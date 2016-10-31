@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{B76F2358-5D05-38B8-94E4-37EC73ED3150}</ProjectGUID>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>libprotobuf</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\aspia-remote-desktop\trunk\3rdparty\protobuf\cmake\out\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">libprotobuf.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">libprotobufd</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)obj\x86\$(ProjectName)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">libprotobuf</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\aspia-remote-desktop\trunk\3rdparty\protobuf\cmake\out\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">libprotobuf.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">libprotobuf</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\aspia-remote-desktop\trunk\3rdparty\protobuf\cmake\out\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">libprotobuf.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">libprotobuf</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions> /bigobj %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>D:\aspia-remote-desktop\trunk\3rdparty\protobuf\cmake\out;D:\aspia-remote-desktop\trunk\3rdparty\protobuf\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4244;4267;4018;4355;4800;4251;4996;4146;4305</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;GOOGLE_PROTOBUF_CMAKE_BUILD;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;GOOGLE_PROTOBUF_CMAKE_BUILD;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\aspia-remote-desktop\trunk\3rdparty\protobuf\cmake\out;D:\aspia-remote-desktop\trunk\3rdparty\protobuf\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\aspia-remote-desktop\trunk\3rdparty\protobuf\cmake\out;D:\aspia-remote-desktop\trunk\3rdparty\protobuf\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions> /bigobj %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(SolutionDir)/3rdparty/protobuf/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings>4244;4267;4018;4355;4800;4251;4996;4146;4305;4506;4065</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;GOOGLE_PROTOBUF_CMAKE_BUILD;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\aspia-remote-desktop\trunk\3rdparty\protobuf\cmake\out;D:\aspia-remote-desktop\trunk\3rdparty\protobuf\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\aspia-remote-desktop\trunk\3rdparty\protobuf\cmake\out;D:\aspia-remote-desktop\trunk\3rdparty\protobuf\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <ClCompile>
+      <AdditionalOptions> /bigobj %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>D:\aspia-remote-desktop\trunk\3rdparty\protobuf\cmake\out;D:\aspia-remote-desktop\trunk\3rdparty\protobuf\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings>4244;4267;4018;4355;4800;4251;4996;4146;4305</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;GOOGLE_PROTOBUF_CMAKE_BUILD;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;GOOGLE_PROTOBUF_CMAKE_BUILD;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\aspia-remote-desktop\trunk\3rdparty\protobuf\cmake\out;D:\aspia-remote-desktop\trunk\3rdparty\protobuf\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\aspia-remote-desktop\trunk\3rdparty\protobuf\cmake\out;D:\aspia-remote-desktop\trunk\3rdparty\protobuf\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalOptions> /bigobj %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>D:\aspia-remote-desktop\trunk\3rdparty\protobuf\cmake\out;D:\aspia-remote-desktop\trunk\3rdparty\protobuf\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4244;4267;4018;4355;4800;4251;4996;4146;4305</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;GOOGLE_PROTOBUF_CMAKE_BUILD;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;GOOGLE_PROTOBUF_CMAKE_BUILD;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\aspia-remote-desktop\trunk\3rdparty\protobuf\cmake\out;D:\aspia-remote-desktop\trunk\3rdparty\protobuf\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\aspia-remote-desktop\trunk\3rdparty\protobuf\cmake\out;D:\aspia-remote-desktop\trunk\3rdparty\protobuf\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src/google/protobuf/arena.cc" />
+    <ClCompile Include="src/google/protobuf/arenastring.cc" />
+    <ClCompile Include="src/google/protobuf/extension_set.cc" />
+    <ClCompile Include="src/google/protobuf/generated_message_util.cc" />
+    <ClCompile Include="src/google/protobuf/io\coded_stream.cc" />
+    <ClCompile Include="src/google/protobuf/io\zero_copy_stream.cc" />
+    <ClCompile Include="src/google/protobuf/io\zero_copy_stream_impl_lite.cc" />
+    <ClCompile Include="src/google/protobuf/message_lite.cc" />
+    <ClCompile Include="src/google/protobuf/repeated_field.cc" />
+    <ClCompile Include="src/google/protobuf/stubs\atomicops_internals_x86_msvc.cc" />
+    <ClCompile Include="src/google/protobuf/stubs\bytestream.cc" />
+    <ClCompile Include="src/google/protobuf/stubs\common.cc" />
+    <ClCompile Include="src/google/protobuf/stubs\int128.cc" />
+    <ClCompile Include="src/google/protobuf/stubs\once.cc" />
+    <ClCompile Include="src/google/protobuf/stubs\status.cc" />
+    <ClCompile Include="src/google/protobuf/stubs\statusor.cc" />
+    <ClCompile Include="src/google/protobuf/stubs\stringpiece.cc" />
+    <ClCompile Include="src/google/protobuf/stubs\stringprintf.cc" />
+    <ClCompile Include="src/google/protobuf/stubs\structurally_valid.cc" />
+    <ClCompile Include="src/google/protobuf/stubs\strutil.cc" />
+    <ClCompile Include="src/google/protobuf/stubs\time.cc" />
+    <ClCompile Include="src/google/protobuf/wire_format_lite.cc" />
+    <ClCompile Include="src/google/protobuf/any.cc" />
+    <ClCompile Include="src/google/protobuf/any.pb.cc" />
+    <ClCompile Include="src/google/protobuf/api.pb.cc" />
+    <ClCompile Include="src/google/protobuf/compiler\importer.cc" />
+    <ClCompile Include="src/google/protobuf/compiler\parser.cc" />
+    <ClCompile Include="src/google/protobuf/descriptor.cc" />
+    <ClCompile Include="src/google/protobuf/descriptor.pb.cc" />
+    <ClCompile Include="src/google/protobuf/descriptor_database.cc" />
+    <ClCompile Include="src/google/protobuf/duration.pb.cc" />
+    <ClCompile Include="src/google/protobuf/dynamic_message.cc" />
+    <ClCompile Include="src/google/protobuf/empty.pb.cc" />
+    <ClCompile Include="src/google/protobuf/extension_set_heavy.cc" />
+    <ClCompile Include="src/google/protobuf/field_mask.pb.cc" />
+    <ClCompile Include="src/google/protobuf/generated_message_reflection.cc" />
+    <ClCompile Include="src/google/protobuf/io\gzip_stream.cc" />
+    <ClCompile Include="src/google/protobuf/io\printer.cc" />
+    <ClCompile Include="src/google/protobuf/io\strtod.cc" />
+    <ClCompile Include="src/google/protobuf/io\tokenizer.cc" />
+    <ClCompile Include="src/google/protobuf/io\zero_copy_stream_impl.cc" />
+    <ClCompile Include="src/google/protobuf/map_field.cc" />
+    <ClCompile Include="src/google/protobuf/message.cc" />
+    <ClCompile Include="src/google/protobuf/reflection_ops.cc" />
+    <ClCompile Include="src/google/protobuf/service.cc" />
+    <ClCompile Include="src/google/protobuf/source_context.pb.cc" />
+    <ClCompile Include="src/google/protobuf/struct.pb.cc" />
+    <ClCompile Include="src/google/protobuf/stubs\mathlimits.cc" />
+    <ClCompile Include="src/google/protobuf/stubs\substitute.cc" />
+    <ClCompile Include="src/google/protobuf/text_format.cc" />
+    <ClCompile Include="src/google/protobuf/timestamp.pb.cc" />
+    <ClCompile Include="src/google/protobuf/type.pb.cc" />
+    <ClCompile Include="src/google/protobuf/unknown_field_set.cc" />
+    <ClCompile Include="src/google/protobuf/util\field_comparator.cc" />
+    <ClCompile Include="src/google/protobuf/util\field_mask_util.cc" />
+    <ClCompile Include="src/google/protobuf/util\internal\datapiece.cc" />
+    <ClCompile Include="src/google/protobuf/util\internal\default_value_objectwriter.cc" />
+    <ClCompile Include="src/google/protobuf/util\internal\field_mask_utility.cc" />
+    <ClCompile Include="src/google/protobuf/util\internal\json_escaping.cc" />
+    <ClCompile Include="src/google/protobuf/util\internal\json_objectwriter.cc" />
+    <ClCompile Include="src/google/protobuf/util\internal\json_stream_parser.cc" />
+    <ClCompile Include="src/google/protobuf/util\internal\object_writer.cc" />
+    <ClCompile Include="src/google/protobuf/util\internal\proto_writer.cc" />
+    <ClCompile Include="src/google/protobuf/util\internal\protostream_objectsource.cc" />
+    <ClCompile Include="src/google/protobuf/util\internal\protostream_objectwriter.cc" />
+    <ClCompile Include="src/google/protobuf/util\internal\type_info.cc" />
+    <ClCompile Include="src/google/protobuf/util\internal\type_info_test_helper.cc" />
+    <ClCompile Include="src/google/protobuf/util\internal\utility.cc" />
+    <ClCompile Include="src/google/protobuf/util\json_util.cc" />
+    <ClCompile Include="src/google/protobuf/util\message_differencer.cc" />
+    <ClCompile Include="src/google/protobuf/util\time_util.cc" />
+    <ClCompile Include="src/google/protobuf/util\type_resolver_util.cc" />
+    <ClCompile Include="src/google/protobuf/wire_format.cc" />
+    <ClCompile Include="src/google/protobuf/wrappers.pb.cc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
