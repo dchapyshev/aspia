@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\base\desktop_win.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\scoped_thread_desktop.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\thread.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\codec\scoped_vpx_codec.cpp">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\capturer_gdi.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\desktop_rect.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\differ.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\screen_window_win.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\capture_scheduler.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\proto\proto.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\diff_block_sse2.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="screen_reciever.cpp" />
+    <ClCompile Include="screen_sender.cpp" />
+    <ClCompile Include="..\base\event.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\desktop_effects.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\unicode.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\desktop_region_win.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\codec\video_decoder_raw.cpp">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\codec\video_encoder_raw.cpp">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\service_control_win.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\service_win.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\process.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\input_event.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\runas.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network\socket_tcp.cpp">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network\socket.cpp">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network\socket_openssl.cpp">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network\socket_sspi.cpp">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\codec\compressor_zlib.cpp">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\codec\decompressor_zlib.cpp">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\pixel_format.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\codec\video_encoder_zlib.cpp">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\codec\video_decoder_zlib.cpp">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\codec\video_decoder_vp8.cpp">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\codec\video_encoder_vp8.cpp">
+      <Filter>codec</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="screen_reciever.h" />
+    <ClInclude Include="screen_sender.h" />
+    <ClInclude Include="..\base\service_control_win.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\service_win.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\process.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\input_event.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\runas.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\socket.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\socket_tcp.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\socket_openssl.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network\socket_sspi.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\codec\compressor.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\codec\compressor_zlib.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\codec\decompressor_zlib.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\codec\decompressor.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\codec\pixel_translator.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\codec\pixel_translator_libyuv.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\codec\pixel_translator_fake.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\codec\pixel_translator_fromRGB565.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\codec\pixel_translator_fromARGB.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\codec\pixel_translator_selector.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\cpuid.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\scoped_aligned_buffer.h">
+      <Filter>base</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="base">
+      <UniqueIdentifier>{d1366073-0a60-4cd5-af48-5412e39a96f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="codec">
+      <UniqueIdentifier>{55c1f0a3-315e-4892-bae4-b397ffdb6aa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="desktop_capture">
+      <UniqueIdentifier>{6fb51194-14a2-48e9-b975-2eba571ee18a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="proto">
+      <UniqueIdentifier>{da3c0c09-bb57-4c3a-bec8-4947a619db19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="network">
+      <UniqueIdentifier>{4e0e7222-3344-4f67-8855-be3903c77450}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

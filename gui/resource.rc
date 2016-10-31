@@ -1,0 +1,14 @@
+/*
+* PROJECT:         Aspia Remote Desktop
+* FILE:            gui/resource.rc
+* LICENSE:         See top-level directory
+* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+*/
+
+#include "resource.h"
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+
+IDI_MAINICON ICON "resource/main.ico"
+
+1 24 "manifest.xml"

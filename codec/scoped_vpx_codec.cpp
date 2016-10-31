@@ -1,0 +1,24 @@
+/*
+* PROJECT:         Aspia Remote Desktop
+* FILE:            codec/scoped_vpx_codec.h
+* LICENSE:         See top-level directory
+* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+*/
+
+#include "codec/scoped_vpx_codec.h"
+
+extern "C"
+{
+#define VPX_CODEC_DISABLE_COMPAT 1
+#include "vpx/vpx_codec.h"
+}
+
+void VpxCodecDeleter::operator()(vpx_codec_ctx_t* codec)
+{
+    if (codec)
+    {
+        vpx_codec_err_t ret = vpx_codec_destroy(codec);
+        CHECK_EQ(ret, VPX_CODEC_OK) << "Failed to destroy codec";
+        delete codec;
+    }
+}

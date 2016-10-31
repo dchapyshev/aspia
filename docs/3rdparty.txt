@@ -1,0 +1,25 @@
+Third party components information.
+
+Licences:
+
+  component  | license
+protobuf       BSD 3-Clause License
+libglog        BSD 3-Clause License
+googletest     BSD 3-Clause License
+libyuv         BSD 3-Clause License
+libvpx         BSD 3-Clause License
+zlib-ng        zlib License
+wtl            Common Public License 1.0, Microsoft Public License
+rapidjson      MIT License
+
+Synchronization status:
+
+  component  |   sync date   |   version  |   url
+protobuf       26.10.2016       3.1.0      https://github.com/google/glog
+libglog        26.10.2016       trunk      https://github.com/google/protobuf/releases
+googletest     26.10.2016       trunk      https://github.com/google/googletest
+libyuv         26.10.2016       trunk      https://chromium.googlesource.com/libyuv/libyuv
+libvpx         20.07.2016       1.6.0      https://chromium.googlesource.com/webm/libvpx
+zlib-ng        26.10.2016       trunk      https://github.com/Dead2/zlib-ng
+wtl            26.10.2016       r631       https://sourceforge.net/projects/wtl
+rapidjson      26.10.2016       trunk      https://github.com/miloyip/rapidjson

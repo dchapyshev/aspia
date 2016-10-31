@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="auth_dialog.cpp" />
+    <ClCompile Include="screen_window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="auth_dialog.h" />
+    <ClInclude Include="screen_window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="lang">
+      <UniqueIdentifier>{f4f764f8-6cb6-4975-b788-3a508f0b5de0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="lang\en-US.rc">
+      <Filter>lang</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

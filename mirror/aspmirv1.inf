@@ -1,0 +1,86 @@
+; aspmir.inf
+
+[Version]
+Signature = "$Windows NT$"
+Provider  = %Aspia%
+ClassGUID = {4D36E968-E325-11CE-BFC1-08002BE10318}
+Class     = Display
+DriverVer = 04/11/2014,1.0
+
+[DestinationDirs]
+DefaultDestDir    = 11
+aspmirv1.Miniport = 12 ; drivers
+aspmirv1.Display  = 11 ; system32
+
+; Driver information
+[Manufacturer]
+%Aspia% = Mirror.Mfg
+
+[Mirror.Mfg]
+%Mirror% = aspmirv1, aspia_mirror_v1
+
+; General installation section
+[aspmirv1]
+CopyFiles=aspmirv1.Miniport, aspmirv1.Display
+
+; File sections
+[aspmirv1.Miniport]
+aspmirv1.sys
+[aspmirv1.Display]
+aspmirv1.dll
+
+; Service Installation
+[aspmirv1.Services]
+AddService = aspmirv1, 0x00000002, mirror_Service_Inst, mirror_EventLog_Inst
+
+[mirror_Service_Inst]
+ServiceType    = 1 ; SERVICE_KERNEL_DRIVER
+StartType      = 1 ; SERVICE_SYSTEM_START
+ErrorControl   = 0 ; SERVICE_ERROR_IGNORE
+LoadOrderGroup = Video
+ServiceBinary  = %12%\aspmirv1.sys
+
+[mirror_EventLog_Inst]
+AddReg = mirror_EventLog_AddReg
+
+[mirror_EventLog_AddReg]
+HKR,,EventMessageFile,0x00020000,"%SystemRoot%\System32\IoLogMsg.dll;%SystemRoot%\System32\drivers\aspmirv1.sys"
+HKR,,TypesSupported,0x00010001,7
+
+; Software Installation
+[aspmirv1.SoftwareSettings]
+AddReg = mirror_SoftwareDeviceSettings
+
+[mirror_SoftwareDeviceSettings]
+HKR,, MirrorDriver,            %REG_DWORD%,    1
+HKR,, InstalledDisplayDrivers, %REG_MULTI_SZ%, aspmirv1
+HKR,, VgaCompatible,           %REG_DWORD%,    0
+HKR,, Attach.ToDesktop,        %REG_DWORD%,    1
+
+; Not currently used:
+[aspmirv1.GeneralConfigData]
+MaximumNumberOfDevices    = 1
+KeepExistingDriverEnabled = 1
+
+; Source file information
+[SourceDisksNames]
+1 = %DiskId%,,,""
+
+[SourceDisksFiles]
+aspmirv1.sys = 1
+aspmirv1.dll = 1
+
+[Strings]
+; Non-Localizable Strings
+REG_SZ        = 0x00000000
+REG_MULTI_SZ  = 0x00010000
+REG_EXPAND_SZ = 0x00020000
+REG_BINARY    = 0x00000001
+REG_DWORD     = 0x00010001
+SERVICEROOT   = "System\CurrentControlSet\Services"
+
+; Localizable Strings
+DiskId    = "Mirror Installation DISK (VIDEO)"
+GraphAdap = "Graphics Adapter"
+Aspia     = "Aspia"
+Mirror    = "Aspia Mirror Driver v1"

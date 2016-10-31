@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\base\desktop_win.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\scoped_thread_desktop.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\thread.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\capturer_gdi.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\desktop_rect.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\differ.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\screen_window_win.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\capture_scheduler.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\diff_block_sse2.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\event.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\desktop_effects.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\unicode.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\desktop_region_win.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="screen_updater.cpp" />
+    <ClCompile Include="..\desktop_capture\diff_block_avx2.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desktop_capture\pixel_format.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="screen_updater.h" />
+    <ClInclude Include="..\base\mutex.h">
+      <Filter>base</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="base">
+      <UniqueIdentifier>{d1366073-0a60-4cd5-af48-5412e39a96f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="desktop_capture">
+      <UniqueIdentifier>{6fb51194-14a2-48e9-b975-2eba571ee18a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
