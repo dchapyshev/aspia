@@ -21,6 +21,8 @@ All dependencies are included in the project.
 Many of the comments in the code now on Russian language. Later they will be
 translated into English.
 
+Project code is available under the GNU Lesser General Public License version 3.
+
 At the moment the project in development stage and is not intended for use.
 
 If you have any questions, you can email me: dmitry@aspia.ru
