@@ -36,11 +36,9 @@ void protobuf_InitDefaults_proto_2eproto();
 void protobuf_AssignDesc_proto_2eproto();
 void protobuf_ShutdownFile_proto_2eproto();
 
-class AudioControl;
-class AudioPacket;
-class AuthorizationReply;
-class AuthorizationRequest;
-class AuthorizationResult;
+class AuthReply;
+class AuthRequest;
+class AuthResult;
 class Bell;
 class ClientToServer;
 class Clipboard;
@@ -49,7 +47,7 @@ class ClipboardRequest;
 class CursorShape;
 class CursorShapeControl;
 class KeyEvent;
-class MouseEvent;
+class PointerEvent;
 class PowerControl;
 class ServerToClient;
 class TextChat;
@@ -58,6 +56,7 @@ class VideoPacket;
 class VideoPacketFormat;
 class VideoPixelFormat;
 class VideoRect;
+class VideoSize;
 
 enum PowerControl_PowerAction {
   PowerControl_PowerAction_POWER_UNKNOWN = 0,
@@ -75,6 +74,21 @@ const PowerControl_PowerAction PowerControl_PowerAction_PowerAction_MIN = PowerC
 const PowerControl_PowerAction PowerControl_PowerAction_PowerAction_MAX = PowerControl_PowerAction_POWER_LOGOFF;
 const int PowerControl_PowerAction_PowerAction_ARRAYSIZE = PowerControl_PowerAction_PowerAction_MAX + 1;
 
+enum PointerEvent_ButtonMask {
+  PointerEvent_ButtonMask_EMPTY = 0,
+  PointerEvent_ButtonMask_LEFT_BUTTON = 1,
+  PointerEvent_ButtonMask_MIDDLE_BUTTON = 2,
+  PointerEvent_ButtonMask_RIGHT_BUTTON = 4,
+  PointerEvent_ButtonMask_WHEEL_UP = 8,
+  PointerEvent_ButtonMask_WHEEL_DOWN = 16,
+  PointerEvent_ButtonMask_PointerEvent_ButtonMask_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  PointerEvent_ButtonMask_PointerEvent_ButtonMask_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool PointerEvent_ButtonMask_IsValid(int value);
+const PointerEvent_ButtonMask PointerEvent_ButtonMask_ButtonMask_MIN = PointerEvent_ButtonMask_EMPTY;
+const PointerEvent_ButtonMask PointerEvent_ButtonMask_ButtonMask_MAX = PointerEvent_ButtonMask_WHEEL_DOWN;
+const int PointerEvent_ButtonMask_ButtonMask_ARRAYSIZE = PointerEvent_ButtonMask_ButtonMask_MAX + 1;
+
 enum VideoPacket_Flags {
   VideoPacket_Flags_UNKNOWN_PACKET = 0,
   VideoPacket_Flags_FIRST_PACKET = 1,
@@ -88,96 +102,82 @@ const VideoPacket_Flags VideoPacket_Flags_Flags_MIN = VideoPacket_Flags_UNKNOWN_
 const VideoPacket_Flags VideoPacket_Flags_Flags_MAX = VideoPacket_Flags_PARTITION_PACKET;
 const int VideoPacket_Flags_Flags_ARRAYSIZE = VideoPacket_Flags_Flags_MAX + 1;
 
-enum AuthorizationMethod {
+enum AuthMethod {
   AUTH_UNKNOWN = 0,
   AUTH_NONE = 1,
-  AUTH_PROTOCOL = 2,
-  AUTH_TEMP_PASS = 3,
-  AUTH_MS_LOGON = 4,
-  AuthorizationMethod_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  AuthorizationMethod_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+  AUTH_BASIC = 2,
+  AuthMethod_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  AuthMethod_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
-bool AuthorizationMethod_IsValid(int value);
-const AuthorizationMethod AuthorizationMethod_MIN = AUTH_UNKNOWN;
-const AuthorizationMethod AuthorizationMethod_MAX = AUTH_MS_LOGON;
-const int AuthorizationMethod_ARRAYSIZE = AuthorizationMethod_MAX + 1;
+bool AuthMethod_IsValid(int value);
+const AuthMethod AuthMethod_MIN = AUTH_UNKNOWN;
+const AuthMethod AuthMethod_MAX = AUTH_BASIC;
+const int AuthMethod_ARRAYSIZE = AuthMethod_MAX + 1;
 
 enum SessionFeature {
-  FEATURE_UNKNOWN = 0,
+  FEATURE_NONE = 0,
   FEATURE_DESKTOP_MANAGE = 1,
   FEATURE_DESKTOP_VIEW = 2,
-  FEATURE_POWER_MANAGE = 3,
-  FEATURE_CLIPBOARD = 4,
-  FEATURE_FILE_TRANSFER = 5,
-  FEATURE_BELL = 6,
-  FEATURE_TEXT_CHAT = 7,
+  FEATURE_DESKTOP_AUDIO = 4,
+  FEATURE_POWER_MANAGE = 8,
+  FEATURE_CLIPBOARD = 16,
+  FEATURE_FILE_TRANSFER = 32,
+  FEATURE_BELL = 64,
+  FEATURE_TEXT_CHAT = 128,
+  FEATURE_TEXT_MESSAGE = 256,
+  FEATURE_AUDIO_CHAT = 512,
+  FEATURE_REMOTE_UPDATE = 1024,
+  FEATURE_SYSTEM_INFO = 2048,
+  FEATURE_SYSTEM_MANAGE = 4096,
   SessionFeature_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   SessionFeature_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool SessionFeature_IsValid(int value);
-const SessionFeature SessionFeature_MIN = FEATURE_UNKNOWN;
-const SessionFeature SessionFeature_MAX = FEATURE_TEXT_CHAT;
+const SessionFeature SessionFeature_MIN = FEATURE_NONE;
+const SessionFeature SessionFeature_MAX = FEATURE_SYSTEM_MANAGE;
 const int SessionFeature_ARRAYSIZE = SessionFeature_MAX + 1;
 
 enum VideoEncoding {
   VIDEO_ENCODING_UNKNOWN = 0,
   VIDEO_ENCODING_RAW = 1,
   VIDEO_ENCODING_ZLIB = 2,
-  VIDEO_ENCODING_VP8 = 3,
-  VIDEO_ENCODING_VP9 = 4,
+  VIDEO_ENCODING_VP8 = 4,
   VideoEncoding_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   VideoEncoding_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool VideoEncoding_IsValid(int value);
 const VideoEncoding VideoEncoding_MIN = VIDEO_ENCODING_UNKNOWN;
-const VideoEncoding VideoEncoding_MAX = VIDEO_ENCODING_VP9;
+const VideoEncoding VideoEncoding_MAX = VIDEO_ENCODING_VP8;
 const int VideoEncoding_ARRAYSIZE = VideoEncoding_MAX + 1;
-
-enum AudioEncoding {
-  AUDIO_ENCODING_UNKNOWN = 0,
-  AUDIO_ENCODING_VERBATIM = 1,
-  AUDIO_ENCODING_OPUS = 2,
-  AudioEncoding_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  AudioEncoding_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool AudioEncoding_IsValid(int value);
-const AudioEncoding AudioEncoding_MIN = AUDIO_ENCODING_UNKNOWN;
-const AudioEncoding AudioEncoding_MAX = AUDIO_ENCODING_OPUS;
-const int AudioEncoding_ARRAYSIZE = AudioEncoding_MAX + 1;
 
 // ===================================================================
 
-class AuthorizationRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.AuthorizationRequest) */ {
+class AuthRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.AuthRequest) */ {
  public:
-  AuthorizationRequest();
-  virtual ~AuthorizationRequest();
+  AuthRequest();
+  virtual ~AuthRequest();
 
-  AuthorizationRequest(const AuthorizationRequest& from);
+  AuthRequest(const AuthRequest& from);
 
-  inline AuthorizationRequest& operator=(const AuthorizationRequest& from) {
+  inline AuthRequest& operator=(const AuthRequest& from) {
     CopyFrom(from);
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
-  static const AuthorizationRequest& default_instance();
+  static const AuthRequest& default_instance();
 
-  static const AuthorizationRequest* internal_default_instance();
+  static const AuthRequest* internal_default_instance();
 
-  void UnsafeArenaSwap(AuthorizationRequest* other);
-  void Swap(AuthorizationRequest* other);
+  void Swap(AuthRequest* other);
 
   // implements Message ----------------------------------------------
 
-  inline AuthorizationRequest* New() const { return New(NULL); }
+  inline AuthRequest* New() const { return New(NULL); }
 
-  AuthorizationRequest* New(::google::protobuf::Arena* arena) const;
+  AuthRequest* New(::google::protobuf::Arena* arena) const;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from);
-  void CopyFrom(const AuthorizationRequest& from);
-  void MergeFrom(const AuthorizationRequest& from);
+  void CopyFrom(const AuthRequest& from);
+  void MergeFrom(const AuthRequest& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -192,13 +192,8 @@ class AuthorizationRequest : public ::google::protobuf::MessageLite /* @@protoc_
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(AuthorizationRequest* other);
-  void UnsafeMergeFrom(const AuthorizationRequest& from);
-  protected:
-  explicit AuthorizationRequest(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
+  void InternalSwap(AuthRequest* other);
+  void UnsafeMergeFrom(const AuthRequest& from);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -214,27 +209,19 @@ class AuthorizationRequest : public ::google::protobuf::MessageLite /* @@protoc_
 
   // accessors -------------------------------------------------------
 
-  // repeated .proto.AuthorizationMethod methods = 1;
-  int methods_size() const;
+  // optional int32 methods = 1;
   void clear_methods();
   static const int kMethodsFieldNumber = 1;
-  ::proto::AuthorizationMethod methods(int index) const;
-  void set_methods(int index, ::proto::AuthorizationMethod value);
-  void add_methods(::proto::AuthorizationMethod value);
-  const ::google::protobuf::RepeatedField<int>& methods() const;
-  ::google::protobuf::RepeatedField<int>* mutable_methods();
+  ::google::protobuf::int32 methods() const;
+  void set_methods(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:proto.AuthorizationRequest)
+  // @@protoc_insertion_point(class_scope:proto.AuthRequest)
  private:
 
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::google::protobuf::RepeatedField<int> methods_;
-  mutable int _methods_cached_byte_size_;
+  ::google::protobuf::int32 methods_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
   friend void  protobuf_AddDesc_proto_2eproto_impl();
@@ -243,41 +230,36 @@ class AuthorizationRequest : public ::google::protobuf::MessageLite /* @@protoc_
 
   void InitAsDefaultInstance();
 };
-extern ::google::protobuf::internal::ExplicitlyConstructed<AuthorizationRequest> AuthorizationRequest_default_instance_;
+extern ::google::protobuf::internal::ExplicitlyConstructed<AuthRequest> AuthRequest_default_instance_;
 
 // -------------------------------------------------------------------
 
-class AuthorizationReply : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.AuthorizationReply) */ {
+class AuthReply : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.AuthReply) */ {
  public:
-  AuthorizationReply();
-  virtual ~AuthorizationReply();
+  AuthReply();
+  virtual ~AuthReply();
 
-  AuthorizationReply(const AuthorizationReply& from);
+  AuthReply(const AuthReply& from);
 
-  inline AuthorizationReply& operator=(const AuthorizationReply& from) {
+  inline AuthReply& operator=(const AuthReply& from) {
     CopyFrom(from);
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
-  static const AuthorizationReply& default_instance();
+  static const AuthReply& default_instance();
 
-  static const AuthorizationReply* internal_default_instance();
+  static const AuthReply* internal_default_instance();
 
-  void UnsafeArenaSwap(AuthorizationReply* other);
-  void Swap(AuthorizationReply* other);
+  void Swap(AuthReply* other);
 
   // implements Message ----------------------------------------------
 
-  inline AuthorizationReply* New() const { return New(NULL); }
+  inline AuthReply* New() const { return New(NULL); }
 
-  AuthorizationReply* New(::google::protobuf::Arena* arena) const;
+  AuthReply* New(::google::protobuf::Arena* arena) const;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from);
-  void CopyFrom(const AuthorizationReply& from);
-  void MergeFrom(const AuthorizationReply& from);
+  void CopyFrom(const AuthReply& from);
+  void MergeFrom(const AuthReply& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -292,13 +274,8 @@ class AuthorizationReply : public ::google::protobuf::MessageLite /* @@protoc_in
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(AuthorizationReply* other);
-  void UnsafeMergeFrom(const AuthorizationReply& from);
-  protected:
-  explicit AuthorizationReply(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
+  void InternalSwap(AuthReply* other);
+  void UnsafeMergeFrom(const AuthReply& from);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -314,39 +291,22 @@ class AuthorizationReply : public ::google::protobuf::MessageLite /* @@protoc_in
 
   // accessors -------------------------------------------------------
 
-  // optional .proto.AuthorizationMethod method = 1;
+  // optional int32 method = 1;
   void clear_method();
   static const int kMethodFieldNumber = 1;
-  ::proto::AuthorizationMethod method() const;
-  void set_method(::proto::AuthorizationMethod value);
+  ::google::protobuf::int32 method() const;
+  void set_method(::google::protobuf::int32 value);
 
-  // optional string domain = 2;
-  void clear_domain();
-  static const int kDomainFieldNumber = 2;
-  const ::std::string& domain() const;
-  void set_domain(const ::std::string& value);
-  void set_domain(const char* value);
-  void set_domain(const char* value, size_t size);
-  ::std::string* mutable_domain();
-  ::std::string* release_domain();
-  void set_allocated_domain(::std::string* domain);
-  ::std::string* unsafe_arena_release_domain();
-  void unsafe_arena_set_allocated_domain(
-      ::std::string* domain);
-
-  // optional string user_name = 3;
-  void clear_user_name();
-  static const int kUserNameFieldNumber = 3;
-  const ::std::string& user_name() const;
-  void set_user_name(const ::std::string& value);
-  void set_user_name(const char* value);
-  void set_user_name(const char* value, size_t size);
-  ::std::string* mutable_user_name();
-  ::std::string* release_user_name();
-  void set_allocated_user_name(::std::string* user_name);
-  ::std::string* unsafe_arena_release_user_name();
-  void unsafe_arena_set_allocated_user_name(
-      ::std::string* user_name);
+  // optional string username = 3;
+  void clear_username();
+  static const int kUsernameFieldNumber = 3;
+  const ::std::string& username() const;
+  void set_username(const ::std::string& value);
+  void set_username(const char* value);
+  void set_username(const char* value, size_t size);
+  ::std::string* mutable_username();
+  ::std::string* release_username();
+  void set_allocated_username(::std::string* username);
 
   // optional bytes password = 4;
   void clear_password();
@@ -358,23 +318,16 @@ class AuthorizationReply : public ::google::protobuf::MessageLite /* @@protoc_in
   ::std::string* mutable_password();
   ::std::string* release_password();
   void set_allocated_password(::std::string* password);
-  ::std::string* unsafe_arena_release_password();
-  void unsafe_arena_set_allocated_password(
-      ::std::string* password);
 
-  // @@protoc_insertion_point(class_scope:proto.AuthorizationReply)
+  // @@protoc_insertion_point(class_scope:proto.AuthReply)
  private:
 
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::google::protobuf::internal::ArenaStringPtr domain_;
-  ::google::protobuf::internal::ArenaStringPtr user_name_;
+  ::google::protobuf::internal::ArenaStringPtr username_;
   ::google::protobuf::internal::ArenaStringPtr password_;
-  int method_;
+  ::google::protobuf::int32 method_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
   friend void  protobuf_AddDesc_proto_2eproto_impl();
@@ -383,41 +336,36 @@ class AuthorizationReply : public ::google::protobuf::MessageLite /* @@protoc_in
 
   void InitAsDefaultInstance();
 };
-extern ::google::protobuf::internal::ExplicitlyConstructed<AuthorizationReply> AuthorizationReply_default_instance_;
+extern ::google::protobuf::internal::ExplicitlyConstructed<AuthReply> AuthReply_default_instance_;
 
 // -------------------------------------------------------------------
 
-class AuthorizationResult : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.AuthorizationResult) */ {
+class AuthResult : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.AuthResult) */ {
  public:
-  AuthorizationResult();
-  virtual ~AuthorizationResult();
+  AuthResult();
+  virtual ~AuthResult();
 
-  AuthorizationResult(const AuthorizationResult& from);
+  AuthResult(const AuthResult& from);
 
-  inline AuthorizationResult& operator=(const AuthorizationResult& from) {
+  inline AuthResult& operator=(const AuthResult& from) {
     CopyFrom(from);
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
-  static const AuthorizationResult& default_instance();
+  static const AuthResult& default_instance();
 
-  static const AuthorizationResult* internal_default_instance();
+  static const AuthResult* internal_default_instance();
 
-  void UnsafeArenaSwap(AuthorizationResult* other);
-  void Swap(AuthorizationResult* other);
+  void Swap(AuthResult* other);
 
   // implements Message ----------------------------------------------
 
-  inline AuthorizationResult* New() const { return New(NULL); }
+  inline AuthResult* New() const { return New(NULL); }
 
-  AuthorizationResult* New(::google::protobuf::Arena* arena) const;
+  AuthResult* New(::google::protobuf::Arena* arena) const;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from);
-  void CopyFrom(const AuthorizationResult& from);
-  void MergeFrom(const AuthorizationResult& from);
+  void CopyFrom(const AuthResult& from);
+  void MergeFrom(const AuthResult& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -432,13 +380,8 @@ class AuthorizationResult : public ::google::protobuf::MessageLite /* @@protoc_i
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(AuthorizationResult* other);
-  void UnsafeMergeFrom(const AuthorizationResult& from);
-  protected:
-  explicit AuthorizationResult(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
+  void InternalSwap(AuthResult* other);
+  void UnsafeMergeFrom(const AuthResult& from);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -460,28 +403,20 @@ class AuthorizationResult : public ::google::protobuf::MessageLite /* @@protoc_i
   bool success() const;
   void set_success(bool value);
 
-  // repeated .proto.SessionFeature features = 2;
-  int features_size() const;
+  // optional int32 features = 2;
   void clear_features();
   static const int kFeaturesFieldNumber = 2;
-  ::proto::SessionFeature features(int index) const;
-  void set_features(int index, ::proto::SessionFeature value);
-  void add_features(::proto::SessionFeature value);
-  const ::google::protobuf::RepeatedField<int>& features() const;
-  ::google::protobuf::RepeatedField<int>* mutable_features();
+  ::google::protobuf::int32 features() const;
+  void set_features(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:proto.AuthorizationResult)
+  // @@protoc_insertion_point(class_scope:proto.AuthResult)
  private:
 
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::google::protobuf::RepeatedField<int> features_;
-  mutable int _features_cached_byte_size_;
   bool success_;
+  ::google::protobuf::int32 features_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
   friend void  protobuf_AddDesc_proto_2eproto_impl();
@@ -490,7 +425,7 @@ class AuthorizationResult : public ::google::protobuf::MessageLite /* @@protoc_i
 
   void InitAsDefaultInstance();
 };
-extern ::google::protobuf::internal::ExplicitlyConstructed<AuthorizationResult> AuthorizationResult_default_instance_;
+extern ::google::protobuf::internal::ExplicitlyConstructed<AuthResult> AuthResult_default_instance_;
 
 // -------------------------------------------------------------------
 
@@ -506,15 +441,10 @@ class PowerControl : public ::google::protobuf::MessageLite /* @@protoc_insertio
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const PowerControl& default_instance();
 
   static const PowerControl* internal_default_instance();
 
-  void UnsafeArenaSwap(PowerControl* other);
   void Swap(PowerControl* other);
 
   // implements Message ----------------------------------------------
@@ -541,11 +471,6 @@ class PowerControl : public ::google::protobuf::MessageLite /* @@protoc_insertio
   void SetCachedSize(int size) const;
   void InternalSwap(PowerControl* other);
   void UnsafeMergeFrom(const PowerControl& from);
-  protected:
-  explicit PowerControl(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -598,9 +523,6 @@ class PowerControl : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
   int action_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
@@ -626,15 +548,10 @@ class Bell : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const Bell& default_instance();
 
   static const Bell* internal_default_instance();
 
-  void UnsafeArenaSwap(Bell* other);
   void Swap(Bell* other);
 
   // implements Message ----------------------------------------------
@@ -661,11 +578,6 @@ class Bell : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
   void SetCachedSize(int size) const;
   void InternalSwap(Bell* other);
   void UnsafeMergeFrom(const Bell& from);
-  protected:
-  explicit Bell(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -681,11 +593,11 @@ class Bell : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
 
   // accessors -------------------------------------------------------
 
-  // optional int32 duration = 1;
-  void clear_duration();
-  static const int kDurationFieldNumber = 1;
-  ::google::protobuf::int32 duration() const;
-  void set_duration(::google::protobuf::int32 value);
+  // optional bool dummy = 1;
+  void clear_dummy();
+  static const int kDummyFieldNumber = 1;
+  bool dummy() const;
+  void set_dummy(bool value);
 
   // @@protoc_insertion_point(class_scope:proto.Bell)
  private:
@@ -693,10 +605,7 @@ class Bell : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::google::protobuf::int32 duration_;
+  bool dummy_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
   friend void  protobuf_AddDesc_proto_2eproto_impl();
@@ -721,15 +630,10 @@ class TextChat : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const TextChat& default_instance();
 
   static const TextChat* internal_default_instance();
 
-  void UnsafeArenaSwap(TextChat* other);
   void Swap(TextChat* other);
 
   // implements Message ----------------------------------------------
@@ -756,11 +660,6 @@ class TextChat : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   void SetCachedSize(int size) const;
   void InternalSwap(TextChat* other);
   void UnsafeMergeFrom(const TextChat& from);
-  protected:
-  explicit TextChat(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -786,9 +685,6 @@ class TextChat : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::std::string* mutable_message();
   ::std::string* release_message();
   void set_allocated_message(::std::string* message);
-  ::std::string* unsafe_arena_release_message();
-  void unsafe_arena_set_allocated_message(
-      ::std::string* message);
 
   // @@protoc_insertion_point(class_scope:proto.TextChat)
  private:
@@ -796,9 +692,6 @@ class TextChat : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
   ::google::protobuf::internal::ArenaStringPtr message_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
@@ -824,15 +717,10 @@ class KeyEvent : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const KeyEvent& default_instance();
 
   static const KeyEvent* internal_default_instance();
 
-  void UnsafeArenaSwap(KeyEvent* other);
   void Swap(KeyEvent* other);
 
   // implements Message ----------------------------------------------
@@ -859,11 +747,6 @@ class KeyEvent : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   void SetCachedSize(int size) const;
   void InternalSwap(KeyEvent* other);
   void UnsafeMergeFrom(const KeyEvent& from);
-  protected:
-  explicit KeyEvent(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -879,17 +762,17 @@ class KeyEvent : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
 
   // accessors -------------------------------------------------------
 
-  // optional uint32 keycode = 1;
+  // optional int32 keycode = 1;
   void clear_keycode();
   static const int kKeycodeFieldNumber = 1;
-  ::google::protobuf::uint32 keycode() const;
-  void set_keycode(::google::protobuf::uint32 value);
+  ::google::protobuf::int32 keycode() const;
+  void set_keycode(::google::protobuf::int32 value);
 
-  // optional uint32 extended = 2;
+  // optional bool extended = 2;
   void clear_extended();
   static const int kExtendedFieldNumber = 2;
-  ::google::protobuf::uint32 extended() const;
-  void set_extended(::google::protobuf::uint32 value);
+  bool extended() const;
+  void set_extended(bool value);
 
   // optional bool pressed = 3;
   void clear_pressed();
@@ -903,11 +786,8 @@ class KeyEvent : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::google::protobuf::uint32 keycode_;
-  ::google::protobuf::uint32 extended_;
+  ::google::protobuf::int32 keycode_;
+  bool extended_;
   bool pressed_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
@@ -921,37 +801,32 @@ extern ::google::protobuf::internal::ExplicitlyConstructed<KeyEvent> KeyEvent_de
 
 // -------------------------------------------------------------------
 
-class MouseEvent : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.MouseEvent) */ {
+class PointerEvent : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.PointerEvent) */ {
  public:
-  MouseEvent();
-  virtual ~MouseEvent();
+  PointerEvent();
+  virtual ~PointerEvent();
 
-  MouseEvent(const MouseEvent& from);
+  PointerEvent(const PointerEvent& from);
 
-  inline MouseEvent& operator=(const MouseEvent& from) {
+  inline PointerEvent& operator=(const PointerEvent& from) {
     CopyFrom(from);
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
-  static const MouseEvent& default_instance();
+  static const PointerEvent& default_instance();
 
-  static const MouseEvent* internal_default_instance();
+  static const PointerEvent* internal_default_instance();
 
-  void UnsafeArenaSwap(MouseEvent* other);
-  void Swap(MouseEvent* other);
+  void Swap(PointerEvent* other);
 
   // implements Message ----------------------------------------------
 
-  inline MouseEvent* New() const { return New(NULL); }
+  inline PointerEvent* New() const { return New(NULL); }
 
-  MouseEvent* New(::google::protobuf::Arena* arena) const;
+  PointerEvent* New(::google::protobuf::Arena* arena) const;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from);
-  void CopyFrom(const MouseEvent& from);
-  void MergeFrom(const MouseEvent& from);
+  void CopyFrom(const PointerEvent& from);
+  void MergeFrom(const PointerEvent& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -966,13 +841,8 @@ class MouseEvent : public ::google::protobuf::MessageLite /* @@protoc_insertion_
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(MouseEvent* other);
-  void UnsafeMergeFrom(const MouseEvent& from);
-  protected:
-  explicit MouseEvent(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
+  void InternalSwap(PointerEvent* other);
+  void UnsafeMergeFrom(const PointerEvent& from);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -986,38 +856,58 @@ class MouseEvent : public ::google::protobuf::MessageLite /* @@protoc_insertion_
 
   // nested types ----------------------------------------------------
 
+  typedef PointerEvent_ButtonMask ButtonMask;
+  static const ButtonMask EMPTY =
+    PointerEvent_ButtonMask_EMPTY;
+  static const ButtonMask LEFT_BUTTON =
+    PointerEvent_ButtonMask_LEFT_BUTTON;
+  static const ButtonMask MIDDLE_BUTTON =
+    PointerEvent_ButtonMask_MIDDLE_BUTTON;
+  static const ButtonMask RIGHT_BUTTON =
+    PointerEvent_ButtonMask_RIGHT_BUTTON;
+  static const ButtonMask WHEEL_UP =
+    PointerEvent_ButtonMask_WHEEL_UP;
+  static const ButtonMask WHEEL_DOWN =
+    PointerEvent_ButtonMask_WHEEL_DOWN;
+  static inline bool ButtonMask_IsValid(int value) {
+    return PointerEvent_ButtonMask_IsValid(value);
+  }
+  static const ButtonMask ButtonMask_MIN =
+    PointerEvent_ButtonMask_ButtonMask_MIN;
+  static const ButtonMask ButtonMask_MAX =
+    PointerEvent_ButtonMask_ButtonMask_MAX;
+  static const int ButtonMask_ARRAYSIZE =
+    PointerEvent_ButtonMask_ButtonMask_ARRAYSIZE;
+
   // accessors -------------------------------------------------------
 
-  // optional int32 x = 1;
+  // optional int32 mask = 1;
+  void clear_mask();
+  static const int kMaskFieldNumber = 1;
+  ::google::protobuf::int32 mask() const;
+  void set_mask(::google::protobuf::int32 value);
+
+  // optional int32 x = 2;
   void clear_x();
-  static const int kXFieldNumber = 1;
+  static const int kXFieldNumber = 2;
   ::google::protobuf::int32 x() const;
   void set_x(::google::protobuf::int32 value);
 
-  // optional int32 y = 2;
+  // optional int32 y = 3;
   void clear_y();
-  static const int kYFieldNumber = 2;
+  static const int kYFieldNumber = 3;
   ::google::protobuf::int32 y() const;
   void set_y(::google::protobuf::int32 value);
 
-  // optional uint32 mask = 3;
-  void clear_mask();
-  static const int kMaskFieldNumber = 3;
-  ::google::protobuf::uint32 mask() const;
-  void set_mask(::google::protobuf::uint32 value);
-
-  // @@protoc_insertion_point(class_scope:proto.MouseEvent)
+  // @@protoc_insertion_point(class_scope:proto.PointerEvent)
  private:
 
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
+  ::google::protobuf::int32 mask_;
   ::google::protobuf::int32 x_;
   ::google::protobuf::int32 y_;
-  ::google::protobuf::uint32 mask_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
   friend void  protobuf_AddDesc_proto_2eproto_impl();
@@ -1026,7 +916,7 @@ class MouseEvent : public ::google::protobuf::MessageLite /* @@protoc_insertion_
 
   void InitAsDefaultInstance();
 };
-extern ::google::protobuf::internal::ExplicitlyConstructed<MouseEvent> MouseEvent_default_instance_;
+extern ::google::protobuf::internal::ExplicitlyConstructed<PointerEvent> PointerEvent_default_instance_;
 
 // -------------------------------------------------------------------
 
@@ -1042,15 +932,10 @@ class Clipboard : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const Clipboard& default_instance();
 
   static const Clipboard* internal_default_instance();
 
-  void UnsafeArenaSwap(Clipboard* other);
   void Swap(Clipboard* other);
 
   // implements Message ----------------------------------------------
@@ -1077,11 +962,6 @@ class Clipboard : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
   void SetCachedSize(int size) const;
   void InternalSwap(Clipboard* other);
   void UnsafeMergeFrom(const Clipboard& from);
-  protected:
-  explicit Clipboard(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -1107,9 +987,6 @@ class Clipboard : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
   ::std::string* mutable_mime_type();
   ::std::string* release_mime_type();
   void set_allocated_mime_type(::std::string* mime_type);
-  ::std::string* unsafe_arena_release_mime_type();
-  void unsafe_arena_set_allocated_mime_type(
-      ::std::string* mime_type);
 
   // optional bytes data = 2;
   void clear_data();
@@ -1121,9 +998,6 @@ class Clipboard : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
   ::std::string* mutable_data();
   ::std::string* release_data();
   void set_allocated_data(::std::string* data);
-  ::std::string* unsafe_arena_release_data();
-  void unsafe_arena_set_allocated_data(
-      ::std::string* data);
 
   // @@protoc_insertion_point(class_scope:proto.Clipboard)
  private:
@@ -1131,9 +1005,6 @@ class Clipboard : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
   ::google::protobuf::internal::ArenaStringPtr mime_type_;
   ::google::protobuf::internal::ArenaStringPtr data_;
   mutable int _cached_size_;
@@ -1160,15 +1031,10 @@ class ClipboardRequest : public ::google::protobuf::MessageLite /* @@protoc_inse
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const ClipboardRequest& default_instance();
 
   static const ClipboardRequest* internal_default_instance();
 
-  void UnsafeArenaSwap(ClipboardRequest* other);
   void Swap(ClipboardRequest* other);
 
   // implements Message ----------------------------------------------
@@ -1195,11 +1061,6 @@ class ClipboardRequest : public ::google::protobuf::MessageLite /* @@protoc_inse
   void SetCachedSize(int size) const;
   void InternalSwap(ClipboardRequest* other);
   void UnsafeMergeFrom(const ClipboardRequest& from);
-  protected:
-  explicit ClipboardRequest(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -1227,9 +1088,6 @@ class ClipboardRequest : public ::google::protobuf::MessageLite /* @@protoc_inse
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
   bool dummy_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
@@ -1255,15 +1113,10 @@ class ClipboardControl : public ::google::protobuf::MessageLite /* @@protoc_inse
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const ClipboardControl& default_instance();
 
   static const ClipboardControl* internal_default_instance();
 
-  void UnsafeArenaSwap(ClipboardControl* other);
   void Swap(ClipboardControl* other);
 
   // implements Message ----------------------------------------------
@@ -1290,11 +1143,6 @@ class ClipboardControl : public ::google::protobuf::MessageLite /* @@protoc_inse
   void SetCachedSize(int size) const;
   void InternalSwap(ClipboardControl* other);
   void UnsafeMergeFrom(const ClipboardControl& from);
-  protected:
-  explicit ClipboardControl(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -1322,9 +1170,6 @@ class ClipboardControl : public ::google::protobuf::MessageLite /* @@protoc_inse
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
   bool auto_send_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
@@ -1350,15 +1195,10 @@ class CursorShape : public ::google::protobuf::MessageLite /* @@protoc_insertion
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const CursorShape& default_instance();
 
   static const CursorShape* internal_default_instance();
 
-  void UnsafeArenaSwap(CursorShape* other);
   void Swap(CursorShape* other);
 
   // implements Message ----------------------------------------------
@@ -1385,11 +1225,6 @@ class CursorShape : public ::google::protobuf::MessageLite /* @@protoc_insertion
   void SetCachedSize(int size) const;
   void InternalSwap(CursorShape* other);
   void UnsafeMergeFrom(const CursorShape& from);
-  protected:
-  explicit CursorShape(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -1429,19 +1264,33 @@ class CursorShape : public ::google::protobuf::MessageLite /* @@protoc_insertion
   ::google::protobuf::int32 hotspot_y() const;
   void set_hotspot_y(::google::protobuf::int32 value);
 
-  // optional bytes data = 5;
-  void clear_data();
-  static const int kDataFieldNumber = 5;
-  const ::std::string& data() const;
-  void set_data(const ::std::string& value);
-  void set_data(const char* value);
-  void set_data(const void* value, size_t size);
-  ::std::string* mutable_data();
-  ::std::string* release_data();
-  void set_allocated_data(::std::string* data);
-  ::std::string* unsafe_arena_release_data();
-  void unsafe_arena_set_allocated_data(
-      ::std::string* data);
+  // optional int32 bits_per_pixel = 5;
+  void clear_bits_per_pixel();
+  static const int kBitsPerPixelFieldNumber = 5;
+  ::google::protobuf::int32 bits_per_pixel() const;
+  void set_bits_per_pixel(::google::protobuf::int32 value);
+
+  // optional bytes color = 6;
+  void clear_color();
+  static const int kColorFieldNumber = 6;
+  const ::std::string& color() const;
+  void set_color(const ::std::string& value);
+  void set_color(const char* value);
+  void set_color(const void* value, size_t size);
+  ::std::string* mutable_color();
+  ::std::string* release_color();
+  void set_allocated_color(::std::string* color);
+
+  // optional bytes mask = 7;
+  void clear_mask();
+  static const int kMaskFieldNumber = 7;
+  const ::std::string& mask() const;
+  void set_mask(const ::std::string& value);
+  void set_mask(const char* value);
+  void set_mask(const void* value, size_t size);
+  ::std::string* mutable_mask();
+  ::std::string* release_mask();
+  void set_allocated_mask(::std::string* mask);
 
   // @@protoc_insertion_point(class_scope:proto.CursorShape)
  private:
@@ -1449,14 +1298,13 @@ class CursorShape : public ::google::protobuf::MessageLite /* @@protoc_insertion
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::google::protobuf::internal::ArenaStringPtr data_;
+  ::google::protobuf::internal::ArenaStringPtr color_;
+  ::google::protobuf::internal::ArenaStringPtr mask_;
   ::google::protobuf::int32 width_;
   ::google::protobuf::int32 height_;
   ::google::protobuf::int32 hotspot_x_;
   ::google::protobuf::int32 hotspot_y_;
+  ::google::protobuf::int32 bits_per_pixel_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
   friend void  protobuf_AddDesc_proto_2eproto_impl();
@@ -1481,15 +1329,10 @@ class CursorShapeControl : public ::google::protobuf::MessageLite /* @@protoc_in
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const CursorShapeControl& default_instance();
 
   static const CursorShapeControl* internal_default_instance();
 
-  void UnsafeArenaSwap(CursorShapeControl* other);
   void Swap(CursorShapeControl* other);
 
   // implements Message ----------------------------------------------
@@ -1516,11 +1359,6 @@ class CursorShapeControl : public ::google::protobuf::MessageLite /* @@protoc_in
   void SetCachedSize(int size) const;
   void InternalSwap(CursorShapeControl* other);
   void UnsafeMergeFrom(const CursorShapeControl& from);
-  protected:
-  explicit CursorShapeControl(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -1548,9 +1386,6 @@ class CursorShapeControl : public ::google::protobuf::MessageLite /* @@protoc_in
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
   bool enable_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
@@ -1576,15 +1411,10 @@ class VideoRect : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const VideoRect& default_instance();
 
   static const VideoRect* internal_default_instance();
 
-  void UnsafeArenaSwap(VideoRect* other);
   void Swap(VideoRect* other);
 
   // implements Message ----------------------------------------------
@@ -1611,11 +1441,6 @@ class VideoRect : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
   void SetCachedSize(int size) const;
   void InternalSwap(VideoRect* other);
   void UnsafeMergeFrom(const VideoRect& from);
-  protected:
-  explicit VideoRect(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -1661,9 +1486,6 @@ class VideoRect : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
   ::google::protobuf::int32 x_;
   ::google::protobuf::int32 y_;
   ::google::protobuf::int32 width_;
@@ -1692,15 +1514,10 @@ class VideoPixelFormat : public ::google::protobuf::MessageLite /* @@protoc_inse
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const VideoPixelFormat& default_instance();
 
   static const VideoPixelFormat* internal_default_instance();
 
-  void UnsafeArenaSwap(VideoPixelFormat* other);
   void Swap(VideoPixelFormat* other);
 
   // implements Message ----------------------------------------------
@@ -1727,11 +1544,6 @@ class VideoPixelFormat : public ::google::protobuf::MessageLite /* @@protoc_inse
   void SetCachedSize(int size) const;
   void InternalSwap(VideoPixelFormat* other);
   void UnsafeMergeFrom(const VideoPixelFormat& from);
-  protected:
-  explicit VideoPixelFormat(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -1795,9 +1607,6 @@ class VideoPixelFormat : public ::google::protobuf::MessageLite /* @@protoc_inse
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
   ::google::protobuf::int32 bits_per_pixel_;
   ::google::protobuf::int32 red_max_;
   ::google::protobuf::int32 green_max_;
@@ -1817,6 +1626,95 @@ extern ::google::protobuf::internal::ExplicitlyConstructed<VideoPixelFormat> Vid
 
 // -------------------------------------------------------------------
 
+class VideoSize : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.VideoSize) */ {
+ public:
+  VideoSize();
+  virtual ~VideoSize();
+
+  VideoSize(const VideoSize& from);
+
+  inline VideoSize& operator=(const VideoSize& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const VideoSize& default_instance();
+
+  static const VideoSize* internal_default_instance();
+
+  void Swap(VideoSize* other);
+
+  // implements Message ----------------------------------------------
+
+  inline VideoSize* New() const { return New(NULL); }
+
+  VideoSize* New(::google::protobuf::Arena* arena) const;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from);
+  void CopyFrom(const VideoSize& from);
+  void MergeFrom(const VideoSize& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  size_t ByteSizeLong() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  void DiscardUnknownFields();
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(VideoSize* other);
+  void UnsafeMergeFrom(const VideoSize& from);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _arena_ptr_;
+  }
+  inline ::google::protobuf::Arena* MaybeArenaPtr() const {
+    return _arena_ptr_;
+  }
+  public:
+
+  ::std::string GetTypeName() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 width = 1;
+  void clear_width();
+  static const int kWidthFieldNumber = 1;
+  ::google::protobuf::int32 width() const;
+  void set_width(::google::protobuf::int32 value);
+
+  // optional int32 height = 2;
+  void clear_height();
+  static const int kHeightFieldNumber = 2;
+  ::google::protobuf::int32 height() const;
+  void set_height(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:proto.VideoSize)
+ private:
+
+  ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
+  ::google::protobuf::Arena* _arena_ptr_;
+
+  ::google::protobuf::int32 width_;
+  ::google::protobuf::int32 height_;
+  mutable int _cached_size_;
+  friend void  protobuf_InitDefaults_proto_2eproto_impl();
+  friend void  protobuf_AddDesc_proto_2eproto_impl();
+  friend void protobuf_AssignDesc_proto_2eproto();
+  friend void protobuf_ShutdownFile_proto_2eproto();
+
+  void InitAsDefaultInstance();
+};
+extern ::google::protobuf::internal::ExplicitlyConstructed<VideoSize> VideoSize_default_instance_;
+
+// -------------------------------------------------------------------
+
 class VideoPacketFormat : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.VideoPacketFormat) */ {
  public:
   VideoPacketFormat();
@@ -1829,15 +1727,10 @@ class VideoPacketFormat : public ::google::protobuf::MessageLite /* @@protoc_ins
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const VideoPacketFormat& default_instance();
 
   static const VideoPacketFormat* internal_default_instance();
 
-  void UnsafeArenaSwap(VideoPacketFormat* other);
   void Swap(VideoPacketFormat* other);
 
   // implements Message ----------------------------------------------
@@ -1864,11 +1757,6 @@ class VideoPacketFormat : public ::google::protobuf::MessageLite /* @@protoc_ins
   void SetCachedSize(int size) const;
   void InternalSwap(VideoPacketFormat* other);
   void UnsafeMergeFrom(const VideoPacketFormat& from);
-  protected:
-  explicit VideoPacketFormat(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -1884,41 +1772,29 @@ class VideoPacketFormat : public ::google::protobuf::MessageLite /* @@protoc_ins
 
   // accessors -------------------------------------------------------
 
-  // optional .proto.VideoEncoding encoding = 1;
+  // optional int32 encoding = 1;
   void clear_encoding();
   static const int kEncodingFieldNumber = 1;
-  ::proto::VideoEncoding encoding() const;
-  void set_encoding(::proto::VideoEncoding value);
+  ::google::protobuf::int32 encoding() const;
+  void set_encoding(::google::protobuf::int32 value);
 
-  // optional int32 screen_width = 2;
-  void clear_screen_width();
-  static const int kScreenWidthFieldNumber = 2;
-  ::google::protobuf::int32 screen_width() const;
-  void set_screen_width(::google::protobuf::int32 value);
+  // optional .proto.VideoSize screen_size = 2;
+  bool has_screen_size() const;
+  void clear_screen_size();
+  static const int kScreenSizeFieldNumber = 2;
+  const ::proto::VideoSize& screen_size() const;
+  ::proto::VideoSize* mutable_screen_size();
+  ::proto::VideoSize* release_screen_size();
+  void set_allocated_screen_size(::proto::VideoSize* screen_size);
 
-  // optional int32 screen_height = 3;
-  void clear_screen_height();
-  static const int kScreenHeightFieldNumber = 3;
-  ::google::protobuf::int32 screen_height() const;
-  void set_screen_height(::google::protobuf::int32 value);
-
-  // optional .proto.VideoPixelFormat pixel_format = 4;
+  // optional .proto.VideoPixelFormat pixel_format = 3;
   bool has_pixel_format() const;
   void clear_pixel_format();
-  static const int kPixelFormatFieldNumber = 4;
-  private:
-  void _slow_mutable_pixel_format();
-  void _slow_set_allocated_pixel_format(
-      ::google::protobuf::Arena* message_arena, ::proto::VideoPixelFormat** pixel_format);
-  ::proto::VideoPixelFormat* _slow_release_pixel_format();
-  public:
+  static const int kPixelFormatFieldNumber = 3;
   const ::proto::VideoPixelFormat& pixel_format() const;
   ::proto::VideoPixelFormat* mutable_pixel_format();
   ::proto::VideoPixelFormat* release_pixel_format();
   void set_allocated_pixel_format(::proto::VideoPixelFormat* pixel_format);
-  ::proto::VideoPixelFormat* unsafe_arena_release_pixel_format();
-  void unsafe_arena_set_allocated_pixel_format(
-      ::proto::VideoPixelFormat* pixel_format);
 
   // @@protoc_insertion_point(class_scope:proto.VideoPacketFormat)
  private:
@@ -1926,13 +1802,9 @@ class VideoPacketFormat : public ::google::protobuf::MessageLite /* @@protoc_ins
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
+  ::proto::VideoSize* screen_size_;
   ::proto::VideoPixelFormat* pixel_format_;
-  int encoding_;
-  ::google::protobuf::int32 screen_width_;
-  ::google::protobuf::int32 screen_height_;
+  ::google::protobuf::int32 encoding_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
   friend void  protobuf_AddDesc_proto_2eproto_impl();
@@ -1957,15 +1829,10 @@ class VideoPacket : public ::google::protobuf::MessageLite /* @@protoc_insertion
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const VideoPacket& default_instance();
 
   static const VideoPacket* internal_default_instance();
 
-  void UnsafeArenaSwap(VideoPacket* other);
   void Swap(VideoPacket* other);
 
   // implements Message ----------------------------------------------
@@ -1992,11 +1859,6 @@ class VideoPacket : public ::google::protobuf::MessageLite /* @@protoc_insertion
   void SetCachedSize(int size) const;
   void InternalSwap(VideoPacket* other);
   void UnsafeMergeFrom(const VideoPacket& from);
-  protected:
-  explicit VideoPacket(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -2041,19 +1903,10 @@ class VideoPacket : public ::google::protobuf::MessageLite /* @@protoc_insertion
   bool has_format() const;
   void clear_format();
   static const int kFormatFieldNumber = 2;
-  private:
-  void _slow_mutable_format();
-  void _slow_set_allocated_format(
-      ::google::protobuf::Arena* message_arena, ::proto::VideoPacketFormat** format);
-  ::proto::VideoPacketFormat* _slow_release_format();
-  public:
   const ::proto::VideoPacketFormat& format() const;
   ::proto::VideoPacketFormat* mutable_format();
   ::proto::VideoPacketFormat* release_format();
   void set_allocated_format(::proto::VideoPacketFormat* format);
-  ::proto::VideoPacketFormat* unsafe_arena_release_format();
-  void unsafe_arena_set_allocated_format(
-      ::proto::VideoPacketFormat* format);
 
   // repeated .proto.VideoRect changed_rect = 3;
   int changed_rect_size() const;
@@ -2077,9 +1930,6 @@ class VideoPacket : public ::google::protobuf::MessageLite /* @@protoc_insertion
   ::std::string* mutable_data();
   ::std::string* release_data();
   void set_allocated_data(::std::string* data);
-  ::std::string* unsafe_arena_release_data();
-  void unsafe_arena_set_allocated_data(
-      ::std::string* data);
 
   // @@protoc_insertion_point(class_scope:proto.VideoPacket)
  private:
@@ -2087,9 +1937,6 @@ class VideoPacket : public ::google::protobuf::MessageLite /* @@protoc_insertion
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
   ::google::protobuf::RepeatedPtrField< ::proto::VideoRect > changed_rect_;
   ::google::protobuf::internal::ArenaStringPtr data_;
   ::proto::VideoPacketFormat* format_;
@@ -2118,15 +1965,10 @@ class VideoControl : public ::google::protobuf::MessageLite /* @@protoc_insertio
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const VideoControl& default_instance();
 
   static const VideoControl* internal_default_instance();
 
-  void UnsafeArenaSwap(VideoControl* other);
   void Swap(VideoControl* other);
 
   // implements Message ----------------------------------------------
@@ -2153,11 +1995,6 @@ class VideoControl : public ::google::protobuf::MessageLite /* @@protoc_insertio
   void SetCachedSize(int size) const;
   void InternalSwap(VideoControl* other);
   void UnsafeMergeFrom(const VideoControl& from);
-  protected:
-  explicit VideoControl(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -2179,47 +2016,20 @@ class VideoControl : public ::google::protobuf::MessageLite /* @@protoc_insertio
   bool enable() const;
   void set_enable(bool value);
 
-  // optional .proto.VideoRect rect = 2;
-  bool has_rect() const;
-  void clear_rect();
-  static const int kRectFieldNumber = 2;
-  private:
-  void _slow_mutable_rect();
-  void _slow_set_allocated_rect(
-      ::google::protobuf::Arena* message_arena, ::proto::VideoRect** rect);
-  ::proto::VideoRect* _slow_release_rect();
-  public:
-  const ::proto::VideoRect& rect() const;
-  ::proto::VideoRect* mutable_rect();
-  ::proto::VideoRect* release_rect();
-  void set_allocated_rect(::proto::VideoRect* rect);
-  ::proto::VideoRect* unsafe_arena_release_rect();
-  void unsafe_arena_set_allocated_rect(
-      ::proto::VideoRect* rect);
-
-  // optional .proto.VideoEncoding encoding = 3;
+  // optional int32 encoding = 2;
   void clear_encoding();
-  static const int kEncodingFieldNumber = 3;
-  ::proto::VideoEncoding encoding() const;
-  void set_encoding(::proto::VideoEncoding value);
+  static const int kEncodingFieldNumber = 2;
+  ::google::protobuf::int32 encoding() const;
+  void set_encoding(::google::protobuf::int32 value);
 
-  // optional .proto.VideoPixelFormat pixel_format = 4;
+  // optional .proto.VideoPixelFormat pixel_format = 3;
   bool has_pixel_format() const;
   void clear_pixel_format();
-  static const int kPixelFormatFieldNumber = 4;
-  private:
-  void _slow_mutable_pixel_format();
-  void _slow_set_allocated_pixel_format(
-      ::google::protobuf::Arena* message_arena, ::proto::VideoPixelFormat** pixel_format);
-  ::proto::VideoPixelFormat* _slow_release_pixel_format();
-  public:
+  static const int kPixelFormatFieldNumber = 3;
   const ::proto::VideoPixelFormat& pixel_format() const;
   ::proto::VideoPixelFormat* mutable_pixel_format();
   ::proto::VideoPixelFormat* release_pixel_format();
   void set_allocated_pixel_format(::proto::VideoPixelFormat* pixel_format);
-  ::proto::VideoPixelFormat* unsafe_arena_release_pixel_format();
-  void unsafe_arena_set_allocated_pixel_format(
-      ::proto::VideoPixelFormat* pixel_format);
 
   // @@protoc_insertion_point(class_scope:proto.VideoControl)
  private:
@@ -2227,13 +2037,9 @@ class VideoControl : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::proto::VideoRect* rect_;
   ::proto::VideoPixelFormat* pixel_format_;
   bool enable_;
-  int encoding_;
+  ::google::protobuf::int32 encoding_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
   friend void  protobuf_AddDesc_proto_2eproto_impl();
@@ -2243,218 +2049,6 @@ class VideoControl : public ::google::protobuf::MessageLite /* @@protoc_insertio
   void InitAsDefaultInstance();
 };
 extern ::google::protobuf::internal::ExplicitlyConstructed<VideoControl> VideoControl_default_instance_;
-
-// -------------------------------------------------------------------
-
-class AudioPacket : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.AudioPacket) */ {
- public:
-  AudioPacket();
-  virtual ~AudioPacket();
-
-  AudioPacket(const AudioPacket& from);
-
-  inline AudioPacket& operator=(const AudioPacket& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
-  static const AudioPacket& default_instance();
-
-  static const AudioPacket* internal_default_instance();
-
-  void UnsafeArenaSwap(AudioPacket* other);
-  void Swap(AudioPacket* other);
-
-  // implements Message ----------------------------------------------
-
-  inline AudioPacket* New() const { return New(NULL); }
-
-  AudioPacket* New(::google::protobuf::Arena* arena) const;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from);
-  void CopyFrom(const AudioPacket& from);
-  void MergeFrom(const AudioPacket& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  size_t ByteSizeLong() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  void DiscardUnknownFields();
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(AudioPacket* other);
-  void UnsafeMergeFrom(const AudioPacket& from);
-  protected:
-  explicit AudioPacket(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return _arena_ptr_;
-  }
-  inline ::google::protobuf::Arena* MaybeArenaPtr() const {
-    return _arena_ptr_;
-  }
-  public:
-
-  ::std::string GetTypeName() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // optional .proto.AudioEncoding encoding = 1;
-  void clear_encoding();
-  static const int kEncodingFieldNumber = 1;
-  ::proto::AudioEncoding encoding() const;
-  void set_encoding(::proto::AudioEncoding value);
-
-  // optional bytes data = 2;
-  void clear_data();
-  static const int kDataFieldNumber = 2;
-  const ::std::string& data() const;
-  void set_data(const ::std::string& value);
-  void set_data(const char* value);
-  void set_data(const void* value, size_t size);
-  ::std::string* mutable_data();
-  ::std::string* release_data();
-  void set_allocated_data(::std::string* data);
-  ::std::string* unsafe_arena_release_data();
-  void unsafe_arena_set_allocated_data(
-      ::std::string* data);
-
-  // @@protoc_insertion_point(class_scope:proto.AudioPacket)
- private:
-
-  ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
-  ::google::protobuf::Arena* _arena_ptr_;
-
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::google::protobuf::internal::ArenaStringPtr data_;
-  int encoding_;
-  mutable int _cached_size_;
-  friend void  protobuf_InitDefaults_proto_2eproto_impl();
-  friend void  protobuf_AddDesc_proto_2eproto_impl();
-  friend void protobuf_AssignDesc_proto_2eproto();
-  friend void protobuf_ShutdownFile_proto_2eproto();
-
-  void InitAsDefaultInstance();
-};
-extern ::google::protobuf::internal::ExplicitlyConstructed<AudioPacket> AudioPacket_default_instance_;
-
-// -------------------------------------------------------------------
-
-class AudioControl : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.AudioControl) */ {
- public:
-  AudioControl();
-  virtual ~AudioControl();
-
-  AudioControl(const AudioControl& from);
-
-  inline AudioControl& operator=(const AudioControl& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
-  static const AudioControl& default_instance();
-
-  static const AudioControl* internal_default_instance();
-
-  void UnsafeArenaSwap(AudioControl* other);
-  void Swap(AudioControl* other);
-
-  // implements Message ----------------------------------------------
-
-  inline AudioControl* New() const { return New(NULL); }
-
-  AudioControl* New(::google::protobuf::Arena* arena) const;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from);
-  void CopyFrom(const AudioControl& from);
-  void MergeFrom(const AudioControl& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  size_t ByteSizeLong() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  void DiscardUnknownFields();
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(AudioControl* other);
-  void UnsafeMergeFrom(const AudioControl& from);
-  protected:
-  explicit AudioControl(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return _arena_ptr_;
-  }
-  inline ::google::protobuf::Arena* MaybeArenaPtr() const {
-    return _arena_ptr_;
-  }
-  public:
-
-  ::std::string GetTypeName() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // optional bool enable = 1;
-  void clear_enable();
-  static const int kEnableFieldNumber = 1;
-  bool enable() const;
-  void set_enable(bool value);
-
-  // optional .proto.AudioEncoding encoding = 3;
-  void clear_encoding();
-  static const int kEncodingFieldNumber = 3;
-  ::proto::AudioEncoding encoding() const;
-  void set_encoding(::proto::AudioEncoding value);
-
-  // @@protoc_insertion_point(class_scope:proto.AudioControl)
- private:
-
-  ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
-  ::google::protobuf::Arena* _arena_ptr_;
-
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  bool enable_;
-  int encoding_;
-  mutable int _cached_size_;
-  friend void  protobuf_InitDefaults_proto_2eproto_impl();
-  friend void  protobuf_AddDesc_proto_2eproto_impl();
-  friend void protobuf_AssignDesc_proto_2eproto();
-  friend void protobuf_ShutdownFile_proto_2eproto();
-
-  void InitAsDefaultInstance();
-};
-extern ::google::protobuf::internal::ExplicitlyConstructed<AudioControl> AudioControl_default_instance_;
 
 // -------------------------------------------------------------------
 
@@ -2470,15 +2064,10 @@ class ServerToClient : public ::google::protobuf::MessageLite /* @@protoc_insert
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const ServerToClient& default_instance();
 
   static const ServerToClient* internal_default_instance();
 
-  void UnsafeArenaSwap(ServerToClient* other);
   void Swap(ServerToClient* other);
 
   // implements Message ----------------------------------------------
@@ -2505,11 +2094,6 @@ class ServerToClient : public ::google::protobuf::MessageLite /* @@protoc_insert
   void SetCachedSize(int size) const;
   void InternalSwap(ServerToClient* other);
   void UnsafeMergeFrom(const ServerToClient& from);
-  protected:
-  explicit ServerToClient(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -2529,127 +2113,55 @@ class ServerToClient : public ::google::protobuf::MessageLite /* @@protoc_insert
   bool has_video_packet() const;
   void clear_video_packet();
   static const int kVideoPacketFieldNumber = 1;
-  private:
-  void _slow_mutable_video_packet();
-  void _slow_set_allocated_video_packet(
-      ::google::protobuf::Arena* message_arena, ::proto::VideoPacket** video_packet);
-  ::proto::VideoPacket* _slow_release_video_packet();
-  public:
   const ::proto::VideoPacket& video_packet() const;
   ::proto::VideoPacket* mutable_video_packet();
   ::proto::VideoPacket* release_video_packet();
   void set_allocated_video_packet(::proto::VideoPacket* video_packet);
-  ::proto::VideoPacket* unsafe_arena_release_video_packet();
-  void unsafe_arena_set_allocated_video_packet(
-      ::proto::VideoPacket* video_packet);
 
-  // optional .proto.AudioPacket audio_packet = 2;
-  bool has_audio_packet() const;
-  void clear_audio_packet();
-  static const int kAudioPacketFieldNumber = 2;
-  private:
-  void _slow_mutable_audio_packet();
-  void _slow_set_allocated_audio_packet(
-      ::google::protobuf::Arena* message_arena, ::proto::AudioPacket** audio_packet);
-  ::proto::AudioPacket* _slow_release_audio_packet();
-  public:
-  const ::proto::AudioPacket& audio_packet() const;
-  ::proto::AudioPacket* mutable_audio_packet();
-  ::proto::AudioPacket* release_audio_packet();
-  void set_allocated_audio_packet(::proto::AudioPacket* audio_packet);
-  ::proto::AudioPacket* unsafe_arena_release_audio_packet();
-  void unsafe_arena_set_allocated_audio_packet(
-      ::proto::AudioPacket* audio_packet);
-
-  // optional .proto.CursorShape cursor = 3;
+  // optional .proto.CursorShape cursor = 2;
   bool has_cursor() const;
   void clear_cursor();
-  static const int kCursorFieldNumber = 3;
-  private:
-  void _slow_mutable_cursor();
-  void _slow_set_allocated_cursor(
-      ::google::protobuf::Arena* message_arena, ::proto::CursorShape** cursor);
-  ::proto::CursorShape* _slow_release_cursor();
-  public:
+  static const int kCursorFieldNumber = 2;
   const ::proto::CursorShape& cursor() const;
   ::proto::CursorShape* mutable_cursor();
   ::proto::CursorShape* release_cursor();
   void set_allocated_cursor(::proto::CursorShape* cursor);
-  ::proto::CursorShape* unsafe_arena_release_cursor();
-  void unsafe_arena_set_allocated_cursor(
-      ::proto::CursorShape* cursor);
 
-  // optional .proto.Clipboard clipboard = 4;
+  // optional .proto.Clipboard clipboard = 3;
   bool has_clipboard() const;
   void clear_clipboard();
-  static const int kClipboardFieldNumber = 4;
-  private:
-  void _slow_mutable_clipboard();
-  void _slow_set_allocated_clipboard(
-      ::google::protobuf::Arena* message_arena, ::proto::Clipboard** clipboard);
-  ::proto::Clipboard* _slow_release_clipboard();
-  public:
+  static const int kClipboardFieldNumber = 3;
   const ::proto::Clipboard& clipboard() const;
   ::proto::Clipboard* mutable_clipboard();
   ::proto::Clipboard* release_clipboard();
   void set_allocated_clipboard(::proto::Clipboard* clipboard);
-  ::proto::Clipboard* unsafe_arena_release_clipboard();
-  void unsafe_arena_set_allocated_clipboard(
-      ::proto::Clipboard* clipboard);
 
-  // optional .proto.TextChat text_chat = 5;
+  // optional .proto.TextChat text_chat = 4;
   bool has_text_chat() const;
   void clear_text_chat();
-  static const int kTextChatFieldNumber = 5;
-  private:
-  void _slow_mutable_text_chat();
-  void _slow_set_allocated_text_chat(
-      ::google::protobuf::Arena* message_arena, ::proto::TextChat** text_chat);
-  ::proto::TextChat* _slow_release_text_chat();
-  public:
+  static const int kTextChatFieldNumber = 4;
   const ::proto::TextChat& text_chat() const;
   ::proto::TextChat* mutable_text_chat();
   ::proto::TextChat* release_text_chat();
   void set_allocated_text_chat(::proto::TextChat* text_chat);
-  ::proto::TextChat* unsafe_arena_release_text_chat();
-  void unsafe_arena_set_allocated_text_chat(
-      ::proto::TextChat* text_chat);
 
-  // optional .proto.AuthorizationRequest auth_request = 6;
+  // optional .proto.AuthRequest auth_request = 5;
   bool has_auth_request() const;
   void clear_auth_request();
-  static const int kAuthRequestFieldNumber = 6;
-  private:
-  void _slow_mutable_auth_request();
-  void _slow_set_allocated_auth_request(
-      ::google::protobuf::Arena* message_arena, ::proto::AuthorizationRequest** auth_request);
-  ::proto::AuthorizationRequest* _slow_release_auth_request();
-  public:
-  const ::proto::AuthorizationRequest& auth_request() const;
-  ::proto::AuthorizationRequest* mutable_auth_request();
-  ::proto::AuthorizationRequest* release_auth_request();
-  void set_allocated_auth_request(::proto::AuthorizationRequest* auth_request);
-  ::proto::AuthorizationRequest* unsafe_arena_release_auth_request();
-  void unsafe_arena_set_allocated_auth_request(
-      ::proto::AuthorizationRequest* auth_request);
+  static const int kAuthRequestFieldNumber = 5;
+  const ::proto::AuthRequest& auth_request() const;
+  ::proto::AuthRequest* mutable_auth_request();
+  ::proto::AuthRequest* release_auth_request();
+  void set_allocated_auth_request(::proto::AuthRequest* auth_request);
 
-  // optional .proto.AuthorizationResult auth_result = 7;
+  // optional .proto.AuthResult auth_result = 6;
   bool has_auth_result() const;
   void clear_auth_result();
-  static const int kAuthResultFieldNumber = 7;
-  private:
-  void _slow_mutable_auth_result();
-  void _slow_set_allocated_auth_result(
-      ::google::protobuf::Arena* message_arena, ::proto::AuthorizationResult** auth_result);
-  ::proto::AuthorizationResult* _slow_release_auth_result();
-  public:
-  const ::proto::AuthorizationResult& auth_result() const;
-  ::proto::AuthorizationResult* mutable_auth_result();
-  ::proto::AuthorizationResult* release_auth_result();
-  void set_allocated_auth_result(::proto::AuthorizationResult* auth_result);
-  ::proto::AuthorizationResult* unsafe_arena_release_auth_result();
-  void unsafe_arena_set_allocated_auth_result(
-      ::proto::AuthorizationResult* auth_result);
+  static const int kAuthResultFieldNumber = 6;
+  const ::proto::AuthResult& auth_result() const;
+  ::proto::AuthResult* mutable_auth_result();
+  ::proto::AuthResult* release_auth_result();
+  void set_allocated_auth_result(::proto::AuthResult* auth_result);
 
   // @@protoc_insertion_point(class_scope:proto.ServerToClient)
  private:
@@ -2657,16 +2169,12 @@ class ServerToClient : public ::google::protobuf::MessageLite /* @@protoc_insert
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
   ::proto::VideoPacket* video_packet_;
-  ::proto::AudioPacket* audio_packet_;
   ::proto::CursorShape* cursor_;
   ::proto::Clipboard* clipboard_;
   ::proto::TextChat* text_chat_;
-  ::proto::AuthorizationRequest* auth_request_;
-  ::proto::AuthorizationResult* auth_result_;
+  ::proto::AuthRequest* auth_request_;
+  ::proto::AuthResult* auth_result_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
   friend void  protobuf_AddDesc_proto_2eproto_impl();
@@ -2691,15 +2199,10 @@ class ClientToServer : public ::google::protobuf::MessageLite /* @@protoc_insert
     return *this;
   }
 
-  inline ::google::protobuf::Arena* GetArena() const { return GetArenaNoVirtual(); }
-  inline void* GetMaybeArenaPointer() const {
-    return MaybeArenaPtr();
-  }
   static const ClientToServer& default_instance();
 
   static const ClientToServer* internal_default_instance();
 
-  void UnsafeArenaSwap(ClientToServer* other);
   void Swap(ClientToServer* other);
 
   // implements Message ----------------------------------------------
@@ -2726,11 +2229,6 @@ class ClientToServer : public ::google::protobuf::MessageLite /* @@protoc_insert
   void SetCachedSize(int size) const;
   void InternalSwap(ClientToServer* other);
   void UnsafeMergeFrom(const ClientToServer& from);
-  protected:
-  explicit ClientToServer(::google::protobuf::Arena* arena);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::google::protobuf::Arena* arena);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -2750,217 +2248,100 @@ class ClientToServer : public ::google::protobuf::MessageLite /* @@protoc_insert
   bool has_video_control() const;
   void clear_video_control();
   static const int kVideoControlFieldNumber = 1;
-  private:
-  void _slow_mutable_video_control();
-  void _slow_set_allocated_video_control(
-      ::google::protobuf::Arena* message_arena, ::proto::VideoControl** video_control);
-  ::proto::VideoControl* _slow_release_video_control();
-  public:
   const ::proto::VideoControl& video_control() const;
   ::proto::VideoControl* mutable_video_control();
   ::proto::VideoControl* release_video_control();
   void set_allocated_video_control(::proto::VideoControl* video_control);
-  ::proto::VideoControl* unsafe_arena_release_video_control();
-  void unsafe_arena_set_allocated_video_control(
-      ::proto::VideoControl* video_control);
 
-  // optional .proto.AudioControl audio_control = 2;
-  bool has_audio_control() const;
-  void clear_audio_control();
-  static const int kAudioControlFieldNumber = 2;
-  private:
-  void _slow_mutable_audio_control();
-  void _slow_set_allocated_audio_control(
-      ::google::protobuf::Arena* message_arena, ::proto::AudioControl** audio_control);
-  ::proto::AudioControl* _slow_release_audio_control();
-  public:
-  const ::proto::AudioControl& audio_control() const;
-  ::proto::AudioControl* mutable_audio_control();
-  ::proto::AudioControl* release_audio_control();
-  void set_allocated_audio_control(::proto::AudioControl* audio_control);
-  ::proto::AudioControl* unsafe_arena_release_audio_control();
-  void unsafe_arena_set_allocated_audio_control(
-      ::proto::AudioControl* audio_control);
-
-  // optional .proto.CursorShapeControl cursor_shape_control = 3;
+  // optional .proto.CursorShapeControl cursor_shape_control = 2;
   bool has_cursor_shape_control() const;
   void clear_cursor_shape_control();
-  static const int kCursorShapeControlFieldNumber = 3;
-  private:
-  void _slow_mutable_cursor_shape_control();
-  void _slow_set_allocated_cursor_shape_control(
-      ::google::protobuf::Arena* message_arena, ::proto::CursorShapeControl** cursor_shape_control);
-  ::proto::CursorShapeControl* _slow_release_cursor_shape_control();
-  public:
+  static const int kCursorShapeControlFieldNumber = 2;
   const ::proto::CursorShapeControl& cursor_shape_control() const;
   ::proto::CursorShapeControl* mutable_cursor_shape_control();
   ::proto::CursorShapeControl* release_cursor_shape_control();
   void set_allocated_cursor_shape_control(::proto::CursorShapeControl* cursor_shape_control);
-  ::proto::CursorShapeControl* unsafe_arena_release_cursor_shape_control();
-  void unsafe_arena_set_allocated_cursor_shape_control(
-      ::proto::CursorShapeControl* cursor_shape_control);
 
-  // optional .proto.ClipboardControl clipboard_control = 4;
+  // optional .proto.ClipboardControl clipboard_control = 3;
   bool has_clipboard_control() const;
   void clear_clipboard_control();
-  static const int kClipboardControlFieldNumber = 4;
-  private:
-  void _slow_mutable_clipboard_control();
-  void _slow_set_allocated_clipboard_control(
-      ::google::protobuf::Arena* message_arena, ::proto::ClipboardControl** clipboard_control);
-  ::proto::ClipboardControl* _slow_release_clipboard_control();
-  public:
+  static const int kClipboardControlFieldNumber = 3;
   const ::proto::ClipboardControl& clipboard_control() const;
   ::proto::ClipboardControl* mutable_clipboard_control();
   ::proto::ClipboardControl* release_clipboard_control();
   void set_allocated_clipboard_control(::proto::ClipboardControl* clipboard_control);
-  ::proto::ClipboardControl* unsafe_arena_release_clipboard_control();
-  void unsafe_arena_set_allocated_clipboard_control(
-      ::proto::ClipboardControl* clipboard_control);
 
-  // optional .proto.ClipboardRequest clipboard_request = 5;
+  // optional .proto.ClipboardRequest clipboard_request = 4;
   bool has_clipboard_request() const;
   void clear_clipboard_request();
-  static const int kClipboardRequestFieldNumber = 5;
-  private:
-  void _slow_mutable_clipboard_request();
-  void _slow_set_allocated_clipboard_request(
-      ::google::protobuf::Arena* message_arena, ::proto::ClipboardRequest** clipboard_request);
-  ::proto::ClipboardRequest* _slow_release_clipboard_request();
-  public:
+  static const int kClipboardRequestFieldNumber = 4;
   const ::proto::ClipboardRequest& clipboard_request() const;
   ::proto::ClipboardRequest* mutable_clipboard_request();
   ::proto::ClipboardRequest* release_clipboard_request();
   void set_allocated_clipboard_request(::proto::ClipboardRequest* clipboard_request);
-  ::proto::ClipboardRequest* unsafe_arena_release_clipboard_request();
-  void unsafe_arena_set_allocated_clipboard_request(
-      ::proto::ClipboardRequest* clipboard_request);
 
-  // optional .proto.Clipboard clipboard = 6;
+  // optional .proto.Clipboard clipboard = 5;
   bool has_clipboard() const;
   void clear_clipboard();
-  static const int kClipboardFieldNumber = 6;
-  private:
-  void _slow_mutable_clipboard();
-  void _slow_set_allocated_clipboard(
-      ::google::protobuf::Arena* message_arena, ::proto::Clipboard** clipboard);
-  ::proto::Clipboard* _slow_release_clipboard();
-  public:
+  static const int kClipboardFieldNumber = 5;
   const ::proto::Clipboard& clipboard() const;
   ::proto::Clipboard* mutable_clipboard();
   ::proto::Clipboard* release_clipboard();
   void set_allocated_clipboard(::proto::Clipboard* clipboard);
-  ::proto::Clipboard* unsafe_arena_release_clipboard();
-  void unsafe_arena_set_allocated_clipboard(
-      ::proto::Clipboard* clipboard);
 
-  // optional .proto.MouseEvent mouse_event = 7;
-  bool has_mouse_event() const;
-  void clear_mouse_event();
-  static const int kMouseEventFieldNumber = 7;
-  private:
-  void _slow_mutable_mouse_event();
-  void _slow_set_allocated_mouse_event(
-      ::google::protobuf::Arena* message_arena, ::proto::MouseEvent** mouse_event);
-  ::proto::MouseEvent* _slow_release_mouse_event();
-  public:
-  const ::proto::MouseEvent& mouse_event() const;
-  ::proto::MouseEvent* mutable_mouse_event();
-  ::proto::MouseEvent* release_mouse_event();
-  void set_allocated_mouse_event(::proto::MouseEvent* mouse_event);
-  ::proto::MouseEvent* unsafe_arena_release_mouse_event();
-  void unsafe_arena_set_allocated_mouse_event(
-      ::proto::MouseEvent* mouse_event);
+  // optional .proto.PointerEvent pointer_event = 6;
+  bool has_pointer_event() const;
+  void clear_pointer_event();
+  static const int kPointerEventFieldNumber = 6;
+  const ::proto::PointerEvent& pointer_event() const;
+  ::proto::PointerEvent* mutable_pointer_event();
+  ::proto::PointerEvent* release_pointer_event();
+  void set_allocated_pointer_event(::proto::PointerEvent* pointer_event);
 
-  // optional .proto.KeyEvent key_event = 8;
+  // optional .proto.KeyEvent key_event = 7;
   bool has_key_event() const;
   void clear_key_event();
-  static const int kKeyEventFieldNumber = 8;
-  private:
-  void _slow_mutable_key_event();
-  void _slow_set_allocated_key_event(
-      ::google::protobuf::Arena* message_arena, ::proto::KeyEvent** key_event);
-  ::proto::KeyEvent* _slow_release_key_event();
-  public:
+  static const int kKeyEventFieldNumber = 7;
   const ::proto::KeyEvent& key_event() const;
   ::proto::KeyEvent* mutable_key_event();
   ::proto::KeyEvent* release_key_event();
   void set_allocated_key_event(::proto::KeyEvent* key_event);
-  ::proto::KeyEvent* unsafe_arena_release_key_event();
-  void unsafe_arena_set_allocated_key_event(
-      ::proto::KeyEvent* key_event);
 
-  // optional .proto.Bell bell = 9;
+  // optional .proto.Bell bell = 8;
   bool has_bell() const;
   void clear_bell();
-  static const int kBellFieldNumber = 9;
-  private:
-  void _slow_mutable_bell();
-  void _slow_set_allocated_bell(
-      ::google::protobuf::Arena* message_arena, ::proto::Bell** bell);
-  ::proto::Bell* _slow_release_bell();
-  public:
+  static const int kBellFieldNumber = 8;
   const ::proto::Bell& bell() const;
   ::proto::Bell* mutable_bell();
   ::proto::Bell* release_bell();
   void set_allocated_bell(::proto::Bell* bell);
-  ::proto::Bell* unsafe_arena_release_bell();
-  void unsafe_arena_set_allocated_bell(
-      ::proto::Bell* bell);
 
-  // optional .proto.TextChat text_chat = 10;
+  // optional .proto.TextChat text_chat = 9;
   bool has_text_chat() const;
   void clear_text_chat();
-  static const int kTextChatFieldNumber = 10;
-  private:
-  void _slow_mutable_text_chat();
-  void _slow_set_allocated_text_chat(
-      ::google::protobuf::Arena* message_arena, ::proto::TextChat** text_chat);
-  ::proto::TextChat* _slow_release_text_chat();
-  public:
+  static const int kTextChatFieldNumber = 9;
   const ::proto::TextChat& text_chat() const;
   ::proto::TextChat* mutable_text_chat();
   ::proto::TextChat* release_text_chat();
   void set_allocated_text_chat(::proto::TextChat* text_chat);
-  ::proto::TextChat* unsafe_arena_release_text_chat();
-  void unsafe_arena_set_allocated_text_chat(
-      ::proto::TextChat* text_chat);
 
-  // optional .proto.PowerControl power_control = 11;
+  // optional .proto.PowerControl power_control = 10;
   bool has_power_control() const;
   void clear_power_control();
-  static const int kPowerControlFieldNumber = 11;
-  private:
-  void _slow_mutable_power_control();
-  void _slow_set_allocated_power_control(
-      ::google::protobuf::Arena* message_arena, ::proto::PowerControl** power_control);
-  ::proto::PowerControl* _slow_release_power_control();
-  public:
+  static const int kPowerControlFieldNumber = 10;
   const ::proto::PowerControl& power_control() const;
   ::proto::PowerControl* mutable_power_control();
   ::proto::PowerControl* release_power_control();
   void set_allocated_power_control(::proto::PowerControl* power_control);
-  ::proto::PowerControl* unsafe_arena_release_power_control();
-  void unsafe_arena_set_allocated_power_control(
-      ::proto::PowerControl* power_control);
 
-  // optional .proto.AuthorizationReply auth_reply = 12;
+  // optional .proto.AuthReply auth_reply = 11;
   bool has_auth_reply() const;
   void clear_auth_reply();
-  static const int kAuthReplyFieldNumber = 12;
-  private:
-  void _slow_mutable_auth_reply();
-  void _slow_set_allocated_auth_reply(
-      ::google::protobuf::Arena* message_arena, ::proto::AuthorizationReply** auth_reply);
-  ::proto::AuthorizationReply* _slow_release_auth_reply();
-  public:
-  const ::proto::AuthorizationReply& auth_reply() const;
-  ::proto::AuthorizationReply* mutable_auth_reply();
-  ::proto::AuthorizationReply* release_auth_reply();
-  void set_allocated_auth_reply(::proto::AuthorizationReply* auth_reply);
-  ::proto::AuthorizationReply* unsafe_arena_release_auth_reply();
-  void unsafe_arena_set_allocated_auth_reply(
-      ::proto::AuthorizationReply* auth_reply);
+  static const int kAuthReplyFieldNumber = 11;
+  const ::proto::AuthReply& auth_reply() const;
+  ::proto::AuthReply* mutable_auth_reply();
+  ::proto::AuthReply* release_auth_reply();
+  void set_allocated_auth_reply(::proto::AuthReply* auth_reply);
 
   // @@protoc_insertion_point(class_scope:proto.ClientToServer)
  private:
@@ -2968,21 +2349,17 @@ class ClientToServer : public ::google::protobuf::MessageLite /* @@protoc_insert
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  friend class ::google::protobuf::Arena;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
   ::proto::VideoControl* video_control_;
-  ::proto::AudioControl* audio_control_;
   ::proto::CursorShapeControl* cursor_shape_control_;
   ::proto::ClipboardControl* clipboard_control_;
   ::proto::ClipboardRequest* clipboard_request_;
   ::proto::Clipboard* clipboard_;
-  ::proto::MouseEvent* mouse_event_;
+  ::proto::PointerEvent* pointer_event_;
   ::proto::KeyEvent* key_event_;
   ::proto::Bell* bell_;
   ::proto::TextChat* text_chat_;
   ::proto::PowerControl* power_control_;
-  ::proto::AuthorizationReply* auth_reply_;
+  ::proto::AuthReply* auth_reply_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
   friend void  protobuf_AddDesc_proto_2eproto_impl();
@@ -2999,310 +2376,168 @@ extern ::google::protobuf::internal::ExplicitlyConstructed<ClientToServer> Clien
 // ===================================================================
 
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
-// AuthorizationRequest
+// AuthRequest
 
-// repeated .proto.AuthorizationMethod methods = 1;
-inline int AuthorizationRequest::methods_size() const {
-  return methods_.size();
+// optional int32 methods = 1;
+inline void AuthRequest::clear_methods() {
+  methods_ = 0;
 }
-inline void AuthorizationRequest::clear_methods() {
-  methods_.Clear();
-}
-inline ::proto::AuthorizationMethod AuthorizationRequest::methods(int index) const {
-  // @@protoc_insertion_point(field_get:proto.AuthorizationRequest.methods)
-  return static_cast< ::proto::AuthorizationMethod >(methods_.Get(index));
-}
-inline void AuthorizationRequest::set_methods(int index, ::proto::AuthorizationMethod value) {
-  methods_.Set(index, value);
-  // @@protoc_insertion_point(field_set:proto.AuthorizationRequest.methods)
-}
-inline void AuthorizationRequest::add_methods(::proto::AuthorizationMethod value) {
-  methods_.Add(value);
-  // @@protoc_insertion_point(field_add:proto.AuthorizationRequest.methods)
-}
-inline const ::google::protobuf::RepeatedField<int>&
-AuthorizationRequest::methods() const {
-  // @@protoc_insertion_point(field_list:proto.AuthorizationRequest.methods)
+inline ::google::protobuf::int32 AuthRequest::methods() const {
+  // @@protoc_insertion_point(field_get:proto.AuthRequest.methods)
   return methods_;
 }
-inline ::google::protobuf::RepeatedField<int>*
-AuthorizationRequest::mutable_methods() {
-  // @@protoc_insertion_point(field_mutable_list:proto.AuthorizationRequest.methods)
-  return &methods_;
+inline void AuthRequest::set_methods(::google::protobuf::int32 value) {
+  
+  methods_ = value;
+  // @@protoc_insertion_point(field_set:proto.AuthRequest.methods)
 }
 
-inline const AuthorizationRequest* AuthorizationRequest::internal_default_instance() {
-  return &AuthorizationRequest_default_instance_.get();
+inline const AuthRequest* AuthRequest::internal_default_instance() {
+  return &AuthRequest_default_instance_.get();
 }
 // -------------------------------------------------------------------
 
-// AuthorizationReply
+// AuthReply
 
-// optional .proto.AuthorizationMethod method = 1;
-inline void AuthorizationReply::clear_method() {
+// optional int32 method = 1;
+inline void AuthReply::clear_method() {
   method_ = 0;
 }
-inline ::proto::AuthorizationMethod AuthorizationReply::method() const {
-  // @@protoc_insertion_point(field_get:proto.AuthorizationReply.method)
-  return static_cast< ::proto::AuthorizationMethod >(method_);
+inline ::google::protobuf::int32 AuthReply::method() const {
+  // @@protoc_insertion_point(field_get:proto.AuthReply.method)
+  return method_;
 }
-inline void AuthorizationReply::set_method(::proto::AuthorizationMethod value) {
+inline void AuthReply::set_method(::google::protobuf::int32 value) {
   
   method_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthorizationReply.method)
+  // @@protoc_insertion_point(field_set:proto.AuthReply.method)
 }
 
-// optional string domain = 2;
-inline void AuthorizationReply::clear_domain() {
-  domain_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+// optional string username = 3;
+inline void AuthReply::clear_username() {
+  username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& AuthorizationReply::domain() const {
-  // @@protoc_insertion_point(field_get:proto.AuthorizationReply.domain)
-  return domain_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline const ::std::string& AuthReply::username() const {
+  // @@protoc_insertion_point(field_get:proto.AuthReply.username)
+  return username_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void AuthorizationReply::set_domain(const ::std::string& value) {
+inline void AuthReply::set_username(const ::std::string& value) {
   
-  domain_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set:proto.AuthorizationReply.domain)
+  username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:proto.AuthReply.username)
 }
-inline void AuthorizationReply::set_domain(const char* value) {
+inline void AuthReply::set_username(const char* value) {
   
-  domain_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_char:proto.AuthorizationReply.domain)
+  username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:proto.AuthReply.username)
 }
-inline void AuthorizationReply::set_domain(const char* value,
-    size_t size) {
+inline void AuthReply::set_username(const char* value, size_t size) {
   
-  domain_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_pointer:proto.AuthorizationReply.domain)
+  username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:proto.AuthReply.username)
 }
-inline ::std::string* AuthorizationReply::mutable_domain() {
+inline ::std::string* AuthReply::mutable_username() {
   
-  // @@protoc_insertion_point(field_mutable:proto.AuthorizationReply.domain)
-  return domain_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  // @@protoc_insertion_point(field_mutable:proto.AuthReply.username)
+  return username_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* AuthorizationReply::release_domain() {
-  // @@protoc_insertion_point(field_release:proto.AuthorizationReply.domain)
+inline ::std::string* AuthReply::release_username() {
+  // @@protoc_insertion_point(field_release:proto.AuthReply.username)
   
-  return domain_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  return username_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* AuthorizationReply::unsafe_arena_release_domain() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.AuthorizationReply.domain)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return domain_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
-}
-inline void AuthorizationReply::set_allocated_domain(::std::string* domain) {
-  if (domain != NULL) {
+inline void AuthReply::set_allocated_username(::std::string* username) {
+  if (username != NULL) {
     
   } else {
     
   }
-  domain_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), domain,
-      GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_allocated:proto.AuthorizationReply.domain)
-}
-inline void AuthorizationReply::unsafe_arena_set_allocated_domain(
-    ::std::string* domain) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (domain != NULL) {
-    
-  } else {
-    
-  }
-  domain_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      domain, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.AuthorizationReply.domain)
-}
-
-// optional string user_name = 3;
-inline void AuthorizationReply::clear_user_name() {
-  user_name_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-inline const ::std::string& AuthorizationReply::user_name() const {
-  // @@protoc_insertion_point(field_get:proto.AuthorizationReply.user_name)
-  return user_name_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void AuthorizationReply::set_user_name(const ::std::string& value) {
-  
-  user_name_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set:proto.AuthorizationReply.user_name)
-}
-inline void AuthorizationReply::set_user_name(const char* value) {
-  
-  user_name_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_char:proto.AuthorizationReply.user_name)
-}
-inline void AuthorizationReply::set_user_name(const char* value,
-    size_t size) {
-  
-  user_name_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_pointer:proto.AuthorizationReply.user_name)
-}
-inline ::std::string* AuthorizationReply::mutable_user_name() {
-  
-  // @@protoc_insertion_point(field_mutable:proto.AuthorizationReply.user_name)
-  return user_name_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-inline ::std::string* AuthorizationReply::release_user_name() {
-  // @@protoc_insertion_point(field_release:proto.AuthorizationReply.user_name)
-  
-  return user_name_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-inline ::std::string* AuthorizationReply::unsafe_arena_release_user_name() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.AuthorizationReply.user_name)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return user_name_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
-}
-inline void AuthorizationReply::set_allocated_user_name(::std::string* user_name) {
-  if (user_name != NULL) {
-    
-  } else {
-    
-  }
-  user_name_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), user_name,
-      GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_allocated:proto.AuthorizationReply.user_name)
-}
-inline void AuthorizationReply::unsafe_arena_set_allocated_user_name(
-    ::std::string* user_name) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (user_name != NULL) {
-    
-  } else {
-    
-  }
-  user_name_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      user_name, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.AuthorizationReply.user_name)
+  username_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), username);
+  // @@protoc_insertion_point(field_set_allocated:proto.AuthReply.username)
 }
 
 // optional bytes password = 4;
-inline void AuthorizationReply::clear_password() {
-  password_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+inline void AuthReply::clear_password() {
+  password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& AuthorizationReply::password() const {
-  // @@protoc_insertion_point(field_get:proto.AuthorizationReply.password)
-  return password_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline const ::std::string& AuthReply::password() const {
+  // @@protoc_insertion_point(field_get:proto.AuthReply.password)
+  return password_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void AuthorizationReply::set_password(const ::std::string& value) {
+inline void AuthReply::set_password(const ::std::string& value) {
   
-  password_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set:proto.AuthorizationReply.password)
+  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:proto.AuthReply.password)
 }
-inline void AuthorizationReply::set_password(const char* value) {
+inline void AuthReply::set_password(const char* value) {
   
-  password_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_char:proto.AuthorizationReply.password)
+  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:proto.AuthReply.password)
 }
-inline void AuthorizationReply::set_password(const void* value,
-    size_t size) {
+inline void AuthReply::set_password(const void* value, size_t size) {
   
-  password_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_pointer:proto.AuthorizationReply.password)
+  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:proto.AuthReply.password)
 }
-inline ::std::string* AuthorizationReply::mutable_password() {
+inline ::std::string* AuthReply::mutable_password() {
   
-  // @@protoc_insertion_point(field_mutable:proto.AuthorizationReply.password)
-  return password_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  // @@protoc_insertion_point(field_mutable:proto.AuthReply.password)
+  return password_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* AuthorizationReply::release_password() {
-  // @@protoc_insertion_point(field_release:proto.AuthorizationReply.password)
+inline ::std::string* AuthReply::release_password() {
+  // @@protoc_insertion_point(field_release:proto.AuthReply.password)
   
-  return password_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  return password_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* AuthorizationReply::unsafe_arena_release_password() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.AuthorizationReply.password)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return password_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
-}
-inline void AuthorizationReply::set_allocated_password(::std::string* password) {
+inline void AuthReply::set_allocated_password(::std::string* password) {
   if (password != NULL) {
     
   } else {
     
   }
-  password_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), password,
-      GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_allocated:proto.AuthorizationReply.password)
-}
-inline void AuthorizationReply::unsafe_arena_set_allocated_password(
-    ::std::string* password) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (password != NULL) {
-    
-  } else {
-    
-  }
-  password_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      password, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.AuthorizationReply.password)
+  password_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), password);
+  // @@protoc_insertion_point(field_set_allocated:proto.AuthReply.password)
 }
 
-inline const AuthorizationReply* AuthorizationReply::internal_default_instance() {
-  return &AuthorizationReply_default_instance_.get();
+inline const AuthReply* AuthReply::internal_default_instance() {
+  return &AuthReply_default_instance_.get();
 }
 // -------------------------------------------------------------------
 
-// AuthorizationResult
+// AuthResult
 
 // optional bool success = 1;
-inline void AuthorizationResult::clear_success() {
+inline void AuthResult::clear_success() {
   success_ = false;
 }
-inline bool AuthorizationResult::success() const {
-  // @@protoc_insertion_point(field_get:proto.AuthorizationResult.success)
+inline bool AuthResult::success() const {
+  // @@protoc_insertion_point(field_get:proto.AuthResult.success)
   return success_;
 }
-inline void AuthorizationResult::set_success(bool value) {
+inline void AuthResult::set_success(bool value) {
   
   success_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthorizationResult.success)
+  // @@protoc_insertion_point(field_set:proto.AuthResult.success)
 }
 
-// repeated .proto.SessionFeature features = 2;
-inline int AuthorizationResult::features_size() const {
-  return features_.size();
+// optional int32 features = 2;
+inline void AuthResult::clear_features() {
+  features_ = 0;
 }
-inline void AuthorizationResult::clear_features() {
-  features_.Clear();
-}
-inline ::proto::SessionFeature AuthorizationResult::features(int index) const {
-  // @@protoc_insertion_point(field_get:proto.AuthorizationResult.features)
-  return static_cast< ::proto::SessionFeature >(features_.Get(index));
-}
-inline void AuthorizationResult::set_features(int index, ::proto::SessionFeature value) {
-  features_.Set(index, value);
-  // @@protoc_insertion_point(field_set:proto.AuthorizationResult.features)
-}
-inline void AuthorizationResult::add_features(::proto::SessionFeature value) {
-  features_.Add(value);
-  // @@protoc_insertion_point(field_add:proto.AuthorizationResult.features)
-}
-inline const ::google::protobuf::RepeatedField<int>&
-AuthorizationResult::features() const {
-  // @@protoc_insertion_point(field_list:proto.AuthorizationResult.features)
+inline ::google::protobuf::int32 AuthResult::features() const {
+  // @@protoc_insertion_point(field_get:proto.AuthResult.features)
   return features_;
 }
-inline ::google::protobuf::RepeatedField<int>*
-AuthorizationResult::mutable_features() {
-  // @@protoc_insertion_point(field_mutable_list:proto.AuthorizationResult.features)
-  return &features_;
+inline void AuthResult::set_features(::google::protobuf::int32 value) {
+  
+  features_ = value;
+  // @@protoc_insertion_point(field_set:proto.AuthResult.features)
 }
 
-inline const AuthorizationResult* AuthorizationResult::internal_default_instance() {
-  return &AuthorizationResult_default_instance_.get();
+inline const AuthResult* AuthResult::internal_default_instance() {
+  return &AuthResult_default_instance_.get();
 }
 // -------------------------------------------------------------------
 
@@ -3329,18 +2564,18 @@ inline const PowerControl* PowerControl::internal_default_instance() {
 
 // Bell
 
-// optional int32 duration = 1;
-inline void Bell::clear_duration() {
-  duration_ = 0;
+// optional bool dummy = 1;
+inline void Bell::clear_dummy() {
+  dummy_ = false;
 }
-inline ::google::protobuf::int32 Bell::duration() const {
-  // @@protoc_insertion_point(field_get:proto.Bell.duration)
-  return duration_;
+inline bool Bell::dummy() const {
+  // @@protoc_insertion_point(field_get:proto.Bell.dummy)
+  return dummy_;
 }
-inline void Bell::set_duration(::google::protobuf::int32 value) {
+inline void Bell::set_dummy(bool value) {
   
-  duration_ = value;
-  // @@protoc_insertion_point(field_set:proto.Bell.duration)
+  dummy_ = value;
+  // @@protoc_insertion_point(field_set:proto.Bell.dummy)
 }
 
 inline const Bell* Bell::internal_default_instance() {
@@ -3352,46 +2587,37 @@ inline const Bell* Bell::internal_default_instance() {
 
 // optional string message = 1;
 inline void TextChat::clear_message() {
-  message_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  message_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& TextChat::message() const {
   // @@protoc_insertion_point(field_get:proto.TextChat.message)
-  return message_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return message_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void TextChat::set_message(const ::std::string& value) {
   
-  message_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
+  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:proto.TextChat.message)
 }
 inline void TextChat::set_message(const char* value) {
   
-  message_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
+  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:proto.TextChat.message)
 }
-inline void TextChat::set_message(const char* value,
-    size_t size) {
+inline void TextChat::set_message(const char* value, size_t size) {
   
-  message_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
+  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:proto.TextChat.message)
 }
 inline ::std::string* TextChat::mutable_message() {
   
   // @@protoc_insertion_point(field_mutable:proto.TextChat.message)
-  return message_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  return message_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* TextChat::release_message() {
   // @@protoc_insertion_point(field_release:proto.TextChat.message)
   
-  return message_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-inline ::std::string* TextChat::unsafe_arena_release_message() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.TextChat.message)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return message_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
+  return message_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void TextChat::set_allocated_message(::std::string* message) {
   if (message != NULL) {
@@ -3399,21 +2625,8 @@ inline void TextChat::set_allocated_message(::std::string* message) {
   } else {
     
   }
-  message_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), message,
-      GetArenaNoVirtual());
+  message_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), message);
   // @@protoc_insertion_point(field_set_allocated:proto.TextChat.message)
-}
-inline void TextChat::unsafe_arena_set_allocated_message(
-    ::std::string* message) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (message != NULL) {
-    
-  } else {
-    
-  }
-  message_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      message, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.TextChat.message)
 }
 
 inline const TextChat* TextChat::internal_default_instance() {
@@ -3423,29 +2636,29 @@ inline const TextChat* TextChat::internal_default_instance() {
 
 // KeyEvent
 
-// optional uint32 keycode = 1;
+// optional int32 keycode = 1;
 inline void KeyEvent::clear_keycode() {
-  keycode_ = 0u;
+  keycode_ = 0;
 }
-inline ::google::protobuf::uint32 KeyEvent::keycode() const {
+inline ::google::protobuf::int32 KeyEvent::keycode() const {
   // @@protoc_insertion_point(field_get:proto.KeyEvent.keycode)
   return keycode_;
 }
-inline void KeyEvent::set_keycode(::google::protobuf::uint32 value) {
+inline void KeyEvent::set_keycode(::google::protobuf::int32 value) {
   
   keycode_ = value;
   // @@protoc_insertion_point(field_set:proto.KeyEvent.keycode)
 }
 
-// optional uint32 extended = 2;
+// optional bool extended = 2;
 inline void KeyEvent::clear_extended() {
-  extended_ = 0u;
+  extended_ = false;
 }
-inline ::google::protobuf::uint32 KeyEvent::extended() const {
+inline bool KeyEvent::extended() const {
   // @@protoc_insertion_point(field_get:proto.KeyEvent.extended)
   return extended_;
 }
-inline void KeyEvent::set_extended(::google::protobuf::uint32 value) {
+inline void KeyEvent::set_extended(bool value) {
   
   extended_ = value;
   // @@protoc_insertion_point(field_set:proto.KeyEvent.extended)
@@ -3470,52 +2683,52 @@ inline const KeyEvent* KeyEvent::internal_default_instance() {
 }
 // -------------------------------------------------------------------
 
-// MouseEvent
+// PointerEvent
 
-// optional int32 x = 1;
-inline void MouseEvent::clear_x() {
-  x_ = 0;
+// optional int32 mask = 1;
+inline void PointerEvent::clear_mask() {
+  mask_ = 0;
 }
-inline ::google::protobuf::int32 MouseEvent::x() const {
-  // @@protoc_insertion_point(field_get:proto.MouseEvent.x)
-  return x_;
-}
-inline void MouseEvent::set_x(::google::protobuf::int32 value) {
-  
-  x_ = value;
-  // @@protoc_insertion_point(field_set:proto.MouseEvent.x)
-}
-
-// optional int32 y = 2;
-inline void MouseEvent::clear_y() {
-  y_ = 0;
-}
-inline ::google::protobuf::int32 MouseEvent::y() const {
-  // @@protoc_insertion_point(field_get:proto.MouseEvent.y)
-  return y_;
-}
-inline void MouseEvent::set_y(::google::protobuf::int32 value) {
-  
-  y_ = value;
-  // @@protoc_insertion_point(field_set:proto.MouseEvent.y)
-}
-
-// optional uint32 mask = 3;
-inline void MouseEvent::clear_mask() {
-  mask_ = 0u;
-}
-inline ::google::protobuf::uint32 MouseEvent::mask() const {
-  // @@protoc_insertion_point(field_get:proto.MouseEvent.mask)
+inline ::google::protobuf::int32 PointerEvent::mask() const {
+  // @@protoc_insertion_point(field_get:proto.PointerEvent.mask)
   return mask_;
 }
-inline void MouseEvent::set_mask(::google::protobuf::uint32 value) {
+inline void PointerEvent::set_mask(::google::protobuf::int32 value) {
   
   mask_ = value;
-  // @@protoc_insertion_point(field_set:proto.MouseEvent.mask)
+  // @@protoc_insertion_point(field_set:proto.PointerEvent.mask)
 }
 
-inline const MouseEvent* MouseEvent::internal_default_instance() {
-  return &MouseEvent_default_instance_.get();
+// optional int32 x = 2;
+inline void PointerEvent::clear_x() {
+  x_ = 0;
+}
+inline ::google::protobuf::int32 PointerEvent::x() const {
+  // @@protoc_insertion_point(field_get:proto.PointerEvent.x)
+  return x_;
+}
+inline void PointerEvent::set_x(::google::protobuf::int32 value) {
+  
+  x_ = value;
+  // @@protoc_insertion_point(field_set:proto.PointerEvent.x)
+}
+
+// optional int32 y = 3;
+inline void PointerEvent::clear_y() {
+  y_ = 0;
+}
+inline ::google::protobuf::int32 PointerEvent::y() const {
+  // @@protoc_insertion_point(field_get:proto.PointerEvent.y)
+  return y_;
+}
+inline void PointerEvent::set_y(::google::protobuf::int32 value) {
+  
+  y_ = value;
+  // @@protoc_insertion_point(field_set:proto.PointerEvent.y)
+}
+
+inline const PointerEvent* PointerEvent::internal_default_instance() {
+  return &PointerEvent_default_instance_.get();
 }
 // -------------------------------------------------------------------
 
@@ -3523,46 +2736,37 @@ inline const MouseEvent* MouseEvent::internal_default_instance() {
 
 // optional string mime_type = 1;
 inline void Clipboard::clear_mime_type() {
-  mime_type_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  mime_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& Clipboard::mime_type() const {
   // @@protoc_insertion_point(field_get:proto.Clipboard.mime_type)
-  return mime_type_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return mime_type_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void Clipboard::set_mime_type(const ::std::string& value) {
   
-  mime_type_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
+  mime_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:proto.Clipboard.mime_type)
 }
 inline void Clipboard::set_mime_type(const char* value) {
   
-  mime_type_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
+  mime_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:proto.Clipboard.mime_type)
 }
-inline void Clipboard::set_mime_type(const char* value,
-    size_t size) {
+inline void Clipboard::set_mime_type(const char* value, size_t size) {
   
-  mime_type_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
+  mime_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:proto.Clipboard.mime_type)
 }
 inline ::std::string* Clipboard::mutable_mime_type() {
   
   // @@protoc_insertion_point(field_mutable:proto.Clipboard.mime_type)
-  return mime_type_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  return mime_type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* Clipboard::release_mime_type() {
   // @@protoc_insertion_point(field_release:proto.Clipboard.mime_type)
   
-  return mime_type_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-inline ::std::string* Clipboard::unsafe_arena_release_mime_type() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.Clipboard.mime_type)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return mime_type_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
+  return mime_type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void Clipboard::set_allocated_mime_type(::std::string* mime_type) {
   if (mime_type != NULL) {
@@ -3570,65 +2774,43 @@ inline void Clipboard::set_allocated_mime_type(::std::string* mime_type) {
   } else {
     
   }
-  mime_type_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mime_type,
-      GetArenaNoVirtual());
+  mime_type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mime_type);
   // @@protoc_insertion_point(field_set_allocated:proto.Clipboard.mime_type)
-}
-inline void Clipboard::unsafe_arena_set_allocated_mime_type(
-    ::std::string* mime_type) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (mime_type != NULL) {
-    
-  } else {
-    
-  }
-  mime_type_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      mime_type, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.Clipboard.mime_type)
 }
 
 // optional bytes data = 2;
 inline void Clipboard::clear_data() {
-  data_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& Clipboard::data() const {
   // @@protoc_insertion_point(field_get:proto.Clipboard.data)
-  return data_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return data_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void Clipboard::set_data(const ::std::string& value) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:proto.Clipboard.data)
 }
 inline void Clipboard::set_data(const char* value) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:proto.Clipboard.data)
 }
-inline void Clipboard::set_data(const void* value,
-    size_t size) {
+inline void Clipboard::set_data(const void* value, size_t size) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:proto.Clipboard.data)
 }
 inline ::std::string* Clipboard::mutable_data() {
   
   // @@protoc_insertion_point(field_mutable:proto.Clipboard.data)
-  return data_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* Clipboard::release_data() {
   // @@protoc_insertion_point(field_release:proto.Clipboard.data)
   
-  return data_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-inline ::std::string* Clipboard::unsafe_arena_release_data() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.Clipboard.data)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return data_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
+  return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void Clipboard::set_allocated_data(::std::string* data) {
   if (data != NULL) {
@@ -3636,21 +2818,8 @@ inline void Clipboard::set_allocated_data(::std::string* data) {
   } else {
     
   }
-  data_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data,
-      GetArenaNoVirtual());
+  data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
   // @@protoc_insertion_point(field_set_allocated:proto.Clipboard.data)
-}
-inline void Clipboard::unsafe_arena_set_allocated_data(
-    ::std::string* data) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (data != NULL) {
-    
-  } else {
-    
-  }
-  data_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      data, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.Clipboard.data)
 }
 
 inline const Clipboard* Clipboard::internal_default_instance() {
@@ -3758,70 +2927,106 @@ inline void CursorShape::set_hotspot_y(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:proto.CursorShape.hotspot_y)
 }
 
-// optional bytes data = 5;
-inline void CursorShape::clear_data() {
-  data_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+// optional int32 bits_per_pixel = 5;
+inline void CursorShape::clear_bits_per_pixel() {
+  bits_per_pixel_ = 0;
 }
-inline const ::std::string& CursorShape::data() const {
-  // @@protoc_insertion_point(field_get:proto.CursorShape.data)
-  return data_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline ::google::protobuf::int32 CursorShape::bits_per_pixel() const {
+  // @@protoc_insertion_point(field_get:proto.CursorShape.bits_per_pixel)
+  return bits_per_pixel_;
 }
-inline void CursorShape::set_data(const ::std::string& value) {
+inline void CursorShape::set_bits_per_pixel(::google::protobuf::int32 value) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set:proto.CursorShape.data)
+  bits_per_pixel_ = value;
+  // @@protoc_insertion_point(field_set:proto.CursorShape.bits_per_pixel)
 }
-inline void CursorShape::set_data(const char* value) {
+
+// optional bytes color = 6;
+inline void CursorShape::clear_color() {
+  color_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& CursorShape::color() const {
+  // @@protoc_insertion_point(field_get:proto.CursorShape.color)
+  return color_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void CursorShape::set_color(const ::std::string& value) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_char:proto.CursorShape.data)
+  color_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:proto.CursorShape.color)
 }
-inline void CursorShape::set_data(const void* value,
-    size_t size) {
+inline void CursorShape::set_color(const char* value) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_pointer:proto.CursorShape.data)
+  color_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:proto.CursorShape.color)
 }
-inline ::std::string* CursorShape::mutable_data() {
+inline void CursorShape::set_color(const void* value, size_t size) {
   
-  // @@protoc_insertion_point(field_mutable:proto.CursorShape.data)
-  return data_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  color_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:proto.CursorShape.color)
 }
-inline ::std::string* CursorShape::release_data() {
-  // @@protoc_insertion_point(field_release:proto.CursorShape.data)
+inline ::std::string* CursorShape::mutable_color() {
   
-  return data_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  // @@protoc_insertion_point(field_mutable:proto.CursorShape.color)
+  return color_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* CursorShape::unsafe_arena_release_data() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.CursorShape.data)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
+inline ::std::string* CursorShape::release_color() {
+  // @@protoc_insertion_point(field_release:proto.CursorShape.color)
   
-  return data_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
+  return color_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void CursorShape::set_allocated_data(::std::string* data) {
-  if (data != NULL) {
+inline void CursorShape::set_allocated_color(::std::string* color) {
+  if (color != NULL) {
     
   } else {
     
   }
-  data_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data,
-      GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_allocated:proto.CursorShape.data)
+  color_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), color);
+  // @@protoc_insertion_point(field_set_allocated:proto.CursorShape.color)
 }
-inline void CursorShape::unsafe_arena_set_allocated_data(
-    ::std::string* data) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (data != NULL) {
+
+// optional bytes mask = 7;
+inline void CursorShape::clear_mask() {
+  mask_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& CursorShape::mask() const {
+  // @@protoc_insertion_point(field_get:proto.CursorShape.mask)
+  return mask_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void CursorShape::set_mask(const ::std::string& value) {
+  
+  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:proto.CursorShape.mask)
+}
+inline void CursorShape::set_mask(const char* value) {
+  
+  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:proto.CursorShape.mask)
+}
+inline void CursorShape::set_mask(const void* value, size_t size) {
+  
+  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:proto.CursorShape.mask)
+}
+inline ::std::string* CursorShape::mutable_mask() {
+  
+  // @@protoc_insertion_point(field_mutable:proto.CursorShape.mask)
+  return mask_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* CursorShape::release_mask() {
+  // @@protoc_insertion_point(field_release:proto.CursorShape.mask)
+  
+  return mask_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void CursorShape::set_allocated_mask(::std::string* mask) {
+  if (mask != NULL) {
     
   } else {
     
   }
-  data_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      data, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.CursorShape.data)
+  mask_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mask);
+  // @@protoc_insertion_point(field_set_allocated:proto.CursorShape.mask)
 }
 
 inline const CursorShape* CursorShape::internal_default_instance() {
@@ -4018,51 +3223,97 @@ inline const VideoPixelFormat* VideoPixelFormat::internal_default_instance() {
 }
 // -------------------------------------------------------------------
 
+// VideoSize
+
+// optional int32 width = 1;
+inline void VideoSize::clear_width() {
+  width_ = 0;
+}
+inline ::google::protobuf::int32 VideoSize::width() const {
+  // @@protoc_insertion_point(field_get:proto.VideoSize.width)
+  return width_;
+}
+inline void VideoSize::set_width(::google::protobuf::int32 value) {
+  
+  width_ = value;
+  // @@protoc_insertion_point(field_set:proto.VideoSize.width)
+}
+
+// optional int32 height = 2;
+inline void VideoSize::clear_height() {
+  height_ = 0;
+}
+inline ::google::protobuf::int32 VideoSize::height() const {
+  // @@protoc_insertion_point(field_get:proto.VideoSize.height)
+  return height_;
+}
+inline void VideoSize::set_height(::google::protobuf::int32 value) {
+  
+  height_ = value;
+  // @@protoc_insertion_point(field_set:proto.VideoSize.height)
+}
+
+inline const VideoSize* VideoSize::internal_default_instance() {
+  return &VideoSize_default_instance_.get();
+}
+// -------------------------------------------------------------------
+
 // VideoPacketFormat
 
-// optional .proto.VideoEncoding encoding = 1;
+// optional int32 encoding = 1;
 inline void VideoPacketFormat::clear_encoding() {
   encoding_ = 0;
 }
-inline ::proto::VideoEncoding VideoPacketFormat::encoding() const {
+inline ::google::protobuf::int32 VideoPacketFormat::encoding() const {
   // @@protoc_insertion_point(field_get:proto.VideoPacketFormat.encoding)
-  return static_cast< ::proto::VideoEncoding >(encoding_);
+  return encoding_;
 }
-inline void VideoPacketFormat::set_encoding(::proto::VideoEncoding value) {
+inline void VideoPacketFormat::set_encoding(::google::protobuf::int32 value) {
   
   encoding_ = value;
   // @@protoc_insertion_point(field_set:proto.VideoPacketFormat.encoding)
 }
 
-// optional int32 screen_width = 2;
-inline void VideoPacketFormat::clear_screen_width() {
-  screen_width_ = 0;
+// optional .proto.VideoSize screen_size = 2;
+inline bool VideoPacketFormat::has_screen_size() const {
+  return this != internal_default_instance() && screen_size_ != NULL;
 }
-inline ::google::protobuf::int32 VideoPacketFormat::screen_width() const {
-  // @@protoc_insertion_point(field_get:proto.VideoPacketFormat.screen_width)
-  return screen_width_;
+inline void VideoPacketFormat::clear_screen_size() {
+  if (GetArenaNoVirtual() == NULL && screen_size_ != NULL) delete screen_size_;
+  screen_size_ = NULL;
 }
-inline void VideoPacketFormat::set_screen_width(::google::protobuf::int32 value) {
+inline const ::proto::VideoSize& VideoPacketFormat::screen_size() const {
+  // @@protoc_insertion_point(field_get:proto.VideoPacketFormat.screen_size)
+  return screen_size_ != NULL ? *screen_size_
+                         : *::proto::VideoSize::internal_default_instance();
+}
+inline ::proto::VideoSize* VideoPacketFormat::mutable_screen_size() {
   
-  screen_width_ = value;
-  // @@protoc_insertion_point(field_set:proto.VideoPacketFormat.screen_width)
+  if (screen_size_ == NULL) {
+    screen_size_ = new ::proto::VideoSize;
+  }
+  // @@protoc_insertion_point(field_mutable:proto.VideoPacketFormat.screen_size)
+  return screen_size_;
+}
+inline ::proto::VideoSize* VideoPacketFormat::release_screen_size() {
+  // @@protoc_insertion_point(field_release:proto.VideoPacketFormat.screen_size)
+  
+  ::proto::VideoSize* temp = screen_size_;
+  screen_size_ = NULL;
+  return temp;
+}
+inline void VideoPacketFormat::set_allocated_screen_size(::proto::VideoSize* screen_size) {
+  delete screen_size_;
+  screen_size_ = screen_size;
+  if (screen_size) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:proto.VideoPacketFormat.screen_size)
 }
 
-// optional int32 screen_height = 3;
-inline void VideoPacketFormat::clear_screen_height() {
-  screen_height_ = 0;
-}
-inline ::google::protobuf::int32 VideoPacketFormat::screen_height() const {
-  // @@protoc_insertion_point(field_get:proto.VideoPacketFormat.screen_height)
-  return screen_height_;
-}
-inline void VideoPacketFormat::set_screen_height(::google::protobuf::int32 value) {
-  
-  screen_height_ = value;
-  // @@protoc_insertion_point(field_set:proto.VideoPacketFormat.screen_height)
-}
-
-// optional .proto.VideoPixelFormat pixel_format = 4;
+// optional .proto.VideoPixelFormat pixel_format = 3;
 inline bool VideoPacketFormat::has_pixel_format() const {
   return this != internal_default_instance() && pixel_format_ != NULL;
 }
@@ -4078,7 +3329,7 @@ inline const ::proto::VideoPixelFormat& VideoPacketFormat::pixel_format() const 
 inline ::proto::VideoPixelFormat* VideoPacketFormat::mutable_pixel_format() {
   
   if (pixel_format_ == NULL) {
-    _slow_mutable_pixel_format();
+    pixel_format_ = new ::proto::VideoPixelFormat;
   }
   // @@protoc_insertion_point(field_mutable:proto.VideoPacketFormat.pixel_format)
   return pixel_format_;
@@ -4086,22 +3337,12 @@ inline ::proto::VideoPixelFormat* VideoPacketFormat::mutable_pixel_format() {
 inline ::proto::VideoPixelFormat* VideoPacketFormat::release_pixel_format() {
   // @@protoc_insertion_point(field_release:proto.VideoPacketFormat.pixel_format)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_pixel_format();
-  } else {
-    ::proto::VideoPixelFormat* temp = pixel_format_;
-    pixel_format_ = NULL;
-    return temp;
-  }
+  ::proto::VideoPixelFormat* temp = pixel_format_;
+  pixel_format_ = NULL;
+  return temp;
 }
-inline  void VideoPacketFormat::set_allocated_pixel_format(::proto::VideoPixelFormat* pixel_format) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete pixel_format_;
-  }
-  if (pixel_format != NULL) {
-    _slow_set_allocated_pixel_format(message_arena, &pixel_format);
-  }
+inline void VideoPacketFormat::set_allocated_pixel_format(::proto::VideoPixelFormat* pixel_format) {
+  delete pixel_format_;
   pixel_format_ = pixel_format;
   if (pixel_format) {
     
@@ -4148,7 +3389,7 @@ inline const ::proto::VideoPacketFormat& VideoPacket::format() const {
 inline ::proto::VideoPacketFormat* VideoPacket::mutable_format() {
   
   if (format_ == NULL) {
-    _slow_mutable_format();
+    format_ = new ::proto::VideoPacketFormat;
   }
   // @@protoc_insertion_point(field_mutable:proto.VideoPacket.format)
   return format_;
@@ -4156,22 +3397,12 @@ inline ::proto::VideoPacketFormat* VideoPacket::mutable_format() {
 inline ::proto::VideoPacketFormat* VideoPacket::release_format() {
   // @@protoc_insertion_point(field_release:proto.VideoPacket.format)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_format();
-  } else {
-    ::proto::VideoPacketFormat* temp = format_;
-    format_ = NULL;
-    return temp;
-  }
+  ::proto::VideoPacketFormat* temp = format_;
+  format_ = NULL;
+  return temp;
 }
-inline  void VideoPacket::set_allocated_format(::proto::VideoPacketFormat* format) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete format_;
-  }
-  if (format != NULL) {
-    _slow_set_allocated_format(message_arena, &format);
-  }
+inline void VideoPacket::set_allocated_format(::proto::VideoPacketFormat* format) {
+  delete format_;
   format_ = format;
   if (format) {
     
@@ -4213,46 +3444,37 @@ VideoPacket::changed_rect() const {
 
 // optional bytes data = 4;
 inline void VideoPacket::clear_data() {
-  data_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& VideoPacket::data() const {
   // @@protoc_insertion_point(field_get:proto.VideoPacket.data)
-  return data_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return data_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void VideoPacket::set_data(const ::std::string& value) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:proto.VideoPacket.data)
 }
 inline void VideoPacket::set_data(const char* value) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:proto.VideoPacket.data)
 }
-inline void VideoPacket::set_data(const void* value,
-    size_t size) {
+inline void VideoPacket::set_data(const void* value, size_t size) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:proto.VideoPacket.data)
 }
 inline ::std::string* VideoPacket::mutable_data() {
   
   // @@protoc_insertion_point(field_mutable:proto.VideoPacket.data)
-  return data_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* VideoPacket::release_data() {
   // @@protoc_insertion_point(field_release:proto.VideoPacket.data)
   
-  return data_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-inline ::std::string* VideoPacket::unsafe_arena_release_data() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.VideoPacket.data)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return data_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
+  return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void VideoPacket::set_allocated_data(::std::string* data) {
   if (data != NULL) {
@@ -4260,21 +3482,8 @@ inline void VideoPacket::set_allocated_data(::std::string* data) {
   } else {
     
   }
-  data_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data,
-      GetArenaNoVirtual());
+  data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
   // @@protoc_insertion_point(field_set_allocated:proto.VideoPacket.data)
-}
-inline void VideoPacket::unsafe_arena_set_allocated_data(
-    ::std::string* data) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (data != NULL) {
-    
-  } else {
-    
-  }
-  data_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      data, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.VideoPacket.data)
 }
 
 inline const VideoPacket* VideoPacket::internal_default_instance() {
@@ -4298,70 +3507,21 @@ inline void VideoControl::set_enable(bool value) {
   // @@protoc_insertion_point(field_set:proto.VideoControl.enable)
 }
 
-// optional .proto.VideoRect rect = 2;
-inline bool VideoControl::has_rect() const {
-  return this != internal_default_instance() && rect_ != NULL;
-}
-inline void VideoControl::clear_rect() {
-  if (GetArenaNoVirtual() == NULL && rect_ != NULL) delete rect_;
-  rect_ = NULL;
-}
-inline const ::proto::VideoRect& VideoControl::rect() const {
-  // @@protoc_insertion_point(field_get:proto.VideoControl.rect)
-  return rect_ != NULL ? *rect_
-                         : *::proto::VideoRect::internal_default_instance();
-}
-inline ::proto::VideoRect* VideoControl::mutable_rect() {
-  
-  if (rect_ == NULL) {
-    _slow_mutable_rect();
-  }
-  // @@protoc_insertion_point(field_mutable:proto.VideoControl.rect)
-  return rect_;
-}
-inline ::proto::VideoRect* VideoControl::release_rect() {
-  // @@protoc_insertion_point(field_release:proto.VideoControl.rect)
-  
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_rect();
-  } else {
-    ::proto::VideoRect* temp = rect_;
-    rect_ = NULL;
-    return temp;
-  }
-}
-inline  void VideoControl::set_allocated_rect(::proto::VideoRect* rect) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete rect_;
-  }
-  if (rect != NULL) {
-    _slow_set_allocated_rect(message_arena, &rect);
-  }
-  rect_ = rect;
-  if (rect) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:proto.VideoControl.rect)
-}
-
-// optional .proto.VideoEncoding encoding = 3;
+// optional int32 encoding = 2;
 inline void VideoControl::clear_encoding() {
   encoding_ = 0;
 }
-inline ::proto::VideoEncoding VideoControl::encoding() const {
+inline ::google::protobuf::int32 VideoControl::encoding() const {
   // @@protoc_insertion_point(field_get:proto.VideoControl.encoding)
-  return static_cast< ::proto::VideoEncoding >(encoding_);
+  return encoding_;
 }
-inline void VideoControl::set_encoding(::proto::VideoEncoding value) {
+inline void VideoControl::set_encoding(::google::protobuf::int32 value) {
   
   encoding_ = value;
   // @@protoc_insertion_point(field_set:proto.VideoControl.encoding)
 }
 
-// optional .proto.VideoPixelFormat pixel_format = 4;
+// optional .proto.VideoPixelFormat pixel_format = 3;
 inline bool VideoControl::has_pixel_format() const {
   return this != internal_default_instance() && pixel_format_ != NULL;
 }
@@ -4377,7 +3537,7 @@ inline const ::proto::VideoPixelFormat& VideoControl::pixel_format() const {
 inline ::proto::VideoPixelFormat* VideoControl::mutable_pixel_format() {
   
   if (pixel_format_ == NULL) {
-    _slow_mutable_pixel_format();
+    pixel_format_ = new ::proto::VideoPixelFormat;
   }
   // @@protoc_insertion_point(field_mutable:proto.VideoControl.pixel_format)
   return pixel_format_;
@@ -4385,22 +3545,12 @@ inline ::proto::VideoPixelFormat* VideoControl::mutable_pixel_format() {
 inline ::proto::VideoPixelFormat* VideoControl::release_pixel_format() {
   // @@protoc_insertion_point(field_release:proto.VideoControl.pixel_format)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_pixel_format();
-  } else {
-    ::proto::VideoPixelFormat* temp = pixel_format_;
-    pixel_format_ = NULL;
-    return temp;
-  }
+  ::proto::VideoPixelFormat* temp = pixel_format_;
+  pixel_format_ = NULL;
+  return temp;
 }
-inline  void VideoControl::set_allocated_pixel_format(::proto::VideoPixelFormat* pixel_format) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete pixel_format_;
-  }
-  if (pixel_format != NULL) {
-    _slow_set_allocated_pixel_format(message_arena, &pixel_format);
-  }
+inline void VideoControl::set_allocated_pixel_format(::proto::VideoPixelFormat* pixel_format) {
+  delete pixel_format_;
   pixel_format_ = pixel_format;
   if (pixel_format) {
     
@@ -4412,128 +3562,6 @@ inline  void VideoControl::set_allocated_pixel_format(::proto::VideoPixelFormat*
 
 inline const VideoControl* VideoControl::internal_default_instance() {
   return &VideoControl_default_instance_.get();
-}
-// -------------------------------------------------------------------
-
-// AudioPacket
-
-// optional .proto.AudioEncoding encoding = 1;
-inline void AudioPacket::clear_encoding() {
-  encoding_ = 0;
-}
-inline ::proto::AudioEncoding AudioPacket::encoding() const {
-  // @@protoc_insertion_point(field_get:proto.AudioPacket.encoding)
-  return static_cast< ::proto::AudioEncoding >(encoding_);
-}
-inline void AudioPacket::set_encoding(::proto::AudioEncoding value) {
-  
-  encoding_ = value;
-  // @@protoc_insertion_point(field_set:proto.AudioPacket.encoding)
-}
-
-// optional bytes data = 2;
-inline void AudioPacket::clear_data() {
-  data_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-inline const ::std::string& AudioPacket::data() const {
-  // @@protoc_insertion_point(field_get:proto.AudioPacket.data)
-  return data_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void AudioPacket::set_data(const ::std::string& value) {
-  
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set:proto.AudioPacket.data)
-}
-inline void AudioPacket::set_data(const char* value) {
-  
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_char:proto.AudioPacket.data)
-}
-inline void AudioPacket::set_data(const void* value,
-    size_t size) {
-  
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_pointer:proto.AudioPacket.data)
-}
-inline ::std::string* AudioPacket::mutable_data() {
-  
-  // @@protoc_insertion_point(field_mutable:proto.AudioPacket.data)
-  return data_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-inline ::std::string* AudioPacket::release_data() {
-  // @@protoc_insertion_point(field_release:proto.AudioPacket.data)
-  
-  return data_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-inline ::std::string* AudioPacket::unsafe_arena_release_data() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.AudioPacket.data)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return data_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
-}
-inline void AudioPacket::set_allocated_data(::std::string* data) {
-  if (data != NULL) {
-    
-  } else {
-    
-  }
-  data_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data,
-      GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_allocated:proto.AudioPacket.data)
-}
-inline void AudioPacket::unsafe_arena_set_allocated_data(
-    ::std::string* data) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (data != NULL) {
-    
-  } else {
-    
-  }
-  data_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      data, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.AudioPacket.data)
-}
-
-inline const AudioPacket* AudioPacket::internal_default_instance() {
-  return &AudioPacket_default_instance_.get();
-}
-// -------------------------------------------------------------------
-
-// AudioControl
-
-// optional bool enable = 1;
-inline void AudioControl::clear_enable() {
-  enable_ = false;
-}
-inline bool AudioControl::enable() const {
-  // @@protoc_insertion_point(field_get:proto.AudioControl.enable)
-  return enable_;
-}
-inline void AudioControl::set_enable(bool value) {
-  
-  enable_ = value;
-  // @@protoc_insertion_point(field_set:proto.AudioControl.enable)
-}
-
-// optional .proto.AudioEncoding encoding = 3;
-inline void AudioControl::clear_encoding() {
-  encoding_ = 0;
-}
-inline ::proto::AudioEncoding AudioControl::encoding() const {
-  // @@protoc_insertion_point(field_get:proto.AudioControl.encoding)
-  return static_cast< ::proto::AudioEncoding >(encoding_);
-}
-inline void AudioControl::set_encoding(::proto::AudioEncoding value) {
-  
-  encoding_ = value;
-  // @@protoc_insertion_point(field_set:proto.AudioControl.encoding)
-}
-
-inline const AudioControl* AudioControl::internal_default_instance() {
-  return &AudioControl_default_instance_.get();
 }
 // -------------------------------------------------------------------
 
@@ -4555,7 +3583,7 @@ inline const ::proto::VideoPacket& ServerToClient::video_packet() const {
 inline ::proto::VideoPacket* ServerToClient::mutable_video_packet() {
   
   if (video_packet_ == NULL) {
-    _slow_mutable_video_packet();
+    video_packet_ = new ::proto::VideoPacket;
   }
   // @@protoc_insertion_point(field_mutable:proto.ServerToClient.video_packet)
   return video_packet_;
@@ -4563,22 +3591,12 @@ inline ::proto::VideoPacket* ServerToClient::mutable_video_packet() {
 inline ::proto::VideoPacket* ServerToClient::release_video_packet() {
   // @@protoc_insertion_point(field_release:proto.ServerToClient.video_packet)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_video_packet();
-  } else {
-    ::proto::VideoPacket* temp = video_packet_;
-    video_packet_ = NULL;
-    return temp;
-  }
+  ::proto::VideoPacket* temp = video_packet_;
+  video_packet_ = NULL;
+  return temp;
 }
-inline  void ServerToClient::set_allocated_video_packet(::proto::VideoPacket* video_packet) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete video_packet_;
-  }
-  if (video_packet != NULL) {
-    _slow_set_allocated_video_packet(message_arena, &video_packet);
-  }
+inline void ServerToClient::set_allocated_video_packet(::proto::VideoPacket* video_packet) {
+  delete video_packet_;
   video_packet_ = video_packet;
   if (video_packet) {
     
@@ -4588,56 +3606,7 @@ inline  void ServerToClient::set_allocated_video_packet(::proto::VideoPacket* vi
   // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.video_packet)
 }
 
-// optional .proto.AudioPacket audio_packet = 2;
-inline bool ServerToClient::has_audio_packet() const {
-  return this != internal_default_instance() && audio_packet_ != NULL;
-}
-inline void ServerToClient::clear_audio_packet() {
-  if (GetArenaNoVirtual() == NULL && audio_packet_ != NULL) delete audio_packet_;
-  audio_packet_ = NULL;
-}
-inline const ::proto::AudioPacket& ServerToClient::audio_packet() const {
-  // @@protoc_insertion_point(field_get:proto.ServerToClient.audio_packet)
-  return audio_packet_ != NULL ? *audio_packet_
-                         : *::proto::AudioPacket::internal_default_instance();
-}
-inline ::proto::AudioPacket* ServerToClient::mutable_audio_packet() {
-  
-  if (audio_packet_ == NULL) {
-    _slow_mutable_audio_packet();
-  }
-  // @@protoc_insertion_point(field_mutable:proto.ServerToClient.audio_packet)
-  return audio_packet_;
-}
-inline ::proto::AudioPacket* ServerToClient::release_audio_packet() {
-  // @@protoc_insertion_point(field_release:proto.ServerToClient.audio_packet)
-  
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_audio_packet();
-  } else {
-    ::proto::AudioPacket* temp = audio_packet_;
-    audio_packet_ = NULL;
-    return temp;
-  }
-}
-inline  void ServerToClient::set_allocated_audio_packet(::proto::AudioPacket* audio_packet) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete audio_packet_;
-  }
-  if (audio_packet != NULL) {
-    _slow_set_allocated_audio_packet(message_arena, &audio_packet);
-  }
-  audio_packet_ = audio_packet;
-  if (audio_packet) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.audio_packet)
-}
-
-// optional .proto.CursorShape cursor = 3;
+// optional .proto.CursorShape cursor = 2;
 inline bool ServerToClient::has_cursor() const {
   return this != internal_default_instance() && cursor_ != NULL;
 }
@@ -4653,7 +3622,7 @@ inline const ::proto::CursorShape& ServerToClient::cursor() const {
 inline ::proto::CursorShape* ServerToClient::mutable_cursor() {
   
   if (cursor_ == NULL) {
-    _slow_mutable_cursor();
+    cursor_ = new ::proto::CursorShape;
   }
   // @@protoc_insertion_point(field_mutable:proto.ServerToClient.cursor)
   return cursor_;
@@ -4661,22 +3630,12 @@ inline ::proto::CursorShape* ServerToClient::mutable_cursor() {
 inline ::proto::CursorShape* ServerToClient::release_cursor() {
   // @@protoc_insertion_point(field_release:proto.ServerToClient.cursor)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_cursor();
-  } else {
-    ::proto::CursorShape* temp = cursor_;
-    cursor_ = NULL;
-    return temp;
-  }
+  ::proto::CursorShape* temp = cursor_;
+  cursor_ = NULL;
+  return temp;
 }
-inline  void ServerToClient::set_allocated_cursor(::proto::CursorShape* cursor) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete cursor_;
-  }
-  if (cursor != NULL) {
-    _slow_set_allocated_cursor(message_arena, &cursor);
-  }
+inline void ServerToClient::set_allocated_cursor(::proto::CursorShape* cursor) {
+  delete cursor_;
   cursor_ = cursor;
   if (cursor) {
     
@@ -4686,7 +3645,7 @@ inline  void ServerToClient::set_allocated_cursor(::proto::CursorShape* cursor) 
   // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.cursor)
 }
 
-// optional .proto.Clipboard clipboard = 4;
+// optional .proto.Clipboard clipboard = 3;
 inline bool ServerToClient::has_clipboard() const {
   return this != internal_default_instance() && clipboard_ != NULL;
 }
@@ -4702,7 +3661,7 @@ inline const ::proto::Clipboard& ServerToClient::clipboard() const {
 inline ::proto::Clipboard* ServerToClient::mutable_clipboard() {
   
   if (clipboard_ == NULL) {
-    _slow_mutable_clipboard();
+    clipboard_ = new ::proto::Clipboard;
   }
   // @@protoc_insertion_point(field_mutable:proto.ServerToClient.clipboard)
   return clipboard_;
@@ -4710,22 +3669,12 @@ inline ::proto::Clipboard* ServerToClient::mutable_clipboard() {
 inline ::proto::Clipboard* ServerToClient::release_clipboard() {
   // @@protoc_insertion_point(field_release:proto.ServerToClient.clipboard)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_clipboard();
-  } else {
-    ::proto::Clipboard* temp = clipboard_;
-    clipboard_ = NULL;
-    return temp;
-  }
+  ::proto::Clipboard* temp = clipboard_;
+  clipboard_ = NULL;
+  return temp;
 }
-inline  void ServerToClient::set_allocated_clipboard(::proto::Clipboard* clipboard) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete clipboard_;
-  }
-  if (clipboard != NULL) {
-    _slow_set_allocated_clipboard(message_arena, &clipboard);
-  }
+inline void ServerToClient::set_allocated_clipboard(::proto::Clipboard* clipboard) {
+  delete clipboard_;
   clipboard_ = clipboard;
   if (clipboard) {
     
@@ -4735,7 +3684,7 @@ inline  void ServerToClient::set_allocated_clipboard(::proto::Clipboard* clipboa
   // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.clipboard)
 }
 
-// optional .proto.TextChat text_chat = 5;
+// optional .proto.TextChat text_chat = 4;
 inline bool ServerToClient::has_text_chat() const {
   return this != internal_default_instance() && text_chat_ != NULL;
 }
@@ -4751,7 +3700,7 @@ inline const ::proto::TextChat& ServerToClient::text_chat() const {
 inline ::proto::TextChat* ServerToClient::mutable_text_chat() {
   
   if (text_chat_ == NULL) {
-    _slow_mutable_text_chat();
+    text_chat_ = new ::proto::TextChat;
   }
   // @@protoc_insertion_point(field_mutable:proto.ServerToClient.text_chat)
   return text_chat_;
@@ -4759,22 +3708,12 @@ inline ::proto::TextChat* ServerToClient::mutable_text_chat() {
 inline ::proto::TextChat* ServerToClient::release_text_chat() {
   // @@protoc_insertion_point(field_release:proto.ServerToClient.text_chat)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_text_chat();
-  } else {
-    ::proto::TextChat* temp = text_chat_;
-    text_chat_ = NULL;
-    return temp;
-  }
+  ::proto::TextChat* temp = text_chat_;
+  text_chat_ = NULL;
+  return temp;
 }
-inline  void ServerToClient::set_allocated_text_chat(::proto::TextChat* text_chat) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete text_chat_;
-  }
-  if (text_chat != NULL) {
-    _slow_set_allocated_text_chat(message_arena, &text_chat);
-  }
+inline void ServerToClient::set_allocated_text_chat(::proto::TextChat* text_chat) {
+  delete text_chat_;
   text_chat_ = text_chat;
   if (text_chat) {
     
@@ -4784,7 +3723,7 @@ inline  void ServerToClient::set_allocated_text_chat(::proto::TextChat* text_cha
   // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.text_chat)
 }
 
-// optional .proto.AuthorizationRequest auth_request = 6;
+// optional .proto.AuthRequest auth_request = 5;
 inline bool ServerToClient::has_auth_request() const {
   return this != internal_default_instance() && auth_request_ != NULL;
 }
@@ -4792,38 +3731,28 @@ inline void ServerToClient::clear_auth_request() {
   if (GetArenaNoVirtual() == NULL && auth_request_ != NULL) delete auth_request_;
   auth_request_ = NULL;
 }
-inline const ::proto::AuthorizationRequest& ServerToClient::auth_request() const {
+inline const ::proto::AuthRequest& ServerToClient::auth_request() const {
   // @@protoc_insertion_point(field_get:proto.ServerToClient.auth_request)
   return auth_request_ != NULL ? *auth_request_
-                         : *::proto::AuthorizationRequest::internal_default_instance();
+                         : *::proto::AuthRequest::internal_default_instance();
 }
-inline ::proto::AuthorizationRequest* ServerToClient::mutable_auth_request() {
+inline ::proto::AuthRequest* ServerToClient::mutable_auth_request() {
   
   if (auth_request_ == NULL) {
-    _slow_mutable_auth_request();
+    auth_request_ = new ::proto::AuthRequest;
   }
   // @@protoc_insertion_point(field_mutable:proto.ServerToClient.auth_request)
   return auth_request_;
 }
-inline ::proto::AuthorizationRequest* ServerToClient::release_auth_request() {
+inline ::proto::AuthRequest* ServerToClient::release_auth_request() {
   // @@protoc_insertion_point(field_release:proto.ServerToClient.auth_request)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_auth_request();
-  } else {
-    ::proto::AuthorizationRequest* temp = auth_request_;
-    auth_request_ = NULL;
-    return temp;
-  }
+  ::proto::AuthRequest* temp = auth_request_;
+  auth_request_ = NULL;
+  return temp;
 }
-inline  void ServerToClient::set_allocated_auth_request(::proto::AuthorizationRequest* auth_request) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete auth_request_;
-  }
-  if (auth_request != NULL) {
-    _slow_set_allocated_auth_request(message_arena, &auth_request);
-  }
+inline void ServerToClient::set_allocated_auth_request(::proto::AuthRequest* auth_request) {
+  delete auth_request_;
   auth_request_ = auth_request;
   if (auth_request) {
     
@@ -4833,7 +3762,7 @@ inline  void ServerToClient::set_allocated_auth_request(::proto::AuthorizationRe
   // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.auth_request)
 }
 
-// optional .proto.AuthorizationResult auth_result = 7;
+// optional .proto.AuthResult auth_result = 6;
 inline bool ServerToClient::has_auth_result() const {
   return this != internal_default_instance() && auth_result_ != NULL;
 }
@@ -4841,38 +3770,28 @@ inline void ServerToClient::clear_auth_result() {
   if (GetArenaNoVirtual() == NULL && auth_result_ != NULL) delete auth_result_;
   auth_result_ = NULL;
 }
-inline const ::proto::AuthorizationResult& ServerToClient::auth_result() const {
+inline const ::proto::AuthResult& ServerToClient::auth_result() const {
   // @@protoc_insertion_point(field_get:proto.ServerToClient.auth_result)
   return auth_result_ != NULL ? *auth_result_
-                         : *::proto::AuthorizationResult::internal_default_instance();
+                         : *::proto::AuthResult::internal_default_instance();
 }
-inline ::proto::AuthorizationResult* ServerToClient::mutable_auth_result() {
+inline ::proto::AuthResult* ServerToClient::mutable_auth_result() {
   
   if (auth_result_ == NULL) {
-    _slow_mutable_auth_result();
+    auth_result_ = new ::proto::AuthResult;
   }
   // @@protoc_insertion_point(field_mutable:proto.ServerToClient.auth_result)
   return auth_result_;
 }
-inline ::proto::AuthorizationResult* ServerToClient::release_auth_result() {
+inline ::proto::AuthResult* ServerToClient::release_auth_result() {
   // @@protoc_insertion_point(field_release:proto.ServerToClient.auth_result)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_auth_result();
-  } else {
-    ::proto::AuthorizationResult* temp = auth_result_;
-    auth_result_ = NULL;
-    return temp;
-  }
+  ::proto::AuthResult* temp = auth_result_;
+  auth_result_ = NULL;
+  return temp;
 }
-inline  void ServerToClient::set_allocated_auth_result(::proto::AuthorizationResult* auth_result) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete auth_result_;
-  }
-  if (auth_result != NULL) {
-    _slow_set_allocated_auth_result(message_arena, &auth_result);
-  }
+inline void ServerToClient::set_allocated_auth_result(::proto::AuthResult* auth_result) {
+  delete auth_result_;
   auth_result_ = auth_result;
   if (auth_result) {
     
@@ -4905,7 +3824,7 @@ inline const ::proto::VideoControl& ClientToServer::video_control() const {
 inline ::proto::VideoControl* ClientToServer::mutable_video_control() {
   
   if (video_control_ == NULL) {
-    _slow_mutable_video_control();
+    video_control_ = new ::proto::VideoControl;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.video_control)
   return video_control_;
@@ -4913,22 +3832,12 @@ inline ::proto::VideoControl* ClientToServer::mutable_video_control() {
 inline ::proto::VideoControl* ClientToServer::release_video_control() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.video_control)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_video_control();
-  } else {
-    ::proto::VideoControl* temp = video_control_;
-    video_control_ = NULL;
-    return temp;
-  }
+  ::proto::VideoControl* temp = video_control_;
+  video_control_ = NULL;
+  return temp;
 }
-inline  void ClientToServer::set_allocated_video_control(::proto::VideoControl* video_control) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete video_control_;
-  }
-  if (video_control != NULL) {
-    _slow_set_allocated_video_control(message_arena, &video_control);
-  }
+inline void ClientToServer::set_allocated_video_control(::proto::VideoControl* video_control) {
+  delete video_control_;
   video_control_ = video_control;
   if (video_control) {
     
@@ -4938,56 +3847,7 @@ inline  void ClientToServer::set_allocated_video_control(::proto::VideoControl* 
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.video_control)
 }
 
-// optional .proto.AudioControl audio_control = 2;
-inline bool ClientToServer::has_audio_control() const {
-  return this != internal_default_instance() && audio_control_ != NULL;
-}
-inline void ClientToServer::clear_audio_control() {
-  if (GetArenaNoVirtual() == NULL && audio_control_ != NULL) delete audio_control_;
-  audio_control_ = NULL;
-}
-inline const ::proto::AudioControl& ClientToServer::audio_control() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.audio_control)
-  return audio_control_ != NULL ? *audio_control_
-                         : *::proto::AudioControl::internal_default_instance();
-}
-inline ::proto::AudioControl* ClientToServer::mutable_audio_control() {
-  
-  if (audio_control_ == NULL) {
-    _slow_mutable_audio_control();
-  }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.audio_control)
-  return audio_control_;
-}
-inline ::proto::AudioControl* ClientToServer::release_audio_control() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.audio_control)
-  
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_audio_control();
-  } else {
-    ::proto::AudioControl* temp = audio_control_;
-    audio_control_ = NULL;
-    return temp;
-  }
-}
-inline  void ClientToServer::set_allocated_audio_control(::proto::AudioControl* audio_control) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete audio_control_;
-  }
-  if (audio_control != NULL) {
-    _slow_set_allocated_audio_control(message_arena, &audio_control);
-  }
-  audio_control_ = audio_control;
-  if (audio_control) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.audio_control)
-}
-
-// optional .proto.CursorShapeControl cursor_shape_control = 3;
+// optional .proto.CursorShapeControl cursor_shape_control = 2;
 inline bool ClientToServer::has_cursor_shape_control() const {
   return this != internal_default_instance() && cursor_shape_control_ != NULL;
 }
@@ -5003,7 +3863,7 @@ inline const ::proto::CursorShapeControl& ClientToServer::cursor_shape_control()
 inline ::proto::CursorShapeControl* ClientToServer::mutable_cursor_shape_control() {
   
   if (cursor_shape_control_ == NULL) {
-    _slow_mutable_cursor_shape_control();
+    cursor_shape_control_ = new ::proto::CursorShapeControl;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.cursor_shape_control)
   return cursor_shape_control_;
@@ -5011,22 +3871,12 @@ inline ::proto::CursorShapeControl* ClientToServer::mutable_cursor_shape_control
 inline ::proto::CursorShapeControl* ClientToServer::release_cursor_shape_control() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.cursor_shape_control)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_cursor_shape_control();
-  } else {
-    ::proto::CursorShapeControl* temp = cursor_shape_control_;
-    cursor_shape_control_ = NULL;
-    return temp;
-  }
+  ::proto::CursorShapeControl* temp = cursor_shape_control_;
+  cursor_shape_control_ = NULL;
+  return temp;
 }
-inline  void ClientToServer::set_allocated_cursor_shape_control(::proto::CursorShapeControl* cursor_shape_control) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete cursor_shape_control_;
-  }
-  if (cursor_shape_control != NULL) {
-    _slow_set_allocated_cursor_shape_control(message_arena, &cursor_shape_control);
-  }
+inline void ClientToServer::set_allocated_cursor_shape_control(::proto::CursorShapeControl* cursor_shape_control) {
+  delete cursor_shape_control_;
   cursor_shape_control_ = cursor_shape_control;
   if (cursor_shape_control) {
     
@@ -5036,7 +3886,7 @@ inline  void ClientToServer::set_allocated_cursor_shape_control(::proto::CursorS
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.cursor_shape_control)
 }
 
-// optional .proto.ClipboardControl clipboard_control = 4;
+// optional .proto.ClipboardControl clipboard_control = 3;
 inline bool ClientToServer::has_clipboard_control() const {
   return this != internal_default_instance() && clipboard_control_ != NULL;
 }
@@ -5052,7 +3902,7 @@ inline const ::proto::ClipboardControl& ClientToServer::clipboard_control() cons
 inline ::proto::ClipboardControl* ClientToServer::mutable_clipboard_control() {
   
   if (clipboard_control_ == NULL) {
-    _slow_mutable_clipboard_control();
+    clipboard_control_ = new ::proto::ClipboardControl;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.clipboard_control)
   return clipboard_control_;
@@ -5060,22 +3910,12 @@ inline ::proto::ClipboardControl* ClientToServer::mutable_clipboard_control() {
 inline ::proto::ClipboardControl* ClientToServer::release_clipboard_control() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.clipboard_control)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_clipboard_control();
-  } else {
-    ::proto::ClipboardControl* temp = clipboard_control_;
-    clipboard_control_ = NULL;
-    return temp;
-  }
+  ::proto::ClipboardControl* temp = clipboard_control_;
+  clipboard_control_ = NULL;
+  return temp;
 }
-inline  void ClientToServer::set_allocated_clipboard_control(::proto::ClipboardControl* clipboard_control) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete clipboard_control_;
-  }
-  if (clipboard_control != NULL) {
-    _slow_set_allocated_clipboard_control(message_arena, &clipboard_control);
-  }
+inline void ClientToServer::set_allocated_clipboard_control(::proto::ClipboardControl* clipboard_control) {
+  delete clipboard_control_;
   clipboard_control_ = clipboard_control;
   if (clipboard_control) {
     
@@ -5085,7 +3925,7 @@ inline  void ClientToServer::set_allocated_clipboard_control(::proto::ClipboardC
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.clipboard_control)
 }
 
-// optional .proto.ClipboardRequest clipboard_request = 5;
+// optional .proto.ClipboardRequest clipboard_request = 4;
 inline bool ClientToServer::has_clipboard_request() const {
   return this != internal_default_instance() && clipboard_request_ != NULL;
 }
@@ -5101,7 +3941,7 @@ inline const ::proto::ClipboardRequest& ClientToServer::clipboard_request() cons
 inline ::proto::ClipboardRequest* ClientToServer::mutable_clipboard_request() {
   
   if (clipboard_request_ == NULL) {
-    _slow_mutable_clipboard_request();
+    clipboard_request_ = new ::proto::ClipboardRequest;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.clipboard_request)
   return clipboard_request_;
@@ -5109,22 +3949,12 @@ inline ::proto::ClipboardRequest* ClientToServer::mutable_clipboard_request() {
 inline ::proto::ClipboardRequest* ClientToServer::release_clipboard_request() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.clipboard_request)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_clipboard_request();
-  } else {
-    ::proto::ClipboardRequest* temp = clipboard_request_;
-    clipboard_request_ = NULL;
-    return temp;
-  }
+  ::proto::ClipboardRequest* temp = clipboard_request_;
+  clipboard_request_ = NULL;
+  return temp;
 }
-inline  void ClientToServer::set_allocated_clipboard_request(::proto::ClipboardRequest* clipboard_request) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete clipboard_request_;
-  }
-  if (clipboard_request != NULL) {
-    _slow_set_allocated_clipboard_request(message_arena, &clipboard_request);
-  }
+inline void ClientToServer::set_allocated_clipboard_request(::proto::ClipboardRequest* clipboard_request) {
+  delete clipboard_request_;
   clipboard_request_ = clipboard_request;
   if (clipboard_request) {
     
@@ -5134,7 +3964,7 @@ inline  void ClientToServer::set_allocated_clipboard_request(::proto::ClipboardR
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.clipboard_request)
 }
 
-// optional .proto.Clipboard clipboard = 6;
+// optional .proto.Clipboard clipboard = 5;
 inline bool ClientToServer::has_clipboard() const {
   return this != internal_default_instance() && clipboard_ != NULL;
 }
@@ -5150,7 +3980,7 @@ inline const ::proto::Clipboard& ClientToServer::clipboard() const {
 inline ::proto::Clipboard* ClientToServer::mutable_clipboard() {
   
   if (clipboard_ == NULL) {
-    _slow_mutable_clipboard();
+    clipboard_ = new ::proto::Clipboard;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.clipboard)
   return clipboard_;
@@ -5158,22 +3988,12 @@ inline ::proto::Clipboard* ClientToServer::mutable_clipboard() {
 inline ::proto::Clipboard* ClientToServer::release_clipboard() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.clipboard)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_clipboard();
-  } else {
-    ::proto::Clipboard* temp = clipboard_;
-    clipboard_ = NULL;
-    return temp;
-  }
+  ::proto::Clipboard* temp = clipboard_;
+  clipboard_ = NULL;
+  return temp;
 }
-inline  void ClientToServer::set_allocated_clipboard(::proto::Clipboard* clipboard) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete clipboard_;
-  }
-  if (clipboard != NULL) {
-    _slow_set_allocated_clipboard(message_arena, &clipboard);
-  }
+inline void ClientToServer::set_allocated_clipboard(::proto::Clipboard* clipboard) {
+  delete clipboard_;
   clipboard_ = clipboard;
   if (clipboard) {
     
@@ -5183,56 +4003,46 @@ inline  void ClientToServer::set_allocated_clipboard(::proto::Clipboard* clipboa
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.clipboard)
 }
 
-// optional .proto.MouseEvent mouse_event = 7;
-inline bool ClientToServer::has_mouse_event() const {
-  return this != internal_default_instance() && mouse_event_ != NULL;
+// optional .proto.PointerEvent pointer_event = 6;
+inline bool ClientToServer::has_pointer_event() const {
+  return this != internal_default_instance() && pointer_event_ != NULL;
 }
-inline void ClientToServer::clear_mouse_event() {
-  if (GetArenaNoVirtual() == NULL && mouse_event_ != NULL) delete mouse_event_;
-  mouse_event_ = NULL;
+inline void ClientToServer::clear_pointer_event() {
+  if (GetArenaNoVirtual() == NULL && pointer_event_ != NULL) delete pointer_event_;
+  pointer_event_ = NULL;
 }
-inline const ::proto::MouseEvent& ClientToServer::mouse_event() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.mouse_event)
-  return mouse_event_ != NULL ? *mouse_event_
-                         : *::proto::MouseEvent::internal_default_instance();
+inline const ::proto::PointerEvent& ClientToServer::pointer_event() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToServer.pointer_event)
+  return pointer_event_ != NULL ? *pointer_event_
+                         : *::proto::PointerEvent::internal_default_instance();
 }
-inline ::proto::MouseEvent* ClientToServer::mutable_mouse_event() {
+inline ::proto::PointerEvent* ClientToServer::mutable_pointer_event() {
   
-  if (mouse_event_ == NULL) {
-    _slow_mutable_mouse_event();
+  if (pointer_event_ == NULL) {
+    pointer_event_ = new ::proto::PointerEvent;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.mouse_event)
-  return mouse_event_;
+  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.pointer_event)
+  return pointer_event_;
 }
-inline ::proto::MouseEvent* ClientToServer::release_mouse_event() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.mouse_event)
+inline ::proto::PointerEvent* ClientToServer::release_pointer_event() {
+  // @@protoc_insertion_point(field_release:proto.ClientToServer.pointer_event)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_mouse_event();
-  } else {
-    ::proto::MouseEvent* temp = mouse_event_;
-    mouse_event_ = NULL;
-    return temp;
-  }
+  ::proto::PointerEvent* temp = pointer_event_;
+  pointer_event_ = NULL;
+  return temp;
 }
-inline  void ClientToServer::set_allocated_mouse_event(::proto::MouseEvent* mouse_event) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete mouse_event_;
-  }
-  if (mouse_event != NULL) {
-    _slow_set_allocated_mouse_event(message_arena, &mouse_event);
-  }
-  mouse_event_ = mouse_event;
-  if (mouse_event) {
+inline void ClientToServer::set_allocated_pointer_event(::proto::PointerEvent* pointer_event) {
+  delete pointer_event_;
+  pointer_event_ = pointer_event;
+  if (pointer_event) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.mouse_event)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.pointer_event)
 }
 
-// optional .proto.KeyEvent key_event = 8;
+// optional .proto.KeyEvent key_event = 7;
 inline bool ClientToServer::has_key_event() const {
   return this != internal_default_instance() && key_event_ != NULL;
 }
@@ -5248,7 +4058,7 @@ inline const ::proto::KeyEvent& ClientToServer::key_event() const {
 inline ::proto::KeyEvent* ClientToServer::mutable_key_event() {
   
   if (key_event_ == NULL) {
-    _slow_mutable_key_event();
+    key_event_ = new ::proto::KeyEvent;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.key_event)
   return key_event_;
@@ -5256,22 +4066,12 @@ inline ::proto::KeyEvent* ClientToServer::mutable_key_event() {
 inline ::proto::KeyEvent* ClientToServer::release_key_event() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.key_event)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_key_event();
-  } else {
-    ::proto::KeyEvent* temp = key_event_;
-    key_event_ = NULL;
-    return temp;
-  }
+  ::proto::KeyEvent* temp = key_event_;
+  key_event_ = NULL;
+  return temp;
 }
-inline  void ClientToServer::set_allocated_key_event(::proto::KeyEvent* key_event) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete key_event_;
-  }
-  if (key_event != NULL) {
-    _slow_set_allocated_key_event(message_arena, &key_event);
-  }
+inline void ClientToServer::set_allocated_key_event(::proto::KeyEvent* key_event) {
+  delete key_event_;
   key_event_ = key_event;
   if (key_event) {
     
@@ -5281,7 +4081,7 @@ inline  void ClientToServer::set_allocated_key_event(::proto::KeyEvent* key_even
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.key_event)
 }
 
-// optional .proto.Bell bell = 9;
+// optional .proto.Bell bell = 8;
 inline bool ClientToServer::has_bell() const {
   return this != internal_default_instance() && bell_ != NULL;
 }
@@ -5297,7 +4097,7 @@ inline const ::proto::Bell& ClientToServer::bell() const {
 inline ::proto::Bell* ClientToServer::mutable_bell() {
   
   if (bell_ == NULL) {
-    _slow_mutable_bell();
+    bell_ = new ::proto::Bell;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.bell)
   return bell_;
@@ -5305,22 +4105,12 @@ inline ::proto::Bell* ClientToServer::mutable_bell() {
 inline ::proto::Bell* ClientToServer::release_bell() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.bell)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_bell();
-  } else {
-    ::proto::Bell* temp = bell_;
-    bell_ = NULL;
-    return temp;
-  }
+  ::proto::Bell* temp = bell_;
+  bell_ = NULL;
+  return temp;
 }
-inline  void ClientToServer::set_allocated_bell(::proto::Bell* bell) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete bell_;
-  }
-  if (bell != NULL) {
-    _slow_set_allocated_bell(message_arena, &bell);
-  }
+inline void ClientToServer::set_allocated_bell(::proto::Bell* bell) {
+  delete bell_;
   bell_ = bell;
   if (bell) {
     
@@ -5330,7 +4120,7 @@ inline  void ClientToServer::set_allocated_bell(::proto::Bell* bell) {
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.bell)
 }
 
-// optional .proto.TextChat text_chat = 10;
+// optional .proto.TextChat text_chat = 9;
 inline bool ClientToServer::has_text_chat() const {
   return this != internal_default_instance() && text_chat_ != NULL;
 }
@@ -5346,7 +4136,7 @@ inline const ::proto::TextChat& ClientToServer::text_chat() const {
 inline ::proto::TextChat* ClientToServer::mutable_text_chat() {
   
   if (text_chat_ == NULL) {
-    _slow_mutable_text_chat();
+    text_chat_ = new ::proto::TextChat;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.text_chat)
   return text_chat_;
@@ -5354,22 +4144,12 @@ inline ::proto::TextChat* ClientToServer::mutable_text_chat() {
 inline ::proto::TextChat* ClientToServer::release_text_chat() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.text_chat)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_text_chat();
-  } else {
-    ::proto::TextChat* temp = text_chat_;
-    text_chat_ = NULL;
-    return temp;
-  }
+  ::proto::TextChat* temp = text_chat_;
+  text_chat_ = NULL;
+  return temp;
 }
-inline  void ClientToServer::set_allocated_text_chat(::proto::TextChat* text_chat) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete text_chat_;
-  }
-  if (text_chat != NULL) {
-    _slow_set_allocated_text_chat(message_arena, &text_chat);
-  }
+inline void ClientToServer::set_allocated_text_chat(::proto::TextChat* text_chat) {
+  delete text_chat_;
   text_chat_ = text_chat;
   if (text_chat) {
     
@@ -5379,7 +4159,7 @@ inline  void ClientToServer::set_allocated_text_chat(::proto::TextChat* text_cha
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.text_chat)
 }
 
-// optional .proto.PowerControl power_control = 11;
+// optional .proto.PowerControl power_control = 10;
 inline bool ClientToServer::has_power_control() const {
   return this != internal_default_instance() && power_control_ != NULL;
 }
@@ -5395,7 +4175,7 @@ inline const ::proto::PowerControl& ClientToServer::power_control() const {
 inline ::proto::PowerControl* ClientToServer::mutable_power_control() {
   
   if (power_control_ == NULL) {
-    _slow_mutable_power_control();
+    power_control_ = new ::proto::PowerControl;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.power_control)
   return power_control_;
@@ -5403,22 +4183,12 @@ inline ::proto::PowerControl* ClientToServer::mutable_power_control() {
 inline ::proto::PowerControl* ClientToServer::release_power_control() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.power_control)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_power_control();
-  } else {
-    ::proto::PowerControl* temp = power_control_;
-    power_control_ = NULL;
-    return temp;
-  }
+  ::proto::PowerControl* temp = power_control_;
+  power_control_ = NULL;
+  return temp;
 }
-inline  void ClientToServer::set_allocated_power_control(::proto::PowerControl* power_control) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete power_control_;
-  }
-  if (power_control != NULL) {
-    _slow_set_allocated_power_control(message_arena, &power_control);
-  }
+inline void ClientToServer::set_allocated_power_control(::proto::PowerControl* power_control) {
+  delete power_control_;
   power_control_ = power_control;
   if (power_control) {
     
@@ -5428,7 +4198,7 @@ inline  void ClientToServer::set_allocated_power_control(::proto::PowerControl* 
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.power_control)
 }
 
-// optional .proto.AuthorizationReply auth_reply = 12;
+// optional .proto.AuthReply auth_reply = 11;
 inline bool ClientToServer::has_auth_reply() const {
   return this != internal_default_instance() && auth_reply_ != NULL;
 }
@@ -5436,38 +4206,28 @@ inline void ClientToServer::clear_auth_reply() {
   if (GetArenaNoVirtual() == NULL && auth_reply_ != NULL) delete auth_reply_;
   auth_reply_ = NULL;
 }
-inline const ::proto::AuthorizationReply& ClientToServer::auth_reply() const {
+inline const ::proto::AuthReply& ClientToServer::auth_reply() const {
   // @@protoc_insertion_point(field_get:proto.ClientToServer.auth_reply)
   return auth_reply_ != NULL ? *auth_reply_
-                         : *::proto::AuthorizationReply::internal_default_instance();
+                         : *::proto::AuthReply::internal_default_instance();
 }
-inline ::proto::AuthorizationReply* ClientToServer::mutable_auth_reply() {
+inline ::proto::AuthReply* ClientToServer::mutable_auth_reply() {
   
   if (auth_reply_ == NULL) {
-    _slow_mutable_auth_reply();
+    auth_reply_ = new ::proto::AuthReply;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.auth_reply)
   return auth_reply_;
 }
-inline ::proto::AuthorizationReply* ClientToServer::release_auth_reply() {
+inline ::proto::AuthReply* ClientToServer::release_auth_reply() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.auth_reply)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_auth_reply();
-  } else {
-    ::proto::AuthorizationReply* temp = auth_reply_;
-    auth_reply_ = NULL;
-    return temp;
-  }
+  ::proto::AuthReply* temp = auth_reply_;
+  auth_reply_ = NULL;
+  return temp;
 }
-inline  void ClientToServer::set_allocated_auth_reply(::proto::AuthorizationReply* auth_reply) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete auth_reply_;
-  }
-  if (auth_reply != NULL) {
-    _slow_set_allocated_auth_reply(message_arena, &auth_reply);
-  }
+inline void ClientToServer::set_allocated_auth_reply(::proto::AuthReply* auth_reply) {
+  delete auth_reply_;
   auth_reply_ = auth_reply;
   if (auth_reply) {
     
@@ -5521,8 +4281,6 @@ inline const ClientToServer* ClientToServer::internal_default_instance() {
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -5533,11 +4291,11 @@ namespace google {
 namespace protobuf {
 
 template <> struct is_proto_enum< ::proto::PowerControl_PowerAction> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::proto::PointerEvent_ButtonMask> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::proto::VideoPacket_Flags> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::proto::AuthorizationMethod> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::proto::AuthMethod> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::proto::SessionFeature> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::proto::VideoEncoding> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::proto::AudioEncoding> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
 }  // namespace google

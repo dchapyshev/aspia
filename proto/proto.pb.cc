@@ -17,14 +17,14 @@
 namespace proto {
 
 void protobuf_ShutdownFile_proto_2eproto() {
-  AuthorizationRequest_default_instance_.Shutdown();
-  AuthorizationReply_default_instance_.Shutdown();
-  AuthorizationResult_default_instance_.Shutdown();
+  AuthRequest_default_instance_.Shutdown();
+  AuthReply_default_instance_.Shutdown();
+  AuthResult_default_instance_.Shutdown();
   PowerControl_default_instance_.Shutdown();
   Bell_default_instance_.Shutdown();
   TextChat_default_instance_.Shutdown();
   KeyEvent_default_instance_.Shutdown();
-  MouseEvent_default_instance_.Shutdown();
+  PointerEvent_default_instance_.Shutdown();
   Clipboard_default_instance_.Shutdown();
   ClipboardRequest_default_instance_.Shutdown();
   ClipboardControl_default_instance_.Shutdown();
@@ -32,11 +32,10 @@ void protobuf_ShutdownFile_proto_2eproto() {
   CursorShapeControl_default_instance_.Shutdown();
   VideoRect_default_instance_.Shutdown();
   VideoPixelFormat_default_instance_.Shutdown();
+  VideoSize_default_instance_.Shutdown();
   VideoPacketFormat_default_instance_.Shutdown();
   VideoPacket_default_instance_.Shutdown();
   VideoControl_default_instance_.Shutdown();
-  AudioPacket_default_instance_.Shutdown();
-  AudioControl_default_instance_.Shutdown();
   ServerToClient_default_instance_.Shutdown();
   ClientToServer_default_instance_.Shutdown();
 }
@@ -44,16 +43,16 @@ void protobuf_ShutdownFile_proto_2eproto() {
 void protobuf_InitDefaults_proto_2eproto_impl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  AuthorizationRequest_default_instance_.DefaultConstruct();
+  AuthRequest_default_instance_.DefaultConstruct();
   ::google::protobuf::internal::GetEmptyString();
-  AuthorizationReply_default_instance_.DefaultConstruct();
-  AuthorizationResult_default_instance_.DefaultConstruct();
+  AuthReply_default_instance_.DefaultConstruct();
+  AuthResult_default_instance_.DefaultConstruct();
   PowerControl_default_instance_.DefaultConstruct();
   Bell_default_instance_.DefaultConstruct();
   ::google::protobuf::internal::GetEmptyString();
   TextChat_default_instance_.DefaultConstruct();
   KeyEvent_default_instance_.DefaultConstruct();
-  MouseEvent_default_instance_.DefaultConstruct();
+  PointerEvent_default_instance_.DefaultConstruct();
   ::google::protobuf::internal::GetEmptyString();
   Clipboard_default_instance_.DefaultConstruct();
   ClipboardRequest_default_instance_.DefaultConstruct();
@@ -63,23 +62,21 @@ void protobuf_InitDefaults_proto_2eproto_impl() {
   CursorShapeControl_default_instance_.DefaultConstruct();
   VideoRect_default_instance_.DefaultConstruct();
   VideoPixelFormat_default_instance_.DefaultConstruct();
+  VideoSize_default_instance_.DefaultConstruct();
   VideoPacketFormat_default_instance_.DefaultConstruct();
   ::google::protobuf::internal::GetEmptyString();
   VideoPacket_default_instance_.DefaultConstruct();
   VideoControl_default_instance_.DefaultConstruct();
-  ::google::protobuf::internal::GetEmptyString();
-  AudioPacket_default_instance_.DefaultConstruct();
-  AudioControl_default_instance_.DefaultConstruct();
   ServerToClient_default_instance_.DefaultConstruct();
   ClientToServer_default_instance_.DefaultConstruct();
-  AuthorizationRequest_default_instance_.get_mutable()->InitAsDefaultInstance();
-  AuthorizationReply_default_instance_.get_mutable()->InitAsDefaultInstance();
-  AuthorizationResult_default_instance_.get_mutable()->InitAsDefaultInstance();
+  AuthRequest_default_instance_.get_mutable()->InitAsDefaultInstance();
+  AuthReply_default_instance_.get_mutable()->InitAsDefaultInstance();
+  AuthResult_default_instance_.get_mutable()->InitAsDefaultInstance();
   PowerControl_default_instance_.get_mutable()->InitAsDefaultInstance();
   Bell_default_instance_.get_mutable()->InitAsDefaultInstance();
   TextChat_default_instance_.get_mutable()->InitAsDefaultInstance();
   KeyEvent_default_instance_.get_mutable()->InitAsDefaultInstance();
-  MouseEvent_default_instance_.get_mutable()->InitAsDefaultInstance();
+  PointerEvent_default_instance_.get_mutable()->InitAsDefaultInstance();
   Clipboard_default_instance_.get_mutable()->InitAsDefaultInstance();
   ClipboardRequest_default_instance_.get_mutable()->InitAsDefaultInstance();
   ClipboardControl_default_instance_.get_mutable()->InitAsDefaultInstance();
@@ -87,11 +84,10 @@ void protobuf_InitDefaults_proto_2eproto_impl() {
   CursorShapeControl_default_instance_.get_mutable()->InitAsDefaultInstance();
   VideoRect_default_instance_.get_mutable()->InitAsDefaultInstance();
   VideoPixelFormat_default_instance_.get_mutable()->InitAsDefaultInstance();
+  VideoSize_default_instance_.get_mutable()->InitAsDefaultInstance();
   VideoPacketFormat_default_instance_.get_mutable()->InitAsDefaultInstance();
   VideoPacket_default_instance_.get_mutable()->InitAsDefaultInstance();
   VideoControl_default_instance_.get_mutable()->InitAsDefaultInstance();
-  AudioPacket_default_instance_.get_mutable()->InitAsDefaultInstance();
-  AudioControl_default_instance_.get_mutable()->InitAsDefaultInstance();
   ServerToClient_default_instance_.get_mutable()->InitAsDefaultInstance();
   ClientToServer_default_instance_.get_mutable()->InitAsDefaultInstance();
 }
@@ -121,13 +117,11 @@ struct StaticDescriptorInitializer_proto_2eproto {
   }
 } static_descriptor_initializer_proto_2eproto_;
 #endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-bool AuthorizationMethod_IsValid(int value) {
+bool AuthMethod_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
     case 2:
-    case 3:
-    case 4:
       return true;
     default:
       return false;
@@ -139,11 +133,17 @@ bool SessionFeature_IsValid(int value) {
     case 0:
     case 1:
     case 2:
-    case 3:
     case 4:
-    case 5:
-    case 6:
-    case 7:
+    case 8:
+    case 16:
+    case 32:
+    case 64:
+    case 128:
+    case 256:
+    case 512:
+    case 1024:
+    case 2048:
+    case 4096:
       return true;
     default:
       return false;
@@ -155,19 +155,7 @@ bool VideoEncoding_IsValid(int value) {
     case 0:
     case 1:
     case 2:
-    case 3:
     case 4:
-      return true;
-    default:
-      return false;
-  }
-}
-
-bool AudioEncoding_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
       return true;
     default:
       return false;
@@ -188,112 +176,82 @@ static void MergeFromFail(int line) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int AuthorizationRequest::kMethodsFieldNumber;
+const int AuthRequest::kMethodsFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-AuthorizationRequest::AuthorizationRequest()
+AuthRequest::AuthRequest()
   : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
   if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.AuthorizationRequest)
-}
-AuthorizationRequest::AuthorizationRequest(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena),
-  methods_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.AuthorizationRequest)
+  // @@protoc_insertion_point(constructor:proto.AuthRequest)
 }
 
-void AuthorizationRequest::InitAsDefaultInstance() {
+void AuthRequest::InitAsDefaultInstance() {
 }
 
-AuthorizationRequest::AuthorizationRequest(const AuthorizationRequest& from)
+AuthRequest::AuthRequest(const AuthRequest& from)
   : ::google::protobuf::MessageLite(),
     _arena_ptr_(NULL) {
   SharedCtor();
   UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:proto.AuthorizationRequest)
+  // @@protoc_insertion_point(copy_constructor:proto.AuthRequest)
 }
 
-void AuthorizationRequest::SharedCtor() {
+void AuthRequest::SharedCtor() {
+  methods_ = 0;
   _cached_size_ = 0;
 }
 
-AuthorizationRequest::~AuthorizationRequest() {
-  // @@protoc_insertion_point(destructor:proto.AuthorizationRequest)
+AuthRequest::~AuthRequest() {
+  // @@protoc_insertion_point(destructor:proto.AuthRequest)
   SharedDtor();
 }
 
-void AuthorizationRequest::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
+void AuthRequest::SharedDtor() {
 }
 
-void AuthorizationRequest::ArenaDtor(void* object) {
-  AuthorizationRequest* _this = reinterpret_cast< AuthorizationRequest* >(object);
-  (void)_this;
-}
-void AuthorizationRequest::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
-void AuthorizationRequest::SetCachedSize(int size) const {
+void AuthRequest::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const AuthorizationRequest& AuthorizationRequest::default_instance() {
+const AuthRequest& AuthRequest::default_instance() {
   protobuf_InitDefaults_proto_2eproto();
   return *internal_default_instance();
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<AuthorizationRequest> AuthorizationRequest_default_instance_;
+::google::protobuf::internal::ExplicitlyConstructed<AuthRequest> AuthRequest_default_instance_;
 
-AuthorizationRequest* AuthorizationRequest::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<AuthorizationRequest>(arena);
+AuthRequest* AuthRequest::New(::google::protobuf::Arena* arena) const {
+  AuthRequest* n = new AuthRequest;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
-void AuthorizationRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.AuthorizationRequest)
-  methods_.Clear();
+void AuthRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:proto.AuthRequest)
+  methods_ = 0;
 }
 
-bool AuthorizationRequest::MergePartialFromCodedStream(
+bool AuthRequest::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:proto.AuthorizationRequest)
+  // @@protoc_insertion_point(parse_start:proto.AuthRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .proto.AuthorizationMethod methods = 1;
+      // optional int32 methods = 1;
       case 1: {
-        if (tag == 10) {
-          ::google::protobuf::uint32 length;
-          DO_(input->ReadVarint32(&length));
-          ::google::protobuf::io::CodedInputStream::Limit limit = input->PushLimit(length);
-          while (input->BytesUntilLimit() > 0) {
-            int value;
-            DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-            add_methods(static_cast< ::proto::AuthorizationMethod >(value));
-          }
-          input->PopLimit(limit);
-        } else if (tag == 8) {
-          int value;
+        if (tag == 8) {
+
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          add_methods(static_cast< ::proto::AuthorizationMethod >(value));
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &methods_)));
         } else {
           goto handle_unusual;
         }
@@ -314,53 +272,34 @@ bool AuthorizationRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.AuthorizationRequest)
+  // @@protoc_insertion_point(parse_success:proto.AuthRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.AuthorizationRequest)
+  // @@protoc_insertion_point(parse_failure:proto.AuthRequest)
   return false;
 #undef DO_
 }
 
-void AuthorizationRequest::SerializeWithCachedSizes(
+void AuthRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.AuthorizationRequest)
-  // repeated .proto.AuthorizationMethod methods = 1;
-  if (this->methods_size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteTag(
-      1,
-      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
-      output);
-    output->WriteVarint32(_methods_cached_byte_size_);
-  }
-  for (int i = 0; i < this->methods_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnumNoTag(
-      this->methods(i), output);
+  // @@protoc_insertion_point(serialize_start:proto.AuthRequest)
+  // optional int32 methods = 1;
+  if (this->methods() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->methods(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:proto.AuthorizationRequest)
+  // @@protoc_insertion_point(serialize_end:proto.AuthRequest)
 }
 
-size_t AuthorizationRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.AuthorizationRequest)
+size_t AuthRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:proto.AuthRequest)
   size_t total_size = 0;
 
-  // repeated .proto.AuthorizationMethod methods = 1;
-  {
-    size_t data_size = 0;
-    unsigned int count = this->methods_size();for (unsigned int i = 0; i < count; i++) {
-      data_size += ::google::protobuf::internal::WireFormatLite::EnumSize(
-        this->methods(i));
-    }
-    if (data_size > 0) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(data_size);
-    }
-    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
-    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-    _methods_cached_byte_size_ = cached_size;
-    GOOGLE_SAFE_CONCURRENT_WRITES_END();
-    total_size += data_size;
+  // optional int32 methods = 1;
+  if (this->methods() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->methods());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -370,13 +309,13 @@ size_t AuthorizationRequest::ByteSizeLong() const {
   return total_size;
 }
 
-void AuthorizationRequest::CheckTypeAndMergeFrom(
+void AuthRequest::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const AuthorizationRequest*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const AuthRequest*>(&from));
 }
 
-void AuthorizationRequest::MergeFrom(const AuthorizationRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.AuthorizationRequest)
+void AuthRequest::MergeFrom(const AuthRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:proto.AuthRequest)
   if (GOOGLE_PREDICT_TRUE(&from != this)) {
     UnsafeMergeFrom(from);
   } else {
@@ -384,230 +323,165 @@ void AuthorizationRequest::MergeFrom(const AuthorizationRequest& from) {
   }
 }
 
-void AuthorizationRequest::UnsafeMergeFrom(const AuthorizationRequest& from) {
+void AuthRequest::UnsafeMergeFrom(const AuthRequest& from) {
   GOOGLE_DCHECK(&from != this);
-  methods_.UnsafeMergeFrom(from.methods_);
+  if (from.methods() != 0) {
+    set_methods(from.methods());
+  }
 }
 
-void AuthorizationRequest::CopyFrom(const AuthorizationRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.AuthorizationRequest)
+void AuthRequest::CopyFrom(const AuthRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:proto.AuthRequest)
   if (&from == this) return;
   Clear();
   UnsafeMergeFrom(from);
 }
 
-bool AuthorizationRequest::IsInitialized() const {
+bool AuthRequest::IsInitialized() const {
 
   return true;
 }
 
-void AuthorizationRequest::Swap(AuthorizationRequest* other) {
+void AuthRequest::Swap(AuthRequest* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    AuthorizationRequest temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void AuthorizationRequest::UnsafeArenaSwap(AuthorizationRequest* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
-void AuthorizationRequest::InternalSwap(AuthorizationRequest* other) {
-  methods_.UnsafeArenaSwap(&other->methods_);
+void AuthRequest::InternalSwap(AuthRequest* other) {
+  std::swap(methods_, other->methods_);
   _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string AuthorizationRequest::GetTypeName() const {
-  return "proto.AuthorizationRequest";
+::std::string AuthRequest::GetTypeName() const {
+  return "proto.AuthRequest";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// AuthorizationRequest
+// AuthRequest
 
-// repeated .proto.AuthorizationMethod methods = 1;
-int AuthorizationRequest::methods_size() const {
-  return methods_.size();
+// optional int32 methods = 1;
+void AuthRequest::clear_methods() {
+  methods_ = 0;
 }
-void AuthorizationRequest::clear_methods() {
-  methods_.Clear();
-}
-::proto::AuthorizationMethod AuthorizationRequest::methods(int index) const {
-  // @@protoc_insertion_point(field_get:proto.AuthorizationRequest.methods)
-  return static_cast< ::proto::AuthorizationMethod >(methods_.Get(index));
-}
-void AuthorizationRequest::set_methods(int index, ::proto::AuthorizationMethod value) {
-  methods_.Set(index, value);
-  // @@protoc_insertion_point(field_set:proto.AuthorizationRequest.methods)
-}
-void AuthorizationRequest::add_methods(::proto::AuthorizationMethod value) {
-  methods_.Add(value);
-  // @@protoc_insertion_point(field_add:proto.AuthorizationRequest.methods)
-}
-const ::google::protobuf::RepeatedField<int>&
-AuthorizationRequest::methods() const {
-  // @@protoc_insertion_point(field_list:proto.AuthorizationRequest.methods)
+::google::protobuf::int32 AuthRequest::methods() const {
+  // @@protoc_insertion_point(field_get:proto.AuthRequest.methods)
   return methods_;
 }
-::google::protobuf::RepeatedField<int>*
-AuthorizationRequest::mutable_methods() {
-  // @@protoc_insertion_point(field_mutable_list:proto.AuthorizationRequest.methods)
-  return &methods_;
+void AuthRequest::set_methods(::google::protobuf::int32 value) {
+  
+  methods_ = value;
+  // @@protoc_insertion_point(field_set:proto.AuthRequest.methods)
 }
 
-inline const AuthorizationRequest* AuthorizationRequest::internal_default_instance() {
-  return &AuthorizationRequest_default_instance_.get();
+inline const AuthRequest* AuthRequest::internal_default_instance() {
+  return &AuthRequest_default_instance_.get();
 }
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int AuthorizationReply::kMethodFieldNumber;
-const int AuthorizationReply::kDomainFieldNumber;
-const int AuthorizationReply::kUserNameFieldNumber;
-const int AuthorizationReply::kPasswordFieldNumber;
+const int AuthReply::kMethodFieldNumber;
+const int AuthReply::kUsernameFieldNumber;
+const int AuthReply::kPasswordFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-AuthorizationReply::AuthorizationReply()
+AuthReply::AuthReply()
   : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
   if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.AuthorizationReply)
-}
-AuthorizationReply::AuthorizationReply(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.AuthorizationReply)
+  // @@protoc_insertion_point(constructor:proto.AuthReply)
 }
 
-void AuthorizationReply::InitAsDefaultInstance() {
+void AuthReply::InitAsDefaultInstance() {
 }
 
-AuthorizationReply::AuthorizationReply(const AuthorizationReply& from)
+AuthReply::AuthReply(const AuthReply& from)
   : ::google::protobuf::MessageLite(),
     _arena_ptr_(NULL) {
   SharedCtor();
   UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:proto.AuthorizationReply)
+  // @@protoc_insertion_point(copy_constructor:proto.AuthReply)
 }
 
-void AuthorizationReply::SharedCtor() {
-  domain_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  user_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+void AuthReply::SharedCtor() {
+  username_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   password_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   method_ = 0;
   _cached_size_ = 0;
 }
 
-AuthorizationReply::~AuthorizationReply() {
-  // @@protoc_insertion_point(destructor:proto.AuthorizationReply)
+AuthReply::~AuthReply() {
+  // @@protoc_insertion_point(destructor:proto.AuthReply)
   SharedDtor();
 }
 
-void AuthorizationReply::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
-  domain_.Destroy(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), arena);
-  user_name_.Destroy(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), arena);
-  password_.Destroy(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), arena);
+void AuthReply::SharedDtor() {
+  username_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  password_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
-void AuthorizationReply::ArenaDtor(void* object) {
-  AuthorizationReply* _this = reinterpret_cast< AuthorizationReply* >(object);
-  (void)_this;
-}
-void AuthorizationReply::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
-void AuthorizationReply::SetCachedSize(int size) const {
+void AuthReply::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const AuthorizationReply& AuthorizationReply::default_instance() {
+const AuthReply& AuthReply::default_instance() {
   protobuf_InitDefaults_proto_2eproto();
   return *internal_default_instance();
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<AuthorizationReply> AuthorizationReply_default_instance_;
+::google::protobuf::internal::ExplicitlyConstructed<AuthReply> AuthReply_default_instance_;
 
-AuthorizationReply* AuthorizationReply::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<AuthorizationReply>(arena);
+AuthReply* AuthReply::New(::google::protobuf::Arena* arena) const {
+  AuthReply* n = new AuthReply;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
-void AuthorizationReply::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.AuthorizationReply)
+void AuthReply::Clear() {
+// @@protoc_insertion_point(message_clear_start:proto.AuthReply)
   method_ = 0;
-  domain_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-  user_name_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-  password_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
-bool AuthorizationReply::MergePartialFromCodedStream(
+bool AuthReply::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:proto.AuthorizationReply)
+  // @@protoc_insertion_point(parse_start:proto.AuthReply)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .proto.AuthorizationMethod method = 1;
+      // optional int32 method = 1;
       case 1: {
         if (tag == 8) {
-          int value;
+
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_method(static_cast< ::proto::AuthorizationMethod >(value));
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &method_)));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(18)) goto parse_domain;
+        if (input->ExpectTag(26)) goto parse_username;
         break;
       }
 
-      // optional string domain = 2;
-      case 2: {
-        if (tag == 18) {
-         parse_domain:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_domain()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->domain().data(), this->domain().length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.AuthorizationReply.domain"));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(26)) goto parse_user_name;
-        break;
-      }
-
-      // optional string user_name = 3;
+      // optional string username = 3;
       case 3: {
         if (tag == 26) {
-         parse_user_name:
+         parse_username:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_user_name()));
+                input, this->mutable_username()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->user_name().data(), this->user_name().length(),
+            this->username().data(), this->username().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.AuthorizationReply.user_name"));
+            "proto.AuthReply.username"));
         } else {
           goto handle_unusual;
         }
@@ -641,41 +515,30 @@ bool AuthorizationReply::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.AuthorizationReply)
+  // @@protoc_insertion_point(parse_success:proto.AuthReply)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.AuthorizationReply)
+  // @@protoc_insertion_point(parse_failure:proto.AuthReply)
   return false;
 #undef DO_
 }
 
-void AuthorizationReply::SerializeWithCachedSizes(
+void AuthReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.AuthorizationReply)
-  // optional .proto.AuthorizationMethod method = 1;
+  // @@protoc_insertion_point(serialize_start:proto.AuthReply)
+  // optional int32 method = 1;
   if (this->method() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->method(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->method(), output);
   }
 
-  // optional string domain = 2;
-  if (this->domain().size() > 0) {
+  // optional string username = 3;
+  if (this->username().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->domain().data(), this->domain().length(),
+      this->username().data(), this->username().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.AuthorizationReply.domain");
+      "proto.AuthReply.username");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      2, this->domain(), output);
-  }
-
-  // optional string user_name = 3;
-  if (this->user_name().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->user_name().data(), this->user_name().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.AuthorizationReply.user_name");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      3, this->user_name(), output);
+      3, this->username(), output);
   }
 
   // optional bytes password = 4;
@@ -684,31 +547,25 @@ void AuthorizationReply::SerializeWithCachedSizes(
       4, this->password(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:proto.AuthorizationReply)
+  // @@protoc_insertion_point(serialize_end:proto.AuthReply)
 }
 
-size_t AuthorizationReply::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.AuthorizationReply)
+size_t AuthReply::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:proto.AuthReply)
   size_t total_size = 0;
 
-  // optional .proto.AuthorizationMethod method = 1;
+  // optional int32 method = 1;
   if (this->method() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->method());
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->method());
   }
 
-  // optional string domain = 2;
-  if (this->domain().size() > 0) {
+  // optional string username = 3;
+  if (this->username().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->domain());
-  }
-
-  // optional string user_name = 3;
-  if (this->user_name().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->user_name());
+        this->username());
   }
 
   // optional bytes password = 4;
@@ -725,13 +582,13 @@ size_t AuthorizationReply::ByteSizeLong() const {
   return total_size;
 }
 
-void AuthorizationReply::CheckTypeAndMergeFrom(
+void AuthReply::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const AuthorizationReply*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const AuthReply*>(&from));
 }
 
-void AuthorizationReply::MergeFrom(const AuthorizationReply& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.AuthorizationReply)
+void AuthReply::MergeFrom(const AuthReply& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:proto.AuthReply)
   if (GOOGLE_PREDICT_TRUE(&from != this)) {
     UnsafeMergeFrom(from);
   } else {
@@ -739,370 +596,248 @@ void AuthorizationReply::MergeFrom(const AuthorizationReply& from) {
   }
 }
 
-void AuthorizationReply::UnsafeMergeFrom(const AuthorizationReply& from) {
+void AuthReply::UnsafeMergeFrom(const AuthReply& from) {
   GOOGLE_DCHECK(&from != this);
   if (from.method() != 0) {
     set_method(from.method());
   }
-  if (from.domain().size() > 0) {
-    set_domain(from.domain());
-  }
-  if (from.user_name().size() > 0) {
-    set_user_name(from.user_name());
+  if (from.username().size() > 0) {
+
+    username_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.username_);
   }
   if (from.password().size() > 0) {
-    set_password(from.password());
+
+    password_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.password_);
   }
 }
 
-void AuthorizationReply::CopyFrom(const AuthorizationReply& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.AuthorizationReply)
+void AuthReply::CopyFrom(const AuthReply& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:proto.AuthReply)
   if (&from == this) return;
   Clear();
   UnsafeMergeFrom(from);
 }
 
-bool AuthorizationReply::IsInitialized() const {
+bool AuthReply::IsInitialized() const {
 
   return true;
 }
 
-void AuthorizationReply::Swap(AuthorizationReply* other) {
+void AuthReply::Swap(AuthReply* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    AuthorizationReply temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void AuthorizationReply::UnsafeArenaSwap(AuthorizationReply* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
-void AuthorizationReply::InternalSwap(AuthorizationReply* other) {
+void AuthReply::InternalSwap(AuthReply* other) {
   std::swap(method_, other->method_);
-  domain_.Swap(&other->domain_);
-  user_name_.Swap(&other->user_name_);
+  username_.Swap(&other->username_);
   password_.Swap(&other->password_);
   _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string AuthorizationReply::GetTypeName() const {
-  return "proto.AuthorizationReply";
+::std::string AuthReply::GetTypeName() const {
+  return "proto.AuthReply";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// AuthorizationReply
+// AuthReply
 
-// optional .proto.AuthorizationMethod method = 1;
-void AuthorizationReply::clear_method() {
+// optional int32 method = 1;
+void AuthReply::clear_method() {
   method_ = 0;
 }
-::proto::AuthorizationMethod AuthorizationReply::method() const {
-  // @@protoc_insertion_point(field_get:proto.AuthorizationReply.method)
-  return static_cast< ::proto::AuthorizationMethod >(method_);
+::google::protobuf::int32 AuthReply::method() const {
+  // @@protoc_insertion_point(field_get:proto.AuthReply.method)
+  return method_;
 }
-void AuthorizationReply::set_method(::proto::AuthorizationMethod value) {
+void AuthReply::set_method(::google::protobuf::int32 value) {
   
   method_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthorizationReply.method)
+  // @@protoc_insertion_point(field_set:proto.AuthReply.method)
 }
 
-// optional string domain = 2;
-void AuthorizationReply::clear_domain() {
-  domain_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+// optional string username = 3;
+void AuthReply::clear_username() {
+  username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-const ::std::string& AuthorizationReply::domain() const {
-  // @@protoc_insertion_point(field_get:proto.AuthorizationReply.domain)
-  return domain_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+const ::std::string& AuthReply::username() const {
+  // @@protoc_insertion_point(field_get:proto.AuthReply.username)
+  return username_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void AuthorizationReply::set_domain(const ::std::string& value) {
+void AuthReply::set_username(const ::std::string& value) {
   
-  domain_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set:proto.AuthorizationReply.domain)
+  username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:proto.AuthReply.username)
 }
-void AuthorizationReply::set_domain(const char* value) {
+void AuthReply::set_username(const char* value) {
   
-  domain_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_char:proto.AuthorizationReply.domain)
+  username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:proto.AuthReply.username)
 }
-void AuthorizationReply::set_domain(const char* value,
-    size_t size) {
+void AuthReply::set_username(const char* value, size_t size) {
   
-  domain_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_pointer:proto.AuthorizationReply.domain)
+  username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:proto.AuthReply.username)
 }
-::std::string* AuthorizationReply::mutable_domain() {
+::std::string* AuthReply::mutable_username() {
   
-  // @@protoc_insertion_point(field_mutable:proto.AuthorizationReply.domain)
-  return domain_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  // @@protoc_insertion_point(field_mutable:proto.AuthReply.username)
+  return username_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* AuthorizationReply::release_domain() {
-  // @@protoc_insertion_point(field_release:proto.AuthorizationReply.domain)
+::std::string* AuthReply::release_username() {
+  // @@protoc_insertion_point(field_release:proto.AuthReply.username)
   
-  return domain_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  return username_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* AuthorizationReply::unsafe_arena_release_domain() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.AuthorizationReply.domain)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return domain_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
-}
-void AuthorizationReply::set_allocated_domain(::std::string* domain) {
-  if (domain != NULL) {
+void AuthReply::set_allocated_username(::std::string* username) {
+  if (username != NULL) {
     
   } else {
     
   }
-  domain_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), domain,
-      GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_allocated:proto.AuthorizationReply.domain)
-}
-void AuthorizationReply::unsafe_arena_set_allocated_domain(
-    ::std::string* domain) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (domain != NULL) {
-    
-  } else {
-    
-  }
-  domain_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      domain, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.AuthorizationReply.domain)
-}
-
-// optional string user_name = 3;
-void AuthorizationReply::clear_user_name() {
-  user_name_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-const ::std::string& AuthorizationReply::user_name() const {
-  // @@protoc_insertion_point(field_get:proto.AuthorizationReply.user_name)
-  return user_name_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-void AuthorizationReply::set_user_name(const ::std::string& value) {
-  
-  user_name_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set:proto.AuthorizationReply.user_name)
-}
-void AuthorizationReply::set_user_name(const char* value) {
-  
-  user_name_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_char:proto.AuthorizationReply.user_name)
-}
-void AuthorizationReply::set_user_name(const char* value,
-    size_t size) {
-  
-  user_name_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_pointer:proto.AuthorizationReply.user_name)
-}
-::std::string* AuthorizationReply::mutable_user_name() {
-  
-  // @@protoc_insertion_point(field_mutable:proto.AuthorizationReply.user_name)
-  return user_name_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-::std::string* AuthorizationReply::release_user_name() {
-  // @@protoc_insertion_point(field_release:proto.AuthorizationReply.user_name)
-  
-  return user_name_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-::std::string* AuthorizationReply::unsafe_arena_release_user_name() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.AuthorizationReply.user_name)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return user_name_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
-}
-void AuthorizationReply::set_allocated_user_name(::std::string* user_name) {
-  if (user_name != NULL) {
-    
-  } else {
-    
-  }
-  user_name_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), user_name,
-      GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_allocated:proto.AuthorizationReply.user_name)
-}
-void AuthorizationReply::unsafe_arena_set_allocated_user_name(
-    ::std::string* user_name) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (user_name != NULL) {
-    
-  } else {
-    
-  }
-  user_name_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      user_name, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.AuthorizationReply.user_name)
+  username_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), username);
+  // @@protoc_insertion_point(field_set_allocated:proto.AuthReply.username)
 }
 
 // optional bytes password = 4;
-void AuthorizationReply::clear_password() {
-  password_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+void AuthReply::clear_password() {
+  password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-const ::std::string& AuthorizationReply::password() const {
-  // @@protoc_insertion_point(field_get:proto.AuthorizationReply.password)
-  return password_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+const ::std::string& AuthReply::password() const {
+  // @@protoc_insertion_point(field_get:proto.AuthReply.password)
+  return password_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void AuthorizationReply::set_password(const ::std::string& value) {
+void AuthReply::set_password(const ::std::string& value) {
   
-  password_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set:proto.AuthorizationReply.password)
+  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:proto.AuthReply.password)
 }
-void AuthorizationReply::set_password(const char* value) {
+void AuthReply::set_password(const char* value) {
   
-  password_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_char:proto.AuthorizationReply.password)
+  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:proto.AuthReply.password)
 }
-void AuthorizationReply::set_password(const void* value,
-    size_t size) {
+void AuthReply::set_password(const void* value, size_t size) {
   
-  password_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_pointer:proto.AuthorizationReply.password)
+  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:proto.AuthReply.password)
 }
-::std::string* AuthorizationReply::mutable_password() {
+::std::string* AuthReply::mutable_password() {
   
-  // @@protoc_insertion_point(field_mutable:proto.AuthorizationReply.password)
-  return password_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  // @@protoc_insertion_point(field_mutable:proto.AuthReply.password)
+  return password_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* AuthorizationReply::release_password() {
-  // @@protoc_insertion_point(field_release:proto.AuthorizationReply.password)
+::std::string* AuthReply::release_password() {
+  // @@protoc_insertion_point(field_release:proto.AuthReply.password)
   
-  return password_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  return password_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* AuthorizationReply::unsafe_arena_release_password() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.AuthorizationReply.password)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return password_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
-}
-void AuthorizationReply::set_allocated_password(::std::string* password) {
+void AuthReply::set_allocated_password(::std::string* password) {
   if (password != NULL) {
     
   } else {
     
   }
-  password_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), password,
-      GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_allocated:proto.AuthorizationReply.password)
-}
-void AuthorizationReply::unsafe_arena_set_allocated_password(
-    ::std::string* password) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (password != NULL) {
-    
-  } else {
-    
-  }
-  password_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      password, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.AuthorizationReply.password)
+  password_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), password);
+  // @@protoc_insertion_point(field_set_allocated:proto.AuthReply.password)
 }
 
-inline const AuthorizationReply* AuthorizationReply::internal_default_instance() {
-  return &AuthorizationReply_default_instance_.get();
+inline const AuthReply* AuthReply::internal_default_instance() {
+  return &AuthReply_default_instance_.get();
 }
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int AuthorizationResult::kSuccessFieldNumber;
-const int AuthorizationResult::kFeaturesFieldNumber;
+const int AuthResult::kSuccessFieldNumber;
+const int AuthResult::kFeaturesFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-AuthorizationResult::AuthorizationResult()
+AuthResult::AuthResult()
   : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
   if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.AuthorizationResult)
-}
-AuthorizationResult::AuthorizationResult(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena),
-  features_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.AuthorizationResult)
+  // @@protoc_insertion_point(constructor:proto.AuthResult)
 }
 
-void AuthorizationResult::InitAsDefaultInstance() {
+void AuthResult::InitAsDefaultInstance() {
 }
 
-AuthorizationResult::AuthorizationResult(const AuthorizationResult& from)
+AuthResult::AuthResult(const AuthResult& from)
   : ::google::protobuf::MessageLite(),
     _arena_ptr_(NULL) {
   SharedCtor();
   UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:proto.AuthorizationResult)
+  // @@protoc_insertion_point(copy_constructor:proto.AuthResult)
 }
 
-void AuthorizationResult::SharedCtor() {
-  success_ = false;
+void AuthResult::SharedCtor() {
+  ::memset(&success_, 0, reinterpret_cast<char*>(&features_) -
+    reinterpret_cast<char*>(&success_) + sizeof(features_));
   _cached_size_ = 0;
 }
 
-AuthorizationResult::~AuthorizationResult() {
-  // @@protoc_insertion_point(destructor:proto.AuthorizationResult)
+AuthResult::~AuthResult() {
+  // @@protoc_insertion_point(destructor:proto.AuthResult)
   SharedDtor();
 }
 
-void AuthorizationResult::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
+void AuthResult::SharedDtor() {
 }
 
-void AuthorizationResult::ArenaDtor(void* object) {
-  AuthorizationResult* _this = reinterpret_cast< AuthorizationResult* >(object);
-  (void)_this;
-}
-void AuthorizationResult::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
-void AuthorizationResult::SetCachedSize(int size) const {
+void AuthResult::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const AuthorizationResult& AuthorizationResult::default_instance() {
+const AuthResult& AuthResult::default_instance() {
   protobuf_InitDefaults_proto_2eproto();
   return *internal_default_instance();
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<AuthorizationResult> AuthorizationResult_default_instance_;
+::google::protobuf::internal::ExplicitlyConstructed<AuthResult> AuthResult_default_instance_;
 
-AuthorizationResult* AuthorizationResult::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<AuthorizationResult>(arena);
+AuthResult* AuthResult::New(::google::protobuf::Arena* arena) const {
+  AuthResult* n = new AuthResult;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
-void AuthorizationResult::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.AuthorizationResult)
-  success_ = false;
-  features_.Clear();
+void AuthResult::Clear() {
+// @@protoc_insertion_point(message_clear_start:proto.AuthResult)
+#if defined(__clang__)
+#define ZR_HELPER_(f) \
+  _Pragma("clang diagnostic push") \
+  _Pragma("clang diagnostic ignored \"-Winvalid-offsetof\"") \
+  __builtin_offsetof(AuthResult, f) \
+  _Pragma("clang diagnostic pop")
+#else
+#define ZR_HELPER_(f) reinterpret_cast<char*>(\
+  &reinterpret_cast<AuthResult*>(16)->f)
+#endif
+
+#define ZR_(first, last) do {\
+  ::memset(&(first), 0,\
+           ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
+} while (0)
+
+  ZR_(success_, features_);
+
+#undef ZR_HELPER_
+#undef ZR_
+
 }
 
-bool AuthorizationResult::MergePartialFromCodedStream(
+bool AuthResult::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:proto.AuthorizationResult)
+  // @@protoc_insertion_point(parse_start:proto.AuthResult)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -1118,31 +853,18 @@ bool AuthorizationResult::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(18)) goto parse_features;
+        if (input->ExpectTag(16)) goto parse_features;
         break;
       }
 
-      // repeated .proto.SessionFeature features = 2;
+      // optional int32 features = 2;
       case 2: {
-        if (tag == 18) {
+        if (tag == 16) {
          parse_features:
-          ::google::protobuf::uint32 length;
-          DO_(input->ReadVarint32(&length));
-          ::google::protobuf::io::CodedInputStream::Limit limit = input->PushLimit(length);
-          while (input->BytesUntilLimit() > 0) {
-            int value;
-            DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-            add_features(static_cast< ::proto::SessionFeature >(value));
-          }
-          input->PopLimit(limit);
-        } else if (tag == 16) {
-          int value;
+
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          add_features(static_cast< ::proto::SessionFeature >(value));
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &features_)));
         } else {
           goto handle_unusual;
         }
@@ -1163,40 +885,32 @@ bool AuthorizationResult::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.AuthorizationResult)
+  // @@protoc_insertion_point(parse_success:proto.AuthResult)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.AuthorizationResult)
+  // @@protoc_insertion_point(parse_failure:proto.AuthResult)
   return false;
 #undef DO_
 }
 
-void AuthorizationResult::SerializeWithCachedSizes(
+void AuthResult::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.AuthorizationResult)
+  // @@protoc_insertion_point(serialize_start:proto.AuthResult)
   // optional bool success = 1;
   if (this->success() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->success(), output);
   }
 
-  // repeated .proto.SessionFeature features = 2;
-  if (this->features_size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteTag(
-      2,
-      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
-      output);
-    output->WriteVarint32(_features_cached_byte_size_);
-  }
-  for (int i = 0; i < this->features_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnumNoTag(
-      this->features(i), output);
+  // optional int32 features = 2;
+  if (this->features() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->features(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:proto.AuthorizationResult)
+  // @@protoc_insertion_point(serialize_end:proto.AuthResult)
 }
 
-size_t AuthorizationResult::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.AuthorizationResult)
+size_t AuthResult::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:proto.AuthResult)
   size_t total_size = 0;
 
   // optional bool success = 1;
@@ -1204,22 +918,11 @@ size_t AuthorizationResult::ByteSizeLong() const {
     total_size += 1 + 1;
   }
 
-  // repeated .proto.SessionFeature features = 2;
-  {
-    size_t data_size = 0;
-    unsigned int count = this->features_size();for (unsigned int i = 0; i < count; i++) {
-      data_size += ::google::protobuf::internal::WireFormatLite::EnumSize(
-        this->features(i));
-    }
-    if (data_size > 0) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(data_size);
-    }
-    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
-    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-    _features_cached_byte_size_ = cached_size;
-    GOOGLE_SAFE_CONCURRENT_WRITES_END();
-    total_size += data_size;
+  // optional int32 features = 2;
+  if (this->features() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->features());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -1229,13 +932,13 @@ size_t AuthorizationResult::ByteSizeLong() const {
   return total_size;
 }
 
-void AuthorizationResult::CheckTypeAndMergeFrom(
+void AuthResult::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const AuthorizationResult*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const AuthResult*>(&from));
 }
 
-void AuthorizationResult::MergeFrom(const AuthorizationResult& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.AuthorizationResult)
+void AuthResult::MergeFrom(const AuthResult& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:proto.AuthResult)
   if (GOOGLE_PREDICT_TRUE(&from != this)) {
     UnsafeMergeFrom(from);
   } else {
@@ -1243,102 +946,76 @@ void AuthorizationResult::MergeFrom(const AuthorizationResult& from) {
   }
 }
 
-void AuthorizationResult::UnsafeMergeFrom(const AuthorizationResult& from) {
+void AuthResult::UnsafeMergeFrom(const AuthResult& from) {
   GOOGLE_DCHECK(&from != this);
-  features_.UnsafeMergeFrom(from.features_);
   if (from.success() != 0) {
     set_success(from.success());
   }
+  if (from.features() != 0) {
+    set_features(from.features());
+  }
 }
 
-void AuthorizationResult::CopyFrom(const AuthorizationResult& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.AuthorizationResult)
+void AuthResult::CopyFrom(const AuthResult& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:proto.AuthResult)
   if (&from == this) return;
   Clear();
   UnsafeMergeFrom(from);
 }
 
-bool AuthorizationResult::IsInitialized() const {
+bool AuthResult::IsInitialized() const {
 
   return true;
 }
 
-void AuthorizationResult::Swap(AuthorizationResult* other) {
+void AuthResult::Swap(AuthResult* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    AuthorizationResult temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void AuthorizationResult::UnsafeArenaSwap(AuthorizationResult* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
-void AuthorizationResult::InternalSwap(AuthorizationResult* other) {
+void AuthResult::InternalSwap(AuthResult* other) {
   std::swap(success_, other->success_);
-  features_.UnsafeArenaSwap(&other->features_);
+  std::swap(features_, other->features_);
   _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string AuthorizationResult::GetTypeName() const {
-  return "proto.AuthorizationResult";
+::std::string AuthResult::GetTypeName() const {
+  return "proto.AuthResult";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// AuthorizationResult
+// AuthResult
 
 // optional bool success = 1;
-void AuthorizationResult::clear_success() {
+void AuthResult::clear_success() {
   success_ = false;
 }
-bool AuthorizationResult::success() const {
-  // @@protoc_insertion_point(field_get:proto.AuthorizationResult.success)
+bool AuthResult::success() const {
+  // @@protoc_insertion_point(field_get:proto.AuthResult.success)
   return success_;
 }
-void AuthorizationResult::set_success(bool value) {
+void AuthResult::set_success(bool value) {
   
   success_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthorizationResult.success)
+  // @@protoc_insertion_point(field_set:proto.AuthResult.success)
 }
 
-// repeated .proto.SessionFeature features = 2;
-int AuthorizationResult::features_size() const {
-  return features_.size();
+// optional int32 features = 2;
+void AuthResult::clear_features() {
+  features_ = 0;
 }
-void AuthorizationResult::clear_features() {
-  features_.Clear();
-}
-::proto::SessionFeature AuthorizationResult::features(int index) const {
-  // @@protoc_insertion_point(field_get:proto.AuthorizationResult.features)
-  return static_cast< ::proto::SessionFeature >(features_.Get(index));
-}
-void AuthorizationResult::set_features(int index, ::proto::SessionFeature value) {
-  features_.Set(index, value);
-  // @@protoc_insertion_point(field_set:proto.AuthorizationResult.features)
-}
-void AuthorizationResult::add_features(::proto::SessionFeature value) {
-  features_.Add(value);
-  // @@protoc_insertion_point(field_add:proto.AuthorizationResult.features)
-}
-const ::google::protobuf::RepeatedField<int>&
-AuthorizationResult::features() const {
-  // @@protoc_insertion_point(field_list:proto.AuthorizationResult.features)
+::google::protobuf::int32 AuthResult::features() const {
+  // @@protoc_insertion_point(field_get:proto.AuthResult.features)
   return features_;
 }
-::google::protobuf::RepeatedField<int>*
-AuthorizationResult::mutable_features() {
-  // @@protoc_insertion_point(field_mutable_list:proto.AuthorizationResult.features)
-  return &features_;
+void AuthResult::set_features(::google::protobuf::int32 value) {
+  
+  features_ = value;
+  // @@protoc_insertion_point(field_set:proto.AuthResult.features)
 }
 
-inline const AuthorizationResult* AuthorizationResult::internal_default_instance() {
-  return &AuthorizationResult_default_instance_.get();
+inline const AuthResult* AuthResult::internal_default_instance() {
+  return &AuthResult_default_instance_.get();
 }
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
@@ -1381,16 +1058,6 @@ PowerControl::PowerControl()
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.PowerControl)
 }
-PowerControl::PowerControl(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.PowerControl)
-}
 
 void PowerControl::InitAsDefaultInstance() {
 }
@@ -1414,19 +1081,8 @@ PowerControl::~PowerControl() {
 }
 
 void PowerControl::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
 }
 
-void PowerControl::ArenaDtor(void* object) {
-  PowerControl* _this = reinterpret_cast< PowerControl* >(object);
-  (void)_this;
-}
-void PowerControl::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void PowerControl::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -1440,7 +1096,11 @@ const PowerControl& PowerControl::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<PowerControl> PowerControl_default_instance_;
 
 PowerControl* PowerControl::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<PowerControl>(arena);
+  PowerControl* n = new PowerControl;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void PowerControl::Clear() {
@@ -1558,18 +1218,6 @@ bool PowerControl::IsInitialized() const {
 
 void PowerControl::Swap(PowerControl* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    PowerControl temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void PowerControl::UnsafeArenaSwap(PowerControl* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void PowerControl::InternalSwap(PowerControl* other) {
@@ -1607,7 +1255,7 @@ inline const PowerControl* PowerControl::internal_default_instance() {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int Bell::kDurationFieldNumber;
+const int Bell::kDummyFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Bell::Bell()
@@ -1615,16 +1263,6 @@ Bell::Bell()
   if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.Bell)
-}
-Bell::Bell(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.Bell)
 }
 
 void Bell::InitAsDefaultInstance() {
@@ -1639,7 +1277,7 @@ Bell::Bell(const Bell& from)
 }
 
 void Bell::SharedCtor() {
-  duration_ = 0;
+  dummy_ = false;
   _cached_size_ = 0;
 }
 
@@ -1649,19 +1287,8 @@ Bell::~Bell() {
 }
 
 void Bell::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
 }
 
-void Bell::ArenaDtor(void* object) {
-  Bell* _this = reinterpret_cast< Bell* >(object);
-  (void)_this;
-}
-void Bell::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void Bell::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -1675,12 +1302,16 @@ const Bell& Bell::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<Bell> Bell_default_instance_;
 
 Bell* Bell::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<Bell>(arena);
+  Bell* n = new Bell;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void Bell::Clear() {
 // @@protoc_insertion_point(message_clear_start:proto.Bell)
-  duration_ = 0;
+  dummy_ = false;
 }
 
 bool Bell::MergePartialFromCodedStream(
@@ -1693,13 +1324,13 @@ bool Bell::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional int32 duration = 1;
+      // optional bool dummy = 1;
       case 1: {
         if (tag == 8) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &duration_)));
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &dummy_)));
         } else {
           goto handle_unusual;
         }
@@ -1731,9 +1362,9 @@ failure:
 void Bell::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:proto.Bell)
-  // optional int32 duration = 1;
-  if (this->duration() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->duration(), output);
+  // optional bool dummy = 1;
+  if (this->dummy() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->dummy(), output);
   }
 
   // @@protoc_insertion_point(serialize_end:proto.Bell)
@@ -1743,11 +1374,9 @@ size_t Bell::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:proto.Bell)
   size_t total_size = 0;
 
-  // optional int32 duration = 1;
-  if (this->duration() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->duration());
+  // optional bool dummy = 1;
+  if (this->dummy() != 0) {
+    total_size += 1 + 1;
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -1773,8 +1402,8 @@ void Bell::MergeFrom(const Bell& from) {
 
 void Bell::UnsafeMergeFrom(const Bell& from) {
   GOOGLE_DCHECK(&from != this);
-  if (from.duration() != 0) {
-    set_duration(from.duration());
+  if (from.dummy() != 0) {
+    set_dummy(from.dummy());
   }
 }
 
@@ -1792,22 +1421,10 @@ bool Bell::IsInitialized() const {
 
 void Bell::Swap(Bell* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    Bell temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void Bell::UnsafeArenaSwap(Bell* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void Bell::InternalSwap(Bell* other) {
-  std::swap(duration_, other->duration_);
+  std::swap(dummy_, other->dummy_);
   _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -1819,18 +1436,18 @@ void Bell::InternalSwap(Bell* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // Bell
 
-// optional int32 duration = 1;
-void Bell::clear_duration() {
-  duration_ = 0;
+// optional bool dummy = 1;
+void Bell::clear_dummy() {
+  dummy_ = false;
 }
-::google::protobuf::int32 Bell::duration() const {
-  // @@protoc_insertion_point(field_get:proto.Bell.duration)
-  return duration_;
+bool Bell::dummy() const {
+  // @@protoc_insertion_point(field_get:proto.Bell.dummy)
+  return dummy_;
 }
-void Bell::set_duration(::google::protobuf::int32 value) {
+void Bell::set_dummy(bool value) {
   
-  duration_ = value;
-  // @@protoc_insertion_point(field_set:proto.Bell.duration)
+  dummy_ = value;
+  // @@protoc_insertion_point(field_set:proto.Bell.dummy)
 }
 
 inline const Bell* Bell::internal_default_instance() {
@@ -1849,16 +1466,6 @@ TextChat::TextChat()
   if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.TextChat)
-}
-TextChat::TextChat(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.TextChat)
 }
 
 void TextChat::InitAsDefaultInstance() {
@@ -1883,20 +1490,9 @@ TextChat::~TextChat() {
 }
 
 void TextChat::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
-  message_.Destroy(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), arena);
+  message_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
-void TextChat::ArenaDtor(void* object) {
-  TextChat* _this = reinterpret_cast< TextChat* >(object);
-  (void)_this;
-}
-void TextChat::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void TextChat::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -1910,12 +1506,16 @@ const TextChat& TextChat::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<TextChat> TextChat_default_instance_;
 
 TextChat* TextChat::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<TextChat>(arena);
+  TextChat* n = new TextChat;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void TextChat::Clear() {
 // @@protoc_insertion_point(message_clear_start:proto.TextChat)
-  message_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  message_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 bool TextChat::MergePartialFromCodedStream(
@@ -2016,7 +1616,8 @@ void TextChat::MergeFrom(const TextChat& from) {
 void TextChat::UnsafeMergeFrom(const TextChat& from) {
   GOOGLE_DCHECK(&from != this);
   if (from.message().size() > 0) {
-    set_message(from.message());
+
+    message_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.message_);
   }
 }
 
@@ -2034,18 +1635,6 @@ bool TextChat::IsInitialized() const {
 
 void TextChat::Swap(TextChat* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    TextChat temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void TextChat::UnsafeArenaSwap(TextChat* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void TextChat::InternalSwap(TextChat* other) {
@@ -2063,46 +1652,37 @@ void TextChat::InternalSwap(TextChat* other) {
 
 // optional string message = 1;
 void TextChat::clear_message() {
-  message_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  message_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& TextChat::message() const {
   // @@protoc_insertion_point(field_get:proto.TextChat.message)
-  return message_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return message_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 void TextChat::set_message(const ::std::string& value) {
   
-  message_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
+  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:proto.TextChat.message)
 }
 void TextChat::set_message(const char* value) {
   
-  message_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
+  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:proto.TextChat.message)
 }
-void TextChat::set_message(const char* value,
-    size_t size) {
+void TextChat::set_message(const char* value, size_t size) {
   
-  message_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
+  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:proto.TextChat.message)
 }
 ::std::string* TextChat::mutable_message() {
   
   // @@protoc_insertion_point(field_mutable:proto.TextChat.message)
-  return message_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  return message_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* TextChat::release_message() {
   // @@protoc_insertion_point(field_release:proto.TextChat.message)
   
-  return message_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-::std::string* TextChat::unsafe_arena_release_message() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.TextChat.message)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return message_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
+  return message_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 void TextChat::set_allocated_message(::std::string* message) {
   if (message != NULL) {
@@ -2110,21 +1690,8 @@ void TextChat::set_allocated_message(::std::string* message) {
   } else {
     
   }
-  message_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), message,
-      GetArenaNoVirtual());
+  message_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), message);
   // @@protoc_insertion_point(field_set_allocated:proto.TextChat.message)
-}
-void TextChat::unsafe_arena_set_allocated_message(
-    ::std::string* message) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (message != NULL) {
-    
-  } else {
-    
-  }
-  message_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      message, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.TextChat.message)
 }
 
 inline const TextChat* TextChat::internal_default_instance() {
@@ -2145,16 +1712,6 @@ KeyEvent::KeyEvent()
   if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.KeyEvent)
-}
-KeyEvent::KeyEvent(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.KeyEvent)
 }
 
 void KeyEvent::InitAsDefaultInstance() {
@@ -2180,19 +1737,8 @@ KeyEvent::~KeyEvent() {
 }
 
 void KeyEvent::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
 }
 
-void KeyEvent::ArenaDtor(void* object) {
-  KeyEvent* _this = reinterpret_cast< KeyEvent* >(object);
-  (void)_this;
-}
-void KeyEvent::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void KeyEvent::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -2206,7 +1752,11 @@ const KeyEvent& KeyEvent::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<KeyEvent> KeyEvent_default_instance_;
 
 KeyEvent* KeyEvent::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<KeyEvent>(arena);
+  KeyEvent* n = new KeyEvent;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void KeyEvent::Clear() {
@@ -2244,12 +1794,12 @@ bool KeyEvent::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional uint32 keycode = 1;
+      // optional int32 keycode = 1;
       case 1: {
         if (tag == 8) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &keycode_)));
         } else {
           goto handle_unusual;
@@ -2258,13 +1808,13 @@ bool KeyEvent::MergePartialFromCodedStream(
         break;
       }
 
-      // optional uint32 extended = 2;
+      // optional bool extended = 2;
       case 2: {
         if (tag == 16) {
          parse_extended:
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
                  input, &extended_)));
         } else {
           goto handle_unusual;
@@ -2312,14 +1862,14 @@ failure:
 void KeyEvent::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:proto.KeyEvent)
-  // optional uint32 keycode = 1;
+  // optional int32 keycode = 1;
   if (this->keycode() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->keycode(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->keycode(), output);
   }
 
-  // optional uint32 extended = 2;
+  // optional bool extended = 2;
   if (this->extended() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->extended(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->extended(), output);
   }
 
   // optional bool pressed = 3;
@@ -2334,18 +1884,16 @@ size_t KeyEvent::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:proto.KeyEvent)
   size_t total_size = 0;
 
-  // optional uint32 keycode = 1;
+  // optional int32 keycode = 1;
   if (this->keycode() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->keycode());
   }
 
-  // optional uint32 extended = 2;
+  // optional bool extended = 2;
   if (this->extended() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->extended());
+    total_size += 1 + 1;
   }
 
   // optional bool pressed = 3;
@@ -2401,18 +1949,6 @@ bool KeyEvent::IsInitialized() const {
 
 void KeyEvent::Swap(KeyEvent* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    KeyEvent temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void KeyEvent::UnsafeArenaSwap(KeyEvent* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void KeyEvent::InternalSwap(KeyEvent* other) {
@@ -2430,29 +1966,29 @@ void KeyEvent::InternalSwap(KeyEvent* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // KeyEvent
 
-// optional uint32 keycode = 1;
+// optional int32 keycode = 1;
 void KeyEvent::clear_keycode() {
-  keycode_ = 0u;
+  keycode_ = 0;
 }
-::google::protobuf::uint32 KeyEvent::keycode() const {
+::google::protobuf::int32 KeyEvent::keycode() const {
   // @@protoc_insertion_point(field_get:proto.KeyEvent.keycode)
   return keycode_;
 }
-void KeyEvent::set_keycode(::google::protobuf::uint32 value) {
+void KeyEvent::set_keycode(::google::protobuf::int32 value) {
   
   keycode_ = value;
   // @@protoc_insertion_point(field_set:proto.KeyEvent.keycode)
 }
 
-// optional uint32 extended = 2;
+// optional bool extended = 2;
 void KeyEvent::clear_extended() {
-  extended_ = 0u;
+  extended_ = false;
 }
-::google::protobuf::uint32 KeyEvent::extended() const {
+bool KeyEvent::extended() const {
   // @@protoc_insertion_point(field_get:proto.KeyEvent.extended)
   return extended_;
 }
-void KeyEvent::set_extended(::google::protobuf::uint32 value) {
+void KeyEvent::set_extended(bool value) {
   
   extended_ = value;
   // @@protoc_insertion_point(field_set:proto.KeyEvent.extended)
@@ -2479,92 +2015,100 @@ inline const KeyEvent* KeyEvent::internal_default_instance() {
 
 // ===================================================================
 
+bool PointerEvent_ButtonMask_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 4:
+    case 8:
+    case 16:
+      return true;
+    default:
+      return false;
+  }
+}
+
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int MouseEvent::kXFieldNumber;
-const int MouseEvent::kYFieldNumber;
-const int MouseEvent::kMaskFieldNumber;
+const PointerEvent_ButtonMask PointerEvent::EMPTY;
+const PointerEvent_ButtonMask PointerEvent::LEFT_BUTTON;
+const PointerEvent_ButtonMask PointerEvent::MIDDLE_BUTTON;
+const PointerEvent_ButtonMask PointerEvent::RIGHT_BUTTON;
+const PointerEvent_ButtonMask PointerEvent::WHEEL_UP;
+const PointerEvent_ButtonMask PointerEvent::WHEEL_DOWN;
+const PointerEvent_ButtonMask PointerEvent::ButtonMask_MIN;
+const PointerEvent_ButtonMask PointerEvent::ButtonMask_MAX;
+const int PointerEvent::ButtonMask_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int PointerEvent::kMaskFieldNumber;
+const int PointerEvent::kXFieldNumber;
+const int PointerEvent::kYFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-MouseEvent::MouseEvent()
+PointerEvent::PointerEvent()
   : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
   if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.MouseEvent)
-}
-MouseEvent::MouseEvent(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.MouseEvent)
+  // @@protoc_insertion_point(constructor:proto.PointerEvent)
 }
 
-void MouseEvent::InitAsDefaultInstance() {
+void PointerEvent::InitAsDefaultInstance() {
 }
 
-MouseEvent::MouseEvent(const MouseEvent& from)
+PointerEvent::PointerEvent(const PointerEvent& from)
   : ::google::protobuf::MessageLite(),
     _arena_ptr_(NULL) {
   SharedCtor();
   UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:proto.MouseEvent)
+  // @@protoc_insertion_point(copy_constructor:proto.PointerEvent)
 }
 
-void MouseEvent::SharedCtor() {
-  ::memset(&x_, 0, reinterpret_cast<char*>(&mask_) -
-    reinterpret_cast<char*>(&x_) + sizeof(mask_));
+void PointerEvent::SharedCtor() {
+  ::memset(&mask_, 0, reinterpret_cast<char*>(&y_) -
+    reinterpret_cast<char*>(&mask_) + sizeof(y_));
   _cached_size_ = 0;
 }
 
-MouseEvent::~MouseEvent() {
-  // @@protoc_insertion_point(destructor:proto.MouseEvent)
+PointerEvent::~PointerEvent() {
+  // @@protoc_insertion_point(destructor:proto.PointerEvent)
   SharedDtor();
 }
 
-void MouseEvent::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
+void PointerEvent::SharedDtor() {
 }
 
-void MouseEvent::ArenaDtor(void* object) {
-  MouseEvent* _this = reinterpret_cast< MouseEvent* >(object);
-  (void)_this;
-}
-void MouseEvent::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
-void MouseEvent::SetCachedSize(int size) const {
+void PointerEvent::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const MouseEvent& MouseEvent::default_instance() {
+const PointerEvent& PointerEvent::default_instance() {
   protobuf_InitDefaults_proto_2eproto();
   return *internal_default_instance();
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<MouseEvent> MouseEvent_default_instance_;
+::google::protobuf::internal::ExplicitlyConstructed<PointerEvent> PointerEvent_default_instance_;
 
-MouseEvent* MouseEvent::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<MouseEvent>(arena);
+PointerEvent* PointerEvent::New(::google::protobuf::Arena* arena) const {
+  PointerEvent* n = new PointerEvent;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
-void MouseEvent::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.MouseEvent)
+void PointerEvent::Clear() {
+// @@protoc_insertion_point(message_clear_start:proto.PointerEvent)
 #if defined(__clang__)
 #define ZR_HELPER_(f) \
   _Pragma("clang diagnostic push") \
   _Pragma("clang diagnostic ignored \"-Winvalid-offsetof\"") \
-  __builtin_offsetof(MouseEvent, f) \
+  __builtin_offsetof(PointerEvent, f) \
   _Pragma("clang diagnostic pop")
 #else
 #define ZR_HELPER_(f) reinterpret_cast<char*>(\
-  &reinterpret_cast<MouseEvent*>(16)->f)
+  &reinterpret_cast<PointerEvent*>(16)->f)
 #endif
 
 #define ZR_(first, last) do {\
@@ -2572,26 +2116,41 @@ void MouseEvent::Clear() {
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  ZR_(x_, mask_);
+  ZR_(mask_, y_);
 
 #undef ZR_HELPER_
 #undef ZR_
 
 }
 
-bool MouseEvent::MergePartialFromCodedStream(
+bool PointerEvent::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:proto.MouseEvent)
+  // @@protoc_insertion_point(parse_start:proto.PointerEvent)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional int32 x = 1;
+      // optional int32 mask = 1;
       case 1: {
         if (tag == 8) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &mask_)));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_x;
+        break;
+      }
+
+      // optional int32 x = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_x:
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
@@ -2599,33 +2158,18 @@ bool MouseEvent::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_y;
+        if (input->ExpectTag(24)) goto parse_y;
         break;
       }
 
-      // optional int32 y = 2;
-      case 2: {
-        if (tag == 16) {
+      // optional int32 y = 3;
+      case 3: {
+        if (tag == 24) {
          parse_y:
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &y_)));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(24)) goto parse_mask;
-        break;
-      }
-
-      // optional uint32 mask = 3;
-      case 3: {
-        if (tag == 24) {
-         parse_mask:
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &mask_)));
         } else {
           goto handle_unusual;
         }
@@ -2646,58 +2190,58 @@ bool MouseEvent::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.MouseEvent)
+  // @@protoc_insertion_point(parse_success:proto.PointerEvent)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.MouseEvent)
+  // @@protoc_insertion_point(parse_failure:proto.PointerEvent)
   return false;
 #undef DO_
 }
 
-void MouseEvent::SerializeWithCachedSizes(
+void PointerEvent::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.MouseEvent)
-  // optional int32 x = 1;
-  if (this->x() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->x(), output);
-  }
-
-  // optional int32 y = 2;
-  if (this->y() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->y(), output);
-  }
-
-  // optional uint32 mask = 3;
+  // @@protoc_insertion_point(serialize_start:proto.PointerEvent)
+  // optional int32 mask = 1;
   if (this->mask() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->mask(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->mask(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:proto.MouseEvent)
+  // optional int32 x = 2;
+  if (this->x() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->x(), output);
+  }
+
+  // optional int32 y = 3;
+  if (this->y() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->y(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:proto.PointerEvent)
 }
 
-size_t MouseEvent::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.MouseEvent)
+size_t PointerEvent::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:proto.PointerEvent)
   size_t total_size = 0;
 
-  // optional int32 x = 1;
+  // optional int32 mask = 1;
+  if (this->mask() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->mask());
+  }
+
+  // optional int32 x = 2;
   if (this->x() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->x());
   }
 
-  // optional int32 y = 2;
+  // optional int32 y = 3;
   if (this->y() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->y());
-  }
-
-  // optional uint32 mask = 3;
-  if (this->mask() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->mask());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -2707,13 +2251,13 @@ size_t MouseEvent::ByteSizeLong() const {
   return total_size;
 }
 
-void MouseEvent::CheckTypeAndMergeFrom(
+void PointerEvent::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const MouseEvent*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const PointerEvent*>(&from));
 }
 
-void MouseEvent::MergeFrom(const MouseEvent& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.MouseEvent)
+void PointerEvent::MergeFrom(const PointerEvent& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:proto.PointerEvent)
   if (GOOGLE_PREDICT_TRUE(&from != this)) {
     UnsafeMergeFrom(from);
   } else {
@@ -2721,106 +2265,94 @@ void MouseEvent::MergeFrom(const MouseEvent& from) {
   }
 }
 
-void MouseEvent::UnsafeMergeFrom(const MouseEvent& from) {
+void PointerEvent::UnsafeMergeFrom(const PointerEvent& from) {
   GOOGLE_DCHECK(&from != this);
+  if (from.mask() != 0) {
+    set_mask(from.mask());
+  }
   if (from.x() != 0) {
     set_x(from.x());
   }
   if (from.y() != 0) {
     set_y(from.y());
   }
-  if (from.mask() != 0) {
-    set_mask(from.mask());
-  }
 }
 
-void MouseEvent::CopyFrom(const MouseEvent& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.MouseEvent)
+void PointerEvent::CopyFrom(const PointerEvent& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:proto.PointerEvent)
   if (&from == this) return;
   Clear();
   UnsafeMergeFrom(from);
 }
 
-bool MouseEvent::IsInitialized() const {
+bool PointerEvent::IsInitialized() const {
 
   return true;
 }
 
-void MouseEvent::Swap(MouseEvent* other) {
+void PointerEvent::Swap(PointerEvent* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    MouseEvent temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void MouseEvent::UnsafeArenaSwap(MouseEvent* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
-void MouseEvent::InternalSwap(MouseEvent* other) {
+void PointerEvent::InternalSwap(PointerEvent* other) {
+  std::swap(mask_, other->mask_);
   std::swap(x_, other->x_);
   std::swap(y_, other->y_);
-  std::swap(mask_, other->mask_);
   _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string MouseEvent::GetTypeName() const {
-  return "proto.MouseEvent";
+::std::string PointerEvent::GetTypeName() const {
+  return "proto.PointerEvent";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// MouseEvent
+// PointerEvent
 
-// optional int32 x = 1;
-void MouseEvent::clear_x() {
-  x_ = 0;
+// optional int32 mask = 1;
+void PointerEvent::clear_mask() {
+  mask_ = 0;
 }
-::google::protobuf::int32 MouseEvent::x() const {
-  // @@protoc_insertion_point(field_get:proto.MouseEvent.x)
-  return x_;
-}
-void MouseEvent::set_x(::google::protobuf::int32 value) {
-  
-  x_ = value;
-  // @@protoc_insertion_point(field_set:proto.MouseEvent.x)
-}
-
-// optional int32 y = 2;
-void MouseEvent::clear_y() {
-  y_ = 0;
-}
-::google::protobuf::int32 MouseEvent::y() const {
-  // @@protoc_insertion_point(field_get:proto.MouseEvent.y)
-  return y_;
-}
-void MouseEvent::set_y(::google::protobuf::int32 value) {
-  
-  y_ = value;
-  // @@protoc_insertion_point(field_set:proto.MouseEvent.y)
-}
-
-// optional uint32 mask = 3;
-void MouseEvent::clear_mask() {
-  mask_ = 0u;
-}
-::google::protobuf::uint32 MouseEvent::mask() const {
-  // @@protoc_insertion_point(field_get:proto.MouseEvent.mask)
+::google::protobuf::int32 PointerEvent::mask() const {
+  // @@protoc_insertion_point(field_get:proto.PointerEvent.mask)
   return mask_;
 }
-void MouseEvent::set_mask(::google::protobuf::uint32 value) {
+void PointerEvent::set_mask(::google::protobuf::int32 value) {
   
   mask_ = value;
-  // @@protoc_insertion_point(field_set:proto.MouseEvent.mask)
+  // @@protoc_insertion_point(field_set:proto.PointerEvent.mask)
 }
 
-inline const MouseEvent* MouseEvent::internal_default_instance() {
-  return &MouseEvent_default_instance_.get();
+// optional int32 x = 2;
+void PointerEvent::clear_x() {
+  x_ = 0;
+}
+::google::protobuf::int32 PointerEvent::x() const {
+  // @@protoc_insertion_point(field_get:proto.PointerEvent.x)
+  return x_;
+}
+void PointerEvent::set_x(::google::protobuf::int32 value) {
+  
+  x_ = value;
+  // @@protoc_insertion_point(field_set:proto.PointerEvent.x)
+}
+
+// optional int32 y = 3;
+void PointerEvent::clear_y() {
+  y_ = 0;
+}
+::google::protobuf::int32 PointerEvent::y() const {
+  // @@protoc_insertion_point(field_get:proto.PointerEvent.y)
+  return y_;
+}
+void PointerEvent::set_y(::google::protobuf::int32 value) {
+  
+  y_ = value;
+  // @@protoc_insertion_point(field_set:proto.PointerEvent.y)
+}
+
+inline const PointerEvent* PointerEvent::internal_default_instance() {
+  return &PointerEvent_default_instance_.get();
 }
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
@@ -2836,16 +2368,6 @@ Clipboard::Clipboard()
   if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.Clipboard)
-}
-Clipboard::Clipboard(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.Clipboard)
 }
 
 void Clipboard::InitAsDefaultInstance() {
@@ -2871,21 +2393,10 @@ Clipboard::~Clipboard() {
 }
 
 void Clipboard::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
-  mime_type_.Destroy(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), arena);
-  data_.Destroy(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), arena);
+  mime_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  data_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
-void Clipboard::ArenaDtor(void* object) {
-  Clipboard* _this = reinterpret_cast< Clipboard* >(object);
-  (void)_this;
-}
-void Clipboard::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void Clipboard::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -2899,13 +2410,17 @@ const Clipboard& Clipboard::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<Clipboard> Clipboard_default_instance_;
 
 Clipboard* Clipboard::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<Clipboard>(arena);
+  Clipboard* n = new Clipboard;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void Clipboard::Clear() {
 // @@protoc_insertion_point(message_clear_start:proto.Clipboard)
-  mime_type_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-  data_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  mime_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 bool Clipboard::MergePartialFromCodedStream(
@@ -3032,10 +2547,12 @@ void Clipboard::MergeFrom(const Clipboard& from) {
 void Clipboard::UnsafeMergeFrom(const Clipboard& from) {
   GOOGLE_DCHECK(&from != this);
   if (from.mime_type().size() > 0) {
-    set_mime_type(from.mime_type());
+
+    mime_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.mime_type_);
   }
   if (from.data().size() > 0) {
-    set_data(from.data());
+
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
 }
 
@@ -3053,18 +2570,6 @@ bool Clipboard::IsInitialized() const {
 
 void Clipboard::Swap(Clipboard* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    Clipboard temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void Clipboard::UnsafeArenaSwap(Clipboard* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void Clipboard::InternalSwap(Clipboard* other) {
@@ -3083,46 +2588,37 @@ void Clipboard::InternalSwap(Clipboard* other) {
 
 // optional string mime_type = 1;
 void Clipboard::clear_mime_type() {
-  mime_type_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  mime_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& Clipboard::mime_type() const {
   // @@protoc_insertion_point(field_get:proto.Clipboard.mime_type)
-  return mime_type_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return mime_type_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 void Clipboard::set_mime_type(const ::std::string& value) {
   
-  mime_type_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
+  mime_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:proto.Clipboard.mime_type)
 }
 void Clipboard::set_mime_type(const char* value) {
   
-  mime_type_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
+  mime_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:proto.Clipboard.mime_type)
 }
-void Clipboard::set_mime_type(const char* value,
-    size_t size) {
+void Clipboard::set_mime_type(const char* value, size_t size) {
   
-  mime_type_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
+  mime_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:proto.Clipboard.mime_type)
 }
 ::std::string* Clipboard::mutable_mime_type() {
   
   // @@protoc_insertion_point(field_mutable:proto.Clipboard.mime_type)
-  return mime_type_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  return mime_type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* Clipboard::release_mime_type() {
   // @@protoc_insertion_point(field_release:proto.Clipboard.mime_type)
   
-  return mime_type_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-::std::string* Clipboard::unsafe_arena_release_mime_type() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.Clipboard.mime_type)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return mime_type_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
+  return mime_type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 void Clipboard::set_allocated_mime_type(::std::string* mime_type) {
   if (mime_type != NULL) {
@@ -3130,65 +2626,43 @@ void Clipboard::set_allocated_mime_type(::std::string* mime_type) {
   } else {
     
   }
-  mime_type_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mime_type,
-      GetArenaNoVirtual());
+  mime_type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mime_type);
   // @@protoc_insertion_point(field_set_allocated:proto.Clipboard.mime_type)
-}
-void Clipboard::unsafe_arena_set_allocated_mime_type(
-    ::std::string* mime_type) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (mime_type != NULL) {
-    
-  } else {
-    
-  }
-  mime_type_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      mime_type, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.Clipboard.mime_type)
 }
 
 // optional bytes data = 2;
 void Clipboard::clear_data() {
-  data_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& Clipboard::data() const {
   // @@protoc_insertion_point(field_get:proto.Clipboard.data)
-  return data_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return data_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 void Clipboard::set_data(const ::std::string& value) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:proto.Clipboard.data)
 }
 void Clipboard::set_data(const char* value) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:proto.Clipboard.data)
 }
-void Clipboard::set_data(const void* value,
-    size_t size) {
+void Clipboard::set_data(const void* value, size_t size) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:proto.Clipboard.data)
 }
 ::std::string* Clipboard::mutable_data() {
   
   // @@protoc_insertion_point(field_mutable:proto.Clipboard.data)
-  return data_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* Clipboard::release_data() {
   // @@protoc_insertion_point(field_release:proto.Clipboard.data)
   
-  return data_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-::std::string* Clipboard::unsafe_arena_release_data() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.Clipboard.data)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return data_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
+  return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 void Clipboard::set_allocated_data(::std::string* data) {
   if (data != NULL) {
@@ -3196,21 +2670,8 @@ void Clipboard::set_allocated_data(::std::string* data) {
   } else {
     
   }
-  data_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data,
-      GetArenaNoVirtual());
+  data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
   // @@protoc_insertion_point(field_set_allocated:proto.Clipboard.data)
-}
-void Clipboard::unsafe_arena_set_allocated_data(
-    ::std::string* data) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (data != NULL) {
-    
-  } else {
-    
-  }
-  data_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      data, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.Clipboard.data)
 }
 
 inline const Clipboard* Clipboard::internal_default_instance() {
@@ -3229,16 +2690,6 @@ ClipboardRequest::ClipboardRequest()
   if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.ClipboardRequest)
-}
-ClipboardRequest::ClipboardRequest(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.ClipboardRequest)
 }
 
 void ClipboardRequest::InitAsDefaultInstance() {
@@ -3263,19 +2714,8 @@ ClipboardRequest::~ClipboardRequest() {
 }
 
 void ClipboardRequest::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
 }
 
-void ClipboardRequest::ArenaDtor(void* object) {
-  ClipboardRequest* _this = reinterpret_cast< ClipboardRequest* >(object);
-  (void)_this;
-}
-void ClipboardRequest::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void ClipboardRequest::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -3289,7 +2729,11 @@ const ClipboardRequest& ClipboardRequest::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<ClipboardRequest> ClipboardRequest_default_instance_;
 
 ClipboardRequest* ClipboardRequest::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<ClipboardRequest>(arena);
+  ClipboardRequest* n = new ClipboardRequest;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void ClipboardRequest::Clear() {
@@ -3404,18 +2848,6 @@ bool ClipboardRequest::IsInitialized() const {
 
 void ClipboardRequest::Swap(ClipboardRequest* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    ClipboardRequest temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void ClipboardRequest::UnsafeArenaSwap(ClipboardRequest* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void ClipboardRequest::InternalSwap(ClipboardRequest* other) {
@@ -3462,16 +2894,6 @@ ClipboardControl::ClipboardControl()
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.ClipboardControl)
 }
-ClipboardControl::ClipboardControl(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.ClipboardControl)
-}
 
 void ClipboardControl::InitAsDefaultInstance() {
 }
@@ -3495,19 +2917,8 @@ ClipboardControl::~ClipboardControl() {
 }
 
 void ClipboardControl::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
 }
 
-void ClipboardControl::ArenaDtor(void* object) {
-  ClipboardControl* _this = reinterpret_cast< ClipboardControl* >(object);
-  (void)_this;
-}
-void ClipboardControl::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void ClipboardControl::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -3521,7 +2932,11 @@ const ClipboardControl& ClipboardControl::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<ClipboardControl> ClipboardControl_default_instance_;
 
 ClipboardControl* ClipboardControl::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<ClipboardControl>(arena);
+  ClipboardControl* n = new ClipboardControl;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void ClipboardControl::Clear() {
@@ -3636,18 +3051,6 @@ bool ClipboardControl::IsInitialized() const {
 
 void ClipboardControl::Swap(ClipboardControl* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    ClipboardControl temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void ClipboardControl::UnsafeArenaSwap(ClipboardControl* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void ClipboardControl::InternalSwap(ClipboardControl* other) {
@@ -3689,7 +3092,9 @@ const int CursorShape::kWidthFieldNumber;
 const int CursorShape::kHeightFieldNumber;
 const int CursorShape::kHotspotXFieldNumber;
 const int CursorShape::kHotspotYFieldNumber;
-const int CursorShape::kDataFieldNumber;
+const int CursorShape::kBitsPerPixelFieldNumber;
+const int CursorShape::kColorFieldNumber;
+const int CursorShape::kMaskFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 CursorShape::CursorShape()
@@ -3697,16 +3102,6 @@ CursorShape::CursorShape()
   if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.CursorShape)
-}
-CursorShape::CursorShape(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.CursorShape)
 }
 
 void CursorShape::InitAsDefaultInstance() {
@@ -3721,9 +3116,10 @@ CursorShape::CursorShape(const CursorShape& from)
 }
 
 void CursorShape::SharedCtor() {
-  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&width_, 0, reinterpret_cast<char*>(&hotspot_y_) -
-    reinterpret_cast<char*>(&width_) + sizeof(hotspot_y_));
+  color_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  mask_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&width_, 0, reinterpret_cast<char*>(&bits_per_pixel_) -
+    reinterpret_cast<char*>(&width_) + sizeof(bits_per_pixel_));
   _cached_size_ = 0;
 }
 
@@ -3733,20 +3129,10 @@ CursorShape::~CursorShape() {
 }
 
 void CursorShape::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
-  data_.Destroy(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), arena);
+  color_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  mask_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
-void CursorShape::ArenaDtor(void* object) {
-  CursorShape* _this = reinterpret_cast< CursorShape* >(object);
-  (void)_this;
-}
-void CursorShape::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void CursorShape::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -3760,7 +3146,11 @@ const CursorShape& CursorShape::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<CursorShape> CursorShape_default_instance_;
 
 CursorShape* CursorShape::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<CursorShape>(arena);
+  CursorShape* n = new CursorShape;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void CursorShape::Clear() {
@@ -3781,8 +3171,9 @@ void CursorShape::Clear() {
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  ZR_(width_, hotspot_y_);
-  data_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  ZR_(width_, bits_per_pixel_);
+  color_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  mask_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 
 #undef ZR_HELPER_
 #undef ZR_
@@ -3854,16 +3245,44 @@ bool CursorShape::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(42)) goto parse_data;
+        if (input->ExpectTag(40)) goto parse_bits_per_pixel;
         break;
       }
 
-      // optional bytes data = 5;
+      // optional int32 bits_per_pixel = 5;
       case 5: {
-        if (tag == 42) {
-         parse_data:
+        if (tag == 40) {
+         parse_bits_per_pixel:
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &bits_per_pixel_)));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(50)) goto parse_color;
+        break;
+      }
+
+      // optional bytes color = 6;
+      case 6: {
+        if (tag == 50) {
+         parse_color:
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_data()));
+                input, this->mutable_color()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(58)) goto parse_mask;
+        break;
+      }
+
+      // optional bytes mask = 7;
+      case 7: {
+        if (tag == 58) {
+         parse_mask:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_mask()));
         } else {
           goto handle_unusual;
         }
@@ -3915,10 +3334,21 @@ void CursorShape::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->hotspot_y(), output);
   }
 
-  // optional bytes data = 5;
-  if (this->data().size() > 0) {
+  // optional int32 bits_per_pixel = 5;
+  if (this->bits_per_pixel() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->bits_per_pixel(), output);
+  }
+
+  // optional bytes color = 6;
+  if (this->color().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      5, this->data(), output);
+      6, this->color(), output);
+  }
+
+  // optional bytes mask = 7;
+  if (this->mask().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      7, this->mask(), output);
   }
 
   // @@protoc_insertion_point(serialize_end:proto.CursorShape)
@@ -3956,11 +3386,25 @@ size_t CursorShape::ByteSizeLong() const {
         this->hotspot_y());
   }
 
-  // optional bytes data = 5;
-  if (this->data().size() > 0) {
+  // optional int32 bits_per_pixel = 5;
+  if (this->bits_per_pixel() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->bits_per_pixel());
+  }
+
+  // optional bytes color = 6;
+  if (this->color().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
-        this->data());
+        this->color());
+  }
+
+  // optional bytes mask = 7;
+  if (this->mask().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->mask());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -3998,8 +3442,16 @@ void CursorShape::UnsafeMergeFrom(const CursorShape& from) {
   if (from.hotspot_y() != 0) {
     set_hotspot_y(from.hotspot_y());
   }
-  if (from.data().size() > 0) {
-    set_data(from.data());
+  if (from.bits_per_pixel() != 0) {
+    set_bits_per_pixel(from.bits_per_pixel());
+  }
+  if (from.color().size() > 0) {
+
+    color_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.color_);
+  }
+  if (from.mask().size() > 0) {
+
+    mask_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.mask_);
   }
 }
 
@@ -4017,18 +3469,6 @@ bool CursorShape::IsInitialized() const {
 
 void CursorShape::Swap(CursorShape* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    CursorShape temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void CursorShape::UnsafeArenaSwap(CursorShape* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void CursorShape::InternalSwap(CursorShape* other) {
@@ -4036,7 +3476,9 @@ void CursorShape::InternalSwap(CursorShape* other) {
   std::swap(height_, other->height_);
   std::swap(hotspot_x_, other->hotspot_x_);
   std::swap(hotspot_y_, other->hotspot_y_);
-  data_.Swap(&other->data_);
+  std::swap(bits_per_pixel_, other->bits_per_pixel_);
+  color_.Swap(&other->color_);
+  mask_.Swap(&other->mask_);
   _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -4104,70 +3546,106 @@ void CursorShape::set_hotspot_y(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:proto.CursorShape.hotspot_y)
 }
 
-// optional bytes data = 5;
-void CursorShape::clear_data() {
-  data_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+// optional int32 bits_per_pixel = 5;
+void CursorShape::clear_bits_per_pixel() {
+  bits_per_pixel_ = 0;
 }
-const ::std::string& CursorShape::data() const {
-  // @@protoc_insertion_point(field_get:proto.CursorShape.data)
-  return data_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+::google::protobuf::int32 CursorShape::bits_per_pixel() const {
+  // @@protoc_insertion_point(field_get:proto.CursorShape.bits_per_pixel)
+  return bits_per_pixel_;
 }
-void CursorShape::set_data(const ::std::string& value) {
+void CursorShape::set_bits_per_pixel(::google::protobuf::int32 value) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set:proto.CursorShape.data)
+  bits_per_pixel_ = value;
+  // @@protoc_insertion_point(field_set:proto.CursorShape.bits_per_pixel)
 }
-void CursorShape::set_data(const char* value) {
+
+// optional bytes color = 6;
+void CursorShape::clear_color() {
+  color_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& CursorShape::color() const {
+  // @@protoc_insertion_point(field_get:proto.CursorShape.color)
+  return color_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void CursorShape::set_color(const ::std::string& value) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_char:proto.CursorShape.data)
+  color_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:proto.CursorShape.color)
 }
-void CursorShape::set_data(const void* value,
-    size_t size) {
+void CursorShape::set_color(const char* value) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_pointer:proto.CursorShape.data)
+  color_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:proto.CursorShape.color)
 }
-::std::string* CursorShape::mutable_data() {
+void CursorShape::set_color(const void* value, size_t size) {
   
-  // @@protoc_insertion_point(field_mutable:proto.CursorShape.data)
-  return data_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  color_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:proto.CursorShape.color)
 }
-::std::string* CursorShape::release_data() {
-  // @@protoc_insertion_point(field_release:proto.CursorShape.data)
+::std::string* CursorShape::mutable_color() {
   
-  return data_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  // @@protoc_insertion_point(field_mutable:proto.CursorShape.color)
+  return color_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* CursorShape::unsafe_arena_release_data() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.CursorShape.data)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
+::std::string* CursorShape::release_color() {
+  // @@protoc_insertion_point(field_release:proto.CursorShape.color)
   
-  return data_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
+  return color_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void CursorShape::set_allocated_data(::std::string* data) {
-  if (data != NULL) {
+void CursorShape::set_allocated_color(::std::string* color) {
+  if (color != NULL) {
     
   } else {
     
   }
-  data_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data,
-      GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_allocated:proto.CursorShape.data)
+  color_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), color);
+  // @@protoc_insertion_point(field_set_allocated:proto.CursorShape.color)
 }
-void CursorShape::unsafe_arena_set_allocated_data(
-    ::std::string* data) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (data != NULL) {
+
+// optional bytes mask = 7;
+void CursorShape::clear_mask() {
+  mask_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& CursorShape::mask() const {
+  // @@protoc_insertion_point(field_get:proto.CursorShape.mask)
+  return mask_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void CursorShape::set_mask(const ::std::string& value) {
+  
+  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:proto.CursorShape.mask)
+}
+void CursorShape::set_mask(const char* value) {
+  
+  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:proto.CursorShape.mask)
+}
+void CursorShape::set_mask(const void* value, size_t size) {
+  
+  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:proto.CursorShape.mask)
+}
+::std::string* CursorShape::mutable_mask() {
+  
+  // @@protoc_insertion_point(field_mutable:proto.CursorShape.mask)
+  return mask_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* CursorShape::release_mask() {
+  // @@protoc_insertion_point(field_release:proto.CursorShape.mask)
+  
+  return mask_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void CursorShape::set_allocated_mask(::std::string* mask) {
+  if (mask != NULL) {
     
   } else {
     
   }
-  data_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      data, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.CursorShape.data)
+  mask_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mask);
+  // @@protoc_insertion_point(field_set_allocated:proto.CursorShape.mask)
 }
 
 inline const CursorShape* CursorShape::internal_default_instance() {
@@ -4186,16 +3664,6 @@ CursorShapeControl::CursorShapeControl()
   if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.CursorShapeControl)
-}
-CursorShapeControl::CursorShapeControl(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.CursorShapeControl)
 }
 
 void CursorShapeControl::InitAsDefaultInstance() {
@@ -4220,19 +3688,8 @@ CursorShapeControl::~CursorShapeControl() {
 }
 
 void CursorShapeControl::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
 }
 
-void CursorShapeControl::ArenaDtor(void* object) {
-  CursorShapeControl* _this = reinterpret_cast< CursorShapeControl* >(object);
-  (void)_this;
-}
-void CursorShapeControl::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void CursorShapeControl::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -4246,7 +3703,11 @@ const CursorShapeControl& CursorShapeControl::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<CursorShapeControl> CursorShapeControl_default_instance_;
 
 CursorShapeControl* CursorShapeControl::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<CursorShapeControl>(arena);
+  CursorShapeControl* n = new CursorShapeControl;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void CursorShapeControl::Clear() {
@@ -4361,18 +3822,6 @@ bool CursorShapeControl::IsInitialized() const {
 
 void CursorShapeControl::Swap(CursorShapeControl* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    CursorShapeControl temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void CursorShapeControl::UnsafeArenaSwap(CursorShapeControl* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void CursorShapeControl::InternalSwap(CursorShapeControl* other) {
@@ -4422,16 +3871,6 @@ VideoRect::VideoRect()
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.VideoRect)
 }
-VideoRect::VideoRect(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.VideoRect)
-}
 
 void VideoRect::InitAsDefaultInstance() {
 }
@@ -4456,19 +3895,8 @@ VideoRect::~VideoRect() {
 }
 
 void VideoRect::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
 }
 
-void VideoRect::ArenaDtor(void* object) {
-  VideoRect* _this = reinterpret_cast< VideoRect* >(object);
-  (void)_this;
-}
-void VideoRect::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void VideoRect::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -4482,7 +3910,11 @@ const VideoRect& VideoRect::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<VideoRect> VideoRect_default_instance_;
 
 VideoRect* VideoRect::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<VideoRect>(arena);
+  VideoRect* n = new VideoRect;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void VideoRect::Clear() {
@@ -4709,18 +4141,6 @@ bool VideoRect::IsInitialized() const {
 
 void VideoRect::Swap(VideoRect* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    VideoRect temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void VideoRect::UnsafeArenaSwap(VideoRect* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void VideoRect::InternalSwap(VideoRect* other) {
@@ -4818,16 +4238,6 @@ VideoPixelFormat::VideoPixelFormat()
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.VideoPixelFormat)
 }
-VideoPixelFormat::VideoPixelFormat(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.VideoPixelFormat)
-}
 
 void VideoPixelFormat::InitAsDefaultInstance() {
 }
@@ -4852,19 +4262,8 @@ VideoPixelFormat::~VideoPixelFormat() {
 }
 
 void VideoPixelFormat::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
 }
 
-void VideoPixelFormat::ArenaDtor(void* object) {
-  VideoPixelFormat* _this = reinterpret_cast< VideoPixelFormat* >(object);
-  (void)_this;
-}
-void VideoPixelFormat::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void VideoPixelFormat::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -4878,7 +4277,11 @@ const VideoPixelFormat& VideoPixelFormat::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<VideoPixelFormat> VideoPixelFormat_default_instance_;
 
 VideoPixelFormat* VideoPixelFormat::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<VideoPixelFormat>(arena);
+  VideoPixelFormat* n = new VideoPixelFormat;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void VideoPixelFormat::Clear() {
@@ -5195,18 +4598,6 @@ bool VideoPixelFormat::IsInitialized() const {
 
 void VideoPixelFormat::Swap(VideoPixelFormat* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    VideoPixelFormat temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void VideoPixelFormat::UnsafeArenaSwap(VideoPixelFormat* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void VideoPixelFormat::InternalSwap(VideoPixelFormat* other) {
@@ -5333,57 +4724,281 @@ inline const VideoPixelFormat* VideoPixelFormat::internal_default_instance() {
 
 // ===================================================================
 
-void VideoPacketFormat::_slow_mutable_pixel_format() {
-  pixel_format_ = ::google::protobuf::Arena::CreateMessage< ::proto::VideoPixelFormat >(
-      GetArenaNoVirtual());
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int VideoSize::kWidthFieldNumber;
+const int VideoSize::kHeightFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+VideoSize::VideoSize()
+  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
+  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:proto.VideoSize)
 }
-::proto::VideoPixelFormat* VideoPacketFormat::_slow_release_pixel_format() {
-  if (pixel_format_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::VideoPixelFormat* temp = new ::proto::VideoPixelFormat(*pixel_format_);
-    pixel_format_ = NULL;
-    return temp;
+
+void VideoSize::InitAsDefaultInstance() {
+}
+
+VideoSize::VideoSize(const VideoSize& from)
+  : ::google::protobuf::MessageLite(),
+    _arena_ptr_(NULL) {
+  SharedCtor();
+  UnsafeMergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:proto.VideoSize)
+}
+
+void VideoSize::SharedCtor() {
+  ::memset(&width_, 0, reinterpret_cast<char*>(&height_) -
+    reinterpret_cast<char*>(&width_) + sizeof(height_));
+  _cached_size_ = 0;
+}
+
+VideoSize::~VideoSize() {
+  // @@protoc_insertion_point(destructor:proto.VideoSize)
+  SharedDtor();
+}
+
+void VideoSize::SharedDtor() {
+}
+
+void VideoSize::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const VideoSize& VideoSize::default_instance() {
+  protobuf_InitDefaults_proto_2eproto();
+  return *internal_default_instance();
+}
+
+::google::protobuf::internal::ExplicitlyConstructed<VideoSize> VideoSize_default_instance_;
+
+VideoSize* VideoSize::New(::google::protobuf::Arena* arena) const {
+  VideoSize* n = new VideoSize;
+  if (arena != NULL) {
+    arena->Own(n);
   }
+  return n;
 }
-::proto::VideoPixelFormat* VideoPacketFormat::unsafe_arena_release_pixel_format() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.VideoPacketFormat.pixel_format)
-  
-  ::proto::VideoPixelFormat* temp = pixel_format_;
-  pixel_format_ = NULL;
-  return temp;
+
+void VideoSize::Clear() {
+// @@protoc_insertion_point(message_clear_start:proto.VideoSize)
+#if defined(__clang__)
+#define ZR_HELPER_(f) \
+  _Pragma("clang diagnostic push") \
+  _Pragma("clang diagnostic ignored \"-Winvalid-offsetof\"") \
+  __builtin_offsetof(VideoSize, f) \
+  _Pragma("clang diagnostic pop")
+#else
+#define ZR_HELPER_(f) reinterpret_cast<char*>(\
+  &reinterpret_cast<VideoSize*>(16)->f)
+#endif
+
+#define ZR_(first, last) do {\
+  ::memset(&(first), 0,\
+           ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
+} while (0)
+
+  ZR_(width_, height_);
+
+#undef ZR_HELPER_
+#undef ZR_
+
 }
-void VideoPacketFormat::_slow_set_allocated_pixel_format(
-    ::google::protobuf::Arena* message_arena, ::proto::VideoPixelFormat** pixel_format) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*pixel_format) == NULL) {
-      message_arena->Own(*pixel_format);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*pixel_format)) {
-      ::proto::VideoPixelFormat* new_pixel_format = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::VideoPixelFormat >(
-            message_arena);
-      new_pixel_format->CopyFrom(**pixel_format);
-      *pixel_format = new_pixel_format;
+
+bool VideoSize::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:proto.VideoSize)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional int32 width = 1;
+      case 1: {
+        if (tag == 8) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &width_)));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_height;
+        break;
+      }
+
+      // optional int32 height = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_height:
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &height_)));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
     }
-}
-void VideoPacketFormat::unsafe_arena_set_allocated_pixel_format(
-    ::proto::VideoPixelFormat* pixel_format) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete pixel_format_;
   }
-  pixel_format_ = pixel_format;
-  if (pixel_format) {
-    
+success:
+  // @@protoc_insertion_point(parse_success:proto.VideoSize)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:proto.VideoSize)
+  return false;
+#undef DO_
+}
+
+void VideoSize::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:proto.VideoSize)
+  // optional int32 width = 1;
+  if (this->width() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->width(), output);
+  }
+
+  // optional int32 height = 2;
+  if (this->height() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->height(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:proto.VideoSize)
+}
+
+size_t VideoSize::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:proto.VideoSize)
+  size_t total_size = 0;
+
+  // optional int32 width = 1;
+  if (this->width() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->width());
+  }
+
+  // optional int32 height = 2;
+  if (this->height() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->height());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void VideoSize::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const VideoSize*>(&from));
+}
+
+void VideoSize::MergeFrom(const VideoSize& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:proto.VideoSize)
+  if (GOOGLE_PREDICT_TRUE(&from != this)) {
+    UnsafeMergeFrom(from);
   } else {
-    
+    MergeFromFail(__LINE__);
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.VideoPacketFormat.pixel_format)
 }
+
+void VideoSize::UnsafeMergeFrom(const VideoSize& from) {
+  GOOGLE_DCHECK(&from != this);
+  if (from.width() != 0) {
+    set_width(from.width());
+  }
+  if (from.height() != 0) {
+    set_height(from.height());
+  }
+}
+
+void VideoSize::CopyFrom(const VideoSize& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:proto.VideoSize)
+  if (&from == this) return;
+  Clear();
+  UnsafeMergeFrom(from);
+}
+
+bool VideoSize::IsInitialized() const {
+
+  return true;
+}
+
+void VideoSize::Swap(VideoSize* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void VideoSize::InternalSwap(VideoSize* other) {
+  std::swap(width_, other->width_);
+  std::swap(height_, other->height_);
+  _unknown_fields_.Swap(&other->_unknown_fields_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string VideoSize::GetTypeName() const {
+  return "proto.VideoSize";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// VideoSize
+
+// optional int32 width = 1;
+void VideoSize::clear_width() {
+  width_ = 0;
+}
+::google::protobuf::int32 VideoSize::width() const {
+  // @@protoc_insertion_point(field_get:proto.VideoSize.width)
+  return width_;
+}
+void VideoSize::set_width(::google::protobuf::int32 value) {
+  
+  width_ = value;
+  // @@protoc_insertion_point(field_set:proto.VideoSize.width)
+}
+
+// optional int32 height = 2;
+void VideoSize::clear_height() {
+  height_ = 0;
+}
+::google::protobuf::int32 VideoSize::height() const {
+  // @@protoc_insertion_point(field_get:proto.VideoSize.height)
+  return height_;
+}
+void VideoSize::set_height(::google::protobuf::int32 value) {
+  
+  height_ = value;
+  // @@protoc_insertion_point(field_set:proto.VideoSize.height)
+}
+
+inline const VideoSize* VideoSize::internal_default_instance() {
+  return &VideoSize_default_instance_.get();
+}
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int VideoPacketFormat::kEncodingFieldNumber;
-const int VideoPacketFormat::kScreenWidthFieldNumber;
-const int VideoPacketFormat::kScreenHeightFieldNumber;
+const int VideoPacketFormat::kScreenSizeFieldNumber;
 const int VideoPacketFormat::kPixelFormatFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -5393,18 +5008,10 @@ VideoPacketFormat::VideoPacketFormat()
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.VideoPacketFormat)
 }
-VideoPacketFormat::VideoPacketFormat(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.VideoPacketFormat)
-}
 
 void VideoPacketFormat::InitAsDefaultInstance() {
+  screen_size_ = const_cast< ::proto::VideoSize*>(
+      ::proto::VideoSize::internal_default_instance());
   pixel_format_ = const_cast< ::proto::VideoPixelFormat*>(
       ::proto::VideoPixelFormat::internal_default_instance());
 }
@@ -5418,9 +5025,9 @@ VideoPacketFormat::VideoPacketFormat(const VideoPacketFormat& from)
 }
 
 void VideoPacketFormat::SharedCtor() {
+  screen_size_ = NULL;
   pixel_format_ = NULL;
-  ::memset(&encoding_, 0, reinterpret_cast<char*>(&screen_height_) -
-    reinterpret_cast<char*>(&encoding_) + sizeof(screen_height_));
+  encoding_ = 0;
   _cached_size_ = 0;
 }
 
@@ -5430,22 +5037,12 @@ VideoPacketFormat::~VideoPacketFormat() {
 }
 
 void VideoPacketFormat::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
   if (this != &VideoPacketFormat_default_instance_.get()) {
+    delete screen_size_;
     delete pixel_format_;
   }
 }
 
-void VideoPacketFormat::ArenaDtor(void* object) {
-  VideoPacketFormat* _this = reinterpret_cast< VideoPacketFormat* >(object);
-  (void)_this;
-}
-void VideoPacketFormat::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void VideoPacketFormat::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -5459,34 +5056,20 @@ const VideoPacketFormat& VideoPacketFormat::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<VideoPacketFormat> VideoPacketFormat_default_instance_;
 
 VideoPacketFormat* VideoPacketFormat::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<VideoPacketFormat>(arena);
+  VideoPacketFormat* n = new VideoPacketFormat;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void VideoPacketFormat::Clear() {
 // @@protoc_insertion_point(message_clear_start:proto.VideoPacketFormat)
-#if defined(__clang__)
-#define ZR_HELPER_(f) \
-  _Pragma("clang diagnostic push") \
-  _Pragma("clang diagnostic ignored \"-Winvalid-offsetof\"") \
-  __builtin_offsetof(VideoPacketFormat, f) \
-  _Pragma("clang diagnostic pop")
-#else
-#define ZR_HELPER_(f) reinterpret_cast<char*>(\
-  &reinterpret_cast<VideoPacketFormat*>(16)->f)
-#endif
-
-#define ZR_(first, last) do {\
-  ::memset(&(first), 0,\
-           ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
-} while (0)
-
-  ZR_(encoding_, screen_height_);
+  encoding_ = 0;
+  if (GetArenaNoVirtual() == NULL && screen_size_ != NULL) delete screen_size_;
+  screen_size_ = NULL;
   if (GetArenaNoVirtual() == NULL && pixel_format_ != NULL) delete pixel_format_;
   pixel_format_ = NULL;
-
-#undef ZR_HELPER_
-#undef ZR_
-
 }
 
 bool VideoPacketFormat::MergePartialFromCodedStream(
@@ -5499,54 +5082,36 @@ bool VideoPacketFormat::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .proto.VideoEncoding encoding = 1;
+      // optional int32 encoding = 1;
       case 1: {
         if (tag == 8) {
-          int value;
+
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_encoding(static_cast< ::proto::VideoEncoding >(value));
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &encoding_)));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_screen_width;
+        if (input->ExpectTag(18)) goto parse_screen_size;
         break;
       }
 
-      // optional int32 screen_width = 2;
+      // optional .proto.VideoSize screen_size = 2;
       case 2: {
-        if (tag == 16) {
-         parse_screen_width:
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &screen_width_)));
+        if (tag == 18) {
+         parse_screen_size:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_screen_size()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_screen_height;
+        if (input->ExpectTag(26)) goto parse_pixel_format;
         break;
       }
 
-      // optional int32 screen_height = 3;
+      // optional .proto.VideoPixelFormat pixel_format = 3;
       case 3: {
-        if (tag == 24) {
-         parse_screen_height:
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &screen_height_)));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(34)) goto parse_pixel_format;
-        break;
-      }
-
-      // optional .proto.VideoPixelFormat pixel_format = 4;
-      case 4: {
-        if (tag == 34) {
+        if (tag == 26) {
          parse_pixel_format:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_pixel_format()));
@@ -5581,26 +5146,21 @@ failure:
 void VideoPacketFormat::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:proto.VideoPacketFormat)
-  // optional .proto.VideoEncoding encoding = 1;
+  // optional int32 encoding = 1;
   if (this->encoding() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->encoding(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->encoding(), output);
   }
 
-  // optional int32 screen_width = 2;
-  if (this->screen_width() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->screen_width(), output);
+  // optional .proto.VideoSize screen_size = 2;
+  if (this->has_screen_size()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      2, *this->screen_size_, output);
   }
 
-  // optional int32 screen_height = 3;
-  if (this->screen_height() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->screen_height(), output);
-  }
-
-  // optional .proto.VideoPixelFormat pixel_format = 4;
+  // optional .proto.VideoPixelFormat pixel_format = 3;
   if (this->has_pixel_format()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      4, *this->pixel_format_, output);
+      3, *this->pixel_format_, output);
   }
 
   // @@protoc_insertion_point(serialize_end:proto.VideoPacketFormat)
@@ -5610,27 +5170,21 @@ size_t VideoPacketFormat::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:proto.VideoPacketFormat)
   size_t total_size = 0;
 
-  // optional .proto.VideoEncoding encoding = 1;
+  // optional int32 encoding = 1;
   if (this->encoding() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->encoding());
-  }
-
-  // optional int32 screen_width = 2;
-  if (this->screen_width() != 0) {
-    total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->screen_width());
+        this->encoding());
   }
 
-  // optional int32 screen_height = 3;
-  if (this->screen_height() != 0) {
+  // optional .proto.VideoSize screen_size = 2;
+  if (this->has_screen_size()) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->screen_height());
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->screen_size_);
   }
 
-  // optional .proto.VideoPixelFormat pixel_format = 4;
+  // optional .proto.VideoPixelFormat pixel_format = 3;
   if (this->has_pixel_format()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -5663,11 +5217,8 @@ void VideoPacketFormat::UnsafeMergeFrom(const VideoPacketFormat& from) {
   if (from.encoding() != 0) {
     set_encoding(from.encoding());
   }
-  if (from.screen_width() != 0) {
-    set_screen_width(from.screen_width());
-  }
-  if (from.screen_height() != 0) {
-    set_screen_height(from.screen_height());
+  if (from.has_screen_size()) {
+    mutable_screen_size()->::proto::VideoSize::MergeFrom(from.screen_size());
   }
   if (from.has_pixel_format()) {
     mutable_pixel_format()->::proto::VideoPixelFormat::MergeFrom(from.pixel_format());
@@ -5688,24 +5239,11 @@ bool VideoPacketFormat::IsInitialized() const {
 
 void VideoPacketFormat::Swap(VideoPacketFormat* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    VideoPacketFormat temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void VideoPacketFormat::UnsafeArenaSwap(VideoPacketFormat* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void VideoPacketFormat::InternalSwap(VideoPacketFormat* other) {
   std::swap(encoding_, other->encoding_);
-  std::swap(screen_width_, other->screen_width_);
-  std::swap(screen_height_, other->screen_height_);
+  std::swap(screen_size_, other->screen_size_);
   std::swap(pixel_format_, other->pixel_format_);
   _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
@@ -5718,49 +5256,60 @@ void VideoPacketFormat::InternalSwap(VideoPacketFormat* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // VideoPacketFormat
 
-// optional .proto.VideoEncoding encoding = 1;
+// optional int32 encoding = 1;
 void VideoPacketFormat::clear_encoding() {
   encoding_ = 0;
 }
-::proto::VideoEncoding VideoPacketFormat::encoding() const {
+::google::protobuf::int32 VideoPacketFormat::encoding() const {
   // @@protoc_insertion_point(field_get:proto.VideoPacketFormat.encoding)
-  return static_cast< ::proto::VideoEncoding >(encoding_);
+  return encoding_;
 }
-void VideoPacketFormat::set_encoding(::proto::VideoEncoding value) {
+void VideoPacketFormat::set_encoding(::google::protobuf::int32 value) {
   
   encoding_ = value;
   // @@protoc_insertion_point(field_set:proto.VideoPacketFormat.encoding)
 }
 
-// optional int32 screen_width = 2;
-void VideoPacketFormat::clear_screen_width() {
-  screen_width_ = 0;
+// optional .proto.VideoSize screen_size = 2;
+bool VideoPacketFormat::has_screen_size() const {
+  return this != internal_default_instance() && screen_size_ != NULL;
 }
-::google::protobuf::int32 VideoPacketFormat::screen_width() const {
-  // @@protoc_insertion_point(field_get:proto.VideoPacketFormat.screen_width)
-  return screen_width_;
+void VideoPacketFormat::clear_screen_size() {
+  if (GetArenaNoVirtual() == NULL && screen_size_ != NULL) delete screen_size_;
+  screen_size_ = NULL;
 }
-void VideoPacketFormat::set_screen_width(::google::protobuf::int32 value) {
+const ::proto::VideoSize& VideoPacketFormat::screen_size() const {
+  // @@protoc_insertion_point(field_get:proto.VideoPacketFormat.screen_size)
+  return screen_size_ != NULL ? *screen_size_
+                         : *::proto::VideoSize::internal_default_instance();
+}
+::proto::VideoSize* VideoPacketFormat::mutable_screen_size() {
   
-  screen_width_ = value;
-  // @@protoc_insertion_point(field_set:proto.VideoPacketFormat.screen_width)
+  if (screen_size_ == NULL) {
+    screen_size_ = new ::proto::VideoSize;
+  }
+  // @@protoc_insertion_point(field_mutable:proto.VideoPacketFormat.screen_size)
+  return screen_size_;
+}
+::proto::VideoSize* VideoPacketFormat::release_screen_size() {
+  // @@protoc_insertion_point(field_release:proto.VideoPacketFormat.screen_size)
+  
+  ::proto::VideoSize* temp = screen_size_;
+  screen_size_ = NULL;
+  return temp;
+}
+void VideoPacketFormat::set_allocated_screen_size(::proto::VideoSize* screen_size) {
+  delete screen_size_;
+  screen_size_ = screen_size;
+  if (screen_size) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:proto.VideoPacketFormat.screen_size)
 }
 
-// optional int32 screen_height = 3;
-void VideoPacketFormat::clear_screen_height() {
-  screen_height_ = 0;
-}
-::google::protobuf::int32 VideoPacketFormat::screen_height() const {
-  // @@protoc_insertion_point(field_get:proto.VideoPacketFormat.screen_height)
-  return screen_height_;
-}
-void VideoPacketFormat::set_screen_height(::google::protobuf::int32 value) {
-  
-  screen_height_ = value;
-  // @@protoc_insertion_point(field_set:proto.VideoPacketFormat.screen_height)
-}
-
-// optional .proto.VideoPixelFormat pixel_format = 4;
+// optional .proto.VideoPixelFormat pixel_format = 3;
 bool VideoPacketFormat::has_pixel_format() const {
   return this != internal_default_instance() && pixel_format_ != NULL;
 }
@@ -5776,7 +5325,7 @@ const ::proto::VideoPixelFormat& VideoPacketFormat::pixel_format() const {
 ::proto::VideoPixelFormat* VideoPacketFormat::mutable_pixel_format() {
   
   if (pixel_format_ == NULL) {
-    _slow_mutable_pixel_format();
+    pixel_format_ = new ::proto::VideoPixelFormat;
   }
   // @@protoc_insertion_point(field_mutable:proto.VideoPacketFormat.pixel_format)
   return pixel_format_;
@@ -5784,22 +5333,12 @@ const ::proto::VideoPixelFormat& VideoPacketFormat::pixel_format() const {
 ::proto::VideoPixelFormat* VideoPacketFormat::release_pixel_format() {
   // @@protoc_insertion_point(field_release:proto.VideoPacketFormat.pixel_format)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_pixel_format();
-  } else {
-    ::proto::VideoPixelFormat* temp = pixel_format_;
-    pixel_format_ = NULL;
-    return temp;
-  }
+  ::proto::VideoPixelFormat* temp = pixel_format_;
+  pixel_format_ = NULL;
+  return temp;
 }
- void VideoPacketFormat::set_allocated_pixel_format(::proto::VideoPixelFormat* pixel_format) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete pixel_format_;
-  }
-  if (pixel_format != NULL) {
-    _slow_set_allocated_pixel_format(message_arena, &pixel_format);
-  }
+void VideoPacketFormat::set_allocated_pixel_format(::proto::VideoPixelFormat* pixel_format) {
+  delete pixel_format_;
   pixel_format_ = pixel_format;
   if (pixel_format) {
     
@@ -5837,53 +5376,6 @@ const VideoPacket_Flags VideoPacket::Flags_MIN;
 const VideoPacket_Flags VideoPacket::Flags_MAX;
 const int VideoPacket::Flags_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-void VideoPacket::_slow_mutable_format() {
-  format_ = ::google::protobuf::Arena::CreateMessage< ::proto::VideoPacketFormat >(
-      GetArenaNoVirtual());
-}
-::proto::VideoPacketFormat* VideoPacket::_slow_release_format() {
-  if (format_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::VideoPacketFormat* temp = new ::proto::VideoPacketFormat(*format_);
-    format_ = NULL;
-    return temp;
-  }
-}
-::proto::VideoPacketFormat* VideoPacket::unsafe_arena_release_format() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.VideoPacket.format)
-  
-  ::proto::VideoPacketFormat* temp = format_;
-  format_ = NULL;
-  return temp;
-}
-void VideoPacket::_slow_set_allocated_format(
-    ::google::protobuf::Arena* message_arena, ::proto::VideoPacketFormat** format) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*format) == NULL) {
-      message_arena->Own(*format);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*format)) {
-      ::proto::VideoPacketFormat* new_format = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::VideoPacketFormat >(
-            message_arena);
-      new_format->CopyFrom(**format);
-      *format = new_format;
-    }
-}
-void VideoPacket::unsafe_arena_set_allocated_format(
-    ::proto::VideoPacketFormat* format) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete format_;
-  }
-  format_ = format;
-  if (format) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.VideoPacket.format)
-}
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int VideoPacket::kFlagsFieldNumber;
 const int VideoPacket::kFormatFieldNumber;
@@ -5896,17 +5388,6 @@ VideoPacket::VideoPacket()
   if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.VideoPacket)
-}
-VideoPacket::VideoPacket(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena),
-  changed_rect_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.VideoPacket)
 }
 
 void VideoPacket::InitAsDefaultInstance() {
@@ -5935,23 +5416,12 @@ VideoPacket::~VideoPacket() {
 }
 
 void VideoPacket::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
-  data_.Destroy(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), arena);
+  data_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (this != &VideoPacket_default_instance_.get()) {
     delete format_;
   }
 }
 
-void VideoPacket::ArenaDtor(void* object) {
-  VideoPacket* _this = reinterpret_cast< VideoPacket* >(object);
-  (void)_this;
-}
-void VideoPacket::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void VideoPacket::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -5965,7 +5435,11 @@ const VideoPacket& VideoPacket::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<VideoPacket> VideoPacket_default_instance_;
 
 VideoPacket* VideoPacket::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<VideoPacket>(arena);
+  VideoPacket* n = new VideoPacket;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void VideoPacket::Clear() {
@@ -5973,7 +5447,7 @@ void VideoPacket::Clear() {
   flags_ = 0;
   if (GetArenaNoVirtual() == NULL && format_ != NULL) delete format_;
   format_ = NULL;
-  data_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   changed_rect_.Clear();
 }
 
@@ -6161,7 +5635,8 @@ void VideoPacket::UnsafeMergeFrom(const VideoPacket& from) {
     mutable_format()->::proto::VideoPacketFormat::MergeFrom(from.format());
   }
   if (from.data().size() > 0) {
-    set_data(from.data());
+
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
 }
 
@@ -6179,18 +5654,6 @@ bool VideoPacket::IsInitialized() const {
 
 void VideoPacket::Swap(VideoPacket* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    VideoPacket temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void VideoPacket::UnsafeArenaSwap(VideoPacket* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void VideoPacket::InternalSwap(VideoPacket* other) {
@@ -6239,7 +5702,7 @@ const ::proto::VideoPacketFormat& VideoPacket::format() const {
 ::proto::VideoPacketFormat* VideoPacket::mutable_format() {
   
   if (format_ == NULL) {
-    _slow_mutable_format();
+    format_ = new ::proto::VideoPacketFormat;
   }
   // @@protoc_insertion_point(field_mutable:proto.VideoPacket.format)
   return format_;
@@ -6247,22 +5710,12 @@ const ::proto::VideoPacketFormat& VideoPacket::format() const {
 ::proto::VideoPacketFormat* VideoPacket::release_format() {
   // @@protoc_insertion_point(field_release:proto.VideoPacket.format)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_format();
-  } else {
-    ::proto::VideoPacketFormat* temp = format_;
-    format_ = NULL;
-    return temp;
-  }
+  ::proto::VideoPacketFormat* temp = format_;
+  format_ = NULL;
+  return temp;
 }
- void VideoPacket::set_allocated_format(::proto::VideoPacketFormat* format) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete format_;
-  }
-  if (format != NULL) {
-    _slow_set_allocated_format(message_arena, &format);
-  }
+void VideoPacket::set_allocated_format(::proto::VideoPacketFormat* format) {
+  delete format_;
   format_ = format;
   if (format) {
     
@@ -6304,46 +5757,37 @@ VideoPacket::changed_rect() const {
 
 // optional bytes data = 4;
 void VideoPacket::clear_data() {
-  data_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& VideoPacket::data() const {
   // @@protoc_insertion_point(field_get:proto.VideoPacket.data)
-  return data_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return data_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 void VideoPacket::set_data(const ::std::string& value) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:proto.VideoPacket.data)
 }
 void VideoPacket::set_data(const char* value) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:proto.VideoPacket.data)
 }
-void VideoPacket::set_data(const void* value,
-    size_t size) {
+void VideoPacket::set_data(const void* value, size_t size) {
   
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:proto.VideoPacket.data)
 }
 ::std::string* VideoPacket::mutable_data() {
   
   // @@protoc_insertion_point(field_mutable:proto.VideoPacket.data)
-  return data_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
+  return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* VideoPacket::release_data() {
   // @@protoc_insertion_point(field_release:proto.VideoPacket.data)
   
-  return data_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-::std::string* VideoPacket::unsafe_arena_release_data() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.VideoPacket.data)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return data_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
+  return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 void VideoPacket::set_allocated_data(::std::string* data) {
   if (data != NULL) {
@@ -6351,21 +5795,8 @@ void VideoPacket::set_allocated_data(::std::string* data) {
   } else {
     
   }
-  data_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data,
-      GetArenaNoVirtual());
+  data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
   // @@protoc_insertion_point(field_set_allocated:proto.VideoPacket.data)
-}
-void VideoPacket::unsafe_arena_set_allocated_data(
-    ::std::string* data) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (data != NULL) {
-    
-  } else {
-    
-  }
-  data_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      data, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.VideoPacket.data)
 }
 
 inline const VideoPacket* VideoPacket::internal_default_instance() {
@@ -6375,103 +5806,8 @@ inline const VideoPacket* VideoPacket::internal_default_instance() {
 
 // ===================================================================
 
-void VideoControl::_slow_mutable_rect() {
-  rect_ = ::google::protobuf::Arena::CreateMessage< ::proto::VideoRect >(
-      GetArenaNoVirtual());
-}
-::proto::VideoRect* VideoControl::_slow_release_rect() {
-  if (rect_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::VideoRect* temp = new ::proto::VideoRect(*rect_);
-    rect_ = NULL;
-    return temp;
-  }
-}
-::proto::VideoRect* VideoControl::unsafe_arena_release_rect() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.VideoControl.rect)
-  
-  ::proto::VideoRect* temp = rect_;
-  rect_ = NULL;
-  return temp;
-}
-void VideoControl::_slow_set_allocated_rect(
-    ::google::protobuf::Arena* message_arena, ::proto::VideoRect** rect) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*rect) == NULL) {
-      message_arena->Own(*rect);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*rect)) {
-      ::proto::VideoRect* new_rect = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::VideoRect >(
-            message_arena);
-      new_rect->CopyFrom(**rect);
-      *rect = new_rect;
-    }
-}
-void VideoControl::unsafe_arena_set_allocated_rect(
-    ::proto::VideoRect* rect) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete rect_;
-  }
-  rect_ = rect;
-  if (rect) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.VideoControl.rect)
-}
-void VideoControl::_slow_mutable_pixel_format() {
-  pixel_format_ = ::google::protobuf::Arena::CreateMessage< ::proto::VideoPixelFormat >(
-      GetArenaNoVirtual());
-}
-::proto::VideoPixelFormat* VideoControl::_slow_release_pixel_format() {
-  if (pixel_format_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::VideoPixelFormat* temp = new ::proto::VideoPixelFormat(*pixel_format_);
-    pixel_format_ = NULL;
-    return temp;
-  }
-}
-::proto::VideoPixelFormat* VideoControl::unsafe_arena_release_pixel_format() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.VideoControl.pixel_format)
-  
-  ::proto::VideoPixelFormat* temp = pixel_format_;
-  pixel_format_ = NULL;
-  return temp;
-}
-void VideoControl::_slow_set_allocated_pixel_format(
-    ::google::protobuf::Arena* message_arena, ::proto::VideoPixelFormat** pixel_format) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*pixel_format) == NULL) {
-      message_arena->Own(*pixel_format);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*pixel_format)) {
-      ::proto::VideoPixelFormat* new_pixel_format = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::VideoPixelFormat >(
-            message_arena);
-      new_pixel_format->CopyFrom(**pixel_format);
-      *pixel_format = new_pixel_format;
-    }
-}
-void VideoControl::unsafe_arena_set_allocated_pixel_format(
-    ::proto::VideoPixelFormat* pixel_format) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete pixel_format_;
-  }
-  pixel_format_ = pixel_format;
-  if (pixel_format) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.VideoControl.pixel_format)
-}
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int VideoControl::kEnableFieldNumber;
-const int VideoControl::kRectFieldNumber;
 const int VideoControl::kEncodingFieldNumber;
 const int VideoControl::kPixelFormatFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -6482,20 +5818,8 @@ VideoControl::VideoControl()
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.VideoControl)
 }
-VideoControl::VideoControl(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.VideoControl)
-}
 
 void VideoControl::InitAsDefaultInstance() {
-  rect_ = const_cast< ::proto::VideoRect*>(
-      ::proto::VideoRect::internal_default_instance());
   pixel_format_ = const_cast< ::proto::VideoPixelFormat*>(
       ::proto::VideoPixelFormat::internal_default_instance());
 }
@@ -6509,7 +5833,6 @@ VideoControl::VideoControl(const VideoControl& from)
 }
 
 void VideoControl::SharedCtor() {
-  rect_ = NULL;
   pixel_format_ = NULL;
   ::memset(&enable_, 0, reinterpret_cast<char*>(&encoding_) -
     reinterpret_cast<char*>(&enable_) + sizeof(encoding_));
@@ -6522,23 +5845,11 @@ VideoControl::~VideoControl() {
 }
 
 void VideoControl::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
   if (this != &VideoControl_default_instance_.get()) {
-    delete rect_;
     delete pixel_format_;
   }
 }
 
-void VideoControl::ArenaDtor(void* object) {
-  VideoControl* _this = reinterpret_cast< VideoControl* >(object);
-  (void)_this;
-}
-void VideoControl::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void VideoControl::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -6552,7 +5863,11 @@ const VideoControl& VideoControl::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<VideoControl> VideoControl_default_instance_;
 
 VideoControl* VideoControl::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<VideoControl>(arena);
+  VideoControl* n = new VideoControl;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void VideoControl::Clear() {
@@ -6574,8 +5889,6 @@ void VideoControl::Clear() {
 } while (0)
 
   ZR_(enable_, encoding_);
-  if (GetArenaNoVirtual() == NULL && rect_ != NULL) delete rect_;
-  rect_ = NULL;
   if (GetArenaNoVirtual() == NULL && pixel_format_ != NULL) delete pixel_format_;
   pixel_format_ = NULL;
 
@@ -6604,42 +5917,28 @@ bool VideoControl::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(18)) goto parse_rect;
+        if (input->ExpectTag(16)) goto parse_encoding;
         break;
       }
 
-      // optional .proto.VideoRect rect = 2;
+      // optional int32 encoding = 2;
       case 2: {
-        if (tag == 18) {
-         parse_rect:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_rect()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(24)) goto parse_encoding;
-        break;
-      }
-
-      // optional .proto.VideoEncoding encoding = 3;
-      case 3: {
-        if (tag == 24) {
+        if (tag == 16) {
          parse_encoding:
-          int value;
+
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_encoding(static_cast< ::proto::VideoEncoding >(value));
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &encoding_)));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(34)) goto parse_pixel_format;
+        if (input->ExpectTag(26)) goto parse_pixel_format;
         break;
       }
 
-      // optional .proto.VideoPixelFormat pixel_format = 4;
-      case 4: {
-        if (tag == 34) {
+      // optional .proto.VideoPixelFormat pixel_format = 3;
+      case 3: {
+        if (tag == 26) {
          parse_pixel_format:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_pixel_format()));
@@ -6679,22 +5978,15 @@ void VideoControl::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->enable(), output);
   }
 
-  // optional .proto.VideoRect rect = 2;
-  if (this->has_rect()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, *this->rect_, output);
-  }
-
-  // optional .proto.VideoEncoding encoding = 3;
+  // optional int32 encoding = 2;
   if (this->encoding() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      3, this->encoding(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->encoding(), output);
   }
 
-  // optional .proto.VideoPixelFormat pixel_format = 4;
+  // optional .proto.VideoPixelFormat pixel_format = 3;
   if (this->has_pixel_format()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      4, *this->pixel_format_, output);
+      3, *this->pixel_format_, output);
   }
 
   // @@protoc_insertion_point(serialize_end:proto.VideoControl)
@@ -6709,20 +6001,14 @@ size_t VideoControl::ByteSizeLong() const {
     total_size += 1 + 1;
   }
 
-  // optional .proto.VideoRect rect = 2;
-  if (this->has_rect()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->rect_);
-  }
-
-  // optional .proto.VideoEncoding encoding = 3;
+  // optional int32 encoding = 2;
   if (this->encoding() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->encoding());
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->encoding());
   }
 
-  // optional .proto.VideoPixelFormat pixel_format = 4;
+  // optional .proto.VideoPixelFormat pixel_format = 3;
   if (this->has_pixel_format()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -6755,9 +6041,6 @@ void VideoControl::UnsafeMergeFrom(const VideoControl& from) {
   if (from.enable() != 0) {
     set_enable(from.enable());
   }
-  if (from.has_rect()) {
-    mutable_rect()->::proto::VideoRect::MergeFrom(from.rect());
-  }
   if (from.encoding() != 0) {
     set_encoding(from.encoding());
   }
@@ -6780,23 +6063,10 @@ bool VideoControl::IsInitialized() const {
 
 void VideoControl::Swap(VideoControl* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    VideoControl temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void VideoControl::UnsafeArenaSwap(VideoControl* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void VideoControl::InternalSwap(VideoControl* other) {
   std::swap(enable_, other->enable_);
-  std::swap(rect_, other->rect_);
   std::swap(encoding_, other->encoding_);
   std::swap(pixel_format_, other->pixel_format_);
   _unknown_fields_.Swap(&other->_unknown_fields_);
@@ -6824,70 +6094,21 @@ void VideoControl::set_enable(bool value) {
   // @@protoc_insertion_point(field_set:proto.VideoControl.enable)
 }
 
-// optional .proto.VideoRect rect = 2;
-bool VideoControl::has_rect() const {
-  return this != internal_default_instance() && rect_ != NULL;
-}
-void VideoControl::clear_rect() {
-  if (GetArenaNoVirtual() == NULL && rect_ != NULL) delete rect_;
-  rect_ = NULL;
-}
-const ::proto::VideoRect& VideoControl::rect() const {
-  // @@protoc_insertion_point(field_get:proto.VideoControl.rect)
-  return rect_ != NULL ? *rect_
-                         : *::proto::VideoRect::internal_default_instance();
-}
-::proto::VideoRect* VideoControl::mutable_rect() {
-  
-  if (rect_ == NULL) {
-    _slow_mutable_rect();
-  }
-  // @@protoc_insertion_point(field_mutable:proto.VideoControl.rect)
-  return rect_;
-}
-::proto::VideoRect* VideoControl::release_rect() {
-  // @@protoc_insertion_point(field_release:proto.VideoControl.rect)
-  
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_rect();
-  } else {
-    ::proto::VideoRect* temp = rect_;
-    rect_ = NULL;
-    return temp;
-  }
-}
- void VideoControl::set_allocated_rect(::proto::VideoRect* rect) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete rect_;
-  }
-  if (rect != NULL) {
-    _slow_set_allocated_rect(message_arena, &rect);
-  }
-  rect_ = rect;
-  if (rect) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:proto.VideoControl.rect)
-}
-
-// optional .proto.VideoEncoding encoding = 3;
+// optional int32 encoding = 2;
 void VideoControl::clear_encoding() {
   encoding_ = 0;
 }
-::proto::VideoEncoding VideoControl::encoding() const {
+::google::protobuf::int32 VideoControl::encoding() const {
   // @@protoc_insertion_point(field_get:proto.VideoControl.encoding)
-  return static_cast< ::proto::VideoEncoding >(encoding_);
+  return encoding_;
 }
-void VideoControl::set_encoding(::proto::VideoEncoding value) {
+void VideoControl::set_encoding(::google::protobuf::int32 value) {
   
   encoding_ = value;
   // @@protoc_insertion_point(field_set:proto.VideoControl.encoding)
 }
 
-// optional .proto.VideoPixelFormat pixel_format = 4;
+// optional .proto.VideoPixelFormat pixel_format = 3;
 bool VideoControl::has_pixel_format() const {
   return this != internal_default_instance() && pixel_format_ != NULL;
 }
@@ -6903,7 +6124,7 @@ const ::proto::VideoPixelFormat& VideoControl::pixel_format() const {
 ::proto::VideoPixelFormat* VideoControl::mutable_pixel_format() {
   
   if (pixel_format_ == NULL) {
-    _slow_mutable_pixel_format();
+    pixel_format_ = new ::proto::VideoPixelFormat;
   }
   // @@protoc_insertion_point(field_mutable:proto.VideoControl.pixel_format)
   return pixel_format_;
@@ -6911,22 +6132,12 @@ const ::proto::VideoPixelFormat& VideoControl::pixel_format() const {
 ::proto::VideoPixelFormat* VideoControl::release_pixel_format() {
   // @@protoc_insertion_point(field_release:proto.VideoControl.pixel_format)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_pixel_format();
-  } else {
-    ::proto::VideoPixelFormat* temp = pixel_format_;
-    pixel_format_ = NULL;
-    return temp;
-  }
+  ::proto::VideoPixelFormat* temp = pixel_format_;
+  pixel_format_ = NULL;
+  return temp;
 }
- void VideoControl::set_allocated_pixel_format(::proto::VideoPixelFormat* pixel_format) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete pixel_format_;
-  }
-  if (pixel_format != NULL) {
-    _slow_set_allocated_pixel_format(message_arena, &pixel_format);
-  }
+void VideoControl::set_allocated_pixel_format(::proto::VideoPixelFormat* pixel_format) {
+  delete pixel_format_;
   pixel_format_ = pixel_format;
   if (pixel_format) {
     
@@ -6944,972 +6155,7 @@ inline const VideoControl* VideoControl::internal_default_instance() {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int AudioPacket::kEncodingFieldNumber;
-const int AudioPacket::kDataFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-AudioPacket::AudioPacket()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.AudioPacket)
-}
-AudioPacket::AudioPacket(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.AudioPacket)
-}
-
-void AudioPacket::InitAsDefaultInstance() {
-}
-
-AudioPacket::AudioPacket(const AudioPacket& from)
-  : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:proto.AudioPacket)
-}
-
-void AudioPacket::SharedCtor() {
-  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  encoding_ = 0;
-  _cached_size_ = 0;
-}
-
-AudioPacket::~AudioPacket() {
-  // @@protoc_insertion_point(destructor:proto.AudioPacket)
-  SharedDtor();
-}
-
-void AudioPacket::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
-  data_.Destroy(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), arena);
-}
-
-void AudioPacket::ArenaDtor(void* object) {
-  AudioPacket* _this = reinterpret_cast< AudioPacket* >(object);
-  (void)_this;
-}
-void AudioPacket::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
-void AudioPacket::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const AudioPacket& AudioPacket::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
-  return *internal_default_instance();
-}
-
-::google::protobuf::internal::ExplicitlyConstructed<AudioPacket> AudioPacket_default_instance_;
-
-AudioPacket* AudioPacket::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<AudioPacket>(arena);
-}
-
-void AudioPacket::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.AudioPacket)
-  encoding_ = 0;
-  data_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-
-bool AudioPacket::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:proto.AudioPacket)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .proto.AudioEncoding encoding = 1;
-      case 1: {
-        if (tag == 8) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_encoding(static_cast< ::proto::AudioEncoding >(value));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(18)) goto parse_data;
-        break;
-      }
-
-      // optional bytes data = 2;
-      case 2: {
-        if (tag == 18) {
-         parse_data:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_data()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:proto.AudioPacket)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:proto.AudioPacket)
-  return false;
-#undef DO_
-}
-
-void AudioPacket::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.AudioPacket)
-  // optional .proto.AudioEncoding encoding = 1;
-  if (this->encoding() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->encoding(), output);
-  }
-
-  // optional bytes data = 2;
-  if (this->data().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      2, this->data(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:proto.AudioPacket)
-}
-
-size_t AudioPacket::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.AudioPacket)
-  size_t total_size = 0;
-
-  // optional .proto.AudioEncoding encoding = 1;
-  if (this->encoding() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->encoding());
-  }
-
-  // optional bytes data = 2;
-  if (this->data().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::BytesSize(
-        this->data());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void AudioPacket::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const AudioPacket*>(&from));
-}
-
-void AudioPacket::MergeFrom(const AudioPacket& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.AudioPacket)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
-
-void AudioPacket::UnsafeMergeFrom(const AudioPacket& from) {
-  GOOGLE_DCHECK(&from != this);
-  if (from.encoding() != 0) {
-    set_encoding(from.encoding());
-  }
-  if (from.data().size() > 0) {
-    set_data(from.data());
-  }
-}
-
-void AudioPacket::CopyFrom(const AudioPacket& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.AudioPacket)
-  if (&from == this) return;
-  Clear();
-  UnsafeMergeFrom(from);
-}
-
-bool AudioPacket::IsInitialized() const {
-
-  return true;
-}
-
-void AudioPacket::Swap(AudioPacket* other) {
-  if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    AudioPacket temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void AudioPacket::UnsafeArenaSwap(AudioPacket* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
-  InternalSwap(other);
-}
-void AudioPacket::InternalSwap(AudioPacket* other) {
-  std::swap(encoding_, other->encoding_);
-  data_.Swap(&other->data_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string AudioPacket::GetTypeName() const {
-  return "proto.AudioPacket";
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// AudioPacket
-
-// optional .proto.AudioEncoding encoding = 1;
-void AudioPacket::clear_encoding() {
-  encoding_ = 0;
-}
-::proto::AudioEncoding AudioPacket::encoding() const {
-  // @@protoc_insertion_point(field_get:proto.AudioPacket.encoding)
-  return static_cast< ::proto::AudioEncoding >(encoding_);
-}
-void AudioPacket::set_encoding(::proto::AudioEncoding value) {
-  
-  encoding_ = value;
-  // @@protoc_insertion_point(field_set:proto.AudioPacket.encoding)
-}
-
-// optional bytes data = 2;
-void AudioPacket::clear_data() {
-  data_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-const ::std::string& AudioPacket::data() const {
-  // @@protoc_insertion_point(field_get:proto.AudioPacket.data)
-  return data_.Get(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-void AudioPacket::set_data(const ::std::string& value) {
-  
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set:proto.AudioPacket.data)
-}
-void AudioPacket::set_data(const char* value) {
-  
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_char:proto.AudioPacket.data)
-}
-void AudioPacket::set_data(const void* value,
-    size_t size) {
-  
-  data_.Set(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_pointer:proto.AudioPacket.data)
-}
-::std::string* AudioPacket::mutable_data() {
-  
-  // @@protoc_insertion_point(field_mutable:proto.AudioPacket.data)
-  return data_.Mutable(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-::std::string* AudioPacket::release_data() {
-  // @@protoc_insertion_point(field_release:proto.AudioPacket.data)
-  
-  return data_.Release(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
-}
-::std::string* AudioPacket::unsafe_arena_release_data() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.AudioPacket.data)
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  
-  return data_.UnsafeArenaRelease(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      GetArenaNoVirtual());
-}
-void AudioPacket::set_allocated_data(::std::string* data) {
-  if (data != NULL) {
-    
-  } else {
-    
-  }
-  data_.SetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data,
-      GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_set_allocated:proto.AudioPacket.data)
-}
-void AudioPacket::unsafe_arena_set_allocated_data(
-    ::std::string* data) {
-  GOOGLE_DCHECK(GetArenaNoVirtual() != NULL);
-  if (data != NULL) {
-    
-  } else {
-    
-  }
-  data_.UnsafeArenaSetAllocated(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      data, GetArenaNoVirtual());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.AudioPacket.data)
-}
-
-inline const AudioPacket* AudioPacket::internal_default_instance() {
-  return &AudioPacket_default_instance_.get();
-}
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int AudioControl::kEnableFieldNumber;
-const int AudioControl::kEncodingFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-AudioControl::AudioControl()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.AudioControl)
-}
-AudioControl::AudioControl(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.AudioControl)
-}
-
-void AudioControl::InitAsDefaultInstance() {
-}
-
-AudioControl::AudioControl(const AudioControl& from)
-  : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:proto.AudioControl)
-}
-
-void AudioControl::SharedCtor() {
-  ::memset(&enable_, 0, reinterpret_cast<char*>(&encoding_) -
-    reinterpret_cast<char*>(&enable_) + sizeof(encoding_));
-  _cached_size_ = 0;
-}
-
-AudioControl::~AudioControl() {
-  // @@protoc_insertion_point(destructor:proto.AudioControl)
-  SharedDtor();
-}
-
-void AudioControl::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
-}
-
-void AudioControl::ArenaDtor(void* object) {
-  AudioControl* _this = reinterpret_cast< AudioControl* >(object);
-  (void)_this;
-}
-void AudioControl::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
-void AudioControl::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const AudioControl& AudioControl::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
-  return *internal_default_instance();
-}
-
-::google::protobuf::internal::ExplicitlyConstructed<AudioControl> AudioControl_default_instance_;
-
-AudioControl* AudioControl::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<AudioControl>(arena);
-}
-
-void AudioControl::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.AudioControl)
-#if defined(__clang__)
-#define ZR_HELPER_(f) \
-  _Pragma("clang diagnostic push") \
-  _Pragma("clang diagnostic ignored \"-Winvalid-offsetof\"") \
-  __builtin_offsetof(AudioControl, f) \
-  _Pragma("clang diagnostic pop")
-#else
-#define ZR_HELPER_(f) reinterpret_cast<char*>(\
-  &reinterpret_cast<AudioControl*>(16)->f)
-#endif
-
-#define ZR_(first, last) do {\
-  ::memset(&(first), 0,\
-           ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
-} while (0)
-
-  ZR_(enable_, encoding_);
-
-#undef ZR_HELPER_
-#undef ZR_
-
-}
-
-bool AudioControl::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:proto.AudioControl)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional bool enable = 1;
-      case 1: {
-        if (tag == 8) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &enable_)));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(24)) goto parse_encoding;
-        break;
-      }
-
-      // optional .proto.AudioEncoding encoding = 3;
-      case 3: {
-        if (tag == 24) {
-         parse_encoding:
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_encoding(static_cast< ::proto::AudioEncoding >(value));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:proto.AudioControl)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:proto.AudioControl)
-  return false;
-#undef DO_
-}
-
-void AudioControl::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.AudioControl)
-  // optional bool enable = 1;
-  if (this->enable() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->enable(), output);
-  }
-
-  // optional .proto.AudioEncoding encoding = 3;
-  if (this->encoding() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      3, this->encoding(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:proto.AudioControl)
-}
-
-size_t AudioControl::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.AudioControl)
-  size_t total_size = 0;
-
-  // optional bool enable = 1;
-  if (this->enable() != 0) {
-    total_size += 1 + 1;
-  }
-
-  // optional .proto.AudioEncoding encoding = 3;
-  if (this->encoding() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->encoding());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void AudioControl::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const AudioControl*>(&from));
-}
-
-void AudioControl::MergeFrom(const AudioControl& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.AudioControl)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
-
-void AudioControl::UnsafeMergeFrom(const AudioControl& from) {
-  GOOGLE_DCHECK(&from != this);
-  if (from.enable() != 0) {
-    set_enable(from.enable());
-  }
-  if (from.encoding() != 0) {
-    set_encoding(from.encoding());
-  }
-}
-
-void AudioControl::CopyFrom(const AudioControl& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.AudioControl)
-  if (&from == this) return;
-  Clear();
-  UnsafeMergeFrom(from);
-}
-
-bool AudioControl::IsInitialized() const {
-
-  return true;
-}
-
-void AudioControl::Swap(AudioControl* other) {
-  if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    AudioControl temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void AudioControl::UnsafeArenaSwap(AudioControl* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
-  InternalSwap(other);
-}
-void AudioControl::InternalSwap(AudioControl* other) {
-  std::swap(enable_, other->enable_);
-  std::swap(encoding_, other->encoding_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string AudioControl::GetTypeName() const {
-  return "proto.AudioControl";
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// AudioControl
-
-// optional bool enable = 1;
-void AudioControl::clear_enable() {
-  enable_ = false;
-}
-bool AudioControl::enable() const {
-  // @@protoc_insertion_point(field_get:proto.AudioControl.enable)
-  return enable_;
-}
-void AudioControl::set_enable(bool value) {
-  
-  enable_ = value;
-  // @@protoc_insertion_point(field_set:proto.AudioControl.enable)
-}
-
-// optional .proto.AudioEncoding encoding = 3;
-void AudioControl::clear_encoding() {
-  encoding_ = 0;
-}
-::proto::AudioEncoding AudioControl::encoding() const {
-  // @@protoc_insertion_point(field_get:proto.AudioControl.encoding)
-  return static_cast< ::proto::AudioEncoding >(encoding_);
-}
-void AudioControl::set_encoding(::proto::AudioEncoding value) {
-  
-  encoding_ = value;
-  // @@protoc_insertion_point(field_set:proto.AudioControl.encoding)
-}
-
-inline const AudioControl* AudioControl::internal_default_instance() {
-  return &AudioControl_default_instance_.get();
-}
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-void ServerToClient::_slow_mutable_video_packet() {
-  video_packet_ = ::google::protobuf::Arena::CreateMessage< ::proto::VideoPacket >(
-      GetArenaNoVirtual());
-}
-::proto::VideoPacket* ServerToClient::_slow_release_video_packet() {
-  if (video_packet_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::VideoPacket* temp = new ::proto::VideoPacket(*video_packet_);
-    video_packet_ = NULL;
-    return temp;
-  }
-}
-::proto::VideoPacket* ServerToClient::unsafe_arena_release_video_packet() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ServerToClient.video_packet)
-  
-  ::proto::VideoPacket* temp = video_packet_;
-  video_packet_ = NULL;
-  return temp;
-}
-void ServerToClient::_slow_set_allocated_video_packet(
-    ::google::protobuf::Arena* message_arena, ::proto::VideoPacket** video_packet) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*video_packet) == NULL) {
-      message_arena->Own(*video_packet);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*video_packet)) {
-      ::proto::VideoPacket* new_video_packet = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::VideoPacket >(
-            message_arena);
-      new_video_packet->CopyFrom(**video_packet);
-      *video_packet = new_video_packet;
-    }
-}
-void ServerToClient::unsafe_arena_set_allocated_video_packet(
-    ::proto::VideoPacket* video_packet) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete video_packet_;
-  }
-  video_packet_ = video_packet;
-  if (video_packet) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ServerToClient.video_packet)
-}
-void ServerToClient::_slow_mutable_audio_packet() {
-  audio_packet_ = ::google::protobuf::Arena::CreateMessage< ::proto::AudioPacket >(
-      GetArenaNoVirtual());
-}
-::proto::AudioPacket* ServerToClient::_slow_release_audio_packet() {
-  if (audio_packet_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::AudioPacket* temp = new ::proto::AudioPacket(*audio_packet_);
-    audio_packet_ = NULL;
-    return temp;
-  }
-}
-::proto::AudioPacket* ServerToClient::unsafe_arena_release_audio_packet() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ServerToClient.audio_packet)
-  
-  ::proto::AudioPacket* temp = audio_packet_;
-  audio_packet_ = NULL;
-  return temp;
-}
-void ServerToClient::_slow_set_allocated_audio_packet(
-    ::google::protobuf::Arena* message_arena, ::proto::AudioPacket** audio_packet) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*audio_packet) == NULL) {
-      message_arena->Own(*audio_packet);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*audio_packet)) {
-      ::proto::AudioPacket* new_audio_packet = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::AudioPacket >(
-            message_arena);
-      new_audio_packet->CopyFrom(**audio_packet);
-      *audio_packet = new_audio_packet;
-    }
-}
-void ServerToClient::unsafe_arena_set_allocated_audio_packet(
-    ::proto::AudioPacket* audio_packet) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete audio_packet_;
-  }
-  audio_packet_ = audio_packet;
-  if (audio_packet) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ServerToClient.audio_packet)
-}
-void ServerToClient::_slow_mutable_cursor() {
-  cursor_ = ::google::protobuf::Arena::CreateMessage< ::proto::CursorShape >(
-      GetArenaNoVirtual());
-}
-::proto::CursorShape* ServerToClient::_slow_release_cursor() {
-  if (cursor_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::CursorShape* temp = new ::proto::CursorShape(*cursor_);
-    cursor_ = NULL;
-    return temp;
-  }
-}
-::proto::CursorShape* ServerToClient::unsafe_arena_release_cursor() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ServerToClient.cursor)
-  
-  ::proto::CursorShape* temp = cursor_;
-  cursor_ = NULL;
-  return temp;
-}
-void ServerToClient::_slow_set_allocated_cursor(
-    ::google::protobuf::Arena* message_arena, ::proto::CursorShape** cursor) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*cursor) == NULL) {
-      message_arena->Own(*cursor);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*cursor)) {
-      ::proto::CursorShape* new_cursor = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::CursorShape >(
-            message_arena);
-      new_cursor->CopyFrom(**cursor);
-      *cursor = new_cursor;
-    }
-}
-void ServerToClient::unsafe_arena_set_allocated_cursor(
-    ::proto::CursorShape* cursor) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete cursor_;
-  }
-  cursor_ = cursor;
-  if (cursor) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ServerToClient.cursor)
-}
-void ServerToClient::_slow_mutable_clipboard() {
-  clipboard_ = ::google::protobuf::Arena::CreateMessage< ::proto::Clipboard >(
-      GetArenaNoVirtual());
-}
-::proto::Clipboard* ServerToClient::_slow_release_clipboard() {
-  if (clipboard_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::Clipboard* temp = new ::proto::Clipboard(*clipboard_);
-    clipboard_ = NULL;
-    return temp;
-  }
-}
-::proto::Clipboard* ServerToClient::unsafe_arena_release_clipboard() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ServerToClient.clipboard)
-  
-  ::proto::Clipboard* temp = clipboard_;
-  clipboard_ = NULL;
-  return temp;
-}
-void ServerToClient::_slow_set_allocated_clipboard(
-    ::google::protobuf::Arena* message_arena, ::proto::Clipboard** clipboard) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*clipboard) == NULL) {
-      message_arena->Own(*clipboard);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*clipboard)) {
-      ::proto::Clipboard* new_clipboard = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::Clipboard >(
-            message_arena);
-      new_clipboard->CopyFrom(**clipboard);
-      *clipboard = new_clipboard;
-    }
-}
-void ServerToClient::unsafe_arena_set_allocated_clipboard(
-    ::proto::Clipboard* clipboard) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete clipboard_;
-  }
-  clipboard_ = clipboard;
-  if (clipboard) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ServerToClient.clipboard)
-}
-void ServerToClient::_slow_mutable_text_chat() {
-  text_chat_ = ::google::protobuf::Arena::CreateMessage< ::proto::TextChat >(
-      GetArenaNoVirtual());
-}
-::proto::TextChat* ServerToClient::_slow_release_text_chat() {
-  if (text_chat_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::TextChat* temp = new ::proto::TextChat(*text_chat_);
-    text_chat_ = NULL;
-    return temp;
-  }
-}
-::proto::TextChat* ServerToClient::unsafe_arena_release_text_chat() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ServerToClient.text_chat)
-  
-  ::proto::TextChat* temp = text_chat_;
-  text_chat_ = NULL;
-  return temp;
-}
-void ServerToClient::_slow_set_allocated_text_chat(
-    ::google::protobuf::Arena* message_arena, ::proto::TextChat** text_chat) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*text_chat) == NULL) {
-      message_arena->Own(*text_chat);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*text_chat)) {
-      ::proto::TextChat* new_text_chat = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::TextChat >(
-            message_arena);
-      new_text_chat->CopyFrom(**text_chat);
-      *text_chat = new_text_chat;
-    }
-}
-void ServerToClient::unsafe_arena_set_allocated_text_chat(
-    ::proto::TextChat* text_chat) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete text_chat_;
-  }
-  text_chat_ = text_chat;
-  if (text_chat) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ServerToClient.text_chat)
-}
-void ServerToClient::_slow_mutable_auth_request() {
-  auth_request_ = ::google::protobuf::Arena::CreateMessage< ::proto::AuthorizationRequest >(
-      GetArenaNoVirtual());
-}
-::proto::AuthorizationRequest* ServerToClient::_slow_release_auth_request() {
-  if (auth_request_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::AuthorizationRequest* temp = new ::proto::AuthorizationRequest(*auth_request_);
-    auth_request_ = NULL;
-    return temp;
-  }
-}
-::proto::AuthorizationRequest* ServerToClient::unsafe_arena_release_auth_request() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ServerToClient.auth_request)
-  
-  ::proto::AuthorizationRequest* temp = auth_request_;
-  auth_request_ = NULL;
-  return temp;
-}
-void ServerToClient::_slow_set_allocated_auth_request(
-    ::google::protobuf::Arena* message_arena, ::proto::AuthorizationRequest** auth_request) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*auth_request) == NULL) {
-      message_arena->Own(*auth_request);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*auth_request)) {
-      ::proto::AuthorizationRequest* new_auth_request = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::AuthorizationRequest >(
-            message_arena);
-      new_auth_request->CopyFrom(**auth_request);
-      *auth_request = new_auth_request;
-    }
-}
-void ServerToClient::unsafe_arena_set_allocated_auth_request(
-    ::proto::AuthorizationRequest* auth_request) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete auth_request_;
-  }
-  auth_request_ = auth_request;
-  if (auth_request) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ServerToClient.auth_request)
-}
-void ServerToClient::_slow_mutable_auth_result() {
-  auth_result_ = ::google::protobuf::Arena::CreateMessage< ::proto::AuthorizationResult >(
-      GetArenaNoVirtual());
-}
-::proto::AuthorizationResult* ServerToClient::_slow_release_auth_result() {
-  if (auth_result_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::AuthorizationResult* temp = new ::proto::AuthorizationResult(*auth_result_);
-    auth_result_ = NULL;
-    return temp;
-  }
-}
-::proto::AuthorizationResult* ServerToClient::unsafe_arena_release_auth_result() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ServerToClient.auth_result)
-  
-  ::proto::AuthorizationResult* temp = auth_result_;
-  auth_result_ = NULL;
-  return temp;
-}
-void ServerToClient::_slow_set_allocated_auth_result(
-    ::google::protobuf::Arena* message_arena, ::proto::AuthorizationResult** auth_result) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*auth_result) == NULL) {
-      message_arena->Own(*auth_result);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*auth_result)) {
-      ::proto::AuthorizationResult* new_auth_result = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::AuthorizationResult >(
-            message_arena);
-      new_auth_result->CopyFrom(**auth_result);
-      *auth_result = new_auth_result;
-    }
-}
-void ServerToClient::unsafe_arena_set_allocated_auth_result(
-    ::proto::AuthorizationResult* auth_result) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete auth_result_;
-  }
-  auth_result_ = auth_result;
-  if (auth_result) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ServerToClient.auth_result)
-}
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ServerToClient::kVideoPacketFieldNumber;
-const int ServerToClient::kAudioPacketFieldNumber;
 const int ServerToClient::kCursorFieldNumber;
 const int ServerToClient::kClipboardFieldNumber;
 const int ServerToClient::kTextChatFieldNumber;
@@ -7923,32 +6169,20 @@ ServerToClient::ServerToClient()
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.ServerToClient)
 }
-ServerToClient::ServerToClient(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.ServerToClient)
-}
 
 void ServerToClient::InitAsDefaultInstance() {
   video_packet_ = const_cast< ::proto::VideoPacket*>(
       ::proto::VideoPacket::internal_default_instance());
-  audio_packet_ = const_cast< ::proto::AudioPacket*>(
-      ::proto::AudioPacket::internal_default_instance());
   cursor_ = const_cast< ::proto::CursorShape*>(
       ::proto::CursorShape::internal_default_instance());
   clipboard_ = const_cast< ::proto::Clipboard*>(
       ::proto::Clipboard::internal_default_instance());
   text_chat_ = const_cast< ::proto::TextChat*>(
       ::proto::TextChat::internal_default_instance());
-  auth_request_ = const_cast< ::proto::AuthorizationRequest*>(
-      ::proto::AuthorizationRequest::internal_default_instance());
-  auth_result_ = const_cast< ::proto::AuthorizationResult*>(
-      ::proto::AuthorizationResult::internal_default_instance());
+  auth_request_ = const_cast< ::proto::AuthRequest*>(
+      ::proto::AuthRequest::internal_default_instance());
+  auth_result_ = const_cast< ::proto::AuthResult*>(
+      ::proto::AuthResult::internal_default_instance());
 }
 
 ServerToClient::ServerToClient(const ServerToClient& from)
@@ -7961,7 +6195,6 @@ ServerToClient::ServerToClient(const ServerToClient& from)
 
 void ServerToClient::SharedCtor() {
   video_packet_ = NULL;
-  audio_packet_ = NULL;
   cursor_ = NULL;
   clipboard_ = NULL;
   text_chat_ = NULL;
@@ -7976,14 +6209,8 @@ ServerToClient::~ServerToClient() {
 }
 
 void ServerToClient::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
   if (this != &ServerToClient_default_instance_.get()) {
     delete video_packet_;
-    delete audio_packet_;
     delete cursor_;
     delete clipboard_;
     delete text_chat_;
@@ -7992,12 +6219,6 @@ void ServerToClient::SharedDtor() {
   }
 }
 
-void ServerToClient::ArenaDtor(void* object) {
-  ServerToClient* _this = reinterpret_cast< ServerToClient* >(object);
-  (void)_this;
-}
-void ServerToClient::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void ServerToClient::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -8011,15 +6232,17 @@ const ServerToClient& ServerToClient::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<ServerToClient> ServerToClient_default_instance_;
 
 ServerToClient* ServerToClient::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<ServerToClient>(arena);
+  ServerToClient* n = new ServerToClient;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void ServerToClient::Clear() {
 // @@protoc_insertion_point(message_clear_start:proto.ServerToClient)
   if (GetArenaNoVirtual() == NULL && video_packet_ != NULL) delete video_packet_;
   video_packet_ = NULL;
-  if (GetArenaNoVirtual() == NULL && audio_packet_ != NULL) delete audio_packet_;
-  audio_packet_ = NULL;
   if (GetArenaNoVirtual() == NULL && cursor_ != NULL) delete cursor_;
   cursor_ = NULL;
   if (GetArenaNoVirtual() == NULL && clipboard_ != NULL) delete clipboard_;
@@ -8050,78 +6273,65 @@ bool ServerToClient::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(18)) goto parse_audio_packet;
+        if (input->ExpectTag(18)) goto parse_cursor;
         break;
       }
 
-      // optional .proto.AudioPacket audio_packet = 2;
+      // optional .proto.CursorShape cursor = 2;
       case 2: {
         if (tag == 18) {
-         parse_audio_packet:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_audio_packet()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(26)) goto parse_cursor;
-        break;
-      }
-
-      // optional .proto.CursorShape cursor = 3;
-      case 3: {
-        if (tag == 26) {
          parse_cursor:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_cursor()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(34)) goto parse_clipboard;
+        if (input->ExpectTag(26)) goto parse_clipboard;
         break;
       }
 
-      // optional .proto.Clipboard clipboard = 4;
-      case 4: {
-        if (tag == 34) {
+      // optional .proto.Clipboard clipboard = 3;
+      case 3: {
+        if (tag == 26) {
          parse_clipboard:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_clipboard()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(42)) goto parse_text_chat;
+        if (input->ExpectTag(34)) goto parse_text_chat;
         break;
       }
 
-      // optional .proto.TextChat text_chat = 5;
-      case 5: {
-        if (tag == 42) {
+      // optional .proto.TextChat text_chat = 4;
+      case 4: {
+        if (tag == 34) {
          parse_text_chat:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_text_chat()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(50)) goto parse_auth_request;
+        if (input->ExpectTag(42)) goto parse_auth_request;
         break;
       }
 
-      // optional .proto.AuthorizationRequest auth_request = 6;
-      case 6: {
-        if (tag == 50) {
+      // optional .proto.AuthRequest auth_request = 5;
+      case 5: {
+        if (tag == 42) {
          parse_auth_request:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_auth_request()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(58)) goto parse_auth_result;
+        if (input->ExpectTag(50)) goto parse_auth_result;
         break;
       }
 
-      // optional .proto.AuthorizationResult auth_result = 7;
-      case 7: {
-        if (tag == 58) {
+      // optional .proto.AuthResult auth_result = 6;
+      case 6: {
+        if (tag == 50) {
          parse_auth_result:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_auth_result()));
@@ -8162,40 +6372,34 @@ void ServerToClient::SerializeWithCachedSizes(
       1, *this->video_packet_, output);
   }
 
-  // optional .proto.AudioPacket audio_packet = 2;
-  if (this->has_audio_packet()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, *this->audio_packet_, output);
-  }
-
-  // optional .proto.CursorShape cursor = 3;
+  // optional .proto.CursorShape cursor = 2;
   if (this->has_cursor()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      3, *this->cursor_, output);
+      2, *this->cursor_, output);
   }
 
-  // optional .proto.Clipboard clipboard = 4;
+  // optional .proto.Clipboard clipboard = 3;
   if (this->has_clipboard()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      4, *this->clipboard_, output);
+      3, *this->clipboard_, output);
   }
 
-  // optional .proto.TextChat text_chat = 5;
+  // optional .proto.TextChat text_chat = 4;
   if (this->has_text_chat()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      5, *this->text_chat_, output);
+      4, *this->text_chat_, output);
   }
 
-  // optional .proto.AuthorizationRequest auth_request = 6;
+  // optional .proto.AuthRequest auth_request = 5;
   if (this->has_auth_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      6, *this->auth_request_, output);
+      5, *this->auth_request_, output);
   }
 
-  // optional .proto.AuthorizationResult auth_result = 7;
+  // optional .proto.AuthResult auth_result = 6;
   if (this->has_auth_result()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      7, *this->auth_result_, output);
+      6, *this->auth_result_, output);
   }
 
   // @@protoc_insertion_point(serialize_end:proto.ServerToClient)
@@ -8212,42 +6416,35 @@ size_t ServerToClient::ByteSizeLong() const {
         *this->video_packet_);
   }
 
-  // optional .proto.AudioPacket audio_packet = 2;
-  if (this->has_audio_packet()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->audio_packet_);
-  }
-
-  // optional .proto.CursorShape cursor = 3;
+  // optional .proto.CursorShape cursor = 2;
   if (this->has_cursor()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->cursor_);
   }
 
-  // optional .proto.Clipboard clipboard = 4;
+  // optional .proto.Clipboard clipboard = 3;
   if (this->has_clipboard()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->clipboard_);
   }
 
-  // optional .proto.TextChat text_chat = 5;
+  // optional .proto.TextChat text_chat = 4;
   if (this->has_text_chat()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->text_chat_);
   }
 
-  // optional .proto.AuthorizationRequest auth_request = 6;
+  // optional .proto.AuthRequest auth_request = 5;
   if (this->has_auth_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->auth_request_);
   }
 
-  // optional .proto.AuthorizationResult auth_result = 7;
+  // optional .proto.AuthResult auth_result = 6;
   if (this->has_auth_result()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -8280,9 +6477,6 @@ void ServerToClient::UnsafeMergeFrom(const ServerToClient& from) {
   if (from.has_video_packet()) {
     mutable_video_packet()->::proto::VideoPacket::MergeFrom(from.video_packet());
   }
-  if (from.has_audio_packet()) {
-    mutable_audio_packet()->::proto::AudioPacket::MergeFrom(from.audio_packet());
-  }
   if (from.has_cursor()) {
     mutable_cursor()->::proto::CursorShape::MergeFrom(from.cursor());
   }
@@ -8293,10 +6487,10 @@ void ServerToClient::UnsafeMergeFrom(const ServerToClient& from) {
     mutable_text_chat()->::proto::TextChat::MergeFrom(from.text_chat());
   }
   if (from.has_auth_request()) {
-    mutable_auth_request()->::proto::AuthorizationRequest::MergeFrom(from.auth_request());
+    mutable_auth_request()->::proto::AuthRequest::MergeFrom(from.auth_request());
   }
   if (from.has_auth_result()) {
-    mutable_auth_result()->::proto::AuthorizationResult::MergeFrom(from.auth_result());
+    mutable_auth_result()->::proto::AuthResult::MergeFrom(from.auth_result());
   }
 }
 
@@ -8314,23 +6508,10 @@ bool ServerToClient::IsInitialized() const {
 
 void ServerToClient::Swap(ServerToClient* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    ServerToClient temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void ServerToClient::UnsafeArenaSwap(ServerToClient* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void ServerToClient::InternalSwap(ServerToClient* other) {
   std::swap(video_packet_, other->video_packet_);
-  std::swap(audio_packet_, other->audio_packet_);
   std::swap(cursor_, other->cursor_);
   std::swap(clipboard_, other->clipboard_);
   std::swap(text_chat_, other->text_chat_);
@@ -8363,7 +6544,7 @@ const ::proto::VideoPacket& ServerToClient::video_packet() const {
 ::proto::VideoPacket* ServerToClient::mutable_video_packet() {
   
   if (video_packet_ == NULL) {
-    _slow_mutable_video_packet();
+    video_packet_ = new ::proto::VideoPacket;
   }
   // @@protoc_insertion_point(field_mutable:proto.ServerToClient.video_packet)
   return video_packet_;
@@ -8371,22 +6552,12 @@ const ::proto::VideoPacket& ServerToClient::video_packet() const {
 ::proto::VideoPacket* ServerToClient::release_video_packet() {
   // @@protoc_insertion_point(field_release:proto.ServerToClient.video_packet)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_video_packet();
-  } else {
-    ::proto::VideoPacket* temp = video_packet_;
-    video_packet_ = NULL;
-    return temp;
-  }
+  ::proto::VideoPacket* temp = video_packet_;
+  video_packet_ = NULL;
+  return temp;
 }
- void ServerToClient::set_allocated_video_packet(::proto::VideoPacket* video_packet) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete video_packet_;
-  }
-  if (video_packet != NULL) {
-    _slow_set_allocated_video_packet(message_arena, &video_packet);
-  }
+void ServerToClient::set_allocated_video_packet(::proto::VideoPacket* video_packet) {
+  delete video_packet_;
   video_packet_ = video_packet;
   if (video_packet) {
     
@@ -8396,56 +6567,7 @@ const ::proto::VideoPacket& ServerToClient::video_packet() const {
   // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.video_packet)
 }
 
-// optional .proto.AudioPacket audio_packet = 2;
-bool ServerToClient::has_audio_packet() const {
-  return this != internal_default_instance() && audio_packet_ != NULL;
-}
-void ServerToClient::clear_audio_packet() {
-  if (GetArenaNoVirtual() == NULL && audio_packet_ != NULL) delete audio_packet_;
-  audio_packet_ = NULL;
-}
-const ::proto::AudioPacket& ServerToClient::audio_packet() const {
-  // @@protoc_insertion_point(field_get:proto.ServerToClient.audio_packet)
-  return audio_packet_ != NULL ? *audio_packet_
-                         : *::proto::AudioPacket::internal_default_instance();
-}
-::proto::AudioPacket* ServerToClient::mutable_audio_packet() {
-  
-  if (audio_packet_ == NULL) {
-    _slow_mutable_audio_packet();
-  }
-  // @@protoc_insertion_point(field_mutable:proto.ServerToClient.audio_packet)
-  return audio_packet_;
-}
-::proto::AudioPacket* ServerToClient::release_audio_packet() {
-  // @@protoc_insertion_point(field_release:proto.ServerToClient.audio_packet)
-  
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_audio_packet();
-  } else {
-    ::proto::AudioPacket* temp = audio_packet_;
-    audio_packet_ = NULL;
-    return temp;
-  }
-}
- void ServerToClient::set_allocated_audio_packet(::proto::AudioPacket* audio_packet) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete audio_packet_;
-  }
-  if (audio_packet != NULL) {
-    _slow_set_allocated_audio_packet(message_arena, &audio_packet);
-  }
-  audio_packet_ = audio_packet;
-  if (audio_packet) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.audio_packet)
-}
-
-// optional .proto.CursorShape cursor = 3;
+// optional .proto.CursorShape cursor = 2;
 bool ServerToClient::has_cursor() const {
   return this != internal_default_instance() && cursor_ != NULL;
 }
@@ -8461,7 +6583,7 @@ const ::proto::CursorShape& ServerToClient::cursor() const {
 ::proto::CursorShape* ServerToClient::mutable_cursor() {
   
   if (cursor_ == NULL) {
-    _slow_mutable_cursor();
+    cursor_ = new ::proto::CursorShape;
   }
   // @@protoc_insertion_point(field_mutable:proto.ServerToClient.cursor)
   return cursor_;
@@ -8469,22 +6591,12 @@ const ::proto::CursorShape& ServerToClient::cursor() const {
 ::proto::CursorShape* ServerToClient::release_cursor() {
   // @@protoc_insertion_point(field_release:proto.ServerToClient.cursor)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_cursor();
-  } else {
-    ::proto::CursorShape* temp = cursor_;
-    cursor_ = NULL;
-    return temp;
-  }
+  ::proto::CursorShape* temp = cursor_;
+  cursor_ = NULL;
+  return temp;
 }
- void ServerToClient::set_allocated_cursor(::proto::CursorShape* cursor) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete cursor_;
-  }
-  if (cursor != NULL) {
-    _slow_set_allocated_cursor(message_arena, &cursor);
-  }
+void ServerToClient::set_allocated_cursor(::proto::CursorShape* cursor) {
+  delete cursor_;
   cursor_ = cursor;
   if (cursor) {
     
@@ -8494,7 +6606,7 @@ const ::proto::CursorShape& ServerToClient::cursor() const {
   // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.cursor)
 }
 
-// optional .proto.Clipboard clipboard = 4;
+// optional .proto.Clipboard clipboard = 3;
 bool ServerToClient::has_clipboard() const {
   return this != internal_default_instance() && clipboard_ != NULL;
 }
@@ -8510,7 +6622,7 @@ const ::proto::Clipboard& ServerToClient::clipboard() const {
 ::proto::Clipboard* ServerToClient::mutable_clipboard() {
   
   if (clipboard_ == NULL) {
-    _slow_mutable_clipboard();
+    clipboard_ = new ::proto::Clipboard;
   }
   // @@protoc_insertion_point(field_mutable:proto.ServerToClient.clipboard)
   return clipboard_;
@@ -8518,22 +6630,12 @@ const ::proto::Clipboard& ServerToClient::clipboard() const {
 ::proto::Clipboard* ServerToClient::release_clipboard() {
   // @@protoc_insertion_point(field_release:proto.ServerToClient.clipboard)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_clipboard();
-  } else {
-    ::proto::Clipboard* temp = clipboard_;
-    clipboard_ = NULL;
-    return temp;
-  }
+  ::proto::Clipboard* temp = clipboard_;
+  clipboard_ = NULL;
+  return temp;
 }
- void ServerToClient::set_allocated_clipboard(::proto::Clipboard* clipboard) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete clipboard_;
-  }
-  if (clipboard != NULL) {
-    _slow_set_allocated_clipboard(message_arena, &clipboard);
-  }
+void ServerToClient::set_allocated_clipboard(::proto::Clipboard* clipboard) {
+  delete clipboard_;
   clipboard_ = clipboard;
   if (clipboard) {
     
@@ -8543,7 +6645,7 @@ const ::proto::Clipboard& ServerToClient::clipboard() const {
   // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.clipboard)
 }
 
-// optional .proto.TextChat text_chat = 5;
+// optional .proto.TextChat text_chat = 4;
 bool ServerToClient::has_text_chat() const {
   return this != internal_default_instance() && text_chat_ != NULL;
 }
@@ -8559,7 +6661,7 @@ const ::proto::TextChat& ServerToClient::text_chat() const {
 ::proto::TextChat* ServerToClient::mutable_text_chat() {
   
   if (text_chat_ == NULL) {
-    _slow_mutable_text_chat();
+    text_chat_ = new ::proto::TextChat;
   }
   // @@protoc_insertion_point(field_mutable:proto.ServerToClient.text_chat)
   return text_chat_;
@@ -8567,22 +6669,12 @@ const ::proto::TextChat& ServerToClient::text_chat() const {
 ::proto::TextChat* ServerToClient::release_text_chat() {
   // @@protoc_insertion_point(field_release:proto.ServerToClient.text_chat)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_text_chat();
-  } else {
-    ::proto::TextChat* temp = text_chat_;
-    text_chat_ = NULL;
-    return temp;
-  }
+  ::proto::TextChat* temp = text_chat_;
+  text_chat_ = NULL;
+  return temp;
 }
- void ServerToClient::set_allocated_text_chat(::proto::TextChat* text_chat) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete text_chat_;
-  }
-  if (text_chat != NULL) {
-    _slow_set_allocated_text_chat(message_arena, &text_chat);
-  }
+void ServerToClient::set_allocated_text_chat(::proto::TextChat* text_chat) {
+  delete text_chat_;
   text_chat_ = text_chat;
   if (text_chat) {
     
@@ -8592,7 +6684,7 @@ const ::proto::TextChat& ServerToClient::text_chat() const {
   // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.text_chat)
 }
 
-// optional .proto.AuthorizationRequest auth_request = 6;
+// optional .proto.AuthRequest auth_request = 5;
 bool ServerToClient::has_auth_request() const {
   return this != internal_default_instance() && auth_request_ != NULL;
 }
@@ -8600,38 +6692,28 @@ void ServerToClient::clear_auth_request() {
   if (GetArenaNoVirtual() == NULL && auth_request_ != NULL) delete auth_request_;
   auth_request_ = NULL;
 }
-const ::proto::AuthorizationRequest& ServerToClient::auth_request() const {
+const ::proto::AuthRequest& ServerToClient::auth_request() const {
   // @@protoc_insertion_point(field_get:proto.ServerToClient.auth_request)
   return auth_request_ != NULL ? *auth_request_
-                         : *::proto::AuthorizationRequest::internal_default_instance();
+                         : *::proto::AuthRequest::internal_default_instance();
 }
-::proto::AuthorizationRequest* ServerToClient::mutable_auth_request() {
+::proto::AuthRequest* ServerToClient::mutable_auth_request() {
   
   if (auth_request_ == NULL) {
-    _slow_mutable_auth_request();
+    auth_request_ = new ::proto::AuthRequest;
   }
   // @@protoc_insertion_point(field_mutable:proto.ServerToClient.auth_request)
   return auth_request_;
 }
-::proto::AuthorizationRequest* ServerToClient::release_auth_request() {
+::proto::AuthRequest* ServerToClient::release_auth_request() {
   // @@protoc_insertion_point(field_release:proto.ServerToClient.auth_request)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_auth_request();
-  } else {
-    ::proto::AuthorizationRequest* temp = auth_request_;
-    auth_request_ = NULL;
-    return temp;
-  }
+  ::proto::AuthRequest* temp = auth_request_;
+  auth_request_ = NULL;
+  return temp;
 }
- void ServerToClient::set_allocated_auth_request(::proto::AuthorizationRequest* auth_request) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete auth_request_;
-  }
-  if (auth_request != NULL) {
-    _slow_set_allocated_auth_request(message_arena, &auth_request);
-  }
+void ServerToClient::set_allocated_auth_request(::proto::AuthRequest* auth_request) {
+  delete auth_request_;
   auth_request_ = auth_request;
   if (auth_request) {
     
@@ -8641,7 +6723,7 @@ const ::proto::AuthorizationRequest& ServerToClient::auth_request() const {
   // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.auth_request)
 }
 
-// optional .proto.AuthorizationResult auth_result = 7;
+// optional .proto.AuthResult auth_result = 6;
 bool ServerToClient::has_auth_result() const {
   return this != internal_default_instance() && auth_result_ != NULL;
 }
@@ -8649,38 +6731,28 @@ void ServerToClient::clear_auth_result() {
   if (GetArenaNoVirtual() == NULL && auth_result_ != NULL) delete auth_result_;
   auth_result_ = NULL;
 }
-const ::proto::AuthorizationResult& ServerToClient::auth_result() const {
+const ::proto::AuthResult& ServerToClient::auth_result() const {
   // @@protoc_insertion_point(field_get:proto.ServerToClient.auth_result)
   return auth_result_ != NULL ? *auth_result_
-                         : *::proto::AuthorizationResult::internal_default_instance();
+                         : *::proto::AuthResult::internal_default_instance();
 }
-::proto::AuthorizationResult* ServerToClient::mutable_auth_result() {
+::proto::AuthResult* ServerToClient::mutable_auth_result() {
   
   if (auth_result_ == NULL) {
-    _slow_mutable_auth_result();
+    auth_result_ = new ::proto::AuthResult;
   }
   // @@protoc_insertion_point(field_mutable:proto.ServerToClient.auth_result)
   return auth_result_;
 }
-::proto::AuthorizationResult* ServerToClient::release_auth_result() {
+::proto::AuthResult* ServerToClient::release_auth_result() {
   // @@protoc_insertion_point(field_release:proto.ServerToClient.auth_result)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_auth_result();
-  } else {
-    ::proto::AuthorizationResult* temp = auth_result_;
-    auth_result_ = NULL;
-    return temp;
-  }
+  ::proto::AuthResult* temp = auth_result_;
+  auth_result_ = NULL;
+  return temp;
 }
- void ServerToClient::set_allocated_auth_result(::proto::AuthorizationResult* auth_result) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete auth_result_;
-  }
-  if (auth_result != NULL) {
-    _slow_set_allocated_auth_result(message_arena, &auth_result);
-  }
+void ServerToClient::set_allocated_auth_result(::proto::AuthResult* auth_result) {
+  delete auth_result_;
   auth_result_ = auth_result;
   if (auth_result) {
     
@@ -8697,578 +6769,13 @@ inline const ServerToClient* ServerToClient::internal_default_instance() {
 
 // ===================================================================
 
-void ClientToServer::_slow_mutable_video_control() {
-  video_control_ = ::google::protobuf::Arena::CreateMessage< ::proto::VideoControl >(
-      GetArenaNoVirtual());
-}
-::proto::VideoControl* ClientToServer::_slow_release_video_control() {
-  if (video_control_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::VideoControl* temp = new ::proto::VideoControl(*video_control_);
-    video_control_ = NULL;
-    return temp;
-  }
-}
-::proto::VideoControl* ClientToServer::unsafe_arena_release_video_control() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ClientToServer.video_control)
-  
-  ::proto::VideoControl* temp = video_control_;
-  video_control_ = NULL;
-  return temp;
-}
-void ClientToServer::_slow_set_allocated_video_control(
-    ::google::protobuf::Arena* message_arena, ::proto::VideoControl** video_control) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*video_control) == NULL) {
-      message_arena->Own(*video_control);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*video_control)) {
-      ::proto::VideoControl* new_video_control = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::VideoControl >(
-            message_arena);
-      new_video_control->CopyFrom(**video_control);
-      *video_control = new_video_control;
-    }
-}
-void ClientToServer::unsafe_arena_set_allocated_video_control(
-    ::proto::VideoControl* video_control) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete video_control_;
-  }
-  video_control_ = video_control;
-  if (video_control) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ClientToServer.video_control)
-}
-void ClientToServer::_slow_mutable_audio_control() {
-  audio_control_ = ::google::protobuf::Arena::CreateMessage< ::proto::AudioControl >(
-      GetArenaNoVirtual());
-}
-::proto::AudioControl* ClientToServer::_slow_release_audio_control() {
-  if (audio_control_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::AudioControl* temp = new ::proto::AudioControl(*audio_control_);
-    audio_control_ = NULL;
-    return temp;
-  }
-}
-::proto::AudioControl* ClientToServer::unsafe_arena_release_audio_control() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ClientToServer.audio_control)
-  
-  ::proto::AudioControl* temp = audio_control_;
-  audio_control_ = NULL;
-  return temp;
-}
-void ClientToServer::_slow_set_allocated_audio_control(
-    ::google::protobuf::Arena* message_arena, ::proto::AudioControl** audio_control) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*audio_control) == NULL) {
-      message_arena->Own(*audio_control);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*audio_control)) {
-      ::proto::AudioControl* new_audio_control = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::AudioControl >(
-            message_arena);
-      new_audio_control->CopyFrom(**audio_control);
-      *audio_control = new_audio_control;
-    }
-}
-void ClientToServer::unsafe_arena_set_allocated_audio_control(
-    ::proto::AudioControl* audio_control) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete audio_control_;
-  }
-  audio_control_ = audio_control;
-  if (audio_control) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ClientToServer.audio_control)
-}
-void ClientToServer::_slow_mutable_cursor_shape_control() {
-  cursor_shape_control_ = ::google::protobuf::Arena::CreateMessage< ::proto::CursorShapeControl >(
-      GetArenaNoVirtual());
-}
-::proto::CursorShapeControl* ClientToServer::_slow_release_cursor_shape_control() {
-  if (cursor_shape_control_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::CursorShapeControl* temp = new ::proto::CursorShapeControl(*cursor_shape_control_);
-    cursor_shape_control_ = NULL;
-    return temp;
-  }
-}
-::proto::CursorShapeControl* ClientToServer::unsafe_arena_release_cursor_shape_control() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ClientToServer.cursor_shape_control)
-  
-  ::proto::CursorShapeControl* temp = cursor_shape_control_;
-  cursor_shape_control_ = NULL;
-  return temp;
-}
-void ClientToServer::_slow_set_allocated_cursor_shape_control(
-    ::google::protobuf::Arena* message_arena, ::proto::CursorShapeControl** cursor_shape_control) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*cursor_shape_control) == NULL) {
-      message_arena->Own(*cursor_shape_control);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*cursor_shape_control)) {
-      ::proto::CursorShapeControl* new_cursor_shape_control = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::CursorShapeControl >(
-            message_arena);
-      new_cursor_shape_control->CopyFrom(**cursor_shape_control);
-      *cursor_shape_control = new_cursor_shape_control;
-    }
-}
-void ClientToServer::unsafe_arena_set_allocated_cursor_shape_control(
-    ::proto::CursorShapeControl* cursor_shape_control) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete cursor_shape_control_;
-  }
-  cursor_shape_control_ = cursor_shape_control;
-  if (cursor_shape_control) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ClientToServer.cursor_shape_control)
-}
-void ClientToServer::_slow_mutable_clipboard_control() {
-  clipboard_control_ = ::google::protobuf::Arena::CreateMessage< ::proto::ClipboardControl >(
-      GetArenaNoVirtual());
-}
-::proto::ClipboardControl* ClientToServer::_slow_release_clipboard_control() {
-  if (clipboard_control_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::ClipboardControl* temp = new ::proto::ClipboardControl(*clipboard_control_);
-    clipboard_control_ = NULL;
-    return temp;
-  }
-}
-::proto::ClipboardControl* ClientToServer::unsafe_arena_release_clipboard_control() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ClientToServer.clipboard_control)
-  
-  ::proto::ClipboardControl* temp = clipboard_control_;
-  clipboard_control_ = NULL;
-  return temp;
-}
-void ClientToServer::_slow_set_allocated_clipboard_control(
-    ::google::protobuf::Arena* message_arena, ::proto::ClipboardControl** clipboard_control) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*clipboard_control) == NULL) {
-      message_arena->Own(*clipboard_control);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*clipboard_control)) {
-      ::proto::ClipboardControl* new_clipboard_control = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::ClipboardControl >(
-            message_arena);
-      new_clipboard_control->CopyFrom(**clipboard_control);
-      *clipboard_control = new_clipboard_control;
-    }
-}
-void ClientToServer::unsafe_arena_set_allocated_clipboard_control(
-    ::proto::ClipboardControl* clipboard_control) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete clipboard_control_;
-  }
-  clipboard_control_ = clipboard_control;
-  if (clipboard_control) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ClientToServer.clipboard_control)
-}
-void ClientToServer::_slow_mutable_clipboard_request() {
-  clipboard_request_ = ::google::protobuf::Arena::CreateMessage< ::proto::ClipboardRequest >(
-      GetArenaNoVirtual());
-}
-::proto::ClipboardRequest* ClientToServer::_slow_release_clipboard_request() {
-  if (clipboard_request_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::ClipboardRequest* temp = new ::proto::ClipboardRequest(*clipboard_request_);
-    clipboard_request_ = NULL;
-    return temp;
-  }
-}
-::proto::ClipboardRequest* ClientToServer::unsafe_arena_release_clipboard_request() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ClientToServer.clipboard_request)
-  
-  ::proto::ClipboardRequest* temp = clipboard_request_;
-  clipboard_request_ = NULL;
-  return temp;
-}
-void ClientToServer::_slow_set_allocated_clipboard_request(
-    ::google::protobuf::Arena* message_arena, ::proto::ClipboardRequest** clipboard_request) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*clipboard_request) == NULL) {
-      message_arena->Own(*clipboard_request);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*clipboard_request)) {
-      ::proto::ClipboardRequest* new_clipboard_request = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::ClipboardRequest >(
-            message_arena);
-      new_clipboard_request->CopyFrom(**clipboard_request);
-      *clipboard_request = new_clipboard_request;
-    }
-}
-void ClientToServer::unsafe_arena_set_allocated_clipboard_request(
-    ::proto::ClipboardRequest* clipboard_request) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete clipboard_request_;
-  }
-  clipboard_request_ = clipboard_request;
-  if (clipboard_request) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ClientToServer.clipboard_request)
-}
-void ClientToServer::_slow_mutable_clipboard() {
-  clipboard_ = ::google::protobuf::Arena::CreateMessage< ::proto::Clipboard >(
-      GetArenaNoVirtual());
-}
-::proto::Clipboard* ClientToServer::_slow_release_clipboard() {
-  if (clipboard_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::Clipboard* temp = new ::proto::Clipboard(*clipboard_);
-    clipboard_ = NULL;
-    return temp;
-  }
-}
-::proto::Clipboard* ClientToServer::unsafe_arena_release_clipboard() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ClientToServer.clipboard)
-  
-  ::proto::Clipboard* temp = clipboard_;
-  clipboard_ = NULL;
-  return temp;
-}
-void ClientToServer::_slow_set_allocated_clipboard(
-    ::google::protobuf::Arena* message_arena, ::proto::Clipboard** clipboard) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*clipboard) == NULL) {
-      message_arena->Own(*clipboard);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*clipboard)) {
-      ::proto::Clipboard* new_clipboard = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::Clipboard >(
-            message_arena);
-      new_clipboard->CopyFrom(**clipboard);
-      *clipboard = new_clipboard;
-    }
-}
-void ClientToServer::unsafe_arena_set_allocated_clipboard(
-    ::proto::Clipboard* clipboard) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete clipboard_;
-  }
-  clipboard_ = clipboard;
-  if (clipboard) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ClientToServer.clipboard)
-}
-void ClientToServer::_slow_mutable_mouse_event() {
-  mouse_event_ = ::google::protobuf::Arena::CreateMessage< ::proto::MouseEvent >(
-      GetArenaNoVirtual());
-}
-::proto::MouseEvent* ClientToServer::_slow_release_mouse_event() {
-  if (mouse_event_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::MouseEvent* temp = new ::proto::MouseEvent(*mouse_event_);
-    mouse_event_ = NULL;
-    return temp;
-  }
-}
-::proto::MouseEvent* ClientToServer::unsafe_arena_release_mouse_event() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ClientToServer.mouse_event)
-  
-  ::proto::MouseEvent* temp = mouse_event_;
-  mouse_event_ = NULL;
-  return temp;
-}
-void ClientToServer::_slow_set_allocated_mouse_event(
-    ::google::protobuf::Arena* message_arena, ::proto::MouseEvent** mouse_event) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*mouse_event) == NULL) {
-      message_arena->Own(*mouse_event);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*mouse_event)) {
-      ::proto::MouseEvent* new_mouse_event = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::MouseEvent >(
-            message_arena);
-      new_mouse_event->CopyFrom(**mouse_event);
-      *mouse_event = new_mouse_event;
-    }
-}
-void ClientToServer::unsafe_arena_set_allocated_mouse_event(
-    ::proto::MouseEvent* mouse_event) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete mouse_event_;
-  }
-  mouse_event_ = mouse_event;
-  if (mouse_event) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ClientToServer.mouse_event)
-}
-void ClientToServer::_slow_mutable_key_event() {
-  key_event_ = ::google::protobuf::Arena::CreateMessage< ::proto::KeyEvent >(
-      GetArenaNoVirtual());
-}
-::proto::KeyEvent* ClientToServer::_slow_release_key_event() {
-  if (key_event_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::KeyEvent* temp = new ::proto::KeyEvent(*key_event_);
-    key_event_ = NULL;
-    return temp;
-  }
-}
-::proto::KeyEvent* ClientToServer::unsafe_arena_release_key_event() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ClientToServer.key_event)
-  
-  ::proto::KeyEvent* temp = key_event_;
-  key_event_ = NULL;
-  return temp;
-}
-void ClientToServer::_slow_set_allocated_key_event(
-    ::google::protobuf::Arena* message_arena, ::proto::KeyEvent** key_event) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*key_event) == NULL) {
-      message_arena->Own(*key_event);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*key_event)) {
-      ::proto::KeyEvent* new_key_event = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::KeyEvent >(
-            message_arena);
-      new_key_event->CopyFrom(**key_event);
-      *key_event = new_key_event;
-    }
-}
-void ClientToServer::unsafe_arena_set_allocated_key_event(
-    ::proto::KeyEvent* key_event) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete key_event_;
-  }
-  key_event_ = key_event;
-  if (key_event) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ClientToServer.key_event)
-}
-void ClientToServer::_slow_mutable_bell() {
-  bell_ = ::google::protobuf::Arena::CreateMessage< ::proto::Bell >(
-      GetArenaNoVirtual());
-}
-::proto::Bell* ClientToServer::_slow_release_bell() {
-  if (bell_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::Bell* temp = new ::proto::Bell(*bell_);
-    bell_ = NULL;
-    return temp;
-  }
-}
-::proto::Bell* ClientToServer::unsafe_arena_release_bell() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ClientToServer.bell)
-  
-  ::proto::Bell* temp = bell_;
-  bell_ = NULL;
-  return temp;
-}
-void ClientToServer::_slow_set_allocated_bell(
-    ::google::protobuf::Arena* message_arena, ::proto::Bell** bell) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*bell) == NULL) {
-      message_arena->Own(*bell);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*bell)) {
-      ::proto::Bell* new_bell = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::Bell >(
-            message_arena);
-      new_bell->CopyFrom(**bell);
-      *bell = new_bell;
-    }
-}
-void ClientToServer::unsafe_arena_set_allocated_bell(
-    ::proto::Bell* bell) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete bell_;
-  }
-  bell_ = bell;
-  if (bell) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ClientToServer.bell)
-}
-void ClientToServer::_slow_mutable_text_chat() {
-  text_chat_ = ::google::protobuf::Arena::CreateMessage< ::proto::TextChat >(
-      GetArenaNoVirtual());
-}
-::proto::TextChat* ClientToServer::_slow_release_text_chat() {
-  if (text_chat_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::TextChat* temp = new ::proto::TextChat(*text_chat_);
-    text_chat_ = NULL;
-    return temp;
-  }
-}
-::proto::TextChat* ClientToServer::unsafe_arena_release_text_chat() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ClientToServer.text_chat)
-  
-  ::proto::TextChat* temp = text_chat_;
-  text_chat_ = NULL;
-  return temp;
-}
-void ClientToServer::_slow_set_allocated_text_chat(
-    ::google::protobuf::Arena* message_arena, ::proto::TextChat** text_chat) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*text_chat) == NULL) {
-      message_arena->Own(*text_chat);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*text_chat)) {
-      ::proto::TextChat* new_text_chat = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::TextChat >(
-            message_arena);
-      new_text_chat->CopyFrom(**text_chat);
-      *text_chat = new_text_chat;
-    }
-}
-void ClientToServer::unsafe_arena_set_allocated_text_chat(
-    ::proto::TextChat* text_chat) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete text_chat_;
-  }
-  text_chat_ = text_chat;
-  if (text_chat) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ClientToServer.text_chat)
-}
-void ClientToServer::_slow_mutable_power_control() {
-  power_control_ = ::google::protobuf::Arena::CreateMessage< ::proto::PowerControl >(
-      GetArenaNoVirtual());
-}
-::proto::PowerControl* ClientToServer::_slow_release_power_control() {
-  if (power_control_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::PowerControl* temp = new ::proto::PowerControl(*power_control_);
-    power_control_ = NULL;
-    return temp;
-  }
-}
-::proto::PowerControl* ClientToServer::unsafe_arena_release_power_control() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ClientToServer.power_control)
-  
-  ::proto::PowerControl* temp = power_control_;
-  power_control_ = NULL;
-  return temp;
-}
-void ClientToServer::_slow_set_allocated_power_control(
-    ::google::protobuf::Arena* message_arena, ::proto::PowerControl** power_control) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*power_control) == NULL) {
-      message_arena->Own(*power_control);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*power_control)) {
-      ::proto::PowerControl* new_power_control = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::PowerControl >(
-            message_arena);
-      new_power_control->CopyFrom(**power_control);
-      *power_control = new_power_control;
-    }
-}
-void ClientToServer::unsafe_arena_set_allocated_power_control(
-    ::proto::PowerControl* power_control) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete power_control_;
-  }
-  power_control_ = power_control;
-  if (power_control) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ClientToServer.power_control)
-}
-void ClientToServer::_slow_mutable_auth_reply() {
-  auth_reply_ = ::google::protobuf::Arena::CreateMessage< ::proto::AuthorizationReply >(
-      GetArenaNoVirtual());
-}
-::proto::AuthorizationReply* ClientToServer::_slow_release_auth_reply() {
-  if (auth_reply_ == NULL) {
-    return NULL;
-  } else {
-    ::proto::AuthorizationReply* temp = new ::proto::AuthorizationReply(*auth_reply_);
-    auth_reply_ = NULL;
-    return temp;
-  }
-}
-::proto::AuthorizationReply* ClientToServer::unsafe_arena_release_auth_reply() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:proto.ClientToServer.auth_reply)
-  
-  ::proto::AuthorizationReply* temp = auth_reply_;
-  auth_reply_ = NULL;
-  return temp;
-}
-void ClientToServer::_slow_set_allocated_auth_reply(
-    ::google::protobuf::Arena* message_arena, ::proto::AuthorizationReply** auth_reply) {
-    if (message_arena != NULL && 
-        ::google::protobuf::Arena::GetArena(*auth_reply) == NULL) {
-      message_arena->Own(*auth_reply);
-    } else if (message_arena !=
-               ::google::protobuf::Arena::GetArena(*auth_reply)) {
-      ::proto::AuthorizationReply* new_auth_reply = 
-            ::google::protobuf::Arena::CreateMessage< ::proto::AuthorizationReply >(
-            message_arena);
-      new_auth_reply->CopyFrom(**auth_reply);
-      *auth_reply = new_auth_reply;
-    }
-}
-void ClientToServer::unsafe_arena_set_allocated_auth_reply(
-    ::proto::AuthorizationReply* auth_reply) {
-  if (GetArenaNoVirtual() == NULL) {
-    delete auth_reply_;
-  }
-  auth_reply_ = auth_reply;
-  if (auth_reply) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:proto.ClientToServer.auth_reply)
-}
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ClientToServer::kVideoControlFieldNumber;
-const int ClientToServer::kAudioControlFieldNumber;
 const int ClientToServer::kCursorShapeControlFieldNumber;
 const int ClientToServer::kClipboardControlFieldNumber;
 const int ClientToServer::kClipboardRequestFieldNumber;
 const int ClientToServer::kClipboardFieldNumber;
-const int ClientToServer::kMouseEventFieldNumber;
+const int ClientToServer::kPointerEventFieldNumber;
 const int ClientToServer::kKeyEventFieldNumber;
 const int ClientToServer::kBellFieldNumber;
 const int ClientToServer::kTextChatFieldNumber;
@@ -9282,22 +6789,10 @@ ClientToServer::ClientToServer()
   SharedCtor();
   // @@protoc_insertion_point(constructor:proto.ClientToServer)
 }
-ClientToServer::ClientToServer(::google::protobuf::Arena* arena)
-  : ::google::protobuf::MessageLite(),
-  _arena_ptr_(arena) {
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  protobuf_InitDefaults_proto_2eproto();
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:proto.ClientToServer)
-}
 
 void ClientToServer::InitAsDefaultInstance() {
   video_control_ = const_cast< ::proto::VideoControl*>(
       ::proto::VideoControl::internal_default_instance());
-  audio_control_ = const_cast< ::proto::AudioControl*>(
-      ::proto::AudioControl::internal_default_instance());
   cursor_shape_control_ = const_cast< ::proto::CursorShapeControl*>(
       ::proto::CursorShapeControl::internal_default_instance());
   clipboard_control_ = const_cast< ::proto::ClipboardControl*>(
@@ -9306,8 +6801,8 @@ void ClientToServer::InitAsDefaultInstance() {
       ::proto::ClipboardRequest::internal_default_instance());
   clipboard_ = const_cast< ::proto::Clipboard*>(
       ::proto::Clipboard::internal_default_instance());
-  mouse_event_ = const_cast< ::proto::MouseEvent*>(
-      ::proto::MouseEvent::internal_default_instance());
+  pointer_event_ = const_cast< ::proto::PointerEvent*>(
+      ::proto::PointerEvent::internal_default_instance());
   key_event_ = const_cast< ::proto::KeyEvent*>(
       ::proto::KeyEvent::internal_default_instance());
   bell_ = const_cast< ::proto::Bell*>(
@@ -9316,8 +6811,8 @@ void ClientToServer::InitAsDefaultInstance() {
       ::proto::TextChat::internal_default_instance());
   power_control_ = const_cast< ::proto::PowerControl*>(
       ::proto::PowerControl::internal_default_instance());
-  auth_reply_ = const_cast< ::proto::AuthorizationReply*>(
-      ::proto::AuthorizationReply::internal_default_instance());
+  auth_reply_ = const_cast< ::proto::AuthReply*>(
+      ::proto::AuthReply::internal_default_instance());
 }
 
 ClientToServer::ClientToServer(const ClientToServer& from)
@@ -9330,12 +6825,11 @@ ClientToServer::ClientToServer(const ClientToServer& from)
 
 void ClientToServer::SharedCtor() {
   video_control_ = NULL;
-  audio_control_ = NULL;
   cursor_shape_control_ = NULL;
   clipboard_control_ = NULL;
   clipboard_request_ = NULL;
   clipboard_ = NULL;
-  mouse_event_ = NULL;
+  pointer_event_ = NULL;
   key_event_ = NULL;
   bell_ = NULL;
   text_chat_ = NULL;
@@ -9350,19 +6844,13 @@ ClientToServer::~ClientToServer() {
 }
 
 void ClientToServer::SharedDtor() {
-  ::google::protobuf::Arena* arena = GetArenaNoVirtual();
-  if (arena != NULL) {
-    return;
-  }
-
   if (this != &ClientToServer_default_instance_.get()) {
     delete video_control_;
-    delete audio_control_;
     delete cursor_shape_control_;
     delete clipboard_control_;
     delete clipboard_request_;
     delete clipboard_;
-    delete mouse_event_;
+    delete pointer_event_;
     delete key_event_;
     delete bell_;
     delete text_chat_;
@@ -9371,12 +6859,6 @@ void ClientToServer::SharedDtor() {
   }
 }
 
-void ClientToServer::ArenaDtor(void* object) {
-  ClientToServer* _this = reinterpret_cast< ClientToServer* >(object);
-  (void)_this;
-}
-void ClientToServer::RegisterArenaDtor(::google::protobuf::Arena* arena) {
-}
 void ClientToServer::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
@@ -9390,15 +6872,17 @@ const ClientToServer& ClientToServer::default_instance() {
 ::google::protobuf::internal::ExplicitlyConstructed<ClientToServer> ClientToServer_default_instance_;
 
 ClientToServer* ClientToServer::New(::google::protobuf::Arena* arena) const {
-  return ::google::protobuf::Arena::CreateMessage<ClientToServer>(arena);
+  ClientToServer* n = new ClientToServer;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void ClientToServer::Clear() {
 // @@protoc_insertion_point(message_clear_start:proto.ClientToServer)
   if (GetArenaNoVirtual() == NULL && video_control_ != NULL) delete video_control_;
   video_control_ = NULL;
-  if (GetArenaNoVirtual() == NULL && audio_control_ != NULL) delete audio_control_;
-  audio_control_ = NULL;
   if (GetArenaNoVirtual() == NULL && cursor_shape_control_ != NULL) delete cursor_shape_control_;
   cursor_shape_control_ = NULL;
   if (GetArenaNoVirtual() == NULL && clipboard_control_ != NULL) delete clipboard_control_;
@@ -9407,8 +6891,8 @@ void ClientToServer::Clear() {
   clipboard_request_ = NULL;
   if (GetArenaNoVirtual() == NULL && clipboard_ != NULL) delete clipboard_;
   clipboard_ = NULL;
-  if (GetArenaNoVirtual() == NULL && mouse_event_ != NULL) delete mouse_event_;
-  mouse_event_ = NULL;
+  if (GetArenaNoVirtual() == NULL && pointer_event_ != NULL) delete pointer_event_;
+  pointer_event_ = NULL;
   if (GetArenaNoVirtual() == NULL && key_event_ != NULL) delete key_event_;
   key_event_ = NULL;
   if (GetArenaNoVirtual() == NULL && bell_ != NULL) delete bell_;
@@ -9439,143 +6923,130 @@ bool ClientToServer::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(18)) goto parse_audio_control;
+        if (input->ExpectTag(18)) goto parse_cursor_shape_control;
         break;
       }
 
-      // optional .proto.AudioControl audio_control = 2;
+      // optional .proto.CursorShapeControl cursor_shape_control = 2;
       case 2: {
         if (tag == 18) {
-         parse_audio_control:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_audio_control()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(26)) goto parse_cursor_shape_control;
-        break;
-      }
-
-      // optional .proto.CursorShapeControl cursor_shape_control = 3;
-      case 3: {
-        if (tag == 26) {
          parse_cursor_shape_control:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_cursor_shape_control()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(34)) goto parse_clipboard_control;
+        if (input->ExpectTag(26)) goto parse_clipboard_control;
         break;
       }
 
-      // optional .proto.ClipboardControl clipboard_control = 4;
-      case 4: {
-        if (tag == 34) {
+      // optional .proto.ClipboardControl clipboard_control = 3;
+      case 3: {
+        if (tag == 26) {
          parse_clipboard_control:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_clipboard_control()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(42)) goto parse_clipboard_request;
+        if (input->ExpectTag(34)) goto parse_clipboard_request;
         break;
       }
 
-      // optional .proto.ClipboardRequest clipboard_request = 5;
-      case 5: {
-        if (tag == 42) {
+      // optional .proto.ClipboardRequest clipboard_request = 4;
+      case 4: {
+        if (tag == 34) {
          parse_clipboard_request:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_clipboard_request()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(50)) goto parse_clipboard;
+        if (input->ExpectTag(42)) goto parse_clipboard;
         break;
       }
 
-      // optional .proto.Clipboard clipboard = 6;
-      case 6: {
-        if (tag == 50) {
+      // optional .proto.Clipboard clipboard = 5;
+      case 5: {
+        if (tag == 42) {
          parse_clipboard:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_clipboard()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(58)) goto parse_mouse_event;
+        if (input->ExpectTag(50)) goto parse_pointer_event;
         break;
       }
 
-      // optional .proto.MouseEvent mouse_event = 7;
-      case 7: {
-        if (tag == 58) {
-         parse_mouse_event:
+      // optional .proto.PointerEvent pointer_event = 6;
+      case 6: {
+        if (tag == 50) {
+         parse_pointer_event:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_mouse_event()));
+               input, mutable_pointer_event()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(66)) goto parse_key_event;
+        if (input->ExpectTag(58)) goto parse_key_event;
         break;
       }
 
-      // optional .proto.KeyEvent key_event = 8;
-      case 8: {
-        if (tag == 66) {
+      // optional .proto.KeyEvent key_event = 7;
+      case 7: {
+        if (tag == 58) {
          parse_key_event:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_key_event()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(74)) goto parse_bell;
+        if (input->ExpectTag(66)) goto parse_bell;
         break;
       }
 
-      // optional .proto.Bell bell = 9;
-      case 9: {
-        if (tag == 74) {
+      // optional .proto.Bell bell = 8;
+      case 8: {
+        if (tag == 66) {
          parse_bell:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_bell()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(82)) goto parse_text_chat;
+        if (input->ExpectTag(74)) goto parse_text_chat;
         break;
       }
 
-      // optional .proto.TextChat text_chat = 10;
-      case 10: {
-        if (tag == 82) {
+      // optional .proto.TextChat text_chat = 9;
+      case 9: {
+        if (tag == 74) {
          parse_text_chat:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_text_chat()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(90)) goto parse_power_control;
+        if (input->ExpectTag(82)) goto parse_power_control;
         break;
       }
 
-      // optional .proto.PowerControl power_control = 11;
-      case 11: {
-        if (tag == 90) {
+      // optional .proto.PowerControl power_control = 10;
+      case 10: {
+        if (tag == 82) {
          parse_power_control:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_power_control()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(98)) goto parse_auth_reply;
+        if (input->ExpectTag(90)) goto parse_auth_reply;
         break;
       }
 
-      // optional .proto.AuthorizationReply auth_reply = 12;
-      case 12: {
-        if (tag == 98) {
+      // optional .proto.AuthReply auth_reply = 11;
+      case 11: {
+        if (tag == 90) {
          parse_auth_reply:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_auth_reply()));
@@ -9616,70 +7087,64 @@ void ClientToServer::SerializeWithCachedSizes(
       1, *this->video_control_, output);
   }
 
-  // optional .proto.AudioControl audio_control = 2;
-  if (this->has_audio_control()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, *this->audio_control_, output);
-  }
-
-  // optional .proto.CursorShapeControl cursor_shape_control = 3;
+  // optional .proto.CursorShapeControl cursor_shape_control = 2;
   if (this->has_cursor_shape_control()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      3, *this->cursor_shape_control_, output);
+      2, *this->cursor_shape_control_, output);
   }
 
-  // optional .proto.ClipboardControl clipboard_control = 4;
+  // optional .proto.ClipboardControl clipboard_control = 3;
   if (this->has_clipboard_control()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      4, *this->clipboard_control_, output);
+      3, *this->clipboard_control_, output);
   }
 
-  // optional .proto.ClipboardRequest clipboard_request = 5;
+  // optional .proto.ClipboardRequest clipboard_request = 4;
   if (this->has_clipboard_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      5, *this->clipboard_request_, output);
+      4, *this->clipboard_request_, output);
   }
 
-  // optional .proto.Clipboard clipboard = 6;
+  // optional .proto.Clipboard clipboard = 5;
   if (this->has_clipboard()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      6, *this->clipboard_, output);
+      5, *this->clipboard_, output);
   }
 
-  // optional .proto.MouseEvent mouse_event = 7;
-  if (this->has_mouse_event()) {
+  // optional .proto.PointerEvent pointer_event = 6;
+  if (this->has_pointer_event()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      7, *this->mouse_event_, output);
+      6, *this->pointer_event_, output);
   }
 
-  // optional .proto.KeyEvent key_event = 8;
+  // optional .proto.KeyEvent key_event = 7;
   if (this->has_key_event()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      8, *this->key_event_, output);
+      7, *this->key_event_, output);
   }
 
-  // optional .proto.Bell bell = 9;
+  // optional .proto.Bell bell = 8;
   if (this->has_bell()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      9, *this->bell_, output);
+      8, *this->bell_, output);
   }
 
-  // optional .proto.TextChat text_chat = 10;
+  // optional .proto.TextChat text_chat = 9;
   if (this->has_text_chat()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      10, *this->text_chat_, output);
+      9, *this->text_chat_, output);
   }
 
-  // optional .proto.PowerControl power_control = 11;
+  // optional .proto.PowerControl power_control = 10;
   if (this->has_power_control()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      11, *this->power_control_, output);
+      10, *this->power_control_, output);
   }
 
-  // optional .proto.AuthorizationReply auth_reply = 12;
+  // optional .proto.AuthReply auth_reply = 11;
   if (this->has_auth_reply()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      12, *this->auth_reply_, output);
+      11, *this->auth_reply_, output);
   }
 
   // @@protoc_insertion_point(serialize_end:proto.ClientToServer)
@@ -9696,77 +7161,70 @@ size_t ClientToServer::ByteSizeLong() const {
         *this->video_control_);
   }
 
-  // optional .proto.AudioControl audio_control = 2;
-  if (this->has_audio_control()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->audio_control_);
-  }
-
-  // optional .proto.CursorShapeControl cursor_shape_control = 3;
+  // optional .proto.CursorShapeControl cursor_shape_control = 2;
   if (this->has_cursor_shape_control()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->cursor_shape_control_);
   }
 
-  // optional .proto.ClipboardControl clipboard_control = 4;
+  // optional .proto.ClipboardControl clipboard_control = 3;
   if (this->has_clipboard_control()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->clipboard_control_);
   }
 
-  // optional .proto.ClipboardRequest clipboard_request = 5;
+  // optional .proto.ClipboardRequest clipboard_request = 4;
   if (this->has_clipboard_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->clipboard_request_);
   }
 
-  // optional .proto.Clipboard clipboard = 6;
+  // optional .proto.Clipboard clipboard = 5;
   if (this->has_clipboard()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->clipboard_);
   }
 
-  // optional .proto.MouseEvent mouse_event = 7;
-  if (this->has_mouse_event()) {
+  // optional .proto.PointerEvent pointer_event = 6;
+  if (this->has_pointer_event()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->mouse_event_);
+        *this->pointer_event_);
   }
 
-  // optional .proto.KeyEvent key_event = 8;
+  // optional .proto.KeyEvent key_event = 7;
   if (this->has_key_event()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->key_event_);
   }
 
-  // optional .proto.Bell bell = 9;
+  // optional .proto.Bell bell = 8;
   if (this->has_bell()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->bell_);
   }
 
-  // optional .proto.TextChat text_chat = 10;
+  // optional .proto.TextChat text_chat = 9;
   if (this->has_text_chat()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->text_chat_);
   }
 
-  // optional .proto.PowerControl power_control = 11;
+  // optional .proto.PowerControl power_control = 10;
   if (this->has_power_control()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->power_control_);
   }
 
-  // optional .proto.AuthorizationReply auth_reply = 12;
+  // optional .proto.AuthReply auth_reply = 11;
   if (this->has_auth_reply()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -9799,9 +7257,6 @@ void ClientToServer::UnsafeMergeFrom(const ClientToServer& from) {
   if (from.has_video_control()) {
     mutable_video_control()->::proto::VideoControl::MergeFrom(from.video_control());
   }
-  if (from.has_audio_control()) {
-    mutable_audio_control()->::proto::AudioControl::MergeFrom(from.audio_control());
-  }
   if (from.has_cursor_shape_control()) {
     mutable_cursor_shape_control()->::proto::CursorShapeControl::MergeFrom(from.cursor_shape_control());
   }
@@ -9814,8 +7269,8 @@ void ClientToServer::UnsafeMergeFrom(const ClientToServer& from) {
   if (from.has_clipboard()) {
     mutable_clipboard()->::proto::Clipboard::MergeFrom(from.clipboard());
   }
-  if (from.has_mouse_event()) {
-    mutable_mouse_event()->::proto::MouseEvent::MergeFrom(from.mouse_event());
+  if (from.has_pointer_event()) {
+    mutable_pointer_event()->::proto::PointerEvent::MergeFrom(from.pointer_event());
   }
   if (from.has_key_event()) {
     mutable_key_event()->::proto::KeyEvent::MergeFrom(from.key_event());
@@ -9830,7 +7285,7 @@ void ClientToServer::UnsafeMergeFrom(const ClientToServer& from) {
     mutable_power_control()->::proto::PowerControl::MergeFrom(from.power_control());
   }
   if (from.has_auth_reply()) {
-    mutable_auth_reply()->::proto::AuthorizationReply::MergeFrom(from.auth_reply());
+    mutable_auth_reply()->::proto::AuthReply::MergeFrom(from.auth_reply());
   }
 }
 
@@ -9848,28 +7303,15 @@ bool ClientToServer::IsInitialized() const {
 
 void ClientToServer::Swap(ClientToServer* other) {
   if (other == this) return;
-  if (GetArenaNoVirtual() == other->GetArenaNoVirtual()) {
-    InternalSwap(other);
-  } else {
-    ClientToServer temp;
-    temp.UnsafeMergeFrom(*this);
-    CopyFrom(*other);
-    other->CopyFrom(temp);
-  }
-}
-void ClientToServer::UnsafeArenaSwap(ClientToServer* other) {
-  if (other == this) return;
-  GOOGLE_DCHECK(GetArenaNoVirtual() == other->GetArenaNoVirtual());
   InternalSwap(other);
 }
 void ClientToServer::InternalSwap(ClientToServer* other) {
   std::swap(video_control_, other->video_control_);
-  std::swap(audio_control_, other->audio_control_);
   std::swap(cursor_shape_control_, other->cursor_shape_control_);
   std::swap(clipboard_control_, other->clipboard_control_);
   std::swap(clipboard_request_, other->clipboard_request_);
   std::swap(clipboard_, other->clipboard_);
-  std::swap(mouse_event_, other->mouse_event_);
+  std::swap(pointer_event_, other->pointer_event_);
   std::swap(key_event_, other->key_event_);
   std::swap(bell_, other->bell_);
   std::swap(text_chat_, other->text_chat_);
@@ -9902,7 +7344,7 @@ const ::proto::VideoControl& ClientToServer::video_control() const {
 ::proto::VideoControl* ClientToServer::mutable_video_control() {
   
   if (video_control_ == NULL) {
-    _slow_mutable_video_control();
+    video_control_ = new ::proto::VideoControl;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.video_control)
   return video_control_;
@@ -9910,22 +7352,12 @@ const ::proto::VideoControl& ClientToServer::video_control() const {
 ::proto::VideoControl* ClientToServer::release_video_control() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.video_control)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_video_control();
-  } else {
-    ::proto::VideoControl* temp = video_control_;
-    video_control_ = NULL;
-    return temp;
-  }
+  ::proto::VideoControl* temp = video_control_;
+  video_control_ = NULL;
+  return temp;
 }
- void ClientToServer::set_allocated_video_control(::proto::VideoControl* video_control) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete video_control_;
-  }
-  if (video_control != NULL) {
-    _slow_set_allocated_video_control(message_arena, &video_control);
-  }
+void ClientToServer::set_allocated_video_control(::proto::VideoControl* video_control) {
+  delete video_control_;
   video_control_ = video_control;
   if (video_control) {
     
@@ -9935,56 +7367,7 @@ const ::proto::VideoControl& ClientToServer::video_control() const {
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.video_control)
 }
 
-// optional .proto.AudioControl audio_control = 2;
-bool ClientToServer::has_audio_control() const {
-  return this != internal_default_instance() && audio_control_ != NULL;
-}
-void ClientToServer::clear_audio_control() {
-  if (GetArenaNoVirtual() == NULL && audio_control_ != NULL) delete audio_control_;
-  audio_control_ = NULL;
-}
-const ::proto::AudioControl& ClientToServer::audio_control() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.audio_control)
-  return audio_control_ != NULL ? *audio_control_
-                         : *::proto::AudioControl::internal_default_instance();
-}
-::proto::AudioControl* ClientToServer::mutable_audio_control() {
-  
-  if (audio_control_ == NULL) {
-    _slow_mutable_audio_control();
-  }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.audio_control)
-  return audio_control_;
-}
-::proto::AudioControl* ClientToServer::release_audio_control() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.audio_control)
-  
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_audio_control();
-  } else {
-    ::proto::AudioControl* temp = audio_control_;
-    audio_control_ = NULL;
-    return temp;
-  }
-}
- void ClientToServer::set_allocated_audio_control(::proto::AudioControl* audio_control) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete audio_control_;
-  }
-  if (audio_control != NULL) {
-    _slow_set_allocated_audio_control(message_arena, &audio_control);
-  }
-  audio_control_ = audio_control;
-  if (audio_control) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.audio_control)
-}
-
-// optional .proto.CursorShapeControl cursor_shape_control = 3;
+// optional .proto.CursorShapeControl cursor_shape_control = 2;
 bool ClientToServer::has_cursor_shape_control() const {
   return this != internal_default_instance() && cursor_shape_control_ != NULL;
 }
@@ -10000,7 +7383,7 @@ const ::proto::CursorShapeControl& ClientToServer::cursor_shape_control() const 
 ::proto::CursorShapeControl* ClientToServer::mutable_cursor_shape_control() {
   
   if (cursor_shape_control_ == NULL) {
-    _slow_mutable_cursor_shape_control();
+    cursor_shape_control_ = new ::proto::CursorShapeControl;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.cursor_shape_control)
   return cursor_shape_control_;
@@ -10008,22 +7391,12 @@ const ::proto::CursorShapeControl& ClientToServer::cursor_shape_control() const 
 ::proto::CursorShapeControl* ClientToServer::release_cursor_shape_control() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.cursor_shape_control)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_cursor_shape_control();
-  } else {
-    ::proto::CursorShapeControl* temp = cursor_shape_control_;
-    cursor_shape_control_ = NULL;
-    return temp;
-  }
+  ::proto::CursorShapeControl* temp = cursor_shape_control_;
+  cursor_shape_control_ = NULL;
+  return temp;
 }
- void ClientToServer::set_allocated_cursor_shape_control(::proto::CursorShapeControl* cursor_shape_control) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete cursor_shape_control_;
-  }
-  if (cursor_shape_control != NULL) {
-    _slow_set_allocated_cursor_shape_control(message_arena, &cursor_shape_control);
-  }
+void ClientToServer::set_allocated_cursor_shape_control(::proto::CursorShapeControl* cursor_shape_control) {
+  delete cursor_shape_control_;
   cursor_shape_control_ = cursor_shape_control;
   if (cursor_shape_control) {
     
@@ -10033,7 +7406,7 @@ const ::proto::CursorShapeControl& ClientToServer::cursor_shape_control() const 
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.cursor_shape_control)
 }
 
-// optional .proto.ClipboardControl clipboard_control = 4;
+// optional .proto.ClipboardControl clipboard_control = 3;
 bool ClientToServer::has_clipboard_control() const {
   return this != internal_default_instance() && clipboard_control_ != NULL;
 }
@@ -10049,7 +7422,7 @@ const ::proto::ClipboardControl& ClientToServer::clipboard_control() const {
 ::proto::ClipboardControl* ClientToServer::mutable_clipboard_control() {
   
   if (clipboard_control_ == NULL) {
-    _slow_mutable_clipboard_control();
+    clipboard_control_ = new ::proto::ClipboardControl;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.clipboard_control)
   return clipboard_control_;
@@ -10057,22 +7430,12 @@ const ::proto::ClipboardControl& ClientToServer::clipboard_control() const {
 ::proto::ClipboardControl* ClientToServer::release_clipboard_control() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.clipboard_control)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_clipboard_control();
-  } else {
-    ::proto::ClipboardControl* temp = clipboard_control_;
-    clipboard_control_ = NULL;
-    return temp;
-  }
+  ::proto::ClipboardControl* temp = clipboard_control_;
+  clipboard_control_ = NULL;
+  return temp;
 }
- void ClientToServer::set_allocated_clipboard_control(::proto::ClipboardControl* clipboard_control) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete clipboard_control_;
-  }
-  if (clipboard_control != NULL) {
-    _slow_set_allocated_clipboard_control(message_arena, &clipboard_control);
-  }
+void ClientToServer::set_allocated_clipboard_control(::proto::ClipboardControl* clipboard_control) {
+  delete clipboard_control_;
   clipboard_control_ = clipboard_control;
   if (clipboard_control) {
     
@@ -10082,7 +7445,7 @@ const ::proto::ClipboardControl& ClientToServer::clipboard_control() const {
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.clipboard_control)
 }
 
-// optional .proto.ClipboardRequest clipboard_request = 5;
+// optional .proto.ClipboardRequest clipboard_request = 4;
 bool ClientToServer::has_clipboard_request() const {
   return this != internal_default_instance() && clipboard_request_ != NULL;
 }
@@ -10098,7 +7461,7 @@ const ::proto::ClipboardRequest& ClientToServer::clipboard_request() const {
 ::proto::ClipboardRequest* ClientToServer::mutable_clipboard_request() {
   
   if (clipboard_request_ == NULL) {
-    _slow_mutable_clipboard_request();
+    clipboard_request_ = new ::proto::ClipboardRequest;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.clipboard_request)
   return clipboard_request_;
@@ -10106,22 +7469,12 @@ const ::proto::ClipboardRequest& ClientToServer::clipboard_request() const {
 ::proto::ClipboardRequest* ClientToServer::release_clipboard_request() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.clipboard_request)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_clipboard_request();
-  } else {
-    ::proto::ClipboardRequest* temp = clipboard_request_;
-    clipboard_request_ = NULL;
-    return temp;
-  }
+  ::proto::ClipboardRequest* temp = clipboard_request_;
+  clipboard_request_ = NULL;
+  return temp;
 }
- void ClientToServer::set_allocated_clipboard_request(::proto::ClipboardRequest* clipboard_request) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete clipboard_request_;
-  }
-  if (clipboard_request != NULL) {
-    _slow_set_allocated_clipboard_request(message_arena, &clipboard_request);
-  }
+void ClientToServer::set_allocated_clipboard_request(::proto::ClipboardRequest* clipboard_request) {
+  delete clipboard_request_;
   clipboard_request_ = clipboard_request;
   if (clipboard_request) {
     
@@ -10131,7 +7484,7 @@ const ::proto::ClipboardRequest& ClientToServer::clipboard_request() const {
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.clipboard_request)
 }
 
-// optional .proto.Clipboard clipboard = 6;
+// optional .proto.Clipboard clipboard = 5;
 bool ClientToServer::has_clipboard() const {
   return this != internal_default_instance() && clipboard_ != NULL;
 }
@@ -10147,7 +7500,7 @@ const ::proto::Clipboard& ClientToServer::clipboard() const {
 ::proto::Clipboard* ClientToServer::mutable_clipboard() {
   
   if (clipboard_ == NULL) {
-    _slow_mutable_clipboard();
+    clipboard_ = new ::proto::Clipboard;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.clipboard)
   return clipboard_;
@@ -10155,22 +7508,12 @@ const ::proto::Clipboard& ClientToServer::clipboard() const {
 ::proto::Clipboard* ClientToServer::release_clipboard() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.clipboard)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_clipboard();
-  } else {
-    ::proto::Clipboard* temp = clipboard_;
-    clipboard_ = NULL;
-    return temp;
-  }
+  ::proto::Clipboard* temp = clipboard_;
+  clipboard_ = NULL;
+  return temp;
 }
- void ClientToServer::set_allocated_clipboard(::proto::Clipboard* clipboard) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete clipboard_;
-  }
-  if (clipboard != NULL) {
-    _slow_set_allocated_clipboard(message_arena, &clipboard);
-  }
+void ClientToServer::set_allocated_clipboard(::proto::Clipboard* clipboard) {
+  delete clipboard_;
   clipboard_ = clipboard;
   if (clipboard) {
     
@@ -10180,56 +7523,46 @@ const ::proto::Clipboard& ClientToServer::clipboard() const {
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.clipboard)
 }
 
-// optional .proto.MouseEvent mouse_event = 7;
-bool ClientToServer::has_mouse_event() const {
-  return this != internal_default_instance() && mouse_event_ != NULL;
+// optional .proto.PointerEvent pointer_event = 6;
+bool ClientToServer::has_pointer_event() const {
+  return this != internal_default_instance() && pointer_event_ != NULL;
 }
-void ClientToServer::clear_mouse_event() {
-  if (GetArenaNoVirtual() == NULL && mouse_event_ != NULL) delete mouse_event_;
-  mouse_event_ = NULL;
+void ClientToServer::clear_pointer_event() {
+  if (GetArenaNoVirtual() == NULL && pointer_event_ != NULL) delete pointer_event_;
+  pointer_event_ = NULL;
 }
-const ::proto::MouseEvent& ClientToServer::mouse_event() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.mouse_event)
-  return mouse_event_ != NULL ? *mouse_event_
-                         : *::proto::MouseEvent::internal_default_instance();
+const ::proto::PointerEvent& ClientToServer::pointer_event() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToServer.pointer_event)
+  return pointer_event_ != NULL ? *pointer_event_
+                         : *::proto::PointerEvent::internal_default_instance();
 }
-::proto::MouseEvent* ClientToServer::mutable_mouse_event() {
+::proto::PointerEvent* ClientToServer::mutable_pointer_event() {
   
-  if (mouse_event_ == NULL) {
-    _slow_mutable_mouse_event();
+  if (pointer_event_ == NULL) {
+    pointer_event_ = new ::proto::PointerEvent;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.mouse_event)
-  return mouse_event_;
+  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.pointer_event)
+  return pointer_event_;
 }
-::proto::MouseEvent* ClientToServer::release_mouse_event() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.mouse_event)
+::proto::PointerEvent* ClientToServer::release_pointer_event() {
+  // @@protoc_insertion_point(field_release:proto.ClientToServer.pointer_event)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_mouse_event();
-  } else {
-    ::proto::MouseEvent* temp = mouse_event_;
-    mouse_event_ = NULL;
-    return temp;
-  }
+  ::proto::PointerEvent* temp = pointer_event_;
+  pointer_event_ = NULL;
+  return temp;
 }
- void ClientToServer::set_allocated_mouse_event(::proto::MouseEvent* mouse_event) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete mouse_event_;
-  }
-  if (mouse_event != NULL) {
-    _slow_set_allocated_mouse_event(message_arena, &mouse_event);
-  }
-  mouse_event_ = mouse_event;
-  if (mouse_event) {
+void ClientToServer::set_allocated_pointer_event(::proto::PointerEvent* pointer_event) {
+  delete pointer_event_;
+  pointer_event_ = pointer_event;
+  if (pointer_event) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.mouse_event)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.pointer_event)
 }
 
-// optional .proto.KeyEvent key_event = 8;
+// optional .proto.KeyEvent key_event = 7;
 bool ClientToServer::has_key_event() const {
   return this != internal_default_instance() && key_event_ != NULL;
 }
@@ -10245,7 +7578,7 @@ const ::proto::KeyEvent& ClientToServer::key_event() const {
 ::proto::KeyEvent* ClientToServer::mutable_key_event() {
   
   if (key_event_ == NULL) {
-    _slow_mutable_key_event();
+    key_event_ = new ::proto::KeyEvent;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.key_event)
   return key_event_;
@@ -10253,22 +7586,12 @@ const ::proto::KeyEvent& ClientToServer::key_event() const {
 ::proto::KeyEvent* ClientToServer::release_key_event() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.key_event)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_key_event();
-  } else {
-    ::proto::KeyEvent* temp = key_event_;
-    key_event_ = NULL;
-    return temp;
-  }
+  ::proto::KeyEvent* temp = key_event_;
+  key_event_ = NULL;
+  return temp;
 }
- void ClientToServer::set_allocated_key_event(::proto::KeyEvent* key_event) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete key_event_;
-  }
-  if (key_event != NULL) {
-    _slow_set_allocated_key_event(message_arena, &key_event);
-  }
+void ClientToServer::set_allocated_key_event(::proto::KeyEvent* key_event) {
+  delete key_event_;
   key_event_ = key_event;
   if (key_event) {
     
@@ -10278,7 +7601,7 @@ const ::proto::KeyEvent& ClientToServer::key_event() const {
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.key_event)
 }
 
-// optional .proto.Bell bell = 9;
+// optional .proto.Bell bell = 8;
 bool ClientToServer::has_bell() const {
   return this != internal_default_instance() && bell_ != NULL;
 }
@@ -10294,7 +7617,7 @@ const ::proto::Bell& ClientToServer::bell() const {
 ::proto::Bell* ClientToServer::mutable_bell() {
   
   if (bell_ == NULL) {
-    _slow_mutable_bell();
+    bell_ = new ::proto::Bell;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.bell)
   return bell_;
@@ -10302,22 +7625,12 @@ const ::proto::Bell& ClientToServer::bell() const {
 ::proto::Bell* ClientToServer::release_bell() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.bell)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_bell();
-  } else {
-    ::proto::Bell* temp = bell_;
-    bell_ = NULL;
-    return temp;
-  }
+  ::proto::Bell* temp = bell_;
+  bell_ = NULL;
+  return temp;
 }
- void ClientToServer::set_allocated_bell(::proto::Bell* bell) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete bell_;
-  }
-  if (bell != NULL) {
-    _slow_set_allocated_bell(message_arena, &bell);
-  }
+void ClientToServer::set_allocated_bell(::proto::Bell* bell) {
+  delete bell_;
   bell_ = bell;
   if (bell) {
     
@@ -10327,7 +7640,7 @@ const ::proto::Bell& ClientToServer::bell() const {
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.bell)
 }
 
-// optional .proto.TextChat text_chat = 10;
+// optional .proto.TextChat text_chat = 9;
 bool ClientToServer::has_text_chat() const {
   return this != internal_default_instance() && text_chat_ != NULL;
 }
@@ -10343,7 +7656,7 @@ const ::proto::TextChat& ClientToServer::text_chat() const {
 ::proto::TextChat* ClientToServer::mutable_text_chat() {
   
   if (text_chat_ == NULL) {
-    _slow_mutable_text_chat();
+    text_chat_ = new ::proto::TextChat;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.text_chat)
   return text_chat_;
@@ -10351,22 +7664,12 @@ const ::proto::TextChat& ClientToServer::text_chat() const {
 ::proto::TextChat* ClientToServer::release_text_chat() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.text_chat)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_text_chat();
-  } else {
-    ::proto::TextChat* temp = text_chat_;
-    text_chat_ = NULL;
-    return temp;
-  }
+  ::proto::TextChat* temp = text_chat_;
+  text_chat_ = NULL;
+  return temp;
 }
- void ClientToServer::set_allocated_text_chat(::proto::TextChat* text_chat) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete text_chat_;
-  }
-  if (text_chat != NULL) {
-    _slow_set_allocated_text_chat(message_arena, &text_chat);
-  }
+void ClientToServer::set_allocated_text_chat(::proto::TextChat* text_chat) {
+  delete text_chat_;
   text_chat_ = text_chat;
   if (text_chat) {
     
@@ -10376,7 +7679,7 @@ const ::proto::TextChat& ClientToServer::text_chat() const {
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.text_chat)
 }
 
-// optional .proto.PowerControl power_control = 11;
+// optional .proto.PowerControl power_control = 10;
 bool ClientToServer::has_power_control() const {
   return this != internal_default_instance() && power_control_ != NULL;
 }
@@ -10392,7 +7695,7 @@ const ::proto::PowerControl& ClientToServer::power_control() const {
 ::proto::PowerControl* ClientToServer::mutable_power_control() {
   
   if (power_control_ == NULL) {
-    _slow_mutable_power_control();
+    power_control_ = new ::proto::PowerControl;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.power_control)
   return power_control_;
@@ -10400,22 +7703,12 @@ const ::proto::PowerControl& ClientToServer::power_control() const {
 ::proto::PowerControl* ClientToServer::release_power_control() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.power_control)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_power_control();
-  } else {
-    ::proto::PowerControl* temp = power_control_;
-    power_control_ = NULL;
-    return temp;
-  }
+  ::proto::PowerControl* temp = power_control_;
+  power_control_ = NULL;
+  return temp;
 }
- void ClientToServer::set_allocated_power_control(::proto::PowerControl* power_control) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete power_control_;
-  }
-  if (power_control != NULL) {
-    _slow_set_allocated_power_control(message_arena, &power_control);
-  }
+void ClientToServer::set_allocated_power_control(::proto::PowerControl* power_control) {
+  delete power_control_;
   power_control_ = power_control;
   if (power_control) {
     
@@ -10425,7 +7718,7 @@ const ::proto::PowerControl& ClientToServer::power_control() const {
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.power_control)
 }
 
-// optional .proto.AuthorizationReply auth_reply = 12;
+// optional .proto.AuthReply auth_reply = 11;
 bool ClientToServer::has_auth_reply() const {
   return this != internal_default_instance() && auth_reply_ != NULL;
 }
@@ -10433,38 +7726,28 @@ void ClientToServer::clear_auth_reply() {
   if (GetArenaNoVirtual() == NULL && auth_reply_ != NULL) delete auth_reply_;
   auth_reply_ = NULL;
 }
-const ::proto::AuthorizationReply& ClientToServer::auth_reply() const {
+const ::proto::AuthReply& ClientToServer::auth_reply() const {
   // @@protoc_insertion_point(field_get:proto.ClientToServer.auth_reply)
   return auth_reply_ != NULL ? *auth_reply_
-                         : *::proto::AuthorizationReply::internal_default_instance();
+                         : *::proto::AuthReply::internal_default_instance();
 }
-::proto::AuthorizationReply* ClientToServer::mutable_auth_reply() {
+::proto::AuthReply* ClientToServer::mutable_auth_reply() {
   
   if (auth_reply_ == NULL) {
-    _slow_mutable_auth_reply();
+    auth_reply_ = new ::proto::AuthReply;
   }
   // @@protoc_insertion_point(field_mutable:proto.ClientToServer.auth_reply)
   return auth_reply_;
 }
-::proto::AuthorizationReply* ClientToServer::release_auth_reply() {
+::proto::AuthReply* ClientToServer::release_auth_reply() {
   // @@protoc_insertion_point(field_release:proto.ClientToServer.auth_reply)
   
-  if (GetArenaNoVirtual() != NULL) {
-    return _slow_release_auth_reply();
-  } else {
-    ::proto::AuthorizationReply* temp = auth_reply_;
-    auth_reply_ = NULL;
-    return temp;
-  }
+  ::proto::AuthReply* temp = auth_reply_;
+  auth_reply_ = NULL;
+  return temp;
 }
- void ClientToServer::set_allocated_auth_reply(::proto::AuthorizationReply* auth_reply) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete auth_reply_;
-  }
-  if (auth_reply != NULL) {
-    _slow_set_allocated_auth_reply(message_arena, &auth_reply);
-  }
+void ClientToServer::set_allocated_auth_reply(::proto::AuthReply* auth_reply) {
+  delete auth_reply_;
   auth_reply_ = auth_reply;
   if (auth_reply) {
     
