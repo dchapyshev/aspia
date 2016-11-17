@@ -14,12 +14,12 @@
 #include <string>
 
 #include "base/macros.h"
-#include "base/logging.h"
+#include "base/scoped_handle.h"
 
 class Event
 {
 public:
-    Event(const std::string &name = std::string());
+    Event(const char *name);
     virtual ~Event();
 
     void Notify();
@@ -28,7 +28,7 @@ public:
     void WaitForEvent();
 
 private:
-    HANDLE hEvent_;
+    ScopedHandle event_;
     std::string name_;
 
     DISALLOW_COPY_AND_ASSIGN(Event);

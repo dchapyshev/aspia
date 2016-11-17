@@ -11,10 +11,6 @@
 #include "aspia_config.h"
 
 #include <string>
-#include <windows.h>
-#include <strsafe.h>
-
-#include "base/unicode.h"
 
 class Clipboard
 {

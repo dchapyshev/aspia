@@ -7,6 +7,8 @@
 
 #include "base/service_win.h"
 
+#include "base/logging.h"
+
 static Service *_self = nullptr;
 
 // public
@@ -112,10 +114,10 @@ void Service::SetStatus(DWORD state)
 // public
 bool Service::Start()
 {
-    SERVICE_TABLE_ENTRY service_table[1] = { 0 };
+    SERVICE_TABLE_ENTRYW service_table[1] = { 0 };
 
     service_table[0].lpServiceName = &service_name_[0];
-    service_table[0].lpServiceProc = reinterpret_cast<LPSERVICE_MAIN_FUNCTION>(ServiceMain);
+    service_table[0].lpServiceProc = reinterpret_cast<LPSERVICE_MAIN_FUNCTIONW>(ServiceMain);
 
     if (!StartServiceCtrlDispatcherW(service_table))
     {

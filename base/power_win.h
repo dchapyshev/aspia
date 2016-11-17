@@ -5,8 +5,8 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#ifndef _ASPIA_POWER_WIN_H
-#define _ASPIA_POWER_WIN_H
+#ifndef _ASPIA_BASE__POWER_WIN_H
+#define _ASPIA_BASE__POWER_WIN_H
 
 #include "aspia_config.h"
 
@@ -101,4 +101,4 @@ private:
     }
 };
 
-#endif // _ASPIA_POWER_WIN_H
+#endif // _ASPIA_BASE__POWER_WIN_H

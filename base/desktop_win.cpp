@@ -7,11 +7,13 @@
 
 #include "base/desktop_win.h"
 
+#include "base/logging.h"
+
 Desktop::Desktop(HDESK desktop, bool own) :
     desktop_(desktop),
     own_(own)
 {
-    // Ничего не делаем
+    // РќРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј
 }
 
 Desktop::~Desktop()

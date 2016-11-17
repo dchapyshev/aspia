@@ -10,17 +10,11 @@
 
 #include "aspia_config.h"
 
-#include <wtsapi32.h>
-#include <tlhelp32.h>
-#include <psapi.h>
-#include <userenv.h>
-#include <string>
 #include <memory>
 
 #include "base/macros.h"
 #include "base/scoped_native_library.h"
 #include "base/service_win.h"
-#include "base/logging.h"
 
 class RunAs : public Service
 {

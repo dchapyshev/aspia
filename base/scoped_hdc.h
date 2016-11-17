@@ -8,7 +8,8 @@
 #ifndef _ASPIA_SCOPED_HDC_H
 #define _ASPIA_SCOPED_HDC_H
 
-#include <windows.h>
+#include "aspia_config.h"
+
 #include "base/logging.h"
 
 //

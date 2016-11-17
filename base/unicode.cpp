@@ -5,7 +5,7 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#include "unicode.h"
+#include "base/unicode.h"
 
 std::wstring UNICODEfromANSI(const std::string &in)
 {

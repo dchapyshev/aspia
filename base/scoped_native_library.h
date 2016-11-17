@@ -20,7 +20,7 @@ public:
         lib_ = LoadLibraryW(UNICODEfromUTF8(lib_name).c_str());
     }
 
-    ~ScopedNativeLibrary()
+    virtual ~ScopedNativeLibrary()
     {
         FreeLibrary(lib_);
     }

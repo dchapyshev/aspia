@@ -10,9 +10,9 @@
 
 #include "aspia_config.h"
 
-#include <memory>
+#include <string>
+
 #include "base/macros.h"
-#include "base/logging.h"
 
 //
 // Based on Chromium Remoting

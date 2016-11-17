@@ -10,11 +10,10 @@
 
 #include "aspia_config.h"
 
-#include <memory>
+#include <string>
 
 #include "base/macros.h"
-#include "base/event.h"
-#include "base/logging.h"
+
 
 class Service
 {

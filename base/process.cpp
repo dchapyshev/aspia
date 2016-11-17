@@ -7,6 +7,12 @@
 
 #include "base/process.h"
 
+#include <shellapi.h>
+#include <stdlib.h>
+#include <string>
+
+#include "base/logging.h"
+
 Process::Process(HANDLE process) :
     process_(process)
 {

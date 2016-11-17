@@ -7,6 +7,14 @@
 
 #include "base/runas.h"
 
+#include <userenv.h>
+#include <psapi.h>
+#include <wtsapi32.h>
+#include <tlhelp32.h>
+#include <string>
+
+#include "base/logging.h"
+
 typedef BOOL(WINAPI *WTSENUMERATEPROCESSESW)(HANDLE, DWORD, DWORD, PWTS_PROCESS_INFOW*, DWORD*);
 typedef VOID(WINAPI *WTSFREEMEMORY)(PVOID);
 typedef DWORD(WINAPI *WTSGETACTIVECONSOLESESSIONID)(VOID);

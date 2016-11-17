@@ -7,6 +7,10 @@
 
 #include "base/clipboard_win.h"
 
+#include <strsafe.h>
+
+#include "base/unicode.h"
+
 // static
 void Clipboard::Set(const std::string &str)
 {

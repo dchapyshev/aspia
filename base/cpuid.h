@@ -1,12 +1,15 @@
 /*
 * PROJECT:         Aspia Remote Desktop
-* FILE:            util/cpuid.h
+* FILE:            base/cpuid.h
 * LICENSE:         See top-level directory
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#ifndef _ASPIA_CPUID_H
-#define _ASPIA_CPUID_H
+#ifndef _ASPIA_BASE__CPUID_H
+#define _ASPIA_BASE__CPUID_H
+
+#include <stdint.h>
+#include <intrin.h>
 
 class CPUID
 {
@@ -103,4 +106,4 @@ private:
     int cpu_info_[4];
 };
 
-#endif // _ASPIA_CPUID_H
+#endif // _ASPIA_BASE__CPUID_H

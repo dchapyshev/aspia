@@ -5,8 +5,8 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#ifndef _ASPIA_BASE_MUTEX_H
-#define _ASPIA_BASE_MUTEX_H
+#ifndef _ASPIA_BASE__MUTEX_H
+#define _ASPIA_BASE__MUTEX_H
 
 #include "aspia_config.h"
 
@@ -51,7 +51,7 @@ public:
         mutex_->lock();
     }
 
-    ~LockGuard()
+    virtual ~LockGuard()
     {
         mutex_->unlock();
     }
@@ -60,4 +60,4 @@ private:
     T *mutex_;
 };
 
-#endif // _ASPIA_BASE_MUTEX_H
+#endif // _ASPIA_BASE__MUTEX_H

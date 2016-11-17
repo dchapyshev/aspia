@@ -10,12 +10,7 @@
 
 #include "aspia_config.h"
 
-#include <shellapi.h>
 #include <stdint.h>
-#include <stdlib.h>
-#include <string>
-
-#include "base/logging.h"
 
 class Process
 {

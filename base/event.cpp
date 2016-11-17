@@ -7,28 +7,32 @@
 
 #include "base/event.h"
 
-Event::Event(const std::string &name) : name_(name)
+#include "base/exception.h"
+#include "base/unicode.h"
+#include "base/logging.h"
+
+Event::Event(const char *name) : name_(name)
 {
-    hEvent_ = CreateEventA(0, FALSE, FALSE, name_.c_str());
-    if (!hEvent_)
+    event_.set(CreateEventW(0, FALSE, FALSE, UNICODEfromUTF8(name_).c_str()));
+    if (!event_.get())
     {
-        LOG(ERROR) << "CreateEventA() failed: " << GetLastError();
+        LOG(ERROR) << "CreateEventA() failed: " << GetLastError()
+                   << "; Event name: " << name_;
+
+        throw Exception("Unable to create event.");
     }
 }
 
-Event::~Event()
-{
-    CloseHandle(hEvent_);
-}
+Event::~Event() {}
 
 void Event::Notify()
 {
-    SetEvent(hEvent_);
+    SetEvent(event_);
 }
 
 void Event::WaitForEvent(uint32_t milliseconds)
 {
-    DWORD error = WaitForSingleObject(hEvent_, milliseconds);
+    DWORD error = WaitForSingleObject(event_, milliseconds);
 
     switch (error)
     {
@@ -47,7 +51,7 @@ void Event::WaitForEvent(uint32_t milliseconds)
 
 void Event::WaitForEvent()
 {
-    if (WaitForSingleObject(hEvent_, INFINITE) == WAIT_FAILED)
+    if (WaitForSingleObject(event_, INFINITE) == WAIT_FAILED)
     {
         LOG(WARNING) << "Unknown waiting error for: " << name_;
     }

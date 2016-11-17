@@ -7,6 +7,8 @@
 
 #include "base/service_control_win.h"
 
+#include "base/logging.h"
+
 // public
 ServiceControl::ServiceControl(const WCHAR *service_short_name) :
     sc_manager_(nullptr),
@@ -55,7 +57,7 @@ std::unique_ptr<ServiceControl> ServiceControl::AddService(const WCHAR *exec_pat
                                                            const WCHAR *service_description,
                                                            bool replace)
 {
-    // Открываем менеджер служб
+    // РћС‚РєСЂС‹РІР°РµРј РјРµРЅРµРґР¶РµСЂ СЃР»СѓР¶Р±
     SC_HANDLE sc_manager = OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS);
     if (!sc_manager)
     {
@@ -67,7 +69,7 @@ std::unique_ptr<ServiceControl> ServiceControl::AddService(const WCHAR *exec_pat
 
     for (int retry_count = 0; retry_count < 3; ++retry_count)
     {
-        // Пытаемся создать службу
+        // РџС‹С‚Р°РµРјСЃСЏ СЃРѕР·РґР°С‚СЊ СЃР»СѓР¶Р±Сѓ
         service = CreateServiceW(sc_manager,
                                  service_short_name,
                                  service_full_name,
@@ -85,26 +87,26 @@ std::unique_ptr<ServiceControl> ServiceControl::AddService(const WCHAR *exec_pat
         {
             DWORD error = GetLastError();
 
-            // Если служба уже существует и указан параметр перезаписи
+            // Р•СЃР»Рё СЃР»СѓР¶Р±Р° СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ Рё СѓРєР°Р·Р°РЅ РїР°СЂР°РјРµС‚СЂ РїРµСЂРµР·Р°РїРёСЃРё
             if (replace && error == ERROR_SERVICE_EXISTS)
             {
-                // Открываем службу
+                // РћС‚РєСЂС‹РІР°РµРј СЃР»СѓР¶Р±Сѓ
                 service = OpenServiceW(sc_manager, service_short_name, SERVICE_STOP | DELETE);
                 if (service)
                 {
                     SERVICE_STATUS status;
 
-                    // Останавливаем службу
+                    // РћСЃС‚Р°РЅР°РІР»РёРІР°РµРј СЃР»СѓР¶Р±Сѓ
                     if (!ControlService(service, SERVICE_CONTROL_STOP, &status))
                     {
-                        // Ошибку пишем в лог, но игнорируем, т.к. служба может быть не запущена
+                        // РћС€РёР±РєСѓ РїРёС€РµРј РІ Р»РѕРі, РЅРѕ РёРіРЅРѕСЂРёСЂСѓРµРј, С‚.Рє. СЃР»СѓР¶Р±Р° РјРѕР¶РµС‚ Р±С‹С‚СЊ РЅРµ Р·Р°РїСѓС‰РµРЅР°
                         LOG(ERROR) << "ControlService() failed: " << GetLastError();
                     }
 
-                    // Удаляем службу
+                    // РЈРґР°Р»СЏРµРј СЃР»СѓР¶Р±Сѓ
                     if (DeleteService(service))
                     {
-                        // Если служба успешно удалена, то пробуем создать повторно
+                        // Р•СЃР»Рё СЃР»СѓР¶Р±Р° СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РµРЅР°, С‚Рѕ РїСЂРѕР±СѓРµРј СЃРѕР·РґР°С‚СЊ РїРѕРІС‚РѕСЂРЅРѕ
                         CloseServiceHandle(service);
                         continue;
                     }
@@ -128,10 +130,10 @@ std::unique_ptr<ServiceControl> ServiceControl::AddService(const WCHAR *exec_pat
         }
         else
         {
-            SERVICE_DESCRIPTION description;
+            SERVICE_DESCRIPTIONW description;
             description.lpDescription = const_cast<LPWSTR>(service_description);
 
-            // Устанавливаем описание службы
+            // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РѕРїРёСЃР°РЅРёРµ СЃР»СѓР¶Р±С‹
             if (!ChangeServiceConfig2W(service,
                                        SERVICE_CONFIG_DESCRIPTION,
                                        &description))
@@ -140,7 +142,7 @@ std::unique_ptr<ServiceControl> ServiceControl::AddService(const WCHAR *exec_pat
             }
         }
 
-        // Выходим из цикла
+        // Р’С‹С…РѕРґРёРј РёР· С†РёРєР»Р°
         break;
     }
 
