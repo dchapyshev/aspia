@@ -10,22 +10,16 @@
 
 #include "aspia_config.h"
 
-#include <algorithm>
 #include <memory>
 
 #include "desktop_capture/desktop_size.h"
 #include "desktop_capture/desktop_region_win.h"
-
-#include "libyuv/cpu_id.h"
-
 #include "base/macros.h"
-#include "base/cpuid.h"
-#include "base/logging.h"
 
 typedef uint8_t(*DIFFFULLBLOCK) (const uint8_t *image1, const uint8_t *image2, int bytes_per_row);
 
 //
-// Класс для поиска изменившихся областей экрана
+// РљР»Р°СЃСЃ РґР»СЏ РїРѕРёСЃРєР° РёР·РјРµРЅРёРІС€РёС…СЃСЏ РѕР±Р»Р°СЃС‚РµР№ СЌРєСЂР°РЅР°
 //
 class Differ
 {
@@ -33,7 +27,7 @@ public:
     Differ(const DesktopSize &size, int bytes_per_pixel);
     ~Differ() {}
 
-    // Размер блока
+    // Р Р°Р·РјРµСЂ Р±Р»РѕРєР°
     static const int kBlockSize = 16;
 
     void CalcChangedRegion(const uint8_t *prev_image,
@@ -61,7 +55,6 @@ private:
 
     int diff_width_;
     int diff_height_;
-    int diff_info_size_;
 
     DIFFFULLBLOCK DiffFullBlock_;
 

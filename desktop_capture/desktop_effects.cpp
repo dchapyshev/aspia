@@ -7,6 +7,10 @@
 
 #include "desktop_capture/desktop_effects.h"
 
+#include <versionhelpers.h>
+
+#include "base/logging.h"
+
 static const bool kForceEnable = 0;
 
 typedef HRESULT(WINAPI *PDWMISCOMPOSITIONENABLED)(BOOL *pfEnabled);
@@ -201,51 +205,51 @@ static void SetListBoxSmoothScrolling(bool value)
 
 DesktopEffects::DesktopEffects()
 {
-    // Тень окон
+    // вЂњРµРЅСЊ РѕРєРѕРЅ
     drop_shadow_ = GetDropShadow();
     if (drop_shadow_) SetDropShadow(false);
 
-    // Перемещение всего окна
+    // С•РµСЂРµРјРµС‰РµРЅРёРµ РІСЃРµРіРѕ РѕРєРЅР°
     drag_full_windows_ = GetDragFullWindows();
     if (drag_full_windows_) SetDragFullWindows(false);
 
-    // Анимация сворачивания-разворачивания окон
+    // СРЅРёРјР°С†РёВ¤ СЃРІРѕСЂР°С‡РёРІР°РЅРёВ¤-СЂР°Р·РІРѕСЂР°С‡РёРІР°РЅРёВ¤ РѕРєРѕРЅ
     animation_ = GetAnimation();
     if (animation_) SetAnimation(false);
 
-    // Анимация меню
+    // СРЅРёРјР°С†РёВ¤ РјРµРЅСЋ
     menu_animation_ = GetMenuAnimation();
     if (menu_animation_) SetMenuAnimation(false);
 
-    // Плавное затухание меню после нажатия
+    // С•Р»Р°РІРЅРѕРµ Р·Р°С‚СѓС…Р°РЅРёРµ РјРµРЅСЋ РїРѕСЃР»Рµ РЅР°Р¶Р°С‚РёВ¤
     selection_fade_ = GetSelectionFade();
     if (selection_fade_) SetSelectionFade(false);
 
-    // Анимация подсказок
+    // СРЅРёРјР°С†РёВ¤ РїРѕРґСЃРєР°Р·РѕРє
     tooltip_animation_ = GetTooltipAnimation();
     if (tooltip_animation_) SetTooltipAnimation(false);
 
-    // Тень под указателем мыши
+    // вЂњРµРЅСЊ РїРѕРґ СѓРєР°Р·Р°С‚РµР»РµРј РјС‹С€Рё
     cursor_shadow_ = GetCursorShadow();
     if (cursor_shadow_) SetCursorShadow(false);
 
-    // Плавная прокрутка списков
+    // С•Р»Р°РІРЅР°В¤ РїСЂРѕРєСЂСѓС‚РєР° СЃРїРёСЃРєРѕРІ
     combobox_animation_ = GetComboboxAnimation();
     if (combobox_animation_) SetComboboxAnimation(false);
 
-    // Эффекты пользовательского интерфейса
+    // РЃС„С„РµРєС‚С‹ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕРіРѕ РёРЅС‚РµСЂС„РµР№СЃР°
     ui_effects_ = GetUiEffects();
     if (ui_effects_) SetUiEffects(false);
 
-    // Градиент заголовков окон
+    // в€љСЂР°РґРёРµРЅС‚ Р·Р°РіРѕР»РѕРІРєРѕРІ РѕРєРѕРЅ
     gradient_captions_ = GetGradientCaptions();
     if (gradient_captions_) SetGradientCaptions(false);
 
-    // Плавное прокручивание
+    // С•Р»Р°РІРЅРѕРµ РїСЂРѕРєСЂСѓС‡РёРІР°РЅРёРµ
     listbox_smooth_scrolling_ = GetListBoxSmoothScrolling();
     if (listbox_smooth_scrolling_) SetListBoxSmoothScrolling(false);
 
-    // Обои рабочего стола
+    // СњР±РѕРё СЂР°Р±РѕС‡РµРіРѕ СЃС‚РѕР»Р°
     wallpaper_ = GetWallpaper();
     if (wallpaper_[0]) SetWallpaper(std::wstring(L""));
 
@@ -254,8 +258,8 @@ DesktopEffects::DesktopEffects()
         dwapi_.reset(new ScopedNativeLibrary("dwmapi.dll"));
 
         //
-        // Актуально только для Windows Vista и Windows 7 (XP/2003 не поддерживает композицию,
-        // начиная с Windows 8 композицию нельзя отключить программно)
+        // СРєС‚СѓР°Р»СЊРЅРѕ С‚РѕР»СЊРєРѕ РґР»В¤ Windows Vista Рё Windows 7 (XP/2003 РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚ РєРѕРјРїРѕР·РёС†РёСЋ,
+        // РЅР°С‡РёРЅР°В¤ СЃ Windows 8 РєРѕРјРїРѕР·РёС†РёСЋ РЅРµР»СЊР·В¤ РѕС‚РєР»СЋС‡РёС‚СЊ РїСЂРѕРіСЂР°РјРјРЅРѕ)
         //
         composition_enabled_ = IsCompositionEnabled();
         if (composition_enabled_)
@@ -264,7 +268,7 @@ DesktopEffects::DesktopEffects()
             EnableComposition(false);
         }
 
-        // Анимация внутри окна
+        // СРЅРёРјР°С†РёВ¤ РІРЅСѓС‚СЂРё РѕРєРЅР°
         client_area_animation_ = GetClientAreaAnimation();
         if (client_area_animation_) SetClientAreaAnimation(false);
     }
@@ -272,47 +276,47 @@ DesktopEffects::DesktopEffects()
 
 DesktopEffects::~DesktopEffects()
 {
-    // Перемещение всего окна
+    // С•РµСЂРµРјРµС‰РµРЅРёРµ РІСЃРµРіРѕ РѕРєРЅР°
     if (kForceEnable || drag_full_windows_ != GetDragFullWindows())
         SetDragFullWindows(true);
 
-    // Анимация сворачивания-разворачивания окон
+    // СРЅРёРјР°С†РёВ¤ СЃРІРѕСЂР°С‡РёРІР°РЅРёВ¤-СЂР°Р·РІРѕСЂР°С‡РёРІР°РЅРёВ¤ РѕРєРѕРЅ
     if (kForceEnable || animation_ != GetAnimation())
         SetAnimation(true);
 
-    // Анимация меню
+    // СРЅРёРјР°С†РёВ¤ РјРµРЅСЋ
     if (kForceEnable || menu_animation_ != GetMenuAnimation())
         SetMenuAnimation(true);
 
-    // Плавное затухание меню после нажатия
+    // С•Р»Р°РІРЅРѕРµ Р·Р°С‚СѓС…Р°РЅРёРµ РјРµРЅСЋ РїРѕСЃР»Рµ РЅР°Р¶Р°С‚РёВ¤
     if (kForceEnable || selection_fade_ != GetSelectionFade())
         SetSelectionFade(true);
 
-    // Анимация подсказок
+    // СРЅРёРјР°С†РёВ¤ РїРѕРґСЃРєР°Р·РѕРє
     if (kForceEnable || tooltip_animation_ != GetTooltipAnimation())
         SetTooltipAnimation(true);
 
-    // Тень под указателем мыши
+    // вЂњРµРЅСЊ РїРѕРґ СѓРєР°Р·Р°С‚РµР»РµРј РјС‹С€Рё
     if (kForceEnable || cursor_shadow_ != GetCursorShadow())
         SetCursorShadow(true);
 
-    // Плавная прокрутка списков
+    // С•Р»Р°РІРЅР°В¤ РїСЂРѕРєСЂСѓС‚РєР° СЃРїРёСЃРєРѕРІ
     if (kForceEnable || combobox_animation_ != GetComboboxAnimation())
         SetComboboxAnimation(true);
 
-    // Эффекты пользовательского интерфейса
+    // РЃС„С„РµРєС‚С‹ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕРіРѕ РёРЅС‚РµСЂС„РµР№СЃР°
     if (kForceEnable || ui_effects_ != GetUiEffects())
         SetUiEffects(true);
 
-    // Градиент заголовков окон
+    // в€љСЂР°РґРёРµРЅС‚ Р·Р°РіРѕР»РѕРІРєРѕРІ РѕРєРѕРЅ
     if (kForceEnable || gradient_captions_ != GetGradientCaptions())
         SetGradientCaptions(true);
 
-    // Плавное прокручивание
+    // С•Р»Р°РІРЅРѕРµ РїСЂРѕРєСЂСѓС‡РёРІР°РЅРёРµ
     if (kForceEnable || listbox_smooth_scrolling_ != GetListBoxSmoothScrolling())
         SetListBoxSmoothScrolling(true);
 
-    // Обои рабочего стола
+    // СњР±РѕРё СЂР°Р±РѕС‡РµРіРѕ СЃС‚РѕР»Р°
     if (kForceEnable || wallpaper_ != GetWallpaper())
         SetWallpaper(wallpaper_);
 
@@ -324,12 +328,12 @@ DesktopEffects::~DesktopEffects()
             EnableComposition(true);
         }
 
-        // Анимация внутри окна
+        // СРЅРёРјР°С†РёВ¤ РІРЅСѓС‚СЂРё РѕРєРЅР°
         if (kForceEnable || client_area_animation_ != GetClientAreaAnimation())
             SetClientAreaAnimation(true);
     }
 
-    // Тень окон
+    // вЂњРµРЅСЊ РѕРєРѕРЅ
     if (kForceEnable || drop_shadow_ != GetDropShadow())
         SetDropShadow(true);
 }

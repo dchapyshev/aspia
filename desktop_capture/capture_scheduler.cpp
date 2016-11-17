@@ -7,40 +7,41 @@
 
 #include "desktop_capture/capture_scheduler.h"
 
-static const uint32_t kMaximumDelay = 100;
+static const uint32_t kMaximumDelay = 45;
 
 CaptureScheduler::CaptureScheduler() :
-    begin_time_(0),
-    diff_time_(0)
+    begin_time_(0)
 {
+    // Nothing
 }
 
 CaptureScheduler::~CaptureScheduler()
 {
+    // Nothing
 }
 
 uint32_t CaptureScheduler::NextCaptureDelay()
 {
-    // Получаем разницу между началом и окончанием обновления
-    diff_time_ = GetTickCount() - begin_time_;
+    // РџРѕР»СѓС‡Р°РµРј СЂР°Р·РЅРёС†Сѓ РјРµР¶РґСѓ РЅР°С‡Р°Р»РѕРј Рё РѕРєРѕРЅС‡Р°РЅРёРµРј РѕР±РЅРѕРІР»РµРЅРёСЏ
+    int32_t diff_time = GetTickCount() - begin_time_;
 
-    // Если разница больше kMaximumDelay
-    if (diff_time_ > kMaximumDelay)
+    // Р•СЃР»Рё СЂР°Р·РЅРёС†Р° Р±РѕР»СЊС€Рµ kMaximumDelay
+    if (diff_time > kMaximumDelay)
     {
-        diff_time_ = kMaximumDelay;
+        diff_time = kMaximumDelay;
     }
-    // Если меньше нуля
-    else if (diff_time_ < 0)
+    // Р•СЃР»Рё РјРµРЅСЊС€Рµ РЅСѓР»СЏ
+    else if (diff_time < 0)
     {
-        diff_time_ = 0;
+        diff_time = 0;
     }
 
-    // Возвращаем интервал ожидания. Он может быть в пределах от 0 до kMaximumDelay
-    return kMaximumDelay - diff_time_;
+    // Р’РѕР·РІСЂР°С‰Р°РµРј РёРЅС‚РµСЂРІР°Р» РѕР¶РёРґР°РЅРёСЏ. РћРЅ РјРѕР¶РµС‚ Р±С‹С‚СЊ РІ РїСЂРµРґРµР»Р°С… РѕС‚ 0 РґРѕ kMaximumDelay
+    return kMaximumDelay - diff_time;
 }
 
 void CaptureScheduler::BeginCapture()
 {
-    // Сохраняем время начала обновления (в мс)
+    // РЎРѕС…СЂР°РЅСЏРµРј РІСЂРµРјСЏ РЅР°С‡Р°Р»Р° РѕР±РЅРѕРІР»РµРЅРёСЏ (РІ РјСЃ)
     begin_time_ = GetTickCount();
 }

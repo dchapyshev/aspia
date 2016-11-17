@@ -11,7 +11,6 @@
 #include "aspia_config.h"
 
 #include <stdint.h>
-#include <intrin.h>
 
 uint8_t
 DiffFullBlock_32x32_32bpp_SSE2(const uint8_t *image1, const uint8_t *image2, int bytes_per_row);

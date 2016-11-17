@@ -7,6 +7,8 @@
 
 #include "desktop_capture/diff_block_sse2.h"
 
+#include <intrin.h>
+
 uint8_t
 DiffFullBlock_32x32_32bpp_SSE2(const uint8_t *image1, const uint8_t *image2, int bytes_per_row)
 {
@@ -64,12 +66,12 @@ DiffFullBlock_32x32_32bpp_SSE2(const uint8_t *image1, const uint8_t *image2, int
         sad = _mm_shuffle_epi32(acc, 0xEE);
         sad = _mm_add_epi16(sad, acc);
 
-        // Если строка имеет отличия
+        // Р•СЃР»Рё СЃС‚СЂРѕРєР° РёРјРµРµС‚ РѕС‚Р»РёС‡РёСЏ
         int diff = _mm_cvtsi128_si32(sad);
         if (diff)
             return 1;
 
-        // Переходим к следующей строке изображениях
+        // РџРµСЂРµС…РѕРґРёРј Рє СЃР»РµРґСѓСЋС‰РµР№ СЃС‚СЂРѕРєРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏС…
         image1 += bytes_per_row;
         image2 += bytes_per_row;
     }
@@ -114,12 +116,12 @@ DiffFullBlock_32x32_16bpp_SSE2(const uint8_t *image1, const uint8_t *image2, int
         sad = _mm_shuffle_epi32(acc, 0xEE);
         sad = _mm_adds_epu16(sad, acc);
 
-        // Если строка имеет отличия
+        // Р•СЃР»Рё СЃС‚СЂРѕРєР° РёРјРµРµС‚ РѕС‚Р»РёС‡РёСЏ
         int diff = _mm_cvtsi128_si32(sad);
         if (diff)
             return 1;
 
-        // Переходим к следующей строке изображениях
+        // РџРµСЂРµС…РѕРґРёРј Рє СЃР»РµРґСѓСЋС‰РµР№ СЃС‚СЂРѕРєРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏС…
         image1 += bytes_per_row;
         image2 += bytes_per_row;
     }
@@ -164,12 +166,12 @@ DiffFullBlock_16x16_32bpp_SSE2(const uint8_t *image1, const uint8_t *image2, int
         sad = _mm_shuffle_epi32(acc, 0xEE);
         sad = _mm_add_epi16(sad, acc);
 
-        // Если строка имеет отличия
+        // Р•СЃР»Рё СЃС‚СЂРѕРєР° РёРјРµРµС‚ РѕС‚Р»РёС‡РёСЏ
         int diff = _mm_cvtsi128_si32(sad);
         if (diff)
             return 1;
 
-        // Переходим к следующей строке изображениях
+        // РџРµСЂРµС…РѕРґРёРј Рє СЃР»РµРґСѓСЋС‰РµР№ СЃС‚СЂРѕРєРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏС…
         image1 += bytes_per_row;
         image2 += bytes_per_row;
     }
@@ -204,12 +206,12 @@ DiffFullBlock_16x16_16bpp_SSE2(const uint8_t *image1, const uint8_t *image2, int
         sad = _mm_shuffle_epi32(acc, 0xEE);
         sad = _mm_adds_epu16(sad, acc);
 
-        // Если строка имеет отличия
+        // Р•СЃР»Рё СЃС‚СЂРѕРєР° РёРјРµРµС‚ РѕС‚Р»РёС‡РёСЏ
         int diff = _mm_cvtsi128_si32(sad);
         if (diff)
             return 1;
 
-        // Переходим к следующей строке изображениях
+        // РџРµСЂРµС…РѕРґРёРј Рє СЃР»РµРґСѓСЋС‰РµР№ СЃС‚СЂРѕРєРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏС…
         image1 += bytes_per_row;
         image2 += bytes_per_row;
     }

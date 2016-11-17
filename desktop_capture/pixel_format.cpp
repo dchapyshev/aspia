@@ -64,6 +64,7 @@ PixelFormat::PixelFormat() :
     green_shift_(0),
     blue_shift_(0)
 {
+    // Nothing
 }
 
 PixelFormat::PixelFormat(const PixelFormat &format)
@@ -73,6 +74,7 @@ PixelFormat::PixelFormat(const PixelFormat &format)
 
 PixelFormat::~PixelFormat()
 {
+    // Nothing
 }
 
 // static
@@ -332,17 +334,7 @@ bool PixelFormat::operator==(const PixelFormat &format)
     return IsEqualTo(format);
 }
 
-bool PixelFormat::operator==(PixelFormat &format)
-{
-    return IsEqualTo(format);
-}
-
 bool PixelFormat::operator!=(const PixelFormat &format)
-{
-    return !IsEqualTo(format);
-}
-
-bool PixelFormat::operator!=(PixelFormat &format)
 {
     return !IsEqualTo(format);
 }

@@ -11,10 +11,8 @@
 #include "aspia_config.h"
 
 #include <stdint.h>
-#include <algorithm>
 
 #include "base/macros.h"
-#include "base/logging.h"
 
 class CaptureScheduler
 {
@@ -29,7 +27,6 @@ public:
 
 private:
     uint32_t begin_time_;
-    int32_t diff_time_;
 
     DISALLOW_COPY_AND_ASSIGN(CaptureScheduler);
 };

@@ -7,10 +7,14 @@
 
 #include "desktop_capture/capturer_gdi.h"
 
+#include "base/logging.h"
+
 CapturerGDI::CapturerGDI() :
     curr_buffer_id_(0)
 {
     memset(image_buffer_, 0, sizeof(image_buffer_));
+
+    desktop_effects_.reset(new DesktopEffects());
 }
 
 // static
@@ -128,6 +132,7 @@ PixelFormat CapturerGDI::GetPixelFormat(const BitmapInfo &bmi)
     }
 
     PixelFormat format;
+
     format.set_bits_per_pixel(bmi.header.biBitCount);
 
     format.set_red_shift(red_shift);
@@ -174,13 +179,18 @@ void CapturerGDI::AllocateBuffer(int buffer_index, int align)
     LOG(INFO) << "buffer[" << buffer_index << "] initialized.";
 }
 
+// static
+DesktopRect CapturerGDI::GetDesktopRect()
+{
+    return DesktopRect::MakeXYWH(GetSystemMetrics(SM_XVIRTUALSCREEN),
+                                 GetSystemMetrics(SM_YVIRTUALSCREEN),
+                                 GetSystemMetrics(SM_CXVIRTUALSCREEN),
+                                 GetSystemMetrics(SM_CYVIRTUALSCREEN));
+}
+
 void CapturerGDI::PrepareCaptureResources()
 {
-    DesktopRect desktop_rect =
-        DesktopRect::MakeXYWH(GetSystemMetrics(SM_XVIRTUALSCREEN),
-                              GetSystemMetrics(SM_YVIRTUALSCREEN),
-                              GetSystemMetrics(SM_CXVIRTUALSCREEN),
-                              GetSystemMetrics(SM_CYVIRTUALSCREEN));
+    DesktopRect desktop_rect = GetDesktopRect();
 
     if (current_desktop_rect_ != desktop_rect)
     {

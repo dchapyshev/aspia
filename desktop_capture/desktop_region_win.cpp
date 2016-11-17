@@ -7,6 +7,8 @@
 
 #include "desktop_capture/desktop_region_win.h"
 
+#include <malloc.h>
+
 DesktopRegion::DesktopRegion()
 {
     region_ = CreateRectRgn(0, 0, 0, 0);

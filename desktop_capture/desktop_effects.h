@@ -12,11 +12,8 @@
 
 #include <memory>
 
-#include <versionhelpers.h>
-
 #include "base/scoped_native_library.h"
 #include "base/macros.h"
-#include "base/logging.h"
 
 class DesktopEffects
 {

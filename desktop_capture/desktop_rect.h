@@ -11,7 +11,6 @@
 #include "aspia_config.h"
 
 #include <stdint.h>
-#include <algorithm>
 
 #include "desktop_capture/desktop_size.h"
 

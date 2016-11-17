@@ -7,6 +7,8 @@
 
 #include "desktop_capture/desktop_rect.h"
 
+#include <algorithm>
+
 DesktopRect::DesktopRect() :
     left_(0),
     top_(0),

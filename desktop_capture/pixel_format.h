@@ -55,9 +55,7 @@ public:
 
     PixelFormat& operator=(const PixelFormat &format);
     bool operator==(const PixelFormat &format);
-    bool operator==(PixelFormat &format);
     bool operator!=(const PixelFormat &format);
-    bool operator!=(PixelFormat &format);
 
 private:
     int bits_per_pixel_;

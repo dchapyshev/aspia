@@ -6,7 +6,10 @@
 */
 
 #include "desktop_capture/differ.h"
+
 #include "desktop_capture/diff_block_sse2.h"
+#include "base/logging.h"
+#include "libyuv/cpu_id.h"
 
 //
 // Based on WebRTC souce code
@@ -24,13 +27,13 @@ DiffFullBlock_C(const uint8_t *image1, const uint8_t *image2, int bytes_per_row)
 
     for (int y = 0; y < block_size; ++y)
     {
-        // Åñëè ñòðîêà èìååò îòëè÷èÿ
+        // Ð•ÑÐ»Ð¸ ÑÑ‚Ñ€Ð¾ÐºÐ° Ð¸Ð¼ÐµÐµÑ‚ Ð¾Ñ‚Ð»Ð¸Ñ‡Ð¸Ñ
         if (memcmp(image1, image2, bytes_per_block) != 0)
         {
             return 1;
         }
 
-        // Ïåðåõîäèì ê ñëåäóþùåé ñòðîêå èçîáðàæåíèÿõ
+        // ÐŸÐµÑ€ÐµÑ…Ð¾Ð´Ð¸Ð¼ Ðº ÑÐ»ÐµÐ´ÑƒÑŽÑ‰ÐµÐ¹ ÑÑ‚Ñ€Ð¾ÐºÐµ Ð¸Ð·Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸ÑÑ…
         image1 += bytes_per_row;
         image2 += bytes_per_row;
     }
@@ -71,51 +74,32 @@ Differ::Differ(const DesktopSize &size, int bytes_per_pixel) :
 {
     static_assert(kBlockSize == 16 || kBlockSize == 32, "Unsupported block size.");
 
-    LOG(INFO) << "size: " << size.width() << "x" << size.height();
-    LOG(INFO) << "block size: " << kBlockSize;
-
     bytes_per_pixel_ = bytes_per_pixel;
     bytes_per_block_ = bytes_per_pixel_ * kBlockSize;
     bytes_per_row_ = bytes_per_pixel_ * size.width();
 
-    LOG(INFO) << "bytes per pixel: " << bytes_per_pixel_;
-    LOG(INFO) << "bytes per block: " << bytes_per_block_;
-    LOG(INFO) << "bytes per row: " << bytes_per_row_;
-
     diff_width_ = ((size.width() + kBlockSize - 1) / kBlockSize) + 1;
     diff_height_ = ((size.height() + kBlockSize - 1) / kBlockSize) + 1;
-    diff_info_size_ = diff_width_ * diff_height_;
+    int diff_info_size = diff_width_ * diff_height_;
 
-    diff_info_.reset(new uint8_t[diff_info_size_]);
-    memset(diff_info_.get(), 0, diff_info_size_);
-
-    LOG(INFO) << "diff width: " << diff_width_;
-    LOG(INFO) << "diff height: " << diff_height_;
-    LOG(INFO) << "diff size: " << diff_info_size_;
+    diff_info_.reset(new uint8_t[diff_info_size]);
+    memset(diff_info_.get(), 0, diff_info_size);
 
     // Calc number of full blocks.
     full_blocks_x_ = size.width() / kBlockSize;
     full_blocks_y_ = size.height() / kBlockSize;
 
-    LOG(INFO) << "full blocks x: " << full_blocks_x_;
-    LOG(INFO) << "full blocks y: " << full_blocks_y_;
-
     // Calc size of partial blocks which may be present on right and bottom edge.
     partial_column_width_ = size.width() - (full_blocks_x_ * kBlockSize);
     partial_row_height_ = size.height() - (full_blocks_y_ * kBlockSize);
 
-    LOG(INFO) << "partial column width: " << partial_column_width_;
-    LOG(INFO) << "partial row height: " << partial_row_height_;
-
     // Offset from the start of one block-row to the next.
     block_stride_y_ = bytes_per_row_ * kBlockSize;
 
-    LOG(INFO) << "block stride y: " << block_stride_y_;
-
-    // Ïðîâåðÿåì ïîääåðæèâàåòñÿ ëè SSE2 ïðîöåññîðîì
+    // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶Ð¸Ð²Ð°ÐµÑ‚ÑÑ Ð»Ð¸ SSE2 Ð¿Ñ€Ð¾Ñ†ÐµÑÑÐ¾Ñ€Ð¾Ð¼
     if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
     {
-        // SSE2 ïîääåðæèâàåòñÿ, èñïîëüçóåì îïòèìèçèðîâàííûå ôóíêöèè
+        // SSE2 Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶Ð¸Ð²Ð°ÐµÑ‚ÑÑ, Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÐ¼ Ð¾Ð¿Ñ‚Ð¸Ð¼Ð¸Ð·Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ðµ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸
         LOG(INFO) << "SSE2 supported";
 
         if (kBlockSize == 16)
@@ -137,7 +121,7 @@ Differ::Differ(const DesktopSize &size, int bytes_per_pixel) :
     }
     else
     {
-        // SSE2 íå ïîääåðæèâàåòñÿ, èñïîëüçóåì îáû÷íûå ôóíêöèè
+        // SSE2 Ð½Ðµ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶Ð¸Ð²Ð°ÐµÑ‚ÑÑ, Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÐ¼ Ð¾Ð±Ñ‹Ñ‡Ð½Ñ‹Ðµ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸
         LOG(INFO) << "SSE2 not supported";
 
         switch (bytes_per_pixel)
@@ -147,7 +131,7 @@ Differ::Differ(const DesktopSize &size, int bytes_per_pixel) :
         }
     }
 
-    DCHECK(DiffFullBlock_);
+    CHECK(DiffFullBlock_);
 }
 
 //
@@ -263,8 +247,8 @@ void Differ::MergeChangedBlocks(DesktopRegion &changed_region)
             //
             if (*is_different != 0)
             {
-                int width  = 1; // Øèðèíà ïðÿìîóãîëüíèêà â áëîêàõ
-                int height = 1; // Âûñîòà ïðÿìîóãîëüíèêà â áëîêàõ
+                int width  = 1; // Ð¨Ð¸Ñ€Ð¸Ð½Ð° Ð¿Ñ€ÑÐ¼Ð¾ÑƒÐ³Ð¾Ð»ÑŒÐ½Ð¸ÐºÐ° Ð² Ð±Ð»Ð¾ÐºÐ°Ñ…
+                int height = 1; // Ð’Ñ‹ÑÐ¾Ñ‚Ð° Ð¿Ñ€ÑÐ¼Ð¾ÑƒÐ³Ð¾Ð»ÑŒÐ½Ð¸ÐºÐ° Ð² Ð±Ð»Ð¾ÐºÐ°Ñ…
 
                 *is_different = 0;
 

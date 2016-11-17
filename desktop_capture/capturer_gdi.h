@@ -5,39 +5,40 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#ifndef _ASPIA_DESKTOP_CAPTURE_CAPTURER_GDI_H
-#define _ASPIA_DESKTOP_CAPTURE_CAPTURER_GDI_H
+#ifndef _ASPIA_DESKTOP_CAPTURE__CAPTURER_GDI_H
+#define _ASPIA_DESKTOP_CAPTURE__CAPTURER_GDI_H
 
 #include "aspia_config.h"
 
+#include "desktop_capture/capturer.h"
 #include "desktop_capture/differ.h"
 #include "desktop_capture/desktop_effects.h"
 #include "desktop_capture/pixel_format.h"
-
 #include "base/macros.h"
 #include "base/scoped_thread_desktop.h"
 #include "base/scoped_gdi_object.h"
 #include "base/scoped_hdc.h"
 #include "base/desktop_win.h"
-#include "base/logging.h"
 
 //
-// Класс захвата избражения экрана
-// TODO: Захват изображения курсора
+// РљР»Р°СЃСЃ Р·Р°С…РІР°С‚Р° РёР·Р±СЂР°Р¶РµРЅРёСЏ СЌРєСЂР°РЅР°
+// TODO: Р—Р°С…РІР°С‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РєСѓСЂСЃРѕСЂР°
 //
-class CapturerGDI
+class CapturerGDI : public Capturer
 {
 public:
     CapturerGDI();
     ~CapturerGDI() {}
 
     //
-    // Метод выполнения захвата экрана
-    // Возвращает указатель на буфер, который содержит изображение экрана.
+    // РњРµС‚РѕРґ РІС‹РїРѕР»РЅРµРЅРёСЏ Р·Р°С…РІР°С‚Р° СЌРєСЂР°РЅР°
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° Р±СѓС„РµСЂ, РєРѕС‚РѕСЂС‹Р№ СЃРѕРґРµСЂР¶РёС‚ РёР·РѕР±СЂР°Р¶РµРЅРёРµ СЌРєСЂР°РЅР°.
     //
     const uint8_t* CaptureImage(DesktopRegion &changed_region,
                                 DesktopSize &desktop_size,
-                                PixelFormat &pixel_format);
+                                PixelFormat &pixel_format) override;
+
+    static DesktopRect GetDesktopRect();
 
 private:
     typedef struct
@@ -65,7 +66,7 @@ private:
 private:
     PixelFormat current_pixel_format_;
 
-    DesktopEffects desktop_effects_;
+    std::unique_ptr<DesktopEffects> desktop_effects_;
 
     DesktopRect current_desktop_rect_;
 
@@ -78,9 +79,9 @@ private:
     static const int kNumBuffers = 2;
     int curr_buffer_id_;
     ScopedBitmap target_bitmap_[kNumBuffers];
-    uint8_t *image_buffer_[kNumBuffers]; // Буфер изображения экрана
+    uint8_t *image_buffer_[kNumBuffers]; // Р‘СѓС„РµСЂ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ СЌРєСЂР°РЅР°
 
     DISALLOW_COPY_AND_ASSIGN(CapturerGDI);
 };
 
-#endif // _ASPIA_DESKTOP_CAPTURE_CAPTURER_GDI_H
+#endif // _ASPIA_DESKTOP_CAPTURE__CAPTURER_GDI_H
