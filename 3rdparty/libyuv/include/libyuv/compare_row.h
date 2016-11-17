@@ -30,8 +30,8 @@ extern "C" {
 #endif
 
 // Visual C 2012 required for AVX2.
-#if defined(_M_IX86) && !defined(__clang__) && \
-    defined(_MSC_VER) && _MSC_VER >= 1700
+#if defined(_M_IX86) && !defined(__clang__) && defined(_MSC_VER) && \
+    _MSC_VER >= 1700
 #define VISUALC_HAS_AVX2 1
 #endif  // VisualStudio >= 2012
 
@@ -42,8 +42,8 @@ extern "C" {
 #endif  // clang >= 3.4
 #endif  // __clang__
 
-#if !defined(LIBYUV_DISABLE_X86) && \
-    defined(_M_IX86) && (defined(VISUALC_HAS_AVX2) || defined(CLANG_HAS_AVX2))
+#if !defined(LIBYUV_DISABLE_X86) && defined(_M_IX86) && \
+    (defined(VISUALC_HAS_AVX2) || defined(CLANG_HAS_AVX2))
 #define HAS_HASHDJB2_AVX2
 #endif
 

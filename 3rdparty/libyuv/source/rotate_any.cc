@@ -18,16 +18,16 @@ namespace libyuv {
 extern "C" {
 #endif
 
-#define TANY(NAMEANY, TPOS_SIMD, MASK)                                         \
-    void NAMEANY(const uint8* src, int src_stride,                             \
-                 uint8* dst, int dst_stride, int width) {                      \
-      int r = width & MASK;                                                    \
-      int n = width - r;                                                       \
-      if (n > 0) {                                                             \
-        TPOS_SIMD(src, src_stride, dst, dst_stride, n);                        \
-      }                                                                        \
-      TransposeWx8_C(src + n, src_stride, dst + n * dst_stride, dst_stride, r);\
-    }
+#define TANY(NAMEANY, TPOS_SIMD, MASK)                                        \
+  void NAMEANY(const uint8* src, int src_stride, uint8* dst, int dst_stride,  \
+               int width) {                                                   \
+    int r = width & MASK;                                                     \
+    int n = width - r;                                                        \
+    if (n > 0) {                                                              \
+      TPOS_SIMD(src, src_stride, dst, dst_stride, n);                         \
+    }                                                                         \
+    TransposeWx8_C(src + n, src_stride, dst + n * dst_stride, dst_stride, r); \
+  }
 
 #ifdef HAS_TRANSPOSEWX8_NEON
 TANY(TransposeWx8_Any_NEON, TransposeWx8_NEON, 7)
@@ -44,19 +44,16 @@ TANY(TransposeWx8_Any_DSPR2, TransposeWx8_DSPR2, 7)
 #undef TANY
 
 #define TUVANY(NAMEANY, TPOS_SIMD, MASK)                                       \
-    void NAMEANY(const uint8* src, int src_stride,                             \
-                uint8* dst_a, int dst_stride_a,                                \
-                uint8* dst_b, int dst_stride_b, int width) {                   \
-      int r = width & MASK;                                                    \
-      int n = width - r;                                                       \
-      if (n > 0) {                                                             \
-        TPOS_SIMD(src, src_stride, dst_a, dst_stride_a, dst_b, dst_stride_b,   \
-                  n);                                                          \
-      }                                                                        \
-      TransposeUVWx8_C(src + n * 2, src_stride,                                \
-                       dst_a + n * dst_stride_a, dst_stride_a,                 \
-                       dst_b + n * dst_stride_b, dst_stride_b, r);             \
-    }
+  void NAMEANY(const uint8* src, int src_stride, uint8* dst_a,                 \
+               int dst_stride_a, uint8* dst_b, int dst_stride_b, int width) {  \
+    int r = width & MASK;                                                      \
+    int n = width - r;                                                         \
+    if (n > 0) {                                                               \
+      TPOS_SIMD(src, src_stride, dst_a, dst_stride_a, dst_b, dst_stride_b, n); \
+    }                                                                          \
+    TransposeUVWx8_C(src + n * 2, src_stride, dst_a + n * dst_stride_a,        \
+                     dst_stride_a, dst_b + n * dst_stride_b, dst_stride_b, r); \
+  }
 
 #ifdef HAS_TRANSPOSEUVWX8_NEON
 TUVANY(TransposeUVWx8_Any_NEON, TransposeUVWx8_NEON, 7)
@@ -73,8 +70,3 @@ TUVANY(TransposeUVWx8_Any_DSPR2, TransposeUVWx8_DSPR2, 7)
 }  // extern "C"
 }  // namespace libyuv
 #endif
-
-
-
-
-
