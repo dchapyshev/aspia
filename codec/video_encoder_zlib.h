@@ -9,9 +9,7 @@
 #define _ASPIA_CODEC__VIDEO_ENCODER_ZLIB_H
 
 #include "base/macros.h"
-#include "base/logging.h"
 #include "base/scoped_aligned_buffer.h"
-
 #include "codec/pixel_translator_selector.h"
 #include "codec/compressor_zlib.h"
 #include "codec/video_encoder.h"
@@ -22,11 +20,13 @@ public:
     VideoEncoderZLIB();
     virtual ~VideoEncoderZLIB() override;
 
-    virtual proto::VideoPacket* Encode(const DesktopSize &desktop_size,
-                                       const PixelFormat &src_format,
-                                       const PixelFormat &dst_format,
-                                       const DesktopRegion &changed_region,
-                                       const uint8_t *src_buffer) override;
+    virtual void Resize(const DesktopSize &screen_size,
+                        const PixelFormat &host_pixel_format,
+                        const PixelFormat &client_pixel_format) override;
+
+    virtual Status Encode(proto::VideoPacket *packet,
+                          const uint8_t *screen_buffer,
+                          const DesktopRegion &changed_region) override;
 
 private:
     void PrepareResources(const DesktopSize &desktop_size,
@@ -34,7 +34,7 @@ private:
                           const PixelFormat &dst_format);
 
     void TranslateRect(const DesktopRect &rect, const uint8_t *src_buffer);
-    void EncodeRect(proto::VideoPacket *packet, const DesktopRect &rect);
+    void CompressRect(proto::VideoPacket *packet, const DesktopRect &rect);
 
     //
     // Retrieves a pointer to the output buffer in |update| used for storing the
@@ -43,10 +43,17 @@ private:
     uint8_t* GetOutputBuffer(proto::VideoPacket *packet, size_t size);
 
 private:
-    DesktopSize current_desktop_size_;
+    bool size_changed_;
 
-    PixelFormat current_src_format_;
-    PixelFormat current_dst_format_;
+    DesktopSize screen_size_;
+
+    PixelFormat client_pixel_format_;
+
+    int host_bytes_per_pixel_;
+    int client_bytes_per_pixel_;
+
+    int host_stride_;
+    int client_stride_;
 
     std::unique_ptr<DesktopRegion::Iterator> rect_iterator;
 

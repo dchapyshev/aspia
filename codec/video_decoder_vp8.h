@@ -10,21 +10,13 @@
 
 #include "aspia_config.h"
 
-#include <thread>
-
-#include "libyuv/convert_from.h"
-
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include "vpx/vpx_decoder.h"
 #include "vpx/vp8dx.h"
 
-#include "desktop_capture/desktop_rect.h"
-
 #include "codec/scoped_vpx_codec.h"
 #include "codec/video_decoder.h"
-
 #include "base/macros.h"
-#include "base/logging.h"
 
 class VideoDecoderVP8 : public VideoDecoder
 {
@@ -32,22 +24,19 @@ public:
     VideoDecoderVP8();
     virtual ~VideoDecoderVP8() override;
 
-    virtual bool Decode(const proto::VideoPacket *packet,
-                        const PixelFormat &dst_format,
-                        uint8_t *dst) override;
+    virtual void Resize(const DesktopSize &screen_size, const PixelFormat &pixel_format) override;
+
+    virtual void Decode(const proto::VideoPacket *packet, uint8_t *screen_buffer) override;
 
 private:
-    bool PrepareResources(const DesktopSize &desktop_size, const PixelFormat &pixel_format);
-    bool ConvertImageToARGB(const proto::VideoPacket *packet, uint8_t *dst);
+    void ConvertImageToARGB(const proto::VideoPacket *packet, vpx_image_t *image, uint8_t *screen_buffer);
 
 private:
-    PixelFormat current_pixel_format_;
-    DesktopSize current_desktop_size_;
+    DesktopSize screen_size_;
 
     int bytes_per_pixel_;
     int bytes_per_row_;
 
-    vpx_image_t *last_image_;
     ScopedVpxCodec codec_;
 
     DISALLOW_COPY_AND_ASSIGN(VideoDecoderVP8);

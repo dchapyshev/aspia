@@ -8,6 +8,8 @@
 #ifndef _ASPIA_CODEC__PIXEL_TRANSLATOR_SELECTOR_H
 #define _ASPIA_CODEC__PIXEL_TRANSLATOR_SELECTOR_H
 
+#include <memory>
+
 #include "codec/pixel_translator_fromARGB.h"
 #include "codec/pixel_translator_fromRGB565.h"
 #include "codec/pixel_translator_fake.h"

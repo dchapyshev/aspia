@@ -7,15 +7,22 @@
 
 #include "codec/video_encoder_zlib.h"
 
+#include "base/logging.h"
+
 VideoEncoderZLIB::VideoEncoderZLIB() :
-    packet_flags_(proto::VideoPacket::LAST_PACKET)
+    packet_flags_(proto::VideoPacket::LAST_PACKET),
+    host_bytes_per_pixel_(0),
+    client_bytes_per_pixel_(0),
+    host_stride_(0),
+    client_stride_(0),
+    size_changed_(true)
 {
     compressor_.reset(new CompressorZLIB());
 }
 
 VideoEncoderZLIB::~VideoEncoderZLIB()
 {
-
+    // Nothing
 }
 
 uint8_t* VideoEncoderZLIB::GetOutputBuffer(proto::VideoPacket *packet, size_t size)
@@ -25,34 +32,7 @@ uint8_t* VideoEncoderZLIB::GetOutputBuffer(proto::VideoPacket *packet, size_t si
     return const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(packet->mutable_data()->data()));
 }
 
-void VideoEncoderZLIB::PrepareResources(const DesktopSize &desktop_size,
-                                            const PixelFormat &src_format,
-                                            const PixelFormat &dst_format)
-{
-    if (current_desktop_size_ != desktop_size ||
-        current_src_format_ != src_format ||
-        current_dst_format_ != dst_format)
-    {
-        current_desktop_size_ = desktop_size;
-
-        current_src_format_ = src_format;
-        current_dst_format_ = dst_format;
-
-        translator_ = SelectTranslator(current_src_format_, current_dst_format_);
-
-        CHECK(translator_);
-
-        size_t buffer_size = current_desktop_size_.width() *
-                             current_desktop_size_.height() *
-                             current_dst_format_.bytes_per_pixel();
-
-        translated_buffer_.reset(new ScopedAlignedBuffer(buffer_size, 32));
-
-        memset(*translated_buffer_, 0, buffer_size);
-    }
-}
-
-void VideoEncoderZLIB::EncodeRect(proto::VideoPacket *packet, const DesktopRect &rect)
+void VideoEncoderZLIB::CompressRect(proto::VideoPacket *packet, const DesktopRect &rect)
 {
     proto::VideoRect *video_rect = packet->add_changed_rect();
 
@@ -61,26 +41,20 @@ void VideoEncoderZLIB::EncodeRect(proto::VideoPacket *packet, const DesktopRect 
     video_rect->set_width(rect.width());
     video_rect->set_height(rect.height());
 
-    // Делаем сброс компрессора при сжатии каждого прямоугольника
+    // Р”РµР»Р°РµРј СЃР±СЂРѕСЃ РєРѕРјРїСЂРµСЃСЃРѕСЂР° РїСЂРё СЃР¶Р°С‚РёРё РєР°Р¶РґРѕРіРѕ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР°
     compressor_->Reset();
 
-    // Количество байт в одном пикселе
-    const int bytes_per_pixel = current_dst_format_.bytes_per_pixel();
-
-    // Размер строки прямоугольника в байтах
-    const int row_size = rect.width() * bytes_per_pixel;
-
-    // Размер строки изображения в байтах
-    const int src_stride = current_desktop_size_.width() * bytes_per_pixel;
+    // Р Р°Р·РјРµСЂ СЃС‚СЂРѕРєРё РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР° РІ Р±Р°Р№С‚Р°С…
+    const int row_size = rect.width() * client_bytes_per_pixel_;
 
     int packet_size = row_size * rect.height();
     packet_size += packet_size / 100 + 16;
 
-    // Получаем указатели на буферы
-    const uint8_t* src = *translated_buffer_ + rect.y() * src_stride + rect.x() * bytes_per_pixel;
-    uint8_t* dst = GetOutputBuffer(packet, packet_size);
+    // РџРѕР»СѓС‡Р°РµРј СѓРєР°Р·Р°С‚РµР»Рё РЅР° Р±СѓС„РµСЂС‹
+    const uint8_t *in = *translated_buffer_ + rect.y() * client_stride_ + rect.x() * client_bytes_per_pixel_;
+    uint8_t *out = GetOutputBuffer(packet, packet_size);
 
-    int filled = 0;   // Количество байт в буфере назначения
+    int filled = 0;   // РљРѕР»РёС‡РµСЃС‚РІРѕ Р±Р°Р№С‚ РІ Р±СѓС„РµСЂРµ РЅР°Р·РЅР°С‡РµРЅРёСЏ
     int row_pos = 0;  // Position in the current row in bytes.
     int row_y = 0;    // Current row.
     bool compress_again = true;
@@ -89,23 +63,23 @@ void VideoEncoderZLIB::EncodeRect(proto::VideoPacket *packet, const DesktopRect 
     {
         Compressor::CompressorFlush flush = Compressor::CompressorNoFlush;
 
-        // Если мы достигли последней строки в прямоугольнике
+        // Р•СЃР»Рё РјС‹ РґРѕСЃС‚РёРіР»Рё РїРѕСЃР»РµРґРЅРµР№ СЃС‚СЂРѕРєРё РІ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРµ
         if (row_y == rect.height() - 1)
         {
-            // Ставим соответствующий флаг
+            // РЎС‚Р°РІРёРј СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ С„Р»Р°Рі
             flush = Compressor::CompressorFinish;
         }
 
-        int consumed = 0; // Количество байт, которое было взято из исходного буфера
-        int written = 0;  // Количество байт, которое было записано в буфер назначения
+        int consumed = 0; // РљРѕР»РёС‡РµСЃС‚РІРѕ Р±Р°Р№С‚, РєРѕС‚РѕСЂРѕРµ Р±С‹Р»Рѕ РІР·СЏС‚Рѕ РёР· РёСЃС…РѕРґРЅРѕРіРѕ Р±СѓС„РµСЂР°
+        int written = 0;  // РљРѕР»РёС‡РµСЃС‚РІРѕ Р±Р°Р№С‚, РєРѕС‚РѕСЂРѕРµ Р±С‹Р»Рѕ Р·Р°РїРёСЃР°РЅРѕ РІ Р±СѓС„РµСЂ РЅР°Р·РЅР°С‡РµРЅРёСЏ
 
-        // Сжимаем очередную порцию данных
-        compress_again = compressor_->Process(src + row_pos, row_size - row_pos,
-                                              dst + filled, packet_size - filled,
+        // РЎР¶РёРјР°РµРј РѕС‡РµСЂРµРґРЅСѓСЋ РїРѕСЂС†РёСЋ РґР°РЅРЅС‹С…
+        compress_again = compressor_->Process(in + row_pos, row_size - row_pos,
+                                              out + filled, packet_size - filled,
                                               flush, &consumed, &written);
 
-        row_pos += consumed; // Сдвигаем положение с текущей строке прямоугольника
-        filled += written;   // Увеличиваем счетчик итогового размера буфера назначения
+        row_pos += consumed; // РЎРґРІРёРіР°РµРј РїРѕР»РѕР¶РµРЅРёРµ СЃ С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕРєРµ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР°
+        filled += written;   // РЈРІРµР»РёС‡РёРІР°РµРј СЃС‡РµС‚С‡РёРє РёС‚РѕРіРѕРІРѕРіРѕ СЂР°Р·РјРµСЂР° Р±СѓС„РµСЂР° РЅР°Р·РЅР°С‡РµРЅРёСЏ
 
         // If we have filled the message or we have reached the end of stream.
         if (filled == packet_size || !compress_again)
@@ -114,16 +88,16 @@ void VideoEncoderZLIB::EncodeRect(proto::VideoPacket *packet, const DesktopRect 
             return;
         }
 
-        // Если мы достигли конца текущей строки в прямоугольнике и это не последняя строка
+        // Р•СЃР»Рё РјС‹ РґРѕСЃС‚РёРіР»Рё РєРѕРЅС†Р° С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕРєРё РІ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРµ Рё СЌС‚Рѕ РЅРµ РїРѕСЃР»РµРґРЅСЏСЏ СЃС‚СЂРѕРєР°
         if (row_pos == row_size && row_y < rect.height() - 1)
         {
-            // Обнуляаем положение в текущей строке
+            // РћР±РЅСѓР»СЏР°РµРј РїРѕР»РѕР¶РµРЅРёРµ РІ С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕРєРµ
             row_pos = 0;
 
-            // Переходим к следующей строке в буфере
-            src += src_stride;
+            // РџРµСЂРµС…РѕРґРёРј Рє СЃР»РµРґСѓСЋС‰РµР№ СЃС‚СЂРѕРєРµ РІ Р±СѓС„РµСЂРµ
+            in += client_stride_;
 
-            // Увеличиваем номер текущей строки
+            // РЈРІРµР»РёС‡РёРІР°РµРј РЅРѕРјРµСЂ С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕРєРё
             ++row_y;
         }
     }
@@ -131,57 +105,81 @@ void VideoEncoderZLIB::EncodeRect(proto::VideoPacket *packet, const DesktopRect 
 
 void VideoEncoderZLIB::TranslateRect(const DesktopRect &rect, const uint8_t *src_buffer)
 {
-    const int src_bytes_per_pixel = current_src_format_.bytes_per_pixel();
-    const int dst_bytes_per_pixel = current_dst_format_.bytes_per_pixel();
+    const uint8_t *in = src_buffer + host_stride_ * rect.y() + rect.x() * host_bytes_per_pixel_;
+    uint8_t *out = *translated_buffer_ + client_stride_ * rect.y() + rect.x() * client_bytes_per_pixel_;
 
-    const int src_stride = current_desktop_size_.width() * src_bytes_per_pixel;
-    const int dst_stride = current_desktop_size_.width() * dst_bytes_per_pixel;
-
-    const uint8_t *src = src_buffer + src_stride * rect.y() + rect.x() * src_bytes_per_pixel;
-    uint8_t *dst = *translated_buffer_ + dst_stride * rect.y() + rect.x() * dst_bytes_per_pixel;
-
-    translator_->Translate(src, src_stride,
-                           dst, dst_stride,
+    translator_->Translate(in, host_stride_,
+                           out, client_stride_,
                            rect.width(), rect.height());
 }
 
-proto::VideoPacket* VideoEncoderZLIB::Encode(const DesktopSize &desktop_size,
-                                             const PixelFormat &src_format,
-                                             const PixelFormat &dst_format,
-                                             const DesktopRegion &changed_region,
-                                             const uint8_t *src_buffer)
+void VideoEncoderZLIB::Resize(const DesktopSize &screen_size,
+                              const PixelFormat &host_pixel_format,
+                              const PixelFormat &client_pixel_format)
 {
-    proto::VideoPacket *packet = GetEmptyPacket();
+    screen_size_ = screen_size;
 
+    client_pixel_format_ = client_pixel_format;
+
+    host_bytes_per_pixel_ = host_pixel_format.bytes_per_pixel();
+    client_bytes_per_pixel_ = client_pixel_format.bytes_per_pixel();
+
+    host_stride_ = screen_size_.width() * host_bytes_per_pixel_;
+    client_stride_ = screen_size_.width() * client_bytes_per_pixel_;
+
+    translator_ = SelectTranslator(host_pixel_format, client_pixel_format);
+
+    CHECK(translator_);
+
+    size_t buffer_size = screen_size.width() *
+                         screen_size.height() *
+                         client_pixel_format.bytes_per_pixel();
+
+    translated_buffer_.reset(new ScopedAlignedBuffer(buffer_size, 32));
+
+    memset(*translated_buffer_, 0, buffer_size);
+
+    size_changed_ = true;
+}
+
+VideoEncoder::Status VideoEncoderZLIB::Encode(proto::VideoPacket *packet,
+                                              const uint8_t *screen_buffer,
+                                              const DesktopRegion &changed_region)
+{
     if (packet_flags_ & proto::VideoPacket::LAST_PACKET)
     {
         packet_flags_ = proto::VideoPacket::FIRST_PACKET;
-
-        PrepareResources(desktop_size, src_format, dst_format);
 
         rect_iterator.reset(new DesktopRegion::Iterator(changed_region));
 
         proto::VideoPacketFormat *format = packet->mutable_format();
 
-        // Заполняем кодировку
+        // Р—Р°РїРѕР»РЅСЏРµРј РєРѕРґРёСЂРѕРІРєСѓ
         format->set_encoding(proto::VIDEO_ENCODING_ZLIB);
 
-        // Размеры экрана
-        format->set_screen_width(desktop_size.width());
-        format->set_screen_height(desktop_size.height());
+        if (size_changed_)
+        {
+            // Р Р°Р·РјРµСЂС‹ СЌРєСЂР°РЅР°
+            proto::VideoSize *size = format->mutable_screen_size();
 
-        // Формат пикселей
-        proto::VideoPixelFormat *pixel_format = format->mutable_pixel_format();
+            size->set_width(screen_size_.width());
+            size->set_height(screen_size_.height());
 
-        pixel_format->set_bits_per_pixel(dst_format.bits_per_pixel());
+            // Р¤РѕСЂРјР°С‚ РїРёРєСЃРµР»РµР№
+            proto::VideoPixelFormat *pixel_format = format->mutable_pixel_format();
 
-        pixel_format->set_red_max(dst_format.red_max());
-        pixel_format->set_green_max(dst_format.green_max());
-        pixel_format->set_blue_max(dst_format.blue_max());
+            pixel_format->set_bits_per_pixel(client_pixel_format_.bits_per_pixel());
 
-        pixel_format->set_red_shift(dst_format.red_shift());
-        pixel_format->set_green_shift(dst_format.green_shift());
-        pixel_format->set_blue_shift(dst_format.blue_shift());
+            pixel_format->set_red_max(client_pixel_format_.red_max());
+            pixel_format->set_green_max(client_pixel_format_.green_max());
+            pixel_format->set_blue_max(client_pixel_format_.blue_max());
+
+            pixel_format->set_red_shift(client_pixel_format_.red_shift());
+            pixel_format->set_green_shift(client_pixel_format_.green_shift());
+            pixel_format->set_blue_shift(client_pixel_format_.blue_shift());
+
+            size_changed_ = false;
+        }
     }
     else
     {
@@ -191,22 +189,22 @@ proto::VideoPacket* VideoEncoderZLIB::Encode(const DesktopSize &desktop_size,
     const DesktopRect &rect = rect_iterator->rect();
 
     // Translate rect to client pixel format
-    TranslateRect(rect, src_buffer);
+    TranslateRect(rect, screen_buffer);
 
     // Compress rect with using ZLIB compressor
-    EncodeRect(packet, rect);
+    CompressRect(packet, rect);
 
-    // Перемещаем итератор в следующее положение
+    // РџРµСЂРµРјРµС‰Р°РµРј РёС‚РµСЂР°С‚РѕСЂ РІ СЃР»РµРґСѓСЋС‰РµРµ РїРѕР»РѕР¶РµРЅРёРµ
     rect_iterator->Advance();
 
-    // Если после перемещения мы находимся в конце списка
+    // Р•СЃР»Рё РїРѕСЃР»Рµ РїРµСЂРµРјРµС‰РµРЅРёСЏ РјС‹ РЅР°С…РѕРґРёРјСЃСЏ РІ РєРѕРЅС†Рµ СЃРїРёСЃРєР°
     if (rect_iterator->IsAtEnd())
     {
-        // Добавляем флаг последнего пакета
+        // Р”РѕР±Р°РІР»СЏРµРј С„Р»Р°Рі РїРѕСЃР»РµРґРЅРµРіРѕ РїР°РєРµС‚Р°
         packet_flags_ |= proto::VideoPacket::LAST_PACKET;
     }
 
     packet->set_flags(packet_flags_);
 
-    return packet;
+    return (packet_flags_ & proto::VideoPacket::LAST_PACKET) ? Status::End : Status::Next;
 }

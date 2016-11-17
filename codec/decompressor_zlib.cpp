@@ -7,6 +7,8 @@
 
 #include "codec/decompressor_zlib.h"
 
+#include "base/logging.h"
+
 DecompressorZLIB::DecompressorZLIB()
 {
     memset(&stream_, 0, sizeof(stream_));

@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CODEC__VIDEO_ENCODER_H
 #define _ASPIA_CODEC__VIDEO_ENCODER_H
 
-#include <memory>
 #include "desktop_capture/desktop_rect.h"
 #include "desktop_capture/desktop_region_win.h"
 #include "desktop_capture/pixel_format.h"
@@ -17,28 +16,18 @@
 class VideoEncoder
 {
 public:
-    VideoEncoder()
-    {
-        packet_ = google::protobuf::Arena::CreateMessage<proto::VideoPacket>(&arena_);
-    }
-
+    VideoEncoder() {}
     virtual ~VideoEncoder() {}
 
-    virtual proto::VideoPacket* Encode(const DesktopSize &desktop_size,
-                                       const PixelFormat &src_format,
-                                       const PixelFormat &dst_format,
-                                       const DesktopRegion &changed_region,
-                                       const uint8_t *src_buffer) = 0;
+    virtual void Resize(const DesktopSize &screen_size,
+                        const PixelFormat &host_pixel_format,
+                        const PixelFormat &client_pixel_format) = 0;
 
-    proto::VideoPacket* GetEmptyPacket()
-    {
-        packet_->Clear();
-        return packet_;
-    }
+    enum class Status { Next, End };
 
-private:
-    google::protobuf::Arena arena_;
-    proto::VideoPacket *packet_;
+    virtual Status Encode(proto::VideoPacket *packet,
+                          const uint8_t *screen_buffer,
+                          const DesktopRegion &changed_region) = 0;
 };
 
 #endif // _ASPIA_CODEC__VIDEO_ENCODER_H

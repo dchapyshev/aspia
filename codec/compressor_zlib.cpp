@@ -7,6 +7,8 @@
 
 #include "codec/compressor_zlib.h"
 
+#include "base/logging.h"
+
 CompressorZLIB::CompressorZLIB()
 {
     memset(&stream_, 0, sizeof(stream_));

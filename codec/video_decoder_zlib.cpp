@@ -7,7 +7,11 @@
 
 #include "codec/video_decoder_zlib.h"
 
-VideoDecoderZLIB::VideoDecoderZLIB()
+#include "base/logging.h"
+
+VideoDecoderZLIB::VideoDecoderZLIB() :
+    bytes_per_pixel_(0),
+    dst_stride_(0)
 {
     decompressor_.reset(new DecompressorZLIB());
 }
@@ -17,25 +21,28 @@ VideoDecoderZLIB::~VideoDecoderZLIB()
 
 }
 
-void VideoDecoderZLIB::DecodeRect(const proto::VideoPacket *packet, uint8_t *dst_buffer)
+void VideoDecoderZLIB::Resize(const DesktopSize &screen_size, const PixelFormat &pixel_format)
+{
+    bytes_per_pixel_ = pixel_format.bytes_per_pixel();
+    dst_stride_ = screen_size.width() * bytes_per_pixel_;
+}
+
+void VideoDecoderZLIB::Decode(const proto::VideoPacket *packet, uint8_t *screen_buffer)
 {
     const proto::VideoRect &rect = packet->changed_rect(0);
 
-    const int bytes_per_pixel = current_pixel_format_.bytes_per_pixel();
-
     const uint8_t *src = reinterpret_cast<const uint8_t*>(packet->data().data());
     const int src_size = packet->data().size();
-    const int row_size = rect.width() * bytes_per_pixel;
+    const int row_size = rect.width() * bytes_per_pixel_;
 
-    const int dst_stride = current_desktop_size_.width() * bytes_per_pixel;
-    uint8_t *dst = dst_buffer + dst_stride * rect.y() + rect.x() * bytes_per_pixel;
+    uint8_t *dst = screen_buffer + dst_stride_ * rect.y() + rect.x() * bytes_per_pixel_;
 
     // Consume all the data in the message.
     bool decompress_again = true;
     int used = 0;
 
-    int row_y = 0;   // Текущая строка
-    int row_pos = 0; // Положение в текущей строке
+    int row_y = 0;   // РўРµРєСѓС‰Р°СЏ СЃС‚СЂРѕРєР°
+    int row_pos = 0; // РџРѕР»РѕР¶РµРЅРёРµ РІ С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕРєРµ
 
     while (decompress_again && used < src_size)
     {
@@ -45,10 +52,10 @@ void VideoDecoderZLIB::DecodeRect(const proto::VideoPacket *packet, uint8_t *dst
             return;
         }
 
-        int written = 0;  // Количество байт записанный в буфер назначения
-        int consumed = 0; // Количество байт, которые были взяты из исходного буфера
+        int written = 0;  // РљРѕР»РёС‡РµСЃС‚РІРѕ Р±Р°Р№С‚ Р·Р°РїРёСЃР°РЅРЅС‹Р№ РІ Р±СѓС„РµСЂ РЅР°Р·РЅР°С‡РµРЅРёСЏ
+        int consumed = 0; // РљРѕР»РёС‡РµСЃС‚РІРѕ Р±Р°Р№С‚, РєРѕС‚РѕСЂС‹Рµ Р±С‹Р»Рё РІР·СЏС‚С‹ РёР· РёСЃС…РѕРґРЅРѕРіРѕ Р±СѓС„РµСЂР°
 
-        // Распаковываем очередную порцию данных
+        // Р Р°СЃРїР°РєРѕРІС‹РІР°РµРј РѕС‡РµСЂРµРґРЅСѓСЋ РїРѕСЂС†РёСЋ РґР°РЅРЅС‹С…
         decompress_again = decompressor_->Process(src + used,
                                                   src_size - used,
                                                   dst + row_pos,
@@ -58,42 +65,20 @@ void VideoDecoderZLIB::DecodeRect(const proto::VideoPacket *packet, uint8_t *dst
         used += consumed;
         row_pos += written;
 
-        // Если мы полностью распаковали строку в прямоугольнике
+        // Р•СЃР»Рё РјС‹ РїРѕР»РЅРѕСЃС‚СЊСЋ СЂР°СЃРїР°РєРѕРІР°Р»Рё СЃС‚СЂРѕРєСѓ РІ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРµ
         if (row_pos == row_size)
         {
-            // Увеличиваем счетчик строк
+            // РЈРІРµР»РёС‡РёРІР°РµРј СЃС‡РµС‚С‡РёРє СЃС‚СЂРѕРє
             ++row_y;
 
-            // Сбрасываем текущее положение в строке
+            // РЎР±СЂР°СЃС‹РІР°РµРј С‚РµРєСѓС‰РµРµ РїРѕР»РѕР¶РµРЅРёРµ РІ СЃС‚СЂРѕРєРµ
             row_pos = 0;
 
-            // Переходим к следующей строке в буфере назначения
-            dst += dst_stride;
+            // РџРµСЂРµС…РѕРґРёРј Рє СЃР»РµРґСѓСЋС‰РµР№ СЃС‚СЂРѕРєРµ РІ Р±СѓС„РµСЂРµ РЅР°Р·РЅР°С‡РµРЅРёСЏ
+            dst += dst_stride_;
         }
     }
 
-    // Сбрасываем декомпрессор после распаковки каждого прямоугольника
+    // РЎР±СЂР°СЃС‹РІР°РµРј РґРµРєРѕРјРїСЂРµСЃСЃРѕСЂ РїРѕСЃР»Рµ СЂР°СЃРїР°РєРѕРІРєРё РєР°Р¶РґРѕРіРѕ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР°
     decompressor_->Reset();
-}
-
-bool VideoDecoderZLIB::Decode(const proto::VideoPacket *packet,
-                              const PixelFormat &dst_format,
-                              uint8_t *dst_buffer)
-{
-    if (packet->flags() & proto::VideoPacket::FIRST_PACKET)
-    {
-        current_pixel_format_ = dst_format;
-
-        const proto::VideoPacketFormat &packet_format = packet->format();
-
-        current_desktop_size_ = DesktopSize(packet_format.screen_width(),
-                                            packet_format.screen_height());
-    }
-
-    if (packet->changed_rect_size() != 1)
-        return false;
-
-    DecodeRect(packet, dst_buffer);
-
-    return true;
 }

@@ -12,8 +12,6 @@
 
 #include <memory>
 
-#include "base/logging.h"
-
 extern "C"
 {
 typedef struct vpx_codec_ctx vpx_codec_ctx_t;

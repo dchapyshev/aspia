@@ -14,12 +14,7 @@
 
 #include "codec/video_decoder.h"
 #include "codec/decompressor_zlib.h"
-
-#include "desktop_capture/desktop_size.h"
-#include "desktop_capture/desktop_rect.h"
-
 #include "base/macros.h"
-#include "base/logging.h"
 
 class VideoDecoderZLIB : public VideoDecoder
 {
@@ -27,16 +22,13 @@ public:
     VideoDecoderZLIB();
     virtual ~VideoDecoderZLIB() override;
 
-    virtual bool Decode(const proto::VideoPacket *packet,
-                        const PixelFormat &dst_format,
-                        uint8_t *dst) override;
+    virtual void Resize(const DesktopSize &screen_size, const PixelFormat &pixel_format) override;
+
+    virtual void Decode(const proto::VideoPacket *packet, uint8_t *screen_buffer) override;
 
 private:
-    void DecodeRect(const proto::VideoPacket *packet, uint8_t *dst_buffer);
-
-private:
-    DesktopSize current_desktop_size_;
-    PixelFormat current_pixel_format_;
+    int bytes_per_pixel_;
+    int dst_stride_;
 
     std::unique_ptr<Decompressor> decompressor_;
 

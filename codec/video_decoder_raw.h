@@ -5,19 +5,15 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#ifndef _ASPIA_VIDEO_DECODER_RAW_H
-#define _ASPIA_VIDEO_DECODER_RAW_H
+#ifndef _ASPIA_CODEC__VIDEO_DECODER_RAW_H
+#define _ASPIA_CODEC__VIDEO_DECODER_RAW_H
 
 #include "aspia_config.h"
 
 #include <stdint.h>
 
 #include "codec/video_decoder.h"
-
-#include "desktop_capture/desktop_size.h"
-
 #include "base/macros.h"
-#include "base/logging.h"
 
 class VideoDecoderRAW : public VideoDecoder
 {
@@ -25,16 +21,15 @@ public:
     VideoDecoderRAW();
     virtual ~VideoDecoderRAW() override;
 
-    virtual bool Decode(const proto::VideoPacket *packet,
-                        const PixelFormat &dst_format,
-                        uint8_t *dst) override;
+    virtual void Resize(const DesktopSize &screen_size, const PixelFormat &pixel_format) override;
+
+    virtual void Decode(const proto::VideoPacket *packet, uint8_t *screen_buffer) override;
 
 private:
-    DesktopSize size_;
-
+    int bytes_per_pixel_;
     int dst_stride_;
 
     DISALLOW_COPY_AND_ASSIGN(VideoDecoderRAW);
 };
 
-#endif // _ASPIA_VIDEO_DECODER_RAW_H
+#endif // _ASPIA_CODEC__VIDEO_DECODER_RAW_H

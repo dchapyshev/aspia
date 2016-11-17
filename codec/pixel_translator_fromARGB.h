@@ -10,12 +10,9 @@
 
 #include "aspia_config.h"
 
-#include <assert.h>
-#include <memory>
 #include <vector>
 
 #include "base/macros.h"
-#include "base/logging.h"
 #include "codec/pixel_translator.h"
 
 //
@@ -29,9 +26,6 @@ public:
     PixelTranslatorFromARGB(const PixelFormat &src_format, const PixelFormat &dst_format) :
         src_format_(src_format)
     {
-        CHECK(sizeof(T) == dst_format.bytes_per_pixel());
-        CHECK(sizeof(uint32_t) == src_format.bytes_per_pixel());
-
         InitRedTable(dst_format);
         InitGreenTable(dst_format);
         InitBlueTable(dst_format);

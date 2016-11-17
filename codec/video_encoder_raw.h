@@ -15,7 +15,6 @@
 #include "codec/video_encoder.h"
 #include "codec/pixel_translator_selector.h"
 #include "base/macros.h"
-#include "base/logging.h"
 
 class VideoEncoderRAW : public VideoEncoder
 {
@@ -23,25 +22,30 @@ public:
     VideoEncoderRAW();
     virtual ~VideoEncoderRAW() override;
 
-    virtual proto::VideoPacket* Encode(const DesktopSize &desktop_size,
-                                       const PixelFormat &src_format,
-                                       const PixelFormat &dst_format,
-                                       const DesktopRegion &changed_region,
-                                       const uint8_t *src_buffer) override;
+    virtual void Resize(const DesktopSize &screen_size,
+                        const PixelFormat &host_pixel_format,
+                        const PixelFormat &client_pixel_format) override;
+
+    virtual Status Encode(proto::VideoPacket *packet,
+                          const uint8_t *screen_buffer,
+                          const DesktopRegion &changed_region) override;
 
 private:
     uint8_t* GetOutputBuffer(proto::VideoPacket *packet, size_t size);
 
-    void PrepareResources(const PixelFormat &src_format,
-                          const PixelFormat &dst_format);
-
 private:
+    bool size_changed_;
+
     int32_t packet_flags_;
 
     std::unique_ptr<DesktopRegion::Iterator> rect_iterator;
 
-    PixelFormat current_src_format_;
-    PixelFormat current_dst_format_;
+    DesktopSize screen_size_;
+    PixelFormat client_pixel_format_;
+
+    int src_bytes_per_pixel_;
+    int dst_bytes_per_pixel_;
+    int src_bytes_per_row_;
 
     std::unique_ptr<PixelTranslator> translator_;
 

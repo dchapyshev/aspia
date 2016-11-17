@@ -10,13 +10,9 @@
 
 #include "aspia_config.h"
 
-#include <assert.h>
-#include <memory>
 #include <vector>
 
 #include "base/macros.h"
-#include "base/logging.h"
-
 #include "codec/pixel_translator.h"
 
 //
@@ -29,9 +25,6 @@ class PixelTranslatorFromRGB565 : public PixelTranslator
 public:
     PixelTranslatorFromRGB565(const PixelFormat &src_format, const PixelFormat &dst_format)
     {
-        CHECK(sizeof(T) == dst_format.bytes_per_pixel());
-        CHECK(sizeof(uint16_t) == src_format.bytes_per_pixel());
-
         InitTable(src_format, dst_format);
     }
 

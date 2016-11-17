@@ -7,116 +7,21 @@
 
 #include"codec/video_encoder_raw.h"
 
+#include "base/logging.h"
+
 VideoEncoderRAW::VideoEncoderRAW() :
-    packet_flags_(proto::VideoPacket::LAST_PACKET)
+    packet_flags_(proto::VideoPacket::LAST_PACKET),
+    size_changed_(true),
+    dst_bytes_per_pixel_(0),
+    src_bytes_per_pixel_(0),
+    src_bytes_per_row_(0)
 {
+    // Nothing
 }
 
 VideoEncoderRAW::~VideoEncoderRAW()
 {
-}
-
-void VideoEncoderRAW::PrepareResources(const PixelFormat &src_format,
-                                       const PixelFormat &dst_format)
-{
-    if (current_src_format_ != src_format || current_dst_format_ != dst_format)
-    {
-        current_src_format_ = src_format;
-        current_dst_format_ = dst_format;
-
-        translator_ = SelectTranslator(current_src_format_, current_dst_format_);
-
-        CHECK(translator_);
-    }
-}
-
-proto::VideoPacket* VideoEncoderRAW::Encode(const DesktopSize &desktop_size,
-                                            const PixelFormat &src_format,
-                                            const PixelFormat &dst_format,
-                                            const DesktopRegion &changed_region,
-                                            const uint8_t *src_buffer)
-{
-    proto::VideoPacket *packet = GetEmptyPacket();
-
-    // Åñëè ïðåäûäóùèé ïàêåò áûë ïîñëåäíèì â ëîãè÷åñêîì îáíîâëåíèè
-    if (packet_flags_ & proto::VideoPacket::LAST_PACKET)
-    {
-        // Óñòàíàâëèâàåì ôëàã ïåðâîãî ïàêåòà.
-        packet_flags_ = proto::VideoPacket::FIRST_PACKET;
-
-        // Ïîäãîòàâëèâàåì ðåñóðñû (êîäåê, îáíîâëÿåì ôîðìàòû)
-        PrepareResources(src_format, dst_format);
-
-        // Ïåðåèíèöèàëèçèðóåì èçìåíåííûé ðåãèîí èç ïàðàìåòðîâ ìåòîäà
-        rect_iterator.reset(new DesktopRegion::Iterator(changed_region));
-
-        proto::VideoPacketFormat *format = packet->mutable_format();
-
-        // Çàïîëíÿåì êîäèðîâêó
-        format->set_encoding(proto::VIDEO_ENCODING_RAW);
-
-        // Ðàçìåðû ýêðàíà
-        format->set_screen_width(desktop_size.width());
-        format->set_screen_height(desktop_size.height());
-
-        // Ôîðìàò ïèêñåëåé
-        proto::VideoPixelFormat *pixel_format = format->mutable_pixel_format();
-
-        pixel_format->set_bits_per_pixel(dst_format.bits_per_pixel());
-
-        pixel_format->set_red_max(dst_format.red_max());
-        pixel_format->set_green_max(dst_format.green_max());
-        pixel_format->set_blue_max(dst_format.blue_max());
-
-        pixel_format->set_red_shift(dst_format.red_shift());
-        pixel_format->set_green_shift(dst_format.green_shift());
-        pixel_format->set_blue_shift(dst_format.blue_shift());
-    }
-    else
-    {
-        packet_flags_ = proto::VideoPacket::PARTITION_PACKET;
-    }
-
-    // Ïîëó÷àåì òåêóùèé èçìåíåííûé ïðÿìîóãîëüíèê
-    const DesktopRect &rect = rect_iterator->rect();
-
-    int src_bytes_per_pixel = current_src_format_.bytes_per_pixel();
-    int dst_bytes_per_pixel = current_dst_format_.bytes_per_pixel();
-
-    int rect_width = rect.width();
-    int rect_height = rect.height();
-
-    proto::VideoRect *video_rect = packet->add_changed_rect();
-    video_rect->set_x(rect.x());
-    video_rect->set_y(rect.y());
-    video_rect->set_width(rect_width);
-    video_rect->set_height(rect_height);
-
-    int src_bytes_per_row = desktop_size.width() * src_bytes_per_pixel;
-    int dst_bytes_per_row = rect.width() * dst_bytes_per_pixel;
-
-    // Èçìåíÿåì ðàçìåð âûõîäíîãî áóôåðà è ïîëó÷àåì óêàçàòåëü íà íåãî
-    const uint8_t *src = src_buffer + src_bytes_per_row * rect.y() + rect.x() * src_bytes_per_pixel;
-    uint8_t *dst = GetOutputBuffer(packet, dst_bytes_per_row * rect_height);
-
-    // Êîíâåðòèðóåì ïðÿìîóãîëüíèê â ôîðìàò êëèåíòà
-    translator_->Translate(src, src_bytes_per_row,
-                           dst, dst_bytes_per_row,
-                           rect_width, rect_height);
-
-    // Ïåðåìåùàåì èòåðàòîð â ñëåäóþùåå ïîëîæåíèå
-    rect_iterator->Advance();
-
-    // Åñëè ïîñëå ïåðåìåùåíèÿ ìû íàõîäèìñÿ â êîíöå ñïèñêà
-    if (rect_iterator->IsAtEnd())
-    {
-        // Äîáàâëÿåì ôëàã ïîñëåäíåãî ïàêåòà
-        packet_flags_ |= proto::VideoPacket::LAST_PACKET;
-    }
-
-    packet->set_flags(packet_flags_);
-
-    return packet;
+    // Nothing
 }
 
 uint8_t* VideoEncoderRAW::GetOutputBuffer(proto::VideoPacket *packet, size_t size)
@@ -124,4 +29,109 @@ uint8_t* VideoEncoderRAW::GetOutputBuffer(proto::VideoPacket *packet, size_t siz
     packet->mutable_data()->resize(size);
 
     return const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(packet->mutable_data()->data()));
+}
+
+void VideoEncoderRAW::Resize(const DesktopSize &screen_size,
+                             const PixelFormat &host_pixel_format,
+                             const PixelFormat &client_pixel_format)
+{
+    screen_size_ = screen_size;
+
+    client_pixel_format_ = client_pixel_format;
+
+    translator_ = SelectTranslator(host_pixel_format, client_pixel_format);
+
+    CHECK(translator_);
+
+    src_bytes_per_pixel_ = host_pixel_format.bytes_per_pixel();
+    dst_bytes_per_pixel_ = client_pixel_format.bytes_per_pixel();
+
+    src_bytes_per_row_ = screen_size_.width() * src_bytes_per_pixel_;
+
+    size_changed_ = true;
+}
+
+VideoEncoder::Status VideoEncoderRAW::Encode(proto::VideoPacket *packet,
+                                             const uint8_t *screen_buffer,
+                                             const DesktopRegion &changed_region)
+{
+    // Ð•ÑÐ»Ð¸ Ð¿Ñ€ÐµÐ´Ñ‹Ð´ÑƒÑ‰Ð¸Ð¹ Ð¿Ð°ÐºÐµÑ‚ Ð±Ñ‹Ð» Ð¿Ð¾ÑÐ»ÐµÐ´Ð½Ð¸Ð¼ Ð² Ð»Ð¾Ð³Ð¸Ñ‡ÐµÑÐºÐ¾Ð¼ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ð¸
+    if (packet_flags_ & proto::VideoPacket::LAST_PACKET)
+    {
+        // Ð£ÑÑ‚Ð°Ð½Ð°Ð²Ð»Ð¸Ð²Ð°ÐµÐ¼ Ñ„Ð»Ð°Ð³ Ð¿ÐµÑ€Ð²Ð¾Ð³Ð¾ Ð¿Ð°ÐºÐµÑ‚Ð°.
+        packet_flags_ = proto::VideoPacket::FIRST_PACKET;
+
+        // ÐŸÐµÑ€ÐµÐ¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð¸Ñ€ÑƒÐµÐ¼ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð½Ñ‹Ð¹ Ñ€ÐµÐ³Ð¸Ð¾Ð½ Ð¸Ð· Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ð¾Ð² Ð¼ÐµÑ‚Ð¾Ð´Ð°
+        rect_iterator.reset(new DesktopRegion::Iterator(changed_region));
+
+        proto::VideoPacketFormat *format = packet->mutable_format();
+
+        // Ð—Ð°Ð¿Ð¾Ð»Ð½ÑÐµÐ¼ ÐºÐ¾Ð´Ð¸Ñ€Ð¾Ð²ÐºÑƒ
+        format->set_encoding(proto::VIDEO_ENCODING_RAW);
+
+        if (size_changed_)
+        {
+            // Ð Ð°Ð·Ð¼ÐµÑ€Ñ‹ ÑÐºÑ€Ð°Ð½Ð°
+            proto::VideoSize *size = format->mutable_screen_size();
+
+            size->set_width(screen_size_.width());
+            size->set_height(screen_size_.height());
+
+            // Ð¤Ð¾Ñ€Ð¼Ð°Ñ‚ Ð¿Ð¸ÐºÑÐµÐ»ÐµÐ¹
+            proto::VideoPixelFormat *pixel_format = format->mutable_pixel_format();
+
+            pixel_format->set_bits_per_pixel(client_pixel_format_.bits_per_pixel());
+
+            pixel_format->set_red_max(client_pixel_format_.red_max());
+            pixel_format->set_green_max(client_pixel_format_.green_max());
+            pixel_format->set_blue_max(client_pixel_format_.blue_max());
+
+            pixel_format->set_red_shift(client_pixel_format_.red_shift());
+            pixel_format->set_green_shift(client_pixel_format_.green_shift());
+            pixel_format->set_blue_shift(client_pixel_format_.blue_shift());
+
+            size_changed_ = false;
+        }
+    }
+    else
+    {
+        packet_flags_ = proto::VideoPacket::PARTITION_PACKET;
+    }
+
+    // ÐŸÐ¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ Ñ‚ÐµÐºÑƒÑ‰Ð¸Ð¹ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð½Ñ‹Ð¹ Ð¿Ñ€ÑÐ¼Ð¾ÑƒÐ³Ð¾Ð»ÑŒÐ½Ð¸Ðº
+    const DesktopRect &rect = rect_iterator->rect();
+
+    const int rect_width = rect.width();
+    const int rect_height = rect.height();
+
+    proto::VideoRect *video_rect = packet->add_changed_rect();
+    video_rect->set_x(rect.x());
+    video_rect->set_y(rect.y());
+    video_rect->set_width(rect_width);
+    video_rect->set_height(rect_height);
+
+    const int dst_bytes_per_row = rect.width() * dst_bytes_per_pixel_;
+
+    // Ð˜Ð·Ð¼ÐµÐ½ÑÐµÐ¼ Ñ€Ð°Ð·Ð¼ÐµÑ€ Ð²Ñ‹Ñ…Ð¾Ð´Ð½Ð¾Ð³Ð¾ Ð±ÑƒÑ„ÐµÑ€Ð° Ð¸ Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ ÑƒÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÑŒ Ð½Ð° Ð½ÐµÐ³Ð¾
+    const uint8_t *src = screen_buffer + src_bytes_per_row_ * rect.y() + rect.x() * src_bytes_per_pixel_;
+    uint8_t *dst = GetOutputBuffer(packet, dst_bytes_per_row * rect_height);
+
+    // ÐšÐ¾Ð½Ð²ÐµÑ€Ñ‚Ð¸Ñ€ÑƒÐµÐ¼ Ð¿Ñ€ÑÐ¼Ð¾ÑƒÐ³Ð¾Ð»ÑŒÐ½Ð¸Ðº Ð² Ñ„Ð¾Ñ€Ð¼Ð°Ñ‚ ÐºÐ»Ð¸ÐµÐ½Ñ‚Ð°
+    translator_->Translate(src, src_bytes_per_row_,
+                           dst, dst_bytes_per_row,
+                           rect_width, rect_height);
+
+    // ÐŸÐµÑ€ÐµÐ¼ÐµÑ‰Ð°ÐµÐ¼ Ð¸Ñ‚ÐµÑ€Ð°Ñ‚Ð¾Ñ€ Ð² ÑÐ»ÐµÐ´ÑƒÑŽÑ‰ÐµÐµ Ð¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ
+    rect_iterator->Advance();
+
+    // Ð•ÑÐ»Ð¸ Ð¿Ð¾ÑÐ»Ðµ Ð¿ÐµÑ€ÐµÐ¼ÐµÑ‰ÐµÐ½Ð¸Ñ Ð¼Ñ‹ Ð½Ð°Ñ…Ð¾Ð´Ð¸Ð¼ÑÑ Ð² ÐºÐ¾Ð½Ñ†Ðµ ÑÐ¿Ð¸ÑÐºÐ°
+    if (rect_iterator->IsAtEnd())
+    {
+        // Ð”Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼ Ñ„Ð»Ð°Ð³ Ð¿Ð¾ÑÐ»ÐµÐ´Ð½ÐµÐ³Ð¾ Ð¿Ð°ÐºÐµÑ‚Ð°
+        packet_flags_ |= proto::VideoPacket::LAST_PACKET;
+    }
+
+    packet->set_flags(packet_flags_);
+
+    return (packet_flags_ & proto::VideoPacket::LAST_PACKET) ? Status::End : Status::Next;
 }

@@ -7,6 +7,8 @@
 
 #include "codec/scoped_vpx_codec.h"
 
+#include "base/logging.h"
+
 extern "C"
 {
 #define VPX_CODEC_DISABLE_COMPAT 1

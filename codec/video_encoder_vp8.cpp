@@ -7,6 +7,12 @@
 
 #include "codec/video_encoder_vp8.h"
 
+#include <thread>
+
+#include "base/logging.h"
+#include "libyuv/convert_from_argb.h"
+#include "libyuv/convert.h"
+
 static const int kBlockSize = 16;
 
 VideoEncoderVP8::VideoEncoderVP8() :
@@ -14,9 +20,10 @@ VideoEncoderVP8::VideoEncoderVP8() :
     active_map_size_(0),
     bytes_per_row_(0),
     bytes_per_pixel_(0),
-    last_timestamp_(0)
+    size_changed_(true)
 {
     memset(&active_map_, 0, sizeof(active_map_));
+    memset(&image_, 0, sizeof(image_));
 }
 
 VideoEncoderVP8::~VideoEncoderVP8()
@@ -27,8 +34,8 @@ void VideoEncoderVP8::CreateImage()
 {
     memset(&image_, 0, sizeof(vpx_image_t));
 
-    image_.d_w = image_.w = current_desktop_size_.width();
-    image_.d_h = image_.h = current_desktop_size_.height();
+    image_.d_w = image_.w = screen_size_.width();
+    image_.d_h = image_.h = screen_size_.height();
 
     image_.fmt = VPX_IMG_FMT_YV12;
     image_.x_chroma_shift = 1;
@@ -38,9 +45,9 @@ void VideoEncoderVP8::CreateImage()
     // libyuv's fast-path requires 16-byte aligned pointers and strides, so pad
     // the Y, U and V planes' strides to multiples of 16 bytes.
     //
-    int y_stride = ((image_.w - 1) & ~31) + 32;
+    int y_stride = ((image_.w - 1) & ~15) + 16;
     int uv_unaligned_stride = y_stride >> image_.x_chroma_shift;
-    int uv_stride = ((uv_unaligned_stride - 1) & ~31) + 32;
+    int uv_stride = ((uv_unaligned_stride - 1) & ~15) + 16;
 
     //
     // libvpx accesses the source image in macro blocks, and will over-read
@@ -72,8 +79,8 @@ void VideoEncoderVP8::CreateImage()
 
 void VideoEncoderVP8::CreateActiveMap()
 {
-    active_map_.cols = (current_desktop_size_.width() + kBlockSize - 1) / kBlockSize;
-    active_map_.rows = (current_desktop_size_.height() + kBlockSize - 1) / kBlockSize;
+    active_map_.cols = (screen_size_.width() + kBlockSize - 1) / kBlockSize;
+    active_map_.rows = (screen_size_.height() + kBlockSize - 1) / kBlockSize;
 
     active_map_size_ = active_map_.cols * active_map_.rows;
 
@@ -86,18 +93,20 @@ void VideoEncoderVP8::SetCommonCodecParameters(vpx_codec_enc_cfg_t *config)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
-    config->g_timebase.den = 20;
+    config->g_timebase.den = 1000;
 
-    // Adjust default target bit-rate to account for actual desktop size.
-    config->rc_target_bitrate = current_desktop_size_.width() * current_desktop_size_.height() *
-        config->rc_target_bitrate / config->g_w / config->g_h;
-
-    config->g_w = current_desktop_size_.width();
-    config->g_h = current_desktop_size_.height();
+    config->g_w = screen_size_.width();
+    config->g_h = screen_size_.height();
     config->g_pass = VPX_RC_ONE_PASS;
 
     // Start emitting packets immediately.
     config->g_lag_in_frames = 0;
+
+    // Since the transport layer is reliable, keyframes should not be necessary.
+    // However, due to crbug.com/440223, decoding fails after 30,000 non-key
+    // frames, so take the hit of an "unnecessary" key-frame every 10,000 frames.
+    config->kf_min_dist = 10000;
+    config->kf_max_dist = 10000;
 
     //
     // Using 2 threads gives a great boost in performance for most systems with
@@ -108,23 +117,21 @@ void VideoEncoderVP8::SetCommonCodecParameters(vpx_codec_enc_cfg_t *config)
     config->g_threads = (std::thread::hardware_concurrency() > 2) ? 2 : 1;
 }
 
-bool VideoEncoderVP8::CreateCodec()
+void VideoEncoderVP8::CreateCodec()
 {
     codec_.reset(new vpx_codec_ctx_t());
 
-    vpx_codec_enc_cfg_t config;
-    vpx_codec_iface_t *algo;
-    vpx_codec_err_t ret;
+    vpx_codec_enc_cfg_t config = { 0 };
 
     // Configure the encoder.
-    algo = vpx_codec_vp8_cx();
-    ret = vpx_codec_enc_config_default(algo, &config, 0);
-    if (ret != VPX_CODEC_OK)
-    {
-        LOG(ERROR) << "vpx_codec_enc_config_default() failed: " <<
-            vpx_codec_err_to_string(ret) << " (" << ret << ")";
-        return false;
-    }
+    vpx_codec_iface_t *algo = vpx_codec_vp8_cx();
+
+    vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config, 0);
+    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to fetch default configuration";
+
+    // Adjust default target bit-rate to account for actual desktop size.
+    config.rc_target_bitrate = screen_size_.width() * screen_size_.height() *
+        config.rc_target_bitrate / config.g_w / config.g_h;
 
     SetCommonCodecParameters(&config);
 
@@ -140,62 +147,21 @@ bool VideoEncoderVP8::CreateCodec()
     config.rc_max_quantizer = 30;
 
     ret = vpx_codec_enc_init(codec_.get(), algo, &config, 0);
-    if (ret != VPX_CODEC_OK)
-    {
-        LOG(ERROR) << "vpx_codec_enc_init() failed: " <<
-            vpx_codec_err_to_string(ret) << " (" << ret << ")";
-        return false;
-    }
+    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to initialize codec";
 
     // Value of 16 will have the smallest CPU load. This turns off subpixel motion search.
     ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 16);
-    if (ret != VPX_CODEC_OK)
-    {
-        LOG(ERROR) << "vpx_codec_control() failed: " <<
-            vpx_codec_err_to_string(ret) << " (" << ret << ")";
-        return false;
-    }
+    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set CPUUSED";
 
     ret = vpx_codec_control(codec_.get(), VP8E_SET_SCREEN_CONTENT_MODE, 1);
-    if (ret != VPX_CODEC_OK)
-    {
-        LOG(ERROR) << "vpx_codec_control() failed: " <<
-            vpx_codec_err_to_string(ret) << " (" << ret << ")";
-        return false;
-    }
+    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set screen content mode";
 
     //
     // Use the lowest level of noise sensitivity so as to spend less time
     // on motion estimation and inter-prediction mode.
     //
     ret = vpx_codec_control(codec_.get(), VP8E_SET_NOISE_SENSITIVITY, 0);
-    if (ret != VPX_CODEC_OK)
-    {
-        LOG(ERROR) << "vpx_codec_control() failed: " <<
-            vpx_codec_err_to_string(ret) << " (" << ret << ")";
-        return false;
-    }
-
-    return true;
-}
-
-void VideoEncoderVP8::PrepareCodec(const DesktopSize &desktop_size, int bytes_per_pixel)
-{
-    if (current_desktop_size_ != desktop_size || bytes_per_pixel_ != bytes_per_pixel)
-    {
-        current_desktop_size_ = desktop_size;
-        bytes_per_pixel_ = bytes_per_pixel;
-        bytes_per_row_ = bytes_per_pixel * desktop_size.width();
-
-        codec_.reset();
-    }
-
-    if (!codec_)
-    {
-        CreateImage();
-        CreateActiveMap();
-        CreateCodec();
-    }
+    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set noise sensitivity";
 }
 
 void VideoEncoderVP8::PrepareImageAndActiveMap(const DesktopRegion &region,
@@ -214,9 +180,9 @@ void VideoEncoderVP8::PrepareImageAndActiveMap(const DesktopRegion &region,
     {
         const DesktopRect &rect = iter.rect();
 
-        int rgb_offset = bytes_per_row_ * rect.top() + rect.left() * bytes_per_pixel_;
-        int y_offset = y_stride * rect.top() + rect.left();
-        int uv_offset = uv_stride * rect.top() / 2 + rect.left() / 2;
+        int rgb_offset = bytes_per_row_ * rect.y() + rect.x() * bytes_per_pixel_;
+        int y_offset = y_stride * rect.y() + rect.x();
+        int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
         int width = rect.width();
         int height = rect.height();
 
@@ -271,30 +237,47 @@ void VideoEncoderVP8::PrepareImageAndActiveMap(const DesktopRegion &region,
     }
 }
 
-proto::VideoPacket* VideoEncoderVP8::Encode(const DesktopSize &desktop_size,
-                                            const PixelFormat &src_format,
-                                            const PixelFormat &dst_format,
-                                            const DesktopRegion &changed_region,
-                                            const uint8_t *src_buffer)
+void VideoEncoderVP8::Resize(const DesktopSize &screen_size,
+                             const PixelFormat &host_pixel_format,
+                             const PixelFormat &client_pixel_format)
 {
-    PrepareCodec(desktop_size, src_format.bytes_per_pixel());
+    screen_size_ = screen_size;
 
-    proto::VideoPacket *packet = GetEmptyPacket();
+    bytes_per_pixel_ = host_pixel_format.bytes_per_pixel();
+    bytes_per_row_ = bytes_per_pixel_ * screen_size.width();
 
+    CreateImage();
+    CreateActiveMap();
+    CreateCodec();
+
+    size_changed_ = true;
+}
+
+VideoEncoder::Status VideoEncoderVP8::Encode(proto::VideoPacket *packet,
+                                             const uint8_t *screen_buffer,
+                                             const DesktopRegion &changed_region)
+{
     packet->set_flags(proto::VideoPacket::FIRST_PACKET | proto::VideoPacket::LAST_PACKET);
 
-    proto::VideoPacketFormat *packet_format = packet->mutable_format();
+    proto::VideoPacketFormat *format = packet->mutable_format();
 
-    packet_format->set_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
+    format->set_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
 
-    packet_format->set_screen_width(current_desktop_size_.width());
-    packet_format->set_screen_height(current_desktop_size_.height());
+    if (size_changed_)
+    {
+        proto::VideoSize *size = format->mutable_screen_size();
+
+        size->set_width(screen_size_.width());
+        size->set_height(screen_size_.height());
+
+        size_changed_ = false;
+    }
 
     //
     // Convert the updated capture data ready for encode.
     // Update active map based on updated region.
     //
-    PrepareImageAndActiveMap(changed_region, src_buffer, packet);
+    PrepareImageAndActiveMap(changed_region, screen_buffer, packet);
 
     // Apply active map to the encoder.
     vpx_codec_err_t ret = vpx_codec_control(codec_.get(), VP8E_SET_ACTIVEMAP, &active_map_);
@@ -304,15 +287,12 @@ proto::VideoPacket* VideoEncoderVP8::Encode(const DesktopSize &desktop_size,
     }
 
     // Do the actual encoding.
-    ret = vpx_codec_encode(codec_.get(), &image_, last_timestamp_, 1, 0, VPX_DL_REALTIME);
+    ret = vpx_codec_encode(codec_.get(), &image_, 0, 1, 0, VPX_DL_REALTIME);
 
     DCHECK_EQ(ret, VPX_CODEC_OK)
         << "Encoding error: " << vpx_codec_err_to_string(ret) << "\n"
         << "Details: " << vpx_codec_error(codec_.get()) << "\n"
         << vpx_codec_error_detail(codec_.get());
-
-    // TODO(hclam): Apply the proper timestamp here.
-    last_timestamp_ += 50;
 
     // Read the encoded data.
     vpx_codec_iter_t iter = nullptr;
@@ -331,7 +311,6 @@ proto::VideoPacket* VideoEncoderVP8::Encode(const DesktopSize &desktop_size,
             case VPX_CODEC_CX_FRAME_PKT:
             {
                 got_data = true;
-                // TODO(sergeyu): Split each frame into multiple partitions.
                 packet->set_data(vpx_packet->data.frame.buf, vpx_packet->data.frame.sz);
             }
             break;
@@ -341,5 +320,5 @@ proto::VideoPacket* VideoEncoderVP8::Encode(const DesktopSize &desktop_size,
         }
     }
 
-    return packet;
+    return Status::End;
 }

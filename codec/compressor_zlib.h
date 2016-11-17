@@ -9,13 +9,9 @@
 #define _ASPIA_CODEC__COMPRESSOR_ZLIB_H
 
 #include <stdint.h>
-#include <memory>
 
 #include "3rdparty/zlib-ng/zlib.h"
-
 #include "base/macros.h"
-#include "base/logging.h"
-
 #include "codec/compressor.h"
 
 class CompressorZLIB : public Compressor
