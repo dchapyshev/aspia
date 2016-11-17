@@ -11,4 +11,7 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 IDI_MAINICON ICON "resource/main.ico"
 
+// UTF-8
+#pragma code_page(65001)
+
 1 24 "manifest.xml"

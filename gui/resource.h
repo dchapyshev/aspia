@@ -5,8 +5,8 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#ifndef _ASPIA_RESOURCE_H
-#define _ASPIA_RESOURCE_H
+#ifndef _ASPIA_GUI__RESOURCE_H
+#define _ASPIA_GUI__RESOURCE_H
 
 #include <windows.h>
 
@@ -35,4 +35,4 @@
 #define IDS_SERVER_STARTED          100
 #define IDS_SERVER_STOPPED          101
 
-#endif // _ASPIA_RESOURCE_H
+#endif // _ASPIA_GUI__RESOURCE_H

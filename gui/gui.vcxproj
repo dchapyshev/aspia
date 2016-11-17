@@ -46,6 +46,10 @@
     <LinkIncremental>false</LinkIncremental>
     <IntDir>$(OutDir)obj\x86\$(ProjectName)\</IntDir>
     <GenerateManifest>false</GenerateManifest>
+    <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSdk_ExecutablePath);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSdk_IncludePath);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSdk_LibraryPath_x86);</LibraryPath>
+    <ExcludePath>$(VC_IncludePath);$(WindowsSdk_IncludePath);$(MSBuild_ExecutablePath);$(VC_LibraryPath_x86);</ExcludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -64,13 +68,13 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)/server;$(SolutionDir)/client;$(SolutionDir)/include;$(SolutionDir)/3rdparty/libglog/src/windows;$(SolutionDir)/3rdparty/asio;$(SolutionDir)/3rdparty/libvpx;$(SolutionDir)/3rdparty/libyuv/include;$(SolutionDir)/3rdparty/zlib-ng;$(SolutionDir)/3rdparty/protobuf/src;$(SolutionDir)/3rdparty/wtl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/3rdparty/libglog/src/windows;$(SolutionDir)/3rdparty/libvpx;$(SolutionDir)/3rdparty/libyuv/include;$(SolutionDir)/3rdparty/zlib-ng;$(SolutionDir)/3rdparty/protobuf/src;$(SolutionDir)/3rdparty/wtl;$(SolutionDir)/3rdparty;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -88,7 +92,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SetChecksum>true</SetChecksum>
-      <AdditionalDependencies>libglog.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;server.lib;client.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;libglog.lib;gflags.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libaspia.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>
@@ -100,16 +105,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main_dialog.cpp" />
     <ClCompile Include="screen_window.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="auth_dialog.h" />
     <ClInclude Include="main_dialog.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="screen_window.h" />
-    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="lang\en-US.rc" />

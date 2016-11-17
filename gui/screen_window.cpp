@@ -5,8 +5,7 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#include "stdafx.h"
-#include "screen_window.h"
+#include "gui/screen_window.h"
 
 LRESULT CScreenWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {

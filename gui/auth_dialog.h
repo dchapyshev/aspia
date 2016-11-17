@@ -5,10 +5,16 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#ifndef _ASPIA_AUTH_DIALOG_H
-#define _ASPIA_AUTH_DIALOG_H
+#ifndef _ASPIA_GUI__AUTH_DIALOG_H
+#define _ASPIA_GUI__AUTH_DIALOG_H
 
-#include "resource.h"
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <atlctrls.h>
+#include <atlctrlx.h>
+
+#include "gui/resource.h"
 
 class CAuthDialog : public CDialogImpl < CAuthDialog >
 {
@@ -25,4 +31,4 @@ private:
     LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
 };
 
-#endif // _ASPIA_AUTH_DIALOG_H
+#endif // _ASPIA_GUI__AUTH_DIALOG_H

@@ -2,14 +2,15 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="auth_dialog.cpp" />
     <ClCompile Include="screen_window.cpp" />
+    <ClCompile Include="main_dialog.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h" />
     <ClInclude Include="auth_dialog.h" />
     <ClInclude Include="screen_window.h" />
+    <ClInclude Include="main_dialog.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="lang">
@@ -20,5 +21,6 @@
     <ResourceCompile Include="lang\en-US.rc">
       <Filter>lang</Filter>
     </ResourceCompile>
+    <ResourceCompile Include="resource.rc" />
   </ItemGroup>
 </Project>

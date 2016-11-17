@@ -5,8 +5,7 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#include "stdafx.h"
-#include "auth_dialog.h"
+#include "gui/auth_dialog.h"
 
 LRESULT CAuthDialog::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {

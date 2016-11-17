@@ -5,77 +5,45 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#include "stdafx.h"
-#include "main_dialog.h"
+#include <atlbase.h>
+#include <atlapp.h>
 
-class Logging
+#include "gui/main_dialog.h"
+
+int main(int argc, char *argv[])
 {
-public:
-    Logging() : is_initialized_(false)
-    {
-        char current_path[256];
+    // РџР°СЂСЃРёРј РїР°СЂР°РјРµС‚СЂС‹ РєРѕРјРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё.
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-        // Получаем путь к директории, из которой запущено приложение
-        if (_getcwd(current_path, _countof(current_path)))
-        {
-            std::string log_path(current_path);
+    // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј Р±РёР±Р»РёРѕС‚РµРєСѓ Р»РѕРіРіРёСЂРѕРІР°РЅРёСЏ.
+    google::InitGoogleLogging(argv[0]);
 
-            log_path.append("/log");
+    HINSTANCE instance = nullptr;
 
-            FLAGS_log_dir      = log_path;
-            FLAGS_logtostderr  = 0;
-            FLAGS_minloglevel  = google::GLOG_INFO;
-            FLAGS_max_log_size = 25; // 25MB
+    GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+                           GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                       reinterpret_cast<WCHAR*>(&main),
+                       &instance);
+    CHECK(instance);
 
-            log_path.append("/SERVER_");
-
-            google::SetLogDestination(google::GLOG_INFO,    log_path.c_str());
-            google::SetLogDestination(google::GLOG_WARNING, log_path.c_str());
-            google::SetLogDestination(google::GLOG_ERROR,   log_path.c_str());
-            google::SetLogDestination(google::GLOG_FATAL,   log_path.c_str());
-
-            google::InitGoogleLogging("aspia-remote-desktop");
-
-            is_initialized_ = true;
-        }
-    }
-
-    ~Logging()
-    {
-        if (is_initialized_)
-        {
-            google::ShutdownGoogleLogging();
-        }
-    }
-
-private:
-    bool is_initialized_;
-};
-
-INT WINAPI
-wWinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, INT nShowCmd)
-{
-    Logging logging;
-
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
-    UNREFERENCED_PARAMETER(nShowCmd);
-
-    HRESULT res = ::CoInitialize(nullptr);
-    ATLASSERT(SUCCEEDED(res));
+    HRESULT res = CoInitialize(nullptr);
+    CHECK(SUCCEEDED(res));
 
     AtlInitCommonControls(ICC_BAR_CLASSES);
 
     CAppModule module;
-    res = module.Init(nullptr, hInst);
-    ATLASSERT(SUCCEEDED(hRes));
+    res = module.Init(nullptr, instance);
+    CHECK(SUCCEEDED(res));
 
     CMainDialog main_dialog;
     main_dialog.DoModal();
 
     module.Term();
 
-    ::CoUninitialize();
+    CoUninitialize();
+
+    google::ShutdownGoogleLogging();
+    gflags::ShutDownCommandLineFlags();
 
     return 0;
 }

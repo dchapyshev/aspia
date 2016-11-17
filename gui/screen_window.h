@@ -5,10 +5,14 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#ifndef _ASPIA_SCREEN_WINDOW_H
-#define _ASPIA_SCREEN_WINDOW_H
+#ifndef _ASPIA_GUI__SCREEN_WINDOW_H
+#define _ASPIA_GUI__SCREEN_WINDOW_H
 
-#include "resource.h"
+#include "gui/resource.h"
+
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
 
 class CScreenWindow : public CWindowImpl < CScreenWindow, CWindow, CFrameWinTraits >
 {
@@ -29,4 +33,4 @@ private:
     LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
 };
 
-#endif // _ASPIA_SCREEN_WINDOW_H
+#endif // _ASPIA_GUI__SCREEN_WINDOW_H
