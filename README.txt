@@ -1,13 +1,14 @@
 Aspia Remote Desktop
 
 Remote desktop implementation (client and server) based on Google Protocol Buffers.
-The project uses code from WebRTC and Chromium Remoting.
+In the project partially uses code from WebRTC and Chromium Remoting.
 Also uses:
    - libvpx (Library for encoding and decoding vp8/vp9 video formats).
    - zlib-ng (Library for compressing and decompressing. Different from the
      original zlib presence of patches from Intel and Cloudflare for faster
      work on modern processors)
    - libglog (Logging library from Google)
+   - gflags (Command line arguments parsing)
    - libyuv (For image formats convertation)
    - WTL (For GUI in Windows)
    - RapidJSON (For storing configuration files to JSON format)
