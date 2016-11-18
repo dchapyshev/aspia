@@ -46,17 +46,20 @@ public:
     static bool IsValidPort(int port);
 
     template<class T>
-    void WriteMessage(T *message)
+    void WriteMessage(const T *message)
     {
         LockGuard<Mutex> guard(&write_lock_);
 
-        if (!message->SerializeToString(&write_message_))
+        uint32_t packet_size = message->ByteSize();
+
+        if (write_message_.size() < packet_size)
+            write_message_.resize(packet_size);
+
+        if (!message->SerializeToArray(&write_message_[0], packet_size))
         {
             Close();
             throw Exception("Unable to serialize the message.");
         }
-
-        uint32_t packet_size = write_message_.size();
 
         if (!packet_size)
         {

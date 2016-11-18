@@ -39,15 +39,18 @@ public:
     void ConnectTo(const char *hostname, int port);
     void Disconnect();
 
-    void SendPointerEvent(int32_t x, int32_t y, int32_t mask);
-    void SendKeyEvent(int32_t keycode, bool extended, bool pressed);
-
-    void ProcessMessage(const proto::ServerToClient *message);
+    void ProcessInputMessage(const proto::ServerToClient *message);
+    void ProcessOutputMessage(const proto::ClientToServer *message);
 
 private:
     void Worker() override;
     void OnStart() override;
     void OnStop() override;
+
+    void InsertToOutputQueue(std::unique_ptr<proto::ClientToServer> &message);
+    void InitScreenWindow();
+    void InitInputQueue();
+    void InitOutputQueue();
 
     void OnScreenWindowClosed();
 
@@ -68,7 +71,8 @@ private:
     OnEventCallback on_event_;
 
     std::unique_ptr<Socket> socket_;
-    std::unique_ptr<MessageQueue> message_queue_;
+    std::unique_ptr<MessageQueue<proto::ServerToClient>> input_message_queue_;
+    std::unique_ptr<MessageQueue<proto::ClientToServer>> output_message_queue_;
     std::unique_ptr<VideoDecoder> decoder_;
     std::unique_ptr<ScreenWindowWin> window_;
 

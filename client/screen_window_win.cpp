@@ -6,13 +6,12 @@
 */
 
 #include "client/screen_window_win.h"
-#include "client/remote_client.h"
 
-ScreenWindowWin::ScreenWindowWin(RemoteClient *client,
-                                 HWND parent,
+ScreenWindowWin::ScreenWindowWin(HWND parent,
+                                 OnMessageAvailableCallback on_message,
                                  OnClosedCallback on_closed) :
-    client_(client),
     parent_(parent),
+    on_message_(on_message),
     on_closed_(on_closed),
     window_(nullptr),
     image_buffer_(nullptr)
@@ -433,6 +432,32 @@ void ScreenWindowWin::OnClose(HWND window)
     self->Stop();
 }
 
+void ScreenWindowWin::SendPointerEvent(int32_t x, int32_t y, int32_t mask)
+{
+    std::unique_ptr<proto::ClientToServer> message(new proto::ClientToServer());
+
+    proto::PointerEvent *pe = message->mutable_pointer_event();
+
+    pe->set_x(x);
+    pe->set_y(y);
+    pe->set_mask(mask);
+
+    on_message_(message);
+}
+
+void ScreenWindowWin::SendKeyEvent(int32_t keycode, bool extended, bool pressed)
+{
+    std::unique_ptr<proto::ClientToServer> message(new proto::ClientToServer());
+
+    proto::KeyEvent *ke = message->mutable_key_event();
+
+    ke->set_keycode(keycode);
+    ke->set_extended(extended);
+    ke->set_pressed(pressed);
+
+    on_message_(message);
+}
+
 // static
 void ScreenWindowWin::OnMouseMessage(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -482,18 +507,11 @@ void ScreenWindowWin::OnMouseMessage(HWND window, UINT msg, WPARAM wParam, LPARA
         return;
     }
 
-    try
-    {
-        self->client_->SendPointerEvent(pos.x, pos.y, mask);
+    self->SendPointerEvent(pos.x, pos.y, mask);
 
-        if (mask & wheel_mask)
-        {
-            self->client_->SendPointerEvent(pos.x, pos.y, mask & ~wheel_mask);
-        }
-    }
-    catch (const Exception &err)
+    if (mask & wheel_mask)
     {
-        LOG(ERROR) << "Unable to send pointer event: " << err.What();
+        self->SendPointerEvent(pos.x, pos.y, mask & ~wheel_mask);
     }
 }
 
@@ -509,14 +527,7 @@ void ScreenWindowWin::OnKeyMessage(HWND window, WPARAM wParam, LPARAM lParam)
 
     uint8_t key = static_cast<uint8_t>(static_cast<uint32_t>(wParam) & 255);
 
-    try
-    {
-        self->client_->SendKeyEvent(key, extended, pressed);
-    }
-    catch (const Exception &err)
-    {
-        LOG(ERROR) << "Unable to send key event: " << err.What();
-    }
+    self->SendKeyEvent(key, extended, pressed);
 }
 
 // static
@@ -599,7 +610,7 @@ static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wParam, LPARAM lParam)
                 case VK_LWIN:
                 case VK_RWIN:
                 {
-                    // Если клавиша TAB нажата, а ALT не нажата.
+                    // Р•СЃР»Рё РєР»Р°РІРёС€Р° TAB РЅР°Р¶Р°С‚Р°, Р° ALT РЅРµ РЅР°Р¶Р°С‚Р°.
                     if (hook_struct->vkCode == VK_TAB && !(hook_struct->flags & LLKHF_ALTDOWN))
                         break;
 
@@ -607,17 +618,17 @@ static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wParam, LPARAM lParam)
 
                     if (hook_struct->flags & LLKHF_EXTENDED)
                     {
-                        // Бит 24 установленный в 1 означает, что это расширенный код клавиши.
+                        // Р‘РёС‚ 24 СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅС‹Р№ РІ 1 РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ СЌС‚Рѕ СЂР°СЃС€РёСЂРµРЅРЅС‹Р№ РєРѕРґ РєР»Р°РІРёС€Рё.
                         flags |= 0x1000000;
                     }
 
                     if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
                     {
-                        // Бит 31 установленный в 1 означает, что клавиша отжата.
+                        // Р‘РёС‚ 31 СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅС‹Р№ РІ 1 РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ РєР»Р°РІРёС€Р° РѕС‚Р¶Р°С‚Р°.
                         flags |= 0x80000000;
                     }
 
-                    // Отправляем сообщение окну, которое находится в фокусе нажатие клавиши.
+                    // РћС‚РїСЂР°РІР»СЏРµРј СЃРѕРѕР±С‰РµРЅРёРµ РѕРєРЅСѓ, РєРѕС‚РѕСЂРѕРµ РЅР°С…РѕРґРёС‚СЃСЏ РІ С„РѕРєСѓСЃРµ РЅР°Р¶Р°С‚РёРµ РєР»Р°РІРёС€Рё.
                     SendMessageW(gui_info.hwndFocus, wParam, hook_struct->vkCode, flags);
 
                     return TRUE;
@@ -633,8 +644,8 @@ static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wParam, LPARAM lParam)
 void ScreenWindowWin::Worker()
 {
     //
-    // Для минимизации задержек при отправке сообщений ввода устанавливаем
-    // высокий приоритет для потока.
+    // Р”Р»СЏ РјРёРЅРёРјРёР·Р°С†РёРё Р·Р°РґРµСЂР¶РµРє РїСЂРё РѕС‚РїСЂР°РІРєРµ СЃРѕРѕР±С‰РµРЅРёР№ РІРІРѕРґР° СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј
+    // РІС‹СЃРѕРєРёР№ РїСЂРёРѕСЂРёС‚РµС‚ РґР»СЏ РїРѕС‚РѕРєР°.
     //
     SetThreadPriority(Priority::Highest);
 
@@ -642,7 +653,7 @@ void ScreenWindowWin::Worker()
 
     HMODULE instance = nullptr;
 
-    // Определяем дискриптор текущего модуля по адресу KeyboardHookProc.
+    // РћРїСЂРµРґРµР»СЏРµРј РґРёСЃРєСЂРёРїС‚РѕСЂ С‚РµРєСѓС‰РµРіРѕ РјРѕРґСѓР»СЏ РїРѕ Р°РґСЂРµСЃСѓ KeyboardHookProc.
     if (!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
                                 GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
                             reinterpret_cast<const WCHAR*>(&KeyboardHookProc),
@@ -680,11 +691,11 @@ void ScreenWindowWin::Worker()
     UpdateWindow(window_);
 
     //
-    // Для правильной обработки некоторых комбинаций нажатия клавиш необходимо
-    // установить перехватчик, который будет предотвращать обработку этих
-    // нажатий системой. К таким комбинациям относятся Left Win, Right Win,
-    // Alt + Tab. Перехватчик определяет нажатия данных клавиш и отправляет
-    // сообщение нажатия клавиши окну, которое находится в данный момент в фокусе.
+    // Р”Р»СЏ РїСЂР°РІРёР»СЊРЅРѕР№ РѕР±СЂР°Р±РѕС‚РєРё РЅРµРєРѕС‚РѕСЂС‹С… РєРѕРјР±РёРЅР°С†РёР№ РЅР°Р¶Р°С‚РёСЏ РєР»Р°РІРёС€ РЅРµРѕР±С…РѕРґРёРјРѕ
+    // СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїРµСЂРµС…РІР°С‚С‡РёРє, РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµС‚ РїСЂРµРґРѕС‚РІСЂР°С‰Р°С‚СЊ РѕР±СЂР°Р±РѕС‚РєСѓ СЌС‚РёС…
+    // РЅР°Р¶Р°С‚РёР№ СЃРёСЃС‚РµРјРѕР№. Рљ С‚Р°РєРёРј РєРѕРјР±РёРЅР°С†РёСЏРј РѕС‚РЅРѕСЃСЏС‚СЃСЏ Left Win, Right Win,
+    // Alt + Tab. РџРµСЂРµС…РІР°С‚С‡РёРє РѕРїСЂРµРґРµР»СЏРµС‚ РЅР°Р¶Р°С‚РёСЏ РґР°РЅРЅС‹С… РєР»Р°РІРёС€ Рё РѕС‚РїСЂР°РІР»СЏРµС‚
+    // СЃРѕРѕР±С‰РµРЅРёРµ РЅР°Р¶Р°С‚РёСЏ РєР»Р°РІРёС€Рё РѕРєРЅСѓ, РєРѕС‚РѕСЂРѕРµ РЅР°С…РѕРґРёС‚СЃСЏ РІ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ РІ С„РѕРєСѓСЃРµ.
     //
     HHOOK keyboard_hook = SetWindowsHookExW(WH_KEYBOARD_LL,
                                             KeyboardHookProc,

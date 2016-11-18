@@ -19,7 +19,7 @@
 class Event
 {
 public:
-    Event(const char *name);
+    Event();
     virtual ~Event();
 
     void Notify();
@@ -29,7 +29,6 @@ public:
 
 private:
     ScopedHandle event_;
-    std::string name_;
 
     DISALLOW_COPY_AND_ASSIGN(Event);
 };

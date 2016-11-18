@@ -19,23 +19,23 @@ RemoteClient::RemoteClient(OnEventCallback on_event) :
 
 RemoteClient::~RemoteClient()
 {
-    // Дожидаемся завершения потока.
+    // Р”РѕР¶РёРґР°РµРјСЃСЏ Р·Р°РІРµСЂС€РµРЅРёСЏ РїРѕС‚РѕРєР°.
     WaitForEnd();
 }
 
 void RemoteClient::ConnectTo(const char *hostname, int port)
 {
-    // Сохраняем адрес и порт.
+    // РЎРѕС…СЂР°РЅСЏРµРј Р°РґСЂРµСЃ Рё РїРѕСЂС‚.
     hostname_ = hostname;
     port_ = port;
 
-    // Запускаем поток.
+    // Р—Р°РїСѓСЃРєР°РµРј РїРѕС‚РѕРє.
     Start();
 }
 
 void RemoteClient::Disconnect()
 {
-    // Даем команду потоку остановиться.
+    // Р”Р°РµРј РєРѕРјР°РЅРґСѓ РїРѕС‚РѕРєСѓ РѕСЃС‚Р°РЅРѕРІРёС‚СЊСЃСЏ.
     Stop();
 }
 
@@ -76,13 +76,13 @@ void RemoteClient::SendAuthReply(int32_t method)
 
 void RemoteClient::ReadVideoPacket(const proto::VideoPacket &packet)
 {
-    // Если пакет является первым в логическом обновлении
+    // Р•СЃР»Рё РїР°РєРµС‚ СЏРІР»СЏРµС‚СЃСЏ РїРµСЂРІС‹Рј РІ Р»РѕРіРёС‡РµСЃРєРѕРј РѕР±РЅРѕРІР»РµРЅРёРё
     if (packet.flags() & proto::VideoPacket::FIRST_PACKET)
     {
-        // Получаем кодировку
+        // РџРѕР»СѓС‡Р°РµРј РєРѕРґРёСЂРѕРІРєСѓ
         int32_t encoding = packet.format().encoding();
 
-        // Переинициализируем декодер при необходимости
+        // РџРµСЂРµРёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РґРµРєРѕРґРµСЂ РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё
         if (current_encoding_ != encoding)
         {
             current_encoding_ = encoding;
@@ -121,22 +121,22 @@ void RemoteClient::ReadVideoPacket(const proto::VideoPacket &packet)
                 decoder_->Resize(screen_size_, pixel_format_);
             }
 
-            // Отправляем окну команду изменить размер.
+            // РћС‚РїСЂР°РІР»СЏРµРј РѕРєРЅСѓ РєРѕРјР°РЅРґСѓ РёР·РјРµРЅРёС‚СЊ СЂР°Р·РјРµСЂ.
             window_->Resize(screen_size_, pixel_format_);
         }
     }
 
-    // Если декодер инициализирован.
+    // Р•СЃР»Рё РґРµРєРѕРґРµСЂ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ.
     if (decoder_)
     {
         {
-            // Получаем буфер, в который будем производить декодирование.
+            // РџРѕР»СѓС‡Р°РµРј Р±СѓС„РµСЂ, РІ РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµРј РїСЂРѕРёР·РІРѕРґРёС‚СЊ РґРµРєРѕРґРёСЂРѕРІР°РЅРёРµ.
             ScreenWindowWin::LockedMemory memory = window_->GetBuffer();
 
             decoder_->Decode(&packet, memory.get());
         }
 
-        // Сообщаем окну, что буфер изменился.
+        // РЎРѕРѕР±С‰Р°РµРј РѕРєРЅСѓ, С‡С‚Рѕ Р±СѓС„РµСЂ РёР·РјРµРЅРёР»СЃСЏ.
         window_->Invalidate();
     }
 }
@@ -153,8 +153,8 @@ void RemoteClient::SendVideoControl(bool enable,
     ctrl->set_encoding(encoding);
 
     //
-    // Поле формата пикселей применимо на данный момент только для
-    // данных кодировок, а для остальных - игнорируется.
+    // РџРѕР»Рµ С„РѕСЂРјР°С‚Р° РїРёРєСЃРµР»РµР№ РїСЂРёРјРµРЅРёРјРѕ РЅР° РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ С‚РѕР»СЊРєРѕ РґР»СЏ
+    // РґР°РЅРЅС‹С… РєРѕРґРёСЂРѕРІРѕРє, Р° РґР»СЏ РѕСЃС‚Р°Р»СЊРЅС‹С… - РёРіРЅРѕСЂРёСЂСѓРµС‚СЃСЏ.
     //
     if (encoding == proto::VIDEO_ENCODING_ZLIB ||
         encoding == proto::VIDEO_ENCODING_RAW)
@@ -175,33 +175,7 @@ void RemoteClient::SendVideoControl(bool enable,
     socket_->WriteMessage(message.get());
 }
 
-void RemoteClient::SendPointerEvent(int32_t x, int32_t y, int32_t mask)
-{
-    std::unique_ptr<proto::ClientToServer> message(new proto::ClientToServer());
-
-    proto::PointerEvent *pe = message->mutable_pointer_event();
-
-    pe->set_x(x);
-    pe->set_y(y);
-    pe->set_mask(mask);
-
-    socket_->WriteMessage(message.get());
-}
-
-void RemoteClient::SendKeyEvent(int32_t keycode, bool extended, bool pressed)
-{
-    std::unique_ptr<proto::ClientToServer> message(new proto::ClientToServer());
-
-    proto::KeyEvent *ke = message->mutable_key_event();
-
-    ke->set_keycode(keycode);
-    ke->set_extended(extended);
-    ke->set_pressed(pressed);
-
-    socket_->WriteMessage(message.get());
-}
-
-void RemoteClient::ProcessMessage(const proto::ServerToClient *message)
+void RemoteClient::ProcessInputMessage(const proto::ServerToClient *message)
 {
     if (message->has_video_packet())
     {
@@ -232,16 +206,70 @@ void RemoteClient::OnScreenWindowClosed()
     Disconnect();
 }
 
+void RemoteClient::InsertToOutputQueue(std::unique_ptr<proto::ClientToServer> &message)
+{
+    output_message_queue_->Add(std::move(message));
+}
+
+void RemoteClient::ProcessOutputMessage(const proto::ClientToServer *message)
+{
+    socket_->WriteMessage(message);
+}
+
+void RemoteClient::InitScreenWindow()
+{
+    ScreenWindowWin::OnClosedCallback on_closed =
+        std::bind(&RemoteClient::OnScreenWindowClosed, this);
+
+    ScreenWindowWin::OnMessageAvailableCallback on_message =
+        std::bind(&RemoteClient::InsertToOutputQueue, this, std::placeholders::_1);
+
+    // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РµРіРѕ Рё Р·Р°РїСѓСЃРєР°РµРј РїРѕС‚РѕРє.
+    window_.reset(new ScreenWindowWin(nullptr, on_message, on_closed));
+
+    // Р—Р°РїСѓСЃРєР°РµРј РїРѕС‚РѕРє РѕРєРЅР°.
+    window_->Start();
+}
+
+void RemoteClient::InitInputQueue()
+{
+    MessageQueue<proto::ServerToClient>::ProcessMessageCallback process_input_message =
+        std::bind(&RemoteClient::ProcessInputMessage, this, std::placeholders::_1);
+
+    //
+    // РћР±СЂР°Р±РѕС‚РєР° СЃРѕРѕР±С‰РµРЅРёСЏ (РІ С‡Р°СЃС‚РЅРѕСЃС‚Рё РґРµРєРѕРґРёСЂРѕРІР°РЅРёРµ РІРёРґРµРѕ-РїР°РєРµС‚РѕРІ) РјРѕР¶РµС‚ Р·Р°РЅРёРјР°С‚СЊ
+    // РґР»РёС‚РµР»СЊРЅРѕРµ РІСЂРµРјСЏ. Р”Р»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ РЅРµ Р±Р»РѕРєРёСЂРѕРІР°С‚СЊ РїРѕС‚РѕРє С‡С‚РµРЅРёСЏ РїР°РєРµС‚РѕРІ РёР· СЃРµС‚Рё
+    // РјС‹ СЃРѕР·РґР°РµРј РѕС‚РґРµР»СЊРЅС‹Р№ РїРѕС‚РѕРє РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№. РЎРѕРѕР±С‰РµРЅРёСЏ РґРѕР±Р°РІР»СЏСЋС‚СЃСЏ РІ
+    // РѕС‡РµСЂРµРґСЊ Рё РѕР±СЂР°Р±Р°С‚С‹РІР°СЋС‚СЃСЏ РІ РїРѕСЂСЏРґРєРµ РїРѕСЃС‚СѓРїР»РµРЅРёСЏ РёР· РґР°РЅРЅРѕРіРѕ РїРѕС‚РѕРєР°.
+    //
+    input_message_queue_.reset(new MessageQueue<proto::ServerToClient>(process_input_message));
+
+    // Р—Р°РїСѓСЃРєР°РµРј РїРѕС‚РѕРє РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№.
+    input_message_queue_->Start();
+}
+
+void RemoteClient::InitOutputQueue()
+{
+    MessageQueue<proto::ClientToServer>::ProcessMessageCallback process_output_message =
+        std::bind(&RemoteClient::ProcessOutputMessage, this, std::placeholders::_1);
+
+    // Р”Р»СЏ Р°СЃРёРЅС…СЂРѕРЅРЅРѕР№ РѕС‚РїСЂР°РІРєРё СЃРѕРѕР±С‰РµРЅРёР№ РЅР° СЃРµСЂРІРµСЂ РјС‹ СЃРѕР·РґР°РµРј РѕС‡РµСЂРµРґСЊ РёСЃС…РѕРґСЏС‰РёРє СЃРѕРѕР±С‰РµРЅРёР№.
+    output_message_queue_.reset(new MessageQueue<proto::ClientToServer>(process_output_message));
+
+    // Р—Р°РїСѓСЃРєР°РµРј РїРѕС‚РѕРє РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№.
+    output_message_queue_->Start();
+}
+
 void RemoteClient::Worker()
 {
     LOG(INFO) << "Remote client thread started";
 
     try
     {
-        // Создаем сокет.
+        // РЎРѕР·РґР°РµРј СЃРѕРєРµС‚.
         socket_.reset(new SocketTCP());
 
-        // Пытаемся подключиться.
+        // РџС‹С‚Р°РµРјСЃСЏ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ.
         socket_->Connect(hostname_.c_str(), port_);
     }
     catch (const Exception &err)
@@ -249,12 +277,12 @@ void RemoteClient::Worker()
         LOG(ERROR) << "Unable to connect: " << err.What();
 
         //
-        // Асинхронно вызываем callback для уведомления о том, что невозможно
-        // подключиться.
+        // РђСЃРёРЅС…СЂРѕРЅРЅРѕ РІС‹Р·С‹РІР°РµРј callback РґР»СЏ СѓРІРµРґРѕРјР»РµРЅРёСЏ Рѕ С‚РѕРј, С‡С‚Рѕ РЅРµРІРѕР·РјРѕР¶РЅРѕ
+        // РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ.
         //
         std::async(std::launch::async, on_event_, EventType::NotConnected);
 
-        // Выходим, поток завершен.
+        // Р’С‹С…РѕРґРёРј, РїРѕС‚РѕРє Р·Р°РІРµСЂС€РµРЅ.
         return;
     }
 
@@ -276,61 +304,40 @@ void RemoteClient::Worker()
         LOG(ERROR) << "Unable to login: " << err.What();
 
         //
-        // Асинхронно вызываем callback для уведомления о том, что невозможно
-        // подключиться.
+        // РђСЃРёРЅС…СЂРѕРЅРЅРѕ РІС‹Р·С‹РІР°РµРј callback РґР»СЏ СѓРІРµРґРѕРјР»РµРЅРёСЏ Рѕ С‚РѕРј, С‡С‚Рѕ РЅРµРІРѕР·РјРѕР¶РЅРѕ
+        // РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ.
         //
         std::async(std::launch::async, on_event_, EventType::BadAuth);
 
-        // Выходим, поток завершен.
+        // Р’С‹С…РѕРґРёРј, РїРѕС‚РѕРє Р·Р°РІРµСЂС€РµРЅ.
         return;
     }
 
-    // Если класс окна не инициализирован.
-    if (!window_)
-    {
-        ScreenWindowWin::OnClosedCallback on_closed =
-            std::bind(&RemoteClient::OnScreenWindowClosed, this);
-
-        // Инициализируем его и запускаем поток.
-        window_.reset(new ScreenWindowWin(this, nullptr, on_closed));
-        window_->Start();
-    }
-
-    MessageQueue::ProcessMessageCallback process_message =
-        std::bind(&RemoteClient::ProcessMessage, this, std::placeholders::_1);
-
-    //
-    // Обработка сообщения (в частности декодирование видео-пакетов) может занимать
-    // длительное время. Для того, чтобы не блокировать поток чтения пакетов из сети
-    // мы создаем отдельный поток для обработки сообщений. Сообщения добавляются в
-    // очередь и обрабатываются в порядке поступления из данного потока.
-    //
-    message_queue_.reset(new MessageQueue(process_message));
-
-    // Запускаем поток обработки сообщений.
-    message_queue_->Start();
+    InitScreenWindow();
+    InitInputQueue();
+    InitOutputQueue();
 
     try
     {
         //
-        // Асинхронно вызываем callback для уведомления о том, что мы успешно
-        // подключились.
+        // РђСЃРёРЅС…СЂРѕРЅРЅРѕ РІС‹Р·С‹РІР°РµРј callback РґР»СЏ СѓРІРµРґРѕРјР»РµРЅРёСЏ Рѕ С‚РѕРј, С‡С‚Рѕ РјС‹ СѓСЃРїРµС€РЅРѕ
+        // РїРѕРґРєР»СЋС‡РёР»РёСЃСЊ.
         //
         std::async(std::launch::async, on_event_, EventType::Connected);
 
         SendVideoControl(true, proto::VIDEO_ENCODING_ZLIB, PixelFormat::MakeRGB565());
 
-        // Продолжаем цикл пока поток окна на завершится.
+        // РџСЂРѕРґРѕР»Р¶Р°РµРј С†РёРєР» РїРѕРєР° РїРѕС‚РѕРє РѕРєРЅР° РЅР° Р·Р°РІРµСЂС€РёС‚СЃСЏ.
         while (!window_->IsEndOfThread())
         {
-            // Создаем экземпляр сообщения.
+            // РЎРѕР·РґР°РµРј СЌРєР·РµРјРїР»СЏСЂ СЃРѕРѕР±С‰РµРЅРёСЏ.
             std::unique_ptr<proto::ServerToClient> message(new proto::ServerToClient());
 
-            // Читаем сообщение от сервера.
+            // Р§РёС‚Р°РµРј СЃРѕРѕР±С‰РµРЅРёРµ РѕС‚ СЃРµСЂРІРµСЂР°.
             socket_->ReadMessage(&message);
 
-            // Добавляем сообщение в очередь.
-            message_queue_->Add(std::move(message));
+            // Р”РѕР±Р°РІР»СЏРµРј СЃРѕРѕР±С‰РµРЅРёРµ РІ РѕС‡РµСЂРµРґСЊ.
+            input_message_queue_->Add(std::move(message));
         }
     }
     catch (const Exception &err)
@@ -338,13 +345,15 @@ void RemoteClient::Worker()
         LOG(ERROR) << "Exception in remote client thread: " << err.What();
     }
 
-    // Даем команду остановиться потоку обработки сообщений.
-    message_queue_->Stop();
+    // Р”Р°РµРј РєРѕРјР°РЅРґСѓ РѕСЃС‚Р°РЅРѕРІРёС‚СЊСЃСЏ РїРѕС‚РѕРєР°Рј РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№.
+    input_message_queue_->Stop();
+    output_message_queue_->Stop();
 
-    // Дожидаемся остановки.
-    message_queue_->WaitForEnd();
+    // Р”РѕР¶РёРґР°РµРјСЃСЏ РѕСЃС‚Р°РЅРѕРІРєРё.
+    input_message_queue_->WaitForEnd();
+    output_message_queue_->WaitForEnd();
 
-    // Асинхронно вызываем callback для уведомления о том, что подключение завершено.
+    // РђСЃРёРЅС…СЂРѕРЅРЅРѕ РІС‹Р·С‹РІР°РµРј callback РґР»СЏ СѓРІРµРґРѕРјР»РµРЅРёСЏ Рѕ С‚РѕРј, С‡С‚Рѕ РїРѕРґРєР»СЋС‡РµРЅРёРµ Р·Р°РІРµСЂС€РµРЅРѕ.
     std::async(std::launch::async, on_event_, EventType::Disconnected);
 
     LOG(INFO) << "Remote client thread stopped";
@@ -357,10 +366,10 @@ void RemoteClient::OnStart()
 
 void RemoteClient::OnStop()
 {
-    // Если сокет был инициализирован.
+    // Р•СЃР»Рё СЃРѕРєРµС‚ Р±С‹Р» РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ.
     if (socket_)
     {
-        // Закрываем его.
+        // Р—Р°РєСЂС‹РІР°РµРј РµРіРѕ.
         socket_->Close();
     }
 }

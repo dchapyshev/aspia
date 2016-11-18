@@ -23,14 +23,13 @@
 #include "base/macros.h"
 #include "proto/proto.pb.h"
 
-class RemoteClient;
-
 class ScreenWindowWin : public Thread
 {
 public:
     typedef std::function<void()> OnClosedCallback;
+    typedef std::function<void(std::unique_ptr<proto::ClientToServer>&)> OnMessageAvailableCallback;
 
-    ScreenWindowWin(RemoteClient *client, HWND parent, OnClosedCallback on_closed);
+    ScreenWindowWin(HWND parent, OnMessageAvailableCallback on_message, OnClosedCallback on_closed);
     ~ScreenWindowWin();
 
     class LockedMemory : public LockGuard<Mutex>
@@ -49,11 +48,14 @@ public:
     void Resize(const DesktopSize &screen_size, const PixelFormat &pixel_format);
     void Invalidate();
 
+private:
     void Worker() override;
     void OnStart() override;
     void OnStop() override;
 
-private:
+    void SendPointerEvent(int32_t x, int32_t y, int32_t mask);
+    void SendKeyEvent(int32_t keycode, bool extended, bool pressed);
+
     static LRESULT CALLBACK WndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
     static void OnCreate(HWND window, LPARAM lParam);
     static void OnDestroy(HWND window);
@@ -73,8 +75,7 @@ private:
     void AllocateBuffer(int align);
 
 private:
-    RemoteClient *client_;
-
+    OnMessageAvailableCallback on_message_;
     OnClosedCallback on_closed_;
 
     HWND parent_;
