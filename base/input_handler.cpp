@@ -36,6 +36,13 @@ void InputHandler::SwitchToInputDesktop()
     {
         desktop_.SetThreadDesktop(input_desktop.release());
     }
+
+    //
+    // Отправляем системе уведомления о том, что она используется для
+    // предотвращения включения экранной заставки, отключения монитора,
+    // перехода в спящий режим и т.д.
+    //
+    SetThreadExecutionState(ES_SYSTEM_REQUIRED);
 }
 
 void InputHandler::HandlePointer(const proto::PointerEvent &msg)
