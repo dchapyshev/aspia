@@ -64,40 +64,39 @@ int main(int argc, char *argv[])
             StartGUI();
         }
     }
-    // Если администраторские права есть и установлен флаг запуска службы.
-    else if (have_admin_rights && FLAGS_run_mode == "sas")
+    // Если администраторские права есть.
+    else
     {
-        SasInjector().DoService();
-    }
-    // Если администраторские права есть и установлен флаг запуска службы.
-    else if (have_admin_rights && FLAGS_run_mode == "runas")
-    {
-        RunAsService().DoService();
-    }
-    // Если администраторские права имеются и установлен флаг запуска от имени системы.
-    else if (have_admin_rights && FLAGS_run_mode == "system")
-    {
-        // Запускаем GUI.
-        StartGUI();
-    }
-    else if (have_admin_rights && FLAGS_run_mode == "service")
-    {
-        // TODO: Режим работы в виде службы.
-    }
-    // Если администраторские права есть, но никакие флаги запуска не установлены.
-    else if (have_admin_rights)
-    {
-        // Если служба не была успешно установлена.
-        if (!RunAsService::InstallAndStartService())
+        // Если установлен флаг запуска службы.
+        if (FLAGS_run_mode == "sas")
+        {
+            SasInjector().DoService();
+        }
+        // Если установлен флаг запуска службы.
+        else if (FLAGS_run_mode == "runas")
+        {
+            RunAsService().DoService();
+        }
+        // Если установлен флаг запуска от имени системы.
+        else if (FLAGS_run_mode == "system")
         {
             // Запускаем GUI.
             StartGUI();
         }
-    }
-    else
-    {
-        // Во всех остальных случаях запускаем GUI.
-        StartGUI();
+        else if (FLAGS_run_mode == "service")
+        {
+            // TODO: Режим работы в виде службы.
+        }
+        // Если никакие флаги запуска не установлены.
+        else
+        {
+            // Если служба не была успешно установлена.
+            if (!RunAsService::InstallAndStartService())
+            {
+                // Запускаем GUI.
+                StartGUI();
+            }
+        }
     }
 
     google::ShutdownGoogleLogging();
