@@ -213,7 +213,7 @@ bool RunAsService::InstallAndStartService()
 
     // Устанавливаем службу в системе.
     std::unique_ptr<ServiceControl> service_control =
-        ServiceControl::Install(module_path,
+        ServiceControl::Install(command_line.c_str(),
                                 kRunAsServiceName,
                                 kRunAsServiceName,
                                 kRunAsServiceName,
