@@ -39,9 +39,6 @@
     <ClCompile Include="base\process.cpp">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\runas.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="base\scoped_thread_desktop.cpp">
       <Filter>base</Filter>
     </ClCompile>
@@ -120,9 +117,6 @@
     <ClCompile Include="server\server.cpp">
       <Filter>server</Filter>
     </ClCompile>
-    <ClCompile Include="client\message_queue.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
     <ClCompile Include="client\remote_client.cpp">
       <Filter>client</Filter>
     </ClCompile>
@@ -137,6 +131,15 @@
     </ClCompile>
     <ClCompile Include="proto\proto.pb.cc">
       <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="base\runas_service.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\sas_injector.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scoped_sas_police.cpp">
+      <Filter>base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -171,9 +174,6 @@
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\process.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\runas.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\scoped_aligned_buffer.h">
@@ -322,6 +322,21 @@
     </ClInclude>
     <ClInclude Include="proto\proto.pb.h">
       <Filter>proto</Filter>
+    </ClInclude>
+    <ClInclude Include="base\runas_service.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_kernel32_library.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\sas_injector.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_sas_police.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_wtsapi32_library.h">
+      <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

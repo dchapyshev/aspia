@@ -9,7 +9,7 @@
 
 /* The driver function table with all function index/address pairs */
 
-/* Начиная с Windows 8 должны быть реализованы ТОЛЬКО перечисленные функции */
+/* РќР°С‡РёРЅР°СЏ СЃ Windows 8 РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ СЂРµР°Р»РёР·РѕРІР°РЅС‹ РўРћР›Р¬РљРћ РїРµСЂРµС‡РёСЃР»РµРЅРЅС‹Рµ С„СѓРЅРєС†РёРё */
 static DRVFN DrvFunctionTableWin8[] =
 {
     { INDEX_DrvEnablePDEV,            (PFN) DrvEnablePDEV         },

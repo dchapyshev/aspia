@@ -207,7 +207,7 @@ LRESULT CMainDialog::OnConnectToServer(WORD wNotifyCode, WORD wID, HWND hWndCtl,
 
         WCHAR addr[256] = { 0 };
 
-        GetDlgItemTextW(IDC_SERVER_ADDRESS_EDIT, addr, _countof(addr));
+        GetDlgItemTextW(IDC_SERVER_ADDRESS_EDIT, addr, ARRAYSIZE(addr));
 
         std::string address = UTF8fromUNICODE(addr);
 

@@ -16,13 +16,14 @@
     <ClCompile Include="base\event.cpp" />
     <ClCompile Include="base\input_handler.cpp" />
     <ClCompile Include="base\process.cpp" />
-    <ClCompile Include="base\runas.cpp" />
+    <ClCompile Include="base\runas_service.cpp" />
+    <ClCompile Include="base\sas_injector.cpp" />
+    <ClCompile Include="base\scoped_sas_police.cpp" />
     <ClCompile Include="base\scoped_thread_desktop.cpp" />
     <ClCompile Include="base\service_control_win.cpp" />
     <ClCompile Include="base\service_win.cpp" />
     <ClCompile Include="base\thread.cpp" />
     <ClCompile Include="base\unicode.cpp" />
-    <ClCompile Include="client\message_queue.cpp" />
     <ClCompile Include="client\remote_client.cpp" />
     <ClCompile Include="client\screen_window_win.cpp" />
     <ClCompile Include="codec\compressor_zlib.cpp" />
@@ -62,14 +63,18 @@
     <ClInclude Include="base\mutex.h" />
     <ClInclude Include="base\power_win.h" />
     <ClInclude Include="base\process.h" />
-    <ClInclude Include="base\runas.h" />
+    <ClInclude Include="base\runas_service.h" />
+    <ClInclude Include="base\sas_injector.h" />
     <ClInclude Include="base\scoped_aligned_buffer.h" />
     <ClInclude Include="base\scoped_gdi_object.h" />
     <ClInclude Include="base\scoped_handle.h" />
     <ClInclude Include="base\scoped_hdc.h" />
+    <ClInclude Include="base\scoped_kernel32_library.h" />
     <ClInclude Include="base\scoped_magnifier_library.h" />
     <ClInclude Include="base\scoped_native_library.h" />
+    <ClInclude Include="base\scoped_sas_police.h" />
     <ClInclude Include="base\scoped_thread_desktop.h" />
+    <ClInclude Include="base\scoped_wtsapi32_library.h" />
     <ClInclude Include="base\service_control_win.h" />
     <ClInclude Include="base\service_win.h" />
     <ClInclude Include="base\thread.h" />
@@ -120,9 +125,9 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v120_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -144,6 +149,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(OutDir)obj\x86\$(ProjectName)\</IntDir>
+    <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSdk_ExecutablePath);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSdk_IncludePath);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSdk_LibraryPath_x86);</LibraryPath>
+    <ExcludePath>$(VC_IncludePath);$(WindowsSdk_IncludePath);$(MSBuild_ExecutablePath);$(VC_LibraryPath_x86);</ExcludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -162,6 +172,9 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)/3rdparty/libglog/src/windows;$(SolutionDir)/3rdparty/libvpx;$(SolutionDir)/3rdparty/libyuv/include;$(SolutionDir)/3rdparty/zlib-ng;$(SolutionDir)/3rdparty/protobuf/src;$(SolutionDir)/3rdparty/wtl;$(SolutionDir)/3rdparty;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -5,8 +5,8 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#ifndef _ASPIA_CLIPBOARD_WIN_H
-#define _ASPIA_CLIPBOARD_WIN_H
+#ifndef _ASPIA_BASE__CLIPBOARD_WIN_H
+#define _ASPIA_BASE__CLIPBOARD_WIN_H
 
 #include "aspia_config.h"
 
@@ -19,4 +19,4 @@ public:
     static std::string Get();
 };
 
-#endif // _ASPIA_CLIPBOARD_WIN_H
+#endif // _ASPIA_BASE__CLIPBOARD_WIN_H
