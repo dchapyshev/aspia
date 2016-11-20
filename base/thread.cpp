@@ -9,7 +9,6 @@
 
 #include <process.h>
 
-#include "base/exception.h"
 #include "base/logging.h"
 
 // static
@@ -34,12 +33,9 @@ Thread::Thread()
                                                       ThreadProc,
                                                       this,
                                                       CREATE_SUSPENDED,
-                                                      &thread_id_));
-    if (!thread_)
-    {
-        LOG(ERROR) << "Unable to create thread: " << errno;
-        throw Exception("Unable to create thread.");
-    }
+                                                      nullptr));
+
+    CHECK(thread_) << "Unable to create thread: " << errno;
 }
 
 Thread::~Thread()
@@ -73,35 +69,15 @@ void Thread::SetThreadPriority(Priority value)
         case Priority::TimeCritical: priority = THREAD_PRIORITY_TIME_CRITICAL; break;
         default:
         {
-            LOG(ERROR) << "Unknwon thread priority";
-            throw Exception("Unknown thread priority passed to SetThreadPriority.");
+            LOG(WARNING) << "Unknwon thread priority";
+            return;
         }
     }
 
     if (!::SetThreadPriority(thread_, priority))
     {
-        LOG(ERROR) << "SetThreadPriority() failed: " << GetLastError();
-        throw Exception("Unable to set thread priority.");
+        LOG(WARNING) << "SetThreadPriority() failed: " << GetLastError();
     }
-}
-
-Thread::Priority Thread::GetThreadPriority() const
-{
-    int value = ::GetThreadPriority(thread_);
-
-    switch (value)
-    {
-        case THREAD_PRIORITY_IDLE:          return Priority::Idle;
-        case THREAD_PRIORITY_LOWEST:        return Priority::Lowest;
-        case THREAD_PRIORITY_BELOW_NORMAL:  return Priority::BelowNormal;
-        case THREAD_PRIORITY_NORMAL:        return Priority::Normal;
-        case THREAD_PRIORITY_ABOVE_NORMAL:  return Priority::AboveNormal;
-        case THREAD_PRIORITY_HIGHEST:       return Priority::Highest;
-        case THREAD_PRIORITY_TIME_CRITICAL: return Priority::TimeCritical;
-    }
-
-    LOG(WARNING) << "Unknown thread priority: " << value;
-    throw Exception("Unknown thread priority.");
 }
 
 void Thread::Start()
@@ -109,7 +85,7 @@ void Thread::Start()
     if (active_)
     {
         LOG(ERROR) << "Attempt to start an already running thread";
-        throw Exception("Attempt to start an already running thread.");
+        return;
     }
 
     OnStart();
@@ -117,8 +93,7 @@ void Thread::Start()
 
     if (!active_)
     {
-        LOG(ERROR) << "ResumeThread() failed: " << GetLastError();
-        throw Exception("Unable to start thread.");
+        LOG(FATAL) << "ResumeThread() failed: " << GetLastError();
     }
 }
 
@@ -126,7 +101,7 @@ void Thread::WaitForEnd(uint32_t milliseconds) const
 {
     if (active_)
     {
-        // ≈сли запущен, то ждем пока он завершит работу.
+        // Если запущен, то ждем пока он завершит работу.
         DWORD error = WaitForSingleObject(thread_, milliseconds);
 
         switch (error)
@@ -158,9 +133,4 @@ void Thread::WaitForEnd() const
 void Thread::Sleep(uint32_t milliseconds)
 {
     ::Sleep(milliseconds);
-}
-
-uint32_t Thread::GetThreadId() const
-{
-    return thread_id_;
 }

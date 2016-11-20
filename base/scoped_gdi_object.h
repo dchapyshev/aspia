@@ -15,8 +15,17 @@ template<class T>
 class ScopedGDIObject
 {
 public:
-    ScopedGDIObject() : object_(nullptr) {}
-    explicit ScopedGDIObject(T object) : object_(object) {}
+    ScopedGDIObject() :
+        object_(nullptr)
+    {
+        // Nothing
+    }
+
+    explicit ScopedGDIObject(T object) :
+        object_(object)
+    {
+        // Nothing
+    }
 
     ~ScopedGDIObject()
     {

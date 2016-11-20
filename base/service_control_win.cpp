@@ -51,11 +51,11 @@ ServiceControl::~ServiceControl()
 }
 
 // static
-std::unique_ptr<ServiceControl> ServiceControl::AddService(const WCHAR *exec_path,
-                                                           const WCHAR *service_full_name,
-                                                           const WCHAR *service_short_name,
-                                                           const WCHAR *service_description,
-                                                           bool replace)
+std::unique_ptr<ServiceControl> ServiceControl::Install(const WCHAR *exec_path,
+                                                        const WCHAR *service_full_name,
+                                                        const WCHAR *service_short_name,
+                                                        const WCHAR *service_description,
+                                                        bool replace)
 {
     // Открываем менеджер служб
     SC_HANDLE sc_manager = OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS);
@@ -99,8 +99,16 @@ std::unique_ptr<ServiceControl> ServiceControl::AddService(const WCHAR *exec_pat
                     // Останавливаем службу
                     if (!ControlService(service, SERVICE_CONTROL_STOP, &status))
                     {
-                        // Ошибку пишем в лог, но игнорируем, т.к. служба может быть не запущена
-                        LOG(ERROR) << "ControlService() failed: " << GetLastError();
+                        error = GetLastError();
+
+                        //
+                        // Если служба не была запущена, то ControlService() вернет FALSE, но
+                        // GetLastError() не будет содержать ошибки.
+                        //
+                        if (error != ERROR_SUCCESS)
+                        {
+                            LOG(WARNING) << "ControlService() failed: " << error;
+                        }
                     }
 
                     // Удаляем службу
@@ -130,15 +138,18 @@ std::unique_ptr<ServiceControl> ServiceControl::AddService(const WCHAR *exec_pat
         }
         else
         {
-            SERVICE_DESCRIPTIONW description;
-            description.lpDescription = const_cast<LPWSTR>(service_description);
-
-            // Устанавливаем описание службы
-            if (!ChangeServiceConfig2W(service,
-                                       SERVICE_CONFIG_DESCRIPTION,
-                                       &description))
+            if (service_description && service_description[0])
             {
-                LOG(ERROR) << "ChangeServiceConfig2W() failed: " << GetLastError();
+                SERVICE_DESCRIPTIONW description;
+                description.lpDescription = const_cast<LPWSTR>(service_description);
+
+                // Устанавливаем описание службы
+                if (!ChangeServiceConfig2W(service,
+                                           SERVICE_CONFIG_DESCRIPTION,
+                                           &description))
+                {
+                    LOG(ERROR) << "ChangeServiceConfig2W() failed: " << GetLastError();
+                }
             }
         }
 

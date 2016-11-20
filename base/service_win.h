@@ -21,7 +21,7 @@ public:
     Service(const WCHAR *service_name);
     virtual ~Service();
 
-    bool Start();
+    bool DoWork();
 
     virtual void Worker() = 0;
     virtual void OnStart() = 0;

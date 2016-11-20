@@ -35,8 +35,7 @@ public:
     uint32_t GetId() const;
 
     static uint32_t GetCurrentId();
-    static bool IsRunAsAdmin();
-    static bool IsElevated(const WCHAR *command_line);
+    static bool IsHaveAdminRights();
     static bool Elevate(const WCHAR *command_line);
 
 private:

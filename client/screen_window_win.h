@@ -55,6 +55,7 @@ private:
 
     void SendPointerEvent(int32_t x, int32_t y, int32_t mask);
     void SendKeyEvent(int32_t keycode, bool extended, bool pressed);
+    void SendCAD(); // Sends CTRL+ALT+DEL
 
     static LRESULT CALLBACK WndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
     static void OnCreate(HWND window, LPARAM lParam);

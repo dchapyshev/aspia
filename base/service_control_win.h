@@ -27,13 +27,13 @@ public:
     // уже существует в системе, то установленная служба будет остановлена
     // и удалена, а вместо нее создана новая.
     // Если параметр replace установлен в false, то при наличии службы с
-    // совпарающим именем будет возвращен нулевой указатель.
+    // совпадающим именем будет возвращен нулевой указатель.
     //
-    static std::unique_ptr<ServiceControl> AddService(const WCHAR *exec_path,
-                                                      const WCHAR *service_name,
-                                                      const WCHAR *service_short_name,
-                                                      const WCHAR *service_description,
-                                                      bool replace = true);
+    static std::unique_ptr<ServiceControl> Install(const WCHAR *exec_path,
+                                                   const WCHAR *service_name,
+                                                   const WCHAR *service_short_name,
+                                                   const WCHAR *service_description,
+                                                   bool replace = true);
 
     //
     // Проверяет валидность экземпляра класса.

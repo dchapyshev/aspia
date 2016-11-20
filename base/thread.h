@@ -68,11 +68,6 @@ public:
     void SetThreadPriority(Priority value = Priority::Normal);
 
     //
-    // Возвращает текущий приоритет потока.
-    //
-    Priority GetThreadPriority() const;
-
-    //
     // Ожидание завершения потока.
     // Если поток успешно завершился, то возвращается true, если нет, то false.
     //
@@ -123,9 +118,6 @@ private:
 private:
     // Дискриптор потока.
     mutable ScopedHandle thread_;
-
-    // ID потока.
-    uint32_t thread_id_;
 
     //
     // Значение true говорит о том, что поток выполняется

@@ -1,85 +1,68 @@
 /*
 * PROJECT:         Aspia Remote Desktop
-* FILE:            base/runas.cpp
+* FILE:            base/runas_service.cpp
 * LICENSE:         See top-level directory
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#include "base/runas.h"
+#include "base/runas_service.h"
 
 #include <userenv.h>
-#include <psapi.h>
 #include <wtsapi32.h>
-#include <tlhelp32.h>
 #include <string>
 
+#include "base/service_control_win.h"
+#include "base/scoped_handle.h"
 #include "base/logging.h"
 
-typedef BOOL(WINAPI *WTSENUMERATEPROCESSESW)(HANDLE, DWORD, DWORD, PWTS_PROCESS_INFOW*, DWORD*);
-typedef VOID(WINAPI *WTSFREEMEMORY)(PVOID);
-typedef DWORD(WINAPI *WTSGETACTIVECONSOLESESSIONID)(VOID);
+static const WCHAR kRunAsServiceName[] = L"aspia-runas-service";
 
-RunAs::RunAs(const WCHAR *service_name) :
-    Service(service_name)
+RunAsService::RunAsService() :
+    Service(kRunAsServiceName)
 {
-    kernel32_.reset(new ScopedNativeLibrary("kernel32.dll"));
-    wtsapi32_.reset(new ScopedNativeLibrary("wtsapi32.dll"));
+    kernel32_.reset(new ScopedKernel32Library());
+    wtsapi32_.reset(new ScopedWtsApi32Library());
 }
 
-RunAs::~RunAs()
+RunAsService::~RunAsService()
 {
-
+    // Nothing
 }
 
-DWORD RunAs::GetWinlogonProcessId(DWORD session_id)
+DWORD RunAsService::GetWinlogonProcessId(DWORD session_id)
 {
     DWORD process_id = static_cast<DWORD>(-1);
 
-    WTSENUMERATEPROCESSESW enumerate_processes =
-        reinterpret_cast<WTSENUMERATEPROCESSESW>(wtsapi32_->GetFunctionPointer("WTSEnumerateProcessesW"));
+    PWTS_PROCESS_INFOW process_info;
+    DWORD process_count;
 
-    WTSFREEMEMORY free_memory =
-        reinterpret_cast<WTSFREEMEMORY>(wtsapi32_->GetFunctionPointer("WTSFreeMemory"));
-
-    if (enumerate_processes && free_memory)
+    if (wtsapi32_->WTSEnumerateProcessesW(WTS_CURRENT_SERVER_HANDLE,
+                                          0,
+                                          1,
+                                          &process_info,
+                                          &process_count))
     {
-        PWTS_PROCESS_INFOW process_info;
-        DWORD process_count;
-
-        if (enumerate_processes(WTS_CURRENT_SERVER_HANDLE,
-                                0,
-                                1,
-                                &process_info,
-                                &process_count))
+        for (DWORD current = 0; current < process_count; ++current)
         {
-            for (DWORD current = 0; current < process_count; ++current)
+            if (_wcsicmp(process_info[current].pProcessName, L"winlogon.exe") == 0 &&
+                process_info[current].SessionId == session_id)
             {
-                if (_wcsicmp(process_info[current].pProcessName, L"winlogon.exe") == 0 &&
-                    process_info[current].SessionId == session_id)
-                {
-                    process_id = process_info[current].ProcessId;
-                    break;
-                }
+                process_id = process_info[current].ProcessId;
+                break;
             }
-
-            free_memory(process_info);
         }
+
+        wtsapi32_->WTSFreeMemory(process_info);
     }
 
     return process_id;
 }
 
-HANDLE RunAs::GetWinlogonUserToken()
+HANDLE RunAsService::GetWinlogonUserToken()
 {
-    WTSGETACTIVECONSOLESESSIONID get_active_console_session_id =
-        reinterpret_cast<WTSGETACTIVECONSOLESESSIONID>(kernel32_->GetFunctionPointer("WTSGetActiveConsoleSessionId"));
-
-    if (!get_active_console_session_id)
-        return nullptr;
-
     HANDLE user_token = nullptr;
 
-    DWORD session_id = get_active_console_session_id();
+    DWORD session_id = kernel32_->WTSGetActiveConsoleSessionId();
     if (session_id == 0xFFFFFFFF)
     {
         LOG(ERROR) << "WTSGetActiveConsoleSessionId() failed: " << GetLastError();
@@ -93,17 +76,20 @@ HANDLE RunAs::GetWinlogonUserToken()
         return nullptr;
     }
 
-    HANDLE process = OpenProcess(MAXIMUM_ALLOWED, FALSE, process_id);
+    ScopedHandle process(OpenProcess(MAXIMUM_ALLOWED, FALSE, process_id));
+
     if (process)
     {
-        HANDLE process_token;
+        HANDLE handle;
 
         if (OpenProcessToken(process,
                              TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY | TOKEN_DUPLICATE |
                                  TOKEN_ASSIGN_PRIMARY | TOKEN_ADJUST_SESSIONID |
                                  TOKEN_READ | TOKEN_WRITE,
-                             &process_token))
+                             &handle))
         {
+            ScopedHandle process_token(handle);
+
             if (DuplicateTokenEx(process_token,
                                  MAXIMUM_ALLOWED,
                                  nullptr,
@@ -123,15 +109,11 @@ HANDLE RunAs::GetWinlogonUserToken()
             {
                 LOG(ERROR) << "DuplicateTokenEx() failed: " << GetLastError();
             }
-
-            CloseHandle(process_token);
         }
         else
         {
             LOG(ERROR) << "OpenProcessToken() failed: " << GetLastError();
         }
-
-        CloseHandle(process);
     }
     else
     {
@@ -141,13 +123,13 @@ HANDLE RunAs::GetWinlogonUserToken()
     return user_token;
 }
 
-void RunAs::Worker()
+void RunAsService::Worker()
 {
     WCHAR module_path[MAX_PATH];
 
-    if (GetModuleFileNameW(nullptr, module_path, _countof(module_path)))
+    if (GetModuleFileNameW(nullptr, module_path, ARRAYSIZE(module_path)))
     {
-        HANDLE winlogon_user_token = GetWinlogonUserToken();
+        ScopedHandle winlogon_user_token(GetWinlogonUserToken());
 
         if (winlogon_user_token)
         {
@@ -157,7 +139,7 @@ void RunAs::Worker()
             {
                 std::wstring command_line(module_path);
 
-                command_line += L" --system";
+                command_line += L" --run_mode=system";
 
                 PROCESS_INFORMATION pi = { 0 };
                 STARTUPINFO si = { 0 };
@@ -171,7 +153,7 @@ void RunAs::Worker()
                                          nullptr,
                                          nullptr,
                                          FALSE,
-                                         CREATE_NO_WINDOW | CREATE_UNICODE_ENVIRONMENT,
+                                         CREATE_UNICODE_ENVIRONMENT,
                                          environment,
                                          nullptr,
                                          &si,
@@ -189,18 +171,60 @@ void RunAs::Worker()
 
                 DestroyEnvironmentBlock(environment);
             }
-
-            CloseHandle(winlogon_user_token);
         }
     }
 }
 
-void RunAs::OnStart()
+void RunAsService::OnStart()
 {
-
+    // Nothing
 }
 
-void RunAs::OnStop()
+void RunAsService::OnStop()
 {
+    // Nothing
+}
 
+void RunAsService::DoService()
+{
+    // Запускаем службу для выполнения метода Worker().
+    DoWork();
+
+    // Удаляем службу.
+    ServiceControl(kRunAsServiceName).Delete();
+}
+
+// static
+bool RunAsService::InstallAndStartService()
+{
+    WCHAR module_path[MAX_PATH];
+
+    // Получаем полный путь к исполняемому файлу.
+    if (!GetModuleFileNameW(nullptr, module_path, ARRAYSIZE(module_path)))
+    {
+        LOG(ERROR) << "GetModuleFileNameW() failed: " << GetLastError();
+        return false;
+    }
+
+    std::wstring command_line(module_path);
+
+    // Добавляем флаг запуска в виде службы.
+    command_line += L" --run_mode=runas";
+
+    // Устанавливаем службу в системе.
+    std::unique_ptr<ServiceControl> service_control =
+        ServiceControl::Install(module_path,
+                                kRunAsServiceName,
+                                kRunAsServiceName,
+                                kRunAsServiceName,
+                                true);
+
+    // Если служба не была установлена.
+    if (!service_control)
+    {
+        return false;
+    }
+
+    // Запускаем ее.
+    return service_control->Start();
 }

@@ -16,7 +16,7 @@ Service::Service(const WCHAR *service_name) :
     service_name_(service_name),
     status_handle_(nullptr)
 {
-    CHECK(_self);
+    CHECK(!_self) << "Another instance of the service has already been created";
 
     memset(&status_, 0, sizeof(status_));
 
@@ -64,7 +64,7 @@ DWORD WINAPI Service::ServiceControlHandler(DWORD control_code,
 // static
 void Service::ServiceMain(int argc, LPWSTR argv)
 {
-    CHECK(!_self);
+    CHECK(_self);
 
     _self->status_handle_ =
         RegisterServiceCtrlHandlerExW(_self->service_name_.c_str(),
@@ -79,7 +79,6 @@ void Service::ServiceMain(int argc, LPWSTR argv)
     _self->SetStatus(SERVICE_START_PENDING);
     _self->SetStatus(SERVICE_RUNNING);
 
-    _self->OnStart();
     _self->Worker();
 
     _self->SetStatus(SERVICE_STOP_PENDING);
@@ -112,12 +111,14 @@ void Service::SetStatus(DWORD state)
 }
 
 // public
-bool Service::Start()
+bool Service::DoWork()
 {
     SERVICE_TABLE_ENTRYW service_table[1] = { 0 };
 
     service_table[0].lpServiceName = &service_name_[0];
     service_table[0].lpServiceProc = reinterpret_cast<LPSERVICE_MAIN_FUNCTIONW>(ServiceMain);
+
+    OnStart();
 
     if (!StartServiceCtrlDispatcherW(service_table))
     {

@@ -16,12 +16,12 @@
 Process::Process(HANDLE process) :
     process_(process)
 {
-
+    // Nothing
 }
 
 Process::~Process()
 {
-
+    // Nothing
 }
 
 Process Process::Current()
@@ -97,7 +97,7 @@ uint32_t Process::GetCurrentId()
 }
 
 // static
-bool Process::IsRunAsAdmin()
+bool Process::IsHaveAdminRights()
 {
     SID_IDENTIFIER_AUTHORITY nt_authority = SECURITY_NT_AUTHORITY;
     PSID admin_group = nullptr;
@@ -118,12 +118,6 @@ bool Process::IsRunAsAdmin()
 }
 
 // static
-bool Process::IsElevated(const WCHAR *command_line)
-{
-    return (std::wstring(command_line).find(L"--elevated") != std::wstring::npos);
-}
-
-// static
 bool Process::Elevate(const WCHAR *command_line)
 {
     WCHAR module_path[MAX_PATH];
@@ -136,16 +130,12 @@ bool Process::Elevate(const WCHAR *command_line)
 
     SHELLEXECUTEINFOW sei = { 0 };
 
-    std::wstring cmd(command_line);
-
-    cmd += L" --elevated";
-
     sei.cbSize       = sizeof(SHELLEXECUTEINFOW);
     sei.lpVerb       = L"runas";
     sei.lpFile       = module_path;
     sei.hwnd         = nullptr;
     sei.nShow        = SW_SHOW;
-    sei.lpParameters = cmd.c_str();
+    sei.lpParameters = command_line;
 
     if (!ShellExecuteExW(&sei))
     {

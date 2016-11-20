@@ -14,15 +14,22 @@
 class PixelTranslatorFake : public PixelTranslator
 {
 public:
-    PixelTranslatorFake() {}
-    ~PixelTranslatorFake() {}
+    PixelTranslatorFake()
+    {
+        // Nothing
+    }
 
-    virtual void Translate(const uint8_t *src,
-                           int src_stride,
-                           uint8_t *dst,
-                           int dst_stride,
-                           int width,
-                           int height) override
+    ~PixelTranslatorFake()
+    {
+        // Nothing
+    }
+
+    void Translate(const uint8_t *src,
+                   int src_stride,
+                   uint8_t *dst,
+                   int dst_stride,
+                   int width,
+                   int height) override
     {
         for (int y = 0; y < height; ++y)
         {

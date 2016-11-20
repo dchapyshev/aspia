@@ -16,15 +16,22 @@
 class PixelTranslatorARGBtoARGB : public PixelTranslator
 {
 public:
-    PixelTranslatorARGBtoARGB() {}
-    virtual ~PixelTranslatorARGBtoARGB() {}
+    PixelTranslatorARGBtoARGB()
+    {
+        // Nothing
+    }
 
-    virtual void Translate(const uint8_t *src,
-                           int src_stride,
-                           uint8_t *dst,
-                           int dst_stride,
-                           int width,
-                           int height) override
+    virtual ~PixelTranslatorARGBtoARGB()
+    {
+        // Nothing
+    }
+
+    void Translate(const uint8_t *src,
+                   int src_stride,
+                   uint8_t *dst,
+                   int dst_stride,
+                   int width,
+                   int height) override
     {
         libyuv::ARGBToARGB(src, src_stride, dst, dst_stride, width, height);
     }
@@ -33,15 +40,22 @@ public:
 class PixelTranslatorARGBtoRGB565 : public PixelTranslator
 {
 public:
-    PixelTranslatorARGBtoRGB565() {}
-    virtual ~PixelTranslatorARGBtoRGB565() {}
+    PixelTranslatorARGBtoRGB565()
+    {
+        // Nothing
+    }
 
-    virtual void Translate(const uint8_t *src,
-                           int src_stride,
-                           uint8_t *dst,
-                           int dst_stride,
-                           int width,
-                           int height) override
+    virtual ~PixelTranslatorARGBtoRGB565()
+    {
+        // Nothing
+    }
+
+    void Translate(const uint8_t *src,
+                   int src_stride,
+                   uint8_t *dst,
+                   int dst_stride,
+                   int width,
+                   int height) override
     {
         libyuv::ARGBToRGB565(src, src_stride, dst, dst_stride, width, height);
     }
@@ -50,15 +64,22 @@ public:
 class PixelTranslatorRGB565toARGB : public PixelTranslator
 {
 public:
-    PixelTranslatorRGB565toARGB() {}
-    virtual ~PixelTranslatorRGB565toARGB() {}
+    PixelTranslatorRGB565toARGB()
+    {
+        // Nothing
+    }
 
-    virtual void Translate(const uint8_t *src,
-                           int src_stride,
-                           uint8_t *dst,
-                           int dst_stride,
-                           int width,
-                           int height) override
+    virtual ~PixelTranslatorRGB565toARGB()
+    {
+        // Nothing
+    }
+
+    void Translate(const uint8_t *src,
+                   int src_stride,
+                   uint8_t *dst,
+                   int dst_stride,
+                   int width,
+                   int height) override
     {
         libyuv::RGB565ToARGB(src, src_stride, dst, dst_stride, width, height);
     }

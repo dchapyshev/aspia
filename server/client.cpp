@@ -187,17 +187,8 @@ void Client::ReadPointerEvent(const proto::PointerEvent &msg)
     //
     if (input_handler_)
     {
-        // Получаем прямоугольник экрана.
-        DesktopRect screen_rect = CapturerGDI::GetDesktopRect();
-
-        // Если полученные в сообщении координаты курсора находятся в области экрана.
-        if (screen_rect.Contains(msg.x(), msg.y()))
-        {
-            // Выполняем команду перемещения курсора и/или нажатия кнопок мыши.
-            input_handler_->ExecuteMouse((msg.x() * 65535) / screen_rect.width(),
-                                         (msg.y() * 65535) / screen_rect.height(),
-                                         msg.mask());
-        }
+        // Выполняем команду перемещения курсора и/или нажатия кнопок мыши.
+        input_handler_->HandlePointer(msg);
     }
     else
     {
@@ -216,7 +207,7 @@ void Client::ReadKeyEvent(const proto::KeyEvent &msg)
     if (input_handler_)
     {
         // Выполняем команду нажатия клавиши.
-        input_handler_->ExecuteKeyboard(msg.keycode(), msg.extended(), msg.pressed());
+        input_handler_->HandleKeyboard(msg);
     }
     else
     {

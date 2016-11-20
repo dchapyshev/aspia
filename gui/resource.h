@@ -11,6 +11,11 @@
 #include <windows.h>
 
 //
+// Icons
+//
+#define IDI_MAINICON     100
+
+//
 // Dialogs
 //
 #define IDD_MAINDIALOG     100

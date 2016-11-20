@@ -9,6 +9,19 @@
 
 LRESULT CMainDialog::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
+    HICON small_icon = AtlLoadIconImage(IDI_MAINICON,
+                                        LR_CREATEDIBSECTION,
+                                        GetSystemMetrics(SM_CXSMICON),
+                                        GetSystemMetrics(SM_CYSMICON));
+
+    HICON big_icon = AtlLoadIconImage(IDI_MAINICON,
+                                      LR_CREATEDIBSECTION,
+                                      GetSystemMetrics(SM_CXICON),
+                                      GetSystemMetrics(SM_CYICON));
+
+    SetIcon(small_icon, FALSE);
+    SetIcon(big_icon, TRUE);
+
     CenterWindow();
 
     CListViewCtrl list(GetDlgItem(IDC_CLIENT_LIST));
@@ -27,6 +40,9 @@ LRESULT CMainDialog::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPa
 
     CEdit port(GetDlgItem(IDC_SERVER_PORT_EDIT));
     port.SetReadOnly(TRUE);
+
+    // Выводим окно на первый план.
+    SetForegroundWindow(*this);
 
     return 0;
 }
@@ -51,6 +67,9 @@ LRESULT CMainDialog::OnDefaultPortClicked(WORD wNotifyCode, WORD wID, HWND hWndC
 
 LRESULT CMainDialog::OnClose(UINT, WPARAM, LPARAM, BOOL&)
 {
+    DestroyIcon(GetIcon(FALSE));
+    DestroyIcon(GetIcon(TRUE));
+
     EndDialog(0);
     return 0;
 }

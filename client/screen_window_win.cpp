@@ -515,6 +515,17 @@ void ScreenWindowWin::OnMouseMessage(HWND window, UINT msg, WPARAM wParam, LPARA
     }
 }
 
+void ScreenWindowWin::SendCAD()
+{
+    SendKeyEvent(VK_CONTROL, false, true);
+    SendKeyEvent(VK_MENU, false, true);
+    SendKeyEvent(VK_DELETE, true, true);
+
+    SendKeyEvent(VK_CONTROL, false, false);
+    SendKeyEvent(VK_MENU, false, false);
+    SendKeyEvent(VK_DELETE, true, false);
+}
+
 void ScreenWindowWin::OnKeyMessage(HWND window, WPARAM wParam, LPARAM lParam)
 {
     ScreenWindowWin *self =

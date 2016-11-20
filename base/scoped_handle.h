@@ -13,8 +13,15 @@
 class ScopedHandle
 {
 public:
-    ScopedHandle() : handle_(nullptr) {}
-    explicit ScopedHandle(HANDLE handle) : handle_(handle) {}
+    ScopedHandle() : handle_(nullptr)
+    {
+        // Nothing
+    }
+
+    explicit ScopedHandle(HANDLE handle) : handle_(handle)
+    {
+        // Nothing
+    }
 
     ~ScopedHandle()
     {

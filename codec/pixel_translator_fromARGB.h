@@ -31,14 +31,17 @@ public:
         InitBlueTable(dst_format);
     }
 
-    ~PixelTranslatorFromARGB() {}
+    ~PixelTranslatorFromARGB()
+    {
+        // Nothing
+    }
 
-    virtual void Translate(const uint8_t *src,
-                           int src_stride,
-                           uint8_t *dst,
-                           int dst_stride,
-                           int width,
-                           int height) override
+    void Translate(const uint8_t *src,
+                   int src_stride,
+                   uint8_t *dst,
+                   int dst_stride,
+                   int width,
+                   int height) override
     { 
         src_stride -= width * sizeof(uint32_t);
         dst_stride -= width * sizeof(T);

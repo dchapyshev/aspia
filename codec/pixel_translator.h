@@ -15,8 +15,15 @@
 class PixelTranslator
 {
 public:
-    PixelTranslator() {}
-    virtual ~PixelTranslator() {}
+    PixelTranslator()
+    {
+        // Nothing
+    }
+
+    virtual ~PixelTranslator()
+    {
+        // Nothing
+    }
 
     virtual void Translate(const uint8_t *src,
                            int src_stride,

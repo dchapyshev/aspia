@@ -28,14 +28,17 @@ public:
         InitTable(src_format, dst_format);
     }
 
-    ~PixelTranslatorFromRGB565() {}
+    ~PixelTranslatorFromRGB565()
+    {
+        // Nothing
+    }
 
-    virtual void Translate(const uint8_t *src,
-                           int src_stride,
-                           uint8_t *dst,
-                           int dst_stride,
-                           int width,
-                           int height) override
+    void Translate(const uint8_t *src,
+                   int src_stride,
+                   uint8_t *dst,
+                   int dst_stride,
+                   int width,
+                   int height) override
     {
         src_stride -= width * sizeof(uint16_t);
         dst_stride -= width * sizeof(T);

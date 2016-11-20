@@ -12,25 +12,35 @@
 
 #include <stdint.h>
 
+#include "base/macros.h"
+#include "base/scoped_thread_desktop.h"
+#include "proto/proto.pb.h"
+
 class InputHandler
 {
 public:
     InputHandler();
     ~InputHandler();
 
-    static const uint8_t kLeftButtonMask   = 1;
-    static const uint8_t kMiddleButtonMask = 2;
-    static const uint8_t kRightButtonMask  = 4;
-    static const uint8_t kWheelUpMask      = 8;
-    static const uint8_t kWheelDownMask    = 16;
-
-    void ExecuteMouse(int x, int y, uint8_t button_mask);
-    void ExecuteKeyboard(uint8_t vk_key_code, bool extended, bool down);
+    void HandlePointer(const proto::PointerEvent &msg);
+    void HandleKeyboard(const proto::KeyEvent &msg);
 
 private:
-    int last_mouse_x_;
-    int last_mouse_y_;
-    uint8_t last_mouse_button_mask_;
+    void SwitchToInputDesktop();
+    void HandleCAD();
+
+private:
+    ScopedThreadDesktop desktop_;
+
+    int32_t last_mouse_x_;
+    int32_t last_mouse_y_;
+    int32_t last_mouse_button_mask_;
+
+    bool ctrl_pressed_;
+    bool alt_pressed_;
+    bool del_pressed_;
+
+    DISALLOW_COPY_AND_ASSIGN(InputHandler);
 };
 
 #endif // _ASPIA_BASE__INPUT_HANDLER_H
