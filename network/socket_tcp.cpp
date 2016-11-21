@@ -9,16 +9,13 @@
 
 #include "base/logging.h"
 
-//
-// FIXME: Изменение количества инициализированных сокетов не потоко-безопасно.
-//
-static int32_t _socket_ref_count = 0;
+static volatile LONG _socket_ref_count = 0;
 
 SocketTCP::SocketTCP() :
     ref_(true)
 {
     // Если ни одного сокета еще не было создано.
-    if (!_socket_ref_count)
+    if (InterlockedIncrement(&_socket_ref_count) == 1)
     {
         WSADATA data;
 
@@ -28,8 +25,6 @@ SocketTCP::SocketTCP() :
             LOG(ERROR) << "WSAStartup() failed: " << WSAGetLastError();
             throw Exception("Unable to initialize socket library.");
         }
-
-        ++_socket_ref_count;
     }
 
     // Создаем сокет.
@@ -60,7 +55,7 @@ SocketTCP::~SocketTCP()
     if (ref_)
     {
         // Уменьшаем количество экземпляров сокета и если их больше не осталось.
-        if (!--_socket_ref_count)
+        if (InterlockedDecrement(&_socket_ref_count) == 0)
         {
             // Деинициализируем библиотеку сокетов.
             WSACleanup();
