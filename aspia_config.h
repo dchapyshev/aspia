@@ -39,17 +39,20 @@
 #define WINVER           0x0501
 #define _WIN32_WINNT     0x0501
 #define _WIN32_WINDOWS   0x0501
-#define NTDDI_VERSION    0x05010000
-#define _WIN32_IE        0x0600
+#define NTDDI_VERSION    0x05010300 // Windows XP SP3
+#define _WIN32_IE        0x0800 // Internet Explorer 8.0
 #define PSAPI_VERSION    1
 
+// windows.h должен подключаться только тут и нигде больше.
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+// Убираем определение ERROR. Мешает использованию GLOG.
 #ifdef ERROR
 #undef ERROR
 #endif // ERROR
 
+// Убираем определения min и max. Мы используем std::min и std::max.
 #ifdef min
 #undef min
 #endif // min
