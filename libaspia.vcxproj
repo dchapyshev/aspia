@@ -36,6 +36,7 @@
     <ClCompile Include="codec\video_encoder_raw.cpp" />
     <ClCompile Include="codec\video_encoder_vp8.cpp" />
     <ClCompile Include="codec\video_encoder_zlib.cpp" />
+    <ClCompile Include="crypto\encryptor_aes.cpp" />
     <ClCompile Include="desktop_capture\capturer_gdi.cpp" />
     <ClCompile Include="desktop_capture\capture_scheduler.cpp" />
     <ClCompile Include="desktop_capture\desktop_effects.cpp" />
@@ -46,6 +47,7 @@
     <ClCompile Include="desktop_capture\pixel_format.cpp" />
     <ClCompile Include="network\socket.cpp" />
     <ClCompile Include="network\socket_tcp.cpp" />
+    <ClCompile Include="proto\auth.pb.cc" />
     <ClCompile Include="proto\proto.pb.cc" />
     <ClCompile Include="server\client.cpp" />
     <ClCompile Include="server\screen_sender.cpp" />
@@ -73,6 +75,7 @@
     <ClInclude Include="base\scoped_magnifier_library.h" />
     <ClInclude Include="base\scoped_native_library.h" />
     <ClInclude Include="base\scoped_sas_police.h" />
+    <ClInclude Include="base\scoped_sc_handle.h" />
     <ClInclude Include="base\scoped_thread_desktop.h" />
     <ClInclude Include="base\scoped_wtsapi32_library.h" />
     <ClInclude Include="base\service_control_win.h" />
@@ -101,6 +104,8 @@
     <ClInclude Include="codec\video_encoder_raw.h" />
     <ClInclude Include="codec\video_encoder_vp8.h" />
     <ClInclude Include="codec\video_encoder_zlib.h" />
+    <ClInclude Include="crypto\encryptor.h" />
+    <ClInclude Include="crypto\encryptor_aes.h" />
     <ClInclude Include="desktop_capture\capturer.h" />
     <ClInclude Include="desktop_capture\capturer_gdi.h" />
     <ClInclude Include="desktop_capture\capture_scheduler.h" />
@@ -113,10 +118,15 @@
     <ClInclude Include="desktop_capture\pixel_format.h" />
     <ClInclude Include="network\socket.h" />
     <ClInclude Include="network\socket_tcp.h" />
+    <ClInclude Include="proto\auth.pb.h" />
     <ClInclude Include="proto\proto.pb.h" />
     <ClInclude Include="server\client.h" />
     <ClInclude Include="server\screen_sender.h" />
     <ClInclude Include="server\server.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="proto\auth.proto" />
+    <None Include="proto\proto.proto" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B4B5FBB6-4E1C-43DB-B73E-6AE3C9AA2AC5}</ProjectGuid>

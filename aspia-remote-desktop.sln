@@ -12,6 +12,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libvpx", "3rdparty\libvpx\build\libvpx.vcxproj", "{DCE19DAF-69AC-46DB-B14A-39F0FAA5DB74}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libglog", "3rdparty\libglog\libglog.vcxproj", "{772C2111-BBBF-49E6-B912-198A7F7A88E5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{099C44D6-3437-300D-BEF0-BD1A1FA56125} = {099C44D6-3437-300D-BEF0-BD1A1FA56125}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libprotobuf", "3rdparty\protobuf\libprotobuf.vcxproj", "{B76F2358-5D05-38B8-94E4-37EC73ED3150}"
 EndProject
@@ -20,6 +23,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libprotoc", "3rdparty\protobuf\libprotoc.vcxproj", "{8DD08E07-DAAC-3B6E-8517-76F9826C3DF9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "protoc", "3rdparty\protobuf\protoc.vcxproj", "{69C31EB9-3AE7-39D9-9CCD-E94FBAE57CBE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8DD08E07-DAAC-3B6E-8517-76F9826C3DF9} = {8DD08E07-DAAC-3B6E-8517-76F9826C3DF9}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtest", "3rdparty\gtest\gtest.vcxproj", "{B01F5AA9-2917-3414-BA68-F756D95BFE7D}"
 EndProject
@@ -30,15 +36,21 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mirror", "mirror", "{49FFD091-537D-45B3-B828-F53045954BCE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui", "gui\gui.vcxproj", "{79CBBC5E-9729-44B0-A81B-3BA0CB1F571B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "proto", "proto", "{55E58013-313D-4799-8132-8E1B7A46D613}"
-	ProjectSection(SolutionItems) = preProject
-		proto\proto.proto = proto\proto.proto
+	ProjectSection(ProjectDependencies) = postProject
+		{B4B5FBB6-4E1C-43DB-B73E-6AE3C9AA2AC5} = {B4B5FBB6-4E1C-43DB-B73E-6AE3C9AA2AC5}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gflags", "3rdparty\gflags\gflags.vcxproj", "{099C44D6-3437-300D-BEF0-BD1A1FA56125}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libaspia", "libaspia.vcxproj", "{B4B5FBB6-4E1C-43DB-B73E-6AE3C9AA2AC5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{772C2111-BBBF-49E6-B912-198A7F7A88E5} = {772C2111-BBBF-49E6-B912-198A7F7A88E5}
+		{03FC4656-A7ED-3694-9524-871E7C13009F} = {03FC4656-A7ED-3694-9524-871E7C13009F}
+		{6A17CB88-F0BC-3A3E-A739-ADA98D51ED38} = {6A17CB88-F0BC-3A3E-A739-ADA98D51ED38}
+		{395D8CA6-16E7-3C44-B8FA-65F713925FAE} = {395D8CA6-16E7-3C44-B8FA-65F713925FAE}
+		{DCE19DAF-69AC-46DB-B14A-39F0FAA5DB74} = {DCE19DAF-69AC-46DB-B14A-39F0FAA5DB74}
+		{099C44D6-3437-300D-BEF0-BD1A1FA56125} = {099C44D6-3437-300D-BEF0-BD1A1FA56125}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
