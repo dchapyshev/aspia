@@ -17,15 +17,17 @@
 
 DEFINE_string(run_mode, "", "Run Mode");
 
-void StartGUI()
+static void StartGUI()
 {
     HINSTANCE instance = nullptr;
 
-    GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
-                           GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-                       reinterpret_cast<WCHAR*>(&StartGUI),
-                       &instance);
-    CHECK(instance) << "GetModuleHandleExW() failed: " << GetLastError();
+    if (!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+                                GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                            reinterpret_cast<WCHAR*>(&StartGUI),
+                            &instance))
+    {
+        LOG(FATAL) << "GetModuleHandleExW() failed: " << GetLastError();
+    }
 
     HRESULT res = CoInitialize(nullptr);
     CHECK(SUCCEEDED(res)) << "CoInitialize() failed: " << res;

@@ -41,8 +41,16 @@ LRESULT CMainDialog::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPa
     CEdit port(GetDlgItem(IDC_SERVER_PORT_EDIT));
     port.SetReadOnly(TRUE);
 
-    // Выводим окно на первый план.
-    SetForegroundWindow(*this);
+    DWORD active_thread_id = GetWindowThreadProcessId(GetForegroundWindow(), NULL);
+    DWORD current_thread_id = GetCurrentThreadId();
+
+    if (active_thread_id != current_thread_id)
+    {
+        // Переводим ввод в наше окно и делаем его активным.
+        AttachThreadInput(current_thread_id, active_thread_id, TRUE);
+        SetForegroundWindow(*this);
+        AttachThreadInput(current_thread_id, active_thread_id, FALSE);
+    }
 
     return 0;
 }
