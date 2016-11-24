@@ -44,7 +44,6 @@ public:
 
 private:
     void Worker() override;
-    void OnStart() override;
     void OnStop() override;
 
     void InsertToOutputQueue(std::unique_ptr<proto::ClientToServer> &message);
@@ -54,14 +53,10 @@ private:
 
     void OnScreenWindowClosed();
 
-    void SendAuthReply(int32_t method);
-
     void SendVideoControl(bool enable,
                           int32_t encoding,
                           const PixelFormat &pixel_format = PixelFormat::MakeRGB565());
 
-    int32_t ReadAuthRequest();
-    void ReadAuthResult(int32_t feature);
     void ReadVideoPacket(const proto::VideoPacket &packet);
 
 private:

@@ -39,41 +39,6 @@ void RemoteClient::Disconnect()
     Stop();
 }
 
-int32_t RemoteClient::ReadAuthRequest()
-{
-    std::unique_ptr<proto::ServerToClient> message(new proto::ServerToClient());
-
-    socket_->ReadMessage(&message);
-
-    return message->auth_request().methods();
-}
-
-void RemoteClient::ReadAuthResult(int32_t feature)
-{
-    std::unique_ptr<proto::ServerToClient> message(new proto::ServerToClient());
-
-    socket_->ReadMessage(&message);
-
-    if (!message->auth_result().success())
-    {
-        throw Exception("Authorisation error.");
-    }
-
-    if (!(message->auth_result().features() & feature))
-    {
-        throw Exception("Requested session feature not available. Access denied.");
-    }
-}
-
-void RemoteClient::SendAuthReply(int32_t method)
-{
-    std::unique_ptr<proto::ClientToServer> message(new proto::ClientToServer());
-
-    message->mutable_auth_reply()->set_method(method);
-
-    socket_->WriteMessage(message.get());
-}
-
 void RemoteClient::ReadVideoPacket(const proto::VideoPacket &packet)
 {
     // Если пакет является первым в логическом обновлении
@@ -208,12 +173,19 @@ void RemoteClient::OnScreenWindowClosed()
 
 void RemoteClient::InsertToOutputQueue(std::unique_ptr<proto::ClientToServer> &message)
 {
-    output_message_queue_->Add(std::move(message));
+    output_message_queue_->Add(message);
 }
 
 void RemoteClient::ProcessOutputMessage(const proto::ClientToServer *message)
 {
-    socket_->WriteMessage(message);
+    try
+    {
+        socket_->WriteMessage(message);
+    }
+    catch (const Exception&)
+    {
+        Disconnect();
+    }
 }
 
 void RemoteClient::InitScreenWindow()
@@ -262,7 +234,7 @@ void RemoteClient::InitOutputQueue()
 
 void RemoteClient::Worker()
 {
-    LOG(INFO) << "Remote client thread started";
+    DLOG(INFO) << "Remote client thread started";
 
     try
     {
@@ -286,33 +258,6 @@ void RemoteClient::Worker()
         return;
     }
 
-    try
-    {
-        int32_t auth_methods = ReadAuthRequest();
-
-        if (!(auth_methods & proto::AUTH_NONE))
-        {
-            throw Exception("Auth method not enabled.");
-        }
-
-        SendAuthReply(proto::AUTH_NONE);
-
-        ReadAuthResult(proto::FEATURE_DESKTOP_MANAGE);
-    }
-    catch (const Exception &err)
-    {
-        LOG(ERROR) << "Unable to login: " << err.What();
-
-        //
-        // Асинхронно вызываем callback для уведомления о том, что невозможно
-        // подключиться.
-        //
-        std::async(std::launch::async, on_event_, EventType::BadAuth);
-
-        // Выходим, поток завершен.
-        return;
-    }
-
     InitScreenWindow();
     InitInputQueue();
     InitOutputQueue();
@@ -325,10 +270,10 @@ void RemoteClient::Worker()
         //
         std::async(std::launch::async, on_event_, EventType::Connected);
 
-        SendVideoControl(true, proto::VIDEO_ENCODING_ZLIB, PixelFormat::MakeRGB565());
+        SendVideoControl(true, proto::VIDEO_ENCODING_VP8, PixelFormat::MakeRGB565());
 
-        // Продолжаем цикл пока поток окна на завершится.
-        while (!window_->IsEndOfThread())
+        // Продолжаем цикл пока не будет дана команда остановить поток.
+        while (!IsEndOfThread())
         {
             // Создаем экземпляр сообщения.
             std::unique_ptr<proto::ServerToClient> message(new proto::ServerToClient());
@@ -337,12 +282,18 @@ void RemoteClient::Worker()
             socket_->ReadMessage(&message);
 
             // Добавляем сообщение в очередь.
-            input_message_queue_->Add(std::move(message));
+            input_message_queue_->Add(message);
         }
     }
     catch (const Exception &err)
     {
         LOG(ERROR) << "Exception in remote client thread: " << err.What();
+    }
+
+    if (window_)
+    {
+        window_->Stop();
+        window_->WaitForEnd();
     }
 
     // Даем команду остановиться потокам обработки сообщений.
@@ -356,12 +307,7 @@ void RemoteClient::Worker()
     // Асинхронно вызываем callback для уведомления о том, что подключение завершено.
     std::async(std::launch::async, on_event_, EventType::Disconnected);
 
-    LOG(INFO) << "Remote client thread stopped";
-}
-
-void RemoteClient::OnStart()
-{
-    // Nothing
+    DLOG(INFO) << "Remote client thread stopped";
 }
 
 void RemoteClient::OnStop()
@@ -369,7 +315,7 @@ void RemoteClient::OnStop()
     // Если сокет был инициализирован.
     if (socket_)
     {
-        // Закрываем его.
-        socket_->Close();
+        // Отключаемся.
+        socket_->Disconnect();
     }
 }

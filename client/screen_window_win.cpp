@@ -89,7 +89,7 @@ void ScreenWindowWin::AllocateBuffer(int align)
                                       nullptr,
                                       0);
 
-    LOG(INFO) << "buffer allocated";
+    DLOG(INFO) << "buffer allocated";
 }
 
 // static
@@ -126,7 +126,7 @@ void ScreenWindowWin::Resize(const DesktopSize &screen_size,
         scroll_max_.y = screen_size_.height();
     }
 
-    PostMessage(window_, WM_SIZE, 0, 0);
+    PostMessageW(window_, WM_SIZE, 0, 0);
 }
 
 void ScreenWindowWin::Invalidate()
@@ -691,12 +691,12 @@ void ScreenWindowWin::Worker()
                               class_name,
                               L"Video Window",
                               style,
-                              0, 0, CW_USEDEFAULT, CW_USEDEFAULT,
+                              0, 0, 400, 200,
                               parent_,
                               nullptr,
                               instance,
                               this);
-    DCHECK(window_) << "Unable to create screen window: " << GetLastError();
+    CHECK(window_) << "Unable to create screen window: " << GetLastError();
 
     ShowWindow(window_, SW_SHOW);
     UpdateWindow(window_);
@@ -727,17 +727,14 @@ void ScreenWindowWin::Worker()
     if (keyboard_hook)
         UnhookWindowsHookEx(keyboard_hook);
 
+    DestroyWindow(window_);
+
     UnregisterClassW(class_name, nullptr);
 
     std::async(std::launch::async, on_closed_);
 }
 
-void ScreenWindowWin::OnStart()
-{
-    // Nothing
-}
-
 void ScreenWindowWin::OnStop()
 {
-    DestroyWindow(window_);
+    PostMessageW(window_, WM_CLOSE, 0, 0);
 }

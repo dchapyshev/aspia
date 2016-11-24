@@ -34,7 +34,7 @@ public:
         // Nothing
     }
 
-    void MessageQueue::Add(std::unique_ptr<T> message)
+    void MessageQueue::Add(std::unique_ptr<T> &message)
     {
         {
             // Блокируем очередь сообщений.
@@ -79,11 +79,6 @@ private:
                 process_message_(message.get());
             }
         }
-    }
-
-    void OnStart() override
-    {
-        // Nothing
     }
 
     void OnStop() override
