@@ -38,11 +38,11 @@ void Event::WaitForEvent(uint32_t milliseconds)
             break;
 
         case WAIT_TIMEOUT:
-            LOG(WARNING) << "Waiting timeout";
+            DLOG(WARNING) << "Waiting timeout";
             break;
 
         default:
-            LOG(WARNING) << "Unknown waiting error: " << error;
+            DLOG(WARNING) << "Unknown waiting error: " << error;
             break;
     }
 }
@@ -51,6 +51,6 @@ void Event::WaitForEvent()
 {
     if (WaitForSingleObject(event_, INFINITE) == WAIT_FAILED)
     {
-        LOG(WARNING) << "Unknown waiting error";
+        DLOG(WARNING) << "Unknown waiting error";
     }
 }

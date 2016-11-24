@@ -30,7 +30,6 @@ public:
 
 private:
     void Worker() override;
-    void OnStart() override;
     void OnStop() override;
 
     void SendSAS();

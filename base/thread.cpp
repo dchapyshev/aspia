@@ -84,11 +84,10 @@ void Thread::Start()
 {
     if (active_)
     {
-        LOG(ERROR) << "Attempt to start an already running thread";
+        DLOG(ERROR) << "Attempt to start an already running thread";
         return;
     }
 
-    OnStart();
     active_ = (ResumeThread(thread_) != -1);
 
     if (!active_)
@@ -107,14 +106,15 @@ void Thread::WaitForEnd(uint32_t milliseconds) const
         switch (error)
         {
             case WAIT_TIMEOUT:
-                LOG(WARNING) << "Timeout at end of thread";
+                DLOG(WARNING) << "Timeout at end of thread";
                 break;
 
             case WAIT_OBJECT_0:
                 break;
 
             default:
-                LOG(WARNING) << "Unknown error at end of thread: " << error;
+                DLOG(WARNING) << "Unknown error at end of thread: " << error
+                              << " (" << GetLastError() << ")";
                 break;
         }
     }
@@ -125,7 +125,10 @@ void Thread::WaitForEnd() const
     if (active_)
     {
         // Если запущен, то ждем пока он завершит работу.
-        WaitForSingleObject(thread_, INFINITE);
+        if (WaitForSingleObject(thread_, INFINITE) == WAIT_FAILED)
+        {
+            DLOG(ERROR) << "WaitForSingleObject() failed: " << GetLastError();
+        }
     }
 }
 

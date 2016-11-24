@@ -10,9 +10,7 @@
 #include "base/logging.h"
 
 // public
-ServiceControl::ServiceControl(const WCHAR *service_short_name) :
-    sc_manager_(nullptr),
-    service_(nullptr)
+ServiceControl::ServiceControl(const WCHAR *service_short_name)
 {
     sc_manager_ = OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS);
 
@@ -26,9 +24,6 @@ ServiceControl::ServiceControl(const WCHAR *service_short_name) :
         if (!service_)
         {
             LOG(ERROR) << "OpenServiceW() failed: " << GetLastError();
-
-            CloseServiceHandle(sc_manager_);
-            sc_manager_ = nullptr;
         }
     }
 }
@@ -43,11 +38,7 @@ ServiceControl::ServiceControl(SC_HANDLE sc_manager, SC_HANDLE service) :
 // public
 ServiceControl::~ServiceControl()
 {
-    if (service_)
-        CloseServiceHandle(service_);
-
-    if (sc_manager_)
-        CloseServiceHandle(sc_manager_);
+    // Nothing
 }
 
 // static
@@ -58,14 +49,14 @@ std::unique_ptr<ServiceControl> ServiceControl::Install(const WCHAR *exec_path,
                                                         bool replace)
 {
     // Открываем менеджер служб
-    SC_HANDLE sc_manager = OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS);
+    ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager)
     {
         LOG(ERROR) << "OpenSCManagerW() failed: " << GetLastError();
         return std::unique_ptr<ServiceControl>();
     }
 
-    SC_HANDLE service = nullptr;
+    ScopedScHandle service;
 
     for (int retry_count = 0; retry_count < 3; ++retry_count)
     {
@@ -115,7 +106,7 @@ std::unique_ptr<ServiceControl> ServiceControl::Install(const WCHAR *exec_path,
                     if (DeleteService(service))
                     {
                         // Если служба успешно удалена, то пробуем создать повторно
-                        CloseServiceHandle(service);
+                        service.set(nullptr);
                         continue;
                     }
                     else
@@ -123,8 +114,7 @@ std::unique_ptr<ServiceControl> ServiceControl::Install(const WCHAR *exec_path,
                         LOG(ERROR) << "DeleteService() failed: " << GetLastError();
                     }
 
-                    CloseServiceHandle(service);
-                    service = nullptr;
+                    service.set(nullptr);
                 }
                 else
                 {
@@ -159,11 +149,11 @@ std::unique_ptr<ServiceControl> ServiceControl::Install(const WCHAR *exec_path,
 
     if (!service)
     {
-        CloseServiceHandle(sc_manager);
         return std::unique_ptr<ServiceControl>();
     }
 
-    return std::unique_ptr<ServiceControl>(new ServiceControl(sc_manager, service));
+    return std::unique_ptr<ServiceControl>(new ServiceControl(sc_manager.release(),
+                                                              service.release()));
 }
 
 // public
@@ -207,11 +197,8 @@ bool ServiceControl::Delete()
         return false;
     }
 
-    CloseServiceHandle(service_);
-    CloseServiceHandle(sc_manager_);
-
-    service_ = nullptr;
-    sc_manager_ = nullptr;
+    service_.set(nullptr);
+    sc_manager_.set(nullptr);
 
     return true;
 }

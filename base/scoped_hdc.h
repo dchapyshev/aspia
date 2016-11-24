@@ -51,6 +51,8 @@ public:
 private:
     HWND hwnd_;
     HDC hdc_;
+
+    DISALLOW_COPY_AND_ASSIGN(ScopedGetDC);
 };
 
 //
@@ -60,8 +62,15 @@ private:
 class ScopedCreateDC
 {
 public:
-    ScopedCreateDC() : hdc_(nullptr) {}
-    explicit ScopedCreateDC(HDC h) : hdc_(h) {}
+    ScopedCreateDC() : hdc_(nullptr)
+    {
+        // Nothing
+    }
+
+    explicit ScopedCreateDC(HDC h) : hdc_(h)
+    {
+        // Nothing
+    }
 
     ~ScopedCreateDC()
     {
@@ -88,6 +97,8 @@ private:
     }
 
     HDC hdc_;
+
+    DISALLOW_COPY_AND_ASSIGN(ScopedCreateDC);
 };
 
 #endif // _ASPIA_SCOPED_HDC_H

@@ -5,11 +5,12 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#ifndef _ASPIA_BASE_SCOPED_NATIVE_LIBRARY_H
-#define _ASPIA_BASE_SCOPED_NATIVE_LIBRARY_H
+#ifndef _ASPIA_BASE__SCOPED_NATIVE_LIBRARY_H
+#define _ASPIA_BASE__SCOPED_NATIVE_LIBRARY_H
 
 #include "aspia_config.h"
 
+#include "base/macros.h"
 #include "base/unicode.h"
 
 class ScopedNativeLibrary
@@ -32,6 +33,8 @@ public:
 
 private:
     HMODULE lib_;
+
+    DISALLOW_COPY_AND_ASSIGN(ScopedNativeLibrary);
 };
 
-#endif // _ASPIA_BASE_SCOPED_NATIVE_LIBRARY_H
+#endif // _ASPIA_BASE__SCOPED_NATIVE_LIBRARY_H

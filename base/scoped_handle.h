@@ -10,6 +10,9 @@
 
 #include "aspia_config.h"
 
+#include "base/macros.h"
+#include "base/logging.h"
+
 class ScopedHandle
 {
 public:
@@ -62,13 +65,19 @@ private:
     {
         if (handle_ && handle_ != INVALID_HANDLE_VALUE)
         {
-            CloseHandle(handle_);
+            if (!CloseHandle(handle_))
+            {
+                DLOG(ERROR) << "CloseHandle() failed: " << GetLastError();
+            }
+
             handle_ = nullptr;
         }
     }
 
 private:
     HANDLE handle_;
+
+    DISALLOW_COPY_AND_ASSIGN(ScopedHandle);
 };
 
 #endif // _ASPIA_BASE__SCOPED_HANDLE_H

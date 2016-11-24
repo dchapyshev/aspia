@@ -16,7 +16,7 @@ Service::Service(const WCHAR *service_name) :
     service_name_(service_name),
     status_handle_(nullptr)
 {
-    CHECK(!_self) << "Another instance of the service has already been created";
+    DCHECK(!_self) << "Another instance of the service has already been created";
 
     memset(&status_, 0, sizeof(status_));
 
@@ -41,7 +41,7 @@ DWORD WINAPI Service::ServiceControlHandler(DWORD control_code,
     {
         case SERVICE_CONTROL_STOP:
         {
-            LOG(INFO) << "Received request to stop service";
+            DLOG(INFO) << "Received request to stop service";
 
             self->SetStatus(SERVICE_STOP_PENDING);
             self->OnStop();
@@ -52,7 +52,7 @@ DWORD WINAPI Service::ServiceControlHandler(DWORD control_code,
 
         default:
         {
-            LOG(INFO) << "Received unsupported request for this service";
+            DLOG(INFO) << "Received unsupported request for this service";
         }
         break;
     }
@@ -64,7 +64,7 @@ DWORD WINAPI Service::ServiceControlHandler(DWORD control_code,
 // static
 void Service::ServiceMain(int argc, LPWSTR argv)
 {
-    CHECK(_self);
+    DCHECK(_self);
 
     _self->status_handle_ =
         RegisterServiceCtrlHandlerExW(_self->service_name_.c_str(),
@@ -117,8 +117,6 @@ bool Service::DoWork()
 
     service_table[0].lpServiceName = &service_name_[0];
     service_table[0].lpServiceProc = reinterpret_cast<LPSERVICE_MAIN_FUNCTIONW>(ServiceMain);
-
-    OnStart();
 
     if (!StartServiceCtrlDispatcherW(service_table))
     {

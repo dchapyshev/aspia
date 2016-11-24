@@ -5,10 +5,12 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#ifndef _ASPIA_SCOPED_GDI_OBJECT_H
-#define _ASPIA_SCOPED_GDI_OBJECT_H
+#ifndef _ASPIA_BASE__SCOPED_GDI_OBJECT_H
+#define _ASPIA_BASE__SCOPED_GDI_OBJECT_H
 
 #include "aspia_config.h"
+
+#include "base/macros.h"
 
 // Like ScopedHandle but for GDI objects.
 template<class T>
@@ -67,10 +69,14 @@ private:
     }
 
     T object_;
+
+    DISALLOW_COPY_AND_ASSIGN(ScopedGDIObject);
 };
 
+//
 // An explicit specialization for HICON because we have to call DestroyIcon()
 // instead of DeleteObject() for HICON.
+//
 template<>
 void ScopedGDIObject<HICON>::Close()
 {
@@ -84,4 +90,4 @@ typedef ScopedGDIObject<HRGN> ScopedRegion;
 typedef ScopedGDIObject<HFONT> ScopedHFONT;
 typedef ScopedGDIObject<HICON> ScopedHICON;
 
-#endif // _ASPIA_SCOPED_GDI_OBJECT_H
+#endif // _ASPIA_BASE__SCOPED_GDI_OBJECT_H

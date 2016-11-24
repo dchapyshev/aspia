@@ -13,6 +13,7 @@
 #include <memory>
 
 #include "base/macros.h"
+#include "base/scoped_sc_handle.h"
 
 class ServiceControl
 {
@@ -64,8 +65,8 @@ private:
     ServiceControl(SC_HANDLE sc_manager, SC_HANDLE service);
 
 private:
-    SC_HANDLE sc_manager_;
-    SC_HANDLE service_;
+    mutable ScopedScHandle sc_manager_;
+    mutable ScopedScHandle service_;
 
     DISALLOW_COPY_AND_ASSIGN(ServiceControl);
 };

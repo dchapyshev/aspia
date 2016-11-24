@@ -10,6 +10,8 @@
 
 #include "aspia_config.h"
 
+#include "base/macros.h"
+
 class ScopedSasPolice
 {
 public:
@@ -22,6 +24,8 @@ private:
 private:
     HKEY key_;
     DWORD old_state_;
+
+    DISALLOW_COPY_AND_ASSIGN(ScopedSasPolice);
 };
 
 #endif // _ASPIA_BASE__SCOPED_SAS_POLICE_H

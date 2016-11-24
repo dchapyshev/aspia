@@ -36,7 +36,7 @@ void SasInjector::SendSAS()
 
     if (session_id == 0xFFFFFFFF)
     {
-        LOG(ERROR) << "Wrong session id";
+        DLOG(ERROR) << "Wrong session id";
         return;
     }
 
@@ -64,7 +64,7 @@ void SasInjector::InjectSAS()
     // Получаем ID сессии пользователя под которым запущен текущий процесс.
     if (!kernel32_->ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
-        LOG(ERROR) << "ProcessIdToSessionId() failed: " << GetLastError();
+        DLOG(WARNING) << "ProcessIdToSessionId() failed: " << GetLastError();
         return;
     }
 
@@ -121,11 +121,6 @@ void SasInjector::DoService()
 void SasInjector::Worker()
 {
     SendSAS();
-}
-
-void SasInjector::OnStart()
-{
-    // Nothing
 }
 
 void SasInjector::OnStop()

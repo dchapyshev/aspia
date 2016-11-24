@@ -5,11 +5,11 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#ifndef _ASPIA_BASE_LOGGING_H
-#define _ASPIA_BASE_LOGGING_H
+#ifndef _ASPIA_BASE__LOGGING_H
+#define _ASPIA_BASE__LOGGING_H
 
 #define GLOG_NO_ABBREVIATED_SEVERITIES
 #define GOOGLE_GLOG_DLL_DECL
 #include <glog/logging.h>
 
-#endif // _ASPIA_BASE_LOGGING_H
+#endif // _ASPIA_BASE__LOGGING_H

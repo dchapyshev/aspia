@@ -11,6 +11,8 @@
 #include <stdint.h>
 #include <malloc.h>
 
+#include "base/macros.h"
+
 class ScopedAlignedBuffer
 {
 public:
@@ -34,6 +36,8 @@ public:
 
 private:
     uint8_t *buffer_;
+
+    DISALLOW_COPY_AND_ASSIGN(ScopedAlignedBuffer);
 };
 
 #endif // _ASPIA_BASE__SCOPED_ALIGNED_BUFFER_H

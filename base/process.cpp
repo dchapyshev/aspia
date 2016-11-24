@@ -139,7 +139,7 @@ bool Process::Elevate(const WCHAR *command_line)
 
     if (!ShellExecuteExW(&sei))
     {
-        LOG(ERROR) << "ShellExecuteExW() failed: " << GetLastError();
+        DLOG(ERROR) << "ShellExecuteExW() failed: " << GetLastError();
         return false;
     }
 

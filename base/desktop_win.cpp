@@ -22,7 +22,7 @@ Desktop::~Desktop()
     {
         if (!CloseDesktop(desktop_))
         {
-            LOG(ERROR) << "CloseDesktop() failed: " << GetLastError();
+            DLOG(ERROR) << "CloseDesktop() failed: " << GetLastError();
         }
     }
 }

@@ -161,8 +161,6 @@ void RunAsService::Worker()
                 {
                     CloseHandle(pi.hThread);
                     CloseHandle(pi.hProcess);
-
-                    LOG(INFO) << "Process started: " << command_line.c_str();
                 }
                 else
                 {
@@ -173,11 +171,6 @@ void RunAsService::Worker()
             }
         }
     }
-}
-
-void RunAsService::OnStart()
-{
-    // Nothing
 }
 
 void RunAsService::OnStop()
