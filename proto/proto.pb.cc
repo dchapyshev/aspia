@@ -17,9 +17,6 @@
 namespace proto {
 
 void protobuf_ShutdownFile_proto_2eproto() {
-  AuthRequest_default_instance_.Shutdown();
-  AuthReply_default_instance_.Shutdown();
-  AuthResult_default_instance_.Shutdown();
   PowerControl_default_instance_.Shutdown();
   Bell_default_instance_.Shutdown();
   TextChat_default_instance_.Shutdown();
@@ -43,10 +40,6 @@ void protobuf_ShutdownFile_proto_2eproto() {
 void protobuf_InitDefaults_proto_2eproto_impl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  AuthRequest_default_instance_.DefaultConstruct();
-  ::google::protobuf::internal::GetEmptyString();
-  AuthReply_default_instance_.DefaultConstruct();
-  AuthResult_default_instance_.DefaultConstruct();
   PowerControl_default_instance_.DefaultConstruct();
   Bell_default_instance_.DefaultConstruct();
   ::google::protobuf::internal::GetEmptyString();
@@ -69,9 +62,6 @@ void protobuf_InitDefaults_proto_2eproto_impl() {
   VideoControl_default_instance_.DefaultConstruct();
   ServerToClient_default_instance_.DefaultConstruct();
   ClientToServer_default_instance_.DefaultConstruct();
-  AuthRequest_default_instance_.get_mutable()->InitAsDefaultInstance();
-  AuthReply_default_instance_.get_mutable()->InitAsDefaultInstance();
-  AuthResult_default_instance_.get_mutable()->InitAsDefaultInstance();
   PowerControl_default_instance_.get_mutable()->InitAsDefaultInstance();
   Bell_default_instance_.get_mutable()->InitAsDefaultInstance();
   TextChat_default_instance_.get_mutable()->InitAsDefaultInstance();
@@ -117,39 +107,6 @@ struct StaticDescriptorInitializer_proto_2eproto {
   }
 } static_descriptor_initializer_proto_2eproto_;
 #endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-bool AuthMethod_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-      return true;
-    default:
-      return false;
-  }
-}
-
-bool SessionFeature_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 4:
-    case 8:
-    case 16:
-    case 32:
-    case 64:
-    case 128:
-    case 256:
-    case 512:
-    case 1024:
-    case 2048:
-    case 4096:
-      return true;
-    default:
-      return false;
-  }
-}
-
 bool VideoEncoding_IsValid(int value) {
   switch (value) {
     case 0:
@@ -172,852 +129,6 @@ static void MergeFromFail(int line) {
 
 }  // namespace
 
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int AuthRequest::kMethodsFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-AuthRequest::AuthRequest()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.AuthRequest)
-}
-
-void AuthRequest::InitAsDefaultInstance() {
-}
-
-AuthRequest::AuthRequest(const AuthRequest& from)
-  : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:proto.AuthRequest)
-}
-
-void AuthRequest::SharedCtor() {
-  methods_ = 0;
-  _cached_size_ = 0;
-}
-
-AuthRequest::~AuthRequest() {
-  // @@protoc_insertion_point(destructor:proto.AuthRequest)
-  SharedDtor();
-}
-
-void AuthRequest::SharedDtor() {
-}
-
-void AuthRequest::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const AuthRequest& AuthRequest::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
-  return *internal_default_instance();
-}
-
-::google::protobuf::internal::ExplicitlyConstructed<AuthRequest> AuthRequest_default_instance_;
-
-AuthRequest* AuthRequest::New(::google::protobuf::Arena* arena) const {
-  AuthRequest* n = new AuthRequest;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void AuthRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.AuthRequest)
-  methods_ = 0;
-}
-
-bool AuthRequest::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:proto.AuthRequest)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional int32 methods = 1;
-      case 1: {
-        if (tag == 8) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &methods_)));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:proto.AuthRequest)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:proto.AuthRequest)
-  return false;
-#undef DO_
-}
-
-void AuthRequest::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.AuthRequest)
-  // optional int32 methods = 1;
-  if (this->methods() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->methods(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:proto.AuthRequest)
-}
-
-size_t AuthRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.AuthRequest)
-  size_t total_size = 0;
-
-  // optional int32 methods = 1;
-  if (this->methods() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->methods());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void AuthRequest::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const AuthRequest*>(&from));
-}
-
-void AuthRequest::MergeFrom(const AuthRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.AuthRequest)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
-
-void AuthRequest::UnsafeMergeFrom(const AuthRequest& from) {
-  GOOGLE_DCHECK(&from != this);
-  if (from.methods() != 0) {
-    set_methods(from.methods());
-  }
-}
-
-void AuthRequest::CopyFrom(const AuthRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.AuthRequest)
-  if (&from == this) return;
-  Clear();
-  UnsafeMergeFrom(from);
-}
-
-bool AuthRequest::IsInitialized() const {
-
-  return true;
-}
-
-void AuthRequest::Swap(AuthRequest* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void AuthRequest::InternalSwap(AuthRequest* other) {
-  std::swap(methods_, other->methods_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string AuthRequest::GetTypeName() const {
-  return "proto.AuthRequest";
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// AuthRequest
-
-// optional int32 methods = 1;
-void AuthRequest::clear_methods() {
-  methods_ = 0;
-}
-::google::protobuf::int32 AuthRequest::methods() const {
-  // @@protoc_insertion_point(field_get:proto.AuthRequest.methods)
-  return methods_;
-}
-void AuthRequest::set_methods(::google::protobuf::int32 value) {
-  
-  methods_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthRequest.methods)
-}
-
-inline const AuthRequest* AuthRequest::internal_default_instance() {
-  return &AuthRequest_default_instance_.get();
-}
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int AuthReply::kMethodFieldNumber;
-const int AuthReply::kUsernameFieldNumber;
-const int AuthReply::kPasswordFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-AuthReply::AuthReply()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.AuthReply)
-}
-
-void AuthReply::InitAsDefaultInstance() {
-}
-
-AuthReply::AuthReply(const AuthReply& from)
-  : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:proto.AuthReply)
-}
-
-void AuthReply::SharedCtor() {
-  username_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  password_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  method_ = 0;
-  _cached_size_ = 0;
-}
-
-AuthReply::~AuthReply() {
-  // @@protoc_insertion_point(destructor:proto.AuthReply)
-  SharedDtor();
-}
-
-void AuthReply::SharedDtor() {
-  username_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  password_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-
-void AuthReply::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const AuthReply& AuthReply::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
-  return *internal_default_instance();
-}
-
-::google::protobuf::internal::ExplicitlyConstructed<AuthReply> AuthReply_default_instance_;
-
-AuthReply* AuthReply::New(::google::protobuf::Arena* arena) const {
-  AuthReply* n = new AuthReply;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void AuthReply::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.AuthReply)
-  method_ = 0;
-  username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-
-bool AuthReply::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:proto.AuthReply)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional int32 method = 1;
-      case 1: {
-        if (tag == 8) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &method_)));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(26)) goto parse_username;
-        break;
-      }
-
-      // optional string username = 3;
-      case 3: {
-        if (tag == 26) {
-         parse_username:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_username()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->username().data(), this->username().length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.AuthReply.username"));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(34)) goto parse_password;
-        break;
-      }
-
-      // optional bytes password = 4;
-      case 4: {
-        if (tag == 34) {
-         parse_password:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_password()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:proto.AuthReply)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:proto.AuthReply)
-  return false;
-#undef DO_
-}
-
-void AuthReply::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.AuthReply)
-  // optional int32 method = 1;
-  if (this->method() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->method(), output);
-  }
-
-  // optional string username = 3;
-  if (this->username().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->username().data(), this->username().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.AuthReply.username");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      3, this->username(), output);
-  }
-
-  // optional bytes password = 4;
-  if (this->password().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      4, this->password(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:proto.AuthReply)
-}
-
-size_t AuthReply::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.AuthReply)
-  size_t total_size = 0;
-
-  // optional int32 method = 1;
-  if (this->method() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->method());
-  }
-
-  // optional string username = 3;
-  if (this->username().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->username());
-  }
-
-  // optional bytes password = 4;
-  if (this->password().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::BytesSize(
-        this->password());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void AuthReply::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const AuthReply*>(&from));
-}
-
-void AuthReply::MergeFrom(const AuthReply& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.AuthReply)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
-
-void AuthReply::UnsafeMergeFrom(const AuthReply& from) {
-  GOOGLE_DCHECK(&from != this);
-  if (from.method() != 0) {
-    set_method(from.method());
-  }
-  if (from.username().size() > 0) {
-
-    username_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.username_);
-  }
-  if (from.password().size() > 0) {
-
-    password_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.password_);
-  }
-}
-
-void AuthReply::CopyFrom(const AuthReply& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.AuthReply)
-  if (&from == this) return;
-  Clear();
-  UnsafeMergeFrom(from);
-}
-
-bool AuthReply::IsInitialized() const {
-
-  return true;
-}
-
-void AuthReply::Swap(AuthReply* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void AuthReply::InternalSwap(AuthReply* other) {
-  std::swap(method_, other->method_);
-  username_.Swap(&other->username_);
-  password_.Swap(&other->password_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string AuthReply::GetTypeName() const {
-  return "proto.AuthReply";
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// AuthReply
-
-// optional int32 method = 1;
-void AuthReply::clear_method() {
-  method_ = 0;
-}
-::google::protobuf::int32 AuthReply::method() const {
-  // @@protoc_insertion_point(field_get:proto.AuthReply.method)
-  return method_;
-}
-void AuthReply::set_method(::google::protobuf::int32 value) {
-  
-  method_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthReply.method)
-}
-
-// optional string username = 3;
-void AuthReply::clear_username() {
-  username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-const ::std::string& AuthReply::username() const {
-  // @@protoc_insertion_point(field_get:proto.AuthReply.username)
-  return username_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-void AuthReply::set_username(const ::std::string& value) {
-  
-  username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:proto.AuthReply.username)
-}
-void AuthReply::set_username(const char* value) {
-  
-  username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:proto.AuthReply.username)
-}
-void AuthReply::set_username(const char* value, size_t size) {
-  
-  username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:proto.AuthReply.username)
-}
-::std::string* AuthReply::mutable_username() {
-  
-  // @@protoc_insertion_point(field_mutable:proto.AuthReply.username)
-  return username_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-::std::string* AuthReply::release_username() {
-  // @@protoc_insertion_point(field_release:proto.AuthReply.username)
-  
-  return username_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-void AuthReply::set_allocated_username(::std::string* username) {
-  if (username != NULL) {
-    
-  } else {
-    
-  }
-  username_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), username);
-  // @@protoc_insertion_point(field_set_allocated:proto.AuthReply.username)
-}
-
-// optional bytes password = 4;
-void AuthReply::clear_password() {
-  password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-const ::std::string& AuthReply::password() const {
-  // @@protoc_insertion_point(field_get:proto.AuthReply.password)
-  return password_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-void AuthReply::set_password(const ::std::string& value) {
-  
-  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:proto.AuthReply.password)
-}
-void AuthReply::set_password(const char* value) {
-  
-  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:proto.AuthReply.password)
-}
-void AuthReply::set_password(const void* value, size_t size) {
-  
-  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:proto.AuthReply.password)
-}
-::std::string* AuthReply::mutable_password() {
-  
-  // @@protoc_insertion_point(field_mutable:proto.AuthReply.password)
-  return password_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-::std::string* AuthReply::release_password() {
-  // @@protoc_insertion_point(field_release:proto.AuthReply.password)
-  
-  return password_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-void AuthReply::set_allocated_password(::std::string* password) {
-  if (password != NULL) {
-    
-  } else {
-    
-  }
-  password_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), password);
-  // @@protoc_insertion_point(field_set_allocated:proto.AuthReply.password)
-}
-
-inline const AuthReply* AuthReply::internal_default_instance() {
-  return &AuthReply_default_instance_.get();
-}
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int AuthResult::kSuccessFieldNumber;
-const int AuthResult::kFeaturesFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-AuthResult::AuthResult()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.AuthResult)
-}
-
-void AuthResult::InitAsDefaultInstance() {
-}
-
-AuthResult::AuthResult(const AuthResult& from)
-  : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:proto.AuthResult)
-}
-
-void AuthResult::SharedCtor() {
-  ::memset(&success_, 0, reinterpret_cast<char*>(&features_) -
-    reinterpret_cast<char*>(&success_) + sizeof(features_));
-  _cached_size_ = 0;
-}
-
-AuthResult::~AuthResult() {
-  // @@protoc_insertion_point(destructor:proto.AuthResult)
-  SharedDtor();
-}
-
-void AuthResult::SharedDtor() {
-}
-
-void AuthResult::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const AuthResult& AuthResult::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
-  return *internal_default_instance();
-}
-
-::google::protobuf::internal::ExplicitlyConstructed<AuthResult> AuthResult_default_instance_;
-
-AuthResult* AuthResult::New(::google::protobuf::Arena* arena) const {
-  AuthResult* n = new AuthResult;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void AuthResult::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.AuthResult)
-#if defined(__clang__)
-#define ZR_HELPER_(f) \
-  _Pragma("clang diagnostic push") \
-  _Pragma("clang diagnostic ignored \"-Winvalid-offsetof\"") \
-  __builtin_offsetof(AuthResult, f) \
-  _Pragma("clang diagnostic pop")
-#else
-#define ZR_HELPER_(f) reinterpret_cast<char*>(\
-  &reinterpret_cast<AuthResult*>(16)->f)
-#endif
-
-#define ZR_(first, last) do {\
-  ::memset(&(first), 0,\
-           ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
-} while (0)
-
-  ZR_(success_, features_);
-
-#undef ZR_HELPER_
-#undef ZR_
-
-}
-
-bool AuthResult::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:proto.AuthResult)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional bool success = 1;
-      case 1: {
-        if (tag == 8) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &success_)));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(16)) goto parse_features;
-        break;
-      }
-
-      // optional int32 features = 2;
-      case 2: {
-        if (tag == 16) {
-         parse_features:
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &features_)));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:proto.AuthResult)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:proto.AuthResult)
-  return false;
-#undef DO_
-}
-
-void AuthResult::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.AuthResult)
-  // optional bool success = 1;
-  if (this->success() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->success(), output);
-  }
-
-  // optional int32 features = 2;
-  if (this->features() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->features(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:proto.AuthResult)
-}
-
-size_t AuthResult::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.AuthResult)
-  size_t total_size = 0;
-
-  // optional bool success = 1;
-  if (this->success() != 0) {
-    total_size += 1 + 1;
-  }
-
-  // optional int32 features = 2;
-  if (this->features() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->features());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void AuthResult::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const AuthResult*>(&from));
-}
-
-void AuthResult::MergeFrom(const AuthResult& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.AuthResult)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
-
-void AuthResult::UnsafeMergeFrom(const AuthResult& from) {
-  GOOGLE_DCHECK(&from != this);
-  if (from.success() != 0) {
-    set_success(from.success());
-  }
-  if (from.features() != 0) {
-    set_features(from.features());
-  }
-}
-
-void AuthResult::CopyFrom(const AuthResult& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.AuthResult)
-  if (&from == this) return;
-  Clear();
-  UnsafeMergeFrom(from);
-}
-
-bool AuthResult::IsInitialized() const {
-
-  return true;
-}
-
-void AuthResult::Swap(AuthResult* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void AuthResult::InternalSwap(AuthResult* other) {
-  std::swap(success_, other->success_);
-  std::swap(features_, other->features_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string AuthResult::GetTypeName() const {
-  return "proto.AuthResult";
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// AuthResult
-
-// optional bool success = 1;
-void AuthResult::clear_success() {
-  success_ = false;
-}
-bool AuthResult::success() const {
-  // @@protoc_insertion_point(field_get:proto.AuthResult.success)
-  return success_;
-}
-void AuthResult::set_success(bool value) {
-  
-  success_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthResult.success)
-}
-
-// optional int32 features = 2;
-void AuthResult::clear_features() {
-  features_ = 0;
-}
-::google::protobuf::int32 AuthResult::features() const {
-  // @@protoc_insertion_point(field_get:proto.AuthResult.features)
-  return features_;
-}
-void AuthResult::set_features(::google::protobuf::int32 value) {
-  
-  features_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthResult.features)
-}
-
-inline const AuthResult* AuthResult::internal_default_instance() {
-  return &AuthResult_default_instance_.get();
-}
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 
@@ -6159,8 +5270,6 @@ const int ServerToClient::kVideoPacketFieldNumber;
 const int ServerToClient::kCursorFieldNumber;
 const int ServerToClient::kClipboardFieldNumber;
 const int ServerToClient::kTextChatFieldNumber;
-const int ServerToClient::kAuthRequestFieldNumber;
-const int ServerToClient::kAuthResultFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ServerToClient::ServerToClient()
@@ -6179,10 +5288,6 @@ void ServerToClient::InitAsDefaultInstance() {
       ::proto::Clipboard::internal_default_instance());
   text_chat_ = const_cast< ::proto::TextChat*>(
       ::proto::TextChat::internal_default_instance());
-  auth_request_ = const_cast< ::proto::AuthRequest*>(
-      ::proto::AuthRequest::internal_default_instance());
-  auth_result_ = const_cast< ::proto::AuthResult*>(
-      ::proto::AuthResult::internal_default_instance());
 }
 
 ServerToClient::ServerToClient(const ServerToClient& from)
@@ -6198,8 +5303,6 @@ void ServerToClient::SharedCtor() {
   cursor_ = NULL;
   clipboard_ = NULL;
   text_chat_ = NULL;
-  auth_request_ = NULL;
-  auth_result_ = NULL;
   _cached_size_ = 0;
 }
 
@@ -6214,8 +5317,6 @@ void ServerToClient::SharedDtor() {
     delete cursor_;
     delete clipboard_;
     delete text_chat_;
-    delete auth_request_;
-    delete auth_result_;
   }
 }
 
@@ -6249,10 +5350,6 @@ void ServerToClient::Clear() {
   clipboard_ = NULL;
   if (GetArenaNoVirtual() == NULL && text_chat_ != NULL) delete text_chat_;
   text_chat_ = NULL;
-  if (GetArenaNoVirtual() == NULL && auth_request_ != NULL) delete auth_request_;
-  auth_request_ = NULL;
-  if (GetArenaNoVirtual() == NULL && auth_result_ != NULL) delete auth_result_;
-  auth_result_ = NULL;
 }
 
 bool ServerToClient::MergePartialFromCodedStream(
@@ -6312,32 +5409,6 @@ bool ServerToClient::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(42)) goto parse_auth_request;
-        break;
-      }
-
-      // optional .proto.AuthRequest auth_request = 5;
-      case 5: {
-        if (tag == 42) {
-         parse_auth_request:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_auth_request()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(50)) goto parse_auth_result;
-        break;
-      }
-
-      // optional .proto.AuthResult auth_result = 6;
-      case 6: {
-        if (tag == 50) {
-         parse_auth_result:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_auth_result()));
-        } else {
-          goto handle_unusual;
-        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -6390,18 +5461,6 @@ void ServerToClient::SerializeWithCachedSizes(
       4, *this->text_chat_, output);
   }
 
-  // optional .proto.AuthRequest auth_request = 5;
-  if (this->has_auth_request()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      5, *this->auth_request_, output);
-  }
-
-  // optional .proto.AuthResult auth_result = 6;
-  if (this->has_auth_result()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      6, *this->auth_result_, output);
-  }
-
   // @@protoc_insertion_point(serialize_end:proto.ServerToClient)
 }
 
@@ -6435,20 +5494,6 @@ size_t ServerToClient::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->text_chat_);
-  }
-
-  // optional .proto.AuthRequest auth_request = 5;
-  if (this->has_auth_request()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->auth_request_);
-  }
-
-  // optional .proto.AuthResult auth_result = 6;
-  if (this->has_auth_result()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->auth_result_);
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -6486,12 +5531,6 @@ void ServerToClient::UnsafeMergeFrom(const ServerToClient& from) {
   if (from.has_text_chat()) {
     mutable_text_chat()->::proto::TextChat::MergeFrom(from.text_chat());
   }
-  if (from.has_auth_request()) {
-    mutable_auth_request()->::proto::AuthRequest::MergeFrom(from.auth_request());
-  }
-  if (from.has_auth_result()) {
-    mutable_auth_result()->::proto::AuthResult::MergeFrom(from.auth_result());
-  }
 }
 
 void ServerToClient::CopyFrom(const ServerToClient& from) {
@@ -6515,8 +5554,6 @@ void ServerToClient::InternalSwap(ServerToClient* other) {
   std::swap(cursor_, other->cursor_);
   std::swap(clipboard_, other->clipboard_);
   std::swap(text_chat_, other->text_chat_);
-  std::swap(auth_request_, other->auth_request_);
-  std::swap(auth_result_, other->auth_result_);
   _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -6684,84 +5721,6 @@ void ServerToClient::set_allocated_text_chat(::proto::TextChat* text_chat) {
   // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.text_chat)
 }
 
-// optional .proto.AuthRequest auth_request = 5;
-bool ServerToClient::has_auth_request() const {
-  return this != internal_default_instance() && auth_request_ != NULL;
-}
-void ServerToClient::clear_auth_request() {
-  if (GetArenaNoVirtual() == NULL && auth_request_ != NULL) delete auth_request_;
-  auth_request_ = NULL;
-}
-const ::proto::AuthRequest& ServerToClient::auth_request() const {
-  // @@protoc_insertion_point(field_get:proto.ServerToClient.auth_request)
-  return auth_request_ != NULL ? *auth_request_
-                         : *::proto::AuthRequest::internal_default_instance();
-}
-::proto::AuthRequest* ServerToClient::mutable_auth_request() {
-  
-  if (auth_request_ == NULL) {
-    auth_request_ = new ::proto::AuthRequest;
-  }
-  // @@protoc_insertion_point(field_mutable:proto.ServerToClient.auth_request)
-  return auth_request_;
-}
-::proto::AuthRequest* ServerToClient::release_auth_request() {
-  // @@protoc_insertion_point(field_release:proto.ServerToClient.auth_request)
-  
-  ::proto::AuthRequest* temp = auth_request_;
-  auth_request_ = NULL;
-  return temp;
-}
-void ServerToClient::set_allocated_auth_request(::proto::AuthRequest* auth_request) {
-  delete auth_request_;
-  auth_request_ = auth_request;
-  if (auth_request) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.auth_request)
-}
-
-// optional .proto.AuthResult auth_result = 6;
-bool ServerToClient::has_auth_result() const {
-  return this != internal_default_instance() && auth_result_ != NULL;
-}
-void ServerToClient::clear_auth_result() {
-  if (GetArenaNoVirtual() == NULL && auth_result_ != NULL) delete auth_result_;
-  auth_result_ = NULL;
-}
-const ::proto::AuthResult& ServerToClient::auth_result() const {
-  // @@protoc_insertion_point(field_get:proto.ServerToClient.auth_result)
-  return auth_result_ != NULL ? *auth_result_
-                         : *::proto::AuthResult::internal_default_instance();
-}
-::proto::AuthResult* ServerToClient::mutable_auth_result() {
-  
-  if (auth_result_ == NULL) {
-    auth_result_ = new ::proto::AuthResult;
-  }
-  // @@protoc_insertion_point(field_mutable:proto.ServerToClient.auth_result)
-  return auth_result_;
-}
-::proto::AuthResult* ServerToClient::release_auth_result() {
-  // @@protoc_insertion_point(field_release:proto.ServerToClient.auth_result)
-  
-  ::proto::AuthResult* temp = auth_result_;
-  auth_result_ = NULL;
-  return temp;
-}
-void ServerToClient::set_allocated_auth_result(::proto::AuthResult* auth_result) {
-  delete auth_result_;
-  auth_result_ = auth_result;
-  if (auth_result) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.auth_result)
-}
-
 inline const ServerToClient* ServerToClient::internal_default_instance() {
   return &ServerToClient_default_instance_.get();
 }
@@ -6780,7 +5739,6 @@ const int ClientToServer::kKeyEventFieldNumber;
 const int ClientToServer::kBellFieldNumber;
 const int ClientToServer::kTextChatFieldNumber;
 const int ClientToServer::kPowerControlFieldNumber;
-const int ClientToServer::kAuthReplyFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ClientToServer::ClientToServer()
@@ -6811,8 +5769,6 @@ void ClientToServer::InitAsDefaultInstance() {
       ::proto::TextChat::internal_default_instance());
   power_control_ = const_cast< ::proto::PowerControl*>(
       ::proto::PowerControl::internal_default_instance());
-  auth_reply_ = const_cast< ::proto::AuthReply*>(
-      ::proto::AuthReply::internal_default_instance());
 }
 
 ClientToServer::ClientToServer(const ClientToServer& from)
@@ -6834,7 +5790,6 @@ void ClientToServer::SharedCtor() {
   bell_ = NULL;
   text_chat_ = NULL;
   power_control_ = NULL;
-  auth_reply_ = NULL;
   _cached_size_ = 0;
 }
 
@@ -6855,7 +5810,6 @@ void ClientToServer::SharedDtor() {
     delete bell_;
     delete text_chat_;
     delete power_control_;
-    delete auth_reply_;
   }
 }
 
@@ -6901,8 +5855,6 @@ void ClientToServer::Clear() {
   text_chat_ = NULL;
   if (GetArenaNoVirtual() == NULL && power_control_ != NULL) delete power_control_;
   power_control_ = NULL;
-  if (GetArenaNoVirtual() == NULL && auth_reply_ != NULL) delete auth_reply_;
-  auth_reply_ = NULL;
 }
 
 bool ClientToServer::MergePartialFromCodedStream(
@@ -7040,19 +5992,6 @@ bool ClientToServer::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(90)) goto parse_auth_reply;
-        break;
-      }
-
-      // optional .proto.AuthReply auth_reply = 11;
-      case 11: {
-        if (tag == 90) {
-         parse_auth_reply:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_auth_reply()));
-        } else {
-          goto handle_unusual;
-        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -7141,12 +6080,6 @@ void ClientToServer::SerializeWithCachedSizes(
       10, *this->power_control_, output);
   }
 
-  // optional .proto.AuthReply auth_reply = 11;
-  if (this->has_auth_reply()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      11, *this->auth_reply_, output);
-  }
-
   // @@protoc_insertion_point(serialize_end:proto.ClientToServer)
 }
 
@@ -7224,13 +6157,6 @@ size_t ClientToServer::ByteSizeLong() const {
         *this->power_control_);
   }
 
-  // optional .proto.AuthReply auth_reply = 11;
-  if (this->has_auth_reply()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->auth_reply_);
-  }
-
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = cached_size;
@@ -7284,9 +6210,6 @@ void ClientToServer::UnsafeMergeFrom(const ClientToServer& from) {
   if (from.has_power_control()) {
     mutable_power_control()->::proto::PowerControl::MergeFrom(from.power_control());
   }
-  if (from.has_auth_reply()) {
-    mutable_auth_reply()->::proto::AuthReply::MergeFrom(from.auth_reply());
-  }
 }
 
 void ClientToServer::CopyFrom(const ClientToServer& from) {
@@ -7316,7 +6239,6 @@ void ClientToServer::InternalSwap(ClientToServer* other) {
   std::swap(bell_, other->bell_);
   std::swap(text_chat_, other->text_chat_);
   std::swap(power_control_, other->power_control_);
-  std::swap(auth_reply_, other->auth_reply_);
   _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -7716,45 +6638,6 @@ void ClientToServer::set_allocated_power_control(::proto::PowerControl* power_co
     
   }
   // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.power_control)
-}
-
-// optional .proto.AuthReply auth_reply = 11;
-bool ClientToServer::has_auth_reply() const {
-  return this != internal_default_instance() && auth_reply_ != NULL;
-}
-void ClientToServer::clear_auth_reply() {
-  if (GetArenaNoVirtual() == NULL && auth_reply_ != NULL) delete auth_reply_;
-  auth_reply_ = NULL;
-}
-const ::proto::AuthReply& ClientToServer::auth_reply() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.auth_reply)
-  return auth_reply_ != NULL ? *auth_reply_
-                         : *::proto::AuthReply::internal_default_instance();
-}
-::proto::AuthReply* ClientToServer::mutable_auth_reply() {
-  
-  if (auth_reply_ == NULL) {
-    auth_reply_ = new ::proto::AuthReply;
-  }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.auth_reply)
-  return auth_reply_;
-}
-::proto::AuthReply* ClientToServer::release_auth_reply() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.auth_reply)
-  
-  ::proto::AuthReply* temp = auth_reply_;
-  auth_reply_ = NULL;
-  return temp;
-}
-void ClientToServer::set_allocated_auth_reply(::proto::AuthReply* auth_reply) {
-  delete auth_reply_;
-  auth_reply_ = auth_reply;
-  if (auth_reply) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.auth_reply)
 }
 
 inline const ClientToServer* ClientToServer::internal_default_instance() {
