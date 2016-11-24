@@ -11,6 +11,8 @@
 
 static volatile LONG _socket_ref_count = 0;
 
+static const int kWriteTimeout = 10000;
+
 SocketTCP::SocketTCP() :
     ref_(true)
 {
@@ -35,22 +37,22 @@ SocketTCP::SocketTCP() :
         throw Exception("Unable to create network socket.");
     }
 
-    //SetWriteTimeout(10000);
-    //SetReadTimeout(10000);
+    SetNoDelay(false);
+    SetWriteTimeout(kWriteTimeout);
 }
 
 SocketTCP::SocketTCP(SOCKET sock) :
     sock_(sock),
     ref_(false)
 {
-    //SetWriteTimeout(10000);
-    //SetReadTimeout(10000);
+    SetNoDelay(false);
+    SetWriteTimeout(kWriteTimeout);
 }
 
 SocketTCP::~SocketTCP()
 {
     // Закрываем сокет.
-    Close();
+    closesocket(sock_);
 
     if (ref_)
     {
@@ -94,14 +96,14 @@ void SocketTCP::Connect(const char *hostname, int port)
     }
 }
 
-int SocketTCP::Write(const char *buf, int len)
+int SocketTCP::Write(const uint8_t *buf, int len)
 {
-    return send(sock_, buf, len, 0);
+    return send(sock_, reinterpret_cast<const char*>(buf), len, 0);
 }
 
-int SocketTCP::Read(char *buf, int len)
+int SocketTCP::Read(uint8_t *buf, int len)
 {
-    return recv(sock_, buf, len, 0);
+    return recv(sock_, reinterpret_cast<char*>(buf), len, 0);
 }
 
 void SocketTCP::Bind(const char *hostname, int port)
@@ -174,20 +176,6 @@ void SocketTCP::SetWriteTimeout(int timeout)
     }
 }
 
-void SocketTCP::SetReadTimeout(int timeout)
-{
-    DWORD value = timeout;
-
-    if (setsockopt(sock_,
-                   SOL_SOCKET,
-                   SO_RCVTIMEO,
-                   reinterpret_cast<const char*>(&value),
-                   sizeof(value)) == SOCKET_ERROR)
-    {
-        LOG(ERROR) << "setsockopt() failed: " << WSAGetLastError();
-    }
-}
-
 void SocketTCP::SetNoDelay(bool enable)
 {
     DWORD value = enable ? 1 : 0;
@@ -200,7 +188,7 @@ std::string SocketTCP::GetIpAddress()
     struct sockaddr_in addr;
     int len = sizeof(addr);
 
-    if (getsockname(sock_, reinterpret_cast<struct sockaddr *>(&addr), &len) != SOCKET_ERROR)
+    if (getpeername(sock_, reinterpret_cast<struct sockaddr *>(&addr), &len) != SOCKET_ERROR)
     {
         return inet_ntoa(addr.sin_addr);
     }
@@ -208,12 +196,7 @@ std::string SocketTCP::GetIpAddress()
     return "0.0.0.0";
 }
 
-void SocketTCP::Close()
+void SocketTCP::Disconnect()
 {
-    if (sock_ != INVALID_SOCKET)
-    {
-        shutdown(sock_, 2);
-        closesocket(sock_);
-        sock_ = INVALID_SOCKET;
-    }
+    shutdown(sock_, 2);
 }

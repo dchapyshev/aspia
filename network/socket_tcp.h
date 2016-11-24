@@ -24,19 +24,19 @@ public:
     ~SocketTCP();
 
     void Connect(const char *hostname, int port) override;
-    int Write(const char *buf, int len) override;
-    int Read(char *buf, int len) override;
+    int Write(const uint8_t *buf, int len) override;
+    int Read(uint8_t *buf, int len) override;
     void Bind(const char *hostname, int port) override;
     void Listen() override;
     std::unique_ptr<Socket> Accept() override;
-    void Close() override;
+    void Disconnect() override;
     std::string GetIpAddress() override;
-    void SetWriteTimeout(int timeout) override;
-    void SetReadTimeout(int timeout) override;
     void SetNoDelay(bool enable) override;
 
 private:
     SocketTCP(SOCKET sock);
+
+    void SetWriteTimeout(int timeout);
 
 private:
     SOCKET sock_;

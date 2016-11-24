@@ -18,6 +18,8 @@
 #include "base/macros.h"
 #include "base/mutex.h"
 
+#include "crypto/encryptor_aes.h"
+
 class Socket
 {
 public:
@@ -25,19 +27,13 @@ public:
     virtual ~Socket();
 
     virtual void Connect(const char *hostname, int port) = 0;
-    virtual int Write(const char *buf, int len) = 0;
-    virtual int Read(char *buf, int len) = 0;
+    virtual int Write(const uint8_t *buf, int len) = 0;
+    virtual int Read(uint8_t *buf, int len) = 0;
     virtual void Bind(const char *hostname, int port) = 0;
     virtual void Listen() = 0;
     virtual std::unique_ptr<Socket> Accept() = 0;
-    virtual void Close() = 0;
+    virtual void Disconnect() = 0;
     virtual std::string GetIpAddress() = 0;
-
-    // Sets the timeout, in milliseconds.
-    virtual void SetWriteTimeout(int timeout) = 0;
-
-    // Sets the timeout, in milliseconds.
-    virtual void SetReadTimeout(int timeout) = 0;
 
     // Disable or enable Nagle’s algorithm.
     virtual void SetNoDelay(bool enable) = 0;
@@ -48,23 +44,34 @@ public:
     template<class T>
     void WriteMessage(const T *message)
     {
+        uint32_t size = message->ByteSize();
+
+        if (!size)
+        {
+            Disconnect();
+            throw Exception("Wrong packet size.");
+        }
+
         LockGuard<Mutex> guard(&write_lock_);
 
-        uint32_t packet_size = message->ByteSize();
-
-        if (write_message_.size() < packet_size)
-            write_message_.resize(packet_size);
-
-        if (!message->SerializeToArray(&write_message_[0], packet_size))
+        if (write_buffer_size_ < size)
         {
-            Close();
+            write_buffer_size_ = size;
+            write_buffer_.reset(new uint8_t[size]);
+        }
+
+        if (!message->SerializeToArray(write_buffer_.get(), size))
+        {
+            Disconnect();
             throw Exception("Unable to serialize the message.");
         }
 
-        if (!packet_size)
+        uint8_t *data = nullptr;
+
+        if (!crypto_->Encrypt(write_buffer_.get(), size, &data, &size))
         {
-            Close();
-            throw Exception("Wrong packet size.");
+            Disconnect();
+            throw Exception("Unable to encrypt the message.");
         }
 
         //
@@ -87,8 +94,8 @@ public:
         SetNoDelay(true);
 
         // Отправляем размер данных и сами данные.
-        Writer(reinterpret_cast<const char*>(&packet_size), sizeof(uint32_t));
-        Writer(write_message_.data(), packet_size);
+        Writer(reinterpret_cast<const uint8_t*>(&size), sizeof(size));
+        Writer(data, size);
 
         // Отключаем алгоритм Нейгла.
         SetNoDelay(false);
@@ -97,43 +104,60 @@ public:
         // Вызываем отправку данных и нулевым размером данных для
         // отправки пакетов в очереди.
         //
-        Write("", 0);
+        Write(reinterpret_cast<const uint8_t*>(""), 0);
     }
 
     template<class T>
     void ReadMessage(std::unique_ptr<T> *message)
     {
-        uint32_t packet_size = 0;
+        uint32_t size = 0;
 
-        Reader(reinterpret_cast<char*>(&packet_size), sizeof(packet_size));
+        Reader(reinterpret_cast<uint8_t*>(&size), sizeof(size));
 
-        if (!packet_size)
+        if (!size)
         {
-            Close();
+            Disconnect();
             throw Exception("Serialized message size is equal to zero.");
         }
 
-        if (read_message_.size() < packet_size)
-            read_message_.resize(packet_size);
-
-        Reader(&read_message_[0], packet_size);
-
-        if (!message->get()->ParseFromArray(read_message_.data(), packet_size))
+        if (read_buffer_size_ < size)
         {
-            Close();
+            read_buffer_size_ = size;
+            read_buffer_.reset(new uint8_t[size]);
+        }
+
+        Reader(read_buffer_.get(), size);
+
+        uint8_t *data = nullptr;
+
+        if (!crypto_->Decrypt(read_buffer_.get(), size, &data, &size))
+        {
+            Disconnect();
+            throw Exception("Unable to decrypt the message.");
+        }
+
+        if (!message->get()->ParseFromArray(data, size))
+        {
+            Disconnect();
             throw Exception("Unable to parse the message.");
         }
     }
 
 private:
-    void Reader(char *buf, int len);
-    void Writer(const char *buf, int len);
+    void Reader(uint8_t *buf, int len);
+    void Writer(const uint8_t *buf, int len);
     static bool IsHostnameChar(char c);
 
 private:
-    std::string write_message_;
-    std::string read_message_;
+    uint32_t write_buffer_size_;
+    uint32_t read_buffer_size_;
+
+    std::unique_ptr<uint8_t[]> write_buffer_;
+    std::unique_ptr<uint8_t[]> read_buffer_;
+
     Mutex write_lock_;
+
+    std::unique_ptr<Encryptor> crypto_;
 
     DISALLOW_COPY_AND_ASSIGN(Socket);
 };

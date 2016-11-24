@@ -11,8 +11,17 @@
 
 static const size_t kMaxHostNameLength = 64;
 
-Socket::Socket() {}
-Socket::~Socket() {}
+Socket::Socket() :
+    write_buffer_size_(0),
+    read_buffer_size_(0)
+{
+    crypto_.reset(new EncryptorAES("my_password"));
+}
+
+Socket::~Socket()
+{
+    // Nothing
+}
 
 // static
 bool Socket::IsHostnameChar(char c)
@@ -54,7 +63,7 @@ bool Socket::IsValidPort(int port)
     return true;
 }
 
-void Socket::Reader(char *buf, int len)
+void Socket::Reader(uint8_t *buf, int len)
 {
     int total_read = 0;
     int left = len;
@@ -65,7 +74,7 @@ void Socket::Reader(char *buf, int len)
 
         if (read <= 0)
         {
-            Close();
+            Disconnect();
             throw Exception("Unable to read data from network.");
         }
 
@@ -74,7 +83,7 @@ void Socket::Reader(char *buf, int len)
     }
 }
 
-void Socket::Writer(const char *buf, int len)
+void Socket::Writer(const uint8_t *buf, int len)
 {
     int total_written = 0;
     int left = len;
@@ -85,7 +94,7 @@ void Socket::Writer(const char *buf, int len)
 
         if (written <= 0)
         {
-            Close();
+            Disconnect();
             throw Exception("Unable to write data to network.");
         }
 
