@@ -17,50 +17,6 @@ CapturerGDI::CapturerGDI() :
     desktop_effects_.reset(new DesktopEffects());
 }
 
-// static
-bool CapturerGDI::GetDCBitmapInfo(HDC hdc, BitmapInfo *bmi)
-{
-    HBITMAP bitmap = reinterpret_cast<HBITMAP>(GetCurrentObject(hdc, OBJ_BITMAP));
-    if (!bitmap)
-    {
-        LOG(ERROR) << "GetCurrentObject() failed: " << GetLastError();
-        return false;
-    }
-
-    memset(bmi, 0, sizeof(BitmapInfo));
-    bmi->header.biSize = sizeof(BITMAPINFOHEADER);
-
-    if (!GetDIBits(hdc,
-                   bitmap,
-                   0, 0,
-                   nullptr,
-                   reinterpret_cast<PBITMAPINFO>(bmi),
-                   DIB_RGB_COLORS))
-    {
-        LOG(ERROR) << "GetDIBits() failed: " << GetLastError();
-        DeleteObject(bitmap);
-        return false;
-    }
-
-    if (bmi->header.biCompression == BI_BITFIELDS)
-    {
-        if (!GetDIBits(hdc,
-                       bitmap,
-                       0, 0,
-                       nullptr,
-                       reinterpret_cast<PBITMAPINFO>(&bmi),
-                       DIB_RGB_COLORS))
-        {
-            LOG(ERROR) << "GetDIBits() failed: " << GetLastError();
-            DeleteObject(bitmap);
-            return false;
-        }
-    }
-
-    DeleteObject(bitmap);
-    return true;
-}
-
 void CapturerGDI::GetDefaultBitmapInfo(BitmapInfo *bmi)
 {
     DEVMODEW mode = { 0 };
@@ -153,13 +109,8 @@ void CapturerGDI::AllocateBuffer(int buffer_index, int align)
 
     int aligned_width = ((current_desktop_rect_.width() + (align - 1)) / align) * 2;
 
-    BitmapInfo bmi = { 0 };
-
-    if (!GetDCBitmapInfo(*desktop_dc_, &bmi))
-    {
-        LOG(WARNING) << "GetDCBitmapInfo() failed. Load default bitmap information...";
-        GetDefaultBitmapInfo(&bmi);
-    }
+    BitmapInfo bmi;
+    GetDefaultBitmapInfo(&bmi);
 
     current_pixel_format_ = GetPixelFormat(bmi);
 
@@ -176,7 +127,7 @@ void CapturerGDI::AllocateBuffer(int buffer_index, int align)
                          nullptr,
                          0);
 
-    LOG(INFO) << "buffer[" << buffer_index << "] initialized.";
+    DLOG(INFO) << "buffer[" << buffer_index << "] initialized.";
 }
 
 // static
@@ -198,7 +149,7 @@ void CapturerGDI::PrepareCaptureResources()
         desktop_dc_.reset();
         memory_dc_.set(nullptr);
 
-        LOG(INFO) << "desktop rect (x:y:w:h) changed from "
+        DLOG(INFO) << "desktop rect (x:y:w:h) changed from "
             << current_desktop_rect_.x() << ":" << current_desktop_rect_.y() << ":"
             << current_desktop_rect_.width() << ":" << current_desktop_rect_.height()
             << " to "

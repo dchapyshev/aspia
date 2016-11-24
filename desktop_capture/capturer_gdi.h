@@ -56,7 +56,6 @@ private:
         } u;
     } BitmapInfo;
 
-    static bool GetDCBitmapInfo(HDC hdc, BitmapInfo *bmi);
     static void GetDefaultBitmapInfo(BitmapInfo *bmi);
     static PixelFormat GetPixelFormat(const BitmapInfo &bmi);
     void AllocateBuffer(int buffer_index, int align);

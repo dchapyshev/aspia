@@ -11,6 +11,9 @@
 #include "base/logging.h"
 #include "libyuv/cpu_id.h"
 
+// Размер блока
+static const int kBlockSize = 16;
+
 //
 // Based on WebRTC souce code
 // Original files:
@@ -70,7 +73,7 @@ DiffPartialBlock(const uint8_t *prev_image,
 
 Differ::Differ(const DesktopSize &size, int bytes_per_pixel) :
     size_(size),
-    DiffFullBlock_(nullptr)
+    diff_full_block_func_(nullptr)
 {
     static_assert(kBlockSize == 16 || kBlockSize == 32, "Unsupported block size.");
 
@@ -100,38 +103,43 @@ Differ::Differ(const DesktopSize &size, int bytes_per_pixel) :
     if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
     {
         // SSE2 поддерживается, используем оптимизированные функции
-        LOG(INFO) << "SSE2 supported";
+        DLOG(INFO) << "SSE2 supported";
 
         if (kBlockSize == 16)
         {
             switch (bytes_per_pixel)
             {
-                case 4: DiffFullBlock_ = DiffFullBlock_16x16_32bpp_SSE2; break;
-                case 2: DiffFullBlock_ = DiffFullBlock_16x16_16bpp_SSE2; break;
+                case 4: diff_full_block_func_ = DiffFullBlock_16x16_32bpp_SSE2; break;
+                case 2: diff_full_block_func_ = DiffFullBlock_16x16_16bpp_SSE2; break;
             }
         }
         else if (kBlockSize == 32)
         {
             switch (bytes_per_pixel)
             {
-                case 4: DiffFullBlock_ = DiffFullBlock_32x32_32bpp_SSE2; break;
-                case 2: DiffFullBlock_ = DiffFullBlock_32x32_16bpp_SSE2; break;
+                case 4: diff_full_block_func_ = DiffFullBlock_32x32_32bpp_SSE2; break;
+                case 2: diff_full_block_func_ = DiffFullBlock_32x32_16bpp_SSE2; break;
             }
         }
     }
     else
     {
         // SSE2 не поддерживается, используем обычные функции
-        LOG(INFO) << "SSE2 not supported";
+        DLOG(INFO) << "SSE2 not supported";
 
         switch (bytes_per_pixel)
         {
-            case 4: DiffFullBlock_ = DiffFullBlock_C<kBlockSize, 32>; break;
-            case 2: DiffFullBlock_ = DiffFullBlock_C<kBlockSize, 16>; break;
+            case 4: diff_full_block_func_ = DiffFullBlock_C<kBlockSize, 32>; break;
+            case 2: diff_full_block_func_ = DiffFullBlock_C<kBlockSize, 16>; break;
         }
     }
 
-    CHECK(DiffFullBlock_);
+    CHECK(diff_full_block_func_);
+}
+
+Differ::~Differ()
+{
+    // Nothing
 }
 
 //
@@ -157,7 +165,7 @@ void Differ::MarkChangedBlocks(const uint8_t *prev_image, const uint8_t *curr_im
         for (int x = 0; x < full_blocks_x_; ++x)
         {
             // Mark this block as being modified so that it gets incorporated into a dirty rect.
-            *is_different = DiffFullBlock_(prev_block, curr_block, bytes_per_row_);
+            *is_different = diff_full_block_func_(prev_block, curr_block, bytes_per_row_);
 
             prev_block += bytes_per_block_;
             curr_block += bytes_per_block_;

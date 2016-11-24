@@ -16,8 +16,6 @@
 #include "desktop_capture/desktop_region_win.h"
 #include "base/macros.h"
 
-typedef uint8_t(*DIFFFULLBLOCK) (const uint8_t *image1, const uint8_t *image2, int bytes_per_row);
-
 //
 // Класс для поиска изменившихся областей экрана
 //
@@ -25,10 +23,7 @@ class Differ
 {
 public:
     Differ(const DesktopSize &size, int bytes_per_pixel);
-    ~Differ() {}
-
-    // Размер блока
-    static const int kBlockSize = 16;
+    ~Differ();
 
     void CalcChangedRegion(const uint8_t *prev_image,
                            const uint8_t *curr_image,
@@ -56,7 +51,9 @@ private:
     int diff_width_;
     int diff_height_;
 
-    DIFFFULLBLOCK DiffFullBlock_;
+    typedef uint8_t(*DIFFFULLBLOCK) (const uint8_t*, const uint8_t*, int);
+
+    DIFFFULLBLOCK diff_full_block_func_;
 
     std::unique_ptr<uint8_t[]> diff_info_;
 

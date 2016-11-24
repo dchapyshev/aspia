@@ -264,7 +264,7 @@ DesktopEffects::DesktopEffects()
         composition_enabled_ = IsCompositionEnabled();
         if (composition_enabled_)
         {
-            LOG(INFO) << "composition enabled. disable it...";
+            DLOG(INFO) << "composition enabled. disable it...";
             EnableComposition(false);
         }
 
@@ -324,7 +324,7 @@ DesktopEffects::~DesktopEffects()
     {
         if (kForceEnable || composition_enabled_)
         {
-            LOG(INFO) << "enable composition...";
+            DLOG(INFO) << "enable composition...";
             EnableComposition(true);
         }
 
