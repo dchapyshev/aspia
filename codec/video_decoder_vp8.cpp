@@ -19,7 +19,10 @@ VideoDecoderVP8::VideoDecoderVP8() :
     // Nothing
 }
 
-VideoDecoderVP8::~VideoDecoderVP8() {}
+VideoDecoderVP8::~VideoDecoderVP8()
+{
+    // Nothing
+}
 
 void VideoDecoderVP8::ConvertImageToARGB(const proto::VideoPacket *packet, vpx_image_t *image, uint8_t *screen_buffer)
 {
@@ -94,7 +97,7 @@ void VideoDecoderVP8::ConvertImageToARGB(const proto::VideoPacket *packet, vpx_i
 
         default:
         {
-            LOG(ERROR) << "Unsupported image format: " << image->fmt;
+            DLOG(ERROR) << "Unsupported image format: " << image->fmt;
         }
     }
 }

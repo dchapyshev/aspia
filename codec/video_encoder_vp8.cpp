@@ -28,6 +28,7 @@ VideoEncoderVP8::VideoEncoderVP8() :
 
 VideoEncoderVP8::~VideoEncoderVP8()
 {
+    // Nothing
 }
 
 void VideoEncoderVP8::CreateImage()
@@ -85,6 +86,8 @@ void VideoEncoderVP8::CreateActiveMap()
     active_map_size_ = active_map_.cols * active_map_.rows;
 
     active_map_buffer_.reset(new uint8_t[active_map_size_]);
+
+    memset(active_map_buffer_.get(), 0, active_map_size_);
 
     active_map_.active_map = active_map_buffer_.get();
 }
@@ -281,10 +284,7 @@ VideoEncoder::Status VideoEncoderVP8::Encode(proto::VideoPacket *packet,
 
     // Apply active map to the encoder.
     vpx_codec_err_t ret = vpx_codec_control(codec_.get(), VP8E_SET_ACTIVEMAP, &active_map_);
-    if (ret != VPX_CODEC_OK)
-    {
-        LOG(ERROR) << "Unable to apply active map";
-    }
+    DCHECK_EQ(ret, VPX_CODEC_OK) << "Unable to apply active map";
 
     // Do the actual encoding.
     ret = vpx_codec_encode(codec_.get(), &image_, 0, 1, 0, VPX_DL_REALTIME);
