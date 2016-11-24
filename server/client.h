@@ -16,6 +16,7 @@
 #include "base/thread.h"
 #include "base/macros.h"
 #include "base/input_handler.h"
+#include "proto/auth.pb.h"
 #include "proto/proto.pb.h"
 #include "network/socket_tcp.h"
 #include "server/screen_sender.h"
@@ -37,7 +38,6 @@ public:
 
 private:
     void Worker() override;
-    void OnStart() override;
     void OnStop() override;
 
     void ReadPointerEvent(const proto::PointerEvent &msg);

@@ -120,7 +120,7 @@ void Server::RemoteDeadClients()
 
 void Server::Worker()
 {
-    LOG(INFO) << "Server thread started";
+    DLOG(INFO) << "Server thread started";
 
     try
     {
@@ -188,19 +188,11 @@ void Server::Worker()
         LOG(ERROR) << "Exception in server thread: " << server_err.What();
     }
 
-    LOG(INFO) << "Server thread stopped";
-}
-
-void Server::OnStart()
-{
-    // Nothing
+    DLOG(INFO) << "Server thread stopped";
 }
 
 void Server::OnStop()
 {
-    // Закрываем сокет для приема входящих подключений.
-    socket_->Close();
-
     // Отключаем всех подключенных клиентов.
     DisconnectAll();
 }

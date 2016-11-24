@@ -19,37 +19,6 @@ Client::Client(std::unique_ptr<Socket> socket,
 {
     DCHECK(socket_);
 
-    std::unique_ptr<proto::ServerToClient> server_message(new proto::ServerToClient());
-
-    proto::AuthRequest *req = server_message->mutable_auth_request();
-
-    req->set_methods(proto::AUTH_NONE | proto::AUTH_BASIC);
-
-    WriteMessage(server_message.get());
-
-    std::unique_ptr<proto::ClientToServer> client_message(new proto::ClientToServer());
-
-    socket_->ReadMessage(&client_message);
-
-    if (!client_message->has_auth_reply())
-    {
-        throw Exception("Wrong auth reply from client.");
-    }
-
-    if (client_message->auth_reply().method() != proto::AUTH_NONE)
-    {
-        throw Exception("Not supported auth method.");
-    }
-
-    server_message->Clear();
-
-    proto::AuthResult *res = server_message->mutable_auth_result();
-
-    res->set_success(true);
-    res->set_features(feature_mask_);
-
-    WriteMessage(server_message.get());
-
     // ≈сли сесси€ не имеет разрешенных возможностей.
     if (feature_mask_ == proto::FEATURE_NONE)
     {
@@ -75,7 +44,7 @@ void Client::WriteMessage(const proto::ServerToClient *message)
 
 void Client::Worker()
 {
-    LOG(INFO) << "Client thread started";
+    DLOG(INFO) << "Client thread started";
 
     // ≈сли сесси€ имеет возможность управлени€ рабочим столом.
     if (feature_mask_ & proto::FEATURE_DESKTOP_MANAGE)
@@ -164,18 +133,13 @@ void Client::Worker()
     //
     std::async(std::launch::async, on_client_disconnected_, GetID());
 
-    LOG(INFO) << "Client thread stopped";
-}
-
-void Client::OnStart()
-{
-    // Nothing
+    DLOG(INFO) << "Client thread stopped";
 }
 
 void Client::OnStop()
 {
     // «акрываем соединение.
-    socket_->Close();
+    socket_->Disconnect();
 }
 
 void Client::ReadPointerEvent(const proto::PointerEvent &msg)

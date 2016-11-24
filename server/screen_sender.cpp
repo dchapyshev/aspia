@@ -64,7 +64,7 @@ void ScreenSender::Configure(int32_t encoding, const PixelFormat &client_pixel_f
 
 void ScreenSender::Worker()
 {
-    LOG(INFO) << "Screen sender thread started";
+    DLOG(INFO) << "Screen sender thread started";
 
     //
     // Для минимизации задержек при отправке сообщений видео-пакетов
@@ -163,12 +163,7 @@ void ScreenSender::Worker()
         LOG(ERROR) << "Exception in screen sender thread: " << err.What();
     }
 
-    LOG(INFO) << "Screen sender thread stopped";
-}
-
-void ScreenSender::OnStart()
-{
-    // Nothing
+    DLOG(INFO) << "Screen sender thread stopped";
 }
 
 void ScreenSender::OnStop()
