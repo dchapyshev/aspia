@@ -22,7 +22,6 @@
 #include "base/thread_pool.h"
 #include "client/screen_window.h"
 #include "network/server_tcp.h"
-#include "network/client_tcp.h"
 #include "host/host.h"
 #include "client/client.h"
 

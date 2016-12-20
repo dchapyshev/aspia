@@ -162,9 +162,6 @@
     <ClCompile Include="base\registry.cpp">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\window.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="desktop_capture\x11region.c">
       <Filter>desktop_capture</Filter>
     </ClCompile>
@@ -384,9 +381,6 @@
       <Filter>host</Filter>
     </ClInclude>
     <ClInclude Include="base\registry.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\window.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\thread_pool.h">

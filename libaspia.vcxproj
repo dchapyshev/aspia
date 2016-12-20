@@ -27,7 +27,6 @@
     <ClCompile Include="base\thread.cpp" />
     <ClCompile Include="base\unicode.cpp" />
     <ClCompile Include="base\waitable_event.cpp" />
-    <ClCompile Include="base\window.cpp" />
     <ClCompile Include="client\client.cpp" />
     <ClCompile Include="client\screen_window.cpp" />
     <ClCompile Include="codec\compressor_zlib.cpp" />
@@ -52,6 +51,7 @@
     <ClCompile Include="desktop_capture\scoped_desktop_effects.cpp" />
     <ClCompile Include="desktop_capture\x11region.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="host\host.cpp" />
     <ClCompile Include="host\input_injector.cpp" />
@@ -89,7 +89,6 @@
     <ClInclude Include="base\thread_pool.h" />
     <ClInclude Include="base\unicode.h" />
     <ClInclude Include="base\waitable_event.h" />
-    <ClInclude Include="base\window.h" />
     <ClInclude Include="client\client.h" />
     <ClInclude Include="client\message_queue.h" />
     <ClInclude Include="client\screen_window.h" />
