@@ -10,9 +10,6 @@
     <Filter Include="desktop_capture">
       <UniqueIdentifier>{3628cfb3-f967-412d-aa33-4769c1455545}</UniqueIdentifier>
     </Filter>
-    <Filter Include="server">
-      <UniqueIdentifier>{00ae15ad-82ed-43c9-bcc0-27349b9e6de7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="client">
       <UniqueIdentifier>{f386621d-af3e-4d74-807d-1cfa46b2a29f}</UniqueIdentifier>
     </Filter>
@@ -25,30 +22,15 @@
     <Filter Include="crypto">
       <UniqueIdentifier>{e7cad8d0-83ac-42ce-9dd7-6f90d4a4c24e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="host">
+      <UniqueIdentifier>{00ae15ad-82ed-43c9-bcc0-27349b9e6de7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="base\clipboard_win.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\desktop_win.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\event.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\input_handler.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="base\process.cpp">
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="base\scoped_thread_desktop.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\service_control_win.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\service_win.cpp">
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="base\thread.cpp">
@@ -66,19 +48,10 @@
     <ClCompile Include="codec\scoped_vpx_codec.cpp">
       <Filter>codec</Filter>
     </ClCompile>
-    <ClCompile Include="codec\video_decoder.cpp">
-      <Filter>codec</Filter>
-    </ClCompile>
-    <ClCompile Include="codec\video_decoder_raw.cpp">
-      <Filter>codec</Filter>
-    </ClCompile>
     <ClCompile Include="codec\video_decoder_vp8.cpp">
       <Filter>codec</Filter>
     </ClCompile>
     <ClCompile Include="codec\video_decoder_zlib.cpp">
-      <Filter>codec</Filter>
-    </ClCompile>
-    <ClCompile Include="codec\video_encoder_raw.cpp">
       <Filter>codec</Filter>
     </ClCompile>
     <ClCompile Include="codec\video_encoder_vp8.cpp">
@@ -93,13 +66,7 @@
     <ClCompile Include="desktop_capture\capturer_gdi.cpp">
       <Filter>desktop_capture</Filter>
     </ClCompile>
-    <ClCompile Include="desktop_capture\desktop_effects.cpp">
-      <Filter>desktop_capture</Filter>
-    </ClCompile>
     <ClCompile Include="desktop_capture\desktop_rect.cpp">
-      <Filter>desktop_capture</Filter>
-    </ClCompile>
-    <ClCompile Include="desktop_capture\desktop_region_win.cpp">
       <Filter>desktop_capture</Filter>
     </ClCompile>
     <ClCompile Include="desktop_capture\diff_block_sse2.cpp">
@@ -111,24 +78,6 @@
     <ClCompile Include="desktop_capture\pixel_format.cpp">
       <Filter>desktop_capture</Filter>
     </ClCompile>
-    <ClCompile Include="server\client.cpp">
-      <Filter>server</Filter>
-    </ClCompile>
-    <ClCompile Include="server\screen_sender.cpp">
-      <Filter>server</Filter>
-    </ClCompile>
-    <ClCompile Include="server\server.cpp">
-      <Filter>server</Filter>
-    </ClCompile>
-    <ClCompile Include="client\remote_client.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
-    <ClCompile Include="client\screen_window_win.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
-    <ClCompile Include="network\socket.cpp">
-      <Filter>network</Filter>
-    </ClCompile>
     <ClCompile Include="network\socket_tcp.cpp">
       <Filter>network</Filter>
     </ClCompile>
@@ -138,48 +87,99 @@
     <ClCompile Include="base\runas_service.cpp">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\sas_injector.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\scoped_sas_police.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="proto\auth.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
     <ClCompile Include="crypto\encryptor_aes.cpp">
       <Filter>crypto</Filter>
     </ClCompile>
+    <ClCompile Include="crypto\decryptor_aes.cpp">
+      <Filter>crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scoped_aligned_buffer.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\desktop_size.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="base\waitable_event.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\lock.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="host\screen_sender.cpp">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="client\client.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\desktop_point.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\scoped_desktop_effects.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="base\service.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\service_control.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\clipboard.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\desktop.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="client\screen_window.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="base\power.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\diff_block_avx2.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="host\input_injector.cpp">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\sas_injector.cpp">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\scoped_sas_police.cpp">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host.cpp">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scoped_kernel32_library.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scoped_wtsapi32_library.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\registry.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\window.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\x11region.c">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\desktop_region.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="base\clipboard_win.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\cpuid.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\desktop_win.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\event.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="base\exception.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\input_handler.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\logging.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\macros.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\mutex.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\power_win.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\process.h">
@@ -197,19 +197,10 @@
     <ClInclude Include="base\scoped_hdc.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="base\scoped_magnifier_library.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="base\scoped_native_library.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\scoped_thread_desktop.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\service_control_win.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\service_win.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\thread.h">
@@ -254,9 +245,6 @@
     <ClInclude Include="codec\video_decoder.h">
       <Filter>codec</Filter>
     </ClInclude>
-    <ClInclude Include="codec\video_decoder_raw.h">
-      <Filter>codec</Filter>
-    </ClInclude>
     <ClInclude Include="codec\video_decoder_vp8.h">
       <Filter>codec</Filter>
     </ClInclude>
@@ -264,9 +252,6 @@
       <Filter>codec</Filter>
     </ClInclude>
     <ClInclude Include="codec\video_encoder.h">
-      <Filter>codec</Filter>
-    </ClInclude>
-    <ClInclude Include="codec\video_encoder_raw.h">
       <Filter>codec</Filter>
     </ClInclude>
     <ClInclude Include="codec\video_encoder_vp8.h">
@@ -284,13 +269,7 @@
     <ClInclude Include="desktop_capture\capturer_gdi.h">
       <Filter>desktop_capture</Filter>
     </ClInclude>
-    <ClInclude Include="desktop_capture\desktop_effects.h">
-      <Filter>desktop_capture</Filter>
-    </ClInclude>
     <ClInclude Include="desktop_capture\desktop_rect.h">
-      <Filter>desktop_capture</Filter>
-    </ClInclude>
-    <ClInclude Include="desktop_capture\desktop_region_win.h">
       <Filter>desktop_capture</Filter>
     </ClInclude>
     <ClInclude Include="desktop_capture\desktop_size.h">
@@ -305,22 +284,7 @@
     <ClInclude Include="desktop_capture\pixel_format.h">
       <Filter>desktop_capture</Filter>
     </ClInclude>
-    <ClInclude Include="server\client.h">
-      <Filter>server</Filter>
-    </ClInclude>
-    <ClInclude Include="server\screen_sender.h">
-      <Filter>server</Filter>
-    </ClInclude>
-    <ClInclude Include="server\server.h">
-      <Filter>server</Filter>
-    </ClInclude>
     <ClInclude Include="client\message_queue.h">
-      <Filter>client</Filter>
-    </ClInclude>
-    <ClInclude Include="client\remote_client.h">
-      <Filter>client</Filter>
-    </ClInclude>
-    <ClInclude Include="client\screen_window_win.h">
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="network\socket.h">
@@ -338,12 +302,6 @@
     <ClInclude Include="base\scoped_kernel32_library.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="base\sas_injector.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\scoped_sas_police.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="base\scoped_wtsapi32_library.h">
       <Filter>base</Filter>
     </ClInclude>
@@ -358,6 +316,87 @@
     </ClInclude>
     <ClInclude Include="crypto\encryptor_aes.h">
       <Filter>crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\decryptor.h">
+      <Filter>crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\decryptor_aes.h">
+      <Filter>crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="base\waitable_event.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\lock.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="network\server_tcp.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="host\screen_sender.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="client\client.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_select_object.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\desktop_point.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\scoped_desktop_effects.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="base\service.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\service_control.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\clipboard.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\desktop.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\power.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="client\screen_window.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\diff_block_avx2.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="host\input_injector.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\sas_injector.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\scoped_sas_police.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="network\client_tcp.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="base\registry.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\window.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\thread_pool.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\x11region.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\desktop_region.h">
+      <Filter>desktop_capture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

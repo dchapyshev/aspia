@@ -1,33 +1,43 @@
 /*
 * PROJECT:         Aspia Remote Desktop
-* FILE:            server/screen_sender.cpp
+* FILE:            host/screen_sender.cpp
 * LICENSE:         See top-level directory
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#include "server/screen_sender.h"
+#include "host/screen_sender.h"
 
+#include "base/exception.h"
 #include "base/logging.h"
+
+namespace aspia {
 
 ScreenSender::ScreenSender(int32_t encoding,
                            const PixelFormat &client_pixel_format,
-                           OnMessageAvailabeCallback on_message_available) :
+                           OnMessageCallback on_message) :
     current_encoding_(proto::VIDEO_ENCODING_UNKNOWN),
     client_pixel_format_(client_pixel_format),
-    on_message_available_(on_message_available)
+    on_message_(on_message)
 {
     Configure(encoding, client_pixel_format);
+
+    SetThreadPriority(Priority::Highest);
+    Start();
 }
 
 ScreenSender::~ScreenSender()
 {
-    // Nothing
+    if (!IsThreadTerminated())
+    {
+        Stop();
+        WaitForEnd();
+    }
 }
 
 void ScreenSender::Configure(int32_t encoding, const PixelFormat &client_pixel_format)
 {
     // Блокируем отправку видео-пакетов.
-    LockGuard<Mutex> guard(&update_lock_);
+    LockGuard<Lock> guard(&update_lock_);
 
     // Если изменилась кодировка.
     if (current_encoding_ != encoding)
@@ -43,14 +53,9 @@ void ScreenSender::Configure(int32_t encoding, const PixelFormat &client_pixel_f
             encoder_.reset(new VideoEncoderZLIB());
             current_encoding_ = encoding;
         }
-        else if (encoding == proto::VIDEO_ENCODING_RAW)
-        {
-            encoder_.reset(new VideoEncoderRAW());
-            current_encoding_ = encoding;
-        }
         else
         {
-            LOG(WARNING) << "Unsupported video encoding: " << current_encoding_;
+            LOG(ERROR) << "Unsupported video encoding: " << current_encoding_;
             throw Exception("Unsupported video encoding.");
         }
     }
@@ -59,20 +64,13 @@ void ScreenSender::Configure(int32_t encoding, const PixelFormat &client_pixel_f
     client_pixel_format_ = client_pixel_format;
 
     // Энкодер должен быть инициализирован.
-    CHECK(encoder_);
+    DCHECK(encoder_);
 }
 
 void ScreenSender::Worker()
 {
-    DLOG(INFO) << "Screen sender thread started";
-
-    //
-    // Для минимизации задержек при отправке сообщений видео-пакетов
-    // устанавливаем высокий приоритет для потока.
-    //
-    SetThreadPriority(Priority::Highest);
-
-    DesktopRegion changed_region;
+    // Создаем сообщение для отправки клиенту.
+    std::unique_ptr<proto::HostToClient> message(new proto::HostToClient());
 
     DesktopSize screen_size;
     DesktopSize prev_screen_size;
@@ -82,20 +80,22 @@ void ScreenSender::Worker()
 
     PixelFormat prev_client_pixel_format;
 
+    DesktopRegion changed_region;
+
     try
     {
         // Создаем экземпляры классов захвата экрана и планировщика захвата экрана.
         std::unique_ptr<CaptureScheduler> scheduler(new CaptureScheduler());
         std::unique_ptr<Capturer> capturer(new CapturerGDI());
 
-        // Создаем сообщение для отправки клиенту.
-        std::unique_ptr<proto::ServerToClient> message(new proto::ServerToClient());
-
         // Продолжаем цикл пока не будет дана команда завершить поток.
-        while (!IsEndOfThread())
+        while (!IsThreadTerminating())
         {
-            // Делаем отметку времени начала операции
+            // Делаем отметку времени начала операции.
             scheduler->BeginCapture();
+
+            // Очищаем регион от предыдущих изменений.
+            changed_region.Clear();
 
             //
             // Делаем захват изображения, получаем его размер, формат пикселей
@@ -105,29 +105,29 @@ void ScreenSender::Worker()
                 capturer->CaptureImage(changed_region, screen_size, host_pixel_format);
 
             // Если измененный регион не пуст.
-            if (!changed_region.is_empty())
+            if (!changed_region.IsEmpty())
             {
                 //
                 // Ставим блокировку отправки видео-пакетов (кодировка, формат пикселей
                 // не могут изменяться при отправки одного логического обновления).
                 //
-                LockGuard<Mutex> guard(&update_lock_);
+                LockGuard<Lock> guard(&update_lock_);
 
                 // Если изменились размера экрана или формат пикселей.
-                if (screen_size != prev_screen_size ||
+                if (screen_size          != prev_screen_size ||
                     client_pixel_format_ != prev_client_pixel_format ||
-                    host_pixel_format != prev_host_pixel_format)
+                    host_pixel_format    != prev_host_pixel_format)
                 {
                     // Изменяем размер экнодера.
                     encoder_->Resize(screen_size, host_pixel_format, client_pixel_format_);
 
                     // Сохраняем новые значения.
-                    prev_host_pixel_format = host_pixel_format;
+                    prev_host_pixel_format   = host_pixel_format;
                     prev_client_pixel_format = client_pixel_format_;
-                    prev_screen_size = screen_size;
+                    prev_screen_size         = screen_size;
                 }
 
-                VideoEncoder::Status status = VideoEncoder::Status::Next;
+                int32_t flags;
 
                 //
                 // Одно обновление экрана может быть разбито на несколько видео-пакетов.
@@ -135,38 +135,35 @@ void ScreenSender::Worker()
                 // измененный прямоугольник экрана отправляется отдельным пакетом.
                 // Продолжаем цикл кодирования пока не будет отправлен последний пакет.
                 //
-                while (status == VideoEncoder::Status::Next)
+                do
                 {
                     // Очищаем сообщение от предыдущих данных.
                     message->Clear();
 
                     // Выполняем кодирование изображения.
-                    status = encoder_->Encode(message->mutable_video_packet(),
-                                              screen_buffer,
-                                              changed_region);
+                    flags = encoder_->Encode(message->mutable_video_packet(),
+                                             screen_buffer,
+                                             changed_region);
 
                     // Отправляем видео-пакет клиенту.
-                    on_message_available_(message.get());
-                }
+                    on_message_(message.get());
+
+                } while (!(flags & proto::VideoPacket::LAST_PACKET));
             }
 
-            // Ждем следующей отправки.
-            Sleep(scheduler->NextCaptureDelay());
+            scheduler->Sleep();
         }
     }
     catch (const Exception &err)
     {
-        //
-        // Если произошло исключение при отправке видео-пакета или другая ошибка
-        // (например, при инициализации каких-либо классов), то завершаем поток.
-        //
-        LOG(ERROR) << "Exception in screen sender thread: " << err.What();
+        DLOG(ERROR) << "An exception occurred: " << err.What();
+        Stop();
     }
-
-    DLOG(INFO) << "Screen sender thread stopped";
 }
 
 void ScreenSender::OnStop()
 {
     // Nothing
 }
+
+} // namespace aspia

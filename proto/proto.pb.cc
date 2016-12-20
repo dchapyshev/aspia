@@ -33,8 +33,8 @@ void protobuf_ShutdownFile_proto_2eproto() {
   VideoPacketFormat_default_instance_.Shutdown();
   VideoPacket_default_instance_.Shutdown();
   VideoControl_default_instance_.Shutdown();
-  ServerToClient_default_instance_.Shutdown();
-  ClientToServer_default_instance_.Shutdown();
+  HostToClient_default_instance_.Shutdown();
+  ClientToHost_default_instance_.Shutdown();
 }
 
 void protobuf_InitDefaults_proto_2eproto_impl() {
@@ -60,8 +60,8 @@ void protobuf_InitDefaults_proto_2eproto_impl() {
   ::google::protobuf::internal::GetEmptyString();
   VideoPacket_default_instance_.DefaultConstruct();
   VideoControl_default_instance_.DefaultConstruct();
-  ServerToClient_default_instance_.DefaultConstruct();
-  ClientToServer_default_instance_.DefaultConstruct();
+  HostToClient_default_instance_.DefaultConstruct();
+  ClientToHost_default_instance_.DefaultConstruct();
   PowerControl_default_instance_.get_mutable()->InitAsDefaultInstance();
   Bell_default_instance_.get_mutable()->InitAsDefaultInstance();
   TextChat_default_instance_.get_mutable()->InitAsDefaultInstance();
@@ -78,8 +78,8 @@ void protobuf_InitDefaults_proto_2eproto_impl() {
   VideoPacketFormat_default_instance_.get_mutable()->InitAsDefaultInstance();
   VideoPacket_default_instance_.get_mutable()->InitAsDefaultInstance();
   VideoControl_default_instance_.get_mutable()->InitAsDefaultInstance();
-  ServerToClient_default_instance_.get_mutable()->InitAsDefaultInstance();
-  ClientToServer_default_instance_.get_mutable()->InitAsDefaultInstance();
+  HostToClient_default_instance_.get_mutable()->InitAsDefaultInstance();
+  ClientToHost_default_instance_.get_mutable()->InitAsDefaultInstance();
 }
 
 GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_InitDefaults_proto_2eproto_once_);
@@ -112,7 +112,6 @@ bool VideoEncoding_IsValid(int value) {
     case 0:
     case 1:
     case 2:
-    case 4:
       return true;
     default:
       return false;
@@ -5266,20 +5265,20 @@ inline const VideoControl* VideoControl::internal_default_instance() {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int ServerToClient::kVideoPacketFieldNumber;
-const int ServerToClient::kCursorFieldNumber;
-const int ServerToClient::kClipboardFieldNumber;
-const int ServerToClient::kTextChatFieldNumber;
+const int HostToClient::kVideoPacketFieldNumber;
+const int HostToClient::kCursorFieldNumber;
+const int HostToClient::kClipboardFieldNumber;
+const int HostToClient::kTextChatFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-ServerToClient::ServerToClient()
+HostToClient::HostToClient()
   : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
   if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.ServerToClient)
+  // @@protoc_insertion_point(constructor:proto.HostToClient)
 }
 
-void ServerToClient::InitAsDefaultInstance() {
+void HostToClient::InitAsDefaultInstance() {
   video_packet_ = const_cast< ::proto::VideoPacket*>(
       ::proto::VideoPacket::internal_default_instance());
   cursor_ = const_cast< ::proto::CursorShape*>(
@@ -5290,15 +5289,15 @@ void ServerToClient::InitAsDefaultInstance() {
       ::proto::TextChat::internal_default_instance());
 }
 
-ServerToClient::ServerToClient(const ServerToClient& from)
+HostToClient::HostToClient(const HostToClient& from)
   : ::google::protobuf::MessageLite(),
     _arena_ptr_(NULL) {
   SharedCtor();
   UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:proto.ServerToClient)
+  // @@protoc_insertion_point(copy_constructor:proto.HostToClient)
 }
 
-void ServerToClient::SharedCtor() {
+void HostToClient::SharedCtor() {
   video_packet_ = NULL;
   cursor_ = NULL;
   clipboard_ = NULL;
@@ -5306,13 +5305,13 @@ void ServerToClient::SharedCtor() {
   _cached_size_ = 0;
 }
 
-ServerToClient::~ServerToClient() {
-  // @@protoc_insertion_point(destructor:proto.ServerToClient)
+HostToClient::~HostToClient() {
+  // @@protoc_insertion_point(destructor:proto.HostToClient)
   SharedDtor();
 }
 
-void ServerToClient::SharedDtor() {
-  if (this != &ServerToClient_default_instance_.get()) {
+void HostToClient::SharedDtor() {
+  if (this != &HostToClient_default_instance_.get()) {
     delete video_packet_;
     delete cursor_;
     delete clipboard_;
@@ -5320,28 +5319,28 @@ void ServerToClient::SharedDtor() {
   }
 }
 
-void ServerToClient::SetCachedSize(int size) const {
+void HostToClient::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ServerToClient& ServerToClient::default_instance() {
+const HostToClient& HostToClient::default_instance() {
   protobuf_InitDefaults_proto_2eproto();
   return *internal_default_instance();
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<ServerToClient> ServerToClient_default_instance_;
+::google::protobuf::internal::ExplicitlyConstructed<HostToClient> HostToClient_default_instance_;
 
-ServerToClient* ServerToClient::New(::google::protobuf::Arena* arena) const {
-  ServerToClient* n = new ServerToClient;
+HostToClient* HostToClient::New(::google::protobuf::Arena* arena) const {
+  HostToClient* n = new HostToClient;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void ServerToClient::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.ServerToClient)
+void HostToClient::Clear() {
+// @@protoc_insertion_point(message_clear_start:proto.HostToClient)
   if (GetArenaNoVirtual() == NULL && video_packet_ != NULL) delete video_packet_;
   video_packet_ = NULL;
   if (GetArenaNoVirtual() == NULL && cursor_ != NULL) delete cursor_;
@@ -5352,11 +5351,11 @@ void ServerToClient::Clear() {
   text_chat_ = NULL;
 }
 
-bool ServerToClient::MergePartialFromCodedStream(
+bool HostToClient::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:proto.ServerToClient)
+  // @@protoc_insertion_point(parse_start:proto.HostToClient)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -5426,17 +5425,17 @@ bool ServerToClient::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.ServerToClient)
+  // @@protoc_insertion_point(parse_success:proto.HostToClient)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.ServerToClient)
+  // @@protoc_insertion_point(parse_failure:proto.HostToClient)
   return false;
 #undef DO_
 }
 
-void ServerToClient::SerializeWithCachedSizes(
+void HostToClient::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.ServerToClient)
+  // @@protoc_insertion_point(serialize_start:proto.HostToClient)
   // optional .proto.VideoPacket video_packet = 1;
   if (this->has_video_packet()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -5461,11 +5460,11 @@ void ServerToClient::SerializeWithCachedSizes(
       4, *this->text_chat_, output);
   }
 
-  // @@protoc_insertion_point(serialize_end:proto.ServerToClient)
+  // @@protoc_insertion_point(serialize_end:proto.HostToClient)
 }
 
-size_t ServerToClient::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.ServerToClient)
+size_t HostToClient::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:proto.HostToClient)
   size_t total_size = 0;
 
   // optional .proto.VideoPacket video_packet = 1;
@@ -5503,13 +5502,13 @@ size_t ServerToClient::ByteSizeLong() const {
   return total_size;
 }
 
-void ServerToClient::CheckTypeAndMergeFrom(
+void HostToClient::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const ServerToClient*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const HostToClient*>(&from));
 }
 
-void ServerToClient::MergeFrom(const ServerToClient& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.ServerToClient)
+void HostToClient::MergeFrom(const HostToClient& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:proto.HostToClient)
   if (GOOGLE_PREDICT_TRUE(&from != this)) {
     UnsafeMergeFrom(from);
   } else {
@@ -5517,7 +5516,7 @@ void ServerToClient::MergeFrom(const ServerToClient& from) {
   }
 }
 
-void ServerToClient::UnsafeMergeFrom(const ServerToClient& from) {
+void HostToClient::UnsafeMergeFrom(const HostToClient& from) {
   GOOGLE_DCHECK(&from != this);
   if (from.has_video_packet()) {
     mutable_video_packet()->::proto::VideoPacket::MergeFrom(from.video_packet());
@@ -5533,23 +5532,23 @@ void ServerToClient::UnsafeMergeFrom(const ServerToClient& from) {
   }
 }
 
-void ServerToClient::CopyFrom(const ServerToClient& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.ServerToClient)
+void HostToClient::CopyFrom(const HostToClient& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:proto.HostToClient)
   if (&from == this) return;
   Clear();
   UnsafeMergeFrom(from);
 }
 
-bool ServerToClient::IsInitialized() const {
+bool HostToClient::IsInitialized() const {
 
   return true;
 }
 
-void ServerToClient::Swap(ServerToClient* other) {
+void HostToClient::Swap(HostToClient* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void ServerToClient::InternalSwap(ServerToClient* other) {
+void HostToClient::InternalSwap(HostToClient* other) {
   std::swap(video_packet_, other->video_packet_);
   std::swap(cursor_, other->cursor_);
   std::swap(clipboard_, other->clipboard_);
@@ -5558,42 +5557,42 @@ void ServerToClient::InternalSwap(ServerToClient* other) {
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string ServerToClient::GetTypeName() const {
-  return "proto.ServerToClient";
+::std::string HostToClient::GetTypeName() const {
+  return "proto.HostToClient";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// ServerToClient
+// HostToClient
 
 // optional .proto.VideoPacket video_packet = 1;
-bool ServerToClient::has_video_packet() const {
+bool HostToClient::has_video_packet() const {
   return this != internal_default_instance() && video_packet_ != NULL;
 }
-void ServerToClient::clear_video_packet() {
+void HostToClient::clear_video_packet() {
   if (GetArenaNoVirtual() == NULL && video_packet_ != NULL) delete video_packet_;
   video_packet_ = NULL;
 }
-const ::proto::VideoPacket& ServerToClient::video_packet() const {
-  // @@protoc_insertion_point(field_get:proto.ServerToClient.video_packet)
+const ::proto::VideoPacket& HostToClient::video_packet() const {
+  // @@protoc_insertion_point(field_get:proto.HostToClient.video_packet)
   return video_packet_ != NULL ? *video_packet_
                          : *::proto::VideoPacket::internal_default_instance();
 }
-::proto::VideoPacket* ServerToClient::mutable_video_packet() {
+::proto::VideoPacket* HostToClient::mutable_video_packet() {
   
   if (video_packet_ == NULL) {
     video_packet_ = new ::proto::VideoPacket;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ServerToClient.video_packet)
+  // @@protoc_insertion_point(field_mutable:proto.HostToClient.video_packet)
   return video_packet_;
 }
-::proto::VideoPacket* ServerToClient::release_video_packet() {
-  // @@protoc_insertion_point(field_release:proto.ServerToClient.video_packet)
+::proto::VideoPacket* HostToClient::release_video_packet() {
+  // @@protoc_insertion_point(field_release:proto.HostToClient.video_packet)
   
   ::proto::VideoPacket* temp = video_packet_;
   video_packet_ = NULL;
   return temp;
 }
-void ServerToClient::set_allocated_video_packet(::proto::VideoPacket* video_packet) {
+void HostToClient::set_allocated_video_packet(::proto::VideoPacket* video_packet) {
   delete video_packet_;
   video_packet_ = video_packet;
   if (video_packet) {
@@ -5601,38 +5600,38 @@ void ServerToClient::set_allocated_video_packet(::proto::VideoPacket* video_pack
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.video_packet)
+  // @@protoc_insertion_point(field_set_allocated:proto.HostToClient.video_packet)
 }
 
 // optional .proto.CursorShape cursor = 2;
-bool ServerToClient::has_cursor() const {
+bool HostToClient::has_cursor() const {
   return this != internal_default_instance() && cursor_ != NULL;
 }
-void ServerToClient::clear_cursor() {
+void HostToClient::clear_cursor() {
   if (GetArenaNoVirtual() == NULL && cursor_ != NULL) delete cursor_;
   cursor_ = NULL;
 }
-const ::proto::CursorShape& ServerToClient::cursor() const {
-  // @@protoc_insertion_point(field_get:proto.ServerToClient.cursor)
+const ::proto::CursorShape& HostToClient::cursor() const {
+  // @@protoc_insertion_point(field_get:proto.HostToClient.cursor)
   return cursor_ != NULL ? *cursor_
                          : *::proto::CursorShape::internal_default_instance();
 }
-::proto::CursorShape* ServerToClient::mutable_cursor() {
+::proto::CursorShape* HostToClient::mutable_cursor() {
   
   if (cursor_ == NULL) {
     cursor_ = new ::proto::CursorShape;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ServerToClient.cursor)
+  // @@protoc_insertion_point(field_mutable:proto.HostToClient.cursor)
   return cursor_;
 }
-::proto::CursorShape* ServerToClient::release_cursor() {
-  // @@protoc_insertion_point(field_release:proto.ServerToClient.cursor)
+::proto::CursorShape* HostToClient::release_cursor() {
+  // @@protoc_insertion_point(field_release:proto.HostToClient.cursor)
   
   ::proto::CursorShape* temp = cursor_;
   cursor_ = NULL;
   return temp;
 }
-void ServerToClient::set_allocated_cursor(::proto::CursorShape* cursor) {
+void HostToClient::set_allocated_cursor(::proto::CursorShape* cursor) {
   delete cursor_;
   cursor_ = cursor;
   if (cursor) {
@@ -5640,38 +5639,38 @@ void ServerToClient::set_allocated_cursor(::proto::CursorShape* cursor) {
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.cursor)
+  // @@protoc_insertion_point(field_set_allocated:proto.HostToClient.cursor)
 }
 
 // optional .proto.Clipboard clipboard = 3;
-bool ServerToClient::has_clipboard() const {
+bool HostToClient::has_clipboard() const {
   return this != internal_default_instance() && clipboard_ != NULL;
 }
-void ServerToClient::clear_clipboard() {
+void HostToClient::clear_clipboard() {
   if (GetArenaNoVirtual() == NULL && clipboard_ != NULL) delete clipboard_;
   clipboard_ = NULL;
 }
-const ::proto::Clipboard& ServerToClient::clipboard() const {
-  // @@protoc_insertion_point(field_get:proto.ServerToClient.clipboard)
+const ::proto::Clipboard& HostToClient::clipboard() const {
+  // @@protoc_insertion_point(field_get:proto.HostToClient.clipboard)
   return clipboard_ != NULL ? *clipboard_
                          : *::proto::Clipboard::internal_default_instance();
 }
-::proto::Clipboard* ServerToClient::mutable_clipboard() {
+::proto::Clipboard* HostToClient::mutable_clipboard() {
   
   if (clipboard_ == NULL) {
     clipboard_ = new ::proto::Clipboard;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ServerToClient.clipboard)
+  // @@protoc_insertion_point(field_mutable:proto.HostToClient.clipboard)
   return clipboard_;
 }
-::proto::Clipboard* ServerToClient::release_clipboard() {
-  // @@protoc_insertion_point(field_release:proto.ServerToClient.clipboard)
+::proto::Clipboard* HostToClient::release_clipboard() {
+  // @@protoc_insertion_point(field_release:proto.HostToClient.clipboard)
   
   ::proto::Clipboard* temp = clipboard_;
   clipboard_ = NULL;
   return temp;
 }
-void ServerToClient::set_allocated_clipboard(::proto::Clipboard* clipboard) {
+void HostToClient::set_allocated_clipboard(::proto::Clipboard* clipboard) {
   delete clipboard_;
   clipboard_ = clipboard;
   if (clipboard) {
@@ -5679,38 +5678,38 @@ void ServerToClient::set_allocated_clipboard(::proto::Clipboard* clipboard) {
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.clipboard)
+  // @@protoc_insertion_point(field_set_allocated:proto.HostToClient.clipboard)
 }
 
 // optional .proto.TextChat text_chat = 4;
-bool ServerToClient::has_text_chat() const {
+bool HostToClient::has_text_chat() const {
   return this != internal_default_instance() && text_chat_ != NULL;
 }
-void ServerToClient::clear_text_chat() {
+void HostToClient::clear_text_chat() {
   if (GetArenaNoVirtual() == NULL && text_chat_ != NULL) delete text_chat_;
   text_chat_ = NULL;
 }
-const ::proto::TextChat& ServerToClient::text_chat() const {
-  // @@protoc_insertion_point(field_get:proto.ServerToClient.text_chat)
+const ::proto::TextChat& HostToClient::text_chat() const {
+  // @@protoc_insertion_point(field_get:proto.HostToClient.text_chat)
   return text_chat_ != NULL ? *text_chat_
                          : *::proto::TextChat::internal_default_instance();
 }
-::proto::TextChat* ServerToClient::mutable_text_chat() {
+::proto::TextChat* HostToClient::mutable_text_chat() {
   
   if (text_chat_ == NULL) {
     text_chat_ = new ::proto::TextChat;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ServerToClient.text_chat)
+  // @@protoc_insertion_point(field_mutable:proto.HostToClient.text_chat)
   return text_chat_;
 }
-::proto::TextChat* ServerToClient::release_text_chat() {
-  // @@protoc_insertion_point(field_release:proto.ServerToClient.text_chat)
+::proto::TextChat* HostToClient::release_text_chat() {
+  // @@protoc_insertion_point(field_release:proto.HostToClient.text_chat)
   
   ::proto::TextChat* temp = text_chat_;
   text_chat_ = NULL;
   return temp;
 }
-void ServerToClient::set_allocated_text_chat(::proto::TextChat* text_chat) {
+void HostToClient::set_allocated_text_chat(::proto::TextChat* text_chat) {
   delete text_chat_;
   text_chat_ = text_chat;
   if (text_chat) {
@@ -5718,37 +5717,37 @@ void ServerToClient::set_allocated_text_chat(::proto::TextChat* text_chat) {
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.text_chat)
+  // @@protoc_insertion_point(field_set_allocated:proto.HostToClient.text_chat)
 }
 
-inline const ServerToClient* ServerToClient::internal_default_instance() {
-  return &ServerToClient_default_instance_.get();
+inline const HostToClient* HostToClient::internal_default_instance() {
+  return &HostToClient_default_instance_.get();
 }
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int ClientToServer::kVideoControlFieldNumber;
-const int ClientToServer::kCursorShapeControlFieldNumber;
-const int ClientToServer::kClipboardControlFieldNumber;
-const int ClientToServer::kClipboardRequestFieldNumber;
-const int ClientToServer::kClipboardFieldNumber;
-const int ClientToServer::kPointerEventFieldNumber;
-const int ClientToServer::kKeyEventFieldNumber;
-const int ClientToServer::kBellFieldNumber;
-const int ClientToServer::kTextChatFieldNumber;
-const int ClientToServer::kPowerControlFieldNumber;
+const int ClientToHost::kVideoControlFieldNumber;
+const int ClientToHost::kCursorShapeControlFieldNumber;
+const int ClientToHost::kClipboardControlFieldNumber;
+const int ClientToHost::kClipboardRequestFieldNumber;
+const int ClientToHost::kClipboardFieldNumber;
+const int ClientToHost::kPointerEventFieldNumber;
+const int ClientToHost::kKeyEventFieldNumber;
+const int ClientToHost::kBellFieldNumber;
+const int ClientToHost::kTextChatFieldNumber;
+const int ClientToHost::kPowerControlFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-ClientToServer::ClientToServer()
+ClientToHost::ClientToHost()
   : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
   if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.ClientToServer)
+  // @@protoc_insertion_point(constructor:proto.ClientToHost)
 }
 
-void ClientToServer::InitAsDefaultInstance() {
+void ClientToHost::InitAsDefaultInstance() {
   video_control_ = const_cast< ::proto::VideoControl*>(
       ::proto::VideoControl::internal_default_instance());
   cursor_shape_control_ = const_cast< ::proto::CursorShapeControl*>(
@@ -5771,15 +5770,15 @@ void ClientToServer::InitAsDefaultInstance() {
       ::proto::PowerControl::internal_default_instance());
 }
 
-ClientToServer::ClientToServer(const ClientToServer& from)
+ClientToHost::ClientToHost(const ClientToHost& from)
   : ::google::protobuf::MessageLite(),
     _arena_ptr_(NULL) {
   SharedCtor();
   UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:proto.ClientToServer)
+  // @@protoc_insertion_point(copy_constructor:proto.ClientToHost)
 }
 
-void ClientToServer::SharedCtor() {
+void ClientToHost::SharedCtor() {
   video_control_ = NULL;
   cursor_shape_control_ = NULL;
   clipboard_control_ = NULL;
@@ -5793,13 +5792,13 @@ void ClientToServer::SharedCtor() {
   _cached_size_ = 0;
 }
 
-ClientToServer::~ClientToServer() {
-  // @@protoc_insertion_point(destructor:proto.ClientToServer)
+ClientToHost::~ClientToHost() {
+  // @@protoc_insertion_point(destructor:proto.ClientToHost)
   SharedDtor();
 }
 
-void ClientToServer::SharedDtor() {
-  if (this != &ClientToServer_default_instance_.get()) {
+void ClientToHost::SharedDtor() {
+  if (this != &ClientToHost_default_instance_.get()) {
     delete video_control_;
     delete cursor_shape_control_;
     delete clipboard_control_;
@@ -5813,28 +5812,28 @@ void ClientToServer::SharedDtor() {
   }
 }
 
-void ClientToServer::SetCachedSize(int size) const {
+void ClientToHost::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ClientToServer& ClientToServer::default_instance() {
+const ClientToHost& ClientToHost::default_instance() {
   protobuf_InitDefaults_proto_2eproto();
   return *internal_default_instance();
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<ClientToServer> ClientToServer_default_instance_;
+::google::protobuf::internal::ExplicitlyConstructed<ClientToHost> ClientToHost_default_instance_;
 
-ClientToServer* ClientToServer::New(::google::protobuf::Arena* arena) const {
-  ClientToServer* n = new ClientToServer;
+ClientToHost* ClientToHost::New(::google::protobuf::Arena* arena) const {
+  ClientToHost* n = new ClientToHost;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void ClientToServer::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.ClientToServer)
+void ClientToHost::Clear() {
+// @@protoc_insertion_point(message_clear_start:proto.ClientToHost)
   if (GetArenaNoVirtual() == NULL && video_control_ != NULL) delete video_control_;
   video_control_ = NULL;
   if (GetArenaNoVirtual() == NULL && cursor_shape_control_ != NULL) delete cursor_shape_control_;
@@ -5857,11 +5856,11 @@ void ClientToServer::Clear() {
   power_control_ = NULL;
 }
 
-bool ClientToServer::MergePartialFromCodedStream(
+bool ClientToHost::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:proto.ClientToServer)
+  // @@protoc_insertion_point(parse_start:proto.ClientToHost)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -6009,17 +6008,17 @@ bool ClientToServer::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.ClientToServer)
+  // @@protoc_insertion_point(parse_success:proto.ClientToHost)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.ClientToServer)
+  // @@protoc_insertion_point(parse_failure:proto.ClientToHost)
   return false;
 #undef DO_
 }
 
-void ClientToServer::SerializeWithCachedSizes(
+void ClientToHost::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.ClientToServer)
+  // @@protoc_insertion_point(serialize_start:proto.ClientToHost)
   // optional .proto.VideoControl video_control = 1;
   if (this->has_video_control()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -6080,11 +6079,11 @@ void ClientToServer::SerializeWithCachedSizes(
       10, *this->power_control_, output);
   }
 
-  // @@protoc_insertion_point(serialize_end:proto.ClientToServer)
+  // @@protoc_insertion_point(serialize_end:proto.ClientToHost)
 }
 
-size_t ClientToServer::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.ClientToServer)
+size_t ClientToHost::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:proto.ClientToHost)
   size_t total_size = 0;
 
   // optional .proto.VideoControl video_control = 1;
@@ -6164,13 +6163,13 @@ size_t ClientToServer::ByteSizeLong() const {
   return total_size;
 }
 
-void ClientToServer::CheckTypeAndMergeFrom(
+void ClientToHost::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const ClientToServer*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const ClientToHost*>(&from));
 }
 
-void ClientToServer::MergeFrom(const ClientToServer& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.ClientToServer)
+void ClientToHost::MergeFrom(const ClientToHost& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:proto.ClientToHost)
   if (GOOGLE_PREDICT_TRUE(&from != this)) {
     UnsafeMergeFrom(from);
   } else {
@@ -6178,7 +6177,7 @@ void ClientToServer::MergeFrom(const ClientToServer& from) {
   }
 }
 
-void ClientToServer::UnsafeMergeFrom(const ClientToServer& from) {
+void ClientToHost::UnsafeMergeFrom(const ClientToHost& from) {
   GOOGLE_DCHECK(&from != this);
   if (from.has_video_control()) {
     mutable_video_control()->::proto::VideoControl::MergeFrom(from.video_control());
@@ -6212,23 +6211,23 @@ void ClientToServer::UnsafeMergeFrom(const ClientToServer& from) {
   }
 }
 
-void ClientToServer::CopyFrom(const ClientToServer& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.ClientToServer)
+void ClientToHost::CopyFrom(const ClientToHost& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:proto.ClientToHost)
   if (&from == this) return;
   Clear();
   UnsafeMergeFrom(from);
 }
 
-bool ClientToServer::IsInitialized() const {
+bool ClientToHost::IsInitialized() const {
 
   return true;
 }
 
-void ClientToServer::Swap(ClientToServer* other) {
+void ClientToHost::Swap(ClientToHost* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void ClientToServer::InternalSwap(ClientToServer* other) {
+void ClientToHost::InternalSwap(ClientToHost* other) {
   std::swap(video_control_, other->video_control_);
   std::swap(cursor_shape_control_, other->cursor_shape_control_);
   std::swap(clipboard_control_, other->clipboard_control_);
@@ -6243,42 +6242,42 @@ void ClientToServer::InternalSwap(ClientToServer* other) {
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string ClientToServer::GetTypeName() const {
-  return "proto.ClientToServer";
+::std::string ClientToHost::GetTypeName() const {
+  return "proto.ClientToHost";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// ClientToServer
+// ClientToHost
 
 // optional .proto.VideoControl video_control = 1;
-bool ClientToServer::has_video_control() const {
+bool ClientToHost::has_video_control() const {
   return this != internal_default_instance() && video_control_ != NULL;
 }
-void ClientToServer::clear_video_control() {
+void ClientToHost::clear_video_control() {
   if (GetArenaNoVirtual() == NULL && video_control_ != NULL) delete video_control_;
   video_control_ = NULL;
 }
-const ::proto::VideoControl& ClientToServer::video_control() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.video_control)
+const ::proto::VideoControl& ClientToHost::video_control() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.video_control)
   return video_control_ != NULL ? *video_control_
                          : *::proto::VideoControl::internal_default_instance();
 }
-::proto::VideoControl* ClientToServer::mutable_video_control() {
+::proto::VideoControl* ClientToHost::mutable_video_control() {
   
   if (video_control_ == NULL) {
     video_control_ = new ::proto::VideoControl;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.video_control)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.video_control)
   return video_control_;
 }
-::proto::VideoControl* ClientToServer::release_video_control() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.video_control)
+::proto::VideoControl* ClientToHost::release_video_control() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.video_control)
   
   ::proto::VideoControl* temp = video_control_;
   video_control_ = NULL;
   return temp;
 }
-void ClientToServer::set_allocated_video_control(::proto::VideoControl* video_control) {
+void ClientToHost::set_allocated_video_control(::proto::VideoControl* video_control) {
   delete video_control_;
   video_control_ = video_control;
   if (video_control) {
@@ -6286,38 +6285,38 @@ void ClientToServer::set_allocated_video_control(::proto::VideoControl* video_co
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.video_control)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.video_control)
 }
 
 // optional .proto.CursorShapeControl cursor_shape_control = 2;
-bool ClientToServer::has_cursor_shape_control() const {
+bool ClientToHost::has_cursor_shape_control() const {
   return this != internal_default_instance() && cursor_shape_control_ != NULL;
 }
-void ClientToServer::clear_cursor_shape_control() {
+void ClientToHost::clear_cursor_shape_control() {
   if (GetArenaNoVirtual() == NULL && cursor_shape_control_ != NULL) delete cursor_shape_control_;
   cursor_shape_control_ = NULL;
 }
-const ::proto::CursorShapeControl& ClientToServer::cursor_shape_control() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.cursor_shape_control)
+const ::proto::CursorShapeControl& ClientToHost::cursor_shape_control() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.cursor_shape_control)
   return cursor_shape_control_ != NULL ? *cursor_shape_control_
                          : *::proto::CursorShapeControl::internal_default_instance();
 }
-::proto::CursorShapeControl* ClientToServer::mutable_cursor_shape_control() {
+::proto::CursorShapeControl* ClientToHost::mutable_cursor_shape_control() {
   
   if (cursor_shape_control_ == NULL) {
     cursor_shape_control_ = new ::proto::CursorShapeControl;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.cursor_shape_control)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.cursor_shape_control)
   return cursor_shape_control_;
 }
-::proto::CursorShapeControl* ClientToServer::release_cursor_shape_control() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.cursor_shape_control)
+::proto::CursorShapeControl* ClientToHost::release_cursor_shape_control() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.cursor_shape_control)
   
   ::proto::CursorShapeControl* temp = cursor_shape_control_;
   cursor_shape_control_ = NULL;
   return temp;
 }
-void ClientToServer::set_allocated_cursor_shape_control(::proto::CursorShapeControl* cursor_shape_control) {
+void ClientToHost::set_allocated_cursor_shape_control(::proto::CursorShapeControl* cursor_shape_control) {
   delete cursor_shape_control_;
   cursor_shape_control_ = cursor_shape_control;
   if (cursor_shape_control) {
@@ -6325,38 +6324,38 @@ void ClientToServer::set_allocated_cursor_shape_control(::proto::CursorShapeCont
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.cursor_shape_control)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.cursor_shape_control)
 }
 
 // optional .proto.ClipboardControl clipboard_control = 3;
-bool ClientToServer::has_clipboard_control() const {
+bool ClientToHost::has_clipboard_control() const {
   return this != internal_default_instance() && clipboard_control_ != NULL;
 }
-void ClientToServer::clear_clipboard_control() {
+void ClientToHost::clear_clipboard_control() {
   if (GetArenaNoVirtual() == NULL && clipboard_control_ != NULL) delete clipboard_control_;
   clipboard_control_ = NULL;
 }
-const ::proto::ClipboardControl& ClientToServer::clipboard_control() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.clipboard_control)
+const ::proto::ClipboardControl& ClientToHost::clipboard_control() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.clipboard_control)
   return clipboard_control_ != NULL ? *clipboard_control_
                          : *::proto::ClipboardControl::internal_default_instance();
 }
-::proto::ClipboardControl* ClientToServer::mutable_clipboard_control() {
+::proto::ClipboardControl* ClientToHost::mutable_clipboard_control() {
   
   if (clipboard_control_ == NULL) {
     clipboard_control_ = new ::proto::ClipboardControl;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.clipboard_control)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.clipboard_control)
   return clipboard_control_;
 }
-::proto::ClipboardControl* ClientToServer::release_clipboard_control() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.clipboard_control)
+::proto::ClipboardControl* ClientToHost::release_clipboard_control() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.clipboard_control)
   
   ::proto::ClipboardControl* temp = clipboard_control_;
   clipboard_control_ = NULL;
   return temp;
 }
-void ClientToServer::set_allocated_clipboard_control(::proto::ClipboardControl* clipboard_control) {
+void ClientToHost::set_allocated_clipboard_control(::proto::ClipboardControl* clipboard_control) {
   delete clipboard_control_;
   clipboard_control_ = clipboard_control;
   if (clipboard_control) {
@@ -6364,38 +6363,38 @@ void ClientToServer::set_allocated_clipboard_control(::proto::ClipboardControl* 
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.clipboard_control)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.clipboard_control)
 }
 
 // optional .proto.ClipboardRequest clipboard_request = 4;
-bool ClientToServer::has_clipboard_request() const {
+bool ClientToHost::has_clipboard_request() const {
   return this != internal_default_instance() && clipboard_request_ != NULL;
 }
-void ClientToServer::clear_clipboard_request() {
+void ClientToHost::clear_clipboard_request() {
   if (GetArenaNoVirtual() == NULL && clipboard_request_ != NULL) delete clipboard_request_;
   clipboard_request_ = NULL;
 }
-const ::proto::ClipboardRequest& ClientToServer::clipboard_request() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.clipboard_request)
+const ::proto::ClipboardRequest& ClientToHost::clipboard_request() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.clipboard_request)
   return clipboard_request_ != NULL ? *clipboard_request_
                          : *::proto::ClipboardRequest::internal_default_instance();
 }
-::proto::ClipboardRequest* ClientToServer::mutable_clipboard_request() {
+::proto::ClipboardRequest* ClientToHost::mutable_clipboard_request() {
   
   if (clipboard_request_ == NULL) {
     clipboard_request_ = new ::proto::ClipboardRequest;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.clipboard_request)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.clipboard_request)
   return clipboard_request_;
 }
-::proto::ClipboardRequest* ClientToServer::release_clipboard_request() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.clipboard_request)
+::proto::ClipboardRequest* ClientToHost::release_clipboard_request() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.clipboard_request)
   
   ::proto::ClipboardRequest* temp = clipboard_request_;
   clipboard_request_ = NULL;
   return temp;
 }
-void ClientToServer::set_allocated_clipboard_request(::proto::ClipboardRequest* clipboard_request) {
+void ClientToHost::set_allocated_clipboard_request(::proto::ClipboardRequest* clipboard_request) {
   delete clipboard_request_;
   clipboard_request_ = clipboard_request;
   if (clipboard_request) {
@@ -6403,38 +6402,38 @@ void ClientToServer::set_allocated_clipboard_request(::proto::ClipboardRequest* 
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.clipboard_request)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.clipboard_request)
 }
 
 // optional .proto.Clipboard clipboard = 5;
-bool ClientToServer::has_clipboard() const {
+bool ClientToHost::has_clipboard() const {
   return this != internal_default_instance() && clipboard_ != NULL;
 }
-void ClientToServer::clear_clipboard() {
+void ClientToHost::clear_clipboard() {
   if (GetArenaNoVirtual() == NULL && clipboard_ != NULL) delete clipboard_;
   clipboard_ = NULL;
 }
-const ::proto::Clipboard& ClientToServer::clipboard() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.clipboard)
+const ::proto::Clipboard& ClientToHost::clipboard() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.clipboard)
   return clipboard_ != NULL ? *clipboard_
                          : *::proto::Clipboard::internal_default_instance();
 }
-::proto::Clipboard* ClientToServer::mutable_clipboard() {
+::proto::Clipboard* ClientToHost::mutable_clipboard() {
   
   if (clipboard_ == NULL) {
     clipboard_ = new ::proto::Clipboard;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.clipboard)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.clipboard)
   return clipboard_;
 }
-::proto::Clipboard* ClientToServer::release_clipboard() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.clipboard)
+::proto::Clipboard* ClientToHost::release_clipboard() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.clipboard)
   
   ::proto::Clipboard* temp = clipboard_;
   clipboard_ = NULL;
   return temp;
 }
-void ClientToServer::set_allocated_clipboard(::proto::Clipboard* clipboard) {
+void ClientToHost::set_allocated_clipboard(::proto::Clipboard* clipboard) {
   delete clipboard_;
   clipboard_ = clipboard;
   if (clipboard) {
@@ -6442,38 +6441,38 @@ void ClientToServer::set_allocated_clipboard(::proto::Clipboard* clipboard) {
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.clipboard)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.clipboard)
 }
 
 // optional .proto.PointerEvent pointer_event = 6;
-bool ClientToServer::has_pointer_event() const {
+bool ClientToHost::has_pointer_event() const {
   return this != internal_default_instance() && pointer_event_ != NULL;
 }
-void ClientToServer::clear_pointer_event() {
+void ClientToHost::clear_pointer_event() {
   if (GetArenaNoVirtual() == NULL && pointer_event_ != NULL) delete pointer_event_;
   pointer_event_ = NULL;
 }
-const ::proto::PointerEvent& ClientToServer::pointer_event() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.pointer_event)
+const ::proto::PointerEvent& ClientToHost::pointer_event() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.pointer_event)
   return pointer_event_ != NULL ? *pointer_event_
                          : *::proto::PointerEvent::internal_default_instance();
 }
-::proto::PointerEvent* ClientToServer::mutable_pointer_event() {
+::proto::PointerEvent* ClientToHost::mutable_pointer_event() {
   
   if (pointer_event_ == NULL) {
     pointer_event_ = new ::proto::PointerEvent;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.pointer_event)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.pointer_event)
   return pointer_event_;
 }
-::proto::PointerEvent* ClientToServer::release_pointer_event() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.pointer_event)
+::proto::PointerEvent* ClientToHost::release_pointer_event() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.pointer_event)
   
   ::proto::PointerEvent* temp = pointer_event_;
   pointer_event_ = NULL;
   return temp;
 }
-void ClientToServer::set_allocated_pointer_event(::proto::PointerEvent* pointer_event) {
+void ClientToHost::set_allocated_pointer_event(::proto::PointerEvent* pointer_event) {
   delete pointer_event_;
   pointer_event_ = pointer_event;
   if (pointer_event) {
@@ -6481,38 +6480,38 @@ void ClientToServer::set_allocated_pointer_event(::proto::PointerEvent* pointer_
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.pointer_event)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.pointer_event)
 }
 
 // optional .proto.KeyEvent key_event = 7;
-bool ClientToServer::has_key_event() const {
+bool ClientToHost::has_key_event() const {
   return this != internal_default_instance() && key_event_ != NULL;
 }
-void ClientToServer::clear_key_event() {
+void ClientToHost::clear_key_event() {
   if (GetArenaNoVirtual() == NULL && key_event_ != NULL) delete key_event_;
   key_event_ = NULL;
 }
-const ::proto::KeyEvent& ClientToServer::key_event() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.key_event)
+const ::proto::KeyEvent& ClientToHost::key_event() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.key_event)
   return key_event_ != NULL ? *key_event_
                          : *::proto::KeyEvent::internal_default_instance();
 }
-::proto::KeyEvent* ClientToServer::mutable_key_event() {
+::proto::KeyEvent* ClientToHost::mutable_key_event() {
   
   if (key_event_ == NULL) {
     key_event_ = new ::proto::KeyEvent;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.key_event)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.key_event)
   return key_event_;
 }
-::proto::KeyEvent* ClientToServer::release_key_event() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.key_event)
+::proto::KeyEvent* ClientToHost::release_key_event() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.key_event)
   
   ::proto::KeyEvent* temp = key_event_;
   key_event_ = NULL;
   return temp;
 }
-void ClientToServer::set_allocated_key_event(::proto::KeyEvent* key_event) {
+void ClientToHost::set_allocated_key_event(::proto::KeyEvent* key_event) {
   delete key_event_;
   key_event_ = key_event;
   if (key_event) {
@@ -6520,38 +6519,38 @@ void ClientToServer::set_allocated_key_event(::proto::KeyEvent* key_event) {
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.key_event)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.key_event)
 }
 
 // optional .proto.Bell bell = 8;
-bool ClientToServer::has_bell() const {
+bool ClientToHost::has_bell() const {
   return this != internal_default_instance() && bell_ != NULL;
 }
-void ClientToServer::clear_bell() {
+void ClientToHost::clear_bell() {
   if (GetArenaNoVirtual() == NULL && bell_ != NULL) delete bell_;
   bell_ = NULL;
 }
-const ::proto::Bell& ClientToServer::bell() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.bell)
+const ::proto::Bell& ClientToHost::bell() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.bell)
   return bell_ != NULL ? *bell_
                          : *::proto::Bell::internal_default_instance();
 }
-::proto::Bell* ClientToServer::mutable_bell() {
+::proto::Bell* ClientToHost::mutable_bell() {
   
   if (bell_ == NULL) {
     bell_ = new ::proto::Bell;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.bell)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.bell)
   return bell_;
 }
-::proto::Bell* ClientToServer::release_bell() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.bell)
+::proto::Bell* ClientToHost::release_bell() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.bell)
   
   ::proto::Bell* temp = bell_;
   bell_ = NULL;
   return temp;
 }
-void ClientToServer::set_allocated_bell(::proto::Bell* bell) {
+void ClientToHost::set_allocated_bell(::proto::Bell* bell) {
   delete bell_;
   bell_ = bell;
   if (bell) {
@@ -6559,38 +6558,38 @@ void ClientToServer::set_allocated_bell(::proto::Bell* bell) {
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.bell)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.bell)
 }
 
 // optional .proto.TextChat text_chat = 9;
-bool ClientToServer::has_text_chat() const {
+bool ClientToHost::has_text_chat() const {
   return this != internal_default_instance() && text_chat_ != NULL;
 }
-void ClientToServer::clear_text_chat() {
+void ClientToHost::clear_text_chat() {
   if (GetArenaNoVirtual() == NULL && text_chat_ != NULL) delete text_chat_;
   text_chat_ = NULL;
 }
-const ::proto::TextChat& ClientToServer::text_chat() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.text_chat)
+const ::proto::TextChat& ClientToHost::text_chat() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.text_chat)
   return text_chat_ != NULL ? *text_chat_
                          : *::proto::TextChat::internal_default_instance();
 }
-::proto::TextChat* ClientToServer::mutable_text_chat() {
+::proto::TextChat* ClientToHost::mutable_text_chat() {
   
   if (text_chat_ == NULL) {
     text_chat_ = new ::proto::TextChat;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.text_chat)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.text_chat)
   return text_chat_;
 }
-::proto::TextChat* ClientToServer::release_text_chat() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.text_chat)
+::proto::TextChat* ClientToHost::release_text_chat() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.text_chat)
   
   ::proto::TextChat* temp = text_chat_;
   text_chat_ = NULL;
   return temp;
 }
-void ClientToServer::set_allocated_text_chat(::proto::TextChat* text_chat) {
+void ClientToHost::set_allocated_text_chat(::proto::TextChat* text_chat) {
   delete text_chat_;
   text_chat_ = text_chat;
   if (text_chat) {
@@ -6598,38 +6597,38 @@ void ClientToServer::set_allocated_text_chat(::proto::TextChat* text_chat) {
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.text_chat)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.text_chat)
 }
 
 // optional .proto.PowerControl power_control = 10;
-bool ClientToServer::has_power_control() const {
+bool ClientToHost::has_power_control() const {
   return this != internal_default_instance() && power_control_ != NULL;
 }
-void ClientToServer::clear_power_control() {
+void ClientToHost::clear_power_control() {
   if (GetArenaNoVirtual() == NULL && power_control_ != NULL) delete power_control_;
   power_control_ = NULL;
 }
-const ::proto::PowerControl& ClientToServer::power_control() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.power_control)
+const ::proto::PowerControl& ClientToHost::power_control() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.power_control)
   return power_control_ != NULL ? *power_control_
                          : *::proto::PowerControl::internal_default_instance();
 }
-::proto::PowerControl* ClientToServer::mutable_power_control() {
+::proto::PowerControl* ClientToHost::mutable_power_control() {
   
   if (power_control_ == NULL) {
     power_control_ = new ::proto::PowerControl;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.power_control)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.power_control)
   return power_control_;
 }
-::proto::PowerControl* ClientToServer::release_power_control() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.power_control)
+::proto::PowerControl* ClientToHost::release_power_control() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.power_control)
   
   ::proto::PowerControl* temp = power_control_;
   power_control_ = NULL;
   return temp;
 }
-void ClientToServer::set_allocated_power_control(::proto::PowerControl* power_control) {
+void ClientToHost::set_allocated_power_control(::proto::PowerControl* power_control) {
   delete power_control_;
   power_control_ = power_control;
   if (power_control) {
@@ -6637,11 +6636,11 @@ void ClientToServer::set_allocated_power_control(::proto::PowerControl* power_co
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.power_control)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.power_control)
 }
 
-inline const ClientToServer* ClientToServer::internal_default_instance() {
-  return &ClientToServer_default_instance_.get();
+inline const ClientToHost* ClientToHost::internal_default_instance() {
+  return &ClientToHost_default_instance_.get();
 }
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 

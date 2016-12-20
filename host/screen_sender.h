@@ -1,33 +1,34 @@
 /*
 * PROJECT:         Aspia Remote Desktop
-* FILE:            server/screen_sender.h
+* FILE:            host/screen_sender.h
 * LICENSE:         See top-level directory
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#ifndef _ASPIA_SERVER__SCREEN_SENDER_H
-#define _ASPIA_SERVER__SCREEN_SENDER_H
+#ifndef _ASPIA_HOST__SCREEN_SENDER_H
+#define _ASPIA_HOST__SCREEN_SENDER_H
 
 #include <functional>
 
 #include "base/thread.h"
-#include "base/mutex.h"
+#include "base/lock.h"
 #include "base/macros.h"
 #include "desktop_capture/capture_scheduler.h"
 #include "desktop_capture/capturer_gdi.h"
-#include "codec/video_encoder_raw.h"
 #include "codec/video_encoder_vp8.h"
 #include "codec/video_encoder_zlib.h"
 #include "network/socket_tcp.h"
 
-class ScreenSender : public Thread
+namespace aspia {
+
+class ScreenSender : private Thread
 {
 public:
-    typedef std::function<void(const proto::ServerToClient *message)> OnMessageAvailabeCallback;
+    typedef std::function<void(const proto::HostToClient *message)> OnMessageCallback;
 
     ScreenSender(int32_t encoding,
                  const PixelFormat &client_pixel_format,
-                 OnMessageAvailabeCallback on_message_available);
+                 OnMessageCallback on_message);
 
     ~ScreenSender();
 
@@ -38,11 +39,11 @@ private:
     void OnStop() override;
 
 private:
-    OnMessageAvailabeCallback on_message_available_;
+    OnMessageCallback on_message_;
 
     std::unique_ptr<VideoEncoder> encoder_;
 
-    Mutex update_lock_;
+    Lock update_lock_;
 
     PixelFormat client_pixel_format_;
     int32_t current_encoding_;
@@ -50,4 +51,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScreenSender);
 };
 
-#endif // _ASPIA_SERVER__SCREEN_SENDER_H
+} // namespace aspia
+
+#endif // _ASPIA_HOST__SCREEN_SENDER_H

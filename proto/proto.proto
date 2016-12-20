@@ -208,9 +208,8 @@ message VideoPixelFormat
 enum VideoEncoding
 {
     VIDEO_ENCODING_UNKNOWN = 0;
-    VIDEO_ENCODING_RAW     = 1;
-    VIDEO_ENCODING_ZLIB    = 2;
-    VIDEO_ENCODING_VP8     = 4;
+    VIDEO_ENCODING_ZLIB    = 1;
+    VIDEO_ENCODING_VP8     = 2;
 }
 
 message VideoSize
@@ -240,8 +239,8 @@ message VideoPacketFormat
     //
     // Формат пикселей, в котором отправлено текущее обновление. При каждом приеме
     // видео-пакета клиент должен проверять не изменился ли формат и переинициализироваться
-    // в соответствии с этим. Данный параметр опциональный и используется при кодировках
-    // VIDEO_ENCODING_RAW и VIDEO_ENCODING_ZLIB.
+    // в соответствии с этим. Данный параметр опциональный и используется при кодировке
+    // VIDEO_ENCODING_ZLIB.
     // Поле отсутствует, если формат пикселей не изменился.
     //
     VideoPixelFormat pixel_format = 3;
@@ -305,7 +304,7 @@ message VideoControl
     //
     // Формат пикселей, который используется клиентом. Если формат клиента отличается от формата
     // сервера, то пиксели в изображении будут перекодированы в формат клиента.
-    // Данный параметр применим для кодирования VIDEO_ENCODING_ZLIB и VIDEO_ENCODING_RAW, в остальных
+    // Данный параметр применим для кодирования VIDEO_ENCODING_ZLIB, в остальных
     // случаях игнорируется.
     // Клиент не должен переинициалироваться после отправки данного параметра. Если сервер поддерживает
     // перекодировку в отправленный формат, то при следующем получении сообщения VideoPacket нужно
@@ -318,7 +317,7 @@ message VideoControl
 //
 // Сообщения, которые отправляются от сервера к клиенту
 //
-message ServerToClient
+message HostToClient
 {
     VideoPacket video_packet = 1;
     CursorShape cursor       = 2;
@@ -329,7 +328,7 @@ message ServerToClient
 //
 // Сообщения, которые отправляются от клиента к серверу
 //
-message ClientToServer
+message ClientToHost
 {
     VideoControl video_control              = 1;
     CursorShapeControl cursor_shape_control = 2;

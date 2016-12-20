@@ -37,16 +37,16 @@ void protobuf_AssignDesc_proto_2eproto();
 void protobuf_ShutdownFile_proto_2eproto();
 
 class Bell;
-class ClientToServer;
+class ClientToHost;
 class Clipboard;
 class ClipboardControl;
 class ClipboardRequest;
 class CursorShape;
 class CursorShapeControl;
+class HostToClient;
 class KeyEvent;
 class PointerEvent;
 class PowerControl;
-class ServerToClient;
 class TextChat;
 class VideoControl;
 class VideoPacket;
@@ -101,9 +101,8 @@ const int VideoPacket_Flags_Flags_ARRAYSIZE = VideoPacket_Flags_Flags_MAX + 1;
 
 enum VideoEncoding {
   VIDEO_ENCODING_UNKNOWN = 0,
-  VIDEO_ENCODING_RAW = 1,
-  VIDEO_ENCODING_ZLIB = 2,
-  VIDEO_ENCODING_VP8 = 4,
+  VIDEO_ENCODING_ZLIB = 1,
+  VIDEO_ENCODING_VP8 = 2,
   VideoEncoding_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   VideoEncoding_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
@@ -1737,32 +1736,32 @@ extern ::google::protobuf::internal::ExplicitlyConstructed<VideoControl> VideoCo
 
 // -------------------------------------------------------------------
 
-class ServerToClient : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.ServerToClient) */ {
+class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.HostToClient) */ {
  public:
-  ServerToClient();
-  virtual ~ServerToClient();
+  HostToClient();
+  virtual ~HostToClient();
 
-  ServerToClient(const ServerToClient& from);
+  HostToClient(const HostToClient& from);
 
-  inline ServerToClient& operator=(const ServerToClient& from) {
+  inline HostToClient& operator=(const HostToClient& from) {
     CopyFrom(from);
     return *this;
   }
 
-  static const ServerToClient& default_instance();
+  static const HostToClient& default_instance();
 
-  static const ServerToClient* internal_default_instance();
+  static const HostToClient* internal_default_instance();
 
-  void Swap(ServerToClient* other);
+  void Swap(HostToClient* other);
 
   // implements Message ----------------------------------------------
 
-  inline ServerToClient* New() const { return New(NULL); }
+  inline HostToClient* New() const { return New(NULL); }
 
-  ServerToClient* New(::google::protobuf::Arena* arena) const;
+  HostToClient* New(::google::protobuf::Arena* arena) const;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from);
-  void CopyFrom(const ServerToClient& from);
-  void MergeFrom(const ServerToClient& from);
+  void CopyFrom(const HostToClient& from);
+  void MergeFrom(const HostToClient& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -1777,8 +1776,8 @@ class ServerToClient : public ::google::protobuf::MessageLite /* @@protoc_insert
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(ServerToClient* other);
-  void UnsafeMergeFrom(const ServerToClient& from);
+  void InternalSwap(HostToClient* other);
+  void UnsafeMergeFrom(const HostToClient& from);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -1830,7 +1829,7 @@ class ServerToClient : public ::google::protobuf::MessageLite /* @@protoc_insert
   ::proto::TextChat* release_text_chat();
   void set_allocated_text_chat(::proto::TextChat* text_chat);
 
-  // @@protoc_insertion_point(class_scope:proto.ServerToClient)
+  // @@protoc_insertion_point(class_scope:proto.HostToClient)
  private:
 
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
@@ -1848,36 +1847,36 @@ class ServerToClient : public ::google::protobuf::MessageLite /* @@protoc_insert
 
   void InitAsDefaultInstance();
 };
-extern ::google::protobuf::internal::ExplicitlyConstructed<ServerToClient> ServerToClient_default_instance_;
+extern ::google::protobuf::internal::ExplicitlyConstructed<HostToClient> HostToClient_default_instance_;
 
 // -------------------------------------------------------------------
 
-class ClientToServer : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.ClientToServer) */ {
+class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.ClientToHost) */ {
  public:
-  ClientToServer();
-  virtual ~ClientToServer();
+  ClientToHost();
+  virtual ~ClientToHost();
 
-  ClientToServer(const ClientToServer& from);
+  ClientToHost(const ClientToHost& from);
 
-  inline ClientToServer& operator=(const ClientToServer& from) {
+  inline ClientToHost& operator=(const ClientToHost& from) {
     CopyFrom(from);
     return *this;
   }
 
-  static const ClientToServer& default_instance();
+  static const ClientToHost& default_instance();
 
-  static const ClientToServer* internal_default_instance();
+  static const ClientToHost* internal_default_instance();
 
-  void Swap(ClientToServer* other);
+  void Swap(ClientToHost* other);
 
   // implements Message ----------------------------------------------
 
-  inline ClientToServer* New() const { return New(NULL); }
+  inline ClientToHost* New() const { return New(NULL); }
 
-  ClientToServer* New(::google::protobuf::Arena* arena) const;
+  ClientToHost* New(::google::protobuf::Arena* arena) const;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from);
-  void CopyFrom(const ClientToServer& from);
-  void MergeFrom(const ClientToServer& from);
+  void CopyFrom(const ClientToHost& from);
+  void MergeFrom(const ClientToHost& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -1892,8 +1891,8 @@ class ClientToServer : public ::google::protobuf::MessageLite /* @@protoc_insert
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(ClientToServer* other);
-  void UnsafeMergeFrom(const ClientToServer& from);
+  void InternalSwap(ClientToHost* other);
+  void UnsafeMergeFrom(const ClientToHost& from);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _arena_ptr_;
@@ -1999,7 +1998,7 @@ class ClientToServer : public ::google::protobuf::MessageLite /* @@protoc_insert
   ::proto::PowerControl* release_power_control();
   void set_allocated_power_control(::proto::PowerControl* power_control);
 
-  // @@protoc_insertion_point(class_scope:proto.ClientToServer)
+  // @@protoc_insertion_point(class_scope:proto.ClientToHost)
  private:
 
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
@@ -2023,7 +2022,7 @@ class ClientToServer : public ::google::protobuf::MessageLite /* @@protoc_insert
 
   void InitAsDefaultInstance();
 };
-extern ::google::protobuf::internal::ExplicitlyConstructed<ClientToServer> ClientToServer_default_instance_;
+extern ::google::protobuf::internal::ExplicitlyConstructed<ClientToHost> ClientToHost_default_instance_;
 
 // ===================================================================
 
@@ -3055,37 +3054,37 @@ inline const VideoControl* VideoControl::internal_default_instance() {
 }
 // -------------------------------------------------------------------
 
-// ServerToClient
+// HostToClient
 
 // optional .proto.VideoPacket video_packet = 1;
-inline bool ServerToClient::has_video_packet() const {
+inline bool HostToClient::has_video_packet() const {
   return this != internal_default_instance() && video_packet_ != NULL;
 }
-inline void ServerToClient::clear_video_packet() {
+inline void HostToClient::clear_video_packet() {
   if (GetArenaNoVirtual() == NULL && video_packet_ != NULL) delete video_packet_;
   video_packet_ = NULL;
 }
-inline const ::proto::VideoPacket& ServerToClient::video_packet() const {
-  // @@protoc_insertion_point(field_get:proto.ServerToClient.video_packet)
+inline const ::proto::VideoPacket& HostToClient::video_packet() const {
+  // @@protoc_insertion_point(field_get:proto.HostToClient.video_packet)
   return video_packet_ != NULL ? *video_packet_
                          : *::proto::VideoPacket::internal_default_instance();
 }
-inline ::proto::VideoPacket* ServerToClient::mutable_video_packet() {
+inline ::proto::VideoPacket* HostToClient::mutable_video_packet() {
   
   if (video_packet_ == NULL) {
     video_packet_ = new ::proto::VideoPacket;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ServerToClient.video_packet)
+  // @@protoc_insertion_point(field_mutable:proto.HostToClient.video_packet)
   return video_packet_;
 }
-inline ::proto::VideoPacket* ServerToClient::release_video_packet() {
-  // @@protoc_insertion_point(field_release:proto.ServerToClient.video_packet)
+inline ::proto::VideoPacket* HostToClient::release_video_packet() {
+  // @@protoc_insertion_point(field_release:proto.HostToClient.video_packet)
   
   ::proto::VideoPacket* temp = video_packet_;
   video_packet_ = NULL;
   return temp;
 }
-inline void ServerToClient::set_allocated_video_packet(::proto::VideoPacket* video_packet) {
+inline void HostToClient::set_allocated_video_packet(::proto::VideoPacket* video_packet) {
   delete video_packet_;
   video_packet_ = video_packet;
   if (video_packet) {
@@ -3093,38 +3092,38 @@ inline void ServerToClient::set_allocated_video_packet(::proto::VideoPacket* vid
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.video_packet)
+  // @@protoc_insertion_point(field_set_allocated:proto.HostToClient.video_packet)
 }
 
 // optional .proto.CursorShape cursor = 2;
-inline bool ServerToClient::has_cursor() const {
+inline bool HostToClient::has_cursor() const {
   return this != internal_default_instance() && cursor_ != NULL;
 }
-inline void ServerToClient::clear_cursor() {
+inline void HostToClient::clear_cursor() {
   if (GetArenaNoVirtual() == NULL && cursor_ != NULL) delete cursor_;
   cursor_ = NULL;
 }
-inline const ::proto::CursorShape& ServerToClient::cursor() const {
-  // @@protoc_insertion_point(field_get:proto.ServerToClient.cursor)
+inline const ::proto::CursorShape& HostToClient::cursor() const {
+  // @@protoc_insertion_point(field_get:proto.HostToClient.cursor)
   return cursor_ != NULL ? *cursor_
                          : *::proto::CursorShape::internal_default_instance();
 }
-inline ::proto::CursorShape* ServerToClient::mutable_cursor() {
+inline ::proto::CursorShape* HostToClient::mutable_cursor() {
   
   if (cursor_ == NULL) {
     cursor_ = new ::proto::CursorShape;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ServerToClient.cursor)
+  // @@protoc_insertion_point(field_mutable:proto.HostToClient.cursor)
   return cursor_;
 }
-inline ::proto::CursorShape* ServerToClient::release_cursor() {
-  // @@protoc_insertion_point(field_release:proto.ServerToClient.cursor)
+inline ::proto::CursorShape* HostToClient::release_cursor() {
+  // @@protoc_insertion_point(field_release:proto.HostToClient.cursor)
   
   ::proto::CursorShape* temp = cursor_;
   cursor_ = NULL;
   return temp;
 }
-inline void ServerToClient::set_allocated_cursor(::proto::CursorShape* cursor) {
+inline void HostToClient::set_allocated_cursor(::proto::CursorShape* cursor) {
   delete cursor_;
   cursor_ = cursor;
   if (cursor) {
@@ -3132,38 +3131,38 @@ inline void ServerToClient::set_allocated_cursor(::proto::CursorShape* cursor) {
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.cursor)
+  // @@protoc_insertion_point(field_set_allocated:proto.HostToClient.cursor)
 }
 
 // optional .proto.Clipboard clipboard = 3;
-inline bool ServerToClient::has_clipboard() const {
+inline bool HostToClient::has_clipboard() const {
   return this != internal_default_instance() && clipboard_ != NULL;
 }
-inline void ServerToClient::clear_clipboard() {
+inline void HostToClient::clear_clipboard() {
   if (GetArenaNoVirtual() == NULL && clipboard_ != NULL) delete clipboard_;
   clipboard_ = NULL;
 }
-inline const ::proto::Clipboard& ServerToClient::clipboard() const {
-  // @@protoc_insertion_point(field_get:proto.ServerToClient.clipboard)
+inline const ::proto::Clipboard& HostToClient::clipboard() const {
+  // @@protoc_insertion_point(field_get:proto.HostToClient.clipboard)
   return clipboard_ != NULL ? *clipboard_
                          : *::proto::Clipboard::internal_default_instance();
 }
-inline ::proto::Clipboard* ServerToClient::mutable_clipboard() {
+inline ::proto::Clipboard* HostToClient::mutable_clipboard() {
   
   if (clipboard_ == NULL) {
     clipboard_ = new ::proto::Clipboard;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ServerToClient.clipboard)
+  // @@protoc_insertion_point(field_mutable:proto.HostToClient.clipboard)
   return clipboard_;
 }
-inline ::proto::Clipboard* ServerToClient::release_clipboard() {
-  // @@protoc_insertion_point(field_release:proto.ServerToClient.clipboard)
+inline ::proto::Clipboard* HostToClient::release_clipboard() {
+  // @@protoc_insertion_point(field_release:proto.HostToClient.clipboard)
   
   ::proto::Clipboard* temp = clipboard_;
   clipboard_ = NULL;
   return temp;
 }
-inline void ServerToClient::set_allocated_clipboard(::proto::Clipboard* clipboard) {
+inline void HostToClient::set_allocated_clipboard(::proto::Clipboard* clipboard) {
   delete clipboard_;
   clipboard_ = clipboard;
   if (clipboard) {
@@ -3171,38 +3170,38 @@ inline void ServerToClient::set_allocated_clipboard(::proto::Clipboard* clipboar
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.clipboard)
+  // @@protoc_insertion_point(field_set_allocated:proto.HostToClient.clipboard)
 }
 
 // optional .proto.TextChat text_chat = 4;
-inline bool ServerToClient::has_text_chat() const {
+inline bool HostToClient::has_text_chat() const {
   return this != internal_default_instance() && text_chat_ != NULL;
 }
-inline void ServerToClient::clear_text_chat() {
+inline void HostToClient::clear_text_chat() {
   if (GetArenaNoVirtual() == NULL && text_chat_ != NULL) delete text_chat_;
   text_chat_ = NULL;
 }
-inline const ::proto::TextChat& ServerToClient::text_chat() const {
-  // @@protoc_insertion_point(field_get:proto.ServerToClient.text_chat)
+inline const ::proto::TextChat& HostToClient::text_chat() const {
+  // @@protoc_insertion_point(field_get:proto.HostToClient.text_chat)
   return text_chat_ != NULL ? *text_chat_
                          : *::proto::TextChat::internal_default_instance();
 }
-inline ::proto::TextChat* ServerToClient::mutable_text_chat() {
+inline ::proto::TextChat* HostToClient::mutable_text_chat() {
   
   if (text_chat_ == NULL) {
     text_chat_ = new ::proto::TextChat;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ServerToClient.text_chat)
+  // @@protoc_insertion_point(field_mutable:proto.HostToClient.text_chat)
   return text_chat_;
 }
-inline ::proto::TextChat* ServerToClient::release_text_chat() {
-  // @@protoc_insertion_point(field_release:proto.ServerToClient.text_chat)
+inline ::proto::TextChat* HostToClient::release_text_chat() {
+  // @@protoc_insertion_point(field_release:proto.HostToClient.text_chat)
   
   ::proto::TextChat* temp = text_chat_;
   text_chat_ = NULL;
   return temp;
 }
-inline void ServerToClient::set_allocated_text_chat(::proto::TextChat* text_chat) {
+inline void HostToClient::set_allocated_text_chat(::proto::TextChat* text_chat) {
   delete text_chat_;
   text_chat_ = text_chat;
   if (text_chat) {
@@ -3210,45 +3209,45 @@ inline void ServerToClient::set_allocated_text_chat(::proto::TextChat* text_chat
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ServerToClient.text_chat)
+  // @@protoc_insertion_point(field_set_allocated:proto.HostToClient.text_chat)
 }
 
-inline const ServerToClient* ServerToClient::internal_default_instance() {
-  return &ServerToClient_default_instance_.get();
+inline const HostToClient* HostToClient::internal_default_instance() {
+  return &HostToClient_default_instance_.get();
 }
 // -------------------------------------------------------------------
 
-// ClientToServer
+// ClientToHost
 
 // optional .proto.VideoControl video_control = 1;
-inline bool ClientToServer::has_video_control() const {
+inline bool ClientToHost::has_video_control() const {
   return this != internal_default_instance() && video_control_ != NULL;
 }
-inline void ClientToServer::clear_video_control() {
+inline void ClientToHost::clear_video_control() {
   if (GetArenaNoVirtual() == NULL && video_control_ != NULL) delete video_control_;
   video_control_ = NULL;
 }
-inline const ::proto::VideoControl& ClientToServer::video_control() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.video_control)
+inline const ::proto::VideoControl& ClientToHost::video_control() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.video_control)
   return video_control_ != NULL ? *video_control_
                          : *::proto::VideoControl::internal_default_instance();
 }
-inline ::proto::VideoControl* ClientToServer::mutable_video_control() {
+inline ::proto::VideoControl* ClientToHost::mutable_video_control() {
   
   if (video_control_ == NULL) {
     video_control_ = new ::proto::VideoControl;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.video_control)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.video_control)
   return video_control_;
 }
-inline ::proto::VideoControl* ClientToServer::release_video_control() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.video_control)
+inline ::proto::VideoControl* ClientToHost::release_video_control() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.video_control)
   
   ::proto::VideoControl* temp = video_control_;
   video_control_ = NULL;
   return temp;
 }
-inline void ClientToServer::set_allocated_video_control(::proto::VideoControl* video_control) {
+inline void ClientToHost::set_allocated_video_control(::proto::VideoControl* video_control) {
   delete video_control_;
   video_control_ = video_control;
   if (video_control) {
@@ -3256,38 +3255,38 @@ inline void ClientToServer::set_allocated_video_control(::proto::VideoControl* v
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.video_control)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.video_control)
 }
 
 // optional .proto.CursorShapeControl cursor_shape_control = 2;
-inline bool ClientToServer::has_cursor_shape_control() const {
+inline bool ClientToHost::has_cursor_shape_control() const {
   return this != internal_default_instance() && cursor_shape_control_ != NULL;
 }
-inline void ClientToServer::clear_cursor_shape_control() {
+inline void ClientToHost::clear_cursor_shape_control() {
   if (GetArenaNoVirtual() == NULL && cursor_shape_control_ != NULL) delete cursor_shape_control_;
   cursor_shape_control_ = NULL;
 }
-inline const ::proto::CursorShapeControl& ClientToServer::cursor_shape_control() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.cursor_shape_control)
+inline const ::proto::CursorShapeControl& ClientToHost::cursor_shape_control() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.cursor_shape_control)
   return cursor_shape_control_ != NULL ? *cursor_shape_control_
                          : *::proto::CursorShapeControl::internal_default_instance();
 }
-inline ::proto::CursorShapeControl* ClientToServer::mutable_cursor_shape_control() {
+inline ::proto::CursorShapeControl* ClientToHost::mutable_cursor_shape_control() {
   
   if (cursor_shape_control_ == NULL) {
     cursor_shape_control_ = new ::proto::CursorShapeControl;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.cursor_shape_control)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.cursor_shape_control)
   return cursor_shape_control_;
 }
-inline ::proto::CursorShapeControl* ClientToServer::release_cursor_shape_control() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.cursor_shape_control)
+inline ::proto::CursorShapeControl* ClientToHost::release_cursor_shape_control() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.cursor_shape_control)
   
   ::proto::CursorShapeControl* temp = cursor_shape_control_;
   cursor_shape_control_ = NULL;
   return temp;
 }
-inline void ClientToServer::set_allocated_cursor_shape_control(::proto::CursorShapeControl* cursor_shape_control) {
+inline void ClientToHost::set_allocated_cursor_shape_control(::proto::CursorShapeControl* cursor_shape_control) {
   delete cursor_shape_control_;
   cursor_shape_control_ = cursor_shape_control;
   if (cursor_shape_control) {
@@ -3295,38 +3294,38 @@ inline void ClientToServer::set_allocated_cursor_shape_control(::proto::CursorSh
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.cursor_shape_control)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.cursor_shape_control)
 }
 
 // optional .proto.ClipboardControl clipboard_control = 3;
-inline bool ClientToServer::has_clipboard_control() const {
+inline bool ClientToHost::has_clipboard_control() const {
   return this != internal_default_instance() && clipboard_control_ != NULL;
 }
-inline void ClientToServer::clear_clipboard_control() {
+inline void ClientToHost::clear_clipboard_control() {
   if (GetArenaNoVirtual() == NULL && clipboard_control_ != NULL) delete clipboard_control_;
   clipboard_control_ = NULL;
 }
-inline const ::proto::ClipboardControl& ClientToServer::clipboard_control() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.clipboard_control)
+inline const ::proto::ClipboardControl& ClientToHost::clipboard_control() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.clipboard_control)
   return clipboard_control_ != NULL ? *clipboard_control_
                          : *::proto::ClipboardControl::internal_default_instance();
 }
-inline ::proto::ClipboardControl* ClientToServer::mutable_clipboard_control() {
+inline ::proto::ClipboardControl* ClientToHost::mutable_clipboard_control() {
   
   if (clipboard_control_ == NULL) {
     clipboard_control_ = new ::proto::ClipboardControl;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.clipboard_control)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.clipboard_control)
   return clipboard_control_;
 }
-inline ::proto::ClipboardControl* ClientToServer::release_clipboard_control() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.clipboard_control)
+inline ::proto::ClipboardControl* ClientToHost::release_clipboard_control() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.clipboard_control)
   
   ::proto::ClipboardControl* temp = clipboard_control_;
   clipboard_control_ = NULL;
   return temp;
 }
-inline void ClientToServer::set_allocated_clipboard_control(::proto::ClipboardControl* clipboard_control) {
+inline void ClientToHost::set_allocated_clipboard_control(::proto::ClipboardControl* clipboard_control) {
   delete clipboard_control_;
   clipboard_control_ = clipboard_control;
   if (clipboard_control) {
@@ -3334,38 +3333,38 @@ inline void ClientToServer::set_allocated_clipboard_control(::proto::ClipboardCo
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.clipboard_control)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.clipboard_control)
 }
 
 // optional .proto.ClipboardRequest clipboard_request = 4;
-inline bool ClientToServer::has_clipboard_request() const {
+inline bool ClientToHost::has_clipboard_request() const {
   return this != internal_default_instance() && clipboard_request_ != NULL;
 }
-inline void ClientToServer::clear_clipboard_request() {
+inline void ClientToHost::clear_clipboard_request() {
   if (GetArenaNoVirtual() == NULL && clipboard_request_ != NULL) delete clipboard_request_;
   clipboard_request_ = NULL;
 }
-inline const ::proto::ClipboardRequest& ClientToServer::clipboard_request() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.clipboard_request)
+inline const ::proto::ClipboardRequest& ClientToHost::clipboard_request() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.clipboard_request)
   return clipboard_request_ != NULL ? *clipboard_request_
                          : *::proto::ClipboardRequest::internal_default_instance();
 }
-inline ::proto::ClipboardRequest* ClientToServer::mutable_clipboard_request() {
+inline ::proto::ClipboardRequest* ClientToHost::mutable_clipboard_request() {
   
   if (clipboard_request_ == NULL) {
     clipboard_request_ = new ::proto::ClipboardRequest;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.clipboard_request)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.clipboard_request)
   return clipboard_request_;
 }
-inline ::proto::ClipboardRequest* ClientToServer::release_clipboard_request() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.clipboard_request)
+inline ::proto::ClipboardRequest* ClientToHost::release_clipboard_request() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.clipboard_request)
   
   ::proto::ClipboardRequest* temp = clipboard_request_;
   clipboard_request_ = NULL;
   return temp;
 }
-inline void ClientToServer::set_allocated_clipboard_request(::proto::ClipboardRequest* clipboard_request) {
+inline void ClientToHost::set_allocated_clipboard_request(::proto::ClipboardRequest* clipboard_request) {
   delete clipboard_request_;
   clipboard_request_ = clipboard_request;
   if (clipboard_request) {
@@ -3373,38 +3372,38 @@ inline void ClientToServer::set_allocated_clipboard_request(::proto::ClipboardRe
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.clipboard_request)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.clipboard_request)
 }
 
 // optional .proto.Clipboard clipboard = 5;
-inline bool ClientToServer::has_clipboard() const {
+inline bool ClientToHost::has_clipboard() const {
   return this != internal_default_instance() && clipboard_ != NULL;
 }
-inline void ClientToServer::clear_clipboard() {
+inline void ClientToHost::clear_clipboard() {
   if (GetArenaNoVirtual() == NULL && clipboard_ != NULL) delete clipboard_;
   clipboard_ = NULL;
 }
-inline const ::proto::Clipboard& ClientToServer::clipboard() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.clipboard)
+inline const ::proto::Clipboard& ClientToHost::clipboard() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.clipboard)
   return clipboard_ != NULL ? *clipboard_
                          : *::proto::Clipboard::internal_default_instance();
 }
-inline ::proto::Clipboard* ClientToServer::mutable_clipboard() {
+inline ::proto::Clipboard* ClientToHost::mutable_clipboard() {
   
   if (clipboard_ == NULL) {
     clipboard_ = new ::proto::Clipboard;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.clipboard)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.clipboard)
   return clipboard_;
 }
-inline ::proto::Clipboard* ClientToServer::release_clipboard() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.clipboard)
+inline ::proto::Clipboard* ClientToHost::release_clipboard() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.clipboard)
   
   ::proto::Clipboard* temp = clipboard_;
   clipboard_ = NULL;
   return temp;
 }
-inline void ClientToServer::set_allocated_clipboard(::proto::Clipboard* clipboard) {
+inline void ClientToHost::set_allocated_clipboard(::proto::Clipboard* clipboard) {
   delete clipboard_;
   clipboard_ = clipboard;
   if (clipboard) {
@@ -3412,38 +3411,38 @@ inline void ClientToServer::set_allocated_clipboard(::proto::Clipboard* clipboar
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.clipboard)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.clipboard)
 }
 
 // optional .proto.PointerEvent pointer_event = 6;
-inline bool ClientToServer::has_pointer_event() const {
+inline bool ClientToHost::has_pointer_event() const {
   return this != internal_default_instance() && pointer_event_ != NULL;
 }
-inline void ClientToServer::clear_pointer_event() {
+inline void ClientToHost::clear_pointer_event() {
   if (GetArenaNoVirtual() == NULL && pointer_event_ != NULL) delete pointer_event_;
   pointer_event_ = NULL;
 }
-inline const ::proto::PointerEvent& ClientToServer::pointer_event() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.pointer_event)
+inline const ::proto::PointerEvent& ClientToHost::pointer_event() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.pointer_event)
   return pointer_event_ != NULL ? *pointer_event_
                          : *::proto::PointerEvent::internal_default_instance();
 }
-inline ::proto::PointerEvent* ClientToServer::mutable_pointer_event() {
+inline ::proto::PointerEvent* ClientToHost::mutable_pointer_event() {
   
   if (pointer_event_ == NULL) {
     pointer_event_ = new ::proto::PointerEvent;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.pointer_event)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.pointer_event)
   return pointer_event_;
 }
-inline ::proto::PointerEvent* ClientToServer::release_pointer_event() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.pointer_event)
+inline ::proto::PointerEvent* ClientToHost::release_pointer_event() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.pointer_event)
   
   ::proto::PointerEvent* temp = pointer_event_;
   pointer_event_ = NULL;
   return temp;
 }
-inline void ClientToServer::set_allocated_pointer_event(::proto::PointerEvent* pointer_event) {
+inline void ClientToHost::set_allocated_pointer_event(::proto::PointerEvent* pointer_event) {
   delete pointer_event_;
   pointer_event_ = pointer_event;
   if (pointer_event) {
@@ -3451,38 +3450,38 @@ inline void ClientToServer::set_allocated_pointer_event(::proto::PointerEvent* p
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.pointer_event)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.pointer_event)
 }
 
 // optional .proto.KeyEvent key_event = 7;
-inline bool ClientToServer::has_key_event() const {
+inline bool ClientToHost::has_key_event() const {
   return this != internal_default_instance() && key_event_ != NULL;
 }
-inline void ClientToServer::clear_key_event() {
+inline void ClientToHost::clear_key_event() {
   if (GetArenaNoVirtual() == NULL && key_event_ != NULL) delete key_event_;
   key_event_ = NULL;
 }
-inline const ::proto::KeyEvent& ClientToServer::key_event() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.key_event)
+inline const ::proto::KeyEvent& ClientToHost::key_event() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.key_event)
   return key_event_ != NULL ? *key_event_
                          : *::proto::KeyEvent::internal_default_instance();
 }
-inline ::proto::KeyEvent* ClientToServer::mutable_key_event() {
+inline ::proto::KeyEvent* ClientToHost::mutable_key_event() {
   
   if (key_event_ == NULL) {
     key_event_ = new ::proto::KeyEvent;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.key_event)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.key_event)
   return key_event_;
 }
-inline ::proto::KeyEvent* ClientToServer::release_key_event() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.key_event)
+inline ::proto::KeyEvent* ClientToHost::release_key_event() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.key_event)
   
   ::proto::KeyEvent* temp = key_event_;
   key_event_ = NULL;
   return temp;
 }
-inline void ClientToServer::set_allocated_key_event(::proto::KeyEvent* key_event) {
+inline void ClientToHost::set_allocated_key_event(::proto::KeyEvent* key_event) {
   delete key_event_;
   key_event_ = key_event;
   if (key_event) {
@@ -3490,38 +3489,38 @@ inline void ClientToServer::set_allocated_key_event(::proto::KeyEvent* key_event
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.key_event)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.key_event)
 }
 
 // optional .proto.Bell bell = 8;
-inline bool ClientToServer::has_bell() const {
+inline bool ClientToHost::has_bell() const {
   return this != internal_default_instance() && bell_ != NULL;
 }
-inline void ClientToServer::clear_bell() {
+inline void ClientToHost::clear_bell() {
   if (GetArenaNoVirtual() == NULL && bell_ != NULL) delete bell_;
   bell_ = NULL;
 }
-inline const ::proto::Bell& ClientToServer::bell() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.bell)
+inline const ::proto::Bell& ClientToHost::bell() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.bell)
   return bell_ != NULL ? *bell_
                          : *::proto::Bell::internal_default_instance();
 }
-inline ::proto::Bell* ClientToServer::mutable_bell() {
+inline ::proto::Bell* ClientToHost::mutable_bell() {
   
   if (bell_ == NULL) {
     bell_ = new ::proto::Bell;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.bell)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.bell)
   return bell_;
 }
-inline ::proto::Bell* ClientToServer::release_bell() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.bell)
+inline ::proto::Bell* ClientToHost::release_bell() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.bell)
   
   ::proto::Bell* temp = bell_;
   bell_ = NULL;
   return temp;
 }
-inline void ClientToServer::set_allocated_bell(::proto::Bell* bell) {
+inline void ClientToHost::set_allocated_bell(::proto::Bell* bell) {
   delete bell_;
   bell_ = bell;
   if (bell) {
@@ -3529,38 +3528,38 @@ inline void ClientToServer::set_allocated_bell(::proto::Bell* bell) {
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.bell)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.bell)
 }
 
 // optional .proto.TextChat text_chat = 9;
-inline bool ClientToServer::has_text_chat() const {
+inline bool ClientToHost::has_text_chat() const {
   return this != internal_default_instance() && text_chat_ != NULL;
 }
-inline void ClientToServer::clear_text_chat() {
+inline void ClientToHost::clear_text_chat() {
   if (GetArenaNoVirtual() == NULL && text_chat_ != NULL) delete text_chat_;
   text_chat_ = NULL;
 }
-inline const ::proto::TextChat& ClientToServer::text_chat() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.text_chat)
+inline const ::proto::TextChat& ClientToHost::text_chat() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.text_chat)
   return text_chat_ != NULL ? *text_chat_
                          : *::proto::TextChat::internal_default_instance();
 }
-inline ::proto::TextChat* ClientToServer::mutable_text_chat() {
+inline ::proto::TextChat* ClientToHost::mutable_text_chat() {
   
   if (text_chat_ == NULL) {
     text_chat_ = new ::proto::TextChat;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.text_chat)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.text_chat)
   return text_chat_;
 }
-inline ::proto::TextChat* ClientToServer::release_text_chat() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.text_chat)
+inline ::proto::TextChat* ClientToHost::release_text_chat() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.text_chat)
   
   ::proto::TextChat* temp = text_chat_;
   text_chat_ = NULL;
   return temp;
 }
-inline void ClientToServer::set_allocated_text_chat(::proto::TextChat* text_chat) {
+inline void ClientToHost::set_allocated_text_chat(::proto::TextChat* text_chat) {
   delete text_chat_;
   text_chat_ = text_chat;
   if (text_chat) {
@@ -3568,38 +3567,38 @@ inline void ClientToServer::set_allocated_text_chat(::proto::TextChat* text_chat
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.text_chat)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.text_chat)
 }
 
 // optional .proto.PowerControl power_control = 10;
-inline bool ClientToServer::has_power_control() const {
+inline bool ClientToHost::has_power_control() const {
   return this != internal_default_instance() && power_control_ != NULL;
 }
-inline void ClientToServer::clear_power_control() {
+inline void ClientToHost::clear_power_control() {
   if (GetArenaNoVirtual() == NULL && power_control_ != NULL) delete power_control_;
   power_control_ = NULL;
 }
-inline const ::proto::PowerControl& ClientToServer::power_control() const {
-  // @@protoc_insertion_point(field_get:proto.ClientToServer.power_control)
+inline const ::proto::PowerControl& ClientToHost::power_control() const {
+  // @@protoc_insertion_point(field_get:proto.ClientToHost.power_control)
   return power_control_ != NULL ? *power_control_
                          : *::proto::PowerControl::internal_default_instance();
 }
-inline ::proto::PowerControl* ClientToServer::mutable_power_control() {
+inline ::proto::PowerControl* ClientToHost::mutable_power_control() {
   
   if (power_control_ == NULL) {
     power_control_ = new ::proto::PowerControl;
   }
-  // @@protoc_insertion_point(field_mutable:proto.ClientToServer.power_control)
+  // @@protoc_insertion_point(field_mutable:proto.ClientToHost.power_control)
   return power_control_;
 }
-inline ::proto::PowerControl* ClientToServer::release_power_control() {
-  // @@protoc_insertion_point(field_release:proto.ClientToServer.power_control)
+inline ::proto::PowerControl* ClientToHost::release_power_control() {
+  // @@protoc_insertion_point(field_release:proto.ClientToHost.power_control)
   
   ::proto::PowerControl* temp = power_control_;
   power_control_ = NULL;
   return temp;
 }
-inline void ClientToServer::set_allocated_power_control(::proto::PowerControl* power_control) {
+inline void ClientToHost::set_allocated_power_control(::proto::PowerControl* power_control) {
   delete power_control_;
   power_control_ = power_control;
   if (power_control) {
@@ -3607,11 +3606,11 @@ inline void ClientToServer::set_allocated_power_control(::proto::PowerControl* p
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:proto.ClientToServer.power_control)
+  // @@protoc_insertion_point(field_set_allocated:proto.ClientToHost.power_control)
 }
 
-inline const ClientToServer* ClientToServer::internal_default_instance() {
-  return &ClientToServer_default_instance_.get();
+inline const ClientToHost* ClientToHost::internal_default_instance() {
+  return &ClientToHost_default_instance_.get();
 }
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
 // -------------------------------------------------------------------
