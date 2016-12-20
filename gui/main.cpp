@@ -9,16 +9,20 @@
 #include <atlapp.h>
 
 #include <gflags/gflags.h>
-#include "base/service_control_win.h"
+#include "base/service_control.h"
 #include "base/runas_service.h"
-#include "base/sas_injector.h"
 #include "base/process.h"
+#include "host/sas_injector.h"
 #include "gui/main_dialog.h"
+
+using namespace aspia;
 
 DEFINE_string(run_mode, "", "Run Mode");
 
 static void StartGUI()
 {
+    Process::Current().SetPriority(Process::Priority::High);
+
     HINSTANCE instance = nullptr;
 
     if (!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |

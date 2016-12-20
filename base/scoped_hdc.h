@@ -1,21 +1,18 @@
 /*
 * PROJECT:         Aspia Remote Desktop
-* FILE:            util/scoped_hdc.h
+* FILE:            base/scoped_hdc.h
 * LICENSE:         See top-level directory
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#ifndef _ASPIA_SCOPED_HDC_H
-#define _ASPIA_SCOPED_HDC_H
+#ifndef _ASPIA_BASE__SCOPED_HDC_H
+#define _ASPIA_BASE__SCOPED_HDC_H
 
 #include "aspia_config.h"
 
 #include "base/logging.h"
 
-//
-// Based on Chromium code.
-// Original file: base/win/scoped_hdc.h
-//
+namespace aspia {
 
 //
 // Like ScopedHandle but for HDC.  Only use this on HDCs returned from GetDC.
@@ -101,4 +98,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedCreateDC);
 };
 
-#endif // _ASPIA_SCOPED_HDC_H
+} // namespace aspia
+
+#endif // _ASPIA_BASE__SCOPED_HDC_H

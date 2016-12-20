@@ -14,6 +14,8 @@
 #include "base/macros.h"
 #include "codec/compressor.h"
 
+namespace aspia {
+
 class CompressorZLIB : public Compressor
 {
 public:
@@ -31,9 +33,14 @@ public:
     virtual void Reset() override;
 
 private:
+    void InitStream();
+
+private:
     z_stream stream_;
 
     DISALLOW_COPY_AND_ASSIGN(CompressorZLIB);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_CODEC__COMPRESSOR_ZLIB_H

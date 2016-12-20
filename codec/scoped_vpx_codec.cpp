@@ -15,6 +15,8 @@ extern "C"
 #include "vpx/vpx_codec.h"
 }
 
+namespace aspia {
+
 void VpxCodecDeleter::operator()(vpx_codec_ctx_t* codec)
 {
     if (codec)
@@ -24,3 +26,5 @@ void VpxCodecDeleter::operator()(vpx_codec_ctx_t* codec)
         delete codec;
     }
 }
+
+} // namespace aspia

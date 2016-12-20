@@ -12,6 +12,8 @@
 
 #include "desktop_capture/pixel_format.h"
 
+namespace aspia {
+
 class PixelTranslator
 {
 public:
@@ -32,5 +34,7 @@ public:
                            int width,
                            int height) = 0;
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_CODEC__PIXEL_TRANSLATOR_H

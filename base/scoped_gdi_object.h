@@ -12,6 +12,8 @@
 
 #include "base/macros.h"
 
+namespace aspia {
+
 // Like ScopedHandle but for GDI objects.
 template<class T>
 class ScopedGDIObject
@@ -89,5 +91,8 @@ typedef ScopedGDIObject<HBITMAP> ScopedBitmap;
 typedef ScopedGDIObject<HRGN> ScopedRegion;
 typedef ScopedGDIObject<HFONT> ScopedHFONT;
 typedef ScopedGDIObject<HICON> ScopedHICON;
+typedef ScopedGDIObject<HBRUSH> ScopedHBRUSH;
+
+} // namespace aspia
 
 #endif // _ASPIA_BASE__SCOPED_GDI_OBJECT_H

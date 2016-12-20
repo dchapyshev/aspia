@@ -7,6 +7,8 @@
 
 #include "base/unicode.h"
 
+namespace aspia {
+
 std::wstring UNICODEfromANSI(const std::string &in)
 {
     int len = ::MultiByteToWideChar(CP_ACP, 0, in.data(), in.length(), nullptr, 0);
@@ -174,3 +176,5 @@ std::string UTF8toANSI(const char *in)
 {
     return ANSIfromUNICODE(UNICODEfromUTF8(in));
 }
+
+} // namespace aspia

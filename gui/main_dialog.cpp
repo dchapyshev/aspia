@@ -7,6 +7,84 @@
 
 #include "gui/main_dialog.h"
 
+#include <strsafe.h>
+#include <iphlpapi.h>
+#include <ws2tcpip.h>
+
+#include "base/exception.h"
+
+namespace aspia {
+
+static bool
+AddressToString(const LPSOCKADDR src, WCHAR *dst, size_t size)
+{
+    if (src->sa_family == AF_INET)
+    {
+        struct sockaddr_in *addr = reinterpret_cast<struct sockaddr_in*>(src);
+
+        static const WCHAR fmt[] = L"%u.%u.%u.%u";
+
+        HRESULT hr = StringCbPrintfW(dst, size, fmt,
+                                     addr->sin_addr.S_un.S_un_b.s_b1,
+                                     addr->sin_addr.S_un.S_un_b.s_b2,
+                                     addr->sin_addr.S_un.S_un_b.s_b3,
+                                     addr->sin_addr.S_un.S_un_b.s_b4);
+        if (SUCCEEDED(hr))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void CMainDialog::InitAddressesList()
+{
+    CListViewCtrl list(GetDlgItem(IDC_IP_LIST));
+    list.SetExtendedListViewStyle(LVS_EX_FULLROWSELECT, 0);
+
+    list.AddColumn(L"", 0);
+    list.SetColumnWidth(0, 200);
+
+    ULONG flags = GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST |
+        GAA_FLAG_SKIP_DNS_SERVER | GAA_FLAG_SKIP_FRIENDLY_NAME;
+
+    ULONG size = 0;
+    if (GetAdaptersAddresses(AF_UNSPEC, flags, NULL, NULL, &size) != ERROR_BUFFER_OVERFLOW)
+        return;
+
+    PIP_ADAPTER_ADDRESSES adapter_addresses =
+        reinterpret_cast<PIP_ADAPTER_ADDRESSES>(malloc(size));
+
+    if (adapter_addresses)
+    {
+        if (GetAdaptersAddresses(AF_UNSPEC, flags, NULL, adapter_addresses, &size) == ERROR_SUCCESS)
+        {
+            for (PIP_ADAPTER_ADDRESSES adapter = adapter_addresses;
+                 adapter != NULL;
+                 adapter = adapter->Next)
+            {
+                if (adapter->OperStatus != IfOperStatusUp) continue;
+
+                for (PIP_ADAPTER_UNICAST_ADDRESS address = adapter->FirstUnicastAddress;
+                     address != NULL;
+                     address = address->Next)
+                {
+                    WCHAR buffer[256];
+
+                    if (AddressToString(address->Address.lpSockaddr, buffer, sizeof(buffer)) &&
+                        wcscmp(buffer, L"127.0.0.1") != 0)
+                    {
+                        list.AddItem(list.GetItemCount(), 0, buffer);
+                    }
+                }
+            }
+        }
+
+        free(adapter_addresses);
+    }
+}
+
 LRESULT CMainDialog::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
     HICON small_icon = AtlLoadIconImage(IDI_MAINICON,
@@ -22,16 +100,12 @@ LRESULT CMainDialog::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPa
     SetIcon(small_icon, FALSE);
     SetIcon(big_icon, TRUE);
 
+    client_count_ = 0;
+    UpdateConnectedClients();
+
     CenterWindow();
 
-    CListViewCtrl list(GetDlgItem(IDC_CLIENT_LIST));
-    list.SetExtendedListViewStyle(LVS_EX_FULLROWSELECT, 0);
-
-    list.AddColumn(L"ID", 0);
-    list.SetColumnWidth(0, 50);
-
-    list.AddColumn(L"Address", 1);
-    list.SetColumnWidth(1, 150);
+    InitAddressesList();
 
     SetDlgItemInt(IDC_SERVER_PORT_EDIT, 11011, 0);
     SetDlgItemTextW(IDC_SERVER_ADDRESS_EDIT, L"192.168.89.70");
@@ -82,44 +156,35 @@ LRESULT CMainDialog::OnClose(UINT, WPARAM, LPARAM, BOOL&)
     return 0;
 }
 
-void CMainDialog::OnClientConnected(uint32_t client_id, const std::string &address)
+void CMainDialog::UpdateConnectedClients()
 {
-    CListViewCtrl list(GetDlgItem(IDC_CLIENT_LIST));
+    CString msg;
 
-    int index = list.AddItem(list.GetItemCount(), 0, std::to_wstring(client_id).c_str());
+    if (client_count_ > 0)
+        msg.Format(IDS_CLIENT_COUNT, client_count_.load());
+    else
+        msg.LoadStringW(IDS_NO_CLIENTS);
 
-    list.AddItem(index, 1, UNICODEfromUTF8(address).c_str());
-    list.SetItemData(index, client_id);
+    GetDlgItem(IDC_CLIENT_COUNT).SetWindowTextW(msg);
 }
 
-void CMainDialog::OnClientRejected(const std::string &address)
+void CMainDialog::OnServerEvent(Host::Event type)
 {
-    std::wstring msg(L"Detected rejected the connection attempt from address: ");
-
-    msg += UNICODEfromUTF8(address);
-
-    MessageBox(msg.c_str(), nullptr, MB_OK | MB_ICONWARNING);
-}
-
-void CMainDialog::OnClientDisconnected(uint32_t client_id)
-{
-    CListViewCtrl list(GetDlgItem(IDC_CLIENT_LIST));
-
-    int count = list.GetItemCount();
-
-    for (int i = 0; i < count; ++i)
+    if (type == Host::Event::Connected)
     {
-        if (list.GetItemData(i) == client_id)
-        {
-            list.DeleteItem(i);
-            break;
-        }
+        ++client_count_;
     }
+    else if (type == Host::Event::Disconnected)
+    {
+        --client_count_;
+    }
+
+    UpdateConnectedClients();
 }
 
 LRESULT CMainDialog::OnStartServer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL &bHandled)
 {
-    LockGuard<Mutex> guard(&server_lock_);
+    LockGuard<Lock> guard(&server_lock_);
 
     CString status;
     CString button;
@@ -128,36 +193,18 @@ LRESULT CMainDialog::OnStartServer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     {
         if (!server_)
         {
-            // Создаем сервер.
-            std::unique_ptr<Server> server(new Server("", 11011));
+            Host::OnEventCallback on_event_callback =
+                std::bind(&CMainDialog::OnServerEvent, this, std::placeholders::_1);
 
-            Server::OnClientConnectedCallback on_connected =
-                std::bind(&CMainDialog::OnClientConnected, this, std::placeholders::_1, std::placeholders::_2);
-
-            Server::OnClientRejectedCallback on_rejected =
-                std::bind(&CMainDialog::OnClientRejected, this, std::placeholders::_1);
-
-            Server::OnClientDisconnectedCallback on_disconnected =
-                std::bind(&CMainDialog::OnClientDisconnected, this, std::placeholders::_1);
-
-            // Регистрируем callback функции для получения уведомлений от сервера.
-            server->RegisterCallbacks(on_connected, on_rejected, on_disconnected);
-
-            // Запускаем поток сервера.
-            server->Start();
+            server_.reset(new ServerTCP<Host>(11011, on_event_callback));
 
             status.LoadStringW(IDS_SERVER_STARTED);
             button.LoadStringW(IDS_STOP);
-
-            server_ = std::move(server);
         }
         else
         {
-            // Даем команду остановить поток сервера.
-            server_->Stop();
-
-            // Дожидаемся завершения работы потока сервера.
-            server_->WaitForEnd();
+            client_count_ = 0;
+            UpdateConnectedClients();
 
             // Уничтожаем экземпляр класса сервера.
             server_.reset();
@@ -182,73 +229,20 @@ LRESULT CMainDialog::OnStartServer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     return 0;
 }
 
-void CMainDialog::OnRemoteClientEvent(RemoteClient::EventType type)
-{
-    if (type == RemoteClient::EventType::NotConnected)
-    {
-        MessageBoxW(L"Unable to connect.", L"Error", MB_OK | MB_ICONWARNING);
-        GetDlgItem(IDC_CONNECT).EnableWindow(TRUE);
-        client_.reset();
-    }
-    else if (type == RemoteClient::EventType::Disconnected)
-    {
-        GetDlgItem(IDC_CONNECT).EnableWindow(TRUE);
-        client_.reset();
-    }
-    else if (type == RemoteClient::EventType::BadAuth)
-    {
-        MessageBoxW(L"BadAuth", L"Error", MB_OK | MB_ICONWARNING);
-        GetDlgItem(IDC_CONNECT).EnableWindow(TRUE);
-        client_.reset();
-    }
-    else if (type == RemoteClient::EventType::Connected)
-    {
-
-    }
-}
-
 LRESULT CMainDialog::OnConnectToServer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL &bHandled)
 {
     try
     {
-        GetDlgItem(IDC_CONNECT).EnableWindow(FALSE);
+        WCHAR address[256] = { 0 };
+        GetDlgItemTextW(IDC_SERVER_ADDRESS_EDIT, address, ARRAYSIZE(address));
 
-        WCHAR addr[256] = { 0 };
+        std::unique_ptr<Socket> sock(new SocketTCP());
 
-        GetDlgItemTextW(IDC_SERVER_ADDRESS_EDIT, addr, ARRAYSIZE(addr));
+        sock->Connect(UTF8fromUNICODE(address), GetDlgItemInt(IDC_SERVER_PORT_EDIT));
 
-        std::string address = UTF8fromUNICODE(addr);
+        std::unique_ptr<ScreenWindow> window(new ScreenWindow(nullptr, std::move(sock)));
 
-        if (!Socket::IsValidHostName(address.c_str()))
-        {
-            CEdit edit(GetDlgItem(IDC_SERVER_ADDRESS_EDIT));
-
-            edit.SetSel(0, edit.LineLength());
-            edit.SetFocus();
-
-            throw Exception("Wrong server address.");
-        }
-
-        int port = GetDlgItemInt(IDC_SERVER_PORT_EDIT);
-
-        if (!Socket::IsValidPort(port))
-        {
-            CEdit edit(GetDlgItem(IDC_SERVER_PORT_EDIT));
-
-            edit.SetSel(0, edit.LineLength());
-            edit.SetFocus();
-
-            throw Exception("Wrong server port.");
-        }
-
-        RemoteClient::OnEventCallback on_event =
-            std::bind(&CMainDialog::OnRemoteClientEvent, this, std::placeholders::_1);
-
-        // Создаем клиент.
-        client_.reset(new RemoteClient(on_event));
-
-        // Подключаемся к указанному серверу.
-        client_->ConnectTo(address.c_str(), port);
+        thread_pool_.Insert(std::move(window));
     }
     catch (const Exception &err)
     {
@@ -259,3 +253,5 @@ LRESULT CMainDialog::OnConnectToServer(WORD wNotifyCode, WORD wID, HWND hWndCtl,
 
     return 0;
 }
+
+} // namespace aspia

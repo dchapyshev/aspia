@@ -15,6 +15,8 @@
 #include "codec/pixel_translator_fake.h"
 #include "codec/pixel_translator_libyuv.h"
 
+namespace aspia {
+
 static std::unique_ptr<PixelTranslator> SelectTranslator(const PixelFormat &src_format,
                                                          const PixelFormat &dst_format)
 {
@@ -31,14 +33,14 @@ static std::unique_ptr<PixelTranslator> SelectTranslator(const PixelFormat &src_
             translator.reset(new PixelTranslatorFake());
         }
     }
-    else if (src_format.bits_per_pixel() == 32)
+    else if (src_format.BitsPerPixel() == 32)
     {
-        if (dst_format.bits_per_pixel() == 8)
+        if (dst_format.BitsPerPixel() == 8)
         {
             translator.reset(new PixelTranslatorFromARGB<uint8_t>(src_format,
                                                                   dst_format));
         }
-        else if (dst_format.bits_per_pixel() == 16)
+        else if (dst_format.BitsPerPixel() == 16)
         {
             if (dst_format.IsEqualTo(PixelFormat::MakeRGB565()))
             {
@@ -50,25 +52,25 @@ static std::unique_ptr<PixelTranslator> SelectTranslator(const PixelFormat &src_
                                                                        dst_format));
             }
         }
-        else if (dst_format.bits_per_pixel() == 32)
+        else if (dst_format.BitsPerPixel() == 32)
         {
             translator.reset(new PixelTranslatorFromARGB<uint32_t>(src_format,
                                                                    dst_format));
         }
     }
-    else if (src_format.bits_per_pixel() == 16)
+    else if (src_format.BitsPerPixel() == 16)
     {
-        if (dst_format.bits_per_pixel() == 8)
+        if (dst_format.BitsPerPixel() == 8)
         {
             translator.reset(new PixelTranslatorFromRGB565<uint8_t>(src_format,
                                                                     dst_format));
         }
-        else if (dst_format.bits_per_pixel() == 16)
+        else if (dst_format.BitsPerPixel() == 16)
         {
             translator.reset(new PixelTranslatorFromRGB565<uint16_t>(src_format,
                                                                      dst_format));
         }
-        else if (dst_format.bits_per_pixel() == 32)
+        else if (dst_format.BitsPerPixel() == 32)
         {
             if (src_format.IsEqualTo(PixelFormat::MakeRGB565()) &&
                 dst_format.IsEqualTo(PixelFormat::MakeARGB()))
@@ -85,5 +87,7 @@ static std::unique_ptr<PixelTranslator> SelectTranslator(const PixelFormat &src_
 
     return translator;
 }
+
+} // namespace aspia
 
 #endif // _ASPIA_CODEC__PIXEL_TRANSLATOR_SELECTOR_H

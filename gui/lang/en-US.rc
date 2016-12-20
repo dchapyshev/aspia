@@ -18,9 +18,10 @@ CAPTION "Aspia Remote Desktop"
 FONT 8, "MS Shell Dlg"
 BEGIN
     GROUPBOX "Server", -1, 5, 5, 180, 150
-    LTEXT "Connected clients:", -1, 12, 17, 100, 9
-    CONTROL "", IDC_CLIENT_LIST, "SysListView32", WS_BORDER | WS_VSCROLL | WS_TABSTOP | LVS_SINGLESEL | LVS_NOSORTHEADER | LVS_SHOWSELALWAYS | LVS_REPORT, 12, 28, 166, 85
-    LTEXT "Server stopped.", IDC_SERVER_STATUS, 12, 120, 100, 9
+    LTEXT "List your IP-addresses:", -1, 12, 17, 100, 9
+    CONTROL "", IDC_IP_LIST, "SysListView32", WS_BORDER | WS_VSCROLL | WS_TABSTOP | LVS_SINGLESEL | LVS_NOSORTHEADER | LVS_NOCOLUMNHEADER | LVS_SHOWSELALWAYS | LVS_REPORT, 12, 28, 166, 75
+    LTEXT "", IDC_CLIENT_COUNT, 12, 110, 100, 9
+    LTEXT "Server stopped.", IDC_SERVER_STATUS, 12, 125, 100, 9
     PUSHBUTTON "&Start", IDC_START_SERVER, 118, 135, 60, 14
 
     GROUPBOX "Client", -1, 190, 5, 180, 150
@@ -47,4 +48,6 @@ BEGIN
     IDS_SERVER_STOPPED "Server stopped."
     IDS_START "&Start"
     IDS_STOP "&Stop"
+    IDS_NO_CLIENTS "No connected clients."
+    IDS_CLIENT_COUNT "Connected clients: %d"
 END

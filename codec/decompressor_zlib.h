@@ -14,6 +14,8 @@
 #include "3rdparty/zlib-ng/zlib.h"
 #include "codec/decompressor.h"
 
+namespace aspia {
+
 class DecompressorZLIB : public Decompressor
 {
 public:
@@ -36,5 +38,7 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(DecompressorZLIB);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_CODEC__DECOMPRESSOR_ZLIB_H

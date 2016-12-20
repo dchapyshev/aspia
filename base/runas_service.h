@@ -15,7 +15,9 @@
 #include "base/macros.h"
 #include "base/scoped_kernel32_library.h"
 #include "base/scoped_wtsapi32_library.h"
-#include "base/service_win.h"
+#include "base/service.h"
+
+namespace aspia {
 
 //
 // Класс для запуска процесса от имени пользователя "SYSTEM".
@@ -43,5 +45,7 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(RunAsService);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_BASE__RUNAS_SERVICE_H

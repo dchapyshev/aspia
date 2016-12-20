@@ -15,10 +15,18 @@
 #include <atlctrlx.h>
 #include <atlmisc.h>
 
+#include <atomic>
+
 #include "gui/resource.h"
 
-#include "server/server.h"
-#include "client/remote_client.h"
+#include "base/thread_pool.h"
+#include "client/screen_window.h"
+#include "network/server_tcp.h"
+#include "network/client_tcp.h"
+#include "host/host.h"
+#include "client/client.h"
+
+namespace aspia {
 
 class CMainDialog : public CDialogImpl < CMainDialog >
 {
@@ -43,17 +51,19 @@ private:
     LRESULT OnStartServer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL &bHandled);
     LRESULT OnConnectToServer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL &bHandled);
 
-    void OnClientConnected(uint32_t client_id, const std::string &address);
-    void OnClientRejected(const std::string &address);
-    void OnClientDisconnected(uint32_t client_id);
+    void InitAddressesList();
+    void UpdateConnectedClients();
 
-    void OnRemoteClientEvent(RemoteClient::EventType type);
+    void OnServerEvent(Host::Event type);
 
 private:
-    std::unique_ptr<Server> server_;
-    Mutex server_lock_;
+    std::unique_ptr<ServerTCP<Host>> server_;
+    Lock server_lock_;
+    std::atomic_int client_count_;
 
-    std::unique_ptr<RemoteClient> client_;
+    ThreadPool thread_pool_;
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_GUI__MAIN_DIALOG_H

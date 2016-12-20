@@ -13,6 +13,8 @@
 #include "libyuv/convert_from_argb.h"
 #include "libyuv/convert.h"
 
+namespace aspia {
+
 static const int kBlockSize = 16;
 
 VideoEncoderVP8::VideoEncoderVP8() :
@@ -20,7 +22,7 @@ VideoEncoderVP8::VideoEncoderVP8() :
     active_map_size_(0),
     bytes_per_row_(0),
     bytes_per_pixel_(0),
-    size_changed_(true)
+    resized_(true)
 {
     memset(&active_map_, 0, sizeof(active_map_));
     memset(&image_, 0, sizeof(image_));
@@ -33,7 +35,7 @@ VideoEncoderVP8::~VideoEncoderVP8()
 
 void VideoEncoderVP8::CreateImage()
 {
-    memset(&image_, 0, sizeof(vpx_image_t));
+    memset(&image_, 0, sizeof(image_));
 
     image_.d_w = image_.w = screen_size_.width();
     image_.d_h = image_.h = screen_size_.height();
@@ -189,30 +191,12 @@ void VideoEncoderVP8::PrepareImageAndActiveMap(const DesktopRegion &region,
         int width = rect.width();
         int height = rect.height();
 
-        switch (bytes_per_pixel_)
-        {
-            case 4:
-            {
-                libyuv::ARGBToI420(src + rgb_offset, bytes_per_row_,
-                                   y_data + y_offset, y_stride,
-                                   u_data + uv_offset, uv_stride,
-                                   v_data + uv_offset, uv_stride,
-                                   width,
-                                   height);
-            }
-            break;
-
-            case 2:
-            {
-                libyuv::RGB565ToI420(src + rgb_offset, bytes_per_row_,
-                                     y_data + y_offset, y_stride,
-                                     u_data + uv_offset, uv_stride,
-                                     v_data + uv_offset, uv_stride,
-                                     width,
-                                     height);
-            }
-            break;
-        }
+        convert_image_func_(src + rgb_offset, bytes_per_row_,
+                            y_data + y_offset, y_stride,
+                            u_data + uv_offset, uv_stride,
+                            v_data + uv_offset, uv_stride,
+                            width,
+                            height);
 
         proto::VideoRect *video_rect = packet->add_changed_rect();
 
@@ -246,19 +230,27 @@ void VideoEncoderVP8::Resize(const DesktopSize &screen_size,
 {
     screen_size_ = screen_size;
 
-    bytes_per_pixel_ = host_pixel_format.bytes_per_pixel();
+    bytes_per_pixel_ = host_pixel_format.BytesPerPixel();
     bytes_per_row_ = bytes_per_pixel_ * screen_size.width();
 
     CreateImage();
     CreateActiveMap();
     CreateCodec();
 
-    size_changed_ = true;
+    switch (bytes_per_pixel_)
+    {
+        case 4: convert_image_func_ = libyuv::ARGBToI420;   break;
+        case 2: convert_image_func_ = libyuv::RGB565ToI420; break;
+    }
+
+    CHECK(convert_image_func_);
+
+    resized_ = true;
 }
 
-VideoEncoder::Status VideoEncoderVP8::Encode(proto::VideoPacket *packet,
-                                             const uint8_t *screen_buffer,
-                                             const DesktopRegion &changed_region)
+int32_t VideoEncoderVP8::Encode(proto::VideoPacket *packet,
+                                const uint8_t *screen_buffer,
+                                const DesktopRegion &changed_region)
 {
     packet->set_flags(proto::VideoPacket::FIRST_PACKET | proto::VideoPacket::LAST_PACKET);
 
@@ -266,14 +258,14 @@ VideoEncoder::Status VideoEncoderVP8::Encode(proto::VideoPacket *packet,
 
     format->set_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
 
-    if (size_changed_)
+    if (resized_)
     {
         proto::VideoSize *size = format->mutable_screen_size();
 
         size->set_width(screen_size_.width());
         size->set_height(screen_size_.height());
 
-        size_changed_ = false;
+        resized_ = false;
     }
 
     //
@@ -320,5 +312,7 @@ VideoEncoder::Status VideoEncoderVP8::Encode(proto::VideoPacket *packet,
         }
     }
 
-    return Status::End;
+    return packet->flags();
 }
+
+} // namespace aspia

@@ -10,6 +10,8 @@
 
 #include <stdint.h>
 
+namespace aspia {
+
 //
 // An object to compress data losslessly. Compressed data can be fully
 // recovered by a Decompressor.
@@ -67,5 +69,7 @@ public:
                          int *consumed,
                          int *written) = 0;
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_CODEC__COMPRESSOR_H

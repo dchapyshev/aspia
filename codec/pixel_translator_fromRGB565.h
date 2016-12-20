@@ -15,6 +15,8 @@
 #include "base/macros.h"
 #include "codec/pixel_translator.h"
 
+namespace aspia {
+
 //
 // Convertation from 16bpp RGB565 to user defined
 //
@@ -63,19 +65,19 @@ private:
     {
         table_.resize(kTableSize);
 
-        uint32_t src_red_mask   = src_format.red_max()   << src_format.red_shift();
-        uint32_t src_green_mask = src_format.green_max() << src_format.green_shift();
-        uint32_t src_blue_mask  = src_format.blue_max()  << src_format.blue_shift();
+        uint32_t src_red_mask   = src_format.RedMax()   << src_format.RedShift();
+        uint32_t src_green_mask = src_format.GreenMax() << src_format.GreenShift();
+        uint32_t src_blue_mask  = src_format.BlueMax()  << src_format.BlueShift();
 
         for (int i = 0; i < kTableSize; ++i)
         {
-            uint32_t src_red   = (i & src_red_mask)   >> src_format.red_shift();
-            uint32_t src_green = (i & src_green_mask) >> src_format.green_shift();
-            uint32_t src_blue  = (i & src_blue_mask)  >> src_format.blue_shift();
+            uint32_t src_red   = (i & src_red_mask)   >> src_format.RedShift();
+            uint32_t src_green = (i & src_green_mask) >> src_format.GreenShift();
+            uint32_t src_blue  = (i & src_blue_mask)  >> src_format.BlueShift();
 
-            uint32_t dst_red   = (src_red   * dst_format.red_max()   / src_format.red_max())   << dst_format.red_shift();
-            uint32_t dst_green = (src_green * dst_format.green_max() / src_format.green_max()) << dst_format.green_shift();
-            uint32_t dst_blue  = (src_blue  * dst_format.blue_max()  / src_format.blue_max())  << dst_format.blue_shift();
+            uint32_t dst_red   = (src_red   * dst_format.RedMax()   / src_format.RedMax())   << dst_format.RedShift();
+            uint32_t dst_green = (src_green * dst_format.GreenMax() / src_format.GreenMax()) << dst_format.GreenShift();
+            uint32_t dst_blue  = (src_blue  * dst_format.BlueMax()  / src_format.BlueMax())  << dst_format.BlueShift();
 
             table_[i] = (dst_red | dst_green | dst_blue);
         }
@@ -87,5 +89,7 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(PixelTranslatorFromRGB565);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_PIXEL_TRANSLATOR_FROMRGB565_H

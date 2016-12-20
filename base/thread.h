@@ -15,7 +15,9 @@
 
 #include "base/scoped_handle.h"
 #include "base/macros.h"
-#include "base/mutex.h"
+#include "base/lock.h"
+
+namespace aspia {
 
 class Thread
 {
@@ -27,21 +29,13 @@ public:
     Thread();
     virtual ~Thread();
 
-    //
     // Запускает поток.
-    // При вызове метода вызывается метод OnStart(), который реализуется
-    // потомком класса.
-    // Метод OnStart() не вызывается, если класс не является валидным или
-    // если поток уже запущен.
-    //
     void Start();
 
     //
     // Метод для инициации завершения потока.
     // При вызове данного метода автоматически вызывается реализованный
     // классом-потомком метод OnStop().
-    // Метод OnStop() не вызывается, если поток не запущен или класс не
-    // является валидным.
     //
     void Stop();
 
@@ -49,17 +43,23 @@ public:
     // Возвращает true, если поток находится в стадии завершения и false,
     // если нет.
     //
-    bool IsEndOfThread() const;
+    bool IsThreadTerminating() const;
+
+    //
+    // Возаращает false, если поток выполняется (выполняется метод Worker())
+    // и true, если не выполняется.
+    //
+    bool IsThreadTerminated() const;
 
     enum class Priority
     {
-        Idle         = 1, // Самый низкий
-        Lowest       = 2, // Низкий
-        BelowNormal  = 3, // Ниже нормального
-        Normal       = 4, // Нормальный
-        AboveNormal  = 5, // Выше нормального
-        Highest      = 6, // Высокий
-        TimeCritical = 7  // Наивысший
+        Idle,        // Самый низкий
+        Lowest,      // Низкий
+        BelowNormal, // Ниже нормального
+        Normal,      // Нормальный
+        AboveNormal, // Выше нормального
+        Highest,     // Высокий
+        TimeCritical // Наивысший
     };
 
     //
@@ -72,22 +72,6 @@ public:
     // Если поток успешно завершился, то возвращается true, если нет, то false.
     //
     void WaitForEnd() const;
-
-    //
-    // Ожидание завершения потока за указанное время.
-    // Если поток успешно завершился, то возвращается true, если нет, то false.
-    //
-    void WaitForEnd(uint32_t milliseconds) const;
-
-    //
-    // Метод вызывает засыпание потока на время, которое указано в параметре.
-    //
-    static void Sleep(uint32_t milliseconds);
-
-    //
-    // Возвращает уникальный идетификатор (ID) потока.
-    //
-    uint32_t GetThreadId() const;
 
 protected:
     //
@@ -126,5 +110,7 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(Thread);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_BASE__THREAD_H

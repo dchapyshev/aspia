@@ -11,6 +11,8 @@
 
 #include "base/logging.h"
 
+namespace aspia {
+
 // static
 UINT CALLBACK Thread::ThreadProc(LPVOID param)
 {
@@ -49,9 +51,14 @@ void Thread::Stop()
     OnStop();
 }
 
-bool Thread::IsEndOfThread() const
+bool Thread::IsThreadTerminating() const
 {
     return end_;
+}
+
+bool Thread::IsThreadTerminated() const
+{
+    return !active_;
 }
 
 void Thread::SetThreadPriority(Priority value)
@@ -96,30 +103,6 @@ void Thread::Start()
     }
 }
 
-void Thread::WaitForEnd(uint32_t milliseconds) const
-{
-    if (active_)
-    {
-        // Если запущен, то ждем пока он завершит работу.
-        DWORD error = WaitForSingleObject(thread_, milliseconds);
-
-        switch (error)
-        {
-            case WAIT_TIMEOUT:
-                DLOG(WARNING) << "Timeout at end of thread";
-                break;
-
-            case WAIT_OBJECT_0:
-                break;
-
-            default:
-                DLOG(WARNING) << "Unknown error at end of thread: " << error
-                              << " (" << GetLastError() << ")";
-                break;
-        }
-    }
-}
-
 void Thread::WaitForEnd() const
 {
     if (active_)
@@ -132,8 +115,4 @@ void Thread::WaitForEnd() const
     }
 }
 
-// static
-void Thread::Sleep(uint32_t milliseconds)
-{
-    ::Sleep(milliseconds);
-}
+} // namespace aspia

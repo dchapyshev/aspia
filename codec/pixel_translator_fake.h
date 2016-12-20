@@ -11,6 +11,8 @@
 #include "base/macros.h"
 #include "codec/pixel_translator.h"
 
+namespace aspia {
+
 class PixelTranslatorFake : public PixelTranslator
 {
 public:
@@ -43,5 +45,7 @@ public:
 private:
     DISALLOW_COPY_AND_ASSIGN(PixelTranslatorFake);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_PIXEL_TRANSLATOR_FAKE_H

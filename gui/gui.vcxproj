@@ -73,7 +73,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;libglog.lib;gflags.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libaspia.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;libglog.lib;gflags.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libaspia.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
@@ -104,8 +104,10 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SetChecksum>true</SetChecksum>
-      <AdditionalDependencies>userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;libglog.lib;gflags.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libaspia.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;libglog.lib;gflags.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libaspia.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <ForceSymbolReferences>
+      </ForceSymbolReferences>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>
@@ -116,17 +118,16 @@
     <ClCompile Include="auth_dialog.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main_dialog.cpp" />
-    <ClCompile Include="screen_window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="auth_dialog.h" />
     <ClInclude Include="main_dialog.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="screen_window.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="lang\en-US.rc" />
     <ResourceCompile Include="resource.rc" />
+    <ResourceCompile Include="version.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

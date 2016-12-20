@@ -12,13 +12,15 @@
 
 #include "desktop_capture/capturer.h"
 #include "desktop_capture/differ.h"
-#include "desktop_capture/desktop_effects.h"
+#include "desktop_capture/scoped_desktop_effects.h"
 #include "desktop_capture/pixel_format.h"
 #include "base/macros.h"
 #include "base/scoped_thread_desktop.h"
 #include "base/scoped_gdi_object.h"
 #include "base/scoped_hdc.h"
-#include "base/desktop_win.h"
+#include "base/desktop.h"
+
+namespace aspia {
 
 //
 // Класс захвата избражения экрана
@@ -65,7 +67,7 @@ private:
 private:
     PixelFormat current_pixel_format_;
 
-    std::unique_ptr<DesktopEffects> desktop_effects_;
+    std::unique_ptr<ScopedDesktopEffects> desktop_effects_;
 
     DesktopRect current_desktop_rect_;
 
@@ -82,5 +84,7 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(CapturerGDI);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_DESKTOP_CAPTURE__CAPTURER_GDI_H

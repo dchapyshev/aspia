@@ -7,9 +7,12 @@
 
 #include "base/scoped_thread_desktop.h"
 
+namespace aspia {
+
 ScopedThreadDesktop::ScopedThreadDesktop() :
     initial_(Desktop::GetThreadDesktop())
 {
+    // Nothing
 }
 
 ScopedThreadDesktop::~ScopedThreadDesktop()
@@ -54,3 +57,5 @@ bool ScopedThreadDesktop::SetThreadDesktop(Desktop *desktop)
 
     return true;
 }
+
+} // namespace aspia

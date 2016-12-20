@@ -12,6 +12,8 @@
 
 #include "base/macros.h"
 
+namespace aspia {
+
 class ScopedScHandle
 {
 public:
@@ -74,5 +76,7 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(ScopedScHandle);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_BASE__SCOPED_SC_HANDLE_H

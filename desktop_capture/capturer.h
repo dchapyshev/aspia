@@ -8,8 +8,10 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__CAPTURER_H
 #define _ASPIA_DESKTOP_CAPTURE__CAPTURER_H
 
-#include "desktop_capture/desktop_region_win.h"
+#include "desktop_capture/desktop_region.h"
 #include "desktop_capture/pixel_format.h"
+
+namespace aspia {
 
 class Capturer
 {
@@ -25,5 +27,7 @@ public:
                                         DesktopSize &desktop_size,
                                         PixelFormat &pixel_format) = 0;
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_DESKTOP_CAPTURE__CAPTURER_H

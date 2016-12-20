@@ -13,6 +13,8 @@
 
 #include "base/logging.h"
 
+namespace aspia {
+
 Process::Process(HANDLE process) :
     process_(process)
 {
@@ -122,7 +124,7 @@ bool Process::Elevate(const WCHAR *command_line)
 {
     WCHAR module_path[MAX_PATH];
 
-    if (!GetModuleFileNameW(nullptr, module_path, _countof(module_path)))
+    if (!GetModuleFileNameW(nullptr, module_path, ARRAYSIZE(module_path)))
     {
         LOG(ERROR) << "GetModuleFileNameW() failed: " << GetLastError();
         return false;
@@ -145,3 +147,5 @@ bool Process::Elevate(const WCHAR *command_line)
 
     return true;
 }
+
+} // namespace aspia

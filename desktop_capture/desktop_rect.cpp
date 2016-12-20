@@ -9,6 +9,8 @@
 
 #include <algorithm>
 
+namespace aspia {
+
 DesktopRect::DesktopRect() :
     left_(0),
     top_(0),
@@ -109,7 +111,7 @@ void DesktopRect::SetHeight(int32_t height)
     bottom_ = top_ + height;
 }
 
-bool DesktopRect::is_empty() const
+bool DesktopRect::IsEmpty() const
 {
     return (width() <= 0 || height() <= 0);
 }
@@ -158,7 +160,7 @@ void DesktopRect::IntersectWith(const DesktopRect& rect)
     right_  = std::min(right(),  rect.right());
     bottom_ = std::min(bottom(), rect.bottom());
 
-    if (is_empty())
+    if (IsEmpty())
     {
         left_   = 0;
         top_    = 0;
@@ -197,3 +199,5 @@ bool DesktopRect::operator!=(const DesktopRect &other)
 {
     return !IsEqualTo(other);
 }
+
+} // namespace aspia

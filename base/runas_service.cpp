@@ -11,17 +11,20 @@
 #include <wtsapi32.h>
 #include <string>
 
-#include "base/service_control_win.h"
+#include "base/service_control.h"
 #include "base/scoped_handle.h"
 #include "base/logging.h"
+
+namespace aspia {
 
 static const WCHAR kRunAsServiceName[] = L"aspia-runas-service";
 
 RunAsService::RunAsService() :
-    Service(kRunAsServiceName)
+    Service(kRunAsServiceName),
+    kernel32_(new ScopedKernel32Library()),
+    wtsapi32_(new ScopedWtsApi32Library())
 {
-    kernel32_.reset(new ScopedKernel32Library());
-    wtsapi32_.reset(new ScopedWtsApi32Library());
+    // Nothing
 }
 
 RunAsService::~RunAsService()
@@ -221,3 +224,5 @@ bool RunAsService::InstallAndStartService()
     // Запускаем ее.
     return service_control->Start();
 }
+
+} // namespace aspia

@@ -14,11 +14,13 @@
 
 #include "base/macros.h"
 #include "base/thread.h"
-#include "base/mutex.h"
-#include "base/event.h"
+#include "base/lock.h"
+#include "base/waitable_event.h"
+
+namespace aspia {
 
 template <class T>
-class MessageQueue : public Thread
+class MessageQueue : private Thread
 {
 public:
     typedef std::function<void(const T*)> ProcessMessageCallback;
@@ -26,19 +28,24 @@ public:
     MessageQueue(ProcessMessageCallback process_message) :
         process_message_(process_message)
     {
-        // Nothing
+        SetThreadPriority(Thread::Priority::Highest);
+        Start();
     }
 
     ~MessageQueue()
     {
-        // Nothing
+        if (!IsThreadTerminated())
+        {
+            Stop();
+            WaitForEnd();
+        }
     }
 
     void MessageQueue::Add(std::unique_ptr<T> &message)
     {
         {
             // Ѕлокируем очередь сообщений.
-            LockGuard<Mutex> guard(&queue_lock_);
+            LockGuard<Lock> guard(&queue_lock_);
 
             // ƒобавл€ем сообщение в очередь.
             queue_.push(std::move(message));
@@ -49,35 +56,40 @@ public:
     }
 
 private:
+    void Dispatch()
+    {
+        //
+        // ѕродолжаем обработку очереди пока не будут обработаны все сообщени€ или
+        // поток не получит команду остановитьс€.
+        //
+        while (!queue_.empty() && !IsThreadTerminating())
+        {
+            std::unique_ptr<T> message;
+
+            {
+                // Ѕлокируем очередь сообщений.
+                LockGuard<Lock> guard(&queue_lock_);
+
+                // »звлекаем первое сообщение из очереди.
+                message = std::move(queue_.front());
+
+                // ”дал€ем первое сообщение из очереди.
+                queue_.pop();
+            }
+
+            // ¬ызываем callback дл€ обработки сообщени€.
+            process_message_(message.get());
+        }
+    }
+
     void Worker() override
     {
-        while (true)
+        while (!IsThreadTerminating())
         {
             // ќжидаем уведомлени€ о новом сообщении.
             message_event_.WaitForEvent();
 
-            // ≈сли потоку дана компанда остановитьс€, прекращаем цикл.
-            if (IsEndOfThread()) break;
-
-            // ѕродолжаем обработку очереди пока не будут обработаны все сообщени€.
-            while (queue_.size())
-            {
-                std::unique_ptr<T> message;
-
-                {
-                    // Ѕлокируем очередь сообщений.
-                    LockGuard<Mutex> guard(&queue_lock_);
-
-                    // »звлекаем первое сообщение из очереди.
-                    message = std::move(queue_.front());
-
-                    // ”дал€ем первое сообщение из очереди.
-                    queue_.pop();
-                }
-
-                // ¬ызываем callback дл€ обработки сообщени€.
-                process_message_(message.get());
-            }
+            Dispatch();
         }
     }
 
@@ -98,12 +110,14 @@ private:
     std::queue <std::unique_ptr<T>> queue_;
 
     // Mutex дл€ блокировани€ очереди сообщений.
-    Mutex queue_lock_;
+    Lock queue_lock_;
 
     //  ласс дл€ уведомлени€ о наличии новых сообщений.
-    Event message_event_;
+    WaitableEvent message_event_;
 
     DISALLOW_COPY_AND_ASSIGN(MessageQueue);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_CLIENT__MESSAGE_QUEUE_H

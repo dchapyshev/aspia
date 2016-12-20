@@ -7,13 +7,14 @@
 
 #include "codec/compressor_zlib.h"
 
+#include "base/exception.h"
 #include "base/logging.h"
+
+namespace aspia {
 
 CompressorZLIB::CompressorZLIB()
 {
-    memset(&stream_, 0, sizeof(stream_));
-
-    Reset();
+    InitStream();
 }
 
 CompressorZLIB::~CompressorZLIB()
@@ -23,20 +24,8 @@ CompressorZLIB::~CompressorZLIB()
 
 void CompressorZLIB::Reset()
 {
-    if (stream_.next_in)
-        deflateEnd(&stream_);
-
-    stream_.next_in = Z_NULL;
-    stream_.zalloc  = Z_NULL;
-    stream_.zfree   = Z_NULL;
-    stream_.opaque  = Z_NULL;
-
-    deflateInit2(&stream_,
-                 Z_BEST_SPEED,
-                 Z_DEFLATED,
-                 MAX_WBITS,
-                 MAX_MEM_LEVEL,
-                 Z_DEFAULT_STRATEGY);
+    deflateEnd(&stream_);
+    InitStream();
 }
 
 bool CompressorZLIB::Process(const uint8_t *input_data,
@@ -47,6 +36,8 @@ bool CompressorZLIB::Process(const uint8_t *input_data,
                              int *consumed,
                              int *written)
 {
+    DCHECK_GT(output_size, 0);
+
     // Setup I/O parameters.
     stream_.avail_in  = input_size;
     stream_.next_in   = const_cast<Bytef*>(input_data);
@@ -70,14 +61,14 @@ bool CompressorZLIB::Process(const uint8_t *input_data,
     else
     {
         LOG(ERROR) << "Unsupported flush mode";
-        return false;
+        throw Exception("Unsupported flush mode in zlib compressor.");
     }
 
     int ret = deflate(&stream_, z_flush);
     if (ret == Z_STREAM_ERROR)
     {
         LOG(ERROR) << "zlib compression failed";
-        return false;
+        throw Exception("zlib compression failed.");
     }
 
     *consumed = input_size - stream_.avail_in;
@@ -103,6 +94,18 @@ bool CompressorZLIB::Process(const uint8_t *input_data,
     else
     {
         LOG(ERROR) << "Unexpected zlib error: " << ret;
-        return false;
+        throw Exception("Unexpected zlib error.");
     }
 }
+
+void CompressorZLIB::InitStream()
+{
+    stream_.next_in = Z_NULL;
+    stream_.zalloc  = Z_NULL;
+    stream_.zfree   = Z_NULL;
+    stream_.opaque  = Z_NULL;
+
+    deflateInit(&stream_, Z_BEST_SPEED);
+}
+
+} // namespace aspia

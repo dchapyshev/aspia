@@ -8,38 +8,24 @@
 #ifndef _ASPIA_BASE__SCOPED_KERNEL32_LIBRARY_H
 #define _ASPIA_BASE__SCOPED_KERNEL32_LIBRARY_H
 
-#include "base/scoped_native_library.h"
-#include "base/logging.h"
+#include "aspia_config.h"
 
-class ScopedKernel32Library : public ScopedNativeLibrary
+#include "base/scoped_native_library.h"
+#include "base/macros.h"
+
+namespace aspia {
+
+class ScopedKernel32Library
+#if (_WIN32_WINNT < 0x0600)
+    : private ScopedNativeLibrary
+#endif // (_WIN32_WINNT < 0x0600)
 {
 public:
-    ScopedKernel32Library() :
-        ScopedNativeLibrary("kernel32.dll")
-    {
-        wts_get_active_console_session_id_func_ =
-            reinterpret_cast<WTSGETACTIVECONSOLESESSIONID>(GetFunctionPointer("WTSGetActiveConsoleSessionId"));
-        CHECK(wts_get_active_console_session_id_func_);
+    ScopedKernel32Library();
+    ~ScopedKernel32Library();
 
-        process_id_to_session_id_func_ =
-            reinterpret_cast<PROCESSIDTOSESSIONID>(GetFunctionPointer("ProcessIdToSessionId"));
-        CHECK(process_id_to_session_id_func_);
-    }
-
-    ~ScopedKernel32Library()
-    {
-        // Nothing
-    }
-
-    DWORD WTSGetActiveConsoleSessionId(VOID)
-    {
-        return wts_get_active_console_session_id_func_();
-    }
-
-    BOOL ProcessIdToSessionId(DWORD dwProcessId, DWORD *pSessionId)
-    {
-        return process_id_to_session_id_func_(dwProcessId, pSessionId);
-    }
+    DWORD WTSGetActiveConsoleSessionId(VOID);
+    BOOL ProcessIdToSessionId(DWORD dwProcessId, DWORD *pSessionId);
 
 private:
     typedef DWORD(WINAPI *WTSGETACTIVECONSOLESESSIONID)(VOID);
@@ -47,6 +33,10 @@ private:
 
     WTSGETACTIVECONSOLESESSIONID wts_get_active_console_session_id_func_ = nullptr;
     PROCESSIDTOSESSIONID process_id_to_session_id_func_ = nullptr;
+
+    DISALLOW_COPY_AND_ASSIGN(ScopedKernel32Library);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_BASE__SCOPED_KERNEL32_LIBRARY_H

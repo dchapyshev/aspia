@@ -13,7 +13,9 @@
 #include <memory>
 
 #include "base/macros.h"
-#include "base/desktop_win.h"
+#include "base/desktop.h"
+
+namespace aspia {
 
 class ScopedThreadDesktop
 {
@@ -47,5 +49,7 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(ScopedThreadDesktop);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_BASE__SCOPED_THREAD_DESKTOP_H

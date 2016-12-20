@@ -13,6 +13,8 @@
 #include "libyuv/convert_argb.h"
 #include "libyuv/convert_from_argb.h"
 
+namespace aspia {
+
 class PixelTranslatorARGBtoARGB : public PixelTranslator
 {
 public:
@@ -84,5 +86,7 @@ public:
         libyuv::RGB565ToARGB(src, src_stride, dst, dst_stride, width, height);
     }
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_CODEC__PIXEL_TRANSLATOR_LIBYUV_H

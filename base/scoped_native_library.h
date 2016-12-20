@@ -13,10 +13,12 @@
 #include "base/macros.h"
 #include "base/unicode.h"
 
+namespace aspia {
+
 class ScopedNativeLibrary
 {
 public:
-    ScopedNativeLibrary(const char *lib_name)
+    explicit ScopedNativeLibrary(const char *lib_name)
     {
         lib_ = LoadLibraryW(UNICODEfromUTF8(lib_name).c_str());
     }
@@ -36,5 +38,7 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(ScopedNativeLibrary);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_BASE__SCOPED_NATIVE_LIBRARY_H

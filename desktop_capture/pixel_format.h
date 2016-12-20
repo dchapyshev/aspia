@@ -12,6 +12,8 @@
 
 #include <stdint.h>
 
+namespace aspia {
+
 class PixelFormat
 {
 public:
@@ -26,32 +28,31 @@ public:
     static PixelFormat MakeRGB64();
     static PixelFormat MakeRGB8();
 
-    int bits_per_pixel() const;
-    void set_bits_per_pixel(int bpp);
+    int BitsPerPixel() const;
+    void SetBitsPerPixel(int bpp);
 
-    int bytes_per_pixel() const;
-    void set_bytes_per_pixel(int bpp);
+    int BytesPerPixel() const;
 
-    uint16_t red_max() const;
-    uint16_t green_max() const;
-    uint16_t blue_max() const;
+    uint16_t RedMax() const;
+    uint16_t GreenMax() const;
+    uint16_t BlueMax() const;
 
-    void set_red_max(uint16_t max);
-    void set_green_max(uint16_t max);
-    void set_blue_max(uint16_t max);
+    void SetRedMax(uint16_t max);
+    void SetGreenMax(uint16_t max);
+    void SetBlueMax(uint16_t max);
 
-    uint8_t red_shift() const;
-    uint8_t green_shift() const;
-    uint8_t blue_shift() const;
+    uint8_t RedShift() const;
+    uint8_t GreenShift() const;
+    uint8_t BlueShift() const;
 
-    void set_red_shift(uint8_t shift);
-    void set_green_shift(uint8_t shift);
-    void set_blue_shift(uint8_t shift);
+    void SetRedShift(uint8_t shift);
+    void SetGreenShift(uint8_t shift);
+    void SetBlueShift(uint8_t shift);
 
-    bool is_empty() const;
+    bool IsEmpty() const;
     void Clear();
     bool IsEqualTo(const PixelFormat &format) const;
-    void set(const PixelFormat &format);
+    void Set(const PixelFormat &format);
 
     PixelFormat& operator=(const PixelFormat &format);
     bool operator==(const PixelFormat &format);
@@ -68,5 +69,7 @@ private:
     uint8_t green_shift_;
     uint8_t blue_shift_;
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H

@@ -7,12 +7,13 @@
 
 #include "codec/decompressor_zlib.h"
 
+#include "base/exception.h"
 #include "base/logging.h"
+
+namespace aspia {
 
 DecompressorZLIB::DecompressorZLIB()
 {
-    memset(&stream_, 0, sizeof(stream_));
-
     InitStream();
 }
 
@@ -34,6 +35,8 @@ bool DecompressorZLIB::Process(const uint8_t *input_data,
                                int *consumed,
                                int *written)
 {
+    DCHECK_GT(output_size, 0);
+
     // Setup I/O parameters.
     stream_.avail_in  = input_size;
     stream_.next_in   = const_cast<Bytef*>(input_data);
@@ -43,8 +46,8 @@ bool DecompressorZLIB::Process(const uint8_t *input_data,
     int ret = inflate(&stream_, Z_NO_FLUSH);
     if (ret == Z_STREAM_ERROR)
     {
-        LOG(ERROR) << "zlib compression failed";
-        return false;
+        LOG(ERROR) << "zlib decompression failed";
+        throw Exception("zlib decompression failed.");
     }
 
     *consumed = input_size - stream_.avail_in;
@@ -65,5 +68,8 @@ void DecompressorZLIB::InitStream()
     stream_.zfree   = Z_NULL;
     stream_.opaque  = Z_NULL;
 
-    inflateInit(&stream_);
+    int ret = inflateInit(&stream_);
+    DCHECK_EQ(ret, Z_OK);
 }
+
+} // namespace aspia

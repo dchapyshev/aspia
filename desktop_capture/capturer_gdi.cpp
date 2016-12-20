@@ -8,13 +8,15 @@
 #include "desktop_capture/capturer_gdi.h"
 
 #include "base/logging.h"
+#include "base/scoped_select_object.h"
+
+namespace aspia {
 
 CapturerGDI::CapturerGDI() :
-    curr_buffer_id_(0)
+    curr_buffer_id_(0),
+    desktop_effects_(new ScopedDesktopEffects())
 {
     memset(image_buffer_, 0, sizeof(image_buffer_));
-
-    desktop_effects_.reset(new DesktopEffects());
 }
 
 void CapturerGDI::GetDefaultBitmapInfo(BitmapInfo *bmi)
@@ -89,15 +91,15 @@ PixelFormat CapturerGDI::GetPixelFormat(const BitmapInfo &bmi)
 
     PixelFormat format;
 
-    format.set_bits_per_pixel(bmi.header.biBitCount);
+    format.SetBitsPerPixel(bmi.header.biBitCount);
 
-    format.set_red_shift(red_shift);
-    format.set_green_shift(green_shift);
-    format.set_blue_shift(blue_shift);
+    format.SetRedShift(red_shift);
+    format.SetGreenShift(green_shift);
+    format.SetBlueShift(blue_shift);
 
-    format.set_red_max(bmi.u.mask.red     >> format.red_shift());
-    format.set_green_max(bmi.u.mask.green >> format.green_shift());
-    format.set_blue_max(bmi.u.mask.blue   >> format.blue_shift());
+    format.SetRedMax(bmi.u.mask.red >> format.RedShift());
+    format.SetGreenMax(bmi.u.mask.green >> format.GreenShift());
+    format.SetBlueMax(bmi.u.mask.blue >> format.BlueShift());
 
     return format;
 }
@@ -114,7 +116,9 @@ void CapturerGDI::AllocateBuffer(int buffer_index, int align)
 
     current_pixel_format_ = GetPixelFormat(bmi);
 
-    bmi.header.biSizeImage = current_pixel_format_.bytes_per_pixel() * aligned_width * current_desktop_rect_.height();
+    bmi.header.biSizeImage = current_pixel_format_.BytesPerPixel() *
+        aligned_width * current_desktop_rect_.height();
+
     bmi.header.biPlanes    = 1;
     bmi.header.biWidth     = current_desktop_rect_.width();
     bmi.header.biHeight    = -current_desktop_rect_.height();
@@ -126,8 +130,6 @@ void CapturerGDI::AllocateBuffer(int buffer_index, int align)
                          reinterpret_cast<void**>(&image_buffer_[buffer_index]),
                          nullptr,
                          0);
-
-    DLOG(INFO) << "buffer[" << buffer_index << "] initialized.";
 }
 
 // static
@@ -149,13 +151,6 @@ void CapturerGDI::PrepareCaptureResources()
         desktop_dc_.reset();
         memory_dc_.set(nullptr);
 
-        DLOG(INFO) << "desktop rect (x:y:w:h) changed from "
-            << current_desktop_rect_.x() << ":" << current_desktop_rect_.y() << ":"
-            << current_desktop_rect_.width() << ":" << current_desktop_rect_.height()
-            << " to "
-            << desktop_rect.x() << ":" << desktop_rect.y() << ":"
-            << desktop_rect.width() << ":" << desktop_rect.height();
-
         current_desktop_rect_ = desktop_rect;
     }
 
@@ -166,16 +161,13 @@ void CapturerGDI::PrepareCaptureResources()
         desktop_dc_.reset(new ScopedGetDC(nullptr));
         memory_dc_.set(CreateCompatibleDC(*desktop_dc_));
 
-        for (int index = 0; index < kNumBuffers; index++)
+        for (int index = 0; index < kNumBuffers; ++index)
         {
             AllocateBuffer(index, 32);
         }
-    }
 
-    if (!differ_)
-    {
         differ_.reset(new Differ(current_desktop_rect_.size(),
-                                 current_pixel_format_.bytes_per_pixel()));
+                                 current_pixel_format_.BytesPerPixel()));
     }
 }
 
@@ -197,41 +189,42 @@ const uint8_t* CapturerGDI::CaptureImage(DesktopRegion &changed_region,
                                          DesktopSize &desktop_size,
                                          PixelFormat &pixel_format)
 {
-Retry:
-    PrepareCaptureResources();
-
-    desktop_size = current_desktop_rect_.size();
-    pixel_format = current_pixel_format_;
-
-    int prev_buffer_id = curr_buffer_id_ - 1;
-    if (prev_buffer_id < 0)
-        prev_buffer_id = kNumBuffers - 1;
-
-    HGDIOBJ prev_object = SelectObject(memory_dc_,
-                                       target_bitmap_[curr_buffer_id_]);
-    if (prev_object)
+    while (true)
     {
+        PrepareCaptureResources();
+
+        desktop_size = current_desktop_rect_.size();
+        pixel_format = current_pixel_format_;
+
+        int prev_buffer_id = curr_buffer_id_ - 1;
+        if (prev_buffer_id < 0)
+            prev_buffer_id = kNumBuffers - 1;
+
+        ScopedSelectObject select_object(memory_dc_,
+                                         target_bitmap_[curr_buffer_id_]);
+
         if (!BitBlt(memory_dc_,
                     0, 0,
-                    current_desktop_rect_.width(), current_desktop_rect_.height(),
+                    current_desktop_rect_.width(),
+                    current_desktop_rect_.height(),
                     *desktop_dc_,
-                    current_desktop_rect_.x(), current_desktop_rect_.y(),
+                    current_desktop_rect_.x(),
+                    current_desktop_rect_.y(),
                     CAPTUREBLT | SRCCOPY))
         {
             PrepareInputDesktop();
-            SelectObject(memory_dc_, prev_object);
-            goto Retry;
+            continue;
         }
 
-        SelectObject(memory_dc_, prev_object);
+        const uint8_t *prev = image_buffer_[prev_buffer_id];
+        const uint8_t *curr = image_buffer_[curr_buffer_id_];
+
+        differ_->CalcChangedRegion(prev, curr, changed_region);
+
+        curr_buffer_id_ = prev_buffer_id;
+
+        return curr;
     }
-
-    const uint8_t *prev = image_buffer_[prev_buffer_id];
-    const uint8_t *curr = image_buffer_[curr_buffer_id_];
-
-    differ_->CalcChangedRegion(prev, curr, changed_region);
-
-    curr_buffer_id_ = prev_buffer_id;
-
-    return curr;
 }
+
+} // namespace aspia

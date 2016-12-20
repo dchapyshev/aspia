@@ -7,6 +7,8 @@
 
 #include "desktop_capture/pixel_format.h"
 
+namespace aspia {
+
 // ARGB
 static const uint8_t kARGB_RedShift   = 16;
 static const uint8_t kARGB_GreenShift = 8;
@@ -69,7 +71,7 @@ PixelFormat::PixelFormat() :
 
 PixelFormat::PixelFormat(const PixelFormat &format)
 {
-    set(format);
+    Set(format);
 }
 
 PixelFormat::~PixelFormat()
@@ -185,87 +187,82 @@ PixelFormat PixelFormat::MakeRGB8()
     return format;
 }
 
-int PixelFormat::bits_per_pixel() const
+int PixelFormat::BitsPerPixel() const
 {
     return bits_per_pixel_;
 }
 
-void PixelFormat::set_bits_per_pixel(int bpp)
+void PixelFormat::SetBitsPerPixel(int bpp)
 {
     bits_per_pixel_ = bpp;
 }
 
-int PixelFormat::bytes_per_pixel() const
+int PixelFormat::BytesPerPixel() const
 {
     return bits_per_pixel_ / 8;
 }
 
-void PixelFormat::set_bytes_per_pixel(int bpp)
-{
-    bits_per_pixel_ = bpp * 8;
-}
-
-uint16_t PixelFormat::red_max() const
+uint16_t PixelFormat::RedMax() const
 {
     return red_max_;
 }
 
-uint16_t PixelFormat::green_max() const
+uint16_t PixelFormat::GreenMax() const
 {
     return green_max_;
 }
 
-uint16_t PixelFormat::blue_max() const
+uint16_t PixelFormat::BlueMax() const
 {
     return blue_max_;
 }
 
-void PixelFormat::set_red_max(uint16_t max)
+void PixelFormat::SetRedMax(uint16_t max)
 {
     red_max_ = max;
 }
 
-void PixelFormat::set_green_max(uint16_t max)
+void PixelFormat::SetGreenMax(uint16_t max)
 {
     green_max_ = max;
 }
 
-void PixelFormat::set_blue_max(uint16_t max)
+void PixelFormat::SetBlueMax(uint16_t max)
 {
     blue_max_ = max;
 }
 
-uint8_t PixelFormat::red_shift() const
+uint8_t PixelFormat::RedShift() const
 {
     return red_shift_;
 }
 
-uint8_t PixelFormat::green_shift() const
+uint8_t PixelFormat::GreenShift() const
 {
     return green_shift_;
 }
 
-uint8_t PixelFormat::blue_shift() const
+uint8_t PixelFormat::BlueShift() const
 {
     return blue_shift_;
 }
 
-void PixelFormat::set_red_shift(uint8_t shift)
+void PixelFormat::SetRedShift(uint8_t shift)
 {
     red_shift_ = shift;
 }
 
-void PixelFormat::set_green_shift(uint8_t shift)
+void PixelFormat::SetGreenShift(uint8_t shift)
 {
     green_shift_ = shift;
 }
 
-void PixelFormat::set_blue_shift(uint8_t shift)
+void PixelFormat::SetBlueShift(uint8_t shift)
 {
     blue_shift_ = shift;
 }
 
-bool PixelFormat::is_empty() const
+bool PixelFormat::IsEmpty() const
 {
     if (bits_per_pixel_ == 0 &&
         red_max_     == 0    &&
@@ -310,7 +307,7 @@ bool PixelFormat::IsEqualTo(const PixelFormat &format) const
     return false;
 }
 
-void PixelFormat::set(const PixelFormat &format)
+void PixelFormat::Set(const PixelFormat &format)
 {
     bits_per_pixel_ = format.bits_per_pixel_;
 
@@ -325,7 +322,7 @@ void PixelFormat::set(const PixelFormat &format)
 
 PixelFormat& PixelFormat::operator=(const PixelFormat &format)
 {
-    set(format);
+    Set(format);
     return *this;
 }
 
@@ -338,3 +335,5 @@ bool PixelFormat::operator!=(const PixelFormat &format)
 {
     return !IsEqualTo(format);
 }
+
+} // namespace aspia

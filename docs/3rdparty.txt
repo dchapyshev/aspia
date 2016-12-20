@@ -24,4 +24,4 @@ libvpx         20.07.2016       1.6.0           https://chromium.googlesource.co
 zlib-ng        26.10.2016       trunk           https://github.com/Dead2/zlib-ng
 wtl            26.10.2016       r631            https://sourceforge.net/projects/wtl
 rapidjson      26.10.2016       trunk           https://github.com/miloyip/rapidjson
-gflags         03.10.2016       2.1.2           https://github.com/gflags/gflags
+gflags         03.10.2016       2.2.0           https://github.com/gflags/gflags

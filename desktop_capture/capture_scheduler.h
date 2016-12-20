@@ -14,21 +14,24 @@
 
 #include "base/macros.h"
 
+namespace aspia {
+
 class CaptureScheduler
 {
 public:
     CaptureScheduler();
     ~CaptureScheduler();
 
-    // Determine the time delay from current time to perform next capture.
-    uint32_t NextCaptureDelay();
-
+    void Sleep();
     void BeginCapture();
 
 private:
-    uint32_t begin_time_;
+    int resolution_;
+    DWORD begin_time_;
 
     DISALLOW_COPY_AND_ASSIGN(CaptureScheduler);
 };
+
+} // namespace aspia
 
 #endif // ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H_

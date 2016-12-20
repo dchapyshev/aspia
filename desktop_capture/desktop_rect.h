@@ -14,6 +14,8 @@
 
 #include "desktop_capture/desktop_size.h"
 
+namespace aspia {
+
 class DesktopRect
 {
 public:
@@ -39,7 +41,7 @@ public:
     void SetWidth(int width);
     void SetHeight(int height);
 
-    bool is_empty() const;
+    bool IsEmpty() const;
     bool IsValid() const;
 
     bool IsEqualTo(const DesktopRect &other) const;
@@ -71,5 +73,7 @@ private:
     int32_t right_;
     int32_t bottom_;
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_DESKTOP_CAPTURE__DESKTOP_RECT_H

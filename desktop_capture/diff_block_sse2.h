@@ -12,16 +12,16 @@
 
 #include <stdint.h>
 
-uint8_t
-DiffFullBlock_32x32_32bpp_SSE2(const uint8_t *image1, const uint8_t *image2, int bytes_per_row);
+namespace aspia {
 
-uint8_t
-DiffFullBlock_32x32_16bpp_SSE2(const uint8_t *image1, const uint8_t *image2, int bytes_per_row);
+uint8_t DiffFullBlock_32x32_32BPP_SSE2(const uint8_t *image1, const uint8_t *image2, int bytes_per_row);
 
-uint8_t
-DiffFullBlock_16x16_32bpp_SSE2(const uint8_t *image1, const uint8_t *image2, int bytes_per_row);
+uint8_t DiffFullBlock_32x32_16BPP_SSE2(const uint8_t *image1, const uint8_t *image2, int bytes_per_row);
 
-uint8_t
-DiffFullBlock_16x16_16bpp_SSE2(const uint8_t *image1, const uint8_t *image2, int bytes_per_row);
+uint8_t DiffFullBlock_16x16_32BPP_SSE2(const uint8_t *image1, const uint8_t *image2, int bytes_per_row);
+
+uint8_t DiffFullBlock_16x16_16BPP_SSE2(const uint8_t *image1, const uint8_t *image2, int bytes_per_row);
+
+} // namespace aspia
 
 #endif // _ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_SSE2_H

@@ -5,55 +5,44 @@
 * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 */
 
-#ifndef _ASPIA_DESKTOP_SIZE_H
-#define _ASPIA_DESKTOP_SIZE_H
+#ifndef _ASPIA_DESKTOP_CAPTURE__DESKTOP_SIZE_H
+#define _ASPIA_DESKTOP_CAPTURE__DESKTOP_SIZE_H
 
 #include "aspia_config.h"
 
 #include <stdint.h>
 
+namespace aspia {
+
 class DesktopSize
 {
 public:
-    DesktopSize() : width_(0), height_(0) {}
-    DesktopSize(int32_t width, int32_t height) : width_(width), height_(height) {}
-    DesktopSize(const DesktopSize &size) : width_(size.width_), height_(size.height_) {}
-    ~DesktopSize() {}
+    DesktopSize();
+    DesktopSize(int32_t width, int32_t height);
+    DesktopSize(const DesktopSize &size);
+    ~DesktopSize();
 
-    int32_t width() const { return width_; }
-    int32_t height() const { return height_; }
+    int32_t width() const;
+    int32_t height() const;
 
-    bool is_empty() const
-    {
-        return (width_ <= 0 || height_ <= 0);
-    }
+    void set_width(int32_t width);
+    void set_height(int32_t height);
 
-    bool IsEqualTo(const DesktopSize &other) const
-    {
-        return (width_ == other.width_ && height_ == other.height_);
-    }
+    bool IsEmpty() const;
 
-    DesktopSize& operator=(const DesktopSize &size)
-    {
-        width_ = size.width_;
-        height_ = size.height_;
+    bool IsEqualTo(const DesktopSize &other) const;
 
-        return *this;
-    }
+    DesktopSize& operator=(const DesktopSize &size);
 
-    bool operator==(const DesktopSize &size)
-    {
-        return IsEqualTo(size);
-    }
+    bool operator==(const DesktopSize &size);
 
-    bool operator!=(const DesktopSize &size)
-    {
-        return !IsEqualTo(size);
-    }
+    bool operator!=(const DesktopSize &size);
 
 private:
     int32_t width_;
     int32_t height_;
 };
 
-#endif // _ASPIA_IMAGE_SIZE_H
+} // namespace aspia
+
+#endif // _ASPIA_DESKTOP_CAPTURE__DESKTOP_SIZE_H

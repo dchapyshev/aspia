@@ -12,6 +12,8 @@
 
 #include <stdint.h>
 
+namespace aspia {
+
 class Process
 {
 public:
@@ -39,10 +41,12 @@ public:
     static bool Elevate(const WCHAR *command_line);
 
 private:
-    Process(HANDLE process);
+    explicit Process(HANDLE process);
 
 private:
     HANDLE process_;
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_BASE__PROCESS_H

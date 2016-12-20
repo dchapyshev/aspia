@@ -8,19 +8,14 @@
 #include "desktop_capture/differ.h"
 
 #include "desktop_capture/diff_block_sse2.h"
+#include "desktop_capture/diff_block_avx2.h"
 #include "base/logging.h"
 #include "libyuv/cpu_id.h"
 
-// Размер блока
-static const int kBlockSize = 16;
+namespace aspia {
 
-//
-// Based on WebRTC souce code
-// Original files:
-//  webrtc\modules\desktop_capture\differ_block.cc
-//  webrtc\modules\desktop_capture\differ_block_sse2.cc
-//  webrtc\modules\desktop_capture\differ.cc
-//
+// Размер блока
+static const int kBlockSize = 32;
 
 template <const int block_size, const int bits_per_pixel>
 static uint8_t
@@ -99,34 +94,48 @@ Differ::Differ(const DesktopSize &size, int bytes_per_pixel) :
     // Offset from the start of one block-row to the next.
     block_stride_y_ = bytes_per_row_ * kBlockSize;
 
-    // Проверяем поддерживается ли SSE2 процессором
-    if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
+    // Проверяем поддерживается ли AVX2 процессором
+    if (libyuv::TestCpuFlag(libyuv::kCpuHasAVX2))
     {
-        // SSE2 поддерживается, используем оптимизированные функции
-        DLOG(INFO) << "SSE2 supported";
-
         if (kBlockSize == 16)
         {
             switch (bytes_per_pixel)
             {
-                case 4: diff_full_block_func_ = DiffFullBlock_16x16_32bpp_SSE2; break;
-                case 2: diff_full_block_func_ = DiffFullBlock_16x16_16bpp_SSE2; break;
+                case 4: diff_full_block_func_ = DiffFullBlock_16x16_32BPP_AVX2; break;
+                case 2: diff_full_block_func_ = DiffFullBlock_16x16_16BPP_AVX2; break;
             }
         }
         else if (kBlockSize == 32)
         {
             switch (bytes_per_pixel)
             {
-                case 4: diff_full_block_func_ = DiffFullBlock_32x32_32bpp_SSE2; break;
-                case 2: diff_full_block_func_ = DiffFullBlock_32x32_16bpp_SSE2; break;
+                case 4: diff_full_block_func_ = DiffFullBlock_32x32_32BPP_AVX2; break;
+                case 2: diff_full_block_func_ = DiffFullBlock_32x32_16BPP_AVX2; break;
+            }
+        }
+    }
+    // Проверяем поддерживается ли SSE2 процессором
+    else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
+    {
+        if (kBlockSize == 16)
+        {
+            switch (bytes_per_pixel)
+            {
+                case 4: diff_full_block_func_ = DiffFullBlock_16x16_32BPP_SSE2; break;
+                case 2: diff_full_block_func_ = DiffFullBlock_16x16_16BPP_SSE2; break;
+            }
+        }
+        else if (kBlockSize == 32)
+        {
+            switch (bytes_per_pixel)
+            {
+                case 4: diff_full_block_func_ = DiffFullBlock_32x32_32BPP_SSE2; break;
+                case 2: diff_full_block_func_ = DiffFullBlock_32x32_16BPP_SSE2; break;
             }
         }
     }
     else
     {
-        // SSE2 не поддерживается, используем обычные функции
-        DLOG(INFO) << "SSE2 not supported";
-
         switch (bytes_per_pixel)
         {
             case 4: diff_full_block_func_ = DiffFullBlock_C<kBlockSize, 32>; break;
@@ -238,8 +247,6 @@ void Differ::MarkChangedBlocks(const uint8_t *prev_image, const uint8_t *curr_im
 //
 void Differ::MergeChangedBlocks(DesktopRegion &changed_region)
 {
-    changed_region.Clear();
-
     uint8_t *is_diff_row_start = diff_info_.get();
     int diff_stride = diff_width_;
 
@@ -344,3 +351,5 @@ void Differ::CalcChangedRegion(const uint8_t *prev_image,
     //
     MergeChangedBlocks(changed_region);
 }
+
+} // namespace aspia

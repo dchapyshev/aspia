@@ -10,6 +10,8 @@
 
 #include <string>
 
+namespace aspia {
+
 class Exception
 {
 public:
@@ -21,18 +23,21 @@ public:
 
     //
     // Конструктор с возможностью передачи текстового описания
-    // исключения. Параметр message не должен быть равен nullptr.
+    // исключения. Параметр description не должен быть равен nullptr.
     //
-    Exception(const char *description)
+    explicit Exception(const char *description)
+    {
+        description_ = description;
+    }
+
+    explicit Exception(const std::string &description)
     {
         description_ = description;
     }
 
     virtual ~Exception() {}
 
-    //
     // Метод для получения текстового описания исключения.
-    //
     const char* What() const
     {
         return description_.c_str();
@@ -41,5 +46,7 @@ public:
 private:
     std::string description_; // Хранит текстовое описание исключения.
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_BASE__EXCEPTION_H

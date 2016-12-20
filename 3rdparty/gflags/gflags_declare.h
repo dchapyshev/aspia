@@ -45,7 +45,16 @@
 // ---------------------------------------------------------------------------
 // Windows DLL import/export.
 
-// We always want to import the symbols of the gflags library
+// Whether gflags library is a DLL.
+//
+// Set to 1 by default when the shared gflags library was built on Windows.
+// Must be overwritten when this header file is used with the optionally also
+// built static library instead; set by CMake's INTERFACE_COMPILE_DEFINITIONS.
+#ifndef GFLAGS_IS_A_DLL
+#  define GFLAGS_IS_A_DLL 0
+#endif
+
+// We always want to import the symbols of the gflags library.
 #ifndef GFLAGS_DLL_DECL
 #  if 0 && defined(_MSC_VER)
 #    define GFLAGS_DLL_DECL __declspec(dllimport)

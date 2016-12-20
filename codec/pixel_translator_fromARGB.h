@@ -15,6 +15,8 @@
 #include "base/macros.h"
 #include "codec/pixel_translator.h"
 
+namespace aspia {
+
 //
 // Convertation from 32bpp 0RGB (alpha channel = 0) to user defined
 //
@@ -50,9 +52,9 @@ public:
         {
             for (int x = 0; x < width; ++x)
             {
-                uint32_t red   = red_table_[*(uint32_t*)src >> src_format_.red_shift() & src_format_.red_max()];
-                uint32_t green = green_table_[*(uint32_t*)src >> src_format_.green_shift() & src_format_.green_max()];
-                uint32_t blue  = blue_table_[*(uint32_t*)src >> src_format_.blue_shift() & src_format_.blue_max()];
+                uint32_t red   = red_table_[*(uint32_t*)src >> src_format_.RedShift() & src_format_.RedMax()];
+                uint32_t green = green_table_[*(uint32_t*)src >> src_format_.GreenShift() & src_format_.GreenMax()];
+                uint32_t blue  = blue_table_[*(uint32_t*)src >> src_format_.BlueShift() & src_format_.BlueMax()];
 
                 *(T*)dst = (T)(red | green | blue);
 
@@ -68,31 +70,31 @@ public:
 private:
     void InitRedTable(const PixelFormat &dst_format)
     {
-        red_table_.resize(src_format_.red_max() + 1);
+        red_table_.resize(src_format_.RedMax() + 1);
 
-        for (uint32_t i = 0; i <= src_format_.red_max(); ++i)
+        for (uint32_t i = 0; i <= src_format_.RedMax(); ++i)
         {
-            red_table_[i] = ((i * dst_format.red_max() + src_format_.red_max() / 2) / src_format_.red_max()) << dst_format.red_shift();
+            red_table_[i] = ((i * dst_format.RedMax() + src_format_.RedMax() / 2) / src_format_.RedMax()) << dst_format.RedShift();
         }
     }
 
     void InitGreenTable(const PixelFormat &dst_format)
     {
-        green_table_.resize(src_format_.green_max() + 1);
+        green_table_.resize(src_format_.GreenMax() + 1);
 
-        for (uint32_t i = 0; i <= src_format_.green_max(); ++i)
+        for (uint32_t i = 0; i <= src_format_.GreenMax(); ++i)
         {
-            green_table_[i] = ((i * dst_format.green_max() + src_format_.green_max() / 2) / src_format_.green_max()) << dst_format.green_shift();
+            green_table_[i] = ((i * dst_format.GreenMax() + src_format_.GreenMax() / 2) / src_format_.GreenMax()) << dst_format.GreenShift();
         }
     }
 
     void InitBlueTable(const PixelFormat &dst_format)
     {
-        blue_table_.resize(src_format_.blue_max() + 1);
+        blue_table_.resize(src_format_.BlueMax() + 1);
 
-        for (uint32_t i = 0; i <= src_format_.blue_max(); ++i)
+        for (uint32_t i = 0; i <= src_format_.BlueMax(); ++i)
         {
-            blue_table_[i] = ((i * dst_format.blue_max() + src_format_.blue_max() / 2) / src_format_.blue_max()) << dst_format.blue_shift();
+            blue_table_[i] = ((i * dst_format.BlueMax() + src_format_.BlueMax() / 2) / src_format_.BlueMax()) << dst_format.BlueShift();
         }
     }
 
@@ -105,5 +107,7 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(PixelTranslatorFromARGB);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_PIXEL_TRANSLATOR_FROMARGB_H

@@ -14,6 +14,8 @@
 #include "codec/compressor_zlib.h"
 #include "codec/video_encoder.h"
 
+namespace aspia {
+
 class VideoEncoderZLIB : public VideoEncoder
 {
 public:
@@ -24,17 +26,12 @@ public:
                         const PixelFormat &host_pixel_format,
                         const PixelFormat &client_pixel_format) override;
 
-    virtual Status Encode(proto::VideoPacket *packet,
-                          const uint8_t *screen_buffer,
-                          const DesktopRegion &changed_region) override;
+    virtual int32_t Encode(proto::VideoPacket *packet,
+                           const uint8_t *screen_buffer,
+                           const DesktopRegion &changed_region) override;
 
 private:
-    void PrepareResources(const DesktopSize &desktop_size,
-                          const PixelFormat &src_format,
-                          const PixelFormat &dst_format);
-
-    void TranslateRect(const DesktopRect &rect, const uint8_t *src_buffer);
-    void CompressRect(proto::VideoPacket *packet, const DesktopRect &rect);
+    void CompressRect(const uint8_t *source_buffer, const DesktopRect &rect, proto::VideoPacket *packet);
 
     //
     // Retrieves a pointer to the output buffer in |update| used for storing the
@@ -43,7 +40,7 @@ private:
     uint8_t* GetOutputBuffer(proto::VideoPacket *packet, size_t size);
 
 private:
-    bool size_changed_;
+    bool resized_;
 
     DesktopSize screen_size_;
 
@@ -55,7 +52,7 @@ private:
     int host_stride_;
     int client_stride_;
 
-    std::unique_ptr<DesktopRegion::Iterator> rect_iterator;
+    DesktopRegion::Iterator rect_iterator;
 
     int32_t packet_flags_;
 
@@ -66,5 +63,7 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(VideoEncoderZLIB);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_CODEC__VIDEO_ENCODER_ZLIB_H

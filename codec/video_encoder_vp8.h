@@ -20,6 +20,8 @@
 #include "codec/video_encoder.h"
 #include "base/macros.h"
 
+namespace aspia {
+
 class VideoEncoderVP8 : public VideoEncoder
 {
 public:
@@ -30,9 +32,9 @@ public:
                         const PixelFormat &host_pixel_format,
                         const PixelFormat &client_pixel_format) override;
 
-    virtual Status Encode(proto::VideoPacket *packet,
-                          const uint8_t *screen_buffer,
-                          const DesktopRegion &changed_region) override;
+    virtual int32_t Encode(proto::VideoPacket *packet,
+                           const uint8_t *screen_buffer,
+                           const DesktopRegion &changed_region) override;
 
 private:
     void CreateImage();
@@ -44,7 +46,7 @@ private:
                                   proto::VideoPacket *packet);
 
 private:
-    bool size_changed_;
+    bool resized_;
 
     // The current frame size.
     DesktopSize screen_size_;
@@ -63,7 +65,13 @@ private:
     // Buffer for storing the yuv image.
     std::unique_ptr<uint8_t[]> yuv_image_;
 
+    typedef int(*CONVERTIMAGE) (const uint8_t*, int, uint8_t*, int, uint8_t*, int, uint8_t*, int, int, int);
+
+    CONVERTIMAGE convert_image_func_ = nullptr;
+
     DISALLOW_COPY_AND_ASSIGN(VideoEncoderVP8);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_CODEC___VIDEO_ENCODER_VP8_H

@@ -13,6 +13,8 @@
 #include "base/macros.h"
 #include "base/logging.h"
 
+namespace aspia {
+
 class ScopedHandle
 {
 public:
@@ -79,5 +81,7 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(ScopedHandle);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_BASE__SCOPED_HANDLE_H

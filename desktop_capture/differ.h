@@ -13,8 +13,10 @@
 #include <memory>
 
 #include "desktop_capture/desktop_size.h"
-#include "desktop_capture/desktop_region_win.h"
+#include "desktop_capture/desktop_region.h"
 #include "base/macros.h"
+
+namespace aspia {
 
 //
 // Класс для поиска изменившихся областей экрана
@@ -59,5 +61,7 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(Differ);
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_DESKTOP_CAPTURE___DIFFER_H
