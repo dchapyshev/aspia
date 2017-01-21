@@ -18,7 +18,6 @@
 #include "base/thread.h"
 
 #include "gui/viewer_window.h"
-#include "gui/window_thread.h"
 #include "gui/resource.h"
 
 #include "network/client_tcp.h"

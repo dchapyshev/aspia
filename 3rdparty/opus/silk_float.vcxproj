@@ -71,6 +71,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>$(OutDir)obj\x86\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
@@ -119,8 +120,10 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <PreBuildEvent>
-      <Command>"$(ProjectDir)genversion.bat" "$(ProjectDir)version.h" PACKAGE_VERSION</Command>
-      <Message>Generating version.h</Message>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
     </PreBuildEvent>
     <CustomBuildStep>
       <Command>

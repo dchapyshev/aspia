@@ -67,6 +67,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(OutDir)obj\x86\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -118,8 +119,10 @@
       <AdditionalDependencies>celt.lib;silk_common.lib;silk_fixed.lib;silk_float.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>"$(ProjectDir)genversion.bat" "$(ProjectDir)version.h" PACKAGE_VERSION</Command>
-      <Message>Generating version.h</Message>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
     </PreBuildEvent>
     <CustomBuildStep>
       <Command>

@@ -143,10 +143,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>$(OutDir)obj\x86\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IntDir>$(OutDir)obj\x86\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -178,8 +180,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>"$(ProjectDir)genversion.bat" "$(ProjectDir)version.h" PACKAGE_VERSION</Command>
-      <Message>Generating version.h</Message>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
     </PreBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -270,8 +274,10 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PreBuildEvent>
-      <Command>"$(ProjectDir)genversion.bat" "$(ProjectDir)version.h" PACKAGE_VERSION</Command>
-      <Message>Generating version.h</Message>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
     </PreBuildEvent>
     <CustomBuildStep>
       <Command>

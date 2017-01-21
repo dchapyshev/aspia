@@ -73,7 +73,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;libglog.lib;gflags.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;flatbuffers.lib;libaspia.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;libglog.lib;gflags.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libaspia.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <ResourceCompile>
