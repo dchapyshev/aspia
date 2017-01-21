@@ -10,4 +10,11 @@
                         language="*" />
     </dependentAssembly>
   </dependency>
+  <trustInfo xmlns="urn:schema-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel Level="highestAvailable" uiAccess="false"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
 </assembly>

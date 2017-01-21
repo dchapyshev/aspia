@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            gui/main.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            gui/main.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include <atlbase.h>
 #include <atlapp.h>
@@ -15,7 +15,11 @@
 #include "host/sas_injector.h"
 #include "gui/main_dialog.h"
 
-using namespace aspia;
+namespace aspia {
+
+CAppModule _module;
+CIcon _small_icon;
+CIcon _big_icon;
 
 DEFINE_string(run_mode, "", "Run Mode");
 
@@ -23,32 +27,34 @@ static void StartGUI()
 {
     Process::Current().SetPriority(Process::Priority::High);
 
-    HINSTANCE instance = nullptr;
-
-    if (!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
-                                GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-                            reinterpret_cast<WCHAR*>(&StartGUI),
-                            &instance))
-    {
-        LOG(FATAL) << "GetModuleHandleExW() failed: " << GetLastError();
-    }
-
     HRESULT res = CoInitialize(nullptr);
     CHECK(SUCCEEDED(res)) << "CoInitialize() failed: " << res;
 
     AtlInitCommonControls(ICC_BAR_CLASSES);
 
-    CAppModule module;
-    res = module.Init(nullptr, instance);
+    res = _module.Init(nullptr, GetModuleHandleW(nullptr));
     CHECK(SUCCEEDED(res)) << "Module initialization failure: " << res;
 
-    CMainDialog main_dialog;
+    _small_icon = AtlLoadIconImage(IDI_MAINICON,
+                                   LR_CREATEDIBSECTION,
+                                   GetSystemMetrics(SM_CXSMICON),
+                                   GetSystemMetrics(SM_CYSMICON));
+
+    _big_icon = AtlLoadIconImage(IDI_MAINICON,
+                                 LR_CREATEDIBSECTION,
+                                 GetSystemMetrics(SM_CXICON),
+                                 GetSystemMetrics(SM_CYICON));
+
+    MainDialog main_dialog;
     main_dialog.DoModal();
 
-    module.Term();
-
+    _module.Term();
     CoUninitialize();
 }
+
+} // namespace aspia
+
+using namespace aspia;
 
 int main(int argc, char *argv[])
 {

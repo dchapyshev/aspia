@@ -1,14 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="auth_dialog.cpp" />
     <ClCompile Include="main_dialog.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="timer.cpp" />
+    <ClCompile Include="viewer_window.cpp" />
+    <ClCompile Include="about_dialog.cpp" />
+    <ClCompile Include="auth_dialog.cpp" />
+    <ClCompile Include="video_window.cpp" />
+    <ClCompile Include="status_dialog.cpp" />
+    <ClCompile Include="viewer_bar.cpp" />
+    <ClCompile Include="settings_dialog.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="auth_dialog.h" />
     <ClInclude Include="main_dialog.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="timer.h" />
+    <ClInclude Include="viewer_window.h" />
+    <ClInclude Include="about_dialog.h" />
+    <ClInclude Include="tray_icon.h" />
+    <ClInclude Include="auth_dialog.h" />
+    <ClInclude Include="video_window.h" />
+    <ClInclude Include="status_dialog.h" />
+    <ClInclude Include="scoped_windows_hook.h" />
+    <ClInclude Include="window_thread.h" />
+    <ClInclude Include="viewer_bar.h" />
+    <ClInclude Include="settings_dialog.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="lang">

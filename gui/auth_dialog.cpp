@@ -1,20 +1,23 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            gui/auth_dialog.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            gui/auth_dialog.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "gui/auth_dialog.h"
 
-LRESULT CAuthDialog::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+namespace aspia {
+
+BOOL CAuthDialog::OnInitDialog(CWindow focus_window, LPARAM lParam)
 {
     CenterWindow();
-    return 0;
+    return TRUE;
 }
 
-LRESULT CAuthDialog::OnClose(UINT, WPARAM, LPARAM, BOOL&)
+void CAuthDialog::OnClose()
 {
     EndDialog(0);
-    return 0;
 }
+
+} // namespace aspia

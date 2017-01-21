@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            gui/resource.rc
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            gui/resource.rc
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "resource.h"
 
@@ -12,42 +12,192 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // UTF-8
 #pragma code_page(65001)
 
-IDD_MAINDIALOG DIALOGEX 100, 100, 375, 160
+IDD_MAIN DIALOGEX 100, 100, 335, 150
 STYLE DS_SHELLFONT | WS_BORDER | WS_OVERLAPPED | WS_SYSMENU | DS_CENTER | WS_MINIMIZEBOX | WS_CAPTION
 CAPTION "Aspia Remote Desktop"
 FONT 8, "MS Shell Dlg"
 BEGIN
-    GROUPBOX "Server", -1, 5, 5, 180, 150
+    GROUPBOX "Server", -1, 5, 5, 160, 140
     LTEXT "List your IP-addresses:", -1, 12, 17, 100, 9
-    CONTROL "", IDC_IP_LIST, "SysListView32", WS_BORDER | WS_VSCROLL | WS_TABSTOP | LVS_SINGLESEL | LVS_NOSORTHEADER | LVS_NOCOLUMNHEADER | LVS_SHOWSELALWAYS | LVS_REPORT, 12, 28, 166, 75
-    LTEXT "", IDC_CLIENT_COUNT, 12, 110, 100, 9
-    LTEXT "Server stopped.", IDC_SERVER_STATUS, 12, 125, 100, 9
-    PUSHBUTTON "&Start", IDC_START_SERVER, 118, 135, 60, 14
+    CONTROL "", IDC_IP_LIST, "SysListView32", WS_BORDER | WS_VSCROLL | WS_TABSTOP | LVS_SINGLESEL | LVS_NOSORTHEADER | LVS_NOCOLUMNHEADER | LVS_SHOWSELALWAYS | LVS_REPORT, 12, 28, 146, 65
+    LTEXT "", IDC_CLIENT_COUNT_TEXT, 12, 100, 100, 9
+    LTEXT "Server stopped.", IDC_SERVER_STATUS_TEXT, 12, 115, 100, 9
+    PUSHBUTTON "&Start", IDC_START_SERVER_BUTTON, 98, 125, 60, 14
 
-    GROUPBOX "Client", -1, 190, 5, 180, 150
-    LTEXT "Server Address:", -1, 197, 17, 100, 9
-    EDITTEXT IDC_SERVER_ADDRESS_EDIT, 197, 28, 166, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | ES_AUTOHSCROLL
+    GROUPBOX "Client", -1, 170, 5, 160, 140
+    LTEXT "Server Address:", -1, 177, 17, 90, 9
+    EDITTEXT IDC_SERVER_ADDRESS_EDIT, 177, 28, 146, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | ES_AUTOHSCROLL
 
-    LTEXT "Server Port:", -1, 197, 47, 100, 9
-    EDITTEXT IDC_SERVER_PORT_EDIT, 197, 58, 60, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | ES_AUTOHSCROLL | ES_NUMBER
-    AUTOCHECKBOX "Use default", IDC_SERVER_DEFAULT_PORT, 265, 60, 60, 8
-    PUSHBUTTON "&Connect", IDC_CONNECT, 303, 135, 60, 14
+    LTEXT "Server Port:", -1, 177, 47, 100, 9
+    EDITTEXT IDC_SERVER_PORT_EDIT, 177, 58, 50, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | ES_AUTOHSCROLL | ES_NUMBER
+    AUTOCHECKBOX "Use default", IDC_SERVER_DEFAULT_PORT_CHECK, 235, 60, 60, 8
+    PUSHBUTTON "&Connect", IDC_CONNECT_BUTTON, 263, 125, 60, 14
 END
 
-IDD_AUTHDIALOG DIALOGEX 100, 100, 375, 160
+IDD_STATUS DIALOGEX 100, 100, 251, 90
 STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
-CAPTION "Aspia Remote Desktop"
+CAPTION "Connection Status"
 FONT 8, "MS Shell Dlg"
 BEGIN
+    EDITTEXT IDC_STATUS_EDIT, 5, 5, 240, 60, WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_GROUP | WS_TABSTOP | ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL
+    DEFPUSHBUTTON "&Cancel", IDCANCEL, 196, 70, 50, 14
+END
 
+IDD_AUTH DIALOGEX 100, 100, 241, 73
+STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "Authorization"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT "User Name:", -1, 10, 15, 77, 10
+    EDITTEXT IDC_USERNAME_EDIT, 100, 11, 130, 14, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
+
+    LTEXT "Password:", -1, 10, 35, 77, 10
+    EDITTEXT IDC_PASSWORD_EDIT, 100, 31, 130, 14, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
+
+    DEFPUSHBUTTON "&OK", IDOK, 124, 53, 50, 14
+    PUSHBUTTON "&Cancel", IDCANCEL, 178, 53, 50, 14
+END
+
+IDD_SETTINGS DIALOGEX 20, 16, 165, 199
+STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "Connection Settings"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    GROUPBOX "Remote Screen", -1, 7, 7, 150, 166
+
+    LTEXT "Codec:", -1, 15, 19, 80, 10
+    COMBOBOX IDC_CODEC_COMBO, 15, 30, 134, 150, CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL
+
+    LTEXT "Color depth:", IDC_COLOR_DEPTH_TEXT, 15, 48, 80, 10
+    COMBOBOX IDC_COLOR_DEPTH_COMBO, 15, 59, 134, 150, CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL
+
+    LTEXT "Compression ratio:", IDC_COMPRESS_RATIO_TEXT, 15, 77, 80, 10
+    LTEXT "Fast", IDC_FAST_TEXT, 15, 90, 20, 10
+    RTEXT "Best", IDC_BEST_TEXT, 129, 90, 20, 10
+    CONTROL "", IDC_COMPRESS_RATIO_TRACKBAR, "msctls_trackbar32", TBS_AUTOTICKS | WS_TABSTOP, 33, 89, 97, 12
+
+    LTEXT "Screen update interval (ms):", -1, 15, 113, 100, 10
+    EDITTEXT IDC_INTERVAL_EDIT, 117, 109, 32, 14, ES_RIGHT | ES_NUMBER | WS_GROUP
+    CONTROL "", IDC_INTERVAL_UPDOWN, "msctls_updown32", UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | WS_BORDER | WS_GROUP, 140, 109, 12, 14
+
+    AUTOCHECKBOX "&Disable desktop effects", IDC_DESKTOP_EFFECTS_CHECK, 15, 129, 125, 8
+    AUTOCHECKBOX "&Show remote cursor", IDC_REMOTE_CURSOR_CHECK, 15, 143, 125, 8
+    AUTOCHECKBOX "&Auto send clipboard", IDC_AUTOSEND_CLIPBOARD_CHECK, 15, 157, 125, 8
+
+    DEFPUSHBUTTON "&OK", IDOK, 33, 179, 60, 14
+    PUSHBUTTON "&Cancel", IDCANCEL, 98, 179, 60, 14
+END
+
+IDD_ABOUT DIALOGEX 100, 100, 220, 200
+STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "About"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    CONTROL -1, IDC_ABOUT_ICON, "STATIC", SS_ICON | SS_CENTERIMAGE | SS_REALSIZEIMAGE, 15, 10, 30, 30
+
+    LTEXT "Aspia Remote Desktop (1.0.0.0)", IDC_VERSION_TEXT, 67, 15, 120, 11
+    LTEXT "© 2016-2017 Dmitry Chapyshev", -1, 66, 27, 120, 10
+
+    EDITTEXT IDC_ABOUT_EDIT, 5, 45, 210, 100, WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_GROUP | WS_TABSTOP | ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL
+    CONTROL "", -1, "STATIC", SS_ETCHEDFRAME, 5, 151, 210, 27
+    DEFPUSHBUTTON "&Donate!", IDC_DONATE_BUTTON, 96, 156, 110, 15
+    PUSHBUTTON "&Visit site", IDC_SITE_BUTTON, 13, 156, 75, 15
+
+    PUSHBUTTON "&Close", IDOK, 165, 181, 50, 14
+END
+
+IDR_SHORTCUTS MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "Ctrl+Esc",        ID_KEY_CTRL_ESC
+        MENUITEM "Alt+Tab",         ID_KEY_ALT_TAB
+        MENUITEM "Alt+Shift+Tab",   ID_KEY_ALT_SHIFT_TAB
+        MENUITEM "PrintScreen",     ID_KEY_PRINTSCREEN
+        MENUITEM "Alt+PrintScreen", ID_KEY_ALT_PRINTSCREEN
+        MENUITEM "Ctrl+Alt+F12",    ID_KEY_CTRL_ALT_F12
+        MENUITEM "F12",             ID_KEY_F12
+        MENUITEM "Ctrl+F12",        ID_KEY_CTRL_F12
+    END
+END
+
+IDR_POWER MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "Shutdown",  ID_POWER_SHUTDOWN
+        MENUITEM "Reboot",    ID_POWER_REBOOT
+        MENUITEM "Hibernate", ID_POWER_HIBERNATE
+        MENUITEM "Suspend",   ID_POWER_SUSPEND
+        MENUITEM "LogOff",    ID_POWER_LOGOFF
+    END
+END
+
+IDR_TRAY MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "Show / Hide", ID_SHOWHIDE
+        MENUITEM "Exit", ID_EXIT
+    END
 END
 
 STRINGTABLE DISCARDABLE
 BEGIN
-    IDS_SERVER_STARTED "Server started."
-    IDS_SERVER_STOPPED "Server stopped."
-    IDS_START "&Start"
-    IDS_STOP "&Stop"
-    IDS_NO_CLIENTS "No connected clients."
-    IDS_CLIENT_COUNT "Connected clients: %d"
+    IDS_APPLICATION_NAME          "Aspia Remote Desktop"
+    IDS_SERVER_STARTED            "Server started."
+    IDS_SERVER_STOPPED            "Server stopped."
+    IDS_START                     "&Start"
+    IDS_STOP                      "&Stop"
+    IDS_NO_CLIENTS                "No connected clients."
+    IDS_CLIENT_COUNT_FORMAT       "Connected clients: %d"
+    IDS_DONATE_LINK               "http://aspia.org/donate"
+    IDS_SITE_LINK                 "http://aspia.org"
+
+    IDS_ABOUT_STRING "Aspia Remote Desktop is free software released under GNU LGPL license.\r\n\
+                      You can get a copy of GNU LGPL license here:\r\n\
+                      http ://www.gnu.org/licenses/lgpl.html\r\n\r\n\
+                      You can also get a translation of GNU LGPL license here:\r\n\
+                      http ://www.gnu.org/licenses/translations.html\r\n\r\n\
+                      Developers:\r\n\
+                      • Dmitry Chapyshev(dmitry@aspia.ru)\r\n\r\n\
+                      In the development we used the following projects:\r\n\
+                      • WebRTC © 2011, The WebRTC project authors, BSD 3-Clause License\r\n\
+                      • libvpx © 2010, The WebM Project authors, BSD 3-Clause License\r\n\
+                      • libyuv © 2011 The LibYuv Project Authors, BSD 3-Clause License\r\n\
+                      • protobuf © 2014 Google Inc., BSD 3-Clause License\r\n\
+                      • libglog © 2008 Google Inc., BSD 3-Clause License\r\n\
+                      • gflags © 2006 Google Inc., BSD 3-Clause License\r\n\
+                      • WTL © 2015 Microsoft Corporation, WTL Team, Microsoft Public License\r\n\
+                      • zlib-ng © 1995-2013 Jean-loup Gailly and Mark Adler, Zlib License\r\n\
+                      • Fugue Icons © 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 License"
+
+    IDS_BELL                       "Send an audio bell to a remote computer"
+    IDS_POWER                      "Power management of the remote computer"
+    IDS_AUTO_SIZE                  "Auto size window"
+    IDS_SETTINGS                   "Settings"
+    IDS_CAD                        "Send Ctrl+Alt+Del"
+    IDS_EXIT                       "Close the current connection"
+    IDS_FULLSCREEN                 "Switch to full screen mode"
+    IDS_SHORTCUTS                  "Send a keyboard shortcut"
+    IDS_CLIP_RECV                  "Get remote clipboard"
+    IDS_CLIP_SEND                  "Send local clipboard"
+    IDS_ABOUT                      "About program"
+    IDS_STATUS_CONNECTING_FORMAT   "Connection to %s:%i"
+    IDS_STATUS_CONNECTED           "Connected"
+    IDS_CONFIRMATION               "Confirmation"
+    IDS_CONF_POWER_SHUTDOWN        "Are you sure you want to shut down a remote computer?"
+    IDS_CONF_POWER_REBOOT          "Are you sure you want to reboot the remote computer?"
+    IDS_CONF_POWER_HIBERNATE       "Are you sure you want to hibernate the remote computer?"
+    IDS_CONF_POWER_SUSPEND         "Are you sure you want to suspend the remote computer?"
+    IDS_CONF_POWER_LOGOFF          "Are you sure you want to end a user session on a remote computer?"
+    IDS_COMPRESSION_RATIO_FORMAT   "Compression ratio: %d"
+    IDS_32BIT                      "True color (32 bit)"
+    IDS_24BIT                      "True color (24 bit)"
+    IDS_16BIT                      "High color (16 bit)"
+    IDS_15BIT                      "High color (15 bit)"
+    IDS_12BIT                      "High color (12 bit)"
+    IDS_8BIT                       "256 colors (8 bit)"
+    IDS_6BIT                       "64 colors (6 bit)"
+    IDS_3BIT                       "8 colors (3 bit)"
 END
