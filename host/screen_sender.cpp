@@ -1,70 +1,133 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            host/screen_sender.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            host/screen_sender.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "host/screen_sender.h"
+
+#include <thread>
 
 #include "base/exception.h"
 #include "base/logging.h"
 
 namespace aspia {
 
-ScreenSender::ScreenSender(int32_t encoding,
-                           const PixelFormat &client_pixel_format,
-                           OnMessageCallback on_message) :
-    current_encoding_(proto::VIDEO_ENCODING_UNKNOWN),
-    client_pixel_format_(client_pixel_format),
-    on_message_(on_message)
+ScreenSender::ScreenSender(OnMessageCallback on_message_callback) :
+    encoding_(proto::VIDEO_ENCODING_UNKNOWN),
+    on_message_callback_(on_message_callback)
 {
-    Configure(encoding, client_pixel_format);
-
-    SetThreadPriority(Priority::Highest);
-    Start();
+    // Nothing
 }
 
 ScreenSender::~ScreenSender()
 {
-    if (!IsThreadTerminated())
+    if (IsActiveThread())
     {
         Stop();
         WaitForEnd();
     }
 }
 
-void ScreenSender::Configure(int32_t encoding, const PixelFormat &client_pixel_format)
+void ScreenSender::Configure(const proto::VideoControl &msg)
 {
     // Блокируем отправку видео-пакетов.
     LockGuard<Lock> guard(&update_lock_);
 
     // Если изменилась кодировка.
-    if (current_encoding_ != encoding)
+    if (encoding_ != msg.encoding())
     {
+        encoding_ = msg.encoding();
+
         // Переинициализируем кодировщик.
-        if (encoding == proto::VIDEO_ENCODING_VP8)
+        switch (encoding_)
         {
-            encoder_.reset(new VideoEncoderVP8());
-            current_encoding_ = encoding;
+            case proto::VIDEO_ENCODING_VP8:
+                encoder_.reset(new VideoEncoderVP8());
+                break;
+
+            case proto::VIDEO_ENCODING_VP9:
+                encoder_.reset(new VideoEncoderVP9());
+                break;
+
+            case proto::VIDEO_ENCODING_ZLIB:
+                encoder_.reset(new VideoEncoderZLIB());
+                break;
+
+            default:
+                LOG(ERROR) << "Unsupported video encoding: " << encoding_;
+                throw Exception("Unsupported video encoding");
+                break;
         }
-        else if (encoding == proto::VIDEO_ENCODING_ZLIB)
+
+        //
+        // Сбрасываем размер экрана, чтобы кодировщик был сконфигурирован в соответствии
+        // с текущим размером.
+        //
+        prev_size_.Clear();
+    }
+
+    if (encoding_ == proto::VIDEO_ENCODING_ZLIB)
+    {
+        VideoEncoderZLIB *encoder = reinterpret_cast<VideoEncoderZLIB*>(encoder_.get());
+
+        // Если получено новое значение уровня сжатия.
+        if (msg.compress_ratio())
         {
-            encoder_.reset(new VideoEncoderZLIB());
-            current_encoding_ = encoding;
-        }
-        else
-        {
-            LOG(ERROR) << "Unsupported video encoding: " << current_encoding_;
-            throw Exception("Unsupported video encoding.");
+            // Устанавливаем новый уровень сжатия.
+            encoder->SetCompressRatio(msg.compress_ratio());
         }
     }
 
-    // Сохраняем формат пикселей клиента.
-    client_pixel_format_ = client_pixel_format;
+    // Если был получен формат пикселей от клиента.
+    if (msg.has_pixel_format())
+    {
+        curr_format_.FromVideoPixelFormat(msg.pixel_format());
+    }
 
     // Энкодер должен быть инициализирован.
     DCHECK(encoder_);
+
+    // Если получена команда отключить эффекты рабочего стола.
+    if (msg.flags() & proto::VideoControl::DISABLE_DESKTOP_EFFECTS)
+    {
+        // Если они еще вы выключены.
+        if (!desktop_effects_)
+        {
+            // Выключаем.
+            desktop_effects_.reset(new ScopedDesktopEffects());
+        }
+    }
+    else
+    {
+        // Включаем эффекты рабочего стола.
+        desktop_effects_.reset();
+    }
+
+    int32_t interval = msg.update_interval();
+
+    // Если получено новое значение интервала обновления и оно не равно предыдущему.
+    if (interval)
+    {
+        // Переинициализируем планировщик.
+        scheduler_.reset(new CaptureScheduler(interval));
+    }
+
+    // Если планировщик не инициализирован.
+    if (!scheduler_)
+    {
+        // Инциализируем его с интервалом обновления по умолчанию.
+        scheduler_.reset(new CaptureScheduler(30));
+    }
+
+    // Если поток не запущен на выполнение.
+    if (!IsActiveThread())
+    {
+        // Устанавливаем приоритет для потока и запускаем его.
+        SetThreadPriority(Priority::Highest);
+        Start();
+    }
 }
 
 void ScreenSender::Worker()
@@ -72,40 +135,25 @@ void ScreenSender::Worker()
     // Создаем сообщение для отправки клиенту.
     std::unique_ptr<proto::HostToClient> message(new proto::HostToClient());
 
-    DesktopSize screen_size;
-    DesktopSize prev_screen_size;
-
-    PixelFormat host_pixel_format;
-    PixelFormat prev_host_pixel_format;
-
-    PixelFormat prev_client_pixel_format;
-
-    DesktopRegion changed_region;
-
     try
     {
-        // Создаем экземпляры классов захвата экрана и планировщика захвата экрана.
-        std::unique_ptr<CaptureScheduler> scheduler(new CaptureScheduler());
+        // Создаем экземпляр класса захвата экрана.
         std::unique_ptr<Capturer> capturer(new CapturerGDI());
 
         // Продолжаем цикл пока не будет дана команда завершить поток.
         while (!IsThreadTerminating())
         {
             // Делаем отметку времени начала операции.
-            scheduler->BeginCapture();
-
-            // Очищаем регион от предыдущих изменений.
-            changed_region.Clear();
+            scheduler_->BeginCapture();
 
             //
             // Делаем захват изображения, получаем его размер, формат пикселей
             // и измененный регион.
             //
-            const uint8_t *screen_buffer =
-                capturer->CaptureImage(changed_region, screen_size, host_pixel_format);
+            const uint8_t *screen_buffer = capturer->CaptureImage(&dirty_region_, &curr_size_);
 
             // Если измененный регион не пуст.
-            if (!changed_region.IsEmpty())
+            if (!dirty_region_.IsEmpty())
             {
                 //
                 // Ставим блокировку отправки видео-пакетов (кодировка, формат пикселей
@@ -114,17 +162,17 @@ void ScreenSender::Worker()
                 LockGuard<Lock> guard(&update_lock_);
 
                 // Если изменились размера экрана или формат пикселей.
-                if (screen_size          != prev_screen_size ||
-                    client_pixel_format_ != prev_client_pixel_format ||
-                    host_pixel_format    != prev_host_pixel_format)
+                if (curr_size_ != prev_size_ || curr_format_ != prev_format_)
                 {
-                    // Изменяем размер экнодера.
-                    encoder_->Resize(screen_size, host_pixel_format, client_pixel_format_);
-
                     // Сохраняем новые значения.
-                    prev_host_pixel_format   = host_pixel_format;
-                    prev_client_pixel_format = client_pixel_format_;
-                    prev_screen_size         = screen_size;
+                    prev_format_ = curr_format_;
+                    prev_size_ = curr_size_;
+
+                    // Изменяем размер экнодера.
+                    encoder_->Resize(curr_size_, curr_format_);
+
+                    // После изменений добавляем в изменный регион всю область экрана.
+                    dirty_region_.AddRect(DesktopRect::MakeSize(curr_size_));
                 }
 
                 int32_t flags;
@@ -143,15 +191,18 @@ void ScreenSender::Worker()
                     // Выполняем кодирование изображения.
                     flags = encoder_->Encode(message->mutable_video_packet(),
                                              screen_buffer,
-                                             changed_region);
+                                             dirty_region_);
 
                     // Отправляем видео-пакет клиенту.
-                    on_message_(message.get());
+                    on_message_callback_(message.get());
 
                 } while (!(flags & proto::VideoPacket::LAST_PACKET));
+
+                // Очищаем регион от предыдущих изменений.
+                dirty_region_.Clear();
             }
 
-            scheduler->Sleep();
+            scheduler_->Wait();
         }
     }
     catch (const Exception &err)

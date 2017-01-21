@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            host/host.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            host/host.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_HOST__HOST_H
 #define _ASPIA_HOST__HOST_H
@@ -16,7 +16,6 @@
 #include "base/thread.h"
 #include "base/macros.h"
 #include "base/scoped_aligned_buffer.h"
-#include "proto/auth.pb.h"
 #include "proto/proto.pb.h"
 #include "network/socket_tcp.h"
 #include "host/input_injector.h"
@@ -51,14 +50,18 @@ private:
 
     void ReadPointerEvent(const proto::PointerEvent &msg);
     void ReadKeyEvent(const proto::KeyEvent &msg);
+    void ReadBellEvent(const proto::BellEvent &msg);
     void ReadVideoControl(const proto::VideoControl &msg);
+    void ReadPowerControl(const proto::PowerControl &msg);
+    void ReadClipboardControl(const proto::ClipboardControl &msg);
+    void ReadClipboard(const proto::Clipboard &msg);
 
 private:
     OnEventCallback on_event_callback_;
 
     std::unique_ptr<Socket> sock_;
 
-    int32_t feature_mask_;
+    uint32_t feature_mask_;
 
     std::unique_ptr<ScreenSender> screen_sender_;
     std::unique_ptr<InputInjector> input_injector_;
@@ -69,8 +72,8 @@ private:
     uint32_t write_buffer_size_;
     uint32_t read_buffer_size_;
 
-    std::unique_ptr<ScopedAlignedBuffer> write_buffer_;
-    std::unique_ptr<ScopedAlignedBuffer> read_buffer_;
+    ScopedAlignedBuffer write_buffer_;
+    ScopedAlignedBuffer read_buffer_;
 
     Lock write_lock_;
 

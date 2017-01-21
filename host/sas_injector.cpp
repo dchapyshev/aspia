@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            host/sas_injector.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            host/sas_injector.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "host/sas_injector.h"
 
@@ -14,8 +14,7 @@ namespace aspia {
 static const WCHAR kSasServiceName[] = L"aspia-sas-service";
 
 SasInjector::SasInjector() :
-    Service(kSasServiceName),
-    kernel32_(new ScopedKernel32Library())
+    Service(kSasServiceName)
 {
     // Nothing
 }
@@ -35,7 +34,7 @@ void SasInjector::SendSAS()
 {
     std::unique_ptr<ScopedSasPolice> sas_police(new ScopedSasPolice());
 
-    DWORD session_id = kernel32_->WTSGetActiveConsoleSessionId();
+    DWORD session_id = kernel32_.WTSGetActiveConsoleSessionId();
 
     if (session_id == 0xFFFFFFFF)
     {
@@ -65,7 +64,7 @@ void SasInjector::InjectSAS()
     DWORD session_id = 0;
 
     // Получаем ID сессии пользователя под которым запущен текущий процесс.
-    if (!kernel32_->ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
+    if (!kernel32_.ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
         DLOG(WARNING) << "ProcessIdToSessionId() failed: " << GetLastError();
         return;

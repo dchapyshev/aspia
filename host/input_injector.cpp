@@ -1,13 +1,14 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            host/input_injecotr.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            host/input_injecotr.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "host/input_injector.h"
 
 #include <versionhelpers.h>
+#include <future>
 
 #include "desktop_capture/desktop_rect.h"
 #include "host/sas_injector.h"
@@ -15,9 +16,9 @@
 namespace aspia {
 
 InputInjector::InputInjector() :
-    last_mouse_button_mask_(0)
+    prev_mouse_button_mask_(0)
 {
-    // Nothing
+    bell_ = false;
 }
 
 InputInjector::~InputInjector()
@@ -60,21 +61,19 @@ void InputInjector::InjectPointer(const proto::PointerEvent &msg)
     }
 
     // Переводим координаты курсора в координаты виртуального экрана.
-    DesktopPoint pos(((msg.x() - screen_rect.x()) * 65535) / (screen_rect.width() - 1),
-                     ((msg.y() - screen_rect.y()) * 65535) / (screen_rect.height() - 1));
+    DesktopPoint pos(((msg.x() - screen_rect.x()) * 65535) / (screen_rect.Width() - 1),
+                     ((msg.y() - screen_rect.y()) * 65535) / (screen_rect.Height() - 1));
 
     DWORD flags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
     DWORD wheel_movement = 0;
-    bool update_mouse = false;
 
-    if (pos != last_mouse_pos_)
+    if (pos != prev_mouse_pos_)
     {
         flags |= MOUSEEVENTF_MOVE;
-        last_mouse_pos_ = pos;
-        update_mouse = true;
+        prev_mouse_pos_ = pos;
     }
 
-    int32_t mask = msg.mask();
+    uint32_t mask = msg.mask();
 
     //
     // Если на компьютере, к которому осуществляется подключение, левая и правая
@@ -93,62 +92,55 @@ void InputInjector::InjectPointer(const proto::PointerEvent &msg)
         if (right) mask |= proto::PointerEvent::LEFT_BUTTON;
     }
 
-    if ((mask & proto::PointerEvent::LEFT_BUTTON) !=
-        (last_mouse_button_mask_ & proto::PointerEvent::LEFT_BUTTON))
-    {
-        flags |= (mask & proto::PointerEvent::LEFT_BUTTON) ?
-            MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP;
+    bool prev = (prev_mouse_button_mask_ & proto::PointerEvent::LEFT_BUTTON) != 0;
+    bool curr = (mask & proto::PointerEvent::LEFT_BUTTON) != 0;
 
-        update_mouse = true;
+    if (curr != prev)
+    {
+        flags |= (curr ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP);
     }
 
-    if ((mask & proto::PointerEvent::MIDDLE_BUTTON) !=
-        (last_mouse_button_mask_ & proto::PointerEvent::MIDDLE_BUTTON))
-    {
-        flags |= (mask & proto::PointerEvent::MIDDLE_BUTTON) ?
-            MOUSEEVENTF_MIDDLEDOWN : MOUSEEVENTF_MIDDLEUP;
+    prev = (prev_mouse_button_mask_ & proto::PointerEvent::MIDDLE_BUTTON) != 0;
+    curr = (mask & proto::PointerEvent::MIDDLE_BUTTON) != 0;
 
-        update_mouse = true;
+    if (curr != prev)
+    {
+        flags |= (curr ? MOUSEEVENTF_MIDDLEDOWN : MOUSEEVENTF_MIDDLEUP);
     }
 
-    if ((mask & proto::PointerEvent::RIGHT_BUTTON) !=
-        (last_mouse_button_mask_ & proto::PointerEvent::RIGHT_BUTTON))
-    {
-        flags |= (mask & proto::PointerEvent::RIGHT_BUTTON) ?
-            MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP;
+    prev = (prev_mouse_button_mask_ & proto::PointerEvent::RIGHT_BUTTON) != 0;
+    curr = (mask & proto::PointerEvent::RIGHT_BUTTON) != 0;
 
-        update_mouse = true;
+    if (curr != prev)
+    {
+        flags |= (curr ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP);
     }
 
     if (mask & proto::PointerEvent::WHEEL_UP)
     {
         flags |= MOUSEEVENTF_WHEEL;
         wheel_movement = static_cast<DWORD>(WHEEL_DELTA);
-        update_mouse = true;
     }
-
-    if (mask & proto::PointerEvent::WHEEL_DOWN)
+    else if (mask & proto::PointerEvent::WHEEL_DOWN)
     {
         flags |= MOUSEEVENTF_WHEEL;
         wheel_movement = static_cast<DWORD>(-WHEEL_DELTA);
-        update_mouse = true;
     }
 
-    if (update_mouse)
-    {
-        INPUT input = { 0 };
+    INPUT input;
 
-        input.type         = INPUT_MOUSE;
-        input.mi.dx        = pos.x();
-        input.mi.dy        = pos.y();
-        input.mi.mouseData = wheel_movement;
-        input.mi.dwFlags   = flags;
+    input.type           = INPUT_MOUSE;
+    input.mi.dx          = pos.x();
+    input.mi.dy          = pos.y();
+    input.mi.mouseData   = wheel_movement;
+    input.mi.dwFlags     = flags;
+    input.mi.time        = 0;
+    input.mi.dwExtraInfo = 0;
 
-        // Do the mouse event
-        SendInput(1, &input, sizeof(input));
+    // Do the mouse event
+    SendInput(1, &input, sizeof(input));
 
-        last_mouse_button_mask_ = mask;
-    }
+    prev_mouse_button_mask_ = mask;
 }
 
 void InputInjector::HandleCAD()
@@ -197,7 +189,7 @@ void InputInjector::HandleCAD()
 void InputInjector::InjectKeyboard(const proto::KeyEvent &msg)
 {
     // Если нажата комбинация Ctrl + Alt + Delete.
-    if (msg.pressed() && msg.keycode() == VK_DELETE &&
+    if ((msg.flags() & proto::KeyEvent::PRESSED) && msg.keycode() == VK_DELETE &&
         (GetAsyncKeyState(VK_CONTROL) & 0x8000) &&
         (GetAsyncKeyState(VK_MENU) & 0x8000))
     {
@@ -207,17 +199,45 @@ void InputInjector::InjectKeyboard(const proto::KeyEvent &msg)
 
     SwitchToInputDesktop();
 
-    DWORD flags = (msg.extended() ? KEYEVENTF_EXTENDEDKEY : 0);
+    DWORD flags = 0;
 
-    INPUT input = { 0 };
+    flags |= ((msg.flags() & proto::KeyEvent::EXTENDED) ? KEYEVENTF_EXTENDEDKEY : 0);
+    flags |= ((msg.flags() & proto::KeyEvent::PRESSED) ? 0 : KEYEVENTF_KEYUP);
 
-    input.type       = INPUT_KEYBOARD;
-    input.ki.wVk     = msg.keycode();
-    input.ki.dwFlags = flags | (msg.pressed() ? 0 : KEYEVENTF_KEYUP);
-    input.ki.wScan   = static_cast<WORD>(MapVirtualKeyW(msg.keycode(), MAPVK_VK_TO_VSC));
+    INPUT input;
+
+    input.type           = INPUT_KEYBOARD;
+    input.ki.wVk         = msg.keycode();
+    input.ki.dwFlags     = flags;
+    input.ki.wScan       = static_cast<WORD>(MapVirtualKeyW(msg.keycode(), MAPVK_VK_TO_VSC));
+    input.ki.time        = 0;
+    input.ki.dwExtraInfo = 0;
 
     // Do the keyboard event
     SendInput(1, &input, sizeof(input));
+}
+
+void InputInjector::DoBell()
+{
+    bell_ = true;
+
+    int count = 3;
+
+    while (count-- > 0)
+    {
+        Beep(1200, 40);
+        Beep(800, 80);
+    }
+
+    bell_ = false;
+}
+
+void InputInjector::InjectBell(const proto::BellEvent &msg)
+{
+    if (!bell_)
+    {
+        std::async(std::launch::async, &InputInjector::DoBell, this);
+    }
 }
 
 } // namespace aspia

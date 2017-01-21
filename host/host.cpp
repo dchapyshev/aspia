@@ -1,14 +1,16 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            host/host.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            host/host.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "host/host.h"
 
 #include "base/exception.h"
 #include "base/logging.h"
+#include "base/power.h"
+#include "base/clipboard.h"
 
 namespace aspia {
 
@@ -25,7 +27,7 @@ Host::Host(std::unique_ptr<Socket> sock, OnEventCallback on_event_callback) :
 
 Host::~Host()
 {
-    if (!IsThreadTerminated())
+    if (IsActiveThread())
     {
         Stop();
         WaitForEnd();
@@ -55,24 +57,22 @@ void Host::WriteMessage(const proto::HostToClient *message)
             if (write_buffer_size_ < size)
             {
                 write_buffer_size_ = size;
-                write_buffer_.reset(new ScopedAlignedBuffer(size));
+                write_buffer_.resize(size);
             }
 
-            if (!message->SerializeToArray(write_buffer_->get(), size))
-            {
-                LOG(ERROR) << "SerializeToArray() failed";
-                throw Exception("Unable to serialize the message.");
-            }
+            if (!message->SerializeToArray(write_buffer_.get(), size))
+                throw Exception("Unable to serialize the message");
 
             uint8_t *encrypted_buffer = nullptr;
 
-            encryptor_->Encrypt(write_buffer_->get(), size, &encrypted_buffer, &size);
+            encryptor_->Encrypt(write_buffer_.get(), size, &encrypted_buffer, &size);
 
             sock_->WriteMessage(encrypted_buffer, size);
         }
     }
-    catch (const Exception&)
+    catch (const Exception &err)
     {
+        DLOG(ERROR) << "An exception occurred: " << err.What();
         Stop();
     }
 }
@@ -81,28 +81,22 @@ void Host::ReadMessage(std::unique_ptr<proto::ClientToHost> *message)
 {
     uint32_t size = sock_->ReadMessageSize();
 
-    if (!size)
+    if (size)
     {
-        LOG(ERROR) << "ReadMessageSize() returns zero";
-        throw Exception("Serialized message size is equal to zero.");
-    }
+        if (read_buffer_size_ < size)
+        {
+            read_buffer_size_ = size;
+            read_buffer_.resize(size);
+        }
 
-    if (read_buffer_size_ < size)
-    {
-        read_buffer_size_ = size;
-        read_buffer_.reset(new ScopedAlignedBuffer(size));
-    }
+        sock_->ReadMessage(read_buffer_.get(), size);
 
-    sock_->ReadMessage(read_buffer_->get(), size);
+        uint8_t *buffer = nullptr;
 
-    uint8_t *buffer = nullptr;
+        decryptor_->Decrypt(read_buffer_.get(), size, &buffer, &size);
 
-    decryptor_->Decrypt(read_buffer_->get(), size, &buffer, &size);
-
-    if (!message->get()->ParseFromArray(buffer, size))
-    {
-        LOG(ERROR) << "ParseFromArray() failed";
-        throw Exception("Unable to parse the message.");
+        if (!message->get()->ParseFromArray(buffer, size))
+            throw Exception("Unable to parse the message");
     }
 }
 
@@ -117,10 +111,7 @@ void Host::DoKeyExchange()
     std::unique_ptr<uint8_t[]> public_key(new uint8_t[public_key_len]);
 
     if (sock_->ReadMessageSize() != public_key_len)
-    {
-        LOG(ERROR) << "Wrong public key size recieved";
-        throw Exception("Wrong public key size recieved.");
-    }
+        throw Exception("Wrong public key size recieved");
 
     // Читаем публичный ключ.
     sock_->ReadMessage(public_key.get(), public_key_len);
@@ -145,10 +136,7 @@ void Host::DoKeyExchange()
     sock_->WriteMessage(session_key.get(), session_key_len);
 
     if (sock_->ReadMessageSize() != session_key_len)
-    {
-        LOG(ERROR) << "Wrong session key size recieved";
-        throw Exception("Wrong session key size recieved.");
-    }
+        throw Exception("Wrong session key size recieved");
 
     // Читаем сессионный ключ дешифратора.
     sock_->ReadMessage(session_key.get(), session_key_len);
@@ -167,37 +155,34 @@ void Host::ProcessMessage(const proto::ClientToHost *message)
     {
         ReadKeyEvent(message->key_event());
     }
-    else if (message->has_video_control())
+    else if (message->has_bell_event())
     {
-        ReadVideoControl(message->video_control());
+        ReadBellEvent(message->bell_event());
     }
-    else if (message->has_cursor_shape_control())
+    else if (message->has_control())
     {
-        DLOG(ERROR) << "CursorShapeControl unimplemented yet";
+        const proto::Control &control = message->control();
+
+        if (control.has_video())
+        {
+            ReadVideoControl(control.video());
+        }
+        else if (control.has_cursor_shape())
+        {
+            DLOG(ERROR) << "CursorShapeControl unimplemented yet";
+        }
+        else if (control.has_power())
+        {
+            ReadPowerControl(control.power());
+        }
+        else if (control.has_clipboard())
+        {
+            ReadClipboardControl(control.clipboard());
+        }
     }
     else if (message->has_clipboard())
     {
-        DLOG(ERROR) << "Clipboard unimplemented yet";
-    }
-    else if (message->has_clipboard_request())
-    {
-        DLOG(ERROR) << "ClipboardRequest unimplemented yet";
-    }
-    else if (message->has_clipboard_control())
-    {
-        DLOG(ERROR) << "ClipboardControl unimplemented yet";
-    }
-    else if (message->has_power_control())
-    {
-        DLOG(ERROR) << "PowerControl unimplemented yet";
-    }
-    else if (message->has_bell())
-    {
-        DLOG(ERROR) << "Bell unimplemented yet";
-    }
-    else if (message->has_text_chat())
-    {
-        DLOG(ERROR) << "TextChat unimplemented yet";
+        ReadClipboard(message->clipboard());
     }
 }
 
@@ -211,13 +196,19 @@ void Host::Worker()
         // Выполняем обмен ключами шифрования.
         DoKeyExchange();
 
-        feature_mask_ = proto::FEATURE_DESKTOP_MANAGE;
+        //while (!IsThreadTerminating())
+        //{
+
+        //}
+
+        feature_mask_ = proto::FEATURE_DESKTOP_MANAGE | proto::FEATURE_POWER_MANAGE |
+            proto::FEATURE_BELL | proto::FEATURE_CLIPBOARD;
 
         // Если сессия не имеет разрешенных возможностей.
         if (feature_mask_ == proto::FEATURE_NONE)
         {
             // Вызываем исключение.
-            throw Exception("Client session has no features.");
+            throw Exception("Client session has no features");
         }
 
         std::unique_ptr<proto::ClientToHost> message(new proto::ClientToHost());
@@ -260,14 +251,10 @@ void Host::OnStop()
 void Host::ReadPointerEvent(const proto::PointerEvent &msg)
 {
     if (!(feature_mask_ & proto::FEATURE_DESKTOP_MANAGE))
-    {
-        throw Exception("Session has no desktop manage feature.");
-    }
+        throw Exception("Session has no desktop manage feature");
 
     if (!input_injector_)
-    {
         input_injector_.reset(new InputInjector());
-    }
 
     // Выполняем команду перемещения курсора и/или нажатия кнопок мыши.
     input_injector_->InjectPointer(msg);
@@ -276,17 +263,24 @@ void Host::ReadPointerEvent(const proto::PointerEvent &msg)
 void Host::ReadKeyEvent(const proto::KeyEvent &msg)
 {
     if (!(feature_mask_ & proto::FEATURE_DESKTOP_MANAGE))
-    {
-        throw Exception("Session has no desktop manage feature.");
-    }
+        throw Exception("Session has no desktop manage feature");
 
     if (!input_injector_)
-    {
         input_injector_.reset(new InputInjector());
-    }
 
     // Выполняем команду нажатия клавиши.
     input_injector_->InjectKeyboard(msg);
+}
+
+void Host::ReadBellEvent(const proto::BellEvent &msg)
+{
+    if (!(feature_mask_ & proto::FEATURE_BELL))
+        throw Exception("Session has no bell feature");
+
+    if (!input_injector_)
+        input_injector_.reset(new InputInjector());
+
+    input_injector_->InjectBell(msg);
 }
 
 void Host::ReadVideoControl(const proto::VideoControl &msg)
@@ -298,53 +292,92 @@ void Host::ReadVideoControl(const proto::VideoControl &msg)
     if (!(feature_mask_ & proto::FEATURE_DESKTOP_MANAGE) &&
         !(feature_mask_ & proto::FEATURE_DESKTOP_VIEW))
     {
-        throw Exception("Session has no desktop manage or view features.");
+        throw Exception("Session has no desktop manage or view features");
     }
 
     // Если получена команда отключить передачу видео-пакетов.
-    if (!msg.enable())
+    if (!(msg.flags() & proto::VideoControl::ENABLE_VIDEO))
     {
-        // Уничтожаем экземпляр класса.
+        // Уничтожаем экземпляр класса и выходим.
         screen_sender_.reset();
-
-        // Выходим, других действий не требуется.
         return;
     }
 
-    // По умолчанию инициализируем формат пикселей клиента в RGB565.
-    PixelFormat format = PixelFormat::MakeRGB565();
-
-    // Если был получен формат пикселей от клиента.
-    if (msg.has_pixel_format())
+    // Если отправка видео-пакетов не инициализирована.
+    if (!screen_sender_)
     {
-        // Получаем его и переводим в локальный формат.
-        const proto::VideoPixelFormat &pf = msg.pixel_format();
-
-        format.SetBitsPerPixel(pf.bits_per_pixel());
-
-        format.SetRedMax(pf.red_max());
-        format.SetGreenMax(pf.green_max());
-        format.SetBlueMax(pf.blue_max());
-
-        format.SetRedShift(pf.red_shift());
-        format.SetGreenShift(pf.green_shift());
-        format.SetBlueShift(pf.blue_shift());
-    }
-
-    // Если отправка видео-пакетов уже инициализирована.
-    if (screen_sender_)
-    {
-        // Перенастраиваем ее в соответствии с полученными от клиента параметрами.
-        screen_sender_->Configure(msg.encoding(), format);
-    }
-    else
-    {
-        ScreenSender::OnMessageCallback on_message =
+        ScreenSender::OnMessageCallback on_message_callback =
             std::bind(&Host::WriteMessage, this, std::placeholders::_1);
 
-        // Инициализируем отправку видео-пакетов с полученными от клиента параметрами.
-        screen_sender_.reset(new ScreenSender(msg.encoding(), format, on_message));
+        // Инициализируем отправку видео-пакетов.
+        screen_sender_.reset(new ScreenSender(on_message_callback));
     }
+
+    // Перенастраиваем ее в соответствии с полученными от клиента параметрами.
+    screen_sender_->Configure(msg);
+}
+
+void Host::ReadPowerControl(const proto::PowerControl &msg)
+{
+    if (!(feature_mask_ & proto::FEATURE_POWER_MANAGE))
+    {
+        throw Exception("Session has no power manage feature");
+    }
+
+    switch (msg.action())
+    {
+        case proto::PowerControl::SHUTDOWN:
+            PowerControl::Shutdown();
+            break;
+
+        case proto::PowerControl::REBOOT:
+            PowerControl::Reboot();
+            break;
+
+        case proto::PowerControl::HIBERNATE:
+            PowerControl::Hibernate();
+            break;
+
+        case proto::PowerControl::SUSPEND:
+            PowerControl::Suspend();
+            break;
+
+        case proto::PowerControl::LOGOFF:
+            PowerControl::Logoff();
+            break;
+
+        default:
+            DLOG(ERROR) << "Unknown power control action requested: " << msg.action();
+            break;
+    }
+}
+
+void Host::ReadClipboardControl(const proto::ClipboardControl &msg)
+{
+    if (!(feature_mask_ & proto::FEATURE_CLIPBOARD))
+    {
+        throw Exception("Session has no clipboard feature");
+    }
+
+    if (msg.flags() & proto::ClipboardControl::REQUESTED)
+    {
+        proto::HostToClient msg;
+        proto::Clipboard *clipboard = msg.mutable_clipboard();
+
+        clipboard->set_data(Clipboard::Get());
+
+        WriteMessage(&msg);
+    }
+}
+
+void Host::ReadClipboard(const proto::Clipboard &msg)
+{
+    if (!(feature_mask_ & proto::FEATURE_CLIPBOARD))
+    {
+        throw Exception("Session has no clipboard feature");
+    }
+
+    Clipboard::Set(msg.data());
 }
 
 } // namespace aspia

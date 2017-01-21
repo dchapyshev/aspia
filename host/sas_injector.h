@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            host/sas_injector.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            host/sas_injector.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_HOST__SAS_INJECTOR_H
 #define _ASPIA_HOST__SAS_INJECTOR_H
@@ -37,7 +37,7 @@ private:
     void SendSAS();
 
 private:
-    std::unique_ptr<ScopedKernel32Library> kernel32_;
+    ScopedKernel32Library kernel32_;
 
     DISALLOW_COPY_AND_ASSIGN(SasInjector);
 };
