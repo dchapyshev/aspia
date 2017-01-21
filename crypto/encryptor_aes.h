@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            crypto/encryptor_aes.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            crypto/encryptor_aes.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_CRYPTO__ENCRYPTOR_AES_H
 #define _ASPIA_CRYPTO__ENCRYPTOR_AES_H
@@ -45,7 +45,7 @@ private:
 
     DWORD buffer_size_; // Размер буфера шифрования в байтах.
 
-    std::unique_ptr<ScopedAlignedBuffer> buffer_; // Буфер шифрования.
+    ScopedAlignedBuffer buffer_; // Буфер шифрования.
 
     DISALLOW_COPY_AND_ASSIGN(EncryptorAES);
 };

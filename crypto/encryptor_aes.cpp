@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            crypto/encryptor_aes.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            crypto/encryptor_aes.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "crypto/encryptor_aes.h"
 
@@ -14,7 +14,7 @@ namespace aspia {
 
 // Размеры ключей шифрования в битах.
 static const DWORD kAESKeySize = 256;
-static const DWORD kRSAKeySize = 2048;
+static const DWORD kRSAKeySize = 1024;
 
 EncryptorAES::EncryptorAES() :
     prov_(NULL),
@@ -26,12 +26,12 @@ EncryptorAES::EncryptorAES() :
     {
         // Создаем контекст шифрования.
         if (!CryptAcquireContextW(&prov_,
-                              NULL,
-                              MS_ENH_RSA_AES_PROV_W,
-                              PROV_RSA_AES,
-                              CRYPT_VERIFYCONTEXT))
+                                  NULL,
+                                  MS_ENH_RSA_AES_PROV_W,
+                                  PROV_RSA_AES,
+                                  CRYPT_VERIFYCONTEXT))
         {
-            LOG(ERROR) << "CryptAcquireContextW() failed: " << GetLastError();
+            DLOG(ERROR) << "CryptAcquireContextW() failed: " << GetLastError();
             break;
         }
 
@@ -41,7 +41,7 @@ EncryptorAES::EncryptorAES() :
         // Создаем экземпляр ключа для AES шифрования.
         if (!CryptGenKey(prov_, CALG_AES_256, CRYPT_EXPORTABLE | (kAESKeySize << 16), &aes_key_))
         {
-            LOG(ERROR) << "CryptGenKey() failed: " << GetLastError();
+            DLOG(ERROR) << "CryptGenKey() failed: " << GetLastError();
             break;
         }
 
@@ -50,7 +50,7 @@ EncryptorAES::EncryptorAES() :
         // Устанавливаем режим шифрования для ключа.
         if (!CryptSetKeyParam(aes_key_, KP_MODE, reinterpret_cast<BYTE*>(&mode), 0))
         {
-            LOG(ERROR) << "CryptSetKeyParam() failed: " << GetLastError();
+            DLOG(ERROR) << "CryptSetKeyParam() failed: " << GetLastError();
             break;
         }
 
@@ -63,7 +63,7 @@ EncryptorAES::EncryptorAES() :
                               &block_size_len,
                               0))
         {
-            LOG(ERROR) << "CryptGetKeyParam() failed: " << GetLastError();
+            DLOG(ERROR) << "CryptGetKeyParam() failed: " << GetLastError();
             break;
         }
 
@@ -151,7 +151,7 @@ void EncryptorAES::SetPublicKey(const uint8_t *key, uint32_t len)
 
     if (!CryptImportKey(prov_, blob.get(), blob_size, NULL, 0, &rsa_key_))
     {
-        LOG(ERROR) << "CryptImportKey() failed: " << GetLastError();
+        DLOG(ERROR) << "CryptImportKey() failed: " << GetLastError();
         throw Exception("Unable to import public key.");
     }
 }
@@ -168,7 +168,7 @@ void EncryptorAES::GetSessionKey(uint8_t *key, uint32_t len)
     // Получаем размер, который необходим для хранения зашифрованного ключа AES.
     if (!CryptExportKey(aes_key_, rsa_key_, SIMPLEBLOB, 0, NULL, &blob_size))
     {
-        LOG(ERROR) << "CryptExportKey() failed: " << GetLastError();
+        DLOG(ERROR) << "CryptExportKey() failed: " << GetLastError();
         throw Exception("Unable to export session key.");
     }
 
@@ -181,13 +181,13 @@ void EncryptorAES::GetSessionKey(uint8_t *key, uint32_t len)
     // Экспортируем зашифрованный ключ AES в выделенный буфер.
     if (!CryptExportKey(aes_key_, rsa_key_, SIMPLEBLOB, 0, blob.get(), &blob_size))
     {
-        LOG(ERROR) << "CryptExportKey() failed: " << GetLastError();
+        DLOG(ERROR) << "CryptExportKey() failed: " << GetLastError();
         throw Exception("Unable to export session key.");
     }
 
     if (sizeof(PUBLICKEYSTRUC) + sizeof(ALG_ID) + len != blob_size)
     {
-        LOG(ERROR) << "Wrong size of session key: " << blob_size;
+        DLOG(ERROR) << "Wrong size of session key: " << blob_size;
         throw Exception("Unable to export session key.");
     }
 
@@ -206,23 +206,23 @@ void EncryptorAES::Encrypt(const uint8_t *in, uint32_t in_len,
         buffer_size_ = enc_size;
 
         // Переинициализируем буфер для энкодера.
-        buffer_.reset(new ScopedAlignedBuffer(enc_size));
+        buffer_.resize(enc_size);
     }
 
     // Копируем исходный буфер в буфер для шифрования.
-    memcpy(buffer_->get(), in, in_len);
+    memcpy(buffer_.get(), in, in_len);
 
     DWORD size = in_len;
 
     // Выполняем шифрование данных.
-    if (!CryptEncrypt(aes_key_, NULL, TRUE, 0, buffer_->get(), &size, enc_size))
+    if (!CryptEncrypt(aes_key_, NULL, TRUE, 0, buffer_.get(), &size, enc_size))
     {
-        LOG(ERROR) << "CryptEncrypt() failed: " << GetLastError();
+        DLOG(ERROR) << "CryptEncrypt() failed: " << GetLastError();
         throw Exception("Unable to encrypt the message.");
     }
 
     // Инициализируем выходные параметры.
-    *out = buffer_->get();
+    *out = buffer_.get();
     *out_len = size;
 }
 

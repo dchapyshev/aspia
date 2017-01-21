@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            crypto/encryptor.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            crypto/encryptor.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_CRYPTO__ENCRYPTOR_H
 #define _ASPIA_CRYPTO__ENCRYPTOR_H

@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            crypto/decryptor_aes.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            crypto/decryptor_aes.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "crypto/decryptor_aes.h"
 
@@ -13,7 +13,7 @@
 namespace aspia {
 
 // Размеры ключей шифрования в битах.
-static const DWORD kRSAKeySize = 2048;
+static const DWORD kRSAKeySize = 1024;
 
 DecryptorAES::DecryptorAES() :
     prov_(NULL),
@@ -30,12 +30,12 @@ DecryptorAES::DecryptorAES() :
                                   PROV_RSA_AES,
                                   CRYPT_VERIFYCONTEXT))
         {
-            LOG(ERROR) << "CryptAcquireContextW() failed: " << GetLastError();
+            DLOG(ERROR) << "CryptAcquireContextW() failed: " << GetLastError();
             break;
         }
 
         // Мы поддерживаем RSA ключи только размера 2048 бит.
-        static_assert(kRSAKeySize == 2048, "Not supported RSA key size");
+        static_assert(kRSAKeySize == 1024, "Not supported RSA key size");
 
         // Создаем экземпляр ключа для RSA шифрования.
         if (!CryptGenKey(prov_,
@@ -43,7 +43,7 @@ DecryptorAES::DecryptorAES() :
                          CRYPT_EXPORTABLE | (kRSAKeySize << 16),
                          &rsa_key_))
         {
-            LOG(ERROR) << "CryptGenKey() failed: " << GetLastError();
+            DLOG(ERROR) << "CryptGenKey() failed: " << GetLastError();
             break;
         }
 
@@ -112,7 +112,7 @@ void DecryptorAES::GetPublicKey(uint8_t *key, uint32_t len)
     // Получаем размер, который необходим для хранения открытого ключа RSA.
     if (!CryptExportKey(rsa_key_, NULL, PUBLICKEYBLOB, 0, NULL, &blob_size))
     {
-        LOG(ERROR) << "CryptExportKey() failed: " << GetLastError();
+        DLOG(ERROR) << "CryptExportKey() failed: " << GetLastError();
         throw Exception("Unable to export public key.");
     }
 
@@ -124,13 +124,13 @@ void DecryptorAES::GetPublicKey(uint8_t *key, uint32_t len)
     // Экспортируем открытый ключ RSA в выделенный буфер.
     if (!CryptExportKey(rsa_key_, NULL, PUBLICKEYBLOB, 0, blob.get(), &blob_size))
     {
-        LOG(ERROR) << "CryptExportKey() failed: " << GetLastError();
+        DLOG(ERROR) << "CryptExportKey() failed: " << GetLastError();
         throw Exception("Unable to export public key.");
     }
 
     if (sizeof(PUBLICKEYSTRUC) + sizeof(RSAPUBKEY) + len != blob_size)
     {
-        LOG(ERROR) << "Wrong size of public key: " << blob_size;
+        DLOG(ERROR) << "Wrong size of public key: " << blob_size;
         throw Exception("Unable to export public key.");
     }
 
@@ -162,7 +162,7 @@ void DecryptorAES::SetSessionKey(const uint8_t *key, uint32_t len)
 
     if (!CryptImportKey(prov_, blob.get(), blob_size, rsa_key_, 0, &aes_key_))
     {
-        LOG(ERROR) << "CryptImportKey() failed: " << GetLastError();
+        DLOG(ERROR) << "CryptImportKey() failed: " << GetLastError();
         throw Exception("Unable to import session key.");
     }
 
@@ -171,7 +171,7 @@ void DecryptorAES::SetSessionKey(const uint8_t *key, uint32_t len)
     // Устанавливаем режим шифрования для ключа.
     if (!CryptSetKeyParam(aes_key_, KP_MODE, reinterpret_cast<BYTE*>(&mode), 0))
     {
-        LOG(ERROR) << "CryptSetKeyParam() failed: " << GetLastError();
+        DLOG(ERROR) << "CryptSetKeyParam() failed: " << GetLastError();
 
         // Уничтожаем ключ шифрования.
         if (!CryptDestroyKey(aes_key_))
@@ -195,23 +195,23 @@ void DecryptorAES::Decrypt(const uint8_t *in, uint32_t in_len,
         buffer_size_ = in_len;
 
         // Переинициализируем буфер для дешифрования.
-        buffer_.reset(new ScopedAlignedBuffer(in_len));
+        buffer_.resize(in_len);
     }
 
     DWORD length = in_len;
 
     // Копируем зашифрованное сообщение в буфер для расшифровки.
-    memcpy(buffer_->get(), in, length);
+    memcpy(buffer_.get(), in, length);
 
     // Расшифровываем сообщение.
-    if (!CryptDecrypt(aes_key_, NULL, TRUE, 0, buffer_->get(), &length))
+    if (!CryptDecrypt(aes_key_, NULL, TRUE, 0, buffer_.get(), &length))
     {
-        LOG(ERROR) << "CryptDecrypt() failed: " << GetLastError();
+        DLOG(ERROR) << "CryptDecrypt() failed: " << GetLastError();
         throw Exception("Unable to decrypt the message.");
     }
 
     // Инициализируем выходные параметры.
-    *out = buffer_->get();
+    *out = buffer_.get();
     *out_len = length;
 }
 
