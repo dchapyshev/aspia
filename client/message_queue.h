@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            client/message_queue.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            client/message_queue.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_CLIENT__MESSAGE_QUEUE_H
 #define _ASPIA_CLIENT__MESSAGE_QUEUE_H
@@ -34,7 +34,7 @@ public:
 
     ~MessageQueue()
     {
-        if (!IsThreadTerminated())
+        if (IsActiveThread())
         {
             Stop();
             WaitForEnd();
@@ -62,7 +62,7 @@ private:
         // Продолжаем обработку очереди пока не будут обработаны все сообщения или
         // поток не получит команду остановиться.
         //
-        while (!queue_.empty() && !IsThreadTerminating())
+        while (!queue_.empty())
         {
             std::unique_ptr<T> message;
 
@@ -107,7 +107,7 @@ private:
     ProcessMessageCallback process_message_;
 
     // Очередь сообщений.
-    std::queue <std::unique_ptr<T>> queue_;
+    std::queue<std::unique_ptr<T>> queue_;
 
     // Mutex для блокирования очереди сообщений.
     Lock queue_lock_;
