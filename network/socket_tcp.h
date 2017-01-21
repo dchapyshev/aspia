@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            network/socket_tcp.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            network/socket_tcp.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_NETWORK__SOCKET_TCP_H
 #define _ASPIA_NETWORK__SOCKET_TCP_H
@@ -43,6 +43,9 @@ private:
 
     // Disable or enable Nagle’s algorithm.
     void EnableNagles(bool enable);
+
+    int Read(char *buf, int len);
+    int Write(const char *buf, int len); 
 
     void Reader(char *buf, int len);
     void Writer(const char *buf, int len);

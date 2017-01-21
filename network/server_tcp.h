@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            network/server_tcp.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            network/server_tcp.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_NETWORK__SERVER_TCP_H
 #define _ASPIA_NETWORK__SERVER_TCP_H
@@ -14,7 +14,6 @@
 #include "base/exception.h"
 #include "base/macros.h"
 #include "base/thread.h"
-#include "network/socket_tcp.h"
 
 namespace aspia {
 
@@ -37,7 +36,7 @@ public:
         // Разрываем соединение.
         sock_->Shutdown();
 
-        if (!IsThreadTerminated())
+        if (IsActiveThread())
         {
             Stop();
             WaitForEnd();

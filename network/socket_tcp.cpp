@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            network/socket_tcp.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            network/socket_tcp.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "network/socket_tcp.h"
 
@@ -14,8 +14,7 @@ namespace aspia {
 
 static volatile LONG _socket_ref_count = 0;
 
-static const int kWriteTimeout = 10000;
-static const size_t kMaxHostNameLength = 64;
+static const int kWriteTimeout = 15000;
 
 SocketTCP::SocketTCP() :
     ref_(true)
@@ -58,6 +57,10 @@ SocketTCP::SocketTCP(SOCKET sock) :
 {
     EnableNagles(false);
     SetWriteTimeout(kWriteTimeout);
+
+    int value = 65536 * 4;
+    setsockopt(sock_, SOL_SOCKET, SO_RCVBUF, reinterpret_cast<const char*>(&value), sizeof(value));
+    setsockopt(sock_, SOL_SOCKET, SO_SNDBUF, reinterpret_cast<const char*>(&value), sizeof(value));
 }
 
 SocketTCP::~SocketTCP()
@@ -96,7 +99,8 @@ void SocketTCP::Connect(const std::string &address, int port)
             throw Exception("Unable to handle the host name.");
         }
 
-        ((uint32_t *)&dest_addr.sin_addr)[0] = ((uint32_t **)host->h_addr_list)[0][0];
+        (reinterpret_cast<uint32_t*>(&dest_addr.sin_addr))[0] =
+            (reinterpret_cast<uint32_t**>(host->h_addr_list)[0][0]);
     }
 
     u_long non_blocking = 1;
@@ -132,7 +136,7 @@ void SocketTCP::Connect(const std::string &address, int port)
             if (select(0, NULL, &write_fds, NULL, &timeout) == SOCKET_ERROR ||
                 !FD_ISSET(sock_, &write_fds))
             {
-                LOG(WARNING) << "select() failed: " << WSAGetLastError();
+                DLOG(WARNING) << "select() failed: " << WSAGetLastError();
                 throw Exception("Unable to establish connection (timeout).");
             }
         }
@@ -153,6 +157,10 @@ void SocketTCP::Connect(const std::string &address, int port)
 
     EnableNagles(false);
     SetWriteTimeout(kWriteTimeout);
+
+    int value = 65536 * 4;
+    setsockopt(sock_, SOL_SOCKET, SO_RCVBUF, reinterpret_cast<const char*>(&value), sizeof(value));
+    setsockopt(sock_, SOL_SOCKET, SO_SNDBUF, reinterpret_cast<const char*>(&value), sizeof(value));
 }
 
 void SocketTCP::Bind(int port)
@@ -189,7 +197,7 @@ std::unique_ptr<Socket> SocketTCP::Accept()
     SOCKET client = accept(sock_, reinterpret_cast<struct sockaddr*>(&addr), &len);
     if (client == INVALID_SOCKET)
     {
-        LOG(ERROR) << "accept() failed: " << WSAGetLastError();
+        DLOG(WARNING) << "accept() failed: " << WSAGetLastError();
         throw Exception("Unable to accept client connection or server stopped.");
     }
 
@@ -239,17 +247,37 @@ void SocketTCP::Shutdown()
     }
 }
 
+int SocketTCP::Read(char *buf, int len)
+{
+    int read = recv(sock_, buf, len, 0);
+
+    if (read <= 0)
+    {
+        DLOG(WARNING) << "recv() failed: " << WSAGetLastError();
+        throw Exception("Unable to read data from network");
+    }
+
+    return read;
+}
+
+int SocketTCP::Write(const char *buf, int len)
+{
+    int written = send(sock_, buf, len, 0);
+
+    if (written <= 0)
+    {
+        DLOG(WARNING) << "send() failed: " << WSAGetLastError();
+        throw Exception("Unable to write data to network");
+    }
+
+    return written;
+}
+
 void SocketTCP::Reader(char *buf, int len)
 {
     while (len)
     {
-        int read = recv(sock_, buf, len, 0);
-
-        if (read <= 0)
-        {
-            LOG(WARNING) << "recv() failed: " << WSAGetLastError();
-            throw Exception("Unable to read data from network.");
-        }
+        int read = Read(buf, len);
 
         buf += read;
         len -= read;
@@ -260,13 +288,7 @@ void SocketTCP::Writer(const char *buf, int len)
 {
     while (len)
     {
-        int written = send(sock_, buf, len, 0);
-
-        if (written <= 0)
-        {
-            LOG(WARNING) << "send() failed: " << WSAGetLastError();
-            throw Exception("Unable to write data to network.");
-        }
+        int written = Write(buf, len);
 
         buf += written;
         len -= written;
@@ -275,16 +297,51 @@ void SocketTCP::Writer(const char *buf, int len)
 
 void SocketTCP::WriteMessage(const uint8_t *buf, uint32_t len)
 {
+    // Максимальный размер сообщения - 3мб.
+    DCHECK(len <= 0x3FFFFF);
+
+    uint8_t length[3];
+    int count = 1;
+
+    length[0] = len & 0x7F;
+
+    if (len > 0x7F)
+    {
+        length[0] |= 0x80;
+        length[count++] = len >> 7 & 0x7F;
+
+        if (len > 0x3FFF)
+        {
+            length[1] |= 0x80;
+            length[count++] = len >> 14 & 0xFF;
+        }
+    }
+
     // Отправляем размер данных и сами данные.
-    Writer(reinterpret_cast<const char*>(&len), sizeof(len));
+    Writer(reinterpret_cast<const char*>(length), count);
     Writer(reinterpret_cast<const char*>(buf), len);
 }
 
 uint32_t SocketTCP::ReadMessageSize()
 {
-    uint32_t size = 0;
+    uint8_t byte;
+    Read(reinterpret_cast<char*>(&byte), sizeof(uint8_t));
 
-    Reader(reinterpret_cast<char*>(&size), sizeof(size));
+    uint32_t size = byte & 0x7F;
+
+    if (byte & 0x80)
+    {
+        Read(reinterpret_cast<char*>(&byte), sizeof(uint8_t));
+
+        size += (byte & 0x7F) << 7;
+
+        if (byte & 0x80)
+        {
+            Read(reinterpret_cast<char*>(&byte), sizeof(uint8_t));
+
+            size += byte << 14;
+        }
+    }
 
     return size;
 }
