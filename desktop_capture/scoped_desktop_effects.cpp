@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            desktop_capture/scoped_desktop_effects.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            desktop_capture/scoped_desktop_effects.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "desktop_capture/scoped_desktop_effects.h"
 
@@ -143,10 +143,9 @@ static void SetUiEffects(bool value)
 
 static std::wstring GetWallpaper()
 {
-    std::wstring wallpaper;
+    WCHAR wallpaper[MAX_PATH];
 
-    wallpaper.resize(MAX_PATH);
-    SystemParametersInfoW(SPI_GETDESKWALLPAPER, wallpaper.size(), &wallpaper[0], 0);
+    SystemParametersInfoW(SPI_GETDESKWALLPAPER, ARRAYSIZE(wallpaper), wallpaper, 0);
 
     return wallpaper;
 }

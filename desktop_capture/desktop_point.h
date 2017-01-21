@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            desktop_capture/desktop_point.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            desktop_capture/desktop_point.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_DESKTOP_CAPTURE__DESKTOP_POINT_H
 #define _ASPIA_DESKTOP_CAPTURE__DESKTOP_POINT_H
@@ -25,15 +25,13 @@ public:
     int32_t x() const;
     int32_t y() const;
 
-    void set_x(int32_t x);
-    void set_y(int32_t y);
+    void Set(int32_t x, int32_t y);
 
     bool IsEqualTo(const DesktopPoint &other) const;
+    void Translate(int32_t x_offset, int32_t y_offset);
 
     DesktopPoint& operator=(const DesktopPoint &other);
-
     bool operator==(const DesktopPoint &other);
-
     bool operator!=(const DesktopPoint &other);
 
 private:

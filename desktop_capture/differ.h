@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            desktop_capture/differ.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            desktop_capture/differ.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_DESKTOP_CAPTURE__DIFFER_H
 #define _ASPIA_DESKTOP_CAPTURE__DIFFER_H
@@ -24,21 +24,22 @@ namespace aspia {
 class Differ
 {
 public:
-    Differ(const DesktopSize &size, int bytes_per_pixel);
+    Differ(const DesktopSize &size, int block_size);
     ~Differ();
 
-    void CalcChangedRegion(const uint8_t *prev_image,
-                           const uint8_t *curr_image,
-                           DesktopRegion &changed_region);
+    void CalcDirtyRegion(const uint8_t *prev_image,
+                         const uint8_t *curr_image,
+                         DesktopRegion *changed_region);
 
 private:
-    void MarkChangedBlocks(const uint8_t *prev_image, const uint8_t *curr_image);
-    void MergeChangedBlocks(DesktopRegion &changed_region);
+    void MarkDirtyBlocks(const uint8_t *prev_image, const uint8_t *curr_image);
+    void MergeBlocks(DesktopRegion *dirty_region);
 
 private:
     DesktopSize size_;
 
-    int bytes_per_pixel_;
+    int block_size_;
+
     int bytes_per_block_;
     int bytes_per_row_;
 

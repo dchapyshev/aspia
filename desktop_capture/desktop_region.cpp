@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            desktop_capture/desktop_region.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            desktop_capture/desktop_region.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "desktop_capture/desktop_region.h"
 
@@ -11,7 +11,7 @@ namespace aspia {
 
 DesktopRegion::DesktopRegion()
 {
-    miRegionInit(&region_, NullBox, 0);
+    miRegionInit(&rgn_, NullBox, 0);
 }
 
 DesktopRegion::DesktopRegion(const DesktopRect &rect)
@@ -20,57 +20,56 @@ DesktopRegion::DesktopRegion(const DesktopRect &rect)
     {
         BoxRec box;
 
-        box.x1 = rect.left();
-        box.x2 = rect.right();
-        box.y1 = rect.top();
-        box.y2 = rect.bottom();
+        box.x1 = rect.Left();
+        box.x2 = rect.Right();
+        box.y1 = rect.Top();
+        box.y2 = rect.Bottom();
 
-        miRegionInit(&region_, &box, 0);
+        miRegionInit(&rgn_, &box, 0);
     }
     else
     {
-        miRegionInit(&region_, NullBox, 0);
+        miRegionInit(&rgn_, NullBox, 0);
     }
 }
 
-DesktopRegion::DesktopRegion(const DesktopRegion &region)
+DesktopRegion::DesktopRegion(const DesktopRegion &other)
 {
-    miRegionInit(&region_, NullBox, 0);
-    miRegionCopy(&region_, (RegionPtr)(&region.region_));
+    miRegionInit(&rgn_, NullBox, 0);
+    miRegionCopy(&rgn_, &other.rgn_);
 }
 
 DesktopRegion::~DesktopRegion()
 {
-    miRegionUninit(&region_);
+    miRegionUninit(&rgn_);
 }
 
-void DesktopRegion::CopyFrom(const DesktopRegion &region)
+void DesktopRegion::CopyFrom(const DesktopRegion &other)
 {
-    Clear();
-    miRegionCopy(&region_, (RegionPtr)(&region.region_));
+    miRegionCopy(&rgn_, &other.rgn_);
 }
 
 void DesktopRegion::Clear()
 {
-    miRegionEmpty(&region_);
+    miRegionEmpty(&rgn_);
 }
 
 bool DesktopRegion::IsEmpty() const
 {
-    return (miRegionNotEmpty((RegionPtr)&region_) == FALSE);
+    return !miRegionNotEmpty(&rgn_);
 }
 
-bool DesktopRegion::Equals(const DesktopRegion &region) const
+bool DesktopRegion::Equals(const DesktopRegion &other) const
 {
-    if (IsEmpty() && region.IsEmpty())
+    if (IsEmpty() && other.IsEmpty())
         return true;
 
-    return !!miRegionsEqual((RegionPtr)&region_, (RegionPtr)&region.region_);
+    return !!miRegionsEqual(&rgn_, &other.rgn_);
 }
 
-void DesktopRegion::AddRegion(const DesktopRegion &region)
+void DesktopRegion::AddRegion(const DesktopRegion &other)
 {
-    miUnion(&region_, &region_, (RegionPtr)&region.region_);
+    miUnion(&rgn_, &rgn_, &other.rgn_);
 }
 
 void DesktopRegion::AddRect(const DesktopRect &rect)
@@ -80,6 +79,22 @@ void DesktopRegion::AddRect(const DesktopRect &rect)
         DesktopRegion temp(rect);
         AddRegion(temp);
     }
+}
+
+void DesktopRegion::Translate(int32_t x_offset, int32_t y_offset)
+{
+    miTranslateRegion(&rgn_, x_offset, y_offset);
+}
+
+void DesktopRegion::IntersectWith(const DesktopRegion &other)
+{
+    miIntersect(&rgn_, &rgn_, &other.rgn_);
+}
+
+void DesktopRegion::IntersectWith(const DesktopRect &rect)
+{
+    DesktopRegion temp(rect);
+    IntersectWith(temp);
 }
 
 DesktopRegion& DesktopRegion::operator=(const DesktopRegion &other)
@@ -110,8 +125,8 @@ DesktopRegion::Iterator::~Iterator()
 
 void DesktopRegion::Iterator::Reset(const DesktopRegion &target)
 {
-    list_  = REGION_RECTS(&target.region_);
-    count_ = REGION_NUM_RECTS(&target.region_);
+    list_  = REGION_RECTS(&target.rgn_);
+    count_ = REGION_NUM_RECTS(&target.rgn_);
     index_ = 0;
 }
 
@@ -127,9 +142,9 @@ void DesktopRegion::Iterator::Advance()
 
 DesktopRect DesktopRegion::Iterator::rect()
 {
-    const BoxRec *r = &list_[index_];
+    const BoxRec *box = &list_[index_];
 
-    return DesktopRect::MakeLTRB(r->x1, r->y1, r->x2, r->y2);
+    return DesktopRect::MakeLTRB(box->x1, box->y1, box->x2, box->y2);
 }
 
 } // namespace aspia

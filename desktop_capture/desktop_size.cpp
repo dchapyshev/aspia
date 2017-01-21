@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            desktop_capture/desktop_size.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            desktop_capture/desktop_size.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "desktop_capture/desktop_size.h"
 
@@ -23,9 +23,9 @@ DesktopSize::DesktopSize(int32_t width, int32_t height) :
     // Nothing
 }
 
-DesktopSize::DesktopSize(const DesktopSize &size) :
-    width_(size.width_),
-    height_(size.height_)
+DesktopSize::DesktopSize(const DesktopSize &other) :
+    width_(other.width_),
+    height_(other.height_)
 {
     // Nothing
 }
@@ -35,23 +35,19 @@ DesktopSize::~DesktopSize()
     // Nothing
 }
 
-int32_t DesktopSize::width() const
+int32_t DesktopSize::Width() const
 {
     return width_;
 }
 
-int32_t DesktopSize::height() const
+int32_t DesktopSize::Height() const
 {
     return height_;
 }
 
-void DesktopSize::set_width(int32_t width)
+void DesktopSize::Set(int32_t width, int32_t height)
 {
     width_ = width;
-}
-
-void DesktopSize::set_height(int32_t height)
-{
     height_ = height;
 }
 
@@ -65,22 +61,38 @@ bool DesktopSize::IsEqualTo(const DesktopSize &other) const
     return (width_ == other.width_ && height_ == other.height_);
 }
 
-DesktopSize& DesktopSize::operator=(const DesktopSize &size)
+void DesktopSize::Clear()
 {
-    width_ = size.width_;
-    height_ = size.height_;
+    width_ = 0;
+    height_ = 0;
+}
 
+void DesktopSize::ToVideoSize(proto::VideoSize *size) const
+{
+    size->set_width(width_);
+    size->set_height(height_);
+}
+
+void DesktopSize::FromVideoSize(const proto::VideoSize &size)
+{
+    width_ = size.width();
+    height_ = size.height();
+}
+
+DesktopSize& DesktopSize::operator=(const DesktopSize &other)
+{
+    Set(other.width_, other.height_);
     return *this;
 }
 
-bool DesktopSize::operator==(const DesktopSize &size)
+bool DesktopSize::operator==(const DesktopSize &other)
 {
-    return IsEqualTo(size);
+    return IsEqualTo(other);
 }
 
-bool DesktopSize::operator!=(const DesktopSize &size)
+bool DesktopSize::operator!=(const DesktopSize &other)
 {
-    return !IsEqualTo(size);
+    return !IsEqualTo(other);
 }
 
 } // namespace aspia

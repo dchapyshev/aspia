@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            desktop_capture/capturer.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            desktop_capture/capturer.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_DESKTOP_CAPTURE__CAPTURER_H
 #define _ASPIA_DESKTOP_CAPTURE__CAPTURER_H
@@ -23,9 +23,8 @@ public:
     // Метод выполнения захвата экрана
     // Возвращает указатель на буфер, который содержит изображение экрана.
     //
-    virtual const uint8_t* CaptureImage(DesktopRegion &changed_region,
-                                        DesktopSize &desktop_size,
-                                        PixelFormat &pixel_format) = 0;
+    virtual const uint8_t* CaptureImage(DesktopRegion *dirty_region,
+                                        DesktopSize *desktop_size) = 0;
 };
 
 } // namespace aspia

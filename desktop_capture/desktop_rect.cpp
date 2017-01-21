@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            desktop_capture/desktop_rect.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            desktop_capture/desktop_rect.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "desktop_capture/desktop_rect.h"
 
@@ -17,6 +17,7 @@ DesktopRect::DesktopRect() :
     right_(0),
     bottom_(0)
 {
+    // Nothing
 }
 
 DesktopRect::DesktopRect(const DesktopRect &rect) :
@@ -25,6 +26,12 @@ DesktopRect::DesktopRect(const DesktopRect &rect) :
     right_(rect.right_),
     bottom_(rect.bottom_)
 {
+    // Nothing
+}
+
+DesktopRect::DesktopRect(const proto::VideoRect &rect)
+{
+    FromVideoRect(rect);
 }
 
 DesktopRect::DesktopRect(int32_t l, int32_t t, int32_t r, int32_t b) :
@@ -33,6 +40,7 @@ DesktopRect::DesktopRect(int32_t l, int32_t t, int32_t r, int32_t b) :
     right_(r),
     bottom_(b)
 {
+    // Nothing
 }
 
 DesktopRect::~DesktopRect() {}
@@ -58,25 +66,25 @@ DesktopRect DesktopRect::MakeLTRB(int32_t l, int32_t t, int32_t r, int32_t b)
 // static
 DesktopRect DesktopRect::MakeSize(const DesktopSize &size)
 {
-    return DesktopRect(0, 0, size.width(), size.height());
+    return DesktopRect(0, 0, size.Width(), size.Height());
 }
 
-int32_t DesktopRect::left() const
+int32_t DesktopRect::Left() const
 {
     return left_;
 }
 
-int32_t DesktopRect::top() const
+int32_t DesktopRect::Top() const
 {
     return top_;
 }
 
-int32_t DesktopRect::right() const
+int32_t DesktopRect::Right() const
 {
     return right_;
 }
 
-int32_t DesktopRect::bottom() const
+int32_t DesktopRect::Bottom() const
 {
     return bottom_;
 }
@@ -91,29 +99,19 @@ int32_t DesktopRect::y() const
     return top_;
 }
 
-int32_t DesktopRect::width() const
+int32_t DesktopRect::Width() const
 {
     return right_ - left_;
 }
 
-int32_t DesktopRect::height() const
+int32_t DesktopRect::Height() const
 {
     return bottom_ - top_;
 }
 
-void DesktopRect::SetWidth(int32_t width)
-{
-    right_ = left_ + width;
-}
-
-void DesktopRect::SetHeight(int32_t height)
-{
-    bottom_ = top_ + height;
-}
-
 bool DesktopRect::IsEmpty() const
 {
-    return (width() <= 0 || height() <= 0);
+    return (Width() <= 0 || Height() <= 0);
 }
 
 bool DesktopRect::IsValid() const
@@ -129,9 +127,9 @@ bool DesktopRect::IsEqualTo(const DesktopRect &other) const
             bottom_ == other.bottom_);
 }
 
-DesktopSize DesktopRect::size() const
+DesktopSize DesktopRect::Size() const
 {
-    return DesktopSize(width(), height());
+    return DesktopSize(Width(), Height());
 }
 
 bool DesktopRect::Contains(int32_t x, int32_t y) const
@@ -155,10 +153,10 @@ void DesktopRect::Translate(int32_t dx, int32_t dy)
 
 void DesktopRect::IntersectWith(const DesktopRect& rect)
 {
-    left_   = std::max(left(),   rect.left());
-    top_    = std::max(top(),    rect.top());
-    right_  = std::min(right(),  rect.right());
-    bottom_ = std::min(bottom(), rect.bottom());
+    left_   = std::max(Left(),   rect.Left());
+    top_    = std::max(Top(),    rect.Top());
+    right_  = std::min(Right(),  rect.Right());
+    bottom_ = std::min(Bottom(), rect.Bottom());
 
     if (IsEmpty())
     {
@@ -167,6 +165,22 @@ void DesktopRect::IntersectWith(const DesktopRect& rect)
         right_  = 0;
         bottom_ = 0;
     }
+}
+
+void DesktopRect::ToVideoRect(proto::VideoRect *rect) const
+{
+    rect->set_x(x());
+    rect->set_y(y());
+    rect->set_width(Width());
+    rect->set_height(Height());
+}
+
+void DesktopRect::FromVideoRect(const proto::VideoRect &rect)
+{
+    left_ = rect.x();
+    top_ = rect.y();
+    right_ = left_ + rect.width();
+    bottom_ = top_ + rect.height();
 }
 
 void DesktopRect::Extend(int32_t left_offset,

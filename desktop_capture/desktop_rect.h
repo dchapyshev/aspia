@@ -1,9 +1,9 @@
-/*
- * PROJECT:         Aspia Remote Desktop
- * FILE:            desktop_capture/desktop_rect.h
- * LICENSE:         See top-level directory
- * PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
- */
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            desktop_capture/desktop_rect.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_DESKTOP_CAPTURE__DESKTOP_RECT_H
 #define _ASPIA_DESKTOP_CAPTURE__DESKTOP_RECT_H
@@ -21,6 +21,7 @@ class DesktopRect
 public:
     DesktopRect();
     DesktopRect(const DesktopRect &rect);
+    DesktopRect(const proto::VideoRect &rect);
     ~DesktopRect();
 
     static DesktopRect MakeXYWH(int32_t x, int32_t y, int32_t width, int32_t height);
@@ -28,28 +29,28 @@ public:
     static DesktopRect MakeLTRB(int32_t l, int32_t t, int32_t r, int32_t b);
     static DesktopRect MakeSize(const DesktopSize &size);
 
-    int32_t left() const;
-    int32_t top() const;
-    int32_t right() const;
-    int32_t bottom() const;
+    int32_t Left() const;
+    int32_t Top() const;
+    int32_t Right() const;
+    int32_t Bottom() const;
 
     int32_t x() const;
     int32_t y() const;
-    int32_t width() const;
-    int32_t height() const;
-
-    void SetWidth(int width);
-    void SetHeight(int height);
+    int32_t Width() const;
+    int32_t Height() const;
 
     bool IsEmpty() const;
     bool IsValid() const;
 
     bool IsEqualTo(const DesktopRect &other) const;
-    DesktopSize size() const;
+    DesktopSize Size() const;
     bool Contains(int32_t x, int32_t y) const;
     bool ContainsRect(const DesktopRect &rect) const;
     void Translate(int32_t dx, int32_t dy);
     void IntersectWith(const DesktopRect &rect);
+
+    void ToVideoRect(proto::VideoRect *rect) const;
+    void FromVideoRect(const proto::VideoRect &rect);
 
     //
     // Enlarges current DesktopRect by subtracting |left_offset| and |top_offset|

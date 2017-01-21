@@ -1,27 +1,25 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            desktop_capture/differ.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            desktop_capture/differ.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "desktop_capture/differ.h"
 
 #include "desktop_capture/diff_block_sse2.h"
-#include "desktop_capture/diff_block_avx2.h"
 #include "base/logging.h"
 #include "libyuv/cpu_id.h"
 
 namespace aspia {
 
-// Размер блока
-static const int kBlockSize = 32;
+static const int kBytesPerPixel = 4;
 
-template <const int block_size, const int bits_per_pixel>
+template <const int block_size>
 static uint8_t
 DiffFullBlock_C(const uint8_t *image1, const uint8_t *image2, int bytes_per_row)
 {
-    const int bytes_per_block = block_size * (bits_per_pixel / 8);
+    const int bytes_per_block = block_size * kBytesPerPixel;
 
     for (int y = 0; y < block_size; ++y)
     {
@@ -66,80 +64,53 @@ DiffPartialBlock(const uint8_t *prev_image,
     return 0;
 }
 
-Differ::Differ(const DesktopSize &size, int bytes_per_pixel) :
+Differ::Differ(const DesktopSize &size, int block_size) :
     size_(size),
+    block_size_(block_size),
     diff_full_block_func_(nullptr)
 {
-    static_assert(kBlockSize == 16 || kBlockSize == 32, "Unsupported block size.");
+    bytes_per_block_ = kBytesPerPixel * block_size_;
+    bytes_per_row_ = kBytesPerPixel * size.Width();
 
-    bytes_per_pixel_ = bytes_per_pixel;
-    bytes_per_block_ = bytes_per_pixel_ * kBlockSize;
-    bytes_per_row_ = bytes_per_pixel_ * size.width();
-
-    diff_width_ = ((size.width() + kBlockSize - 1) / kBlockSize) + 1;
-    diff_height_ = ((size.height() + kBlockSize - 1) / kBlockSize) + 1;
+    diff_width_ = ((size.Width() + block_size_ - 1) / block_size_) + 1;
+    diff_height_ = ((size.Height() + block_size_ - 1) / block_size_) + 1;
     int diff_info_size = diff_width_ * diff_height_;
 
     diff_info_.reset(new uint8_t[diff_info_size]);
     memset(diff_info_.get(), 0, diff_info_size);
 
     // Calc number of full blocks.
-    full_blocks_x_ = size.width() / kBlockSize;
-    full_blocks_y_ = size.height() / kBlockSize;
+    full_blocks_x_ = size.Width() / block_size_;
+    full_blocks_y_ = size.Height() / block_size_;
 
     // Calc size of partial blocks which may be present on right and bottom edge.
-    partial_column_width_ = size.width() - (full_blocks_x_ * kBlockSize);
-    partial_row_height_ = size.height() - (full_blocks_y_ * kBlockSize);
+    partial_column_width_ = size.Width() - (full_blocks_x_ * block_size_);
+    partial_row_height_ = size.Height() - (full_blocks_y_ * block_size_);
 
     // Offset from the start of one block-row to the next.
-    block_stride_y_ = bytes_per_row_ * kBlockSize;
+    block_stride_y_ = bytes_per_row_ * block_size_;
 
-    // Проверяем поддерживается ли AVX2 процессором
-    if (libyuv::TestCpuFlag(libyuv::kCpuHasAVX2))
-    {
-        if (kBlockSize == 16)
-        {
-            switch (bytes_per_pixel)
-            {
-                case 4: diff_full_block_func_ = DiffFullBlock_16x16_32BPP_AVX2; break;
-                case 2: diff_full_block_func_ = DiffFullBlock_16x16_16BPP_AVX2; break;
-            }
-        }
-        else if (kBlockSize == 32)
-        {
-            switch (bytes_per_pixel)
-            {
-                case 4: diff_full_block_func_ = DiffFullBlock_32x32_32BPP_AVX2; break;
-                case 2: diff_full_block_func_ = DiffFullBlock_32x32_16BPP_AVX2; break;
-            }
-        }
-    }
     // Проверяем поддерживается ли SSE2 процессором
-    else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
+    if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
     {
-        if (kBlockSize == 16)
+        if (block_size_ == 16)
         {
-            switch (bytes_per_pixel)
-            {
-                case 4: diff_full_block_func_ = DiffFullBlock_16x16_32BPP_SSE2; break;
-                case 2: diff_full_block_func_ = DiffFullBlock_16x16_16BPP_SSE2; break;
-            }
+            diff_full_block_func_ = DiffFullBlock_16x16_SSE2;
         }
-        else if (kBlockSize == 32)
+        else if (block_size_ == 32)
         {
-            switch (bytes_per_pixel)
-            {
-                case 4: diff_full_block_func_ = DiffFullBlock_32x32_32BPP_SSE2; break;
-                case 2: diff_full_block_func_ = DiffFullBlock_32x32_16BPP_SSE2; break;
-            }
+            diff_full_block_func_ = DiffFullBlock_32x32_SSE2;
         }
     }
     else
     {
-        switch (bytes_per_pixel)
+        if (block_size_ == 16)
         {
-            case 4: diff_full_block_func_ = DiffFullBlock_C<kBlockSize, 32>; break;
-            case 2: diff_full_block_func_ = DiffFullBlock_C<kBlockSize, 16>; break;
+            diff_full_block_func_ = DiffFullBlock_C<16>;
+        }
+        else if (block_size_ == 32)
+        {
+            diff_full_block_func_ = DiffFullBlock_C<32>;
         }
     }
 
@@ -154,7 +125,7 @@ Differ::~Differ()
 //
 // Identify all of the blocks that contain changed pixels.
 //
-void Differ::MarkChangedBlocks(const uint8_t *prev_image, const uint8_t *curr_image)
+void Differ::MarkDirtyBlocks(const uint8_t *prev_image, const uint8_t *curr_image)
 {
     const uint8_t *prev_block_row_start = prev_image;
     const uint8_t *curr_block_row_start = curr_image;
@@ -192,7 +163,7 @@ void Differ::MarkChangedBlocks(const uint8_t *prev_image, const uint8_t *curr_im
                                              curr_block,
                                              bytes_per_row_,
                                              bytes_per_block_,
-                                             kBlockSize);
+                                             block_size_);
 
             ++is_different;
         }
@@ -234,7 +205,7 @@ void Differ::MarkChangedBlocks(const uint8_t *prev_image, const uint8_t *curr_im
             *is_different = DiffPartialBlock(prev_block,
                                              curr_block,
                                              bytes_per_row_,
-                                             partial_column_width_ * bytes_per_pixel_,
+                                             partial_column_width_ * kBytesPerPixel,
                                              partial_row_height_);
         }
     }
@@ -245,7 +216,7 @@ void Differ::MarkChangedBlocks(const uint8_t *prev_image, const uint8_t *curr_im
 // blocks into a region.
 // The goal is to minimize the region that covers the dirty blocks.
 //
-void Differ::MergeChangedBlocks(DesktopRegion &changed_region)
+void Differ::MergeBlocks(DesktopRegion *dirty_region)
 {
     uint8_t *is_diff_row_start = diff_info_.get();
     int diff_stride = diff_width_;
@@ -317,16 +288,20 @@ void Differ::MergeChangedBlocks(DesktopRegion &changed_region)
                     }
                 } while (found_new_row);
 
-                int32_t l = x * kBlockSize;
-                int32_t t = y * kBlockSize;
-                int32_t r = l + (width * kBlockSize);
-                int32_t b = t + (height * kBlockSize);
+                int32_t left = x * block_size_;
+                int32_t top = y * block_size_;
 
-                if (r > size_.width()) r = size_.width();
-                if (b > size_.height()) b = size_.height();
+                width *= block_size_;
+                height *= block_size_;
+
+                if (left + width > size_.Width())
+                    width = size_.Width() - left;
+
+                if (top + height > size_.Height())
+                    height = size_.Height() - top;
 
                 // Add rect to region.
-                changed_region.AddRect(DesktopRect::MakeLTRB(l, t, r, b));
+                dirty_region->AddRect(DesktopRect::MakeXYWH(left, top, width, height));
             }
 
             // Increment to next block in this row.
@@ -338,18 +313,18 @@ void Differ::MergeChangedBlocks(DesktopRegion &changed_region)
     }
 }
 
-void Differ::CalcChangedRegion(const uint8_t *prev_image,
+void Differ::CalcDirtyRegion(const uint8_t *prev_image,
                                const uint8_t *curr_image,
-                               DesktopRegion &changed_region)
+                               DesktopRegion *dirty_region)
 {
     // Identify all the blocks that contain changed pixels.
-    MarkChangedBlocks(prev_image, curr_image);
+    MarkDirtyBlocks(prev_image, curr_image);
 
     //
     // Now that we've identified the blocks that have changed, merge adjacent
     // blocks to minimize the number of rects that we return.
     //
-    MergeChangedBlocks(changed_region);
+    MergeBlocks(dirty_region);
 }
 
 } // namespace aspia

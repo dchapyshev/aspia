@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            desktop_capture/scoped_desktop_effects.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            desktop_capture/scoped_desktop_effects.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_DESKTOP_CAPTURE__SCOPED_DESKTOP_EFFECTS_H
 #define _ASPIA_DESKTOP_CAPTURE__SCOPED_DESKTOP_EFFECTS_H

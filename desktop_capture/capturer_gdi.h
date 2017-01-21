@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            desktop_capture/capturer_gdi.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            desktop_capture/capturer_gdi.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_DESKTOP_CAPTURE__CAPTURER_GDI_H
 #define _ASPIA_DESKTOP_CAPTURE__CAPTURER_GDI_H
@@ -36,11 +36,8 @@ public:
     // Метод выполнения захвата экрана
     // Возвращает указатель на буфер, который содержит изображение экрана.
     //
-    const uint8_t* CaptureImage(DesktopRegion &changed_region,
-                                DesktopSize &desktop_size,
-                                PixelFormat &pixel_format) override;
-
-    static DesktopRect GetDesktopRect();
+    const uint8_t* CaptureImage(DesktopRegion *dirty_region,
+                                DesktopSize *desktop_size) override;
 
 private:
     typedef struct
@@ -58,21 +55,16 @@ private:
         } u;
     } BitmapInfo;
 
-    static void GetDefaultBitmapInfo(BitmapInfo *bmi);
-    static PixelFormat GetPixelFormat(const BitmapInfo &bmi);
     void AllocateBuffer(int buffer_index, int align);
     void PrepareInputDesktop();
     void PrepareCaptureResources();
 
 private:
-    PixelFormat current_pixel_format_;
+    ScopedThreadDesktop desktop_;
 
-    std::unique_ptr<ScopedDesktopEffects> desktop_effects_;
-
-    DesktopRect current_desktop_rect_;
+    DesktopRect screen_rect_;
 
     std::unique_ptr<Differ> differ_;
-    ScopedThreadDesktop desktop_;
 
     std::unique_ptr<ScopedGetDC> desktop_dc_;
     ScopedCreateDC memory_dc_;

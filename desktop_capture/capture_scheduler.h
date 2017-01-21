@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            desktop_capture/capture_scheduler.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            desktop_capture/capture_scheduler.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H_
 #define ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H_
@@ -19,14 +19,14 @@ namespace aspia {
 class CaptureScheduler
 {
 public:
-    CaptureScheduler();
+    explicit CaptureScheduler(int max_delay);
     ~CaptureScheduler();
 
-    void Sleep();
+    void Wait();
     void BeginCapture();
 
 private:
-    int resolution_;
+    int max_delay_;
     DWORD begin_time_;
 
     DISALLOW_COPY_AND_ASSIGN(CaptureScheduler);

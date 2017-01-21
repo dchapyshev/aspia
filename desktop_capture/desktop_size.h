@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            desktop_capture/desktop_size.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            desktop_capture/desktop_size.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_DESKTOP_CAPTURE__DESKTOP_SIZE_H
 #define _ASPIA_DESKTOP_CAPTURE__DESKTOP_SIZE_H
@@ -12,6 +12,8 @@
 
 #include <stdint.h>
 
+#include "proto/video.pb.h"
+
 namespace aspia {
 
 class DesktopSize
@@ -19,24 +21,25 @@ class DesktopSize
 public:
     DesktopSize();
     DesktopSize(int32_t width, int32_t height);
-    DesktopSize(const DesktopSize &size);
+    DesktopSize(const DesktopSize &other);
     ~DesktopSize();
 
-    int32_t width() const;
-    int32_t height() const;
+    int32_t Width() const;
+    int32_t Height() const;
 
-    void set_width(int32_t width);
-    void set_height(int32_t height);
+    void Set(int32_t width, int32_t height);
 
     bool IsEmpty() const;
-
     bool IsEqualTo(const DesktopSize &other) const;
 
-    DesktopSize& operator=(const DesktopSize &size);
+    void Clear();
 
-    bool operator==(const DesktopSize &size);
+    void ToVideoSize(proto::VideoSize *size) const;
+    void FromVideoSize(const proto::VideoSize &size);
 
-    bool operator!=(const DesktopSize &size);
+    DesktopSize& operator=(const DesktopSize &other);
+    bool operator==(const DesktopSize &other);
+    bool operator!=(const DesktopSize &other);
 
 private:
     int32_t width_;
