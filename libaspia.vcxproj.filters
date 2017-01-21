@@ -87,9 +87,6 @@
     <ClCompile Include="base\runas_service.cpp">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="proto\auth.pb.cc">
-      <Filter>proto</Filter>
-    </ClCompile>
     <ClCompile Include="crypto\encryptor_aes.cpp">
       <Filter>crypto</Filter>
     </ClCompile>
@@ -132,14 +129,8 @@
     <ClCompile Include="base\desktop.cpp">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="client\screen_window.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
     <ClCompile Include="base\power.cpp">
       <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="desktop_capture\diff_block_avx2.cpp">
-      <Filter>desktop_capture</Filter>
     </ClCompile>
     <ClCompile Include="host\input_injector.cpp">
       <Filter>host</Filter>
@@ -166,6 +157,33 @@
       <Filter>desktop_capture</Filter>
     </ClCompile>
     <ClCompile Include="desktop_capture\desktop_region.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\sha512.cpp">
+      <Filter>crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="proto\auth.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="proto\video.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\dib_buffer.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="codec\video_encoder_vp9.cpp">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="codec\video_decoder_vp9.cpp">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="client\client_config.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="client\screen_config.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\cursor_capturer.cpp">
       <Filter>desktop_capture</Filter>
     </ClCompile>
   </ItemGroup>
@@ -216,24 +234,6 @@
       <Filter>codec</Filter>
     </ClInclude>
     <ClInclude Include="codec\decompressor_zlib.h">
-      <Filter>codec</Filter>
-    </ClInclude>
-    <ClInclude Include="codec\pixel_translator.h">
-      <Filter>codec</Filter>
-    </ClInclude>
-    <ClInclude Include="codec\pixel_translator_fake.h">
-      <Filter>codec</Filter>
-    </ClInclude>
-    <ClInclude Include="codec\pixel_translator_fromARGB.h">
-      <Filter>codec</Filter>
-    </ClInclude>
-    <ClInclude Include="codec\pixel_translator_fromRGB565.h">
-      <Filter>codec</Filter>
-    </ClInclude>
-    <ClInclude Include="codec\pixel_translator_libyuv.h">
-      <Filter>codec</Filter>
-    </ClInclude>
-    <ClInclude Include="codec\pixel_translator_selector.h">
       <Filter>codec</Filter>
     </ClInclude>
     <ClInclude Include="codec\scoped_vpx_codec.h">
@@ -308,9 +308,6 @@
     <ClInclude Include="base\scoped_sc_handle.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="proto\auth.pb.h">
-      <Filter>proto</Filter>
-    </ClInclude>
     <ClInclude Include="crypto\encryptor_aes.h">
       <Filter>crypto</Filter>
     </ClInclude>
@@ -359,12 +356,6 @@
     <ClInclude Include="base\power.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="client\screen_window.h">
-      <Filter>client</Filter>
-    </ClInclude>
-    <ClInclude Include="desktop_capture\diff_block_avx2.h">
-      <Filter>desktop_capture</Filter>
-    </ClInclude>
     <ClInclude Include="host\input_injector.h">
       <Filter>host</Filter>
     </ClInclude>
@@ -392,12 +383,48 @@
     <ClInclude Include="desktop_capture\desktop_region.h">
       <Filter>desktop_capture</Filter>
     </ClInclude>
+    <ClInclude Include="crypto\sha512.h">
+      <Filter>crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="proto\auth.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
+    <ClInclude Include="proto\video.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\dib_buffer.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\video_encoder_vp9.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\video_decoder_vp9.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\pixel_translator.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="client\client_config.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="client\screen_config.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\pixel_translator_argb.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\cursor_capturer.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="proto\proto.proto">
+      <Filter>proto</Filter>
+    </None>
     <None Include="proto\auth.proto">
       <Filter>proto</Filter>
     </None>
-    <None Include="proto\proto.proto">
+    <None Include="proto\video.proto">
       <Filter>proto</Filter>
     </None>
   </ItemGroup>

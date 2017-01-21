@@ -28,24 +28,29 @@
     <ClCompile Include="base\unicode.cpp" />
     <ClCompile Include="base\waitable_event.cpp" />
     <ClCompile Include="client\client.cpp" />
-    <ClCompile Include="client\screen_window.cpp" />
+    <ClCompile Include="client\client_config.cpp" />
+    <ClCompile Include="client\screen_config.cpp" />
     <ClCompile Include="codec\compressor_zlib.cpp" />
     <ClCompile Include="codec\decompressor_zlib.cpp" />
     <ClCompile Include="codec\scoped_vpx_codec.cpp" />
     <ClCompile Include="codec\video_decoder_vp8.cpp" />
+    <ClCompile Include="codec\video_decoder_vp9.cpp" />
     <ClCompile Include="codec\video_decoder_zlib.cpp" />
     <ClCompile Include="codec\video_encoder_vp8.cpp" />
+    <ClCompile Include="codec\video_encoder_vp9.cpp" />
     <ClCompile Include="codec\video_encoder_zlib.cpp" />
     <ClCompile Include="crypto\decryptor_aes.cpp" />
     <ClCompile Include="crypto\encryptor_aes.cpp" />
+    <ClCompile Include="crypto\sha512.cpp" />
     <ClCompile Include="desktop_capture\capturer_gdi.cpp" />
     <ClCompile Include="desktop_capture\capture_scheduler.cpp" />
+    <ClCompile Include="desktop_capture\cursor_capturer.cpp" />
     <ClCompile Include="desktop_capture\desktop_point.cpp" />
     <ClCompile Include="desktop_capture\desktop_rect.cpp" />
     <ClCompile Include="desktop_capture\desktop_region.cpp" />
     <ClCompile Include="desktop_capture\desktop_size.cpp" />
+    <ClCompile Include="desktop_capture\dib_buffer.cpp" />
     <ClCompile Include="desktop_capture\differ.cpp" />
-    <ClCompile Include="desktop_capture\diff_block_avx2.cpp" />
     <ClCompile Include="desktop_capture\diff_block_sse2.cpp" />
     <ClCompile Include="desktop_capture\pixel_format.cpp" />
     <ClCompile Include="desktop_capture\scoped_desktop_effects.cpp" />
@@ -61,6 +66,7 @@
     <ClCompile Include="network\socket_tcp.cpp" />
     <ClCompile Include="proto\auth.pb.cc" />
     <ClCompile Include="proto\proto.pb.cc" />
+    <ClCompile Include="proto\video.pb.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\clipboard.h" />
@@ -90,38 +96,39 @@
     <ClInclude Include="base\unicode.h" />
     <ClInclude Include="base\waitable_event.h" />
     <ClInclude Include="client\client.h" />
+    <ClInclude Include="client\client_config.h" />
     <ClInclude Include="client\message_queue.h" />
-    <ClInclude Include="client\screen_window.h" />
+    <ClInclude Include="client\screen_config.h" />
     <ClInclude Include="codec\compressor.h" />
     <ClInclude Include="codec\compressor_zlib.h" />
     <ClInclude Include="codec\decompressor.h" />
     <ClInclude Include="codec\decompressor_zlib.h" />
     <ClInclude Include="codec\pixel_translator.h" />
-    <ClInclude Include="codec\pixel_translator_fake.h" />
-    <ClInclude Include="codec\pixel_translator_fromARGB.h" />
-    <ClInclude Include="codec\pixel_translator_fromRGB565.h" />
-    <ClInclude Include="codec\pixel_translator_libyuv.h" />
-    <ClInclude Include="codec\pixel_translator_selector.h" />
+    <ClInclude Include="codec\pixel_translator_argb.h" />
     <ClInclude Include="codec\scoped_vpx_codec.h" />
     <ClInclude Include="codec\video_decoder.h" />
     <ClInclude Include="codec\video_decoder_vp8.h" />
+    <ClInclude Include="codec\video_decoder_vp9.h" />
     <ClInclude Include="codec\video_decoder_zlib.h" />
     <ClInclude Include="codec\video_encoder.h" />
     <ClInclude Include="codec\video_encoder_vp8.h" />
+    <ClInclude Include="codec\video_encoder_vp9.h" />
     <ClInclude Include="codec\video_encoder_zlib.h" />
     <ClInclude Include="crypto\decryptor.h" />
     <ClInclude Include="crypto\decryptor_aes.h" />
     <ClInclude Include="crypto\encryptor.h" />
     <ClInclude Include="crypto\encryptor_aes.h" />
+    <ClInclude Include="crypto\sha512.h" />
     <ClInclude Include="desktop_capture\capturer.h" />
     <ClInclude Include="desktop_capture\capturer_gdi.h" />
     <ClInclude Include="desktop_capture\capture_scheduler.h" />
+    <ClInclude Include="desktop_capture\cursor_capturer.h" />
     <ClInclude Include="desktop_capture\desktop_point.h" />
     <ClInclude Include="desktop_capture\desktop_rect.h" />
     <ClInclude Include="desktop_capture\desktop_region.h" />
     <ClInclude Include="desktop_capture\desktop_size.h" />
+    <ClInclude Include="desktop_capture\dib_buffer.h" />
     <ClInclude Include="desktop_capture\differ.h" />
-    <ClInclude Include="desktop_capture\diff_block_avx2.h" />
     <ClInclude Include="desktop_capture\diff_block_sse2.h" />
     <ClInclude Include="desktop_capture\pixel_format.h" />
     <ClInclude Include="desktop_capture\scoped_desktop_effects.h" />
@@ -137,10 +144,12 @@
     <ClInclude Include="network\socket_tcp.h" />
     <ClInclude Include="proto\auth.pb.h" />
     <ClInclude Include="proto\proto.pb.h" />
+    <ClInclude Include="proto\video.pb.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\auth.proto" />
     <None Include="proto\proto.proto" />
+    <None Include="proto\video.proto" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B4B5FBB6-4E1C-43DB-B73E-6AE3C9AA2AC5}</ProjectGuid>
@@ -215,7 +224,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)/3rdparty/libglog/src/windows;$(SolutionDir)/3rdparty/libvpx;$(SolutionDir)/3rdparty/libyuv/include;$(SolutionDir)/3rdparty/zlib-ng;$(SolutionDir)/3rdparty/protobuf/src;$(SolutionDir)/3rdparty/wtl;$(SolutionDir)/3rdparty;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -223,7 +232,8 @@
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
