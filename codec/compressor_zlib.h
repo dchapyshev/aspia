@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            codec/compressor_zlib.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            codec/compressor_zlib.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_CODEC__COMPRESSOR_ZLIB_H
 #define _ASPIA_CODEC__COMPRESSOR_ZLIB_H
@@ -19,7 +19,7 @@ namespace aspia {
 class CompressorZLIB : public Compressor
 {
 public:
-    CompressorZLIB();
+    CompressorZLIB(int32_t compress_ratio);
     virtual ~CompressorZLIB();
 
     virtual bool Process(const uint8_t *input_data,
@@ -31,9 +31,6 @@ public:
                          int *written) override;
 
     virtual void Reset() override;
-
-private:
-    void InitStream();
 
 private:
     z_stream stream_;

@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            codec/video_encoder_zlib.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            codec/video_encoder_zlib.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "codec/video_encoder_zlib.h"
 
@@ -11,22 +11,27 @@
 
 namespace aspia {
 
+static const int kBytesPerPixel = 4;
+
 VideoEncoderZLIB::VideoEncoderZLIB() :
     packet_flags_(proto::VideoPacket::LAST_PACKET),
-    host_bytes_per_pixel_(0),
-    client_bytes_per_pixel_(0),
+    bytes_per_pixel_(0),
     host_stride_(0),
     client_stride_(0),
     resized_(true),
-    compressor_(new CompressorZLIB()),
     rect_iterator(DesktopRegion())
 {
-    // Nothing
+    SetCompressRatio(6);
 }
 
 VideoEncoderZLIB::~VideoEncoderZLIB()
 {
     // Nothing
+}
+
+void VideoEncoderZLIB::SetCompressRatio(int32_t value)
+{
+    compressor_.reset(new CompressorZLIB(value));
 }
 
 uint8_t* VideoEncoderZLIB::GetOutputBuffer(proto::VideoPacket *packet, size_t size)
@@ -40,34 +45,26 @@ void VideoEncoderZLIB::CompressRect(const uint8_t *source_buffer,
                                     const DesktopRect &rect,
                                     proto::VideoPacket *packet)
 {
-    int width = rect.width();
-    int height = rect.height();
-
-    proto::VideoRect *video_rect = packet->add_changed_rect();
-
-    video_rect->set_x(rect.x());
-    video_rect->set_y(rect.y());
-    video_rect->set_width(width);
-    video_rect->set_height(height);
+    rect.ToVideoRect(packet->add_dirty_rect());
 
     const uint8_t *source_pos = source_buffer + host_stride_ * rect.y() +
-        rect.x() * host_bytes_per_pixel_;
+        rect.x() * kBytesPerPixel;
 
     // Получаем указатели на буферы
-    uint8_t *translated_pos = translated_buffer_->get() + rect.y() * client_stride_ +
-        rect.x() * client_bytes_per_pixel_;
+    uint8_t *translated_pos = translated_buffer_.get() + rect.y() * client_stride_ +
+        rect.x() * bytes_per_pixel_;
 
     translator_->Translate(source_pos, host_stride_,
                            translated_pos, client_stride_,
-                           width, height);
+                           rect.Width(), rect.Height());
 
     // Делаем сброс компрессора при сжатии каждого прямоугольника
     compressor_->Reset();
 
     // Размер строки прямоугольника в байтах
-    const int row_size = width * client_bytes_per_pixel_;
+    const int row_size = rect.Width() * bytes_per_pixel_;
 
-    int packet_size = row_size * height;
+    int packet_size = row_size * rect.Height();
     packet_size += packet_size / 100 + 16;
 
     uint8_t *compressed_pos = GetOutputBuffer(packet, packet_size);
@@ -82,7 +79,7 @@ void VideoEncoderZLIB::CompressRect(const uint8_t *source_buffer,
         Compressor::CompressorFlush flush = Compressor::CompressorNoFlush;
 
         // Если мы достигли последней строки в прямоугольнике
-        if (row_y == height - 1)
+        if (row_y == rect.Height() - 1)
         {
             // Ставим соответствующий флаг
             flush = Compressor::CompressorFinish;
@@ -107,7 +104,7 @@ void VideoEncoderZLIB::CompressRect(const uint8_t *source_buffer,
         }
 
         // Если мы достигли конца текущей строки в прямоугольнике и это не последняя строка
-        if (row_pos == row_size && row_y < height - 1)
+        if (row_pos == row_size && row_y < rect.Height() - 1)
         {
             // Обнуляаем положение в текущей строке
             row_pos = 0;
@@ -121,42 +118,59 @@ void VideoEncoderZLIB::CompressRect(const uint8_t *source_buffer,
     }
 }
 
-void VideoEncoderZLIB::Resize(const DesktopSize &screen_size,
-                              const PixelFormat &host_pixel_format,
-                              const PixelFormat &client_pixel_format)
+void VideoEncoderZLIB::InitTranslator(const PixelFormat &format)
 {
-    screen_size_ = screen_size;
+    switch (format.BitsPerPixel())
+    {
+        case 8:
+            translator_.reset(new PixelTranslatorARGB<1>(format));
+            break;
 
-    client_pixel_format_ = client_pixel_format;
+        case 16:
+            translator_.reset(new PixelTranslatorARGB<2>(format));
+            break;
 
-    host_bytes_per_pixel_ = host_pixel_format.BytesPerPixel();
-    client_bytes_per_pixel_ = client_pixel_format.BytesPerPixel();
+        case 24:
+            translator_.reset(new PixelTranslatorARGB<3>(format));
+            break;
 
-    host_stride_ = screen_size_.width() * host_bytes_per_pixel_;
-    client_stride_ = screen_size_.width() * client_bytes_per_pixel_;
-
-    translator_ = SelectTranslator(host_pixel_format, client_pixel_format);
+        case 32:
+            translator_.reset(new PixelTranslatorARGB<4>(format));
+            break;
+    }
 
     CHECK(translator_);
+}
 
-    size_t buffer_size = screen_size.width() *
-                         screen_size.height() *
-                         client_pixel_format.BytesPerPixel();
+void VideoEncoderZLIB::Resize(const DesktopSize &size, const PixelFormat &format)
+{
+    size_ = size;
 
-    translated_buffer_.reset(new ScopedAlignedBuffer(buffer_size));
+    if (format_ != format)
+    {
+        format_ = format;
+        InitTranslator(format);
+    }
+
+    bytes_per_pixel_ = format.BytesPerPixel();
+
+    host_stride_ = size_.Width() * kBytesPerPixel;
+    client_stride_ = size_.Width() * bytes_per_pixel_;
+
+    size_t buffer_size = size.Width() * size.Height() * format.BytesPerPixel();
+
+    translated_buffer_.resize(buffer_size);
 
     resized_ = true;
 }
 
 int32_t VideoEncoderZLIB::Encode(proto::VideoPacket *packet,
                                  const uint8_t *screen_buffer,
-                                 const DesktopRegion &changed_region)
+                                 const DesktopRegion &dirty_region)
 {
     if (packet_flags_ & proto::VideoPacket::LAST_PACKET)
     {
         packet_flags_ = proto::VideoPacket::FIRST_PACKET;
-
-        rect_iterator.Reset(changed_region);
 
         proto::VideoPacketFormat *format = packet->mutable_format();
 
@@ -165,27 +179,14 @@ int32_t VideoEncoderZLIB::Encode(proto::VideoPacket *packet,
 
         if (resized_)
         {
-            // Размеры экрана
-            proto::VideoSize *size = format->mutable_screen_size();
-
-            size->set_width(screen_size_.width());
-            size->set_height(screen_size_.height());
-
-            // Формат пикселей
-            proto::VideoPixelFormat *pixel_format = format->mutable_pixel_format();
-
-            pixel_format->set_bits_per_pixel(client_pixel_format_.BitsPerPixel());
-
-            pixel_format->set_red_max(client_pixel_format_.RedMax());
-            pixel_format->set_green_max(client_pixel_format_.GreenMax());
-            pixel_format->set_blue_max(client_pixel_format_.BlueMax());
-
-            pixel_format->set_red_shift(client_pixel_format_.RedShift());
-            pixel_format->set_green_shift(client_pixel_format_.GreenShift());
-            pixel_format->set_blue_shift(client_pixel_format_.BlueShift());
+            // Размеры экрана и формат пикселей.
+            size_.ToVideoSize(format->mutable_screen_size());
+            format_.ToVideoPixelFormat(format->mutable_pixel_format());
 
             resized_ = false;
         }
+
+        rect_iterator.Reset(dirty_region);
     }
     else
     {

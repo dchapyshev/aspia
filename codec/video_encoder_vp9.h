@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            codec/video_encoder_vp8.h
+// FILE:            codec/video_encoder_vp9.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_CODEC__VIDEO_ENCODER_VP8_H
-#define _ASPIA_CODEC__VIDEO_ENCODER_VP8_H
+#ifndef _ASPIA_CODEC__VIDEO_ENCODER_VP9_H
+#define _ASPIA_CODEC__VIDEO_ENCODER_VP9_H
 
 #include "aspia_config.h"
 
@@ -24,11 +24,11 @@ extern "C" {
 
 namespace aspia {
 
-class VideoEncoderVP8 : public VideoEncoder
+class VideoEncoderVP9 : public VideoEncoder
 {
 public:
-    VideoEncoderVP8();
-    virtual ~VideoEncoderVP8() override;
+    VideoEncoderVP9();
+    virtual ~VideoEncoderVP9() override;
 
     virtual void Resize(const DesktopSize &screen_size,
                         const PixelFormat &client_pixel_format) override;
@@ -65,9 +65,9 @@ private:
     // Buffer for storing the yuv image.
     std::unique_ptr<uint8_t[]> yuv_image_;
 
-    DISALLOW_COPY_AND_ASSIGN(VideoEncoderVP8);
+    DISALLOW_COPY_AND_ASSIGN(VideoEncoderVP9);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_CODEC___VIDEO_ENCODER_VP8_H
+#endif // _ASPIA_CODEC___VIDEO_ENCODER_VP9_H

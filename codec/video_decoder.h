@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            codec/video_decoder.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            codec/video_decoder.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_CODEC__VIDEO_DECODER_H
 #define _ASPIA_CODEC__VIDEO_DECODER_H
@@ -23,7 +23,7 @@ public:
 
     virtual int32_t Decode(const proto::VideoPacket *packet,
                            uint8_t **buffer,
-                           DesktopRegion &changed_region,
+                           DesktopRegion &dirty_region,
                            DesktopSize &size,
                            PixelFormat &format) = 0;
 };

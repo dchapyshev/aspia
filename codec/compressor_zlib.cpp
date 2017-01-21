@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            codec/compressor_zlib.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            codec/compressor_zlib.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "codec/compressor_zlib.h"
 
@@ -12,9 +12,28 @@
 
 namespace aspia {
 
-CompressorZLIB::CompressorZLIB()
+CompressorZLIB::CompressorZLIB(int32_t compress_ratio)
 {
-    InitStream();
+    if (compress_ratio < 1 || compress_ratio > 9)
+    {
+        LOG(ERROR) << "Wrong compression ratio: " << compress_ratio;
+        throw Exception("Wrong compression ratio");
+    }
+
+    memset(&stream_, 0, sizeof(stream_));
+
+    int ret = deflateInit2(&stream_,
+                           compress_ratio,
+                           Z_DEFLATED,
+                           MAX_WBITS,
+                           MAX_MEM_LEVEL,
+                           Z_DEFAULT_STRATEGY);
+
+    if (ret != Z_OK)
+    {
+        LOG(ERROR) << "deflateInit2() failed: " << ret;
+        throw Exception("Compressor initialization failure");
+    }
 }
 
 CompressorZLIB::~CompressorZLIB()
@@ -24,8 +43,7 @@ CompressorZLIB::~CompressorZLIB()
 
 void CompressorZLIB::Reset()
 {
-    deflateEnd(&stream_);
-    InitStream();
+    deflateReset(&stream_);
 }
 
 bool CompressorZLIB::Process(const uint8_t *input_data,
@@ -96,16 +114,6 @@ bool CompressorZLIB::Process(const uint8_t *input_data,
         LOG(ERROR) << "Unexpected zlib error: " << ret;
         throw Exception("Unexpected zlib error.");
     }
-}
-
-void CompressorZLIB::InitStream()
-{
-    stream_.next_in = Z_NULL;
-    stream_.zalloc  = Z_NULL;
-    stream_.zfree   = Z_NULL;
-    stream_.opaque  = Z_NULL;
-
-    deflateInit(&stream_, Z_BEST_SPEED);
 }
 
 } // namespace aspia

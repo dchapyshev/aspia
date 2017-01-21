@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            codec/decompressor_zlib.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            codec/decompressor_zlib.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "codec/decompressor_zlib.h"
 
@@ -14,7 +14,14 @@ namespace aspia {
 
 DecompressorZLIB::DecompressorZLIB()
 {
-    InitStream();
+    memset(&stream_, 0, sizeof(stream_));
+
+    int ret = inflateInit(&stream_);
+    if (ret != Z_OK)
+    {
+        LOG(ERROR) << "inflateInit() failed: " << ret;
+        throw Exception("Decompressor initialization failure");
+    }
 }
 
 DecompressorZLIB::~DecompressorZLIB()
@@ -24,8 +31,7 @@ DecompressorZLIB::~DecompressorZLIB()
 
 void DecompressorZLIB::Reset()
 {
-    inflateEnd(&stream_);
-    InitStream();
+    inflateReset(&stream_);
 }
 
 bool DecompressorZLIB::Process(const uint8_t *input_data,
@@ -46,7 +52,7 @@ bool DecompressorZLIB::Process(const uint8_t *input_data,
     int ret = inflate(&stream_, Z_NO_FLUSH);
     if (ret == Z_STREAM_ERROR)
     {
-        LOG(ERROR) << "zlib decompression failed";
+        LOG(ERROR) << "zlib decompression failed: " << ret;
         throw Exception("zlib decompression failed.");
     }
 
@@ -59,17 +65,6 @@ bool DecompressorZLIB::Process(const uint8_t *input_data,
     // data.
     //
     return (ret == Z_OK || ret == Z_BUF_ERROR);
-}
-
-void DecompressorZLIB::InitStream()
-{
-    stream_.next_in = Z_NULL;
-    stream_.zalloc  = Z_NULL;
-    stream_.zfree   = Z_NULL;
-    stream_.opaque  = Z_NULL;
-
-    int ret = inflateInit(&stream_);
-    DCHECK_EQ(ret, Z_OK);
 }
 
 } // namespace aspia

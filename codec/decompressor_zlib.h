@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            codec/decompressor_zlib.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            codec/decompressor_zlib.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_CODEC__DECOMPRESSOR_ZLIB_H
 #define _ASPIA_CODEC__DECOMPRESSOR_ZLIB_H
@@ -33,7 +33,6 @@ public:
                          int *written) override;
 
 private:
-    void InitStream();
     z_stream stream_;
 
     DISALLOW_COPY_AND_ASSIGN(DecompressorZLIB);

@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            codec/vodeo_encoder_vp8.cpp
+// FILE:            codec/vodeo_encoder_vp9.cpp
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "codec/video_encoder_vp8.h"
+#include "codec/video_encoder_vp9.h"
 
 #include <thread>
 
@@ -15,10 +15,21 @@
 
 namespace aspia {
 
-static const int kBlockSize = 16;
 static const int kBytesPerPixel = 4;
 
-VideoEncoderVP8::VideoEncoderVP8() :
+//
+// Defines the dimension of a macro block. This is used to compute the active
+// map for the encoder.
+//
+static const int kBlockSize = 16;
+
+// Magic encoder profile numbers for I444 input formats.
+static const int kVp9I444ProfileNumber = 1;
+
+// Magic encoder constants for adaptive quantization strategy.
+static const int kVp9AqModeNone = 0;
+
+VideoEncoderVP9::VideoEncoderVP9() :
     codec_(nullptr),
     active_map_size_(0),
     bytes_per_row_(0),
@@ -28,21 +39,21 @@ VideoEncoderVP8::VideoEncoderVP8() :
     memset(&image_, 0, sizeof(image_));
 }
 
-VideoEncoderVP8::~VideoEncoderVP8()
+VideoEncoderVP9::~VideoEncoderVP9()
 {
     // Nothing
 }
 
-void VideoEncoderVP8::CreateImage()
+void VideoEncoderVP9::CreateImage()
 {
     memset(&image_, 0, sizeof(image_));
 
     image_.d_w = image_.w = screen_size_.Width();
     image_.d_h = image_.h = screen_size_.Height();
 
-    image_.fmt = VPX_IMG_FMT_YV12;
-    image_.x_chroma_shift = 1;
-    image_.y_chroma_shift = 1;
+    image_.fmt = VPX_IMG_FMT_I444;
+    image_.x_chroma_shift = 0;
+    image_.y_chroma_shift = 0;
 
     //
     // libyuv's fast-path requires 16-byte aligned pointers and strides, so pad
@@ -80,7 +91,7 @@ void VideoEncoderVP8::CreateImage()
     image_.stride[2] = uv_stride;
 }
 
-void VideoEncoderVP8::CreateActiveMap()
+void VideoEncoderVP9::CreateActiveMap()
 {
     active_map_.cols = (screen_size_.Width() + kBlockSize - 1) / kBlockSize;
     active_map_.rows = (screen_size_.Height() + kBlockSize - 1) / kBlockSize;
@@ -94,7 +105,7 @@ void VideoEncoderVP8::CreateActiveMap()
     active_map_.active_map = active_map_buffer_.get();
 }
 
-void VideoEncoderVP8::SetCommonCodecParameters(vpx_codec_enc_cfg_t *config)
+void VideoEncoderVP9::SetCommonCodecParameters(vpx_codec_enc_cfg_t *config)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
@@ -122,43 +133,39 @@ void VideoEncoderVP8::SetCommonCodecParameters(vpx_codec_enc_cfg_t *config)
     config->g_threads = (std::thread::hardware_concurrency() > 2) ? 2 : 1;
 }
 
-void VideoEncoderVP8::CreateCodec()
+void VideoEncoderVP9::CreateCodec()
 {
     codec_.reset(new vpx_codec_ctx_t());
 
     vpx_codec_enc_cfg_t config = { 0 };
 
     // Configure the encoder.
-    vpx_codec_iface_t *algo = vpx_codec_vp8_cx();
+    vpx_codec_iface_t *algo = vpx_codec_vp9_cx();
 
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config, 0);
     DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to fetch default configuration";
 
-    // Adjust default target bit-rate to account for actual desktop size.
-    config.rc_target_bitrate = screen_size_.Width() * screen_size_.Height() *
-        config.rc_target_bitrate / config.g_w / config.g_h;
-
     SetCommonCodecParameters(&config);
 
-    //
-    // Value of 2 means using the real time profile. This is basically a
-    // redundant option since we explicitly select real time mode when doing
-    // encoding.
-    //
-    config.g_profile = 2;
+    // Configure VP9 for I444 source frames.
+    config.g_profile = kVp9I444ProfileNumber;
 
-    // Clamping the quantizer constrains the worst-case quality and CPU usage.
-    config.rc_min_quantizer = 20;
-    config.rc_max_quantizer = 30;
+    // Disable quantization entirely, putting the encoder in "lossless" mode.
+    config.rc_min_quantizer = 0;
+    config.rc_max_quantizer = 0;
+    config.rc_end_usage = VPX_VBR;
 
     ret = vpx_codec_enc_init(codec_.get(), algo, &config, 0);
     DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to initialize codec";
 
-    // Value of 16 will have the smallest CPU load. This turns off subpixel motion search.
-    ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 16);
+    //
+    // Request the lowest-CPU usage that VP9 supports, which depends on whether
+    // we are encoding lossy or lossless.
+    //
+    ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 5);
     DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set CPUUSED";
 
-    ret = vpx_codec_control(codec_.get(), VP8E_SET_SCREEN_CONTENT_MODE, 1);
+    ret = vpx_codec_control(codec_.get(), VP9E_SET_TUNE_CONTENT, VP9E_CONTENT_SCREEN);
     DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set screen content mode";
 
     //
@@ -167,12 +174,18 @@ void VideoEncoderVP8::CreateCodec()
     //
     ret = vpx_codec_control(codec_.get(), VP8E_SET_NOISE_SENSITIVITY, 0);
     DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set noise sensitivity";
+
+    // Set cyclic refresh (aka "top-off") only for lossy encoding.
+    ret = vpx_codec_control(codec_.get(), VP9E_SET_AQ_MODE, kVp9AqModeNone);
+    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set aq mode";
 }
 
-void VideoEncoderVP8::PrepareImageAndActiveMap(const DesktopRegion &dirty_region,
+void VideoEncoderVP9::PrepareImageAndActiveMap(const DesktopRegion &dirty_region,
                                                const uint8_t *src,
                                                proto::VideoPacket *packet)
 {
+    DCHECK(image_.fmt == VPX_IMG_FMT_I444);
+
     memset(active_map_.active_map, 0, active_map_size_);
 
     int y_stride = image_.stride[0];
@@ -186,19 +199,16 @@ void VideoEncoderVP8::PrepareImageAndActiveMap(const DesktopRegion &dirty_region
         const DesktopRect &rect = iter.rect();
 
         int rgb_offset = bytes_per_row_ * rect.y() + rect.x() * kBytesPerPixel;
-        int y_offset = y_stride * rect.y() + rect.x();
-        int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
+        int yuv_offset = uv_stride * rect.y() + rect.x();
         int width = rect.Width();
         int height = rect.Height();
 
-        libyuv::ARGBToI420(src + rgb_offset, bytes_per_row_,
-                           y_data + y_offset, y_stride,
-                           u_data + uv_offset, uv_stride,
-                           v_data + uv_offset, uv_stride,
+        libyuv::ARGBToI444(src + rgb_offset, bytes_per_row_,
+                           y_data + yuv_offset, y_stride,
+                           u_data + yuv_offset, uv_stride,
+                           v_data + yuv_offset, uv_stride,
                            width,
                            height);
-
-        rect.ToVideoRect(packet->add_dirty_rect());
 
         int left   = rect.Left() / kBlockSize;
         int top    = rect.Top() / kBlockSize;
@@ -216,10 +226,12 @@ void VideoEncoderVP8::PrepareImageAndActiveMap(const DesktopRegion &dirty_region
 
             map += active_map_.cols;
         }
+
+        rect.ToVideoRect(packet->add_dirty_rect());
     }
 }
 
-void VideoEncoderVP8::Resize(const DesktopSize &screen_size,
+void VideoEncoderVP9::Resize(const DesktopSize &screen_size,
                              const PixelFormat &client_pixel_format)
 {
     screen_size_ = screen_size;
@@ -233,7 +245,7 @@ void VideoEncoderVP8::Resize(const DesktopSize &screen_size,
     resized_ = true;
 }
 
-int32_t VideoEncoderVP8::Encode(proto::VideoPacket *packet,
+int32_t VideoEncoderVP9::Encode(proto::VideoPacket *packet,
                                 const uint8_t *screen_buffer,
                                 const DesktopRegion &dirty_region)
 {
@@ -241,7 +253,7 @@ int32_t VideoEncoderVP8::Encode(proto::VideoPacket *packet,
 
     proto::VideoPacketFormat *format = packet->mutable_format();
 
-    format->set_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
+    format->set_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP9);
 
     if (resized_)
     {

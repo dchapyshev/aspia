@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            codec/video_encoder.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            codec/video_encoder.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_CODEC__VIDEO_ENCODER_H
 #define _ASPIA_CODEC__VIDEO_ENCODER_H
@@ -22,12 +22,11 @@ public:
     virtual ~VideoEncoder() {}
 
     virtual void Resize(const DesktopSize &screen_size,
-                        const PixelFormat &host_pixel_format,
                         const PixelFormat &client_pixel_format) = 0;
 
     virtual int32_t Encode(proto::VideoPacket *packet,
                            const uint8_t *screen_buffer,
-                           const DesktopRegion &changed_region) = 0;
+                           const DesktopRegion &dirty_region) = 0;
 };
 
 } // namespace aspia
