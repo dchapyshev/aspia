@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            base/thread_pool.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/thread_pool.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_BASE__THREAD_POOL_H
 #define _ASPIA_BASE__THREAD_POOL_H
@@ -33,6 +33,12 @@ public:
         list_.push_back(std::move(thread));
     }
 
+    void Clear()
+    {
+        LockGuard<Lock> guard(&list_lock_);
+        list_.clear();
+    }
+
 private:
     void RemoveDeadThreads()
     {
@@ -44,7 +50,7 @@ private:
             Thread *thread = iter->get();
 
             // Если поток завершен.
-            if (thread->IsThreadTerminated())
+            if (!thread->IsActiveThread())
             {
                 // Удаляем поток и получаем следующий элемент списка.
                 iter = list_.erase(iter);

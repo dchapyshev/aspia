@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            base/runas_service.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/runas_service.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_BASE__RUNAS_SERVICE_H
 #define _ASPIA_BASE__RUNAS_SERVICE_H
@@ -40,8 +40,8 @@ private:
     HANDLE GetWinlogonUserToken();
 
 private:
-    std::unique_ptr<ScopedKernel32Library> kernel32_;
-    std::unique_ptr<ScopedWtsApi32Library> wtsapi32_;
+    ScopedKernel32Library kernel32_;
+    ScopedWtsApi32Library wtsapi32_;
 
     DISALLOW_COPY_AND_ASSIGN(RunAsService);
 };

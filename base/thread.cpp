@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            base/thread.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/thread.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "base/thread.h"
 
@@ -56,9 +56,9 @@ bool Thread::IsThreadTerminating() const
     return end_;
 }
 
-bool Thread::IsThreadTerminated() const
+bool Thread::IsActiveThread() const
 {
-    return !active_;
+    return active_;
 }
 
 void Thread::SetThreadPriority(Priority value)

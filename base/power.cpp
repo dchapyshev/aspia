@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            base/power.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/power.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "base/power.h"
 
@@ -22,7 +22,10 @@ PowerControl::~PowerControl()
 // static
 void PowerControl::Logoff()
 {
-    ExitWindowsEx(EWX_LOGOFF | EWX_FORCE, 0);
+    if (!ExitWindowsEx(EWX_LOGOFF | EWX_FORCE, 0))
+    {
+        LOG(ERROR) << "ExitWindowsEx() failed: " << GetLastError();
+    }
 }
 
 // static
@@ -30,17 +33,11 @@ void PowerControl::Shutdown()
 {
     if (EnablePrivilege(SE_SHUTDOWN_NAME, true))
     {
-        ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, 0);
-        EnablePrivilege(SE_SHUTDOWN_NAME, false);
-    }
-}
+        if (!ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, 0))
+        {
+            LOG(ERROR) << "ExitWindowsEx() failed: " << GetLastError();
+        }
 
-//static
-void PowerControl::PowerOff()
-{
-    if (EnablePrivilege(SE_SHUTDOWN_NAME, true))
-    {
-        ExitWindowsEx(EWX_POWEROFF | EWX_FORCE, 0);
         EnablePrivilege(SE_SHUTDOWN_NAME, false);
     }
 }
@@ -50,7 +47,11 @@ void PowerControl::Reboot()
 {
     if (EnablePrivilege(SE_SHUTDOWN_NAME, true))
     {
-        ExitWindowsEx(EWX_REBOOT | EWX_FORCE, 0);
+        if (!ExitWindowsEx(EWX_REBOOT | EWX_FORCE, 0))
+        {
+            LOG(ERROR) << "ExitWindowsEx() failed: " << GetLastError();
+        }
+
         EnablePrivilege(SE_SHUTDOWN_NAME, false);
     }
 }
@@ -60,7 +61,11 @@ void PowerControl::Hibernate()
 {
     if (EnablePrivilege(SE_SHUTDOWN_NAME, true))
     {
-        SetSystemPowerState(FALSE, TRUE);
+        if (!SetSystemPowerState(FALSE, TRUE))
+        {
+            LOG(ERROR) << "SetSystemPowerState() failed: " << GetLastError();
+        }
+
         EnablePrivilege(SE_SHUTDOWN_NAME, false);
     }
 }
@@ -70,46 +75,54 @@ void PowerControl::Suspend()
 {
     if (EnablePrivilege(SE_SHUTDOWN_NAME, true))
     {
-        SetSystemPowerState(TRUE, TRUE);
+        if (!SetSystemPowerState(TRUE, TRUE))
+        {
+            LOG(ERROR) << "SetSystemPowerState() failed: " << GetLastError();
+        }
+
         EnablePrivilege(SE_SHUTDOWN_NAME, false);
     }
 }
 
 // static
-bool PowerControl::EnablePrivilege(const wchar_t *name, bool enable)
+bool PowerControl::EnablePrivilege(const WCHAR *name, bool enable)
 {
-    bool result = false;
     HANDLE handle;
 
-    if (OpenProcessToken(GetCurrentProcess(),
-                         TOKEN_ADJUST_PRIVILEGES,
-                         &handle))
+    if (!OpenProcessToken(GetCurrentProcess(),
+                          TOKEN_ADJUST_PRIVILEGES,
+                          &handle))
     {
-        ScopedHandle token(handle);
-
-        TOKEN_PRIVILEGES privileges;
-
-        if (LookupPrivilegeValueW(nullptr,
-                                  name,
-                                  &privileges.Privileges[0].Luid))
-        {
-            privileges.PrivilegeCount = 1;
-            privileges.Privileges[0].Attributes =
-                enable ? SE_PRIVILEGE_ENABLED : 0;
-
-            if (AdjustTokenPrivileges(token,
-                                      FALSE,
-                                      &privileges,
-                                      0,
-                                      nullptr,
-                                      nullptr))
-            {
-                result = true;
-            }
-        }
+        LOG(ERROR) << "OpenProcessToken() failed: " << GetLastError();
+        return false;
     }
 
-    return result;
+    ScopedHandle token(handle);
+    TOKEN_PRIVILEGES privileges;
+
+    if (!LookupPrivilegeValueW(nullptr,
+                               name,
+                               &privileges.Privileges[0].Luid))
+    {
+        LOG(ERROR) << "LookupPrivilegeValueW() failed: " << GetLastError();
+        return false;
+    }
+
+    privileges.PrivilegeCount = 1;
+    privileges.Privileges[0].Attributes =enable ? SE_PRIVILEGE_ENABLED : 0;
+
+    if (!AdjustTokenPrivileges(token,
+                               FALSE,
+                               &privileges,
+                               0,
+                               nullptr,
+                               nullptr))
+    {
+        LOG(ERROR) << "AdjustTokenPrivileges() failed: " << GetLastError();
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace aspia

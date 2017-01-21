@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            base/clipboard.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/clipboard.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "base/clipboard.h"
 
@@ -24,12 +24,12 @@ void Clipboard::Set(const std::string &str)
         {
             EmptyClipboard();
 
-            SIZE_T buffer_size = (uni.length() + 1) * sizeof(wchar_t);
+            SIZE_T buffer_size = (uni.length() + 1) * sizeof(WCHAR);
 
             HGLOBAL hGlobal = GlobalAlloc(GHND, buffer_size);
             if (hGlobal)
             {
-                wchar_t *buffer = reinterpret_cast<wchar_t*>(GlobalLock(hGlobal));
+                WCHAR *buffer = reinterpret_cast<WCHAR*>(GlobalLock(hGlobal));
                 if (buffer)
                 {
                     StringCbCopyW(buffer, buffer_size, uni.c_str());
@@ -52,7 +52,7 @@ std::string Clipboard::Get()
         HANDLE hData = GetClipboardData(CF_UNICODETEXT);
         if (hData)
         {
-            wchar_t *uni = reinterpret_cast<wchar_t*>(GlobalLock(hData));
+            WCHAR *uni = reinterpret_cast<WCHAR*>(GlobalLock(hData));
             if (uni)
             {
                 std::string str = UTF8fromUNICODE(uni);

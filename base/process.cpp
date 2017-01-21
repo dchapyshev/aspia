@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            base/process.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/process.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "base/process.h"
 
@@ -141,7 +141,7 @@ bool Process::Elevate(const WCHAR *command_line)
 
     if (!ShellExecuteExW(&sei))
     {
-        DLOG(ERROR) << "ShellExecuteExW() failed: " << GetLastError();
+        DLOG(WARNING) << "ShellExecuteExW() failed: " << GetLastError();
         return false;
     }
 

@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            base/scoped_thread_desktop.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/scoped_thread_desktop.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "base/scoped_thread_desktop.h"
 
@@ -20,9 +20,9 @@ ScopedThreadDesktop::~ScopedThreadDesktop()
     Revert();
 }
 
-bool ScopedThreadDesktop::IsSame(const Desktop& desktop)
+bool ScopedThreadDesktop::IsSame(const Desktop &desktop)
 {
-    if (assigned_.get())
+    if (assigned_)
     {
         return assigned_->IsSame(desktop);
     }
@@ -34,7 +34,7 @@ bool ScopedThreadDesktop::IsSame(const Desktop& desktop)
 
 void ScopedThreadDesktop::Revert()
 {
-    if (assigned_.get())
+    if (assigned_)
     {
         initial_->SetThreadDesktop();
         assigned_.reset();

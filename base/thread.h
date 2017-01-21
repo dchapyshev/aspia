@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            base/thread.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/thread.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_BASE__THREAD_H
 #define _ASPIA_BASE__THREAD_H
@@ -46,10 +46,10 @@ public:
     bool IsThreadTerminating() const;
 
     //
-    // Возаращает false, если поток выполняется (выполняется метод Worker())
-    // и true, если не выполняется.
+    // Возаращает true, если поток выполняется (выполняется метод Worker())
+    // и false, если не выполняется.
     //
-    bool IsThreadTerminated() const;
+    bool IsActiveThread() const;
 
     enum class Priority
     {

@@ -1,16 +1,14 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            base/desktop.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/desktop.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_BASE__DESKTOP_H
 #define _ASPIA_BASE__DESKTOP_H
 
 #include "aspia_config.h"
-
-#include <string>
 
 #include "base/macros.h"
 
@@ -42,7 +40,7 @@ public:
     // Returns the name of the desktop represented by the object. Return false if
     // quering the name failed for any reason.
     //
-    bool GetName(std::wstring *desktop_name_out) const;
+    bool GetName(WCHAR *name, DWORD length) const;
 
     //
     // Returns true if |other| has the same name as this desktop. Returns false

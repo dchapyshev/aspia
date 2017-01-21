@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            base/waitable_event.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/waitable_event.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "base/waitable_event.h"
 
@@ -40,7 +40,7 @@ void WaitableEvent::WaitForEvent()
     {
         if (WaitForSingleObject(event_, INFINITE) == WAIT_FAILED)
         {
-            DLOG(WARNING) << "Unknown waiting error";
+            LOG(WARNING) << "Unknown waiting error: " << GetLastError();
         }
     }
 }

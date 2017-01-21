@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            base/scoped_gdi_object.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/scoped_gdi_object.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_BASE__SCOPED_GDI_OBJECT_H
 #define _ASPIA_BASE__SCOPED_GDI_OBJECT_H
@@ -92,6 +92,7 @@ typedef ScopedGDIObject<HRGN> ScopedRegion;
 typedef ScopedGDIObject<HFONT> ScopedHFONT;
 typedef ScopedGDIObject<HICON> ScopedHICON;
 typedef ScopedGDIObject<HBRUSH> ScopedHBRUSH;
+typedef ScopedGDIObject<HCURSOR> ScopedHCURSOR;
 
 } // namespace aspia
 

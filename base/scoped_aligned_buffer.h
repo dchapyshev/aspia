@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            base/scoped_aligned_buffer.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/scoped_aligned_buffer.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_BASE__SCOPED_ALIGNED_BUFFER_H
 #define _ASPIA_BASE__SCOPED_ALIGNED_BUFFER_H
@@ -19,9 +19,12 @@ class ScopedAlignedBuffer
 {
 public:
     ScopedAlignedBuffer(size_t size, size_t align = 32);
+    ScopedAlignedBuffer();
     ~ScopedAlignedBuffer();
 
     uint8_t* get() const;
+
+    void resize(size_t size, size_t align = 32);
 
     operator uint8_t*();
 

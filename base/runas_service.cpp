@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            base/runas_service.cpp
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/runas_service.cpp
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #include "base/runas_service.h"
 
@@ -20,9 +20,7 @@ namespace aspia {
 static const WCHAR kRunAsServiceName[] = L"aspia-runas-service";
 
 RunAsService::RunAsService() :
-    Service(kRunAsServiceName),
-    kernel32_(new ScopedKernel32Library()),
-    wtsapi32_(new ScopedWtsApi32Library())
+    Service(kRunAsServiceName)
 {
     // Nothing
 }
@@ -39,11 +37,11 @@ DWORD RunAsService::GetWinlogonProcessId(DWORD session_id)
     PWTS_PROCESS_INFOW process_info;
     DWORD process_count;
 
-    if (wtsapi32_->WTSEnumerateProcessesW(WTS_CURRENT_SERVER_HANDLE,
-                                          0,
-                                          1,
-                                          &process_info,
-                                          &process_count))
+    if (wtsapi32_.WTSEnumerateProcessesW(WTS_CURRENT_SERVER_HANDLE,
+                                         0,
+                                         1,
+                                         &process_info,
+                                         &process_count))
     {
         for (DWORD current = 0; current < process_count; ++current)
         {
@@ -55,7 +53,7 @@ DWORD RunAsService::GetWinlogonProcessId(DWORD session_id)
             }
         }
 
-        wtsapi32_->WTSFreeMemory(process_info);
+        wtsapi32_.WTSFreeMemory(process_info);
     }
 
     return process_id;
@@ -65,7 +63,7 @@ HANDLE RunAsService::GetWinlogonUserToken()
 {
     HANDLE user_token = nullptr;
 
-    DWORD session_id = kernel32_->WTSGetActiveConsoleSessionId();
+    DWORD session_id = kernel32_.WTSGetActiveConsoleSessionId();
     if (session_id == 0xFFFFFFFF)
     {
         LOG(ERROR) << "WTSGetActiveConsoleSessionId() failed: " << GetLastError();
@@ -107,6 +105,13 @@ HANDLE RunAsService::GetWinlogonUserToken()
                     CloseHandle(user_token);
                     user_token = nullptr;
                 }
+
+                DWORD ui_access = 1;
+
+                if (!SetTokenInformation(user_token, TokenUIAccess, &ui_access, sizeof(ui_access)))
+                {
+                    LOG(INFO) << "SetTokenInformation() failed: " << GetLastError();
+                }
             }
             else
             {
@@ -145,10 +150,10 @@ void RunAsService::Worker()
                 command_line += L" --run_mode=system";
 
                 PROCESS_INFORMATION pi = { 0 };
-                STARTUPINFO si = { 0 };
+                STARTUPINFOW si = { 0 };
 
+                si.cb = sizeof(si);
                 si.lpDesktop = L"Winsta0\\Default";
-                si.cb = sizeof(STARTUPINFO);
 
                 if (CreateProcessAsUserW(winlogon_user_token,
                                          nullptr,

@@ -1,14 +1,18 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            base/lock.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/lock.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_BASE__LOCK_H
 #define _ASPIA_BASE__LOCK_H
 
 #include "aspia_config.h"
+
+#include <stdint.h>
+
+#include "base/macros.h"
 
 namespace aspia {
 
@@ -28,6 +32,8 @@ private:
 #else
     CRITICAL_SECTION cs_;
 #endif
+
+    DISALLOW_COPY_AND_ASSIGN(Lock);
 };
 
 template<class T>
@@ -46,6 +52,8 @@ public:
 
 private:
     T *locker_;
+
+    DISALLOW_COPY_AND_ASSIGN(LockGuard);
 };
 
 } // namespace aspia

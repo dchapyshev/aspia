@@ -1,9 +1,9 @@
-/*
-* PROJECT:         Aspia Remote Desktop
-* FILE:            base/power.h
-* LICENSE:         See top-level directory
-* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-*/
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/power.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
 
 #ifndef _ASPIA_BASE__POWER_H
 #define _ASPIA_BASE__POWER_H
@@ -22,13 +22,12 @@ public:
 
     static void Logoff();
     static void Shutdown();
-    static void PowerOff();
     static void Reboot();
     static void Hibernate();
     static void Suspend();
 
 private:
-    static bool EnablePrivilege(const wchar_t *name, bool enable);
+    static bool EnablePrivilege(const WCHAR *name, bool enable);
 };
 
 } // namespace aspia
