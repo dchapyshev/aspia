@@ -2,47 +2,26 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto;
+package aspia.proto;
 
 enum AuthMethod
 {
     AUTH_UNKNOWN = 0;
 
-    // Без запроса учетных данных
-    AUTH_NONE = 1;
-
     // Средставами протокола (имя пользователя, пароль)
-    AUTH_BASIC = 2;
-}
-
-//
-// Отправляется только от сервера к клиенту
-//
-message AuthRequest
-{
-    //
-    // Маска методов авторизации, которые поддерживает сервер (или которые включены на сервере).
-    //
-    int32 methods = 1;
+    AUTH_BASIC = 1;
 }
 
 //
 // Отправляется только от клиента к серверу
 //
-message AuthReply
+message AuthRequest
 {
-    //
     // Метод с помощью которого производится авторизация.
-    // Если сервер поддерживает метод NO_AUTH (без авторизации), то в сообщении используется
-    // только это поле, все остальные игнорируются.
-    //
-    int32 method = 1;
+    uint32 method = 1;
 
-    // Имя пользователя
-    string username = 3;
-
-    // Пароль зашифрованный алгоритмом DES
-    bytes password = 4;
+    string username = 2;
+    string password = 3;
 }
 
 //
@@ -81,5 +60,5 @@ message AuthResult
     // Маска разрешений, которые применимы для данноЙ авторизации.
     // Если авторизация не пройдена, то данное после отсутствует.
     //
-    int32 features = 2;
+    uint32 features = 2;
 }

@@ -14,23 +14,21 @@
 #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
 // @@protoc_insertion_point(includes)
 
+namespace aspia {
 namespace proto {
 
 void protobuf_ShutdownFile_auth_2eproto() {
   AuthRequest_default_instance_.Shutdown();
-  AuthReply_default_instance_.Shutdown();
   AuthResult_default_instance_.Shutdown();
 }
 
 void protobuf_InitDefaults_auth_2eproto_impl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  AuthRequest_default_instance_.DefaultConstruct();
   ::google::protobuf::internal::GetEmptyString();
-  AuthReply_default_instance_.DefaultConstruct();
+  AuthRequest_default_instance_.DefaultConstruct();
   AuthResult_default_instance_.DefaultConstruct();
   AuthRequest_default_instance_.get_mutable()->InitAsDefaultInstance();
-  AuthReply_default_instance_.get_mutable()->InitAsDefaultInstance();
   AuthResult_default_instance_.get_mutable()->InitAsDefaultInstance();
 }
 
@@ -63,7 +61,6 @@ bool AuthMethod_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
-    case 2:
       return true;
     default:
       return false;
@@ -106,14 +103,16 @@ static void MergeFromFail(int line) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int AuthRequest::kMethodsFieldNumber;
+const int AuthRequest::kMethodFieldNumber;
+const int AuthRequest::kUsernameFieldNumber;
+const int AuthRequest::kPasswordFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 AuthRequest::AuthRequest()
   : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
   if (this != internal_default_instance()) protobuf_InitDefaults_auth_2eproto();
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.AuthRequest)
+  // @@protoc_insertion_point(constructor:aspia.proto.AuthRequest)
 }
 
 void AuthRequest::InitAsDefaultInstance() {
@@ -124,20 +123,24 @@ AuthRequest::AuthRequest(const AuthRequest& from)
     _arena_ptr_(NULL) {
   SharedCtor();
   UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:proto.AuthRequest)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.AuthRequest)
 }
 
 void AuthRequest::SharedCtor() {
-  methods_ = 0;
+  username_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  password_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  method_ = 0u;
   _cached_size_ = 0;
 }
 
 AuthRequest::~AuthRequest() {
-  // @@protoc_insertion_point(destructor:proto.AuthRequest)
+  // @@protoc_insertion_point(destructor:aspia.proto.AuthRequest)
   SharedDtor();
 }
 
 void AuthRequest::SharedDtor() {
+  username_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  password_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void AuthRequest::SetCachedSize(int size) const {
@@ -161,27 +164,63 @@ AuthRequest* AuthRequest::New(::google::protobuf::Arena* arena) const {
 }
 
 void AuthRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.AuthRequest)
-  methods_ = 0;
+// @@protoc_insertion_point(message_clear_start:aspia.proto.AuthRequest)
+  method_ = 0u;
+  username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 bool AuthRequest::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:proto.AuthRequest)
+  // @@protoc_insertion_point(parse_start:aspia.proto.AuthRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional int32 methods = 1;
+      // optional uint32 method = 1;
       case 1: {
         if (tag == 8) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &methods_)));
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &method_)));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_username;
+        break;
+      }
+
+      // optional string username = 2;
+      case 2: {
+        if (tag == 18) {
+         parse_username:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_username()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->username().data(), this->username().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.AuthRequest.username"));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(26)) goto parse_password;
+        break;
+      }
+
+      // optional string password = 3;
+      case 3: {
+        if (tag == 26) {
+         parse_password:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_password()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->password().data(), this->password().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.AuthRequest.password"));
         } else {
           goto handle_unusual;
         }
@@ -202,34 +241,68 @@ bool AuthRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.AuthRequest)
+  // @@protoc_insertion_point(parse_success:aspia.proto.AuthRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.AuthRequest)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.AuthRequest)
   return false;
 #undef DO_
 }
 
 void AuthRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.AuthRequest)
-  // optional int32 methods = 1;
-  if (this->methods() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->methods(), output);
+  // @@protoc_insertion_point(serialize_start:aspia.proto.AuthRequest)
+  // optional uint32 method = 1;
+  if (this->method() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->method(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:proto.AuthRequest)
+  // optional string username = 2;
+  if (this->username().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->username().data(), this->username().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.AuthRequest.username");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->username(), output);
+  }
+
+  // optional string password = 3;
+  if (this->password().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->password().data(), this->password().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.AuthRequest.password");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->password(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:aspia.proto.AuthRequest)
 }
 
 size_t AuthRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.AuthRequest)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.AuthRequest)
   size_t total_size = 0;
 
-  // optional int32 methods = 1;
-  if (this->methods() != 0) {
+  // optional uint32 method = 1;
+  if (this->method() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->methods());
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->method());
+  }
+
+  // optional string username = 2;
+  if (this->username().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->username());
+  }
+
+  // optional string password = 3;
+  if (this->password().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->password());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -245,7 +318,7 @@ void AuthRequest::CheckTypeAndMergeFrom(
 }
 
 void AuthRequest::MergeFrom(const AuthRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.AuthRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.AuthRequest)
   if (GOOGLE_PREDICT_TRUE(&from != this)) {
     UnsafeMergeFrom(from);
   } else {
@@ -255,13 +328,21 @@ void AuthRequest::MergeFrom(const AuthRequest& from) {
 
 void AuthRequest::UnsafeMergeFrom(const AuthRequest& from) {
   GOOGLE_DCHECK(&from != this);
-  if (from.methods() != 0) {
-    set_methods(from.methods());
+  if (from.method() != 0) {
+    set_method(from.method());
+  }
+  if (from.username().size() > 0) {
+
+    username_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.username_);
+  }
+  if (from.password().size() > 0) {
+
+    password_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.password_);
   }
 }
 
 void AuthRequest::CopyFrom(const AuthRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.AuthRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.AuthRequest)
   if (&from == this) return;
   Clear();
   UnsafeMergeFrom(from);
@@ -277,287 +358,6 @@ void AuthRequest::Swap(AuthRequest* other) {
   InternalSwap(other);
 }
 void AuthRequest::InternalSwap(AuthRequest* other) {
-  std::swap(methods_, other->methods_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string AuthRequest::GetTypeName() const {
-  return "proto.AuthRequest";
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// AuthRequest
-
-// optional int32 methods = 1;
-void AuthRequest::clear_methods() {
-  methods_ = 0;
-}
-::google::protobuf::int32 AuthRequest::methods() const {
-  // @@protoc_insertion_point(field_get:proto.AuthRequest.methods)
-  return methods_;
-}
-void AuthRequest::set_methods(::google::protobuf::int32 value) {
-  
-  methods_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthRequest.methods)
-}
-
-inline const AuthRequest* AuthRequest::internal_default_instance() {
-  return &AuthRequest_default_instance_.get();
-}
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int AuthReply::kMethodFieldNumber;
-const int AuthReply::kUsernameFieldNumber;
-const int AuthReply::kPasswordFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-AuthReply::AuthReply()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_auth_2eproto();
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.AuthReply)
-}
-
-void AuthReply::InitAsDefaultInstance() {
-}
-
-AuthReply::AuthReply(const AuthReply& from)
-  : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:proto.AuthReply)
-}
-
-void AuthReply::SharedCtor() {
-  username_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  password_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  method_ = 0;
-  _cached_size_ = 0;
-}
-
-AuthReply::~AuthReply() {
-  // @@protoc_insertion_point(destructor:proto.AuthReply)
-  SharedDtor();
-}
-
-void AuthReply::SharedDtor() {
-  username_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  password_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-
-void AuthReply::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const AuthReply& AuthReply::default_instance() {
-  protobuf_InitDefaults_auth_2eproto();
-  return *internal_default_instance();
-}
-
-::google::protobuf::internal::ExplicitlyConstructed<AuthReply> AuthReply_default_instance_;
-
-AuthReply* AuthReply::New(::google::protobuf::Arena* arena) const {
-  AuthReply* n = new AuthReply;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void AuthReply::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.AuthReply)
-  method_ = 0;
-  username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-
-bool AuthReply::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:proto.AuthReply)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional int32 method = 1;
-      case 1: {
-        if (tag == 8) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &method_)));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(26)) goto parse_username;
-        break;
-      }
-
-      // optional string username = 3;
-      case 3: {
-        if (tag == 26) {
-         parse_username:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_username()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->username().data(), this->username().length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.AuthReply.username"));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(34)) goto parse_password;
-        break;
-      }
-
-      // optional bytes password = 4;
-      case 4: {
-        if (tag == 34) {
-         parse_password:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_password()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:proto.AuthReply)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:proto.AuthReply)
-  return false;
-#undef DO_
-}
-
-void AuthReply::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.AuthReply)
-  // optional int32 method = 1;
-  if (this->method() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->method(), output);
-  }
-
-  // optional string username = 3;
-  if (this->username().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->username().data(), this->username().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.AuthReply.username");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      3, this->username(), output);
-  }
-
-  // optional bytes password = 4;
-  if (this->password().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      4, this->password(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:proto.AuthReply)
-}
-
-size_t AuthReply::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.AuthReply)
-  size_t total_size = 0;
-
-  // optional int32 method = 1;
-  if (this->method() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->method());
-  }
-
-  // optional string username = 3;
-  if (this->username().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->username());
-  }
-
-  // optional bytes password = 4;
-  if (this->password().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::BytesSize(
-        this->password());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void AuthReply::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const AuthReply*>(&from));
-}
-
-void AuthReply::MergeFrom(const AuthReply& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.AuthReply)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
-
-void AuthReply::UnsafeMergeFrom(const AuthReply& from) {
-  GOOGLE_DCHECK(&from != this);
-  if (from.method() != 0) {
-    set_method(from.method());
-  }
-  if (from.username().size() > 0) {
-
-    username_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.username_);
-  }
-  if (from.password().size() > 0) {
-
-    password_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.password_);
-  }
-}
-
-void AuthReply::CopyFrom(const AuthReply& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.AuthReply)
-  if (&from == this) return;
-  Clear();
-  UnsafeMergeFrom(from);
-}
-
-bool AuthReply::IsInitialized() const {
-
-  return true;
-}
-
-void AuthReply::Swap(AuthReply* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void AuthReply::InternalSwap(AuthReply* other) {
   std::swap(method_, other->method_);
   username_.Swap(&other->username_);
   password_.Swap(&other->password_);
@@ -565,117 +365,117 @@ void AuthReply::InternalSwap(AuthReply* other) {
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string AuthReply::GetTypeName() const {
-  return "proto.AuthReply";
+::std::string AuthRequest::GetTypeName() const {
+  return "aspia.proto.AuthRequest";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// AuthReply
+// AuthRequest
 
-// optional int32 method = 1;
-void AuthReply::clear_method() {
-  method_ = 0;
+// optional uint32 method = 1;
+void AuthRequest::clear_method() {
+  method_ = 0u;
 }
-::google::protobuf::int32 AuthReply::method() const {
-  // @@protoc_insertion_point(field_get:proto.AuthReply.method)
+::google::protobuf::uint32 AuthRequest::method() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.AuthRequest.method)
   return method_;
 }
-void AuthReply::set_method(::google::protobuf::int32 value) {
+void AuthRequest::set_method(::google::protobuf::uint32 value) {
   
   method_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthReply.method)
+  // @@protoc_insertion_point(field_set:aspia.proto.AuthRequest.method)
 }
 
-// optional string username = 3;
-void AuthReply::clear_username() {
+// optional string username = 2;
+void AuthRequest::clear_username() {
   username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-const ::std::string& AuthReply::username() const {
-  // @@protoc_insertion_point(field_get:proto.AuthReply.username)
+const ::std::string& AuthRequest::username() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.AuthRequest.username)
   return username_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void AuthReply::set_username(const ::std::string& value) {
+void AuthRequest::set_username(const ::std::string& value) {
   
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:proto.AuthReply.username)
+  // @@protoc_insertion_point(field_set:aspia.proto.AuthRequest.username)
 }
-void AuthReply::set_username(const char* value) {
+void AuthRequest::set_username(const char* value) {
   
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:proto.AuthReply.username)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.AuthRequest.username)
 }
-void AuthReply::set_username(const char* value, size_t size) {
+void AuthRequest::set_username(const char* value, size_t size) {
   
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:proto.AuthReply.username)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.AuthRequest.username)
 }
-::std::string* AuthReply::mutable_username() {
+::std::string* AuthRequest::mutable_username() {
   
-  // @@protoc_insertion_point(field_mutable:proto.AuthReply.username)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.AuthRequest.username)
   return username_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* AuthReply::release_username() {
-  // @@protoc_insertion_point(field_release:proto.AuthReply.username)
+::std::string* AuthRequest::release_username() {
+  // @@protoc_insertion_point(field_release:aspia.proto.AuthRequest.username)
   
   return username_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void AuthReply::set_allocated_username(::std::string* username) {
+void AuthRequest::set_allocated_username(::std::string* username) {
   if (username != NULL) {
     
   } else {
     
   }
   username_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), username);
-  // @@protoc_insertion_point(field_set_allocated:proto.AuthReply.username)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.AuthRequest.username)
 }
 
-// optional bytes password = 4;
-void AuthReply::clear_password() {
+// optional string password = 3;
+void AuthRequest::clear_password() {
   password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-const ::std::string& AuthReply::password() const {
-  // @@protoc_insertion_point(field_get:proto.AuthReply.password)
+const ::std::string& AuthRequest::password() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.AuthRequest.password)
   return password_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void AuthReply::set_password(const ::std::string& value) {
+void AuthRequest::set_password(const ::std::string& value) {
   
   password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:proto.AuthReply.password)
+  // @@protoc_insertion_point(field_set:aspia.proto.AuthRequest.password)
 }
-void AuthReply::set_password(const char* value) {
+void AuthRequest::set_password(const char* value) {
   
   password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:proto.AuthReply.password)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.AuthRequest.password)
 }
-void AuthReply::set_password(const void* value, size_t size) {
+void AuthRequest::set_password(const char* value, size_t size) {
   
   password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:proto.AuthReply.password)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.AuthRequest.password)
 }
-::std::string* AuthReply::mutable_password() {
+::std::string* AuthRequest::mutable_password() {
   
-  // @@protoc_insertion_point(field_mutable:proto.AuthReply.password)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.AuthRequest.password)
   return password_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* AuthReply::release_password() {
-  // @@protoc_insertion_point(field_release:proto.AuthReply.password)
+::std::string* AuthRequest::release_password() {
+  // @@protoc_insertion_point(field_release:aspia.proto.AuthRequest.password)
   
   return password_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void AuthReply::set_allocated_password(::std::string* password) {
+void AuthRequest::set_allocated_password(::std::string* password) {
   if (password != NULL) {
     
   } else {
     
   }
   password_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), password);
-  // @@protoc_insertion_point(field_set_allocated:proto.AuthReply.password)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.AuthRequest.password)
 }
 
-inline const AuthReply* AuthReply::internal_default_instance() {
-  return &AuthReply_default_instance_.get();
+inline const AuthRequest* AuthRequest::internal_default_instance() {
+  return &AuthRequest_default_instance_.get();
 }
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
@@ -690,7 +490,7 @@ AuthResult::AuthResult()
   : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
   if (this != internal_default_instance()) protobuf_InitDefaults_auth_2eproto();
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.AuthResult)
+  // @@protoc_insertion_point(constructor:aspia.proto.AuthResult)
 }
 
 void AuthResult::InitAsDefaultInstance() {
@@ -701,7 +501,7 @@ AuthResult::AuthResult(const AuthResult& from)
     _arena_ptr_(NULL) {
   SharedCtor();
   UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:proto.AuthResult)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.AuthResult)
 }
 
 void AuthResult::SharedCtor() {
@@ -711,7 +511,7 @@ void AuthResult::SharedCtor() {
 }
 
 AuthResult::~AuthResult() {
-  // @@protoc_insertion_point(destructor:proto.AuthResult)
+  // @@protoc_insertion_point(destructor:aspia.proto.AuthResult)
   SharedDtor();
 }
 
@@ -739,7 +539,7 @@ AuthResult* AuthResult::New(::google::protobuf::Arena* arena) const {
 }
 
 void AuthResult::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.AuthResult)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.AuthResult)
 #if defined(__clang__)
 #define ZR_HELPER_(f) \
   _Pragma("clang diagnostic push") \
@@ -767,7 +567,7 @@ bool AuthResult::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:proto.AuthResult)
+  // @@protoc_insertion_point(parse_start:aspia.proto.AuthResult)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -787,13 +587,13 @@ bool AuthResult::MergePartialFromCodedStream(
         break;
       }
 
-      // optional int32 features = 2;
+      // optional uint32 features = 2;
       case 2: {
         if (tag == 16) {
          parse_features:
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &features_)));
         } else {
           goto handle_unusual;
@@ -815,32 +615,32 @@ bool AuthResult::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.AuthResult)
+  // @@protoc_insertion_point(parse_success:aspia.proto.AuthResult)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.AuthResult)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.AuthResult)
   return false;
 #undef DO_
 }
 
 void AuthResult::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.AuthResult)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.AuthResult)
   // optional bool success = 1;
   if (this->success() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->success(), output);
   }
 
-  // optional int32 features = 2;
+  // optional uint32 features = 2;
   if (this->features() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->features(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->features(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:proto.AuthResult)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.AuthResult)
 }
 
 size_t AuthResult::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.AuthResult)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.AuthResult)
   size_t total_size = 0;
 
   // optional bool success = 1;
@@ -848,10 +648,10 @@ size_t AuthResult::ByteSizeLong() const {
     total_size += 1 + 1;
   }
 
-  // optional int32 features = 2;
+  // optional uint32 features = 2;
   if (this->features() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->features());
   }
 
@@ -868,7 +668,7 @@ void AuthResult::CheckTypeAndMergeFrom(
 }
 
 void AuthResult::MergeFrom(const AuthResult& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.AuthResult)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.AuthResult)
   if (GOOGLE_PREDICT_TRUE(&from != this)) {
     UnsafeMergeFrom(from);
   } else {
@@ -887,7 +687,7 @@ void AuthResult::UnsafeMergeFrom(const AuthResult& from) {
 }
 
 void AuthResult::CopyFrom(const AuthResult& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.AuthResult)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.AuthResult)
   if (&from == this) return;
   Clear();
   UnsafeMergeFrom(from);
@@ -910,7 +710,7 @@ void AuthResult::InternalSwap(AuthResult* other) {
 }
 
 ::std::string AuthResult::GetTypeName() const {
-  return "proto.AuthResult";
+  return "aspia.proto.AuthResult";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -921,27 +721,27 @@ void AuthResult::clear_success() {
   success_ = false;
 }
 bool AuthResult::success() const {
-  // @@protoc_insertion_point(field_get:proto.AuthResult.success)
+  // @@protoc_insertion_point(field_get:aspia.proto.AuthResult.success)
   return success_;
 }
 void AuthResult::set_success(bool value) {
   
   success_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthResult.success)
+  // @@protoc_insertion_point(field_set:aspia.proto.AuthResult.success)
 }
 
-// optional int32 features = 2;
+// optional uint32 features = 2;
 void AuthResult::clear_features() {
-  features_ = 0;
+  features_ = 0u;
 }
-::google::protobuf::int32 AuthResult::features() const {
-  // @@protoc_insertion_point(field_get:proto.AuthResult.features)
+::google::protobuf::uint32 AuthResult::features() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.AuthResult.features)
   return features_;
 }
-void AuthResult::set_features(::google::protobuf::int32 value) {
+void AuthResult::set_features(::google::protobuf::uint32 value) {
   
   features_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthResult.features)
+  // @@protoc_insertion_point(field_set:aspia.proto.AuthResult.features)
 }
 
 inline const AuthResult* AuthResult::internal_default_instance() {
@@ -952,5 +752,6 @@ inline const AuthResult* AuthResult::internal_default_instance() {
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace proto
+}  // namespace aspia
 
 // @@protoc_insertion_point(global_scope)

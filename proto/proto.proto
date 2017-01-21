@@ -2,57 +2,13 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto;
+import "auth.proto";
+import "video.proto";
+
+package aspia.proto;
 
 //
 // TODO: Протокол передачи файлов
-//
-
-//
-// Описание взаимодействия сервера и клиента
-//
-// Установка соединения и авторизация.
-// 1. Сервер отправляет клиенту сообщение AuthRequest, которое содержит
-//    маску поддерживаемых способов авторизации.
-// 2. Клиент выбирает метод авторизации и отправляет сообщение AuthReply,
-//    которое содержит идентификатор выбранного метода авторизации и учетные данные
-//    для выбранного метода.
-// 3. Сервер проверяет допустимость метода авторизации и проверяет учетные данные.
-//    Если авторизация не пройдена, то клиенту отправляется сообщение AuthResult,
-//    в котором поле success установлено в false.
-//    Если авторизация пройдена успешно, то клиенту отправляется сообщение AuthResult,
-//    в котором поле success установлено в true, а поле features содержит список возможностей
-//    сессии.
-// 4. Клиент получает сообщение AuthResult. Если список возможнстей не совпадает с
-//    требованиями клиента, то клиент в праве разорвать сессию или использовать
-//    поддерживаемые (или разрешенные) возможности.
-// 5. Сервер находится в ожидании команд от клиента. Сервер не должен без соответствующей
-//    команды начинать пересылку видео, аудио или других пакетов.
-//
-// Передача видео-пакетов
-// 1. Клиент отправляет серверу сообщение VideoControl с полем enable установленным в true.
-//    Поле encoding (опционально) может указывать желаемую кодировку. Сервер может игнорировать
-//    данное поле по своему усмотрению (например, не поддерживать указанную кодировку).
-//    Поле pixel_format (опционально) может указывать формат пикселей, который используется
-//    клиентом. Сервер может игнорировать данное поле по своему усмотрению (например, не
-//    поддерживать указанный формат пикселей)
-// 2. Сервер должен проверить имеет ли текущая сессия возможность (разрешение) передачи видео-пакетов.
-//    Если передача видео-пакетов невозможна, то сообщение VideoControl игнорируется.
-//    Если передача видео-пакетов возможна, то сервер должен начать отправку видео-пакетов
-//    (сообщение VideoPacket).
-// 3. Клиент при получении сообщения VideoPacket должен проверить соответствия размеров
-//    экрана, используемого метода кодирования, формата пикселей и при необходимости
-//    произвести соответствующие инициализации или переинициализации.
-//    Сервер не должен посылать области экрана, которые выходят за пределы указанного прямоугольника.
-//    Сервер так же может проигнорировать данное сообщение.
-// 4. Если клиент временно не нуждает в обновлениях экрана, то он может отправить сообщение
-//    VideoControl с полем enable установленным в false. Для возобновления передачи видео-пакетов
-//    клиент должен отправить данное сообщение с полем enable установленным в true.
-//    Сервер может проигнорировать данное сообщение.
-// 5. Если клиент хочет изменить метод кодирования пакетов или формат пикселей, то он должен
-//    отправить сообщение VideoControl с указанием соответствующих параметров.
-//    Поле enable должно быть установлено в true.
-//    Сервер может проигнорировать данное сообщение.
 //
 
 //
@@ -60,35 +16,16 @@ package proto;
 //
 message PowerControl
 {
-    enum PowerAction
+    enum Action
     {
-        POWER_UNKNOWN   = 0;
-        POWER_SHUTDOWN  = 1; // ?
-        POWER_REBOOT    = 2; // Перезагрузка оперционной системы, в которой запущен сервер
-        POWER_POWEROFF  = 3; // ?
-        POWER_HIBERNATE = 4; // Переход в режим гибернации
-        POWER_SUSPEND   = 5; // Переход в режим сна
-        POWER_LOGOFF    = 6; // Завершение сеанса текущего пользователя
+        SHUTDOWN  = 0; // Выключение компьютера.
+        REBOOT    = 1; // Перезагрузка оперционной системы, в которой запущен сервер
+        HIBERNATE = 2; // Переход в режим гибернации
+        SUSPEND   = 3; // Переход в режим сна
+        LOGOFF    = 4; // Завершение сеанса текущего пользователя
     }
 
-    PowerAction action = 1;
-}
-
-//
-// Отправляется только от клиента к серверу
-// Позволяет воспроизвести звуковой сигнал на сервере для привлечения внимания пользователя
-//
-message Bell
-{
-    bool dummy = 1;
-}
-
-//
-// Отправляется в обоих направлениях между сервером и клиентом
-//
-message TextChat
-{
-    string message = 1;
+    Action action = 1;
 }
 
 //
@@ -96,9 +33,18 @@ message TextChat
 //
 message KeyEvent
 {
-    int32 keycode = 1; // Windows virtual key code
-    bool extended = 2;
-    bool pressed = 3;
+    // The keyboard (Caps/Num) lock states.
+    enum Flags
+    {
+        UNKNOWN  = 0;
+        CAPSLOCK = 1;
+        NUMLOCK  = 2;
+        EXTENDED = 4;
+        PRESSED  = 8;
+    }
+
+    uint32 keycode = 1; // Windows virtual key code
+    uint32 flags = 2;
 }
 
 //
@@ -116,9 +62,16 @@ message PointerEvent
         WHEEL_DOWN    = 16;
     }
 
-    int32 mask = 1; // Button mask
+    uint32 mask = 1; // Button mask
     int32 x = 2;    // x position
     int32 y = 3;    // y position
+}
+
+enum ClipboardEncoding
+{
+    CLIPBOARD_ENCODING_UNKNOWN = 0;
+    CLIPBOARD_ENCODING_RAW     = 1;
+    CLIPBOARD_ENCODING_ZLIB    = 2;
 }
 
 //
@@ -126,17 +79,10 @@ message PointerEvent
 //
 message Clipboard
 {
-    string mime_type = 1;
-    bytes data = 2;
-}
+    ClipboardEncoding encoding = 1;
 
-//
-// Отправляется только от клиента к серверу
-//
-message ClipboardRequest
-{
-    // Параметру необходимо присводить значение true
-    bool dummy = 1;
+    string mime_type = 2;
+    bytes data = 3;
 }
 
 //
@@ -144,14 +90,22 @@ message ClipboardRequest
 //
 message ClipboardControl
 {
-    //
-    // Если поле установлено в true, то сервер должен автоматически отправлять содержимое буфера
-    // обмена при его изменении.
-    // Если поле установлено в false, то сервер не должен автоматически отправлять содержимое
-    // буфера обмена.
-    // Данное поле может быть проигнорировано сервером.
-    //
-    bool auto_send = 1;
+    enum Flags
+    {
+        DISABLE_AUTOSEND = 0;
+        ENABLE_AUTOSEND  = 1;
+        REQUESTED        = 2;
+    }
+
+    uint32 flags = 1;
+}
+
+enum CursorShapeEncoding
+{
+    CURSOR_SHAPE_ENCODING_UNKNOWN = 0;
+    CURSOR_SHAPE_ENCODING_RAW     = 1;
+    CURSOR_SHAPE_ENCODING_ZLIB    = 2;
+    CURSOR_SHAPE_ENCODING_CACHE   = 4;
 }
 
 //
@@ -159,18 +113,20 @@ message ClipboardControl
 //
 message CursorShape
 {
+    CursorShapeEncoding encoding = 1;
+
+    int32 index = 2;
+
     // Width, height (in screen pixels) of the cursor.
-    int32 width = 1;
-    int32 height = 2;
+    int32 width  = 3;
+    int32 height = 4;
 
     // X,Y coordinates (relative to upper-left corner) of the cursor hotspot.
-    int32 hotspot_x = 3;
-    int32 hotspot_y = 4;
+    int32 hotspot_x = 5;
+    int32 hotspot_y = 6;
 
-    int32 bits_per_pixel = 5;
-
-    bytes color = 6;
-    bytes mask = 7;
+    bytes color = 7;
+    bytes mask  = 8;
 }
 
 message CursorShapeControl
@@ -183,161 +139,37 @@ message CursorShapeControl
     bool enable = 1;
 }
 
-message VideoRect
+message BellEvent
 {
-    int32 x = 1;
-    int32 y = 2;
-    int32 width = 3;
-    int32 height = 4;
-}
-
-message VideoPixelFormat
-{
-    int32 bits_per_pixel = 1;
-
-    int32 red_max   = 2;
-    int32 green_max = 3;
-    int32 blue_max  = 4;
-
-    int32 red_shift   = 5;
-    int32 green_shift = 6;
-    int32 blue_shift  = 7;
-}
-
-// Identifies how the image was encoded.
-enum VideoEncoding
-{
-    VIDEO_ENCODING_UNKNOWN = 0;
-    VIDEO_ENCODING_ZLIB    = 1;
-    VIDEO_ENCODING_VP8     = 2;
-}
-
-message VideoSize
-{
-    int32 width = 1;
-    int32 height = 2;
-}
-
-message VideoPacketFormat
-{
-    //
-    // Кодировка, которая используется при текущем обновлении.
-    // Обязательное поле, должно присутствовать в каждом обновлении, которое имеет
-    // флаг FIRST_PACKET.
-    //
-    int32 encoding = 1;
-
-    //
-    // Текущая ширина и высота экрана на сервере. При приеме видео
-    // пакета клиент должен проверять не изменились ли эти величины. Если они
-    // изменились, то клиент должен переинициализировать себя для работы с
-    // новыми размерами.
-    // Поле отсутствует, если размеры экрана не изменились.
-    //
-    VideoSize screen_size = 2;
-
-    //
-    // Формат пикселей, в котором отправлено текущее обновление. При каждом приеме
-    // видео-пакета клиент должен проверять не изменился ли формат и переинициализироваться
-    // в соответствии с этим. Данный параметр опциональный и используется при кодировке
-    // VIDEO_ENCODING_ZLIB.
-    // Поле отсутствует, если формат пикселей не изменился.
-    //
-    VideoPixelFormat pixel_format = 3;
+    uint32 flags = 1;
 }
 
 //
-// Отправляется только от сервера к клиенту
-//
-message VideoPacket
-{
-    //
-    // Энкодер может разбить одно обновление на несколько видео-пакетов
-    // (например, каждый измененный прямоугольник (VideoRect) с использованием
-    // VIDEO_ENCODER_ZLIB отправляется отдельным пакетом).
-    // FIRST_PACKET - говорит о том, что пакет является первым.
-    // LAST_PACKET - говорит о том, что пакет является последним.
-    // Наличие обоих флагов (FIRST_PACKET и LAST_PACKET) говорит о том, что
-    // пакет является единственным.
-    // PARTITION_PACKET - говорит о том, что пакет является частью логического
-    // обновления.
-    // Поле format сообщения заполняется только если пакет имеет флаг FIRST_PACKET.
-    //
-    enum Flags
-    {
-        UNKNOWN_PACKET   = 0;
-        FIRST_PACKET     = 1;
-        LAST_PACKET      = 2;
-        PARTITION_PACKET = 4;
-    }
-
-    int32 flags = 1;
-
-    VideoPacketFormat format = 2;
-
-    // Список измененнившихся областей (прямоугольников).
-    repeated VideoRect changed_rect = 3;
-
-    // Закодированные данные
-    bytes data = 4;
-}
-
-//
-// Отправляется только от клиента к серверу.
-//
-message VideoControl
-{
-    //
-    // Если параметр установлен в true, то клиент имеет потребность в видео-пакетах,
-    // если параметр установлен в false, то сервер должен прекратить передавать видео-пакеты.
-    // Может использоваться для приостановки получения видео-пакетов при сворачивании окна клиента.
-    // Сервер не обязан подчиняться данной команде для приостановки передачи видео-пакетов.
-    //
-    bool enable = 1;
-
-    //
-    // Устанавливает кодировку, которая будет использоваться для кодирования видео-пакетов.
-    // Сервер не обязан подчиняться данной команде (может не поддерживать указанную кодировку).
-    //
-    int32 encoding = 2;
-
-    //
-    // Формат пикселей, который используется клиентом. Если формат клиента отличается от формата
-    // сервера, то пиксели в изображении будут перекодированы в формат клиента.
-    // Данный параметр применим для кодирования VIDEO_ENCODING_ZLIB, в остальных
-    // случаях игнорируется.
-    // Клиент не должен переинициалироваться после отправки данного параметра. Если сервер поддерживает
-    // перекодировку в отправленный формат, то при следующем получении сообщения VideoPacket нужно
-    // проверить, переключился ли сервер на новый формат и переинициализироваться при необходимости.
-    // Сервер не обязан подчиняться данной команде (может не поддерживать указанный формат).
-    //
-    VideoPixelFormat pixel_format = 3;
-}
-
-//
-// Сообщения, которые отправляются от сервера к клиенту
+// Сообщения, которые отправляются от хоста к клиенту
 //
 message HostToClient
 {
     VideoPacket video_packet = 1;
     CursorShape cursor       = 2;
     Clipboard clipboard      = 3;
-    TextChat text_chat       = 4;
+}
+
+message Control
+{
+    VideoControl video              = 1;
+    CursorShapeControl cursor_shape = 2;
+    ClipboardControl clipboard      = 3;
+    PowerControl power              = 4;
 }
 
 //
-// Сообщения, которые отправляются от клиента к серверу
+// Сообщения, которые отправляются от клиента к хосту
 //
 message ClientToHost
 {
-    VideoControl video_control              = 1;
-    CursorShapeControl cursor_shape_control = 2;
-    ClipboardControl clipboard_control      = 3;
-    ClipboardRequest clipboard_request      = 4;
-    Clipboard clipboard                     = 5;
-    PointerEvent pointer_event              = 6;
-    KeyEvent key_event                      = 7;
-    Bell bell                               = 8;
-    TextChat text_chat                      = 9;
-    PowerControl power_control              = 10;
+    PointerEvent pointer_event = 1;
+    KeyEvent key_event         = 2;
+    BellEvent bell_event       = 3;
+    Clipboard clipboard        = 4;
+    Control control            = 5;
 }

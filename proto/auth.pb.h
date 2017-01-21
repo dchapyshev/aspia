@@ -28,6 +28,7 @@
 #include <google/protobuf/generated_enum_util.h>
 // @@protoc_insertion_point(includes)
 
+namespace aspia {
 namespace proto {
 
 // Internal implementation detail -- do not call these.
@@ -36,14 +37,12 @@ void protobuf_InitDefaults_auth_2eproto();
 void protobuf_AssignDesc_auth_2eproto();
 void protobuf_ShutdownFile_auth_2eproto();
 
-class AuthReply;
 class AuthRequest;
 class AuthResult;
 
 enum AuthMethod {
   AUTH_UNKNOWN = 0,
-  AUTH_NONE = 1,
-  AUTH_BASIC = 2,
+  AUTH_BASIC = 1,
   AuthMethod_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   AuthMethod_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
@@ -77,7 +76,7 @@ const int SessionFeature_ARRAYSIZE = SessionFeature_MAX + 1;
 
 // ===================================================================
 
-class AuthRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.AuthRequest) */ {
+class AuthRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.AuthRequest) */ {
  public:
   AuthRequest();
   virtual ~AuthRequest();
@@ -134,19 +133,43 @@ class AuthRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion
 
   // accessors -------------------------------------------------------
 
-  // optional int32 methods = 1;
-  void clear_methods();
-  static const int kMethodsFieldNumber = 1;
-  ::google::protobuf::int32 methods() const;
-  void set_methods(::google::protobuf::int32 value);
+  // optional uint32 method = 1;
+  void clear_method();
+  static const int kMethodFieldNumber = 1;
+  ::google::protobuf::uint32 method() const;
+  void set_method(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:proto.AuthRequest)
+  // optional string username = 2;
+  void clear_username();
+  static const int kUsernameFieldNumber = 2;
+  const ::std::string& username() const;
+  void set_username(const ::std::string& value);
+  void set_username(const char* value);
+  void set_username(const char* value, size_t size);
+  ::std::string* mutable_username();
+  ::std::string* release_username();
+  void set_allocated_username(::std::string* username);
+
+  // optional string password = 3;
+  void clear_password();
+  static const int kPasswordFieldNumber = 3;
+  const ::std::string& password() const;
+  void set_password(const ::std::string& value);
+  void set_password(const char* value);
+  void set_password(const char* value, size_t size);
+  ::std::string* mutable_password();
+  ::std::string* release_password();
+  void set_allocated_password(::std::string* password);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.AuthRequest)
  private:
 
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  ::google::protobuf::int32 methods_;
+  ::google::protobuf::internal::ArenaStringPtr username_;
+  ::google::protobuf::internal::ArenaStringPtr password_;
+  ::google::protobuf::uint32 method_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_auth_2eproto_impl();
   friend void  protobuf_AddDesc_auth_2eproto_impl();
@@ -159,113 +182,7 @@ extern ::google::protobuf::internal::ExplicitlyConstructed<AuthRequest> AuthRequ
 
 // -------------------------------------------------------------------
 
-class AuthReply : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.AuthReply) */ {
- public:
-  AuthReply();
-  virtual ~AuthReply();
-
-  AuthReply(const AuthReply& from);
-
-  inline AuthReply& operator=(const AuthReply& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  static const AuthReply& default_instance();
-
-  static const AuthReply* internal_default_instance();
-
-  void Swap(AuthReply* other);
-
-  // implements Message ----------------------------------------------
-
-  inline AuthReply* New() const { return New(NULL); }
-
-  AuthReply* New(::google::protobuf::Arena* arena) const;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from);
-  void CopyFrom(const AuthReply& from);
-  void MergeFrom(const AuthReply& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  size_t ByteSizeLong() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  void DiscardUnknownFields();
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(AuthReply* other);
-  void UnsafeMergeFrom(const AuthReply& from);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return _arena_ptr_;
-  }
-  inline ::google::protobuf::Arena* MaybeArenaPtr() const {
-    return _arena_ptr_;
-  }
-  public:
-
-  ::std::string GetTypeName() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // optional int32 method = 1;
-  void clear_method();
-  static const int kMethodFieldNumber = 1;
-  ::google::protobuf::int32 method() const;
-  void set_method(::google::protobuf::int32 value);
-
-  // optional string username = 3;
-  void clear_username();
-  static const int kUsernameFieldNumber = 3;
-  const ::std::string& username() const;
-  void set_username(const ::std::string& value);
-  void set_username(const char* value);
-  void set_username(const char* value, size_t size);
-  ::std::string* mutable_username();
-  ::std::string* release_username();
-  void set_allocated_username(::std::string* username);
-
-  // optional bytes password = 4;
-  void clear_password();
-  static const int kPasswordFieldNumber = 4;
-  const ::std::string& password() const;
-  void set_password(const ::std::string& value);
-  void set_password(const char* value);
-  void set_password(const void* value, size_t size);
-  ::std::string* mutable_password();
-  ::std::string* release_password();
-  void set_allocated_password(::std::string* password);
-
-  // @@protoc_insertion_point(class_scope:proto.AuthReply)
- private:
-
-  ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
-  ::google::protobuf::Arena* _arena_ptr_;
-
-  ::google::protobuf::internal::ArenaStringPtr username_;
-  ::google::protobuf::internal::ArenaStringPtr password_;
-  ::google::protobuf::int32 method_;
-  mutable int _cached_size_;
-  friend void  protobuf_InitDefaults_auth_2eproto_impl();
-  friend void  protobuf_AddDesc_auth_2eproto_impl();
-  friend void protobuf_AssignDesc_auth_2eproto();
-  friend void protobuf_ShutdownFile_auth_2eproto();
-
-  void InitAsDefaultInstance();
-};
-extern ::google::protobuf::internal::ExplicitlyConstructed<AuthReply> AuthReply_default_instance_;
-
-// -------------------------------------------------------------------
-
-class AuthResult : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.AuthResult) */ {
+class AuthResult : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.AuthResult) */ {
  public:
   AuthResult();
   virtual ~AuthResult();
@@ -328,20 +245,20 @@ class AuthResult : public ::google::protobuf::MessageLite /* @@protoc_insertion_
   bool success() const;
   void set_success(bool value);
 
-  // optional int32 features = 2;
+  // optional uint32 features = 2;
   void clear_features();
   static const int kFeaturesFieldNumber = 2;
-  ::google::protobuf::int32 features() const;
-  void set_features(::google::protobuf::int32 value);
+  ::google::protobuf::uint32 features() const;
+  void set_features(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:proto.AuthResult)
+  // @@protoc_insertion_point(class_scope:aspia.proto.AuthResult)
  private:
 
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
   bool success_;
-  ::google::protobuf::int32 features_;
+  ::google::protobuf::uint32 features_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_auth_2eproto_impl();
   friend void  protobuf_AddDesc_auth_2eproto_impl();
@@ -360,131 +277,110 @@ extern ::google::protobuf::internal::ExplicitlyConstructed<AuthResult> AuthResul
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // AuthRequest
 
-// optional int32 methods = 1;
-inline void AuthRequest::clear_methods() {
-  methods_ = 0;
+// optional uint32 method = 1;
+inline void AuthRequest::clear_method() {
+  method_ = 0u;
 }
-inline ::google::protobuf::int32 AuthRequest::methods() const {
-  // @@protoc_insertion_point(field_get:proto.AuthRequest.methods)
-  return methods_;
-}
-inline void AuthRequest::set_methods(::google::protobuf::int32 value) {
-  
-  methods_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthRequest.methods)
-}
-
-inline const AuthRequest* AuthRequest::internal_default_instance() {
-  return &AuthRequest_default_instance_.get();
-}
-// -------------------------------------------------------------------
-
-// AuthReply
-
-// optional int32 method = 1;
-inline void AuthReply::clear_method() {
-  method_ = 0;
-}
-inline ::google::protobuf::int32 AuthReply::method() const {
-  // @@protoc_insertion_point(field_get:proto.AuthReply.method)
+inline ::google::protobuf::uint32 AuthRequest::method() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.AuthRequest.method)
   return method_;
 }
-inline void AuthReply::set_method(::google::protobuf::int32 value) {
+inline void AuthRequest::set_method(::google::protobuf::uint32 value) {
   
   method_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthReply.method)
+  // @@protoc_insertion_point(field_set:aspia.proto.AuthRequest.method)
 }
 
-// optional string username = 3;
-inline void AuthReply::clear_username() {
+// optional string username = 2;
+inline void AuthRequest::clear_username() {
   username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& AuthReply::username() const {
-  // @@protoc_insertion_point(field_get:proto.AuthReply.username)
+inline const ::std::string& AuthRequest::username() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.AuthRequest.username)
   return username_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void AuthReply::set_username(const ::std::string& value) {
+inline void AuthRequest::set_username(const ::std::string& value) {
   
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:proto.AuthReply.username)
+  // @@protoc_insertion_point(field_set:aspia.proto.AuthRequest.username)
 }
-inline void AuthReply::set_username(const char* value) {
+inline void AuthRequest::set_username(const char* value) {
   
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:proto.AuthReply.username)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.AuthRequest.username)
 }
-inline void AuthReply::set_username(const char* value, size_t size) {
+inline void AuthRequest::set_username(const char* value, size_t size) {
   
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:proto.AuthReply.username)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.AuthRequest.username)
 }
-inline ::std::string* AuthReply::mutable_username() {
+inline ::std::string* AuthRequest::mutable_username() {
   
-  // @@protoc_insertion_point(field_mutable:proto.AuthReply.username)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.AuthRequest.username)
   return username_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* AuthReply::release_username() {
-  // @@protoc_insertion_point(field_release:proto.AuthReply.username)
+inline ::std::string* AuthRequest::release_username() {
+  // @@protoc_insertion_point(field_release:aspia.proto.AuthRequest.username)
   
   return username_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void AuthReply::set_allocated_username(::std::string* username) {
+inline void AuthRequest::set_allocated_username(::std::string* username) {
   if (username != NULL) {
     
   } else {
     
   }
   username_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), username);
-  // @@protoc_insertion_point(field_set_allocated:proto.AuthReply.username)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.AuthRequest.username)
 }
 
-// optional bytes password = 4;
-inline void AuthReply::clear_password() {
+// optional string password = 3;
+inline void AuthRequest::clear_password() {
   password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& AuthReply::password() const {
-  // @@protoc_insertion_point(field_get:proto.AuthReply.password)
+inline const ::std::string& AuthRequest::password() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.AuthRequest.password)
   return password_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void AuthReply::set_password(const ::std::string& value) {
+inline void AuthRequest::set_password(const ::std::string& value) {
   
   password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:proto.AuthReply.password)
+  // @@protoc_insertion_point(field_set:aspia.proto.AuthRequest.password)
 }
-inline void AuthReply::set_password(const char* value) {
+inline void AuthRequest::set_password(const char* value) {
   
   password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:proto.AuthReply.password)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.AuthRequest.password)
 }
-inline void AuthReply::set_password(const void* value, size_t size) {
+inline void AuthRequest::set_password(const char* value, size_t size) {
   
   password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:proto.AuthReply.password)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.AuthRequest.password)
 }
-inline ::std::string* AuthReply::mutable_password() {
+inline ::std::string* AuthRequest::mutable_password() {
   
-  // @@protoc_insertion_point(field_mutable:proto.AuthReply.password)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.AuthRequest.password)
   return password_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* AuthReply::release_password() {
-  // @@protoc_insertion_point(field_release:proto.AuthReply.password)
+inline ::std::string* AuthRequest::release_password() {
+  // @@protoc_insertion_point(field_release:aspia.proto.AuthRequest.password)
   
   return password_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void AuthReply::set_allocated_password(::std::string* password) {
+inline void AuthRequest::set_allocated_password(::std::string* password) {
   if (password != NULL) {
     
   } else {
     
   }
   password_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), password);
-  // @@protoc_insertion_point(field_set_allocated:proto.AuthReply.password)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.AuthRequest.password)
 }
 
-inline const AuthReply* AuthReply::internal_default_instance() {
-  return &AuthReply_default_instance_.get();
+inline const AuthRequest* AuthRequest::internal_default_instance() {
+  return &AuthRequest_default_instance_.get();
 }
 // -------------------------------------------------------------------
 
@@ -495,27 +391,27 @@ inline void AuthResult::clear_success() {
   success_ = false;
 }
 inline bool AuthResult::success() const {
-  // @@protoc_insertion_point(field_get:proto.AuthResult.success)
+  // @@protoc_insertion_point(field_get:aspia.proto.AuthResult.success)
   return success_;
 }
 inline void AuthResult::set_success(bool value) {
   
   success_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthResult.success)
+  // @@protoc_insertion_point(field_set:aspia.proto.AuthResult.success)
 }
 
-// optional int32 features = 2;
+// optional uint32 features = 2;
 inline void AuthResult::clear_features() {
-  features_ = 0;
+  features_ = 0u;
 }
-inline ::google::protobuf::int32 AuthResult::features() const {
-  // @@protoc_insertion_point(field_get:proto.AuthResult.features)
+inline ::google::protobuf::uint32 AuthResult::features() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.AuthResult.features)
   return features_;
 }
-inline void AuthResult::set_features(::google::protobuf::int32 value) {
+inline void AuthResult::set_features(::google::protobuf::uint32 value) {
   
   features_ = value;
-  // @@protoc_insertion_point(field_set:proto.AuthResult.features)
+  // @@protoc_insertion_point(field_set:aspia.proto.AuthResult.features)
 }
 
 inline const AuthResult* AuthResult::internal_default_instance() {
@@ -524,19 +420,18 @@ inline const AuthResult* AuthResult::internal_default_instance() {
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace proto
+}  // namespace aspia
 
 #ifndef SWIG
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::proto::AuthMethod> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::proto::SessionFeature> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::AuthMethod> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::SessionFeature> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
 }  // namespace google
