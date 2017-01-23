@@ -32,7 +32,7 @@ ScreenSender::~ScreenSender()
 
 void ScreenSender::Configure(const proto::VideoControl &msg)
 {
-    // Блокируем отправку видео-пакетов.
+    // Блокируем обновление.
     LockGuard<Lock> guard(&update_lock_);
 
     // Если изменилась кодировка.
@@ -44,15 +44,15 @@ void ScreenSender::Configure(const proto::VideoControl &msg)
         switch (encoding_)
         {
             case proto::VIDEO_ENCODING_VP8:
-                encoder_.reset(new VideoEncoderVP8());
+                video_encoder_.reset(new VideoEncoderVP8());
                 break;
 
             case proto::VIDEO_ENCODING_VP9:
-                encoder_.reset(new VideoEncoderVP9());
+                video_encoder_.reset(new VideoEncoderVP9());
                 break;
 
             case proto::VIDEO_ENCODING_ZLIB:
-                encoder_.reset(new VideoEncoderZLIB());
+                video_encoder_.reset(new VideoEncoderZLIB());
                 break;
 
             default:
@@ -70,7 +70,7 @@ void ScreenSender::Configure(const proto::VideoControl &msg)
 
     if (encoding_ == proto::VIDEO_ENCODING_ZLIB)
     {
-        VideoEncoderZLIB *encoder = reinterpret_cast<VideoEncoderZLIB*>(encoder_.get());
+        VideoEncoderZLIB *encoder = reinterpret_cast<VideoEncoderZLIB*>(video_encoder_.get());
 
         // Если получено новое значение уровня сжатия.
         if (msg.compress_ratio())
@@ -87,12 +87,27 @@ void ScreenSender::Configure(const proto::VideoControl &msg)
     }
 
     // Энкодер должен быть инициализирован.
-    DCHECK(encoder_);
+    DCHECK(video_encoder_);
+
+    // Если получена команда включить отправку изображения курсора.
+    if (msg.flags() & proto::VideoControl::ENABLE_CURSOR_SHAPE)
+    {
+        // Если энкодер изображения курсора не инициализирован.
+        if (!cursor_encoder_)
+        {
+            cursor_encoder_.reset(new CursorEncoder());
+        }
+    }
+    else
+    {
+        // Деинициализируем энкодер (отключаем отправку).
+        cursor_encoder_.reset();
+    }
 
     // Если получена команда отключить эффекты рабочего стола.
     if (msg.flags() & proto::VideoControl::DISABLE_DESKTOP_EFFECTS)
     {
-        // Если они еще вы выключены.
+        // Если они еще не выключены.
         if (!desktop_effects_)
         {
             // Выключаем.
@@ -132,9 +147,6 @@ void ScreenSender::Configure(const proto::VideoControl &msg)
 
 void ScreenSender::Worker()
 {
-    // Создаем сообщение для отправки клиенту.
-    std::unique_ptr<proto::HostToClient> message(new proto::HostToClient());
-
     try
     {
         // Создаем экземпляр класса захвата экрана.
@@ -143,6 +155,12 @@ void ScreenSender::Worker()
         // Продолжаем цикл пока не будет дана команда завершить поток.
         while (!IsThreadTerminating())
         {
+            //
+            // Ставим блокировку отправки видео-пакетов (кодировка, формат пикселей
+            // не могут изменяться при отправки одного логического обновления).
+            //
+            LockGuard<Lock> guard(&update_lock_);
+
             // Делаем отметку времени начала операции.
             scheduler_->BeginCapture();
 
@@ -152,15 +170,23 @@ void ScreenSender::Worker()
             //
             const uint8_t *screen_buffer = capturer->CaptureImage(&dirty_region_, &curr_size_);
 
+            // Если энкодер курсора инициализирован (включена отправка изображения курсора).
+            if (cursor_encoder_)
+            {
+                // Выполняем захват изображения курсора.
+                std::unique_ptr<MouseCursor> mouse_cursor(capturer->CaptureCursor());
+
+                // Если курсор получен (отличается от предыдущего).
+                if (mouse_cursor)
+                {
+                    // Кодируем изображение курсора.
+                    cursor_encoder_->Encode(message_.mutable_cursor(), std::move(mouse_cursor));
+                }
+            }
+
             // Если измененный регион не пуст.
             if (!dirty_region_.IsEmpty())
             {
-                //
-                // Ставим блокировку отправки видео-пакетов (кодировка, формат пикселей
-                // не могут изменяться при отправки одного логического обновления).
-                //
-                LockGuard<Lock> guard(&update_lock_);
-
                 // Если изменились размера экрана или формат пикселей.
                 if (curr_size_ != prev_size_ || curr_format_ != prev_format_)
                 {
@@ -169,7 +195,7 @@ void ScreenSender::Worker()
                     prev_size_ = curr_size_;
 
                     // Изменяем размер экнодера.
-                    encoder_->Resize(curr_size_, curr_format_);
+                    video_encoder_->Resize(curr_size_, curr_format_);
 
                     // После изменений добавляем в изменный регион всю область экрана.
                     dirty_region_.AddRect(DesktopRect::MakeSize(curr_size_));
@@ -185,23 +211,33 @@ void ScreenSender::Worker()
                 //
                 do
                 {
-                    // Очищаем сообщение от предыдущих данных.
-                    message->Clear();
-
                     // Выполняем кодирование изображения.
-                    flags = encoder_->Encode(message->mutable_video_packet(),
-                                             screen_buffer,
-                                             dirty_region_);
+                    flags = video_encoder_->Encode(message_.mutable_video_packet(),
+                                                   screen_buffer,
+                                                   dirty_region_);
 
                     // Отправляем видео-пакет клиенту.
-                    on_message_callback_(message.get());
+                    on_message_callback_(&message_);
+
+                    // Очищаем сообщение от предыдущих данных.
+                    message_.Clear();
 
                 } while (!(flags & proto::VideoPacket::LAST_PACKET));
 
                 // Очищаем регион от предыдущих изменений.
                 dirty_region_.Clear();
             }
+            // Если изображение экрана не имеет отличий, но имеются изменения курсора.
+            else if (message_.has_cursor())
+            {
+                // Отправляем сообщение.
+                on_message_callback_(&message_);
 
+                // Очищаем сообщение от предыдущих данных.
+                message_.Clear();
+            }
+
+            // Ждем следующего обновления экрана и курсора.
             scheduler_->Wait();
         }
     }

@@ -59,7 +59,8 @@ const int VideoPacket_Flags_Flags_ARRAYSIZE = VideoPacket_Flags_Flags_MAX + 1;
 enum VideoControl_Flags {
   VideoControl_Flags_DISABLE_VIDEO = 0,
   VideoControl_Flags_ENABLE_VIDEO = 1,
-  VideoControl_Flags_DISABLE_DESKTOP_EFFECTS = 2,
+  VideoControl_Flags_ENABLE_CURSOR_SHAPE = 2,
+  VideoControl_Flags_DISABLE_DESKTOP_EFFECTS = 4,
   VideoControl_Flags_VideoControl_Flags_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   VideoControl_Flags_VideoControl_Flags_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
@@ -695,6 +696,8 @@ class VideoControl : public ::google::protobuf::MessageLite /* @@protoc_insertio
     VideoControl_Flags_DISABLE_VIDEO;
   static const Flags ENABLE_VIDEO =
     VideoControl_Flags_ENABLE_VIDEO;
+  static const Flags ENABLE_CURSOR_SHAPE =
+    VideoControl_Flags_ENABLE_CURSOR_SHAPE;
   static const Flags DISABLE_DESKTOP_EFFECTS =
     VideoControl_Flags_DISABLE_DESKTOP_EFFECTS;
   static inline bool Flags_IsValid(int value) {

@@ -183,8 +183,20 @@
     <ClCompile Include="client\screen_config.cpp">
       <Filter>client</Filter>
     </ClCompile>
-    <ClCompile Include="desktop_capture\cursor_capturer.cpp">
+    <ClCompile Include="desktop_capture\mouse_cursor.cpp">
       <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\cursor.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\mouse_cursor_cache.cpp">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="codec\cursor_encoder.cpp">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="codec\cursor_decoder.cpp">
+      <Filter>codec</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -413,8 +425,20 @@
     <ClInclude Include="codec\pixel_translator_argb.h">
       <Filter>codec</Filter>
     </ClInclude>
-    <ClInclude Include="desktop_capture\cursor_capturer.h">
+    <ClInclude Include="desktop_capture\mouse_cursor.h">
       <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\cursor.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\mouse_cursor_cache.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\cursor_encoder.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\cursor_decoder.h">
+      <Filter>codec</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

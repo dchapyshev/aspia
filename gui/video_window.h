@@ -18,6 +18,7 @@
 
 #include "base/lock.h"
 #include "desktop_capture/dib_buffer.h"
+#include "desktop_capture/mouse_cursor.h"
 #include "client/client.h"
 #include "gui/timer.h"
 

@@ -92,7 +92,6 @@ typedef ScopedGDIObject<HRGN> ScopedRegion;
 typedef ScopedGDIObject<HFONT> ScopedHFONT;
 typedef ScopedGDIObject<HICON> ScopedHICON;
 typedef ScopedGDIObject<HBRUSH> ScopedHBRUSH;
-typedef ScopedGDIObject<HCURSOR> ScopedHCURSOR;
 
 } // namespace aspia
 

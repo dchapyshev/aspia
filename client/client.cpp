@@ -149,23 +149,26 @@ void Client::ReadMessage(std::unique_ptr<proto::HostToClient> *message)
 
 void Client::StartScreenUpdate(const ScreenConfig &config,
                                OnVideoUpdateCallback on_update_callback,
-                               OnVideoResizeCallback on_resize_callback)
+                               OnVideoResizeCallback on_resize_callback,
+                               OnCursorUpdateCallback on_cursor_update_callback)
 {
-    on_video_update_callback_ = on_update_callback;
-    on_video_resize_callback_ = on_resize_callback;
+    on_video_update_callback_  = on_update_callback;
+    on_video_resize_callback_  = on_resize_callback;
+    on_cursor_update_callback_ = on_cursor_update_callback;
 
     ApplyScreenConfig(config);
 }
 
 void Client::EndScreenUpdate()
 {
-    on_video_update_callback_ = nullptr;
-    on_video_resize_callback_ = nullptr;
+    on_video_update_callback_  = nullptr;
+    on_video_resize_callback_  = nullptr;
+    on_cursor_update_callback_ = nullptr;
 
     std::unique_ptr<proto::ClientToHost> msg(new proto::ClientToHost());
 
-    proto::VideoControl *control = msg->mutable_control()->mutable_video();
-    control->set_flags(proto::VideoControl::DISABLE_VIDEO);
+    proto::VideoControl *video_control = msg->mutable_control()->mutable_video();
+    video_control->set_flags(proto::VideoControl::DISABLE_VIDEO);
 
     output_queue_->Add(msg);
 }
@@ -177,12 +180,13 @@ void Client::ApplyScreenConfig(const ScreenConfig &config)
     uint32_t flags = proto::VideoControl::ENABLE_VIDEO;
 
     flags |= config.DisableDesktopEffects() ? proto::VideoControl::DISABLE_DESKTOP_EFFECTS : 0;
+    flags |= config.ShowRemoteCursor() ? proto::VideoControl::ENABLE_CURSOR_SHAPE : 0;
 
-    proto::VideoControl *control = msg->mutable_control()->mutable_video();
+    proto::VideoControl *video_control = msg->mutable_control()->mutable_video();
 
-    control->set_flags(flags);
-    control->set_encoding(config.Encoding());
-    control->set_update_interval(config.UpdateInterval());
+    video_control->set_flags(flags);
+    video_control->set_encoding(config.Encoding());
+    video_control->set_update_interval(config.UpdateInterval());
 
     //
     // Поле формата пикселей применимо на данный момент только для
@@ -190,8 +194,8 @@ void Client::ApplyScreenConfig(const ScreenConfig &config)
     //
     if (config.Encoding() == proto::VIDEO_ENCODING_ZLIB)
     {
-        control->set_compress_ratio(config.CompressRatio());
-        config.Format().ToVideoPixelFormat(control->mutable_pixel_format());
+        video_control->set_compress_ratio(config.CompressRatio());
+        config.Format().ToVideoPixelFormat(video_control->mutable_pixel_format());
     }
 
     output_queue_->Add(msg);
@@ -210,15 +214,15 @@ void Client::ReadVideoPacket(const proto::VideoPacket &packet)
             switch (encoding_)
             {
                 case proto::VIDEO_ENCODING_VP8:
-                    decoder_.reset(new VideoDecoderVP8());
+                    video_decoder_.reset(new VideoDecoderVP8());
                     break;
 
                 case proto::VIDEO_ENCODING_VP9:
-                    decoder_.reset(new VideoDecoderVP9());
+                    video_decoder_.reset(new VideoDecoderVP9());
                     break;
 
                 case proto::VIDEO_ENCODING_ZLIB:
-                    decoder_.reset(new VideoDecoderZLIB());
+                    video_decoder_.reset(new VideoDecoderZLIB());
                     break;
 
                 default:
@@ -233,7 +237,7 @@ void Client::ReadVideoPacket(const proto::VideoPacket &packet)
     DesktopSize screen_size;
     uint8_t *buffer = nullptr;
 
-    int32_t flags = decoder_->Decode(&packet, &buffer, changed_region_, screen_size, pixel_format);
+    int32_t flags = video_decoder_->Decode(&packet, &buffer, changed_region_, screen_size, pixel_format);
 
     if (flags & proto::VideoPacket::FIRST_PACKET)
     {
@@ -260,6 +264,25 @@ void Client::ReadVideoPacket(const proto::VideoPacket &packet)
         }
 
         changed_region_.Clear();
+    }
+}
+
+void Client::ReadCursorShape(const proto::CursorShape &msg)
+{
+    // Если декодер курсора не инициализирован.
+    if (!cursor_decoder_)
+    {
+        // Инициализируем его.
+        cursor_decoder_.reset(new CursorDecoder());
+    }
+
+    // Декодируем изображение курсора.
+    const MouseCursor *mouse_cursor = cursor_decoder_->Decode(msg);
+
+    if (!on_cursor_update_callback_._Empty() && mouse_cursor)
+    {
+        // Вызываем callback для уведомления об изменении курсора.
+        on_cursor_update_callback_(mouse_cursor);
     }
 }
 
@@ -345,11 +368,13 @@ void Client::ProcessMessage(const proto::HostToClient *message)
         {
             ReadVideoPacket(message->video_packet());
         }
-        else if (message->has_cursor())
+
+        if (message->has_cursor())
         {
-            DLOG(ERROR) << "CursorShape unimplemented yet";
+            ReadCursorShape(message->cursor());
         }
-        else if (message->has_clipboard())
+
+        if (message->has_clipboard())
         {
             ReadClipboard(message->clipboard());
         }

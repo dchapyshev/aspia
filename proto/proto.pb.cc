@@ -24,7 +24,6 @@ void protobuf_ShutdownFile_proto_2eproto() {
   Clipboard_default_instance_.Shutdown();
   ClipboardControl_default_instance_.Shutdown();
   CursorShape_default_instance_.Shutdown();
-  CursorShapeControl_default_instance_.Shutdown();
   BellEvent_default_instance_.Shutdown();
   HostToClient_default_instance_.Shutdown();
   Control_default_instance_.Shutdown();
@@ -44,7 +43,6 @@ void protobuf_InitDefaults_proto_2eproto_impl() {
   ClipboardControl_default_instance_.DefaultConstruct();
   ::google::protobuf::internal::GetEmptyString();
   CursorShape_default_instance_.DefaultConstruct();
-  CursorShapeControl_default_instance_.DefaultConstruct();
   BellEvent_default_instance_.DefaultConstruct();
   HostToClient_default_instance_.DefaultConstruct();
   Control_default_instance_.DefaultConstruct();
@@ -55,7 +53,6 @@ void protobuf_InitDefaults_proto_2eproto_impl() {
   Clipboard_default_instance_.get_mutable()->InitAsDefaultInstance();
   ClipboardControl_default_instance_.get_mutable()->InitAsDefaultInstance();
   CursorShape_default_instance_.get_mutable()->InitAsDefaultInstance();
-  CursorShapeControl_default_instance_.get_mutable()->InitAsDefaultInstance();
   BellEvent_default_instance_.get_mutable()->InitAsDefaultInstance();
   HostToClient_default_instance_.get_mutable()->InitAsDefaultInstance();
   Control_default_instance_.get_mutable()->InitAsDefaultInstance();
@@ -105,7 +102,6 @@ bool CursorShapeEncoding_IsValid(int value) {
     case 0:
     case 1:
     case 2:
-    case 4:
       return true;
     default:
       return false;
@@ -1590,13 +1586,12 @@ inline const ClipboardControl* ClipboardControl::internal_default_instance() {
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int CursorShape::kEncodingFieldNumber;
-const int CursorShape::kIndexFieldNumber;
 const int CursorShape::kWidthFieldNumber;
 const int CursorShape::kHeightFieldNumber;
 const int CursorShape::kHotspotXFieldNumber;
 const int CursorShape::kHotspotYFieldNumber;
-const int CursorShape::kColorFieldNumber;
-const int CursorShape::kMaskFieldNumber;
+const int CursorShape::kDataFieldNumber;
+const int CursorShape::kCacheIndexFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 CursorShape::CursorShape()
@@ -1618,10 +1613,9 @@ CursorShape::CursorShape(const CursorShape& from)
 }
 
 void CursorShape::SharedCtor() {
-  color_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  mask_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&encoding_, 0, reinterpret_cast<char*>(&hotspot_y_) -
-    reinterpret_cast<char*>(&encoding_) + sizeof(hotspot_y_));
+  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&encoding_, 0, reinterpret_cast<char*>(&cache_index_) -
+    reinterpret_cast<char*>(&encoding_) + sizeof(cache_index_));
   _cached_size_ = 0;
 }
 
@@ -1631,8 +1625,7 @@ CursorShape::~CursorShape() {
 }
 
 void CursorShape::SharedDtor() {
-  color_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  mask_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  data_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void CursorShape::SetCachedSize(int size) const {
@@ -1673,9 +1666,8 @@ void CursorShape::Clear() {
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  ZR_(encoding_, hotspot_y_);
-  color_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  mask_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ZR_(encoding_, cache_index_);
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 
 #undef ZR_HELPER_
 #undef ZR_
@@ -1703,28 +1695,13 @@ bool CursorShape::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_index;
+        if (input->ExpectTag(16)) goto parse_width;
         break;
       }
 
-      // optional int32 index = 2;
+      // optional int32 width = 2;
       case 2: {
         if (tag == 16) {
-         parse_index:
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &index_)));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(24)) goto parse_width;
-        break;
-      }
-
-      // optional int32 width = 3;
-      case 3: {
-        if (tag == 24) {
          parse_width:
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
@@ -1733,13 +1710,13 @@ bool CursorShape::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(32)) goto parse_height;
+        if (input->ExpectTag(24)) goto parse_height;
         break;
       }
 
-      // optional int32 height = 4;
-      case 4: {
-        if (tag == 32) {
+      // optional int32 height = 3;
+      case 3: {
+        if (tag == 24) {
          parse_height:
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
@@ -1748,13 +1725,13 @@ bool CursorShape::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(40)) goto parse_hotspot_x;
+        if (input->ExpectTag(32)) goto parse_hotspot_x;
         break;
       }
 
-      // optional int32 hotspot_x = 5;
-      case 5: {
-        if (tag == 40) {
+      // optional int32 hotspot_x = 4;
+      case 4: {
+        if (tag == 32) {
          parse_hotspot_x:
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
@@ -1763,13 +1740,13 @@ bool CursorShape::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(48)) goto parse_hotspot_y;
+        if (input->ExpectTag(40)) goto parse_hotspot_y;
         break;
       }
 
-      // optional int32 hotspot_y = 6;
-      case 6: {
-        if (tag == 48) {
+      // optional int32 hotspot_y = 5;
+      case 5: {
+        if (tag == 40) {
          parse_hotspot_y:
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
@@ -1778,29 +1755,31 @@ bool CursorShape::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(58)) goto parse_color;
+        if (input->ExpectTag(50)) goto parse_data;
         break;
       }
 
-      // optional bytes color = 7;
-      case 7: {
-        if (tag == 58) {
-         parse_color:
+      // optional bytes data = 6;
+      case 6: {
+        if (tag == 50) {
+         parse_data:
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_color()));
+                input, this->mutable_data()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(66)) goto parse_mask;
+        if (input->ExpectTag(56)) goto parse_cache_index;
         break;
       }
 
-      // optional bytes mask = 8;
-      case 8: {
-        if (tag == 66) {
-         parse_mask:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_mask()));
+      // optional int32 cache_index = 7;
+      case 7: {
+        if (tag == 56) {
+         parse_cache_index:
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &cache_index_)));
         } else {
           goto handle_unusual;
         }
@@ -1838,41 +1817,35 @@ void CursorShape::SerializeWithCachedSizes(
       1, this->encoding(), output);
   }
 
-  // optional int32 index = 2;
-  if (this->index() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->index(), output);
-  }
-
-  // optional int32 width = 3;
+  // optional int32 width = 2;
   if (this->width() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->width(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->width(), output);
   }
 
-  // optional int32 height = 4;
+  // optional int32 height = 3;
   if (this->height() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->height(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->height(), output);
   }
 
-  // optional int32 hotspot_x = 5;
+  // optional int32 hotspot_x = 4;
   if (this->hotspot_x() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->hotspot_x(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->hotspot_x(), output);
   }
 
-  // optional int32 hotspot_y = 6;
+  // optional int32 hotspot_y = 5;
   if (this->hotspot_y() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(6, this->hotspot_y(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->hotspot_y(), output);
   }
 
-  // optional bytes color = 7;
-  if (this->color().size() > 0) {
+  // optional bytes data = 6;
+  if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      7, this->color(), output);
+      6, this->data(), output);
   }
 
-  // optional bytes mask = 8;
-  if (this->mask().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      8, this->mask(), output);
+  // optional int32 cache_index = 7;
+  if (this->cache_index() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->cache_index(), output);
   }
 
   // @@protoc_insertion_point(serialize_end:aspia.proto.CursorShape)
@@ -1888,53 +1861,46 @@ size_t CursorShape::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->encoding());
   }
 
-  // optional int32 index = 2;
-  if (this->index() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->index());
-  }
-
-  // optional int32 width = 3;
+  // optional int32 width = 2;
   if (this->width() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->width());
   }
 
-  // optional int32 height = 4;
+  // optional int32 height = 3;
   if (this->height() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->height());
   }
 
-  // optional int32 hotspot_x = 5;
+  // optional int32 hotspot_x = 4;
   if (this->hotspot_x() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->hotspot_x());
   }
 
-  // optional int32 hotspot_y = 6;
+  // optional int32 hotspot_y = 5;
   if (this->hotspot_y() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->hotspot_y());
   }
 
-  // optional bytes color = 7;
-  if (this->color().size() > 0) {
+  // optional bytes data = 6;
+  if (this->data().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
-        this->color());
+        this->data());
   }
 
-  // optional bytes mask = 8;
-  if (this->mask().size() > 0) {
+  // optional int32 cache_index = 7;
+  if (this->cache_index() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::BytesSize(
-        this->mask());
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->cache_index());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -1963,9 +1929,6 @@ void CursorShape::UnsafeMergeFrom(const CursorShape& from) {
   if (from.encoding() != 0) {
     set_encoding(from.encoding());
   }
-  if (from.index() != 0) {
-    set_index(from.index());
-  }
   if (from.width() != 0) {
     set_width(from.width());
   }
@@ -1978,13 +1941,12 @@ void CursorShape::UnsafeMergeFrom(const CursorShape& from) {
   if (from.hotspot_y() != 0) {
     set_hotspot_y(from.hotspot_y());
   }
-  if (from.color().size() > 0) {
+  if (from.data().size() > 0) {
 
-    color_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.color_);
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
-  if (from.mask().size() > 0) {
-
-    mask_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.mask_);
+  if (from.cache_index() != 0) {
+    set_cache_index(from.cache_index());
   }
 }
 
@@ -2006,13 +1968,12 @@ void CursorShape::Swap(CursorShape* other) {
 }
 void CursorShape::InternalSwap(CursorShape* other) {
   std::swap(encoding_, other->encoding_);
-  std::swap(index_, other->index_);
   std::swap(width_, other->width_);
   std::swap(height_, other->height_);
   std::swap(hotspot_x_, other->hotspot_x_);
   std::swap(hotspot_y_, other->hotspot_y_);
-  color_.Swap(&other->color_);
-  mask_.Swap(&other->mask_);
+  data_.Swap(&other->data_);
+  std::swap(cache_index_, other->cache_index_);
   _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -2038,21 +1999,7 @@ void CursorShape::set_encoding(::aspia::proto::CursorShapeEncoding value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.encoding)
 }
 
-// optional int32 index = 2;
-void CursorShape::clear_index() {
-  index_ = 0;
-}
-::google::protobuf::int32 CursorShape::index() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CursorShape.index)
-  return index_;
-}
-void CursorShape::set_index(::google::protobuf::int32 value) {
-  
-  index_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.index)
-}
-
-// optional int32 width = 3;
+// optional int32 width = 2;
 void CursorShape::clear_width() {
   width_ = 0;
 }
@@ -2066,7 +2013,7 @@ void CursorShape::set_width(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.width)
 }
 
-// optional int32 height = 4;
+// optional int32 height = 3;
 void CursorShape::clear_height() {
   height_ = 0;
 }
@@ -2080,7 +2027,7 @@ void CursorShape::set_height(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.height)
 }
 
-// optional int32 hotspot_x = 5;
+// optional int32 hotspot_x = 4;
 void CursorShape::clear_hotspot_x() {
   hotspot_x_ = 0;
 }
@@ -2094,7 +2041,7 @@ void CursorShape::set_hotspot_x(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.hotspot_x)
 }
 
-// optional int32 hotspot_y = 6;
+// optional int32 hotspot_y = 5;
 void CursorShape::clear_hotspot_y() {
   hotspot_y_ = 0;
 }
@@ -2108,299 +2055,66 @@ void CursorShape::set_hotspot_y(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.hotspot_y)
 }
 
-// optional bytes color = 7;
-void CursorShape::clear_color() {
-  color_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// optional bytes data = 6;
+void CursorShape::clear_data() {
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-const ::std::string& CursorShape::color() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CursorShape.color)
-  return color_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+const ::std::string& CursorShape::data() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CursorShape.data)
+  return data_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void CursorShape::set_color(const ::std::string& value) {
+void CursorShape::set_data(const ::std::string& value) {
   
-  color_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.color)
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.data)
 }
-void CursorShape::set_color(const char* value) {
+void CursorShape::set_data(const char* value) {
   
-  color_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.CursorShape.color)
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.CursorShape.data)
 }
-void CursorShape::set_color(const void* value, size_t size) {
+void CursorShape::set_data(const void* value, size_t size) {
   
-  color_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CursorShape.color)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CursorShape.data)
 }
-::std::string* CursorShape::mutable_color() {
+::std::string* CursorShape::mutable_data() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.CursorShape.color)
-  return color_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:aspia.proto.CursorShape.data)
+  return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* CursorShape::release_color() {
-  // @@protoc_insertion_point(field_release:aspia.proto.CursorShape.color)
+::std::string* CursorShape::release_data() {
+  // @@protoc_insertion_point(field_release:aspia.proto.CursorShape.data)
   
-  return color_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void CursorShape::set_allocated_color(::std::string* color) {
-  if (color != NULL) {
+void CursorShape::set_allocated_data(::std::string* data) {
+  if (data != NULL) {
     
   } else {
     
   }
-  color_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), color);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CursorShape.color)
+  data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CursorShape.data)
 }
 
-// optional bytes mask = 8;
-void CursorShape::clear_mask() {
-  mask_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// optional int32 cache_index = 7;
+void CursorShape::clear_cache_index() {
+  cache_index_ = 0;
 }
-const ::std::string& CursorShape::mask() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CursorShape.mask)
-  return mask_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+::google::protobuf::int32 CursorShape::cache_index() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CursorShape.cache_index)
+  return cache_index_;
 }
-void CursorShape::set_mask(const ::std::string& value) {
+void CursorShape::set_cache_index(::google::protobuf::int32 value) {
   
-  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.mask)
-}
-void CursorShape::set_mask(const char* value) {
-  
-  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.CursorShape.mask)
-}
-void CursorShape::set_mask(const void* value, size_t size) {
-  
-  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CursorShape.mask)
-}
-::std::string* CursorShape::mutable_mask() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.CursorShape.mask)
-  return mask_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-::std::string* CursorShape::release_mask() {
-  // @@protoc_insertion_point(field_release:aspia.proto.CursorShape.mask)
-  
-  return mask_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-void CursorShape::set_allocated_mask(::std::string* mask) {
-  if (mask != NULL) {
-    
-  } else {
-    
-  }
-  mask_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mask);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CursorShape.mask)
+  cache_index_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.cache_index)
 }
 
 inline const CursorShape* CursorShape::internal_default_instance() {
   return &CursorShape_default_instance_.get();
-}
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int CursorShapeControl::kEnableFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-CursorShapeControl::CursorShapeControl()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.CursorShapeControl)
-}
-
-void CursorShapeControl::InitAsDefaultInstance() {
-}
-
-CursorShapeControl::CursorShapeControl(const CursorShapeControl& from)
-  : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.CursorShapeControl)
-}
-
-void CursorShapeControl::SharedCtor() {
-  enable_ = false;
-  _cached_size_ = 0;
-}
-
-CursorShapeControl::~CursorShapeControl() {
-  // @@protoc_insertion_point(destructor:aspia.proto.CursorShapeControl)
-  SharedDtor();
-}
-
-void CursorShapeControl::SharedDtor() {
-}
-
-void CursorShapeControl::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const CursorShapeControl& CursorShapeControl::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
-  return *internal_default_instance();
-}
-
-::google::protobuf::internal::ExplicitlyConstructed<CursorShapeControl> CursorShapeControl_default_instance_;
-
-CursorShapeControl* CursorShapeControl::New(::google::protobuf::Arena* arena) const {
-  CursorShapeControl* n = new CursorShapeControl;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void CursorShapeControl::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.CursorShapeControl)
-  enable_ = false;
-}
-
-bool CursorShapeControl::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:aspia.proto.CursorShapeControl)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional bool enable = 1;
-      case 1: {
-        if (tag == 8) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &enable_)));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.CursorShapeControl)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.CursorShapeControl)
-  return false;
-#undef DO_
-}
-
-void CursorShapeControl::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.CursorShapeControl)
-  // optional bool enable = 1;
-  if (this->enable() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->enable(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:aspia.proto.CursorShapeControl)
-}
-
-size_t CursorShapeControl::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.CursorShapeControl)
-  size_t total_size = 0;
-
-  // optional bool enable = 1;
-  if (this->enable() != 0) {
-    total_size += 1 + 1;
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void CursorShapeControl::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const CursorShapeControl*>(&from));
-}
-
-void CursorShapeControl::MergeFrom(const CursorShapeControl& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.CursorShapeControl)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
-
-void CursorShapeControl::UnsafeMergeFrom(const CursorShapeControl& from) {
-  GOOGLE_DCHECK(&from != this);
-  if (from.enable() != 0) {
-    set_enable(from.enable());
-  }
-}
-
-void CursorShapeControl::CopyFrom(const CursorShapeControl& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.CursorShapeControl)
-  if (&from == this) return;
-  Clear();
-  UnsafeMergeFrom(from);
-}
-
-bool CursorShapeControl::IsInitialized() const {
-
-  return true;
-}
-
-void CursorShapeControl::Swap(CursorShapeControl* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void CursorShapeControl::InternalSwap(CursorShapeControl* other) {
-  std::swap(enable_, other->enable_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string CursorShapeControl::GetTypeName() const {
-  return "aspia.proto.CursorShapeControl";
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// CursorShapeControl
-
-// optional bool enable = 1;
-void CursorShapeControl::clear_enable() {
-  enable_ = false;
-}
-bool CursorShapeControl::enable() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CursorShapeControl.enable)
-  return enable_;
-}
-void CursorShapeControl::set_enable(bool value) {
-  
-  enable_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CursorShapeControl.enable)
-}
-
-inline const CursorShapeControl* CursorShapeControl::internal_default_instance() {
-  return &CursorShapeControl_default_instance_.get();
 }
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
@@ -3000,7 +2714,6 @@ inline const HostToClient* HostToClient::internal_default_instance() {
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int Control::kVideoFieldNumber;
-const int Control::kCursorShapeFieldNumber;
 const int Control::kClipboardFieldNumber;
 const int Control::kPowerFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -3015,8 +2728,6 @@ Control::Control()
 void Control::InitAsDefaultInstance() {
   video_ = const_cast< ::aspia::proto::VideoControl*>(
       ::aspia::proto::VideoControl::internal_default_instance());
-  cursor_shape_ = const_cast< ::aspia::proto::CursorShapeControl*>(
-      ::aspia::proto::CursorShapeControl::internal_default_instance());
   clipboard_ = const_cast< ::aspia::proto::ClipboardControl*>(
       ::aspia::proto::ClipboardControl::internal_default_instance());
   power_ = const_cast< ::aspia::proto::PowerControl*>(
@@ -3033,7 +2744,6 @@ Control::Control(const Control& from)
 
 void Control::SharedCtor() {
   video_ = NULL;
-  cursor_shape_ = NULL;
   clipboard_ = NULL;
   power_ = NULL;
   _cached_size_ = 0;
@@ -3047,7 +2757,6 @@ Control::~Control() {
 void Control::SharedDtor() {
   if (this != &Control_default_instance_.get()) {
     delete video_;
-    delete cursor_shape_;
     delete clipboard_;
     delete power_;
   }
@@ -3077,8 +2786,6 @@ void Control::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.Control)
   if (GetArenaNoVirtual() == NULL && video_ != NULL) delete video_;
   video_ = NULL;
-  if (GetArenaNoVirtual() == NULL && cursor_shape_ != NULL) delete cursor_shape_;
-  cursor_shape_ = NULL;
   if (GetArenaNoVirtual() == NULL && clipboard_ != NULL) delete clipboard_;
   clipboard_ = NULL;
   if (GetArenaNoVirtual() == NULL && power_ != NULL) delete power_;
@@ -3103,39 +2810,26 @@ bool Control::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(18)) goto parse_cursor_shape;
+        if (input->ExpectTag(18)) goto parse_clipboard;
         break;
       }
 
-      // optional .aspia.proto.CursorShapeControl cursor_shape = 2;
+      // optional .aspia.proto.ClipboardControl clipboard = 2;
       case 2: {
         if (tag == 18) {
-         parse_cursor_shape:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_cursor_shape()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(26)) goto parse_clipboard;
-        break;
-      }
-
-      // optional .aspia.proto.ClipboardControl clipboard = 3;
-      case 3: {
-        if (tag == 26) {
          parse_clipboard:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_clipboard()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(34)) goto parse_power;
+        if (input->ExpectTag(26)) goto parse_power;
         break;
       }
 
-      // optional .aspia.proto.PowerControl power = 4;
-      case 4: {
-        if (tag == 34) {
+      // optional .aspia.proto.PowerControl power = 3;
+      case 3: {
+        if (tag == 26) {
          parse_power:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_power()));
@@ -3176,22 +2870,16 @@ void Control::SerializeWithCachedSizes(
       1, *this->video_, output);
   }
 
-  // optional .aspia.proto.CursorShapeControl cursor_shape = 2;
-  if (this->has_cursor_shape()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, *this->cursor_shape_, output);
-  }
-
-  // optional .aspia.proto.ClipboardControl clipboard = 3;
+  // optional .aspia.proto.ClipboardControl clipboard = 2;
   if (this->has_clipboard()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      3, *this->clipboard_, output);
+      2, *this->clipboard_, output);
   }
 
-  // optional .aspia.proto.PowerControl power = 4;
+  // optional .aspia.proto.PowerControl power = 3;
   if (this->has_power()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      4, *this->power_, output);
+      3, *this->power_, output);
   }
 
   // @@protoc_insertion_point(serialize_end:aspia.proto.Control)
@@ -3208,21 +2896,14 @@ size_t Control::ByteSizeLong() const {
         *this->video_);
   }
 
-  // optional .aspia.proto.CursorShapeControl cursor_shape = 2;
-  if (this->has_cursor_shape()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->cursor_shape_);
-  }
-
-  // optional .aspia.proto.ClipboardControl clipboard = 3;
+  // optional .aspia.proto.ClipboardControl clipboard = 2;
   if (this->has_clipboard()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->clipboard_);
   }
 
-  // optional .aspia.proto.PowerControl power = 4;
+  // optional .aspia.proto.PowerControl power = 3;
   if (this->has_power()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -3255,9 +2936,6 @@ void Control::UnsafeMergeFrom(const Control& from) {
   if (from.has_video()) {
     mutable_video()->::aspia::proto::VideoControl::MergeFrom(from.video());
   }
-  if (from.has_cursor_shape()) {
-    mutable_cursor_shape()->::aspia::proto::CursorShapeControl::MergeFrom(from.cursor_shape());
-  }
   if (from.has_clipboard()) {
     mutable_clipboard()->::aspia::proto::ClipboardControl::MergeFrom(from.clipboard());
   }
@@ -3284,7 +2962,6 @@ void Control::Swap(Control* other) {
 }
 void Control::InternalSwap(Control* other) {
   std::swap(video_, other->video_);
-  std::swap(cursor_shape_, other->cursor_shape_);
   std::swap(clipboard_, other->clipboard_);
   std::swap(power_, other->power_);
   _unknown_fields_.Swap(&other->_unknown_fields_);
@@ -3337,46 +3014,7 @@ void Control::set_allocated_video(::aspia::proto::VideoControl* video) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.Control.video)
 }
 
-// optional .aspia.proto.CursorShapeControl cursor_shape = 2;
-bool Control::has_cursor_shape() const {
-  return this != internal_default_instance() && cursor_shape_ != NULL;
-}
-void Control::clear_cursor_shape() {
-  if (GetArenaNoVirtual() == NULL && cursor_shape_ != NULL) delete cursor_shape_;
-  cursor_shape_ = NULL;
-}
-const ::aspia::proto::CursorShapeControl& Control::cursor_shape() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Control.cursor_shape)
-  return cursor_shape_ != NULL ? *cursor_shape_
-                         : *::aspia::proto::CursorShapeControl::internal_default_instance();
-}
-::aspia::proto::CursorShapeControl* Control::mutable_cursor_shape() {
-  
-  if (cursor_shape_ == NULL) {
-    cursor_shape_ = new ::aspia::proto::CursorShapeControl;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Control.cursor_shape)
-  return cursor_shape_;
-}
-::aspia::proto::CursorShapeControl* Control::release_cursor_shape() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Control.cursor_shape)
-  
-  ::aspia::proto::CursorShapeControl* temp = cursor_shape_;
-  cursor_shape_ = NULL;
-  return temp;
-}
-void Control::set_allocated_cursor_shape(::aspia::proto::CursorShapeControl* cursor_shape) {
-  delete cursor_shape_;
-  cursor_shape_ = cursor_shape;
-  if (cursor_shape) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Control.cursor_shape)
-}
-
-// optional .aspia.proto.ClipboardControl clipboard = 3;
+// optional .aspia.proto.ClipboardControl clipboard = 2;
 bool Control::has_clipboard() const {
   return this != internal_default_instance() && clipboard_ != NULL;
 }
@@ -3415,7 +3053,7 @@ void Control::set_allocated_clipboard(::aspia::proto::ClipboardControl* clipboar
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.Control.clipboard)
 }
 
-// optional .aspia.proto.PowerControl power = 4;
+// optional .aspia.proto.PowerControl power = 3;
 bool Control::has_power() const {
   return this != internal_default_instance() && power_ != NULL;
 }

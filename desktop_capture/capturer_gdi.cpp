@@ -7,8 +7,11 @@
 
 #include "desktop_capture/capturer_gdi.h"
 
+#include "base/exception.h"
 #include "base/logging.h"
 #include "base/scoped_select_object.h"
+
+#include "desktop_capture/cursor.h"
 
 namespace aspia {
 
@@ -17,7 +20,10 @@ static const int kBytesPerPixel = 4;
 CapturerGDI::CapturerGDI() :
     curr_buffer_id_(0)
 {
-    memset(image_buffer_, 0, sizeof(image_buffer_));
+    image_buffer_[0] = nullptr;
+    image_buffer_[1] = nullptr;
+
+    memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
 }
 
 void CapturerGDI::AllocateBuffer(int buffer_index, int align)
@@ -49,6 +55,10 @@ void CapturerGDI::AllocateBuffer(int buffer_index, int align)
                          reinterpret_cast<void**>(&image_buffer_[buffer_index]),
                          nullptr,
                          0);
+    if (!target_bitmap_[buffer_index].Get())
+    {
+        LOG(ERROR) << "CreateDIBSection() failed: " << GetLastError();
+    }
 }
 
 void CapturerGDI::PrepareCaptureResources()
@@ -138,6 +148,51 @@ const uint8_t* CapturerGDI::CaptureImage(DesktopRegion *dirty_region,
 
         return curr;
     }
+}
+
+static bool IsSameCursorShape(const CURSORINFO &left, const CURSORINFO &right)
+{
+    // If the cursors are not showing, we do not care the hCursor handle.
+    return left.flags == right.flags && (left.flags != CURSOR_SHOWING ||
+                                         left.hCursor == right.hCursor);
+}
+
+MouseCursor* CapturerGDI::CaptureCursor()
+{
+    CURSORINFO cursor_info = { 0 };
+
+    // Note: cursor_info.hCursor does not need to be freed.
+    cursor_info.cbSize = sizeof(CURSORINFO);
+    if (!GetCursorInfo(&cursor_info))
+    {
+        LOG(ERROR) << "GetCursorInfo() failed: " << GetLastError();
+        throw Exception("Unable to retrieve the cursor image");
+    }
+
+    if (!IsSameCursorShape(cursor_info, prev_cursor_info_))
+    {
+        if (cursor_info.flags == 0)
+        {
+            //
+            // Host machine does not have a hardware mouse attached, we will send a
+            // default one instead.
+            // Note, Windows automatically caches cursor resource, so we do not need
+            // to cache the result of LoadCursor.
+            //
+            cursor_info.hCursor = LoadCursorW(nullptr, IDC_ARROW);
+        }
+
+        MouseCursor *mouse_cursor = CreateMouseCursorFromHCursor(*desktop_dc_, cursor_info.hCursor);
+
+        if (mouse_cursor)
+        {
+            prev_cursor_info_ = cursor_info;
+        }
+
+        return mouse_cursor;
+    }
+
+    return nullptr;
 }
 
 } // namespace aspia

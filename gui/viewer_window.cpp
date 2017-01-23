@@ -9,6 +9,8 @@
 
 #include "gui/resource.h"
 #include "base/clipboard.h"
+#include "base/unicode.h"
+#include "desktop_capture/cursor.h"
 #include "proto/proto.pb.h"
 
 namespace aspia {
@@ -56,14 +58,33 @@ void ViewerWindow::OnVideoResize(const DesktopSize &size, const PixelFormat &for
     video_window_.ShowScrollBar(SB_BOTH, FALSE);
 }
 
+void ViewerWindow::OnCursorUpdate(const MouseCursor *mouse_cursor)
+{
+    ScopedGetDC desktop_dc(nullptr);
+
+    cursor_ = CreateHCursorFromMouseCursor(desktop_dc, *mouse_cursor);
+    if (cursor_)
+    {
+        SetClassLongPtrW(video_window_,
+                         GCLP_HCURSOR,
+                         reinterpret_cast<LONG_PTR>(cursor_.m_hCursor));
+    }
+}
+
 int ViewerWindow::OnCreate(LPCREATESTRUCT create_struct)
 {
     SetIcon(_small_icon, FALSE);
     SetIcon(_big_icon, TRUE);
 
-    CString title;
-    title.LoadStringW(IDS_APPLICATION_NAME);
-    SetWindowTextW(title);
+    CString app_name;
+    app_name.LoadStringW(IDS_APPLICATION_NAME);
+
+    std::wstring title(UNICODEfromUTF8(config_->RemoteAddress()));
+
+    title += L" - ";
+    title += app_name;
+
+    SetWindowTextW(title.c_str());
 
     toolbar_.Create(*this);
     video_window_.Create(*this);
@@ -224,6 +245,15 @@ LRESULT ViewerWindow::OnSettingsButton(WORD notify_code, WORD id, HWND ctrl, BOO
 
         config_->mutable_screen_config()->Set(config);
         client_->ApplyScreenConfig(config);
+
+        if (!config.ShowRemoteCursor())
+        {
+            cursor_ = LoadCursorW(nullptr, IDC_ARROW);
+
+            SetClassLongPtrW(video_window_,
+                             GCLP_HCURSOR,
+                             reinterpret_cast<LONG_PTR>(cursor_.m_hCursor));
+        }
     }
 
     return 0;

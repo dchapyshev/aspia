@@ -16,7 +16,8 @@ namespace aspia {
 static const UINT_PTR kScrollTimerId = 1;
 static const int kScrollDelta = 25;
 
-static const uint8_t kWheelMask = proto::PointerEvent::WHEEL_DOWN | proto::PointerEvent::WHEEL_UP;
+static const uint8_t kWheelMask =
+    proto::PointerEvent::WHEEL_DOWN | proto::PointerEvent::WHEEL_UP;
 
 VideoWindow::VideoWindow(Client *client) :
     client_(client),
@@ -89,7 +90,8 @@ void VideoWindow::OnPaint(CDCHandle dc)
                            // Координаты буфера из которых будет произведено рисование.
                            DesktopPoint(paint.left + scroll_pos.x, paint.top + scroll_pos.y),
                            // Размеры буфера (ширина и высота).
-                           DesktopSize(paint.Width() - (center_offset_.x * 2), paint.Height() - (center_offset_.y * 2)));
+                           DesktopSize(paint.Width() - (center_offset_.x * 2),
+                                       paint.Height() - (center_offset_.y * 2)));
         }
     }
     else
@@ -111,34 +113,36 @@ void VideoWindow::OnWindowPosChanged(LPWINDOWPOS pos)
 void VideoWindow::OnSize(UINT type, CSize size)
 {
     CRect rect;
-    GetClientRect(&rect);
 
-    client_size_ = rect.Size();
+    if (GetClientRect(&rect))
+    {
+        client_size_ = rect.Size();
 
-    int32_t width = buffer_.Size().Width();
-    int32_t height = buffer_.Size().Height();
+        int32_t width = buffer_.Size().Width();
+        int32_t height = buffer_.Size().Height();
 
-    if (width < client_size_.cx)
-        center_offset_.x = (client_size_.cx / 2) - (width / 2);
-    else
-        center_offset_.x = 0;
+        if (width < client_size_.cx)
+            center_offset_.x = (client_size_.cx / 2) - (width / 2);
+        else
+            center_offset_.x = 0;
 
-    if (height < client_size_.cy)
-        center_offset_.y = (client_size_.cy / 2) - (height / 2);
-    else
-        center_offset_.y = 0;
+        if (height < client_size_.cy)
+            center_offset_.y = (client_size_.cy / 2) - (height / 2);
+        else
+            center_offset_.y = 0;
 
-    CPoint scroll_pos;
-    scroll_pos.x = std::max(0L, std::min(scroll_pos_.x, width - client_size_.cx));
-    scroll_pos.y = std::max(0L, std::min(scroll_pos_.y, height - client_size_.cy));
+        CPoint scroll_pos;
+        scroll_pos.x = std::max(0L, std::min(scroll_pos_.x, width - client_size_.cx));
+        scroll_pos.y = std::max(0L, std::min(scroll_pos_.y, height - client_size_.cy));
 
-    ScrollWindowEx(scroll_pos_.x - scroll_pos.x,
-                   scroll_pos_.y - scroll_pos.y,
-                   SW_INVALIDATE);
+        ScrollWindowEx(scroll_pos_.x - scroll_pos.x,
+                       scroll_pos_.y - scroll_pos.y,
+                       SW_INVALIDATE);
 
-    scroll_pos_ = scroll_pos;
+        scroll_pos_ = scroll_pos;
 
-    UpdateScrollBars();
+        UpdateScrollBars();
+    }
 }
 
 LRESULT VideoWindow::OnMouse(UINT msg, WPARAM wParam, LPARAM lParam, BOOL &handled)

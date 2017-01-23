@@ -10,6 +10,7 @@
 
 #include "desktop_capture/desktop_region.h"
 #include "desktop_capture/pixel_format.h"
+#include "desktop_capture/mouse_cursor.h"
 
 namespace aspia {
 
@@ -25,6 +26,8 @@ public:
     //
     virtual const uint8_t* CaptureImage(DesktopRegion *dirty_region,
                                         DesktopSize *desktop_size) = 0;
+
+    virtual MouseCursor* CaptureCursor() = 0;
 };
 
 } // namespace aspia

@@ -112,7 +112,8 @@ message VideoControl
     {
         DISABLE_VIDEO           = 0;
         ENABLE_VIDEO            = 1;
-        DISABLE_DESKTOP_EFFECTS = 2;
+        ENABLE_CURSOR_SHAPE     = 2;
+        DISABLE_DESKTOP_EFFECTS = 4;
     }
 
     uint32 flags = 1;

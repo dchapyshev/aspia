@@ -143,7 +143,7 @@ void InputInjector::InjectPointer(const proto::PointerEvent &msg)
     prev_mouse_button_mask_ = mask;
 }
 
-void InputInjector::HandleCAD()
+void InputInjector::InjectCtrlAltDel()
 {
 #if (_WIN32_WINNT < 0x0600)
     if (IsWindowsVistaOrGreater())
@@ -193,7 +193,7 @@ void InputInjector::InjectKeyboard(const proto::KeyEvent &msg)
         (GetAsyncKeyState(VK_CONTROL) & 0x8000) &&
         (GetAsyncKeyState(VK_MENU) & 0x8000))
     {
-        HandleCAD();
+        InjectCtrlAltDel();
         return;
     }
 

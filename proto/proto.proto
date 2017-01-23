@@ -103,9 +103,8 @@ message ClipboardControl
 enum CursorShapeEncoding
 {
     CURSOR_SHAPE_ENCODING_UNKNOWN = 0;
-    CURSOR_SHAPE_ENCODING_RAW     = 1;
+    CURSOR_SHAPE_ENCODING_CACHE   = 1;
     CURSOR_SHAPE_ENCODING_ZLIB    = 2;
-    CURSOR_SHAPE_ENCODING_CACHE   = 4;
 }
 
 //
@@ -115,28 +114,22 @@ message CursorShape
 {
     CursorShapeEncoding encoding = 1;
 
-    int32 index = 2;
-
     // Width, height (in screen pixels) of the cursor.
-    int32 width  = 3;
-    int32 height = 4;
+    int32 width  = 2;
+    int32 height = 3;
 
     // X,Y coordinates (relative to upper-left corner) of the cursor hotspot.
-    int32 hotspot_x = 5;
-    int32 hotspot_y = 6;
+    int32 hotspot_x = 4;
+    int32 hotspot_y = 5;
 
-    bytes color = 7;
-    bytes mask  = 8;
-}
+    // Cursor pixmap data in 32-bit BGRA format compressed with ZLIB.
+    bytes data = 6;
 
-message CursorShapeControl
-{
     //
-    // Если поле установлено в true, то сервер должен начать посылать изображение курсора (сообщение CursorShape).
-    // Если поле установлено в false, то сервер должен прекратить посылать изображение курсора.
-    // Сервер не обязан подчиняться данной команде для приостановки передачи изображения курсора.
+    // Индекс курсора в кеше. Если кодировка не равна CURSOR_SHAPE_ENCODING_CACHE
+    // и данный параметр не равен нулю, то кеш должен быть сброшен.
     //
-    bool enable = 1;
+    int32 cache_index = 7;
 }
 
 message BellEvent
@@ -156,10 +149,9 @@ message HostToClient
 
 message Control
 {
-    VideoControl video              = 1;
-    CursorShapeControl cursor_shape = 2;
-    ClipboardControl clipboard      = 3;
-    PowerControl power              = 4;
+    VideoControl video         = 1;
+    ClipboardControl clipboard = 2;
+    PowerControl power         = 3;
 }
 
 //

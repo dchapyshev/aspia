@@ -39,6 +39,8 @@ public:
     const uint8_t* CaptureImage(DesktopRegion *dirty_region,
                                 DesktopSize *desktop_size) override;
 
+    MouseCursor* CaptureCursor() override;
+
 private:
     typedef struct
     {
@@ -73,6 +75,8 @@ private:
     int curr_buffer_id_;
     ScopedBitmap target_bitmap_[kNumBuffers];
     uint8_t *image_buffer_[kNumBuffers]; // Буфер изображения экрана
+
+    CURSORINFO prev_cursor_info_;
 
     DISALLOW_COPY_AND_ASSIGN(CapturerGDI);
 };

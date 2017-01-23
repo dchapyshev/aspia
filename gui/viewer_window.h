@@ -75,6 +75,7 @@ public:
 
     void OnVideoUpdate(const uint8_t *buffer, const DesktopRegion &region);
     void OnVideoResize(const DesktopSize &size, const PixelFormat &format);
+    void OnCursorUpdate(const MouseCursor *mouse_cursor);
 
     void Worker() override
     {
@@ -133,6 +134,8 @@ private:
     ScopedWindowsHook keyboard_hook_;
 
     WINDOWPLACEMENT window_pos_;
+
+    CCursor cursor_;
 };
 
 } // namespace aspia

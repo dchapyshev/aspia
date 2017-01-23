@@ -31,6 +31,8 @@
     <ClCompile Include="client\client_config.cpp" />
     <ClCompile Include="client\screen_config.cpp" />
     <ClCompile Include="codec\compressor_zlib.cpp" />
+    <ClCompile Include="codec\cursor_decoder.cpp" />
+    <ClCompile Include="codec\cursor_encoder.cpp" />
     <ClCompile Include="codec\decompressor_zlib.cpp" />
     <ClCompile Include="codec\scoped_vpx_codec.cpp" />
     <ClCompile Include="codec\video_decoder_vp8.cpp" />
@@ -44,7 +46,7 @@
     <ClCompile Include="crypto\sha512.cpp" />
     <ClCompile Include="desktop_capture\capturer_gdi.cpp" />
     <ClCompile Include="desktop_capture\capture_scheduler.cpp" />
-    <ClCompile Include="desktop_capture\cursor_capturer.cpp" />
+    <ClCompile Include="desktop_capture\cursor.cpp" />
     <ClCompile Include="desktop_capture\desktop_point.cpp" />
     <ClCompile Include="desktop_capture\desktop_rect.cpp" />
     <ClCompile Include="desktop_capture\desktop_region.cpp" />
@@ -52,6 +54,8 @@
     <ClCompile Include="desktop_capture\dib_buffer.cpp" />
     <ClCompile Include="desktop_capture\differ.cpp" />
     <ClCompile Include="desktop_capture\diff_block_sse2.cpp" />
+    <ClCompile Include="desktop_capture\mouse_cursor.cpp" />
+    <ClCompile Include="desktop_capture\mouse_cursor_cache.cpp" />
     <ClCompile Include="desktop_capture\pixel_format.cpp" />
     <ClCompile Include="desktop_capture\scoped_desktop_effects.cpp" />
     <ClCompile Include="desktop_capture\x11region.c">
@@ -101,6 +105,8 @@
     <ClInclude Include="client\screen_config.h" />
     <ClInclude Include="codec\compressor.h" />
     <ClInclude Include="codec\compressor_zlib.h" />
+    <ClInclude Include="codec\cursor_decoder.h" />
+    <ClInclude Include="codec\cursor_encoder.h" />
     <ClInclude Include="codec\decompressor.h" />
     <ClInclude Include="codec\decompressor_zlib.h" />
     <ClInclude Include="codec\pixel_translator.h" />
@@ -122,7 +128,7 @@
     <ClInclude Include="desktop_capture\capturer.h" />
     <ClInclude Include="desktop_capture\capturer_gdi.h" />
     <ClInclude Include="desktop_capture\capture_scheduler.h" />
-    <ClInclude Include="desktop_capture\cursor_capturer.h" />
+    <ClInclude Include="desktop_capture\cursor.h" />
     <ClInclude Include="desktop_capture\desktop_point.h" />
     <ClInclude Include="desktop_capture\desktop_rect.h" />
     <ClInclude Include="desktop_capture\desktop_region.h" />
@@ -130,6 +136,8 @@
     <ClInclude Include="desktop_capture\dib_buffer.h" />
     <ClInclude Include="desktop_capture\differ.h" />
     <ClInclude Include="desktop_capture\diff_block_sse2.h" />
+    <ClInclude Include="desktop_capture\mouse_cursor.h" />
+    <ClInclude Include="desktop_capture\mouse_cursor_cache.h" />
     <ClInclude Include="desktop_capture\pixel_format.h" />
     <ClInclude Include="desktop_capture\scoped_desktop_effects.h" />
     <ClInclude Include="desktop_capture\x11region.h" />
@@ -222,9 +230,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)/3rdparty/libglog/src/windows;$(SolutionDir)/3rdparty/libvpx;$(SolutionDir)/3rdparty/libyuv/include;$(SolutionDir)/3rdparty/zlib-ng;$(SolutionDir)/3rdparty/protobuf/src;$(SolutionDir)/3rdparty/wtl;$(SolutionDir)/3rdparty;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -234,6 +241,15 @@
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <OmitFramePointers>true</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <StringPooling>true</StringPooling>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+      <CompileAsManaged>false</CompileAsManaged>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>None</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

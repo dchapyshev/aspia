@@ -56,7 +56,7 @@ void VideoDecoderZLIB::DecodePacket(const proto::VideoPacket *packet, DesktopReg
         if (row_y > rect.height() - 1)
         {
             LOG(WARNING) << "Too much data is received for the given rectangle";
-            throw Exception("Too much data is received for the given rectangle.");
+            throw Exception("Too much data is received for the given rectangle");
         }
 
         int written = 0;  // Количество байт записанный в буфер назначения

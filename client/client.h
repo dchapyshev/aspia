@@ -18,6 +18,7 @@
 #include "codec/video_decoder_zlib.h"
 #include "codec/video_decoder_vp8.h"
 #include "codec/video_decoder_vp9.h"
+#include "codec/cursor_decoder.h"
 #include "desktop_capture/desktop_region.h"
 #include "desktop_capture/desktop_point.h"
 #include "client/message_queue.h"
@@ -55,10 +56,12 @@ public:
 
     typedef std::function<void(const uint8_t*, const DesktopRegion&)> OnVideoUpdateCallback;
     typedef std::function<void(const DesktopSize&, const PixelFormat&)> OnVideoResizeCallback;
+    typedef std::function<void(const MouseCursor*)> OnCursorUpdateCallback;
 
     void StartScreenUpdate(const ScreenConfig &config,
                            OnVideoUpdateCallback on_update_callback,
-                           OnVideoResizeCallback on_resize_callback);
+                           OnVideoResizeCallback on_resize_callback,
+                           OnCursorUpdateCallback on_cursor_update_callback);
     void EndScreenUpdate();
     void ApplyScreenConfig(const ScreenConfig &config);
 
@@ -74,6 +77,7 @@ private:
     void ProcessMessage(const proto::HostToClient *message);
 
     void ReadVideoPacket(const proto::VideoPacket &packet);
+    void ReadCursorShape(const proto::CursorShape &msg);
     void ReadClipboard(const proto::Clipboard &msg);
 
 private:
@@ -81,11 +85,15 @@ private:
 
     OnVideoUpdateCallback on_video_update_callback_;
     OnVideoResizeCallback on_video_resize_callback_;
+    OnCursorUpdateCallback on_cursor_update_callback_;
 
     std::unique_ptr<Socket> sock_;
+
     std::unique_ptr<MessageQueue<proto::HostToClient>> input_queue_;
     std::unique_ptr<MessageQueue<proto::ClientToHost>> output_queue_;
-    std::unique_ptr<VideoDecoder> decoder_;
+
+    std::unique_ptr<VideoDecoder> video_decoder_;
+    std::unique_ptr<CursorDecoder> cursor_decoder_;
 
     uint32_t encoding_;
 

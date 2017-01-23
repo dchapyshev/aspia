@@ -64,6 +64,7 @@ private:
     uint32_t feature_mask_;
 
     std::unique_ptr<ScreenSender> screen_sender_;
+
     std::unique_ptr<InputInjector> input_injector_;
 
     std::unique_ptr<Encryptor> encryptor_;

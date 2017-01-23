@@ -45,7 +45,6 @@ class Clipboard;
 class ClipboardControl;
 class Control;
 class CursorShape;
-class CursorShapeControl;
 class HostToClient;
 class KeyEvent;
 class PointerEvent;
@@ -120,15 +119,14 @@ const int ClipboardEncoding_ARRAYSIZE = ClipboardEncoding_MAX + 1;
 
 enum CursorShapeEncoding {
   CURSOR_SHAPE_ENCODING_UNKNOWN = 0,
-  CURSOR_SHAPE_ENCODING_RAW = 1,
+  CURSOR_SHAPE_ENCODING_CACHE = 1,
   CURSOR_SHAPE_ENCODING_ZLIB = 2,
-  CURSOR_SHAPE_ENCODING_CACHE = 4,
   CursorShapeEncoding_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   CursorShapeEncoding_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool CursorShapeEncoding_IsValid(int value);
 const CursorShapeEncoding CursorShapeEncoding_MIN = CURSOR_SHAPE_ENCODING_UNKNOWN;
-const CursorShapeEncoding CursorShapeEncoding_MAX = CURSOR_SHAPE_ENCODING_CACHE;
+const CursorShapeEncoding CursorShapeEncoding_MAX = CURSOR_SHAPE_ENCODING_ZLIB;
 const int CursorShapeEncoding_ARRAYSIZE = CursorShapeEncoding_MAX + 1;
 
 // ===================================================================
@@ -733,57 +731,46 @@ class CursorShape : public ::google::protobuf::MessageLite /* @@protoc_insertion
   ::aspia::proto::CursorShapeEncoding encoding() const;
   void set_encoding(::aspia::proto::CursorShapeEncoding value);
 
-  // optional int32 index = 2;
-  void clear_index();
-  static const int kIndexFieldNumber = 2;
-  ::google::protobuf::int32 index() const;
-  void set_index(::google::protobuf::int32 value);
-
-  // optional int32 width = 3;
+  // optional int32 width = 2;
   void clear_width();
-  static const int kWidthFieldNumber = 3;
+  static const int kWidthFieldNumber = 2;
   ::google::protobuf::int32 width() const;
   void set_width(::google::protobuf::int32 value);
 
-  // optional int32 height = 4;
+  // optional int32 height = 3;
   void clear_height();
-  static const int kHeightFieldNumber = 4;
+  static const int kHeightFieldNumber = 3;
   ::google::protobuf::int32 height() const;
   void set_height(::google::protobuf::int32 value);
 
-  // optional int32 hotspot_x = 5;
+  // optional int32 hotspot_x = 4;
   void clear_hotspot_x();
-  static const int kHotspotXFieldNumber = 5;
+  static const int kHotspotXFieldNumber = 4;
   ::google::protobuf::int32 hotspot_x() const;
   void set_hotspot_x(::google::protobuf::int32 value);
 
-  // optional int32 hotspot_y = 6;
+  // optional int32 hotspot_y = 5;
   void clear_hotspot_y();
-  static const int kHotspotYFieldNumber = 6;
+  static const int kHotspotYFieldNumber = 5;
   ::google::protobuf::int32 hotspot_y() const;
   void set_hotspot_y(::google::protobuf::int32 value);
 
-  // optional bytes color = 7;
-  void clear_color();
-  static const int kColorFieldNumber = 7;
-  const ::std::string& color() const;
-  void set_color(const ::std::string& value);
-  void set_color(const char* value);
-  void set_color(const void* value, size_t size);
-  ::std::string* mutable_color();
-  ::std::string* release_color();
-  void set_allocated_color(::std::string* color);
+  // optional bytes data = 6;
+  void clear_data();
+  static const int kDataFieldNumber = 6;
+  const ::std::string& data() const;
+  void set_data(const ::std::string& value);
+  void set_data(const char* value);
+  void set_data(const void* value, size_t size);
+  ::std::string* mutable_data();
+  ::std::string* release_data();
+  void set_allocated_data(::std::string* data);
 
-  // optional bytes mask = 8;
-  void clear_mask();
-  static const int kMaskFieldNumber = 8;
-  const ::std::string& mask() const;
-  void set_mask(const ::std::string& value);
-  void set_mask(const char* value);
-  void set_mask(const void* value, size_t size);
-  ::std::string* mutable_mask();
-  ::std::string* release_mask();
-  void set_allocated_mask(::std::string* mask);
+  // optional int32 cache_index = 7;
+  void clear_cache_index();
+  static const int kCacheIndexFieldNumber = 7;
+  ::google::protobuf::int32 cache_index() const;
+  void set_cache_index(::google::protobuf::int32 value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.CursorShape)
  private:
@@ -791,14 +778,13 @@ class CursorShape : public ::google::protobuf::MessageLite /* @@protoc_insertion
   ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
   ::google::protobuf::Arena* _arena_ptr_;
 
-  ::google::protobuf::internal::ArenaStringPtr color_;
-  ::google::protobuf::internal::ArenaStringPtr mask_;
+  ::google::protobuf::internal::ArenaStringPtr data_;
   int encoding_;
-  ::google::protobuf::int32 index_;
   ::google::protobuf::int32 width_;
   ::google::protobuf::int32 height_;
   ::google::protobuf::int32 hotspot_x_;
   ::google::protobuf::int32 hotspot_y_;
+  ::google::protobuf::int32 cache_index_;
   mutable int _cached_size_;
   friend void  protobuf_InitDefaults_proto_2eproto_impl();
   friend void  protobuf_AddDesc_proto_2eproto_impl();
@@ -808,88 +794,6 @@ class CursorShape : public ::google::protobuf::MessageLite /* @@protoc_insertion
   void InitAsDefaultInstance();
 };
 extern ::google::protobuf::internal::ExplicitlyConstructed<CursorShape> CursorShape_default_instance_;
-
-// -------------------------------------------------------------------
-
-class CursorShapeControl : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.CursorShapeControl) */ {
- public:
-  CursorShapeControl();
-  virtual ~CursorShapeControl();
-
-  CursorShapeControl(const CursorShapeControl& from);
-
-  inline CursorShapeControl& operator=(const CursorShapeControl& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  static const CursorShapeControl& default_instance();
-
-  static const CursorShapeControl* internal_default_instance();
-
-  void Swap(CursorShapeControl* other);
-
-  // implements Message ----------------------------------------------
-
-  inline CursorShapeControl* New() const { return New(NULL); }
-
-  CursorShapeControl* New(::google::protobuf::Arena* arena) const;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from);
-  void CopyFrom(const CursorShapeControl& from);
-  void MergeFrom(const CursorShapeControl& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  size_t ByteSizeLong() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  void DiscardUnknownFields();
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(CursorShapeControl* other);
-  void UnsafeMergeFrom(const CursorShapeControl& from);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return _arena_ptr_;
-  }
-  inline ::google::protobuf::Arena* MaybeArenaPtr() const {
-    return _arena_ptr_;
-  }
-  public:
-
-  ::std::string GetTypeName() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // optional bool enable = 1;
-  void clear_enable();
-  static const int kEnableFieldNumber = 1;
-  bool enable() const;
-  void set_enable(bool value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.CursorShapeControl)
- private:
-
-  ::google::protobuf::internal::ArenaStringPtr _unknown_fields_;
-  ::google::protobuf::Arena* _arena_ptr_;
-
-  bool enable_;
-  mutable int _cached_size_;
-  friend void  protobuf_InitDefaults_proto_2eproto_impl();
-  friend void  protobuf_AddDesc_proto_2eproto_impl();
-  friend void protobuf_AssignDesc_proto_2eproto();
-  friend void protobuf_ShutdownFile_proto_2eproto();
-
-  void InitAsDefaultInstance();
-};
-extern ::google::protobuf::internal::ExplicitlyConstructed<CursorShapeControl> CursorShapeControl_default_instance_;
 
 // -------------------------------------------------------------------
 
@@ -1146,28 +1050,19 @@ class Control : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
   ::aspia::proto::VideoControl* release_video();
   void set_allocated_video(::aspia::proto::VideoControl* video);
 
-  // optional .aspia.proto.CursorShapeControl cursor_shape = 2;
-  bool has_cursor_shape() const;
-  void clear_cursor_shape();
-  static const int kCursorShapeFieldNumber = 2;
-  const ::aspia::proto::CursorShapeControl& cursor_shape() const;
-  ::aspia::proto::CursorShapeControl* mutable_cursor_shape();
-  ::aspia::proto::CursorShapeControl* release_cursor_shape();
-  void set_allocated_cursor_shape(::aspia::proto::CursorShapeControl* cursor_shape);
-
-  // optional .aspia.proto.ClipboardControl clipboard = 3;
+  // optional .aspia.proto.ClipboardControl clipboard = 2;
   bool has_clipboard() const;
   void clear_clipboard();
-  static const int kClipboardFieldNumber = 3;
+  static const int kClipboardFieldNumber = 2;
   const ::aspia::proto::ClipboardControl& clipboard() const;
   ::aspia::proto::ClipboardControl* mutable_clipboard();
   ::aspia::proto::ClipboardControl* release_clipboard();
   void set_allocated_clipboard(::aspia::proto::ClipboardControl* clipboard);
 
-  // optional .aspia.proto.PowerControl power = 4;
+  // optional .aspia.proto.PowerControl power = 3;
   bool has_power() const;
   void clear_power();
-  static const int kPowerFieldNumber = 4;
+  static const int kPowerFieldNumber = 3;
   const ::aspia::proto::PowerControl& power() const;
   ::aspia::proto::PowerControl* mutable_power();
   ::aspia::proto::PowerControl* release_power();
@@ -1180,7 +1075,6 @@ class Control : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
   ::google::protobuf::Arena* _arena_ptr_;
 
   ::aspia::proto::VideoControl* video_;
-  ::aspia::proto::CursorShapeControl* cursor_shape_;
   ::aspia::proto::ClipboardControl* clipboard_;
   ::aspia::proto::PowerControl* power_;
   mutable int _cached_size_;
@@ -1575,21 +1469,7 @@ inline void CursorShape::set_encoding(::aspia::proto::CursorShapeEncoding value)
   // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.encoding)
 }
 
-// optional int32 index = 2;
-inline void CursorShape::clear_index() {
-  index_ = 0;
-}
-inline ::google::protobuf::int32 CursorShape::index() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CursorShape.index)
-  return index_;
-}
-inline void CursorShape::set_index(::google::protobuf::int32 value) {
-  
-  index_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.index)
-}
-
-// optional int32 width = 3;
+// optional int32 width = 2;
 inline void CursorShape::clear_width() {
   width_ = 0;
 }
@@ -1603,7 +1483,7 @@ inline void CursorShape::set_width(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.width)
 }
 
-// optional int32 height = 4;
+// optional int32 height = 3;
 inline void CursorShape::clear_height() {
   height_ = 0;
 }
@@ -1617,7 +1497,7 @@ inline void CursorShape::set_height(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.height)
 }
 
-// optional int32 hotspot_x = 5;
+// optional int32 hotspot_x = 4;
 inline void CursorShape::clear_hotspot_x() {
   hotspot_x_ = 0;
 }
@@ -1631,7 +1511,7 @@ inline void CursorShape::set_hotspot_x(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.hotspot_x)
 }
 
-// optional int32 hotspot_y = 6;
+// optional int32 hotspot_y = 5;
 inline void CursorShape::clear_hotspot_y() {
   hotspot_y_ = 0;
 }
@@ -1645,117 +1525,66 @@ inline void CursorShape::set_hotspot_y(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.hotspot_y)
 }
 
-// optional bytes color = 7;
-inline void CursorShape::clear_color() {
-  color_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// optional bytes data = 6;
+inline void CursorShape::clear_data() {
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& CursorShape::color() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CursorShape.color)
-  return color_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline const ::std::string& CursorShape::data() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CursorShape.data)
+  return data_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void CursorShape::set_color(const ::std::string& value) {
+inline void CursorShape::set_data(const ::std::string& value) {
   
-  color_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.color)
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.data)
 }
-inline void CursorShape::set_color(const char* value) {
+inline void CursorShape::set_data(const char* value) {
   
-  color_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.CursorShape.color)
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.CursorShape.data)
 }
-inline void CursorShape::set_color(const void* value, size_t size) {
+inline void CursorShape::set_data(const void* value, size_t size) {
   
-  color_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CursorShape.color)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CursorShape.data)
 }
-inline ::std::string* CursorShape::mutable_color() {
+inline ::std::string* CursorShape::mutable_data() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.CursorShape.color)
-  return color_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:aspia.proto.CursorShape.data)
+  return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* CursorShape::release_color() {
-  // @@protoc_insertion_point(field_release:aspia.proto.CursorShape.color)
+inline ::std::string* CursorShape::release_data() {
+  // @@protoc_insertion_point(field_release:aspia.proto.CursorShape.data)
   
-  return color_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void CursorShape::set_allocated_color(::std::string* color) {
-  if (color != NULL) {
+inline void CursorShape::set_allocated_data(::std::string* data) {
+  if (data != NULL) {
     
   } else {
     
   }
-  color_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), color);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CursorShape.color)
+  data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CursorShape.data)
 }
 
-// optional bytes mask = 8;
-inline void CursorShape::clear_mask() {
-  mask_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// optional int32 cache_index = 7;
+inline void CursorShape::clear_cache_index() {
+  cache_index_ = 0;
 }
-inline const ::std::string& CursorShape::mask() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CursorShape.mask)
-  return mask_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline ::google::protobuf::int32 CursorShape::cache_index() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CursorShape.cache_index)
+  return cache_index_;
 }
-inline void CursorShape::set_mask(const ::std::string& value) {
+inline void CursorShape::set_cache_index(::google::protobuf::int32 value) {
   
-  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.mask)
-}
-inline void CursorShape::set_mask(const char* value) {
-  
-  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.CursorShape.mask)
-}
-inline void CursorShape::set_mask(const void* value, size_t size) {
-  
-  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CursorShape.mask)
-}
-inline ::std::string* CursorShape::mutable_mask() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.CursorShape.mask)
-  return mask_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* CursorShape::release_mask() {
-  // @@protoc_insertion_point(field_release:aspia.proto.CursorShape.mask)
-  
-  return mask_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void CursorShape::set_allocated_mask(::std::string* mask) {
-  if (mask != NULL) {
-    
-  } else {
-    
-  }
-  mask_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mask);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CursorShape.mask)
+  cache_index_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.cache_index)
 }
 
 inline const CursorShape* CursorShape::internal_default_instance() {
   return &CursorShape_default_instance_.get();
-}
-// -------------------------------------------------------------------
-
-// CursorShapeControl
-
-// optional bool enable = 1;
-inline void CursorShapeControl::clear_enable() {
-  enable_ = false;
-}
-inline bool CursorShapeControl::enable() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CursorShapeControl.enable)
-  return enable_;
-}
-inline void CursorShapeControl::set_enable(bool value) {
-  
-  enable_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CursorShapeControl.enable)
-}
-
-inline const CursorShapeControl* CursorShapeControl::internal_default_instance() {
-  return &CursorShapeControl_default_instance_.get();
 }
 // -------------------------------------------------------------------
 
@@ -1945,46 +1774,7 @@ inline void Control::set_allocated_video(::aspia::proto::VideoControl* video) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.Control.video)
 }
 
-// optional .aspia.proto.CursorShapeControl cursor_shape = 2;
-inline bool Control::has_cursor_shape() const {
-  return this != internal_default_instance() && cursor_shape_ != NULL;
-}
-inline void Control::clear_cursor_shape() {
-  if (GetArenaNoVirtual() == NULL && cursor_shape_ != NULL) delete cursor_shape_;
-  cursor_shape_ = NULL;
-}
-inline const ::aspia::proto::CursorShapeControl& Control::cursor_shape() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Control.cursor_shape)
-  return cursor_shape_ != NULL ? *cursor_shape_
-                         : *::aspia::proto::CursorShapeControl::internal_default_instance();
-}
-inline ::aspia::proto::CursorShapeControl* Control::mutable_cursor_shape() {
-  
-  if (cursor_shape_ == NULL) {
-    cursor_shape_ = new ::aspia::proto::CursorShapeControl;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Control.cursor_shape)
-  return cursor_shape_;
-}
-inline ::aspia::proto::CursorShapeControl* Control::release_cursor_shape() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Control.cursor_shape)
-  
-  ::aspia::proto::CursorShapeControl* temp = cursor_shape_;
-  cursor_shape_ = NULL;
-  return temp;
-}
-inline void Control::set_allocated_cursor_shape(::aspia::proto::CursorShapeControl* cursor_shape) {
-  delete cursor_shape_;
-  cursor_shape_ = cursor_shape;
-  if (cursor_shape) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Control.cursor_shape)
-}
-
-// optional .aspia.proto.ClipboardControl clipboard = 3;
+// optional .aspia.proto.ClipboardControl clipboard = 2;
 inline bool Control::has_clipboard() const {
   return this != internal_default_instance() && clipboard_ != NULL;
 }
@@ -2023,7 +1813,7 @@ inline void Control::set_allocated_clipboard(::aspia::proto::ClipboardControl* c
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.Control.clipboard)
 }
 
-// optional .aspia.proto.PowerControl power = 4;
+// optional .aspia.proto.PowerControl power = 3;
 inline bool Control::has_power() const {
   return this != internal_default_instance() && power_ != NULL;
 }
@@ -2268,8 +2058,6 @@ inline const ClientToHost* ClientToHost::internal_default_instance() {
   return &ClientToHost_default_instance_.get();
 }
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

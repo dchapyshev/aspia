@@ -2046,6 +2046,7 @@ bool VideoControl_Flags_IsValid(int value) {
     case 0:
     case 1:
     case 2:
+    case 4:
       return true;
     default:
       return false;
@@ -2055,6 +2056,7 @@ bool VideoControl_Flags_IsValid(int value) {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const VideoControl_Flags VideoControl::DISABLE_VIDEO;
 const VideoControl_Flags VideoControl::ENABLE_VIDEO;
+const VideoControl_Flags VideoControl::ENABLE_CURSOR_SHAPE;
 const VideoControl_Flags VideoControl::DISABLE_DESKTOP_EFFECTS;
 const VideoControl_Flags VideoControl::Flags_MIN;
 const VideoControl_Flags VideoControl::Flags_MAX;

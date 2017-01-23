@@ -167,15 +167,13 @@ void Host::ProcessMessage(const proto::ClientToHost *message)
         {
             ReadVideoControl(control.video());
         }
-        else if (control.has_cursor_shape())
-        {
-            DLOG(ERROR) << "CursorShapeControl unimplemented yet";
-        }
-        else if (control.has_power())
+
+        if (control.has_power())
         {
             ReadPowerControl(control.power());
         }
-        else if (control.has_clipboard())
+
+        if (control.has_clipboard())
         {
             ReadClipboardControl(control.clipboard());
         }
@@ -229,7 +227,7 @@ void Host::Worker()
         DLOG(ERROR) << "An exception occurred: " << err.What();
     }
 
-    // Останавливаем и уничтожаем поток отправки изменений экрана.
+    // Останавливаем и уничтожаем потоки отправки изменений экрана и курсора.
     screen_sender_.reset();
 
     Stop();
@@ -347,7 +345,7 @@ void Host::ReadPowerControl(const proto::PowerControl &msg)
             break;
 
         default:
-            DLOG(ERROR) << "Unknown power control action requested: " << msg.action();
+            LOG(ERROR) << "Unknown power control action requested: " << msg.action();
             break;
     }
 }

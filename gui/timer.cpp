@@ -30,7 +30,7 @@ void Timer::Start(HWND window, UINT elapse)
 
         if (!SetTimer(window_, id_, elapse, nullptr))
         {
-            DLOG(ERROR) << "SetTimer() failed: " << GetLastError();
+            LOG(ERROR) << "SetTimer() failed: " << GetLastError();
         }
 
         active_ = true;
@@ -43,7 +43,7 @@ void Timer::Stop()
     {
         if (!KillTimer(window_, id_))
         {
-            DLOG(ERROR) << "KillTimer() failed: " << GetLastError();
+            LOG(ERROR) << "KillTimer() failed: " << GetLastError();
         }
 
         active_ = false;

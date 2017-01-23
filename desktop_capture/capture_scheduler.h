@@ -26,7 +26,7 @@ public:
     void BeginCapture();
 
 private:
-    int max_delay_;
+    const int max_delay_;
     DWORD begin_time_;
 
     DISALLOW_COPY_AND_ASSIGN(CaptureScheduler);

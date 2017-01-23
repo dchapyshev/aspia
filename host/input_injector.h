@@ -32,7 +32,7 @@ public:
 
 private:
     void SwitchToInputDesktop();
-    void HandleCAD();
+    void InjectCtrlAltDel();
     void DoBell();
 
 private:

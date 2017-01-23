@@ -95,15 +95,19 @@ void StatusDialog::OnClientEvent(Client::Event type)
 
         viewer_.reset(new ViewerWindow(this, client_.get(), &config_));
 
-        Client::OnVideoUpdateCallback on_update_callback =
+        Client::OnVideoUpdateCallback on_video_update_callback =
             std::bind(&ViewerWindow::OnVideoUpdate, viewer_.get(), std::placeholders::_1, std::placeholders::_2);
 
-        Client::OnVideoResizeCallback on_resize_callback =
+        Client::OnVideoResizeCallback on_video_resize_callback =
             std::bind(&ViewerWindow::OnVideoResize, viewer_.get(), std::placeholders::_1, std::placeholders::_2);
 
+        Client::OnCursorUpdateCallback on_cursor_update_callback =
+            std::bind(&ViewerWindow::OnCursorUpdate, viewer_.get(), std::placeholders::_1);
+
         client_->StartScreenUpdate(config_.screen_config(),
-                                   on_update_callback,
-                                   on_resize_callback);
+                                   on_video_update_callback,
+                                   on_video_resize_callback,
+                                   on_cursor_update_callback);
     }
 }
 
