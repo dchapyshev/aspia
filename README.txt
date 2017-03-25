@@ -14,7 +14,7 @@ Also uses:
    - gtest (Library from Google for unit testing)
 
 For building the project requires:
-   - Visual Studio 2015: http://visualstudio.com/
+   - Visual Studio 2017: http://visualstudio.com/
    - YASM compiller: http://yasm.tortall.net/Download.html (version for "general use")
 
 All dependencies are included in the project.
