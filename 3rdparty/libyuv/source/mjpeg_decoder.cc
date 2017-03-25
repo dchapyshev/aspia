@@ -431,7 +431,7 @@ void skip_input_data(j_decompress_ptr cinfo, long num_bytes) {  // NOLINT
 }
 
 void term_source(j_decompress_ptr cinfo) {
-  // Nothing to do.
+  (void)cinfo;  // Nothing to do.
 }
 
 #ifdef HAVE_SETJMP
@@ -455,8 +455,9 @@ void ErrorHandler(j_common_ptr cinfo) {
   longjmp(mgr->setjmp_buffer, 1);
 }
 
+// Suppress fprintf warnings.
 void OutputHandler(j_common_ptr cinfo) {
-  // Suppress fprintf warnings.
+  (void)cinfo;
 }
 
 #endif  // HAVE_SETJMP

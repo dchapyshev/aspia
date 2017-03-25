@@ -33,6 +33,7 @@ void ScaleRowDown2_C(const uint8* src_ptr,
                      uint8* dst,
                      int dst_width) {
   int x;
+  (void)src_stride;
   for (x = 0; x < dst_width - 1; x += 2) {
     dst[0] = src_ptr[1];
     dst[1] = src_ptr[3];
@@ -49,6 +50,7 @@ void ScaleRowDown2_16_C(const uint16* src_ptr,
                         uint16* dst,
                         int dst_width) {
   int x;
+  (void)src_stride;
   for (x = 0; x < dst_width - 1; x += 2) {
     dst[0] = src_ptr[1];
     dst[1] = src_ptr[3];
@@ -66,6 +68,7 @@ void ScaleRowDown2Linear_C(const uint8* src_ptr,
                            int dst_width) {
   const uint8* s = src_ptr;
   int x;
+  (void)src_stride;
   for (x = 0; x < dst_width - 1; x += 2) {
     dst[0] = (s[0] + s[1] + 1) >> 1;
     dst[1] = (s[2] + s[3] + 1) >> 1;
@@ -83,6 +86,7 @@ void ScaleRowDown2Linear_16_C(const uint16* src_ptr,
                               int dst_width) {
   const uint16* s = src_ptr;
   int x;
+  (void)src_stride;
   for (x = 0; x < dst_width - 1; x += 2) {
     dst[0] = (s[0] + s[1] + 1) >> 1;
     dst[1] = (s[2] + s[3] + 1) >> 1;
@@ -161,6 +165,7 @@ void ScaleRowDown4_C(const uint8* src_ptr,
                      uint8* dst,
                      int dst_width) {
   int x;
+  (void)src_stride;
   for (x = 0; x < dst_width - 1; x += 2) {
     dst[0] = src_ptr[2];
     dst[1] = src_ptr[6];
@@ -177,6 +182,7 @@ void ScaleRowDown4_16_C(const uint16* src_ptr,
                         uint16* dst,
                         int dst_width) {
   int x;
+  (void)src_stride;
   for (x = 0; x < dst_width - 1; x += 2) {
     dst[0] = src_ptr[2];
     dst[1] = src_ptr[6];
@@ -269,6 +275,7 @@ void ScaleRowDown34_C(const uint8* src_ptr,
                       uint8* dst,
                       int dst_width) {
   int x;
+  (void)src_stride;
   assert((dst_width % 3 == 0) && (dst_width > 0));
   for (x = 0; x < dst_width; x += 3) {
     dst[0] = src_ptr[0];
@@ -284,6 +291,7 @@ void ScaleRowDown34_16_C(const uint16* src_ptr,
                          uint16* dst,
                          int dst_width) {
   int x;
+  (void)src_stride;
   assert((dst_width % 3 == 0) && (dst_width > 0));
   for (x = 0; x < dst_width; x += 3) {
     dst[0] = src_ptr[0];
@@ -436,6 +444,8 @@ void ScaleColsUp2_C(uint8* dst_ptr,
                     int x,
                     int dx) {
   int j;
+  (void)x;
+  (void)dx;
   for (j = 0; j < dst_width - 1; j += 2) {
     dst_ptr[1] = dst_ptr[0] = src_ptr[0];
     src_ptr += 1;
@@ -452,6 +462,8 @@ void ScaleColsUp2_16_C(uint16* dst_ptr,
                        int x,
                        int dx) {
   int j;
+  (void)x;
+  (void)dx;
   for (j = 0; j < dst_width - 1; j += 2) {
     dst_ptr[1] = dst_ptr[0] = src_ptr[0];
     src_ptr += 1;
@@ -593,6 +605,7 @@ void ScaleRowDown38_C(const uint8* src_ptr,
                       uint8* dst,
                       int dst_width) {
   int x;
+  (void)src_stride;
   assert(dst_width % 3 == 0);
   for (x = 0; x < dst_width; x += 3) {
     dst[0] = src_ptr[0];
@@ -608,6 +621,7 @@ void ScaleRowDown38_16_C(const uint16* src_ptr,
                          uint16* dst,
                          int dst_width) {
   int x;
+  (void)src_stride;
   assert(dst_width % 3 == 0);
   for (x = 0; x < dst_width; x += 3) {
     dst[0] = src_ptr[0];
@@ -764,8 +778,8 @@ void ScaleARGBRowDown2_C(const uint8* src_argb,
                          int dst_width) {
   const uint32* src = (const uint32*)(src_argb);
   uint32* dst = (uint32*)(dst_argb);
-
   int x;
+  (void)src_stride;
   for (x = 0; x < dst_width - 1; x += 2) {
     dst[0] = src[1];
     dst[1] = src[3];
@@ -782,6 +796,7 @@ void ScaleARGBRowDown2Linear_C(const uint8* src_argb,
                                uint8* dst_argb,
                                int dst_width) {
   int x;
+  (void)src_stride;
   for (x = 0; x < dst_width; ++x) {
     dst_argb[0] = (src_argb[0] + src_argb[4] + 1) >> 1;
     dst_argb[1] = (src_argb[1] + src_argb[5] + 1) >> 1;
@@ -822,7 +837,7 @@ void ScaleARGBRowDownEven_C(const uint8* src_argb,
                             int dst_width) {
   const uint32* src = (const uint32*)(src_argb);
   uint32* dst = (uint32*)(dst_argb);
-
+  (void)src_stride;
   int x;
   for (x = 0; x < dst_width - 1; x += 2) {
     dst[0] = src[0];
@@ -910,6 +925,8 @@ void ScaleARGBColsUp2_C(uint8* dst_argb,
   const uint32* src = (const uint32*)(src_argb);
   uint32* dst = (uint32*)(dst_argb);
   int j;
+  (void)x;
+  (void)dx;
   for (j = 0; j < dst_width - 1; j += 2) {
     dst[1] = dst[0] = src[0];
     src += 1;
@@ -1053,6 +1070,14 @@ void ScalePlaneVertical(int src_height,
     InterpolateRow = InterpolateRow_Any_DSPR2;
     if (IS_ALIGNED(dst_width_bytes, 4)) {
       InterpolateRow = InterpolateRow_DSPR2;
+    }
+  }
+#endif
+#if defined(HAS_INTERPOLATEROW_MSA)
+  if (TestCpuFlag(kCpuHasMSA)) {
+    InterpolateRow = InterpolateRow_Any_MSA;
+    if (IS_ALIGNED(dst_width_bytes, 32)) {
+      InterpolateRow = InterpolateRow_MSA;
     }
   }
 #endif

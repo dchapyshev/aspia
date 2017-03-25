@@ -10,8 +10,8 @@
 
 #include "libyuv/rotate.h"
 
-#include "libyuv/cpu_id.h"
 #include "libyuv/convert.h"
+#include "libyuv/cpu_id.h"
 #include "libyuv/planar_functions.h"
 #include "libyuv/row.h"
 

@@ -2032,7 +2032,7 @@ __declspec(naked) void RGBAToUVRow_SSSE3(const uint8* src_argb0,
     __asm vpsraw     ymm2, ymm2, 6                                             \
     __asm vpackuswb  ymm0, ymm0, ymm0 /* B */                        \
     __asm vpackuswb  ymm1, ymm1, ymm1 /* G */                        \
-    __asm vpackuswb  ymm2, ymm2, ymm2 /* R */            \
+    __asm vpackuswb  ymm2, ymm2, ymm2 /* R */                  \
   }
 
 // Store 16 ARGB values.
@@ -6070,11 +6070,12 @@ __declspec(naked) void HalfFloatRow_SSE2(const uint16* src,
     mulss      xmm4, kExpBias
     pshufd     xmm4, xmm4, 0
     pxor       xmm5, xmm5
+    sub        edx, eax
 
     // 8 pixel loop.
  convertloop:
     movdqu      xmm2, xmmword ptr [eax]  // 8 shorts
-    lea         eax, [eax + 16]
+    add         eax, 16
     movdqa      xmm3, xmm2
     punpcklwd   xmm2, xmm5
     cvtdq2ps    xmm2, xmm2  // convert 8 ints to floats
@@ -6085,8 +6086,7 @@ __declspec(naked) void HalfFloatRow_SSE2(const uint16* src,
     psrld       xmm2, 13
     psrld       xmm3, 13
     packssdw    xmm2, xmm3
-    movdqu      [edx], xmm2
-    lea         edx, [edx + 16]
+    movdqu      [eax + edx - 16], xmm2
     sub         ecx, 8
     jg          convertloop
     ret
@@ -6108,11 +6108,12 @@ __declspec(naked) void HalfFloatRow_AVX2(const uint16* src,
     vmulss     xmm4, xmm4, kExpBias
     vbroadcastss ymm4, xmm4
     vpxor      ymm5, ymm5, ymm5
+    sub        edx, eax
 
     // 16 pixel loop.
  convertloop:
     vmovdqu     ymm2, [eax]  // 16 shorts
-    lea         eax, [eax + 32]
+    add         eax, 32
     vpunpckhwd  ymm3, ymm2, ymm5  // convert 16 shorts to 16 ints
     vpunpcklwd  ymm2, ymm2, ymm5
     vcvtdq2ps   ymm3, ymm3  // convert 16 ints to floats
@@ -6122,8 +6123,7 @@ __declspec(naked) void HalfFloatRow_AVX2(const uint16* src,
     vpsrld      ymm3, ymm3, 13  // float convert to 8 half floats truncate
     vpsrld      ymm2, ymm2, 13
     vpackssdw   ymm2, ymm2, ymm3
-    vmovdqu     [edx], ymm2
-    lea         edx, [edx + 32]
+    vmovdqu     [eax + edx - 32], ymm2
     sub         ecx, 16
     jg          convertloop
     vzeroupper
@@ -6142,21 +6142,21 @@ __declspec(naked) void HalfFloatRow_F16C(const uint16* src,
     mov        edx, [esp + 8] /* dst */
     vbroadcastss ymm4, [esp + 12] /* scale */
     mov        ecx, [esp + 16] /* width */
+    sub        edx, eax
 
     // 16 pixel loop.
  convertloop:
     vpmovzxwd   ymm2, xmmword ptr [eax]  // 8 shorts -> 8 ints
     vpmovzxwd   ymm3, xmmword ptr [eax + 16]  // 8 more shorts
-    lea         eax, [eax + 32]
+    add         eax, 32
     vcvtdq2ps   ymm2, ymm2  // convert 8 ints to floats
     vcvtdq2ps   ymm3, ymm3
     vmulps      ymm2, ymm2, ymm4  // scale to normalized range 0 to 1
     vmulps      ymm3, ymm3, ymm4
     vcvtps2ph   xmm2, ymm2, 3  // float convert to 8 half floats truncate
     vcvtps2ph   xmm3, ymm3, 3
-    vmovdqu     [edx], xmm2
-    vmovdqu     [edx + 16], xmm3
-    lea         edx, [edx + 32]
+    vmovdqu     [eax + edx + 32], xmm2
+    vmovdqu     [eax + edx + 32 + 16], xmm3
     sub         ecx, 16
     jg          convertloop
     vzeroupper

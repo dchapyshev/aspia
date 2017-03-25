@@ -17,7 +17,7 @@ extern "C" {
 #endif
 
 // This module is for GCC MIPS DSPR2
-#if !defined(LIBYUV_DISABLE_MIPS) && defined(__mips_dsp) && \
+#if !defined(LIBYUV_DISABLE_DSPR2) && defined(__mips_dsp) && \
     (__mips_dsp_rev >= 2) && (_MIPS_SIM == _MIPS_SIM_ABI32)
 
 void ScaleRowDown2_DSPR2(const uint8* src_ptr,

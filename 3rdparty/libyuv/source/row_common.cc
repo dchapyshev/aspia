@@ -312,6 +312,7 @@ static __inline int RGBToV(uint8 r, uint8 g, uint8 b) {
   return (112 * r - 94 * g - 18 * b + 0x8080) >> 8;
 }
 
+// ARGBToY_C and ARGBToUV_C
 #define MAKEROWY(NAME, R, G, B, BPP)                                     \
   void NAME##ToYRow_C(const uint8* src_argb0, uint8* dst_y, int width) { \
     int x;                                                               \
@@ -397,6 +398,7 @@ static __inline int RGBToVJ(uint8 r, uint8 g, uint8 b) {
 
 #define AVGB(a, b) (((a) + (b) + 1) >> 1)
 
+// ARGBToYJ_C and ARGBToUVJ_C
 #define MAKEROWYJ(NAME, R, G, B, BPP)                                     \
   void NAME##ToYJRow_C(const uint8* src_argb0, uint8* dst_y, int width) { \
     int x;                                                                \

@@ -96,6 +96,7 @@ void ScaleRowDown2_SSSE3(const uint8* src_ptr,
                          ptrdiff_t src_stride,
                          uint8* dst_ptr,
                          int dst_width) {
+  (void)src_stride;
   asm volatile (
     LABELALIGN
   "1:                                          \n"
@@ -120,6 +121,7 @@ void ScaleRowDown2Linear_SSSE3(const uint8* src_ptr,
                                ptrdiff_t src_stride,
                                uint8* dst_ptr,
                                int dst_width) {
+  (void)src_stride;
   asm volatile (
     "pcmpeqb    %%xmm4,%%xmm4                  \n"
     "psrlw      $0xf,%%xmm4                    \n"
@@ -193,6 +195,7 @@ void ScaleRowDown2_AVX2(const uint8* src_ptr,
                         ptrdiff_t src_stride,
                         uint8* dst_ptr,
                         int dst_width) {
+  (void)src_stride;
   asm volatile (
     LABELALIGN
   "1:                                          \n"
@@ -219,6 +222,7 @@ void ScaleRowDown2Linear_AVX2(const uint8* src_ptr,
                               ptrdiff_t src_stride,
                               uint8* dst_ptr,
                               int dst_width) {
+  (void)src_stride;
   asm volatile (
     "vpcmpeqb   %%ymm4,%%ymm4,%%ymm4           \n"
     "vpsrlw     $0xf,%%ymm4,%%ymm4             \n"
@@ -296,6 +300,7 @@ void ScaleRowDown4_SSSE3(const uint8* src_ptr,
                          ptrdiff_t src_stride,
                          uint8* dst_ptr,
                          int dst_width) {
+  (void)src_stride;
   asm volatile (
     "pcmpeqb   %%xmm5,%%xmm5                   \n"
     "psrld     $0x18,%%xmm5                    \n"
@@ -383,6 +388,7 @@ void ScaleRowDown4_AVX2(const uint8* src_ptr,
                         ptrdiff_t src_stride,
                         uint8* dst_ptr,
                         int dst_width) {
+  (void)src_stride;
   asm volatile (
     "vpcmpeqb   %%ymm5,%%ymm5,%%ymm5           \n"
     "vpsrld     $0x18,%%ymm5,%%ymm5            \n"
@@ -472,6 +478,7 @@ void ScaleRowDown34_SSSE3(const uint8* src_ptr,
                           ptrdiff_t src_stride,
                           uint8* dst_ptr,
                           int dst_width) {
+  (void)src_stride;
   asm volatile(
       "movdqa    %0,%%xmm3                       \n"
       "movdqa    %1,%%xmm4                       \n"
@@ -645,6 +652,7 @@ void ScaleRowDown38_SSSE3(const uint8* src_ptr,
                           ptrdiff_t src_stride,
                           uint8* dst_ptr,
                           int dst_width) {
+  (void)src_stride;
   asm volatile (
     "movdqa    %3,%%xmm4                       \n"
     "movdqa    %4,%%xmm5                       \n"
@@ -952,6 +960,8 @@ void ScaleColsUp2_SSE2(uint8* dst_ptr,
                        int dst_width,
                        int x,
                        int dx) {
+  (void)x;
+  (void)dx;
   asm volatile (
     LABELALIGN
   "1:                                          \n"
@@ -977,6 +987,7 @@ void ScaleARGBRowDown2_SSE2(const uint8* src_argb,
                             ptrdiff_t src_stride,
                             uint8* dst_argb,
                             int dst_width) {
+  (void)src_stride;
   asm volatile (
     LABELALIGN
   "1:                                          \n"
@@ -999,6 +1010,7 @@ void ScaleARGBRowDown2Linear_SSE2(const uint8* src_argb,
                                   ptrdiff_t src_stride,
                                   uint8* dst_argb,
                                   int dst_width) {
+  (void)src_stride;
   asm volatile (
     LABELALIGN
   "1:                                          \n"
@@ -1060,6 +1072,7 @@ void ScaleARGBRowDownEven_SSE2(const uint8* src_argb,
                                int dst_width) {
   intptr_t src_stepx_x4 = (intptr_t)(src_stepx);
   intptr_t src_stepx_x12;
+  (void)src_stride;
   asm volatile (
     "lea       " MEMLEA3(0x00,1,4) ",%1        \n"
     "lea       " MEMLEA4(0x00,1,1,2) ",%4      \n"
@@ -1212,6 +1225,8 @@ void ScaleARGBColsUp2_SSE2(uint8* dst_argb,
                            int dst_width,
                            int x,
                            int dx) {
+  (void)x;
+  (void)dx;
   asm volatile (
     LABELALIGN
   "1:                                          \n"

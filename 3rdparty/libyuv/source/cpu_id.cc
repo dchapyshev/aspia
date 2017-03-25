@@ -95,6 +95,8 @@ void CpuId(uint32 info_eax, uint32 info_ecx, uint32* cpu_info) {
 #else  // (defined(_M_IX86) || defined(_M_X64) ...
 LIBYUV_API
 void CpuId(uint32 eax, uint32 ecx, uint32* cpu_info) {
+  (void)eax;
+  (void)ecx;
   cpu_info[0] = cpu_info[1] = cpu_info[2] = cpu_info[3] = 0;
 }
 #endif
@@ -172,9 +174,7 @@ LIBYUV_API SAFEBUFFERS int MipsCpuCaps(const char* cpuinfo_name,
     if (strcmp(ase, " msa") == 0) {
       return kCpuHasMSA;
     }
-    if (strcmp(ase, " dspr2") == 0) {
-      return kCpuHasDSPR2;
-    }
+    return kCpuHasDSPR2;
   }
   while (fgets(cpuinfo_line, sizeof(cpuinfo_line) - 1, f)) {
     if (memcmp(cpuinfo_line, "ASEs implemented", 16) == 0) {
@@ -184,9 +184,7 @@ LIBYUV_API SAFEBUFFERS int MipsCpuCaps(const char* cpuinfo_name,
         if (strcmp(ase, " msa") == 0) {
           return kCpuHasMSA;
         }
-        if (strcmp(ase, " dspr2") == 0) {
-          return kCpuHasDSPR2;
-        }
+        return kCpuHasDSPR2;
       }
     }
   }

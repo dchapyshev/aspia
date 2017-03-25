@@ -50,8 +50,8 @@ int ConvertToARGB(const uint8* sample,
   int r = 0;
 
   // One pass rotation is available for some formats. For the rest, convert
-  // to I420 (with optional vertical flipping) into a temporary I420 buffer,
-  // and then rotate the I420 to the final destination buffer.
+  // to ARGB (with optional vertical flipping) into a temporary ARGB buffer,
+  // and then rotate the ARGB to the final destination buffer.
   // For in-place conversion, if destination crop_argb is same as source sample,
   // also enable temporary buffer.
   LIBYUV_BOOL need_buf =
@@ -102,9 +102,11 @@ int ConvertToARGB(const uint8* sample,
                     inv_crop_height);
       break;
     case FOURCC_ARGB:
-      src = sample + (src_width * crop_y + crop_x) * 4;
-      r = ARGBToARGB(src, src_width * 4, crop_argb, argb_stride, crop_width,
-                     inv_crop_height);
+      if (!need_buf && !rotation) {
+        src = sample + (src_width * crop_y + crop_x) * 4;
+        r = ARGBToARGB(src, src_width * 4, crop_argb, argb_stride, crop_width,
+                       inv_crop_height);
+      }
       break;
     case FOURCC_BGRA:
       src = sample + (src_width * crop_y + crop_x) * 4;
@@ -253,6 +255,10 @@ int ConvertToARGB(const uint8* sample,
                      crop_width, abs_crop_height, rotation);
     }
     free(rotate_buffer);
+  } else if (rotation) {
+    src = sample + (src_width * crop_y + crop_x) * 4;
+    r = ARGBRotate(src, src_width * 4, crop_argb, argb_stride, crop_width,
+                   inv_crop_height, rotation);
   }
 
   return r;

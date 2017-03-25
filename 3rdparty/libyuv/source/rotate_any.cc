@@ -41,6 +41,9 @@ TANY(TransposeWx8_Fast_Any_SSSE3, TransposeWx8_Fast_SSSE3, 15)
 #ifdef HAS_TRANSPOSEWX8_DSPR2
 TANY(TransposeWx8_Any_DSPR2, TransposeWx8_DSPR2, 7)
 #endif
+#ifdef HAS_TRANSPOSEWX16_MSA
+TANY(TransposeWx16_Any_MSA, TransposeWx16_MSA, 15)
+#endif
 #undef TANY
 
 #define TUVANY(NAMEANY, TPOS_SIMD, MASK)                                       \
@@ -63,6 +66,9 @@ TUVANY(TransposeUVWx8_Any_SSE2, TransposeUVWx8_SSE2, 7)
 #endif
 #ifdef HAS_TRANSPOSEUVWX8_DSPR2
 TUVANY(TransposeUVWx8_Any_DSPR2, TransposeUVWx8_DSPR2, 7)
+#endif
+#ifdef HAS_TRANSPOSEUVWX16_MSA
+TUVANY(TransposeUVWx16_Any_MSA, TransposeUVWx16_MSA, 7)
 #endif
 #undef TUVANY
 
