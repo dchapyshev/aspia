@@ -1,9 +1,9 @@
-//
-// PROJECT:         Aspia Remote Desktop
-// FILE:            crypto/sha512.h
-// LICENSE:         See top-level directory
-// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
-//
+/*
+* PROJECT:         Aspia Remote Desktop
+* FILE:            crypto/sha512.h
+* LICENSE:         See top-level directory
+* PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+*/
 
 #ifndef _ASPIA_CRYPTO__SHA512_H
 #define _ASPIA_CRYPTO__SHA512_H
@@ -20,28 +20,15 @@ namespace aspia {
 class SHA512
 {
 public:
-    SHA512();
+    SHA512(const std::string &data, uint32_t iter);
     ~SHA512();
 
-    void Update(const uint8_t *buffer, size_t size);
-    void Update(const std::string &buffer);
+    const std::string& Hash() const;
 
-    typedef struct
-    {
-        uint8_t data[64];
-        uint32_t size;
-    } Hash;
-
-    void Final(Hash *hash);
+    operator const std::string&() const;
 
 private:
-    void Transform(const uint8_t *buffer);
-
-private:
-    uint64_t length_;
-    uint64_t state_[8];
-    size_t curlen_;
-    uint8_t buf_[128];
+    std::string data_;
 
     DISALLOW_COPY_AND_ASSIGN(SHA512);
 };

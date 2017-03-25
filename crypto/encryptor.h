@@ -17,14 +17,13 @@ class Encryptor
 {
 public:
     Encryptor() {}
-    virtual ~Encryptor() {}
+    virtual ~Encryptor() = default;
 
+    virtual bool Init() = 0;
     virtual uint32_t GetSessionKeySize() = 0;
-    virtual void GetSessionKey(uint8_t *key, uint32_t len) = 0;
-    virtual void SetPublicKey(const uint8_t *key, uint32_t len) = 0;
-
-    virtual void Encrypt(const uint8_t *in, uint32_t in_len,
-                         uint8_t **out, uint32_t *out_len) = 0;
+    virtual bool GetSessionKey(uint8_t* key, uint32_t len) = 0;
+    virtual bool SetPublicKey(const uint8_t* key, uint32_t len) = 0;
+    virtual const uint8_t* Encrypt(const uint8_t* in, uint32_t in_len, uint32_t* out_len) = 0;
 };
 
 } // namespace aspia

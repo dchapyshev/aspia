@@ -17,14 +17,13 @@ class Decryptor
 {
 public:
     Decryptor() {}
-    virtual ~Decryptor() {}
+    virtual ~Decryptor() = default;
 
+    virtual bool Init() = 0;
     virtual uint32_t GetPublicKeySize() = 0;
-    virtual void GetPublicKey(uint8_t *key, uint32_t len) = 0;
-    virtual void SetSessionKey(const uint8_t *key, uint32_t len) = 0;
-
-    virtual void Decrypt(const uint8_t *in, uint32_t in_len,
-                         uint8_t **out, uint32_t *out_len) = 0;
+    virtual bool GetPublicKey(uint8_t* key, uint32_t len) = 0;
+    virtual bool SetSessionKey(const uint8_t* key, uint32_t len) = 0;
+    virtual const uint8_t* Decrypt(const uint8_t* in, uint32_t in_len, uint32_t* out_len) = 0;
 };
 
 } // namespace aspia
