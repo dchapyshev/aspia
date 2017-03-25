@@ -1,5 +1,5 @@
 /* zutil.c -- target dependent utility functions for the compression library
- * Copyright (C) 1995-2005, 2010, 2011, 2012 Jean-loup Gailly.
+ * Copyright (C) 1995-2017 Jean-loup Gailly
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -11,19 +11,20 @@
 #endif
 
 const char * const z_errmsg[10] = {
-"need dictionary",     /* Z_NEED_DICT       2  */
-"stream end",          /* Z_STREAM_END      1  */
-"",                    /* Z_OK              0  */
-"file error",          /* Z_ERRNO         (-1) */
-"stream error",        /* Z_STREAM_ERROR  (-2) */
-"data error",          /* Z_DATA_ERROR    (-3) */
-"insufficient memory", /* Z_MEM_ERROR     (-4) */
-"buffer error",        /* Z_BUF_ERROR     (-5) */
-"incompatible version",/* Z_VERSION_ERROR (-6) */
-""};
+    (const char *)"need dictionary",     /* Z_NEED_DICT       2  */
+    (const char *)"stream end",          /* Z_STREAM_END      1  */
+    (const char *)"",                    /* Z_OK              0  */
+    (const char *)"file error",          /* Z_ERRNO         (-1) */
+    (const char *)"stream error",        /* Z_STREAM_ERROR  (-2) */
+    (const char *)"data error",          /* Z_DATA_ERROR    (-3) */
+    (const char *)"insufficient memory", /* Z_MEM_ERROR     (-4) */
+    (const char *)"buffer error",        /* Z_BUF_ERROR     (-5) */
+    (const char *)"incompatible version",/* Z_VERSION_ERROR (-6) */
+    (const char *)""
+};
 
 const char zlibng_string[] =
-   " zlib-ng 1.9.9 forked from zlib 1.2.8 ";
+   " zlib-ng 1.9.9 forked from zlib 1.2.11 ";
 
 const char * ZEXPORT zlibVersion(void)
 {
@@ -59,7 +60,7 @@ unsigned long ZEXPORT zlibCompileFlags(void)
     case 8:     flags += 2 << 6;        break;
     default:    flags += 3 << 6;
     }
-#ifdef DEBUG
+#ifdef ZLIB_DEBUG
     flags += 1 << 8;
 #endif
 #ifdef ZLIB_WINAPI
@@ -83,7 +84,7 @@ unsigned long ZEXPORT zlibCompileFlags(void)
     return flags;
 }
 
-#ifdef DEBUG
+#ifdef ZLIB_DEBUG
 
 #  ifndef verbose
 #    define verbose 0

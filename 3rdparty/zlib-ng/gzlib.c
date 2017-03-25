@@ -1,5 +1,5 @@
 /* gzlib.c -- zlib functions common to reading and writing gzip files
- * Copyright (C) 2004, 2010, 2011, 2012, 2013 Mark Adler
+ * Copyright (C) 2004-2017 Mark Adler
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -16,11 +16,11 @@
 #endif
 
 /* Local functions */
-local void gz_reset(gz_statep);
-local gzFile gz_open(const void *, int, const char *);
+static void gz_reset(gz_state *);
+static gzFile gz_open(const void *, int, const char *);
 
 /* Reset gzip file state */
-local void gz_reset(gz_statep state) {
+static void gz_reset(gz_state *state) {
     state->x.have = 0;              /* no output data available */
     if (state->mode == GZ_READ) {   /* for reading ... */
         state->eof = 0;             /* not at end of file */
@@ -34,8 +34,8 @@ local void gz_reset(gz_statep state) {
 }
 
 /* Open a gzip file either by name or file descriptor. */
-local gzFile gz_open(const void *path, int fd, const char *mode) {
-    gz_statep state;
+static gzFile gz_open(const void *path, int fd, const char *mode) {
+    gz_state *state;
     size_t len;
     int oflag;
 #ifdef O_CLOEXEC
@@ -50,7 +50,7 @@ local gzFile gz_open(const void *path, int fd, const char *mode) {
         return NULL;
 
     /* allocate gzFile structure to return */
-    state = (gz_statep)malloc(sizeof(gz_state));
+    state = (gz_state *)malloc(sizeof(gz_state));
     if (state == NULL)
         return NULL;
     state->size = 0;            /* no buffers allocated yet */
@@ -153,7 +153,7 @@ local gzFile gz_open(const void *path, int fd, const char *mode) {
         }
     else
 #endif
-        snprintf(state->path, len + 1, "%s", (const char *)path);
+        (void)snprintf(state->path, len + 1, "%s", (const char *)path);
 
     /* compute the flags for open() */
     oflag =
@@ -224,7 +224,7 @@ gzFile ZEXPORT gzdopen(int fd, const char *mode) {
 
     if (fd == -1 || (path = (char *)malloc(7 + 3 * sizeof(int))) == NULL)
         return NULL;
-    snprintf(path, 7 + 3 * sizeof(int), "<fd:%d>", fd); /* for debugging */
+    (void)snprintf(path, 7 + 3 * sizeof(int), "<fd:%d>", fd); /* for debugging */
     gz = gz_open(path, fd, mode);
     free(path);
     return gz;
@@ -239,12 +239,12 @@ gzFile ZEXPORT gzopen_w(const wchar_t *path, const char *mode) {
 
 /* -- see zlib.h -- */
 int ZEXPORT gzbuffer(gzFile file, unsigned size) {
-    gz_statep state;
+    gz_state *state;
 
     /* get internal structure and check integrity */
     if (file == NULL)
         return -1;
-    state = (gz_statep)file;
+    state = (gz_state *)file;
     if (state->mode != GZ_READ && state->mode != GZ_WRITE)
         return -1;
 
@@ -263,12 +263,12 @@ int ZEXPORT gzbuffer(gzFile file, unsigned size) {
 
 /* -- see zlib.h -- */
 int ZEXPORT gzrewind(gzFile file) {
-    gz_statep state;
+    gz_state *state;
 
     /* get internal structure */
     if (file == NULL)
         return -1;
-    state = (gz_statep)file;
+    state = (gz_state *)file;
 
     /* check that we're reading and that there's no error */
     if (state->mode != GZ_READ || (state->err != Z_OK && state->err != Z_BUF_ERROR))
@@ -285,12 +285,12 @@ int ZEXPORT gzrewind(gzFile file) {
 z_off64_t ZEXPORT gzseek64(gzFile file, z_off64_t offset, int whence) {
     unsigned n;
     z_off64_t ret;
-    gz_statep state;
+    gz_state *state;
 
     /* get internal structure and check integrity */
     if (file == NULL)
         return -1;
-    state = (gz_statep)file;
+    state = (gz_state *)file;
     if (state->mode != GZ_READ && state->mode != GZ_WRITE)
         return -1;
 
@@ -362,12 +362,12 @@ z_off_t ZEXPORT gzseek(gzFile file, z_off_t offset, int whence) {
 
 /* -- see zlib.h -- */
 z_off64_t ZEXPORT gztell64(gzFile file) {
-    gz_statep state;
+    gz_state *state;
 
     /* get internal structure and check integrity */
     if (file == NULL)
         return -1;
-    state = (gz_statep)file;
+    state = (gz_state *)file;
     if (state->mode != GZ_READ && state->mode != GZ_WRITE)
         return -1;
 
@@ -386,12 +386,12 @@ z_off_t ZEXPORT gztell(gzFile file) {
 /* -- see zlib.h -- */
 z_off64_t ZEXPORT gzoffset64(gzFile file) {
     z_off64_t offset;
-    gz_statep state;
+    gz_state *state;
 
     /* get internal structure and check integrity */
     if (file == NULL)
         return -1;
-    state = (gz_statep)file;
+    state = (gz_state *)file;
     if (state->mode != GZ_READ && state->mode != GZ_WRITE)
         return -1;
 
@@ -414,12 +414,12 @@ z_off_t ZEXPORT gzoffset(gzFile file) {
 
 /* -- see zlib.h -- */
 int ZEXPORT gzeof(gzFile file) {
-    gz_statep state;
+    gz_state *state;
 
     /* get internal structure and check integrity */
     if (file == NULL)
         return 0;
-    state = (gz_statep)file;
+    state = (gz_state *)file;
     if (state->mode != GZ_READ && state->mode != GZ_WRITE)
         return 0;
 
@@ -429,12 +429,12 @@ int ZEXPORT gzeof(gzFile file) {
 
 /* -- see zlib.h -- */
 const char * ZEXPORT gzerror(gzFile file, int *errnum) {
-    gz_statep state;
+    gz_state *state;
 
     /* get internal structure and check integrity */
     if (file == NULL)
         return NULL;
-    state = (gz_statep)file;
+    state = (gz_state *)file;
     if (state->mode != GZ_READ && state->mode != GZ_WRITE)
         return NULL;
 
@@ -446,12 +446,12 @@ const char * ZEXPORT gzerror(gzFile file, int *errnum) {
 
 /* -- see zlib.h -- */
 void ZEXPORT gzclearerr(gzFile file) {
-    gz_statep state;
+    gz_state *state;
 
     /* get internal structure and check integrity */
     if (file == NULL)
         return;
-    state = (gz_statep)file;
+    state = (gz_state *)file;
     if (state->mode != GZ_READ && state->mode != GZ_WRITE)
         return;
 
@@ -469,7 +469,7 @@ void ZEXPORT gzclearerr(gzFile file) {
    memory).  Simply save the error message as a static string.  If there is an
    allocation failure constructing the error message, then convert the error to
    out of memory. */
-void ZLIB_INTERNAL gz_error(gz_statep state, int err, const char *msg) {
+void ZLIB_INTERNAL gz_error(gz_state *state, int err, const char *msg) {
     /* free previously allocated message and clear */
     if (state->msg != NULL) {
         if (state->err != Z_MEM_ERROR)
@@ -495,8 +495,7 @@ void ZLIB_INTERNAL gz_error(gz_statep state, int err, const char *msg) {
         state->err = Z_MEM_ERROR;
         return;
     }
-    snprintf(state->msg, strlen(state->path) + strlen(msg) + 3, "%s%s%s", state->path, ": ", msg);
-    return;
+    (void)snprintf(state->msg, strlen(state->path) + strlen(msg) + 3, "%s%s%s", state->path, ": ", msg);
 }
 
 #ifndef INT_MAX

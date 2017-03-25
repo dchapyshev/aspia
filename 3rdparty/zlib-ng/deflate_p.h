@@ -15,7 +15,7 @@
 
 /* Forward declare common non-inlined functions declared in deflate.c */
 
-#ifdef DEBUG
+#ifdef ZLIB_DEBUG
 void check_match(deflate_state *s, IPos start, IPos match, int length);
 #else
 #define check_match(s, start, match, length)
@@ -33,12 +33,12 @@ void flush_pending(z_stream *strm);
  */
 
 #ifdef X86_SSE4_2_CRC_HASH
-extern Pos insert_string_sse(deflate_state *const s, const Pos str, uInt count);
+extern Pos insert_string_sse(deflate_state *const s, const Pos str, unsigned int count);
 #endif
 
-local inline Pos insert_string_c(deflate_state *const s, const Pos str, uInt count) {
+static inline Pos insert_string_c(deflate_state *const s, const Pos str, unsigned int count) {
     Pos ret = 0;
-    uInt idx;
+    unsigned int idx;
 
     for (idx = 0; idx < count; idx++) {
         UPDATE_HASH(s, s->ins_h, str+idx);
@@ -51,26 +51,13 @@ local inline Pos insert_string_c(deflate_state *const s, const Pos str, uInt cou
     return ret;
 }
 
-local inline Pos insert_string(deflate_state *const s, const Pos str) {
+static inline Pos insert_string(deflate_state *const s, const Pos str, unsigned int count) {
 #ifdef X86_SSE4_2_CRC_HASH
     if (x86_cpu_has_sse42)
-        return insert_string_sse(s, str, 1);
+        return insert_string_sse(s, str, count);
 #endif
-    return insert_string_c(s, str, 1);
+    return insert_string_c(s, str, count);
 }
-
-#ifndef NOT_TWEAK_COMPILER
-local inline void bulk_insert_str(deflate_state *const s, Pos startpos, uInt count) {
-# ifdef X86_SSE4_2_CRC_HASH
-    if (x86_cpu_has_sse42) {
-        insert_string_sse(s, startpos, count);
-    } else
-# endif
-    {
-        insert_string_c(s, startpos, count);
-    }
-}
-#endif /* NOT_TWEAK_COMPILER */
 
 /* ===========================================================================
  * Flush the current block, with given end-of-file flag.
@@ -79,8 +66,8 @@ local inline void bulk_insert_str(deflate_state *const s, Pos startpos, uInt cou
 #define FLUSH_BLOCK_ONLY(s, last) { \
     _tr_flush_block(s, (s->block_start >= 0L ? \
                    (char *)&s->window[(unsigned)s->block_start] : \
-                   (char *)Z_NULL), \
-                   (ulg)((long)s->strstart - s->block_start), \
+                   NULL), \
+                   (unsigned long)((long)s->strstart - s->block_start), \
                    (last)); \
     s->block_start = s->strstart; \
     flush_pending(s->strm); \
@@ -92,5 +79,11 @@ local inline void bulk_insert_str(deflate_state *const s, Pos startpos, uInt cou
     FLUSH_BLOCK_ONLY(s, last); \
     if (s->strm->avail_out == 0) return (last) ? finish_started : need_more; \
 }
+
+/* Maximum stored block length in deflate format (not including header). */
+#define MAX_STORED 65535
+
+/* Minimum of a and b. */
+#define MIN(a, b) ((a) > (b) ? (b) : (a))
 
 #endif

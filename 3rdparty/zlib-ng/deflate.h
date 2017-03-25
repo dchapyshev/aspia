@@ -1,7 +1,7 @@
 #ifndef DEFLATE_H_
 #define DEFLATE_H_
 /* deflate.h -- internal compression state
- * Copyright (C) 1995-2012 Jean-loup Gailly
+ * Copyright (C) 1995-2016 Jean-loup Gailly
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -57,13 +57,16 @@
 #define END_BLOCK 256
 /* end of block literal code */
 
-#define INIT_STATE    42
-#define EXTRA_STATE   69
-#define NAME_STATE    73
-#define COMMENT_STATE 91
-#define HCRC_STATE   103
-#define BUSY_STATE   113
-#define FINISH_STATE 666
+#define INIT_STATE    42    /* zlib header -> BUSY_STATE */
+#ifdef GZIP
+#  define GZIP_STATE  57    /* gzip header -> BUSY_STATE | EXTRA_STATE */
+#endif
+#define EXTRA_STATE   69    /* gzip extra block -> NAME_STATE */
+#define NAME_STATE    73    /* gzip file name -> COMMENT_STATE */
+#define COMMENT_STATE 91    /* gzip comment -> HCRC_STATE */
+#define HCRC_STATE   103    /* gzip header CRC -> BUSY_STATE */
+#define BUSY_STATE   113    /* deflate -> FINISH_STATE */
+#define FINISH_STATE 666    /* stream complete */
 /* Stream status */
 
 
@@ -87,8 +90,8 @@ typedef struct ct_data_s {
 typedef struct static_tree_desc_s  static_tree_desc;
 
 typedef struct tree_desc_s {
-    ct_data *dyn_tree;           /* the dynamic tree */
-    int     max_code;            /* largest code with non zero frequency */
+    ct_data                *dyn_tree;  /* the dynamic tree */
+    int                    max_code;   /* largest code with non zero frequency */
     const static_tree_desc *stat_desc; /* the corresponding static tree */
 } tree_desc;
 
@@ -105,10 +108,10 @@ typedef struct internal_state {
     unsigned char *pending_buf;      /* output still pending */
     unsigned long pending_buf_size;  /* size of pending_buf */
     unsigned char *pending_out;      /* next pending byte to output to the stream */
-    unsigned int  pending;           /* nb of bytes in the pending buffer */
+    uint32_t      pending;           /* nb of bytes in the pending buffer */
     int           wrap;              /* bit 0 true for zlib, bit 1 true for gzip */
     gz_headerp    gzhead;            /* gzip header information to write */
-    unsigned int  gzindex;           /* where in extra, name, or comment */
+    uint32_t      gzindex;           /* where in extra, name, or comment */
     unsigned char method;            /* can only be DEFLATED */
     int           last_flush;        /* value of flush param for previous deflate call */
 
@@ -150,7 +153,9 @@ typedef struct internal_state {
     unsigned int  hash_bits;         /* log2(hash_size) */
     unsigned int  hash_mask;         /* hash_size-1 */
 
+    #if !defined(__x86_64) && !defined(__i386_)
     unsigned int  hash_shift;
+    #endif
     /* Number of bits by which ins_h must be shifted at each input
      * step. It must be such that after MIN_MATCH steps, the oldest
      * byte no longer takes part in the hash key, that is:
@@ -258,7 +263,7 @@ typedef struct internal_state {
     unsigned int matches;         /* number of string matches in current block */
     unsigned int insert;          /* bytes at end of window left to insert */
 
-#ifdef DEBUG
+#ifdef ZLIB_DEBUG
     unsigned long compressed_len; /* total bit length of compressed file mod 2^32 */
     unsigned long bits_sent;      /* bit length of compressed data sent mod 2^32 */
 #endif
@@ -278,6 +283,12 @@ typedef struct internal_state {
      * longest match routines access bytes past the input.  This is then
      * updated to the new high water mark.
      */
+    int block_open;
+    /* Whether or not a block is currently open for the QUICK deflation scheme.
+     * This is set to 1 if there is an active block, or 0 if the block was just
+     * closed.
+     */
+
 } deflate_state;
 
 typedef enum {
@@ -290,13 +301,13 @@ typedef enum {
 /* Output a byte on the stream.
  * IN assertion: there is enough room in pending_buf.
  */
-#define put_byte(s, c) {s->pending_buf[s->pending++] = (c);}
+#define put_byte(s, c) {s->pending_buf[s->pending++] = (unsigned char)(c);}
 
 /* ===========================================================================
  * Output a short LSB first on the stream.
  * IN assertion: there is enough room in pendingBuf.
  */
-#if defined(__x86_64) || defined(__i386_)
+#ifdef UNALIGNED_OK
 /* Compared to the else-clause's implementation, there are few advantages:
  *  - s->pending is loaded only once (else-clause's implementation needs to
  *    load s->pending twice due to the alias between s->pending and
@@ -307,8 +318,8 @@ typedef enum {
  *    cost of penalty of potentially unaligned access. 
  */
 #define put_short(s, w) { \
+    *(uint16_t*)(&s->pending_buf[s->pending]) = (w) ; \
     s->pending += 2; \
-    *(uint16_t*)(&s->pending_buf[s->pending - 2]) = (w) ; \
 }
 #else
 #define put_short(s, w) { \
@@ -346,7 +357,7 @@ void ZLIB_INTERNAL bi_windup(deflate_state *s);
  * used.
  */
 
-#ifndef DEBUG
+#ifndef ZLIB_DEBUG
 /* Inline versions of _tr_tally for speed: */
 
 # if defined(GEN_TREES_H)
@@ -365,8 +376,8 @@ void ZLIB_INTERNAL bi_windup(deflate_state *s);
     flush = (s->last_lit == s->lit_bufsize-1); \
   }
 # define _tr_tally_dist(s, distance, length, flush) \
-  { unsigned char len = (length); \
-    uint16_t dist = (distance); \
+  { unsigned char len = (unsigned char)(length); \
+    uint16_t dist = (uint16_t)(distance); \
     s->d_buf[s->last_lit] = dist; \
     s->l_buf[s->last_lit++] = len; \
     dist--; \
@@ -386,10 +397,17 @@ void ZLIB_INTERNAL bi_windup(deflate_state *s);
  *    input characters, so that a running hash key can be computed from the
  *    previous key instead of complete recalculation each time.
  */
-#ifdef X86_SSE4_2_CRC_HASH
+
+#ifdef NOT_TWEAK_COMPILER
+#define TRIGGER_LEVEL 6
+#else
+#define TRIGGER_LEVEL 5
+#endif
+
+#if defined(__x86_64) || defined(__i386_)
 #define UPDATE_HASH(s, h, i) \
     do {\
-        if (s->level < 6) \
+        if (s->level < TRIGGER_LEVEL) \
             h = (3483 * (s->window[i]) +\
                  23081* (s->window[i+1]) +\
                  6954 * (s->window[i+2]) +\
@@ -403,11 +421,11 @@ void ZLIB_INTERNAL bi_windup(deflate_state *s);
 #   define UPDATE_HASH(s, h, i) (h = (((h) << s->hash_shift) ^ (s->window[i + (MIN_MATCH-1)])) & s->hash_mask)
 #endif
 
-#ifndef DEBUG
+#ifndef ZLIB_DEBUG
 #  define send_code(s, c, tree) send_bits(s, tree[c].Code, tree[c].Len)
 /* Send a code of the given tree. c and tree must not have side effects */
 
-#else /* DEBUG */
+#else /* ZLIB_DEBUG */
 #  define send_code(s, c, tree) \
     {  if (z_verbose > 2) { \
            fprintf(stderr, "\ncd %3d ", (c)); \
@@ -416,35 +434,13 @@ void ZLIB_INTERNAL bi_windup(deflate_state *s);
      }
 #endif
 
-#ifdef DEBUG
-/* ===========================================================================
- * Send a value on a given number of bits.
- * IN assertion: length <= 16 and value fits in length bits.
- */
-local void send_bits(deflate_state *s, int value, int length) {
-    Tracevv((stderr, " l %2d v %4x ", length, value));
-    Assert(length > 0 && length <= 15, "invalid length");
-    s->bits_sent += (unsigned long)length;
-
-    /* If not enough room in bi_buf, use (valid) bits from bi_buf and
-     * (16 - bi_valid) bits from value, leaving (width - (16-bi_valid))
-     * unused bits in value.
-     */
-    if (s->bi_valid > (int)Buf_size - length) {
-        s->bi_buf |= (uint16_t)value << s->bi_valid;
-        put_short(s, s->bi_buf);
-        s->bi_buf = (uint16_t)value >> (Buf_size - s->bi_valid);
-        s->bi_valid += length - Buf_size;
-    } else {
-        s->bi_buf |= (uint16_t)value << s->bi_valid;
-        s->bi_valid += length;
-    }
-}
+#ifdef ZLIB_DEBUG
+void send_bits(deflate_state *s, int value, int length);
 #else
 #define send_bits(s, value, length) \
 { int len = length;\
   if (s->bi_valid > (int)Buf_size - len) {\
-    int val = value;\
+    int val = (int)value;\
     s->bi_buf |= (uint16_t)val << s->bi_valid;\
     put_short(s, s->bi_buf);\
     s->bi_buf = (uint16_t)val >> (Buf_size - s->bi_valid);\

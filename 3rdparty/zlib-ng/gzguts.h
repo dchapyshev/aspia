@@ -1,7 +1,7 @@
 #ifndef GZGUTS_H_
 #define GZGUTS_H_
 /* gzguts.h -- zlib internal header definitions for gz* operations
- * Copyright (C) 2004, 2005, 2010, 2011, 2012, 2013 Mark Adler
+ * Copyright (C) 2004, 2005, 2010, 2011, 2012, 2013, 2016 Mark Adler
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -63,11 +63,6 @@
 #if defined(_MSC_VER) && _MSC_VER < 1900
 #  define snprintf _snprintf
 #endif
-
-#ifndef local
-#  define local static
-#endif
-/* compile with -Dlocal if your debugger can't find static symbols */
 
 /* get errno and strerror definition */
 #ifndef NO_STRERROR
@@ -143,7 +138,7 @@ typedef struct {
 typedef gz_state *gz_statep;
 
 /* shared functions */
-void ZLIB_INTERNAL gz_error(gz_statep, int, const char *);
+void ZLIB_INTERNAL gz_error(gz_state *, int, const char *);
 
 /* GT_OFF(x), where x is an unsigned value, is true if x > maximum z_off64_t
    value -- needed when comparing unsigned to z_off64_t, which is signed

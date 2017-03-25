@@ -1,5 +1,5 @@
 /* adler32.c -- compute the Adler-32 checksum of a data stream
- * Copyright (C) 1995-2011 Mark Adler
+ * Copyright (C) 1995-2011, 2016 Mark Adler
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -60,7 +60,7 @@ static uint32_t adler32_combine_(uint32_t adler1, uint32_t adler2, z_off64_t len
 #endif
 
 /* ========================================================================= */
-uint32_t ZEXPORT adler32(uint32_t adler, const unsigned char *buf, uint32_t len) {
+uint32_t ZEXPORT adler32_z(uint32_t adler, const unsigned char *buf, size_t len) {
     uint32_t sum2;
     unsigned n;
 
@@ -80,7 +80,7 @@ uint32_t ZEXPORT adler32(uint32_t adler, const unsigned char *buf, uint32_t len)
     }
 
     /* initial Adler-32 value (deferred check for len == 1 speed) */
-    if (buf == Z_NULL)
+    if (buf == NULL)
         return 1L;
 
     /* in case short lengths are provided, keep it somewhat fast */
@@ -140,6 +140,11 @@ uint32_t ZEXPORT adler32(uint32_t adler, const unsigned char *buf, uint32_t len)
 
     /* return recombined sums */
     return adler | (sum2 << 16);
+}
+
+/* ========================================================================= */
+uint32_t ZEXPORT adler32(uint32_t adler, const unsigned char *buf, uint32_t len) {
+    return adler32_z(adler, buf, len);
 }
 
 /* ========================================================================= */

@@ -19,14 +19,14 @@
 Pos insert_string_sse(deflate_state *const s, const Pos str, unsigned int count) {
     Pos ret = 0;
     unsigned int idx;
-    unsigned *ip, val, h = 0;
+    unsigned *ip, val, h;
 
     for (idx = 0; idx < count; idx++) {
         ip = (unsigned *)&s->window[str+idx];
         val = *ip;
         h = 0;
 
-        if (s->level >= 6)
+        if (s->level >= TRIGGER_LEVEL)
             val &= 0xFFFFFF;
 
 #ifdef _MSC_VER

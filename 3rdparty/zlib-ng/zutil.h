@@ -1,7 +1,7 @@
 #ifndef ZUTIL_H_
 #define ZUTIL_H_
 /* zutil.h -- internal interface and configuration of the compression library
- * Copyright (C) 1995-2013 Jean-loup Gailly.
+ * Copyright (C) 1995-2016 Jean-loup Gailly, Mark Adler
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -25,11 +25,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "zlib.h"
-
-#ifndef local
-#  define local static
-#endif
-/* compile with -Dlocal if your debugger can't find static symbols */
 
 typedef unsigned char uch; /* Included for compatibility with external code only */
 typedef uint16_t ush;      /* Included for compatibility with external code only */
@@ -70,10 +65,45 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 
         /* target dependencies */
 
-#ifdef WIN32
-#  ifndef __CYGWIN__  /* Cygwin is Unix, not Win32 */
-#    define OS_CODE  0x0b
+#ifdef AMIGA
+#  define OS_CODE  1
+#endif
+
+#ifdef __370__
+#  if __TARGET_LIB__ < 0x20000000
+#    define OS_CODE 4
+#  elif __TARGET_LIB__ < 0x40000000
+#    define OS_CODE 11
+#  else
+#    define OS_CODE 8
 #  endif
+#endif
+
+#if defined(ATARI) || defined(atarist)
+#  define OS_CODE  5
+#endif
+
+#ifdef OS2
+#  define OS_CODE  6
+#  if defined(M_I86) && !defined(Z_SOLO)
+#    include <malloc.h>
+#  endif
+#endif
+
+#if defined(MACOS) || defined(TARGET_OS_MAC)
+#  define OS_CODE  7
+#endif
+
+#ifdef __acorn
+#  define OS_CODE 13
+#endif
+
+#if defined(WIN32) && !defined(__CYGWIN__)
+#  define OS_CODE  10
+#endif
+
+#ifdef __APPLE__
+#  define OS_CODE 19
 #endif
 
 #if (defined(_MSC_VER) && (_MSC_VER > 600))
@@ -95,7 +125,7 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
         /* common defaults */
 
 #ifndef OS_CODE
-#  define OS_CODE  0x03  /* assume Unix */
+#  define OS_CODE  3  /* assume Unix */
 #endif
 
 #ifndef F_OPEN
@@ -105,7 +135,7 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
          /* functions */
 
 /* Diagnostic functions */
-#ifdef DEBUG
+#ifdef ZLIB_DEBUG
 #   include <stdio.h>
     extern int ZLIB_INTERNAL z_verbose;
     extern void ZLIB_INTERNAL z_error(char *m);

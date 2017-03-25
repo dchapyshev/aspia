@@ -29,16 +29,9 @@
 
 
 #if defined(_MSC_VER) && !defined(__clang__)
-#include <intrin.h>
-/* This is not a general purpose replacement for __builtin_ctzl. The function expects that value is != 0
- * Because of that assumption trailing_zero is not initialized and the return value of _BitScanForward is not checked
- */
-static __forceinline unsigned long __builtin_ctzl(unsigned long value)
-{
-	unsigned long trailing_zero;
-	_BitScanForward(&trailing_zero, value);
-	return trailing_zero;
-}
+# if defined(_M_IX86) || defined(_M_AMD64) || defined(_M_IA64)
+#  include "arch/x86/ctzl.h"
+# endif
 #endif
 
 
@@ -150,7 +143,7 @@ ZLIB_INTERNAL unsigned longest_match(deflate_state *const s, IPos cur_match) {
              * is pretty low, so for performance it's best to
              * outright stop here for the lower compression levels
              */
-            if (s->level < 6)
+            if (s->level < TRIGGER_LEVEL)
                 break;
         }
     } while ((cur_match = prev[cur_match & wmask]) > limit && --chain_length);
@@ -271,7 +264,7 @@ ZLIB_INTERNAL unsigned longest_match(deflate_state *const s, IPos cur_match) {
              * is pretty low, so for performance it's best to
              * outright stop here for the lower compression levels
              */
-            if (s->level < 6)
+            if (s->level < TRIGGER_LEVEL)
                 break;
         }
     } while (--chain_length && (cur_match = prev[cur_match & wmask]) > limit);
@@ -431,7 +424,6 @@ ZLIB_INTERNAL unsigned longest_match(deflate_state *const s, IPos cur_match) {
             if (xor) {
                 int match_byte = __builtin_ctzl(xor) / 8;
                 scan += match_byte;
-                match += match_byte;
                 break;
             } else {
                 scan += sizeof(unsigned long);
@@ -459,7 +451,7 @@ ZLIB_INTERNAL unsigned longest_match(deflate_state *const s, IPos cur_match) {
              * is pretty low, so for performance it's best to
              * outright stop here for the lower compression levels
              */
-            if (s->level < 6)
+            if (s->level < TRIGGER_LEVEL)
                 break;
         }
     } while ((cur_match = prev[cur_match & wmask]) > limit && --chain_length != 0);

@@ -85,7 +85,7 @@ for small objects.
 #  define ZEXTERN extern
 #endif
 #ifndef ZEXPORT
-#  define ZEXPORT
+#  define ZEXPORT __vectorcall
 #endif
 #ifndef ZEXPORTVA
 #  define ZEXPORTVA
