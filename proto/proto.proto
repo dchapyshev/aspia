@@ -3,34 +3,26 @@ syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
 
 import "auth.proto";
-import "video.proto";
 
 package aspia.proto;
 
-//
-// TODO: Протокол передачи файлов
-//
-
-//
-// Отправляется только от клиента к серверу
-//
-message PowerControl
+// Отправляется только от клиента к серверу.
+message PowerEvent
 {
     enum Action
     {
         SHUTDOWN  = 0; // Выключение компьютера.
-        REBOOT    = 1; // Перезагрузка оперционной системы, в которой запущен сервер
-        HIBERNATE = 2; // Переход в режим гибернации
-        SUSPEND   = 3; // Переход в режим сна
-        LOGOFF    = 4; // Завершение сеанса текущего пользователя
+        REBOOT    = 1; // Перезагрузка оперционной системы, в которой запущен сервер.
+        HIBERNATE = 2; // Переход в режим гибернации.
+        SUSPEND   = 3; // Переход в режим сна.
+        LOGOFF    = 4; // Завершение сеанса текущего пользователя.
+        LOCK      = 5; // Заблокировать сеанс текущего пользователя.
     }
 
     Action action = 1;
 }
 
-//
-// Отправляется только от клиента к серверу
-//
+// Отправляется только от клиента к серверу.
 message KeyEvent
 {
     // The keyboard (Caps/Num) lock states.
@@ -43,13 +35,11 @@ message KeyEvent
         PRESSED  = 8;
     }
 
-    uint32 keycode = 1; // Windows virtual key code
+    uint32 keycode = 1; // Windows virtual key code.
     uint32 flags = 2;
 }
 
-//
-// Отправляется только от клиента к серверу
-//
+// Отправляется только от клиента к серверу.
 message PointerEvent
 {
     enum ButtonMask
@@ -62,57 +52,34 @@ message PointerEvent
         WHEEL_DOWN    = 16;
     }
 
-    uint32 mask = 1; // Button mask
-    int32 x = 2;    // x position
-    int32 y = 3;    // y position
+    uint32 mask = 1; // Button mask.
+    int32 x = 2;    // x position.
+    int32 y = 3;    // y position.
 }
 
-enum ClipboardEncoding
+// Отправляется в обоих направлениях между сервером и клиентом.
+message ClipboardEvent
 {
-    CLIPBOARD_ENCODING_UNKNOWN = 0;
-    CLIPBOARD_ENCODING_RAW     = 1;
-    CLIPBOARD_ENCODING_ZLIB    = 2;
+    string mime_type = 1;
+    bytes data = 2;
 }
 
-//
-// Отправляется в обоих направлениях между сервером и клиентом
-//
-message Clipboard
-{
-    ClipboardEncoding encoding = 1;
-
-    string mime_type = 2;
-    bytes data = 3;
-}
-
-//
-// Отправляется только от клиента к серверу
-//
-message ClipboardControl
+// Отправляется только от сервера к клиенту.
+message CursorShape
 {
     enum Flags
     {
-        DISABLE_AUTOSEND = 0;
-        ENABLE_AUTOSEND  = 1;
-        REQUESTED        = 2;
+        UNKNOWN     = 0;
+        RESET_CACHE = 64;
+        CACHE       = 128;
     }
 
+    // Если бит 7 установлен в 1, то биты 0-4 содержат индекс курсора в кеше.
+    // Если бит 7 не установлен, то получено изображение курсора.
+    // Если бит 6 установлен в 1, то получена команда сбросить содержимое кеша,
+    // а биты 0-4 содержат новый размер кеша.
+    // Бит 5 зарезервирован.
     uint32 flags = 1;
-}
-
-enum CursorShapeEncoding
-{
-    CURSOR_SHAPE_ENCODING_UNKNOWN = 0;
-    CURSOR_SHAPE_ENCODING_CACHE   = 1;
-    CURSOR_SHAPE_ENCODING_ZLIB    = 2;
-}
-
-//
-// Отправляется только от сервера к клиенту.
-//
-message CursorShape
-{
-    CursorShapeEncoding encoding = 1;
 
     // Width, height (in screen pixels) of the cursor.
     int32 width  = 2;
@@ -124,44 +91,123 @@ message CursorShape
 
     // Cursor pixmap data in 32-bit BGRA format compressed with ZLIB.
     bytes data = 6;
-
-    //
-    // Индекс курсора в кеше. Если кодировка не равна CURSOR_SHAPE_ENCODING_CACHE
-    // и данный параметр не равен нулю, то кеш должен быть сброшен.
-    //
-    int32 cache_index = 7;
 }
 
-message BellEvent
+message VideoRect
 {
+    int32 x = 1;
+    int32 y = 2;
+    int32 width = 3;
+    int32 height = 4;
+}
+
+message VideoPixelFormat
+{
+    uint32 bits_per_pixel = 1;
+
+    uint32 red_max   = 2;
+    uint32 green_max = 3;
+    uint32 blue_max  = 4;
+
+    uint32 red_shift   = 5;
+    uint32 green_shift = 6;
+    uint32 blue_shift  = 7;
+}
+
+// Identifies how the image was encoded.
+enum VideoEncoding
+{
+    VIDEO_ENCODING_UNKNOWN = 0;
+    VIDEO_ENCODING_ZLIB    = 1;
+    VIDEO_ENCODING_VP8     = 2;
+    VIDEO_ENCODING_VP9     = 3; // LossLess
+}
+
+message VideoSize
+{
+    int32 width = 1;
+    int32 height = 2;
+}
+
+// Отправляется только от сервера к клиенту.
+message VideoPacket
+{
+    //
+    // Кодировка, которая используется при текущем обновлении.
+    // Обязательное поле, должно присутствовать в каждом обновлении.
+    //
+    VideoEncoding encoding = 1;
+
+    //
+    // Текущая ширина и высота экрана на сервере. При приеме видео
+    // пакета клиент должен проверять не изменились ли эти величины. Если они
+    // изменились, то клиент должен переинициализировать себя для работы с
+    // новыми размерами.
+    // Поле отсутствует, если размеры экрана не изменились.
+    //
+    VideoSize screen_size = 2;
+
+    //
+    // Формат пикселей, в котором отправлено текущее обновление. При каждом приеме
+    // видео-пакета клиент должен проверять не изменился ли формат и переинициализироваться
+    // в соответствии с этим. Данный параметр опциональный и используется при кодировке
+    // VIDEO_ENCODING_ZLIB.
+    // Поле отсутствует, если формат пикселей не изменился.
+    //
+    VideoPixelFormat pixel_format = 3;
+
+    // Список измененнившихся областей (прямоугольников).
+    repeated VideoRect dirty_rect = 4;
+
+    // Закодированные данные
+    bytes data = 5;
+}
+
+enum DesktopFeatures
+{
+    FEATURE_NONE         = 0;
+    FEATURE_CURSOR_SHAPE = 1;
+    FEATURE_CLIPBOARD    = 2;
+}
+
+message DesktopConfigRequest
+{
+    uint32 video_encodings = 1;
+    uint32 audio_encodings = 2;
+    uint32 features = 3;
+}
+
+message DesktopConfig
+{
+    // TODO: Раздельное отключение композиции рабочего стола, фона рабочего стола и эффектов.
+    enum Flags
+    {
+        ENABLE_NONE             = 0;
+        ENABLE_DESKTOP_EFFECTS  = 1; // Включает эффекты рабочего стола.
+        ENABLE_CURSOR_SHAPE     = 2; // Включает отправку изображения курсора.
+        ENABLE_CLIPBOARD        = 4; // Включает автоматическую отправку буфера обмена.
+    }
+
     uint32 flags = 1;
-}
 
-//
-// Сообщения, которые отправляются от хоста к клиенту
-//
-message HostToClient
-{
-    VideoPacket video_packet = 1;
-    CursorShape cursor       = 2;
-    Clipboard clipboard      = 3;
-}
+    //
+    // Устанавливает кодировку, которая будет использоваться для кодирования видео-пакетов.
+    // Сервер не обязан подчиняться данной команде (может не поддерживать указанную кодировку).
+    //
+    VideoEncoding encoding = 2;
 
-message Control
-{
-    VideoControl video         = 1;
-    ClipboardControl clipboard = 2;
-    PowerControl power         = 3;
-}
+    //
+    // Формат пикселей, который используется клиентом. Если формат клиента отличается от формата
+    // сервера, то пиксели в изображении будут перекодированы в формат клиента.
+    // Данный параметр применим для кодирования VIDEO_ENCODING_ZLIB, в остальных
+    // случаях игнорируется.
+    // Клиент не должен переинициалироваться после отправки данного параметра. Если сервер поддерживает
+    // перекодировку в отправленный формат, то при следующем получении сообщения VideoPacket нужно
+    // проверить, переключился ли сервер на новый формат и переинициализироваться при необходимости.
+    // Сервер не обязан подчиняться данной команде (может не поддерживать указанный формат).
+    //
+    VideoPixelFormat pixel_format = 3;
 
-//
-// Сообщения, которые отправляются от клиента к хосту
-//
-message ClientToHost
-{
-    PointerEvent pointer_event = 1;
-    KeyEvent key_event         = 2;
-    BellEvent bell_event       = 3;
-    Clipboard clipboard        = 4;
-    Control control            = 5;
+    uint32 update_interval = 4;
+    uint32 compress_ratio = 5;
 }

@@ -6,59 +6,45 @@ package aspia.proto;
 
 enum AuthMethod
 {
-    AUTH_UNKNOWN = 0;
+    AUTH_METHOD_UNKNOWN = 0;
 
-    // Средставами протокола (имя пользователя, пароль)
-    AUTH_BASIC = 1;
+    // Средставами протокола (имя пользователя, пароль).
+    AUTH_METHOD_BASIC = 1;
 }
 
 //
-// Отправляется только от клиента к серверу
+// Тип сессии.
 //
+enum SessionType
+{
+    SESSION_NONE           = 0;  // Нет разрешенных возможностей.
+    SESSION_DESKTOP_MANAGE = 1;  // Управление рабочим столом.
+    SESSION_DESKTOP_VIEW   = 2;  // Просмотр рабочего стола.
+    SESSION_POWER_MANAGE   = 4;  // Управление питанием.
+    SESSION_FILE_TRANSFER  = 8;  // Передача файлов.
+}
+
+// Отправляется только от клиента к серверу.
 message AuthRequest
 {
     // Метод с помощью которого производится авторизация.
-    uint32 method = 1;
+    AuthMethod method = 1;
 
-    string username = 2;
-    string password = 3;
+    string username = 3;
+    bytes password = 4;
 }
 
-//
-// Возможности сессии
-//
-enum SessionFeature
-{
-    FEATURE_NONE           = 0;    // Нет разрешенных возможностей
-    FEATURE_DESKTOP_MANAGE = 1;    // Управление рабочим столом
-    FEATURE_DESKTOP_VIEW   = 2;    // Просмотр рабочего стола
-    FEATURE_DESKTOP_AUDIO  = 4;    // Воспроизведение звука
-    FEATURE_POWER_MANAGE   = 8;    // Управление питанием
-    FEATURE_CLIPBOARD      = 16;   // Управление буфером обмена
-    FEATURE_FILE_TRANSFER  = 32;   // Передача файлов
-    FEATURE_BELL           = 64;   // Звуковой вызов
-    FEATURE_TEXT_CHAT      = 128;  // Текстовый чат
-    FEATURE_TEXT_MESSAGE   = 256;  // Текстовое сообщение
-    FEATURE_AUDIO_CHAT     = 512;  // Аудио чат
-    FEATURE_REMOTE_UPDATE  = 1024; // Удаленное обновление сервера
-    FEATURE_SYSTEM_INFO    = 2048; // Получение информации о системе
-    FEATURE_SYSTEM_MANAGE  = 4096; // Управление параметрами системы
-}
-
-//
-// Отправляется только от сервера к клиенту
-//
+// Отправляется только от сервера к клиенту.
 message AuthResult
 {
-    //
-    // Если авторизация прошла успешно, то поле имеет значение true,
-    // если нет, то false.
-    //
-    bool success = 1;
+    enum Status
+    {
+        SUCCESS        = 0; // Успешная авторизация.
+        ACCESS_DENIED  = 1; // Неверное имя пользователя или пароль.
+        SESSION_DENIED = 2; // Тип сессии не разрешен для пользователя.
+    }
 
-    //
-    // Маска разрешений, которые применимы для данноЙ авторизации.
-    // Если авторизация не пройдена, то данное после отсутствует.
-    //
-    uint32 features = 2;
+    Status status = 1;
+
+    uint32 session_types = 2;
 }

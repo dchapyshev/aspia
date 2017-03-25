@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+import "proto.proto";
+
+package aspia.proto.desktop;
+
+// —ообщени€, которые отправл€ютс€ от хоста к клиенту.
+message HostToClient
+{
+    VideoPacket video_packet            = 1;
+    CursorShape cursor_shape            = 2;
+    ClipboardEvent clipboard_event      = 3;
+    DesktopConfigRequest config_request = 4;
+}
+
+// —ообщени€, которые отправл€ютс€ от клиента к хосту.
+message ClientToHost
+{
+    PointerEvent pointer_event     = 1;
+    KeyEvent key_event             = 2;
+    ClipboardEvent clipboard_event = 3;
+    PowerEvent power_event         = 4;
+    DesktopConfig config           = 5;
+}

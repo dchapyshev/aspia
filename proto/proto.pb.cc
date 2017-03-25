@@ -16,118 +16,103 @@
 
 namespace aspia {
 namespace proto {
+class PowerEventDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<PowerEvent> {
+} _PowerEvent_default_instance_;
+class KeyEventDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<KeyEvent> {
+} _KeyEvent_default_instance_;
+class PointerEventDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<PointerEvent> {
+} _PointerEvent_default_instance_;
+class ClipboardEventDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ClipboardEvent> {
+} _ClipboardEvent_default_instance_;
+class CursorShapeDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<CursorShape> {
+} _CursorShape_default_instance_;
+class VideoRectDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<VideoRect> {
+} _VideoRect_default_instance_;
+class VideoPixelFormatDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<VideoPixelFormat> {
+} _VideoPixelFormat_default_instance_;
+class VideoSizeDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<VideoSize> {
+} _VideoSize_default_instance_;
+class VideoPacketDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<VideoPacket> {
+} _VideoPacket_default_instance_;
+class DesktopConfigRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<DesktopConfigRequest> {
+} _DesktopConfigRequest_default_instance_;
+class DesktopConfigDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<DesktopConfig> {
+} _DesktopConfig_default_instance_;
 
-void protobuf_ShutdownFile_proto_2eproto() {
-  PowerControl_default_instance_.Shutdown();
-  KeyEvent_default_instance_.Shutdown();
-  PointerEvent_default_instance_.Shutdown();
-  Clipboard_default_instance_.Shutdown();
-  ClipboardControl_default_instance_.Shutdown();
-  CursorShape_default_instance_.Shutdown();
-  BellEvent_default_instance_.Shutdown();
-  HostToClient_default_instance_.Shutdown();
-  Control_default_instance_.Shutdown();
-  ClientToHost_default_instance_.Shutdown();
+namespace protobuf_proto_2eproto {
+
+
+void TableStruct::Shutdown() {
+  _PowerEvent_default_instance_.Shutdown();
+  _KeyEvent_default_instance_.Shutdown();
+  _PointerEvent_default_instance_.Shutdown();
+  _ClipboardEvent_default_instance_.Shutdown();
+  _CursorShape_default_instance_.Shutdown();
+  _VideoRect_default_instance_.Shutdown();
+  _VideoPixelFormat_default_instance_.Shutdown();
+  _VideoSize_default_instance_.Shutdown();
+  _VideoPacket_default_instance_.Shutdown();
+  _DesktopConfigRequest_default_instance_.Shutdown();
+  _DesktopConfig_default_instance_.Shutdown();
 }
 
-void protobuf_InitDefaults_proto_2eproto_impl() {
+void TableStruct::InitDefaultsImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::aspia::proto::protobuf_InitDefaults_auth_2eproto();
-  ::aspia::proto::protobuf_InitDefaults_video_2eproto();
-  PowerControl_default_instance_.DefaultConstruct();
-  KeyEvent_default_instance_.DefaultConstruct();
-  PointerEvent_default_instance_.DefaultConstruct();
-  ::google::protobuf::internal::GetEmptyString();
-  Clipboard_default_instance_.DefaultConstruct();
-  ClipboardControl_default_instance_.DefaultConstruct();
-  ::google::protobuf::internal::GetEmptyString();
-  CursorShape_default_instance_.DefaultConstruct();
-  BellEvent_default_instance_.DefaultConstruct();
-  HostToClient_default_instance_.DefaultConstruct();
-  Control_default_instance_.DefaultConstruct();
-  ClientToHost_default_instance_.DefaultConstruct();
-  PowerControl_default_instance_.get_mutable()->InitAsDefaultInstance();
-  KeyEvent_default_instance_.get_mutable()->InitAsDefaultInstance();
-  PointerEvent_default_instance_.get_mutable()->InitAsDefaultInstance();
-  Clipboard_default_instance_.get_mutable()->InitAsDefaultInstance();
-  ClipboardControl_default_instance_.get_mutable()->InitAsDefaultInstance();
-  CursorShape_default_instance_.get_mutable()->InitAsDefaultInstance();
-  BellEvent_default_instance_.get_mutable()->InitAsDefaultInstance();
-  HostToClient_default_instance_.get_mutable()->InitAsDefaultInstance();
-  Control_default_instance_.get_mutable()->InitAsDefaultInstance();
-  ClientToHost_default_instance_.get_mutable()->InitAsDefaultInstance();
+  ::google::protobuf::internal::InitProtobufDefaults();
+  ::aspia::proto::protobuf_auth_2eproto::InitDefaults();
+  _PowerEvent_default_instance_.DefaultConstruct();
+  _KeyEvent_default_instance_.DefaultConstruct();
+  _PointerEvent_default_instance_.DefaultConstruct();
+  _ClipboardEvent_default_instance_.DefaultConstruct();
+  _CursorShape_default_instance_.DefaultConstruct();
+  _VideoRect_default_instance_.DefaultConstruct();
+  _VideoPixelFormat_default_instance_.DefaultConstruct();
+  _VideoSize_default_instance_.DefaultConstruct();
+  _VideoPacket_default_instance_.DefaultConstruct();
+  _DesktopConfigRequest_default_instance_.DefaultConstruct();
+  _DesktopConfig_default_instance_.DefaultConstruct();
+  _VideoPacket_default_instance_.get_mutable()->screen_size_ = const_cast< ::aspia::proto::VideoSize*>(
+      ::aspia::proto::VideoSize::internal_default_instance());
+  _VideoPacket_default_instance_.get_mutable()->pixel_format_ = const_cast< ::aspia::proto::VideoPixelFormat*>(
+      ::aspia::proto::VideoPixelFormat::internal_default_instance());
+  _DesktopConfig_default_instance_.get_mutable()->pixel_format_ = const_cast< ::aspia::proto::VideoPixelFormat*>(
+      ::aspia::proto::VideoPixelFormat::internal_default_instance());
 }
 
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_InitDefaults_proto_2eproto_once_);
-void protobuf_InitDefaults_proto_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_InitDefaults_proto_2eproto_once_,
-                 &protobuf_InitDefaults_proto_2eproto_impl);
+void InitDefaults() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &TableStruct::InitDefaultsImpl);
 }
-void protobuf_AddDesc_proto_2eproto_impl() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  protobuf_InitDefaults_proto_2eproto();
-  ::aspia::proto::protobuf_AddDesc_auth_2eproto();
-  ::aspia::proto::protobuf_AddDesc_video_2eproto();
-  ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_proto_2eproto);
+void AddDescriptorsImpl() {
+  InitDefaults();
+  ::aspia::proto::protobuf_auth_2eproto::AddDescriptors();
+  ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
 }
 
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AddDesc_proto_2eproto_once_);
-void protobuf_AddDesc_proto_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_AddDesc_proto_2eproto_once_,
-                 &protobuf_AddDesc_proto_2eproto_impl);
+void AddDescriptors() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &AddDescriptorsImpl);
 }
 #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
 // Force AddDescriptors() to be called at static initialization time.
-struct StaticDescriptorInitializer_proto_2eproto {
-  StaticDescriptorInitializer_proto_2eproto() {
-    protobuf_AddDesc_proto_2eproto();
+struct StaticDescriptorInitializer {
+  StaticDescriptorInitializer() {
+    AddDescriptors();
   }
-} static_descriptor_initializer_proto_2eproto_;
+} static_descriptor_initializer;
 #endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-bool ClipboardEncoding_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-      return true;
-    default:
-      return false;
-  }
-}
 
-bool CursorShapeEncoding_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-      return true;
-    default:
-      return false;
-  }
-}
+}  // namespace protobuf_proto_2eproto
 
-
-namespace {
-
-static void MergeFromFail(int line) GOOGLE_ATTRIBUTE_COLD GOOGLE_ATTRIBUTE_NORETURN;
-static void MergeFromFail(int line) {
-  ::google::protobuf::internal::MergeFromFail(__FILE__, line);
-}
-
-}  // namespace
-
-
-// ===================================================================
-
-bool PowerControl_Action_IsValid(int value) {
+bool PowerEvent_Action_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
     case 2:
     case 3:
     case 4:
+    case 5:
       return true;
     default:
       return false;
@@ -135,221 +120,16 @@ bool PowerControl_Action_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const PowerControl_Action PowerControl::SHUTDOWN;
-const PowerControl_Action PowerControl::REBOOT;
-const PowerControl_Action PowerControl::HIBERNATE;
-const PowerControl_Action PowerControl::SUSPEND;
-const PowerControl_Action PowerControl::LOGOFF;
-const PowerControl_Action PowerControl::Action_MIN;
-const PowerControl_Action PowerControl::Action_MAX;
-const int PowerControl::Action_ARRAYSIZE;
+const PowerEvent_Action PowerEvent::SHUTDOWN;
+const PowerEvent_Action PowerEvent::REBOOT;
+const PowerEvent_Action PowerEvent::HIBERNATE;
+const PowerEvent_Action PowerEvent::SUSPEND;
+const PowerEvent_Action PowerEvent::LOGOFF;
+const PowerEvent_Action PowerEvent::LOCK;
+const PowerEvent_Action PowerEvent::Action_MIN;
+const PowerEvent_Action PowerEvent::Action_MAX;
+const int PowerEvent::Action_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int PowerControl::kActionFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-PowerControl::PowerControl()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.PowerControl)
-}
-
-void PowerControl::InitAsDefaultInstance() {
-}
-
-PowerControl::PowerControl(const PowerControl& from)
-  : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.PowerControl)
-}
-
-void PowerControl::SharedCtor() {
-  action_ = 0;
-  _cached_size_ = 0;
-}
-
-PowerControl::~PowerControl() {
-  // @@protoc_insertion_point(destructor:aspia.proto.PowerControl)
-  SharedDtor();
-}
-
-void PowerControl::SharedDtor() {
-}
-
-void PowerControl::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const PowerControl& PowerControl::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
-  return *internal_default_instance();
-}
-
-::google::protobuf::internal::ExplicitlyConstructed<PowerControl> PowerControl_default_instance_;
-
-PowerControl* PowerControl::New(::google::protobuf::Arena* arena) const {
-  PowerControl* n = new PowerControl;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void PowerControl::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.PowerControl)
-  action_ = 0;
-}
-
-bool PowerControl::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:aspia.proto.PowerControl)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .aspia.proto.PowerControl.Action action = 1;
-      case 1: {
-        if (tag == 8) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_action(static_cast< ::aspia::proto::PowerControl_Action >(value));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.PowerControl)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.PowerControl)
-  return false;
-#undef DO_
-}
-
-void PowerControl::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.PowerControl)
-  // optional .aspia.proto.PowerControl.Action action = 1;
-  if (this->action() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->action(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:aspia.proto.PowerControl)
-}
-
-size_t PowerControl::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.PowerControl)
-  size_t total_size = 0;
-
-  // optional .aspia.proto.PowerControl.Action action = 1;
-  if (this->action() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->action());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void PowerControl::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const PowerControl*>(&from));
-}
-
-void PowerControl::MergeFrom(const PowerControl& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.PowerControl)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
-
-void PowerControl::UnsafeMergeFrom(const PowerControl& from) {
-  GOOGLE_DCHECK(&from != this);
-  if (from.action() != 0) {
-    set_action(from.action());
-  }
-}
-
-void PowerControl::CopyFrom(const PowerControl& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.PowerControl)
-  if (&from == this) return;
-  Clear();
-  UnsafeMergeFrom(from);
-}
-
-bool PowerControl::IsInitialized() const {
-
-  return true;
-}
-
-void PowerControl::Swap(PowerControl* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void PowerControl::InternalSwap(PowerControl* other) {
-  std::swap(action_, other->action_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string PowerControl::GetTypeName() const {
-  return "aspia.proto.PowerControl";
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// PowerControl
-
-// optional .aspia.proto.PowerControl.Action action = 1;
-void PowerControl::clear_action() {
-  action_ = 0;
-}
-::aspia::proto::PowerControl_Action PowerControl::action() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.PowerControl.action)
-  return static_cast< ::aspia::proto::PowerControl_Action >(action_);
-}
-void PowerControl::set_action(::aspia::proto::PowerControl_Action value) {
-  
-  action_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.PowerControl.action)
-}
-
-inline const PowerControl* PowerControl::internal_default_instance() {
-  return &PowerControl_default_instance_.get();
-}
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
 bool KeyEvent_Flags_IsValid(int value) {
   switch (value) {
     case 0:
@@ -373,26 +153,308 @@ const KeyEvent_Flags KeyEvent::Flags_MIN;
 const KeyEvent_Flags KeyEvent::Flags_MAX;
 const int KeyEvent::Flags_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool PointerEvent_ButtonMask_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 4:
+    case 8:
+    case 16:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const PointerEvent_ButtonMask PointerEvent::EMPTY;
+const PointerEvent_ButtonMask PointerEvent::LEFT_BUTTON;
+const PointerEvent_ButtonMask PointerEvent::MIDDLE_BUTTON;
+const PointerEvent_ButtonMask PointerEvent::RIGHT_BUTTON;
+const PointerEvent_ButtonMask PointerEvent::WHEEL_UP;
+const PointerEvent_ButtonMask PointerEvent::WHEEL_DOWN;
+const PointerEvent_ButtonMask PointerEvent::ButtonMask_MIN;
+const PointerEvent_ButtonMask PointerEvent::ButtonMask_MAX;
+const int PointerEvent::ButtonMask_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool CursorShape_Flags_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 64:
+    case 128:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const CursorShape_Flags CursorShape::UNKNOWN;
+const CursorShape_Flags CursorShape::RESET_CACHE;
+const CursorShape_Flags CursorShape::CACHE;
+const CursorShape_Flags CursorShape::Flags_MIN;
+const CursorShape_Flags CursorShape::Flags_MAX;
+const int CursorShape::Flags_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool DesktopConfig_Flags_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 4:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const DesktopConfig_Flags DesktopConfig::ENABLE_NONE;
+const DesktopConfig_Flags DesktopConfig::ENABLE_DESKTOP_EFFECTS;
+const DesktopConfig_Flags DesktopConfig::ENABLE_CURSOR_SHAPE;
+const DesktopConfig_Flags DesktopConfig::ENABLE_CLIPBOARD;
+const DesktopConfig_Flags DesktopConfig::Flags_MIN;
+const DesktopConfig_Flags DesktopConfig::Flags_MAX;
+const int DesktopConfig::Flags_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool VideoEncoding_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+      return true;
+    default:
+      return false;
+  }
+}
+
+bool DesktopFeatures_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int PowerEvent::kActionFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+PowerEvent::PowerEvent()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_proto_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.PowerEvent)
+}
+PowerEvent::PowerEvent(const PowerEvent& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  action_ = from.action_;
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.PowerEvent)
+}
+
+void PowerEvent::SharedCtor() {
+  action_ = 0;
+  _cached_size_ = 0;
+}
+
+PowerEvent::~PowerEvent() {
+  // @@protoc_insertion_point(destructor:aspia.proto.PowerEvent)
+  SharedDtor();
+}
+
+void PowerEvent::SharedDtor() {
+}
+
+void PowerEvent::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const PowerEvent& PowerEvent::default_instance() {
+  protobuf_proto_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+PowerEvent* PowerEvent::New(::google::protobuf::Arena* arena) const {
+  PowerEvent* n = new PowerEvent;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void PowerEvent::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.PowerEvent)
+  action_ = 0;
+}
+
+bool PowerEvent::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:aspia.proto.PowerEvent)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // .aspia.proto.PowerEvent.Action action = 1;
+      case 1: {
+        if (tag == 8u) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_action(static_cast< ::aspia::proto::PowerEvent_Action >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.PowerEvent)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.PowerEvent)
+  return false;
+#undef DO_
+}
+
+void PowerEvent::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.PowerEvent)
+  // .aspia.proto.PowerEvent.Action action = 1;
+  if (this->action() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->action(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:aspia.proto.PowerEvent)
+}
+
+size_t PowerEvent::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.PowerEvent)
+  size_t total_size = 0;
+
+  // .aspia.proto.PowerEvent.Action action = 1;
+  if (this->action() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->action());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void PowerEvent::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const PowerEvent*>(&from));
+}
+
+void PowerEvent::MergeFrom(const PowerEvent& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.PowerEvent)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from.action() != 0) {
+    set_action(from.action());
+  }
+}
+
+void PowerEvent::CopyFrom(const PowerEvent& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.PowerEvent)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool PowerEvent::IsInitialized() const {
+  return true;
+}
+
+void PowerEvent::Swap(PowerEvent* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void PowerEvent::InternalSwap(PowerEvent* other) {
+  std::swap(action_, other->action_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string PowerEvent::GetTypeName() const {
+  return "aspia.proto.PowerEvent";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// PowerEvent
+
+// .aspia.proto.PowerEvent.Action action = 1;
+void PowerEvent::clear_action() {
+  action_ = 0;
+}
+::aspia::proto::PowerEvent_Action PowerEvent::action() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.PowerEvent.action)
+  return static_cast< ::aspia::proto::PowerEvent_Action >(action_);
+}
+void PowerEvent::set_action(::aspia::proto::PowerEvent_Action value) {
+  
+  action_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.PowerEvent.action)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int KeyEvent::kKeycodeFieldNumber;
 const int KeyEvent::kFlagsFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 KeyEvent::KeyEvent()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_proto_2eproto::InitDefaults();
+  }
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.KeyEvent)
 }
-
-void KeyEvent::InitAsDefaultInstance() {
-}
-
 KeyEvent::KeyEvent(const KeyEvent& from)
   : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&keycode_, &from.keycode_,
+    reinterpret_cast<char*>(&flags_) -
+    reinterpret_cast<char*>(&keycode_) + sizeof(flags_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.KeyEvent)
 }
 
@@ -416,11 +478,9 @@ void KeyEvent::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
 const KeyEvent& KeyEvent::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
+  protobuf_proto_2eproto::InitDefaults();
   return *internal_default_instance();
 }
-
-::google::protobuf::internal::ExplicitlyConstructed<KeyEvent> KeyEvent_default_instance_;
 
 KeyEvent* KeyEvent::New(::google::protobuf::Arena* arena) const {
   KeyEvent* n = new KeyEvent;
@@ -432,27 +492,8 @@ KeyEvent* KeyEvent::New(::google::protobuf::Arena* arena) const {
 
 void KeyEvent::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.KeyEvent)
-#if defined(__clang__)
-#define ZR_HELPER_(f) \
-  _Pragma("clang diagnostic push") \
-  _Pragma("clang diagnostic ignored \"-Winvalid-offsetof\"") \
-  __builtin_offsetof(KeyEvent, f) \
-  _Pragma("clang diagnostic pop")
-#else
-#define ZR_HELPER_(f) reinterpret_cast<char*>(\
-  &reinterpret_cast<KeyEvent*>(16)->f)
-#endif
-
-#define ZR_(first, last) do {\
-  ::memset(&(first), 0,\
-           ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
-} while (0)
-
-  ZR_(keycode_, flags_);
-
-#undef ZR_HELPER_
-#undef ZR_
-
+  ::memset(&keycode_, 0, reinterpret_cast<char*>(&flags_) -
+    reinterpret_cast<char*>(&keycode_) + sizeof(flags_));
 }
 
 bool KeyEvent::MergePartialFromCodedStream(
@@ -461,13 +502,13 @@ bool KeyEvent::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   // @@protoc_insertion_point(parse_start:aspia.proto.KeyEvent)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional uint32 keycode = 1;
+      // uint32 keycode = 1;
       case 1: {
-        if (tag == 8) {
+        if (tag == 8u) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -475,14 +516,12 @@ bool KeyEvent::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_flags;
         break;
       }
 
-      // optional uint32 flags = 2;
+      // uint32 flags = 2;
       case 2: {
-        if (tag == 16) {
-         parse_flags:
+        if (tag == 16u) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -490,7 +529,6 @@ bool KeyEvent::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectAtEnd()) goto success;
         break;
       }
 
@@ -518,12 +556,12 @@ failure:
 void KeyEvent::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:aspia.proto.KeyEvent)
-  // optional uint32 keycode = 1;
+  // uint32 keycode = 1;
   if (this->keycode() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->keycode(), output);
   }
 
-  // optional uint32 flags = 2;
+  // uint32 flags = 2;
   if (this->flags() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->flags(), output);
   }
@@ -535,14 +573,14 @@ size_t KeyEvent::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:aspia.proto.KeyEvent)
   size_t total_size = 0;
 
-  // optional uint32 keycode = 1;
+  // uint32 keycode = 1;
   if (this->keycode() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->keycode());
   }
 
-  // optional uint32 flags = 2;
+  // uint32 flags = 2;
   if (this->flags() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
@@ -563,15 +601,8 @@ void KeyEvent::CheckTypeAndMergeFrom(
 
 void KeyEvent::MergeFrom(const KeyEvent& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.KeyEvent)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
-
-void KeyEvent::UnsafeMergeFrom(const KeyEvent& from) {
-  GOOGLE_DCHECK(&from != this);
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.keycode() != 0) {
     set_keycode(from.keycode());
   }
@@ -584,11 +615,10 @@ void KeyEvent::CopyFrom(const KeyEvent& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.KeyEvent)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool KeyEvent::IsInitialized() const {
-
   return true;
 }
 
@@ -599,7 +629,6 @@ void KeyEvent::Swap(KeyEvent* other) {
 void KeyEvent::InternalSwap(KeyEvent* other) {
   std::swap(keycode_, other->keycode_);
   std::swap(flags_, other->flags_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -610,7 +639,7 @@ void KeyEvent::InternalSwap(KeyEvent* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // KeyEvent
 
-// optional uint32 keycode = 1;
+// uint32 keycode = 1;
 void KeyEvent::clear_keycode() {
   keycode_ = 0u;
 }
@@ -624,7 +653,7 @@ void KeyEvent::set_keycode(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.KeyEvent.keycode)
 }
 
-// optional uint32 flags = 2;
+// uint32 flags = 2;
 void KeyEvent::clear_flags() {
   flags_ = 0u;
 }
@@ -638,38 +667,10 @@ void KeyEvent::set_flags(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.KeyEvent.flags)
 }
 
-inline const KeyEvent* KeyEvent::internal_default_instance() {
-  return &KeyEvent_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 
-bool PointerEvent_ButtonMask_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 4:
-    case 8:
-    case 16:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const PointerEvent_ButtonMask PointerEvent::EMPTY;
-const PointerEvent_ButtonMask PointerEvent::LEFT_BUTTON;
-const PointerEvent_ButtonMask PointerEvent::MIDDLE_BUTTON;
-const PointerEvent_ButtonMask PointerEvent::RIGHT_BUTTON;
-const PointerEvent_ButtonMask PointerEvent::WHEEL_UP;
-const PointerEvent_ButtonMask PointerEvent::WHEEL_DOWN;
-const PointerEvent_ButtonMask PointerEvent::ButtonMask_MIN;
-const PointerEvent_ButtonMask PointerEvent::ButtonMask_MAX;
-const int PointerEvent::ButtonMask_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int PointerEvent::kMaskFieldNumber;
 const int PointerEvent::kXFieldNumber;
@@ -677,20 +678,21 @@ const int PointerEvent::kYFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 PointerEvent::PointerEvent()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_proto_2eproto::InitDefaults();
+  }
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.PointerEvent)
 }
-
-void PointerEvent::InitAsDefaultInstance() {
-}
-
 PointerEvent::PointerEvent(const PointerEvent& from)
   : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&mask_, &from.mask_,
+    reinterpret_cast<char*>(&y_) -
+    reinterpret_cast<char*>(&mask_) + sizeof(y_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.PointerEvent)
 }
 
@@ -714,11 +716,9 @@ void PointerEvent::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
 const PointerEvent& PointerEvent::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
+  protobuf_proto_2eproto::InitDefaults();
   return *internal_default_instance();
 }
-
-::google::protobuf::internal::ExplicitlyConstructed<PointerEvent> PointerEvent_default_instance_;
 
 PointerEvent* PointerEvent::New(::google::protobuf::Arena* arena) const {
   PointerEvent* n = new PointerEvent;
@@ -730,27 +730,8 @@ PointerEvent* PointerEvent::New(::google::protobuf::Arena* arena) const {
 
 void PointerEvent::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.PointerEvent)
-#if defined(__clang__)
-#define ZR_HELPER_(f) \
-  _Pragma("clang diagnostic push") \
-  _Pragma("clang diagnostic ignored \"-Winvalid-offsetof\"") \
-  __builtin_offsetof(PointerEvent, f) \
-  _Pragma("clang diagnostic pop")
-#else
-#define ZR_HELPER_(f) reinterpret_cast<char*>(\
-  &reinterpret_cast<PointerEvent*>(16)->f)
-#endif
-
-#define ZR_(first, last) do {\
-  ::memset(&(first), 0,\
-           ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
-} while (0)
-
-  ZR_(mask_, y_);
-
-#undef ZR_HELPER_
-#undef ZR_
-
+  ::memset(&mask_, 0, reinterpret_cast<char*>(&y_) -
+    reinterpret_cast<char*>(&mask_) + sizeof(y_));
 }
 
 bool PointerEvent::MergePartialFromCodedStream(
@@ -759,13 +740,13 @@ bool PointerEvent::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   // @@protoc_insertion_point(parse_start:aspia.proto.PointerEvent)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional uint32 mask = 1;
+      // uint32 mask = 1;
       case 1: {
-        if (tag == 8) {
+        if (tag == 8u) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -773,14 +754,12 @@ bool PointerEvent::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_x;
         break;
       }
 
-      // optional int32 x = 2;
+      // int32 x = 2;
       case 2: {
-        if (tag == 16) {
-         parse_x:
+        if (tag == 16u) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
@@ -788,14 +767,12 @@ bool PointerEvent::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_y;
         break;
       }
 
-      // optional int32 y = 3;
+      // int32 y = 3;
       case 3: {
-        if (tag == 24) {
-         parse_y:
+        if (tag == 24u) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
@@ -803,7 +780,6 @@ bool PointerEvent::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectAtEnd()) goto success;
         break;
       }
 
@@ -831,17 +807,17 @@ failure:
 void PointerEvent::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:aspia.proto.PointerEvent)
-  // optional uint32 mask = 1;
+  // uint32 mask = 1;
   if (this->mask() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->mask(), output);
   }
 
-  // optional int32 x = 2;
+  // int32 x = 2;
   if (this->x() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->x(), output);
   }
 
-  // optional int32 y = 3;
+  // int32 y = 3;
   if (this->y() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->y(), output);
   }
@@ -853,21 +829,21 @@ size_t PointerEvent::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:aspia.proto.PointerEvent)
   size_t total_size = 0;
 
-  // optional uint32 mask = 1;
+  // uint32 mask = 1;
   if (this->mask() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->mask());
   }
 
-  // optional int32 x = 2;
+  // int32 x = 2;
   if (this->x() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->x());
   }
 
-  // optional int32 y = 3;
+  // int32 y = 3;
   if (this->y() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
@@ -888,15 +864,8 @@ void PointerEvent::CheckTypeAndMergeFrom(
 
 void PointerEvent::MergeFrom(const PointerEvent& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.PointerEvent)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
-
-void PointerEvent::UnsafeMergeFrom(const PointerEvent& from) {
-  GOOGLE_DCHECK(&from != this);
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.mask() != 0) {
     set_mask(from.mask());
   }
@@ -912,11 +881,10 @@ void PointerEvent::CopyFrom(const PointerEvent& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.PointerEvent)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool PointerEvent::IsInitialized() const {
-
   return true;
 }
 
@@ -928,7 +896,6 @@ void PointerEvent::InternalSwap(PointerEvent* other) {
   std::swap(mask_, other->mask_);
   std::swap(x_, other->x_);
   std::swap(y_, other->y_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -939,7 +906,7 @@ void PointerEvent::InternalSwap(PointerEvent* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // PointerEvent
 
-// optional uint32 mask = 1;
+// uint32 mask = 1;
 void PointerEvent::clear_mask() {
   mask_ = 0u;
 }
@@ -953,7 +920,7 @@ void PointerEvent::set_mask(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.PointerEvent.mask)
 }
 
-// optional int32 x = 2;
+// int32 x = 2;
 void PointerEvent::clear_x() {
   x_ = 0;
 }
@@ -967,7 +934,7 @@ void PointerEvent::set_x(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.PointerEvent.x)
 }
 
-// optional int32 y = 3;
+// int32 y = 3;
 void PointerEvent::clear_y() {
   y_ = 0;
 }
@@ -981,133 +948,112 @@ void PointerEvent::set_y(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.PointerEvent.y)
 }
 
-inline const PointerEvent* PointerEvent::internal_default_instance() {
-  return &PointerEvent_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int Clipboard::kEncodingFieldNumber;
-const int Clipboard::kMimeTypeFieldNumber;
-const int Clipboard::kDataFieldNumber;
+const int ClipboardEvent::kMimeTypeFieldNumber;
+const int ClipboardEvent::kDataFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-Clipboard::Clipboard()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
+ClipboardEvent::ClipboardEvent()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_proto_2eproto::InitDefaults();
+  }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.Clipboard)
+  // @@protoc_insertion_point(constructor:aspia.proto.ClipboardEvent)
 }
-
-void Clipboard::InitAsDefaultInstance() {
-}
-
-Clipboard::Clipboard(const Clipboard& from)
+ClipboardEvent::ClipboardEvent(const ClipboardEvent& from)
   : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.Clipboard)
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  mime_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.mime_type().size() > 0) {
+    mime_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.mime_type_);
+  }
+  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.data().size() > 0) {
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.ClipboardEvent)
 }
 
-void Clipboard::SharedCtor() {
+void ClipboardEvent::SharedCtor() {
   mime_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  encoding_ = 0;
   _cached_size_ = 0;
 }
 
-Clipboard::~Clipboard() {
-  // @@protoc_insertion_point(destructor:aspia.proto.Clipboard)
+ClipboardEvent::~ClipboardEvent() {
+  // @@protoc_insertion_point(destructor:aspia.proto.ClipboardEvent)
   SharedDtor();
 }
 
-void Clipboard::SharedDtor() {
+void ClipboardEvent::SharedDtor() {
   mime_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
-void Clipboard::SetCachedSize(int size) const {
+void ClipboardEvent::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const Clipboard& Clipboard::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
+const ClipboardEvent& ClipboardEvent::default_instance() {
+  protobuf_proto_2eproto::InitDefaults();
   return *internal_default_instance();
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<Clipboard> Clipboard_default_instance_;
-
-Clipboard* Clipboard::New(::google::protobuf::Arena* arena) const {
-  Clipboard* n = new Clipboard;
+ClipboardEvent* ClipboardEvent::New(::google::protobuf::Arena* arena) const {
+  ClipboardEvent* n = new ClipboardEvent;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void Clipboard::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.Clipboard)
-  encoding_ = 0;
+void ClipboardEvent::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.ClipboardEvent)
   mime_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
-bool Clipboard::MergePartialFromCodedStream(
+bool ClipboardEvent::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:aspia.proto.Clipboard)
+  // @@protoc_insertion_point(parse_start:aspia.proto.ClipboardEvent)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .aspia.proto.ClipboardEncoding encoding = 1;
+      // string mime_type = 1;
       case 1: {
-        if (tag == 8) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_encoding(static_cast< ::aspia::proto::ClipboardEncoding >(value));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(18)) goto parse_mime_type;
-        break;
-      }
-
-      // optional string mime_type = 2;
-      case 2: {
-        if (tag == 18) {
-         parse_mime_type:
+        if (tag == 10u) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_mime_type()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->mime_type().data(), this->mime_type().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.Clipboard.mime_type"));
+            "aspia.proto.ClipboardEvent.mime_type"));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(26)) goto parse_data;
         break;
       }
 
-      // optional bytes data = 3;
-      case 3: {
-        if (tag == 26) {
-         parse_data:
+      // bytes data = 2;
+      case 2: {
+        if (tag == 18u) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_data()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectAtEnd()) goto success;
         break;
       }
 
@@ -1124,60 +1070,48 @@ bool Clipboard::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.Clipboard)
+  // @@protoc_insertion_point(parse_success:aspia.proto.ClipboardEvent)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.Clipboard)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.ClipboardEvent)
   return false;
 #undef DO_
 }
 
-void Clipboard::SerializeWithCachedSizes(
+void ClipboardEvent::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.Clipboard)
-  // optional .aspia.proto.ClipboardEncoding encoding = 1;
-  if (this->encoding() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->encoding(), output);
-  }
-
-  // optional string mime_type = 2;
+  // @@protoc_insertion_point(serialize_start:aspia.proto.ClipboardEvent)
+  // string mime_type = 1;
   if (this->mime_type().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->mime_type().data(), this->mime_type().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.Clipboard.mime_type");
+      "aspia.proto.ClipboardEvent.mime_type");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      2, this->mime_type(), output);
+      1, this->mime_type(), output);
   }
 
-  // optional bytes data = 3;
+  // bytes data = 2;
   if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      3, this->data(), output);
+      2, this->data(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:aspia.proto.Clipboard)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.ClipboardEvent)
 }
 
-size_t Clipboard::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Clipboard)
+size_t ClipboardEvent::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.ClipboardEvent)
   size_t total_size = 0;
 
-  // optional .aspia.proto.ClipboardEncoding encoding = 1;
-  if (this->encoding() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->encoding());
-  }
-
-  // optional string mime_type = 2;
+  // string mime_type = 1;
   if (this->mime_type().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->mime_type());
   }
 
-  // optional bytes data = 3;
+  // bytes data = 2;
   if (this->data().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
@@ -1191,25 +1125,15 @@ size_t Clipboard::ByteSizeLong() const {
   return total_size;
 }
 
-void Clipboard::CheckTypeAndMergeFrom(
+void ClipboardEvent::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const Clipboard*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const ClipboardEvent*>(&from));
 }
 
-void Clipboard::MergeFrom(const Clipboard& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Clipboard)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
-
-void Clipboard::UnsafeMergeFrom(const Clipboard& from) {
-  GOOGLE_DCHECK(&from != this);
-  if (from.encoding() != 0) {
-    set_encoding(from.encoding());
-  }
+void ClipboardEvent::MergeFrom(const ClipboardEvent& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.ClipboardEvent)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.mime_type().size() > 0) {
 
     mime_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.mime_type_);
@@ -1220,402 +1144,178 @@ void Clipboard::UnsafeMergeFrom(const Clipboard& from) {
   }
 }
 
-void Clipboard::CopyFrom(const Clipboard& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Clipboard)
+void ClipboardEvent::CopyFrom(const ClipboardEvent& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.ClipboardEvent)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
-bool Clipboard::IsInitialized() const {
-
+bool ClipboardEvent::IsInitialized() const {
   return true;
 }
 
-void Clipboard::Swap(Clipboard* other) {
+void ClipboardEvent::Swap(ClipboardEvent* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void Clipboard::InternalSwap(Clipboard* other) {
-  std::swap(encoding_, other->encoding_);
+void ClipboardEvent::InternalSwap(ClipboardEvent* other) {
   mime_type_.Swap(&other->mime_type_);
   data_.Swap(&other->data_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string Clipboard::GetTypeName() const {
-  return "aspia.proto.Clipboard";
+::std::string ClipboardEvent::GetTypeName() const {
+  return "aspia.proto.ClipboardEvent";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// Clipboard
+// ClipboardEvent
 
-// optional .aspia.proto.ClipboardEncoding encoding = 1;
-void Clipboard::clear_encoding() {
-  encoding_ = 0;
-}
-::aspia::proto::ClipboardEncoding Clipboard::encoding() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Clipboard.encoding)
-  return static_cast< ::aspia::proto::ClipboardEncoding >(encoding_);
-}
-void Clipboard::set_encoding(::aspia::proto::ClipboardEncoding value) {
-  
-  encoding_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.Clipboard.encoding)
-}
-
-// optional string mime_type = 2;
-void Clipboard::clear_mime_type() {
+// string mime_type = 1;
+void ClipboardEvent::clear_mime_type() {
   mime_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-const ::std::string& Clipboard::mime_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Clipboard.mime_type)
-  return mime_type_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+const ::std::string& ClipboardEvent::mime_type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.ClipboardEvent.mime_type)
+  return mime_type_.GetNoArena();
 }
-void Clipboard::set_mime_type(const ::std::string& value) {
+void ClipboardEvent::set_mime_type(const ::std::string& value) {
   
   mime_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.Clipboard.mime_type)
+  // @@protoc_insertion_point(field_set:aspia.proto.ClipboardEvent.mime_type)
 }
-void Clipboard::set_mime_type(const char* value) {
+#if LANG_CXX11
+void ClipboardEvent::set_mime_type(::std::string&& value) {
+  
+  mime_type_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.ClipboardEvent.mime_type)
+}
+#endif
+void ClipboardEvent::set_mime_type(const char* value) {
   
   mime_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.Clipboard.mime_type)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.ClipboardEvent.mime_type)
 }
-void Clipboard::set_mime_type(const char* value, size_t size) {
+void ClipboardEvent::set_mime_type(const char* value, size_t size) {
   
   mime_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.Clipboard.mime_type)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.ClipboardEvent.mime_type)
 }
-::std::string* Clipboard::mutable_mime_type() {
+::std::string* ClipboardEvent::mutable_mime_type() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Clipboard.mime_type)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.ClipboardEvent.mime_type)
   return mime_type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* Clipboard::release_mime_type() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Clipboard.mime_type)
+::std::string* ClipboardEvent::release_mime_type() {
+  // @@protoc_insertion_point(field_release:aspia.proto.ClipboardEvent.mime_type)
   
   return mime_type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void Clipboard::set_allocated_mime_type(::std::string* mime_type) {
+void ClipboardEvent::set_allocated_mime_type(::std::string* mime_type) {
   if (mime_type != NULL) {
     
   } else {
     
   }
   mime_type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mime_type);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Clipboard.mime_type)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.ClipboardEvent.mime_type)
 }
 
-// optional bytes data = 3;
-void Clipboard::clear_data() {
+// bytes data = 2;
+void ClipboardEvent::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-const ::std::string& Clipboard::data() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Clipboard.data)
-  return data_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+const ::std::string& ClipboardEvent::data() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.ClipboardEvent.data)
+  return data_.GetNoArena();
 }
-void Clipboard::set_data(const ::std::string& value) {
+void ClipboardEvent::set_data(const ::std::string& value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.Clipboard.data)
+  // @@protoc_insertion_point(field_set:aspia.proto.ClipboardEvent.data)
 }
-void Clipboard::set_data(const char* value) {
+#if LANG_CXX11
+void ClipboardEvent::set_data(::std::string&& value) {
+  
+  data_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.ClipboardEvent.data)
+}
+#endif
+void ClipboardEvent::set_data(const char* value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.Clipboard.data)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.ClipboardEvent.data)
 }
-void Clipboard::set_data(const void* value, size_t size) {
+void ClipboardEvent::set_data(const void* value, size_t size) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.Clipboard.data)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.ClipboardEvent.data)
 }
-::std::string* Clipboard::mutable_data() {
+::std::string* ClipboardEvent::mutable_data() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Clipboard.data)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.ClipboardEvent.data)
   return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* Clipboard::release_data() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Clipboard.data)
+::std::string* ClipboardEvent::release_data() {
+  // @@protoc_insertion_point(field_release:aspia.proto.ClipboardEvent.data)
   
   return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void Clipboard::set_allocated_data(::std::string* data) {
+void ClipboardEvent::set_allocated_data(::std::string* data) {
   if (data != NULL) {
     
   } else {
     
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Clipboard.data)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.ClipboardEvent.data)
 }
 
-inline const Clipboard* Clipboard::internal_default_instance() {
-  return &Clipboard_default_instance_.get();
-}
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-bool ClipboardControl_Flags_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const ClipboardControl_Flags ClipboardControl::DISABLE_AUTOSEND;
-const ClipboardControl_Flags ClipboardControl::ENABLE_AUTOSEND;
-const ClipboardControl_Flags ClipboardControl::REQUESTED;
-const ClipboardControl_Flags ClipboardControl::Flags_MIN;
-const ClipboardControl_Flags ClipboardControl::Flags_MAX;
-const int ClipboardControl::Flags_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int ClipboardControl::kFlagsFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-ClipboardControl::ClipboardControl()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.ClipboardControl)
-}
-
-void ClipboardControl::InitAsDefaultInstance() {
-}
-
-ClipboardControl::ClipboardControl(const ClipboardControl& from)
-  : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.ClipboardControl)
-}
-
-void ClipboardControl::SharedCtor() {
-  flags_ = 0u;
-  _cached_size_ = 0;
-}
-
-ClipboardControl::~ClipboardControl() {
-  // @@protoc_insertion_point(destructor:aspia.proto.ClipboardControl)
-  SharedDtor();
-}
-
-void ClipboardControl::SharedDtor() {
-}
-
-void ClipboardControl::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const ClipboardControl& ClipboardControl::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
-  return *internal_default_instance();
-}
-
-::google::protobuf::internal::ExplicitlyConstructed<ClipboardControl> ClipboardControl_default_instance_;
-
-ClipboardControl* ClipboardControl::New(::google::protobuf::Arena* arena) const {
-  ClipboardControl* n = new ClipboardControl;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void ClipboardControl::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.ClipboardControl)
-  flags_ = 0u;
-}
-
-bool ClipboardControl::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:aspia.proto.ClipboardControl)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional uint32 flags = 1;
-      case 1: {
-        if (tag == 8) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &flags_)));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.ClipboardControl)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.ClipboardControl)
-  return false;
-#undef DO_
-}
-
-void ClipboardControl::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.ClipboardControl)
-  // optional uint32 flags = 1;
-  if (this->flags() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->flags(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:aspia.proto.ClipboardControl)
-}
-
-size_t ClipboardControl::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.ClipboardControl)
-  size_t total_size = 0;
-
-  // optional uint32 flags = 1;
-  if (this->flags() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->flags());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void ClipboardControl::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const ClipboardControl*>(&from));
-}
-
-void ClipboardControl::MergeFrom(const ClipboardControl& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.ClipboardControl)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
-
-void ClipboardControl::UnsafeMergeFrom(const ClipboardControl& from) {
-  GOOGLE_DCHECK(&from != this);
-  if (from.flags() != 0) {
-    set_flags(from.flags());
-  }
-}
-
-void ClipboardControl::CopyFrom(const ClipboardControl& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.ClipboardControl)
-  if (&from == this) return;
-  Clear();
-  UnsafeMergeFrom(from);
-}
-
-bool ClipboardControl::IsInitialized() const {
-
-  return true;
-}
-
-void ClipboardControl::Swap(ClipboardControl* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void ClipboardControl::InternalSwap(ClipboardControl* other) {
-  std::swap(flags_, other->flags_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string ClipboardControl::GetTypeName() const {
-  return "aspia.proto.ClipboardControl";
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// ClipboardControl
-
-// optional uint32 flags = 1;
-void ClipboardControl::clear_flags() {
-  flags_ = 0u;
-}
-::google::protobuf::uint32 ClipboardControl::flags() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.ClipboardControl.flags)
-  return flags_;
-}
-void ClipboardControl::set_flags(::google::protobuf::uint32 value) {
-  
-  flags_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.ClipboardControl.flags)
-}
-
-inline const ClipboardControl* ClipboardControl::internal_default_instance() {
-  return &ClipboardControl_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int CursorShape::kEncodingFieldNumber;
+const int CursorShape::kFlagsFieldNumber;
 const int CursorShape::kWidthFieldNumber;
 const int CursorShape::kHeightFieldNumber;
 const int CursorShape::kHotspotXFieldNumber;
 const int CursorShape::kHotspotYFieldNumber;
 const int CursorShape::kDataFieldNumber;
-const int CursorShape::kCacheIndexFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 CursorShape::CursorShape()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_proto_2eproto::InitDefaults();
+  }
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.CursorShape)
 }
-
-void CursorShape::InitAsDefaultInstance() {
-}
-
 CursorShape::CursorShape(const CursorShape& from)
   : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.data().size() > 0) {
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+  ::memcpy(&flags_, &from.flags_,
+    reinterpret_cast<char*>(&hotspot_y_) -
+    reinterpret_cast<char*>(&flags_) + sizeof(hotspot_y_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.CursorShape)
 }
 
 void CursorShape::SharedCtor() {
   data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&encoding_, 0, reinterpret_cast<char*>(&cache_index_) -
-    reinterpret_cast<char*>(&encoding_) + sizeof(cache_index_));
+  ::memset(&flags_, 0, reinterpret_cast<char*>(&hotspot_y_) -
+    reinterpret_cast<char*>(&flags_) + sizeof(hotspot_y_));
   _cached_size_ = 0;
 }
 
@@ -1634,11 +1334,9 @@ void CursorShape::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
 const CursorShape& CursorShape::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
+  protobuf_proto_2eproto::InitDefaults();
   return *internal_default_instance();
 }
-
-::google::protobuf::internal::ExplicitlyConstructed<CursorShape> CursorShape_default_instance_;
 
 CursorShape* CursorShape::New(::google::protobuf::Arena* arena) const {
   CursorShape* n = new CursorShape;
@@ -1650,28 +1348,9 @@ CursorShape* CursorShape::New(::google::protobuf::Arena* arena) const {
 
 void CursorShape::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.CursorShape)
-#if defined(__clang__)
-#define ZR_HELPER_(f) \
-  _Pragma("clang diagnostic push") \
-  _Pragma("clang diagnostic ignored \"-Winvalid-offsetof\"") \
-  __builtin_offsetof(CursorShape, f) \
-  _Pragma("clang diagnostic pop")
-#else
-#define ZR_HELPER_(f) reinterpret_cast<char*>(\
-  &reinterpret_cast<CursorShape*>(16)->f)
-#endif
-
-#define ZR_(first, last) do {\
-  ::memset(&(first), 0,\
-           ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
-} while (0)
-
-  ZR_(encoding_, cache_index_);
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-
-#undef ZR_HELPER_
-#undef ZR_
-
+  ::memset(&flags_, 0, reinterpret_cast<char*>(&hotspot_y_) -
+    reinterpret_cast<char*>(&flags_) + sizeof(hotspot_y_));
 }
 
 bool CursorShape::MergePartialFromCodedStream(
@@ -1680,29 +1359,26 @@ bool CursorShape::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   // @@protoc_insertion_point(parse_start:aspia.proto.CursorShape)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .aspia.proto.CursorShapeEncoding encoding = 1;
+      // uint32 flags = 1;
       case 1: {
-        if (tag == 8) {
-          int value;
+        if (tag == 8u) {
+
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_encoding(static_cast< ::aspia::proto::CursorShapeEncoding >(value));
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &flags_)));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_width;
         break;
       }
 
-      // optional int32 width = 2;
+      // int32 width = 2;
       case 2: {
-        if (tag == 16) {
-         parse_width:
+        if (tag == 16u) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
@@ -1710,14 +1386,12 @@ bool CursorShape::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_height;
         break;
       }
 
-      // optional int32 height = 3;
+      // int32 height = 3;
       case 3: {
-        if (tag == 24) {
-         parse_height:
+        if (tag == 24u) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
@@ -1725,14 +1399,12 @@ bool CursorShape::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(32)) goto parse_hotspot_x;
         break;
       }
 
-      // optional int32 hotspot_x = 4;
+      // int32 hotspot_x = 4;
       case 4: {
-        if (tag == 32) {
-         parse_hotspot_x:
+        if (tag == 32u) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
@@ -1740,14 +1412,12 @@ bool CursorShape::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(40)) goto parse_hotspot_y;
         break;
       }
 
-      // optional int32 hotspot_y = 5;
+      // int32 hotspot_y = 5;
       case 5: {
-        if (tag == 40) {
-         parse_hotspot_y:
+        if (tag == 40u) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
@@ -1755,35 +1425,17 @@ bool CursorShape::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(50)) goto parse_data;
         break;
       }
 
-      // optional bytes data = 6;
+      // bytes data = 6;
       case 6: {
-        if (tag == 50) {
-         parse_data:
+        if (tag == 50u) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_data()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(56)) goto parse_cache_index;
-        break;
-      }
-
-      // optional int32 cache_index = 7;
-      case 7: {
-        if (tag == 56) {
-         parse_cache_index:
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &cache_index_)));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
         break;
       }
 
@@ -1811,41 +1463,35 @@ failure:
 void CursorShape::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:aspia.proto.CursorShape)
-  // optional .aspia.proto.CursorShapeEncoding encoding = 1;
-  if (this->encoding() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->encoding(), output);
+  // uint32 flags = 1;
+  if (this->flags() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->flags(), output);
   }
 
-  // optional int32 width = 2;
+  // int32 width = 2;
   if (this->width() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->width(), output);
   }
 
-  // optional int32 height = 3;
+  // int32 height = 3;
   if (this->height() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->height(), output);
   }
 
-  // optional int32 hotspot_x = 4;
+  // int32 hotspot_x = 4;
   if (this->hotspot_x() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->hotspot_x(), output);
   }
 
-  // optional int32 hotspot_y = 5;
+  // int32 hotspot_y = 5;
   if (this->hotspot_y() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->hotspot_y(), output);
   }
 
-  // optional bytes data = 6;
+  // bytes data = 6;
   if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
       6, this->data(), output);
-  }
-
-  // optional int32 cache_index = 7;
-  if (this->cache_index() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->cache_index(), output);
   }
 
   // @@protoc_insertion_point(serialize_end:aspia.proto.CursorShape)
@@ -1855,52 +1501,46 @@ size_t CursorShape::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:aspia.proto.CursorShape)
   size_t total_size = 0;
 
-  // optional .aspia.proto.CursorShapeEncoding encoding = 1;
-  if (this->encoding() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->encoding());
-  }
-
-  // optional int32 width = 2;
-  if (this->width() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->width());
-  }
-
-  // optional int32 height = 3;
-  if (this->height() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->height());
-  }
-
-  // optional int32 hotspot_x = 4;
-  if (this->hotspot_x() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->hotspot_x());
-  }
-
-  // optional int32 hotspot_y = 5;
-  if (this->hotspot_y() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->hotspot_y());
-  }
-
-  // optional bytes data = 6;
+  // bytes data = 6;
   if (this->data().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
         this->data());
   }
 
-  // optional int32 cache_index = 7;
-  if (this->cache_index() != 0) {
+  // uint32 flags = 1;
+  if (this->flags() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->flags());
+  }
+
+  // int32 width = 2;
+  if (this->width() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->cache_index());
+        this->width());
+  }
+
+  // int32 height = 3;
+  if (this->height() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->height());
+  }
+
+  // int32 hotspot_x = 4;
+  if (this->hotspot_x() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->hotspot_x());
+  }
+
+  // int32 hotspot_y = 5;
+  if (this->hotspot_y() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->hotspot_y());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -1917,17 +1557,14 @@ void CursorShape::CheckTypeAndMergeFrom(
 
 void CursorShape::MergeFrom(const CursorShape& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.CursorShape)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from.data().size() > 0) {
 
-void CursorShape::UnsafeMergeFrom(const CursorShape& from) {
-  GOOGLE_DCHECK(&from != this);
-  if (from.encoding() != 0) {
-    set_encoding(from.encoding());
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+  if (from.flags() != 0) {
+    set_flags(from.flags());
   }
   if (from.width() != 0) {
     set_width(from.width());
@@ -1941,24 +1578,16 @@ void CursorShape::UnsafeMergeFrom(const CursorShape& from) {
   if (from.hotspot_y() != 0) {
     set_hotspot_y(from.hotspot_y());
   }
-  if (from.data().size() > 0) {
-
-    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
-  }
-  if (from.cache_index() != 0) {
-    set_cache_index(from.cache_index());
-  }
 }
 
 void CursorShape::CopyFrom(const CursorShape& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.CursorShape)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool CursorShape::IsInitialized() const {
-
   return true;
 }
 
@@ -1967,14 +1596,12 @@ void CursorShape::Swap(CursorShape* other) {
   InternalSwap(other);
 }
 void CursorShape::InternalSwap(CursorShape* other) {
-  std::swap(encoding_, other->encoding_);
+  data_.Swap(&other->data_);
+  std::swap(flags_, other->flags_);
   std::swap(width_, other->width_);
   std::swap(height_, other->height_);
   std::swap(hotspot_x_, other->hotspot_x_);
   std::swap(hotspot_y_, other->hotspot_y_);
-  data_.Swap(&other->data_);
-  std::swap(cache_index_, other->cache_index_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -1985,21 +1612,21 @@ void CursorShape::InternalSwap(CursorShape* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // CursorShape
 
-// optional .aspia.proto.CursorShapeEncoding encoding = 1;
-void CursorShape::clear_encoding() {
-  encoding_ = 0;
+// uint32 flags = 1;
+void CursorShape::clear_flags() {
+  flags_ = 0u;
 }
-::aspia::proto::CursorShapeEncoding CursorShape::encoding() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CursorShape.encoding)
-  return static_cast< ::aspia::proto::CursorShapeEncoding >(encoding_);
+::google::protobuf::uint32 CursorShape::flags() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CursorShape.flags)
+  return flags_;
 }
-void CursorShape::set_encoding(::aspia::proto::CursorShapeEncoding value) {
+void CursorShape::set_flags(::google::protobuf::uint32 value) {
   
-  encoding_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.encoding)
+  flags_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.flags)
 }
 
-// optional int32 width = 2;
+// int32 width = 2;
 void CursorShape::clear_width() {
   width_ = 0;
 }
@@ -2013,7 +1640,7 @@ void CursorShape::set_width(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.width)
 }
 
-// optional int32 height = 3;
+// int32 height = 3;
 void CursorShape::clear_height() {
   height_ = 0;
 }
@@ -2027,7 +1654,7 @@ void CursorShape::set_height(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.height)
 }
 
-// optional int32 hotspot_x = 4;
+// int32 hotspot_x = 4;
 void CursorShape::clear_hotspot_x() {
   hotspot_x_ = 0;
 }
@@ -2041,7 +1668,7 @@ void CursorShape::set_hotspot_x(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.hotspot_x)
 }
 
-// optional int32 hotspot_y = 5;
+// int32 hotspot_y = 5;
 void CursorShape::clear_hotspot_y() {
   hotspot_y_ = 0;
 }
@@ -2055,19 +1682,27 @@ void CursorShape::set_hotspot_y(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.hotspot_y)
 }
 
-// optional bytes data = 6;
+// bytes data = 6;
 void CursorShape::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& CursorShape::data() const {
   // @@protoc_insertion_point(field_get:aspia.proto.CursorShape.data)
-  return data_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return data_.GetNoArena();
 }
 void CursorShape::set_data(const ::std::string& value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.data)
 }
+#if LANG_CXX11
+void CursorShape::set_data(::std::string&& value) {
+  
+  data_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.CursorShape.data)
+}
+#endif
 void CursorShape::set_data(const char* value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
@@ -2099,100 +1734,1905 @@ void CursorShape::set_allocated_data(::std::string* data) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.CursorShape.data)
 }
 
-// optional int32 cache_index = 7;
-void CursorShape::clear_cache_index() {
-  cache_index_ = 0;
-}
-::google::protobuf::int32 CursorShape::cache_index() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CursorShape.cache_index)
-  return cache_index_;
-}
-void CursorShape::set_cache_index(::google::protobuf::int32 value) {
-  
-  cache_index_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CursorShape.cache_index)
-}
-
-inline const CursorShape* CursorShape::internal_default_instance() {
-  return &CursorShape_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int BellEvent::kFlagsFieldNumber;
+const int VideoRect::kXFieldNumber;
+const int VideoRect::kYFieldNumber;
+const int VideoRect::kWidthFieldNumber;
+const int VideoRect::kHeightFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-BellEvent::BellEvent()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
+VideoRect::VideoRect()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_proto_2eproto::InitDefaults();
+  }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.BellEvent)
+  // @@protoc_insertion_point(constructor:aspia.proto.VideoRect)
 }
-
-void BellEvent::InitAsDefaultInstance() {
-}
-
-BellEvent::BellEvent(const BellEvent& from)
+VideoRect::VideoRect(const VideoRect& from)
   : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.BellEvent)
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&x_, &from.x_,
+    reinterpret_cast<char*>(&height_) -
+    reinterpret_cast<char*>(&x_) + sizeof(height_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.VideoRect)
 }
 
-void BellEvent::SharedCtor() {
-  flags_ = 0u;
+void VideoRect::SharedCtor() {
+  ::memset(&x_, 0, reinterpret_cast<char*>(&height_) -
+    reinterpret_cast<char*>(&x_) + sizeof(height_));
   _cached_size_ = 0;
 }
 
-BellEvent::~BellEvent() {
-  // @@protoc_insertion_point(destructor:aspia.proto.BellEvent)
+VideoRect::~VideoRect() {
+  // @@protoc_insertion_point(destructor:aspia.proto.VideoRect)
   SharedDtor();
 }
 
-void BellEvent::SharedDtor() {
+void VideoRect::SharedDtor() {
 }
 
-void BellEvent::SetCachedSize(int size) const {
+void VideoRect::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const BellEvent& BellEvent::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
+const VideoRect& VideoRect::default_instance() {
+  protobuf_proto_2eproto::InitDefaults();
   return *internal_default_instance();
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<BellEvent> BellEvent_default_instance_;
-
-BellEvent* BellEvent::New(::google::protobuf::Arena* arena) const {
-  BellEvent* n = new BellEvent;
+VideoRect* VideoRect::New(::google::protobuf::Arena* arena) const {
+  VideoRect* n = new VideoRect;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void BellEvent::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.BellEvent)
-  flags_ = 0u;
+void VideoRect::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.VideoRect)
+  ::memset(&x_, 0, reinterpret_cast<char*>(&height_) -
+    reinterpret_cast<char*>(&x_) + sizeof(height_));
 }
 
-bool BellEvent::MergePartialFromCodedStream(
+bool VideoRect::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:aspia.proto.BellEvent)
+  // @@protoc_insertion_point(parse_start:aspia.proto.VideoRect)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional uint32 flags = 1;
+      // int32 x = 1;
       case 1: {
-        if (tag == 8) {
+        if (tag == 8u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &x_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 y = 2;
+      case 2: {
+        if (tag == 16u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &y_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 width = 3;
+      case 3: {
+        if (tag == 24u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &width_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 height = 4;
+      case 4: {
+        if (tag == 32u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &height_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.VideoRect)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.VideoRect)
+  return false;
+#undef DO_
+}
+
+void VideoRect::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.VideoRect)
+  // int32 x = 1;
+  if (this->x() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->x(), output);
+  }
+
+  // int32 y = 2;
+  if (this->y() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->y(), output);
+  }
+
+  // int32 width = 3;
+  if (this->width() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->width(), output);
+  }
+
+  // int32 height = 4;
+  if (this->height() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->height(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:aspia.proto.VideoRect)
+}
+
+size_t VideoRect::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.VideoRect)
+  size_t total_size = 0;
+
+  // int32 x = 1;
+  if (this->x() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->x());
+  }
+
+  // int32 y = 2;
+  if (this->y() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->y());
+  }
+
+  // int32 width = 3;
+  if (this->width() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->width());
+  }
+
+  // int32 height = 4;
+  if (this->height() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->height());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void VideoRect::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const VideoRect*>(&from));
+}
+
+void VideoRect::MergeFrom(const VideoRect& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.VideoRect)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from.x() != 0) {
+    set_x(from.x());
+  }
+  if (from.y() != 0) {
+    set_y(from.y());
+  }
+  if (from.width() != 0) {
+    set_width(from.width());
+  }
+  if (from.height() != 0) {
+    set_height(from.height());
+  }
+}
+
+void VideoRect::CopyFrom(const VideoRect& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.VideoRect)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool VideoRect::IsInitialized() const {
+  return true;
+}
+
+void VideoRect::Swap(VideoRect* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void VideoRect::InternalSwap(VideoRect* other) {
+  std::swap(x_, other->x_);
+  std::swap(y_, other->y_);
+  std::swap(width_, other->width_);
+  std::swap(height_, other->height_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string VideoRect::GetTypeName() const {
+  return "aspia.proto.VideoRect";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// VideoRect
+
+// int32 x = 1;
+void VideoRect::clear_x() {
+  x_ = 0;
+}
+::google::protobuf::int32 VideoRect::x() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoRect.x)
+  return x_;
+}
+void VideoRect::set_x(::google::protobuf::int32 value) {
+  
+  x_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoRect.x)
+}
+
+// int32 y = 2;
+void VideoRect::clear_y() {
+  y_ = 0;
+}
+::google::protobuf::int32 VideoRect::y() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoRect.y)
+  return y_;
+}
+void VideoRect::set_y(::google::protobuf::int32 value) {
+  
+  y_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoRect.y)
+}
+
+// int32 width = 3;
+void VideoRect::clear_width() {
+  width_ = 0;
+}
+::google::protobuf::int32 VideoRect::width() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoRect.width)
+  return width_;
+}
+void VideoRect::set_width(::google::protobuf::int32 value) {
+  
+  width_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoRect.width)
+}
+
+// int32 height = 4;
+void VideoRect::clear_height() {
+  height_ = 0;
+}
+::google::protobuf::int32 VideoRect::height() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoRect.height)
+  return height_;
+}
+void VideoRect::set_height(::google::protobuf::int32 value) {
+  
+  height_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoRect.height)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int VideoPixelFormat::kBitsPerPixelFieldNumber;
+const int VideoPixelFormat::kRedMaxFieldNumber;
+const int VideoPixelFormat::kGreenMaxFieldNumber;
+const int VideoPixelFormat::kBlueMaxFieldNumber;
+const int VideoPixelFormat::kRedShiftFieldNumber;
+const int VideoPixelFormat::kGreenShiftFieldNumber;
+const int VideoPixelFormat::kBlueShiftFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+VideoPixelFormat::VideoPixelFormat()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_proto_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.VideoPixelFormat)
+}
+VideoPixelFormat::VideoPixelFormat(const VideoPixelFormat& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&bits_per_pixel_, &from.bits_per_pixel_,
+    reinterpret_cast<char*>(&blue_shift_) -
+    reinterpret_cast<char*>(&bits_per_pixel_) + sizeof(blue_shift_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.VideoPixelFormat)
+}
+
+void VideoPixelFormat::SharedCtor() {
+  ::memset(&bits_per_pixel_, 0, reinterpret_cast<char*>(&blue_shift_) -
+    reinterpret_cast<char*>(&bits_per_pixel_) + sizeof(blue_shift_));
+  _cached_size_ = 0;
+}
+
+VideoPixelFormat::~VideoPixelFormat() {
+  // @@protoc_insertion_point(destructor:aspia.proto.VideoPixelFormat)
+  SharedDtor();
+}
+
+void VideoPixelFormat::SharedDtor() {
+}
+
+void VideoPixelFormat::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const VideoPixelFormat& VideoPixelFormat::default_instance() {
+  protobuf_proto_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+VideoPixelFormat* VideoPixelFormat::New(::google::protobuf::Arena* arena) const {
+  VideoPixelFormat* n = new VideoPixelFormat;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void VideoPixelFormat::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.VideoPixelFormat)
+  ::memset(&bits_per_pixel_, 0, reinterpret_cast<char*>(&blue_shift_) -
+    reinterpret_cast<char*>(&bits_per_pixel_) + sizeof(blue_shift_));
+}
+
+bool VideoPixelFormat::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:aspia.proto.VideoPixelFormat)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // uint32 bits_per_pixel = 1;
+      case 1: {
+        if (tag == 8u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &bits_per_pixel_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 red_max = 2;
+      case 2: {
+        if (tag == 16u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &red_max_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 green_max = 3;
+      case 3: {
+        if (tag == 24u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &green_max_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 blue_max = 4;
+      case 4: {
+        if (tag == 32u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &blue_max_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 red_shift = 5;
+      case 5: {
+        if (tag == 40u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &red_shift_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 green_shift = 6;
+      case 6: {
+        if (tag == 48u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &green_shift_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 blue_shift = 7;
+      case 7: {
+        if (tag == 56u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &blue_shift_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.VideoPixelFormat)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.VideoPixelFormat)
+  return false;
+#undef DO_
+}
+
+void VideoPixelFormat::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.VideoPixelFormat)
+  // uint32 bits_per_pixel = 1;
+  if (this->bits_per_pixel() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->bits_per_pixel(), output);
+  }
+
+  // uint32 red_max = 2;
+  if (this->red_max() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->red_max(), output);
+  }
+
+  // uint32 green_max = 3;
+  if (this->green_max() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->green_max(), output);
+  }
+
+  // uint32 blue_max = 4;
+  if (this->blue_max() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->blue_max(), output);
+  }
+
+  // uint32 red_shift = 5;
+  if (this->red_shift() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->red_shift(), output);
+  }
+
+  // uint32 green_shift = 6;
+  if (this->green_shift() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(6, this->green_shift(), output);
+  }
+
+  // uint32 blue_shift = 7;
+  if (this->blue_shift() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(7, this->blue_shift(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:aspia.proto.VideoPixelFormat)
+}
+
+size_t VideoPixelFormat::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.VideoPixelFormat)
+  size_t total_size = 0;
+
+  // uint32 bits_per_pixel = 1;
+  if (this->bits_per_pixel() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->bits_per_pixel());
+  }
+
+  // uint32 red_max = 2;
+  if (this->red_max() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->red_max());
+  }
+
+  // uint32 green_max = 3;
+  if (this->green_max() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->green_max());
+  }
+
+  // uint32 blue_max = 4;
+  if (this->blue_max() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->blue_max());
+  }
+
+  // uint32 red_shift = 5;
+  if (this->red_shift() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->red_shift());
+  }
+
+  // uint32 green_shift = 6;
+  if (this->green_shift() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->green_shift());
+  }
+
+  // uint32 blue_shift = 7;
+  if (this->blue_shift() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->blue_shift());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void VideoPixelFormat::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const VideoPixelFormat*>(&from));
+}
+
+void VideoPixelFormat::MergeFrom(const VideoPixelFormat& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.VideoPixelFormat)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from.bits_per_pixel() != 0) {
+    set_bits_per_pixel(from.bits_per_pixel());
+  }
+  if (from.red_max() != 0) {
+    set_red_max(from.red_max());
+  }
+  if (from.green_max() != 0) {
+    set_green_max(from.green_max());
+  }
+  if (from.blue_max() != 0) {
+    set_blue_max(from.blue_max());
+  }
+  if (from.red_shift() != 0) {
+    set_red_shift(from.red_shift());
+  }
+  if (from.green_shift() != 0) {
+    set_green_shift(from.green_shift());
+  }
+  if (from.blue_shift() != 0) {
+    set_blue_shift(from.blue_shift());
+  }
+}
+
+void VideoPixelFormat::CopyFrom(const VideoPixelFormat& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.VideoPixelFormat)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool VideoPixelFormat::IsInitialized() const {
+  return true;
+}
+
+void VideoPixelFormat::Swap(VideoPixelFormat* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void VideoPixelFormat::InternalSwap(VideoPixelFormat* other) {
+  std::swap(bits_per_pixel_, other->bits_per_pixel_);
+  std::swap(red_max_, other->red_max_);
+  std::swap(green_max_, other->green_max_);
+  std::swap(blue_max_, other->blue_max_);
+  std::swap(red_shift_, other->red_shift_);
+  std::swap(green_shift_, other->green_shift_);
+  std::swap(blue_shift_, other->blue_shift_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string VideoPixelFormat::GetTypeName() const {
+  return "aspia.proto.VideoPixelFormat";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// VideoPixelFormat
+
+// uint32 bits_per_pixel = 1;
+void VideoPixelFormat::clear_bits_per_pixel() {
+  bits_per_pixel_ = 0u;
+}
+::google::protobuf::uint32 VideoPixelFormat::bits_per_pixel() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoPixelFormat.bits_per_pixel)
+  return bits_per_pixel_;
+}
+void VideoPixelFormat::set_bits_per_pixel(::google::protobuf::uint32 value) {
+  
+  bits_per_pixel_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoPixelFormat.bits_per_pixel)
+}
+
+// uint32 red_max = 2;
+void VideoPixelFormat::clear_red_max() {
+  red_max_ = 0u;
+}
+::google::protobuf::uint32 VideoPixelFormat::red_max() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoPixelFormat.red_max)
+  return red_max_;
+}
+void VideoPixelFormat::set_red_max(::google::protobuf::uint32 value) {
+  
+  red_max_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoPixelFormat.red_max)
+}
+
+// uint32 green_max = 3;
+void VideoPixelFormat::clear_green_max() {
+  green_max_ = 0u;
+}
+::google::protobuf::uint32 VideoPixelFormat::green_max() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoPixelFormat.green_max)
+  return green_max_;
+}
+void VideoPixelFormat::set_green_max(::google::protobuf::uint32 value) {
+  
+  green_max_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoPixelFormat.green_max)
+}
+
+// uint32 blue_max = 4;
+void VideoPixelFormat::clear_blue_max() {
+  blue_max_ = 0u;
+}
+::google::protobuf::uint32 VideoPixelFormat::blue_max() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoPixelFormat.blue_max)
+  return blue_max_;
+}
+void VideoPixelFormat::set_blue_max(::google::protobuf::uint32 value) {
+  
+  blue_max_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoPixelFormat.blue_max)
+}
+
+// uint32 red_shift = 5;
+void VideoPixelFormat::clear_red_shift() {
+  red_shift_ = 0u;
+}
+::google::protobuf::uint32 VideoPixelFormat::red_shift() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoPixelFormat.red_shift)
+  return red_shift_;
+}
+void VideoPixelFormat::set_red_shift(::google::protobuf::uint32 value) {
+  
+  red_shift_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoPixelFormat.red_shift)
+}
+
+// uint32 green_shift = 6;
+void VideoPixelFormat::clear_green_shift() {
+  green_shift_ = 0u;
+}
+::google::protobuf::uint32 VideoPixelFormat::green_shift() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoPixelFormat.green_shift)
+  return green_shift_;
+}
+void VideoPixelFormat::set_green_shift(::google::protobuf::uint32 value) {
+  
+  green_shift_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoPixelFormat.green_shift)
+}
+
+// uint32 blue_shift = 7;
+void VideoPixelFormat::clear_blue_shift() {
+  blue_shift_ = 0u;
+}
+::google::protobuf::uint32 VideoPixelFormat::blue_shift() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoPixelFormat.blue_shift)
+  return blue_shift_;
+}
+void VideoPixelFormat::set_blue_shift(::google::protobuf::uint32 value) {
+  
+  blue_shift_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoPixelFormat.blue_shift)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int VideoSize::kWidthFieldNumber;
+const int VideoSize::kHeightFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+VideoSize::VideoSize()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_proto_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.VideoSize)
+}
+VideoSize::VideoSize(const VideoSize& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&width_, &from.width_,
+    reinterpret_cast<char*>(&height_) -
+    reinterpret_cast<char*>(&width_) + sizeof(height_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.VideoSize)
+}
+
+void VideoSize::SharedCtor() {
+  ::memset(&width_, 0, reinterpret_cast<char*>(&height_) -
+    reinterpret_cast<char*>(&width_) + sizeof(height_));
+  _cached_size_ = 0;
+}
+
+VideoSize::~VideoSize() {
+  // @@protoc_insertion_point(destructor:aspia.proto.VideoSize)
+  SharedDtor();
+}
+
+void VideoSize::SharedDtor() {
+}
+
+void VideoSize::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const VideoSize& VideoSize::default_instance() {
+  protobuf_proto_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+VideoSize* VideoSize::New(::google::protobuf::Arena* arena) const {
+  VideoSize* n = new VideoSize;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void VideoSize::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.VideoSize)
+  ::memset(&width_, 0, reinterpret_cast<char*>(&height_) -
+    reinterpret_cast<char*>(&width_) + sizeof(height_));
+}
+
+bool VideoSize::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:aspia.proto.VideoSize)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int32 width = 1;
+      case 1: {
+        if (tag == 8u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &width_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 height = 2;
+      case 2: {
+        if (tag == 16u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &height_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.VideoSize)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.VideoSize)
+  return false;
+#undef DO_
+}
+
+void VideoSize::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.VideoSize)
+  // int32 width = 1;
+  if (this->width() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->width(), output);
+  }
+
+  // int32 height = 2;
+  if (this->height() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->height(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:aspia.proto.VideoSize)
+}
+
+size_t VideoSize::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.VideoSize)
+  size_t total_size = 0;
+
+  // int32 width = 1;
+  if (this->width() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->width());
+  }
+
+  // int32 height = 2;
+  if (this->height() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->height());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void VideoSize::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const VideoSize*>(&from));
+}
+
+void VideoSize::MergeFrom(const VideoSize& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.VideoSize)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from.width() != 0) {
+    set_width(from.width());
+  }
+  if (from.height() != 0) {
+    set_height(from.height());
+  }
+}
+
+void VideoSize::CopyFrom(const VideoSize& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.VideoSize)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool VideoSize::IsInitialized() const {
+  return true;
+}
+
+void VideoSize::Swap(VideoSize* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void VideoSize::InternalSwap(VideoSize* other) {
+  std::swap(width_, other->width_);
+  std::swap(height_, other->height_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string VideoSize::GetTypeName() const {
+  return "aspia.proto.VideoSize";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// VideoSize
+
+// int32 width = 1;
+void VideoSize::clear_width() {
+  width_ = 0;
+}
+::google::protobuf::int32 VideoSize::width() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoSize.width)
+  return width_;
+}
+void VideoSize::set_width(::google::protobuf::int32 value) {
+  
+  width_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoSize.width)
+}
+
+// int32 height = 2;
+void VideoSize::clear_height() {
+  height_ = 0;
+}
+::google::protobuf::int32 VideoSize::height() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoSize.height)
+  return height_;
+}
+void VideoSize::set_height(::google::protobuf::int32 value) {
+  
+  height_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoSize.height)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int VideoPacket::kEncodingFieldNumber;
+const int VideoPacket::kScreenSizeFieldNumber;
+const int VideoPacket::kPixelFormatFieldNumber;
+const int VideoPacket::kDirtyRectFieldNumber;
+const int VideoPacket::kDataFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+VideoPacket::VideoPacket()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_proto_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.VideoPacket)
+}
+VideoPacket::VideoPacket(const VideoPacket& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      dirty_rect_(from.dirty_rect_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.data().size() > 0) {
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+  if (from.has_screen_size()) {
+    screen_size_ = new ::aspia::proto::VideoSize(*from.screen_size_);
+  } else {
+    screen_size_ = NULL;
+  }
+  if (from.has_pixel_format()) {
+    pixel_format_ = new ::aspia::proto::VideoPixelFormat(*from.pixel_format_);
+  } else {
+    pixel_format_ = NULL;
+  }
+  encoding_ = from.encoding_;
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.VideoPacket)
+}
+
+void VideoPacket::SharedCtor() {
+  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&screen_size_, 0, reinterpret_cast<char*>(&encoding_) -
+    reinterpret_cast<char*>(&screen_size_) + sizeof(encoding_));
+  _cached_size_ = 0;
+}
+
+VideoPacket::~VideoPacket() {
+  // @@protoc_insertion_point(destructor:aspia.proto.VideoPacket)
+  SharedDtor();
+}
+
+void VideoPacket::SharedDtor() {
+  data_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != internal_default_instance()) {
+    delete screen_size_;
+  }
+  if (this != internal_default_instance()) {
+    delete pixel_format_;
+  }
+}
+
+void VideoPacket::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const VideoPacket& VideoPacket::default_instance() {
+  protobuf_proto_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+VideoPacket* VideoPacket::New(::google::protobuf::Arena* arena) const {
+  VideoPacket* n = new VideoPacket;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void VideoPacket::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.VideoPacket)
+  dirty_rect_.Clear();
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (GetArenaNoVirtual() == NULL && screen_size_ != NULL) {
+    delete screen_size_;
+  }
+  screen_size_ = NULL;
+  if (GetArenaNoVirtual() == NULL && pixel_format_ != NULL) {
+    delete pixel_format_;
+  }
+  pixel_format_ = NULL;
+  encoding_ = 0;
+}
+
+bool VideoPacket::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:aspia.proto.VideoPacket)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // .aspia.proto.VideoEncoding encoding = 1;
+      case 1: {
+        if (tag == 8u) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_encoding(static_cast< ::aspia::proto::VideoEncoding >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.VideoSize screen_size = 2;
+      case 2: {
+        if (tag == 18u) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_screen_size()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.VideoPixelFormat pixel_format = 3;
+      case 3: {
+        if (tag == 26u) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_pixel_format()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .aspia.proto.VideoRect dirty_rect = 4;
+      case 4: {
+        if (tag == 34u) {
+          DO_(input->IncrementRecursionDepth());
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtualNoRecursionDepth(
+                input, add_dirty_rect()));
+        } else {
+          goto handle_unusual;
+        }
+        input->UnsafeDecrementRecursionDepth();
+        break;
+      }
+
+      // bytes data = 5;
+      case 5: {
+        if (tag == 42u) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_data()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.VideoPacket)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.VideoPacket)
+  return false;
+#undef DO_
+}
+
+void VideoPacket::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.VideoPacket)
+  // .aspia.proto.VideoEncoding encoding = 1;
+  if (this->encoding() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->encoding(), output);
+  }
+
+  // .aspia.proto.VideoSize screen_size = 2;
+  if (this->has_screen_size()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      2, *this->screen_size_, output);
+  }
+
+  // .aspia.proto.VideoPixelFormat pixel_format = 3;
+  if (this->has_pixel_format()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      3, *this->pixel_format_, output);
+  }
+
+  // repeated .aspia.proto.VideoRect dirty_rect = 4;
+  for (unsigned int i = 0, n = this->dirty_rect_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      4, this->dirty_rect(i), output);
+  }
+
+  // bytes data = 5;
+  if (this->data().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      5, this->data(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:aspia.proto.VideoPacket)
+}
+
+size_t VideoPacket::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.VideoPacket)
+  size_t total_size = 0;
+
+  // repeated .aspia.proto.VideoRect dirty_rect = 4;
+  {
+    unsigned int count = this->dirty_rect_size();
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->dirty_rect(i));
+    }
+  }
+
+  // bytes data = 5;
+  if (this->data().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->data());
+  }
+
+  // .aspia.proto.VideoSize screen_size = 2;
+  if (this->has_screen_size()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->screen_size_);
+  }
+
+  // .aspia.proto.VideoPixelFormat pixel_format = 3;
+  if (this->has_pixel_format()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->pixel_format_);
+  }
+
+  // .aspia.proto.VideoEncoding encoding = 1;
+  if (this->encoding() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->encoding());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void VideoPacket::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const VideoPacket*>(&from));
+}
+
+void VideoPacket::MergeFrom(const VideoPacket& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.VideoPacket)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  dirty_rect_.MergeFrom(from.dirty_rect_);
+  if (from.data().size() > 0) {
+
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+  if (from.has_screen_size()) {
+    mutable_screen_size()->::aspia::proto::VideoSize::MergeFrom(from.screen_size());
+  }
+  if (from.has_pixel_format()) {
+    mutable_pixel_format()->::aspia::proto::VideoPixelFormat::MergeFrom(from.pixel_format());
+  }
+  if (from.encoding() != 0) {
+    set_encoding(from.encoding());
+  }
+}
+
+void VideoPacket::CopyFrom(const VideoPacket& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.VideoPacket)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool VideoPacket::IsInitialized() const {
+  return true;
+}
+
+void VideoPacket::Swap(VideoPacket* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void VideoPacket::InternalSwap(VideoPacket* other) {
+  dirty_rect_.UnsafeArenaSwap(&other->dirty_rect_);
+  data_.Swap(&other->data_);
+  std::swap(screen_size_, other->screen_size_);
+  std::swap(pixel_format_, other->pixel_format_);
+  std::swap(encoding_, other->encoding_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string VideoPacket::GetTypeName() const {
+  return "aspia.proto.VideoPacket";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// VideoPacket
+
+// .aspia.proto.VideoEncoding encoding = 1;
+void VideoPacket::clear_encoding() {
+  encoding_ = 0;
+}
+::aspia::proto::VideoEncoding VideoPacket::encoding() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoPacket.encoding)
+  return static_cast< ::aspia::proto::VideoEncoding >(encoding_);
+}
+void VideoPacket::set_encoding(::aspia::proto::VideoEncoding value) {
+  
+  encoding_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoPacket.encoding)
+}
+
+// .aspia.proto.VideoSize screen_size = 2;
+bool VideoPacket::has_screen_size() const {
+  return this != internal_default_instance() && screen_size_ != NULL;
+}
+void VideoPacket::clear_screen_size() {
+  if (GetArenaNoVirtual() == NULL && screen_size_ != NULL) delete screen_size_;
+  screen_size_ = NULL;
+}
+const ::aspia::proto::VideoSize& VideoPacket::screen_size() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoPacket.screen_size)
+  return screen_size_ != NULL ? *screen_size_
+                         : *::aspia::proto::VideoSize::internal_default_instance();
+}
+::aspia::proto::VideoSize* VideoPacket::mutable_screen_size() {
+  
+  if (screen_size_ == NULL) {
+    screen_size_ = new ::aspia::proto::VideoSize;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoPacket.screen_size)
+  return screen_size_;
+}
+::aspia::proto::VideoSize* VideoPacket::release_screen_size() {
+  // @@protoc_insertion_point(field_release:aspia.proto.VideoPacket.screen_size)
+  
+  ::aspia::proto::VideoSize* temp = screen_size_;
+  screen_size_ = NULL;
+  return temp;
+}
+void VideoPacket::set_allocated_screen_size(::aspia::proto::VideoSize* screen_size) {
+  delete screen_size_;
+  screen_size_ = screen_size;
+  if (screen_size) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoPacket.screen_size)
+}
+
+// .aspia.proto.VideoPixelFormat pixel_format = 3;
+bool VideoPacket::has_pixel_format() const {
+  return this != internal_default_instance() && pixel_format_ != NULL;
+}
+void VideoPacket::clear_pixel_format() {
+  if (GetArenaNoVirtual() == NULL && pixel_format_ != NULL) delete pixel_format_;
+  pixel_format_ = NULL;
+}
+const ::aspia::proto::VideoPixelFormat& VideoPacket::pixel_format() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoPacket.pixel_format)
+  return pixel_format_ != NULL ? *pixel_format_
+                         : *::aspia::proto::VideoPixelFormat::internal_default_instance();
+}
+::aspia::proto::VideoPixelFormat* VideoPacket::mutable_pixel_format() {
+  
+  if (pixel_format_ == NULL) {
+    pixel_format_ = new ::aspia::proto::VideoPixelFormat;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoPacket.pixel_format)
+  return pixel_format_;
+}
+::aspia::proto::VideoPixelFormat* VideoPacket::release_pixel_format() {
+  // @@protoc_insertion_point(field_release:aspia.proto.VideoPacket.pixel_format)
+  
+  ::aspia::proto::VideoPixelFormat* temp = pixel_format_;
+  pixel_format_ = NULL;
+  return temp;
+}
+void VideoPacket::set_allocated_pixel_format(::aspia::proto::VideoPixelFormat* pixel_format) {
+  delete pixel_format_;
+  pixel_format_ = pixel_format;
+  if (pixel_format) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoPacket.pixel_format)
+}
+
+// repeated .aspia.proto.VideoRect dirty_rect = 4;
+int VideoPacket::dirty_rect_size() const {
+  return dirty_rect_.size();
+}
+void VideoPacket::clear_dirty_rect() {
+  dirty_rect_.Clear();
+}
+const ::aspia::proto::VideoRect& VideoPacket::dirty_rect(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoPacket.dirty_rect)
+  return dirty_rect_.Get(index);
+}
+::aspia::proto::VideoRect* VideoPacket::mutable_dirty_rect(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoPacket.dirty_rect)
+  return dirty_rect_.Mutable(index);
+}
+::aspia::proto::VideoRect* VideoPacket::add_dirty_rect() {
+  // @@protoc_insertion_point(field_add:aspia.proto.VideoPacket.dirty_rect)
+  return dirty_rect_.Add();
+}
+::google::protobuf::RepeatedPtrField< ::aspia::proto::VideoRect >*
+VideoPacket::mutable_dirty_rect() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.proto.VideoPacket.dirty_rect)
+  return &dirty_rect_;
+}
+const ::google::protobuf::RepeatedPtrField< ::aspia::proto::VideoRect >&
+VideoPacket::dirty_rect() const {
+  // @@protoc_insertion_point(field_list:aspia.proto.VideoPacket.dirty_rect)
+  return dirty_rect_;
+}
+
+// bytes data = 5;
+void VideoPacket::clear_data() {
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& VideoPacket::data() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoPacket.data)
+  return data_.GetNoArena();
+}
+void VideoPacket::set_data(const ::std::string& value) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoPacket.data)
+}
+#if LANG_CXX11
+void VideoPacket::set_data(::std::string&& value) {
+  
+  data_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoPacket.data)
+}
+#endif
+void VideoPacket::set_data(const char* value) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoPacket.data)
+}
+void VideoPacket::set_data(const void* value, size_t size) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoPacket.data)
+}
+::std::string* VideoPacket::mutable_data() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoPacket.data)
+  return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* VideoPacket::release_data() {
+  // @@protoc_insertion_point(field_release:aspia.proto.VideoPacket.data)
+  
+  return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void VideoPacket::set_allocated_data(::std::string* data) {
+  if (data != NULL) {
+    
+  } else {
+    
+  }
+  data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoPacket.data)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DesktopConfigRequest::kVideoEncodingsFieldNumber;
+const int DesktopConfigRequest::kAudioEncodingsFieldNumber;
+const int DesktopConfigRequest::kFeaturesFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DesktopConfigRequest::DesktopConfigRequest()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_proto_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.DesktopConfigRequest)
+}
+DesktopConfigRequest::DesktopConfigRequest(const DesktopConfigRequest& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&video_encodings_, &from.video_encodings_,
+    reinterpret_cast<char*>(&features_) -
+    reinterpret_cast<char*>(&video_encodings_) + sizeof(features_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DesktopConfigRequest)
+}
+
+void DesktopConfigRequest::SharedCtor() {
+  ::memset(&video_encodings_, 0, reinterpret_cast<char*>(&features_) -
+    reinterpret_cast<char*>(&video_encodings_) + sizeof(features_));
+  _cached_size_ = 0;
+}
+
+DesktopConfigRequest::~DesktopConfigRequest() {
+  // @@protoc_insertion_point(destructor:aspia.proto.DesktopConfigRequest)
+  SharedDtor();
+}
+
+void DesktopConfigRequest::SharedDtor() {
+}
+
+void DesktopConfigRequest::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DesktopConfigRequest& DesktopConfigRequest::default_instance() {
+  protobuf_proto_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+DesktopConfigRequest* DesktopConfigRequest::New(::google::protobuf::Arena* arena) const {
+  DesktopConfigRequest* n = new DesktopConfigRequest;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DesktopConfigRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DesktopConfigRequest)
+  ::memset(&video_encodings_, 0, reinterpret_cast<char*>(&features_) -
+    reinterpret_cast<char*>(&video_encodings_) + sizeof(features_));
+}
+
+bool DesktopConfigRequest::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:aspia.proto.DesktopConfigRequest)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // uint32 video_encodings = 1;
+      case 1: {
+        if (tag == 8u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &video_encodings_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 audio_encodings = 2;
+      case 2: {
+        if (tag == 16u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &audio_encodings_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 features = 3;
+      case 3: {
+        if (tag == 24u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &features_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.DesktopConfigRequest)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DesktopConfigRequest)
+  return false;
+#undef DO_
+}
+
+void DesktopConfigRequest::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DesktopConfigRequest)
+  // uint32 video_encodings = 1;
+  if (this->video_encodings() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->video_encodings(), output);
+  }
+
+  // uint32 audio_encodings = 2;
+  if (this->audio_encodings() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->audio_encodings(), output);
+  }
+
+  // uint32 features = 3;
+  if (this->features() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->features(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DesktopConfigRequest)
+}
+
+size_t DesktopConfigRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DesktopConfigRequest)
+  size_t total_size = 0;
+
+  // uint32 video_encodings = 1;
+  if (this->video_encodings() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->video_encodings());
+  }
+
+  // uint32 audio_encodings = 2;
+  if (this->audio_encodings() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->audio_encodings());
+  }
+
+  // uint32 features = 3;
+  if (this->features() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->features());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DesktopConfigRequest::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const DesktopConfigRequest*>(&from));
+}
+
+void DesktopConfigRequest::MergeFrom(const DesktopConfigRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DesktopConfigRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from.video_encodings() != 0) {
+    set_video_encodings(from.video_encodings());
+  }
+  if (from.audio_encodings() != 0) {
+    set_audio_encodings(from.audio_encodings());
+  }
+  if (from.features() != 0) {
+    set_features(from.features());
+  }
+}
+
+void DesktopConfigRequest::CopyFrom(const DesktopConfigRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DesktopConfigRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DesktopConfigRequest::IsInitialized() const {
+  return true;
+}
+
+void DesktopConfigRequest::Swap(DesktopConfigRequest* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void DesktopConfigRequest::InternalSwap(DesktopConfigRequest* other) {
+  std::swap(video_encodings_, other->video_encodings_);
+  std::swap(audio_encodings_, other->audio_encodings_);
+  std::swap(features_, other->features_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string DesktopConfigRequest::GetTypeName() const {
+  return "aspia.proto.DesktopConfigRequest";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// DesktopConfigRequest
+
+// uint32 video_encodings = 1;
+void DesktopConfigRequest::clear_video_encodings() {
+  video_encodings_ = 0u;
+}
+::google::protobuf::uint32 DesktopConfigRequest::video_encodings() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DesktopConfigRequest.video_encodings)
+  return video_encodings_;
+}
+void DesktopConfigRequest::set_video_encodings(::google::protobuf::uint32 value) {
+  
+  video_encodings_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DesktopConfigRequest.video_encodings)
+}
+
+// uint32 audio_encodings = 2;
+void DesktopConfigRequest::clear_audio_encodings() {
+  audio_encodings_ = 0u;
+}
+::google::protobuf::uint32 DesktopConfigRequest::audio_encodings() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DesktopConfigRequest.audio_encodings)
+  return audio_encodings_;
+}
+void DesktopConfigRequest::set_audio_encodings(::google::protobuf::uint32 value) {
+  
+  audio_encodings_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DesktopConfigRequest.audio_encodings)
+}
+
+// uint32 features = 3;
+void DesktopConfigRequest::clear_features() {
+  features_ = 0u;
+}
+::google::protobuf::uint32 DesktopConfigRequest::features() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DesktopConfigRequest.features)
+  return features_;
+}
+void DesktopConfigRequest::set_features(::google::protobuf::uint32 value) {
+  
+  features_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DesktopConfigRequest.features)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DesktopConfig::kFlagsFieldNumber;
+const int DesktopConfig::kEncodingFieldNumber;
+const int DesktopConfig::kPixelFormatFieldNumber;
+const int DesktopConfig::kUpdateIntervalFieldNumber;
+const int DesktopConfig::kCompressRatioFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DesktopConfig::DesktopConfig()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_proto_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.DesktopConfig)
+}
+DesktopConfig::DesktopConfig(const DesktopConfig& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from.has_pixel_format()) {
+    pixel_format_ = new ::aspia::proto::VideoPixelFormat(*from.pixel_format_);
+  } else {
+    pixel_format_ = NULL;
+  }
+  ::memcpy(&flags_, &from.flags_,
+    reinterpret_cast<char*>(&compress_ratio_) -
+    reinterpret_cast<char*>(&flags_) + sizeof(compress_ratio_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DesktopConfig)
+}
+
+void DesktopConfig::SharedCtor() {
+  ::memset(&pixel_format_, 0, reinterpret_cast<char*>(&compress_ratio_) -
+    reinterpret_cast<char*>(&pixel_format_) + sizeof(compress_ratio_));
+  _cached_size_ = 0;
+}
+
+DesktopConfig::~DesktopConfig() {
+  // @@protoc_insertion_point(destructor:aspia.proto.DesktopConfig)
+  SharedDtor();
+}
+
+void DesktopConfig::SharedDtor() {
+  if (this != internal_default_instance()) {
+    delete pixel_format_;
+  }
+}
+
+void DesktopConfig::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DesktopConfig& DesktopConfig::default_instance() {
+  protobuf_proto_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+DesktopConfig* DesktopConfig::New(::google::protobuf::Arena* arena) const {
+  DesktopConfig* n = new DesktopConfig;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DesktopConfig::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DesktopConfig)
+  if (GetArenaNoVirtual() == NULL && pixel_format_ != NULL) {
+    delete pixel_format_;
+  }
+  pixel_format_ = NULL;
+  ::memset(&flags_, 0, reinterpret_cast<char*>(&compress_ratio_) -
+    reinterpret_cast<char*>(&flags_) + sizeof(compress_ratio_));
+}
+
+bool DesktopConfig::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:aspia.proto.DesktopConfig)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // uint32 flags = 1;
+      case 1: {
+        if (tag == 8u) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -2200,7 +3640,57 @@ bool BellEvent::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      // .aspia.proto.VideoEncoding encoding = 2;
+      case 2: {
+        if (tag == 16u) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_encoding(static_cast< ::aspia::proto::VideoEncoding >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.VideoPixelFormat pixel_format = 3;
+      case 3: {
+        if (tag == 26u) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_pixel_format()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 update_interval = 4;
+      case 4: {
+        if (tag == 32u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &update_interval_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 compress_ratio = 5;
+      case 5: {
+        if (tag == 40u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &compress_ratio_)));
+        } else {
+          goto handle_unusual;
+        }
         break;
       }
 
@@ -2217,36 +3707,85 @@ bool BellEvent::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.BellEvent)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DesktopConfig)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.BellEvent)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DesktopConfig)
   return false;
 #undef DO_
 }
 
-void BellEvent::SerializeWithCachedSizes(
+void DesktopConfig::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.BellEvent)
-  // optional uint32 flags = 1;
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DesktopConfig)
+  // uint32 flags = 1;
   if (this->flags() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->flags(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:aspia.proto.BellEvent)
+  // .aspia.proto.VideoEncoding encoding = 2;
+  if (this->encoding() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      2, this->encoding(), output);
+  }
+
+  // .aspia.proto.VideoPixelFormat pixel_format = 3;
+  if (this->has_pixel_format()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      3, *this->pixel_format_, output);
+  }
+
+  // uint32 update_interval = 4;
+  if (this->update_interval() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->update_interval(), output);
+  }
+
+  // uint32 compress_ratio = 5;
+  if (this->compress_ratio() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->compress_ratio(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DesktopConfig)
 }
 
-size_t BellEvent::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.BellEvent)
+size_t DesktopConfig::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DesktopConfig)
   size_t total_size = 0;
 
-  // optional uint32 flags = 1;
+  // .aspia.proto.VideoPixelFormat pixel_format = 3;
+  if (this->has_pixel_format()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->pixel_format_);
+  }
+
+  // uint32 flags = 1;
   if (this->flags() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->flags());
   }
 
+  // .aspia.proto.VideoEncoding encoding = 2;
+  if (this->encoding() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->encoding());
+  }
+
+  // uint32 update_interval = 4;
+  if (this->update_interval() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->update_interval());
+  }
+
+  // uint32 compress_ratio = 5;
+  if (this->compress_ratio() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->compress_ratio());
+  }
+
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = cached_size;
@@ -2254,1386 +3793,158 @@ size_t BellEvent::ByteSizeLong() const {
   return total_size;
 }
 
-void BellEvent::CheckTypeAndMergeFrom(
+void DesktopConfig::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const BellEvent*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const DesktopConfig*>(&from));
 }
 
-void BellEvent::MergeFrom(const BellEvent& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.BellEvent)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
+void DesktopConfig::MergeFrom(const DesktopConfig& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DesktopConfig)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from.has_pixel_format()) {
+    mutable_pixel_format()->::aspia::proto::VideoPixelFormat::MergeFrom(from.pixel_format());
   }
-}
-
-void BellEvent::UnsafeMergeFrom(const BellEvent& from) {
-  GOOGLE_DCHECK(&from != this);
   if (from.flags() != 0) {
     set_flags(from.flags());
   }
+  if (from.encoding() != 0) {
+    set_encoding(from.encoding());
+  }
+  if (from.update_interval() != 0) {
+    set_update_interval(from.update_interval());
+  }
+  if (from.compress_ratio() != 0) {
+    set_compress_ratio(from.compress_ratio());
+  }
 }
 
-void BellEvent::CopyFrom(const BellEvent& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.BellEvent)
+void DesktopConfig::CopyFrom(const DesktopConfig& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DesktopConfig)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
-bool BellEvent::IsInitialized() const {
-
+bool DesktopConfig::IsInitialized() const {
   return true;
 }
 
-void BellEvent::Swap(BellEvent* other) {
+void DesktopConfig::Swap(DesktopConfig* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void BellEvent::InternalSwap(BellEvent* other) {
+void DesktopConfig::InternalSwap(DesktopConfig* other) {
+  std::swap(pixel_format_, other->pixel_format_);
   std::swap(flags_, other->flags_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
+  std::swap(encoding_, other->encoding_);
+  std::swap(update_interval_, other->update_interval_);
+  std::swap(compress_ratio_, other->compress_ratio_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string BellEvent::GetTypeName() const {
-  return "aspia.proto.BellEvent";
+::std::string DesktopConfig::GetTypeName() const {
+  return "aspia.proto.DesktopConfig";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// BellEvent
+// DesktopConfig
 
-// optional uint32 flags = 1;
-void BellEvent::clear_flags() {
+// uint32 flags = 1;
+void DesktopConfig::clear_flags() {
   flags_ = 0u;
 }
-::google::protobuf::uint32 BellEvent::flags() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.BellEvent.flags)
+::google::protobuf::uint32 DesktopConfig::flags() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DesktopConfig.flags)
   return flags_;
 }
-void BellEvent::set_flags(::google::protobuf::uint32 value) {
+void DesktopConfig::set_flags(::google::protobuf::uint32 value) {
   
   flags_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.BellEvent.flags)
+  // @@protoc_insertion_point(field_set:aspia.proto.DesktopConfig.flags)
 }
 
-inline const BellEvent* BellEvent::internal_default_instance() {
-  return &BellEvent_default_instance_.get();
+// .aspia.proto.VideoEncoding encoding = 2;
+void DesktopConfig::clear_encoding() {
+  encoding_ = 0;
 }
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int HostToClient::kVideoPacketFieldNumber;
-const int HostToClient::kCursorFieldNumber;
-const int HostToClient::kClipboardFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-HostToClient::HostToClient()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.HostToClient)
+::aspia::proto::VideoEncoding DesktopConfig::encoding() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DesktopConfig.encoding)
+  return static_cast< ::aspia::proto::VideoEncoding >(encoding_);
 }
-
-void HostToClient::InitAsDefaultInstance() {
-  video_packet_ = const_cast< ::aspia::proto::VideoPacket*>(
-      ::aspia::proto::VideoPacket::internal_default_instance());
-  cursor_ = const_cast< ::aspia::proto::CursorShape*>(
-      ::aspia::proto::CursorShape::internal_default_instance());
-  clipboard_ = const_cast< ::aspia::proto::Clipboard*>(
-      ::aspia::proto::Clipboard::internal_default_instance());
-}
-
-HostToClient::HostToClient(const HostToClient& from)
-  : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.HostToClient)
-}
-
-void HostToClient::SharedCtor() {
-  video_packet_ = NULL;
-  cursor_ = NULL;
-  clipboard_ = NULL;
-  _cached_size_ = 0;
-}
-
-HostToClient::~HostToClient() {
-  // @@protoc_insertion_point(destructor:aspia.proto.HostToClient)
-  SharedDtor();
-}
-
-void HostToClient::SharedDtor() {
-  if (this != &HostToClient_default_instance_.get()) {
-    delete video_packet_;
-    delete cursor_;
-    delete clipboard_;
-  }
-}
-
-void HostToClient::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const HostToClient& HostToClient::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
-  return *internal_default_instance();
-}
-
-::google::protobuf::internal::ExplicitlyConstructed<HostToClient> HostToClient_default_instance_;
-
-HostToClient* HostToClient::New(::google::protobuf::Arena* arena) const {
-  HostToClient* n = new HostToClient;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void HostToClient::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.HostToClient)
-  if (GetArenaNoVirtual() == NULL && video_packet_ != NULL) delete video_packet_;
-  video_packet_ = NULL;
-  if (GetArenaNoVirtual() == NULL && cursor_ != NULL) delete cursor_;
-  cursor_ = NULL;
-  if (GetArenaNoVirtual() == NULL && clipboard_ != NULL) delete clipboard_;
-  clipboard_ = NULL;
-}
-
-bool HostToClient::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:aspia.proto.HostToClient)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .aspia.proto.VideoPacket video_packet = 1;
-      case 1: {
-        if (tag == 10) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_video_packet()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(18)) goto parse_cursor;
-        break;
-      }
-
-      // optional .aspia.proto.CursorShape cursor = 2;
-      case 2: {
-        if (tag == 18) {
-         parse_cursor:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_cursor()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(26)) goto parse_clipboard;
-        break;
-      }
-
-      // optional .aspia.proto.Clipboard clipboard = 3;
-      case 3: {
-        if (tag == 26) {
-         parse_clipboard:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_clipboard()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.HostToClient)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.HostToClient)
-  return false;
-#undef DO_
-}
-
-void HostToClient::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.HostToClient)
-  // optional .aspia.proto.VideoPacket video_packet = 1;
-  if (this->has_video_packet()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1, *this->video_packet_, output);
-  }
-
-  // optional .aspia.proto.CursorShape cursor = 2;
-  if (this->has_cursor()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, *this->cursor_, output);
-  }
-
-  // optional .aspia.proto.Clipboard clipboard = 3;
-  if (this->has_clipboard()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      3, *this->clipboard_, output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:aspia.proto.HostToClient)
-}
-
-size_t HostToClient::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.HostToClient)
-  size_t total_size = 0;
-
-  // optional .aspia.proto.VideoPacket video_packet = 1;
-  if (this->has_video_packet()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->video_packet_);
-  }
-
-  // optional .aspia.proto.CursorShape cursor = 2;
-  if (this->has_cursor()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->cursor_);
-  }
-
-  // optional .aspia.proto.Clipboard clipboard = 3;
-  if (this->has_clipboard()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->clipboard_);
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void HostToClient::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const HostToClient*>(&from));
-}
-
-void HostToClient::MergeFrom(const HostToClient& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.HostToClient)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
-
-void HostToClient::UnsafeMergeFrom(const HostToClient& from) {
-  GOOGLE_DCHECK(&from != this);
-  if (from.has_video_packet()) {
-    mutable_video_packet()->::aspia::proto::VideoPacket::MergeFrom(from.video_packet());
-  }
-  if (from.has_cursor()) {
-    mutable_cursor()->::aspia::proto::CursorShape::MergeFrom(from.cursor());
-  }
-  if (from.has_clipboard()) {
-    mutable_clipboard()->::aspia::proto::Clipboard::MergeFrom(from.clipboard());
-  }
-}
-
-void HostToClient::CopyFrom(const HostToClient& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.HostToClient)
-  if (&from == this) return;
-  Clear();
-  UnsafeMergeFrom(from);
-}
-
-bool HostToClient::IsInitialized() const {
-
-  return true;
-}
-
-void HostToClient::Swap(HostToClient* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void HostToClient::InternalSwap(HostToClient* other) {
-  std::swap(video_packet_, other->video_packet_);
-  std::swap(cursor_, other->cursor_);
-  std::swap(clipboard_, other->clipboard_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string HostToClient::GetTypeName() const {
-  return "aspia.proto.HostToClient";
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// HostToClient
-
-// optional .aspia.proto.VideoPacket video_packet = 1;
-bool HostToClient::has_video_packet() const {
-  return this != internal_default_instance() && video_packet_ != NULL;
-}
-void HostToClient::clear_video_packet() {
-  if (GetArenaNoVirtual() == NULL && video_packet_ != NULL) delete video_packet_;
-  video_packet_ = NULL;
-}
-const ::aspia::proto::VideoPacket& HostToClient::video_packet() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.HostToClient.video_packet)
-  return video_packet_ != NULL ? *video_packet_
-                         : *::aspia::proto::VideoPacket::internal_default_instance();
-}
-::aspia::proto::VideoPacket* HostToClient::mutable_video_packet() {
+void DesktopConfig::set_encoding(::aspia::proto::VideoEncoding value) {
   
-  if (video_packet_ == NULL) {
-    video_packet_ = new ::aspia::proto::VideoPacket;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.HostToClient.video_packet)
-  return video_packet_;
+  encoding_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DesktopConfig.encoding)
 }
-::aspia::proto::VideoPacket* HostToClient::release_video_packet() {
-  // @@protoc_insertion_point(field_release:aspia.proto.HostToClient.video_packet)
+
+// .aspia.proto.VideoPixelFormat pixel_format = 3;
+bool DesktopConfig::has_pixel_format() const {
+  return this != internal_default_instance() && pixel_format_ != NULL;
+}
+void DesktopConfig::clear_pixel_format() {
+  if (GetArenaNoVirtual() == NULL && pixel_format_ != NULL) delete pixel_format_;
+  pixel_format_ = NULL;
+}
+const ::aspia::proto::VideoPixelFormat& DesktopConfig::pixel_format() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DesktopConfig.pixel_format)
+  return pixel_format_ != NULL ? *pixel_format_
+                         : *::aspia::proto::VideoPixelFormat::internal_default_instance();
+}
+::aspia::proto::VideoPixelFormat* DesktopConfig::mutable_pixel_format() {
   
-  ::aspia::proto::VideoPacket* temp = video_packet_;
-  video_packet_ = NULL;
+  if (pixel_format_ == NULL) {
+    pixel_format_ = new ::aspia::proto::VideoPixelFormat;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.DesktopConfig.pixel_format)
+  return pixel_format_;
+}
+::aspia::proto::VideoPixelFormat* DesktopConfig::release_pixel_format() {
+  // @@protoc_insertion_point(field_release:aspia.proto.DesktopConfig.pixel_format)
+  
+  ::aspia::proto::VideoPixelFormat* temp = pixel_format_;
+  pixel_format_ = NULL;
   return temp;
 }
-void HostToClient::set_allocated_video_packet(::aspia::proto::VideoPacket* video_packet) {
-  delete video_packet_;
-  video_packet_ = video_packet;
-  if (video_packet) {
+void DesktopConfig::set_allocated_pixel_format(::aspia::proto::VideoPixelFormat* pixel_format) {
+  delete pixel_format_;
+  pixel_format_ = pixel_format;
+  if (pixel_format) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.HostToClient.video_packet)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DesktopConfig.pixel_format)
 }
 
-// optional .aspia.proto.CursorShape cursor = 2;
-bool HostToClient::has_cursor() const {
-  return this != internal_default_instance() && cursor_ != NULL;
+// uint32 update_interval = 4;
+void DesktopConfig::clear_update_interval() {
+  update_interval_ = 0u;
 }
-void HostToClient::clear_cursor() {
-  if (GetArenaNoVirtual() == NULL && cursor_ != NULL) delete cursor_;
-  cursor_ = NULL;
+::google::protobuf::uint32 DesktopConfig::update_interval() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DesktopConfig.update_interval)
+  return update_interval_;
 }
-const ::aspia::proto::CursorShape& HostToClient::cursor() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.HostToClient.cursor)
-  return cursor_ != NULL ? *cursor_
-                         : *::aspia::proto::CursorShape::internal_default_instance();
-}
-::aspia::proto::CursorShape* HostToClient::mutable_cursor() {
+void DesktopConfig::set_update_interval(::google::protobuf::uint32 value) {
   
-  if (cursor_ == NULL) {
-    cursor_ = new ::aspia::proto::CursorShape;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.HostToClient.cursor)
-  return cursor_;
+  update_interval_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DesktopConfig.update_interval)
 }
-::aspia::proto::CursorShape* HostToClient::release_cursor() {
-  // @@protoc_insertion_point(field_release:aspia.proto.HostToClient.cursor)
+
+// uint32 compress_ratio = 5;
+void DesktopConfig::clear_compress_ratio() {
+  compress_ratio_ = 0u;
+}
+::google::protobuf::uint32 DesktopConfig::compress_ratio() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DesktopConfig.compress_ratio)
+  return compress_ratio_;
+}
+void DesktopConfig::set_compress_ratio(::google::protobuf::uint32 value) {
   
-  ::aspia::proto::CursorShape* temp = cursor_;
-  cursor_ = NULL;
-  return temp;
+  compress_ratio_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DesktopConfig.compress_ratio)
 }
-void HostToClient::set_allocated_cursor(::aspia::proto::CursorShape* cursor) {
-  delete cursor_;
-  cursor_ = cursor;
-  if (cursor) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.HostToClient.cursor)
-}
-
-// optional .aspia.proto.Clipboard clipboard = 3;
-bool HostToClient::has_clipboard() const {
-  return this != internal_default_instance() && clipboard_ != NULL;
-}
-void HostToClient::clear_clipboard() {
-  if (GetArenaNoVirtual() == NULL && clipboard_ != NULL) delete clipboard_;
-  clipboard_ = NULL;
-}
-const ::aspia::proto::Clipboard& HostToClient::clipboard() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.HostToClient.clipboard)
-  return clipboard_ != NULL ? *clipboard_
-                         : *::aspia::proto::Clipboard::internal_default_instance();
-}
-::aspia::proto::Clipboard* HostToClient::mutable_clipboard() {
-  
-  if (clipboard_ == NULL) {
-    clipboard_ = new ::aspia::proto::Clipboard;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.HostToClient.clipboard)
-  return clipboard_;
-}
-::aspia::proto::Clipboard* HostToClient::release_clipboard() {
-  // @@protoc_insertion_point(field_release:aspia.proto.HostToClient.clipboard)
-  
-  ::aspia::proto::Clipboard* temp = clipboard_;
-  clipboard_ = NULL;
-  return temp;
-}
-void HostToClient::set_allocated_clipboard(::aspia::proto::Clipboard* clipboard) {
-  delete clipboard_;
-  clipboard_ = clipboard;
-  if (clipboard) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.HostToClient.clipboard)
-}
-
-inline const HostToClient* HostToClient::internal_default_instance() {
-  return &HostToClient_default_instance_.get();
-}
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int Control::kVideoFieldNumber;
-const int Control::kClipboardFieldNumber;
-const int Control::kPowerFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-Control::Control()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.Control)
-}
-
-void Control::InitAsDefaultInstance() {
-  video_ = const_cast< ::aspia::proto::VideoControl*>(
-      ::aspia::proto::VideoControl::internal_default_instance());
-  clipboard_ = const_cast< ::aspia::proto::ClipboardControl*>(
-      ::aspia::proto::ClipboardControl::internal_default_instance());
-  power_ = const_cast< ::aspia::proto::PowerControl*>(
-      ::aspia::proto::PowerControl::internal_default_instance());
-}
-
-Control::Control(const Control& from)
-  : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.Control)
-}
-
-void Control::SharedCtor() {
-  video_ = NULL;
-  clipboard_ = NULL;
-  power_ = NULL;
-  _cached_size_ = 0;
-}
-
-Control::~Control() {
-  // @@protoc_insertion_point(destructor:aspia.proto.Control)
-  SharedDtor();
-}
-
-void Control::SharedDtor() {
-  if (this != &Control_default_instance_.get()) {
-    delete video_;
-    delete clipboard_;
-    delete power_;
-  }
-}
-
-void Control::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const Control& Control::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
-  return *internal_default_instance();
-}
-
-::google::protobuf::internal::ExplicitlyConstructed<Control> Control_default_instance_;
-
-Control* Control::New(::google::protobuf::Arena* arena) const {
-  Control* n = new Control;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void Control::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.Control)
-  if (GetArenaNoVirtual() == NULL && video_ != NULL) delete video_;
-  video_ = NULL;
-  if (GetArenaNoVirtual() == NULL && clipboard_ != NULL) delete clipboard_;
-  clipboard_ = NULL;
-  if (GetArenaNoVirtual() == NULL && power_ != NULL) delete power_;
-  power_ = NULL;
-}
-
-bool Control::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:aspia.proto.Control)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .aspia.proto.VideoControl video = 1;
-      case 1: {
-        if (tag == 10) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_video()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(18)) goto parse_clipboard;
-        break;
-      }
-
-      // optional .aspia.proto.ClipboardControl clipboard = 2;
-      case 2: {
-        if (tag == 18) {
-         parse_clipboard:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_clipboard()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(26)) goto parse_power;
-        break;
-      }
-
-      // optional .aspia.proto.PowerControl power = 3;
-      case 3: {
-        if (tag == 26) {
-         parse_power:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_power()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.Control)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.Control)
-  return false;
-#undef DO_
-}
-
-void Control::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.Control)
-  // optional .aspia.proto.VideoControl video = 1;
-  if (this->has_video()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1, *this->video_, output);
-  }
-
-  // optional .aspia.proto.ClipboardControl clipboard = 2;
-  if (this->has_clipboard()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, *this->clipboard_, output);
-  }
-
-  // optional .aspia.proto.PowerControl power = 3;
-  if (this->has_power()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      3, *this->power_, output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:aspia.proto.Control)
-}
-
-size_t Control::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Control)
-  size_t total_size = 0;
-
-  // optional .aspia.proto.VideoControl video = 1;
-  if (this->has_video()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->video_);
-  }
-
-  // optional .aspia.proto.ClipboardControl clipboard = 2;
-  if (this->has_clipboard()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->clipboard_);
-  }
-
-  // optional .aspia.proto.PowerControl power = 3;
-  if (this->has_power()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->power_);
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void Control::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const Control*>(&from));
-}
-
-void Control::MergeFrom(const Control& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Control)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
-
-void Control::UnsafeMergeFrom(const Control& from) {
-  GOOGLE_DCHECK(&from != this);
-  if (from.has_video()) {
-    mutable_video()->::aspia::proto::VideoControl::MergeFrom(from.video());
-  }
-  if (from.has_clipboard()) {
-    mutable_clipboard()->::aspia::proto::ClipboardControl::MergeFrom(from.clipboard());
-  }
-  if (from.has_power()) {
-    mutable_power()->::aspia::proto::PowerControl::MergeFrom(from.power());
-  }
-}
-
-void Control::CopyFrom(const Control& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Control)
-  if (&from == this) return;
-  Clear();
-  UnsafeMergeFrom(from);
-}
-
-bool Control::IsInitialized() const {
-
-  return true;
-}
-
-void Control::Swap(Control* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void Control::InternalSwap(Control* other) {
-  std::swap(video_, other->video_);
-  std::swap(clipboard_, other->clipboard_);
-  std::swap(power_, other->power_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string Control::GetTypeName() const {
-  return "aspia.proto.Control";
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// Control
-
-// optional .aspia.proto.VideoControl video = 1;
-bool Control::has_video() const {
-  return this != internal_default_instance() && video_ != NULL;
-}
-void Control::clear_video() {
-  if (GetArenaNoVirtual() == NULL && video_ != NULL) delete video_;
-  video_ = NULL;
-}
-const ::aspia::proto::VideoControl& Control::video() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Control.video)
-  return video_ != NULL ? *video_
-                         : *::aspia::proto::VideoControl::internal_default_instance();
-}
-::aspia::proto::VideoControl* Control::mutable_video() {
-  
-  if (video_ == NULL) {
-    video_ = new ::aspia::proto::VideoControl;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Control.video)
-  return video_;
-}
-::aspia::proto::VideoControl* Control::release_video() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Control.video)
-  
-  ::aspia::proto::VideoControl* temp = video_;
-  video_ = NULL;
-  return temp;
-}
-void Control::set_allocated_video(::aspia::proto::VideoControl* video) {
-  delete video_;
-  video_ = video;
-  if (video) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Control.video)
-}
-
-// optional .aspia.proto.ClipboardControl clipboard = 2;
-bool Control::has_clipboard() const {
-  return this != internal_default_instance() && clipboard_ != NULL;
-}
-void Control::clear_clipboard() {
-  if (GetArenaNoVirtual() == NULL && clipboard_ != NULL) delete clipboard_;
-  clipboard_ = NULL;
-}
-const ::aspia::proto::ClipboardControl& Control::clipboard() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Control.clipboard)
-  return clipboard_ != NULL ? *clipboard_
-                         : *::aspia::proto::ClipboardControl::internal_default_instance();
-}
-::aspia::proto::ClipboardControl* Control::mutable_clipboard() {
-  
-  if (clipboard_ == NULL) {
-    clipboard_ = new ::aspia::proto::ClipboardControl;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Control.clipboard)
-  return clipboard_;
-}
-::aspia::proto::ClipboardControl* Control::release_clipboard() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Control.clipboard)
-  
-  ::aspia::proto::ClipboardControl* temp = clipboard_;
-  clipboard_ = NULL;
-  return temp;
-}
-void Control::set_allocated_clipboard(::aspia::proto::ClipboardControl* clipboard) {
-  delete clipboard_;
-  clipboard_ = clipboard;
-  if (clipboard) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Control.clipboard)
-}
-
-// optional .aspia.proto.PowerControl power = 3;
-bool Control::has_power() const {
-  return this != internal_default_instance() && power_ != NULL;
-}
-void Control::clear_power() {
-  if (GetArenaNoVirtual() == NULL && power_ != NULL) delete power_;
-  power_ = NULL;
-}
-const ::aspia::proto::PowerControl& Control::power() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Control.power)
-  return power_ != NULL ? *power_
-                         : *::aspia::proto::PowerControl::internal_default_instance();
-}
-::aspia::proto::PowerControl* Control::mutable_power() {
-  
-  if (power_ == NULL) {
-    power_ = new ::aspia::proto::PowerControl;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Control.power)
-  return power_;
-}
-::aspia::proto::PowerControl* Control::release_power() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Control.power)
-  
-  ::aspia::proto::PowerControl* temp = power_;
-  power_ = NULL;
-  return temp;
-}
-void Control::set_allocated_power(::aspia::proto::PowerControl* power) {
-  delete power_;
-  power_ = power;
-  if (power) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Control.power)
-}
-
-inline const Control* Control::internal_default_instance() {
-  return &Control_default_instance_.get();
-}
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int ClientToHost::kPointerEventFieldNumber;
-const int ClientToHost::kKeyEventFieldNumber;
-const int ClientToHost::kBellEventFieldNumber;
-const int ClientToHost::kClipboardFieldNumber;
-const int ClientToHost::kControlFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-ClientToHost::ClientToHost()
-  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_proto_2eproto();
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.ClientToHost)
-}
 
-void ClientToHost::InitAsDefaultInstance() {
-  pointer_event_ = const_cast< ::aspia::proto::PointerEvent*>(
-      ::aspia::proto::PointerEvent::internal_default_instance());
-  key_event_ = const_cast< ::aspia::proto::KeyEvent*>(
-      ::aspia::proto::KeyEvent::internal_default_instance());
-  bell_event_ = const_cast< ::aspia::proto::BellEvent*>(
-      ::aspia::proto::BellEvent::internal_default_instance());
-  clipboard_ = const_cast< ::aspia::proto::Clipboard*>(
-      ::aspia::proto::Clipboard::internal_default_instance());
-  control_ = const_cast< ::aspia::proto::Control*>(
-      ::aspia::proto::Control::internal_default_instance());
-}
-
-ClientToHost::ClientToHost(const ClientToHost& from)
-  : ::google::protobuf::MessageLite(),
-    _arena_ptr_(NULL) {
-  SharedCtor();
-  UnsafeMergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.ClientToHost)
-}
-
-void ClientToHost::SharedCtor() {
-  pointer_event_ = NULL;
-  key_event_ = NULL;
-  bell_event_ = NULL;
-  clipboard_ = NULL;
-  control_ = NULL;
-  _cached_size_ = 0;
-}
-
-ClientToHost::~ClientToHost() {
-  // @@protoc_insertion_point(destructor:aspia.proto.ClientToHost)
-  SharedDtor();
-}
-
-void ClientToHost::SharedDtor() {
-  if (this != &ClientToHost_default_instance_.get()) {
-    delete pointer_event_;
-    delete key_event_;
-    delete bell_event_;
-    delete clipboard_;
-    delete control_;
-  }
-}
-
-void ClientToHost::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const ClientToHost& ClientToHost::default_instance() {
-  protobuf_InitDefaults_proto_2eproto();
-  return *internal_default_instance();
-}
-
-::google::protobuf::internal::ExplicitlyConstructed<ClientToHost> ClientToHost_default_instance_;
-
-ClientToHost* ClientToHost::New(::google::protobuf::Arena* arena) const {
-  ClientToHost* n = new ClientToHost;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void ClientToHost::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.ClientToHost)
-  if (GetArenaNoVirtual() == NULL && pointer_event_ != NULL) delete pointer_event_;
-  pointer_event_ = NULL;
-  if (GetArenaNoVirtual() == NULL && key_event_ != NULL) delete key_event_;
-  key_event_ = NULL;
-  if (GetArenaNoVirtual() == NULL && bell_event_ != NULL) delete bell_event_;
-  bell_event_ = NULL;
-  if (GetArenaNoVirtual() == NULL && clipboard_ != NULL) delete clipboard_;
-  clipboard_ = NULL;
-  if (GetArenaNoVirtual() == NULL && control_ != NULL) delete control_;
-  control_ = NULL;
-}
-
-bool ClientToHost::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:aspia.proto.ClientToHost)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .aspia.proto.PointerEvent pointer_event = 1;
-      case 1: {
-        if (tag == 10) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_pointer_event()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(18)) goto parse_key_event;
-        break;
-      }
-
-      // optional .aspia.proto.KeyEvent key_event = 2;
-      case 2: {
-        if (tag == 18) {
-         parse_key_event:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_key_event()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(26)) goto parse_bell_event;
-        break;
-      }
-
-      // optional .aspia.proto.BellEvent bell_event = 3;
-      case 3: {
-        if (tag == 26) {
-         parse_bell_event:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_bell_event()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(34)) goto parse_clipboard;
-        break;
-      }
-
-      // optional .aspia.proto.Clipboard clipboard = 4;
-      case 4: {
-        if (tag == 34) {
-         parse_clipboard:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_clipboard()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(42)) goto parse_control;
-        break;
-      }
-
-      // optional .aspia.proto.Control control = 5;
-      case 5: {
-        if (tag == 42) {
-         parse_control:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_control()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.ClientToHost)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.ClientToHost)
-  return false;
-#undef DO_
-}
-
-void ClientToHost::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.ClientToHost)
-  // optional .aspia.proto.PointerEvent pointer_event = 1;
-  if (this->has_pointer_event()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1, *this->pointer_event_, output);
-  }
-
-  // optional .aspia.proto.KeyEvent key_event = 2;
-  if (this->has_key_event()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, *this->key_event_, output);
-  }
-
-  // optional .aspia.proto.BellEvent bell_event = 3;
-  if (this->has_bell_event()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      3, *this->bell_event_, output);
-  }
-
-  // optional .aspia.proto.Clipboard clipboard = 4;
-  if (this->has_clipboard()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      4, *this->clipboard_, output);
-  }
-
-  // optional .aspia.proto.Control control = 5;
-  if (this->has_control()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      5, *this->control_, output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:aspia.proto.ClientToHost)
-}
-
-size_t ClientToHost::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.ClientToHost)
-  size_t total_size = 0;
-
-  // optional .aspia.proto.PointerEvent pointer_event = 1;
-  if (this->has_pointer_event()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->pointer_event_);
-  }
-
-  // optional .aspia.proto.KeyEvent key_event = 2;
-  if (this->has_key_event()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->key_event_);
-  }
-
-  // optional .aspia.proto.BellEvent bell_event = 3;
-  if (this->has_bell_event()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->bell_event_);
-  }
-
-  // optional .aspia.proto.Clipboard clipboard = 4;
-  if (this->has_clipboard()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->clipboard_);
-  }
-
-  // optional .aspia.proto.Control control = 5;
-  if (this->has_control()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->control_);
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void ClientToHost::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const ClientToHost*>(&from));
-}
-
-void ClientToHost::MergeFrom(const ClientToHost& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.ClientToHost)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
-  }
-}
-
-void ClientToHost::UnsafeMergeFrom(const ClientToHost& from) {
-  GOOGLE_DCHECK(&from != this);
-  if (from.has_pointer_event()) {
-    mutable_pointer_event()->::aspia::proto::PointerEvent::MergeFrom(from.pointer_event());
-  }
-  if (from.has_key_event()) {
-    mutable_key_event()->::aspia::proto::KeyEvent::MergeFrom(from.key_event());
-  }
-  if (from.has_bell_event()) {
-    mutable_bell_event()->::aspia::proto::BellEvent::MergeFrom(from.bell_event());
-  }
-  if (from.has_clipboard()) {
-    mutable_clipboard()->::aspia::proto::Clipboard::MergeFrom(from.clipboard());
-  }
-  if (from.has_control()) {
-    mutable_control()->::aspia::proto::Control::MergeFrom(from.control());
-  }
-}
-
-void ClientToHost::CopyFrom(const ClientToHost& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.ClientToHost)
-  if (&from == this) return;
-  Clear();
-  UnsafeMergeFrom(from);
-}
-
-bool ClientToHost::IsInitialized() const {
-
-  return true;
-}
-
-void ClientToHost::Swap(ClientToHost* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void ClientToHost::InternalSwap(ClientToHost* other) {
-  std::swap(pointer_event_, other->pointer_event_);
-  std::swap(key_event_, other->key_event_);
-  std::swap(bell_event_, other->bell_event_);
-  std::swap(clipboard_, other->clipboard_);
-  std::swap(control_, other->control_);
-  _unknown_fields_.Swap(&other->_unknown_fields_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string ClientToHost::GetTypeName() const {
-  return "aspia.proto.ClientToHost";
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// ClientToHost
-
-// optional .aspia.proto.PointerEvent pointer_event = 1;
-bool ClientToHost::has_pointer_event() const {
-  return this != internal_default_instance() && pointer_event_ != NULL;
-}
-void ClientToHost::clear_pointer_event() {
-  if (GetArenaNoVirtual() == NULL && pointer_event_ != NULL) delete pointer_event_;
-  pointer_event_ = NULL;
-}
-const ::aspia::proto::PointerEvent& ClientToHost::pointer_event() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.ClientToHost.pointer_event)
-  return pointer_event_ != NULL ? *pointer_event_
-                         : *::aspia::proto::PointerEvent::internal_default_instance();
-}
-::aspia::proto::PointerEvent* ClientToHost::mutable_pointer_event() {
-  
-  if (pointer_event_ == NULL) {
-    pointer_event_ = new ::aspia::proto::PointerEvent;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.ClientToHost.pointer_event)
-  return pointer_event_;
-}
-::aspia::proto::PointerEvent* ClientToHost::release_pointer_event() {
-  // @@protoc_insertion_point(field_release:aspia.proto.ClientToHost.pointer_event)
-  
-  ::aspia::proto::PointerEvent* temp = pointer_event_;
-  pointer_event_ = NULL;
-  return temp;
-}
-void ClientToHost::set_allocated_pointer_event(::aspia::proto::PointerEvent* pointer_event) {
-  delete pointer_event_;
-  pointer_event_ = pointer_event;
-  if (pointer_event) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.ClientToHost.pointer_event)
-}
-
-// optional .aspia.proto.KeyEvent key_event = 2;
-bool ClientToHost::has_key_event() const {
-  return this != internal_default_instance() && key_event_ != NULL;
-}
-void ClientToHost::clear_key_event() {
-  if (GetArenaNoVirtual() == NULL && key_event_ != NULL) delete key_event_;
-  key_event_ = NULL;
-}
-const ::aspia::proto::KeyEvent& ClientToHost::key_event() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.ClientToHost.key_event)
-  return key_event_ != NULL ? *key_event_
-                         : *::aspia::proto::KeyEvent::internal_default_instance();
-}
-::aspia::proto::KeyEvent* ClientToHost::mutable_key_event() {
-  
-  if (key_event_ == NULL) {
-    key_event_ = new ::aspia::proto::KeyEvent;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.ClientToHost.key_event)
-  return key_event_;
-}
-::aspia::proto::KeyEvent* ClientToHost::release_key_event() {
-  // @@protoc_insertion_point(field_release:aspia.proto.ClientToHost.key_event)
-  
-  ::aspia::proto::KeyEvent* temp = key_event_;
-  key_event_ = NULL;
-  return temp;
-}
-void ClientToHost::set_allocated_key_event(::aspia::proto::KeyEvent* key_event) {
-  delete key_event_;
-  key_event_ = key_event;
-  if (key_event) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.ClientToHost.key_event)
-}
-
-// optional .aspia.proto.BellEvent bell_event = 3;
-bool ClientToHost::has_bell_event() const {
-  return this != internal_default_instance() && bell_event_ != NULL;
-}
-void ClientToHost::clear_bell_event() {
-  if (GetArenaNoVirtual() == NULL && bell_event_ != NULL) delete bell_event_;
-  bell_event_ = NULL;
-}
-const ::aspia::proto::BellEvent& ClientToHost::bell_event() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.ClientToHost.bell_event)
-  return bell_event_ != NULL ? *bell_event_
-                         : *::aspia::proto::BellEvent::internal_default_instance();
-}
-::aspia::proto::BellEvent* ClientToHost::mutable_bell_event() {
-  
-  if (bell_event_ == NULL) {
-    bell_event_ = new ::aspia::proto::BellEvent;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.ClientToHost.bell_event)
-  return bell_event_;
-}
-::aspia::proto::BellEvent* ClientToHost::release_bell_event() {
-  // @@protoc_insertion_point(field_release:aspia.proto.ClientToHost.bell_event)
-  
-  ::aspia::proto::BellEvent* temp = bell_event_;
-  bell_event_ = NULL;
-  return temp;
-}
-void ClientToHost::set_allocated_bell_event(::aspia::proto::BellEvent* bell_event) {
-  delete bell_event_;
-  bell_event_ = bell_event;
-  if (bell_event) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.ClientToHost.bell_event)
-}
-
-// optional .aspia.proto.Clipboard clipboard = 4;
-bool ClientToHost::has_clipboard() const {
-  return this != internal_default_instance() && clipboard_ != NULL;
-}
-void ClientToHost::clear_clipboard() {
-  if (GetArenaNoVirtual() == NULL && clipboard_ != NULL) delete clipboard_;
-  clipboard_ = NULL;
-}
-const ::aspia::proto::Clipboard& ClientToHost::clipboard() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.ClientToHost.clipboard)
-  return clipboard_ != NULL ? *clipboard_
-                         : *::aspia::proto::Clipboard::internal_default_instance();
-}
-::aspia::proto::Clipboard* ClientToHost::mutable_clipboard() {
-  
-  if (clipboard_ == NULL) {
-    clipboard_ = new ::aspia::proto::Clipboard;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.ClientToHost.clipboard)
-  return clipboard_;
-}
-::aspia::proto::Clipboard* ClientToHost::release_clipboard() {
-  // @@protoc_insertion_point(field_release:aspia.proto.ClientToHost.clipboard)
-  
-  ::aspia::proto::Clipboard* temp = clipboard_;
-  clipboard_ = NULL;
-  return temp;
-}
-void ClientToHost::set_allocated_clipboard(::aspia::proto::Clipboard* clipboard) {
-  delete clipboard_;
-  clipboard_ = clipboard;
-  if (clipboard) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.ClientToHost.clipboard)
-}
-
-// optional .aspia.proto.Control control = 5;
-bool ClientToHost::has_control() const {
-  return this != internal_default_instance() && control_ != NULL;
-}
-void ClientToHost::clear_control() {
-  if (GetArenaNoVirtual() == NULL && control_ != NULL) delete control_;
-  control_ = NULL;
-}
-const ::aspia::proto::Control& ClientToHost::control() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.ClientToHost.control)
-  return control_ != NULL ? *control_
-                         : *::aspia::proto::Control::internal_default_instance();
-}
-::aspia::proto::Control* ClientToHost::mutable_control() {
-  
-  if (control_ == NULL) {
-    control_ = new ::aspia::proto::Control;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.ClientToHost.control)
-  return control_;
-}
-::aspia::proto::Control* ClientToHost::release_control() {
-  // @@protoc_insertion_point(field_release:aspia.proto.ClientToHost.control)
-  
-  ::aspia::proto::Control* temp = control_;
-  control_ = NULL;
-  return temp;
-}
-void ClientToHost::set_allocated_control(::aspia::proto::Control* control) {
-  delete control_;
-  control_ = control;
-  if (control) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.ClientToHost.control)
-}
-
-inline const ClientToHost* ClientToHost::internal_default_instance() {
-  return &ClientToHost_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // @@protoc_insertion_point(namespace_scope)
