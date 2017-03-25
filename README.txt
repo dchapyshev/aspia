@@ -11,11 +11,10 @@ Also uses:
    - gflags (Command line arguments parsing)
    - libyuv (For image formats convertation)
    - WTL (For GUI in Windows)
-   - RapidJSON (For storing configuration files to JSON format)
    - gtest (Library from Google for unit testing)
 
 For building the project requires:
-   - Visual Studio 2013: http://visualstudio.com/
+   - Visual Studio 2015: http://visualstudio.com/
    - YASM compiller: http://yasm.tortall.net/Download.html (version for "general use")
 
 All dependencies are included in the project.

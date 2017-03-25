@@ -8,6 +8,10 @@
 #ifndef _ASPIA_CONFIG_H
 #define _ASPIA_CONFIG_H
 
+#include <stdint.h>
+
+static const uint16_t kDefaultHostTcpPort = 11011;
+
 #ifdef WINVER
 #undef WINVER
 #endif // WINVER
@@ -32,16 +36,13 @@
 #undef PSAPI_VERSION
 #endif // PSAPI_VERSION
 
-//
 // Target version
-// ћы используем Windows XP в качестве минимальной версии
-//
-#define WINVER           0x0501
-#define _WIN32_WINNT     0x0501
-#define _WIN32_WINDOWS   0x0501
-#define NTDDI_VERSION    0x05010000 // Windows XP
+#define _WIN32_WINNT     0x0601
+#define NTDDI_VERSION    0x06010000 // Windows 7
 #define _WIN32_IE        0x0800 // Internet Explorer 8.0
-#define PSAPI_VERSION    1
+#define PSAPI_VERSION    2
+#define WINVER           _WIN32_WINNT
+#define _WIN32_WINDOWS   _WIN32_WINNT
 
 // windows.h должен подключаться только тут и нигде больше.
 #define WIN32_LEAN_AND_MEAN
@@ -60,5 +61,11 @@
 #ifdef max
 #undef max
 #endif // max
+
+#define INLINE      __forceinline
+
+#ifndef UNREFERENCED_PARAMETER
+#define UNREFERENCED_PARAMETER(P)    (P)
+#endif // UNREFERENCED_PARAMETER
 
 #endif // _ASPIA_CONFIG_H
