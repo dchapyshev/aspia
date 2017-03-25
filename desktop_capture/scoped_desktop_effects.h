@@ -10,9 +10,8 @@
 
 #include "aspia_config.h"
 
-#include <memory>
+#include <string>
 
-#include "base/scoped_native_library.h"
 #include "base/macros.h"
 
 namespace aspia {
@@ -25,11 +24,8 @@ public:
 
 private:
     bool IsCompositionEnabled();
-    void EnableComposition(bool enable);
 
 private:
-    std::unique_ptr<ScopedNativeLibrary> dwapi_;
-
     bool composition_enabled_;
 
     std::wstring wallpaper_;

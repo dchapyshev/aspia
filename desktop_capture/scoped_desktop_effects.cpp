@@ -7,14 +7,11 @@
 
 #include "desktop_capture/scoped_desktop_effects.h"
 
-#include <versionhelpers.h>
+#include <dwmapi.h>
 
 namespace aspia {
 
-static const bool kForceEnable = 0;
-
-typedef HRESULT(WINAPI *PDWMISCOMPOSITIONENABLED)(BOOL *pfEnabled);
-typedef HRESULT(WINAPI *PDWMENABLECOMPOSITION)(UINT uCompositionAction);
+static const bool kForceEnable = false;
 
 static bool GetDragFullWindows()
 {
@@ -143,7 +140,7 @@ static void SetUiEffects(bool value)
 
 static std::wstring GetWallpaper()
 {
-    WCHAR wallpaper[MAX_PATH];
+    WCHAR wallpaper[MAX_PATH] = { 0 };
 
     SystemParametersInfoW(SPI_GETDESKWALLPAPER, ARRAYSIZE(wallpaper), wallpaper, 0);
 
@@ -154,14 +151,6 @@ static void SetWallpaper(std::wstring &wallpaper)
 {
     SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, &wallpaper[0], 0);
 }
-
-#ifndef SPI_GETCLIENTAREAANIMATION
-#define SPI_GETCLIENTAREAANIMATION   0x1042
-#endif // SPI_GETCLIENTAREAANIMATION
-
-#ifndef SPI_SETCLIENTAREAANIMATION
-#define SPI_SETCLIENTAREAANIMATION   0x1043
-#endif // SPI_SETCLIENTAREAANIMATION
 
 static bool GetClientAreaAnimation()
 {
@@ -250,26 +239,17 @@ ScopedDesktopEffects::ScopedDesktopEffects()
 
     // Обои рабочего стола
     wallpaper_ = GetWallpaper();
-    if (wallpaper_[0]) SetWallpaper(std::wstring(L""));
+    if (!wallpaper_.empty()) SetWallpaper(std::wstring());
 
-    if (IsWindowsVistaOrGreater())
+    composition_enabled_ = IsCompositionEnabled();
+    if (composition_enabled_)
     {
-        dwapi_.reset(new ScopedNativeLibrary("dwmapi.dll"));
-
-        //
-        // Актуально только для Windows Vista и Windows 7 (XP/2003 не поддерживает композицию,
-        // начиная с Windows 8 композицию нельзя отключить программно)
-        //
-        composition_enabled_ = IsCompositionEnabled();
-        if (composition_enabled_)
-        {
-            EnableComposition(false);
-        }
-
-        // Анимация внутри окна
-        client_area_animation_ = GetClientAreaAnimation();
-        if (client_area_animation_) SetClientAreaAnimation(false);
+        DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
     }
+
+    // Анимация внутри окна
+    client_area_animation_ = GetClientAreaAnimation();
+    if (client_area_animation_) SetClientAreaAnimation(false);
 }
 
 ScopedDesktopEffects::~ScopedDesktopEffects()
@@ -318,17 +298,14 @@ ScopedDesktopEffects::~ScopedDesktopEffects()
     if (kForceEnable || wallpaper_ != GetWallpaper())
         SetWallpaper(wallpaper_);
 
-    if (IsWindowsVistaOrGreater())
+    if (kForceEnable || composition_enabled_)
     {
-        if (kForceEnable || composition_enabled_)
-        {
-            EnableComposition(true);
-        }
-
-        // Анимация внутри окна
-        if (kForceEnable || client_area_animation_ != GetClientAreaAnimation())
-            SetClientAreaAnimation(true);
+        DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);
     }
+
+    // Анимация внутри окна
+    if (kForceEnable || client_area_animation_ != GetClientAreaAnimation())
+        SetClientAreaAnimation(true);
 
     // Тень окон
     if (kForceEnable || drop_shadow_ != GetDropShadow())
@@ -337,27 +314,10 @@ ScopedDesktopEffects::~ScopedDesktopEffects()
 
 bool ScopedDesktopEffects::IsCompositionEnabled()
 {
-    PDWMISCOMPOSITIONENABLED is_enabled =
-        reinterpret_cast<PDWMISCOMPOSITIONENABLED>(dwapi_->GetFunctionPointer("DwmIsCompositionEnabled"));
-
-    if (!is_enabled)
-        return false;
-
     BOOL value = FALSE;
-    is_enabled(&value);
+    DwmIsCompositionEnabled(&value);
 
     return (value != FALSE);
-}
-
-void ScopedDesktopEffects::EnableComposition(bool enable)
-{
-    PDWMENABLECOMPOSITION enable_composition =
-        reinterpret_cast<PDWMENABLECOMPOSITION>(dwapi_->GetFunctionPointer("DwmEnableComposition"));
-
-    if (!enable_composition)
-        return;
-
-    enable_composition(enable ? 1 : 0);
 }
 
 } // namespace aspia

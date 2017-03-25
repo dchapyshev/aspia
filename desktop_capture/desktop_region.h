@@ -9,10 +9,7 @@
 #define _ASPIA_DESKTOP_CAPTURE__DESKTOP_REGION_H
 
 #include "desktop_capture/desktop_rect.h"
-
-extern "C" {
 #include "desktop_capture/x11region.h"
-}
 
 namespace aspia {
 
@@ -20,27 +17,27 @@ class DesktopRegion
 {
 public:
     DesktopRegion();
-    explicit DesktopRegion(const DesktopRect &rect);
-    DesktopRegion(const DesktopRegion &other);
+    explicit DesktopRegion(const DesktopRect& rect);
+    DesktopRegion(const DesktopRegion& other);
     ~DesktopRegion();
 
-    void CopyFrom(const DesktopRegion &other);
+    void CopyFrom(const DesktopRegion& other);
     void Clear();
     bool IsEmpty() const;
-    bool Equals(const DesktopRegion &other) const;
-    void AddRegion(const DesktopRegion &other);
-    void AddRect(const DesktopRect &rect);
+    bool IsEqual(const DesktopRegion& other) const;
+    void AddRegion(const DesktopRegion& other);
+    void AddRect(const DesktopRect& rect);
     void Translate(int32_t x_offset, int32_t y_offset);
-    void IntersectWith(const DesktopRegion &other);
-    void IntersectWith(const DesktopRect &rect);
+    void IntersectWith(const DesktopRegion& other);
+    void IntersectWith(const DesktopRect& rect);
 
     class Iterator
     {
     public:
-        explicit Iterator(const DesktopRegion &target);
+        explicit Iterator(const DesktopRegion& target);
         ~Iterator();
 
-        void Reset(const DesktopRegion &target);
+        void Reset(const DesktopRegion& target);
 
         bool IsAtEnd() const;
         void Advance();
@@ -48,14 +45,12 @@ public:
         DesktopRect rect();
 
     private:
-        const BoxRec *list_;
+        const BoxRec* list_;
         DWORD index_;
         DWORD count_;
     };
 
-    DesktopRegion& operator=(const DesktopRegion &other);
-    bool operator==(const DesktopRegion &other);
-    bool operator!=(const DesktopRegion &other);
+    DesktopRegion& operator=(const DesktopRegion& other);
 
 private:
     mutable RegionRec rgn_;

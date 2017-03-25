@@ -11,10 +11,10 @@ namespace aspia {
 
 DesktopRegion::DesktopRegion()
 {
-    miRegionInit(&rgn_, NullBox, 0);
+    miRegionInit(&rgn_, kNullBox, 0);
 }
 
-DesktopRegion::DesktopRegion(const DesktopRect &rect)
+DesktopRegion::DesktopRegion(const DesktopRect& rect)
 {
     if (!rect.IsEmpty())
     {
@@ -29,13 +29,13 @@ DesktopRegion::DesktopRegion(const DesktopRect &rect)
     }
     else
     {
-        miRegionInit(&rgn_, NullBox, 0);
+        miRegionInit(&rgn_, kNullBox, 0);
     }
 }
 
-DesktopRegion::DesktopRegion(const DesktopRegion &other)
+DesktopRegion::DesktopRegion(const DesktopRegion& other)
 {
-    miRegionInit(&rgn_, NullBox, 0);
+    miRegionInit(&rgn_, kNullBox, 0);
     miRegionCopy(&rgn_, &other.rgn_);
 }
 
@@ -44,7 +44,7 @@ DesktopRegion::~DesktopRegion()
     miRegionUninit(&rgn_);
 }
 
-void DesktopRegion::CopyFrom(const DesktopRegion &other)
+void DesktopRegion::CopyFrom(const DesktopRegion& other)
 {
     miRegionCopy(&rgn_, &other.rgn_);
 }
@@ -59,20 +59,20 @@ bool DesktopRegion::IsEmpty() const
     return !miRegionNotEmpty(&rgn_);
 }
 
-bool DesktopRegion::Equals(const DesktopRegion &other) const
+bool DesktopRegion::IsEqual(const DesktopRegion& other) const
 {
     if (IsEmpty() && other.IsEmpty())
         return true;
 
-    return !!miRegionsEqual(&rgn_, &other.rgn_);
+    return miRegionsEqual(&rgn_, &other.rgn_);
 }
 
-void DesktopRegion::AddRegion(const DesktopRegion &other)
+void DesktopRegion::AddRegion(const DesktopRegion& other)
 {
     miUnion(&rgn_, &rgn_, &other.rgn_);
 }
 
-void DesktopRegion::AddRect(const DesktopRect &rect)
+void DesktopRegion::AddRect(const DesktopRect& rect)
 {
     if (!rect.IsEmpty())
     {
@@ -86,34 +86,24 @@ void DesktopRegion::Translate(int32_t x_offset, int32_t y_offset)
     miTranslateRegion(&rgn_, x_offset, y_offset);
 }
 
-void DesktopRegion::IntersectWith(const DesktopRegion &other)
+void DesktopRegion::IntersectWith(const DesktopRegion& other)
 {
     miIntersect(&rgn_, &rgn_, &other.rgn_);
 }
 
-void DesktopRegion::IntersectWith(const DesktopRect &rect)
+void DesktopRegion::IntersectWith(const DesktopRect& rect)
 {
     DesktopRegion temp(rect);
     IntersectWith(temp);
 }
 
-DesktopRegion& DesktopRegion::operator=(const DesktopRegion &other)
+DesktopRegion& DesktopRegion::operator=(const DesktopRegion& other)
 {
     CopyFrom(other);
     return *this;
 }
 
-bool DesktopRegion::operator==(const DesktopRegion &other)
-{
-    return Equals(other);
-}
-
-bool DesktopRegion::operator!=(const DesktopRegion &other)
-{
-    return !Equals(other);
-}
-
-DesktopRegion::Iterator::Iterator(const DesktopRegion &target)
+DesktopRegion::Iterator::Iterator(const DesktopRegion& target)
 {
     Reset(target);
 }
@@ -123,7 +113,7 @@ DesktopRegion::Iterator::~Iterator()
     // Nothing
 }
 
-void DesktopRegion::Iterator::Reset(const DesktopRegion &target)
+void DesktopRegion::Iterator::Reset(const DesktopRegion& target)
 {
     list_  = REGION_RECTS(&target.rgn_);
     count_ = REGION_NUM_RECTS(&target.rgn_);
@@ -142,7 +132,7 @@ void DesktopRegion::Iterator::Advance()
 
 DesktopRect DesktopRegion::Iterator::rect()
 {
-    const BoxRec *box = &list_[index_];
+    const BoxRec* box = &list_[index_];
 
     return DesktopRect::MakeLTRB(box->x1, box->y1, box->x2, box->y2);
 }

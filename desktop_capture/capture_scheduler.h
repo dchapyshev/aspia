@@ -19,15 +19,13 @@ namespace aspia {
 class CaptureScheduler
 {
 public:
-    explicit CaptureScheduler(int max_delay);
-    ~CaptureScheduler();
+    CaptureScheduler();
+    ~CaptureScheduler() = default;
 
-    void Wait();
-    void BeginCapture();
+    int32_t NextCaptureDelay(int32_t max_delay);
 
 private:
-    const int max_delay_;
-    DWORD begin_time_;
+    uint64_t begin_time_;
 
     DISALLOW_COPY_AND_ASSIGN(CaptureScheduler);
 };

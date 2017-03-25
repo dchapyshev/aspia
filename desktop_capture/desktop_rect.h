@@ -13,6 +13,7 @@
 #include <stdint.h>
 
 #include "desktop_capture/desktop_size.h"
+#include "desktop_capture/desktop_point.h"
 
 namespace aspia {
 
@@ -20,14 +21,14 @@ class DesktopRect
 {
 public:
     DesktopRect();
-    DesktopRect(const DesktopRect &rect);
-    DesktopRect(const proto::VideoRect &rect);
-    ~DesktopRect();
+    DesktopRect(const DesktopRect& other);
+    DesktopRect(const proto::VideoRect& other);
+    ~DesktopRect() = default;
 
     static DesktopRect MakeXYWH(int32_t x, int32_t y, int32_t width, int32_t height);
     static DesktopRect MakeWH(int32_t width, int32_t height);
     static DesktopRect MakeLTRB(int32_t l, int32_t t, int32_t r, int32_t b);
-    static DesktopRect MakeSize(const DesktopSize &size);
+    static DesktopRect MakeSize(const DesktopSize& size);
 
     int32_t Left() const;
     int32_t Top() const;
@@ -39,18 +40,20 @@ public:
     int32_t Width() const;
     int32_t Height() const;
 
+    DesktopPoint LeftTop() const;
+
     bool IsEmpty() const;
     bool IsValid() const;
 
-    bool IsEqualTo(const DesktopRect &other) const;
+    bool IsEqual(const DesktopRect& other) const;
     DesktopSize Size() const;
     bool Contains(int32_t x, int32_t y) const;
-    bool ContainsRect(const DesktopRect &rect) const;
+    bool ContainsRect(const DesktopRect& other) const;
     void Translate(int32_t dx, int32_t dy);
-    void IntersectWith(const DesktopRect &rect);
+    void IntersectWith(const DesktopRect& other);
 
-    void ToVideoRect(proto::VideoRect *rect) const;
-    void FromVideoRect(const proto::VideoRect &rect);
+    void ToVideoRect(proto::VideoRect* other) const;
+    void FromVideoRect(const proto::VideoRect& other);
 
     //
     // Enlarges current DesktopRect by subtracting |left_offset| and |top_offset|
@@ -61,9 +64,7 @@ public:
     //
     void Extend(int32_t left_offset, int32_t top_offset, int32_t right_offset, int32_t bottom_offset);
 
-    DesktopRect& operator=(const DesktopRect &rc);
-    bool operator==(const DesktopRect &rc);
-    bool operator!=(const DesktopRect &rc);
+    DesktopRect& operator=(const DesktopRect& other);
 
 private:
     DesktopRect(int32_t l, int32_t t, int32_t r, int32_t b);

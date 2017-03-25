@@ -19,20 +19,18 @@ class DesktopPoint
 public:
     DesktopPoint();
     DesktopPoint(int32_t x, int32_t y);
-    DesktopPoint(const DesktopPoint &point);
-    ~DesktopPoint();
+    DesktopPoint(const DesktopPoint& point);
+    ~DesktopPoint() = default;
 
     int32_t x() const;
     int32_t y() const;
 
     void Set(int32_t x, int32_t y);
 
-    bool IsEqualTo(const DesktopPoint &other) const;
+    bool IsEqual(const DesktopPoint& other) const;
     void Translate(int32_t x_offset, int32_t y_offset);
 
-    DesktopPoint& operator=(const DesktopPoint &other);
-    bool operator==(const DesktopPoint &other);
-    bool operator!=(const DesktopPoint &other);
+    DesktopPoint& operator=(const DesktopPoint& other);
 
 private:
     int32_t x_;

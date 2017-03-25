@@ -12,7 +12,7 @@
 
 #include <stdint.h>
 
-#include "proto/video.pb.h"
+#include "proto/proto.pb.h"
 
 namespace aspia {
 
@@ -20,8 +20,16 @@ class PixelFormat
 {
 public:
     PixelFormat();
-    PixelFormat(const PixelFormat &other);
-    ~PixelFormat();
+    PixelFormat(const PixelFormat& other);
+    PixelFormat(uint32_t bits_per_pixel,
+                uint32_t red_max,
+                uint32_t green_max,
+                uint32_t blue_max,
+                uint32_t red_shift,
+                uint32_t green_shift,
+                uint32_t blue_shift);
+    PixelFormat(const proto::VideoPixelFormat& format);
+    ~PixelFormat() = default;
 
     // True color (32 bits per pixel)
     // 0:7   - blue
@@ -76,40 +84,39 @@ public:
     // 3:7 - unused
     static PixelFormat RGB111();
 
-    int BitsPerPixel() const;
-    int BytesPerPixel() const;
+    uint32_t BitsPerPixel() const;
+    uint32_t BytesPerPixel() const;
 
-    uint16_t RedMax() const;
-    uint16_t GreenMax() const;
-    uint16_t BlueMax() const;
+    uint32_t RedMax() const;
+    uint32_t GreenMax() const;
+    uint32_t BlueMax() const;
 
-    uint8_t RedShift() const;
-    uint8_t GreenShift() const;
-    uint8_t BlueShift() const;
+    uint32_t RedShift() const;
+    uint32_t GreenShift() const;
+    uint32_t BlueShift() const;
 
     bool IsEmpty() const;
     void Clear();
-    bool IsEqualTo(const PixelFormat &other) const;
-    void Set(const PixelFormat &other);
+    bool IsEqual(const PixelFormat& other) const;
+    void Set(const PixelFormat& other);
 
-    void ToVideoPixelFormat(proto::VideoPixelFormat *format) const;
-    void FromVideoPixelFormat(const proto::VideoPixelFormat &format);
+    void ToVideoPixelFormat(proto::VideoPixelFormat* format) const;
+    void FromVideoPixelFormat(const proto::VideoPixelFormat& format);
 
-    PixelFormat& operator=(const PixelFormat &other);
-    bool operator==(const PixelFormat &other);
-    bool operator!=(const PixelFormat &other);
+    PixelFormat& operator=(const PixelFormat& other);
+    bool operator==(const PixelFormat& other);
+    bool operator!=(const PixelFormat& other);
 
 private:
-    // Количество бит, которые пиксель занимает в памяти.
-    int bits_per_pixel_;
+    uint32_t bits_per_pixel_; // РљРѕР»РёС‡РµСЃС‚РІРѕ Р±РёС‚, РєРѕС‚РѕСЂС‹Рµ РїРёРєСЃРµР»СЊ Р·Р°РЅРёРјР°РµС‚ РІ РїР°РјСЏС‚Рё.
 
-    uint16_t red_max_;
-    uint16_t green_max_;
-    uint16_t blue_max_;
+    uint32_t red_max_;
+    uint32_t green_max_;
+    uint32_t blue_max_;
 
-    uint8_t red_shift_;
-    uint8_t green_shift_;
-    uint8_t blue_shift_;
+    uint32_t red_shift_;
+    uint32_t green_shift_;
+    uint32_t blue_shift_;
 };
 
 } // namespace aspia

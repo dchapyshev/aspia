@@ -20,25 +20,19 @@ namespace aspia {
 class MouseCursor
 {
 public:
-    MouseCursor();
-    ~MouseCursor();
+    MouseCursor(std::unique_ptr<uint8_t[]>&& data,
+                int width, int height,
+                int hotspot_x, int hotspot_y);
+    ~MouseCursor() = default;
 
     const DesktopSize& Size() const;
-    void SetSize(int32_t width, int32_t height);
-
     const DesktopPoint& Hotspot() const;
-    void SetHotspot(int32_t x, int32_t y);
+    const uint8_t* Data() const;
 
-    uint8_t* Data() const;
-    size_t DataSize() const;
-    void SetData(std::unique_ptr<uint8_t[]> data, size_t data_size);
-
-    bool IsEqual(const MouseCursor &other);
+    bool IsEqual(const MouseCursor& other);
 
 private:
     std::unique_ptr<uint8_t[]> data_;
-    size_t data_size_;
-
     DesktopSize size_;
     DesktopPoint hotspot_;
 };

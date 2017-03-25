@@ -7,7 +7,6 @@
 
 #include "desktop_capture/capturer_gdi.h"
 
-#include "base/exception.h"
 #include "base/logging.h"
 #include "base/scoped_select_object.h"
 
@@ -15,50 +14,27 @@
 
 namespace aspia {
 
-static const int kBytesPerPixel = 4;
-
 CapturerGDI::CapturerGDI() :
-    curr_buffer_id_(0)
+    curr_frame_id_(0)
 {
-    image_buffer_[0] = nullptr;
-    image_buffer_[1] = nullptr;
-
     memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
 }
 
-void CapturerGDI::AllocateBuffer(int buffer_index, int align)
+bool CapturerGDI::PrepareInputDesktop()
 {
-    DCHECK(desktop_dc_);
-    DCHECK(memory_dc_);
+    Desktop input_desktop(Desktop::GetInputDesktop());
 
-    int aligned_width = ((screen_rect_.Width() + (align - 1)) / align) * 2;
-
-    BitmapInfo bmi = { 0 };
-
-    bmi.header.biSize        = sizeof(BITMAPINFOHEADER);
-    bmi.header.biBitCount    = kBytesPerPixel * 8;
-    bmi.header.biCompression = BI_BITFIELDS;
-    bmi.header.biSizeImage   = kBytesPerPixel * aligned_width * screen_rect_.Height();
-    bmi.header.biPlanes      = 1;
-    bmi.header.biWidth       = screen_rect_.Width();
-    bmi.header.biHeight      = -screen_rect_.Height();
-
-    // 0RGB (alpha = 0)
-    bmi.u.mask.red   = 0x00FF0000;
-    bmi.u.mask.green = 0x0000FF00;
-    bmi.u.mask.blue  = 0x000000FF;
-
-    target_bitmap_[buffer_index] =
-        CreateDIBSection(memory_dc_,
-                         reinterpret_cast<PBITMAPINFO>(&bmi),
-                         DIB_RGB_COLORS,
-                         reinterpret_cast<void**>(&image_buffer_[buffer_index]),
-                         nullptr,
-                         0);
-    if (!target_bitmap_[buffer_index].Get())
+    if (input_desktop.IsValid() && !desktop_.IsSame(input_desktop))
     {
-        LOG(ERROR) << "CreateDIBSection() failed: " << GetLastError();
+        desktop_dc_.reset();
+        memory_dc_.set(nullptr);
+
+        desktop_.SetThreadDesktop(std::move(input_desktop));
+
+        return true;
     }
+
+    return false;
 }
 
 void CapturerGDI::PrepareCaptureResources()
@@ -69,9 +45,8 @@ void CapturerGDI::PrepareCaptureResources()
                               GetSystemMetrics(SM_CXVIRTUALSCREEN),
                               GetSystemMetrics(SM_CYVIRTUALSCREEN));
 
-    if (screen_rect_ != screen_rect)
+    if (!screen_rect_.IsEqual(screen_rect))
     {
-        differ_.reset();
         desktop_dc_.reset();
         memory_dc_.set(nullptr);
 
@@ -85,72 +60,67 @@ void CapturerGDI::PrepareCaptureResources()
         desktop_dc_.reset(new ScopedGetDC(nullptr));
         memory_dc_.set(CreateCompatibleDC(*desktop_dc_));
 
-        for (int index = 0; index < kNumBuffers; ++index)
+        DesktopSize size = screen_rect_.Size();
+
+        for (int i = 0; i < kNumFrames; ++i)
         {
-            AllocateBuffer(index, 32);
+            frame_[i].reset(DesktopFrameDib::Create(size, PixelFormat::ARGB(), memory_dc_));
+            CHECK(frame_[i]);
         }
 
-        differ_.reset(new Differ(screen_rect_.Size(), 16));
+        differ_.reset(new Differ(size));
     }
 }
 
-void CapturerGDI::PrepareInputDesktop()
+const DesktopFrame* CapturerGDI::CaptureImage(bool* desktop_change)
 {
-    std::unique_ptr<Desktop> input_desktop(Desktop::GetInputDesktop());
+    *desktop_change = PrepareInputDesktop();
+    PrepareCaptureResources();
 
-    if (input_desktop && !desktop_.IsSame(*input_desktop))
+    int prev_frame_id = curr_frame_id_ - 1;
+    if (prev_frame_id < 0)
+        prev_frame_id = kNumFrames - 1;
+
+    DesktopFrameDib* prev_frame = frame_[prev_frame_id].get();
+    DesktopFrameDib* curr_frame = frame_[curr_frame_id_].get();
+
     {
-        differ_.reset();
-        desktop_dc_.reset();
-        memory_dc_.set(nullptr);
+        ScopedSelectObject select_object(memory_dc_, curr_frame->Bitmap());
 
-        desktop_.SetThreadDesktop(input_desktop.release());
-    }
-}
-
-const uint8_t* CapturerGDI::CaptureImage(DesktopRegion *dirty_region,
-                                         DesktopSize *desktop_size)
-{
-    while (true)
-    {
-        PrepareCaptureResources();
-
-        *desktop_size = screen_rect_.Size();
-
-        int prev_buffer_id = curr_buffer_id_ - 1;
-        if (prev_buffer_id < 0)
-            prev_buffer_id = kNumBuffers - 1;
-
+        if (!BitBlt(memory_dc_,
+                    0, 0,
+                    curr_frame->Size().Width(),
+                    curr_frame->Size().Height(),
+                    *desktop_dc_,
+                    screen_rect_.x(),
+                    screen_rect_.y(),
+                    CAPTUREBLT | SRCCOPY))
         {
-            ScopedSelectObject select_object(memory_dc_,
-                                             target_bitmap_[curr_buffer_id_]);
-
-            if (!BitBlt(memory_dc_,
-                        0, 0,
-                        screen_rect_.Width(),
-                        screen_rect_.Height(),
-                        *desktop_dc_,
-                        screen_rect_.x(),
-                        screen_rect_.y(),
-                        CAPTUREBLT | SRCCOPY))
-            {
-                PrepareInputDesktop();
-                continue;
-            }
+            DLOG(WARNING) << "BitBlt() failed: " << GetLastError();
+            return prev_frame;
         }
-
-        const uint8_t *prev = image_buffer_[prev_buffer_id];
-        const uint8_t *curr = image_buffer_[curr_buffer_id_];
-
-        differ_->CalcDirtyRegion(prev, curr, dirty_region);
-
-        curr_buffer_id_ = prev_buffer_id;
-
-        return curr;
     }
+
+    // Если рабочий стол не был переключен.
+    if (!*desktop_change)
+    {
+        // Вычисляем изменившиеся области.
+        differ_->CalcDirtyRegion(prev_frame->GetFrameData(),
+                                 curr_frame->GetFrameData(),
+                                 curr_frame->MutableUpdatedRegion());
+    }
+    else
+    {
+        // Добавляем в измененный регион всю область экрана.
+        curr_frame->InvalidateFrame();
+    }
+
+    curr_frame_id_ = prev_frame_id;
+
+    return curr_frame;
 }
 
-static bool IsSameCursorShape(const CURSORINFO &left, const CURSORINFO &right)
+static bool IsSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
 {
     // If the cursors are not showing, we do not care the hCursor handle.
     return left.flags == right.flags && (left.flags != CURSOR_SHOWING ||
@@ -162,34 +132,32 @@ MouseCursor* CapturerGDI::CaptureCursor()
     CURSORINFO cursor_info = { 0 };
 
     // Note: cursor_info.hCursor does not need to be freed.
-    cursor_info.cbSize = sizeof(CURSORINFO);
-    if (!GetCursorInfo(&cursor_info))
+    cursor_info.cbSize = sizeof(cursor_info);
+    if (GetCursorInfo(&cursor_info))
     {
-        LOG(ERROR) << "GetCursorInfo() failed: " << GetLastError();
-        throw Exception("Unable to retrieve the cursor image");
-    }
-
-    if (!IsSameCursorShape(cursor_info, prev_cursor_info_))
-    {
-        if (cursor_info.flags == 0)
+        if (!IsSameCursorShape(cursor_info, prev_cursor_info_))
         {
-            //
-            // Host machine does not have a hardware mouse attached, we will send a
-            // default one instead.
-            // Note, Windows automatically caches cursor resource, so we do not need
-            // to cache the result of LoadCursor.
-            //
-            cursor_info.hCursor = LoadCursorW(nullptr, IDC_ARROW);
+            if (cursor_info.flags == 0)
+            {
+                //
+                // Host machine does not have a hardware mouse attached, we will send a
+                // default one instead.
+                // Note, Windows automatically caches cursor resource, so we do not need
+                // to cache the result of LoadCursor.
+                //
+                cursor_info.hCursor = LoadCursorW(nullptr, IDC_ARROW);
+            }
+
+            MouseCursor* mouse_cursor =
+                CreateMouseCursorFromHCursor(*desktop_dc_, cursor_info.hCursor);
+
+            if (mouse_cursor)
+            {
+                prev_cursor_info_ = cursor_info;
+            }
+
+            return mouse_cursor;
         }
-
-        MouseCursor *mouse_cursor = CreateMouseCursorFromHCursor(*desktop_dc_, cursor_info.hCursor);
-
-        if (mouse_cursor)
-        {
-            prev_cursor_info_ = cursor_info;
-        }
-
-        return mouse_cursor;
     }
 
     return nullptr;

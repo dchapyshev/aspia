@@ -14,27 +14,27 @@
 namespace aspia {
 
 #define RGBA(r, g, b, a)          \
-    ((((a) << 24) & 0xff000000) | \
-    (((b)  << 16) & 0xff0000)   | \
-    (((g)  << 8)  & 0xff00)     | \
-    ((r)          & 0xff))
+    ((((a) << 24) & 0xFF000000) | \
+    (((b)  << 16) & 0xFF0000)   | \
+    (((g)  << 8)  & 0xFF00)     | \
+    ((r)          & 0xFF))
 
 static const int kBytesPerPixel = 4;
 
 // Pixel colors used when generating cursor outlines.
-static const uint32_t kPixelRgbaBlack       = RGBA(0,    0,    0,    0xff);
-static const uint32_t kPixelRgbaWhite       = RGBA(0xff, 0xff, 0xff, 0xff);
+static const uint32_t kPixelRgbaBlack       = RGBA(0,    0,    0,    0xFF);
+static const uint32_t kPixelRgbaWhite       = RGBA(0xFF, 0xFF, 0xFF, 0xFF);
 static const uint32_t kPixelRgbaTransparent = RGBA(0,    0,    0,    0);
 
-static const uint32_t kPixelRgbWhite = RGB(0xff, 0xff, 0xff);
+static const uint32_t kPixelRgbWhite = RGB(0xFF, 0xFF, 0xFF);
 
 //
 // Scans a 32bpp bitmap looking for any pixels with non-zero alpha component.
 // Returns true if non-zero alpha is found. |stride| is expressed in pixels.
 //
-static bool HasAlphaChannel(const uint32_t *data, int stride, int width, int height)
+static bool HasAlphaChannel(const uint32_t* data, int width, int height)
 {
-    const RGBQUAD *plane = reinterpret_cast<const RGBQUAD*>(data);
+    const RGBQUAD* plane = reinterpret_cast<const RGBQUAD*>(data);
 
     for (int y = 0; y < height; ++y)
     {
@@ -43,10 +43,8 @@ static bool HasAlphaChannel(const uint32_t *data, int stride, int width, int hei
             if (plane->rgbReserved != 0)
                 return true;
 
-            plane += 1;
+            ++plane;
         }
-
-        plane += stride - width;
     }
 
     return false;
@@ -56,7 +54,7 @@ static bool HasAlphaChannel(const uint32_t *data, int stride, int width, int hei
 // Expands the cursor shape to add a white outline for visibility against
 // dark backgrounds.
 //
-static void AddCursorOutline(int width, int height, uint32_t *data)
+static void AddCursorOutline(int width, int height, uint32_t* data)
 {
     for (int y = 0; y < height; ++y)
     {
@@ -86,19 +84,19 @@ static void AddCursorOutline(int width, int height, uint32_t *data)
 // Premultiplies RGB components of the pixel data in the given image by
 // the corresponding alpha components.
 //
-static void AlphaMul(uint32_t *data, int width, int height)
+static void AlphaMul(uint32_t* data, int width, int height)
 {
     static_assert(sizeof(uint32_t) == kBytesPerPixel,
         "size of uint32 should be the number of bytes per pixel");
 
-    for (uint32_t *data_end = data + width * height; data != data_end; ++data)
+    for (uint32_t* data_end = data + width * height; data != data_end; ++data)
     {
-        RGBQUAD *from = reinterpret_cast<RGBQUAD*>(data);
-        RGBQUAD *to = reinterpret_cast<RGBQUAD*>(data);
+        RGBQUAD* from = reinterpret_cast<RGBQUAD*>(data);
+        RGBQUAD* to = reinterpret_cast<RGBQUAD*>(data);
 
-        to->rgbBlue  = (static_cast<uint16_t>(from->rgbBlue)  * from->rgbReserved) / 0xff;
-        to->rgbGreen = (static_cast<uint16_t>(from->rgbGreen) * from->rgbReserved) / 0xff;
-        to->rgbRed   = (static_cast<uint16_t>(from->rgbRed)   * from->rgbReserved) / 0xff;
+        to->rgbBlue  = (static_cast<uint16_t>(from->rgbBlue)  * from->rgbReserved) / 0xFF;
+        to->rgbGreen = (static_cast<uint16_t>(from->rgbGreen) * from->rgbReserved) / 0xFF;
+        to->rgbRed   = (static_cast<uint16_t>(from->rgbRed)   * from->rgbReserved) / 0xFF;
     }
 }
 
@@ -145,7 +143,7 @@ MouseCursor* CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     bmi.bV5Planes      = 1;
     bmi.bV5BitCount    = kBytesPerPixel * 8;
     bmi.bV5Compression = BI_RGB;
-    bmi.bV5AlphaMask   = 0xff000000;
+    bmi.bV5AlphaMask   = 0xFF000000;
     bmi.bV5CSType      = LCS_WINDOWS_COLOR_SPACE;
     bmi.bV5Intent      = LCS_GM_BUSINESS;
 
@@ -161,7 +159,7 @@ MouseCursor* CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor)
         return nullptr;
     }
 
-    uint32_t *mask_plane = mask_data.get();
+    uint32_t* mask_plane = mask_data.get();
 
     std::unique_ptr<uint8_t[]> image;
     size_t image_size;
@@ -190,10 +188,7 @@ MouseCursor* CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor)
         // GetDIBits() does not provide any indication whether the bitmap has alpha
         // channel, so we use HasAlphaChannel() below to find it out.
         //
-        has_alpha = HasAlphaChannel(reinterpret_cast<uint32_t*>(image.get()),
-                                    width,
-                                    width,
-                                    height);
+        has_alpha = HasAlphaChannel(reinterpret_cast<uint32_t*>(image.get()), width, height);
     }
     else
     {
@@ -266,16 +261,14 @@ MouseCursor* CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     // Pre-multiply the resulting pixels since MouseCursor uses premultiplied images.
     AlphaMul(reinterpret_cast<uint32_t*>(image.get()), width, height);
 
-    std::unique_ptr<MouseCursor> mouse_cursor(new MouseCursor());
-
-    mouse_cursor->SetHotspot(icon_info.xHotspot, icon_info.yHotspot);
-    mouse_cursor->SetSize(width, height);
-    mouse_cursor->SetData(std::move(image), image_size);
-
-    return mouse_cursor.release();
+    return new MouseCursor(std::move(image),
+                           width,
+                           height,
+                           icon_info.xHotspot,
+                           icon_info.yHotspot);
 }
 
-HCURSOR CreateHCursorFromMouseCursor(HDC dc, const MouseCursor &mouse_cursor)
+HCURSOR CreateHCursorFromMouseCursor(HDC dc, const MouseCursor& mouse_cursor)
 {
     typedef struct
     {

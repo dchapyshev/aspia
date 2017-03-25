@@ -12,7 +12,7 @@
 
 #include <stdint.h>
 
-#include "proto/video.pb.h"
+#include "proto/proto.pb.h"
 
 namespace aspia {
 
@@ -21,8 +21,9 @@ class DesktopSize
 public:
     DesktopSize();
     DesktopSize(int32_t width, int32_t height);
-    DesktopSize(const DesktopSize &other);
-    ~DesktopSize();
+    DesktopSize(const DesktopSize& other);
+    DesktopSize(const proto::VideoSize& size);
+    ~DesktopSize() = default;
 
     int32_t Width() const;
     int32_t Height() const;
@@ -30,16 +31,14 @@ public:
     void Set(int32_t width, int32_t height);
 
     bool IsEmpty() const;
-    bool IsEqualTo(const DesktopSize &other) const;
+    bool IsEqual(const DesktopSize& other) const;
 
     void Clear();
 
-    void ToVideoSize(proto::VideoSize *size) const;
-    void FromVideoSize(const proto::VideoSize &size);
+    void ToVideoSize(proto::VideoSize* size) const;
+    void FromVideoSize(const proto::VideoSize& size);
 
-    DesktopSize& operator=(const DesktopSize &other);
-    bool operator==(const DesktopSize &other);
-    bool operator!=(const DesktopSize &other);
+    DesktopSize& operator=(const DesktopSize& other);
 
 private:
     int32_t width_;

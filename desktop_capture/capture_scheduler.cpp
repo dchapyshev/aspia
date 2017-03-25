@@ -7,53 +7,29 @@
 
 #include "desktop_capture/capture_scheduler.h"
 
-#include "base/exception.h"
-#include "base/logging.h"
-
 namespace aspia {
 
-CaptureScheduler::CaptureScheduler(int32_t max_delay) :
-    max_delay_(max_delay),
-    begin_time_(0)
-{
-    if (max_delay_ < 15 || max_delay_ > 100)
-    {
-        LOG(ERROR) << "Wrong maximum capture delay: " << max_delay_;
-        throw Exception("Wrong maximum capture delay");
-    }
-}
-
-CaptureScheduler::~CaptureScheduler()
+CaptureScheduler::CaptureScheduler() :
+    begin_time_(GetTickCount64())
 {
     // Nothing
 }
 
-void CaptureScheduler::Wait()
+int32_t CaptureScheduler::NextCaptureDelay(int32_t max_delay)
 {
     // Получаем разницу между началом и окончанием обновления.
-    int diff_time = GetTickCount() - begin_time_;
+    int32_t diff_time = static_cast<int32_t>(GetTickCount64() - begin_time_);
 
-    if (diff_time > max_delay_)
+    if (diff_time > max_delay)
     {
-        diff_time = max_delay_;
+        return 0;
     }
     else if (diff_time < 0)
     {
-        diff_time = 0;
+        return max_delay;
     }
 
-    int delay = max_delay_ - diff_time;
-
-    if (delay)
-    {
-        Sleep(delay);
-    }
-}
-
-void CaptureScheduler::BeginCapture()
-{
-    // Сохраняем время начала обновления (в мс).
-    begin_time_ = GetTickCount();
+    return max_delay - diff_time;
 }
 
 } // namespace aspia

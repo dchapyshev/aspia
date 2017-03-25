@@ -20,18 +20,18 @@ DesktopRect::DesktopRect() :
     // Nothing
 }
 
-DesktopRect::DesktopRect(const DesktopRect &rect) :
-    left_(rect.left_),
-    top_(rect.top_),
-    right_(rect.right_),
-    bottom_(rect.bottom_)
+DesktopRect::DesktopRect(const DesktopRect& other) :
+    left_(other.left_),
+    top_(other.top_),
+    right_(other.right_),
+    bottom_(other.bottom_)
 {
     // Nothing
 }
 
-DesktopRect::DesktopRect(const proto::VideoRect &rect)
+DesktopRect::DesktopRect(const proto::VideoRect& other)
 {
-    FromVideoRect(rect);
+    FromVideoRect(other);
 }
 
 DesktopRect::DesktopRect(int32_t l, int32_t t, int32_t r, int32_t b) :
@@ -42,8 +42,6 @@ DesktopRect::DesktopRect(int32_t l, int32_t t, int32_t r, int32_t b) :
 {
     // Nothing
 }
-
-DesktopRect::~DesktopRect() {}
 
 // static
 DesktopRect DesktopRect::MakeXYWH(int32_t x, int32_t y, int32_t width, int32_t height)
@@ -64,7 +62,7 @@ DesktopRect DesktopRect::MakeLTRB(int32_t l, int32_t t, int32_t r, int32_t b)
 }
 
 // static
-DesktopRect DesktopRect::MakeSize(const DesktopSize &size)
+DesktopRect DesktopRect::MakeSize(const DesktopSize& size)
 {
     return DesktopRect(0, 0, size.Width(), size.Height());
 }
@@ -109,6 +107,11 @@ int32_t DesktopRect::Height() const
     return bottom_ - top_;
 }
 
+DesktopPoint DesktopRect::LeftTop() const
+{
+    return DesktopPoint(Left(), Top());
+}
+
 bool DesktopRect::IsEmpty() const
 {
     return (Width() <= 0 || Height() <= 0);
@@ -119,7 +122,7 @@ bool DesktopRect::IsValid() const
     return (right_ < left_ && bottom_ < top_);
 }
 
-bool DesktopRect::IsEqualTo(const DesktopRect &other) const
+bool DesktopRect::IsEqual(const DesktopRect& other) const
 {
     return (left_   == other.left_  &&
             top_    == other.top_   &&
@@ -137,10 +140,10 @@ bool DesktopRect::Contains(int32_t x, int32_t y) const
     return (x >= left_ && x < right_ && y >= top_ && y < bottom_);
 }
 
-bool DesktopRect::ContainsRect(const DesktopRect &rect) const
+bool DesktopRect::ContainsRect(const DesktopRect& other) const
 {
-    return (rect.left_ >= left_ && rect.right_  <= right_ &&
-            rect.top_  >= top_  && rect.bottom_ <= bottom_);
+    return (other.left_ >= left_ && other.right_  <= right_ &&
+            other.top_  >= top_  && other.bottom_ <= bottom_);
 }
 
 void DesktopRect::Translate(int32_t dx, int32_t dy)
@@ -151,12 +154,12 @@ void DesktopRect::Translate(int32_t dx, int32_t dy)
     bottom_ += dy;
 }
 
-void DesktopRect::IntersectWith(const DesktopRect& rect)
+void DesktopRect::IntersectWith(const DesktopRect& other)
 {
-    left_   = std::max(Left(),   rect.Left());
-    top_    = std::max(Top(),    rect.Top());
-    right_  = std::min(Right(),  rect.Right());
-    bottom_ = std::min(Bottom(), rect.Bottom());
+    left_   = std::max(Left(),   other.Left());
+    top_    = std::max(Top(),    other.Top());
+    right_  = std::min(Right(),  other.Right());
+    bottom_ = std::min(Bottom(), other.Bottom());
 
     if (IsEmpty())
     {
@@ -167,20 +170,20 @@ void DesktopRect::IntersectWith(const DesktopRect& rect)
     }
 }
 
-void DesktopRect::ToVideoRect(proto::VideoRect *rect) const
+void DesktopRect::ToVideoRect(proto::VideoRect* other) const
 {
-    rect->set_x(x());
-    rect->set_y(y());
-    rect->set_width(Width());
-    rect->set_height(Height());
+    other->set_x(x());
+    other->set_y(y());
+    other->set_width(Width());
+    other->set_height(Height());
 }
 
-void DesktopRect::FromVideoRect(const proto::VideoRect &rect)
+void DesktopRect::FromVideoRect(const proto::VideoRect& other)
 {
-    left_ = rect.x();
-    top_ = rect.y();
-    right_ = left_ + rect.width();
-    bottom_ = top_ + rect.height();
+    left_   = other.x();
+    top_    = other.y();
+    right_  = left_ + other.width();
+    bottom_ = top_ + other.height();
 }
 
 void DesktopRect::Extend(int32_t left_offset,
@@ -194,7 +197,7 @@ void DesktopRect::Extend(int32_t left_offset,
     bottom_ += bottom_offset;
 }
 
-DesktopRect& DesktopRect::operator=(const DesktopRect &other)
+DesktopRect& DesktopRect::operator=(const DesktopRect& other)
 {
     left_   = other.left_;
     top_    = other.top_;
@@ -202,16 +205,6 @@ DesktopRect& DesktopRect::operator=(const DesktopRect &other)
     bottom_ = other.bottom_;
 
     return *this;
-}
-
-bool DesktopRect::operator==(const DesktopRect &other)
-{
-    return IsEqualTo(other);
-}
-
-bool DesktopRect::operator!=(const DesktopRect &other)
-{
-    return !IsEqualTo(other);
 }
 
 } // namespace aspia

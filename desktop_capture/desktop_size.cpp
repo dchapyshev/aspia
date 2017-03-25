@@ -23,16 +23,16 @@ DesktopSize::DesktopSize(int32_t width, int32_t height) :
     // Nothing
 }
 
-DesktopSize::DesktopSize(const DesktopSize &other) :
+DesktopSize::DesktopSize(const DesktopSize& other) :
     width_(other.width_),
     height_(other.height_)
 {
     // Nothing
 }
 
-DesktopSize::~DesktopSize()
+DesktopSize::DesktopSize(const proto::VideoSize& size)
 {
-    // Nothing
+    FromVideoSize(size);
 }
 
 int32_t DesktopSize::Width() const
@@ -56,7 +56,7 @@ bool DesktopSize::IsEmpty() const
     return (width_ <= 0 || height_ <= 0);
 }
 
-bool DesktopSize::IsEqualTo(const DesktopSize &other) const
+bool DesktopSize::IsEqual(const DesktopSize& other) const
 {
     return (width_ == other.width_ && height_ == other.height_);
 }
@@ -67,32 +67,22 @@ void DesktopSize::Clear()
     height_ = 0;
 }
 
-void DesktopSize::ToVideoSize(proto::VideoSize *size) const
+void DesktopSize::ToVideoSize(proto::VideoSize* size) const
 {
     size->set_width(width_);
     size->set_height(height_);
 }
 
-void DesktopSize::FromVideoSize(const proto::VideoSize &size)
+void DesktopSize::FromVideoSize(const proto::VideoSize& size)
 {
     width_ = size.width();
     height_ = size.height();
 }
 
-DesktopSize& DesktopSize::operator=(const DesktopSize &other)
+DesktopSize& DesktopSize::operator=(const DesktopSize& other)
 {
     Set(other.width_, other.height_);
     return *this;
-}
-
-bool DesktopSize::operator==(const DesktopSize &other)
-{
-    return IsEqualTo(other);
-}
-
-bool DesktopSize::operator!=(const DesktopSize &other)
-{
-    return !IsEqualTo(other);
 }
 
 } // namespace aspia

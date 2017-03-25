@@ -7,7 +7,12 @@
 
 #include "desktop_capture/mouse_cursor_cache.h"
 
+#include "base/logging.h"
+
 namespace aspia {
+
+static const size_t kMinCacheSize = 2;
+static const size_t kMaxCacheSize = 31;
 
 MouseCursorCache::MouseCursorCache(size_t cache_size) :
     cache_size_(cache_size)
@@ -15,21 +20,18 @@ MouseCursorCache::MouseCursorCache(size_t cache_size) :
     // Nothing
 }
 
-MouseCursorCache::~MouseCursorCache()
+int MouseCursorCache::Find(const MouseCursor* mouse_cursor)
 {
-    // Nothing
-}
+    DCHECK(mouse_cursor);
 
-int MouseCursorCache::Find(const MouseCursor *mouse_cursor)
-{
     int size = cache_.size();
 
     for (int index = 0; index < size; ++index)
     {
-        // Если курсор найден к кеше.
+        // Р•СЃР»Рё РєСѓСЂСЃРѕСЂ РЅР°Р№РґРµРЅ Рє РєРµС€Рµ.
         if (cache_.at(index)->IsEqual(*mouse_cursor))
         {
-            // Возвращаем его индекс.
+            // Р’РѕР·РІСЂР°С‰Р°РµРј РµРіРѕ РёРЅРґРµРєСЃ.
             return index;
         }
     }
@@ -39,13 +41,15 @@ int MouseCursorCache::Find(const MouseCursor *mouse_cursor)
 
 int MouseCursorCache::Add(std::unique_ptr<MouseCursor> mouse_cursor)
 {
-    // Добавляем курсор в конец списка.
+    DCHECK(mouse_cursor);
+
+    // Р”РѕР±Р°РІР»СЏРµРј РєСѓСЂСЃРѕСЂ РІ РєРѕРЅРµС† СЃРїРёСЃРєР°.
     cache_.push_back(std::move(mouse_cursor));
 
-    // Если текущий размер кеша превышает максимальный размер кеша.
+    // Р•СЃР»Рё С‚РµРєСѓС‰РёР№ СЂР°Р·РјРµСЂ РєРµС€Р° РїСЂРµРІС‹С€Р°РµС‚ РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СЂР°Р·РјРµСЂ РєРµС€Р°.
     if (cache_.size() > cache_size_)
     {
-        // Удаляем первый элемент в кеше (самый старый).
+        // РЈРґР°Р»СЏРµРј РїРµСЂРІС‹Р№ СЌР»РµРјРµРЅС‚ РІ РєРµС€Рµ (СЃР°РјС‹Р№ СЃС‚Р°СЂС‹Р№).
         cache_.pop_front();
     }
 
@@ -54,6 +58,12 @@ int MouseCursorCache::Add(std::unique_ptr<MouseCursor> mouse_cursor)
 
 MouseCursor* MouseCursorCache::Get(int index)
 {
+    if (index < 0 || index > kMaxCacheSize)
+    {
+        DLOG(ERROR) << "Invalid cache index: " << index;
+        return nullptr;
+    }
+
     return cache_.at(index).get();
 }
 
@@ -65,6 +75,22 @@ bool MouseCursorCache::IsEmpty() const
 void MouseCursorCache::Clear()
 {
     cache_.clear();
+}
+
+int MouseCursorCache::Size() const
+{
+    return cache_size_;
+}
+
+// static
+bool MouseCursorCache::IsValidCacheSize(size_t size)
+{
+    if (size < kMinCacheSize || size > kMaxCacheSize)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace aspia
