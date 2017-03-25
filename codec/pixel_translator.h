@@ -22,14 +22,11 @@ public:
         // Nothing
     }
 
-    virtual ~PixelTranslator()
-    {
-        // Nothing
-    }
+    virtual ~PixelTranslator() = default;
 
-    virtual void Translate(const uint8_t *src,
+    virtual void Translate(const uint8_t* src,
                            int src_stride,
-                           uint8_t *dst,
+                           uint8_t* dst,
                            int dst_stride,
                            int width,
                            int height) = 0;

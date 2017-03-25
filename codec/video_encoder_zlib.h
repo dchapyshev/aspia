@@ -22,47 +22,35 @@ class VideoEncoderZLIB : public VideoEncoder
 {
 public:
     VideoEncoderZLIB();
-    virtual ~VideoEncoderZLIB() override;
+    ~VideoEncoderZLIB() = default;
 
-    virtual void Resize(const DesktopSize &screen_size,
-                        const PixelFormat &client_pixel_format) override;
+    void Encode(proto::VideoPacket* packet, const DesktopFrame* frame) override;
 
-    virtual int32_t Encode(proto::VideoPacket *packet,
-                           const uint8_t *screen_buffer,
-                           const DesktopRegion &dirty_region) override;
-
-    void SetCompressRatio(int32_t value);
+    bool SetCompressRatio(int32_t value);
+    void SetPixelFormat(const PixelFormat& client_pixel_format);
 
 private:
-    void CompressRect(const uint8_t *source_buffer, const DesktopRect &rect, proto::VideoPacket *packet);
+    void CompressPacket(proto::VideoPacket* packet, size_t source_data_size);
 
     //
     // Retrieves a pointer to the output buffer in |update| used for storing the
-    // encoded rectangle data.  Will resize the buffer to |size|.
+    // encoded rectangle data. Will resize the buffer to |size|.
     //
-    uint8_t* GetOutputBuffer(proto::VideoPacket *packet, size_t size);
-
-    void InitTranslator(const PixelFormat &format);
+    uint8_t* GetOutputBuffer(proto::VideoPacket* packet, size_t size);
 
 private:
-    bool resized_;
+    bool pixel_format_changed_;
 
-    DesktopSize size_;
+    // The current frame size.
+    DesktopSize screen_size_;
+
+    // Client's pixel format
     PixelFormat format_;
-
-    int bytes_per_pixel_;
-
-    int host_stride_;
-    int client_stride_;
-
-    DesktopRegion::Iterator rect_iterator;
-
-    int32_t packet_flags_;
 
     std::unique_ptr<CompressorZLIB> compressor_;
     std::unique_ptr<PixelTranslator> translator_;
 
-    ScopedAlignedBuffer translated_buffer_;
+    ScopedAlignedBuffer translate_buffer_;
 
     DISALLOW_COPY_AND_ASSIGN(VideoEncoderZLIB);
 };

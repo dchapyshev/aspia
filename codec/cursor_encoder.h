@@ -24,13 +24,13 @@ class CursorEncoder
 {
 public:
     CursorEncoder();
-    ~CursorEncoder();
+    ~CursorEncoder() = default;
 
-    void Encode(proto::CursorShape *packet, std::unique_ptr<MouseCursor> mouse_cursor);
+    void Encode(proto::CursorShape* cursor_shape, std::unique_ptr<MouseCursor> mouse_cursor);
 
 private:
-    uint8_t* GetOutputBuffer(proto::CursorShape *packet, size_t size);
-    void CompressCursor(proto::CursorShape *packet, const MouseCursor *mouse_cursor);
+    uint8_t* GetOutputBuffer(proto::CursorShape* cursor_shape, size_t size);
+    void CompressCursor(proto::CursorShape* cursor_shape, const MouseCursor* mouse_cursor);
 
 private:
     MouseCursorCache cache_;

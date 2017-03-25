@@ -10,8 +10,6 @@
 
 #include "aspia_config.h"
 
-#include <memory>
-
 #include "codec/video_decoder.h"
 #include "codec/decompressor_zlib.h"
 #include "base/scoped_aligned_buffer.h"
@@ -23,27 +21,11 @@ class VideoDecoderZLIB : public VideoDecoder
 {
 public:
     VideoDecoderZLIB();
-    virtual ~VideoDecoderZLIB() override;
+    ~VideoDecoderZLIB() = default;
 
-    virtual int32_t Decode(const proto::VideoPacket *packet,
-                           uint8_t **buffer,
-                           DesktopRegion &dirty_region,
-                           DesktopSize &size,
-                           PixelFormat &format) override;
+    bool Decode(const proto::VideoPacket& packet, DesktopFrame* frame) override;
 
 private:
-    void DecodePacket(const proto::VideoPacket *packet, DesktopRegion &dirty_region);
-    void Resize();
-
-private:
-    DesktopSize screen_size_;
-    PixelFormat pixel_format_;
-
-    int bytes_per_pixel_;
-    int dst_stride_;
-
-    ScopedAlignedBuffer buffer_;
-
     DecompressorZLIB decompressor_;
 
     DISALLOW_COPY_AND_ASSIGN(VideoDecoderZLIB);

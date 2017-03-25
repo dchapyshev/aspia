@@ -8,10 +8,9 @@
 #ifndef _ASPIA_CODEC__VIDEO_ENCODER_H
 #define _ASPIA_CODEC__VIDEO_ENCODER_H
 
-#include "desktop_capture/desktop_rect.h"
-#include "desktop_capture/desktop_region.h"
+#include "desktop_capture/desktop_frame.h"
 #include "desktop_capture/pixel_format.h"
-#include "proto/proto.pb.h"
+#include "proto/desktop_session.pb.h"
 
 namespace aspia {
 
@@ -19,14 +18,9 @@ class VideoEncoder
 {
 public:
     VideoEncoder() {}
-    virtual ~VideoEncoder() {}
+    virtual ~VideoEncoder() = default;
 
-    virtual void Resize(const DesktopSize &screen_size,
-                        const PixelFormat &client_pixel_format) = 0;
-
-    virtual int32_t Encode(proto::VideoPacket *packet,
-                           const uint8_t *screen_buffer,
-                           const DesktopRegion &dirty_region) = 0;
+    virtual void Encode(proto::VideoPacket* packet, const DesktopFrame* frame) = 0;
 };
 
 } // namespace aspia

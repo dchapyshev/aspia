@@ -11,42 +11,45 @@
 
 namespace aspia {
 
+// Р Р°Р·РјРµСЂ РєРµС€Р° РјРѕР¶РµС‚ Р±С‹С‚СЊ РІ РёРЅС‚РµСЂРІР°Р»Рµ РѕС‚ 2 РґРѕ 31.
+static const uint8_t kCacheSize = 8;
+
+// РЎС‚РµРїРµРЅСЊ СЃР¶Р°С‚РёСЏ РјРѕР¶РµС‚ Р±С‹С‚СЊ РІ РёРЅС‚РµСЂРІР°Р»Рµ РѕС‚ 1 РґРѕ 9.
+static const int32_t kCompressionRatio = 6;
+
 CursorEncoder::CursorEncoder() :
-    compressor_(6)
+    compressor_(kCompressionRatio),
+    cache_(kCacheSize)
 {
-    // Nothing
+    static_assert(kCacheSize >= 2 && kCacheSize <= 31, "Invalid cache size");
+    static_assert(kCompressionRatio >= 1 && kCompressionRatio <= 9, "Invalid compression ratio");
 }
 
-CursorEncoder::~CursorEncoder()
+uint8_t* CursorEncoder::GetOutputBuffer(proto::CursorShape* cursor_shape, size_t size)
 {
-    // Nothing
+    cursor_shape->mutable_data()->resize(size);
+
+    return const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(cursor_shape->mutable_data()->data()));
 }
 
-uint8_t* CursorEncoder::GetOutputBuffer(proto::CursorShape *packet, size_t size)
+void CursorEncoder::CompressCursor(proto::CursorShape* cursor_shape, const MouseCursor* mouse_cursor)
 {
-    packet->mutable_data()->resize(size);
-
-    return const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(packet->mutable_data()->data()));
-}
-
-void CursorEncoder::CompressCursor(proto::CursorShape *packet, const MouseCursor *mouse_cursor)
-{
-    // Делаем сброс компрессора при сжатии каждого курсора.
+    // Р”РµР»Р°РµРј СЃР±СЂРѕСЃ РєРѕРјРїСЂРµСЃСЃРѕСЂР° РїСЂРё СЃР¶Р°С‚РёРё РєР°Р¶РґРѕРіРѕ РєСѓСЂСЃРѕСЂР°.
     compressor_.Reset();
 
     int width = mouse_cursor->Size().Width();
     int height = mouse_cursor->Size().Height();
 
-    // Размер строки курсора в байтах.
+    // Р Р°Р·РјРµСЂ СЃС‚СЂРѕРєРё РєСѓСЂСЃРѕСЂР° РІ Р±Р°Р№С‚Р°С….
     const int row_size = width * sizeof(uint32_t);
 
     int packet_size = row_size * height;
     packet_size += packet_size / 100 + 16;
 
-    uint8_t *compressed_pos = GetOutputBuffer(packet, packet_size);
-    uint8_t *source_pos = mouse_cursor->Data();
+    uint8_t* compressed_pos = GetOutputBuffer(cursor_shape, packet_size);
+    const uint8_t* source_pos = mouse_cursor->Data();
 
-    int filled = 0;   // Количество байт в буфере назначения.
+    int filled = 0;   // РљРѕР»РёС‡РµСЃС‚РІРѕ Р±Р°Р№С‚ РІ Р±СѓС„РµСЂРµ РЅР°Р·РЅР°С‡РµРЅРёСЏ.
     int row_pos = 0;  // Position in the current row in bytes.
     int row_y = 0;    // Current row.
     bool compress_again = true;
@@ -55,79 +58,73 @@ void CursorEncoder::CompressCursor(proto::CursorShape *packet, const MouseCursor
     {
         Compressor::CompressorFlush flush = Compressor::CompressorNoFlush;
 
-        // Если мы достигли последней строки в прямоугольнике
+        // Р•СЃР»Рё РјС‹ РґРѕСЃС‚РёРіР»Рё РїРѕСЃР»РµРґРЅРµР№ СЃС‚СЂРѕРєРё РІ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРµ
         if (row_y == height - 1)
         {
-            // Ставим соответствующий флаг
+            // РЎС‚Р°РІРёРј СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ С„Р»Р°Рі
             flush = Compressor::CompressorFinish;
         }
 
-        int consumed = 0; // Количество байт, которое было взято из исходного буфера.
-        int written = 0;  // Количество байт, которое было записано в буфер назначения.
+        int consumed = 0; // РљРѕР»РёС‡РµСЃС‚РІРѕ Р±Р°Р№С‚, РєРѕС‚РѕСЂРѕРµ Р±С‹Р»Рѕ РІР·СЏС‚Рѕ РёР· РёСЃС…РѕРґРЅРѕРіРѕ Р±СѓС„РµСЂР°.
+        int written = 0;  // РљРѕР»РёС‡РµСЃС‚РІРѕ Р±Р°Р№С‚, РєРѕС‚РѕСЂРѕРµ Р±С‹Р»Рѕ Р·Р°РїРёСЃР°РЅРѕ РІ Р±СѓС„РµСЂ РЅР°Р·РЅР°С‡РµРЅРёСЏ.
 
-        // Сжимаем очередную порцию данных.
+        // РЎР¶РёРјР°РµРј РѕС‡РµСЂРµРґРЅСѓСЋ РїРѕСЂС†РёСЋ РґР°РЅРЅС‹С….
         compress_again = compressor_.Process(source_pos + row_pos, row_size - row_pos,
                                              compressed_pos + filled, packet_size - filled,
                                              flush, &consumed, &written);
 
-        row_pos += consumed; // Сдвигаем положение с текущей строке прямоугольника.
-        filled += written;   // Увеличиваем счетчик итогового размера буфера назначения.
+        row_pos += consumed; // РЎРґРІРёРіР°РµРј РїРѕР»РѕР¶РµРЅРёРµ СЃ С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕРєРµ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР°.
+        filled += written;   // РЈРІРµР»РёС‡РёРІР°РµРј СЃС‡РµС‚С‡РёРє РёС‚РѕРіРѕРІРѕРіРѕ СЂР°Р·РјРµСЂР° Р±СѓС„РµСЂР° РЅР°Р·РЅР°С‡РµРЅРёСЏ.
 
         // If we have filled the message or we have reached the end of stream.
         if (filled == packet_size || !compress_again)
         {
-            packet->mutable_data()->resize(filled);
+            cursor_shape->mutable_data()->resize(filled);
             return;
         }
 
-        // Если мы достигли конца текущей строки в прямоугольнике и это не последняя строка.
+        // Р•СЃР»Рё РјС‹ РґРѕСЃС‚РёРіР»Рё РєРѕРЅС†Р° С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕРєРё РІ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРµ Рё СЌС‚Рѕ РЅРµ РїРѕСЃР»РµРґРЅСЏСЏ СЃС‚СЂРѕРєР°.
         if (row_pos == row_size && row_y < height - 1)
         {
-            // Обнуляаем положение в текущей строке.
+            // РћР±РЅСѓР»СЏР°РµРј РїРѕР»РѕР¶РµРЅРёРµ РІ С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕРєРµ.
             row_pos = 0;
 
-            // Переходим к следующей строке в буфере.
+            // РџРµСЂРµС…РѕРґРёРј Рє СЃР»РµРґСѓСЋС‰РµР№ СЃС‚СЂРѕРєРµ РІ Р±СѓС„РµСЂРµ.
             source_pos += row_size;
 
-            // Увеличиваем номер текущей строки.
+            // РЈРІРµР»РёС‡РёРІР°РµРј РЅРѕРјРµСЂ С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕРєРё.
             ++row_y;
         }
     }
 }
 
-void CursorEncoder::Encode(proto::CursorShape *packet, std::unique_ptr<MouseCursor> mouse_cursor)
+void CursorEncoder::Encode(proto::CursorShape* cursor_shape, std::unique_ptr<MouseCursor> mouse_cursor)
 {
     int index = cache_.Find(mouse_cursor.get());
 
-    // Курсор не найден в кеше.
+    // РљСѓСЂСЃРѕСЂ РЅРµ РЅР°Р№РґРµРЅ РІ РєРµС€Рµ.
     if (index == -1)
     {
-        packet->set_encoding(proto::CursorShapeEncoding::CURSOR_SHAPE_ENCODING_ZLIB);
+        cursor_shape->set_width(mouse_cursor->Size().Width());
+        cursor_shape->set_height(mouse_cursor->Size().Height());
+        cursor_shape->set_hotspot_x(mouse_cursor->Hotspot().x());
+        cursor_shape->set_hotspot_y(mouse_cursor->Hotspot().y());
 
-        packet->set_width(mouse_cursor->Size().Width());
-        packet->set_height(mouse_cursor->Size().Height());
-        packet->set_hotspot_x(mouse_cursor->Hotspot().x());
-        packet->set_hotspot_y(mouse_cursor->Hotspot().y());
+        CompressCursor(cursor_shape, mouse_cursor.get());
 
-        CompressCursor(packet, mouse_cursor.get());
+        //
+        // Р•СЃР»Рё РєРµС€ РїСѓСЃС‚, С‚Рѕ СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј С„Р»Р°Рі СЃР±СЂРѕСЃР° РєРµС€Р° РЅР° СЃС‚РѕСЂРѕРЅРµ РєР»РёРµРЅС‚Р° Рё РїРµСЂРµРґР°РµРј
+        // РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СЂР°Р·РјРµСЂ РєРµС€Р°.
+        //
+        cursor_shape->set_flags(cache_.IsEmpty() ?
+            (proto::CursorShape::RESET_CACHE | (kCacheSize & 0x1F)) : 0);
 
-        // Если кеш пуст.
-        if (cache_.IsEmpty())
-        {
-            //
-            // Устанавливаем индекс в кеше в любое не нулевое значение для того,
-            // чтобы на стороне клиента кеш был сброшен.
-            //
-            packet->set_cache_index(-1);
-        }
-
-        // Добавляем курсор в кеш.
+        // Р”РѕР±Р°РІР»СЏРµРј РєСѓСЂСЃРѕСЂ РІ РєРµС€.
         cache_.Add(std::move(mouse_cursor));
     }
     else
     {
-        packet->set_encoding(proto::CursorShapeEncoding::CURSOR_SHAPE_ENCODING_CACHE);
-        packet->set_cache_index(index);
+        cursor_shape->set_flags(proto::CursorShape::CACHE | (index & 0x1F));
     }
 }
 

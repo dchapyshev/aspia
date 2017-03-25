@@ -21,7 +21,7 @@ namespace aspia {
 
 struct VpxCodecDeleter
 {
-    void operator()(vpx_codec_ctx_t *codec);
+    void operator()(vpx_codec_ctx_t* codec);
 };
 
 typedef std::unique_ptr<vpx_codec_ctx_t, VpxCodecDeleter> ScopedVpxCodec;

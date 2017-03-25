@@ -23,19 +23,21 @@ template<const int bytes_per_pixel>
 class PixelTranslatorARGB : public PixelTranslator
 {
 public:
-    PixelTranslatorARGB(const PixelFormat &format)
+    PixelTranslatorARGB(const PixelFormat& format)
     {
-        InitTables(format);
+        for (uint32_t i = 0; i < 256; ++i)
+        {
+            red_table_[i]   = ((i * format.RedMax()   + 255 / 2) / 255) << format.RedShift();
+            green_table_[i] = ((i * format.GreenMax() + 255 / 2) / 255) << format.GreenShift();
+            blue_table_[i]  = ((i * format.BlueMax()  + 255 / 2) / 255) << format.BlueShift();
+        }
     }
 
-    ~PixelTranslatorARGB()
-    {
-        // Nothing
-    }
+    ~PixelTranslatorARGB() = default;
 
-    void Translate(const uint8_t *src,
+    void Translate(const uint8_t* src,
                    int src_stride,
-                   uint8_t *dst,
+                   uint8_t* dst,
                    int dst_stride,
                    int width,
                    int height) override
@@ -76,17 +78,6 @@ public:
 
             src += src_stride;
             dst += dst_stride;
-        }
-    }
-
-private:
-    void InitTables(const PixelFormat &format)
-    {
-        for (uint32_t i = 0; i < 256; ++i)
-        {
-            red_table_[i]   = ((i * format.RedMax()   + 255 / 2) / 255) << format.RedShift();
-            green_table_[i] = ((i * format.GreenMax() + 255 / 2) / 255) << format.GreenShift();
-            blue_table_[i]  = ((i * format.BlueMax()  + 255 / 2) / 255) << format.BlueShift();
         }
     }
 

@@ -28,27 +28,19 @@ class VideoEncoderVP9 : public VideoEncoder
 {
 public:
     VideoEncoderVP9();
-    virtual ~VideoEncoderVP9() override;
+    ~VideoEncoderVP9() = default;
 
-    virtual void Resize(const DesktopSize &screen_size,
-                        const PixelFormat &client_pixel_format) override;
-
-    virtual int32_t Encode(proto::VideoPacket *packet,
-                           const uint8_t *screen_buffer,
-                           const DesktopRegion &dirty_region) override;
+    void Encode(proto::VideoPacket* packet, const DesktopFrame* frame) override;
 
 private:
     void CreateImage();
     void CreateActiveMap();
-    void SetCommonCodecParameters(vpx_codec_enc_cfg_t *config);
+    void SetCommonCodecParameters(vpx_codec_enc_cfg_t* config);
     void CreateCodec();
-    void PrepareImageAndActiveMap(const DesktopRegion &dirty_region,
-                                  const uint8_t *buffer,
-                                  proto::VideoPacket *packet);
+    void PrepareImageAndActiveMap(const DesktopFrame* frame,
+                                  proto::VideoPacket* packet);
 
 private:
-    bool resized_;
-
     // The current frame size.
     DesktopSize screen_size_;
 
@@ -59,8 +51,6 @@ private:
 
     vpx_active_map_t active_map_;
     std::unique_ptr<uint8_t[]> active_map_buffer_;
-
-    int bytes_per_row_;
 
     // Buffer for storing the yuv image.
     std::unique_ptr<uint8_t[]> yuv_image_;

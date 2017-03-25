@@ -20,17 +20,17 @@ class DecompressorZLIB : public Decompressor
 {
 public:
     DecompressorZLIB();
-    virtual ~DecompressorZLIB();
+    ~DecompressorZLIB();
 
-    virtual void Reset() override;
+    void Reset() override;
 
     // Decompressor implementations.
-    virtual bool Process(const uint8_t *input_data,
-                         int input_size,
-                         uint8_t *output_data,
-                         int output_size,
-                         int *consumed,
-                         int *written) override;
+    bool Process(const uint8_t* input_data,
+                 int input_size,
+                 uint8_t* output_data,
+                 int output_size,
+                 int* consumed,
+                 int* written) override;
 
 private:
     z_stream stream_;

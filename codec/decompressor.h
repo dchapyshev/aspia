@@ -23,7 +23,7 @@ namespace aspia {
 class Decompressor
 {
 public:
-    virtual ~Decompressor() {}
+    virtual ~Decompressor() = default;
 
     //
     // Resets all the internal state so the decompressor behaves as if it was
@@ -45,12 +45,12 @@ public:
     // there is more bytes to be decompressed or more input data is
     // needed.
     //
-    virtual bool Process(const uint8_t *input_data,
+    virtual bool Process(const uint8_t* input_data,
                          int input_size,
-                         uint8_t *output_data,
+                         uint8_t* output_data,
                          int output_size,
-                         int *consumed,
-                         int *written) = 0;
+                         int* consumed,
+                         int* written) = 0;
 };
 
 } // namespace aspia

@@ -30,7 +30,7 @@ public:
         CompressorFinish,
     };
 
-    virtual ~Compressor() {}
+    virtual ~Compressor() = default;
 
     //
     // Resets all the internal state so the compressor behaves as if it
@@ -61,13 +61,13 @@ public:
     // there is more data to be written out. This is particularly
     // useful for end of the compression stream.
     //
-    virtual bool Process(const uint8_t *input_data,
+    virtual bool Process(const uint8_t* input_data,
                          int input_size,
-                         uint8_t *output_data,
+                         uint8_t* output_data,
                          int output_size,
                          CompressorFlush flush,
-                         int *consumed,
-                         int *written) = 0;
+                         int* consumed,
+                         int* written) = 0;
 };
 
 } // namespace aspia

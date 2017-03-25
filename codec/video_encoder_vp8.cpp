@@ -7,30 +7,20 @@
 
 #include "codec/video_encoder_vp8.h"
 
-#include <thread>
-
+#include <libyuv/convert_from_argb.h>
 #include "base/logging.h"
-#include "libyuv/convert_from_argb.h"
-#include "libyuv/convert.h"
+#include "base/cpu.h"
 
 namespace aspia {
 
 static const int kBlockSize = 16;
-static const int kBytesPerPixel = 4;
 
 VideoEncoderVP8::VideoEncoderVP8() :
     codec_(nullptr),
-    active_map_size_(0),
-    bytes_per_row_(0),
-    resized_(true)
+    active_map_size_(0)
 {
     memset(&active_map_, 0, sizeof(active_map_));
     memset(&image_, 0, sizeof(image_));
-}
-
-VideoEncoderVP8::~VideoEncoderVP8()
-{
-    // Nothing
 }
 
 void VideoEncoderVP8::CreateImage()
@@ -75,9 +65,8 @@ void VideoEncoderVP8::CreateImage()
     image_.planes[1] = image_.planes[0] + y_stride * y_rows;
     image_.planes[2] = image_.planes[1] + uv_stride * uv_rows;
 
-    image_.stride[0] = y_stride; //-V525
-    image_.stride[1] = uv_stride;
-    image_.stride[2] = uv_stride;
+    image_.stride[0] = y_stride;
+    image_.stride[1] = image_.stride[2] = uv_stride;
 }
 
 void VideoEncoderVP8::CreateActiveMap()
@@ -94,7 +83,7 @@ void VideoEncoderVP8::CreateActiveMap()
     active_map_.active_map = active_map_buffer_.get();
 }
 
-void VideoEncoderVP8::SetCommonCodecParameters(vpx_codec_enc_cfg_t *config)
+void VideoEncoderVP8::SetCommonCodecParameters(vpx_codec_enc_cfg_t* config)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
@@ -119,7 +108,7 @@ void VideoEncoderVP8::SetCommonCodecParameters(vpx_codec_enc_cfg_t *config)
     // windows systems can really hurt performance.
     // http://crbug.com/99179
     //
-    config->g_threads = (std::thread::hardware_concurrency() > 2) ? 2 : 1;
+    config->g_threads = (GetNumberOfProcessors() > 2) ? 2 : 1;
 }
 
 void VideoEncoderVP8::CreateCodec()
@@ -129,7 +118,7 @@ void VideoEncoderVP8::CreateCodec()
     vpx_codec_enc_cfg_t config = { 0 };
 
     // Configure the encoder.
-    vpx_codec_iface_t *algo = vpx_codec_vp8_cx();
+    vpx_codec_iface_t* algo = vpx_codec_vp8_cx();
 
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config, 0);
     DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to fetch default configuration";
@@ -169,29 +158,28 @@ void VideoEncoderVP8::CreateCodec()
     DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set noise sensitivity";
 }
 
-void VideoEncoderVP8::PrepareImageAndActiveMap(const DesktopRegion &dirty_region,
-                                               const uint8_t *src,
-                                               proto::VideoPacket *packet)
+void VideoEncoderVP8::PrepareImageAndActiveMap(const DesktopFrame* frame,
+                                               proto::VideoPacket* packet)
 {
     memset(active_map_.active_map, 0, active_map_size_);
 
     int y_stride = image_.stride[0];
     int uv_stride = image_.stride[1];
-    uint8_t *y_data = image_.planes[0];
-    uint8_t *u_data = image_.planes[1];
-    uint8_t *v_data = image_.planes[2];
+    uint8_t* y_data = image_.planes[0];
+    uint8_t* u_data = image_.planes[1];
+    uint8_t* v_data = image_.planes[2];
 
-    for (DesktopRegion::Iterator iter(dirty_region); !iter.IsAtEnd(); iter.Advance())
+    for (DesktopRegion::Iterator iter(frame->UpdatedRegion()); !iter.IsAtEnd(); iter.Advance())
     {
-        const DesktopRect &rect = iter.rect();
+        const DesktopRect& rect = iter.rect();
 
-        int rgb_offset = bytes_per_row_ * rect.y() + rect.x() * kBytesPerPixel;
+        int rgb_offset = frame->Stride() * rect.y() + rect.x() * frame->Format().BytesPerPixel();
         int y_offset = y_stride * rect.y() + rect.x();
         int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
         int width = rect.Width();
         int height = rect.Height();
 
-        libyuv::ARGBToI420(src + rgb_offset, bytes_per_row_,
+        libyuv::ARGBToI420(frame->GetFrameData() + rgb_offset, frame->Stride(),
                            y_data + y_offset, y_stride,
                            u_data + uv_offset, uv_stride,
                            v_data + uv_offset, uv_stride,
@@ -205,7 +193,7 @@ void VideoEncoderVP8::PrepareImageAndActiveMap(const DesktopRegion &dirty_region
         int right  = (rect.Right() - 1) / kBlockSize;
         int bottom = (rect.Bottom() - 1) / kBlockSize;
 
-        uint8_t *map = active_map_.active_map + top * active_map_.cols;
+        uint8_t* map = active_map_.active_map + top * active_map_.cols;
 
         for (int y = top; y <= bottom; ++y)
         {
@@ -219,41 +207,28 @@ void VideoEncoderVP8::PrepareImageAndActiveMap(const DesktopRegion &dirty_region
     }
 }
 
-void VideoEncoderVP8::Resize(const DesktopSize &screen_size,
-                             const PixelFormat &client_pixel_format)
+void VideoEncoderVP8::Encode(proto::VideoPacket* packet, const DesktopFrame* frame)
 {
-    screen_size_ = screen_size;
+    packet->set_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
 
-    bytes_per_row_ = kBytesPerPixel * screen_size.Width();
-
-    CreateImage();
-    CreateActiveMap();
-    CreateCodec();
-
-    resized_ = true;
-}
-
-int32_t VideoEncoderVP8::Encode(proto::VideoPacket *packet,
-                                const uint8_t *screen_buffer,
-                                const DesktopRegion &dirty_region)
-{
-    packet->set_flags(proto::VideoPacket::FIRST_PACKET | proto::VideoPacket::LAST_PACKET);
-
-    proto::VideoPacketFormat *format = packet->mutable_format();
-
-    format->set_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
-
-    if (resized_)
+    if (!screen_size_.IsEqual(frame->Size()))
     {
-        screen_size_.ToVideoSize(format->mutable_screen_size());
-        resized_ = false;
+        screen_size_ = frame->Size();
+
+        CreateImage();
+        CreateActiveMap();
+        CreateCodec();
+
+        screen_size_.ToVideoSize(packet->mutable_screen_size());
+
+        frame->InvalidateFrame();
     }
 
     //
     // Convert the updated capture data ready for encode.
     // Update active map based on updated region.
     //
-    PrepareImageAndActiveMap(dirty_region, screen_buffer, packet);
+    PrepareImageAndActiveMap(frame, packet);
 
     // Apply active map to the encoder.
     vpx_codec_err_t ret = vpx_codec_control(codec_.get(), VP8E_SET_ACTIVEMAP, &active_map_);
@@ -269,31 +244,18 @@ int32_t VideoEncoderVP8::Encode(proto::VideoPacket *packet,
 
     // Read the encoded data.
     vpx_codec_iter_t iter = nullptr;
-    bool got_data = false;
 
-    while (!got_data)
+    while (true)
     {
-        const vpx_codec_cx_pkt_t *vpx_packet =
+        const vpx_codec_cx_pkt_t* vpx_packet =
             vpx_codec_get_cx_data(codec_.get(), &iter);
 
-        if (!vpx_packet)
-            continue;
-
-        switch (vpx_packet->kind)
+        if (vpx_packet && vpx_packet->kind == VPX_CODEC_CX_FRAME_PKT)
         {
-            case VPX_CODEC_CX_FRAME_PKT:
-            {
-                got_data = true;
-                packet->set_data(vpx_packet->data.frame.buf, vpx_packet->data.frame.sz);
-            }
-            break;
-
-            default:
+            packet->set_data(vpx_packet->data.frame.buf, vpx_packet->data.frame.sz);
             break;
         }
     }
-
-    return packet->flags();
 }
 
 } // namespace aspia

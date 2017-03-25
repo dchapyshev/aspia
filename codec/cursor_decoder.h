@@ -21,15 +21,15 @@ class CursorDecoder
 {
 public:
     CursorDecoder();
-    ~CursorDecoder();
+    ~CursorDecoder() = default;
 
-    const MouseCursor* Decode(const proto::CursorShape &msg);
-
-private:
-    void DecompressCursor(const proto::CursorShape &msg, uint8_t *image);
+    const MouseCursor* Decode(const proto::CursorShape& cursor_shape);
 
 private:
-    MouseCursorCache cache_;
+    bool DecompressCursor(const proto::CursorShape& cursor_shape, uint8_t* image);
+
+private:
+    std::unique_ptr<MouseCursorCache> cache_;
     DecompressorZLIB decompressor_;
 
     DISALLOW_COPY_AND_ASSIGN(CursorDecoder);

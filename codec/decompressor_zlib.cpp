@@ -7,7 +7,6 @@
 
 #include "codec/decompressor_zlib.h"
 
-#include "base/exception.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -17,43 +16,40 @@ DecompressorZLIB::DecompressorZLIB()
     memset(&stream_, 0, sizeof(stream_));
 
     int ret = inflateInit(&stream_);
-    if (ret != Z_OK)
-    {
-        LOG(ERROR) << "inflateInit() failed: " << ret;
-        throw Exception("Decompressor initialization failure");
-    }
+    DCHECK_EQ(ret, Z_OK);
 }
 
 DecompressorZLIB::~DecompressorZLIB()
 {
-    inflateEnd(&stream_);
+    int ret = inflateEnd(&stream_);
+    DCHECK_EQ(ret, Z_OK);
 }
 
 void DecompressorZLIB::Reset()
 {
-    inflateReset(&stream_);
+    int ret = inflateReset(&stream_);
+    DCHECK_EQ(ret, Z_OK);
 }
 
-bool DecompressorZLIB::Process(const uint8_t *input_data,
+bool DecompressorZLIB::Process(const uint8_t* input_data,
                                int input_size,
-                               uint8_t *output_data,
+                               uint8_t* output_data,
                                int output_size,
-                               int *consumed,
-                               int *written)
+                               int* consumed,
+                               int* written)
 {
     DCHECK_GT(output_size, 0);
 
     // Setup I/O parameters.
     stream_.avail_in  = input_size;
-    stream_.next_in   = const_cast<Bytef*>(input_data);
+    stream_.next_in   = input_data;
     stream_.avail_out = output_size;
-    stream_.next_out  = const_cast<Bytef*>(output_data);
+    stream_.next_out  = output_data;
 
     int ret = inflate(&stream_, Z_NO_FLUSH);
     if (ret == Z_STREAM_ERROR)
     {
-        LOG(ERROR) << "zlib decompression failed: " << ret;
-        throw Exception("zlib decompression failed.");
+        DLOG(ERROR) << "zlib decompression failed: " << ret;
     }
 
     *consumed = input_size - stream_.avail_in;

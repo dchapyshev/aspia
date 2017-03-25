@@ -19,18 +19,18 @@ namespace aspia {
 class CompressorZLIB : public Compressor
 {
 public:
-    CompressorZLIB(int32_t compress_ratio);
-    virtual ~CompressorZLIB();
+    explicit CompressorZLIB(int32_t compress_ratio);
+    ~CompressorZLIB();
 
-    virtual bool Process(const uint8_t *input_data,
-                         int input_size,
-                         uint8_t *output_data,
-                         int output_size,
-                         CompressorFlush flush,
-                         int *consumed,
-                         int *written) override;
+    bool Process(const uint8_t* input_data,
+                 int input_size,
+                 uint8_t* output_data,
+                 int output_size,
+                 CompressorFlush flush,
+                 int* consumed,
+                 int* written) override;
 
-    virtual void Reset() override;
+    void Reset() override;
 
 private:
     z_stream stream_;

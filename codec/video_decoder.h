@@ -8,9 +8,7 @@
 #ifndef _ASPIA_CODEC__VIDEO_DECODER_H
 #define _ASPIA_CODEC__VIDEO_DECODER_H
 
-#include "desktop_capture/pixel_format.h"
-#include "desktop_capture/desktop_region.h"
-#include "desktop_capture/desktop_size.h"
+#include "desktop_capture/desktop_frame.h"
 #include "proto/proto.pb.h"
 
 namespace aspia {
@@ -18,14 +16,10 @@ namespace aspia {
 class VideoDecoder
 {
 public:
-    VideoDecoder() {}
-    virtual ~VideoDecoder() {}
+    VideoDecoder() { }
+    virtual ~VideoDecoder() = default;
 
-    virtual int32_t Decode(const proto::VideoPacket *packet,
-                           uint8_t **buffer,
-                           DesktopRegion &dirty_region,
-                           DesktopSize &size,
-                           PixelFormat &format) = 0;
+    virtual bool Decode(const proto::VideoPacket& packet, DesktopFrame* frame) = 0;
 };
 
 } // namespace aspia

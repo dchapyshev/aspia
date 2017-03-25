@@ -27,28 +27,16 @@ class VideoDecoderVP8 : public VideoDecoder
 {
 public:
     VideoDecoderVP8();
-    virtual ~VideoDecoderVP8() override;
+    ~VideoDecoderVP8() = default;
 
-    virtual int32_t Decode(const proto::VideoPacket *packet,
-                           uint8_t **buffer,
-                           DesktopRegion &dirty_region,
-                           DesktopSize &size,
-                           PixelFormat &format) override;
+    bool Decode(const proto::VideoPacket& packet, DesktopFrame* frame) override;
 
 private:
-    void Resize();
-
-    void ConvertImageToARGB(const proto::VideoPacket *packet,
-                            vpx_image_t *image,
-                            DesktopRegion &dirty_region);
+    bool ConvertImage(const proto::VideoPacket& packet,
+                      vpx_image_t* image,
+                      DesktopFrame* frame);
 
 private:
-    DesktopSize screen_size_;
-
-    ScopedAlignedBuffer buffer_;
-
-    int bytes_per_row_;
-
     ScopedVpxCodec codec_;
 
     DISALLOW_COPY_AND_ASSIGN(VideoDecoderVP8);
