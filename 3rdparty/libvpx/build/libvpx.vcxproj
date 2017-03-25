@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -18,13 +18,13 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v120_xp</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v120_xp</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -46,31 +46,42 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>".";"..";%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <CompileAsWinRT>false</CompileAsWinRT>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <SDLCheck>false</SDLCheck>
+      <DisableSpecificWarnings>4067;4752</DisableSpecificWarnings>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Full</Optimization>
       <AdditionalIncludeDirectories>".";"..";%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <CompileAsWinRT>false</CompileAsWinRT>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <SDLCheck>false</SDLCheck>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <DisableSpecificWarnings>4067;4752</DisableSpecificWarnings>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <OmitFramePointers>true</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <StringPooling>true</StringPooling>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <DisableSpecificWarnings>4067;4752</DisableSpecificWarnings>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <CompileAsManaged>false</CompileAsManaged>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+      <CallingConvention>Cdecl</CallingConvention>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -85,9 +96,6 @@
     </ClCompile>
     <ClCompile Include="..\vpx\src\vpx_image.c">
       <ObjectFileName>$(IntDir)vpx_src_vpx_image.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\vpx\src\vpx_psnr.c">
-      <ObjectFileName>$(IntDir)vpx_src_vpx_psnr.obj</ObjectFileName>
     </ClCompile>
     <ClCompile Include="..\vpx_mem\vpx_mem.c">
       <ObjectFileName>$(IntDir)vpx_mem_vpx_mem.obj</ObjectFileName>
@@ -123,6 +131,9 @@
     </ClCompile>
     <ClCompile Include="..\vpx_dsp\bitwriter_buffer.c">
       <ObjectFileName>$(IntDir)vpx_dsp_bitwriter_buffer.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\vpx_dsp\psnr.c">
+      <ObjectFileName>$(IntDir)vpx_dsp_psnr.obj</ObjectFileName>
     </ClCompile>
     <ClCompile Include="..\vpx_dsp\bitreader.c">
       <ObjectFileName>$(IntDir)vpx_dsp_bitreader.obj</ObjectFileName>
@@ -160,6 +171,9 @@
     <ClCompile Include="..\vpx_dsp\add_noise.c">
       <ObjectFileName>$(IntDir)vpx_dsp_add_noise.obj</ObjectFileName>
     </ClCompile>
+    <ClCompile Include="..\vpx_dsp\deblock.c">
+      <ObjectFileName>$(IntDir)vpx_dsp_deblock.obj</ObjectFileName>
+    </ClCompile>
     <CustomBuild Include="..\vpx_dsp\x86\add_noise_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_add_noise_sse2_asm.obj</Command>
@@ -167,6 +181,14 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_add_noise_sse2_asm.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vpx_dsp_x86_add_noise_sse2_asm.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\vpx_dsp\x86\deblock_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_deblock_sse2_asm.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vpx_dsp_x86_deblock_sse2_asm.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_deblock_sse2_asm.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vpx_dsp_x86_deblock_sse2_asm.obj</Outputs>
     </CustomBuild>
     <ClCompile Include="..\vpx_dsp\vpx_convolve.c">
       <ObjectFileName>$(IntDir)vpx_dsp_vpx_convolve.obj</ObjectFileName>
@@ -262,6 +284,12 @@
     <ClCompile Include="..\vpx_dsp\subtract.c">
       <ObjectFileName>$(IntDir)vpx_dsp_subtract.obj</ObjectFileName>
     </ClCompile>
+    <ClCompile Include="..\vpx_dsp\sum_squares.c">
+      <ObjectFileName>$(IntDir)vpx_dsp_sum_squares.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\vpx_dsp\x86\sum_squares_sse2.c">
+      <ObjectFileName>$(IntDir)vpx_dsp_x86_sum_squares_sse2.obj</ObjectFileName>
+    </ClCompile>
     <CustomBuild Include="..\vpx_dsp\x86\sad_sse3.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse3_asm.obj</Command>
@@ -322,17 +350,6 @@
     <ClCompile Include="..\vpx_dsp\x86\variance_sse2.c">
       <ObjectFileName>$(IntDir)vpx_dsp_x86_variance_sse2.obj</ObjectFileName>
     </ClCompile>
-    <ClCompile Include="..\vpx_dsp\x86\halfpix_variance_sse2.c">
-      <ObjectFileName>$(IntDir)vpx_dsp_x86_halfpix_variance_sse2.obj</ObjectFileName>
-    </ClCompile>
-    <CustomBuild Include="..\vpx_dsp\x86\halfpix_variance_impl_sse2.asm">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_halfpix_variance_impl_sse2_asm.obj</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vpx_dsp_x86_halfpix_variance_impl_sse2_asm.obj</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_halfpix_variance_impl_sse2_asm.obj</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vpx_dsp_x86_halfpix_variance_impl_sse2_asm.obj</Outputs>
-    </CustomBuild>
     <ClCompile Include="..\vpx_dsp\x86\variance_avx2.c">
       <ObjectFileName>$(IntDir)vpx_dsp_x86_variance_avx2.obj</ObjectFileName>
     </ClCompile>
@@ -361,9 +378,6 @@
     </ClCompile>
     <ClCompile Include="..\vp8\common\copy_c.c">
       <ObjectFileName>$(IntDir)vp8_common_copy_c.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\vp8\common\debugmodes.c">
-      <ObjectFileName>$(IntDir)vp8_common_debugmodes.obj</ObjectFileName>
     </ClCompile>
     <ClCompile Include="..\vp8\common\dequantize.c">
       <ObjectFileName>$(IntDir)vp8_common_dequantize.obj</ObjectFileName>
@@ -465,22 +479,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_mmx_asm.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_idctllm_mmx_asm.obj</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\vp8\common\x86\iwalsh_mmx.asm">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_mmx_asm.obj</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_iwalsh_mmx_asm.obj</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_mmx_asm.obj</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_iwalsh_mmx_asm.obj</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="..\vp8\common\x86\vp8_loopfilter_mmx.asm">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_vp8_loopfilter_mmx_asm.obj</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_vp8_loopfilter_mmx_asm.obj</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_vp8_loopfilter_mmx_asm.obj</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_vp8_loopfilter_mmx_asm.obj</Outputs>
-    </CustomBuild>
     <CustomBuild Include="..\vp8\common\x86\recon_mmx.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_mmx_asm.obj</Command>
@@ -564,14 +562,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_ssse3_asm.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_subpixel_ssse3_asm.obj</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\vp8\common\x86\postproc_mmx.asm">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_mmx_asm.obj</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_postproc_mmx_asm.obj</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_mmx_asm.obj</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_postproc_mmx_asm.obj</Outputs>
-    </CustomBuild>
     <CustomBuild Include="..\vp8\common\x86\mfqe_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_mfqe_sse2_asm.obj</Command>
@@ -579,14 +569,6 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_mfqe_sse2_asm.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_mfqe_sse2_asm.obj</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="..\vp8\common\x86\postproc_sse2.asm">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_sse2_asm.obj</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_postproc_sse2_asm.obj</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_sse2_asm.obj</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_postproc_sse2_asm.obj</Outputs>
     </CustomBuild>
     <ClCompile Include="..\vp8\vp8_cx_iface.c">
       <ObjectFileName>$(IntDir)vp8_vp8_cx_iface.obj</ObjectFileName>
@@ -654,14 +636,6 @@
     <ClCompile Include="..\vp8\encoder\treewriter.c">
       <ObjectFileName>$(IntDir)vp8_encoder_treewriter.obj</ObjectFileName>
     </ClCompile>
-    <CustomBuild Include="..\vp8\encoder\x86\dct_mmx.asm">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_mmx_asm.obj</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_dct_mmx_asm.obj</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_mmx_asm.obj</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_dct_mmx_asm.obj</Outputs>
-    </CustomBuild>
     <ClCompile Include="..\vp8\encoder\x86\vp8_enc_stubs_mmx.c">
       <ObjectFileName>$(IntDir)vp8_encoder_x86_vp8_enc_stubs_mmx.obj</ObjectFileName>
     </ClCompile>
@@ -738,9 +712,6 @@
     </ClCompile>
     <ClCompile Include="..\vp9\common\vp9_blockd.c">
       <ObjectFileName>$(IntDir)vp9_common_vp9_blockd.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\vp9\common\vp9_debugmodes.c">
-      <ObjectFileName>$(IntDir)vp9_common_vp9_debugmodes.obj</ObjectFileName>
     </ClCompile>
     <ClCompile Include="..\vp9\common\vp9_entropy.c">
       <ObjectFileName>$(IntDir)vp9_common_vp9_entropy.obj</ObjectFileName>
@@ -895,6 +866,9 @@
     <ClCompile Include="..\vp9\encoder\vp9_aq_complexity.c">
       <ObjectFileName>$(IntDir)vp9_encoder_vp9_aq_complexity.obj</ObjectFileName>
     </ClCompile>
+    <ClCompile Include="..\vp9\encoder\vp9_alt_ref_aq.c">
+      <ObjectFileName>$(IntDir)vp9_encoder_vp9_alt_ref_aq.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="..\vp9\encoder\vp9_skin_detection.c">
       <ObjectFileName>$(IntDir)vp9_encoder_vp9_skin_detection.obj</ObjectFileName>
     </ClCompile>
@@ -982,7 +956,6 @@
     <ClInclude Include="..\vpx\vpx_decoder.h" />
     <ClInclude Include="..\vpx\vpx_encoder.h" />
     <ClInclude Include="..\vpx\internal\vpx_codec_internal.h" />
-    <ClInclude Include="..\vpx\internal\vpx_psnr.h" />
     <ClInclude Include="..\vpx\vpx_codec.h" />
     <ClInclude Include="..\vpx\vpx_frame_buffer.h" />
     <ClInclude Include="..\vpx\vpx_image.h" />
@@ -1001,8 +974,10 @@
     <ClInclude Include="..\vpx_dsp\prob.h" />
     <ClInclude Include="..\vpx_dsp\bitwriter.h" />
     <ClInclude Include="..\vpx_dsp\bitwriter_buffer.h" />
+    <ClInclude Include="..\vpx_dsp\psnr.h" />
     <ClInclude Include="..\vpx_dsp\bitreader.h" />
     <ClInclude Include="..\vpx_dsp\bitreader_buffer.h" />
+    <ClInclude Include="..\vpx_dsp\postproc.h" />
     <ClInclude Include="..\vpx_dsp\vpx_convolve.h" />
     <ClInclude Include="..\vpx_dsp\vpx_filter.h" />
     <ClInclude Include="..\vpx_dsp\x86\convolve.h" />
@@ -1016,6 +991,7 @@
     <ClInclude Include="..\vpx_dsp\inv_txfm.h" />
     <ClInclude Include="..\vpx_dsp\x86\inv_txfm_sse2.h" />
     <ClInclude Include="..\vpx_dsp\quantize.h" />
+    <ClInclude Include="..\vpx_dsp\x86\fdct.h" />
     <ClInclude Include="..\vpx_dsp\variance.h" />
     <ClInclude Include="..\vpx_util\vpx_thread.h" />
     <ClInclude Include="..\vpx_util\endian_inl.h" />
@@ -1102,7 +1078,6 @@
     <ClInclude Include="..\vp9\common\vp9_reconintra.h" />
     <ClInclude Include="..\vp9\common\vp9_scale.h" />
     <ClInclude Include="..\vp9\common\vp9_seg_common.h" />
-    <ClInclude Include="..\vp9\common\vp9_textblit.h" />
     <ClInclude Include="..\vp9\common\vp9_tile_common.h" />
     <ClInclude Include="..\vp9\common\vp9_mvref_common.h" />
     <ClInclude Include="..\vp9\common\vp9_common_data.h" />
@@ -1137,6 +1112,7 @@
     <ClInclude Include="..\vp9\encoder\vp9_aq_360.h" />
     <ClInclude Include="..\vp9\encoder\vp9_aq_cyclicrefresh.h" />
     <ClInclude Include="..\vp9\encoder\vp9_aq_complexity.h" />
+    <ClInclude Include="..\vp9\encoder\vp9_alt_ref_aq.h" />
     <ClInclude Include="..\vp9\encoder\vp9_skin_detection.h" />
     <ClInclude Include="..\vp9\encoder\vp9_noise_estimate.h" />
     <ClInclude Include="..\vp9\encoder\vp9_temporal_filter.h" />
