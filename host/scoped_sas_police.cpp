@@ -33,9 +33,11 @@ ScopedSasPolice::ScopedSasPolice() :
     status = key_.ReadValueDW(kSoftwareSASGeneration, &old_state_);
     if (status != ERROR_SUCCESS)
     {
-        LOG(WARNING) << "ReadValueDW() failed: " << status;
-        key_.Close();
-        return;
+        //
+        // Предыдущее состояние не определено.
+        // Считаем, что программная генерация SAS была отключена.
+        //
+        old_state_ = kNone;
     }
 
     if (old_state_ >= kServices)

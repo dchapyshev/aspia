@@ -6,42 +6,44 @@
 //
 
 #include "host/screen_sender.h"
-
-#include <thread>
-
-#include "base/exception.h"
 #include "base/logging.h"
 
 namespace aspia {
 
-ScreenSender::ScreenSender(OnMessageCallback on_message_callback) :
-    encoding_(proto::VIDEO_ENCODING_UNKNOWN),
-    on_message_callback_(on_message_callback)
+static const uint32_t kDefaultUpdateInterval = 30;
+static const uint32_t kMinUpdateInterval = 15;
+static const uint32_t kMaxUpdateInterval = 100;
+
+ScreenSender::ScreenSender()
 {
     // Nothing
 }
 
 ScreenSender::~ScreenSender()
 {
-    if (IsActiveThread())
-    {
-        Stop();
-        WaitForEnd();
-    }
+    StopSending();
 }
 
-void ScreenSender::Configure(const proto::VideoControl &msg)
+bool ScreenSender::StartSending(const proto::DesktopConfig& config,
+                                const MessageCallback& message_callback)
 {
-    // Блокируем обновление.
-    LockGuard<Lock> guard(&update_lock_);
+    // Р‘Р»РѕРєРёСЂСѓРµРј РѕР±РЅРѕРІР»РµРЅРёРµ.
+    AutoLock lock(update_lock_);
 
-    // Если изменилась кодировка.
-    if (encoding_ != msg.encoding())
+    message_callback_ = message_callback;
+
+    if (config.update_interval() < kMinUpdateInterval ||
+        config.update_interval() > kMaxUpdateInterval)
     {
-        encoding_ = msg.encoding();
+        LOG(ERROR) << "Wrong update interval: " << config.update_interval();
+        return false;
+    }
 
-        // Переинициализируем кодировщик.
-        switch (encoding_)
+    // Р•СЃР»Рё РєРѕРґРёСЂРѕРІС‰РёРє РЅРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ РёР»Рё РёР·РјРµРЅРёР»Р°СЃСЊ РєРѕРґРёСЂРѕРІРєР°.
+    if (!video_encoder_ || config_.encoding() != config.encoding())
+    {
+        // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РєРѕРґРёСЂРѕРІС‰РёРє.
+        switch (config.encoding())
         {
             case proto::VIDEO_ENCODING_VP8:
                 video_encoder_.reset(new VideoEncoderVP8());
@@ -56,195 +58,157 @@ void ScreenSender::Configure(const proto::VideoControl &msg)
                 break;
 
             default:
-                LOG(ERROR) << "Unsupported video encoding: " << encoding_;
-                throw Exception("Unsupported video encoding");
-                break;
+                LOG(ERROR) << "Unsupported video encoding: " << config.encoding();
+                return false;
         }
-
-        //
-        // Сбрасываем размер экрана, чтобы кодировщик был сконфигурирован в соответствии
-        // с текущим размером.
-        //
-        prev_size_.Clear();
     }
 
-    if (encoding_ == proto::VIDEO_ENCODING_ZLIB)
+    if (config.encoding() == proto::VIDEO_ENCODING_ZLIB)
     {
-        VideoEncoderZLIB *encoder = reinterpret_cast<VideoEncoderZLIB*>(video_encoder_.get());
+        VideoEncoderZLIB* zlib_video_encoder =
+            reinterpret_cast<VideoEncoderZLIB*>(video_encoder_.get());
 
-        // Если получено новое значение уровня сжатия.
-        if (msg.compress_ratio())
+        // Р•СЃР»Рё РїРѕР»СѓС‡РµРЅРѕ РЅРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ СѓСЂРѕРІРЅСЏ СЃР¶Р°С‚РёСЏ.
+        if (config.compress_ratio())
         {
-            // Устанавливаем новый уровень сжатия.
-            encoder->SetCompressRatio(msg.compress_ratio());
+            // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РЅРѕРІС‹Р№ СѓСЂРѕРІРµРЅСЊ СЃР¶Р°С‚РёСЏ.
+            if (!zlib_video_encoder->SetCompressRatio(config.compress_ratio()))
+                return false;
+        }
+
+        // Р•СЃР»Рё Р±С‹Р» РїРѕР»СѓС‡РµРЅ С„РѕСЂРјР°С‚ РїРёРєСЃРµР»РµР№ РѕС‚ РєР»РёРµРЅС‚Р°.
+        if (config.has_pixel_format())
+        {
+            PixelFormat format(config.pixel_format());
+            zlib_video_encoder->SetPixelFormat(format);
         }
     }
 
-    // Если был получен формат пикселей от клиента.
-    if (msg.has_pixel_format())
+    // Р•СЃР»Рё РїРѕР»СѓС‡РµРЅР° РєРѕРјР°РЅРґР° РІРєР»СЋС‡РёС‚СЊ РѕС‚РїСЂР°РІРєСѓ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РєСѓСЂСЃРѕСЂР°.
+    if (config.flags() & proto::DesktopConfig::ENABLE_CURSOR_SHAPE)
     {
-        curr_format_.FromVideoPixelFormat(msg.pixel_format());
-    }
-
-    // Энкодер должен быть инициализирован.
-    DCHECK(video_encoder_);
-
-    // Если получена команда включить отправку изображения курсора.
-    if (msg.flags() & proto::VideoControl::ENABLE_CURSOR_SHAPE)
-    {
-        // Если энкодер изображения курсора не инициализирован.
+        // Р•СЃР»Рё СЌРЅРєРѕРґРµСЂ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РєСѓСЂСЃРѕСЂР° РЅРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ.
         if (!cursor_encoder_)
-        {
             cursor_encoder_.reset(new CursorEncoder());
-        }
     }
     else
     {
-        // Деинициализируем энкодер (отключаем отправку).
+        // Р”РµРёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј СЌРЅРєРѕРґРµСЂ (РѕС‚РєР»СЋС‡Р°РµРј РѕС‚РїСЂР°РІРєСѓ).
         cursor_encoder_.reset();
     }
 
-    // Если получена команда отключить эффекты рабочего стола.
-    if (msg.flags() & proto::VideoControl::DISABLE_DESKTOP_EFFECTS)
+    // Р•СЃР»Рё РїРѕР»СѓС‡РµРЅР° РєРѕРјР°РЅРґР° РѕС‚РєР»СЋС‡РёС‚СЊ СЌС„С„РµРєС‚С‹ СЂР°Р±РѕС‡РµРіРѕ СЃС‚РѕР»Р°.
+    if (!(config.flags() & proto::DesktopConfig::ENABLE_DESKTOP_EFFECTS))
     {
-        // Если они еще не выключены.
         if (!desktop_effects_)
         {
-            // Выключаем.
+            // Р’С‹РєР»СЋС‡Р°РµРј.
             desktop_effects_.reset(new ScopedDesktopEffects());
         }
     }
     else
     {
-        // Включаем эффекты рабочего стола.
+        // Р’РєР»СЋС‡Р°РµРј СЌС„С„РµРєС‚С‹ СЂР°Р±РѕС‡РµРіРѕ СЃС‚РѕР»Р°.
         desktop_effects_.reset();
     }
 
-    int32_t interval = msg.update_interval();
+    // РЎРѕС…СЂР°РЅСЏРµРј РєРѕРїРёСЋ РєРѕРЅС„РёРіСѓСЂР°С†РёРё.
+    config_.CopyFrom(config);
 
-    // Если получено новое значение интервала обновления и оно не равно предыдущему.
-    if (interval)
-    {
-        // Переинициализируем планировщик.
-        scheduler_.reset(new CaptureScheduler(interval));
-    }
+    // Р•СЃР»Рё РїРѕС‚РѕРє РЅРµ Р·Р°РїСѓС‰РµРЅ РЅР° РІС‹РїРѕР»РЅРµРЅРёРµ.
+    if (!IsActive())
+        Start(Priority::AboveNormal);
 
-    // Если планировщик не инициализирован.
-    if (!scheduler_)
-    {
-        // Инциализируем его с интервалом обновления по умолчанию.
-        scheduler_.reset(new CaptureScheduler(30));
-    }
+    return true;
+}
 
-    // Если поток не запущен на выполнение.
-    if (!IsActiveThread())
-    {
-        // Устанавливаем приоритет для потока и запускаем его.
-        SetThreadPriority(Priority::Highest);
-        Start();
-    }
+void ScreenSender::StopSending()
+{
+    Stop();
+    Wait();
 }
 
 void ScreenSender::Worker()
 {
-    try
-    {
-        // Создаем экземпляр класса захвата экрана.
-        std::unique_ptr<Capturer> capturer(new CapturerGDI());
+    // РЎРѕР·РґР°РµРј СЌРєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° Р·Р°С…РІР°С‚Р° СЌРєСЂР°РЅР°.
+    capturer_.reset(new CapturerGDI());
 
-        // Продолжаем цикл пока не будет дана команда завершить поток.
-        while (!IsThreadTerminating())
+    // РџСЂРѕРґРѕР»Р¶Р°РµРј С†РёРєР» РїРѕРєР° РЅРµ Р±СѓРґРµС‚ РґР°РЅР° РєРѕРјР°РЅРґР° Р·Р°РІРµСЂС€РёС‚СЊ РїРѕС‚РѕРє.
+    while (!IsTerminating())
+    {
+        CaptureScheduler scheduler;
+
         {
             //
-            // Ставим блокировку отправки видео-пакетов (кодировка, формат пикселей
-            // не могут изменяться при отправки одного логического обновления).
+            // РЎС‚Р°РІРёРј Р±Р»РѕРєРёСЂРѕРІРєСѓ РѕС‚РїСЂР°РІРєРё РІРёРґРµРѕ-РїР°РєРµС‚РѕРІ (РєРѕРґРёСЂРѕРІРєР°, С„РѕСЂРјР°С‚ РїРёРєСЃРµР»РµР№
+            // РЅРµ РјРѕРіСѓС‚ РёР·РјРµРЅСЏС‚СЊСЃСЏ РїСЂРё РѕС‚РїСЂР°РІРєРё РѕРґРЅРѕРіРѕ Р»РѕРіРёС‡РµСЃРєРѕРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ).
             //
-            LockGuard<Lock> guard(&update_lock_);
+            AutoLock lock(update_lock_);
 
-            // Делаем отметку времени начала операции.
-            scheduler_->BeginCapture();
+            bool desktop_change;
 
             //
-            // Делаем захват изображения, получаем его размер, формат пикселей
-            // и измененный регион.
+            // Р”РµР»Р°РµРј Р·Р°С…РІР°С‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ, РїРѕР»СѓС‡Р°РµРј РµРіРѕ СЂР°Р·РјРµСЂ, С„РѕСЂРјР°С‚ РїРёРєСЃРµР»РµР№
+            // Рё РёР·РјРµРЅРµРЅРЅС‹Р№ СЂРµРіРёРѕРЅ.
             //
-            const uint8_t *screen_buffer = capturer->CaptureImage(&dirty_region_, &curr_size_);
+            const DesktopFrame* frame = capturer_->CaptureImage(&desktop_change);
 
-            // Если энкодер курсора инициализирован (включена отправка изображения курсора).
+            if (desktop_change)
+            {
+                if (!(config_.flags() & proto::DesktopConfig::ENABLE_DESKTOP_EFFECTS))
+                {
+                    // Р’С‹РєР»СЋС‡Р°РµРј.
+                    desktop_effects_.reset(new ScopedDesktopEffects());
+                }
+                else
+                {
+                    // Р’РєР»СЋС‡Р°РµРј СЌС„С„РµРєС‚С‹ СЂР°Р±РѕС‡РµРіРѕ СЃС‚РѕР»Р°.
+                    desktop_effects_.reset();
+                }
+            }
+
+            // Р•СЃР»Рё СЌРЅРєРѕРґРµСЂ РєСѓСЂСЃРѕСЂР° РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ (РІРєР»СЋС‡РµРЅР° РѕС‚РїСЂР°РІРєР° РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РєСѓСЂСЃРѕСЂР°).
             if (cursor_encoder_)
             {
-                // Выполняем захват изображения курсора.
-                std::unique_ptr<MouseCursor> mouse_cursor(capturer->CaptureCursor());
+                // Р’С‹РїРѕР»РЅСЏРµРј Р·Р°С…РІР°С‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РєСѓСЂСЃРѕСЂР°.
+                std::unique_ptr<MouseCursor> mouse_cursor(capturer_->CaptureCursor());
 
-                // Если курсор получен (отличается от предыдущего).
+                // Р•СЃР»Рё РєСѓСЂСЃРѕСЂ РїРѕР»СѓС‡РµРЅ (РѕС‚Р»РёС‡Р°РµС‚СЃСЏ РѕС‚ РїСЂРµРґС‹РґСѓС‰РµРіРѕ).
                 if (mouse_cursor)
                 {
-                    // Кодируем изображение курсора.
-                    cursor_encoder_->Encode(message_.mutable_cursor(), std::move(mouse_cursor));
+                    // РљРѕРґРёСЂСѓРµРј РёР·РѕР±СЂР°Р¶РµРЅРёРµ РєСѓСЂСЃРѕСЂР°.
+                    cursor_encoder_->Encode(message_.mutable_cursor_shape(),
+                                            std::move(mouse_cursor));
                 }
             }
 
-            // Если измененный регион не пуст.
-            if (!dirty_region_.IsEmpty())
+            // Р•СЃР»Рё РёР·РјРµРЅРµРЅРЅС‹Р№ СЂРµРіРёРѕРЅ РЅРµ РїСѓСЃС‚.
+            if (!frame->UpdatedRegion().IsEmpty())
             {
-                // Если изменились размера экрана или формат пикселей.
-                if (curr_size_ != prev_size_ || curr_format_ != prev_format_)
-                {
-                    // Сохраняем новые значения.
-                    prev_format_ = curr_format_;
-                    prev_size_ = curr_size_;
+                // Р’С‹РїРѕР»РЅСЏРµРј РєРѕРґРёСЂРѕРІР°РЅРёРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ.
+                video_encoder_->Encode(message_.mutable_video_packet(), frame);
 
-                    // Изменяем размер экнодера.
-                    video_encoder_->Resize(curr_size_, curr_format_);
+                // РћС‚РїСЂР°РІР»СЏРµРј РІРёРґРµРѕ-РїР°РєРµС‚ РєР»РёРµРЅС‚Сѓ.
+                if (!message_callback_(message_))
+                    return;
 
-                    // После изменений добавляем в изменный регион всю область экрана.
-                    dirty_region_.AddRect(DesktopRect::MakeSize(curr_size_));
-                }
-
-                int32_t flags;
-
-                //
-                // Одно обновление экрана может быть разбито на несколько видео-пакетов.
-                // Например, при использовании кодировки VIDEO_ENCODING_ZLIB каждый
-                // измененный прямоугольник экрана отправляется отдельным пакетом.
-                // Продолжаем цикл кодирования пока не будет отправлен последний пакет.
-                //
-                do
-                {
-                    // Выполняем кодирование изображения.
-                    flags = video_encoder_->Encode(message_.mutable_video_packet(),
-                                                   screen_buffer,
-                                                   dirty_region_);
-
-                    // Отправляем видео-пакет клиенту.
-                    on_message_callback_(&message_);
-
-                    // Очищаем сообщение от предыдущих данных.
-                    message_.Clear();
-
-                } while (!(flags & proto::VideoPacket::LAST_PACKET));
-
-                // Очищаем регион от предыдущих изменений.
-                dirty_region_.Clear();
-            }
-            // Если изображение экрана не имеет отличий, но имеются изменения курсора.
-            else if (message_.has_cursor())
-            {
-                // Отправляем сообщение.
-                on_message_callback_(&message_);
-
-                // Очищаем сообщение от предыдущих данных.
+                // РћС‡РёС‰Р°РµРј СЃРѕРѕР±С‰РµРЅРёРµ РѕС‚ РїСЂРµРґС‹РґСѓС‰РёС… РґР°РЅРЅС‹С….
                 message_.Clear();
             }
+            // Р•СЃР»Рё РёР·РѕР±СЂР°Р¶РµРЅРёРµ СЌРєСЂР°РЅР° РЅРµ РёРјРµРµС‚ РѕС‚Р»РёС‡РёР№, РЅРѕ РёРјРµСЋС‚СЃСЏ РёР·РјРµРЅРµРЅРёСЏ РєСѓСЂСЃРѕСЂР°.
+            else if (message_.has_cursor_shape())
+            {
+                // РћС‚РїСЂР°РІР»СЏРµРј СЃРѕРѕР±С‰РµРЅРёРµ.
+                if (!message_callback_(message_))
+                    return;
 
-            // Ждем следующего обновления экрана и курсора.
-            scheduler_->Wait();
+                // РћС‡РёС‰Р°РµРј СЃРѕРѕР±С‰РµРЅРёРµ РѕС‚ РїСЂРµРґС‹РґСѓС‰РёС… РґР°РЅРЅС‹С….
+                message_.Clear();
+            }
         }
-    }
-    catch (const Exception &err)
-    {
-        DLOG(ERROR) << "An exception occurred: " << err.What();
-        Stop();
+
+        // Р–РґРµРј СЃР»РµРґСѓСЋС‰РµРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ СЌРєСЂР°РЅР° Рё РєСѓСЂСЃРѕСЂР°.
+        Sleep(scheduler.NextCaptureDelay(config_.update_interval()));
     }
 }
 

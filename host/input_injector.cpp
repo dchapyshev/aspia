@@ -1,15 +1,13 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/input_injecotr.cpp
+// FILE:            host/input_injector.cpp
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #include "host/input_injector.h"
 
-#include <versionhelpers.h>
-#include <future>
-
+#include "base/logging.h"
 #include "desktop_capture/desktop_rect.h"
 #include "host/sas_injector.h"
 
@@ -18,79 +16,57 @@ namespace aspia {
 InputInjector::InputInjector() :
     prev_mouse_button_mask_(0)
 {
-    bell_ = false;
-}
-
-InputInjector::~InputInjector()
-{
     // Nothing
 }
 
 void InputInjector::SwitchToInputDesktop()
 {
-    std::unique_ptr<Desktop> input_desktop(Desktop::GetInputDesktop());
+    Desktop input_desktop(Desktop::GetInputDesktop());
 
-    if (input_desktop && !desktop_.IsSame(*input_desktop))
+    if (input_desktop.IsValid() && !desktop_.IsSame(input_desktop))
     {
-        desktop_.SetThreadDesktop(input_desktop.release());
+        desktop_.SetThreadDesktop(std::move(input_desktop));
     }
 
     //
-    // Отправляем системе уведомления о том, что она используется для
-    // предотвращения включения экранной заставки, отключения монитора,
-    // перехода в спящий режим и т.д.
+    // РћС‚РїСЂР°РІР»СЏРµРј СЃРёСЃС‚РµРјРµ СѓРІРµРґРѕРјР»РµРЅРёСЏ Рѕ С‚РѕРј, С‡С‚Рѕ РѕРЅР° РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ
+    // РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ РІРєР»СЋС‡РµРЅРёСЏ СЌРєСЂР°РЅРЅРѕР№ Р·Р°СЃС‚Р°РІРєРё, РѕС‚РєР»СЋС‡РµРЅРёСЏ РјРѕРЅРёС‚РѕСЂР°,
+    // РїРµСЂРµС…РѕРґР° РІ СЃРїСЏС‰РёР№ СЂРµР¶РёРј Рё С‚.Рґ.
     //
     SetThreadExecutionState(ES_SYSTEM_REQUIRED);
 }
 
-void InputInjector::InjectPointer(const proto::PointerEvent &msg)
+void InputInjector::InjectPointerEvent(const proto::PointerEvent& event)
 {
     SwitchToInputDesktop();
 
-    // Получаем прямоугольник экрана.
+    // РџРѕР»СѓС‡Р°РµРј РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє СЌРєСЂР°РЅР°.
     DesktopRect screen_rect = DesktopRect::MakeXYWH(GetSystemMetrics(SM_XVIRTUALSCREEN),
                                                     GetSystemMetrics(SM_YVIRTUALSCREEN),
                                                     GetSystemMetrics(SM_CXVIRTUALSCREEN),
                                                     GetSystemMetrics(SM_CYVIRTUALSCREEN));
 
-    // Если полученные в сообщении координаты курсора не находятся в области экрана.
-    if (!screen_rect.Contains(msg.x(), msg.y()))
+    // Р•СЃР»Рё РїРѕР»СѓС‡РµРЅРЅС‹Рµ РІ СЃРѕРѕР±С‰РµРЅРёРё РєРѕРѕСЂРґРёРЅР°С‚С‹ РєСѓСЂСЃРѕСЂР° РЅРµ РЅР°С…РѕРґСЏС‚СЃСЏ РІ РѕР±Р»Р°СЃС‚Рё СЌРєСЂР°РЅР°.
+    if (!screen_rect.Contains(event.x(), event.y()))
     {
-        // Выходим.
+        // Р’С‹С…РѕРґРёРј.
         return;
     }
 
-    // Переводим координаты курсора в координаты виртуального экрана.
-    DesktopPoint pos(((msg.x() - screen_rect.x()) * 65535) / (screen_rect.Width() - 1),
-                     ((msg.y() - screen_rect.y()) * 65535) / (screen_rect.Height() - 1));
+    // РџРµСЂРµРІРѕРґРёРј РєРѕРѕСЂРґРёРЅР°С‚С‹ РєСѓСЂСЃРѕСЂР° РІ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРёСЂС‚СѓР°Р»СЊРЅРѕРіРѕ СЌРєСЂР°РЅР°.
+    DesktopPoint pos(((event.x() - screen_rect.x()) * 65535) / (screen_rect.Width() - 1),
+                     ((event.y() - screen_rect.y()) * 65535) / (screen_rect.Height() - 1));
 
     DWORD flags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
     DWORD wheel_movement = 0;
 
-    if (pos != prev_mouse_pos_)
+    if (!pos.IsEqual(prev_mouse_pos_))
     {
         flags |= MOUSEEVENTF_MOVE;
         prev_mouse_pos_ = pos;
     }
 
-    uint32_t mask = msg.mask();
-
-    //
-    // Если на компьютере, к которому осуществляется подключение, левая и правая
-    // кнопка мыши поменяны местами, то обмениваем их обратно.
-    // Это необходимо для того, чтобы удаленный клиент использовал свои параметры,
-    // а не параметры управляемого компьютера.
-    //
-    if (GetSystemMetrics(SM_SWAPBUTTON))
-    {
-        bool left = (mask & proto::PointerEvent::LEFT_BUTTON) != 0;
-        bool right = (mask & proto::PointerEvent::RIGHT_BUTTON) != 0;
-
-        mask = mask & ~(proto::PointerEvent::LEFT_BUTTON | proto::PointerEvent::RIGHT_BUTTON);
-
-        if (left) mask |= proto::PointerEvent::RIGHT_BUTTON;
-        if (right) mask |= proto::PointerEvent::LEFT_BUTTON;
-    }
+    uint32_t mask = event.mask();
 
     bool prev = (prev_mouse_button_mask_ & proto::PointerEvent::LEFT_BUTTON) != 0;
     bool curr = (mask & proto::PointerEvent::LEFT_BUTTON) != 0;
@@ -138,106 +114,69 @@ void InputInjector::InjectPointer(const proto::PointerEvent &msg)
     input.mi.dwExtraInfo = 0;
 
     // Do the mouse event
-    SendInput(1, &input, sizeof(input));
+    if (!SendInput(1, &input, sizeof(input)))
+    {
+        DLOG(WARNING) << "SendInput() failed: " << GetLastError();
+    }
 
     prev_mouse_button_mask_ = mask;
 }
 
-void InputInjector::InjectCtrlAltDel()
+void InputInjector::SendKeyboardInput(WORD key_code, DWORD flags)
 {
-#if (_WIN32_WINNT < 0x0600)
-    if (IsWindowsVistaOrGreater())
-    {
-        std::unique_ptr<SasInjector> sas_injector(new SasInjector());
-
-        sas_injector->InjectSAS();
-    }
-    // Windows XP/2003
-    else
-    {
-        const WCHAR kWinlogonDesktopName[] = L"Winlogon";
-        const WCHAR kSasWindowClassName[] = L"SAS window class";
-        const WCHAR kSasWindowTitle[] = L"SAS window";
-
-        std::unique_ptr<Desktop> winlogon_desktop(Desktop::GetDesktop(kWinlogonDesktopName));
-
-        if (winlogon_desktop)
-        {
-            ScopedThreadDesktop desktop;
-
-            if (desktop.SetThreadDesktop(winlogon_desktop.release()))
-            {
-                HWND window = FindWindowW(kSasWindowClassName, kSasWindowTitle);
-
-                if (!window)
-                    window = HWND_BROADCAST;
-
-                PostMessageW(window,
-                             WM_HOTKEY,
-                             0,
-                             MAKELONG(MOD_ALT | MOD_CONTROL, VK_DELETE));
-            }
-        }
-    }
-#else
-    std::unique_ptr<SasInjector> sas_injector(new SasInjector());
-
-    sas_injector->InjectSAS();
-#endif // (_WIN32_WINNT < 0x0600)
-}
-
-void InputInjector::InjectKeyboard(const proto::KeyEvent &msg)
-{
-    // Если нажата комбинация Ctrl + Alt + Delete.
-    if ((msg.flags() & proto::KeyEvent::PRESSED) && msg.keycode() == VK_DELETE &&
-        (GetAsyncKeyState(VK_CONTROL) & 0x8000) &&
-        (GetAsyncKeyState(VK_MENU) & 0x8000))
-    {
-        InjectCtrlAltDel();
-        return;
-    }
-
-    SwitchToInputDesktop();
-
-    DWORD flags = 0;
-
-    flags |= ((msg.flags() & proto::KeyEvent::EXTENDED) ? KEYEVENTF_EXTENDEDKEY : 0);
-    flags |= ((msg.flags() & proto::KeyEvent::PRESSED) ? 0 : KEYEVENTF_KEYUP);
-
     INPUT input;
 
     input.type           = INPUT_KEYBOARD;
-    input.ki.wVk         = msg.keycode();
+    input.ki.wVk         = key_code;
     input.ki.dwFlags     = flags;
-    input.ki.wScan       = static_cast<WORD>(MapVirtualKeyW(msg.keycode(), MAPVK_VK_TO_VSC));
+    input.ki.wScan       = static_cast<WORD>(MapVirtualKeyW(key_code, MAPVK_VK_TO_VSC));
     input.ki.time        = 0;
     input.ki.dwExtraInfo = 0;
 
     // Do the keyboard event
-    SendInput(1, &input, sizeof(input));
+    if (!SendInput(1, &input, sizeof(input)))
+    {
+        DLOG(WARNING) << "SendInput() failed: " << GetLastError();
+    }
 }
 
-void InputInjector::DoBell()
+void InputInjector::InjectKeyEvent(const proto::KeyEvent& event)
 {
-    bell_ = true;
+    SwitchToInputDesktop();
 
-    int count = 3;
-
-    while (count-- > 0)
+    // Р•СЃР»Рё РЅР°Р¶Р°С‚Р° РєРѕРјР±РёРЅР°С†РёСЏ Ctrl + Alt + Delete.
+    if ((event.flags() & proto::KeyEvent::PRESSED) && event.keycode() == VK_DELETE &&
+        (GetAsyncKeyState(VK_CONTROL) & 0x8000) &&
+        (GetAsyncKeyState(VK_MENU) & 0x8000))
     {
-        Beep(1200, 40);
-        Beep(800, 80);
+        SasInjector::InjectSAS();
+        return;
     }
 
-    bell_ = false;
-}
+    bool prev_state = GetKeyState(VK_CAPITAL) != 0;
+    bool curr_state = (event.flags() & proto::KeyEvent::CAPSLOCK) != 0;
 
-void InputInjector::InjectBell(const proto::BellEvent &msg)
-{
-    if (!bell_)
+    if (prev_state != curr_state)
     {
-        std::async(std::launch::async, &InputInjector::DoBell, this);
+        SendKeyboardInput(VK_CAPITAL, 0);
+        SendKeyboardInput(VK_CAPITAL, KEYEVENTF_KEYUP);
     }
+
+    prev_state = GetKeyState(VK_NUMLOCK) != 0;
+    curr_state = (event.flags() & proto::KeyEvent::NUMLOCK) != 0;
+
+    if (prev_state != curr_state)
+    {
+        SendKeyboardInput(VK_NUMLOCK, 0);
+        SendKeyboardInput(VK_NUMLOCK, KEYEVENTF_KEYUP);
+    }
+
+    DWORD flags = 0;
+
+    flags |= ((event.flags() & proto::KeyEvent::EXTENDED) ? KEYEVENTF_EXTENDEDKEY : 0);
+    flags |= ((event.flags() & proto::KeyEvent::PRESSED) ? 0 : KEYEVENTF_KEYUP);
+
+    SendKeyboardInput(event.keycode(), flags);
 }
 
 } // namespace aspia

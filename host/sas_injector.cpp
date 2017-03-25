@@ -7,122 +7,73 @@
 
 #include "host/sas_injector.h"
 
-#include "base/service_control.h"
+#include <sas.h>
+
+#include "base/service_manager.h"
+#include "base/path.h"
+#include "base/logging.h"
+#include "base/unicode.h"
+#include "host/scoped_sas_police.h"
 
 namespace aspia {
 
-static const WCHAR kSasServiceName[] = L"aspia-sas-service";
+static const WCHAR kSasServiceShortName[] = L"aspia-sas-service";
+static const WCHAR kSasServiceFullName[] = L"Aspia SAS Injector";
 
-SasInjector::SasInjector() :
-    Service(kSasServiceName)
+SasInjector::SasInjector(const std::wstring& service_id) :
+    Service(ServiceManager::CreateUniqueServiceName(kSasServiceShortName, service_id))
 {
     // Nothing
 }
 
-SasInjector::~SasInjector()
-{
-    // Nothing
-}
-
-//
-// Данный метод вызова SendSAS работает только если мы вызываем из службы.
-// Делать реализацию отправки от имени непривилегированного пользователя
-// смысла нет, т.к. если нет прав пользователя SYSTEM, мы все равно не
-// сможем переключиться на другой рабочий стол после вызова.
-//
-void SasInjector::SendSAS()
-{
-    std::unique_ptr<ScopedSasPolice> sas_police(new ScopedSasPolice());
-
-    DWORD session_id = kernel32_.WTSGetActiveConsoleSessionId();
-
-    if (session_id == 0xFFFFFFFF)
-    {
-        LOG(ERROR) << "Wrong session id";
-        return;
-    }
-
-    ScopedNativeLibrary wmsgapi("wmsgapi.dll");
-
-    typedef DWORD(WINAPI *PWMSGSENDMESSAGE)(DWORD session_id, UINT msg, WPARAM wParam, LPARAM lParam);
-
-    PWMSGSENDMESSAGE send_message_func =
-        reinterpret_cast<PWMSGSENDMESSAGE>(wmsgapi.GetFunctionPointer("WmsgSendMessage"));
-
-    if (!send_message_func)
-    {
-        LOG(ERROR) << "WmsgSendMessage() not found in wmsgapi.dll";
-        return;
-    }
-
-    BOOL as_user_ = FALSE;
-    send_message_func(session_id, 0x208, 0, reinterpret_cast<LPARAM>(&as_user_));
-}
-
+// static
 void SasInjector::InjectSAS()
 {
-    DWORD session_id = 0;
+    std::wstring command_line;
 
-    // Получаем ID сессии пользователя под которым запущен текущий процесс.
-    if (!kernel32_.ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
-    {
-        LOG(WARNING) << "ProcessIdToSessionId() failed: " << GetLastError();
+    // РџРѕР»СѓС‡Р°РµРј РїРѕР»РЅС‹Р№ РїСѓС‚СЊ Рє РёСЃРїРѕР»РЅСЏРµРјРѕРјСѓ С„Р°Р№Р»Сѓ.
+    if (!GetPath(PathKey::FILE_EXE, &command_line))
         return;
-    }
 
-    //
-    // Если получен ID сессии, то приложение запущено не как служба, а для
-    // выполнения SAS нам необходимо выполнить код из службы.
-    //
-    if (session_id)
+    std::wstring service_id =
+        ServiceManager::GenerateUniqueServiceId();
+
+    std::wstring unique_name =
+        ServiceManager::CreateUniqueServiceName(kSasServiceShortName, service_id);
+
+    // Р”РѕР±Р°РІР»СЏРµРј С„Р»Р°Рі Р·Р°РїСѓСЃРєР° РІ РІРёРґРµ СЃР»СѓР¶Р±С‹.
+    command_line.append(L" --run_mode=");
+    command_line.append(kSasServiceSwitch);
+
+    command_line.append(L" --service_id=");
+    command_line.append(service_id);
+
+    // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј СЃР»СѓР¶Р±Сѓ РІ СЃРёСЃС‚РµРјРµ.
+    ServiceManager manager(ServiceManager::Create(command_line,
+                                                  kSasServiceFullName,
+                                                  unique_name));
+
+    // Р•СЃР»Рё СЃР»СѓР¶Р±Р° СѓСЃС‚Р°РЅРѕРІР»РµРЅР°.
+    if (manager.IsValid())
     {
-        WCHAR module_path[MAX_PATH];
-
-        // Получаем полный путь к исполняемому файлу.
-        if (!GetModuleFileNameW(nullptr, module_path, ARRAYSIZE(module_path)))
-        {
-            LOG(ERROR) << "GetModuleFileNameW() failed: " << GetLastError();
-            return;
-        }
-
-        std::wstring command_line(module_path);
-
-        // Добавляем флаг запуска в виде службы.
-        command_line += L" --run_mode=sas";
-
-        // Устанавливаем службу в системе.
-        std::unique_ptr<ServiceControl> service_control =
-            ServiceControl::Install(command_line.c_str(),
-                                    kSasServiceName,
-                                    kSasServiceName,
-                                    kSasServiceName,
-                                    true);
-
-        // Если служба установлена.
-        if (service_control)
-        {
-            // Запускаем ее.
-            service_control->Start();
-        }
-    }
-    else
-    {
-        SendSAS();
+        // Р—Р°РїСѓСЃРєР°РµРј РµРµ.
+        manager.Start();
     }
 }
 
-void SasInjector::DoService()
+void SasInjector::ExecuteService()
 {
-    // Запускаем службу для выполнения метода Worker().
-    DoWork();
+    // Р—Р°РїСѓСЃРєР°РµРј СЃР»СѓР¶Р±Сѓ РґР»СЏ РІС‹РїРѕР»РЅРµРЅРёСЏ РјРµС‚РѕРґР° Worker().
+    Run();
 
-    // Удаляем службу.
-    ServiceControl(kSasServiceName).Delete();
+    // РЈРґР°Р»СЏРµРј СЃР»СѓР¶Р±Сѓ.
+    ServiceManager(ServiceName()).Remove();
 }
 
 void SasInjector::Worker()
 {
-    SendSAS();
+    ScopedSasPolice sas_police;
+    SendSAS(FALSE);
 }
 
 void SasInjector::OnStop()

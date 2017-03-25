@@ -8,37 +8,27 @@
 #ifndef _ASPIA_HOST__SAS_INJECTOR_H
 #define _ASPIA_HOST__SAS_INJECTOR_H
 
-#include <memory>
-
-#include "base/scoped_kernel32_library.h"
 #include "base/service.h"
-#include "base/thread.h"
-#include "host/scoped_sas_police.h"
 
 namespace aspia {
 
-//
-// Класс можно использовать только начиная с Windows Vista.
-//
+static const WCHAR kSasServiceSwitch[] = L"sas-service";
+
 class SasInjector : private Service
 {
 public:
-    SasInjector();
-    ~SasInjector();
+    SasInjector(const std::wstring& service_id);
+    ~SasInjector() = default;
 
-    void DoService();
+    void ExecuteService();
 
-    void InjectSAS();
+    static void InjectSAS();
 
 private:
     void Worker() override;
     void OnStop() override;
 
-    void SendSAS();
-
 private:
-    ScopedKernel32Library kernel32_;
-
     DISALLOW_COPY_AND_ASSIGN(SasInjector);
 };
 

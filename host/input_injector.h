@@ -11,7 +11,6 @@
 #include "aspia_config.h"
 
 #include <stdint.h>
-#include <atomic>
 
 #include "base/macros.h"
 #include "base/scoped_thread_desktop.h"
@@ -24,24 +23,20 @@ class InputInjector
 {
 public:
     InputInjector();
-    ~InputInjector();
+    ~InputInjector() = default;
 
-    void InjectPointer(const proto::PointerEvent &msg);
-    void InjectKeyboard(const proto::KeyEvent &msg);
-    void InjectBell(const proto::BellEvent &msg);
+    void InjectPointerEvent(const proto::PointerEvent& event);
+    void InjectKeyEvent(const proto::KeyEvent& event);
 
 private:
     void SwitchToInputDesktop();
-    void InjectCtrlAltDel();
-    void DoBell();
+    void SendKeyboardInput(WORD key_code, DWORD flags);
 
 private:
     ScopedThreadDesktop desktop_;
 
     DesktopPoint prev_mouse_pos_;
     uint32_t prev_mouse_button_mask_;
-
-    std::atomic_bool bell_;
 
     DISALLOW_COPY_AND_ASSIGN(InputInjector);
 };

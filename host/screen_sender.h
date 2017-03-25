@@ -15,6 +15,7 @@
 #include "base/thread.h"
 #include "base/lock.h"
 #include "base/macros.h"
+#include "desktop_capture/scoped_desktop_effects.h"
 #include "desktop_capture/capture_scheduler.h"
 #include "desktop_capture/capturer_gdi.h"
 #include "codec/video_encoder_zlib.h"
@@ -28,38 +29,33 @@ namespace aspia {
 class ScreenSender : private Thread
 {
 public:
-    typedef std::function<void(const proto::HostToClient*)> OnMessageCallback;
+    typedef std::function<bool(const proto::desktop::HostToClient&)> MessageCallback;
 
-    ScreenSender(OnMessageCallback on_message_callback);
+    explicit ScreenSender();
     ~ScreenSender();
 
-    void Configure(const proto::VideoControl &msg);
+    bool StartSending(const proto::DesktopConfig& config,
+                      const MessageCallback& message_callback);
+    void StopSending();
 
 private:
     void Worker() override;
     void OnStop() override;
 
 private:
-    OnMessageCallback on_message_callback_;
+    MessageCallback message_callback_;
 
     std::unique_ptr<VideoEncoder> video_encoder_;
     std::unique_ptr<CursorEncoder> cursor_encoder_;
-    std::unique_ptr<CaptureScheduler> scheduler_;
+    std::unique_ptr<Capturer> capturer_;
+
+    proto::DesktopConfig config_;
+
     std::unique_ptr<ScopedDesktopEffects> desktop_effects_;
 
     Lock update_lock_;
 
-    DesktopSize prev_size_;
-    DesktopSize curr_size_;
-
-    PixelFormat prev_format_;
-    PixelFormat curr_format_;
-
-    proto::VideoEncoding encoding_;
-
-    DesktopRegion dirty_region_;
-
-    proto::HostToClient message_;
+    proto::desktop::HostToClient message_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenSender);
 };
