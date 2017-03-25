@@ -12,16 +12,18 @@ zlib-ng        zlib License
 wtl            Common Public License 1.0, Microsoft Public License
 rapidjson      MIT License
 gflags         BSD 3-Clause License
+opus           BSD 3-Clause License
 
 Synchronization status:
 
   component  |   sync date   |     version    |   url
-protobuf       26.10.2016       3.1.0-alpha1    https://github.com/google/protobuf/releases
+protobuf       19.02.2017       3.2.0           https://github.com/google/protobuf/releases
 libglog        26.10.2016       trunk           https://github.com/google/glog
 googletest     26.10.2016       trunk           https://github.com/google/googletest
-libyuv         17.11.2016       trunk           https://chromium.googlesource.com/libyuv/libyuv
-libvpx         20.07.2016       1.6.0           https://chromium.googlesource.com/webm/libvpx
-zlib-ng        26.10.2016       trunk           https://github.com/Dead2/zlib-ng
-wtl            26.10.2016       r631            https://sourceforge.net/projects/wtl
+libyuv         19.02.2017       trunk           https://chromium.googlesource.com/libyuv/libyuv
+libvpx         26.01.2017       1.6.1           https://chromium.googlesource.com/webm/libvpx
+zlib-ng        19.02.2017       trunk           https://github.com/Dead2/zlib-ng
+wtl            19.02.2017       r633            https://sourceforge.net/projects/wtl
 rapidjson      26.10.2016       trunk           https://github.com/miloyip/rapidjson
 gflags         03.10.2016       2.2.0           https://github.com/gflags/gflags
+opus           24.01.2017       1.1.4           http://opus-codec.org
