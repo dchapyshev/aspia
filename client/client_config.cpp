@@ -15,12 +15,9 @@ ClientConfig::ClientConfig() :
     // Nothing
 }
 
-ClientConfig::~ClientConfig()
-{
-    // Nothing
-}
+ClientConfig::~ClientConfig() = default;
 
-void ClientConfig::SetRemoteAddress(const std::string &address)
+void ClientConfig::SetRemoteAddress(const std::string& address)
 {
     address_ = address;
 }
@@ -30,7 +27,7 @@ const std::string& ClientConfig::RemoteAddress() const
     return address_;
 }
 
-void ClientConfig::SetRemotePort(int port)
+void ClientConfig::SetRemotePort(uint16_t port)
 {
     port_ = port;
 }

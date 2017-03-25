@@ -26,24 +26,24 @@ class ScreenConfig
 {
 public:
     ScreenConfig();
-    ScreenConfig(const ScreenConfig &other);
-    ~ScreenConfig();
+    ScreenConfig(const ScreenConfig& other);
+    ~ScreenConfig() = default;
 
     void SetEncoding(proto::VideoEncoding encoding);
     proto::VideoEncoding Encoding() const;
 
-    void SetFormat(const PixelFormat &format);
+    void SetFormat(const PixelFormat& format);
     const PixelFormat& Format() const;
     PixelFormat* MutableFormat();
 
-    bool DisableDesktopEffects() const;
-    void SetDisableDesktopEffects(bool value);
+    bool DesktopEffects() const;
+    void SetDesktopEffects(bool value);
 
-    bool ShowRemoteCursor() const;
-    void SetShowRemoteCursor(bool value);
+    bool CursorShape() const;
+    void SetCursorShape(bool value);
 
-    bool AutoSendClipboard() const;
-    void SetAutoSendClipboard(bool value);
+    bool Clipboard() const;
+    void SetClipboard(bool value);
 
     int32_t UpdateInterval() const;
     void SetUpdateInterval(int32_t value);
@@ -51,18 +51,18 @@ public:
     int32_t CompressRatio() const;
     void SetCompressRatio(int32_t value);
 
-    bool IsEqualTo(const ScreenConfig &other) const;
-    void Set(const ScreenConfig &other);
+    bool IsEqualTo(const ScreenConfig& other) const;
+    void Set(const ScreenConfig& other);
 
-    ScreenConfig& operator=(const ScreenConfig &other);
+    ScreenConfig& operator=(const ScreenConfig& other);
 
 private:
     proto::VideoEncoding encoding_;
     PixelFormat format_;
 
-    bool disable_desktop_effects_;
-    bool show_remote_cursor_;
-    bool auto_send_clipboard_;
+    bool enable_desktop_effects_;
+    bool enable_cursor_shape_;
+    bool enable_clipboard_;
 
     int32_t update_interval_;
     int32_t compress_ratio_;

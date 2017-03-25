@@ -11,9 +11,9 @@ namespace aspia {
 
 ScreenConfig::ScreenConfig() :
     encoding_(proto::VideoEncoding::VIDEO_ENCODING_ZLIB),
-    disable_desktop_effects_(true),
-    show_remote_cursor_(true),
-    auto_send_clipboard_(false),
+    enable_desktop_effects_(false),
+    enable_cursor_shape_(true),
+    enable_clipboard_(true),
     update_interval_(kDefUpdateInterval),
     compress_ratio_(kDefCompressRatio),
     format_(PixelFormat::RGB565())
@@ -21,14 +21,9 @@ ScreenConfig::ScreenConfig() :
     // Nothing
 }
 
-ScreenConfig::ScreenConfig(const ScreenConfig &other)
+ScreenConfig::ScreenConfig(const ScreenConfig& other)
 {
     Set(other);
-}
-
-ScreenConfig::~ScreenConfig()
-{
-    // Nothing
 }
 
 void ScreenConfig::SetEncoding(proto::VideoEncoding encoding)
@@ -41,7 +36,7 @@ proto::VideoEncoding ScreenConfig::Encoding() const
     return encoding_;
 }
 
-void ScreenConfig::SetFormat(const PixelFormat &format)
+void ScreenConfig::SetFormat(const PixelFormat& format)
 {
     format_ = format;
 }
@@ -56,34 +51,34 @@ PixelFormat* ScreenConfig::MutableFormat()
     return &format_;
 }
 
-bool ScreenConfig::DisableDesktopEffects() const
+bool ScreenConfig::DesktopEffects() const
 {
-    return disable_desktop_effects_;
+    return enable_desktop_effects_;
 }
 
-void ScreenConfig::SetDisableDesktopEffects(bool value)
+void ScreenConfig::SetDesktopEffects(bool value)
 {
-    disable_desktop_effects_ = value;
+    enable_desktop_effects_ = value;
 }
 
-bool ScreenConfig::ShowRemoteCursor() const
+bool ScreenConfig::CursorShape() const
 {
-    return show_remote_cursor_;
+    return enable_cursor_shape_;
 }
 
-void ScreenConfig::SetShowRemoteCursor(bool value)
+void ScreenConfig::SetCursorShape(bool value)
 {
-    show_remote_cursor_ = value;
+    enable_cursor_shape_ = value;
 }
 
-bool ScreenConfig::AutoSendClipboard() const
+bool ScreenConfig::Clipboard() const
 {
-    return auto_send_clipboard_;
+    return enable_clipboard_;
 }
 
-void ScreenConfig::SetAutoSendClipboard(bool value)
+void ScreenConfig::SetClipboard(bool value)
 {
-    auto_send_clipboard_ = value;
+    enable_clipboard_ = value;
 }
 
 int32_t ScreenConfig::UpdateInterval() const
@@ -106,29 +101,29 @@ void ScreenConfig::SetCompressRatio(int32_t value)
     compress_ratio_ = value;
 }
 
-bool ScreenConfig::IsEqualTo(const ScreenConfig &other) const
+bool ScreenConfig::IsEqualTo(const ScreenConfig& other) const
 {
-    return (format_.IsEqualTo(other.format_) &&
-            encoding_                == other.encoding_ &&
-            disable_desktop_effects_ == other.disable_desktop_effects_ &&
-            show_remote_cursor_      == other.show_remote_cursor_ &&
-            auto_send_clipboard_     == other.auto_send_clipboard_ &&
-            update_interval_         == other.update_interval_ &&
-            compress_ratio_          == other.compress_ratio_);
+    return (format_.IsEqual(other.format_) &&
+            encoding_               == other.encoding_ &&
+            enable_desktop_effects_ == other.enable_desktop_effects_ &&
+            enable_cursor_shape_    == other.enable_cursor_shape_ &&
+            enable_clipboard_       == other.enable_clipboard_ &&
+            update_interval_        == other.update_interval_ &&
+            compress_ratio_         == other.compress_ratio_);
 }
 
-void ScreenConfig::Set(const ScreenConfig &other)
+void ScreenConfig::Set(const ScreenConfig& other)
 {
-    encoding_                = other.encoding_;
-    format_                  = other.format_;
-    disable_desktop_effects_ = other.disable_desktop_effects_;
-    show_remote_cursor_      = other.show_remote_cursor_;
-    auto_send_clipboard_     = other.auto_send_clipboard_;
-    update_interval_         = other.update_interval_;
-    compress_ratio_          = other.compress_ratio_;
+    encoding_               = other.encoding_;
+    format_                 = other.format_;
+    enable_desktop_effects_ = other.enable_desktop_effects_;
+    enable_cursor_shape_    = other.enable_cursor_shape_;
+    enable_clipboard_       = other.enable_clipboard_;
+    update_interval_        = other.update_interval_;
+    compress_ratio_         = other.compress_ratio_;
 }
 
-ScreenConfig& ScreenConfig::operator=(const ScreenConfig &other)
+ScreenConfig& ScreenConfig::operator=(const ScreenConfig& other)
 {
     Set(other);
     return *this;

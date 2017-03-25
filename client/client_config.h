@@ -18,10 +18,10 @@ public:
     ClientConfig();
     ~ClientConfig();
 
-    void SetRemoteAddress(const std::string &address);
+    void SetRemoteAddress(const std::string& address);
     const std::string& RemoteAddress() const;
 
-    void SetRemotePort(int port);
+    void SetRemotePort(uint16_t port);
     int RemotePort() const;
 
     const ScreenConfig& screen_config() const;
@@ -29,7 +29,7 @@ public:
 
 private:
     std::string address_;
-    int port_;
+    uint16_t port_;
     ScreenConfig screen_;
 };
 
