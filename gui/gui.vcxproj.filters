@@ -11,6 +11,8 @@
     <ClCompile Include="status_dialog.cpp" />
     <ClCompile Include="viewer_bar.cpp" />
     <ClCompile Include="settings_dialog.cpp" />
+    <ClCompile Include="users_dialog.cpp" />
+    <ClCompile Include="add_user_dialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main_dialog.h" />
@@ -23,9 +25,11 @@
     <ClInclude Include="video_window.h" />
     <ClInclude Include="status_dialog.h" />
     <ClInclude Include="scoped_windows_hook.h" />
-    <ClInclude Include="window_thread.h" />
     <ClInclude Include="viewer_bar.h" />
     <ClInclude Include="settings_dialog.h" />
+    <ClInclude Include="dialog_thread.h" />
+    <ClInclude Include="users_dialog.h" />
+    <ClInclude Include="add_user_dialog.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="lang">

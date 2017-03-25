@@ -9,6 +9,7 @@
 
 #include <algorithm>
 
+#include "base/scoped_select_object.h"
 #include "proto/proto.pb.h"
 
 namespace aspia {
@@ -19,8 +20,8 @@ static const int kScrollDelta = 25;
 static const uint8_t kWheelMask =
     proto::PointerEvent::WHEEL_DOWN | proto::PointerEvent::WHEEL_UP;
 
-VideoWindow::VideoWindow(Client *client) :
-    client_(client),
+VideoWindow::VideoWindow(ClientSessionDesktop* client_session) :
+    client_session_(client_session),
     background_brush_(CreateSolidBrush(RGB(25, 25, 25))),
     scroll_timer_(kScrollTimerId),
     has_mouse_(false),
@@ -30,24 +31,21 @@ VideoWindow::VideoWindow(Client *client) :
     // Nothing
 }
 
-VideoWindow::~VideoWindow()
-{
-    // Nothing
-}
+VideoWindow::~VideoWindow() = default;
 
 LRESULT VideoWindow::OnCreate(LPCREATESTRUCT create_struct)
 {
     return 0;
 }
 
-void VideoWindow::DrawBackground(CPaintDC &target_dc)
+void VideoWindow::DrawBackground(CPaintDC& target_dc)
 {
     CRect left(target_dc.m_ps.rcPaint.left,
                target_dc.m_ps.rcPaint.top,
                center_offset_.x,
                target_dc.m_ps.rcPaint.bottom);
 
-    CRect right(center_offset_.x + buffer_.Size().Width(),
+    CRect right(center_offset_.x + frame_->Size().Width(),
                 target_dc.m_ps.rcPaint.top,
                 target_dc.m_ps.rcPaint.right,
                 target_dc.m_ps.rcPaint.bottom);
@@ -58,44 +56,57 @@ void VideoWindow::DrawBackground(CPaintDC &target_dc)
               center_offset_.y);
 
     CRect bottom(target_dc.m_ps.rcPaint.left + left.Width(),
-                 center_offset_.y + buffer_.Size().Height(),
+                 center_offset_.y + frame_->Size().Height(),
                  target_dc.m_ps.rcPaint.right - right.Width(),
                  target_dc.m_ps.rcPaint.bottom);
 
-    target_dc.FillRect(&left, background_brush_);
-    target_dc.FillRect(&right, background_brush_);
-    target_dc.FillRect(&top, background_brush_);
-    target_dc.FillRect(&bottom, background_brush_);
+    if (!left.IsRectEmpty())
+        target_dc.FillRect(&left, background_brush_);
+
+    if (!right.IsRectEmpty())
+        target_dc.FillRect(&right, background_brush_);
+
+    if (!top.IsRectEmpty())
+        target_dc.FillRect(&top, background_brush_);
+
+    if (!bottom.IsRectEmpty())
+        target_dc.FillRect(&bottom, background_brush_);
 }
 
 void VideoWindow::OnPaint(CDCHandle dc)
 {
     CPaintDC target_dc(*this);
 
+    // Если экран инициализирован.
     if (screen_dc_)
     {
         CPoint scroll_pos(center_offset_.x ? 0 : scroll_pos_.x,
                           center_offset_.y ? 0 : scroll_pos_.y);
 
-        DrawBackground(target_dc);
-
         CRect paint(target_dc.m_ps.rcPaint);
 
         {
-            LockGuard<Lock> guard(&buffer_lock_);
+            AutoReadLock lock(frame_lock_);
 
-            buffer_.DrawTo(target_dc,
-                           // ���������� ������ � ������� ����� ����������� ���������.
-                           DesktopPoint(paint.left + center_offset_.x, paint.top + center_offset_.y),
-                           // ���������� ������ �� ������� ����� ����������� ���������.
-                           DesktopPoint(paint.left + scroll_pos.x, paint.top + scroll_pos.y),
-                           // ������� ������ (������ � ������).
-                           DesktopSize(paint.Width() - (center_offset_.x * 2),
-                                       paint.Height() - (center_offset_.y * 2)));
+            if (!frame_)
+                return;
+
+            // При размере окна большем, чем размер удаленного экрана рисуем фон.
+            DrawBackground(target_dc);
+
+            ScopedSelectObject select_object(memory_dc_, frame_->Bitmap());
+
+            BitBlt(target_dc,
+                   paint.left + center_offset_.x, paint.top + center_offset_.y,
+                   paint.Width() - (center_offset_.x * 2), paint.Height() - (center_offset_.y * 2),
+                   memory_dc_,
+                   paint.left + scroll_pos.x, paint.top + scroll_pos.y,
+                   SRCCOPY);
         }
     }
     else
     {
+        // Заполняем все окно фоном.
         target_dc.FillRect(&target_dc.m_ps.rcPaint, background_brush_);
     }
 }
@@ -112,42 +123,51 @@ void VideoWindow::OnWindowPosChanged(LPWINDOWPOS pos)
 
 void VideoWindow::OnSize(UINT type, CSize size)
 {
+    AutoReadLock lock(frame_lock_);
+
+    if (!frame_)
+        return;
+
     CRect rect;
+    GetClientRect(&rect);
 
-    if (GetClientRect(&rect))
-    {
-        client_size_ = rect.Size();
+    client_size_ = rect.Size();
 
-        int32_t width = buffer_.Size().Width();
-        int32_t height = buffer_.Size().Height();
+    int width = frame_->Size().Width();
+    int height = frame_->Size().Height();
 
-        if (width < client_size_.cx)
-            center_offset_.x = (client_size_.cx / 2) - (width / 2);
-        else
-            center_offset_.x = 0;
+    if (width < client_size_.cx)
+        center_offset_.x = (client_size_.cx / 2) - (width / 2);
+    else
+        center_offset_.x = 0;
 
-        if (height < client_size_.cy)
-            center_offset_.y = (client_size_.cy / 2) - (height / 2);
-        else
-            center_offset_.y = 0;
+    if (height < client_size_.cy)
+        center_offset_.y = (client_size_.cy / 2) - (height / 2);
+    else
+        center_offset_.y = 0;
 
-        CPoint scroll_pos;
-        scroll_pos.x = std::max(0L, std::min(scroll_pos_.x, width - client_size_.cx));
-        scroll_pos.y = std::max(0L, std::min(scroll_pos_.y, height - client_size_.cy));
+    CPoint scroll_pos;
+    scroll_pos.x = std::max(0L, std::min(scroll_pos_.x, width - client_size_.cx));
+    scroll_pos.y = std::max(0L, std::min(scroll_pos_.y, height - client_size_.cy));
 
-        ScrollWindowEx(scroll_pos_.x - scroll_pos.x,
-                       scroll_pos_.y - scroll_pos.y,
-                       SW_INVALIDATE);
+    ScrollWindowEx(scroll_pos_.x - scroll_pos.x,
+                   scroll_pos_.y - scroll_pos.y,
+                   SW_INVALIDATE);
 
-        scroll_pos_ = scroll_pos;
+    scroll_pos_ = scroll_pos;
 
-        UpdateScrollBars();
-    }
+    UpdateScrollBars(width, height);
 }
 
-LRESULT VideoWindow::OnMouse(UINT msg, WPARAM wParam, LPARAM lParam, BOOL &handled)
+LRESULT VideoWindow::OnMouse(UINT msg, WPARAM wParam, LPARAM lParam, BOOL& handled)
 {
-    if (!has_focus_) return 0;
+    AutoReadLock lock(frame_lock_);
+
+    if (!frame_)
+        return 0;
+
+    if (!has_focus_)
+        return 0;
 
     if (!has_mouse_)
     {
@@ -197,7 +217,7 @@ LRESULT VideoWindow::OnMouse(UINT msg, WPARAM wParam, LPARAM lParam, BOOL &handl
     {
         scroll_delta_.SetPoint(0, 0);
 
-        if (client_size_.cx < buffer_.Size().Width())
+        if (client_size_.cx < frame_->Size().Width())
         {
             if (pos.x > client_size_.cx - 15)
                 scroll_delta_.x = kScrollDelta;
@@ -205,7 +225,7 @@ LRESULT VideoWindow::OnMouse(UINT msg, WPARAM wParam, LPARAM lParam, BOOL &handl
                 scroll_delta_.x = -kScrollDelta;
         }
 
-        if (client_size_.cy < buffer_.Size().Height())
+        if (client_size_.cy < frame_->Size().Height())
         {
             if (pos.y > client_size_.cy - 15)
                 scroll_delta_.y = kScrollDelta;
@@ -222,7 +242,7 @@ LRESULT VideoWindow::OnMouse(UINT msg, WPARAM wParam, LPARAM lParam, BOOL &handl
     pos.x -= center_offset_.x - std::abs(scroll_pos_.x);
     pos.y -= center_offset_.y - std::abs(scroll_pos_.y);
 
-    if (buffer_.Contains(pos.x, pos.y))
+    if (frame_->Contains(pos.x, pos.y))
     {
         if (pos != prev_pos_ || mask != prev_mask_)
         {
@@ -233,13 +253,13 @@ LRESULT VideoWindow::OnMouse(UINT msg, WPARAM wParam, LPARAM lParam, BOOL &handl
             {
                 for (WORD i = 0; i < wheel_speed; ++i)
                 {
-                    client_->SendPointerEvent(pos.x, pos.y, mask);
-                    client_->SendPointerEvent(pos.x, pos.y, mask & ~kWheelMask);
+                    client_session_->SendPointerEvent(pos.x, pos.y, mask);
+                    client_session_->SendPointerEvent(pos.x, pos.y, mask & ~kWheelMask);
                 }
             }
             else
             {
-                client_->SendPointerEvent(pos.x, pos.y, mask);
+                client_session_->SendPointerEvent(pos.x, pos.y, mask);
             }
         }
     }
@@ -249,6 +269,7 @@ LRESULT VideoWindow::OnMouse(UINT msg, WPARAM wParam, LPARAM lParam, BOOL &handl
 
 void VideoWindow::OnMouseLeave()
 {
+    // Курсор мыши покинул область окна.
     has_mouse_ = false;
 }
 
@@ -323,12 +344,9 @@ void VideoWindow::OnVScroll(UINT code, UINT pos, CScrollBar scrollbar)
     }
 }
 
-void VideoWindow::UpdateScrollBars()
+void VideoWindow::UpdateScrollBars(int width, int height)
 {
     CSize scrollbar;
-
-    int width = buffer_.Size().Width();
-    int height = buffer_.Size().Height();
 
     if (client_size_.cx >= width)
         scrollbar.cx = GetSystemMetrics(SM_CXHSCROLL);
@@ -355,18 +373,26 @@ void VideoWindow::UpdateScrollBars()
 
 bool VideoWindow::Scroll(LONG delta_x, LONG delta_y)
 {
+    AutoReadLock lock(frame_lock_);
+
+    if (!frame_)
+        return false;
+
     CPoint offset;
+
+    int width = frame_->Size().Width();
+    int height = frame_->Size().Height();
 
     if (delta_x)
     {
         offset.x = std::max(delta_x, -scroll_pos_.x);
-        offset.x = std::min(offset.x, buffer_.Size().Width() - client_size_.cx - scroll_pos_.x);
+        offset.x = std::min(offset.x, width - client_size_.cx - scroll_pos_.x);
     }
 
     if (delta_y)
     {
         offset.y = std::max(delta_y, -scroll_pos_.y);
-        offset.y = std::min(offset.y, buffer_.Size().Height() - client_size_.cy - scroll_pos_.y);
+        offset.y = std::min(offset.y, height - client_size_.cy - scroll_pos_.y);
     }
 
     if (offset.x || offset.y)
@@ -374,7 +400,7 @@ bool VideoWindow::Scroll(LONG delta_x, LONG delta_y)
         scroll_pos_.Offset(offset);
 
         ScrollWindowEx(-offset.x, -offset.y, SW_INVALIDATE);
-        UpdateScrollBars();
+        UpdateScrollBars(width, height);
 
         return true;
     }
@@ -382,27 +408,36 @@ bool VideoWindow::Scroll(LONG delta_x, LONG delta_y)
     return false;
 }
 
-bool VideoWindow::Scroll(const CPoint &delta)
+bool VideoWindow::Scroll(const CPoint& delta)
 {
     return Scroll(delta.x, delta.y);
 }
 
-void VideoWindow::OnVideoUpdate(const uint8_t *buffer, const DesktopRegion &region)
+DesktopFrame* VideoWindow::GetVideoFrame()
 {
-    buffer_.CopyFrom(buffer, region);
+    return frame_.get();
+}
 
+void VideoWindow::VideoFrameUpdated()
+{
+    // Уведомляем окно о том, что оно содержит невалидное изображение.
     Invalidate(FALSE);
 }
 
-void VideoWindow::OnVideoResize(const DesktopSize &size, const PixelFormat &format)
+void VideoWindow::ResizeVideoFrame(const DesktopSize& size, const PixelFormat& format)
 {
     {
-        LockGuard<Lock> guard(&buffer_lock_);
+        // Блокируем буфер изображения на запись и чтение.
+        AutoWriteLock lock(frame_lock_);
 
+        // Изменяем размеры буфера.
         screen_dc_.set(CreateCompatibleDC(nullptr));
-        buffer_.Resize(screen_dc_, size, format);
+        memory_dc_.set(CreateCompatibleDC(screen_dc_));
+
+        frame_.reset(DesktopFrameDib::Create(size, format, memory_dc_));
     }
 
+    // Уведомляем окно о том, что размер изменился.
     PostMessageW(WM_SIZE);
 }
 

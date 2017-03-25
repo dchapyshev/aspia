@@ -14,10 +14,7 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 IDI_MAINICON   ICON "resource/main.ico"
 IDI_ABOUT      ICON "resource/about.ico"
-IDI_BELL       ICON "resource/bell.ico"
 IDI_CAD        ICON "resource/cad.ico"
-IDI_CLIP_RECV  ICON "resource/clip_recv.ico"
-IDI_CLIP_SEND  ICON "resource/clip_send.ico"
 IDI_EXIT       ICON "resource/exit.ico"
 IDI_FULLSCREEN ICON "resource/fullscreen.ico"
 IDI_IDEALSIZE  ICON "resource/idealsize.ico"

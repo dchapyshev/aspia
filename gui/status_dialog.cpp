@@ -6,16 +6,17 @@
 //
 
 #include "gui/status_dialog.h"
-
-#include <future>
-
-#include "base/exception.h"
 #include "base/unicode.h"
 
 namespace aspia {
 
 extern CIcon _small_icon;
 extern CIcon _big_icon;
+
+StatusDialog::StatusDialog(const ClientConfig& config) : config_(config)
+{
+    // Nothing
+}
 
 BOOL StatusDialog::OnInitDialog(CWindow focus_window, LPARAM lParam)
 {
@@ -30,16 +31,7 @@ BOOL StatusDialog::OnInitDialog(CWindow focus_window, LPARAM lParam)
                    config_.RemotePort());
     AddMessage(message);
 
-    ClientTCP::OnConnectedCallback on_connected_callback =
-        std::bind(&StatusDialog::OnConnected, this, std::placeholders::_1);
-
-    ClientTCP::OnErrorCallback on_error_callback =
-        std::bind(&StatusDialog::OnError, this, std::placeholders::_1);
-
-    tcp_.reset(new ClientTCP(config_.RemoteAddress(),
-                             config_.RemotePort(),
-                             on_connected_callback,
-                             on_error_callback));
+    Connect(config_.RemoteAddress(), config_.RemotePort());
 
     GetDlgItem(IDCANCEL).SetFocus();
 
@@ -48,133 +40,63 @@ BOOL StatusDialog::OnInitDialog(CWindow focus_window, LPARAM lParam)
 
 void StatusDialog::OnClose()
 {
-    viewer_.reset();
-    client_.reset();
-    tcp_.reset();
-
+    viewer_window_.reset();
     EndDialog(0);
 }
 
-LRESULT StatusDialog::OnAppMessage(UINT msg, WPARAM wParam, LPARAM lParam, BOOL &handled)
+LRESULT StatusDialog::OnAppMessage(UINT msg, WPARAM wParam, LPARAM lParam, BOOL& handled)
 {
     PostMessageW(WM_CLOSE);
     return 0;
 }
 
-LRESULT StatusDialog::OnCancelButton(WORD notify_code, WORD id, HWND ctrl, BOOL &handled)
+LRESULT StatusDialog::OnCancelButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled)
 {
     PostMessageW(WM_CLOSE);
     return 0;
 }
 
-void StatusDialog::OnClientEvent(Client::Event type)
+void StatusDialog::OnConnectionSuccess(std::unique_ptr<Socket> sock)
 {
-    if (type == Client::Event::NotConnected)
-    {
-        //Stop();
-    }
-    else if (type == Client::Event::Disconnected)
-    {
-        viewer_.reset();
-        client_.reset();
+    AddMessage(IDS_STATUS_CONNECTED);
+    ShowWindow(SW_HIDE);
 
-        ShowWindow(SW_SHOW);
-    }
-    else if (type == Client::Event::AuthRequest)
-    {
+    std::unique_ptr<ViewerWindow> viewer_window(new ViewerWindow(this, std::move(sock), &config_));
 
-    }
-    else if (type == Client::Event::BadAuth)
-    {
-        //Stop();
-    }
-    else if (type == Client::Event::Connected)
-    {
-        AddMessage(IDS_STATUS_CONNECTED);
-        ShowWindow(SW_HIDE);
-
-        viewer_.reset(new ViewerWindow(this, client_.get(), &config_));
-
-        Client::OnVideoUpdateCallback on_video_update_callback =
-            std::bind(&ViewerWindow::OnVideoUpdate, viewer_.get(), std::placeholders::_1, std::placeholders::_2);
-
-        Client::OnVideoResizeCallback on_video_resize_callback =
-            std::bind(&ViewerWindow::OnVideoResize, viewer_.get(), std::placeholders::_1, std::placeholders::_2);
-
-        Client::OnCursorUpdateCallback on_cursor_update_callback =
-            std::bind(&ViewerWindow::OnCursorUpdate, viewer_.get(), std::placeholders::_1);
-
-        client_->StartScreenUpdate(config_.screen_config(),
-                                   on_video_update_callback,
-                                   on_video_resize_callback,
-                                   on_cursor_update_callback);
-    }
+    viewer_window_.reset(new DialogThread<ViewerWindow>(std::move(viewer_window)));
 }
 
-void StatusDialog::OnConnected(std::unique_ptr<Socket> &sock)
+void StatusDialog::OnConnectionError()
 {
-    try
-    {
-        Client::OnEventCallback on_event_callback =
-            std::bind(&StatusDialog::OnClientEvent, this, std::placeholders::_1);
-
-        client_.reset(new Client(std::move(sock), on_event_callback));
-        tcp_.reset();
-    }
-    catch (const Exception &err)
-    {
-        AddMessage(UNICODEfromUTF8(err.What()).c_str());
-    }
+    AddMessage(IDS_STATUS_NOT_CONNECTED);
 }
 
-void StatusDialog::OnError(const char *reason)
-{
-    AddMessage(UNICODEfromUTF8(reason).c_str());
-}
-
-void StatusDialog::AddMessage(const WCHAR *message)
+void StatusDialog::AddMessage(const WCHAR* message)
 {
     CEdit status = GetDlgItem(IDC_STATUS_EDIT);
 
-    int len = GetDateFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, nullptr, 0);
-    if (len)
+    WCHAR buffer[128];
+
+    if (GetDateFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, buffer, ARRAYSIZE(buffer)))
     {
-        std::wstring date;
-
-        date.resize(len + 1);
-
-        if (GetDateFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, &date[0], len))
-        {
-            status.AppendText(date.c_str());
-            status.AppendText(L" ");
-        }
+        status.AppendText(buffer);
+        status.AppendText(L" ");
     }
 
-    len = GetTimeFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, nullptr, 0);
-    if (len)
+    if (GetTimeFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, buffer, ARRAYSIZE(buffer)))
     {
-        std::wstring time;
-
-        time.resize(len + 1);
-
-        if (GetTimeFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, &time[0], len))
-        {
-            status.AppendText(time.c_str());
-            status.AppendText(L": ");
-        }
+        status.AppendText(buffer);
+        status.AppendText(L": ");
     }
 
     status.AppendText(message);
     status.AppendText(L"\r\n");
-
-    status.SetSelNone();
 }
 
 void StatusDialog::AddMessage(UINT message_id)
 {
     CString message;
     message.LoadStringW(message_id);
-
     AddMessage(message);
 }
 

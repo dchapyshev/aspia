@@ -25,20 +25,18 @@
 #include "gui/tray_icon.h"
 #include "network/server_tcp.h"
 #include "host/host.h"
-#include "client/client.h"
 
 namespace aspia {
 
 class MainDialog : public CDialogImpl<MainDialog>, public TrayIcon<MainDialog>
 {
 public:
-    MainDialog() : is_hidden_(false)
-    {
-        client_count_ = 0;
-    }
+    MainDialog();
+    ~MainDialog() = default;
 
     enum { IDD = IDD_MAIN };
 
+private:
     BEGIN_MSG_MAP(MainDialog)
         MSG_WM_INITDIALOG(OnInitDialog)
         MSG_WM_CLOSE(OnClose)
@@ -48,32 +46,43 @@ public:
 
         COMMAND_ID_HANDLER(IDC_SERVER_DEFAULT_PORT_CHECK, OnDefaultPortClicked)
 
-        COMMAND_ID_HANDLER(ID_EXIT, OnExitButton)
+        COMMAND_ID_HANDLER(ID_APP_EXIT, OnExitButton)
+        COMMAND_ID_HANDLER(ID_HELP, OnHelpButton)
+        COMMAND_ID_HANDLER(ID_APP_ABOUT, OnAboutButton)
+        COMMAND_ID_HANDLER(ID_USERS, OnUsersButton)
         COMMAND_ID_HANDLER(ID_SHOWHIDE, OnShowHideButton)
+        COMMAND_ID_HANDLER(ID_INSTALL_SERVICE, OnInstallServiceButton)
+        COMMAND_ID_HANDLER(ID_REMOVE_SERVICE, OnRemoveServiceButton)
 
         CHAIN_MSG_MAP(TrayIcon<MainDialog>)
     END_MSG_MAP()
 
-private:
     BOOL OnInitDialog(CWindow focus_window, LPARAM lParam);
     void OnClose();
 
-    LRESULT OnDefaultPortClicked(WORD notify_code, WORD id, HWND ctrl, BOOL &handled);
-    LRESULT OnStartServer(WORD notify_code, WORD id, HWND hWndCtl, BOOL &handled);
-    LRESULT OnConnectButton(WORD notify_code, WORD id, HWND hWndCtl, BOOL &handled);
+    LRESULT OnDefaultPortClicked(WORD notify_code, WORD id, HWND ctrl, BOOL& handled);
+    LRESULT OnStartServer(WORD notify_code, WORD id, HWND hWndCtl, BOOL& handled);
+    LRESULT OnConnectButton(WORD notify_code, WORD id, HWND hWndCtl, BOOL& handled);
 
-    LRESULT OnExitButton(WORD notify_code, WORD id, HWND ctrl, BOOL &handled);
-    LRESULT OnShowHideButton(WORD notify_code, WORD id, HWND ctrl, BOOL &handled);
+    LRESULT OnExitButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled);
+    LRESULT OnHelpButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled);
+    LRESULT OnAboutButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled);
+    LRESULT OnUsersButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled);
+    LRESULT OnShowHideButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled);
+    LRESULT OnInstallServiceButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled);
+    LRESULT OnRemoveServiceButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled);
 
     void InitAddressesList();
     void UpdateConnectedClients();
 
-    void OnServerEvent(Host::Event type);
+    void OnServerEvent(Host::SessionEvent event);
 
 private:
+    CMenu main_menu_;
+
     bool is_hidden_;
 
-    std::unique_ptr<ServerTCP<Host>> server_;
+    std::unique_ptr<ServerTCP<Host>> host_server_;
     Lock server_lock_;
     std::atomic_int client_count_;
 

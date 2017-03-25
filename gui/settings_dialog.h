@@ -28,6 +28,12 @@ class SettingsDialog : public CDialogImpl<SettingsDialog>
 public:
     enum { IDD = IDD_SETTINGS };
 
+    const ScreenConfig& GetConfig() const
+    {
+        return config_;
+    }
+
+private:
     BEGIN_MSG_MAP(SettingsDialog)
         MSG_WM_INITDIALOG(OnInitDialog)
         MSG_WM_CLOSE(OnClose)
@@ -38,28 +44,22 @@ public:
         COMMAND_ID_HANDLER(IDCANCEL, OnCancelButton)
     END_MSG_MAP()
 
-    const ScreenConfig& GetConfig() const
-    {
-        return config_;
-    }
-
-private:
     BOOL OnInitDialog(CWindow focus_window, LPARAM lParam);
     void OnClose();
     void OnHScroll(UINT code, UINT pos, HWND ctrl);
 
-    LRESULT OnCodecChanged(WORD notify_code, WORD id, HWND ctrl, BOOL &handled);
-    LRESULT OnOkButton(WORD notify_code, WORD id, HWND ctrl, BOOL &handled);
-    LRESULT OnCancelButton(WORD notify_code, WORD id, HWND ctrl, BOOL &handled);
+    LRESULT OnCodecChanged(WORD notify_code, WORD id, HWND ctrl, BOOL& handled);
+    LRESULT OnOkButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled);
+    LRESULT OnCancelButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled);
 
     void InitCodecList();
     void InitColorDepthList();
-    void AddColorDepth(CComboBox &combobox, int index, UINT string_id);
+    void AddColorDepth(CComboBox& combobox, int index, UINT string_id);
     void DoCodecChanged();
 
 private:
-    static const int kVP9 = 0;
-    static const int kVP8 = 1;
+    static const int kVP9  = 0;
+    static const int kVP8  = 1;
     static const int kZLIB = 2;
 
     static const int kARGB   = 0;

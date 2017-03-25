@@ -24,6 +24,7 @@ class AboutDialog : public CDialogImpl<AboutDialog>
 public:
     enum { IDD = IDD_ABOUT };
 
+private:
     BEGIN_MSG_MAP(AboutDialog)
         MSG_WM_INITDIALOG(OnInitDialog)
         MSG_WM_CLOSE(OnClose)
@@ -33,13 +34,12 @@ public:
         COMMAND_ID_HANDLER(IDC_SITE_BUTTON, OnSiteButton)
     END_MSG_MAP()
 
-private:
     BOOL OnInitDialog(CWindow focus_window, LPARAM lParam);
     void OnClose();
 
-    LRESULT OnCloseButton(WORD notify_code, WORD id, HWND ctrl, BOOL &handled);
-    LRESULT OnDonateButton(WORD notify_code, WORD id, HWND ctrl, BOOL &handled);
-    LRESULT OnSiteButton(WORD notify_code, WORD id, HWND ctrl, BOOL &handled);
+    LRESULT OnCloseButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled);
+    LRESULT OnDonateButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled);
+    LRESULT OnSiteButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled);
 
 private:
     CIcon icon_;

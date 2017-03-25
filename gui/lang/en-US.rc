@@ -5,33 +5,33 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "resource.h"
+#include "gui/resource.h"
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 // UTF-8
 #pragma code_page(65001)
 
-IDD_MAIN DIALOGEX 100, 100, 335, 150
+IDD_MAIN DIALOGEX 100, 100, 335, 152
 STYLE DS_SHELLFONT | WS_BORDER | WS_OVERLAPPED | WS_SYSMENU | DS_CENTER | WS_MINIMIZEBOX | WS_CAPTION
 CAPTION "Aspia Remote Desktop"
 FONT 8, "MS Shell Dlg"
 BEGIN
-    GROUPBOX "Server", -1, 5, 5, 160, 140
+    GROUPBOX "Server", -1, 5, 5, 160, 130
     LTEXT "List your IP-addresses:", -1, 12, 17, 100, 9
-    CONTROL "", IDC_IP_LIST, "SysListView32", WS_BORDER | WS_VSCROLL | WS_TABSTOP | LVS_SINGLESEL | LVS_NOSORTHEADER | LVS_NOCOLUMNHEADER | LVS_SHOWSELALWAYS | LVS_REPORT, 12, 28, 146, 65
-    LTEXT "", IDC_CLIENT_COUNT_TEXT, 12, 100, 100, 9
-    LTEXT "Server stopped.", IDC_SERVER_STATUS_TEXT, 12, 115, 100, 9
-    PUSHBUTTON "&Start", IDC_START_SERVER_BUTTON, 98, 125, 60, 14
+    CONTROL "", IDC_IP_LIST, "SysListView32", WS_BORDER | WS_VSCROLL | WS_TABSTOP | LVS_SINGLESEL | LVS_NOSORTHEADER | LVS_NOCOLUMNHEADER | LVS_SHOWSELALWAYS | LVS_REPORT, 12, 28, 146, 55
+    LTEXT "", IDC_CLIENT_COUNT_TEXT, 12, 90, 100, 9
+    LTEXT "Server stopped.", IDC_SERVER_STATUS_TEXT, 12, 105, 100, 9
+    PUSHBUTTON "&Start", IDC_START_SERVER_BUTTON, 98, 115, 60, 14
 
-    GROUPBOX "Client", -1, 170, 5, 160, 140
+    GROUPBOX "Client", -1, 170, 5, 160, 130
     LTEXT "Server Address:", -1, 177, 17, 90, 9
     EDITTEXT IDC_SERVER_ADDRESS_EDIT, 177, 28, 146, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | ES_AUTOHSCROLL
 
     LTEXT "Server Port:", -1, 177, 47, 100, 9
     EDITTEXT IDC_SERVER_PORT_EDIT, 177, 58, 50, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | ES_AUTOHSCROLL | ES_NUMBER
     AUTOCHECKBOX "Use default", IDC_SERVER_DEFAULT_PORT_CHECK, 235, 60, 60, 8
-    PUSHBUTTON "&Connect", IDC_CONNECT_BUTTON, 263, 125, 60, 14
+    PUSHBUTTON "&Connect", IDC_CONNECT_BUTTON, 263, 115, 60, 14
 END
 
 IDD_STATUS DIALOGEX 100, 100, 251, 90
@@ -43,19 +43,19 @@ BEGIN
     DEFPUSHBUTTON "&Cancel", IDCANCEL, 196, 70, 50, 14
 END
 
-IDD_AUTH DIALOGEX 100, 100, 241, 73
+IDD_AUTH DIALOGEX 100, 100, 194, 73
 STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
 CAPTION "Authorization"
 FONT 8, "MS Shell Dlg"
 BEGIN
-    LTEXT "User Name:", -1, 10, 15, 77, 10
-    EDITTEXT IDC_USERNAME_EDIT, 100, 11, 130, 14, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
+    LTEXT "User Name:", -1, 10, 15, 65, 10
+    EDITTEXT IDC_USERNAME_EDIT, 75, 11, 108, 14, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
 
-    LTEXT "Password:", -1, 10, 35, 77, 10
-    EDITTEXT IDC_PASSWORD_EDIT, 100, 31, 130, 14, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
+    LTEXT "Password:", -1, 10, 35, 65, 10
+    EDITTEXT IDC_PASSWORD_EDIT, 75, 31, 108, 14, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
 
-    DEFPUSHBUTTON "&OK", IDOK, 124, 53, 50, 14
-    PUSHBUTTON "&Cancel", IDCANCEL, 178, 53, 50, 14
+    DEFPUSHBUTTON "&OK", IDOK, 78, 53, 50, 14
+    PUSHBUTTON "&Cancel", IDCANCEL, 134, 53, 50, 14
 END
 
 IDD_SETTINGS DIALOGEX 20, 16, 165, 199
@@ -80,9 +80,9 @@ BEGIN
     EDITTEXT IDC_INTERVAL_EDIT, 117, 109, 32, 14, ES_RIGHT | ES_NUMBER | WS_GROUP
     CONTROL "", IDC_INTERVAL_UPDOWN, "msctls_updown32", UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | WS_BORDER | WS_GROUP, 140, 109, 12, 14
 
-    AUTOCHECKBOX "&Disable desktop effects", IDC_DESKTOP_EFFECTS_CHECK, 15, 129, 125, 8
-    AUTOCHECKBOX "&Show remote cursor", IDC_REMOTE_CURSOR_CHECK, 15, 143, 125, 8
-    AUTOCHECKBOX "&Auto send clipboard", IDC_AUTOSEND_CLIPBOARD_CHECK, 15, 157, 125, 8
+    AUTOCHECKBOX "Enable &desktop effects", IDC_ENABLE_DESKTOP_EFFECTS_CHECK, 15, 129, 125, 8
+    AUTOCHECKBOX "Enable cursor &shape", IDC_ENABLE_CURSOR_SHAPE_CHECK, 15, 143, 125, 8
+    AUTOCHECKBOX "Enable &clipboard", IDC_ENABLE_CLIPBOARD_CHECK, 15, 157, 125, 8
 
     DEFPUSHBUTTON "&OK", IDOK, 33, 179, 60, 14
     PUSHBUTTON "&Cancel", IDCANCEL, 98, 179, 60, 14
@@ -104,6 +104,52 @@ BEGIN
     PUSHBUTTON "&Visit site", IDC_SITE_BUTTON, 13, 156, 75, 15
 
     PUSHBUTTON "&Close", IDOK, 165, 181, 50, 14
+END
+
+IDD_VIEWER DIALOGEX 100, 100, 200, 200
+STYLE DS_SHELLFONT | WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX
+CAPTION "Aspia Remote Desktop"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    // Nothing
+END
+
+IDD_USER_ADD DIALOGEX 100, 100, 240, 225
+STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "Add User"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT "User Name:", -1, 10, 15, 77, 10
+    EDITTEXT IDC_USERNAME_EDIT, 100, 11, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
+    LTEXT "Password:", -1, 10, 35, 77, 10
+    EDITTEXT IDC_PASSWORD_EDIT, 100, 31, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
+    LTEXT "Password (retry):", -1, 10, 55, 77, 10
+    EDITTEXT IDC_PASSWORD2_EDIT, 100, 51, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
+
+    AUTOCHECKBOX "Disable User", IDC_DISABLE_USER_CHECK, 105, 72, 122, 8
+
+    LTEXT "Allowed features:", -1, 10, 85, 77, 10
+    CONTROL "", IDC_USER_FEATURES_LIST, "SysListView32", LVS_REPORT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP, 9, 97, 220, 101
+
+    PUSHBUTTON "&Add", IDOK, 124, 204, 50, 14
+    PUSHBUTTON "&Close", IDCANCEL, 180, 204, 50, 14
+END
+
+IDD_USERS DIALOGEX 100, 100, 230, 227
+STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "User Management"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    GROUPBOX "Users", -1, 5, 5, 217, 197
+
+    CONTROL "", IDC_USER_LIST, "SysListView32", LVS_REPORT | LVS_SORTASCENDING | WS_BORDER | WS_TABSTOP, 12, 18, 204, 160
+
+    PUSHBUTTON "&Add", IDС_ADD_USER, 57, 182, 50, 14
+    PUSHBUTTON "&Edit", IDC_EDIT_USER, 111, 182, 50, 14
+    PUSHBUTTON "&Delete", IDC_DELETE_USER, 166, 182, 50, 14
+
+    PUSHBUTTON "&OK", IDOK, 119, 207, 50, 14
+    PUSHBUTTON "&Cancel", IDCANCEL, 173, 207, 50, 14
 END
 
 IDR_SHORTCUTS MENU
@@ -129,7 +175,7 @@ BEGIN
         MENUITEM "Reboot",    ID_POWER_REBOOT
         MENUITEM "Hibernate", ID_POWER_HIBERNATE
         MENUITEM "Suspend",   ID_POWER_SUSPEND
-        MENUITEM "LogOff",    ID_POWER_LOGOFF
+        MENUITEM "Logoff",    ID_POWER_LOGOFF
     END
 END
 
@@ -138,7 +184,28 @@ BEGIN
     POPUP "popup"
     BEGIN
         MENUITEM "Show / Hide", ID_SHOWHIDE
-        MENUITEM "Exit", ID_EXIT
+        MENUITEM "Exit", ID_APP_EXIT
+    END
+END
+
+IDR_MAIN MENU
+BEGIN
+    POPUP "&Aspia"
+    BEGIN
+        POPUP "Service"
+        BEGIN
+            MENUITEM "&Install", ID_INSTALL_SERVICE
+            MENUITEM "&Remove", ID_REMOVE_SERVICE
+        END
+        MENUITEM "&Users...", ID_USERS
+        MENUITEM SEPARATOR
+        MENUITEM "&Exit\tAlt+F4", ID_APP_EXIT
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Online Help\tF1", ID_HELP
+        MENUITEM SEPARATOR
+        MENUITEM "&About", ID_APP_ABOUT
     END
 END
 
@@ -151,8 +218,9 @@ BEGIN
     IDS_STOP                      "&Stop"
     IDS_NO_CLIENTS                "No connected clients."
     IDS_CLIENT_COUNT_FORMAT       "Connected clients: %d"
-    IDS_DONATE_LINK               "http://aspia.org/donate"
-    IDS_SITE_LINK                 "http://aspia.org"
+    IDS_DONATE_LINK               "https://aspia.org/donate"
+    IDS_SITE_LINK                 "https://aspia.org"
+    IDS_HELP_LINK                 "https://aspia.org/help"
 
     IDS_ABOUT_STRING "Aspia Remote Desktop is free software released under GNU LGPL license.\r\n\
                       You can get a copy of GNU LGPL license here:\r\n\
@@ -172,7 +240,6 @@ BEGIN
                       • zlib-ng © 1995-2013 Jean-loup Gailly and Mark Adler, Zlib License\r\n\
                       • Fugue Icons © 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 License"
 
-    IDS_BELL                       "Send an audio bell to a remote computer"
     IDS_POWER                      "Power management of the remote computer"
     IDS_AUTO_SIZE                  "Auto size window"
     IDS_SETTINGS                   "Settings"
@@ -180,11 +247,12 @@ BEGIN
     IDS_EXIT                       "Close the current connection"
     IDS_FULLSCREEN                 "Switch to full screen mode"
     IDS_SHORTCUTS                  "Send a keyboard shortcut"
-    IDS_CLIP_RECV                  "Get remote clipboard"
-    IDS_CLIP_SEND                  "Send local clipboard"
     IDS_ABOUT                      "About program"
     IDS_STATUS_CONNECTING_FORMAT   "Connection to %s:%i"
     IDS_STATUS_CONNECTED           "Connected"
+    IDS_STATUS_NOT_CONNECTED       "Unable to establish connection"
+    IDS_STATUS_ACCESS_DENIED       "Access denied. Invalid username and password or does not have sufficient permissions for the session"
+    IDS_STATUS_KEY_EXCHANGE_ERROR  "Error exchange of encryption keys"
     IDS_CONFIRMATION               "Confirmation"
     IDS_CONF_POWER_SHUTDOWN        "Are you sure you want to shut down a remote computer?"
     IDS_CONF_POWER_REBOOT          "Are you sure you want to reboot the remote computer?"
@@ -200,4 +268,5 @@ BEGIN
     IDS_8BIT                       "256 colors (8 bit)"
     IDS_6BIT                       "64 colors (6 bit)"
     IDS_3BIT                       "8 colors (3 bit)"
+    IDS_INFORMATION                "Information"
 END

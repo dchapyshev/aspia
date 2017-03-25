@@ -23,7 +23,6 @@ BOOL AboutDialog::OnInitDialog(CWindow focus_window, LPARAM lParam)
     CEdit edit(GetDlgItem(IDC_ABOUT_EDIT));
 
     edit.AppendText(about);
-    edit.SetSelNone();
 
     GetDlgItem(IDC_DONATE_BUTTON).SetFocus();
 
@@ -35,29 +34,25 @@ void AboutDialog::OnClose()
     EndDialog(0);
 }
 
-LRESULT AboutDialog::OnCloseButton(WORD notify_code, WORD id, HWND ctrl, BOOL &handled)
+LRESULT AboutDialog::OnCloseButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled)
 {
     PostMessageW(WM_CLOSE);
     return 0;
 }
 
-LRESULT AboutDialog::OnDonateButton(WORD notify_code, WORD id, HWND ctrl, BOOL &handled)
+LRESULT AboutDialog::OnDonateButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled)
 {
     CString link;
     link.LoadStringW(IDS_DONATE_LINK);
-
     ShellExecuteW(nullptr, L"open", link, nullptr, nullptr, SW_SHOWNORMAL);
-
     return 0;
 }
 
-LRESULT AboutDialog::OnSiteButton(WORD notify_code, WORD id, HWND ctrl, BOOL &handled)
+LRESULT AboutDialog::OnSiteButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled)
 {
     CString link;
     link.LoadStringW(IDS_SITE_LINK);
-
     ShellExecuteW(nullptr, L"open", link, nullptr, nullptr, SW_SHOWNORMAL);
-
     return 0;
 }
 

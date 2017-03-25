@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            gui/auth_dialog.h
+// FILE:            gui/users_dialog.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_GUI__AUTH_DIALOG_H
-#define _ASPIA_GUI__AUTH_DIALOG_H
+#ifndef _ASPIA_GUI__USERS_DIALOG_H
+#define _ASPIA_GUI__USERS_DIALOG_H
 
 #include <atlbase.h>
 #include <atlapp.h>
@@ -16,27 +16,30 @@
 #include <atlcrack.h>
 #include <atlmisc.h>
 
-#include <string>
+#include <list>
 
 #include "gui/resource.h"
 
+#include "host/host_user.h"
+
 namespace aspia {
 
-class AuthDialog : public CDialogImpl<AuthDialog>
+class UsersDialog : public CDialogImpl<UsersDialog>
 {
 public:
-    AuthDialog() = default;
-    ~AuthDialog() = default;
+    UsersDialog() = default;
+    ~UsersDialog() = default;
 
-    enum { IDD = IDD_AUTH };
-
-    std::string UserName();
-    std::string Password();
+    enum { IDD = IDD_USERS };
 
 private:
     BEGIN_MSG_MAP(AuthDialog)
         MSG_WM_INITDIALOG(OnInitDialog)
         MSG_WM_CLOSE(OnClose)
+
+        COMMAND_ID_HANDLER(IDÑ_ADD_USER, OnAddButton)
+        COMMAND_ID_HANDLER(IDC_EDIT_USER, OnEditButton)
+        COMMAND_ID_HANDLER(IDC_DELETE_USER, OnDeleteButton)
 
         COMMAND_ID_HANDLER(IDOK, OnOkButton)
         COMMAND_ID_HANDLER(IDCANCEL, OnCancelButton)
@@ -44,14 +47,16 @@ private:
 
     BOOL OnInitDialog(CWindow focus_window, LPARAM lParam);
     void OnClose();
+    LRESULT OnAddButton(WORD notify_code, WORD id, HWND hWndCtl, BOOL& handled);
+    LRESULT OnEditButton(WORD notify_code, WORD id, HWND hWndCtl, BOOL& handled);
+    LRESULT OnDeleteButton(WORD notify_code, WORD id, HWND hWndCtl, BOOL& handled);
     LRESULT OnOkButton(WORD notify_code, WORD id, HWND hWndCtl, BOOL& handled);
     LRESULT OnCancelButton(WORD notify_code, WORD id, HWND hWndCtl, BOOL& handled);
 
 private:
-    std::string username_;
-    std::string password_;
+    std::list<HostUser> user_list_;
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_GUI__AUTH_DIALOG_H
+#endif // _ASPIA_GUI__USERS_DIALOG_H

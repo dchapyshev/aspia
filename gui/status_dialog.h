@@ -17,21 +17,26 @@
 
 #include "base/thread.h"
 
+#include "gui/dialog_thread.h"
 #include "gui/viewer_window.h"
 #include "gui/resource.h"
 
 #include "network/client_tcp.h"
-#include "client/client.h"
+#include "client/client_session_desktop.h"
 
 namespace aspia {
 
 class StatusDialog :
     public CDialogImpl<StatusDialog>,
-    public Thread
+    private ClientTCP
 {
 public:
     enum { IDD = IDD_STATUS };
 
+    StatusDialog(const ClientConfig& config);
+    ~StatusDialog() = default;
+
+private:
     BEGIN_MSG_MAP(StatusDialog)
         MSG_WM_INITDIALOG(OnInitDialog)
         MSG_WM_CLOSE(OnClose)
@@ -40,52 +45,21 @@ public:
         COMMAND_ID_HANDLER(IDCANCEL, OnCancelButton)
     END_MSG_MAP()
 
-    StatusDialog(const ClientConfig &config) :
-        config_(config)
-    {
-        Start();
-    }
-
-    ~StatusDialog()
-    {
-        if (IsActiveThread())
-        {
-            Stop();
-            WaitForEnd();
-        }
-    }
-
-    void OnClientEvent(Client::Event type);
-
-private:
     BOOL OnInitDialog(CWindow focus_window, LPARAM lParam);
     void OnClose();
-    LRESULT OnAppMessage(UINT msg, WPARAM wParam, LPARAM lParam, BOOL &handled);
-    LRESULT OnCancelButton(WORD notify_code, WORD id, HWND ctrl, BOOL &handled);
+    LRESULT OnAppMessage(UINT msg, WPARAM wParam, LPARAM lParam, BOOL& handled);
+    LRESULT OnCancelButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled);
 
-    void OnConnected(std::unique_ptr<Socket> &sock);
-    void OnError(const char *reason);
+    void OnConnectionSuccess(std::unique_ptr<Socket> sock) override;
+    void OnConnectionError() override;
 
-    void AddMessage(const WCHAR *message);
+    void AddMessage(const WCHAR* message);
     void AddMessage(UINT message_id);
-
-    void Worker() override
-    {
-        DoModal(nullptr);
-    }
-
-    void OnStop() override
-    {
-        PostMessageW(WM_CLOSE);
-    }
 
 private:
     ClientConfig config_;
 
-    std::unique_ptr<ClientTCP> tcp_;
-    std::unique_ptr<Client> client_;
-
-    std::unique_ptr<ViewerWindow> viewer_;
+    std::unique_ptr<DialogThread<ViewerWindow>> viewer_window_;
 };
 
 } // namespace aspia

@@ -28,10 +28,7 @@ void Timer::Start(HWND window, UINT elapse)
     {
         window_ = window;
 
-        if (!SetTimer(window_, id_, elapse, nullptr))
-        {
-            LOG(ERROR) << "SetTimer() failed: " << GetLastError();
-        }
+        SetTimer(window_, id_, elapse, nullptr);
 
         active_ = true;
     }
@@ -41,10 +38,7 @@ void Timer::Stop()
 {
     if (active_)
     {
-        if (!KillTimer(window_, id_))
-        {
-            LOG(ERROR) << "KillTimer() failed: " << GetLastError();
-        }
+        KillTimer(window_, id_);
 
         active_ = false;
     }

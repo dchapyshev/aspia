@@ -24,35 +24,35 @@ void SettingsDialog::InitColorDepthList()
 
     const PixelFormat &format = config_.Format();
 
-    if (format.IsEqualTo(PixelFormat::ARGB()))
+    if (format.IsEqual(PixelFormat::ARGB()))
     {
         combo.SetCurSel(kARGB);
     }
-    else if (format.IsEqualTo(PixelFormat::RGB888()))
+    else if (format.IsEqual(PixelFormat::RGB888()))
     {
         combo.SetCurSel(kRGB888);
     }
-    else if (format.IsEqualTo(PixelFormat::RGB565()))
+    else if (format.IsEqual(PixelFormat::RGB565()))
     {
         combo.SetCurSel(kRGB565);
     }
-    else if (format.IsEqualTo(PixelFormat::RGB555()))
+    else if (format.IsEqual(PixelFormat::RGB555()))
     {
         combo.SetCurSel(kRGB555);
     }
-    else if (format.IsEqualTo(PixelFormat::RGB444()))
+    else if (format.IsEqual(PixelFormat::RGB444()))
     {
         combo.SetCurSel(kRGB444);
     }
-    else if (format.IsEqualTo(PixelFormat::RGB332()))
+    else if (format.IsEqual(PixelFormat::RGB332()))
     {
         combo.SetCurSel(kRGB332);
     }
-    else if (format.IsEqualTo(PixelFormat::RGB222()))
+    else if (format.IsEqual(PixelFormat::RGB222()))
     {
         combo.SetCurSel(kRGB222);
     }
-    else if (format.IsEqualTo(PixelFormat::RGB111()))
+    else if (format.IsEqual(PixelFormat::RGB111()))
     {
         combo.SetCurSel(kRGB111);
     }
@@ -114,14 +114,14 @@ BOOL SettingsDialog::OnInitDialog(CWindow focus_window, LPARAM lParam)
     updown.SetRange(kMinUpdateInterval, kMaxUpdateInterval);
     updown.SetPos(config_.UpdateInterval());
 
-    CheckDlgButton(IDC_DESKTOP_EFFECTS_CHECK,
-                   config_.DisableDesktopEffects() ? BST_CHECKED : BST_UNCHECKED);
+    CheckDlgButton(IDC_ENABLE_DESKTOP_EFFECTS_CHECK,
+                   config_.DesktopEffects() ? BST_CHECKED : BST_UNCHECKED);
 
-    CheckDlgButton(IDC_REMOTE_CURSOR_CHECK,
-                   config_.ShowRemoteCursor() ? BST_CHECKED : BST_UNCHECKED);
+    CheckDlgButton(IDC_ENABLE_CURSOR_SHAPE_CHECK,
+                   config_.CursorShape() ? BST_CHECKED : BST_UNCHECKED);
 
-    CheckDlgButton(IDC_AUTOSEND_CLIPBOARD_CHECK,
-                   config_.AutoSendClipboard() ? BST_CHECKED : BST_UNCHECKED);
+    CheckDlgButton(IDC_ENABLE_CLIPBOARD_CHECK,
+                   config_.Clipboard() ? BST_CHECKED : BST_UNCHECKED);
 
     return FALSE;
 }
@@ -160,7 +160,7 @@ void SettingsDialog::DoCodecChanged()
     GetDlgItem(IDC_BEST_TEXT).EnableWindow(has_pixel_format);
 }
 
-LRESULT SettingsDialog::OnCodecChanged(WORD notify_code, WORD id, HWND ctrl, BOOL &handled)
+LRESULT SettingsDialog::OnCodecChanged(WORD notify_code, WORD id, HWND ctrl, BOOL& handled)
 {
     if (notify_code == CBN_SELCHANGE)
     {
@@ -170,29 +170,60 @@ LRESULT SettingsDialog::OnCodecChanged(WORD notify_code, WORD id, HWND ctrl, BOO
     return 0;
 }
 
-LRESULT SettingsDialog::OnOkButton(WORD notify_code, WORD id, HWND ctrl, BOOL &handled)
+LRESULT SettingsDialog::OnOkButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled)
 {
     int codec = CComboBox(GetDlgItem(IDC_CODEC_COMBO)).GetCurSel();
 
     switch (codec)
     {
-        case kVP8:  config_.SetEncoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);  break;
-        case kVP9:  config_.SetEncoding(proto::VideoEncoding::VIDEO_ENCODING_VP9);  break;
-        case kZLIB: config_.SetEncoding(proto::VideoEncoding::VIDEO_ENCODING_ZLIB); break;
+        case kVP8:
+            config_.SetEncoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
+            break;
+
+        case kVP9:
+            config_.SetEncoding(proto::VideoEncoding::VIDEO_ENCODING_VP9);
+            break;
+
+        case kZLIB:
+            config_.SetEncoding(proto::VideoEncoding::VIDEO_ENCODING_ZLIB);
+            break;
     }
 
     if (codec == kZLIB)
     {
         switch (CComboBox(GetDlgItem(IDC_COLOR_DEPTH_COMBO)).GetCurSel())
         {
-            case kARGB:   config_.SetFormat(PixelFormat::ARGB());   break;
-            case kRGB888: config_.SetFormat(PixelFormat::RGB888()); break;
-            case kRGB565: config_.SetFormat(PixelFormat::RGB565()); break;
-            case kRGB555: config_.SetFormat(PixelFormat::RGB555()); break;
-            case kRGB444: config_.SetFormat(PixelFormat::RGB444()); break;
-            case kRGB332: config_.SetFormat(PixelFormat::RGB332()); break;
-            case kRGB222: config_.SetFormat(PixelFormat::RGB222()); break;
-            case kRGB111: config_.SetFormat(PixelFormat::RGB111()); break;
+            case kARGB:
+                config_.SetFormat(PixelFormat::ARGB());
+                break;
+
+            case kRGB888:
+                config_.SetFormat(PixelFormat::RGB888());
+                break;
+
+            case kRGB565:
+                config_.SetFormat(PixelFormat::RGB565());
+                break;
+
+            case kRGB555:
+                config_.SetFormat(PixelFormat::RGB555());
+                break;
+
+            case kRGB444:
+                config_.SetFormat(PixelFormat::RGB444());
+                break;
+
+            case kRGB332:
+                config_.SetFormat(PixelFormat::RGB332());
+                break;
+
+            case kRGB222:
+                config_.SetFormat(PixelFormat::RGB222());
+                break;
+
+            case kRGB111:
+                config_.SetFormat(PixelFormat::RGB111());
+                break;
         }
 
         int32_t compress_ratio = CTrackBarCtrl(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR)).GetPos();
@@ -202,14 +233,14 @@ LRESULT SettingsDialog::OnOkButton(WORD notify_code, WORD id, HWND ctrl, BOOL &h
         }
     }
 
-    bool value = IsDlgButtonChecked(IDC_DESKTOP_EFFECTS_CHECK) == BST_CHECKED;
-    config_.SetDisableDesktopEffects(value);
+    bool value = IsDlgButtonChecked(IDC_ENABLE_DESKTOP_EFFECTS_CHECK) == BST_CHECKED;
+    config_.SetDesktopEffects(value);
 
-    value = IsDlgButtonChecked(IDC_REMOTE_CURSOR_CHECK) == BST_CHECKED;
-    config_.SetShowRemoteCursor(value);
+    value = IsDlgButtonChecked(IDC_ENABLE_CURSOR_SHAPE_CHECK) == BST_CHECKED;
+    config_.SetCursorShape(value);
 
-    value = IsDlgButtonChecked(IDC_AUTOSEND_CLIPBOARD_CHECK) == BST_CHECKED;
-    config_.SetAutoSendClipboard(value);
+    value = IsDlgButtonChecked(IDC_ENABLE_CLIPBOARD_CHECK) == BST_CHECKED;
+    config_.SetClipboard(value);
 
     int32_t interval = CUpDownCtrl(GetDlgItem(IDC_INTERVAL_UPDOWN)).GetPos();
     if (interval >= kMinUpdateInterval && interval <= kMaxUpdateInterval)
@@ -221,13 +252,13 @@ LRESULT SettingsDialog::OnOkButton(WORD notify_code, WORD id, HWND ctrl, BOOL &h
     return 0;
 }
 
-LRESULT SettingsDialog::OnCancelButton(WORD notify_code, WORD id, HWND ctrl, BOOL &handled)
+LRESULT SettingsDialog::OnCancelButton(WORD notify_code, WORD id, HWND ctrl, BOOL& handled)
 {
     PostMessageW(WM_CLOSE);
     return 0;
 }
 
-void SettingsDialog::AddColorDepth(CComboBox &combobox, int index, UINT string_id)
+void SettingsDialog::AddColorDepth(CComboBox& combobox, int index, UINT string_id)
 {
     CString title;
     title.LoadStringW(string_id);

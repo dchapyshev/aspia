@@ -16,10 +16,11 @@
 #include <atlmisc.h>
 #include <functional>
 
-#include "base/lock.h"
-#include "desktop_capture/dib_buffer.h"
+#include "base/scoped_hdc.h"
+#include "base/read_write_lock.h"
+#include "desktop_capture/desktop_frame_dib.h"
 #include "desktop_capture/mouse_cursor.h"
-#include "client/client.h"
+#include "client/client_session_desktop.h"
 #include "gui/timer.h"
 
 namespace aspia {
@@ -27,6 +28,31 @@ namespace aspia {
 class VideoWindow : public CWindowImpl<VideoWindow, CWindow>
 {
 public:
+    explicit VideoWindow(ClientSessionDesktop* client_session);
+    ~VideoWindow();
+
+    DesktopFrame* GetVideoFrame();
+    void VideoFrameUpdated();
+    void ResizeVideoFrame(const DesktopSize& size, const PixelFormat& format);
+
+    void HasFocus(bool has)
+    {
+        has_focus_ = has;
+    }
+
+    CSize GetSize()
+    {
+        AutoReadLock lock(frame_lock_);
+
+        if (!frame_)
+            return CSize();
+
+        return CSize(frame_->Size().Width(), frame_->Size().Height());
+    }
+
+    LRESULT OnMouse(UINT msg, WPARAM wParam, LPARAM lParam, BOOL& handled);
+
+private:
     BEGIN_MSG_MAP(VideoWindow)
         MSG_WM_PAINT(OnPaint)
         MSG_WM_ERASEBKGND(OnEraseBackground)
@@ -42,25 +68,6 @@ public:
         MSG_WM_MOUSELEAVE(OnMouseLeave)
     END_MSG_MAP()
 
-    VideoWindow(Client *client);
-    ~VideoWindow();
-
-    void OnVideoUpdate(const uint8_t *buffer, const DesktopRegion &region);
-    void OnVideoResize(const DesktopSize &size, const PixelFormat &format);
-
-    void HasFocus(bool has)
-    {
-        has_focus_ = has;
-    }
-
-    CSize GetSize()
-    {
-        return CSize(buffer_.Size().Width(), buffer_.Size().Height());
-    }
-
-    LRESULT OnMouse(UINT msg, WPARAM wParam, LPARAM lParam, BOOL &handled);
-
-private:
     LRESULT OnCreate(LPCREATESTRUCT create_struct);
     void OnPaint(CDCHandle dc);
     BOOL OnEraseBackground(CDCHandle dc);
@@ -71,13 +78,13 @@ private:
     void OnHScroll(UINT code, UINT pos, CScrollBar scrollbar);
     void OnVScroll(UINT code, UINT pos, CScrollBar scrollbar);
 
-    void DrawBackground(CPaintDC &target_dc);
-    void UpdateScrollBars();
+    void DrawBackground(CPaintDC& target_dc);
+    void UpdateScrollBars(int width, int height);
     bool Scroll(LONG x, LONG y);
-    bool Scroll(const CPoint &delta);
+    bool Scroll(const CPoint& delta);
 
 private:
-    Client *client_;
+    ClientSessionDesktop* client_session_;
 
     CBrush background_brush_;
 
@@ -86,9 +93,10 @@ private:
     CPoint scroll_pos_;
 
     ScopedCreateDC screen_dc_;
+    ScopedCreateDC memory_dc_;
 
-    DibBuffer buffer_;
-    Lock buffer_lock_;
+    std::unique_ptr<DesktopFrameDib> frame_;
+    ReadWriteLock frame_lock_;
 
     CPoint prev_pos_;
     uint8_t prev_mask_;
