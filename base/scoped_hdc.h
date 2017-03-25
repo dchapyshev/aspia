@@ -11,6 +11,7 @@
 #include "aspia_config.h"
 
 #include "base/logging.h"
+#include "base/macros.h"
 
 namespace aspia {
 
@@ -40,7 +41,8 @@ public:
 
     ~ScopedGetDC()
     {
-        if (hdc_) ReleaseDC(hwnd_, hdc_);
+        if (hdc_)
+            ReleaseDC(hwnd_, hdc_);
     }
 
     operator HDC() { return hdc_; }

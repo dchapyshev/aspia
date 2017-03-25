@@ -12,39 +12,50 @@
 
 #include <stdint.h>
 
+#include "base/scoped_handle.h"
+#include "base/macros.h"
+
 namespace aspia {
+
+typedef HANDLE ProcessHandle;
+
+static const ProcessHandle kNullProcessHandle = nullptr;
 
 class Process
 {
 public:
-    ~Process();
+    Process();
+    Process(ProcessHandle process_handle);
+    Process(Process&& other);
+    ~Process() = default;
 
-    enum class Priority
-    {
-        Unknown     = 0,
-        Idle        = 1,
-        BelowNormal = 2,
-        Normal      = 3,
-        AboveNormal = 4,
-        High        = 5,
-        RealTime    = 6
-    };
+    enum class Priority { Unknown, Idle, BelowNormal, Normal, AboveNormal, High, RealTime };
 
     static Process Current();
 
+    bool IsValid() const;
+    bool IsCurrent() const;
+
     Priority GetPriority();
     bool SetPriority(Priority priority);
-    uint32_t GetId() const;
+    uint32_t Pid() const;
+    ProcessHandle Handle() const;
+    void Terminate(uint32_t exit_code);
 
-    static uint32_t GetCurrentId();
-    static bool IsHaveAdminRights();
-    static bool Elevate(const WCHAR *command_line);
+    bool HasAdminRights();
+
+    static bool ElevateProcess();
+
+    bool IsElevated();
+
+    void Close();
+
+    Process& operator=(Process&& other);
 
 private:
-    explicit Process(HANDLE process);
+    ProcessHandle process_handle_;
 
-private:
-    HANDLE process_;
+    DISALLOW_COPY_AND_ASSIGN(Process);
 };
 
 } // namespace aspia

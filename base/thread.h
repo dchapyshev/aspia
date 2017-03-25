@@ -27,29 +27,7 @@ public:
     // Для запуска потока необходимо вызвать метод Start().
     //
     Thread();
-    virtual ~Thread();
-
-    // Запускает поток.
-    void Start();
-
-    //
-    // Метод для инициации завершения потока.
-    // При вызове данного метода автоматически вызывается реализованный
-    // классом-потомком метод OnStop().
-    //
-    void Stop();
-
-    //
-    // Возвращает true, если поток находится в стадии завершения и false,
-    // если нет.
-    //
-    bool IsThreadTerminating() const;
-
-    //
-    // Возаращает true, если поток выполняется (выполняется метод Worker())
-    // и false, если не выполняется.
-    //
-    bool IsActiveThread() const;
+    virtual ~Thread() = default;
 
     enum class Priority
     {
@@ -62,16 +40,40 @@ public:
         TimeCritical // Наивысший
     };
 
+    // Запускает поток.
+    void Start(Priority priority = Priority::Normal);
+
+    //
+    // Метод для инициации завершения потока.
+    // При первом вызове данного метода автоматически вызывается реализованный
+    // классом-потомком метод OnStop().
+    //
+    void Stop();
+
+    //
+    // Возвращает true, если поток находится в стадии завершения и false,
+    // если нет.
+    //
+    bool IsTerminating() const;
+
+    //
+    // Возаращает true, если поток выполняется (выполняется метод Worker())
+    // и false, если не выполняется.
+    //
+    bool IsActive() const;
+
     //
     // Устанавливает приоритет выполнения потока.
     //
-    void SetThreadPriority(Priority value = Priority::Normal);
+    void SetPriority(Priority value);
 
     //
     // Ожидание завершения потока.
     // Если поток успешно завершился, то возвращается true, если нет, то false.
     //
-    void WaitForEnd() const;
+    void Wait() const;
+
+    static void Sleep(uint32_t delay_in_ms);
 
 protected:
     //
@@ -100,13 +102,13 @@ private:
     // (выполняется метод Worker(), при завершении которого
     // флаг принимает значение false).
     //
-    std::atomic_bool active_;
+    mutable std::atomic_bool active_;
 
     //
     // Значение true говорит о том, что потоку дана команда завершиться.
     // При вызове метода Stop() флаг принимает значение false.
     //
-    std::atomic_bool end_;
+    std::atomic_bool terminating_;
 
     DISALLOW_COPY_AND_ASSIGN(Thread);
 };

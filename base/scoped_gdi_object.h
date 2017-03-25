@@ -9,13 +9,12 @@
 #define _ASPIA_BASE__SCOPED_GDI_OBJECT_H
 
 #include "aspia_config.h"
-
 #include "base/macros.h"
 
 namespace aspia {
 
 // Like ScopedHandle but for GDI objects.
-template<class T>
+template<class T, class Traits>
 class ScopedGDIObject
 {
 public:
@@ -33,7 +32,7 @@ public:
 
     ~ScopedGDIObject()
     {
-        Close();
+        Traits::Close(object_);
     }
 
     T Get()
@@ -44,7 +43,7 @@ public:
     void Set(T object)
     {
         if (object_ && object != object_)
-            Close();
+            Traits::Close(object_);
         object_ = object;
     }
 
@@ -54,44 +53,75 @@ public:
         return *this;
     }
 
-    T release()
+    T Release()
     {
         T object = object_;
-        object_ = NULL;
+        object_ = nullptr;
         return object;
     }
 
     operator T() { return object_; }
 
 private:
-    void Close()
-    {
-        if (object_)
-            DeleteObject(object_);
-    }
-
     T object_;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedGDIObject);
 };
 
-//
-// An explicit specialization for HICON because we have to call DestroyIcon()
-// instead of DeleteObject() for HICON.
-//
-template<>
-void ScopedGDIObject<HICON>::Close()
+// The traits class that uses DeleteObject() to close a handle.
+template <typename T>
+class DeleteObjectTraits
 {
-    if (object_)
-        DestroyIcon(object_);
-}
+public:
+    // Closes the handle.
+    static void Close(T handle)
+    {
+        if (handle)
+            DeleteObject(handle);
+    }
+
+private:
+    DISALLOW_IMPLICIT_CONSTRUCTORS(DeleteObjectTraits);
+};
+
+// The traits class that uses DestroyCursor() to close a handle.
+class DestroyCursorTraits
+{
+public:
+    // Closes the handle.
+    static void Close(HCURSOR handle)
+    {
+        if (handle)
+            DestroyCursor(handle);
+    }
+
+private:
+    DISALLOW_IMPLICIT_CONSTRUCTORS(DestroyCursorTraits);
+};
+
+// The traits class that uses DestroyIcon() to close a handle.
+class DestroyIconTraits
+{
+public:
+    // Closes the handle.
+    static void Close(HICON handle)
+    {
+        if (handle)
+            DestroyIcon(handle);
+    }
+
+private:
+    DISALLOW_IMPLICIT_CONSTRUCTORS(DestroyIconTraits);
+};
 
 // Typedefs for some common use cases.
-typedef ScopedGDIObject<HBITMAP> ScopedBitmap;
-typedef ScopedGDIObject<HRGN> ScopedRegion;
-typedef ScopedGDIObject<HFONT> ScopedHFONT;
-typedef ScopedGDIObject<HICON> ScopedHICON;
-typedef ScopedGDIObject<HBRUSH> ScopedHBRUSH;
+typedef ScopedGDIObject<HBITMAP, DeleteObjectTraits<HBITMAP>> ScopedBitmap;
+typedef ScopedGDIObject<HRGN, DeleteObjectTraits<HRGN>> ScopedRegion;
+typedef ScopedGDIObject<HFONT, DeleteObjectTraits<HFONT>> ScopedHFONT;
+typedef ScopedGDIObject<HBRUSH, DeleteObjectTraits<HBRUSH>> ScopedHBRUSH;
+
+typedef ScopedGDIObject<HICON, DestroyIconTraits> ScopedHICON;
+typedef ScopedGDIObject<HCURSOR, DestroyCursorTraits> ScopedHCURSOR;
 
 } // namespace aspia
 

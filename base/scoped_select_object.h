@@ -25,13 +25,13 @@ public:
     {
         DCHECK(hdc_);
         DCHECK(object);
-        DCHECK(oldobj_ != NULL && oldobj_ != HGDI_ERROR);
+        DCHECK(oldobj_ != nullptr && oldobj_ != HGDI_ERROR);
     }
 
     ~ScopedSelectObject()
     {
         HGDIOBJ object = SelectObject(hdc_, oldobj_);
-        DCHECK((GetObjectType(oldobj_) != OBJ_REGION && object != NULL) ||
+        DCHECK((GetObjectType(oldobj_) != OBJ_REGION && object != nullptr) ||
                (GetObjectType(oldobj_) == OBJ_REGION && object != HGDI_ERROR));
     }
 

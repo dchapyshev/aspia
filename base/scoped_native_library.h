@@ -18,7 +18,7 @@ namespace aspia {
 class ScopedNativeLibrary
 {
 public:
-    explicit ScopedNativeLibrary(const char *lib_name)
+    explicit ScopedNativeLibrary(const char* lib_name)
     {
         lib_ = LoadLibraryW(UNICODEfromUTF8(lib_name).c_str());
     }
@@ -28,7 +28,7 @@ public:
         FreeLibrary(lib_);
     }
 
-    void* GetFunctionPointer(const char *function_name) const
+    void* GetFunctionPointer(const char* function_name) const
     {
         return GetProcAddress(lib_, function_name);
     }

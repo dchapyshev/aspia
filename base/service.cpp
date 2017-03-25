@@ -6,7 +6,6 @@
 //
 
 #include "base/service.h"
-
 #include "base/logging.h"
 
 namespace aspia {
@@ -14,7 +13,7 @@ namespace aspia {
 static Service *_self = nullptr;
 
 // public
-Service::Service(const WCHAR *service_name) :
+Service::Service(const std::wstring& service_name) :
     service_name_(service_name),
     status_handle_(nullptr)
 {
@@ -37,15 +36,19 @@ DWORD WINAPI Service::ServiceControlHandler(DWORD control_code,
                                             LPVOID event_data,
                                             LPVOID context)
 {
-    Service *self = reinterpret_cast<Service*>(context);
+    UNREFERENCED_PARAMETER(event_type);
+    UNREFERENCED_PARAMETER(event_data);
 
     switch (control_code)
     {
+        case SERVICE_CONTROL_INTERROGATE:
+            return NO_ERROR;
+
+        case SERVICE_CONTROL_SHUTDOWN:
         case SERVICE_CONTROL_STOP:
         {
-            DLOG(INFO) << "Received request to stop service";
+            Service* self = reinterpret_cast<Service*>(context);
 
-            self->SetStatus(SERVICE_STOP_PENDING);
             self->OnStop();
 
             return NO_ERROR;
@@ -53,20 +56,16 @@ DWORD WINAPI Service::ServiceControlHandler(DWORD control_code,
         break;
 
         default:
-        {
-            DLOG(INFO) << "Received unsupported request for this service";
-        }
-        break;
+            return ERROR_CALL_NOT_IMPLEMENTED;
     }
-
-    self->SetStatus(SERVICE_STOP_PENDING);
-
-    return NO_ERROR;
 }
 
 // static
 void Service::ServiceMain(int argc, LPWSTR argv)
 {
+    UNREFERENCED_PARAMETER(argc);
+    UNREFERENCED_PARAMETER(argv);
+
     DCHECK(_self);
 
     _self->status_handle_ =
@@ -99,7 +98,10 @@ void Service::SetStatus(DWORD state)
     status_.dwWaitHint                = 0;
 
     if (state == SERVICE_RUNNING)
-        status_.dwControlsAccepted = SERVICE_ACCEPT_STOP;
+    {
+        status_.dwControlsAccepted =
+            SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SHUTDOWN;
+    }
 
     if (state != SERVICE_RUNNING && state != SERVICE_STOPPED)
     {
@@ -113,8 +115,7 @@ void Service::SetStatus(DWORD state)
     SetServiceStatus(status_handle_, &status_);
 }
 
-// public
-bool Service::DoWork()
+bool Service::Run()
 {
     SERVICE_TABLE_ENTRYW service_table[1] = { 0 };
 
@@ -128,6 +129,11 @@ bool Service::DoWork()
     }
 
     return true;
+}
+
+const std::wstring& Service::ServiceName() const
+{
+    return service_name_;
 }
 
 } // namespace aspia

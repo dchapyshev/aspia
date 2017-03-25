@@ -18,18 +18,18 @@ namespace aspia {
 class ScopedAlignedBuffer
 {
 public:
-    ScopedAlignedBuffer(size_t size, size_t align = 32);
     ScopedAlignedBuffer();
     ~ScopedAlignedBuffer();
 
-    uint8_t* get() const;
-
-    void resize(size_t size, size_t align = 32);
+    uint8_t* Get() const;
+    void Resize(size_t size, size_t align = 32);
+    size_t Size() const;
 
     operator uint8_t*();
 
 private:
-    uint8_t *buffer_;
+    uint8_t* buffer_;
+    size_t size_;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedAlignedBuffer);
 };

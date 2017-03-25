@@ -28,32 +28,57 @@ public:
         // Nothing
     }
 
-    ~ScopedHandle()
+    ScopedHandle(ScopedHandle&& other)
     {
-        close();
+        handle_ = other.handle_;
+        other.handle_ = nullptr;
     }
 
-    HANDLE get()
+    ~ScopedHandle()
+    {
+        Close();
+    }
+
+    HANDLE Get()
     {
         return handle_;
     }
 
-    void set(HANDLE handle)
+    void Set(HANDLE handle)
     {
-        close();
+        Close();
         handle_ = handle;
     }
 
-    HANDLE release()
+    HANDLE* Recieve()
+    {
+        Close();
+        return &handle_;
+    }
+
+    HANDLE Release()
     {
         HANDLE handle = handle_;
         handle_ = nullptr;
         return handle;
     }
 
+    bool IsValid() const
+    {
+        return ((handle_ != nullptr) && (handle_ != INVALID_HANDLE_VALUE));
+    }
+
     ScopedHandle& operator=(HANDLE handle)
     {
-        set(handle);
+        Set(handle);
+        return *this;
+    }
+
+    ScopedHandle& operator=(ScopedHandle&& other)
+    {
+        Close();
+        handle_ = other.handle_;
+        other.handle_ = nullptr;
         return *this;
     }
 
@@ -63,9 +88,9 @@ public:
     }
 
 private:
-    void close()
+    void Close()
     {
-        if (handle_ && handle_ != INVALID_HANDLE_VALUE)
+        if (IsValid())
         {
             if (!CloseHandle(handle_))
             {

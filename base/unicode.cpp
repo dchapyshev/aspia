@@ -9,7 +9,7 @@
 
 namespace aspia {
 
-std::wstring UNICODEfromANSI(const std::string &in)
+std::wstring UNICODEfromANSI(const std::string& in)
 {
     int len = ::MultiByteToWideChar(CP_ACP, 0, in.data(), in.length(), nullptr, 0);
     if (len > 0)
@@ -25,7 +25,7 @@ std::wstring UNICODEfromANSI(const std::string &in)
     return std::wstring();
 }
 
-std::wstring UNICODEfromANSI(const char *in)
+std::wstring UNICODEfromANSI(const char* in)
 {
     if (in && in[0] != 0)
     {
@@ -46,7 +46,7 @@ std::wstring UNICODEfromANSI(const char *in)
     return std::wstring();
 }
 
-std::string ANSIfromUNICODE(const std::wstring &in)
+std::string ANSIfromUNICODE(const std::wstring& in)
 {
     int len = ::WideCharToMultiByte(CP_ACP, 0, in.data(), in.length(), nullptr, 0, nullptr, nullptr);
     if (len > 0)
@@ -62,7 +62,7 @@ std::string ANSIfromUNICODE(const std::wstring &in)
     return std::string();
 }
 
-std::string ANSIfromUNICODE(const wchar_t *in)
+std::string ANSIfromUNICODE(const WCHAR* in)
 {
     if (in && in[0] != 0)
     {
@@ -83,7 +83,7 @@ std::string ANSIfromUNICODE(const wchar_t *in)
     return std::string();
 }
 
-std::string UTF8fromUNICODE(const std::wstring &in)
+std::string UTF8fromUNICODE(const std::wstring& in)
 {
     int len = ::WideCharToMultiByte(CP_UTF8, 0, in.data(), in.length(), nullptr, 0, nullptr, nullptr);
     if (len > 0)
@@ -99,7 +99,7 @@ std::string UTF8fromUNICODE(const std::wstring &in)
     return std::string();
 }
 
-std::string UTF8fromUNICODE(const wchar_t *in)
+std::string UTF8fromUNICODE(const WCHAR* in)
 {
     if (in && in[0] != 0)
     {
@@ -120,7 +120,7 @@ std::string UTF8fromUNICODE(const wchar_t *in)
     return std::string();
 }
 
-std::wstring UNICODEfromUTF8(const std::string &in)
+std::wstring UNICODEfromUTF8(const std::string& in)
 {
     int len = ::MultiByteToWideChar(CP_UTF8, 0, in.data(), in.length(), nullptr, 0);
     if (len > 0)
@@ -136,7 +136,7 @@ std::wstring UNICODEfromUTF8(const std::string &in)
     return std::wstring();
 }
 
-std::wstring UNICODEfromUTF8(const char *in)
+std::wstring UNICODEfromUTF8(const char* in)
 {
     if (in && in[0] != 0)
     {
@@ -157,22 +157,22 @@ std::wstring UNICODEfromUTF8(const char *in)
     return std::wstring();
 }
 
-std::string ANSItoUTF8(const std::string &in)
+std::string ANSItoUTF8(const std::string& in)
 {
     return UTF8fromUNICODE(UNICODEfromANSI(in));
 }
 
-std::string ANSItoUTF8(const char *in)
+std::string ANSItoUTF8(const char* in)
 {
     return UTF8fromUNICODE(UNICODEfromANSI(in));
 }
 
-std::string UTF8toANSI(const std::string &in)
+std::string UTF8toANSI(const std::string& in)
 {
     return ANSIfromUNICODE(UNICODEfromUTF8(in));
 }
 
-std::string UTF8toANSI(const char *in)
+std::string UTF8toANSI(const char* in)
 {
     return ANSIfromUNICODE(UNICODEfromUTF8(in));
 }

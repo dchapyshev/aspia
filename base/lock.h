@@ -19,41 +19,59 @@ namespace aspia {
 class Lock
 {
 public:
-    Lock();
-    ~Lock();
+    using NativeHandle = SRWLOCK;
 
-    void lock();
-    bool try_lock();
-    void unlock();
+    Lock();
+    ~Lock() = default;
+
+    void Acquire();
+    bool Try();
+    void Release();
+
+    NativeHandle* native_handle() { return &native_handle_; }
 
 private:
-#if (_WIN32_WINNT >= 0x0600)
-    SRWLOCK lock_;
-#else
-    CRITICAL_SECTION cs_;
-#endif
+    NativeHandle native_handle_;
 
     DISALLOW_COPY_AND_ASSIGN(Lock);
 };
 
-template<class T>
-class LockGuard
+class AutoLock
 {
 public:
-    explicit LockGuard(T *locker) : locker_(locker)
+    explicit AutoLock(Lock& locker) : locker_(locker)
     {
-        locker_->lock();
+        locker_.Acquire();
     }
 
-    virtual ~LockGuard()
+    virtual ~AutoLock()
     {
-        locker_->unlock();
+        locker_.Release();
     }
 
 private:
-    T *locker_;
+    Lock& locker_;
 
-    DISALLOW_COPY_AND_ASSIGN(LockGuard);
+    DISALLOW_COPY_AND_ASSIGN(AutoLock);
+};
+
+class AutoUnlock
+{
+public:
+    explicit AutoUnlock(Lock& locker) : locker_(locker)
+    {
+        locker_.Release();
+    }
+
+    virtual ~AutoUnlock()
+    {
+        locker_.Acquire();
+    }
+
+private:
+    Lock& locker_;
+
+    DISALLOW_COPY_AND_ASSIGN(AutoUnlock);
 };
 
 } // namespace aspia

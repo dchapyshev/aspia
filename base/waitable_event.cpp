@@ -6,43 +6,30 @@
 //
 
 #include "base/waitable_event.h"
-
 #include "base/logging.h"
 
 namespace aspia {
 
-static const LONG kSignaled = 1;
-static const LONG kNotSignaled = 0;
-
 WaitableEvent::WaitableEvent() :
-    event_(CreateEventW(nullptr, FALSE, FALSE, nullptr)),
-    state_(kNotSignaled)
+    event_(CreateEventW(nullptr, FALSE, FALSE, nullptr))
 {
-    CHECK(event_) << "CreateEventW() failed: " << GetLastError();
-}
-
-WaitableEvent::~WaitableEvent()
-{
-    // Nothing
+    CHECK(event_) << GetLastError();
 }
 
 void WaitableEvent::Notify()
 {
-    if (_InterlockedCompareExchange(&state_, kSignaled, kNotSignaled) == kNotSignaled)
-    {
-        SetEvent(event_);
-    }
+    SetEvent(event_);
 }
 
-void WaitableEvent::WaitForEvent()
+void WaitableEvent::Wait()
 {
-    if (_InterlockedCompareExchange(&state_, kNotSignaled, kSignaled) == kNotSignaled)
-    {
-        if (WaitForSingleObject(event_, INFINITE) == WAIT_FAILED)
-        {
-            LOG(WARNING) << "Unknown waiting error: " << GetLastError();
-        }
-    }
+    Wait(INFINITE);
+}
+
+void WaitableEvent::Wait(uint32_t timeout_in_ms)
+{
+    DWORD ret = WaitForSingleObject(event_, timeout_in_ms);
+    DCHECK(ret != WAIT_FAILED) << GetLastError();
 }
 
 } // namespace aspia

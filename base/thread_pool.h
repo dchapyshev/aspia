@@ -19,23 +19,23 @@ class ThreadPool
 {
 public:
     ThreadPool() {}
-    ~ThreadPool() {}
+    ~ThreadPool() = default;
 
     void Insert(std::unique_ptr<Thread> thread)
     {
-        // Блокируем пул потоков.
-        LockGuard<Lock> guard(&list_lock_);
+        // Р‘Р»РѕРєРёСЂСѓРµРј РїСѓР» РїРѕС‚РѕРєРѕРІ.
+        AutoLock lock(list_lock_);
 
-        // Удаляем завершенные потоки.
+        // РЈРґР°Р»СЏРµРј Р·Р°РІРµСЂС€РµРЅРЅС‹Рµ РїРѕС‚РѕРєРё.
         RemoveDeadThreads();
 
-        // Добавляем новый поток.
+        // Р”РѕР±Р°РІР»СЏРµРј РЅРѕРІС‹Р№ РїРѕС‚РѕРє.
         list_.push_back(std::move(thread));
     }
 
     void Clear()
     {
-        LockGuard<Lock> guard(&list_lock_);
+        AutoLock lock(list_lock_);
         list_.clear();
     }
 
@@ -44,20 +44,20 @@ private:
     {
         auto iter = list_.begin();
 
-        // Проходим по всему потоков.
+        // РџСЂРѕС…РѕРґРёРј РїРѕ РІСЃРµРјСѓ РїРѕС‚РѕРєРѕРІ.
         while (iter != list_.end())
         {
-            Thread *thread = iter->get();
+            Thread* thread = iter->get();
 
-            // Если поток завершен.
-            if (!thread->IsActiveThread())
+            // Р•СЃР»Рё РїРѕС‚РѕРє Р·Р°РІРµСЂС€РµРЅ.
+            if (!thread->IsActive())
             {
-                // Удаляем поток и получаем следующий элемент списка.
+                // РЈРґР°Р»СЏРµРј РїРѕС‚РѕРє Рё РїРѕР»СѓС‡Р°РµРј СЃР»РµРґСѓСЋС‰РёР№ СЌР»РµРјРµРЅС‚ СЃРїРёСЃРєР°.
                 iter = list_.erase(iter);
             }
             else
             {
-                // Переходим к следующему элементу.
+                // РџРµСЂРµС…РѕРґРёРј Рє СЃР»РµРґСѓСЋС‰РµРјСѓ СЌР»РµРјРµРЅС‚Сѓ.
                 ++iter;
             }
         }

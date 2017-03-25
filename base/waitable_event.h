@@ -9,10 +9,6 @@
 #define _ASPIA_BASE__WAITABLE_EVENT_H
 
 #include "aspia_config.h"
-
-#include <stdint.h>
-#include <string>
-
 #include "base/macros.h"
 #include "base/scoped_handle.h"
 
@@ -21,15 +17,19 @@ namespace aspia {
 class WaitableEvent
 {
 public:
+    using NativeHandle = HANDLE;
+
     WaitableEvent();
-    virtual ~WaitableEvent();
+    virtual ~WaitableEvent() = default;
 
     void Notify();
-    void WaitForEvent();
+    void Wait(uint32_t timeout_in_ms);
+    void Wait();
+
+    NativeHandle native_handle() { return event_; }
 
 private:
     ScopedHandle event_;
-    volatile LONG state_;
 
     DISALLOW_COPY_AND_ASSIGN(WaitableEvent);
 };

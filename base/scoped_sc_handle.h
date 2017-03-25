@@ -17,33 +17,46 @@ namespace aspia {
 class ScopedScHandle
 {
 public:
-    ScopedScHandle() : handle_(nullptr)
+    ScopedScHandle() :
+        handle_(nullptr)
     {
         // Nothing
     }
 
-    explicit ScopedScHandle(SC_HANDLE handle) : handle_(handle)
+    explicit ScopedScHandle(SC_HANDLE handle) :
+        handle_(handle)
     {
         // Nothing
+    }
+
+    ScopedScHandle(ScopedScHandle&& other)
+    {
+        handle_ = other.handle_;
+        other.handle_ = nullptr;
     }
 
     ~ScopedScHandle()
     {
-        close();
+        Close();
     }
 
-    SC_HANDLE get()
+    SC_HANDLE Get()
     {
         return handle_;
     }
 
-    void set(SC_HANDLE handle)
+    void Set(SC_HANDLE handle)
     {
-        close();
+        Close();
         handle_ = handle;
     }
 
-    SC_HANDLE release()
+    bool IsValid() const
+    {
+        return handle_ != nullptr;
+    }
+
+    SC_HANDLE Release()
     {
         SC_HANDLE handle = handle_;
         handle_ = nullptr;
@@ -52,7 +65,15 @@ public:
 
     ScopedScHandle& operator=(SC_HANDLE handle)
     {
-        set(handle);
+        Set(handle);
+        return *this;
+    }
+
+    ScopedScHandle& operator=(ScopedScHandle&& other)
+    {
+        Close();
+        handle_ = other.handle_;
+        other.handle_ = nullptr;
         return *this;
     }
 
@@ -62,7 +83,7 @@ public:
     }
 
 private:
-    void close()
+    void Close()
     {
         if (handle_)
         {

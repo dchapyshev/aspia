@@ -14,23 +14,23 @@
 
 namespace aspia {
 
-std::wstring UNICODEfromANSI(const std::string &in);
-std::wstring UNICODEfromANSI(const char *in);
+std::wstring UNICODEfromANSI(const std::string& in);
+std::wstring UNICODEfromANSI(const char* in);
 
-std::string ANSIfromUNICODE(const std::wstring &in);
-std::string ANSIfromUNICODE(const wchar_t *in);
+std::string ANSIfromUNICODE(const std::wstring& in);
+std::string ANSIfromUNICODE(const WCHAR* in);
 
-std::string UTF8fromUNICODE(const std::wstring &in);
-std::string UTF8fromUNICODE(const wchar_t *in);
+std::string UTF8fromUNICODE(const std::wstring& in);
+std::string UTF8fromUNICODE(const WCHAR* in);
 
-std::wstring UNICODEfromUTF8(const std::string &in);
-std::wstring UNICODEfromUTF8(const char *in);
+std::wstring UNICODEfromUTF8(const std::string& in);
+std::wstring UNICODEfromUTF8(const char* in);
 
-std::string ANSItoUTF8(const std::string &in);
-std::string ANSItoUTF8(const char *in);
+std::string ANSItoUTF8(const std::string& in);
+std::string ANSItoUTF8(const char* in);
 
-std::string UTF8toANSI(const std::string &in);
-std::string UTF8toANSI(const char *in);
+std::string UTF8toANSI(const std::string& in);
+std::string UTF8toANSI(const char* in);
 
 } // namespace aspia
 

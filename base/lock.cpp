@@ -9,60 +9,24 @@
 
 namespace aspia {
 
-#if (_WIN32_WINNT >= 0x0600)
-
-Lock::Lock() : lock_(SRWLOCK_INIT)
+Lock::Lock() : native_handle_(SRWLOCK_INIT)
 {
     // Nothing
 }
 
-Lock::~Lock()
+void Lock::Acquire()
 {
-    // Nothing
+    AcquireSRWLockExclusive(&native_handle_);
 }
 
-void Lock::lock()
+bool Lock::Try()
 {
-    AcquireSRWLockExclusive(&lock_);
+    return !!TryAcquireSRWLockExclusive(&native_handle_);
 }
 
-bool Lock::try_lock()
+void Lock::Release()
 {
-    return !!TryAcquireSRWLockExclusive(&lock_);
+    ReleaseSRWLockExclusive(&native_handle_);
 }
-
-void Lock::unlock()
-{
-    ReleaseSRWLockExclusive(&lock_);
-}
-
-#else
-
-Lock::Lock()
-{
-    InitializeCriticalSection(&cs_);
-}
-
-Lock::~Lock()
-{
-    DeleteCriticalSection(&cs_);
-}
-
-void Lock::lock()
-{
-    EnterCriticalSection(&cs_);
-}
-
-bool Lock::try_lock()
-{
-    return !!TryEnterCriticalSection(&cs_);
-}
-
-void Lock::unlock()
-{
-    LeaveCriticalSection(&cs_);
-}
-
-#endif // (_WIN32_WINNT >= 0x0600)
 
 } // namespace aspia

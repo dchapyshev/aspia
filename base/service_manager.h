@@ -1,27 +1,30 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/service_control.h
+// FILE:            base/service_manager.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__SERVICE_CONTROL_H
-#define _ASPIA_BASE__SERVICE_CONTROL_H
+#ifndef _ASPIA_BASE__SERVICE_MANAGER_H
+#define _ASPIA_BASE__SERVICE_MANAGER_H
 
 #include "aspia_config.h"
 
 #include <memory>
+#include <string>
 
 #include "base/macros.h"
 #include "base/scoped_sc_handle.h"
 
 namespace aspia {
 
-class ServiceControl
+class ServiceManager
 {
 public:
-    explicit ServiceControl(const WCHAR *service_short_name);
-    ~ServiceControl();
+    ServiceManager();
+    explicit ServiceManager(const std::wstring& service_short_name);
+    ServiceManager(ServiceManager&& other);
+    ~ServiceManager();
 
     //
     // Создает службу в системе и возвращает указатель на экземпляр класса
@@ -32,11 +35,15 @@ public:
     // Если параметр replace установлен в false, то при наличии службы с
     // совпадающим именем будет возвращен нулевой указатель.
     //
-    static std::unique_ptr<ServiceControl> Install(const WCHAR *exec_path,
-                                                   const WCHAR *service_name,
-                                                   const WCHAR *service_short_name,
-                                                   const WCHAR *service_description,
-                                                   bool replace = true);
+    static ServiceManager Create(const std::wstring& command_line,
+                                 const std::wstring& service_name,
+                                 const std::wstring& service_short_name,
+                                 const std::wstring& service_description = std::wstring());
+
+    static std::wstring GenerateUniqueServiceId();
+
+    static std::wstring CreateUniqueServiceName(const std::wstring& service_name,
+                                                const std::wstring& service_id);
 
     //
     // Проверяет валидность экземпляра класса.
@@ -61,18 +68,20 @@ public:
     // После вызова метода класс становится невалидным, вызовы других методов
     // будут возвращаться с ошибкой и метод IsValid() возвратит false.
     //
-    bool Delete();
+    bool Remove();
+
+    ServiceManager& operator=(ServiceManager&& other);
 
 private:
-    ServiceControl(SC_HANDLE sc_manager, SC_HANDLE service);
+    ServiceManager(SC_HANDLE sc_manager, SC_HANDLE service);
 
 private:
     mutable ScopedScHandle sc_manager_;
     mutable ScopedScHandle service_;
 
-    DISALLOW_COPY_AND_ASSIGN(ServiceControl);
+    DISALLOW_COPY_AND_ASSIGN(ServiceManager);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__SERVICE_CONTROL_H
+#endif // _ASPIA_BASE__SERVICE_MANAGER_H

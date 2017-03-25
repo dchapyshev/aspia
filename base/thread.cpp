@@ -16,7 +16,7 @@ namespace aspia {
 // static
 UINT CALLBACK Thread::ThreadProc(LPVOID param)
 {
-    Thread *self = reinterpret_cast<Thread*>(param);
+    Thread* self = reinterpret_cast<Thread*>(param);
 
     self->Worker();
     self->active_ = false;
@@ -28,40 +28,29 @@ UINT CALLBACK Thread::ThreadProc(LPVOID param)
 Thread::Thread()
 {
     active_ = false;
-    end_ = false;
-
-    thread_ = reinterpret_cast<HANDLE>(_beginthreadex(nullptr,
-                                                      0,
-                                                      ThreadProc,
-                                                      this,
-                                                      CREATE_SUSPENDED,
-                                                      nullptr));
-
-    CHECK(thread_) << "Unable to create thread: " << errno;
-}
-
-Thread::~Thread()
-{
-    // Nothing
+    terminating_ = false;
 }
 
 void Thread::Stop()
 {
-    end_ = true;
-    OnStop();
+    if (!terminating_)
+    {
+        terminating_ = true;
+        OnStop();
+    }
 }
 
-bool Thread::IsThreadTerminating() const
+bool Thread::IsTerminating() const
 {
-    return end_;
+    return terminating_;
 }
 
-bool Thread::IsActiveThread() const
+bool Thread::IsActive() const
 {
     return active_;
 }
 
-void Thread::SetThreadPriority(Priority value)
+void Thread::SetPriority(Priority value)
 {
     int priority;
 
@@ -76,18 +65,17 @@ void Thread::SetThreadPriority(Priority value)
         case Priority::TimeCritical: priority = THREAD_PRIORITY_TIME_CRITICAL; break;
         default:
         {
-            LOG(WARNING) << "Unknwon thread priority";
-            return;
+            DLOG(WARNING) << "Unexpected priority:" << static_cast<int>(value);
+            priority = THREAD_PRIORITY_BELOW_NORMAL;
         }
+        break;
     }
 
-    if (!::SetThreadPriority(thread_, priority))
-    {
-        LOG(WARNING) << "SetThreadPriority() failed: " << GetLastError();
-    }
+    BOOL result = ::SetThreadPriority(thread_, priority);
+    DCHECK(result) << GetLastError();
 }
 
-void Thread::Start()
+void Thread::Start(Priority priority)
 {
     if (active_)
     {
@@ -95,24 +83,37 @@ void Thread::Start()
         return;
     }
 
-    active_ = (ResumeThread(thread_) != -1);
+    active_ = false;
+    terminating_ = false;
 
-    if (!active_)
-    {
-        LOG(FATAL) << "ResumeThread() failed: " << GetLastError();
-    }
+    thread_ = reinterpret_cast<HANDLE>(_beginthreadex(nullptr,
+                                                      0,
+                                                      ThreadProc,
+                                                      this,
+                                                      0,
+                                                      nullptr));
+    CHECK(thread_) << errno;
+
+    active_ = true;
+
+    if (priority != Priority::Normal)
+        SetPriority(priority);
 }
 
-void Thread::WaitForEnd() const
+void Thread::Wait() const
 {
     if (active_)
     {
         // Если запущен, то ждем пока он завершит работу.
-        if (WaitForSingleObject(thread_, INFINITE) == WAIT_FAILED)
-        {
-            DLOG(ERROR) << "WaitForSingleObject() failed: " << GetLastError();
-        }
+        WaitForSingleObject(thread_, INFINITE);
+        active_ = false;
     }
+}
+
+// static
+void Thread::Sleep(uint32_t delay_in_ms)
+{
+    ::Sleep(delay_in_ms);
 }
 
 } // namespace aspia
