@@ -20,18 +20,13 @@ namespace aspia {
 class Socket
 {
 public:
-    Socket() {}
-    virtual ~Socket() {}
+    Socket() = default;
+    virtual ~Socket() = default;
 
-    virtual void Connect(const std::string &address, int port) = 0;
-    virtual void Bind(int port) = 0;
-    virtual void Listen() = 0;
-    virtual std::unique_ptr<Socket> Accept() = 0;
-    virtual void Shutdown() = 0;
-
-    virtual void WriteMessage(const uint8_t *buf, uint32_t len) = 0;
-    virtual uint32_t ReadMessageSize() = 0;
-    virtual void ReadMessage(uint8_t *buf, uint32_t len) = 0;
+    virtual void Disconnect() = 0;
+    virtual bool Write(const uint8_t* buf, uint32_t len) = 0;
+    virtual uint32_t ReadSize() = 0;
+    virtual bool Read(uint8_t* buf, uint32_t len) = 0;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(Socket);

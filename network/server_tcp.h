@@ -9,116 +9,117 @@
 #define _ASPIA_NETWORK__SERVER_TCP_H
 
 #include <functional>
+#include <memory>
 #include <list>
 
-#include "base/exception.h"
 #include "base/macros.h"
 #include "base/thread.h"
+#include "network/scoped_firewall_rule.h"
+#include "network/socket_tcp.h"
 
 namespace aspia {
 
 template <class T>
-class ServerTCP : private Thread
+class ServerTCP : public Thread
 {
 public:
-    ServerTCP(int port, typename T::OnEventCallback on_event_callback) :
-        on_event_callback_(on_event_callback),
-        sock_(new SocketTCP())
+    ServerTCP(uint16_t port, const typename T::EventCallback& event_callback) :
+        event_callback_(event_callback),
+        port_(port)
     {
-        sock_->Bind(port);
-        sock_->Listen();
-
         Start();
     }
 
     ~ServerTCP()
     {
-        // Разрываем соединение.
-        sock_->Shutdown();
-
-        if (IsActiveThread())
-        {
-            Stop();
-            WaitForEnd();
-        }
+        Stop();
+        Wait();
     }
 
 private:
     void RemoveDeadClients()
     {
-        // Блокируем список подключенных клиентов.
-        LockGuard<Lock> guard(&client_list_lock_);
+        // Р‘Р»РѕРєРёСЂСѓРµРј СЃРїРёСЃРѕРє РїРѕРґРєР»СЋС‡РµРЅРЅС‹С… РєР»РёРµРЅС‚РѕРІ.
+        AutoLock lock(client_list_lock_);
 
         auto iter = client_list_.begin();
 
-        // Проходим по всему списку подключенных клиентов.
+        // РџСЂРѕС…РѕРґРёРј РїРѕ РІСЃРµРјСѓ СЃРїРёСЃРєСѓ РїРѕРґРєР»СЋС‡РµРЅРЅС‹С… РєР»РёРµРЅС‚РѕРІ.
         while (iter != client_list_.end())
         {
-            // Если поток клиента находится в стадии завершения.
+            // Р•СЃР»Рё РїРѕС‚РѕРє РєР»РёРµРЅС‚Р° РЅР°С…РѕРґРёС‚СЃСЏ РІ СЃС‚Р°РґРёРё Р·Р°РІРµСЂС€РµРЅРёСЏ.
             if (iter->get()->IsDead())
             {
-                // Удаляем клиента из списка и получаем следующий элемент списка.
+                // РЈРґР°Р»СЏРµРј РєР»РёРµРЅС‚Р° РёР· СЃРїРёСЃРєР° Рё РїРѕР»СѓС‡Р°РµРј СЃР»РµРґСѓСЋС‰РёР№ СЌР»РµРјРµРЅС‚ СЃРїРёСЃРєР°.
                 iter = client_list_.erase(iter);
             }
             else
             {
-                // Переходим к следующему элементу.
+                // РџРµСЂРµС…РѕРґРёРј Рє СЃР»РµРґСѓСЋС‰РµРјСѓ СЌР»РµРјРµРЅС‚Сѓ.
                 ++iter;
             }
         }
     }
 
-    void OnClientEvent(typename T::Event type)
+    void OnClientEvent(typename T::SessionEvent event)
     {
-        // Если поток завершает работу, то игнорируем события.
-        if (IsThreadTerminating())
+        // Р•СЃР»Рё РїРѕС‚РѕРє Р·Р°РІРµСЂС€Р°РµС‚ СЂР°Р±РѕС‚Сѓ, С‚Рѕ РёРіРЅРѕСЂРёСЂСѓРµРј СЃРѕР±С‹С‚РёСЏ.
+        if (IsTerminating())
             return;
 
-        if (type == typename T::Event::Disconnected)
+        if (event == typename T::SessionEvent::CLOSE)
             RemoveDeadClients();
 
-        on_event_callback_(type);
+        event_callback_(event);
     }
 
     void OnStop() override
     {
-        // Nothing
+        if (sock_)
+        {
+            // Р Р°Р·СЂС‹РІР°РµРј СЃРѕРµРґРёРЅРµРЅРёРµ.
+            sock_->Disconnect();
+        }
     }
 
     void Worker() override
     {
-        while (!IsThreadTerminating())
+        firewall_rule_.reset(new ScopedFirewallRule(port_));
+        sock_.reset(SocketTCP::Create());
+
+        if (!sock_ || !sock_->Bind(port_))
+            return;
+
+        while (!IsTerminating())
         {
-            try
-            {
-                std::unique_ptr<Socket> sock(sock_->Accept());
+            std::unique_ptr<Socket> sock(sock_->Accept());
 
-                T::OnEventCallback on_event_callback =
-                    std::bind(&ServerTCP::OnClientEvent, this, std::placeholders::_1);
+            if (!sock)
+                break;
 
-                std::unique_ptr<T> client(new T(std::move(sock), on_event_callback));
+            T::EventCallback event_callback =
+                std::bind(&ServerTCP::OnClientEvent, this, std::placeholders::_1);
 
-                // Блокируем список подключенных клиентов.
-                LockGuard<Lock> guard(&client_list_lock_);
+            std::unique_ptr<T> client(new T(std::move(sock), event_callback));
 
-                // Добавляем клиента в список подключенных клиентов.
-                client_list_.push_back(std::move(client));
-            }
-            catch (const Exception &err)
-            {
-                DLOG(WARNING) << "Exception in tcp server: " << err.What();
-                Stop();
-            }
+            // Р‘Р»РѕРєРёСЂСѓРµРј СЃРїРёСЃРѕРє РїРѕРґРєР»СЋС‡РµРЅРЅС‹С… РєР»РёРµРЅС‚РѕРІ.
+            AutoLock lock(client_list_lock_);
+
+            // Р”РѕР±Р°РІР»СЏРµРј РєР»РёРµРЅС‚Р° РІ СЃРїРёСЃРѕРє РїРѕРґРєР»СЋС‡РµРЅРЅС‹С… РєР»РёРµРЅС‚РѕРІ.
+            client_list_.push_back(std::move(client));
         }
     }
 
 private:
-    std::unique_ptr<Socket> sock_;
+    uint16_t port_;
+
+    std::unique_ptr<ScopedFirewallRule> firewall_rule_;
+    std::unique_ptr<SocketTCP> sock_;
 
     std::list<std::unique_ptr<T>> client_list_;
     Lock client_list_lock_;
 
-    typename T::OnEventCallback on_event_callback_;
+    typename T::EventCallback event_callback_;
 
     DISALLOW_COPY_AND_ASSIGN(ServerTCP);
 };

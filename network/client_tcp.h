@@ -8,9 +8,8 @@
 #ifndef _ASPIA_NETWORK__CLIENT_TCP_H
 #define _ASPIA_NETWORK__CLIENT_TCP_H
 
-#include <functional>
+#include <string>
 
-#include "base/exception.h"
 #include "base/thread.h"
 #include "base/macros.h"
 #include "network/socket_tcp.h"
@@ -20,66 +19,55 @@ namespace aspia {
 class ClientTCP : public Thread
 {
 public:
-    typedef std::function<void(const char*)> OnErrorCallback;
-    typedef std::function<void(std::unique_ptr<Socket>&)> OnConnectedCallback;
-
-    ClientTCP(const std::string &address, int port,
-              OnConnectedCallback on_connected_callback,
-              OnErrorCallback on_error_callback) :
-        on_connected_callback_(on_connected_callback),
-        on_error_callback_(on_error_callback),
-        address_(address),
-        port_(port)
+    ClientTCP() : port_(0)
     {
+        // Nothing
+    }
+
+    virtual ~ClientTCP()
+    {
+        Stop();
+        Wait();
+    }
+
+    void Connect(const std::string& address, uint16_t port)
+    {
+        address_ = address;
+        port_ = port;
+
         Start();
     }
 
-    ~ClientTCP()
-    {
-        if (IsActiveThread())
-        {
-            Stop();
-            WaitForEnd();
-        }
-    }
+    virtual void OnConnectionSuccess(std::unique_ptr<Socket> sock) = 0;
+    virtual void OnConnectionError() = 0;
 
 private:
     void Worker()
     {
-        try
-        {
-            sock_.reset(new SocketTCP());
+        sock_.reset(SocketTCP::Create());
 
-            sock_->Connect(address_, port_);
-
-            on_connected_callback_(sock_);
-        }
-        catch (const Exception &err)
+        if (!sock_ || !sock_->Connect(address_, port_))
         {
-            if (!IsThreadTerminating())
-            {
-                DLOG(WARNING) << "Exception in tcp client: " << err.What();
-                on_error_callback_(err.What());
-            }
+            if (!IsTerminating())
+                OnConnectionError();
+
+            return;
         }
+
+        OnConnectionSuccess(std::move(sock_));
     }
 
     void OnStop()
     {
         if (sock_)
-        {
-            sock_->Shutdown();
-        }
+            sock_->Disconnect();
     }
 
 private:
     std::string address_;
-    int port_;
+    uint16_t port_;
 
-    std::unique_ptr<Socket> sock_;
-
-    OnConnectedCallback on_connected_callback_;
-    OnErrorCallback on_error_callback_;
+    std::unique_ptr<SocketTCP> sock_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientTCP);
 };

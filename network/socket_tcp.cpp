@@ -7,72 +7,42 @@
 
 #include "network/socket_tcp.h"
 
-#include "base/exception.h"
 #include "base/logging.h"
+#include <atomic>
 
 namespace aspia {
 
-static volatile LONG _socket_ref_count = 0;
+static std::atomic_int32_t _socket_ref_count = 0;
 
 static const int kWriteTimeout = 15000;
+static const int kMaxClientCount = 10;
 
 SocketTCP::SocketTCP() :
-    ref_(true)
-{
-    // Если ни одного сокета еще не было создано.
-    if (InterlockedIncrement(&_socket_ref_count) == 1)
-    {
-        WSADATA data = { 0 };
-
-        static const BYTE kMajorVersion = 2;
-        static const BYTE kMinorVersion = 2;
-
-        // Инициализируем библиотеку сокетов.
-        if (WSAStartup(MAKEWORD(kMajorVersion, kMinorVersion), &data) != 0)
-        {
-            LOG(ERROR) << "WSAStartup() failed: " << WSAGetLastError();
-            throw Exception("Unable to initialize socket library.");
-        }
-
-        if (HIBYTE(data.wVersion) != kMinorVersion || LOBYTE(data.wVersion) != kMajorVersion)
-        {
-            LOG(ERROR) << "Wrong version sockets library: " << data.wVersion;
-            throw Exception("Unable to initialize socket library.");
-        }
-    }
-
-    // Создаем сокет.
-    sock_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sock_ == INVALID_SOCKET)
-    {
-        LOG(ERROR) << "socket() failed: " << WSAGetLastError();
-        throw Exception("Unable to create network socket.");
-    }
-}
-
-// Конструктор, который вызывается при приеме входящего подключения.
-SocketTCP::SocketTCP(SOCKET sock) :
-    sock_(sock),
+    sock_(INVALID_SOCKET),
     ref_(false)
 {
-    EnableNagles(false);
-    SetWriteTimeout(kWriteTimeout);
+    // Nothing
+}
 
-    int value = 65536 * 4;
-    setsockopt(sock_, SOL_SOCKET, SO_RCVBUF, reinterpret_cast<const char*>(&value), sizeof(value));
-    setsockopt(sock_, SOL_SOCKET, SO_SNDBUF, reinterpret_cast<const char*>(&value), sizeof(value));
+SocketTCP::SocketTCP(SOCKET sock, bool ref) :
+    sock_(sock),
+    ref_(ref)
+{
+    // Nothing
 }
 
 SocketTCP::~SocketTCP()
 {
-    Shutdown();
+    Disconnect();
 
     if (ref_)
     {
-        // Уменьшаем количество экземпляров сокета и если их больше не осталось.
-        if (InterlockedDecrement(&_socket_ref_count) == 0)
+        // РЈРјРµРЅСЊС€Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ СЌРєР·РµРјРїР»СЏСЂРѕРІ СЃРѕРєРµС‚Р° Рё РµСЃР»Рё РёС… Р±РѕР»СЊС€Рµ РЅРµ РѕСЃС‚Р°Р»РѕСЃСЊ.
+        --_socket_ref_count;
+
+        if (!_socket_ref_count)
         {
-            // Деинициализируем библиотеку сокетов.
+            // Р”РµРёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј Р±РёР±Р»РёРѕС‚РµРєСѓ СЃРѕРєРµС‚РѕРІ.
             if (WSACleanup() == SOCKET_ERROR)
             {
                 DLOG(ERROR) << "WSACleanup() failed: " << WSAGetLastError();
@@ -81,9 +51,38 @@ SocketTCP::~SocketTCP()
     }
 }
 
-void SocketTCP::Connect(const std::string &address, int port)
+// static
+SocketTCP* SocketTCP::Create()
 {
-    struct sockaddr_in dest_addr = { 0 };
+    // Р•СЃР»Рё РЅРё РѕРґРЅРѕРіРѕ СЃРѕРєРµС‚Р° РµС‰Рµ РЅРµ Р±С‹Р»Рѕ СЃРѕР·РґР°РЅРѕ.
+    if (!_socket_ref_count)
+    {
+        WSADATA data = { 0 };
+
+        // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј Р±РёР±Р»РёРѕС‚РµРєСѓ СЃРѕРєРµС‚РѕРІ.
+        if (WSAStartup(MAKEWORD(2, 2), &data) != 0)
+        {
+            LOG(ERROR) << "WSAStartup() failed: " << WSAGetLastError();
+            return nullptr;
+        }
+
+        ++_socket_ref_count;
+    }
+
+    // РЎРѕР·РґР°РµРј СЃРѕРєРµС‚.
+    SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (sock == INVALID_SOCKET)
+    {
+        LOG(ERROR) << "socket() failed: " << WSAGetLastError();
+        return nullptr;
+    }
+
+    return new SocketTCP(sock, true);
+}
+
+bool SocketTCP::Connect(const std::string& address, uint16_t port)
+{
+    sockaddr_in dest_addr = { 0 };
 
     dest_addr.sin_family = AF_INET;
     dest_addr.sin_port = htons(port);
@@ -91,12 +90,12 @@ void SocketTCP::Connect(const std::string &address, int port)
     dest_addr.sin_addr.s_addr = inet_addr(address.c_str());
     if (dest_addr.sin_addr.s_addr == INADDR_NONE)
     {
-        HOSTENT *host = gethostbyname(address.c_str());
+        HOSTENT* host = gethostbyname(address.c_str());
 
         if (!host)
         {
             LOG(WARNING) << "gethostbyname() failed: " << WSAGetLastError();
-            throw Exception("Unable to handle the host name.");
+            return false;
         }
 
         (reinterpret_cast<uint32_t*>(&dest_addr.sin_addr))[0] =
@@ -108,18 +107,18 @@ void SocketTCP::Connect(const std::string &address, int port)
     if (ioctlsocket(sock_, FIONBIO, &non_blocking) == SOCKET_ERROR)
     {
         LOG(ERROR) << "ioctlsocket() failed: " << WSAGetLastError();
-        throw Exception("Unable to set non-blocking mode for socket.");
+        return false;
     }
 
-    // Пытаемся подключиться.
+    // РџС‹С‚Р°РµРјСЃСЏ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ.
     int ret = connect(sock_,
-                      reinterpret_cast<const struct sockaddr*>(&dest_addr),
+                      reinterpret_cast<const sockaddr*>(&dest_addr),
                       sizeof(dest_addr));
     if (ret == SOCKET_ERROR)
     {
         int err = WSAGetLastError();
 
-        // Если неблокирующий сокет не успел выполнить подключение во время вызова.
+        // Р•СЃР»Рё РЅРµР±Р»РѕРєРёСЂСѓСЋС‰РёР№ СЃРѕРєРµС‚ РЅРµ СѓСЃРїРµР» РІС‹РїРѕР»РЅРёС‚СЊ РїРѕРґРєР»СЋС‡РµРЅРёРµ РІРѕ РІСЂРµРјСЏ РІС‹Р·РѕРІР°.
         if (err == WSAEWOULDBLOCK)
         {
             fd_set write_fds;
@@ -127,23 +126,23 @@ void SocketTCP::Connect(const std::string &address, int port)
             FD_ZERO(&write_fds);
             FD_SET(sock_, &write_fds);
 
-            struct timeval timeout = { 0 };
+            timeval timeout = { 0 };
 
-            timeout.tv_sec = 5; // 5 seconds.
+            timeout.tv_sec = 10; // 10 seconds.
             timeout.tv_usec = 0;
 
-            // Ждем завершения операции.
-            if (select(0, NULL, &write_fds, NULL, &timeout) == SOCKET_ERROR ||
+            // Р–РґРµРј Р·Р°РІРµСЂС€РµРЅРёСЏ РѕРїРµСЂР°С†РёРё.
+            if (select(0, nullptr, &write_fds, nullptr, &timeout) == SOCKET_ERROR ||
                 !FD_ISSET(sock_, &write_fds))
             {
                 DLOG(WARNING) << "select() failed: " << WSAGetLastError();
-                throw Exception("Unable to establish connection (timeout).");
+                return false;
             }
         }
         else
         {
             LOG(WARNING) << "connect() failed: " << err;
-            throw Exception("Unable to establish connection.");
+            return false;
         }
     }
 
@@ -152,91 +151,103 @@ void SocketTCP::Connect(const std::string &address, int port)
     if (ioctlsocket(sock_, FIONBIO, &non_blocking) == SOCKET_ERROR)
     {
         LOG(ERROR) << "ioctlsocket() failed: " << WSAGetLastError();
-        throw Exception("Unable to set blocking mode for socket.");
+        return false;
     }
 
-    EnableNagles(false);
-    SetWriteTimeout(kWriteTimeout);
+    if (!EnableNagles(sock_, false))
+        return false;
 
-    int value = 65536 * 4;
-    setsockopt(sock_, SOL_SOCKET, SO_RCVBUF, reinterpret_cast<const char*>(&value), sizeof(value));
-    setsockopt(sock_, SOL_SOCKET, SO_SNDBUF, reinterpret_cast<const char*>(&value), sizeof(value));
+    if (!SetWriteTimeout(sock_, kWriteTimeout))
+        return false;
+
+    return true;
 }
 
-void SocketTCP::Bind(int port)
+bool SocketTCP::Bind(uint16_t port)
 {
-    struct sockaddr_in local_addr = { 0 };
+    sockaddr_in local_addr = { 0 };
 
     local_addr.sin_family = AF_INET;
     local_addr.sin_port = htons(port);
     local_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
     if (bind(sock_,
-             reinterpret_cast<const struct sockaddr*>(&local_addr),
+             reinterpret_cast<const sockaddr*>(&local_addr),
              sizeof(local_addr)) == SOCKET_ERROR)
     {
         LOG(ERROR) << "bind() failed: " << WSAGetLastError();
-        throw Exception("Unable to execute binding command.");
+        return false;
     }
-}
 
-void SocketTCP::Listen()
-{
-    if (listen(sock_, SOMAXCONN) == SOCKET_ERROR)
+    if (listen(sock_, kMaxClientCount) == SOCKET_ERROR)
     {
         LOG(ERROR) << "listen() failed: " << WSAGetLastError();
-        throw Exception("Unable to execute listen command.");
+        return false;
     }
+
+    return true;
 }
 
-std::unique_ptr<Socket> SocketTCP::Accept()
+SocketTCP* SocketTCP::Accept()
 {
-    struct sockaddr_in addr;
+    sockaddr_in addr;
     int len = sizeof(addr);
 
-    SOCKET client = accept(sock_, reinterpret_cast<struct sockaddr*>(&addr), &len);
+    SOCKET client = accept(sock_, reinterpret_cast<sockaddr*>(&addr), &len);
     if (client == INVALID_SOCKET)
     {
         DLOG(WARNING) << "accept() failed: " << WSAGetLastError();
-        throw Exception("Unable to accept client connection or server stopped.");
+        return nullptr;
     }
 
-    return std::unique_ptr<Socket>(new SocketTCP(client));
+    if (!EnableNagles(client, false))
+        return nullptr;
+
+    if (!SetWriteTimeout(client, kWriteTimeout))
+        return nullptr;
+
+    return new SocketTCP(client, false);
 }
 
-void SocketTCP::SetWriteTimeout(int timeout)
+// static
+bool SocketTCP::SetWriteTimeout(SOCKET sock, int timeout)
 {
     DWORD value = timeout;
 
-    if (setsockopt(sock_,
+    if (setsockopt(sock,
                    SOL_SOCKET,
                    SO_SNDTIMEO,
                    reinterpret_cast<const char*>(&value),
                    sizeof(value)) == SOCKET_ERROR)
     {
         LOG(ERROR) << "setsockopt() failed: " << WSAGetLastError();
-        throw Exception("Unable to set write timeout for socket.");
+        return false;
     }
+
+    return true;
 }
 
-void SocketTCP::EnableNagles(bool enable)
+// static
+bool SocketTCP::EnableNagles(SOCKET sock, bool enable)
 {
     DWORD value = enable ? 0 : 1;
 
-    if (setsockopt(sock_,
+    if (setsockopt(sock,
                    IPPROTO_TCP,
                    TCP_NODELAY,
                    reinterpret_cast<const char*>(&value),
                    sizeof(value)) == SOCKET_ERROR)
     {
         LOG(ERROR) << "setsockopt() failed: " << WSAGetLastError();
-        throw Exception("Unable to enable or disable Nagles algorithm for socket.");
+        return false;
     }
+
+    return true;
 }
 
-void SocketTCP::Shutdown()
+void SocketTCP::Disconnect()
 {
-    LockGuard<Lock> guard(&shutdown_lock_);
+    AutoLock lock(shutdown_lock_);
 
     if (sock_ != INVALID_SOCKET)
     {
@@ -247,57 +258,25 @@ void SocketTCP::Shutdown()
     }
 }
 
-int SocketTCP::Read(char *buf, int len)
-{
-    int read = recv(sock_, buf, len, 0);
-
-    if (read <= 0)
-    {
-        DLOG(WARNING) << "recv() failed: " << WSAGetLastError();
-        throw Exception("Unable to read data from network");
-    }
-
-    return read;
-}
-
-int SocketTCP::Write(const char *buf, int len)
-{
-    int written = send(sock_, buf, len, 0);
-
-    if (written <= 0)
-    {
-        DLOG(WARNING) << "send() failed: " << WSAGetLastError();
-        throw Exception("Unable to write data to network");
-    }
-
-    return written;
-}
-
-void SocketTCP::Reader(char *buf, int len)
+bool SocketTCP::Writer(const char* buf, int len)
 {
     while (len)
     {
-        int read = Read(buf, len);
+        int written = send(sock_, buf, len, 0);
 
-        buf += read;
-        len -= read;
-    }
-}
-
-void SocketTCP::Writer(const char *buf, int len)
-{
-    while (len)
-    {
-        int written = Write(buf, len);
+        if (written <= 0)
+            return false;
 
         buf += written;
         len -= written;
     }
+
+    return true;
 }
 
-void SocketTCP::WriteMessage(const uint8_t *buf, uint32_t len)
+bool SocketTCP::Write(const uint8_t* buf, uint32_t len)
 {
-    // Максимальный размер сообщения - 3мб.
+    // РњР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СЂР°Р·РјРµСЂ СЃРѕРѕР±С‰РµРЅРёСЏ - 3РјР±.
     DCHECK(len <= 0x3FFFFF);
 
     uint8_t length[3];
@@ -317,27 +296,33 @@ void SocketTCP::WriteMessage(const uint8_t *buf, uint32_t len)
         }
     }
 
-    // Отправляем размер данных и сами данные.
-    Writer(reinterpret_cast<const char*>(length), count);
-    Writer(reinterpret_cast<const char*>(buf), len);
+    // РћС‚РїСЂР°РІР»СЏРµРј СЂР°Р·РјРµСЂ РґР°РЅРЅС‹С… Рё СЃР°РјРё РґР°РЅРЅС‹Рµ.
+    if (!Writer(reinterpret_cast<const char*>(length), count))
+        return false;
+
+    return Writer(reinterpret_cast<const char*>(buf), len);
 }
 
-uint32_t SocketTCP::ReadMessageSize()
+uint32_t SocketTCP::ReadSize()
 {
     uint8_t byte;
-    Read(reinterpret_cast<char*>(&byte), sizeof(uint8_t));
+
+    if (recv(sock_, reinterpret_cast<char*>(&byte), sizeof(byte), 0) <= 0)
+        return 0;
 
     uint32_t size = byte & 0x7F;
 
     if (byte & 0x80)
     {
-        Read(reinterpret_cast<char*>(&byte), sizeof(uint8_t));
+        if (recv(sock_, reinterpret_cast<char*>(&byte), sizeof(byte), 0) <= 0)
+            return 0;
 
         size += (byte & 0x7F) << 7;
 
         if (byte & 0x80)
         {
-            Read(reinterpret_cast<char*>(&byte), sizeof(uint8_t));
+            if (recv(sock_, reinterpret_cast<char*>(&byte), sizeof(byte), 0) <= 0)
+                return 0;
 
             size += byte << 14;
         }
@@ -346,9 +331,20 @@ uint32_t SocketTCP::ReadMessageSize()
     return size;
 }
 
-void SocketTCP::ReadMessage(uint8_t *buf, uint32_t len)
+bool SocketTCP::Read(uint8_t* buf, uint32_t len)
 {
-    Reader(reinterpret_cast<char*>(buf), len);
+    while (len)
+    {
+        int read = recv(sock_, reinterpret_cast<char*>(buf), len, 0);
+
+        if (read <= 0)
+            return false;
+
+        buf += read;
+        len -= read;
+    }
+
+    return true;
 }
 
 } // namespace aspia

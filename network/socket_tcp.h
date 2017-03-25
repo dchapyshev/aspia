@@ -26,29 +26,26 @@ public:
     SocketTCP();
     ~SocketTCP();
 
-    void Connect(const std::string &address, int port) override;
-    void Bind(int port) override;
-    void Listen() override;
-    std::unique_ptr<Socket> Accept() override;
-    void Shutdown() override;
+    static SocketTCP* Create();
 
-    void WriteMessage(const uint8_t *buf, uint32_t len) override;
-    uint32_t ReadMessageSize() override;
-    void ReadMessage(uint8_t *buf, uint32_t len) override;
+    bool Connect(const std::string& address, uint16_t port);
+    bool Bind(uint16_t port);
+    SocketTCP* Accept();
+
+    void Disconnect() override;
+    bool Write(const uint8_t* buf, uint32_t len) override;
+    uint32_t ReadSize() override;
+    bool Read(uint8_t* buf, uint32_t len) override;
 
 private:
-    explicit SocketTCP(SOCKET sock);
+    SocketTCP(SOCKET sock, bool ref);
 
-    void SetWriteTimeout(int timeout);
+    static bool SetWriteTimeout(SOCKET sock, int timeout);
 
-    // Disable or enable Nagle’s algorithm.
-    void EnableNagles(bool enable);
+    // Disable or enable Nagleâ€™s algorithm.
+    static bool EnableNagles(SOCKET sock, bool enable);
 
-    int Read(char *buf, int len);
-    int Write(const char *buf, int len); 
-
-    void Reader(char *buf, int len);
-    void Writer(const char *buf, int len);
+    bool Writer(const char* buf, int len);
 
 private:
     SOCKET sock_;
