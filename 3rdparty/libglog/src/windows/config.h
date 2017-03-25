@@ -8,7 +8,7 @@
 /* #undef HAVE_DLADDR */
 
 /* Define if you have the `snprintf' function */
-/* #undef HAVE_SNPRINTF */
+#define HAVE_SNPRINTF
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 /* #undef HAVE_DLFCN_H */
