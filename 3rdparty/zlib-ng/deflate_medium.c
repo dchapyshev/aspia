@@ -31,7 +31,7 @@ static int tr_tally_lit(deflate_state *s, int c) {
 static int emit_match(deflate_state *s, struct match match) {
     int flush = 0;
 
-    /* matches that are not long enough we need to emit as litterals */
+    /* matches that are not long enough we need to emit as literals */
     if (match.match_length < MIN_MATCH) {
         while (match.match_length) {
             flush += tr_tally_lit(s, s->window[match.strstart]);
@@ -54,7 +54,7 @@ static void insert_match(deflate_state *s, struct match match) {
     if (unlikely(s->lookahead <= match.match_length + MIN_MATCH))
         return;
 
-    /* matches that are not long enough we need to emit as litterals */
+    /* matches that are not long enough we need to emit as literals */
     if (match.match_length < MIN_MATCH) {
 #ifdef NOT_TWEAK_COMPILER
         while (match.match_length) {
@@ -152,12 +152,6 @@ static void fizzle_matches(deflate_state *s, struct match *current, struct match
 
     /* quick exit check.. if this fails then don't bother with anything else */
     if (likely(*match != *orig))
-        return;
-
-    /* check the overlap case and just give up. We can do better in theory,
-     * but unlikely to be worth it
-     */
-    if (next->match_start + next->match_length >= current->strstart)
         return;
 
     c = *current;
@@ -270,7 +264,7 @@ block_state deflate_medium(deflate_state *s, int flush) {
         insert_match(s, current_match);
 
         /* now, look ahead one */
-        if (s->lookahead > MIN_LOOKAHEAD) {
+        if (s->lookahead > MIN_LOOKAHEAD && (current_match.strstart + current_match.match_length) < (s->window_size - MIN_LOOKAHEAD)) {
             s->strstart = current_match.strstart + current_match.match_length;
             hash_head = insert_string(s, s->strstart, 1);
 

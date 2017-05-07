@@ -36,6 +36,7 @@
 #include <google/protobuf/io/zero_copy_stream.h>
 #include <google/protobuf/descriptor_database.h>
 #include <google/protobuf/dynamic_message.h>
+#include <google/protobuf/util/internal/testdata/maps.pb.h>
 #include <google/protobuf/util/json_format_proto3.pb.h>
 #include <google/protobuf/util/type_resolver.h>
 #include <google/protobuf/util/type_resolver_util.h>
@@ -50,19 +51,17 @@ using proto3::FOO;
 using proto3::BAR;
 using proto3::TestMessage;
 using proto3::TestMap;
+using proto3::TestOneof;
+using google::protobuf::testing::MapIn;
 
 static const char kTypeUrlPrefix[] = "type.googleapis.com";
-
-static string GetTypeUrl(const Descriptor* message) {
-  return string(kTypeUrlPrefix) + "/" + message->full_name();
-}
 
 // As functions defined in json_util.h are just thin wrappers around the
 // JSON conversion code in //net/proto2/util/converter, in this test we
 // only cover some very basic cases to make sure the wrappers have forwarded
 // parameters to the underlying implementation correctly. More detailed
 // tests are contained in the //net/proto2/util/converter directory.
-class JsonUtilTest : public testing::Test {
+class JsonUtilTest : public ::testing::Test {
  protected:
   JsonUtilTest() {
   }
@@ -156,6 +155,65 @@ TEST_F(JsonUtilTest, TestDefaultValues) {
       "\"repeatedMessageValue\":[]"
       "}",
       ToJson(m, options));
+
+  options.preserve_proto_field_names = true;
+  m.set_string_value("i am a test string value");
+  m.set_bytes_value("i am a test bytes value");
+  EXPECT_EQ(
+      "{\"bool_value\":false,"
+      "\"int32_value\":0,"
+      "\"int64_value\":\"0\","
+      "\"uint32_value\":0,"
+      "\"uint64_value\":\"0\","
+      "\"float_value\":0,"
+      "\"double_value\":0,"
+      "\"string_value\":\"i am a test string value\","
+      "\"bytes_value\":\"aSBhbSBhIHRlc3QgYnl0ZXMgdmFsdWU=\","
+      "\"enum_value\":\"FOO\","
+      "\"repeated_bool_value\":[],"
+      "\"repeated_int32_value\":[],"
+      "\"repeated_int64_value\":[],"
+      "\"repeated_uint32_value\":[],"
+      "\"repeated_uint64_value\":[],"
+      "\"repeated_float_value\":[],"
+      "\"repeated_double_value\":[],"
+      "\"repeated_string_value\":[],"
+      "\"repeated_bytes_value\":[],"
+      "\"repeated_enum_value\":[],"
+      "\"repeated_message_value\":[]"
+      "}",
+      ToJson(m, options));
+}
+
+TEST_F(JsonUtilTest, TestPreserveProtoFieldNames) {
+  TestMessage m;
+  m.mutable_message_value();
+
+  JsonPrintOptions options;
+  options.preserve_proto_field_names = true;
+  EXPECT_EQ("{\"message_value\":{}}", ToJson(m, options));
+}
+
+TEST_F(JsonUtilTest, TestAlwaysPrintEnumsAsInts) {
+  TestMessage orig;
+  orig.set_enum_value(proto3::BAR);
+  orig.add_repeated_enum_value(proto3::FOO);
+  orig.add_repeated_enum_value(proto3::BAR);
+
+  JsonPrintOptions print_options;
+  print_options.always_print_enums_as_ints = true;
+
+  string expected_json = "{\"enumValue\":1,\"repeatedEnumValue\":[0,1]}";
+  EXPECT_EQ(expected_json, ToJson(orig, print_options));
+
+  TestMessage parsed;
+  JsonParseOptions parse_options;
+  ASSERT_TRUE(FromJson(expected_json, &parsed, parse_options));
+
+  EXPECT_EQ(proto3::BAR, parsed.enum_value());
+  EXPECT_EQ(2, parsed.repeated_enum_value_size());
+  EXPECT_EQ(proto3::FOO, parsed.repeated_enum_value(0));
+  EXPECT_EQ(proto3::BAR, parsed.repeated_enum_value(1));
 }
 
 TEST_F(JsonUtilTest, ParseMessage) {
@@ -194,6 +252,29 @@ TEST_F(JsonUtilTest, ParseMap) {
   TestMap other;
   ASSERT_TRUE(FromJson(ToJson(message, print_options), &other, parse_options));
   EXPECT_EQ(message.DebugString(), other.DebugString());
+}
+
+TEST_F(JsonUtilTest, ParsePrimitiveMapIn) {
+  MapIn message;
+  JsonPrintOptions print_options;
+  print_options.always_print_primitive_fields = true;
+  JsonParseOptions parse_options;
+  EXPECT_EQ("{\"other\":\"\",\"things\":[],\"mapInput\":{}}",
+            ToJson(message, print_options));
+  MapIn other;
+  ASSERT_TRUE(FromJson(ToJson(message, print_options), &other, parse_options));
+  EXPECT_EQ(message.DebugString(), other.DebugString());
+}
+
+TEST_F(JsonUtilTest, PrintPrimitiveOneof) {
+  TestOneof message;
+  JsonPrintOptions options;
+  options.always_print_primitive_fields = true;
+  message.mutable_oneof_message_value();
+  EXPECT_EQ("{\"oneofMessageValue\":{\"value\":0}}", ToJson(message, options));
+
+  message.set_oneof_int32_value(1);
+  EXPECT_EQ("{\"oneofInt32Value\":1}", ToJson(message, options));
 }
 
 TEST_F(JsonUtilTest, TestParseIgnoreUnknownFields) {

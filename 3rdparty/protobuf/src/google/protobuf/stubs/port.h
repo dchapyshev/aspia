@@ -44,6 +44,8 @@
 #include <stdint.h>
 #endif
 
+#include <google/protobuf/stubs/platform_macros.h>
+
 #undef PROTOBUF_LITTLE_ENDIAN
 #ifdef _WIN32
   // Assuming windows is always little-endian.
@@ -358,8 +360,13 @@ class Bits {
 #endif
   }
 
-  static uint64 Log2FloorNonZero64(uint64 n) {
-#if defined(__GNUC__)
+  static uint32 Log2FloorNonZero64(uint64 n) {
+    // arm-nacl-clang runs into an instruction-selection failure when it
+    // encounters __builtin_clzll:
+    // https://bugs.chromium.org/p/nativeclient/issues/detail?id=4395
+    // To work around this, when we build for NaCl we use the portable
+    // implementation instead.
+#if defined(__GNUC__) && !defined(GOOGLE_PROTOBUF_OS_NACL)
   return 63 ^ __builtin_clzll(n);
 #else
   return Log2FloorNonZero64_Portable(n);
