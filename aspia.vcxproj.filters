@@ -1,0 +1,830 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="base">
+      <UniqueIdentifier>{2d609bc8-f775-41c7-97ea-5e1d37d1c484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="codec">
+      <UniqueIdentifier>{fffb58ae-9f1f-4a6f-ac3a-e5e5d247a457}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="desktop_capture">
+      <UniqueIdentifier>{3628cfb3-f967-412d-aa33-4769c1455545}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="client">
+      <UniqueIdentifier>{f386621d-af3e-4d74-807d-1cfa46b2a29f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="network">
+      <UniqueIdentifier>{48d5ff0d-110c-430d-9391-ae83627680e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="proto">
+      <UniqueIdentifier>{8bf5962a-003d-4a9c-a1d2-2a0eb0c2af44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="crypto">
+      <UniqueIdentifier>{e7cad8d0-83ac-42ce-9dd7-6f90d4a4c24e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="host">
+      <UniqueIdentifier>{00ae15ad-82ed-43c9-bcc0-27349b9e6de7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="protocol">
+      <UniqueIdentifier>{5d54609a-dc26-4ef6-9a7f-f8a74ba1163b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ipc">
+      <UniqueIdentifier>{2dcd9387-3217-414c-810b-2480c76dce9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="base\message_loop">
+      <UniqueIdentifier>{c56f52c6-fe00-4362-90af-a6f701853693}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui">
+      <UniqueIdentifier>{bb5d18bf-52e1-4d0f-bf39-374ab2f6a4e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\lang">
+      <UniqueIdentifier>{80136ad0-6aa9-4cf3-97b3-fec39f194104}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\base">
+      <UniqueIdentifier>{14024680-c8eb-4103-8847-07859313882c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="proto\desktop_session.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="proto\power_session.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="ipc\pipe_channel.cc">
+      <Filter>ipc</Filter>
+    </ClCompile>
+    <ClCompile Include="network\firewall_manager.cc">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol\clipboard.cc">
+      <Filter>protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="base\desktop.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\message_window.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\object_watcher.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\path.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\process.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\registry.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scoped_bstr.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scoped_clipboard.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scoped_impersonator.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scoped_thread_desktop.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scoped_variant.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\service.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\service_manager.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\thread.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\unicode.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\util.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\waitable_timer.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="client\client_config.cc">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="client\client_session_desktop.cc">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="codec\compressor_zlib.cc">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="codec\cursor_decoder.cc">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="codec\cursor_encoder.cc">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="codec\decompressor_zlib.cc">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="codec\scoped_vpx_codec.cc">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="codec\video_decoder_zlib.cc">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="codec\video_encoder_zlib.cc">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\decryptor_rsa_aes.cc">
+      <Filter>crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\encryptor_rsa_aes.cc">
+      <Filter>crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\capture_scheduler.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\capturer_gdi.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\cursor.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\desktop_frame.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\desktop_frame_basic.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\desktop_frame_dib.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\desktop_point.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\desktop_rect.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\desktop_region.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\desktop_size.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\differ.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\mouse_cursor.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\mouse_cursor_cache.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\pixel_format.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\x11region.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="host\console_session_watcher.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\desktop_session_client.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\desktop_session_launcher.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host_service.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\input_injector.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\power_injector.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\sas_injector.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\scoped_sas_police.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\screen_updater.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="base\security_helpers.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="host\desktop_session.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="codec\video_encoder_vpx.cc">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="codec\video_decoder_vpx.cc">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="network\network_channel.cc">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="network\network_channel_tcp.cc">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="network\network_client_tcp.cc">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="network\network_server_tcp.cc">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="base\elevation_helpers.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="proto\auth_session_message.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="proto\auth_session.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="proto\desktop_session_message.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="proto\power_session_message.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="base\aligned_memory.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\io_queue.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="codec\pixel_translator.cc">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="base\message_loop\message_loop.cc">
+      <Filter>base\message_loop</Filter>
+    </ClCompile>
+    <ClCompile Include="base\message_loop\message_pump_ui.cc">
+      <Filter>base\message_loop</Filter>
+    </ClCompile>
+    <ClCompile Include="base\message_loop\message_pump_default.cc">
+      <Filter>base\message_loop</Filter>
+    </ClCompile>
+    <ClCompile Include="base\waitable_event.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\waitable_event_watcher.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\about_dialog.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\auth_dialog.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\main_dialog.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\settings_dialog.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\status_dialog.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\users_dialog.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\video_window.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\viewer_window.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cc" />
+    <ClCompile Include="base\message_loop\message_pump_io.cc">
+      <Filter>base\message_loop</Filter>
+    </ClCompile>
+    <ClCompile Include="base\message_loop\message_pump_win.cc">
+      <Filter>base\message_loop</Filter>
+    </ClCompile>
+    <ClCompile Include="base\message_loop\message_loop_proxy.cc">
+      <Filter>base\message_loop</Filter>
+    </ClCompile>
+    <ClCompile Include="client\client_pool.cc">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="client\client.cc">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host_pool.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\clipboard_thread.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="base\message_loop\message_loop_thread.cc">
+      <Filter>base\message_loop</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host_user_utils.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="proto\host_user.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\user_prop_dialog.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\sha512.cc">
+      <Filter>crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\base\child_window.cc">
+      <Filter>ui\base</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\base\modal_dialog.cc">
+      <Filter>ui\base</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\base\module.cc">
+      <Filter>ui\base</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\base\window.cc">
+      <Filter>ui\base</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\base\window_timer.cc">
+      <Filter>ui\base</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\base\tray_icon.cc">
+      <Filter>ui\base</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="base\logging.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\macros.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\process.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_gdi_object.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_hdc.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_native_library.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_thread_desktop.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\thread.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\unicode.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\compressor.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\compressor_zlib.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\decompressor.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\decompressor_zlib.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\scoped_vpx_codec.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\video_decoder.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\video_decoder_zlib.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\video_encoder.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\video_encoder_zlib.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\capture_scheduler.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\capturer.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\capturer_gdi.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\desktop_rect.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\desktop_size.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\diff_block_sse2.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\differ.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\pixel_format.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\encryptor.h">
+      <Filter>crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\decryptor.h">
+      <Filter>crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_select_object.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\desktop_point.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="base\service.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\desktop.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="host\input_injector.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\sas_injector.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\scoped_sas_police.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="base\registry.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\x11region.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\desktop_region.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="client\client_config.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\mouse_cursor.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\cursor.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\mouse_cursor_cache.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\cursor_encoder.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\cursor_decoder.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_clipboard.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_hglobal.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\util.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="client\client_session_desktop.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="host\power_injector.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\clipboard.h">
+      <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_bstr.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_variant.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="network\firewall_manager.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="base\service_manager.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\decryptor_rsa_aes.h">
+      <Filter>crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\encryptor_rsa_aes.h">
+      <Filter>crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_impersonator.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_service.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="ipc\pipe_channel.h">
+      <Filter>ipc</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_local.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\path.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_wts_memory.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="host\desktop_session_client.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="base\message_window.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="host\console_session_watcher.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\desktop_session_launcher.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="proto\desktop_session.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
+    <ClInclude Include="proto\power_session.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
+    <ClInclude Include="base\object_watcher.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_privilege.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\waitable_timer.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\desktop_frame.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\desktop_frame_dib.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\desktop_frame_basic.h">
+      <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="host\screen_updater.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="base\typed_buffer.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_com_initializer.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\security_helpers.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_session.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\desktop_session.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\video_encoder_vpx.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\video_decoder_vpx.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="network\network_channel.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="network\network_channel_tcp.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="network\network_client_tcp.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="network\network_server_tcp.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="network\scoped_addrinfo.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="base\elevation_helpers.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="network\scoped_wsa_initializer.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="proto\auth_session_message.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
+    <ClInclude Include="proto\auth_session.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
+    <ClInclude Include="proto\desktop_session_message.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
+    <ClInclude Include="proto\power_session_message.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\video_helpers.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_object.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\aligned_memory.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\io_buffer.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\message_serialization.h">
+      <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="base\io_queue.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="network\socket.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="codec\pixel_translator.h">
+      <Filter>codec</Filter>
+    </ClInclude>
+    <ClInclude Include="base\message_loop\message_loop.h">
+      <Filter>base\message_loop</Filter>
+    </ClInclude>
+    <ClInclude Include="base\message_loop\message_pump.h">
+      <Filter>base\message_loop</Filter>
+    </ClInclude>
+    <ClInclude Include="base\message_loop\message_pump_ui.h">
+      <Filter>base\message_loop</Filter>
+    </ClInclude>
+    <ClInclude Include="base\message_loop\message_pump_default.h">
+      <Filter>base\message_loop</Filter>
+    </ClInclude>
+    <ClInclude Include="base\waitable_event.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\waitable_event_watcher.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\about_dialog.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\auth_dialog.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\main_dialog.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\resource.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\settings_dialog.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\status_dialog.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\users_dialog.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\video_window.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\viewer_window.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="build_config.h" />
+    <ClInclude Include="global.h" />
+    <ClInclude Include="base\scoped_user_object.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\message_loop\message_pump_io.h">
+      <Filter>base\message_loop</Filter>
+    </ClInclude>
+    <ClInclude Include="base\message_loop\message_pump_dispatcher.h">
+      <Filter>base\message_loop</Filter>
+    </ClInclude>
+    <ClInclude Include="base\message_loop\message_pump_win.h">
+      <Filter>base\message_loop</Filter>
+    </ClInclude>
+    <ClInclude Include="base\message_loop\message_loop_proxy.h">
+      <Filter>base\message_loop</Filter>
+    </ClInclude>
+    <ClInclude Include="base\message_loop\task.h">
+      <Filter>base\message_loop</Filter>
+    </ClInclude>
+    <ClInclude Include="network\wsa_waitable_event.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="client\status.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="client\client_pool.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="client\client.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_pool.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="client\client_session.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="host\clipboard_thread.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="base\message_loop\message_loop_thread.h">
+      <Filter>base\message_loop</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_user_utils.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="proto\host_user.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\user_prop_dialog.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\sha512.h">
+      <Filter>crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\child_window.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\imagelist.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\modal_dialog.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\module.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\window.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\window_timer.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\tray_icon.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="proto\desktop_session.proto">
+      <Filter>proto</Filter>
+    </None>
+    <None Include="proto\power_session.proto">
+      <Filter>proto</Filter>
+    </None>
+    <None Include="proto\desktop_session_message.proto">
+      <Filter>proto</Filter>
+    </None>
+    <None Include="proto\power_session_message.proto">
+      <Filter>proto</Filter>
+    </None>
+    <None Include="proto\auth_session.proto">
+      <Filter>proto</Filter>
+    </None>
+    <None Include="proto\auth_session_message.proto">
+      <Filter>proto</Filter>
+    </None>
+    <None Include="proto\host_user.proto">
+      <Filter>proto</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ui\lang\en-US.rc">
+      <Filter>ui\lang</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="ui\resource.rc">
+      <Filter>ui</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="version.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="common-controls.manifest" />
+  </ItemGroup>
+</Project>

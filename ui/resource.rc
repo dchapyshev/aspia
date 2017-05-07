@@ -1,0 +1,25 @@
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            ui/resource.rc
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+#include "ui/resource.h"
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+
+// UTF-8
+#pragma code_page(65001)
+
+IDI_MAIN          ICON "resource/main.ico"
+IDI_ABOUT         ICON "resource/about.ico"
+IDI_CAD           ICON "resource/cad.ico"
+IDI_EXIT          ICON "resource/exit.ico"
+IDI_FULLSCREEN    ICON "resource/fullscreen.ico"
+IDI_AUTOSIZE      ICON "resource/autosize.ico"
+IDI_KEYS          ICON "resource/keys.ico"
+IDI_POWER         ICON "resource/power.ico"
+IDI_SETTINGS      ICON "resource/settings.ico"
+IDI_USER          ICON "resource/user.ico"
+IDI_USER_DISABLED ICON "resource/user_disabled.ico"

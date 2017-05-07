@@ -1,0 +1,83 @@
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            ui/video_window.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+#ifndef _ASPIA_UI__VIDEO_WINDOW_H
+#define _ASPIA_UI__VIDEO_WINDOW_H
+
+#include "base/scoped_hdc.h"
+#include "desktop_capture/desktop_frame_dib.h"
+#include "desktop_capture/mouse_cursor.h"
+#include "ui/base/child_window.h"
+#include "ui/base/window_timer.h"
+
+namespace aspia {
+
+class VideoWindow : public ChildWindow
+{
+public:
+    class Delegate
+    {
+    public:
+        virtual void OnPointerEvent(int32_t x, int32_t y, uint32_t mask) = 0;
+    };
+
+    explicit VideoWindow(Delegate* delegate);
+
+    DesktopFrame* Frame();
+    void DrawFrame();
+    void ResizeFrame(const DesktopSize& size, const PixelFormat& format);
+    DesktopSize FrameSize();
+
+    void HasFocus(bool has);
+
+    void OnMouse(UINT msg, WPARAM wParam, LPARAM lParam);
+
+private:
+    bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;
+
+    void OnPaint();
+    void OnSize();
+    void OnMouseLeave();
+    LRESULT OnTimer(UINT_PTR event_id);
+    void OnHScroll(UINT code, UINT pos);
+    void OnVScroll(UINT code, UINT pos);
+    void OnVideoFrameResize(WPARAM wParam, LPARAM lParam);
+
+    void FillBackgroundRect(HDC paint_dc, const DesktopRect& paint_rect);
+    void DrawBackground(HDC paint_dc, const DesktopRect& paint_rect);
+    void UpdateScrollBars(int width, int height);
+    bool Scroll(int x, int y);
+
+private:
+    Delegate* delegate_;
+
+    ScopedHBRUSH background_brush_;
+
+    DesktopSize client_size_; // // Размер клиентской области окна.
+    DesktopPoint center_offset_;
+    DesktopPoint scroll_pos_;
+
+    ScopedCreateDC screen_dc_;
+    ScopedCreateDC memory_dc_;
+
+    std::unique_ptr<DesktopFrameDIB> frame_;
+
+    DesktopPoint prev_pos_;
+    uint8_t prev_mask_;
+
+    bool has_mouse_; // Находится ли курсор над окном.
+    bool has_focus_; // Находится ли окно в фокусе.
+
+    WindowTimer scroll_timer_;
+    DesktopPoint scroll_delta_;
+
+    DISALLOW_COPY_AND_ASSIGN(VideoWindow);
+};
+
+} // namespace aspia
+
+#endif // _ASPIA_UI__VIDEO_WINDOW_H

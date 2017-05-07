@@ -1,0 +1,52 @@
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            ui/user_prop_dialog.h
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+#ifndef _ASPIA_UI__USER_PROP_DIALOG_H
+#define _ASPIA_UI__USER_PROP_DIALOG_H
+
+#include "ui/base/modal_dialog.h"
+#include "proto/auth_session.pb.h"
+#include "proto/host_user.pb.h"
+
+namespace aspia {
+
+class UserPropDialog : public ModalDialog
+{
+public:
+    enum class Mode { Add, Edit };
+
+    UserPropDialog(Mode mode, proto::HostUser* user);
+
+    INT_PTR DoModal(HWND parent) override;
+
+private:
+    INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) override;
+
+    void OnInitDialog();
+    void OnClose();
+    void OnOkButton();
+    void OnCancelButton();
+    void OnPasswordEditDblClick();
+
+    void InsertSessionType(HWND list, proto::SessionType session_type);
+
+    static LRESULT CALLBACK PasswordEditWindowProc(HWND hwnd,
+                                                   UINT msg,
+                                                   WPARAM wparam,
+                                                   LPARAM lparam,
+                                                   UINT_PTR subclass_id,
+                                                   DWORD_PTR ref_data);
+    Mode mode_;
+    proto::HostUser* user_;
+    bool password_changed_ = true;
+
+    DISALLOW_COPY_AND_ASSIGN(UserPropDialog);
+};
+
+} // namespace aspia
+
+#endif // _ASPIA_UI__USER_PROP_DIALOG_H

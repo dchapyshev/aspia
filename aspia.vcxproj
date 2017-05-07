@@ -1,0 +1,411 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="base\aligned_memory.cc" />
+    <ClCompile Include="base\desktop.cc" />
+    <ClCompile Include="base\elevation_helpers.cc" />
+    <ClCompile Include="base\io_queue.cc" />
+    <ClCompile Include="base\message_loop\message_loop.cc" />
+    <ClCompile Include="base\message_loop\message_loop_proxy.cc" />
+    <ClCompile Include="base\message_loop\message_loop_thread.cc" />
+    <ClCompile Include="base\message_loop\message_pump_default.cc" />
+    <ClCompile Include="base\message_loop\message_pump_io.cc" />
+    <ClCompile Include="base\message_loop\message_pump_ui.cc" />
+    <ClCompile Include="base\message_loop\message_pump_win.cc" />
+    <ClCompile Include="base\message_window.cc" />
+    <ClCompile Include="base\object_watcher.cc" />
+    <ClCompile Include="base\path.cc" />
+    <ClCompile Include="base\process.cc" />
+    <ClCompile Include="base\registry.cc" />
+    <ClCompile Include="base\scoped_bstr.cc" />
+    <ClCompile Include="base\scoped_clipboard.cc" />
+    <ClCompile Include="base\scoped_impersonator.cc" />
+    <ClCompile Include="base\scoped_thread_desktop.cc" />
+    <ClCompile Include="base\scoped_variant.cc" />
+    <ClCompile Include="base\security_helpers.cc" />
+    <ClCompile Include="base\service.cc" />
+    <ClCompile Include="base\service_manager.cc" />
+    <ClCompile Include="base\thread.cc" />
+    <ClCompile Include="base\unicode.cc" />
+    <ClCompile Include="base\util.cc" />
+    <ClCompile Include="base\waitable_event.cc" />
+    <ClCompile Include="base\waitable_event_watcher.cc" />
+    <ClCompile Include="base\waitable_timer.cc" />
+    <ClCompile Include="client\client.cc" />
+    <ClCompile Include="client\client_config.cc" />
+    <ClCompile Include="client\client_pool.cc" />
+    <ClCompile Include="client\client_session_desktop.cc" />
+    <ClCompile Include="codec\compressor_zlib.cc" />
+    <ClCompile Include="codec\cursor_decoder.cc" />
+    <ClCompile Include="codec\cursor_encoder.cc" />
+    <ClCompile Include="codec\decompressor_zlib.cc" />
+    <ClCompile Include="codec\pixel_translator.cc" />
+    <ClCompile Include="codec\scoped_vpx_codec.cc" />
+    <ClCompile Include="codec\video_decoder_vpx.cc" />
+    <ClCompile Include="codec\video_decoder_zlib.cc" />
+    <ClCompile Include="codec\video_encoder_vpx.cc" />
+    <ClCompile Include="codec\video_encoder_zlib.cc" />
+    <ClCompile Include="crypto\decryptor_rsa_aes.cc" />
+    <ClCompile Include="crypto\encryptor_rsa_aes.cc" />
+    <ClCompile Include="crypto\sha512.cc" />
+    <ClCompile Include="desktop_capture\capturer_gdi.cc" />
+    <ClCompile Include="desktop_capture\capture_scheduler.cc" />
+    <ClCompile Include="desktop_capture\cursor.cc" />
+    <ClCompile Include="desktop_capture\desktop_frame.cc" />
+    <ClCompile Include="desktop_capture\desktop_frame_basic.cc" />
+    <ClCompile Include="desktop_capture\desktop_frame_dib.cc" />
+    <ClCompile Include="desktop_capture\desktop_point.cc" />
+    <ClCompile Include="desktop_capture\desktop_rect.cc" />
+    <ClCompile Include="desktop_capture\desktop_region.cc" />
+    <ClCompile Include="desktop_capture\desktop_size.cc" />
+    <ClCompile Include="desktop_capture\differ.cc" />
+    <ClCompile Include="desktop_capture\mouse_cursor.cc" />
+    <ClCompile Include="desktop_capture\mouse_cursor_cache.cc" />
+    <ClCompile Include="desktop_capture\pixel_format.cc" />
+    <ClCompile Include="desktop_capture\x11region.cc" />
+    <ClCompile Include="host\clipboard_thread.cc" />
+    <ClCompile Include="host\console_session_watcher.cc" />
+    <ClCompile Include="host\desktop_session.cc" />
+    <ClCompile Include="host\desktop_session_client.cc" />
+    <ClCompile Include="host\desktop_session_launcher.cc" />
+    <ClCompile Include="host\host.cc" />
+    <ClCompile Include="host\host_pool.cc" />
+    <ClCompile Include="host\host_service.cc" />
+    <ClCompile Include="host\host_user_utils.cc" />
+    <ClCompile Include="host\input_injector.cc" />
+    <ClCompile Include="host\power_injector.cc" />
+    <ClCompile Include="host\sas_injector.cc" />
+    <ClCompile Include="host\scoped_sas_police.cc" />
+    <ClCompile Include="host\screen_updater.cc" />
+    <ClCompile Include="ipc\pipe_channel.cc" />
+    <ClCompile Include="main.cc" />
+    <ClCompile Include="network\firewall_manager.cc" />
+    <ClCompile Include="network\network_channel.cc" />
+    <ClCompile Include="network\network_channel_tcp.cc" />
+    <ClCompile Include="network\network_client_tcp.cc" />
+    <ClCompile Include="network\network_server_tcp.cc" />
+    <ClCompile Include="protocol\clipboard.cc" />
+    <ClCompile Include="proto\auth_session.pb.cc" />
+    <ClCompile Include="proto\auth_session_message.pb.cc" />
+    <ClCompile Include="proto\desktop_session.pb.cc" />
+    <ClCompile Include="proto\desktop_session_message.pb.cc" />
+    <ClCompile Include="proto\host_user.pb.cc" />
+    <ClCompile Include="proto\power_session.pb.cc" />
+    <ClCompile Include="proto\power_session_message.pb.cc" />
+    <ClCompile Include="ui\about_dialog.cc" />
+    <ClCompile Include="ui\auth_dialog.cc" />
+    <ClCompile Include="ui\base\child_window.cc" />
+    <ClCompile Include="ui\base\modal_dialog.cc" />
+    <ClCompile Include="ui\base\module.cc" />
+    <ClCompile Include="ui\base\tray_icon.cc" />
+    <ClCompile Include="ui\base\window.cc" />
+    <ClCompile Include="ui\base\window_timer.cc" />
+    <ClCompile Include="ui\main_dialog.cc" />
+    <ClCompile Include="ui\settings_dialog.cc" />
+    <ClCompile Include="ui\status_dialog.cc" />
+    <ClCompile Include="ui\users_dialog.cc" />
+    <ClCompile Include="ui\user_prop_dialog.cc" />
+    <ClCompile Include="ui\video_window.cc" />
+    <ClCompile Include="ui\viewer_window.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="base\aligned_memory.h" />
+    <ClInclude Include="base\desktop.h" />
+    <ClInclude Include="base\elevation_helpers.h" />
+    <ClInclude Include="base\io_buffer.h" />
+    <ClInclude Include="base\io_queue.h" />
+    <ClInclude Include="base\logging.h" />
+    <ClInclude Include="base\macros.h" />
+    <ClInclude Include="base\message_loop\message_loop.h" />
+    <ClInclude Include="base\message_loop\message_loop_proxy.h" />
+    <ClInclude Include="base\message_loop\message_loop_thread.h" />
+    <ClInclude Include="base\message_loop\message_pump.h" />
+    <ClInclude Include="base\message_loop\message_pump_default.h" />
+    <ClInclude Include="base\message_loop\message_pump_dispatcher.h" />
+    <ClInclude Include="base\message_loop\message_pump_io.h" />
+    <ClInclude Include="base\message_loop\message_pump_ui.h" />
+    <ClInclude Include="base\message_loop\message_pump_win.h" />
+    <ClInclude Include="base\message_loop\task.h" />
+    <ClInclude Include="base\message_window.h" />
+    <ClInclude Include="base\object_watcher.h" />
+    <ClInclude Include="base\path.h" />
+    <ClInclude Include="base\process.h" />
+    <ClInclude Include="base\registry.h" />
+    <ClInclude Include="base\scoped_bstr.h" />
+    <ClInclude Include="base\scoped_clipboard.h" />
+    <ClInclude Include="base\scoped_com_initializer.h" />
+    <ClInclude Include="base\scoped_gdi_object.h" />
+    <ClInclude Include="base\scoped_hdc.h" />
+    <ClInclude Include="base\scoped_hglobal.h" />
+    <ClInclude Include="base\scoped_impersonator.h" />
+    <ClInclude Include="base\scoped_local.h" />
+    <ClInclude Include="base\scoped_native_library.h" />
+    <ClInclude Include="base\scoped_object.h" />
+    <ClInclude Include="base\scoped_privilege.h" />
+    <ClInclude Include="base\scoped_select_object.h" />
+    <ClInclude Include="base\scoped_thread_desktop.h" />
+    <ClInclude Include="base\scoped_user_object.h" />
+    <ClInclude Include="base\scoped_variant.h" />
+    <ClInclude Include="base\scoped_wts_memory.h" />
+    <ClInclude Include="base\security_helpers.h" />
+    <ClInclude Include="base\service.h" />
+    <ClInclude Include="base\service_manager.h" />
+    <ClInclude Include="base\thread.h" />
+    <ClInclude Include="base\typed_buffer.h" />
+    <ClInclude Include="base\unicode.h" />
+    <ClInclude Include="base\util.h" />
+    <ClInclude Include="base\waitable_event.h" />
+    <ClInclude Include="base\waitable_event_watcher.h" />
+    <ClInclude Include="base\waitable_timer.h" />
+    <ClInclude Include="build_config.h" />
+    <ClInclude Include="client\client.h" />
+    <ClInclude Include="client\client_config.h" />
+    <ClInclude Include="client\client_pool.h" />
+    <ClInclude Include="client\client_session.h" />
+    <ClInclude Include="client\client_session_desktop.h" />
+    <ClInclude Include="client\status.h" />
+    <ClInclude Include="codec\compressor.h" />
+    <ClInclude Include="codec\compressor_zlib.h" />
+    <ClInclude Include="codec\cursor_decoder.h" />
+    <ClInclude Include="codec\cursor_encoder.h" />
+    <ClInclude Include="codec\decompressor.h" />
+    <ClInclude Include="codec\decompressor_zlib.h" />
+    <ClInclude Include="codec\pixel_translator.h" />
+    <ClInclude Include="codec\scoped_vpx_codec.h" />
+    <ClInclude Include="codec\video_decoder.h" />
+    <ClInclude Include="codec\video_decoder_vpx.h" />
+    <ClInclude Include="codec\video_decoder_zlib.h" />
+    <ClInclude Include="codec\video_encoder.h" />
+    <ClInclude Include="codec\video_encoder_vpx.h" />
+    <ClInclude Include="codec\video_encoder_zlib.h" />
+    <ClInclude Include="codec\video_helpers.h" />
+    <ClInclude Include="crypto\decryptor.h" />
+    <ClInclude Include="crypto\decryptor_rsa_aes.h" />
+    <ClInclude Include="crypto\encryptor.h" />
+    <ClInclude Include="crypto\encryptor_rsa_aes.h" />
+    <ClInclude Include="crypto\sha512.h" />
+    <ClInclude Include="desktop_capture\capturer.h" />
+    <ClInclude Include="desktop_capture\capturer_gdi.h" />
+    <ClInclude Include="desktop_capture\capture_scheduler.h" />
+    <ClInclude Include="desktop_capture\cursor.h" />
+    <ClInclude Include="desktop_capture\desktop_frame.h" />
+    <ClInclude Include="desktop_capture\desktop_frame_basic.h" />
+    <ClInclude Include="desktop_capture\desktop_frame_dib.h" />
+    <ClInclude Include="desktop_capture\desktop_point.h" />
+    <ClInclude Include="desktop_capture\desktop_rect.h" />
+    <ClInclude Include="desktop_capture\desktop_region.h" />
+    <ClInclude Include="desktop_capture\desktop_size.h" />
+    <ClInclude Include="desktop_capture\differ.h" />
+    <ClInclude Include="desktop_capture\diff_block_sse2.h" />
+    <ClInclude Include="desktop_capture\mouse_cursor.h" />
+    <ClInclude Include="desktop_capture\mouse_cursor_cache.h" />
+    <ClInclude Include="desktop_capture\pixel_format.h" />
+    <ClInclude Include="desktop_capture\x11region.h" />
+    <ClInclude Include="global.h" />
+    <ClInclude Include="host\clipboard_thread.h" />
+    <ClInclude Include="host\console_session_watcher.h" />
+    <ClInclude Include="host\desktop_session.h" />
+    <ClInclude Include="host\desktop_session_client.h" />
+    <ClInclude Include="host\desktop_session_launcher.h" />
+    <ClInclude Include="host\host.h" />
+    <ClInclude Include="host\host_pool.h" />
+    <ClInclude Include="host\host_service.h" />
+    <ClInclude Include="host\host_user_utils.h" />
+    <ClInclude Include="host\input_injector.h" />
+    <ClInclude Include="host\power_injector.h" />
+    <ClInclude Include="host\sas_injector.h" />
+    <ClInclude Include="host\scoped_sas_police.h" />
+    <ClInclude Include="host\screen_updater.h" />
+    <ClInclude Include="host\host_session.h" />
+    <ClInclude Include="ipc\pipe_channel.h" />
+    <ClInclude Include="network\firewall_manager.h" />
+    <ClInclude Include="network\network_channel.h" />
+    <ClInclude Include="network\network_channel_tcp.h" />
+    <ClInclude Include="network\network_client_tcp.h" />
+    <ClInclude Include="network\network_server_tcp.h" />
+    <ClInclude Include="network\scoped_addrinfo.h" />
+    <ClInclude Include="network\scoped_wsa_initializer.h" />
+    <ClInclude Include="network\socket.h" />
+    <ClInclude Include="network\wsa_waitable_event.h" />
+    <ClInclude Include="protocol\clipboard.h" />
+    <ClInclude Include="protocol\message_serialization.h" />
+    <ClInclude Include="proto\auth_session.pb.h" />
+    <ClInclude Include="proto\auth_session_message.pb.h" />
+    <ClInclude Include="proto\desktop_session.pb.h" />
+    <ClInclude Include="proto\desktop_session_message.pb.h" />
+    <ClInclude Include="proto\host_user.pb.h" />
+    <ClInclude Include="proto\power_session.pb.h" />
+    <ClInclude Include="proto\power_session_message.pb.h" />
+    <ClInclude Include="ui\about_dialog.h" />
+    <ClInclude Include="ui\auth_dialog.h" />
+    <ClInclude Include="ui\base\child_window.h" />
+    <ClInclude Include="ui\base\imagelist.h" />
+    <ClInclude Include="ui\base\modal_dialog.h" />
+    <ClInclude Include="ui\base\module.h" />
+    <ClInclude Include="ui\base\tray_icon.h" />
+    <ClInclude Include="ui\base\window.h" />
+    <ClInclude Include="ui\base\window_timer.h" />
+    <ClInclude Include="ui\main_dialog.h" />
+    <ClInclude Include="ui\resource.h" />
+    <ClInclude Include="ui\settings_dialog.h" />
+    <ClInclude Include="ui\status_dialog.h" />
+    <ClInclude Include="ui\users_dialog.h" />
+    <ClInclude Include="ui\user_prop_dialog.h" />
+    <ClInclude Include="ui\video_window.h" />
+    <ClInclude Include="ui\viewer_window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="proto\auth_session.proto" />
+    <None Include="proto\auth_session_message.proto" />
+    <None Include="proto\desktop_session.proto" />
+    <None Include="proto\desktop_session_message.proto" />
+    <None Include="proto\host_user.proto" />
+    <None Include="proto\power_session.proto" />
+    <None Include="proto\power_session_message.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ui\lang\en-US.rc" />
+    <ResourceCompile Include="ui\resource.rc" />
+    <ResourceCompile Include="version.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="common-controls.manifest" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B4B5FBB6-4E1C-43DB-B73E-6AE3C9AA2AC5}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>libaspia</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>aspia</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(OutDir)obj\x86\$(ProjectName)\</IntDir>
+    <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSdk_ExecutablePath);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSdk_IncludePath);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSdk_LibraryPath_x86);</LibraryPath>
+    <ExcludePath>$(VC_IncludePath);$(WindowsSdk_IncludePath);$(MSBuild_ExecutablePath);$(VC_LibraryPath_x86);</ExcludePath>
+    <EnableCppCoreCheck>true</EnableCppCoreCheck>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IntDir>$(OutDir)obj\x86\$(ProjectName)\</IntDir>
+    <GenerateManifest>true</GenerateManifest>
+    <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSdk_ExecutablePath);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSdk_IncludePath);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSdk_LibraryPath_x86);</LibraryPath>
+    <ExcludePath>$(VC_IncludePath);$(WindowsSdk_IncludePath);$(MSBuild_ExecutablePath);$(VC_LibraryPath_x86);</ExcludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)/3rdparty/libglog/src/windows;$(SolutionDir)/3rdparty/libvpx;$(SolutionDir)/3rdparty/libyuv/include;$(SolutionDir)/3rdparty/zlib-ng;$(SolutionDir)/3rdparty/protobuf/src;$(SolutionDir)/3rdparty;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;sas.lib;dwmapi.lib;uxtheme.lib;libglog.lib;gflags.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+    </Link>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalManifestFiles>common-controls.manifest</AdditionalManifestFiles>
+    </Manifest>
+    <ResourceCompile />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)/3rdparty/libglog/src/windows;$(SolutionDir)/3rdparty/libvpx;$(SolutionDir)/3rdparty/libyuv/include;$(SolutionDir)/3rdparty/zlib-ng;$(SolutionDir)/3rdparty/protobuf/src;$(SolutionDir)/3rdparty;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalOptions>/Zm160 %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitFramePointers>true</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <StringPooling>true</StringPooling>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+      <CompileAsManaged>false</CompileAsManaged>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <CallingConvention>Cdecl</CallingConvention>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SetChecksum>true</SetChecksum>
+      <AdditionalDependencies>dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;sas.lib;dwmapi.lib;uxtheme.lib;libglog.lib;gflags.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
+    <Manifest>
+      <AssemblyIdentity>
+      </AssemblyIdentity>
+      <AdditionalManifestFiles>common-controls.manifest</AdditionalManifestFiles>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
+    <ResourceCompile />
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
