@@ -20,13 +20,8 @@ public:
     Capturer() {}
     virtual ~Capturer() = default;
 
-    //
-    // Метод выполнения захвата экрана
-    // Возвращает указатель на буфер, который содержит изображение экрана.
-    //
-    virtual const DesktopFrame* CaptureImage(bool* desktop_change) = 0;
-
-    virtual MouseCursor* CaptureCursor() = 0;
+    virtual const DesktopFrame* CaptureImage() = 0;
+    virtual std::unique_ptr<MouseCursor> CaptureCursor() = 0;
 };
 
 } // namespace aspia

@@ -8,8 +8,6 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__DIFFER_H
 #define _ASPIA_DESKTOP_CAPTURE__DIFFER_H
 
-#include "aspia_config.h"
-
 #include <memory>
 
 #include "desktop_capture/desktop_size.h"
@@ -24,7 +22,7 @@ namespace aspia {
 class Differ
 {
 public:
-    Differ(const DesktopSize& size);
+    explicit Differ(const DesktopSize& size);
     ~Differ() = default;
 
     void CalcDirtyRegion(const uint8_t* prev_image,

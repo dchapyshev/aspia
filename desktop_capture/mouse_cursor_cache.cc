@@ -1,12 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            desktop_capture/mouse_cursor_cache.cpp
+// FILE:            desktop_capture/mouse_cursor_cache.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #include "desktop_capture/mouse_cursor_cache.h"
-
 #include "base/logging.h"
 
 namespace aspia {
@@ -56,7 +55,7 @@ int MouseCursorCache::Add(std::unique_ptr<MouseCursor> mouse_cursor)
     return cache_.size() - 1;
 }
 
-MouseCursor* MouseCursorCache::Get(int index)
+std::shared_ptr<MouseCursor> MouseCursorCache::Get(int index)
 {
     if (index < 0 || index > kMaxCacheSize)
     {
@@ -64,7 +63,7 @@ MouseCursor* MouseCursorCache::Get(int index)
         return nullptr;
     }
 
-    return cache_.at(index).get();
+    return cache_.at(index);
 }
 
 bool MouseCursorCache::IsEmpty() const

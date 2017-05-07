@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            desktop_capture/differ.cpp
+// FILE:            desktop_capture/differ.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
@@ -15,7 +15,7 @@ static const int kBytesPerPixel = 4;
 static const int kBlockSize = 16;
 static const int kBytesPerBlock = kBytesPerPixel * kBlockSize;
 
-INLINE static uint8_t DiffFullBlock_C(const uint8_t* image1,
+static INLINE uint8_t DiffFullBlock_C(const uint8_t* image1,
                                       const uint8_t* image2,
                                       int bytes_per_row)
 {
@@ -41,7 +41,7 @@ INLINE static uint8_t DiffFullBlock_C(const uint8_t* image1,
 // Note that if we force the capturer to always return images whose width and
 // height are multiples of kBlockSize, then this will never be called.
 //
-INLINE static uint8_t DiffPartialBlock(const uint8_t* prev_image,
+static INLINE uint8_t DiffPartialBlock(const uint8_t* prev_image,
                                        const uint8_t* curr_image,
                                        int bytes_per_row,
                                        int bytes_per_block,

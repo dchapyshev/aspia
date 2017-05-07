@@ -8,10 +8,6 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__DESKTOP_POINT_H
 #define _ASPIA_DESKTOP_CAPTURE__DESKTOP_POINT_H
 
-#include "aspia_config.h"
-
-#include <stdint.h>
-
 namespace aspia {
 
 class DesktopPoint

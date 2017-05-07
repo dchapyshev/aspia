@@ -1,16 +1,18 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            desktop_capture/pixel_format.cpp
+// FILE:            desktop_capture/pixel_format.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #include "desktop_capture/pixel_format.h"
+#include "base/logging.h"
 
 namespace aspia {
 
 PixelFormat::PixelFormat() :
     bits_per_pixel_(0),
+    bytes_per_pixel_(0),
     red_max_(0),
     green_max_(0),
     blue_max_(0),
@@ -26,14 +28,15 @@ PixelFormat::PixelFormat(const PixelFormat& other)
     Set(other);
 }
 
-PixelFormat::PixelFormat(uint32_t bits_per_pixel,
-                         uint32_t red_max,
-                         uint32_t green_max,
-                         uint32_t blue_max,
-                         uint32_t red_shift,
-                         uint32_t green_shift,
-                         uint32_t blue_shift) :
+PixelFormat::PixelFormat(uint8_t bits_per_pixel,
+                         uint16_t red_max,
+                         uint16_t green_max,
+                         uint16_t blue_max,
+                         uint8_t red_shift,
+                         uint8_t green_shift,
+                         uint8_t blue_shift) :
     bits_per_pixel_(bits_per_pixel),
+    bytes_per_pixel_(bits_per_pixel / 8),
     red_max_(red_max),
     green_max_(green_max),
     blue_max_(blue_max),
@@ -42,11 +45,6 @@ PixelFormat::PixelFormat(uint32_t bits_per_pixel,
     blue_shift_(blue_shift)
 {
     // Nothing
-}
-
-PixelFormat::PixelFormat(const proto::VideoPixelFormat& format)
-{
-    FromVideoPixelFormat(format);
 }
 
 // static
@@ -146,42 +144,42 @@ PixelFormat PixelFormat::RGB111()
                        0); // blue shift
 }
 
-uint32_t PixelFormat::BitsPerPixel() const
+uint8_t PixelFormat::BitsPerPixel() const
 {
     return bits_per_pixel_;
 }
 
-uint32_t PixelFormat::BytesPerPixel() const
+uint8_t PixelFormat::BytesPerPixel() const
 {
-    return bits_per_pixel_ / 8;
+    return bytes_per_pixel_;
 }
 
-uint32_t PixelFormat::RedMax() const
+uint16_t PixelFormat::RedMax() const
 {
     return red_max_;
 }
 
-uint32_t PixelFormat::GreenMax() const
+uint16_t PixelFormat::GreenMax() const
 {
     return green_max_;
 }
 
-uint32_t PixelFormat::BlueMax() const
+uint16_t PixelFormat::BlueMax() const
 {
     return blue_max_;
 }
 
-uint32_t PixelFormat::RedShift() const
+uint8_t PixelFormat::RedShift() const
 {
     return red_shift_;
 }
 
-uint32_t PixelFormat::GreenShift() const
+uint8_t PixelFormat::GreenShift() const
 {
     return green_shift_;
 }
 
-uint32_t PixelFormat::BlueShift() const
+uint8_t PixelFormat::BlueShift() const
 {
     return blue_shift_;
 }
@@ -205,6 +203,7 @@ bool PixelFormat::IsEmpty() const
 void PixelFormat::Clear()
 {
     bits_per_pixel_ = 0;
+    bytes_per_pixel_ = 0;
 
     red_max_   = 0;
     green_max_ = 0;
@@ -217,6 +216,9 @@ void PixelFormat::Clear()
 
 bool PixelFormat::IsEqual(const PixelFormat& other) const
 {
+    DCHECK(bytes_per_pixel_ == (bits_per_pixel_ / 8));
+    DCHECK(other.bytes_per_pixel_ == (other.bits_per_pixel_ / 8));
+
     if (bits_per_pixel_ == other.bits_per_pixel_ &&
         red_max_        == other.red_max_        &&
         green_max_      == other.green_max_      &&
@@ -234,6 +236,7 @@ bool PixelFormat::IsEqual(const PixelFormat& other) const
 void PixelFormat::Set(const PixelFormat& other)
 {
     bits_per_pixel_ = other.bits_per_pixel_;
+    bytes_per_pixel_ = other.bytes_per_pixel_;
 
     red_max_   = other.red_max_;
     green_max_ = other.green_max_;
@@ -242,32 +245,6 @@ void PixelFormat::Set(const PixelFormat& other)
     red_shift_   = other.red_shift_;
     green_shift_ = other.green_shift_;
     blue_shift_  = other.blue_shift_;
-}
-
-void PixelFormat::ToVideoPixelFormat(proto::VideoPixelFormat* format) const
-{
-    format->set_bits_per_pixel(bits_per_pixel_);
-
-    format->set_red_max(red_max_);
-    format->set_green_max(green_max_);
-    format->set_blue_max(blue_max_);
-
-    format->set_red_shift(red_shift_);
-    format->set_green_shift(green_shift_);
-    format->set_blue_shift(blue_shift_);
-}
-
-void PixelFormat::FromVideoPixelFormat(const proto::VideoPixelFormat& format)
-{
-    bits_per_pixel_ = format.bits_per_pixel();
-
-    red_max_   = format.red_max();
-    green_max_ = format.green_max();
-    blue_max_  = format.blue_max();
-
-    red_shift_   = format.red_shift();
-    green_shift_ = format.green_shift();
-    blue_shift_  = format.blue_shift();
 }
 
 PixelFormat& PixelFormat::operator=(const PixelFormat& other)

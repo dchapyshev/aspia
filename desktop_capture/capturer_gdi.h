@@ -8,8 +8,6 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__CAPTURER_GDI_H
 #define _ASPIA_DESKTOP_CAPTURE__CAPTURER_GDI_H
 
-#include "aspia_config.h"
-
 #include "desktop_capture/capturer.h"
 #include "desktop_capture/desktop_frame_dib.h"
 #include "desktop_capture/differ.h"
@@ -28,24 +26,19 @@ namespace aspia {
 class CapturerGDI : public Capturer
 {
 public:
-    CapturerGDI();
     ~CapturerGDI() = default;
 
-    //
-    // Метод выполнения захвата экрана
-    // Возвращает указатель на буфер, который содержит изображение экрана.
-    //
-    const DesktopFrame* CaptureImage(bool* desktop_change) override;
+    static std::unique_ptr<CapturerGDI> Create();
 
-    MouseCursor* CaptureCursor() override;
+    const DesktopFrame* CaptureImage() override;
+    std::unique_ptr<MouseCursor> CaptureCursor() override;
 
 private:
-    bool PrepareInputDesktop();
-    void PrepareCaptureResources();
+    CapturerGDI();
+    bool PrepareCaptureResources();
 
-private:
     ScopedThreadDesktop desktop_;
-    DesktopRect screen_rect_;
+    DesktopRect desktop_dc_rect_;
 
     std::unique_ptr<Differ> differ_;
     std::unique_ptr<ScopedGetDC> desktop_dc_;
@@ -54,7 +47,7 @@ private:
     static const int kNumFrames = 2;
     int curr_frame_id_;
 
-    std::unique_ptr<DesktopFrameDib> frame_[kNumFrames];
+    std::unique_ptr<DesktopFrameDIB> frame_[kNumFrames];
 
     CURSORINFO prev_cursor_info_;
 

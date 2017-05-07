@@ -1,11 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            desktop_capture/desktop_frame_basic.cpp
+// FILE:            desktop_capture/desktop_frame_basic.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #include "desktop_capture/desktop_frame_basic.h"
+#include <malloc.h>
 
 namespace aspia {
 
@@ -20,19 +21,23 @@ DesktopFrameBasic::DesktopFrameBasic(const DesktopSize& size,
 
 DesktopFrameBasic::~DesktopFrameBasic()
 {
-    _aligned_free(data_);
+    free(data_);
 }
 
 // static
-DesktopFrameBasic* DesktopFrameBasic::Create(const DesktopSize& size, const PixelFormat& format)
+std::unique_ptr<DesktopFrameBasic> DesktopFrameBasic::Create(const DesktopSize& size,
+                                                             const PixelFormat& format)
 {
     int bytes_per_row = size.Width() * format.BytesPerPixel();
 
-    uint8_t* data = reinterpret_cast<uint8_t*>(_aligned_malloc(bytes_per_row * size.Height(), 32));
+    uint8_t* data = reinterpret_cast<uint8_t*>(malloc(bytes_per_row * size.Height()));
     if (!data)
         return nullptr;
 
-    return new DesktopFrameBasic(size, format, bytes_per_row, data);
+    return std::unique_ptr<DesktopFrameBasic>(new DesktopFrameBasic(size,
+                                                                    format,
+                                                                    bytes_per_row,
+                                                                    data));
 }
 
 } // namespace aspia

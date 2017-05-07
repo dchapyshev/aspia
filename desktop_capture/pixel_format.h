@@ -8,11 +8,7 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H
 #define _ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H
 
-#include "aspia_config.h"
-
 #include <stdint.h>
-
-#include "proto/proto.pb.h"
 
 namespace aspia {
 
@@ -21,14 +17,13 @@ class PixelFormat
 public:
     PixelFormat();
     PixelFormat(const PixelFormat& other);
-    PixelFormat(uint32_t bits_per_pixel,
-                uint32_t red_max,
-                uint32_t green_max,
-                uint32_t blue_max,
-                uint32_t red_shift,
-                uint32_t green_shift,
-                uint32_t blue_shift);
-    PixelFormat(const proto::VideoPixelFormat& format);
+    PixelFormat(uint8_t bits_per_pixel,
+                uint16_t red_max,
+                uint16_t green_max,
+                uint16_t blue_max,
+                uint8_t red_shift,
+                uint8_t green_shift,
+                uint8_t blue_shift);
     ~PixelFormat() = default;
 
     // True color (32 bits per pixel)
@@ -84,39 +79,37 @@ public:
     // 3:7 - unused
     static PixelFormat RGB111();
 
-    uint32_t BitsPerPixel() const;
-    uint32_t BytesPerPixel() const;
+    uint8_t BitsPerPixel() const;
+    uint8_t BytesPerPixel() const;
 
-    uint32_t RedMax() const;
-    uint32_t GreenMax() const;
-    uint32_t BlueMax() const;
+    uint16_t RedMax() const;
+    uint16_t GreenMax() const;
+    uint16_t BlueMax() const;
 
-    uint32_t RedShift() const;
-    uint32_t GreenShift() const;
-    uint32_t BlueShift() const;
+    uint8_t RedShift() const;
+    uint8_t GreenShift() const;
+    uint8_t BlueShift() const;
 
     bool IsEmpty() const;
     void Clear();
     bool IsEqual(const PixelFormat& other) const;
     void Set(const PixelFormat& other);
 
-    void ToVideoPixelFormat(proto::VideoPixelFormat* format) const;
-    void FromVideoPixelFormat(const proto::VideoPixelFormat& format);
-
     PixelFormat& operator=(const PixelFormat& other);
     bool operator==(const PixelFormat& other);
     bool operator!=(const PixelFormat& other);
 
 private:
-    uint32_t bits_per_pixel_; // Количество бит, которые пиксель занимает в памяти.
+    uint8_t bits_per_pixel_; // Количество бит, которые пиксель занимает в памяти.
+    uint8_t bytes_per_pixel_; // Количество байт, которые пиксель занимает в памяти.
 
-    uint32_t red_max_;
-    uint32_t green_max_;
-    uint32_t blue_max_;
+    uint16_t red_max_;
+    uint16_t green_max_;
+    uint16_t blue_max_;
 
-    uint32_t red_shift_;
-    uint32_t green_shift_;
-    uint32_t blue_shift_;
+    uint8_t red_shift_;
+    uint8_t green_shift_;
+    uint8_t blue_shift_;
 };
 
 } // namespace aspia

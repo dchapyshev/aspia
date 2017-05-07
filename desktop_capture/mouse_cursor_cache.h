@@ -35,7 +35,7 @@ public:
     //
     // Возвращает указатель на закешированный курсор по его индексу в кеше.
     //
-    MouseCursor* Get(int index);
+    std::shared_ptr<MouseCursor> Get(int index);
 
     //
     // Проверяет наличие элементов в кеше.
@@ -55,7 +55,7 @@ public:
     static bool IsValidCacheSize(size_t size);
 
 private:
-    std::deque<std::unique_ptr<MouseCursor>> cache_;
+    std::deque<std::shared_ptr<MouseCursor>> cache_;
     const size_t cache_size_;
 };
 

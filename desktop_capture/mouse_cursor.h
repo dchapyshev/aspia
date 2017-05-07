@@ -8,8 +8,6 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__MOUSE_CURSOR_H
 #define _ASPIA_DESKTOP_CAPTURE__MOUSE_CURSOR_H
 
-#include "aspia_config.h"
-
 #include <memory>
 
 #include "desktop_capture/desktop_size.h"
@@ -20,21 +18,28 @@ namespace aspia {
 class MouseCursor
 {
 public:
-    MouseCursor(std::unique_ptr<uint8_t[]>&& data,
-                int width, int height,
-                int hotspot_x, int hotspot_y);
     ~MouseCursor() = default;
+
+    static std::unique_ptr<MouseCursor> Create(std::unique_ptr<uint8_t[]> data,
+                                               const DesktopSize& size,
+                                               const DesktopPoint& hotspot);
 
     const DesktopSize& Size() const;
     const DesktopPoint& Hotspot() const;
     const uint8_t* Data() const;
 
+    int Stride() const;
+
     bool IsEqual(const MouseCursor& other);
 
 private:
+    MouseCursor(std::unique_ptr<uint8_t[]> data,
+                const DesktopSize& size,
+                const DesktopPoint& hotspot);
+
     std::unique_ptr<uint8_t[]> data_;
-    DesktopSize size_;
-    DesktopPoint hotspot_;
+    const DesktopSize size_;
+    const DesktopPoint hotspot_;
 };
 
 } // namespace aspia

@@ -8,10 +8,6 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__DESKTOP_RECT_H
 #define _ASPIA_DESKTOP_CAPTURE__DESKTOP_RECT_H
 
-#include "aspia_config.h"
-
-#include <stdint.h>
-
 #include "desktop_capture/desktop_size.h"
 #include "desktop_capture/desktop_point.h"
 
@@ -22,7 +18,6 @@ class DesktopRect
 public:
     DesktopRect();
     DesktopRect(const DesktopRect& other);
-    DesktopRect(const proto::VideoRect& other);
     ~DesktopRect() = default;
 
     static DesktopRect MakeXYWH(int32_t x, int32_t y, int32_t width, int32_t height);
@@ -51,9 +46,6 @@ public:
     bool ContainsRect(const DesktopRect& other) const;
     void Translate(int32_t dx, int32_t dy);
     void IntersectWith(const DesktopRect& other);
-
-    void ToVideoRect(proto::VideoRect* other) const;
-    void FromVideoRect(const proto::VideoRect& other);
 
     //
     // Enlarges current DesktopRect by subtracting |left_offset| and |top_offset|

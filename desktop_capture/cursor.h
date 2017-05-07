@@ -12,7 +12,7 @@
 
 namespace aspia {
 
-MouseCursor* CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor);
+std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor);
 
 HCURSOR CreateHCursorFromMouseCursor(HDC dc, const MouseCursor& mouse_cursor);
 

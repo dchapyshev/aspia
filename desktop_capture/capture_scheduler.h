@@ -5,12 +5,10 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H_
-#define ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H_
+#ifndef _ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H
+#define _ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H
 
-#include "aspia_config.h"
-
-#include <stdint.h>
+#include <chrono>
 
 #include "base/macros.h"
 
@@ -22,14 +20,14 @@ public:
     CaptureScheduler();
     ~CaptureScheduler() = default;
 
-    int32_t NextCaptureDelay(int32_t max_delay);
+    std::chrono::milliseconds NextCaptureDelay(const std::chrono::milliseconds& max_delay);
 
 private:
-    uint64_t begin_time_;
+    std::chrono::time_point<std::chrono::high_resolution_clock> begin_time_;
 
     DISALLOW_COPY_AND_ASSIGN(CaptureScheduler);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H_
+#endif // _ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H

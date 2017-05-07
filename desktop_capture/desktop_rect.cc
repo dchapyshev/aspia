@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            desktop_capture/desktop_rect.cpp
+// FILE:            desktop_capture/desktop_rect.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
@@ -27,11 +27,6 @@ DesktopRect::DesktopRect(const DesktopRect& other) :
     bottom_(other.bottom_)
 {
     // Nothing
-}
-
-DesktopRect::DesktopRect(const proto::VideoRect& other)
-{
-    FromVideoRect(other);
 }
 
 DesktopRect::DesktopRect(int32_t l, int32_t t, int32_t r, int32_t b) :
@@ -168,22 +163,6 @@ void DesktopRect::IntersectWith(const DesktopRect& other)
         right_  = 0;
         bottom_ = 0;
     }
-}
-
-void DesktopRect::ToVideoRect(proto::VideoRect* other) const
-{
-    other->set_x(x());
-    other->set_y(y());
-    other->set_width(Width());
-    other->set_height(Height());
-}
-
-void DesktopRect::FromVideoRect(const proto::VideoRect& other)
-{
-    left_   = other.x();
-    top_    = other.y();
-    right_  = left_ + other.width();
-    bottom_ = top_ + other.height();
 }
 
 void DesktopRect::Extend(int32_t left_offset,

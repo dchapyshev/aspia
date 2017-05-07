@@ -8,9 +8,9 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_BASIC_H
 #define _ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_BASIC_H
 
-#include "aspia_config.h"
-
 #include "desktop_capture/desktop_frame.h"
+
+#include <memory>
 
 namespace aspia {
 
@@ -19,7 +19,8 @@ class DesktopFrameBasic : public DesktopFrame
 public:
     ~DesktopFrameBasic();
 
-    static DesktopFrameBasic* Create(const DesktopSize& size, const PixelFormat& format);
+    static std::unique_ptr<DesktopFrameBasic> Create(const DesktopSize& size,
+                                                     const PixelFormat& format);
 
 private:
     DesktopFrameBasic(const DesktopSize& size,

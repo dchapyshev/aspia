@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            desktop_capture/desktop_frame_dib.cpp
+// FILE:            desktop_capture/desktop_frame_dib.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
@@ -10,7 +10,7 @@
 
 namespace aspia {
 
-DesktopFrameDib::DesktopFrameDib(const DesktopSize& size,
+DesktopFrameDIB::DesktopFrameDIB(const DesktopSize& size,
                                  const PixelFormat& format,
                                  int stride,
                                  uint8_t* data,
@@ -21,17 +21,19 @@ DesktopFrameDib::DesktopFrameDib(const DesktopSize& size,
     // Nothing
 }
 
-DesktopFrameDib::~DesktopFrameDib()
+DesktopFrameDIB::~DesktopFrameDIB()
 {
     // Nothing
 }
 
 // static
-DesktopFrameDib* DesktopFrameDib::Create(const DesktopSize& size, const PixelFormat& format, HDC hdc)
+std::unique_ptr<DesktopFrameDIB> DesktopFrameDIB::Create(const DesktopSize& size,
+                                                         const PixelFormat& format,
+                                                         HDC hdc)
 {
     int bytes_per_row = size.Width() * format.BytesPerPixel();
 
-    typedef struct
+    struct BitmapInfo
     {
         BITMAPINFOHEADER header;
         union
@@ -44,7 +46,7 @@ DesktopFrameDib* DesktopFrameDib::Create(const DesktopSize& size, const PixelFor
             } mask;
             RGBQUAD color[256];
         } u;
-    } BitmapInfo;
+    };
 
     BitmapInfo bmi = { 0 };
     bmi.header.biSize      = sizeof(bmi.header);
@@ -54,7 +56,15 @@ DesktopFrameDib* DesktopFrameDib::Create(const DesktopSize& size, const PixelFor
     bmi.header.biWidth     = size.Width();
     bmi.header.biHeight    = -size.Height();
 
-    if (format.BitsPerPixel() == 8)
+    if (format.BitsPerPixel() == 32 || format.BitsPerPixel() == 16)
+    {
+        bmi.header.biCompression = BI_BITFIELDS;
+
+        bmi.u.mask.red   = format.RedMax()   << format.RedShift();
+        bmi.u.mask.green = format.GreenMax() << format.GreenShift();
+        bmi.u.mask.blue  = format.BlueMax()  << format.BlueShift();
+    }
+    else
     {
         bmi.header.biCompression = BI_RGB;
 
@@ -69,15 +79,6 @@ DesktopFrameDib* DesktopFrameDib::Create(const DesktopSize& size, const PixelFor
             bmi.u.color[i].rgbBlue  = blue  * 0xFF / format.BlueMax();
         }
     }
-    else
-    {
-        bmi.header.biCompression =
-            ((format.BitsPerPixel() == 24) ? BI_RGB : BI_BITFIELDS);
-
-        bmi.u.mask.red   = format.RedMax()   << format.RedShift();
-        bmi.u.mask.green = format.GreenMax() << format.GreenShift();
-        bmi.u.mask.blue  = format.BlueMax()  << format.BlueShift();
-    }
 
     void* data = nullptr;
 
@@ -89,18 +90,18 @@ DesktopFrameDib* DesktopFrameDib::Create(const DesktopSize& size, const PixelFor
                                       0);
     if (!bitmap)
     {
-        LOG(ERROR) << "CreateDIBSection() failed: " << GetLastError();
+        LOG(ERROR) << "CreateDIBSection() failed";
         return nullptr;
     }
 
-    return new DesktopFrameDib(size,
-                               format,
-                               bytes_per_row,
-                               reinterpret_cast<uint8_t*>(data),
-                               bitmap);
+    return std::unique_ptr<DesktopFrameDIB>(new DesktopFrameDIB(size,
+                                                                format,
+                                                                bytes_per_row,
+                                                                reinterpret_cast<uint8_t*>(data),
+                                                                bitmap));
 }
 
-HBITMAP DesktopFrameDib::Bitmap()
+HBITMAP DesktopFrameDIB::Bitmap()
 {
     return bitmap_;
 }

@@ -29,7 +29,6 @@ public:
     int Stride() const;
     bool Contains(int32_t x, int32_t y);
 
-    void InvalidateFrame() const;
     const DesktopRegion& UpdatedRegion() const;
     DesktopRegion* MutableUpdatedRegion();
 
@@ -48,7 +47,7 @@ private:
     const PixelFormat format_;
     const int stride_;
 
-    mutable DesktopRegion updated_region_;
+    DesktopRegion updated_region_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopFrame);
 };

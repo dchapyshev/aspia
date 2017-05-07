@@ -8,9 +8,6 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_SSE2_H
 #define _ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_SSE2_H
 
-#include "aspia_config.h"
-
-#include <stdint.h>
 #include <intrin.h>
 
 namespace aspia {

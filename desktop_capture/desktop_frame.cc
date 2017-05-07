@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            desktop_capture/desktop_frame.cpp
+// FILE:            desktop_capture/desktop_frame.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
@@ -61,11 +61,6 @@ uint8_t* DesktopFrame::GetFrameDataAtPos(const DesktopPoint& pos) const
 uint8_t* DesktopFrame::GetFrameDataAtPos(int32_t x, int32_t y) const
 {
     return GetFrameDataAtPos(DesktopPoint(x, y));
-}
-
-void DesktopFrame::InvalidateFrame() const
-{
-    updated_region_.AddRect(DesktopRect::MakeSize(size_));
 }
 
 const DesktopRegion& DesktopFrame::UpdatedRegion() const

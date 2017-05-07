@@ -997,6 +997,8 @@ static bool miIntersectO(RegionPtr pReg,
                          short y2,
                          bool* pOverlap)
 {
+    pOverlap;
+
     BoxPtr pNextRect = REGION_TOP(pReg);
 
     assert(y1 < y2);
@@ -1821,6 +1823,8 @@ miSubtractO(RegionPtr pReg,
             short y2,
             bool* pOverlap)
 {
+    pOverlap;
+
     int x1 = r1->x1;
     
     assert(y1 < y2);

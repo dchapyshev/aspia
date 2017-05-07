@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            desktop_capture/cursor.cpp
+// FILE:            desktop_capture/cursor.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
@@ -101,7 +101,7 @@ static void AlphaMul(uint32_t* data, int width, int height)
 }
 
 // Converts an HCURSOR into a |MouseCursor| instance.
-MouseCursor* CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor)
+std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 {
     ICONINFO icon_info = { 0 };
 
@@ -112,8 +112,8 @@ MouseCursor* CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     }
 
     // Make sure the bitmaps will be freed.
-    ScopedBitmap scoped_mask(icon_info.hbmMask);
-    ScopedBitmap scoped_color(icon_info.hbmColor);
+    ScopedHBITMAP scoped_mask(icon_info.hbmMask);
+    ScopedHBITMAP scoped_color(icon_info.hbmColor);
 
     bool is_color = (icon_info.hbmColor != nullptr);
 
@@ -131,15 +131,13 @@ MouseCursor* CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 
     std::unique_ptr<uint32_t[]> mask_data(new uint32_t[width * height]);
 
-    //
     // Get pixel data from |scoped_mask| converting it to 32bpp along the way.
     // GetDIBits() sets the alpha component of every pixel to 0.
-    //
     BITMAPV5HEADER bmi = { 0 };
 
     bmi.bV5Size        = sizeof(bmi);
     bmi.bV5Width       = width;
-    bmi.bV5Height      = -height;  // request a top-down bitmap.
+    bmi.bV5Height      = -height; // request a top-down bitmap.
     bmi.bV5Planes      = 1;
     bmi.bV5BitCount    = kBytesPerPixel * 8;
     bmi.bV5Compression = BI_RGB;
@@ -188,7 +186,7 @@ MouseCursor* CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor)
         // GetDIBits() does not provide any indication whether the bitmap has alpha
         // channel, so we use HasAlphaChannel() below to find it out.
         //
-        has_alpha = HasAlphaChannel(reinterpret_cast<uint32_t*>(image.get()), width, height);
+        has_alpha = HasAlphaChannel(reinterpret_cast<const uint32_t*>(image.get()), width, height);
     }
     else
     {
@@ -261,16 +259,14 @@ MouseCursor* CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     // Pre-multiply the resulting pixels since MouseCursor uses premultiplied images.
     AlphaMul(reinterpret_cast<uint32_t*>(image.get()), width, height);
 
-    return new MouseCursor(std::move(image),
-                           width,
-                           height,
-                           icon_info.xHotspot,
-                           icon_info.yHotspot);
+    return MouseCursor::Create(std::move(image),
+                               DesktopSize(width, height),
+                               DesktopPoint(icon_info.xHotspot, icon_info.yHotspot));
 }
 
 HCURSOR CreateHCursorFromMouseCursor(HDC dc, const MouseCursor& mouse_cursor)
 {
-    typedef struct
+    struct BitmapInfo
     {
         BITMAPV5HEADER header;
         union
@@ -283,12 +279,12 @@ HCURSOR CreateHCursorFromMouseCursor(HDC dc, const MouseCursor& mouse_cursor)
             } mask;
             RGBQUAD color[256];
         } u;
-    } BitmapInfo;
+    };
 
     BitmapInfo bmi = { 0 };
 
-    int32_t width = mouse_cursor.Size().Width();
-    int32_t height = mouse_cursor.Size().Height();
+    int width = mouse_cursor.Size().Width();
+    int height = mouse_cursor.Size().Height();
 
     bmi.header.bV5Size        = sizeof(bmi.header);
     bmi.header.bV5BitCount    = kBytesPerPixel * 8;
@@ -304,19 +300,19 @@ HCURSOR CreateHCursorFromMouseCursor(HDC dc, const MouseCursor& mouse_cursor)
     bmi.u.mask.green          = 0x0000FF00;
     bmi.u.mask.blue           = 0x000000FF;
 
-    ScopedBitmap color_bitmap(CreateDIBitmap(dc,
-                                             reinterpret_cast<const LPBITMAPINFOHEADER>(&bmi.header),
-                                             CBM_INIT,
-                                             mouse_cursor.Data(),
-                                             reinterpret_cast<const LPBITMAPINFO>(&bmi),
-                                             DIB_RGB_COLORS));
+    ScopedHBITMAP color_bitmap(CreateDIBitmap(dc,
+                                              reinterpret_cast<const LPBITMAPINFOHEADER>(&bmi.header),
+                                              CBM_INIT,
+                                              mouse_cursor.Data(),
+                                              reinterpret_cast<const LPBITMAPINFO>(&bmi),
+                                              DIB_RGB_COLORS));
     if (!color_bitmap)
     {
         LOG(ERROR) << "CreateDIBitmap() failed: " << GetLastError();
         return nullptr;
     }
 
-    ScopedBitmap mask_bitmap(CreateBitmap(width, height, 1, 1, nullptr));
+    ScopedHBITMAP mask_bitmap(CreateBitmap(width, height, 1, 1, nullptr));
 
     if (!mask_bitmap)
     {
