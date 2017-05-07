@@ -8,27 +8,76 @@
 #ifndef _ASPIA_NETWORK__SOCKET_H
 #define _ASPIA_NETWORK__SOCKET_H
 
-#include "aspia_config.h"
-
-#include <string>
-#include <stdint.h>
-
 #include "base/macros.h"
+
+#include <winsock2.h>
 
 namespace aspia {
 
 class Socket
 {
 public:
-    Socket() = default;
-    virtual ~Socket() = default;
+    Socket() : socket_(INVALID_SOCKET)
+    {
+        // Nothing
+    }
 
-    virtual void Disconnect() = 0;
-    virtual bool Write(const uint8_t* buf, uint32_t len) = 0;
-    virtual uint32_t ReadSize() = 0;
-    virtual bool Read(uint8_t* buf, uint32_t len) = 0;
+    explicit Socket(SOCKET socket) : socket_(socket)
+    {
+        // Nothing
+    }
+
+    Socket(Socket&& other)
+    {
+        socket_ = other.socket_;
+        other.socket_ = INVALID_SOCKET;
+    }
+
+    ~Socket()
+    {
+        Close();
+    }
+
+    bool IsValid() const
+    {
+        return socket_ != INVALID_SOCKET;
+    }
+
+    SOCKET Handle() const
+    {
+        return socket_;
+    }
+
+    void Reset(SOCKET socket = INVALID_SOCKET)
+    {
+        Close();
+        socket_ = socket;
+    }
+
+    Socket& operator=(Socket&& other)
+    {
+        Reset(other.socket_);
+        other.socket_ = INVALID_SOCKET;
+        return *this;
+    }
+
+    operator SOCKET()
+    {
+        return Handle();
+    }
 
 private:
+    void Close()
+    {
+        if (IsValid())
+        {
+            closesocket(socket_);
+            socket_ = INVALID_SOCKET;
+        }
+    }
+
+    SOCKET socket_;
+
     DISALLOW_COPY_AND_ASSIGN(Socket);
 };
 
