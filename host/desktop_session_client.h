@@ -8,49 +8,58 @@
 #ifndef _ASPIA_HOST__DESKTOP_SESSION_CLIENT_H
 #define _ASPIA_HOST__DESKTOP_SESSION_CLIENT_H
 
-#include <memory>
-
-#include "base/scoped_aligned_buffer.h"
-#include "base/lock.h"
-#include "ipc/pipe_client_channel.h"
+#include "codec/video_encoder.h"
+#include "codec/cursor_encoder.h"
 #include "host/input_injector.h"
-#include "host/screen_sender.h"
-#include "protocol/clipboard.h"
+#include "host/screen_updater.h"
+#include "host/clipboard_thread.h"
+#include "ipc/pipe_channel.h"
+#include "proto/desktop_session.pb.h"
 
 namespace aspia {
 
-class DesktopSessionClient
+class DesktopSessionClient :
+    private PipeChannel::Delegate,
+    private ScreenUpdater::Delegate
 {
 public:
     DesktopSessionClient();
     ~DesktopSessionClient() = default;
 
-    void Execute(const std::wstring& input_channel_name,
-                 const std::wstring& output_channel_name);
+    void Run(const std::wstring& input_channel_name,
+             const std::wstring& output_channel_name);
 
 private:
-    bool OnIncommingMessage(const uint8_t* buffer, uint32_t size);
+    // Pipe channel implementation.
+    void OnPipeChannelConnect(ProcessId peer_pid) override;
+    void OnPipeChannelDisconnect() override;
+    void OnPipeChannelMessage(const IOBuffer* buffer) override;
 
-    bool WriteMessage(const proto::desktop::HostToClient& message);
+    // Screen updater implementation.
+    void OnScreenUpdate(const DesktopFrame* screen_frame) override;
+    void OnCursorUpdate(std::unique_ptr<MouseCursor> mouse_cursor) override;
+    void OnScreenUpdateError() override;
 
-    bool ReadPointerEvent(const proto::PointerEvent& event);
-    bool ReadKeyEvent(const proto::KeyEvent& event);
-    bool ReadClipboardEvent(const proto::ClipboardEvent& event);
-    bool ReadPowerEvent(const proto::PowerEvent& event);
+    void WriteMessage(const proto::desktop::HostToClient& message);
+
+    void ReadPointerEvent(const proto::PointerEvent& event);
+    void ReadKeyEvent(const proto::KeyEvent& event);
+    void ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);
+    void ReadPowerEvent(const proto::PowerEvent& event);
     bool ReadConfig(const proto::DesktopConfig& config);
 
-    bool SendClipboardEvent(const proto::ClipboardEvent& event);
-    bool SendConfigRequest();
+    void SendClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event);
+    void SendConfigRequest();
 
 private:
-    PipeClientChannel ipc_channel_;
+    std::unique_ptr<PipeChannel> ipc_channel_;
+    std::mutex outgoing_lock_;
 
-    ScopedAlignedBuffer outgoing_buffer_;
-    Lock outgoing_lock_;
-
-    ScreenSender screen_sender_;
+    std::unique_ptr<VideoEncoder> video_encoder_;
+    std::unique_ptr<CursorEncoder> cursor_encoder_;
+    std::unique_ptr<ScreenUpdater> screen_updater_;
     std::unique_ptr<InputInjector> input_injector_;
-    Clipboard clipboard_;
+    std::unique_ptr<ClipboardThread> clipboard_thread_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionClient);
 };

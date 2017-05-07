@@ -8,13 +8,9 @@
 #ifndef _ASPIA_HOST__INPUT_INJECTOR_H
 #define _ASPIA_HOST__INPUT_INJECTOR_H
 
-#include "aspia_config.h"
-
-#include <stdint.h>
-
 #include "base/macros.h"
 #include "base/scoped_thread_desktop.h"
-#include "proto/proto.pb.h"
+#include "proto/desktop_session_message.pb.h"
 #include "desktop_capture/desktop_point.h"
 
 namespace aspia {
@@ -25,6 +21,7 @@ public:
     InputInjector();
     ~InputInjector() = default;
 
+    // The calling thread should not own any windows.
     void InjectPointerEvent(const proto::PointerEvent& event);
     void InjectKeyEvent(const proto::KeyEvent& event);
 

@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/input_injector.cpp
+// FILE:            host/input_injector.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
@@ -28,11 +28,8 @@ void InputInjector::SwitchToInputDesktop()
         desktop_.SetThreadDesktop(std::move(input_desktop));
     }
 
-    //
-    // Отправляем системе уведомления о том, что она используется для
-    // предотвращения включения экранной заставки, отключения монитора,
-    // перехода в спящий режим и т.д.
-    //
+    // We send a notification to the system that it is used to prevent
+    // the screen saver, going into hibernation mode, etc.
     SetThreadExecutionState(ES_SYSTEM_REQUIRED);
 }
 
@@ -40,20 +37,14 @@ void InputInjector::InjectPointerEvent(const proto::PointerEvent& event)
 {
     SwitchToInputDesktop();
 
-    // Получаем прямоугольник экрана.
     DesktopRect screen_rect = DesktopRect::MakeXYWH(GetSystemMetrics(SM_XVIRTUALSCREEN),
                                                     GetSystemMetrics(SM_YVIRTUALSCREEN),
                                                     GetSystemMetrics(SM_CXVIRTUALSCREEN),
                                                     GetSystemMetrics(SM_CYVIRTUALSCREEN));
-
-    // Если полученные в сообщении координаты курсора не находятся в области экрана.
     if (!screen_rect.Contains(event.x(), event.y()))
-    {
-        // Выходим.
         return;
-    }
 
-    // Переводим координаты курсора в координаты виртуального экрана.
+    // Translate the coordinates of the cursor into the coordinates of the virtual screen.
     DesktopPoint pos(((event.x() - screen_rect.x()) * 65535) / (screen_rect.Width() - 1),
                      ((event.y() - screen_rect.y()) * 65535) / (screen_rect.Height() - 1));
 
@@ -113,10 +104,10 @@ void InputInjector::InjectPointerEvent(const proto::PointerEvent& event)
     input.mi.time        = 0;
     input.mi.dwExtraInfo = 0;
 
-    // Do the mouse event
+    // Do the mouse event.
     if (!SendInput(1, &input, sizeof(input)))
     {
-        DLOG(WARNING) << "SendInput() failed: " << GetLastError();
+        LOG(WARNING) << "SendInput() failed: " << GetLastError();
     }
 
     prev_mouse_button_mask_ = mask;
@@ -133,10 +124,10 @@ void InputInjector::SendKeyboardInput(WORD key_code, DWORD flags)
     input.ki.time        = 0;
     input.ki.dwExtraInfo = 0;
 
-    // Do the keyboard event
+    // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
     {
-        DLOG(WARNING) << "SendInput() failed: " << GetLastError();
+        LOG(WARNING) << "SendInput() failed: " << GetLastError();
     }
 }
 
@@ -144,7 +135,7 @@ void InputInjector::InjectKeyEvent(const proto::KeyEvent& event)
 {
     SwitchToInputDesktop();
 
-    // Если нажата комбинация Ctrl + Alt + Delete.
+    // If the combination Ctrl + Alt + Delete is pressed.
     if ((event.flags() & proto::KeyEvent::PRESSED) && event.keycode() == VK_DELETE &&
         (GetAsyncKeyState(VK_CONTROL) & 0x8000) &&
         (GetAsyncKeyState(VK_MENU) & 0x8000))
@@ -176,7 +167,7 @@ void InputInjector::InjectKeyEvent(const proto::KeyEvent& event)
     flags |= ((event.flags() & proto::KeyEvent::EXTENDED) ? KEYEVENTF_EXTENDEDKEY : 0);
     flags |= ((event.flags() & proto::KeyEvent::PRESSED) ? 0 : KEYEVENTF_KEYUP);
 
-    SendKeyboardInput(event.keycode(), flags);
+    SendKeyboardInput(static_cast<WORD>(event.keycode()), flags);
 }
 
 } // namespace aspia

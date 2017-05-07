@@ -8,14 +8,9 @@
 #ifndef _ASPIA_HOST__HOST_SERVICE_H
 #define _ASPIA_HOST__HOST_SERVICE_H
 
-#include "aspia_config.h"
-
-#include "base/macros.h"
+#include "base/message_loop/message_loop_proxy.h"
 #include "base/service.h"
-#include "network/server_tcp.h"
-#include "host/host.h"
-
-#include <memory>
+#include "host/host_pool.h"
 
 namespace aspia {
 
@@ -33,13 +28,11 @@ public:
     static bool Remove();
 
 private:
+    // Service implementation.
     void Worker() override;
     void OnStop() override;
 
-    void OnServerEvent(Host::SessionEvent event);
-
-private:
-    std::unique_ptr<ServerTCP<Host>> server_;
+    std::shared_ptr<MessageLoopProxy> runner_;
 
     DISALLOW_COPY_AND_ASSIGN(HostService);
 };

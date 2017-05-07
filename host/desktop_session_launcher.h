@@ -8,9 +8,6 @@
 #ifndef _ASPIA_HOST__DESKTOP_SESSION_LAUNCHER_H
 #define _ASPIA_HOST__DESKTOP_SESSION_LAUNCHER_H
 
-#include "aspia_config.h"
-
-#include <stdint.h>
 #include <memory>
 
 #include "base/macros.h"

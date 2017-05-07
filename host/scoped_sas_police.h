@@ -8,8 +8,6 @@
 #ifndef _ASPIA_HOST__SCOPED_SAS_POLICE_H
 #define _ASPIA_HOST__SCOPED_SAS_POLICE_H
 
-#include "aspia_config.h"
-
 #include "base/macros.h"
 #include "base/registry.h"
 

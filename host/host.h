@@ -8,55 +8,49 @@
 #ifndef _ASPIA_HOST__HOST_H
 #define _ASPIA_HOST__HOST_H
 
-#include "aspia_config.h"
-
 #include "base/macros.h"
-#include "base/thread.h"
-#include "crypto/encryptor_rsa_aes.h"
-#include "crypto/decryptor_rsa_aes.h"
-#include "network/socket_tcp.h"
+#include "network/network_channel.h"
+#include "host/host_session.h"
+#include "proto/auth_session.pb.h"
 
-#include "host/desktop_session_server.h"
+#include <mutex>
 
 namespace aspia {
 
-class Host : public Thread
+class Host :
+    private HostSession::Delegate,
+    private NetworkChannel::Listener
 {
 public:
-    enum class SessionEvent
+    class Delegate
     {
-        OPEN,               // Сессия успешно открыта.
-        CLOSE,              // Сессия закрыта.
-        KEY_EXCHANGE_ERROR, // Ошибка обмена ключами шифрования.
-        ACCESS_DENIED       // Доступ запрещен.
+    public:
+        virtual void OnSessionTerminate() = 0;
     };
 
-    typedef std::function<void(SessionEvent)> EventCallback;
+    Host(std::unique_ptr<NetworkChannel> channel, Delegate* delegate);
+    ~Host();
 
-    Host(std::unique_ptr<Socket> sock, const EventCallback& event_callback);
-
-    virtual ~Host() = default;
-
-    bool IsDead();
+    bool IsAliveSession() const;
 
 private:
-    void Worker() override;
-    void OnStop() override;
+    // HostSession::Delegate implementation.
+    void OnSessionMessage(const IOBuffer* buffer) override;
+    void OnSessionTerminate() override;
 
-    bool DoKeyExchange();
-    bool WriteMessage(const uint8_t* buffer, uint32_t size);
+    // NetworkChannel::Listener implementation.
+    void OnNetworkChannelMessage(const IOBuffer* buffer) override;
+    void OnNetworkChannelDisconnect() override;
 
-private:
-    EventCallback event_callback_;
+    bool SendAuthResult(const IOBuffer* request_buffer);
 
-    std::unique_ptr<Socket> sock_;
+    bool is_auth_complete_;
+    std::unique_ptr<NetworkChannel> channel_;
 
-    std::unique_ptr<Encryptor> encryptor_;
-    std::unique_ptr<Decryptor> decryptor_;
+    std::unique_ptr<HostSession> session_;
+    std::mutex session_lock_;
 
-    ScopedAlignedBuffer read_buffer_;
-
-    DesktopSessionServer session_;
+    Delegate* delegate_;
 };
 
 } // namespace aspia

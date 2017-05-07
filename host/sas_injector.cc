@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/sas_injector.cpp
+// FILE:            host/sas_injector.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
@@ -32,7 +32,7 @@ void SasInjector::InjectSAS()
     std::wstring command_line;
 
     // Получаем полный путь к исполняемому файлу.
-    if (!GetPath(PathKey::FILE_EXE, &command_line))
+    if (!GetPathW(PathKey::FILE_EXE, &command_line))
         return;
 
     std::wstring service_id =

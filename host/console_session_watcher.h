@@ -8,37 +8,38 @@
 #ifndef _ASPIA_HOST__CONSOLE_SESSION_WATCHER_H
 #define _ASPIA_HOST__CONSOLE_SESSION_WATCHER_H
 
-#include "aspia_config.h"
-
 #include <functional>
+#include <memory>
 
 #include "base/message_window.h"
 
 namespace aspia {
 
-class ConsoleSessionWatcher : private MessageWindow
+class ConsoleSessionWatcher
 {
 public:
     ConsoleSessionWatcher();
     ~ConsoleSessionWatcher();
 
-    //
-    // «апускает отслеживание изменений текущей консольной сессии.
-    // ¬озвращаетс€ true, если удалось запустить отслеживание и false, если не удалось.
-    // ћетод вызывает указанный callback с ID текущей сессии.
-    //
-    void StartSessionWatching();
+    class Delegate
+    {
+    public:
+        virtual void OnSessionDetached() = 0;
+        virtual void OnSessionAttached(uint32_t session_id) = 0;
+    };
 
-    // ќстанавливает отслеживание.
-    void StopSessionWatching();
+    // Starts monitoring changes to the current console session.
+    // Returns true if tracking could be started and false if failed.
+    bool StartWatching(Delegate* delegate);
 
-    void DetachSession();
-
-    virtual void OnSessionDetached() = 0;
-    virtual void OnSessionAttached(uint32_t session_id) = 0;
+    // Stops monitoring.
+    void StopWatching();
 
 private:
-    void OnMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override;
+    bool OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* result);
+
+    std::unique_ptr<MessageWindow> window_;
+    Delegate* delegate_;
 
     DISALLOW_COPY_AND_ASSIGN(ConsoleSessionWatcher);
 };

@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/desktop_session_launcher.cpp
+// FILE:            host/desktop_session_launcher.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
@@ -11,8 +11,9 @@
 #include <wtsapi32.h>
 #include <string>
 
+#include "base/elevation_helpers.h"
 #include "base/service_manager.h"
-#include "base/scoped_handle.h"
+#include "base/scoped_object.h"
 #include "base/scoped_wts_memory.h"
 #include "base/scoped_impersonator.h"
 #include "base/object_watcher.h"
@@ -92,7 +93,7 @@ static bool CreatePrivilegedToken(ScopedHandle* token_out)
         return false;
     }
 
-    token_out->Set(privileged_token.Release());
+    token_out->Reset(privileged_token.Release());
     return true;
 }
 
@@ -132,7 +133,7 @@ static bool CreateSessionToken(uint32_t session_id, ScopedHandle* token_out)
         }
     }
 
-    token_out->Set(session_token.Release());
+    token_out->Reset(session_token.Release());
     return true;
 }
 
@@ -173,7 +174,7 @@ static bool LaunchProcessInSession(uint32_t session_id,
     std::wstring command_line;
 
     // Получаем полный путь к исполняемому файлу.
-    if (!GetPath(PathKey::FILE_EXE, &command_line))
+    if (!GetPathW(PathKey::FILE_EXE, &command_line))
         return false;
 
     command_line.append(L" --run_mode=");
@@ -223,14 +224,10 @@ bool DesktopSessionLauncher::LaunchSession(uint32_t session_id,
                                            const std::wstring& input_channel_id,
                                            const std::wstring& output_channel_id)
 {
-    Process current_process(Process::Current());
-
-    bool is_process_elevated = current_process.IsElevated();
-
     std::wstring command_line;
 
     // Получаем полный путь к исполняемому файлу.
-    if (!GetPath(PathKey::FILE_EXE, &command_line))
+    if (!GetPathW(PathKey::FILE_EXE, &command_line))
         return false;
 
     command_line.append(L" --input_channel_id=");
@@ -238,7 +235,7 @@ bool DesktopSessionLauncher::LaunchSession(uint32_t session_id,
     command_line.append(L" --output_channel_id=");
     command_line.append(output_channel_id);
 
-    if (!is_process_elevated)
+    if (!IsProcessElevated())
     {
         command_line.append(L" --run_mode=");
         command_line.append(kDesktopSessionSwitch);
@@ -259,6 +256,7 @@ bool DesktopSessionLauncher::LaunchSession(uint32_t session_id,
             LOG(WARNING) << "ProcessIdToSessionId() failed: " << GetLastError();
             return false;
         }
+
         //
         // Если текущий процесс запущен не в нулевой сессии (не как служба), то создаем службу
         // для запуска процесса в требуемой сессии.

@@ -1,12 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/scoped_sas_police.cpp
+// FILE:            host/scoped_sas_police.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #include "host/scoped_sas_police.h"
-
 #include "base/logging.h"
 
 namespace aspia {
@@ -33,10 +32,8 @@ ScopedSasPolice::ScopedSasPolice() :
     status = key_.ReadValueDW(kSoftwareSASGeneration, &old_state_);
     if (status != ERROR_SUCCESS)
     {
-        //
-        // Предыдущее состояние не определено.
-        // Считаем, что программная генерация SAS была отключена.
-        //
+        // The previous state is not defined.
+        // Consider that the software generation of SAS has been disabled.
         old_state_ = kNone;
     }
 
