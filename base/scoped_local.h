@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__SCOPED_LOCAL_H
 #define _ASPIA_BASE__SCOPED_LOCAL_H
 
-#include "aspia_config.h"
 #include "base/macros.h"
 
 namespace aspia {
@@ -48,7 +47,7 @@ public:
         return local_;
     }
 
-    void Set(T local)
+    void Reset(T local = nullptr)
     {
         Close();
         local_ = local;
@@ -106,8 +105,6 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(ScopedLocal);
 };
-
-typedef ScopedLocal<PSECURITY_DESCRIPTOR> ScopedSD;
 
 } // namespace aspia
 

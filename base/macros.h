@@ -32,4 +32,8 @@
   TypeName() = delete;                           \
   DISALLOW_COPY_AND_ASSIGN(TypeName)
 
+#ifndef UNREF
+#define UNREF(P)    (P)
+#endif // UNREF
+
 #endif // _ASPIA_BASE__MACROS_H

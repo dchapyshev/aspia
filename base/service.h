@@ -8,8 +8,7 @@
 #ifndef _ASPIA_BASE__SERVICE_H
 #define _ASPIA_BASE__SERVICE_H
 
-#include "aspia_config.h"
-
+#include <atomic>
 #include <string>
 
 #include "base/macros.h"
@@ -29,6 +28,9 @@ public:
     //
     bool Run();
 
+    const std::wstring& ServiceName() const;
+
+protected:
     //
     // Метод, в котором выполняется работа службы. После его завершения служба
     // переходит в состояние "Остановлена".
@@ -41,7 +43,7 @@ public:
     //
     virtual void OnStop() = 0;
 
-    const std::wstring& ServiceName() const;
+    bool IsTerminating() const;
 
 private:
     static void WINAPI ServiceMain(int argc, LPWSTR argv);
@@ -55,6 +57,7 @@ private:
 
 private:
     std::wstring service_name_;
+    std::atomic_bool terminating_;
 
     SERVICE_STATUS_HANDLE status_handle_;
     SERVICE_STATUS status_;

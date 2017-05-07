@@ -8,8 +8,6 @@
 #ifndef _ASPIA_BASE__SCOPED_THREAD_DESKTOP_H
 #define _ASPIA_BASE__SCOPED_THREAD_DESKTOP_H
 
-#include "aspia_config.h"
-
 #include <memory>
 
 #include "base/macros.h"
@@ -38,7 +36,7 @@ public:
     // Assigns |desktop| to be the calling thread. Returns true if the thread has
     // been switched to |desktop| successfully. Takes ownership of |desktop|.
     //
-    bool SetThreadDesktop(Desktop&& desktop);
+    bool SetThreadDesktop(Desktop desktop);
 
 private:
     // The desktop handle assigned to the calling thread by Set

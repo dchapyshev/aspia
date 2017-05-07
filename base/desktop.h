@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__DESKTOP_H
 #define _ASPIA_BASE__DESKTOP_H
 
-#include "aspia_config.h"
 #include "base/macros.h"
 
 namespace aspia {

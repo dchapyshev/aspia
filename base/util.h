@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__UTIL_H
 #define _ASPIA_BASE__UTIL_H
 
-#include "aspia_config.h"
 #include <string>
 
 namespace aspia {
@@ -16,6 +15,8 @@ namespace aspia {
 std::string ReplaceLfByCrLf(const std::string& in);
 
 std::string ReplaceCrLfByLf(const std::string& in);
+
+bool StringIsUtf8(const char* data, size_t length);
 
 std::string StringPrintf(const char* format, ...);
 

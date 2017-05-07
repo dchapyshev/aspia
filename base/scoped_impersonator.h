@@ -8,8 +8,6 @@
 #ifndef _ASPIA_BASE__SCOPED_IMPERSONATOR_H
 #define _ASPIA_BASE__SCOPED_IMPERSONATOR_H
 
-#include "aspia_config.h"
-
 #include "base/macros.h"
 
 namespace aspia {

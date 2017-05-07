@@ -8,8 +8,6 @@
 #ifndef _ASPIA_BASE__SCOPED_BSTR_H
 #define _ASPIA_BASE__SCOPED_BSTR_H
 
-#include "aspia_config.h"
-
 #include <oleauto.h>
 
 #include "base/macros.h"

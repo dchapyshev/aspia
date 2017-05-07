@@ -8,11 +8,10 @@
 #ifndef _ASPIA_BASE__SCOPED_PRIVILEGE_H
 #define _ASPIA_BASE__SCOPED_PRIVILEGE_H
 
-#include "aspia_config.h"
-
 #include <string>
 
-#include "base/scoped_handle.h"
+#include "base/scoped_object.h"
+#include "base/logging.h"
 
 namespace aspia {
 

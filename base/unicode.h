@@ -8,8 +8,6 @@
 #ifndef _ASPIA_BASE__UNICODE_H
 #define _ASPIA_BASE__UNICODE_H
 
-#include "aspia_config.h"
-
 #include <string>
 
 namespace aspia {

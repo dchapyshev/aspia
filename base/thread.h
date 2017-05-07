@@ -8,107 +8,56 @@
 #ifndef _ASPIA_BASE__THREAD_H
 #define _ASPIA_BASE__THREAD_H
 
-#include "aspia_config.h"
-
-#include <stdint.h>
 #include <atomic>
+#include <condition_variable>
+#include <mutex>
+#include <thread>
 
-#include "base/scoped_handle.h"
 #include "base/macros.h"
-#include "base/lock.h"
 
 namespace aspia {
 
 class Thread
 {
 public:
-    //
-    // Поток изначально создается в приостановленном состоянии.
-    // Для запуска потока необходимо вызвать метод Start().
-    //
     Thread();
     virtual ~Thread() = default;
 
-    enum class Priority
-    {
-        Idle,        // Самый низкий
-        Lowest,      // Низкий
-        BelowNormal, // Ниже нормального
-        Normal,      // Нормальный
-        AboveNormal, // Выше нормального
-        Highest,     // Высокий
-        TimeCritical // Наивысший
-    };
+    // Starts the thread and waits for its real start
+    void Start();
 
-    // Запускает поток.
-    void Start(Priority priority = Priority::Normal);
+    // Signals the thread to exit in the near future.
+    void StopSoon();
 
-    //
-    // Метод для инициации завершения потока.
-    // При первом вызове данного метода автоматически вызывается реализованный
-    // классом-потомком метод OnStop().
-    //
+    // Signals the thread to exit and returns once the thread has exited.  After
+    // this method returns, the Thread object is completely reset and may be used
+    // as if it were newly constructed (i.e., Start may be called again).
+    // Stop may be called multiple times and is simply ignored if the thread is
+    // already stopped.
     void Stop();
 
-    //
-    // Возвращает true, если поток находится в стадии завершения и false,
-    // если нет.
-    //
-    bool IsTerminating() const;
+    // Waits for thread to finish.
+    void Join();
 
-    //
-    // Возаращает true, если поток выполняется (выполняется метод Worker())
-    // и false, если не выполняется.
-    //
-    bool IsActive() const;
-
-    //
-    // Устанавливает приоритет выполнения потока.
-    //
-    void SetPriority(Priority value);
-
-    //
-    // Ожидание завершения потока.
-    // Если поток успешно завершился, то возвращается true, если нет, то false.
-    //
-    void Wait() const;
-
-    static void Sleep(uint32_t delay_in_ms);
+    // Returns true if the StopSoon method was called.
+    bool IsStopping() const;
 
 protected:
-    //
-    // Метод, который непосредственно выполняется в потоке.
-    // Метод должен быть реализован потомком класса.
-    //
-    virtual void Worker() = 0;
-
-    //
-    // Вызывается при вызове метода Stop() до непосредственной
-    // остановки потока. Метод вызывается из того же потока, что и
-    // метод Stop().
-    // Метод должен быть реализован потомком класса.
-    //
-    virtual void OnStop() = 0;
+    virtual void Run() = 0;
 
 private:
-    static UINT CALLBACK ThreadProc(LPVOID param);
+    void ThreadMain();
 
-private:
-    // Дискриптор потока.
-    mutable ScopedHandle thread_;
+    std::thread thread_;
 
-    //
-    // Значение true говорит о том, что поток выполняется
-    // (выполняется метод Worker(), при завершении которого
-    // флаг принимает значение false).
-    //
-    mutable std::atomic_bool active_;
+    enum class State { Starting, Started, Stopping, Stopped };
 
-    //
-    // Значение true говорит о том, что потоку дана команда завершиться.
-    // При вызове метода Stop() флаг принимает значение false.
-    //
-    std::atomic_bool terminating_;
+    std::atomic<State> state_;
+
+    // True while inside of Run().
+    bool running_;
+    std::mutex running_lock_;
+    std::condition_variable running_event_;
 
     DISALLOW_COPY_AND_ASSIGN(Thread);
 };

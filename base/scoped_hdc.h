@@ -8,8 +8,6 @@
 #ifndef _ASPIA_BASE__SCOPED_HDC_H
 #define _ASPIA_BASE__SCOPED_HDC_H
 
-#include "aspia_config.h"
-
 #include "base/logging.h"
 #include "base/macros.h"
 
@@ -76,12 +74,12 @@ public:
         Close();
     }
 
-    HDC get()
+    HDC Get()
     {
         return hdc_;
     }
 
-    void set(HDC h)
+    void Reset(HDC h = nullptr)
     {
         Close();
         hdc_ = h;

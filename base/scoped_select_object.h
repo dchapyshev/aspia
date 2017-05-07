@@ -8,8 +8,6 @@
 #ifndef _ASPIA_BASE__SCOPED_SELECT_OBJECT_H
 #define _ASPIA_BASE__SCOPED_SELECT_OBJECT_H
 
-#include "aspia_config.h"
-
 #include "base/macros.h"
 #include "base/logging.h"
 

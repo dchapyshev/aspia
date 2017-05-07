@@ -8,16 +8,13 @@
 #ifndef _ASPIA_BASE__PROCESS_H
 #define _ASPIA_BASE__PROCESS_H
 
-#include "aspia_config.h"
-
-#include <stdint.h>
-
-#include "base/scoped_handle.h"
+#include "base/scoped_object.h"
 #include "base/macros.h"
 
 namespace aspia {
 
-typedef HANDLE ProcessHandle;
+using ProcessHandle = HANDLE;
+using ProcessId = DWORD;
 
 static const ProcessHandle kNullProcessHandle = nullptr;
 
@@ -25,34 +22,68 @@ class Process
 {
 public:
     Process();
-    Process(ProcessHandle process_handle);
     Process(Process&& other);
     ~Process() = default;
 
     enum class Priority { Unknown, Idle, BelowNormal, Normal, AboveNormal, High, RealTime };
 
+    // Returns an object for the current process.
     static Process Current();
 
+    // Returns a Process for the given |pid|.
+    static Process Open(ProcessId pid);
+
+    // Returns a Process for the given |pid|. On Windows the handle is opened
+    // with more access rights and must only be used by trusted code (can read the
+    // address space and duplicate handles).
+    static Process OpenWithExtraPrivileges(ProcessId pid);
+
+    // Returns a Process for the given |pid|, using some |desired_access|.
+    // See ::OpenProcess documentation for valid |desired_access|.
+    static Process OpenWithAccess(ProcessId pid, DWORD desired_access);
+
+    // Returns true if this objects represents a valid process.
     bool IsValid() const;
+
+    // Returns true if this process is the current process.
     bool IsCurrent() const;
 
     Priority GetPriority();
     bool SetPriority(Priority priority);
-    uint32_t Pid() const;
+
+    // Get the PID for this process.
+    ProcessId Pid() const;
+
+    // Returns a handle for this process. There is no guarantee about when that
+    // handle becomes invalid because this object retains ownership.
     ProcessHandle Handle() const;
-    void Terminate(uint32_t exit_code);
+
+    // Terminates the process with extreme prejudice. The given |exit_code| will
+    // be the exit code of the process. If |wait| is true, this method will wait
+    // for up to one minute for the process to actually terminate.
+    // Returns true if the process terminates within the allowed time.
+    bool Terminate(uint32_t exit_code, bool wait);
+
+    // Waits for the process to exit. Returns true on success.
+    // NOTE: |exit_code| is optional, nullptr can be passed if the exit code is
+    // not required.
+    bool WaitForExit(int* exit_code) const;
+
+    // Same as WaitForExit() but only waits for up to |timeout|.
+    // NOTE: |exit_code| is optional, nullptr can be passed if the exit code
+    // is not required.
+    bool WaitForExitWithTimeout(uint32_t timeout_ms, int* exit_code) const;
 
     bool HasAdminRights();
 
-    static bool ElevateProcess();
-
-    bool IsElevated();
-
+    // Close the process handle. This will not terminate the process.
     void Close();
 
     Process& operator=(Process&& other);
 
 private:
+    explicit Process(ProcessHandle process_handle);
+
     ProcessHandle process_handle_;
 
     DISALLOW_COPY_AND_ASSIGN(Process);

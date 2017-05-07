@@ -8,13 +8,11 @@
 #ifndef _ASPIA_BASE__SERVICE_MANAGER_H
 #define _ASPIA_BASE__SERVICE_MANAGER_H
 
-#include "aspia_config.h"
-
 #include <memory>
 #include <string>
 
 #include "base/macros.h"
-#include "base/scoped_sc_handle.h"
+#include "base/scoped_object.h"
 
 namespace aspia {
 
@@ -44,6 +42,8 @@ public:
 
     static std::wstring CreateUniqueServiceName(const std::wstring& service_name,
                                                 const std::wstring& service_id);
+
+    static bool IsServiceInstalled(const std::wstring& service_name);
 
     //
     // Проверяет валидность экземпляра класса.

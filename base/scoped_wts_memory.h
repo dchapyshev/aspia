@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__SCOPED_WTS_MEMORY_H
 #define _ASPIA_BASE__SCOPED_WTS_MEMORY_H
 
-#include "aspia_config.h"
 #include "base/macros.h"
 
 #include <wtsapi32.h>

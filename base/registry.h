@@ -8,8 +8,6 @@
 #ifndef _ASPIA_BASE__REGISTRY_H
 #define _ASPIA_BASE__REGISTRY_H
 
-#include "aspia_config.h"
-
 #include <string>
 #include <vector>
 

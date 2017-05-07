@@ -9,31 +9,36 @@
 #define _ASPIA_BASE__MESSAGE_WINDOW_H
 
 #include "base/macros.h"
-#include "base/thread.h"
+
+#include <functional>
 
 namespace aspia {
 
-class MessageWindow : private Thread
+class MessageWindow
 {
 public:
     MessageWindow();
-    virtual ~MessageWindow();
+    ~MessageWindow();
 
-    void CreateMessageWindow();
-    void DestroyMessageWindow();
-    HWND GetMessageWindowHandle();
+    // Implement this callback to handle messages received by the message window.
+    // If the callback returns |false|, the first four parameters are passed to
+    // DefWindowProc(). Otherwise, |*result| is returned by the window procedure.
+    using MessageCallback = std::function<bool(UINT message,
+                                               WPARAM wparam,
+                                               LPARAM lparam,
+                                               LRESULT* result)>;
 
-    virtual void OnMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) = 0;
+    // Creates a message-only window. The incoming messages will be passed by
+    // |message_callback|. |message_callback| must outlive |this|.
+    bool Create(MessageCallback message_callback);
+
+    HWND hwnd();
 
 private:
-    void Worker() override;
-    void OnStop() override;
-
     bool RegisterWindowClass(HINSTANCE instance);
-
     static LRESULT CALLBACK WindowProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
 
-private:
+    MessageCallback message_callback_;
     HWND hwnd_;
 
     DISALLOW_COPY_AND_ASSIGN(MessageWindow);

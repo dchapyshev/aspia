@@ -8,8 +8,6 @@
 #ifndef _ASPIA_BASE__SCOPED_VARIANT_H
 #define _ASPIA_BASE__SCOPED_VARIANT_H
 
-#include "aspia_config.h"
-
 #include <oleauto.h>
 #include <stdint.h>
 

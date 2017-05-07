@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__SCOPED_GDI_OBJECT_H
 #define _ASPIA_BASE__SCOPED_GDI_OBJECT_H
 
-#include "aspia_config.h"
 #include "base/macros.h"
 
 namespace aspia {
@@ -40,7 +39,7 @@ public:
         return object_;
     }
 
-    void Set(T object)
+    void Reset(T object = nullptr)
     {
         if (object_ && object != object_)
             Traits::Close(object_);
@@ -49,7 +48,7 @@ public:
 
     ScopedGDIObject& operator=(T object)
     {
-        Set(object);
+        Reset(object);
         return *this;
     }
 
@@ -84,44 +83,11 @@ private:
     DISALLOW_IMPLICIT_CONSTRUCTORS(DeleteObjectTraits);
 };
 
-// The traits class that uses DestroyCursor() to close a handle.
-class DestroyCursorTraits
-{
-public:
-    // Closes the handle.
-    static void Close(HCURSOR handle)
-    {
-        if (handle)
-            DestroyCursor(handle);
-    }
-
-private:
-    DISALLOW_IMPLICIT_CONSTRUCTORS(DestroyCursorTraits);
-};
-
-// The traits class that uses DestroyIcon() to close a handle.
-class DestroyIconTraits
-{
-public:
-    // Closes the handle.
-    static void Close(HICON handle)
-    {
-        if (handle)
-            DestroyIcon(handle);
-    }
-
-private:
-    DISALLOW_IMPLICIT_CONSTRUCTORS(DestroyIconTraits);
-};
-
 // Typedefs for some common use cases.
-typedef ScopedGDIObject<HBITMAP, DeleteObjectTraits<HBITMAP>> ScopedBitmap;
-typedef ScopedGDIObject<HRGN, DeleteObjectTraits<HRGN>> ScopedRegion;
-typedef ScopedGDIObject<HFONT, DeleteObjectTraits<HFONT>> ScopedHFONT;
-typedef ScopedGDIObject<HBRUSH, DeleteObjectTraits<HBRUSH>> ScopedHBRUSH;
-
-typedef ScopedGDIObject<HICON, DestroyIconTraits> ScopedHICON;
-typedef ScopedGDIObject<HCURSOR, DestroyCursorTraits> ScopedHCURSOR;
+using ScopedHBITMAP = ScopedGDIObject<HBITMAP, DeleteObjectTraits<HBITMAP>>;
+using ScopedHRGN = ScopedGDIObject<HRGN, DeleteObjectTraits<HRGN>>;
+using ScopedHFONT = ScopedGDIObject<HFONT, DeleteObjectTraits<HFONT>>;
+using ScopedHBRUSH = ScopedGDIObject<HBRUSH, DeleteObjectTraits<HBRUSH>>;
 
 } // namespace aspia
 

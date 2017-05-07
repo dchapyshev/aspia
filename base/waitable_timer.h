@@ -8,9 +8,7 @@
 #ifndef _ASPIA_BASE__WAITABLE_TIMER_H
 #define _ASPIA_BASE__WAITABLE_TIMER_H
 
-#include "aspia_config.h"
-
-#include <atomic>
+#include <chrono>
 #include <functional>
 
 #include "base/macros.h"
@@ -23,10 +21,17 @@ public:
     WaitableTimer();
     ~WaitableTimer();
 
-    typedef std::function<void()> TimeoutCallback;
+    using TimeoutCallback = std::function<void()>;
 
-    void Start(uint32_t time_delta_in_ms, const TimeoutCallback& signal_callback);
+    // Запускает выполнение |signal_callback| через интервал времени |time_delta_in_ms|.
+    // Если таймер уже находится в запущеном состоянии, то никаких действий не выполняется.
+    // После завершения |signal_callback| таймер автоматически переходит в остановленное состояние.
+    void Start(const std::chrono::milliseconds& time_delta, TimeoutCallback signal_callback);
+
+    // Останавливает таймер и дожидается завершения callback-функции, если она выполняется.
     void Stop();
+
+    // Проверяет состояние таймера.
     bool IsActive() const;
 
 private:
@@ -34,9 +39,7 @@ private:
 
 private:
     TimeoutCallback signal_callback_;
-
     HANDLE timer_handle_;
-    std::atomic_bool active_;
 
     DISALLOW_COPY_AND_ASSIGN(WaitableTimer);
 };

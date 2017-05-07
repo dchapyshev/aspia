@@ -8,24 +8,24 @@
 #ifndef _ASPIA_BASE__SCOPED_NATIVE_LIBRARY_H
 #define _ASPIA_BASE__SCOPED_NATIVE_LIBRARY_H
 
-#include "aspia_config.h"
-
 #include "base/macros.h"
-#include "base/unicode.h"
+
+#include <string>
 
 namespace aspia {
 
 class ScopedNativeLibrary
 {
 public:
-    explicit ScopedNativeLibrary(const char* lib_name)
+    explicit ScopedNativeLibrary(const WCHAR* lib_name)
     {
-        lib_ = LoadLibraryW(UNICODEfromUTF8(lib_name).c_str());
+        lib_ = LoadLibraryW(lib_name);
     }
 
     virtual ~ScopedNativeLibrary()
     {
-        FreeLibrary(lib_);
+        if (lib_)
+            FreeLibrary(lib_);
     }
 
     void* GetFunctionPointer(const char* function_name) const
