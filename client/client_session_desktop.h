@@ -8,63 +8,44 @@
 #ifndef _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_H
 #define _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_H
 
-#include "aspia_config.h"
-
-#include "base/macros.h"
-#include "codec/video_decoder_zlib.h"
-#include "codec/video_decoder_vp8.h"
-#include "codec/video_decoder_vp9.h"
+#include "codec/video_decoder.h"
 #include "codec/cursor_decoder.h"
-#include "desktop_capture/desktop_frame.h"
 #include "client/client_session.h"
-#include "client/client_config.h"
-#include "protocol/message_queue.h"
+#include "desktop_capture/desktop_frame.h"
 #include "protocol/clipboard.h"
-#include "proto/desktop_session.pb.h"
+#include "ui/viewer_window.h"
 
 namespace aspia {
 
-class ClientSessionDesktop : public ClientSession
+class ClientSessionDesktop :
+    public ClientSession,
+    private ViewerWindow::Delegate
 {
 public:
-    explicit ClientSessionDesktop(std::unique_ptr<Socket> sock);
-    ~ClientSessionDesktop() = default;
-
-    virtual DesktopFrame* GetVideoFrame() = 0;
-    virtual void VideoFrameUpdated() = 0;
-    virtual void ResizeVideoFrame(const DesktopSize& size, const PixelFormat& format) = 0;
-
-    virtual void OnCursorUpdate(const MouseCursor* mouse_cursor) = 0;
-    virtual void OnConfigRequest() = 0;
-
-    void SendPointerEvent(int32_t x, int32_t y, uint32_t mask);
-    void SendKeyEvent(uint32_t keycode, uint32_t flags = 0);
-    void SendPowerEvent(proto::PowerEvent::Action action);
-
-    void ConfigureSession(const ScreenConfig& config);
+    ClientSessionDesktop(const ClientConfig& config, ClientSession::Delegate* delegate);
+    ~ClientSessionDesktop();
 
 private:
-    bool OnIncommingMessage(const uint8_t* buffer, uint32_t size) override;
+    // ViewerWindow::Delegate implementation.
+    void OnWindowClose() override;
+    void OnConfigChange(const proto::DesktopConfig& config) override;
+    void OnKeyEvent(uint32_t keycode, uint32_t flags) override;
+    void OnPointerEvent(int x, int y, uint32_t mask) override;
+    void OnPowerEvent(proto::PowerEvent::Action action) override;
+    void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) override;
 
-    bool WriteMessage(const proto::desktop::ClientToHost* message);
-    void SendClipboardEvent(const proto::ClipboardEvent& event);
+    void Send(const IOBuffer* buffer) override;
 
-    bool ProcessIncommingMessage(const proto::desktop::HostToClient* message);
-    bool ReadVideoPacket(const proto::VideoPacket& packet);
-    bool ReadCursorShape(const proto::CursorShape& cursor_shape);
-    bool ReadClipboardEvent(const proto::ClipboardEvent& event);
-    bool ReadConfigRequest(const proto::DesktopConfigRequest& config_request);
+    void WriteMessage(const proto::desktop::ClientToHost& message);
 
-private:
-    std::unique_ptr<MessageQueue<proto::desktop::HostToClient>> incomming_queue_;
-    std::unique_ptr<MessageQueue<proto::desktop::ClientToHost>> outgoing_queue_;
-
-    ScopedAlignedBuffer outgoing_buffer_;
+    bool ReadVideoPacket(const proto::VideoPacket& video_packet);
+    void ReadCursorShape(const proto::CursorShape& cursor_shape);
+    void ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);
+    void ReadConfigRequest(const proto::DesktopConfigRequest& config_request);
 
     std::unique_ptr<VideoDecoder> video_decoder_;
     std::unique_ptr<CursorDecoder> cursor_decoder_;
-
-    Clipboard clipboard_;
+    std::unique_ptr<ViewerWindow> viewer_;
 
     proto::VideoEncoding video_encoding_;
 

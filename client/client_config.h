@@ -8,7 +8,8 @@
 #ifndef _ASPIA_CLIENT__CLIENT_CONFIG_H
 #define _ASPIA_CLIENT__CLIENT_CONFIG_H
 
-#include "client/screen_config.h"
+#include "proto/desktop_session.pb.h"
+#include "proto/auth_session.pb.h"
 
 namespace aspia {
 
@@ -16,21 +17,31 @@ class ClientConfig
 {
 public:
     ClientConfig();
-    ~ClientConfig();
+    ClientConfig(const ClientConfig& other);
+    ~ClientConfig() = default;
 
-    void SetRemoteAddress(const std::string& address);
-    const std::string& RemoteAddress() const;
+    void CopyFrom(const ClientConfig& other);
+
+    void SetRemoteAddress(const std::wstring& address);
+    const std::wstring& RemoteAddress() const;
 
     void SetRemotePort(uint16_t port);
-    int RemotePort() const;
+    uint16_t RemotePort() const;
 
-    const ScreenConfig& screen_config() const;
-    ScreenConfig* mutable_screen_config();
+    void SetSessionType(proto::SessionType session_type);
+    proto::SessionType SessionType() const;
+
+    const proto::DesktopConfig& desktop_config() const;
+    proto::DesktopConfig* mutable_desktop_config();
+
+    ClientConfig& operator=(const ClientConfig& other);
 
 private:
-    std::string address_;
+    std::wstring address_;
     uint16_t port_;
-    ScreenConfig screen_;
+
+    proto::SessionType session_type_;
+    proto::DesktopConfig desktop_config_;
 };
 
 } // namespace aspia

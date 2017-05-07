@@ -8,56 +8,41 @@
 #ifndef _ASPIA_CLIENT__CLIENT_SESSION_H
 #define _ASPIA_CLIENT__CLIENT_SESSION_H
 
-#include "aspia_config.h"
-
+#include "base/io_buffer.h"
+#include "base/logging.h"
 #include "base/macros.h"
-#include "base/thread.h"
-#include "base/lock.h"
-#include "base/scoped_aligned_buffer.h"
-#include "network/socket_tcp.h"
-#include "crypto/encryptor_rsa_aes.h"
-#include "crypto/decryptor_rsa_aes.h"
+#include "client/client_config.h"
+
+#include <memory>
 
 namespace aspia {
 
-class ClientSession : public Thread
+class ClientSession
 {
 public:
-    explicit ClientSession(std::unique_ptr<Socket> sock);
-    virtual ~ClientSession() = default;
-
-    enum class SessionEvent
+    class Delegate
     {
-        OPEN,               // Сессия успешно открыта.
-        CLOSE,              // Сессия закрыта.
-        CANCELED,           // Отменено пользователем.
-        KEY_EXCHANGE_ERROR, // Ошибка обмена ключами шифрования.
-        ACCESS_DENIED       // Доступ запрещен.
+    public:
+        virtual void OnSessionMessage(std::unique_ptr<IOBuffer> buffer) = 0;
+        virtual void OnSessionTerminate() = 0;
     };
 
-    virtual void OnSessionEvent(SessionEvent event) = 0;
-    virtual bool OnAuthorizationRequest(std::string& username, std::string& password) = 0;
-    virtual bool OnIncommingMessage(const uint8_t* buffer, uint32_t size) = 0;
+    ClientSession(const ClientConfig& config, Delegate* delegate) :
+        config_(config),
+        delegate_(delegate)
+    {
+        DCHECK(delegate_);
+    }
 
-    void OpenSession();
-    void CloseSession();
-    bool WriteOutgoingMessage(const uint8_t* buffer, uint32_t size);
+    virtual ~ClientSession() { }
+
+    virtual void Send(const IOBuffer* buffer) = 0;
+
+protected:
+    ClientConfig config_;
+    Delegate* delegate_;
 
 private:
-    bool DoKeyExchange();
-    SessionEvent DoAuthorization();
-
-    void Worker() override;
-    void OnStop() override;
-
-private:
-    std::unique_ptr<Socket> sock_;
-
-    std::unique_ptr<Encryptor> encryptor_;
-    std::unique_ptr<Decryptor> decryptor_;
-
-    ScopedAlignedBuffer incomming_buffer_;
-
     DISALLOW_COPY_AND_ASSIGN(ClientSession);
 };
 
