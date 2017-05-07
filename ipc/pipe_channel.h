@@ -8,64 +8,67 @@
 #ifndef _ASPIA_IPC__PIPE_CHANNEL_H
 #define _ASPIA_IPC__PIPE_CHANNEL_H
 
-#include "aspia_config.h"
-
-#include "base/scoped_aligned_buffer.h"
-#include "base/scoped_handle.h"
+#include "base/scoped_object.h"
 #include "base/waitable_event.h"
+#include "base/process.h"
 #include "base/thread.h"
-#include "base/lock.h"
 #include "base/macros.h"
+#include "base/io_buffer.h"
 
-#include <functional>
+#include <memory>
+#include <mutex>
+#include <string>
 
 namespace aspia {
 
 class PipeChannel : protected Thread
 {
 public:
-    virtual ~PipeChannel() { }
+    virtual ~PipeChannel();
 
-    typedef std::function<bool(const uint8_t*, uint32_t)> IncommingMessageCallback;
+    static std::unique_ptr<PipeChannel> CreateServer(std::wstring* input_channel_id,
+                                                     std::wstring* output_channel_id);
 
-    void Disconnect();
+    static std::unique_ptr<PipeChannel> CreateClient(const std::wstring& input_channel_id,
+                                                     const std::wstring& output_channel_id);
 
-    bool IsValid() const;
-    bool WriteMessage(const uint8_t* buffer, uint32_t size);
-
-    void WaitForDisconnect();
-
-protected:
-    PipeChannel(HANDLE read_pipe, HANDLE write_pipe, bool is_server);
-
-    typedef struct
+    class Delegate
     {
-        uint32_t pid;
-    } PipeHelloMessage;
+    public:
+        virtual void OnPipeChannelMessage(const IOBuffer* buffer) = 0;
+        virtual void OnPipeChannelConnect(ProcessId peer_pid) = 0;
+        virtual void OnPipeChannelDisconnect() = 0;
+    };
 
-    static std::wstring CreatePipeName(const std::wstring& channel_id);
+    bool Connect(Delegate* delegate);
+    void Close();
+
+    void Send(const IOBuffer* buffer);
+
+    void Wait();
+
+private:
+    enum class Mode { SERVER, CLIENT };
+
+    PipeChannel(HANDLE read_pipe, HANDLE write_pipe, Mode mode);
 
     bool Read(void* buf, size_t len);
     bool Write(const void* buf, size_t len);
 
-    IncommingMessageCallback incomming_message_callback_;
+    void Run() override;
+
+    const Mode mode_;
+    Delegate* delegate_;
+    ProcessId peer_pid_;
 
     ScopedHandle read_pipe_;
     ScopedHandle write_pipe_;
 
-private:
-    void Worker() override;
-    void OnStop() override;
-
-    bool is_server_;
-
     WaitableEvent read_event_;
     WaitableEvent write_event_;
 
-    Lock read_lock_;
-    Lock write_lock_;
-
-    ScopedAlignedBuffer incomming_buffer_;
+    std::mutex read_lock_;
+    std::mutex write_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(PipeChannel);
 };
