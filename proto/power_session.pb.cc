@@ -22,6 +22,20 @@ class ClientToHostDefaultTypeInternal : public ::google::protobuf::internal::Exp
 
 namespace protobuf_power_5fsession_2eproto {
 
+PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTableField
+    const TableStruct::entries[] = {
+  {0, 0, 0, ::google::protobuf::internal::kInvalidMask, 0, 0},
+};
+
+PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::AuxillaryParseTableField
+    const TableStruct::aux[] = {
+  ::google::protobuf::internal::AuxillaryParseTableField(),
+};
+PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
+    TableStruct::schema[] = {
+  { NULL, NULL, 0, -1, -1, false },
+};
+
 
 void TableStruct::Shutdown() {
   _ClientToHost_default_instance_.Shutdown();
@@ -31,7 +45,7 @@ void TableStruct::InitDefaultsImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::internal::InitProtobufDefaults();
-  ::aspia::proto::protobuf_proto_2eproto::InitDefaults();
+  ::aspia::proto::protobuf_power_5fsession_5fmessage_2eproto::InitDefaults();
   _ClientToHost_default_instance_.DefaultConstruct();
   _ClientToHost_default_instance_.get_mutable()->power_event_ = const_cast< ::aspia::proto::PowerEvent*>(
       ::aspia::proto::PowerEvent::internal_default_instance());
@@ -43,7 +57,7 @@ void InitDefaults() {
 }
 void AddDescriptorsImpl() {
   InitDefaults();
-  ::aspia::proto::protobuf_proto_2eproto::AddDescriptors();
+  ::aspia::proto::protobuf_power_5fsession_5fmessage_2eproto::AddDescriptors();
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
 }
 
@@ -144,7 +158,8 @@ bool ClientToHost::MergePartialFromCodedStream(
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
       // .aspia.proto.PowerEvent power_event = 1;
       case 1: {
-        if (tag == 10u) {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_power_event()));
         } else {
@@ -177,6 +192,9 @@ failure:
 void ClientToHost::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:aspia.proto.power.ClientToHost)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
   // .aspia.proto.PowerEvent power_event = 1;
   if (this->has_power_event()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -213,6 +231,9 @@ void ClientToHost::MergeFrom(const ClientToHost& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.power.ClientToHost)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
   if (from.has_power_event()) {
     mutable_power_event()->::aspia::proto::PowerEvent::MergeFrom(from.power_event());
   }

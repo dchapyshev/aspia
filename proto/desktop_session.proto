@@ -2,20 +2,20 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "proto.proto";
+import "desktop_session_message.proto";
+import "power_session_message.proto";
 
 package aspia.proto.desktop;
 
-// —ообщени€, которые отправл€ютс€ от хоста к клиенту.
 message HostToClient
 {
     VideoPacket video_packet            = 1;
-    CursorShape cursor_shape            = 2;
-    ClipboardEvent clipboard_event      = 3;
-    DesktopConfigRequest config_request = 4;
+    AudioPacket audio_packet            = 2;
+    CursorShape cursor_shape            = 3;
+    ClipboardEvent clipboard_event      = 4;
+    DesktopConfigRequest config_request = 5;
 }
 
-// —ообщени€, которые отправл€ютс€ от клиента к хосту.
 message ClientToHost
 {
     PointerEvent pointer_event     = 1;

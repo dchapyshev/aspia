@@ -2,11 +2,10 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "proto.proto";
+import "power_session_message.proto";
 
 package aspia.proto.power;
 
-// —ообщени€, которые отправл€ютс€ от клиента к хосту.
 message ClientToHost
 {
     PowerEvent power_event = 1;

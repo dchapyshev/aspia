@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+import "auth_session_message.proto";
+
+package aspia.proto.auth;
+
+message HostToClient
+{
+    AuthStatus status = 1;
+}
+
+message ClientToHost
+{
+    AuthMethod method = 1;
+
+    string username = 2;
+    bytes password = 3;
+
+    SessionType session_type = 4;
+}

@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message PowerEvent
+{
+    enum Action
+    {
+        SHUTDOWN  = 0;
+        REBOOT    = 1;
+        HIBERNATE = 2;
+        SUSPEND   = 3;
+        LOGOFF    = 4;
+        LOCK      = 5;
+    }
+
+    Action action = 1;
+}
