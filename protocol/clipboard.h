@@ -8,36 +8,41 @@
 #ifndef _ASPIA_PROTOCOL__CLIPBOARD_H
 #define _ASPIA_PROTOCOL__CLIPBOARD_H
 
-#include "aspia_config.h"
-
 #include <functional>
+#include <memory>
 #include <string>
 
 #include "base/message_window.h"
-#include "proto/proto.pb.h"
+#include "proto/desktop_session_message.pb.h"
 
 namespace aspia {
 
-class Clipboard : private MessageWindow
+class Clipboard
 {
 public:
     Clipboard();
     ~Clipboard();
 
-    typedef std::function<void(const proto::ClipboardEvent&)> ClipboardEventCallback;
+    using ClipboardEventCallback =
+        std::function<void(std::unique_ptr<proto::ClipboardEvent> clipboard_event)>;
 
-    // Callback вызывается при наличии исходящего буфера обмена.
-    void StartExchange(const ClipboardEventCallback& clipboard_event_callback);
-    void StopExchange();
+    // Callback is called when there is an outgoing clipboard.
+    bool Start(ClipboardEventCallback clipboard_event_callback);
 
-    // Прием входящего буфера обмена.
-    void InjectClipboardEvent(const proto::ClipboardEvent& event);
+    void Stop();
+
+    // Receiving the incoming clipboard.
+    void InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);
 
 private:
-    void OnMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override;
+    // Handles messages received by |window_|.
+    bool OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* result);
+
     void OnClipboardUpdate();
 
-private:
+    // Used to subscribe to WM_CLIPBOARDUPDATE messages.
+    std::unique_ptr<MessageWindow> window_;
+
     ClipboardEventCallback clipboard_event_callback_;
 
     std::string last_mime_type_;

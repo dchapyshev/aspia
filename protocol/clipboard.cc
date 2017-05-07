@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            protocol/clipboard.cpp
+// FILE:            protocol/clipboard.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
@@ -24,18 +24,48 @@ Clipboard::Clipboard()
 
 Clipboard::~Clipboard()
 {
-    DestroyMessageWindow();
+    Stop();
 }
 
-void Clipboard::StartExchange(const ClipboardEventCallback& clipboard_event_callback)
+bool Clipboard::Start(ClipboardEventCallback clipboard_event_callback)
 {
-    clipboard_event_callback_ = clipboard_event_callback;
-    CreateMessageWindow();
+    clipboard_event_callback_ = std::move(clipboard_event_callback);
+
+    window_.reset(new MessageWindow());
+
+    if (!window_->Create(std::bind(&Clipboard::OnMessage,
+                                   this,
+                                   std::placeholders::_1,
+                                   std::placeholders::_2,
+                                   std::placeholders::_3,
+                                   std::placeholders::_4)))
+    {
+        LOG(ERROR) << "Couldn't create clipboard window.";
+        return false;
+    }
+
+    if (!AddClipboardFormatListener(window_->hwnd()))
+    {
+        LOG(WARNING) << "AddClipboardFormatListener() failed: "
+                     << GetLastError();
+        return false;
+    }
+
+    return true;
 }
 
-void Clipboard::StopExchange()
+void Clipboard::Stop()
 {
-    DestroyMessageWindow();
+    if (window_)
+    {
+        RemoveClipboardFormatListener(window_->hwnd());
+        window_.reset();
+
+        last_mime_type_.clear();
+        last_data_.clear();
+
+        clipboard_event_callback_ = nullptr;
+    }
 }
 
 void Clipboard::OnClipboardUpdate()
@@ -48,7 +78,7 @@ void Clipboard::OnClipboardUpdate()
         {
             ScopedClipboard clipboard;
 
-            if (!clipboard.Init(GetMessageWindowHandle()))
+            if (!clipboard.Init(window_->hwnd()))
             {
                 LOG(WARNING) << "Couldn't open the clipboard: " << GetLastError();
                 return;
@@ -79,66 +109,59 @@ void Clipboard::OnClipboardUpdate()
 
             if (last_mime_type_ != kMimeTypeTextUtf8 || last_data_ != data)
             {
-                proto::ClipboardEvent event;
+                std::unique_ptr<proto::ClipboardEvent> event(new proto::ClipboardEvent);
 
-                event.set_mime_type(kMimeTypeTextUtf8);
-                event.set_data(data);
+                event->set_mime_type(kMimeTypeTextUtf8);
+                event->set_data(data);
 
-                clipboard_event_callback_(event);
+                clipboard_event_callback_(std::move(event));
             }
         }
     }
 }
 
-void Clipboard::OnMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+bool Clipboard::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* result)
 {
-    switch (message)
+    UNREF(wParam);
+    UNREF(lParam);
+
+    if (message == WM_CLIPBOARDUPDATE)
     {
-        case WM_CREATE:
-        {
-            if (!AddClipboardFormatListener(hwnd))
-            {
-                LOG(WARNING) << "AddClipboardFormatListener() failed: "
-                             << GetLastError();
-            }
-        }
-        break;
-
-        case WM_DESTROY:
-        {
-            RemoveClipboardFormatListener(hwnd);
-        }
-        break;
-
-        case WM_CLIPBOARDUPDATE:
-        {
-            OnClipboardUpdate();
-        }
-        break;
+        OnClipboardUpdate();
+        *result = 0;
+        return true;
     }
+
+    return false;
 }
 
-void Clipboard::InjectClipboardEvent(const proto::ClipboardEvent& event)
+void Clipboard::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
 {
-    if (!GetMessageWindowHandle())
+    if (!window_ || !clipboard_event)
         return;
 
     // Currently we only handle UTF-8 text.
-    if (event.mime_type() != kMimeTypeTextUtf8)
+    if (clipboard_event->mime_type() != kMimeTypeTextUtf8)
     {
-        LOG(WARNING) << "Unsupported mime type: " << event.mime_type();
+        LOG(WARNING) << "Unsupported mime type: " << clipboard_event->mime_type();
+        return;
+    }
+
+    if (!StringIsUtf8(clipboard_event->data().c_str(), clipboard_event->data().length()))
+    {
+        LOG(WARNING) << "Clipboard data is not UTF-8 encoded";
         return;
     }
 
     // Store last injected data.
-    last_mime_type_ = event.mime_type();
-    last_data_ = event.data();
+    last_mime_type_ = std::move(*clipboard_event->mutable_mime_type());
+    last_data_ = std::move(*clipboard_event->mutable_data());
 
-    std::wstring text = UNICODEfromUTF8(ReplaceLfByCrLf(event.data()));
+    std::wstring text = UNICODEfromUTF8(ReplaceLfByCrLf(last_data_));
 
     ScopedClipboard clipboard;
 
-    if (!clipboard.Init(GetMessageWindowHandle()))
+    if (!clipboard.Init(window_->hwnd()))
     {
         LOG(WARNING) << "Couldn't open the clipboard." << GetLastError();
         return;
