@@ -8,13 +8,9 @@
 #ifndef _ASPIA_CRYPTO__DECRYPTOR_RSA_AES_H
 #define _ASPIA_CRYPTO__DECRYPTOR_RSA_AES_H
 
-#include "aspia_config.h"
-
 #include <wincrypt.h>
 
 #include "base/macros.h"
-#include "base/scoped_aligned_buffer.h"
-
 #include "crypto/decryptor.h"
 
 namespace aspia {
@@ -22,25 +18,23 @@ namespace aspia {
 class DecryptorAES : public Decryptor
 {
 public:
-    DecryptorAES();
     ~DecryptorAES();
 
-    bool Init() override;
-    uint32_t GetPublicKeySize() override;
-    bool GetPublicKey(uint8_t* key, uint32_t len) override;
-    bool SetSessionKey(const uint8_t* blob, uint32_t len) override;
-    const uint8_t* Decrypt(const uint8_t* in, uint32_t in_len, uint32_t* out_len) override;
+    static DecryptorAES* Create();
+
+    std::unique_ptr<IOBuffer> GetPublicKey();
+    bool SetSessionKey(const IOBuffer* session_key);
+
+    std::unique_ptr<IOBuffer> Decrypt(const IOBuffer* source_buffer) override;
 
 private:
-    void Cleanup();
+    DecryptorAES(HCRYPTPROV prov, HCRYPTKEY rsa_key);
 
 private:
-    HCRYPTPROV prov_; // Контекст шифрования.
+    HCRYPTPROV prov_;
 
-    HCRYPTKEY aes_key_; // Сессионный ключ для дешифрования.
+    HCRYPTKEY aes_key_;
     HCRYPTKEY rsa_key_;
-
-    ScopedAlignedBuffer buffer_; // Буфер дешифрования.
 
     DISALLOW_COPY_AND_ASSIGN(DecryptorAES);
 };

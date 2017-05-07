@@ -8,13 +8,9 @@
 #ifndef _ASPIA_CRYPTO__ENCRYPTOR_RSA_AES_H
 #define _ASPIA_CRYPTO__ENCRYPTOR_RSA_AES_H
 
-#include "aspia_config.h"
-
 #include <wincrypt.h>
 
 #include "base/macros.h"
-#include "base/scoped_aligned_buffer.h"
-
 #include "crypto/encryptor.h"
 
 namespace aspia {
@@ -22,27 +18,25 @@ namespace aspia {
 class EncryptorAES : public Encryptor
 {
 public:
-    EncryptorAES();
     ~EncryptorAES();
 
-    bool Init() override;
-    uint32_t GetSessionKeySize() override;
-    bool GetSessionKey(uint8_t* key, uint32_t len) override;
-    bool SetPublicKey(const uint8_t* key, uint32_t len) override;
-    const uint8_t* Encrypt(const uint8_t* in, uint32_t in_len, uint32_t* out_len) override;
+    static EncryptorAES* Create();
+
+    std::unique_ptr<IOBuffer> GetSessionKey();
+    bool SetPublicKey(const IOBuffer* public_key);
+
+    std::unique_ptr<IOBuffer> Encrypt(const IOBuffer* source_buffer) override;
 
 private:
-    void Cleanup();
+    EncryptorAES(HCRYPTPROV prov, HCRYPTKEY aes_key, DWORD block_size);
 
 private:
-    HCRYPTPROV prov_; // Контекст шифрования.
+    HCRYPTPROV prov_;
 
-    HCRYPTKEY aes_key_; // Сессионный ключ для шифрования.
+    HCRYPTKEY aes_key_;
     HCRYPTKEY rsa_key_;
 
-    DWORD block_size_; // Размер блока шифрования в байтах.
-
-    ScopedAlignedBuffer buffer_; // Буфер шифрования.
+    DWORD block_size_;
 
     DISALLOW_COPY_AND_ASSIGN(EncryptorAES);
 };
