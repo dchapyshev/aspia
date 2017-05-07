@@ -9,7 +9,7 @@
 #define _ASPIA_CODEC__VIDEO_DECODER_H
 
 #include "desktop_capture/desktop_frame.h"
-#include "proto/proto.pb.h"
+#include "proto/desktop_session_message.pb.h"
 
 namespace aspia {
 

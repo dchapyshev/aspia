@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            codec/scoped_vpx_codec.h
+// FILE:            codec/scoped_vpx_codec.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //

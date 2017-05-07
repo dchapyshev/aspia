@@ -11,25 +11,24 @@
 #include <memory>
 
 #include "base/macros.h"
-#include "base/scoped_aligned_buffer.h"
+#include "base/aligned_memory.h"
 #include "codec/compressor_zlib.h"
 #include "codec/video_encoder.h"
-#include "codec/pixel_translator_argb.h"
+#include "codec/pixel_translator.h"
 
 namespace aspia {
 
 class VideoEncoderZLIB : public VideoEncoder
 {
 public:
-    VideoEncoderZLIB();
     ~VideoEncoderZLIB() = default;
 
-    void Encode(proto::VideoPacket* packet, const DesktopFrame* frame) override;
+    static std::unique_ptr<VideoEncoderZLIB> Create(const PixelFormat& format, int compression_ratio);
 
-    bool SetCompressRatio(int32_t value);
-    void SetPixelFormat(const PixelFormat& client_pixel_format);
+    std::unique_ptr<proto::VideoPacket> Encode(const DesktopFrame* frame) override;
 
 private:
+    VideoEncoderZLIB(const PixelFormat& format, int compression_ratio);
     void CompressPacket(proto::VideoPacket* packet, size_t source_data_size);
 
     //
@@ -39,18 +38,17 @@ private:
     uint8_t* GetOutputBuffer(proto::VideoPacket* packet, size_t size);
 
 private:
-    bool pixel_format_changed_;
-
     // The current frame size.
     DesktopSize screen_size_;
 
     // Client's pixel format
     PixelFormat format_;
 
-    std::unique_ptr<CompressorZLIB> compressor_;
-    std::unique_ptr<PixelTranslator> translator_;
+    CompressorZLIB compressor_;
+    PixelTranslator translator_;
 
-    ScopedAlignedBuffer translate_buffer_;
+    std::unique_ptr<uint8_t[], AlignedFreeDeleter> translate_buffer_;
+    size_t translate_buffer_size_;
 
     DISALLOW_COPY_AND_ASSIGN(VideoEncoderZLIB);
 };

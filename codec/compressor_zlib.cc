@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            codec/compressor_zlib.cpp
+// FILE:            codec/compressor_zlib.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //

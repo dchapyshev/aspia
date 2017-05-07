@@ -8,15 +8,10 @@
 #ifndef _ASPIA_CODEC__CURSOR_ENCODER_H
 #define _ASPIA_CODEC__CURSOR_ENCODER_H
 
-#include "aspia_config.h"
-
-#include <stdint.h>
-
 #include "base/macros.h"
 #include "codec/compressor_zlib.h"
 #include "desktop_capture/mouse_cursor_cache.h"
-
-#include "proto/proto.pb.h"
+#include "proto/desktop_session_message.pb.h"
 
 namespace aspia {
 

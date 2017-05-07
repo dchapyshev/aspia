@@ -1,22 +1,27 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            codec/video_encoder_vp8.h
+// FILE:            codec/video_encoder_vpx.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_CODEC__VIDEO_ENCODER_VP8_H
-#define _ASPIA_CODEC__VIDEO_ENCODER_VP8_H
-
-#include "aspia_config.h"
+#ifndef _ASPIA_CODEC__VIDEO_ENCODER_VPX_H
+#define _ASPIA_CODEC__VIDEO_ENCODER_VPX_H
 
 #include <memory>
 
 extern "C" {
+
+#pragma warning(push)
+#pragma warning(disable:4505)
+
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include "vpx/vpx_encoder.h"
 #include "vpx/vp8cx.h"
-}
+
+#pragma warning(pop)
+
+} // extern "C"
 
 #include "codec/scoped_vpx_codec.h"
 #include "codec/video_encoder.h"
@@ -24,22 +29,30 @@ extern "C" {
 
 namespace aspia {
 
-class VideoEncoderVP8 : public VideoEncoder
+class VideoEncoderVPX : public VideoEncoder
 {
 public:
-    VideoEncoderVP8();
-    ~VideoEncoderVP8() = default;
+    ~VideoEncoderVPX() = default;
 
-    void Encode(proto::VideoPacket* packet, const DesktopFrame* frame) override;
+    static std::unique_ptr<VideoEncoderVPX> CreateVP8();
+    static std::unique_ptr<VideoEncoderVPX> CreateVP9();
+
+    std::unique_ptr<proto::VideoPacket> Encode(const DesktopFrame* frame) override;
 
 private:
+    VideoEncoderVPX(proto::VideoEncoding encoding);
+
     void CreateImage();
     void CreateActiveMap();
     void SetCommonCodecParameters(vpx_codec_enc_cfg_t* config);
-    void CreateCodec();
+    void CreateVp8Codec();
+    void CreateVp9Codec();
     void PrepareImageAndActiveMap(const DesktopFrame* frame, proto::VideoPacket* packet);
+    void SetActiveMap(const DesktopRect& rect);
 
 private:
+    const proto::VideoEncoding encoding_;
+
     // The current frame size.
     DesktopSize screen_size_;
 
@@ -54,9 +67,9 @@ private:
     // Buffer for storing the yuv image.
     std::unique_ptr<uint8_t[]> yuv_image_;
 
-    DISALLOW_COPY_AND_ASSIGN(VideoEncoderVP8);
+    DISALLOW_COPY_AND_ASSIGN(VideoEncoderVPX);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_CODEC___VIDEO_ENCODER_VP8_H
+#endif // _ASPIA_CODEC___VIDEO_ENCODER_VPX_H

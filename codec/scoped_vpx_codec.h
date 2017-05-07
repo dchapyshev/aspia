@@ -8,8 +8,6 @@
 #ifndef _ASPIA_CODEC__SCOPED_VPX_CODEC_H
 #define _ASPIA_CODEC__SCOPED_VPX_CODEC_H
 
-#include "aspia_config.h"
-
 #include <memory>
 
 extern "C"
@@ -24,7 +22,7 @@ struct VpxCodecDeleter
     void operator()(vpx_codec_ctx_t* codec);
 };
 
-typedef std::unique_ptr<vpx_codec_ctx_t, VpxCodecDeleter> ScopedVpxCodec;
+using ScopedVpxCodec = std::unique_ptr<vpx_codec_ctx_t, VpxCodecDeleter>;
 
 } // namespace aspia
 

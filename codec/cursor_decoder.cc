@@ -1,12 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            codec/cursor_decoder.cpp
+// FILE:            codec/cursor_decoder.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #include "codec/cursor_decoder.h"
-
 #include "base/logging.h"
 
 namespace aspia {
@@ -26,8 +25,8 @@ bool CursorDecoder::DecompressCursor(const proto::CursorShape& cursor_shape, uin
     bool decompress_again = true;
     int used = 0;
 
-    int row_y = 0;   // Текущая строка.
-    int row_pos = 0; // Положение в текущей строке.
+    int row_y = 0;
+    int row_pos = 0;
 
     while (decompress_again && used < src_size)
     {
@@ -37,10 +36,9 @@ bool CursorDecoder::DecompressCursor(const proto::CursorShape& cursor_shape, uin
             return false;
         }
 
-        int written = 0;  // Количество байт записанный в буфер назначения.
-        int consumed = 0; // Количество байт, которые были взяты из исходного буфера.
+        int written = 0;
+        int consumed = 0;
 
-        // Распаковываем очередную порцию данных.
         decompress_again = decompressor_.Process(src + used,
                                                  src_size - used,
                                                  image + row_pos,
@@ -50,59 +48,50 @@ bool CursorDecoder::DecompressCursor(const proto::CursorShape& cursor_shape, uin
         used += consumed;
         row_pos += written;
 
-        // Если мы полностью распаковали строку в прямоугольнике.
         if (row_pos == row_size)
         {
-            // Увеличиваем счетчик строк.
             ++row_y;
-
-            // Сбрасываем текущее положение в строке.
             row_pos = 0;
-
-            // Переходим к следующей строке в буфере назначения.
             image += row_size;
         }
     }
 
-    // Сбрасываем декомпрессор после распаковки каждого прямоугольника.
     decompressor_.Reset();
 
     return true;
 }
 
-const MouseCursor* CursorDecoder::Decode(const proto::CursorShape& cursor_shape)
+std::shared_ptr<MouseCursor> CursorDecoder::Decode(const proto::CursorShape& cursor_shape)
 {
     int cache_index = -1;
 
     if (cursor_shape.flags() & proto::CursorShape::CACHE)
     {
-        // Биты 0-4 содержат позицию курсора в индексе.
+        // Bits 0-4 contain the cursor position in the cache.
         cache_index = cursor_shape.flags() & 0x1F;
     }
     else
     {
-        int width = cursor_shape.width();
-        int height = cursor_shape.height();
+        DesktopSize size(cursor_shape.width(), cursor_shape.height());
 
-        if (width  <= 0 || width  > (SHRT_MAX / 2) ||
-            height <= 0 || height > (SHRT_MAX / 2))
+        if (size.Width()  <= 0 || size.Width()  > (std::numeric_limits<int16_t>::max() / 2) ||
+            size.Height() <= 0 || size.Height() > (std::numeric_limits<int16_t>::max() / 2))
         {
-            DLOG(ERROR) << "Cursor dimensions are out of bounds for SetCursor: "
-                        << width << "x" << height;
+            LOG(ERROR) << "Cursor dimensions are out of bounds for SetCursor: "
+                       << size.Width() << "x" << size.Height();
             return nullptr;
         }
 
-        size_t image_size = width * height * sizeof(uint32_t);
+        size_t image_size = size.Width() * size.Height() * sizeof(uint32_t);
         std::unique_ptr<uint8_t[]> image(new uint8_t[image_size]);
 
         if (!DecompressCursor(cursor_shape, image.get()))
             return nullptr;
 
-        std::unique_ptr<MouseCursor> mouse_cursor(new MouseCursor(std::move(image),
-                                                                  width,
-                                                                  height,
-                                                                  cursor_shape.hotspot_x(),
-                                                                  cursor_shape.hotspot_y()));
+        std::unique_ptr<MouseCursor> mouse_cursor =
+            MouseCursor::Create(std::move(image),
+                                size,
+                                DesktopPoint(cursor_shape.hotspot_x(), cursor_shape.hotspot_y()));
 
         if (cursor_shape.flags() & proto::CursorShape::RESET_CACHE)
         {
@@ -116,7 +105,7 @@ const MouseCursor* CursorDecoder::Decode(const proto::CursorShape& cursor_shape)
 
         if (!cache_)
         {
-            DLOG(ERROR) << "Host did not send cache reset command";
+            LOG(ERROR) << "Host did not send cache reset command";
             return nullptr;
         }
 

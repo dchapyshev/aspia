@@ -12,6 +12,8 @@
 #include "desktop_capture/pixel_format.h"
 #include "proto/desktop_session.pb.h"
 
+#include <memory>
+
 namespace aspia {
 
 class VideoEncoder
@@ -20,7 +22,15 @@ public:
     VideoEncoder() {}
     virtual ~VideoEncoder() = default;
 
-    virtual void Encode(proto::VideoPacket* packet, const DesktopFrame* frame) = 0;
+    virtual std::unique_ptr<proto::VideoPacket> Encode(const DesktopFrame* frame) = 0;
+
+protected:
+    static std::unique_ptr<proto::VideoPacket> CreatePacket(proto::VideoEncoding encoding)
+    {
+        std::unique_ptr<proto::VideoPacket> packet(new proto::VideoPacket());
+        packet->set_encoding(encoding);
+        return packet;
+    }
 };
 
 } // namespace aspia
