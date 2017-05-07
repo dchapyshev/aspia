@@ -1,29 +1,23 @@
-Third party components information.
+Third-party components information.
 
-Licences:
+Component   | License               | URL
+protobuf      BSD 3-Clause License    https://github.com/google/protobuf/releases
+glog          BSD 3-Clause License    https://github.com/google/glog
+googletest    BSD 3-Clause License    https://github.com/google/googletest
+libyuv        BSD 3-Clause License    https://chromium.googlesource.com/libyuv/libyuv
+libvpx        BSD 3-Clause License    https://chromium.googlesource.com/webm/libvpx
+gflags        BSD 3-Clause License    https://github.com/gflags/gflags
+opus          BSD 3-Clause License    http://opus-codec.org
+zlib-ng       zlib License            https://github.com/Dead2/zlib-ng
 
-  component  | license
-protobuf       BSD 3-Clause License
-libglog        BSD 3-Clause License
-googletest     BSD 3-Clause License
-libyuv         BSD 3-Clause License
-libvpx         BSD 3-Clause License
-zlib-ng        zlib License
-wtl            Common Public License 1.0, Microsoft Public License
-rapidjson      MIT License
-gflags         BSD 3-Clause License
-opus           BSD 3-Clause License
+Synchronization status
 
-Synchronization status:
-
-  component  |   sync date   |     version    |   url
-protobuf       19.02.2017       3.2.0           https://github.com/google/protobuf/releases
-libglog        26.10.2016       trunk           https://github.com/google/glog
-googletest     26.10.2016       trunk           https://github.com/google/googletest
-libyuv         19.02.2017       trunk           https://chromium.googlesource.com/libyuv/libyuv
-libvpx         26.01.2017       1.6.1           https://chromium.googlesource.com/webm/libvpx
-zlib-ng        19.02.2017       trunk           https://github.com/Dead2/zlib-ng
-wtl            19.02.2017       r633            https://sourceforge.net/projects/wtl
-rapidjson      26.10.2016       trunk           https://github.com/miloyip/rapidjson
-gflags         03.10.2016       2.2.0           https://github.com/gflags/gflags
-opus           24.01.2017       1.1.4           http://opus-codec.org
+Component   | Sync date   | Version
+protobuf      03.05.2017    3.3.0
+glog          03.05.2017    trunk
+googletest    26.10.2016    trunk
+libyuv        03.05.2017    trunk
+libvpx        26.01.2017    1.6.1
+gflags        03.05.2017    2.2.0
+opus          24.01.2017    1.1.4
+zlib-ng       26.03.2017    trunk
