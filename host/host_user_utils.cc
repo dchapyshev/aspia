@@ -95,31 +95,21 @@ bool IsValidUserList(const proto::HostUserList& list)
     return true;
 }
 
-static bool GetUserListFilePath(std::string& path)
+static bool GetUserListDirectoryPath(std::string& path)
 {
     if (!GetPath(PathKey::DIR_COMMON_APP_DATA, path))
         return false;
 
     path.append("/Aspia/Remote Desktop");
+    return true;
+}
 
-    if (!std::experimental::filesystem::exists(path))
-    {
-        std::error_code code;
-
-        if (!std::experimental::filesystem::create_directories(path, code))
-        {
-            LOG(ERROR) << "Unable to create directory: '" << path
-                       << "'. Error: " << code.message();
-            return false;
-        }
-    }
-    else
-    {
-        CHECK(std::experimental::filesystem::is_directory(path));
-    }
+static bool GetUserListFilePath(std::string& path)
+{
+    if (!GetUserListDirectoryPath(path))
+        return false;
 
     path.append("/userlist.dat");
-
     return true;
 }
 
@@ -131,8 +121,31 @@ bool WriteUserList(const proto::HostUserList& list)
         return false;
     }
 
-    std::string file_path;
+    std::string dir_path;
+    if (!GetUserListDirectoryPath(dir_path))
+        return false;
 
+    if (!std::experimental::filesystem::exists(dir_path))
+    {
+        std::error_code code;
+
+        if (!std::experimental::filesystem::create_directories(dir_path, code))
+        {
+            LOG(ERROR) << "Unable to create directory: '" << dir_path
+                       << "'. Error: " << code.message();
+            return false;
+        }
+    }
+    else
+    {
+        if (!std::experimental::filesystem::is_directory(dir_path))
+        {
+            LOG(ERROR) << "Path '" << dir_path << "' exist, not it is not a directory";
+            return false;
+        }
+    }
+
+    std::string file_path;
     if (!GetUserListFilePath(file_path))
         return false;
 
@@ -148,14 +161,13 @@ bool WriteUserList(const proto::HostUserList& list)
     std::string string = list.SerializeAsString();
 
     file_stream.write(string.c_str(), string.size());
+    file_stream.close();
 
     return true;
 }
 
-bool ReadUserList(proto::HostUserList* list)
+bool ReadUserList(proto::HostUserList& list)
 {
-    DCHECK(list);
-
     std::string file_path;
 
     if (!GetUserListFilePath(file_path))
@@ -188,14 +200,15 @@ bool ReadUserList(proto::HostUserList* list)
     string.resize(static_cast<size_t>(size));
 
     file_stream.read(&string[0], size);
+    file_stream.close();
 
-    if (!list->ParseFromString(string))
+    if (!list.ParseFromString(string))
     {
         LOG(ERROR) << "User list corrupted";
         return false;
     }
 
-    if (!IsValidUserList(*list))
+    if (!IsValidUserList(list))
     {
         LOG(ERROR) << "User list contains incorrect entries";
         return false;
@@ -208,7 +221,7 @@ bool IsUniqueUserName(const std::wstring& username)
 {
     proto::HostUserList list;
 
-    if (!ReadUserList(&list))
+    if (!ReadUserList(list))
         return true;
 
     std::string username_utf8;

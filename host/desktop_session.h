@@ -8,13 +8,9 @@
 #ifndef _ASPIA_HOST__DESKTOP_SESSION_H
 #define _ASPIA_HOST__DESKTOP_SESSION_H
 
-#include <memory>
-#include <mutex>
-
 #include "base/message_loop/message_loop_thread.h"
 #include "base/object_watcher.h"
 #include "base/waitable_timer.h"
-#include "base/macros.h"
 #include "base/thread.h"
 #include "base/process.h"
 #include "ipc/pipe_channel.h"

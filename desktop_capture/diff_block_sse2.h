@@ -52,11 +52,11 @@ static INLINE uint8_t DiffFullBlock_32x32_SSE2(const uint8_t* image1,
         sad = _mm_shuffle_epi32(acc, 0xEE);
         sad = _mm_adds_epu16(sad, acc);
 
-        // Если строка имеет отличия
+        // If the row has differences.
         if (_mm_cvtsi128_si32(sad))
             return 1U;
 
-        // Переходим к следующей строке изображения
+        // Go to the next row of the image.
         image1 += bytes_per_row;
         image2 += bytes_per_row;
     }
@@ -92,11 +92,11 @@ static INLINE uint8_t DiffFullBlock_16x16_SSE2(const uint8_t* image1,
         sad = _mm_shuffle_epi32(acc, 0xEE);
         sad = _mm_adds_epu16(sad, acc);
 
-        // Если строка имеет отличия
+        // If the row has differences.
         if (_mm_cvtsi128_si32(sad))
             return 1U;
 
-        // Переходим к следующей строке изображения
+        // Go to the next row of the image.
         image1 += bytes_per_row;
         image2 += bytes_per_row;
     }

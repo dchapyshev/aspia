@@ -74,7 +74,7 @@ static proto::AuthStatus BasicAuthorization(const std::string& username,
 {
     proto::HostUserList list;
 
-    if (ReadUserList(&list))
+    if (ReadUserList(list))
     {
         for (int i = 0; i < list.user_list_size(); ++i)
         {

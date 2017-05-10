@@ -82,7 +82,7 @@ void UsersDialog::OnInitDialog()
     EnableWindow(GetDlgItem(ID_EDIT), FALSE);
     EnableWindow(GetDlgItem(ID_DELETE), FALSE);
 
-    if (ReadUserList(&user_list_))
+    if (ReadUserList(user_list_))
         UpdateUserList();
 }
 

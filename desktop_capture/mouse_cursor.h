@@ -37,7 +37,7 @@ private:
                 const DesktopSize& size,
                 const DesktopPoint& hotspot);
 
-    std::unique_ptr<uint8_t[]> data_;
+    std::unique_ptr<uint8_t[]> const data_;
     const DesktopSize size_;
     const DesktopPoint hotspot_;
 };

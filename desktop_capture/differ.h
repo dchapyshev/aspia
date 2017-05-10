@@ -16,9 +16,7 @@
 
 namespace aspia {
 
-//
-// Класс для поиска изменившихся областей экрана
-//
+// Class to search for changed regions of the screen.
 class Differ
 {
 public:

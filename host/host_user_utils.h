@@ -22,7 +22,7 @@ bool IsValidUserList(const proto::HostUserList& list);
 
 bool WriteUserList(const proto::HostUserList& list);
 
-bool ReadUserList(proto::HostUserList* list);
+bool ReadUserList(proto::HostUserList& list);
 
 bool IsUniqueUserName(const std::wstring& username);
 
