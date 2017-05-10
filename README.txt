@@ -7,10 +7,10 @@ Also uses:
    - zlib-ng (library for compressing and decompressing. Different from the
      original zlib presence of patches from Intel and Cloudflare for faster
      work on modern processors)
-   - libglog (logging library from Google)
+   - libglog (logging library)
    - gflags (command line arguments parsing)
-   - libyuv (ror image formats convertation)
-   - gtest (library from Google for unit testing)
+   - libyuv (image formats convertation)
+   - gtest (unit testing)
 
 For building the project requires:
    - Visual Studio 2017: http://visualstudio.com/
