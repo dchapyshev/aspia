@@ -68,7 +68,7 @@ protected:
     // MessagePump::Delegate methods:
     virtual bool DoWork() override;
 
-    Type type_;
+    const Type type_;
 
     // A list of tasks that need to be processed by this instance.  Note that
     // this queue is only accessed (push/pop) by our current thread.

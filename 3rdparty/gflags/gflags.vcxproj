@@ -107,11 +107,11 @@
     <ClInclude Include="src/gflags/gflags.h" />
     <ClInclude Include="src/gflags/gflags_declare.h" />
     <ClInclude Include="src/gflags/gflags_completions.h" />
-    <ClInclude Include="src/gflags/gflags_gflags.h" />
     <ClCompile Include="src/gflags.cc" />
     <ClCompile Include="src/gflags_reporting.cc" />
     <ClCompile Include="src/gflags_completions.cc" />
     <ClCompile Include="src/windows_port.cc" />
+    <ClInclude Include="src\gflags\gflags_ns.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
