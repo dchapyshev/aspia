@@ -31,7 +31,6 @@ void SasInjector::InjectSAS()
 {
     std::wstring command_line;
 
-    // Получаем полный путь к исполняемому файлу.
     if (!GetPathW(PathKey::FILE_EXE, command_line))
         return;
 
@@ -41,32 +40,25 @@ void SasInjector::InjectSAS()
     std::wstring unique_name =
         ServiceManager::CreateUniqueServiceName(kSasServiceShortName, service_id);
 
-    // Добавляем флаг запуска в виде службы.
     command_line.append(L" --run_mode=");
     command_line.append(kSasServiceSwitch);
 
     command_line.append(L" --service_id=");
     command_line.append(service_id);
 
-    // Устанавливаем службу в системе.
+    // Install the service in the system.
     ServiceManager manager(ServiceManager::Create(command_line,
                                                   kSasServiceFullName,
                                                   unique_name));
 
-    // Если служба установлена.
+    // If the service is installed.
     if (manager.IsValid())
-    {
-        // Запускаем ее.
         manager.Start();
-    }
 }
 
 void SasInjector::ExecuteService()
 {
-    // Запускаем службу для выполнения метода Worker().
     Run();
-
-    // Удаляем службу.
     ServiceManager(ServiceName()).Remove();
 }
 
