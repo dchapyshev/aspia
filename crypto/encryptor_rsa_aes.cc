@@ -10,7 +10,7 @@
 
 namespace aspia {
 
-// Размеры ключей шифрования в битах.
+// The size of the encryption keys in bits.
 static const DWORD kAESKeySize = 256;
 static const DWORD kRSAKeySize = 1024;
 
@@ -25,8 +25,15 @@ std::unique_ptr<EncryptorRsaAes> EncryptorRsaAes::Create()
                               PROV_RSA_AES,
                               CRYPT_VERIFYCONTEXT))
     {
-        LOG(ERROR) << "CryptAcquireContextW() failed: " << GetLastError();
-        return nullptr;
+        if (!CryptAcquireContextW(&prov,
+                                  NULL,
+                                  MS_ENH_RSA_AES_PROV_XP_W,
+                                  PROV_RSA_AES,
+                                  CRYPT_VERIFYCONTEXT))
+        {
+            LOG(ERROR) << "CryptAcquireContextW() failed: " << GetLastError();
+            return nullptr;
+        }
     }
 
     static_assert(kAESKeySize == 256, "Not supported AES key size");

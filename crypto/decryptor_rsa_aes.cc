@@ -23,8 +23,15 @@ std::unique_ptr<DecryptorRsaAes> DecryptorRsaAes::Create()
                               PROV_RSA_AES,
                               CRYPT_VERIFYCONTEXT))
     {
-        LOG(ERROR) << "CryptAcquireContextW() failed: " << GetLastError();
-        return nullptr;
+        if (!CryptAcquireContextW(&prov,
+                                  NULL,
+                                  MS_ENH_RSA_AES_PROV_XP_W,
+                                  PROV_RSA_AES,
+                                  CRYPT_VERIFYCONTEXT))
+        {
+            LOG(ERROR) << "CryptAcquireContextW() failed: " << GetLastError();
+            return nullptr;
+        }
     }
 
     static_assert(kRSAKeySize == 1024, "Not supported RSA key size");
