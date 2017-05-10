@@ -1,0 +1,285 @@
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            ui/lang/nl-NL.rc
+// LICENSE:         See top-level directory
+// TRANSLATOR:      Mark Jansen
+//
+
+#include "ui/resource.h"
+
+LANGUAGE LANG_DUTCH, SUBLANG_NEUTRAL
+
+// UTF-8
+#pragma code_page(65001)
+
+IDD_MAIN DIALOGEX 100, 100, 335, 152
+STYLE DS_SHELLFONT | WS_BORDER | WS_OVERLAPPED | WS_SYSMENU | DS_CENTER | WS_MINIMIZEBOX | WS_CAPTION
+CAPTION "Aspia Remote Desktop"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    GROUPBOX "Server", -1, 5, 5, 160, 130
+    LTEXT "Vul uw IP-addressen in:", -1, 12, 17, 100, 9
+    LISTBOX IDC_IP_LIST, 12, 28, 146, 80, LBS_STANDARD | LBS_NOINTEGRALHEIGHT | WS_HSCROLL | WS_TABSTOP
+    PUSHBUTTON "&Start", IDC_START_SERVER_BUTTON, 98, 115, 60, 14
+
+    GROUPBOX "Client", -1, 170, 5, 160, 130
+    LTEXT "Server Adres:", -1, 177, 17, 90, 9
+    EDITTEXT IDC_SERVER_ADDRESS_EDIT, 177, 28, 146, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | ES_AUTOHSCROLL
+
+    LTEXT "Server Poort:", -1, 177, 47, 100, 9
+    EDITTEXT IDC_SERVER_PORT_EDIT, 177, 58, 50, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | ES_AUTOHSCROLL | ES_NUMBER
+    AUTOCHECKBOX "Gebruik standaard", IDC_SERVER_DEFAULT_PORT_CHECK, 235, 60, 85, 8
+    DEFPUSHBUTTON "&Verbinden...", IDC_CONNECT_BUTTON, 263, 115, 60, 14
+END
+
+IDD_STATUS DIALOGEX 100, 100, 251, 90
+STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "Verbindings Status"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    EDITTEXT IDC_STATUS_EDIT, 5, 5, 240, 60, WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_GROUP | WS_TABSTOP | ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL
+    DEFPUSHBUTTON "&Annuleren", IDCANCEL, 196, 70, 50, 14
+END
+
+IDD_AUTH DIALOGEX 100, 100, 194, 73
+STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "Autorisatie"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT "Gebruikersnaam:", -1, 10, 14, 65, 10
+    EDITTEXT IDC_USERNAME_EDIT, 75, 11, 108, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
+
+    LTEXT "Wachtwoord:", -1, 10, 34, 65, 10
+    EDITTEXT IDC_PASSWORD_EDIT, 75, 31, 108, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
+
+    DEFPUSHBUTTON "&OK", IDOK, 78, 53, 50, 14
+    PUSHBUTTON "&Annuleren", IDCANCEL, 134, 53, 50, 14
+END
+
+IDD_SETTINGS DIALOGEX 20, 16, 165, 185
+STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "Verbindings Instellingen"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    GROUPBOX "Afstandsbediening", -1, 7, 7, 150, 152
+
+    LTEXT "Codec:", -1, 15, 19, 80, 10
+    COMBOBOX IDC_CODEC_COMBO, 15, 30, 134, 150, CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL
+
+    LTEXT "Kleur diepte:", IDC_COLOR_DEPTH_TEXT, 15, 48, 80, 10
+    COMBOBOX IDC_COLOR_DEPTH_COMBO, 15, 59, 134, 150, CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL
+
+    LTEXT "Compressieverhouding:", IDC_COMPRESS_RATIO_TEXT, 15, 77, 80, 10
+    LTEXT "Snel", IDC_FAST_TEXT, 15, 90, 20, 10
+    RTEXT "Beste", IDC_BEST_TEXT, 129, 90, 20, 10
+    CONTROL "", IDC_COMPRESS_RATIO_TRACKBAR, "msctls_trackbar32", TBS_AUTOTICKS | WS_TABSTOP, 33, 89, 97, 12
+
+    LTEXT "Scherm update interval (ms):", -1, 15, 113, 100, 10
+    EDITTEXT IDC_INTERVAL_EDIT, 117, 109, 32, 14, ES_RIGHT | ES_NUMBER | WS_GROUP
+    CONTROL "", IDC_INTERVAL_UPDOWN, "msctls_updown32", UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | WS_BORDER | WS_GROUP, 140, 109, 12, 14
+
+    AUTOCHECKBOX "Schakel &cursor vorm in", IDC_ENABLE_CURSOR_SHAPE_CHECK, 15, 129, 125, 8
+    AUTOCHECKBOX "Schakel &klembord in", IDC_ENABLE_CLIPBOARD_CHECK, 15, 143, 125, 8
+
+    DEFPUSHBUTTON "&OK", IDOK, 33, 164, 60, 14
+    PUSHBUTTON "&Annuleren", IDCANCEL, 98, 164, 60, 14
+END
+
+IDD_ABOUT DIALOGEX 100, 100, 220, 200
+STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "Over"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    CONTROL -1, IDC_ABOUT_ICON, "STATIC", SS_ICON | SS_CENTERIMAGE | SS_REALSIZEIMAGE, 15, 10, 32, 32
+
+    LTEXT "Aspia Remote Desktop (1.0.0.0)", IDC_VERSION_TEXT, 67, 15, 120, 11
+    LTEXT "© 2016-2017 Dmitry Chapyshev", -1, 66, 27, 120, 10
+
+    EDITTEXT IDC_ABOUT_EDIT, 5, 45, 210, 100, WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_GROUP | WS_TABSTOP | ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL
+    CONTROL "", -1, "STATIC", SS_ETCHEDFRAME, 5, 151, 210, 27
+    DEFPUSHBUTTON "&Doneer!", IDC_DONATE_BUTTON, 96, 156, 110, 15
+    PUSHBUTTON "&Bezoek site", IDC_SITE_BUTTON, 13, 156, 75, 15
+
+    PUSHBUTTON "&Sluiten", IDOK, 165, 181, 50, 14
+END
+
+IDD_USER_PROP DIALOGEX 100, 100, 220, 225
+STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "Gebruikerseigenschappen"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT "Gebruikers Naam:", -1, 10, 15, 77, 10
+    EDITTEXT IDC_USERNAME_EDIT, 100, 11, 110, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
+    LTEXT "Wachtwoord:", -1, 10, 35, 77, 10
+    EDITTEXT IDC_PASSWORD_EDIT, 100, 31, 110, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
+    LTEXT "Wachtwoord (opnieuw):", -1, 10, 55, 77, 10
+    EDITTEXT IDC_PASSWORD_RETRY_EDIT, 100, 51, 110, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
+
+    AUTOCHECKBOX "Gebruiker uitschakelen", IDC_DISABLE_USER_CHECK, 105, 72, 122, 8
+
+    LTEXT "Toegestane sessie typen:", -1, 10, 85, 130, 10
+    CONTROL "", IDC_SESSION_TYPES_LIST, "SysListView32", LVS_REPORT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP, 9, 97, 200, 101
+
+    PUSHBUTTON "&OK", IDOK, 104, 204, 50, 14
+    PUSHBUTTON "&Annuleren", IDCANCEL, 160, 204, 50, 14
+END
+
+IDD_USERS DIALOGEX 100, 100, 215, 207
+STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "Gebruikers Beheer"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    GROUPBOX "Gebruiker Lijst", IDC_USERS_GROUPBOX, 5, 5, 204, 177
+
+    CONTROL "", IDC_USER_LIST, "SysListView32", LVS_REPORT | LVS_NOCOLUMNHEADER | LVS_SORTASCENDING | WS_BORDER | WS_TABSTOP, 12, 18, 190, 140
+
+    PUSHBUTTON "&Toevoegen...", ID_ADD, 14, 162, 60, 14
+    PUSHBUTTON "&Bewerken...", ID_EDIT, 78, 162, 60, 14
+    PUSHBUTTON "&Verwijderen", ID_DELETE, 142, 162, 60, 14
+
+    PUSHBUTTON "&OK", IDOK, 105, 187, 50, 14
+    PUSHBUTTON "&Annuleren", IDCANCEL, 159, 187, 50, 14
+END
+
+IDR_SHORTCUTS MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "Ctrl+Esc",        ID_KEY_CTRL_ESC
+        MENUITEM "Alt+Tab",         ID_KEY_ALT_TAB
+        MENUITEM "Alt+Shift+Tab",   ID_KEY_ALT_SHIFT_TAB
+        MENUITEM "PrintScreen",     ID_KEY_PRINTSCREEN
+        MENUITEM "Alt+PrintScreen", ID_KEY_ALT_PRINTSCREEN
+        MENUITEM "Ctrl+Alt+F12",    ID_KEY_CTRL_ALT_F12
+        MENUITEM "F12",             ID_KEY_F12
+        MENUITEM "Ctrl+F12",        ID_KEY_CTRL_F12
+    END
+END
+
+IDR_POWER MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "Afsluiten", ID_POWER_SHUTDOWN
+        MENUITEM "Opnieuw opstarten", ID_POWER_REBOOT
+        MENUITEM "Sluimerstand", ID_POWER_HIBERNATE
+        MENUITEM "Slaapstand", ID_POWER_SUSPEND
+        MENUITEM "Afmelden", ID_POWER_LOGOFF
+    END
+END
+
+IDR_TRAY MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "Weergeven / Verbergen", ID_SHOWHIDE
+        MENUITEM "Exit", ID_EXIT
+    END
+END
+
+IDR_USER MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "&Bewerken...", ID_EDIT
+        MENUITEM "&Verwijderen", ID_DELETE
+        MENUITEM SEPARATOR
+        MENUITEM "&Toevoegen...", ID_ADD
+    END
+END
+
+IDR_MAIN MENU
+BEGIN
+    POPUP "&Aspia"
+    BEGIN
+        POPUP "Service"
+        BEGIN
+            MENUITEM "&Installeren", ID_INSTALL_SERVICE
+            MENUITEM "&Verwijderen", ID_REMOVE_SERVICE
+        END
+        MENUITEM "&Gebruikers...", ID_USERS
+        MENUITEM SEPARATOR
+        MENUITEM "&Exit\tAlt+F4", ID_EXIT
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Online Help...\tF1", ID_HELP
+        MENUITEM SEPARATOR
+        MENUITEM "&Over...", ID_ABOUT
+    END
+END
+
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_APPLICATION_NAME          "Aspia Remote Desktop"
+    IDS_START                     "&Start"
+    IDS_STOP                      "&Stop"
+    IDS_DONATE_LINK               "https://aspia.org/donate"
+    IDS_SITE_LINK                 "https://aspia.org"
+    IDS_HELP_LINK                 "https://aspia.org/help"
+
+    IDS_ABOUT_STRING "Aspia Remote Desktop is vrije software, gereleased met de GNU LGPL license.\r\n\
+                      Hier kunt u een kopie van de GNU LGPL bekijken:\r\n\
+                      http://www.gnu.org/licenses/lgpl.html\r\n\r\n\
+                      Hier kunt u vertalingen van de GNU LGPL licentie bekijken:\r\n\
+                      http://www.gnu.org/licenses/translations.html\r\n\r\n\
+                      Ontwikkelaars:\r\n\
+                      • Dmitry Chapyshev (dmitry@aspia.ru)\r\n\r\n\
+                      Bij het ontwikkelen zijn de volgende projecten gebruikt:\r\n\
+                      • Chromium © 2015, The Chromium Authors, BSD 3-Clause Licentie\r\n\
+                      • WebRTC © 2011, The WebRTC project authors, BSD 3-Clause Licentie\r\n\
+                      • libvpx © 2010, The WebM Project authors, BSD 3-Clause Licentie\r\n\
+                      • libyuv © 2011 The LibYuv Project Authors, BSD 3-Clause Licentie\r\n\
+                      • protobuf © 2014 Google Inc., BSD 3-Clause Licentie\r\n\
+                      • libglog © 2008 Google Inc., BSD 3-Clause Licentie\r\n\
+                      • gflags © 2006 Google Inc., BSD 3-Clause Licentie\r\n\
+                      • zlib-ng © 1995-2013 Jean-loup Gailly and Mark Adler, Zlib Licentie\r\n\
+                      • Fugue Icons © 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 Licentie"
+
+    IDS_POWER                             "Power management van de externe computer"
+    IDS_AUTO_SIZE                         "Scherm automatische grootte"
+    IDS_SETTINGS                          "Instellingen"
+    IDS_CAD                               "Stuur Ctrl+Alt+Del"
+    IDS_EXIT                              "Huidige verbinding sluiten"
+    IDS_FULLSCREEN                        "Schakel over naar volledig scherm"
+    IDS_SHORTCUTS                         "Zend een toetsencombinatie"
+    IDS_ABOUT                             "Over programma"
+    IDS_CONNECTION                        "Verbinden naar: %s:%u"
+    IDS_STATUS_DISCONNECTED               "Verbinding verbroken"
+    IDS_STATUS_CONNECTING                 "Verbinden..."
+    IDS_STATUS_CONNECTED                  "Verbonden"
+    IDS_STATUS_CONNECT_TIMEOUT            "Verbinding timeout"
+    IDS_STATUS_CONNECT_ERROR              "Kan geen verbinding opzetten"
+    IDS_STATUS_SESSION_TYPE_NOT_ALLOWED   "Het geselecteerde sessie type is niet ondersteund of uitgeschakeld"
+    IDS_STATUS_NOT_SUPPORTED_METHOD       "De geselecteerde authenticatie methode is niet ondersteund of uitgeschakeld"
+    IDS_STATUS_BAD_USERNAME_OR_PASSWORD   "De ingevulde gebruikersnaam/wachtwoord zijn incorrect of uitgeschakeld"
+    IDS_STATUS_INVALID_HOSTNAME           "Ongeldig adres opgegeven"
+    IDS_STATUS_INVALID_PORT               "Ongelide poort opgegeven"
+    IDS_CONFIRMATION                      "Bevestiging"
+    IDS_CONF_POWER_SHUTDOWN               "Weet u zeker dat u de externe computer wilt afsluiten?"
+    IDS_CONF_POWER_REBOOT                 "Weet u zeker dat u de externe computer wilt herstarten?"
+    IDS_CONF_POWER_HIBERNATE              "Weet u zeker dat u de externe computer in sluimerstand wilt zetten?"
+    IDS_CONF_POWER_SUSPEND                "Weet u zeker dat u de externe computer in slaapstand wilt zetten?"
+    IDS_CONF_POWER_LOGOFF                 "Weet u zeker dat u de gebruiker sessie wilt beëindigen op de externe computer?"
+    IDS_COMPRESSION_RATIO_FORMAT          "Compressie ratio: %d"
+    IDS_32BIT                             "Ware kleuren (32 bit)"
+    IDS_24BIT                             "Ware kleuren (24 bit)"
+    IDS_16BIT                             "Hoge kleuren (16 bit)"
+    IDS_15BIT                             "Hoge kleuren (15 bit)"
+    IDS_12BIT                             "Hoge kleuren (12 bit)"
+    IDS_8BIT                              "256 kleuren (8 bit)"
+    IDS_6BIT                              "64 kleuren (6 bit)"
+    IDS_3BIT                              "8 kleuren (3 bit)"
+    IDS_INFORMATION                       "Informatie"
+    IDS_INVALID_USERNAME                  "De gebruikersnaam mag niet leeg zijn, en alleen letters, nummers en ""_"", ""-"", ""."" karakters bevatten."
+    IDS_USER_ALREADY_EXISTS               "De gekozen gebruikersnaam bestaat al."
+    IDS_INVALID_PASSWORD                  "Wachtwoord mag niet korter dan 6 karakters zijn."
+    IDS_PASSWORDS_NOT_MATCH               "De opgegeven wachtwoorden komen niet overeen."
+    IDS_SESSION_TYPE_DESKTOP_MANAGE       "Bureaublad beheer"
+    IDS_SESSION_TYPE_DESKTOP_VIEW         "Bureaublad weergave"
+    IDS_SESSION_TYPE_POWER_MANAGE         "Power beheer"
+    IDS_SESSION_TYPE_FILE_TRANSFER        "Bestandsoverdracht"
+    IDS_SESSION_TYPE_SYSTEM_INFO          "Systeem informatie"
+    IDS_DELETE_USER_CONFORMATION          "Weet u zeker dat u de gebruiker ""%s"" wilt verwijderen?"
+    IDS_USER_LIST_MODIFIED                "Gebruiker Lijst (* aangepast)"
+END

@@ -832,6 +832,9 @@
     <ResourceCompile Include="ui\lang\ru-RU.rc">
       <Filter>ui\lang</Filter>
     </ResourceCompile>
+    <ResourceCompile Include="ui\lang\nl-NL.rc">
+      <Filter>ui\lang</Filter>
+    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="ui\common-controls.manifest">

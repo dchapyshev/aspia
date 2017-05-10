@@ -277,6 +277,7 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ui\lang\en-US.rc" />
+    <ResourceCompile Include="ui\lang\nl-NL.rc" />
     <ResourceCompile Include="ui\lang\ru-RU.rc" />
     <ResourceCompile Include="ui\resource.rc" />
     <ResourceCompile Include="version.rc" />

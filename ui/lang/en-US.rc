@@ -28,7 +28,7 @@ BEGIN
 
     LTEXT "Server Port:", -1, 177, 47, 100, 9
     EDITTEXT IDC_SERVER_PORT_EDIT, 177, 58, 50, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | ES_AUTOHSCROLL | ES_NUMBER
-    AUTOCHECKBOX "Use default", IDC_SERVER_DEFAULT_PORT_CHECK, 235, 60, 60, 8
+    AUTOCHECKBOX "Use default", IDC_SERVER_DEFAULT_PORT_CHECK, 235, 60, 85, 8
     DEFPUSHBUTTON "&Connect...", IDC_CONNECT_BUTTON, 263, 115, 60, 14
 END
 
@@ -115,30 +115,30 @@ BEGIN
     LTEXT "Password (retry):", -1, 10, 55, 77, 10
     EDITTEXT IDC_PASSWORD_RETRY_EDIT, 100, 51, 110, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
 
-    AUTOCHECKBOX "Disable User", IDC_DISABLE_USER_CHECK, 105, 72, 122, 8
+    AUTOCHECKBOX "Disable user account", IDC_DISABLE_USER_CHECK, 105, 72, 122, 8
 
-    LTEXT "Allowed session types:", -1, 10, 85, 77, 10
+    LTEXT "Allowed session types:", -1, 10, 85, 130, 10
     CONTROL "", IDC_SESSION_TYPES_LIST, "SysListView32", LVS_REPORT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP, 9, 97, 200, 101
 
     PUSHBUTTON "&OK", IDOK, 104, 204, 50, 14
     PUSHBUTTON "&Cancel", IDCANCEL, 160, 204, 50, 14
 END
 
-IDD_USERS DIALOGEX 100, 100, 200, 207
+IDD_USERS DIALOGEX 100, 100, 215, 207
 STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
 CAPTION "User Management"
 FONT 8, "MS Shell Dlg"
 BEGIN
-    GROUPBOX "User List", IDC_USERS_GROUPBOX, 5, 5, 187, 177
+    GROUPBOX "User List", IDC_USERS_GROUPBOX, 5, 5, 204, 177
 
-    CONTROL "", IDC_USER_LIST, "SysListView32", LVS_REPORT | LVS_NOCOLUMNHEADER | LVS_SORTASCENDING | WS_BORDER | WS_TABSTOP, 12, 18, 174, 140
+    CONTROL "", IDC_USER_LIST, "SysListView32", LVS_REPORT | LVS_NOCOLUMNHEADER | LVS_SORTASCENDING | WS_BORDER | WS_TABSTOP, 12, 18, 190, 140
 
-    PUSHBUTTON "&Add...", ID_ADD, 27, 162, 50, 14
-    PUSHBUTTON "&Edit...", ID_EDIT, 81, 162, 50, 14
-    PUSHBUTTON "&Delete", ID_DELETE, 136, 162, 50, 14
+    PUSHBUTTON "&Add...", ID_ADD, 14, 162, 60, 14
+    PUSHBUTTON "&Edit...", ID_EDIT, 78, 162, 60, 14
+    PUSHBUTTON "&Delete", ID_DELETE, 142, 162, 60, 14
 
-    PUSHBUTTON "&OK", IDOK, 89, 187, 50, 14
-    PUSHBUTTON "&Cancel", IDCANCEL, 143, 187, 50, 14
+    PUSHBUTTON "&OK", IDOK, 105, 187, 50, 14
+    PUSHBUTTON "&Cancel", IDCANCEL, 159, 187, 50, 14
 END
 
 IDR_SHORTCUTS MENU
@@ -220,11 +220,11 @@ BEGIN
 
     IDS_ABOUT_STRING "Aspia Remote Desktop is free software released under GNU LGPL license.\r\n\
                       You can get a copy of GNU LGPL license here:\r\n\
-                      http ://www.gnu.org/licenses/lgpl.html\r\n\r\n\
+                      http://www.gnu.org/licenses/lgpl.html\r\n\r\n\
                       You can also get a translation of GNU LGPL license here:\r\n\
-                      http ://www.gnu.org/licenses/translations.html\r\n\r\n\
+                      http://www.gnu.org/licenses/translations.html\r\n\r\n\
                       Developers:\r\n\
-                      • Dmitry Chapyshev(dmitry@aspia.ru)\r\n\r\n\
+                      • Dmitry Chapyshev (dmitry@aspia.ru)\r\n\r\n\
                       In the development we used the following projects:\r\n\
                       • Chromium © 2015, The Chromium Authors, BSD 3-Clause License\r\n\
                       • WebRTC © 2011, The WebRTC project authors, BSD 3-Clause License\r\n\
