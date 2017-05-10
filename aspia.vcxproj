@@ -282,7 +282,7 @@
     <ResourceCompile Include="version.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Manifest Include="common-controls.manifest" />
+    <Manifest Include="ui\common-controls.manifest" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B4B5FBB6-4E1C-43DB-B73E-6AE3C9AA2AC5}</ProjectGuid>
@@ -355,7 +355,7 @@
     </Link>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
-      <AdditionalManifestFiles>common-controls.manifest</AdditionalManifestFiles>
+      <AdditionalManifestFiles>ui/common-controls.manifest</AdditionalManifestFiles>
     </Manifest>
     <ResourceCompile />
   </ItemDefinitionGroup>
@@ -403,7 +403,7 @@
     <Manifest>
       <AssemblyIdentity>
       </AssemblyIdentity>
-      <AdditionalManifestFiles>common-controls.manifest</AdditionalManifestFiles>
+      <AdditionalManifestFiles>ui/common-controls.manifest</AdditionalManifestFiles>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <ResourceCompile />

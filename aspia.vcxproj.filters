@@ -834,6 +834,8 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Manifest Include="common-controls.manifest" />
+    <Manifest Include="ui\common-controls.manifest">
+      <Filter>ui</Filter>
+    </Manifest>
   </ItemGroup>
 </Project>
