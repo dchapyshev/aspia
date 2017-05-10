@@ -48,9 +48,11 @@ void ScreenUpdater::Run()
         return;
     }
 
+    CaptureScheduler scheduler(interval_);
+
     while (!IsStopping())
     {
-        CaptureScheduler scheduler;
+        scheduler.BeginCapture();
 
         const DesktopFrame* screen_frame = capturer->CaptureImage();
 
@@ -75,7 +77,7 @@ void ScreenUpdater::Run()
             }
         }
 
-        std::this_thread::sleep_for(scheduler.NextCaptureDelay(interval_));
+        std::this_thread::sleep_for(scheduler.NextCaptureDelay());
     }
 }
 
