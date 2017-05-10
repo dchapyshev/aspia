@@ -44,8 +44,8 @@ bool InjectPowerEvent(const proto::PowerEvent& event)
         break;
     }
 
-    ScopedProcessPrivilege privilege;
-    if (!privilege.Enable(SE_SHUTDOWN_NAME))
+    ScopedProcessPrivilege privilege(SE_SHUTDOWN_NAME);
+    if (!privilege.IsSuccessed())
         return false;
 
     switch (event.action())

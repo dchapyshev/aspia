@@ -145,8 +145,7 @@ void DesktopSession::OnPipeChannelConnect(ProcessId peer_pid)
     // To open a host process and terminate it, additional privileges are required.
     // If the current process is running from the service, then the privilege
     // already exists, if not, then enable it.
-    ScopedProcessPrivilege privilege;
-    privilege.Enable(SE_DEBUG_NAME);
+    ScopedProcessPrivilege privilege(SE_DEBUG_NAME);
 
     process_ = Process::Open(peer_pid);
 

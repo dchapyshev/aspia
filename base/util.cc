@@ -118,7 +118,8 @@ std::string StringPrintf(const char* format, ...)
 
     va_start(args, format);
 
-    size_t len = _vscprintf(format, args);
+    int len = _vscprintf(format, args);
+    CHECK(len >= 0) << errno;
 
     std::string out;
     out.resize(len);
@@ -136,7 +137,8 @@ std::wstring StringPrintfW(const WCHAR* format, ...)
 
     va_start(args, format);
 
-    size_t len = _vscwprintf(format, args);
+    int len = _vscwprintf(format, args);
+    CHECK(len >= 0) << errno;
 
     std::wstring out;
     out.resize(len);

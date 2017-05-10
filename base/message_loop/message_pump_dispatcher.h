@@ -23,7 +23,7 @@ using NativeEvent = MSG;
 class MessagePumpDispatcher
 {
 public:
-    virtual ~MessagePumpDispatcher() {}
+    virtual ~MessagePumpDispatcher() = default;
 
     // Dispatches the event. If true is returned processing continues as
     // normal. If false is returned, the nested loop exits immediately.

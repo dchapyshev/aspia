@@ -9,7 +9,6 @@
 #define _ASPIA_BASE__OBJECT_WATCHER_H
 
 #include <chrono>
-#include <functional>
 
 namespace aspia {
 
