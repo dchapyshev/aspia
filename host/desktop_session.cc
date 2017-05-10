@@ -66,8 +66,8 @@ void DesktopSession::OnSessionAttached(uint32_t session_id)
         std::wstring input_channel_id;
         std::wstring output_channel_id;
 
-        ipc_channel_ = PipeChannel::CreateServer(&input_channel_id,
-                                                 &output_channel_id);
+        ipc_channel_ = PipeChannel::CreateServer(input_channel_id,
+                                                 output_channel_id);
         if (ipc_channel_)
         {
             if (DesktopSessionLauncher::LaunchSession(session_id,
@@ -104,12 +104,10 @@ void DesktopSession::OnSessionDetached()
 
     ipc_channel_.reset();
 
-    Task::Callback callback =
-        std::bind(&DesktopSession::OnSessionAttachTimeout, this);
-
     // If the new session is not connected within the specified time interval,
     // an error occurred.
-    timer_.Start(kAttachTimeout, std::move(callback));
+    timer_.Start(kAttachTimeout,
+                 std::bind(&DesktopSession::OnSessionAttachTimeout, this));
 }
 
 void DesktopSession::OnObjectSignaled(HANDLE object)

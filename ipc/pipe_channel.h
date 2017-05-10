@@ -26,8 +26,8 @@ class PipeChannel : protected Thread
 public:
     virtual ~PipeChannel();
 
-    static std::unique_ptr<PipeChannel> CreateServer(std::wstring* input_channel_id,
-                                                     std::wstring* output_channel_id);
+    static std::unique_ptr<PipeChannel> CreateServer(std::wstring& input_channel_id,
+                                                     std::wstring& output_channel_id);
 
     static std::unique_ptr<PipeChannel> CreateClient(const std::wstring& input_channel_id,
                                                      const std::wstring& output_channel_id);

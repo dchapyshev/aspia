@@ -45,7 +45,7 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
                            const std::wstring& mandatory_label,
                            bool activate_as_activator);
 
-bool GetUserSidString(std::wstring* user_sid);
+bool GetUserSidString(std::wstring& user_sid);
 
 ScopedSd ConvertSddlToSd(const std::wstring& sddl);
 

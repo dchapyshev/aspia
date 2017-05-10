@@ -42,7 +42,7 @@ public:
 
     IOBuffer& operator=(IOBuffer&& other)
     {
-        data_.swap(other.data_);
+        data_ = std::move(other.data_);
         data_size_ = other.data_size_;
         other.data_size_ = 0;
         return *this;

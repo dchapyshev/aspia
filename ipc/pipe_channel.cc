@@ -46,15 +46,12 @@ static std::wstring CreatePipeName(const std::wstring& channel_id)
 }
 
 // static
-std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring* input_channel_id,
-                                                       std::wstring* output_channel_id)
+std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& input_channel_id,
+                                                       std::wstring& output_channel_id)
 {
-    DCHECK(input_channel_id);
-    DCHECK(output_channel_id);
-
     std::wstring user_sid;
 
-    if (!GetUserSidString(&user_sid))
+    if (!GetUserSidString(user_sid))
     {
         LOG(ERROR) << "Failed to query the current user SID";
         return nullptr;
@@ -122,8 +119,8 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring* input_chann
     // We return the ID of the channels to which the client will be connected,
     // and in relation to the client, the outgoing server channel will be incoming,
     // and the incoming server channel will be outgoing.
-    *input_channel_id = std::move(server_output_channel_id);
-    *output_channel_id = std::move(server_input_channel_id);
+    input_channel_id = std::move(server_output_channel_id);
+    output_channel_id = std::move(server_input_channel_id);
 
     return std::unique_ptr<PipeChannel>(new PipeChannel(read_pipe.Release(),
                                                         write_pipe.Release(),

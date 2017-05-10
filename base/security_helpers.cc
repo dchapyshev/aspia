@@ -132,7 +132,7 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
     return true;
 }
 
-bool GetUserSidString(std::wstring* user_sid)
+bool GetUserSidString(std::wstring& user_sid)
 {
     // Get the current token.
     ScopedHandle token;
@@ -156,7 +156,7 @@ bool GetUserSidString(std::wstring* user_sid)
     if (!ConvertSidToStringSidW(user->User.Sid, sid_string.Recieve()))
         return false;
 
-    *user_sid = sid_string;
+    user_sid.assign(sid_string);
 
     return true;
 }
