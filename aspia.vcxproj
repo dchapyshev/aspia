@@ -144,6 +144,7 @@
     <ClInclude Include="base\registry.h" />
     <ClInclude Include="base\scoped_bstr.h" />
     <ClInclude Include="base\scoped_clipboard.h" />
+    <ClInclude Include="base\scoped_comptr.h" />
     <ClInclude Include="base\scoped_com_initializer.h" />
     <ClInclude Include="base\scoped_gdi_object.h" />
     <ClInclude Include="base\scoped_hdc.h" />
@@ -153,6 +154,7 @@
     <ClInclude Include="base\scoped_native_library.h" />
     <ClInclude Include="base\scoped_object.h" />
     <ClInclude Include="base\scoped_privilege.h" />
+    <ClInclude Include="base\scoped_refptr.h" />
     <ClInclude Include="base\scoped_select_object.h" />
     <ClInclude Include="base\scoped_thread_desktop.h" />
     <ClInclude Include="base\scoped_user_object.h" />
