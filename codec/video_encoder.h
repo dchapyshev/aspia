@@ -19,7 +19,6 @@ namespace aspia {
 class VideoEncoder
 {
 public:
-    VideoEncoder() {}
     virtual ~VideoEncoder() = default;
 
     virtual std::unique_ptr<proto::VideoPacket> Encode(const DesktopFrame* frame) = 0;

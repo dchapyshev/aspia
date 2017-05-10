@@ -9,13 +9,10 @@
 
 namespace aspia {
 
-HostPool::HostPool()
-{
-    // Nothing
-}
-
 HostPool::~HostPool()
 {
+    terminating_ = true;
+
     if (runner_)
     {
         DCHECK(runner_->BelongsToCurrentThread());
@@ -43,6 +40,9 @@ void HostPool::OnChannelConnected(std::unique_ptr<NetworkChannel> channel)
 
 void HostPool::OnSessionTerminate()
 {
+    if (terminating_)
+        return;
+
     if (!runner_->BelongsToCurrentThread())
     {
         runner_->PostTask(std::bind(&HostPool::OnSessionTerminate, this));

@@ -140,7 +140,9 @@ void UserPropDialog::OnInitDialog()
         HWND password_edit = GetDlgItem(IDC_PASSWORD_EDIT);
         HWND password_retry_edit = GetDlgItem(IDC_PASSWORD_RETRY_EDIT);
 
-        Edit_SetText(username_edit, UNICODEfromUTF8(user_->username()).c_str());
+        std::wstring username;
+        CHECK(UTF8toUNICODE(user_->username(), username));
+        Edit_SetText(username_edit, username.c_str());
 
         const WCHAR kNotChangedPassword[] = L"******";
         Edit_SetText(password_edit, kNotChangedPassword);
@@ -185,7 +187,14 @@ void UserPropDialog::OnOkButton()
         return;
     }
 
-    if (mode_ == Mode::Add || username != UNICODEfromUTF8(user_->username()))
+    std::wstring prev_username;
+
+    if (!user_->username().empty())
+    {
+        CHECK(UTF8toUNICODE(user_->username(), prev_username));
+    }
+
+    if (username != prev_username)
     {
         if (!IsUniqueUserName(username))
         {
@@ -218,8 +227,11 @@ void UserPropDialog::OnOkButton()
             return;
         }
 
-        bool ret = CreateSHA512(UTF8fromUNICODE(password),
-                                user_->mutable_password_hash());
+        std::string password_in_utf8;
+        CHECK(UNICODEtoUTF8(password, password_in_utf8));
+
+        bool ret = CreateSHA512(password_in_utf8,
+                                *user_->mutable_password_hash());
         CHECK(ret);
     }
 
@@ -247,8 +259,9 @@ void UserPropDialog::OnOkButton()
     bool is_enabled =
         IsDlgButtonChecked(hwnd(), IDC_DISABLE_USER_CHECK) == BST_UNCHECKED;
 
+    CHECK(UNICODEtoUTF8(username, *user_->mutable_username()));
+
     user_->set_enabled(is_enabled);
-    user_->set_username(UTF8fromUNICODE(username));
     user_->set_session_types(session_types);
 
     EndDialog(IDOK);

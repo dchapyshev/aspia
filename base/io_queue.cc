@@ -22,26 +22,21 @@ IOQueue::~IOQueue()
     Join();
 }
 
-bool IOQueue::Add(std::unique_ptr<IOBuffer> buffer)
+void IOQueue::Add(IOBuffer buffer)
 {
-    if (!buffer)
-        return false;
-
     {
         std::unique_lock<std::mutex> lock(queue_lock_);
         queue_.push(std::move(buffer));
     }
 
     event_.notify_one();
-
-    return true;
 }
 
 void IOQueue::Run()
 {
     while (!IsStopping())
     {
-        std::unique_ptr<IOBuffer> buffer;
+        IOBuffer buffer;
 
         {
             std::unique_lock<std::mutex> lock(queue_lock_);
@@ -62,7 +57,7 @@ void IOQueue::Run()
             queue_.pop();
         }
 
-        process_message_callback_(buffer.get());
+        process_message_callback_(buffer);
     }
 }
 

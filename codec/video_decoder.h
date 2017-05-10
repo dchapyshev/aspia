@@ -16,7 +16,6 @@ namespace aspia {
 class VideoDecoder
 {
 public:
-    VideoDecoder() { }
     virtual ~VideoDecoder() = default;
 
     virtual bool Decode(const proto::VideoPacket& packet, DesktopFrame* frame) = 0;

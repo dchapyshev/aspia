@@ -9,13 +9,6 @@
 
 namespace aspia {
 
-ClientConfig::ClientConfig() :
-    port_(kDefaultHostTcpPort),
-    session_type_(proto::SessionType::SESSION_NONE)
-{
-    // Nothing
-}
-
 ClientConfig::ClientConfig(const ClientConfig& other)
 {
     CopyFrom(other);
@@ -27,7 +20,7 @@ void ClientConfig::CopyFrom(const ClientConfig& other)
     port_ = other.port_;
     session_type_ = other.session_type_;
 
-    desktop_config_.CopyFrom(other.desktop_config_);
+    desktop_session_config_.CopyFrom(other.desktop_session_config_);
 }
 
 void ClientConfig::SetRemoteAddress(const std::wstring& address)
@@ -60,14 +53,14 @@ uint16_t ClientConfig::RemotePort() const
     return port_;
 }
 
-const proto::DesktopConfig& ClientConfig::desktop_config() const
+const proto::DesktopSessionConfig& ClientConfig::desktop_session_config() const
 {
-    return desktop_config_;
+    return desktop_session_config_;
 }
 
-proto::DesktopConfig* ClientConfig::mutable_desktop_config()
+proto::DesktopSessionConfig* ClientConfig::mutable_desktop_session_config()
 {
-    return &desktop_config_;
+    return &desktop_session_config_;
 }
 
 ClientConfig& ClientConfig::operator=(const ClientConfig& other)

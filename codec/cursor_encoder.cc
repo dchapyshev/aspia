@@ -11,10 +11,10 @@
 
 namespace aspia {
 
-// Размер кеша может быть в интервале от 2 до 31.
-static const uint8_t kCacheSize = 8;
+// Cache size can be in the range from 2 to 31.
+static const uint8_t kCacheSize = 16;
 
-// Степень сжатия может быть в интервале от 1 до 9.
+// The compression ratio can be in the range of 1 to 9.
 static const int32_t kCompressionRatio = 6;
 
 CursorEncoder::CursorEncoder() :
@@ -34,13 +34,11 @@ uint8_t* CursorEncoder::GetOutputBuffer(proto::CursorShape* cursor_shape, size_t
 
 void CursorEncoder::CompressCursor(proto::CursorShape* cursor_shape, const MouseCursor* mouse_cursor)
 {
-    // Делаем сброс компрессора при сжатии каждого курсора.
     compressor_.Reset();
 
     int width = mouse_cursor->Size().Width();
     int height = mouse_cursor->Size().Height();
 
-    // Размер строки курсора в байтах.
     const int row_size = width * sizeof(uint32_t);
 
     int packet_size = row_size * height;
@@ -49,32 +47,28 @@ void CursorEncoder::CompressCursor(proto::CursorShape* cursor_shape, const Mouse
     uint8_t* compressed_pos = GetOutputBuffer(cursor_shape, packet_size);
     const uint8_t* source_pos = mouse_cursor->Data();
 
-    int filled = 0;   // Количество байт в буфере назначения.
-    int row_pos = 0;  // Position in the current row in bytes.
-    int row_y = 0;    // Current row.
+    int filled = 0;
+    int row_pos = 0; // Position in the current row in bytes.
+    int row_y = 0; // Current row.
     bool compress_again = true;
 
     while (compress_again)
     {
         Compressor::CompressorFlush flush = Compressor::CompressorNoFlush;
 
-        // Если мы достигли последней строки в прямоугольнике
+        // If we reached the last row in the rectangle.
         if (row_y == height - 1)
-        {
-            // Ставим соответствующий флаг
             flush = Compressor::CompressorFinish;
-        }
 
-        int consumed = 0; // Количество байт, которое было взято из исходного буфера.
-        int written = 0;  // Количество байт, которое было записано в буфер назначения.
+        int consumed = 0;
+        int written = 0;
 
-        // Сжимаем очередную порцию данных.
         compress_again = compressor_.Process(source_pos + row_pos, row_size - row_pos,
                                              compressed_pos + filled, packet_size - filled,
                                              flush, &consumed, &written);
 
-        row_pos += consumed; // Сдвигаем положение с текущей строке прямоугольника.
-        filled += written;   // Увеличиваем счетчик итогового размера буфера назначения.
+        row_pos += consumed;
+        filled += written;
 
         // If we have filled the message or we have reached the end of stream.
         if (filled == packet_size || !compress_again)
@@ -83,49 +77,62 @@ void CursorEncoder::CompressCursor(proto::CursorShape* cursor_shape, const Mouse
             return;
         }
 
-        // Если мы достигли конца текущей строки в прямоугольнике и это не последняя строка.
+        // If we have reached the end of the current row in the rectangle and
+        // this is not the last row.
         if (row_pos == row_size && row_y < height - 1)
         {
-            // Обнуляаем положение в текущей строке.
             row_pos = 0;
-
-            // Переходим к следующей строке в буфере.
             source_pos += row_size;
-
-            // Увеличиваем номер текущей строки.
             ++row_y;
         }
     }
 }
 
-void CursorEncoder::Encode(proto::CursorShape* cursor_shape, std::unique_ptr<MouseCursor> mouse_cursor)
+std::unique_ptr<proto::CursorShape> CursorEncoder::Encode(std::unique_ptr<MouseCursor> mouse_cursor)
 {
-    int index = cache_.Find(mouse_cursor.get());
+    if (!mouse_cursor)
+        return nullptr;
 
-    // Курсор не найден в кеше.
-    if (index == -1)
+    if (mouse_cursor->Size().Width() <= 0 ||
+        mouse_cursor->Size().Width() > (std::numeric_limits<int16_t>::max() / 2) ||
+        mouse_cursor->Size().Height() <= 0 ||
+        mouse_cursor->Size().Height() > (std::numeric_limits<int16_t>::max() / 2))
+    {
+        DLOG(ERROR) << "Wrong size of cursor: "
+                    << mouse_cursor->Size().Width()
+                    << "x"
+                    << mouse_cursor->Size().Height();
+        return nullptr;
+    }
+
+    std::unique_ptr<proto::CursorShape> cursor_shape(new proto::CursorShape());
+
+    size_t index = cache_.Find(mouse_cursor.get());
+
+    // The cursor is not found in the cache.
+    if (index == MouseCursorCache::kInvalidIndex)
     {
         cursor_shape->set_width(mouse_cursor->Size().Width());
         cursor_shape->set_height(mouse_cursor->Size().Height());
         cursor_shape->set_hotspot_x(mouse_cursor->Hotspot().x());
         cursor_shape->set_hotspot_y(mouse_cursor->Hotspot().y());
 
-        CompressCursor(cursor_shape, mouse_cursor.get());
+        CompressCursor(cursor_shape.get(), mouse_cursor.get());
 
-        //
-        // Если кеш пуст, то устанавливаем флаг сброса кеша на стороне клиента и передаем
-        // максимальный размер кеша.
-        //
+        // If the cache is empty, then set the cache reset flag on the client
+        // side and pass the maximum cache size.
         cursor_shape->set_flags(cache_.IsEmpty() ?
             (proto::CursorShape::RESET_CACHE | (kCacheSize & 0x1F)) : 0);
 
-        // Добавляем курсор в кеш.
+        // Add the cursor to the cache.
         cache_.Add(std::move(mouse_cursor));
     }
     else
     {
         cursor_shape->set_flags(proto::CursorShape::CACHE | (index & 0x1F));
     }
+
+    return cursor_shape;
 }
 
 } // namespace aspia

@@ -24,7 +24,7 @@ bool WriteUserList(const proto::HostUserList& list);
 
 bool ReadUserList(proto::HostUserList* list);
 
-bool IsUniqueUserName(std::wstring username);
+bool IsUniqueUserName(const std::wstring& username);
 
 } // namespace aspia
 

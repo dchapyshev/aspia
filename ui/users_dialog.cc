@@ -32,7 +32,8 @@ void UsersDialog::UpdateUserList()
     {
         const proto::HostUser& user = user_list_.user_list(i);
 
-        std::wstring username = UNICODEfromUTF8(user.username());
+        std::wstring username;
+        CHECK(UTF8toUNICODE(user.username(), username));
 
         LVITEMW item = { 0 };
         item.mask    = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
@@ -152,7 +153,9 @@ void UsersDialog::OnDeleteButton()
 
     std::wstring title = module().string(IDS_CONFIRMATION);
     std::wstring message_format = module().string(IDS_DELETE_USER_CONFORMATION);
-    std::wstring username = UNICODEfromUTF8(user_list_.user_list(user_index).username());
+
+    std::wstring username;
+    CHECK(UTF8toUNICODE(user_list_.user_list(user_index).username(), username));
 
     std::wstring message = StringPrintfW(message_format.c_str(), username.c_str());
 

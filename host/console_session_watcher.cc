@@ -12,12 +12,6 @@
 
 namespace aspia {
 
-ConsoleSessionWatcher::ConsoleSessionWatcher() :
-    delegate_(nullptr)
-{
-    // Nothing
-}
-
 ConsoleSessionWatcher::~ConsoleSessionWatcher()
 {
     StopWatching();

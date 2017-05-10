@@ -130,21 +130,21 @@ message AudioPacket
     AudioEncoding encoding = 1;
 }
 
-enum DesktopFeatures
+enum DesktopSessionFeatures
 {
     FEATURE_NONE         = 0;
     FEATURE_CURSOR_SHAPE = 1;
     FEATURE_CLIPBOARD    = 2;
 }
 
-message DesktopConfigRequest
+message DesktopSessionConfigRequest
 {
     uint32 video_encodings = 1;
     uint32 audio_encodings = 2;
     uint32 features = 3;
 }
 
-message DesktopConfig
+message DesktopSessionConfig
 {
     enum Flags
     {

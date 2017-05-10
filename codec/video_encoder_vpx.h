@@ -56,10 +56,10 @@ private:
     // The current frame size.
     DesktopSize screen_size_;
 
-    ScopedVpxCodec codec_;
+    ScopedVpxCodec codec_ = nullptr;
     vpx_image_t image_;
 
-    int active_map_size_;
+    size_t active_map_size_ = 0;
 
     vpx_active_map_t active_map_;
     std::unique_ptr<uint8_t[]> active_map_buffer_;

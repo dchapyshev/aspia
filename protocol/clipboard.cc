@@ -6,7 +6,6 @@
 //
 
 #include "protocol/clipboard.h"
-
 #include "base/scoped_clipboard.h"
 #include "base/scoped_hglobal.h"
 #include "base/unicode.h"
@@ -16,11 +15,6 @@
 namespace aspia {
 
 static const char kMimeTypeTextUtf8[] = "text/plain; charset=UTF-8";
-
-Clipboard::Clipboard()
-{
-    // Nothing
-}
 
 Clipboard::~Clipboard()
 {
@@ -99,7 +93,11 @@ void Clipboard::OnClipboardUpdate()
                     return;
                 }
 
-                data = UTF8fromUNICODE(text_lock.Get());
+                if (!UNICODEtoUTF8(text_lock.Get(), data))
+                {
+                    LOG(WARNING) << "Couldn't convert data to utf8";
+                    return;
+                }
             }
         }
 
@@ -157,7 +155,13 @@ void Clipboard::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clip
     last_mime_type_ = std::move(*clipboard_event->mutable_mime_type());
     last_data_ = std::move(*clipboard_event->mutable_data());
 
-    std::wstring text = UNICODEfromUTF8(ReplaceLfByCrLf(last_data_));
+    std::wstring text;
+
+    if (!UTF8toUNICODE(ReplaceLfByCrLf(last_data_), text))
+    {
+        LOG(WARNING) << "Couldn't convert data to unicode";
+        return;
+    }
 
     ScopedClipboard clipboard;
 

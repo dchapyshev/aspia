@@ -24,10 +24,7 @@ static const uint8_t kWheelMask =
 VideoWindow::VideoWindow(Delegate* delegate) :
     delegate_(delegate),
     background_brush_(CreateSolidBrush(RGB(25, 25, 25))),
-    scroll_timer_(kScrollTimerId),
-    has_mouse_(false),
-    has_focus_(false),
-    prev_mask_(0)
+    scroll_timer_(kScrollTimerId)
 {
     // Nothing
 }
@@ -89,7 +86,7 @@ void VideoWindow::OnPaint()
         DesktopPoint scroll_pos(center_offset_.x() ? 0 : scroll_pos_.x(),
                                 center_offset_.y() ? 0 : scroll_pos_.y());
 
-        // При размере окна большем, чем размер удаленного экрана рисуем фон.
+        // When the window size is larger than the size of the remote screen, draw the background.
         DrawBackground(paint_dc, paint_rect);
 
         ScopedSelectObject select_object(memory_dc_, frame_->Bitmap());

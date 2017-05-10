@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/resource.rc
+// FILE:            ui/lang/en-US.rc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
@@ -29,7 +29,7 @@ BEGIN
     LTEXT "Server Port:", -1, 177, 47, 100, 9
     EDITTEXT IDC_SERVER_PORT_EDIT, 177, 58, 50, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | ES_AUTOHSCROLL | ES_NUMBER
     AUTOCHECKBOX "Use default", IDC_SERVER_DEFAULT_PORT_CHECK, 235, 60, 60, 8
-    PUSHBUTTON "&Connect...", IDC_CONNECT_BUTTON, 263, 115, 60, 14
+    DEFPUSHBUTTON "&Connect...", IDC_CONNECT_BUTTON, 263, 115, 60, 14
 END
 
 IDD_STATUS DIALOGEX 100, 100, 251, 90
@@ -46,10 +46,10 @@ STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_C
 CAPTION "Authorization"
 FONT 8, "MS Shell Dlg"
 BEGIN
-    LTEXT "User Name:", -1, 10, 15, 65, 10
+    LTEXT "User Name:", -1, 10, 14, 65, 10
     EDITTEXT IDC_USERNAME_EDIT, 75, 11, 108, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
 
-    LTEXT "Password:", -1, 10, 35, 65, 10
+    LTEXT "Password:", -1, 10, 34, 65, 10
     EDITTEXT IDC_PASSWORD_EDIT, 75, 31, 108, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
 
     DEFPUSHBUTTON "&OK", IDOK, 78, 53, 50, 14
@@ -253,6 +253,8 @@ BEGIN
     IDS_STATUS_SESSION_TYPE_NOT_ALLOWED   "The selected session type is not supported or disabled"
     IDS_STATUS_NOT_SUPPORTED_METHOD       "The selected authorization method is not supported or disabled"
     IDS_STATUS_BAD_USERNAME_OR_PASSWORD   "An incorrect username and/or password or user account is disabled"
+    IDS_STATUS_INVALID_HOSTNAME           "Invalid address specified"
+    IDS_STATUS_INVALID_PORT               "Invalid port specified"
     IDS_CONFIRMATION                      "Confirmation"
     IDS_CONF_POWER_SHUTDOWN               "Are you sure you want to shut down a remote computer?"
     IDS_CONF_POWER_REBOOT                 "Are you sure you want to reboot the remote computer?"

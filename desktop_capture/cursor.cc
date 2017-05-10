@@ -6,7 +6,6 @@
 //
 
 #include "desktop_capture/cursor.h"
-
 #include "base/scoped_gdi_object.h"
 #include "base/scoped_hdc.h"
 #include "base/logging.h"

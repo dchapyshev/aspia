@@ -26,7 +26,7 @@ public:
     bool Decode(const proto::VideoPacket& packet, DesktopFrame* frame) override;
 
 private:
-    VideoDecoderZLIB();
+    VideoDecoderZLIB() = default;
 
     DecompressorZLIB decompressor_;
 

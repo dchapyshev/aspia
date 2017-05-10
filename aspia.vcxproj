@@ -72,13 +72,13 @@
     <ClCompile Include="desktop_capture\mouse_cursor.cc" />
     <ClCompile Include="desktop_capture\mouse_cursor_cache.cc" />
     <ClCompile Include="desktop_capture\pixel_format.cc" />
-    <ClCompile Include="desktop_capture\x11region.cc" />
     <ClCompile Include="host\clipboard_thread.cc" />
     <ClCompile Include="host\console_session_watcher.cc" />
     <ClCompile Include="host\desktop_session.cc" />
     <ClCompile Include="host\desktop_session_client.cc" />
     <ClCompile Include="host\desktop_session_launcher.cc" />
     <ClCompile Include="host\host.cc" />
+    <ClCompile Include="host\host_main.cc" />
     <ClCompile Include="host\host_pool.cc" />
     <ClCompile Include="host\host_service.cc" />
     <ClCompile Include="host\host_user_utils.cc" />
@@ -113,6 +113,7 @@
     <ClCompile Include="ui\main_dialog.cc" />
     <ClCompile Include="ui\settings_dialog.cc" />
     <ClCompile Include="ui\status_dialog.cc" />
+    <ClCompile Include="ui\ui_main.cc" />
     <ClCompile Include="ui\users_dialog.cc" />
     <ClCompile Include="ui\user_prop_dialog.cc" />
     <ClCompile Include="ui\video_window.cc" />
@@ -173,7 +174,7 @@
     <ClInclude Include="client\client_pool.h" />
     <ClInclude Include="client\client_session.h" />
     <ClInclude Include="client\client_session_desktop.h" />
-    <ClInclude Include="client\status.h" />
+    <ClInclude Include="client\client_status.h" />
     <ClInclude Include="codec\compressor.h" />
     <ClInclude Include="codec\compressor_zlib.h" />
     <ClInclude Include="codec\cursor_decoder.h" />
@@ -210,7 +211,6 @@
     <ClInclude Include="desktop_capture\mouse_cursor.h" />
     <ClInclude Include="desktop_capture\mouse_cursor_cache.h" />
     <ClInclude Include="desktop_capture\pixel_format.h" />
-    <ClInclude Include="desktop_capture\x11region.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="host\clipboard_thread.h" />
     <ClInclude Include="host\console_session_watcher.h" />
@@ -218,6 +218,7 @@
     <ClInclude Include="host\desktop_session_client.h" />
     <ClInclude Include="host\desktop_session_launcher.h" />
     <ClInclude Include="host\host.h" />
+    <ClInclude Include="host\host_main.h" />
     <ClInclude Include="host\host_pool.h" />
     <ClInclude Include="host\host_service.h" />
     <ClInclude Include="host\host_user_utils.h" />
@@ -259,6 +260,7 @@
     <ClInclude Include="ui\resource.h" />
     <ClInclude Include="ui\settings_dialog.h" />
     <ClInclude Include="ui\status_dialog.h" />
+    <ClInclude Include="ui\ui_main.h" />
     <ClInclude Include="ui\users_dialog.h" />
     <ClInclude Include="ui\user_prop_dialog.h" />
     <ClInclude Include="ui\video_window.h" />
@@ -275,6 +277,7 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ui\lang\en-US.rc" />
+    <ResourceCompile Include="ui\lang\ru-RU.rc" />
     <ResourceCompile Include="ui\resource.rc" />
     <ResourceCompile Include="version.rc" />
   </ItemGroup>

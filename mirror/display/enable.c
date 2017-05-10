@@ -219,7 +219,7 @@ DrvGetModes(__in HANDLE hDriver, ULONG cjSize, __out_bcount_opt(cjSize) DEVMODEW
                                          ModesList[Index].Height,
                                          ModesList[Index].BitsPerPixel);
 
-            Index++;
+            ++Index;
         }
         while (ModesList[Index].Width != 0);
 

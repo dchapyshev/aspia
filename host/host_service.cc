@@ -81,7 +81,7 @@ bool HostService::Install()
 {
     std::wstring command_line;
 
-    if (!GetPathW(PathKey::FILE_EXE, &command_line))
+    if (!GetPathW(PathKey::FILE_EXE, command_line))
         return false;
 
     command_line.append(L" --run_mode=");

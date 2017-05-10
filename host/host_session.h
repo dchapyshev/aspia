@@ -8,8 +8,6 @@
 #ifndef _ASPIA_HOST__HOST_SESSION_H
 #define _ASPIA_HOST__HOST_SESSION_H
 
-#include <stdint.h>
-
 #include "base/io_buffer.h"
 #include "base/logging.h"
 #include "base/macros.h"
@@ -22,7 +20,7 @@ public:
     class Delegate
     {
     public:
-        virtual void OnSessionMessage(const IOBuffer* message) = 0;
+        virtual void OnSessionMessage(const IOBuffer& message) = 0;
         virtual void OnSessionTerminate() = 0;
     };
 
@@ -33,7 +31,7 @@ public:
 
     virtual ~HostSession() {}
 
-    virtual void Send(const IOBuffer* buffer) = 0;
+    virtual void Send(const IOBuffer& buffer) = 0;
 
 protected:
     Delegate* delegate_;

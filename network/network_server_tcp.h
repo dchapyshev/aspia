@@ -21,7 +21,7 @@ namespace aspia {
 class NetworkServerTcp : private ObjectWatcher::Delegate
 {
 public:
-    NetworkServerTcp();
+    NetworkServerTcp() = default;
     ~NetworkServerTcp();
 
     class Delegate
@@ -40,12 +40,12 @@ private:
     std::shared_ptr<MessageLoopProxy> runner_;
 
     ObjectWatcher accept_watcher_;
-    Delegate* delegate_;
+    Delegate* delegate_ = nullptr;
 
     FirewallManager firewall_manager_;
-    bool firewall_rule_exists_;
+    bool firewall_rule_exists_ = false;
 
-    uint16_t port_;
+    uint16_t port_ = 0;
     Socket server_socket_;
     WsaWaitableEvent accept_event_;
 

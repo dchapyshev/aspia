@@ -45,7 +45,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedCryptoHash);
 };
 
-bool CreateSHA512(const std::string& data, std::string* data_hash)
+bool CreateSHA512(const std::string& data, std::string& data_hash)
 {
     ScopedCryptoProvider prov;
 
@@ -91,11 +91,11 @@ bool CreateSHA512(const std::string& data, std::string* data_hash)
             return false;
         }
 
-        data_hash->resize(size);
+        data_hash.resize(size);
 
         if (!CryptGetHashParam(hash,
                                HP_HASHVAL,
-                               reinterpret_cast<BYTE*>(&(*data_hash)[0]),
+                               reinterpret_cast<BYTE*>(&data_hash[0]),
                                &size,
                                0))
         {

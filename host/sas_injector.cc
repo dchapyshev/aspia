@@ -32,7 +32,7 @@ void SasInjector::InjectSAS()
     std::wstring command_line;
 
     // Получаем полный путь к исполняемому файлу.
-    if (!GetPathW(PathKey::FILE_EXE, &command_line))
+    if (!GetPathW(PathKey::FILE_EXE, command_line))
         return;
 
     std::wstring service_id =

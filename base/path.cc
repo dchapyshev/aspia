@@ -12,10 +12,8 @@
 
 namespace aspia {
 
-bool GetPathW(PathKey key, std::wstring* result)
+bool GetPathW(PathKey key, std::wstring& result)
 {
-    DCHECK(result);
-
     WCHAR buffer[MAX_PATH] = { 0 };
 
     switch (key)
@@ -57,23 +55,19 @@ bool GetPathW(PathKey key, std::wstring* result)
         break;
     }
 
-    result->assign(buffer);
+    result.assign(buffer);
 
     return true;
 }
 
-bool GetPath(PathKey key, std::string* result)
+bool GetPath(PathKey key, std::string& result)
 {
-    DCHECK(result);
-
     std::wstring unicode_result;
 
-    if (!GetPathW(key, &unicode_result))
+    if (!GetPathW(key, unicode_result))
         return false;
 
-    *result = std::move(UTF8fromUNICODE(unicode_result));
-
-    return true;
+    return UNICODEtoUTF8(unicode_result, result);
 }
 
 } // namespace aspia

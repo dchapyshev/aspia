@@ -35,16 +35,16 @@ public:
 
 private:
     // HostSession::Delegate implementation.
-    void OnSessionMessage(const IOBuffer* buffer) override;
+    void OnSessionMessage(const IOBuffer& buffer) override;
     void OnSessionTerminate() override;
 
     // NetworkChannel::Listener implementation.
-    void OnNetworkChannelMessage(const IOBuffer* buffer) override;
+    void OnNetworkChannelMessage(const IOBuffer& buffer) override;
     void OnNetworkChannelDisconnect() override;
 
-    bool SendAuthResult(const IOBuffer* request_buffer);
+    bool SendAuthResult(const IOBuffer& request_buffer);
 
-    bool is_auth_complete_;
+    bool is_auth_complete_ = false;
     std::unique_ptr<NetworkChannel> channel_;
 
     std::unique_ptr<HostSession> session_;

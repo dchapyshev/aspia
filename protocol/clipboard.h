@@ -20,7 +20,7 @@ namespace aspia {
 class Clipboard
 {
 public:
-    Clipboard();
+    Clipboard() = default;
     ~Clipboard();
 
     using ClipboardEventCallback =

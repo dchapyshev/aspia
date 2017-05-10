@@ -10,13 +10,6 @@
 
 namespace aspia {
 
-Desktop::Desktop() :
-    desktop_(nullptr),
-    own_(false)
-{
-    // Nothing
-}
-
 Desktop::Desktop(Desktop&& other)
 {
     desktop_ = other.desktop_;

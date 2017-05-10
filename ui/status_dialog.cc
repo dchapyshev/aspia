@@ -43,6 +43,14 @@ void StatusDialog::SetStatus(ClientStatus status)
 
     switch (status)
     {
+        case ClientStatus::INVALID_HOSTNAME:
+            resource_id = IDS_STATUS_INVALID_HOSTNAME;
+            break;
+
+        case ClientStatus::INVALID_PORT:
+            resource_id = IDS_STATUS_INVALID_PORT;
+            break;
+
         case ClientStatus::DISCONNECTED:
             resource_id = IDS_STATUS_DISCONNECTED;
             break;

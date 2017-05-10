@@ -10,12 +10,6 @@
 
 namespace aspia {
 
-Module::Module() :
-    instance_(nullptr)
-{
-    // Nothing
-}
-
 Module::Module(HINSTANCE instance) :
     instance_(instance)
 {
@@ -25,11 +19,6 @@ Module::Module(HINSTANCE instance) :
 Module::Module(const Module& other)
 {
     instance_ = other.instance_;
-}
-
-Module::~Module()
-{
-    // Nothing
 }
 
 // static

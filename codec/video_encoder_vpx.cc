@@ -41,9 +41,7 @@ std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::CreateVP9()
 }
 
 VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding) :
-    encoding_(encoding),
-    codec_(nullptr),
-    active_map_size_(0)
+    encoding_(encoding)
 {
     memset(&active_map_, 0, sizeof(active_map_));
     memset(&image_, 0, sizeof(image_));

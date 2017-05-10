@@ -54,44 +54,44 @@ bool NetworkChannelTcp::ClientKeyExchange()
     EncryptorAES* encryptor = reinterpret_cast<EncryptorAES*>(encryptor_.get());
     DecryptorAES* decryptor = reinterpret_cast<DecryptorAES*>(decryptor_.get());
 
-    std::unique_ptr<IOBuffer> decryptor_public_key = decryptor->GetPublicKey();
+    IOBuffer decryptor_public_key = decryptor->GetPublicKey();
 
-    if (!WriteMessage(decryptor_public_key.get()))
+    if (!WriteMessage(decryptor_public_key))
         return false;
 
     size_t message_size = ReadMessageSize();
-    if (message_size != decryptor_public_key->Size())
+    if (message_size != decryptor_public_key.Size())
     {
         LOG(ERROR) << "Invalid decryptor key size: " << message_size;
         return false;
     }
 
-    std::unique_ptr<IOBuffer> encryptor_public_key(new IOBuffer(decryptor_public_key->Size()));
+    IOBuffer encryptor_public_key(decryptor_public_key.Size());
 
-    if (!ReadData(encryptor_public_key->Data(), encryptor_public_key->Size()))
+    if (!ReadData(encryptor_public_key.Data(), encryptor_public_key.Size()))
         return false;
 
-    if (!encryptor->SetPublicKey(encryptor_public_key.get()))
+    if (!encryptor->SetPublicKey(encryptor_public_key))
         return false;
 
-    std::unique_ptr<IOBuffer> encryptor_session_key = encryptor->GetSessionKey();
+    IOBuffer encryptor_session_key = encryptor->GetSessionKey();
 
     message_size = ReadMessageSize();
-    if (message_size != encryptor_session_key->Size())
+    if (message_size != encryptor_session_key.Size())
     {
         LOG(ERROR) << "Invalid encryptor key size: " << message_size;
         return false;
     }
 
-    std::unique_ptr<IOBuffer> decryptor_session_key(new IOBuffer(encryptor_session_key->Size()));
+    IOBuffer decryptor_session_key(encryptor_session_key.Size());
 
-    if (!ReadData(decryptor_session_key->Data(), decryptor_session_key->Size()))
+    if (!ReadData(decryptor_session_key.Data(), decryptor_session_key.Size()))
         return false;
 
-    if (!decryptor->SetSessionKey(decryptor_session_key.get()))
+    if (!decryptor->SetSessionKey(decryptor_session_key))
         return false;
 
-    if (!WriteMessage(encryptor_session_key.get()))
+    if (!WriteMessage(encryptor_session_key))
         return false;
 
     return true;
@@ -102,44 +102,44 @@ bool NetworkChannelTcp::ServerKeyExchange()
     EncryptorAES* encryptor = reinterpret_cast<EncryptorAES*>(encryptor_.get());
     DecryptorAES* decryptor = reinterpret_cast<DecryptorAES*>(decryptor_.get());
 
-    std::unique_ptr<IOBuffer> decryptor_public_key = decryptor->GetPublicKey();
+    IOBuffer decryptor_public_key = decryptor->GetPublicKey();
 
     size_t message_size = ReadMessageSize();
-    if (message_size != decryptor_public_key->Size())
+    if (message_size != decryptor_public_key.Size())
     {
         LOG(ERROR) << "Invalid decryptor key size: " << message_size;
         return false;
     }
 
-    std::unique_ptr<IOBuffer> encryptor_public_key(new IOBuffer(decryptor_public_key->Size()));
+    IOBuffer encryptor_public_key(decryptor_public_key.Size());
 
-    if (!ReadData(encryptor_public_key->Data(), encryptor_public_key->Size()))
+    if (!ReadData(encryptor_public_key.Data(), encryptor_public_key.Size()))
         return false;
 
-    if (!encryptor->SetPublicKey(encryptor_public_key.get()))
+    if (!encryptor->SetPublicKey(encryptor_public_key))
         return false;
 
-    if (!WriteMessage(decryptor_public_key.get()))
+    if (!WriteMessage(decryptor_public_key))
         return false;
 
-    std::unique_ptr<IOBuffer> encryptor_session_key = encryptor->GetSessionKey();
+    IOBuffer encryptor_session_key = encryptor->GetSessionKey();
 
-    if (!WriteMessage(encryptor_session_key.get()))
+    if (!WriteMessage(encryptor_session_key))
         return false;
 
     message_size = ReadMessageSize();
-    if (message_size != encryptor_session_key->Size())
+    if (message_size != encryptor_session_key.Size())
     {
         LOG(ERROR) << "Invalid encryptor key size: " << message_size;
         return false;
     }
 
-    std::unique_ptr<IOBuffer> decryptor_session_key(new IOBuffer(encryptor_session_key->Size()));
+    IOBuffer decryptor_session_key(encryptor_session_key.Size());
 
-    if (!ReadData(decryptor_session_key->Data(), decryptor_session_key->Size()))
+    if (!ReadData(decryptor_session_key.Data(), decryptor_session_key.Size()))
         return false;
 
-    if (!decryptor->SetSessionKey(decryptor_session_key.get()))
+    if (!decryptor->SetSessionKey(decryptor_session_key))
         return false;
 
     return true;

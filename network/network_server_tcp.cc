@@ -18,14 +18,6 @@ static const WCHAR kAppName[] = L"Aspia Remote Desktop";
 static const WCHAR kRuleName[] = L"Aspia Remote Desktop Host";
 static const WCHAR kRuleDesc[] = L"Allow incoming connections";
 
-NetworkServerTcp::NetworkServerTcp() :
-    delegate_(nullptr),
-    firewall_rule_exists_(false),
-    port_(0)
-{
-    // Nothing
-}
-
 NetworkServerTcp::~NetworkServerTcp()
 {
     accept_watcher_.StopWatching();
@@ -53,7 +45,7 @@ bool NetworkServerTcp::Start(uint16_t port, Delegate* delegate)
 
     std::wstring exe_path;
 
-    if (!GetPathW(PathKey::FILE_EXE, &exe_path))
+    if (!GetPathW(PathKey::FILE_EXE, exe_path))
         return false;
 
     firewall_rule_exists_ = false;

@@ -11,15 +11,6 @@
 
 namespace aspia {
 
-MessageLoopThread::MessageLoopThread() :
-    delegate_(nullptr),
-    state_(State::Stopped),
-    running_(false),
-    message_loop_(nullptr)
-{
-    // Nothing
-}
-
 MessageLoopThread::~MessageLoopThread()
 {
     Stop();

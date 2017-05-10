@@ -40,7 +40,7 @@ private:
                                                    LPARAM lparam,
                                                    UINT_PTR subclass_id,
                                                    DWORD_PTR ref_data);
-    Mode mode_;
+    const Mode mode_;
     proto::HostUser* user_;
     bool password_changed_ = true;
 

@@ -21,7 +21,16 @@ public:
 
 private:
     RegistryKey key_;
-    DWORD old_state_;
+
+    enum State
+    {
+        STATE_NONE = 0,
+        STATE_SERVICES = 1,
+        STATE_APPLICATIONS = 2,
+        STATE_SERVICES_AND_APPLICATIONS = 3
+    };
+
+    DWORD old_state_ = STATE_NONE;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedSasPolice);
 };

@@ -16,10 +16,7 @@ template <typename T>
 class ScopedLocal
 {
 public:
-    ScopedLocal() : local_(nullptr)
-    {
-        // Nothing
-    }
+    ScopedLocal() = default;
 
     ScopedLocal(ScopedLocal&& other)
     {
@@ -101,7 +98,7 @@ private:
     }
 
 private:
-    T local_;
+    T local_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedLocal);
 };

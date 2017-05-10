@@ -16,13 +16,6 @@
 
 namespace aspia {
 
-FirewallManager::FirewallManager() :
-    firewall_policy_(nullptr),
-    firewall_rules_(nullptr)
-{
-    // Nothing
-}
-
 bool FirewallManager::Init(const std::wstring& app_name, const std::wstring& app_path)
 {
     // Retrieve INetFwPolicy2

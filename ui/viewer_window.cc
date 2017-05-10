@@ -195,7 +195,7 @@ void ViewerWindow::OnCreate()
 
     DoAutoSize(kVideoWindowSize);
 
-    ApplyConfig(config_.desktop_config());
+    ApplyConfig(config_.desktop_session_config());
 }
 
 void ViewerWindow::OnClose()
@@ -330,14 +330,14 @@ void ViewerWindow::OnKillFocus()
     video_window_.HasFocus(false);
 }
 
-void ViewerWindow::ApplyConfig(const proto::DesktopConfig& config)
+void ViewerWindow::ApplyConfig(const proto::DesktopSessionConfig& config)
 {
-    if (!(config.flags() & proto::DesktopConfig::ENABLE_CURSOR_SHAPE))
+    if (!(config.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE))
     {
         SetCursor(LoadCursorW(nullptr, IDC_ARROW));
     }
 
-    if (config.flags() & proto::DesktopConfig::ENABLE_CLIPBOARD)
+    if (config.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD)
     {
         clipboard_.Start(std::bind(&ViewerWindow::Delegate::OnClipboardEvent,
                                    delegate_,
@@ -352,12 +352,12 @@ void ViewerWindow::ApplyConfig(const proto::DesktopConfig& config)
 void ViewerWindow::OnSettingsButton()
 {
     SettingsDialog dialog;
-    if (dialog.DoModal(hwnd(), config_.desktop_config()) == IDOK)
+    if (dialog.DoModal(hwnd(), config_.desktop_session_config()) == IDOK)
     {
-        config_.mutable_desktop_config()->CopyFrom(dialog.GetConfig());
+        config_.mutable_desktop_session_config()->CopyFrom(dialog.Config());
 
-        ApplyConfig(config_.desktop_config());
-        delegate_->OnConfigChange(config_.desktop_config());
+        ApplyConfig(config_.desktop_session_config());
+        delegate_->OnConfigChange(config_.desktop_session_config());
     }
 }
 

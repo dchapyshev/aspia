@@ -18,7 +18,7 @@ namespace aspia {
 class RegistryKey
 {
 public:
-    RegistryKey();
+    RegistryKey() = default;
     explicit RegistryKey(HKEY key);
     RegistryKey(HKEY rootkey, const WCHAR* subkey, REGSAM access);
 
@@ -72,8 +72,8 @@ public:
     void Close();
 
 private:
-    HKEY key_;
-    REGSAM wow64access_;
+    HKEY key_ = nullptr;
+    REGSAM wow64access_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(RegistryKey);
 };

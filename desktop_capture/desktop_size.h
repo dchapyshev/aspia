@@ -13,15 +13,15 @@ namespace aspia {
 class DesktopSize
 {
 public:
-    DesktopSize();
-    DesktopSize(int32_t width, int32_t height);
+    DesktopSize() = default;
+    DesktopSize(int width, int height);
     DesktopSize(const DesktopSize& other);
     ~DesktopSize() = default;
 
-    int32_t Width() const;
-    int32_t Height() const;
+    int Width() const;
+    int Height() const;
 
-    void Set(int32_t width, int32_t height);
+    void Set(int width, int height);
     bool IsEmpty() const;
     bool IsEqual(const DesktopSize& other) const;
     void Clear();
@@ -29,8 +29,8 @@ public:
     DesktopSize& operator=(const DesktopSize& other);
 
 private:
-    int32_t width_;
-    int32_t height_;
+    int32_t width_ = 0;
+    int32_t height_ = 0;
 };
 
 } // namespace aspia

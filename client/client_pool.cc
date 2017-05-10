@@ -17,6 +17,7 @@ ClientPool::ClientPool(std::shared_ptr<MessageLoopProxy> runner) :
 
 ClientPool::~ClientPool()
 {
+    terminating_ = true;
     network_client_.reset();
     session_list_.clear();
 }
@@ -32,16 +33,27 @@ void ClientPool::Connect(HWND parent, const ClientConfig& config)
 
 void ClientPool::OnStatusDialogOpen()
 {
-    status_dialog_->SetDestonation(config_.RemoteAddress(), config_.RemotePort());
-    status_dialog_->SetStatus(ClientStatus::CONNECTING);
-
-    network_client_.reset(new NetworkClientTcp());
-
-    if (!network_client_->Connect(config_.RemoteAddress(),
-                                  config_.RemotePort(),
-                                  this))
+    if (!NetworkClientTcp::IsValidHostName(config_.RemoteAddress()))
     {
-        status_dialog_->SetStatus(ClientStatus::CONNECT_ERROR);
+        status_dialog_->SetStatus(ClientStatus::INVALID_HOSTNAME);
+    }
+    else if (!NetworkClientTcp::IsValidPort(config_.RemotePort()))
+    {
+        status_dialog_->SetStatus(ClientStatus::INVALID_PORT);
+    }
+    else
+    {
+        status_dialog_->SetDestonation(config_.RemoteAddress(), config_.RemotePort());
+        status_dialog_->SetStatus(ClientStatus::CONNECTING);
+
+        network_client_.reset(new NetworkClientTcp());
+
+        if (!network_client_->Connect(config_.RemoteAddress(),
+                                      config_.RemotePort(),
+                                      this))
+        {
+            status_dialog_->SetStatus(ClientStatus::CONNECT_ERROR);
+        }
     }
 }
 
@@ -69,6 +81,9 @@ void ClientPool::OnConnectionError()
 
 void ClientPool::OnSessionTerminate()
 {
+    if (terminating_)
+        return;
+
     if (!runner_->BelongsToCurrentThread())
     {
         runner_->PostTask(std::bind(&ClientPool::OnSessionTerminate, this));

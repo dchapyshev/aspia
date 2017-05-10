@@ -11,14 +11,6 @@
 
 namespace aspia {
 
-ObjectWatcher::ObjectWatcher() :
-    object_(nullptr),
-    wait_object_(nullptr),
-    delegate_(nullptr)
-{
-    // Nothing
-}
-
 ObjectWatcher::~ObjectWatcher()
 {
     StopWatching();

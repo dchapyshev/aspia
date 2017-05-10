@@ -17,11 +17,7 @@ template<class T, class Traits>
 class ScopedUserObject
 {
 public:
-    ScopedUserObject() :
-        object_(nullptr)
-    {
-        // Nothing
-    }
+    ScopedUserObject() = default;
 
     explicit ScopedUserObject(T object) :
         object_(object)
@@ -84,7 +80,7 @@ public:
     }
 
 private:
-    T object_;
+    T object_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedUserObject);
 };

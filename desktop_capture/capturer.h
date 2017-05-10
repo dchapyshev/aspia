@@ -17,7 +17,6 @@ namespace aspia {
 class Capturer
 {
 public:
-    Capturer() {}
     virtual ~Capturer() = default;
 
     virtual const DesktopFrame* CaptureImage() = 0;

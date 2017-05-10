@@ -9,172 +9,126 @@
 
 namespace aspia {
 
-std::wstring UNICODEfromANSI(const std::string& in)
+bool ANSItoUNICODE(const std::string& in, std::wstring& out)
 {
-    int len = ::MultiByteToWideChar(CP_ACP, 0, in.data(), in.length(), nullptr, 0);
+    int len = MultiByteToWideChar(CP_ACP, 0, in.data(), in.length(), nullptr, 0);
     if (len > 0)
     {
-        std::wstring uni;
-        uni.resize(len);
-        if (::MultiByteToWideChar(CP_ACP, 0, in.data(), in.length(), &uni[0], len) != 0)
+        out.resize(len);
+        if (MultiByteToWideChar(CP_ACP, 0, in.data(), in.length(), &out[0], len) == len)
         {
-            return uni;
+            return true;
         }
     }
 
-    return std::wstring();
+    return false;
 }
 
-std::wstring UNICODEfromANSI(const char* in)
+bool UNICODEtoANSI(const std::wstring& in, std::string& out)
 {
-    if (in && in[0] != 0)
+    int len = WideCharToMultiByte(CP_ACP, 0, in.data(), in.length(), nullptr, 0, nullptr, nullptr);
+    if (len > 0)
     {
-        const int in_len = static_cast<int>(strlen(in));
-
-        int uni_len = ::MultiByteToWideChar(CP_ACP, 0, in, in_len, nullptr, 0);
-        if (uni_len > 0)
+        out.resize(len);
+        if (WideCharToMultiByte(CP_ACP, 0, in.data(), in.length(), &out[0], out.length(), nullptr, nullptr) == len)
         {
-            std::wstring uni;
-            uni.resize(uni_len);
-            if (::MultiByteToWideChar(CP_ACP, 0, in, in_len, &uni[0], uni_len) != 0)
-            {
-                return uni;
-            }
+            return true;
         }
     }
 
-    return std::wstring();
+    return false;
+}
+
+bool UNICODEtoUTF8(const std::wstring& in, std::string& out)
+{
+    int len = WideCharToMultiByte(CP_UTF8, 0, in.data(), in.length(), nullptr, 0, nullptr, nullptr);
+    if (len > 0)
+    {
+        out.resize(len);
+        if (WideCharToMultiByte(CP_UTF8, 0, in.data(), in.length(), &out[0], len, nullptr, nullptr) == len)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool UTF8toUNICODE(const std::string& in, std::wstring& out)
+{
+    int len = MultiByteToWideChar(CP_UTF8, 0, in.data(), in.length(), nullptr, 0);
+    if (len > 0)
+    {
+        out.resize(len);
+        if (MultiByteToWideChar(CP_UTF8, 0, in.data(), in.length(), &out[0], len) == len)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool ANSItoUTF8(const std::string& in, std::string& out)
+{
+    std::wstring uni;
+
+    if (!ANSItoUNICODE(in, uni))
+        return false;
+
+    return UNICODEtoUTF8(uni, out);
+}
+
+bool UTF8toANSI(const std::string& in, std::string& out)
+{
+    std::wstring uni;
+
+    if (!UTF8toUNICODE(in, uni))
+        return false;
+
+    return UNICODEtoANSI(uni, out);
+}
+
+std::wstring UNICODEfromANSI(const std::string& in)
+{
+    std::wstring out;
+    ANSItoUNICODE(in, out);
+    return out;
 }
 
 std::string ANSIfromUNICODE(const std::wstring& in)
 {
-    int len = ::WideCharToMultiByte(CP_ACP, 0, in.data(), in.length(), nullptr, 0, nullptr, nullptr);
-    if (len > 0)
-    {
-        std::string acp;
-        acp.resize(len);
-        if (::WideCharToMultiByte(CP_ACP, 0, in.data(), in.length(), &acp[0], acp.length(), nullptr, nullptr) != 0)
-        {
-            return acp;
-        }
-    }
-
-    return std::string();
-}
-
-std::string ANSIfromUNICODE(const WCHAR* in)
-{
-    if (in && in[0] != 0)
-    {
-        const int uni_len = static_cast<int>(wcslen(in));
-
-        int acp_len = ::WideCharToMultiByte(CP_ACP, 0, in, uni_len, nullptr, 0, nullptr, nullptr);
-        if (acp_len > 0)
-        {
-            std::string acp;
-            acp.resize(acp_len);
-            if (::WideCharToMultiByte(CP_ACP, 0, in, uni_len, &acp[0], acp.length(), nullptr, nullptr) != 0)
-            {
-                return acp;
-            }
-        }
-    }
-
-    return std::string();
-}
-
-std::string UTF8fromUNICODE(const std::wstring& in)
-{
-    int len = ::WideCharToMultiByte(CP_UTF8, 0, in.data(), in.length(), nullptr, 0, nullptr, nullptr);
-    if (len > 0)
-    {
-        std::string utf8;
-        utf8.resize(len);
-        if (::WideCharToMultiByte(CP_UTF8, 0, in.data(), in.length(), &utf8[0], len, nullptr, nullptr) != 0)
-        {
-            return utf8;
-        }
-    }
-
-    return std::string();
-}
-
-std::string UTF8fromUNICODE(const WCHAR* in)
-{
-    if (in && in[0] != 0)
-    {
-        const int uni_len = static_cast<int>(wcslen(in));
-
-        int utf8_len = ::WideCharToMultiByte(CP_UTF8, 0, in, uni_len, nullptr, 0, nullptr, nullptr);
-        if (utf8_len > 0)
-        {
-            std::string utf8;
-            utf8.resize(utf8_len);
-            if (::WideCharToMultiByte(CP_UTF8, 0, in, uni_len, &utf8[0], utf8_len, nullptr, nullptr) != 0)
-            {
-                return utf8;
-            }
-        }
-    }
-
-    return std::string();
+    std::string out;
+    UNICODEtoANSI(in, out);
+    return out;
 }
 
 std::wstring UNICODEfromUTF8(const std::string& in)
 {
-    int len = ::MultiByteToWideChar(CP_UTF8, 0, in.data(), in.length(), nullptr, 0);
-    if (len > 0)
-    {
-        std::wstring uni;
-        uni.resize(len);
-        if (::MultiByteToWideChar(CP_UTF8, 0, in.data(), in.length(), &uni[0], len) != 0)
-        {
-            return uni;
-        }
-    }
-
-    return std::wstring();
+    std::wstring out;
+    UTF8toUNICODE(in, out);
+    return out;
 }
 
-std::wstring UNICODEfromUTF8(const char* in)
+std::string UTF8fromUNICODE(const std::wstring& in)
 {
-    if (in && in[0] != 0)
-    {
-        const int utf8_len = static_cast<int>(strlen(in));
-
-        int utf16_len = ::MultiByteToWideChar(CP_UTF8, 0, in, utf8_len, nullptr, 0);
-        if (utf16_len > 0)
-        {
-            std::wstring uni;
-            uni.resize(utf16_len);
-            if (::MultiByteToWideChar(CP_UTF8, 0, in, utf8_len, &uni[0], utf16_len) != 0)
-            {
-                return uni;
-            }
-        }
-    }
-
-    return std::wstring();
+    std::string out;
+    UNICODEtoUTF8(in, out);
+    return out;
 }
 
-std::string ANSItoUTF8(const std::string& in)
+std::string UTF8fromANSI(const std::string& in)
 {
-    return UTF8fromUNICODE(UNICODEfromANSI(in));
+    std::string out;
+    ANSItoUTF8(in, out);
+    return out;
 }
 
-std::string ANSItoUTF8(const char* in)
+std::string ANSIfromUTF8(const std::string& in)
 {
-    return UTF8fromUNICODE(UNICODEfromANSI(in));
-}
-
-std::string UTF8toANSI(const std::string& in)
-{
-    return ANSIfromUNICODE(UNICODEfromUTF8(in));
-}
-
-std::string UTF8toANSI(const char* in)
-{
-    return ANSIfromUNICODE(UNICODEfromUTF8(in));
+    std::string out;
+    UTF8toANSI(in, out);
+    return out;
 }
 
 } // namespace aspia

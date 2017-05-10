@@ -44,7 +44,7 @@ static const int kMaxCompressRatio = 9;
 static const int kMinCompressRatio = 1;
 static const int kDefCompressRatio = 6;
 
-INT_PTR SettingsDialog::DoModal(HWND parent, const proto::DesktopConfig& config)
+INT_PTR SettingsDialog::DoModal(HWND parent, const proto::DesktopSessionConfig& config)
 {
     config_.CopyFrom(config);
     return DoModal(parent);
@@ -147,7 +147,6 @@ void SettingsDialog::UpdateCompressionRatio(int compression_ratio)
 
 void SettingsDialog::OnInitDialog()
 {
-    CenterWindow();
     InitCodecList();
     InitColorDepthList();
     UpdateCompressionRatio(config_.compress_ratio());
@@ -164,11 +163,11 @@ void SettingsDialog::OnInitDialog()
     SendMessageW(updown, UDM_SETPOS, 0, MAKELPARAM(config_.update_interval(), 0));
 
     CheckDlgButton(hwnd(), IDC_ENABLE_CURSOR_SHAPE_CHECK,
-                   (config_.flags() & proto::DesktopConfig::ENABLE_CURSOR_SHAPE) ?
+                   (config_.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE) ?
                        BST_CHECKED : BST_UNCHECKED);
 
     CheckDlgButton(hwnd(), IDC_ENABLE_CLIPBOARD_CHECK,
-                   (config_.flags() & proto::DesktopConfig::ENABLE_CLIPBOARD) ?
+                   (config_.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD) ?
                        BST_CHECKED : BST_UNCHECKED);
 }
 
@@ -276,10 +275,10 @@ void SettingsDialog::OnOkButton()
     uint32_t flags = 0;
 
     if (IsDlgButtonChecked(hwnd(), IDC_ENABLE_CURSOR_SHAPE_CHECK) == BST_CHECKED)
-        flags |= proto::DesktopConfig::ENABLE_CURSOR_SHAPE;
+        flags |= proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE;
 
     if (IsDlgButtonChecked(hwnd(), IDC_ENABLE_CLIPBOARD_CHECK) == BST_CHECKED)
-        flags |= proto::DesktopConfig::ENABLE_CLIPBOARD;
+        flags |= proto::DesktopSessionConfig::ENABLE_CLIPBOARD;
 
     config_.set_flags(flags);
 

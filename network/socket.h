@@ -17,10 +17,7 @@ namespace aspia {
 class Socket
 {
 public:
-    Socket() : socket_(INVALID_SOCKET)
-    {
-        // Nothing
-    }
+    Socket() = default;
 
     explicit Socket(SOCKET socket) : socket_(socket)
     {
@@ -76,7 +73,7 @@ private:
         }
     }
 
-    SOCKET socket_;
+    SOCKET socket_ = INVALID_SOCKET;
 
     DISALLOW_COPY_AND_ASSIGN(Socket);
 };

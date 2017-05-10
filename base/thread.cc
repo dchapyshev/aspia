@@ -27,13 +27,6 @@ void Thread::ThreadMain()
     }
 }
 
-Thread::Thread() :
-    state_(State::Stopped),
-    running_(false)
-{
-    // Nothing
-}
-
 void Thread::StopSoon()
 {
     state_ = State::Stopping;

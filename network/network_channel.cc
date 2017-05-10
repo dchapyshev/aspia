@@ -10,12 +10,6 @@
 
 namespace aspia {
 
-NetworkChannel::NetworkChannel() :
-    listener_(nullptr)
-{
-    // Nothing
-}
-
 NetworkChannel::~NetworkChannel()
 {
     Stop();
@@ -27,17 +21,17 @@ void NetworkChannel::StartListening(Listener* listener)
     Start();
 }
 
-std::unique_ptr<IOBuffer> NetworkChannel::ReadMessage()
+IOBuffer NetworkChannel::ReadMessage()
 {
     size_t message_size = ReadMessageSize();
 
     if (!message_size)
-        return nullptr;
+        return IOBuffer();
 
-    std::unique_ptr<IOBuffer> buffer(new IOBuffer(message_size));
+    IOBuffer buffer(message_size);
 
-    if (!ReadData(buffer->Data(), buffer->Size()))
-        return nullptr;
+    if (!ReadData(buffer.Data(), buffer.Size()))
+        return IOBuffer();
 
     return buffer;
 }
@@ -48,12 +42,12 @@ void NetworkChannel::Run()
     {
         listener_->OnNetworkChannelStarted();
 
-        std::unique_ptr<IOBuffer> buffer = ReadMessage();
+        IOBuffer buffer = ReadMessage();
 
-        if (buffer)
+        if (!buffer.IsEmpty())
         {
             // We process the first message directly (without use |IOQueue]).
-            OnIncommingMessage(buffer.get());
+            OnIncommingMessage(buffer);
 
             IOQueue incomming_queue(std::bind(&NetworkChannel::OnIncommingMessage,
                                               this,
@@ -63,8 +57,11 @@ void NetworkChannel::Run()
             {
                 buffer = ReadMessage();
 
-                if (incomming_queue.Add(std::move(buffer)))
+                if (!buffer.IsEmpty())
+                {
+                    incomming_queue.Add(std::move(buffer));
                     continue;
+                }
 
                 StopSoon();
             }
@@ -74,17 +71,19 @@ void NetworkChannel::Run()
     listener_->OnNetworkChannelDisconnect();
 }
 
-void NetworkChannel::Send(const IOBuffer* buffer)
+void NetworkChannel::Send(const IOBuffer& buffer)
 {
     std::unique_lock<std::mutex> lock(outgoing_lock_);
 
-    if (!WriteMessage(encryptor_->Encrypt(buffer).get()))
+    IOBuffer message_buffer = encryptor_->Encrypt(buffer);
+
+    if (!WriteMessage(message_buffer))
     {
         Close();
     }
 }
 
-void NetworkChannel::SendAsync(std::unique_ptr<IOBuffer> buffer)
+void NetworkChannel::SendAsync(IOBuffer buffer)
 {
     {
         std::unique_lock<std::mutex> lock(outgoing_queue_lock_);
@@ -97,15 +96,26 @@ void NetworkChannel::SendAsync(std::unique_ptr<IOBuffer> buffer)
         }
     }
 
-    if (!outgoing_queue_->Add(std::move(buffer)))
+    if (buffer.IsEmpty())
     {
         Close();
+        return;
     }
+
+    outgoing_queue_->Add(std::move(buffer));
 }
 
-void NetworkChannel::OnIncommingMessage(const IOBuffer* buffer)
+void NetworkChannel::OnIncommingMessage(const IOBuffer& buffer)
 {
-    listener_->OnNetworkChannelMessage(decryptor_->Decrypt(buffer).get());
+    IOBuffer message_buffer = decryptor_->Decrypt(buffer);
+
+    if (message_buffer.IsEmpty())
+    {
+        Close();
+        return;
+    }
+
+    listener_->OnNetworkChannelMessage(message_buffer);
 }
 
 size_t NetworkChannel::ReadMessageSize()
@@ -136,12 +146,12 @@ size_t NetworkChannel::ReadMessageSize()
     return size;
 }
 
-bool NetworkChannel::WriteMessage(const IOBuffer* buffer)
+bool NetworkChannel::WriteMessage(const IOBuffer& buffer)
 {
-    if (!buffer)
+    if (buffer.IsEmpty())
         return false;
 
-    size_t size = buffer->Size();
+    size_t size = buffer.Size();
 
     // The maximum message size is 3MB.
     DCHECK(size <= 0x3FFFFF);
@@ -166,7 +176,7 @@ bool NetworkChannel::WriteMessage(const IOBuffer* buffer)
     if (!WriteData(length, count))
         return false;
 
-    return WriteData(buffer->Data(), size);
+    return WriteData(buffer.Data(), size);
 }
 
 } // namespace aspia

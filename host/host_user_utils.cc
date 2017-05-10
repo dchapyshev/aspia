@@ -10,6 +10,7 @@
 #include "base/logging.h"
 #include "base/path.h"
 
+#include <filesystem>
 #include <fstream>
 #include <memory>
 
@@ -69,7 +70,12 @@ bool IsValidPasswordHash(const std::string& password_hash)
 
 bool IsValidUser(const proto::HostUser& user)
 {
-    if (!IsValidUserName(UNICODEfromUTF8(user.username())))
+    std::wstring username;
+
+    if (!UTF8toUNICODE(user.username(), username))
+        return false;
+
+    if (!IsValidUserName(username))
         return false;
 
     if (!IsValidPasswordHash(user.password_hash()))
@@ -89,12 +95,31 @@ bool IsValidUserList(const proto::HostUserList& list)
     return true;
 }
 
-static bool GetUserListFilePath(std::string* path)
+static bool GetUserListFilePath(std::string& path)
 {
     if (!GetPath(PathKey::DIR_COMMON_APP_DATA, path))
         return false;
 
-    path->append("/userlist.dat");
+    path.append("/Aspia/Remote Desktop");
+
+    if (!std::experimental::filesystem::exists(path))
+    {
+        std::error_code code;
+
+        if (!std::experimental::filesystem::create_directories(path, code))
+        {
+            LOG(ERROR) << "Unable to create directory: '" << path
+                       << "'. Error: " << code.message();
+            return false;
+        }
+    }
+    else
+    {
+        CHECK(std::experimental::filesystem::is_directory(path));
+    }
+
+    path.append("/userlist.dat");
+
     return true;
 }
 
@@ -108,7 +133,7 @@ bool WriteUserList(const proto::HostUserList& list)
 
     std::string file_path;
 
-    if (!GetUserListFilePath(&file_path))
+    if (!GetUserListFilePath(file_path))
         return false;
 
     std::ofstream file_stream;
@@ -133,7 +158,7 @@ bool ReadUserList(proto::HostUserList* list)
 
     std::string file_path;
 
-    if (!GetUserListFilePath(&file_path))
+    if (!GetUserListFilePath(file_path))
         return false;
 
     std::ifstream file_stream;
@@ -179,14 +204,15 @@ bool ReadUserList(proto::HostUserList* list)
     return true;
 }
 
-bool IsUniqueUserName(std::wstring username)
+bool IsUniqueUserName(const std::wstring& username)
 {
     proto::HostUserList list;
 
     if (!ReadUserList(&list))
         return true;
 
-    std::string username_utf8 = UTF8fromUNICODE(username);
+    std::string username_utf8;
+    CHECK(UNICODEtoUTF8(username, username_utf8));
 
     for (int i = 0; i < list.user_list_size(); ++i)
     {

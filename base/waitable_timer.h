@@ -18,20 +18,19 @@ namespace aspia {
 class WaitableTimer
 {
 public:
-    WaitableTimer();
+    WaitableTimer() = default;
     ~WaitableTimer();
 
     using TimeoutCallback = std::function<void()>;
 
-    // Запускает выполнение |signal_callback| через интервал времени |time_delta_in_ms|.
-    // Если таймер уже находится в запущеном состоянии, то никаких действий не выполняется.
-    // После завершения |signal_callback| таймер автоматически переходит в остановленное состояние.
+    // Starts execution |signal_callback| in the time interval |time_delta_in_ms|.
+    // If the timer is already in a running state, then no action is taken.
     void Start(const std::chrono::milliseconds& time_delta, TimeoutCallback signal_callback);
 
-    // Останавливает таймер и дожидается завершения callback-функции, если она выполняется.
+    // Stops the timer and waits for the callback function to complete, if it is running.
     void Stop();
 
-    // Проверяет состояние таймера.
+    // Checks the state of the timer.
     bool IsActive() const;
 
 private:
@@ -39,7 +38,7 @@ private:
 
 private:
     TimeoutCallback signal_callback_;
-    HANDLE timer_handle_;
+    HANDLE timer_handle_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(WaitableTimer);
 };

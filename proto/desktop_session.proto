@@ -9,11 +9,11 @@ package aspia.proto.desktop;
 
 message HostToClient
 {
-    VideoPacket video_packet            = 1;
-    AudioPacket audio_packet            = 2;
-    CursorShape cursor_shape            = 3;
-    ClipboardEvent clipboard_event      = 4;
-    DesktopConfigRequest config_request = 5;
+    VideoPacket video_packet                   = 1;
+    AudioPacket audio_packet                   = 2;
+    CursorShape cursor_shape                   = 3;
+    ClipboardEvent clipboard_event             = 4;
+    DesktopSessionConfigRequest config_request = 5;
 }
 
 message ClientToHost
@@ -22,5 +22,5 @@ message ClientToHost
     KeyEvent key_event             = 2;
     ClipboardEvent clipboard_event = 3;
     PowerEvent power_event         = 4;
-    DesktopConfig config           = 5;
+    DesktopSessionConfig config    = 5;
 }

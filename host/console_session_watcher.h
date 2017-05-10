@@ -18,7 +18,7 @@ namespace aspia {
 class ConsoleSessionWatcher
 {
 public:
-    ConsoleSessionWatcher();
+    ConsoleSessionWatcher() = default;
     ~ConsoleSessionWatcher();
 
     class Delegate
@@ -39,7 +39,7 @@ private:
     bool OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* result);
 
     std::unique_ptr<MessageWindow> window_;
-    Delegate* delegate_;
+    Delegate* delegate_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ConsoleSessionWatcher);
 };

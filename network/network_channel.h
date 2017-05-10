@@ -22,27 +22,27 @@ public:
     public:
         virtual void OnNetworkChannelStarted() { }
         virtual void OnNetworkChannelDisconnect() = 0;
-        virtual void OnNetworkChannelMessage(const IOBuffer* buffer) = 0;
+        virtual void OnNetworkChannelMessage(const IOBuffer& buffer) = 0;
     };
 
     ~NetworkChannel();
 
     void StartListening(Listener* listener);
-    void Send(const IOBuffer* buffer);
-    void SendAsync(std::unique_ptr<IOBuffer> buffer);
+    void Send(const IOBuffer& buffer);
+    void SendAsync(IOBuffer buffer);
     virtual void Close() = 0;
     virtual bool IsConnected() const = 0;
 
 protected:
-    NetworkChannel();
+    NetworkChannel() = default;
 
     virtual bool KeyExchange() = 0;
     virtual bool WriteData(const uint8_t* buffer, size_t size) = 0;
     virtual bool ReadData(uint8_t* buffer, size_t size) = 0;
 
     size_t ReadMessageSize();
-    std::unique_ptr<IOBuffer> ReadMessage();
-    bool WriteMessage(const IOBuffer* buffer);
+    IOBuffer ReadMessage();
+    bool WriteMessage(const IOBuffer& buffer);
 
     std::unique_ptr<Encryptor> encryptor_;
     std::unique_ptr<Decryptor> decryptor_;
@@ -50,9 +50,9 @@ protected:
 private:
     void Run() override;
 
-    void OnIncommingMessage(const IOBuffer* buffer);
+    void OnIncommingMessage(const IOBuffer& buffer);
 
-    Listener* listener_;
+    Listener* listener_ = nullptr;
     std::unique_ptr<IOQueue> outgoing_queue_;
     std::mutex outgoing_queue_lock_;
 

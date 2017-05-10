@@ -11,12 +11,6 @@
 
 namespace aspia {
 
-ScopedClipboard::ScopedClipboard() :
-    opened_(false)
-{
-    // Nothing
-}
-
 ScopedClipboard::~ScopedClipboard()
 {
     if (opened_)

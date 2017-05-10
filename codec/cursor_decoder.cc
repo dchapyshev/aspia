@@ -10,11 +10,6 @@
 
 namespace aspia {
 
-CursorDecoder::CursorDecoder()
-{
-    // Nothing
-}
-
 bool CursorDecoder::DecompressCursor(const proto::CursorShape& cursor_shape, uint8_t* image)
 {
     const uint8_t* src = reinterpret_cast<const uint8_t*>(cursor_shape.data().data());
@@ -63,7 +58,7 @@ bool CursorDecoder::DecompressCursor(const proto::CursorShape& cursor_shape, uin
 
 std::shared_ptr<MouseCursor> CursorDecoder::Decode(const proto::CursorShape& cursor_shape)
 {
-    int cache_index = -1;
+    size_t cache_index;
 
     if (cursor_shape.flags() & proto::CursorShape::CACHE)
     {

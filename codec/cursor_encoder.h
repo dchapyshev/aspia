@@ -21,7 +21,7 @@ public:
     CursorEncoder();
     ~CursorEncoder() = default;
 
-    void Encode(proto::CursorShape* cursor_shape, std::unique_ptr<MouseCursor> mouse_cursor);
+    std::unique_ptr<proto::CursorShape> Encode(std::unique_ptr<MouseCursor> mouse_cursor);
 
 private:
     uint8_t* GetOutputBuffer(proto::CursorShape* cursor_shape, size_t size);

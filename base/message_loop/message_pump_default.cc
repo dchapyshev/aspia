@@ -10,13 +10,6 @@
 
 namespace aspia {
 
-MessagePumpDefault::MessagePumpDefault() :
-    keep_running_(true),
-    have_work_(false)
-{
-    // Nothing
-}
-
 void MessagePumpDefault::Run(Delegate* delegate)
 {
     DCHECK(keep_running_) << "Quit must have been called outside of Run!";

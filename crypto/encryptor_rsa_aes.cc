@@ -73,7 +73,6 @@ EncryptorAES* EncryptorAES::Create()
 
 EncryptorAES::EncryptorAES(HCRYPTPROV prov, HCRYPTKEY aes_key, DWORD block_size) :
     prov_(prov),
-    rsa_key_(NULL),
     aes_key_(aes_key),
     block_size_(block_size)
 {
@@ -101,9 +100,9 @@ EncryptorAES::~EncryptorAES()
     }
 }
 
-bool EncryptorAES::SetPublicKey(const IOBuffer* public_key)
+bool EncryptorAES::SetPublicKey(const IOBuffer& public_key)
 {
-    if (!public_key)
+    if (public_key.IsEmpty())
         return false;
 
     // Согласно MSDN блоб публичного ключа имеет структуру:
@@ -124,12 +123,12 @@ bool EncryptorAES::SetPublicKey(const IOBuffer* public_key)
     rsa.bitlen = kRSAKeySize;
     rsa.pubexp = 65537;
 
-    uint32_t blob_size = sizeof(PUBLICKEYSTRUC) + sizeof(RSAPUBKEY) + public_key->Size();
+    uint32_t blob_size = sizeof(PUBLICKEYSTRUC) + sizeof(RSAPUBKEY) + public_key.Size();
     std::unique_ptr<uint8_t[]> blob(new uint8_t[blob_size]);
 
     memcpy(blob.get(), &header, sizeof(header));
     memcpy(blob.get() + sizeof(header), &rsa, sizeof(rsa));
-    memcpy(blob.get() + sizeof(header) + sizeof(rsa), public_key->Data(), public_key->Size());
+    memcpy(blob.get() + sizeof(header) + sizeof(rsa), public_key.Data(), public_key.Size());
 
     if (!CryptImportKey(prov_, blob.get(), blob_size, NULL, 0, &rsa_key_))
     {
@@ -140,14 +139,14 @@ bool EncryptorAES::SetPublicKey(const IOBuffer* public_key)
     return true;
 }
 
-std::unique_ptr<IOBuffer> EncryptorAES::GetSessionKey()
+IOBuffer EncryptorAES::GetSessionKey()
 {
     DWORD blob_size = 0;
 
     if (!CryptExportKey(aes_key_, rsa_key_, SIMPLEBLOB, 0, NULL, &blob_size))
     {
         LOG(ERROR) << "CryptExportKey() failed: " << GetLastError();
-        return false;
+        return IOBuffer();
     }
 
     std::unique_ptr<uint8_t[]> blob(new uint8_t[blob_size]);
@@ -155,7 +154,7 @@ std::unique_ptr<IOBuffer> EncryptorAES::GetSessionKey()
     if (!CryptExportKey(aes_key_, rsa_key_, SIMPLEBLOB, 0, blob.get(), &blob_size))
     {
         LOG(ERROR) << "CryptExportKey() failed: " << GetLastError();
-        return false;
+        return IOBuffer();
     }
 
     const size_t session_key_size = kRSAKeySize / 8;
@@ -163,35 +162,35 @@ std::unique_ptr<IOBuffer> EncryptorAES::GetSessionKey()
     if (sizeof(PUBLICKEYSTRUC) + sizeof(ALG_ID) + session_key_size != blob_size)
     {
         LOG(ERROR) << "Wrong size of session key: " << blob_size;
-        return false;
+        return IOBuffer();
     }
 
-    std::unique_ptr<IOBuffer> session_key(new IOBuffer(session_key_size));
+    IOBuffer session_key(session_key_size);
 
-    memcpy(session_key->Data(),
+    memcpy(session_key.Data(),
            blob.get() + sizeof(PUBLICKEYSTRUC) + sizeof(ALG_ID),
            session_key_size);
 
     return session_key;
 }
 
-std::unique_ptr<IOBuffer> EncryptorAES::Encrypt(const IOBuffer* source_buffer)
+IOBuffer EncryptorAES::Encrypt(const IOBuffer& source_buffer)
 {
-    if (!source_buffer)
-        return nullptr;
+    if (source_buffer.IsEmpty())
+        return IOBuffer();
 
-    DWORD size = source_buffer->Size();
+    DWORD size = source_buffer.Size();
 
     DWORD enc_size = ((size / block_size_ + 1) * block_size_);
 
-    std::unique_ptr<IOBuffer> output_buffer(new IOBuffer(enc_size));
+    IOBuffer output_buffer(enc_size);
 
-    memcpy(output_buffer->Data(), source_buffer->Data(), size);
+    memcpy(output_buffer.Data(), source_buffer.Data(), size);
 
-    if (!CryptEncrypt(aes_key_, NULL, TRUE, 0, output_buffer->Data(), &size, enc_size))
+    if (!CryptEncrypt(aes_key_, NULL, TRUE, 0, output_buffer.Data(), &size, enc_size))
     {
         DLOG(ERROR) << "CryptEncrypt() failed: " << GetLastError();
-        return nullptr;
+        return IOBuffer();
     }
 
     return output_buffer;

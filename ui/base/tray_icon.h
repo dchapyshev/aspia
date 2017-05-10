@@ -32,11 +32,11 @@ public:
     bool HandleMessage(UINT msg, WPARAM wparam, LPARAM lparam);
 
 private:
-    HWND hwnd_;
+    HWND hwnd_ = nullptr;
     UINT message_id_;
     NOTIFYICONDATAW nid_;
-    bool is_installed_;
-    UINT default_menu_item_;
+    bool is_installed_ = false;
+    UINT default_menu_item_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(TrayIcon);
 };

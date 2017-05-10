@@ -12,14 +12,6 @@ namespace aspia {
 static const std::chrono::milliseconds kMinUpdateInterval{ 15 };
 static const std::chrono::milliseconds kMaxUpdateInterval{ 100 };
 
-ScreenUpdater::ScreenUpdater() :
-    mode_(Mode::SCREEN_AND_CURSOR),
-    delegate_(nullptr),
-    interval_(0)
-{
-    // Nothing
-}
-
 ScreenUpdater::~ScreenUpdater()
 {
     Stop();

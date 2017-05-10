@@ -8,7 +8,6 @@
 #ifndef _ASPIA_NETWORK__NETWORK_CLIENT_TCP_H
 #define _ASPIA_NETWORK__NETWORK_CLIENT_TCP_H
 
-#include <memory>
 #include <string>
 
 #include "base/message_loop/message_loop_proxy.h"
@@ -20,7 +19,7 @@ namespace aspia {
 class NetworkClientTcp : private ObjectWatcher::Delegate
 {
 public:
-    NetworkClientTcp();
+    NetworkClientTcp() = default;
     ~NetworkClientTcp();
 
     class Delegate
@@ -33,6 +32,9 @@ public:
 
     bool Connect(const std::wstring& address, uint16_t port, Delegate* delegate);
 
+    static bool IsValidHostName(const std::wstring& hostname);
+    static bool IsValidPort(uint16_t port);
+
 private:
     // ObjectWatcher::Delegate implementation.
     void OnObjectSignaled(HANDLE object) override;
@@ -41,7 +43,7 @@ private:
     std::shared_ptr<MessageLoopProxy> runner_;
 
     ObjectWatcher connect_watcher_;
-    Delegate* delegate_;
+    Delegate* delegate_ = nullptr;
 
     Socket socket_;
     WsaWaitableEvent connect_event_;

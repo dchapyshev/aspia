@@ -14,8 +14,7 @@ namespace aspia {
 VideoEncoderZLIB::VideoEncoderZLIB(const PixelFormat& format, int compression_ratio) :
     format_(format),
     compressor_(compression_ratio),
-    translator_(format),
-    translate_buffer_size_(0)
+    translator_(format)
 {
     // Nothing
 }

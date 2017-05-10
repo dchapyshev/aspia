@@ -28,7 +28,7 @@ public:
     {
     public:
         virtual void OnWindowClose() = 0;
-        virtual void OnConfigChange(const proto::DesktopConfig& config) = 0;
+        virtual void OnConfigChange(const proto::DesktopSessionConfig& config) = 0;
         virtual void OnKeyEvent(uint32_t keycode, uint32_t flags) = 0;
         virtual void OnPointerEvent(int x, int y, uint32_t mask) = 0;
         virtual void OnPowerEvent(proto::PowerEvent::Action action) = 0;
@@ -79,7 +79,7 @@ private:
     void ShowDropDownMenu(int button_id, RECT* button_rect);
     int DoAutoSize(const DesktopSize& video_frame_size);
     void DoFullScreen(bool fullscreen);
-    void ApplyConfig(const proto::DesktopConfig& config);
+    void ApplyConfig(const proto::DesktopSessionConfig& config);
 
 private:
     MessageLoopThread ui_thread_;

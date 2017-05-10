@@ -20,8 +20,8 @@ class ModalDialog :
     private MessageLoopForUI::Dispatcher
 {
 public:
-    ModalDialog();
-    virtual ~ModalDialog() {}
+    ModalDialog() = default;
+    virtual ~ModalDialog() = default;
 
     virtual INT_PTR DoModal(HWND parent) = 0;
 
@@ -65,8 +65,8 @@ private:
     bool Dispatch(const NativeEvent& event) override;
 
     Module module_;
-    bool end_dialog_;
-    INT_PTR result_;
+    bool end_dialog_ = false;
+    INT_PTR result_ = 0;
 
     ScopedHICON small_icon_;
     ScopedHICON big_icon_;

@@ -6,20 +6,9 @@
 //
 
 #include "base/scoped_impersonator.h"
-#include "base/scoped_object.h"
 #include "base/logging.h"
 
-#include <wtsapi32.h>
-
 namespace aspia {
-
-static DWORD kInvalidSessionId = 0xFFFFFFFF;
-
-ScopedImpersonator::ScopedImpersonator() :
-    impersonated_(false)
-{
-    // Nothing
-}
 
 ScopedImpersonator::~ScopedImpersonator()
 {
@@ -39,7 +28,6 @@ bool ScopedImpersonator::ImpersonateLoggedOnUser(HANDLE user_token)
     }
 
     impersonated_ = true;
-
     return true;
 }
 
@@ -52,7 +40,6 @@ bool ScopedImpersonator::ImpersonateAnonymous()
     }
 
     impersonated_ = true;
-
     return true;
 }
 
@@ -65,7 +52,6 @@ bool ScopedImpersonator::ImpersonateNamedPipeClient(HANDLE named_pipe)
     }
 
     impersonated_ = true;
-
     return true;
 }
 

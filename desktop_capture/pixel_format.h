@@ -8,14 +8,12 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H
 #define _ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H
 
-#include <stdint.h>
-
 namespace aspia {
 
 class PixelFormat
 {
 public:
-    PixelFormat();
+    PixelFormat() = default;
     PixelFormat(const PixelFormat& other);
     PixelFormat(uint8_t bits_per_pixel,
                 uint16_t red_max,
@@ -90,7 +88,7 @@ public:
     uint8_t GreenShift() const;
     uint8_t BlueShift() const;
 
-    bool IsEmpty() const;
+    bool IsValid() const;
     void Clear();
     bool IsEqual(const PixelFormat& other) const;
     void Set(const PixelFormat& other);
@@ -100,16 +98,16 @@ public:
     bool operator!=(const PixelFormat& other);
 
 private:
-    uint8_t bits_per_pixel_; // Количество бит, которые пиксель занимает в памяти.
-    uint8_t bytes_per_pixel_; // Количество байт, которые пиксель занимает в памяти.
+    uint8_t bits_per_pixel_ = 0;
+    uint8_t bytes_per_pixel_ = 0;
 
-    uint16_t red_max_;
-    uint16_t green_max_;
-    uint16_t blue_max_;
+    uint16_t red_max_ = 0;
+    uint16_t green_max_ = 0;
+    uint16_t blue_max_ = 0;
 
-    uint8_t red_shift_;
-    uint8_t green_shift_;
-    uint8_t blue_shift_;
+    uint8_t red_shift_ = 0;
+    uint8_t green_shift_ = 0;
+    uint8_t blue_shift_ = 0;
 };
 
 } // namespace aspia

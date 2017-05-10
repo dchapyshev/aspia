@@ -18,8 +18,8 @@ namespace aspia {
 class MessagePumpDefault : public MessagePump
 {
 public:
-    MessagePumpDefault();
-    virtual ~MessagePumpDefault() {}
+    MessagePumpDefault() = default;
+    ~MessagePumpDefault() = default;
 
     // MessagePump methods:
     virtual void Run(Delegate* delegate) override;
@@ -28,12 +28,12 @@ public:
 
 private:
     // This flag is set to false when Run should return.
-    bool keep_running_;
+    bool keep_running_ = true;
 
     // Used to sleep until there is more work to do.
     std::condition_variable event_;
 
-    bool have_work_;
+    bool have_work_ = false;
     std::mutex have_work_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(MessagePumpDefault);

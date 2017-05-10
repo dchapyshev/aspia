@@ -9,7 +9,6 @@
 #define _ASPIA_HOST__SCREEN_UPDATER_H
 
 #include "base/thread.h"
-#include "base/macros.h"
 #include "desktop_capture/capture_scheduler.h"
 #include "desktop_capture/capturer_gdi.h"
 
@@ -20,7 +19,7 @@ namespace aspia {
 class ScreenUpdater : private Thread
 {
 public:
-    ScreenUpdater();
+    ScreenUpdater() = default;
     ~ScreenUpdater();
 
     class Delegate
@@ -40,9 +39,9 @@ public:
 private:
     void Run() override;
 
-    Delegate* delegate_;
-    Mode mode_;
-    std::chrono::milliseconds interval_;
+    Delegate* delegate_ = nullptr;
+    Mode mode_ = Mode::SCREEN_AND_CURSOR;
+    std::chrono::milliseconds interval_{ 0 };
 
     DISALLOW_COPY_AND_ASSIGN(ScreenUpdater);
 };

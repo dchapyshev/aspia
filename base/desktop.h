@@ -15,7 +15,7 @@ namespace aspia {
 class Desktop
 {
 public:
-    Desktop();
+    Desktop() = default;
     Desktop(Desktop&& other);
     ~Desktop();
 
@@ -66,10 +66,10 @@ private:
 
 private:
     // The desktop handle.
-    HDESK desktop_;
+    HDESK desktop_ = nullptr;
 
     // True if |desktop_| must be closed on teardown.
-    bool own_;
+    bool own_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(Desktop);
 };

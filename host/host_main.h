@@ -1,19 +1,19 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            crypto/sha512.h
+// FILE:            host/host_main.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_CRYPTO__SHA512_H
-#define _ASPIA_CRYPTO__SHA512_H
+#ifndef _ASPIA_HOST__HOST_MAIN_H
+#define _ASPIA_HOST__HOST_MAIN_H
 
 #include <string>
 
 namespace aspia {
 
-bool CreateSHA512(const std::string& data, std::string& data_hash);
+void RunHostMain(const std::wstring& run_mode);
 
 } // namespace aspia
 
-#endif // _ASPIA_CRYPTO__SHA512_H
+#endif // _ASPIA_HOST__HOST_MAIN_H

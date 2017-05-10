@@ -11,18 +11,12 @@
 #include "desktop_capture/capturer.h"
 #include "desktop_capture/desktop_frame_dib.h"
 #include "desktop_capture/differ.h"
-#include "base/macros.h"
 #include "base/scoped_thread_desktop.h"
 #include "base/scoped_gdi_object.h"
 #include "base/scoped_hdc.h"
-#include "base/desktop.h"
 
 namespace aspia {
 
-//
-// Класс захвата избражения экрана
-// TODO: Захват изображения курсора
-//
 class CapturerGDI : public Capturer
 {
 public:
@@ -45,7 +39,7 @@ private:
     ScopedCreateDC memory_dc_;
 
     static const int kNumFrames = 2;
-    int curr_frame_id_;
+    int curr_frame_id_ = 0;
 
     std::unique_ptr<DesktopFrameDIB> frame_[kNumFrames];
 

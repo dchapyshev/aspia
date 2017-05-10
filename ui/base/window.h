@@ -17,9 +17,9 @@ namespace aspia {
 class Window
 {
 public:
-    Window() : hwnd_(nullptr) { }
+    Window() = default;
     Window(HWND hwnd) : hwnd_(hwnd) { }
-    virtual ~Window() { }
+    virtual ~Window() = default;
 
     void Attach(HWND hwnd) { hwnd_ = hwnd; }
     HWND hwnd() { return hwnd_; }
@@ -30,7 +30,7 @@ public:
     bool ModifyStyleEx(DWORD remove, DWORD add);
 
 private:
-    HWND hwnd_;
+    HWND hwnd_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(Window);
 };

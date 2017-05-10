@@ -22,9 +22,9 @@ public:
     void Stop();
 
 private:
-    HWND window_;
+    HWND window_ = nullptr;
     UINT_PTR id_;
-    bool active_;
+    bool active_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(WindowTimer);
 };

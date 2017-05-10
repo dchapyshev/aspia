@@ -21,7 +21,7 @@ static const ProcessHandle kNullProcessHandle = nullptr;
 class Process
 {
 public:
-    Process();
+    Process() = default;
     Process(Process&& other);
     ~Process() = default;
 
@@ -84,7 +84,7 @@ public:
 private:
     explicit Process(ProcessHandle process_handle);
 
-    ProcessHandle process_handle_;
+    ProcessHandle process_handle_ = kNullProcessHandle;
 
     DISALLOW_COPY_AND_ASSIGN(Process);
 };

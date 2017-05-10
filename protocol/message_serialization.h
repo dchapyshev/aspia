@@ -12,39 +12,36 @@
 #include "base/logging.h"
 
 #include <google/protobuf/message_lite.h>
-#include <memory>
 
 namespace aspia {
 
-static std::unique_ptr<IOBuffer> SerializeMessage(const google::protobuf::MessageLite& message)
+static IOBuffer SerializeMessage(const google::protobuf::MessageLite& message)
 {
     size_t size = message.ByteSizeLong();
 
     if (!size)
     {
         LOG(ERROR) << "Empty messages are not allowed";
-        return nullptr;
+        return IOBuffer();
     }
 
-    std::unique_ptr<IOBuffer> buffer(new IOBuffer(size));
+    IOBuffer buffer(size);
 
-    message.SerializeWithCachedSizesToArray(buffer->Data());
+    message.SerializeWithCachedSizesToArray(buffer.Data());
 
     return buffer;
 }
 
 template <class T>
-std::unique_ptr<T> ParseMessage(const IOBuffer* buffer)
+bool ParseMessage(const IOBuffer& buffer, T& message)
 {
-    std::unique_ptr<T> message(new T());
-
-    if (!message->ParseFromArray(buffer->Data(), buffer->Size()))
+    if (!message.ParseFromArray(buffer.Data(), buffer.Size()))
     {
         LOG(ERROR) << "Received message that is not a valid protocol buffer.";
-        return nullptr;
+        return false;
     }
 
-    return message;
+    return true;
 }
 
 } // namespace aspia

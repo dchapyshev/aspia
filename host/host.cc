@@ -16,8 +16,7 @@ namespace aspia {
 
 Host::Host(std::unique_ptr<NetworkChannel> channel, Delegate* delegate) :
     channel_(std::move(channel)),
-    delegate_(delegate),
-    is_auth_complete_(false)
+    delegate_(delegate)
 {
     channel_->StartListening(this);
 }
@@ -32,7 +31,7 @@ bool Host::IsAliveSession() const
     return channel_->IsConnected();
 }
 
-void Host::OnSessionMessage(const IOBuffer* buffer)
+void Host::OnSessionMessage(const IOBuffer& buffer)
 {
     channel_->Send(buffer);
 }
@@ -42,7 +41,7 @@ void Host::OnSessionTerminate()
     channel_->Close();
 }
 
-void Host::OnNetworkChannelMessage(const IOBuffer* buffer)
+void Host::OnNetworkChannelMessage(const IOBuffer& buffer)
 {
     std::unique_lock<std::mutex> lock(session_lock_);
 
@@ -69,8 +68,8 @@ void Host::OnNetworkChannelDisconnect()
     delegate_->OnSessionTerminate();
 }
 
-static proto::AuthStatus BasicAuthorization(const std::string username,
-                                            const std::string password,
+static proto::AuthStatus BasicAuthorization(const std::string& username,
+                                            const std::string& password,
                                             proto::SessionType session_type)
 {
     proto::HostUserList list;
@@ -87,7 +86,7 @@ static proto::AuthStatus BasicAuthorization(const std::string username,
                 {
                     std::string password_hash;
 
-                    if (CreateSHA512(password, &password_hash))
+                    if (CreateSHA512(password, password_hash))
                     {
                         if (user.password_hash() == password_hash)
                         {
@@ -109,22 +108,21 @@ static proto::AuthStatus BasicAuthorization(const std::string username,
     return proto::AuthStatus::AUTH_STATUS_BAD_USERNAME_OR_PASSWORD;
 }
 
-bool Host::SendAuthResult(const IOBuffer* request_buffer)
+bool Host::SendAuthResult(const IOBuffer& request_buffer)
 {
-    std::unique_ptr<proto::auth::ClientToHost> request =
-        ParseMessage<proto::auth::ClientToHost>(request_buffer);
+    proto::auth::ClientToHost request;
 
-    if (!request)
+    if (!ParseMessage(request_buffer, request))
         return false;
 
     proto::auth::HostToClient result;
 
-    switch (request->method())
+    switch (request.method())
     {
         case proto::AuthMethod::AUTH_METHOD_BASIC:
-            result.set_status(BasicAuthorization(request->username(),
-                                                 request->password(),
-                                                 request->session_type()));
+            result.set_status(BasicAuthorization(request.username(),
+                                                 request.password(),
+                                                 request.session_type()));
             break;
 
         default:
@@ -132,19 +130,19 @@ bool Host::SendAuthResult(const IOBuffer* request_buffer)
             break;
     }
 
-    std::unique_ptr<IOBuffer> result_buffer(SerializeMessage(result));
-    channel_->Send(result_buffer.get());
+    IOBuffer result_buffer(SerializeMessage(result));
+    channel_->Send(result_buffer);
 
     if (result.status() == proto::AuthStatus::AUTH_STATUS_SUCCESS)
     {
-        switch (request->session_type())
+        switch (request.session_type())
         {
             case proto::SessionType::SESSION_DESKTOP_MANAGE:
                 session_ = DesktopSession::Create(this);
                 break;
 
             default:
-                LOG(ERROR) << "Unsupported session type: " << request->session_type();
+                LOG(ERROR) << "Unsupported session type: " << request.session_type();
                 break;
         }
 

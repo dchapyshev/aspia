@@ -8,6 +8,7 @@
 #include "ui/auth_dialog.h"
 #include "ui/resource.h"
 #include "base/unicode.h"
+#include "base/logging.h"
 
 namespace aspia {
 
@@ -37,14 +38,16 @@ void AuthDialog::OnOkButton()
     WCHAR buffer[128];
 
     if (GetDlgItemTextW(hwnd(), IDC_USERNAME_EDIT, buffer, _countof(buffer)))
-        username_ = UTF8fromUNICODE(buffer);
-
-    SecureZeroMemory(buffer, sizeof(buffer));
+    {
+        CHECK(UNICODEtoUTF8(buffer, username_));
+        SecureZeroMemory(buffer, sizeof(buffer));
+    }
 
     if (GetDlgItemTextW(hwnd(), IDC_PASSWORD_EDIT, buffer, _countof(buffer)))
-        password_ = UTF8fromUNICODE(buffer);
-
-    SecureZeroMemory(buffer, sizeof(buffer));
+    {
+        CHECK(UNICODEtoUTF8(buffer, password_));
+        SecureZeroMemory(buffer, sizeof(buffer));
+    }
 
     EndDialog(IDOK);
 }

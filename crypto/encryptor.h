@@ -10,17 +10,14 @@
 
 #include "base/io_buffer.h"
 
-#include <memory>
-
 namespace aspia {
 
 class Encryptor
 {
 public:
-    Encryptor() {}
     virtual ~Encryptor() = default;
 
-    virtual std::unique_ptr<IOBuffer> Encrypt(const IOBuffer* source_buffer) = 0;
+    virtual IOBuffer Encrypt(const IOBuffer& source_buffer) = 0;
 };
 
 } // namespace aspia

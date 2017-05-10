@@ -23,7 +23,7 @@ public:
     class Delegate
     {
     public:
-        virtual void OnSessionMessage(std::unique_ptr<IOBuffer> buffer) = 0;
+        virtual void OnSessionMessage(IOBuffer buffer) = 0;
         virtual void OnSessionTerminate() = 0;
     };
 
@@ -34,9 +34,9 @@ public:
         DCHECK(delegate_);
     }
 
-    virtual ~ClientSession() { }
+    virtual ~ClientSession() = default;
 
-    virtual void Send(const IOBuffer* buffer) = 0;
+    virtual void Send(const IOBuffer& buffer) = 0;
 
 protected:
     ClientConfig config_;

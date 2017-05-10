@@ -10,15 +10,9 @@
 
 namespace aspia {
 
-static const DWORD kNone = 0;
-static const DWORD kServices = 1;
-static const DWORD kApplications = 2;
-static const DWORD kServicesAndApplications = 3;
-
 static const WCHAR kSoftwareSASGeneration[] = L"SoftwareSASGeneration";
 
-ScopedSasPolice::ScopedSasPolice() :
-    old_state_(kNone)
+ScopedSasPolice::ScopedSasPolice()
 {
     LONG status = key_.Create(HKEY_LOCAL_MACHINE,
                               L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
@@ -34,16 +28,16 @@ ScopedSasPolice::ScopedSasPolice() :
     {
         // The previous state is not defined.
         // Consider that the software generation of SAS has been disabled.
-        old_state_ = kNone;
+        old_state_ = STATE_NONE;
     }
 
-    if (old_state_ >= kServices)
+    if (old_state_ >= STATE_SERVICES)
     {
         key_.Close();
         return;
     }
 
-    status = key_.WriteValue(kSoftwareSASGeneration, kServices);
+    status = key_.WriteValue(kSoftwareSASGeneration, STATE_SERVICES);
     if (status != ERROR_SUCCESS)
     {
         LOG(WARNING) << "WriteValue() failed: " << status;

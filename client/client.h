@@ -39,23 +39,23 @@ public:
 
 private:
     // ClientSession::Delegate implementation.
-    void OnSessionMessage(std::unique_ptr<IOBuffer> buffer) override;
+    void OnSessionMessage(IOBuffer buffer) override;
     void OnSessionTerminate() override;
 
     // NetworkChannel::Listener implementation.
-    void OnNetworkChannelMessage(const IOBuffer* buffer) override;
+    void OnNetworkChannelMessage(const IOBuffer& buffer) override;
     void OnNetworkChannelDisconnect() override;
     void OnNetworkChannelStarted() override;
 
     // StatusDialog::Delegate implementation.
     void OnStatusDialogOpen();
 
-    bool ReadAuthResult(const IOBuffer* buffer);
+    bool ReadAuthResult(const IOBuffer& buffer);
     void CreateSession(proto::SessionType session_type);
 
     Delegate* delegate_;
 
-    bool is_auth_complete_;
+    bool is_auth_complete_ = false;
     ClientStatus status_;
     std::unique_ptr<StatusDialog> status_dialog_;
 

@@ -16,16 +16,15 @@
 
 #include "build_config.h"
 
-// windows.h должен подключаться только тут и нигде больше.
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-// Убираем определение ERROR. Мешает использованию GLOG.
+// Remove the definition of ERROR. Prevents the use of GLOG.
 #ifdef ERROR
 #undef ERROR
 #endif // ERROR
 
-// Убираем определения min и max. Мы используем std::min и std::max.
+// Remove the min and max definitions. We use std::min and std::max.
 #ifdef min
 #undef min
 #endif // min

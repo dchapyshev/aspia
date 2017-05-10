@@ -37,7 +37,9 @@ private:
     void OnStop() override;
 
 private:
-    uint32_t session_id_;
+    static const uint32_t kInvalidSessionId = 0xFFFFFFFF;
+
+    uint32_t session_id_ = kInvalidSessionId;
     std::wstring input_channel_id_;
     std::wstring output_channel_id_;
 

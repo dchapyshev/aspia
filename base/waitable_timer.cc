@@ -10,12 +10,6 @@
 
 namespace aspia {
 
-WaitableTimer::WaitableTimer() :
-    timer_handle_(nullptr)
-{
-    // Nothing
-}
-
 WaitableTimer::~WaitableTimer()
 {
     Stop();
@@ -35,6 +29,8 @@ void NTAPI WaitableTimer::TimerProc(LPVOID context, BOOLEAN timer_or_wait_fired)
 void WaitableTimer::Start(const std::chrono::milliseconds& time_delta,
                           TimeoutCallback signal_callback)
 {
+    DCHECK(time_delta.count() < std::numeric_limits<DWORD>::max());
+
     if (timer_handle_)
         return;
 
@@ -54,7 +50,6 @@ void WaitableTimer::Stop()
 {
     if (timer_handle_)
     {
-        // Дожидаемся удаления таймера и завершения callback-функции.
         DeleteTimerQueueTimer(nullptr, timer_handle_, INVALID_HANDLE_VALUE);
         timer_handle_ = nullptr;
     }

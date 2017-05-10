@@ -10,11 +10,6 @@
 
 namespace aspia {
 
-ClipboardThread::ClipboardThread()
-{
-    // Nothing
-}
-
 ClipboardThread::~ClipboardThread()
 {
     ui_thread_.Stop();

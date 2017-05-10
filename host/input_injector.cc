@@ -13,12 +13,6 @@
 
 namespace aspia {
 
-InputInjector::InputInjector() :
-    prev_mouse_button_mask_(0)
-{
-    // Nothing
-}
-
 void InputInjector::SwitchToInputDesktop()
 {
     Desktop input_desktop(Desktop::GetInputDesktop());

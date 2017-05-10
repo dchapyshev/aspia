@@ -17,7 +17,6 @@ Client::Client(std::unique_ptr<NetworkChannel> channel,
                Delegate* delegate) :
     channel_(std::move(channel)),
     config_(config),
-    is_auth_complete_(false),
     delegate_(delegate)
 {
     channel_->StartListening(this);
@@ -33,7 +32,7 @@ bool Client::IsAliveSession() const
     return channel_->IsConnected();
 }
 
-void Client::OnSessionMessage(std::unique_ptr<IOBuffer> buffer)
+void Client::OnSessionMessage(IOBuffer buffer)
 {
     channel_->SendAsync(std::move(buffer));
 }
@@ -43,7 +42,7 @@ void Client::OnSessionTerminate()
     channel_->Close();
 }
 
-void Client::OnNetworkChannelMessage(const IOBuffer* buffer)
+void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
 {
     std::unique_lock<std::mutex> lock(session_lock_);
 
@@ -95,10 +94,10 @@ void Client::OnNetworkChannelStarted()
     request.set_username(dialog.UserName());
     request.set_password(dialog.Password());
 
-    std::unique_ptr<IOBuffer> output_buffer = SerializeMessage(request);
-    CHECK(output_buffer);
+    IOBuffer output_buffer = SerializeMessage(request);
+    CHECK(!output_buffer.IsEmpty());
 
-    channel_->Send(output_buffer.get());
+    channel_->Send(output_buffer);
 }
 
 void Client::OnStatusDialogOpen()
@@ -108,15 +107,14 @@ void Client::OnStatusDialogOpen()
     status_dialog_->SetStatus(status_);
 }
 
-bool Client::ReadAuthResult(const IOBuffer* buffer)
+bool Client::ReadAuthResult(const IOBuffer& buffer)
 {
-    std::unique_ptr<proto::auth::HostToClient> result =
-        ParseMessage<proto::auth::HostToClient>(buffer);
-
-    if (!result)
+    proto::auth::HostToClient result;
+    
+    if (!ParseMessage(buffer, result))
         return false;
 
-    switch (result->status())
+    switch (result.status())
     {
         case proto::AuthStatus::AUTH_STATUS_SUCCESS:
             return true;
@@ -134,7 +132,7 @@ bool Client::ReadAuthResult(const IOBuffer* buffer)
             break;
 
         default:
-            LOG(ERROR) << "Unknown auth status: " << result->status();
+            LOG(ERROR) << "Unknown auth status: " << result.status();
             return false;
     }
 

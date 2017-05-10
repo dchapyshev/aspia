@@ -16,10 +16,7 @@ template<class T, class Traits>
 class ScopedObject
 {
 public:
-    ScopedObject() : object_(nullptr)
-    {
-        // Nothing
-    }
+    ScopedObject() = default;
 
     explicit ScopedObject(T object) : object_(object)
     {
@@ -86,7 +83,7 @@ public:
     }
 
 private:
-    T object_;
+    T object_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedObject);
 };

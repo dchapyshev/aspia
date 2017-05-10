@@ -186,9 +186,6 @@
     <ClCompile Include="desktop_capture\pixel_format.cc">
       <Filter>desktop_capture</Filter>
     </ClCompile>
-    <ClCompile Include="desktop_capture\x11region.cc">
-      <Filter>desktop_capture</Filter>
-    </ClCompile>
     <ClCompile Include="host\console_session_watcher.cc">
       <Filter>host</Filter>
     </ClCompile>
@@ -361,6 +358,12 @@
     <ClCompile Include="ui\base\tray_icon.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
+    <ClCompile Include="host\host_main.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_main.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -470,9 +473,6 @@
     </ClInclude>
     <ClInclude Include="base\registry.h">
       <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="desktop_capture\x11region.h">
-      <Filter>desktop_capture</Filter>
     </ClInclude>
     <ClInclude Include="desktop_capture\desktop_region.h">
       <Filter>desktop_capture</Filter>
@@ -737,9 +737,6 @@
     <ClInclude Include="network\wsa_waitable_event.h">
       <Filter>network</Filter>
     </ClInclude>
-    <ClInclude Include="client\status.h">
-      <Filter>client</Filter>
-    </ClInclude>
     <ClInclude Include="client\client_pool.h">
       <Filter>client</Filter>
     </ClInclude>
@@ -791,6 +788,15 @@
     <ClInclude Include="ui\base\tray_icon.h">
       <Filter>ui\base</Filter>
     </ClInclude>
+    <ClInclude Include="host\host_main.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_main.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="client\client_status.h">
+      <Filter>client</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -823,6 +829,9 @@
       <Filter>ui</Filter>
     </ResourceCompile>
     <ResourceCompile Include="version.rc" />
+    <ResourceCompile Include="ui\lang\ru-RU.rc">
+      <Filter>ui\lang</Filter>
+    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="common-controls.manifest" />

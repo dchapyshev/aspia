@@ -59,7 +59,7 @@ private:
     std::wstring service_name_;
     std::atomic_bool terminating_;
 
-    SERVICE_STATUS_HANDLE status_handle_;
+    SERVICE_STATUS_HANDLE status_handle_ = nullptr;
     SERVICE_STATUS status_;
 
     DISALLOW_COPY_AND_ASSIGN(Service);

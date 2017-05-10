@@ -16,12 +16,6 @@ static const WCHAR kWindowClassName[] = L"Aspia_MessageWindowClass";
 static const WCHAR kWindowName[] = L"Aspia_MessageWindow";
 static std::atomic_bool _class_registered = false;
 
-MessageWindow::MessageWindow() :
-    hwnd_(nullptr)
-{
-    // Nothing
-}
-
 MessageWindow::~MessageWindow()
 {
     if (hwnd_)

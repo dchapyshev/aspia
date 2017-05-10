@@ -18,7 +18,7 @@ namespace aspia {
 class InputInjector
 {
 public:
-    InputInjector();
+    InputInjector() = default;
     ~InputInjector() = default;
 
     // The calling thread should not own any windows.
@@ -33,7 +33,7 @@ private:
     ScopedThreadDesktop desktop_;
 
     DesktopPoint prev_mouse_pos_;
-    uint32_t prev_mouse_button_mask_;
+    uint32_t prev_mouse_button_mask_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(InputInjector);
 };

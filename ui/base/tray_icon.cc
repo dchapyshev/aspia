@@ -14,10 +14,7 @@
 
 namespace aspia {
 
-TrayIcon::TrayIcon() :
-    is_installed_(false),
-    default_menu_item_(0),
-    hwnd_(nullptr)
+TrayIcon::TrayIcon()
 {
     memset(&nid_, 0, sizeof(nid_));
     nid_.cbSize = sizeof(nid_);

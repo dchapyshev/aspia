@@ -22,19 +22,19 @@ public:
 
     static DecryptorAES* Create();
 
-    std::unique_ptr<IOBuffer> GetPublicKey();
-    bool SetSessionKey(const IOBuffer* session_key);
+    IOBuffer GetPublicKey();
+    bool SetSessionKey(const IOBuffer& session_key);
 
-    std::unique_ptr<IOBuffer> Decrypt(const IOBuffer* source_buffer) override;
+    IOBuffer Decrypt(const IOBuffer& source_buffer) override;
 
 private:
     DecryptorAES(HCRYPTPROV prov, HCRYPTKEY rsa_key);
 
 private:
-    HCRYPTPROV prov_;
+    HCRYPTPROV prov_ = NULL;
 
-    HCRYPTKEY aes_key_;
-    HCRYPTKEY rsa_key_;
+    HCRYPTKEY aes_key_ = NULL;
+    HCRYPTKEY rsa_key_ = NULL;
 
     DISALLOW_COPY_AND_ASSIGN(DecryptorAES);
 };

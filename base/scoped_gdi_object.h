@@ -17,11 +17,7 @@ template<class T, class Traits>
 class ScopedGDIObject
 {
 public:
-    ScopedGDIObject() :
-        object_(nullptr)
-    {
-        // Nothing
-    }
+    ScopedGDIObject() = default;
 
     explicit ScopedGDIObject(T object) :
         object_(object)
@@ -62,7 +58,7 @@ public:
     operator T() { return object_; }
 
 private:
-    T object_;
+    T object_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedGDIObject);
 };

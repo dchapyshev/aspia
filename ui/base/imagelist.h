@@ -20,10 +20,7 @@ namespace aspia {
 class ImageList
 {
 public:
-    ImageList() : list_(nullptr)
-    {
-        // Nothing
-    }
+    ImageList() = default;
 
     ~ImageList()
     {
@@ -69,7 +66,7 @@ private:
             ImageList_Destroy(list_);
     }
 
-    HIMAGELIST list_;
+    HIMAGELIST list_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ImageList);
 };

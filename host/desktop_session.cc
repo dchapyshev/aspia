@@ -20,8 +20,7 @@ std::unique_ptr<DesktopSession> DesktopSession::Create(HostSession::Delegate* de
 }
 
 DesktopSession::DesktopSession(HostSession::Delegate* delegate) :
-    HostSession(delegate),
-    state_(State::Detached)
+    HostSession(delegate)
 {
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
@@ -209,7 +208,7 @@ void DesktopSession::OnPipeChannelDisconnect()
     }
 }
 
-void DesktopSession::OnPipeChannelMessage(const IOBuffer* buffer)
+void DesktopSession::OnPipeChannelMessage(const IOBuffer& buffer)
 {
     delegate_->OnSessionMessage(buffer);
 }
@@ -235,7 +234,7 @@ void DesktopSession::OnSessionAttachTimeout()
     }
 }
 
-void DesktopSession::Send(const IOBuffer* buffer)
+void DesktopSession::Send(const IOBuffer& buffer)
 {
     std::unique_lock<std::mutex> lock(ipc_channel_lock_);
 

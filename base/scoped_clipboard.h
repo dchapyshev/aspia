@@ -15,7 +15,7 @@ namespace aspia {
 class ScopedClipboard
 {
 public:
-    ScopedClipboard();
+    ScopedClipboard() = default;
     ~ScopedClipboard();
 
     bool Init(HWND owner);
@@ -30,7 +30,7 @@ public:
     HANDLE GetData(UINT format);
 
 private:
-    bool opened_;
+    bool opened_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedClipboard);
 };

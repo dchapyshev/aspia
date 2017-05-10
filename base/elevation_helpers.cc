@@ -18,7 +18,7 @@ bool ElevateProcess()
 {
     std::wstring path;
 
-    if (!GetPathW(PathKey::FILE_EXE, &path))
+    if (!GetPathW(PathKey::FILE_EXE, path))
         return false;
 
     SHELLEXECUTEINFOW sei = { 0 };

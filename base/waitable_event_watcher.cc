@@ -15,7 +15,7 @@ WaitableEventWatcher::WaitableEventWatcher() = default;
 
 WaitableEventWatcher::~WaitableEventWatcher()
 {
-    // Nothing
+    StopWatching();
 }
 
 bool WaitableEventWatcher::StartWatching(WaitableEvent* event,

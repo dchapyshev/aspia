@@ -48,7 +48,7 @@ private:
     PixelTranslator translator_;
 
     std::unique_ptr<uint8_t[], AlignedFreeDeleter> translate_buffer_;
-    size_t translate_buffer_size_;
+    size_t translate_buffer_size_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(VideoEncoderZLIB);
 };

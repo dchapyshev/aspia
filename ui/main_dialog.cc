@@ -90,8 +90,6 @@ void MainDialog::OnInitDialog()
     main_menu_.Reset(module().menu(IDR_MAIN));
     SetMenu(hwnd(), main_menu_);
 
-    CenterWindow();
-
     tray_icon_.AddIcon(hwnd(),
                        IDI_MAIN,
                        module().string(IDS_APPLICATION_NAME),
@@ -101,7 +99,6 @@ void MainDialog::OnInitDialog()
     InitAddressesList();
 
     SetDlgItemInt(IDC_SERVER_PORT_EDIT, kDefaultHostTcpPort);
-    SetDlgItemString(IDC_SERVER_ADDRESS_EDIT, L"");
     CheckDlgButton(hwnd(), IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
 
     Edit_SetReadOnly(GetDlgItem(IDC_SERVER_PORT_EDIT), TRUE);
@@ -185,10 +182,10 @@ void MainDialog::OnStartServerButton()
     host_pool_.reset();
 }
 
-static void SetDefaultDesktopSessionConfig(proto::DesktopConfig* config)
+static void SetDefaultDesktopSessionConfig(proto::DesktopSessionConfig* config)
 {
-    config->set_flags(proto::DesktopConfig::ENABLE_CLIPBOARD |
-                     proto::DesktopConfig::ENABLE_CURSOR_SHAPE);
+    config->set_flags(proto::DesktopSessionConfig::ENABLE_CLIPBOARD |
+                     proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE);
 
     config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_ZLIB);
 
@@ -206,7 +203,7 @@ void MainDialog::OnConnectButton()
     config.SetRemotePort(GetDlgItemInt<uint16_t>(IDC_SERVER_PORT_EDIT));
     config.SetSessionType(proto::SessionType::SESSION_DESKTOP_MANAGE);
 
-    SetDefaultDesktopSessionConfig(config.mutable_desktop_config());
+    SetDefaultDesktopSessionConfig(config.mutable_desktop_session_config());
 
     if (!client_pool_)
         client_pool_.reset(new ClientPool(MessageLoopProxy::Current()));

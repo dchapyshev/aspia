@@ -10,19 +10,6 @@
 
 namespace aspia {
 
-PixelFormat::PixelFormat() :
-    bits_per_pixel_(0),
-    bytes_per_pixel_(0),
-    red_max_(0),
-    green_max_(0),
-    blue_max_(0),
-    red_shift_(0),
-    green_shift_(0),
-    blue_shift_(0)
-{
-    // Nothing
-}
-
 PixelFormat::PixelFormat(const PixelFormat& other)
 {
     Set(other);
@@ -184,7 +171,7 @@ uint8_t PixelFormat::BlueShift() const
     return blue_shift_;
 }
 
-bool PixelFormat::IsEmpty() const
+bool PixelFormat::IsValid() const
 {
     if (bits_per_pixel_ == 0 &&
         red_max_        == 0 &&
@@ -194,10 +181,10 @@ bool PixelFormat::IsEmpty() const
         green_shift_    == 0 &&
         blue_shift_     == 0)
     {
-        return true;
+        return false;
     }
 
-    return false;
+    return true;
 }
 
 void PixelFormat::Clear()

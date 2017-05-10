@@ -14,8 +14,7 @@ static Service *_self = nullptr;
 
 // public
 Service::Service(const std::wstring& service_name) :
-    service_name_(service_name),
-    status_handle_(nullptr)
+    service_name_(service_name)
 {
     DCHECK(!_self) << "Another instance of the service has already been created";
 

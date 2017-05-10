@@ -16,24 +16,24 @@ namespace aspia {
 class DesktopRect
 {
 public:
-    DesktopRect();
+    DesktopRect() = default;
     DesktopRect(const DesktopRect& other);
     ~DesktopRect() = default;
 
-    static DesktopRect MakeXYWH(int32_t x, int32_t y, int32_t width, int32_t height);
-    static DesktopRect MakeWH(int32_t width, int32_t height);
-    static DesktopRect MakeLTRB(int32_t l, int32_t t, int32_t r, int32_t b);
+    static DesktopRect MakeXYWH(int x, int y, int width, int height);
+    static DesktopRect MakeWH(int width, int height);
+    static DesktopRect MakeLTRB(int l, int t, int r, int b);
     static DesktopRect MakeSize(const DesktopSize& size);
 
-    int32_t Left() const;
-    int32_t Top() const;
-    int32_t Right() const;
-    int32_t Bottom() const;
+    int Left() const;
+    int Top() const;
+    int Right() const;
+    int Bottom() const;
 
-    int32_t x() const;
-    int32_t y() const;
-    int32_t Width() const;
-    int32_t Height() const;
+    int x() const;
+    int y() const;
+    int Width() const;
+    int Height() const;
 
     DesktopPoint LeftTop() const;
 
@@ -42,9 +42,9 @@ public:
 
     bool IsEqual(const DesktopRect& other) const;
     DesktopSize Size() const;
-    bool Contains(int32_t x, int32_t y) const;
+    bool Contains(int x, int y) const;
     bool ContainsRect(const DesktopRect& other) const;
-    void Translate(int32_t dx, int32_t dy);
+    void Translate(int dx, int dy);
     void IntersectWith(const DesktopRect& other);
 
     //
@@ -54,18 +54,18 @@ public:
     // |left_| and |top_| may be less than zero or larger than |right_| and
     // |bottom_|.
     //
-    void Extend(int32_t left_offset, int32_t top_offset, int32_t right_offset, int32_t bottom_offset);
+    void Extend(int left_offset, int top_offset, int right_offset, int bottom_offset);
 
     DesktopRect& operator=(const DesktopRect& other);
 
 private:
-    DesktopRect(int32_t l, int32_t t, int32_t r, int32_t b);
+    DesktopRect(int l, int t, int r, int b);
 
 private:
-    int32_t left_;
-    int32_t top_;
-    int32_t right_;
-    int32_t bottom_;
+    int32_t left_   = 0;
+    int32_t top_    = 0;
+    int32_t right_  = 0;
+    int32_t bottom_ = 0;
 };
 
 } // namespace aspia

@@ -48,8 +48,7 @@ DecryptorAES* DecryptorAES::Create()
 
 DecryptorAES::DecryptorAES(HCRYPTPROV prov, HCRYPTKEY rsa_key) :
     prov_(prov),
-    rsa_key_(rsa_key),
-    aes_key_(NULL)
+    rsa_key_(rsa_key)
 {
     // Nothing
 }
@@ -75,14 +74,14 @@ DecryptorAES::~DecryptorAES()
     }
 }
 
-std::unique_ptr<IOBuffer> DecryptorAES::GetPublicKey()
+IOBuffer DecryptorAES::GetPublicKey()
 {
     DWORD blob_size = 0;
 
     if (!CryptExportKey(rsa_key_, NULL, PUBLICKEYBLOB, 0, NULL, &blob_size))
     {
         LOG(ERROR) << "CryptExportKey() failed: " << GetLastError();
-        return nullptr;
+        return IOBuffer();
     }
 
     std::unique_ptr<uint8_t[]> blob(new uint8_t[blob_size]);
@@ -90,7 +89,7 @@ std::unique_ptr<IOBuffer> DecryptorAES::GetPublicKey()
     if (!CryptExportKey(rsa_key_, NULL, PUBLICKEYBLOB, 0, blob.get(), &blob_size))
     {
         LOG(ERROR) << "CryptExportKey() failed: " << GetLastError();
-        return nullptr;
+        return IOBuffer();
     }
 
     const size_t key_size = kRSAKeySize / 8;
@@ -98,21 +97,21 @@ std::unique_ptr<IOBuffer> DecryptorAES::GetPublicKey()
     if (sizeof(PUBLICKEYSTRUC) + sizeof(RSAPUBKEY) + key_size != blob_size)
     {
         LOG(ERROR) << "Wrong size of public key: " << blob_size;
-        return nullptr;
+        return IOBuffer();
     }
 
-    std::unique_ptr<IOBuffer> key_buffer(new IOBuffer(key_size));
+    IOBuffer key_buffer(key_size);
 
-    memcpy(key_buffer->Data(),
+    memcpy(key_buffer.Data(),
            blob.get() + sizeof(PUBLICKEYSTRUC) + sizeof(RSAPUBKEY),
            key_size);
 
     return key_buffer;
 }
 
-bool DecryptorAES::SetSessionKey(const IOBuffer* session_key)
+bool DecryptorAES::SetSessionKey(const IOBuffer& session_key)
 {
-    if (!session_key)
+    if (session_key.IsEmpty())
         return false;
 
     // Согласно MSDN блоб сессионного ключа имеет структуру:
@@ -129,12 +128,12 @@ bool DecryptorAES::SetSessionKey(const IOBuffer* session_key)
 
     ALG_ID alg_id = CALG_RSA_KEYX;
 
-    uint32_t blob_size = sizeof(header) + sizeof(alg_id) + session_key->Size();
+    uint32_t blob_size = sizeof(header) + sizeof(alg_id) + session_key.Size();
     std::unique_ptr<uint8_t[]> blob(new uint8_t[blob_size]);
 
     memcpy(blob.get(), &header, sizeof(header));
     memcpy(blob.get() + sizeof(header), &alg_id, sizeof(alg_id));
-    memcpy(blob.get() + sizeof(header) + sizeof(alg_id), session_key->Data(), session_key->Size());
+    memcpy(blob.get() + sizeof(header) + sizeof(alg_id), session_key.Data(), session_key.Size());
 
     if (!CryptImportKey(prov_, blob.get(), blob_size, rsa_key_, 0, &aes_key_))
     {
@@ -157,22 +156,22 @@ bool DecryptorAES::SetSessionKey(const IOBuffer* session_key)
     return true;
 }
 
-std::unique_ptr<IOBuffer> DecryptorAES::Decrypt(const IOBuffer* source_buffer)
+IOBuffer DecryptorAES::Decrypt(const IOBuffer& source_buffer)
 {
-    if (!source_buffer)
-        return nullptr;
+    if (source_buffer.IsEmpty())
+        return IOBuffer();
 
-    DWORD length = source_buffer->Size();
+    DWORD length = source_buffer.Size();
 
-    if (!CryptDecrypt(aes_key_, NULL, TRUE, 0, source_buffer->Data(), &length))
+    if (!CryptDecrypt(aes_key_, NULL, TRUE, 0, source_buffer.Data(), &length))
     {
         DLOG(ERROR) << "CryptDecrypt() failed: " << GetLastError();
-        return nullptr;
+        return IOBuffer();
     }
 
-    std::unique_ptr<IOBuffer> output_buffer(new IOBuffer(length));
+    IOBuffer output_buffer(length);
 
-    memcpy(output_buffer->Data(), source_buffer->Data(), output_buffer->Size());
+    memcpy(output_buffer.Data(), source_buffer.Data(), output_buffer.Size());
 
     return output_buffer;
 }

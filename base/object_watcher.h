@@ -46,13 +46,13 @@ namespace aspia {
 class ObjectWatcher
 {
 public:
-    ObjectWatcher();
+    ObjectWatcher() = default;
     ~ObjectWatcher();
 
     class Delegate
     {
     public:
-        virtual ~Delegate() {}
+        virtual ~Delegate() { }
 
         // Called from the sequence that started the watch when a signaled object is
         // detected. To continue watching the object, StartWatching must be called
@@ -91,9 +91,9 @@ private:
     // Called on a background thread when done waiting.
     static void NTAPI DoneWaiting(PVOID context, BOOLEAN timed_out);
 
-    Delegate* delegate_;
-    HANDLE wait_object_;
-    HANDLE object_;
+    Delegate* delegate_ = nullptr;
+    HANDLE wait_object_ = nullptr;
+    HANDLE object_ = nullptr;
 };
 
 } // namespace aspia

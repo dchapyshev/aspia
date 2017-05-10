@@ -57,7 +57,7 @@ private:
 
     ScopedHBRUSH background_brush_;
 
-    DesktopSize client_size_; // // Размер клиентской области окна.
+    DesktopSize client_size_; // The size of the client area of the window.
     DesktopPoint center_offset_;
     DesktopPoint scroll_pos_;
 
@@ -67,10 +67,10 @@ private:
     std::unique_ptr<DesktopFrameDIB> frame_;
 
     DesktopPoint prev_pos_;
-    uint8_t prev_mask_;
+    uint8_t prev_mask_ = 0;
 
-    bool has_mouse_; // Находится ли курсор над окном.
-    bool has_focus_; // Находится ли окно в фокусе.
+    bool has_mouse_ = false; // Is the cursor over the window?
+    bool has_focus_ = false; // Is the window in focus?
 
     WindowTimer scroll_timer_;
     DesktopPoint scroll_delta_;

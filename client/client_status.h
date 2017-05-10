@@ -1,17 +1,19 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            client/status.h
+// FILE:            client/client_status.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_CLIENT__STATUS_H
-#define _ASPIA_CLIENT__STATUS_H
+#ifndef _ASPIA_CLIENT__CLIENT_STATUS_H
+#define _ASPIA_CLIENT__CLIENT_STATUS_H
 
 namespace aspia {
 
 enum class ClientStatus
 {
+    INVALID_HOSTNAME,
+    INVALID_PORT,
     DISCONNECTED,
     CONNECTING,
     CONNECTED,
@@ -24,4 +26,4 @@ enum class ClientStatus
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__STATUS_H
+#endif // _ASPIA_CLIENT__CLIENT_STATUS_H

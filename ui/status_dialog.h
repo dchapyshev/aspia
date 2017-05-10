@@ -9,7 +9,7 @@
 #define _ASPIA_UI__STATUS_DIALOG_H
 
 #include "base/scoped_gdi_object.h"
-#include "client/status.h"
+#include "client/client_status.h"
 #include "ui/base/modal_dialog.h"
 
 namespace aspia {
@@ -38,7 +38,7 @@ private:
     void OnCancelButton();
     void AddMessage(UINT resource_id);
 
-    Delegate* delegate_;
+    Delegate* delegate_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(StatusDialog);
 };

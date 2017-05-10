@@ -18,9 +18,9 @@ class SettingsDialog : public ModalDialog
 public:
     SettingsDialog() = default;
 
-    INT_PTR DoModal(HWND parent, const proto::DesktopConfig& config);
+    INT_PTR DoModal(HWND parent, const proto::DesktopSessionConfig& config);
 
-    const proto::DesktopConfig& GetConfig() const { return config_; }
+    const proto::DesktopSessionConfig& Config() const { return config_; }
 
 private:
     INT_PTR DoModal(HWND parent) override;
@@ -40,7 +40,7 @@ private:
     void AddColorDepth(HWND combobox, int index, UINT string_id);
     void OnCodecChanged();
 
-    proto::DesktopConfig config_;
+    proto::DesktopSessionConfig config_;
 
     DISALLOW_COPY_AND_ASSIGN(SettingsDialog);
 };

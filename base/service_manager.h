@@ -19,7 +19,7 @@ namespace aspia {
 class ServiceManager
 {
 public:
-    ServiceManager();
+    ServiceManager() = default;
     explicit ServiceManager(const std::wstring& service_short_name);
     ServiceManager(ServiceManager&& other);
     ~ServiceManager();

@@ -18,7 +18,7 @@ namespace aspia {
 class CursorDecoder
 {
 public:
-    CursorDecoder();
+    CursorDecoder() = default;
     ~CursorDecoder() = default;
 
     std::shared_ptr<MouseCursor> Decode(const proto::CursorShape& cursor_shape);

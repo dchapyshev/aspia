@@ -18,7 +18,7 @@ namespace aspia {
 class DesktopFrameDIB : public DesktopFrame
 {
 public:
-    ~DesktopFrameDIB();
+    ~DesktopFrameDIB() = default;
 
     static std::unique_ptr<DesktopFrameDIB> Create(const DesktopSize& size,
                                                    const PixelFormat& format,

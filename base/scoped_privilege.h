@@ -18,10 +18,7 @@ namespace aspia {
 class ScopedProcessPrivilege
 {
 public:
-    ScopedProcessPrivilege()
-    {
-        // Nothing
-    }
+    ScopedProcessPrivilege() = default;
 
     ~ScopedProcessPrivilege()
     {

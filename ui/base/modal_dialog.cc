@@ -10,13 +10,6 @@
 
 namespace aspia {
 
-ModalDialog::ModalDialog() :
-    end_dialog_(false),
-    result_(0)
-{
-    // Nothing
-}
-
 INT_PTR ModalDialog::Run(const Module& module, HWND parent, UINT resource_id)
 {
     module_ = module;
@@ -124,7 +117,7 @@ std::wstring ModalDialog::GetDlgItemString(int item_id)
     {
         // Returns the length without null-character.
         int length = GetWindowTextLengthW(hwnd);
-        if (length)
+        if (length > 0)
         {
             std::wstring string;
             string.resize(length);

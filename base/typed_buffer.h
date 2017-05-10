@@ -24,15 +24,12 @@ template <typename T>
 class TypedBuffer
 {
 public:
-    TypedBuffer() : TypedBuffer(0)
-    {
-        // Nothing
-    }
+    TypedBuffer() : TypedBuffer(0) { }
 
     // Creates an instance of the object allocating a buffer of the given size.
-    explicit TypedBuffer(uint32_t length) : buffer_(nullptr), length_(length)
+    explicit TypedBuffer(size_t length) : length_(length)
     {
-        if (length_ > 0)
+        if (length_ != 0)
             buffer_ = reinterpret_cast<T*>(new uint8_t[length_]);
     }
 
@@ -73,7 +70,7 @@ public:
         return buffer_;
     }
 
-    uint32_t length() const
+    size_t length() const
     {
         return length_;
     }
@@ -102,10 +99,10 @@ public:
 
 private:
     // Points to the owned buffer.
-    T* buffer_;
+    T* buffer_ = nullptr;
 
     // Length of the owned buffer in bytes.
-    uint32_t length_;
+    size_t length_;
 
     DISALLOW_COPY_AND_ASSIGN(TypedBuffer);
 };

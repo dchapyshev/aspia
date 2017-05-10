@@ -11,15 +11,6 @@
 
 namespace aspia {
 
-DesktopRect::DesktopRect() :
-    left_(0),
-    top_(0),
-    right_(0),
-    bottom_(0)
-{
-    // Nothing
-}
-
 DesktopRect::DesktopRect(const DesktopRect& other) :
     left_(other.left_),
     top_(other.top_),
@@ -29,7 +20,7 @@ DesktopRect::DesktopRect(const DesktopRect& other) :
     // Nothing
 }
 
-DesktopRect::DesktopRect(int32_t l, int32_t t, int32_t r, int32_t b) :
+DesktopRect::DesktopRect(int l, int t, int r, int b) :
     left_(l),
     top_(t),
     right_(r),
@@ -39,19 +30,19 @@ DesktopRect::DesktopRect(int32_t l, int32_t t, int32_t r, int32_t b) :
 }
 
 // static
-DesktopRect DesktopRect::MakeXYWH(int32_t x, int32_t y, int32_t width, int32_t height)
+DesktopRect DesktopRect::MakeXYWH(int x, int y, int width, int height)
 {
     return DesktopRect(x, y, x + width, y + height);
 }
 
 // static
-DesktopRect DesktopRect::MakeWH(int32_t width, int32_t height)
+DesktopRect DesktopRect::MakeWH(int width, int height)
 {
     return DesktopRect(0, 0, width, height);
 }
 
 // static
-DesktopRect DesktopRect::MakeLTRB(int32_t l, int32_t t, int32_t r, int32_t b)
+DesktopRect DesktopRect::MakeLTRB(int l, int t, int r, int b)
 {
     return DesktopRect(l, t, r, b);
 }
@@ -62,42 +53,42 @@ DesktopRect DesktopRect::MakeSize(const DesktopSize& size)
     return DesktopRect(0, 0, size.Width(), size.Height());
 }
 
-int32_t DesktopRect::Left() const
+int DesktopRect::Left() const
 {
     return left_;
 }
 
-int32_t DesktopRect::Top() const
+int DesktopRect::Top() const
 {
     return top_;
 }
 
-int32_t DesktopRect::Right() const
+int DesktopRect::Right() const
 {
     return right_;
 }
 
-int32_t DesktopRect::Bottom() const
+int DesktopRect::Bottom() const
 {
     return bottom_;
 }
 
-int32_t DesktopRect::x() const
+int DesktopRect::x() const
 {
     return left_;
 }
 
-int32_t DesktopRect::y() const
+int DesktopRect::y() const
 {
     return top_;
 }
 
-int32_t DesktopRect::Width() const
+int DesktopRect::Width() const
 {
     return right_ - left_;
 }
 
-int32_t DesktopRect::Height() const
+int DesktopRect::Height() const
 {
     return bottom_ - top_;
 }
@@ -130,7 +121,7 @@ DesktopSize DesktopRect::Size() const
     return DesktopSize(Width(), Height());
 }
 
-bool DesktopRect::Contains(int32_t x, int32_t y) const
+bool DesktopRect::Contains(int x, int y) const
 {
     return (x >= left_ && x < right_ && y >= top_ && y < bottom_);
 }
@@ -141,7 +132,7 @@ bool DesktopRect::ContainsRect(const DesktopRect& other) const
             other.top_  >= top_  && other.bottom_ <= bottom_);
 }
 
-void DesktopRect::Translate(int32_t dx, int32_t dy)
+void DesktopRect::Translate(int dx, int dy)
 {
     left_   += dx;
     right_  += dx;
@@ -165,10 +156,10 @@ void DesktopRect::IntersectWith(const DesktopRect& other)
     }
 }
 
-void DesktopRect::Extend(int32_t left_offset,
-                         int32_t top_offset,
-                         int32_t right_offset,
-                         int32_t bottom_offset)
+void DesktopRect::Extend(int left_offset,
+                         int top_offset,
+                         int right_offset,
+                         int bottom_offset)
 {
     left_   -= left_offset;
     top_    -= top_offset;

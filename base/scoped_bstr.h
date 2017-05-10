@@ -19,7 +19,7 @@ namespace aspia {
 class ScopedBstr
 {
 public:
-    ScopedBstr() : bstr_(nullptr) {}
+    ScopedBstr() = default;
 
     // Constructor to create a new BSTR.
     //
@@ -81,7 +81,7 @@ public:
     }
 
 protected:
-    BSTR bstr_;
+    BSTR bstr_ = nullptr;
 
 private:
     // Forbid comparison of ScopedBstr types.  You should never have the same

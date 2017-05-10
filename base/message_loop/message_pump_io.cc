@@ -16,11 +16,6 @@ MessagePumpForIO::MessagePumpForIO()
     DCHECK(port_.IsValid());
 }
 
-MessagePumpForIO::~MessagePumpForIO()
-{
-    // Nothing
-}
-
 void MessagePumpForIO::DoRunLoop()
 {
     for (;;)

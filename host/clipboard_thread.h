@@ -16,7 +16,7 @@ namespace aspia {
 class ClipboardThread : private MessageLoopThread::Delegate
 {
 public:
-    ClipboardThread();
+    ClipboardThread() = default;
     ~ClipboardThread();
 
     void Start(Clipboard::ClipboardEventCallback event_callback);

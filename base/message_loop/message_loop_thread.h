@@ -20,7 +20,7 @@ namespace aspia {
 class MessageLoopThread
 {
 public:
-    MessageLoopThread();
+    MessageLoopThread() = default;
     ~MessageLoopThread();
 
     class Delegate
@@ -59,20 +59,20 @@ public:
 private:
     void ThreadMain(MessageLoop::Type message_loop_type);
 
-    Delegate* delegate_;
+    Delegate* delegate_ = nullptr;
 
     enum class State { Starting, Started, Stopping, Stopped };
 
-    std::atomic<State> state_;
+    std::atomic<State> state_ = State::Stopped;
 
     std::thread thread_;
 
     // True while inside of Run().
-    bool running_;
+    bool running_ = false;
     std::mutex running_lock_;
     std::condition_variable running_event_;
 
-    MessageLoop* message_loop_;
+    MessageLoop* message_loop_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(MessageLoopThread);
 };

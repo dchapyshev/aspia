@@ -22,19 +22,19 @@ public:
 
     static EncryptorAES* Create();
 
-    std::unique_ptr<IOBuffer> GetSessionKey();
-    bool SetPublicKey(const IOBuffer* public_key);
+    IOBuffer GetSessionKey();
+    bool SetPublicKey(const IOBuffer& public_key);
 
-    std::unique_ptr<IOBuffer> Encrypt(const IOBuffer* source_buffer) override;
+    IOBuffer Encrypt(const IOBuffer& source_buffer) override;
 
 private:
     EncryptorAES(HCRYPTPROV prov, HCRYPTKEY aes_key, DWORD block_size);
 
 private:
-    HCRYPTPROV prov_;
+    HCRYPTPROV prov_ = NULL;
 
-    HCRYPTKEY aes_key_;
-    HCRYPTKEY rsa_key_;
+    HCRYPTKEY aes_key_ = NULL;
+    HCRYPTKEY rsa_key_ = NULL;
 
     DWORD block_size_;
 

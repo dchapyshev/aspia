@@ -11,11 +11,46 @@
 namespace aspia {
 
 static const std::chrono::milliseconds kConnectTimeout{ 10000 };
+static const size_t kMaximumHostNameLength = 64;
 
-NetworkClientTcp::NetworkClientTcp() :
-    delegate_(nullptr)
+static bool IsValidHostNameChar(wchar_t c)
 {
-    // Nothing
+    if (isalnum(c) != 0)
+        return true;
+
+    if (c == '.' || c == ' ' || c == '_' || c == '-')
+        return true;
+
+    return false;
+}
+
+// static
+bool NetworkClientTcp::IsValidHostName(const std::wstring& hostname)
+{
+    if (hostname.empty())
+        return false;
+
+    size_t length = hostname.length();
+
+    if (length > kMaximumHostNameLength)
+        return false;
+
+    for (size_t i = 0; i < length; ++i)
+    {
+        if (!IsValidHostNameChar(hostname[i]))
+            return false;
+    }
+
+    return true;
+}
+
+// static
+bool NetworkClientTcp::IsValidPort(uint16_t port)
+{
+    if (port == 0 || port >= 65535)
+        return false;
+
+    return true;
 }
 
 NetworkClientTcp::~NetworkClientTcp()
@@ -26,6 +61,9 @@ NetworkClientTcp::~NetworkClientTcp()
 
 bool NetworkClientTcp::Connect(const std::wstring& address, uint16_t port, Delegate* delegate)
 {
+    if (!IsValidHostName(address) || !IsValidPort(port))
+        return false;
+
     delegate_ = delegate;
 
     runner_ = MessageLoopProxy::Current();

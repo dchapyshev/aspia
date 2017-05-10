@@ -61,8 +61,8 @@ void TableStruct::InitDefaultsImpl() {
       ::aspia::proto::CursorShape::internal_default_instance());
   _HostToClient_default_instance_.get_mutable()->clipboard_event_ = const_cast< ::aspia::proto::ClipboardEvent*>(
       ::aspia::proto::ClipboardEvent::internal_default_instance());
-  _HostToClient_default_instance_.get_mutable()->config_request_ = const_cast< ::aspia::proto::DesktopConfigRequest*>(
-      ::aspia::proto::DesktopConfigRequest::internal_default_instance());
+  _HostToClient_default_instance_.get_mutable()->config_request_ = const_cast< ::aspia::proto::DesktopSessionConfigRequest*>(
+      ::aspia::proto::DesktopSessionConfigRequest::internal_default_instance());
   _ClientToHost_default_instance_.get_mutable()->pointer_event_ = const_cast< ::aspia::proto::PointerEvent*>(
       ::aspia::proto::PointerEvent::internal_default_instance());
   _ClientToHost_default_instance_.get_mutable()->key_event_ = const_cast< ::aspia::proto::KeyEvent*>(
@@ -71,8 +71,8 @@ void TableStruct::InitDefaultsImpl() {
       ::aspia::proto::ClipboardEvent::internal_default_instance());
   _ClientToHost_default_instance_.get_mutable()->power_event_ = const_cast< ::aspia::proto::PowerEvent*>(
       ::aspia::proto::PowerEvent::internal_default_instance());
-  _ClientToHost_default_instance_.get_mutable()->config_ = const_cast< ::aspia::proto::DesktopConfig*>(
-      ::aspia::proto::DesktopConfig::internal_default_instance());
+  _ClientToHost_default_instance_.get_mutable()->config_ = const_cast< ::aspia::proto::DesktopSessionConfig*>(
+      ::aspia::proto::DesktopSessionConfig::internal_default_instance());
 }
 
 void InitDefaults() {
@@ -146,7 +146,7 @@ HostToClient::HostToClient(const HostToClient& from)
     clipboard_event_ = NULL;
   }
   if (from.has_config_request()) {
-    config_request_ = new ::aspia::proto::DesktopConfigRequest(*from.config_request_);
+    config_request_ = new ::aspia::proto::DesktopSessionConfigRequest(*from.config_request_);
   } else {
     config_request_ = NULL;
   }
@@ -282,7 +282,7 @@ bool HostToClient::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.DesktopConfigRequest config_request = 5;
+      // .aspia.proto.DesktopSessionConfigRequest config_request = 5;
       case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(42u)) {
@@ -345,7 +345,7 @@ void HostToClient::SerializeWithCachedSizes(
       4, *this->clipboard_event_, output);
   }
 
-  // .aspia.proto.DesktopConfigRequest config_request = 5;
+  // .aspia.proto.DesktopSessionConfigRequest config_request = 5;
   if (this->has_config_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       5, *this->config_request_, output);
@@ -386,7 +386,7 @@ size_t HostToClient::ByteSizeLong() const {
         *this->clipboard_event_);
   }
 
-  // .aspia.proto.DesktopConfigRequest config_request = 5;
+  // .aspia.proto.DesktopSessionConfigRequest config_request = 5;
   if (this->has_config_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -425,7 +425,7 @@ void HostToClient::MergeFrom(const HostToClient& from) {
     mutable_clipboard_event()->::aspia::proto::ClipboardEvent::MergeFrom(from.clipboard_event());
   }
   if (from.has_config_request()) {
-    mutable_config_request()->::aspia::proto::DesktopConfigRequest::MergeFrom(from.config_request());
+    mutable_config_request()->::aspia::proto::DesktopSessionConfigRequest::MergeFrom(from.config_request());
   }
 }
 
@@ -616,7 +616,7 @@ void HostToClient::set_allocated_clipboard_event(::aspia::proto::ClipboardEvent*
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.clipboard_event)
 }
 
-// .aspia.proto.DesktopConfigRequest config_request = 5;
+// .aspia.proto.DesktopSessionConfigRequest config_request = 5;
 bool HostToClient::has_config_request() const {
   return this != internal_default_instance() && config_request_ != NULL;
 }
@@ -624,27 +624,27 @@ void HostToClient::clear_config_request() {
   if (GetArenaNoVirtual() == NULL && config_request_ != NULL) delete config_request_;
   config_request_ = NULL;
 }
-const ::aspia::proto::DesktopConfigRequest& HostToClient::config_request() const {
+const ::aspia::proto::DesktopSessionConfigRequest& HostToClient::config_request() const {
   // @@protoc_insertion_point(field_get:aspia.proto.desktop.HostToClient.config_request)
   return config_request_ != NULL ? *config_request_
-                         : *::aspia::proto::DesktopConfigRequest::internal_default_instance();
+                         : *::aspia::proto::DesktopSessionConfigRequest::internal_default_instance();
 }
-::aspia::proto::DesktopConfigRequest* HostToClient::mutable_config_request() {
+::aspia::proto::DesktopSessionConfigRequest* HostToClient::mutable_config_request() {
   
   if (config_request_ == NULL) {
-    config_request_ = new ::aspia::proto::DesktopConfigRequest;
+    config_request_ = new ::aspia::proto::DesktopSessionConfigRequest;
   }
   // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.HostToClient.config_request)
   return config_request_;
 }
-::aspia::proto::DesktopConfigRequest* HostToClient::release_config_request() {
+::aspia::proto::DesktopSessionConfigRequest* HostToClient::release_config_request() {
   // @@protoc_insertion_point(field_release:aspia.proto.desktop.HostToClient.config_request)
   
-  ::aspia::proto::DesktopConfigRequest* temp = config_request_;
+  ::aspia::proto::DesktopSessionConfigRequest* temp = config_request_;
   config_request_ = NULL;
   return temp;
 }
-void HostToClient::set_allocated_config_request(::aspia::proto::DesktopConfigRequest* config_request) {
+void HostToClient::set_allocated_config_request(::aspia::proto::DesktopSessionConfigRequest* config_request) {
   delete config_request_;
   config_request_ = config_request;
   if (config_request) {
@@ -701,7 +701,7 @@ ClientToHost::ClientToHost(const ClientToHost& from)
     power_event_ = NULL;
   }
   if (from.has_config()) {
-    config_ = new ::aspia::proto::DesktopConfig(*from.config_);
+    config_ = new ::aspia::proto::DesktopSessionConfig(*from.config_);
   } else {
     config_ = NULL;
   }
@@ -837,7 +837,7 @@ bool ClientToHost::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.DesktopConfig config = 5;
+      // .aspia.proto.DesktopSessionConfig config = 5;
       case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(42u)) {
@@ -900,7 +900,7 @@ void ClientToHost::SerializeWithCachedSizes(
       4, *this->power_event_, output);
   }
 
-  // .aspia.proto.DesktopConfig config = 5;
+  // .aspia.proto.DesktopSessionConfig config = 5;
   if (this->has_config()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       5, *this->config_, output);
@@ -941,7 +941,7 @@ size_t ClientToHost::ByteSizeLong() const {
         *this->power_event_);
   }
 
-  // .aspia.proto.DesktopConfig config = 5;
+  // .aspia.proto.DesktopSessionConfig config = 5;
   if (this->has_config()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -980,7 +980,7 @@ void ClientToHost::MergeFrom(const ClientToHost& from) {
     mutable_power_event()->::aspia::proto::PowerEvent::MergeFrom(from.power_event());
   }
   if (from.has_config()) {
-    mutable_config()->::aspia::proto::DesktopConfig::MergeFrom(from.config());
+    mutable_config()->::aspia::proto::DesktopSessionConfig::MergeFrom(from.config());
   }
 }
 
@@ -1171,7 +1171,7 @@ void ClientToHost::set_allocated_power_event(::aspia::proto::PowerEvent* power_e
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.power_event)
 }
 
-// .aspia.proto.DesktopConfig config = 5;
+// .aspia.proto.DesktopSessionConfig config = 5;
 bool ClientToHost::has_config() const {
   return this != internal_default_instance() && config_ != NULL;
 }
@@ -1179,27 +1179,27 @@ void ClientToHost::clear_config() {
   if (GetArenaNoVirtual() == NULL && config_ != NULL) delete config_;
   config_ = NULL;
 }
-const ::aspia::proto::DesktopConfig& ClientToHost::config() const {
+const ::aspia::proto::DesktopSessionConfig& ClientToHost::config() const {
   // @@protoc_insertion_point(field_get:aspia.proto.desktop.ClientToHost.config)
   return config_ != NULL ? *config_
-                         : *::aspia::proto::DesktopConfig::internal_default_instance();
+                         : *::aspia::proto::DesktopSessionConfig::internal_default_instance();
 }
-::aspia::proto::DesktopConfig* ClientToHost::mutable_config() {
+::aspia::proto::DesktopSessionConfig* ClientToHost::mutable_config() {
   
   if (config_ == NULL) {
-    config_ = new ::aspia::proto::DesktopConfig;
+    config_ = new ::aspia::proto::DesktopSessionConfig;
   }
   // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.ClientToHost.config)
   return config_;
 }
-::aspia::proto::DesktopConfig* ClientToHost::release_config() {
+::aspia::proto::DesktopSessionConfig* ClientToHost::release_config() {
   // @@protoc_insertion_point(field_release:aspia.proto.desktop.ClientToHost.config)
   
-  ::aspia::proto::DesktopConfig* temp = config_;
+  ::aspia::proto::DesktopSessionConfig* temp = config_;
   config_ = NULL;
   return temp;
 }
-void ClientToHost::set_allocated_config(::aspia::proto::DesktopConfig* config) {
+void ClientToHost::set_allocated_config(::aspia::proto::DesktopSessionConfig* config) {
   delete config_;
   config_ = config;
   if (config) {

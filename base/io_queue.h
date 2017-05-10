@@ -23,19 +23,19 @@ namespace aspia {
 class IOQueue : private Thread
 {
 public:
-    using ProcessMessageCallback = std::function<void(const IOBuffer* buffer)>;
+    using ProcessMessageCallback = std::function<void(const IOBuffer& buffer)>;
 
     explicit IOQueue(ProcessMessageCallback process_message_callback);
     ~IOQueue();
 
-    bool Add(std::unique_ptr<IOBuffer> buffer);
+    void Add(IOBuffer buffer);
 
 private:
     void Run() override;
 
     ProcessMessageCallback process_message_callback_;
 
-    std::queue<std::unique_ptr<IOBuffer>> queue_;
+    std::queue<IOBuffer> queue_;
     std::mutex queue_lock_;
 
     std::condition_variable event_;

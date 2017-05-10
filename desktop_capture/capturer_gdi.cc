@@ -15,8 +15,7 @@
 
 namespace aspia {
 
-CapturerGDI::CapturerGDI() :
-    curr_frame_id_(0)
+CapturerGDI::CapturerGDI()
 {
     memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
 }

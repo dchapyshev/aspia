@@ -15,7 +15,7 @@ namespace aspia {
 class ScopedImpersonator
 {
 public:
-    ScopedImpersonator();
+    ScopedImpersonator() = default;
     ~ScopedImpersonator();
 
     bool ImpersonateLoggedOnUser(HANDLE user_token);
@@ -23,7 +23,7 @@ public:
     bool ImpersonateNamedPipeClient(HANDLE named_pipe);
 
 private:
-    bool impersonated_;
+    bool impersonated_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedImpersonator);
 };

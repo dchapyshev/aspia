@@ -30,16 +30,18 @@ public:
     void Connect(HWND parent, const ClientConfig& config);
 
 private:
-    // StatusDialog implementation.
+    // StatusDialog::Delegate implementation.
     void OnStatusDialogOpen() override;
 
-    // NetworkClientTcp implementation.
+    // NetworkClientTcp::Delegate implementation.
     void OnConnectionSuccess(std::unique_ptr<NetworkChannel> channel) override;
     void OnConnectionTimeout() override;
     void OnConnectionError() override;
 
-    // ClientSession implementation.
+    // Client::Delegate implementation.
     void OnSessionTerminate() override;
+
+    bool terminating_ = false;
 
     ClientConfig config_;
     std::unique_ptr<StatusDialog> status_dialog_;

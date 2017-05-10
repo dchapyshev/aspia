@@ -6,7 +6,6 @@
 //
 
 #include "base/scoped_bstr.h"
-
 #include "base/logging.h"
 
 namespace aspia {

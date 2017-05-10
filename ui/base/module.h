@@ -15,9 +15,9 @@ namespace aspia {
 class Module
 {
 public:
-    Module();
+    Module() = default;
     Module(const Module& other);
-    ~Module();
+    ~Module() = default;
 
     static Module Current();
 
@@ -32,7 +32,7 @@ public:
 private:
     explicit Module(HINSTANCE instance);
 
-    HINSTANCE instance_;
+    HINSTANCE instance_ = nullptr;
 };
 
 } // namespace aspia

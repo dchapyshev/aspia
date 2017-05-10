@@ -23,8 +23,8 @@ enum class PathKey
     FILE_EXE
 };
 
-bool GetPathW(PathKey key, std::wstring* result);
-bool GetPath(PathKey key, std::string* result);
+bool GetPathW(PathKey key, std::wstring& result);
+bool GetPath(PathKey key, std::string& result);
 
 } // namespace aspia
 

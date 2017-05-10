@@ -9,10 +9,7 @@
 
 namespace aspia {
 
-WindowTimer::WindowTimer(UINT_PTR id) :
-    window_(nullptr),
-    id_(id),
-    active_(false)
+WindowTimer::WindowTimer(UINT_PTR id) : id_(id)
 {
     // Nothing
 }

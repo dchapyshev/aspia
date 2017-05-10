@@ -17,13 +17,6 @@ namespace aspia {
 
 static std::atomic_uint32_t _last_service_id = 0;
 
-ServiceManager::ServiceManager() :
-    sc_manager_(nullptr),
-    service_(nullptr)
-{
-    // Nothing
-}
-
 ServiceManager::ServiceManager(const std::wstring& service_short_name) :
     sc_manager_(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS))
 {

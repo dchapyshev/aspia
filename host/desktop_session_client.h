@@ -23,19 +23,19 @@ class DesktopSessionClient :
     private ScreenUpdater::Delegate
 {
 public:
-    DesktopSessionClient();
+    DesktopSessionClient() = default;
     ~DesktopSessionClient() = default;
 
     void Run(const std::wstring& input_channel_name,
              const std::wstring& output_channel_name);
 
 private:
-    // Pipe channel implementation.
+    // PipeChannel::Delegate implementation.
     void OnPipeChannelConnect(ProcessId peer_pid) override;
     void OnPipeChannelDisconnect() override;
-    void OnPipeChannelMessage(const IOBuffer* buffer) override;
+    void OnPipeChannelMessage(const IOBuffer& buffer) override;
 
-    // Screen updater implementation.
+    // ScreenUpdater::Delegate implementation.
     void OnScreenUpdate(const DesktopFrame* screen_frame) override;
     void OnCursorUpdate(std::unique_ptr<MouseCursor> mouse_cursor) override;
     void OnScreenUpdateError() override;
@@ -46,7 +46,7 @@ private:
     void ReadKeyEvent(const proto::KeyEvent& event);
     void ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);
     void ReadPowerEvent(const proto::PowerEvent& event);
-    bool ReadConfig(const proto::DesktopConfig& config);
+    bool ReadConfig(const proto::DesktopSessionConfig& config);
 
     void SendClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event);
     void SendConfigRequest();

@@ -20,7 +20,7 @@ namespace aspia {
 class Thread
 {
 public:
-    Thread();
+    Thread() = default;
     virtual ~Thread() = default;
 
     // Starts the thread and waits for its real start
@@ -52,10 +52,10 @@ private:
 
     enum class State { Starting, Started, Stopping, Stopped };
 
-    std::atomic<State> state_;
+    std::atomic<State> state_ = State::Stopped;
 
     // True while inside of Run().
-    bool running_;
+    bool running_ = false;
     std::mutex running_lock_;
     std::condition_variable running_event_;
 

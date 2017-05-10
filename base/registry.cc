@@ -35,23 +35,13 @@ WCHAR* WriteInto(std::wstring* str, size_t length_with_null)
     return &((*str)[0]);
 }
 
-RegistryKey::RegistryKey() :
-    key_(nullptr),
-    wow64access_(0)
-{
-    // Nothing
-}
-
 RegistryKey::RegistryKey(HKEY key) :
-    key_(key),
-    wow64access_(0)
+    key_(key)
 {
     // Nothing
 }
 
-RegistryKey::RegistryKey(HKEY rootkey, const WCHAR *subkey, REGSAM access) :
-    key_(nullptr),
-    wow64access_(0)
+RegistryKey::RegistryKey(HKEY rootkey, const WCHAR *subkey, REGSAM access)
 {
     if (rootkey)
     {

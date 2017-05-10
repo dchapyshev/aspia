@@ -60,12 +60,10 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring* input_chann
         return nullptr;
     }
 
-    //
     // Create a security descriptor that gives full access to the caller and
     // BUILTIN_ADMINISTRATORS and denies access by anyone else.
     // Local admins need access because the privileged host process will run
     // as a local admin which may not be the same user as the current user.
-    //
     std::wstring security_descriptor =
         StringPrintfW(L"O:%sG:%sD:(A;;GA;;;%s)(A;;GA;;;BA)",
                       user_sid.c_str(),
@@ -121,12 +119,11 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring* input_chann
         return nullptr;
     }
 
-    //
-    // ћы возвращаем ID каналов, к которым будет подключатьс€ клиент, а по отношению
-    // к клиенту исход€щий канал сервера будет вход€щим, а вход€щий канал сервера - исход€щим.
-    //
-    *input_channel_id = server_output_channel_id;
-    *output_channel_id = server_input_channel_id;
+    // We return the ID of the channels to which the client will be connected,
+    // and in relation to the client, the outgoing server channel will be incoming,
+    // and the incoming server channel will be outgoing.
+    *input_channel_id = std::move(server_output_channel_id);
+    *output_channel_id = std::move(server_input_channel_id);
 
     return std::unique_ptr<PipeChannel>(new PipeChannel(read_pipe.Release(),
                                                         write_pipe.Release(),
@@ -174,8 +171,6 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateClient(const std::wstring& input
 PipeChannel::PipeChannel(HANDLE read_pipe, HANDLE write_pipe, Mode mode) :
     read_pipe_(read_pipe),
     write_pipe_(write_pipe),
-    delegate_(nullptr),
-    peer_pid_(0),
     mode_(mode),
     read_event_(WaitableEvent::ResetPolicy::Automatic,
                 WaitableEvent::InitialState::NotSignaled),
@@ -290,19 +285,16 @@ bool PipeChannel::Write(const void* buffer, size_t buffer_size)
     return written_bytes == buffer_size;
 }
 
-void PipeChannel::Send(const IOBuffer* buffer)
+void PipeChannel::Send(const IOBuffer& buffer)
 {
-    if (buffer)
+    if (!buffer.IsEmpty())
     {
-        uint32_t message_size = buffer->Size();
+        uint32_t message_size = buffer.Size();
 
-        if (message_size)
+        if (Write(&message_size, sizeof(message_size)))
         {
-            if (Write(&message_size, sizeof(message_size)))
-            {
-                if (Write(buffer->Data(), buffer->Size()))
-                    return;
-            }
+            if (Write(buffer.Data(), buffer.Size()))
+                return;
         }
     }
 
@@ -320,10 +312,8 @@ static bool ConnectToClientPipe(HANDLE pipe_handle)
 
     if (ConnectNamedPipe(pipe_handle, &overlapped))
     {
-        //
         // API documentation says that this function should never return success
         // when used in overlapped mode.
-        //
         LOG(ERROR) << "ConnectNamedPipe() failed: " << GetLastError();
         return false;
     }
@@ -433,11 +423,11 @@ void PipeChannel::Run()
         {
             if (message_size)
             {
-                std::unique_ptr<IOBuffer> buffer(new IOBuffer(message_size));
+                IOBuffer buffer(message_size);
 
-                if (Read(buffer->Data(), buffer->Size()))
+                if (Read(buffer.Data(), buffer.Size()))
                 {
-                    delegate_->OnPipeChannelMessage(buffer.get());
+                    delegate_->OnPipeChannelMessage(buffer);
                     continue;
                 }
             }

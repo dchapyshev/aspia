@@ -21,11 +21,6 @@ DesktopFrameDIB::DesktopFrameDIB(const DesktopSize& size,
     // Nothing
 }
 
-DesktopFrameDIB::~DesktopFrameDIB()
-{
-    // Nothing
-}
-
 // static
 std::unique_ptr<DesktopFrameDIB> DesktopFrameDIB::Create(const DesktopSize& size,
                                                          const PixelFormat& format,

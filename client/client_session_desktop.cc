@@ -16,8 +16,7 @@ namespace aspia {
 
 ClientSessionDesktop::ClientSessionDesktop(const ClientConfig& config,
                                            ClientSession::Delegate* delegate) :
-    ClientSession(config, delegate),
-    video_encoding_(proto::VIDEO_ENCODING_UNKNOWN)
+    ClientSession(config, delegate)
 {
     viewer_.reset(new ViewerWindow(config, this));
 }
@@ -66,7 +65,7 @@ bool ClientSessionDesktop::ReadVideoPacket(const proto::VideoPacket& video_packe
             pixel_format = PixelFormat::ARGB();
         }
 
-        if (pixel_format.IsEmpty())
+        if (!pixel_format.IsValid())
         {
             LOG(ERROR) << "Wrong pixel format";
             return false;
@@ -103,42 +102,41 @@ void ClientSessionDesktop::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEv
     viewer_->InjectClipboardEvent(clipboard_event);
 }
 
-void ClientSessionDesktop::ReadConfigRequest(const proto::DesktopConfigRequest& config_request)
+void ClientSessionDesktop::ReadConfigRequest(const proto::DesktopSessionConfigRequest& config_request)
 {
-    OnConfigChange(config_.desktop_config());
+    OnConfigChange(config_.desktop_session_config());
 }
 
-void ClientSessionDesktop::Send(const IOBuffer* buffer)
+void ClientSessionDesktop::Send(const IOBuffer& buffer)
 {
-    std::unique_ptr<proto::desktop::HostToClient> message =
-        ParseMessage<proto::desktop::HostToClient>(buffer);
+    proto::desktop::HostToClient message;
 
-    if (message)
+    if (ParseMessage(buffer, message))
     {
         bool success = true;
 
-        if (message->has_video_packet())
+        if (message.has_video_packet())
         {
-            success = ReadVideoPacket(message->video_packet());
+            success = ReadVideoPacket(message.video_packet());
         }
-        else if (message->has_audio_packet())
+        else if (message.has_audio_packet())
         {
             LOG(WARNING) << "Audio not implemented yet";
         }
-        else if (message->has_cursor_shape())
+        else if (message.has_cursor_shape())
         {
-            ReadCursorShape(message->cursor_shape());
+            ReadCursorShape(message.cursor_shape());
         }
-        else if (message->has_clipboard_event())
+        else if (message.has_clipboard_event())
         {
             std::shared_ptr<proto::ClipboardEvent> clipboard_event(
-                message->release_clipboard_event());
+                message.release_clipboard_event());
 
             ReadClipboardEvent(clipboard_event);
         }
-        else if (message->has_config_request())
+        else if (message.has_config_request())
         {
-            ReadConfigRequest(message->config_request());
+            ReadConfigRequest(message.config_request());
         }
         else
         {
@@ -155,9 +153,9 @@ void ClientSessionDesktop::Send(const IOBuffer* buffer)
 
 void ClientSessionDesktop::WriteMessage(const proto::desktop::ClientToHost& message)
 {
-    std::unique_ptr<IOBuffer> buffer = SerializeMessage(message);
+    IOBuffer buffer = SerializeMessage(message);
 
-    if (buffer)
+    if (!buffer.IsEmpty())
     {
         delegate_->OnSessionMessage(std::move(buffer));
         return;
@@ -171,7 +169,7 @@ void ClientSessionDesktop::OnWindowClose()
     delegate_->OnSessionTerminate();
 }
 
-void ClientSessionDesktop::OnConfigChange(const proto::DesktopConfig& config)
+void ClientSessionDesktop::OnConfigChange(const proto::DesktopSessionConfig& config)
 {
     proto::desktop::ClientToHost message;
     message.mutable_config()->CopyFrom(config);

@@ -20,16 +20,14 @@ class MessagePumpForIO : public MessagePumpWin
 {
 public:
     MessagePumpForIO();
-    virtual ~MessagePumpForIO();
+    ~MessagePumpForIO() = default;
 
     struct IOContext;
 
     class IOHandler
     {
     public:
-        virtual ~IOHandler()
-        {
-        }
+        virtual ~IOHandler() {}
         // This will be called once the pending IO operation associated with
         // |context| completes. |error| is the Win32 error code of the IO operation
         // (ERROR_SUCCESS if there was no error). |bytes_transfered| will be zero

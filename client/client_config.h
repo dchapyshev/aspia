@@ -16,7 +16,7 @@ namespace aspia {
 class ClientConfig
 {
 public:
-    ClientConfig();
+    ClientConfig() = default;
     ClientConfig(const ClientConfig& other);
     ~ClientConfig() = default;
 
@@ -31,17 +31,17 @@ public:
     void SetSessionType(proto::SessionType session_type);
     proto::SessionType SessionType() const;
 
-    const proto::DesktopConfig& desktop_config() const;
-    proto::DesktopConfig* mutable_desktop_config();
+    const proto::DesktopSessionConfig& desktop_session_config() const;
+    proto::DesktopSessionConfig* mutable_desktop_session_config();
 
     ClientConfig& operator=(const ClientConfig& other);
 
 private:
     std::wstring address_;
-    uint16_t port_;
+    uint16_t port_ = kDefaultHostTcpPort;
 
-    proto::SessionType session_type_;
-    proto::DesktopConfig desktop_config_;
+    proto::SessionType session_type_ = proto::SessionType::SESSION_NONE;
+    proto::DesktopSessionConfig desktop_session_config_;
 };
 
 } // namespace aspia

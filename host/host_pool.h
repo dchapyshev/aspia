@@ -20,7 +20,7 @@ class HostPool :
     private Host::Delegate
 {
 public:
-    HostPool();
+    HostPool() = default;
     ~HostPool();
 
     bool Start();
@@ -31,6 +31,8 @@ private:
 
     // Host:Delegate implementation.
     void OnSessionTerminate() override;
+
+    bool terminating_ = false;
 
     std::shared_ptr<MessageLoopProxy> runner_;
     std::unique_ptr<NetworkServerTcp> network_server_;

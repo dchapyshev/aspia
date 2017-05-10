@@ -21,12 +21,8 @@ static const uint32_t kSupportedVideoEncodings =
 static const uint32_t kSupportedAudioEncodings = 0;
 
 static const uint32_t kSupportedFeatures =
-    proto::DesktopFeatures::FEATURE_CURSOR_SHAPE | proto::DesktopFeatures::FEATURE_CLIPBOARD;
-
-DesktopSessionClient::DesktopSessionClient()
-{
-    // Nothing
-}
+    proto::DesktopSessionFeatures::FEATURE_CURSOR_SHAPE |
+    proto::DesktopSessionFeatures::FEATURE_CLIPBOARD;
 
 void DesktopSessionClient::Run(const std::wstring& input_channel_name,
                                const std::wstring& output_channel_name)
@@ -57,37 +53,36 @@ void DesktopSessionClient::OnPipeChannelDisconnect()
     // Nothing
 }
 
-void DesktopSessionClient::OnPipeChannelMessage(const IOBuffer* buffer)
+void DesktopSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
 {
-    std::unique_ptr<proto::desktop::ClientToHost> message =
-        ParseMessage<proto::desktop::ClientToHost>(buffer);
+    proto::desktop::ClientToHost message;
 
-    if (message)
+    if (ParseMessage(buffer, message))
     {
         bool success = true;
 
-        if (message->has_pointer_event())
+        if (message.has_pointer_event())
         {
-            ReadPointerEvent(message->pointer_event());
+            ReadPointerEvent(message.pointer_event());
         }
-        else if (message->has_key_event())
+        else if (message.has_key_event())
         {
-            ReadKeyEvent(message->key_event());
+            ReadKeyEvent(message.key_event());
         }
-        else if (message->has_power_event())
+        else if (message.has_power_event())
         {
-            ReadPowerEvent(message->power_event());
+            ReadPowerEvent(message.power_event());
         }
-        else if (message->has_clipboard_event())
+        else if (message.has_clipboard_event())
         {
             std::shared_ptr<proto::ClipboardEvent> clipboard_event(
-                message->release_clipboard_event());
+                message.release_clipboard_event());
 
             ReadClipboardEvent(clipboard_event);
         }
-        else if (message->has_config())
+        else if (message.has_config())
         {
-            success = ReadConfig(message->config());
+            success = ReadConfig(message.config());
         }
         else
         {
@@ -106,7 +101,9 @@ void DesktopSessionClient::OnScreenUpdate(const DesktopFrame* screen_frame)
 {
     DCHECK(video_encoder_);
 
-    std::unique_ptr<proto::VideoPacket> packet = video_encoder_->Encode(screen_frame);
+    std::unique_ptr<proto::VideoPacket> packet =
+        video_encoder_->Encode(screen_frame);
+
     if (packet)
     {
         proto::desktop::HostToClient message;
@@ -119,12 +116,15 @@ void DesktopSessionClient::OnCursorUpdate(std::unique_ptr<MouseCursor> mouse_cur
 {
     DCHECK(cursor_encoder_);
 
-    proto::desktop::HostToClient message;
+    std::unique_ptr<proto::CursorShape> cursor_shape =
+        cursor_encoder_->Encode(std::move(mouse_cursor));
 
-    // Кодируем изображение курсора.
-    cursor_encoder_->Encode(message.mutable_cursor_shape(), std::move(mouse_cursor));
-
-    WriteMessage(message);
+    if (cursor_shape)
+    {
+        proto::desktop::HostToClient message;
+        message.set_allocated_cursor_shape(cursor_shape.release());
+        WriteMessage(message);
+    }
 }
 
 void DesktopSessionClient::OnScreenUpdateError()
@@ -134,13 +134,9 @@ void DesktopSessionClient::OnScreenUpdateError()
 
 void DesktopSessionClient::WriteMessage(const proto::desktop::HostToClient& message)
 {
-    std::unique_ptr<IOBuffer> buffer(SerializeMessage(message));
-
-    if (!buffer)
-        return;
-
+    IOBuffer buffer(SerializeMessage(message));
     std::unique_lock<std::mutex> lock(outgoing_lock_);
-    ipc_channel_->Send(buffer.get());
+    ipc_channel_->Send(buffer);
 }
 
 void DesktopSessionClient::ReadPointerEvent(const proto::PointerEvent& event)
@@ -148,18 +144,14 @@ void DesktopSessionClient::ReadPointerEvent(const proto::PointerEvent& event)
     if (!input_injector_)
         input_injector_.reset(new InputInjector());
 
-    // Выполняем команду перемещения курсора и/или нажатия кнопок мыши.
     input_injector_->InjectPointerEvent(event);
 }
 
 void DesktopSessionClient::ReadKeyEvent(const proto::KeyEvent& event)
 {
-    // Класс InputInjector должен инициализироваться потоком,
-    // в котором будет выполняться внедрение ввода.
     if (!input_injector_)
         input_injector_.reset(new InputInjector());
 
-    // Выполняем команду нажатия клавиши.
     input_injector_->InjectKeyEvent(event);
 }
 
@@ -187,7 +179,8 @@ void DesktopSessionClient::SendConfigRequest()
 {
     proto::desktop::HostToClient message;
 
-    proto::DesktopConfigRequest* request = message.mutable_config_request();
+    proto::DesktopSessionConfigRequest* request =
+        message.mutable_config_request();
 
     request->set_video_encodings(kSupportedVideoEncodings);
     request->set_audio_encodings(kSupportedAudioEncodings);
@@ -196,7 +189,7 @@ void DesktopSessionClient::SendConfigRequest()
     WriteMessage(message);
 }
 
-bool DesktopSessionClient::ReadConfig(const proto::DesktopConfig& config)
+bool DesktopSessionClient::ReadConfig(const proto::DesktopSessionConfig& config)
 {
     screen_updater_.reset(new ScreenUpdater());
 
@@ -227,7 +220,7 @@ bool DesktopSessionClient::ReadConfig(const proto::DesktopConfig& config)
 
     ScreenUpdater::Mode mode;
 
-    if (config.flags() & proto::DesktopConfig::ENABLE_CURSOR_SHAPE)
+    if (config.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE)
     {
         mode = ScreenUpdater::Mode::SCREEN_AND_CURSOR;
         cursor_encoder_.reset(new CursorEncoder());
@@ -243,7 +236,7 @@ bool DesktopSessionClient::ReadConfig(const proto::DesktopConfig& config)
                                         this))
         return false;
 
-    if (config.flags() & proto::DesktopConfig::ENABLE_CLIPBOARD)
+    if (config.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD)
     {
         clipboard_thread_.reset(new ClipboardThread());
 

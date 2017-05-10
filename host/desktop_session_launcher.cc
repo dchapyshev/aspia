@@ -30,11 +30,8 @@ static const WCHAR kServiceFullName[] = L"Aspia Desktop Session Launcher";
 // Name of the default session desktop.
 static WCHAR kDefaultDesktopName[] = L"winsta0\\default";
 
-static const uint32_t kInvalidSessionId = 0xFFFFFFFF;
-
 DesktopSessionLauncher::DesktopSessionLauncher(const std::wstring& service_id) :
-    Service(ServiceManager::CreateUniqueServiceName(kServiceShortName, service_id)),
-    session_id_(kInvalidSessionId)
+    Service(ServiceManager::CreateUniqueServiceName(kServiceShortName, service_id))
 {
     // Nothing
 }
@@ -97,10 +94,8 @@ static bool CreatePrivilegedToken(ScopedHandle* token_out)
     return true;
 }
 
-//
 // Creates a copy of the current process token for the given |session_id| so
 // it can be used to launch a process in that session.
-//
 static bool CreateSessionToken(uint32_t session_id, ScopedHandle* token_out)
 {
     ScopedHandle session_token;
@@ -173,8 +168,7 @@ static bool LaunchProcessInSession(uint32_t session_id,
 {
     std::wstring command_line;
 
-    // Получаем полный путь к исполняемому файлу.
-    if (!GetPathW(PathKey::FILE_EXE, &command_line))
+    if (!GetPathW(PathKey::FILE_EXE, command_line))
         return false;
 
     command_line.append(L" --run_mode=");
@@ -212,10 +206,8 @@ void DesktopSessionLauncher::ExecuteService(uint32_t session_id,
     input_channel_id_ = input_channel_id;
     output_channel_id_ = output_channel_id;
 
-    // Запускаем службу для выполнения метода Worker().
     Run();
 
-    // Удаляем службу.
     ServiceManager(ServiceName()).Remove();
 }
 
@@ -226,8 +218,7 @@ bool DesktopSessionLauncher::LaunchSession(uint32_t session_id,
 {
     std::wstring command_line;
 
-    // Получаем полный путь к исполняемому файлу.
-    if (!GetPathW(PathKey::FILE_EXE, &command_line))
+    if (!GetPathW(PathKey::FILE_EXE, command_line))
         return false;
 
     command_line.append(L" --input_channel_id=");
@@ -257,10 +248,8 @@ bool DesktopSessionLauncher::LaunchSession(uint32_t session_id,
             return false;
         }
 
-        //
-        // Если текущий процесс запущен не в нулевой сессии (не как служба), то создаем службу
-        // для запуска процесса в требуемой сессии.
-        //
+        // If the current process is started not in session 0 (not as a service),
+        // then we create a service to start the process in the required session.
         if (current_process_session_id)
         {
             std::wstring service_id =
@@ -277,22 +266,20 @@ bool DesktopSessionLauncher::LaunchSession(uint32_t session_id,
             command_line.append(L" --service_id=");
             command_line.append(service_id);
 
-            // Устанавливаем службу в системе.
+            // Install the service in the system.
             ServiceManager manager(ServiceManager::Create(command_line,
                                                           kServiceFullName,
                                                           unique_name));
 
-            // Если служба не была установлена.
+            // If the service was not installed.
             if (!manager.IsValid())
                 return false;
 
-            // Запускаем ее.
             return manager.Start();
         }
-        // Код выполняется из службы.
-        else
+        else // The code is executed from the service.
         {
-            // Запускаем процесс напрямую.
+            // Start the process directly.
             return LaunchProcessInSession(session_id, input_channel_id, output_channel_id);
         }
     }

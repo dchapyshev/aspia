@@ -16,11 +16,7 @@ template <typename T>
 class ScopedWtsMemory
 {
 public:
-    ScopedWtsMemory() :
-        memory_(nullptr)
-    {
-        // Nothing
-    }
+    ScopedWtsMemory() = default;
 
     explicit ScopedWtsMemory(T memory) :
         memory_(memory)
@@ -84,7 +80,7 @@ private:
     }
 
 private:
-    T memory_;
+    T memory_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedWtsMemory);
 };

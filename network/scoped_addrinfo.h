@@ -19,10 +19,7 @@ namespace aspia {
 class ScopedAddrInfo
 {
 public:
-    ScopedAddrInfo() : ptr_(nullptr)
-    {
-        // Nothing
-    }
+    ScopedAddrInfo() = default;
 
     explicit ScopedAddrInfo(ADDRINFOW* ptr) : ptr_(ptr)
     {
@@ -99,7 +96,7 @@ private:
     }
 
 private:
-    ADDRINFOW* ptr_;
+    ADDRINFOW* ptr_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedAddrInfo);
 };

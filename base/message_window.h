@@ -17,7 +17,7 @@ namespace aspia {
 class MessageWindow
 {
 public:
-    MessageWindow();
+    MessageWindow() = default;
     ~MessageWindow();
 
     // Implement this callback to handle messages received by the message window.
@@ -39,7 +39,7 @@ private:
     static LRESULT CALLBACK WindowProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
 
     MessageCallback message_callback_;
-    HWND hwnd_;
+    HWND hwnd_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(MessageWindow);
 };

@@ -19,7 +19,7 @@ namespace aspia {
 class FirewallManager
 {
 public:
-    FirewallManager();
+    FirewallManager() = default;
     ~FirewallManager() = default;
 
     bool Init(const std::wstring& app_name, const std::wstring& app_path);
@@ -28,8 +28,8 @@ public:
     void DeleteRule(const WCHAR* rule_name);
 
 private:
-    Microsoft::WRL::ComPtr<INetFwPolicy2> firewall_policy_;
-    Microsoft::WRL::ComPtr<INetFwRules> firewall_rules_;
+    Microsoft::WRL::ComPtr<INetFwPolicy2> firewall_policy_ = nullptr;
+    Microsoft::WRL::ComPtr<INetFwRules> firewall_rules_ = nullptr;
 
     std::wstring app_name_;
     std::wstring app_path_;

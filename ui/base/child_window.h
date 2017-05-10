@@ -15,8 +15,8 @@ namespace aspia {
 class ChildWindow : public Window
 {
 public:
-    ChildWindow() { }
-    virtual ~ChildWindow() { }
+    ChildWindow() = default;
+    virtual ~ChildWindow() = default;
 
     bool Create(HWND parent, DWORD style, const std::wstring& title = std::wstring());
 

@@ -35,7 +35,7 @@ public:
 
     static std::unique_ptr<DesktopSession> Create(HostSession::Delegate* delegate);
 
-    void Send(const IOBuffer* buffer) override;
+    void Send(const IOBuffer& buffer) override;
 
 private:
     DesktopSession(HostSession::Delegate* delegate);
@@ -54,7 +54,7 @@ private:
     // PipeChannel::Delegate implementation.
     void OnPipeChannelConnect(ProcessId peer_pid) override;
     void OnPipeChannelDisconnect() override;
-    void OnPipeChannelMessage(const IOBuffer* buffer) override;
+    void OnPipeChannelMessage(const IOBuffer& buffer) override;
 
     void OnSessionAttachTimeout();
 
@@ -62,7 +62,8 @@ private:
     std::shared_ptr<MessageLoopProxy> runner_;
 
     enum class State { Starting, Detached, Attached };
-    State state_;
+
+    State state_ = State::Detached;
 
     WaitableTimer timer_;
 

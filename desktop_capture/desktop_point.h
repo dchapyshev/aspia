@@ -13,24 +13,24 @@ namespace aspia {
 class DesktopPoint
 {
 public:
-    DesktopPoint();
-    DesktopPoint(int32_t x, int32_t y);
+    DesktopPoint() = default;
+    DesktopPoint(int x, int y);
     DesktopPoint(const DesktopPoint& point);
     ~DesktopPoint() = default;
 
-    int32_t x() const;
-    int32_t y() const;
+    int x() const;
+    int y() const;
 
-    void Set(int32_t x, int32_t y);
+    void Set(int x, int y);
 
     bool IsEqual(const DesktopPoint& other) const;
-    void Translate(int32_t x_offset, int32_t y_offset);
+    void Translate(int x_offset, int y_offset);
 
     DesktopPoint& operator=(const DesktopPoint& other);
 
 private:
-    int32_t x_;
-    int32_t y_;
+    int32_t x_ = 0;
+    int32_t y_ = 0;
 };
 
 } // namespace aspia
