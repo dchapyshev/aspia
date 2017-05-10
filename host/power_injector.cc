@@ -12,18 +12,15 @@
 
 namespace aspia {
 
-// Delay for shutdown and reboot.
-static const DWORD kActionDelayInSeconds = 60;
-
 bool InjectPowerEvent(const proto::PowerEvent& event)
 {
     switch (event.action())
     {
         case proto::PowerEvent::LOGOFF:
         {
-            if (!WTSLogoffSession(WTS_CURRENT_SERVER_HANDLE, WTS_CURRENT_SESSION, FALSE))
+            if (!ExitWindowsEx(EWX_LOGOFF | EWX_FORCE, 0))
             {
-                LOG(ERROR) << "WTSLogoffSession() failed: " << GetLastError();
+                LOG(ERROR) << "ExitWindowsEx() failed: " << GetLastError();
                 return false;
             }
 
@@ -33,9 +30,9 @@ bool InjectPowerEvent(const proto::PowerEvent& event)
 
         case proto::PowerEvent::LOCK:
         {
-            if (!WTSDisconnectSession(WTS_CURRENT_SERVER_HANDLE, WTS_CURRENT_SESSION, FALSE))
+            if (!LockWorkStation())
             {
-                LOG(ERROR) << "WTSDisconnectSession() failed: " << GetLastError();
+                LOG(ERROR) << "LockWorkStation() failed: " << GetLastError();
                 return false;
             }
 
@@ -52,30 +49,18 @@ bool InjectPowerEvent(const proto::PowerEvent& event)
     {
         case proto::PowerEvent::SHUTDOWN:
         {
-            if (!InitiateSystemShutdownExW(nullptr,
-                                           nullptr,
-                                           kActionDelayInSeconds,
-                                           TRUE,  // Force close apps.
-                                           FALSE, // Shutdown.
-                                           SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_MAINTENANCE))
+            if (!ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, 0))
             {
-                LOG(ERROR) << "InitiateSystemShutdownExW() failed: " << GetLastError();
-                return false;
+                LOG(ERROR) << "ExitWindowsEx() failed: " << GetLastError();
             }
         }
         break;
 
         case proto::PowerEvent::REBOOT:
         {
-            if (!InitiateSystemShutdownExW(nullptr,
-                                           nullptr,
-                                           kActionDelayInSeconds,
-                                           TRUE, // Force close apps.
-                                           TRUE, // Reboot.
-                                           SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_MAINTENANCE))
+            if (!ExitWindowsEx(EWX_REBOOT | EWX_FORCE, 0))
             {
-                LOG(ERROR) << "InitiateSystemShutdownExW() failed: " << GetLastError();
-                return false;
+                LOG(ERROR) << "ExitWindowsEx() failed: " << GetLastError();
             }
         }
         break;
