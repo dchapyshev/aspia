@@ -40,7 +40,7 @@
 
 // ---------------------------------------------------------------------------
 // Namespace of gflags library symbols.
-#define GFLAGS_NAMESPACE google
+#define GFLAGS_NAMESPACE @GFLAGS_NAMESPACE@
 
 // ---------------------------------------------------------------------------
 // Windows DLL import/export.
@@ -51,7 +51,7 @@
 // Must be overwritten when this header file is used with the optionally also
 // built static library instead; set by CMake's INTERFACE_COMPILE_DEFINITIONS.
 #ifndef GFLAGS_IS_A_DLL
-#  define GFLAGS_IS_A_DLL 0
+#  define GFLAGS_IS_A_DLL @GFLAGS_IS_A_DLL@
 #endif
 
 // We always want to import the symbols of the gflags library.
@@ -75,27 +75,27 @@
 // ---------------------------------------------------------------------------
 // Flag types
 #include <string>
-#if defined(HAVE_STDINT_H)
+#if @HAVE_STDINT_H@
 #  include <stdint.h>                   // the normal place uint32_t is defined
-#elif defined(HAVE_SYS_TYPES_H)
+#elif @HAVE_SYS_TYPES_H@
 #  include <sys/types.h>                // the normal place u_int32_t is defined
-#elif defined(HAVE_INTTYPES_H)
+#elif @HAVE_INTTYPES_H@
 #  include <inttypes.h>                 // a third place for uint32_t or u_int32_t
 #endif
 
 namespace GFLAGS_NAMESPACE {
 
-#if 1 // C99
+#if @GFLAGS_INTTYPES_FORMAT_C99@ // C99
 typedef int32_t          int32;
 typedef uint32_t         uint32;
 typedef int64_t          int64;
 typedef uint64_t         uint64;
-#elif 0 // BSD
+#elif @GFLAGS_INTTYPES_FORMAT_BSD@ // BSD
 typedef int32_t          int32;
 typedef u_int32_t        uint32;
 typedef int64_t          int64;
 typedef u_int64_t        uint64;
-#elif 0 // Windows
+#elif @GFLAGS_INTTYPES_FORMAT_VC7@ // Windows
 typedef __int32          int32;
 typedef unsigned __int32 uint32;
 typedef __int64          int64;

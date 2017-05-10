@@ -18,6 +18,6 @@ glog          10.05.2017    0.3.5
 googletest    26.10.2016    trunk
 libyuv        10.05.2017    trunk
 libvpx        26.01.2017    1.6.1
-gflags        03.05.2017    2.2.0
+gflags        10.05.2017    trunk
 opus          24.01.2017    1.1.4
 zlib-ng       26.03.2017    trunk

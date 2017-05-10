@@ -50,7 +50,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)/3rdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/3rdparty/gflags/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CompileAs>CompileAsCpp</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -63,25 +63,13 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;GFLAGS_IS_A_DLL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;GFLAGS_IS_A_DLL=0;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\aspia-remote-desktop\vendor\gflags\out\include;D:\aspia-remote-desktop\vendor\gflags\src;D:\aspia-remote-desktop\vendor\gflags\out\include\gflags;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Midl>
-      <AdditionalIncludeDirectories>D:\aspia-remote-desktop\vendor\gflags\out\include;D:\aspia-remote-desktop\vendor\gflags\src;D:\aspia-remote-desktop\vendor\gflags\out\include\gflags;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
-      <HeaderFileName>%(Filename).h</HeaderFileName>
-      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
-      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
-      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
-    </Midl>
     <Lib>
       <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)/3rdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/3rdparty/gflags/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ExceptionHandling>Sync</ExceptionHandling>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
@@ -107,35 +95,23 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DisableSpecificWarnings>4005</DisableSpecificWarnings>
     </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;GFLAGS_IS_A_DLL=0;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\aspia-remote-desktop\vendor\gflags\out\include;D:\aspia-remote-desktop\vendor\gflags\src;D:\aspia-remote-desktop\vendor\gflags\out\include\gflags;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Midl>
-      <AdditionalIncludeDirectories>D:\aspia-remote-desktop\vendor\gflags\out\include;D:\aspia-remote-desktop\vendor\gflags\src;D:\aspia-remote-desktop\vendor\gflags\out\include\gflags;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
-      <HeaderFileName>%(Filename).h</HeaderFileName>
-      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
-      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
-      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
-    </Midl>
     <Lib>
       <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="config.h" />
-    <ClInclude Include="util.h" />
-    <ClInclude Include="mutex.h" />
-    <ClInclude Include="windows_port.h" />
-    <ClInclude Include="gflags.h" />
-    <ClInclude Include="gflags_declare.h" />
-    <ClInclude Include="gflags_completions.h" />
-    <ClInclude Include="gflags_gflags.h" />
-    <ClCompile Include="gflags.cc" />
-    <ClCompile Include="gflags_reporting.cc" />
-    <ClCompile Include="gflags_completions.cc" />
-    <ClCompile Include="windows_port.cc" />
+    <ClInclude Include="src/config.h" />
+    <ClInclude Include="src/util.h" />
+    <ClInclude Include="src/mutex.h" />
+    <ClInclude Include="src/windows_port.h" />
+    <ClInclude Include="src/gflags/gflags.h" />
+    <ClInclude Include="src/gflags/gflags_declare.h" />
+    <ClInclude Include="src/gflags/gflags_completions.h" />
+    <ClInclude Include="src/gflags/gflags_gflags.h" />
+    <ClCompile Include="src/gflags.cc" />
+    <ClCompile Include="src/gflags_reporting.cc" />
+    <ClCompile Include="src/gflags_completions.cc" />
+    <ClCompile Include="src/windows_port.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
