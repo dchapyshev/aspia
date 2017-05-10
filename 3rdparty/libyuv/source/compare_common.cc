@@ -17,6 +17,41 @@ namespace libyuv {
 extern "C" {
 #endif
 
+#if ORIGINAL_C
+uint32 HammingDistance_C(const uint8* src_a, const uint8* src_b, int count) {
+  uint32 diff = 0u;
+
+  int i;
+  for (i = 0; i < count; ++i) {
+    int x = src_a[i] ^ src_b[i];
+    if (x & 1) ++diff;
+    if (x & 2) ++diff;
+    if (x & 4) ++diff;
+    if (x & 8) ++diff;
+    if (x & 16) ++diff;
+    if (x & 32) ++diff;
+    if (x & 64) ++diff;
+    if (x & 128) ++diff;
+  }
+  return diff;
+}
+#endif
+
+// Hakmem method for hamming distance.
+uint32 HammingDistance_C(const uint8* src_a, const uint8* src_b, int count) {
+  uint32 diff = 0u;
+
+  int i;
+  for (i = 0; i < count - 3; i += 4) {
+    uint32 x = *((uint32*)src_a) ^ *((uint32*)src_b);
+    src_a += 4;
+    src_b += 4;
+    uint32 u = x - ((x >> 1) & 033333333333) - ((x >> 2) & 011111111111);
+    diff += ((u + (u >> 3)) & 030707070707) % 63;
+  }
+  return diff;
+}
+
 uint32 SumSquareError_C(const uint8* src_a, const uint8* src_b, int count) {
   uint32 sse = 0u;
   int i;

@@ -67,6 +67,10 @@ extern "C" {
 #define HAS_SUMSQUAREERROR_NEON
 #endif
 
+uint32 HammingDistance_C(const uint8* src_a, const uint8* src_b, int count);
+uint32 HammingDistance_X86(const uint8* src_a, const uint8* src_b, int count);
+uint32 HammingDistance_NEON(const uint8* src_a, const uint8* src_b, int count);
+
 uint32 SumSquareError_C(const uint8* src_a, const uint8* src_b, int count);
 uint32 SumSquareError_SSE2(const uint8* src_a, const uint8* src_b, int count);
 uint32 SumSquareError_AVX2(const uint8* src_a, const uint8* src_b, int count);

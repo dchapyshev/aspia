@@ -22,6 +22,19 @@ extern "C" {
 #if !defined(LIBYUV_DISABLE_X86) && \
     (defined(__x86_64__) || (defined(__i386__) && !defined(_MSC_VER)))
 
+uint32 HammingDistance_X86(const uint8* src_a, const uint8* src_b, int count) {
+  uint32 diff = 0u;
+
+  int i;
+  for (i = 0; i < count - 7; i += 8) {
+    uint64 x = *((uint64*)src_a) ^ *((uint64*)src_b);
+    src_a += 8;
+    src_b += 8;
+    diff += __builtin_popcountll(x);
+  }
+  return diff;
+}
+
 uint32 SumSquareError_SSE2(const uint8* src_a, const uint8* src_b, int count) {
   uint32 sse;
   asm volatile (
