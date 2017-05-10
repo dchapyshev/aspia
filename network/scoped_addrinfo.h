@@ -95,7 +95,6 @@ private:
         }
     }
 
-private:
     ADDRINFOW* ptr_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedAddrInfo);
