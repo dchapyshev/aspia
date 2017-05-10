@@ -14,7 +14,7 @@ Synchronization status
 
 Component   | Sync date   | Version
 protobuf      03.05.2017    3.3.0
-glog          03.05.2017    trunk
+glog          10.05.2017    0.3.5
 googletest    26.10.2016    trunk
 libyuv        03.05.2017    trunk
 libvpx        26.01.2017    1.6.1
