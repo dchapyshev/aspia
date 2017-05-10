@@ -38,7 +38,16 @@ private:
     // Handles messages received by |window_|.
     bool OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* result);
 
+    bool HaveClipboardListenerApi();
     void OnClipboardUpdate();
+
+    typedef BOOL(WINAPI AddClipboardFormatListenerFn)(HWND);
+    typedef BOOL(WINAPI RemoveClipboardFormatListenerFn)(HWND);
+
+    AddClipboardFormatListenerFn* add_clipboard_format_listener_ = nullptr;
+    RemoveClipboardFormatListenerFn* remove_clipboard_format_listener_ = nullptr;
+
+    HWND next_viewer_window_ = nullptr;
 
     // Used to subscribe to WM_CLIPBOARDUPDATE messages.
     std::unique_ptr<MessageWindow> window_;

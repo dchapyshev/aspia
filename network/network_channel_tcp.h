@@ -13,7 +13,6 @@
 #include "network/socket.h"
 
 #include <winsock2.h>
-#include <shared_mutex>
 
 namespace aspia {
 
@@ -44,7 +43,6 @@ private:
     Mode mode_;
 
     Socket socket_;
-    mutable std::shared_mutex socket_lock_;
 
     WsaWaitableEvent read_event_;
     WsaWaitableEvent write_event_;

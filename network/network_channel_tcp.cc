@@ -199,16 +199,8 @@ bool NetworkChannelTcp::WriteData(const uint8_t* buffer, size_t size)
 
         DWORD flags = 0;
         DWORD written = 0;
-        int ret;
 
-        {
-            std::shared_lock<std::shared_mutex> lock(socket_lock_);
-
-            if (!socket_.IsValid())
-                return false;
-
-            ret = WSASend(socket_, &data, 1, nullptr, flags, &overlapped, nullptr);
-        }
+        int ret = WSASend(socket_, &data, 1, nullptr, flags, &overlapped, nullptr);
 
         if (ret == SOCKET_ERROR)
         {
@@ -224,17 +216,10 @@ bool NetworkChannelTcp::WriteData(const uint8_t* buffer, size_t size)
         if (!write_event_.TimedWait(kWriteTimeout))
             return false;
 
+        if (!WSAGetOverlappedResult(socket_, &overlapped, &written, FALSE, &flags))
         {
-            std::shared_lock<std::shared_mutex> lock(socket_lock_);
-
-            if (!socket_.IsValid())
-                return false;
-
-            if (!WSAGetOverlappedResult(socket_, &overlapped, &written, FALSE, &flags))
-            {
-                LOG(ERROR) << "WSAGetOverlappedResult() failed: " << WSAGetLastError();
-                return false;
-            }
+            LOG(ERROR) << "WSAGetOverlappedResult() failed: " << WSAGetLastError();
+            return false;
         }
 
         if (!written)
@@ -262,17 +247,8 @@ bool NetworkChannelTcp::ReadData(uint8_t* buffer, size_t size)
 
         DWORD flags = 0;
         DWORD read = 0;
-        int ret;
 
-        {
-            std::shared_lock<std::shared_mutex> lock(socket_lock_);
-
-            if (!socket_.IsValid())
-                return false;
-
-            ret = WSARecv(socket_, &data, 1, nullptr, &flags, &overlapped, nullptr);
-        }
-
+        int ret = WSARecv(socket_, &data, 1, nullptr, &flags, &overlapped, nullptr);
         if (ret == SOCKET_ERROR)
         {
             int err = WSAGetLastError();
@@ -286,17 +262,10 @@ bool NetworkChannelTcp::ReadData(uint8_t* buffer, size_t size)
 
         read_event_.Wait();
 
+        if (!WSAGetOverlappedResult(socket_, &overlapped, &read, FALSE, &flags))
         {
-            std::shared_lock<std::shared_mutex> lock(socket_lock_);
-
-            if (!socket_.IsValid())
-                return false;
-
-            if (!WSAGetOverlappedResult(socket_, &overlapped, &read, FALSE, &flags))
-            {
-                LOG(ERROR) << "WSAGetOverlappedResult() failed: " << WSAGetLastError();
-                return false;
-            }
+            LOG(ERROR) << "WSAGetOverlappedResult() failed: " << WSAGetLastError();
+            return false;
         }
 
         if (!read)
@@ -311,10 +280,7 @@ bool NetworkChannelTcp::ReadData(uint8_t* buffer, size_t size)
 
 void NetworkChannelTcp::Close()
 {
-    {
-        std::lock_guard<std::shared_mutex> lock(socket_lock_);
-        socket_.Reset();
-    }
+    shutdown(socket_, SD_BOTH);
 
     read_event_.Signal();
     write_event_.Signal();
@@ -324,8 +290,7 @@ void NetworkChannelTcp::Close()
 
 bool NetworkChannelTcp::IsConnected() const
 {
-    std::shared_lock<std::shared_mutex> lock(socket_lock_);
-    return socket_.IsValid();
+    return IsStopping();
 }
 
 } // namespace aspia
