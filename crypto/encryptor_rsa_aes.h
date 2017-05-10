@@ -15,12 +15,12 @@
 
 namespace aspia {
 
-class EncryptorAES : public Encryptor
+class EncryptorRsaAes : public Encryptor
 {
 public:
-    ~EncryptorAES();
+    ~EncryptorRsaAes();
 
-    static EncryptorAES* Create();
+    static std::unique_ptr<EncryptorRsaAes> Create();
 
     IOBuffer GetSessionKey();
     bool SetPublicKey(const IOBuffer& public_key);
@@ -28,17 +28,15 @@ public:
     IOBuffer Encrypt(const IOBuffer& source_buffer) override;
 
 private:
-    EncryptorAES(HCRYPTPROV prov, HCRYPTKEY aes_key, DWORD block_size);
+    EncryptorRsaAes(HCRYPTPROV prov, HCRYPTKEY aes_key, DWORD block_size);
 
-private:
     HCRYPTPROV prov_ = NULL;
-
     HCRYPTKEY aes_key_ = NULL;
     HCRYPTKEY rsa_key_ = NULL;
 
     DWORD block_size_;
 
-    DISALLOW_COPY_AND_ASSIGN(EncryptorAES);
+    DISALLOW_COPY_AND_ASSIGN(EncryptorRsaAes);
 };
 
 } // namespace aspia

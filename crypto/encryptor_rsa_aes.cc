@@ -15,7 +15,7 @@ static const DWORD kAESKeySize = 256;
 static const DWORD kRSAKeySize = 1024;
 
 // static
-EncryptorAES* EncryptorAES::Create()
+std::unique_ptr<EncryptorRsaAes> EncryptorRsaAes::Create()
 {
     HCRYPTPROV prov;
 
@@ -68,10 +68,11 @@ EncryptorAES* EncryptorAES::Create()
     // Переводим биты в байты.
     block_size /= 8;
 
-    return new EncryptorAES(prov, aes_key, block_size);
+    return std::unique_ptr<EncryptorRsaAes>(
+        new EncryptorRsaAes(prov, aes_key, block_size));
 }
 
-EncryptorAES::EncryptorAES(HCRYPTPROV prov, HCRYPTKEY aes_key, DWORD block_size) :
+EncryptorRsaAes::EncryptorRsaAes(HCRYPTPROV prov, HCRYPTKEY aes_key, DWORD block_size) :
     prov_(prov),
     aes_key_(aes_key),
     block_size_(block_size)
@@ -79,7 +80,7 @@ EncryptorAES::EncryptorAES(HCRYPTPROV prov, HCRYPTKEY aes_key, DWORD block_size)
     // Nothing
 }
 
-EncryptorAES::~EncryptorAES()
+EncryptorRsaAes::~EncryptorRsaAes()
 {
     if (aes_key_)
     {
@@ -100,7 +101,7 @@ EncryptorAES::~EncryptorAES()
     }
 }
 
-bool EncryptorAES::SetPublicKey(const IOBuffer& public_key)
+bool EncryptorRsaAes::SetPublicKey(const IOBuffer& public_key)
 {
     if (public_key.IsEmpty())
         return false;
@@ -139,7 +140,7 @@ bool EncryptorAES::SetPublicKey(const IOBuffer& public_key)
     return true;
 }
 
-IOBuffer EncryptorAES::GetSessionKey()
+IOBuffer EncryptorRsaAes::GetSessionKey()
 {
     DWORD blob_size = 0;
 
@@ -174,7 +175,7 @@ IOBuffer EncryptorAES::GetSessionKey()
     return session_key;
 }
 
-IOBuffer EncryptorAES::Encrypt(const IOBuffer& source_buffer)
+IOBuffer EncryptorRsaAes::Encrypt(const IOBuffer& source_buffer)
 {
     if (source_buffer.IsEmpty())
         return IOBuffer();

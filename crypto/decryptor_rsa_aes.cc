@@ -6,16 +6,14 @@
 //
 
 #include "crypto/decryptor_rsa_aes.h"
-
 #include "base/logging.h"
 
 namespace aspia {
 
-// Размеры ключей шифрования в битах.
-static const DWORD kRSAKeySize = 1024;
+static const DWORD kRSAKeySize = 1024; // In bits.
 
 // static
-DecryptorAES* DecryptorAES::Create()
+std::unique_ptr<DecryptorRsaAes> DecryptorRsaAes::Create()
 {
     HCRYPTPROV prov;
 
@@ -43,17 +41,18 @@ DecryptorAES* DecryptorAES::Create()
         return nullptr;
     }
 
-    return new DecryptorAES(prov, rsa_key);
+    return std::unique_ptr<DecryptorRsaAes>(
+        new DecryptorRsaAes(prov, rsa_key));
 }
 
-DecryptorAES::DecryptorAES(HCRYPTPROV prov, HCRYPTKEY rsa_key) :
+DecryptorRsaAes::DecryptorRsaAes(HCRYPTPROV prov, HCRYPTKEY rsa_key) :
     prov_(prov),
     rsa_key_(rsa_key)
 {
     // Nothing
 }
 
-DecryptorAES::~DecryptorAES()
+DecryptorRsaAes::~DecryptorRsaAes()
 {
     if (aes_key_)
     {
@@ -74,7 +73,7 @@ DecryptorAES::~DecryptorAES()
     }
 }
 
-IOBuffer DecryptorAES::GetPublicKey()
+IOBuffer DecryptorRsaAes::GetPublicKey()
 {
     DWORD blob_size = 0;
 
@@ -109,7 +108,7 @@ IOBuffer DecryptorAES::GetPublicKey()
     return key_buffer;
 }
 
-bool DecryptorAES::SetSessionKey(const IOBuffer& session_key)
+bool DecryptorRsaAes::SetSessionKey(const IOBuffer& session_key)
 {
     if (session_key.IsEmpty())
         return false;
@@ -156,7 +155,7 @@ bool DecryptorAES::SetSessionKey(const IOBuffer& session_key)
     return true;
 }
 
-IOBuffer DecryptorAES::Decrypt(const IOBuffer& source_buffer)
+IOBuffer DecryptorRsaAes::Decrypt(const IOBuffer& source_buffer)
 {
     if (source_buffer.IsEmpty())
         return IOBuffer();

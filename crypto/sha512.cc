@@ -19,7 +19,11 @@ class ScopedCryptoProvider
 {
 public:
     ScopedCryptoProvider() : prov_(NULL) { }
-    ~ScopedCryptoProvider() { CryptReleaseContext(prov_, 0); }
+    ~ScopedCryptoProvider()
+    {
+        if (prov_ != NULL)
+            CryptReleaseContext(prov_, 0);
+    }
 
     HCRYPTPROV* Recieve() { return &prov_; }
     operator HCRYPTPROV() { return prov_; }
@@ -34,7 +38,11 @@ class ScopedCryptoHash
 {
 public:
     ScopedCryptoHash() : hash_(NULL) { }
-    ~ScopedCryptoHash() { CryptDestroyHash(hash_); }
+    ~ScopedCryptoHash()
+    {
+        if (hash_ != NULL)
+            CryptDestroyHash(hash_);
+    }
 
     HCRYPTHASH* Recieve() { return &hash_; }
     operator HCRYPTHASH() { return hash_; }

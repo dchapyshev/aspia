@@ -51,8 +51,11 @@ NetworkChannelTcp::~NetworkChannelTcp()
 
 bool NetworkChannelTcp::ClientKeyExchange()
 {
-    EncryptorAES* encryptor = reinterpret_cast<EncryptorAES*>(encryptor_.get());
-    DecryptorAES* decryptor = reinterpret_cast<DecryptorAES*>(decryptor_.get());
+    EncryptorRsaAes* encryptor =
+        reinterpret_cast<EncryptorRsaAes*>(encryptor_.get());
+
+    DecryptorRsaAes* decryptor =
+        reinterpret_cast<DecryptorRsaAes*>(decryptor_.get());
 
     IOBuffer decryptor_public_key = decryptor->GetPublicKey();
 
@@ -99,8 +102,11 @@ bool NetworkChannelTcp::ClientKeyExchange()
 
 bool NetworkChannelTcp::ServerKeyExchange()
 {
-    EncryptorAES* encryptor = reinterpret_cast<EncryptorAES*>(encryptor_.get());
-    DecryptorAES* decryptor = reinterpret_cast<DecryptorAES*>(decryptor_.get());
+    EncryptorRsaAes* encryptor =
+        reinterpret_cast<EncryptorRsaAes*>(encryptor_.get());
+
+    DecryptorRsaAes* decryptor =
+        reinterpret_cast<DecryptorRsaAes*>(decryptor_.get());
 
     IOBuffer decryptor_public_key = decryptor->GetPublicKey();
 
@@ -147,8 +153,8 @@ bool NetworkChannelTcp::ServerKeyExchange()
 
 bool NetworkChannelTcp::KeyExchange()
 {
-    encryptor_.reset(EncryptorAES::Create());
-    decryptor_.reset(DecryptorAES::Create());
+    encryptor_ = EncryptorRsaAes::Create();
+    decryptor_ = DecryptorRsaAes::Create();
 
     if (!decryptor_ || !encryptor_)
     {
