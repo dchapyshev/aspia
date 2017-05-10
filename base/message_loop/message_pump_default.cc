@@ -10,6 +10,13 @@
 
 namespace aspia {
 
+MessagePumpDefault::MessagePumpDefault() :
+    event_(WaitableEvent::ResetPolicy::Automatic,
+           WaitableEvent::InitialState::NotSignaled)
+{
+    // Nothing
+}
+
 void MessagePumpDefault::Run(Delegate* delegate)
 {
     DCHECK(keep_running_) << "Quit must have been called outside of Run!";
@@ -24,12 +31,7 @@ void MessagePumpDefault::Run(Delegate* delegate)
         if (did_work)
             continue;
 
-        std::unique_lock<std::mutex> lock(have_work_lock_);
-
-        while (!have_work_)
-            event_.wait(lock);
-
-        have_work_ = false;
+        event_.Wait();
     }
 
     keep_running_ = true;
@@ -42,14 +44,9 @@ void MessagePumpDefault::Quit()
 
 void MessagePumpDefault::ScheduleWork()
 {
-    {
-        std::unique_lock<std::mutex> lock(have_work_lock_);
-        have_work_ = true;
-    }
-
     // Since this can be called on any thread, we need to ensure that our Run
     // loop wakes up.
-    event_.notify_one();
+    event_.Signal();
 }
 
 }  // namespace base

@@ -10,9 +10,9 @@
 
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_loop_proxy.h"
+#include "base/waitable_event.h"
 
 #include <atomic>
-#include <condition_variable>
 #include <thread>
 
 namespace aspia {
@@ -20,7 +20,7 @@ namespace aspia {
 class MessageLoopThread
 {
 public:
-    MessageLoopThread() = default;
+    MessageLoopThread();
     ~MessageLoopThread();
 
     class Delegate
@@ -68,9 +68,9 @@ private:
     std::thread thread_;
 
     // True while inside of Run().
-    bool running_ = false;
-    std::mutex running_lock_;
-    std::condition_variable running_event_;
+    std::atomic_bool running_ = false;
+
+    WaitableEvent start_event_;
 
     MessageLoop* message_loop_ = nullptr;
 

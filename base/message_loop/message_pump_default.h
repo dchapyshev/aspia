@@ -9,16 +9,14 @@
 #define _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_PUMP_DEFAULT_H
 
 #include "base/message_loop/message_pump.h"
-#include "base/macros.h"
-
-#include <condition_variable>
+#include "base/waitable_event.h"
 
 namespace aspia {
 
 class MessagePumpDefault : public MessagePump
 {
 public:
-    MessagePumpDefault() = default;
+    MessagePumpDefault();
     ~MessagePumpDefault() = default;
 
     // MessagePump methods:
@@ -31,10 +29,7 @@ private:
     bool keep_running_ = true;
 
     // Used to sleep until there is more work to do.
-    std::condition_variable event_;
-
-    bool have_work_ = false;
-    std::mutex have_work_lock_;
+    WaitableEvent event_;
 
     DISALLOW_COPY_AND_ASSIGN(MessagePumpDefault);
 };

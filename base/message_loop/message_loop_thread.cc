@@ -11,6 +11,13 @@
 
 namespace aspia {
 
+MessageLoopThread::MessageLoopThread() :
+    start_event_(WaitableEvent::ResetPolicy::Manual,
+                 WaitableEvent::InitialState::NotSignaled)
+{
+    // Nothing
+}
+
 MessageLoopThread::~MessageLoopThread()
 {
     Stop();
@@ -24,12 +31,9 @@ void MessageLoopThread::Start(MessageLoop::Type message_loop_type, Delegate* del
 
     state_ = State::Starting;
 
+    start_event_.Reset();
     thread_.swap(std::thread(&MessageLoopThread::ThreadMain, this, message_loop_type));
-
-    std::unique_lock<std::mutex> lock(running_lock_);
-
-    while (!running_)
-        running_event_.wait(lock);
+    start_event_.Wait();
 
     state_ = State::Started;
 
@@ -81,19 +85,12 @@ void MessageLoopThread::ThreadMain(MessageLoop::Type message_loop_type)
     if (delegate_)
         delegate_->OnBeforeThreadRunning();
 
-    {
-        std::unique_lock<std::mutex> lock(running_lock_);
-        running_ = true;
-    }
-
-    running_event_.notify_one();
+    running_ = true;
+    start_event_.Signal();
 
     message_loop_->Run();
 
-    {
-        std::unique_lock<std::mutex> lock(running_lock_);
-        running_ = false;
-    }
+    running_ = false;
 
     // Let the thread do extra cleanup.
     if (delegate_)
