@@ -355,21 +355,17 @@ bool PipeChannel::Connect(Delegate* delegate)
         if (!ConnectToClientPipe(read_pipe_) || !ConnectToClientPipe(write_pipe_))
             return false;
 
-        if (!GetNamedPipeClientProcessId(read_pipe_, &peer_pid_))
-        {
-            LOG(ERROR) << "GetNamedPipeClientProcessId() failed: " << GetLastError();
+        if (!Read(&peer_pid_, sizeof(peer_pid_)))
             return false;
-        }
     }
     else
     {
         DCHECK(mode_ == Mode::CLIENT);
 
-        if (!GetNamedPipeServerProcessId(read_pipe_, &peer_pid_))
-        {
-            LOG(ERROR) << "GetNamedPipeServerProcessId() failed: " << GetLastError();
+        peer_pid_ = GetCurrentProcessId();
+
+        if (!Write(&peer_pid_, sizeof(peer_pid_)))
             return false;
-        }
     }
 
     delegate_ = delegate;
