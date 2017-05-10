@@ -8,9 +8,9 @@
 #ifndef _ASPIA_NETWORK__FIREWALL_MANAGER_H
 #define _ASPIA_NETWORK__FIREWALL_MANAGER_H
 
+#include "base/scoped_comptr.h"
 #include "base/macros.h"
 
-#include <wrl.h>
 #include <netfw.h>
 #include <string>
 
@@ -28,8 +28,8 @@ public:
     void DeleteRule(const WCHAR* rule_name);
 
 private:
-    Microsoft::WRL::ComPtr<INetFwPolicy2> firewall_policy_ = nullptr;
-    Microsoft::WRL::ComPtr<INetFwRules> firewall_rules_ = nullptr;
+    ScopedComPtr<INetFwPolicy2> firewall_policy_;
+    ScopedComPtr<INetFwRules> firewall_rules_;
 
     std::wstring app_name_;
     std::wstring app_path_;

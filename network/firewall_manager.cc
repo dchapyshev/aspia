@@ -19,17 +19,14 @@ namespace aspia {
 bool FirewallManager::Init(const std::wstring& app_name, const std::wstring& app_path)
 {
     // Retrieve INetFwPolicy2
-    HRESULT hr = CoCreateInstance(CLSID_NetFwPolicy2,
-                                  nullptr,
-                                  CLSCTX_ALL,
-                                  IID_PPV_ARGS(firewall_policy_.GetAddressOf()));
+    HRESULT hr = firewall_policy_.CreateInstance(CLSID_NetFwPolicy2);
     if (FAILED(hr))
     {
         LOG(ERROR) << "CreateInstance() failed: " << hr;
         return false;
     }
 
-    hr = firewall_policy_->get_Rules(firewall_rules_.GetAddressOf());
+    hr = firewall_policy_->get_Rules(firewall_rules_.Receive());
     if (FAILED(hr))
     {
         LOG(ERROR) << "get_Rules() failed: " << hr;
@@ -79,12 +76,9 @@ bool FirewallManager::AddTcpRule(const WCHAR* rule_name, const WCHAR* descriptio
 {
     DeleteRule(rule_name);
 
-    Microsoft::WRL::ComPtr<INetFwRule> rule;
+    ScopedComPtr<INetFwRule> rule;
 
-    HRESULT hr = CoCreateInstance(CLSID_NetFwRule,
-                                  nullptr,
-                                  CLSCTX_ALL,
-                                  IID_PPV_ARGS(rule.GetAddressOf()));
+    HRESULT hr = rule.CreateInstance(CLSID_NetFwRule);
     if (FAILED(hr))
     {
         LOG(ERROR) << "CoCreateInstance() failed: " << hr;
@@ -102,7 +96,7 @@ bool FirewallManager::AddTcpRule(const WCHAR* rule_name, const WCHAR* descriptio
     rule->put_Profiles(NET_FW_PROFILE2_ALL);
     rule->put_Action(NET_FW_ACTION_ALLOW);
 
-    firewall_rules_->Add(rule.Get());
+    firewall_rules_->Add(rule.get());
     if (FAILED(hr))
     {
         LOG(ERROR) << "Add() failed: " << hr;
@@ -114,18 +108,18 @@ bool FirewallManager::AddTcpRule(const WCHAR* rule_name, const WCHAR* descriptio
 
 void FirewallManager::DeleteRule(const WCHAR* rule_name)
 {
-    Microsoft::WRL::ComPtr<IUnknown> rules_enum_unknown;
+    ScopedComPtr<IUnknown> rules_enum_unknown;
 
-    HRESULT hr = firewall_rules_->get__NewEnum(rules_enum_unknown.GetAddressOf());
+    HRESULT hr = firewall_rules_->get__NewEnum(rules_enum_unknown.Receive());
     if (FAILED(hr))
     {
         LOG(ERROR) << "get__NewEnum() failed: " << hr;
         return;
     }
 
-    Microsoft::WRL::ComPtr<IEnumVARIANT> rules_enum;
+    ScopedComPtr<IEnumVARIANT> rules_enum;
 
-    hr = rules_enum_unknown.As(&rules_enum);
+    hr = rules_enum.QueryFrom(rules_enum_unknown.get());
     if (FAILED(hr))
     {
         LOG(ERROR) << "QueryInterface() failed: " << hr;
@@ -145,9 +139,9 @@ void FirewallManager::DeleteRule(const WCHAR* rule_name)
 
         DCHECK_EQ(VT_DISPATCH, rule_var.type());
 
-        Microsoft::WRL::ComPtr<INetFwRule> rule;
+        ScopedComPtr<INetFwRule> rule;
 
-        hr = V_DISPATCH(&rule_var)->QueryInterface(rule.GetAddressOf());
+        hr = rule.QueryFrom(V_DISPATCH(&rule_var));
         if (FAILED(hr))
         {
             DLOG(ERROR) << "QueryInterface() failed: " << hr;
