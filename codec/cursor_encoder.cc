@@ -93,15 +93,12 @@ std::unique_ptr<proto::CursorShape> CursorEncoder::Encode(std::unique_ptr<MouseC
     if (!mouse_cursor)
         return nullptr;
 
-    if (mouse_cursor->Size().Width() <= 0 ||
-        mouse_cursor->Size().Width() > (std::numeric_limits<int16_t>::max() / 2) ||
-        mouse_cursor->Size().Height() <= 0 ||
-        mouse_cursor->Size().Height() > (std::numeric_limits<int16_t>::max() / 2))
+    const DesktopSize& size = mouse_cursor->Size();
+
+    if (size.Width() <= 0 || size.Width() > (std::numeric_limits<int16_t>::max() / 2) ||
+        size.Height() <= 0 || size.Height() > (std::numeric_limits<int16_t>::max() / 2))
     {
-        DLOG(ERROR) << "Wrong size of cursor: "
-                    << mouse_cursor->Size().Width()
-                    << "x"
-                    << mouse_cursor->Size().Height();
+        DLOG(ERROR) << "Wrong size of cursor: " << size.Width() << "x" << size.Height();
         return nullptr;
     }
 
@@ -112,8 +109,8 @@ std::unique_ptr<proto::CursorShape> CursorEncoder::Encode(std::unique_ptr<MouseC
     // The cursor is not found in the cache.
     if (index == MouseCursorCache::kInvalidIndex)
     {
-        cursor_shape->set_width(mouse_cursor->Size().Width());
-        cursor_shape->set_height(mouse_cursor->Size().Height());
+        cursor_shape->set_width(size.Width());
+        cursor_shape->set_height(size.Height());
         cursor_shape->set_hotspot_x(mouse_cursor->Hotspot().x());
         cursor_shape->set_hotspot_y(mouse_cursor->Hotspot().y());
 
