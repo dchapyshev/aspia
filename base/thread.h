@@ -9,10 +9,10 @@
 #define _ASPIA_BASE__THREAD_H
 
 #include <atomic>
-#include <condition_variable>
 #include <mutex>
 #include <thread>
 
+#include "base/waitable_event.h"
 #include "base/macros.h"
 
 namespace aspia {
@@ -20,7 +20,7 @@ namespace aspia {
 class Thread
 {
 public:
-    Thread() = default;
+    Thread();
     virtual ~Thread() = default;
 
     // Starts the thread and waits for its real start
@@ -55,9 +55,9 @@ private:
     std::atomic<State> state_ = State::Stopped;
 
     // True while inside of Run().
-    bool running_ = false;
-    std::mutex running_lock_;
-    std::condition_variable running_event_;
+    std::atomic_bool running_ = false;
+
+    WaitableEvent start_event_;
 
     DISALLOW_COPY_AND_ASSIGN(Thread);
 };

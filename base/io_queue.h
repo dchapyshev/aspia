@@ -8,12 +8,12 @@
 #ifndef _ASPIA_BASE__IO_QUEUE_H
 #define _ASPIA_BASE__IO_QUEUE_H
 
-#include <condition_variable>
 #include <functional>
 #include <queue>
 #include <memory>
 #include <mutex>
 
+#include "base/waitable_event.h"
 #include "base/thread.h"
 #include "base/macros.h"
 #include "base/io_buffer.h"
@@ -38,7 +38,7 @@ private:
     std::queue<IOBuffer> queue_;
     std::mutex queue_lock_;
 
-    std::condition_variable event_;
+    WaitableEvent event_;
 
     DISALLOW_COPY_AND_ASSIGN(IOQueue);
 };

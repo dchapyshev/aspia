@@ -10,21 +10,21 @@
 
 namespace aspia {
 
+Thread::Thread() :
+    start_event_(WaitableEvent::ResetPolicy::Manual,
+                 WaitableEvent::InitialState::NotSignaled)
+{
+    // Nothing
+}
+
 void Thread::ThreadMain()
 {
-    {
-        std::unique_lock<std::mutex> lock(running_lock_);
-        running_ = true;
-    }
-
-    running_event_.notify_one();
+    running_ = true;
+    start_event_.Signal();
 
     Run();
 
-    {
-        std::unique_lock<std::mutex> lock(running_lock_);
-        running_ = false;
-    }
+    running_ = false;
 }
 
 void Thread::StopSoon()
@@ -62,12 +62,9 @@ void Thread::Start()
 
     state_ = State::Starting;
 
+    start_event_.Reset();
     thread_.swap(std::thread(&Thread::ThreadMain, this));
-
-    std::unique_lock<std::mutex> lock(running_lock_);
-
-    while (!running_)
-        running_event_.wait(lock);
+    start_event_.Wait();
 
     state_ = State::Started;
 }

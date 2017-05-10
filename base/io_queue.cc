@@ -10,7 +10,9 @@
 namespace aspia {
 
 IOQueue::IOQueue(ProcessMessageCallback process_message_callback) :
-    process_message_callback_(std::move(process_message_callback))
+    process_message_callback_(std::move(process_message_callback)),
+    event_(WaitableEvent::ResetPolicy::Automatic,
+           WaitableEvent::InitialState::NotSignaled)
 {
     Start();
 }
@@ -18,7 +20,7 @@ IOQueue::IOQueue(ProcessMessageCallback process_message_callback) :
 IOQueue::~IOQueue()
 {
     StopSoon();
-    event_.notify_one();
+    event_.Signal();
     Join();
 }
 
@@ -29,35 +31,40 @@ void IOQueue::Add(IOBuffer buffer)
         queue_.push(std::move(buffer));
     }
 
-    event_.notify_one();
+    event_.Signal();
 }
 
 void IOQueue::Run()
 {
     while (!IsStopping())
     {
-        IOBuffer buffer;
-
+        for (;;)
         {
-            std::unique_lock<std::mutex> lock(queue_lock_);
+            if (IsStopping())
+                return;
 
-            // Conditional variables can unexpectedly wake up (even if the
-            // corresponding methods/functions are not called). After waking up
-            // the conditional variable repeatedly check the presence of messages
-            // in the queue. If there are no messages, then fall asleep again.
-            while (queue_.empty())
+            bool is_empty;
+
             {
-                event_.wait(lock);
-
-                if (IsStopping())
-                    return;
+                std::unique_lock<std::mutex> lock(queue_lock_);
+                is_empty = queue_.empty();
             }
 
-            buffer = std::move(queue_.front());
-            queue_.pop();
+            if (is_empty)
+                break;
+
+            IOBuffer buffer;
+
+            {
+                std::unique_lock<std::mutex> lock(queue_lock_);
+                buffer = std::move(queue_.front());
+                queue_.pop();
+            }
+
+            process_message_callback_(buffer);
         }
 
-        process_message_callback_(buffer);
+        event_.Wait();
     }
 }
 
