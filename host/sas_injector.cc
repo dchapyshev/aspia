@@ -13,6 +13,7 @@
 #include "base/path.h"
 #include "base/logging.h"
 #include "base/unicode.h"
+#include "base/scoped_native_library.h"
 #include "host/scoped_sas_police.h"
 
 namespace aspia {
@@ -64,8 +65,43 @@ void SasInjector::ExecuteService()
 
 void SasInjector::Worker()
 {
+    ScopedNativeLibrary wmsgapi(L"wmsgapi.dll");
+
+    typedef DWORD(WINAPI *WmsgSendMessageFn)(DWORD session_id, UINT msg, WPARAM wParam, LPARAM lParam);
+
+    WmsgSendMessageFn send_message_func =
+        reinterpret_cast<WmsgSendMessageFn>(wmsgapi.GetFunctionPointer("WmsgSendMessage"));
+
+    if (!send_message_func)
+    {
+        LOG(ERROR) << "WmsgSendMessage() not found in wmsgapi.dll";
+        return;
+    }
+
+    HMODULE kernel32_module = GetModuleHandleW(L"kernel32.dll");
+
+    typedef DWORD(WINAPI *WTSGetActiveConsoleSessionIdFn)();
+
+    WTSGetActiveConsoleSessionIdFn get_active_console_session_id_ =
+        reinterpret_cast<WTSGetActiveConsoleSessionIdFn>(
+            GetProcAddress(kernel32_module, "WTSGetActiveConsoleSessionId"));
+    if (!get_active_console_session_id_)
+    {
+        LOG(ERROR) << "WTSGetActiveConsoleSessionId() not found in kernel32.dll";
+        return;
+    }
+
+    DWORD session_id = get_active_console_session_id_();
+    if (session_id == 0xFFFFFFFF)
+    {
+        LOG(ERROR) << "WTSGetActiveConsoleSessionId() failed: " << GetLastError();
+        return;
+    }
+
     ScopedSasPolice sas_police;
-    SendSAS(FALSE);
+
+    BOOL as_user_ = FALSE;
+    send_message_func(session_id, 0x208, 0, reinterpret_cast<LPARAM>(&as_user_));
 }
 
 void SasInjector::OnStop()
