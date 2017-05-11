@@ -37,7 +37,7 @@ DesktopSessionLauncher::DesktopSessionLauncher(const std::wstring& service_id) :
     // Nothing
 }
 
-static bool CopyProcessToken(DWORD desired_access, ScopedHandle* token_out)
+static bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
 {
     ScopedHandle process_token;
 
@@ -54,7 +54,7 @@ static bool CopyProcessToken(DWORD desired_access, ScopedHandle* token_out)
                           nullptr,
                           SecurityImpersonation,
                           TokenPrimary,
-                          token_out->Recieve()))
+                          token_out.Recieve()))
     {
         LOG(ERROR) << "DuplicateTokenEx() failed: " << GetLastError();
         return false;
@@ -64,13 +64,13 @@ static bool CopyProcessToken(DWORD desired_access, ScopedHandle* token_out)
 }
 
 // Creates a copy of the current process with SE_TCB_NAME privilege enabled.
-static bool CreatePrivilegedToken(ScopedHandle* token_out)
+static bool CreatePrivilegedToken(ScopedHandle& token_out)
 {
     ScopedHandle privileged_token;
     DWORD desired_access = TOKEN_ADJUST_PRIVILEGES | TOKEN_IMPERSONATE |
         TOKEN_DUPLICATE | TOKEN_QUERY;
 
-    if (!CopyProcessToken(desired_access, &privileged_token))
+    if (!CopyProcessToken(desired_access, privileged_token))
         return false;
 
     // Get the LUID for the SE_TCB_NAME privilege.
@@ -91,24 +91,24 @@ static bool CreatePrivilegedToken(ScopedHandle* token_out)
         return false;
     }
 
-    token_out->Reset(privileged_token.Release());
+    token_out.Reset(privileged_token.Release());
     return true;
 }
 
 // Creates a copy of the current process token for the given |session_id| so
 // it can be used to launch a process in that session.
-static bool CreateSessionToken(uint32_t session_id, ScopedHandle* token_out)
+static bool CreateSessionToken(uint32_t session_id, ScopedHandle& token_out)
 {
     ScopedHandle session_token;
     DWORD desired_access = TOKEN_ADJUST_DEFAULT | TOKEN_ADJUST_SESSIONID |
         TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
-    if (!CopyProcessToken(desired_access, &session_token))
+    if (!CopyProcessToken(desired_access, session_token))
         return false;
 
     ScopedHandle privileged_token;
 
-    if (!CreatePrivilegedToken(&privileged_token))
+    if (!CreatePrivilegedToken(privileged_token))
         return false;
 
     {
@@ -129,7 +129,7 @@ static bool CreateSessionToken(uint32_t session_id, ScopedHandle* token_out)
         }
     }
 
-    token_out->Reset(session_token.Release());
+    token_out.Reset(session_token.Release());
     return true;
 }
 
@@ -183,7 +183,7 @@ static bool LaunchProcessInSession(uint32_t session_id,
 
     ScopedHandle session_token;
 
-    if (!CreateSessionToken(session_id, &session_token))
+    if (!CreateSessionToken(session_id, session_token))
         return false;
 
     return CreateProcessWithToken(session_token, command_line);
@@ -234,7 +234,7 @@ bool DesktopSessionLauncher::LaunchSession(uint32_t session_id,
 
         ScopedHandle token;
 
-        if (!CopyProcessToken(TOKEN_ALL_ACCESS, &token))
+        if (!CopyProcessToken(TOKEN_ALL_ACCESS, token))
             return false;
 
         return CreateProcessWithToken(token, command_line);
