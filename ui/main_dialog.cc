@@ -12,8 +12,7 @@
 #include <ws2tcpip.h>
 
 #include "base/version_helpers.h"
-#include "base/elevation_helpers.h"
-#include "base/process.h"
+#include "base/process_helpers.h"
 #include "base/unicode.h"
 #include "base/util.h"
 #include "client/client_config.h"
@@ -129,20 +128,8 @@ void MainDialog::OnInitDialog()
     }
 
     bool host_service_installed = HostService::IsInstalled();
-    bool is_admin_mode = false;
 
-    if (IsWindowsVistaOrGreater())
-    {
-        if (IsProcessElevated())
-            is_admin_mode = true;
-    }
-    else
-    {
-        if (Process::Current().HasAdminRights())
-            is_admin_mode = true;
-    }
-
-    if (!is_admin_mode)
+    if (!IsCallerHasAdminRights())
     {
         EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_GRAYED);
         EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);

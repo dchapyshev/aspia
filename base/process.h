@@ -74,8 +74,6 @@ public:
     // is not required.
     bool WaitForExitWithTimeout(uint32_t timeout_ms, int* exit_code) const;
 
-    bool HasAdminRights();
-
     // Close the process handle. This will not terminate the process.
     void Close();
 

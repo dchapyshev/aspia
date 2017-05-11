@@ -8,8 +8,8 @@
 #include "ui/users_dialog.h"
 #include "ui/user_prop_dialog.h"
 #include "ui/resource.h"
+#include "base/process_helpers.h"
 #include "base/unicode.h"
-#include "base/process.h"
 #include "base/util.h"
 #include "host/host_user_utils.h"
 
@@ -73,7 +73,7 @@ void UsersDialog::OnInitDialog()
 
     ListView_InsertColumn(list, 0, &column);
 
-    if (!Process::Current().HasAdminRights())
+    if (!IsCallerHasAdminRights())
     {
         EnableWindow(GetDlgItem(IDC_USER_LIST), FALSE);
         EnableWindow(GetDlgItem(ID_ADD), FALSE);

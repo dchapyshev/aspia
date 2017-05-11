@@ -11,7 +11,6 @@
 #include <string>
 
 #include "base/scoped_impersonator.h"
-#include "base/scoped_local.h"
 #include "base/logging.h"
 #include "base/path.h"
 
@@ -215,64 +214,6 @@ Process& Process::operator=(Process&& other)
     other.process_handle_ = kNullProcessHandle;
 
     return *this;
-}
-
-bool Process::HasAdminRights()
-{
-    DWORD desired_access = TOKEN_ADJUST_PRIVILEGES | TOKEN_IMPERSONATE |
-                           TOKEN_DUPLICATE | TOKEN_QUERY;
-
-    ScopedHandle process_token;
-
-    if (!OpenProcessToken(Handle(),
-                          desired_access,
-                          process_token.Recieve()))
-    {
-        LOG(ERROR) << "OpenProcessToken() failed: " << GetLastError();
-        return false;
-    }
-
-    ScopedHandle duplicate_token;
-
-    if (!DuplicateTokenEx(process_token,
-                          desired_access,
-                          nullptr,
-                          SecurityImpersonation,
-                          TokenPrimary,
-                          duplicate_token.Recieve()))
-    {
-        LOG(ERROR) << "DuplicateTokenEx() failed: " << GetLastError();
-        return false;
-    }
-
-    ScopedImpersonator impersonator;
-
-    if (!impersonator.ImpersonateLoggedOnUser(duplicate_token))
-        return false;
-
-    SID_IDENTIFIER_AUTHORITY nt_authority = SECURITY_NT_AUTHORITY;
-    ScopedLocal<PSID> admin_group;
-
-    if (!AllocateAndInitializeSid(&nt_authority,
-                                  2,
-                                  SECURITY_BUILTIN_DOMAIN_RID,
-                                  DOMAIN_ALIAS_RID_ADMINS,
-                                  0, 0, 0, 0, 0, 0,
-                                  admin_group.Recieve()))
-    {
-        LOG(ERROR) << "AllocateAndInitializeSid() failed: " << GetLastError();
-        return false;
-    }
-
-    BOOL is_admin = FALSE;
-
-    if (!CheckTokenMembership(nullptr, admin_group, &is_admin))
-    {
-        LOG(ERROR) << "CheckTokenMembership() failed: " << GetLastError();
-        return false;
-    }
-
-    return !!is_admin;
 }
 
 } // namespace aspia

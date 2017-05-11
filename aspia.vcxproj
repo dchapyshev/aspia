@@ -13,7 +13,6 @@
   <ItemGroup>
     <ClCompile Include="base\aligned_memory.cc" />
     <ClCompile Include="base\desktop.cc" />
-    <ClCompile Include="base\elevation_helpers.cc" />
     <ClCompile Include="base\io_queue.cc" />
     <ClCompile Include="base\message_loop\message_loop.cc" />
     <ClCompile Include="base\message_loop\message_loop_proxy.cc" />
@@ -26,6 +25,7 @@
     <ClCompile Include="base\object_watcher.cc" />
     <ClCompile Include="base\path.cc" />
     <ClCompile Include="base\process.cc" />
+    <ClCompile Include="base\process_helpers.cc" />
     <ClCompile Include="base\registry.cc" />
     <ClCompile Include="base\scoped_bstr.cc" />
     <ClCompile Include="base\scoped_clipboard.cc" />
@@ -123,7 +123,6 @@
   <ItemGroup>
     <ClInclude Include="base\aligned_memory.h" />
     <ClInclude Include="base\desktop.h" />
-    <ClInclude Include="base\elevation_helpers.h" />
     <ClInclude Include="base\io_buffer.h" />
     <ClInclude Include="base\io_queue.h" />
     <ClInclude Include="base\logging.h" />
@@ -142,6 +141,7 @@
     <ClInclude Include="base\object_watcher.h" />
     <ClInclude Include="base\path.h" />
     <ClInclude Include="base\process.h" />
+    <ClInclude Include="base\process_helpers.h" />
     <ClInclude Include="base\registry.h" />
     <ClInclude Include="base\scoped_bstr.h" />
     <ClInclude Include="base\scoped_clipboard.h" />
