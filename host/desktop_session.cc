@@ -7,6 +7,7 @@
 
 #include "host/desktop_session.h"
 #include "host/desktop_session_launcher.h"
+#include "base/version_helpers.h"
 #include "base/scoped_privilege.h"
 
 namespace aspia {
@@ -40,8 +41,13 @@ void DesktopSession::OnBeforeThreadRunning()
 
     OnSessionAttached(WTSGetActiveConsoleSessionId());
 
-    bool ret = session_watcher_.StartWatching(this);
-    DCHECK(ret);
+    // In Windows XP, the console session always has a ID equal to 0.
+    // We do not need to watch the session.
+    if (IsWindowsVistaOrGreater())
+    {
+        bool ret = session_watcher_.StartWatching(this);
+        DCHECK(ret);
+    }
 }
 
 void DesktopSession::OnAfterThreadRunning()
