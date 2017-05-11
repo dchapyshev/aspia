@@ -55,8 +55,15 @@ bool CreateSHA512(const std::string& data, std::string& data_hash)
                               PROV_RSA_AES,
                               CRYPT_VERIFYCONTEXT))
     {
-        LOG(ERROR) << "CryptAcquireContextW() failed: " << GetLastError();
-        return false;
+        if (!CryptAcquireContextW(prov.Recieve(),
+                                  NULL,
+                                  MS_ENH_RSA_AES_PROV_XP_W,
+                                  PROV_RSA_AES,
+                                  CRYPT_VERIFYCONTEXT))
+        {
+            LOG(ERROR) << "CryptAcquireContextW() failed: " << GetLastError();
+            return nullptr;
+        }
     }
 
     {
