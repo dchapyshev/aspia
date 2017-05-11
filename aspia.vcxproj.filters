@@ -806,6 +806,9 @@
     <ClInclude Include="base\process_helpers.h">
       <Filter>base</Filter>
     </ClInclude>
+    <ClInclude Include="network\scoped_addrinfo.h">
+      <Filter>network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
