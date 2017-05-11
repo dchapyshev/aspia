@@ -240,9 +240,19 @@ bool DesktopSessionLauncher::LaunchSession(uint32_t session_id,
     }
     else
     {
+        typedef BOOL(WINAPI *ProcessIdToSessionIdFn)(DWORD, DWORD*);
+
+        HMODULE kernel32_module = GetModuleHandleW(L"kernel32.dll");
+        CHECK(kernel32_module);
+
+        ProcessIdToSessionIdFn process_id_to_session_id =
+            reinterpret_cast<ProcessIdToSessionIdFn>(
+                GetProcAddress(kernel32_module, "ProcessIdToSessionId"));
+        CHECK(process_id_to_session_id);
+
         DWORD current_process_session_id;
 
-        if (!ProcessIdToSessionId(GetCurrentProcessId(), &current_process_session_id))
+        if (!process_id_to_session_id(GetCurrentProcessId(), &current_process_session_id))
         {
             LOG(WARNING) << "ProcessIdToSessionId() failed: " << GetLastError();
             return false;
