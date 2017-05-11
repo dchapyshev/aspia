@@ -6,7 +6,7 @@
 //
 
 #include "network/network_client_tcp.h"
-#include "network/scoped_addrinfo.h"
+#include "base/unicode.h"
 
 namespace aspia {
 
@@ -67,68 +67,67 @@ bool NetworkClientTcp::Connect(const std::wstring& address, uint16_t port, Deleg
     delegate_ = delegate;
 
     runner_ = MessageLoopProxy::Current();
+    DCHECK(runner_);
 
-    ADDRINFOW hints = { 0 };
+    std::string address_ansi;
+    CHECK(UNICODEtoANSI(address, address_ansi));
 
-    hints.ai_family   = AF_INET;
-    hints.ai_socktype = SOCK_STREAM;
-    hints.ai_protocol = IPPROTO_TCP;
+    sockaddr_in dest_addr;
 
-    ScopedAddrInfo result;
+    dest_addr.sin_family = AF_INET;
+    dest_addr.sin_port = htons(port);
+    dest_addr.sin_addr.s_addr = inet_addr(address_ansi.c_str());
 
-    int ret = GetAddrInfoW(address.c_str(),
-                           std::to_wstring(port).c_str(),
-                           &hints,
-                           result.Recieve());
-    if (ret != 0)
+    if (dest_addr.sin_addr.s_addr == INADDR_NONE)
     {
-        LOG(ERROR) << "getaddrinfo() failed: " << ret;
+        HOSTENT* host = gethostbyname(address_ansi.c_str());
+
+        if (!host)
+            return false;
+
+        ((ULONG *) &dest_addr.sin_addr)[0] = ((ULONG **) host->h_addr_list)[0][0];
+    }
+
+    socket_.Reset(socket(AF_INET, SOCK_STREAM, IPPROTO_TCP));
+    if (!socket_.IsValid())
+    {
+        LOG(ERROR) << "socket() failed: " << WSAGetLastError();
         return false;
     }
 
-    for (ADDRINFOW* curr = result.Get(); curr != nullptr; curr = curr->ai_next)
+    u_long non_blocking = 1;
+
+    if (ioctlsocket(socket_, FIONBIO, &non_blocking) == SOCKET_ERROR)
     {
-        socket_.Reset(socket(curr->ai_family, curr->ai_socktype, curr->ai_protocol));
-        if (!socket_.IsValid())
-        {
-            LOG(ERROR) << "socket() failed: " << WSAGetLastError();
-            continue;
-        }
-
-        u_long non_blocking = 1;
-
-        if (ioctlsocket(socket_, FIONBIO, &non_blocking) == SOCKET_ERROR)
-        {
-            LOG(ERROR) << "ioctlsocket() failed: " << WSAGetLastError();
-            continue;
-        }
-
-        connect_event_.Reset();
-
-        if (WSAEventSelect(socket_, connect_event_.Handle(), FD_CONNECT) == SOCKET_ERROR)
-        {
-            LOG(ERROR) << "WSAEventSelect() failed: " << WSAGetLastError();
-            continue;
-        }
-
-        if (WSAConnect(socket_, curr->ai_addr, curr->ai_addrlen,
-                       nullptr, nullptr, nullptr, nullptr) == SOCKET_ERROR)
-        {
-            ret = WSAGetLastError();
-
-            if (ret != WSAEWOULDBLOCK)
-            {
-                LOG(ERROR) << "WSAConnect() failed: " << ret;
-                continue;
-            }
-        }
-
-        return connect_watcher_.StartTimedWatching(connect_event_.Handle(),
-                                                   kConnectTimeout,
-                                                   this);
+        LOG(ERROR) << "ioctlsocket() failed: " << WSAGetLastError();
+        return false;
     }
 
-    return false;
+    connect_event_.Reset();
+
+    if (WSAEventSelect(socket_, connect_event_.Handle(), FD_CONNECT) == SOCKET_ERROR)
+    {
+        LOG(ERROR) << "WSAEventSelect() failed: " << WSAGetLastError();
+        return false;
+    }
+
+    if (WSAConnect(socket_,
+                   reinterpret_cast<const sockaddr*>(&dest_addr),
+                   sizeof(dest_addr),
+                   nullptr, nullptr, nullptr, nullptr) == SOCKET_ERROR)
+    {
+        int ret = WSAGetLastError();
+
+        if (ret != WSAEWOULDBLOCK)
+        {
+            LOG(ERROR) << "WSAConnect() failed: " << ret;
+            return false;
+        }
+    }
+
+    return connect_watcher_.StartTimedWatching(connect_event_.Handle(),
+                                               kConnectTimeout,
+                                               this);
 }
 
 void NetworkClientTcp::OnObjectSignaled(HANDLE object)

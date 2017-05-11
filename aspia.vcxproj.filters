@@ -627,9 +627,6 @@
     <ClInclude Include="network\network_server_tcp.h">
       <Filter>network</Filter>
     </ClInclude>
-    <ClInclude Include="network\scoped_addrinfo.h">
-      <Filter>network</Filter>
-    </ClInclude>
     <ClInclude Include="network\scoped_wsa_initializer.h">
       <Filter>network</Filter>
     </ClInclude>

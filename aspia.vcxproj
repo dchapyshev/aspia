@@ -238,7 +238,6 @@
     <ClInclude Include="network\network_channel_tcp.h" />
     <ClInclude Include="network\network_client_tcp.h" />
     <ClInclude Include="network\network_server_tcp.h" />
-    <ClInclude Include="network\scoped_addrinfo.h" />
     <ClInclude Include="network\scoped_wsa_initializer.h" />
     <ClInclude Include="network\socket.h" />
     <ClInclude Include="network\wsa_waitable_event.h" />

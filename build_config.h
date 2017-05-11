@@ -12,8 +12,8 @@
 
 // Target version
 #define _WIN32_WINNT     0x0501
-#define NTDDI_VERSION    0x05010200 // Windows XP SP2
-#define _WIN32_IE        0x0800 // Internet Explorer 8.0
+#define NTDDI_VERSION    0x05010000 // Windows XP (without service packs)
+#define _WIN32_IE        0x0600 // Internet Explorer 6.0
 #define PSAPI_VERSION    1
 #define WINVER           _WIN32_WINNT
 #define _WIN32_WINDOWS   _WIN32_WINNT
