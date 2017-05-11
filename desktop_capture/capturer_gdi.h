@@ -11,6 +11,7 @@
 #include "desktop_capture/capturer.h"
 #include "desktop_capture/desktop_frame_dib.h"
 #include "desktop_capture/differ.h"
+#include "base/scoped_native_library.h"
 #include "base/scoped_thread_desktop.h"
 #include "base/scoped_gdi_object.h"
 #include "base/scoped_hdc.h"
@@ -28,8 +29,13 @@ public:
     std::unique_ptr<MouseCursor> CaptureCursor() override;
 
 private:
+    typedef HRESULT(WINAPI * DwmEnableCompositionFunc)(UINT);
+
     CapturerGDI();
     bool PrepareCaptureResources();
+
+    ScopedNativeLibrary dwmapi_library_;
+    DwmEnableCompositionFunc composition_func_ = nullptr;
 
     ScopedThreadDesktop desktop_;
     DesktopRect desktop_dc_rect_;

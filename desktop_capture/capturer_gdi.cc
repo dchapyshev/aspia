@@ -6,18 +6,26 @@
 //
 
 #include "desktop_capture/capturer_gdi.h"
-
 #include "base/logging.h"
 #include "base/scoped_select_object.h"
 #include "desktop_capture/cursor.h"
 
-#include <dwmapi.h>
-
 namespace aspia {
 
-CapturerGDI::CapturerGDI()
+// Constants from dwmapi.h.
+const UINT DWM_EC_DISABLECOMPOSITION = 0;
+const UINT DWM_EC_ENABLECOMPOSITION = 1;
+
+const wchar_t kDwmapiLibraryName[] = L"dwmapi.dll";
+
+CapturerGDI::CapturerGDI() :
+    dwmapi_library_(kDwmapiLibraryName)
 {
     memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
+
+    composition_func_ =
+        reinterpret_cast<DwmEnableCompositionFunc>(
+            dwmapi_library_.GetFunctionPointer("DwmEnableComposition"));
 }
 
 // static
@@ -63,7 +71,10 @@ bool CapturerGDI::PrepareCaptureResources()
         // Vote to disable Aero composited desktop effects while capturing. Windows
         // will restore Aero automatically if the process exits. This has no effect
         // under Windows 8 or higher. See crbug.com/124018.
-        DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+        if (composition_func_)
+        {
+            composition_func_(DWM_EC_DISABLECOMPOSITION);
+        }
 
         // Create GDI device contexts to capture from the desktop into memory.
         desktop_dc_.reset(new ScopedGetDC(nullptr));
