@@ -6,6 +6,7 @@
 //
 
 #include <gflags/gflags.h>
+#include "base/version_helpers.h"
 #include "base/elevation_helpers.h"
 #include "base/process.h"
 #include "base/unicode.h"
@@ -24,14 +25,14 @@ int main(int argc, char *argv[])
 
     if (FLAGS_run_mode.empty())
     {
-        if (Process::Current().HasAdminRights())
-        {
-            RunUIMain();
-        }
-        else
+        if (IsWindowsVistaOrGreater() && !IsProcessElevated())
         {
             if (!ElevateProcess())
                 RunUIMain();
+        }
+        else
+        {
+            RunUIMain();
         }
     }
     else

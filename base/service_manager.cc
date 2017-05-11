@@ -158,13 +158,25 @@ bool ServiceManager::IsServiceInstalled(const std::wstring& service_name)
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
 
     if (!sc_manager.IsValid())
+    {
+        LOG(ERROR) << "OpenSCManagerW() failed: " << GetLastError();
         return false;
+    }
 
     ScopedScHandle service(OpenServiceW(sc_manager,
                                         service_name.c_str(),
                                         SERVICE_QUERY_STATUS));
+    if (!service.IsValid())
+    {
+        DWORD error = GetLastError();
 
-    return service.IsValid();
+        if (error != ERROR_SERVICE_DOES_NOT_EXIST)
+            LOG(ERROR) << "OpenServiceW() failed: " << error;
+
+        return false;
+    }
+
+    return true;
 }
 
 bool ServiceManager::IsValid() const

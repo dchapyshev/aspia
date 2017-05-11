@@ -11,7 +11,9 @@
 #include <iphlpapi.h>
 #include <ws2tcpip.h>
 
+#include "base/version_helpers.h"
 #include "base/elevation_helpers.h"
+#include "base/process.h"
 #include "base/unicode.h"
 #include "base/util.h"
 #include "client/client_config.h"
@@ -127,18 +129,30 @@ void MainDialog::OnInitDialog()
     }
 
     bool host_service_installed = HostService::IsInstalled();
+    bool is_admin_mode = false;
 
-    if (!IsProcessElevated())
+    if (IsWindowsVistaOrGreater())
     {
-        EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_DISABLED);
-        EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_DISABLED);
+        if (IsProcessElevated())
+            is_admin_mode = true;
+    }
+    else
+    {
+        if (Process::Current().HasAdminRights())
+            is_admin_mode = true;
+    }
+
+    if (!is_admin_mode)
+    {
+        EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_GRAYED);
+        EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);
     }
     else
     {
         if (host_service_installed)
-            EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_DISABLED);
+            EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_GRAYED);
         else
-            EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_DISABLED);
+            EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);
     }
 
     if (host_service_installed)
@@ -268,7 +282,7 @@ void MainDialog::OnInstallServiceButton()
 
     if (HostService::Install())
     {
-        EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_DISABLED);
+        EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_GRAYED);
         EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_ENABLED);
         EnableWindow(GetDlgItem(IDC_START_SERVER_BUTTON), FALSE);
     }
@@ -279,7 +293,7 @@ void MainDialog::OnRemoveServiceButton()
     if (HostService::Remove())
     {
         EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_ENABLED);
-        EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_DISABLED);
+        EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);
         EnableWindow(GetDlgItem(IDC_START_SERVER_BUTTON), TRUE);
     }
 }
