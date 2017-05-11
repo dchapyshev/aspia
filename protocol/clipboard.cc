@@ -73,7 +73,7 @@ void Clipboard::Stop()
     {
         if (HaveClipboardListenerApi())
         {
-            RemoveClipboardFormatListener(window_->hwnd());
+            remove_clipboard_format_listener_(window_->hwnd());
         }
         else
         {

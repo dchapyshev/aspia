@@ -13,6 +13,7 @@
 
 #include "base/elevation_helpers.h"
 #include "base/unicode.h"
+#include "base/util.h"
 #include "client/client_config.h"
 #include "codec/video_helpers.h"
 #include "host/host_service.h"
@@ -31,6 +32,20 @@ MainDialog::MainDialog()
 INT_PTR MainDialog::DoModal(HWND parent)
 {
     return Run(Module::Current(), parent, IDD_MAIN);
+}
+
+static std::wstring
+AddressToString(const LPSOCKADDR src)
+{
+    DCHECK_EQ(src->sa_family, AF_INET);
+
+    sockaddr_in *addr = reinterpret_cast<sockaddr_in*>(src);
+
+    return StringPrintfW(L"%u.%u.%u.%u",
+                         addr->sin_addr.S_un.S_un_b.s_b1,
+                         addr->sin_addr.S_un.S_un_b.s_b2,
+                         addr->sin_addr.S_un.S_un_b.s_b3,
+                         addr->sin_addr.S_un.S_un_b.s_b4);
 }
 
 void MainDialog::InitAddressesList()
@@ -71,13 +86,11 @@ void MainDialog::InitAddressesList()
             if (address->Address.lpSockaddr->sa_family != AF_INET)
                 continue;
 
-            sockaddr_in *addr = reinterpret_cast<sockaddr_in*>(address->Address.lpSockaddr);
-            WCHAR buffer[128] = { 0 };
+            std::wstring address_string = AddressToString(address->Address.lpSockaddr);
 
-            if (InetNtopW(AF_INET, &(addr->sin_addr), buffer, _countof(buffer)) &&
-                wcscmp(buffer, L"127.0.0.1") != 0)
+            if (address_string != L"127.0.0.1")
             {
-                ListBox_AddString(list, buffer);
+                ListBox_AddString(list, address_string.c_str());
             }
         }
     }
