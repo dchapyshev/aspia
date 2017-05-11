@@ -11,6 +11,7 @@
 #include <wtsapi32.h>
 #include <string>
 
+#include "base/version_helpers.h"
 #include "base/elevation_helpers.h"
 #include "base/service_manager.h"
 #include "base/scoped_object.h"
@@ -226,7 +227,21 @@ bool DesktopSessionLauncher::LaunchSession(uint32_t session_id,
     command_line.append(L" --output_channel_id=");
     command_line.append(output_channel_id);
 
-    if (!IsProcessElevated())
+    bool vista_or_greater = IsWindowsVistaOrGreater();
+    bool use_current_rights = true;
+
+    if (vista_or_greater)
+    {
+        if (IsProcessElevated())
+            use_current_rights = false;
+    }
+    else
+    {
+        if (Process::Current().HasAdminRights())
+            use_current_rights = false;
+    }
+
+    if (use_current_rights)
     {
         command_line.append(L" --run_mode=");
         command_line.append(kDesktopSessionSwitch);
@@ -260,7 +275,7 @@ bool DesktopSessionLauncher::LaunchSession(uint32_t session_id,
 
         // If the current process is started not in session 0 (not as a service),
         // then we create a service to start the process in the required session.
-        if (current_process_session_id)
+        if (!vista_or_greater || current_process_session_id != 0)
         {
             std::wstring service_id =
                 ServiceManager::GenerateUniqueServiceId();

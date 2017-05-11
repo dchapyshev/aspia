@@ -37,7 +37,7 @@ void ClipboardThread::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent
 
 void ClipboardThread::OnBeforeThreadRunning()
 {
-    if (!SetThreadPriority(GetCurrentThread(), THREAD_MODE_BACKGROUND_BEGIN))
+    if (!SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_LOWEST))
     {
         LOG(ERROR) << "SetThreadPriority() failed: " << GetLastError();
     }
@@ -51,11 +51,6 @@ void ClipboardThread::OnBeforeThreadRunning()
 void ClipboardThread::OnAfterThreadRunning()
 {
     clipboard_.Stop();
-
-    if (!SetThreadPriority(GetCurrentThread(), THREAD_MODE_BACKGROUND_END))
-    {
-        LOG(ERROR) << "SetThreadPriority() failed: " << GetLastError();
-    }
 }
 
 } // namespace aspia
