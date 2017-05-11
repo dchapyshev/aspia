@@ -38,6 +38,7 @@
     <ClCompile Include="base\thread.cc" />
     <ClCompile Include="base\unicode.cc" />
     <ClCompile Include="base\util.cc" />
+    <ClCompile Include="base\version_helpers.cc" />
     <ClCompile Include="base\waitable_event.cc" />
     <ClCompile Include="base\waitable_event_watcher.cc" />
     <ClCompile Include="base\waitable_timer.cc" />
@@ -167,6 +168,7 @@
     <ClInclude Include="base\typed_buffer.h" />
     <ClInclude Include="base\unicode.h" />
     <ClInclude Include="base\util.h" />
+    <ClInclude Include="base\version_helpers.h" />
     <ClInclude Include="base\waitable_event.h" />
     <ClInclude Include="base\waitable_event_watcher.h" />
     <ClInclude Include="base\waitable_timer.h" />

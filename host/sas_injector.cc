@@ -6,10 +6,9 @@
 //
 
 #include "host/sas_injector.h"
-
-#include <sas.h>
-
+#include "base/scoped_thread_desktop.h"
 #include "base/service_manager.h"
+#include "base/version_helpers.h"
 #include "base/path.h"
 #include "base/logging.h"
 #include "base/unicode.h"
@@ -20,6 +19,7 @@ namespace aspia {
 
 static const WCHAR kSasServiceShortName[] = L"aspia-sas-service";
 static const WCHAR kSasServiceFullName[] = L"Aspia SAS Injector";
+static const DWORD kInvalidSessionId = 0xFFFFFFFF;
 
 SasInjector::SasInjector(const std::wstring& service_id) :
     Service(ServiceManager::CreateUniqueServiceName(kSasServiceShortName, service_id))
@@ -30,31 +30,59 @@ SasInjector::SasInjector(const std::wstring& service_id) :
 // static
 void SasInjector::InjectSAS()
 {
-    std::wstring command_line;
+    if (!IsWindowsVistaOrGreater())
+    {
+        const wchar_t kWinlogonDesktopName[] = L"Winlogon";
+        const wchar_t kSasWindowClassName[] = L"SAS window class";
+        const wchar_t kSasWindowTitle[] = L"SAS window";
 
-    if (!GetPathW(PathKey::FILE_EXE, command_line))
-        return;
+        Desktop winlogon_desktop(Desktop::GetDesktop(kWinlogonDesktopName));
 
-    std::wstring service_id =
-        ServiceManager::GenerateUniqueServiceId();
+        if (!winlogon_desktop.IsValid())
+            return;
 
-    std::wstring unique_name =
-        ServiceManager::CreateUniqueServiceName(kSasServiceShortName, service_id);
+        ScopedThreadDesktop desktop;
 
-    command_line.append(L" --run_mode=");
-    command_line.append(kSasServiceSwitch);
+        if (!desktop.SetThreadDesktop(std::move(winlogon_desktop)))
+            return;
 
-    command_line.append(L" --service_id=");
-    command_line.append(service_id);
+        HWND window = FindWindowW(kSasWindowClassName, kSasWindowTitle);
+        if (!window)
+            return;
 
-    // Install the service in the system.
-    ServiceManager manager(ServiceManager::Create(command_line,
-                                                  kSasServiceFullName,
-                                                  unique_name));
+        PostMessageW(window,
+                     WM_HOTKEY,
+                     0,
+                     MAKELONG(MOD_ALT | MOD_CONTROL, VK_DELETE));
+    }
+    else // For Windows Vista and above.
+    {
+        std::wstring command_line;
 
-    // If the service is installed.
-    if (manager.IsValid())
-        manager.Start();
+        if (!GetPathW(PathKey::FILE_EXE, command_line))
+            return;
+
+        std::wstring service_id =
+            ServiceManager::GenerateUniqueServiceId();
+
+        std::wstring unique_name =
+            ServiceManager::CreateUniqueServiceName(kSasServiceShortName, service_id);
+
+        command_line.append(L" --run_mode=");
+        command_line.append(kSasServiceSwitch);
+
+        command_line.append(L" --service_id=");
+        command_line.append(service_id);
+
+        // Install the service in the system.
+        ServiceManager manager(ServiceManager::Create(command_line,
+                                                      kSasServiceFullName,
+                                                      unique_name));
+
+        // If the service is installed.
+        if (manager.IsValid())
+            manager.Start();
+    }
 }
 
 void SasInjector::ExecuteService()
@@ -82,17 +110,17 @@ void SasInjector::Worker()
 
     typedef DWORD(WINAPI *WTSGetActiveConsoleSessionIdFn)();
 
-    WTSGetActiveConsoleSessionIdFn get_active_console_session_id_ =
+    WTSGetActiveConsoleSessionIdFn get_active_console_session_id_func =
         reinterpret_cast<WTSGetActiveConsoleSessionIdFn>(
             GetProcAddress(kernel32_module, "WTSGetActiveConsoleSessionId"));
-    if (!get_active_console_session_id_)
+    if (!get_active_console_session_id_func)
     {
         LOG(ERROR) << "WTSGetActiveConsoleSessionId() not found in kernel32.dll";
         return;
     }
 
-    DWORD session_id = get_active_console_session_id_();
-    if (session_id == 0xFFFFFFFF)
+    DWORD session_id = get_active_console_session_id_func();
+    if (session_id == kInvalidSessionId)
     {
         LOG(ERROR) << "WTSGetActiveConsoleSessionId() failed: " << GetLastError();
         return;
