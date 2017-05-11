@@ -6,6 +6,7 @@
 //
 
 #include "ipc/pipe_channel.h"
+#include "base/version_helpers.h"
 #include "base/security_helpers.h"
 #include "base/util.h"
 #include "base/logging.h"
@@ -83,8 +84,10 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& input_chann
     std::wstring server_output_channel_id = GenerateUniqueRandomChannelID();
 
     DWORD open_mode = FILE_FLAG_OVERLAPPED | FILE_FLAG_FIRST_PIPE_INSTANCE;
-    DWORD pipe_mode = PIPE_TYPE_BYTE | PIPE_READMODE_BYTE |
-                      PIPE_REJECT_REMOTE_CLIENTS;
+    DWORD pipe_mode = PIPE_TYPE_BYTE | PIPE_READMODE_BYTE;
+
+    if (IsWindowsVistaOrGreater())
+        pipe_mode |= PIPE_REJECT_REMOTE_CLIENTS;
 
     ScopedHandle read_pipe(CreateNamedPipeW(CreatePipeName(server_input_channel_id).c_str(),
                                             open_mode | PIPE_ACCESS_INBOUND,

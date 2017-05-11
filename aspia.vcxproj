@@ -342,6 +342,7 @@
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <CompileAs>CompileAsCpp</CompileAs>
       <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
