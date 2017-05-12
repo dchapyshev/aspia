@@ -9,6 +9,7 @@
 #define _ASPIA_UI__USER_PROP_DIALOG_H
 
 #include "ui/base/modal_dialog.h"
+#include "ui/base/listview.h"
 #include "proto/auth_session.pb.h"
 #include "proto/host_user.pb.h"
 
@@ -32,7 +33,7 @@ private:
     void OnCancelButton();
     void OnPasswordEditDblClick();
 
-    void InsertSessionType(HWND list, proto::SessionType session_type);
+    void InsertSessionType(ListView& list, proto::SessionType session_type);
 
     static LRESULT CALLBACK PasswordEditWindowProc(HWND hwnd,
                                                    UINT msg,

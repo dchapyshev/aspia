@@ -367,6 +367,9 @@
     <ClCompile Include="base\process_helpers.cc">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="ui\base\listview.cc">
+      <Filter>ui\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -808,6 +811,9 @@
     </ClInclude>
     <ClInclude Include="network\scoped_addrinfo.h">
       <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\listview.h">
+      <Filter>ui\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

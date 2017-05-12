@@ -12,8 +12,6 @@
 #include "host/host_user_utils.h"
 #include "crypto/sha512.h"
 
-#include <commctrl.h>
-#include <uxtheme.h>
 #include <windowsx.h>
 
 namespace aspia {
@@ -29,7 +27,7 @@ INT_PTR UserPropDialog::DoModal(HWND parent)
     return Run(Module::Current(), parent, IDD_USER_PROP);
 }
 
-void UserPropDialog::InsertSessionType(HWND list, proto::SessionType session_type)
+void UserPropDialog::InsertSessionType(ListView& list, proto::SessionType session_type)
 {
     UINT string_id;
 
@@ -61,17 +59,9 @@ void UserPropDialog::InsertSessionType(HWND list, proto::SessionType session_typ
 
     std::wstring item_text = module().string(string_id);
 
-    LVITEMW item = { 0 };
-    item.mask    = LVIF_TEXT | LVIF_PARAM;
-    item.pszText = &item_text[0];
-    item.iItem   = ListView_GetItemCount(list);
-    item.lParam  = session_type;
-
-    int item_index = ListView_InsertItem(list, &item);
-
-    ListView_SetCheckState(list,
-                           item_index,
-                           ((user_->session_types() & session_type) ? TRUE : FALSE));
+    int item_index = list.AddItem(module().string(string_id), session_type);
+    list.SetCheckState(item_index,
+                       (user_->session_types() & session_type) ? true : false);
 }
 
 void UserPropDialog::OnPasswordEditDblClick()
@@ -110,20 +100,10 @@ LRESULT CALLBACK UserPropDialog::PasswordEditWindowProc(HWND hwnd,
 
 void UserPropDialog::OnInitDialog()
 {
-    HWND list = GetDlgItem(IDC_SESSION_TYPES_LIST);
+    ListView list(GetDlgItem(IDC_SESSION_TYPES_LIST));
 
-    SetWindowTheme(list, L"explorer", nullptr);
-    ListView_SetExtendedListViewStyle(list, LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT);
-
-    RECT list_rect = { 0 };
-    GetClientRect(list, &list_rect);
-
-    LVCOLUMNW column = { 0 };
-    column.mask = LVCF_FMT | LVCF_WIDTH;
-    column.cx   = (list_rect.right - list_rect.left) - GetSystemMetrics(SM_CXVSCROLL);
-    column.fmt  = LVCFMT_LEFT;
-
-    ListView_InsertColumn(list, 0, &column);
+    list.ModifyExtendedListViewStyle(0, LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT);
+    list.AddOnlyOneColumn();
 
     InsertSessionType(list, proto::SessionType::SESSION_DESKTOP_MANAGE);
     InsertSessionType(list, proto::SessionType::SESSION_DESKTOP_VIEW);
@@ -237,23 +217,13 @@ void UserPropDialog::OnOkButton()
 
     uint32_t session_types = 0;
 
-    HWND list = GetDlgItem(IDC_SESSION_TYPES_LIST);
-    int count = ListView_GetItemCount(list);
+    ListView list(GetDlgItem(IDC_SESSION_TYPES_LIST));
+    int count = list.GetItemCount();
 
     for (int i = 0; i < count; ++i)
     {
-        if (ListView_GetCheckState(list, i))
-        {
-            LVITEMW item = { 0 };
-
-            item.mask = LVIF_PARAM;
-            item.iItem = i;
-
-            if (ListView_GetItem(list, &item))
-            {
-                session_types |= static_cast<uint32_t>(item.lParam);
-            }
-        }
+        if (list.GetCheckState(i))
+            session_types |= list.GetItemData<uint32_t>(i);
     }
 
     bool is_enabled =

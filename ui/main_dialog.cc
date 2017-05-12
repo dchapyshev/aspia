@@ -18,6 +18,7 @@
 #include "client/client_config.h"
 #include "codec/video_helpers.h"
 #include "host/host_service.h"
+#include "ui/base/listview.h"
 #include "ui/viewer_window.h"
 #include "ui/about_dialog.h"
 #include "ui/users_dialog.h"
@@ -51,7 +52,10 @@ AddressToString(const LPSOCKADDR src)
 
 void MainDialog::InitAddressesList()
 {
-    HWND list = GetDlgItem(IDC_IP_LIST);
+    ListView list(GetDlgItem(IDC_IP_LIST));
+
+    list.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
+    list.AddOnlyOneColumn();
 
     ULONG flags = GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST |
         GAA_FLAG_SKIP_DNS_SERVER | GAA_FLAG_SKIP_FRIENDLY_NAME;
@@ -90,9 +94,7 @@ void MainDialog::InitAddressesList()
             std::wstring address_string = AddressToString(address->Address.lpSockaddr);
 
             if (address_string != L"127.0.0.1")
-            {
-                ListBox_AddString(list, address_string.c_str());
-            }
+                list.AddItem(address_string, 0);
         }
     }
 }

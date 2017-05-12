@@ -6,14 +6,13 @@
 //
 
 #include "ui/users_dialog.h"
+#include "ui/base/listview.h"
 #include "ui/user_prop_dialog.h"
 #include "ui/resource.h"
 #include "base/process_helpers.h"
 #include "base/unicode.h"
 #include "base/util.h"
 #include "host/host_user_utils.h"
-
-#include <uxtheme.h>
 
 namespace aspia {
 
@@ -24,9 +23,9 @@ INT_PTR UsersDialog::DoModal(HWND parent)
 
 void UsersDialog::UpdateUserList()
 {
-    HWND list = GetDlgItem(IDC_USER_LIST);
+    ListView list(GetDlgItem(IDC_USER_LIST));
 
-    ListView_DeleteAllItems(list);
+    list.DeleteAllItems();
 
     for (int i = 0; i < user_list_.user_list_size(); ++i)
     {
@@ -35,14 +34,7 @@ void UsersDialog::UpdateUserList()
         std::wstring username;
         CHECK(UTF8toUNICODE(user.username(), username));
 
-        LVITEMW item = { 0 };
-        item.mask    = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
-        item.pszText = &username[0];
-        item.iItem   = ListView_GetItemCount(list);
-        item.lParam  = i;
-        item.iImage  = user.enabled() ? 0 : 1;
-
-        ListView_InsertItem(list, &item);
+        list.AddItem(username, i, user.enabled() ? 0 : 1);
     }
 }
 
@@ -57,21 +49,11 @@ void UsersDialog::OnInitDialog()
         imagelist_.AddIcon(module(), IDI_USER_DISABLED, width, height);
     }
 
-    HWND list = GetDlgItem(IDC_USER_LIST);
+    ListView list(GetDlgItem(IDC_USER_LIST));
 
-    SetWindowTheme(list, L"explorer", nullptr);
-    ListView_SetExtendedListViewStyle(list, LVS_EX_FULLROWSELECT);
-    ListView_SetImageList(list, imagelist_, LVSIL_SMALL);
-
-    RECT list_rect = { 0 };
-    GetClientRect(list, &list_rect);
-
-    LVCOLUMNW column = { 0 };
-    column.mask = LVCF_FMT | LVCF_WIDTH;
-    column.cx = (list_rect.right - list_rect.left) - GetSystemMetrics(SM_CXVSCROLL);
-    column.fmt = LVCFMT_LEFT;
-
-    ListView_InsertColumn(list, 0, &column);
+    list.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
+    list.SetImageList(imagelist_, LVSIL_SMALL);
+    list.AddOnlyOneColumn();
 
     if (!IsCallerHasAdminRights())
     {
@@ -109,19 +91,8 @@ void UsersDialog::OnAddButton()
 
 int UsersDialog::GetSelectedUserIndex()
 {
-    HWND list = GetDlgItem(IDC_USER_LIST);
-
-    int item_index = ListView_GetNextItem(list, -1, LVNI_SELECTED);
-
-    LVITEMW item = { 0 };
-
-    item.mask = LVIF_PARAM;
-    item.iItem = item_index;
-
-    if (!ListView_GetItem(list, &item))
-        return -1;
-
-    return item.lParam;
+    ListView list(GetDlgItem(IDC_USER_LIST));
+    return list.GetItemData<int>(list.GetFirstSelectedItem());
 }
 
 void UsersDialog::OnEditButton()

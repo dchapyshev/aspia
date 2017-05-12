@@ -106,6 +106,7 @@
     <ClCompile Include="ui\about_dialog.cc" />
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\child_window.cc" />
+    <ClCompile Include="ui\base\listview.cc" />
     <ClCompile Include="ui\base\modal_dialog.cc" />
     <ClCompile Include="ui\base\module.cc" />
     <ClCompile Include="ui\base\tray_icon.cc" />
@@ -255,6 +256,7 @@
     <ClInclude Include="ui\auth_dialog.h" />
     <ClInclude Include="ui\base\child_window.h" />
     <ClInclude Include="ui\base\imagelist.h" />
+    <ClInclude Include="ui\base\listview.h" />
     <ClInclude Include="ui\base\modal_dialog.h" />
     <ClInclude Include="ui\base\module.h" />
     <ClInclude Include="ui\base\tray_icon.h" />
