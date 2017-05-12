@@ -20,7 +20,7 @@ All thrid party dependencies are included in the project.
 
 Project code is available under the GNU Lesser General Public License version 3.
 
-System requirements: x86 or x86_64 CPU, Windows XP SP3 or higher.
+System requirements: x86 or x86_64 CPU with SSE2 support, Windows XP SP3 or higher.
 
 At the moment the project in development stage and is not intended for use.
 
