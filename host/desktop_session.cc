@@ -36,9 +36,6 @@ void DesktopSession::OnBeforeThreadRunning()
     runner_ = ui_thread_.message_loop_proxy();
     DCHECK(runner_);
 
-    timer_.Start(kAttachTimeout,
-                 std::bind(&DesktopSession::OnSessionAttachTimeout, this));
-
     OnSessionAttached(WTSGetActiveConsoleSessionId());
 
     // In Windows XP, the console session always has a ID equal to 0.
