@@ -57,8 +57,6 @@ void UserPropDialog::InsertSessionType(ListView& list, proto::SessionType sessio
             return;
     }
 
-    std::wstring item_text = module().string(string_id);
-
     int item_index = list.AddItem(module().string(string_id), session_type);
     list.SetCheckState(item_index,
                        (user_->session_types() & session_type) ? true : false);
