@@ -105,8 +105,15 @@ void ViewerWindow::InjectMouseCursor(std::shared_ptr<MouseCursor> mouse_cursor)
 
     ScopedHCURSOR cursor(CreateHCursorFromMouseCursor(desktop_dc, *mouse_cursor));
 
-    if (cursor.IsValid())
+    // If we can not get a remote cursor, then we use the default cursor.
+    if (!cursor.IsValid())
+    {
+        SetCursor(LoadCursorW(nullptr, IDC_ARROW));
+    }
+    else
+    {
         SetCursor(cursor);
+    }
 }
 
 void ViewerWindow::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
