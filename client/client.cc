@@ -24,6 +24,11 @@ Client::Client(std::unique_ptr<NetworkChannel> channel,
 
 Client::~Client()
 {
+    {
+        std::unique_lock<std::mutex> lock(session_lock_);
+        session_.reset();
+    }
+
     channel_.reset();
 }
 

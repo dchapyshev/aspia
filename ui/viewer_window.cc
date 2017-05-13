@@ -32,6 +32,11 @@ ViewerWindow::ViewerWindow(const ClientConfig& config, Delegate* delegate) :
 
 ViewerWindow::~ViewerWindow()
 {
+    // WM_QUIT stops all nested message loops and main message loop
+    // (open modal dialogs).
+    PostMessageW(hwnd(), WM_QUIT, 0, 0);
+
+    // Now we stop the thread of message processing.
     ui_thread_.Stop();
 }
 
