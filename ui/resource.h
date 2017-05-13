@@ -35,6 +35,7 @@
 #define IDD_SETTINGS                          104
 #define IDD_USERS                             105
 #define IDD_USER_PROP                         106
+#define IDD_POWER                             107
 
 //
 // Controls
@@ -104,15 +105,15 @@
 #define ID_POWER_HIBERNATE                    610
 #define ID_POWER_SUSPEND                      611
 #define ID_POWER_LOGOFF                       612
+#define ID_POWER_LOCK                         613
 
 //
 // Menu
 //
-#define IDR_POWER                             100
-#define IDR_SHORTCUTS                         101
-#define IDR_TRAY                              102
-#define IDR_MAIN                              103
-#define IDR_USER                              104
+#define IDR_SHORTCUTS                         100
+#define IDR_TRAY                              101
+#define IDR_MAIN                              102
+#define IDR_USER                              103
 
 //
 // Strings
@@ -144,31 +145,26 @@
 #define IDS_STATUS_INVALID_HOSTNAME           124
 #define IDS_STATUS_INVALID_PORT               125
 #define IDS_CONFIRMATION                      126
-#define IDS_CONF_POWER_SHUTDOWN               127
-#define IDS_CONF_POWER_REBOOT                 128
-#define IDS_CONF_POWER_HIBERNATE              129
-#define IDS_CONF_POWER_SUSPEND                130
-#define IDS_CONF_POWER_LOGOFF                 131
-#define IDS_COMPRESSION_RATIO_FORMAT          132
-#define IDS_32BIT                             133
-#define IDS_24BIT                             134
-#define IDS_16BIT                             135
-#define IDS_15BIT                             136
-#define IDS_12BIT                             137
-#define IDS_8BIT                              138
-#define IDS_6BIT                              139
-#define IDS_3BIT                              140
-#define IDS_INFORMATION                       141
-#define IDS_INVALID_USERNAME                  142
-#define IDS_USER_ALREADY_EXISTS               143
-#define IDS_INVALID_PASSWORD                  144
-#define IDS_PASSWORDS_NOT_MATCH               145
-#define IDS_SESSION_TYPE_DESKTOP_MANAGE       146
-#define IDS_SESSION_TYPE_DESKTOP_VIEW         147
-#define IDS_SESSION_TYPE_POWER_MANAGE         148
-#define IDS_SESSION_TYPE_FILE_TRANSFER        149
-#define IDS_SESSION_TYPE_SYSTEM_INFO          150
-#define IDS_DELETE_USER_CONFORMATION          151
-#define IDS_USER_LIST_MODIFIED                152
+#define IDS_COMPRESSION_RATIO_FORMAT          127
+#define IDS_32BIT                             128
+#define IDS_24BIT                             129
+#define IDS_16BIT                             130
+#define IDS_15BIT                             131
+#define IDS_12BIT                             132
+#define IDS_8BIT                              133
+#define IDS_6BIT                              134
+#define IDS_3BIT                              135
+#define IDS_INFORMATION                       136
+#define IDS_INVALID_USERNAME                  137
+#define IDS_USER_ALREADY_EXISTS               138
+#define IDS_INVALID_PASSWORD                  139
+#define IDS_PASSWORDS_NOT_MATCH               140
+#define IDS_SESSION_TYPE_DESKTOP_MANAGE       141
+#define IDS_SESSION_TYPE_DESKTOP_VIEW         142
+#define IDS_SESSION_TYPE_POWER_MANAGE         143
+#define IDS_SESSION_TYPE_FILE_TRANSFER        144
+#define IDS_SESSION_TYPE_SYSTEM_INFO          145
+#define IDS_DELETE_USER_CONFORMATION          146
+#define IDS_USER_LIST_MODIFIED                147
 
 #endif // _ASPIA_UI__RESOURCE_H

@@ -69,7 +69,7 @@ private:
     void OnAutoSizeButton();
     void OnFullScreenButton();
     void OnDropDownButton(WORD ctrl_id);
-    void OnPowerButton(WORD ctrl_id);
+    void OnPowerButton();
     void OnCADButton();
     void OnKeyButton(WORD ctrl_id);
     void OnGetDispInfo(LPNMHDR phdr);

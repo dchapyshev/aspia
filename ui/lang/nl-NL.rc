@@ -141,6 +141,23 @@ BEGIN
     PUSHBUTTON "&Annuleren", IDCANCEL, 159, 187, 50, 14
 END
 
+IDD_POWER DIALOGEX 100, 100, 127, 151
+STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "Power Manage"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    GROUPBOX "Select an action", -1, 6, 6, 116, 120
+
+    PUSHBUTTON "Afsl&uiten",         ID_POWER_SHUTDOWN,  14, 19,  100, 14
+    PUSHBUTTON "&Opnieuw opstarten", ID_POWER_REBOOT,    14, 36,  100, 14
+    PUSHBUTTON "&Sluimerstand",      ID_POWER_HIBERNATE, 14, 53,  100, 14
+    PUSHBUTTON "S&laapstand",        ID_POWER_SUSPEND,   14, 70,  100, 14
+    PUSHBUTTON "A&fmelden",          ID_POWER_LOGOFF,    14, 87,  100, 14
+    PUSHBUTTON "L&ock",              ID_POWER_LOCK,      14, 104, 100, 14
+
+    PUSHBUTTON "&Annuleren", IDCANCEL, 72, 131, 50, 14
+END
+
 IDR_SHORTCUTS MENU
 BEGIN
     POPUP "popup"
@@ -256,11 +273,6 @@ BEGIN
     IDS_STATUS_INVALID_HOSTNAME           "Ongeldig adres opgegeven"
     IDS_STATUS_INVALID_PORT               "Ongelide poort opgegeven"
     IDS_CONFIRMATION                      "Bevestiging"
-    IDS_CONF_POWER_SHUTDOWN               "Weet u zeker dat u de externe computer wilt afsluiten?"
-    IDS_CONF_POWER_REBOOT                 "Weet u zeker dat u de externe computer wilt herstarten?"
-    IDS_CONF_POWER_HIBERNATE              "Weet u zeker dat u de externe computer in sluimerstand wilt zetten?"
-    IDS_CONF_POWER_SUSPEND                "Weet u zeker dat u de externe computer in slaapstand wilt zetten?"
-    IDS_CONF_POWER_LOGOFF                 "Weet u zeker dat u de gebruiker sessie wilt beëindigen op de externe computer?"
     IDS_COMPRESSION_RATIO_FORMAT          "Compressie ratio: %d"
     IDS_32BIT                             "Ware kleuren (32 bit)"
     IDS_24BIT                             "Ware kleuren (24 bit)"

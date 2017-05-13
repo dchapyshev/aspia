@@ -79,6 +79,7 @@ bool PowerEvent_Action_IsValid(int value) {
     case 3:
     case 4:
     case 5:
+    case 6:
       return true;
     default:
       return false;
@@ -86,6 +87,7 @@ bool PowerEvent_Action_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const PowerEvent_Action PowerEvent::UNKNOWN;
 const PowerEvent_Action PowerEvent::SHUTDOWN;
 const PowerEvent_Action PowerEvent::REBOOT;
 const PowerEvent_Action PowerEvent::HIBERNATE;

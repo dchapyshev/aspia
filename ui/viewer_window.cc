@@ -6,6 +6,7 @@
 //
 
 #include "ui/viewer_window.h"
+#include "ui/power_manage_dialog.h"
 #include "ui/resource.h"
 #include "ui/base/module.h"
 #include "base/unicode.h"
@@ -137,7 +138,7 @@ void ViewerWindow::CreateToolBar()
     TBBUTTON kButtons[] =
     {
         // iBitmap, idCommand, fsState, fsStyle, bReserved[2], dwData, iString
-        {  0, ID_POWER,      TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_DROPDOWN,{ 0 }, 0, -1 },
+        {  0, ID_POWER,      TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                { 0 }, 0, -1 },
         { -1, 0,             TBSTATE_ENABLED, BTNS_SEP,                                   { 0 }, 0, -1 },
         {  1, ID_CAD,        TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                { 0 }, 0, -1 },
         {  2, ID_SHORTCUTS,  TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_DROPDOWN,{ 0 }, 0, -1 },
@@ -522,49 +523,15 @@ void ViewerWindow::OnDropDownButton(WORD ctrl_id)
     ShowDropDownMenu(ctrl_id, &rc);
 }
 
-void ViewerWindow::OnPowerButton(WORD ctrl_id)
+void ViewerWindow::OnPowerButton()
 {
-    proto::PowerEvent::Action action;
-    UINT string_id;
+    PowerManageDialog dialog;
 
-    switch (ctrl_id)
-    {
-        case ID_POWER_SHUTDOWN:
-            action = proto::PowerEvent::SHUTDOWN;
-            string_id = IDS_CONF_POWER_SHUTDOWN;
-            break;
+    proto::PowerEvent::Action action =
+        static_cast<proto::PowerEvent::Action>(dialog.DoModal(hwnd()));
 
-        case ID_POWER_REBOOT:
-            action = proto::PowerEvent::REBOOT;
-            string_id = IDS_CONF_POWER_REBOOT;
-            break;
-
-        case ID_POWER_HIBERNATE:
-            action = proto::PowerEvent::HIBERNATE;
-            string_id = IDS_CONF_POWER_HIBERNATE;
-            break;
-
-        case ID_POWER_SUSPEND:
-            action = proto::PowerEvent::SUSPEND;
-            string_id = IDS_CONF_POWER_SUSPEND;
-            break;
-
-        case ID_POWER_LOGOFF:
-            action = proto::PowerEvent::LOGOFF;
-            string_id = IDS_CONF_POWER_LOGOFF;
-            break;
-
-        default:
-            return;
-    }
-
-    if (MessageBoxW(hwnd(),
-                    Module().Current().string(string_id).c_str(),
-                    Module().Current().string(IDS_CONFIRMATION).c_str(),
-                    MB_ICONQUESTION | MB_YESNO) == IDYES)
-    {
+    if (action != proto::PowerEvent::UNKNOWN)
         delegate_->OnPowerEvent(action);
-    }
 }
 
 void ViewerWindow::OnCADButton()
@@ -717,23 +684,10 @@ void ViewerWindow::OnToolBarDropDown(LPNMHDR phdr)
     ShowDropDownMenu(header->iItem, &header->rcButton);
 }
 
-void ViewerWindow::ShowDropDownMenu(int button_id, RECT *button_rect)
+void ViewerWindow::ShowDropDownMenu(int button_id, RECT* button_rect)
 {
-    UINT menu_id;
-
-    switch (button_id)
-    {
-        case ID_POWER:
-            menu_id = IDR_POWER;
-            break;
-
-        case ID_SHORTCUTS:
-            menu_id = IDR_SHORTCUTS;
-            break;
-
-        default:
-            return;
-    }
+    if (button_id != ID_SHORTCUTS)
+        return;
 
     if (MapWindowPoints(toolbar_, HWND_DESKTOP, reinterpret_cast<LPPOINT>(button_rect), 2))
     {
@@ -741,7 +695,7 @@ void ViewerWindow::ShowDropDownMenu(int button_id, RECT *button_rect)
         tpm.cbSize = sizeof(TPMPARAMS);
         tpm.rcExclude = *button_rect;
 
-        ScopedHMENU menu(Module().Current().menu(menu_id));
+        ScopedHMENU menu(Module().Current().menu(IDR_SHORTCUTS));
 
         TrackPopupMenuEx(GetSubMenu(menu, 0),
                          TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_VERTICAL,
@@ -838,7 +792,6 @@ bool ViewerWindow::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* re
                     OnFullScreenButton();
                     break;
 
-                case ID_POWER:
                 case ID_SHORTCUTS:
                     OnDropDownButton(LOWORD(wparam));
                     break;
@@ -858,12 +811,8 @@ bool ViewerWindow::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* re
                     OnKeyButton(LOWORD(wparam));
                     break;
 
-                case ID_POWER_SHUTDOWN:
-                case ID_POWER_REBOOT:
-                case ID_POWER_HIBERNATE:
-                case ID_POWER_SUSPEND:
-                case ID_POWER_LOGOFF:
-                    OnPowerButton(LOWORD(wparam));
+                case ID_POWER:
+                    OnPowerButton();
                     break;
             }
         }

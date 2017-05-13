@@ -30,7 +30,7 @@ public:
 
     // Like EndDialog function from Windows API, but to work with
     // current modal dialog implementation.
-    void EndDialog(INT_PTR result);
+    void EndDialog(INT_PTR result = 0);
 
     void SetIcon(UINT resource_id);
 

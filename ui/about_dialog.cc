@@ -32,7 +32,7 @@ void AboutDialog::OnInitDialog()
 
 void AboutDialog::OnClose()
 {
-    EndDialog(0);
+    EndDialog();
 }
 
 void AboutDialog::OnCloseButton()

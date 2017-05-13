@@ -56,17 +56,18 @@ void InitDefaults();
 }  // namespace protobuf_power_5fsession_5fmessage_2eproto
 
 enum PowerEvent_Action {
-  PowerEvent_Action_SHUTDOWN = 0,
-  PowerEvent_Action_REBOOT = 1,
-  PowerEvent_Action_HIBERNATE = 2,
-  PowerEvent_Action_SUSPEND = 3,
-  PowerEvent_Action_LOGOFF = 4,
-  PowerEvent_Action_LOCK = 5,
+  PowerEvent_Action_UNKNOWN = 0,
+  PowerEvent_Action_SHUTDOWN = 1,
+  PowerEvent_Action_REBOOT = 2,
+  PowerEvent_Action_HIBERNATE = 3,
+  PowerEvent_Action_SUSPEND = 4,
+  PowerEvent_Action_LOGOFF = 5,
+  PowerEvent_Action_LOCK = 6,
   PowerEvent_Action_PowerEvent_Action_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   PowerEvent_Action_PowerEvent_Action_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool PowerEvent_Action_IsValid(int value);
-const PowerEvent_Action PowerEvent_Action_Action_MIN = PowerEvent_Action_SHUTDOWN;
+const PowerEvent_Action PowerEvent_Action_Action_MIN = PowerEvent_Action_UNKNOWN;
 const PowerEvent_Action PowerEvent_Action_Action_MAX = PowerEvent_Action_LOCK;
 const int PowerEvent_Action_Action_ARRAYSIZE = PowerEvent_Action_Action_MAX + 1;
 
@@ -133,6 +134,8 @@ class PowerEvent : public ::google::protobuf::MessageLite /* @@protoc_insertion_
   // nested types ----------------------------------------------------
 
   typedef PowerEvent_Action Action;
+  static const Action UNKNOWN =
+    PowerEvent_Action_UNKNOWN;
   static const Action SHUTDOWN =
     PowerEvent_Action_SHUTDOWN;
   static const Action REBOOT =

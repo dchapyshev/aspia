@@ -370,6 +370,9 @@
     <ClCompile Include="ui\base\listview.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
+    <ClCompile Include="ui\power_manage_dialog.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -814,6 +817,9 @@
     </ClInclude>
     <ClInclude Include="ui\base\listview.h">
       <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\power_manage_dialog.h">
+      <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
