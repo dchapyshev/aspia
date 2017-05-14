@@ -16,6 +16,8 @@ PowerManageSession::PowerManageSession(HostSession::Delegate* delegate) :
     HostSession(delegate)
 {
     thread_.Start(MessageLoop::Type::TYPE_DEFAULT, this);
+    runner_ = thread_.message_loop_proxy();
+    DCHECK(runner_);
 }
 
 PowerManageSession::~PowerManageSession()
