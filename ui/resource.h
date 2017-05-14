@@ -70,6 +70,7 @@
 #define IDC_DISABLE_USER_CHECK                127
 #define IDC_SESSION_TYPES_LIST                128
 #define IDC_USERS_GROUPBOX                    129
+#define IDC_SESSION_TYPE_COMBO                130
 
 //
 // Commands
@@ -104,8 +105,6 @@
 #define ID_POWER_REBOOT                       609
 #define ID_POWER_HIBERNATE                    610
 #define ID_POWER_SUSPEND                      611
-#define ID_POWER_LOGOFF                       612
-#define ID_POWER_LOCK                         613
 
 //
 // Menu

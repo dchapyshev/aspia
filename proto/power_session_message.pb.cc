@@ -78,8 +78,6 @@ bool PowerEvent_Action_IsValid(int value) {
     case 2:
     case 3:
     case 4:
-    case 5:
-    case 6:
       return true;
     default:
       return false;
@@ -92,8 +90,6 @@ const PowerEvent_Action PowerEvent::SHUTDOWN;
 const PowerEvent_Action PowerEvent::REBOOT;
 const PowerEvent_Action PowerEvent::HIBERNATE;
 const PowerEvent_Action PowerEvent::SUSPEND;
-const PowerEvent_Action PowerEvent::LOGOFF;
-const PowerEvent_Action PowerEvent::LOCK;
 const PowerEvent_Action PowerEvent::Action_MIN;
 const PowerEvent_Action PowerEvent::Action_MAX;
 const int PowerEvent::Action_ARRAYSIZE;

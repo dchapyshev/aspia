@@ -7,6 +7,7 @@
 
 #include "host/host.h"
 #include "host/desktop_session.h"
+#include "host/power_manage_session.h"
 #include "host/host_user_utils.h"
 #include "proto/auth_session.pb.h"
 #include "protocol/message_serialization.h"
@@ -142,12 +143,16 @@ bool Host::SendAuthResult(const IOBuffer& request_buffer)
                 session_ = DesktopSession::Create(this);
                 break;
 
+            case proto::SessionType::SESSION_POWER_MANAGE:
+                session_ = PowerManageSession::Create(this);
+                break;
+
             default:
                 LOG(ERROR) << "Unsupported session type: " << request.session_type();
                 break;
         }
 
-        return true;
+        return session_ != nullptr;
     }
 
     return false;

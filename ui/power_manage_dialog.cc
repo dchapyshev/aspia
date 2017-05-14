@@ -44,10 +44,6 @@ INT_PTR PowerManageDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
                         action = proto::PowerEvent::HIBERNATE;
                     else if (IsDlgButtonChecked(hwnd(), ID_POWER_SUSPEND) == BST_CHECKED)
                         action = proto::PowerEvent::SUSPEND;
-                    else if (IsDlgButtonChecked(hwnd(), ID_POWER_LOGOFF) == BST_CHECKED)
-                        action = proto::PowerEvent::LOGOFF;
-                    else if (IsDlgButtonChecked(hwnd(), ID_POWER_LOCK) == BST_CHECKED)
-                        action = proto::PowerEvent::LOCK;
 
                     EndDialog(action);
                 }

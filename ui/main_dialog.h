@@ -42,6 +42,8 @@ private:
     void OnRemoveServiceButton();
 
     void InitAddressesList();
+    void InitSessionTypesCombo();
+    proto::SessionType GetSelectedSessionType();
     void StopHostMode();
 
     ScopedHMENU main_menu_;

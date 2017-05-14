@@ -99,6 +99,32 @@ void MainDialog::InitAddressesList()
     }
 }
 
+void MainDialog::InitSessionTypesCombo()
+{
+    HWND combo = GetDlgItem(IDC_SESSION_TYPE_COMBO);
+
+    ComboBox_InsertString(combo,
+                          0,
+                          module().string(IDS_SESSION_TYPE_DESKTOP_MANAGE).c_str());
+    ComboBox_SetItemData(combo, 0, proto::SessionType::SESSION_DESKTOP_MANAGE);
+
+    ComboBox_InsertString(combo,
+                          1,
+                          module().string(IDS_SESSION_TYPE_POWER_MANAGE).c_str());
+    ComboBox_SetItemData(combo, 1, proto::SessionType::SESSION_POWER_MANAGE);
+
+    ComboBox_SetCurSel(combo, 0);
+}
+
+proto::SessionType MainDialog::GetSelectedSessionType()
+{
+    HWND combo = GetDlgItem(IDC_SESSION_TYPE_COMBO);
+
+    int selected_item = ComboBox_GetCurSel(combo);
+
+    return static_cast<proto::SessionType>(ComboBox_GetItemData(combo, selected_item));
+}
+
 void MainDialog::OnInitDialog()
 {
     SetIcon(IDI_MAIN);
@@ -113,6 +139,7 @@ void MainDialog::OnInitDialog()
     tray_icon_.SetDefaultMenuItem(ID_SHOWHIDE);
 
     InitAddressesList();
+    InitSessionTypesCombo();
 
     SetDlgItemInt(IDC_SERVER_PORT_EDIT, kDefaultHostTcpPort);
     CheckDlgButton(hwnd(), IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
@@ -213,18 +240,31 @@ static void SetDefaultDesktopSessionConfig(proto::DesktopSessionConfig* config)
 
 void MainDialog::OnConnectButton()
 {
-    ClientConfig config;
+    proto::SessionType session_type = GetSelectedSessionType();
 
-    config.SetRemoteAddress(GetDlgItemString(IDC_SERVER_ADDRESS_EDIT));
-    config.SetRemotePort(GetDlgItemInt<uint16_t>(IDC_SERVER_PORT_EDIT));
-    config.SetSessionType(proto::SessionType::SESSION_DESKTOP_MANAGE);
+    if (session_type != proto::SessionType::SESSION_NONE)
+    {
+        ClientConfig config;
 
-    SetDefaultDesktopSessionConfig(config.mutable_desktop_session_config());
+        config.SetRemoteAddress(GetDlgItemString(IDC_SERVER_ADDRESS_EDIT));
+        config.SetRemotePort(GetDlgItemInt<uint16_t>(IDC_SERVER_PORT_EDIT));
+        config.SetSessionType(session_type);
 
-    if (!client_pool_)
-        client_pool_.reset(new ClientPool(MessageLoopProxy::Current()));
+        switch (session_type)
+        {
+            case proto::SessionType::SESSION_DESKTOP_MANAGE:
+                SetDefaultDesktopSessionConfig(config.mutable_desktop_session_config());
+                break;
 
-    client_pool_->Connect(hwnd(), config);
+            default:
+                break;
+        }
+
+        if (!client_pool_)
+            client_pool_.reset(new ClientPool(MessageLoopProxy::Current()));
+
+        client_pool_->Connect(hwnd(), config);
+    }
 }
 
 void MainDialog::OnExitButton()

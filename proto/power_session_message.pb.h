@@ -61,14 +61,12 @@ enum PowerEvent_Action {
   PowerEvent_Action_REBOOT = 2,
   PowerEvent_Action_HIBERNATE = 3,
   PowerEvent_Action_SUSPEND = 4,
-  PowerEvent_Action_LOGOFF = 5,
-  PowerEvent_Action_LOCK = 6,
   PowerEvent_Action_PowerEvent_Action_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   PowerEvent_Action_PowerEvent_Action_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool PowerEvent_Action_IsValid(int value);
 const PowerEvent_Action PowerEvent_Action_Action_MIN = PowerEvent_Action_UNKNOWN;
-const PowerEvent_Action PowerEvent_Action_Action_MAX = PowerEvent_Action_LOCK;
+const PowerEvent_Action PowerEvent_Action_Action_MAX = PowerEvent_Action_SUSPEND;
 const int PowerEvent_Action_Action_ARRAYSIZE = PowerEvent_Action_Action_MAX + 1;
 
 // ===================================================================
@@ -144,10 +142,6 @@ class PowerEvent : public ::google::protobuf::MessageLite /* @@protoc_insertion_
     PowerEvent_Action_HIBERNATE;
   static const Action SUSPEND =
     PowerEvent_Action_SUSPEND;
-  static const Action LOGOFF =
-    PowerEvent_Action_LOGOFF;
-  static const Action LOCK =
-    PowerEvent_Action_LOCK;
   static inline bool Action_IsValid(int value) {
     return PowerEvent_Action_IsValid(value);
   }

@@ -157,7 +157,7 @@ void ClientSessionDesktop::WriteMessage(const proto::desktop::ClientToHost& mess
 
     if (!buffer.IsEmpty())
     {
-        delegate_->OnSessionMessage(std::move(buffer));
+        delegate_->OnSessionMessageAsync(std::move(buffer));
         return;
     }
 

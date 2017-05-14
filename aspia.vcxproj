@@ -46,6 +46,7 @@
     <ClCompile Include="client\client_config.cc" />
     <ClCompile Include="client\client_pool.cc" />
     <ClCompile Include="client\client_session_desktop.cc" />
+    <ClCompile Include="client\client_session_power_manage.cc" />
     <ClCompile Include="codec\compressor_zlib.cc" />
     <ClCompile Include="codec\cursor_decoder.cc" />
     <ClCompile Include="codec\cursor_encoder.cc" />
@@ -85,6 +86,7 @@
     <ClCompile Include="host\host_user_utils.cc" />
     <ClCompile Include="host\input_injector.cc" />
     <ClCompile Include="host\power_injector.cc" />
+    <ClCompile Include="host\power_manage_session.cc" />
     <ClCompile Include="host\sas_injector.cc" />
     <ClCompile Include="host\scoped_sas_police.cc" />
     <ClCompile Include="host\screen_updater.cc" />
@@ -181,6 +183,7 @@
     <ClInclude Include="client\client_pool.h" />
     <ClInclude Include="client\client_session.h" />
     <ClInclude Include="client\client_session_desktop.h" />
+    <ClInclude Include="client\client_session_power_manage.h" />
     <ClInclude Include="client\client_status.h" />
     <ClInclude Include="codec\compressor.h" />
     <ClInclude Include="codec\compressor_zlib.h" />
@@ -231,6 +234,7 @@
     <ClInclude Include="host\host_user_utils.h" />
     <ClInclude Include="host\input_injector.h" />
     <ClInclude Include="host\power_injector.h" />
+    <ClInclude Include="host\power_manage_session.h" />
     <ClInclude Include="host\sas_injector.h" />
     <ClInclude Include="host\scoped_sas_police.h" />
     <ClInclude Include="host\screen_updater.h" />

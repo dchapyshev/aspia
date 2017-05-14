@@ -7,6 +7,7 @@
 
 #include "client/client.h"
 #include "client/client_session_desktop.h"
+#include "client/client_session_power_manage.h"
 #include "protocol/message_serialization.h"
 #include "ui/auth_dialog.h"
 
@@ -33,9 +34,14 @@ bool Client::IsAliveSession() const
     return channel_proxy_->IsConnected();
 }
 
-void Client::OnSessionMessage(IOBuffer buffer)
+void Client::OnSessionMessageAsync(IOBuffer buffer)
 {
     channel_proxy_->SendAsync(std::move(buffer));
+}
+
+void Client::OnSessionMessage(const IOBuffer& buffer)
+{
+    channel_proxy_->Send(buffer);
 }
 
 void Client::OnSessionTerminate()
@@ -150,6 +156,10 @@ void Client::CreateSession(proto::SessionType session_type)
     {
         case proto::SessionType::SESSION_DESKTOP_MANAGE:
             session_.reset(new ClientSessionDesktop(config_, this));
+            break;
+
+        case proto::SessionType::SESSION_POWER_MANAGE:
+            session_.reset(new ClientSessionPowerManage(config_, this));
             break;
 
         default:

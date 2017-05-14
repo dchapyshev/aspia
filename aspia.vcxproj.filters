@@ -376,6 +376,12 @@
     <ClCompile Include="network\network_channel_proxy.cc">
       <Filter>network</Filter>
     </ClCompile>
+    <ClCompile Include="host\power_manage_session.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="client\client_session_power_manage.cc">
+      <Filter>client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -826,6 +832,12 @@
     </ClInclude>
     <ClInclude Include="network\network_channel_proxy.h">
       <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="host\power_manage_session.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="client\client_session_power_manage.h">
+      <Filter>client</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

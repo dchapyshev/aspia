@@ -36,7 +36,7 @@ public:
 private:
     DesktopSession(HostSession::Delegate* delegate);
 
-    // MessageThread::Delegate implementation.
+    // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 

@@ -7,6 +7,7 @@
 
 #include "host/power_injector.h"
 #include "base/scoped_privilege.h"
+#include "base/scoped_impersonator.h"
 
 #include <wtsapi32.h>
 
@@ -14,33 +15,6 @@ namespace aspia {
 
 bool InjectPowerEvent(const proto::PowerEvent& event)
 {
-    switch (event.action())
-    {
-        case proto::PowerEvent::LOGOFF:
-        {
-            if (!ExitWindowsEx(EWX_LOGOFF | EWX_FORCE, 0))
-            {
-                LOG(ERROR) << "ExitWindowsEx() failed: " << GetLastError();
-                return false;
-            }
-
-            return true;
-        }
-        break;
-
-        case proto::PowerEvent::LOCK:
-        {
-            if (!LockWorkStation())
-            {
-                LOG(ERROR) << "LockWorkStation() failed: " << GetLastError();
-                return false;
-            }
-
-            return true;
-        }
-        break;
-    }
-
     ScopedProcessPrivilege privilege(SE_SHUTDOWN_NAME);
     if (!privilege.IsSuccessed())
         return false;

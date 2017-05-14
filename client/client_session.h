@@ -9,11 +9,7 @@
 #define _ASPIA_CLIENT__CLIENT_SESSION_H
 
 #include "base/io_buffer.h"
-#include "base/logging.h"
-#include "base/macros.h"
 #include "client/client_config.h"
-
-#include <memory>
 
 namespace aspia {
 
@@ -23,7 +19,8 @@ public:
     class Delegate
     {
     public:
-        virtual void OnSessionMessage(IOBuffer buffer) = 0;
+        virtual void OnSessionMessageAsync(IOBuffer buffer) = 0;
+        virtual void OnSessionMessage(const IOBuffer& buffer) = 0;
         virtual void OnSessionTerminate() = 0;
     };
 

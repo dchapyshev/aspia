@@ -13,8 +13,6 @@ message PowerEvent
         REBOOT    = 2;
         HIBERNATE = 3;
         SUSPEND   = 4;
-        LOGOFF    = 5;
-        LOCK      = 6;
     }
 
     Action action = 1;

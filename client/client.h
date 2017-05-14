@@ -40,7 +40,8 @@ public:
 
 private:
     // ClientSession::Delegate implementation.
-    void OnSessionMessage(IOBuffer buffer) override;
+    void OnSessionMessageAsync(IOBuffer buffer) override;
+    void OnSessionMessage(const IOBuffer& buffer) override;
     void OnSessionTerminate() override;
 
     // NetworkChannel::Listener implementation.
