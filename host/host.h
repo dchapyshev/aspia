@@ -10,6 +10,7 @@
 
 #include "base/macros.h"
 #include "network/network_channel.h"
+#include "network/network_channel_proxy.h"
 #include "host/host_session.h"
 #include "proto/auth_session.pb.h"
 
@@ -46,6 +47,7 @@ private:
 
     bool is_auth_complete_ = false;
     std::unique_ptr<NetworkChannel> channel_;
+    std::shared_ptr<NetworkChannelProxy> channel_proxy_;
 
     std::unique_ptr<HostSession> session_;
     std::mutex session_lock_;

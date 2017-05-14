@@ -6,12 +6,21 @@
 //
 
 #include "network/network_channel.h"
+#include "network/network_channel_proxy.h"
 #include "base/logging.h"
 
 namespace aspia {
 
+NetworkChannel::NetworkChannel()
+{
+    proxy_.reset(new NetworkChannelProxy(this));
+}
+
 NetworkChannel::~NetworkChannel()
 {
+    proxy_->WillDestroyCurrentChannel();
+    proxy_ = nullptr;
+
     Stop();
 }
 
@@ -19,6 +28,17 @@ void NetworkChannel::StartListening(Listener* listener)
 {
     listener_ = listener;
     Start();
+}
+
+bool NetworkChannel::IsConnected() const
+{
+    return !IsStopping();
+}
+
+void NetworkChannel::Disconnect()
+{
+    StopSoon();
+    Close();
 }
 
 IOBuffer NetworkChannel::ReadMessage()
@@ -73,36 +93,12 @@ void NetworkChannel::Run()
 
 void NetworkChannel::Send(const IOBuffer& buffer)
 {
-    std::unique_lock<std::mutex> lock(outgoing_lock_);
-
     IOBuffer message_buffer = encryptor_->Encrypt(buffer);
 
     if (!WriteMessage(message_buffer))
     {
-        Close();
+        StopSoon();
     }
-}
-
-void NetworkChannel::SendAsync(IOBuffer buffer)
-{
-    {
-        std::unique_lock<std::mutex> lock(outgoing_queue_lock_);
-
-        if (!outgoing_queue_)
-        {
-            outgoing_queue_.reset(new IOQueue(std::bind(&NetworkChannel::Send,
-                                                        this,
-                                                        std::placeholders::_1)));
-        }
-    }
-
-    if (buffer.IsEmpty())
-    {
-        Close();
-        return;
-    }
-
-    outgoing_queue_->Add(std::move(buffer));
 }
 
 void NetworkChannel::OnIncommingMessage(const IOBuffer& buffer)
@@ -111,7 +107,7 @@ void NetworkChannel::OnIncommingMessage(const IOBuffer& buffer)
 
     if (message_buffer.IsEmpty())
     {
-        Close();
+        StopSoon();
         return;
     }
 

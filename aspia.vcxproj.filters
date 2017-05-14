@@ -373,6 +373,9 @@
     <ClCompile Include="ui\power_manage_dialog.cc">
       <Filter>ui</Filter>
     </ClCompile>
+    <ClCompile Include="network\network_channel_proxy.cc">
+      <Filter>network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -820,6 +823,9 @@
     </ClInclude>
     <ClInclude Include="ui\power_manage_dialog.h">
       <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="network\network_channel_proxy.h">
+      <Filter>network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

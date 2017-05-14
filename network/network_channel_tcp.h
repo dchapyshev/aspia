@@ -24,13 +24,11 @@ public:
     static std::unique_ptr<NetworkChannelTcp> CreateClient(Socket socket);
     static std::unique_ptr<NetworkChannelTcp> CreateServer(Socket socket);
 
-    void Close() override;
-    bool IsConnected() const override;
-
 protected:
     bool KeyExchange() override;
     bool WriteData(const uint8_t* buffer, size_t size) override;
     bool ReadData(uint8_t* buffer, size_t size) override;
+    void Close() override;
 
     enum class Mode { SERVER, CLIENT };
 

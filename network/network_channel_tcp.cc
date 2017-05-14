@@ -18,21 +18,23 @@ static const std::chrono::milliseconds kWriteTimeout{ 15000 };
 std::unique_ptr<NetworkChannelTcp> NetworkChannelTcp::CreateClient(Socket socket)
 {
     DCHECK(socket.IsValid());
-    return std::unique_ptr<NetworkChannelTcp>(new NetworkChannelTcp(std::move(socket), Mode::CLIENT));
+    return std::unique_ptr<NetworkChannelTcp>(
+        new NetworkChannelTcp(std::move(socket), Mode::CLIENT));
 }
 
 // static
 std::unique_ptr<NetworkChannelTcp> NetworkChannelTcp::CreateServer(Socket socket)
 {
     DCHECK(socket.IsValid());
-    return std::unique_ptr<NetworkChannelTcp>(new NetworkChannelTcp(std::move(socket), Mode::SERVER));
+    return std::unique_ptr<NetworkChannelTcp>(
+        new NetworkChannelTcp(std::move(socket), Mode::SERVER));
 }
 
 NetworkChannelTcp::NetworkChannelTcp(Socket socket, Mode mode) :
     socket_(std::move(socket)),
     mode_(mode)
 {
-    DWORD value = 1; // Отключаем алгоритм Нейгла.
+    DWORD value = 1; // Disable the algorithm of Nagle.
 
     if (setsockopt(socket_,
                    IPPROTO_TCP,
@@ -284,13 +286,6 @@ void NetworkChannelTcp::Close()
 
     read_event_.Signal();
     write_event_.Signal();
-
-    StopSoon();
-}
-
-bool NetworkChannelTcp::IsConnected() const
-{
-    return IsStopping();
 }
 
 } // namespace aspia

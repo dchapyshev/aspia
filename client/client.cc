@@ -19,32 +19,28 @@ Client::Client(std::unique_ptr<NetworkChannel> channel,
     config_(config),
     delegate_(delegate)
 {
+    channel_proxy_ = channel_->network_channel_proxy();
     channel_->StartListening(this);
 }
 
 Client::~Client()
 {
-    {
-        std::unique_lock<std::mutex> lock(session_lock_);
-        session_.reset();
-    }
-
     channel_.reset();
 }
 
 bool Client::IsAliveSession() const
 {
-    return channel_->IsConnected();
+    return channel_proxy_->IsConnected();
 }
 
 void Client::OnSessionMessage(IOBuffer buffer)
 {
-    channel_->SendAsync(std::move(buffer));
+    channel_proxy_->SendAsync(std::move(buffer));
 }
 
 void Client::OnSessionTerminate()
 {
-    channel_->Close();
+    channel_proxy_->Disconnect();
 }
 
 void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
@@ -56,7 +52,7 @@ void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
         is_auth_complete_ = ReadAuthResult(buffer);
         if (!is_auth_complete_)
         {
-            channel_->Close();
+            channel_proxy_->Disconnect();
         }
         else
         {
@@ -87,7 +83,7 @@ void Client::OnNetworkChannelStarted()
     AuthDialog dialog;
     if (dialog.DoModal(nullptr) != IDOK)
     {
-        channel_->Close();
+        channel_proxy_->Disconnect();
         return;
     }
 
@@ -102,7 +98,7 @@ void Client::OnNetworkChannelStarted()
     IOBuffer output_buffer = SerializeMessage(request);
     CHECK(!output_buffer.IsEmpty());
 
-    channel_->Send(output_buffer);
+    channel_proxy_->Send(output_buffer);
 }
 
 void Client::OnStatusDialogOpen()

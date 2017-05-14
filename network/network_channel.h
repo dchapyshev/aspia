@@ -14,7 +14,9 @@
 
 namespace aspia {
 
-class NetworkChannel : public Thread
+class NetworkChannelProxy;
+
+class NetworkChannel : private Thread
 {
 public:
     class Listener
@@ -28,17 +30,24 @@ public:
     ~NetworkChannel();
 
     void StartListening(Listener* listener);
-    void Send(const IOBuffer& buffer);
-    void SendAsync(IOBuffer buffer);
-    virtual void Close() = 0;
-    virtual bool IsConnected() const = 0;
+
+    std::shared_ptr<NetworkChannelProxy> network_channel_proxy()
+    {
+        return proxy_;
+    }
 
 protected:
-    NetworkChannel() = default;
+    friend class NetworkChannelProxy;
+
+    NetworkChannel();
+    void Send(const IOBuffer& buffer);
+    bool IsConnected() const;
+    void Disconnect();
 
     virtual bool KeyExchange() = 0;
     virtual bool WriteData(const uint8_t* buffer, size_t size) = 0;
     virtual bool ReadData(uint8_t* buffer, size_t size) = 0;
+    virtual void Close() = 0;
 
     size_t ReadMessageSize();
     IOBuffer ReadMessage();
@@ -49,14 +58,10 @@ protected:
 
 private:
     void Run() override;
-
     void OnIncommingMessage(const IOBuffer& buffer);
 
     Listener* listener_ = nullptr;
-    std::unique_ptr<IOQueue> outgoing_queue_;
-    std::mutex outgoing_queue_lock_;
-
-    std::mutex outgoing_lock_;
+    std::shared_ptr<NetworkChannelProxy> proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(NetworkChannel);
 };

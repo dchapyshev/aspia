@@ -10,6 +10,7 @@
 
 #include "client/client_session.h"
 #include "network/network_channel.h"
+#include "network/network_channel_proxy.h"
 #include "proto/auth_session.pb.h"
 #include "ui/status_dialog.h"
 
@@ -60,6 +61,7 @@ private:
     std::unique_ptr<StatusDialog> status_dialog_;
 
     std::unique_ptr<NetworkChannel> channel_;
+    std::shared_ptr<NetworkChannelProxy> channel_proxy_;
 
     ClientConfig config_;
     std::unique_ptr<ClientSession> session_;

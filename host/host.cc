@@ -18,6 +18,7 @@ Host::Host(std::unique_ptr<NetworkChannel> channel, Delegate* delegate) :
     channel_(std::move(channel)),
     delegate_(delegate)
 {
+    channel_proxy_ = channel_->network_channel_proxy();
     channel_->StartListening(this);
 }
 
@@ -28,17 +29,17 @@ Host::~Host()
 
 bool Host::IsAliveSession() const
 {
-    return channel_->IsConnected();
+    return channel_proxy_->IsConnected();
 }
 
 void Host::OnSessionMessage(const IOBuffer& buffer)
 {
-    channel_->Send(buffer);
+    channel_proxy_->Send(buffer);
 }
 
 void Host::OnSessionTerminate()
 {
-    channel_->Close();
+    channel_proxy_->Disconnect();
 }
 
 void Host::OnNetworkChannelMessage(const IOBuffer& buffer)
@@ -49,7 +50,7 @@ void Host::OnNetworkChannelMessage(const IOBuffer& buffer)
     {
         is_auth_complete_ = SendAuthResult(buffer);
         if (!is_auth_complete_)
-            channel_->Close();
+            channel_proxy_->Disconnect();
 
         return;
     }
@@ -131,7 +132,7 @@ bool Host::SendAuthResult(const IOBuffer& request_buffer)
     }
 
     IOBuffer result_buffer(SerializeMessage(result));
-    channel_->Send(result_buffer);
+    channel_proxy_->Send(result_buffer);
 
     if (result.status() == proto::AuthStatus::AUTH_STATUS_SUCCESS)
     {
