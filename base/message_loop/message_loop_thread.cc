@@ -23,7 +23,8 @@ MessageLoopThread::~MessageLoopThread()
     Stop();
 }
 
-void MessageLoopThread::Start(MessageLoop::Type message_loop_type, Delegate* delegate)
+void MessageLoopThread::Start(MessageLoop::Type message_loop_type,
+                              Delegate* delegate)
 {
     DCHECK(!message_loop_);
 
@@ -32,7 +33,9 @@ void MessageLoopThread::Start(MessageLoop::Type message_loop_type, Delegate* del
     state_ = State::Starting;
 
     start_event_.Reset();
-    thread_.swap(std::thread(&MessageLoopThread::ThreadMain, this, message_loop_type));
+    thread_.swap(std::thread(&MessageLoopThread::ThreadMain,
+                             this,
+                             message_loop_type));
     start_event_.Wait();
 
     state_ = State::Started;
