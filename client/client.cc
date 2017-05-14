@@ -6,7 +6,7 @@
 //
 
 #include "client/client.h"
-#include "client/client_session_desktop.h"
+#include "client/client_session_desktop_manage.h"
 #include "client/client_session_power_manage.h"
 #include "protocol/message_serialization.h"
 #include "ui/auth_dialog.h"
@@ -155,7 +155,7 @@ void Client::CreateSession(proto::SessionType session_type)
     switch (session_type)
     {
         case proto::SessionType::SESSION_DESKTOP_MANAGE:
-            session_.reset(new ClientSessionDesktop(config_, this));
+            session_.reset(new ClientSessionDesktopManage(config_, this));
             break;
 
         case proto::SessionType::SESSION_POWER_MANAGE:

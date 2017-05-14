@@ -22,6 +22,8 @@ int main(int argc, char *argv[])
     gflags::ParseCommandLineFlags(&argc, &argv, true);
     google::InitGoogleLogging(argv[0]);
 
+    FLAGS_log_dir = "c:\\temp";
+
     if (FLAGS_run_mode.empty())
     {
         if (IsWindowsVistaOrGreater() && !IsProcessElevated())

@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            client/client_session_desktop.cc
+// FILE:            client/client_session_desktop_manage.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "client/client_session_desktop.h"
+#include "client/client_session_desktop_manage.h"
 #include "base/logging.h"
 #include "codec/video_decoder_zlib.h"
 #include "codec/video_decoder_vpx.h"
@@ -14,19 +14,19 @@
 
 namespace aspia {
 
-ClientSessionDesktop::ClientSessionDesktop(const ClientConfig& config,
-                                           ClientSession::Delegate* delegate) :
+ClientSessionDesktopManage::ClientSessionDesktopManage(const ClientConfig& config,
+                                                       ClientSession::Delegate* delegate) :
     ClientSession(config, delegate)
 {
     viewer_.reset(new ViewerWindow(config, this));
 }
 
-ClientSessionDesktop::~ClientSessionDesktop()
+ClientSessionDesktopManage::~ClientSessionDesktopManage()
 {
     viewer_.reset();
 }
 
-bool ClientSessionDesktop::ReadVideoPacket(const proto::VideoPacket& video_packet)
+bool ClientSessionDesktopManage::ReadVideoPacket(const proto::VideoPacket& video_packet)
 {
     if (video_encoding_ != video_packet.encoding())
     {
@@ -86,7 +86,7 @@ bool ClientSessionDesktop::ReadVideoPacket(const proto::VideoPacket& video_packe
     return true;
 }
 
-void ClientSessionDesktop::ReadCursorShape(const proto::CursorShape& cursor_shape)
+void ClientSessionDesktopManage::ReadCursorShape(const proto::CursorShape& cursor_shape)
 {
     if (!cursor_decoder_)
         cursor_decoder_.reset(new CursorDecoder());
@@ -97,17 +97,17 @@ void ClientSessionDesktop::ReadCursorShape(const proto::CursorShape& cursor_shap
         viewer_->InjectMouseCursor(mouse_cursor);
 }
 
-void ClientSessionDesktop::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
+void ClientSessionDesktopManage::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
 {
     viewer_->InjectClipboardEvent(clipboard_event);
 }
 
-void ClientSessionDesktop::ReadConfigRequest(const proto::DesktopSessionConfigRequest& config_request)
+void ClientSessionDesktopManage::ReadConfigRequest(const proto::DesktopSessionConfigRequest& config_request)
 {
     OnConfigChange(config_.desktop_session_config());
 }
 
-void ClientSessionDesktop::Send(const IOBuffer& buffer)
+void ClientSessionDesktopManage::Send(const IOBuffer& buffer)
 {
     proto::desktop::HostToClient message;
 
@@ -151,7 +151,7 @@ void ClientSessionDesktop::Send(const IOBuffer& buffer)
     delegate_->OnSessionTerminate();
 }
 
-void ClientSessionDesktop::WriteMessage(const proto::desktop::ClientToHost& message)
+void ClientSessionDesktopManage::WriteMessage(const proto::desktop::ClientToHost& message)
 {
     IOBuffer buffer = SerializeMessage(message);
 
@@ -164,19 +164,19 @@ void ClientSessionDesktop::WriteMessage(const proto::desktop::ClientToHost& mess
     delegate_->OnSessionTerminate();
 }
 
-void ClientSessionDesktop::OnWindowClose()
+void ClientSessionDesktopManage::OnWindowClose()
 {
     delegate_->OnSessionTerminate();
 }
 
-void ClientSessionDesktop::OnConfigChange(const proto::DesktopSessionConfig& config)
+void ClientSessionDesktopManage::OnConfigChange(const proto::DesktopSessionConfig& config)
 {
     proto::desktop::ClientToHost message;
     message.mutable_config()->CopyFrom(config);
     WriteMessage(message);
 }
 
-void ClientSessionDesktop::OnKeyEvent(uint32_t keycode, uint32_t flags)
+void ClientSessionDesktopManage::OnKeyEvent(uint32_t keycode, uint32_t flags)
 {
     proto::desktop::ClientToHost message;
 
@@ -187,7 +187,7 @@ void ClientSessionDesktop::OnKeyEvent(uint32_t keycode, uint32_t flags)
     WriteMessage(message);
 }
 
-void ClientSessionDesktop::OnPointerEvent(int x, int y, uint32_t mask)
+void ClientSessionDesktopManage::OnPointerEvent(int x, int y, uint32_t mask)
 {
     proto::desktop::ClientToHost message;
 
@@ -199,14 +199,14 @@ void ClientSessionDesktop::OnPointerEvent(int x, int y, uint32_t mask)
     WriteMessage(message);
 }
 
-void ClientSessionDesktop::OnPowerEvent(proto::PowerEvent::Action action)
+void ClientSessionDesktopManage::OnPowerEvent(proto::PowerEvent::Action action)
 {
     proto::desktop::ClientToHost message;
     message.mutable_power_event()->set_action(action);
     WriteMessage(message);
 }
 
-void ClientSessionDesktop::OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event)
+void ClientSessionDesktopManage::OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event)
 {
     proto::desktop::ClientToHost message;
     message.set_allocated_clipboard_event(clipboard_event.release());

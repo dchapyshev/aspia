@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            client/client_session_desktop.h
+// FILE:            client/client_session_desktop_manage.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_H
-#define _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_H
+#ifndef _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_MANAGE_H
+#define _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_MANAGE_H
 
 #include "codec/video_decoder.h"
 #include "codec/cursor_decoder.h"
@@ -17,13 +17,14 @@
 
 namespace aspia {
 
-class ClientSessionDesktop :
+class ClientSessionDesktopManage :
     public ClientSession,
     private ViewerWindow::Delegate
 {
 public:
-    ClientSessionDesktop(const ClientConfig& config, ClientSession::Delegate* delegate);
-    ~ClientSessionDesktop();
+    ClientSessionDesktopManage(const ClientConfig& config,
+                               ClientSession::Delegate* delegate);
+    ~ClientSessionDesktopManage();
 
 private:
     // ViewerWindow::Delegate implementation.
@@ -49,7 +50,7 @@ private:
 
     proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktop);
+    DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktopManage);
 };
 
 } // namespace aspia

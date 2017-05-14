@@ -114,9 +114,6 @@
     <ClCompile Include="client\client_config.cc">
       <Filter>client</Filter>
     </ClCompile>
-    <ClCompile Include="client\client_session_desktop.cc">
-      <Filter>client</Filter>
-    </ClCompile>
     <ClCompile Include="codec\compressor_zlib.cc">
       <Filter>codec</Filter>
     </ClCompile>
@@ -382,6 +379,9 @@
     <ClCompile Include="client\client_session_power_manage.cc">
       <Filter>client</Filter>
     </ClCompile>
+    <ClCompile Include="client\client_session_desktop_manage.cc">
+      <Filter>client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -521,9 +521,6 @@
     </ClInclude>
     <ClInclude Include="base\util.h">
       <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="client\client_session_desktop.h">
-      <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="host\power_injector.h">
       <Filter>host</Filter>
@@ -837,6 +834,9 @@
       <Filter>host</Filter>
     </ClInclude>
     <ClInclude Include="client\client_session_power_manage.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="client\client_session_desktop_manage.h">
       <Filter>client</Filter>
     </ClInclude>
   </ItemGroup>
