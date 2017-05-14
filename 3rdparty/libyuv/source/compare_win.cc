@@ -13,6 +13,10 @@
 #include "libyuv/compare_row.h"
 #include "libyuv/row.h"
 
+#if defined(_MSC_VER)
+#include <intrin.h>   // For __popcnt
+#endif
+
 #ifdef __cplusplus
 namespace libyuv {
 extern "C" {
@@ -20,6 +24,19 @@ extern "C" {
 
 // This module is for 32 bit Visual C x86 and clangcl
 #if !defined(LIBYUV_DISABLE_X86) && defined(_M_IX86)
+
+uint32 HammingDistance_X86(const uint8* src_a, const uint8* src_b, int count) {
+  uint32 diff = 0u;
+
+  int i;
+  for (i = 0; i < count - 3; i += 4) {
+    uint32 x = *((uint32*)src_a) ^ *((uint32*)src_b);
+    src_a += 4;
+    src_b += 4;
+    diff += __popcnt(x);
+  }
+  return diff;
+}
 
 __declspec(naked) uint32
     SumSquareError_SSE2(const uint8* src_a, const uint8* src_b, int count) {

@@ -49,9 +49,10 @@ extern "C" {
 
 // The following are available for Visual C and GCC:
 #if !defined(LIBYUV_DISABLE_X86) && \
-    (defined(__x86_64__) || (defined(__i386__) || defined(_M_IX86)))
+    (defined(__x86_64__) || defined(__i386__) || defined(_M_IX86))
 #define HAS_HASHDJB2_SSE41
 #define HAS_SUMSQUAREERROR_SSE2
+#define HAS_HAMMINGDISTANCE_X86
 #endif
 
 // The following are available for Visual C and clangcl 32 bit:
@@ -65,6 +66,11 @@ extern "C" {
 #if !defined(LIBYUV_DISABLE_NEON) && \
     (defined(__ARM_NEON__) || defined(LIBYUV_NEON) || defined(__aarch64__))
 #define HAS_SUMSQUAREERROR_NEON
+#endif
+
+// The following are available for Neon 64 bit:
+#if !defined(LIBYUV_DISABLE_NEON) && defined(__aarch64__)
+#define HAS_HAMMINGDISTANCE_NEON
 #endif
 
 uint32 HammingDistance_C(const uint8* src_a, const uint8* src_b, int count);
