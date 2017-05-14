@@ -172,10 +172,10 @@ PipeChannel::PipeChannel(HANDLE read_pipe, HANDLE write_pipe, Mode mode) :
     read_pipe_(read_pipe),
     write_pipe_(write_pipe),
     mode_(mode),
-    read_event_(WaitableEvent::ResetPolicy::Automatic,
-                WaitableEvent::InitialState::NotSignaled),
-    write_event_(WaitableEvent::ResetPolicy::Automatic,
-                 WaitableEvent::InitialState::NotSignaled)
+    read_event_(WaitableEvent::ResetPolicy::AUTOMATIC,
+                WaitableEvent::InitialState::NOT_SIGNALED),
+    write_event_(WaitableEvent::ResetPolicy::AUTOMATIC,
+                 WaitableEvent::InitialState::NOT_SIGNALED)
 {
     // Nothing
 }
@@ -305,8 +305,8 @@ static bool ConnectToClientPipe(HANDLE pipe_handle)
 {
     OVERLAPPED overlapped = { 0 };
 
-    WaitableEvent event(WaitableEvent::ResetPolicy::Automatic,
-                        WaitableEvent::InitialState::NotSignaled);
+    WaitableEvent event(WaitableEvent::ResetPolicy::AUTOMATIC,
+                        WaitableEvent::InitialState::NOT_SIGNALED);
 
     overlapped.hEvent = event.Handle();
 

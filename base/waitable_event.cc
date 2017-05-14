@@ -12,8 +12,8 @@ namespace aspia {
 
 WaitableEvent::WaitableEvent(ResetPolicy reset_policy, InitialState initial_state) :
     handle_(CreateEventW(nullptr,
-                         reset_policy == ResetPolicy::Manual,
-                         initial_state == InitialState::Signaled,
+                         reset_policy == ResetPolicy::MANUAL,
+                         initial_state == InitialState::SIGNALED,
                          nullptr))
 {
     // We're probably going to crash anyways if this is ever NULL, so we might as

@@ -11,8 +11,8 @@
 namespace aspia {
 
 MessagePumpDefault::MessagePumpDefault() :
-    event_(WaitableEvent::ResetPolicy::Automatic,
-           WaitableEvent::InitialState::NotSignaled)
+    event_(WaitableEvent::ResetPolicy::AUTOMATIC,
+           WaitableEvent::InitialState::NOT_SIGNALED)
 {
     // Nothing
 }

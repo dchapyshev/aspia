@@ -11,8 +11,8 @@ namespace aspia {
 
 IOQueue::IOQueue(ProcessMessageCallback process_message_callback) :
     process_message_callback_(std::move(process_message_callback)),
-    event_(WaitableEvent::ResetPolicy::Automatic,
-           WaitableEvent::InitialState::NotSignaled)
+    event_(WaitableEvent::ResetPolicy::AUTOMATIC,
+           WaitableEvent::InitialState::NOT_SIGNALED)
 {
     Start();
 }

@@ -23,11 +23,11 @@ public:
     // Indicates whether a WaitableEvent should automatically reset the event
     // state after a single waiting thread has been released or remain signaled
     // until Reset() is manually invoked.
-    enum class ResetPolicy { Manual, Automatic };
+    enum class ResetPolicy { MANUAL, AUTOMATIC };
 
     // Indicates whether a new WaitableEvent should start in a signaled state or
     // not.
-    enum class InitialState { Signaled, NotSignaled };
+    enum class InitialState { SIGNALED, NOT_SIGNALED };
 
     WaitableEvent(ResetPolicy reset_policy, InitialState initial_state);
 
