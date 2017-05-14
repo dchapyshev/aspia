@@ -15,7 +15,8 @@
 namespace aspia {
 
 class ClientSessionPowerManage :
-    public ClientSession
+    public ClientSession,
+    private MessageLoopThread::Delegate
 {
 public:
     ClientSessionPowerManage(const ClientConfig& config,
@@ -26,6 +27,12 @@ public:
 private:
     // ClientSession implementation.
     void Send(const IOBuffer& buffer) override;
+
+    // MessageLoopThread::Delegate implementation.
+    void OnBeforeThreadRunning() override;
+    void OnAfterThreadRunning() override;
+
+    MessageLoopThread ui_thread_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionPowerManage);
 };

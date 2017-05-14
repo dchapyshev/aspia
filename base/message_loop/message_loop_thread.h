@@ -56,6 +56,11 @@ public:
         return message_loop_ ? message_loop_->message_loop_proxy() : nullptr;
     }
 
+    uint32_t thread_id() const
+    {
+        return thread_id_;
+    }
+
 private:
     void ThreadMain(MessageLoop::Type message_loop_type);
 
@@ -66,6 +71,7 @@ private:
     std::atomic<State> state_ = State::Stopped;
 
     std::thread thread_;
+    uint32_t thread_id_ = 0;
 
     // True while inside of Run().
     std::atomic_bool running_ = false;

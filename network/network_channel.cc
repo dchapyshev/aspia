@@ -62,29 +62,21 @@ void NetworkChannel::Run()
     {
         listener_->OnNetworkChannelStarted();
 
-        IOBuffer buffer = ReadMessage();
+        IOQueue incomming_queue(std::bind(&NetworkChannel::OnIncommingMessage,
+                                          this,
+                                          std::placeholders::_1));
 
-        if (!buffer.IsEmpty())
+        while (!IsStopping())
         {
-            // We process the first message directly (without use |IOQueue]).
-            OnIncommingMessage(buffer);
+            IOBuffer buffer(ReadMessage());
 
-            IOQueue incomming_queue(std::bind(&NetworkChannel::OnIncommingMessage,
-                                              this,
-                                              std::placeholders::_1));
-
-            while (!IsStopping())
+            if (!buffer.IsEmpty())
             {
-                buffer = ReadMessage();
-
-                if (!buffer.IsEmpty())
-                {
-                    incomming_queue.Add(std::move(buffer));
-                    continue;
-                }
-
-                StopSoon();
+                incomming_queue.Add(std::move(buffer));
+                continue;
             }
+
+            StopSoon();
         }
     }
 

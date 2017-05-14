@@ -15,6 +15,26 @@ ClientSessionPowerManage::ClientSessionPowerManage(const ClientConfig& config,
                                                    ClientSession::Delegate* delegate) :
     ClientSession(config, delegate)
 {
+    ui_thread_.Start(MessageLoop::Type::TYPE_UI, this);
+}
+
+ClientSessionPowerManage::~ClientSessionPowerManage()
+{
+    ui_thread_.Stop();
+}
+
+void ClientSessionPowerManage::Send(const IOBuffer& buffer)
+{
+    // The power management session does not receive any messages.
+}
+
+void ClientSessionPowerManage::OnBeforeThreadRunning()
+{
+    ui_thread_.StopSoon();
+}
+
+void ClientSessionPowerManage::OnAfterThreadRunning()
+{
     PowerManageDialog dialog;
 
     proto::PowerEvent::Action action =
@@ -31,16 +51,6 @@ ClientSessionPowerManage::ClientSessionPowerManage(const ClientConfig& config,
     }
 
     delegate_->OnSessionTerminate();
-}
-
-ClientSessionPowerManage::~ClientSessionPowerManage()
-{
-    // Nothing
-}
-
-void ClientSessionPowerManage::Send(const IOBuffer& buffer)
-{
-    // The power management session does not receive any messages
 }
 
 } // namespace aspia

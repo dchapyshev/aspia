@@ -60,6 +60,9 @@ void MessageLoopThread::Stop()
 
     StopSoon();
 
+    if (message_loop_ && message_loop_->type() == MessageLoop::Type::TYPE_UI)
+        PostThreadMessageW(thread_id_, WM_QUIT, 0, 0);
+
     // Wait for the thread to exit.
     thread_.join();
 
@@ -82,6 +85,8 @@ void MessageLoopThread::ThreadMain(MessageLoop::Type message_loop_type)
 
     ScopedCOMInitializer com_initializer;
     CHECK(com_initializer.IsSucceeded());
+
+    thread_id_ = GetCurrentThreadId();
 
     // Let the thread do extra initialization.
     // Let's do this before signaling we are started.

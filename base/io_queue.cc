@@ -26,6 +26,9 @@ IOQueue::~IOQueue()
 
 void IOQueue::Add(IOBuffer buffer)
 {
+    if (IsStopping())
+        return;
+
     {
         std::unique_lock<std::mutex> lock(queue_lock_);
         queue_.push(std::move(buffer));
@@ -36,13 +39,10 @@ void IOQueue::Add(IOBuffer buffer)
 
 void IOQueue::Run()
 {
-    while (!IsStopping())
+    for (;;)
     {
         for (;;)
         {
-            if (IsStopping())
-                return;
-
             bool is_empty;
 
             {
@@ -63,6 +63,9 @@ void IOQueue::Run()
 
             process_message_callback_(buffer);
         }
+
+        if (IsStopping())
+            return;
 
         event_.Wait();
     }

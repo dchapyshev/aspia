@@ -8,7 +8,6 @@
 #include "host/power_manage_session.h"
 #include "host/power_injector.h"
 #include "protocol/message_serialization.h"
-#include "proto/power_session.pb.h"
 
 namespace aspia {
 
@@ -47,10 +46,15 @@ void PowerManageSession::Send(const IOBuffer& buffer)
 
     if (ParseMessage(buffer, message))
     {
-        InjectPowerEvent(message.power_event());
+        std::shared_ptr<proto::PowerEvent> power_event(message.release_power_event());
+        runner_->PostTask(std::bind(&PowerManageSession::Inject, this, power_event));
     }
+}
 
-    runner_->PostQuit();
+void PowerManageSession::Inject(std::shared_ptr<proto::PowerEvent> power_event)
+{
+    InjectPowerEvent(*power_event);
+    thread_.StopSoon();
 }
 
 } // namespace aspia

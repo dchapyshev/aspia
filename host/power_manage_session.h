@@ -10,6 +10,9 @@
 
 #include "host/host_session.h"
 #include "base/message_loop/message_loop_thread.h"
+#include "proto/power_session.pb.h"
+
+#include <memory>
 
 namespace aspia {
 
@@ -30,6 +33,8 @@ private:
     // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
+
+    void Inject(std::shared_ptr<proto::PowerEvent> power_event);
 
     MessageLoopThread thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
