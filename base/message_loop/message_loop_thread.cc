@@ -25,7 +25,7 @@ MessageLoopThread::~MessageLoopThread()
 
 void MessageLoopThread::Start(MessageLoop::Type message_loop_type, Delegate* delegate)
 {
-    CHECK(!message_loop_);
+    DCHECK(!message_loop_);
 
     delegate_ = delegate;
 
