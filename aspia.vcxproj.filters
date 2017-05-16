@@ -388,6 +388,9 @@
     <ClCompile Include="client\client_session.cc">
       <Filter>client</Filter>
     </ClCompile>
+    <ClCompile Include="host\host_session.cc">
+      <Filter>host</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -850,6 +853,9 @@
     </ClInclude>
     <ClInclude Include="client\client_session_proxy.h">
       <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_session_proxy.h">
+      <Filter>host</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

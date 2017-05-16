@@ -61,16 +61,15 @@ void Client::OnSessionTerminate()
 
 void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
 {
-    if (!is_auth_complete_)
+    if (!session_proxy_)
     {
-        is_auth_complete_ = ReadAuthResult(buffer);
-        if (!is_auth_complete_)
+        if (ReadAuthResult(buffer))
         {
-            channel_proxy_->Disconnect();
+            CreateSession(config_.session_type());
         }
         else
         {
-            CreateSession(config_.session_type());
+            channel_proxy_->Disconnect();
         }
 
         return;

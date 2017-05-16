@@ -10,9 +10,10 @@
 
 #include "base/io_buffer.h"
 #include "base/logging.h"
-#include "base/macros.h"
 
 namespace aspia {
+
+class HostSessionProxy;
 
 class HostSession
 {
@@ -24,19 +25,21 @@ public:
         virtual void OnSessionTerminate() = 0;
     };
 
-    HostSession(Delegate* delegate) : delegate_(delegate)
-    {
-        DCHECK(delegate_);
-    }
+    HostSession(Delegate* delegate);
+    virtual ~HostSession();
 
-    virtual ~HostSession() {}
-
-    virtual void Send(const IOBuffer& buffer) = 0;
+    std::shared_ptr<HostSessionProxy> host_session_proxy();
 
 protected:
     Delegate* delegate_;
 
 private:
+    friend class HostSessionProxy;
+
+    virtual void Send(const IOBuffer& buffer) = 0;
+
+    std::shared_ptr<HostSessionProxy> session_proxy_;
+
     DISALLOW_COPY_AND_ASSIGN(HostSession);
 };
 

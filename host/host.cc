@@ -45,28 +45,19 @@ void Host::OnSessionTerminate()
 
 void Host::OnNetworkChannelMessage(const IOBuffer& buffer)
 {
-    std::lock_guard<std::mutex> lock(session_lock_);
-
-    if (!is_auth_complete_)
+    if (!session_proxy_)
     {
-        is_auth_complete_ = SendAuthResult(buffer);
-        if (!is_auth_complete_)
+        if (!SendAuthResult(buffer))
             channel_proxy_->Disconnect();
-
         return;
     }
 
-    if (!session_)
-        return;
-
-    session_->Send(buffer);
+    session_proxy_->Send(buffer);
 }
 
 void Host::OnNetworkChannelDisconnect()
 {
-    std::lock_guard<std::mutex> lock(session_lock_);
     session_.reset();
-
     delegate_->OnSessionTerminate();
 }
 
@@ -153,7 +144,11 @@ bool Host::SendAuthResult(const IOBuffer& request_buffer)
                 break;
         }
 
-        return session_ != nullptr;
+        if (session_)
+        {
+            session_proxy_ = session_->host_session_proxy();
+            return true;
+        }
     }
 
     return false;

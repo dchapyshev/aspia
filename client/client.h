@@ -67,7 +67,6 @@ private:
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
-    bool is_auth_complete_ = false;
     ClientStatus status_;
     StatusDialog status_dialog_;
 

@@ -32,7 +32,6 @@ public:
     std::shared_ptr<ClientSessionProxy> client_session_proxy();
 
 protected:
-    std::shared_ptr<ClientSessionProxy> session_proxy_;
     ClientConfig config_;
     Delegate* delegate_;
 
@@ -40,6 +39,8 @@ private:
     friend class ClientSessionProxy;
 
     virtual void Send(const IOBuffer& buffer) = 0;
+
+    std::shared_ptr<ClientSessionProxy> session_proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSession);
 };
