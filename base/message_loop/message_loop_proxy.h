@@ -25,7 +25,7 @@ public:
 private:
     friend class MessageLoop;
 
-    MessageLoopProxy(MessageLoop* loop);
+    explicit MessageLoopProxy(MessageLoop* loop);
 
     // Called directly by MessageLoop::~MessageLoop.
     void WillDestroyCurrentMessageLoop();

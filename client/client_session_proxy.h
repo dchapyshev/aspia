@@ -32,7 +32,7 @@ public:
 private:
     friend class ClientSession;
 
-    ClientSessionProxy(ClientSession* client_session) :
+    explicit ClientSessionProxy(ClientSession* client_session) :
         client_session_(client_session)
     {
         // Nothing

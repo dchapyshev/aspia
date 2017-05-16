@@ -32,7 +32,7 @@ public:
 private:
     friend class HostSession;
 
-    HostSessionProxy(HostSession* host_session) :
+    explicit HostSessionProxy(HostSession* host_session) :
         host_session_(host_session)
     {
         // Nothing

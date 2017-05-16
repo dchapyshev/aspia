@@ -25,7 +25,7 @@ public:
 private:
     friend class NetworkChannel;
 
-    NetworkChannelProxy(NetworkChannel* channel);
+    explicit NetworkChannelProxy(NetworkChannel* channel);
 
     // Called directly by NetworkChannel::~NetworkChannel.
     void WillDestroyCurrentChannel();
