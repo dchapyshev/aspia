@@ -25,56 +25,49 @@ ClientPool::~ClientPool()
 void ClientPool::Connect(HWND parent, const ClientConfig& config)
 {
     config_.CopyFrom(config);
-
-    status_dialog_.reset(new StatusDialog());
-    status_dialog_->DoModal(parent, this);
-    status_dialog_.reset();
+    status_dialog_.DoModal(parent, this);
 }
 
 void ClientPool::OnStatusDialogOpen()
 {
     if (!NetworkClientTcp::IsValidHostName(config_.address()))
     {
-        status_dialog_->SetStatus(ClientStatus::INVALID_HOSTNAME);
+        status_dialog_.SetStatus(ClientStatus::INVALID_HOSTNAME);
     }
     else if (!NetworkClientTcp::IsValidPort(config_.port()))
     {
-        status_dialog_->SetStatus(ClientStatus::INVALID_PORT);
+        status_dialog_.SetStatus(ClientStatus::INVALID_PORT);
     }
     else
     {
-        status_dialog_->SetDestonation(config_.address(), config_.port());
-        status_dialog_->SetStatus(ClientStatus::CONNECTING);
+        status_dialog_.SetDestonation(config_.address(), config_.port());
+        status_dialog_.SetStatus(ClientStatus::CONNECTING);
 
         network_client_.reset(new NetworkClientTcp());
 
         if (!network_client_->Connect(config_.address(), config_.port(), this))
         {
-            status_dialog_->SetStatus(ClientStatus::CONNECT_ERROR);
+            status_dialog_.SetStatus(ClientStatus::CONNECT_ERROR);
         }
     }
 }
 
 void ClientPool::OnConnectionSuccess(std::unique_ptr<NetworkChannel> channel)
 {
-    status_dialog_->SetStatus(ClientStatus::CONNECTED);
-
     std::unique_ptr<Client> client(new Client(std::move(channel), config_, this));
-
     session_list_.push_back(std::move(client));
 
-    // Leave from message loop.
-    runner_->PostQuit();
+    status_dialog_.EndDialog();
 }
 
 void ClientPool::OnConnectionTimeout()
 {
-    status_dialog_->SetStatus(ClientStatus::CONNECT_TIMEOUT);
+    status_dialog_.SetStatus(ClientStatus::CONNECT_TIMEOUT);
 }
 
 void ClientPool::OnConnectionError()
 {
-    status_dialog_->SetStatus(ClientStatus::CONNECT_ERROR);
+    status_dialog_.SetStatus(ClientStatus::CONNECT_ERROR);
 }
 
 void ClientPool::OnSessionTerminate()

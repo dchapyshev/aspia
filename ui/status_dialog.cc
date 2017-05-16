@@ -84,8 +84,8 @@ void StatusDialog::SetStatus(ClientStatus status)
             break;
 
         default:
-            DLOG(FATAL) << "Unhandled status code: " << static_cast<int>(status);
-            return;
+            resource_id = IDS_STATUS_UNKNOWN;
+            break;
     }
 
     AddMessage(resource_id);

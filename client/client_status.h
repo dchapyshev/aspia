@@ -12,6 +12,7 @@ namespace aspia {
 
 enum class ClientStatus
 {
+    UNKNOWN,
     INVALID_HOSTNAME,
     INVALID_PORT,
     DISCONNECTED,

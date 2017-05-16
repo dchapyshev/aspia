@@ -9,7 +9,6 @@
 #include "client/client_session_desktop_manage.h"
 #include "client/client_session_power_manage.h"
 #include "protocol/message_serialization.h"
-#include "ui/auth_dialog.h"
 
 namespace aspia {
 
@@ -20,11 +19,22 @@ Client::Client(std::unique_ptr<NetworkChannel> channel,
     config_(config),
     delegate_(delegate)
 {
+    ui_thread_.Start(MessageLoop::Type::TYPE_UI, this);
+}
+
+Client::~Client()
+{
+    ui_thread_.Stop();
+}
+
+void Client::OnBeforeThreadRunning()
+{
+    runner_ = ui_thread_.message_loop_proxy();
     channel_proxy_ = channel_->network_channel_proxy();
     channel_->StartListening(this);
 }
 
-Client::~Client()
+void Client::OnAfterThreadRunning()
 {
     channel_.reset();
 }
@@ -51,7 +61,7 @@ void Client::OnSessionTerminate()
 
 void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
 {
-    std::unique_lock<std::mutex> lock(session_lock_);
+    std::lock_guard<std::mutex> lock(session_lock_);
 
     if (!is_auth_complete_)
     {
@@ -76,20 +86,32 @@ void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
 
 void Client::OnNetworkChannelDisconnect()
 {
+    if (!runner_->BelongsToCurrentThread())
     {
-        std::unique_lock<std::mutex> lock(session_lock_);
+        runner_->PostTask(std::bind(&Client::OnNetworkChannelDisconnect, this));
+        return;
+    }
+
+    {
+        std::lock_guard<std::mutex> lock(session_lock_);
         session_.reset();
     }
 
+    ui_thread_.StopSoon();
     delegate_->OnSessionTerminate();
 }
 
 void Client::OnNetworkChannelStarted()
 {
-    std::unique_lock<std::mutex> lock(session_lock_);
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&Client::OnNetworkChannelStarted, this));
+        return;
+    }
 
-    AuthDialog dialog;
-    if (dialog.DoModal(nullptr) != IDOK)
+    AuthDialog auth_dialog;
+
+    if (auth_dialog.DoModal(nullptr) != IDOK)
     {
         channel_proxy_->Disconnect();
         return;
@@ -100,8 +122,8 @@ void Client::OnNetworkChannelStarted()
     request.set_method(proto::AuthMethod::AUTH_METHOD_BASIC);
     request.set_session_type(config_.session_type());
 
-    request.set_username(dialog.UserName());
-    request.set_password(dialog.Password());
+    request.set_username(auth_dialog.UserName());
+    request.set_password(auth_dialog.Password());
 
     IOBuffer output_buffer(SerializeMessage(request));
     CHECK(!output_buffer.IsEmpty());
@@ -113,6 +135,11 @@ void Client::OnStatusDialogOpen()
 {
     status_dialog_.SetDestonation(config_.address(), config_.port());
     status_dialog_.SetStatus(status_);
+}
+
+void Client::OpenStatusDialog()
+{
+    status_dialog_.DoModal(nullptr, this);
 }
 
 bool Client::ReadAuthResult(const IOBuffer& buffer)
@@ -140,11 +167,11 @@ bool Client::ReadAuthResult(const IOBuffer& buffer)
             break;
 
         default:
-            LOG(ERROR) << "Unknown auth status: " << result.status();
-            return false;
+            status_ = ClientStatus::UNKNOWN;
+            break;
     }
 
-    status_dialog_.DoModal(nullptr, this);
+    runner_->PostTask(std::bind(&Client::OpenStatusDialog, this));
     return false;
 }
 

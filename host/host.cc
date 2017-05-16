@@ -45,7 +45,7 @@ void Host::OnSessionTerminate()
 
 void Host::OnNetworkChannelMessage(const IOBuffer& buffer)
 {
-    std::unique_lock<std::mutex> lock(session_lock_);
+    std::lock_guard<std::mutex> lock(session_lock_);
 
     if (!is_auth_complete_)
     {
@@ -64,7 +64,7 @@ void Host::OnNetworkChannelMessage(const IOBuffer& buffer)
 
 void Host::OnNetworkChannelDisconnect()
 {
-    std::unique_lock<std::mutex> lock(session_lock_);
+    std::lock_guard<std::mutex> lock(session_lock_);
     session_.reset();
 
     delegate_->OnSessionTerminate();

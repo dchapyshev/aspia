@@ -94,7 +94,14 @@ MessagePumpWin* MessageLoop::pump_win()
 
 void MessageLoop::RunTask(const Task& pending_task)
 {
+    DCHECK(nestable_tasks_allowed_);
+
+    // Execute the task and assume the worst: It is probably not reentrant.
+    nestable_tasks_allowed_ = false;
+
     pending_task.callback();
+
+    nestable_tasks_allowed_ = true;
 }
 
 void MessageLoop::AddToIncomingQueue(Task* pending_task)
@@ -102,7 +109,7 @@ void MessageLoop::AddToIncomingQueue(Task* pending_task)
     std::shared_ptr<MessagePump> pump;
 
     {
-        std::unique_lock<std::mutex> lock(incoming_queue_lock_);
+        std::lock_guard<std::mutex> lock(incoming_queue_lock_);
 
         bool empty = incoming_queue_.empty();
 
@@ -125,7 +132,7 @@ void MessageLoop::ReloadWorkQueue()
         return;
 
     {
-        std::unique_lock<std::mutex> lock(incoming_queue_lock_);
+        std::lock_guard<std::mutex> lock(incoming_queue_lock_);
 
         if (incoming_queue_.empty())
             return;
@@ -143,6 +150,12 @@ void MessageLoop::DeletePendingTasks()
 
 bool MessageLoop::DoWork()
 {
+    if (!nestable_tasks_allowed_)
+    {
+        // Task can't be executed right now.
+        return false;
+    }
+
     ReloadWorkQueue();
 
     if (work_queue_.empty())
@@ -180,7 +193,12 @@ MessagePumpForUI* MessageLoopForUI::pump_ui()
 MessageLoopForIO* MessageLoopForIO::Current()
 {
     MessageLoop* loop = MessageLoop::Current();
-    DCHECK_EQ(MessageLoop::TYPE_IO, loop->type());
+
+    if (loop)
+    {
+        DCHECK_EQ(MessageLoop::TYPE_IO, loop->type());
+    }
+
     return static_cast<MessageLoopForIO*>(loop);
 }
 

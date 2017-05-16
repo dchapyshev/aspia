@@ -152,7 +152,7 @@ void DesktopSessionClient::OnScreenUpdateError()
 void DesktopSessionClient::WriteMessage(const proto::desktop::HostToClient& message)
 {
     IOBuffer buffer(SerializeMessage(message));
-    std::unique_lock<std::mutex> lock(outgoing_lock_);
+    std::lock_guard<std::mutex> lock(outgoing_lock_);
     ipc_channel_->Send(buffer);
 }
 

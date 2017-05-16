@@ -194,7 +194,7 @@ bool PipeChannel::Read(void* buffer, size_t buffer_size)
     BOOL ret;
 
     {
-        std::unique_lock<std::mutex> lock(read_lock_);
+        std::lock_guard<std::mutex> lock(read_lock_);
 
         if (!read_pipe_.IsValid())
             return false;
@@ -210,7 +210,7 @@ bool PipeChannel::Read(void* buffer, size_t buffer_size)
         {
             read_event_.Wait();
 
-            std::unique_lock<std::mutex> lock(read_lock_);
+            std::lock_guard<std::mutex> lock(read_lock_);
 
             if (!read_pipe_.IsValid())
                 return false;
@@ -244,7 +244,7 @@ bool PipeChannel::Write(const void* buffer, size_t buffer_size)
     BOOL ret;
 
     {
-        std::unique_lock<std::mutex> lock(write_lock_);
+        std::lock_guard<std::mutex> lock(write_lock_);
 
         if (!write_pipe_.IsValid())
             return false;
@@ -260,7 +260,7 @@ bool PipeChannel::Write(const void* buffer, size_t buffer_size)
         {
             write_event_.Wait();
 
-            std::unique_lock<std::mutex> lock(write_lock_);
+            std::lock_guard<std::mutex> lock(write_lock_);
 
             if (!write_pipe_.IsValid())
                 return false;
@@ -384,7 +384,7 @@ bool PipeChannel::Connect(uint32_t user_data, Delegate* delegate)
 void PipeChannel::Close()
 {
     {
-        std::unique_lock<std::mutex> lock(read_lock_);
+        std::lock_guard<std::mutex> lock(read_lock_);
 
         if (mode_ == Mode::SERVER)
             DisconnectNamedPipe(read_pipe_);
@@ -393,7 +393,7 @@ void PipeChannel::Close()
     }
 
     {
-        std::unique_lock<std::mutex> lock(write_lock_);
+        std::lock_guard<std::mutex> lock(write_lock_);
 
         if (mode_ == Mode::SERVER)
             DisconnectNamedPipe(write_pipe_);

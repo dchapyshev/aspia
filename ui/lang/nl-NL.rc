@@ -263,6 +263,7 @@ BEGIN
     IDS_STATUS_BAD_USERNAME_OR_PASSWORD   "De ingevulde gebruikersnaam/wachtwoord zijn incorrect of uitgeschakeld"
     IDS_STATUS_INVALID_HOSTNAME           "Ongeldig adres opgegeven"
     IDS_STATUS_INVALID_PORT               "Ongelide poort opgegeven"
+    IDS_STATUS_UNKNOWN                    "Unknown error type"
     IDS_CONFIRMATION                      "Bevestiging"
     IDS_COMPRESSION_RATIO_FORMAT          "Compressie ratio: %d"
     IDS_32BIT                             "Ware kleuren (32 bit)"

@@ -263,6 +263,7 @@ BEGIN
     IDS_STATUS_BAD_USERNAME_OR_PASSWORD   "An incorrect username and/or password or user account is disabled"
     IDS_STATUS_INVALID_HOSTNAME           "Invalid address specified"
     IDS_STATUS_INVALID_PORT               "Invalid port specified"
+    IDS_STATUS_UNKNOWN                    "Unknown error type"
     IDS_CONFIRMATION                      "Confirmation"
     IDS_COMPRESSION_RATIO_FORMAT          "Compression ratio: %d"
     IDS_32BIT                             "True color (32 bit)"

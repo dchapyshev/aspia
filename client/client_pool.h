@@ -44,7 +44,7 @@ private:
     bool terminating_ = false;
 
     ClientConfig config_;
-    std::unique_ptr<StatusDialog> status_dialog_;
+    StatusDialog status_dialog_;
 
     std::shared_ptr<MessageLoopProxy> runner_;
     std::unique_ptr<NetworkClientTcp> network_client_;

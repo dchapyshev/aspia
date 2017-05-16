@@ -30,7 +30,7 @@ void IOQueue::Add(IOBuffer buffer)
         return;
 
     {
-        std::unique_lock<std::mutex> lock(queue_lock_);
+        std::lock_guard<std::mutex> lock(queue_lock_);
         queue_.push(std::move(buffer));
     }
 
@@ -46,7 +46,7 @@ void IOQueue::Run()
             bool is_empty;
 
             {
-                std::unique_lock<std::mutex> lock(queue_lock_);
+                std::lock_guard<std::mutex> lock(queue_lock_);
                 is_empty = queue_.empty();
             }
 
@@ -56,7 +56,7 @@ void IOQueue::Run()
             IOBuffer buffer;
 
             {
-                std::unique_lock<std::mutex> lock(queue_lock_);
+                std::lock_guard<std::mutex> lock(queue_lock_);
                 buffer = std::move(queue_.front());
                 queue_.pop();
             }

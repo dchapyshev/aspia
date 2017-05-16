@@ -74,6 +74,10 @@ protected:
     // this queue is only accessed (push/pop) by our current thread.
     TaskQueue work_queue_;
 
+    // A recursion block that prevents accidentally running additional tasks when
+    // insider a (accidentally induced?) nested message pump.
+    bool nestable_tasks_allowed_ = true;
+
     std::shared_ptr<MessagePump> pump_;
 
     TaskQueue incoming_queue_;

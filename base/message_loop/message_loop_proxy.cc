@@ -22,7 +22,7 @@ std::shared_ptr<MessageLoopProxy> MessageLoopProxy::Current()
 
 bool MessageLoopProxy::PostTask(Task::Callback callback)
 {
-    std::unique_lock<std::mutex> lock(loop_lock_);
+    std::lock_guard<std::mutex> lock(loop_lock_);
 
     if (loop_)
     {
@@ -35,7 +35,7 @@ bool MessageLoopProxy::PostTask(Task::Callback callback)
 
 bool MessageLoopProxy::PostQuit()
 {
-    std::unique_lock<std::mutex> lock(loop_lock_);
+    std::lock_guard<std::mutex> lock(loop_lock_);
 
     if (loop_)
     {
@@ -48,7 +48,7 @@ bool MessageLoopProxy::PostQuit()
 
 bool MessageLoopProxy::BelongsToCurrentThread() const
 {
-    std::unique_lock<std::mutex> lock(loop_lock_);
+    std::lock_guard<std::mutex> lock(loop_lock_);
 
     return loop_ && MessageLoop::Current() == loop_;
 }
@@ -62,7 +62,7 @@ MessageLoopProxy::MessageLoopProxy(MessageLoop* loop) :
 // Called directly by MessageLoop::~MessageLoop.
 void MessageLoopProxy::WillDestroyCurrentMessageLoop()
 {
-    std::unique_lock<std::mutex> lock(loop_lock_);
+    std::lock_guard<std::mutex> lock(loop_lock_);
     loop_ = nullptr;
 }
 

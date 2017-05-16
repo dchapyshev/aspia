@@ -263,6 +263,7 @@ BEGIN
     IDS_STATUS_BAD_USERNAME_OR_PASSWORD   "Некорректное имя пользователя, пароль или учетная запись пользователя отключена"
     IDS_STATUS_INVALID_HOSTNAME           "Указан недопустимый адрес"
     IDS_STATUS_INVALID_PORT               "Указан недопустимый порт"
+    IDS_STATUS_UNKNOWN                    "Неизвестный тип ошибки"
     IDS_CONFIRMATION                      "Подтверждение"
     IDS_COMPRESSION_RATIO_FORMAT          "Уровень сжатия: %d"
     IDS_32BIT                             "True color (32 бит)"

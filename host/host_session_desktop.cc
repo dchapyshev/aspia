@@ -75,7 +75,7 @@ void HostSessionDesktop::OnSessionAttached(uint32_t session_id)
     DCHECK(!ipc_channel_);
 
     {
-        std::unique_lock<std::mutex> lock(ipc_channel_lock_);
+        std::lock_guard<std::mutex> lock(ipc_channel_lock_);
 
         state_ = State::Starting;
 
@@ -111,7 +111,7 @@ void HostSessionDesktop::OnSessionDetached()
 
     state_ = State::Detached;
 
-    std::unique_lock<std::mutex> lock(ipc_channel_lock_);
+    std::lock_guard<std::mutex> lock(ipc_channel_lock_);
 
     process_watcher_.StopWatching();
 
@@ -254,7 +254,7 @@ void HostSessionDesktop::OnSessionAttachTimeout()
 
 void HostSessionDesktop::Send(const IOBuffer& buffer)
 {
-    std::unique_lock<std::mutex> lock(ipc_channel_lock_);
+    std::lock_guard<std::mutex> lock(ipc_channel_lock_);
 
     if (!ipc_channel_)
         return;
