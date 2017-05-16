@@ -158,6 +158,10 @@ void Client::CreateSession(proto::SessionType session_type)
             session_.reset(new ClientSessionDesktopManage(config_, this));
             break;
 
+        case proto::SessionType::SESSION_DESKTOP_VIEW:
+            session_.reset(new ClientSessionDesktopView(config_, this));
+            break;
+
         case proto::SessionType::SESSION_POWER_MANAGE:
             session_.reset(new ClientSessionPowerManage(config_, this));
             break;

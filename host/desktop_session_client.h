@@ -14,6 +14,7 @@
 #include "host/screen_updater.h"
 #include "host/clipboard_thread.h"
 #include "ipc/pipe_channel.h"
+#include "proto/auth_session.pb.h"
 #include "proto/desktop_session.pb.h"
 
 namespace aspia {
@@ -31,7 +32,7 @@ public:
 
 private:
     // PipeChannel::Delegate implementation.
-    void OnPipeChannelConnect(ProcessId peer_pid) override;
+    void OnPipeChannelConnect(uint32_t user_data) override;
     void OnPipeChannelDisconnect() override;
     void OnPipeChannelMessage(const IOBuffer& buffer) override;
 
@@ -42,10 +43,10 @@ private:
 
     void WriteMessage(const proto::desktop::HostToClient& message);
 
-    void ReadPointerEvent(const proto::PointerEvent& event);
-    void ReadKeyEvent(const proto::KeyEvent& event);
-    void ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);
-    void ReadPowerEvent(const proto::PowerEvent& event);
+    bool ReadPointerEvent(const proto::PointerEvent& event);
+    bool ReadKeyEvent(const proto::KeyEvent& event);
+    bool ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);
+    bool ReadPowerEvent(const proto::PowerEvent& event);
     bool ReadConfig(const proto::DesktopSessionConfig& config);
 
     void SendClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event);
@@ -54,6 +55,8 @@ private:
 private:
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::mutex outgoing_lock_;
+
+    proto::SessionType session_type_ = proto::SessionType::SESSION_NONE;
 
     std::unique_ptr<VideoEncoder> video_encoder_;
     std::unique_ptr<CursorEncoder> cursor_encoder_;

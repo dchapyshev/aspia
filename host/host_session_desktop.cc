@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/desktop_session.cc
+// FILE:            host/host_session_desktop.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "host/desktop_session.h"
+#include "host/host_session_desktop.h"
 #include "host/desktop_session_launcher.h"
 #include "base/version_helpers.h"
 #include "base/scoped_privilege.h"
@@ -15,23 +15,36 @@ namespace aspia {
 static const std::chrono::milliseconds kAttachTimeout{ 30000 };
 
 // static
-std::unique_ptr<DesktopSession> DesktopSession::Create(HostSession::Delegate* delegate)
+std::unique_ptr<HostSessionDesktop> HostSessionDesktop::Create(proto::SessionType session_type,
+                                                               HostSession::Delegate* delegate)
 {
-    return std::unique_ptr<DesktopSession>(new DesktopSession(delegate));
+    switch (session_type)
+    {
+        case proto::SessionType::SESSION_DESKTOP_MANAGE:
+        case proto::SessionType::SESSION_DESKTOP_VIEW:
+            break;
+
+        default:
+            return nullptr;
+    }
+
+    return std::unique_ptr<HostSessionDesktop>(new HostSessionDesktop(session_type, delegate));
 }
 
-DesktopSession::DesktopSession(HostSession::Delegate* delegate) :
-    HostSession(delegate)
+HostSessionDesktop::HostSessionDesktop(proto::SessionType session_type,
+                                       HostSession::Delegate* delegate) :
+    HostSession(delegate),
+    session_type_(session_type)
 {
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
-DesktopSession::~DesktopSession()
+HostSessionDesktop::~HostSessionDesktop()
 {
     ui_thread_.Stop();
 }
 
-void DesktopSession::OnBeforeThreadRunning()
+void HostSessionDesktop::OnBeforeThreadRunning()
 {
     runner_ = ui_thread_.message_loop_proxy();
     DCHECK(runner_);
@@ -47,14 +60,14 @@ void DesktopSession::OnBeforeThreadRunning()
     }
 }
 
-void DesktopSession::OnAfterThreadRunning()
+void HostSessionDesktop::OnAfterThreadRunning()
 {
     session_watcher_.StopWatching();
     OnSessionDetached();
     timer_.Stop();
 }
 
-void DesktopSession::OnSessionAttached(uint32_t session_id)
+void HostSessionDesktop::OnSessionAttached(uint32_t session_id)
 {
     DCHECK(runner_->BelongsToCurrentThread());
     DCHECK(state_ == State::Detached);
@@ -77,7 +90,7 @@ void DesktopSession::OnSessionAttached(uint32_t session_id)
                                                       input_channel_id,
                                                       output_channel_id))
             {
-                if (ipc_channel_->Connect(this))
+                if (ipc_channel_->Connect(session_type_, this))
                     return;
             }
         }
@@ -89,7 +102,7 @@ void DesktopSession::OnSessionAttached(uint32_t session_id)
     delegate_->OnSessionTerminate();
 }
 
-void DesktopSession::OnSessionDetached()
+void HostSessionDesktop::OnSessionDetached()
 {
     DCHECK(runner_->BelongsToCurrentThread());
 
@@ -110,14 +123,16 @@ void DesktopSession::OnSessionDetached()
     // If the new session is not connected within the specified time interval,
     // an error occurred.
     timer_.Start(kAttachTimeout,
-                 std::bind(&DesktopSession::OnSessionAttachTimeout, this));
+                 std::bind(&HostSessionDesktop::OnSessionAttachTimeout, this));
 }
 
-void DesktopSession::OnObjectSignaled(HANDLE object)
+void HostSessionDesktop::OnObjectSignaled(HANDLE object)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&DesktopSession::OnObjectSignaled, this, object));
+        runner_->PostTask(std::bind(&HostSessionDesktop::OnObjectSignaled,
+                                    this,
+                                    object));
         return;
     }
 
@@ -135,11 +150,13 @@ void DesktopSession::OnObjectSignaled(HANDLE object)
     }
 }
 
-void DesktopSession::OnPipeChannelConnect(ProcessId peer_pid)
+void HostSessionDesktop::OnPipeChannelConnect(uint32_t user_data)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&DesktopSession::OnPipeChannelConnect, this, peer_pid));
+        runner_->PostTask(std::bind(&HostSessionDesktop::OnPipeChannelConnect,
+                                    this,
+                                    user_data));
         return;
     }
 
@@ -148,7 +165,8 @@ void DesktopSession::OnPipeChannelConnect(ProcessId peer_pid)
     // already exists, if not, then enable it.
     ScopedProcessPrivilege privilege(SE_DEBUG_NAME);
 
-    process_ = Process::Open(peer_pid);
+    // The client sends a process ID in user_data.
+    process_ = Process::Open(user_data);
 
     bool ok = process_.IsValid();
     if (!ok)
@@ -178,11 +196,11 @@ void DesktopSession::OnPipeChannelConnect(ProcessId peer_pid)
     state_ = State::Attached;
 }
 
-void DesktopSession::OnPipeChannelDisconnect()
+void HostSessionDesktop::OnPipeChannelDisconnect()
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&DesktopSession::OnPipeChannelDisconnect, this));
+        runner_->PostTask(std::bind(&HostSessionDesktop::OnPipeChannelDisconnect, this));
         return;
     }
 
@@ -208,16 +226,16 @@ void DesktopSession::OnPipeChannelDisconnect()
     }
 }
 
-void DesktopSession::OnPipeChannelMessage(const IOBuffer& buffer)
+void HostSessionDesktop::OnPipeChannelMessage(const IOBuffer& buffer)
 {
     delegate_->OnSessionMessage(buffer);
 }
 
-void DesktopSession::OnSessionAttachTimeout()
+void HostSessionDesktop::OnSessionAttachTimeout()
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&DesktopSession::OnSessionAttachTimeout, this));
+        runner_->PostTask(std::bind(&HostSessionDesktop::OnSessionAttachTimeout, this));
         return;
     }
 
@@ -234,7 +252,7 @@ void DesktopSession::OnSessionAttachTimeout()
     }
 }
 
-void DesktopSession::Send(const IOBuffer& buffer)
+void HostSessionDesktop::Send(const IOBuffer& buffer)
 {
     std::unique_lock<std::mutex> lock(ipc_channel_lock_);
 

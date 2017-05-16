@@ -6,6 +6,7 @@
 //
 
 #include "ui/base/listview.h"
+#include "base/version_helpers.h"
 
 #include <uxtheme.h>
 
@@ -14,7 +15,9 @@ namespace aspia {
 ListView::ListView(HWND hwnd)
 {
     Attach(hwnd);
-    SetWindowTheme(hwnd, L"explorer", nullptr);
+
+    if (IsWindowsVistaOrGreater())
+        SetWindowTheme(hwnd, L"explorer", nullptr);
 }
 
 int ListView::GetColumnCount()

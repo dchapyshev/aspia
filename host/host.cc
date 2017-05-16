@@ -6,8 +6,8 @@
 //
 
 #include "host/host.h"
-#include "host/desktop_session.h"
-#include "host/power_manage_session.h"
+#include "host/host_session_desktop.h"
+#include "host/host_session_power.h"
 #include "host/host_user_utils.h"
 #include "proto/auth_session.pb.h"
 #include "protocol/message_serialization.h"
@@ -140,11 +140,12 @@ bool Host::SendAuthResult(const IOBuffer& request_buffer)
         switch (request.session_type())
         {
             case proto::SessionType::SESSION_DESKTOP_MANAGE:
-                session_ = DesktopSession::Create(this);
+            case proto::SessionType::SESSION_DESKTOP_VIEW:
+                session_ = HostSessionDesktop::Create(request.session_type(), this);
                 break;
 
             case proto::SessionType::SESSION_POWER_MANAGE:
-                session_ = PowerManageSession::Create(this);
+                session_ = HostSessionPower::Create(this);
                 break;
 
             default:

@@ -349,7 +349,7 @@ static bool ConnectToClientPipe(HANDLE pipe_handle)
     return true;
 }
 
-bool PipeChannel::Connect(Delegate* delegate)
+bool PipeChannel::Connect(uint32_t user_data, Delegate* delegate)
 {
     DCHECK(delegate);
 
@@ -358,21 +358,24 @@ bool PipeChannel::Connect(Delegate* delegate)
         if (!ConnectToClientPipe(read_pipe_) || !ConnectToClientPipe(write_pipe_))
             return false;
 
-        if (!Read(&peer_pid_, sizeof(peer_pid_)))
+        if (!Read(&user_data_, sizeof(user_data_)))
+            return false;
+
+        if (!Write(&user_data, sizeof(user_data)))
             return false;
     }
     else
     {
         DCHECK(mode_ == Mode::CLIENT);
 
-        peer_pid_ = GetCurrentProcessId();
+        if (!Write(&user_data, sizeof(user_data)))
+            return false;
 
-        if (!Write(&peer_pid_, sizeof(peer_pid_)))
+        if (!Read(&user_data_, sizeof(user_data_)))
             return false;
     }
 
     delegate_ = delegate;
-
     Start();
 
     return true;
@@ -409,7 +412,7 @@ void PipeChannel::Wait()
 
 void PipeChannel::Run()
 {
-    delegate_->OnPipeChannelConnect(peer_pid_);
+    delegate_->OnPipeChannelConnect(user_data_);
 
     while (!IsStopping())
     {

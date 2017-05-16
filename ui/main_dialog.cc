@@ -110,8 +110,13 @@ void MainDialog::InitSessionTypesCombo()
 
     ComboBox_InsertString(combo,
                           1,
+                          module().string(IDS_SESSION_TYPE_DESKTOP_VIEW).c_str());
+    ComboBox_SetItemData(combo, 1, proto::SessionType::SESSION_DESKTOP_VIEW);
+
+    ComboBox_InsertString(combo,
+                          2,
                           module().string(IDS_SESSION_TYPE_POWER_MANAGE).c_str());
-    ComboBox_SetItemData(combo, 1, proto::SessionType::SESSION_POWER_MANAGE);
+    ComboBox_SetItemData(combo, 2, proto::SessionType::SESSION_POWER_MANAGE);
 
     ComboBox_SetCurSel(combo, 0);
 }
@@ -253,6 +258,7 @@ void MainDialog::OnConnectButton()
         switch (session_type)
         {
             case proto::SessionType::SESSION_DESKTOP_MANAGE:
+            case proto::SessionType::SESSION_DESKTOP_VIEW:
                 SetDefaultDesktopSessionConfig(config.mutable_desktop_session_config());
                 break;
 

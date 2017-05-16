@@ -186,12 +186,6 @@
     <ClCompile Include="host\console_session_watcher.cc">
       <Filter>host</Filter>
     </ClCompile>
-    <ClCompile Include="host\desktop_session_client.cc">
-      <Filter>host</Filter>
-    </ClCompile>
-    <ClCompile Include="host\desktop_session_launcher.cc">
-      <Filter>host</Filter>
-    </ClCompile>
     <ClCompile Include="host\host.cc">
       <Filter>host</Filter>
     </ClCompile>
@@ -215,9 +209,6 @@
     </ClCompile>
     <ClCompile Include="base\security_helpers.cc">
       <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="host\desktop_session.cc">
-      <Filter>host</Filter>
     </ClCompile>
     <ClCompile Include="codec\video_encoder_vpx.cc">
       <Filter>codec</Filter>
@@ -373,14 +364,26 @@
     <ClCompile Include="network\network_channel_proxy.cc">
       <Filter>network</Filter>
     </ClCompile>
-    <ClCompile Include="host\power_manage_session.cc">
-      <Filter>host</Filter>
-    </ClCompile>
     <ClCompile Include="client\client_session_power_manage.cc">
       <Filter>client</Filter>
     </ClCompile>
     <ClCompile Include="client\client_session_desktop_manage.cc">
       <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="client\client_session_desktop_view.cc">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host_session_desktop.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\desktop_session_client.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\desktop_session_launcher.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host_session_power.cc">
+      <Filter>host</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -564,9 +567,6 @@
     <ClInclude Include="base\scoped_wts_memory.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="host\desktop_session_client.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="host\host.h">
       <Filter>host</Filter>
     </ClInclude>
@@ -574,9 +574,6 @@
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="host\console_session_watcher.h">
-      <Filter>host</Filter>
-    </ClInclude>
-    <ClInclude Include="host\desktop_session_launcher.h">
       <Filter>host</Filter>
     </ClInclude>
     <ClInclude Include="proto\desktop_session.pb.h">
@@ -616,9 +613,6 @@
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="host\host_session.h">
-      <Filter>host</Filter>
-    </ClInclude>
-    <ClInclude Include="host\desktop_session.h">
       <Filter>host</Filter>
     </ClInclude>
     <ClInclude Include="codec\video_encoder_vpx.h">
@@ -830,14 +824,26 @@
     <ClInclude Include="network\network_channel_proxy.h">
       <Filter>network</Filter>
     </ClInclude>
-    <ClInclude Include="host\power_manage_session.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="client\client_session_power_manage.h">
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="client\client_session_desktop_manage.h">
       <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="client\client_session_desktop_view.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_session_desktop.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\desktop_session_client.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\desktop_session_launcher.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_session_power.h">
+      <Filter>host</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

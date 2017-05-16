@@ -8,18 +8,13 @@
 #ifndef _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_MANAGE_H
 #define _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_MANAGE_H
 
-#include "codec/video_decoder.h"
+#include "client/client_session_desktop_view.h"
 #include "codec/cursor_decoder.h"
-#include "client/client_session.h"
-#include "desktop_capture/desktop_frame.h"
 #include "protocol/clipboard.h"
-#include "ui/viewer_window.h"
 
 namespace aspia {
 
-class ClientSessionDesktopManage :
-    public ClientSession,
-    private ViewerWindow::Delegate
+class ClientSessionDesktopManage : public ClientSessionDesktopView
 {
 public:
     ClientSessionDesktopManage(const ClientConfig& config,
@@ -28,27 +23,18 @@ public:
 
 private:
     // ViewerWindow::Delegate implementation.
-    void OnWindowClose() override;
-    void OnConfigChange(const proto::DesktopSessionConfig& config) override;
     void OnKeyEvent(uint32_t keycode, uint32_t flags) override;
     void OnPointerEvent(int x, int y, uint32_t mask) override;
     void OnPowerEvent(proto::PowerEvent::Action action) override;
     void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) override;
 
+    // ClientSession implementation.
     void Send(const IOBuffer& buffer) override;
 
-    void WriteMessage(const proto::desktop::ClientToHost& message);
-
-    bool ReadVideoPacket(const proto::VideoPacket& video_packet);
     void ReadCursorShape(const proto::CursorShape& cursor_shape);
     void ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);
-    void ReadConfigRequest(const proto::DesktopSessionConfigRequest& config_request);
 
-    std::unique_ptr<VideoDecoder> video_decoder_;
     std::unique_ptr<CursorDecoder> cursor_decoder_;
-    std::unique_ptr<ViewerWindow> viewer_;
-
-    proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktopManage);
 };

@@ -36,11 +36,11 @@ public:
     {
     public:
         virtual void OnPipeChannelMessage(const IOBuffer& buffer) = 0;
-        virtual void OnPipeChannelConnect(ProcessId peer_pid) = 0;
+        virtual void OnPipeChannelConnect(uint32_t user_data) = 0;
         virtual void OnPipeChannelDisconnect() = 0;
     };
 
-    bool Connect(Delegate* delegate);
+    bool Connect(uint32_t user_data, Delegate* delegate);
     void Close();
 
     void Send(const IOBuffer& buffer);
@@ -59,7 +59,7 @@ private:
 
     const Mode mode_;
     Delegate* delegate_ = nullptr;
-    ProcessId peer_pid_ = 0;
+    uint32_t user_data_ = 0;
 
     ScopedHandle read_pipe_;
     ScopedHandle write_pipe_;

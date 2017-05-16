@@ -16,74 +16,14 @@ namespace aspia {
 
 ClientSessionDesktopManage::ClientSessionDesktopManage(const ClientConfig& config,
                                                        ClientSession::Delegate* delegate) :
-    ClientSession(config, delegate)
+    ClientSessionDesktopView(config, delegate)
 {
-    viewer_.reset(new ViewerWindow(config, this));
+    // Nothing
 }
 
 ClientSessionDesktopManage::~ClientSessionDesktopManage()
 {
-    viewer_.reset();
-}
-
-bool ClientSessionDesktopManage::ReadVideoPacket(const proto::VideoPacket& video_packet)
-{
-    if (video_encoding_ != video_packet.encoding())
-    {
-        video_encoding_ = video_packet.encoding();
-
-        switch (video_encoding_)
-        {
-            case proto::VIDEO_ENCODING_VP8:
-                video_decoder_ = VideoDecoderVPX::CreateVP8();
-                break;
-
-            case proto::VIDEO_ENCODING_VP9:
-                video_decoder_ = VideoDecoderVPX::CreateVP9();
-                break;
-
-            case proto::VIDEO_ENCODING_ZLIB:
-                video_decoder_ = VideoDecoderZLIB::Create();
-                break;
-
-            default:
-                LOG(ERROR) << "Unsupported encoding: " << video_encoding_;
-                return false;
-        }
-    }
-
-    if (video_packet.has_screen_size() || video_packet.has_pixel_format())
-    {
-        PixelFormat pixel_format;
-
-        if (video_encoding_ == proto::VideoEncoding::VIDEO_ENCODING_ZLIB)
-        {
-            pixel_format = ConvertFromVideoPixelFormat(video_packet.pixel_format());
-        }
-        else
-        {
-            pixel_format = PixelFormat::ARGB();
-        }
-
-        if (!pixel_format.IsValid())
-        {
-            LOG(ERROR) << "Wrong pixel format";
-            return false;
-        }
-
-        viewer_->ResizeFrame(ConvertFromVideoSize(video_packet.screen_size()), pixel_format);
-    }
-
-    DesktopFrame* frame = viewer_->Frame();
-    if (!frame)
-        return false;
-
-    if (!video_decoder_->Decode(video_packet, frame))
-        return false;
-
-    viewer_->DrawFrame();
-
-    return true;
+    // Nothing
 }
 
 void ClientSessionDesktopManage::ReadCursorShape(const proto::CursorShape& cursor_shape)
@@ -100,11 +40,6 @@ void ClientSessionDesktopManage::ReadCursorShape(const proto::CursorShape& curso
 void ClientSessionDesktopManage::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
 {
     viewer_->InjectClipboardEvent(clipboard_event);
-}
-
-void ClientSessionDesktopManage::ReadConfigRequest(const proto::DesktopSessionConfigRequest& config_request)
-{
-    OnConfigChange(config_.desktop_session_config());
 }
 
 void ClientSessionDesktopManage::Send(const IOBuffer& buffer)
@@ -149,31 +84,6 @@ void ClientSessionDesktopManage::Send(const IOBuffer& buffer)
     }
 
     delegate_->OnSessionTerminate();
-}
-
-void ClientSessionDesktopManage::WriteMessage(const proto::desktop::ClientToHost& message)
-{
-    IOBuffer buffer = SerializeMessage(message);
-
-    if (!buffer.IsEmpty())
-    {
-        delegate_->OnSessionMessageAsync(std::move(buffer));
-        return;
-    }
-
-    delegate_->OnSessionTerminate();
-}
-
-void ClientSessionDesktopManage::OnWindowClose()
-{
-    delegate_->OnSessionTerminate();
-}
-
-void ClientSessionDesktopManage::OnConfigChange(const proto::DesktopSessionConfig& config)
-{
-    proto::desktop::ClientToHost message;
-    message.mutable_config()->CopyFrom(config);
-    WriteMessage(message);
 }
 
 void ClientSessionDesktopManage::OnKeyEvent(uint32_t keycode, uint32_t flags)

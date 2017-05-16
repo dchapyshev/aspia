@@ -1,17 +1,17 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/power_manage_session.cc
+// FILE:            host/host_session_power.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "host/power_manage_session.h"
+#include "host/host_session_power.h"
 #include "host/power_injector.h"
 #include "protocol/message_serialization.h"
 
 namespace aspia {
 
-PowerManageSession::PowerManageSession(HostSession::Delegate* delegate) :
+HostSessionPower::HostSessionPower(HostSession::Delegate* delegate) :
     HostSession(delegate)
 {
     thread_.Start(MessageLoop::Type::TYPE_DEFAULT, this);
@@ -19,39 +19,39 @@ PowerManageSession::PowerManageSession(HostSession::Delegate* delegate) :
     DCHECK(runner_);
 }
 
-PowerManageSession::~PowerManageSession()
+HostSessionPower::~HostSessionPower()
 {
     thread_.Stop();
 }
 
 // static
-std::unique_ptr<PowerManageSession> PowerManageSession::Create(HostSession::Delegate* delegate)
+std::unique_ptr<HostSessionPower> HostSessionPower::Create(HostSession::Delegate* delegate)
 {
-    return std::unique_ptr<PowerManageSession>(new PowerManageSession(delegate));
+    return std::unique_ptr<HostSessionPower>(new HostSessionPower(delegate));
 }
 
-void PowerManageSession::OnBeforeThreadRunning()
+void HostSessionPower::OnBeforeThreadRunning()
 {
     // Nothing
 }
 
-void PowerManageSession::OnAfterThreadRunning()
+void HostSessionPower::OnAfterThreadRunning()
 {
     delegate_->OnSessionTerminate();
 }
 
-void PowerManageSession::Send(const IOBuffer& buffer)
+void HostSessionPower::Send(const IOBuffer& buffer)
 {
     proto::power::ClientToHost message;
 
     if (ParseMessage(buffer, message))
     {
         std::shared_ptr<proto::PowerEvent> power_event(message.release_power_event());
-        runner_->PostTask(std::bind(&PowerManageSession::Inject, this, power_event));
+        runner_->PostTask(std::bind(&HostSessionPower::Inject, this, power_event));
     }
 }
 
-void PowerManageSession::Inject(std::shared_ptr<proto::PowerEvent> power_event)
+void HostSessionPower::Inject(std::shared_ptr<proto::PowerEvent> power_event)
 {
     InjectPowerEvent(*power_event);
     thread_.StopSoon();

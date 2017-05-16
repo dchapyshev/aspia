@@ -32,9 +32,12 @@ void DesktopSessionClient::Run(const std::wstring& input_channel_name,
     if (!ipc_channel_)
         return;
 
-    if (ipc_channel_->Connect(this))
+    if (ipc_channel_->Connect(GetCurrentProcessId(), this))
     {
+        // Waiting for the connection to close.
         ipc_channel_->Wait();
+
+        // Stop the threads.
         clipboard_thread_.reset();
         screen_updater_.reset();
     }
@@ -42,9 +45,22 @@ void DesktopSessionClient::Run(const std::wstring& input_channel_name,
     ipc_channel_.reset();
 }
 
-void DesktopSessionClient::OnPipeChannelConnect(ProcessId peer_pid)
+void DesktopSessionClient::OnPipeChannelConnect(uint32_t user_data)
 {
-    UNREF(peer_pid);
+    // The server sends the session type in user_data.
+    session_type_ = static_cast<proto::SessionType>(user_data);
+
+    switch (session_type_)
+    {
+        case proto::SessionType::SESSION_DESKTOP_MANAGE:
+        case proto::SessionType::SESSION_DESKTOP_VIEW:
+            break;
+
+        default:
+            LOG(FATAL) << "Invalid session type passed: " << session_type_;
+            return;
+    }
+
     SendConfigRequest();
 }
 
@@ -63,22 +79,22 @@ void DesktopSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
 
         if (message.has_pointer_event())
         {
-            ReadPointerEvent(message.pointer_event());
+            success = ReadPointerEvent(message.pointer_event());
         }
         else if (message.has_key_event())
         {
-            ReadKeyEvent(message.key_event());
+            success = ReadKeyEvent(message.key_event());
         }
         else if (message.has_power_event())
         {
-            ReadPowerEvent(message.power_event());
+            success = ReadPowerEvent(message.power_event());
         }
         else if (message.has_clipboard_event())
         {
             std::shared_ptr<proto::ClipboardEvent> clipboard_event(
                 message.release_clipboard_event());
 
-            ReadClipboardEvent(clipboard_event);
+            success = ReadClipboardEvent(clipboard_event);
         }
         else if (message.has_config())
         {
@@ -114,6 +130,7 @@ void DesktopSessionClient::OnScreenUpdate(const DesktopFrame* screen_frame)
 
 void DesktopSessionClient::OnCursorUpdate(std::unique_ptr<MouseCursor> mouse_cursor)
 {
+    DCHECK_EQ(session_type_, proto::SessionType::SESSION_DESKTOP_MANAGE);
     DCHECK(cursor_encoder_);
 
     std::unique_ptr<proto::CursorShape> cursor_shape =
@@ -139,33 +156,49 @@ void DesktopSessionClient::WriteMessage(const proto::desktop::HostToClient& mess
     ipc_channel_->Send(buffer);
 }
 
-void DesktopSessionClient::ReadPointerEvent(const proto::PointerEvent& event)
+bool DesktopSessionClient::ReadPointerEvent(const proto::PointerEvent& event)
 {
+    if (session_type_ != proto::SessionType::SESSION_DESKTOP_MANAGE)
+        return false;
+
     if (!input_injector_)
         input_injector_.reset(new InputInjector());
 
     input_injector_->InjectPointerEvent(event);
+    return true;
 }
 
-void DesktopSessionClient::ReadKeyEvent(const proto::KeyEvent& event)
+bool DesktopSessionClient::ReadKeyEvent(const proto::KeyEvent& event)
 {
+    if (session_type_ != proto::SessionType::SESSION_DESKTOP_MANAGE)
+        return false;
+
     if (!input_injector_)
         input_injector_.reset(new InputInjector());
 
     input_injector_->InjectKeyEvent(event);
+    return true;
 }
 
-void DesktopSessionClient::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
+bool DesktopSessionClient::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
 {
+    if (session_type_ != proto::SessionType::SESSION_DESKTOP_MANAGE)
+        return false;
+
     if (!clipboard_thread_)
-        return;
+        return false;
 
     clipboard_thread_->InjectClipboardEvent(clipboard_event);
+    return true;
 }
 
-void DesktopSessionClient::ReadPowerEvent(const proto::PowerEvent& event)
+bool DesktopSessionClient::ReadPowerEvent(const proto::PowerEvent& event)
 {
+    if (session_type_ != proto::SessionType::SESSION_DESKTOP_MANAGE)
+        return false;
+
     InjectPowerEvent(event);
+    return true;
 }
 
 void DesktopSessionClient::SendClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event)
@@ -184,7 +217,11 @@ void DesktopSessionClient::SendConfigRequest()
 
     request->set_video_encodings(kSupportedVideoEncodings);
     request->set_audio_encodings(kSupportedAudioEncodings);
-    request->set_features(kSupportedFeatures);
+
+    if (session_type_ == proto::SessionType::SESSION_DESKTOP_MANAGE)
+        request->set_features(kSupportedFeatures);
+    else
+        request->set_features(0);
 
     WriteMessage(message);
 }
@@ -218,37 +255,38 @@ bool DesktopSessionClient::ReadConfig(const proto::DesktopSessionConfig& config)
     if (!video_encoder_)
         return false;
 
-    ScreenUpdater::Mode mode;
+    ScreenUpdater::Mode mode = ScreenUpdater::Mode::SCREEN_ONLY;
 
-    if (config.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE)
+    if (session_type_ == proto::SessionType::SESSION_DESKTOP_MANAGE)
     {
-        mode = ScreenUpdater::Mode::SCREEN_AND_CURSOR;
-        cursor_encoder_.reset(new CursorEncoder());
-    }
-    else
-    {
-        mode = ScreenUpdater::Mode::SCREEN_ONLY;
-        cursor_encoder_.reset();
+        if (config.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE)
+        {
+            mode = ScreenUpdater::Mode::SCREEN_AND_CURSOR;
+            cursor_encoder_.reset(new CursorEncoder());
+        }
+        else
+        {
+            cursor_encoder_.reset();
+        }
+
+        if (config.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD)
+        {
+            clipboard_thread_.reset(new ClipboardThread());
+
+            clipboard_thread_->Start(std::bind(&DesktopSessionClient::SendClipboardEvent,
+                                               this,
+                                               std::placeholders::_1));
+        }
+        else
+        {
+            clipboard_thread_.reset();
+        }
     }
 
     if (!screen_updater_->StartUpdating(mode,
                                         std::chrono::milliseconds(config.update_interval()),
                                         this))
         return false;
-
-    if (config.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD)
-    {
-        clipboard_thread_.reset(new ClipboardThread());
-
-        Clipboard::ClipboardEventCallback clipboard_event_callback =
-            std::bind(&DesktopSessionClient::SendClipboardEvent, this, std::placeholders::_1);
-
-        clipboard_thread_->Start(std::move(clipboard_event_callback));
-    }
-    else
-    {
-        clipboard_thread_.reset();
-    }
 
     return true;
 }

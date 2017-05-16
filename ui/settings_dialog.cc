@@ -44,8 +44,11 @@ static const int kMaxCompressRatio = 9;
 static const int kMinCompressRatio = 1;
 static const int kDefCompressRatio = 6;
 
-INT_PTR SettingsDialog::DoModal(HWND parent, const proto::DesktopSessionConfig& config)
+INT_PTR SettingsDialog::DoModal(HWND parent,
+                                proto::SessionType session_type,
+                                const proto::DesktopSessionConfig& config)
 {
+    session_type_ = session_type;
     config_.CopyFrom(config);
     return DoModal(parent);
 }
@@ -162,13 +165,21 @@ void SettingsDialog::OnInitDialog()
     SendMessageW(updown, UDM_SETRANGE, 0, MAKELPARAM(kMaxUpdateInterval, kMinUpdateInterval));
     SendMessageW(updown, UDM_SETPOS, 0, MAKELPARAM(config_.update_interval(), 0));
 
-    CheckDlgButton(hwnd(), IDC_ENABLE_CURSOR_SHAPE_CHECK,
-                   (config_.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE) ?
-                       BST_CHECKED : BST_UNCHECKED);
+    if (session_type_ == proto::SessionType::SESSION_DESKTOP_VIEW)
+    {
+        EnableWindow(GetDlgItem(IDC_ENABLE_CLIPBOARD_CHECK), FALSE);
+        EnableWindow(GetDlgItem(IDC_ENABLE_CURSOR_SHAPE_CHECK), FALSE);
+    }
+    else
+    {
+        CheckDlgButton(hwnd(), IDC_ENABLE_CURSOR_SHAPE_CHECK,
+            (config_.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE) ?
+                BST_CHECKED : BST_UNCHECKED);
 
-    CheckDlgButton(hwnd(), IDC_ENABLE_CLIPBOARD_CHECK,
-                   (config_.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD) ?
-                       BST_CHECKED : BST_UNCHECKED);
+        CheckDlgButton(hwnd(), IDC_ENABLE_CLIPBOARD_CHECK,
+            (config_.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD) ?
+                BST_CHECKED : BST_UNCHECKED);
+    }
 }
 
 void SettingsDialog::OnClose()

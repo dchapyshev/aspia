@@ -55,6 +55,7 @@ void ViewerWindow::OnBeforeThreadRunning()
                                                 GetSystemMetrics(SM_CYSMICON),
                                                 LR_CREATEDIBSECTION));
         SetIcon(icon);
+        SetCursor(LoadCursorW(nullptr, IDC_ARROW));
     }
 }
 
@@ -163,7 +164,7 @@ void ViewerWindow::CreateToolBar()
 
     SendMessageW(toolbar_,
                  TB_ADDBUTTONS,
-                 ARRAYSIZE(kButtons),
+                 _countof(kButtons),
                  reinterpret_cast<LPARAM>(kButtons));
 
     int width = GetSystemMetrics(SM_CXSMICON);
@@ -186,6 +187,18 @@ void ViewerWindow::CreateToolBar()
                      TB_SETIMAGELIST,
                      0,
                      reinterpret_cast<LPARAM>(toolbar_imagelist_.Handle()));
+    }
+
+    if (config_.SessionType() == proto::SessionType::SESSION_DESKTOP_VIEW)
+    {
+        TBBUTTONINFOW button_info;
+        button_info.cbSize  = sizeof(button_info);
+        button_info.dwMask  = TBIF_STATE;
+        button_info.fsState = 0;
+
+        SendMessageW(toolbar_, TB_SETBUTTONINFOW, ID_POWER, reinterpret_cast<LPARAM>(&button_info));
+        SendMessageW(toolbar_, TB_SETBUTTONINFOW, ID_CAD, reinterpret_cast<LPARAM>(&button_info));
+        SendMessageW(toolbar_, TB_SETBUTTONINFOW, ID_SHORTCUTS, reinterpret_cast<LPARAM>(&button_info));
     }
 }
 
@@ -360,7 +373,10 @@ void ViewerWindow::ApplyConfig(const proto::DesktopSessionConfig& config)
 void ViewerWindow::OnSettingsButton()
 {
     SettingsDialog dialog;
-    if (dialog.DoModal(hwnd(), config_.desktop_session_config()) == IDOK)
+
+    if (dialog.DoModal(hwnd(),
+                       config_.SessionType(),
+                       config_.desktop_session_config()) == IDOK)
     {
         config_.mutable_desktop_session_config()->CopyFrom(dialog.Config());
 

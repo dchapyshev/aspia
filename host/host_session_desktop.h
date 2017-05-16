@@ -1,25 +1,25 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/desktop_session.h
+// FILE:            host/host_session_desktop.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_HOST__DESKTOP_SESSION_H
-#define _ASPIA_HOST__DESKTOP_SESSION_H
+#ifndef _ASPIA_HOST__HOST_SESSION_DESKTOP_H
+#define _ASPIA_HOST__HOST_SESSION_DESKTOP_H
 
 #include "base/message_loop/message_loop_thread.h"
 #include "base/object_watcher.h"
 #include "base/waitable_timer.h"
 #include "base/thread.h"
-#include "base/process.h"
 #include "ipc/pipe_channel.h"
 #include "host/host_session.h"
 #include "host/console_session_watcher.h"
+#include "proto/auth_session.pb.h"
 
 namespace aspia {
 
-class DesktopSession :
+class HostSessionDesktop :
     public HostSession,
     private ConsoleSessionWatcher::Delegate,
     private ObjectWatcher::Delegate,
@@ -27,14 +27,16 @@ class DesktopSession :
     private MessageLoopThread::Delegate
 {
 public:
-    ~DesktopSession();
+    ~HostSessionDesktop();
 
-    static std::unique_ptr<DesktopSession> Create(HostSession::Delegate* delegate);
+    static std::unique_ptr<HostSessionDesktop> Create(proto::SessionType session_type,
+                                                      HostSession::Delegate* delegate);
 
     void Send(const IOBuffer& buffer) override;
 
 private:
-    DesktopSession(HostSession::Delegate* delegate);
+    HostSessionDesktop(proto::SessionType session_type,
+                       HostSession::Delegate* delegate);
 
     // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;
@@ -48,11 +50,13 @@ private:
     void OnObjectSignaled(HANDLE object) override;
 
     // PipeChannel::Delegate implementation.
-    void OnPipeChannelConnect(ProcessId peer_pid) override;
+    void OnPipeChannelConnect(uint32_t user_data) override;
     void OnPipeChannelDisconnect() override;
     void OnPipeChannelMessage(const IOBuffer& buffer) override;
 
     void OnSessionAttachTimeout();
+
+    proto::SessionType session_type_;
 
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
@@ -71,9 +75,9 @@ private:
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::mutex ipc_channel_lock_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopSession);
+    DISALLOW_COPY_AND_ASSIGN(HostSessionDesktop);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__DESKTOP_SESSION_H
+#endif // _ASPIA_HOST__HOST_SESSION_DESKTOP_H
