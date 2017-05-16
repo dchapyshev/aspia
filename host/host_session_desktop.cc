@@ -20,8 +20,8 @@ std::unique_ptr<HostSessionDesktop> HostSessionDesktop::Create(proto::SessionTyp
 {
     switch (session_type)
     {
-        case proto::SessionType::SESSION_DESKTOP_MANAGE:
-        case proto::SessionType::SESSION_DESKTOP_VIEW:
+        case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
             break;
 
         default:

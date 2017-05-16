@@ -105,7 +105,7 @@ void ClientSessionDesktopView::Send(const IOBuffer& buffer)
         }
         else if (message.has_audio_packet())
         {
-            LOG(WARNING) << "Audio not implemented yet";
+            DLOG(WARNING) << "Audio not implemented yet";
         }
         else if (message.has_config_request())
         {

@@ -33,23 +33,23 @@ void UserPropDialog::InsertSessionType(ListView& list, proto::SessionType sessio
 
     switch (session_type)
     {
-        case proto::SessionType::SESSION_DESKTOP_MANAGE:
+        case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
             string_id = IDS_SESSION_TYPE_DESKTOP_MANAGE;
             break;
 
-        case proto::SessionType::SESSION_DESKTOP_VIEW:
+        case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
             string_id = IDS_SESSION_TYPE_DESKTOP_VIEW;
             break;
 
-        case proto::SessionType::SESSION_POWER_MANAGE:
+        case proto::SessionType::SESSION_TYPE_POWER_MANAGE:
             string_id = IDS_SESSION_TYPE_POWER_MANAGE;
             break;
 
-        case proto::SessionType::SESSION_FILE_TRANSFER:
+        case proto::SessionType::SESSION_TYPE_FILE_TRANSFER:
             string_id = IDS_SESSION_TYPE_FILE_TRANSFER;
             break;
 
-        case proto::SessionType::SESSION_SYSTEM_INFO:
+        case proto::SessionType::SESSION_TYPE_SYSTEM_INFO:
             string_id = IDS_SESSION_TYPE_SYSTEM_INFO;
             break;
 
@@ -103,11 +103,11 @@ void UserPropDialog::OnInitDialog()
     list.ModifyExtendedListViewStyle(0, LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT);
     list.AddOnlyOneColumn();
 
-    InsertSessionType(list, proto::SessionType::SESSION_DESKTOP_MANAGE);
-    InsertSessionType(list, proto::SessionType::SESSION_DESKTOP_VIEW);
-    InsertSessionType(list, proto::SessionType::SESSION_POWER_MANAGE);
-    InsertSessionType(list, proto::SessionType::SESSION_FILE_TRANSFER);
-    InsertSessionType(list, proto::SessionType::SESSION_SYSTEM_INFO);
+    InsertSessionType(list, proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
+    InsertSessionType(list, proto::SessionType::SESSION_TYPE_DESKTOP_VIEW);
+    InsertSessionType(list, proto::SessionType::SESSION_TYPE_POWER_MANAGE);
+    InsertSessionType(list, proto::SessionType::SESSION_TYPE_FILE_TRANSFER);
+    InsertSessionType(list, proto::SessionType::SESSION_TYPE_SYSTEM_INFO);
 
     HWND username_edit = GetDlgItem(IDC_USERNAME_EDIT);
 

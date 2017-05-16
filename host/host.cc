@@ -139,12 +139,12 @@ bool Host::SendAuthResult(const IOBuffer& request_buffer)
     {
         switch (request.session_type())
         {
-            case proto::SessionType::SESSION_DESKTOP_MANAGE:
-            case proto::SessionType::SESSION_DESKTOP_VIEW:
+            case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
+            case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
                 session_ = HostSessionDesktop::Create(request.session_type(), this);
                 break;
 
-            case proto::SessionType::SESSION_POWER_MANAGE:
+            case proto::SessionType::SESSION_TYPE_POWER_MANAGE:
                 session_ = HostSessionPower::Create(this);
                 break;
 

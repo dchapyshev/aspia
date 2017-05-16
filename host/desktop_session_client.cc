@@ -52,8 +52,8 @@ void DesktopSessionClient::OnPipeChannelConnect(uint32_t user_data)
 
     switch (session_type_)
     {
-        case proto::SessionType::SESSION_DESKTOP_MANAGE:
-        case proto::SessionType::SESSION_DESKTOP_VIEW:
+        case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
             break;
 
         default:
@@ -130,7 +130,7 @@ void DesktopSessionClient::OnScreenUpdate(const DesktopFrame* screen_frame)
 
 void DesktopSessionClient::OnCursorUpdate(std::unique_ptr<MouseCursor> mouse_cursor)
 {
-    DCHECK_EQ(session_type_, proto::SessionType::SESSION_DESKTOP_MANAGE);
+    DCHECK_EQ(session_type_, proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
     DCHECK(cursor_encoder_);
 
     std::unique_ptr<proto::CursorShape> cursor_shape =
@@ -158,7 +158,7 @@ void DesktopSessionClient::WriteMessage(const proto::desktop::HostToClient& mess
 
 bool DesktopSessionClient::ReadPointerEvent(const proto::PointerEvent& event)
 {
-    if (session_type_ != proto::SessionType::SESSION_DESKTOP_MANAGE)
+    if (session_type_ != proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
 
     if (!input_injector_)
@@ -170,7 +170,7 @@ bool DesktopSessionClient::ReadPointerEvent(const proto::PointerEvent& event)
 
 bool DesktopSessionClient::ReadKeyEvent(const proto::KeyEvent& event)
 {
-    if (session_type_ != proto::SessionType::SESSION_DESKTOP_MANAGE)
+    if (session_type_ != proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
 
     if (!input_injector_)
@@ -182,7 +182,7 @@ bool DesktopSessionClient::ReadKeyEvent(const proto::KeyEvent& event)
 
 bool DesktopSessionClient::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
 {
-    if (session_type_ != proto::SessionType::SESSION_DESKTOP_MANAGE)
+    if (session_type_ != proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
 
     if (!clipboard_thread_)
@@ -194,7 +194,7 @@ bool DesktopSessionClient::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEv
 
 bool DesktopSessionClient::ReadPowerEvent(const proto::PowerEvent& event)
 {
-    if (session_type_ != proto::SessionType::SESSION_DESKTOP_MANAGE)
+    if (session_type_ != proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
 
     InjectPowerEvent(event);
@@ -218,7 +218,7 @@ void DesktopSessionClient::SendConfigRequest()
     request->set_video_encodings(kSupportedVideoEncodings);
     request->set_audio_encodings(kSupportedAudioEncodings);
 
-    if (session_type_ == proto::SessionType::SESSION_DESKTOP_MANAGE)
+    if (session_type_ == proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
         request->set_features(kSupportedFeatures);
     else
         request->set_features(0);
@@ -257,7 +257,7 @@ bool DesktopSessionClient::ReadConfig(const proto::DesktopSessionConfig& config)
 
     ScreenUpdater::Mode mode = ScreenUpdater::Mode::SCREEN_ONLY;
 
-    if (session_type_ == proto::SessionType::SESSION_DESKTOP_MANAGE)
+    if (session_type_ == proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
     {
         if (config.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE)
         {

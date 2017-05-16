@@ -189,7 +189,7 @@ void ViewerWindow::CreateToolBar()
                      reinterpret_cast<LPARAM>(toolbar_imagelist_.Handle()));
     }
 
-    if (config_.SessionType() == proto::SessionType::SESSION_DESKTOP_VIEW)
+    if (config_.session_type() == proto::SessionType::SESSION_TYPE_DESKTOP_VIEW)
     {
         TBBUTTONINFOW button_info;
         button_info.cbSize  = sizeof(button_info);
@@ -204,7 +204,7 @@ void ViewerWindow::CreateToolBar()
 
 void ViewerWindow::OnCreate()
 {
-    std::wstring title(config_.RemoteAddress());
+    std::wstring title(config_.address());
 
     title.append(L" - ");
     title.append(Module().Current().string(IDS_APPLICATION_NAME));
@@ -375,7 +375,7 @@ void ViewerWindow::OnSettingsButton()
     SettingsDialog dialog;
 
     if (dialog.DoModal(hwnd(),
-                       config_.SessionType(),
+                       config_.session_type(),
                        config_.desktop_session_config()) == IDOK)
     {
         config_.mutable_desktop_session_config()->CopyFrom(dialog.Config());

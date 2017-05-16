@@ -165,7 +165,7 @@ void SettingsDialog::OnInitDialog()
     SendMessageW(updown, UDM_SETRANGE, 0, MAKELPARAM(kMaxUpdateInterval, kMinUpdateInterval));
     SendMessageW(updown, UDM_SETPOS, 0, MAKELPARAM(config_.update_interval(), 0));
 
-    if (session_type_ == proto::SessionType::SESSION_DESKTOP_VIEW)
+    if (session_type_ == proto::SessionType::SESSION_TYPE_DESKTOP_VIEW)
     {
         EnableWindow(GetDlgItem(IDC_ENABLE_CLIPBOARD_CHECK), FALSE);
         EnableWindow(GetDlgItem(IDC_ENABLE_CURSOR_SHAPE_CHECK), FALSE);

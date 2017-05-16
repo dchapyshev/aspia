@@ -59,7 +59,7 @@ private:
 
     bool is_auth_complete_ = false;
     ClientStatus status_;
-    std::unique_ptr<StatusDialog> status_dialog_;
+    StatusDialog status_dialog_;
 
     std::unique_ptr<NetworkChannel> channel_;
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;

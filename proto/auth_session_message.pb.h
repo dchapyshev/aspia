@@ -77,18 +77,18 @@ const AuthStatus AuthStatus_MAX = AUTH_STATUS_BAD_USERNAME_OR_PASSWORD;
 const int AuthStatus_ARRAYSIZE = AuthStatus_MAX + 1;
 
 enum SessionType {
-  SESSION_NONE = 0,
-  SESSION_DESKTOP_MANAGE = 1,
-  SESSION_DESKTOP_VIEW = 2,
-  SESSION_POWER_MANAGE = 4,
-  SESSION_FILE_TRANSFER = 8,
-  SESSION_SYSTEM_INFO = 16,
+  SESSION_TYPE_UNKNOWN = 0,
+  SESSION_TYPE_DESKTOP_MANAGE = 1,
+  SESSION_TYPE_DESKTOP_VIEW = 2,
+  SESSION_TYPE_POWER_MANAGE = 4,
+  SESSION_TYPE_FILE_TRANSFER = 8,
+  SESSION_TYPE_SYSTEM_INFO = 16,
   SessionType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   SessionType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool SessionType_IsValid(int value);
-const SessionType SessionType_MIN = SESSION_NONE;
-const SessionType SessionType_MAX = SESSION_SYSTEM_INFO;
+const SessionType SessionType_MIN = SESSION_TYPE_UNKNOWN;
+const SessionType SessionType_MAX = SESSION_TYPE_SYSTEM_INFO;
 const int SessionType_ARRAYSIZE = SessionType_MAX + 1;
 
 // ===================================================================

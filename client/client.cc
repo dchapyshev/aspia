@@ -62,7 +62,7 @@ void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
         }
         else
         {
-            CreateSession(config_.SessionType());
+            CreateSession(config_.session_type());
         }
 
         return;
@@ -76,8 +76,10 @@ void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
 
 void Client::OnNetworkChannelDisconnect()
 {
-    std::unique_lock<std::mutex> lock(session_lock_);
-    session_.reset();
+    {
+        std::unique_lock<std::mutex> lock(session_lock_);
+        session_.reset();
+    }
 
     delegate_->OnSessionTerminate();
 }
@@ -96,12 +98,12 @@ void Client::OnNetworkChannelStarted()
     proto::auth::ClientToHost request;
 
     request.set_method(proto::AuthMethod::AUTH_METHOD_BASIC);
-    request.set_session_type(config_.SessionType());
+    request.set_session_type(config_.session_type());
 
     request.set_username(dialog.UserName());
     request.set_password(dialog.Password());
 
-    IOBuffer output_buffer = SerializeMessage(request);
+    IOBuffer output_buffer(SerializeMessage(request));
     CHECK(!output_buffer.IsEmpty());
 
     channel_proxy_->Send(output_buffer);
@@ -109,9 +111,8 @@ void Client::OnNetworkChannelStarted()
 
 void Client::OnStatusDialogOpen()
 {
-    status_dialog_->SetDestonation(config_.RemoteAddress(),
-                                   config_.RemotePort());
-    status_dialog_->SetStatus(status_);
+    status_dialog_.SetDestonation(config_.address(), config_.port());
+    status_dialog_.SetStatus(status_);
 }
 
 bool Client::ReadAuthResult(const IOBuffer& buffer)
@@ -143,10 +144,7 @@ bool Client::ReadAuthResult(const IOBuffer& buffer)
             return false;
     }
 
-    status_dialog_.reset(new StatusDialog());
-    status_dialog_->DoModal(nullptr, this);
-    status_dialog_.reset();
-
+    status_dialog_.DoModal(nullptr, this);
     return false;
 }
 
@@ -154,15 +152,15 @@ void Client::CreateSession(proto::SessionType session_type)
 {
     switch (session_type)
     {
-        case proto::SessionType::SESSION_DESKTOP_MANAGE:
+        case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
             session_.reset(new ClientSessionDesktopManage(config_, this));
             break;
 
-        case proto::SessionType::SESSION_DESKTOP_VIEW:
+        case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
             session_.reset(new ClientSessionDesktopView(config_, this));
             break;
 
-        case proto::SessionType::SESSION_POWER_MANAGE:
+        case proto::SessionType::SESSION_TYPE_POWER_MANAGE:
             session_.reset(new ClientSessionPowerManage(config_, this));
             break;
 

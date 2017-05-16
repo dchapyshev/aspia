@@ -43,7 +43,7 @@ private:
     void AddColorDepth(HWND combobox, int index, UINT string_id);
     void OnCodecChanged();
 
-    proto::SessionType session_type_ = proto::SessionType::SESSION_NONE;
+    proto::SessionType session_type_ = proto::SessionType::SESSION_TYPE_UNKNOWN;
     proto::DesktopSessionConfig config_;
 
     DISALLOW_COPY_AND_ASSIGN(SettingsDialog);

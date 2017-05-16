@@ -22,14 +22,14 @@ public:
 
     void CopyFrom(const ClientConfig& other);
 
-    void SetRemoteAddress(const std::wstring& address);
-    const std::wstring& RemoteAddress() const;
+    void set_address(const std::wstring& address);
+    const std::wstring& address() const;
 
-    void SetRemotePort(uint16_t port);
-    uint16_t RemotePort() const;
+    void set_port(uint16_t port);
+    uint16_t port() const;
 
-    void SetSessionType(proto::SessionType session_type);
-    proto::SessionType SessionType() const;
+    void set_session_type(proto::SessionType session_type);
+    proto::SessionType session_type() const;
 
     const proto::DesktopSessionConfig& desktop_session_config() const;
     proto::DesktopSessionConfig* mutable_desktop_session_config();
@@ -40,7 +40,7 @@ private:
     std::wstring address_;
     uint16_t port_ = kDefaultHostTcpPort;
 
-    proto::SessionType session_type_ = proto::SessionType::SESSION_NONE;
+    proto::SessionType session_type_ = proto::SessionType::SESSION_TYPE_UNKNOWN;
     proto::DesktopSessionConfig desktop_session_config_;
 };
 

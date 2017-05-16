@@ -23,32 +23,32 @@ void ClientConfig::CopyFrom(const ClientConfig& other)
     desktop_session_config_.CopyFrom(other.desktop_session_config_);
 }
 
-void ClientConfig::SetRemoteAddress(const std::wstring& address)
+void ClientConfig::set_address(const std::wstring& address)
 {
     address_ = address;
 }
 
-const std::wstring& ClientConfig::RemoteAddress() const
+const std::wstring& ClientConfig::address() const
 {
     return address_;
 }
 
-void ClientConfig::SetSessionType(proto::SessionType session_type)
+void ClientConfig::set_session_type(proto::SessionType session_type)
 {
     session_type_ = session_type;
 }
 
-proto::SessionType ClientConfig::SessionType() const
+proto::SessionType ClientConfig::session_type() const
 {
     return session_type_;
 }
 
-void ClientConfig::SetRemotePort(uint16_t port)
+void ClientConfig::set_port(uint16_t port)
 {
     port_ = port;
 }
 
-uint16_t ClientConfig::RemotePort() const
+uint16_t ClientConfig::port() const
 {
     return port_;
 }
