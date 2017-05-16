@@ -13,6 +13,8 @@
 
 namespace aspia {
 
+class ClientSessionProxy;
+
 class ClientSession
 {
 public:
@@ -24,18 +26,15 @@ public:
         virtual void OnSessionTerminate() = 0;
     };
 
-    ClientSession(const ClientConfig& config, Delegate* delegate) :
-        config_(config),
-        delegate_(delegate)
-    {
-        DCHECK(delegate_);
-    }
-
-    virtual ~ClientSession() = default;
+    ClientSession(const ClientConfig& config, Delegate* delegate);
+    virtual ~ClientSession();
 
     virtual void Send(const IOBuffer& buffer) = 0;
 
+    std::shared_ptr<ClientSessionProxy> client_session_proxy();
+
 protected:
+    std::shared_ptr<ClientSessionProxy> session_proxy_;
     ClientConfig config_;
     Delegate* delegate_;
 

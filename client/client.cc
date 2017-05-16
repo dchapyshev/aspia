@@ -61,8 +61,6 @@ void Client::OnSessionTerminate()
 
 void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
 {
-    std::lock_guard<std::mutex> lock(session_lock_);
-
     if (!is_auth_complete_)
     {
         is_auth_complete_ = ReadAuthResult(buffer);
@@ -78,10 +76,7 @@ void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
         return;
     }
 
-    if (!session_)
-        return;
-
-    session_->Send(buffer);
+    session_proxy_->Send(buffer);
 }
 
 void Client::OnNetworkChannelDisconnect()
@@ -92,11 +87,7 @@ void Client::OnNetworkChannelDisconnect()
         return;
     }
 
-    {
-        std::lock_guard<std::mutex> lock(session_lock_);
-        session_.reset();
-    }
-
+    session_.reset();
     ui_thread_.StopSoon();
     delegate_->OnSessionTerminate();
 }
@@ -193,8 +184,10 @@ void Client::CreateSession(proto::SessionType session_type)
 
         default:
             LOG(FATAL) << "Invalid session type: " << session_type;
-            break;
+            return;
     }
+
+    session_proxy_ = session_->client_session_proxy();
 }
 
 } // namespace aspia

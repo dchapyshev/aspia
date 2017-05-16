@@ -45,6 +45,7 @@
     <ClCompile Include="client\client.cc" />
     <ClCompile Include="client\client_config.cc" />
     <ClCompile Include="client\client_pool.cc" />
+    <ClCompile Include="client\client_session.cc" />
     <ClCompile Include="client\client_session_desktop_manage.cc" />
     <ClCompile Include="client\client_session_desktop_view.cc" />
     <ClCompile Include="client\client_session_power_manage.cc" />
@@ -186,6 +187,7 @@
     <ClInclude Include="client\client_session_desktop_manage.h" />
     <ClInclude Include="client\client_session_desktop_view.h" />
     <ClInclude Include="client\client_session_power_manage.h" />
+    <ClInclude Include="client\client_session_proxy.h" />
     <ClInclude Include="client\client_status.h" />
     <ClInclude Include="codec\compressor.h" />
     <ClInclude Include="codec\compressor_zlib.h" />
