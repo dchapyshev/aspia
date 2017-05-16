@@ -25,6 +25,8 @@ public:
             return false;
 
         client_session_->Send(buffer);
+
+        return true;
     }
 
 private:
