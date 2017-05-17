@@ -6,7 +6,6 @@
 //
 
 #include "network/firewall_manager.h"
-
 #include "base/scoped_bstr.h"
 #include "base/scoped_variant.h"
 #include "base/logging.h"

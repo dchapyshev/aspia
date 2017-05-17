@@ -391,6 +391,9 @@
     <ClCompile Include="host\host_session.cc">
       <Filter>host</Filter>
     </ClCompile>
+    <ClCompile Include="network\firewall_manager_legacy.cc">
+      <Filter>network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -856,6 +859,9 @@
     </ClInclude>
     <ClInclude Include="host\host_session_proxy.h">
       <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="network\firewall_manager_legacy.h">
+      <Filter>network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

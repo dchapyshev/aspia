@@ -14,6 +14,7 @@
 #include "base/object_watcher.h"
 #include "network/network_channel_tcp.h"
 #include "network/firewall_manager.h"
+#include "network/firewall_manager_legacy.h"
 #include "network/socket.h"
 
 namespace aspia {
@@ -37,13 +38,18 @@ private:
     // ObjectWatcher::Delegate implementation.
     void OnObjectSignaled(HANDLE object) override;
 
+    void AddFirewallRule();
+
     std::shared_ptr<MessageLoopProxy> runner_;
 
     ObjectWatcher accept_watcher_;
     Delegate* delegate_ = nullptr;
 
-    FirewallManager firewall_manager_;
-    bool firewall_rule_exists_ = false;
+    // For Vista and later.
+    std::unique_ptr<FirewallManager> firewall_manager_;
+
+    // For XP/2003.
+    std::unique_ptr<FirewallManagerLegacy> firewall_manager_legacy_;
 
     uint16_t port_ = 0;
     Socket server_socket_;

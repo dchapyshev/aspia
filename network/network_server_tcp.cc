@@ -6,6 +6,7 @@
 //
 
 #include "network/network_server_tcp.h"
+#include "base/version_helpers.h"
 #include "base/path.h"
 
 #include <ws2tcpip.h>
@@ -23,8 +24,52 @@ NetworkServerTcp::~NetworkServerTcp()
     accept_watcher_.StopWatching();
     server_socket_.Reset();
 
-    if (firewall_rule_exists_)
-        firewall_manager_.DeleteRule(kRuleName);
+    if (firewall_manager_)
+        firewall_manager_->DeleteRule(kRuleName);
+
+    if (firewall_manager_legacy_)
+        firewall_manager_legacy_->DeleteRule();
+}
+
+void NetworkServerTcp::AddFirewallRule()
+{
+    std::wstring exe_path;
+
+    if (!GetPathW(PathKey::FILE_EXE, exe_path))
+        return;
+
+    if (IsWindowsVistaOrGreater())
+    {
+        firewall_manager_.reset(new FirewallManager());
+
+        if (!firewall_manager_->Init(kAppName, exe_path))
+        {
+            firewall_manager_.reset();
+            return;
+        }
+
+        if (!firewall_manager_->AddTcpRule(kRuleName, kRuleDesc, port_))
+        {
+            firewall_manager_.reset();
+            return;
+        }
+    }
+    else
+    {
+        firewall_manager_legacy_.reset(new FirewallManagerLegacy());
+
+        if (!firewall_manager_legacy_->Init(kAppName, exe_path))
+        {
+            firewall_manager_legacy_.reset();
+            return;
+        }
+
+        if (!firewall_manager_legacy_->SetAllowIncomingConnection(true))
+        {
+            firewall_manager_legacy_.reset();
+            return;
+        }
+    }
 }
 
 bool NetworkServerTcp::Start(uint16_t port, Delegate* delegate)
@@ -43,15 +88,7 @@ bool NetworkServerTcp::Start(uint16_t port, Delegate* delegate)
     port_ = port;
     delegate_ = delegate;
 
-    std::wstring exe_path;
-
-    if (!GetPathW(PathKey::FILE_EXE, exe_path))
-        return false;
-
-    firewall_rule_exists_ = false;
-
-    if (firewall_manager_.Init(kAppName, exe_path))
-        firewall_rule_exists_ = firewall_manager_.AddTcpRule(kRuleName, kRuleDesc, port_);
+    AddFirewallRule();
 
     server_socket_.Reset(socket(AF_INET, SOCK_STREAM, IPPROTO_TCP));
     if (!server_socket_.IsValid())

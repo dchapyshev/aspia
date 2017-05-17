@@ -96,6 +96,7 @@
     <ClCompile Include="ipc\pipe_channel.cc" />
     <ClCompile Include="main.cc" />
     <ClCompile Include="network\firewall_manager.cc" />
+    <ClCompile Include="network\firewall_manager_legacy.cc" />
     <ClCompile Include="network\network_channel.cc" />
     <ClCompile Include="network\network_channel_proxy.cc" />
     <ClCompile Include="network\network_channel_tcp.cc" />
@@ -247,6 +248,7 @@
     <ClInclude Include="host\host_session.h" />
     <ClInclude Include="ipc\pipe_channel.h" />
     <ClInclude Include="network\firewall_manager.h" />
+    <ClInclude Include="network\firewall_manager_legacy.h" />
     <ClInclude Include="network\network_channel.h" />
     <ClInclude Include="network\network_channel_proxy.h" />
     <ClInclude Include="network\network_channel_tcp.h" />
