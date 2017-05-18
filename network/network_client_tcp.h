@@ -19,7 +19,7 @@ namespace aspia {
 class NetworkClientTcp : private ObjectWatcher::Delegate
 {
 public:
-    NetworkClientTcp() = default;
+    NetworkClientTcp();
     ~NetworkClientTcp();
 
     class Delegate
@@ -46,7 +46,7 @@ private:
     Delegate* delegate_ = nullptr;
 
     Socket socket_;
-    WsaWaitableEvent connect_event_;
+    WaitableEvent connect_event_;
 
     DISALLOW_COPY_AND_ASSIGN(NetworkClientTcp);
 };

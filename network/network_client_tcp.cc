@@ -53,6 +53,13 @@ bool NetworkClientTcp::IsValidPort(uint16_t port)
     return true;
 }
 
+NetworkClientTcp::NetworkClientTcp() :
+    connect_event_(WaitableEvent::ResetPolicy::MANUAL,
+                   WaitableEvent::InitialState::NOT_SIGNALED)
+{
+    // Nothing
+}
+
 NetworkClientTcp::~NetworkClientTcp()
 {
     connect_watcher_.StopWatching();

@@ -19,6 +19,13 @@ static const WCHAR kAppName[] = L"Aspia Remote Desktop";
 static const WCHAR kRuleName[] = L"Aspia Remote Desktop Host";
 static const WCHAR kRuleDesc[] = L"Allow incoming connections";
 
+NetworkServerTcp::NetworkServerTcp() :
+    accept_event_(WaitableEvent::ResetPolicy::MANUAL,
+                  WaitableEvent::InitialState::NOT_SIGNALED)
+{
+    // Nothing
+}
+
 NetworkServerTcp::~NetworkServerTcp()
 {
     accept_watcher_.StopWatching();

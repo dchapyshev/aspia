@@ -752,9 +752,6 @@
     <ClInclude Include="base\message_loop\task.h">
       <Filter>base\message_loop</Filter>
     </ClInclude>
-    <ClInclude Include="network\wsa_waitable_event.h">
-      <Filter>network</Filter>
-    </ClInclude>
     <ClInclude Include="client\client_pool.h">
       <Filter>client</Filter>
     </ClInclude>

@@ -53,12 +53,10 @@ void WaitableEvent::Wait()
     DCHECK_EQ(WAIT_OBJECT_0, result) << "WaitForSingleObject failed";
 }
 
-void WaitableEvent::TimedWait(const std::chrono::microseconds& timeout)
+bool WaitableEvent::TimedWait(const std::chrono::microseconds& timeout)
 {
     DWORD result = WaitForSingleObject(handle_, static_cast<DWORD>(timeout.count()));
-    // It is most unexpected that this should ever fail.  Help consumers learn
-    // about it if it should ever fail.
-    DCHECK_EQ(WAIT_OBJECT_0, result) << "WaitForSingleObject failed";
+    return result != WAIT_TIMEOUT;
 }
 
 // static

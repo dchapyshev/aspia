@@ -261,7 +261,6 @@
     <ClInclude Include="network\scoped_addrinfo.h" />
     <ClInclude Include="network\scoped_wsa_initializer.h" />
     <ClInclude Include="network\socket.h" />
-    <ClInclude Include="network\wsa_waitable_event.h" />
     <ClInclude Include="protocol\clipboard.h" />
     <ClInclude Include="protocol\message_serialization.h" />
     <ClInclude Include="proto\auth_session.pb.h" />

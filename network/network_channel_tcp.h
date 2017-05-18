@@ -9,8 +9,8 @@
 #define _ASPIA_NETWORK__NETWORK_CHANNEL_TCP_H
 
 #include "network/network_channel.h"
-#include "network/wsa_waitable_event.h"
 #include "network/socket.h"
+#include "base/waitable_event.h"
 
 #include <winsock2.h>
 
@@ -42,8 +42,8 @@ private:
 
     Socket socket_;
 
-    WsaWaitableEvent read_event_;
-    WsaWaitableEvent write_event_;
+    WaitableEvent read_event_;
+    WaitableEvent write_event_;
 
     DISALLOW_COPY_AND_ASSIGN(NetworkChannelTcp);
 };

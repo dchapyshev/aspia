@@ -59,7 +59,7 @@ public:
     //   delete e;
     void Wait();
 
-    void TimedWait(const std::chrono::microseconds& timeout);
+    bool TimedWait(const std::chrono::microseconds& timeout);
 
     NativeHandle Handle() { return handle_; }
 

@@ -22,7 +22,7 @@ namespace aspia {
 class NetworkServerTcp : private ObjectWatcher::Delegate
 {
 public:
-    NetworkServerTcp() = default;
+    NetworkServerTcp();
     ~NetworkServerTcp();
 
     class Delegate
@@ -53,7 +53,7 @@ private:
 
     uint16_t port_ = 0;
     Socket server_socket_;
-    WsaWaitableEvent accept_event_;
+    WaitableEvent accept_event_;
 
     DISALLOW_COPY_AND_ASSIGN(NetworkServerTcp);
 };

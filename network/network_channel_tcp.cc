@@ -32,7 +32,11 @@ std::unique_ptr<NetworkChannelTcp> NetworkChannelTcp::CreateServer(Socket socket
 
 NetworkChannelTcp::NetworkChannelTcp(Socket socket, Mode mode) :
     socket_(std::move(socket)),
-    mode_(mode)
+    mode_(mode),
+    read_event_(WaitableEvent::ResetPolicy::MANUAL,
+                WaitableEvent::InitialState::NOT_SIGNALED),
+    write_event_(WaitableEvent::ResetPolicy::MANUAL,
+                 WaitableEvent::InitialState::NOT_SIGNALED)
 {
     DWORD value = 1; // Disable the algorithm of Nagle.
 
