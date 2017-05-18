@@ -40,13 +40,10 @@ void UsersDialog::UpdateUserList()
 
 void UsersDialog::OnInitDialog()
 {
-    int width = GetSystemMetrics(SM_CXSMICON);
-    int height = GetSystemMetrics(SM_CYSMICON);
-
-    if (imagelist_.Create(width, height, ILC_MASK | ILC_COLOR32, 1, 1))
+    if (imagelist_.CreateSmall())
     {
-        imagelist_.AddIcon(module(), IDI_USER, width, height);
-        imagelist_.AddIcon(module(), IDI_USER_DISABLED, width, height);
+        imagelist_.AddIcon(module(), IDI_USER);
+        imagelist_.AddIcon(module(), IDI_USER_DISABLED);
     }
 
     ListView list(GetDlgItem(IDC_USER_LIST));

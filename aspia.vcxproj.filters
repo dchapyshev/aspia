@@ -400,6 +400,9 @@
     <ClCompile Include="base\string_util_constants.cc">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="ui\base\imagelist.cc">
+      <Filter>ui\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">

@@ -115,6 +115,7 @@
     <ClCompile Include="ui\about_dialog.cc" />
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\child_window.cc" />
+    <ClCompile Include="ui\base\imagelist.cc" />
     <ClCompile Include="ui\base\listview.cc" />
     <ClCompile Include="ui\base\modal_dialog.cc" />
     <ClCompile Include="ui\base\module.cc" />

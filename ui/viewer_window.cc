@@ -167,21 +167,18 @@ void ViewerWindow::CreateToolBar()
                  _countof(kButtons),
                  reinterpret_cast<LPARAM>(kButtons));
 
-    int width = GetSystemMetrics(SM_CXSMICON);
-    int height = GetSystemMetrics(SM_CYSMICON);
-
-    if (toolbar_imagelist_.Create(width, height, ILC_MASK | ILC_COLOR32, 1, 1))
+    if (toolbar_imagelist_.CreateSmall())
     {
         const Module& module = Module().Current();
 
-        toolbar_imagelist_.AddIcon(module, IDI_POWER,      width, height);
-        toolbar_imagelist_.AddIcon(module, IDI_CAD,        width, height);
-        toolbar_imagelist_.AddIcon(module, IDI_KEYS,       width, height);
-        toolbar_imagelist_.AddIcon(module, IDI_AUTOSIZE,   width, height);
-        toolbar_imagelist_.AddIcon(module, IDI_FULLSCREEN, width, height);
-        toolbar_imagelist_.AddIcon(module, IDI_SETTINGS,   width, height);
-        toolbar_imagelist_.AddIcon(module, IDI_ABOUT,      width, height);
-        toolbar_imagelist_.AddIcon(module, IDI_EXIT,       width, height);
+        toolbar_imagelist_.AddIcon(module, IDI_POWER);
+        toolbar_imagelist_.AddIcon(module, IDI_CAD);
+        toolbar_imagelist_.AddIcon(module, IDI_KEYS);
+        toolbar_imagelist_.AddIcon(module, IDI_AUTOSIZE);
+        toolbar_imagelist_.AddIcon(module, IDI_FULLSCREEN);
+        toolbar_imagelist_.AddIcon(module, IDI_SETTINGS);
+        toolbar_imagelist_.AddIcon(module, IDI_ABOUT);
+        toolbar_imagelist_.AddIcon(module, IDI_EXIT);
 
         SendMessageW(toolbar_,
                      TB_SETIMAGELIST,

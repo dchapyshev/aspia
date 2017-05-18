@@ -21,50 +21,19 @@ class ImageList
 {
 public:
     ImageList() = default;
+    ~ImageList();
 
-    ~ImageList()
-    {
-        Close();
-    }
+    bool Create(int width, int height, UINT flags, int initial, int grow);
+    bool CreateSmall();
 
-    bool Create(int width, int height, UINT flags, int initial, int grow)
-    {
-        Close();
+    int AddIcon(HICON icon);
+    int AddIcon(const Module& module, UINT resource_id);
 
-        list_ = ImageList_Create(width, height, flags, initial, grow);
-        if (!list_)
-            return false;
-
-        return true;
-    }
-
-    int AddIcon(HICON icon)
-    {
-        return ImageList_AddIcon(list_, icon);
-    }
-
-    int AddIcon(const Module& module, UINT resource_id, int width, int height)
-    {
-        ScopedHICON icon(module.icon(resource_id, width, height, LR_CREATEDIBSECTION));
-        return AddIcon(icon);
-    }
-
-    HIMAGELIST Handle()
-    {
-        return list_;
-    }
-
-    operator HIMAGELIST()
-    {
-        return Handle();
-    }
+    HIMAGELIST Handle() { return list_; }
+    operator HIMAGELIST() { return Handle(); }
 
 private:
-    void Close()
-    {
-        if (list_)
-            ImageList_Destroy(list_);
-    }
+    void Close();
 
     HIMAGELIST list_ = nullptr;
 
