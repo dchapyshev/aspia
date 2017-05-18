@@ -25,12 +25,10 @@ private:
     INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) override;
 
     void OnInitDialog();
-    void OnClose();
     void OnAddButton();
     void OnEditButton();
     void OnDeleteButton();
     void OnOkButton();
-    void OnCancelButton();
 
     void UpdateUserList();
     int GetSelectedUserIndex();

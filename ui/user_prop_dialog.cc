@@ -148,11 +148,6 @@ void UserPropDialog::OnInitDialog()
     SetFocus(username_edit);
 }
 
-void UserPropDialog::OnClose()
-{
-    EndDialog(IDCANCEL);
-}
-
 void UserPropDialog::OnOkButton()
 {
     std::wstring username = GetDlgItemString(IDC_USERNAME_EDIT);
@@ -235,11 +230,6 @@ void UserPropDialog::OnOkButton()
     EndDialog(IDOK);
 }
 
-void UserPropDialog::OnCancelButton()
-{
-    EndDialog(IDCANCEL);
-}
-
 INT_PTR UserPropDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
@@ -257,14 +247,14 @@ INT_PTR UserPropDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
                     break;
 
                 case IDCANCEL:
-                    OnCancelButton();
+                    EndDialog(IDCANCEL);
                     break;
             }
         }
         break;
 
         case WM_CLOSE:
-            OnClose();
+            EndDialog(IDCANCEL);
             break;
     }
 

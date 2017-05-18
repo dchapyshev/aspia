@@ -30,12 +30,10 @@ private:
     INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) override;
 
     void OnInitDialog();
-    void OnClose();
     void OnHScroll(HWND ctrl);
 
     void OnCodecChanged(WORD notify_code);
     void OnOkButton();
-    void OnCancelButton();
 
     void InitCodecList();
     void InitColorDepthList();

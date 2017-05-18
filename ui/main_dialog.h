@@ -18,8 +18,8 @@ namespace aspia {
 class MainDialog : public ModalDialog
 {
 public:
-    MainDialog();
-    ~MainDialog() {}
+    MainDialog() = default;
+    ~MainDialog() = default;
 
     INT_PTR DoModal(HWND parent) override;
 
@@ -33,10 +33,7 @@ private:
     void OnStartServerButton();
     void OnConnectButton();
 
-    void OnExitButton();
     void OnHelpButton();
-    void OnAboutButton();
-    void OnUsersButton();
     void OnShowHideButton();
     void OnInstallServiceButton();
     void OnRemoveServiceButton();

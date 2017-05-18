@@ -22,12 +22,6 @@ public:
 private:
     INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) override;
 
-    void OnInitDialog();
-    void OnClose();
-    void OnCloseButton();
-    void OnDonateButton();
-    void OnSiteButton();
-
     ScopedHICON icon_;
 
     DISALLOW_COPY_AND_ASSIGN(AboutDialog);

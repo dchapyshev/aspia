@@ -65,11 +65,6 @@ void UsersDialog::OnInitDialog()
         UpdateUserList();
 }
 
-void UsersDialog::OnClose()
-{
-    EndDialog(IDCANCEL);
-}
-
 void UsersDialog::OnAddButton()
 {
     std::unique_ptr<proto::HostUser> user(new proto::HostUser());
@@ -142,11 +137,6 @@ void UsersDialog::OnOkButton()
 {
     WriteUserList(user_list_);
     EndDialog(IDOK);
-}
-
-void UsersDialog::OnCancelButton()
-{
-    PostMessageW(hwnd(), WM_CLOSE, 0, 0);
 }
 
 void UsersDialog::ShowUserPopupMenu()
@@ -270,14 +260,14 @@ INT_PTR UsersDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
                     break;
 
                 case IDCANCEL:
-                    OnCancelButton();
+                    EndDialog(IDCANCEL);
                     break;
             }
         }
         break;
 
         case WM_CLOSE:
-            OnClose();
+            EndDialog(IDCANCEL);
             break;
     }
 

@@ -143,9 +143,8 @@ void SettingsDialog::UpdateCompressionRatio(int compression_ratio)
 {
     std::wstring format = module().string(IDS_COMPRESSION_RATIO_FORMAT);
 
-    SetDlgItemTextW(hwnd(),
-                    IDC_COMPRESS_RATIO_TEXT,
-                    StringPrintfW(format.c_str(), compression_ratio).c_str());
+    SetDlgItemString(IDC_COMPRESS_RATIO_TEXT,
+                     StringPrintfW(format.c_str(), compression_ratio));
 }
 
 void SettingsDialog::OnInitDialog()
@@ -182,11 +181,6 @@ void SettingsDialog::OnInitDialog()
     }
 }
 
-void SettingsDialog::OnClose()
-{
-    EndDialog(IDCANCEL);
-}
-
 void SettingsDialog::OnHScroll(HWND ctrl)
 {
     if (GetWindowLongPtrW(ctrl, GWLP_ID) == IDC_COMPRESS_RATIO_TRACKBAR)
@@ -200,7 +194,8 @@ void SettingsDialog::OnHScroll(HWND ctrl)
 
 void SettingsDialog::OnCodecChanged()
 {
-    BOOL has_pixel_format = (ComboBox_GetCurSel(GetDlgItem(IDC_CODEC_COMBO)) == kZLIB);
+    BOOL has_pixel_format =
+        (ComboBox_GetCurSel(GetDlgItem(IDC_CODEC_COMBO)) == kZLIB);
 
     EnableWindow(GetDlgItem(IDC_COLOR_DEPTH_TEXT), has_pixel_format);
     EnableWindow(GetDlgItem(IDC_COLOR_DEPTH_COMBO), has_pixel_format);
@@ -307,11 +302,6 @@ void SettingsDialog::OnOkButton()
     EndDialog(IDOK);
 }
 
-void SettingsDialog::OnCancelButton()
-{
-    EndDialog(IDCANCEL);
-}
-
 void SettingsDialog::AddColorDepth(HWND combobox, int index, UINT string_id)
 {
     ComboBox_InsertString(combobox,
@@ -328,7 +318,7 @@ INT_PTR SettingsDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
             break;
 
         case WM_CLOSE:
-            OnClose();
+            EndDialog(IDCANCEL);
             break;
 
         case WM_HSCROLL:
@@ -348,7 +338,7 @@ INT_PTR SettingsDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
                     break;
 
                 case IDCANCEL:
-                    OnCancelButton();
+                    EndDialog(IDCANCEL);
                     break;
             }
         }

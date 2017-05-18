@@ -25,8 +25,6 @@ ViewerWindow::ViewerWindow(const ClientConfig& config, Delegate* delegate) :
     delegate_(delegate),
     video_window_(this)
 {
-    memset(&window_pos_, 0, sizeof(window_pos_));
-
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
@@ -253,7 +251,7 @@ static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wParam, LPARAM lParam)
     {
         GUITHREADINFO gui_info = { 0 };
 
-        gui_info.cbSize = sizeof(GUITHREADINFO);
+        gui_info.cbSize = sizeof(gui_info);
 
         if (GetGUIThreadInfo(0, &gui_info) && gui_info.hwndFocus)
         {

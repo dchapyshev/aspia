@@ -26,11 +26,6 @@
 
 namespace aspia {
 
-MainDialog::MainDialog()
-{
-    // Nothing
-}
-
 INT_PTR MainDialog::DoModal(HWND parent)
 {
     return Run(Module::Current(), parent, IDD_MAIN);
@@ -199,7 +194,7 @@ void MainDialog::OnClose()
 {
     host_pool_.reset();
     client_pool_.reset();
-    EndDialog(0);
+    EndDialog();
 }
 
 void MainDialog::StopHostMode()
@@ -273,11 +268,6 @@ void MainDialog::OnConnectButton()
     }
 }
 
-void MainDialog::OnExitButton()
-{
-    PostMessageW(hwnd(), WM_CLOSE, 0, 0);
-}
-
 void MainDialog::OnHelpButton()
 {
     ShellExecuteW(nullptr,
@@ -286,18 +276,6 @@ void MainDialog::OnHelpButton()
                   nullptr,
                   nullptr,
                   SW_SHOWNORMAL);
-}
-
-void MainDialog::OnAboutButton()
-{
-    AboutDialog dialog;
-    dialog.DoModal(hwnd());
-}
-
-void MainDialog::OnUsersButton()
-{
-    UsersDialog dialog;
-    dialog.DoModal(hwnd());
 }
 
 void MainDialog::OnShowHideButton()
@@ -358,7 +336,7 @@ INT_PTR MainDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
                     break;
 
                 case ID_EXIT:
-                    OnExitButton();
+                    EndDialog();
                     break;
 
                 case ID_HELP:
@@ -366,11 +344,11 @@ INT_PTR MainDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
                     break;
 
                 case ID_ABOUT:
-                    OnAboutButton();
+                    AboutDialog().DoModal(hwnd());
                     break;
 
                 case ID_USERS:
-                    OnUsersButton();
+                    UsersDialog().DoModal(hwnd());
                     break;
 
                 case ID_SHOWHIDE:

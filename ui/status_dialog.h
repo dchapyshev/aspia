@@ -34,8 +34,6 @@ private:
     INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) override;
 
     void OnInitDialog();
-    void OnClose();
-    void OnCancelButton();
     void AddMessage(UINT resource_id);
 
     Delegate* delegate_ = nullptr;

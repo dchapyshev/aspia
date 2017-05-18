@@ -81,7 +81,6 @@ private:
     void DoFullScreen(bool fullscreen);
     void ApplyConfig(const proto::DesktopSessionConfig& config);
 
-private:
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
@@ -94,7 +93,7 @@ private:
     VideoWindow video_window_;
     Clipboard clipboard_;
     ScopedHHOOK keyboard_hook_;
-    WINDOWPLACEMENT window_pos_;
+    WINDOWPLACEMENT window_pos_ = { 0 };
 
     DISALLOW_COPY_AND_ASSIGN(ViewerWindow);
 };

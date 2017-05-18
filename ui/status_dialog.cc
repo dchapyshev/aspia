@@ -99,16 +99,6 @@ void StatusDialog::OnInitDialog()
     delegate_->OnStatusDialogOpen();
 }
 
-void StatusDialog::OnClose()
-{
-    EndDialog(0);
-}
-
-void StatusDialog::OnCancelButton()
-{
-    EndDialog(0);
-}
-
 static void AppendText(HWND edit, const WCHAR* text)
 {
     int length = GetWindowTextLengthW(edit);
@@ -153,14 +143,14 @@ INT_PTR StatusDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
             switch (LOWORD(wparam))
             {
                 case IDCANCEL:
-                    OnCancelButton();
+                    EndDialog();
                     break;
             }
         }
         break;
 
         case WM_CLOSE:
-            OnClose();
+            EndDialog();
             break;
     }
 
