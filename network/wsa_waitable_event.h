@@ -21,7 +21,7 @@ class WsaWaitableEvent
 public:
     WsaWaitableEvent() : handle_(WSACreateEvent())
     {
-        CHECK(handle_) << WSAGetLastError();
+        CHECK(handle_) << GetLastSystemErrorCodeString();
     }
 
     ~WsaWaitableEvent()
@@ -64,7 +64,8 @@ private:
     {
         if (WSAWaitForMultipleEvents(1, &handle_, TRUE, timeout, TRUE) == WSA_WAIT_FAILED)
         {
-            LOG(ERROR) << "WSAWaitForMultipleEvents() failed: " << WSAGetLastError();
+            LOG(ERROR) << "WSAWaitForMultipleEvents() failed: "
+                       << GetLastSystemErrorCodeString();
             return false;
         }
 

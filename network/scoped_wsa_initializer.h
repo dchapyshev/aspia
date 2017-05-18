@@ -22,11 +22,11 @@ public:
     {
         WSADATA data = { 0 };
 
-        // Инициализируем библиотеку сокетов.
+        // Initialize the socket library.
         is_succeded_ = (WSAStartup(MAKEWORD(2, 2), &data) == 0);
         if (!is_succeded_)
         {
-            LOG(ERROR) << "WSAStartup() failed: " << WSAGetLastError();
+            LOG(ERROR) << "WSAStartup() failed: " << GetLastSystemErrorCodeString();
         }
     }
 
