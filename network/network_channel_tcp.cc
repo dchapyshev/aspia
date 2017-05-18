@@ -42,7 +42,7 @@ NetworkChannelTcp::NetworkChannelTcp(Socket socket, Mode mode) :
                    reinterpret_cast<const char*>(&value),
                    sizeof(value)) == SOCKET_ERROR)
     {
-        LOG(ERROR) << "setsockopt() failed: " << WSAGetLastError();
+        LOG(ERROR) << "setsockopt() failed: " << GetLastSystemErrorCodeString();
     }
 }
 
@@ -210,7 +210,7 @@ bool NetworkChannelTcp::WriteData(const uint8_t* buffer, size_t size)
 
             if (err != WSA_IO_PENDING)
             {
-                LOG(ERROR) << "WSASend() failed: " << err;
+                LOG(ERROR) << "WSASend() failed: " << SystemErrorCodeToString(err);
                 return false;
             }
         }
@@ -220,7 +220,8 @@ bool NetworkChannelTcp::WriteData(const uint8_t* buffer, size_t size)
 
         if (!WSAGetOverlappedResult(socket_, &overlapped, &written, FALSE, &flags))
         {
-            LOG(ERROR) << "WSAGetOverlappedResult() failed: " << WSAGetLastError();
+            LOG(ERROR) << "WSAGetOverlappedResult() failed: "
+                       << GetLastSystemErrorCodeString();
             return false;
         }
 
@@ -257,7 +258,7 @@ bool NetworkChannelTcp::ReadData(uint8_t* buffer, size_t size)
 
             if (err != WSA_IO_PENDING)
             {
-                LOG(ERROR) << "WSARecv() failed: " << err;
+                LOG(ERROR) << "WSARecv() failed: " << SystemErrorCodeToString(err);
                 return false;
             }
         }
@@ -266,7 +267,8 @@ bool NetworkChannelTcp::ReadData(uint8_t* buffer, size_t size)
 
         if (!WSAGetOverlappedResult(socket_, &overlapped, &read, FALSE, &flags))
         {
-            LOG(ERROR) << "WSAGetOverlappedResult() failed: " << WSAGetLastError();
+            LOG(ERROR) << "WSAGetOverlappedResult() failed: "
+                       << GetLastSystemErrorCodeString();
             return false;
         }
 
