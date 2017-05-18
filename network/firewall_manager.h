@@ -22,10 +22,21 @@ public:
     FirewallManager() = default;
     ~FirewallManager() = default;
 
+    // Initializes object to manage application win name |app_name| and path
+    // |app_path|.
     bool Init(const std::wstring& app_name, const std::wstring& app_path);
+
+    // Returns true if firewall is enabled.
     bool IsFirewallEnabled();
-    bool AddTcpRule(const WCHAR* rule_name, const WCHAR* description, uint16_t port);
-    void DeleteRule(const WCHAR* rule_name);
+
+    // Adds a firewall rule allowing inbound connections to the application on TCP
+    // port |port|. Replaces the rule if it already exists. Needs elevation.
+    bool AddTCPRule(const std::wstring& rule_name,
+                    const std::wstring& description,
+                    uint16_t port);
+
+    // Deletes all rules with specified name. Needs elevation.
+    void DeleteRuleByName(const std::wstring& rule_name);
 
 private:
     ScopedComPtr<INetFwPolicy2> firewall_policy_;

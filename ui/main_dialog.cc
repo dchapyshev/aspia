@@ -14,7 +14,7 @@
 #include "base/version_helpers.h"
 #include "base/process_helpers.h"
 #include "base/unicode.h"
-#include "base/util.h"
+#include "base/string_util.h"
 #include "client/client_config.h"
 #include "codec/video_helpers.h"
 #include "host/host_service.h"

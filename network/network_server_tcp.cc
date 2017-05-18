@@ -25,7 +25,7 @@ NetworkServerTcp::~NetworkServerTcp()
     server_socket_.Reset();
 
     if (firewall_manager_)
-        firewall_manager_->DeleteRule(kRuleName);
+        firewall_manager_->DeleteRuleByName(kRuleName);
 
     if (firewall_manager_legacy_)
         firewall_manager_legacy_->DeleteRule();
@@ -48,7 +48,7 @@ void NetworkServerTcp::AddFirewallRule()
             return;
         }
 
-        if (!firewall_manager_->AddTcpRule(kRuleName, kRuleDesc, port_))
+        if (!firewall_manager_->AddTCPRule(kRuleName, kRuleDesc, port_))
         {
             firewall_manager_.reset();
             return;

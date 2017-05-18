@@ -17,18 +17,22 @@ namespace aspia {
 
 bool FirewallManager::Init(const std::wstring& app_name, const std::wstring& app_path)
 {
+    firewall_rules_ = nullptr;
+
     // Retrieve INetFwPolicy2
     HRESULT hr = firewall_policy_.CreateInstance(CLSID_NetFwPolicy2);
     if (FAILED(hr))
     {
-        LOG(ERROR) << "CreateInstance() failed: " << hr;
+        LOG(ERROR) << "CreateInstance() failed: " << SystemErrorCodeToString(hr);
+        firewall_policy_ = nullptr;
         return false;
     }
 
     hr = firewall_policy_->get_Rules(firewall_rules_.Receive());
     if (FAILED(hr))
     {
-        LOG(ERROR) << "get_Rules() failed: " << hr;
+        LOG(ERROR) << "get_Rules() failed: " << SystemErrorCodeToString(hr);
+        firewall_rules_ = nullptr;
         return false;
     }
 
@@ -54,7 +58,7 @@ bool FirewallManager::IsFirewallEnabled()
         NET_FW_PROFILE2_DOMAIN
     };
 
-    for (size_t i = 0; i < ARRAYSIZE(kProfileTypes); ++i)
+    for (size_t i = 0; i < _countof(kProfileTypes); ++i)
     {
         if ((profile_types & kProfileTypes[i]) != 0)
         {
@@ -71,21 +75,23 @@ bool FirewallManager::IsFirewallEnabled()
     return false;
 }
 
-bool FirewallManager::AddTcpRule(const WCHAR* rule_name, const WCHAR* description, uint16_t port)
+bool FirewallManager::AddTCPRule(const std::wstring& rule_name,
+                                 const std::wstring& description,
+                                 uint16_t port)
 {
-    DeleteRule(rule_name);
+    DeleteRuleByName(rule_name);
 
     ScopedComPtr<INetFwRule> rule;
 
     HRESULT hr = rule.CreateInstance(CLSID_NetFwRule);
     if (FAILED(hr))
     {
-        LOG(ERROR) << "CoCreateInstance() failed: " << hr;
+        LOG(ERROR) << "CoCreateInstance() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
-    rule->put_Name(ScopedBstr(rule_name));
-    rule->put_Description(ScopedBstr(description));
+    rule->put_Name(ScopedBstr(rule_name.c_str()));
+    rule->put_Description(ScopedBstr(description.c_str()));
     rule->put_ApplicationName(ScopedBstr(app_path_.c_str()));
     rule->put_Protocol(NET_FW_IP_PROTOCOL_TCP);
     rule->put_Direction(NET_FW_RULE_DIR_IN);
@@ -98,21 +104,21 @@ bool FirewallManager::AddTcpRule(const WCHAR* rule_name, const WCHAR* descriptio
     firewall_rules_->Add(rule.get());
     if (FAILED(hr))
     {
-        LOG(ERROR) << "Add() failed: " << hr;
+        LOG(ERROR) << "Add() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
     return true;
 }
 
-void FirewallManager::DeleteRule(const WCHAR* rule_name)
+void FirewallManager::DeleteRuleByName(const std::wstring& rule_name)
 {
     ScopedComPtr<IUnknown> rules_enum_unknown;
 
     HRESULT hr = firewall_rules_->get__NewEnum(rules_enum_unknown.Receive());
     if (FAILED(hr))
     {
-        LOG(ERROR) << "get__NewEnum() failed: " << hr;
+        LOG(ERROR) << "get__NewEnum() failed: " << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -121,7 +127,7 @@ void FirewallManager::DeleteRule(const WCHAR* rule_name)
     hr = rules_enum.QueryFrom(rules_enum_unknown.get());
     if (FAILED(hr))
     {
-        LOG(ERROR) << "QueryInterface() failed: " << hr;
+        LOG(ERROR) << "QueryInterface() failed: " << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -131,7 +137,7 @@ void FirewallManager::DeleteRule(const WCHAR* rule_name)
 
         hr = rules_enum->Next(1, rule_var.Receive(), nullptr);
 
-        DLOG_IF(ERROR, FAILED(hr)) << hr;
+        DLOG_IF(ERROR, FAILED(hr)) << SystemErrorCodeToString(hr);
 
         if (hr != S_OK)
             break;
@@ -143,7 +149,7 @@ void FirewallManager::DeleteRule(const WCHAR* rule_name)
         hr = rule.QueryFrom(V_DISPATCH(&rule_var));
         if (FAILED(hr))
         {
-            DLOG(ERROR) << "QueryInterface() failed: " << hr;
+            DLOG(ERROR) << "QueryInterface() failed: " << SystemErrorCodeToString(hr);
             continue;
         }
 
@@ -152,16 +158,16 @@ void FirewallManager::DeleteRule(const WCHAR* rule_name)
         hr = rule->get_Name(bstr_rule_name.Receive());
         if (FAILED(hr))
         {
-            DLOG(ERROR) << "get_Name() failed: " << hr;
+            DLOG(ERROR) << "get_Name() failed: " << SystemErrorCodeToString(hr);
             continue;
         }
 
-        if (bstr_rule_name && _wcsicmp(bstr_rule_name, rule_name) == 0)
+        if (bstr_rule_name && _wcsicmp(bstr_rule_name, rule_name.c_str()) == 0)
         {
             hr = firewall_rules_->Remove(bstr_rule_name);
             if (FAILED(hr))
             {
-                DLOG(ERROR) << "Remove() failed: " << hr;
+                DLOG(ERROR) << "Remove() failed: " << SystemErrorCodeToString(hr);
                 continue;
             }
         }

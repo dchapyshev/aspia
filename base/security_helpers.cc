@@ -10,7 +10,7 @@
 #include "base/scoped_local.h"
 #include "base/unicode.h"
 #include "base/logging.h"
-#include "base/util.h"
+#include "base/string_util.h"
 
 #include <objidl.h>
 #include <sddl.h>

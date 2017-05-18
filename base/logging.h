@@ -12,4 +12,13 @@
 #define GOOGLE_GLOG_DLL_DECL
 #include <glog/logging.h>
 
+namespace aspia {
+
+using SystemErrorCode = DWORD;
+
+SystemErrorCode GetLastSystemErrorCode();
+std::string SystemErrorCodeToString(SystemErrorCode error_code);
+
+} // namespace aspia
+
 #endif // _ASPIA_BASE__LOGGING_H

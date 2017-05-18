@@ -105,9 +105,6 @@
     <ClCompile Include="base\unicode.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\util.cc">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="base\waitable_timer.cc">
       <Filter>base</Filter>
     </ClCompile>
@@ -394,6 +391,15 @@
     <ClCompile Include="network\firewall_manager_legacy.cc">
       <Filter>network</Filter>
     </ClCompile>
+    <ClCompile Include="base\logging.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\string_util.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\string_util_constants.cc">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -529,9 +535,6 @@
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\scoped_hglobal.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\util.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="host\power_injector.h">
@@ -862,6 +865,12 @@
     </ClInclude>
     <ClInclude Include="network\firewall_manager_legacy.h">
       <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="base\string_util.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\string_util_constants.h">
+      <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

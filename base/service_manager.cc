@@ -7,7 +7,7 @@
 
 #include "base/service_manager.h"
 #include "base/unicode.h"
-#include "base/util.h"
+#include "base/string_util.h"
 #include "base/logging.h"
 
 #include <atomic>

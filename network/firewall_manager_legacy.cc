@@ -19,7 +19,7 @@ bool FirewallManagerLegacy::Init(const std::wstring& app_name, const std::wstrin
     HRESULT hr = firewall_manager.CreateInstance(CLSID_NetFwMgr);
     if (FAILED(hr))
     {
-        DLOG(ERROR) << "CreateInstance() failed: " << hr;
+        DLOG(ERROR) << "CreateInstance() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -27,14 +27,14 @@ bool FirewallManagerLegacy::Init(const std::wstring& app_name, const std::wstrin
     hr = firewall_manager->get_LocalPolicy(firewall_policy.Receive());
     if (FAILED(hr))
     {
-        DLOG(ERROR) << "get_LocalPolicy() failed: " << hr;
+        DLOG(ERROR) << "get_LocalPolicy() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
     hr = firewall_policy->get_CurrentProfile(current_profile_.Receive());
     if (FAILED(hr))
     {
-        DLOG(ERROR) << "get_CurrentProfile() failed: " << hr;
+        DLOG(ERROR) << "get_CurrentProfile() failed: " << SystemErrorCodeToString(hr);
         current_profile_ = nullptr;
         return false;
     }
@@ -58,7 +58,7 @@ ScopedComPtr<INetFwAuthorizedApplications> FirewallManagerLegacy::GetAuthorizedA
     HRESULT hr = current_profile_->get_AuthorizedApplications(authorized_apps.Receive());
     if (FAILED(hr))
     {
-        DLOG(ERROR) << "get_AuthorizedApplications() failed: " << hr;
+        DLOG(ERROR) << "get_AuthorizedApplications() failed: " << SystemErrorCodeToString(hr);
         return ScopedComPtr<INetFwAuthorizedApplications>();
     }
 
@@ -72,7 +72,7 @@ ScopedComPtr<INetFwAuthorizedApplication> FirewallManagerLegacy::CreateAuthoriza
     HRESULT hr = application.CreateInstance(CLSID_NetFwAuthorizedApplication);
     if (FAILED(hr))
     {
-        DLOG(ERROR) << "CreateInstance() failed: " << hr;
+        DLOG(ERROR) << "CreateInstance() failed: " << SystemErrorCodeToString(hr);
         return ScopedComPtr<INetFwAuthorizedApplication>();
     }
 
@@ -123,7 +123,7 @@ bool FirewallManagerLegacy::SetAllowIncomingConnection(bool allow)
         return false;
 
     HRESULT hr = authorized_apps->Add(authorization.get());
-    DLOG_IF(ERROR, FAILED(hr)) << "Add() failed: " << hr;
+    DLOG_IF(ERROR, FAILED(hr)) << "Add() failed: " << SystemErrorCodeToString(hr);
 
     return SUCCEEDED(hr);
 }
