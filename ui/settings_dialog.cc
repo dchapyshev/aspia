@@ -10,7 +10,7 @@
 #include "ui/base/module.h"
 #include "desktop_capture/pixel_format.h"
 #include "codec/video_helpers.h"
-#include "base/util.h"
+#include "base/string_util.h"
 
 #include <windowsx.h>
 #include <commctrl.h>
