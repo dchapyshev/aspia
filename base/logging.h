@@ -18,6 +18,7 @@ using SystemErrorCode = DWORD;
 
 SystemErrorCode GetLastSystemErrorCode();
 std::string SystemErrorCodeToString(SystemErrorCode error_code);
+std::string GetLastSystemErrorCodeString();
 
 } // namespace aspia
 

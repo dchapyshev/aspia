@@ -70,7 +70,8 @@ bool ObjectWatcher::StartWatchingInternal(HANDLE object, DWORD timeout, Delegate
                                      timeout,
                                      wait_flags))
     {
-        LOG(ERROR) << "RegisterWaitForSingleObject() failed: " << GetLastError();
+        LOG(ERROR) << "RegisterWaitForSingleObject() failed: "
+                   << GetLastSystemErrorCodeString();
         object_ = nullptr;
         wait_object_ = nullptr;
         delegate_ = nullptr;
@@ -87,7 +88,8 @@ bool ObjectWatcher::StopWatching()
 
     if (!UnregisterWaitEx(wait_object_, INVALID_HANDLE_VALUE))
     {
-        LOG(ERROR) << "UnregisterWaitEx() failed: " << GetLastError();
+        LOG(ERROR) << "UnregisterWaitEx() failed: "
+                   << GetLastSystemErrorCodeString();
         return false;
     }
 

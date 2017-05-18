@@ -101,7 +101,7 @@ void InputInjector::InjectPointerEvent(const proto::PointerEvent& event)
     // Do the mouse event.
     if (!SendInput(1, &input, sizeof(input)))
     {
-        LOG(WARNING) << "SendInput() failed: " << GetLastError();
+        LOG(WARNING) << "SendInput() failed: " << GetLastSystemErrorCodeString();
     }
 
     prev_mouse_button_mask_ = mask;
@@ -121,7 +121,7 @@ void InputInjector::SendKeyboardInput(WORD key_code, DWORD flags)
     // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
     {
-        LOG(WARNING) << "SendInput() failed: " << GetLastError();
+        LOG(WARNING) << "SendInput() failed: " << GetLastSystemErrorCodeString();
     }
 }
 

@@ -25,7 +25,8 @@ bool InjectPowerEvent(const proto::PowerEvent& event)
         {
             if (!ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, 0))
             {
-                LOG(ERROR) << "ExitWindowsEx() failed: " << GetLastError();
+                LOG(ERROR) << "ExitWindowsEx() failed: "
+                           << GetLastSystemErrorCodeString();
             }
         }
         break;
@@ -34,7 +35,8 @@ bool InjectPowerEvent(const proto::PowerEvent& event)
         {
             if (!ExitWindowsEx(EWX_REBOOT | EWX_FORCE, 0))
             {
-                LOG(ERROR) << "ExitWindowsEx() failed: " << GetLastError();
+                LOG(ERROR) << "ExitWindowsEx() failed: "
+                           << GetLastSystemErrorCodeString();
             }
         }
         break;
@@ -43,7 +45,8 @@ bool InjectPowerEvent(const proto::PowerEvent& event)
         {
             if (!SetSystemPowerState(FALSE, TRUE))
             {
-                LOG(ERROR) << "SetSystemPowerState() failed: " << GetLastError();
+                LOG(ERROR) << "SetSystemPowerState() failed: "
+                           << GetLastSystemErrorCodeString();
                 return false;
             }
         }
@@ -53,7 +56,8 @@ bool InjectPowerEvent(const proto::PowerEvent& event)
         {
             if (!SetSystemPowerState(TRUE, TRUE))
             {
-                LOG(ERROR) << "SetSystemPowerState() failed: " << GetLastError();
+                LOG(ERROR) << "SetSystemPowerState() failed: "
+                           << GetLastSystemErrorCodeString();
                 return false;
             }
         }

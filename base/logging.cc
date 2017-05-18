@@ -38,4 +38,9 @@ std::string SystemErrorCodeToString(SystemErrorCode error_code)
                         GetLastError(), error_code);
 }
 
+std::string GetLastSystemErrorCodeString()
+{
+    return SystemErrorCodeToString(GetLastSystemErrorCode());
+}
+
 } // namespace aspia

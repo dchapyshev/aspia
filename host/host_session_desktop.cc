@@ -171,7 +171,8 @@ void HostSessionDesktop::OnPipeChannelConnect(uint32_t user_data)
     bool ok = process_.IsValid();
     if (!ok)
     {
-        LOG(ERROR) << "Unable to open session process: " << GetLastError();
+        LOG(ERROR) << "Unable to open session process: "
+                   << GetLastSystemErrorCodeString();
     }
 
     if (ok)

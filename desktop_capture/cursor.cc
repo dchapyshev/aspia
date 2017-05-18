@@ -106,7 +106,7 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
 
     if (!GetIconInfo(cursor, &icon_info))
     {
-        LOG(ERROR) << "GetIconInfo() failed: " << GetLastError();
+        LOG(ERROR) << "GetIconInfo() failed: " << GetLastSystemErrorCodeString();
         return nullptr;
     }
 
@@ -121,7 +121,7 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
 
     if (!GetObjectW(scoped_mask, sizeof(bitmap_info), &bitmap_info))
     {
-        LOG(ERROR) << "GetObjectW() failed: " << GetLastError();
+        LOG(ERROR) << "GetObjectW() failed: " << GetLastSystemErrorCodeString();
         return nullptr;
     }
 
@@ -152,7 +152,7 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
                    reinterpret_cast<BITMAPINFO*>(&bmi),
                    DIB_RGB_COLORS))
     {
-        LOG(ERROR) << "GetDIBits() failed: " << GetLastError();
+        LOG(ERROR) << "GetDIBits() failed: " << GetLastSystemErrorCodeString();
         return nullptr;
     }
 
@@ -177,7 +177,7 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
                        reinterpret_cast<BITMAPINFO*>(&bmi),
                        DIB_RGB_COLORS))
         {
-            LOG(ERROR) << "GetDIBits() failed: " << GetLastError();
+            LOG(ERROR) << "GetDIBits() failed: " << GetLastSystemErrorCodeString();
             return nullptr;
         }
 
@@ -307,7 +307,7 @@ HCURSOR CreateHCursorFromMouseCursor(HDC dc, const MouseCursor& mouse_cursor)
                                               DIB_RGB_COLORS));
     if (!color_bitmap)
     {
-        LOG(ERROR) << "CreateDIBitmap() failed: " << GetLastError();
+        LOG(ERROR) << "CreateDIBitmap() failed: " << GetLastSystemErrorCodeString();
         return nullptr;
     }
 
@@ -315,7 +315,7 @@ HCURSOR CreateHCursorFromMouseCursor(HDC dc, const MouseCursor& mouse_cursor)
 
     if (!mask_bitmap)
     {
-        LOG(ERROR) << "CreateBitmap() failed: " << GetLastError();
+        LOG(ERROR) << "CreateBitmap() failed: " << GetLastSystemErrorCodeString();
         return nullptr;
     }
 

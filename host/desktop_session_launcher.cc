@@ -45,7 +45,7 @@ static bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
                           TOKEN_DUPLICATE | desired_access,
                           process_token.Recieve()))
     {
-        LOG(ERROR) << "OpenProcessToken() failed: " << GetLastError();
+        LOG(ERROR) << "OpenProcessToken() failed: " << GetLastSystemErrorCodeString();
         return false;
     }
 
@@ -56,7 +56,7 @@ static bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
                           TokenPrimary,
                           token_out.Recieve()))
     {
-        LOG(ERROR) << "DuplicateTokenEx() failed: " << GetLastError();
+        LOG(ERROR) << "DuplicateTokenEx() failed: " << GetLastSystemErrorCodeString();
         return false;
     }
 
@@ -80,14 +80,14 @@ static bool CreatePrivilegedToken(ScopedHandle& token_out)
 
     if (!LookupPrivilegeValueW(nullptr, SE_TCB_NAME, &state.Privileges[0].Luid))
     {
-        LOG(ERROR) << "LookupPrivilegeValueW() failed: " << GetLastError();
+        LOG(ERROR) << "LookupPrivilegeValueW() failed: " << GetLastSystemErrorCodeString();
         return false;
     }
 
     // Enable the SE_TCB_NAME privilege.
     if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0, nullptr, 0))
     {
-        LOG(ERROR) << "AdjustTokenPrivileges() failed: " << GetLastError();
+        LOG(ERROR) << "AdjustTokenPrivileges() failed: " << GetLastSystemErrorCodeString();
         return false;
     }
 
@@ -124,7 +124,7 @@ static bool CreateSessionToken(uint32_t session_id, ScopedHandle& token_out)
                                  &new_session_id,
                                  sizeof(new_session_id)))
         {
-            LOG(ERROR) << "SetTokenInformation() failed: " << GetLastError();
+            LOG(ERROR) << "SetTokenInformation() failed: " << GetLastSystemErrorCodeString();
             return false;
         }
     }
@@ -153,7 +153,7 @@ static bool CreateProcessWithToken(HANDLE user_token, const std::wstring& comman
                               &startup_info,
                               &process_info))
     {
-        LOG(ERROR) << "CreateProcessAsUserW() failed: " << GetLastError();
+        LOG(ERROR) << "CreateProcessAsUserW() failed: " << GetLastSystemErrorCodeString();
         return false;
     }
 
@@ -255,7 +255,7 @@ bool DesktopSessionLauncher::LaunchSession(uint32_t session_id,
 
         if (!process_id_to_session_id(GetCurrentProcessId(), &current_process_session_id))
         {
-            LOG(WARNING) << "ProcessIdToSessionId() failed: " << GetLastError();
+            LOG(WARNING) << "ProcessIdToSessionId() failed: " << GetLastSystemErrorCodeString();
             return false;
         }
 

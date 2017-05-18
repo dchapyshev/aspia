@@ -38,7 +38,8 @@ bool MessageWindow::Create(MessageCallback message_callback)
                             reinterpret_cast<WCHAR*>(&WindowProc),
                             &instance))
     {
-        LOG(ERROR) << "GetModuleHandleExW() failed: " << GetLastError();
+        LOG(ERROR) << "GetModuleHandleExW() failed: "
+                   << GetLastSystemErrorCodeString();
         return false;
     }
 
@@ -54,7 +55,8 @@ bool MessageWindow::Create(MessageCallback message_callback)
                           this);
     if (!hwnd_)
     {
-        LOG(ERROR) << "CreateWindowW() failed: " << GetLastError();
+        LOG(ERROR) << "CreateWindowW() failed: "
+                   << GetLastSystemErrorCodeString();
         return false;
     }
 
@@ -128,7 +130,8 @@ bool MessageWindow::RegisterWindowClass(HINSTANCE instance)
 
     if (!RegisterClassExW(&window_class))
     {
-        LOG(ERROR) << "RegisterClassExW() failed: " << GetLastError();
+        LOG(ERROR) << "RegisterClassExW() failed: "
+                   << GetLastSystemErrorCodeString();
         return false;
     }
 

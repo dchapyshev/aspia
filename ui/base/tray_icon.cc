@@ -22,7 +22,8 @@ TrayIcon::TrayIcon()
     message_id_ = RegisterWindowMessageW(L"WM_TRAYICON");
     if (!message_id_)
     {
-        LOG(ERROR) << "RegisterWindowMessageW() failed: " << GetLastError();
+        DLOG(ERROR) << "RegisterWindowMessageW() failed: "
+                    << GetLastSystemErrorCodeString();
     }
 }
 
@@ -44,7 +45,7 @@ bool TrayIcon::AddIcon(HWND hwnd, HICON icon, const std::wstring& tooltip, UINT 
     HRESULT hr = StringCbCopyW(nid_.szTip, sizeof(nid_.szTip), tooltip.c_str());
     if (FAILED(hr))
     {
-        LOG(ERROR) << "StringCbCopyW() failed: " << hr;
+        DLOG(ERROR) << "StringCbCopyW() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -89,7 +90,7 @@ bool TrayIcon::SetTooltip(const WCHAR *tooltip)
     HRESULT hr = StringCbCopyW(nid_.szTip, sizeof(nid_.szTip), tooltip);
     if (FAILED(hr))
     {
-        LOG(ERROR) << "StringCbCopyW() failed: " << hr;
+        DLOG(ERROR) << "StringCbCopyW() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 

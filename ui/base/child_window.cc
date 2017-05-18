@@ -77,7 +77,8 @@ bool ChildWindow::RegisterWindowClass(HINSTANCE instance)
 
     if (!RegisterClassExW(&window_class))
     {
-        LOG(ERROR) << "RegisterClassExW() failed: " << GetLastError();
+        LOG(ERROR) << "RegisterClassExW() failed: "
+                   << GetLastSystemErrorCodeString();
         return false;
     }
 
@@ -95,7 +96,8 @@ bool ChildWindow::Create(HWND parent, DWORD style, const std::wstring& title)
                             reinterpret_cast<WCHAR*>(&WindowProc),
                             &instance))
     {
-        LOG(ERROR) << "GetModuleHandleExW() failed: " << GetLastError();
+        LOG(ERROR) << "GetModuleHandleExW() failed: "
+                   << GetLastSystemErrorCodeString();
         return false;
     }
 
@@ -111,7 +113,8 @@ bool ChildWindow::Create(HWND parent, DWORD style, const std::wstring& title)
                        instance,
                        this))
     {
-        LOG(ERROR) << "CreateWindowW() failed: " << GetLastError();
+        LOG(ERROR) << "CreateWindowW() failed: "
+                   << GetLastSystemErrorCodeString();
         return false;
     }
 

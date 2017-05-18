@@ -18,7 +18,7 @@ WaitableEvent::WaitableEvent(ResetPolicy reset_policy, InitialState initial_stat
 {
     // We're probably going to crash anyways if this is ever NULL, so we might as
     // well make our stack reports more informative by crashing here.
-    CHECK(handle_.IsValid()) << GetLastError();
+    CHECK(handle_.IsValid()) << GetLastSystemErrorCodeString();
 }
 
 WaitableEvent::WaitableEvent(ScopedHandle handle)

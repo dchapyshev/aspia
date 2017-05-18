@@ -52,7 +52,8 @@ bool ConsoleSessionWatcher::StartWatching(Delegate* delegate)
     if (!register_session_notification_(window_->hwnd(),
                                         NOTIFY_FOR_ALL_SESSIONS))
     {
-        LOG(ERROR) << "WTSRegisterSessionNotification() failed: " << GetLastError();
+        LOG(ERROR) << "WTSRegisterSessionNotification() failed: "
+                   << GetLastSystemErrorCodeString();
         window_.reset();
         return false;
     }

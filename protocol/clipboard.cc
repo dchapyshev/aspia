@@ -55,7 +55,7 @@ bool Clipboard::Start(ClipboardEventCallback clipboard_event_callback)
         if (!add_clipboard_format_listener_(window_->hwnd()))
         {
             LOG(WARNING) << "AddClipboardFormatListener() failed: "
-                << GetLastError();
+                         << GetLastSystemErrorCodeString();
             return false;
         }
     }
@@ -109,14 +109,16 @@ void Clipboard::OnClipboardUpdate()
 
             if (!clipboard.Init(window_->hwnd()))
             {
-                LOG(WARNING) << "Couldn't open the clipboard: " << GetLastError();
+                LOG(WARNING) << "Couldn't open the clipboard: "
+                             << GetLastSystemErrorCodeString();
                 return;
             }
 
             HGLOBAL text_global = clipboard.GetData(CF_UNICODETEXT);
             if (!text_global)
             {
-                LOG(WARNING) << "Couldn't get data from the clipboard: " << GetLastError();
+                LOG(WARNING) << "Couldn't get data from the clipboard: "
+                             << GetLastSystemErrorCodeString();
                 return;
             }
 
@@ -124,7 +126,8 @@ void Clipboard::OnClipboardUpdate()
                 ScopedHGlobal<WCHAR> text_lock(text_global);
                 if (!text_lock.Get())
                 {
-                    LOG(WARNING) << "Couldn't lock clipboard data: " << GetLastError();
+                    LOG(WARNING) << "Couldn't lock clipboard data: "
+                                 << GetLastSystemErrorCodeString();
                     return;
                 }
 
@@ -240,7 +243,8 @@ void Clipboard::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clip
 
     if (!clipboard.Init(window_->hwnd()))
     {
-        LOG(WARNING) << "Couldn't open the clipboard." << GetLastError();
+        LOG(WARNING) << "Couldn't open the clipboard."
+                     << GetLastSystemErrorCodeString();
         return;
     }
 
@@ -249,7 +253,7 @@ void Clipboard::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clip
     HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(WCHAR));
     if (!text_global)
     {
-        LOG(WARNING) << "GlobalAlloc() failed: " << GetLastError();
+        LOG(WARNING) << "GlobalAlloc() failed: " << GetLastSystemErrorCodeString();
         return;
     }
 
@@ -257,7 +261,7 @@ void Clipboard::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clip
 
     if (!text_global_locked)
     {
-        LOG(WARNING) << "GlobalLock() failed: " << GetLastError();
+        LOG(WARNING) << "GlobalLock() failed: " << GetLastSystemErrorCodeString();
         return;
     }
 
