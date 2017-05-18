@@ -11,6 +11,8 @@
 
 namespace aspia {
 
+static const size_t kMaximumMessageSize = 0x3FFFFF; // 3 MB
+
 NetworkChannel::NetworkChannel()
 {
     proxy_.reset(new NetworkChannelProxy(this));
@@ -139,10 +141,11 @@ bool NetworkChannel::WriteMessage(const IOBuffer& buffer)
     if (buffer.IsEmpty())
         return false;
 
-    size_t size = buffer.Size();
+    const size_t size = buffer.Size();
 
     // The maximum message size is 3MB.
-    DCHECK(size <= 0x3FFFFF);
+    if (size > kMaximumMessageSize)
+        return false;
 
     uint8_t length[3];
     int count = 1;
