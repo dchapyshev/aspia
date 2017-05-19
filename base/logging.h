@@ -20,6 +20,9 @@ SystemErrorCode GetLastSystemErrorCode();
 std::string SystemErrorCodeToString(SystemErrorCode error_code);
 std::string GetLastSystemErrorCodeString();
 
+std::ostream& operator<<(std::ostream& out, const wchar_t* str);
+std::ostream& operator<<(std::ostream& out, const std::wstring& str);
+
 } // namespace aspia
 
 #endif // _ASPIA_BASE__LOGGING_H

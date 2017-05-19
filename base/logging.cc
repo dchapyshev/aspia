@@ -7,6 +7,7 @@
 
 #include "base/logging.h"
 #include "base/string_util.h"
+#include "base/unicode.h"
 
 namespace aspia {
 
@@ -41,6 +42,18 @@ std::string SystemErrorCodeToString(SystemErrorCode error_code)
 std::string GetLastSystemErrorCodeString()
 {
     return SystemErrorCodeToString(GetLastSystemErrorCode());
+}
+
+std::ostream& operator<<(std::ostream& out, const wchar_t* str)
+{
+    out << ANSIfromUNICODE(str);
+    return out;
+}
+
+std::ostream& operator<<(std::ostream& out, const std::wstring& str)
+{
+    out << ANSIfromUNICODE(str);
+    return out;
 }
 
 } // namespace aspia
