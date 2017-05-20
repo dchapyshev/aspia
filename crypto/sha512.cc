@@ -62,7 +62,7 @@ bool CreateSHA512(const std::string& data, std::string& data_hash)
                                   CRYPT_VERIFYCONTEXT))
         {
             LOG(ERROR) << "CryptAcquireContextW() failed: "
-                       << GetLastSystemErrorCodeString();
+                       << GetLastSystemErrorString();
             return nullptr;
         }
     }
@@ -72,7 +72,7 @@ bool CreateSHA512(const std::string& data, std::string& data_hash)
 
         if (!CryptCreateHash(prov, CALG_SHA_512, NULL, 0, hash.Recieve()))
         {
-            LOG(ERROR) << "CryptCreateHash() failed: " << GetLastSystemErrorCodeString();
+            LOG(ERROR) << "CryptCreateHash() failed: " << GetLastSystemErrorString();
             return false;
         }
 
@@ -81,7 +81,7 @@ bool CreateSHA512(const std::string& data, std::string& data_hash)
                            data.length(),
                            0))
         {
-            LOG(ERROR) << "CryptHashData() failed: " << GetLastSystemErrorCodeString();
+            LOG(ERROR) << "CryptHashData() failed: " << GetLastSystemErrorString();
             return false;
         }
 
@@ -89,7 +89,7 @@ bool CreateSHA512(const std::string& data, std::string& data_hash)
 
         if (!CryptGetHashParam(hash, HP_HASHVAL, NULL, &size, 0))
         {
-            LOG(ERROR) << "CryptGetHashParam() failed: " << GetLastSystemErrorCodeString();
+            LOG(ERROR) << "CryptGetHashParam() failed: " << GetLastSystemErrorString();
             return false;
         }
 
@@ -107,7 +107,7 @@ bool CreateSHA512(const std::string& data, std::string& data_hash)
                                &size,
                                0))
         {
-            LOG(ERROR) << "CryptGetHashParam() failed: " << GetLastSystemErrorCodeString();
+            LOG(ERROR) << "CryptGetHashParam() failed: " << GetLastSystemErrorString();
             return false;
         }
     }

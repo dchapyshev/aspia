@@ -100,7 +100,7 @@ bool NetworkServerTcp::Start(uint16_t port, Delegate* delegate)
     server_socket_.Reset(socket(AF_INET, SOCK_STREAM, IPPROTO_TCP));
     if (!server_socket_.IsValid())
     {
-        LOG(ERROR) << "socket() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "socket() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -114,19 +114,19 @@ bool NetworkServerTcp::Start(uint16_t port, Delegate* delegate)
              reinterpret_cast<const struct sockaddr*>(&local_addr),
              sizeof(local_addr)) == SOCKET_ERROR)
     {
-        LOG(ERROR) << "bind() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "bind() failed: " << GetLastSystemErrorString();
         return false;
     }
 
     if (listen(server_socket_, kMaxClientCount) == SOCKET_ERROR)
     {
-        LOG(ERROR) << "listen() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "listen() failed: " << GetLastSystemErrorString();
         return false;
     }
 
     if (WSAEventSelect(server_socket_, accept_event_.Handle(), FD_ACCEPT) == SOCKET_ERROR)
     {
-        LOG(ERROR) << "WSAEventSelect() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "WSAEventSelect() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -160,7 +160,7 @@ void NetworkServerTcp::OnObjectSignaled(HANDLE object)
 
     if (WSAEnumNetworkEvents(server_socket_, accept_event_.Handle(), &events) == SOCKET_ERROR)
     {
-        LOG(ERROR) << "WSAEnumNetworkEvents() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "WSAEnumNetworkEvents() failed: " << GetLastSystemErrorString();
     }
     else if ((events.lNetworkEvents & FD_ACCEPT) &&
              (events.iErrorCode[FD_ACCEPT_BIT] == 0))
@@ -169,7 +169,7 @@ void NetworkServerTcp::OnObjectSignaled(HANDLE object)
 
         if (!client_socket.IsValid())
         {
-            LOG(ERROR) << "WSAAccept() failed: " << GetLastSystemErrorCodeString();
+            LOG(ERROR) << "WSAAccept() failed: " << GetLastSystemErrorString();
             return;
         }
 
@@ -177,7 +177,7 @@ void NetworkServerTcp::OnObjectSignaled(HANDLE object)
 
         if (ioctlsocket(client_socket, FIONBIO, &non_blocking) == SOCKET_ERROR)
         {
-            LOG(ERROR) << "ioctlsocket() failed: " << GetLastSystemErrorCodeString();
+            LOG(ERROR) << "ioctlsocket() failed: " << GetLastSystemErrorString();
             return;
         }
 

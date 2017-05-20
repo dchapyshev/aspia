@@ -40,7 +40,7 @@ void ClipboardThread::OnBeforeThreadRunning()
     if (!SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_LOWEST))
     {
         LOG(ERROR) << "SetThreadPriority() failed: "
-                   << GetLastSystemErrorCodeString();
+                   << GetLastSystemErrorString();
     }
 
     runner_ = ui_thread_.message_loop_proxy();

@@ -23,7 +23,7 @@ TrayIcon::TrayIcon()
     if (!message_id_)
     {
         DLOG(ERROR) << "RegisterWindowMessageW() failed: "
-                    << GetLastSystemErrorCodeString();
+                    << GetLastSystemErrorString();
     }
 }
 

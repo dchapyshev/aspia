@@ -123,7 +123,7 @@ void SasInjector::Worker()
     if (session_id == kInvalidSessionId)
     {
         LOG(ERROR) << "WTSGetActiveConsoleSessionId() failed: "
-                   << GetLastSystemErrorCodeString();
+                   << GetLastSystemErrorString();
         return;
     }
 

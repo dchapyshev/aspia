@@ -98,7 +98,7 @@ bool NetworkClientTcp::Connect(const std::wstring& address, uint16_t port, Deleg
         socket_.Reset(socket(curr->ai_family, curr->ai_socktype, curr->ai_protocol));
         if (!socket_.IsValid())
         {
-            LOG(ERROR) << "socket() failed: " << GetLastSystemErrorCodeString();
+            LOG(ERROR) << "socket() failed: " << GetLastSystemErrorString();
             continue;
         }
 
@@ -106,7 +106,7 @@ bool NetworkClientTcp::Connect(const std::wstring& address, uint16_t port, Deleg
 
         if (ioctlsocket(socket_, FIONBIO, &non_blocking) == SOCKET_ERROR)
         {
-            LOG(ERROR) << "ioctlsocket() failed: " << GetLastSystemErrorCodeString();
+            LOG(ERROR) << "ioctlsocket() failed: " << GetLastSystemErrorString();
             continue;
         }
 
@@ -114,7 +114,7 @@ bool NetworkClientTcp::Connect(const std::wstring& address, uint16_t port, Deleg
 
         if (WSAEventSelect(socket_, connect_event_.Handle(), FD_CONNECT) == SOCKET_ERROR)
         {
-            LOG(ERROR) << "WSAEventSelect() failed: " << GetLastSystemErrorCodeString();
+            LOG(ERROR) << "WSAEventSelect() failed: " << GetLastSystemErrorString();
             continue;
         }
 
@@ -154,7 +154,7 @@ void NetworkClientTcp::OnObjectSignaled(HANDLE object)
 
     if (WSAEnumNetworkEvents(socket_, connect_event_.Handle(), &events) == SOCKET_ERROR)
     {
-        LOG(ERROR) << "WSAEnumNetworkEvents() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "WSAEnumNetworkEvents() failed: " << GetLastSystemErrorString();
     }
     else if ((events.lNetworkEvents & FD_CONNECT) &&
              (events.iErrorCode[FD_CONNECT_BIT] == 0))

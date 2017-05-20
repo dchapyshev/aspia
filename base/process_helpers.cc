@@ -35,7 +35,7 @@ bool ElevateProcess()
     if (!ShellExecuteExW(&sei))
     {
         DLOG(WARNING) << "ShellExecuteExW() failed: "
-                      << GetLastSystemErrorCodeString();
+                      << GetLastSystemErrorString();
         return false;
     }
 
@@ -49,7 +49,7 @@ bool IsProcessElevated()
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.Recieve()))
     {
         LOG(ERROR) << "OpenProcessToken() failed: "
-                   << GetLastSystemErrorCodeString();
+                   << GetLastSystemErrorString();
         return false;
     }
 
@@ -60,7 +60,7 @@ bool IsProcessElevated()
                              sizeof(elevation), &size))
     {
         LOG(ERROR) << "GetTokenInformation() failed: "
-                   << GetLastSystemErrorCodeString();
+                   << GetLastSystemErrorString();
         return false;
     }
 
@@ -80,7 +80,7 @@ bool IsCallerAdminGroupMember()
                                   admin_group.Recieve()))
     {
         LOG(ERROR) << "AllocateAndInitializeSid() failed: "
-                   << GetLastSystemErrorCodeString();
+                   << GetLastSystemErrorString();
         return false;
     }
 
@@ -89,7 +89,7 @@ bool IsCallerAdminGroupMember()
     if (!CheckTokenMembership(nullptr, admin_group, &is_admin))
     {
         LOG(ERROR) << "CheckTokenMembership() failed: "
-                   << GetLastSystemErrorCodeString();
+                   << GetLastSystemErrorString();
         return false;
     }
 

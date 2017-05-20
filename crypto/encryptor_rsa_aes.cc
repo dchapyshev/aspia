@@ -32,7 +32,7 @@ std::unique_ptr<EncryptorRsaAes> EncryptorRsaAes::Create()
                                   CRYPT_VERIFYCONTEXT))
         {
             LOG(ERROR) << "CryptAcquireContextW() failed: "
-                       << GetLastSystemErrorCodeString();
+                       << GetLastSystemErrorString();
             return nullptr;
         }
     }
@@ -43,7 +43,7 @@ std::unique_ptr<EncryptorRsaAes> EncryptorRsaAes::Create()
 
     if (!CryptGenKey(prov, CALG_AES_256, CRYPT_EXPORTABLE | (kAESKeySize << 16), &aes_key))
     {
-        LOG(ERROR) << "CryptGenKey() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "CryptGenKey() failed: " << GetLastSystemErrorString();
         CryptReleaseContext(prov, 0);
         return nullptr;
     }
@@ -52,7 +52,7 @@ std::unique_ptr<EncryptorRsaAes> EncryptorRsaAes::Create()
 
     if (!CryptSetKeyParam(aes_key, KP_MODE, reinterpret_cast<BYTE*>(&mode), 0))
     {
-        LOG(ERROR) << "CryptSetKeyParam() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "CryptSetKeyParam() failed: " << GetLastSystemErrorString();
         CryptDestroyKey(aes_key);
         CryptReleaseContext(prov, 0);
         return nullptr;
@@ -67,7 +67,7 @@ std::unique_ptr<EncryptorRsaAes> EncryptorRsaAes::Create()
                           &block_size_len,
                           0))
     {
-        LOG(ERROR) << "CryptGetKeyParam() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "CryptGetKeyParam() failed: " << GetLastSystemErrorString();
         CryptDestroyKey(aes_key);
         CryptReleaseContext(prov, 0);
         return nullptr;
@@ -141,7 +141,7 @@ bool EncryptorRsaAes::SetPublicKey(const IOBuffer& public_key)
 
     if (!CryptImportKey(prov_, blob.get(), blob_size, NULL, 0, &rsa_key_))
     {
-        LOG(ERROR) << "CryptImportKey() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "CryptImportKey() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -154,7 +154,7 @@ IOBuffer EncryptorRsaAes::GetSessionKey()
 
     if (!CryptExportKey(aes_key_, rsa_key_, SIMPLEBLOB, 0, NULL, &blob_size))
     {
-        LOG(ERROR) << "CryptExportKey() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "CryptExportKey() failed: " << GetLastSystemErrorString();
         return IOBuffer();
     }
 
@@ -162,7 +162,7 @@ IOBuffer EncryptorRsaAes::GetSessionKey()
 
     if (!CryptExportKey(aes_key_, rsa_key_, SIMPLEBLOB, 0, blob.get(), &blob_size))
     {
-        LOG(ERROR) << "CryptExportKey() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "CryptExportKey() failed: " << GetLastSystemErrorString();
         return IOBuffer();
     }
 
@@ -198,7 +198,7 @@ IOBuffer EncryptorRsaAes::Encrypt(const IOBuffer& source_buffer)
 
     if (!CryptEncrypt(aes_key_, NULL, TRUE, 0, output_buffer.Data(), &size, enc_size))
     {
-        DLOG(ERROR) << "CryptEncrypt() failed: " << GetLastSystemErrorCodeString();
+        DLOG(ERROR) << "CryptEncrypt() failed: " << GetLastSystemErrorString();
         return IOBuffer();
     }
 

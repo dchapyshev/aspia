@@ -84,7 +84,7 @@ Process::Priority Process::GetPriority()
     if (!value)
     {
         LOG(ERROR) << "GetPriorityClass() failed: "
-                   << GetLastSystemErrorCodeString();
+                   << GetLastSystemErrorString();
         return Priority::Unknown;
     }
 
@@ -152,7 +152,7 @@ bool Process::SetPriority(Priority priority)
     if (!SetPriorityClass(Handle(), value))
     {
         LOG(ERROR) << "SetPriorityClass() failed: "
-                   << GetLastSystemErrorCodeString();
+                   << GetLastSystemErrorString();
         return false;
     }
 

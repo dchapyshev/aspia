@@ -46,7 +46,7 @@ NetworkChannelTcp::NetworkChannelTcp(Socket socket, Mode mode) :
                    reinterpret_cast<const char*>(&value),
                    sizeof(value)) == SOCKET_ERROR)
     {
-        LOG(ERROR) << "setsockopt() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "setsockopt() failed: " << GetLastSystemErrorString();
     }
 }
 
@@ -225,7 +225,7 @@ bool NetworkChannelTcp::WriteData(const uint8_t* buffer, size_t size)
         if (!WSAGetOverlappedResult(socket_, &overlapped, &written, FALSE, &flags))
         {
             LOG(ERROR) << "WSAGetOverlappedResult() failed: "
-                       << GetLastSystemErrorCodeString();
+                       << GetLastSystemErrorString();
             return false;
         }
 
@@ -272,7 +272,7 @@ bool NetworkChannelTcp::ReadData(uint8_t* buffer, size_t size)
         if (!WSAGetOverlappedResult(socket_, &overlapped, &read, FALSE, &flags))
         {
             LOG(ERROR) << "WSAGetOverlappedResult() failed: "
-                       << GetLastSystemErrorCodeString();
+                       << GetLastSystemErrorString();
             return false;
         }
 

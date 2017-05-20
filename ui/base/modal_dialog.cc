@@ -38,7 +38,7 @@ INT_PTR ModalDialog::Run(const Module& module, HWND parent, UINT resource_id)
                             reinterpret_cast<LPARAM>(this)))
     {
         LOG(ERROR) << "CreateDialogParamW() failed: "
-                   << GetLastSystemErrorCodeString();
+                   << GetLastSystemErrorString();
         EnableWindow(disabled_parent, TRUE);
         return 0;
     }

@@ -30,7 +30,7 @@ std::unique_ptr<DecryptorRsaAes> DecryptorRsaAes::Create()
                                   CRYPT_VERIFYCONTEXT))
         {
             LOG(ERROR) << "CryptAcquireContextW() failed: "
-                       << GetLastSystemErrorCodeString();
+                       << GetLastSystemErrorString();
             return nullptr;
         }
     }
@@ -44,7 +44,7 @@ std::unique_ptr<DecryptorRsaAes> DecryptorRsaAes::Create()
                      CRYPT_EXPORTABLE | (kRSAKeySize << 16),
                      &rsa_key))
     {
-        LOG(ERROR) << "CryptGenKey() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "CryptGenKey() failed: " << GetLastSystemErrorString();
         CryptReleaseContext(prov, 0);
         return nullptr;
     }
@@ -87,7 +87,7 @@ IOBuffer DecryptorRsaAes::GetPublicKey()
 
     if (!CryptExportKey(rsa_key_, NULL, PUBLICKEYBLOB, 0, NULL, &blob_size))
     {
-        LOG(ERROR) << "CryptExportKey() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "CryptExportKey() failed: " << GetLastSystemErrorString();
         return IOBuffer();
     }
 
@@ -95,7 +95,7 @@ IOBuffer DecryptorRsaAes::GetPublicKey()
 
     if (!CryptExportKey(rsa_key_, NULL, PUBLICKEYBLOB, 0, blob.get(), &blob_size))
     {
-        LOG(ERROR) << "CryptExportKey() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "CryptExportKey() failed: " << GetLastSystemErrorString();
         return IOBuffer();
     }
 
@@ -144,7 +144,7 @@ bool DecryptorRsaAes::SetSessionKey(const IOBuffer& session_key)
 
     if (!CryptImportKey(prov_, blob.get(), blob_size, rsa_key_, 0, &aes_key_))
     {
-        LOG(ERROR) << "CryptImportKey() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "CryptImportKey() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -152,7 +152,7 @@ bool DecryptorRsaAes::SetSessionKey(const IOBuffer& session_key)
 
     if (!CryptSetKeyParam(aes_key_, KP_MODE, reinterpret_cast<BYTE*>(&mode), 0))
     {
-        LOG(ERROR) << "CryptSetKeyParam() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "CryptSetKeyParam() failed: " << GetLastSystemErrorString();
 
         CryptDestroyKey(aes_key_);
         aes_key_ = NULL;
@@ -172,7 +172,7 @@ IOBuffer DecryptorRsaAes::Decrypt(const IOBuffer& source_buffer)
 
     if (!CryptDecrypt(aes_key_, NULL, TRUE, 0, source_buffer.Data(), &length))
     {
-        DLOG(ERROR) << "CryptDecrypt() failed: " << GetLastSystemErrorCodeString();
+        DLOG(ERROR) << "CryptDecrypt() failed: " << GetLastSystemErrorString();
         return IOBuffer();
     }
 

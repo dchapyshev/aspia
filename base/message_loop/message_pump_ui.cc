@@ -142,7 +142,7 @@ void MessagePumpForUI::WaitForWork()
             wait_flags = 0;
         }
 
-        DCHECK_NE(WAIT_FAILED, result) << GetLastSystemErrorCodeString();
+        DCHECK_NE(WAIT_FAILED, result) << GetLastSystemErrorString();
     }
 }
 

@@ -172,7 +172,7 @@ void HostSessionDesktop::OnPipeChannelConnect(uint32_t user_data)
     if (!ok)
     {
         LOG(ERROR) << "Unable to open session process: "
-                   << GetLastSystemErrorCodeString();
+                   << GetLastSystemErrorString();
     }
 
     if (ok)

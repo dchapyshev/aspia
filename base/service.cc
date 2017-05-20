@@ -77,7 +77,7 @@ void Service::ServiceMain(int argc, LPWSTR argv)
     if (!_self->status_handle_)
     {
         LOG(ERROR) << "RegisterServiceCtrlHandlerExW() failed: "
-                   << GetLastSystemErrorCodeString();
+                   << GetLastSystemErrorString();
         return;
     }
 
@@ -128,7 +128,7 @@ bool Service::Run()
     if (!StartServiceCtrlDispatcherW(service_table))
     {
         LOG(ERROR) << "StartServiceCtrlDispatcherW() failed: "
-                   << GetLastSystemErrorCodeString();
+                   << GetLastSystemErrorString();
         return false;
     }
 

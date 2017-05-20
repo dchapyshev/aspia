@@ -18,7 +18,7 @@ using SystemErrorCode = DWORD;
 
 SystemErrorCode GetLastSystemErrorCode();
 std::string SystemErrorCodeToString(SystemErrorCode error_code);
-std::string GetLastSystemErrorCodeString();
+std::string GetLastSystemErrorString();
 
 std::ostream& operator<<(std::ostream& out, const wchar_t* str);
 std::ostream& operator<<(std::ostream& out, const std::wstring& str);

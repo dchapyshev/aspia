@@ -25,7 +25,7 @@ public:
                               process_token_.Recieve()))
         {
             LOG(ERROR) << "OpenProcessToken() failed: "
-                       << GetLastSystemErrorCodeString();
+                       << GetLastSystemErrorString();
             return;
         }
 
@@ -36,7 +36,7 @@ public:
                                    &privileges_.Privileges[0].Luid))
         {
             LOG(ERROR) << "LookupPrivilegeValueW() failed: "
-                       << GetLastSystemErrorCodeString();
+                       << GetLastSystemErrorString();
             return;
         }
 
@@ -51,7 +51,7 @@ public:
                                    nullptr))
         {
             LOG(ERROR) << "AdjustTokenPrivileges() failed: "
-                       << GetLastSystemErrorCodeString();
+                       << GetLastSystemErrorString();
             return;
         }
 
@@ -73,7 +73,7 @@ public:
                                        nullptr))
             {
                 LOG(ERROR) << "AdjustTokenPrivileges() failed: "
-                           << GetLastSystemErrorCodeString();
+                           << GetLastSystemErrorString();
             }
         }
     }

@@ -45,7 +45,7 @@ bool MakeScopedAbsoluteSd(const ScopedSd& relative_sd,
                        &group_size) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        LOG(ERROR) << "MakeAbsoluteSD() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "MakeAbsoluteSD() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -69,7 +69,7 @@ bool MakeScopedAbsoluteSd(const ScopedSd& relative_sd,
                         local_group.get(),
                         &group_size))
     {
-        LOG(ERROR) << "MakeAbsoluteSD() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "MakeAbsoluteSD() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -172,7 +172,7 @@ ScopedSd ConvertSddlToSd(const std::wstring& sddl)
                                                               &length))
     {
         LOG(ERROR) << "ConvertStringSecurityDescriptorToSecurityDescriptorW() failed: "
-                   << GetLastSystemErrorCodeString();
+                   << GetLastSystemErrorString();
         return ScopedSd();
     }
 

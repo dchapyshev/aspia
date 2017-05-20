@@ -100,7 +100,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& input_chann
 
     if (!read_pipe.IsValid())
     {
-        LOG(ERROR) << "CreateNamedPipeW() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "CreateNamedPipeW() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
@@ -115,7 +115,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& input_chann
 
     if (!write_pipe.IsValid())
     {
-        LOG(ERROR) << "CreateNamedPipeW() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "CreateNamedPipeW() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
@@ -146,7 +146,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateClient(const std::wstring& input
                                         nullptr));
     if (!write_pipe.IsValid())
     {
-        LOG(ERROR) << "CreateFileW() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "CreateFileW() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
@@ -159,7 +159,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateClient(const std::wstring& input
                                        nullptr));
     if (!read_pipe.IsValid())
     {
-        LOG(ERROR) << "CreateFileW() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "CreateFileW() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
@@ -220,7 +220,7 @@ bool PipeChannel::Read(void* buffer, size_t buffer_size)
             if (!GetOverlappedResult(read_pipe_, &overlapped, &transfered_bytes, FALSE))
             {
                 LOG(ERROR) << "GetOverlappedResult() failed: "
-                           << GetLastSystemErrorCodeString();
+                           << GetLastSystemErrorString();
                 return false;
             }
 
@@ -271,7 +271,7 @@ bool PipeChannel::Write(const void* buffer, size_t buffer_size)
             if (!GetOverlappedResult(write_pipe_, &overlapped, &transfered_bytes, FALSE))
             {
                 LOG(ERROR) << "GetOverlappedResult() failed: "
-                           << GetLastSystemErrorCodeString();
+                           << GetLastSystemErrorString();
                 return false;
             }
 
@@ -316,7 +316,7 @@ static bool ConnectToClientPipe(HANDLE pipe_handle)
     {
         // API documentation says that this function should never return success
         // when used in overlapped mode.
-        LOG(ERROR) << "ConnectNamedPipe() failed: " << GetLastSystemErrorCodeString();
+        LOG(ERROR) << "ConnectNamedPipe() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -333,7 +333,7 @@ static bool ConnectToClientPipe(HANDLE pipe_handle)
             if (!GetOverlappedResult(pipe_handle, &overlapped, &dummy, FALSE))
             {
                 LOG(ERROR) << "GetOverlappedResult() failed: "
-                           << GetLastSystemErrorCodeString();
+                           << GetLastSystemErrorString();
                 return false;
             }
         }
