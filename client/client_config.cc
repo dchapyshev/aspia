@@ -6,12 +6,32 @@
 //
 
 #include "client/client_config.h"
+#include "codec/video_helpers.h"
 
 namespace aspia {
+
+ClientConfig::ClientConfig()
+{
+    SetDefaultDesktopSessionConfig();
+}
 
 ClientConfig::ClientConfig(const ClientConfig& other)
 {
     CopyFrom(other);
+}
+
+void ClientConfig::SetDefaultDesktopSessionConfig()
+{
+    desktop_session_config_.set_flags(proto::DesktopSessionConfig::ENABLE_CLIPBOARD |
+                                      proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE);
+
+    desktop_session_config_.set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_ZLIB);
+
+    desktop_session_config_.set_update_interval(30);
+    desktop_session_config_.set_compress_ratio(6);
+
+    ConvertToVideoPixelFormat(PixelFormat::RGB565(),
+                              desktop_session_config_.mutable_pixel_format());
 }
 
 void ClientConfig::CopyFrom(const ClientConfig& other)

@@ -16,7 +16,7 @@ namespace aspia {
 class ClientConfig
 {
 public:
-    ClientConfig() = default;
+    ClientConfig();
     ClientConfig(const ClientConfig& other);
     ~ClientConfig() = default;
 
@@ -35,6 +35,8 @@ public:
     proto::DesktopSessionConfig* mutable_desktop_session_config();
 
     ClientConfig& operator=(const ClientConfig& other);
+
+    void SetDefaultDesktopSessionConfig();
 
 private:
     std::wstring address_;

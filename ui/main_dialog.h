@@ -31,6 +31,8 @@ private:
 
     void OnDefaultPortClicked();
     void OnStartServerButton();
+    void OnSessionTypeChanged();
+    void OnSettingsButton();
     void OnConnectButton();
 
     void OnHelpButton();
@@ -48,6 +50,7 @@ private:
 
     std::unique_ptr<HostPool> host_pool_;
     std::unique_ptr<ClientPool> client_pool_;
+    ClientConfig config_;
 
     DISALLOW_COPY_AND_ASSIGN(MainDialog);
 };

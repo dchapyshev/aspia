@@ -16,7 +16,6 @@
 #include "base/unicode.h"
 #include "base/string_util.h"
 #include "client/client_config.h"
-#include "codec/video_helpers.h"
 #include "host/host_service.h"
 #include "ui/base/listview.h"
 #include "ui/viewer_window.h"
@@ -173,6 +172,8 @@ void MainDialog::OnInitDialog()
 
     if (host_service_installed)
         EnableWindow(GetDlgItem(IDC_START_SERVER_BUTTON), FALSE);
+
+    OnSessionTypeChanged();
 }
 
 void MainDialog::OnDefaultPortClicked()
@@ -225,17 +226,51 @@ void MainDialog::OnStartServerButton()
     host_pool_.reset();
 }
 
-static void SetDefaultDesktopSessionConfig(proto::DesktopSessionConfig* config)
+void MainDialog::OnSessionTypeChanged()
 {
-    config->set_flags(proto::DesktopSessionConfig::ENABLE_CLIPBOARD |
-                     proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE);
+    proto::SessionType session_type = GetSelectedSessionType();
 
-    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_ZLIB);
+    HWND settings_button = GetDlgItem(IDC_SETTINGS_BUTTON);
 
-    config->set_update_interval(30);
-    config->set_compress_ratio(6);
+    switch (session_type)
+    {
+        case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
+        {
+            config_.SetDefaultDesktopSessionConfig();
+            EnableWindow(settings_button, TRUE);
+        }
+        break;
 
-    ConvertToVideoPixelFormat(PixelFormat::RGB565(), config->mutable_pixel_format());
+        default:
+            EnableWindow(settings_button, FALSE);
+            break;
+    }
+}
+
+void MainDialog::OnSettingsButton()
+{
+    proto::SessionType session_type = GetSelectedSessionType();
+
+    switch (session_type)
+    {
+        case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
+        {
+            SettingsDialog dialog;
+
+            if (dialog.DoModal(hwnd(),
+                               session_type,
+                               config_.desktop_session_config()) == IDOK)
+            {
+                config_.mutable_desktop_session_config()->CopyFrom(dialog.Config());
+            }
+        }
+        break;
+
+        default:
+            break;
+    }
 }
 
 void MainDialog::OnConnectButton()
@@ -244,27 +279,14 @@ void MainDialog::OnConnectButton()
 
     if (session_type != proto::SessionType::SESSION_TYPE_UNKNOWN)
     {
-        ClientConfig config;
-
-        config.set_address(GetDlgItemString(IDC_SERVER_ADDRESS_EDIT));
-        config.set_port(GetDlgItemInt<uint16_t>(IDC_SERVER_PORT_EDIT));
-        config.set_session_type(session_type);
-
-        switch (session_type)
-        {
-            case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
-            case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
-                SetDefaultDesktopSessionConfig(config.mutable_desktop_session_config());
-                break;
-
-            default:
-                break;
-        }
+        config_.set_address(GetDlgItemString(IDC_SERVER_ADDRESS_EDIT));
+        config_.set_port(GetDlgItemInt<uint16_t>(IDC_SERVER_PORT_EDIT));
+        config_.set_session_type(session_type);
 
         if (!client_pool_)
             client_pool_.reset(new ClientPool(MessageLoopProxy::Current()));
 
-        client_pool_->Connect(hwnd(), config);
+        client_pool_->Connect(hwnd(), config_);
     }
 }
 
@@ -327,6 +349,10 @@ INT_PTR MainDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
                     OnStartServerButton();
                     break;
 
+                case IDC_SETTINGS_BUTTON:
+                    OnSettingsButton();
+                    break;
+
                 case IDC_CONNECT_BUTTON:
                     OnConnectButton();
                     break;
@@ -362,6 +388,13 @@ INT_PTR MainDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
                 case ID_REMOVE_SERVICE:
                     OnRemoveServiceButton();
                     break;
+
+                case IDC_SESSION_TYPE_COMBO:
+                {
+                    if (HIWORD(wparam) == CBN_SELCHANGE)
+                        OnSessionTypeChanged();
+                }
+                break;
             }
         }
         break;
