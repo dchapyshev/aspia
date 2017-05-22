@@ -11,62 +11,82 @@ namespace aspia {
 
 bool ANSItoUNICODE(const std::string& in, std::wstring& out)
 {
-    int len = MultiByteToWideChar(CP_ACP, 0, in.data(), in.length(), nullptr, 0);
-    if (len > 0)
-    {
-        out.resize(len);
-        if (MultiByteToWideChar(CP_ACP, 0, in.data(), in.length(), &out[0], len) == len)
-        {
-            return true;
-        }
-    }
+    const int in_len = static_cast<int>(in.length());
+    if (in_len <= 0)
+        return false;
 
-    return false;
+    int out_len = MultiByteToWideChar(CP_ACP, 0, in.data(), in_len,
+                                      nullptr, 0);
+    if (out_len <= 0)
+        return false;
+
+    out.resize(out_len);
+
+    if (MultiByteToWideChar(CP_ACP, 0, in.data(), in_len,
+                            &out[0], out_len) != out_len)
+        return false;
+
+    return true;
 }
 
 bool UNICODEtoANSI(const std::wstring& in, std::string& out)
 {
-    int len = WideCharToMultiByte(CP_ACP, 0, in.data(), in.length(), nullptr, 0, nullptr, nullptr);
-    if (len > 0)
-    {
-        out.resize(len);
-        if (WideCharToMultiByte(CP_ACP, 0, in.data(), in.length(), &out[0], out.length(), nullptr, nullptr) == len)
-        {
-            return true;
-        }
-    }
+    const int in_len = static_cast<int>(in.length());
+    if (in_len <= 0)
+        return false;
 
-    return false;
+    int out_len = WideCharToMultiByte(CP_ACP, 0, in.data(), in_len,
+                                  nullptr, 0, nullptr, nullptr);
+    if (out_len <= 0)
+        return false;
+
+    out.resize(out_len);
+
+    if (WideCharToMultiByte(CP_ACP, 0, in.data(), in_len,
+                            &out[0], out_len, nullptr, nullptr) != out_len)
+        return false;
+
+    return true;
 }
 
 bool UNICODEtoUTF8(const std::wstring& in, std::string& out)
 {
-    int len = WideCharToMultiByte(CP_UTF8, 0, in.data(), in.length(), nullptr, 0, nullptr, nullptr);
-    if (len > 0)
-    {
-        out.resize(len);
-        if (WideCharToMultiByte(CP_UTF8, 0, in.data(), in.length(), &out[0], len, nullptr, nullptr) == len)
-        {
-            return true;
-        }
-    }
+    const int in_len = static_cast<int>(in.length());
+    if (in_len <= 0)
+        return false;
 
-    return false;
+    int out_len = WideCharToMultiByte(CP_UTF8, 0, in.data(), in_len,
+                                      nullptr, 0, nullptr, nullptr);
+    if (out_len <= 0)
+        return false;
+
+    out.resize(out_len);
+
+    if (WideCharToMultiByte(CP_UTF8, 0, in.data(), in_len,
+                            &out[0], out_len, nullptr, nullptr) != out_len)
+        return false;
+
+    return true;
 }
 
 bool UTF8toUNICODE(const std::string& in, std::wstring& out)
 {
-    int len = MultiByteToWideChar(CP_UTF8, 0, in.data(), in.length(), nullptr, 0);
-    if (len > 0)
-    {
-        out.resize(len);
-        if (MultiByteToWideChar(CP_UTF8, 0, in.data(), in.length(), &out[0], len) == len)
-        {
-            return true;
-        }
-    }
+    const int in_len = static_cast<int>(in.length());
+    if (in_len <= 0)
+        return false;
 
-    return false;
+    int out_len = MultiByteToWideChar(CP_UTF8, 0, in.data(), in_len,
+                                      nullptr, 0);
+    if (out_len <= 0)
+        return false;
+
+    out.resize(out_len);
+
+    if (MultiByteToWideChar(CP_UTF8, 0, in.data(), in_len,
+                            &out[0], out_len) != out_len)
+        return false;
+
+    return true;
 }
 
 bool ANSItoUTF8(const std::string& in, std::string& out)
