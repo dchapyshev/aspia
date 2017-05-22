@@ -128,7 +128,7 @@
     <ClCompile>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <Optimization>Full</Optimization>
-      <AdditionalIncludeDirectories>".";"..";%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..;x86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_WIN32_WINNT=0x0501;NTDDI_VERSION=0x05010300;_WIN32_IE=0x0800;PSAPI_VERSION=1;WINVER=0x0501;_WIN32_WINDOWS=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
@@ -139,7 +139,7 @@
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <StringPooling>true</StringPooling>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -266,6 +266,7 @@
     <ClCompile Include="..\vpx_scale\vpx_scale_rtcd.c">
       <ObjectFileName>$(IntDir)vpx_scale_vpx_scale_rtcd.obj</ObjectFileName>
     </ClCompile>
+    <ClCompile Include="x86\vpx_config.c" />
     <CustomBuild Include="..\vpx_ports\emms.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Assembling %(Filename)%(Extension)</Message>
@@ -277,7 +278,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_ports_emms_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_ports_emms_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_ports_emms_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_ports_emms_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_ports_emms_asm.obj</Command>
@@ -318,7 +319,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_intrapred_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_intrapred_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_intrapred_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_intrapred_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_intrapred_sse2_asm.obj</Command>
@@ -338,7 +339,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_intrapred_ssse3_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_intrapred_ssse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_intrapred_ssse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_intrapred_ssse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_intrapred_ssse3_asm.obj</Command>
@@ -358,7 +359,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_8t_ssse3_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_8t_ssse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_8t_ssse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_8t_ssse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_8t_ssse3_asm.obj</Command>
@@ -384,7 +385,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_add_noise_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_add_noise_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_add_noise_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_add_noise_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_add_noise_sse2_asm.obj</Command>
@@ -404,7 +405,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_deblock_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_deblock_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_deblock_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_deblock_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_deblock_sse2_asm.obj</Command>
@@ -430,7 +431,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_8t_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_8t_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_8t_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_8t_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_8t_sse2_asm.obj</Command>
@@ -450,7 +451,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_bilinear_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_bilinear_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_bilinear_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_bilinear_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_bilinear_sse2_asm.obj</Command>
@@ -470,7 +471,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_bilinear_ssse3_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_bilinear_ssse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_bilinear_ssse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_bilinear_ssse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_subpixel_bilinear_ssse3_asm.obj</Command>
@@ -496,7 +497,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_convolve_copy_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_convolve_copy_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_convolve_copy_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_convolve_copy_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_vpx_convolve_copy_sse2_asm.obj</Command>
@@ -540,7 +541,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_inv_wht_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_inv_wht_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_inv_wht_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_inv_wht_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_inv_wht_sse2_asm.obj</Command>
@@ -584,7 +585,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse3_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse3_asm.obj</Command>
@@ -604,7 +605,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_ssse3_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_ssse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_ssse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_ssse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_ssse3_asm.obj</Command>
@@ -624,7 +625,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse4_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse4_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse4_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse4_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse4_asm.obj</Command>
@@ -650,7 +651,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad4d_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad4d_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad4d_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad4d_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad4d_sse2_asm.obj</Command>
@@ -670,7 +671,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_sad_sse2_asm.obj</Command>
@@ -690,7 +691,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_subtract_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_subtract_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_subtract_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_subtract_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_subtract_sse2_asm.obj</Command>
@@ -722,7 +723,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_subpel_variance_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vpx_dsp_x86_subpel_variance_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_subpel_variance_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_subpel_variance_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vpx_dsp_x86_subpel_variance_sse2_asm.obj</Command>
@@ -838,7 +839,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_dequantize_mmx_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_common_x86_dequantize_mmx_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_dequantize_mmx_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_dequantize_mmx_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_dequantize_mmx_asm.obj</Command>
@@ -861,7 +862,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_mmx_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_mmx_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_mmx_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_mmx_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_mmx_asm.obj</Command>
@@ -881,7 +882,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_mmx_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_mmx_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_mmx_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_mmx_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_mmx_asm.obj</Command>
@@ -901,7 +902,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_mmx_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_mmx_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_mmx_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_mmx_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_mmx_asm.obj</Command>
@@ -921,7 +922,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_copy_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_common_x86_copy_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_copy_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_copy_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_copy_sse2_asm.obj</Command>
@@ -944,7 +945,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_sse2_asm.obj</Command>
@@ -964,7 +965,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_sse2_asm.obj</Command>
@@ -984,7 +985,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_sse2_asm.obj</Command>
@@ -1004,7 +1005,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_sse2_asm.obj</Command>
@@ -1024,7 +1025,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_sse2_asm.obj</Command>
@@ -1044,7 +1045,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_copy_sse3_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_common_x86_copy_sse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_copy_sse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_copy_sse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_copy_sse3_asm.obj</Command>
@@ -1064,7 +1065,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_ssse3_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_ssse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_ssse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_ssse3_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_ssse3_asm.obj</Command>
@@ -1084,7 +1085,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_mfqe_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_common_x86_mfqe_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_mfqe_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_mfqe_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_common_x86_mfqe_sse2_asm.obj</Command>
@@ -1173,7 +1174,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_sse2_asm.obj</Command>
@@ -1193,7 +1194,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_fwalsh_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_encoder_x86_fwalsh_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_fwalsh_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_fwalsh_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_fwalsh_sse2_asm.obj</Command>
@@ -1228,7 +1229,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_mmx_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_mmx_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_mmx_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_mmx_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_mmx_asm.obj</Command>
@@ -1248,7 +1249,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_encodeopt_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp8_encoder_x86_encodeopt_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_encodeopt_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_encodeopt_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp8_encoder_x86_encodeopt_asm.obj</Command>
@@ -1463,7 +1464,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp9_encoder_x86_vp9_temporal_filter_apply_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp9_encoder_x86_vp9_temporal_filter_apply_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp9_encoder_x86_vp9_temporal_filter_apply_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp9_encoder_x86_vp9_temporal_filter_apply_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp9_encoder_x86_vp9_temporal_filter_apply_sse2_asm.obj</Command>
@@ -1489,7 +1490,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp9_encoder_x86_vp9_dct_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp9_encoder_x86_vp9_dct_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp9_encoder_x86_vp9_dct_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp9_encoder_x86_vp9_dct_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp9_encoder_x86_vp9_dct_sse2_asm.obj</Command>
@@ -1509,7 +1510,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp9_encoder_x86_vp9_error_sse2_asm.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f win32  -I"." -I".." -I"x86" "%(FullPath)" -o $(IntDir)vp9_encoder_x86_vp9_error_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp9_encoder_x86_vp9_error_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp9_encoder_x86_vp9_error_sse2_asm.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release (x64)|x64'">yasm -Xvc -f win32  -I"." -I".." "%(FullPath)" -o $(IntDir)vp9_encoder_x86_vp9_error_sse2_asm.obj</Command>
@@ -1550,9 +1551,6 @@
     </ClCompile>
     <ClCompile Include="..\vp9\decoder\vp9_dsubexp.c">
       <ObjectFileName>$(IntDir)vp9_decoder_vp9_dsubexp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="vpx_config.c">
-      <ObjectFileName>$(IntDir)x_config.obj</ObjectFileName>
     </ClCompile>
     <None Include="vpx.def" />
   </ItemGroup>
