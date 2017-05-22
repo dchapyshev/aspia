@@ -11,6 +11,8 @@
 #include "base/scoped_object.h"
 #include "base/macros.h"
 
+#include <stdint.h>
+
 namespace aspia {
 
 using ProcessHandle = HANDLE;
