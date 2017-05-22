@@ -40,11 +40,14 @@ void Thread::Stop()
 
 void Thread::Join()
 {
+    std::lock_guard<std::mutex> lock(thread_lock_);
+
     if (state_ == State::Stopped)
         return;
 
     // Wait for the thread to exit.
-    thread_.join();
+    if (thread_.joinable())
+        thread_.join();
 
     // The thread no longer needs to be joined.
     state_ = State::Stopped;
@@ -57,6 +60,8 @@ bool Thread::IsStopping() const
 
 void Thread::Start()
 {
+    std::lock_guard<std::mutex> lock(thread_lock_);
+
     if (state_ != State::Stopped)
         return;
 

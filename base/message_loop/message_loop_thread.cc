@@ -26,6 +26,8 @@ MessageLoopThread::~MessageLoopThread()
 void MessageLoopThread::Start(MessageLoop::Type message_loop_type,
                               Delegate* delegate)
 {
+    std::lock_guard<std::mutex> lock(thread_lock_);
+
     DCHECK(!message_loop_);
 
     delegate_ = delegate;
@@ -55,6 +57,8 @@ void MessageLoopThread::StopSoon()
 
 void MessageLoopThread::Stop()
 {
+    std::lock_guard<std::mutex> lock(thread_lock_);
+
     if (state_ == State::Stopped)
         return;
 
@@ -64,7 +68,8 @@ void MessageLoopThread::Stop()
         PostThreadMessageW(thread_id_, WM_QUIT, 0, 0);
 
     // Wait for the thread to exit.
-    thread_.join();
+    if (thread_.joinable())
+        thread_.join();
 
     // The thread should NULL message_loop_ on exit.
     DCHECK(!message_loop_);

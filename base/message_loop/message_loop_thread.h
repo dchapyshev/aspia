@@ -71,6 +71,7 @@ private:
     std::atomic<State> state_ = State::Stopped;
 
     std::thread thread_;
+    std::mutex thread_lock_;
     uint32_t thread_id_ = 0;
 
     // True while inside of Run().

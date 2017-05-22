@@ -51,7 +51,7 @@ void HostSessionDesktop::OnBeforeThreadRunning()
 
     OnSessionAttached(WTSGetActiveConsoleSessionId());
 
-    // In Windows XP, the console session always has a ID equal to 0.
+    // In Windows XP/2003, the console session always has a ID equal to 0.
     // We do not need to watch the session.
     if (IsWindowsVistaOrGreater())
     {
@@ -65,6 +65,8 @@ void HostSessionDesktop::OnAfterThreadRunning()
     session_watcher_.StopWatching();
     OnSessionDetached();
     timer_.Stop();
+
+    delegate_->OnSessionTerminate();
 }
 
 void HostSessionDesktop::OnSessionAttached(uint32_t session_id)
@@ -96,10 +98,7 @@ void HostSessionDesktop::OnSessionAttached(uint32_t session_id)
         }
     }
 
-    session_watcher_.StopWatching();
-    timer_.Stop();
-
-    delegate_->OnSessionTerminate();
+    runner_->PostQuit();
 }
 
 void HostSessionDesktop::OnSessionDetached()
@@ -190,7 +189,7 @@ void HostSessionDesktop::OnPipeChannelConnect(uint32_t user_data)
     if (!ok)
     {
         state_ = State::Detached;
-        delegate_->OnSessionTerminate();
+        runner_->PostQuit();
         return;
     }
 
@@ -221,7 +220,7 @@ void HostSessionDesktop::OnPipeChannelDisconnect()
             state_ = State::Detached;
 
             timer_.Stop();
-            delegate_->OnSessionTerminate();
+            runner_->PostQuit();
         }
         break;
     }
@@ -244,7 +243,7 @@ void HostSessionDesktop::OnSessionAttachTimeout()
     {
         case State::Detached:
         case State::Starting:
-            delegate_->OnSessionTerminate();
+            runner_->PostQuit();
             break;
 
         case State::Attached:

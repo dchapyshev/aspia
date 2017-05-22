@@ -49,6 +49,7 @@ private:
     void ThreadMain();
 
     std::thread thread_;
+    std::mutex thread_lock_;
 
     enum class State { Starting, Started, Stopping, Stopped };
 
