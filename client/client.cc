@@ -63,6 +63,9 @@ void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
 {
     if (!session_proxy_)
     {
+        if (is_auth_failed_)
+            return;
+
         if (ReadAuthResult(buffer))
         {
             CreateSession(config_.session_type());
@@ -70,6 +73,7 @@ void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
         else
         {
             channel_proxy_->Disconnect();
+            is_auth_failed_ = true;
         }
 
         return;

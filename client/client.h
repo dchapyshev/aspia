@@ -77,6 +77,8 @@ private:
     std::unique_ptr<ClientSession> session_;
     std::shared_ptr<ClientSessionProxy> session_proxy_;
 
+    bool is_auth_failed_ = false;
+
     DISALLOW_COPY_AND_ASSIGN(Client);
 };
 

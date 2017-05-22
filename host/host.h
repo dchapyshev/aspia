@@ -50,6 +50,10 @@ private:
     std::shared_ptr<HostSessionProxy> session_proxy_;
 
     Delegate* delegate_;
+
+    bool is_auth_failed_ = false;
+
+    DISALLOW_COPY_AND_ASSIGN(Host);
 };
 
 } // namespace aspia
