@@ -65,8 +65,11 @@ void SasInjector::InjectSAS()
         std::wstring service_id =
             ServiceManager::GenerateUniqueServiceId();
 
-        std::wstring unique_name =
+        std::wstring unique_short_name =
             ServiceManager::CreateUniqueServiceName(kSasServiceShortName, service_id);
+
+        std::wstring unique_full_name =
+            ServiceManager::CreateUniqueServiceName(kSasServiceFullName, service_id);
 
         command_line.append(L" --run_mode=");
         command_line.append(kSasServiceSwitch);
@@ -76,8 +79,8 @@ void SasInjector::InjectSAS()
 
         // Install the service in the system.
         ServiceManager manager(ServiceManager::Create(command_line,
-                                                      kSasServiceFullName,
-                                                      unique_name));
+                                                      unique_full_name,
+                                                      unique_short_name));
 
         // If the service is installed.
         if (manager.IsValid())

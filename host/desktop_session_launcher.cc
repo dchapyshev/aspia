@@ -266,8 +266,11 @@ bool DesktopSessionLauncher::LaunchSession(uint32_t session_id,
             std::wstring service_id =
                 ServiceManager::GenerateUniqueServiceId();
 
-            std::wstring unique_name =
+            std::wstring unique_short_name =
                 ServiceManager::CreateUniqueServiceName(kServiceShortName, service_id);
+
+            std::wstring unique_full_name =
+                ServiceManager::CreateUniqueServiceName(kServiceFullName, service_id);
 
             command_line.append(L" --run_mode=");
             command_line.append(kDesktopSessionLauncherSwitch);
@@ -279,8 +282,8 @@ bool DesktopSessionLauncher::LaunchSession(uint32_t session_id,
 
             // Install the service in the system.
             ServiceManager manager(ServiceManager::Create(command_line,
-                                                          kServiceFullName,
-                                                          unique_name));
+                                                          unique_full_name,
+                                                          unique_short_name));
 
             // If the service was not installed.
             if (!manager.IsValid())
