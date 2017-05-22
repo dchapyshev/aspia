@@ -118,7 +118,7 @@ bool NetworkClientTcp::Connect(const std::wstring& address, uint16_t port, Deleg
             continue;
         }
 
-        if (WSAConnect(socket_, curr->ai_addr, curr->ai_addrlen,
+        if (WSAConnect(socket_, curr->ai_addr, static_cast<int>(curr->ai_addrlen),
                        nullptr, nullptr, nullptr, nullptr) == SOCKET_ERROR)
         {
             ret = WSAGetLastError();

@@ -199,7 +199,8 @@ bool PipeChannel::Read(void* buffer, size_t buffer_size)
         if (!read_pipe_.IsValid())
             return false;
 
-        ret = ReadFile(read_pipe_, buffer, buffer_size, &read_bytes, &overlapped);
+        ret = ReadFile(read_pipe_, buffer, static_cast<DWORD>(buffer_size),
+                       &read_bytes, &overlapped);
     }
 
     if (!ret)
@@ -250,7 +251,8 @@ bool PipeChannel::Write(const void* buffer, size_t buffer_size)
         if (!write_pipe_.IsValid())
             return false;
 
-        ret = WriteFile(write_pipe_, buffer, buffer_size, &written_bytes, &overlapped);
+        ret = WriteFile(write_pipe_, buffer, static_cast<DWORD>(buffer_size),
+                        &written_bytes, &overlapped);
     }
 
     if (!ret)
@@ -291,7 +293,7 @@ void PipeChannel::Send(const IOBuffer& buffer)
 {
     if (!buffer.IsEmpty())
     {
-        uint32_t message_size = buffer.Size();
+        uint32_t message_size = static_cast<uint32_t>(buffer.Size());
 
         if (Write(&message_size, sizeof(message_size)))
         {

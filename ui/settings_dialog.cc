@@ -185,10 +185,11 @@ void SettingsDialog::OnHScroll(HWND ctrl)
 {
     if (GetWindowLongPtrW(ctrl, GWLP_ID) == IDC_COMPRESS_RATIO_TRACKBAR)
     {
-        UpdateCompressionRatio(SendMessageW(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR),
-                                            TBM_GETPOS,
-                                            0,
-                                            0));
+        int compression_ratio =
+            static_cast<int>(SendMessageW(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR),
+                                          TBM_GETPOS, 0, 0));
+
+        UpdateCompressionRatio(compression_ratio);
     }
 }
 
@@ -271,7 +272,9 @@ void SettingsDialog::OnOkButton()
 
         ConvertToVideoPixelFormat(format, config_.mutable_pixel_format());
 
-        int compress_ratio = SendMessageW(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR), TBM_GETPOS, 0, 0);
+        int compress_ratio =
+            static_cast<int>(SendMessageW(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR), TBM_GETPOS, 0, 0));
+
         if (compress_ratio >= kMinCompressRatio && compress_ratio <= kMaxCompressRatio)
         {
             config_.set_compress_ratio(compress_ratio);
@@ -288,7 +291,8 @@ void SettingsDialog::OnOkButton()
 
     config_.set_flags(flags);
 
-    DWORD ret = SendMessageW(GetDlgItem(IDC_INTERVAL_UPDOWN), UDM_GETPOS, 0, 0);
+    DWORD ret = static_cast<DWORD>(SendMessageW(GetDlgItem(IDC_INTERVAL_UPDOWN),
+                                                UDM_GETPOS, 0, 0));
     if (HIWORD(ret))
     {
         int interval = LOWORD(ret);

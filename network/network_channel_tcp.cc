@@ -201,7 +201,7 @@ bool NetworkChannelTcp::WriteData(const uint8_t* buffer, size_t size)
 
         WSABUF data;
         data.buf = const_cast<char*>(reinterpret_cast<const char*>(buffer));
-        data.len = size;
+        data.len = static_cast<ULONG>(size);
 
         DWORD flags = 0;
         DWORD written = 0;
@@ -250,7 +250,7 @@ bool NetworkChannelTcp::ReadData(uint8_t* buffer, size_t size)
 
         WSABUF data;
         data.buf = reinterpret_cast<char*>(buffer);
-        data.len = size;
+        data.len = static_cast<ULONG>(size);
 
         DWORD flags = 0;
         DWORD read = 0;

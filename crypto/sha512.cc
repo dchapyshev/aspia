@@ -78,7 +78,7 @@ bool CreateSHA512(const std::string& data, std::string& data_hash)
 
         if (!CryptHashData(hash,
                            reinterpret_cast<const BYTE*>(data.c_str()),
-                           data.length(),
+                           static_cast<DWORD>(data.length()),
                            0))
         {
             LOG(ERROR) << "CryptHashData() failed: " << GetLastSystemErrorString();

@@ -79,7 +79,7 @@ bool ConsoleSessionWatcher::OnMessage(UINT message, WPARAM wParam, LPARAM lParam
         switch (wParam)
         {
             case WTS_CONSOLE_CONNECT:
-                delegate_->OnSessionAttached(lParam);
+                delegate_->OnSessionAttached(static_cast<uint32_t>(lParam));
                 break;
 
             case WTS_CONSOLE_DISCONNECT:

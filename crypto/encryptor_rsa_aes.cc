@@ -132,14 +132,14 @@ bool EncryptorRsaAes::SetPublicKey(const IOBuffer& public_key)
     rsa.bitlen = kRSAKeySize;
     rsa.pubexp = 65537;
 
-    uint32_t blob_size = sizeof(PUBLICKEYSTRUC) + sizeof(RSAPUBKEY) + public_key.Size();
+    size_t blob_size = sizeof(PUBLICKEYSTRUC) + sizeof(RSAPUBKEY) + public_key.Size();
     std::unique_ptr<uint8_t[]> blob(new uint8_t[blob_size]);
 
     memcpy(blob.get(), &header, sizeof(header));
     memcpy(blob.get() + sizeof(header), &rsa, sizeof(rsa));
     memcpy(blob.get() + sizeof(header) + sizeof(rsa), public_key.Data(), public_key.Size());
 
-    if (!CryptImportKey(prov_, blob.get(), blob_size, NULL, 0, &rsa_key_))
+    if (!CryptImportKey(prov_, blob.get(), static_cast<DWORD>(blob_size), NULL, 0, &rsa_key_))
     {
         LOG(ERROR) << "CryptImportKey() failed: " << GetLastSystemErrorString();
         return false;
@@ -188,7 +188,7 @@ IOBuffer EncryptorRsaAes::Encrypt(const IOBuffer& source_buffer)
     if (source_buffer.IsEmpty())
         return IOBuffer();
 
-    DWORD size = source_buffer.Size();
+    DWORD size = static_cast<DWORD>(source_buffer.Size());
 
     DWORD enc_size = ((size / block_size_ + 1) * block_size_);
 

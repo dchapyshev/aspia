@@ -12,7 +12,7 @@ namespace aspia {
 
 bool Window::CenterWindow(HWND hwnd_center)
 {
-    DWORD style = GetWindowLongPtrW(hwnd_, GWL_STYLE);
+    LONG_PTR style = GetWindowLongPtrW(hwnd_, GWL_STYLE);
 
     if (!hwnd_center)
     {
@@ -34,7 +34,7 @@ bool Window::CenterWindow(HWND hwnd_center)
         // Don't center against invisible or minimized windows.
         if (hwnd_center)
         {
-            DWORD dwStyleCenter = GetWindowLongPtrW(hwnd_center, GWL_STYLE);
+            LONG_PTR dwStyleCenter = GetWindowLongPtrW(hwnd_center, GWL_STYLE);
 
             if (!(dwStyleCenter & WS_VISIBLE) || (dwStyleCenter & WS_MINIMIZE))
                 hwnd_center = nullptr;
@@ -100,11 +100,11 @@ bool Window::CenterWindow(HWND hwnd_center)
                           SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
-bool Window::ModifyStyle(DWORD remove, DWORD add)
+bool Window::ModifyStyle(LONG_PTR remove, LONG_PTR add)
 {
-    DWORD style = GetWindowLongPtrW(hwnd_, GWL_STYLE);
+    LONG_PTR style = GetWindowLongPtrW(hwnd_, GWL_STYLE);
 
-    DWORD new_style = (style & ~remove) | add;
+    LONG_PTR new_style = (style & ~remove) | add;
 
     if (style == new_style)
         return false;
@@ -114,11 +114,11 @@ bool Window::ModifyStyle(DWORD remove, DWORD add)
     return true;
 }
 
-bool Window::ModifyStyleEx(DWORD remove, DWORD add)
+bool Window::ModifyStyleEx(LONG_PTR remove, LONG_PTR add)
 {
-    DWORD style = GetWindowLongPtrW(hwnd_, GWL_EXSTYLE);
+    LONG_PTR style = GetWindowLongPtrW(hwnd_, GWL_EXSTYLE);
 
-    DWORD new_style = (style & ~remove) | add;
+    LONG_PTR new_style = (style & ~remove) | add;
     if (style == new_style)
         return false;
 

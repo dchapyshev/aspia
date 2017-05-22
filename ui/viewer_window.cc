@@ -135,7 +135,8 @@ void ViewerWindow::CreateToolBar()
                                     Module().Current().Handle(),
                                     nullptr));
 
-    DWORD extended_style = SendMessageW(toolbar_, TB_GETEXTENDEDSTYLE, 0, 0);
+    DWORD extended_style =
+        static_cast<DWORD>(SendMessageW(toolbar_, TB_GETEXTENDEDSTYLE, 0, 0));
 
     extended_style |= TBSTYLE_EX_DRAWDDARROWS;
 
@@ -283,7 +284,10 @@ static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wParam, LPARAM lParam)
                     }
 
                     // Send the message to the window that is in focus.
-                    SendMessageW(gui_info.hwndFocus, wParam, hook_struct->vkCode, flags);
+                    SendMessageW(gui_info.hwndFocus,
+                                 static_cast<UINT>(wParam),
+                                 hook_struct->vkCode,
+                                 flags);
 
                     return TRUE;
                 }

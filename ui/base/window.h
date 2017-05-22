@@ -26,8 +26,8 @@ public:
     operator HWND() { return hwnd(); }
 
     bool CenterWindow(HWND hwnd_center = nullptr);
-    bool ModifyStyle(DWORD remove, DWORD add);
-    bool ModifyStyleEx(DWORD remove, DWORD add);
+    bool ModifyStyle(LONG_PTR remove, LONG_PTR add);
+    bool ModifyStyleEx(LONG_PTR remove, LONG_PTR add);
 
 private:
     HWND hwnd_ = nullptr;

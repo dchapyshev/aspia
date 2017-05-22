@@ -135,14 +135,14 @@ bool DecryptorRsaAes::SetSessionKey(const IOBuffer& session_key)
 
     ALG_ID alg_id = CALG_RSA_KEYX;
 
-    uint32_t blob_size = sizeof(header) + sizeof(alg_id) + session_key.Size();
+    size_t blob_size = sizeof(header) + sizeof(alg_id) + session_key.Size();
     std::unique_ptr<uint8_t[]> blob(new uint8_t[blob_size]);
 
     memcpy(blob.get(), &header, sizeof(header));
     memcpy(blob.get() + sizeof(header), &alg_id, sizeof(alg_id));
     memcpy(blob.get() + sizeof(header) + sizeof(alg_id), session_key.Data(), session_key.Size());
 
-    if (!CryptImportKey(prov_, blob.get(), blob_size, rsa_key_, 0, &aes_key_))
+    if (!CryptImportKey(prov_, blob.get(), static_cast<DWORD>(blob_size), rsa_key_, 0, &aes_key_))
     {
         LOG(ERROR) << "CryptImportKey() failed: " << GetLastSystemErrorString();
         return false;
@@ -168,7 +168,7 @@ IOBuffer DecryptorRsaAes::Decrypt(const IOBuffer& source_buffer)
     if (source_buffer.IsEmpty())
         return IOBuffer();
 
-    DWORD length = source_buffer.Size();
+    DWORD length = static_cast<DWORD>(source_buffer.Size());
 
     if (!CryptDecrypt(aes_key_, NULL, TRUE, 0, source_buffer.Data(), &length))
     {

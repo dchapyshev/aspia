@@ -146,7 +146,7 @@ bool VideoDecoderVPX::Decode(const proto::VideoPacket& packet, DesktopFrame* fra
     vpx_codec_err_t ret =
         vpx_codec_decode(codec_.get(),
                          reinterpret_cast<const uint8_t*>(packet.data().data()),
-                         packet.data().size(),
+                         static_cast<unsigned int>(packet.data().size()),
                          nullptr,
                          0);
     if (ret != VPX_CODEC_OK)
