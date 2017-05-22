@@ -407,15 +407,16 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IntDir>$(OutDir)obj\x86\$(ProjectName)\</IntDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
     <GenerateManifest>true</GenerateManifest>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <GenerateManifest>true</GenerateManifest>
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IntDir>$(OutDir)obj\$(Platform)\$(ProjectName)\</IntDir>
-    <TargetName>aspia64</TargetName>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -565,7 +566,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SetChecksum>true</SetChecksum>
-      <AdditionalDependencies>dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;sas.lib;dwmapi.lib;uxtheme.lib;libglog64.lib;gflags64.lib;libvpx64.lib;libyuv64.lib;zlib-ng64.lib;libprotobuf-lite64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;sas.lib;dwmapi.lib;uxtheme.lib;libglog.lib;gflags.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>

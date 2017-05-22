@@ -81,14 +81,14 @@
     <TargetName>libvpx</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IntDir>$(OutDir)obj\$(Platform)\$(ProjectName)\</IntDir>
-    <TargetName>libvpx</TargetName>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>libvpx64</TargetName>
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IntDir>$(OutDir)obj\$(Platform)\$(ProjectName)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
