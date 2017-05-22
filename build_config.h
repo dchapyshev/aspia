@@ -31,12 +31,21 @@
 #endif
 
 // Target version
+#if defined(ARCH_CPU_X86_64)
+#define _WIN32_WINNT     0x0502
+#define NTDDI_VERSION    0x05020000 // Windows 2003 / XP x64
+#define _WIN32_IE        0x0800 // Internet Explorer 8.0
+#define PSAPI_VERSION    1
+#define WINVER           _WIN32_WINNT
+#define _WIN32_WINDOWS   _WIN32_WINNT
+#elif defined(ARCH_CPU_X86)
 #define _WIN32_WINNT     0x0501
 #define NTDDI_VERSION    0x05010300 // Windows XP SP3
 #define _WIN32_IE        0x0800 // Internet Explorer 8.0
 #define PSAPI_VERSION    1
 #define WINVER           _WIN32_WINNT
 #define _WIN32_WINDOWS   _WIN32_WINNT
+#endif
 
 static const unsigned short kDefaultHostTcpPort = 8050;
 
