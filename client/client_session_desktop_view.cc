@@ -67,11 +67,19 @@ bool ClientSessionDesktopView::ReadVideoPacket(const proto::VideoPacket& video_p
 
         if (!pixel_format.IsValid())
         {
-            LOG(ERROR) << "Wrong pixel format";
+            LOG(ERROR) << "Wrong pixel format for frame";
             return false;
         }
 
-        viewer_->ResizeFrame(ConvertFromVideoSize(video_packet.screen_size()), pixel_format);
+        DesktopSize size = ConvertFromVideoSize(video_packet.screen_size());
+
+        if (size.IsEmpty())
+        {
+            LOG(ERROR) << "Wrong size for frame";
+            return false;
+        }
+
+        viewer_->ResizeFrame(size, pixel_format);
     }
 
     DesktopFrame* frame = viewer_->Frame();
