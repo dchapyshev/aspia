@@ -52,11 +52,11 @@ message CursorShape
         CACHE       = 128;
     }
 
-    // ≈сли бит 7 установлен в 1, то биты 0-4 содержат индекс курсора в кеше.
-    // ≈сли бит 7 не установлен, то получено изображение курсора.
-    // ≈сли бит 6 установлен в 1, то получена команда сбросить содержимое кеша,
-    // а биты 0-4 содержат новый размер кеша.
-    // Ѕит 5 зарезервирован.
+    // If bit 7 is set to 1, then bits 0-4 contain the cursor index in the cache.
+    // If bit 7 is not set, then the cursor image is received.
+    // If bit 6 is set to 1, then the command to reset the contents of the cache
+    // is received, and bits 0-4 contain a new cache size.
+    // Bit 5 is reserved.
     uint32 flags = 1;
 
     // Width, height (in screen pixels) of the cursor.
