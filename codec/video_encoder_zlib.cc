@@ -87,7 +87,7 @@ void VideoEncoderZLIB::CompressPacket(proto::VideoPacket* packet, size_t source_
 
 std::unique_ptr<proto::VideoPacket> VideoEncoderZLIB::Encode(const DesktopFrame* frame)
 {
-    std::unique_ptr<proto::VideoPacket> packet(CreatePacket(proto::VIDEO_ENCODING_ZLIB));
+    std::unique_ptr<proto::VideoPacket> packet(CreateVideoPacket(proto::VIDEO_ENCODING_ZLIB));
 
     if (!screen_size_.IsEqual(frame->Size()))
     {

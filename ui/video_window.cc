@@ -148,7 +148,7 @@ void VideoWindow::OnMouse(UINT msg, WPARAM wParam, LPARAM lParam)
 
         tme.cbSize = sizeof(TRACKMOUSEEVENT);
         tme.dwFlags = TME_LEAVE;
-        tme.hwndTrack = *this;
+        tme.hwndTrack = hwnd();
 
         TrackMouseEvent(&tme);
 
@@ -210,7 +210,7 @@ void VideoWindow::OnMouse(UINT msg, WPARAM wParam, LPARAM lParam)
         scroll_delta_.Set(scroll_delta_x, scroll_delta_y);
 
         if (scroll_delta_x || scroll_delta_y)
-            scroll_timer_.Start(*this);
+            scroll_timer_.Start(hwnd());
         else
             scroll_timer_.Stop();
     }

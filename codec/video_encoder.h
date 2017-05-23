@@ -22,14 +22,6 @@ public:
     virtual ~VideoEncoder() = default;
 
     virtual std::unique_ptr<proto::VideoPacket> Encode(const DesktopFrame* frame) = 0;
-
-protected:
-    static std::unique_ptr<proto::VideoPacket> CreatePacket(proto::VideoEncoding encoding)
-    {
-        std::unique_ptr<proto::VideoPacket> packet(new proto::VideoPacket());
-        packet->set_encoding(encoding);
-        return packet;
-    }
 };
 
 } // namespace aspia

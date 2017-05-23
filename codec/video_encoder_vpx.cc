@@ -327,7 +327,7 @@ std::unique_ptr<proto::VideoPacket> VideoEncoderVPX::Encode(const DesktopFrame* 
     DCHECK(encoding_ == proto::VideoEncoding::VIDEO_ENCODING_VP8 ||
            encoding_ == proto::VideoEncoding::VIDEO_ENCODING_VP9);
 
-    std::unique_ptr<proto::VideoPacket> packet(CreatePacket(encoding_));
+    std::unique_ptr<proto::VideoPacket> packet(CreateVideoPacket(encoding_));
 
     if (!screen_size_.IsEqual(frame->Size()))
     {
