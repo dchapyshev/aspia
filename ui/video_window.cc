@@ -14,7 +14,6 @@
 
 namespace aspia {
 
-static const UINT kResizeFrameMessage = WM_APP + 1;
 static const UINT_PTR kScrollTimerId = 1;
 static const int kScrollDelta = 25;
 
@@ -408,25 +407,14 @@ void VideoWindow::HasFocus(bool has)
     has_focus_ = has;
 }
 
-void VideoWindow::OnVideoFrameResize(WPARAM wParam, LPARAM lParam)
+void VideoWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& format)
 {
     screen_dc_.Reset(CreateCompatibleDC(nullptr));
     memory_dc_.Reset(CreateCompatibleDC(screen_dc_));
 
-    DesktopSize* size = reinterpret_cast<DesktopSize*>(wParam);
-    PixelFormat* format = reinterpret_cast<PixelFormat*>(lParam);
-
-    frame_ = DesktopFrameDIB::Create(*size, *format, memory_dc_);
+    frame_ = DesktopFrameDIB::Create(size, format, memory_dc_);
 
     PostMessageW(hwnd(), WM_SIZE, 0, 0);
-}
-
-void VideoWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& format)
-{
-    SendMessageW(hwnd(),
-                 kResizeFrameMessage,
-                 reinterpret_cast<WPARAM>(&size),
-                 reinterpret_cast<LPARAM>(&format));
 }
 
 bool VideoWindow::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
@@ -469,10 +457,6 @@ bool VideoWindow::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* res
 
         case WM_MOUSELEAVE:
             OnMouseLeave();
-            break;
-
-        case kResizeFrameMessage:
-            OnVideoFrameResize(wparam, lparam);
             break;
 
         default:

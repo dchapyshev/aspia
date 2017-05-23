@@ -17,6 +17,7 @@ namespace aspia {
 
 static const DWORD kKeyUpFlag = 0x80000000;
 static const DWORD kKeyExtendedFlag = 0x1000000;
+static const UINT kResizeFrameMessage = WM_APP + 1;
 
 static const DesktopSize kVideoWindowSize(400, 280);
 
@@ -72,19 +73,33 @@ void ViewerWindow::DrawFrame()
     video_window_.DrawFrame();
 }
 
+void ViewerWindow::OnVideoFrameResize(WPARAM wparam, LPARAM lparam)
+{
+    const DesktopSize* size = reinterpret_cast<DesktopSize*>(wparam);
+    const PixelFormat* format = reinterpret_cast<PixelFormat*>(lparam);
+
+    int show_scroll_bars = -1;
+
+    if (!size->IsEqual(video_window_.FrameSize()))
+    {
+        ShowScrollBar(video_window_, SB_BOTH, FALSE);
+        show_scroll_bars = DoAutoSize(*size);
+    }
+
+    video_window_.ResizeFrame(*size, *format);
+
+    if (show_scroll_bars != -1)
+        ShowScrollBar(video_window_, show_scroll_bars, FALSE);
+}
+
 void ViewerWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& format)
 {
-    ShowScrollBar(video_window_, SB_BOTH, FALSE);
-
-    int sb = -1;
-
-    if (!size.IsEqual(video_window_.FrameSize()))
-        sb = DoAutoSize(size);
-
-    video_window_.ResizeFrame(size, format);
-
-    if (sb != -1)
-        ShowScrollBar(video_window_, sb, FALSE);
+    // ResizeFrame method is called from another thread.
+    // We need to move the action to UI thread.
+    SendMessageW(hwnd(),
+                 kResizeFrameMessage,
+                 reinterpret_cast<WPARAM>(&size),
+                 reinterpret_cast<LPARAM>(&format));
 }
 
 void ViewerWindow::InjectMouseCursor(std::shared_ptr<MouseCursor> mouse_cursor)
@@ -843,9 +858,17 @@ bool ViewerWindow::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* re
         case WM_CLOSE:
             OnClose();
             break;
+
+        case kResizeFrameMessage:
+            OnVideoFrameResize(wparam, lparam);
+            break;
+
+        default:
+            return false;
     }
 
-    return 0;
+    *result = 0;
+    return true;
 }
 
 void ViewerWindow::OnPointerEvent(int32_t x, int32_t y, uint32_t mask)

@@ -45,7 +45,6 @@ private:
     LRESULT OnTimer(UINT_PTR event_id);
     void OnHScroll(UINT code, UINT pos);
     void OnVScroll(UINT code, UINT pos);
-    void OnVideoFrameResize(WPARAM wParam, LPARAM lParam);
 
     void FillBackgroundRect(HDC paint_dc, const DesktopRect& paint_rect);
     void DrawBackground(HDC paint_dc, const DesktopRect& paint_rect);

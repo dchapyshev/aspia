@@ -74,6 +74,7 @@ private:
     void OnKeyButton(WORD ctrl_id);
     void OnGetDispInfo(LPNMHDR phdr);
     void OnToolBarDropDown(LPNMHDR phdr);
+    void OnVideoFrameResize(WPARAM wParam, LPARAM lParam);
 
     void CreateToolBar();
     void ShowDropDownMenu(int button_id, RECT* button_rect);
