@@ -72,6 +72,6 @@ static INLINE void ConvertToVideoPixelFormat(const PixelFormat& from, proto::Vid
     to->set_blue_shift(from.BlueShift());
 }
 
-}
+} // namespace aspia
 
 #endif // _ASPIA_CODEC__VIDEO_HELPERS_H
