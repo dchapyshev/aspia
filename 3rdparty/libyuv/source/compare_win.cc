@@ -14,7 +14,7 @@
 #include "libyuv/row.h"
 
 #if defined(_MSC_VER)
-#include <intrin.h>   // For __popcnt
+#include <intrin.h>  // For __popcnt
 #endif
 
 #ifdef __cplusplus

@@ -16,7 +16,7 @@ Component   | Sync date   | Version
 protobuf      14.05.2017    3.3.1
 glog          10.05.2017    0.3.5
 googletest    26.10.2016    trunk
-libyuv        14.05.2017    trunk
+libyuv        25.05.2017    trunk
 libvpx        26.01.2017    1.6.1
 gflags        10.05.2017    trunk
 opus          24.01.2017    1.1.4
