@@ -9,6 +9,7 @@ libvpx        BSD 3-Clause License    https://chromium.googlesource.com/webm/lib
 gflags        BSD 3-Clause License    https://github.com/gflags/gflags
 opus          BSD 3-Clause License    http://opus-codec.org
 zlib-ng       zlib License            https://github.com/Dead2/zlib-ng
+libsodium     ISC License             https://github.com/jedisct1/libsodium/releases
 
 Synchronization status
 
@@ -21,3 +22,4 @@ libvpx        26.01.2017    1.6.1
 gflags        10.05.2017    trunk
 opus          24.01.2017    1.1.4
 zlib-ng       26.03.2017    trunk
+libsodium     27.05.2017    1.0.12
