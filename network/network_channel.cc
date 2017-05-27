@@ -11,7 +11,7 @@
 
 namespace aspia {
 
-static const size_t kMaximumMessageSize = 0x3FFFFF; // 3 MB
+static const size_t kMaximumMessageSize = 5 * 1024 * 1024; // 5 MB
 
 NetworkChannel::NetworkChannel()
 {
@@ -110,28 +110,18 @@ void NetworkChannel::OnIncommingMessage(const IOBuffer& buffer)
 
 size_t NetworkChannel::ReadMessageSize()
 {
-    uint8_t byte;
+    uint32_t size;
 
-    if (!ReadData(&byte, sizeof(byte)))
+    if (!ReadData(reinterpret_cast<uint8_t*>(&size), sizeof(size)))
         return 0;
 
-    size_t size = byte & 0x7F;
+#if (ARCH_CPU_LITTLE_ENDIAN == 1)
+    // Convert from network byte order (big endian).
+    size = _byteswap_ulong(size);
+#endif
 
-    if (byte & 0x80)
-    {
-        if (!ReadData(&byte, sizeof(byte)))
-            return 0;
-
-        size += (byte & 0x7F) << 7;
-
-        if (byte & 0x80)
-        {
-            if (!ReadData(&byte, sizeof(byte)))
-                return 0;
-
-            size += byte << 14;
-        }
-    }
+    if (size > kMaximumMessageSize)
+        return 0;
 
     return size;
 }
@@ -141,33 +131,20 @@ bool NetworkChannel::WriteMessage(const IOBuffer& buffer)
     if (buffer.IsEmpty())
         return false;
 
-    const size_t size = buffer.size();
-
-    // The maximum message size is 3MB.
-    if (size > kMaximumMessageSize)
+    if (buffer.size() > kMaximumMessageSize)
         return false;
 
-    uint8_t length[3];
-    int count = 1;
+    uint32_t size = static_cast<uint32_t>(buffer.size());
 
-    length[0] = size & 0x7F;
+#if (ARCH_CPU_LITTLE_ENDIAN == 1)
+    // Convert to network byte order (big endian).
+    size = _byteswap_ulong(size);
+#endif
 
-    if (size > 0x7F)
-    {
-        length[0] |= 0x80;
-        length[count++] = size >> 7 & 0x7F;
-
-        if (size > 0x3FFF)
-        {
-            length[1] |= 0x80;
-            length[count++] = size >> 14 & 0xFF;
-        }
-    }
-
-    if (!WriteData(length, count))
+    if (!WriteData(reinterpret_cast<const uint8_t*>(&size), sizeof(size)))
         return false;
 
-    return WriteData(buffer.data(), size);
+    return WriteData(buffer.data(), buffer.size());
 }
 
 } // namespace aspia
