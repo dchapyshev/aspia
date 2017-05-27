@@ -1,16 +1,16 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            crypto/encryptor_sodium.cc
+// FILE:            crypto/encryptor.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "crypto/encryptor_sodium.h"
+#include "crypto/encryptor.h"
 #include "base/logging.h"
 
 namespace aspia {
 
-EncryptorSodium::EncryptorSodium(Mode mode, SecureBuffer public_key, SecureBuffer secret_key) :
+Encryptor::Encryptor(Mode mode, SecureBuffer public_key, SecureBuffer secret_key) :
     local_public_key_(std::move(public_key)),
     local_secret_key_(std::move(secret_key)),
     decrypt_key_(crypto_kx_SESSIONKEYBYTES),
@@ -22,13 +22,13 @@ EncryptorSodium::EncryptorSodium(Mode mode, SecureBuffer public_key, SecureBuffe
     randombytes_buf(nonce_.data(), nonce_.size());
 }
 
-EncryptorSodium::~EncryptorSodium()
+Encryptor::~Encryptor()
 {
     // Nothing
 }
 
 // static
-std::unique_ptr<EncryptorSodium> EncryptorSodium::Create(Mode mode)
+std::unique_ptr<Encryptor> Encryptor::Create(Mode mode)
 {
     if (sodium_init() == -1)
     {
@@ -45,13 +45,12 @@ std::unique_ptr<EncryptorSodium> EncryptorSodium::Create(Mode mode)
         return nullptr;
     }
 
-    return std::unique_ptr<EncryptorSodium>(
-        new EncryptorSodium(mode,
-                            std::move(public_key),
-                            std::move(secret_key)));
+    return std::unique_ptr<Encryptor>(new Encryptor(mode,
+                                                    std::move(public_key),
+                                                    std::move(secret_key)));
 }
 
-bool EncryptorSodium::SetRemotePublicKey(const IOBuffer& public_key)
+bool Encryptor::SetRemotePublicKey(const IOBuffer& public_key)
 {
     if (public_key.IsEmpty())
     {
@@ -97,7 +96,7 @@ bool EncryptorSodium::SetRemotePublicKey(const IOBuffer& public_key)
     return true;
 }
 
-IOBuffer EncryptorSodium::GetLocalPublicKey()
+IOBuffer Encryptor::GetLocalPublicKey()
 {
     if (local_public_key_.IsEmpty())
         return IOBuffer();
@@ -108,7 +107,7 @@ IOBuffer EncryptorSodium::GetLocalPublicKey()
     return public_key;
 }
 
-IOBuffer EncryptorSodium::Encrypt(const IOBuffer& source_buffer)
+IOBuffer Encryptor::Encrypt(const IOBuffer& source_buffer)
 {
     DCHECK_EQ(nonce_.size(), crypto_secretbox_NONCEBYTES);
 
@@ -134,7 +133,7 @@ IOBuffer EncryptorSodium::Encrypt(const IOBuffer& source_buffer)
     return encrypted_buffer;
 }
 
-IOBuffer EncryptorSodium::Decrypt(const IOBuffer& source_buffer)
+IOBuffer Encryptor::Decrypt(const IOBuffer& source_buffer)
 {
     IOBuffer decrypted_buffer(source_buffer.size() -
                               crypto_secretbox_NONCEBYTES -

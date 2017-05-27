@@ -77,7 +77,7 @@
     <ClCompile Include="codec\video_decoder_zlib.cc" />
     <ClCompile Include="codec\video_encoder_vpx.cc" />
     <ClCompile Include="codec\video_encoder_zlib.cc" />
-    <ClCompile Include="crypto\encryptor_sodium.cc" />
+    <ClCompile Include="crypto\encryptor.cc" />
     <ClCompile Include="crypto\sha512.cc" />
     <ClCompile Include="desktop_capture\capturer_gdi.cc" />
     <ClCompile Include="desktop_capture\capture_scheduler.cc" />
@@ -225,7 +225,7 @@
     <ClInclude Include="codec\video_encoder_vpx.h" />
     <ClInclude Include="codec\video_encoder_zlib.h" />
     <ClInclude Include="codec\video_helpers.h" />
-    <ClInclude Include="crypto\encryptor_sodium.h" />
+    <ClInclude Include="crypto\encryptor.h" />
     <ClInclude Include="crypto\secure_buffer.h" />
     <ClInclude Include="crypto\sha512.h" />
     <ClInclude Include="desktop_capture\capturer.h" />

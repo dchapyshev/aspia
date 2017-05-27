@@ -6,7 +6,6 @@
 //
 
 #include "network/network_channel_tcp.h"
-#include "crypto/encryptor_sodium.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -108,7 +107,7 @@ bool NetworkChannelTcp::KeyExchange()
 {
     if (mode_ == Mode::CLIENT)
     {
-        encryptor_ = EncryptorSodium::Create(EncryptorSodium::Mode::CLIENT);
+        encryptor_ = Encryptor::Create(Encryptor::Mode::CLIENT);
         if (!encryptor_)
             return false;
 
@@ -122,7 +121,7 @@ bool NetworkChannelTcp::KeyExchange()
     {
         DCHECK(mode_ == Mode::SERVER);
 
-        encryptor_ = EncryptorSodium::Create(EncryptorSodium::Mode::SERVER);
+        encryptor_ = Encryptor::Create(Encryptor::Mode::SERVER);
         if (!encryptor_)
             return false;
 

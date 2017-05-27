@@ -397,7 +397,7 @@
     <ClCompile Include="ui\base\imagelist.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
-    <ClCompile Include="crypto\encryptor_sodium.cc">
+    <ClCompile Include="crypto\encryptor.cc">
       <Filter>crypto</Filter>
     </ClCompile>
   </ItemGroup>
@@ -857,10 +857,10 @@
     <ClInclude Include="base\string_util_constants.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="crypto\encryptor_sodium.h">
+    <ClInclude Include="crypto\secure_buffer.h">
       <Filter>crypto</Filter>
     </ClInclude>
-    <ClInclude Include="crypto\secure_buffer.h">
+    <ClInclude Include="crypto\encryptor.h">
       <Filter>crypto</Filter>
     </ClInclude>
   </ItemGroup>

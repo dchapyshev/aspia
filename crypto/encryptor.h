@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            crypto/encryptor_sodium.h
+// FILE:            crypto/encryptor.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_CRYPTO__ENCRYPTOR_SODIUM_H
-#define _ASPIA_CRYPTO__ENCRYPTOR_SODIUM_H
+#ifndef _ASPIA_CRYPTO__ENCRYPTOR_H
+#define _ASPIA_CRYPTO__ENCRYPTOR_H
 
 #include "base/io_buffer.h"
 #include "crypto/secure_buffer.h"
@@ -20,14 +20,14 @@ extern "C" {
 
 namespace aspia {
 
-class EncryptorSodium
+class Encryptor
 {
 public:
-    ~EncryptorSodium();
+    ~Encryptor();
 
     enum class Mode { SERVER, CLIENT };
 
-    static std::unique_ptr<EncryptorSodium> Create(Mode mode);
+    static std::unique_ptr<Encryptor> Create(Mode mode);
 
     bool SetRemotePublicKey(const IOBuffer& public_key);
     IOBuffer GetLocalPublicKey();
@@ -36,7 +36,7 @@ public:
     IOBuffer Decrypt(const IOBuffer& source_buffer);
 
 private:
-    EncryptorSodium(Mode mode, SecureBuffer public_key, SecureBuffer secret_key);
+    Encryptor(Mode mode, SecureBuffer public_key, SecureBuffer secret_key);
 
     const Mode mode_;
 
@@ -48,9 +48,9 @@ private:
 
     SecureBuffer nonce_;
 
-    DISALLOW_COPY_AND_ASSIGN(EncryptorSodium);
+    DISALLOW_COPY_AND_ASSIGN(Encryptor);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_CRYPTO__ENCRYPTOR_SODIUM_H
+#endif // _ASPIA_CRYPTO__ENCRYPTOR_H
