@@ -17,19 +17,25 @@
 
 namespace aspia {
 
-static INLINE std::unique_ptr<proto::VideoPacket> CreateVideoPacket(proto::VideoEncoding encoding)
+static INLINE std::unique_ptr<proto::VideoPacket>
+CreateVideoPacket(proto::VideoEncoding encoding)
 {
     std::unique_ptr<proto::VideoPacket> packet(new proto::VideoPacket());
     packet->set_encoding(encoding);
     return packet;
 }
 
-static INLINE DesktopRect ConvertFromVideoRect(const proto::VideoRect& rect)
+static INLINE DesktopRect
+ConvertFromVideoRect(const proto::VideoRect& rect)
 {
-    return DesktopRect::MakeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
+    return DesktopRect::MakeXYWH(rect.x(),
+                                 rect.y(),
+                                 rect.width(),
+                                 rect.height());
 }
 
-static INLINE void ConvertToVideoRect(const DesktopRect& from, proto::VideoRect* to)
+static INLINE void
+ConvertToVideoRect(const DesktopRect& from, proto::VideoRect* to)
 {
     to->set_x(from.x());
     to->set_y(from.y());
@@ -37,18 +43,21 @@ static INLINE void ConvertToVideoRect(const DesktopRect& from, proto::VideoRect*
     to->set_height(from.Height());
 }
 
-static INLINE DesktopSize ConvertFromVideoSize(const proto::VideoSize& size)
+static INLINE DesktopSize
+ConvertFromVideoSize(const proto::VideoSize& size)
 {
     return DesktopSize(size.width(), size.height());
 }
 
-static INLINE void ConvertToVideoSize(const DesktopSize& from, proto::VideoSize* to)
+static INLINE void
+ConvertToVideoSize(const DesktopSize& from, proto::VideoSize* to)
 {
     to->set_width(from.Width());
     to->set_height(from.Height());
 }
 
-static INLINE PixelFormat ConvertFromVideoPixelFormat(const proto::VideoPixelFormat& format)
+static INLINE PixelFormat
+ConvertFromVideoPixelFormat(const proto::VideoPixelFormat& format)
 {
     return PixelFormat(static_cast<uint8_t>(format.bits_per_pixel()),
                        static_cast<uint16_t>(format.red_max()),
@@ -59,7 +68,9 @@ static INLINE PixelFormat ConvertFromVideoPixelFormat(const proto::VideoPixelFor
                        static_cast<uint8_t>(format.blue_shift()));
 }
 
-static INLINE void ConvertToVideoPixelFormat(const PixelFormat& from, proto::VideoPixelFormat* to)
+static INLINE void
+ConvertToVideoPixelFormat(const PixelFormat& from,
+                          proto::VideoPixelFormat* to)
 {
     to->set_bits_per_pixel(from.BitsPerPixel());
 

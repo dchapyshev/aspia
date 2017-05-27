@@ -56,6 +56,9 @@ extern PointerEventDefaultTypeInternal _PointerEvent_default_instance_;
 class VideoPacket;
 class VideoPacketDefaultTypeInternal;
 extern VideoPacketDefaultTypeInternal _VideoPacket_default_instance_;
+class VideoPacketFormat;
+class VideoPacketFormatDefaultTypeInternal;
+extern VideoPacketFormatDefaultTypeInternal _VideoPacketFormat_default_instance_;
 class VideoPixelFormat;
 class VideoPixelFormatDefaultTypeInternal;
 extern VideoPixelFormatDefaultTypeInternal _VideoPixelFormat_default_instance_;
@@ -941,6 +944,97 @@ class VideoSize : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
+class VideoPacketFormat : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.VideoPacketFormat) */ {
+ public:
+  VideoPacketFormat();
+  virtual ~VideoPacketFormat();
+
+  VideoPacketFormat(const VideoPacketFormat& from);
+
+  inline VideoPacketFormat& operator=(const VideoPacketFormat& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const VideoPacketFormat& default_instance();
+
+  static inline const VideoPacketFormat* internal_default_instance() {
+    return reinterpret_cast<const VideoPacketFormat*>(
+               &_VideoPacketFormat_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    7;
+
+  void Swap(VideoPacketFormat* other);
+
+  // implements Message ----------------------------------------------
+
+  inline VideoPacketFormat* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  VideoPacketFormat* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const VideoPacketFormat& from);
+  void MergeFrom(const VideoPacketFormat& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(VideoPacketFormat* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // .aspia.proto.VideoSize screen_size = 1;
+  bool has_screen_size() const;
+  void clear_screen_size();
+  static const int kScreenSizeFieldNumber = 1;
+  const ::aspia::proto::VideoSize& screen_size() const;
+  ::aspia::proto::VideoSize* mutable_screen_size();
+  ::aspia::proto::VideoSize* release_screen_size();
+  void set_allocated_screen_size(::aspia::proto::VideoSize* screen_size);
+
+  // .aspia.proto.VideoPixelFormat pixel_format = 2;
+  bool has_pixel_format() const;
+  void clear_pixel_format();
+  static const int kPixelFormatFieldNumber = 2;
+  const ::aspia::proto::VideoPixelFormat& pixel_format() const;
+  ::aspia::proto::VideoPixelFormat* mutable_pixel_format();
+  ::aspia::proto::VideoPixelFormat* release_pixel_format();
+  void set_allocated_pixel_format(::aspia::proto::VideoPixelFormat* pixel_format);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.VideoPacketFormat)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::aspia::proto::VideoSize* screen_size_;
+  ::aspia::proto::VideoPixelFormat* pixel_format_;
+  mutable int _cached_size_;
+  friend struct protobuf_desktop_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class VideoPacket : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.VideoPacket) */ {
  public:
   VideoPacket();
@@ -960,7 +1054,7 @@ class VideoPacket : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_VideoPacket_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    8;
 
   void Swap(VideoPacket* other);
 
@@ -1003,10 +1097,10 @@ class VideoPacket : public ::google::protobuf::MessageLite /* @@protoc_insertion
 
   // accessors -------------------------------------------------------
 
-  // repeated .aspia.proto.VideoRect dirty_rect = 4;
+  // repeated .aspia.proto.VideoRect dirty_rect = 3;
   int dirty_rect_size() const;
   void clear_dirty_rect();
-  static const int kDirtyRectFieldNumber = 4;
+  static const int kDirtyRectFieldNumber = 3;
   const ::aspia::proto::VideoRect& dirty_rect(int index) const;
   ::aspia::proto::VideoRect* mutable_dirty_rect(int index);
   ::aspia::proto::VideoRect* add_dirty_rect();
@@ -1015,9 +1109,9 @@ class VideoPacket : public ::google::protobuf::MessageLite /* @@protoc_insertion
   const ::google::protobuf::RepeatedPtrField< ::aspia::proto::VideoRect >&
       dirty_rect() const;
 
-  // bytes data = 5;
+  // bytes data = 4;
   void clear_data();
-  static const int kDataFieldNumber = 5;
+  static const int kDataFieldNumber = 4;
   const ::std::string& data() const;
   void set_data(const ::std::string& value);
   #if LANG_CXX11
@@ -1029,23 +1123,14 @@ class VideoPacket : public ::google::protobuf::MessageLite /* @@protoc_insertion
   ::std::string* release_data();
   void set_allocated_data(::std::string* data);
 
-  // .aspia.proto.VideoSize screen_size = 2;
-  bool has_screen_size() const;
-  void clear_screen_size();
-  static const int kScreenSizeFieldNumber = 2;
-  const ::aspia::proto::VideoSize& screen_size() const;
-  ::aspia::proto::VideoSize* mutable_screen_size();
-  ::aspia::proto::VideoSize* release_screen_size();
-  void set_allocated_screen_size(::aspia::proto::VideoSize* screen_size);
-
-  // .aspia.proto.VideoPixelFormat pixel_format = 3;
-  bool has_pixel_format() const;
-  void clear_pixel_format();
-  static const int kPixelFormatFieldNumber = 3;
-  const ::aspia::proto::VideoPixelFormat& pixel_format() const;
-  ::aspia::proto::VideoPixelFormat* mutable_pixel_format();
-  ::aspia::proto::VideoPixelFormat* release_pixel_format();
-  void set_allocated_pixel_format(::aspia::proto::VideoPixelFormat* pixel_format);
+  // .aspia.proto.VideoPacketFormat format = 2;
+  bool has_format() const;
+  void clear_format();
+  static const int kFormatFieldNumber = 2;
+  const ::aspia::proto::VideoPacketFormat& format() const;
+  ::aspia::proto::VideoPacketFormat* mutable_format();
+  ::aspia::proto::VideoPacketFormat* release_format();
+  void set_allocated_format(::aspia::proto::VideoPacketFormat* format);
 
   // .aspia.proto.VideoEncoding encoding = 1;
   void clear_encoding();
@@ -1059,8 +1144,7 @@ class VideoPacket : public ::google::protobuf::MessageLite /* @@protoc_insertion
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::aspia::proto::VideoRect > dirty_rect_;
   ::google::protobuf::internal::ArenaStringPtr data_;
-  ::aspia::proto::VideoSize* screen_size_;
-  ::aspia::proto::VideoPixelFormat* pixel_format_;
+  ::aspia::proto::VideoPacketFormat* format_;
   int encoding_;
   mutable int _cached_size_;
   friend struct protobuf_desktop_5fsession_5fmessage_2eproto::TableStruct;
@@ -1086,7 +1170,7 @@ class AudioPacket : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_AudioPacket_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    9;
 
   void Swap(AudioPacket* other);
 
@@ -1164,7 +1248,7 @@ class DesktopSessionConfigRequest : public ::google::protobuf::MessageLite /* @@
                &_DesktopSessionConfigRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    10;
 
   void Swap(DesktopSessionConfigRequest* other);
 
@@ -1256,7 +1340,7 @@ class DesktopSessionConfig : public ::google::protobuf::MessageLite /* @@protoc_
                &_DesktopSessionConfig_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    11;
 
   void Swap(DesktopSessionConfig* other);
 
@@ -1885,6 +1969,88 @@ inline void VideoSize::set_height(::google::protobuf::int32 value) {
 
 // -------------------------------------------------------------------
 
+// VideoPacketFormat
+
+// .aspia.proto.VideoSize screen_size = 1;
+inline bool VideoPacketFormat::has_screen_size() const {
+  return this != internal_default_instance() && screen_size_ != NULL;
+}
+inline void VideoPacketFormat::clear_screen_size() {
+  if (GetArenaNoVirtual() == NULL && screen_size_ != NULL) delete screen_size_;
+  screen_size_ = NULL;
+}
+inline const ::aspia::proto::VideoSize& VideoPacketFormat::screen_size() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoPacketFormat.screen_size)
+  return screen_size_ != NULL ? *screen_size_
+                         : *::aspia::proto::VideoSize::internal_default_instance();
+}
+inline ::aspia::proto::VideoSize* VideoPacketFormat::mutable_screen_size() {
+  
+  if (screen_size_ == NULL) {
+    screen_size_ = new ::aspia::proto::VideoSize;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoPacketFormat.screen_size)
+  return screen_size_;
+}
+inline ::aspia::proto::VideoSize* VideoPacketFormat::release_screen_size() {
+  // @@protoc_insertion_point(field_release:aspia.proto.VideoPacketFormat.screen_size)
+  
+  ::aspia::proto::VideoSize* temp = screen_size_;
+  screen_size_ = NULL;
+  return temp;
+}
+inline void VideoPacketFormat::set_allocated_screen_size(::aspia::proto::VideoSize* screen_size) {
+  delete screen_size_;
+  screen_size_ = screen_size;
+  if (screen_size) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoPacketFormat.screen_size)
+}
+
+// .aspia.proto.VideoPixelFormat pixel_format = 2;
+inline bool VideoPacketFormat::has_pixel_format() const {
+  return this != internal_default_instance() && pixel_format_ != NULL;
+}
+inline void VideoPacketFormat::clear_pixel_format() {
+  if (GetArenaNoVirtual() == NULL && pixel_format_ != NULL) delete pixel_format_;
+  pixel_format_ = NULL;
+}
+inline const ::aspia::proto::VideoPixelFormat& VideoPacketFormat::pixel_format() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoPacketFormat.pixel_format)
+  return pixel_format_ != NULL ? *pixel_format_
+                         : *::aspia::proto::VideoPixelFormat::internal_default_instance();
+}
+inline ::aspia::proto::VideoPixelFormat* VideoPacketFormat::mutable_pixel_format() {
+  
+  if (pixel_format_ == NULL) {
+    pixel_format_ = new ::aspia::proto::VideoPixelFormat;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoPacketFormat.pixel_format)
+  return pixel_format_;
+}
+inline ::aspia::proto::VideoPixelFormat* VideoPacketFormat::release_pixel_format() {
+  // @@protoc_insertion_point(field_release:aspia.proto.VideoPacketFormat.pixel_format)
+  
+  ::aspia::proto::VideoPixelFormat* temp = pixel_format_;
+  pixel_format_ = NULL;
+  return temp;
+}
+inline void VideoPacketFormat::set_allocated_pixel_format(::aspia::proto::VideoPixelFormat* pixel_format) {
+  delete pixel_format_;
+  pixel_format_ = pixel_format;
+  if (pixel_format) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoPacketFormat.pixel_format)
+}
+
+// -------------------------------------------------------------------
+
 // VideoPacket
 
 // .aspia.proto.VideoEncoding encoding = 1;
@@ -1901,85 +2067,46 @@ inline void VideoPacket::set_encoding(::aspia::proto::VideoEncoding value) {
   // @@protoc_insertion_point(field_set:aspia.proto.VideoPacket.encoding)
 }
 
-// .aspia.proto.VideoSize screen_size = 2;
-inline bool VideoPacket::has_screen_size() const {
-  return this != internal_default_instance() && screen_size_ != NULL;
+// .aspia.proto.VideoPacketFormat format = 2;
+inline bool VideoPacket::has_format() const {
+  return this != internal_default_instance() && format_ != NULL;
 }
-inline void VideoPacket::clear_screen_size() {
-  if (GetArenaNoVirtual() == NULL && screen_size_ != NULL) delete screen_size_;
-  screen_size_ = NULL;
+inline void VideoPacket::clear_format() {
+  if (GetArenaNoVirtual() == NULL && format_ != NULL) delete format_;
+  format_ = NULL;
 }
-inline const ::aspia::proto::VideoSize& VideoPacket::screen_size() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.VideoPacket.screen_size)
-  return screen_size_ != NULL ? *screen_size_
-                         : *::aspia::proto::VideoSize::internal_default_instance();
+inline const ::aspia::proto::VideoPacketFormat& VideoPacket::format() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoPacket.format)
+  return format_ != NULL ? *format_
+                         : *::aspia::proto::VideoPacketFormat::internal_default_instance();
 }
-inline ::aspia::proto::VideoSize* VideoPacket::mutable_screen_size() {
+inline ::aspia::proto::VideoPacketFormat* VideoPacket::mutable_format() {
   
-  if (screen_size_ == NULL) {
-    screen_size_ = new ::aspia::proto::VideoSize;
+  if (format_ == NULL) {
+    format_ = new ::aspia::proto::VideoPacketFormat;
   }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoPacket.screen_size)
-  return screen_size_;
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoPacket.format)
+  return format_;
 }
-inline ::aspia::proto::VideoSize* VideoPacket::release_screen_size() {
-  // @@protoc_insertion_point(field_release:aspia.proto.VideoPacket.screen_size)
+inline ::aspia::proto::VideoPacketFormat* VideoPacket::release_format() {
+  // @@protoc_insertion_point(field_release:aspia.proto.VideoPacket.format)
   
-  ::aspia::proto::VideoSize* temp = screen_size_;
-  screen_size_ = NULL;
+  ::aspia::proto::VideoPacketFormat* temp = format_;
+  format_ = NULL;
   return temp;
 }
-inline void VideoPacket::set_allocated_screen_size(::aspia::proto::VideoSize* screen_size) {
-  delete screen_size_;
-  screen_size_ = screen_size;
-  if (screen_size) {
+inline void VideoPacket::set_allocated_format(::aspia::proto::VideoPacketFormat* format) {
+  delete format_;
+  format_ = format;
+  if (format) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoPacket.screen_size)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoPacket.format)
 }
 
-// .aspia.proto.VideoPixelFormat pixel_format = 3;
-inline bool VideoPacket::has_pixel_format() const {
-  return this != internal_default_instance() && pixel_format_ != NULL;
-}
-inline void VideoPacket::clear_pixel_format() {
-  if (GetArenaNoVirtual() == NULL && pixel_format_ != NULL) delete pixel_format_;
-  pixel_format_ = NULL;
-}
-inline const ::aspia::proto::VideoPixelFormat& VideoPacket::pixel_format() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.VideoPacket.pixel_format)
-  return pixel_format_ != NULL ? *pixel_format_
-                         : *::aspia::proto::VideoPixelFormat::internal_default_instance();
-}
-inline ::aspia::proto::VideoPixelFormat* VideoPacket::mutable_pixel_format() {
-  
-  if (pixel_format_ == NULL) {
-    pixel_format_ = new ::aspia::proto::VideoPixelFormat;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoPacket.pixel_format)
-  return pixel_format_;
-}
-inline ::aspia::proto::VideoPixelFormat* VideoPacket::release_pixel_format() {
-  // @@protoc_insertion_point(field_release:aspia.proto.VideoPacket.pixel_format)
-  
-  ::aspia::proto::VideoPixelFormat* temp = pixel_format_;
-  pixel_format_ = NULL;
-  return temp;
-}
-inline void VideoPacket::set_allocated_pixel_format(::aspia::proto::VideoPixelFormat* pixel_format) {
-  delete pixel_format_;
-  pixel_format_ = pixel_format;
-  if (pixel_format) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoPacket.pixel_format)
-}
-
-// repeated .aspia.proto.VideoRect dirty_rect = 4;
+// repeated .aspia.proto.VideoRect dirty_rect = 3;
 inline int VideoPacket::dirty_rect_size() const {
   return dirty_rect_.size();
 }
@@ -2009,7 +2136,7 @@ VideoPacket::dirty_rect() const {
   return dirty_rect_;
 }
 
-// bytes data = 5;
+// bytes data = 4;
 inline void VideoPacket::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -2240,6 +2367,8 @@ inline void DesktopSessionConfig::set_compress_ratio(::google::protobuf::uint32 
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -93,8 +93,8 @@ std::unique_ptr<proto::VideoPacket> VideoEncoderZLIB::Encode(const DesktopFrame*
     {
         screen_size_ = frame->Size();
 
-        ConvertToVideoSize(screen_size_, packet->mutable_screen_size());
-        ConvertToVideoPixelFormat(format_, packet->mutable_pixel_format());
+        ConvertToVideoSize(screen_size_, packet->mutable_format()->mutable_screen_size());
+        ConvertToVideoPixelFormat(format_, packet->mutable_format()->mutable_pixel_format());
     }
 
     size_t data_size = 0;
@@ -131,7 +131,7 @@ std::unique_ptr<proto::VideoPacket> VideoEncoderZLIB::Encode(const DesktopFrame*
         translate_pos += rect.Height() * stride;
     }
 
-    // Compress data with using ZLIB compressor
+    // Compress data with using ZLIB compressor.
     CompressPacket(packet.get(), data_size);
 
     return packet;

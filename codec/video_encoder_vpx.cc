@@ -345,7 +345,7 @@ std::unique_ptr<proto::VideoPacket> VideoEncoderVPX::Encode(const DesktopFrame* 
             CreateVp9Codec();
         }
 
-        ConvertToVideoSize(screen_size_, packet->mutable_screen_size());
+        ConvertToVideoSize(screen_size_, packet->mutable_format()->mutable_screen_size());
     }
 
     //

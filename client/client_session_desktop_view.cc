@@ -26,39 +26,45 @@ ClientSessionDesktopView::~ClientSessionDesktopView()
     viewer_.reset();
 }
 
+static std::unique_ptr<VideoDecoder>
+CreateVideoDecoder(proto::VideoEncoding encoding)
+{
+    switch (encoding)
+    {
+        case proto::VIDEO_ENCODING_VP8:
+            return VideoDecoderVPX::CreateVP8();
+
+        case proto::VIDEO_ENCODING_VP9:
+            return VideoDecoderVPX::CreateVP9();
+
+        case proto::VIDEO_ENCODING_ZLIB:
+            return VideoDecoderZLIB::Create();
+
+        default:
+            LOG(ERROR) << "Unsupported encoding: " << encoding;
+            return nullptr;
+    }
+}
+
 bool ClientSessionDesktopView::ReadVideoPacket(const proto::VideoPacket& video_packet)
 {
     if (video_encoding_ != video_packet.encoding())
     {
         video_encoding_ = video_packet.encoding();
-
-        switch (video_encoding_)
-        {
-            case proto::VIDEO_ENCODING_VP8:
-                video_decoder_ = VideoDecoderVPX::CreateVP8();
-                break;
-
-            case proto::VIDEO_ENCODING_VP9:
-                video_decoder_ = VideoDecoderVPX::CreateVP9();
-                break;
-
-            case proto::VIDEO_ENCODING_ZLIB:
-                video_decoder_ = VideoDecoderZLIB::Create();
-                break;
-
-            default:
-                LOG(ERROR) << "Unsupported encoding: " << video_encoding_;
-                return false;
-        }
+        video_decoder_ = CreateVideoDecoder(video_encoding_);
     }
 
-    if (video_packet.has_screen_size() || video_packet.has_pixel_format())
+    if (!video_decoder_)
+        return false;
+
+    if (video_packet.has_format())
     {
         PixelFormat pixel_format;
 
         if (video_encoding_ == proto::VideoEncoding::VIDEO_ENCODING_ZLIB)
         {
-            pixel_format = ConvertFromVideoPixelFormat(video_packet.pixel_format());
+            pixel_format =
+                ConvertFromVideoPixelFormat(video_packet.format().pixel_format());
         }
         else
         {
@@ -71,7 +77,8 @@ bool ClientSessionDesktopView::ReadVideoPacket(const proto::VideoPacket& video_p
             return false;
         }
 
-        DesktopSize size = ConvertFromVideoSize(video_packet.screen_size());
+        DesktopSize size =
+            ConvertFromVideoSize(video_packet.format().screen_size());
 
         if (size.IsEmpty())
         {
@@ -94,7 +101,8 @@ bool ClientSessionDesktopView::ReadVideoPacket(const proto::VideoPacket& video_p
     return true;
 }
 
-void ClientSessionDesktopView::ReadConfigRequest(const proto::DesktopSessionConfigRequest& config_request)
+void ClientSessionDesktopView::ReadConfigRequest(
+    const proto::DesktopSessionConfigRequest& config_request)
 {
     OnConfigChange(config_.desktop_session_config());
 }
@@ -132,7 +140,8 @@ void ClientSessionDesktopView::Send(const IOBuffer& buffer)
     delegate_->OnSessionTerminate();
 }
 
-void ClientSessionDesktopView::WriteMessage(const proto::desktop::ClientToHost& message)
+void ClientSessionDesktopView::WriteMessage(
+    const proto::desktop::ClientToHost& message)
 {
     IOBuffer buffer = SerializeMessage(message);
 
@@ -150,7 +159,8 @@ void ClientSessionDesktopView::OnWindowClose()
     delegate_->OnSessionTerminate();
 }
 
-void ClientSessionDesktopView::OnConfigChange(const proto::DesktopSessionConfig& config)
+void ClientSessionDesktopView::OnConfigChange(
+    const proto::DesktopSessionConfig& config)
 {
     proto::desktop::ClientToHost message;
     message.mutable_config()->CopyFrom(config);

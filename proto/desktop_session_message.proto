@@ -52,6 +52,7 @@ message CursorShape
         CACHE       = 128;
     }
 
+    // We use only the first byte in this field.
     // If bit 7 is set to 1, then bits 0-4 contain the cursor index in the cache.
     // If bit 7 is not set, then the cursor image is received.
     // If bit 6 is set to 1, then the command to reset the contents of the cache
@@ -107,16 +108,24 @@ message VideoSize
     int32 height = 2;
 }
 
+message VideoPacketFormat
+{
+    VideoSize screen_size = 1;
+    VideoPixelFormat pixel_format = 2;
+}
+
 message VideoPacket
 {
     VideoEncoding encoding = 1;
 
-    VideoSize screen_size = 2;
-    VideoPixelFormat pixel_format = 3;
+    // If the screen size or the pixel format has changed, the field must be filled.
+    VideoPacketFormat format = 2;
 
-    repeated VideoRect dirty_rect = 4;
+    // The list of changed rectangles (areas) of the screen.
+    repeated VideoRect dirty_rect = 3;
 
-    bytes data = 5;
+    // Video packet data.
+    bytes data = 4;
 }
 
 enum AudioEncoding
