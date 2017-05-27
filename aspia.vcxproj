@@ -125,6 +125,7 @@
     <ClCompile Include="proto\desktop_session.pb.cc" />
     <ClCompile Include="proto\desktop_session_message.pb.cc" />
     <ClCompile Include="proto\host_user.pb.cc" />
+    <ClCompile Include="proto\key_exchange.pb.cc" />
     <ClCompile Include="proto\power_session.pb.cc" />
     <ClCompile Include="proto\power_session_message.pb.cc" />
     <ClCompile Include="ui\about_dialog.cc" />
@@ -281,6 +282,7 @@
     <ClInclude Include="proto\desktop_session.pb.h" />
     <ClInclude Include="proto\desktop_session_message.pb.h" />
     <ClInclude Include="proto\host_user.pb.h" />
+    <ClInclude Include="proto\key_exchange.pb.h" />
     <ClInclude Include="proto\power_session.pb.h" />
     <ClInclude Include="proto\power_session_message.pb.h" />
     <ClInclude Include="ui\about_dialog.h" />
@@ -310,6 +312,7 @@
     <None Include="proto\desktop_session.proto" />
     <None Include="proto\desktop_session_message.proto" />
     <None Include="proto\host_user.proto" />
+    <None Include="proto\key_exchange.proto" />
     <None Include="proto\power_session.proto" />
     <None Include="proto\power_session_message.proto" />
   </ItemGroup>

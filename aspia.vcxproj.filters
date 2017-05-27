@@ -400,6 +400,9 @@
     <ClCompile Include="crypto\encryptor.cc">
       <Filter>crypto</Filter>
     </ClCompile>
+    <ClCompile Include="proto\key_exchange.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -863,6 +866,9 @@
     <ClInclude Include="crypto\encryptor.h">
       <Filter>crypto</Filter>
     </ClInclude>
+    <ClInclude Include="proto\key_exchange.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -884,6 +890,9 @@
       <Filter>proto</Filter>
     </None>
     <None Include="proto\host_user.proto">
+      <Filter>proto</Filter>
+    </None>
+    <None Include="proto\key_exchange.proto">
       <Filter>proto</Filter>
     </None>
   </ItemGroup>

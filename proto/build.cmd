@@ -7,4 +7,6 @@ protoc desktop_session.proto --cpp_out=.
 protoc power_session.proto --cpp_out=.
 
 protoc host_user.proto --cpp_out=.
+
+protoc key_exchange.proto --cpp_out=.
 pause

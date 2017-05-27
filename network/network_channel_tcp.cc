@@ -55,58 +55,58 @@ NetworkChannelTcp::~NetworkChannelTcp()
 
 bool NetworkChannelTcp::ClientKeyExchange()
 {
-    IOBuffer client_public_key(encryptor_->GetLocalPublicKey());
+    IOBuffer client_hello_message(encryptor_->HelloMessage());
 
-    if (!WriteMessage(client_public_key))
+    if (!WriteMessage(client_hello_message))
         return false;
 
-    sodium_memzero(client_public_key.data(), client_public_key.size());
+    sodium_memzero(client_hello_message.data(), client_hello_message.size());
 
     size_t message_size = ReadMessageSize();
-    if (message_size != client_public_key.size())
+    if (message_size != client_hello_message.size())
     {
-        LOG(ERROR) << "Invalid key size: " << message_size;
+        LOG(ERROR) << "Invalid hello message size: " << message_size;
         return false;
     }
 
-    IOBuffer server_public_key(message_size);
+    IOBuffer server_hello_message(message_size);
 
-    if (!ReadData(server_public_key.data(), message_size))
+    if (!ReadData(server_hello_message.data(), message_size))
         return false;
 
-    if (!encryptor_->SetRemotePublicKey(server_public_key))
+    if (!encryptor_->ReadHelloMessage(server_hello_message))
         return false;
 
-    sodium_memzero(server_public_key.data(), server_public_key.size());
+    sodium_memzero(server_hello_message.data(), server_hello_message.size());
 
     return true;
 }
 
 bool NetworkChannelTcp::ServerKeyExchange()
 {
-    IOBuffer server_public_key(encryptor_->GetLocalPublicKey());
+    IOBuffer server_hello_message(encryptor_->HelloMessage());
 
     size_t message_size = ReadMessageSize();
-    if (message_size != server_public_key.size())
+    if (message_size != server_hello_message.size())
     {
-        LOG(ERROR) << "Invalid key size: " << message_size;
+        LOG(ERROR) << "Invalid hello message size: " << message_size;
         return false;
     }
 
-    IOBuffer client_public_key(message_size);
+    IOBuffer client_hello_message(message_size);
 
-    if (!ReadData(client_public_key.data(), message_size))
+    if (!ReadData(client_hello_message.data(), message_size))
         return false;
 
-    if (!encryptor_->SetRemotePublicKey(client_public_key))
+    if (!encryptor_->ReadHelloMessage(client_hello_message))
         return false;
 
-    sodium_memzero(client_public_key.data(), client_public_key.size());
+    sodium_memzero(client_hello_message.data(), client_hello_message.size());
 
-    if (!WriteMessage(server_public_key))
+    if (!WriteMessage(server_hello_message))
         return false;
 
-    sodium_memzero(server_public_key.data(), server_public_key.size());
+    sodium_memzero(server_hello_message.data(), server_hello_message.size());
 
     return true;
 }

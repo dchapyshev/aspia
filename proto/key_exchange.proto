@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message HelloMessage
+{
+    bytes public_key = 1;
+    bytes nonce = 2;
+}

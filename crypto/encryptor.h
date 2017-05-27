@@ -20,6 +20,7 @@ extern "C" {
 
 namespace aspia {
 
+// Implements encryption of messages with using xsalsa20 + poly1305 algorithms.
 class Encryptor
 {
 public:
@@ -29,8 +30,8 @@ public:
 
     static std::unique_ptr<Encryptor> Create(Mode mode);
 
-    bool SetRemotePublicKey(const IOBuffer& public_key);
-    IOBuffer GetLocalPublicKey();
+    bool ReadHelloMessage(const IOBuffer& message_buffer);
+    IOBuffer HelloMessage();
 
     IOBuffer Encrypt(const IOBuffer& source_buffer);
     IOBuffer Decrypt(const IOBuffer& source_buffer);
@@ -46,7 +47,8 @@ private:
     SecureBuffer encrypt_key_;
     SecureBuffer decrypt_key_;
 
-    SecureBuffer nonce_;
+    SecureBuffer encrypt_nonce_;
+    SecureBuffer decrypt_nonce_;
 
     DISALLOW_COPY_AND_ASSIGN(Encryptor);
 };
