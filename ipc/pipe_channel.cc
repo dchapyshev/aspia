@@ -86,6 +86,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& input_chann
     DWORD open_mode = FILE_FLAG_OVERLAPPED | FILE_FLAG_FIRST_PIPE_INSTANCE;
     DWORD pipe_mode = PIPE_TYPE_BYTE | PIPE_READMODE_BYTE;
 
+    // Windows XP/2003 does't support this flag.
     if (IsWindowsVistaOrGreater())
         pipe_mode |= PIPE_REJECT_REMOTE_CLIENTS;
 
