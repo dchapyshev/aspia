@@ -62,7 +62,8 @@ void NetworkChannelProxy::Disconnect()
 
     if (channel_)
     {
-        channel_->Disconnect();
+        if (channel_->IsConnected())
+            channel_->Disconnect();
     }
 }
 
