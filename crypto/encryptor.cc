@@ -91,8 +91,6 @@ bool Encryptor::SetRemotePublicKey(const IOBuffer& public_key)
         }
     }
 
-    sodium_memzero(public_key.data(), public_key.size());
-
     return true;
 }
 

@@ -60,6 +60,8 @@ bool NetworkChannelTcp::ClientKeyExchange()
     if (!WriteMessage(client_public_key))
         return false;
 
+    sodium_memzero(client_public_key.data(), client_public_key.size());
+
     size_t message_size = ReadMessageSize();
     if (message_size != client_public_key.size())
     {
@@ -75,12 +77,14 @@ bool NetworkChannelTcp::ClientKeyExchange()
     if (!encryptor_->SetRemotePublicKey(server_public_key))
         return false;
 
+    sodium_memzero(server_public_key.data(), server_public_key.size());
+
     return true;
 }
 
 bool NetworkChannelTcp::ServerKeyExchange()
 {
-    IOBuffer server_public_key = encryptor_->GetLocalPublicKey();
+    IOBuffer server_public_key(encryptor_->GetLocalPublicKey());
 
     size_t message_size = ReadMessageSize();
     if (message_size != server_public_key.size())
@@ -97,8 +101,12 @@ bool NetworkChannelTcp::ServerKeyExchange()
     if (!encryptor_->SetRemotePublicKey(client_public_key))
         return false;
 
+    sodium_memzero(client_public_key.data(), client_public_key.size());
+
     if (!WriteMessage(server_public_key))
         return false;
+
+    sodium_memzero(server_public_key.data(), server_public_key.size());
 
     return true;
 }
