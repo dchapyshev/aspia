@@ -916,4 +916,8 @@
       <Filter>ui</Filter>
     </Manifest>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="README.txt" />
+    <Text Include="LICENSE.txt" />
+  </ItemGroup>
 </Project>

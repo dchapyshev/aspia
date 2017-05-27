@@ -6,7 +6,6 @@
 //
 
 #include "crypto/encryptor.h"
-#include "base/logging.h"
 #include "proto/key_exchange.pb.h"
 #include "protocol/message_serialization.h"
 

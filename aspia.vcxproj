@@ -326,6 +326,10 @@
   <ItemGroup>
     <Manifest Include="ui\common-controls.manifest" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="LICENSE.txt" />
+    <Text Include="README.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B4B5FBB6-4E1C-43DB-B73E-6AE3C9AA2AC5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
