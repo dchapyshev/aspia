@@ -99,8 +99,11 @@ bool Encryptor::ReadHelloMessage(const IOBuffer& message_buffer)
         }
     }
 
-    sodium_memzero(message.mutable_public_key(), message.public_key().size());
-    sodium_memzero(message.mutable_nonce(), message.nonce().size());
+    sodium_memzero(const_cast<char*>(message.mutable_public_key()->data()),
+                   message.public_key().size());
+
+    sodium_memzero(const_cast<char*>(message.mutable_nonce()->data()),
+                   message.nonce().size());
 
     return true;
 }
@@ -117,8 +120,11 @@ IOBuffer Encryptor::HelloMessage()
 
     IOBuffer message_buffer(SerializeMessage(message));
 
-    sodium_memzero(message.mutable_public_key(), message.public_key().size());
-    sodium_memzero(message.mutable_nonce(), message.nonce().size());
+    sodium_memzero(const_cast<char*>(message.mutable_public_key()->data()),
+                   message.public_key().size());
+
+    sodium_memzero(const_cast<char*>(message.mutable_nonce()->data()),
+                   message.nonce().size());
 
     return message_buffer;
 }
