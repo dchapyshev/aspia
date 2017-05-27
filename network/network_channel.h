@@ -9,8 +9,7 @@
 #define _ASPIA_NETWORK__NETWORK_CHANNEL_H
 
 #include "base/io_queue.h"
-#include "crypto/encryptor.h"
-#include "crypto/decryptor.h"
+#include "crypto/encryptor_sodium.h"
 
 namespace aspia {
 
@@ -53,8 +52,7 @@ protected:
     IOBuffer ReadMessage();
     bool WriteMessage(const IOBuffer& buffer);
 
-    std::unique_ptr<Encryptor> encryptor_;
-    std::unique_ptr<Decryptor> decryptor_;
+    std::unique_ptr<EncryptorSodium> encryptor_;
 
 private:
     void Run() override;

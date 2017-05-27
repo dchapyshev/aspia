@@ -9,107 +9,23 @@
 #include "base/logging.h"
 #include "base/macros.h"
 
-#include <wincrypt.h>
+extern "C" {
+#define SODIUM_STATIC
+#include <sodium.h>
+} // extern "C"
 
 namespace aspia {
 
-static const DWORD kExpectedHashSize = 64;
-
-class ScopedCryptoProvider
-{
-public:
-    ScopedCryptoProvider() : prov_(NULL) { }
-    ~ScopedCryptoProvider() { CryptReleaseContext(prov_, 0); }
-
-    HCRYPTPROV* Recieve() { return &prov_; }
-    operator HCRYPTPROV() { return prov_; }
-
-private:
-    HCRYPTPROV prov_;
-
-    DISALLOW_COPY_AND_ASSIGN(ScopedCryptoProvider);
-};
-
-class ScopedCryptoHash
-{
-public:
-    ScopedCryptoHash() : hash_(NULL) { }
-    ~ScopedCryptoHash() { CryptDestroyHash(hash_); }
-
-    HCRYPTHASH* Recieve() { return &hash_; }
-    operator HCRYPTHASH() { return hash_; }
-
-private:
-    HCRYPTHASH hash_;
-
-    DISALLOW_COPY_AND_ASSIGN(ScopedCryptoHash);
-};
-
 bool CreateSHA512(const std::string& data, std::string& data_hash)
 {
-    ScopedCryptoProvider prov;
+    data_hash.resize(crypto_hash_sha512_BYTES);
 
-    if (!CryptAcquireContextW(prov.Recieve(),
-                              NULL,
-                              MS_ENH_RSA_AES_PROV_W,
-                              PROV_RSA_AES,
-                              CRYPT_VERIFYCONTEXT))
+    if (crypto_hash_sha512(reinterpret_cast<uint8_t*>(&data_hash[0]),
+                           reinterpret_cast<const uint8_t*>(data.data()),
+                           data.size()) != 0)
     {
-        if (!CryptAcquireContextW(prov.Recieve(),
-                                  NULL,
-                                  MS_ENH_RSA_AES_PROV_XP_W,
-                                  PROV_RSA_AES,
-                                  CRYPT_VERIFYCONTEXT))
-        {
-            LOG(ERROR) << "CryptAcquireContextW() failed: "
-                       << GetLastSystemErrorString();
-            return nullptr;
-        }
-    }
-
-    {
-        ScopedCryptoHash hash;
-
-        if (!CryptCreateHash(prov, CALG_SHA_512, NULL, 0, hash.Recieve()))
-        {
-            LOG(ERROR) << "CryptCreateHash() failed: " << GetLastSystemErrorString();
-            return false;
-        }
-
-        if (!CryptHashData(hash,
-                           reinterpret_cast<const BYTE*>(data.c_str()),
-                           static_cast<DWORD>(data.length()),
-                           0))
-        {
-            LOG(ERROR) << "CryptHashData() failed: " << GetLastSystemErrorString();
-            return false;
-        }
-
-        DWORD size = 0;
-
-        if (!CryptGetHashParam(hash, HP_HASHVAL, NULL, &size, 0))
-        {
-            LOG(ERROR) << "CryptGetHashParam() failed: " << GetLastSystemErrorString();
-            return false;
-        }
-
-        if (size != kExpectedHashSize)
-        {
-            LOG(ERROR) << "Wrong hash size: " << size;
-            return false;
-        }
-
-        data_hash.resize(size);
-
-        if (!CryptGetHashParam(hash,
-                               HP_HASHVAL,
-                               reinterpret_cast<BYTE*>(&data_hash[0]),
-                               &size,
-                               0))
-        {
-            LOG(ERROR) << "CryptGetHashParam() failed: " << GetLastSystemErrorString();
-            return false;
-        }
+        LOG(ERROR) << "crypto_hash_sha512() failed";
+        return false;
     }
 
     return true;

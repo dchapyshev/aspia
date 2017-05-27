@@ -293,11 +293,11 @@ void PipeChannel::Send(const IOBuffer& buffer)
 {
     if (!buffer.IsEmpty())
     {
-        uint32_t message_size = static_cast<uint32_t>(buffer.Size());
+        uint32_t message_size = static_cast<uint32_t>(buffer.size());
 
         if (Write(&message_size, sizeof(message_size)))
         {
-            if (Write(buffer.Data(), buffer.Size()))
+            if (Write(buffer.data(), buffer.size()))
                 return;
         }
     }
@@ -430,7 +430,7 @@ void PipeChannel::Run()
             {
                 IOBuffer buffer(message_size);
 
-                if (Read(buffer.Data(), buffer.Size()))
+                if (Read(buffer.data(), buffer.size()))
                 {
                     delegate_->OnPipeChannelMessage(buffer);
                     continue;

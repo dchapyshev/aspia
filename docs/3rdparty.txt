@@ -1,4 +1,5 @@
-Third-party components information.
+Third-party components information
+==================================
 
 Component   | License               | URL
 protobuf      BSD 3-Clause License    https://github.com/google/protobuf/releases
@@ -12,6 +13,7 @@ zlib-ng       zlib License            https://github.com/Dead2/zlib-ng
 libsodium     ISC License             https://github.com/jedisct1/libsodium/releases
 
 Synchronization status
+======================
 
 Component   | Sync date   | Version
 protobuf      14.05.2017    3.3.1

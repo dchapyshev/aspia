@@ -52,7 +52,7 @@ IOBuffer NetworkChannel::ReadMessage()
 
     IOBuffer buffer(message_size);
 
-    if (!ReadData(buffer.Data(), buffer.Size()))
+    if (!ReadData(buffer.data(), buffer.size()))
         return IOBuffer();
 
     return buffer;
@@ -97,7 +97,7 @@ void NetworkChannel::Send(const IOBuffer& buffer)
 
 void NetworkChannel::OnIncommingMessage(const IOBuffer& buffer)
 {
-    IOBuffer message_buffer = decryptor_->Decrypt(buffer);
+    IOBuffer message_buffer(encryptor_->Decrypt(buffer));
 
     if (message_buffer.IsEmpty())
     {
@@ -141,7 +141,7 @@ bool NetworkChannel::WriteMessage(const IOBuffer& buffer)
     if (buffer.IsEmpty())
         return false;
 
-    const size_t size = buffer.Size();
+    const size_t size = buffer.size();
 
     // The maximum message size is 3MB.
     if (size > kMaximumMessageSize)
@@ -167,7 +167,7 @@ bool NetworkChannel::WriteMessage(const IOBuffer& buffer)
     if (!WriteData(length, count))
         return false;
 
-    return WriteData(buffer.Data(), size);
+    return WriteData(buffer.data(), size);
 }
 
 } // namespace aspia

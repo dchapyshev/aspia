@@ -6,8 +6,7 @@
 //
 
 #include "network/network_channel_tcp.h"
-#include "crypto/encryptor_rsa_aes.h"
-#include "crypto/decryptor_rsa_aes.h"
+#include "crypto/encryptor_sodium.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -57,50 +56,24 @@ NetworkChannelTcp::~NetworkChannelTcp()
 
 bool NetworkChannelTcp::ClientKeyExchange()
 {
-    EncryptorRsaAes* encryptor =
-        reinterpret_cast<EncryptorRsaAes*>(encryptor_.get());
+    IOBuffer client_public_key(encryptor_->GetLocalPublicKey());
 
-    DecryptorRsaAes* decryptor =
-        reinterpret_cast<DecryptorRsaAes*>(decryptor_.get());
-
-    IOBuffer decryptor_public_key = decryptor->GetPublicKey();
-
-    if (!WriteMessage(decryptor_public_key))
+    if (!WriteMessage(client_public_key))
         return false;
 
     size_t message_size = ReadMessageSize();
-    if (message_size != decryptor_public_key.Size())
+    if (message_size != client_public_key.size())
     {
-        LOG(ERROR) << "Invalid decryptor key size: " << message_size;
+        LOG(ERROR) << "Invalid key size: " << message_size;
         return false;
     }
 
-    IOBuffer encryptor_public_key(decryptor_public_key.Size());
+    IOBuffer server_public_key(message_size);
 
-    if (!ReadData(encryptor_public_key.Data(), encryptor_public_key.Size()))
+    if (!ReadData(server_public_key.data(), message_size))
         return false;
 
-    if (!encryptor->SetPublicKey(encryptor_public_key))
-        return false;
-
-    IOBuffer encryptor_session_key = encryptor->GetSessionKey();
-
-    message_size = ReadMessageSize();
-    if (message_size != encryptor_session_key.Size())
-    {
-        LOG(ERROR) << "Invalid encryptor key size: " << message_size;
-        return false;
-    }
-
-    IOBuffer decryptor_session_key(encryptor_session_key.Size());
-
-    if (!ReadData(decryptor_session_key.Data(), decryptor_session_key.Size()))
-        return false;
-
-    if (!decryptor->SetSessionKey(decryptor_session_key))
-        return false;
-
-    if (!WriteMessage(encryptor_session_key))
+    if (!encryptor_->SetRemotePublicKey(server_public_key))
         return false;
 
     return true;
@@ -108,50 +81,24 @@ bool NetworkChannelTcp::ClientKeyExchange()
 
 bool NetworkChannelTcp::ServerKeyExchange()
 {
-    EncryptorRsaAes* encryptor =
-        reinterpret_cast<EncryptorRsaAes*>(encryptor_.get());
-
-    DecryptorRsaAes* decryptor =
-        reinterpret_cast<DecryptorRsaAes*>(decryptor_.get());
-
-    IOBuffer decryptor_public_key = decryptor->GetPublicKey();
+    IOBuffer server_public_key = encryptor_->GetLocalPublicKey();
 
     size_t message_size = ReadMessageSize();
-    if (message_size != decryptor_public_key.Size())
+    if (message_size != server_public_key.size())
     {
-        LOG(ERROR) << "Invalid decryptor key size: " << message_size;
+        LOG(ERROR) << "Invalid key size: " << message_size;
         return false;
     }
 
-    IOBuffer encryptor_public_key(decryptor_public_key.Size());
+    IOBuffer client_public_key(message_size);
 
-    if (!ReadData(encryptor_public_key.Data(), encryptor_public_key.Size()))
+    if (!ReadData(client_public_key.data(), message_size))
         return false;
 
-    if (!encryptor->SetPublicKey(encryptor_public_key))
+    if (!encryptor_->SetRemotePublicKey(client_public_key))
         return false;
 
-    if (!WriteMessage(decryptor_public_key))
-        return false;
-
-    IOBuffer encryptor_session_key = encryptor->GetSessionKey();
-
-    if (!WriteMessage(encryptor_session_key))
-        return false;
-
-    message_size = ReadMessageSize();
-    if (message_size != encryptor_session_key.Size())
-    {
-        LOG(ERROR) << "Invalid encryptor key size: " << message_size;
-        return false;
-    }
-
-    IOBuffer decryptor_session_key(encryptor_session_key.Size());
-
-    if (!ReadData(decryptor_session_key.Data(), decryptor_session_key.Size()))
-        return false;
-
-    if (!decryptor->SetSessionKey(decryptor_session_key))
+    if (!WriteMessage(server_public_key))
         return false;
 
     return true;
@@ -159,17 +106,12 @@ bool NetworkChannelTcp::ServerKeyExchange()
 
 bool NetworkChannelTcp::KeyExchange()
 {
-    encryptor_ = EncryptorRsaAes::Create();
-    decryptor_ = DecryptorRsaAes::Create();
-
-    if (!decryptor_ || !encryptor_)
-    {
-        LOG(ERROR) << "Unable to initialize encryption";
-        return false;
-    }
-
     if (mode_ == Mode::CLIENT)
     {
+        encryptor_ = EncryptorSodium::Create(EncryptorSodium::Mode::CLIENT);
+        if (!encryptor_)
+            return false;
+
         if (!ClientKeyExchange())
         {
             LOG(ERROR) << "Client key exchange failure";
@@ -179,6 +121,10 @@ bool NetworkChannelTcp::KeyExchange()
     else
     {
         DCHECK(mode_ == Mode::SERVER);
+
+        encryptor_ = EncryptorSodium::Create(EncryptorSodium::Mode::SERVER);
+        if (!encryptor_)
+            return false;
 
         if (!ServerKeyExchange())
         {

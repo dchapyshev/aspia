@@ -36,8 +36,8 @@ public:
 
     ~IOBuffer() = default;
 
-    uint8_t* Data() const { return data_.get(); }
-    size_t Size() const { return data_size_; }
+    uint8_t* data() const { return data_.get(); }
+    size_t size() const { return data_size_; }
     bool IsEmpty() const { return data_ == nullptr || data_size_ == 0; }
 
     IOBuffer& operator=(IOBuffer&& other)

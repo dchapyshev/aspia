@@ -243,6 +243,7 @@ BEGIN
                       • libglog © 2008 Google Inc., BSD 3-Clause Licentie\r\n\
                       • gflags © 2006 Google Inc., BSD 3-Clause Licentie\r\n\
                       • zlib-ng © 1995-2013 Jean-loup Gailly and Mark Adler, Zlib Licentie\r\n\
+                      • libsodium © 2013-2017 Frank Denis, ISC License\r\n\
                       • Fugue Icons © 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 Licentie"
 
     IDS_POWER                             "Power management van de externe computer"

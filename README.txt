@@ -1,4 +1,5 @@
 Aspia Remote Desktop
+====================
 
 Remote desktop implementation (client and server) based on Google Protocol Buffers.
 In the project partially uses code from WebRTC and Chromium Remoting.
@@ -11,6 +12,7 @@ Also uses:
    - gflags (command line arguments parsing)
    - libyuv (image formats convertation)
    - gtest (unit testing)
+   - libsodium (encryption)
 
 For building the project requires:
    - Visual Studio 2017: http://visualstudio.com/

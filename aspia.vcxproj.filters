@@ -132,12 +132,6 @@
     <ClCompile Include="codec\video_encoder_zlib.cc">
       <Filter>codec</Filter>
     </ClCompile>
-    <ClCompile Include="crypto\decryptor_rsa_aes.cc">
-      <Filter>crypto</Filter>
-    </ClCompile>
-    <ClCompile Include="crypto\encryptor_rsa_aes.cc">
-      <Filter>crypto</Filter>
-    </ClCompile>
     <ClCompile Include="desktop_capture\capture_scheduler.cc">
       <Filter>desktop_capture</Filter>
     </ClCompile>
@@ -403,6 +397,9 @@
     <ClCompile Include="ui\base\imagelist.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
+    <ClCompile Include="crypto\encryptor_sodium.cc">
+      <Filter>crypto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -483,12 +480,6 @@
     <ClInclude Include="desktop_capture\pixel_format.h">
       <Filter>desktop_capture</Filter>
     </ClInclude>
-    <ClInclude Include="crypto\encryptor.h">
-      <Filter>crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="crypto\decryptor.h">
-      <Filter>crypto</Filter>
-    </ClInclude>
     <ClInclude Include="base\scoped_select_object.h">
       <Filter>base</Filter>
     </ClInclude>
@@ -557,12 +548,6 @@
     </ClInclude>
     <ClInclude Include="base\service_manager.h">
       <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="crypto\decryptor_rsa_aes.h">
-      <Filter>crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="crypto\encryptor_rsa_aes.h">
-      <Filter>crypto</Filter>
     </ClInclude>
     <ClInclude Include="base\scoped_impersonator.h">
       <Filter>base</Filter>
@@ -871,6 +856,12 @@
     </ClInclude>
     <ClInclude Include="base\string_util_constants.h">
       <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\encryptor_sodium.h">
+      <Filter>crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\secure_buffer.h">
+      <Filter>crypto</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

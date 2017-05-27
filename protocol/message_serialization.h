@@ -27,7 +27,7 @@ static IOBuffer SerializeMessage(const google::protobuf::MessageLite& message)
 
     IOBuffer buffer(size);
 
-    message.SerializeWithCachedSizesToArray(buffer.Data());
+    message.SerializeWithCachedSizesToArray(buffer.data());
 
     return buffer;
 }
@@ -35,7 +35,7 @@ static IOBuffer SerializeMessage(const google::protobuf::MessageLite& message)
 template <class T>
 bool ParseMessage(const IOBuffer& buffer, T& message)
 {
-    if (!message.ParseFromArray(buffer.Data(), static_cast<int>(buffer.Size())))
+    if (!message.ParseFromArray(buffer.data(), static_cast<int>(buffer.size())))
     {
         LOG(ERROR) << "Received message that is not a valid protocol buffer.";
         return false;
