@@ -111,6 +111,9 @@ IOBuffer Encryptor::Encrypt(const IOBuffer& source_buffer)
 {
     DCHECK_EQ(nonce_.size(), crypto_secretbox_NONCEBYTES);
 
+    if (source_buffer.IsEmpty())
+        return IOBuffer();
+
     sodium_increment(nonce_.data(), crypto_secretbox_NONCEBYTES);
 
     IOBuffer encrypted_buffer(source_buffer.size() +
@@ -135,6 +138,9 @@ IOBuffer Encryptor::Encrypt(const IOBuffer& source_buffer)
 
 IOBuffer Encryptor::Decrypt(const IOBuffer& source_buffer)
 {
+    if (source_buffer.IsEmpty())
+        return IOBuffer();
+
     IOBuffer decrypted_buffer(source_buffer.size() -
                               crypto_secretbox_NONCEBYTES -
                               crypto_secretbox_MACBYTES);
