@@ -55,58 +55,60 @@ NetworkChannelTcp::~NetworkChannelTcp()
 
 bool NetworkChannelTcp::ClientKeyExchange()
 {
-    IOBuffer client_hello_message(encryptor_->HelloMessage());
-
-    if (!WriteMessage(client_hello_message))
-        return false;
-
-    sodium_memzero(client_hello_message.data(), client_hello_message.size());
-
-    size_t message_size = ReadMessageSize();
-    if (message_size != client_hello_message.size())
     {
-        LOG(ERROR) << "Invalid hello message size: " << message_size;
-        return false;
+        IOBuffer client_hello_message(encryptor_->HelloMessage());
+
+        if (!WriteMessage(client_hello_message))
+            return false;
+
+        sodium_memzero(client_hello_message.data(), client_hello_message.size());
     }
 
-    IOBuffer server_hello_message(message_size);
-
-    if (!ReadData(server_hello_message.data(), message_size))
+    size_t message_size = ReadMessageSize();
+    if (!message_size)
         return false;
 
-    if (!encryptor_->ReadHelloMessage(server_hello_message))
-        return false;
+    {
+        IOBuffer server_hello_message(message_size);
 
-    sodium_memzero(server_hello_message.data(), server_hello_message.size());
+        if (!ReadData(server_hello_message.data(), message_size))
+            return false;
+
+        if (!encryptor_->ReadHelloMessage(server_hello_message))
+            return false;
+
+        sodium_memzero(server_hello_message.data(), server_hello_message.size());
+    }
 
     return true;
 }
 
 bool NetworkChannelTcp::ServerKeyExchange()
 {
-    IOBuffer server_hello_message(encryptor_->HelloMessage());
-
     size_t message_size = ReadMessageSize();
-    if (message_size != server_hello_message.size())
-    {
-        LOG(ERROR) << "Invalid hello message size: " << message_size;
+    if (!message_size)
         return false;
+
+    {
+        IOBuffer client_hello_message(message_size);
+
+        if (!ReadData(client_hello_message.data(), message_size))
+            return false;
+
+        if (!encryptor_->ReadHelloMessage(client_hello_message))
+            return false;
+
+        sodium_memzero(client_hello_message.data(), client_hello_message.size());
     }
 
-    IOBuffer client_hello_message(message_size);
+    {
+        IOBuffer server_hello_message(encryptor_->HelloMessage());
 
-    if (!ReadData(client_hello_message.data(), message_size))
-        return false;
+        if (!WriteMessage(server_hello_message))
+            return false;
 
-    if (!encryptor_->ReadHelloMessage(client_hello_message))
-        return false;
-
-    sodium_memzero(client_hello_message.data(), client_hello_message.size());
-
-    if (!WriteMessage(server_hello_message))
-        return false;
-
-    sodium_memzero(server_hello_message.data(), server_hello_message.size());
+        sodium_memzero(server_hello_message.data(), server_hello_message.size());
+    }
 
     return true;
 }
