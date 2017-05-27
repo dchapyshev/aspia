@@ -24,7 +24,7 @@ class SecureBuffer
 public:
     SecureBuffer() = default;
 
-    SecureBuffer(size_t size) :
+    explicit SecureBuffer(size_t size) :
         data_size_(size)
     {
         data_.reset(new uint8_t[data_size_]);
@@ -40,11 +40,8 @@ public:
 
     ~SecureBuffer()
     {
-        if (data_ && data_size_)
-        {
+        if (!IsEmpty())
             sodium_memzero(data_.get(), data_size_);
-            data_.reset();
-        }
     }
 
     SecureBuffer& operator=(SecureBuffer&& other)
@@ -55,19 +52,9 @@ public:
         return *this;
     }
 
-    size_t size() const
-    {
-        return data_size_;
-    }
-    uint8_t* data() const
-    {
-        return data_.get();
-    }
-
-    bool IsEmpty() const
-    {
-        return data_ == nullptr || data_size_ == 0;
-    }
+    size_t size() const { return data_size_; }
+    uint8_t* data() const { return data_.get(); }
+    bool IsEmpty() const { return data_ == nullptr || data_size_ == 0; }
 
 private:
     std::unique_ptr<uint8_t[]> data_;
