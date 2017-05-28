@@ -293,7 +293,7 @@ void SettingsDialog::OnOkButton()
 
     DWORD ret = static_cast<DWORD>(SendMessageW(GetDlgItem(IDC_INTERVAL_UPDOWN),
                                                 UDM_GETPOS, 0, 0));
-    if (HIWORD(ret))
+    if (HIWORD(ret) == 0)
     {
         int interval = LOWORD(ret);
 
