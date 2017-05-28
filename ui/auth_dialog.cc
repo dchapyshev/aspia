@@ -10,12 +10,14 @@
 #include "base/unicode.h"
 #include "base/logging.h"
 
+#include <sodium.h>
+
 namespace aspia {
 
 AuthDialog::~AuthDialog()
 {
-    SecureZeroMemory(&username_[0], username_.size());
-    SecureZeroMemory(&password_[0], password_.size());
+    sodium_memzero(&username_[0], username_.size());
+    sodium_memzero(&password_[0], password_.size());
 }
 
 INT_PTR AuthDialog::DoModal(HWND parent)
@@ -36,18 +38,20 @@ void AuthDialog::OnClose()
 
 void AuthDialog::OnOkButton()
 {
-    WCHAR buffer[128];
+    std::wstring username(GetDlgItemString(IDC_USERNAME_EDIT));
 
-    if (GetDlgItemTextW(hwnd(), IDC_USERNAME_EDIT, buffer, _countof(buffer)))
+    if (!username.empty())
     {
-        CHECK(UNICODEtoUTF8(buffer, username_));
-        SecureZeroMemory(buffer, sizeof(buffer));
+        UNICODEtoUTF8(username, username_);
+        sodium_memzero(&username[0], username.size());
     }
 
-    if (GetDlgItemTextW(hwnd(), IDC_PASSWORD_EDIT, buffer, _countof(buffer)))
+    std::wstring password(GetDlgItemString(IDC_PASSWORD_EDIT));
+
+    if (!password.empty())
     {
-        CHECK(UNICODEtoUTF8(buffer, password_));
-        SecureZeroMemory(buffer, sizeof(buffer));
+        UNICODEtoUTF8(password, password_);
+        sodium_memzero(&password[0], password.size());
     }
 
     EndDialog(IDOK);
