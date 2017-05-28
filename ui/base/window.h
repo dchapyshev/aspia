@@ -26,6 +26,7 @@ public:
     operator HWND() { return hwnd(); }
 
     bool CenterWindow(HWND hwnd_center = nullptr);
+    void SetForegroundWindowEx();
     bool ModifyStyle(LONG_PTR remove, LONG_PTR add);
     bool ModifyStyleEx(LONG_PTR remove, LONG_PTR add);
 

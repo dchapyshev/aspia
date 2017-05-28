@@ -61,6 +61,7 @@ void ViewerWindow::OnBeforeThreadRunning()
 void ViewerWindow::OnAfterThreadRunning()
 {
     DestroyWindow(hwnd());
+    Attach(nullptr);
 }
 
 DesktopFrame* ViewerWindow::Frame()
@@ -233,7 +234,6 @@ void ViewerWindow::OnCreate()
 void ViewerWindow::OnClose()
 {
     delegate_->OnWindowClose();
-    DestroyWindow(video_window_);
 }
 
 void ViewerWindow::OnSize()
@@ -858,6 +858,13 @@ bool ViewerWindow::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* re
         case WM_CLOSE:
             OnClose();
             break;
+
+        case WM_DESTROY:
+        {
+            DestroyWindow(toolbar_);
+            DestroyWindow(video_window_);
+        }
+        break;
 
         case kResizeFrameMessage:
             OnVideoFrameResize(wparam, lparam);

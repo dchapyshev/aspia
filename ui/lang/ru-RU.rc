@@ -258,7 +258,7 @@ BEGIN
     IDS_STATUS_DISCONNECTED               "Отключен"
     IDS_STATUS_CONNECTING                 "Подключение..."
     IDS_STATUS_CONNECTED                  "Подключен"
-    IDS_STATUS_CONNECT_TIMEOUT            "Превышено время ожидание соединения"
+    IDS_STATUS_CONNECT_TIMEOUT            "Превышено время ожидания соединения"
     IDS_STATUS_CONNECT_ERROR              "Не удалось установить подключение"
     IDS_STATUS_SESSION_TYPE_NOT_ALLOWED   "Выбранный тип сессии не поддерживается или отключен"
     IDS_STATUS_NOT_SUPPORTED_METHOD       "Выбранный тип авторизации не поддерживается или отключен"

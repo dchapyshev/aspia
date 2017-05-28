@@ -100,6 +100,25 @@ bool Window::CenterWindow(HWND hwnd_center)
                           SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
+void Window::SetForegroundWindowEx()
+{
+    DWORD active_thread_id =
+        GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
+
+    DWORD current_thread_id = GetCurrentThreadId();
+
+    if (active_thread_id != current_thread_id)
+    {
+        AttachThreadInput(current_thread_id, active_thread_id, TRUE);
+        SetWindowPos(hwnd(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+        SetWindowPos(hwnd(), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+        SetForegroundWindow(hwnd());
+        AttachThreadInput(current_thread_id, active_thread_id, FALSE);
+        SetFocus(hwnd());
+        SetActiveWindow(hwnd());
+    }
+}
+
 bool Window::ModifyStyle(LONG_PTR remove, LONG_PTR add)
 {
     LONG_PTR style = GetWindowLongPtrW(hwnd_, GWL_STYLE);

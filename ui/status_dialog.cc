@@ -93,6 +93,7 @@ void StatusDialog::SetStatus(ClientStatus status)
 
 void StatusDialog::OnInitDialog()
 {
+    SetForegroundWindowEx();
     SetIcon(IDI_MAIN);
     SetFocus(GetDlgItem(IDCANCEL));
 

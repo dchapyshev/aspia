@@ -25,6 +25,7 @@ INT_PTR AuthDialog::DoModal(HWND parent)
 
 void AuthDialog::OnInitDialog()
 {
+    SetForegroundWindowEx();
     CenterWindow();
 }
 

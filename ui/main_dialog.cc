@@ -145,16 +145,6 @@ void MainDialog::OnInitDialog()
 
     Edit_SetReadOnly(GetDlgItem(IDC_SERVER_PORT_EDIT), TRUE);
 
-    DWORD active_thread_id = GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
-    DWORD current_thread_id = GetCurrentThreadId();
-
-    if (active_thread_id != current_thread_id)
-    {
-        AttachThreadInput(current_thread_id, active_thread_id, TRUE);
-        SetForegroundWindow(hwnd());
-        AttachThreadInput(current_thread_id, active_thread_id, FALSE);
-    }
-
     bool host_service_installed = HostService::IsInstalled();
 
     if (!IsCallerHasAdminRights())
@@ -174,6 +164,7 @@ void MainDialog::OnInitDialog()
         EnableWindow(GetDlgItem(IDC_START_SERVER_BUTTON), FALSE);
 
     OnSessionTypeChanged();
+    SetForegroundWindowEx();
 }
 
 void MainDialog::OnDefaultPortClicked()
