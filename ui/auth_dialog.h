@@ -22,8 +22,8 @@ public:
 
     INT_PTR DoModal(HWND parent) override;
 
-    std::string UserName();
-    std::string Password();
+    const std::string& UserName() const;
+    const std::string& Password() const;
 
 private:
     INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) override;

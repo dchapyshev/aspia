@@ -62,12 +62,12 @@ void AuthDialog::OnCancelButton()
     PostMessageW(hwnd(), WM_CLOSE, 0, 0);
 }
 
-std::string AuthDialog::UserName()
+const std::string& AuthDialog::UserName() const
 {
     return username_;
 }
 
-std::string AuthDialog::Password()
+const std::string& AuthDialog::Password() const
 {
     return password_;
 }
