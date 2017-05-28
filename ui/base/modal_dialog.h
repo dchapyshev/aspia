@@ -35,6 +35,7 @@ public:
     void SetIcon(UINT resource_id);
 
     HWND GetDlgItem(int item_id);
+    void EnableDlgItem(int item_id, bool enable);
 
     std::wstring GetDlgItemString(int item_id);
     bool SetDlgItemString(int item_id, const std::wstring& string);

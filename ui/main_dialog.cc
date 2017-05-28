@@ -7,7 +7,6 @@
 
 #include "ui/main_dialog.h"
 
-#include <windowsx.h>
 #include <iphlpapi.h>
 #include <ws2tcpip.h>
 
@@ -18,6 +17,7 @@
 #include "client/client_config.h"
 #include "host/host_service.h"
 #include "ui/base/listview.h"
+#include "ui/base/combobox.h"
 #include "ui/viewer_window.h"
 #include "ui/about_dialog.h"
 #include "ui/users_dialog.h"
@@ -97,31 +97,25 @@ void MainDialog::InitSessionTypesCombo()
 {
     HWND combo = GetDlgItem(IDC_SESSION_TYPE_COMBO);
 
-    ComboBox_InsertString(combo,
-                          0,
-                          module().string(IDS_SESSION_TYPE_DESKTOP_MANAGE).c_str());
-    ComboBox_SetItemData(combo, 0, proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
+    ComboBox_AddItem(combo,
+                     module().string(IDS_SESSION_TYPE_DESKTOP_MANAGE),
+                     proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
 
-    ComboBox_InsertString(combo,
-                          1,
-                          module().string(IDS_SESSION_TYPE_DESKTOP_VIEW).c_str());
-    ComboBox_SetItemData(combo, 1, proto::SessionType::SESSION_TYPE_DESKTOP_VIEW);
+    ComboBox_AddItem(combo,
+                     module().string(IDS_SESSION_TYPE_DESKTOP_VIEW),
+                     proto::SessionType::SESSION_TYPE_DESKTOP_VIEW);
 
-    ComboBox_InsertString(combo,
-                          2,
-                          module().string(IDS_SESSION_TYPE_POWER_MANAGE).c_str());
-    ComboBox_SetItemData(combo, 2, proto::SessionType::SESSION_TYPE_POWER_MANAGE);
+    ComboBox_AddItem(combo,
+                     module().string(IDS_SESSION_TYPE_POWER_MANAGE),
+                     proto::SessionType::SESSION_TYPE_POWER_MANAGE);
 
-    ComboBox_SetCurSel(combo, 0);
+    ComboBox_SelItemWithData(combo, proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
 }
 
 proto::SessionType MainDialog::GetSelectedSessionType()
 {
     HWND combo = GetDlgItem(IDC_SESSION_TYPE_COMBO);
-
-    int selected_item = ComboBox_GetCurSel(combo);
-
-    return static_cast<proto::SessionType>(ComboBox_GetItemData(combo, selected_item));
+    return static_cast<proto::SessionType>(ComboBox_CurItemData(combo));
 }
 
 void MainDialog::OnInitDialog()
@@ -161,7 +155,7 @@ void MainDialog::OnInitDialog()
     }
 
     if (host_service_installed)
-        EnableWindow(GetDlgItem(IDC_START_SERVER_BUTTON), FALSE);
+        EnableDlgItem(IDC_START_SERVER_BUTTON, false);
 
     OnSessionTypeChanged();
     SetForegroundWindowEx();
@@ -221,20 +215,18 @@ void MainDialog::OnSessionTypeChanged()
 {
     proto::SessionType session_type = GetSelectedSessionType();
 
-    HWND settings_button = GetDlgItem(IDC_SETTINGS_BUTTON);
-
     switch (session_type)
     {
         case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
         {
             config_.SetDefaultDesktopSessionConfig();
-            EnableWindow(settings_button, TRUE);
+            EnableDlgItem(IDC_SETTINGS_BUTTON, true);
         }
         break;
 
         default:
-            EnableWindow(settings_button, FALSE);
+            EnableDlgItem(IDC_SETTINGS_BUTTON, false);
             break;
     }
 }
@@ -310,7 +302,7 @@ void MainDialog::OnInstallServiceButton()
     {
         EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_GRAYED);
         EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_ENABLED);
-        EnableWindow(GetDlgItem(IDC_START_SERVER_BUTTON), FALSE);
+        EnableDlgItem(IDC_START_SERVER_BUTTON, false);
     }
 }
 
@@ -320,7 +312,7 @@ void MainDialog::OnRemoveServiceButton()
     {
         EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_ENABLED);
         EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);
-        EnableWindow(GetDlgItem(IDC_START_SERVER_BUTTON), TRUE);
+        EnableDlgItem(IDC_START_SERVER_BUTTON, true);
     }
 }
 

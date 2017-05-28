@@ -31,7 +31,9 @@ private:
     void OnOkButton();
     void OnPasswordEditDblClick();
 
-    void InsertSessionType(ListView& list, proto::SessionType session_type);
+    void InsertSessionType(ListView& list,
+                           proto::SessionType session_type,
+                           UINT string_id);
 
     static LRESULT CALLBACK PasswordEditWindowProc(HWND hwnd,
                                                    UINT msg,

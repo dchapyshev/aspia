@@ -38,7 +38,6 @@ private:
     void InitCodecList();
     void InitColorDepthList();
     void UpdateCompressionRatio(int compression_ratio);
-    void AddColorDepth(HWND combobox, int index, UINT string_id);
     void OnCodecChanged();
 
     proto::SessionType session_type_ = proto::SessionType::SESSION_TYPE_UNKNOWN;

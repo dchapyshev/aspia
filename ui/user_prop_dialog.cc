@@ -27,37 +27,12 @@ INT_PTR UserPropDialog::DoModal(HWND parent)
     return Run(Module::Current(), parent, IDD_USER_PROP);
 }
 
-void UserPropDialog::InsertSessionType(ListView& list, proto::SessionType session_type)
+void UserPropDialog::InsertSessionType(ListView& list,
+                                       proto::SessionType session_type,
+                                       UINT string_id)
 {
-    UINT string_id;
-
-    switch (session_type)
-    {
-        case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
-            string_id = IDS_SESSION_TYPE_DESKTOP_MANAGE;
-            break;
-
-        case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
-            string_id = IDS_SESSION_TYPE_DESKTOP_VIEW;
-            break;
-
-        case proto::SessionType::SESSION_TYPE_POWER_MANAGE:
-            string_id = IDS_SESSION_TYPE_POWER_MANAGE;
-            break;
-
-        case proto::SessionType::SESSION_TYPE_FILE_TRANSFER:
-            string_id = IDS_SESSION_TYPE_FILE_TRANSFER;
-            break;
-
-        case proto::SessionType::SESSION_TYPE_SYSTEM_INFO:
-            string_id = IDS_SESSION_TYPE_SYSTEM_INFO;
-            break;
-
-        default:
-            return;
-    }
-
     int item_index = list.AddItem(module().string(string_id), session_type);
+
     list.SetCheckState(item_index,
                        (user_->session_types() & session_type) ? true : false);
 }
@@ -103,11 +78,25 @@ void UserPropDialog::OnInitDialog()
     list.ModifyExtendedListViewStyle(0, LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT);
     list.AddOnlyOneColumn();
 
-    InsertSessionType(list, proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
-    InsertSessionType(list, proto::SessionType::SESSION_TYPE_DESKTOP_VIEW);
-    InsertSessionType(list, proto::SessionType::SESSION_TYPE_POWER_MANAGE);
-    InsertSessionType(list, proto::SessionType::SESSION_TYPE_FILE_TRANSFER);
-    InsertSessionType(list, proto::SessionType::SESSION_TYPE_SYSTEM_INFO);
+    InsertSessionType(list,
+                      proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE,
+                      IDS_SESSION_TYPE_DESKTOP_MANAGE);
+
+    InsertSessionType(list,
+                      proto::SessionType::SESSION_TYPE_DESKTOP_VIEW,
+                      IDS_SESSION_TYPE_DESKTOP_VIEW);
+
+    InsertSessionType(list,
+                      proto::SessionType::SESSION_TYPE_POWER_MANAGE,
+                      IDS_SESSION_TYPE_POWER_MANAGE);
+
+    InsertSessionType(list,
+                      proto::SessionType::SESSION_TYPE_FILE_TRANSFER,
+                      IDS_SESSION_TYPE_FILE_TRANSFER);
+
+    InsertSessionType(list,
+                      proto::SessionType::SESSION_TYPE_SYSTEM_INFO,
+                      IDS_SESSION_TYPE_SYSTEM_INFO);
 
     HWND username_edit = GetDlgItem(IDC_USERNAME_EDIT);
 
@@ -205,7 +194,7 @@ void UserPropDialog::OnOkButton()
 
         bool ret = CreateSHA512(password_in_utf8,
                                 *user_->mutable_password_hash());
-        CHECK(ret);
+        DCHECK(ret);
     }
 
     uint32_t session_types = 0;

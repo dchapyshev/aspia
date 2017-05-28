@@ -113,6 +113,11 @@ HWND ModalDialog::GetDlgItem(int item_id)
     return ::GetDlgItem(hwnd(), item_id);
 }
 
+void ModalDialog::EnableDlgItem(int item_id, bool enable)
+{
+    EnableWindow(GetDlgItem(item_id), enable);
+}
+
 std::wstring ModalDialog::GetDlgItemString(int item_id)
 {
     HWND hwnd = GetDlgItem(item_id);

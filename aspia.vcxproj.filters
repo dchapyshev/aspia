@@ -869,6 +869,15 @@
     <ClInclude Include="proto\key_exchange.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
+    <ClInclude Include="ui\base\combobox.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\updown.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\trackbar.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">

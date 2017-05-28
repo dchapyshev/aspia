@@ -8,21 +8,14 @@
 #include "ui/settings_dialog.h"
 #include "ui/resource.h"
 #include "ui/base/module.h"
+#include "ui/base/combobox.h"
+#include "ui/base/updown.h"
+#include "ui/base/trackbar.h"
 #include "desktop_capture/pixel_format.h"
 #include "codec/video_helpers.h"
 #include "base/string_util.h"
 
-#include <windowsx.h>
-#include <commctrl.h>
-
 namespace aspia {
-
-enum Codecs
-{
-    kVP9 = 0,
-    kVP8 = 1,
-    kZLIB = 2
-};
 
 enum PixelFormats
 {
@@ -62,18 +55,18 @@ void SettingsDialog::InitColorDepthList()
 {
     HWND combo = GetDlgItem(IDC_COLOR_DEPTH_COMBO);
 
-    AddColorDepth(combo, kARGB,   IDS_32BIT);
-    AddColorDepth(combo, kRGB888, IDS_24BIT);
-    AddColorDepth(combo, kRGB565, IDS_16BIT);
-    AddColorDepth(combo, kRGB555, IDS_15BIT);
-    AddColorDepth(combo, kRGB444, IDS_12BIT);
-    AddColorDepth(combo, kRGB332, IDS_8BIT);
-    AddColorDepth(combo, kRGB222, IDS_6BIT);
-    AddColorDepth(combo, kRGB111, IDS_3BIT);
+    ComboBox_AddItem(combo, module().string(IDS_32BIT), kARGB);
+    ComboBox_AddItem(combo, module().string(IDS_24BIT), kRGB888);
+    ComboBox_AddItem(combo, module().string(IDS_16BIT), kRGB565);
+    ComboBox_AddItem(combo, module().string(IDS_15BIT), kRGB555);
+    ComboBox_AddItem(combo, module().string(IDS_12BIT), kRGB444);
+    ComboBox_AddItem(combo, module().string(IDS_8BIT),  kRGB332);
+    ComboBox_AddItem(combo, module().string(IDS_6BIT),  kRGB222);
+    ComboBox_AddItem(combo, module().string(IDS_3BIT),  kRGB111);
 
     PixelFormat format(ConvertFromVideoPixelFormat(config_.pixel_format()));
 
-    int curr_item = kRGB565;
+    PixelFormats curr_item = kRGB565;
 
     if (format.IsEqual(PixelFormat::ARGB()))
     {
@@ -108,35 +101,18 @@ void SettingsDialog::InitColorDepthList()
         curr_item = kRGB111;
     }
 
-    ComboBox_SetCurSel(combo, curr_item);
+    ComboBox_SelItemWithData(combo, curr_item);
 }
 
 void SettingsDialog::InitCodecList()
 {
     HWND combo = GetDlgItem(IDC_CODEC_COMBO);
 
-    ComboBox_InsertString(combo, kVP9, L"VP9");
-    ComboBox_InsertString(combo, kVP8, L"VP8");
-    ComboBox_InsertString(combo, kZLIB, L"ZLIB");
+    ComboBox_AddItem(combo, L"VP9", proto::VideoEncoding::VIDEO_ENCODING_VP9);
+    ComboBox_AddItem(combo, L"VP8", proto::VideoEncoding::VIDEO_ENCODING_VP8);
+    ComboBox_AddItem(combo, L"ZLIB", proto::VideoEncoding::VIDEO_ENCODING_ZLIB);
 
-    int curr = -1;
-
-    switch (config_.video_encoding())
-    {
-        case proto::VideoEncoding::VIDEO_ENCODING_VP8:
-            curr = kVP8;
-            break;
-
-        case proto::VideoEncoding::VIDEO_ENCODING_VP9:
-            curr = kVP9;
-            break;
-
-        case proto::VideoEncoding::VIDEO_ENCODING_ZLIB:
-            curr = kZLIB;
-            break;
-    }
-
-    ComboBox_SetCurSel(combo, curr);
+    ComboBox_SelItemWithData(combo, config_.video_encoding());
 }
 
 void SettingsDialog::UpdateCompressionRatio(int compression_ratio)
@@ -155,19 +131,19 @@ void SettingsDialog::OnInitDialog()
     OnCodecChanged();
 
     HWND ratio = GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR);
-    SendMessageW(ratio, TBM_SETRANGE, TRUE, MAKELPARAM(kMinCompressRatio, kMaxCompressRatio));
-    SendMessageW(ratio, TBM_SETPOS, TRUE, config_.compress_ratio());
+    TrackBar_SetRange(ratio, kMinCompressRatio, kMaxCompressRatio);
+    TrackBar_SetPos(ratio, config_.compress_ratio());
 
     SendMessageW(GetDlgItem(IDC_INTERVAL_EDIT), EM_SETLIMITTEXT, 3, 0);
 
     HWND updown = GetDlgItem(IDC_INTERVAL_UPDOWN);
-    SendMessageW(updown, UDM_SETRANGE, 0, MAKELPARAM(kMaxUpdateInterval, kMinUpdateInterval));
-    SendMessageW(updown, UDM_SETPOS, 0, MAKELPARAM(config_.update_interval(), 0));
+    UpDown_SetRange(updown, kMinUpdateInterval, kMaxUpdateInterval);
+    UpDown_SetPos(updown, config_.update_interval());
 
     if (session_type_ == proto::SessionType::SESSION_TYPE_DESKTOP_VIEW)
     {
-        EnableWindow(GetDlgItem(IDC_ENABLE_CLIPBOARD_CHECK), FALSE);
-        EnableWindow(GetDlgItem(IDC_ENABLE_CURSOR_SHAPE_CHECK), FALSE);
+        EnableDlgItem(IDC_ENABLE_CLIPBOARD_CHECK, FALSE);
+        EnableDlgItem(IDC_ENABLE_CURSOR_SHAPE_CHECK, FALSE);
     }
     else
     {
@@ -186,8 +162,7 @@ void SettingsDialog::OnHScroll(HWND ctrl)
     if (GetWindowLongPtrW(ctrl, GWLP_ID) == IDC_COMPRESS_RATIO_TRACKBAR)
     {
         int compression_ratio =
-            static_cast<int>(SendMessageW(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR),
-                                          TBM_GETPOS, 0, 0));
+            TrackBar_GetPos(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR));
 
         UpdateCompressionRatio(compression_ratio);
     }
@@ -195,15 +170,16 @@ void SettingsDialog::OnHScroll(HWND ctrl)
 
 void SettingsDialog::OnCodecChanged()
 {
-    BOOL has_pixel_format =
-        (ComboBox_GetCurSel(GetDlgItem(IDC_CODEC_COMBO)) == kZLIB);
+    bool has_pixel_format =
+        (ComboBox_CurItemData(GetDlgItem(IDC_CODEC_COMBO)) ==
+            proto::VIDEO_ENCODING_ZLIB);
 
-    EnableWindow(GetDlgItem(IDC_COLOR_DEPTH_TEXT), has_pixel_format);
-    EnableWindow(GetDlgItem(IDC_COLOR_DEPTH_COMBO), has_pixel_format);
-    EnableWindow(GetDlgItem(IDC_COMPRESS_RATIO_TEXT), has_pixel_format);
-    EnableWindow(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR), has_pixel_format);
-    EnableWindow(GetDlgItem(IDC_FAST_TEXT), has_pixel_format);
-    EnableWindow(GetDlgItem(IDC_BEST_TEXT), has_pixel_format);
+    EnableDlgItem(IDC_COLOR_DEPTH_TEXT, has_pixel_format);
+    EnableDlgItem(IDC_COLOR_DEPTH_COMBO, has_pixel_format);
+    EnableDlgItem(IDC_COMPRESS_RATIO_TEXT, has_pixel_format);
+    EnableDlgItem(IDC_COMPRESS_RATIO_TRACKBAR, has_pixel_format);
+    EnableDlgItem(IDC_FAST_TEXT, has_pixel_format);
+    EnableDlgItem(IDC_BEST_TEXT, has_pixel_format);
 }
 
 void SettingsDialog::OnCodecChanged(WORD notify_code)
@@ -214,28 +190,17 @@ void SettingsDialog::OnCodecChanged(WORD notify_code)
 
 void SettingsDialog::OnOkButton()
 {
-    int codec = ComboBox_GetCurSel(GetDlgItem(IDC_CODEC_COMBO));
+    proto::VideoEncoding encoding =
+        static_cast<proto::VideoEncoding>(
+            ComboBox_CurItemData(GetDlgItem(IDC_CODEC_COMBO)));
 
-    switch (codec)
-    {
-        case kVP8:
-            config_.set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
-            break;
+    config_.set_video_encoding(encoding);
 
-        case kVP9:
-            config_.set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP9);
-            break;
-
-        case kZLIB:
-            config_.set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_ZLIB);
-            break;
-    }
-
-    if (codec == kZLIB)
+    if (encoding == proto::VIDEO_ENCODING_ZLIB)
     {
         PixelFormat format;
 
-        switch (ComboBox_GetCurSel(GetDlgItem(IDC_COLOR_DEPTH_COMBO)))
+        switch (ComboBox_CurItemData(GetDlgItem(IDC_COLOR_DEPTH_COMBO)))
         {
             case kARGB:
                 format = PixelFormat::ARGB();
@@ -273,7 +238,7 @@ void SettingsDialog::OnOkButton()
         ConvertToVideoPixelFormat(format, config_.mutable_pixel_format());
 
         int compress_ratio =
-            static_cast<int>(SendMessageW(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR), TBM_GETPOS, 0, 0));
+            TrackBar_GetPos(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR));
 
         if (compress_ratio >= kMinCompressRatio && compress_ratio <= kMaxCompressRatio)
         {
@@ -291,8 +256,7 @@ void SettingsDialog::OnOkButton()
 
     config_.set_flags(flags);
 
-    DWORD ret = static_cast<DWORD>(SendMessageW(GetDlgItem(IDC_INTERVAL_UPDOWN),
-                                                UDM_GETPOS, 0, 0));
+    DWORD ret = UpDown_GetPos(GetDlgItem(IDC_INTERVAL_UPDOWN));
     if (HIWORD(ret) == 0)
     {
         int interval = LOWORD(ret);
@@ -304,13 +268,6 @@ void SettingsDialog::OnOkButton()
     }
 
     EndDialog(IDOK);
-}
-
-void SettingsDialog::AddColorDepth(HWND combobox, int index, UINT string_id)
-{
-    ComboBox_InsertString(combobox,
-                          index,
-                          module().string(string_id).c_str());
 }
 
 INT_PTR SettingsDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)

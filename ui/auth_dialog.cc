@@ -10,7 +10,10 @@
 #include "base/unicode.h"
 #include "base/logging.h"
 
+extern "C" {
+#define SODIUM_STATIC
 #include <sodium.h>
+} // extern "C"
 
 namespace aspia {
 
