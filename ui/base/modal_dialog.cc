@@ -12,6 +12,9 @@ namespace aspia {
 
 INT_PTR ModalDialog::Run(const Module& module, HWND parent, UINT resource_id)
 {
+    end_dialog_ = false;
+    result_ = 0;
+
     module_ = module;
 
     HWND disabled_parent = nullptr;
