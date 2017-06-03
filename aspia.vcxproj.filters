@@ -878,6 +878,9 @@
     <ClInclude Include="ui\base\trackbar.h">
       <Filter>ui\base</Filter>
     </ClInclude>
+    <ClInclude Include="crypto\secure_string.h">
+      <Filter>crypto</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">

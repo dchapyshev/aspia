@@ -12,6 +12,9 @@
 
 namespace aspia {
 
+// Number of iterations for hashing a user's password.
+static const size_t kUserPasswordHashIterCount = 100;
+
 bool IsValidUserName(const std::wstring& username);
 
 bool IsValidPassword(const std::wstring& password);
@@ -24,7 +27,8 @@ bool WriteUserList(const proto::HostUserList& list);
 
 bool ReadUserList(proto::HostUserList& list);
 
-bool IsUniqueUserName(const std::wstring& username);
+bool IsUniqueUserName(const proto::HostUserList& list,
+                      const std::wstring& username);
 
 } // namespace aspia
 

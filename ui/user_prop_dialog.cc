@@ -11,15 +11,20 @@
 #include "base/logging.h"
 #include "host/host_user_utils.h"
 #include "crypto/sha512.h"
+#include "crypto/secure_string.h"
 
 #include <windowsx.h>
 
 namespace aspia {
 
-UserPropDialog::UserPropDialog(Mode mode, proto::HostUser* user) :
-    mode_(mode), user_(user)
+UserPropDialog::UserPropDialog(Mode mode,
+                               proto::HostUser* user,
+                               const proto::HostUserList& user_list) :
+    mode_(mode),
+    user_(user),
+    user_list_(user_list)
 {
-    // Nothing
+    DCHECK(user_);
 }
 
 INT_PTR UserPropDialog::DoModal(HWND parent)
@@ -107,7 +112,7 @@ void UserPropDialog::OnInitDialog()
         HWND password_edit = GetDlgItem(IDC_PASSWORD_EDIT);
         HWND password_retry_edit = GetDlgItem(IDC_PASSWORD_RETRY_EDIT);
 
-        std::wstring username;
+        SecureString<std::wstring> username;
         CHECK(UTF8toUNICODE(user_->username(), username));
         Edit_SetText(username_edit, username.c_str());
 
@@ -139,7 +144,8 @@ void UserPropDialog::OnInitDialog()
 
 void UserPropDialog::OnOkButton()
 {
-    std::wstring username = GetDlgItemString(IDC_USERNAME_EDIT);
+    SecureString<std::wstring> username(GetDlgItemString(IDC_USERNAME_EDIT));
+
     if (!IsValidUserName(username))
     {
         MessageBoxW(hwnd(),
@@ -149,7 +155,7 @@ void UserPropDialog::OnOkButton()
         return;
     }
 
-    std::wstring prev_username;
+    SecureString<std::wstring> prev_username;
 
     if (!user_->username().empty())
     {
@@ -158,7 +164,7 @@ void UserPropDialog::OnOkButton()
 
     if (username != prev_username)
     {
-        if (!IsUniqueUserName(username))
+        if (!IsUniqueUserName(user_list_, username))
         {
             MessageBoxW(hwnd(),
                         module().string(IDS_USER_ALREADY_EXISTS).c_str(),
@@ -170,7 +176,7 @@ void UserPropDialog::OnOkButton()
 
     if (mode_ == Mode::Add || password_changed_)
     {
-        std::wstring password = GetDlgItemString(IDC_PASSWORD_EDIT);
+        SecureString<std::wstring> password(GetDlgItemString(IDC_PASSWORD_EDIT));
         if (!IsValidPassword(password))
         {
             MessageBoxW(hwnd(),
@@ -180,7 +186,10 @@ void UserPropDialog::OnOkButton()
             return;
         }
 
-        if (password != GetDlgItemString(IDC_PASSWORD_RETRY_EDIT))
+        SecureString<std::wstring> password_retry =
+            GetDlgItemString(IDC_PASSWORD_RETRY_EDIT);
+
+        if (password != password_retry)
         {
             MessageBoxW(hwnd(),
                         module().string(IDS_PASSWORDS_NOT_MATCH).c_str(),
@@ -189,11 +198,12 @@ void UserPropDialog::OnOkButton()
             return;
         }
 
-        std::string password_in_utf8;
+        SecureString<std::string> password_in_utf8;
         CHECK(UNICODEtoUTF8(password, password_in_utf8));
 
         bool ret = CreateSHA512(password_in_utf8,
-                                *user_->mutable_password_hash());
+                                *user_->mutable_password_hash(),
+                                kUserPasswordHashIterCount);
         DCHECK(ret);
     }
 

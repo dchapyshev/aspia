@@ -12,6 +12,7 @@
 #include "proto/auth_session.pb.h"
 #include "protocol/message_serialization.h"
 #include "crypto/sha512.h"
+#include "crypto/secure_string.h"
 
 namespace aspia {
 
@@ -84,9 +85,11 @@ static proto::AuthStatus BasicAuthorization(const std::string& username,
             {
                 if (user.enabled())
                 {
-                    std::string password_hash;
+                    SecureString<std::string> password_hash;
 
-                    if (CreateSHA512(password, password_hash))
+                    if (CreateSHA512(password,
+                                     password_hash,
+                                     kUserPasswordHashIterCount))
                     {
                         if (user.password_hash() == password_hash)
                         {

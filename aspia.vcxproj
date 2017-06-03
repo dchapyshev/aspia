@@ -228,6 +228,7 @@
     <ClInclude Include="codec\video_helpers.h" />
     <ClInclude Include="crypto\encryptor.h" />
     <ClInclude Include="crypto\secure_buffer.h" />
+    <ClInclude Include="crypto\secure_string.h" />
     <ClInclude Include="crypto\sha512.h" />
     <ClInclude Include="desktop_capture\capturer.h" />
     <ClInclude Include="desktop_capture\capturer_gdi.h" />

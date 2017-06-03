@@ -13,6 +13,7 @@
 #include "base/unicode.h"
 #include "base/string_util.h"
 #include "host/host_user_utils.h"
+#include "crypto/secure_string.h"
 
 namespace aspia {
 
@@ -31,7 +32,7 @@ void UsersDialog::UpdateUserList()
     {
         const proto::HostUser& user = user_list_.user_list(i);
 
-        std::wstring username;
+        SecureString<std::wstring> username;
         CHECK(UTF8toUNICODE(user.username(), username));
 
         list.AddItem(username, i, user.enabled() ? 0 : 1);
@@ -54,12 +55,12 @@ void UsersDialog::OnInitDialog()
 
     if (!IsCallerHasAdminRights())
     {
-        EnableWindow(GetDlgItem(IDC_USER_LIST), FALSE);
-        EnableWindow(GetDlgItem(ID_ADD), FALSE);
+        EnableDlgItem(IDC_USER_LIST, FALSE);
+        EnableDlgItem(ID_ADD, FALSE);
     }
 
-    EnableWindow(GetDlgItem(ID_EDIT), FALSE);
-    EnableWindow(GetDlgItem(ID_DELETE), FALSE);
+    EnableDlgItem(ID_EDIT, FALSE);
+    EnableDlgItem(ID_DELETE, FALSE);
 
     if (ReadUserList(user_list_))
         UpdateUserList();
@@ -69,7 +70,7 @@ void UsersDialog::OnAddButton()
 {
     std::unique_ptr<proto::HostUser> user(new proto::HostUser());
 
-    UserPropDialog dialog(UserPropDialog::Mode::Add, user.get());
+    UserPropDialog dialog(UserPropDialog::Mode::Add, user.get(), user_list_);
     if (dialog.DoModal(hwnd()) == IDOK)
     {
         user_list_.mutable_user_list()->AddAllocated(user.release());
@@ -77,8 +78,8 @@ void UsersDialog::OnAddButton()
         SetUserListModified();
     }
 
-    EnableWindow(GetDlgItem(ID_EDIT), FALSE);
-    EnableWindow(GetDlgItem(ID_DELETE), FALSE);
+    EnableDlgItem(ID_EDIT, FALSE);
+    EnableDlgItem(ID_DELETE, FALSE);
 }
 
 int UsersDialog::GetSelectedUserIndex()
@@ -96,15 +97,15 @@ void UsersDialog::OnEditButton()
 
     proto::HostUser* user = user_list_.mutable_user_list(user_index);
 
-    UserPropDialog dialog(UserPropDialog::Mode::Edit, user);
+    UserPropDialog dialog(UserPropDialog::Mode::Edit, user, user_list_);
     if (dialog.DoModal(hwnd()) == IDOK)
     {
         UpdateUserList();
         SetUserListModified();
     }
 
-    EnableWindow(GetDlgItem(ID_EDIT), FALSE);
-    EnableWindow(GetDlgItem(ID_DELETE), FALSE);
+    EnableDlgItem(ID_EDIT, FALSE);
+    EnableDlgItem(ID_DELETE, FALSE);
 }
 
 void UsersDialog::OnDeleteButton()
@@ -117,20 +118,24 @@ void UsersDialog::OnDeleteButton()
     std::wstring title = module().string(IDS_CONFIRMATION);
     std::wstring message_format = module().string(IDS_DELETE_USER_CONFORMATION);
 
-    std::wstring username;
+    SecureString<std::wstring> username;
     CHECK(UTF8toUNICODE(user_list_.user_list(user_index).username(), username));
 
-    std::wstring message = StringPrintfW(message_format.c_str(), username.c_str());
+    SecureString<std::wstring> message =
+        StringPrintfW(message_format.c_str(), username.c_str());
 
-    if (MessageBoxW(hwnd(), message.c_str(), title.c_str(), MB_YESNO | MB_ICONQUESTION) == IDYES)
+    if (MessageBoxW(hwnd(),
+                    message.c_str(),
+                    title.c_str(),
+                    MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
         user_list_.mutable_user_list()->DeleteSubrange(user_index, 1);
         UpdateUserList();
         SetUserListModified();
     }
 
-    EnableWindow(GetDlgItem(ID_EDIT), FALSE);
-    EnableWindow(GetDlgItem(ID_DELETE), FALSE);
+    EnableDlgItem(ID_EDIT, FALSE);
+    EnableDlgItem(ID_DELETE, FALSE);
 }
 
 void UsersDialog::OnOkButton()
@@ -165,21 +170,21 @@ void UsersDialog::ShowUserPopupMenu()
         }
     }
 
-    EnableWindow(GetDlgItem(ID_EDIT), FALSE);
-    EnableWindow(GetDlgItem(ID_DELETE), FALSE);
+    EnableDlgItem(ID_EDIT, FALSE);
+    EnableDlgItem(ID_DELETE, FALSE);
 }
 
 void UsersDialog::OnUserListClicked()
 {
     if (GetSelectedUserIndex() == -1)
     {
-        EnableWindow(GetDlgItem(ID_EDIT), FALSE);
-        EnableWindow(GetDlgItem(ID_DELETE), FALSE);
+        EnableDlgItem(ID_EDIT, FALSE);
+        EnableDlgItem(ID_DELETE, FALSE);
     }
     else
     {
-        EnableWindow(GetDlgItem(ID_EDIT), TRUE);
-        EnableWindow(GetDlgItem(ID_DELETE), TRUE);
+        EnableDlgItem(ID_EDIT, TRUE);
+        EnableDlgItem(ID_DELETE, TRUE);
     }
 }
 

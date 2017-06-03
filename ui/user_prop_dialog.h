@@ -20,7 +20,9 @@ class UserPropDialog : public ModalDialog
 public:
     enum class Mode { Add, Edit };
 
-    UserPropDialog(Mode mode, proto::HostUser* user);
+    UserPropDialog(Mode mode,
+                   proto::HostUser* user,
+                   const proto::HostUserList& user_list);
 
     INT_PTR DoModal(HWND parent) override;
 
@@ -43,6 +45,7 @@ private:
                                                    DWORD_PTR ref_data);
     const Mode mode_;
     proto::HostUser* user_;
+    const proto::HostUserList& user_list_;
     bool password_changed_ = true;
 
     DISALLOW_COPY_AND_ASSIGN(UserPropDialog);

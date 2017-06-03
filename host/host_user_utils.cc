@@ -9,6 +9,7 @@
 #include "base/unicode.h"
 #include "base/logging.h"
 #include "base/path.h"
+#include "crypto/secure_string.h"
 
 #include <filesystem>
 #include <fstream>
@@ -65,12 +66,12 @@ bool IsValidPassword(const std::wstring& password)
 
 bool IsValidPasswordHash(const std::string& password_hash)
 {
-    return password_hash.length() == kPasswordHashLength;
+    return password_hash.size() == kPasswordHashLength;
 }
 
 bool IsValidUser(const proto::HostUser& user)
 {
-    std::wstring username;
+    SecureString<std::wstring> username;
 
     if (!UTF8toUNICODE(user.username(), username))
         return false;
@@ -158,7 +159,7 @@ bool WriteUserList(const proto::HostUserList& list)
         return false;
     }
 
-    std::string string = list.SerializeAsString();
+    SecureString<std::string> string = list.SerializeAsString();
 
     file_stream.write(string.c_str(), string.size());
     file_stream.close();
@@ -196,7 +197,7 @@ bool ReadUserList(proto::HostUserList& list)
         return false;
     }
 
-    std::string string;
+    SecureString<std::string> string;
     string.resize(static_cast<size_t>(size));
 
     file_stream.read(&string[0], size);
@@ -217,14 +218,10 @@ bool ReadUserList(proto::HostUserList& list)
     return true;
 }
 
-bool IsUniqueUserName(const std::wstring& username)
+bool IsUniqueUserName(const proto::HostUserList& list,
+                      const std::wstring& username)
 {
-    proto::HostUserList list;
-
-    if (!ReadUserList(list))
-        return true;
-
-    std::string username_utf8;
+    SecureString<std::string> username_utf8;
     CHECK(UNICODEtoUTF8(username, username_utf8));
 
     for (int i = 0; i < list.user_list_size(); ++i)
