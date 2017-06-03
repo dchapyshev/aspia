@@ -304,9 +304,6 @@
     <ClCompile Include="base\message_loop\message_loop_thread.cc">
       <Filter>base\message_loop</Filter>
     </ClCompile>
-    <ClCompile Include="host\host_user_utils.cc">
-      <Filter>host</Filter>
-    </ClCompile>
     <ClCompile Include="proto\host_user.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
@@ -402,6 +399,9 @@
     </ClCompile>
     <ClCompile Include="proto\key_exchange.pb.cc">
       <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host_user_list.cc">
+      <Filter>host</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -758,9 +758,6 @@
     <ClInclude Include="base\message_loop\message_loop_thread.h">
       <Filter>base\message_loop</Filter>
     </ClInclude>
-    <ClInclude Include="host\host_user_utils.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="proto\host_user.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
@@ -879,6 +876,12 @@
       <Filter>ui\base</Filter>
     </ClInclude>
     <ClInclude Include="crypto\secure_string.h">
+      <Filter>crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_user_list.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\secure_io_buffer.h">
       <Filter>crypto</Filter>
     </ClInclude>
   </ItemGroup>

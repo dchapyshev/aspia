@@ -34,7 +34,7 @@ public:
         other.data_size_ = 0;
     }
 
-    ~IOBuffer() = default;
+    virtual ~IOBuffer() = default;
 
     uint8_t* data() const { return data_.get(); }
     size_t size() const { return data_size_; }

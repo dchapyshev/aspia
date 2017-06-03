@@ -10,6 +10,7 @@
 
 #include "base/io_buffer.h"
 #include "base/logging.h"
+#include "crypto/secure_io_buffer.h"
 
 #include <google/protobuf/message_lite.h>
 
@@ -26,6 +27,23 @@ static IOBuffer SerializeMessage(const google::protobuf::MessageLite& message)
     }
 
     IOBuffer buffer(size);
+
+    message.SerializeWithCachedSizesToArray(buffer.data());
+
+    return buffer;
+}
+
+static SecureIOBuffer SerializeSecureMessage(const google::protobuf::MessageLite& message)
+{
+    size_t size = message.ByteSizeLong();
+
+    if (!size)
+    {
+        LOG(ERROR) << "Empty messages are not allowed";
+        return SecureIOBuffer();
+    }
+
+    SecureIOBuffer buffer(size);
 
     message.SerializeWithCachedSizesToArray(buffer.data());
 

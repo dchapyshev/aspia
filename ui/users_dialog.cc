@@ -12,7 +12,6 @@
 #include "base/process_helpers.h"
 #include "base/unicode.h"
 #include "base/string_util.h"
-#include "host/host_user_utils.h"
 #include "crypto/secure_string.h"
 
 namespace aspia {
@@ -28,9 +27,11 @@ void UsersDialog::UpdateUserList()
 
     list.DeleteAllItems();
 
-    for (int i = 0; i < user_list_.user_list_size(); ++i)
+    const int size = user_list_.size();
+
+    for (int i = 0; i < size; ++i)
     {
-        const proto::HostUser& user = user_list_.user_list(i);
+        const proto::HostUser& user = user_list_.host_user(i);
 
         SecureString<std::wstring> username;
         CHECK(UTF8toUNICODE(user.username(), username));
@@ -62,7 +63,7 @@ void UsersDialog::OnInitDialog()
     EnableDlgItem(ID_EDIT, FALSE);
     EnableDlgItem(ID_DELETE, FALSE);
 
-    if (ReadUserList(user_list_))
+    if (user_list_.LoadFromStorage())
         UpdateUserList();
 }
 
@@ -73,7 +74,7 @@ void UsersDialog::OnAddButton()
     UserPropDialog dialog(UserPropDialog::Mode::Add, user.get(), user_list_);
     if (dialog.DoModal(hwnd()) == IDOK)
     {
-        user_list_.mutable_user_list()->AddAllocated(user.release());
+        user_list_.Add(std::move(user));
         UpdateUserList();
         SetUserListModified();
     }
@@ -92,10 +93,10 @@ void UsersDialog::OnEditButton()
 {
     int user_index = GetSelectedUserIndex();
 
-    if (user_index < 0 || user_index >= user_list_.user_list_size())
+    if (user_index < 0 || user_index >= user_list_.size())
         return;
 
-    proto::HostUser* user = user_list_.mutable_user_list(user_index);
+    proto::HostUser* user = user_list_.mutable_host_user(user_index);
 
     UserPropDialog dialog(UserPropDialog::Mode::Edit, user, user_list_);
     if (dialog.DoModal(hwnd()) == IDOK)
@@ -112,14 +113,14 @@ void UsersDialog::OnDeleteButton()
 {
     int user_index = GetSelectedUserIndex();
 
-    if (user_index < 0 || user_index >= user_list_.user_list_size())
+    if (user_index < 0 || user_index >= user_list_.size())
         return;
 
     std::wstring title = module().string(IDS_CONFIRMATION);
     std::wstring message_format = module().string(IDS_DELETE_USER_CONFORMATION);
 
     SecureString<std::wstring> username;
-    CHECK(UTF8toUNICODE(user_list_.user_list(user_index).username(), username));
+    CHECK(UTF8toUNICODE(user_list_.host_user(user_index).username(), username));
 
     SecureString<std::wstring> message =
         StringPrintfW(message_format.c_str(), username.c_str());
@@ -129,7 +130,7 @@ void UsersDialog::OnDeleteButton()
                     title.c_str(),
                     MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
-        user_list_.mutable_user_list()->DeleteSubrange(user_index, 1);
+        user_list_.Delete(user_index);
         UpdateUserList();
         SetUserListModified();
     }
@@ -140,7 +141,7 @@ void UsersDialog::OnDeleteButton()
 
 void UsersDialog::OnOkButton()
 {
-    WriteUserList(user_list_);
+    user_list_.SaveToStorage();
     EndDialog(IDOK);
 }
 

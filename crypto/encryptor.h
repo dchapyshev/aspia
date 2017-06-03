@@ -8,8 +8,8 @@
 #ifndef _ASPIA_CRYPTO__ENCRYPTOR_H
 #define _ASPIA_CRYPTO__ENCRYPTOR_H
 
-#include "base/io_buffer.h"
 #include "crypto/secure_buffer.h"
+#include "crypto/secure_io_buffer.h"
 
 extern "C" {
 #define SODIUM_STATIC
@@ -24,31 +24,28 @@ namespace aspia {
 class Encryptor
 {
 public:
-    ~Encryptor();
-
     enum class Mode { SERVER, CLIENT };
 
-    static std::unique_ptr<Encryptor> Create(Mode mode);
+    Encryptor(Mode mode);
+    ~Encryptor();
 
-    bool ReadHelloMessage(const IOBuffer& message_buffer);
-    IOBuffer HelloMessage();
+    bool ReadHelloMessage(const SecureIOBuffer& message_buffer);
+    SecureIOBuffer HelloMessage();
 
     IOBuffer Encrypt(const IOBuffer& source_buffer);
     IOBuffer Decrypt(const IOBuffer& source_buffer);
 
 private:
-    Encryptor(Mode mode, SecureBuffer public_key, SecureBuffer secret_key);
-
     const Mode mode_;
 
-    SecureBuffer local_public_key_;
-    SecureBuffer local_secret_key_;
+    std::unique_ptr<SecureBuffer> local_public_key_;
+    std::unique_ptr<SecureBuffer> local_secret_key_;
 
-    SecureBuffer encrypt_key_;
-    SecureBuffer decrypt_key_;
+    std::unique_ptr<SecureBuffer> encrypt_key_;
+    std::unique_ptr<SecureBuffer> decrypt_key_;
 
-    SecureBuffer encrypt_nonce_;
-    SecureBuffer decrypt_nonce_;
+    std::unique_ptr<SecureBuffer> encrypt_nonce_;
+    std::unique_ptr<SecureBuffer> decrypt_nonce_;
 
     DISALLOW_COPY_AND_ASSIGN(Encryptor);
 };

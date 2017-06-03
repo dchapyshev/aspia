@@ -56,12 +56,10 @@ NetworkChannelTcp::~NetworkChannelTcp()
 bool NetworkChannelTcp::ClientKeyExchange()
 {
     {
-        IOBuffer client_hello_message(encryptor_->HelloMessage());
+        SecureIOBuffer client_hello_message(encryptor_->HelloMessage());
 
         if (!WriteMessage(client_hello_message))
             return false;
-
-        sodium_memzero(client_hello_message.data(), client_hello_message.size());
     }
 
     size_t message_size = ReadMessageSize();
@@ -69,15 +67,13 @@ bool NetworkChannelTcp::ClientKeyExchange()
         return false;
 
     {
-        IOBuffer server_hello_message(message_size);
+        SecureIOBuffer server_hello_message(message_size);
 
         if (!ReadData(server_hello_message.data(), message_size))
             return false;
 
         if (!encryptor_->ReadHelloMessage(server_hello_message))
             return false;
-
-        sodium_memzero(server_hello_message.data(), server_hello_message.size());
     }
 
     return true;
@@ -90,24 +86,20 @@ bool NetworkChannelTcp::ServerKeyExchange()
         return false;
 
     {
-        IOBuffer client_hello_message(message_size);
+        SecureIOBuffer client_hello_message(message_size);
 
         if (!ReadData(client_hello_message.data(), message_size))
             return false;
 
         if (!encryptor_->ReadHelloMessage(client_hello_message))
             return false;
-
-        sodium_memzero(client_hello_message.data(), client_hello_message.size());
     }
 
     {
-        IOBuffer server_hello_message(encryptor_->HelloMessage());
+        SecureIOBuffer server_hello_message(encryptor_->HelloMessage());
 
         if (!WriteMessage(server_hello_message))
             return false;
-
-        sodium_memzero(server_hello_message.data(), server_hello_message.size());
     }
 
     return true;
@@ -117,7 +109,7 @@ bool NetworkChannelTcp::KeyExchange()
 {
     if (mode_ == Mode::CLIENT)
     {
-        encryptor_ = Encryptor::Create(Encryptor::Mode::CLIENT);
+        encryptor_.reset(new Encryptor(Encryptor::Mode::CLIENT));
         if (!encryptor_)
             return false;
 
@@ -131,7 +123,7 @@ bool NetworkChannelTcp::KeyExchange()
     {
         DCHECK(mode_ == Mode::SERVER);
 
-        encryptor_ = Encryptor::Create(Encryptor::Mode::SERVER);
+        encryptor_.reset(new Encryptor(Encryptor::Mode::SERVER));
         if (!encryptor_)
             return false;
 

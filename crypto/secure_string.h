@@ -17,6 +17,15 @@ extern "C" {
 
 namespace aspia {
 
+template<class T>
+void ClearStringContent(T& str)
+{
+    size_t memory_size = str.size();
+
+    if (memory_size)
+        sodium_memzero(const_cast<T::value_type*>(str.data()), memory_size);
+}
+
 template <class T>
 class SecureString : public T
 {
@@ -31,10 +40,7 @@ public:
 
     virtual ~SecureString()
     {
-        size_t memory_size = size();
-
-        if (memory_size)
-            sodium_memzero((void*)data(), memory_size);
+        ClearStringContent(*this);
     }
 
 private:

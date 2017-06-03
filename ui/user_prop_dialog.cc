@@ -9,7 +9,7 @@
 #include "ui/resource.h"
 #include "base/unicode.h"
 #include "base/logging.h"
-#include "host/host_user_utils.h"
+#include "host/host_user_list.h"
 #include "crypto/sha512.h"
 #include "crypto/secure_string.h"
 
@@ -19,7 +19,7 @@ namespace aspia {
 
 UserPropDialog::UserPropDialog(Mode mode,
                                proto::HostUser* user,
-                               const proto::HostUserList& user_list) :
+                               const HostUserList& user_list) :
     mode_(mode),
     user_(user),
     user_list_(user_list)
@@ -146,7 +146,7 @@ void UserPropDialog::OnOkButton()
 {
     SecureString<std::wstring> username(GetDlgItemString(IDC_USERNAME_EDIT));
 
-    if (!IsValidUserName(username))
+    if (!HostUserList::IsValidUserName(username))
     {
         MessageBoxW(hwnd(),
                     module().string(IDS_INVALID_USERNAME).c_str(),
@@ -164,7 +164,7 @@ void UserPropDialog::OnOkButton()
 
     if (username != prev_username)
     {
-        if (!IsUniqueUserName(user_list_, username))
+        if (!user_list_.IsUniqueUserName(username))
         {
             MessageBoxW(hwnd(),
                         module().string(IDS_USER_ALREADY_EXISTS).c_str(),
@@ -177,7 +177,7 @@ void UserPropDialog::OnOkButton()
     if (mode_ == Mode::Add || password_changed_)
     {
         SecureString<std::wstring> password(GetDlgItemString(IDC_PASSWORD_EDIT));
-        if (!IsValidPassword(password))
+        if (!HostUserList::IsValidPassword(password))
         {
             MessageBoxW(hwnd(),
                         module().string(IDS_INVALID_PASSWORD).c_str(),
@@ -203,7 +203,7 @@ void UserPropDialog::OnOkButton()
 
         bool ret = CreateSHA512(password_in_utf8,
                                 *user_->mutable_password_hash(),
-                                kUserPasswordHashIterCount);
+                                HostUserList::kPasswordHashIterCount);
         DCHECK(ret);
     }
 

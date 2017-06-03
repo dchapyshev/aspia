@@ -104,7 +104,7 @@
     <ClCompile Include="host\host_session.cc" />
     <ClCompile Include="host\host_session_desktop.cc" />
     <ClCompile Include="host\host_session_power.cc" />
-    <ClCompile Include="host\host_user_utils.cc" />
+    <ClCompile Include="host\host_user_list.cc" />
     <ClCompile Include="host\input_injector.cc" />
     <ClCompile Include="host\power_injector.cc" />
     <ClCompile Include="host\sas_injector.cc" />
@@ -228,6 +228,7 @@
     <ClInclude Include="codec\video_helpers.h" />
     <ClInclude Include="crypto\encryptor.h" />
     <ClInclude Include="crypto\secure_buffer.h" />
+    <ClInclude Include="crypto\secure_io_buffer.h" />
     <ClInclude Include="crypto\secure_string.h" />
     <ClInclude Include="crypto\sha512.h" />
     <ClInclude Include="desktop_capture\capturer.h" />
@@ -258,7 +259,7 @@
     <ClInclude Include="host\host_session_desktop.h" />
     <ClInclude Include="host\host_session_power.h" />
     <ClInclude Include="host\host_session_proxy.h" />
-    <ClInclude Include="host\host_user_utils.h" />
+    <ClInclude Include="host\host_user_list.h" />
     <ClInclude Include="host\input_injector.h" />
     <ClInclude Include="host\power_injector.h" />
     <ClInclude Include="host\sas_injector.h" />

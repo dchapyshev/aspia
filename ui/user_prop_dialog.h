@@ -10,8 +10,8 @@
 
 #include "ui/base/modal_dialog.h"
 #include "ui/base/listview.h"
+#include "host/host_user_list.h"
 #include "proto/auth_session.pb.h"
-#include "proto/host_user.pb.h"
 
 namespace aspia {
 
@@ -22,7 +22,7 @@ public:
 
     UserPropDialog(Mode mode,
                    proto::HostUser* user,
-                   const proto::HostUserList& user_list);
+                   const HostUserList& user_list);
 
     INT_PTR DoModal(HWND parent) override;
 
@@ -45,7 +45,7 @@ private:
                                                    DWORD_PTR ref_data);
     const Mode mode_;
     proto::HostUser* user_;
-    const proto::HostUserList& user_list_;
+    const HostUserList& user_list_;
     bool password_changed_ = true;
 
     DISALLOW_COPY_AND_ASSIGN(UserPropDialog);

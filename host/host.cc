@@ -8,7 +8,7 @@
 #include "host/host.h"
 #include "host/host_session_desktop.h"
 #include "host/host_session_power.h"
-#include "host/host_user_utils.h"
+#include "host/host_user_list.h"
 #include "proto/auth_session.pb.h"
 #include "protocol/message_serialization.h"
 #include "crypto/sha512.h"
@@ -73,13 +73,15 @@ static proto::AuthStatus BasicAuthorization(const std::string& username,
                                             const std::string& password,
                                             proto::SessionType session_type)
 {
-    proto::HostUserList list;
+    HostUserList list;
 
-    if (ReadUserList(list))
+    if (list.LoadFromStorage())
     {
-        for (int i = 0; i < list.user_list_size(); ++i)
+        const int size = list.size();
+
+        for (int i = 0; i < size; ++i)
         {
-            const proto::HostUser& user = list.user_list(i);
+            const proto::HostUser& user = list.host_user(i);
 
             if (user.username() == username)
             {
@@ -89,7 +91,7 @@ static proto::AuthStatus BasicAuthorization(const std::string& username,
 
                     if (CreateSHA512(password,
                                      password_hash,
-                                     kUserPasswordHashIterCount))
+                                     HostUserList::kPasswordHashIterCount))
                     {
                         if (user.password_hash() == password_hash)
                         {

@@ -31,30 +31,13 @@ public:
         sodium_memzero(data_.get(), data_size_);
     }
 
-    SecureBuffer(SecureBuffer&& other) :
-        data_size_(other.data_size_)
-    {
-        data_ = std::move(other.data_);
-        other.data_size_ = 0;
-    }
-
     ~SecureBuffer()
     {
-        if (!IsEmpty())
-            sodium_memzero(data_.get(), data_size_);
-    }
-
-    SecureBuffer& operator=(SecureBuffer&& other)
-    {
-        data_ = std::move(other.data_);
-        data_size_ = other.data_size_;
-        other.data_size_ = 0;
-        return *this;
+        sodium_memzero(data_.get(), data_size_);
     }
 
     size_t size() const { return data_size_; }
     uint8_t* data() const { return data_.get(); }
-    bool IsEmpty() const { return data_ == nullptr || data_size_ == 0; }
 
 private:
     std::unique_ptr<uint8_t[]> data_;

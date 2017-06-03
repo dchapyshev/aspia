@@ -10,7 +10,7 @@
 
 #include "ui/base/modal_dialog.h"
 #include "ui/base/imagelist.h"
-#include "proto/host_user.pb.h"
+#include "host/host_user_list.h"
 
 namespace aspia {
 
@@ -36,7 +36,7 @@ private:
     void OnUserListClicked();
     void SetUserListModified();
 
-    proto::HostUserList user_list_;
+    HostUserList user_list_;
     ImageList imagelist_;
 
     DISALLOW_COPY_AND_ASSIGN(UsersDialog);
