@@ -10,6 +10,7 @@
 #include "base/logging.h"
 #include "base/path.h"
 #include "crypto/secure_string.h"
+#include "crypto/sha512.h"
 
 #include <filesystem>
 #include <fstream>
@@ -23,6 +24,9 @@ static const size_t kMaximumPasswordLength = 64;
 static const size_t kPasswordHashLength = 64; // 512 bits
 
 static const size_t kMaximumUserListSize = 10 * 1024 * 1024; // 10MB
+
+// Number of iterations for hashing a user's password.
+static const size_t kPasswordHashIterCount = 100;
 
 HostUserList::~HostUserList()
 {
@@ -59,6 +63,21 @@ bool HostUserList::IsValidUser(const proto::HostUser& user)
         return false;
 
     return true;
+}
+
+// static
+bool HostUserList::CreatePasswordHash(const std::string& password,
+                                      std::string& password_hash)
+{
+    SecureString<std::wstring> password_unicode =
+        UNICODEfromUTF8(password);
+
+    if (!IsValidPassword(password_unicode))
+        return false;
+
+    return CreateSHA512(password,
+                        password_hash,
+                        kPasswordHashIterCount);
 }
 
 bool HostUserList::IsValidUserList()

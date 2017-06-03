@@ -18,9 +18,6 @@ namespace aspia {
 class HostUserList
 {
 public:
-    // Number of iterations for hashing a user's password.
-    static const size_t kPasswordHashIterCount = 100;
-
     HostUserList() = default;
     ~HostUserList();
 
@@ -39,6 +36,9 @@ public:
     static bool IsValidUserName(const std::wstring& username);
     static bool IsValidPassword(const std::wstring& password);
     static bool IsValidUser(const proto::HostUser& user);
+
+    static bool CreatePasswordHash(const std::string& password,
+                                   std::string& password_hash);
 
 private:
     bool IsValidUserList();

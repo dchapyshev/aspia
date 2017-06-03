@@ -201,9 +201,8 @@ void UserPropDialog::OnOkButton()
         SecureString<std::string> password_in_utf8;
         CHECK(UNICODEtoUTF8(password, password_in_utf8));
 
-        bool ret = CreateSHA512(password_in_utf8,
-                                *user_->mutable_password_hash(),
-                                HostUserList::kPasswordHashIterCount);
+        bool ret = HostUserList::CreatePasswordHash(password_in_utf8,
+                                                    *user_->mutable_password_hash());
         DCHECK(ret);
     }
 

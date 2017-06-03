@@ -11,7 +11,6 @@
 #include "host/host_user_list.h"
 #include "proto/auth_session.pb.h"
 #include "protocol/message_serialization.h"
-#include "crypto/sha512.h"
 #include "crypto/secure_string.h"
 
 namespace aspia {
@@ -75,39 +74,33 @@ static proto::AuthStatus BasicAuthorization(const std::string& username,
 {
     HostUserList list;
 
-    if (list.LoadFromStorage())
+    if (!list.LoadFromStorage())
+        return proto::AuthStatus::AUTH_STATUS_BAD_USERNAME_OR_PASSWORD;
+
+    const int size = list.size();
+
+    for (int i = 0; i < size; ++i)
     {
-        const int size = list.size();
+        const proto::HostUser& user = list.host_user(i);
 
-        for (int i = 0; i < size; ++i)
-        {
-            const proto::HostUser& user = list.host_user(i);
+        if (user.username() != username)
+            continue;
 
-            if (user.username() == username)
-            {
-                if (user.enabled())
-                {
-                    SecureString<std::string> password_hash;
+        if (!user.enabled())
+            return proto::AuthStatus::AUTH_STATUS_BAD_USERNAME_OR_PASSWORD;
 
-                    if (CreateSHA512(password,
-                                     password_hash,
-                                     HostUserList::kPasswordHashIterCount))
-                    {
-                        if (user.password_hash() == password_hash)
-                        {
-                            if ((user.session_types() & session_type))
-                            {
-                                return proto::AuthStatus::AUTH_STATUS_SUCCESS;
-                            }
+        SecureString<std::string> password_hash;
 
-                            return proto::AuthStatus::AUTH_STATUS_SESSION_TYPE_NOT_ALLOWED;
-                        }
-                    }
-                }
+        if (!HostUserList::CreatePasswordHash(password, password_hash))
+            return proto::AuthStatus::AUTH_STATUS_BAD_USERNAME_OR_PASSWORD;
 
-                return proto::AuthStatus::AUTH_STATUS_BAD_USERNAME_OR_PASSWORD;
-            }
-        }
+        if (user.password_hash() != password_hash)
+            return proto::AuthStatus::AUTH_STATUS_BAD_USERNAME_OR_PASSWORD;
+
+        if (!(user.session_types() & session_type))
+            return proto::AuthStatus::AUTH_STATUS_SESSION_TYPE_NOT_ALLOWED;
+
+        return proto::AuthStatus::AUTH_STATUS_SUCCESS;
     }
 
     return proto::AuthStatus::AUTH_STATUS_BAD_USERNAME_OR_PASSWORD;

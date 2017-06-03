@@ -32,6 +32,7 @@ public:
     static std::unique_ptr<HostSessionDesktop> Create(proto::SessionType session_type,
                                                       HostSession::Delegate* delegate);
 
+    // HostSession implementation.
     void Send(const IOBuffer& buffer) override;
 
 private:
