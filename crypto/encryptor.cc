@@ -108,7 +108,7 @@ bool Encryptor::ReadHelloMessage(const SecureIOBuffer& message_buffer)
 SecureIOBuffer Encryptor::HelloMessage()
 {
     if (!local_public_key_ || !local_secret_key_)
-        return false;
+        return SecureIOBuffer();
 
     encrypt_nonce_.reset(new SecureBuffer(crypto_secretbox_NONCEBYTES));
 
