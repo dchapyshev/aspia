@@ -53,12 +53,12 @@ private:
     // NetworkChannel::Listener implementation.
     void OnNetworkChannelMessage(const IOBuffer& buffer) override;
     void OnNetworkChannelDisconnect() override;
-    void OnNetworkChannelStarted() override;
+    bool OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer) override;
+    void OnNetworkChannelConnect() override;
 
     // StatusDialog::Delegate implementation.
     void OnStatusDialogOpen();
 
-    bool ReadAuthResult(const IOBuffer& buffer);
     void CreateSession(proto::SessionType session_type);
     void OpenStatusDialog();
 
@@ -76,8 +76,6 @@ private:
     ClientConfig config_;
     std::unique_ptr<ClientSession> session_;
     std::shared_ptr<ClientSessionProxy> session_proxy_;
-
-    bool is_auth_failed_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(Client);
 };

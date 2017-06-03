@@ -15,6 +15,8 @@
 
 namespace aspia {
 
+static const std::chrono::seconds kAuthTimeout{ 60 };
+
 Host::Host(std::unique_ptr<NetworkChannel> channel, Delegate* delegate) :
     channel_(std::move(channel)),
     delegate_(delegate)
@@ -43,34 +45,18 @@ void Host::OnSessionTerminate()
     channel_proxy_->Disconnect();
 }
 
-void Host::OnNetworkChannelMessage(const IOBuffer& buffer)
+void Host::OnNetworkChannelConnect()
 {
-    if (!session_proxy_)
-    {
-        if (is_auth_failed_)
-            return;
-
-        if (!SendAuthResult(buffer))
-        {
-            channel_proxy_->Disconnect();
-            is_auth_failed_ = true;
-        }
-
-        return;
-    }
-
-    session_proxy_->Send(buffer);
+    // If the authorization request is not received within the specified time
+    // interval, the connection will be closed.
+    auth_timer_.Start(kAuthTimeout,
+                      std::bind(&NetworkChannelProxy::Disconnect,
+                                channel_proxy_.get()));
 }
 
-void Host::OnNetworkChannelDisconnect()
-{
-    session_.reset();
-    delegate_->OnSessionTerminate();
-}
-
-static proto::AuthStatus BasicAuthorization(const std::string& username,
-                                            const std::string& password,
-                                            proto::SessionType session_type)
+static proto::AuthStatus DoBasicAuthorization(const std::string& username,
+                                              const std::string& password,
+                                              proto::SessionType session_type)
 {
     HostUserList list;
 
@@ -106,11 +92,14 @@ static proto::AuthStatus BasicAuthorization(const std::string& username,
     return proto::AuthStatus::AUTH_STATUS_BAD_USERNAME_OR_PASSWORD;
 }
 
-bool Host::SendAuthResult(const IOBuffer& request_buffer)
+bool Host::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
 {
+    // Authorization request received, stop the timer.
+    auth_timer_.Stop();
+
     proto::auth::ClientToHost request;
 
-    if (!ParseMessage(request_buffer, request))
+    if (!ParseMessage(buffer, request))
         return false;
 
     proto::auth::HostToClient result;
@@ -118,9 +107,9 @@ bool Host::SendAuthResult(const IOBuffer& request_buffer)
     switch (request.method())
     {
         case proto::AuthMethod::AUTH_METHOD_BASIC:
-            result.set_status(BasicAuthorization(request.username(),
-                                                 request.password(),
-                                                 request.session_type()));
+            result.set_status(DoBasicAuthorization(request.username(),
+                                                   request.password(),
+                                                   request.session_type()));
             break;
 
         default:
@@ -128,7 +117,10 @@ bool Host::SendAuthResult(const IOBuffer& request_buffer)
             break;
     }
 
-    IOBuffer result_buffer(SerializeMessage(result));
+    ClearStringContent(*request.mutable_username());
+    ClearStringContent(*request.mutable_password());
+
+    SecureIOBuffer result_buffer(SerializeSecureMessage(result));
     channel_proxy_->Send(result_buffer);
 
     if (result.status() == proto::AuthStatus::AUTH_STATUS_SUCCESS)
@@ -157,6 +149,19 @@ bool Host::SendAuthResult(const IOBuffer& request_buffer)
     }
 
     return false;
+}
+
+void Host::OnNetworkChannelMessage(const IOBuffer& buffer)
+{
+    DCHECK(session_proxy_);
+    session_proxy_->Send(buffer);
+}
+
+void Host::OnNetworkChannelDisconnect()
+{
+    auth_timer_.Stop();
+    session_.reset();
+    delegate_->OnSessionTerminate();
 }
 
 } // namespace aspia

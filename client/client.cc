@@ -8,6 +8,7 @@
 #include "client/client.h"
 #include "client/client_session_desktop_manage.h"
 #include "client/client_session_power_manage.h"
+#include "crypto/secure_string.h"
 #include "protocol/message_serialization.h"
 
 namespace aspia {
@@ -59,93 +60,17 @@ void Client::OnSessionTerminate()
     channel_proxy_->Disconnect();
 }
 
-void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
-{
-    if (!session_proxy_)
-    {
-        if (is_auth_failed_)
-            return;
-
-        if (ReadAuthResult(buffer))
-        {
-            CreateSession(config_.session_type());
-        }
-        else
-        {
-            channel_proxy_->Disconnect();
-            is_auth_failed_ = true;
-        }
-
-        return;
-    }
-
-    session_proxy_->Send(buffer);
-}
-
-void Client::OnNetworkChannelDisconnect()
-{
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&Client::OnNetworkChannelDisconnect, this));
-        return;
-    }
-
-    session_.reset();
-    ui_thread_.StopSoon();
-    delegate_->OnSessionTerminate();
-}
-
-void Client::OnNetworkChannelStarted()
-{
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&Client::OnNetworkChannelStarted, this));
-        return;
-    }
-
-    AuthDialog auth_dialog;
-
-    if (auth_dialog.DoModal(nullptr) != IDOK)
-    {
-        channel_proxy_->Disconnect();
-        return;
-    }
-
-    proto::auth::ClientToHost request;
-
-    request.set_method(proto::AuthMethod::AUTH_METHOD_BASIC);
-    request.set_session_type(config_.session_type());
-
-    request.set_username(auth_dialog.UserName());
-    request.set_password(auth_dialog.Password());
-
-    IOBuffer output_buffer(SerializeMessage(request));
-    CHECK(!output_buffer.IsEmpty());
-
-    channel_proxy_->Send(output_buffer);
-}
-
-void Client::OnStatusDialogOpen()
-{
-    status_dialog_.SetDestonation(config_.address(), config_.port());
-    status_dialog_.SetStatus(status_);
-}
-
-void Client::OpenStatusDialog()
-{
-    status_dialog_.DoModal(nullptr, this);
-}
-
-bool Client::ReadAuthResult(const IOBuffer& buffer)
+bool Client::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
 {
     proto::auth::HostToClient result;
-    
+
     if (!ParseMessage(buffer, result))
         return false;
 
     switch (result.status())
     {
         case proto::AuthStatus::AUTH_STATUS_SUCCESS:
+            CreateSession(config_.session_type());
             return true;
 
         case proto::AuthStatus::AUTH_STATUS_BAD_USERNAME_OR_PASSWORD:
@@ -167,6 +92,69 @@ bool Client::ReadAuthResult(const IOBuffer& buffer)
 
     runner_->PostTask(std::bind(&Client::OpenStatusDialog, this));
     return false;
+}
+
+void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
+{
+    DCHECK(session_proxy_);
+    session_proxy_->Send(buffer);
+}
+
+void Client::OnNetworkChannelDisconnect()
+{
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&Client::OnNetworkChannelDisconnect, this));
+        return;
+    }
+
+    session_.reset();
+    ui_thread_.StopSoon();
+    delegate_->OnSessionTerminate();
+}
+
+void Client::OnNetworkChannelConnect()
+{
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&Client::OnNetworkChannelConnect, this));
+        return;
+    }
+
+    AuthDialog auth_dialog;
+
+    if (auth_dialog.DoModal(nullptr) != IDOK)
+    {
+        channel_proxy_->Disconnect();
+        return;
+    }
+
+    proto::auth::ClientToHost request;
+
+    request.set_method(proto::AuthMethod::AUTH_METHOD_BASIC);
+    request.set_session_type(config_.session_type());
+
+    request.set_username(auth_dialog.UserName());
+    request.set_password(auth_dialog.Password());
+
+    SecureIOBuffer output_buffer(SerializeSecureMessage(request));
+    CHECK(!output_buffer.IsEmpty());
+
+    ClearStringContent(*request.mutable_username());
+    ClearStringContent(*request.mutable_password());
+
+    channel_proxy_->Send(output_buffer);
+}
+
+void Client::OnStatusDialogOpen()
+{
+    status_dialog_.SetDestonation(config_.address(), config_.port());
+    status_dialog_.SetStatus(status_);
+}
+
+void Client::OpenStatusDialog()
+{
+    status_dialog_.DoModal(nullptr, this);
 }
 
 void Client::CreateSession(proto::SessionType session_type)

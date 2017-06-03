@@ -34,6 +34,12 @@ public:
         // Nothing
     }
 
+    SecureIOBuffer(IOBuffer&& other) :
+        IOBuffer(std::move(other))
+    {
+        // Nothing
+    }
+
     ~SecureIOBuffer()
     {
         if (!IsEmpty())

@@ -8,6 +8,7 @@
 #ifndef _ASPIA_HOST__HOST_H
 #define _ASPIA_HOST__HOST_H
 
+#include "base/waitable_timer.h"
 #include "network/network_channel.h"
 #include "network/network_channel_proxy.h"
 #include "host/host_session.h"
@@ -38,10 +39,10 @@ private:
     void OnSessionTerminate() override;
 
     // NetworkChannel::Listener implementation.
+    void OnNetworkChannelConnect() override;
+    bool OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer) override;
     void OnNetworkChannelMessage(const IOBuffer& buffer) override;
     void OnNetworkChannelDisconnect() override;
-
-    bool SendAuthResult(const IOBuffer& request_buffer);
 
     std::unique_ptr<NetworkChannel> channel_;
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;
@@ -51,7 +52,7 @@ private:
 
     Delegate* delegate_;
 
-    bool is_auth_failed_ = false;
+    WaitableTimer auth_timer_;
 
     DISALLOW_COPY_AND_ASSIGN(Host);
 };

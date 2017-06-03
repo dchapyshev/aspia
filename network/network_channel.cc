@@ -58,27 +58,49 @@ IOBuffer NetworkChannel::ReadMessage()
     return buffer;
 }
 
+bool NetworkChannel::ReadFirstMessage()
+{
+    size_t message_size = ReadMessageSize();
+
+    if (!message_size)
+        return false;
+
+    SecureIOBuffer buffer(message_size);
+
+    if (!ReadData(buffer.data(), buffer.size()))
+        return false;
+
+    SecureIOBuffer message_buffer(encryptor_->Decrypt(buffer));
+    if (message_buffer.IsEmpty())
+        return false;
+
+    return listener_->OnNetworkChannelFirstMessage(message_buffer);
+}
+
 void NetworkChannel::Run()
 {
     if (KeyExchange())
     {
-        listener_->OnNetworkChannelStarted();
+        listener_->OnNetworkChannelConnect();
 
-        IOQueue incomming_queue(std::bind(&NetworkChannel::OnIncommingMessage,
-                                          this,
-                                          std::placeholders::_1));
-
-        while (!IsStopping())
+        if (ReadFirstMessage())
         {
-            IOBuffer buffer(ReadMessage());
+            IOQueue incomming_queue(std::bind(&NetworkChannel::OnIncommingMessage,
+                                              this,
+                                              std::placeholders::_1));
 
-            if (!buffer.IsEmpty())
+            while (!IsStopping())
             {
-                incomming_queue.Add(std::move(buffer));
-                continue;
-            }
+                IOBuffer buffer(ReadMessage());
 
-            StopSoon();
+                if (!buffer.IsEmpty())
+                {
+                    incomming_queue.Add(std::move(buffer));
+                    continue;
+                }
+
+                StopSoon();
+            }
         }
     }
 

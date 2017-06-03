@@ -21,8 +21,20 @@ public:
     class Listener
     {
     public:
-        virtual void OnNetworkChannelStarted() { }
+        // The method is called when the connection is successfully established.
+        virtual void OnNetworkChannelConnect() = 0;
+
+        // Called when the connection is disconnected.
+        // The method will be called even if method |OnNetworkChannelConnect|
+        // was not called (for example, if an encryption key exchange error occurred).
         virtual void OnNetworkChannelDisconnect() = 0;
+
+        // Called when the first message is received.
+        // If the method returns |false|, the connection will be terminated
+        // and a method |OnNetworkChannelDisconnect| will be called.
+        virtual bool OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer) = 0;
+
+        // Called when a new message is received.
         virtual void OnNetworkChannelMessage(const IOBuffer& buffer) = 0;
     };
 
@@ -50,6 +62,7 @@ protected:
 
     size_t ReadMessageSize();
     IOBuffer ReadMessage();
+    bool ReadFirstMessage();
     bool WriteMessage(const IOBuffer& buffer);
 
     std::unique_ptr<Encryptor> encryptor_;
