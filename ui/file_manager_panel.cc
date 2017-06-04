@@ -231,8 +231,6 @@ void FileManagerPanel::OnDrawItem(LPDRAWITEMSTRUCT dis)
             {
                 SetTextColor(dis->hDC, GetSysColor(COLOR_WINDOWTEXT));
 
-                dis->rcItem.left += 10;
-
                 DrawTextW(dis->hDC,
                           label,
                           wcslen(label),
