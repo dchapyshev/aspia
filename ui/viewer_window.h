@@ -45,7 +45,7 @@ public:
     void InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);
 
 private:
-    // MessageThread::Delegate implementation.
+    // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
