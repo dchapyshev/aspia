@@ -14,7 +14,8 @@
 
 namespace aspia {
 
-static const int kSplitPanelWidth = 6;
+static const int kSplitPanelWidth = 4;
+static const int kBorderSize = 3;
 
 bool Splitter::CreateWithFixedLeft(HWND parent, int position)
 {
@@ -88,15 +89,19 @@ void Splitter::OnSize(const DesktopSize& size)
         DeferWindowPos(dwp,
                        left_panel_,
                        nullptr,
-                       0, 0,
-                       x_, height_,
+                       kBorderSize,
+                       kBorderSize,
+                       x_ - (kBorderSize * 2),
+                       height_ - (kBorderSize * 2),
                        SWP_NOACTIVATE | SWP_NOZORDER);
 
         DeferWindowPos(dwp,
                        right_panel_,
                        nullptr,
-                       x_ + kSplitPanelWidth, 0,
-                       size.Width() - x_ - kSplitPanelWidth, height_,
+                       x_ + kSplitPanelWidth + kBorderSize,
+                       kBorderSize,
+                       size.Width() - x_ - kSplitPanelWidth - (kBorderSize * 2),
+                       height_ - (kBorderSize * 2),
                        SWP_NOACTIVATE | SWP_NOZORDER);
 
         DeferWindowPos(dwp,
@@ -197,22 +202,6 @@ void Splitter::OnDrawItem(LPDRAWITEMSTRUCT dis)
         if (saved_dc)
         {
             FillRect(dis->hDC, &dis->rcItem, GetSysColorBrush(COLOR_WINDOW));
-
-            HBRUSH border_brush = GetSysColorBrush(COLOR_WINDOWFRAME);
-
-            if (border_brush)
-            {
-                dis->rcItem.left = 0;
-                dis->rcItem.right = dis->rcItem.left + 1;
-
-                FillRect(dis->hDC, &dis->rcItem, border_brush);
-
-                dis->rcItem.left = kSplitPanelWidth - 1;
-                dis->rcItem.right = dis->rcItem.left + 1;
-
-                FillRect(dis->hDC, &dis->rcItem, border_brush);
-            }
-
             RestoreDC(dis->hDC, saved_dc);
         }
     }

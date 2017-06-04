@@ -74,6 +74,7 @@ bool ChildWindow::RegisterWindowClass(HINSTANCE instance)
     window_class.lpszClassName = kWindowClassName;
     window_class.hInstance     = instance;
     window_class.lpfnWndProc   = WindowProc;
+    window_class.hbrBackground = GetSysColorBrush(COLOR_WINDOW);
 
     if (!RegisterClassExW(&window_class))
     {
