@@ -403,6 +403,15 @@
     <ClCompile Include="host\host_user_list.cc">
       <Filter>host</Filter>
     </ClCompile>
+    <ClCompile Include="ui\file_manager.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\base\splitter.cc">
+      <Filter>ui\base</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\file_manager_panel.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -883,6 +892,15 @@
     </ClInclude>
     <ClInclude Include="crypto\secure_io_buffer.h">
       <Filter>crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_manager.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\splitter.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_manager_panel.h">
+      <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

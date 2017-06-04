@@ -25,10 +25,15 @@ public:
     HWND hwnd() { return hwnd_; }
     operator HWND() { return hwnd(); }
 
+    void DestroyWindow();
     bool CenterWindow(HWND hwnd_center = nullptr);
     void SetForegroundWindowEx();
     bool ModifyStyle(LONG_PTR remove, LONG_PTR add);
     bool ModifyStyleEx(LONG_PTR remove, LONG_PTR add);
+    void SetFont(HFONT font);
+    int Width();
+    int Height();
+    DesktopSize Size();
 
 private:
     HWND hwnd_ = nullptr;

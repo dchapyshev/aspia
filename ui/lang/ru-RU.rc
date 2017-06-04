@@ -289,3 +289,20 @@ BEGIN
     IDS_DELETE_USER_CONFORMATION          "Вы действительно хотите удалить пользователя ""%s""?"
     IDS_USER_LIST_MODIFIED                "Список пользователей (* изменен)"
 END
+
+// File Transfer
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_FT_LOCAL_COMPUTER                 "Локальный компьютер"
+    IDS_FT_REMOTE_COMPUTER                "Удаленный компьютер"
+    IDS_FT_COLUMN_NAME                    "Имя"
+    IDS_FT_COLUMN_SIZE                    "Размер"
+    IDS_FT_COLUMN_TYPE                    "Тип"
+    IDS_FT_TOOLTIP_REFRESH                "Обновить список файлов (F5)"
+    IDS_FT_TOOLTIP_DELETE                 "Удалить выбранный объект(ы) (Delete)"
+    IDS_FT_TOOLTIP_FOLDER_ADD             "Создать новую папку"
+    IDS_FT_TOOLTIP_FOLDER_UP              "Перейти в родительскую папку (Backspace)"
+    IDS_FT_TOOLTIP_HOME                   "Перейти в списку дисков (Ctrl+Backspace)"
+    IDS_FT_TOOLTIP_SEND                   "Отправить выбранные объекты на удаленный компьютер (F11)"
+    IDS_FT_TOOLTIP_RECIEVE                "Отправить выбранные объекты на локальный компьютер (F11)"
+END

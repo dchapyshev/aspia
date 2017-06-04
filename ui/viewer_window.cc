@@ -60,8 +60,7 @@ void ViewerWindow::OnBeforeThreadRunning()
 
 void ViewerWindow::OnAfterThreadRunning()
 {
-    DestroyWindow(hwnd());
-    Attach(nullptr);
+    DestroyWindow();
 }
 
 DesktopFrame* ViewerWindow::Frame()
@@ -140,7 +139,7 @@ void ViewerWindow::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> c
 void ViewerWindow::CreateToolBar()
 {
     toolbar_.Attach(CreateWindowExW(0,
-                                    TOOLBARCLASSNAME,
+                                    TOOLBARCLASSNAMEW,
                                     nullptr,
                                     WS_CHILD | WS_VISIBLE | WS_TABSTOP | TBSTYLE_FLAT |
                                         TBSTYLE_TOOLTIPS,
@@ -861,8 +860,8 @@ bool ViewerWindow::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* re
 
         case WM_DESTROY:
         {
-            DestroyWindow(toolbar_);
-            DestroyWindow(video_window_);
+            toolbar_.DestroyWindow();
+            video_window_.DestroyWindow();
         }
         break;
 

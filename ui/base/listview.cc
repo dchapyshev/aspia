@@ -50,6 +50,20 @@ void ListView::AddOnlyOneColumn(const std::wstring& title)
     ListView_InsertColumn(hwnd(), 0, &column);
 }
 
+void ListView::AddColumn(const std::wstring& title, int width)
+{
+    int column_count = GetColumnCount();
+
+    LVCOLUMNW column = { 0 };
+
+    column.mask    = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;
+    column.cx      = width;
+    column.fmt     = LVCFMT_LEFT;
+    column.pszText = const_cast<LPWSTR>(title.c_str());
+
+    ListView_InsertColumn(hwnd(), column_count, &column);
+}
+
 void ListView::DeleteAllItems()
 {
     ListView_DeleteAllItems(hwnd());

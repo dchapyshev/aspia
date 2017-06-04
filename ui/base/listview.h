@@ -18,12 +18,15 @@ namespace aspia {
 class ListView : public Window
 {
 public:
+    ListView() = default;
     ListView(HWND hwnd);
 
     int GetColumnCount();
     int GetItemCount();
 
     void AddOnlyOneColumn(const std::wstring& title = std::wstring());
+
+    void AddColumn(const std::wstring& title, int width);
 
     template <typename T>
     int AddItem(const std::wstring& text, T item_data, int image_index = -1)

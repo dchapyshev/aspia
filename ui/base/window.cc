@@ -10,6 +10,15 @@
 
 namespace aspia {
 
+void Window::DestroyWindow()
+{
+    if (hwnd_)
+    {
+        ::DestroyWindow(hwnd_);
+        hwnd_ = nullptr;
+    }
+}
+
 bool Window::CenterWindow(HWND hwnd_center)
 {
     LONG_PTR style = GetWindowLongPtrW(hwnd_, GWL_STYLE);
@@ -144,6 +153,41 @@ bool Window::ModifyStyleEx(LONG_PTR remove, LONG_PTR add)
     SetWindowLongPtrW(hwnd_, GWL_EXSTYLE, new_style);
 
     return true;
+}
+
+void Window::SetFont(HFONT font)
+{
+    SendMessageW(hwnd(), WM_SETFONT, reinterpret_cast<WPARAM>(font), TRUE);
+}
+
+int Window::Width()
+{
+    RECT rc = { 0 };
+
+    if (!GetWindowRect(hwnd(), &rc))
+        return 0;
+
+    return rc.right - rc.left;
+}
+
+int Window::Height()
+{
+    RECT rc = { 0 };
+
+    if (!GetWindowRect(hwnd(), &rc))
+        return 0;
+
+    return rc.bottom - rc.top;
+}
+
+DesktopSize Window::Size()
+{
+    RECT rc = { 0 };
+
+    if (!GetWindowRect(hwnd(), &rc))
+        return DesktopSize();
+
+    return DesktopSize(rc.right - rc.left, rc.bottom - rc.top);
 }
 
 } // namespace aspia

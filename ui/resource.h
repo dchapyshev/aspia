@@ -16,14 +16,21 @@
 #define IDI_MAIN                              100
 #define IDI_ABOUT                             101
 #define IDI_CAD                               102
-#define IDI_EXIT                              103
-#define IDI_FULLSCREEN                        104
-#define IDI_AUTOSIZE                          105
-#define IDI_KEYS                              106
-#define IDI_POWER                             107
-#define IDI_SETTINGS                          108
-#define IDI_USER                              109
-#define IDI_USER_DISABLED                     110
+#define IDI_DELETE                            103
+#define IDI_EXIT                              104
+#define IDI_FOLDER_ADD                        105
+#define IDI_FOLDER_UP                         106
+#define IDI_FULLSCREEN                        107
+#define IDI_HOME                              108
+#define IDI_AUTOSIZE                          109
+#define IDI_KEYS                              110
+#define IDI_POWER                             111
+#define IDI_RECIEVE                           112
+#define IDI_REFRESH                           113
+#define IDI_SEND                              114
+#define IDI_SETTINGS                          115
+#define IDI_USER                              116
+#define IDI_USER_DISABLED                     117
 
 //
 // Dialogs
@@ -92,6 +99,11 @@
 #define ID_EDIT                               513
 #define ID_DELETE                             514
 #define ID_ADD                                515
+#define ID_REFRESH                            516
+#define ID_FOLDER_ADD                         517
+#define ID_FOLDER_UP                          518
+#define ID_HOME                               519
+#define ID_SEND                               520
 
 #define ID_KEY_CTRL_ESC                       600
 #define ID_KEY_ALT_TAB                        601
@@ -167,5 +179,19 @@
 #define IDS_SESSION_TYPE_SYSTEM_INFO          146
 #define IDS_DELETE_USER_CONFORMATION          147
 #define IDS_USER_LIST_MODIFIED                148
+
+// File transfer
+#define IDS_FT_LOCAL_COMPUTER                 1000
+#define IDS_FT_REMOTE_COMPUTER                1001
+#define IDS_FT_COLUMN_NAME                    1002
+#define IDS_FT_COLUMN_SIZE                    1003
+#define IDS_FT_COLUMN_TYPE                    1004
+#define IDS_FT_TOOLTIP_REFRESH                1005
+#define IDS_FT_TOOLTIP_DELETE                 1006
+#define IDS_FT_TOOLTIP_FOLDER_ADD             1007
+#define IDS_FT_TOOLTIP_FOLDER_UP              1008
+#define IDS_FT_TOOLTIP_HOME                   1009
+#define IDS_FT_TOOLTIP_SEND                   1010
+#define IDS_FT_TOOLTIP_RECIEVE                1011
 
 #endif // _ASPIA_UI__RESOURCE_H

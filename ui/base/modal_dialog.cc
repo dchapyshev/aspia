@@ -75,8 +75,7 @@ INT_PTR ModalDialog::Run(const Module& module, HWND parent, UINT resource_id)
     }
 
     // After closing the dialog, we destroy the window.
-    DestroyWindow(hwnd());
-    Attach(nullptr);
+    DestroyWindow();
 
     return result_;
 }
