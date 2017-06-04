@@ -11,6 +11,7 @@
 #include "base/message_loop/message_loop.h"
 #include "base/scoped_user_object.h"
 #include "desktop_capture/desktop_size.h"
+#include "desktop_capture/desktop_point.h"
 
 namespace aspia {
 
@@ -34,6 +35,10 @@ public:
     int Width();
     int Height();
     DesktopSize Size();
+    int ClientWidth();
+    int ClientHeight();
+    DesktopSize ClientSize();
+    DesktopPoint CursorPositionInWindow();
 
 private:
     HWND hwnd_ = nullptr;

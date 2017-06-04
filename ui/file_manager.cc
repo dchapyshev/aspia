@@ -57,8 +57,12 @@ void FileManager::OnAfterThreadRunning()
 
 void FileManager::OnCreate()
 {
-    local_panel_.CreatePanel(hwnd(), FileManagerPanel::Type::LOCAL);
-    remote_panel_.CreatePanel(hwnd(), FileManagerPanel::Type::REMOTE);
+    splitter_.CreateWithProportion(hwnd());
+
+    local_panel_.CreatePanel(splitter_, FileManagerPanel::Type::LOCAL);
+    remote_panel_.CreatePanel(splitter_, FileManagerPanel::Type::REMOTE);
+
+    splitter_.SetPanels(local_panel_, remote_panel_);
 
     MoveWindow(hwnd(), 0, 0, kDefaultWindowWidth, kDefaultWindowHeight, TRUE);
     CenterWindow();
@@ -68,29 +72,21 @@ void FileManager::OnDestroy()
 {
     local_panel_.DestroyWindow();
     remote_panel_.DestroyWindow();
+    splitter_.DestroyWindow();
 }
 
 void FileManager::OnSize(int width, int height)
 {
-    HDWP dwp = BeginDeferWindowPos(2);
+    HDWP dwp = BeginDeferWindowPos(1);
 
     if (dwp)
     {
         DeferWindowPos(dwp,
-                       local_panel_,
+                       splitter_,
                        nullptr,
                        0,
                        0,
-                       width / 2,
-                       height,
-                       SWP_NOACTIVATE | SWP_NOZORDER);
-
-        DeferWindowPos(dwp,
-                       remote_panel_,
-                       nullptr,
-                       width / 2,
-                       0,
-                       width / 2,
+                       width,
                        height,
                        SWP_NOACTIVATE | SWP_NOZORDER);
 

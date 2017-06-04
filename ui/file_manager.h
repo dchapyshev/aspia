@@ -10,6 +10,7 @@
 
 #include "base/message_loop/message_loop_thread.h"
 #include "ui/base/child_window.h"
+#include "ui/base/splitter.h"
 #include "ui/file_manager_panel.h"
 
 namespace aspia {
@@ -49,6 +50,7 @@ private:
 
     FileManagerPanel local_panel_;
     FileManagerPanel remote_panel_;
+    Splitter splitter_;
 
     DISALLOW_COPY_AND_ASSIGN(FileManager);
 };

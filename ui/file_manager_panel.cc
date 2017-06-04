@@ -216,29 +216,32 @@ void FileManagerPanel::OnDrawItem(LPDRAWITEMSTRUCT dis)
     {
         int saved_dc = SaveDC(dis->hDC);
 
-        // Transparent background.
-        SetBkMode(dis->hDC, TRANSPARENT);
-
-        HBRUSH background_brush = GetSysColorBrush(COLOR_WINDOW);
-        FillRect(dis->hDC, &dis->rcItem, background_brush);
-
-        SetTextColor(dis->hDC, GetSysColor(COLOR_WINDOWTEXT));
-
-        dis->rcItem.left += 10;
-
-        WCHAR label[256] = { 0 };
-        GetWindowTextW(dis->hwndItem, label, _countof(label));
-
-        if (label[0])
+        if (saved_dc)
         {
-            DrawTextW(dis->hDC,
-                      label,
-                      wcslen(label),
-                      &dis->rcItem,
-                      DT_VCENTER | DT_SINGLELINE);
-        }
+            // Transparent background.
+            SetBkMode(dis->hDC, TRANSPARENT);
 
-        RestoreDC(dis->hDC, saved_dc);
+            HBRUSH background_brush = GetSysColorBrush(COLOR_WINDOW);
+            FillRect(dis->hDC, &dis->rcItem, background_brush);
+
+            WCHAR label[256] = { 0 };
+            GetWindowTextW(dis->hwndItem, label, _countof(label));
+
+            if (label[0])
+            {
+                SetTextColor(dis->hDC, GetSysColor(COLOR_WINDOWTEXT));
+
+                dis->rcItem.left += 10;
+
+                DrawTextW(dis->hDC,
+                          label,
+                          wcslen(label),
+                          &dis->rcItem,
+                          DT_VCENTER | DT_SINGLELINE);
+            }
+
+            RestoreDC(dis->hDC, saved_dc);
+        }
     }
 }
 

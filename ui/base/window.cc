@@ -190,4 +190,47 @@ DesktopSize Window::Size()
     return DesktopSize(rc.right - rc.left, rc.bottom - rc.top);
 }
 
+int Window::ClientWidth()
+{
+    RECT rc = { 0 };
+
+    if (!GetClientRect(hwnd(), &rc))
+        return 0;
+
+    return rc.right - rc.left;
+}
+
+int Window::ClientHeight()
+{
+    RECT rc = { 0 };
+
+    if (!GetClientRect(hwnd(), &rc))
+        return 0;
+
+    return rc.bottom - rc.top;
+}
+
+DesktopSize Window::ClientSize()
+{
+    RECT rc = { 0 };
+
+    if (!GetClientRect(hwnd(), &rc))
+        return DesktopSize();
+
+    return DesktopSize(rc.right - rc.left, rc.bottom - rc.top);
+}
+
+DesktopPoint Window::CursorPositionInWindow()
+{
+    POINT cursor_pos = { 0 };
+
+    if (!GetCursorPos(&cursor_pos))
+        return DesktopPoint();
+
+    if (!ScreenToClient(hwnd(), &cursor_pos))
+        return DesktopPoint();
+
+    return DesktopPoint(cursor_pos.x, cursor_pos.y);
+}
+
 } // namespace aspia
