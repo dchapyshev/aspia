@@ -22,7 +22,7 @@ public:
     class Delegate
     {
     public:
-        virtual void OnPointerEvent(int32_t x, int32_t y, uint32_t mask) = 0;
+        virtual void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) = 0;
     };
 
     explicit VideoWindow(Delegate* delegate);

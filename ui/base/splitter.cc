@@ -140,12 +140,17 @@ void Splitter::Draw()
 
 int Splitter::NormalizePosition(int position)
 {
-    int width = ClientWidth();
-
-    if (position > (width - kSplitPanelWidth))
-        return width - kSplitPanelWidth;
-    else if (position < 0)
+    if (position < 0)
+    {
         return 0;
+    }
+    else
+    {
+        int width = ClientWidth();
+
+        if (position > (width - kSplitPanelWidth))
+            return width - kSplitPanelWidth;
+    }
 
     return position;
 }

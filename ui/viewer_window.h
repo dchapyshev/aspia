@@ -30,7 +30,7 @@ public:
         virtual void OnWindowClose() = 0;
         virtual void OnConfigChange(const proto::DesktopSessionConfig& config) = 0;
         virtual void OnKeyEvent(uint32_t keycode, uint32_t flags) = 0;
-        virtual void OnPointerEvent(int x, int y, uint32_t mask) = 0;
+        virtual void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) = 0;
         virtual void OnPowerEvent(proto::PowerEvent::Action action) = 0;
         virtual void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) = 0;
     };
@@ -53,7 +53,7 @@ private:
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;
 
     // VideoWindow::Delegate implementation.
-    void OnPointerEvent(int32_t x, int32_t y, uint32_t mask) override;
+    void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) override;
 
     void OnCreate();
     void OnClose();

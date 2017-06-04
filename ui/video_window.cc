@@ -16,6 +16,8 @@ namespace aspia {
 
 static const UINT_PTR kScrollTimerId = 1;
 static const int kScrollDelta = 25;
+static const int kScrollTimerInterval = 20;
+static const int kScrollBorder = 15;
 
 static const uint8_t kWheelMask =
     proto::PointerEvent::WHEEL_DOWN | proto::PointerEvent::WHEEL_UP;
@@ -110,10 +112,7 @@ void VideoWindow::OnSize()
     if (!frame_)
         return;
 
-    RECT rect;
-    GetClientRect(hwnd(), &rect);
-
-    client_size_ = DesktopSize(rect.right - rect.left, rect.bottom - rect.top);
+    client_size_ = ClientSize();;
 
     int width = frame_->Size().Width();
     int height = frame_->Size().Height();
@@ -193,24 +192,24 @@ void VideoWindow::OnMouse(UINT msg, WPARAM wParam, LPARAM lParam)
 
         if (client_size_.Width() < frame_->Size().Width())
         {
-            if (pos.x > client_size_.Width() - 15)
+            if (pos.x > client_size_.Width() - kScrollBorder)
                 scroll_delta_x = kScrollDelta;
-            else if (pos.x < 15)
+            else if (pos.x < kScrollBorder)
                 scroll_delta_x = -kScrollDelta;
         }
 
         if (client_size_.Height() < frame_->Size().Height())
         {
-            if (pos.y > client_size_.Height() - 15)
+            if (pos.y > client_size_.Height() - kScrollBorder)
                 scroll_delta_y = kScrollDelta;
-            else if (pos.y < 15)
+            else if (pos.y < kScrollBorder)
                 scroll_delta_y = -kScrollDelta;
         }
 
         scroll_delta_.Set(scroll_delta_x, scroll_delta_y);
 
         if (scroll_delta_x || scroll_delta_y)
-            scroll_timer_.Start(hwnd());
+            scroll_timer_.Start(hwnd(), kScrollTimerInterval);
         else
             scroll_timer_.Stop();
     }
@@ -220,22 +219,24 @@ void VideoWindow::OnMouse(UINT msg, WPARAM wParam, LPARAM lParam)
 
     if (frame_->Contains(pos.x, pos.y))
     {
-        if (!prev_pos_.IsEqual(DesktopPoint(pos.x, pos.y)) || mask != prev_mask_)
+        DesktopPoint new_pos(pos.x, pos.y);
+
+        if (!prev_pos_.IsEqual(new_pos) || mask != prev_mask_)
         {
-            prev_pos_ = DesktopPoint(pos.x, pos.y);
+            prev_pos_ = new_pos;
             prev_mask_ = mask & ~kWheelMask;
 
             if (mask & kWheelMask)
             {
                 for (WORD i = 0; i < wheel_speed; ++i)
                 {
-                    delegate_->OnPointerEvent(pos.x, pos.y, mask);
-                    delegate_->OnPointerEvent(pos.x, pos.y, mask & ~kWheelMask);
+                    delegate_->OnPointerEvent(new_pos, mask);
+                    delegate_->OnPointerEvent(new_pos, mask & ~kWheelMask);
                 }
             }
             else
             {
-                delegate_->OnPointerEvent(pos.x, pos.y, mask);
+                delegate_->OnPointerEvent(new_pos, mask);
             }
         }
     }

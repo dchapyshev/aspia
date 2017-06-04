@@ -97,13 +97,13 @@ void ClientSessionDesktopManage::OnKeyEvent(uint32_t keycode, uint32_t flags)
     WriteMessage(message);
 }
 
-void ClientSessionDesktopManage::OnPointerEvent(int x, int y, uint32_t mask)
+void ClientSessionDesktopManage::OnPointerEvent(const DesktopPoint& pos, uint32_t mask)
 {
     proto::desktop::ClientToHost message;
 
     proto::PointerEvent* event = message.mutable_pointer_event();
-    event->set_x(x);
-    event->set_y(y);
+    event->set_x(pos.x());
+    event->set_y(pos.y());
     event->set_mask(mask);
 
     WriteMessage(message);

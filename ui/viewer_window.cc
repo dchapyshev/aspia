@@ -877,9 +877,9 @@ bool ViewerWindow::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* re
     return true;
 }
 
-void ViewerWindow::OnPointerEvent(int32_t x, int32_t y, uint32_t mask)
+void ViewerWindow::OnPointerEvent(const DesktopPoint& pos, uint32_t mask)
 {
-    delegate_->OnPointerEvent(x, y, mask);
+    delegate_->OnPointerEvent(pos, mask);
 }
 
 } // namespace aspia
