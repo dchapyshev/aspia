@@ -6,7 +6,7 @@
 //
 
 #include "host/host.h"
-#include "host/host_session_desktop.h"
+#include "host/host_session_console.h"
 #include "host/host_session_power.h"
 #include "host/host_user_list.h"
 #include "proto/auth_session.pb.h"
@@ -128,8 +128,15 @@ bool Host::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
         switch (request.session_type())
         {
             case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
+                session_ = HostSessionConsole::CreateForDesktopManage(this);
+                break;
+
             case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
-                session_ = HostSessionDesktop::Create(request.session_type(), this);
+                session_ = HostSessionConsole::CreateForDesktopView(this);
+                break;
+
+            case proto::SessionType::SESSION_TYPE_FILE_TRANSFER:
+                session_ = HostSessionConsole::CreateForFileTransfer(this);
                 break;
 
             case proto::SessionType::SESSION_TYPE_POWER_MANAGE:

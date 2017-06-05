@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/host_session_desktop.cc
+// FILE:            host/host_session_console.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "host/host_session_desktop.h"
+#include "host/host_session_console.h"
 #include "host/console_session_launcher.h"
 #include "base/version_helpers.h"
 #include "base/scoped_privilege.h"
@@ -15,23 +15,33 @@ namespace aspia {
 static const std::chrono::milliseconds kAttachTimeout{ 30000 };
 
 // static
-std::unique_ptr<HostSessionDesktop> HostSessionDesktop::Create(proto::SessionType session_type,
-                                                               HostSession::Delegate* delegate)
+std::unique_ptr<HostSessionConsole>
+HostSessionConsole::CreateForDesktopManage(HostSession::Delegate* delegate)
 {
-    switch (session_type)
-    {
-        case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
-            break;
-
-        default:
-            return nullptr;
-    }
-
-    return std::unique_ptr<HostSessionDesktop>(new HostSessionDesktop(session_type, delegate));
+    return std::unique_ptr<HostSessionConsole>(
+        new HostSessionConsole(proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE,
+                               delegate));
 }
 
-HostSessionDesktop::HostSessionDesktop(proto::SessionType session_type,
+// static
+std::unique_ptr<HostSessionConsole>
+HostSessionConsole::CreateForDesktopView(HostSession::Delegate* delegate)
+{
+    return std::unique_ptr<HostSessionConsole>(
+        new HostSessionConsole(proto::SessionType::SESSION_TYPE_DESKTOP_VIEW,
+                               delegate));
+}
+
+// static
+std::unique_ptr<HostSessionConsole>
+HostSessionConsole::CreateForFileTransfer(HostSession::Delegate* delegate)
+{
+    return std::unique_ptr<HostSessionConsole>(
+        new HostSessionConsole(proto::SessionType::SESSION_TYPE_FILE_TRANSFER,
+                               delegate));
+}
+
+HostSessionConsole::HostSessionConsole(proto::SessionType session_type,
                                        HostSession::Delegate* delegate) :
     HostSession(delegate),
     session_type_(session_type)
@@ -39,12 +49,12 @@ HostSessionDesktop::HostSessionDesktop(proto::SessionType session_type,
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
-HostSessionDesktop::~HostSessionDesktop()
+HostSessionConsole::~HostSessionConsole()
 {
     ui_thread_.Stop();
 }
 
-void HostSessionDesktop::OnBeforeThreadRunning()
+void HostSessionConsole::OnBeforeThreadRunning()
 {
     runner_ = ui_thread_.message_loop_proxy();
     DCHECK(runner_);
@@ -60,7 +70,7 @@ void HostSessionDesktop::OnBeforeThreadRunning()
     }
 }
 
-void HostSessionDesktop::OnAfterThreadRunning()
+void HostSessionConsole::OnAfterThreadRunning()
 {
     session_watcher_.StopWatching();
     OnSessionDetached();
@@ -69,7 +79,7 @@ void HostSessionDesktop::OnAfterThreadRunning()
     delegate_->OnSessionTerminate();
 }
 
-void HostSessionDesktop::OnSessionAttached(uint32_t session_id)
+void HostSessionConsole::OnSessionAttached(uint32_t session_id)
 {
     DCHECK(runner_->BelongsToCurrentThread());
     DCHECK(state_ == State::Detached);
@@ -101,7 +111,7 @@ void HostSessionDesktop::OnSessionAttached(uint32_t session_id)
     runner_->PostQuit();
 }
 
-void HostSessionDesktop::OnSessionDetached()
+void HostSessionConsole::OnSessionDetached()
 {
     DCHECK(runner_->BelongsToCurrentThread());
 
@@ -122,14 +132,14 @@ void HostSessionDesktop::OnSessionDetached()
     // If the new session is not connected within the specified time interval,
     // an error occurred.
     timer_.Start(kAttachTimeout,
-                 std::bind(&HostSessionDesktop::OnSessionAttachTimeout, this));
+                 std::bind(&HostSessionConsole::OnSessionAttachTimeout, this));
 }
 
-void HostSessionDesktop::OnObjectSignaled(HANDLE object)
+void HostSessionConsole::OnObjectSignaled(HANDLE object)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&HostSessionDesktop::OnObjectSignaled,
+        runner_->PostTask(std::bind(&HostSessionConsole::OnObjectSignaled,
                                     this,
                                     object));
         return;
@@ -149,11 +159,11 @@ void HostSessionDesktop::OnObjectSignaled(HANDLE object)
     }
 }
 
-void HostSessionDesktop::OnPipeChannelConnect(uint32_t user_data)
+void HostSessionConsole::OnPipeChannelConnect(uint32_t user_data)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&HostSessionDesktop::OnPipeChannelConnect,
+        runner_->PostTask(std::bind(&HostSessionConsole::OnPipeChannelConnect,
                                     this,
                                     user_data));
         return;
@@ -196,11 +206,11 @@ void HostSessionDesktop::OnPipeChannelConnect(uint32_t user_data)
     state_ = State::Attached;
 }
 
-void HostSessionDesktop::OnPipeChannelDisconnect()
+void HostSessionConsole::OnPipeChannelDisconnect()
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&HostSessionDesktop::OnPipeChannelDisconnect, this));
+        runner_->PostTask(std::bind(&HostSessionConsole::OnPipeChannelDisconnect, this));
         return;
     }
 
@@ -226,16 +236,16 @@ void HostSessionDesktop::OnPipeChannelDisconnect()
     }
 }
 
-void HostSessionDesktop::OnPipeChannelMessage(const IOBuffer& buffer)
+void HostSessionConsole::OnPipeChannelMessage(const IOBuffer& buffer)
 {
     delegate_->OnSessionMessage(buffer);
 }
 
-void HostSessionDesktop::OnSessionAttachTimeout()
+void HostSessionConsole::OnSessionAttachTimeout()
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&HostSessionDesktop::OnSessionAttachTimeout, this));
+        runner_->PostTask(std::bind(&HostSessionConsole::OnSessionAttachTimeout, this));
         return;
     }
 
@@ -252,7 +262,7 @@ void HostSessionDesktop::OnSessionAttachTimeout()
     }
 }
 
-void HostSessionDesktop::Send(const IOBuffer& buffer)
+void HostSessionConsole::Send(const IOBuffer& buffer)
 {
     std::lock_guard<std::mutex> lock(ipc_channel_lock_);
 

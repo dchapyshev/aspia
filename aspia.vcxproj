@@ -103,8 +103,7 @@
     <ClCompile Include="host\host_pool.cc" />
     <ClCompile Include="host\host_service.cc" />
     <ClCompile Include="host\host_session.cc" />
-    <ClCompile Include="host\host_session_desktop.cc" />
-    <ClCompile Include="host\host_session_file_transfer.cc" />
+    <ClCompile Include="host\host_session_console.cc" />
     <ClCompile Include="host\host_session_power.cc" />
     <ClCompile Include="host\host_user_list.cc" />
     <ClCompile Include="host\input_injector.cc" />
@@ -264,8 +263,7 @@
     <ClInclude Include="host\host_main.h" />
     <ClInclude Include="host\host_pool.h" />
     <ClInclude Include="host\host_service.h" />
-    <ClInclude Include="host\host_session_desktop.h" />
-    <ClInclude Include="host\host_session_file_transfer.h" />
+    <ClInclude Include="host\host_session_console.h" />
     <ClInclude Include="host\host_session_power.h" />
     <ClInclude Include="host\host_session_proxy.h" />
     <ClInclude Include="host\host_user_list.h" />

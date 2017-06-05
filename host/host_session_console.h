@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/host_session_desktop.h
+// FILE:            host/host_session_console.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_HOST__HOST_SESSION_DESKTOP_H
-#define _ASPIA_HOST__HOST_SESSION_DESKTOP_H
+#ifndef _ASPIA_HOST__HOST_SESSION_CONSOLE_H
+#define _ASPIA_HOST__HOST_SESSION_CONSOLE_H
 
 #include "base/message_loop/message_loop_thread.h"
 #include "base/object_watcher.h"
@@ -19,7 +19,7 @@
 
 namespace aspia {
 
-class HostSessionDesktop :
+class HostSessionConsole :
     public HostSession,
     private ConsoleSessionWatcher::Delegate,
     private ObjectWatcher::Delegate,
@@ -27,16 +27,22 @@ class HostSessionDesktop :
     private MessageLoopThread::Delegate
 {
 public:
-    ~HostSessionDesktop();
+    ~HostSessionConsole();
 
-    static std::unique_ptr<HostSessionDesktop> Create(proto::SessionType session_type,
-                                                      HostSession::Delegate* delegate);
+    static std::unique_ptr<HostSessionConsole>
+        CreateForDesktopManage(HostSession::Delegate* delegate);
+
+    static std::unique_ptr<HostSessionConsole>
+        CreateForDesktopView(HostSession::Delegate* delegate);
+
+    static std::unique_ptr<HostSessionConsole>
+        CreateForFileTransfer(HostSession::Delegate* delegate);
 
     // HostSession implementation.
     void Send(const IOBuffer& buffer) override;
 
 private:
-    HostSessionDesktop(proto::SessionType session_type,
+    HostSessionConsole(proto::SessionType session_type,
                        HostSession::Delegate* delegate);
 
     // MessageLoopThread::Delegate implementation.
@@ -76,9 +82,9 @@ private:
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::mutex ipc_channel_lock_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostSessionDesktop);
+    DISALLOW_COPY_AND_ASSIGN(HostSessionConsole);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__HOST_SESSION_DESKTOP_H
+#endif // _ASPIA_HOST__HOST_SESSION_CONSOLE_H
