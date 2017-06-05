@@ -45,7 +45,8 @@ static bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
                           TOKEN_DUPLICATE | desired_access,
                           process_token.Recieve()))
     {
-        LOG(ERROR) << "OpenProcessToken() failed: " << GetLastSystemErrorString();
+        LOG(ERROR) << "OpenProcessToken() failed: "
+                   << GetLastSystemErrorString();
         return false;
     }
 
@@ -56,7 +57,8 @@ static bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
                           TokenPrimary,
                           token_out.Recieve()))
     {
-        LOG(ERROR) << "DuplicateTokenEx() failed: " << GetLastSystemErrorString();
+        LOG(ERROR) << "DuplicateTokenEx() failed: "
+                   << GetLastSystemErrorString();
         return false;
     }
 
@@ -80,14 +82,16 @@ static bool CreatePrivilegedToken(ScopedHandle& token_out)
 
     if (!LookupPrivilegeValueW(nullptr, SE_TCB_NAME, &state.Privileges[0].Luid))
     {
-        LOG(ERROR) << "LookupPrivilegeValueW() failed: " << GetLastSystemErrorString();
+        LOG(ERROR) << "LookupPrivilegeValueW() failed: "
+                   << GetLastSystemErrorString();
         return false;
     }
 
     // Enable the SE_TCB_NAME privilege.
     if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0, nullptr, 0))
     {
-        LOG(ERROR) << "AdjustTokenPrivileges() failed: " << GetLastSystemErrorString();
+        LOG(ERROR) << "AdjustTokenPrivileges() failed: "
+                   << GetLastSystemErrorString();
         return false;
     }
 
@@ -124,7 +128,8 @@ static bool CreateSessionToken(uint32_t session_id, ScopedHandle& token_out)
                                  &new_session_id,
                                  sizeof(new_session_id)))
         {
-            LOG(ERROR) << "SetTokenInformation() failed: " << GetLastSystemErrorString();
+            LOG(ERROR) << "SetTokenInformation() failed: "
+                       << GetLastSystemErrorString();
             return false;
         }
     }
@@ -133,7 +138,8 @@ static bool CreateSessionToken(uint32_t session_id, ScopedHandle& token_out)
     return true;
 }
 
-static bool CreateProcessWithToken(HANDLE user_token, const std::wstring& command_line)
+static bool CreateProcessWithToken(HANDLE user_token,
+                                   const std::wstring& command_line)
 {
     PROCESS_INFORMATION process_info = { 0 };
     STARTUPINFOW startup_info = { 0 };
@@ -153,7 +159,8 @@ static bool CreateProcessWithToken(HANDLE user_token, const std::wstring& comman
                               &startup_info,
                               &process_info))
     {
-        LOG(ERROR) << "CreateProcessAsUserW() failed: " << GetLastSystemErrorString();
+        LOG(ERROR) << "CreateProcessAsUserW() failed: "
+                   << GetLastSystemErrorString();
         return false;
     }
 
@@ -212,36 +219,6 @@ void ConsoleSessionLauncher::ExecuteService(uint32_t session_id,
     ServiceManager(ServiceName()).Remove();
 }
 
-static bool GetSessionIdForCurrentProcess(DWORD& session_id)
-{
-    typedef BOOL(WINAPI *ProcessIdToSessionIdFn)(DWORD, DWORD*);
-
-    HMODULE kernel32_module = GetModuleHandleW(L"kernel32.dll");
-    if (!kernel32_module)
-    {
-        LOG(ERROR) << "Failed to get kernel32.dll module handle";
-        return false;
-    }
-
-    ProcessIdToSessionIdFn process_id_to_session_id =
-        reinterpret_cast<ProcessIdToSessionIdFn>(
-            GetProcAddress(kernel32_module, "ProcessIdToSessionId"));
-    if (!process_id_to_session_id)
-    {
-        LOG(ERROR) << "Failed to load ProcessIdToSessionId function";
-        return false;
-    }
-
-    if (!process_id_to_session_id(GetCurrentProcessId(), &session_id))
-    {
-        LOG(ERROR) << "ProcessIdToSessionId() failed: "
-                   << GetLastSystemErrorString();
-        return false;
-    }
-
-    return true;
-}
-
 // static
 bool ConsoleSessionLauncher::LaunchSession(uint32_t session_id,
                                            const std::wstring& input_channel_id,
@@ -271,14 +248,7 @@ bool ConsoleSessionLauncher::LaunchSession(uint32_t session_id,
     }
     else
     {
-        DWORD current_process_session_id;
-
-        if (!GetSessionIdForCurrentProcess(current_process_session_id))
-            return false;
-
-        // If the current process is started not in session 0 (not as a service),
-        // then we create a service to start the process in the required session.
-        if (!IsWindowsVistaOrGreater() || current_process_session_id != 0)
+        if (!IsRunningAsService())
         {
             std::wstring service_id =
                 ServiceManager::GenerateUniqueServiceId();
@@ -311,7 +281,9 @@ bool ConsoleSessionLauncher::LaunchSession(uint32_t session_id,
         else // The code is executed from the service.
         {
             // Start the process directly.
-            return LaunchProcessInSession(session_id, input_channel_id, output_channel_id);
+            return LaunchProcessInSession(session_id,
+                                          input_channel_id,
+                                          output_channel_id);
         }
     }
 }
