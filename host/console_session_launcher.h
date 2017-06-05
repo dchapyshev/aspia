@@ -29,10 +29,6 @@ public:
                         const std::wstring& input_channel_id,
                         const std::wstring& output_channel_id);
 
-    static bool LaunchSession(uint32_t session_id,
-                              const std::wstring& input_channel_id,
-                              const std::wstring& output_channel_id);
-
 private:
     void Worker() override;
     void OnStop() override;
@@ -46,6 +42,14 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(ConsoleSessionLauncher);
 };
+
+bool LaunchDesktopSession(uint32_t session_id,
+                          const std::wstring& input_channel_id,
+                          const std::wstring& output_channel_id);
+
+bool LaunchFileTransferSession(uint32_t session_id,
+                               const std::wstring& input_channel_id,
+                               const std::wstring& output_channel_id);
 
 } // namespace aspia
 

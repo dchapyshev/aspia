@@ -170,23 +170,33 @@ static bool CreateProcessWithToken(HANDLE user_token,
     return true;
 }
 
-static bool LaunchProcessInSession(uint32_t session_id,
+static bool CreateCommandLine(const std::wstring& run_mode,
+                              const std::wstring& input_channel_id,
+                              const std::wstring& output_channel_id,
+                              std::wstring& command_line)
+{
+    if (!GetPathW(PathKey::FILE_EXE, command_line))
+        return false;
+
+    command_line.append(L" --run_mode=");
+    command_line.append(run_mode);
+    command_line.append(L" --input_channel_id=");
+    command_line.append(input_channel_id);
+    command_line.append(L" --output_channel_id=");
+    command_line.append(output_channel_id);
+
+    return true;
+}
+
+static bool LaunchProcessInSession(const std::wstring& run_mode,
+                                   uint32_t session_id,
                                    const std::wstring& input_channel_id,
                                    const std::wstring& output_channel_id)
 {
     std::wstring command_line;
 
-    if (!GetPathW(PathKey::FILE_EXE, command_line))
+    if (!CreateCommandLine(run_mode, input_channel_id, output_channel_id, command_line))
         return false;
-
-    command_line.append(L" --run_mode=");
-
-    command_line.append(kDesktopSessionSwitch);
-
-    command_line.append(L" --input_channel_id=");
-    command_line.append(input_channel_id);
-    command_line.append(L" --output_channel_id=");
-    command_line.append(output_channel_id);
 
     ScopedHandle session_token;
 
@@ -196,9 +206,70 @@ static bool LaunchProcessInSession(uint32_t session_id,
     return CreateProcessWithToken(session_token, command_line);
 }
 
+static bool LaunchProcessWithCurrentRights(const std::wstring& run_mode,
+                                           const std::wstring& input_channel_id,
+                                           const std::wstring& output_channel_id)
+{
+    std::wstring command_line;
+
+    if (!CreateCommandLine(run_mode, input_channel_id, output_channel_id, command_line))
+        return false;
+
+    ScopedHandle token;
+
+    if (!CopyProcessToken(TOKEN_ALL_ACCESS, token))
+        return false;
+
+    return CreateProcessWithToken(token, command_line);
+}
+
+static bool LaunchProcessOverService(uint32_t session_id,
+                                     const std::wstring& input_channel_id,
+                                     const std::wstring& output_channel_id)
+{
+    std::wstring service_id =
+        ServiceManager::GenerateUniqueServiceId();
+
+    std::wstring unique_short_name =
+        ServiceManager::CreateUniqueServiceName(kServiceShortName, service_id);
+
+    std::wstring unique_full_name =
+        ServiceManager::CreateUniqueServiceName(kServiceFullName, service_id);
+
+    std::wstring command_line;
+
+    if (!GetPathW(PathKey::FILE_EXE, command_line))
+        return false;
+
+    command_line.append(L" --input_channel_id=");
+    command_line.append(input_channel_id);
+    command_line.append(L" --output_channel_id=");
+    command_line.append(output_channel_id);
+    command_line.append(L" --run_mode=");
+    command_line.append(kDesktopSessionLauncherSwitch);
+    command_line.append(L" --session_id=");
+    command_line.append(std::to_wstring(session_id));
+    command_line.append(L" --service_id=");
+    command_line.append(service_id);
+
+    // Install the service in the system.
+    ServiceManager manager(ServiceManager::Create(command_line,
+                                                  unique_full_name,
+                                                  unique_short_name));
+
+    // If the service was not installed.
+    if (!manager.IsValid())
+        return false;
+
+    return manager.Start();
+}
+
 void ConsoleSessionLauncher::Worker()
 {
-    LaunchProcessInSession(session_id_, input_channel_id_, output_channel_id_);
+    LaunchProcessInSession(kDesktopSessionSwitch,
+                           session_id_,
+                           input_channel_id_,
+                           output_channel_id_);
 }
 
 void ConsoleSessionLauncher::OnStop()
@@ -219,73 +290,50 @@ void ConsoleSessionLauncher::ExecuteService(uint32_t session_id,
     ServiceManager(ServiceName()).Remove();
 }
 
-// static
-bool ConsoleSessionLauncher::LaunchSession(uint32_t session_id,
-                                           const std::wstring& input_channel_id,
-                                           const std::wstring& output_channel_id)
+bool LaunchDesktopSession(uint32_t session_id,
+                          const std::wstring& input_channel_id,
+                          const std::wstring& output_channel_id)
 {
-    std::wstring command_line;
-
-    if (!GetPathW(PathKey::FILE_EXE, command_line))
-        return false;
-
-    command_line.append(L" --input_channel_id=");
-    command_line.append(input_channel_id);
-    command_line.append(L" --output_channel_id=");
-    command_line.append(output_channel_id);
-
     if (!IsCallerHasAdminRights())
     {
-        command_line.append(L" --run_mode=");
-        command_line.append(kDesktopSessionSwitch);
-
-        ScopedHandle token;
-
-        if (!CopyProcessToken(TOKEN_ALL_ACCESS, token))
-            return false;
-
-        return CreateProcessWithToken(token, command_line);
+        return LaunchProcessWithCurrentRights(kDesktopSessionSwitch,
+                                              input_channel_id,
+                                              output_channel_id);
     }
     else
     {
         if (!IsRunningAsService())
         {
-            std::wstring service_id =
-                ServiceManager::GenerateUniqueServiceId();
-
-            std::wstring unique_short_name =
-                ServiceManager::CreateUniqueServiceName(kServiceShortName, service_id);
-
-            std::wstring unique_full_name =
-                ServiceManager::CreateUniqueServiceName(kServiceFullName, service_id);
-
-            command_line.append(L" --run_mode=");
-            command_line.append(kDesktopSessionLauncherSwitch);
-            command_line.append(L" --session_id=");
-            command_line.append(std::to_wstring(session_id));
-
-            command_line.append(L" --service_id=");
-            command_line.append(service_id);
-
-            // Install the service in the system.
-            ServiceManager manager(ServiceManager::Create(command_line,
-                                                          unique_full_name,
-                                                          unique_short_name));
-
-            // If the service was not installed.
-            if (!manager.IsValid())
-                return false;
-
-            return manager.Start();
+            return LaunchProcessOverService(session_id,
+                                            input_channel_id,
+                                            output_channel_id);
         }
         else // The code is executed from the service.
         {
             // Start the process directly.
-            return LaunchProcessInSession(session_id,
+            return LaunchProcessInSession(kDesktopSessionSwitch,
+                                          session_id,
                                           input_channel_id,
                                           output_channel_id);
         }
     }
+}
+
+bool LaunchFileTransferSession(uint32_t session_id,
+                               const std::wstring& input_channel_id,
+                               const std::wstring& output_channel_id)
+{
+    if (IsRunningAsService())
+    {
+        return LaunchProcessInSession(kFileTransferSessionSwitch,
+                                      session_id,
+                                      input_channel_id,
+                                      output_channel_id);
+    }
+
+    return LaunchProcessWithCurrentRights(kFileTransferSessionSwitch,
+                                          input_channel_id,
+                                          output_channel_id);
 }
 
 } // namespace aspia

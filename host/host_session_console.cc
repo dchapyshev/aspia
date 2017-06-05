@@ -98,13 +98,26 @@ void HostSessionConsole::OnSessionAttached(uint32_t session_id)
                                                  output_channel_id);
         if (ipc_channel_)
         {
-            if (ConsoleSessionLauncher::LaunchSession(session_id,
-                                                      input_channel_id,
-                                                      output_channel_id))
+            bool launched = false;
+
+            switch (session_type_)
             {
-                if (ipc_channel_->Connect(session_type_, this))
-                    return;
+                case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
+                case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
+                    launched = LaunchDesktopSession(session_id,
+                                                    input_channel_id,
+                                                    output_channel_id);
+                    break;
+
+                case proto::SessionType::SESSION_TYPE_FILE_TRANSFER:
+                    launched = LaunchFileTransferSession(session_id,
+                                                         input_channel_id,
+                                                         output_channel_id);
+                    break;
             }
+
+            if (launched && ipc_channel_->Connect(session_type_, this))
+                return;
         }
     }
 
