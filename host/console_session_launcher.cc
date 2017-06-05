@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/desktop_session_launcher.cc
+// FILE:            host/console_session_launcher.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "host/desktop_session_launcher.h"
+#include "host/console_session_launcher.h"
 
 #include <userenv.h>
 #include <wtsapi32.h>
@@ -31,7 +31,7 @@ static const WCHAR kServiceFullName[] = L"Aspia Desktop Session Launcher";
 // Name of the default session desktop.
 static WCHAR kDefaultDesktopName[] = L"winsta0\\default";
 
-DesktopSessionLauncher::DesktopSessionLauncher(const std::wstring& service_id) :
+ConsoleSessionLauncher::ConsoleSessionLauncher(const std::wstring& service_id) :
     Service(ServiceManager::CreateUniqueServiceName(kServiceShortName, service_id))
 {
     // Nothing
@@ -189,17 +189,17 @@ static bool LaunchProcessInSession(uint32_t session_id,
     return CreateProcessWithToken(session_token, command_line);
 }
 
-void DesktopSessionLauncher::Worker()
+void ConsoleSessionLauncher::Worker()
 {
     LaunchProcessInSession(session_id_, input_channel_id_, output_channel_id_);
 }
 
-void DesktopSessionLauncher::OnStop()
+void ConsoleSessionLauncher::OnStop()
 {
     // Nothing
 }
 
-void DesktopSessionLauncher::ExecuteService(uint32_t session_id,
+void ConsoleSessionLauncher::ExecuteService(uint32_t session_id,
                                             const std::wstring& input_channel_id,
                                             const std::wstring& output_channel_id)
 {
@@ -213,7 +213,7 @@ void DesktopSessionLauncher::ExecuteService(uint32_t session_id,
 }
 
 // static
-bool DesktopSessionLauncher::LaunchSession(uint32_t session_id,
+bool ConsoleSessionLauncher::LaunchSession(uint32_t session_id,
                                            const std::wstring& input_channel_id,
                                            const std::wstring& output_channel_id)
 {

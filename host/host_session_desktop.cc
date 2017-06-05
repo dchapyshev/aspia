@@ -6,7 +6,7 @@
 //
 
 #include "host/host_session_desktop.h"
-#include "host/desktop_session_launcher.h"
+#include "host/console_session_launcher.h"
 #include "base/version_helpers.h"
 #include "base/scoped_privilege.h"
 
@@ -88,7 +88,7 @@ void HostSessionDesktop::OnSessionAttached(uint32_t session_id)
                                                  output_channel_id);
         if (ipc_channel_)
         {
-            if (DesktopSessionLauncher::LaunchSession(session_id,
+            if (ConsoleSessionLauncher::LaunchSession(session_id,
                                                       input_channel_id,
                                                       output_channel_id))
             {

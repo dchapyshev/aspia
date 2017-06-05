@@ -367,9 +367,6 @@
     <ClCompile Include="host\desktop_session_client.cc">
       <Filter>host</Filter>
     </ClCompile>
-    <ClCompile Include="host\desktop_session_launcher.cc">
-      <Filter>host</Filter>
-    </ClCompile>
     <ClCompile Include="host\host_session_power.cc">
       <Filter>host</Filter>
     </ClCompile>
@@ -422,6 +419,9 @@
       <Filter>proto</Filter>
     </ClCompile>
     <ClCompile Include="host\host_session_file_transfer.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\console_session_launcher.cc">
       <Filter>host</Filter>
     </ClCompile>
   </ItemGroup>
@@ -857,9 +857,6 @@
     <ClInclude Include="host\desktop_session_client.h">
       <Filter>host</Filter>
     </ClInclude>
-    <ClInclude Include="host\desktop_session_launcher.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="host\host_session_power.h">
       <Filter>host</Filter>
     </ClInclude>
@@ -924,6 +921,9 @@
       <Filter>proto</Filter>
     </ClInclude>
     <ClInclude Include="host\host_session_file_transfer.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\console_session_launcher.h">
       <Filter>host</Filter>
     </ClInclude>
   </ItemGroup>

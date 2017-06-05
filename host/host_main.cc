@@ -8,7 +8,7 @@
 #include "host/host_main.h"
 #include "host/host_service.h"
 #include "host/sas_injector.h"
-#include "host/desktop_session_launcher.h"
+#include "host/console_session_launcher.h"
 #include "host/desktop_session_client.h"
 #include "base/unicode.h"
 
@@ -54,7 +54,7 @@ void RunHostMain(const std::wstring& run_mode)
         std::wstring service_id;
         CHECK(ANSItoUNICODE(FLAGS_service_id, service_id));
 
-        DesktopSessionLauncher launcher(service_id);
+        ConsoleSessionLauncher launcher(service_id);
         launcher.ExecuteService(FLAGS_session_id, input_channel_id, output_channel_id);
     }
     else if (run_mode == kDesktopSessionSwitch)

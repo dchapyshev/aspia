@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/desktop_session_launcher.h
+// FILE:            host/console_session_launcher.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_HOST__DESKTOP_SESSION_LAUNCHER_H
-#define _ASPIA_HOST__DESKTOP_SESSION_LAUNCHER_H
+#ifndef _ASPIA_HOST__CONSOLE_SESSION_LAUNCHER_H
+#define _ASPIA_HOST__CONSOLE_SESSION_LAUNCHER_H
 
 #include <memory>
 
@@ -18,11 +18,11 @@ namespace aspia {
 static const WCHAR kDesktopSessionLauncherSwitch[] = L"desktop-session-launcher";
 static const WCHAR kDesktopSessionSwitch[] = L"desktop-session";
 
-class DesktopSessionLauncher : private Service
+class ConsoleSessionLauncher : private Service
 {
 public:
-    DesktopSessionLauncher(const std::wstring& service_id);
-    ~DesktopSessionLauncher() = default;
+    ConsoleSessionLauncher(const std::wstring& service_id);
+    ~ConsoleSessionLauncher() = default;
 
     void ExecuteService(uint32_t session_id,
                         const std::wstring& input_channel_id,
@@ -43,9 +43,9 @@ private:
     std::wstring input_channel_id_;
     std::wstring output_channel_id_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopSessionLauncher);
+    DISALLOW_COPY_AND_ASSIGN(ConsoleSessionLauncher);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__DESKTOP_SESSION_LAUNCHER_H
+#endif // _ASPIA_HOST__CONSOLE_SESSION_LAUNCHER_H
