@@ -10,6 +10,7 @@
 #include "host/sas_injector.h"
 #include "host/console_session_launcher.h"
 #include "host/desktop_session_client.h"
+#include "host/file_transfer_session_client.h"
 #include "base/unicode.h"
 
 #include <gflags/gflags.h>
@@ -66,6 +67,16 @@ void RunHostMain(const std::wstring& run_mode)
         CHECK(ANSItoUNICODE(FLAGS_output_channel_id, output_channel_id));
 
         DesktopSessionClient().Run(input_channel_id, output_channel_id);
+    }
+    else if (run_mode == kFileTransferSessionSwitch)
+    {
+        std::wstring input_channel_id;
+        CHECK(ANSItoUNICODE(FLAGS_input_channel_id, input_channel_id));
+
+        std::wstring output_channel_id;
+        CHECK(ANSItoUNICODE(FLAGS_output_channel_id, output_channel_id));
+
+        FileTransferSessionClient().Run(input_channel_id, output_channel_id);
     }
 }
 

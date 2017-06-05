@@ -7,6 +7,7 @@
 
 #include "client/client.h"
 #include "client/client_session_desktop_manage.h"
+#include "client/client_session_file_transfer.h"
 #include "client/client_session_power_manage.h"
 #include "crypto/secure_string.h"
 #include "protocol/message_serialization.h"
@@ -167,6 +168,10 @@ void Client::CreateSession(proto::SessionType session_type)
 
         case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
             session_.reset(new ClientSessionDesktopView(config_, this));
+            break;
+
+        case proto::SessionType::SESSION_TYPE_FILE_TRANSFER:
+            session_.reset(new ClientSessionFileTransfer(config_, this));
             break;
 
         case proto::SessionType::SESSION_TYPE_POWER_MANAGE:

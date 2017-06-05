@@ -98,6 +98,7 @@
     <ClCompile Include="host\console_session_launcher.cc" />
     <ClCompile Include="host\console_session_watcher.cc" />
     <ClCompile Include="host\desktop_session_client.cc" />
+    <ClCompile Include="host\file_transfer_session_client.cc" />
     <ClCompile Include="host\host.cc" />
     <ClCompile Include="host\host_main.cc" />
     <ClCompile Include="host\host_pool.cc" />
@@ -259,6 +260,7 @@
     <ClInclude Include="host\console_session_launcher.h" />
     <ClInclude Include="host\console_session_watcher.h" />
     <ClInclude Include="host\desktop_session_client.h" />
+    <ClInclude Include="host\file_transfer_session_client.h" />
     <ClInclude Include="host\host.h" />
     <ClInclude Include="host\host_main.h" />
     <ClInclude Include="host\host_pool.h" />

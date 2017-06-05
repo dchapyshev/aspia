@@ -17,6 +17,7 @@ namespace aspia {
 
 static const WCHAR kDesktopSessionLauncherSwitch[] = L"desktop-session-launcher";
 static const WCHAR kDesktopSessionSwitch[] = L"desktop-session";
+static const WCHAR kFileTransferSessionSwitch[] = L"file-transfer-session";
 
 class ConsoleSessionLauncher : private Service
 {

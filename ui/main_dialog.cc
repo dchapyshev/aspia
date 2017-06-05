@@ -106,6 +106,10 @@ void MainDialog::InitSessionTypesCombo()
                      proto::SessionType::SESSION_TYPE_DESKTOP_VIEW);
 
     ComboBox_AddItem(combo,
+                     module().string(IDS_SESSION_TYPE_FILE_TRANSFER),
+                     proto::SessionType::SESSION_TYPE_FILE_TRANSFER);
+
+    ComboBox_AddItem(combo,
                      module().string(IDS_SESSION_TYPE_POWER_MANAGE),
                      proto::SessionType::SESSION_TYPE_POWER_MANAGE);
 

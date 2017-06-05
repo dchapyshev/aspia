@@ -421,6 +421,9 @@
     <ClCompile Include="host\host_session_console.cc">
       <Filter>host</Filter>
     </ClCompile>
+    <ClCompile Include="host\file_transfer_session_client.cc">
+      <Filter>host</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -918,6 +921,9 @@
       <Filter>host</Filter>
     </ClInclude>
     <ClInclude Include="host\host_session_console.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\file_transfer_session_client.h">
       <Filter>host</Filter>
     </ClInclude>
   </ItemGroup>

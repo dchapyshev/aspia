@@ -52,7 +52,6 @@ private:
     void SendClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event);
     void SendConfigRequest();
 
-private:
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::mutex outgoing_lock_;
 
