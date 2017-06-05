@@ -13,6 +13,7 @@
 #include "base/path.h"
 
 #include <shellapi.h>
+#include <memory>
 
 namespace aspia {
 
@@ -106,6 +107,79 @@ bool IsCallerHasAdminRights()
     else
     {
         if (IsCallerAdminGroupMember())
+            return true;
+    }
+
+    return false;
+}
+
+bool IsRunningAsService()
+{
+    ScopedScHandle sc_manager(OpenSCManagerW(nullptr,
+                                             SERVICES_ACTIVE_DATABASE,
+                                             SC_MANAGER_ENUMERATE_SERVICE));
+
+    if (!sc_manager.IsValid())
+    {
+        LOG(ERROR) << "OpenSCManagerW() failed: " << GetLastSystemErrorString();
+        return false;
+    }
+
+    DWORD needed_bytes = 0;
+    DWORD services_count = 0;
+
+    if (!EnumServicesStatusExW(sc_manager,
+                               SC_ENUM_PROCESS_INFO,
+                               SERVICE_WIN32,
+                               SERVICE_ACTIVE,
+                               nullptr,
+                               0,
+                               &needed_bytes,
+                               &services_count,
+                               nullptr,
+                               nullptr))
+    {
+        DWORD error_code = GetLastError();
+
+        if (error_code != ERROR_MORE_DATA)
+        {
+            LOG(ERROR) << "EnumServicesStatusExW() failed: "
+                       << SystemErrorCodeToString(error_code);
+            return false;
+        }
+    }
+    else
+    {
+        LOG(ERROR) << "EnumServicesStatusExW() returns unexpected value";
+        return false;
+    }
+
+    std::unique_ptr<uint8_t[]> buffer(new uint8_t[needed_bytes]);
+
+    if (!EnumServicesStatusExW(sc_manager,
+                               SC_ENUM_PROCESS_INFO,
+                               SERVICE_WIN32,
+                               SERVICE_ACTIVE,
+                               buffer.get(),
+                               needed_bytes,
+                               &needed_bytes,
+                               &services_count,
+                               nullptr,
+                               nullptr))
+    {
+        LOG(ERROR) << "EnumServicesStatusExW() failed: "
+                   << GetLastSystemErrorString();
+        return false;
+    }
+
+    LPENUM_SERVICE_STATUS_PROCESS services =
+        reinterpret_cast<LPENUM_SERVICE_STATUS_PROCESS>(buffer.get());
+
+    DWORD current_process_id = GetCurrentProcessId();
+
+    for (DWORD i = 0; i < services_count; ++i)
+    {
+        if (services[i].ServiceStatusProcess.dwProcessId == current_process_id)
             return true;
     }
 

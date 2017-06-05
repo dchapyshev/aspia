@@ -16,6 +16,8 @@ bool IsProcessElevated();
 bool IsCallerAdminGroupMember();
 bool IsCallerHasAdminRights();
 
+bool IsRunningAsService();
+
 } // namespace aspia
 
 #endif // _ASPIA_BASE__PROCESS_HELPERS_H
