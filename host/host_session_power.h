@@ -25,6 +25,7 @@ public:
 
     static std::unique_ptr<HostSessionPower> Create(HostSession::Delegate* delegate);
 
+    // HostSession implementation.
     void Send(const IOBuffer& buffer) override;
 
 private:

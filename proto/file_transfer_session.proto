@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+import "file_transfer_session_message.proto";
+
+package aspia.proto.file_transfer;
+
+message HostToClient
+{
+    DriveList drive_list         = 1;
+    DirectoryList directory_list = 2;
+    File file                    = 3;
+}
+
+message ClientToHost
+{
+    DriveListRequest drive_list_request         = 1;
+    DirectoryListRequest directory_list_request = 2;
+    FileRequest file_request                    = 3;
+    File file                                   = 4;
+}

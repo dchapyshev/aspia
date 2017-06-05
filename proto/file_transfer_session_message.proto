@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message DriveListItem
+{
+    enum Type
+    {
+        UNKNOWN        = 0;
+        CDROM          = 1;
+        REMOVABLE      = 2;
+        HARDDRIVE      = 3;
+        DESKTOP_FOLDER = 4;
+    }
+
+    string path = 1;
+    Type type   = 2;
+}
+
+message DriveList
+{
+    repeated DriveListItem item = 1;
+}
+
+message DriveListRequest
+{
+    uint32 dummy = 1;
+}
+
+message DirectoryListItem
+{
+    enum Type
+    {
+        UNKNOWN   = 0;
+        DIRECTORY = 1;
+        FILE      = 2;
+    }
+
+    string name   = 1;
+    Type type = 2;
+}
+
+message DirectoryList
+{
+    string path = 1;
+    repeated DirectoryListItem item = 2;
+}
+
+message DirectoryListRequest
+{
+    string path = 1;
+}
+
+message File
+{
+    enum Flags
+    {
+         UNKNOWN_PACKET   = 0;
+         FIRST_PACKET     = 1;
+         PARTITION_PACKET = 2;
+         LAST_PACKET      = 4;
+    }
+
+    string path  = 1;
+    uint32 flags = 2;
+    bytes data   = 3;
+}
+
+message FileRequest
+{
+    string path = 1;
+}
+
+message RequestFailure
+{
+    enum ErrorCode
+    {
+        UNKNOWN_ERROR      = 0;
+        NO_CONSOLE_SESSION = 1;
+        ACCESS_DENIED      = 2;
+        FILE_NOT_FOUND     = 3;
+        PATH_NOT_FOUND     = 4;
+        FILE_EXISTS        = 5;
+        NOT_ENOUGH_MEMORY  = 6;
+    }
+
+    ErrorCode error_code = 1;
+}

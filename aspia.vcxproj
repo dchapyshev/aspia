@@ -66,6 +66,7 @@
     <ClCompile Include="client\client_session.cc" />
     <ClCompile Include="client\client_session_desktop_manage.cc" />
     <ClCompile Include="client\client_session_desktop_view.cc" />
+    <ClCompile Include="client\client_session_file_transfer.cc" />
     <ClCompile Include="client\client_session_power_manage.cc" />
     <ClCompile Include="codec\compressor_zlib.cc" />
     <ClCompile Include="codec\cursor_decoder.cc" />
@@ -103,6 +104,7 @@
     <ClCompile Include="host\host_service.cc" />
     <ClCompile Include="host\host_session.cc" />
     <ClCompile Include="host\host_session_desktop.cc" />
+    <ClCompile Include="host\host_session_file_transfer.cc" />
     <ClCompile Include="host\host_session_power.cc" />
     <ClCompile Include="host\host_user_list.cc" />
     <ClCompile Include="host\input_injector.cc" />
@@ -124,6 +126,8 @@
     <ClCompile Include="proto\auth_session_message.pb.cc" />
     <ClCompile Include="proto\desktop_session.pb.cc" />
     <ClCompile Include="proto\desktop_session_message.pb.cc" />
+    <ClCompile Include="proto\file_transfer_session.pb.cc" />
+    <ClCompile Include="proto\file_transfer_session_message.pb.cc" />
     <ClCompile Include="proto\host_user.pb.cc" />
     <ClCompile Include="proto\key_exchange.pb.cc" />
     <ClCompile Include="proto\power_session.pb.cc" />
@@ -211,6 +215,7 @@
     <ClInclude Include="client\client_session.h" />
     <ClInclude Include="client\client_session_desktop_manage.h" />
     <ClInclude Include="client\client_session_desktop_view.h" />
+    <ClInclude Include="client\client_session_file_transfer.h" />
     <ClInclude Include="client\client_session_power_manage.h" />
     <ClInclude Include="client\client_session_proxy.h" />
     <ClInclude Include="client\client_status.h" />
@@ -260,6 +265,7 @@
     <ClInclude Include="host\host_pool.h" />
     <ClInclude Include="host\host_service.h" />
     <ClInclude Include="host\host_session_desktop.h" />
+    <ClInclude Include="host\host_session_file_transfer.h" />
     <ClInclude Include="host\host_session_power.h" />
     <ClInclude Include="host\host_session_proxy.h" />
     <ClInclude Include="host\host_user_list.h" />
@@ -286,6 +292,8 @@
     <ClInclude Include="proto\auth_session_message.pb.h" />
     <ClInclude Include="proto\desktop_session.pb.h" />
     <ClInclude Include="proto\desktop_session_message.pb.h" />
+    <ClInclude Include="proto\file_transfer_session.pb.h" />
+    <ClInclude Include="proto\file_transfer_session_message.pb.h" />
     <ClInclude Include="proto\host_user.pb.h" />
     <ClInclude Include="proto\key_exchange.pb.h" />
     <ClInclude Include="proto\power_session.pb.h" />
@@ -322,6 +330,8 @@
     <None Include="proto\auth_session_message.proto" />
     <None Include="proto\desktop_session.proto" />
     <None Include="proto\desktop_session_message.proto" />
+    <None Include="proto\file_transfer_session.proto" />
+    <None Include="proto\file_transfer_session_message.proto" />
     <None Include="proto\host_user.proto" />
     <None Include="proto\key_exchange.proto" />
     <None Include="proto\power_session.proto" />

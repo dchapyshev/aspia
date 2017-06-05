@@ -412,6 +412,18 @@
     <ClCompile Include="ui\file_manager_panel.cc">
       <Filter>ui</Filter>
     </ClCompile>
+    <ClCompile Include="client\client_session_file_transfer.cc">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="proto\file_transfer_session.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="proto\file_transfer_session_message.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host_session_file_transfer.cc">
+      <Filter>host</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -902,6 +914,18 @@
     <ClInclude Include="ui\file_manager_panel.h">
       <Filter>ui</Filter>
     </ClInclude>
+    <ClInclude Include="client\client_session_file_transfer.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="proto\file_transfer_session.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
+    <ClInclude Include="proto\file_transfer_session_message.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_session_file_transfer.h">
+      <Filter>host</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -926,6 +950,12 @@
       <Filter>proto</Filter>
     </None>
     <None Include="proto\key_exchange.proto">
+      <Filter>proto</Filter>
+    </None>
+    <None Include="proto\file_transfer_session.proto">
+      <Filter>proto</Filter>
+    </None>
+    <None Include="proto\file_transfer_session_message.proto">
       <Filter>proto</Filter>
     </None>
   </ItemGroup>
