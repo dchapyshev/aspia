@@ -212,6 +212,36 @@ void ConsoleSessionLauncher::ExecuteService(uint32_t session_id,
     ServiceManager(ServiceName()).Remove();
 }
 
+static bool GetSessionIdForCurrentProcess(DWORD& session_id)
+{
+    typedef BOOL(WINAPI *ProcessIdToSessionIdFn)(DWORD, DWORD*);
+
+    HMODULE kernel32_module = GetModuleHandleW(L"kernel32.dll");
+    if (!kernel32_module)
+    {
+        LOG(ERROR) << "Failed to get kernel32.dll module handle";
+        return false;
+    }
+
+    ProcessIdToSessionIdFn process_id_to_session_id =
+        reinterpret_cast<ProcessIdToSessionIdFn>(
+            GetProcAddress(kernel32_module, "ProcessIdToSessionId"));
+    if (!process_id_to_session_id)
+    {
+        LOG(ERROR) << "Failed to load ProcessIdToSessionId function";
+        return false;
+    }
+
+    if (!process_id_to_session_id(GetCurrentProcessId(), &session_id))
+    {
+        LOG(ERROR) << "ProcessIdToSessionId() failed: "
+                   << GetLastSystemErrorString();
+        return false;
+    }
+
+    return true;
+}
+
 // static
 bool ConsoleSessionLauncher::LaunchSession(uint32_t session_id,
                                            const std::wstring& input_channel_id,
@@ -241,23 +271,10 @@ bool ConsoleSessionLauncher::LaunchSession(uint32_t session_id,
     }
     else
     {
-        typedef BOOL(WINAPI *ProcessIdToSessionIdFn)(DWORD, DWORD*);
-
-        HMODULE kernel32_module = GetModuleHandleW(L"kernel32.dll");
-        CHECK(kernel32_module);
-
-        ProcessIdToSessionIdFn process_id_to_session_id =
-            reinterpret_cast<ProcessIdToSessionIdFn>(
-                GetProcAddress(kernel32_module, "ProcessIdToSessionId"));
-        CHECK(process_id_to_session_id);
-
         DWORD current_process_session_id;
 
-        if (!process_id_to_session_id(GetCurrentProcessId(), &current_process_session_id))
-        {
-            LOG(WARNING) << "ProcessIdToSessionId() failed: " << GetLastSystemErrorString();
+        if (!GetSessionIdForCurrentProcess(current_process_session_id))
             return false;
-        }
 
         // If the current process is started not in session 0 (not as a service),
         // then we create a service to start the process in the required session.
