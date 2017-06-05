@@ -102,8 +102,7 @@ void FileManager::OnGetMinMaxInfo(LPMINMAXINFO mmi)
 
 void FileManager::OnClose()
 {
-    //delegate_->OnWindowClose();
-    runner_->PostQuit();
+    delegate_->OnWindowClose();
 }
 
 bool FileManager::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
