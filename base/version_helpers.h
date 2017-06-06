@@ -11,6 +11,7 @@
 namespace aspia {
 
 bool IsWindowsVistaOrGreater();
+bool IsWindows7OrGreater();
 
 } // namespace aspia
 
