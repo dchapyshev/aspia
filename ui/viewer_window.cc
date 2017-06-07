@@ -21,7 +21,7 @@ static const UINT kResizeFrameMessage = WM_APP + 1;
 
 static const DesktopSize kVideoWindowSize(400, 280);
 
-ViewerWindow::ViewerWindow(const ClientConfig& config, Delegate* delegate) :
+ViewerWindow::ViewerWindow(ClientConfig* config, Delegate* delegate) :
     config_(config),
     delegate_(delegate),
     video_window_(this)
@@ -200,7 +200,7 @@ void ViewerWindow::CreateToolBar()
                      reinterpret_cast<LPARAM>(toolbar_imagelist_.Handle()));
     }
 
-    if (config_.session_type() == proto::SessionType::SESSION_TYPE_DESKTOP_VIEW)
+    if (config_->session_type() == proto::SessionType::SESSION_TYPE_DESKTOP_VIEW)
     {
         TBBUTTONINFOW button_info;
         button_info.cbSize  = sizeof(button_info);
@@ -215,7 +215,7 @@ void ViewerWindow::CreateToolBar()
 
 void ViewerWindow::OnCreate()
 {
-    std::wstring title(config_.address());
+    std::wstring title(config_->address());
 
     title.append(L" - ");
     title.append(Module().Current().string(IDS_APPLICATION_NAME));
@@ -227,7 +227,7 @@ void ViewerWindow::OnCreate()
 
     DoAutoSize(kVideoWindowSize);
 
-    ApplyConfig(config_.desktop_session_config());
+    ApplyConfig(config_->desktop_session_config());
 }
 
 void ViewerWindow::OnClose()
@@ -388,13 +388,13 @@ void ViewerWindow::OnSettingsButton()
     SettingsDialog dialog;
 
     if (dialog.DoModal(hwnd(),
-                       config_.session_type(),
-                       config_.desktop_session_config()) == IDOK)
+                       config_->session_type(),
+                       config_->desktop_session_config()) == IDOK)
     {
-        config_.mutable_desktop_session_config()->CopyFrom(dialog.Config());
+        config_->mutable_desktop_session_config()->CopyFrom(dialog.Config());
 
-        ApplyConfig(config_.desktop_session_config());
-        delegate_->OnConfigChange(config_.desktop_session_config());
+        ApplyConfig(config_->desktop_session_config());
+        delegate_->OnConfigChange(config_->desktop_session_config());
     }
 }
 

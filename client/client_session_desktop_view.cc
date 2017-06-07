@@ -18,7 +18,7 @@ ClientSessionDesktopView::ClientSessionDesktopView(const ClientConfig& config,
                                                    ClientSession::Delegate* delegate) :
     ClientSession(config, delegate)
 {
-    viewer_.reset(new ViewerWindow(config, this));
+    viewer_.reset(new ViewerWindow(&config_, this));
 }
 
 ClientSessionDesktopView::~ClientSessionDesktopView()

@@ -35,7 +35,7 @@ public:
         virtual void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) = 0;
     };
 
-    ViewerWindow(const ClientConfig& config, Delegate* delegate);
+    ViewerWindow(ClientConfig* config, Delegate* delegate);
     ~ViewerWindow();
 
     DesktopFrame* Frame();
@@ -86,7 +86,7 @@ private:
     std::shared_ptr<MessageLoopProxy> runner_;
 
     Delegate* delegate_;
-    ClientConfig config_;
+    ClientConfig* config_;
 
     Window toolbar_;
     ImageList toolbar_imagelist_;
