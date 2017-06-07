@@ -299,11 +299,18 @@ END
 // Status
 STRINGTABLE DISCARDABLE
 BEGIN
-    IDS_STATUS_CONNECTING                 "Подключение"
+    IDS_STATUS_SUCCESS                    "Successfully completed"
+    IDS_STATUS_NO_CONSOLE_SESSION         "No console session"
+    IDS_STATUS_ACCESS_DENIED              "Доступ запрещен"
+    IDS_STATUS_FILE_NOT_FOUND             "File not found"
+    IDS_STATUS_PATH_NOT_FOUND             "Path not found"
+    IDS_STATUS_FILE_ALREADY_EXISTS        "File already exists"
+    IDS_STATUS_PATH_ALREADY_EXISTS        "Path already exists"
+    IDS_STATUS_DISK_FULL                  "Disk full"
+    IDS_STATUS_INVALID_ADDRESS            "Указан недопустимый адрес"
+    IDS_STATUS_INVALID_PORT               "Указан недопустимый порт"
     IDS_STATUS_CONNECT_TIMEOUT            "Превышено время ожидания соединения"
     IDS_STATUS_CONNECT_ERROR              "Не удалось установить соединение"
-    IDS_STATUS_ACCESS_DENIED              "Доступ запрещен"
-    IDS_STATUS_INVALID_HOSTNAME           "Указан недопустимый адрес"
-    IDS_STATUS_INVALID_PORT               "Указан недопустимый порт"
+    IDS_STATUS_CONNECTING                 "Подключение"
     IDS_STATUS_UNKNOWN                    "Неизвестный код состояния"
 END

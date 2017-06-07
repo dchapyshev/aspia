@@ -37,42 +37,20 @@ void StatusDialog::SetDestonation(const std::wstring& address, uint16_t port)
     SetWindowTextW(hwnd(), message.c_str());
 }
 
+// static
+std::wstring StatusDialog::StatusToString(proto::Status status)
+{
+    UINT resource_id = status + IDS_STATUS_MIN;
+
+    if (!Status_IsValid(status))
+        resource_id = IDS_STATUS_UNKNOWN;
+
+    return Module().string(resource_id);
+}
+
 void StatusDialog::SetStatus(proto::Status status)
 {
-    UINT resource_id = 0;
-
-    switch (status)
-    {
-        case proto::Status::STATUS_INVALID_ADDRESS:
-            resource_id = IDS_STATUS_INVALID_HOSTNAME;
-            break;
-
-        case proto::Status::STATUS_INVALID_PORT:
-            resource_id = IDS_STATUS_INVALID_PORT;
-            break;
-
-        case proto::Status::STATUS_CONNECTING:
-            resource_id = IDS_STATUS_CONNECTING;
-            break;
-
-        case proto::Status::STATUS_CONNECT_TIMEOUT:
-            resource_id = IDS_STATUS_CONNECT_TIMEOUT;
-            break;
-
-        case proto::Status::STATUS_CONNECT_ERROR:
-            resource_id = IDS_STATUS_CONNECT_ERROR;
-            break;
-
-        case proto::Status::STATUS_ACCESS_DENIED:
-            resource_id = IDS_STATUS_ACCESS_DENIED;
-            break;
-
-        default:
-            resource_id = IDS_STATUS_UNKNOWN;
-            break;
-    }
-
-    AddMessage(resource_id);
+    AddMessage(StatusToString(status));
 }
 
 void StatusDialog::OnInitDialog()
@@ -93,7 +71,7 @@ static void AppendText(HWND edit, const WCHAR* text)
     Edit_ReplaceSel(edit, text);
 }
 
-void StatusDialog::AddMessage(UINT resource_id)
+void StatusDialog::AddMessage(const std::wstring& message)
 {
     HWND status_edit = GetDlgItem(IDC_STATUS_EDIT);
 
@@ -111,7 +89,7 @@ void StatusDialog::AddMessage(UINT resource_id)
         AppendText(status_edit, L": ");
     }
 
-    AppendText(status_edit, module().string(resource_id).c_str());
+    AppendText(status_edit, message.c_str());
     AppendText(status_edit, L"\r\n");
 }
 

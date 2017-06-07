@@ -184,12 +184,21 @@
 #define IDS_FT_TOOLTIP_RECIEVE                1011
 
 // Status
-#define IDS_STATUS_CONNECTING                 10000
-#define IDS_STATUS_CONNECT_TIMEOUT            10001
-#define IDS_STATUS_CONNECT_ERROR              10002
-#define IDS_STATUS_ACCESS_DENIED              10003
-#define IDS_STATUS_INVALID_HOSTNAME           10004
-#define IDS_STATUS_INVALID_PORT               10005
-#define IDS_STATUS_UNKNOWN                    10006
+#define IDS_STATUS_MIN                        10000
+#define IDS_STATUS_SUCCESS                    10000
+#define IDS_STATUS_NO_CONSOLE_SESSION         10001
+#define IDS_STATUS_ACCESS_DENIED              10002
+#define IDS_STATUS_FILE_NOT_FOUND             10003
+#define IDS_STATUS_PATH_NOT_FOUND             10004
+#define IDS_STATUS_FILE_ALREADY_EXISTS        10005
+#define IDS_STATUS_PATH_ALREADY_EXISTS        10006
+#define IDS_STATUS_DISK_FULL                  10007
+#define IDS_STATUS_INVALID_ADDRESS            10008
+#define IDS_STATUS_INVALID_PORT               10009
+#define IDS_STATUS_CONNECT_TIMEOUT            10010
+#define IDS_STATUS_CONNECT_ERROR              10011
+#define IDS_STATUS_CONNECTING                 10012
+#define IDS_STATUS_MAX                        10012
+#define IDS_STATUS_UNKNOWN                    10013
 
 #endif // _ASPIA_UI__RESOURCE_H
