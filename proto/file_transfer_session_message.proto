@@ -72,19 +72,3 @@ message FileRequest
 {
     string path = 1;
 }
-
-message RequestFailure
-{
-    enum ErrorCode
-    {
-        UNKNOWN_ERROR      = 0;
-        NO_CONSOLE_SESSION = 1;
-        ACCESS_DENIED      = 2;
-        FILE_NOT_FOUND     = 3;
-        PATH_NOT_FOUND     = 4;
-        FILE_EXISTS        = 5;
-        NOT_ENOUGH_MEMORY  = 6;
-    }
-
-    ErrorCode error_code = 1;
-}

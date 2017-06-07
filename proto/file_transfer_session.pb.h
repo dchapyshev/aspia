@@ -29,6 +29,7 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include "file_transfer_session_message.pb.h"
+#include "status.pb.h"
 // @@protoc_insertion_point(includes)
 namespace aspia {
 namespace proto {
@@ -56,9 +57,6 @@ extern FileDefaultTypeInternal _File_default_instance_;
 class FileRequest;
 class FileRequestDefaultTypeInternal;
 extern FileRequestDefaultTypeInternal _FileRequest_default_instance_;
-class RequestFailure;
-class RequestFailureDefaultTypeInternal;
-extern RequestFailureDefaultTypeInternal _RequestFailure_default_instance_;
 namespace file_transfer {
 class ClientToHost;
 class ClientToHostDefaultTypeInternal;
@@ -152,32 +150,38 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.DriveList drive_list = 1;
+  // .aspia.proto.DriveList drive_list = 2;
   bool has_drive_list() const;
   void clear_drive_list();
-  static const int kDriveListFieldNumber = 1;
+  static const int kDriveListFieldNumber = 2;
   const ::aspia::proto::DriveList& drive_list() const;
   ::aspia::proto::DriveList* mutable_drive_list();
   ::aspia::proto::DriveList* release_drive_list();
   void set_allocated_drive_list(::aspia::proto::DriveList* drive_list);
 
-  // .aspia.proto.DirectoryList directory_list = 2;
+  // .aspia.proto.DirectoryList directory_list = 3;
   bool has_directory_list() const;
   void clear_directory_list();
-  static const int kDirectoryListFieldNumber = 2;
+  static const int kDirectoryListFieldNumber = 3;
   const ::aspia::proto::DirectoryList& directory_list() const;
   ::aspia::proto::DirectoryList* mutable_directory_list();
   ::aspia::proto::DirectoryList* release_directory_list();
   void set_allocated_directory_list(::aspia::proto::DirectoryList* directory_list);
 
-  // .aspia.proto.File file = 3;
+  // .aspia.proto.File file = 4;
   bool has_file() const;
   void clear_file();
-  static const int kFileFieldNumber = 3;
+  static const int kFileFieldNumber = 4;
   const ::aspia::proto::File& file() const;
   ::aspia::proto::File* mutable_file();
   ::aspia::proto::File* release_file();
   void set_allocated_file(::aspia::proto::File* file);
+
+  // .aspia.proto.Status status = 1;
+  void clear_status();
+  static const int kStatusFieldNumber = 1;
+  ::aspia::proto::Status status() const;
+  void set_status(::aspia::proto::Status value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.file_transfer.HostToClient)
  private:
@@ -186,6 +190,7 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::DriveList* drive_list_;
   ::aspia::proto::DirectoryList* directory_list_;
   ::aspia::proto::File* file_;
+  int status_;
   mutable int _cached_size_;
   friend struct protobuf_file_5ftransfer_5fsession_2eproto::TableStruct;
 };
@@ -308,7 +313,21 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // HostToClient
 
-// .aspia.proto.DriveList drive_list = 1;
+// .aspia.proto.Status status = 1;
+inline void HostToClient::clear_status() {
+  status_ = 0;
+}
+inline ::aspia::proto::Status HostToClient::status() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.HostToClient.status)
+  return static_cast< ::aspia::proto::Status >(status_);
+}
+inline void HostToClient::set_status(::aspia::proto::Status value) {
+  
+  status_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.file_transfer.HostToClient.status)
+}
+
+// .aspia.proto.DriveList drive_list = 2;
 inline bool HostToClient::has_drive_list() const {
   return this != internal_default_instance() && drive_list_ != NULL;
 }
@@ -347,7 +366,7 @@ inline void HostToClient::set_allocated_drive_list(::aspia::proto::DriveList* dr
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.HostToClient.drive_list)
 }
 
-// .aspia.proto.DirectoryList directory_list = 2;
+// .aspia.proto.DirectoryList directory_list = 3;
 inline bool HostToClient::has_directory_list() const {
   return this != internal_default_instance() && directory_list_ != NULL;
 }
@@ -386,7 +405,7 @@ inline void HostToClient::set_allocated_directory_list(::aspia::proto::Directory
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.HostToClient.directory_list)
 }
 
-// .aspia.proto.File file = 3;
+// .aspia.proto.File file = 4;
 inline bool HostToClient::has_file() const {
   return this != internal_default_instance() && file_ != NULL;
 }

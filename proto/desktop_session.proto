@@ -4,16 +4,18 @@ option optimize_for = LITE_RUNTIME;
 
 import "desktop_session_message.proto";
 import "power_session_message.proto";
+import "status.proto";
 
 package aspia.proto.desktop;
 
 message HostToClient
 {
-    VideoPacket video_packet                   = 1;
-    AudioPacket audio_packet                   = 2;
-    CursorShape cursor_shape                   = 3;
-    ClipboardEvent clipboard_event             = 4;
-    DesktopSessionConfigRequest config_request = 5;
+    Status status                              = 1;
+    VideoPacket video_packet                   = 2;
+    AudioPacket audio_packet                   = 3;
+    CursorShape cursor_shape                   = 4;
+    ClipboardEvent clipboard_event             = 5;
+    DesktopSessionConfigRequest config_request = 6;
 }
 
 message ClientToHost

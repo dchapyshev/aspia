@@ -30,6 +30,7 @@
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include "desktop_session_message.pb.h"
 #include "power_session_message.pb.h"
+#include "status.pb.h"
 // @@protoc_insertion_point(includes)
 namespace aspia {
 namespace proto {
@@ -165,50 +166,56 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.VideoPacket video_packet = 1;
+  // .aspia.proto.VideoPacket video_packet = 2;
   bool has_video_packet() const;
   void clear_video_packet();
-  static const int kVideoPacketFieldNumber = 1;
+  static const int kVideoPacketFieldNumber = 2;
   const ::aspia::proto::VideoPacket& video_packet() const;
   ::aspia::proto::VideoPacket* mutable_video_packet();
   ::aspia::proto::VideoPacket* release_video_packet();
   void set_allocated_video_packet(::aspia::proto::VideoPacket* video_packet);
 
-  // .aspia.proto.AudioPacket audio_packet = 2;
+  // .aspia.proto.AudioPacket audio_packet = 3;
   bool has_audio_packet() const;
   void clear_audio_packet();
-  static const int kAudioPacketFieldNumber = 2;
+  static const int kAudioPacketFieldNumber = 3;
   const ::aspia::proto::AudioPacket& audio_packet() const;
   ::aspia::proto::AudioPacket* mutable_audio_packet();
   ::aspia::proto::AudioPacket* release_audio_packet();
   void set_allocated_audio_packet(::aspia::proto::AudioPacket* audio_packet);
 
-  // .aspia.proto.CursorShape cursor_shape = 3;
+  // .aspia.proto.CursorShape cursor_shape = 4;
   bool has_cursor_shape() const;
   void clear_cursor_shape();
-  static const int kCursorShapeFieldNumber = 3;
+  static const int kCursorShapeFieldNumber = 4;
   const ::aspia::proto::CursorShape& cursor_shape() const;
   ::aspia::proto::CursorShape* mutable_cursor_shape();
   ::aspia::proto::CursorShape* release_cursor_shape();
   void set_allocated_cursor_shape(::aspia::proto::CursorShape* cursor_shape);
 
-  // .aspia.proto.ClipboardEvent clipboard_event = 4;
+  // .aspia.proto.ClipboardEvent clipboard_event = 5;
   bool has_clipboard_event() const;
   void clear_clipboard_event();
-  static const int kClipboardEventFieldNumber = 4;
+  static const int kClipboardEventFieldNumber = 5;
   const ::aspia::proto::ClipboardEvent& clipboard_event() const;
   ::aspia::proto::ClipboardEvent* mutable_clipboard_event();
   ::aspia::proto::ClipboardEvent* release_clipboard_event();
   void set_allocated_clipboard_event(::aspia::proto::ClipboardEvent* clipboard_event);
 
-  // .aspia.proto.DesktopSessionConfigRequest config_request = 5;
+  // .aspia.proto.DesktopSessionConfigRequest config_request = 6;
   bool has_config_request() const;
   void clear_config_request();
-  static const int kConfigRequestFieldNumber = 5;
+  static const int kConfigRequestFieldNumber = 6;
   const ::aspia::proto::DesktopSessionConfigRequest& config_request() const;
   ::aspia::proto::DesktopSessionConfigRequest* mutable_config_request();
   ::aspia::proto::DesktopSessionConfigRequest* release_config_request();
   void set_allocated_config_request(::aspia::proto::DesktopSessionConfigRequest* config_request);
+
+  // .aspia.proto.Status status = 1;
+  void clear_status();
+  static const int kStatusFieldNumber = 1;
+  ::aspia::proto::Status status() const;
+  void set_status(::aspia::proto::Status value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.desktop.HostToClient)
  private:
@@ -219,6 +226,7 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::CursorShape* cursor_shape_;
   ::aspia::proto::ClipboardEvent* clipboard_event_;
   ::aspia::proto::DesktopSessionConfigRequest* config_request_;
+  int status_;
   mutable int _cached_size_;
   friend struct protobuf_desktop_5fsession_2eproto::TableStruct;
 };
@@ -351,7 +359,21 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // HostToClient
 
-// .aspia.proto.VideoPacket video_packet = 1;
+// .aspia.proto.Status status = 1;
+inline void HostToClient::clear_status() {
+  status_ = 0;
+}
+inline ::aspia::proto::Status HostToClient::status() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.desktop.HostToClient.status)
+  return static_cast< ::aspia::proto::Status >(status_);
+}
+inline void HostToClient::set_status(::aspia::proto::Status value) {
+  
+  status_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.desktop.HostToClient.status)
+}
+
+// .aspia.proto.VideoPacket video_packet = 2;
 inline bool HostToClient::has_video_packet() const {
   return this != internal_default_instance() && video_packet_ != NULL;
 }
@@ -390,7 +412,7 @@ inline void HostToClient::set_allocated_video_packet(::aspia::proto::VideoPacket
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.video_packet)
 }
 
-// .aspia.proto.AudioPacket audio_packet = 2;
+// .aspia.proto.AudioPacket audio_packet = 3;
 inline bool HostToClient::has_audio_packet() const {
   return this != internal_default_instance() && audio_packet_ != NULL;
 }
@@ -429,7 +451,7 @@ inline void HostToClient::set_allocated_audio_packet(::aspia::proto::AudioPacket
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.audio_packet)
 }
 
-// .aspia.proto.CursorShape cursor_shape = 3;
+// .aspia.proto.CursorShape cursor_shape = 4;
 inline bool HostToClient::has_cursor_shape() const {
   return this != internal_default_instance() && cursor_shape_ != NULL;
 }
@@ -468,7 +490,7 @@ inline void HostToClient::set_allocated_cursor_shape(::aspia::proto::CursorShape
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.cursor_shape)
 }
 
-// .aspia.proto.ClipboardEvent clipboard_event = 4;
+// .aspia.proto.ClipboardEvent clipboard_event = 5;
 inline bool HostToClient::has_clipboard_event() const {
   return this != internal_default_instance() && clipboard_event_ != NULL;
 }
@@ -507,7 +529,7 @@ inline void HostToClient::set_allocated_clipboard_event(::aspia::proto::Clipboar
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.clipboard_event)
 }
 
-// .aspia.proto.DesktopSessionConfigRequest config_request = 5;
+// .aspia.proto.DesktopSessionConfigRequest config_request = 6;
 inline bool HostToClient::has_config_request() const {
   return this != internal_default_instance() && config_request_ != NULL;
 }

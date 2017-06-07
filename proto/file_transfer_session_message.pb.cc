@@ -32,8 +32,6 @@ class FileDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyC
 } _File_default_instance_;
 class FileRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<FileRequest> {
 } _FileRequest_default_instance_;
-class RequestFailureDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RequestFailure> {
-} _RequestFailure_default_instance_;
 
 namespace protobuf_file_5ftransfer_5fsession_5fmessage_2eproto {
 
@@ -56,7 +54,6 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
-  { NULL, NULL, 0, -1, -1, false },
 };
 
 
@@ -69,7 +66,6 @@ void TableStruct::Shutdown() {
   _DirectoryListRequest_default_instance_.Shutdown();
   _File_default_instance_.Shutdown();
   _FileRequest_default_instance_.Shutdown();
-  _RequestFailure_default_instance_.Shutdown();
 }
 
 void TableStruct::InitDefaultsImpl() {
@@ -84,7 +80,6 @@ void TableStruct::InitDefaultsImpl() {
   _DirectoryListRequest_default_instance_.DefaultConstruct();
   _File_default_instance_.DefaultConstruct();
   _FileRequest_default_instance_.DefaultConstruct();
-  _RequestFailure_default_instance_.DefaultConstruct();
 }
 
 void InitDefaults() {
@@ -173,33 +168,6 @@ const File_Flags File::LAST_PACKET;
 const File_Flags File::Flags_MIN;
 const File_Flags File::Flags_MAX;
 const int File::Flags_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool RequestFailure_ErrorCode_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const RequestFailure_ErrorCode RequestFailure::UNKNOWN_ERROR;
-const RequestFailure_ErrorCode RequestFailure::NO_CONSOLE_SESSION;
-const RequestFailure_ErrorCode RequestFailure::ACCESS_DENIED;
-const RequestFailure_ErrorCode RequestFailure::FILE_NOT_FOUND;
-const RequestFailure_ErrorCode RequestFailure::PATH_NOT_FOUND;
-const RequestFailure_ErrorCode RequestFailure::FILE_EXISTS;
-const RequestFailure_ErrorCode RequestFailure::NOT_ENOUGH_MEMORY;
-const RequestFailure_ErrorCode RequestFailure::ErrorCode_MIN;
-const RequestFailure_ErrorCode RequestFailure::ErrorCode_MAX;
-const int RequestFailure::ErrorCode_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 // ===================================================================
@@ -2389,203 +2357,6 @@ void FileRequest::set_allocated_path(::std::string* path) {
   }
   path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.FileRequest.path)
-}
-
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int RequestFailure::kErrorCodeFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-RequestFailure::RequestFailure()
-  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::InitDefaults();
-  }
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.RequestFailure)
-}
-RequestFailure::RequestFailure(const RequestFailure& from)
-  : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  error_code_ = from.error_code_;
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.RequestFailure)
-}
-
-void RequestFailure::SharedCtor() {
-  error_code_ = 0;
-  _cached_size_ = 0;
-}
-
-RequestFailure::~RequestFailure() {
-  // @@protoc_insertion_point(destructor:aspia.proto.RequestFailure)
-  SharedDtor();
-}
-
-void RequestFailure::SharedDtor() {
-}
-
-void RequestFailure::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const RequestFailure& RequestFailure::default_instance() {
-  protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::InitDefaults();
-  return *internal_default_instance();
-}
-
-RequestFailure* RequestFailure::New(::google::protobuf::Arena* arena) const {
-  RequestFailure* n = new RequestFailure;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void RequestFailure::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.RequestFailure)
-  error_code_ = 0;
-}
-
-bool RequestFailure::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:aspia.proto.RequestFailure)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.RequestFailure.ErrorCode error_code = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(8u)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_error_code(static_cast< ::aspia::proto::RequestFailure_ErrorCode >(value));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.RequestFailure)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.RequestFailure)
-  return false;
-#undef DO_
-}
-
-void RequestFailure::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.RequestFailure)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // .aspia.proto.RequestFailure.ErrorCode error_code = 1;
-  if (this->error_code() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->error_code(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:aspia.proto.RequestFailure)
-}
-
-size_t RequestFailure::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.RequestFailure)
-  size_t total_size = 0;
-
-  // .aspia.proto.RequestFailure.ErrorCode error_code = 1;
-  if (this->error_code() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->error_code());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void RequestFailure::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const RequestFailure*>(&from));
-}
-
-void RequestFailure::MergeFrom(const RequestFailure& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.RequestFailure)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if (from.error_code() != 0) {
-    set_error_code(from.error_code());
-  }
-}
-
-void RequestFailure::CopyFrom(const RequestFailure& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.RequestFailure)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool RequestFailure::IsInitialized() const {
-  return true;
-}
-
-void RequestFailure::Swap(RequestFailure* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void RequestFailure::InternalSwap(RequestFailure* other) {
-  std::swap(error_code_, other->error_code_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string RequestFailure::GetTypeName() const {
-  return "aspia.proto.RequestFailure";
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// RequestFailure
-
-// .aspia.proto.RequestFailure.ErrorCode error_code = 1;
-void RequestFailure::clear_error_code() {
-  error_code_ = 0;
-}
-::aspia::proto::RequestFailure_ErrorCode RequestFailure::error_code() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.RequestFailure.error_code)
-  return static_cast< ::aspia::proto::RequestFailure_ErrorCode >(error_code_);
-}
-void RequestFailure::set_error_code(::aspia::proto::RequestFailure_ErrorCode value) {
-  
-  error_code_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.RequestFailure.error_code)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

@@ -50,6 +50,7 @@ void TableStruct::InitDefaultsImpl() {
 
   ::google::protobuf::internal::InitProtobufDefaults();
   ::aspia::proto::protobuf_auth_5fsession_5fmessage_2eproto::InitDefaults();
+  ::aspia::proto::protobuf_status_2eproto::InitDefaults();
   _HostToClient_default_instance_.DefaultConstruct();
   _ClientToHost_default_instance_.DefaultConstruct();
 }
@@ -61,6 +62,7 @@ void InitDefaults() {
 void AddDescriptorsImpl() {
   InitDefaults();
   ::aspia::proto::protobuf_auth_5fsession_5fmessage_2eproto::AddDescriptors();
+  ::aspia::proto::protobuf_status_2eproto::AddDescriptors();
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
 }
 
@@ -149,7 +151,7 @@ bool HostToClient::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.AuthStatus status = 1;
+      // .aspia.proto.Status status = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u)) {
@@ -157,7 +159,7 @@ bool HostToClient::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_status(static_cast< ::aspia::proto::AuthStatus >(value));
+          set_status(static_cast< ::aspia::proto::Status >(value));
         } else {
           goto handle_unusual;
         }
@@ -191,7 +193,7 @@ void HostToClient::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.AuthStatus status = 1;
+  // .aspia.proto.Status status = 1;
   if (this->status() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->status(), output);
@@ -204,7 +206,7 @@ size_t HostToClient::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:aspia.proto.auth.HostToClient)
   size_t total_size = 0;
 
-  // .aspia.proto.AuthStatus status = 1;
+  // .aspia.proto.Status status = 1;
   if (this->status() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
@@ -261,15 +263,15 @@ void HostToClient::InternalSwap(HostToClient* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // HostToClient
 
-// .aspia.proto.AuthStatus status = 1;
+// .aspia.proto.Status status = 1;
 void HostToClient::clear_status() {
   status_ = 0;
 }
-::aspia::proto::AuthStatus HostToClient::status() const {
+::aspia::proto::Status HostToClient::status() const {
   // @@protoc_insertion_point(field_get:aspia.proto.auth.HostToClient.status)
-  return static_cast< ::aspia::proto::AuthStatus >(status_);
+  return static_cast< ::aspia::proto::Status >(status_);
 }
-void HostToClient::set_status(::aspia::proto::AuthStatus value) {
+void HostToClient::set_status(::aspia::proto::Status value) {
   
   status_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.auth.HostToClient.status)
@@ -280,10 +282,10 @@ void HostToClient::set_status(::aspia::proto::AuthStatus value) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ClientToHost::kSessionTypeFieldNumber;
 const int ClientToHost::kMethodFieldNumber;
 const int ClientToHost::kUsernameFieldNumber;
 const int ClientToHost::kPasswordFieldNumber;
-const int ClientToHost::kSessionTypeFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ClientToHost::ClientToHost()
@@ -307,17 +309,17 @@ ClientToHost::ClientToHost(const ClientToHost& from)
   if (from.password().size() > 0) {
     password_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.password_);
   }
-  ::memcpy(&method_, &from.method_,
-    reinterpret_cast<char*>(&session_type_) -
-    reinterpret_cast<char*>(&method_) + sizeof(session_type_));
+  ::memcpy(&session_type_, &from.session_type_,
+    reinterpret_cast<char*>(&method_) -
+    reinterpret_cast<char*>(&session_type_) + sizeof(method_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.auth.ClientToHost)
 }
 
 void ClientToHost::SharedCtor() {
   username_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   password_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&method_, 0, reinterpret_cast<char*>(&session_type_) -
-    reinterpret_cast<char*>(&method_) + sizeof(session_type_));
+  ::memset(&session_type_, 0, reinterpret_cast<char*>(&method_) -
+    reinterpret_cast<char*>(&session_type_) + sizeof(method_));
   _cached_size_ = 0;
 }
 
@@ -353,8 +355,8 @@ void ClientToHost::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.auth.ClientToHost)
   username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&method_, 0, reinterpret_cast<char*>(&session_type_) -
-    reinterpret_cast<char*>(&method_) + sizeof(session_type_));
+  ::memset(&session_type_, 0, reinterpret_cast<char*>(&method_) -
+    reinterpret_cast<char*>(&session_type_) + sizeof(method_));
 }
 
 bool ClientToHost::MergePartialFromCodedStream(
@@ -367,10 +369,25 @@ bool ClientToHost::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.AuthMethod method = 1;
+      // .aspia.proto.SessionType session_type = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_session_type(static_cast< ::aspia::proto::SessionType >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.AuthMethod method = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u)) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
@@ -382,10 +399,10 @@ bool ClientToHost::MergePartialFromCodedStream(
         break;
       }
 
-      // string username = 2;
-      case 2: {
+      // string username = 3;
+      case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(18u)) {
+            static_cast< ::google::protobuf::uint8>(26u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_username()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -398,27 +415,12 @@ bool ClientToHost::MergePartialFromCodedStream(
         break;
       }
 
-      // bytes password = 3;
-      case 3: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(26u)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_password()));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // .aspia.proto.SessionType session_type = 4;
+      // bytes password = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(32u)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_session_type(static_cast< ::aspia::proto::SessionType >(value));
+            static_cast< ::google::protobuf::uint8>(34u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_password()));
         } else {
           goto handle_unusual;
         }
@@ -452,32 +454,32 @@ void ClientToHost::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.AuthMethod method = 1;
-  if (this->method() != 0) {
+  // .aspia.proto.SessionType session_type = 1;
+  if (this->session_type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->method(), output);
+      1, this->session_type(), output);
   }
 
-  // string username = 2;
+  // .aspia.proto.AuthMethod method = 2;
+  if (this->method() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      2, this->method(), output);
+  }
+
+  // string username = 3;
   if (this->username().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->username().data(), this->username().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.proto.auth.ClientToHost.username");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      2, this->username(), output);
+      3, this->username(), output);
   }
 
-  // bytes password = 3;
+  // bytes password = 4;
   if (this->password().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      3, this->password(), output);
-  }
-
-  // .aspia.proto.SessionType session_type = 4;
-  if (this->session_type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      4, this->session_type(), output);
+      4, this->password(), output);
   }
 
   // @@protoc_insertion_point(serialize_end:aspia.proto.auth.ClientToHost)
@@ -487,30 +489,30 @@ size_t ClientToHost::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:aspia.proto.auth.ClientToHost)
   size_t total_size = 0;
 
-  // string username = 2;
+  // string username = 3;
   if (this->username().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->username());
   }
 
-  // bytes password = 3;
+  // bytes password = 4;
   if (this->password().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
         this->password());
   }
 
-  // .aspia.proto.AuthMethod method = 1;
-  if (this->method() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->method());
-  }
-
-  // .aspia.proto.SessionType session_type = 4;
+  // .aspia.proto.SessionType session_type = 1;
   if (this->session_type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->session_type());
+  }
+
+  // .aspia.proto.AuthMethod method = 2;
+  if (this->method() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->method());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -540,11 +542,11 @@ void ClientToHost::MergeFrom(const ClientToHost& from) {
 
     password_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.password_);
   }
-  if (from.method() != 0) {
-    set_method(from.method());
-  }
   if (from.session_type() != 0) {
     set_session_type(from.session_type());
+  }
+  if (from.method() != 0) {
+    set_method(from.method());
   }
 }
 
@@ -566,8 +568,8 @@ void ClientToHost::Swap(ClientToHost* other) {
 void ClientToHost::InternalSwap(ClientToHost* other) {
   username_.Swap(&other->username_);
   password_.Swap(&other->password_);
-  std::swap(method_, other->method_);
   std::swap(session_type_, other->session_type_);
+  std::swap(method_, other->method_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -578,7 +580,21 @@ void ClientToHost::InternalSwap(ClientToHost* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // ClientToHost
 
-// .aspia.proto.AuthMethod method = 1;
+// .aspia.proto.SessionType session_type = 1;
+void ClientToHost::clear_session_type() {
+  session_type_ = 0;
+}
+::aspia::proto::SessionType ClientToHost::session_type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.ClientToHost.session_type)
+  return static_cast< ::aspia::proto::SessionType >(session_type_);
+}
+void ClientToHost::set_session_type(::aspia::proto::SessionType value) {
+  
+  session_type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.ClientToHost.session_type)
+}
+
+// .aspia.proto.AuthMethod method = 2;
 void ClientToHost::clear_method() {
   method_ = 0;
 }
@@ -592,7 +608,7 @@ void ClientToHost::set_method(::aspia::proto::AuthMethod value) {
   // @@protoc_insertion_point(field_set:aspia.proto.auth.ClientToHost.method)
 }
 
-// string username = 2;
+// string username = 3;
 void ClientToHost::clear_username() {
   username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -645,7 +661,7 @@ void ClientToHost::set_allocated_username(::std::string* username) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.ClientToHost.username)
 }
 
-// bytes password = 3;
+// bytes password = 4;
 void ClientToHost::clear_password() {
   password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -696,20 +712,6 @@ void ClientToHost::set_allocated_password(::std::string* password) {
   }
   password_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), password);
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.ClientToHost.password)
-}
-
-// .aspia.proto.SessionType session_type = 4;
-void ClientToHost::clear_session_type() {
-  session_type_ = 0;
-}
-::aspia::proto::SessionType ClientToHost::session_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.ClientToHost.session_type)
-  return static_cast< ::aspia::proto::SessionType >(session_type_);
-}
-void ClientToHost::set_session_type(::aspia::proto::SessionType value) {
-  
-  session_type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.ClientToHost.session_type)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

@@ -29,6 +29,7 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include "auth_session_message.pb.h"
+#include "status.pb.h"
 // @@protoc_insertion_point(includes)
 namespace aspia {
 namespace proto {
@@ -125,11 +126,11 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.AuthStatus status = 1;
+  // .aspia.proto.Status status = 1;
   void clear_status();
   static const int kStatusFieldNumber = 1;
-  ::aspia::proto::AuthStatus status() const;
-  void set_status(::aspia::proto::AuthStatus value);
+  ::aspia::proto::Status status() const;
+  void set_status(::aspia::proto::Status value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.auth.HostToClient)
  private:
@@ -203,9 +204,9 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
 
   // accessors -------------------------------------------------------
 
-  // string username = 2;
+  // string username = 3;
   void clear_username();
-  static const int kUsernameFieldNumber = 2;
+  static const int kUsernameFieldNumber = 3;
   const ::std::string& username() const;
   void set_username(const ::std::string& value);
   #if LANG_CXX11
@@ -217,9 +218,9 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::std::string* release_username();
   void set_allocated_username(::std::string* username);
 
-  // bytes password = 3;
+  // bytes password = 4;
   void clear_password();
-  static const int kPasswordFieldNumber = 3;
+  static const int kPasswordFieldNumber = 4;
   const ::std::string& password() const;
   void set_password(const ::std::string& value);
   #if LANG_CXX11
@@ -231,17 +232,17 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::std::string* release_password();
   void set_allocated_password(::std::string* password);
 
-  // .aspia.proto.AuthMethod method = 1;
-  void clear_method();
-  static const int kMethodFieldNumber = 1;
-  ::aspia::proto::AuthMethod method() const;
-  void set_method(::aspia::proto::AuthMethod value);
-
-  // .aspia.proto.SessionType session_type = 4;
+  // .aspia.proto.SessionType session_type = 1;
   void clear_session_type();
-  static const int kSessionTypeFieldNumber = 4;
+  static const int kSessionTypeFieldNumber = 1;
   ::aspia::proto::SessionType session_type() const;
   void set_session_type(::aspia::proto::SessionType value);
+
+  // .aspia.proto.AuthMethod method = 2;
+  void clear_method();
+  static const int kMethodFieldNumber = 2;
+  ::aspia::proto::AuthMethod method() const;
+  void set_method(::aspia::proto::AuthMethod value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.auth.ClientToHost)
  private:
@@ -249,8 +250,8 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr username_;
   ::google::protobuf::internal::ArenaStringPtr password_;
-  int method_;
   int session_type_;
+  int method_;
   mutable int _cached_size_;
   friend struct protobuf_auth_5fsession_2eproto::TableStruct;
 };
@@ -262,15 +263,15 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // HostToClient
 
-// .aspia.proto.AuthStatus status = 1;
+// .aspia.proto.Status status = 1;
 inline void HostToClient::clear_status() {
   status_ = 0;
 }
-inline ::aspia::proto::AuthStatus HostToClient::status() const {
+inline ::aspia::proto::Status HostToClient::status() const {
   // @@protoc_insertion_point(field_get:aspia.proto.auth.HostToClient.status)
-  return static_cast< ::aspia::proto::AuthStatus >(status_);
+  return static_cast< ::aspia::proto::Status >(status_);
 }
-inline void HostToClient::set_status(::aspia::proto::AuthStatus value) {
+inline void HostToClient::set_status(::aspia::proto::Status value) {
   
   status_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.auth.HostToClient.status)
@@ -280,7 +281,21 @@ inline void HostToClient::set_status(::aspia::proto::AuthStatus value) {
 
 // ClientToHost
 
-// .aspia.proto.AuthMethod method = 1;
+// .aspia.proto.SessionType session_type = 1;
+inline void ClientToHost::clear_session_type() {
+  session_type_ = 0;
+}
+inline ::aspia::proto::SessionType ClientToHost::session_type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.ClientToHost.session_type)
+  return static_cast< ::aspia::proto::SessionType >(session_type_);
+}
+inline void ClientToHost::set_session_type(::aspia::proto::SessionType value) {
+  
+  session_type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.ClientToHost.session_type)
+}
+
+// .aspia.proto.AuthMethod method = 2;
 inline void ClientToHost::clear_method() {
   method_ = 0;
 }
@@ -294,7 +309,7 @@ inline void ClientToHost::set_method(::aspia::proto::AuthMethod value) {
   // @@protoc_insertion_point(field_set:aspia.proto.auth.ClientToHost.method)
 }
 
-// string username = 2;
+// string username = 3;
 inline void ClientToHost::clear_username() {
   username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -347,7 +362,7 @@ inline void ClientToHost::set_allocated_username(::std::string* username) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.ClientToHost.username)
 }
 
-// bytes password = 3;
+// bytes password = 4;
 inline void ClientToHost::clear_password() {
   password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -398,20 +413,6 @@ inline void ClientToHost::set_allocated_password(::std::string* password) {
   }
   password_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), password);
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.ClientToHost.password)
-}
-
-// .aspia.proto.SessionType session_type = 4;
-inline void ClientToHost::clear_session_type() {
-  session_type_ = 0;
-}
-inline ::aspia::proto::SessionType ClientToHost::session_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.ClientToHost.session_type)
-  return static_cast< ::aspia::proto::SessionType >(session_type_);
-}
-inline void ClientToHost::set_session_type(::aspia::proto::SessionType value) {
-  
-  session_type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.ClientToHost.session_type)
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS

@@ -427,6 +427,9 @@
     <ClCompile Include="base\file_enumerator.cc">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="proto\status.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -932,6 +935,9 @@
     <ClInclude Include="base\file_enumerator.h">
       <Filter>base</Filter>
     </ClInclude>
+    <ClInclude Include="proto\status.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -962,6 +968,12 @@
       <Filter>proto</Filter>
     </None>
     <None Include="proto\file_transfer_session_message.proto">
+      <Filter>proto</Filter>
+    </None>
+    <None Include="proto\status.proto">
+      <Filter>proto</Filter>
+    </None>
+    <None Include="proto\build.cmd">
       <Filter>proto</Filter>
     </None>
   </ItemGroup>

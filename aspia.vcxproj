@@ -133,6 +133,7 @@
     <ClCompile Include="proto\key_exchange.pb.cc" />
     <ClCompile Include="proto\power_session.pb.cc" />
     <ClCompile Include="proto\power_session_message.pb.cc" />
+    <ClCompile Include="proto\status.pb.cc" />
     <ClCompile Include="ui\about_dialog.cc" />
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\child_window.cc" />
@@ -300,6 +301,7 @@
     <ClInclude Include="proto\key_exchange.pb.h" />
     <ClInclude Include="proto\power_session.pb.h" />
     <ClInclude Include="proto\power_session_message.pb.h" />
+    <ClInclude Include="proto\status.pb.h" />
     <ClInclude Include="ui\about_dialog.h" />
     <ClInclude Include="ui\auth_dialog.h" />
     <ClInclude Include="ui\base\child_window.h" />
@@ -330,6 +332,7 @@
   <ItemGroup>
     <None Include="proto\auth_session.proto" />
     <None Include="proto\auth_session_message.proto" />
+    <None Include="proto\build.cmd" />
     <None Include="proto\desktop_session.proto" />
     <None Include="proto\desktop_session_message.proto" />
     <None Include="proto\file_transfer_session.proto" />
@@ -338,6 +341,7 @@
     <None Include="proto\key_exchange.proto" />
     <None Include="proto\power_session.proto" />
     <None Include="proto\power_session_message.proto" />
+    <None Include="proto\status.proto" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ui\lang\en-US.rc" />

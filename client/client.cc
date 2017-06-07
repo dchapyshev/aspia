@@ -70,19 +70,19 @@ bool Client::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
 
     switch (result.status())
     {
-        case proto::AuthStatus::AUTH_STATUS_SUCCESS:
+        case proto::Status::STATUS_SUCCESS:
             CreateSession(config_.session_type());
             return true;
 
-        case proto::AuthStatus::AUTH_STATUS_BAD_USERNAME_OR_PASSWORD:
+        case proto::Status::STATUS_INVALID_USERNAME_OR_PASSWORD:
             status_ = ClientStatus::INVALID_USERNAME_OR_PASSWORD;
             break;
 
-        case proto::AuthStatus::AUTH_STATUS_NOT_SUPPORTED_METHOD:
+        case proto::Status::STATUS_AUTH_METHOD_NOT_SUPPORTED:
             status_ = ClientStatus::NOT_SUPPORTED_AUTH_METHOD;
             break;
 
-        case proto::AuthStatus::AUTH_STATUS_SESSION_TYPE_NOT_ALLOWED:
+        case proto::Status::STATUS_SESSION_TYPE_NOT_ALLOWED:
             status_ = ClientStatus::SESSION_TYPE_NOT_ALLOWED;
             break;
 

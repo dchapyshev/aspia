@@ -54,14 +54,14 @@ void Host::OnNetworkChannelConnect()
                                 channel_proxy_.get()));
 }
 
-static proto::AuthStatus DoBasicAuthorization(const std::string& username,
-                                              const std::string& password,
-                                              proto::SessionType session_type)
+static proto::Status DoBasicAuthorization(const std::string& username,
+                                          const std::string& password,
+                                          proto::SessionType session_type)
 {
     HostUserList list;
 
     if (!list.LoadFromStorage())
-        return proto::AuthStatus::AUTH_STATUS_BAD_USERNAME_OR_PASSWORD;
+        return proto::Status::STATUS_INVALID_USERNAME_OR_PASSWORD;
 
     const int size = list.size();
 
@@ -73,23 +73,23 @@ static proto::AuthStatus DoBasicAuthorization(const std::string& username,
             continue;
 
         if (!user.enabled())
-            return proto::AuthStatus::AUTH_STATUS_BAD_USERNAME_OR_PASSWORD;
+            return proto::Status::STATUS_INVALID_USERNAME_OR_PASSWORD;
 
         SecureString<std::string> password_hash;
 
         if (!HostUserList::CreatePasswordHash(password, password_hash))
-            return proto::AuthStatus::AUTH_STATUS_BAD_USERNAME_OR_PASSWORD;
+            return proto::Status::STATUS_INVALID_USERNAME_OR_PASSWORD;
 
         if (user.password_hash() != password_hash)
-            return proto::AuthStatus::AUTH_STATUS_BAD_USERNAME_OR_PASSWORD;
+            return proto::Status::STATUS_INVALID_USERNAME_OR_PASSWORD;
 
         if (!(user.session_types() & session_type))
-            return proto::AuthStatus::AUTH_STATUS_SESSION_TYPE_NOT_ALLOWED;
+            return proto::Status::STATUS_SESSION_TYPE_NOT_ALLOWED;
 
-        return proto::AuthStatus::AUTH_STATUS_SUCCESS;
+        return proto::Status::STATUS_SUCCESS;
     }
 
-    return proto::AuthStatus::AUTH_STATUS_BAD_USERNAME_OR_PASSWORD;
+    return proto::Status::STATUS_INVALID_USERNAME_OR_PASSWORD;
 }
 
 bool Host::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
@@ -113,7 +113,7 @@ bool Host::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
             break;
 
         default:
-            result.set_status(proto::AuthStatus::AUTH_STATUS_NOT_SUPPORTED_METHOD);
+            result.set_status(proto::Status::STATUS_AUTH_METHOD_NOT_SUPPORTED);
             break;
     }
 
@@ -123,7 +123,7 @@ bool Host::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
     SecureIOBuffer result_buffer(SerializeMessage<SecureIOBuffer>(result));
     channel_proxy_->Send(result_buffer);
 
-    if (result.status() == proto::AuthStatus::AUTH_STATUS_SUCCESS)
+    if (result.status() == proto::Status::STATUS_SUCCESS)
     {
         switch (request.session_type())
         {

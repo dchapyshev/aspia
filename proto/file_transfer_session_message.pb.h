@@ -56,9 +56,6 @@ extern FileDefaultTypeInternal _File_default_instance_;
 class FileRequest;
 class FileRequestDefaultTypeInternal;
 extern FileRequestDefaultTypeInternal _FileRequest_default_instance_;
-class RequestFailure;
-class RequestFailureDefaultTypeInternal;
-extern RequestFailureDefaultTypeInternal _RequestFailure_default_instance_;
 }  // namespace proto
 }  // namespace aspia
 
@@ -117,22 +114,6 @@ bool File_Flags_IsValid(int value);
 const File_Flags File_Flags_Flags_MIN = File_Flags_UNKNOWN_PACKET;
 const File_Flags File_Flags_Flags_MAX = File_Flags_LAST_PACKET;
 const int File_Flags_Flags_ARRAYSIZE = File_Flags_Flags_MAX + 1;
-
-enum RequestFailure_ErrorCode {
-  RequestFailure_ErrorCode_UNKNOWN_ERROR = 0,
-  RequestFailure_ErrorCode_NO_CONSOLE_SESSION = 1,
-  RequestFailure_ErrorCode_ACCESS_DENIED = 2,
-  RequestFailure_ErrorCode_FILE_NOT_FOUND = 3,
-  RequestFailure_ErrorCode_PATH_NOT_FOUND = 4,
-  RequestFailure_ErrorCode_FILE_EXISTS = 5,
-  RequestFailure_ErrorCode_NOT_ENOUGH_MEMORY = 6,
-  RequestFailure_ErrorCode_RequestFailure_ErrorCode_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  RequestFailure_ErrorCode_RequestFailure_ErrorCode_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool RequestFailure_ErrorCode_IsValid(int value);
-const RequestFailure_ErrorCode RequestFailure_ErrorCode_ErrorCode_MIN = RequestFailure_ErrorCode_UNKNOWN_ERROR;
-const RequestFailure_ErrorCode RequestFailure_ErrorCode_ErrorCode_MAX = RequestFailure_ErrorCode_NOT_ENOUGH_MEMORY;
-const int RequestFailure_ErrorCode_ErrorCode_ARRAYSIZE = RequestFailure_ErrorCode_ErrorCode_MAX + 1;
 
 // ===================================================================
 
@@ -918,109 +899,6 @@ class FileRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion
   mutable int _cached_size_;
   friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
 };
-// -------------------------------------------------------------------
-
-class RequestFailure : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.RequestFailure) */ {
- public:
-  RequestFailure();
-  virtual ~RequestFailure();
-
-  RequestFailure(const RequestFailure& from);
-
-  inline RequestFailure& operator=(const RequestFailure& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  static const RequestFailure& default_instance();
-
-  static inline const RequestFailure* internal_default_instance() {
-    return reinterpret_cast<const RequestFailure*>(
-               &_RequestFailure_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
-
-  void Swap(RequestFailure* other);
-
-  // implements Message ----------------------------------------------
-
-  inline RequestFailure* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  RequestFailure* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const RequestFailure& from);
-  void MergeFrom(const RequestFailure& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(RequestFailure* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  typedef RequestFailure_ErrorCode ErrorCode;
-  static const ErrorCode UNKNOWN_ERROR =
-    RequestFailure_ErrorCode_UNKNOWN_ERROR;
-  static const ErrorCode NO_CONSOLE_SESSION =
-    RequestFailure_ErrorCode_NO_CONSOLE_SESSION;
-  static const ErrorCode ACCESS_DENIED =
-    RequestFailure_ErrorCode_ACCESS_DENIED;
-  static const ErrorCode FILE_NOT_FOUND =
-    RequestFailure_ErrorCode_FILE_NOT_FOUND;
-  static const ErrorCode PATH_NOT_FOUND =
-    RequestFailure_ErrorCode_PATH_NOT_FOUND;
-  static const ErrorCode FILE_EXISTS =
-    RequestFailure_ErrorCode_FILE_EXISTS;
-  static const ErrorCode NOT_ENOUGH_MEMORY =
-    RequestFailure_ErrorCode_NOT_ENOUGH_MEMORY;
-  static inline bool ErrorCode_IsValid(int value) {
-    return RequestFailure_ErrorCode_IsValid(value);
-  }
-  static const ErrorCode ErrorCode_MIN =
-    RequestFailure_ErrorCode_ErrorCode_MIN;
-  static const ErrorCode ErrorCode_MAX =
-    RequestFailure_ErrorCode_ErrorCode_MAX;
-  static const int ErrorCode_ARRAYSIZE =
-    RequestFailure_ErrorCode_ErrorCode_ARRAYSIZE;
-
-  // accessors -------------------------------------------------------
-
-  // .aspia.proto.RequestFailure.ErrorCode error_code = 1;
-  void clear_error_code();
-  static const int kErrorCodeFieldNumber = 1;
-  ::aspia::proto::RequestFailure_ErrorCode error_code() const;
-  void set_error_code(::aspia::proto::RequestFailure_ErrorCode value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.RequestFailure)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  int error_code_;
-  mutable int _cached_size_;
-  friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
-};
 // ===================================================================
 
 
@@ -1544,27 +1422,7 @@ inline void FileRequest::set_allocated_path(::std::string* path) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.FileRequest.path)
 }
 
-// -------------------------------------------------------------------
-
-// RequestFailure
-
-// .aspia.proto.RequestFailure.ErrorCode error_code = 1;
-inline void RequestFailure::clear_error_code() {
-  error_code_ = 0;
-}
-inline ::aspia::proto::RequestFailure_ErrorCode RequestFailure::error_code() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.RequestFailure.error_code)
-  return static_cast< ::aspia::proto::RequestFailure_ErrorCode >(error_code_);
-}
-inline void RequestFailure::set_error_code(::aspia::proto::RequestFailure_ErrorCode value) {
-  
-  error_code_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.RequestFailure.error_code)
-}
-
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
@@ -1593,7 +1451,6 @@ namespace protobuf {
 template <> struct is_proto_enum< ::aspia::proto::DriveListItem_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DirectoryListItem_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::File_Flags> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::RequestFailure_ErrorCode> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
 }  // namespace google
