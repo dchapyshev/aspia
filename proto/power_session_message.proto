@@ -1,3 +1,10 @@
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            proto/power_session_message.proto
+// LICENSE:         See top-level directory
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
 syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
