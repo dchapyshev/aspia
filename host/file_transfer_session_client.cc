@@ -85,7 +85,7 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
 void FileTransferSessionClient::WriteMessage(
     const proto::file_transfer::HostToClient& message)
 {
-    IOBuffer buffer(SerializeMessage(message));
+    IOBuffer buffer(SerializeMessage<IOBuffer>(message));
     std::lock_guard<std::mutex> lock(outgoing_lock_);
     ipc_channel_->Send(buffer);
 }

@@ -143,7 +143,7 @@ void ClientSessionDesktopView::Send(const IOBuffer& buffer)
 void ClientSessionDesktopView::WriteMessage(
     const proto::desktop::ClientToHost& message)
 {
-    IOBuffer buffer = SerializeMessage(message);
+    IOBuffer buffer(SerializeMessage<IOBuffer>(message));
 
     if (!buffer.IsEmpty())
     {

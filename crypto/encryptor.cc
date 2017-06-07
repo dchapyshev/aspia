@@ -120,7 +120,7 @@ SecureIOBuffer Encryptor::HelloMessage()
     message.set_public_key(local_public_key_->data(), local_public_key_->size());
     message.set_nonce(encrypt_nonce_->data(), encrypt_nonce_->size());
 
-    SecureIOBuffer message_buffer(SerializeSecureMessage(message));
+    SecureIOBuffer message_buffer(SerializeMessage<SecureIOBuffer>(message));
 
     ClearStringContent(*message.mutable_public_key());
     ClearStringContent(*message.mutable_nonce());

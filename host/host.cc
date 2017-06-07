@@ -120,7 +120,7 @@ bool Host::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
     ClearStringContent(*request.mutable_username());
     ClearStringContent(*request.mutable_password());
 
-    SecureIOBuffer result_buffer(SerializeSecureMessage(result));
+    SecureIOBuffer result_buffer(SerializeMessage<SecureIOBuffer>(result));
     channel_proxy_->Send(result_buffer);
 
     if (result.status() == proto::AuthStatus::AUTH_STATUS_SUCCESS)

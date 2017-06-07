@@ -45,7 +45,7 @@ void ClientSessionPowerManage::OnAfterThreadRunning()
         proto::power::ClientToHost message;
         message.mutable_power_event()->set_action(action);
 
-        IOBuffer buffer(SerializeMessage(message));
+        IOBuffer buffer(SerializeMessage<IOBuffer>(message));
 
         delegate_->OnSessionMessage(std::move(buffer));
     }

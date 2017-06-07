@@ -138,7 +138,7 @@ void Client::OnNetworkChannelConnect()
     request.set_username(auth_dialog.UserName());
     request.set_password(auth_dialog.Password());
 
-    SecureIOBuffer output_buffer(SerializeSecureMessage(request));
+    SecureIOBuffer output_buffer(SerializeMessage<SecureIOBuffer>(request));
     CHECK(!output_buffer.IsEmpty());
 
     ClearStringContent(*request.mutable_username());
