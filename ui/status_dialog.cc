@@ -37,50 +37,34 @@ void StatusDialog::SetDestonation(const std::wstring& address, uint16_t port)
     SetWindowTextW(hwnd(), message.c_str());
 }
 
-void StatusDialog::SetStatus(ClientStatus status)
+void StatusDialog::SetStatus(proto::Status status)
 {
     UINT resource_id = 0;
 
     switch (status)
     {
-        case ClientStatus::INVALID_HOSTNAME:
+        case proto::Status::STATUS_INVALID_ADDRESS:
             resource_id = IDS_STATUS_INVALID_HOSTNAME;
             break;
 
-        case ClientStatus::INVALID_PORT:
+        case proto::Status::STATUS_INVALID_PORT:
             resource_id = IDS_STATUS_INVALID_PORT;
             break;
 
-        case ClientStatus::DISCONNECTED:
-            resource_id = IDS_STATUS_DISCONNECTED;
-            break;
-
-        case ClientStatus::CONNECTING:
+        case proto::Status::STATUS_CONNECTING:
             resource_id = IDS_STATUS_CONNECTING;
             break;
 
-        case ClientStatus::CONNECTED:
-            resource_id = IDS_STATUS_CONNECTED;
-            break;
-
-        case ClientStatus::CONNECT_TIMEOUT:
+        case proto::Status::STATUS_CONNECT_TIMEOUT:
             resource_id = IDS_STATUS_CONNECT_TIMEOUT;
             break;
 
-        case ClientStatus::CONNECT_ERROR:
+        case proto::Status::STATUS_CONNECT_ERROR:
             resource_id = IDS_STATUS_CONNECT_ERROR;
             break;
 
-        case ClientStatus::INVALID_USERNAME_OR_PASSWORD:
-            resource_id = IDS_STATUS_BAD_USERNAME_OR_PASSWORD;
-            break;
-
-        case ClientStatus::NOT_SUPPORTED_AUTH_METHOD:
-            resource_id = IDS_STATUS_NOT_SUPPORTED_METHOD;
-            break;
-
-        case ClientStatus::SESSION_TYPE_NOT_ALLOWED:
-            resource_id = IDS_STATUS_SESSION_TYPE_NOT_ALLOWED;
+        case proto::Status::STATUS_ACCESS_DENIED:
+            resource_id = IDS_STATUS_ACCESS_DENIED;
             break;
 
         default:

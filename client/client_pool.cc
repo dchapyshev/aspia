@@ -32,22 +32,22 @@ void ClientPool::OnStatusDialogOpen()
 {
     if (!NetworkClientTcp::IsValidHostName(config_.address()))
     {
-        status_dialog_.SetStatus(ClientStatus::INVALID_HOSTNAME);
+        status_dialog_.SetStatus(proto::Status::STATUS_INVALID_ADDRESS);
     }
     else if (!NetworkClientTcp::IsValidPort(config_.port()))
     {
-        status_dialog_.SetStatus(ClientStatus::INVALID_PORT);
+        status_dialog_.SetStatus(proto::Status::STATUS_INVALID_PORT);
     }
     else
     {
         status_dialog_.SetDestonation(config_.address(), config_.port());
-        status_dialog_.SetStatus(ClientStatus::CONNECTING);
+        status_dialog_.SetStatus(proto::Status::STATUS_CONNECTING);
 
         network_client_.reset(new NetworkClientTcp());
 
         if (!network_client_->Connect(config_.address(), config_.port(), this))
         {
-            status_dialog_.SetStatus(ClientStatus::CONNECT_ERROR);
+            status_dialog_.SetStatus(proto::Status::STATUS_CONNECT_ERROR);
         }
     }
 }
@@ -62,12 +62,12 @@ void ClientPool::OnConnectionSuccess(std::unique_ptr<NetworkChannel> channel)
 
 void ClientPool::OnConnectionTimeout()
 {
-    status_dialog_.SetStatus(ClientStatus::CONNECT_TIMEOUT);
+    status_dialog_.SetStatus(proto::Status::STATUS_CONNECT_TIMEOUT);
 }
 
 void ClientPool::OnConnectionError()
 {
-    status_dialog_.SetStatus(ClientStatus::CONNECT_ERROR);
+    status_dialog_.SetStatus(proto::Status::STATUS_CONNECT_ERROR);
 }
 
 void ClientPool::OnSessionTerminate()

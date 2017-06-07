@@ -821,9 +821,6 @@
     <ClInclude Include="ui\ui_main.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="client\client_status.h">
-      <Filter>client</Filter>
-    </ClInclude>
     <ClInclude Include="base\scoped_comptr.h">
       <Filter>base</Filter>
     </ClInclude>

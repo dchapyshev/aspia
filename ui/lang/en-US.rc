@@ -255,17 +255,6 @@ BEGIN
     IDS_SHORTCUTS                         "Send a keyboard shortcut"
     IDS_ABOUT                             "About program"
     IDS_CONNECTION                        "Connection to: %s:%u"
-    IDS_STATUS_DISCONNECTED               "Disconnected"
-    IDS_STATUS_CONNECTING                 "Connecting..."
-    IDS_STATUS_CONNECTED                  "Connected"
-    IDS_STATUS_CONNECT_TIMEOUT            "Connection timeout"
-    IDS_STATUS_CONNECT_ERROR              "Unable to establish connection"
-    IDS_STATUS_SESSION_TYPE_NOT_ALLOWED   "The selected session type is not supported or disabled"
-    IDS_STATUS_NOT_SUPPORTED_METHOD       "The selected authorization method is not supported or disabled"
-    IDS_STATUS_BAD_USERNAME_OR_PASSWORD   "An incorrect username and/or password or user account is disabled"
-    IDS_STATUS_INVALID_HOSTNAME           "Invalid address specified"
-    IDS_STATUS_INVALID_PORT               "Invalid port specified"
-    IDS_STATUS_UNKNOWN                    "Unknown error type"
     IDS_CONFIRMATION                      "Confirmation"
     IDS_COMPRESSION_RATIO_FORMAT          "Compression ratio: %d"
     IDS_32BIT                             "True color (32 bit)"
@@ -305,4 +294,16 @@ BEGIN
     IDS_FT_TOOLTIP_HOME                   "Browse to drives (Ctrl+Backspace)"
     IDS_FT_TOOLTIP_SEND                   "Send selected object(s) to remote computer (F11)"
     IDS_FT_TOOLTIP_RECIEVE                "Send selected object(s) to local computer (F11)"
+END
+
+// Status
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_STATUS_CONNECTING                 "Connecting"
+    IDS_STATUS_CONNECT_TIMEOUT            "Connection timeout"
+    IDS_STATUS_CONNECT_ERROR              "Unable to establish connection"
+    IDS_STATUS_ACCESS_DENIED              "Access denied"
+    IDS_STATUS_INVALID_HOSTNAME           "Invalid address specified"
+    IDS_STATUS_INVALID_PORT               "Invalid port specified"
+    IDS_STATUS_UNKNOWN                    "Unknown status code"
 END

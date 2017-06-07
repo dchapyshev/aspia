@@ -221,7 +221,6 @@
     <ClInclude Include="client\client_session_file_transfer.h" />
     <ClInclude Include="client\client_session_power_manage.h" />
     <ClInclude Include="client\client_session_proxy.h" />
-    <ClInclude Include="client\client_status.h" />
     <ClInclude Include="codec\compressor.h" />
     <ClInclude Include="codec\compressor_zlib.h" />
     <ClInclude Include="codec\cursor_decoder.h" />

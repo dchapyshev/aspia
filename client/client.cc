@@ -68,31 +68,16 @@ bool Client::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
     if (!ParseMessage(buffer, result))
         return false;
 
-    switch (result.status())
+    status_ = result.status();
+
+    if (status_ != proto::Status::STATUS_SUCCESS)
     {
-        case proto::Status::STATUS_SUCCESS:
-            CreateSession(result.session_type());
-            return true;
-
-        case proto::Status::STATUS_INVALID_USERNAME_OR_PASSWORD:
-            status_ = ClientStatus::INVALID_USERNAME_OR_PASSWORD;
-            break;
-
-        case proto::Status::STATUS_AUTH_METHOD_NOT_SUPPORTED:
-            status_ = ClientStatus::NOT_SUPPORTED_AUTH_METHOD;
-            break;
-
-        case proto::Status::STATUS_SESSION_TYPE_NOT_ALLOWED:
-            status_ = ClientStatus::SESSION_TYPE_NOT_ALLOWED;
-            break;
-
-        default:
-            status_ = ClientStatus::UNKNOWN;
-            break;
+        runner_->PostTask(std::bind(&Client::OpenStatusDialog, this));
+        return false;
     }
 
-    runner_->PostTask(std::bind(&Client::OpenStatusDialog, this));
-    return false;
+    CreateSession(result.session_type());
+    return true;
 }
 
 void Client::OnNetworkChannelMessage(const IOBuffer& buffer)

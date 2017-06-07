@@ -61,7 +61,7 @@ static proto::Status DoBasicAuthorization(const std::string& username,
     HostUserList user_list;
 
     if (!user_list.LoadFromStorage())
-        return proto::Status::STATUS_INVALID_USERNAME_OR_PASSWORD;
+        return proto::Status::STATUS_ACCESS_DENIED;
 
     const int size = user_list.size();
 
@@ -73,23 +73,23 @@ static proto::Status DoBasicAuthorization(const std::string& username,
             continue;
 
         if (!user.enabled())
-            return proto::Status::STATUS_INVALID_USERNAME_OR_PASSWORD;
+            return proto::Status::STATUS_ACCESS_DENIED;
 
         SecureString<std::string> password_hash;
 
         if (!HostUserList::CreatePasswordHash(password, password_hash))
-            return proto::Status::STATUS_INVALID_USERNAME_OR_PASSWORD;
+            return proto::Status::STATUS_ACCESS_DENIED;
 
         if (user.password_hash() != password_hash)
-            return proto::Status::STATUS_INVALID_USERNAME_OR_PASSWORD;
+            return proto::Status::STATUS_ACCESS_DENIED;
 
         if (!(user.session_types() & session_type))
-            return proto::Status::STATUS_SESSION_TYPE_NOT_ALLOWED;
+            return proto::Status::STATUS_ACCESS_DENIED;
 
         return proto::Status::STATUS_SUCCESS;
     }
 
-    return proto::Status::STATUS_INVALID_USERNAME_OR_PASSWORD;
+    return proto::Status::STATUS_ACCESS_DENIED;
 }
 
 bool Host::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
@@ -114,7 +114,7 @@ bool Host::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
             break;
 
         default:
-            result.set_status(proto::Status::STATUS_AUTH_METHOD_NOT_SUPPORTED);
+            result.set_status(proto::Status::STATUS_ACCESS_DENIED);
             break;
     }
 

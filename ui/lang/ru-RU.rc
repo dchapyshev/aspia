@@ -255,17 +255,6 @@ BEGIN
     IDS_SHORTCUTS                         "Отправить комбинацию клавишь"
     IDS_ABOUT                             "О программе"
     IDS_CONNECTION                        "Подключение к: %s:%u"
-    IDS_STATUS_DISCONNECTED               "Отключен"
-    IDS_STATUS_CONNECTING                 "Подключение..."
-    IDS_STATUS_CONNECTED                  "Подключен"
-    IDS_STATUS_CONNECT_TIMEOUT            "Превышено время ожидания соединения"
-    IDS_STATUS_CONNECT_ERROR              "Не удалось установить подключение"
-    IDS_STATUS_SESSION_TYPE_NOT_ALLOWED   "Выбранный тип сессии не поддерживается или отключен"
-    IDS_STATUS_NOT_SUPPORTED_METHOD       "Выбранный тип авторизации не поддерживается или отключен"
-    IDS_STATUS_BAD_USERNAME_OR_PASSWORD   "Некорректное имя пользователя, пароль или учетная запись пользователя отключена"
-    IDS_STATUS_INVALID_HOSTNAME           "Указан недопустимый адрес"
-    IDS_STATUS_INVALID_PORT               "Указан недопустимый порт"
-    IDS_STATUS_UNKNOWN                    "Неизвестный тип ошибки"
     IDS_CONFIRMATION                      "Подтверждение"
     IDS_COMPRESSION_RATIO_FORMAT          "Уровень сжатия: %d"
     IDS_32BIT                             "True color (32 бит)"
@@ -305,4 +294,16 @@ BEGIN
     IDS_FT_TOOLTIP_HOME                   "Перейти в списку дисков (Ctrl+Backspace)"
     IDS_FT_TOOLTIP_SEND                   "Отправить выбранные объекты на удаленный компьютер (F11)"
     IDS_FT_TOOLTIP_RECIEVE                "Отправить выбранные объекты на локальный компьютер (F11)"
+END
+
+// Status
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_STATUS_CONNECTING                 "Подключение"
+    IDS_STATUS_CONNECT_TIMEOUT            "Превышено время ожидания соединения"
+    IDS_STATUS_CONNECT_ERROR              "Не удалось установить соединение"
+    IDS_STATUS_ACCESS_DENIED              "Доступ запрещен"
+    IDS_STATUS_INVALID_HOSTNAME           "Указан недопустимый адрес"
+    IDS_STATUS_INVALID_PORT               "Указан недопустимый порт"
+    IDS_STATUS_UNKNOWN                    "Неизвестный код состояния"
 END

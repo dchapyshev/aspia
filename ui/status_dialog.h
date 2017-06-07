@@ -9,7 +9,7 @@
 #define _ASPIA_UI__STATUS_DIALOG_H
 
 #include "base/scoped_gdi_object.h"
-#include "client/client_status.h"
+#include "proto/status.pb.h"
 #include "ui/base/modal_dialog.h"
 
 namespace aspia {
@@ -27,7 +27,7 @@ public:
 
     INT_PTR DoModal(HWND parent, Delegate* delegate);
     void SetDestonation(const std::wstring& address, uint16_t port);
-    void SetStatus(ClientStatus status);
+    void SetStatus(proto::Status status);
 
 private:
     INT_PTR DoModal(HWND parent) override;

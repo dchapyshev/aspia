@@ -78,6 +78,9 @@ bool Status_IsValid(int value) {
     case 7:
     case 8:
     case 9:
+    case 10:
+    case 11:
+    case 12:
       return true;
     default:
       return false;
