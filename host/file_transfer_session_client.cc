@@ -90,6 +90,13 @@ void FileTransferSessionClient::WriteMessage(
     ipc_channel_->Send(buffer);
 }
 
+void FileTransferSessionClient::WriteStatus(proto::Status status)
+{
+    proto::file_transfer::HostToClient message;
+    message.set_status(status);
+    WriteMessage(message);
+}
+
 bool FileTransferSessionClient::ReadDriveListRequestMessage(
     const proto::DriveListRequest& drive_list_request)
 {

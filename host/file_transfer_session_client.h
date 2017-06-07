@@ -30,6 +30,7 @@ private:
     void OnPipeChannelMessage(const IOBuffer& buffer) override;
 
     void WriteMessage(const proto::file_transfer::HostToClient& message);
+    void WriteStatus(proto::Status status);
 
     bool ReadDriveListRequestMessage(const proto::DriveListRequest& drive_list_request);
     bool ReadDirectoryListRequestMessage(const proto::DirectoryListRequest& direcrory_list_request);

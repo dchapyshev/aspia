@@ -42,6 +42,7 @@ private:
     void OnScreenUpdateError() override;
 
     void WriteMessage(const proto::desktop::HostToClient& message);
+    void WriteStatus(proto::Status status);
 
     bool ReadPointerEvent(const proto::PointerEvent& event);
     bool ReadKeyEvent(const proto::KeyEvent& event);
