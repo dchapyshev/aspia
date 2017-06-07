@@ -81,7 +81,7 @@ int MaskCpuFlags(int enable_flags);
 // eax is the info type that you want.
 // ecx is typically the cpu number, and should normally be zero.
 LIBYUV_API
-void CpuId(uint32 eax, uint32 ecx, uint32* cpu_info);
+void CpuId(int eax, int ecx, int* cpu_info);
 
 #ifdef __cplusplus
 }  // extern "C"

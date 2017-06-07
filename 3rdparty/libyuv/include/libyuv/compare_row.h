@@ -66,10 +66,6 @@ extern "C" {
 #if !defined(LIBYUV_DISABLE_NEON) && \
     (defined(__ARM_NEON__) || defined(LIBYUV_NEON) || defined(__aarch64__))
 #define HAS_SUMSQUAREERROR_NEON
-#endif
-
-// The following are available for Neon 64 bit:
-#if !defined(LIBYUV_DISABLE_NEON) && defined(__aarch64__)
 #define HAS_HAMMINGDISTANCE_NEON
 #endif
 

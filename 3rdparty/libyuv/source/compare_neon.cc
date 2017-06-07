@@ -21,6 +21,41 @@ extern "C" {
 #if !defined(LIBYUV_DISABLE_NEON) && defined(__ARM_NEON__) && \
     !defined(__aarch64__)
 
+// 256 bits at a time
+uint32 HammingDistance_NEON(const uint8* src_a, const uint8* src_b, int count) {
+  uint32 diff;
+
+  asm volatile (
+    // Load constants.
+    "vmov.u8    q4, #0                         \n"  // accumulator
+
+  "1:                                          \n"
+    "vld1.8     {q0, q1}, [%0]!                \n"
+    "vld1.8     {q2, q3}, [%1]!                \n"
+    "veor.32    q0, q0, q2                     \n"
+    "veor.32    q1, q1, q3                     \n"
+    "vcnt.i8    q0, q0                         \n"
+    "vcnt.i8    q1, q1                         \n"
+    "subs       %2, %2, #32                    \n"
+    "vadd.u8    q0, q0, q1                     \n"  // 16 byte counts
+    "vpaddl.u8  q0, q0                         \n"  // 8 shorts
+    "vpadal.u16 q4, q0                         \n"  // 4 ints
+    "bgt        1b                             \n"
+
+    "vpadd.u32  d0, d8, d9                     \n"
+    "vpadd.u32  d0, d0, d0                     \n"
+    // Move distance to return register.
+    "vmov.32    %3, d0[0]                      \n"
+ 
+    : "+r"(src_a),
+      "+r"(src_b),
+      "+r"(count),
+      "=r"(diff)
+    :
+    :  "cc", "q0", "q1", "q2", "q3", "q4");
+  return diff;
+}
+
 uint32 SumSquareError_NEON(const uint8* src_a, const uint8* src_b, int count) {
   uint32 sse;
   asm volatile (
