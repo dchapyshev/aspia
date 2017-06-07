@@ -29,6 +29,7 @@
   <ItemGroup>
     <ClCompile Include="base\aligned_memory.cc" />
     <ClCompile Include="base\desktop.cc" />
+    <ClCompile Include="base\drive_enumerator.cc" />
     <ClCompile Include="base\file_enumerator.cc" />
     <ClCompile Include="base\io_queue.cc" />
     <ClCompile Include="base\logging.cc" />
@@ -160,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="base\aligned_memory.h" />
     <ClInclude Include="base\desktop.h" />
+    <ClInclude Include="base\drive_enumerator.h" />
     <ClInclude Include="base\file_enumerator.h" />
     <ClInclude Include="base\io_buffer.h" />
     <ClInclude Include="base\io_queue.h" />
