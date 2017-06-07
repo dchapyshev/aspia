@@ -13,15 +13,14 @@ package aspia.proto;
 
 enum Status
 {
-    STATUS_UNKNOWN                      = 0;
-    STATUS_SUCCESS                      = 1;
-    STATUS_NO_CONSOLE_SESSION           = 2;
-    STATUS_INVALID_USERNAME_OR_PASSWORD = 3;
-    STATUS_SESSION_TYPE_NOT_ALLOWED     = 4;
-    STATUS_AUTH_METHOD_NOT_SUPPORTED    = 5;
-    STATUS_ACCESS_DENIED                = 6;
-    STATUS_FILE_NOT_FOUND               = 7;
-    STATUS_PATH_NOT_FOUND               = 8;
-    STATUS_FILE_ALREADY_EXISTS          = 9;
-    STATUS_NOT_ENOUGH_MEMORY            = 10;
+    STATUS_SUCCESS                      = 0;
+    STATUS_NO_CONSOLE_SESSION           = 1;
+    STATUS_INVALID_USERNAME_OR_PASSWORD = 2;
+    STATUS_SESSION_TYPE_NOT_ALLOWED     = 3;
+    STATUS_AUTH_METHOD_NOT_SUPPORTED    = 4;
+    STATUS_ACCESS_DENIED                = 5;
+    STATUS_FILE_NOT_FOUND               = 6;
+    STATUS_PATH_NOT_FOUND               = 7;
+    STATUS_FILE_ALREADY_EXISTS          = 8;
+    STATUS_NOT_ENOUGH_MEMORY            = 9;
 }

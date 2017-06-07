@@ -16,15 +16,14 @@ package aspia.proto.auth;
 
 message HostToClient
 {
-    Status status = 1;
+    SessionType session_type = 1;
+    Status status            = 2;
 }
 
 message ClientToHost
 {
     SessionType session_type = 1;
-
-    AuthMethod method = 2;
-
-    string username = 3;
-    bytes password = 4;
+    AuthMethod method        = 2;
+    string username          = 3;
+    bytes password           = 4;
 }

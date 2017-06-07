@@ -126,9 +126,15 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.Status status = 1;
+  // .aspia.proto.SessionType session_type = 1;
+  void clear_session_type();
+  static const int kSessionTypeFieldNumber = 1;
+  ::aspia::proto::SessionType session_type() const;
+  void set_session_type(::aspia::proto::SessionType value);
+
+  // .aspia.proto.Status status = 2;
   void clear_status();
-  static const int kStatusFieldNumber = 1;
+  static const int kStatusFieldNumber = 2;
   ::aspia::proto::Status status() const;
   void set_status(::aspia::proto::Status value);
 
@@ -136,6 +142,7 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  int session_type_;
   int status_;
   mutable int _cached_size_;
   friend struct protobuf_auth_5fsession_2eproto::TableStruct;
@@ -263,7 +270,21 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // HostToClient
 
-// .aspia.proto.Status status = 1;
+// .aspia.proto.SessionType session_type = 1;
+inline void HostToClient::clear_session_type() {
+  session_type_ = 0;
+}
+inline ::aspia::proto::SessionType HostToClient::session_type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.HostToClient.session_type)
+  return static_cast< ::aspia::proto::SessionType >(session_type_);
+}
+inline void HostToClient::set_session_type(::aspia::proto::SessionType value) {
+  
+  session_type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.HostToClient.session_type)
+}
+
+// .aspia.proto.Status status = 2;
 inline void HostToClient::clear_status() {
   status_ = 0;
 }

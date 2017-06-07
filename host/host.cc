@@ -58,16 +58,16 @@ static proto::Status DoBasicAuthorization(const std::string& username,
                                           const std::string& password,
                                           proto::SessionType session_type)
 {
-    HostUserList list;
+    HostUserList user_list;
 
-    if (!list.LoadFromStorage())
+    if (!user_list.LoadFromStorage())
         return proto::Status::STATUS_INVALID_USERNAME_OR_PASSWORD;
 
-    const int size = list.size();
+    const int size = user_list.size();
 
     for (int i = 0; i < size; ++i)
     {
-        const proto::HostUser& user = list.host_user(i);
+        const proto::HostUser& user = user_list.host_user(i);
 
         if (user.username() != username)
             continue;
@@ -103,6 +103,7 @@ bool Host::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
         return false;
 
     proto::auth::HostToClient result;
+    result.set_session_type(request.session_type());
 
     switch (request.method())
     {
@@ -120,8 +121,7 @@ bool Host::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
     ClearStringContent(*request.mutable_username());
     ClearStringContent(*request.mutable_password());
 
-    SecureIOBuffer result_buffer(SerializeMessage<SecureIOBuffer>(result));
-    channel_proxy_->Send(result_buffer);
+    channel_proxy_->Send(SerializeMessage<SecureIOBuffer>(result));
 
     if (result.status() == proto::Status::STATUS_SUCCESS)
     {

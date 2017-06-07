@@ -92,6 +92,8 @@ void FileTransferSessionClient::WriteMessage(
 
 void FileTransferSessionClient::WriteStatus(proto::Status status)
 {
+    DCHECK(status != proto::Status::STATUS_SUCCESS);
+
     proto::file_transfer::HostToClient message;
     message.set_status(status);
     WriteMessage(message);

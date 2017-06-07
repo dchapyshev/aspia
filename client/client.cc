@@ -71,7 +71,7 @@ bool Client::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
     switch (result.status())
     {
         case proto::Status::STATUS_SUCCESS:
-            CreateSession(config_.session_type());
+            CreateSession(result.session_type());
             return true;
 
         case proto::Status::STATUS_INVALID_USERNAME_OR_PASSWORD:
@@ -138,13 +138,10 @@ void Client::OnNetworkChannelConnect()
     request.set_username(auth_dialog.UserName());
     request.set_password(auth_dialog.Password());
 
-    SecureIOBuffer output_buffer(SerializeMessage<SecureIOBuffer>(request));
-    CHECK(!output_buffer.IsEmpty());
+    channel_proxy_->Send(SerializeMessage<SecureIOBuffer>(request));
 
     ClearStringContent(*request.mutable_username());
     ClearStringContent(*request.mutable_password());
-
-    channel_proxy_->Send(output_buffer);
 }
 
 void Client::OnStatusDialogOpen()

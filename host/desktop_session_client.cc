@@ -123,10 +123,7 @@ void DesktopSessionClient::OnScreenUpdate(const DesktopFrame* screen_frame)
     if (packet)
     {
         proto::desktop::HostToClient message;
-
-        message.set_status(proto::Status::STATUS_SUCCESS);
         message.set_allocated_video_packet(packet.release());
-
         WriteMessage(message);
     }
 }
@@ -142,10 +139,7 @@ void DesktopSessionClient::OnCursorUpdate(std::unique_ptr<MouseCursor> mouse_cur
     if (cursor_shape)
     {
         proto::desktop::HostToClient message;
-
-        message.set_status(proto::Status::STATUS_SUCCESS);
         message.set_allocated_cursor_shape(cursor_shape.release());
-
         WriteMessage(message);
     }
 }
@@ -164,6 +158,8 @@ void DesktopSessionClient::WriteMessage(const proto::desktop::HostToClient& mess
 
 void DesktopSessionClient::WriteStatus(proto::Status status)
 {
+    DCHECK(status != proto::Status::STATUS_SUCCESS);
+
     proto::desktop::HostToClient message;
     message.set_status(status);
     WriteMessage(message);
@@ -217,18 +213,13 @@ bool DesktopSessionClient::ReadPowerEvent(const proto::PowerEvent& event)
 void DesktopSessionClient::SendClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event)
 {
     proto::desktop::HostToClient message;
-
-    message.set_status(proto::Status::STATUS_SUCCESS);
     message.set_allocated_clipboard_event(clipboard_event.release());
-
     WriteMessage(message);
 }
 
 void DesktopSessionClient::SendConfigRequest()
 {
     proto::desktop::HostToClient message;
-
-    message.set_status(proto::Status::STATUS_SUCCESS);
 
     proto::DesktopSessionConfigRequest* request =
         message.mutable_config_request();
