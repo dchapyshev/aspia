@@ -104,14 +104,16 @@ bool NetworkServerTcp::Start(uint16_t port, Delegate* delegate)
         return false;
     }
 
-    struct sockaddr_in local_addr = { 0 };
+    sockaddr_in local_addr;
+
+    memset(&local_addr, 0, sizeof(local_addr));
 
     local_addr.sin_family = AF_INET;
     local_addr.sin_port = htons(port_);
     local_addr.sin_addr = in4addr_any;
 
     if (bind(server_socket_,
-             reinterpret_cast<const struct sockaddr*>(&local_addr),
+             reinterpret_cast<const sockaddr*>(&local_addr),
              sizeof(local_addr)) == SOCKET_ERROR)
     {
         LOG(ERROR) << "bind() failed: " << GetLastSystemErrorString();
@@ -156,7 +158,8 @@ void NetworkServerTcp::OnObjectSignaled(HANDLE object)
     accept_event_.Reset();
     accept_watcher_.StartWatching(accept_event_.Handle(), this);
 
-    WSANETWORKEVENTS events = { 0 };
+    WSANETWORKEVENTS events;
+    memset(&events, 0, sizeof(events));
 
     if (WSAEnumNetworkEvents(server_socket_, accept_event_.Handle(), &events) == SOCKET_ERROR)
     {

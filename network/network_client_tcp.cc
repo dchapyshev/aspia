@@ -75,7 +75,8 @@ bool NetworkClientTcp::Connect(const std::wstring& address, uint16_t port, Deleg
 
     runner_ = MessageLoopProxy::Current();
 
-    ADDRINFOW hints = { 0 };
+    ADDRINFOW hints;
+    memset(&hints, 0, sizeof(hints));
 
     hints.ai_family   = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
@@ -150,7 +151,8 @@ void NetworkClientTcp::OnObjectSignaled(HANDLE object)
 
     connect_watcher_.StopWatching();
 
-    WSANETWORKEVENTS events = { 0 };
+    WSANETWORKEVENTS events;
+    memset(&events, 0, sizeof(events));
 
     if (WSAEnumNetworkEvents(socket_, connect_event_.Handle(), &events) == SOCKET_ERROR)
     {

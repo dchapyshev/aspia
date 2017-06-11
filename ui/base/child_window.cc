@@ -68,7 +68,8 @@ bool ChildWindow::RegisterWindowClass(HINSTANCE instance)
     if (_class_registered)
         return true;
 
-    WNDCLASSEXW window_class = { 0 };
+    WNDCLASSEXW window_class;
+    memset(&window_class, 0, sizeof(window_class));
 
     window_class.cbSize        = sizeof(window_class);
     window_class.lpszClassName = kWindowClassName;

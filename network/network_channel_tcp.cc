@@ -143,7 +143,7 @@ bool NetworkChannelTcp::WriteData(const uint8_t* buffer, size_t size)
     {
         write_event_.Reset();
 
-        WSAOVERLAPPED overlapped = { 0 };
+        OVERLAPPED overlapped = { 0 };
         overlapped.hEvent = write_event_.Handle();
 
         WSABUF data;
@@ -192,7 +192,7 @@ bool NetworkChannelTcp::ReadData(uint8_t* buffer, size_t size)
     {
         read_event_.Reset();
 
-        WSAOVERLAPPED overlapped = { 0 };
+        OVERLAPPED overlapped = { 0 };
         overlapped.hEvent = read_event_.Handle();
 
         WSABUF data;

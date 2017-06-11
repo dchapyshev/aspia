@@ -24,9 +24,10 @@ bool ElevateProcess()
     if (!GetPathW(PathKey::FILE_EXE, path))
         return false;
 
-    SHELLEXECUTEINFOW sei = { 0 };
+    SHELLEXECUTEINFOW sei;
+    memset(&sei, 0, sizeof(sei));
 
-    sei.cbSize       = sizeof(SHELLEXECUTEINFOW);
+    sei.cbSize       = sizeof(sei);
     sei.lpVerb       = L"runas";
     sei.lpFile       = path.c_str();
     sei.hwnd         = nullptr;
