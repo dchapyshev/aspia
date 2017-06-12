@@ -20,7 +20,7 @@ class HostPool :
     private Host::Delegate
 {
 public:
-    HostPool() = default;
+    HostPool(std::shared_ptr<MessageLoopProxy> runner);
     ~HostPool();
 
     bool Start();

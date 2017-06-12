@@ -154,12 +154,11 @@ bool NetworkChannelTcp::WriteData(const uint8_t* buffer, size_t size)
         DWORD written = 0;
 
         int ret = WSASend(socket_, &data, 1, nullptr, flags, &overlapped, nullptr);
-
         if (ret == SOCKET_ERROR)
         {
-            int err = WSAGetLastError();
+            SystemErrorCode err = GetLastSystemErrorCode();
 
-            if (err != WSA_IO_PENDING)
+            if (err != ERROR_IO_PENDING)
             {
                 LOG(ERROR) << "WSASend() failed: " << SystemErrorCodeToString(err);
                 return false;
@@ -205,9 +204,9 @@ bool NetworkChannelTcp::ReadData(uint8_t* buffer, size_t size)
         int ret = WSARecv(socket_, &data, 1, nullptr, &flags, &overlapped, nullptr);
         if (ret == SOCKET_ERROR)
         {
-            int err = WSAGetLastError();
+            SystemErrorCode err = GetLastSystemErrorCode();
 
-            if (err != WSA_IO_PENDING)
+            if (err != ERROR_IO_PENDING)
             {
                 LOG(ERROR) << "WSARecv() failed: " << SystemErrorCodeToString(err);
                 return false;

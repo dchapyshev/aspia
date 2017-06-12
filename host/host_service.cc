@@ -56,9 +56,9 @@ void HostService::Worker()
     InitializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
     MessageLoop loop;
-    HostPool host_pool;
-
     runner_ = MessageLoopProxy::Current();
+
+    HostPool host_pool(runner_);
 
     if (host_pool.Start())
         loop.Run();

@@ -9,14 +9,17 @@
 
 namespace aspia {
 
+HostPool::HostPool(std::shared_ptr<MessageLoopProxy> runner) :
+    runner_(runner)
+{
+    DCHECK(runner_);
+}
+
 HostPool::~HostPool()
 {
     terminating_ = true;
 
-    if (runner_)
-    {
-        DCHECK(runner_->BelongsToCurrentThread());
-    }
+    DCHECK(runner_->BelongsToCurrentThread());
 
     network_server_.reset();
     session_list_.clear();
@@ -24,11 +27,7 @@ HostPool::~HostPool()
 
 bool HostPool::Start()
 {
-    runner_ = MessageLoopProxy::Current();
-    DCHECK(runner_);
-
-    network_server_.reset(new NetworkServerTcp());
-
+    network_server_.reset(new NetworkServerTcp(runner_));
     return network_server_->Start(kDefaultHostTcpPort, this);
 }
 

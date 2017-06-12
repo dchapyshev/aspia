@@ -204,7 +204,7 @@ void MainDialog::OnStartServerButton()
         return;
     }
 
-    host_pool_.reset(new HostPool());
+    host_pool_.reset(new HostPool(MessageLoopProxy::Current()));
 
     if (host_pool_->Start())
     {

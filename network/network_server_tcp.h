@@ -22,7 +22,7 @@ namespace aspia {
 class NetworkServerTcp : private ObjectWatcher::Delegate
 {
 public:
-    NetworkServerTcp();
+    NetworkServerTcp(std::shared_ptr<MessageLoopProxy> runner);
     ~NetworkServerTcp();
 
     class Delegate

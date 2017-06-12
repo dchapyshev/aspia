@@ -19,7 +19,7 @@ namespace aspia {
 class NetworkClientTcp : private ObjectWatcher::Delegate
 {
 public:
-    NetworkClientTcp();
+    NetworkClientTcp(std::shared_ptr<MessageLoopProxy> runner);
     ~NetworkClientTcp();
 
     class Delegate

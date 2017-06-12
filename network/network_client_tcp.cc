@@ -53,9 +53,10 @@ bool NetworkClientTcp::IsValidPort(uint16_t port)
     return true;
 }
 
-NetworkClientTcp::NetworkClientTcp() :
+NetworkClientTcp::NetworkClientTcp(std::shared_ptr<MessageLoopProxy> runner) :
     connect_event_(WaitableEvent::ResetPolicy::MANUAL,
-                   WaitableEvent::InitialState::NOT_SIGNALED)
+                   WaitableEvent::InitialState::NOT_SIGNALED),
+    runner_(runner)
 {
     // Nothing
 }
@@ -72,8 +73,6 @@ bool NetworkClientTcp::Connect(const std::wstring& address, uint16_t port, Deleg
         return false;
 
     delegate_ = delegate;
-
-    runner_ = MessageLoopProxy::Current();
 
     ADDRINFOW hints;
     memset(&hints, 0, sizeof(hints));

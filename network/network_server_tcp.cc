@@ -19,9 +19,10 @@ static const WCHAR kAppName[] = L"Aspia Remote Desktop";
 static const WCHAR kRuleName[] = L"Aspia Remote Desktop Host";
 static const WCHAR kRuleDesc[] = L"Allow incoming connections";
 
-NetworkServerTcp::NetworkServerTcp() :
+NetworkServerTcp::NetworkServerTcp(std::shared_ptr<MessageLoopProxy> runner) :
     accept_event_(WaitableEvent::ResetPolicy::MANUAL,
-                  WaitableEvent::InitialState::NOT_SIGNALED)
+                  WaitableEvent::InitialState::NOT_SIGNALED),
+    runner_(runner)
 {
     // Nothing
 }
@@ -88,9 +89,6 @@ bool NetworkServerTcp::Start(uint16_t port, Delegate* delegate)
         LOG(ERROR) << "Trying to start an already starting server";
         return false;
     }
-
-    runner_ = MessageLoopProxy::Current();
-    DCHECK(runner_);
 
     port_ = port;
     delegate_ = delegate;

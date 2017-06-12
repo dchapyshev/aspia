@@ -20,7 +20,8 @@ class ScopedWsaInitializer
 public:
     ScopedWsaInitializer()
     {
-        WSADATA data = { 0 };
+        WSADATA data;
+        memset(&data, 0, sizeof(data));
 
         // Initialize the socket library.
         is_succeded_ = (WSAStartup(MAKEWORD(2, 2), &data) == 0);

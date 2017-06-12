@@ -43,7 +43,7 @@ void ClientPool::OnStatusDialogOpen()
         status_dialog_.SetDestonation(config_.address(), config_.port());
         status_dialog_.SetStatus(proto::Status::STATUS_CONNECTING);
 
-        network_client_.reset(new NetworkClientTcp());
+        network_client_.reset(new NetworkClientTcp(runner_));
 
         if (!network_client_->Connect(config_.address(), config_.port(), this))
         {
