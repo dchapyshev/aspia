@@ -162,6 +162,45 @@ BEGIN
     PUSHBUTTON "&Отмена", IDCANCEL, 72, 87, 50, 14
 END
 
+IDD_FILE_TRANSFER DIALOGEX 100, 100, 400, 173
+STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
+CAPTION "Передача файлов"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT "Из:", -1, 7, 6, 130, 10
+    EDITTEXT IDC_FROM_EDIT, 7, 17, 384, 14, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_READONLY
+
+    LTEXT "В:", -1, 7, 34, 130, 10
+    EDITTEXT IDC_TO_EDIT, 7, 45, 384, 14, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_READONLY
+
+    LTEXT "Текущий элемент:", -1, 7, 62, 130, 10
+    EDITTEXT IDC_CURRENT_ITEM_EDIT, 7, 73, 384, 14, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_READONLY
+
+    LTEXT "Общий прогресс:", IDC_TOTAL_PROGRESS_TEXT, 7, 90, 200, 10
+    CONTROL "", IDC_TOTAL_PROGRESS, PROGRESS_CLASS, WS_BORDER | WS_TABSTOP | PBS_MARQUEE, 7, 101, 384, 14
+
+    LTEXT "Прогресс для текущего элемента:", IDC_CURRENT_PROGRESS_TEXT, 7, 118, 200, 10
+    CONTROL "", IDC_CURRENT_PROGRESS, PROGRESS_CLASS, WS_BORDER | WS_TABSTOP | PBS_MARQUEE, 7, 129, 384, 14
+
+    PUSHBUTTON "&Отмена", IDCANCEL, 332, 152, 60, 14
+END
+
+IDD_FILE_REPLACE DIALOGEX 100, 100, 309, 78
+STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
+CAPTION "Передача файлов"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT "Элемент уже существует:", -1, 7, 6, 200, 10
+    EDITTEXT IDC_CURRENT_ITEM_EDIT, 7, 17, 295, 14, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_READONLY
+
+    PUSHBUTTON "&Заменить", IDC_REPLACE_BUTTON, 7, 37, 70, 14
+    PUSHBUTTON "З&аменить все", IDC_REPLACE_ALL_BUTTON, 82, 37, 70, 14
+    PUSHBUTTON "&Пропустить", IDC_SKIP_BUTTON, 157, 37, 70, 14
+    PUSHBUTTON "П&ропустить все", IDC_SKIP_ALL_BUTTON, 232, 37, 70, 14
+
+    PUSHBUTTON "&Cancel", IDCANCEL, 232, 57, 70, 14
+END
+
 IDR_SHORTCUTS MENU
 BEGIN
     POPUP "popup"
@@ -299,14 +338,14 @@ END
 // Status
 STRINGTABLE DISCARDABLE
 BEGIN
-    IDS_STATUS_SUCCESS                    "Successfully completed"
-    IDS_STATUS_NO_CONSOLE_SESSION         "No console session"
+    IDS_STATUS_SUCCESS                    "Успешно завершено"
+    IDS_STATUS_NO_CONSOLE_SESSION         "Нет консольной сессии"
     IDS_STATUS_ACCESS_DENIED              "Доступ запрещен"
-    IDS_STATUS_FILE_NOT_FOUND             "File not found"
-    IDS_STATUS_PATH_NOT_FOUND             "Path not found"
-    IDS_STATUS_FILE_ALREADY_EXISTS        "File already exists"
-    IDS_STATUS_PATH_ALREADY_EXISTS        "Path already exists"
-    IDS_STATUS_DISK_FULL                  "Disk full"
+    IDS_STATUS_FILE_NOT_FOUND             "Файл не найден"
+    IDS_STATUS_PATH_NOT_FOUND             "Путь не найден"
+    IDS_STATUS_FILE_ALREADY_EXISTS        "Указанный файл уже существует"
+    IDS_STATUS_PATH_ALREADY_EXISTS        "Указанный путь уже существует"
+    IDS_STATUS_DISK_FULL                  "Нет свободного места на диске"
     IDS_STATUS_INVALID_ADDRESS            "Указан недопустимый адрес"
     IDS_STATUS_INVALID_PORT               "Указан недопустимый порт"
     IDS_STATUS_CONNECT_TIMEOUT            "Превышено время ожидания соединения"

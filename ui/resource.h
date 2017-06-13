@@ -9,6 +9,7 @@
 #define _ASPIA_UI__RESOURCE_H
 
 #include <windows.h>
+#include <commctrl.h>
 
 //
 // Icons
@@ -43,6 +44,8 @@
 #define IDD_USERS                             105
 #define IDD_USER_PROP                         106
 #define IDD_POWER                             107
+#define IDD_FILE_TRANSFER                     108
+#define IDD_FILE_REPLACE                      109
 
 //
 // Controls
@@ -79,6 +82,17 @@
 #define IDC_SESSION_TYPES_LIST                129
 #define IDC_USERS_GROUPBOX                    130
 #define IDC_SESSION_TYPE_COMBO                131
+#define IDC_FROM_EDIT                         132
+#define IDC_TO_EDIT                           133
+#define IDC_CURRENT_ITEM_EDIT                 134
+#define IDC_TOTAL_PROGRESS_TEXT               135
+#define IDC_TOTAL_PROGRESS                    136
+#define IDC_CURRENT_PROGRESS_TEXT             137
+#define IDC_CURRENT_PROGRESS                  138
+#define IDC_REPLACE_BUTTON                    139
+#define IDC_REPLACE_ALL_BUTTON                140
+#define IDC_SKIP_BUTTON                       141
+#define IDC_SKIP_ALL_BUTTON                   142
 
 //
 // Commands
