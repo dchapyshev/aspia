@@ -69,9 +69,9 @@ void ClientSessionFileTransfer::OnWindowClose()
     delegate_->OnSessionTerminate();
 }
 
-void ClientSessionFileTransfer::OnDriveListRequest(FileManager::Type type)
+void ClientSessionFileTransfer::OnDriveListRequest(FileManager::PanelType panel_type)
 {
-    if (type == FileManager::Type::REMOTE)
+    if (panel_type == FileManager::PanelType::REMOTE)
     {
         proto::file_transfer::ClientToHost message;
         message.mutable_drive_list_request()->set_dummy(1);
@@ -79,7 +79,7 @@ void ClientSessionFileTransfer::OnDriveListRequest(FileManager::Type type)
     }
     else
     {
-        DCHECK(type == FileManager::Type::LOCAL);
+        DCHECK(panel_type == FileManager::PanelType::LOCAL);
 
         DriveEnumerator enumerator;
 
@@ -121,7 +121,7 @@ void ClientSessionFileTransfer::OnDriveListRequest(FileManager::Type type)
                     break;
             }
 
-            file_manager_->AddDriveItem(type,
+            file_manager_->AddDriveItem(panel_type,
                                         drive_type,
                                         drive_info.Path(),
                                         drive_info.VolumeName(),
@@ -132,10 +132,10 @@ void ClientSessionFileTransfer::OnDriveListRequest(FileManager::Type type)
     }
 }
 
-void ClientSessionFileTransfer::OnDirectoryListRequest(FileManager::Type type,
+void ClientSessionFileTransfer::OnDirectoryListRequest(FileManager::PanelType panel_type,
                                                        const std::wstring& path)
 {
-    if (type == FileManager::Type::REMOTE)
+    if (panel_type == FileManager::PanelType::REMOTE)
     {
         proto::file_transfer::ClientToHost message;
         message.mutable_directory_list_request()->set_path(UTF8fromUNICODE(path));
@@ -143,7 +143,7 @@ void ClientSessionFileTransfer::OnDirectoryListRequest(FileManager::Type type,
     }
     else
     {
-        DCHECK(type == FileManager::Type::LOCAL);
+        DCHECK(panel_type == FileManager::PanelType::LOCAL);
 
         FileEnumerator enumerator(path,
                                   false,
@@ -169,7 +169,7 @@ void ClientSessionFileTransfer::OnDirectoryListRequest(FileManager::Type type,
                 type = proto::DirectoryListItem::FILE;
             }
 
-            file_manager_->AddDirectoryItem(FileManager::Type::LOCAL,
+            file_manager_->AddDirectoryItem(panel_type,
                                             type,
                                             file_info.GetName(),
                                             file_info.GetSize());
@@ -198,7 +198,7 @@ bool ClientSessionFileTransfer::ReadDriveListMessage(
     {
         const proto::DriveListItem& item = drive_list.item(index);
 
-        file_manager_->AddDriveItem(FileManager::Type::REMOTE,
+        file_manager_->AddDriveItem(FileManager::PanelType::REMOTE,
                                     item.type(),
                                     UNICODEfromUTF8(item.path()),
                                     UNICODEfromUTF8(item.volume_name()),
@@ -219,7 +219,7 @@ bool ClientSessionFileTransfer::ReadDirectoryListMessage(
     {
         const proto::DirectoryListItem& item = direcrory_list.item(index);
 
-        file_manager_->AddDirectoryItem(FileManager::Type::REMOTE,
+        file_manager_->AddDirectoryItem(FileManager::PanelType::REMOTE,
                                         item.type(),
                                         UNICODEfromUTF8(item.name()),
                                         item.size());

@@ -55,7 +55,7 @@ void FileManager::OnAfterThreadRunning()
     DestroyWindow();
 }
 
-void FileManager::AddDriveItem(Type panel_type,
+void FileManager::AddDriveItem(PanelType panel_type,
                                proto::DriveListItem::Type drive_type,
                                const std::wstring& drive_path,
                                const std::wstring& drive_name,
@@ -63,7 +63,7 @@ void FileManager::AddDriveItem(Type panel_type,
                                uint64_t total_space,
                                uint64_t free_space)
 {
-    if (panel_type == FileManager::Type::REMOTE)
+    if (panel_type == FileManager::PanelType::REMOTE)
     {
         remote_panel_.AddDriveItem(drive_type,
                                    drive_path,
@@ -74,7 +74,7 @@ void FileManager::AddDriveItem(Type panel_type,
     }
     else
     {
-        DCHECK(panel_type == FileManager::Type::LOCAL);
+        DCHECK(panel_type == FileManager::PanelType::LOCAL);
 
         local_panel_.AddDriveItem(drive_type,
                                   drive_path,
@@ -85,32 +85,32 @@ void FileManager::AddDriveItem(Type panel_type,
     }
 }
 
-void FileManager::AddDirectoryItem(Type panel_type,
+void FileManager::AddDirectoryItem(PanelType panel_type,
                                    proto::DirectoryListItem::Type item_type,
                                    const std::wstring& item_name,
                                    uint64_t item_size)
 {
-    if (panel_type == FileManager::Type::REMOTE)
+    if (panel_type == FileManager::PanelType::REMOTE)
     {
 
     }
     else
     {
-        DCHECK(panel_type == FileManager::Type::LOCAL);
+        DCHECK(panel_type == FileManager::PanelType::LOCAL);
     }
 }
 
-void FileManager::OnDriveListRequest(FileManager::Type type)
+void FileManager::OnDriveListRequest(FileManager::PanelType panel_type)
 {
-    delegate_->OnDriveListRequest(type);
+    delegate_->OnDriveListRequest(panel_type);
 }
 
 void FileManager::OnCreate()
 {
     splitter_.CreateWithProportion(hwnd());
 
-    local_panel_.CreatePanel(splitter_, FileManager::Type::LOCAL, this);
-    remote_panel_.CreatePanel(splitter_, FileManager::Type::REMOTE, this);
+    local_panel_.CreatePanel(splitter_, FileManager::PanelType::LOCAL, this);
+    remote_panel_.CreatePanel(splitter_, FileManager::PanelType::REMOTE, this);
 
     splitter_.SetPanels(local_panel_, remote_panel_);
 
@@ -119,11 +119,11 @@ void FileManager::OnCreate()
 
     runner_->PostTask(std::bind(&FileManager::OnDriveListRequest,
                                 this,
-                                FileManager::Type::LOCAL));
+                                FileManager::PanelType::LOCAL));
 
     runner_->PostTask(std::bind(&FileManager::OnDriveListRequest,
                                 this,
-                                FileManager::Type::REMOTE));
+                                FileManager::PanelType::REMOTE));
 }
 
 void FileManager::OnDestroy()

@@ -22,14 +22,14 @@ class FileManager :
     private FileManagerPanel::Delegate
 {
 public:
-    using Type = FileManagerPanel::Type;
+    using PanelType = FileManagerPanel::Type;
 
     class Delegate
     {
     public:
         virtual void OnWindowClose() = 0;
-        virtual void OnDriveListRequest(Type type) = 0;
-        virtual void OnDirectoryListRequest(Type type, const std::wstring& path) = 0;
+        virtual void OnDriveListRequest(PanelType panel_type) = 0;
+        virtual void OnDirectoryListRequest(PanelType panel_type, const std::wstring& path) = 0;
         virtual void OnSendFile(const std::wstring& from_path, const std::wstring& to_path) = 0;
         virtual void OnRecieveFile(const std::wstring& from_path, const std::wstring& to_path) = 0;
     };
@@ -37,7 +37,7 @@ public:
     FileManager(Delegate* delegate);
     ~FileManager();
 
-    void AddDriveItem(Type panel_type,
+    void AddDriveItem(PanelType panel_type,
                       proto::DriveListItem::Type drive_type,
                       const std::wstring& drive_path,
                       const std::wstring& drive_name,
@@ -45,7 +45,7 @@ public:
                       uint64_t total_space,
                       uint64_t free_space);
 
-    void AddDirectoryItem(Type panel_type,
+    void AddDirectoryItem(PanelType panel_type,
                           proto::DirectoryListItem::Type item_type,
                           const std::wstring& item_name,
                           uint64_t item_size);
@@ -56,7 +56,7 @@ private:
     void OnAfterThreadRunning() override;
 
     // FileManagerPanel::Delegate implementation.
-    void OnDriveListRequest(Type type) override;
+    void OnDriveListRequest(PanelType panel_type) override;
 
     // ChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;

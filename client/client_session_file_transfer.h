@@ -29,8 +29,8 @@ private:
 
     // FileManager::Delegate implementation.
     void OnWindowClose() override;
-    void OnDriveListRequest(FileManager::Type type) override;
-    void OnDirectoryListRequest(FileManager::Type type, const std::wstring& path) override;
+    void OnDriveListRequest(FileManager::PanelType panel_type) override;
+    void OnDirectoryListRequest(FileManager::PanelType panel_type, const std::wstring& path) override;
     void OnSendFile(const std::wstring& from_path, const std::wstring& to_path) override;
     void OnRecieveFile(const std::wstring& from_path, const std::wstring& to_path) override;
 
