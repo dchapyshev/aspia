@@ -6,14 +6,16 @@
 //
 
 #include "ui/file_manager_panel.h"
-#include "ui/resource.h"
+#include "ui/base/combobox.h"
 #include "ui/base/module.h"
+#include "ui/resource.h"
 #include "base/scoped_gdi_object.h"
 
 namespace aspia {
 
-bool FileManagerPanel::CreatePanel(HWND parent, Type type)
+bool FileManagerPanel::CreatePanel(HWND parent, Type type, Delegate* delegate)
 {
+    delegate_ = delegate;
     type_ = type;
 
     const Module& module = Module::Current();
@@ -29,6 +31,23 @@ bool FileManagerPanel::CreatePanel(HWND parent, Type type)
     }
 
     return Create(parent, WS_CHILD | WS_VISIBLE);
+}
+
+void FileManagerPanel::AddDriveItem(proto::DriveListItem::Type drive_type,
+                                    const std::wstring& drive_path,
+                                    const std::wstring& drive_name,
+                                    const std::wstring& drive_filesystem,
+                                    uint64_t total_space,
+                                    uint64_t free_space)
+{
+    ComboBox_AddItem(address_window_, drive_path, 0);
+}
+
+void FileManagerPanel::AddDirectoryItem(proto::DirectoryListItem::Type item_type,
+                                        const std::wstring& item_name,
+                                        uint64_t item_size)
+{
+    // TODO
 }
 
 void FileManagerPanel::OnCreate()

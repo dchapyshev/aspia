@@ -113,6 +113,8 @@ bool DriveListItem_Type_IsValid(int value) {
     case 2:
     case 3:
     case 4:
+    case 5:
+    case 6:
       return true;
     default:
       return false;
@@ -123,7 +125,9 @@ bool DriveListItem_Type_IsValid(int value) {
 const DriveListItem_Type DriveListItem::UNKNOWN;
 const DriveListItem_Type DriveListItem::CDROM;
 const DriveListItem_Type DriveListItem::REMOVABLE;
-const DriveListItem_Type DriveListItem::HARDDRIVE;
+const DriveListItem_Type DriveListItem::FIXED;
+const DriveListItem_Type DriveListItem::REMOTE;
+const DriveListItem_Type DriveListItem::RAM;
 const DriveListItem_Type DriveListItem::DESKTOP_FOLDER;
 const DriveListItem_Type DriveListItem::Type_MIN;
 const DriveListItem_Type DriveListItem::Type_MAX;
@@ -173,8 +177,12 @@ const int File::Flags_ARRAYSIZE;
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int DriveListItem::kPathFieldNumber;
 const int DriveListItem::kTypeFieldNumber;
+const int DriveListItem::kFilesystemFieldNumber;
+const int DriveListItem::kVolumeNameFieldNumber;
+const int DriveListItem::kPathFieldNumber;
+const int DriveListItem::kTotalSpaceFieldNumber;
+const int DriveListItem::kFreeSpaceFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 DriveListItem::DriveListItem()
@@ -190,17 +198,30 @@ DriveListItem::DriveListItem(const DriveListItem& from)
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  filesystem_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.filesystem().size() > 0) {
+    filesystem_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.filesystem_);
+  }
+  volume_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.volume_name().size() > 0) {
+    volume_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.volume_name_);
+  }
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.path().size() > 0) {
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
-  type_ = from.type_;
+  ::memcpy(&total_space_, &from.total_space_,
+    reinterpret_cast<char*>(&type_) -
+    reinterpret_cast<char*>(&total_space_) + sizeof(type_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.DriveListItem)
 }
 
 void DriveListItem::SharedCtor() {
+  filesystem_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  volume_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_ = 0;
+  ::memset(&total_space_, 0, reinterpret_cast<char*>(&type_) -
+    reinterpret_cast<char*>(&total_space_) + sizeof(type_));
   _cached_size_ = 0;
 }
 
@@ -210,6 +231,8 @@ DriveListItem::~DriveListItem() {
 }
 
 void DriveListItem::SharedDtor() {
+  filesystem_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  volume_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
@@ -233,8 +256,11 @@ DriveListItem* DriveListItem::New(::google::protobuf::Arena* arena) const {
 
 void DriveListItem::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.DriveListItem)
+  filesystem_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  volume_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_ = 0;
+  ::memset(&total_space_, 0, reinterpret_cast<char*>(&type_) -
+    reinterpret_cast<char*>(&total_space_) + sizeof(type_));
 }
 
 bool DriveListItem::MergePartialFromCodedStream(
@@ -247,10 +273,57 @@ bool DriveListItem::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // string path = 1;
+      // .aspia.proto.DriveListItem.Type type = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(10u)) {
+            static_cast< ::google::protobuf::uint8>(8u)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_type(static_cast< ::aspia::proto::DriveListItem_Type >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string filesystem = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_filesystem()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->filesystem().data(), this->filesystem().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DriveListItem.filesystem"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string volume_name = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_volume_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->volume_name().data(), this->volume_name().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DriveListItem.volume_name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string path = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_path()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -263,15 +336,28 @@ bool DriveListItem::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.DriveListItem.Type type = 2;
-      case 2: {
+      // uint64 total_space = 5;
+      case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(16u)) {
-          int value;
+            static_cast< ::google::protobuf::uint8>(40u)) {
+
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_type(static_cast< ::aspia::proto::DriveListItem_Type >(value));
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &total_space_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint64 free_space = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(48u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &free_space_)));
         } else {
           goto handle_unusual;
         }
@@ -305,20 +391,50 @@ void DriveListItem::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string path = 1;
+  // .aspia.proto.DriveListItem.Type type = 1;
+  if (this->type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->type(), output);
+  }
+
+  // string filesystem = 2;
+  if (this->filesystem().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->filesystem().data(), this->filesystem().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DriveListItem.filesystem");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->filesystem(), output);
+  }
+
+  // string volume_name = 3;
+  if (this->volume_name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->volume_name().data(), this->volume_name().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DriveListItem.volume_name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->volume_name(), output);
+  }
+
+  // string path = 4;
   if (this->path().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->path().data(), this->path().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.proto.DriveListItem.path");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->path(), output);
+      4, this->path(), output);
   }
 
-  // .aspia.proto.DriveListItem.Type type = 2;
-  if (this->type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      2, this->type(), output);
+  // uint64 total_space = 5;
+  if (this->total_space() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(5, this->total_space(), output);
+  }
+
+  // uint64 free_space = 6;
+  if (this->free_space() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(6, this->free_space(), output);
   }
 
   // @@protoc_insertion_point(serialize_end:aspia.proto.DriveListItem)
@@ -328,14 +444,42 @@ size_t DriveListItem::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:aspia.proto.DriveListItem)
   size_t total_size = 0;
 
-  // string path = 1;
+  // string filesystem = 2;
+  if (this->filesystem().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->filesystem());
+  }
+
+  // string volume_name = 3;
+  if (this->volume_name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->volume_name());
+  }
+
+  // string path = 4;
   if (this->path().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->path());
   }
 
-  // .aspia.proto.DriveListItem.Type type = 2;
+  // uint64 total_space = 5;
+  if (this->total_space() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->total_space());
+  }
+
+  // uint64 free_space = 6;
+  if (this->free_space() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->free_space());
+  }
+
+  // .aspia.proto.DriveListItem.Type type = 1;
   if (this->type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
@@ -360,9 +504,23 @@ void DriveListItem::MergeFrom(const DriveListItem& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from.filesystem().size() > 0) {
+
+    filesystem_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.filesystem_);
+  }
+  if (from.volume_name().size() > 0) {
+
+    volume_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.volume_name_);
+  }
   if (from.path().size() > 0) {
 
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
+  }
+  if (from.total_space() != 0) {
+    set_total_space(from.total_space());
+  }
+  if (from.free_space() != 0) {
+    set_free_space(from.free_space());
   }
   if (from.type() != 0) {
     set_type(from.type());
@@ -385,7 +543,11 @@ void DriveListItem::Swap(DriveListItem* other) {
   InternalSwap(other);
 }
 void DriveListItem::InternalSwap(DriveListItem* other) {
+  filesystem_.Swap(&other->filesystem_);
+  volume_name_.Swap(&other->volume_name_);
   path_.Swap(&other->path_);
+  std::swap(total_space_, other->total_space_);
+  std::swap(free_space_, other->free_space_);
   std::swap(type_, other->type_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -397,7 +559,127 @@ void DriveListItem::InternalSwap(DriveListItem* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // DriveListItem
 
-// string path = 1;
+// .aspia.proto.DriveListItem.Type type = 1;
+void DriveListItem::clear_type() {
+  type_ = 0;
+}
+::aspia::proto::DriveListItem_Type DriveListItem::type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DriveListItem.type)
+  return static_cast< ::aspia::proto::DriveListItem_Type >(type_);
+}
+void DriveListItem::set_type(::aspia::proto::DriveListItem_Type value) {
+  
+  type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DriveListItem.type)
+}
+
+// string filesystem = 2;
+void DriveListItem::clear_filesystem() {
+  filesystem_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DriveListItem::filesystem() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DriveListItem.filesystem)
+  return filesystem_.GetNoArena();
+}
+void DriveListItem::set_filesystem(const ::std::string& value) {
+  
+  filesystem_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.DriveListItem.filesystem)
+}
+#if LANG_CXX11
+void DriveListItem::set_filesystem(::std::string&& value) {
+  
+  filesystem_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.DriveListItem.filesystem)
+}
+#endif
+void DriveListItem::set_filesystem(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  filesystem_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.DriveListItem.filesystem)
+}
+void DriveListItem::set_filesystem(const char* value, size_t size) {
+  
+  filesystem_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.DriveListItem.filesystem)
+}
+::std::string* DriveListItem::mutable_filesystem() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.DriveListItem.filesystem)
+  return filesystem_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DriveListItem::release_filesystem() {
+  // @@protoc_insertion_point(field_release:aspia.proto.DriveListItem.filesystem)
+  
+  return filesystem_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DriveListItem::set_allocated_filesystem(::std::string* filesystem) {
+  if (filesystem != NULL) {
+    
+  } else {
+    
+  }
+  filesystem_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), filesystem);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DriveListItem.filesystem)
+}
+
+// string volume_name = 3;
+void DriveListItem::clear_volume_name() {
+  volume_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DriveListItem::volume_name() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DriveListItem.volume_name)
+  return volume_name_.GetNoArena();
+}
+void DriveListItem::set_volume_name(const ::std::string& value) {
+  
+  volume_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.DriveListItem.volume_name)
+}
+#if LANG_CXX11
+void DriveListItem::set_volume_name(::std::string&& value) {
+  
+  volume_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.DriveListItem.volume_name)
+}
+#endif
+void DriveListItem::set_volume_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  volume_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.DriveListItem.volume_name)
+}
+void DriveListItem::set_volume_name(const char* value, size_t size) {
+  
+  volume_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.DriveListItem.volume_name)
+}
+::std::string* DriveListItem::mutable_volume_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.DriveListItem.volume_name)
+  return volume_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DriveListItem::release_volume_name() {
+  // @@protoc_insertion_point(field_release:aspia.proto.DriveListItem.volume_name)
+  
+  return volume_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DriveListItem::set_allocated_volume_name(::std::string* volume_name) {
+  if (volume_name != NULL) {
+    
+  } else {
+    
+  }
+  volume_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), volume_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DriveListItem.volume_name)
+}
+
+// string path = 4;
 void DriveListItem::clear_path() {
   path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -450,18 +732,32 @@ void DriveListItem::set_allocated_path(::std::string* path) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.DriveListItem.path)
 }
 
-// .aspia.proto.DriveListItem.Type type = 2;
-void DriveListItem::clear_type() {
-  type_ = 0;
+// uint64 total_space = 5;
+void DriveListItem::clear_total_space() {
+  total_space_ = GOOGLE_ULONGLONG(0);
 }
-::aspia::proto::DriveListItem_Type DriveListItem::type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DriveListItem.type)
-  return static_cast< ::aspia::proto::DriveListItem_Type >(type_);
+::google::protobuf::uint64 DriveListItem::total_space() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DriveListItem.total_space)
+  return total_space_;
 }
-void DriveListItem::set_type(::aspia::proto::DriveListItem_Type value) {
+void DriveListItem::set_total_space(::google::protobuf::uint64 value) {
   
-  type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DriveListItem.type)
+  total_space_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DriveListItem.total_space)
+}
+
+// uint64 free_space = 6;
+void DriveListItem::clear_free_space() {
+  free_space_ = GOOGLE_ULONGLONG(0);
+}
+::google::protobuf::uint64 DriveListItem::free_space() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DriveListItem.free_space)
+  return free_space_;
+}
+void DriveListItem::set_free_space(::google::protobuf::uint64 value) {
+  
+  free_space_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DriveListItem.free_space)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -877,8 +1173,9 @@ void DriveListRequest::set_dummy(::google::protobuf::uint32 value) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int DirectoryListItem::kNameFieldNumber;
 const int DirectoryListItem::kTypeFieldNumber;
+const int DirectoryListItem::kNameFieldNumber;
+const int DirectoryListItem::kSizeFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 DirectoryListItem::DirectoryListItem()
@@ -898,13 +1195,16 @@ DirectoryListItem::DirectoryListItem(const DirectoryListItem& from)
   if (from.name().size() > 0) {
     name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
   }
-  type_ = from.type_;
+  ::memcpy(&size_, &from.size_,
+    reinterpret_cast<char*>(&type_) -
+    reinterpret_cast<char*>(&size_) + sizeof(type_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.DirectoryListItem)
 }
 
 void DirectoryListItem::SharedCtor() {
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_ = 0;
+  ::memset(&size_, 0, reinterpret_cast<char*>(&type_) -
+    reinterpret_cast<char*>(&size_) + sizeof(type_));
   _cached_size_ = 0;
 }
 
@@ -938,7 +1238,8 @@ DirectoryListItem* DirectoryListItem::New(::google::protobuf::Arena* arena) cons
 void DirectoryListItem::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.DirectoryListItem)
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_ = 0;
+  ::memset(&size_, 0, reinterpret_cast<char*>(&type_) -
+    reinterpret_cast<char*>(&size_) + sizeof(type_));
 }
 
 bool DirectoryListItem::MergePartialFromCodedStream(
@@ -951,10 +1252,25 @@ bool DirectoryListItem::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // string name = 1;
+      // .aspia.proto.DirectoryListItem.Type type = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(10u)) {
+            static_cast< ::google::protobuf::uint8>(8u)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_type(static_cast< ::aspia::proto::DirectoryListItem_Type >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string name = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_name()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -967,15 +1283,14 @@ bool DirectoryListItem::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.DirectoryListItem.Type type = 2;
-      case 2: {
+      // uint64 size = 3;
+      case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(16u)) {
-          int value;
+            static_cast< ::google::protobuf::uint8>(24u)) {
+
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_type(static_cast< ::aspia::proto::DirectoryListItem_Type >(value));
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &size_)));
         } else {
           goto handle_unusual;
         }
@@ -1009,20 +1324,25 @@ void DirectoryListItem::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string name = 1;
+  // .aspia.proto.DirectoryListItem.Type type = 1;
+  if (this->type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->type(), output);
+  }
+
+  // string name = 2;
   if (this->name().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), this->name().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.proto.DirectoryListItem.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->name(), output);
+      2, this->name(), output);
   }
 
-  // .aspia.proto.DirectoryListItem.Type type = 2;
-  if (this->type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      2, this->type(), output);
+  // uint64 size = 3;
+  if (this->size() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(3, this->size(), output);
   }
 
   // @@protoc_insertion_point(serialize_end:aspia.proto.DirectoryListItem)
@@ -1032,14 +1352,21 @@ size_t DirectoryListItem::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:aspia.proto.DirectoryListItem)
   size_t total_size = 0;
 
-  // string name = 1;
+  // string name = 2;
   if (this->name().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->name());
   }
 
-  // .aspia.proto.DirectoryListItem.Type type = 2;
+  // uint64 size = 3;
+  if (this->size() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->size());
+  }
+
+  // .aspia.proto.DirectoryListItem.Type type = 1;
   if (this->type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
@@ -1068,6 +1395,9 @@ void DirectoryListItem::MergeFrom(const DirectoryListItem& from) {
 
     name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
   }
+  if (from.size() != 0) {
+    set_size(from.size());
+  }
   if (from.type() != 0) {
     set_type(from.type());
   }
@@ -1090,6 +1420,7 @@ void DirectoryListItem::Swap(DirectoryListItem* other) {
 }
 void DirectoryListItem::InternalSwap(DirectoryListItem* other) {
   name_.Swap(&other->name_);
+  std::swap(size_, other->size_);
   std::swap(type_, other->type_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -1101,7 +1432,21 @@ void DirectoryListItem::InternalSwap(DirectoryListItem* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // DirectoryListItem
 
-// string name = 1;
+// .aspia.proto.DirectoryListItem.Type type = 1;
+void DirectoryListItem::clear_type() {
+  type_ = 0;
+}
+::aspia::proto::DirectoryListItem_Type DirectoryListItem::type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DirectoryListItem.type)
+  return static_cast< ::aspia::proto::DirectoryListItem_Type >(type_);
+}
+void DirectoryListItem::set_type(::aspia::proto::DirectoryListItem_Type value) {
+  
+  type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DirectoryListItem.type)
+}
+
+// string name = 2;
 void DirectoryListItem::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1154,18 +1499,18 @@ void DirectoryListItem::set_allocated_name(::std::string* name) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.DirectoryListItem.name)
 }
 
-// .aspia.proto.DirectoryListItem.Type type = 2;
-void DirectoryListItem::clear_type() {
-  type_ = 0;
+// uint64 size = 3;
+void DirectoryListItem::clear_size() {
+  size_ = GOOGLE_ULONGLONG(0);
 }
-::aspia::proto::DirectoryListItem_Type DirectoryListItem::type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DirectoryListItem.type)
-  return static_cast< ::aspia::proto::DirectoryListItem_Type >(type_);
+::google::protobuf::uint64 DirectoryListItem::size() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DirectoryListItem.size)
+  return size_;
 }
-void DirectoryListItem::set_type(::aspia::proto::DirectoryListItem_Type value) {
+void DirectoryListItem::set_size(::google::protobuf::uint64 value) {
   
-  type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DirectoryListItem.type)
+  size_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DirectoryListItem.size)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

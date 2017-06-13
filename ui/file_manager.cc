@@ -55,17 +55,75 @@ void FileManager::OnAfterThreadRunning()
     DestroyWindow();
 }
 
+void FileManager::AddDriveItem(Type panel_type,
+                               proto::DriveListItem::Type drive_type,
+                               const std::wstring& drive_path,
+                               const std::wstring& drive_name,
+                               const std::wstring& drive_filesystem,
+                               uint64_t total_space,
+                               uint64_t free_space)
+{
+    if (panel_type == FileManager::Type::REMOTE)
+    {
+        remote_panel_.AddDriveItem(drive_type,
+                                   drive_path,
+                                   drive_name,
+                                   drive_filesystem,
+                                   total_space,
+                                   free_space);
+    }
+    else
+    {
+        DCHECK(panel_type == FileManager::Type::LOCAL);
+
+        local_panel_.AddDriveItem(drive_type,
+                                  drive_path,
+                                  drive_name,
+                                  drive_filesystem,
+                                  total_space,
+                                  free_space);
+    }
+}
+
+void FileManager::AddDirectoryItem(Type panel_type,
+                                   proto::DirectoryListItem::Type item_type,
+                                   const std::wstring& item_name,
+                                   uint64_t item_size)
+{
+    if (panel_type == FileManager::Type::REMOTE)
+    {
+
+    }
+    else
+    {
+        DCHECK(panel_type == FileManager::Type::LOCAL);
+    }
+}
+
+void FileManager::OnDriveListRequest(FileManager::Type type)
+{
+    delegate_->OnDriveListRequest(type);
+}
+
 void FileManager::OnCreate()
 {
     splitter_.CreateWithProportion(hwnd());
 
-    local_panel_.CreatePanel(splitter_, FileManagerPanel::Type::LOCAL);
-    remote_panel_.CreatePanel(splitter_, FileManagerPanel::Type::REMOTE);
+    local_panel_.CreatePanel(splitter_, FileManager::Type::LOCAL, this);
+    remote_panel_.CreatePanel(splitter_, FileManager::Type::REMOTE, this);
 
     splitter_.SetPanels(local_panel_, remote_panel_);
 
     MoveWindow(hwnd(), 0, 0, kDefaultWindowWidth, kDefaultWindowHeight, TRUE);
     CenterWindow();
+
+    runner_->PostTask(std::bind(&FileManager::OnDriveListRequest,
+                                this,
+                                FileManager::Type::LOCAL));
+
+    runner_->PostTask(std::bind(&FileManager::OnDriveListRequest,
+                                this,
+                                FileManager::Type::REMOTE));
 }
 
 void FileManager::OnDestroy()

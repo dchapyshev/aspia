@@ -29,10 +29,16 @@ private:
 
     // FileManager::Delegate implementation.
     void OnWindowClose() override;
+    void OnDriveListRequest(FileManager::Type type) override;
+    void OnDirectoryListRequest(FileManager::Type type, const std::wstring& path) override;
+    void OnSendFile(const std::wstring& from_path, const std::wstring& to_path) override;
+    void OnRecieveFile(const std::wstring& from_path, const std::wstring& to_path) override;
 
     bool ReadDriveListMessage(const proto::DriveList& drive_list);
     bool ReadDirectoryListMessage(const proto::DirectoryList& direcrory_list);
     bool ReadFileMessage(const proto::File& file);
+
+    void WriteMessage(const proto::file_transfer::ClientToHost& message);
 
     std::unique_ptr<FileManager> file_manager_;
 

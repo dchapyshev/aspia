@@ -18,12 +18,18 @@ message DriveListItem
         UNKNOWN        = 0;
         CDROM          = 1;
         REMOVABLE      = 2;
-        HARDDRIVE      = 3;
-        DESKTOP_FOLDER = 4;
+        FIXED          = 3;
+        REMOTE         = 4;
+        RAM            = 5;
+        DESKTOP_FOLDER = 6;
     }
 
-    string path = 1;
-    Type type   = 2;
+    Type type   = 1;
+    string filesystem = 2;
+    string volume_name = 3;
+    string path = 4;
+    uint64 total_space = 5;
+    uint64 free_space = 6;
 }
 
 message DriveList
@@ -45,8 +51,9 @@ message DirectoryListItem
         FILE      = 2;
     }
 
-    string name   = 1;
-    Type type = 2;
+    Type type   = 1;
+    string name = 2;
+    uint64 size = 3;
 }
 
 message DirectoryList
