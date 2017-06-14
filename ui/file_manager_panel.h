@@ -9,6 +9,7 @@
 #define _ASPIA_UI__FILE_MANAGER_PANEL_H
 
 #include "ui/base/child_window.h"
+#include "ui/base/comboboxex.h"
 #include "ui/base/listview.h"
 #include "ui/base/imagelist.h"
 #include "proto/file_transfer_session.pb.h"
@@ -63,7 +64,9 @@ private:
     Window toolbar_window_;
     ImageList toolbar_imagelist_;
 
-    Window address_window_;
+    ComboBoxEx address_window_;
+    ImageList address_imagelist_;
+
     Window status_window_;
 
     DISALLOW_COPY_AND_ASSIGN(FileManagerPanel);

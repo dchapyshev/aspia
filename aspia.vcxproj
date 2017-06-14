@@ -138,6 +138,7 @@
     <ClCompile Include="ui\about_dialog.cc" />
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\child_window.cc" />
+    <ClCompile Include="ui\base\comboboxex.cc" />
     <ClCompile Include="ui\base\imagelist.cc" />
     <ClCompile Include="ui\base\listview.cc" />
     <ClCompile Include="ui\base\modal_dialog.cc" />
@@ -151,6 +152,7 @@
     <ClCompile Include="ui\file_replace_dialog.cc" />
     <ClCompile Include="ui\file_status_dialog.cc" />
     <ClCompile Include="ui\file_transfer_dialog.cc" />
+    <ClCompile Include="ui\get_stock_icon.cc" />
     <ClCompile Include="ui\main_dialog.cc" />
     <ClCompile Include="ui\power_manage_dialog.cc" />
     <ClCompile Include="ui\settings_dialog.cc" />
@@ -310,6 +312,7 @@
     <ClInclude Include="ui\auth_dialog.h" />
     <ClInclude Include="ui\base\child_window.h" />
     <ClInclude Include="ui\base\combobox.h" />
+    <ClInclude Include="ui\base\comboboxex.h" />
     <ClInclude Include="ui\base\imagelist.h" />
     <ClInclude Include="ui\base\listview.h" />
     <ClInclude Include="ui\base\modal_dialog.h" />
@@ -325,6 +328,7 @@
     <ClInclude Include="ui\file_replace_dialog.h" />
     <ClInclude Include="ui\file_status_dialog.h" />
     <ClInclude Include="ui\file_transfer_dialog.h" />
+    <ClInclude Include="ui\get_stock_icon.h" />
     <ClInclude Include="ui\main_dialog.h" />
     <ClInclude Include="ui\power_manage_dialog.h" />
     <ClInclude Include="ui\resource.h" />

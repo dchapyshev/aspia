@@ -442,6 +442,12 @@
     <ClCompile Include="ui\file_status_dialog.cc">
       <Filter>ui</Filter>
     </ClCompile>
+    <ClCompile Include="ui\base\comboboxex.cc">
+      <Filter>ui\base</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\get_stock_icon.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -957,6 +963,12 @@
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="ui\file_status_dialog.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\comboboxex.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\get_stock_icon.h">
       <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,10 +6,13 @@
 //
 
 #include "ui/file_manager_panel.h"
-#include "ui/base/combobox.h"
 #include "ui/base/module.h"
 #include "ui/resource.h"
+#include "ui/get_stock_icon.h"
 #include "base/scoped_gdi_object.h"
+
+#include <shellapi.h>
+#include <shlobj.h>
 
 namespace aspia {
 
@@ -40,7 +43,53 @@ void FileManagerPanel::AddDriveItem(proto::DriveListItem::Type drive_type,
                                     uint64_t total_space,
                                     uint64_t free_space)
 {
-    ComboBox_AddItem(address_window_, drive_path, 0);
+    SHSTOCKICONID icon_id;
+
+    switch (drive_type)
+    {
+        case proto::DriveListItem::CDROM:
+            icon_id = SIID_DRIVECD;
+            break;
+
+        case proto::DriveListItem::FIXED:
+            icon_id = SIID_DRIVEFIXED;
+            break;
+
+        case proto::DriveListItem::REMOVABLE:
+            icon_id = SIID_DRIVEREMOVE;
+            break;
+
+        case proto::DriveListItem::REMOTE:
+            icon_id = SIID_DRIVENET;
+            break;
+
+        case proto::DriveListItem::RAM:
+            icon_id = SIID_DRIVERAM;
+            break;
+
+        case proto::DriveListItem::DESKTOP_FOLDER:
+            icon_id = SIID_DESKTOP;
+            break;
+
+        default:
+            icon_id = SIID_DRIVEFIXED;
+            break;
+    }
+
+    SHSTOCKICONINFO icon_info;
+
+    memset(&icon_info, 0, sizeof(icon_info));
+    icon_info.cbSize = sizeof(icon_info);
+
+    int icon_index = -1;
+
+    if (SUCCEEDED(SHGetStockIconInfo(icon_id, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
+    {
+        ScopedHICON icon(icon_info.hIcon);
+        icon_index = address_imagelist_.AddIcon(icon);
+    }
+
+    address_window_.AddItem(drive_path, icon_index, 0, 0);
 }
 
 void FileManagerPanel::AddDirectoryItem(proto::DirectoryListItem::Type item_type,
@@ -69,7 +118,7 @@ void FileManagerPanel::OnCreate()
     title_window_.SetFont(default_font);
 
     address_window_.Attach(CreateWindowExW(0,
-                                           WC_COMBOBOXW,
+                                           WC_COMBOBOXEXW,
                                            L"",
                                            WS_CHILD | WS_VISIBLE | WS_TABSTOP |
                                                WS_VSCROLL | CBS_DROPDOWN,
@@ -79,6 +128,11 @@ void FileManagerPanel::OnCreate()
                                            module.Handle(),
                                            nullptr));
     address_window_.SetFont(default_font);
+
+    if (address_imagelist_.CreateSmall())
+    {
+        address_window_.SetImageList(address_imagelist_);
+    }
 
     toolbar_window_.Attach(CreateWindowExW(0,
                                            TOOLBARCLASSNAMEW,
