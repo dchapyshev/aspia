@@ -149,6 +149,7 @@
     <ClCompile Include="ui\file_manager.cc" />
     <ClCompile Include="ui\file_manager_panel.cc" />
     <ClCompile Include="ui\file_replace_dialog.cc" />
+    <ClCompile Include="ui\file_status_dialog.cc" />
     <ClCompile Include="ui\file_transfer_dialog.cc" />
     <ClCompile Include="ui\main_dialog.cc" />
     <ClCompile Include="ui\power_manage_dialog.cc" />
@@ -322,6 +323,7 @@
     <ClInclude Include="ui\file_manager.h" />
     <ClInclude Include="ui\file_manager_panel.h" />
     <ClInclude Include="ui\file_replace_dialog.h" />
+    <ClInclude Include="ui\file_status_dialog.h" />
     <ClInclude Include="ui\file_transfer_dialog.h" />
     <ClInclude Include="ui\main_dialog.h" />
     <ClInclude Include="ui\power_manage_dialog.h" />

@@ -439,6 +439,9 @@
     <ClCompile Include="ui\file_replace_dialog.cc">
       <Filter>ui</Filter>
     </ClCompile>
+    <ClCompile Include="ui\file_status_dialog.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -951,6 +954,9 @@
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="ui\file_replace_dialog.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_status_dialog.h">
       <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>

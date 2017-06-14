@@ -46,6 +46,7 @@
 #define IDD_POWER                             107
 #define IDD_FILE_TRANSFER                     108
 #define IDD_FILE_REPLACE                      109
+#define IDD_FILE_STATUS                       110
 
 //
 // Controls
@@ -93,6 +94,8 @@
 #define IDC_REPLACE_ALL_BUTTON                140
 #define IDC_SKIP_BUTTON                       141
 #define IDC_SKIP_ALL_BUTTON                   142
+#define IDC_STOP_BUTTON                       143
+#define IDC_MINIMIZE_BUTTON                   144
 
 //
 // Commands
