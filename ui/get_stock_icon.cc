@@ -6,20 +6,43 @@
 //
 
 #include "ui/get_stock_icon.h"
+#include "base/version_helpers.h"
 
 #include <shlwapi.h>
 #include <shlobj.h>
 #include <strsafe.h>
 
-#if (NTDDI_VERSION < NTDDI_VISTA)
+namespace aspia {
 
 static const WCHAR kShellIcons[] =
-    L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Icons";
+L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Icons";
 
-static const WCHAR kShell32Library[] = L"shell32.dll";
+static const WCHAR kShell32LibraryName[] = L"shell32.dll";
 
-HRESULT WINAPI SHGetStockIconInfo(SHSTOCKICONID id, UINT flags, SHSTOCKICONINFO* sii)
+HRESULT GetStockIconInfo(SHSTOCKICONID id, UINT flags, SHSTOCKICONINFO* sii)
 {
+#if (NTDDI_VERSION >= NTDDI_VISTA)
+    return SHGetStockIconInfo(id, flags, sii);
+#else
+    if (IsWindowsVistaOrGreater())
+    {
+        typedef HRESULT(WINAPI *SHGetStockIconInfoFn)(SHSTOCKICONID, UINT, SHSTOCKICONINFO*);
+
+        HMODULE shell32_module = GetModuleHandleW(kShell32LibraryName);
+
+        if (!shell32_module)
+            return E_UNEXPECTED;
+
+        SHGetStockIconInfoFn get_stock_icon =
+            reinterpret_cast<SHGetStockIconInfoFn>(
+                GetProcAddress(shell32_module, "SHGetStockIconInfo"));
+
+        if (!get_stock_icon)
+            return E_UNEXPECTED;
+
+        return get_stock_icon(id, flags, sii);
+    }
+
     if (id < 0 || id >= SIID_MAX_ICONS)
         return E_INVALIDARG;
 
@@ -55,7 +78,7 @@ HRESULT WINAPI SHGetStockIconInfo(SHSTOCKICONID id, UINT flags, SHSTOCKICONINFO*
             if (!ret || ret >= MAX_PATH)
                 return HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
 
-            if (!PathAppendW(sii->szPath, kShell32Library))
+            if (!PathAppendW(sii->szPath, kShell32LibraryName))
                 return HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
         }
     }
@@ -81,6 +104,7 @@ HRESULT WINAPI SHGetStockIconInfo(SHSTOCKICONID id, UINT flags, SHSTOCKICONINFO*
     }
 
     return S_OK;
+#endif // (NTDDI_VERSION >= NTDDI_VISTA)
 }
 
-#endif // (NTDDI_VERSION < NTDDI_VISTA)
+} // namespace aspia

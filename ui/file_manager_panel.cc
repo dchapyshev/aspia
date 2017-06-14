@@ -83,7 +83,7 @@ void FileManagerPanel::AddDriveItem(proto::DriveListItem::Type drive_type,
 
     int icon_index = -1;
 
-    if (SUCCEEDED(SHGetStockIconInfo(icon_id, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
+    if (SUCCEEDED(GetStockIconInfo(icon_id, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
     {
         ScopedHICON icon(icon_info.hIcon);
         icon_index = address_imagelist_.AddIcon(icon);
