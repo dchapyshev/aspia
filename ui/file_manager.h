@@ -29,7 +29,7 @@ public:
     public:
         virtual void OnWindowClose() = 0;
         virtual void OnDriveListRequest(PanelType panel_type) = 0;
-        virtual void OnDirectoryListRequest(PanelType panel_type, const std::wstring& path) = 0;
+        virtual void OnDirectoryListRequest(PanelType panel_type, const std::string& path) = 0;
         virtual void OnSendFile(const std::wstring& from_path, const std::wstring& to_path) = 0;
         virtual void OnRecieveFile(const std::wstring& from_path, const std::wstring& to_path) = 0;
     };
@@ -37,15 +37,11 @@ public:
     FileManager(Delegate* delegate);
     ~FileManager();
 
-    void AddDriveItem(PanelType panel_type,
-                      proto::DriveListItem::Type drive_type,
-                      const std::wstring& drive_path,
-                      const std::wstring& drive_name);
+    void ReadDriveList(PanelType panel_type,
+                       std::unique_ptr<proto::DriveList> drive_list);
 
-    void AddDirectoryItem(PanelType panel_type,
-                          proto::DirectoryListItem::Type item_type,
-                          const std::wstring& item_name,
-                          uint64_t item_size);
+    void ReadDirectoryList(PanelType panel_type,
+                           std::unique_ptr<proto::DirectoryList> directory_list);
 
 private:
     // MessageLoopThread::Delegate implementation.
@@ -54,6 +50,7 @@ private:
 
     // FileManagerPanel::Delegate implementation.
     void OnDriveListRequest(PanelType panel_type) override;
+    void OnDirectoryListRequest(PanelType type, const std::string& path) override;
 
     // ChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;

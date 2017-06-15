@@ -6,11 +6,10 @@
 //
 
 #include "client/client_session_file_transfer.h"
-#include "base/drive_enumerator.h"
-#include "base/file_enumerator.h"
 #include "base/unicode.h"
-#include "base/path.h"
 #include "protocol/message_serialization.h"
+#include "protocol/directory_list.h"
+#include "protocol/drive_list.h"
 
 namespace aspia {
 
@@ -42,11 +41,13 @@ void ClientSessionFileTransfer::Send(const IOBuffer& buffer)
 
         if (message.has_drive_list())
         {
-            success = ReadDriveListMessage(message.drive_list());
+            std::unique_ptr<proto::DriveList> drive_list(message.release_drive_list());
+            success = ReadDriveListMessage(std::move(drive_list));
         }
         else if (message.has_directory_list())
         {
-            success = ReadDirectoryListMessage(message.directory_list());
+            std::unique_ptr<proto::DirectoryList> directory_list(message.release_directory_list());
+            success = ReadDirectoryListMessage(std::move(directory_list));
         }
         else if (message.has_file())
         {
@@ -82,113 +83,36 @@ void ClientSessionFileTransfer::OnDriveListRequest(FileManager::PanelType panel_
     {
         DCHECK(panel_type == FileManager::PanelType::LOCAL);
 
-        DriveEnumerator enumerator;
+        std::unique_ptr<proto::DriveList> drive_list = CreateDriveList();
 
-        for (;;)
+        if (drive_list)
         {
-            std::wstring path = enumerator.Next();
-
-            if (path.empty())
-                break;
-
-            DriveEnumerator::DriveInfo drive_info = enumerator.GetInfo();
-
-            proto::DriveListItem::Type drive_type;
-
-            switch (drive_info.Type())
-            {
-                case DriveEnumerator::DriveInfo::DriveType::CDROM:
-                    drive_type = proto::DriveListItem::CDROM;
-                    break;
-
-                case DriveEnumerator::DriveInfo::DriveType::REMOVABLE:
-                    drive_type = proto::DriveListItem::REMOVABLE;
-                    break;
-
-                case DriveEnumerator::DriveInfo::DriveType::FIXED:
-                    drive_type = proto::DriveListItem::FIXED;
-                    break;
-
-                case DriveEnumerator::DriveInfo::DriveType::RAM:
-                    drive_type = proto::DriveListItem::RAM;
-                    break;
-
-                case DriveEnumerator::DriveInfo::DriveType::REMOTE:
-                    drive_type = proto::DriveListItem::REMOTE;
-                    break;
-
-                default:
-                    drive_type = proto::DriveListItem::UNKNOWN;
-                    break;
-            }
-
-            file_manager_->AddDriveItem(panel_type,
-                                        drive_type,
-                                        drive_info.Path(),
-                                        drive_info.VolumeName());
-        }
-
-        std::wstring path;
-
-        if (GetPathW(PathKey::DIR_USER_HOME, path))
-        {
-            file_manager_->AddDriveItem(panel_type,
-                                        proto::DriveListItem::HOME_FOLDER,
-                                        path,
-                                        std::wstring());
-        }
-
-        if (GetPathW(PathKey::DIR_USER_DESKTOP, path))
-        {
-            file_manager_->AddDriveItem(panel_type,
-                                        proto::DriveListItem::DESKTOP_FOLDER,
-                                        path,
-                                        std::wstring());
+            file_manager_->ReadDriveList(FileManager::PanelType::LOCAL,
+                                         std::move(drive_list));
         }
     }
 }
 
 void ClientSessionFileTransfer::OnDirectoryListRequest(FileManager::PanelType panel_type,
-                                                       const std::wstring& path)
+                                                       const std::string& path)
 {
     if (panel_type == FileManager::PanelType::REMOTE)
     {
         proto::file_transfer::ClientToHost message;
-        message.mutable_directory_list_request()->set_path(UTF8fromUNICODE(path));
+        message.mutable_directory_list_request()->set_path(path);
         WriteMessage(message);
     }
     else
     {
         DCHECK(panel_type == FileManager::PanelType::LOCAL);
 
-        FileEnumerator enumerator(path,
-                                  false,
-                                  FileEnumerator::FILES | FileEnumerator::DIRECTORIES);
+        std::unique_ptr<proto::DirectoryList> directory_list =
+            CreateDirectoryList(UNICODEfromUTF8(path));
 
-        for (;;)
+        if (directory_list)
         {
-            std::wstring path = enumerator.Next();
-
-            if (path.empty())
-                break;
-
-            FileEnumerator::FileInfo file_info = enumerator.GetInfo();
-
-            proto::DirectoryListItem::Type type;
-
-            if (file_info.IsDirectory())
-            {
-                type = proto::DirectoryListItem::DIRECTORY;
-            }
-            else
-            {
-                type = proto::DirectoryListItem::FILE;
-            }
-
-            file_manager_->AddDirectoryItem(panel_type,
-                                            type,
-                                            file_info.GetName(),
-                                            file_info.GetSize());
+            file_manager_->ReadDirectoryList(FileManager::PanelType::LOCAL,
+                                             std::move(directory_list));
         }
     }
 }
@@ -206,38 +130,24 @@ void ClientSessionFileTransfer::OnRecieveFile(const std::wstring& from_path,
 }
 
 bool ClientSessionFileTransfer::ReadDriveListMessage(
-    const proto::DriveList& drive_list)
+    std::unique_ptr<proto::DriveList> drive_list)
 {
-    const int count = drive_list.item_size();
+    if (!drive_list)
+        return false;
 
-    for (int index = 0; index < count; ++index)
-    {
-        const proto::DriveListItem& item = drive_list.item(index);
-
-        file_manager_->AddDriveItem(FileManager::PanelType::REMOTE,
-                                    item.type(),
-                                    UNICODEfromUTF8(item.path()),
-                                    UNICODEfromUTF8(item.name()));
-    }
-
+    file_manager_->ReadDriveList(FileManager::PanelType::REMOTE,
+                                 std::move(drive_list));
     return true;
 }
 
 bool ClientSessionFileTransfer::ReadDirectoryListMessage(
-    const proto::DirectoryList& direcrory_list)
+    std::unique_ptr<proto::DirectoryList> directory_list)
 {
-    const int count = direcrory_list.item_size();
+    if (!directory_list)
+        return false;
 
-    for (int index = 0; index < count; ++index)
-    {
-        const proto::DirectoryListItem& item = direcrory_list.item(index);
-
-        file_manager_->AddDirectoryItem(FileManager::PanelType::REMOTE,
-                                        item.type(),
-                                        UNICODEfromUTF8(item.name()),
-                                        item.size());
-    }
-
+    file_manager_->ReadDirectoryList(FileManager::PanelType::REMOTE,
+                                     std::move(directory_list));
     return true;
 }
 

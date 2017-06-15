@@ -345,6 +345,11 @@ BEGIN
     IDS_FT_TOOLTIP_RECIEVE                "Send selected object(s) to local computer (F11)"
     IDS_FT_HOME_FOLDER                    "Home Folder"
     IDS_FT_DESKTOP_FOLDER                 "Desktop"
+    IDS_FT_SIZE_TBYTES                    "TB"
+    IDS_FT_SIZE_GBYTES                    "GB"
+    IDS_FT_SIZE_MBYTES                    "MB"
+    IDS_FT_SIZE_KBYTES                    "KB"
+    IDS_FT_SIZE_BYTES                     "B"
 END
 
 // Status

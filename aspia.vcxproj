@@ -124,6 +124,8 @@
     <ClCompile Include="network\network_client_tcp.cc" />
     <ClCompile Include="network\network_server_tcp.cc" />
     <ClCompile Include="protocol\clipboard.cc" />
+    <ClCompile Include="protocol\directory_list.cc" />
+    <ClCompile Include="protocol\drive_list.cc" />
     <ClCompile Include="proto\auth_session.pb.cc" />
     <ClCompile Include="proto\auth_session_message.pb.cc" />
     <ClCompile Include="proto\desktop_session.pb.cc" />
@@ -296,6 +298,8 @@
     <ClInclude Include="network\scoped_wsa_initializer.h" />
     <ClInclude Include="network\socket.h" />
     <ClInclude Include="protocol\clipboard.h" />
+    <ClInclude Include="protocol\directory_list.h" />
+    <ClInclude Include="protocol\drive_list.h" />
     <ClInclude Include="protocol\message_serialization.h" />
     <ClInclude Include="proto\auth_session.pb.h" />
     <ClInclude Include="proto\auth_session_message.pb.h" />
@@ -366,6 +370,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="LICENSE.txt" />
+    <Text Include="protocol\README.txt" />
     <Text Include="README.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

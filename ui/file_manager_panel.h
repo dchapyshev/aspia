@@ -28,17 +28,13 @@ public:
     {
     public:
         virtual void OnDriveListRequest(Type type) = 0;
+        virtual void OnDirectoryListRequest(Type type, const std::string& path) = 0;
     };
 
     bool CreatePanel(HWND parent, Type type, Delegate* delegate);
 
-    void AddDriveItem(proto::DriveListItem::Type drive_type,
-                      const std::wstring& drive_path,
-                      const std::wstring& drive_name);
-
-    void AddDirectoryItem(proto::DirectoryListItem::Type item_type,
-                          const std::wstring& item_name,
-                          uint64_t item_size);
+    void ReadDriveList(std::unique_ptr<proto::DriveList> drive_list);
+    void ReadDirectoryList(std::unique_ptr<proto::DirectoryList> directory_list);
 
 private:
     void OnCreate();
@@ -46,6 +42,8 @@ private:
     void OnSize(int width, int height);
     void OnDrawItem(LPDRAWITEMSTRUCT dis);
     void OnGetDispInfo(LPNMHDR phdr);
+    void OnAddressChanged();
+    void OnAddressChange(LPNMITEMACTIVATE item_activate);
 
     // ChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;
@@ -56,11 +54,14 @@ private:
 
     Window title_window_;
 
+    std::unique_ptr<proto::DirectoryList> directory_list_;
     ListView list_window_;
+    ImageList list_imagelist_;
 
     Window toolbar_window_;
     ImageList toolbar_imagelist_;
 
+    std::unique_ptr<proto::DriveList> drive_list_;
     ComboBoxEx address_window_;
     ImageList address_imagelist_;
 

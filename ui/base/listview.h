@@ -21,6 +21,8 @@ public:
     ListView() = default;
     ListView(HWND hwnd);
 
+    bool Create(HWND parent, DWORD ex_style, DWORD style, HINSTANCE instance);
+
     int GetColumnCount();
     int GetItemCount();
 
@@ -42,6 +44,8 @@ public:
         return ListView_InsertItem(hwnd(), &item);
     }
 
+    void SetItemText(int item_index, int column_index, const std::wstring& text);
+
     template <typename T>
     T GetItemData(int item_index)
     {
@@ -62,6 +66,7 @@ public:
     bool ModifyExtendedListViewStyle(DWORD remove, DWORD add);
     void SetImageList(HIMAGELIST imagelist, int type);
     int GetFirstSelectedItem();
+    int GetItemUnderPointer();
 };
 
 } // namespace aspia

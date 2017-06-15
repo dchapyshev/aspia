@@ -25,6 +25,7 @@ public:
 
     bool Create(int width, int height, UINT flags, int initial, int grow);
     bool CreateSmall();
+    void RemoveAll();
 
     int AddIcon(HICON icon);
     int AddIcon(const Module& module, UINT resource_id);

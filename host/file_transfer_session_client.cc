@@ -6,11 +6,10 @@
 //
 
 #include "host/file_transfer_session_client.h"
-#include "base/drive_enumerator.h"
-#include "base/file_enumerator.h"
 #include "base/unicode.h"
-#include "base/path.h"
 #include "protocol/message_serialization.h"
+#include "protocol/drive_list.h"
+#include "protocol/directory_list.h"
 #include "proto/auth_session.pb.h"
 
 namespace aspia {
@@ -106,108 +105,30 @@ void FileTransferSessionClient::WriteStatus(proto::Status status)
 bool FileTransferSessionClient::ReadDriveListRequestMessage(
     const proto::DriveListRequest& drive_list_request)
 {
+    std::unique_ptr<proto::DriveList> drive_list = CreateDriveList();
+    if (!drive_list)
+        return false;
+
     proto::file_transfer::HostToClient message;
-
-    DriveEnumerator enumerator;
-
-    for (;;)
-    {
-        std::wstring path = enumerator.Next();
-
-        if (path.empty())
-            break;
-
-        proto::DriveListItem* item = message.mutable_drive_list()->add_item();
-
-        item->set_path(UTF8fromUNICODE(path));
-
-        DriveEnumerator::DriveInfo drive_info = enumerator.GetInfo();
-
-        item->set_name(UTF8fromUNICODE(drive_info.VolumeName()));
-
-        switch (drive_info.Type())
-        {
-            case DriveEnumerator::DriveInfo::DriveType::CDROM:
-                item->set_type(proto::DriveListItem::CDROM);
-                break;
-
-            case DriveEnumerator::DriveInfo::DriveType::REMOVABLE:
-                item->set_type(proto::DriveListItem::REMOVABLE);
-                break;
-
-            case DriveEnumerator::DriveInfo::DriveType::FIXED:
-                item->set_type(proto::DriveListItem::FIXED);
-                break;
-
-            case DriveEnumerator::DriveInfo::DriveType::RAM:
-                item->set_type(proto::DriveListItem::RAM);
-                break;
-
-            case DriveEnumerator::DriveInfo::DriveType::REMOTE:
-                item->set_type(proto::DriveListItem::REMOTE);
-                break;
-
-            default:
-                item->set_type(proto::DriveListItem::UNKNOWN);
-                break;
-        }
-    }
-
-    std::wstring path;
-
-    if (GetPathW(PathKey::DIR_USER_HOME, path))
-    {
-        proto::DriveListItem* item = message.mutable_drive_list()->add_item();
-
-        item->set_type(proto::DriveListItem::HOME_FOLDER);
-        item->set_path(UTF8fromUNICODE(path));
-    }
-
-    if (GetPathW(PathKey::DIR_USER_DESKTOP, path))
-    {
-        proto::DriveListItem* item = message.mutable_drive_list()->add_item();
-
-        item->set_type(proto::DriveListItem::DESKTOP_FOLDER);
-        item->set_path(UTF8fromUNICODE(path));
-    }
-
+    message.set_allocated_drive_list(drive_list.release());
     WriteMessage(message);
+
     return true;
 }
 
 bool FileTransferSessionClient::ReadDirectoryListRequestMessage(
     const proto::DirectoryListRequest& direcrory_list_request)
 {
+    std::unique_ptr<proto::DirectoryList> directory_list =
+        CreateDirectoryList(UNICODEfromUTF8(direcrory_list_request.path()));
+
+    if (!directory_list)
+        return false;
+
     proto::file_transfer::HostToClient message;
-
-    FileEnumerator enumerator(UNICODEfromUTF8(direcrory_list_request.path()),
-                              false,
-                              FileEnumerator::FILES | FileEnumerator::DIRECTORIES);
-
-    for (;;)
-    {
-        std::wstring path = enumerator.Next();
-
-        if (path.empty())
-            break;
-
-        proto::DirectoryListItem* item = message.mutable_directory_list()->add_item();
-        FileEnumerator::FileInfo file_info = enumerator.GetInfo();
-
-        item->set_name(UTF8fromUNICODE(file_info.GetName()));
-
-        if (!file_info.IsDirectory())
-        {
-            item->set_type(proto::DirectoryListItem::FILE);
-            item->set_size(file_info.GetSize());
-        }
-        else
-        {
-            item->set_type(proto::DirectoryListItem::DIRECTORY);
-        }
-    }
-
+    message.set_allocated_directory_list(directory_list.release());
     WriteMessage(message);
+
     return true;
 }
 

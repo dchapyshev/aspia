@@ -55,40 +55,42 @@ void FileManager::OnAfterThreadRunning()
     DestroyWindow();
 }
 
-void FileManager::AddDriveItem(PanelType panel_type,
-                               proto::DriveListItem::Type drive_type,
-                               const std::wstring& drive_path,
-                               const std::wstring& drive_name)
+void FileManager::ReadDriveList(PanelType panel_type,
+                                std::unique_ptr<proto::DriveList> drive_list)
 {
     if (panel_type == FileManager::PanelType::REMOTE)
     {
-        remote_panel_.AddDriveItem(drive_type, drive_path, drive_name);
+        remote_panel_.ReadDriveList(std::move(drive_list));
     }
     else
     {
         DCHECK(panel_type == FileManager::PanelType::LOCAL);
-        local_panel_.AddDriveItem(drive_type, drive_path, drive_name);
+        local_panel_.ReadDriveList(std::move(drive_list));
     }
 }
 
-void FileManager::AddDirectoryItem(PanelType panel_type,
-                                   proto::DirectoryListItem::Type item_type,
-                                   const std::wstring& item_name,
-                                   uint64_t item_size)
+void FileManager::ReadDirectoryList(PanelType panel_type,
+                                    std::unique_ptr<proto::DirectoryList> directory_list)
 {
     if (panel_type == FileManager::PanelType::REMOTE)
     {
-
+        remote_panel_.ReadDirectoryList(std::move(directory_list));
     }
     else
     {
         DCHECK(panel_type == FileManager::PanelType::LOCAL);
+        local_panel_.ReadDirectoryList(std::move(directory_list));
     }
 }
 
 void FileManager::OnDriveListRequest(FileManager::PanelType panel_type)
 {
     delegate_->OnDriveListRequest(panel_type);
+}
+
+void FileManager::OnDirectoryListRequest(PanelType type, const std::string& path)
+{
+    delegate_->OnDirectoryListRequest(type, path);
 }
 
 void FileManager::OnCreate()

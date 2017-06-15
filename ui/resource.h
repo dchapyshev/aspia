@@ -96,6 +96,7 @@
 #define IDC_SKIP_ALL_BUTTON                   142
 #define IDC_STOP_BUTTON                       143
 #define IDC_MINIMIZE_BUTTON                   144
+#define IDC_ADDRESS_COMBO                     145
 
 //
 // Commands
@@ -201,6 +202,11 @@
 #define IDS_FT_TOOLTIP_RECIEVE                1011
 #define IDS_FT_HOME_FOLDER                    1012
 #define IDS_FT_DESKTOP_FOLDER                 1013
+#define IDS_FT_SIZE_TBYTES                    1014
+#define IDS_FT_SIZE_GBYTES                    1015
+#define IDS_FT_SIZE_MBYTES                    1016
+#define IDS_FT_SIZE_KBYTES                    1017
+#define IDS_FT_SIZE_BYTES                     1018
 
 // Status
 #define IDS_STATUS_MIN                        10000

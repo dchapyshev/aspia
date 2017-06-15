@@ -17,7 +17,37 @@ ListView::ListView(HWND hwnd)
     Attach(hwnd);
 
     if (IsWindowsVistaOrGreater())
+    {
         SetWindowTheme(hwnd, L"explorer", nullptr);
+        ModifyExtendedListViewStyle(0, LVS_EX_DOUBLEBUFFER);
+    }
+}
+
+bool ListView::Create(HWND parent, DWORD ex_style, DWORD style, HINSTANCE instance)
+{
+    Attach(CreateWindowExW(ex_style,
+                           WC_LISTVIEWW,
+                           L"",
+                           style,
+                           CW_USEDEFAULT, CW_USEDEFAULT,
+                           CW_USEDEFAULT, CW_USEDEFAULT,
+                           parent,
+                           nullptr,
+                           instance,
+                           nullptr));
+
+    if (hwnd())
+    {
+        if (IsWindowsVistaOrGreater())
+        {
+            SetWindowTheme(hwnd(), L"explorer", nullptr);
+            ModifyExtendedListViewStyle(0, LVS_EX_DOUBLEBUFFER);
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 int ListView::GetColumnCount()
@@ -64,6 +94,14 @@ void ListView::AddColumn(const std::wstring& title, int width)
     ListView_InsertColumn(hwnd(), column_count, &column);
 }
 
+void ListView::SetItemText(int item_index, int column_index, const std::wstring& text)
+{
+    ListView_SetItemText(hwnd(),
+                         item_index,
+                         column_index,
+                         const_cast<LPWSTR>(text.c_str()));
+}
+
 void ListView::DeleteAllItems()
 {
     ListView_DeleteAllItems(hwnd());
@@ -101,6 +139,23 @@ void ListView::SetImageList(HIMAGELIST imagelist, int type)
 int ListView::GetFirstSelectedItem()
 {
     return ListView_GetNextItem(hwnd(), -1, LVNI_SELECTED);
+}
+
+int ListView::GetItemUnderPointer()
+{
+    LVHITTESTINFO hti;
+    memset(&hti, 0, sizeof(hti));
+
+    if (GetCursorPos(&hti.pt))
+    {
+        if (ScreenToClient(hwnd(), &hti.pt) != FALSE)
+        {
+            hti.flags = LVHT_ONITEMICON | LVHT_ONITEMLABEL;
+            return ListView_HitTest(hwnd(), &hti);
+        }
+    }
+
+    return -1;
 }
 
 } // namespace aspia

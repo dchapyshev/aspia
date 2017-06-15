@@ -51,6 +51,16 @@ LRESULT ComboBoxEx::DeleteItem(INT_PTR item_index)
     return SendMessageW(hwnd(), CBEM_DELETEITEM, item_index, 0);
 }
 
+void ComboBoxEx::DeleteAllItems()
+{
+    const int count = GetItemCount();
+
+    for (int index = 0; index < count; ++index)
+    {
+        DeleteItem(index);
+    }
+}
+
 LPARAM ComboBoxEx::GetItemData(INT_PTR item_index)
 {
     COMBOBOXEXITEMW item;
@@ -133,6 +143,11 @@ int ComboBoxEx::GetItemCount()
         reinterpret_cast<HWND>(SendMessageW(hwnd(), CBEM_GETCOMBOCONTROL, 0, 0));
 
     return ComboBox_GetCount(combobox);
+}
+
+int ComboBoxEx::GetSelectedItem()
+{
+    return SendMessageW(hwnd(), CB_GETCURSEL, 0, 0);
 }
 
 } // namespace aspia

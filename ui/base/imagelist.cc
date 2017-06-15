@@ -62,6 +62,11 @@ bool ImageList::CreateSmall()
                   1, 1);
 }
 
+void ImageList::RemoveAll()
+{
+    ImageList_RemoveAll(list_);
+}
+
 int ImageList::AddIcon(HICON icon)
 {
     return ImageList_AddIcon(list_, icon);

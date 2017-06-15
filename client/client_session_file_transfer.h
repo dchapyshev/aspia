@@ -30,12 +30,12 @@ private:
     // FileManager::Delegate implementation.
     void OnWindowClose() override;
     void OnDriveListRequest(FileManager::PanelType panel_type) override;
-    void OnDirectoryListRequest(FileManager::PanelType panel_type, const std::wstring& path) override;
+    void OnDirectoryListRequest(FileManager::PanelType panel_type, const std::string& path) override;
     void OnSendFile(const std::wstring& from_path, const std::wstring& to_path) override;
     void OnRecieveFile(const std::wstring& from_path, const std::wstring& to_path) override;
 
-    bool ReadDriveListMessage(const proto::DriveList& drive_list);
-    bool ReadDirectoryListMessage(const proto::DirectoryList& direcrory_list);
+    bool ReadDriveListMessage(std::unique_ptr<proto::DriveList> drive_list);
+    bool ReadDirectoryListMessage(std::unique_ptr<proto::DirectoryList> directory_list);
     bool ReadFileMessage(const proto::File& file);
 
     void WriteMessage(const proto::file_transfer::ClientToHost& message);

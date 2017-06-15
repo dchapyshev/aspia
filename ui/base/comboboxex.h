@@ -34,6 +34,7 @@ public:
                     LPARAM lparam);
 
     LRESULT DeleteItem(INT_PTR item_index);
+    void DeleteAllItems();
 
     LPARAM GetItemData(INT_PTR item_index);
     LRESULT SetItemData(INT_PTR item_index, LPARAM lparam);
@@ -45,6 +46,7 @@ public:
     HIMAGELIST GetImageList();
 
     int GetItemCount();
+    int GetSelectedItem();
 };
 
 } // namespace aspia

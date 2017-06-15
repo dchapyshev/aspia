@@ -345,6 +345,11 @@ BEGIN
     IDS_FT_TOOLTIP_RECIEVE                "Отправить выбранные объекты на локальный компьютер (F11)"
     IDS_FT_HOME_FOLDER                    "Домашняя папка"
     IDS_FT_DESKTOP_FOLDER                 "Рабочий стол"
+    IDS_FT_SIZE_TBYTES                    "ТБ"
+    IDS_FT_SIZE_GBYTES                    "ГБ"
+    IDS_FT_SIZE_MBYTES                    "МБ"
+    IDS_FT_SIZE_KBYTES                    "КБ"
+    IDS_FT_SIZE_BYTES                     "Б"
 END
 
 // Status
