@@ -58,30 +58,16 @@ void FileManager::OnAfterThreadRunning()
 void FileManager::AddDriveItem(PanelType panel_type,
                                proto::DriveListItem::Type drive_type,
                                const std::wstring& drive_path,
-                               const std::wstring& drive_name,
-                               const std::wstring& drive_filesystem,
-                               uint64_t total_space,
-                               uint64_t free_space)
+                               const std::wstring& drive_name)
 {
     if (panel_type == FileManager::PanelType::REMOTE)
     {
-        remote_panel_.AddDriveItem(drive_type,
-                                   drive_path,
-                                   drive_name,
-                                   drive_filesystem,
-                                   total_space,
-                                   free_space);
+        remote_panel_.AddDriveItem(drive_type, drive_path, drive_name);
     }
     else
     {
         DCHECK(panel_type == FileManager::PanelType::LOCAL);
-
-        local_panel_.AddDriveItem(drive_type,
-                                  drive_path,
-                                  drive_name,
-                                  drive_filesystem,
-                                  total_space,
-                                  free_space);
+        local_panel_.AddDriveItem(drive_type, drive_path, drive_name);
     }
 }
 

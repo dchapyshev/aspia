@@ -9,6 +9,7 @@
 #include "base/drive_enumerator.h"
 #include "base/file_enumerator.h"
 #include "base/unicode.h"
+#include "base/path.h"
 #include "protocol/message_serialization.h"
 #include "proto/auth_session.pb.h"
 
@@ -122,10 +123,7 @@ bool FileTransferSessionClient::ReadDriveListRequestMessage(
 
         DriveEnumerator::DriveInfo drive_info = enumerator.GetInfo();
 
-        item->set_total_space(drive_info.TotalSpace());
-        item->set_free_space(drive_info.FreeSpace());
-        item->set_volume_name(UTF8fromUNICODE(drive_info.VolumeName()));
-        item->set_filesystem(UTF8fromUNICODE(drive_info.FileSystem()));
+        item->set_name(UTF8fromUNICODE(drive_info.VolumeName()));
 
         switch (drive_info.Type())
         {
@@ -153,6 +151,24 @@ bool FileTransferSessionClient::ReadDriveListRequestMessage(
                 item->set_type(proto::DriveListItem::UNKNOWN);
                 break;
         }
+    }
+
+    std::wstring path;
+
+    if (GetPathW(PathKey::DIR_USER_HOME, path))
+    {
+        proto::DriveListItem* item = message.mutable_drive_list()->add_item();
+
+        item->set_type(proto::DriveListItem::HOME_FOLDER);
+        item->set_path(UTF8fromUNICODE(path));
+    }
+
+    if (GetPathW(PathKey::DIR_USER_DESKTOP, path))
+    {
+        proto::DriveListItem* item = message.mutable_drive_list()->add_item();
+
+        item->set_type(proto::DriveListItem::DESKTOP_FOLDER);
+        item->set_path(UTF8fromUNICODE(path));
     }
 
     WriteMessage(message);

@@ -10,6 +10,7 @@
 #include "ui/resource.h"
 #include "ui/get_stock_icon.h"
 #include "base/scoped_gdi_object.h"
+#include "base/string_util.h"
 
 #include <shellapi.h>
 #include <shlobj.h>
@@ -36,12 +37,7 @@ bool FileManagerPanel::CreatePanel(HWND parent, Type type, Delegate* delegate)
     return Create(parent, WS_CHILD | WS_VISIBLE);
 }
 
-void FileManagerPanel::AddDriveItem(proto::DriveListItem::Type drive_type,
-                                    const std::wstring& drive_path,
-                                    const std::wstring& drive_name,
-                                    const std::wstring& drive_filesystem,
-                                    uint64_t total_space,
-                                    uint64_t free_space)
+static HICON GetDriveIcon(proto::DriveListItem::Type drive_type)
 {
     SHSTOCKICONID icon_id;
 
@@ -71,8 +67,9 @@ void FileManagerPanel::AddDriveItem(proto::DriveListItem::Type drive_type,
             icon_id = SIID_DESKTOP;
             break;
 
+        case proto::DriveListItem::HOME_FOLDER:
         default:
-            icon_id = SIID_DRIVEFIXED;
+            icon_id = SIID_FOLDER;
             break;
     }
 
@@ -81,15 +78,53 @@ void FileManagerPanel::AddDriveItem(proto::DriveListItem::Type drive_type,
     memset(&icon_info, 0, sizeof(icon_info));
     icon_info.cbSize = sizeof(icon_info);
 
-    int icon_index = -1;
+    if (FAILED(GetStockIconInfo(icon_id, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
+        return nullptr;
 
-    if (SUCCEEDED(GetStockIconInfo(icon_id, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
+    return icon_info.hIcon;
+}
+
+static std::wstring GetDriveLabel(proto::DriveListItem::Type drive_type,
+                                  const std::wstring& drive_path,
+                                  const std::wstring& drive_name)
+{
+    switch (drive_type)
     {
-        ScopedHICON icon(icon_info.hIcon);
-        icon_index = address_imagelist_.AddIcon(icon);
+        case proto::DriveListItem::HOME_FOLDER:
+            return Module::Current().string(IDS_FT_HOME_FOLDER);
+
+        case proto::DriveListItem::DESKTOP_FOLDER:
+            return Module::Current().string(IDS_FT_DESKTOP_FOLDER);
+
+        case proto::DriveListItem::CDROM:
+        case proto::DriveListItem::FIXED:
+        case proto::DriveListItem::REMOVABLE:
+        case proto::DriveListItem::REMOTE:
+        case proto::DriveListItem::RAM:
+        {
+            if (!drive_name.empty())
+                return StringPrintfW(L"%s (%s)", drive_path.c_str(), drive_name.c_str());
+        }
+        break;
     }
 
-    address_window_.AddItem(drive_path, icon_index, 0, 0);
+    return drive_path;
+}
+
+void FileManagerPanel::AddDriveItem(proto::DriveListItem::Type drive_type,
+                                    const std::wstring& drive_path,
+                                    const std::wstring& drive_name)
+{
+    ScopedHICON icon(GetDriveIcon(drive_type));
+
+    int icon_index = -1;
+
+    if (icon.IsValid())
+        icon_index = address_imagelist_.AddIcon(icon);
+
+    std::wstring label = GetDriveLabel(drive_type, drive_path, drive_name);
+
+    address_window_.AddItem(label, icon_index, 0, 0);
 }
 
 void FileManagerPanel::AddDirectoryItem(proto::DirectoryListItem::Type item_type,

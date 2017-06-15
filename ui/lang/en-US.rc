@@ -343,6 +343,8 @@ BEGIN
     IDS_FT_TOOLTIP_HOME                   "Browse to drives (Ctrl+Backspace)"
     IDS_FT_TOOLTIP_SEND                   "Send selected object(s) to remote computer (F11)"
     IDS_FT_TOOLTIP_RECIEVE                "Send selected object(s) to local computer (F11)"
+    IDS_FT_HOME_FOLDER                    "Home Folder"
+    IDS_FT_DESKTOP_FOLDER                 "Desktop"
 END
 
 // Status

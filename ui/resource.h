@@ -199,6 +199,8 @@
 #define IDS_FT_TOOLTIP_HOME                   1009
 #define IDS_FT_TOOLTIP_SEND                   1010
 #define IDS_FT_TOOLTIP_RECIEVE                1011
+#define IDS_FT_HOME_FOLDER                    1012
+#define IDS_FT_DESKTOP_FOLDER                 1013
 
 // Status
 #define IDS_STATUS_MIN                        10000

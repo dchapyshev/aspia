@@ -21,15 +21,13 @@ message DriveListItem
         FIXED          = 3;
         REMOTE         = 4;
         RAM            = 5;
-        DESKTOP_FOLDER = 6;
+        HOME_FOLDER    = 6;
+        DESKTOP_FOLDER = 7;
     }
 
     Type type   = 1;
-    string filesystem = 2;
-    string volume_name = 3;
-    string path = 4;
-    uint64 total_space = 5;
-    uint64 free_space = 6;
+    string name = 2;
+    string path = 3;
 }
 
 message DriveList

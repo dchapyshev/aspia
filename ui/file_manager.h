@@ -40,10 +40,7 @@ public:
     void AddDriveItem(PanelType panel_type,
                       proto::DriveListItem::Type drive_type,
                       const std::wstring& drive_path,
-                      const std::wstring& drive_name,
-                      const std::wstring& drive_filesystem,
-                      uint64_t total_space,
-                      uint64_t free_space);
+                      const std::wstring& drive_name);
 
     void AddDirectoryItem(PanelType panel_type,
                           proto::DirectoryListItem::Type item_type,

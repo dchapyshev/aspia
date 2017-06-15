@@ -55,6 +55,16 @@ bool GetPathW(PathKey key, std::wstring& result)
         }
         break;
 
+        case PathKey::DIR_USER_HOME:
+        {
+            if (FAILED(SHGetFolderPathW(nullptr, CSIDL_PROFILE, nullptr,
+                                        SHGFP_TYPE_CURRENT, buffer)))
+            {
+                return false;
+            }
+        }
+        break;
+
         case PathKey::DIR_CURRENT:
         {
             if (!GetCurrentDirectoryW(_countof(buffer), buffer))

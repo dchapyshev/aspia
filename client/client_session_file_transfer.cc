@@ -9,6 +9,7 @@
 #include "base/drive_enumerator.h"
 #include "base/file_enumerator.h"
 #include "base/unicode.h"
+#include "base/path.h"
 #include "protocol/message_serialization.h"
 
 namespace aspia {
@@ -124,10 +125,25 @@ void ClientSessionFileTransfer::OnDriveListRequest(FileManager::PanelType panel_
             file_manager_->AddDriveItem(panel_type,
                                         drive_type,
                                         drive_info.Path(),
-                                        drive_info.VolumeName(),
-                                        drive_info.FileSystem(),
-                                        drive_info.TotalSpace(),
-                                        drive_info.FreeSpace());
+                                        drive_info.VolumeName());
+        }
+
+        std::wstring path;
+
+        if (GetPathW(PathKey::DIR_USER_HOME, path))
+        {
+            file_manager_->AddDriveItem(panel_type,
+                                        proto::DriveListItem::HOME_FOLDER,
+                                        path,
+                                        std::wstring());
+        }
+
+        if (GetPathW(PathKey::DIR_USER_DESKTOP, path))
+        {
+            file_manager_->AddDriveItem(panel_type,
+                                        proto::DriveListItem::DESKTOP_FOLDER,
+                                        path,
+                                        std::wstring());
         }
     }
 }
@@ -201,10 +217,7 @@ bool ClientSessionFileTransfer::ReadDriveListMessage(
         file_manager_->AddDriveItem(FileManager::PanelType::REMOTE,
                                     item.type(),
                                     UNICODEfromUTF8(item.path()),
-                                    UNICODEfromUTF8(item.volume_name()),
-                                    UNICODEfromUTF8(item.filesystem()),
-                                    item.total_space(),
-                                    item.free_space());
+                                    UNICODEfromUTF8(item.name()));
     }
 
     return true;

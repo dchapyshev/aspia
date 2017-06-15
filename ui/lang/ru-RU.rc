@@ -343,6 +343,8 @@ BEGIN
     IDS_FT_TOOLTIP_HOME                   "Перейти в списку дисков (Ctrl+Backspace)"
     IDS_FT_TOOLTIP_SEND                   "Отправить выбранные объекты на удаленный компьютер (F11)"
     IDS_FT_TOOLTIP_RECIEVE                "Отправить выбранные объекты на локальный компьютер (F11)"
+    IDS_FT_HOME_FOLDER                    "Домашняя папка"
+    IDS_FT_DESKTOP_FOLDER                 "Рабочий стол"
 END
 
 // Status
