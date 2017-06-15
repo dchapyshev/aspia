@@ -62,9 +62,14 @@ std::wstring FileEnumerator::Next()
             std::wstring src = root_path_;
 
             if (pattern_.empty())
-                src = src.append(L"*");  // No pattern = match everything.
+            {
+                src.append(L"\\*");  // No pattern = match everything.
+            }
             else
-                src = src.append(pattern_);
+            {
+                src.append(L"\\");
+                src.append(pattern_);
+            }
 
             if (IsWindows7OrGreater())
             {
@@ -113,7 +118,9 @@ std::wstring FileEnumerator::Next()
             continue;
 
         // Construct the absolute filename.
-        cur_file = root_path_.append(find_data_.cFileName);
+        cur_file = root_path_;
+        cur_file.append(L"\\");
+        cur_file.append(find_data_.cFileName);
 
         if (find_data_.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
