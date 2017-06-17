@@ -14,7 +14,7 @@
 
 namespace aspia {
 
-TrayIcon::TrayIcon()
+UiTrayIcon::UiTrayIcon()
 {
     memset(&nid_, 0, sizeof(nid_));
     nid_.cbSize = sizeof(nid_);
@@ -27,12 +27,12 @@ TrayIcon::TrayIcon()
     }
 }
 
-TrayIcon::~TrayIcon()
+UiTrayIcon::~UiTrayIcon()
 {
     RemoveIcon();
 }
 
-bool TrayIcon::AddIcon(HWND hwnd, HICON icon, const std::wstring& tooltip, UINT menu_id)
+bool UiTrayIcon::AddIcon(HWND hwnd, HICON icon, const std::wstring& tooltip, UINT menu_id)
 {
     hwnd_ = hwnd;
 
@@ -56,16 +56,16 @@ bool TrayIcon::AddIcon(HWND hwnd, HICON icon, const std::wstring& tooltip, UINT 
     return is_installed_;
 }
 
-bool TrayIcon::AddIcon(HWND hwnd, UINT icon_id, const std::wstring& tooltip, UINT menu_id)
+bool UiTrayIcon::AddIcon(HWND hwnd, UINT icon_id, const std::wstring& tooltip, UINT menu_id)
 {
-    ScopedHICON icon(Module::Current().icon(icon_id,
-                                            GetSystemMetrics(SM_CXSMICON),
-                                            GetSystemMetrics(SM_CYSMICON),
-                                            LR_DEFAULTCOLOR | LR_DEFAULTSIZE));
+    ScopedHICON icon(UiModule::Current().icon(icon_id,
+                                              GetSystemMetrics(SM_CXSMICON),
+                                              GetSystemMetrics(SM_CYSMICON),
+                                              LR_DEFAULTCOLOR | LR_DEFAULTSIZE));
     return AddIcon(hwnd, icon, tooltip, menu_id);
 }
 
-bool TrayIcon::RemoveIcon()
+bool UiTrayIcon::RemoveIcon()
 {
     if (!is_installed_)
         return false;
@@ -75,12 +75,12 @@ bool TrayIcon::RemoveIcon()
     return !!Shell_NotifyIconW(NIM_DELETE, &nid_);
 }
 
-void TrayIcon::SetDefaultMenuItem(UINT menu_item)
+void UiTrayIcon::SetDefaultMenuItem(UINT menu_item)
 {
     default_menu_item_ = menu_item;
 }
 
-bool TrayIcon::SetTooltip(const WCHAR *tooltip)
+bool UiTrayIcon::SetTooltip(const WCHAR *tooltip)
 {
     if (!tooltip)
         return false;
@@ -97,7 +97,7 @@ bool TrayIcon::SetTooltip(const WCHAR *tooltip)
     return !!Shell_NotifyIconW(NIM_MODIFY, &nid_);
 }
 
-bool TrayIcon::SetIcon(HICON icon)
+bool UiTrayIcon::SetIcon(HICON icon)
 {
     if (!icon)
         return false;
@@ -108,23 +108,23 @@ bool TrayIcon::SetIcon(HICON icon)
     return !!Shell_NotifyIconW(NIM_MODIFY, &nid_);
 }
 
-bool TrayIcon::SetIcon(UINT icon_id)
+bool UiTrayIcon::SetIcon(UINT icon_id)
 {
-    ScopedHICON icon(Module::Current().icon(icon_id,
-                                            GetSystemMetrics(SM_CXSMICON),
-                                            GetSystemMetrics(SM_CYSMICON),
-                                            LR_DEFAULTCOLOR | LR_DEFAULTSIZE));
+    ScopedHICON icon(UiModule::Current().icon(icon_id,
+                                              GetSystemMetrics(SM_CXSMICON),
+                                              GetSystemMetrics(SM_CYSMICON),
+                                              LR_DEFAULTCOLOR | LR_DEFAULTSIZE));
     return SetIcon(icon);
 }
 
-bool TrayIcon::HandleMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+bool UiTrayIcon::HandleMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
     if (msg != message_id_ || wparam != nid_.uID)
         return false;
 
     if (LOWORD(lparam) == WM_RBUTTONUP)
     {
-        ScopedHMENU menu(Module::Current().menu(nid_.uID));
+        ScopedHMENU menu(UiModule::Current().menu(nid_.uID));
 
         HMENU popup_menu = GetSubMenu(menu, 0);
 

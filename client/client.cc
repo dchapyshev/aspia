@@ -107,7 +107,7 @@ void Client::OnNetworkChannelConnect()
         return;
     }
 
-    AuthDialog auth_dialog;
+    UiAuthDialog auth_dialog;
 
     if (auth_dialog.DoModal(nullptr) != IDOK)
     {

@@ -16,11 +16,11 @@
 
 namespace aspia {
 
-class ComboBoxEx : public Window
+class UiComboBoxEx : public UiWindow
 {
 public:
-    ComboBoxEx() = default;
-    ComboBoxEx(HWND hwnd);
+    UiComboBoxEx() = default;
+    UiComboBoxEx(HWND hwnd);
 
     LRESULT InsertItem(const std::wstring& text,
                        INT_PTR item_index,

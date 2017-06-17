@@ -12,7 +12,7 @@ namespace aspia {
 
 INT_PTR FileReplaceDialog::DoModal(HWND parent)
 {
-    return Run(Module::Current(), parent, IDD_FILE_REPLACE);
+    return Run(UiModule::Current(), parent, IDD_FILE_REPLACE);
 }
 
 INT_PTR FileReplaceDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)

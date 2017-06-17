@@ -23,7 +23,7 @@ class Client :
     private MessageLoopThread::Delegate,
     private NetworkChannel::Listener,
     private ClientSession::Delegate,
-    private StatusDialog::Delegate
+    private UiStatusDialog::Delegate
 {
 public:
     class Delegate
@@ -56,7 +56,7 @@ private:
     bool OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer) override;
     void OnNetworkChannelConnect() override;
 
-    // StatusDialog::Delegate implementation.
+    // UiStatusDialog::Delegate implementation.
     void OnStatusDialogOpen();
 
     void CreateSession(proto::SessionType session_type);
@@ -68,7 +68,7 @@ private:
     std::shared_ptr<MessageLoopProxy> runner_;
 
     proto::Status status_;
-    StatusDialog status_dialog_;
+    UiStatusDialog status_dialog_;
 
     std::unique_ptr<NetworkChannel> channel_;
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;

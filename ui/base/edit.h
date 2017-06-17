@@ -12,11 +12,11 @@
 
 namespace aspia {
 
-class Edit : public Window
+class UiEdit : public UiWindow
 {
 public:
-    Edit() = default;
-    Edit(HWND hwnd);
+    UiEdit() = default;
+    UiEdit(HWND hwnd);
 
     bool Create(HWND parent, DWORD style);
 

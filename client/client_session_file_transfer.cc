@@ -17,7 +17,7 @@ ClientSessionFileTransfer::ClientSessionFileTransfer(const ClientConfig& config,
                                                      ClientSession::Delegate* delegate) :
     ClientSession(config, delegate)
 {
-    file_manager_.reset(new FileManager(this));
+    file_manager_.reset(new UiFileManager(this));
 }
 
 ClientSessionFileTransfer::~ClientSessionFileTransfer()
@@ -71,9 +71,9 @@ void ClientSessionFileTransfer::OnWindowClose()
     delegate_->OnSessionTerminate();
 }
 
-void ClientSessionFileTransfer::OnDriveListRequest(FileManager::PanelType panel_type)
+void ClientSessionFileTransfer::OnDriveListRequest(UiFileManager::PanelType panel_type)
 {
-    if (panel_type == FileManager::PanelType::REMOTE)
+    if (panel_type == UiFileManager::PanelType::REMOTE)
     {
         proto::file_transfer::ClientToHost message;
         message.mutable_drive_list_request()->set_dummy(1);
@@ -81,22 +81,22 @@ void ClientSessionFileTransfer::OnDriveListRequest(FileManager::PanelType panel_
     }
     else
     {
-        DCHECK(panel_type == FileManager::PanelType::LOCAL);
+        DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
 
         std::unique_ptr<proto::DriveList> drive_list = CreateDriveList();
 
         if (drive_list)
         {
-            file_manager_->ReadDriveList(FileManager::PanelType::LOCAL,
+            file_manager_->ReadDriveList(UiFileManager::PanelType::LOCAL,
                                          std::move(drive_list));
         }
     }
 }
 
-void ClientSessionFileTransfer::OnDirectoryListRequest(FileManager::PanelType panel_type,
+void ClientSessionFileTransfer::OnDirectoryListRequest(UiFileManager::PanelType panel_type,
                                                        const std::string& path)
 {
-    if (panel_type == FileManager::PanelType::REMOTE)
+    if (panel_type == UiFileManager::PanelType::REMOTE)
     {
         proto::file_transfer::ClientToHost message;
         message.mutable_directory_list_request()->set_path(path);
@@ -104,14 +104,14 @@ void ClientSessionFileTransfer::OnDirectoryListRequest(FileManager::PanelType pa
     }
     else
     {
-        DCHECK(panel_type == FileManager::PanelType::LOCAL);
+        DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
 
         std::unique_ptr<proto::DirectoryList> directory_list =
             CreateDirectoryList(UNICODEfromUTF8(path));
 
         if (directory_list)
         {
-            file_manager_->ReadDirectoryList(FileManager::PanelType::LOCAL,
+            file_manager_->ReadDirectoryList(UiFileManager::PanelType::LOCAL,
                                              std::move(directory_list));
         }
     }
@@ -135,7 +135,7 @@ bool ClientSessionFileTransfer::ReadDriveListMessage(
     if (!drive_list)
         return false;
 
-    file_manager_->ReadDriveList(FileManager::PanelType::REMOTE,
+    file_manager_->ReadDriveList(UiFileManager::PanelType::REMOTE,
                                  std::move(drive_list));
     return true;
 }
@@ -146,7 +146,7 @@ bool ClientSessionFileTransfer::ReadDirectoryListMessage(
     if (!directory_list)
         return false;
 
-    file_manager_->ReadDirectoryList(FileManager::PanelType::REMOTE,
+    file_manager_->ReadDirectoryList(UiFileManager::PanelType::REMOTE,
                                      std::move(directory_list));
     return true;
 }

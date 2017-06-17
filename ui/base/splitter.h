@@ -12,11 +12,11 @@
 
 namespace aspia {
 
-class Splitter : public ChildWindow
+class UiSplitter : public UiChildWindow
 {
 public:
-    Splitter() = default;
-    ~Splitter() = default;
+    UiSplitter() = default;
+    ~UiSplitter() = default;
 
     bool CreateWithFixedLeft(HWND parent, int position);
     bool CreateWithProportion(HWND parent);
@@ -41,9 +41,9 @@ private:
 
     HCURSOR cursor_;
 
-    Window left_panel_;
-    Window right_panel_;
-    Window split_panel_;
+    UiWindow left_panel_;
+    UiWindow right_panel_;
+    UiWindow split_panel_;
 
     DesktopSize prev_size_;
 
@@ -52,7 +52,7 @@ private:
     int x_ = 0;
     int height_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(Splitter);
+    DISALLOW_COPY_AND_ASSIGN(UiSplitter);
 };
 
 } // namespace aspia

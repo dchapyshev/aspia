@@ -10,12 +10,12 @@
 
 namespace aspia {
 
-INT_PTR FileTransferDialog::DoModal(HWND parent)
+INT_PTR UiFileTransferDialog::DoModal(HWND parent)
 {
-    return Run(Module::Current(), parent, IDD_FILE_TRANSFER);
+    return Run(UiModule::Current(), parent, IDD_FILE_TRANSFER);
 }
 
-INT_PTR FileTransferDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+INT_PTR UiFileTransferDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
     {

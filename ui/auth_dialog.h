@@ -14,11 +14,11 @@
 
 namespace aspia {
 
-class AuthDialog : public ModalDialog
+class UiAuthDialog : public UiModalDialog
 {
 public:
-    AuthDialog() = default;
-    ~AuthDialog();
+    UiAuthDialog() = default;
+    ~UiAuthDialog();
 
     INT_PTR DoModal(HWND parent) override;
 
@@ -37,7 +37,7 @@ private:
     std::string username_;
     std::string password_;
 
-    DISALLOW_COPY_AND_ASSIGN(AuthDialog);
+    DISALLOW_COPY_AND_ASSIGN(UiAuthDialog);
 };
 
 } // namespace aspia

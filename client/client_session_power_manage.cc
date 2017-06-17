@@ -35,7 +35,7 @@ void ClientSessionPowerManage::OnBeforeThreadRunning()
 
 void ClientSessionPowerManage::OnAfterThreadRunning()
 {
-    PowerManageDialog dialog;
+    UiPowerManageDialog dialog;
 
     proto::PowerEvent::Action action =
         static_cast<proto::PowerEvent::Action>(dialog.DoModal(nullptr));

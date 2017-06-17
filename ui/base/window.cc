@@ -10,7 +10,7 @@
 
 namespace aspia {
 
-void Window::DestroyWindow()
+void UiWindow::DestroyWindow()
 {
     if (hwnd_)
     {
@@ -19,7 +19,7 @@ void Window::DestroyWindow()
     }
 }
 
-bool Window::CenterWindow(HWND hwnd_center)
+bool UiWindow::CenterWindow(HWND hwnd_center)
 {
     LONG_PTR style = GetWindowLongPtrW(hwnd_, GWL_STYLE);
 
@@ -109,7 +109,7 @@ bool Window::CenterWindow(HWND hwnd_center)
                           SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
-void Window::SetForegroundWindowEx()
+void UiWindow::SetForegroundWindowEx()
 {
     DWORD active_thread_id =
         GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
@@ -128,7 +128,7 @@ void Window::SetForegroundWindowEx()
     }
 }
 
-bool Window::ModifyStyle(LONG_PTR remove, LONG_PTR add)
+bool UiWindow::ModifyStyle(LONG_PTR remove, LONG_PTR add)
 {
     LONG_PTR style = GetWindowLongPtrW(hwnd_, GWL_STYLE);
 
@@ -142,7 +142,7 @@ bool Window::ModifyStyle(LONG_PTR remove, LONG_PTR add)
     return true;
 }
 
-bool Window::ModifyStyleEx(LONG_PTR remove, LONG_PTR add)
+bool UiWindow::ModifyStyleEx(LONG_PTR remove, LONG_PTR add)
 {
     LONG_PTR style = GetWindowLongPtrW(hwnd_, GWL_EXSTYLE);
 
@@ -155,12 +155,12 @@ bool Window::ModifyStyleEx(LONG_PTR remove, LONG_PTR add)
     return true;
 }
 
-void Window::SetFont(HFONT font)
+void UiWindow::SetFont(HFONT font)
 {
     SendMessageW(hwnd(), WM_SETFONT, reinterpret_cast<WPARAM>(font), TRUE);
 }
 
-int Window::Width()
+int UiWindow::Width()
 {
     RECT rc = { 0 };
 
@@ -170,7 +170,7 @@ int Window::Width()
     return rc.right - rc.left;
 }
 
-int Window::Height()
+int UiWindow::Height()
 {
     RECT rc = { 0 };
 
@@ -180,7 +180,7 @@ int Window::Height()
     return rc.bottom - rc.top;
 }
 
-DesktopSize Window::Size()
+DesktopSize UiWindow::Size()
 {
     RECT rc = { 0 };
 
@@ -190,7 +190,7 @@ DesktopSize Window::Size()
     return DesktopSize(rc.right - rc.left, rc.bottom - rc.top);
 }
 
-int Window::ClientWidth()
+int UiWindow::ClientWidth()
 {
     RECT rc = { 0 };
 
@@ -200,7 +200,7 @@ int Window::ClientWidth()
     return rc.right - rc.left;
 }
 
-int Window::ClientHeight()
+int UiWindow::ClientHeight()
 {
     RECT rc = { 0 };
 
@@ -210,7 +210,7 @@ int Window::ClientHeight()
     return rc.bottom - rc.top;
 }
 
-DesktopSize Window::ClientSize()
+DesktopSize UiWindow::ClientSize()
 {
     RECT rc = { 0 };
 
@@ -220,7 +220,7 @@ DesktopSize Window::ClientSize()
     return DesktopSize(rc.right - rc.left, rc.bottom - rc.top);
 }
 
-DesktopPoint Window::CursorPositionInWindow()
+DesktopPoint UiWindow::CursorPositionInWindow()
 {
     POINT cursor_pos = { 0 };
 
@@ -233,7 +233,7 @@ DesktopPoint Window::CursorPositionInWindow()
     return DesktopPoint(cursor_pos.x, cursor_pos.y);
 }
 
-void Window::SetSize(int width, int height)
+void UiWindow::SetSize(int width, int height)
 {
     RECT rc;
 

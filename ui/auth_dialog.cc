@@ -17,29 +17,29 @@ extern "C" {
 
 namespace aspia {
 
-AuthDialog::~AuthDialog()
+UiAuthDialog::~UiAuthDialog()
 {
     sodium_memzero(&username_[0], username_.size());
     sodium_memzero(&password_[0], password_.size());
 }
 
-INT_PTR AuthDialog::DoModal(HWND parent)
+INT_PTR UiAuthDialog::DoModal(HWND parent)
 {
-    return Run(Module().Current(), parent, IDD_AUTH);
+    return Run(UiModule().Current(), parent, IDD_AUTH);
 }
 
-void AuthDialog::OnInitDialog()
+void UiAuthDialog::OnInitDialog()
 {
     SetForegroundWindowEx();
     CenterWindow();
 }
 
-void AuthDialog::OnClose()
+void UiAuthDialog::OnClose()
 {
     EndDialog(IDCANCEL);
 }
 
-void AuthDialog::OnOkButton()
+void UiAuthDialog::OnOkButton()
 {
     std::wstring username(GetDlgItemString(IDC_USERNAME_EDIT));
 
@@ -60,22 +60,22 @@ void AuthDialog::OnOkButton()
     EndDialog(IDOK);
 }
 
-void AuthDialog::OnCancelButton()
+void UiAuthDialog::OnCancelButton()
 {
     PostMessageW(hwnd(), WM_CLOSE, 0, 0);
 }
 
-const std::string& AuthDialog::UserName() const
+const std::string& UiAuthDialog::UserName() const
 {
     return username_;
 }
 
-const std::string& AuthDialog::Password() const
+const std::string& UiAuthDialog::Password() const
 {
     return password_;
 }
 
-INT_PTR AuthDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+INT_PTR UiAuthDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
     {

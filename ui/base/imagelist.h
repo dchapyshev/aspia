@@ -17,18 +17,18 @@
 
 namespace aspia {
 
-class ImageList
+class UiImageList
 {
 public:
-    ImageList() = default;
-    ~ImageList();
+    UiImageList() = default;
+    ~UiImageList();
 
     bool Create(int width, int height, UINT flags, int initial, int grow);
     bool CreateSmall();
     void RemoveAll();
 
     int AddIcon(HICON icon);
-    int AddIcon(const Module& module, UINT resource_id);
+    int AddIcon(const UiModule& module, UINT resource_id);
 
     HIMAGELIST Handle() { return list_; }
     operator HIMAGELIST() { return Handle(); }
@@ -38,7 +38,7 @@ private:
 
     HIMAGELIST list_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ImageList);
+    DISALLOW_COPY_AND_ASSIGN(UiImageList);
 };
 
 } // namespace aspia

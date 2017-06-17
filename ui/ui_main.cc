@@ -30,7 +30,7 @@ void RunUIMain()
 
     InitCommonControlsEx(&iccx);
 
-    MainDialog main_dialog;
+    UiMainDialog main_dialog;
     main_dialog.DoModal(nullptr);
 }
 

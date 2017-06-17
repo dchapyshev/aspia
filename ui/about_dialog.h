@@ -12,10 +12,10 @@
 
 namespace aspia {
 
-class AboutDialog : public ModalDialog
+class UiAboutDialog : public UiModalDialog
 {
 public:
-    AboutDialog() = default;
+    UiAboutDialog() = default;
 
     INT_PTR DoModal(HWND parent) override;
 
@@ -24,7 +24,7 @@ private:
 
     ScopedHICON icon_;
 
-    DISALLOW_COPY_AND_ASSIGN(AboutDialog);
+    DISALLOW_COPY_AND_ASSIGN(UiAboutDialog);
 };
 
 } // namespace aspia

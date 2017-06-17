@@ -16,10 +16,10 @@ static const WCHAR kWindowClassName[] = L"Aspia_ChildWindow";
 static std::atomic_bool _class_registered = false;
 
 // static
-LRESULT CALLBACK ChildWindow::WindowProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK UiChildWindow::WindowProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    ChildWindow* self =
-        reinterpret_cast<ChildWindow*>(GetWindowLongPtrW(window, GWLP_USERDATA));
+    UiChildWindow* self =
+        reinterpret_cast<UiChildWindow*>(GetWindowLongPtrW(window, GWLP_USERDATA));
 
     switch (msg)
     {
@@ -27,7 +27,7 @@ LRESULT CALLBACK ChildWindow::WindowProc(HWND window, UINT msg, WPARAM wParam, L
         case WM_CREATE:
         {
             LPCREATESTRUCT cs = reinterpret_cast<LPCREATESTRUCT>(lParam);
-            self = reinterpret_cast<ChildWindow*>(cs->lpCreateParams);
+            self = reinterpret_cast<UiChildWindow*>(cs->lpCreateParams);
 
             // Make |hwnd| available to the message handler. At this point the control
             // hasn't returned from CreateWindow() yet.
@@ -63,7 +63,7 @@ LRESULT CALLBACK ChildWindow::WindowProc(HWND window, UINT msg, WPARAM wParam, L
     return DefWindowProcW(window, msg, wParam, lParam);
 }
 
-bool ChildWindow::RegisterWindowClass(HINSTANCE instance)
+bool UiChildWindow::RegisterWindowClass(HINSTANCE instance)
 {
     if (_class_registered)
         return true;
@@ -89,7 +89,7 @@ bool ChildWindow::RegisterWindowClass(HINSTANCE instance)
     return true;
 }
 
-bool ChildWindow::Create(HWND parent, DWORD style, const std::wstring& title)
+bool UiChildWindow::Create(HWND parent, DWORD style, const std::wstring& title)
 {
     HINSTANCE instance = nullptr;
 
@@ -126,12 +126,12 @@ bool ChildWindow::Create(HWND parent, DWORD style, const std::wstring& title)
     return true;
 }
 
-void ChildWindow::SetIcon(HICON icon)
+void UiChildWindow::SetIcon(HICON icon)
 {
     SetClassLongPtrW(hwnd(), GCLP_HICON, reinterpret_cast<LONG_PTR>(icon));
 }
 
-void ChildWindow::SetCursor(HCURSOR cursor)
+void UiChildWindow::SetCursor(HCURSOR cursor)
 {
     SetClassLongPtrW(hwnd(), GCLP_HCURSOR, reinterpret_cast<LONG_PTR>(cursor));
 }

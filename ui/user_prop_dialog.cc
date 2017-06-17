@@ -17,9 +17,9 @@
 
 namespace aspia {
 
-UserPropDialog::UserPropDialog(Mode mode,
-                               proto::HostUser* user,
-                               const HostUserList& user_list) :
+UiUserPropDialog::UiUserPropDialog(Mode mode,
+                                   proto::HostUser* user,
+                                   const HostUserList& user_list) :
     mode_(mode),
     user_(user),
     user_list_(user_list)
@@ -27,14 +27,14 @@ UserPropDialog::UserPropDialog(Mode mode,
     DCHECK(user_);
 }
 
-INT_PTR UserPropDialog::DoModal(HWND parent)
+INT_PTR UiUserPropDialog::DoModal(HWND parent)
 {
-    return Run(Module::Current(), parent, IDD_USER_PROP);
+    return Run(UiModule::Current(), parent, IDD_USER_PROP);
 }
 
-void UserPropDialog::InsertSessionType(ListView& list,
-                                       proto::SessionType session_type,
-                                       UINT string_id)
+void UiUserPropDialog::InsertSessionType(UiListView& list,
+                                         proto::SessionType session_type,
+                                         UINT string_id)
 {
     int item_index = list.AddItem(module().string(string_id), session_type);
 
@@ -42,7 +42,7 @@ void UserPropDialog::InsertSessionType(ListView& list,
                        (user_->session_types() & session_type) ? true : false);
 }
 
-void UserPropDialog::OnPasswordEditDblClick()
+void UiUserPropDialog::OnPasswordEditDblClick()
 {
     HWND password_edit = GetDlgItem(IDC_PASSWORD_EDIT);
     HWND password_retry_edit = GetDlgItem(IDC_PASSWORD_RETRY_EDIT);
@@ -56,16 +56,16 @@ void UserPropDialog::OnPasswordEditDblClick()
 }
 
 //static
-LRESULT CALLBACK UserPropDialog::PasswordEditWindowProc(HWND hwnd,
-                                                        UINT msg,
-                                                        WPARAM wparam,
-                                                        LPARAM lparam,
-                                                        UINT_PTR subclass_id,
-                                                        DWORD_PTR ref_data)
+LRESULT CALLBACK UiUserPropDialog::PasswordEditWindowProc(HWND hwnd,
+                                                          UINT msg,
+                                                          WPARAM wparam,
+                                                          LPARAM lparam,
+                                                          UINT_PTR subclass_id,
+                                                          DWORD_PTR ref_data)
 {
     if (msg == WM_LBUTTONDBLCLK)
     {
-        UserPropDialog* self = reinterpret_cast<UserPropDialog*>(ref_data);
+        UiUserPropDialog* self = reinterpret_cast<UiUserPropDialog*>(ref_data);
         self->OnPasswordEditDblClick();
     }
 
@@ -76,9 +76,9 @@ LRESULT CALLBACK UserPropDialog::PasswordEditWindowProc(HWND hwnd,
     return window_proc(hwnd, msg, wparam, lparam);
 }
 
-void UserPropDialog::OnInitDialog()
+void UiUserPropDialog::OnInitDialog()
 {
-    ListView list(GetDlgItem(IDC_SESSION_TYPES_LIST));
+    UiListView list(GetDlgItem(IDC_SESSION_TYPES_LIST));
 
     list.ModifyExtendedListViewStyle(0, LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT);
     list.AddOnlyOneColumn();
@@ -142,7 +142,7 @@ void UserPropDialog::OnInitDialog()
     SetFocus(username_edit);
 }
 
-void UserPropDialog::OnOkButton()
+void UiUserPropDialog::OnOkButton()
 {
     SecureString<std::wstring> username(GetDlgItemString(IDC_USERNAME_EDIT));
 
@@ -208,7 +208,7 @@ void UserPropDialog::OnOkButton()
 
     uint32_t session_types = 0;
 
-    ListView list(GetDlgItem(IDC_SESSION_TYPES_LIST));
+    UiListView list(GetDlgItem(IDC_SESSION_TYPES_LIST));
     int count = list.GetItemCount();
 
     for (int i = 0; i < count; ++i)
@@ -228,7 +228,7 @@ void UserPropDialog::OnOkButton()
     EndDialog(IDOK);
 }
 
-INT_PTR UserPropDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+INT_PTR UiUserPropDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
     {

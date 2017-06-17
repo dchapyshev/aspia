@@ -16,7 +16,7 @@ namespace aspia {
 
 class ClientSessionFileTransfer :
     public ClientSession,
-    private FileManager::Delegate
+    private UiFileManager::Delegate
 {
 public:
     ClientSessionFileTransfer(const ClientConfig& config,
@@ -29,8 +29,8 @@ private:
 
     // FileManager::Delegate implementation.
     void OnWindowClose() override;
-    void OnDriveListRequest(FileManager::PanelType panel_type) override;
-    void OnDirectoryListRequest(FileManager::PanelType panel_type, const std::string& path) override;
+    void OnDriveListRequest(UiFileManager::PanelType panel_type) override;
+    void OnDirectoryListRequest(UiFileManager::PanelType panel_type, const std::string& path) override;
     void OnSendFile(const std::wstring& from_path, const std::wstring& to_path) override;
     void OnRecieveFile(const std::wstring& from_path, const std::wstring& to_path) override;
 
@@ -40,7 +40,7 @@ private:
 
     void WriteMessage(const proto::file_transfer::ClientToHost& message);
 
-    std::unique_ptr<FileManager> file_manager_;
+    std::unique_ptr<UiFileManager> file_manager_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);
 };

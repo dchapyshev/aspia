@@ -14,10 +14,10 @@
 
 namespace aspia {
 
-class UsersDialog : public ModalDialog
+class UiUsersDialog : public UiModalDialog
 {
 public:
-    UsersDialog() = default;
+    UiUsersDialog() = default;
 
     INT_PTR DoModal(HWND parent) override;
 
@@ -37,9 +37,9 @@ private:
     void SetUserListModified();
 
     HostUserList user_list_;
-    ImageList imagelist_;
+    UiImageList imagelist_;
 
-    DISALLOW_COPY_AND_ASSIGN(UsersDialog);
+    DISALLOW_COPY_AND_ASSIGN(UiUsersDialog);
 };
 
 } // namespace aspia

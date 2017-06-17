@@ -16,13 +16,13 @@
 
 namespace aspia {
 
-class FileManager :
-    public ChildWindow,
+class UiFileManager :
+    public UiChildWindow,
     private MessageLoopThread::Delegate,
-    private FileManagerPanel::Delegate
+    private UiFileManagerPanel::Delegate
 {
 public:
-    using PanelType = FileManagerPanel::Type;
+    using PanelType = UiFileManagerPanel::Type;
 
     class Delegate
     {
@@ -34,8 +34,8 @@ public:
         virtual void OnRecieveFile(const std::wstring& from_path, const std::wstring& to_path) = 0;
     };
 
-    FileManager(Delegate* delegate);
-    ~FileManager();
+    UiFileManager(Delegate* delegate);
+    ~UiFileManager();
 
     void ReadDriveList(PanelType panel_type,
                        std::unique_ptr<proto::DriveList> drive_list);
@@ -48,11 +48,11 @@ private:
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
-    // FileManagerPanel::Delegate implementation.
+    // UiFileManagerPanel::Delegate implementation.
     void OnDriveListRequest(PanelType panel_type) override;
     void OnDirectoryListRequest(PanelType type, const std::string& path) override;
 
-    // ChildWindow implementation.
+    // UiChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;
 
     void OnCreate();
@@ -66,11 +66,11 @@ private:
 
     Delegate* delegate_;
 
-    FileManagerPanel local_panel_;
-    FileManagerPanel remote_panel_;
-    Splitter splitter_;
+    UiFileManagerPanel local_panel_;
+    UiFileManagerPanel remote_panel_;
+    UiSplitter splitter_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileManager);
+    DISALLOW_COPY_AND_ASSIGN(UiFileManager);
 };
 
 } // namespace aspia

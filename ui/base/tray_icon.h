@@ -15,11 +15,11 @@
 
 namespace aspia {
 
-class TrayIcon
+class UiTrayIcon
 {
 public:
-    TrayIcon();
-    ~TrayIcon();
+    UiTrayIcon();
+    ~UiTrayIcon();
 
     bool AddIcon(HWND hwnd, HICON icon, const std::wstring& tooltip, UINT menu_id);
     bool AddIcon(HWND hwnd, UINT icon_id, const std::wstring& tooltip, UINT menu_id);
@@ -38,7 +38,7 @@ private:
     bool is_installed_ = false;
     UINT default_menu_item_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(TrayIcon);
+    DISALLOW_COPY_AND_ASSIGN(UiTrayIcon);
 };
 
 } // namespace aspia

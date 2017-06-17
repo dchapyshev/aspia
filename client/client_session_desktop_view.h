@@ -18,7 +18,7 @@ namespace aspia {
 
 class ClientSessionDesktopView :
     public ClientSession,
-    private ViewerWindow::Delegate
+    private UiViewerWindow::Delegate
 {
 public:
     ClientSessionDesktopView(const ClientConfig& config,
@@ -30,7 +30,7 @@ protected:
     void ReadConfigRequest(const proto::DesktopSessionConfigRequest& config_request);
     bool ReadVideoPacket(const proto::VideoPacket& video_packet);
 
-    std::unique_ptr<ViewerWindow> viewer_;
+    std::unique_ptr<UiViewerWindow> viewer_;
 
 private:
     // ViewerWindow::Delegate implementation.

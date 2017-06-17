@@ -10,7 +10,7 @@
 
 namespace aspia {
 
-bool Dialog::Create(HWND parent, UINT resource_id, const Module& module)
+bool UiDialog::Create(HWND parent, UINT resource_id, const UiModule& module)
 {
     module_ = module;
 
@@ -34,14 +34,14 @@ bool Dialog::Create(HWND parent, UINT resource_id, const Module& module)
 }
 
 // static
-INT_PTR CALLBACK Dialog::DialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+INT_PTR CALLBACK UiDialog::DialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
-    Dialog* self =
-        reinterpret_cast<Dialog*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
+    UiDialog* self =
+        reinterpret_cast<UiDialog*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
 
     if (msg == WM_INITDIALOG)
     {
-        self = reinterpret_cast<Dialog*>(lparam);
+        self = reinterpret_cast<UiDialog*>(lparam);
         self->Attach(hwnd);
 
         // Store pointer to the self to the window's user data.
@@ -58,12 +58,12 @@ INT_PTR CALLBACK Dialog::DialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
     return 0;
 }
 
-const Module& Dialog::module()
+const UiModule& UiDialog::module()
 {
     return module_;
 }
 
-void Dialog::SetIcon(UINT resource_id)
+void UiDialog::SetIcon(UINT resource_id)
 {
     small_icon_ = module().icon(resource_id,
                                 GetSystemMetrics(SM_CXSMICON),
@@ -79,17 +79,17 @@ void Dialog::SetIcon(UINT resource_id)
     SendMessageW(hwnd(), WM_SETICON, TRUE, reinterpret_cast<LPARAM>(big_icon_.Get()));
 }
 
-HWND Dialog::GetDlgItem(int item_id)
+HWND UiDialog::GetDlgItem(int item_id)
 {
     return ::GetDlgItem(hwnd(), item_id);
 }
 
-void Dialog::EnableDlgItem(int item_id, bool enable)
+void UiDialog::EnableDlgItem(int item_id, bool enable)
 {
     EnableWindow(GetDlgItem(item_id), enable);
 }
 
-std::wstring Dialog::GetDlgItemString(int item_id)
+std::wstring UiDialog::GetDlgItemString(int item_id)
 {
     HWND hwnd = GetDlgItem(item_id);
 
@@ -110,12 +110,12 @@ std::wstring Dialog::GetDlgItemString(int item_id)
     return std::wstring();
 }
 
-bool Dialog::SetDlgItemString(int item_id, const std::wstring& string)
+bool UiDialog::SetDlgItemString(int item_id, const std::wstring& string)
 {
     return !!SetDlgItemTextW(hwnd(), item_id, string.c_str());
 }
 
-bool Dialog::SetDlgItemString(int item_id, UINT resource_id)
+bool UiDialog::SetDlgItemString(int item_id, UINT resource_id)
 {
     return SetDlgItemString(item_id, module().string(resource_id));
 }

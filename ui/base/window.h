@@ -15,12 +15,12 @@
 
 namespace aspia {
 
-class Window
+class UiWindow
 {
 public:
-    Window() = default;
-    Window(HWND hwnd) : hwnd_(hwnd) { }
-    virtual ~Window() = default;
+    UiWindow() = default;
+    UiWindow(HWND hwnd) : hwnd_(hwnd) { }
+    virtual ~UiWindow() = default;
 
     void Attach(HWND hwnd) { hwnd_ = hwnd; }
     HWND hwnd() { return hwnd_; }
@@ -44,7 +44,7 @@ public:
 private:
     HWND hwnd_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(Window);
+    DISALLOW_COPY_AND_ASSIGN(UiWindow);
 };
 
 } // namespace aspia

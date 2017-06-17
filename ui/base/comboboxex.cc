@@ -11,16 +11,16 @@
 
 namespace aspia {
 
-ComboBoxEx::ComboBoxEx(HWND hwnd)
+UiComboBoxEx::UiComboBoxEx(HWND hwnd)
 {
     Attach(hwnd);
 }
 
-LRESULT ComboBoxEx::InsertItem(const std::wstring& text,
-                               INT_PTR item_index,
-                               int image_index,
-                               int indent,
-                               LPARAM lparam)
+LRESULT UiComboBoxEx::InsertItem(const std::wstring& text,
+                                 INT_PTR item_index,
+                                 int image_index,
+                                 int indent,
+                                 LPARAM lparam)
 {
     COMBOBOXEXITEMW item;
 
@@ -38,20 +38,20 @@ LRESULT ComboBoxEx::InsertItem(const std::wstring& text,
     return SendMessageW(hwnd(), CBEM_INSERTITEM, 0, reinterpret_cast<LPARAM>(&item));
 }
 
-LRESULT ComboBoxEx::AddItem(const std::wstring& text,
-                            int image_index,
-                            int indent,
-                            LPARAM lparam)
+LRESULT UiComboBoxEx::AddItem(const std::wstring& text,
+                              int image_index,
+                              int indent,
+                              LPARAM lparam)
 {
     return InsertItem(text, -1, image_index, indent, lparam);
 }
 
-LRESULT ComboBoxEx::DeleteItem(INT_PTR item_index)
+LRESULT UiComboBoxEx::DeleteItem(INT_PTR item_index)
 {
     return SendMessageW(hwnd(), CBEM_DELETEITEM, item_index, 0);
 }
 
-void ComboBoxEx::DeleteAllItems()
+void UiComboBoxEx::DeleteAllItems()
 {
     const int count = GetItemCount();
 
@@ -61,10 +61,9 @@ void ComboBoxEx::DeleteAllItems()
     }
 }
 
-LPARAM ComboBoxEx::GetItemData(INT_PTR item_index)
+LPARAM UiComboBoxEx::GetItemData(INT_PTR item_index)
 {
     COMBOBOXEXITEMW item;
-
     memset(&item, 0, sizeof(item));
 
     item.mask  = CBEIF_LPARAM;
@@ -78,7 +77,7 @@ LPARAM ComboBoxEx::GetItemData(INT_PTR item_index)
     return -1;
 }
 
-LRESULT ComboBoxEx::SetItemData(INT_PTR item_index, LPARAM lparam)
+LRESULT UiComboBoxEx::SetItemData(INT_PTR item_index, LPARAM lparam)
 {
     COMBOBOXEXITEMW item;
 
@@ -91,10 +90,9 @@ LRESULT ComboBoxEx::SetItemData(INT_PTR item_index, LPARAM lparam)
     return SendMessageW(hwnd(), CBEM_SETITEM, 0, reinterpret_cast<LPARAM>(&item));
 }
 
-std::wstring ComboBoxEx::GetItemText(INT_PTR item_index)
+std::wstring UiComboBoxEx::GetItemText(INT_PTR item_index)
 {
     COMBOBOXEXITEMW item;
-
     memset(&item, 0, sizeof(item));
 
     item.mask = CBEIF_TEXT;
@@ -111,10 +109,9 @@ std::wstring ComboBoxEx::GetItemText(INT_PTR item_index)
     return std::wstring();
 }
 
-LRESULT ComboBoxEx::SetItemText(INT_PTR item_index, const std::wstring& text)
+LRESULT UiComboBoxEx::SetItemText(INT_PTR item_index, const std::wstring& text)
 {
     COMBOBOXEXITEMW item;
-
     memset(&item, 0, sizeof(item));
 
     item.mask    = CBEIF_TEXT;
@@ -124,7 +121,7 @@ LRESULT ComboBoxEx::SetItemText(INT_PTR item_index, const std::wstring& text)
     return SendMessageW(hwnd(), CBEM_SETITEM, 0, reinterpret_cast<LPARAM>(&item));
 }
 
-HIMAGELIST ComboBoxEx::SetImageList(HIMAGELIST imagelist)
+HIMAGELIST UiComboBoxEx::SetImageList(HIMAGELIST imagelist)
 {
     return reinterpret_cast<HIMAGELIST>(SendMessageW(hwnd(),
                                                      CBEM_SETIMAGELIST,
@@ -132,12 +129,12 @@ HIMAGELIST ComboBoxEx::SetImageList(HIMAGELIST imagelist)
                                                      reinterpret_cast<LPARAM>(imagelist)));
 }
 
-HIMAGELIST ComboBoxEx::GetImageList()
+HIMAGELIST UiComboBoxEx::GetImageList()
 {
     return reinterpret_cast<HIMAGELIST>(SendMessageW(hwnd(), CBEM_GETIMAGELIST, 0, 0));
 }
 
-int ComboBoxEx::GetItemCount()
+int UiComboBoxEx::GetItemCount()
 {
     HWND combobox =
         reinterpret_cast<HWND>(SendMessageW(hwnd(), CBEM_GETCOMBOCONTROL, 0, 0));
@@ -145,7 +142,7 @@ int ComboBoxEx::GetItemCount()
     return ComboBox_GetCount(combobox);
 }
 
-int ComboBoxEx::GetSelectedItem()
+int UiComboBoxEx::GetSelectedItem()
 {
     return SendMessageW(hwnd(), CB_GETCURSEL, 0, 0);
 }

@@ -15,7 +15,7 @@ namespace aspia {
 
 static const int kBorderSize = 10;
 
-FileStatusDialog::FileStatusDialog(Delegate* delegate) :
+UiFileStatusDialog::UiFileStatusDialog(Delegate* delegate) :
     delegate_(delegate)
 {
     DCHECK(delegate_);
@@ -23,44 +23,44 @@ FileStatusDialog::FileStatusDialog(Delegate* delegate) :
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
-FileStatusDialog::~FileStatusDialog()
+UiFileStatusDialog::~UiFileStatusDialog()
 {
     ui_thread_.Stop();
 }
 
-void FileStatusDialog::OnBeforeThreadRunning()
+void UiFileStatusDialog::OnBeforeThreadRunning()
 {
     runner_ = ui_thread_.message_loop_proxy();
     DCHECK(runner_);
 
-    if (!Create(nullptr, IDD_FILE_STATUS, Module::Current()))
+    if (!Create(nullptr, IDD_FILE_STATUS, UiModule::Current()))
     {
         LOG(ERROR) << "File status dialog not created";
         runner_->PostQuit();
     }
 }
 
-void FileStatusDialog::OnAfterThreadRunning()
+void UiFileStatusDialog::OnAfterThreadRunning()
 {
     DestroyWindow();
     delegate_->OnWindowClose();
 }
 
-void FileStatusDialog::OnInitDialog()
+void UiFileStatusDialog::OnInitDialog()
 {
     SetWindowPos(hwnd(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
     SetIcon(IDI_MAIN);
 }
 
-void FileStatusDialog::OnSize(int width, int height)
+void UiFileStatusDialog::OnSize(int width, int height)
 {
     HDWP dwp = BeginDeferWindowPos(3);
 
     if (dwp)
     {
-        Window minimize_button(GetDlgItem(IDC_MINIMIZE_BUTTON));
-        Window stop_button(GetDlgItem(IDC_STOP_BUTTON));
-        Window log_edit(GetDlgItem(IDC_STATUS_EDIT));
+        UiWindow minimize_button(GetDlgItem(IDC_MINIMIZE_BUTTON));
+        UiWindow stop_button(GetDlgItem(IDC_STOP_BUTTON));
+        UiWindow log_edit(GetDlgItem(IDC_STATUS_EDIT));
 
         DesktopSize stop_size = stop_button.Size();
         DesktopSize minimize_size = minimize_button.Size();
@@ -96,7 +96,7 @@ void FileStatusDialog::OnSize(int width, int height)
     }
 }
 
-INT_PTR FileStatusDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+INT_PTR UiFileStatusDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
     {
@@ -138,15 +138,15 @@ static std::wstring CurrentTime()
     return buffer;
 }
 
-void FileStatusDialog::OnDirectoryOpen(const std::wstring& path)
+void UiFileStatusDialog::OnDirectoryOpen(const std::wstring& path)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&FileStatusDialog::OnDirectoryOpen, this, path));
+        runner_->PostTask(std::bind(&UiFileStatusDialog::OnDirectoryOpen, this, path));
         return;
     }
 
-    Edit log_edit(GetDlgItem(IDC_STATUS_EDIT));
+    UiEdit log_edit(GetDlgItem(IDC_STATUS_EDIT));
 
     log_edit.AppendText(CurrentTime());
     log_edit.AppendText(L" Browse folders: ");
@@ -154,20 +154,20 @@ void FileStatusDialog::OnDirectoryOpen(const std::wstring& path)
     log_edit.AppendText(L"\r\n");
 }
 
-void FileStatusDialog::OnFileSend(const std::wstring& path)
+void UiFileStatusDialog::OnFileSend(const std::wstring& path)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&FileStatusDialog::OnFileSend, this, path));
+        runner_->PostTask(std::bind(&UiFileStatusDialog::OnFileSend, this, path));
         return;
     }
 }
 
-void FileStatusDialog::OnFileRecieve(const std::wstring& path)
+void UiFileStatusDialog::OnFileRecieve(const std::wstring& path)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&FileStatusDialog::OnFileRecieve, this, path));
+        runner_->PostTask(std::bind(&UiFileStatusDialog::OnFileRecieve, this, path));
         return;
     }
 }

@@ -10,7 +10,7 @@
 
 namespace aspia {
 
-INT_PTR ModalDialog::Run(const Module& module, HWND parent, UINT resource_id)
+INT_PTR UiModalDialog::Run(const UiModule& module, HWND parent, UINT resource_id)
 {
     end_dialog_ = false;
     result_ = 0;
@@ -74,13 +74,13 @@ INT_PTR ModalDialog::Run(const Module& module, HWND parent, UINT resource_id)
     return result_;
 }
 
-void ModalDialog::EndDialog(INT_PTR result)
+void UiModalDialog::EndDialog(INT_PTR result)
 {
     result_ = result;
     end_dialog_ = true;
 }
 
-bool ModalDialog::Dispatch(const NativeEvent& event)
+bool UiModalDialog::Dispatch(const NativeEvent& event)
 {
     // If the window was destroyed or the EndDialog method was called.
     if (!IsWindow(hwnd()) || end_dialog_)

@@ -10,30 +10,30 @@
 
 namespace aspia {
 
-Module::Module(HINSTANCE instance) :
+UiModule::UiModule(HINSTANCE instance) :
     instance_(instance)
 {
     // Nothing
 }
 
-Module::Module(const Module& other)
+UiModule::UiModule(const UiModule& other)
 {
     instance_ = other.instance_;
 }
 
 // static
-Module Module::Current()
+UiModule UiModule::Current()
 {
-    return Module(GetModuleHandleW(nullptr));
+    return UiModule(GetModuleHandleW(nullptr));
 }
 
-Module& Module::operator=(const Module& other)
+UiModule& UiModule::operator=(const UiModule& other)
 {
     instance_ = other.instance_;
     return *this;
 }
 
-HINSTANCE Module::Handle() const
+HINSTANCE UiModule::Handle() const
 {
     return instance_;
 }
@@ -68,7 +68,7 @@ static int GetLengthOfStringResource(HINSTANCE instance, UINT string_id)
     return -1;
 }
 
-std::wstring Module::string(UINT resource_id) const
+std::wstring UiModule::string(UINT resource_id) const
 {
     int length = GetLengthOfStringResource(instance_, resource_id);
 
@@ -82,7 +82,7 @@ std::wstring Module::string(UINT resource_id) const
     return string;
 }
 
-HICON Module::icon(UINT resource_id, int width, int height, UINT flags) const
+HICON UiModule::icon(UINT resource_id, int width, int height, UINT flags) const
 {
     return reinterpret_cast<HICON>(LoadImageW(instance_,
                                               MAKEINTRESOURCEW(resource_id),
@@ -92,7 +92,7 @@ HICON Module::icon(UINT resource_id, int width, int height, UINT flags) const
                                               flags));
 }
 
-HMENU Module::menu(UINT resource_id) const
+HMENU UiModule::menu(UINT resource_id) const
 {
     return LoadMenuW(instance_, MAKEINTRESOURCEW(resource_id));
 }

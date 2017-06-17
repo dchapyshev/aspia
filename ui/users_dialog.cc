@@ -16,14 +16,14 @@
 
 namespace aspia {
 
-INT_PTR UsersDialog::DoModal(HWND parent)
+INT_PTR UiUsersDialog::DoModal(HWND parent)
 {
-    return Run(Module::Current(), parent, IDD_USERS);
+    return Run(UiModule::Current(), parent, IDD_USERS);
 }
 
-void UsersDialog::UpdateUserList()
+void UiUsersDialog::UpdateUserList()
 {
-    ListView list(GetDlgItem(IDC_USER_LIST));
+    UiListView list(GetDlgItem(IDC_USER_LIST));
 
     list.DeleteAllItems();
 
@@ -40,7 +40,7 @@ void UsersDialog::UpdateUserList()
     }
 }
 
-void UsersDialog::OnInitDialog()
+void UiUsersDialog::OnInitDialog()
 {
     if (imagelist_.CreateSmall())
     {
@@ -48,7 +48,7 @@ void UsersDialog::OnInitDialog()
         imagelist_.AddIcon(module(), IDI_USER_DISABLED);
     }
 
-    ListView list(GetDlgItem(IDC_USER_LIST));
+    UiListView list(GetDlgItem(IDC_USER_LIST));
 
     list.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
     list.SetImageList(imagelist_, LVSIL_SMALL);
@@ -67,11 +67,11 @@ void UsersDialog::OnInitDialog()
         UpdateUserList();
 }
 
-void UsersDialog::OnAddButton()
+void UiUsersDialog::OnAddButton()
 {
     std::unique_ptr<proto::HostUser> user(new proto::HostUser());
 
-    UserPropDialog dialog(UserPropDialog::Mode::Add, user.get(), user_list_);
+    UiUserPropDialog dialog(UiUserPropDialog::Mode::Add, user.get(), user_list_);
     if (dialog.DoModal(hwnd()) == IDOK)
     {
         user_list_.Add(std::move(user));
@@ -83,13 +83,13 @@ void UsersDialog::OnAddButton()
     EnableDlgItem(ID_DELETE, FALSE);
 }
 
-int UsersDialog::GetSelectedUserIndex()
+int UiUsersDialog::GetSelectedUserIndex()
 {
-    ListView list(GetDlgItem(IDC_USER_LIST));
+    UiListView list(GetDlgItem(IDC_USER_LIST));
     return list.GetItemData<int>(list.GetFirstSelectedItem());
 }
 
-void UsersDialog::OnEditButton()
+void UiUsersDialog::OnEditButton()
 {
     int user_index = GetSelectedUserIndex();
 
@@ -98,7 +98,7 @@ void UsersDialog::OnEditButton()
 
     proto::HostUser* user = user_list_.mutable_host_user(user_index);
 
-    UserPropDialog dialog(UserPropDialog::Mode::Edit, user, user_list_);
+    UiUserPropDialog dialog(UiUserPropDialog::Mode::Edit, user, user_list_);
     if (dialog.DoModal(hwnd()) == IDOK)
     {
         UpdateUserList();
@@ -109,7 +109,7 @@ void UsersDialog::OnEditButton()
     EnableDlgItem(ID_DELETE, FALSE);
 }
 
-void UsersDialog::OnDeleteButton()
+void UiUsersDialog::OnDeleteButton()
 {
     int user_index = GetSelectedUserIndex();
 
@@ -139,13 +139,13 @@ void UsersDialog::OnDeleteButton()
     EnableDlgItem(ID_DELETE, FALSE);
 }
 
-void UsersDialog::OnOkButton()
+void UiUsersDialog::OnOkButton()
 {
     user_list_.SaveToStorage();
     EndDialog(IDOK);
 }
 
-void UsersDialog::ShowUserPopupMenu()
+void UiUsersDialog::ShowUserPopupMenu()
 {
     ScopedHMENU menu(module().menu(IDR_USER));
 
@@ -175,7 +175,7 @@ void UsersDialog::ShowUserPopupMenu()
     EnableDlgItem(ID_DELETE, FALSE);
 }
 
-void UsersDialog::OnUserListClicked()
+void UiUsersDialog::OnUserListClicked()
 {
     if (GetSelectedUserIndex() == -1)
     {
@@ -189,13 +189,13 @@ void UsersDialog::OnUserListClicked()
     }
 }
 
-void UsersDialog::SetUserListModified()
+void UiUsersDialog::SetUserListModified()
 {
     HWND group = GetDlgItem(IDC_USERS_GROUPBOX);
     SetWindowTextW(group, module().string(IDS_USER_LIST_MODIFIED).c_str());
 }
 
-INT_PTR UsersDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+INT_PTR UiUsersDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
     {

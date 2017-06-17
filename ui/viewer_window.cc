@@ -21,7 +21,7 @@ static const UINT kResizeFrameMessage = WM_APP + 1;
 
 static const DesktopSize kVideoWindowSize(400, 280);
 
-ViewerWindow::ViewerWindow(ClientConfig* config, Delegate* delegate) :
+UiViewerWindow::UiViewerWindow(ClientConfig* config, Delegate* delegate) :
     config_(config),
     delegate_(delegate),
     video_window_(this)
@@ -32,12 +32,12 @@ ViewerWindow::ViewerWindow(ClientConfig* config, Delegate* delegate) :
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
-ViewerWindow::~ViewerWindow()
+UiViewerWindow::~UiViewerWindow()
 {
     ui_thread_.Stop();
 }
 
-void ViewerWindow::OnBeforeThreadRunning()
+void UiViewerWindow::OnBeforeThreadRunning()
 {
     runner_ = ui_thread_.message_loop_proxy();
     DCHECK(runner_);
@@ -52,31 +52,31 @@ void ViewerWindow::OnBeforeThreadRunning()
     }
     else
     {
-        ScopedHICON icon(Module::Current().icon(IDI_MAIN,
-                                                GetSystemMetrics(SM_CXSMICON),
-                                                GetSystemMetrics(SM_CYSMICON),
-                                                LR_CREATEDIBSECTION));
+        ScopedHICON icon(UiModule::Current().icon(IDI_MAIN,
+                                                  GetSystemMetrics(SM_CXSMICON),
+                                                  GetSystemMetrics(SM_CYSMICON),
+                                                  LR_CREATEDIBSECTION));
         SetIcon(icon);
         SetCursor(LoadCursorW(nullptr, IDC_ARROW));
     }
 }
 
-void ViewerWindow::OnAfterThreadRunning()
+void UiViewerWindow::OnAfterThreadRunning()
 {
     DestroyWindow();
 }
 
-DesktopFrame* ViewerWindow::Frame()
+DesktopFrame* UiViewerWindow::Frame()
 {
     return video_window_.Frame();
 }
 
-void ViewerWindow::DrawFrame()
+void UiViewerWindow::DrawFrame()
 {
     video_window_.DrawFrame();
 }
 
-void ViewerWindow::OnVideoFrameResize(WPARAM wparam, LPARAM lparam)
+void UiViewerWindow::OnVideoFrameResize(WPARAM wparam, LPARAM lparam)
 {
     const DesktopSize* size = reinterpret_cast<DesktopSize*>(wparam);
     const PixelFormat* format = reinterpret_cast<PixelFormat*>(lparam);
@@ -95,7 +95,7 @@ void ViewerWindow::OnVideoFrameResize(WPARAM wparam, LPARAM lparam)
         ShowScrollBar(video_window_, show_scroll_bars, FALSE);
 }
 
-void ViewerWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& format)
+void UiViewerWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& format)
 {
     // ResizeFrame method is called from another thread.
     // We need to move the action to UI thread.
@@ -105,11 +105,11 @@ void ViewerWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& forma
                  reinterpret_cast<LPARAM>(&format));
 }
 
-void ViewerWindow::InjectMouseCursor(std::shared_ptr<MouseCursor> mouse_cursor)
+void UiViewerWindow::InjectMouseCursor(std::shared_ptr<MouseCursor> mouse_cursor)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&ViewerWindow::InjectMouseCursor, this, mouse_cursor));
+        runner_->PostTask(std::bind(&UiViewerWindow::InjectMouseCursor, this, mouse_cursor));
         return;
     }
 
@@ -128,19 +128,21 @@ void ViewerWindow::InjectMouseCursor(std::shared_ptr<MouseCursor> mouse_cursor)
     }
 }
 
-void ViewerWindow::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
+void UiViewerWindow::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&ViewerWindow::InjectClipboardEvent, this, clipboard_event));
+        runner_->PostTask(std::bind(&UiViewerWindow::InjectClipboardEvent, this, clipboard_event));
         return;
     }
 
     clipboard_.InjectClipboardEvent(clipboard_event);
 }
 
-void ViewerWindow::CreateToolBar()
+void UiViewerWindow::CreateToolBar()
 {
+    const UiModule& module = UiModule().Current();
+
     toolbar_.Attach(CreateWindowExW(0,
                                     TOOLBARCLASSNAMEW,
                                     nullptr,
@@ -150,7 +152,7 @@ void ViewerWindow::CreateToolBar()
                                     CW_USEDEFAULT, CW_USEDEFAULT,
                                     hwnd(),
                                     nullptr,
-                                    Module().Current().Handle(),
+                                    module.Handle(),
                                     nullptr));
 
     DWORD extended_style =
@@ -186,8 +188,6 @@ void ViewerWindow::CreateToolBar()
 
     if (toolbar_imagelist_.CreateSmall())
     {
-        const Module& module = Module().Current();
-
         toolbar_imagelist_.AddIcon(module, IDI_POWER);
         toolbar_imagelist_.AddIcon(module, IDI_CAD);
         toolbar_imagelist_.AddIcon(module, IDI_KEYS);
@@ -216,12 +216,12 @@ void ViewerWindow::CreateToolBar()
     }
 }
 
-void ViewerWindow::OnCreate()
+void UiViewerWindow::OnCreate()
 {
     std::wstring title(config_->address());
 
     title.append(L" - ");
-    title.append(Module().Current().string(IDS_APPLICATION_NAME));
+    title.append(UiModule().Current().string(IDS_APPLICATION_NAME));
 
     SetWindowTextW(hwnd(), title.c_str());
 
@@ -233,31 +233,28 @@ void ViewerWindow::OnCreate()
     ApplyConfig(config_->desktop_session_config());
 }
 
-void ViewerWindow::OnClose()
+void UiViewerWindow::OnClose()
 {
     delegate_->OnWindowClose();
 }
 
-void ViewerWindow::OnSize()
+void UiViewerWindow::OnSize()
 {
     SendMessageW(toolbar_, TB_AUTOSIZE, 0, 0);
 
-    RECT rc = { 0 };
-    GetWindowRect(toolbar_, &rc);
+    int toolbar_height = toolbar_.Height();
 
-    int toolbar_height = rc.bottom - rc.top;
-
-    GetClientRect(hwnd(), &rc);
+    DesktopSize size = ClientSize();
 
     MoveWindow(video_window_,
                0,
                toolbar_height,
-               rc.right - rc.left,
-               rc.bottom - rc.top - toolbar_height,
+               size.Width(),
+               size.Height() - toolbar_height,
                TRUE);
 }
 
-void ViewerWindow::OnGetMinMaxInfo(LPMINMAXINFO mmi)
+void UiViewerWindow::OnGetMinMaxInfo(LPMINMAXINFO mmi)
 {
     mmi->ptMinTrackSize.x = kVideoWindowSize.Width();
     mmi->ptMinTrackSize.y = kVideoWindowSize.Height();
@@ -316,7 +313,7 @@ static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wParam, LPARAM lParam)
     return CallNextHookEx(nullptr, code, wParam, lParam);
 }
 
-void ViewerWindow::OnActivate(UINT state)
+void UiViewerWindow::OnActivate(UINT state)
 {
     if (state == WA_ACTIVE || state == WA_CLICKACTIVE)
     {
@@ -336,7 +333,7 @@ void ViewerWindow::OnActivate(UINT state)
     }
 }
 
-void ViewerWindow::OnKeyboard(WPARAM wParam, LPARAM lParam)
+void UiViewerWindow::OnKeyboard(WPARAM wParam, LPARAM lParam)
 {
     uint8_t key_code = static_cast<uint8_t>(static_cast<uint32_t>(wParam) & 255);
 
@@ -357,17 +354,17 @@ void ViewerWindow::OnKeyboard(WPARAM wParam, LPARAM lParam)
     }
 }
 
-void ViewerWindow::OnSetFocus()
+void UiViewerWindow::OnSetFocus()
 {
     video_window_.HasFocus(true);
 }
 
-void ViewerWindow::OnKillFocus()
+void UiViewerWindow::OnKillFocus()
 {
     video_window_.HasFocus(false);
 }
 
-void ViewerWindow::ApplyConfig(const proto::DesktopSessionConfig& config)
+void UiViewerWindow::ApplyConfig(const proto::DesktopSessionConfig& config)
 {
     if (!(config.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE))
     {
@@ -376,7 +373,7 @@ void ViewerWindow::ApplyConfig(const proto::DesktopSessionConfig& config)
 
     if (config.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD)
     {
-        clipboard_.Start(std::bind(&ViewerWindow::Delegate::OnClipboardEvent,
+        clipboard_.Start(std::bind(&UiViewerWindow::Delegate::OnClipboardEvent,
                                    delegate_,
                                    std::placeholders::_1));
     }
@@ -386,9 +383,9 @@ void ViewerWindow::ApplyConfig(const proto::DesktopSessionConfig& config)
     }
 }
 
-void ViewerWindow::OnSettingsButton()
+void UiViewerWindow::OnSettingsButton()
 {
-    SettingsDialog dialog;
+    UiSettingsDialog dialog;
 
     if (dialog.DoModal(hwnd(),
                        config_->session_type(),
@@ -401,18 +398,18 @@ void ViewerWindow::OnSettingsButton()
     }
 }
 
-void ViewerWindow::OnAboutButton()
+void UiViewerWindow::OnAboutButton()
 {
-    AboutDialog dialog;
+    UiAboutDialog dialog;
     dialog.DoModal(hwnd());
 }
 
-void ViewerWindow::OnExitButton()
+void UiViewerWindow::OnExitButton()
 {
     PostMessageW(hwnd(), WM_CLOSE, 0, 0);
 }
 
-int ViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
+int UiViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
 {
     if (SendMessageW(toolbar_, TB_ISBUTTONCHECKED, ID_FULLSCREEN, 0))
         DoFullScreen(false);
@@ -492,7 +489,7 @@ int ViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
     return -1;
 }
 
-void ViewerWindow::OnAutoSizeButton()
+void UiViewerWindow::OnAutoSizeButton()
 {
     DesktopSize video_frame_size = video_window_.FrameSize();
 
@@ -503,7 +500,7 @@ void ViewerWindow::OnAutoSizeButton()
     }
 }
 
-void ViewerWindow::DoFullScreen(bool fullscreen)
+void UiViewerWindow::DoFullScreen(bool fullscreen)
 {
     SendMessageW(toolbar_, TB_CHECKBUTTON, ID_FULLSCREEN, MAKELPARAM(fullscreen, 0));
 
@@ -549,12 +546,12 @@ void ViewerWindow::DoFullScreen(bool fullscreen)
     }
 }
 
-void ViewerWindow::OnFullScreenButton()
+void UiViewerWindow::OnFullScreenButton()
 {
     DoFullScreen(!!SendMessageW(toolbar_, TB_ISBUTTONCHECKED, ID_FULLSCREEN, 0));
 }
 
-void ViewerWindow::OnDropDownButton(WORD ctrl_id)
+void UiViewerWindow::OnDropDownButton(WORD ctrl_id)
 {
     RECT rc = { 0 };
     SendMessageW(toolbar_, TB_GETRECT, ctrl_id, reinterpret_cast<LPARAM>(&rc));
@@ -562,9 +559,9 @@ void ViewerWindow::OnDropDownButton(WORD ctrl_id)
     ShowDropDownMenu(ctrl_id, &rc);
 }
 
-void ViewerWindow::OnPowerButton()
+void UiViewerWindow::OnPowerButton()
 {
-    PowerManageDialog dialog;
+    UiPowerManageDialog dialog;
 
     proto::PowerEvent::Action action =
         static_cast<proto::PowerEvent::Action>(dialog.DoModal(hwnd()));
@@ -573,7 +570,7 @@ void ViewerWindow::OnPowerButton()
         delegate_->OnPowerEvent(action);
 }
 
-void ViewerWindow::OnCADButton()
+void UiViewerWindow::OnCADButton()
 {
     delegate_->OnKeyEvent(VK_CONTROL, proto::KeyEvent::PRESSED);
     delegate_->OnKeyEvent(VK_MENU, proto::KeyEvent::PRESSED);
@@ -584,7 +581,7 @@ void ViewerWindow::OnCADButton()
     delegate_->OnKeyEvent(VK_DELETE, proto::KeyEvent::EXTENDED);
 }
 
-void ViewerWindow::OnKeyButton(WORD ctrl_id)
+void UiViewerWindow::OnKeyButton(WORD ctrl_id)
 {
     switch (ctrl_id)
     {
@@ -668,7 +665,7 @@ void ViewerWindow::OnKeyButton(WORD ctrl_id)
     }
 }
 
-void ViewerWindow::OnGetDispInfo(LPNMHDR phdr)
+void UiViewerWindow::OnGetDispInfo(LPNMHDR phdr)
 {
     LPTOOLTIPTEXTW header = reinterpret_cast<LPTOOLTIPTEXTW>(phdr);
     UINT string_id;
@@ -711,19 +708,19 @@ void ViewerWindow::OnGetDispInfo(LPNMHDR phdr)
             return;
     }
 
-    LoadStringW(Module().Current().Handle(),
+    LoadStringW(UiModule().Current().Handle(),
                 string_id,
                 header->szText,
                 _countof(header->szText));
 }
 
-void ViewerWindow::OnToolBarDropDown(LPNMHDR phdr)
+void UiViewerWindow::OnToolBarDropDown(LPNMHDR phdr)
 {
     LPNMTOOLBARW header = reinterpret_cast<LPNMTOOLBARW>(phdr);
     ShowDropDownMenu(header->iItem, &header->rcButton);
 }
 
-void ViewerWindow::ShowDropDownMenu(int button_id, RECT* button_rect)
+void UiViewerWindow::ShowDropDownMenu(int button_id, RECT* button_rect)
 {
     if (button_id != ID_SHORTCUTS)
         return;
@@ -734,7 +731,7 @@ void ViewerWindow::ShowDropDownMenu(int button_id, RECT* button_rect)
         tpm.cbSize = sizeof(TPMPARAMS);
         tpm.rcExclude = *button_rect;
 
-        ScopedHMENU menu(Module().Current().menu(IDR_SHORTCUTS));
+        ScopedHMENU menu(UiModule().Current().menu(IDR_SHORTCUTS));
 
         TrackPopupMenuEx(GetSubMenu(menu, 0),
                          TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_VERTICAL,
@@ -745,7 +742,7 @@ void ViewerWindow::ShowDropDownMenu(int button_id, RECT* button_rect)
     }
 }
 
-bool ViewerWindow::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
+bool UiViewerWindow::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
 {
     switch (msg)
     {
@@ -880,7 +877,7 @@ bool ViewerWindow::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* re
     return true;
 }
 
-void ViewerWindow::OnPointerEvent(const DesktopPoint& pos, uint32_t mask)
+void UiViewerWindow::OnPointerEvent(const DesktopPoint& pos, uint32_t mask)
 {
     delegate_->OnPointerEvent(pos, mask);
 }

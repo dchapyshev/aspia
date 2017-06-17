@@ -15,11 +15,11 @@
 
 namespace aspia {
 
-class MainDialog : public ModalDialog
+class UiMainDialog : public UiModalDialog
 {
 public:
-    MainDialog() = default;
-    ~MainDialog() = default;
+    UiMainDialog() = default;
+    ~UiMainDialog() = default;
 
     INT_PTR DoModal(HWND parent) override;
 
@@ -46,13 +46,13 @@ private:
     void StopHostMode();
 
     ScopedHMENU main_menu_;
-    TrayIcon tray_icon_;
+    UiTrayIcon tray_icon_;
 
     std::unique_ptr<HostPool> host_pool_;
     std::unique_ptr<ClientPool> client_pool_;
     ClientConfig config_;
 
-    DISALLOW_COPY_AND_ASSIGN(MainDialog);
+    DISALLOW_COPY_AND_ASSIGN(UiMainDialog);
 };
 
 } // namespace aspia

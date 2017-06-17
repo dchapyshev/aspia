@@ -22,7 +22,7 @@ static const int kScrollBorder = 15;
 static const uint8_t kWheelMask =
     proto::PointerEvent::WHEEL_DOWN | proto::PointerEvent::WHEEL_UP;
 
-VideoWindow::VideoWindow(Delegate* delegate) :
+UiVideoWindow::UiVideoWindow(Delegate* delegate) :
     delegate_(delegate),
     background_brush_(CreateSolidBrush(RGB(25, 25, 25))),
     scroll_timer_(kScrollTimerId)
@@ -30,7 +30,7 @@ VideoWindow::VideoWindow(Delegate* delegate) :
     // Nothing
 }
 
-void VideoWindow::FillBackgroundRect(HDC paint_dc, const DesktopRect& rect)
+void UiVideoWindow::FillBackgroundRect(HDC paint_dc, const DesktopRect& rect)
 {
     if (!rect.IsEmpty())
     {
@@ -40,7 +40,7 @@ void VideoWindow::FillBackgroundRect(HDC paint_dc, const DesktopRect& rect)
     }
 }
 
-void VideoWindow::DrawBackground(HDC paint_dc, const DesktopRect& paint_rect)
+void UiVideoWindow::DrawBackground(HDC paint_dc, const DesktopRect& paint_rect)
 {
     DesktopRect left_rect =
         DesktopRect::MakeLTRB(paint_rect.Left(),
@@ -72,7 +72,7 @@ void VideoWindow::DrawBackground(HDC paint_dc, const DesktopRect& paint_rect)
     FillBackgroundRect(paint_dc, bottom_rect);
 }
 
-void VideoWindow::OnPaint()
+void UiVideoWindow::OnPaint()
 {
     PAINTSTRUCT ps;
     HDC paint_dc = BeginPaint(hwnd(), &ps);
@@ -107,7 +107,7 @@ void VideoWindow::OnPaint()
     EndPaint(hwnd(), &ps);
 }
 
-void VideoWindow::OnSize()
+void UiVideoWindow::OnSize()
 {
     if (!frame_)
         return;
@@ -136,7 +136,7 @@ void VideoWindow::OnSize()
     UpdateScrollBars(width, height);
 }
 
-void VideoWindow::OnMouse(UINT msg, WPARAM wParam, LPARAM lParam)
+void UiVideoWindow::OnMouse(UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if (!frame_ || !has_focus_)
         return;
@@ -242,12 +242,12 @@ void VideoWindow::OnMouse(UINT msg, WPARAM wParam, LPARAM lParam)
     }
 }
 
-void VideoWindow::OnMouseLeave()
+void UiVideoWindow::OnMouseLeave()
 {
     has_mouse_ = false;
 }
 
-LRESULT VideoWindow::OnTimer(UINT_PTR event_id)
+LRESULT UiVideoWindow::OnTimer(UINT_PTR event_id)
 {
     switch (event_id)
     {
@@ -264,7 +264,7 @@ LRESULT VideoWindow::OnTimer(UINT_PTR event_id)
     return 0;
 }
 
-void VideoWindow::OnHScroll(UINT code, UINT pos)
+void UiVideoWindow::OnHScroll(UINT code, UINT pos)
 {
     switch (code)
     {
@@ -291,7 +291,7 @@ void VideoWindow::OnHScroll(UINT code, UINT pos)
     }
 }
 
-void VideoWindow::OnVScroll(UINT code, UINT pos)
+void UiVideoWindow::OnVScroll(UINT code, UINT pos)
 {
     switch (code)
     {
@@ -318,7 +318,7 @@ void VideoWindow::OnVScroll(UINT code, UINT pos)
     }
 }
 
-void VideoWindow::UpdateScrollBars(int width, int height)
+void UiVideoWindow::UpdateScrollBars(int width, int height)
 {
     int scroolbar_width = 0;
     int scroolbar_height = 0;
@@ -346,7 +346,7 @@ void VideoWindow::UpdateScrollBars(int width, int height)
     InvalidateRect(hwnd(), nullptr, FALSE);
 }
 
-bool VideoWindow::Scroll(int delta_x, int delta_y)
+bool UiVideoWindow::Scroll(int delta_x, int delta_y)
 {
     if (!frame_)
         return false;
@@ -385,17 +385,17 @@ bool VideoWindow::Scroll(int delta_x, int delta_y)
     return false;
 }
 
-DesktopFrame* VideoWindow::Frame()
+DesktopFrame* UiVideoWindow::Frame()
 {
     return frame_.get();
 }
 
-void VideoWindow::DrawFrame()
+void UiVideoWindow::DrawFrame()
 {
     InvalidateRect(hwnd(), nullptr, FALSE);
 }
 
-DesktopSize VideoWindow::FrameSize()
+DesktopSize UiVideoWindow::FrameSize()
 {
     if (!frame_)
         return DesktopSize();
@@ -403,12 +403,12 @@ DesktopSize VideoWindow::FrameSize()
     return frame_->Size();
 }
 
-void VideoWindow::HasFocus(bool has)
+void UiVideoWindow::HasFocus(bool has)
 {
     has_focus_ = has;
 }
 
-void VideoWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& format)
+void UiVideoWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& format)
 {
     screen_dc_.Reset(CreateCompatibleDC(nullptr));
     memory_dc_.Reset(CreateCompatibleDC(screen_dc_));
@@ -418,7 +418,7 @@ void VideoWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& format
     PostMessageW(hwnd(), WM_SIZE, 0, 0);
 }
 
-bool VideoWindow::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
+bool UiVideoWindow::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
 {
     switch (msg)
     {

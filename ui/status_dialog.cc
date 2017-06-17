@@ -17,18 +17,18 @@
 
 namespace aspia {
 
-INT_PTR StatusDialog::DoModal(HWND parent, Delegate* delegate)
+INT_PTR UiStatusDialog::DoModal(HWND parent, Delegate* delegate)
 {
     delegate_ = delegate;
     return DoModal(parent);
 }
 
-INT_PTR StatusDialog::DoModal(HWND parent)
+INT_PTR UiStatusDialog::DoModal(HWND parent)
 {
-    return Run(Module::Current(), parent, IDD_STATUS);
+    return Run(UiModule::Current(), parent, IDD_STATUS);
 }
 
-void StatusDialog::SetDestonation(const std::wstring& address, uint16_t port)
+void UiStatusDialog::SetDestonation(const std::wstring& address, uint16_t port)
 {
     std::wstring format = module().string(IDS_CONNECTION);
 
@@ -39,22 +39,22 @@ void StatusDialog::SetDestonation(const std::wstring& address, uint16_t port)
 }
 
 // static
-std::wstring StatusDialog::StatusToString(proto::Status status)
+std::wstring UiStatusDialog::StatusToString(proto::Status status)
 {
     UINT resource_id = status + IDS_STATUS_MIN;
 
     if (!Status_IsValid(status))
         resource_id = IDS_STATUS_UNKNOWN;
 
-    return Module().string(resource_id);
+    return UiModule().string(resource_id);
 }
 
-void StatusDialog::SetStatus(proto::Status status)
+void UiStatusDialog::SetStatus(proto::Status status)
 {
     AddMessage(StatusToString(status));
 }
 
-void StatusDialog::OnInitDialog()
+void UiStatusDialog::OnInitDialog()
 {
     SetForegroundWindowEx();
     SetIcon(IDI_MAIN);
@@ -63,9 +63,9 @@ void StatusDialog::OnInitDialog()
     delegate_->OnStatusDialogOpen();
 }
 
-void StatusDialog::AddMessage(const std::wstring& message)
+void UiStatusDialog::AddMessage(const std::wstring& message)
 {
-    Edit status_edit(GetDlgItem(IDC_STATUS_EDIT));
+    UiEdit status_edit(GetDlgItem(IDC_STATUS_EDIT));
 
     WCHAR buffer[128];
 
@@ -85,7 +85,7 @@ void StatusDialog::AddMessage(const std::wstring& message)
     status_edit.AppendText(L"\r\n");
 }
 
-INT_PTR StatusDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+INT_PTR UiStatusDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
     {

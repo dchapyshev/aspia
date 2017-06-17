@@ -11,12 +11,12 @@
 
 namespace aspia {
 
-INT_PTR PowerManageDialog::DoModal(HWND parent)
+INT_PTR UiPowerManageDialog::DoModal(HWND parent)
 {
-    return Run(Module::Current(), parent, IDD_POWER);
+    return Run(UiModule::Current(), parent, IDD_POWER);
 }
 
-INT_PTR PowerManageDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+INT_PTR UiPowerManageDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
     {

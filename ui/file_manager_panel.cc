@@ -18,12 +18,12 @@
 
 namespace aspia {
 
-bool FileManagerPanel::CreatePanel(HWND parent, Type type, Delegate* delegate)
+bool UiFileManagerPanel::CreatePanel(HWND parent, Type type, Delegate* delegate)
 {
     delegate_ = delegate;
     type_ = type;
 
-    const Module& module = Module::Current();
+    const UiModule& module = UiModule::Current();
 
     if (type == Type::LOCAL)
     {
@@ -90,10 +90,10 @@ static std::wstring GetDriveDisplayName(const proto::DriveListItem& item)
     switch (item.type())
     {
         case proto::DriveListItem::HOME_FOLDER:
-            return Module::Current().string(IDS_FT_HOME_FOLDER);
+            return UiModule::Current().string(IDS_FT_HOME_FOLDER);
 
         case proto::DriveListItem::DESKTOP_FOLDER:
-            return Module::Current().string(IDS_FT_DESKTOP_FOLDER);
+            return UiModule::Current().string(IDS_FT_DESKTOP_FOLDER);
 
         case proto::DriveListItem::CDROM:
         case proto::DriveListItem::FIXED:
@@ -114,7 +114,7 @@ static std::wstring GetDriveDisplayName(const proto::DriveListItem& item)
     return UNICODEfromUTF8(item.path());
 }
 
-void FileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_list)
+void UiFileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_list)
 {
     address_window_.DeleteAllItems();
     address_imagelist_.RemoveAll();
@@ -174,7 +174,7 @@ static std::wstring SizeToString(uint64_t size)
     static const uint64_t kMB = 1024ULL * 1024ULL;
     static const uint64_t kKB = 1024ULL;
 
-    const Module& module = Module().Current();
+    const UiModule& module = UiModule().Current();
 
     std::wstring units;
     uint64_t divider;
@@ -210,7 +210,7 @@ static std::wstring SizeToString(uint64_t size)
                          units.c_str());
 }
 
-void FileManagerPanel::ReadDirectoryList(std::unique_ptr<proto::DirectoryList> directory_list)
+void UiFileManagerPanel::ReadDirectoryList(std::unique_ptr<proto::DirectoryList> directory_list)
 {
     list_window_.DeleteAllItems();
     list_imagelist_.RemoveAll();
@@ -285,9 +285,9 @@ void FileManagerPanel::ReadDirectoryList(std::unique_ptr<proto::DirectoryList> d
     }
 }
 
-void FileManagerPanel::OnCreate()
+void UiFileManagerPanel::OnCreate()
 {
-    const Module& module = Module().Current();
+    const UiModule& module = UiModule().Current();
 
     HFONT default_font =
         reinterpret_cast<HFONT>(GetStockObject(DEFAULT_GUI_FONT));
@@ -402,7 +402,7 @@ void FileManagerPanel::OnCreate()
     }
 }
 
-void FileManagerPanel::OnDestroy()
+void UiFileManagerPanel::OnDestroy()
 {
     list_window_.DestroyWindow();
     toolbar_window_.DestroyWindow();
@@ -411,7 +411,7 @@ void FileManagerPanel::OnDestroy()
     status_window_.DestroyWindow();
 }
 
-void FileManagerPanel::OnSize(int width, int height)
+void UiFileManagerPanel::OnSize(int width, int height)
 {
     HDWP dwp = BeginDeferWindowPos(5);
 
@@ -466,7 +466,7 @@ void FileManagerPanel::OnSize(int width, int height)
     }
 }
 
-void FileManagerPanel::OnDrawItem(LPDRAWITEMSTRUCT dis)
+void UiFileManagerPanel::OnDrawItem(LPDRAWITEMSTRUCT dis)
 {
     if (dis->hwndItem == title_window_.hwnd() ||
         dis->hwndItem == status_window_.hwnd())
@@ -500,7 +500,7 @@ void FileManagerPanel::OnDrawItem(LPDRAWITEMSTRUCT dis)
     }
 }
 
-void FileManagerPanel::OnGetDispInfo(LPNMHDR phdr)
+void UiFileManagerPanel::OnGetDispInfo(LPNMHDR phdr)
 {
     LPTOOLTIPTEXTW header = reinterpret_cast<LPTOOLTIPTEXTW>(phdr);
     UINT string_id;
@@ -540,13 +540,13 @@ void FileManagerPanel::OnGetDispInfo(LPNMHDR phdr)
             return;
     }
 
-    LoadStringW(Module().Current().Handle(),
+    LoadStringW(UiModule().Current().Handle(),
                 string_id,
                 header->szText,
                 _countof(header->szText));
 }
 
-void FileManagerPanel::OnAddressChanged()
+void UiFileManagerPanel::OnAddressChanged()
 {
     if (!drive_list_)
         return;
@@ -562,7 +562,7 @@ void FileManagerPanel::OnAddressChanged()
     delegate_->OnDirectoryListRequest(type_, drive_list_->item(index).path());
 }
 
-void FileManagerPanel::OnAddressChange(LPNMITEMACTIVATE item_activate)
+void UiFileManagerPanel::OnAddressChange(LPNMITEMACTIVATE item_activate)
 {
     if (!directory_list_)
         return;
@@ -584,7 +584,7 @@ void FileManagerPanel::OnAddressChange(LPNMITEMACTIVATE item_activate)
     }
 }
 
-bool FileManagerPanel::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
+bool UiFileManagerPanel::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
 {
     switch (msg)
     {

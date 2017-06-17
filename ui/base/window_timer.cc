@@ -9,17 +9,17 @@
 
 namespace aspia {
 
-WindowTimer::WindowTimer(UINT_PTR id) : id_(id)
+UiWindowTimer::UiWindowTimer(UINT_PTR id) : id_(id)
 {
     // Nothing
 }
 
-WindowTimer::~WindowTimer()
+UiWindowTimer::~UiWindowTimer()
 {
     Stop();
 }
 
-void WindowTimer::Start(HWND window, UINT elapse)
+void UiWindowTimer::Start(HWND window, UINT elapse)
 {
     if (!active_)
     {
@@ -30,7 +30,7 @@ void WindowTimer::Start(HWND window, UINT elapse)
     }
 }
 
-void WindowTimer::Stop()
+void UiWindowTimer::Stop()
 {
     if (active_)
     {

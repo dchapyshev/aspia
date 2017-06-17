@@ -12,12 +12,12 @@
 
 namespace aspia {
 
-Edit::Edit(HWND hwnd)
+UiEdit::UiEdit(HWND hwnd)
 {
     Attach(hwnd);
 }
 
-bool Edit::Create(HWND parent, DWORD style)
+bool UiEdit::Create(HWND parent, DWORD style)
 {
     HINSTANCE instance =
         reinterpret_cast<HINSTANCE>(GetWindowLongPtrW(parent, GWLP_HINSTANCE));
@@ -40,7 +40,7 @@ bool Edit::Create(HWND parent, DWORD style)
     return false;
 }
 
-void Edit::AppendText(const std::wstring& text)
+void UiEdit::AppendText(const std::wstring& text)
 {
     int length = GetWindowTextLengthW(hwnd());
 

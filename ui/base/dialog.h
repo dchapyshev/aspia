@@ -13,16 +13,16 @@
 
 namespace aspia {
 
-class Dialog : public Window
+class UiDialog : public UiWindow
 {
 public:
-    Dialog() = default;
-    ~Dialog() = default;
+    UiDialog() = default;
+    ~UiDialog() = default;
 
-    bool Create(HWND parent, UINT resource_id, const Module& module);
+    bool Create(HWND parent, UINT resource_id, const UiModule& module);
 
     // Returns module instance from which the dialog is loaded.
-    const Module& module();
+    const UiModule& module();
 
     void SetIcon(UINT resource_id);
 
@@ -53,7 +53,7 @@ protected:
 private:
     static INT_PTR CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
-    Module module_;
+    UiModule module_;
     ScopedHICON small_icon_;
     ScopedHICON big_icon_;
 };

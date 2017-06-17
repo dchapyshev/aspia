@@ -14,10 +14,10 @@
 
 namespace aspia {
 
-class StatusDialog : public ModalDialog
+class UiStatusDialog : public UiModalDialog
 {
 public:
-    StatusDialog() = default;
+    UiStatusDialog() = default;
 
     class Delegate
     {
@@ -40,7 +40,7 @@ private:
 
     Delegate* delegate_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(StatusDialog);
+    DISALLOW_COPY_AND_ASSIGN(UiStatusDialog);
 };
 
 } // namespace aspia

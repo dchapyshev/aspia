@@ -12,7 +12,7 @@
 
 namespace aspia {
 
-class FileReplaceDialog : public ModalDialog
+class FileReplaceDialog : public UiModalDialog
 {
 public:
     FileReplaceDialog() = default;

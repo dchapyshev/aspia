@@ -16,7 +16,7 @@
 
 namespace aspia {
 
-class VideoWindow : public ChildWindow
+class UiVideoWindow : public UiChildWindow
 {
 public:
     class Delegate
@@ -25,7 +25,7 @@ public:
         virtual void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) = 0;
     };
 
-    explicit VideoWindow(Delegate* delegate);
+    explicit UiVideoWindow(Delegate* delegate);
 
     DesktopFrame* Frame();
     void DrawFrame();
@@ -71,10 +71,10 @@ private:
     bool has_mouse_ = false; // Is the cursor over the window?
     bool has_focus_ = false; // Is the window in focus?
 
-    WindowTimer scroll_timer_;
+    UiWindowTimer scroll_timer_;
     DesktopPoint scroll_delta_;
 
-    DISALLOW_COPY_AND_ASSIGN(VideoWindow);
+    DISALLOW_COPY_AND_ASSIGN(UiVideoWindow);
 };
 
 } // namespace aspia

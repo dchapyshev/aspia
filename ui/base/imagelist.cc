@@ -38,12 +38,12 @@ static int GetICLColor()
     return ILC_COLOR32;
 }
 
-ImageList::~ImageList()
+UiImageList::~UiImageList()
 {
     Close();
 }
 
-bool ImageList::Create(int width, int height, UINT flags, int initial, int grow)
+bool UiImageList::Create(int width, int height, UINT flags, int initial, int grow)
 {
     Close();
 
@@ -54,7 +54,7 @@ bool ImageList::Create(int width, int height, UINT flags, int initial, int grow)
     return true;
 }
 
-bool ImageList::CreateSmall()
+bool UiImageList::CreateSmall()
 {
     return Create(GetSystemMetrics(SM_CXSMICON),
                   GetSystemMetrics(SM_CYSMICON),
@@ -62,17 +62,17 @@ bool ImageList::CreateSmall()
                   1, 1);
 }
 
-void ImageList::RemoveAll()
+void UiImageList::RemoveAll()
 {
     ImageList_RemoveAll(list_);
 }
 
-int ImageList::AddIcon(HICON icon)
+int UiImageList::AddIcon(HICON icon)
 {
     return ImageList_AddIcon(list_, icon);
 }
 
-int ImageList::AddIcon(const Module& module, UINT resource_id)
+int UiImageList::AddIcon(const UiModule& module, UINT resource_id)
 {
     int width = 0;
     int height = 0;
@@ -86,7 +86,7 @@ int ImageList::AddIcon(const Module& module, UINT resource_id)
     return -1;
 }
 
-void ImageList::Close()
+void UiImageList::Close()
 {
     if (list_)
     {

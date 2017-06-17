@@ -15,14 +15,14 @@
 
 namespace aspia {
 
-class UserPropDialog : public ModalDialog
+class UiUserPropDialog : public UiModalDialog
 {
 public:
     enum class Mode { Add, Edit };
 
-    UserPropDialog(Mode mode,
-                   proto::HostUser* user,
-                   const HostUserList& user_list);
+    UiUserPropDialog(Mode mode,
+                     proto::HostUser* user,
+                     const HostUserList& user_list);
 
     INT_PTR DoModal(HWND parent) override;
 
@@ -33,7 +33,7 @@ private:
     void OnOkButton();
     void OnPasswordEditDblClick();
 
-    void InsertSessionType(ListView& list,
+    void InsertSessionType(UiListView& list,
                            proto::SessionType session_type,
                            UINT string_id);
 
@@ -48,7 +48,7 @@ private:
     const HostUserList& user_list_;
     bool password_changed_ = true;
 
-    DISALLOW_COPY_AND_ASSIGN(UserPropDialog);
+    DISALLOW_COPY_AND_ASSIGN(UiUserPropDialog);
 };
 
 } // namespace aspia

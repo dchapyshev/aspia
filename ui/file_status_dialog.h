@@ -14,8 +14,8 @@
 
 namespace aspia {
 
-class FileStatusDialog :
-    private Dialog,
+class UiFileStatusDialog :
+    private UiDialog,
     private MessageLoopThread::Delegate
 {
 public:
@@ -25,8 +25,8 @@ public:
         virtual void OnWindowClose() = 0;
     };
 
-    FileStatusDialog(Delegate* delegate);
-    ~FileStatusDialog();
+    UiFileStatusDialog(Delegate* delegate);
+    ~UiFileStatusDialog();
 
     void OnDirectoryOpen(const std::wstring& path);
     void OnFileSend(const std::wstring& path);
@@ -48,7 +48,7 @@ private:
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileStatusDialog);
+    DISALLOW_COPY_AND_ASSIGN(UiFileStatusDialog);
 };
 
 } // namespace aspia

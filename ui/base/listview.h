@@ -15,11 +15,11 @@
 
 namespace aspia {
 
-class ListView : public Window
+class UiListView : public UiWindow
 {
 public:
-    ListView() = default;
-    ListView(HWND hwnd);
+    UiListView() = default;
+    UiListView(HWND hwnd);
 
     bool Create(HWND parent, DWORD ex_style, DWORD style, HINSTANCE instance);
 

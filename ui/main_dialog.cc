@@ -25,9 +25,9 @@
 
 namespace aspia {
 
-INT_PTR MainDialog::DoModal(HWND parent)
+INT_PTR UiMainDialog::DoModal(HWND parent)
 {
-    return Run(Module::Current(), parent, IDD_MAIN);
+    return Run(UiModule::Current(), parent, IDD_MAIN);
 }
 
 static std::wstring
@@ -44,9 +44,9 @@ AddressToString(const LPSOCKADDR src)
                          addr->sin_addr.S_un.S_un_b.s_b4);
 }
 
-void MainDialog::InitAddressesList()
+void UiMainDialog::InitAddressesList()
 {
-    ListView list(GetDlgItem(IDC_IP_LIST));
+    UiListView list(GetDlgItem(IDC_IP_LIST));
 
     list.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
     list.AddOnlyOneColumn();
@@ -93,7 +93,7 @@ void MainDialog::InitAddressesList()
     }
 }
 
-void MainDialog::InitSessionTypesCombo()
+void UiMainDialog::InitSessionTypesCombo()
 {
     HWND combo = GetDlgItem(IDC_SESSION_TYPE_COMBO);
 
@@ -116,13 +116,13 @@ void MainDialog::InitSessionTypesCombo()
     ComboBox_SelItemWithData(combo, proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
 }
 
-proto::SessionType MainDialog::GetSelectedSessionType()
+proto::SessionType UiMainDialog::GetSelectedSessionType()
 {
     HWND combo = GetDlgItem(IDC_SESSION_TYPE_COMBO);
     return static_cast<proto::SessionType>(ComboBox_CurItemData(combo));
 }
 
-void MainDialog::OnInitDialog()
+void UiMainDialog::OnInitDialog()
 {
     SetIcon(IDI_MAIN);
 
@@ -165,7 +165,7 @@ void MainDialog::OnInitDialog()
     SetForegroundWindowEx();
 }
 
-void MainDialog::OnDefaultPortClicked()
+void UiMainDialog::OnDefaultPortClicked()
 {
     HWND port = GetDlgItem(IDC_SERVER_PORT_EDIT);
 
@@ -180,14 +180,14 @@ void MainDialog::OnDefaultPortClicked()
     }
 }
 
-void MainDialog::OnClose()
+void UiMainDialog::OnClose()
 {
     host_pool_.reset();
     client_pool_.reset();
     EndDialog();
 }
 
-void MainDialog::StopHostMode()
+void UiMainDialog::StopHostMode()
 {
     if (host_pool_)
     {
@@ -196,7 +196,7 @@ void MainDialog::StopHostMode()
     }
 }
 
-void MainDialog::OnStartServerButton()
+void UiMainDialog::OnStartServerButton()
 {
     if (host_pool_)
     {
@@ -215,7 +215,7 @@ void MainDialog::OnStartServerButton()
     host_pool_.reset();
 }
 
-void MainDialog::OnSessionTypeChanged()
+void UiMainDialog::OnSessionTypeChanged()
 {
     proto::SessionType session_type = GetSelectedSessionType();
 
@@ -235,7 +235,7 @@ void MainDialog::OnSessionTypeChanged()
     }
 }
 
-void MainDialog::OnSettingsButton()
+void UiMainDialog::OnSettingsButton()
 {
     proto::SessionType session_type = GetSelectedSessionType();
 
@@ -244,7 +244,7 @@ void MainDialog::OnSettingsButton()
         case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
         {
-            SettingsDialog dialog;
+            UiSettingsDialog dialog;
 
             if (dialog.DoModal(hwnd(),
                                session_type,
@@ -260,7 +260,7 @@ void MainDialog::OnSettingsButton()
     }
 }
 
-void MainDialog::OnConnectButton()
+void UiMainDialog::OnConnectButton()
 {
     proto::SessionType session_type = GetSelectedSessionType();
 
@@ -277,7 +277,7 @@ void MainDialog::OnConnectButton()
     }
 }
 
-void MainDialog::OnHelpButton()
+void UiMainDialog::OnHelpButton()
 {
     ShellExecuteW(nullptr,
                   L"open",
@@ -287,7 +287,7 @@ void MainDialog::OnHelpButton()
                   SW_SHOWNORMAL);
 }
 
-void MainDialog::OnShowHideButton()
+void UiMainDialog::OnShowHideButton()
 {
     if (IsWindowVisible(hwnd()))
         ShowWindow(hwnd(), SW_HIDE);
@@ -295,7 +295,7 @@ void MainDialog::OnShowHideButton()
         ShowWindow(hwnd(), SW_SHOWNORMAL);
 }
 
-void MainDialog::OnInstallServiceButton()
+void UiMainDialog::OnInstallServiceButton()
 {
     if (host_pool_)
     {
@@ -310,7 +310,7 @@ void MainDialog::OnInstallServiceButton()
     }
 }
 
-void MainDialog::OnRemoveServiceButton()
+void UiMainDialog::OnRemoveServiceButton()
 {
     if (HostService::Remove())
     {
@@ -320,7 +320,7 @@ void MainDialog::OnRemoveServiceButton()
     }
 }
 
-INT_PTR MainDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+INT_PTR UiMainDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
     {
@@ -357,11 +357,11 @@ INT_PTR MainDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
                     break;
 
                 case ID_ABOUT:
-                    AboutDialog().DoModal(hwnd());
+                    UiAboutDialog().DoModal(hwnd());
                     break;
 
                 case ID_USERS:
-                    UsersDialog().DoModal(hwnd());
+                    UiUsersDialog().DoModal(hwnd());
                     break;
 
                 case ID_SHOWHIDE:

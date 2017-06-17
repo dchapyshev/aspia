@@ -47,7 +47,7 @@ void FileTransferSessionClient::OnPipeChannelConnect(uint32_t user_data)
         return;
     }
 
-    status_dialog_.reset(new FileStatusDialog(this));
+    status_dialog_.reset(new UiFileStatusDialog(this));
 }
 
 void FileTransferSessionClient::OnPipeChannelDisconnect()

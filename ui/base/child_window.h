@@ -12,11 +12,11 @@
 
 namespace aspia {
 
-class ChildWindow : public Window
+class UiChildWindow : public UiWindow
 {
 public:
-    ChildWindow() = default;
-    virtual ~ChildWindow() = default;
+    UiChildWindow() = default;
+    virtual ~UiChildWindow() = default;
 
     bool Create(HWND parent, DWORD style, const std::wstring& title = std::wstring());
 
@@ -30,7 +30,7 @@ private:
     bool RegisterWindowClass(HINSTANCE instance);
     static LRESULT CALLBACK WindowProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
 
-    DISALLOW_COPY_AND_ASSIGN(ChildWindow);
+    DISALLOW_COPY_AND_ASSIGN(UiChildWindow);
 };
 
 } // namespace aspia

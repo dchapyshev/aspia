@@ -12,16 +12,16 @@
 
 namespace aspia {
 
-class Module
+class UiModule
 {
 public:
-    Module() = default;
-    Module(const Module& other);
-    ~Module() = default;
+    UiModule() = default;
+    UiModule(const UiModule& other);
+    ~UiModule() = default;
 
-    static Module Current();
+    static UiModule Current();
 
-    Module& operator=(const Module& other);
+    UiModule& operator=(const UiModule& other);
 
     HINSTANCE Handle() const;
 
@@ -30,7 +30,7 @@ public:
     HMENU menu(UINT resource_id) const;
 
 private:
-    explicit Module(HINSTANCE instance);
+    explicit UiModule(HINSTANCE instance);
 
     HINSTANCE instance_ = nullptr;
 };

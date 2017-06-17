@@ -12,7 +12,7 @@
 
 namespace aspia {
 
-ListView::ListView(HWND hwnd)
+UiListView::UiListView(HWND hwnd)
 {
     Attach(hwnd);
 
@@ -23,7 +23,7 @@ ListView::ListView(HWND hwnd)
     }
 }
 
-bool ListView::Create(HWND parent, DWORD ex_style, DWORD style, HINSTANCE instance)
+bool UiListView::Create(HWND parent, DWORD ex_style, DWORD style, HINSTANCE instance)
 {
     Attach(CreateWindowExW(ex_style,
                            WC_LISTVIEWW,
@@ -50,7 +50,7 @@ bool ListView::Create(HWND parent, DWORD ex_style, DWORD style, HINSTANCE instan
     return false;
 }
 
-int ListView::GetColumnCount()
+int UiListView::GetColumnCount()
 {
     HWND header_window = ListView_GetHeader(hwnd());
 
@@ -60,12 +60,12 @@ int ListView::GetColumnCount()
     return Header_GetItemCount(header_window);
 }
 
-int ListView::GetItemCount()
+int UiListView::GetItemCount()
 {
     return ListView_GetItemCount(hwnd());
 }
 
-void ListView::AddOnlyOneColumn(const std::wstring& title)
+void UiListView::AddOnlyOneColumn(const std::wstring& title)
 {
     RECT list_rect = { 0 };
     GetClientRect(hwnd(), &list_rect);
@@ -80,7 +80,7 @@ void ListView::AddOnlyOneColumn(const std::wstring& title)
     ListView_InsertColumn(hwnd(), 0, &column);
 }
 
-void ListView::AddColumn(const std::wstring& title, int width)
+void UiListView::AddColumn(const std::wstring& title, int width)
 {
     int column_count = GetColumnCount();
 
@@ -94,7 +94,7 @@ void ListView::AddColumn(const std::wstring& title, int width)
     ListView_InsertColumn(hwnd(), column_count, &column);
 }
 
-void ListView::SetItemText(int item_index, int column_index, const std::wstring& text)
+void UiListView::SetItemText(int item_index, int column_index, const std::wstring& text)
 {
     ListView_SetItemText(hwnd(),
                          item_index,
@@ -102,22 +102,22 @@ void ListView::SetItemText(int item_index, int column_index, const std::wstring&
                          const_cast<LPWSTR>(text.c_str()));
 }
 
-void ListView::DeleteAllItems()
+void UiListView::DeleteAllItems()
 {
     ListView_DeleteAllItems(hwnd());
 }
 
-void ListView::SetCheckState(int item_index, bool checked)
+void UiListView::SetCheckState(int item_index, bool checked)
 {
     ListView_SetCheckState(hwnd(), item_index, checked);
 }
 
-bool ListView::GetCheckState(int item_index)
+bool UiListView::GetCheckState(int item_index)
 {
     return !!ListView_GetCheckState(hwnd(), item_index);
 }
 
-bool ListView::ModifyExtendedListViewStyle(DWORD remove, DWORD add)
+bool UiListView::ModifyExtendedListViewStyle(DWORD remove, DWORD add)
 {
     DWORD style = ListView_GetExtendedListViewStyle(hwnd());
 
@@ -131,17 +131,17 @@ bool ListView::ModifyExtendedListViewStyle(DWORD remove, DWORD add)
     return true;
 }
 
-void ListView::SetImageList(HIMAGELIST imagelist, int type)
+void UiListView::SetImageList(HIMAGELIST imagelist, int type)
 {
     ListView_SetImageList(hwnd(), imagelist, type);
 }
 
-int ListView::GetFirstSelectedItem()
+int UiListView::GetFirstSelectedItem()
 {
     return ListView_GetNextItem(hwnd(), -1, LVNI_SELECTED);
 }
 
-int ListView::GetItemUnderPointer()
+int UiListView::GetItemUnderPointer()
 {
     LVHITTESTINFO hti;
     memset(&hti, 0, sizeof(hti));

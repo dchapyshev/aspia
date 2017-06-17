@@ -14,13 +14,13 @@
 
 namespace aspia {
 
-class ModalDialog :
-    public Dialog,
+class UiModalDialog :
+    public UiDialog,
     private MessageLoopForUI::Dispatcher
 {
 public:
-    ModalDialog() = default;
-    virtual ~ModalDialog() = default;
+    UiModalDialog() = default;
+    virtual ~UiModalDialog() = default;
 
     virtual INT_PTR DoModal(HWND parent) = 0;
 
@@ -30,7 +30,7 @@ public:
 
 protected:
     // Runs the modal dialog in the current message loop.
-    INT_PTR Run(const Module& module, HWND parent, UINT resource_id);
+    INT_PTR Run(const UiModule& module, HWND parent, UINT resource_id);
 
 private:
     bool Dispatch(const NativeEvent& event) override;
@@ -38,7 +38,7 @@ private:
     bool end_dialog_ = false;
     INT_PTR result_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(ModalDialog);
+    DISALLOW_COPY_AND_ASSIGN(UiModalDialog);
 };
 
 } // namespace aspia

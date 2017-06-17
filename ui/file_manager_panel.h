@@ -16,11 +16,11 @@
 
 namespace aspia {
 
-class FileManagerPanel : public ChildWindow
+class UiFileManagerPanel : public UiChildWindow
 {
 public:
-    FileManagerPanel() = default;
-    virtual ~FileManagerPanel() = default;
+    UiFileManagerPanel() = default;
+    virtual ~UiFileManagerPanel() = default;
 
     enum class Type { UNKNOWN, LOCAL, REMOTE };
 
@@ -52,22 +52,22 @@ private:
     Delegate* delegate_ = nullptr;
     std::wstring name_;
 
-    Window title_window_;
+    UiWindow title_window_;
 
     std::unique_ptr<proto::DirectoryList> directory_list_;
-    ListView list_window_;
-    ImageList list_imagelist_;
+    UiListView list_window_;
+    UiImageList list_imagelist_;
 
-    Window toolbar_window_;
-    ImageList toolbar_imagelist_;
+    UiWindow toolbar_window_;
+    UiImageList toolbar_imagelist_;
 
     std::unique_ptr<proto::DriveList> drive_list_;
-    ComboBoxEx address_window_;
-    ImageList address_imagelist_;
+    UiComboBoxEx address_window_;
+    UiImageList address_imagelist_;
 
-    Window status_window_;
+    UiWindow status_window_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileManagerPanel);
+    DISALLOW_COPY_AND_ASSIGN(UiFileManagerPanel);
 };
 
 } // namespace aspia

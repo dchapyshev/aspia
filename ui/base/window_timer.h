@@ -12,11 +12,11 @@
 
 namespace aspia {
 
-class WindowTimer
+class UiWindowTimer
 {
 public:
-    explicit WindowTimer(UINT_PTR id);
-    ~WindowTimer();
+    explicit UiWindowTimer(UINT_PTR id);
+    ~UiWindowTimer();
 
     void Start(HWND window, UINT elapse = 25);
     void Stop();
@@ -26,7 +26,7 @@ private:
     UINT_PTR id_;
     bool active_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(WindowTimer);
+    DISALLOW_COPY_AND_ASSIGN(UiWindowTimer);
 };
 
 } // namespace aspia

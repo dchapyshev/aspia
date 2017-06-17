@@ -15,18 +15,18 @@ namespace aspia {
 static const int kDefaultWindowWidth = 800;
 static const int kDefaultWindowHeight = 600;
 
-FileManager::FileManager(Delegate* delegate) :
+UiFileManager::UiFileManager(Delegate* delegate) :
     delegate_(delegate)
 {
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
-FileManager::~FileManager()
+UiFileManager::~UiFileManager()
 {
     ui_thread_.Stop();
 }
 
-void FileManager::OnBeforeThreadRunning()
+void UiFileManager::OnBeforeThreadRunning()
 {
     runner_ = ui_thread_.message_loop_proxy();
     DCHECK(runner_);
@@ -41,87 +41,87 @@ void FileManager::OnBeforeThreadRunning()
     }
     else
     {
-        ScopedHICON icon(Module::Current().icon(IDI_MAIN,
-                                                GetSystemMetrics(SM_CXSMICON),
-                                                GetSystemMetrics(SM_CYSMICON),
-                                                LR_CREATEDIBSECTION));
+        ScopedHICON icon(UiModule::Current().icon(IDI_MAIN,
+                                                  GetSystemMetrics(SM_CXSMICON),
+                                                  GetSystemMetrics(SM_CYSMICON),
+                                                  LR_CREATEDIBSECTION));
         SetIcon(icon);
         SetCursor(LoadCursorW(nullptr, IDC_ARROW));
     }
 }
 
-void FileManager::OnAfterThreadRunning()
+void UiFileManager::OnAfterThreadRunning()
 {
     DestroyWindow();
 }
 
-void FileManager::ReadDriveList(PanelType panel_type,
-                                std::unique_ptr<proto::DriveList> drive_list)
+void UiFileManager::ReadDriveList(PanelType panel_type,
+                                  std::unique_ptr<proto::DriveList> drive_list)
 {
-    if (panel_type == FileManager::PanelType::REMOTE)
+    if (panel_type == UiFileManager::PanelType::REMOTE)
     {
         remote_panel_.ReadDriveList(std::move(drive_list));
     }
     else
     {
-        DCHECK(panel_type == FileManager::PanelType::LOCAL);
+        DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
         local_panel_.ReadDriveList(std::move(drive_list));
     }
 }
 
-void FileManager::ReadDirectoryList(PanelType panel_type,
-                                    std::unique_ptr<proto::DirectoryList> directory_list)
+void UiFileManager::ReadDirectoryList(PanelType panel_type,
+                                      std::unique_ptr<proto::DirectoryList> directory_list)
 {
-    if (panel_type == FileManager::PanelType::REMOTE)
+    if (panel_type == UiFileManager::PanelType::REMOTE)
     {
         remote_panel_.ReadDirectoryList(std::move(directory_list));
     }
     else
     {
-        DCHECK(panel_type == FileManager::PanelType::LOCAL);
+        DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
         local_panel_.ReadDirectoryList(std::move(directory_list));
     }
 }
 
-void FileManager::OnDriveListRequest(FileManager::PanelType panel_type)
+void UiFileManager::OnDriveListRequest(UiFileManager::PanelType panel_type)
 {
     delegate_->OnDriveListRequest(panel_type);
 }
 
-void FileManager::OnDirectoryListRequest(PanelType type, const std::string& path)
+void UiFileManager::OnDirectoryListRequest(PanelType type, const std::string& path)
 {
     delegate_->OnDirectoryListRequest(type, path);
 }
 
-void FileManager::OnCreate()
+void UiFileManager::OnCreate()
 {
     splitter_.CreateWithProportion(hwnd());
 
-    local_panel_.CreatePanel(splitter_, FileManager::PanelType::LOCAL, this);
-    remote_panel_.CreatePanel(splitter_, FileManager::PanelType::REMOTE, this);
+    local_panel_.CreatePanel(splitter_, UiFileManager::PanelType::LOCAL, this);
+    remote_panel_.CreatePanel(splitter_, UiFileManager::PanelType::REMOTE, this);
 
     splitter_.SetPanels(local_panel_, remote_panel_);
 
     MoveWindow(hwnd(), 0, 0, kDefaultWindowWidth, kDefaultWindowHeight, TRUE);
     CenterWindow();
 
-    runner_->PostTask(std::bind(&FileManager::OnDriveListRequest,
+    runner_->PostTask(std::bind(&UiFileManager::OnDriveListRequest,
                                 this,
-                                FileManager::PanelType::LOCAL));
+                                UiFileManager::PanelType::LOCAL));
 
-    runner_->PostTask(std::bind(&FileManager::OnDriveListRequest,
+    runner_->PostTask(std::bind(&UiFileManager::OnDriveListRequest,
                                 this,
-                                FileManager::PanelType::REMOTE));
+                                UiFileManager::PanelType::REMOTE));
 }
 
-void FileManager::OnDestroy()
+void UiFileManager::OnDestroy()
 {
     local_panel_.DestroyWindow();
     remote_panel_.DestroyWindow();
     splitter_.DestroyWindow();
 }
 
-void FileManager::OnSize(int width, int height)
+void UiFileManager::OnSize(int width, int height)
 {
     HDWP dwp = BeginDeferWindowPos(1);
 
@@ -140,18 +140,18 @@ void FileManager::OnSize(int width, int height)
     }
 }
 
-void FileManager::OnGetMinMaxInfo(LPMINMAXINFO mmi)
+void UiFileManager::OnGetMinMaxInfo(LPMINMAXINFO mmi)
 {
     mmi->ptMinTrackSize.x = 500;
     mmi->ptMinTrackSize.y = 400;
 }
 
-void FileManager::OnClose()
+void UiFileManager::OnClose()
 {
     delegate_->OnWindowClose();
 }
 
-bool FileManager::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
+bool UiFileManager::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
 {
     switch (msg)
     {

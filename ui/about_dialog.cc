@@ -14,12 +14,12 @@
 
 namespace aspia {
 
-INT_PTR AboutDialog::DoModal(HWND parent)
+INT_PTR UiAboutDialog::DoModal(HWND parent)
 {
-    return Run(Module::Current(), parent, IDD_ABOUT);
+    return Run(UiModule::Current(), parent, IDD_ABOUT);
 }
 
-INT_PTR AboutDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+INT_PTR UiAboutDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
     {

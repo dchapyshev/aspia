@@ -37,21 +37,21 @@ static const int kMaxCompressRatio = 9;
 static const int kMinCompressRatio = 1;
 static const int kDefCompressRatio = 6;
 
-INT_PTR SettingsDialog::DoModal(HWND parent,
-                                proto::SessionType session_type,
-                                const proto::DesktopSessionConfig& config)
+INT_PTR UiSettingsDialog::DoModal(HWND parent,
+                                  proto::SessionType session_type,
+                                  const proto::DesktopSessionConfig& config)
 {
     session_type_ = session_type;
     config_.CopyFrom(config);
     return DoModal(parent);
 }
 
-INT_PTR SettingsDialog::DoModal(HWND parent)
+INT_PTR UiSettingsDialog::DoModal(HWND parent)
 {
-    return Run(Module::Current(), parent, IDD_SETTINGS);
+    return Run(UiModule::Current(), parent, IDD_SETTINGS);
 }
 
-void SettingsDialog::InitColorDepthList()
+void UiSettingsDialog::InitColorDepthList()
 {
     HWND combo = GetDlgItem(IDC_COLOR_DEPTH_COMBO);
 
@@ -104,7 +104,7 @@ void SettingsDialog::InitColorDepthList()
     ComboBox_SelItemWithData(combo, curr_item);
 }
 
-void SettingsDialog::InitCodecList()
+void UiSettingsDialog::InitCodecList()
 {
     HWND combo = GetDlgItem(IDC_CODEC_COMBO);
 
@@ -115,7 +115,7 @@ void SettingsDialog::InitCodecList()
     ComboBox_SelItemWithData(combo, config_.video_encoding());
 }
 
-void SettingsDialog::UpdateCompressionRatio(int compression_ratio)
+void UiSettingsDialog::UpdateCompressionRatio(int compression_ratio)
 {
     std::wstring format = module().string(IDS_COMPRESSION_RATIO_FORMAT);
 
@@ -123,7 +123,7 @@ void SettingsDialog::UpdateCompressionRatio(int compression_ratio)
                      StringPrintfW(format.c_str(), compression_ratio));
 }
 
-void SettingsDialog::OnInitDialog()
+void UiSettingsDialog::OnInitDialog()
 {
     InitCodecList();
     InitColorDepthList();
@@ -157,7 +157,7 @@ void SettingsDialog::OnInitDialog()
     }
 }
 
-void SettingsDialog::OnHScroll(HWND ctrl)
+void UiSettingsDialog::OnHScroll(HWND ctrl)
 {
     if (GetWindowLongPtrW(ctrl, GWLP_ID) == IDC_COMPRESS_RATIO_TRACKBAR)
     {
@@ -168,7 +168,7 @@ void SettingsDialog::OnHScroll(HWND ctrl)
     }
 }
 
-void SettingsDialog::OnCodecChanged()
+void UiSettingsDialog::OnCodecChanged()
 {
     bool has_pixel_format =
         (ComboBox_CurItemData(GetDlgItem(IDC_CODEC_COMBO)) ==
@@ -182,13 +182,13 @@ void SettingsDialog::OnCodecChanged()
     EnableDlgItem(IDC_BEST_TEXT, has_pixel_format);
 }
 
-void SettingsDialog::OnCodecChanged(WORD notify_code)
+void UiSettingsDialog::OnCodecChanged(WORD notify_code)
 {
     if (notify_code == CBN_SELCHANGE)
         OnCodecChanged();
 }
 
-void SettingsDialog::OnOkButton()
+void UiSettingsDialog::OnOkButton()
 {
     proto::VideoEncoding encoding =
         static_cast<proto::VideoEncoding>(
@@ -270,7 +270,7 @@ void SettingsDialog::OnOkButton()
     EndDialog(IDOK);
 }
 
-INT_PTR SettingsDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+INT_PTR UiSettingsDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
     {

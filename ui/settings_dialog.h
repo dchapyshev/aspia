@@ -14,10 +14,10 @@
 
 namespace aspia {
 
-class SettingsDialog : public ModalDialog
+class UiSettingsDialog : public UiModalDialog
 {
 public:
-    SettingsDialog() = default;
+    UiSettingsDialog() = default;
 
     INT_PTR DoModal(HWND parent,
                     proto::SessionType session_type,
@@ -43,7 +43,7 @@ private:
     proto::SessionType session_type_ = proto::SessionType::SESSION_TYPE_UNKNOWN;
     proto::DesktopSessionConfig config_;
 
-    DISALLOW_COPY_AND_ASSIGN(SettingsDialog);
+    DISALLOW_COPY_AND_ASSIGN(UiSettingsDialog);
 };
 
 } // namespace aspia

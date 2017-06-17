@@ -17,32 +17,32 @@ namespace aspia {
 static const int kSplitPanelWidth = 4;
 static const int kBorderSize = 3;
 
-bool Splitter::CreateWithFixedLeft(HWND parent, int position)
+bool UiSplitter::CreateWithFixedLeft(HWND parent, int position)
 {
     fixed_left_ = true;
     x_ = position;
     return CreateInternal(parent);
 }
 
-bool Splitter::CreateWithProportion(HWND parent)
+bool UiSplitter::CreateWithProportion(HWND parent)
 {
     fixed_left_ = false;
     return CreateInternal(parent);
 }
 
-bool Splitter::CreateInternal(HWND parent)
+bool UiSplitter::CreateInternal(HWND parent)
 {
     cursor_ = LoadCursorW(nullptr, IDC_SIZEWE);
     return Create(parent, WS_CHILD | WS_VISIBLE);
 }
 
-void Splitter::SetPanels(HWND left, HWND right)
+void UiSplitter::SetPanels(HWND left, HWND right)
 {
     left_panel_.Attach(left);
     right_panel_.Attach(right);
 }
 
-void Splitter::OnCreate()
+void UiSplitter::OnCreate()
 {
     split_panel_.Attach(CreateWindowExW(0,
                                         WC_STATICW,
@@ -51,16 +51,16 @@ void Splitter::OnCreate()
                                         x_, 0, kSplitPanelWidth, 0,
                                         hwnd(),
                                         nullptr,
-                                        Module().Current().Handle(),
+                                        UiModule().Current().Handle(),
                                         nullptr));
 }
 
-void Splitter::OnDestroy()
+void UiSplitter::OnDestroy()
 {
     split_panel_.DestroyWindow();
 }
 
-void Splitter::OnSize(const DesktopSize& size)
+void UiSplitter::OnSize(const DesktopSize& size)
 {
     HDWP dwp = BeginDeferWindowPos(3);
 
@@ -117,7 +117,7 @@ void Splitter::OnSize(const DesktopSize& size)
     prev_size_ = size;
 }
 
-void Splitter::Draw()
+void UiSplitter::Draw()
 {
     HDC hdc = GetWindowDC(hwnd());
     if (hdc)
@@ -143,7 +143,7 @@ void Splitter::Draw()
     }
 }
 
-int Splitter::NormalizePosition(int position)
+int UiSplitter::NormalizePosition(int position)
 {
     if (position < 0)
     {
@@ -160,7 +160,7 @@ int Splitter::NormalizePosition(int position)
     return position;
 }
 
-void Splitter::OnLButtonDown()
+void UiSplitter::OnLButtonDown()
 {
     is_sizing_ = true;
     x_ = NormalizePosition(CursorPositionInWindow().x());
@@ -169,7 +169,7 @@ void Splitter::OnLButtonDown()
     Draw();
 }
 
-void Splitter::OnLButtonUp()
+void UiSplitter::OnLButtonUp()
 {
     if (is_sizing_)
     {
@@ -181,7 +181,7 @@ void Splitter::OnLButtonUp()
     }
 }
 
-void Splitter::OnMouseMove()
+void UiSplitter::OnMouseMove()
 {
     ::SetCursor(cursor_);
 
@@ -193,7 +193,7 @@ void Splitter::OnMouseMove()
     Draw();
 }
 
-void Splitter::OnDrawItem(LPDRAWITEMSTRUCT dis)
+void UiSplitter::OnDrawItem(LPDRAWITEMSTRUCT dis)
 {
     if (dis->hwndItem == split_panel_.hwnd())
     {
@@ -207,7 +207,7 @@ void Splitter::OnDrawItem(LPDRAWITEMSTRUCT dis)
     }
 }
 
-bool Splitter::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
+bool UiSplitter::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
 {
     switch (msg)
     {
