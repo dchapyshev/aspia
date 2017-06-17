@@ -15,8 +15,6 @@ INT_PTR ModalDialog::Run(const Module& module, HWND parent, UINT resource_id)
     end_dialog_ = false;
     result_ = 0;
 
-    module_ = module;
-
     HWND disabled_parent = nullptr;
 
     if (parent)
@@ -34,11 +32,7 @@ INT_PTR ModalDialog::Run(const Module& module, HWND parent, UINT resource_id)
     }
 
     // Create a dialog window from the resources.
-    if (!CreateDialogParamW(module.Handle(),
-                            MAKEINTRESOURCEW(resource_id),
-                            parent,
-                            DialogProc,
-                            reinterpret_cast<LPARAM>(this)))
+    if (!Create(parent, resource_id, module))
     {
         LOG(ERROR) << "CreateDialogParamW() failed: "
                    << GetLastSystemErrorString();
@@ -80,97 +74,10 @@ INT_PTR ModalDialog::Run(const Module& module, HWND parent, UINT resource_id)
     return result_;
 }
 
-const Module& ModalDialog::module()
-{
-    return module_;
-}
-
 void ModalDialog::EndDialog(INT_PTR result)
 {
     result_ = result;
     end_dialog_ = true;
-}
-
-void ModalDialog::SetIcon(UINT resource_id)
-{
-    small_icon_ = module().icon(resource_id,
-                                GetSystemMetrics(SM_CXSMICON),
-                                GetSystemMetrics(SM_CYSMICON),
-                                LR_CREATEDIBSECTION);
-
-    big_icon_ = module().icon(resource_id,
-                              GetSystemMetrics(SM_CXICON),
-                              GetSystemMetrics(SM_CYICON),
-                              LR_CREATEDIBSECTION);
-
-    SendMessageW(hwnd(), WM_SETICON, FALSE, reinterpret_cast<LPARAM>(small_icon_.Get()));
-    SendMessageW(hwnd(), WM_SETICON, TRUE, reinterpret_cast<LPARAM>(big_icon_.Get()));
-}
-
-HWND ModalDialog::GetDlgItem(int item_id)
-{
-    return ::GetDlgItem(hwnd(), item_id);
-}
-
-void ModalDialog::EnableDlgItem(int item_id, bool enable)
-{
-    EnableWindow(GetDlgItem(item_id), enable);
-}
-
-std::wstring ModalDialog::GetDlgItemString(int item_id)
-{
-    HWND hwnd = GetDlgItem(item_id);
-
-    if (hwnd)
-    {
-        // Returns the length without null-character.
-        int length = GetWindowTextLengthW(hwnd);
-        if (length > 0)
-        {
-            std::wstring string;
-            string.resize(length);
-
-            if (GetWindowTextW(hwnd, &string[0], length + 1))
-                return string;
-        }
-    }
-
-    return std::wstring();
-}
-
-bool ModalDialog::SetDlgItemString(int item_id, const std::wstring& string)
-{
-    return !!SetDlgItemTextW(hwnd(), item_id, string.c_str());
-}
-
-bool ModalDialog::SetDlgItemString(int item_id, UINT resource_id)
-{
-    return SetDlgItemString(item_id, module().string(resource_id));
-}
-
-// static
-INT_PTR CALLBACK ModalDialog::DialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-{
-    ModalDialog* self =
-        reinterpret_cast<ModalDialog*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
-
-    if (msg == WM_INITDIALOG)
-    {
-        self = reinterpret_cast<ModalDialog*>(lparam);
-        self->Attach(hwnd);
-
-        // Store pointer to the self to the window's user data.
-        SetLastError(ERROR_SUCCESS);
-        LONG_PTR result = SetWindowLongPtrW(hwnd,
-                                            GWLP_USERDATA,
-                                            reinterpret_cast<LONG_PTR>(self));
-        CHECK(result != 0 || GetLastError() == ERROR_SUCCESS);
-    }
-
-    if (self)
-        return self->OnMessage(msg, wparam, lparam);
-
-    return 0;
 }
 
 bool ModalDialog::Dispatch(const NativeEvent& event)

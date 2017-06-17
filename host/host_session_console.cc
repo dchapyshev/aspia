@@ -233,8 +233,18 @@ void HostSessionConsole::OnPipeChannelDisconnect()
             break;
 
         case State::Attached:
+        {
             OnSessionDetached();
-            break;
+
+            if (session_type_ == proto::SessionType::SESSION_TYPE_FILE_TRANSFER)
+            {
+                state_ = State::Detached;
+
+                timer_.Stop();
+                runner_->PostQuit();
+            }
+        }
+        break;
 
         case State::Starting:
         {

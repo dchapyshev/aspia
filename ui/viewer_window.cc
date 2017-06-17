@@ -26,6 +26,9 @@ ViewerWindow::ViewerWindow(ClientConfig* config, Delegate* delegate) :
     delegate_(delegate),
     video_window_(this)
 {
+    DCHECK(config_);
+    DCHECK(delegate_);
+
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 

@@ -141,6 +141,8 @@
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\child_window.cc" />
     <ClCompile Include="ui\base\comboboxex.cc" />
+    <ClCompile Include="ui\base\dialog.cc" />
+    <ClCompile Include="ui\base\edit.cc" />
     <ClCompile Include="ui\base\imagelist.cc" />
     <ClCompile Include="ui\base\listview.cc" />
     <ClCompile Include="ui\base\modal_dialog.cc" />
@@ -317,6 +319,8 @@
     <ClInclude Include="ui\base\child_window.h" />
     <ClInclude Include="ui\base\combobox.h" />
     <ClInclude Include="ui\base\comboboxex.h" />
+    <ClInclude Include="ui\base\dialog.h" />
+    <ClInclude Include="ui\base\edit.h" />
     <ClInclude Include="ui\base\imagelist.h" />
     <ClInclude Include="ui\base\listview.h" />
     <ClInclude Include="ui\base\modal_dialog.h" />

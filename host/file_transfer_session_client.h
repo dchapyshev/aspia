@@ -10,11 +10,13 @@
 
 #include "ipc/pipe_channel.h"
 #include "proto/file_transfer_session.pb.h"
+#include "ui/file_status_dialog.h"
 
 namespace aspia {
 
 class FileTransferSessionClient :
-    private PipeChannel::Delegate
+    private PipeChannel::Delegate,
+    private FileStatusDialog::Delegate
 {
 public:
     FileTransferSessionClient() = default;
@@ -29,6 +31,9 @@ private:
     void OnPipeChannelDisconnect() override;
     void OnPipeChannelMessage(const IOBuffer& buffer) override;
 
+    // FileStatusWindow::Delegate implementation.
+    void OnWindowClose() override;
+
     void WriteMessage(const proto::file_transfer::HostToClient& message);
     void WriteStatus(proto::Status status);
 
@@ -39,6 +44,8 @@ private:
 
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::mutex outgoing_lock_;
+
+    std::unique_ptr<FileStatusDialog> status_dialog_;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransferSessionClient);
 };

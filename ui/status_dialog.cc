@@ -7,6 +7,7 @@
 
 #include "ui/status_dialog.h"
 #include "ui/resource.h"
+#include "ui/base/edit.h"
 #include "ui/base/module.h"
 #include "base/logging.h"
 #include "base/unicode.h"
@@ -62,35 +63,26 @@ void StatusDialog::OnInitDialog()
     delegate_->OnStatusDialogOpen();
 }
 
-static void AppendText(HWND edit, const WCHAR* text)
-{
-    int length = GetWindowTextLengthW(edit);
-
-    Edit_SetSel(edit, length, length);
-    Edit_ScrollCaret(edit);
-    Edit_ReplaceSel(edit, text);
-}
-
 void StatusDialog::AddMessage(const std::wstring& message)
 {
-    HWND status_edit = GetDlgItem(IDC_STATUS_EDIT);
+    Edit status_edit(GetDlgItem(IDC_STATUS_EDIT));
 
     WCHAR buffer[128];
 
     if (GetDateFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, buffer, _countof(buffer)))
     {
-        AppendText(status_edit, buffer);
-        AppendText(status_edit, L" ");
+        status_edit.AppendText(buffer);
+        status_edit.AppendText(L" ");
     }
 
     if (GetTimeFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, buffer, _countof(buffer)))
     {
-        AppendText(status_edit, buffer);
-        AppendText(status_edit, L": ");
+        status_edit.AppendText(buffer);
+        status_edit.AppendText(L": ");
     }
 
-    AppendText(status_edit, message.c_str());
-    AppendText(status_edit, L"\r\n");
+    status_edit.AppendText(message);
+    status_edit.AppendText(L"\r\n");
 }
 
 INT_PTR StatusDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)

@@ -454,6 +454,12 @@
     <ClCompile Include="protocol\drive_list.cc">
       <Filter>protocol</Filter>
     </ClCompile>
+    <ClCompile Include="ui\base\edit.cc">
+      <Filter>ui\base</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\base\dialog.cc">
+      <Filter>ui\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -982,6 +988,12 @@
     </ClInclude>
     <ClInclude Include="protocol\drive_list.h">
       <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\edit.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\dialog.h">
+      <Filter>ui\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

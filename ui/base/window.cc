@@ -233,4 +233,15 @@ DesktopPoint Window::CursorPositionInWindow()
     return DesktopPoint(cursor_pos.x, cursor_pos.y);
 }
 
+void Window::SetSize(int width, int height)
+{
+    RECT rc;
+
+    if (!GetWindowRect(hwnd(), &rc))
+        return;
+
+    SetWindowPos(hwnd(), nullptr, rc.left, rc.top, width, height,
+                 SWP_NOZORDER | SWP_NOACTIVATE);
+}
+
 } // namespace aspia

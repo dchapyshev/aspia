@@ -39,6 +39,7 @@ public:
     int ClientHeight();
     DesktopSize ClientSize();
     DesktopPoint CursorPositionInWindow();
+    void SetSize(int width, int height);
 
 private:
     HWND hwnd_ = nullptr;

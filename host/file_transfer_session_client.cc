@@ -31,6 +31,11 @@ void FileTransferSessionClient::Run(const std::wstring& input_channel_name,
     ipc_channel_.reset();
 }
 
+void FileTransferSessionClient::OnWindowClose()
+{
+    ipc_channel_->Close();
+}
+
 void FileTransferSessionClient::OnPipeChannelConnect(uint32_t user_data)
 {
     // The server sends the session type in user_data.
@@ -41,6 +46,8 @@ void FileTransferSessionClient::OnPipeChannelConnect(uint32_t user_data)
         LOG(FATAL) << "Invalid session type passed: " << session_type;
         return;
     }
+
+    status_dialog_.reset(new FileStatusDialog(this));
 }
 
 void FileTransferSessionClient::OnPipeChannelDisconnect()
@@ -119,8 +126,12 @@ bool FileTransferSessionClient::ReadDriveListRequestMessage(
 bool FileTransferSessionClient::ReadDirectoryListRequestMessage(
     const proto::DirectoryListRequest& direcrory_list_request)
 {
+    std::wstring path = UNICODEfromUTF8(direcrory_list_request.path());
+
+    status_dialog_->OnDirectoryOpen(path);
+
     std::unique_ptr<proto::DirectoryList> directory_list =
-        CreateDirectoryList(UNICODEfromUTF8(direcrory_list_request.path()));
+        CreateDirectoryList(path);
 
     if (!directory_list)
         return false;
