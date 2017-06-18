@@ -336,6 +336,7 @@ BEGIN
     IDS_FT_COLUMN_NAME                    "Name"
     IDS_FT_COLUMN_SIZE                    "Size"
     IDS_FT_COLUMN_TYPE                    "Type"
+    IDS_FT_COLUMN_MODIFIED                "Modified"
     IDS_FT_TOOLTIP_REFRESH                "Refresh the file list (F5)"
     IDS_FT_TOOLTIP_DELETE                 "Delete selected object(s) (Delete)"
     IDS_FT_TOOLTIP_FOLDER_ADD             "Create a new folder"

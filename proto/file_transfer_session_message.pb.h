@@ -516,6 +516,12 @@ class DirectoryListItem : public ::google::protobuf::MessageLite /* @@protoc_ins
   ::google::protobuf::uint64 size() const;
   void set_size(::google::protobuf::uint64 value);
 
+  // uint64 modified = 4;
+  void clear_modified();
+  static const int kModifiedFieldNumber = 4;
+  ::google::protobuf::uint64 modified() const;
+  void set_modified(::google::protobuf::uint64 value);
+
   // .aspia.proto.DirectoryListItem.Type type = 1;
   void clear_type();
   static const int kTypeFieldNumber = 1;
@@ -528,6 +534,7 @@ class DirectoryListItem : public ::google::protobuf::MessageLite /* @@protoc_ins
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr name_;
   ::google::protobuf::uint64 size_;
+  ::google::protobuf::uint64 modified_;
   int type_;
   mutable int _cached_size_;
   friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
@@ -1193,6 +1200,20 @@ inline void DirectoryListItem::set_size(::google::protobuf::uint64 value) {
   
   size_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.DirectoryListItem.size)
+}
+
+// uint64 modified = 4;
+inline void DirectoryListItem::clear_modified() {
+  modified_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 DirectoryListItem::modified() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DirectoryListItem.modified)
+  return modified_;
+}
+inline void DirectoryListItem::set_modified(::google::protobuf::uint64 value) {
+  
+  modified_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DirectoryListItem.modified)
 }
 
 // -------------------------------------------------------------------

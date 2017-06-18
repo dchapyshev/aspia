@@ -13,6 +13,7 @@
 #include "base/string_util.h"
 #include "base/unicode.h"
 
+#include <filesystem>
 #include <shellapi.h>
 #include <shlobj.h>
 
@@ -210,7 +211,25 @@ static std::wstring SizeToString(uint64_t size)
                          units.c_str());
 }
 
-void UiFileManagerPanel::ReadDirectoryList(std::unique_ptr<proto::DirectoryList> directory_list)
+static std::wstring TimeToString(time_t time)
+{
+    tm* local_time = std::localtime(&time);
+
+    if (!local_time)
+        return std::wstring();
+
+    // Set the locale obtained from system.
+    _wsetlocale(LC_TIME, L"");
+
+    wchar_t string[128];
+    if (!wcsftime(string, _countof(string), L"%x %X", local_time))
+        return std::wstring();
+
+    return string;
+}
+
+void UiFileManagerPanel::ReadDirectoryList(
+    std::unique_ptr<proto::DirectoryList> directory_list)
 {
     list_window_.DeleteAllItems();
     list_imagelist_.RemoveAll();
@@ -219,10 +238,10 @@ void UiFileManagerPanel::ReadDirectoryList(std::unique_ptr<proto::DirectoryList>
 
     const int count = directory_list_->item_size();
 
-    // All directories have the same icon
-    ScopedHICON icon(GetDirectoryIcon());
-
     int icon_index = -1;
+
+    // All directories have the same icon.
+    ScopedHICON icon(GetDirectoryIcon());
 
     if (icon.IsValid())
         icon_index = list_imagelist_.AddIcon(icon);
@@ -249,6 +268,7 @@ void UiFileManagerPanel::ReadDirectoryList(std::unique_ptr<proto::DirectoryList>
                        SHGFI_USEFILEATTRIBUTES | SHGFI_TYPENAME);
 
         list_window_.SetItemText(item_index, 2, file_info.szTypeName);
+        list_window_.SetItemText(item_index, 3, TimeToString(item.modified()));
     }
 
     // Enumerate the files.
@@ -282,6 +302,7 @@ void UiFileManagerPanel::ReadDirectoryList(std::unique_ptr<proto::DirectoryList>
                        SHGFI_USEFILEATTRIBUTES | SHGFI_TYPENAME);
 
         list_window_.SetItemText(item_index, 2, file_info.szTypeName);
+        list_window_.SetItemText(item_index, 3, TimeToString(item.modified()));
     }
 }
 
@@ -381,9 +402,10 @@ void UiFileManagerPanel::OnCreate()
 
     list_window_.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
 
-    list_window_.AddColumn(module.string(IDS_FT_COLUMN_NAME), 200);
-    list_window_.AddColumn(module.string(IDS_FT_COLUMN_SIZE), 80);
+    list_window_.AddColumn(module.string(IDS_FT_COLUMN_NAME), 180);
+    list_window_.AddColumn(module.string(IDS_FT_COLUMN_SIZE), 60);
     list_window_.AddColumn(module.string(IDS_FT_COLUMN_TYPE), 100);
+    list_window_.AddColumn(module.string(IDS_FT_COLUMN_MODIFIED), 100);
 
     status_window_.Attach(CreateWindowExW(0,
                                           WC_STATICW,
@@ -562,7 +584,7 @@ void UiFileManagerPanel::OnAddressChanged()
     delegate_->OnDirectoryListRequest(type_, drive_list_->item(index).path());
 }
 
-void UiFileManagerPanel::OnAddressChange(LPNMITEMACTIVATE item_activate)
+void UiFileManagerPanel::OnAddressChange()
 {
     if (!directory_list_)
         return;
@@ -571,7 +593,7 @@ void UiFileManagerPanel::OnAddressChange(LPNMITEMACTIVATE item_activate)
     if (item_index == -1)
         return;
 
-    int index = list_window_.GetItemData<int>(item_index);;
+    int index = list_window_.GetItemData<int>(item_index);
     if (index < 0 || index >= directory_list_->item_size())
         return;
 
@@ -579,9 +601,32 @@ void UiFileManagerPanel::OnAddressChange(LPNMITEMACTIVATE item_activate)
 
     if (item.type() == proto::DirectoryListItem::DIRECTORY)
     {
-        std::string new_path = directory_list_->path() + "/" + item.name();
-        delegate_->OnDirectoryListRequest(type_, new_path);
+        std::experimental::filesystem::path path =
+            std::experimental::filesystem::u8path(directory_list_->path());
+
+        path.append(item.name());
+
+        delegate_->OnDirectoryListRequest(type_, path.u8string());
     }
+}
+
+void UiFileManagerPanel::OnFolderUp()
+{
+    if (!directory_list_)
+        return;
+
+    std::experimental::filesystem::path path =
+        std::experimental::filesystem::u8path(directory_list_->path());
+
+    if (!path.has_parent_path())
+        return;
+
+    path = path.parent_path();
+
+    if (path.has_root_name() && path.root_name() == path)
+        return;
+
+    delegate_->OnDirectoryListRequest(type_, path.u8string());
 }
 
 bool UiFileManagerPanel::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
@@ -622,7 +667,7 @@ bool UiFileManagerPanel::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESU
                 switch (header->code)
                 {
                     case NM_DBLCLK:
-                        OnAddressChange(reinterpret_cast<LPNMITEMACTIVATE>(lparam));
+                        OnAddressChange();
                         break;
 
                     case NM_RCLICK:
@@ -649,6 +694,10 @@ bool UiFileManagerPanel::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESU
                     }
                 }
                 break;
+
+                case ID_FOLDER_UP:
+                    OnFolderUp();
+                    break;
             }
         }
         break;

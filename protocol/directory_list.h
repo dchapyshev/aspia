@@ -10,11 +10,13 @@
 
 #include "proto/file_transfer_session.pb.h"
 
+#include <filesystem>
 #include <memory>
 
 namespace aspia {
 
-std::unique_ptr<proto::DirectoryList> CreateDirectoryList(const std::wstring& path);
+std::unique_ptr<proto::DirectoryList> CreateDirectoryList(
+    const std::experimental::filesystem::path& path);
 
 } // namespace aspia
 

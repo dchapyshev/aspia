@@ -92,6 +92,14 @@ HICON UiModule::icon(UINT resource_id, int width, int height, UINT flags) const
                                               flags));
 }
 
+HICON UiModule::small_icon(UINT resource_id) const
+{
+    return icon(resource_id,
+                GetSystemMetrics(SM_CXSMICON),
+                GetSystemMetrics(SM_CYSMICON),
+                LR_CREATEDIBSECTION);
+}
+
 HMENU UiModule::menu(UINT resource_id) const
 {
     return LoadMenuW(instance_, MAKEINTRESOURCEW(resource_id));

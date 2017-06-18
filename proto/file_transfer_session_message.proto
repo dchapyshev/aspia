@@ -49,9 +49,10 @@ message DirectoryListItem
         FILE      = 2;
     }
 
-    Type type   = 1;
-    string name = 2;
-    uint64 size = 3;
+    Type type       = 1;
+    string name     = 2;
+    uint64 size     = 3;
+    uint64 modified = 4;
 }
 
 message DirectoryList

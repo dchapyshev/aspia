@@ -424,9 +424,6 @@
     <ClCompile Include="host\file_transfer_session_client.cc">
       <Filter>host</Filter>
     </ClCompile>
-    <ClCompile Include="base\file_enumerator.cc">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="proto\status.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
@@ -958,9 +955,6 @@
     </ClInclude>
     <ClInclude Include="host\file_transfer_session_client.h">
       <Filter>host</Filter>
-    </ClInclude>
-    <ClInclude Include="base\file_enumerator.h">
-      <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="proto\status.pb.h">
       <Filter>proto</Filter>

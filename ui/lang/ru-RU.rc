@@ -336,6 +336,7 @@ BEGIN
     IDS_FT_COLUMN_NAME                    "Имя"
     IDS_FT_COLUMN_SIZE                    "Размер"
     IDS_FT_COLUMN_TYPE                    "Тип"
+    IDS_FT_COLUMN_MODIFIED                "Изменен"
     IDS_FT_TOOLTIP_REFRESH                "Обновить список файлов (F5)"
     IDS_FT_TOOLTIP_DELETE                 "Удалить выбранный объект(ы) (Delete)"
     IDS_FT_TOOLTIP_FOLDER_ADD             "Создать новую папку"

@@ -6,41 +6,40 @@
 //
 
 #include "protocol/directory_list.h"
-#include "base/file_enumerator.h"
-#include "base/unicode.h"
 
 namespace aspia {
 
-std::unique_ptr<proto::DirectoryList> CreateDirectoryList(const std::wstring& path)
+std::unique_ptr<proto::DirectoryList> CreateDirectoryList(
+    const std::experimental::filesystem::path& path)
 {
     std::unique_ptr<proto::DirectoryList> directory_list(new proto::DirectoryList());
 
-    directory_list->set_path(UTF8fromUNICODE(path));
+    directory_list->set_path(path.u8string());
 
-    FileEnumerator enumerator(path,
-                              false,
-                              FileEnumerator::FILES | FileEnumerator::DIRECTORIES);
+    std::error_code code;
 
-    for (;;)
+    for (auto& entry : std::experimental::filesystem::directory_iterator(path, code))
     {
-        std::wstring path = enumerator.Next();
-
-        if (path.empty())
-            break;
-
         proto::DirectoryListItem* item = directory_list->add_item();
-        FileEnumerator::FileInfo file_info = enumerator.GetInfo();
 
-        item->set_name(UTF8fromUNICODE(file_info.GetName()));
+        item->set_name(entry.path().filename().u8string());
 
-        if (!file_info.IsDirectory())
+        std::experimental::filesystem::file_time_type time =
+            std::experimental::filesystem::last_write_time(entry.path(), code);
+
+        item->set_modified(decltype(time)::clock::to_time_t(time));
+
+        if (entry.status().type() == std::experimental::filesystem::file_type::directory)
         {
-            item->set_type(proto::DirectoryListItem::FILE);
-            item->set_size(file_info.GetSize());
+            item->set_type(proto::DirectoryListItem::DIRECTORY);
         }
         else
         {
-            item->set_type(proto::DirectoryListItem::DIRECTORY);
+            item->set_type(proto::DirectoryListItem::FILE);
+
+            uintmax_t size = std::experimental::filesystem::file_size(entry.path(), code);
+            if (size != -1)
+                item->set_size(size);
         }
     }
 

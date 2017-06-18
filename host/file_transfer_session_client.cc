@@ -126,9 +126,10 @@ bool FileTransferSessionClient::ReadDriveListRequestMessage(
 bool FileTransferSessionClient::ReadDirectoryListRequestMessage(
     const proto::DirectoryListRequest& direcrory_list_request)
 {
-    std::wstring path = UNICODEfromUTF8(direcrory_list_request.path());
+    std::experimental::filesystem::path path =
+        std::experimental::filesystem::u8path(direcrory_list_request.path());
 
-    status_dialog_->OnDirectoryOpen(path);
+    status_dialog_->OnDirectoryOpen(path.wstring());
 
     std::unique_ptr<proto::DirectoryList> directory_list =
         CreateDirectoryList(path);

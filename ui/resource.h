@@ -193,20 +193,21 @@
 #define IDS_FT_COLUMN_NAME                    1002
 #define IDS_FT_COLUMN_SIZE                    1003
 #define IDS_FT_COLUMN_TYPE                    1004
-#define IDS_FT_TOOLTIP_REFRESH                1005
-#define IDS_FT_TOOLTIP_DELETE                 1006
-#define IDS_FT_TOOLTIP_FOLDER_ADD             1007
-#define IDS_FT_TOOLTIP_FOLDER_UP              1008
-#define IDS_FT_TOOLTIP_HOME                   1009
-#define IDS_FT_TOOLTIP_SEND                   1010
-#define IDS_FT_TOOLTIP_RECIEVE                1011
-#define IDS_FT_HOME_FOLDER                    1012
-#define IDS_FT_DESKTOP_FOLDER                 1013
-#define IDS_FT_SIZE_TBYTES                    1014
-#define IDS_FT_SIZE_GBYTES                    1015
-#define IDS_FT_SIZE_MBYTES                    1016
-#define IDS_FT_SIZE_KBYTES                    1017
-#define IDS_FT_SIZE_BYTES                     1018
+#define IDS_FT_COLUMN_MODIFIED                1005
+#define IDS_FT_TOOLTIP_REFRESH                1006
+#define IDS_FT_TOOLTIP_DELETE                 1007
+#define IDS_FT_TOOLTIP_FOLDER_ADD             1008
+#define IDS_FT_TOOLTIP_FOLDER_UP              1009
+#define IDS_FT_TOOLTIP_HOME                   1010
+#define IDS_FT_TOOLTIP_SEND                   1011
+#define IDS_FT_TOOLTIP_RECIEVE                1012
+#define IDS_FT_HOME_FOLDER                    1013
+#define IDS_FT_DESKTOP_FOLDER                 1014
+#define IDS_FT_SIZE_TBYTES                    1015
+#define IDS_FT_SIZE_GBYTES                    1016
+#define IDS_FT_SIZE_MBYTES                    1017
+#define IDS_FT_SIZE_KBYTES                    1018
+#define IDS_FT_SIZE_BYTES                     1019
 
 // Status
 #define IDS_STATUS_MIN                        10000

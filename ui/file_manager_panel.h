@@ -43,7 +43,8 @@ private:
     void OnDrawItem(LPDRAWITEMSTRUCT dis);
     void OnGetDispInfo(LPNMHDR phdr);
     void OnAddressChanged();
-    void OnAddressChange(LPNMITEMACTIVATE item_activate);
+    void OnAddressChange();
+    void OnFolderUp();
 
     // ChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;

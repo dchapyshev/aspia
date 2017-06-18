@@ -985,6 +985,7 @@ void DriveListRequest::set_dummy(::google::protobuf::uint32 value) {
 const int DirectoryListItem::kTypeFieldNumber;
 const int DirectoryListItem::kNameFieldNumber;
 const int DirectoryListItem::kSizeFieldNumber;
+const int DirectoryListItem::kModifiedFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 DirectoryListItem::DirectoryListItem()
@@ -1106,6 +1107,20 @@ bool DirectoryListItem::MergePartialFromCodedStream(
         break;
       }
 
+      // uint64 modified = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &modified_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0 ||
@@ -1154,6 +1169,11 @@ void DirectoryListItem::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt64(3, this->size(), output);
   }
 
+  // uint64 modified = 4;
+  if (this->modified() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(4, this->modified(), output);
+  }
+
   // @@protoc_insertion_point(serialize_end:aspia.proto.DirectoryListItem)
 }
 
@@ -1173,6 +1193,13 @@ size_t DirectoryListItem::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt64Size(
         this->size());
+  }
+
+  // uint64 modified = 4;
+  if (this->modified() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->modified());
   }
 
   // .aspia.proto.DirectoryListItem.Type type = 1;
@@ -1207,6 +1234,9 @@ void DirectoryListItem::MergeFrom(const DirectoryListItem& from) {
   if (from.size() != 0) {
     set_size(from.size());
   }
+  if (from.modified() != 0) {
+    set_modified(from.modified());
+  }
   if (from.type() != 0) {
     set_type(from.type());
   }
@@ -1230,6 +1260,7 @@ void DirectoryListItem::Swap(DirectoryListItem* other) {
 void DirectoryListItem::InternalSwap(DirectoryListItem* other) {
   name_.Swap(&other->name_);
   std::swap(size_, other->size_);
+  std::swap(modified_, other->modified_);
   std::swap(type_, other->type_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -1320,6 +1351,20 @@ void DirectoryListItem::set_size(::google::protobuf::uint64 value) {
   
   size_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.DirectoryListItem.size)
+}
+
+// uint64 modified = 4;
+void DirectoryListItem::clear_modified() {
+  modified_ = GOOGLE_ULONGLONG(0);
+}
+::google::protobuf::uint64 DirectoryListItem::modified() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DirectoryListItem.modified)
+  return modified_;
+}
+void DirectoryListItem::set_modified(::google::protobuf::uint64 value) {
+  
+  modified_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DirectoryListItem.modified)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

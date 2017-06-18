@@ -12,8 +12,8 @@
 
 namespace aspia {
 
-static const int kDefaultWindowWidth = 800;
-static const int kDefaultWindowHeight = 600;
+static const int kDefaultWindowWidth = 980;
+static const int kDefaultWindowHeight = 700;
 
 UiFileManager::UiFileManager(Delegate* delegate) :
     delegate_(delegate)

@@ -52,10 +52,7 @@ void UiViewerWindow::OnBeforeThreadRunning()
     }
     else
     {
-        ScopedHICON icon(UiModule::Current().icon(IDI_MAIN,
-                                                  GetSystemMetrics(SM_CXSMICON),
-                                                  GetSystemMetrics(SM_CYSMICON),
-                                                  LR_CREATEDIBSECTION));
+        ScopedHICON icon(UiModule::Current().small_icon(IDI_MAIN));
         SetIcon(icon);
         SetCursor(LoadCursorW(nullptr, IDC_ARROW));
     }
