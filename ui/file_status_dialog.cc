@@ -48,7 +48,7 @@ void UiFileStatusDialog::OnAfterThreadRunning()
 
 void UiFileStatusDialog::OnInitDialog()
 {
-    SetWindowPos(hwnd(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+    SetTopMost();
     SetIcon(IDI_MAIN);
 }
 
@@ -128,8 +128,6 @@ INT_PTR UiFileStatusDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 
 static std::wstring CurrentTime()
 {
-    std::wstring time;
-
     WCHAR buffer[128];
 
     if (!GetTimeFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, buffer, _countof(buffer)))

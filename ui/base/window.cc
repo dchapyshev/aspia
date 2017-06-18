@@ -235,13 +235,14 @@ DesktopPoint UiWindow::CursorPositionInWindow()
 
 void UiWindow::SetSize(int width, int height)
 {
-    RECT rc;
+    SetWindowPos(hwnd(), nullptr, 0, 0, width, height,
+                 SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
+}
 
-    if (!GetWindowRect(hwnd(), &rc))
-        return;
-
-    SetWindowPos(hwnd(), nullptr, rc.left, rc.top, width, height,
-                 SWP_NOZORDER | SWP_NOACTIVATE);
+void UiWindow::SetTopMost()
+{
+    SetWindowPos(hwnd(), HWND_TOPMOST, 0, 0, 0, 0,
+                 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 }
 
 } // namespace aspia
