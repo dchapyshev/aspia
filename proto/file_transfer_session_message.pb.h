@@ -32,6 +32,9 @@
 // @@protoc_insertion_point(includes)
 namespace aspia {
 namespace proto {
+class CreateDirectoryRequest;
+class CreateDirectoryRequestDefaultTypeInternal;
+extern CreateDirectoryRequestDefaultTypeInternal _CreateDirectoryRequest_default_instance_;
 class DirectoryList;
 class DirectoryListDefaultTypeInternal;
 extern DirectoryListDefaultTypeInternal _DirectoryList_default_instance_;
@@ -937,6 +940,92 @@ class FileRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion
   mutable int _cached_size_;
   friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
 };
+// -------------------------------------------------------------------
+
+class CreateDirectoryRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.CreateDirectoryRequest) */ {
+ public:
+  CreateDirectoryRequest();
+  virtual ~CreateDirectoryRequest();
+
+  CreateDirectoryRequest(const CreateDirectoryRequest& from);
+
+  inline CreateDirectoryRequest& operator=(const CreateDirectoryRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const CreateDirectoryRequest& default_instance();
+
+  static inline const CreateDirectoryRequest* internal_default_instance() {
+    return reinterpret_cast<const CreateDirectoryRequest*>(
+               &_CreateDirectoryRequest_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    8;
+
+  void Swap(CreateDirectoryRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  inline CreateDirectoryRequest* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  CreateDirectoryRequest* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const CreateDirectoryRequest& from);
+  void MergeFrom(const CreateDirectoryRequest& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(CreateDirectoryRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string path = 1;
+  void clear_path();
+  static const int kPathFieldNumber = 1;
+  const ::std::string& path() const;
+  void set_path(const ::std::string& value);
+  #if LANG_CXX11
+  void set_path(::std::string&& value);
+  #endif
+  void set_path(const char* value);
+  void set_path(const char* value, size_t size);
+  ::std::string* mutable_path();
+  ::std::string* release_path();
+  void set_allocated_path(::std::string* path);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.CreateDirectoryRequest)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr path_;
+  mutable int _cached_size_;
+  friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
+};
 // ===================================================================
 
 
@@ -1541,7 +1630,66 @@ inline void FileRequest::set_allocated_path(::std::string* path) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.FileRequest.path)
 }
 
+// -------------------------------------------------------------------
+
+// CreateDirectoryRequest
+
+// string path = 1;
+inline void CreateDirectoryRequest::clear_path() {
+  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& CreateDirectoryRequest::path() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CreateDirectoryRequest.path)
+  return path_.GetNoArena();
+}
+inline void CreateDirectoryRequest::set_path(const ::std::string& value) {
+  
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.CreateDirectoryRequest.path)
+}
+#if LANG_CXX11
+inline void CreateDirectoryRequest::set_path(::std::string&& value) {
+  
+  path_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.CreateDirectoryRequest.path)
+}
+#endif
+inline void CreateDirectoryRequest::set_path(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.CreateDirectoryRequest.path)
+}
+inline void CreateDirectoryRequest::set_path(const char* value, size_t size) {
+  
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CreateDirectoryRequest.path)
+}
+inline ::std::string* CreateDirectoryRequest::mutable_path() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.CreateDirectoryRequest.path)
+  return path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* CreateDirectoryRequest::release_path() {
+  // @@protoc_insertion_point(field_release:aspia.proto.CreateDirectoryRequest.path)
+  
+  return path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void CreateDirectoryRequest::set_allocated_path(::std::string* path) {
+  if (path != NULL) {
+    
+  } else {
+    
+  }
+  path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CreateDirectoryRequest.path)
+}
+
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

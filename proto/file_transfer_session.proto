@@ -24,8 +24,9 @@ message HostToClient
 
 message ClientToHost
 {
-    DriveListRequest drive_list_request         = 1;
-    DirectoryListRequest directory_list_request = 2;
-    FileRequest file_request                    = 3;
-    File file                                   = 4;
+    DriveListRequest drive_list_request             = 1;
+    DirectoryListRequest directory_list_request     = 2;
+    FileRequest file_request                        = 3;
+    File file                                       = 4;
+    CreateDirectoryRequest create_directory_request = 5;
 }

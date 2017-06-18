@@ -29,6 +29,7 @@ public:
     public:
         virtual void OnDriveListRequest(Type type) = 0;
         virtual void OnDirectoryListRequest(Type type, const std::string& path) = 0;
+        virtual void OnCreateDirectoryRequest(Type type, const std::string& path) = 0;
     };
 
     bool CreatePanel(HWND parent, Type type, Delegate* delegate);
@@ -45,6 +46,7 @@ private:
     void OnAddressChanged();
     void OnAddressChange();
     void OnFolderUp();
+    void OnFolderCreate();
 
     // ChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;

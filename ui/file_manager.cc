@@ -93,6 +93,11 @@ void UiFileManager::OnDirectoryListRequest(PanelType type, const std::string& pa
     delegate_->OnDirectoryListRequest(type, path);
 }
 
+void UiFileManager::OnCreateDirectoryRequest(PanelType type, const std::string& path)
+{
+    delegate_->OnCreateDirectoryRequest(type, path);
+}
+
 void UiFileManager::OnCreate()
 {
     splitter_.CreateWithProportion(hwnd());

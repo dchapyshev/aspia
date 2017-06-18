@@ -67,6 +67,8 @@ void TableStruct::InitDefaultsImpl() {
       ::aspia::proto::FileRequest::internal_default_instance());
   _ClientToHost_default_instance_.get_mutable()->file_ = const_cast< ::aspia::proto::File*>(
       ::aspia::proto::File::internal_default_instance());
+  _ClientToHost_default_instance_.get_mutable()->create_directory_request_ = const_cast< ::aspia::proto::CreateDirectoryRequest*>(
+      ::aspia::proto::CreateDirectoryRequest::internal_default_instance());
 }
 
 void InitDefaults() {
@@ -544,6 +546,7 @@ const int ClientToHost::kDriveListRequestFieldNumber;
 const int ClientToHost::kDirectoryListRequestFieldNumber;
 const int ClientToHost::kFileRequestFieldNumber;
 const int ClientToHost::kFileFieldNumber;
+const int ClientToHost::kCreateDirectoryRequestFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ClientToHost::ClientToHost()
@@ -579,12 +582,17 @@ ClientToHost::ClientToHost(const ClientToHost& from)
   } else {
     file_ = NULL;
   }
+  if (from.has_create_directory_request()) {
+    create_directory_request_ = new ::aspia::proto::CreateDirectoryRequest(*from.create_directory_request_);
+  } else {
+    create_directory_request_ = NULL;
+  }
   // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.ClientToHost)
 }
 
 void ClientToHost::SharedCtor() {
-  ::memset(&drive_list_request_, 0, reinterpret_cast<char*>(&file_) -
-    reinterpret_cast<char*>(&drive_list_request_) + sizeof(file_));
+  ::memset(&drive_list_request_, 0, reinterpret_cast<char*>(&create_directory_request_) -
+    reinterpret_cast<char*>(&drive_list_request_) + sizeof(create_directory_request_));
   _cached_size_ = 0;
 }
 
@@ -605,6 +613,9 @@ void ClientToHost::SharedDtor() {
   }
   if (this != internal_default_instance()) {
     delete file_;
+  }
+  if (this != internal_default_instance()) {
+    delete create_directory_request_;
   }
 }
 
@@ -644,6 +655,10 @@ void ClientToHost::Clear() {
     delete file_;
   }
   file_ = NULL;
+  if (GetArenaNoVirtual() == NULL && create_directory_request_ != NULL) {
+    delete create_directory_request_;
+  }
+  create_directory_request_ = NULL;
 }
 
 bool ClientToHost::MergePartialFromCodedStream(
@@ -704,6 +719,18 @@ bool ClientToHost::MergePartialFromCodedStream(
         break;
       }
 
+      // .aspia.proto.CreateDirectoryRequest create_directory_request = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_create_directory_request()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0 ||
@@ -755,6 +782,12 @@ void ClientToHost::SerializeWithCachedSizes(
       4, *this->file_, output);
   }
 
+  // .aspia.proto.CreateDirectoryRequest create_directory_request = 5;
+  if (this->has_create_directory_request()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      5, *this->create_directory_request_, output);
+  }
+
   // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.ClientToHost)
 }
 
@@ -790,6 +823,13 @@ size_t ClientToHost::ByteSizeLong() const {
         *this->file_);
   }
 
+  // .aspia.proto.CreateDirectoryRequest create_directory_request = 5;
+  if (this->has_create_directory_request()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->create_directory_request_);
+  }
+
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = cached_size;
@@ -821,6 +861,9 @@ void ClientToHost::MergeFrom(const ClientToHost& from) {
   if (from.has_file()) {
     mutable_file()->::aspia::proto::File::MergeFrom(from.file());
   }
+  if (from.has_create_directory_request()) {
+    mutable_create_directory_request()->::aspia::proto::CreateDirectoryRequest::MergeFrom(from.create_directory_request());
+  }
 }
 
 void ClientToHost::CopyFrom(const ClientToHost& from) {
@@ -843,6 +886,7 @@ void ClientToHost::InternalSwap(ClientToHost* other) {
   std::swap(directory_list_request_, other->directory_list_request_);
   std::swap(file_request_, other->file_request_);
   std::swap(file_, other->file_);
+  std::swap(create_directory_request_, other->create_directory_request_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -1007,6 +1051,45 @@ void ClientToHost::set_allocated_file(::aspia::proto::File* file) {
     
   }
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.ClientToHost.file)
+}
+
+// .aspia.proto.CreateDirectoryRequest create_directory_request = 5;
+bool ClientToHost::has_create_directory_request() const {
+  return this != internal_default_instance() && create_directory_request_ != NULL;
+}
+void ClientToHost::clear_create_directory_request() {
+  if (GetArenaNoVirtual() == NULL && create_directory_request_ != NULL) delete create_directory_request_;
+  create_directory_request_ = NULL;
+}
+const ::aspia::proto::CreateDirectoryRequest& ClientToHost::create_directory_request() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.ClientToHost.create_directory_request)
+  return create_directory_request_ != NULL ? *create_directory_request_
+                         : *::aspia::proto::CreateDirectoryRequest::internal_default_instance();
+}
+::aspia::proto::CreateDirectoryRequest* ClientToHost::mutable_create_directory_request() {
+  
+  if (create_directory_request_ == NULL) {
+    create_directory_request_ = new ::aspia::proto::CreateDirectoryRequest;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.file_transfer.ClientToHost.create_directory_request)
+  return create_directory_request_;
+}
+::aspia::proto::CreateDirectoryRequest* ClientToHost::release_create_directory_request() {
+  // @@protoc_insertion_point(field_release:aspia.proto.file_transfer.ClientToHost.create_directory_request)
+  
+  ::aspia::proto::CreateDirectoryRequest* temp = create_directory_request_;
+  create_directory_request_ = NULL;
+  return temp;
+}
+void ClientToHost::set_allocated_create_directory_request(::aspia::proto::CreateDirectoryRequest* create_directory_request) {
+  delete create_directory_request_;
+  create_directory_request_ = create_directory_request;
+  if (create_directory_request) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.ClientToHost.create_directory_request)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

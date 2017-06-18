@@ -117,6 +117,28 @@ void ClientSessionFileTransfer::OnDirectoryListRequest(UiFileManager::PanelType 
     }
 }
 
+void ClientSessionFileTransfer::OnCreateDirectoryRequest(
+    UiFileManager::PanelType panel_type,
+    const std::string& path)
+{
+    if (panel_type == UiFileManager::PanelType::REMOTE)
+    {
+        proto::file_transfer::ClientToHost message;
+        message.mutable_create_directory_request()->set_path(path);
+        WriteMessage(message);
+    }
+    else
+    {
+        DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
+
+        std::experimental::filesystem::path directory_path =
+            std::experimental::filesystem::u8path(path);
+
+        std::error_code code;
+        std::experimental::filesystem::create_directory(directory_path, code);
+    }
+}
+
 void ClientSessionFileTransfer::OnSendFile(const std::wstring& from_path,
                                            const std::wstring& to_path)
 {

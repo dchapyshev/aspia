@@ -112,7 +112,12 @@ INT_PTR UiFileStatusDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
         {
             switch (LOWORD(wparam))
             {
-                case IDCANCEL:
+                case IDC_MINIMIZE_BUTTON:
+                    ShowWindow(hwnd(), SW_MINIMIZE);
+                    break;
+
+                case IDC_STOP_BUTTON:
+                    PostMessageW(hwnd(), WM_CLOSE, 0, 0);
                     break;
             }
         }

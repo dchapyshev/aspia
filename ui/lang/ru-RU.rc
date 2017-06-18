@@ -349,7 +349,7 @@ BEGIN
     IDS_FT_SIZE_TBYTES                    "ТБ"
     IDS_FT_SIZE_GBYTES                    "ГБ"
     IDS_FT_SIZE_MBYTES                    "МБ"
-    IDS_FT_SIZE_KBYTES                    "КБ"
+    IDS_FT_SIZE_KBYTES                    "кБ"
     IDS_FT_SIZE_BYTES                     "Б"
 END
 

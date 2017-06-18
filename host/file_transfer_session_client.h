@@ -41,6 +41,7 @@ private:
     bool ReadDirectoryListRequestMessage(const proto::DirectoryListRequest& direcrory_list_request);
     bool ReadFileRequestMessage(const proto::FileRequest& file_request);
     bool ReadFileMessage(const proto::File& file);
+    bool ReadCreateDirectoryRequest(const proto::CreateDirectoryRequest& create_directory_request);
 
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::mutex outgoing_lock_;

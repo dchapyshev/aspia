@@ -85,3 +85,8 @@ message FileRequest
 {
     string path = 1;
 }
+
+message CreateDirectoryRequest
+{
+    string path = 1;
+}

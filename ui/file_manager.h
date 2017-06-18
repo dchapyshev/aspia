@@ -30,6 +30,7 @@ public:
         virtual void OnWindowClose() = 0;
         virtual void OnDriveListRequest(PanelType panel_type) = 0;
         virtual void OnDirectoryListRequest(PanelType panel_type, const std::string& path) = 0;
+        virtual void OnCreateDirectoryRequest(PanelType type, const std::string& path) = 0;
         virtual void OnSendFile(const std::wstring& from_path, const std::wstring& to_path) = 0;
         virtual void OnRecieveFile(const std::wstring& from_path, const std::wstring& to_path) = 0;
     };
@@ -51,6 +52,7 @@ private:
     // UiFileManagerPanel::Delegate implementation.
     void OnDriveListRequest(PanelType panel_type) override;
     void OnDirectoryListRequest(PanelType type, const std::string& path) override;
+    void OnCreateDirectoryRequest(PanelType type, const std::string& path) override;
 
     // UiChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;

@@ -79,6 +79,10 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
         {
             success = ReadFileMessage(message.file());
         }
+        else if (message.has_create_directory_request())
+        {
+            success = ReadCreateDirectoryRequest(message.create_directory_request());
+        }
         else
         {
             // Unknown messages are ignored.
@@ -152,6 +156,18 @@ bool FileTransferSessionClient::ReadFileRequestMessage(
 
 bool FileTransferSessionClient::ReadFileMessage(const proto::File& file)
 {
+    return true;
+}
+
+bool FileTransferSessionClient::ReadCreateDirectoryRequest(
+    const proto::CreateDirectoryRequest& create_directory_request)
+{
+    std::experimental::filesystem::path path =
+        std::experimental::filesystem::u8path(create_directory_request.path());
+
+    std::error_code code;
+    std::experimental::filesystem::create_directory(path, code);
+
     return true;
 }
 

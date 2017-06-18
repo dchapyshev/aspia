@@ -27,10 +27,11 @@ private:
     // ClientSession implementation.
     void Send(const IOBuffer& buffer) override;
 
-    // FileManager::Delegate implementation.
+    // UiFileManager::Delegate implementation.
     void OnWindowClose() override;
     void OnDriveListRequest(UiFileManager::PanelType panel_type) override;
     void OnDirectoryListRequest(UiFileManager::PanelType panel_type, const std::string& path) override;
+    void OnCreateDirectoryRequest(UiFileManager::PanelType panel_type, const std::string& path) override;
     void OnSendFile(const std::wstring& from_path, const std::wstring& to_path) override;
     void OnRecieveFile(const std::wstring& from_path, const std::wstring& to_path) override;
 

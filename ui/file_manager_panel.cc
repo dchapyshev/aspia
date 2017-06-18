@@ -403,7 +403,7 @@ void UiFileManagerPanel::OnCreate()
     list_window_.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
 
     list_window_.AddColumn(module.string(IDS_FT_COLUMN_NAME), 180);
-    list_window_.AddColumn(module.string(IDS_FT_COLUMN_SIZE), 60);
+    list_window_.AddColumn(module.string(IDS_FT_COLUMN_SIZE), 70);
     list_window_.AddColumn(module.string(IDS_FT_COLUMN_TYPE), 100);
     list_window_.AddColumn(module.string(IDS_FT_COLUMN_MODIFIED), 100);
 
@@ -629,6 +629,11 @@ void UiFileManagerPanel::OnFolderUp()
     delegate_->OnDirectoryListRequest(type_, path.u8string());
 }
 
+void UiFileManagerPanel::OnFolderCreate()
+{
+
+}
+
 bool UiFileManagerPanel::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
 {
     switch (msg)
@@ -697,6 +702,10 @@ bool UiFileManagerPanel::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESU
 
                 case ID_FOLDER_UP:
                     OnFolderUp();
+                    break;
+
+                case ID_FOLDER_ADD:
+                    OnFolderCreate();
                     break;
             }
         }
