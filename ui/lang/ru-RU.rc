@@ -331,6 +331,7 @@ END
 // File Transfer
 STRINGTABLE DISCARDABLE
 BEGIN
+    IDS_FT_FILE_TRANSFER                  "Передача файлов"
     IDS_FT_LOCAL_COMPUTER                 "Локальный компьютер"
     IDS_FT_REMOTE_COMPUTER                "Удаленный компьютер"
     IDS_FT_COLUMN_NAME                    "Имя"
@@ -352,6 +353,15 @@ BEGIN
     IDS_FT_SIZE_KBYTES                    "кБ"
     IDS_FT_SIZE_BYTES                     "Б"
     IDS_FT_NEW_FOLDER                     "Новая папка"
+    IDS_FT_COMPUTER                       "Компьютер"
+    IDS_FT_DRIVE_DESC_DESKTOP             "Рабочий стол пользователя"
+    IDS_FT_DRIVE_DESC_HOME                "Домашняя папка пользователя"
+    IDS_FT_DRIVE_DESC_CDROM               "Оптический дисковод"
+    IDS_FT_DRIVE_DESC_FIXED               "Несъемное устройство"
+    IDS_FT_DRIVE_DESC_REMOVABLE           "Съемное устройство"
+    IDS_FT_DRIVE_DESC_REMOTE              "Сетевой диск"
+    IDS_FT_DRIVE_DESC_RAM                 "RAM диск"
+    IDS_FT_DRIVE_DESC_UNKNOWN             "Неизвестное устройство"
 END
 
 // Status

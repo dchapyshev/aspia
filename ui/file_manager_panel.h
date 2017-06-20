@@ -51,7 +51,9 @@ private:
     void OnFolderCreate();
     void OnRefresh();
     void OnRemove();
+    void OnMoveToComputer();
     void OnEndLabelEdit(LPNMLVDISPINFOW disp_info);
+    int GetKnownDriveIndex(const std::string& path);
 
     // ChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;

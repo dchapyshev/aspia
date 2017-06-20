@@ -25,6 +25,7 @@ public:
 
     bool Create(int width, int height, UINT flags, int initial, int grow);
     bool CreateSmall();
+    void Remove(int index);
     void RemoveAll();
 
     int AddIcon(HICON icon);

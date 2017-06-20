@@ -22,31 +22,38 @@ public:
     UiComboBoxEx() = default;
     UiComboBoxEx(HWND hwnd);
 
-    LRESULT InsertItem(const std::wstring& text,
-                       INT_PTR item_index,
-                       int image_index,
-                       int indent,
-                       LPARAM lparam);
+    int InsertItem(const std::wstring& text,
+                   int item_index,
+                   int image_index,
+                   int indent,
+                   LPARAM lparam);
 
-    LRESULT AddItem(const std::wstring& text,
-                    int image_index,
-                    int indent,
-                    LPARAM lparam);
+    int AddItem(const std::wstring& text,
+                int image_index,
+                int indent,
+                LPARAM lparam);
 
-    int DeleteItem(INT_PTR item_index);
+    int DeleteItem(int item_index);
+    int DeleteItemWithData(LPARAM lparam);
     void DeleteAllItems();
 
-    LPARAM GetItemData(INT_PTR item_index);
-    LRESULT SetItemData(INT_PTR item_index, LPARAM lparam);
+    LPARAM GetItemData(int item_index);
+    LRESULT SetItemData(int item_index, LPARAM lparam);
 
-    std::wstring GetItemText(INT_PTR item_index);
-    LRESULT SetItemText(INT_PTR item_index, const std::wstring& text);
+    std::wstring GetItemText(int item_index);
+    LRESULT SetItemText(int item_index, const std::wstring& text);
+
+    int GetItemImage(int item_index);
 
     HIMAGELIST SetImageList(HIMAGELIST imagelist);
     HIMAGELIST GetImageList();
 
     int GetItemCount();
     int GetSelectedItem();
+    int GetItemWithData(LPARAM lparam);
+
+    void SelectItem(int item_index);
+    void SelectItemData(LPARAM lparam);
 };
 
 } // namespace aspia

@@ -331,6 +331,7 @@ END
 // File Transfer
 STRINGTABLE DISCARDABLE
 BEGIN
+    IDS_FT_FILE_TRANSFER                  "File Transfer"
     IDS_FT_LOCAL_COMPUTER                 "Local Computer"
     IDS_FT_REMOTE_COMPUTER                "Remote Computer"
     IDS_FT_COLUMN_NAME                    "Name"
@@ -352,6 +353,15 @@ BEGIN
     IDS_FT_SIZE_KBYTES                    "kB"
     IDS_FT_SIZE_BYTES                     "B"
     IDS_FT_NEW_FOLDER                     "New Folder"
+    IDS_FT_COMPUTER                       "Computer"
+    IDS_FT_DRIVE_DESC_DESKTOP             "User's Desktop Folder"
+    IDS_FT_DRIVE_DESC_HOME                "User's Home Folder"
+    IDS_FT_DRIVE_DESC_CDROM               "Optical Drive"
+    IDS_FT_DRIVE_DESC_FIXED               "Fixed Device"
+    IDS_FT_DRIVE_DESC_REMOVABLE           "Removable Device"
+    IDS_FT_DRIVE_DESC_REMOTE              "Remote Drive"
+    IDS_FT_DRIVE_DESC_RAM                 "RAM Drive"
+    IDS_FT_DRIVE_DESC_UNKNOWN             "Unknown Device"
 END
 
 // Status

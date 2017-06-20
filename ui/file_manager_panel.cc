@@ -21,6 +21,8 @@
 namespace aspia {
 
 static const int kNewFolderIndex = -1;
+static const int kComputerIndex = -1;
+static const int kCurrentFolderIndex = -2;
 
 bool UiFileManagerPanel::CreatePanel(HWND parent,
                                      PanelType panel_type,
@@ -120,6 +122,49 @@ static std::wstring GetDriveDisplayName(const proto::DriveListItem& item)
     return UNICODEfromUTF8(item.path());
 }
 
+static std::wstring GetDriveDescription(proto::DriveListItem::Type type)
+{
+    switch (type)
+    {
+        case proto::DriveListItem::HOME_FOLDER:
+            return UiModule::Current().string(IDS_FT_DRIVE_DESC_HOME);
+
+        case proto::DriveListItem::DESKTOP_FOLDER:
+            return UiModule::Current().string(IDS_FT_DRIVE_DESC_DESKTOP);
+
+        case proto::DriveListItem::CDROM:
+            return UiModule::Current().string(IDS_FT_DRIVE_DESC_CDROM);
+
+        case proto::DriveListItem::FIXED:
+            return UiModule::Current().string(IDS_FT_DRIVE_DESC_FIXED);
+
+        case proto::DriveListItem::REMOVABLE:
+            return UiModule::Current().string(IDS_FT_DRIVE_DESC_REMOVABLE);
+
+        case proto::DriveListItem::REMOTE:
+            return UiModule::Current().string(IDS_FT_DRIVE_DESC_REMOTE);
+
+        case proto::DriveListItem::RAM:
+            return UiModule::Current().string(IDS_FT_DRIVE_DESC_RAM);
+
+        default:
+            return UiModule::Current().string(IDS_FT_DRIVE_DESC_UNKNOWN);
+    }
+}
+
+static HICON GetComputerIcon()
+{
+    SHSTOCKICONINFO icon_info;
+
+    memset(&icon_info, 0, sizeof(icon_info));
+    icon_info.cbSize = sizeof(icon_info);
+
+    if (FAILED(GetStockIconInfo(SIID_DESKTOPPC, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
+        return nullptr;
+
+    return icon_info.hIcon;
+}
+
 void UiFileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_list)
 {
     drives_combo_.DeleteAllItems();
@@ -127,22 +172,33 @@ void UiFileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_l
 
     drive_list_.reset(drive_list.release());
 
+    ScopedHICON icon(GetComputerIcon());
+    DCHECK(icon.IsValid());
+
+    int icon_index = drives_imagelist_.AddIcon(icon);
+
+    int root_index =
+        drives_combo_.AddItem(UiModule::Current().string(IDS_FT_COMPUTER),
+                              icon_index, 0, kComputerIndex);
+
     const int count = drive_list_->item_size();
 
     for (int index = 0; index < count; ++index)
     {
         const proto::DriveListItem& item = drive_list_->item(index);
 
-        ScopedHICON icon(GetDriveIcon(item.type()));
-
-        int icon_index = -1;
-
-        if (icon.IsValid())
-            icon_index = drives_imagelist_.AddIcon(icon);
+        icon.Reset(GetDriveIcon(item.type()));
+        icon_index = drives_imagelist_.AddIcon(icon);
 
         std::wstring display_name = GetDriveDisplayName(item);
 
-        drives_combo_.AddItem(display_name, icon_index, 0, index);
+        drives_combo_.AddItem(display_name, icon_index, 1, index);
+    }
+
+    if (!directory_list_)
+    {
+        drives_combo_.SelectItem(root_index);
+        OnAddressChanged();
     }
 }
 
@@ -269,15 +325,32 @@ void UiFileManagerPanel::ReadDirectoryList(
 
     directory_list_.reset(directory_list.release());
 
-    const int count = directory_list_->item_size();
-
-    int icon_index = -1;
-
     // All directories have the same icon.
     ScopedHICON icon(GetDirectoryIcon());
 
-    if (icon.IsValid())
-        icon_index = list_imagelist_.AddIcon(icon);
+    int current_folder_index = drives_combo_.GetItemWithData(kCurrentFolderIndex);
+    if (current_folder_index != CB_ERR)
+    {
+        int icon_index = drives_combo_.GetItemImage(current_folder_index);
+        if (icon_index != -1)
+            drives_imagelist_.Remove(icon_index);
+
+        drives_combo_.DeleteItem(current_folder_index);
+    }
+
+    int known_index = GetKnownDriveIndex(directory_list_->path());
+    if (known_index == -1)
+    {
+        int icon_index = drives_imagelist_.AddIcon(icon);
+        drives_combo_.InsertItem(UNICODEfromUTF8(directory_list_->path()),
+                                 0, icon_index, 0, kCurrentFolderIndex);
+        known_index = kCurrentFolderIndex;
+    }
+
+    drives_combo_.SelectItemData(known_index);
+
+    int icon_index = list_imagelist_.AddIcon(icon);
+    int count = directory_list_->item_size();
 
     // Enumerate the directories first.
     for (int index = 0; index < count; ++index)
@@ -305,11 +378,7 @@ void UiFileManagerPanel::ReadDirectoryList(
         std::wstring name = UNICODEfromUTF8(item.name());
 
         icon.Reset(GetFileIcon(name));
-
-        icon_index = -1;
-
-        if (icon.IsValid())
-            icon_index = list_imagelist_.AddIcon(icon);
+        icon_index = list_imagelist_.AddIcon(icon);
 
         int item_index = list_window_.AddItem(name, index, icon_index);
         list_window_.SetItemText(item_index, 1, SizeToString(item.size()));
@@ -537,7 +606,7 @@ void UiFileManagerPanel::OnDrawItem(LPDRAWITEMSTRUCT dis)
 
 void UiFileManagerPanel::OnGetDispInfo(LPNMHDR phdr)
 {
-    LPTOOLTIPTEXTW header = reinterpret_cast<LPTOOLTIPTEXTW>(phdr);
+    LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(phdr);
     UINT string_id;
 
     switch (header->hdr.idFrom)
@@ -581,6 +650,22 @@ void UiFileManagerPanel::OnGetDispInfo(LPNMHDR phdr)
                 _countof(header->szText));
 }
 
+int UiFileManagerPanel::GetKnownDriveIndex(const std::string& path)
+{
+    if (drive_list_)
+    {
+        const int count = drive_list_->item_size();
+
+        for (int index = 0; index < count; ++index)
+        {
+            if (_stricmp(path.c_str(), drive_list_->item(index).path().c_str()) == 0)
+                return index;
+        }
+    }
+
+    return -1;
+}
+
 void UiFileManagerPanel::OnAddressChanged()
 {
     if (!drive_list_)
@@ -591,23 +676,65 @@ void UiFileManagerPanel::OnAddressChanged()
         return;
 
     int index = drives_combo_.GetItemData(selected_item);
-    if (index < 0 || index >= drive_list_->item_size())
-        return;
 
-    delegate_->OnDirectoryListRequest(panel_type_,
-                                      drive_list_->item(index).path());
+    if (index == kComputerIndex)
+    {
+        list_window_.DeleteAllItems();
+        list_imagelist_.RemoveAll();
+        directory_list_.reset();
+
+        const int count = drive_list_->item_size();
+
+        for (int index = 0; index < count; ++index)
+        {
+            const proto::DriveListItem& item = drive_list_->item(index);
+
+            ScopedHICON icon(GetDriveIcon(item.type()));
+            int icon_index = list_imagelist_.AddIcon(icon);
+
+            std::wstring display_name = GetDriveDisplayName(item);
+
+            int item_index = list_window_.AddItem(display_name, index, icon_index);
+            list_window_.SetItemText(item_index, 2, GetDriveDescription(item.type()));
+        }
+    }
+    else if (index == kCurrentFolderIndex)
+    {
+        std::experimental::filesystem::path path =
+            drives_combo_.GetItemText(selected_item);
+
+        delegate_->OnDirectoryListRequest(panel_type_, path.u8string());
+    }
+    else if (index < 0 || index >= drive_list_->item_size())
+    {
+        return;
+    }
+    else
+    {
+        delegate_->OnDirectoryListRequest(panel_type_,
+                                          drive_list_->item(index).path());
+    }
 }
 
 void UiFileManagerPanel::OnAddressChange()
 {
-    if (!directory_list_)
-        return;
-
     int item_index = list_window_.GetItemUnderPointer();
     if (item_index == -1)
         return;
 
     int index = list_window_.GetItemData<int>(item_index);
+
+    if (!directory_list_)
+    {
+        if (!drive_list_)
+            return;
+
+        drives_combo_.SelectItemData(index);
+        OnAddressChanged();
+
+        return;
+    }
+
     if (index < 0 || index >= directory_list_->item_size())
         return;
 
@@ -638,18 +765,22 @@ void UiFileManagerPanel::OnFolderUp()
     path = path.parent_path();
 
     if (path.has_root_name() && path.root_name() == path)
+    {
+        drives_combo_.SelectItemData(kComputerIndex);
+        OnAddressChanged();
         return;
+    }
 
     delegate_->OnDirectoryListRequest(panel_type_, path.u8string());
 }
 
 void UiFileManagerPanel::OnFolderCreate()
 {
-    int icon_index = -1;
+    if (!directory_list_)
+        return;
 
     ScopedHICON folder_icon(GetDirectoryIcon());
-    if (folder_icon.IsValid())
-        icon_index = list_imagelist_.AddIcon(folder_icon);
+    int icon_index = list_imagelist_.AddIcon(folder_icon);
 
     std::wstring folder_name = UiModule::Current().string(IDS_FT_NEW_FOLDER);
 
@@ -691,6 +822,12 @@ void UiFileManagerPanel::OnRemove()
 
     delegate_->OnRemoveRequest(panel_type_, path.u8string());
     delegate_->OnDirectoryListRequest(panel_type_, directory_list_->path());
+}
+
+void UiFileManagerPanel::OnMoveToComputer()
+{
+    drives_combo_.SelectItemData(kComputerIndex);
+    OnAddressChanged();
 }
 
 void UiFileManagerPanel::OnEndLabelEdit(LPNMLVDISPINFOW disp_info)
@@ -769,13 +906,18 @@ bool UiFileManagerPanel::OnMessage(UINT msg,
         {
             LPNMHDR header = reinterpret_cast<LPNMHDR>(lparam);
 
-            if (header->hwndFrom == toolbar_window_.hwnd())
+            if (header->code == TTN_GETDISPINFOW)
             {
-                switch (header->code)
+                OnGetDispInfo(header);
+            }
+            else if (header->code == CBEN_ENDEDITW && header->hwndFrom == drives_combo_.hwnd())
+            {
+                PNMCBEENDEDITW end_edit = reinterpret_cast<PNMCBEENDEDITW>(lparam);
+
+                if (end_edit->fChanged && end_edit->iWhy == CBENF_RETURN && end_edit->szText)
                 {
-                    case TTN_GETDISPINFO:
-                        OnGetDispInfo(header);
-                        break;
+                    std::experimental::filesystem::path path = end_edit->szText;
+                    delegate_->OnDirectoryListRequest(panel_type_, path.u8string());
                 }
             }
             else if (header->hwndFrom == list_window_.hwnd())
@@ -829,6 +971,10 @@ bool UiFileManagerPanel::OnMessage(UINT msg,
 
                 case ID_DELETE:
                     OnRemove();
+                    break;
+
+                case ID_HOME:
+                    OnMoveToComputer();
                     break;
             }
         }

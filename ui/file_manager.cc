@@ -34,17 +34,16 @@ void UiFileManager::OnBeforeThreadRunning()
     const DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU |
         WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
 
-    if (!Create(nullptr, style, L"File Transfer"))
+    const UiModule& module = UiModule::Current();
+
+    if (!Create(nullptr, style, module.string(IDS_FT_FILE_TRANSFER)))
     {
         LOG(ERROR) << "File manager window not created";
         runner_->PostQuit();
     }
     else
     {
-        ScopedHICON icon(UiModule::Current().icon(IDI_MAIN,
-                                                  GetSystemMetrics(SM_CXSMICON),
-                                                  GetSystemMetrics(SM_CYSMICON),
-                                                  LR_CREATEDIBSECTION));
+        ScopedHICON icon(module.small_icon(IDI_MAIN));
         SetIcon(icon);
         SetCursor(LoadCursorW(nullptr, IDC_ARROW));
     }
@@ -183,19 +182,6 @@ bool UiFileManager::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* r
         case WM_GETMINMAXINFO:
             OnGetMinMaxInfo(reinterpret_cast<LPMINMAXINFO>(lparam));
             break;
-
-        case WM_NOTIFY:
-            break;
-
-        case WM_COMMAND:
-        {
-            switch (LOWORD(wparam))
-            {
-                case 0:
-                    break;
-            }
-        }
-        break;
 
         case WM_CLOSE:
             OnClose();

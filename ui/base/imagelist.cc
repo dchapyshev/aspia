@@ -62,6 +62,11 @@ bool UiImageList::CreateSmall()
                   1, 1);
 }
 
+void UiImageList::Remove(int index)
+{
+    ImageList_Remove(list_, index);
+}
+
 void UiImageList::RemoveAll()
 {
     ImageList_RemoveAll(list_);
