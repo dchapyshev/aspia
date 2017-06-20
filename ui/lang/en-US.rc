@@ -351,6 +351,7 @@ BEGIN
     IDS_FT_SIZE_MBYTES                    "MB"
     IDS_FT_SIZE_KBYTES                    "kB"
     IDS_FT_SIZE_BYTES                     "B"
+    IDS_FT_NEW_FOLDER                     "New Folder"
 END
 
 // Status

@@ -42,6 +42,8 @@ private:
     bool ReadFileRequestMessage(const proto::FileRequest& file_request);
     bool ReadFileMessage(const proto::File& file);
     bool ReadCreateDirectoryRequest(const proto::CreateDirectoryRequest& create_directory_request);
+    bool ReadRenameRequest(const proto::RenameRequest& rename_request);
+    bool ReadRemoveRequest(const proto::RemoveRequest& remove_request);
 
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::mutex outgoing_lock_;

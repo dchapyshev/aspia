@@ -29,4 +29,6 @@ message ClientToHost
     FileRequest file_request                        = 3;
     File file                                       = 4;
     CreateDirectoryRequest create_directory_request = 5;
+    RenameRequest rename_request                    = 6;
+    RemoveRequest remove_request                    = 7;
 }

@@ -22,17 +22,19 @@ public:
     UiFileManagerPanel() = default;
     virtual ~UiFileManagerPanel() = default;
 
-    enum class Type { UNKNOWN, LOCAL, REMOTE };
+    enum class PanelType { UNKNOWN, LOCAL, REMOTE };
 
     class Delegate
     {
     public:
-        virtual void OnDriveListRequest(Type type) = 0;
-        virtual void OnDirectoryListRequest(Type type, const std::string& path) = 0;
-        virtual void OnCreateDirectoryRequest(Type type, const std::string& path) = 0;
+        virtual void OnDriveListRequest(PanelType panel_type) = 0;
+        virtual void OnDirectoryListRequest(PanelType _panel_type, const std::string& path) = 0;
+        virtual void OnCreateDirectoryRequest(PanelType panel_type, const std::string& path) = 0;
+        virtual void OnRenameRequest(PanelType panel_type, const std::string& old_path, const std::string& new_path) = 0;
+        virtual void OnRemoveRequest(PanelType panel_type, const std::string& path) = 0;
     };
 
-    bool CreatePanel(HWND parent, Type type, Delegate* delegate);
+    bool CreatePanel(HWND parent, PanelType panel_type, Delegate* delegate);
 
     void ReadDriveList(std::unique_ptr<proto::DriveList> drive_list);
     void ReadDirectoryList(std::unique_ptr<proto::DirectoryList> directory_list);
@@ -47,11 +49,14 @@ private:
     void OnAddressChange();
     void OnFolderUp();
     void OnFolderCreate();
+    void OnRefresh();
+    void OnRemove();
+    void OnEndLabelEdit(LPNMLVDISPINFOW disp_info);
 
     // ChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;
 
-    Type type_ = Type::UNKNOWN;
+    PanelType panel_type_ = PanelType::UNKNOWN;
     Delegate* delegate_ = nullptr;
     std::wstring name_;
 
@@ -65,8 +70,8 @@ private:
     UiImageList toolbar_imagelist_;
 
     std::unique_ptr<proto::DriveList> drive_list_;
-    UiComboBoxEx address_window_;
-    UiImageList address_imagelist_;
+    UiComboBoxEx drives_combo_;
+    UiImageList drives_imagelist_;
 
     UiWindow status_window_;
 

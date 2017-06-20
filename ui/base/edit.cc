@@ -49,4 +49,20 @@ void UiEdit::AppendText(const std::wstring& text)
     Edit_ReplaceSel(hwnd(), text.c_str());
 }
 
+std::wstring UiEdit::GetText()
+{
+    // Returns the length without null-character.
+    int length = GetWindowTextLengthW(hwnd());
+    if (length > 0)
+    {
+        std::wstring string;
+        string.resize(length);
+
+        if (GetWindowTextW(hwnd(), &string[0], length + 1))
+             return string;
+    }
+
+    return std::wstring();
+}
+
 } // namespace aspia

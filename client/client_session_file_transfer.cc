@@ -139,6 +139,53 @@ void ClientSessionFileTransfer::OnCreateDirectoryRequest(
     }
 }
 
+void ClientSessionFileTransfer::OnRenameRequest(
+    UiFileManager::PanelType panel_type,
+    const std::string& old_path,
+    const std::string& new_path)
+{
+    if (panel_type == UiFileManager::PanelType::REMOTE)
+    {
+        proto::file_transfer::ClientToHost message;
+
+        message.mutable_rename_request()->set_old_path(old_path);
+        message.mutable_rename_request()->set_new_path(new_path);
+
+        WriteMessage(message);
+    }
+    else
+    {
+        DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
+
+        std::error_code code;
+        std::experimental::filesystem::rename(std::experimental::filesystem::u8path(old_path),
+                                              std::experimental::filesystem::u8path(new_path),
+                                              code);
+    }
+}
+
+void ClientSessionFileTransfer::OnRemoveRequest(
+    UiFileManager::PanelType panel_type,
+    const std::string& path)
+{
+    if (panel_type == UiFileManager::PanelType::REMOTE)
+    {
+        proto::file_transfer::ClientToHost message;
+        message.mutable_remove_request()->set_path(path);
+        WriteMessage(message);
+    }
+    else
+    {
+        DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
+
+        std::experimental::filesystem::path remove_path =
+            std::experimental::filesystem::u8path(path);
+
+        std::error_code code;
+        std::experimental::filesystem::remove(remove_path, code);
+    }
+}
+
 void ClientSessionFileTransfer::OnSendFile(const std::wstring& from_path,
                                            const std::wstring& to_path)
 {

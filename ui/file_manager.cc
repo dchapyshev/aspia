@@ -88,14 +88,26 @@ void UiFileManager::OnDriveListRequest(UiFileManager::PanelType panel_type)
     delegate_->OnDriveListRequest(panel_type);
 }
 
-void UiFileManager::OnDirectoryListRequest(PanelType type, const std::string& path)
+void UiFileManager::OnDirectoryListRequest(PanelType panel_type, const std::string& path)
 {
-    delegate_->OnDirectoryListRequest(type, path);
+    delegate_->OnDirectoryListRequest(panel_type, path);
 }
 
-void UiFileManager::OnCreateDirectoryRequest(PanelType type, const std::string& path)
+void UiFileManager::OnCreateDirectoryRequest(PanelType panel_type, const std::string& path)
 {
-    delegate_->OnCreateDirectoryRequest(type, path);
+    delegate_->OnCreateDirectoryRequest(panel_type, path);
+}
+
+void UiFileManager::OnRenameRequest(PanelType panel_type,
+                                    const std::string& old_path,
+                                    const std::string& new_path)
+{
+    delegate_->OnRenameRequest(panel_type, old_path, new_path);
+}
+
+void UiFileManager::OnRemoveRequest(PanelType panel_type, const std::string& path)
+{
+    delegate_->OnRemoveRequest(panel_type, path);
 }
 
 void UiFileManager::OnCreate()

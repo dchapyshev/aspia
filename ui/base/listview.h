@@ -60,6 +60,9 @@ public:
         return static_cast<T>(item.lParam);
     }
 
+    int GetItemTextLength(int item_index, int column_index);
+    std::wstring GetItemText(int item_index, int column_index);
+
     void DeleteAllItems();
     void SetCheckState(int item_index, bool checked);
     bool GetCheckState(int item_index);
@@ -67,6 +70,9 @@ public:
     void SetImageList(HIMAGELIST imagelist, int type);
     int GetFirstSelectedItem();
     int GetItemUnderPointer();
+
+    HWND EditLabel(int item_index);
+    std::wstring GetTextFromEdit();
 };
 
 } // namespace aspia

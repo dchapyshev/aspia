@@ -59,6 +59,12 @@ extern FileDefaultTypeInternal _File_default_instance_;
 class FileRequest;
 class FileRequestDefaultTypeInternal;
 extern FileRequestDefaultTypeInternal _FileRequest_default_instance_;
+class RemoveRequest;
+class RemoveRequestDefaultTypeInternal;
+extern RemoveRequestDefaultTypeInternal _RemoveRequest_default_instance_;
+class RenameRequest;
+class RenameRequestDefaultTypeInternal;
+extern RenameRequestDefaultTypeInternal _RenameRequest_default_instance_;
 }  // namespace proto
 }  // namespace aspia
 
@@ -1026,6 +1032,193 @@ class CreateDirectoryRequest : public ::google::protobuf::MessageLite /* @@proto
   mutable int _cached_size_;
   friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
 };
+// -------------------------------------------------------------------
+
+class RenameRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.RenameRequest) */ {
+ public:
+  RenameRequest();
+  virtual ~RenameRequest();
+
+  RenameRequest(const RenameRequest& from);
+
+  inline RenameRequest& operator=(const RenameRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const RenameRequest& default_instance();
+
+  static inline const RenameRequest* internal_default_instance() {
+    return reinterpret_cast<const RenameRequest*>(
+               &_RenameRequest_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    9;
+
+  void Swap(RenameRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  inline RenameRequest* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  RenameRequest* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const RenameRequest& from);
+  void MergeFrom(const RenameRequest& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(RenameRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string old_path = 1;
+  void clear_old_path();
+  static const int kOldPathFieldNumber = 1;
+  const ::std::string& old_path() const;
+  void set_old_path(const ::std::string& value);
+  #if LANG_CXX11
+  void set_old_path(::std::string&& value);
+  #endif
+  void set_old_path(const char* value);
+  void set_old_path(const char* value, size_t size);
+  ::std::string* mutable_old_path();
+  ::std::string* release_old_path();
+  void set_allocated_old_path(::std::string* old_path);
+
+  // string new_path = 2;
+  void clear_new_path();
+  static const int kNewPathFieldNumber = 2;
+  const ::std::string& new_path() const;
+  void set_new_path(const ::std::string& value);
+  #if LANG_CXX11
+  void set_new_path(::std::string&& value);
+  #endif
+  void set_new_path(const char* value);
+  void set_new_path(const char* value, size_t size);
+  ::std::string* mutable_new_path();
+  ::std::string* release_new_path();
+  void set_allocated_new_path(::std::string* new_path);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.RenameRequest)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr old_path_;
+  ::google::protobuf::internal::ArenaStringPtr new_path_;
+  mutable int _cached_size_;
+  friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class RemoveRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.RemoveRequest) */ {
+ public:
+  RemoveRequest();
+  virtual ~RemoveRequest();
+
+  RemoveRequest(const RemoveRequest& from);
+
+  inline RemoveRequest& operator=(const RemoveRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const RemoveRequest& default_instance();
+
+  static inline const RemoveRequest* internal_default_instance() {
+    return reinterpret_cast<const RemoveRequest*>(
+               &_RemoveRequest_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    10;
+
+  void Swap(RemoveRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  inline RemoveRequest* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  RemoveRequest* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const RemoveRequest& from);
+  void MergeFrom(const RemoveRequest& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(RemoveRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string path = 1;
+  void clear_path();
+  static const int kPathFieldNumber = 1;
+  const ::std::string& path() const;
+  void set_path(const ::std::string& value);
+  #if LANG_CXX11
+  void set_path(::std::string&& value);
+  #endif
+  void set_path(const char* value);
+  void set_path(const char* value, size_t size);
+  ::std::string* mutable_path();
+  ::std::string* release_path();
+  void set_allocated_path(::std::string* path);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.RemoveRequest)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr path_;
+  mutable int _cached_size_;
+  friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
+};
 // ===================================================================
 
 
@@ -1687,7 +1880,178 @@ inline void CreateDirectoryRequest::set_allocated_path(::std::string* path) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.CreateDirectoryRequest.path)
 }
 
+// -------------------------------------------------------------------
+
+// RenameRequest
+
+// string old_path = 1;
+inline void RenameRequest::clear_old_path() {
+  old_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RenameRequest::old_path() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RenameRequest.old_path)
+  return old_path_.GetNoArena();
+}
+inline void RenameRequest::set_old_path(const ::std::string& value) {
+  
+  old_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RenameRequest.old_path)
+}
+#if LANG_CXX11
+inline void RenameRequest::set_old_path(::std::string&& value) {
+  
+  old_path_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RenameRequest.old_path)
+}
+#endif
+inline void RenameRequest::set_old_path(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  old_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RenameRequest.old_path)
+}
+inline void RenameRequest::set_old_path(const char* value, size_t size) {
+  
+  old_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RenameRequest.old_path)
+}
+inline ::std::string* RenameRequest::mutable_old_path() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RenameRequest.old_path)
+  return old_path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RenameRequest::release_old_path() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RenameRequest.old_path)
+  
+  return old_path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RenameRequest::set_allocated_old_path(::std::string* old_path) {
+  if (old_path != NULL) {
+    
+  } else {
+    
+  }
+  old_path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), old_path);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RenameRequest.old_path)
+}
+
+// string new_path = 2;
+inline void RenameRequest::clear_new_path() {
+  new_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RenameRequest::new_path() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RenameRequest.new_path)
+  return new_path_.GetNoArena();
+}
+inline void RenameRequest::set_new_path(const ::std::string& value) {
+  
+  new_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RenameRequest.new_path)
+}
+#if LANG_CXX11
+inline void RenameRequest::set_new_path(::std::string&& value) {
+  
+  new_path_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RenameRequest.new_path)
+}
+#endif
+inline void RenameRequest::set_new_path(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  new_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RenameRequest.new_path)
+}
+inline void RenameRequest::set_new_path(const char* value, size_t size) {
+  
+  new_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RenameRequest.new_path)
+}
+inline ::std::string* RenameRequest::mutable_new_path() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RenameRequest.new_path)
+  return new_path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RenameRequest::release_new_path() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RenameRequest.new_path)
+  
+  return new_path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RenameRequest::set_allocated_new_path(::std::string* new_path) {
+  if (new_path != NULL) {
+    
+  } else {
+    
+  }
+  new_path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), new_path);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RenameRequest.new_path)
+}
+
+// -------------------------------------------------------------------
+
+// RemoveRequest
+
+// string path = 1;
+inline void RemoveRequest::clear_path() {
+  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RemoveRequest::path() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RemoveRequest.path)
+  return path_.GetNoArena();
+}
+inline void RemoveRequest::set_path(const ::std::string& value) {
+  
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RemoveRequest.path)
+}
+#if LANG_CXX11
+inline void RemoveRequest::set_path(::std::string&& value) {
+  
+  path_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RemoveRequest.path)
+}
+#endif
+inline void RemoveRequest::set_path(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RemoveRequest.path)
+}
+inline void RemoveRequest::set_path(const char* value, size_t size) {
+  
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RemoveRequest.path)
+}
+inline ::std::string* RemoveRequest::mutable_path() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RemoveRequest.path)
+  return path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RemoveRequest::release_path() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RemoveRequest.path)
+  
+  return path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RemoveRequest::set_allocated_path(::std::string* path) {
+  if (path != NULL) {
+    
+  } else {
+    
+  }
+  path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RemoveRequest.path)
+}
+
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

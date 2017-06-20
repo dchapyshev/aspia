@@ -21,6 +21,7 @@ public:
     bool Create(HWND parent, DWORD style);
 
     void AppendText(const std::wstring& text);
+    std::wstring GetText();
 };
 
 } // namespace aspia

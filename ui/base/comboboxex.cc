@@ -7,8 +7,6 @@
 
 #include "ui/base/comboboxex.h"
 
-#include <windowsx.h>
-
 namespace aspia {
 
 UiComboBoxEx::UiComboBoxEx(HWND hwnd)
@@ -46,19 +44,14 @@ LRESULT UiComboBoxEx::AddItem(const std::wstring& text,
     return InsertItem(text, -1, image_index, indent, lparam);
 }
 
-LRESULT UiComboBoxEx::DeleteItem(INT_PTR item_index)
+int UiComboBoxEx::DeleteItem(INT_PTR item_index)
 {
     return SendMessageW(hwnd(), CBEM_DELETEITEM, item_index, 0);
 }
 
 void UiComboBoxEx::DeleteAllItems()
 {
-    const int count = GetItemCount();
-
-    for (int index = 0; index < count; ++index)
-    {
-        DeleteItem(index);
-    }
+    SendMessageW(hwnd(), CB_RESETCONTENT, 0, 0);
 }
 
 LPARAM UiComboBoxEx::GetItemData(INT_PTR item_index)
@@ -136,10 +129,7 @@ HIMAGELIST UiComboBoxEx::GetImageList()
 
 int UiComboBoxEx::GetItemCount()
 {
-    HWND combobox =
-        reinterpret_cast<HWND>(SendMessageW(hwnd(), CBEM_GETCOMBOCONTROL, 0, 0));
-
-    return ComboBox_GetCount(combobox);
+    return SendMessageW(hwnd(), CB_GETCOUNT, 0, 0);
 }
 
 int UiComboBoxEx::GetSelectedItem()

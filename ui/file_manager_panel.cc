@@ -13,26 +13,31 @@
 #include "base/string_util.h"
 #include "base/unicode.h"
 
+#include <clocale>
 #include <filesystem>
 #include <shellapi.h>
 #include <shlobj.h>
 
 namespace aspia {
 
-bool UiFileManagerPanel::CreatePanel(HWND parent, Type type, Delegate* delegate)
+static const int kNewFolderIndex = -1;
+
+bool UiFileManagerPanel::CreatePanel(HWND parent,
+                                     PanelType panel_type,
+                                     Delegate* delegate)
 {
     delegate_ = delegate;
-    type_ = type;
+    panel_type_ = panel_type;
 
     const UiModule& module = UiModule::Current();
 
-    if (type == Type::LOCAL)
+    if (panel_type == PanelType::LOCAL)
     {
         name_ = module.string(IDS_FT_LOCAL_COMPUTER);
     }
     else
     {
-        DCHECK(type == Type::REMOTE);
+        DCHECK(panel_type == PanelType::REMOTE);
         name_ = module.string(IDS_FT_REMOTE_COMPUTER);
     }
 
@@ -117,8 +122,8 @@ static std::wstring GetDriveDisplayName(const proto::DriveListItem& item)
 
 void UiFileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_list)
 {
-    address_window_.DeleteAllItems();
-    address_imagelist_.RemoveAll();
+    drives_combo_.DeleteAllItems();
+    drives_imagelist_.RemoveAll();
 
     drive_list_.reset(drive_list.release());
 
@@ -133,11 +138,11 @@ void UiFileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_l
         int icon_index = -1;
 
         if (icon.IsValid())
-            icon_index = address_imagelist_.AddIcon(icon);
+            icon_index = drives_imagelist_.AddIcon(icon);
 
         std::wstring display_name = GetDriveDisplayName(item);
 
-        address_window_.AddItem(display_name, icon_index, 0, index);
+        drives_combo_.AddItem(display_name, icon_index, 0, index);
     }
 }
 
@@ -152,6 +157,34 @@ static HICON GetDirectoryIcon()
         return nullptr;
 
     return icon_info.hIcon;
+}
+
+static std::wstring GetDirectoryTypeString(const std::wstring& dir_name)
+{
+    SHFILEINFO file_info;
+    memset(&file_info, 0, sizeof(file_info));
+
+    SHGetFileInfoW(dir_name.c_str(),
+                   FILE_ATTRIBUTE_DIRECTORY,
+                   &file_info,
+                   sizeof(file_info),
+                   SHGFI_USEFILEATTRIBUTES | SHGFI_TYPENAME);
+
+    return file_info.szTypeName;
+}
+
+static std::wstring GetFileTypeString(const std::wstring& file_name)
+{
+    SHFILEINFO file_info;
+    memset(&file_info, 0, sizeof(file_info));
+
+    SHGetFileInfoW(file_name.c_str(),
+                   FILE_ATTRIBUTE_NORMAL,
+                   &file_info,
+                   sizeof(file_info),
+                   SHGFI_USEFILEATTRIBUTES | SHGFI_TYPENAME);
+
+    return file_info.szTypeName;
 }
 
 static HICON GetFileIcon(const std::wstring& file_name)
@@ -219,10 +252,10 @@ static std::wstring TimeToString(time_t time)
         return std::wstring();
 
     // Set the locale obtained from system.
-    _wsetlocale(LC_TIME, L"");
+    std::setlocale(LC_TIME, "");
 
     wchar_t string[128];
-    if (!wcsftime(string, _countof(string), L"%x %X", local_time))
+    if (!std::wcsftime(string, _countof(string), L"%x %X", local_time))
         return std::wstring();
 
     return string;
@@ -257,17 +290,7 @@ void UiFileManagerPanel::ReadDirectoryList(
         std::wstring name = UNICODEfromUTF8(item.name());
 
         int item_index = list_window_.AddItem(name, index, icon_index);
-
-        SHFILEINFO file_info;
-        memset(&file_info, 0, sizeof(file_info));
-
-        SHGetFileInfoW(name.c_str(),
-                       FILE_ATTRIBUTE_DIRECTORY,
-                       &file_info,
-                       sizeof(file_info),
-                       SHGFI_USEFILEATTRIBUTES | SHGFI_TYPENAME);
-
-        list_window_.SetItemText(item_index, 2, file_info.szTypeName);
+        list_window_.SetItemText(item_index, 2, GetDirectoryTypeString(name));
         list_window_.SetItemText(item_index, 3, TimeToString(item.modified()));
     }
 
@@ -289,19 +312,8 @@ void UiFileManagerPanel::ReadDirectoryList(
             icon_index = list_imagelist_.AddIcon(icon);
 
         int item_index = list_window_.AddItem(name, index, icon_index);
-
         list_window_.SetItemText(item_index, 1, SizeToString(item.size()));
-
-        SHFILEINFO file_info;
-        memset(&file_info, 0, sizeof(file_info));
-
-        SHGetFileInfoW(name.c_str(),
-                       FILE_ATTRIBUTE_NORMAL,
-                       &file_info,
-                       sizeof(file_info),
-                       SHGFI_USEFILEATTRIBUTES | SHGFI_TYPENAME);
-
-        list_window_.SetItemText(item_index, 2, file_info.szTypeName);
+        list_window_.SetItemText(item_index, 2, GetFileTypeString(name));
         list_window_.SetItemText(item_index, 3, TimeToString(item.modified()));
     }
 }
@@ -324,21 +336,21 @@ void UiFileManagerPanel::OnCreate()
                                          nullptr));
     title_window_.SetFont(default_font);
 
-    address_window_.Attach(CreateWindowExW(0,
-                                           WC_COMBOBOXEXW,
-                                           L"",
-                                           WS_CHILD | WS_VISIBLE | WS_TABSTOP |
-                                               WS_VSCROLL | CBS_DROPDOWN,
-                                           0, 0, 200, 200,
-                                           hwnd(),
-                                           reinterpret_cast<HMENU>(IDC_ADDRESS_COMBO),
-                                           module.Handle(),
-                                           nullptr));
-    address_window_.SetFont(default_font);
+    drives_combo_.Attach(CreateWindowExW(0,
+                                         WC_COMBOBOXEXW,
+                                         L"",
+                                         WS_CHILD | WS_VISIBLE | WS_TABSTOP |
+                                             WS_VSCROLL | CBS_DROPDOWN,
+                                         0, 0, 200, 200,
+                                         hwnd(),
+                                         reinterpret_cast<HMENU>(IDC_ADDRESS_COMBO),
+                                         module.Handle(),
+                                         nullptr));
+    drives_combo_.SetFont(default_font);
 
-    if (address_imagelist_.CreateSmall())
+    if (drives_imagelist_.CreateSmall())
     {
-        address_window_.SetImageList(address_imagelist_);
+        drives_combo_.SetImageList(drives_imagelist_);
     }
 
     toolbar_window_.Attach(CreateWindowExW(0,
@@ -379,13 +391,13 @@ void UiFileManagerPanel::OnCreate()
         toolbar_imagelist_.AddIcon(module, IDI_FOLDER_UP);
         toolbar_imagelist_.AddIcon(module, IDI_HOME);
 
-        if (type_ == Type::LOCAL)
+        if (panel_type_ == PanelType::LOCAL)
         {
             toolbar_imagelist_.AddIcon(module, IDI_SEND);
         }
         else
         {
-            DCHECK(type_ == Type::REMOTE);
+            DCHECK(panel_type_ == PanelType::REMOTE);
             toolbar_imagelist_.AddIcon(module, IDI_RECIEVE);
         }
 
@@ -397,7 +409,8 @@ void UiFileManagerPanel::OnCreate()
 
     list_window_.Create(hwnd(),
                         WS_EX_CLIENTEDGE,
-                        WS_CHILD | WS_VISIBLE | WS_TABSTOP | LVS_REPORT | LVS_SHOWSELALWAYS,
+                        WS_CHILD | WS_VISIBLE | WS_TABSTOP | LVS_REPORT |
+                            LVS_SHOWSELALWAYS | LVS_EDITLABELS,
                         module.Handle());
 
     list_window_.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
@@ -429,7 +442,7 @@ void UiFileManagerPanel::OnDestroy()
     list_window_.DestroyWindow();
     toolbar_window_.DestroyWindow();
     title_window_.DestroyWindow();
-    address_window_.DestroyWindow();
+    drives_combo_.DestroyWindow();
     status_window_.DestroyWindow();
 }
 
@@ -441,7 +454,7 @@ void UiFileManagerPanel::OnSize(int width, int height)
     {
         SendMessageW(toolbar_window_, TB_AUTOSIZE, 0, 0);
 
-        int address_height = address_window_.Height();
+        int address_height = drives_combo_.Height();
         int toolbar_height = toolbar_window_.Height();
         int title_height = title_window_.Height();
         int status_height = status_window_.Height();
@@ -453,7 +466,7 @@ void UiFileManagerPanel::OnSize(int width, int height)
                        title_height,
                        SWP_NOACTIVATE | SWP_NOZORDER);
 
-        DeferWindowPos(dwp, address_window_, nullptr,
+        DeferWindowPos(dwp, drives_combo_, nullptr,
                        0,
                        title_height,
                        width,
@@ -551,7 +564,7 @@ void UiFileManagerPanel::OnGetDispInfo(LPNMHDR phdr)
 
         case ID_SEND:
         {
-            if (type_ == Type::LOCAL)
+            if (panel_type_ == PanelType::LOCAL)
                 string_id = IDS_FT_TOOLTIP_SEND;
             else
                 string_id = IDS_FT_TOOLTIP_RECIEVE;
@@ -573,15 +586,16 @@ void UiFileManagerPanel::OnAddressChanged()
     if (!drive_list_)
         return;
 
-    int selected_item = address_window_.GetSelectedItem();
+    int selected_item = drives_combo_.GetSelectedItem();
     if (selected_item == CB_ERR)
         return;
 
-    int index = address_window_.GetItemData(selected_item);
+    int index = drives_combo_.GetItemData(selected_item);
     if (index < 0 || index >= drive_list_->item_size())
         return;
 
-    delegate_->OnDirectoryListRequest(type_, drive_list_->item(index).path());
+    delegate_->OnDirectoryListRequest(panel_type_,
+                                      drive_list_->item(index).path());
 }
 
 void UiFileManagerPanel::OnAddressChange()
@@ -604,9 +618,9 @@ void UiFileManagerPanel::OnAddressChange()
         std::experimental::filesystem::path path =
             std::experimental::filesystem::u8path(directory_list_->path());
 
-        path.append(item.name());
+        path.append(std::experimental::filesystem::u8path(item.name()));
 
-        delegate_->OnDirectoryListRequest(type_, path.u8string());
+        delegate_->OnDirectoryListRequest(panel_type_, path.u8string());
     }
 }
 
@@ -626,15 +640,112 @@ void UiFileManagerPanel::OnFolderUp()
     if (path.has_root_name() && path.root_name() == path)
         return;
 
-    delegate_->OnDirectoryListRequest(type_, path.u8string());
+    delegate_->OnDirectoryListRequest(panel_type_, path.u8string());
 }
 
 void UiFileManagerPanel::OnFolderCreate()
 {
+    int icon_index = -1;
 
+    ScopedHICON folder_icon(GetDirectoryIcon());
+    if (folder_icon.IsValid())
+        icon_index = list_imagelist_.AddIcon(folder_icon);
+
+    std::wstring folder_name = UiModule::Current().string(IDS_FT_NEW_FOLDER);
+
+    SetFocus(list_window_);
+
+    int item_index =
+        list_window_.AddItem(folder_name, kNewFolderIndex, icon_index);
+
+    list_window_.SetItemText(item_index, 2, GetDirectoryTypeString(folder_name));
+    list_window_.EditLabel(item_index);
 }
 
-bool UiFileManagerPanel::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
+void UiFileManagerPanel::OnRefresh()
+{
+    delegate_->OnDriveListRequest(panel_type_);
+
+    if (directory_list_)
+        delegate_->OnDirectoryListRequest(panel_type_, directory_list_->path());
+}
+
+void UiFileManagerPanel::OnRemove()
+{
+    if (!directory_list_)
+        return;
+
+    int selected_item = list_window_.GetFirstSelectedItem();
+    if (selected_item == -1)
+        return;
+
+    int index = list_window_.GetItemData<int>(selected_item);
+    if (index < 0 || index >= directory_list_->item_size())
+        return;
+
+    std::experimental::filesystem::path path =
+        std::experimental::filesystem::u8path(directory_list_->path());
+
+    path.append(std::experimental::filesystem::u8path(
+        directory_list_->item(index).name()));
+
+    delegate_->OnRemoveRequest(panel_type_, path.u8string());
+    delegate_->OnDirectoryListRequest(panel_type_, directory_list_->path());
+}
+
+void UiFileManagerPanel::OnEndLabelEdit(LPNMLVDISPINFOW disp_info)
+{
+    if (!directory_list_)
+        return;
+
+    int index = disp_info->item.lParam;
+
+    // New folder.
+    if (index == kNewFolderIndex)
+    {
+        std::experimental::filesystem::path path =
+            std::experimental::filesystem::u8path(directory_list_->path());
+
+        path.append(std::experimental::filesystem::path(
+            list_window_.GetTextFromEdit()));
+
+        delegate_->OnCreateDirectoryRequest(panel_type_, path.u8string());
+    }
+    else // Rename exists item.
+    {
+        DCHECK(index >= 0 || index < directory_list_->item_size());
+
+        // User canceled rename.
+        if (!disp_info->item.pszText)
+            return;
+
+        std::experimental::filesystem::path old_path =
+            std::experimental::filesystem::u8path(directory_list_->path());
+
+        old_path.append(std::experimental::filesystem::u8path(
+            directory_list_->item(index).name()));
+
+        std::experimental::filesystem::path new_path =
+            std::experimental::filesystem::u8path(directory_list_->path());
+
+        new_path.append(std::experimental::filesystem::path(
+            disp_info->item.pszText));
+
+        if (old_path == new_path)
+            return;
+
+        delegate_->OnRenameRequest(panel_type_,
+                                   old_path.u8string(),
+                                   new_path.u8string());
+    }
+
+    delegate_->OnDirectoryListRequest(panel_type_, directory_list_->path());
+}
+
+bool UiFileManagerPanel::OnMessage(UINT msg,
+                                   WPARAM wparam,
+                                   LPARAM lparam,
+                                   LRESULT* result)
 {
     switch (msg)
     {
@@ -680,6 +791,10 @@ bool UiFileManagerPanel::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESU
 
                     case NM_CLICK:
                         break;
+
+                    case LVN_ENDLABELEDIT:
+                        OnEndLabelEdit(reinterpret_cast<LPNMLVDISPINFOW>(lparam));
+                        break;
                 }
             }
         }
@@ -706,6 +821,14 @@ bool UiFileManagerPanel::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESU
 
                 case ID_FOLDER_ADD:
                     OnFolderCreate();
+                    break;
+
+                case ID_REFRESH:
+                    OnRefresh();
+                    break;
+
+                case ID_DELETE:
+                    OnRemove();
                     break;
             }
         }

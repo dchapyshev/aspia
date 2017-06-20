@@ -6,6 +6,7 @@
 //
 
 #include "ui/base/listview.h"
+#include "ui/base/edit.h"
 #include "base/version_helpers.h"
 
 #include <uxtheme.h>
@@ -102,6 +103,33 @@ void UiListView::SetItemText(int item_index, int column_index, const std::wstrin
                          const_cast<LPWSTR>(text.c_str()));
 }
 
+int UiListView::GetItemTextLength(int item_index, int column_index)
+{
+    LVITEMW item;
+    memset(&item, 0, sizeof(item));
+
+    item.iSubItem = column_index;
+
+    return SendMessageW(hwnd(),
+                        LVM_GETITEMTEXT,
+                        item_index,
+                        reinterpret_cast<LPARAM>(&item));
+}
+
+std::wstring UiListView::GetItemText(int item_index, int column_index)
+{
+    int length = GetItemTextLength(item_index, column_index);
+    if (length <= 0)
+        return std::wstring();
+
+    std::wstring text;
+    text.resize(length);
+
+    ListView_GetItemText(hwnd(), item_index, column_index, &text[0], length + 1);
+
+    return text;
+}
+
 void UiListView::DeleteAllItems()
 {
     ListView_DeleteAllItems(hwnd());
@@ -156,6 +184,23 @@ int UiListView::GetItemUnderPointer()
     }
 
     return -1;
+}
+
+HWND UiListView::EditLabel(int item_index)
+{
+    return ListView_EditLabel(hwnd(), item_index);
+}
+
+std::wstring UiListView::GetTextFromEdit()
+{
+    UiEdit edit(reinterpret_cast<HWND>(SendMessageW(hwnd(),
+                                                    LVM_GETEDITCONTROL,
+                                                    0,
+                                                    0)));
+    if (!edit)
+        return std::wstring();
+
+    return edit.GetText();
 }
 
 } // namespace aspia

@@ -33,7 +33,7 @@ public:
                     int indent,
                     LPARAM lparam);
 
-    LRESULT DeleteItem(INT_PTR item_index);
+    int DeleteItem(INT_PTR item_index);
     void DeleteAllItems();
 
     LPARAM GetItemData(INT_PTR item_index);

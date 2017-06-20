@@ -29,6 +29,8 @@ public:
     ~UiFileStatusDialog();
 
     void OnDirectoryOpen(const std::wstring& path);
+    void OnRename(const std::wstring& old_path, const std::wstring& new_path);
+    void OnRemove(const std::wstring& path);
     void OnFileSend(const std::wstring& path);
     void OnFileRecieve(const std::wstring& path);
 

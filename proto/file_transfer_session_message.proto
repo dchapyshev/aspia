@@ -90,3 +90,14 @@ message CreateDirectoryRequest
 {
     string path = 1;
 }
+
+message RenameRequest
+{
+    string old_path = 1;
+    string new_path = 2;
+}
+
+message RemoveRequest
+{
+    string path = 1;
+}

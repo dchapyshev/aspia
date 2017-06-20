@@ -351,6 +351,7 @@ BEGIN
     IDS_FT_SIZE_MBYTES                    "МБ"
     IDS_FT_SIZE_KBYTES                    "кБ"
     IDS_FT_SIZE_BYTES                     "Б"
+    IDS_FT_NEW_FOLDER                     "Новая папка"
 END
 
 // Status

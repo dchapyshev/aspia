@@ -485,7 +485,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libglog/src/windows;$(SolutionDir)3rdparty/libvpx;$(SolutionDir)3rdparty/libyuv/include;$(SolutionDir)3rdparty/zlib-ng;$(SolutionDir)3rdparty/protobuf/src;$(SolutionDir)3rdparty/gflags/src;$(SolutionDir)3rdparty/libsodium/src/libsodium/include;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>

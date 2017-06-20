@@ -83,6 +83,14 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
         {
             success = ReadCreateDirectoryRequest(message.create_directory_request());
         }
+        else if (message.has_rename_request())
+        {
+            success = ReadRenameRequest(message.rename_request());
+        }
+        else if (message.has_remove_request())
+        {
+            success = ReadRemoveRequest(message.remove_request());
+        }
         else
         {
             // Unknown messages are ignored.
@@ -167,6 +175,37 @@ bool FileTransferSessionClient::ReadCreateDirectoryRequest(
 
     std::error_code code;
     std::experimental::filesystem::create_directory(path, code);
+
+    return true;
+}
+
+bool FileTransferSessionClient::ReadRenameRequest(
+    const proto::RenameRequest& rename_request)
+{
+    std::experimental::filesystem::path old_path =
+        std::experimental::filesystem::u8path(rename_request.old_path());
+
+    std::experimental::filesystem::path new_path =
+        std::experimental::filesystem::u8path(rename_request.new_path());
+
+    status_dialog_->OnRename(old_path.wstring(), new_path.wstring());
+
+    std::error_code code;
+    std::experimental::filesystem::rename(old_path, new_path, code);
+
+    return true;
+}
+
+bool FileTransferSessionClient::ReadRemoveRequest(
+    const proto::RemoveRequest& remove_request)
+{
+    std::experimental::filesystem::path path =
+        std::experimental::filesystem::u8path(remove_request.path());
+
+    status_dialog_->OnRemove(path.wstring());
+
+    std::error_code code;
+    std::experimental::filesystem::remove(path, code);
 
     return true;
 }

@@ -157,6 +157,40 @@ void UiFileStatusDialog::OnDirectoryOpen(const std::wstring& path)
     log_edit.AppendText(L"\r\n");
 }
 
+void UiFileStatusDialog::OnRename(const std::wstring& old_path, const std::wstring& new_path)
+{
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&UiFileStatusDialog::OnRename, this, old_path, new_path));
+        return;
+    }
+
+    UiEdit log_edit(GetDlgItem(IDC_STATUS_EDIT));
+
+    log_edit.AppendText(CurrentTime());
+    log_edit.AppendText(L" Rename: ");
+    log_edit.AppendText(old_path);
+    log_edit.AppendText(L" to ");
+    log_edit.AppendText(new_path);
+    log_edit.AppendText(L"\r\n");
+}
+
+void UiFileStatusDialog::OnRemove(const std::wstring& path)
+{
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&UiFileStatusDialog::OnRemove, this, path));
+        return;
+    }
+
+    UiEdit log_edit(GetDlgItem(IDC_STATUS_EDIT));
+
+    log_edit.AppendText(CurrentTime());
+    log_edit.AppendText(L" Remove: ");
+    log_edit.AppendText(path);
+    log_edit.AppendText(L"\r\n");
+}
+
 void UiFileStatusDialog::OnFileSend(const std::wstring& path)
 {
     if (!runner_->BelongsToCurrentThread())

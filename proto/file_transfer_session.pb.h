@@ -60,6 +60,12 @@ extern FileDefaultTypeInternal _File_default_instance_;
 class FileRequest;
 class FileRequestDefaultTypeInternal;
 extern FileRequestDefaultTypeInternal _FileRequest_default_instance_;
+class RemoveRequest;
+class RemoveRequestDefaultTypeInternal;
+extern RemoveRequestDefaultTypeInternal _RemoveRequest_default_instance_;
+class RenameRequest;
+class RenameRequestDefaultTypeInternal;
+extern RenameRequestDefaultTypeInternal _RenameRequest_default_instance_;
 namespace file_transfer {
 class ClientToHost;
 class ClientToHostDefaultTypeInternal;
@@ -306,6 +312,24 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::CreateDirectoryRequest* release_create_directory_request();
   void set_allocated_create_directory_request(::aspia::proto::CreateDirectoryRequest* create_directory_request);
 
+  // .aspia.proto.RenameRequest rename_request = 6;
+  bool has_rename_request() const;
+  void clear_rename_request();
+  static const int kRenameRequestFieldNumber = 6;
+  const ::aspia::proto::RenameRequest& rename_request() const;
+  ::aspia::proto::RenameRequest* mutable_rename_request();
+  ::aspia::proto::RenameRequest* release_rename_request();
+  void set_allocated_rename_request(::aspia::proto::RenameRequest* rename_request);
+
+  // .aspia.proto.RemoveRequest remove_request = 7;
+  bool has_remove_request() const;
+  void clear_remove_request();
+  static const int kRemoveRequestFieldNumber = 7;
+  const ::aspia::proto::RemoveRequest& remove_request() const;
+  ::aspia::proto::RemoveRequest* mutable_remove_request();
+  ::aspia::proto::RemoveRequest* release_remove_request();
+  void set_allocated_remove_request(::aspia::proto::RemoveRequest* remove_request);
+
   // @@protoc_insertion_point(class_scope:aspia.proto.file_transfer.ClientToHost)
  private:
 
@@ -315,6 +339,8 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::FileRequest* file_request_;
   ::aspia::proto::File* file_;
   ::aspia::proto::CreateDirectoryRequest* create_directory_request_;
+  ::aspia::proto::RenameRequest* rename_request_;
+  ::aspia::proto::RemoveRequest* remove_request_;
   mutable int _cached_size_;
   friend struct protobuf_file_5ftransfer_5fsession_2eproto::TableStruct;
 };
@@ -654,6 +680,84 @@ inline void ClientToHost::set_allocated_create_directory_request(::aspia::proto:
     
   }
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.ClientToHost.create_directory_request)
+}
+
+// .aspia.proto.RenameRequest rename_request = 6;
+inline bool ClientToHost::has_rename_request() const {
+  return this != internal_default_instance() && rename_request_ != NULL;
+}
+inline void ClientToHost::clear_rename_request() {
+  if (GetArenaNoVirtual() == NULL && rename_request_ != NULL) delete rename_request_;
+  rename_request_ = NULL;
+}
+inline const ::aspia::proto::RenameRequest& ClientToHost::rename_request() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.ClientToHost.rename_request)
+  return rename_request_ != NULL ? *rename_request_
+                         : *::aspia::proto::RenameRequest::internal_default_instance();
+}
+inline ::aspia::proto::RenameRequest* ClientToHost::mutable_rename_request() {
+  
+  if (rename_request_ == NULL) {
+    rename_request_ = new ::aspia::proto::RenameRequest;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.file_transfer.ClientToHost.rename_request)
+  return rename_request_;
+}
+inline ::aspia::proto::RenameRequest* ClientToHost::release_rename_request() {
+  // @@protoc_insertion_point(field_release:aspia.proto.file_transfer.ClientToHost.rename_request)
+  
+  ::aspia::proto::RenameRequest* temp = rename_request_;
+  rename_request_ = NULL;
+  return temp;
+}
+inline void ClientToHost::set_allocated_rename_request(::aspia::proto::RenameRequest* rename_request) {
+  delete rename_request_;
+  rename_request_ = rename_request;
+  if (rename_request) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.ClientToHost.rename_request)
+}
+
+// .aspia.proto.RemoveRequest remove_request = 7;
+inline bool ClientToHost::has_remove_request() const {
+  return this != internal_default_instance() && remove_request_ != NULL;
+}
+inline void ClientToHost::clear_remove_request() {
+  if (GetArenaNoVirtual() == NULL && remove_request_ != NULL) delete remove_request_;
+  remove_request_ = NULL;
+}
+inline const ::aspia::proto::RemoveRequest& ClientToHost::remove_request() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.ClientToHost.remove_request)
+  return remove_request_ != NULL ? *remove_request_
+                         : *::aspia::proto::RemoveRequest::internal_default_instance();
+}
+inline ::aspia::proto::RemoveRequest* ClientToHost::mutable_remove_request() {
+  
+  if (remove_request_ == NULL) {
+    remove_request_ = new ::aspia::proto::RemoveRequest;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.file_transfer.ClientToHost.remove_request)
+  return remove_request_;
+}
+inline ::aspia::proto::RemoveRequest* ClientToHost::release_remove_request() {
+  // @@protoc_insertion_point(field_release:aspia.proto.file_transfer.ClientToHost.remove_request)
+  
+  ::aspia::proto::RemoveRequest* temp = remove_request_;
+  remove_request_ = NULL;
+  return temp;
+}
+inline void ClientToHost::set_allocated_remove_request(::aspia::proto::RemoveRequest* remove_request) {
+  delete remove_request_;
+  remove_request_ = remove_request;
+  if (remove_request) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.ClientToHost.remove_request)
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS

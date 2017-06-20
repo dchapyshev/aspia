@@ -208,6 +208,7 @@
 #define IDS_FT_SIZE_MBYTES                    1017
 #define IDS_FT_SIZE_KBYTES                    1018
 #define IDS_FT_SIZE_BYTES                     1019
+#define IDS_FT_NEW_FOLDER                     1020
 
 // Status
 #define IDS_STATUS_MIN                        10000
