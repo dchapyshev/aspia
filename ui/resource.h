@@ -221,6 +221,9 @@
 #define IDS_FT_DRIVE_DESC_UNKNOWN             1030
 #define IDS_FT_DELETE_CONFORM_FILE            1031
 #define IDS_FT_DELETE_CONFORM_DIR             1032
+#define IDS_FT_OP_BROWSE_FOLDERS              1033
+#define IDS_FT_OP_RENAME                      1034
+#define IDS_FT_OP_REMOVE                      1035
 
 // Status
 #define IDS_STATUS_MIN                        10000

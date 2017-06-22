@@ -9,6 +9,7 @@
 #include "ui/status_code.h"
 #include "ui/resource.h"
 #include "ui/base/module.h"
+#include "base/string_util.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -161,12 +162,15 @@ void UiFileStatusDialog::OnDirectoryOpen(const std::wstring& path)
         return;
     }
 
-    UiEdit log_edit(GetDlgItem(IDC_STATUS_EDIT));
+    UiEdit edit(GetDlgItem(IDC_STATUS_EDIT));
 
-    log_edit.AppendText(CurrentTime());
-    log_edit.AppendText(L" Browse folders: ");
-    log_edit.AppendText(path);
-    log_edit.AppendText(L"\r\n");
+    edit.AppendText(CurrentTime());
+    edit.AppendText(L" ");
+
+    std::wstring format = module().string(IDS_FT_OP_BROWSE_FOLDERS);
+
+    edit.AppendText(StringPrintfW(format.c_str(), path.c_str()));
+    edit.AppendText(L"\r\n");
 }
 
 void UiFileStatusDialog::OnRename(const std::wstring& old_path,
@@ -183,13 +187,10 @@ void UiFileStatusDialog::OnRename(const std::wstring& old_path,
         return;
     }
 
-    std::wstring message;
-    message.append(L" Rename: ");
-    message.append(old_path);
-    message.append(L" to ");
-    message.append(new_path);
+    std::wstring format = module().string(IDS_FT_OP_RENAME);
 
-    WriteLog(message, status);
+    WriteLog(StringPrintfW(format.c_str(), old_path.c_str(), new_path.c_str()),
+             status);
 }
 
 void UiFileStatusDialog::OnRemove(const std::wstring& path, proto::Status status)
@@ -200,11 +201,9 @@ void UiFileStatusDialog::OnRemove(const std::wstring& path, proto::Status status
         return;
     }
 
-    std::wstring message;
-    message.append(L" Remove: ");
-    message.append(path);
+    std::wstring format = module().string(IDS_FT_OP_REMOVE);
 
-    WriteLog(message, status);
+    WriteLog(StringPrintfW(format.c_str(), path.c_str()), status);
 }
 
 void UiFileStatusDialog::OnFileSend(const std::wstring& path)
