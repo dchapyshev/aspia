@@ -31,18 +31,6 @@ bool UiFileManagerPanel::CreatePanel(HWND parent,
     delegate_ = delegate;
     panel_type_ = panel_type;
 
-    const UiModule& module = UiModule::Current();
-
-    if (panel_type == PanelType::LOCAL)
-    {
-        name_ = module.string(IDS_FT_LOCAL_COMPUTER);
-    }
-    else
-    {
-        DCHECK(panel_type == PanelType::REMOTE);
-        name_ = module.string(IDS_FT_REMOTE_COMPUTER);
-    }
-
     return Create(parent, WS_CHILD | WS_VISIBLE);
 }
 
@@ -160,9 +148,16 @@ void UiFileManagerPanel::OnCreate()
     HFONT default_font =
         reinterpret_cast<HFONT>(GetStockObject(DEFAULT_GUI_FONT));
 
+    std::wstring panel_name;
+
+    if (panel_type_ == PanelType::LOCAL)
+        panel_name = module.string(IDS_FT_LOCAL_COMPUTER);
+    else
+        panel_name = module.string(IDS_FT_REMOTE_COMPUTER);
+
     title_window_.Attach(CreateWindowExW(0,
                                          WC_STATICW,
-                                         name_.c_str(),
+                                         panel_name.c_str(),
                                          WS_CHILD | WS_VISIBLE | SS_OWNERDRAW,
                                          0, 0, 200, 20,
                                          hwnd(),
@@ -184,9 +179,7 @@ void UiFileManagerPanel::OnCreate()
     drives_combo_.SetFont(default_font);
 
     if (drives_imagelist_.CreateSmall())
-    {
         drives_combo_.SetImageList(drives_imagelist_);
-    }
 
     toolbar_window_.Attach(CreateWindowExW(0,
                                            TOOLBARCLASSNAMEW,

@@ -60,7 +60,6 @@ private:
 
     PanelType panel_type_ = PanelType::UNKNOWN;
     Delegate* delegate_ = nullptr;
-    std::wstring name_;
 
     UiWindow title_window_;
 
