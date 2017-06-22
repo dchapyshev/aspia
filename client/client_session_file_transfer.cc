@@ -8,8 +8,7 @@
 #include "client/client_session_file_transfer.h"
 #include "base/unicode.h"
 #include "protocol/message_serialization.h"
-#include "protocol/directory_list.h"
-#include "protocol/drive_list.h"
+#include "protocol/filesystem.h"
 
 namespace aspia {
 

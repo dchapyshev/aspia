@@ -445,17 +445,14 @@
     <ClCompile Include="ui\get_stock_icon.cc">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="protocol\directory_list.cc">
-      <Filter>protocol</Filter>
-    </ClCompile>
-    <ClCompile Include="protocol\drive_list.cc">
-      <Filter>protocol</Filter>
-    </ClCompile>
     <ClCompile Include="ui\base\edit.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
     <ClCompile Include="ui\base\dialog.cc">
       <Filter>ui\base</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol\filesystem.cc">
+      <Filter>protocol</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -977,17 +974,14 @@
     <ClInclude Include="ui\get_stock_icon.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="protocol\directory_list.h">
-      <Filter>protocol</Filter>
-    </ClInclude>
-    <ClInclude Include="protocol\drive_list.h">
-      <Filter>protocol</Filter>
-    </ClInclude>
     <ClInclude Include="ui\base\edit.h">
       <Filter>ui\base</Filter>
     </ClInclude>
     <ClInclude Include="ui\base\dialog.h">
       <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\filesystem.h">
+      <Filter>protocol</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
