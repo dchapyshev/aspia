@@ -176,10 +176,11 @@ void FileTransferSessionClient::ReadCreateDirectoryRequest(
 void FileTransferSessionClient::ReadRenameRequest(
     const proto::RenameRequest& rename_request)
 {
-    status_dialog_->OnRename(UNICODEfromUTF8(rename_request.old_path()),
-                             UNICODEfromUTF8(rename_request.new_path()));
-
     proto::Status status = ExecuteRenameRequest(rename_request);
+
+    status_dialog_->OnRename(UNICODEfromUTF8(rename_request.old_path()),
+                             UNICODEfromUTF8(rename_request.new_path()),
+                             status);
 
     if (status != proto::Status::STATUS_SUCCESS)
         WriteStatus(status);
@@ -188,9 +189,9 @@ void FileTransferSessionClient::ReadRenameRequest(
 void FileTransferSessionClient::ReadRemoveRequest(
     const proto::RemoveRequest& remove_request)
 {
-    status_dialog_->OnRemove(UNICODEfromUTF8(remove_request.path()));
-
     proto::Status status = ExecuteRemoveRequest(remove_request);
+
+    status_dialog_->OnRemove(UNICODEfromUTF8(remove_request.path()), status);
 
     if (status != proto::Status::STATUS_SUCCESS)
         WriteStatus(status);

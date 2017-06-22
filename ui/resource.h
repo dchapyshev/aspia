@@ -219,6 +219,8 @@
 #define IDS_FT_DRIVE_DESC_REMOTE              1028
 #define IDS_FT_DRIVE_DESC_RAM                 1029
 #define IDS_FT_DRIVE_DESC_UNKNOWN             1030
+#define IDS_FT_DELETE_CONFORM_FILE            1031
+#define IDS_FT_DELETE_CONFORM_DIR             1032
 
 // Status
 #define IDS_STATUS_MIN                        10000
@@ -230,12 +232,14 @@
 #define IDS_STATUS_FILE_ALREADY_EXISTS        10005
 #define IDS_STATUS_PATH_ALREADY_EXISTS        10006
 #define IDS_STATUS_DISK_FULL                  10007
-#define IDS_STATUS_INVALID_ADDRESS            10008
-#define IDS_STATUS_INVALID_PORT               10009
-#define IDS_STATUS_CONNECT_TIMEOUT            10010
-#define IDS_STATUS_CONNECT_ERROR              10011
-#define IDS_STATUS_CONNECTING                 10012
-#define IDS_STATUS_MAX                        10012
-#define IDS_STATUS_UNKNOWN                    10013
+#define IDS_STATUS_INVALID_FILE_NAME          10008
+#define IDS_STATUS_INVALID_PATH_NAME          10009
+#define IDS_STATUS_INVALID_ADDRESS            10010
+#define IDS_STATUS_INVALID_PORT               10011
+#define IDS_STATUS_CONNECT_TIMEOUT            10012
+#define IDS_STATUS_CONNECT_ERROR              10013
+#define IDS_STATUS_CONNECTING                 10014
+#define IDS_STATUS_MAX                        10014
+#define IDS_STATUS_UNKNOWN                    10015
 
 #endif // _ASPIA_UI__RESOURCE_H

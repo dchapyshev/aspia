@@ -158,7 +158,19 @@ proto::Status ExecuteRenameRequest(const proto::RenameRequest& rename_request)
     std::experimental::filesystem::path new_path =
         std::experimental::filesystem::u8path(rename_request.new_path());
 
+    if (old_path == new_path)
+        return proto::Status::STATUS_SUCCESS;
+
     std::error_code code;
+
+    if (std::experimental::filesystem::exists(new_path, code))
+    {
+        if (std::experimental::filesystem::is_directory(new_path, code))
+            return proto::Status::STATUS_PATH_ALREADY_EXISTS;
+
+        return proto::Status::STATUS_FILE_ALREADY_EXISTS;
+    }
+
     std::experimental::filesystem::rename(old_path, new_path, code);
 
     return proto::Status::STATUS_SUCCESS;
@@ -166,15 +178,17 @@ proto::Status ExecuteRenameRequest(const proto::RenameRequest& rename_request)
 
 proto::Status ExecuteRemoveRequest(const proto::RemoveRequest& remove_request)
 {
-    std::experimental::filesystem::path remove_path =
+    std::experimental::filesystem::path path =
         std::experimental::filesystem::u8path(remove_request.path());
 
     std::error_code code;
 
-    if (!std::experimental::filesystem::remove(remove_path, code))
+    if (!std::experimental::filesystem::exists(path, code))
+        return proto::Status::STATUS_PATH_NOT_FOUND;
+
+    if (std::experimental::filesystem::remove_all(path, code) ==
+        static_cast<std::uintmax_t>(-1))
     {
-        LOG(ERROR) << "Unable to remove: " << code.value() << " , " << code.message();
-        // TODO: Convert std::error_code to proto::Status.
         return proto::Status::STATUS_ACCESS_DENIED;
     }
 

@@ -362,6 +362,8 @@ BEGIN
     IDS_FT_DRIVE_DESC_REMOTE              "Remote Drive"
     IDS_FT_DRIVE_DESC_RAM                 "RAM Drive"
     IDS_FT_DRIVE_DESC_UNKNOWN             "Unknown Device"
+    IDS_FT_DELETE_CONFORM_FILE            "Are you sure you want to delete file ""%s""?"
+    IDS_FT_DELETE_CONFORM_DIR             "Do you really want to delete directory ""%s"" and all its contents?"
 END
 
 // Status
@@ -375,6 +377,8 @@ BEGIN
     IDS_STATUS_FILE_ALREADY_EXISTS        "File already exists"
     IDS_STATUS_PATH_ALREADY_EXISTS        "Path already exists"
     IDS_STATUS_DISK_FULL                  "Disk full"
+    IDS_STATUS_INVALID_FILE_NAME          "Invalid file name"
+    IDS_STATUS_INVALID_PATH_NAME          "Invalid directory name"
     IDS_STATUS_INVALID_ADDRESS            "Invalid address specified"
     IDS_STATUS_INVALID_PORT               "Invalid port specified"
     IDS_STATUS_CONNECT_TIMEOUT            "Connection timeout"

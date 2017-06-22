@@ -6,9 +6,9 @@
 //
 
 #include "ui/file_status_dialog.h"
+#include "ui/status_code.h"
 #include "ui/resource.h"
 #include "ui/base/module.h"
-#include "ui/resource.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -141,6 +141,18 @@ static std::wstring CurrentTime()
     return buffer;
 }
 
+void UiFileStatusDialog::WriteLog(const std::wstring& message, proto::Status status)
+{
+    UiEdit edit(GetDlgItem(IDC_STATUS_EDIT));
+
+    edit.AppendText(CurrentTime());
+    edit.AppendText(L" ");
+    edit.AppendText(message);
+    edit.AppendText(L" (");
+    edit.AppendText(StatusCodeToString(module(), status));
+    edit.AppendText(L")\r\n");
+}
+
 void UiFileStatusDialog::OnDirectoryOpen(const std::wstring& path)
 {
     if (!runner_->BelongsToCurrentThread())
@@ -157,38 +169,42 @@ void UiFileStatusDialog::OnDirectoryOpen(const std::wstring& path)
     log_edit.AppendText(L"\r\n");
 }
 
-void UiFileStatusDialog::OnRename(const std::wstring& old_path, const std::wstring& new_path)
+void UiFileStatusDialog::OnRename(const std::wstring& old_path,
+                                  const std::wstring& new_path,
+                                  proto::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::OnRename, this, old_path, new_path));
+        runner_->PostTask(std::bind(&UiFileStatusDialog::OnRename,
+                                    this,
+                                    old_path,
+                                    new_path,
+                                    status));
         return;
     }
 
-    UiEdit log_edit(GetDlgItem(IDC_STATUS_EDIT));
+    std::wstring message;
+    message.append(L" Rename: ");
+    message.append(old_path);
+    message.append(L" to ");
+    message.append(new_path);
 
-    log_edit.AppendText(CurrentTime());
-    log_edit.AppendText(L" Rename: ");
-    log_edit.AppendText(old_path);
-    log_edit.AppendText(L" to ");
-    log_edit.AppendText(new_path);
-    log_edit.AppendText(L"\r\n");
+    WriteLog(message, status);
 }
 
-void UiFileStatusDialog::OnRemove(const std::wstring& path)
+void UiFileStatusDialog::OnRemove(const std::wstring& path, proto::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::OnRemove, this, path));
+        runner_->PostTask(std::bind(&UiFileStatusDialog::OnRemove, this, path, status));
         return;
     }
 
-    UiEdit log_edit(GetDlgItem(IDC_STATUS_EDIT));
+    std::wstring message;
+    message.append(L" Remove: ");
+    message.append(path);
 
-    log_edit.AppendText(CurrentTime());
-    log_edit.AppendText(L" Remove: ");
-    log_edit.AppendText(path);
-    log_edit.AppendText(L"\r\n");
+    WriteLog(message, status);
 }
 
 void UiFileStatusDialog::OnFileSend(const std::wstring& path)

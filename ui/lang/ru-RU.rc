@@ -362,6 +362,8 @@ BEGIN
     IDS_FT_DRIVE_DESC_REMOTE              "Сетевой диск"
     IDS_FT_DRIVE_DESC_RAM                 "RAM диск"
     IDS_FT_DRIVE_DESC_UNKNOWN             "Неизвестное устройство"
+    IDS_FT_DELETE_CONFORM_FILE            "Вы действительно хотите удалить файл ""%s""?"
+    IDS_FT_DELETE_CONFORM_DIR             "Вы действительно хотите удалить директорию ""%s"" и все ее содержимое?"
 END
 
 // Status
@@ -375,6 +377,8 @@ BEGIN
     IDS_STATUS_FILE_ALREADY_EXISTS        "Указанный файл уже существует"
     IDS_STATUS_PATH_ALREADY_EXISTS        "Указанный путь уже существует"
     IDS_STATUS_DISK_FULL                  "Нет свободного места на диске"
+    IDS_STATUS_INVALID_FILE_NAME          "Неверное имя файла"
+    IDS_STATUS_INVALID_PATH_NAME          "Неверное имя директории"
     IDS_STATUS_INVALID_ADDRESS            "Указан недопустимый адрес"
     IDS_STATUS_INVALID_PORT               "Указан недопустимый порт"
     IDS_STATUS_CONNECT_TIMEOUT            "Превышено время ожидания соединения"

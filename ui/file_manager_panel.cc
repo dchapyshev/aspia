@@ -586,8 +586,25 @@ void UiFileManagerPanel::OnRemove()
     path.append(std::experimental::filesystem::u8path(
         directory_list_->item(index).name()));
 
-    delegate_->OnRemoveRequest(panel_type_, path.u8string());
-    delegate_->OnDirectoryListRequest(panel_type_, directory_list_->path());
+    const UiModule& module = UiModule::Current();
+    std::wstring format;
+
+    if (directory_list_->item(index).type() == proto::DirectoryListItem::DIRECTORY)
+        format = module.string(IDS_FT_DELETE_CONFORM_DIR);
+    else
+        format = module.string(IDS_FT_DELETE_CONFORM_FILE);
+
+    std::wstring message = StringPrintfW(format.c_str(), path.wstring().c_str());
+    std::wstring title = module.string(IDS_CONFIRMATION);
+
+    if (MessageBoxW(hwnd(),
+                    message.c_str(),
+                    title.c_str(),
+                    MB_YESNO | MB_ICONQUESTION) == IDYES)
+    {
+        delegate_->OnRemoveRequest(panel_type_, path.u8string());
+        delegate_->OnDirectoryListRequest(panel_type_, directory_list_->path());
+    }
 }
 
 void UiFileManagerPanel::OnMoveToComputer()
