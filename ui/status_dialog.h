@@ -29,8 +29,6 @@ public:
     void SetDestonation(const std::wstring& address, uint16_t port);
     void SetStatus(proto::Status status);
 
-    static std::wstring StatusToString(proto::Status status);
-
 private:
     INT_PTR DoModal(HWND parent) override;
     INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) override;

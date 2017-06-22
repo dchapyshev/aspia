@@ -45,7 +45,7 @@ private:
     void OnSize(int width, int height);
     void OnDrawItem(LPDRAWITEMSTRUCT dis);
     void OnGetDispInfo(LPNMHDR phdr);
-    void OnAddressChanged();
+    void OnDriveChange();
     void OnAddressChange();
     void OnFolderUp();
     void OnFolderCreate();

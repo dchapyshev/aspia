@@ -40,6 +40,8 @@ public:
     UiFileManager(Delegate* delegate);
     ~UiFileManager();
 
+    void ReadStatusCode(proto::Status status);
+
     void ReadDriveList(PanelType panel_type,
                        std::unique_ptr<proto::DriveList> drive_list);
 

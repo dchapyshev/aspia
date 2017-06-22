@@ -16,7 +16,8 @@ namespace aspia {
 
 class ClientSessionFileTransfer :
     public ClientSession,
-    private UiFileManager::Delegate
+    private UiFileManager::Delegate,
+    private MessageLoopThread::Delegate
 {
 public:
     ClientSessionFileTransfer(const ClientConfig& config,
@@ -26,6 +27,10 @@ public:
 private:
     // ClientSession implementation.
     void Send(const IOBuffer& buffer) override;
+
+    // MessageLoopThread::Delegate implementation.
+    void OnBeforeThreadRunning() override;
+    void OnAfterThreadRunning() override;
 
     // UiFileManager::Delegate implementation.
     void OnWindowClose() override;
@@ -44,6 +49,9 @@ private:
     void WriteMessage(const proto::file_transfer::ClientToHost& message);
 
     std::unique_ptr<UiFileManager> file_manager_;
+
+    MessageLoopThread worker_thread_;
+    std::shared_ptr<MessageLoopProxy> worker_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);
 };

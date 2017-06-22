@@ -9,11 +9,15 @@
 #include "base/drive_enumerator.h"
 #include "base/unicode.h"
 #include "base/path.h"
+#include "base/logging.h"
 
 namespace aspia {
 
-std::unique_ptr<proto::DriveList> CreateDriveList()
+std::unique_ptr<proto::DriveList> ExecuteDriveListRequest(
+    const proto::DriveListRequest& drive_list_request)
 {
+    UNREF(drive_list_request);
+
     std::unique_ptr<proto::DriveList> drive_list(new proto::DriveList());
 
     DriveEnumerator enumerator;
@@ -82,9 +86,12 @@ std::unique_ptr<proto::DriveList> CreateDriveList()
     return drive_list;
 }
 
-std::unique_ptr<proto::DirectoryList> CreateDirectoryList(
-    const std::experimental::filesystem::path& path)
+std::unique_ptr<proto::DirectoryList> ExecuteDirectoryListRequest(
+    const proto::DirectoryListRequest& directory_list_request)
 {
+    std::experimental::filesystem::path path =
+        std::experimental::filesystem::u8path(directory_list_request.path());
+
     std::unique_ptr<proto::DirectoryList> directory_list(new proto::DirectoryList());
 
     directory_list->set_path(path.u8string());
@@ -117,6 +124,61 @@ std::unique_ptr<proto::DirectoryList> CreateDirectoryList(
     }
 
     return directory_list;
+}
+
+proto::Status ExecuteCreateDirectoryRequest(
+    const proto::CreateDirectoryRequest& create_directory_request)
+{
+    std::experimental::filesystem::path path =
+        std::experimental::filesystem::u8path(create_directory_request.path());
+
+    std::error_code code;
+
+    if (!std::experimental::filesystem::create_directory(path, code))
+    {
+        if (std::experimental::filesystem::exists(path, code))
+        {
+            if (std::experimental::filesystem::is_directory(path, code))
+                return proto::Status::STATUS_PATH_ALREADY_EXISTS;
+            else
+                return proto::Status::STATUS_FILE_ALREADY_EXISTS;
+        }
+
+        return proto::Status::STATUS_ACCESS_DENIED;
+    }
+
+    return proto::Status::STATUS_SUCCESS;
+}
+
+proto::Status ExecuteRenameRequest(const proto::RenameRequest& rename_request)
+{
+    std::experimental::filesystem::path old_path =
+        std::experimental::filesystem::u8path(rename_request.old_path());
+
+    std::experimental::filesystem::path new_path =
+        std::experimental::filesystem::u8path(rename_request.new_path());
+
+    std::error_code code;
+    std::experimental::filesystem::rename(old_path, new_path, code);
+
+    return proto::Status::STATUS_SUCCESS;
+}
+
+proto::Status ExecuteRemoveRequest(const proto::RemoveRequest& remove_request)
+{
+    std::experimental::filesystem::path remove_path =
+        std::experimental::filesystem::u8path(remove_request.path());
+
+    std::error_code code;
+
+    if (!std::experimental::filesystem::remove(remove_path, code))
+    {
+        LOG(ERROR) << "Unable to remove: " << code.value() << " , " << code.message();
+        // TODO: Convert std::error_code to proto::Status.
+        return proto::Status::STATUS_ACCESS_DENIED;
+    }
+
+    return proto::Status::STATUS_SUCCESS;
 }
 
 } // namespace aspia

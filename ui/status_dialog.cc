@@ -6,6 +6,7 @@
 //
 
 #include "ui/status_dialog.h"
+#include "ui/status_code.h"
 #include "ui/resource.h"
 #include "ui/base/edit.h"
 #include "ui/base/module.h"
@@ -38,20 +39,9 @@ void UiStatusDialog::SetDestonation(const std::wstring& address, uint16_t port)
     SetWindowTextW(hwnd(), message.c_str());
 }
 
-// static
-std::wstring UiStatusDialog::StatusToString(proto::Status status)
-{
-    UINT resource_id = status + IDS_STATUS_MIN;
-
-    if (!Status_IsValid(status))
-        resource_id = IDS_STATUS_UNKNOWN;
-
-    return UiModule().string(resource_id);
-}
-
 void UiStatusDialog::SetStatus(proto::Status status)
 {
-    AddMessage(StatusToString(status));
+    AddMessage(StatusCodeToString(module(), status));
 }
 
 void UiStatusDialog::OnInitDialog()

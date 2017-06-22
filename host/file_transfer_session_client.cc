@@ -68,7 +68,7 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
         }
         else if (message.has_directory_list_request())
         {
-            success = ReadDirectoryListRequestMessage(message.directory_list_request());
+            ReadDirectoryListRequestMessage(message.directory_list_request());
         }
         else if (message.has_file_request())
         {
@@ -80,15 +80,15 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
         }
         else if (message.has_create_directory_request())
         {
-            success = ReadCreateDirectoryRequest(message.create_directory_request());
+            ReadCreateDirectoryRequest(message.create_directory_request());
         }
         else if (message.has_rename_request())
         {
-            success = ReadRenameRequest(message.rename_request());
+            ReadRenameRequest(message.rename_request());
         }
         else if (message.has_remove_request())
         {
-            success = ReadRemoveRequest(message.remove_request());
+            ReadRemoveRequest(message.remove_request());
         }
         else
         {
@@ -123,7 +123,8 @@ void FileTransferSessionClient::WriteStatus(proto::Status status)
 bool FileTransferSessionClient::ReadDriveListRequestMessage(
     const proto::DriveListRequest& drive_list_request)
 {
-    std::unique_ptr<proto::DriveList> drive_list = CreateDriveList();
+    std::unique_ptr<proto::DriveList> drive_list =
+        ExecuteDriveListRequest(drive_list_request);
     if (!drive_list)
         return false;
 
@@ -134,25 +135,21 @@ bool FileTransferSessionClient::ReadDriveListRequestMessage(
     return true;
 }
 
-bool FileTransferSessionClient::ReadDirectoryListRequestMessage(
+void FileTransferSessionClient::ReadDirectoryListRequestMessage(
     const proto::DirectoryListRequest& direcrory_list_request)
 {
-    std::experimental::filesystem::path path =
-        std::experimental::filesystem::u8path(direcrory_list_request.path());
-
-    status_dialog_->OnDirectoryOpen(path.wstring());
+    status_dialog_->OnDirectoryOpen(
+        UNICODEfromUTF8(direcrory_list_request.path()));
 
     std::unique_ptr<proto::DirectoryList> directory_list =
-        CreateDirectoryList(path);
+        ExecuteDirectoryListRequest(direcrory_list_request);
 
     if (!directory_list)
-        return false;
+        return;
 
     proto::file_transfer::HostToClient message;
     message.set_allocated_directory_list(directory_list.release());
     WriteMessage(message);
-
-    return true;
 }
 
 bool FileTransferSessionClient::ReadFileRequestMessage(
@@ -166,47 +163,37 @@ bool FileTransferSessionClient::ReadFileMessage(const proto::File& file)
     return true;
 }
 
-bool FileTransferSessionClient::ReadCreateDirectoryRequest(
+void FileTransferSessionClient::ReadCreateDirectoryRequest(
     const proto::CreateDirectoryRequest& create_directory_request)
 {
-    std::experimental::filesystem::path path =
-        std::experimental::filesystem::u8path(create_directory_request.path());
+    proto::Status status =
+        ExecuteCreateDirectoryRequest(create_directory_request);
 
-    std::error_code code;
-    std::experimental::filesystem::create_directory(path, code);
-
-    return true;
+    if (status != proto::Status::STATUS_SUCCESS)
+        WriteStatus(status);
 }
 
-bool FileTransferSessionClient::ReadRenameRequest(
+void FileTransferSessionClient::ReadRenameRequest(
     const proto::RenameRequest& rename_request)
 {
-    std::experimental::filesystem::path old_path =
-        std::experimental::filesystem::u8path(rename_request.old_path());
+    status_dialog_->OnRename(UNICODEfromUTF8(rename_request.old_path()),
+                             UNICODEfromUTF8(rename_request.new_path()));
 
-    std::experimental::filesystem::path new_path =
-        std::experimental::filesystem::u8path(rename_request.new_path());
+    proto::Status status = ExecuteRenameRequest(rename_request);
 
-    status_dialog_->OnRename(old_path.wstring(), new_path.wstring());
-
-    std::error_code code;
-    std::experimental::filesystem::rename(old_path, new_path, code);
-
-    return true;
+    if (status != proto::Status::STATUS_SUCCESS)
+        WriteStatus(status);
 }
 
-bool FileTransferSessionClient::ReadRemoveRequest(
+void FileTransferSessionClient::ReadRemoveRequest(
     const proto::RemoveRequest& remove_request)
 {
-    std::experimental::filesystem::path path =
-        std::experimental::filesystem::u8path(remove_request.path());
+    status_dialog_->OnRemove(UNICODEfromUTF8(remove_request.path()));
 
-    status_dialog_->OnRemove(path.wstring());
+    proto::Status status = ExecuteRemoveRequest(remove_request);
 
-    std::error_code code;
-    std::experimental::filesystem::remove(path, code);
-
-    return true;
+    if (status != proto::Status::STATUS_SUCCESS)
+        WriteStatus(status);
 }
 
 } // namespace aspia

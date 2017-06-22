@@ -150,6 +150,7 @@
     <ClCompile Include="ui\base\window.cc" />
     <ClCompile Include="ui\base\window_timer.cc" />
     <ClCompile Include="ui\file_manager.cc" />
+    <ClCompile Include="ui\file_manager_helpers.cc" />
     <ClCompile Include="ui\file_manager_panel.cc" />
     <ClCompile Include="ui\file_replace_dialog.cc" />
     <ClCompile Include="ui\file_status_dialog.cc" />
@@ -328,6 +329,7 @@
     <ClInclude Include="ui\base\window.h" />
     <ClInclude Include="ui\base\window_timer.h" />
     <ClInclude Include="ui\file_manager.h" />
+    <ClInclude Include="ui\file_manager_helpers.h" />
     <ClInclude Include="ui\file_manager_panel.h" />
     <ClInclude Include="ui\file_replace_dialog.h" />
     <ClInclude Include="ui\file_status_dialog.h" />
@@ -337,6 +339,7 @@
     <ClInclude Include="ui\power_manage_dialog.h" />
     <ClInclude Include="ui\resource.h" />
     <ClInclude Include="ui\settings_dialog.h" />
+    <ClInclude Include="ui\status_code.h" />
     <ClInclude Include="ui\status_dialog.h" />
     <ClInclude Include="ui\ui_main.h" />
     <ClInclude Include="ui\users_dialog.h" />

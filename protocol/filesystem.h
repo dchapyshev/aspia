@@ -15,10 +15,18 @@
 
 namespace aspia {
 
-std::unique_ptr<proto::DriveList> CreateDriveList();
+std::unique_ptr<proto::DriveList> ExecuteDriveListRequest(
+    const proto::DriveListRequest& drive_list_request);
 
-std::unique_ptr<proto::DirectoryList> CreateDirectoryList(
-    const std::experimental::filesystem::path& path);
+std::unique_ptr<proto::DirectoryList> ExecuteDirectoryListRequest(
+    const proto::DirectoryListRequest& directory_list_request);
+
+proto::Status ExecuteCreateDirectoryRequest(
+    const proto::CreateDirectoryRequest& create_directory_request);
+
+proto::Status ExecuteRenameRequest(const proto::RenameRequest& rename_request);
+
+proto::Status ExecuteRemoveRequest(const proto::RemoveRequest& remove_request);
 
 } // namespace aspia
 

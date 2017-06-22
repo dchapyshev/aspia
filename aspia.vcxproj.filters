@@ -454,6 +454,9 @@
     <ClCompile Include="protocol\filesystem.cc">
       <Filter>protocol</Filter>
     </ClCompile>
+    <ClCompile Include="ui\file_manager_helpers.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -982,6 +985,12 @@
     </ClInclude>
     <ClInclude Include="protocol\filesystem.h">
       <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\status_code.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_manager_helpers.h">
+      <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

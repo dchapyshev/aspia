@@ -16,10 +16,23 @@ ClientSessionFileTransfer::ClientSessionFileTransfer(const ClientConfig& config,
                                                      ClientSession::Delegate* delegate) :
     ClientSession(config, delegate)
 {
-    file_manager_.reset(new UiFileManager(this));
+    worker_thread_.Start(MessageLoop::Type::TYPE_DEFAULT, this);
 }
 
 ClientSessionFileTransfer::~ClientSessionFileTransfer()
+{
+    worker_thread_.Stop();
+}
+
+void ClientSessionFileTransfer::OnBeforeThreadRunning()
+{
+    worker_ = worker_thread_.message_loop_proxy();
+    DCHECK(worker_);
+
+    file_manager_.reset(new UiFileManager(this));
+}
+
+void ClientSessionFileTransfer::OnAfterThreadRunning()
 {
     file_manager_.reset();
 }
@@ -32,7 +45,7 @@ void ClientSessionFileTransfer::Send(const IOBuffer& buffer)
     {
         if (message.status() != proto::Status::STATUS_SUCCESS)
         {
-            // TODO: Status processing.
+            file_manager_->ReadStatusCode(message.status());
             return;
         }
 
@@ -72,17 +85,27 @@ void ClientSessionFileTransfer::OnWindowClose()
 
 void ClientSessionFileTransfer::OnDriveListRequest(UiFileManager::PanelType panel_type)
 {
+    if (!worker_->BelongsToCurrentThread())
+    {
+        worker_->PostTask(std::bind(&ClientSessionFileTransfer::OnDriveListRequest,
+                                    this,
+                                    panel_type));
+        return;
+    }
+
+    proto::file_transfer::ClientToHost message;
+    message.mutable_drive_list_request()->set_dummy(1);
+
     if (panel_type == UiFileManager::PanelType::REMOTE)
     {
-        proto::file_transfer::ClientToHost message;
-        message.mutable_drive_list_request()->set_dummy(1);
         WriteMessage(message);
     }
     else
     {
         DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
 
-        std::unique_ptr<proto::DriveList> drive_list = CreateDriveList();
+        std::unique_ptr<proto::DriveList> drive_list =
+            ExecuteDriveListRequest(message.drive_list_request());
 
         if (drive_list)
         {
@@ -95,10 +118,20 @@ void ClientSessionFileTransfer::OnDriveListRequest(UiFileManager::PanelType pane
 void ClientSessionFileTransfer::OnDirectoryListRequest(UiFileManager::PanelType panel_type,
                                                        const std::string& path)
 {
+    if (!worker_->BelongsToCurrentThread())
+    {
+        worker_->PostTask(std::bind(&ClientSessionFileTransfer::OnDirectoryListRequest,
+                                    this,
+                                    panel_type,
+                                    path));
+        return;
+    }
+
+    proto::file_transfer::ClientToHost message;
+    message.mutable_directory_list_request()->set_path(path);
+
     if (panel_type == UiFileManager::PanelType::REMOTE)
     {
-        proto::file_transfer::ClientToHost message;
-        message.mutable_directory_list_request()->set_path(path);
         WriteMessage(message);
     }
     else
@@ -106,7 +139,7 @@ void ClientSessionFileTransfer::OnDirectoryListRequest(UiFileManager::PanelType 
         DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
 
         std::unique_ptr<proto::DirectoryList> directory_list =
-            CreateDirectoryList(UNICODEfromUTF8(path));
+            ExecuteDirectoryListRequest(message.directory_list_request());
 
         if (directory_list)
         {
@@ -120,21 +153,30 @@ void ClientSessionFileTransfer::OnCreateDirectoryRequest(
     UiFileManager::PanelType panel_type,
     const std::string& path)
 {
+    if (!worker_->BelongsToCurrentThread())
+    {
+        worker_->PostTask(std::bind(&ClientSessionFileTransfer::OnCreateDirectoryRequest,
+                                    this,
+                                    panel_type,
+                                    path));
+        return;
+    }
+
+    proto::file_transfer::ClientToHost message;
+    message.mutable_create_directory_request()->set_path(path);
+
     if (panel_type == UiFileManager::PanelType::REMOTE)
     {
-        proto::file_transfer::ClientToHost message;
-        message.mutable_create_directory_request()->set_path(path);
         WriteMessage(message);
     }
     else
     {
         DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
 
-        std::experimental::filesystem::path directory_path =
-            std::experimental::filesystem::u8path(path);
-
-        std::error_code code;
-        std::experimental::filesystem::create_directory(directory_path, code);
+        proto::Status status =
+            ExecuteCreateDirectoryRequest(message.create_directory_request());
+        if (status != proto::Status::STATUS_SUCCESS)
+            file_manager_->ReadStatusCode(status);
     }
 }
 
@@ -143,23 +185,32 @@ void ClientSessionFileTransfer::OnRenameRequest(
     const std::string& old_path,
     const std::string& new_path)
 {
+    if (!worker_->BelongsToCurrentThread())
+    {
+        worker_->PostTask(std::bind(&ClientSessionFileTransfer::OnRenameRequest,
+                                    this,
+                                    panel_type,
+                                    old_path,
+                                    new_path));
+        return;
+    }
+
+    proto::file_transfer::ClientToHost message;
+
+    message.mutable_rename_request()->set_old_path(old_path);
+    message.mutable_rename_request()->set_new_path(new_path);
+
     if (panel_type == UiFileManager::PanelType::REMOTE)
     {
-        proto::file_transfer::ClientToHost message;
-
-        message.mutable_rename_request()->set_old_path(old_path);
-        message.mutable_rename_request()->set_new_path(new_path);
-
         WriteMessage(message);
     }
     else
     {
         DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
 
-        std::error_code code;
-        std::experimental::filesystem::rename(std::experimental::filesystem::u8path(old_path),
-                                              std::experimental::filesystem::u8path(new_path),
-                                              code);
+        proto::Status status = ExecuteRenameRequest(message.rename_request());
+        if (status != proto::Status::STATUS_SUCCESS)
+            file_manager_->ReadStatusCode(status);
     }
 }
 
@@ -167,21 +218,29 @@ void ClientSessionFileTransfer::OnRemoveRequest(
     UiFileManager::PanelType panel_type,
     const std::string& path)
 {
+    if (!worker_->BelongsToCurrentThread())
+    {
+        worker_->PostTask(std::bind(&ClientSessionFileTransfer::OnRemoveRequest,
+                                    this,
+                                    panel_type,
+                                    path));
+        return;
+    }
+
+    proto::file_transfer::ClientToHost message;
+    message.mutable_remove_request()->set_path(path);
+
     if (panel_type == UiFileManager::PanelType::REMOTE)
     {
-        proto::file_transfer::ClientToHost message;
-        message.mutable_remove_request()->set_path(path);
         WriteMessage(message);
     }
     else
     {
         DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
 
-        std::experimental::filesystem::path remove_path =
-            std::experimental::filesystem::u8path(path);
-
-        std::error_code code;
-        std::experimental::filesystem::remove(remove_path, code);
+        proto::Status status = ExecuteRemoveRequest(message.remove_request());
+        if (status != proto::Status::STATUS_SUCCESS)
+            file_manager_->ReadStatusCode(status);
     }
 }
 
@@ -231,7 +290,7 @@ void ClientSessionFileTransfer::WriteMessage(
 
     if (!buffer.IsEmpty())
     {
-        delegate_->OnSessionMessageAsync(std::move(buffer));
+        delegate_->OnSessionMessage(std::move(buffer));
         return;
     }
 

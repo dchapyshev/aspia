@@ -7,6 +7,7 @@
 
 #include "ui/file_manager.h"
 #include "ui/resource.h"
+#include "ui/status_code.h"
 #include "ui/base/module.h"
 #include "base/logging.h"
 
@@ -52,6 +53,19 @@ void UiFileManager::OnBeforeThreadRunning()
 void UiFileManager::OnAfterThreadRunning()
 {
     DestroyWindow();
+}
+
+void UiFileManager::ReadStatusCode(proto::Status status)
+{
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&UiFileManager::ReadStatusCode, this, status));
+        return;
+    }
+
+    std::wstring message = StatusCodeToString(UiModule::Current(), status);
+
+    MessageBoxW(hwnd(), message.c_str(), nullptr, MB_ICONWARNING | MB_OK);
 }
 
 void UiFileManager::ReadDriveList(PanelType panel_type,
