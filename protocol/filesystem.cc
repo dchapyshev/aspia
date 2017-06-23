@@ -132,6 +132,9 @@ proto::Status ExecuteCreateDirectoryRequest(
     std::experimental::filesystem::path path =
         std::experimental::filesystem::u8path(create_directory_request.path());
 
+    path.append(std::experimental::filesystem::u8path(
+        create_directory_request.name()));
+
     std::error_code code;
 
     if (!std::experimental::filesystem::create_directory(path, code))

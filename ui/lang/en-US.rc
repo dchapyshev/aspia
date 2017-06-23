@@ -364,9 +364,12 @@ BEGIN
     IDS_FT_DRIVE_DESC_UNKNOWN             "Unknown Device"
     IDS_FT_DELETE_CONFORM_FILE            "Are you sure you want to delete file ""%s""?"
     IDS_FT_DELETE_CONFORM_DIR             "Do you really want to delete directory ""%s"" and all its contents?"
+    IDS_FT_OP_SESSION_START               "Session started"
+    IDS_FT_OP_SESSION_END                 "Session terminated"
     IDS_FT_OP_BROWSE_FOLDERS              "Browse folders: ""%s"""
-    IDS_FT_OP_RENAME                      "Rename ""%s\\%s"" to ""%s\\%s"""
-    IDS_FT_OP_REMOVE                      "Remove ""%s"""
+    IDS_FT_OP_RENAME                      "Rename: ""%s\\%s"" to ""%s\\%s"""
+    IDS_FT_OP_REMOVE                      "Remove: ""%s"""
+    IDS_FT_OP_CREATE_FOLDER               "Create folder: ""%s\\%s"""
 END
 
 // Status

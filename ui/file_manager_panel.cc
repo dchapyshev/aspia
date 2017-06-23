@@ -616,13 +616,9 @@ void UiFileManagerPanel::OnEndLabelEdit(LPNMLVDISPINFOW disp_info)
     // New folder.
     if (index == kNewFolderIndex)
     {
-        std::experimental::filesystem::path path =
-            std::experimental::filesystem::u8path(directory_list_->path());
-
-        path.append(std::experimental::filesystem::path(
-            list_window_.GetTextFromEdit()));
-
-        delegate_->OnCreateDirectoryRequest(panel_type_, path.u8string());
+        delegate_->OnCreateDirectoryRequest(panel_type_,
+                                            directory_list_->path(),
+                                            UTF8fromUNICODE(list_window_.GetTextFromEdit()));
     }
     else // Rename exists item.
     {

@@ -29,7 +29,10 @@ public:
     public:
         virtual void OnDriveListRequest(PanelType panel_type) = 0;
         virtual void OnDirectoryListRequest(PanelType _panel_type, const std::string& path) = 0;
-        virtual void OnCreateDirectoryRequest(PanelType panel_type, const std::string& path) = 0;
+
+        virtual void OnCreateDirectoryRequest(PanelType panel_type,
+                                              const std::string& path,
+                                              const std::string& name) = 0;
 
         virtual void OnRenameRequest(PanelType panel_type,
                                      const std::string& path,

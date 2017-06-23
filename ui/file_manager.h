@@ -30,7 +30,10 @@ public:
         virtual void OnWindowClose() = 0;
         virtual void OnDriveListRequest(PanelType panel_type) = 0;
         virtual void OnDirectoryListRequest(PanelType panel_type, const std::string& path) = 0;
-        virtual void OnCreateDirectoryRequest(PanelType panel_type, const std::string& path) = 0;
+
+        virtual void OnCreateDirectoryRequest(PanelType panel_type,
+                                              const std::string& path,
+                                              const std::string& name) = 0;
 
         virtual void OnRenameRequest(PanelType panel_type,
                                      const std::string& path,
@@ -61,7 +64,10 @@ private:
     // UiFileManagerPanel::Delegate implementation.
     void OnDriveListRequest(PanelType panel_type) override;
     void OnDirectoryListRequest(PanelType panel_type, const std::string& path) override;
-    void OnCreateDirectoryRequest(PanelType panel_type, const std::string& path) override;
+
+    void OnCreateDirectoryRequest(PanelType panel_type,
+                                  const std::string& path,
+                                  const std::string& name) override;
 
     void OnRenameRequest(PanelType panel_type,
                          const std::string& path,

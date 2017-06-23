@@ -31,6 +31,10 @@ public:
 
     void OnDirectoryOpen(const std::wstring& path);
 
+    void OnCreateDirectory(const std::wstring& path,
+                           const std::wstring& name,
+                           proto::Status status);
+
     void OnRename(const std::wstring& path,
                   const std::wstring& old_name,
                   const std::wstring& new_name,

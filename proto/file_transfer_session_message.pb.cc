@@ -2558,6 +2558,7 @@ void FileRequest::set_allocated_path(::std::string* path) {
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int CreateDirectoryRequest::kPathFieldNumber;
+const int CreateDirectoryRequest::kNameFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 CreateDirectoryRequest::CreateDirectoryRequest()
@@ -2577,11 +2578,16 @@ CreateDirectoryRequest::CreateDirectoryRequest(const CreateDirectoryRequest& fro
   if (from.path().size() > 0) {
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.name().size() > 0) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
   // @@protoc_insertion_point(copy_constructor:aspia.proto.CreateDirectoryRequest)
 }
 
 void CreateDirectoryRequest::SharedCtor() {
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   _cached_size_ = 0;
 }
 
@@ -2592,6 +2598,7 @@ CreateDirectoryRequest::~CreateDirectoryRequest() {
 
 void CreateDirectoryRequest::SharedDtor() {
   path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void CreateDirectoryRequest::SetCachedSize(int size) const {
@@ -2615,6 +2622,7 @@ CreateDirectoryRequest* CreateDirectoryRequest::New(::google::protobuf::Arena* a
 void CreateDirectoryRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.CreateDirectoryRequest)
   path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 bool CreateDirectoryRequest::MergePartialFromCodedStream(
@@ -2637,6 +2645,22 @@ bool CreateDirectoryRequest::MergePartialFromCodedStream(
             this->path().data(), this->path().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
             "aspia.proto.CreateDirectoryRequest.path"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string name = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->name().data(), this->name().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.CreateDirectoryRequest.name"));
         } else {
           goto handle_unusual;
         }
@@ -2680,6 +2704,16 @@ void CreateDirectoryRequest::SerializeWithCachedSizes(
       1, this->path(), output);
   }
 
+  // string name = 2;
+  if (this->name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->name().data(), this->name().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.CreateDirectoryRequest.name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->name(), output);
+  }
+
   // @@protoc_insertion_point(serialize_end:aspia.proto.CreateDirectoryRequest)
 }
 
@@ -2692,6 +2726,13 @@ size_t CreateDirectoryRequest::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->path());
+  }
+
+  // string name = 2;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->name());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -2717,6 +2758,10 @@ void CreateDirectoryRequest::MergeFrom(const CreateDirectoryRequest& from) {
 
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
+  if (from.name().size() > 0) {
+
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
 }
 
 void CreateDirectoryRequest::CopyFrom(const CreateDirectoryRequest& from) {
@@ -2736,6 +2781,7 @@ void CreateDirectoryRequest::Swap(CreateDirectoryRequest* other) {
 }
 void CreateDirectoryRequest::InternalSwap(CreateDirectoryRequest* other) {
   path_.Swap(&other->path_);
+  name_.Swap(&other->name_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -2797,6 +2843,59 @@ void CreateDirectoryRequest::set_allocated_path(::std::string* path) {
   }
   path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.CreateDirectoryRequest.path)
+}
+
+// string name = 2;
+void CreateDirectoryRequest::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& CreateDirectoryRequest::name() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CreateDirectoryRequest.name)
+  return name_.GetNoArena();
+}
+void CreateDirectoryRequest::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.CreateDirectoryRequest.name)
+}
+#if LANG_CXX11
+void CreateDirectoryRequest::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.CreateDirectoryRequest.name)
+}
+#endif
+void CreateDirectoryRequest::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.CreateDirectoryRequest.name)
+}
+void CreateDirectoryRequest::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CreateDirectoryRequest.name)
+}
+::std::string* CreateDirectoryRequest::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.CreateDirectoryRequest.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* CreateDirectoryRequest::release_name() {
+  // @@protoc_insertion_point(field_release:aspia.proto.CreateDirectoryRequest.name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void CreateDirectoryRequest::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CreateDirectoryRequest.name)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

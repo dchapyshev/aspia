@@ -169,6 +169,10 @@ void FileTransferSessionClient::ReadCreateDirectoryRequest(
     proto::Status status =
         ExecuteCreateDirectoryRequest(create_directory_request);
 
+    status_dialog_->OnCreateDirectory(UNICODEfromUTF8(create_directory_request.path()),
+                                      UNICODEfromUTF8(create_directory_request.name()),
+                                      status);
+
     if (status != proto::Status::STATUS_SUCCESS)
         WriteStatus(status);
 }

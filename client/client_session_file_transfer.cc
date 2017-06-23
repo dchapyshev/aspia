@@ -151,19 +151,22 @@ void ClientSessionFileTransfer::OnDirectoryListRequest(UiFileManager::PanelType 
 
 void ClientSessionFileTransfer::OnCreateDirectoryRequest(
     UiFileManager::PanelType panel_type,
-    const std::string& path)
+    const std::string& path,
+    const std::string& name)
 {
     if (!worker_->BelongsToCurrentThread())
     {
         worker_->PostTask(std::bind(&ClientSessionFileTransfer::OnCreateDirectoryRequest,
                                     this,
                                     panel_type,
-                                    path));
+                                    path,
+                                    name));
         return;
     }
 
     proto::file_transfer::ClientToHost message;
     message.mutable_create_directory_request()->set_path(path);
+    message.mutable_create_directory_request()->set_name(name);
 
     if (panel_type == UiFileManager::PanelType::REMOTE)
     {

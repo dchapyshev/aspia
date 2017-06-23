@@ -81,6 +81,7 @@ message FileRequest
 message CreateDirectoryRequest
 {
     string path = 1;
+    string name = 2;
 }
 
 message RenameRequest

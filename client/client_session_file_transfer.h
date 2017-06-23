@@ -36,8 +36,16 @@ private:
     void OnWindowClose() override;
     void OnDriveListRequest(UiFileManager::PanelType panel_type) override;
     void OnDirectoryListRequest(UiFileManager::PanelType panel_type, const std::string& path) override;
-    void OnCreateDirectoryRequest(UiFileManager::PanelType panel_type, const std::string& path) override;
-    void OnRenameRequest(UiFileManager::PanelType panel_type, const std::string& path, const std::string& old_name, const std::string& new_name) override;
+
+    void OnCreateDirectoryRequest(UiFileManager::PanelType panel_type,
+                                  const std::string& path,
+                                  const std::string& name) override;
+
+    void OnRenameRequest(UiFileManager::PanelType panel_type,
+                         const std::string& path,
+                         const std::string& old_name,
+                         const std::string& new_name) override;
+
     void OnRemoveRequest(UiFileManager::PanelType panel_type, const std::string& path) override;
     void OnSendFile(const std::wstring& from_path, const std::wstring& to_path) override;
     void OnRecieveFile(const std::wstring& from_path, const std::wstring& to_path) override;

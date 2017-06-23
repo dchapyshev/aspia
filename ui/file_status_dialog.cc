@@ -51,6 +51,11 @@ void UiFileStatusDialog::OnInitDialog()
 {
     SetTopMost();
     SetIcon(IDI_MAIN);
+
+    WriteLog(module().string(IDS_FT_OP_SESSION_START),
+             proto::Status::STATUS_SUCCESS);
+
+    SetFocus(GetDlgItem(IDC_MINIMIZE_BUTTON));
 }
 
 void UiFileStatusDialog::OnSize(int width, int height)
@@ -136,10 +141,18 @@ static std::wstring CurrentTime()
 {
     WCHAR buffer[128];
 
+    if (!GetDateFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, buffer, _countof(buffer)))
+        return std::wstring();
+
+    std::wstring datetime(buffer);
+
     if (!GetTimeFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, buffer, _countof(buffer)))
         return std::wstring();
 
-    return buffer;
+    datetime.append(L" ");
+    datetime.append(buffer);
+
+    return datetime;
 }
 
 void UiFileStatusDialog::WriteLog(const std::wstring& message, proto::Status status)
@@ -149,9 +162,15 @@ void UiFileStatusDialog::WriteLog(const std::wstring& message, proto::Status sta
     edit.AppendText(CurrentTime());
     edit.AppendText(L" ");
     edit.AppendText(message);
-    edit.AppendText(L" (");
-    edit.AppendText(StatusCodeToString(module(), status));
-    edit.AppendText(L")\r\n");
+
+    if (status != proto::Status::STATUS_SUCCESS)
+    {
+        edit.AppendText(L" (");
+        edit.AppendText(StatusCodeToString(module(), status));
+        edit.AppendText(L")");
+    }
+
+    edit.AppendText(L"\r\n");
 }
 
 void UiFileStatusDialog::OnDirectoryOpen(const std::wstring& path)
@@ -162,15 +181,30 @@ void UiFileStatusDialog::OnDirectoryOpen(const std::wstring& path)
         return;
     }
 
-    UiEdit edit(GetDlgItem(IDC_STATUS_EDIT));
+    WriteLog(module().string(IDS_FT_OP_BROWSE_FOLDERS),
+             proto::Status::STATUS_SUCCESS);
+}
 
-    edit.AppendText(CurrentTime());
-    edit.AppendText(L" ");
+void UiFileStatusDialog::OnCreateDirectory(const std::wstring& path,
+                                           const std::wstring& name,
+                                           proto::Status status)
+{
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&UiFileStatusDialog::OnCreateDirectory,
+                                    this,
+                                    path,
+                                    name,
+                                    status));
+        return;
+    }
 
-    std::wstring format = module().string(IDS_FT_OP_BROWSE_FOLDERS);
+    std::wstring format = module().string(IDS_FT_OP_CREATE_FOLDER);
 
-    edit.AppendText(StringPrintfW(format.c_str(), path.c_str()));
-    edit.AppendText(L"\r\n");
+    WriteLog(StringPrintfW(format.c_str(),
+                           path.c_str(),
+                           name.c_str()),
+             status);
 }
 
 void UiFileStatusDialog::OnRename(const std::wstring& path,
