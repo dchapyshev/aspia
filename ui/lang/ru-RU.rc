@@ -365,7 +365,7 @@ BEGIN
     IDS_FT_DELETE_CONFORM_FILE            "Вы действительно хотите удалить файл ""%s""?"
     IDS_FT_DELETE_CONFORM_DIR             "Вы действительно хотите удалить директорию ""%s"" и все ее содержимое?"
     IDS_FT_OP_BROWSE_FOLDERS              "Обзор папок: ""%s"""
-    IDS_FT_OP_RENAME                      "Переименование ""%s"" в ""%s"""
+    IDS_FT_OP_RENAME                      "Переименование ""%s\\%s"" в ""%s\\%s"""
     IDS_FT_OP_REMOVE                      "Удаление ""%s"""
 END
 

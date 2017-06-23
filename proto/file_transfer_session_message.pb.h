@@ -114,19 +114,6 @@ const DirectoryListItem_Type DirectoryListItem_Type_Type_MIN = DirectoryListItem
 const DirectoryListItem_Type DirectoryListItem_Type_Type_MAX = DirectoryListItem_Type_FILE;
 const int DirectoryListItem_Type_Type_ARRAYSIZE = DirectoryListItem_Type_Type_MAX + 1;
 
-enum File_Flags {
-  File_Flags_UNKNOWN_PACKET = 0,
-  File_Flags_FIRST_PACKET = 1,
-  File_Flags_PARTITION_PACKET = 2,
-  File_Flags_LAST_PACKET = 4,
-  File_Flags_File_Flags_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  File_Flags_File_Flags_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool File_Flags_IsValid(int value);
-const File_Flags File_Flags_Flags_MIN = File_Flags_UNKNOWN_PACKET;
-const File_Flags File_Flags_Flags_MAX = File_Flags_LAST_PACKET;
-const int File_Flags_Flags_ARRAYSIZE = File_Flags_Flags_MAX + 1;
-
 // ===================================================================
 
 class DriveListItem : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DriveListItem) */ {
@@ -795,25 +782,6 @@ class File : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
 
   // nested types ----------------------------------------------------
 
-  typedef File_Flags Flags;
-  static const Flags UNKNOWN_PACKET =
-    File_Flags_UNKNOWN_PACKET;
-  static const Flags FIRST_PACKET =
-    File_Flags_FIRST_PACKET;
-  static const Flags PARTITION_PACKET =
-    File_Flags_PARTITION_PACKET;
-  static const Flags LAST_PACKET =
-    File_Flags_LAST_PACKET;
-  static inline bool Flags_IsValid(int value) {
-    return File_Flags_IsValid(value);
-  }
-  static const Flags Flags_MIN =
-    File_Flags_Flags_MIN;
-  static const Flags Flags_MAX =
-    File_Flags_Flags_MAX;
-  static const int Flags_ARRAYSIZE =
-    File_Flags_Flags_ARRAYSIZE;
-
   // accessors -------------------------------------------------------
 
   // string path = 1;
@@ -844,11 +812,11 @@ class File : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
   ::std::string* release_data();
   void set_allocated_data(::std::string* data);
 
-  // uint32 flags = 2;
-  void clear_flags();
-  static const int kFlagsFieldNumber = 2;
-  ::google::protobuf::uint32 flags() const;
-  void set_flags(::google::protobuf::uint32 value);
+  // uint64 full_size = 2;
+  void clear_full_size();
+  static const int kFullSizeFieldNumber = 2;
+  ::google::protobuf::uint64 full_size() const;
+  void set_full_size(::google::protobuf::uint64 value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.File)
  private:
@@ -856,7 +824,7 @@ class File : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr path_;
   ::google::protobuf::internal::ArenaStringPtr data_;
-  ::google::protobuf::uint32 flags_;
+  ::google::protobuf::uint64 full_size_;
   mutable int _cached_size_;
   friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
 };
@@ -1096,40 +1064,55 @@ class RenameRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
 
   // accessors -------------------------------------------------------
 
-  // string old_path = 1;
-  void clear_old_path();
-  static const int kOldPathFieldNumber = 1;
-  const ::std::string& old_path() const;
-  void set_old_path(const ::std::string& value);
+  // string path = 1;
+  void clear_path();
+  static const int kPathFieldNumber = 1;
+  const ::std::string& path() const;
+  void set_path(const ::std::string& value);
   #if LANG_CXX11
-  void set_old_path(::std::string&& value);
+  void set_path(::std::string&& value);
   #endif
-  void set_old_path(const char* value);
-  void set_old_path(const char* value, size_t size);
-  ::std::string* mutable_old_path();
-  ::std::string* release_old_path();
-  void set_allocated_old_path(::std::string* old_path);
+  void set_path(const char* value);
+  void set_path(const char* value, size_t size);
+  ::std::string* mutable_path();
+  ::std::string* release_path();
+  void set_allocated_path(::std::string* path);
 
-  // string new_path = 2;
-  void clear_new_path();
-  static const int kNewPathFieldNumber = 2;
-  const ::std::string& new_path() const;
-  void set_new_path(const ::std::string& value);
+  // string old_item_name = 2;
+  void clear_old_item_name();
+  static const int kOldItemNameFieldNumber = 2;
+  const ::std::string& old_item_name() const;
+  void set_old_item_name(const ::std::string& value);
   #if LANG_CXX11
-  void set_new_path(::std::string&& value);
+  void set_old_item_name(::std::string&& value);
   #endif
-  void set_new_path(const char* value);
-  void set_new_path(const char* value, size_t size);
-  ::std::string* mutable_new_path();
-  ::std::string* release_new_path();
-  void set_allocated_new_path(::std::string* new_path);
+  void set_old_item_name(const char* value);
+  void set_old_item_name(const char* value, size_t size);
+  ::std::string* mutable_old_item_name();
+  ::std::string* release_old_item_name();
+  void set_allocated_old_item_name(::std::string* old_item_name);
+
+  // string new_item_name = 3;
+  void clear_new_item_name();
+  static const int kNewItemNameFieldNumber = 3;
+  const ::std::string& new_item_name() const;
+  void set_new_item_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_new_item_name(::std::string&& value);
+  #endif
+  void set_new_item_name(const char* value);
+  void set_new_item_name(const char* value, size_t size);
+  ::std::string* mutable_new_item_name();
+  ::std::string* release_new_item_name();
+  void set_allocated_new_item_name(::std::string* new_item_name);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.RenameRequest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr old_path_;
-  ::google::protobuf::internal::ArenaStringPtr new_path_;
+  ::google::protobuf::internal::ArenaStringPtr path_;
+  ::google::protobuf::internal::ArenaStringPtr old_item_name_;
+  ::google::protobuf::internal::ArenaStringPtr new_item_name_;
   mutable int _cached_size_;
   friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
 };
@@ -1699,18 +1682,18 @@ inline void File::set_allocated_path(::std::string* path) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.File.path)
 }
 
-// uint32 flags = 2;
-inline void File::clear_flags() {
-  flags_ = 0u;
+// uint64 full_size = 2;
+inline void File::clear_full_size() {
+  full_size_ = GOOGLE_ULONGLONG(0);
 }
-inline ::google::protobuf::uint32 File::flags() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.File.flags)
-  return flags_;
+inline ::google::protobuf::uint64 File::full_size() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.File.full_size)
+  return full_size_;
 }
-inline void File::set_flags(::google::protobuf::uint32 value) {
+inline void File::set_full_size(::google::protobuf::uint64 value) {
   
-  flags_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.File.flags)
+  full_size_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.File.full_size)
 }
 
 // bytes data = 3;
@@ -1884,110 +1867,163 @@ inline void CreateDirectoryRequest::set_allocated_path(::std::string* path) {
 
 // RenameRequest
 
-// string old_path = 1;
-inline void RenameRequest::clear_old_path() {
-  old_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// string path = 1;
+inline void RenameRequest::clear_path() {
+  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& RenameRequest::old_path() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.RenameRequest.old_path)
-  return old_path_.GetNoArena();
+inline const ::std::string& RenameRequest::path() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RenameRequest.path)
+  return path_.GetNoArena();
 }
-inline void RenameRequest::set_old_path(const ::std::string& value) {
+inline void RenameRequest::set_path(const ::std::string& value) {
   
-  old_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.RenameRequest.old_path)
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RenameRequest.path)
 }
 #if LANG_CXX11
-inline void RenameRequest::set_old_path(::std::string&& value) {
+inline void RenameRequest::set_path(::std::string&& value) {
   
-  old_path_.SetNoArena(
+  path_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RenameRequest.old_path)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RenameRequest.path)
 }
 #endif
-inline void RenameRequest::set_old_path(const char* value) {
+inline void RenameRequest::set_path(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
-  old_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.RenameRequest.old_path)
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RenameRequest.path)
 }
-inline void RenameRequest::set_old_path(const char* value, size_t size) {
+inline void RenameRequest::set_path(const char* value, size_t size) {
   
-  old_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RenameRequest.old_path)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RenameRequest.path)
 }
-inline ::std::string* RenameRequest::mutable_old_path() {
+inline ::std::string* RenameRequest::mutable_path() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.RenameRequest.old_path)
-  return old_path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RenameRequest.path)
+  return path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* RenameRequest::release_old_path() {
-  // @@protoc_insertion_point(field_release:aspia.proto.RenameRequest.old_path)
+inline ::std::string* RenameRequest::release_path() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RenameRequest.path)
   
-  return old_path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void RenameRequest::set_allocated_old_path(::std::string* old_path) {
-  if (old_path != NULL) {
+inline void RenameRequest::set_allocated_path(::std::string* path) {
+  if (path != NULL) {
     
   } else {
     
   }
-  old_path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), old_path);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RenameRequest.old_path)
+  path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RenameRequest.path)
 }
 
-// string new_path = 2;
-inline void RenameRequest::clear_new_path() {
-  new_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// string old_item_name = 2;
+inline void RenameRequest::clear_old_item_name() {
+  old_item_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& RenameRequest::new_path() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.RenameRequest.new_path)
-  return new_path_.GetNoArena();
+inline const ::std::string& RenameRequest::old_item_name() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RenameRequest.old_item_name)
+  return old_item_name_.GetNoArena();
 }
-inline void RenameRequest::set_new_path(const ::std::string& value) {
+inline void RenameRequest::set_old_item_name(const ::std::string& value) {
   
-  new_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.RenameRequest.new_path)
+  old_item_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RenameRequest.old_item_name)
 }
 #if LANG_CXX11
-inline void RenameRequest::set_new_path(::std::string&& value) {
+inline void RenameRequest::set_old_item_name(::std::string&& value) {
   
-  new_path_.SetNoArena(
+  old_item_name_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RenameRequest.new_path)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RenameRequest.old_item_name)
 }
 #endif
-inline void RenameRequest::set_new_path(const char* value) {
+inline void RenameRequest::set_old_item_name(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
-  new_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.RenameRequest.new_path)
+  old_item_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RenameRequest.old_item_name)
 }
-inline void RenameRequest::set_new_path(const char* value, size_t size) {
+inline void RenameRequest::set_old_item_name(const char* value, size_t size) {
   
-  new_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  old_item_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RenameRequest.new_path)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RenameRequest.old_item_name)
 }
-inline ::std::string* RenameRequest::mutable_new_path() {
+inline ::std::string* RenameRequest::mutable_old_item_name() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.RenameRequest.new_path)
-  return new_path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RenameRequest.old_item_name)
+  return old_item_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* RenameRequest::release_new_path() {
-  // @@protoc_insertion_point(field_release:aspia.proto.RenameRequest.new_path)
+inline ::std::string* RenameRequest::release_old_item_name() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RenameRequest.old_item_name)
   
-  return new_path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return old_item_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void RenameRequest::set_allocated_new_path(::std::string* new_path) {
-  if (new_path != NULL) {
+inline void RenameRequest::set_allocated_old_item_name(::std::string* old_item_name) {
+  if (old_item_name != NULL) {
     
   } else {
     
   }
-  new_path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), new_path);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RenameRequest.new_path)
+  old_item_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), old_item_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RenameRequest.old_item_name)
+}
+
+// string new_item_name = 3;
+inline void RenameRequest::clear_new_item_name() {
+  new_item_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RenameRequest::new_item_name() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RenameRequest.new_item_name)
+  return new_item_name_.GetNoArena();
+}
+inline void RenameRequest::set_new_item_name(const ::std::string& value) {
+  
+  new_item_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RenameRequest.new_item_name)
+}
+#if LANG_CXX11
+inline void RenameRequest::set_new_item_name(::std::string&& value) {
+  
+  new_item_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RenameRequest.new_item_name)
+}
+#endif
+inline void RenameRequest::set_new_item_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  new_item_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RenameRequest.new_item_name)
+}
+inline void RenameRequest::set_new_item_name(const char* value, size_t size) {
+  
+  new_item_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RenameRequest.new_item_name)
+}
+inline ::std::string* RenameRequest::mutable_new_item_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RenameRequest.new_item_name)
+  return new_item_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RenameRequest::release_new_item_name() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RenameRequest.new_item_name)
+  
+  return new_item_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RenameRequest::set_allocated_new_item_name(::std::string* new_item_name) {
+  if (new_item_name != NULL) {
+    
+  } else {
+    
+  }
+  new_item_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), new_item_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RenameRequest.new_item_name)
 }
 
 // -------------------------------------------------------------------
@@ -2081,7 +2117,6 @@ namespace protobuf {
 
 template <> struct is_proto_enum< ::aspia::proto::DriveListItem_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DirectoryListItem_Type> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::File_Flags> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
 }  // namespace google

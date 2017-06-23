@@ -178,8 +178,9 @@ void FileTransferSessionClient::ReadRenameRequest(
 {
     proto::Status status = ExecuteRenameRequest(rename_request);
 
-    status_dialog_->OnRename(UNICODEfromUTF8(rename_request.old_path()),
-                             UNICODEfromUTF8(rename_request.new_path()),
+    status_dialog_->OnRename(UNICODEfromUTF8(rename_request.path()),
+                             UNICODEfromUTF8(rename_request.old_item_name()),
+                             UNICODEfromUTF8(rename_request.new_item_name()),
                              status);
 
     if (status != proto::Status::STATUS_SUCCESS)

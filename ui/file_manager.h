@@ -31,7 +31,12 @@ public:
         virtual void OnDriveListRequest(PanelType panel_type) = 0;
         virtual void OnDirectoryListRequest(PanelType panel_type, const std::string& path) = 0;
         virtual void OnCreateDirectoryRequest(PanelType panel_type, const std::string& path) = 0;
-        virtual void OnRenameRequest(PanelType panel_type, const std::string& old_path, const std::string& new_path) = 0;
+
+        virtual void OnRenameRequest(PanelType panel_type,
+                                     const std::string& path,
+                                     const std::string& old_name,
+                                     const std::string& new_name) = 0;
+
         virtual void OnRemoveRequest(PanelType panel_type, const std::string& path) = 0;
         virtual void OnSendFile(const std::wstring& from_path, const std::wstring& to_path) = 0;
         virtual void OnRecieveFile(const std::wstring& from_path, const std::wstring& to_path) = 0;
@@ -57,7 +62,12 @@ private:
     void OnDriveListRequest(PanelType panel_type) override;
     void OnDirectoryListRequest(PanelType panel_type, const std::string& path) override;
     void OnCreateDirectoryRequest(PanelType panel_type, const std::string& path) override;
-    void OnRenameRequest(PanelType panel_type, const std::string& old_path, const std::string& new_path) override;
+
+    void OnRenameRequest(PanelType panel_type,
+                         const std::string& path,
+                         const std::string& old_path,
+                         const std::string& new_path) override;
+
     void OnRemoveRequest(PanelType panel_type, const std::string& path) override;
 
     // UiChildWindow implementation.

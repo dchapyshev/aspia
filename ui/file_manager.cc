@@ -112,10 +112,11 @@ void UiFileManager::OnCreateDirectoryRequest(PanelType panel_type, const std::st
 }
 
 void UiFileManager::OnRenameRequest(PanelType panel_type,
-                                    const std::string& old_path,
-                                    const std::string& new_path)
+                                    const std::string& path,
+                                    const std::string& old_name,
+                                    const std::string& new_name)
 {
-    delegate_->OnRenameRequest(panel_type, old_path, new_path);
+    delegate_->OnRenameRequest(panel_type, path, old_name, new_name);
 }
 
 void UiFileManager::OnRemoveRequest(PanelType panel_type, const std::string& path)

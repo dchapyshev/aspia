@@ -153,10 +153,16 @@ proto::Status ExecuteCreateDirectoryRequest(
 proto::Status ExecuteRenameRequest(const proto::RenameRequest& rename_request)
 {
     std::experimental::filesystem::path old_path =
-        std::experimental::filesystem::u8path(rename_request.old_path());
+        std::experimental::filesystem::u8path(rename_request.path());
+
+    old_path.append(std::experimental::filesystem::u8path(
+        rename_request.old_item_name()));
 
     std::experimental::filesystem::path new_path =
-        std::experimental::filesystem::u8path(rename_request.new_path());
+        std::experimental::filesystem::u8path(rename_request.path());
+
+    new_path.append(std::experimental::filesystem::u8path(
+        rename_request.new_item_name()));
 
     if (old_path == new_path)
         return proto::Status::STATUS_SUCCESS;

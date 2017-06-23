@@ -173,23 +173,27 @@ void UiFileStatusDialog::OnDirectoryOpen(const std::wstring& path)
     edit.AppendText(L"\r\n");
 }
 
-void UiFileStatusDialog::OnRename(const std::wstring& old_path,
-                                  const std::wstring& new_path,
+void UiFileStatusDialog::OnRename(const std::wstring& path,
+                                  const std::wstring& old_name,
+                                  const std::wstring& new_name,
                                   proto::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
         runner_->PostTask(std::bind(&UiFileStatusDialog::OnRename,
                                     this,
-                                    old_path,
-                                    new_path,
+                                    path,
+                                    old_name,
+                                    new_name,
                                     status));
         return;
     }
 
     std::wstring format = module().string(IDS_FT_OP_RENAME);
 
-    WriteLog(StringPrintfW(format.c_str(), old_path.c_str(), new_path.c_str()),
+    WriteLog(StringPrintfW(format.c_str(),
+                           path.c_str(), old_name.c_str(),
+                           path.c_str(), new_name.c_str()),
              status);
 }
 

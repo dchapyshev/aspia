@@ -182,23 +182,26 @@ void ClientSessionFileTransfer::OnCreateDirectoryRequest(
 
 void ClientSessionFileTransfer::OnRenameRequest(
     UiFileManager::PanelType panel_type,
-    const std::string& old_path,
-    const std::string& new_path)
+    const std::string& path,
+    const std::string& old_name,
+    const std::string& new_name)
 {
     if (!worker_->BelongsToCurrentThread())
     {
         worker_->PostTask(std::bind(&ClientSessionFileTransfer::OnRenameRequest,
                                     this,
                                     panel_type,
-                                    old_path,
-                                    new_path));
+                                    path,
+                                    old_name,
+                                    new_name));
         return;
     }
 
     proto::file_transfer::ClientToHost message;
 
-    message.mutable_rename_request()->set_old_path(old_path);
-    message.mutable_rename_request()->set_new_path(new_path);
+    message.mutable_rename_request()->set_path(path);
+    message.mutable_rename_request()->set_old_item_name(old_name);
+    message.mutable_rename_request()->set_new_item_name(new_name);
 
     if (panel_type == UiFileManager::PanelType::REMOTE)
     {

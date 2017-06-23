@@ -632,24 +632,13 @@ void UiFileManagerPanel::OnEndLabelEdit(LPNMLVDISPINFOW disp_info)
         if (!disp_info->item.pszText)
             return;
 
-        std::experimental::filesystem::path old_path =
+        std::experimental::filesystem::path path =
             std::experimental::filesystem::u8path(directory_list_->path());
-
-        old_path.append(std::experimental::filesystem::u8path(
-            directory_list_->item(index).name()));
-
-        std::experimental::filesystem::path new_path =
-            std::experimental::filesystem::u8path(directory_list_->path());
-
-        new_path.append(std::experimental::filesystem::path(
-            disp_info->item.pszText));
-
-        if (old_path == new_path)
-            return;
 
         delegate_->OnRenameRequest(panel_type_,
-                                   old_path.u8string(),
-                                   new_path.u8string());
+                                   path.u8string(),
+                                   directory_list_->item(index).name(),
+                                   UTF8fromUNICODE(disp_info->item.pszText));
     }
 
     delegate_->OnDirectoryListRequest(panel_type_, directory_list_->path());
