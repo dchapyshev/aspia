@@ -17,30 +17,34 @@ extern "C" {
 
 namespace aspia {
 
-template<class T>
-void ClearStringContent(T& str)
+template<class StringType>
+void SecureClearString(StringType& str)
 {
     size_t memory_size = str.size();
 
     if (memory_size)
-        sodium_memzero(const_cast<T::value_type*>(str.data()), memory_size);
+    {
+        sodium_memzero(const_cast<StringType::value_type*>(str.data()),
+                       memory_size);
+        str.clear();
+    }
 }
 
-template <class T>
-class SecureString : public T
+template <class StringType>
+class SecureString : public StringType
 {
 public:
-    SecureString() { }
+    SecureString() = default;
 
-    SecureString(T&& other) :
-        T(std::move(other))
+    SecureString(StringType&& other) :
+        StringType(std::move(other))
     {
         // Nothing
     }
 
     virtual ~SecureString()
     {
-        ClearStringContent(*this);
+        SecureClearString(*this);
     }
 
 private:

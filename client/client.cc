@@ -125,8 +125,8 @@ void Client::OnNetworkChannelConnect()
 
     channel_proxy_->Send(SerializeMessage<SecureIOBuffer>(request));
 
-    ClearStringContent(*request.mutable_username());
-    ClearStringContent(*request.mutable_password());
+    SecureClearString(*request.mutable_username());
+    SecureClearString(*request.mutable_password());
 }
 
 void Client::OnStatusDialogOpen()

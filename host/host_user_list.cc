@@ -36,8 +36,8 @@ HostUserList::~HostUserList()
     {
         proto::HostUser* user = list_.mutable_user_list(i);
 
-        ClearStringContent(*user->mutable_username());
-        ClearStringContent(*user->mutable_password_hash());
+        SecureClearString(*user->mutable_username());
+        SecureClearString(*user->mutable_password_hash());
 
         user->set_session_types(0);
         user->set_enabled(false);

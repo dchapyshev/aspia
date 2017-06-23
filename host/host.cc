@@ -118,8 +118,8 @@ bool Host::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
             break;
     }
 
-    ClearStringContent(*request.mutable_username());
-    ClearStringContent(*request.mutable_password());
+    SecureClearString(*request.mutable_username());
+    SecureClearString(*request.mutable_password());
 
     channel_proxy_->Send(SerializeMessage<SecureIOBuffer>(result));
 

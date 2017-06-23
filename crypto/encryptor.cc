@@ -90,8 +90,8 @@ bool Encryptor::ReadHelloMessage(const SecureIOBuffer& message_buffer)
         }
     }
 
-    ClearStringContent(*message.mutable_public_key());
-    ClearStringContent(*message.mutable_nonce());
+    SecureClearString(*message.mutable_public_key());
+    SecureClearString(*message.mutable_nonce());
 
     if (mode_ == Mode::CLIENT)
     {
@@ -122,8 +122,8 @@ SecureIOBuffer Encryptor::HelloMessage()
 
     SecureIOBuffer message_buffer(SerializeMessage<SecureIOBuffer>(message));
 
-    ClearStringContent(*message.mutable_public_key());
-    ClearStringContent(*message.mutable_nonce());
+    SecureClearString(*message.mutable_public_key());
+    SecureClearString(*message.mutable_nonce());
 
     if (mode_ == Mode::SERVER)
     {
