@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/drive_enumerator.h
+// FILE:            base/files/drive_enumerator.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__DRIVE_ENUMERATOR_H
-#define _ASPIA_BASE__DRIVE_ENUMERATOR_H
+#ifndef _ASPIA_BASE__FILES__DRIVE_ENUMERATOR_H
+#define _ASPIA_BASE__FILES__DRIVE_ENUMERATOR_H
 
 #include "base/macros.h"
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__DRIVE_ENUMERATOR_H
+#endif // _ASPIA_BASE__FILES__DRIVE_ENUMERATOR_H

@@ -43,6 +43,9 @@
     <Filter Include="ui\base">
       <UniqueIdentifier>{14024680-c8eb-4103-8847-07859313882c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="base\files">
+      <UniqueIdentifier>{75605218-99f0-4b1a-a0d5-ee1b0cdc597b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="proto\desktop_session.pb.cc">
@@ -427,9 +430,6 @@
     <ClCompile Include="proto\status.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
-    <ClCompile Include="base\drive_enumerator.cc">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="ui\file_transfer_dialog.cc">
       <Filter>ui</Filter>
     </ClCompile>
@@ -456,6 +456,9 @@
     </ClCompile>
     <ClCompile Include="ui\file_manager_helpers.cc">
       <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="base\files\drive_enumerator.cc">
+      <Filter>base\files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -959,9 +962,6 @@
     <ClInclude Include="proto\status.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
-    <ClInclude Include="base\drive_enumerator.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="ui\file_transfer_dialog.h">
       <Filter>ui</Filter>
     </ClInclude>
@@ -991,6 +991,9 @@
     </ClInclude>
     <ClInclude Include="ui\file_manager_helpers.h">
       <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="base\files\drive_enumerator.h">
+      <Filter>base\files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

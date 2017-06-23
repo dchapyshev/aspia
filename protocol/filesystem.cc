@@ -6,7 +6,7 @@
 //
 
 #include "protocol/filesystem.h"
-#include "base/drive_enumerator.h"
+#include "base/files/drive_enumerator.h"
 #include "base/unicode.h"
 #include "base/path.h"
 #include "base/logging.h"
