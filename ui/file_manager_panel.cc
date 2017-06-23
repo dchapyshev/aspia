@@ -10,8 +10,8 @@
 #include "ui/base/module.h"
 #include "ui/resource.h"
 #include "base/scoped_gdi_object.h"
-#include "base/string_util.h"
-#include "base/unicode.h"
+#include "base/strings/string_util.h"
+#include "base/strings/unicode.h"
 
 #include <clocale>
 #include <filesystem>

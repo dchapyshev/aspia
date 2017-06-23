@@ -27,11 +27,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="base\aligned_memory.cc" />
     <ClCompile Include="base\desktop.cc" />
     <ClCompile Include="base\files\drive_enumerator.cc" />
     <ClCompile Include="base\io_queue.cc" />
     <ClCompile Include="base\logging.cc" />
+    <ClCompile Include="base\memory\aligned_memory.cc" />
     <ClCompile Include="base\message_loop\message_loop.cc" />
     <ClCompile Include="base\message_loop\message_loop_proxy.cc" />
     <ClCompile Include="base\message_loop\message_loop_thread.cc" />
@@ -53,10 +53,10 @@
     <ClCompile Include="base\security_helpers.cc" />
     <ClCompile Include="base\service.cc" />
     <ClCompile Include="base\service_manager.cc" />
-    <ClCompile Include="base\string_util.cc" />
-    <ClCompile Include="base\string_util_constants.cc" />
+    <ClCompile Include="base\strings\string_util.cc" />
+    <ClCompile Include="base\strings\string_util_constants.cc" />
+    <ClCompile Include="base\strings\unicode.cc" />
     <ClCompile Include="base\thread.cc" />
-    <ClCompile Include="base\unicode.cc" />
     <ClCompile Include="base\version_helpers.cc" />
     <ClCompile Include="base\waitable_event.cc" />
     <ClCompile Include="base\waitable_event_watcher.cc" />
@@ -167,13 +167,13 @@
     <ClCompile Include="ui\viewer_window.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="base\aligned_memory.h" />
     <ClInclude Include="base\desktop.h" />
     <ClInclude Include="base\files\drive_enumerator.h" />
     <ClInclude Include="base\io_buffer.h" />
     <ClInclude Include="base\io_queue.h" />
     <ClInclude Include="base\logging.h" />
     <ClInclude Include="base\macros.h" />
+    <ClInclude Include="base\memory\aligned_memory.h" />
     <ClInclude Include="base\message_loop\message_loop.h" />
     <ClInclude Include="base\message_loop\message_loop_proxy.h" />
     <ClInclude Include="base\message_loop\message_loop_thread.h" />
@@ -211,11 +211,11 @@
     <ClInclude Include="base\security_helpers.h" />
     <ClInclude Include="base\service.h" />
     <ClInclude Include="base\service_manager.h" />
-    <ClInclude Include="base\string_util.h" />
-    <ClInclude Include="base\string_util_constants.h" />
+    <ClInclude Include="base\strings\string_util.h" />
+    <ClInclude Include="base\strings\string_util_constants.h" />
+    <ClInclude Include="base\strings\unicode.h" />
     <ClInclude Include="base\thread.h" />
     <ClInclude Include="base\typed_buffer.h" />
-    <ClInclude Include="base\unicode.h" />
     <ClInclude Include="base\version_helpers.h" />
     <ClInclude Include="base\waitable_event.h" />
     <ClInclude Include="base\waitable_event_watcher.h" />

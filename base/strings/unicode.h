@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/unicode.h
+// FILE:            base/strings/unicode.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__UNICODE_H
-#define _ASPIA_BASE__UNICODE_H
+#ifndef _ASPIA_BASE__STRINGS__UNICODE_H
+#define _ASPIA_BASE__STRINGS__UNICODE_H
 
 #include <string>
 
@@ -32,4 +32,4 @@ std::string ANSIfromUTF8(const std::string& in);
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__UNICODE_H
+#endif // _ASPIA_BASE__STRINGS__UNICODE_H

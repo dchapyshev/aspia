@@ -7,7 +7,7 @@
 
 #include "ui/auth_dialog.h"
 #include "ui/resource.h"
-#include "base/unicode.h"
+#include "base/strings/unicode.h"
 #include "base/logging.h"
 
 extern "C" {

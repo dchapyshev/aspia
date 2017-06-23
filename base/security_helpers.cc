@@ -8,9 +8,9 @@
 #include "base/security_helpers.h"
 #include "base/scoped_object.h"
 #include "base/scoped_local.h"
-#include "base/unicode.h"
+#include "base/strings/string_util.h"
+#include "base/strings/unicode.h"
 #include "base/logging.h"
-#include "base/string_util.h"
 
 #include <objidl.h>
 #include <sddl.h>

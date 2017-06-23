@@ -12,8 +12,8 @@
 
 #include "base/version_helpers.h"
 #include "base/process_helpers.h"
-#include "base/unicode.h"
-#include "base/string_util.h"
+#include "base/strings/string_util.h"
+#include "base/strings/unicode.h"
 #include "client/client_config.h"
 #include "host/host_service.h"
 #include "ui/base/listview.h"

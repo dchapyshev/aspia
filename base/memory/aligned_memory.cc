@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/aligned_memory.cc
+// FILE:            base/memory/aligned_memory.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/aligned_memory.h"
+#include "base/memory/aligned_memory.h"
 #include "base/logging.h"
 
 namespace aspia {

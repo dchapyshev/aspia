@@ -11,8 +11,8 @@
 #include "ui/base/edit.h"
 #include "ui/base/module.h"
 #include "base/logging.h"
-#include "base/unicode.h"
-#include "base/string_util.h"
+#include "base/strings/string_util.h"
+#include "base/strings/unicode.h"
 
 #include <windowsx.h>
 

@@ -10,8 +10,8 @@
 #include "ui/user_prop_dialog.h"
 #include "ui/resource.h"
 #include "base/process_helpers.h"
-#include "base/unicode.h"
-#include "base/string_util.h"
+#include "base/strings/string_util.h"
+#include "base/strings/unicode.h"
 #include "crypto/secure_string.h"
 
 namespace aspia {

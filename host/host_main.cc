@@ -11,7 +11,7 @@
 #include "host/console_session_launcher.h"
 #include "host/desktop_session_client.h"
 #include "host/file_transfer_session_client.h"
-#include "base/unicode.h"
+#include "base/strings/unicode.h"
 
 #include <gflags/gflags.h>
 

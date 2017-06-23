@@ -13,7 +13,7 @@
 #include "ui/base/trackbar.h"
 #include "desktop_capture/pixel_format.h"
 #include "codec/video_helpers.h"
-#include "base/string_util.h"
+#include "base/strings/string_util.h"
 
 namespace aspia {
 

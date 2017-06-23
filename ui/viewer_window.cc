@@ -9,7 +9,7 @@
 #include "ui/power_manage_dialog.h"
 #include "ui/resource.h"
 #include "ui/base/module.h"
-#include "base/unicode.h"
+#include "base/strings/unicode.h"
 #include "desktop_capture/cursor.h"
 #include "proto/desktop_session_message.pb.h"
 

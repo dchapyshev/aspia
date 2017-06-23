@@ -6,7 +6,7 @@
 //
 
 #include "host/host_user_list.h"
-#include "base/unicode.h"
+#include "base/strings/unicode.h"
 #include "base/logging.h"
 #include "base/path.h"
 #include "crypto/secure_string.h"

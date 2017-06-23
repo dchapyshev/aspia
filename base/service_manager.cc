@@ -6,8 +6,8 @@
 //
 
 #include "base/service_manager.h"
-#include "base/unicode.h"
-#include "base/string_util.h"
+#include "base/strings/unicode.h"
+#include "base/strings/string_util.h"
 #include "base/logging.h"
 
 #include <atomic>

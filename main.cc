@@ -8,7 +8,7 @@
 #include <gflags/gflags.h>
 #include "base/version_helpers.h"
 #include "base/process_helpers.h"
-#include "base/unicode.h"
+#include "base/strings/unicode.h"
 #include "base/logging.h"
 #include "host/host_main.h"
 #include "ui/ui_main.h"

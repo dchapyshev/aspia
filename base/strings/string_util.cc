@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/string_util.cc
+// FILE:            base/strings/string_util.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/string_util.h"
-#include "base/string_util_constants.h"
+#include "base/strings/string_util.h"
+#include "base/strings/string_util_constants.h"
 #include "base/logging.h"
 
 #include <strsafe.h>

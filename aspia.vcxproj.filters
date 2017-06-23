@@ -46,6 +46,12 @@
     <Filter Include="base\files">
       <UniqueIdentifier>{75605218-99f0-4b1a-a0d5-ee1b0cdc597b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="base\memory">
+      <UniqueIdentifier>{a253d829-0d87-4505-9fb6-e5d9031011e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="base\strings">
+      <UniqueIdentifier>{75dce182-2556-41f5-a0a6-d7f9afb6e34b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="proto\desktop_session.pb.cc">
@@ -103,9 +109,6 @@
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="base\thread.cc">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\unicode.cc">
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="base\waitable_timer.cc">
@@ -233,9 +236,6 @@
     </ClCompile>
     <ClCompile Include="proto\power_session_message.pb.cc">
       <Filter>proto</Filter>
-    </ClCompile>
-    <ClCompile Include="base\aligned_memory.cc">
-      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="base\io_queue.cc">
       <Filter>base</Filter>
@@ -382,12 +382,6 @@
     <ClCompile Include="base\logging.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\string_util.cc">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\string_util_constants.cc">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="ui\base\imagelist.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
@@ -460,6 +454,18 @@
     <ClCompile Include="base\files\drive_enumerator.cc">
       <Filter>base\files</Filter>
     </ClCompile>
+    <ClCompile Include="base\memory\aligned_memory.cc">
+      <Filter>base\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="base\strings\string_util.cc">
+      <Filter>base\strings</Filter>
+    </ClCompile>
+    <ClCompile Include="base\strings\string_util_constants.cc">
+      <Filter>base\strings</Filter>
+    </ClCompile>
+    <ClCompile Include="base\strings\unicode.cc">
+      <Filter>base\strings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -484,9 +490,6 @@
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\thread.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\unicode.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="codec\compressor.h">
@@ -714,9 +717,6 @@
     <ClInclude Include="base\scoped_object.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="base\aligned_memory.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="base\io_buffer.h">
       <Filter>base</Filter>
     </ClInclude>
@@ -899,12 +899,6 @@
     <ClInclude Include="network\firewall_manager_legacy.h">
       <Filter>network</Filter>
     </ClInclude>
-    <ClInclude Include="base\string_util.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\string_util_constants.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="crypto\secure_buffer.h">
       <Filter>crypto</Filter>
     </ClInclude>
@@ -994,6 +988,18 @@
     </ClInclude>
     <ClInclude Include="base\files\drive_enumerator.h">
       <Filter>base\files</Filter>
+    </ClInclude>
+    <ClInclude Include="base\memory\aligned_memory.h">
+      <Filter>base\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="base\strings\string_util.h">
+      <Filter>base\strings</Filter>
+    </ClInclude>
+    <ClInclude Include="base\strings\string_util_constants.h">
+      <Filter>base\strings</Filter>
+    </ClInclude>
+    <ClInclude Include="base\strings\unicode.h">
+      <Filter>base\strings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

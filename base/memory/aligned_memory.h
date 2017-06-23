@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/aligned_memory.h
+// FILE:            base/memory/aligned_memory.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
@@ -34,8 +34,8 @@
 //   std::unique_ptr<float, AlignedFreeDeleter> my_array(
 //       static_cast<float*>(AlignedAlloc(size, alignment)));
 
-#ifndef _ASPIA_BASE__ALIGNED_MEMORY_H
-#define _ASPIA_BASE__ALIGNED_MEMORY_H
+#ifndef _ASPIA_BASE__MEMORY__ALIGNED_MEMORY_H
+#define _ASPIA_BASE__MEMORY__ALIGNED_MEMORY_H
 
 #include <stddef.h>
 #include <stdint.h>
@@ -62,4 +62,4 @@ struct AlignedFreeDeleter
 
 }  // namespace aspia
 
-#endif  // _ASPIA_BASE__ALIGNED_MEMORY_H
+#endif  // _ASPIA_BASE__MEMORY__ALIGNED_MEMORY_H

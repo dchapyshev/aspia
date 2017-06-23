@@ -6,7 +6,7 @@
 //
 
 #include "client/client_session_file_transfer.h"
-#include "base/unicode.h"
+#include "base/strings/unicode.h"
 #include "protocol/message_serialization.h"
 #include "protocol/filesystem.h"
 

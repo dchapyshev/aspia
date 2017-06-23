@@ -7,7 +7,7 @@
 
 #include "ui/user_prop_dialog.h"
 #include "ui/resource.h"
-#include "base/unicode.h"
+#include "base/strings/unicode.h"
 #include "base/logging.h"
 #include "host/host_user_list.h"
 #include "crypto/sha512.h"

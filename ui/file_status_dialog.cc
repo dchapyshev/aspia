@@ -9,7 +9,7 @@
 #include "ui/status_code.h"
 #include "ui/resource.h"
 #include "ui/base/module.h"
-#include "base/string_util.h"
+#include "base/strings/string_util.h"
 #include "base/logging.h"
 
 namespace aspia {

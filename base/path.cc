@@ -6,7 +6,7 @@
 //
 
 #include "base/path.h"
-#include "base/unicode.h"
+#include "base/strings/unicode.h"
 #include "base/logging.h"
 #include <shlobj.h>
 

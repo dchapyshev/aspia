@@ -9,8 +9,8 @@
 #include "ui/get_stock_icon.h"
 #include "ui/resource.h"
 #include "ui/base/module.h"
-#include "base/string_util.h"
-#include "base/unicode.h"
+#include "base/strings/string_util.h"
+#include "base/strings/unicode.h"
 
 #include <clocale>
 #include <ctime>

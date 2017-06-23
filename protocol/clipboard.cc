@@ -8,9 +8,9 @@
 #include "protocol/clipboard.h"
 #include "base/scoped_clipboard.h"
 #include "base/scoped_hglobal.h"
-#include "base/unicode.h"
+#include "base/strings/string_util.h"
+#include "base/strings/unicode.h"
 #include "base/logging.h"
-#include "base/string_util.h"
 
 namespace aspia {
 

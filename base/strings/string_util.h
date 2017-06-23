@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/string_util.h
+// FILE:            base/strings/string_util.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__STRING_UTIL_H
-#define _ASPIA_BASE__STRING_UTIL_H
+#ifndef _ASPIA_BASE__STRINGS__STRING_UTIL_H
+#define _ASPIA_BASE__STRINGS__STRING_UTIL_H
 
 #include <string>
 
@@ -37,4 +37,4 @@ std::string CollapseWhitespaceASCII(const std::string& text,
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__STRING_UTIL_H
+#endif // _ASPIA_BASE__STRINGS__STRING_UTIL_H
