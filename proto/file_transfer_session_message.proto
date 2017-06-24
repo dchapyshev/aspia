@@ -94,4 +94,5 @@ message RenameRequest
 message RemoveRequest
 {
     string path = 1;
+    string item_name = 2;
 }

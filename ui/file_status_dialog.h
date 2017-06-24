@@ -40,7 +40,10 @@ public:
                   const std::wstring& new_name,
                   proto::Status status);
 
-    void OnRemove(const std::wstring& path, proto::Status status);
+    void OnRemove(const std::wstring& path,
+                  const std::wstring& item_name,
+                  proto::Status status);
+
     void OnFileSend(const std::wstring& path);
     void OnFileRecieve(const std::wstring& path);
 

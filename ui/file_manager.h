@@ -40,7 +40,10 @@ public:
                                      const std::string& old_name,
                                      const std::string& new_name) = 0;
 
-        virtual void OnRemoveRequest(PanelType panel_type, const std::string& path) = 0;
+        virtual void OnRemoveRequest(PanelType panel_type,
+                                     const std::string& path,
+                                     const std::string& item_name) = 0;
+
         virtual void OnSendFile(const std::wstring& from_path, const std::wstring& to_path) = 0;
         virtual void OnRecieveFile(const std::wstring& from_path, const std::wstring& to_path) = 0;
     };
@@ -74,7 +77,9 @@ private:
                          const std::string& old_path,
                          const std::string& new_path) override;
 
-    void OnRemoveRequest(PanelType panel_type, const std::string& path) override;
+    void OnRemoveRequest(PanelType panel_type,
+                         const std::string& path,
+                         const std::string& item_name) override;
 
     // UiChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;

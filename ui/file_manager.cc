@@ -121,9 +121,11 @@ void UiFileManager::OnRenameRequest(PanelType panel_type,
     delegate_->OnRenameRequest(panel_type, path, old_name, new_name);
 }
 
-void UiFileManager::OnRemoveRequest(PanelType panel_type, const std::string& path)
+void UiFileManager::OnRemoveRequest(PanelType panel_type,
+                                    const std::string& path,
+                                    const std::string& item_name)
 {
-    delegate_->OnRemoveRequest(panel_type, path);
+    delegate_->OnRemoveRequest(panel_type, path, item_name);
 }
 
 void UiFileManager::OnCreate()

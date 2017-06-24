@@ -40,7 +40,9 @@ public:
                                      const std::string& old_name,
                                      const std::string& new_name) = 0;
 
-        virtual void OnRemoveRequest(PanelType panel_type, const std::string& path) = 0;
+        virtual void OnRemoveRequest(PanelType panel_type,
+                                     const std::string& path,
+                                     const std::string& item_name) = 0;
     };
 
     bool CreatePanel(HWND parent, PanelType panel_type, Delegate* delegate);

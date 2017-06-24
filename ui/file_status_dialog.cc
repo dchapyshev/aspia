@@ -232,17 +232,24 @@ void UiFileStatusDialog::OnRename(const std::wstring& path,
              status);
 }
 
-void UiFileStatusDialog::OnRemove(const std::wstring& path, proto::Status status)
+void UiFileStatusDialog::OnRemove(const std::wstring& path,
+                                  const std::wstring& item_name,
+                                  proto::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::OnRemove, this, path, status));
+        runner_->PostTask(std::bind(&UiFileStatusDialog::OnRemove,
+                                    this,
+                                    path,
+                                    item_name,
+                                    status));
         return;
     }
 
     std::wstring format = module().string(IDS_FT_OP_REMOVE);
 
-    WriteLog(StringPrintfW(format.c_str(), path.c_str()), status);
+    WriteLog(StringPrintfW(format.c_str(), path.c_str(), item_name.c_str()),
+             status);
 }
 
 void UiFileStatusDialog::OnFileSend(const std::wstring& path)

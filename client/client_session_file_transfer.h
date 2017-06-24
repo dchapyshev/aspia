@@ -46,7 +46,10 @@ private:
                          const std::string& old_name,
                          const std::string& new_name) override;
 
-    void OnRemoveRequest(UiFileManager::PanelType panel_type, const std::string& path) override;
+    void OnRemoveRequest(UiFileManager::PanelType panel_type,
+                         const std::string& path,
+                         const std::string& item_name) override;
+
     void OnSendFile(const std::wstring& from_path, const std::wstring& to_path) override;
     void OnRecieveFile(const std::wstring& from_path, const std::wstring& to_path) override;
 

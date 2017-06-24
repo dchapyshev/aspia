@@ -222,19 +222,22 @@ void ClientSessionFileTransfer::OnRenameRequest(
 
 void ClientSessionFileTransfer::OnRemoveRequest(
     UiFileManager::PanelType panel_type,
-    const std::string& path)
+    const std::string& path,
+    const std::string& item_name)
 {
     if (!worker_->BelongsToCurrentThread())
     {
         worker_->PostTask(std::bind(&ClientSessionFileTransfer::OnRemoveRequest,
                                     this,
                                     panel_type,
-                                    path));
+                                    path,
+                                    item_name));
         return;
     }
 
     proto::file_transfer::ClientToHost message;
     message.mutable_remove_request()->set_path(path);
+    message.mutable_remove_request()->set_item_name(item_name);
 
     if (panel_type == UiFileManager::PanelType::REMOTE)
     {

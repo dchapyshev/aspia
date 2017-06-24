@@ -190,6 +190,8 @@ proto::Status ExecuteRemoveRequest(const proto::RemoveRequest& remove_request)
     std::experimental::filesystem::path path =
         std::experimental::filesystem::u8path(remove_request.path());
 
+    path.append(std::experimental::filesystem::u8path(remove_request.item_name()));
+
     std::error_code code;
 
     if (!std::experimental::filesystem::exists(path, code))

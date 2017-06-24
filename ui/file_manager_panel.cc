@@ -557,12 +557,6 @@ void UiFileManagerPanel::OnRemove()
     if (index < 0 || index >= directory_list_->item_size())
         return;
 
-    std::experimental::filesystem::path path =
-        std::experimental::filesystem::u8path(directory_list_->path());
-
-    path.append(std::experimental::filesystem::u8path(
-        directory_list_->item(index).name()));
-
     const UiModule& module = UiModule::Current();
     std::wstring format;
 
@@ -571,7 +565,10 @@ void UiFileManagerPanel::OnRemove()
     else
         format = module.string(IDS_FT_DELETE_CONFORM_FILE);
 
-    std::wstring message = StringPrintfW(format.c_str(), path.wstring().c_str());
+    const std::string& item_name = directory_list_->item(index).name();
+
+    std::wstring message = StringPrintfW(format.c_str(),
+                                         UNICODEfromUTF8(item_name).c_str());
     std::wstring title = module.string(IDS_CONFIRMATION);
 
     if (MessageBoxW(hwnd(),
@@ -579,7 +576,10 @@ void UiFileManagerPanel::OnRemove()
                     title.c_str(),
                     MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
-        delegate_->OnRemoveRequest(panel_type_, path.u8string());
+        delegate_->OnRemoveRequest(panel_type_,
+                                   directory_list_->path(),
+                                   item_name);
+
         delegate_->OnDirectoryListRequest(panel_type_, directory_list_->path());
     }
 }
@@ -612,11 +612,8 @@ void UiFileManagerPanel::OnEndLabelEdit(LPNMLVDISPINFOW disp_info)
         if (!disp_info->item.pszText)
             return;
 
-        std::experimental::filesystem::path path =
-            std::experimental::filesystem::u8path(directory_list_->path());
-
         delegate_->OnRenameRequest(panel_type_,
-                                   path.u8string(),
+                                   directory_list_->path(),
                                    directory_list_->item(index).name(),
                                    UTF8fromUNICODE(disp_info->item.pszText));
     }
@@ -661,8 +658,8 @@ bool UiFileManagerPanel::OnMessage(UINT msg,
 
                 if (end_edit->fChanged && end_edit->iWhy == CBENF_RETURN && end_edit->szText)
                 {
-                    std::experimental::filesystem::path path = end_edit->szText;
-                    delegate_->OnDirectoryListRequest(panel_type_, path.u8string());
+                    delegate_->OnDirectoryListRequest(panel_type_,
+                                                      UTF8fromUNICODE(end_edit->szText));
                 }
             }
             else if (header->hwndFrom == list_.hwnd())

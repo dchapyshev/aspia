@@ -196,7 +196,9 @@ void FileTransferSessionClient::ReadRemoveRequest(
 {
     proto::Status status = ExecuteRemoveRequest(remove_request);
 
-    status_dialog_->OnRemove(UNICODEfromUTF8(remove_request.path()), status);
+    status_dialog_->OnRemove(UNICODEfromUTF8(remove_request.path()),
+                             UNICODEfromUTF8(remove_request.item_name()),
+                             status);
 
     if (status != proto::Status::STATUS_SUCCESS)
         WriteStatus(status);
