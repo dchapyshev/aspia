@@ -38,6 +38,8 @@ std::unique_ptr<proto::DriveList> ExecuteDriveListRequest(
         DriveEnumerator::DriveInfo drive_info = enumerator.GetInfo();
 
         item->set_name(UTF8fromUNICODE(drive_info.VolumeName()));
+        item->set_total_space(drive_info.TotalSpace());
+        item->set_free_space(drive_info.FreeSpace());
 
         switch (drive_info.Type())
         {

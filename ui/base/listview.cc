@@ -95,6 +95,19 @@ void UiListView::AddColumn(const std::wstring& title, int width)
     ListView_InsertColumn(hwnd(), column_count, &column);
 }
 
+void UiListView::DeleteColumn(int column_index)
+{
+    ListView_DeleteColumn(hwnd(), column_index);
+}
+
+void UiListView::DeleteAllColumns()
+{
+    int count = GetColumnCount();
+
+    while (--count >= 0)
+        DeleteColumn(count);
+}
+
 void UiListView::SetItemText(int item_index, int column_index, const std::wstring& text)
 {
     ListView_SetItemText(hwnd(),

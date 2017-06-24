@@ -26,6 +26,8 @@ bool UiFileManagerPanel::CreatePanel(HWND parent,
     delegate_ = delegate;
     panel_type_ = panel_type;
 
+    module_ = UiModule::Current();
+
     return Create(parent, WS_CHILD | WS_VISIBLE);
 }
 
@@ -42,7 +44,7 @@ void UiFileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_l
     int icon_index = drive_imagelist_.AddIcon(icon);
 
     int root_index =
-        drive_combo_.AddItem(UiModule::Current().string(IDS_FT_COMPUTER),
+        drive_combo_.AddItem(module_.string(IDS_FT_COMPUTER),
                              icon_index, 0, kComputerIndex);
 
     const int count = drive_list_->item_size();
@@ -71,6 +73,7 @@ void UiFileManagerPanel::ReadDirectoryList(
 {
     list_.DeleteAllItems();
     list_imagelist_.RemoveAll();
+    SetFolderViews();
 
     directory_list_.reset(directory_list.release());
 
@@ -136,19 +139,53 @@ void UiFileManagerPanel::ReadDirectoryList(
     }
 }
 
+void UiFileManagerPanel::SetComputerViews()
+{
+    list_.DeleteAllColumns();
+
+    list_.AddColumn(module_.string(IDS_FT_COLUMN_NAME), 130);
+    list_.AddColumn(module_.string(IDS_FT_COLUMN_TYPE), 150);
+    list_.AddColumn(module_.string(IDS_FT_COLUMN_TOTAL_SPACE), 80);
+    list_.AddColumn(module_.string(IDS_FT_COLUMN_FREE_SPACE), 80);
+
+    list_.ModifyStyle(0, LVS_SINGLESEL);
+
+    toolbar_.EnableButton(ID_FOLDER_ADD, false);
+    toolbar_.EnableButton(ID_FOLDER_UP, false);
+    toolbar_.EnableButton(ID_DELETE, false);
+    toolbar_.EnableButton(ID_SEND, false);
+    toolbar_.EnableButton(ID_HOME, false);
+}
+
+void UiFileManagerPanel::SetFolderViews()
+{
+    list_.DeleteAllColumns();
+
+    list_.AddColumn(module_.string(IDS_FT_COLUMN_NAME), 180);
+    list_.AddColumn(module_.string(IDS_FT_COLUMN_SIZE), 70);
+    list_.AddColumn(module_.string(IDS_FT_COLUMN_TYPE), 100);
+    list_.AddColumn(module_.string(IDS_FT_COLUMN_MODIFIED), 100);
+
+    list_.ModifyStyle(LVS_SINGLESEL, 0);
+
+    toolbar_.EnableButton(ID_FOLDER_ADD, true);
+    toolbar_.EnableButton(ID_FOLDER_UP, true);
+    toolbar_.EnableButton(ID_DELETE, true);
+    toolbar_.EnableButton(ID_SEND, true);
+    toolbar_.EnableButton(ID_HOME, true);
+}
+
 void UiFileManagerPanel::OnCreate()
 {
-    const UiModule& module = UiModule().Current();
-
     HFONT default_font =
         reinterpret_cast<HFONT>(GetStockObject(DEFAULT_GUI_FONT));
 
     std::wstring panel_name;
 
     if (panel_type_ == PanelType::LOCAL)
-        panel_name = module.string(IDS_FT_LOCAL_COMPUTER);
+        panel_name = module_.string(IDS_FT_LOCAL_COMPUTER);
     else
-        panel_name = module.string(IDS_FT_REMOTE_COMPUTER);
+        panel_name = module_.string(IDS_FT_REMOTE_COMPUTER);
 
     title_window_.Attach(CreateWindowExW(0,
                                          WC_STATICW,
@@ -157,13 +194,13 @@ void UiFileManagerPanel::OnCreate()
                                          0, 0, 200, 20,
                                          hwnd(),
                                          nullptr,
-                                         module.Handle(),
+                                         module_.Handle(),
                                          nullptr));
     title_window_.SetFont(default_font);
 
     drive_combo_.Create(hwnd(),
                         IDC_ADDRESS_COMBO, WS_VSCROLL | CBS_DROPDOWN,
-                        module.Handle());
+                        module_.Handle());
     drive_combo_.SetFont(default_font);
 
     if (drive_imagelist_.CreateSmall())
@@ -171,7 +208,7 @@ void UiFileManagerPanel::OnCreate()
 
     toolbar_.Create(hwnd(),
                     TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS,
-                    module.Handle());
+                    module_.Handle());
 
     toolbar_.ModifyExtendedStyle(0, TBSTYLE_EX_MIXEDBUTTONS | TBSTYLE_EX_DOUBLEBUFFER);
 
@@ -191,41 +228,36 @@ void UiFileManagerPanel::OnCreate()
 
     if (toolbar_imagelist_.CreateSmall())
     {
-        toolbar_imagelist_.AddIcon(module, IDI_REFRESH);
-        toolbar_imagelist_.AddIcon(module, IDI_DELETE);
-        toolbar_imagelist_.AddIcon(module, IDI_FOLDER_ADD);
-        toolbar_imagelist_.AddIcon(module, IDI_FOLDER_UP);
-        toolbar_imagelist_.AddIcon(module, IDI_HOME);
+        toolbar_imagelist_.AddIcon(module_, IDI_REFRESH);
+        toolbar_imagelist_.AddIcon(module_, IDI_DELETE);
+        toolbar_imagelist_.AddIcon(module_, IDI_FOLDER_ADD);
+        toolbar_imagelist_.AddIcon(module_, IDI_FOLDER_UP);
+        toolbar_imagelist_.AddIcon(module_, IDI_HOME);
 
         if (panel_type_ == PanelType::LOCAL)
         {
-            toolbar_imagelist_.AddIcon(module, IDI_SEND);
+            toolbar_imagelist_.AddIcon(module_, IDI_SEND);
         }
         else
         {
             DCHECK(panel_type_ == PanelType::REMOTE);
-            toolbar_imagelist_.AddIcon(module, IDI_RECIEVE);
+            toolbar_imagelist_.AddIcon(module_, IDI_RECIEVE);
         }
 
         toolbar_.SetImageList(toolbar_imagelist_);
     }
 
     if (panel_type_ == PanelType::LOCAL)
-        toolbar_.SetButtonText(ID_SEND, module.string(IDS_FT_SEND));
+        toolbar_.SetButtonText(ID_SEND, module_.string(IDS_FT_SEND));
     else
-        toolbar_.SetButtonText(ID_SEND, module.string(IDS_FT_RECIEVE));
+        toolbar_.SetButtonText(ID_SEND, module_.string(IDS_FT_RECIEVE));
 
     list_.Create(hwnd(),
                  WS_EX_CLIENTEDGE,
                  LVS_REPORT | LVS_SHOWSELALWAYS | LVS_EDITLABELS,
-                 module.Handle());
+                 module_.Handle());
 
     list_.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
-
-    list_.AddColumn(module.string(IDS_FT_COLUMN_NAME), 180);
-    list_.AddColumn(module.string(IDS_FT_COLUMN_SIZE), 70);
-    list_.AddColumn(module.string(IDS_FT_COLUMN_TYPE), 100);
-    list_.AddColumn(module.string(IDS_FT_COLUMN_MODIFIED), 100);
 
     status_window_.Attach(CreateWindowExW(0,
                                           WC_STATICW,
@@ -234,7 +266,7 @@ void UiFileManagerPanel::OnCreate()
                                           0, 0, 200, 20,
                                           hwnd(),
                                           nullptr,
-                                          module.Handle(),
+                                          module_.Handle(),
                                           nullptr));
     status_window_.SetFont(default_font);
 
@@ -382,7 +414,7 @@ void UiFileManagerPanel::OnGetDispInfo(LPNMHDR phdr)
             return;
     }
 
-    LoadStringW(UiModule().Current().Handle(),
+    LoadStringW(module_.Handle(),
                 string_id,
                 header->szText,
                 _countof(header->szText));
@@ -421,6 +453,8 @@ void UiFileManagerPanel::OnDriveChange()
         list_imagelist_.RemoveAll();
         directory_list_.reset();
 
+        SetComputerViews();
+
         const int count = drive_list_->item_size();
 
         for (int index = 0; index < count; ++index)
@@ -433,7 +467,13 @@ void UiFileManagerPanel::OnDriveChange()
             std::wstring display_name = GetDriveDisplayName(item);
 
             int item_index = list_.AddItem(display_name, index, icon_index);
-            list_.SetItemText(item_index, 2, GetDriveDescription(item.type()));
+            list_.SetItemText(item_index, 1, GetDriveDescription(item.type()));
+
+            if (item.total_space())
+                list_.SetItemText(item_index, 2, SizeToString(item.total_space()));
+
+            if (item.free_space())
+                list_.SetItemText(item_index, 3, SizeToString(item.free_space()));
         }
     }
     else if (index == kCurrentFolderIndex)
@@ -455,7 +495,7 @@ void UiFileManagerPanel::OnDriveChange()
     }
 }
 
-void UiFileManagerPanel::OnAddressChange()
+void UiFileManagerPanel::OnDirectoryChange()
 {
     int item_index = list_.GetItemUnderPointer();
     if (item_index == -1)
@@ -491,8 +531,7 @@ void UiFileManagerPanel::OnFolderUp()
 {
     if (!directory_list_ || !directory_list_->has_parent())
     {
-        drive_combo_.SelectItemData(kComputerIndex);
-        OnDriveChange();
+        OnMoveToComputer();
     }
     else
     {
@@ -510,7 +549,7 @@ void UiFileManagerPanel::OnFolderCreate()
     ScopedHICON folder_icon(GetDirectoryIcon());
     int icon_index = list_imagelist_.AddIcon(folder_icon);
 
-    std::wstring folder_name = UiModule::Current().string(IDS_FT_NEW_FOLDER);
+    std::wstring folder_name = module_.string(IDS_FT_NEW_FOLDER);
 
     SetFocus(list_);
 
@@ -546,19 +585,18 @@ void UiFileManagerPanel::OnRemove()
     if (index < 0 || index >= directory_list_->item_size())
         return;
 
-    const UiModule& module = UiModule::Current();
     std::wstring format;
 
     if (directory_list_->item(index).type() == proto::DirectoryListItem::DIRECTORY)
-        format = module.string(IDS_FT_DELETE_CONFORM_DIR);
+        format = module_.string(IDS_FT_DELETE_CONFORM_DIR);
     else
-        format = module.string(IDS_FT_DELETE_CONFORM_FILE);
+        format = module_.string(IDS_FT_DELETE_CONFORM_FILE);
 
     const std::string& item_name = directory_list_->item(index).name();
 
     std::wstring message = StringPrintfW(format.c_str(),
                                          UNICODEfromUTF8(item_name).c_str());
-    std::wstring title = module.string(IDS_CONFIRMATION);
+    std::wstring title = module_.string(IDS_CONFIRMATION);
 
     if (MessageBoxW(hwnd(),
                     message.c_str(),
@@ -661,7 +699,7 @@ bool UiFileManagerPanel::OnMessage(UINT msg,
                 switch (header->code)
                 {
                     case NM_DBLCLK:
-                        OnAddressChange();
+                        OnDirectoryChange();
                         break;
 
                     case NM_RCLICK:

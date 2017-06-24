@@ -29,6 +29,8 @@ public:
     void AddOnlyOneColumn(const std::wstring& title = std::wstring());
 
     void AddColumn(const std::wstring& title, int width);
+    void DeleteColumn(int column_index);
+    void DeleteAllColumns();
 
     template <typename T>
     int AddItem(const std::wstring& text, T item_data, int image_index = -1)

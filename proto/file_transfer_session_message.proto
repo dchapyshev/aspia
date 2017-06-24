@@ -25,9 +25,11 @@ message DriveListItem
         DESKTOP_FOLDER = 7;
     }
 
-    Type type   = 1;
-    string name = 2;
-    string path = 3;
+    Type type          = 1;
+    string name        = 2;
+    string path        = 3;
+    uint64 total_space = 4;
+    uint64 free_space  = 5;
 }
 
 message DriveList

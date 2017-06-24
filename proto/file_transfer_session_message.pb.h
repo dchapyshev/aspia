@@ -233,6 +233,18 @@ class DriveListItem : public ::google::protobuf::MessageLite /* @@protoc_inserti
   ::std::string* release_path();
   void set_allocated_path(::std::string* path);
 
+  // uint64 total_space = 4;
+  void clear_total_space();
+  static const int kTotalSpaceFieldNumber = 4;
+  ::google::protobuf::uint64 total_space() const;
+  void set_total_space(::google::protobuf::uint64 value);
+
+  // uint64 free_space = 5;
+  void clear_free_space();
+  static const int kFreeSpaceFieldNumber = 5;
+  ::google::protobuf::uint64 free_space() const;
+  void set_free_space(::google::protobuf::uint64 value);
+
   // .aspia.proto.DriveListItem.Type type = 1;
   void clear_type();
   static const int kTypeFieldNumber = 1;
@@ -245,6 +257,8 @@ class DriveListItem : public ::google::protobuf::MessageLite /* @@protoc_inserti
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr name_;
   ::google::protobuf::internal::ArenaStringPtr path_;
+  ::google::protobuf::uint64 total_space_;
+  ::google::protobuf::uint64 free_space_;
   int type_;
   mutable int _cached_size_;
   friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
@@ -1380,6 +1394,34 @@ inline void DriveListItem::set_allocated_path(::std::string* path) {
   }
   path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.DriveListItem.path)
+}
+
+// uint64 total_space = 4;
+inline void DriveListItem::clear_total_space() {
+  total_space_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 DriveListItem::total_space() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DriveListItem.total_space)
+  return total_space_;
+}
+inline void DriveListItem::set_total_space(::google::protobuf::uint64 value) {
+  
+  total_space_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DriveListItem.total_space)
+}
+
+// uint64 free_space = 5;
+inline void DriveListItem::clear_free_space() {
+  free_space_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 DriveListItem::free_space() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DriveListItem.free_space)
+  return free_space_;
+}
+inline void DriveListItem::set_free_space(::google::protobuf::uint64 value) {
+  
+  free_space_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DriveListItem.free_space)
 }
 
 // -------------------------------------------------------------------

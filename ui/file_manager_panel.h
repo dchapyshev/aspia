@@ -60,7 +60,7 @@ private:
     void OnDrawItem(LPDRAWITEMSTRUCT dis);
     void OnGetDispInfo(LPNMHDR phdr);
     void OnDriveChange();
-    void OnAddressChange();
+    void OnDirectoryChange();
     void OnFolderUp();
     void OnFolderCreate();
     void OnRefresh();
@@ -68,12 +68,16 @@ private:
     void OnMoveToComputer();
     void OnEndLabelEdit(LPNMLVDISPINFOW disp_info);
     int GetKnownDriveIndex(const std::string& path);
+    void SetComputerViews();
+    void SetFolderViews();
 
     // ChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;
 
     PanelType panel_type_ = PanelType::UNKNOWN;
     Delegate* delegate_ = nullptr;
+
+    UiModule module_;
 
     UiWindow title_window_;
 
