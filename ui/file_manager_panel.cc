@@ -181,17 +181,11 @@ void UiFileManagerPanel::OnCreate()
     if (drives_imagelist_.CreateSmall())
         drives_combo_.SetImageList(drives_imagelist_);
 
-    toolbar_window_.Attach(CreateWindowExW(0,
-                                           TOOLBARCLASSNAMEW,
-                                           nullptr,
-                                           WS_CHILD | WS_VISIBLE | WS_TABSTOP | TBSTYLE_FLAT |
-                                               TBSTYLE_TOOLTIPS,
-                                           CW_USEDEFAULT, CW_USEDEFAULT,
-                                           CW_USEDEFAULT, CW_USEDEFAULT,
-                                           hwnd(),
-                                           nullptr,
-                                           module.Handle(),
-                                           nullptr));
+    toolbar_.Create(hwnd(),
+                    TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS,
+                    module.Handle());
+
+    toolbar_.ModifyExtendedStyle(0, TBSTYLE_EX_MIXEDBUTTONS);
 
     TBBUTTON kButtons[] =
     {
@@ -201,15 +195,11 @@ void UiFileManagerPanel::OnCreate()
         { 2, ID_FOLDER_ADD, TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE, { 0 }, 0, -1 },
         { 3, ID_FOLDER_UP,  TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE, { 0 }, 0, -1 },
         { 4, ID_HOME,       TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE, { 0 }, 0, -1 },
-        { 5, ID_SEND,       TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE, { 0 }, 0, -1 }
+        { 5, ID_SEND,       TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_SHOWTEXT, { 0 }, 0, -1 }
     };
 
-    SendMessageW(toolbar_window_, TB_BUTTONSTRUCTSIZE, sizeof(kButtons[0]), 0);
-
-    SendMessageW(toolbar_window_,
-                 TB_ADDBUTTONS,
-                 _countof(kButtons),
-                 reinterpret_cast<LPARAM>(kButtons));
+    toolbar_.ButtonStructSize(sizeof(kButtons[0]));
+    toolbar_.AddButtons(_countof(kButtons), kButtons);
 
     if (toolbar_imagelist_.CreateSmall())
     {
@@ -229,11 +219,13 @@ void UiFileManagerPanel::OnCreate()
             toolbar_imagelist_.AddIcon(module, IDI_RECIEVE);
         }
 
-        SendMessageW(toolbar_window_,
-                     TB_SETIMAGELIST,
-                     0,
-                     reinterpret_cast<LPARAM>(toolbar_imagelist_.Handle()));
+        toolbar_.SetImageList(toolbar_imagelist_);
     }
+
+    if (panel_type_ == PanelType::LOCAL)
+        toolbar_.SetButtonText(ID_SEND, module.string(IDS_FT_SEND));
+    else
+        toolbar_.SetButtonText(ID_SEND, module.string(IDS_FT_RECIEVE));
 
     list_window_.Create(hwnd(),
                         WS_EX_CLIENTEDGE,
@@ -268,7 +260,7 @@ void UiFileManagerPanel::OnCreate()
 void UiFileManagerPanel::OnDestroy()
 {
     list_window_.DestroyWindow();
-    toolbar_window_.DestroyWindow();
+    toolbar_.DestroyWindow();
     title_window_.DestroyWindow();
     drives_combo_.DestroyWindow();
     status_window_.DestroyWindow();
@@ -280,10 +272,10 @@ void UiFileManagerPanel::OnSize(int width, int height)
 
     if (dwp)
     {
-        SendMessageW(toolbar_window_, TB_AUTOSIZE, 0, 0);
+        toolbar_.AutoSize();
 
         int address_height = drives_combo_.Height();
-        int toolbar_height = toolbar_window_.Height();
+        int toolbar_height = toolbar_.Height();
         int title_height = title_window_.Height();
         int status_height = status_window_.Height();
 
@@ -301,7 +293,7 @@ void UiFileManagerPanel::OnSize(int width, int height)
                        address_height,
                        SWP_NOACTIVATE | SWP_NOZORDER);
 
-        DeferWindowPos(dwp, toolbar_window_, nullptr,
+        DeferWindowPos(dwp, toolbar_, nullptr,
                        0,
                        title_height + address_height,
                        width,

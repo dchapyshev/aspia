@@ -15,6 +15,7 @@
 #include "ui/about_dialog.h"
 #include "ui/settings_dialog.h"
 #include "ui/base/imagelist.h"
+#include "ui/base/toolbar.h"
 
 namespace aspia {
 
@@ -88,7 +89,7 @@ private:
     Delegate* delegate_;
     ClientConfig* config_;
 
-    UiWindow toolbar_;
+    UiToolBar toolbar_;
     UiImageList toolbar_imagelist_;
 
     UiVideoWindow video_window_;

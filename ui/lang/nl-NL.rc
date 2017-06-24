@@ -370,6 +370,8 @@ BEGIN
     IDS_FT_OP_RENAME                      "Rename ""%s\\%s"" to ""%s\\%s"""
     IDS_FT_OP_REMOVE                      "Remove ""%s"""
     IDS_FT_OP_CREATE_FOLDER               "Create folder: ""%s\\%s"""
+    IDS_FT_SEND                           "Send"
+    IDS_FT_RECIEVE                        "Recieve"
 END
 
 // Status

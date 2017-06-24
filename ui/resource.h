@@ -227,6 +227,8 @@
 #define IDS_FT_OP_RENAME                      1036
 #define IDS_FT_OP_REMOVE                      1037
 #define IDS_FT_OP_CREATE_FOLDER               1038
+#define IDS_FT_SEND                           1039
+#define IDS_FT_RECIEVE                        1040
 
 // Status
 #define IDS_STATUS_MIN                        10000

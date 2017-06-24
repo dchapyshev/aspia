@@ -140,31 +140,18 @@ void UiViewerWindow::CreateToolBar()
 {
     const UiModule& module = UiModule().Current();
 
-    toolbar_.Attach(CreateWindowExW(0,
-                                    TOOLBARCLASSNAMEW,
-                                    nullptr,
-                                    WS_CHILD | WS_VISIBLE | WS_TABSTOP | TBSTYLE_FLAT |
-                                        TBSTYLE_TOOLTIPS,
-                                    CW_USEDEFAULT, CW_USEDEFAULT,
-                                    CW_USEDEFAULT, CW_USEDEFAULT,
-                                    hwnd(),
-                                    nullptr,
-                                    module.Handle(),
-                                    nullptr));
+    toolbar_.Create(hwnd(),
+                    TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS,
+                    module.Handle());
 
-    DWORD extended_style =
-        static_cast<DWORD>(SendMessageW(toolbar_, TB_GETEXTENDEDSTYLE, 0, 0));
-
-    extended_style |= TBSTYLE_EX_DRAWDDARROWS;
-
-    SendMessageW(toolbar_, TB_SETEXTENDEDSTYLE, 0, extended_style);
+    toolbar_.ModifyExtendedStyle(0, TBSTYLE_EX_DRAWDDARROWS | TBSTYLE_EX_MIXEDBUTTONS);
 
     TBBUTTON kButtons[] =
     {
         // iBitmap, idCommand, fsState, fsStyle, bReserved[2], dwData, iString
-        {  0, ID_POWER,      TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                { 0 }, 0, -1 },
+        {  0, ID_POWER,      TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_SHOWTEXT,{ 0 }, 0, -1 },
         { -1, 0,             TBSTATE_ENABLED, BTNS_SEP,                                   { 0 }, 0, -1 },
-        {  1, ID_CAD,        TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                { 0 }, 0, -1 },
+        {  1, ID_CAD,        TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_SHOWTEXT,{ 0 }, 0, -1 },
         {  2, ID_SHORTCUTS,  TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_DROPDOWN,{ 0 }, 0, -1 },
         { -1, 0,             TBSTATE_ENABLED, BTNS_SEP,                                   { 0 }, 0, -1 },
         {  3, ID_AUTO_SIZE,  TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                { 0 }, 0, -1 },
@@ -176,12 +163,8 @@ void UiViewerWindow::CreateToolBar()
         {  7, ID_EXIT,       TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                { 0 }, 0, -1 },
     };
 
-    SendMessageW(toolbar_, TB_BUTTONSTRUCTSIZE, sizeof(kButtons[0]), 0);
-
-    SendMessageW(toolbar_,
-                 TB_ADDBUTTONS,
-                 _countof(kButtons),
-                 reinterpret_cast<LPARAM>(kButtons));
+    toolbar_.ButtonStructSize(sizeof(kButtons[0]));
+    toolbar_.AddButtons(_countof(kButtons), kButtons);
 
     if (toolbar_imagelist_.CreateSmall())
     {
@@ -194,22 +177,14 @@ void UiViewerWindow::CreateToolBar()
         toolbar_imagelist_.AddIcon(module, IDI_ABOUT);
         toolbar_imagelist_.AddIcon(module, IDI_EXIT);
 
-        SendMessageW(toolbar_,
-                     TB_SETIMAGELIST,
-                     0,
-                     reinterpret_cast<LPARAM>(toolbar_imagelist_.Handle()));
+        toolbar_.SetImageList(toolbar_imagelist_);
     }
 
     if (config_->session_type() == proto::SessionType::SESSION_TYPE_DESKTOP_VIEW)
     {
-        TBBUTTONINFOW button_info;
-        button_info.cbSize  = sizeof(button_info);
-        button_info.dwMask  = TBIF_STATE;
-        button_info.fsState = 0;
-
-        SendMessageW(toolbar_, TB_SETBUTTONINFOW, ID_POWER, reinterpret_cast<LPARAM>(&button_info));
-        SendMessageW(toolbar_, TB_SETBUTTONINFOW, ID_CAD, reinterpret_cast<LPARAM>(&button_info));
-        SendMessageW(toolbar_, TB_SETBUTTONINFOW, ID_SHORTCUTS, reinterpret_cast<LPARAM>(&button_info));
+        toolbar_.SetButtonState(ID_POWER, 0);
+        toolbar_.SetButtonState(ID_CAD, 0);
+        toolbar_.SetButtonState(ID_SHORTCUTS, 0);
     }
 }
 
@@ -237,7 +212,7 @@ void UiViewerWindow::OnClose()
 
 void UiViewerWindow::OnSize()
 {
-    SendMessageW(toolbar_, TB_AUTOSIZE, 0, 0);
+    toolbar_.AutoSize();
 
     int toolbar_height = toolbar_.Height();
 
@@ -408,7 +383,7 @@ void UiViewerWindow::OnExitButton()
 
 int UiViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
 {
-    if (SendMessageW(toolbar_, TB_ISBUTTONCHECKED, ID_FULLSCREEN, 0))
+    if (toolbar_.IsButtonChecked(ID_FULLSCREEN))
         DoFullScreen(false);
 
     RECT screen_rect = { 0 };
@@ -438,21 +413,16 @@ int UiViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
     if (!GetWindowPlacement(hwnd(), &wp))
         return -1;
 
-    RECT full_rect = { 0 };
-    GetWindowRect(hwnd(), &full_rect);
-
-    RECT client_rect = { 0 };
-    GetClientRect(hwnd(), &client_rect);
-
-    RECT toolbar_rect = { 0 };
-    GetWindowRect(toolbar_, &toolbar_rect);
+    DesktopSize full_size = Size();
+    DesktopSize client_size = ClientSize();
+    DesktopSize toolbar_size = toolbar_.Size();
 
     int client_area_width = video_frame_size.Width() +
-        (full_rect.right - full_rect.left) - (client_rect.right - client_rect.left);
+        full_size.Width() - client_size.Width();
 
     int client_area_height = video_frame_size.Height() +
-        (full_rect.bottom - full_rect.top) - (client_rect.bottom - client_rect.top) +
-        (toolbar_rect.bottom - toolbar_rect.top);
+        full_size.Height() - client_size.Height() +
+        toolbar_size.Height();
 
     int screen_width = screen_rect.right - screen_rect.left;
     int screen_height = screen_rect.bottom - screen_rect.top;
@@ -499,7 +469,7 @@ void UiViewerWindow::OnAutoSizeButton()
 
 void UiViewerWindow::DoFullScreen(bool fullscreen)
 {
-    SendMessageW(toolbar_, TB_CHECKBUTTON, ID_FULLSCREEN, MAKELPARAM(fullscreen, 0));
+    toolbar_.CheckButton(ID_FULLSCREEN, fullscreen);
 
     if (fullscreen)
     {
@@ -545,14 +515,13 @@ void UiViewerWindow::DoFullScreen(bool fullscreen)
 
 void UiViewerWindow::OnFullScreenButton()
 {
-    DoFullScreen(!!SendMessageW(toolbar_, TB_ISBUTTONCHECKED, ID_FULLSCREEN, 0));
+    DoFullScreen(toolbar_.IsButtonChecked(ID_FULLSCREEN));
 }
 
 void UiViewerWindow::OnDropDownButton(WORD ctrl_id)
 {
     RECT rc = { 0 };
-    SendMessageW(toolbar_, TB_GETRECT, ctrl_id, reinterpret_cast<LPARAM>(&rc));
-
+    toolbar_.GetRect(ctrl_id, rc);
     ShowDropDownMenu(ctrl_id, &rc);
 }
 

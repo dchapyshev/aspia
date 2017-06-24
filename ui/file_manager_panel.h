@@ -9,6 +9,7 @@
 #define _ASPIA_UI__FILE_MANAGER_PANEL_H
 
 #include "ui/base/child_window.h"
+#include "ui/base/toolbar.h"
 #include "ui/base/comboboxex.h"
 #include "ui/base/listview.h"
 #include "ui/base/imagelist.h"
@@ -75,7 +76,7 @@ private:
     UiListView list_window_;
     UiImageList list_imagelist_;
 
-    UiWindow toolbar_window_;
+    UiToolBar toolbar_;
     UiImageList toolbar_imagelist_;
 
     std::unique_ptr<proto::DriveList> drive_list_;

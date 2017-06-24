@@ -466,6 +466,9 @@
     <ClCompile Include="base\strings\unicode.cc">
       <Filter>base\strings</Filter>
     </ClCompile>
+    <ClCompile Include="ui\base\toolbar.cc">
+      <Filter>ui\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1000,6 +1003,9 @@
     </ClInclude>
     <ClInclude Include="base\strings\unicode.h">
       <Filter>base\strings</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\toolbar.h">
+      <Filter>ui\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
