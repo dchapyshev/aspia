@@ -70,6 +70,7 @@ private:
     int GetKnownDriveIndex(const std::string& path);
     void SetComputerViews();
     void SetFolderViews();
+    void OnListItemChanged();
 
     // ChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;
@@ -78,8 +79,7 @@ private:
     Delegate* delegate_ = nullptr;
 
     UiModule module_;
-
-    UiWindow title_window_;
+    UiWindow title_;
 
     std::unique_ptr<proto::DirectoryList> directory_list_;
     UiListView list_;
@@ -92,7 +92,7 @@ private:
     UiComboBoxEx drive_combo_;
     UiImageList drive_imagelist_;
 
-    UiWindow status_window_;
+    UiWindow status_;
 
     DISALLOW_COPY_AND_ASSIGN(UiFileManagerPanel);
 };

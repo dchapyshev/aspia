@@ -372,8 +372,9 @@ BEGIN
     IDS_FT_OP_RENAME                      "Переименование ""%s"" в ""%s"""
     IDS_FT_OP_REMOVE                      "Удаление ""%s"""
     IDS_FT_OP_CREATE_FOLDER               "Создание папки: ""%s"""
-    IDS_FT_SEND                           "Send"
-    IDS_FT_RECIEVE                        "Recieve"
+    IDS_FT_SEND                           "Отправить"
+    IDS_FT_RECIEVE                        "Получить"
+    IDS_FT_SELECTED_OBJECT_COUNT          "%lu объект(ов) выбрано"
 END
 
 // Status

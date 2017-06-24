@@ -187,16 +187,16 @@ void UiFileManagerPanel::OnCreate()
     else
         panel_name = module_.string(IDS_FT_REMOTE_COMPUTER);
 
-    title_window_.Attach(CreateWindowExW(0,
-                                         WC_STATICW,
-                                         panel_name.c_str(),
-                                         WS_CHILD | WS_VISIBLE | SS_OWNERDRAW,
-                                         0, 0, 200, 20,
-                                         hwnd(),
-                                         nullptr,
-                                         module_.Handle(),
-                                         nullptr));
-    title_window_.SetFont(default_font);
+    title_.Attach(CreateWindowExW(0,
+                                  WC_STATICW,
+                                  panel_name.c_str(),
+                                  WS_CHILD | WS_VISIBLE | SS_OWNERDRAW,
+                                  0, 0, 200, 20,
+                                  hwnd(),
+                                  nullptr,
+                                  module_.Handle(),
+                                  nullptr));
+    title_.SetFont(default_font);
 
     drive_combo_.Create(hwnd(),
                         IDC_ADDRESS_COMBO, WS_VSCROLL | CBS_DROPDOWN,
@@ -259,30 +259,32 @@ void UiFileManagerPanel::OnCreate()
 
     list_.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
 
-    status_window_.Attach(CreateWindowExW(0,
-                                          WC_STATICW,
-                                          L"",
-                                          WS_CHILD | WS_VISIBLE | SS_OWNERDRAW,
-                                          0, 0, 200, 20,
-                                          hwnd(),
-                                          nullptr,
-                                          module_.Handle(),
-                                          nullptr));
-    status_window_.SetFont(default_font);
+    status_.Attach(CreateWindowExW(0,
+                                   WC_STATICW,
+                                   L"",
+                                   WS_CHILD | WS_VISIBLE | SS_OWNERDRAW,
+                                   0, 0, 200, 20,
+                                   hwnd(),
+                                   nullptr,
+                                   module_.Handle(),
+                                   nullptr));
+    status_.SetFont(default_font);
 
     if (list_imagelist_.CreateSmall())
     {
         list_.SetImageList(list_imagelist_, LVSIL_SMALL);
     }
+
+    OnListItemChanged();
 }
 
 void UiFileManagerPanel::OnDestroy()
 {
     list_.DestroyWindow();
     toolbar_.DestroyWindow();
-    title_window_.DestroyWindow();
+    title_.DestroyWindow();
     drive_combo_.DestroyWindow();
-    status_window_.DestroyWindow();
+    status_.DestroyWindow();
 }
 
 void UiFileManagerPanel::OnSize(int width, int height)
@@ -295,10 +297,10 @@ void UiFileManagerPanel::OnSize(int width, int height)
 
         int address_height = drive_combo_.Height();
         int toolbar_height = toolbar_.Height();
-        int title_height = title_window_.Height();
-        int status_height = status_window_.Height();
+        int title_height = title_.Height();
+        int status_height = status_.Height();
 
-        DeferWindowPos(dwp, title_window_, nullptr,
+        DeferWindowPos(dwp, title_, nullptr,
                        0,
                        0,
                        width,
@@ -329,7 +331,7 @@ void UiFileManagerPanel::OnSize(int width, int height)
                        list_height,
                        SWP_NOACTIVATE | SWP_NOZORDER);
 
-        DeferWindowPos(dwp, status_window_, nullptr,
+        DeferWindowPos(dwp, status_, nullptr,
                        0,
                        list_y + list_height,
                        width,
@@ -342,8 +344,7 @@ void UiFileManagerPanel::OnSize(int width, int height)
 
 void UiFileManagerPanel::OnDrawItem(LPDRAWITEMSTRUCT dis)
 {
-    if (dis->hwndItem == title_window_.hwnd() ||
-        dis->hwndItem == status_window_.hwnd())
+    if (dis->hwndItem == title_.hwnd() || dis->hwndItem == status_.hwnd())
     {
         int saved_dc = SaveDC(dis->hDC);
 
@@ -652,6 +653,16 @@ void UiFileManagerPanel::OnEndLabelEdit(LPNMLVDISPINFOW disp_info)
                                       std::string());
 }
 
+void UiFileManagerPanel::OnListItemChanged()
+{
+    UINT count = list_.GetSelectedCount();
+
+    std::wstring format = module_.string(IDS_FT_SELECTED_OBJECT_COUNT);
+    std::wstring status = StringPrintfW(format.c_str(), count);
+
+    SetWindowTextW(status_, status.c_str());
+}
+
 bool UiFileManagerPanel::OnMessage(UINT msg,
                                    WPARAM wparam,
                                    LPARAM lparam,
@@ -710,6 +721,10 @@ bool UiFileManagerPanel::OnMessage(UINT msg,
 
                     case LVN_ENDLABELEDIT:
                         OnEndLabelEdit(reinterpret_cast<LPNMLVDISPINFOW>(lparam));
+                        break;
+
+                    case LVN_ITEMCHANGED:
+                        OnListItemChanged();
                         break;
                 }
             }

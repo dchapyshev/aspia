@@ -231,6 +231,7 @@
 #define IDS_FT_OP_CREATE_FOLDER               1040
 #define IDS_FT_SEND                           1041
 #define IDS_FT_RECIEVE                        1042
+#define IDS_FT_SELECTED_OBJECT_COUNT          1043
 
 // Status
 #define IDS_STATUS_MIN                        10000

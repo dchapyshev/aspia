@@ -199,6 +199,11 @@ int UiListView::GetItemUnderPointer()
     return -1;
 }
 
+UINT UiListView::GetSelectedCount()
+{
+    return ListView_GetSelectedCount(hwnd());
+}
+
 HWND UiListView::EditLabel(int item_index)
 {
     return ListView_EditLabel(hwnd(), item_index);

@@ -374,6 +374,7 @@ BEGIN
     IDS_FT_OP_CREATE_FOLDER               "Create folder: ""%s"""
     IDS_FT_SEND                           "Send"
     IDS_FT_RECIEVE                        "Recieve"
+    IDS_FT_SELECTED_OBJECT_COUNT          "%lu object(s) selected"
 END
 
 // Status

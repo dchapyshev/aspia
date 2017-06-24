@@ -72,6 +72,7 @@ public:
     void SetImageList(HIMAGELIST imagelist, int type);
     int GetFirstSelectedItem();
     int GetItemUnderPointer();
+    UINT GetSelectedCount();
 
     HWND EditLabel(int item_index);
     std::wstring GetTextFromEdit();
