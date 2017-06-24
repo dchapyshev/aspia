@@ -137,9 +137,6 @@ void UiFileManagerPanel::ReadDirectoryList(
         list_.SetItemText(item_index, 2, GetFileTypeString(name));
         list_.SetItemText(item_index, 3, TimeToString(item.modified()));
     }
-
-    // Select first item.
-    list_.SelectItem(0);
 }
 
 void UiFileManagerPanel::SetComputerViews()

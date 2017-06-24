@@ -12,6 +12,7 @@
 #include "base/scoped_user_object.h"
 #include "desktop_capture/desktop_size.h"
 #include "desktop_capture/desktop_point.h"
+#include "desktop_capture/desktop_rect.h"
 
 namespace aspia {
 
@@ -37,8 +38,10 @@ public:
     DesktopSize Size();
     int ClientWidth();
     int ClientHeight();
+    DesktopRect Rect();
+    DesktopRect ClientRect();
     DesktopSize ClientSize();
-    DesktopPoint CursorPositionInWindow();
+    DesktopPoint CursorPos();
     void SetSize(int width, int height);
     void SetTopMost();
 

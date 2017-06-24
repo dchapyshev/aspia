@@ -163,7 +163,7 @@ int UiSplitter::NormalizePosition(int position)
 void UiSplitter::OnLButtonDown()
 {
     is_sizing_ = true;
-    x_ = NormalizePosition(CursorPositionInWindow().x());
+    x_ = NormalizePosition(CursorPos().x());
 
     SetCapture(hwnd());
     Draw();
@@ -183,13 +183,18 @@ void UiSplitter::OnLButtonUp()
 
 void UiSplitter::OnMouseMove()
 {
-    ::SetCursor(cursor_);
+    DesktopPoint pos = split_panel_.CursorPos();
+
+    if (split_panel_.ClientRect().Contains(pos.x(), pos.y()))
+    {
+        ::SetCursor(cursor_);
+    }
 
     if (!is_sizing_)
         return;
 
     Draw();
-    x_ = NormalizePosition(CursorPositionInWindow().x());
+    x_ = NormalizePosition(CursorPos().x());
     Draw();
 }
 

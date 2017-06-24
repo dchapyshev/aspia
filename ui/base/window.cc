@@ -220,7 +220,27 @@ DesktopSize UiWindow::ClientSize()
     return DesktopSize(rc.right - rc.left, rc.bottom - rc.top);
 }
 
-DesktopPoint UiWindow::CursorPositionInWindow()
+DesktopRect UiWindow::Rect()
+{
+    RECT rc = { 0 };
+
+    if (!GetWindowRect(hwnd(), &rc))
+        return DesktopRect();
+
+    return DesktopRect::MakeLTRB(rc.left, rc.top, rc.right, rc.bottom);
+}
+
+DesktopRect UiWindow::ClientRect()
+{
+    RECT rc = { 0 };
+
+    if (!GetClientRect(hwnd(), &rc))
+        return DesktopRect();
+
+    return DesktopRect::MakeLTRB(rc.left, rc.top, rc.right, rc.bottom);
+}
+
+DesktopPoint UiWindow::CursorPos()
 {
     POINT cursor_pos = { 0 };
 
