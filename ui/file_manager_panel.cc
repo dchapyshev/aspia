@@ -381,36 +381,35 @@ void UiFileManagerPanel::OnDrawItem(LPDRAWITEMSTRUCT dis)
 void UiFileManagerPanel::OnGetDispInfo(LPNMHDR phdr)
 {
     LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(phdr);
-    UINT string_id;
 
     switch (header->hdr.idFrom)
     {
         case ID_REFRESH:
-            string_id = IDS_FT_TOOLTIP_REFRESH;
+            header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_REFRESH);
             break;
 
         case ID_DELETE:
-            string_id = IDS_FT_TOOLTIP_DELETE;
+            header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_DELETE);
             break;
 
         case ID_FOLDER_ADD:
-            string_id = IDS_FT_TOOLTIP_FOLDER_ADD;
+            header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_FOLDER_ADD);
             break;
 
         case ID_FOLDER_UP:
-            string_id = IDS_FT_TOOLTIP_FOLDER_UP;
+            header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_FOLDER_UP);
             break;
 
         case ID_HOME:
-            string_id = IDS_FT_TOOLTIP_HOME;
+            header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_HOME);
             break;
 
         case ID_SEND:
         {
             if (panel_type_ == PanelType::LOCAL)
-                string_id = IDS_FT_TOOLTIP_SEND;
+                header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_SEND);
             else
-                string_id = IDS_FT_TOOLTIP_RECIEVE;
+                header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_RECIEVE);
         }
         break;
 
@@ -418,10 +417,7 @@ void UiFileManagerPanel::OnGetDispInfo(LPNMHDR phdr)
             return;
     }
 
-    LoadStringW(module_.Handle(),
-                string_id,
-                header->szText,
-                _countof(header->szText));
+    header->hinst = module_.Handle();
 }
 
 int UiFileManagerPanel::GetKnownDriveIndex(const std::string& path)

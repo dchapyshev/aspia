@@ -635,51 +635,47 @@ void UiViewerWindow::OnKeyButton(WORD ctrl_id)
 
 void UiViewerWindow::OnGetDispInfo(LPNMHDR phdr)
 {
-    LPTOOLTIPTEXTW header = reinterpret_cast<LPTOOLTIPTEXTW>(phdr);
-    UINT string_id;
+    LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(phdr);
 
     switch (header->hdr.idFrom)
     {
         case ID_POWER:
-            string_id = IDS_POWER;
+            header->lpszText = MAKEINTRESOURCEW(IDS_POWER);
             break;
 
         case ID_ABOUT:
-            string_id = IDS_ABOUT;
+            header->lpszText = MAKEINTRESOURCEW(IDS_ABOUT);
             break;
 
         case ID_AUTO_SIZE:
-            string_id = IDS_AUTO_SIZE;
+            header->lpszText = MAKEINTRESOURCEW(IDS_AUTO_SIZE);
             break;
 
         case ID_FULLSCREEN:
-            string_id = IDS_FULLSCREEN;
+            header->lpszText = MAKEINTRESOURCEW(IDS_FULLSCREEN);
             break;
 
         case ID_EXIT:
-            string_id = IDS_EXIT;
+            header->lpszText = MAKEINTRESOURCEW(IDS_EXIT);
             break;
 
         case ID_CAD:
-            string_id = IDS_CAD;
+            header->lpszText = MAKEINTRESOURCEW(IDS_CAD);
             break;
 
         case ID_SHORTCUTS:
-            string_id = IDS_SHORTCUTS;
+            header->lpszText = MAKEINTRESOURCEW(IDS_SHORTCUTS);
             break;
 
         case ID_SETTINGS:
-            string_id = IDS_SETTINGS;
+            header->lpszText = MAKEINTRESOURCEW(IDS_SETTINGS);
             break;
 
         default:
             return;
     }
 
-    LoadStringW(UiModule().Current().Handle(),
-                string_id,
-                header->szText,
-                _countof(header->szText));
+    header->hinst = UiModule().Current().Handle();
 }
 
 void UiViewerWindow::OnToolBarDropDown(LPNMHDR phdr)
