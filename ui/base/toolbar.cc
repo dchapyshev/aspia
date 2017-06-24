@@ -61,6 +61,39 @@ void UiToolBar::AddButtons(UINT number_buttons, TBBUTTON* buttons)
                  reinterpret_cast<LPARAM>(buttons));
 }
 
+void UiToolBar::InsertButton(int button_index,
+                             int command_id,
+                             int icon_index,
+                             int style)
+{
+    TBBUTTON button = { 0 };
+
+    button.idCommand = command_id;
+    button.iBitmap   = icon_index;
+    button.fsStyle   = style;
+    button.fsState   = TBSTATE_ENABLED;
+
+    SendMessageW(hwnd(),
+                 TB_INSERTBUTTON,
+                 button_index,
+                 reinterpret_cast<LPARAM>(&button));
+}
+
+void UiToolBar::InsertSeparator(int button_index)
+{
+    InsertButton(button_index, 0, -1, BTNS_SEP);
+}
+
+void UiToolBar::DeleteButton(int button_index)
+{
+    SendMessageW(hwnd(), TB_DELETEBUTTON, button_index, 0);
+}
+
+int UiToolBar::CommandIdToIndex(int command_id)
+{
+    return SendMessageW(hwnd(), TB_COMMANDTOINDEX, command_id, 0);
+}
+
 void UiToolBar::SetImageList(HIMAGELIST imagelist)
 {
     SendMessageW(hwnd(),
@@ -69,7 +102,7 @@ void UiToolBar::SetImageList(HIMAGELIST imagelist)
                  reinterpret_cast<LPARAM>(imagelist));
 }
 
-void UiToolBar::SetButtonText(int button_id, const std::wstring& text)
+void UiToolBar::SetButtonText(int command_id, const std::wstring& text)
 {
     TBBUTTONINFOW button = { 0 };
 
@@ -79,11 +112,11 @@ void UiToolBar::SetButtonText(int button_id, const std::wstring& text)
 
     SendMessageW(hwnd(),
                  TB_SETBUTTONINFO,
-                 button_id,
+                 command_id,
                  reinterpret_cast<LPARAM>(&button));
 }
 
-void UiToolBar::SetButtonState(int button_id, BYTE state)
+void UiToolBar::SetButtonState(int command_id, BYTE state)
 {
     TBBUTTONINFOW button_info;
 
@@ -93,18 +126,38 @@ void UiToolBar::SetButtonState(int button_id, BYTE state)
 
     SendMessageW(hwnd(),
                  TB_SETBUTTONINFOW,
-                 button_id,
+                 command_id,
                  reinterpret_cast<LPARAM>(&button_info));
 }
 
-bool UiToolBar::IsButtonChecked(int button_id)
+bool UiToolBar::IsButtonChecked(int command_id)
 {
-    return !!SendMessageW(hwnd(), TB_ISBUTTONCHECKED, button_id, 0);
+    return !!SendMessageW(hwnd(), TB_ISBUTTONCHECKED, command_id, 0);
 }
 
-void UiToolBar::CheckButton(int button_id, bool check)
+void UiToolBar::CheckButton(int command_id, bool check)
 {
-    SendMessageW(hwnd(), TB_CHECKBUTTON, button_id, MAKELPARAM(check, 0));
+    SendMessageW(hwnd(), TB_CHECKBUTTON, command_id, MAKELPARAM(check, 0));
+}
+
+bool UiToolBar::IsButtonEnabled(int command_id)
+{
+    return !!SendMessageW(hwnd(), TB_ISBUTTONENABLED, command_id, 0);
+}
+
+void UiToolBar::EnableButton(int command_id, bool enable)
+{
+    SendMessageW(hwnd(), TB_ENABLEBUTTON, command_id, MAKELONG(enable, 0));
+}
+
+bool UiToolBar::IsButtonHidden(int command_id)
+{
+    return !!SendMessageW(hwnd(), TB_ISBUTTONHIDDEN, command_id, 0);
+}
+
+void UiToolBar::HideButton(int command_id, bool hide)
+{
+    SendMessageW(hwnd(), TB_HIDEBUTTON, command_id, MAKELONG(hide, 0));
 }
 
 void UiToolBar::AutoSize()
@@ -112,9 +165,14 @@ void UiToolBar::AutoSize()
     SendMessageW(hwnd(), TB_AUTOSIZE, 0, 0);
 }
 
-void UiToolBar::GetRect(int button_id, RECT& rect)
+void UiToolBar::GetRect(int command_id, RECT& rect)
 {
-    SendMessageW(hwnd(), TB_GETRECT, button_id, reinterpret_cast<LPARAM>(&rect));
+    SendMessageW(hwnd(), TB_GETRECT, command_id, reinterpret_cast<LPARAM>(&rect));
+}
+
+void UiToolBar::SetPadding(int cx, int cy)
+{
+    SendMessageW(hwnd(), TB_SETPADDING, 0, MAKELONG(cx, cy));
 }
 
 } // namespace aspia

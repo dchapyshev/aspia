@@ -25,13 +25,22 @@ public:
     bool ModifyExtendedStyle(DWORD remove, DWORD add);
     void ButtonStructSize(size_t size);
     void AddButtons(UINT number_buttons, TBBUTTON* buttons);
+    void InsertButton(int button_index, int command_id, int icon_index, int style);
+    void InsertSeparator(int button_index);
+    void DeleteButton(int button_index);
+    int CommandIdToIndex(int command_id);
     void SetImageList(HIMAGELIST imagelist);
-    void SetButtonText(int button_id, const std::wstring& text);
-    void SetButtonState(int button_id, BYTE state);
-    bool IsButtonChecked(int button_id);
-    void CheckButton(int button_id, bool check);
+    void SetButtonText(int command_id, const std::wstring& text);
+    void SetButtonState(int command_id, BYTE state);
+    bool IsButtonChecked(int command_id);
+    void CheckButton(int command_id, bool check);
+    bool IsButtonEnabled(int command_id);
+    void EnableButton(int command_id, bool enable);
+    bool IsButtonHidden(int command_id);
+    void HideButton(int command_id, bool hide);
     void AutoSize();
-    void GetRect(int button_id, RECT& rect);
+    void GetRect(int command_id, RECT& rect);
+    void SetPadding(int cx, int cy);
 };
 
 } // namespace aspia
