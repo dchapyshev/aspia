@@ -80,8 +80,8 @@ private:
     UiImageList toolbar_imagelist_;
 
     std::unique_ptr<proto::DriveList> drive_list_;
-    UiComboBoxEx drives_combo_;
-    UiImageList drives_imagelist_;
+    UiComboBoxEx drive_combo_;
+    UiImageList drive_imagelist_;
 
     UiWindow status_window_;
 
