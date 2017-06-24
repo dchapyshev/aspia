@@ -73,7 +73,7 @@ private:
     UiWindow title_window_;
 
     std::unique_ptr<proto::DirectoryList> directory_list_;
-    UiListView list_window_;
+    UiListView list_;
     UiImageList list_imagelist_;
 
     UiToolBar toolbar_;

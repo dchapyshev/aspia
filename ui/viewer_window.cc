@@ -144,7 +144,9 @@ void UiViewerWindow::CreateToolBar()
                     TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS,
                     module.Handle());
 
-    toolbar_.ModifyExtendedStyle(0, TBSTYLE_EX_DRAWDDARROWS | TBSTYLE_EX_MIXEDBUTTONS);
+    toolbar_.ModifyExtendedStyle(0, TBSTYLE_EX_DRAWDDARROWS |
+                                    TBSTYLE_EX_MIXEDBUTTONS |
+                                    TBSTYLE_EX_DOUBLEBUFFER);
 
     TBBUTTON kButtons[] =
     {
@@ -160,7 +162,7 @@ void UiViewerWindow::CreateToolBar()
         {  5, ID_SETTINGS,   TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                { 0 }, 0, -1 },
         { -1, 0,             TBSTATE_ENABLED, BTNS_SEP,                                   { 0 }, 0, -1 },
         {  6, ID_ABOUT,      TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                { 0 }, 0, -1 },
-        {  7, ID_EXIT,       TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                { 0 }, 0, -1 },
+        {  7, ID_EXIT,       TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                { 0 }, 0, -1 }
     };
 
     toolbar_.ButtonStructSize(sizeof(kButtons[0]));

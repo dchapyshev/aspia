@@ -14,6 +14,23 @@ UiComboBoxEx::UiComboBoxEx(HWND hwnd)
     Attach(hwnd);
 }
 
+bool UiComboBoxEx::Create(HWND parent, int ctrl_id, DWORD style, HINSTANCE instance)
+{
+    Attach(CreateWindowExW(0,
+                           WC_COMBOBOXEXW,
+                           L"",
+                           WS_CHILD | WS_VISIBLE | WS_TABSTOP | style,
+                           0, 0, 200, 200,
+                           parent,
+                           reinterpret_cast<HMENU>(ctrl_id),
+                           instance,
+                           nullptr));
+    if (hwnd() == nullptr)
+        return false;
+
+    return true;
+}
+
 int UiComboBoxEx::InsertItem(const std::wstring& text,
                              int item_index,
                              int image_index,

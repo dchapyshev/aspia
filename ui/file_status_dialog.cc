@@ -181,7 +181,8 @@ void UiFileStatusDialog::OnDirectoryOpen(const std::wstring& path)
         return;
     }
 
-    WriteLog(module().string(IDS_FT_OP_BROWSE_FOLDERS),
+    WriteLog(StringPrintfW(module().string(IDS_FT_OP_BROWSE_FOLDERS).c_str(),
+                           path.c_str()),
              proto::Status::STATUS_SUCCESS);
 }
 

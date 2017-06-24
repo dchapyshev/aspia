@@ -29,7 +29,7 @@ bool UiListView::Create(HWND parent, DWORD ex_style, DWORD style, HINSTANCE inst
     Attach(CreateWindowExW(ex_style,
                            WC_LISTVIEWW,
                            L"",
-                           style,
+                           WS_CHILD | WS_VISIBLE | WS_TABSTOP | style,
                            CW_USEDEFAULT, CW_USEDEFAULT,
                            CW_USEDEFAULT, CW_USEDEFAULT,
                            parent,

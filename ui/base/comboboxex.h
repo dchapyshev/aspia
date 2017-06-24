@@ -22,6 +22,8 @@ public:
     UiComboBoxEx() = default;
     UiComboBoxEx(HWND hwnd);
 
+    bool Create(HWND parent, int ctrl_id, DWORD style, HINSTANCE instance);
+
     int InsertItem(const std::wstring& text,
                    int item_index,
                    int image_index,

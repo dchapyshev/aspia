@@ -74,7 +74,7 @@ void UiFileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_l
 void UiFileManagerPanel::ReadDirectoryList(
     std::unique_ptr<proto::DirectoryList> directory_list)
 {
-    list_window_.DeleteAllItems();
+    list_.DeleteAllItems();
     list_imagelist_.RemoveAll();
 
     directory_list_.reset(directory_list.release());
@@ -116,9 +116,9 @@ void UiFileManagerPanel::ReadDirectoryList(
 
         std::wstring name = UNICODEfromUTF8(item.name());
 
-        int item_index = list_window_.AddItem(name, index, icon_index);
-        list_window_.SetItemText(item_index, 2, GetDirectoryTypeString(name));
-        list_window_.SetItemText(item_index, 3, TimeToString(item.modified()));
+        int item_index = list_.AddItem(name, index, icon_index);
+        list_.SetItemText(item_index, 2, GetDirectoryTypeString(name));
+        list_.SetItemText(item_index, 3, TimeToString(item.modified()));
     }
 
     // Enumerate the files.
@@ -134,10 +134,10 @@ void UiFileManagerPanel::ReadDirectoryList(
         icon.Reset(GetFileIcon(name));
         icon_index = list_imagelist_.AddIcon(icon);
 
-        int item_index = list_window_.AddItem(name, index, icon_index);
-        list_window_.SetItemText(item_index, 1, SizeToString(item.size()));
-        list_window_.SetItemText(item_index, 2, GetFileTypeString(name));
-        list_window_.SetItemText(item_index, 3, TimeToString(item.modified()));
+        int item_index = list_.AddItem(name, index, icon_index);
+        list_.SetItemText(item_index, 1, SizeToString(item.size()));
+        list_.SetItemText(item_index, 2, GetFileTypeString(name));
+        list_.SetItemText(item_index, 3, TimeToString(item.modified()));
     }
 }
 
@@ -166,16 +166,9 @@ void UiFileManagerPanel::OnCreate()
                                          nullptr));
     title_window_.SetFont(default_font);
 
-    drives_combo_.Attach(CreateWindowExW(0,
-                                         WC_COMBOBOXEXW,
-                                         L"",
-                                         WS_CHILD | WS_VISIBLE | WS_TABSTOP |
-                                             WS_VSCROLL | CBS_DROPDOWN,
-                                         0, 0, 200, 200,
-                                         hwnd(),
-                                         reinterpret_cast<HMENU>(IDC_ADDRESS_COMBO),
-                                         module.Handle(),
-                                         nullptr));
+    drives_combo_.Create(hwnd(),
+                         IDC_ADDRESS_COMBO, WS_VSCROLL | CBS_DROPDOWN,
+                         module.Handle());
     drives_combo_.SetFont(default_font);
 
     if (drives_imagelist_.CreateSmall())
@@ -185,7 +178,7 @@ void UiFileManagerPanel::OnCreate()
                     TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS,
                     module.Handle());
 
-    toolbar_.ModifyExtendedStyle(0, TBSTYLE_EX_MIXEDBUTTONS);
+    toolbar_.ModifyExtendedStyle(0, TBSTYLE_EX_MIXEDBUTTONS | TBSTYLE_EX_DOUBLEBUFFER);
 
     TBBUTTON kButtons[] =
     {
@@ -227,18 +220,17 @@ void UiFileManagerPanel::OnCreate()
     else
         toolbar_.SetButtonText(ID_SEND, module.string(IDS_FT_RECIEVE));
 
-    list_window_.Create(hwnd(),
-                        WS_EX_CLIENTEDGE,
-                        WS_CHILD | WS_VISIBLE | WS_TABSTOP | LVS_REPORT |
-                            LVS_SHOWSELALWAYS | LVS_EDITLABELS,
-                        module.Handle());
+    list_.Create(hwnd(),
+                 WS_EX_CLIENTEDGE,
+                 LVS_REPORT | LVS_SHOWSELALWAYS | LVS_EDITLABELS,
+                 module.Handle());
 
-    list_window_.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
+    list_.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
 
-    list_window_.AddColumn(module.string(IDS_FT_COLUMN_NAME), 180);
-    list_window_.AddColumn(module.string(IDS_FT_COLUMN_SIZE), 70);
-    list_window_.AddColumn(module.string(IDS_FT_COLUMN_TYPE), 100);
-    list_window_.AddColumn(module.string(IDS_FT_COLUMN_MODIFIED), 100);
+    list_.AddColumn(module.string(IDS_FT_COLUMN_NAME), 180);
+    list_.AddColumn(module.string(IDS_FT_COLUMN_SIZE), 70);
+    list_.AddColumn(module.string(IDS_FT_COLUMN_TYPE), 100);
+    list_.AddColumn(module.string(IDS_FT_COLUMN_MODIFIED), 100);
 
     status_window_.Attach(CreateWindowExW(0,
                                           WC_STATICW,
@@ -253,13 +245,13 @@ void UiFileManagerPanel::OnCreate()
 
     if (list_imagelist_.CreateSmall())
     {
-        list_window_.SetImageList(list_imagelist_, LVSIL_SMALL);
+        list_.SetImageList(list_imagelist_, LVSIL_SMALL);
     }
 }
 
 void UiFileManagerPanel::OnDestroy()
 {
-    list_window_.DestroyWindow();
+    list_.DestroyWindow();
     toolbar_.DestroyWindow();
     title_window_.DestroyWindow();
     drives_combo_.DestroyWindow();
@@ -303,7 +295,7 @@ void UiFileManagerPanel::OnSize(int width, int height)
         int list_y = title_height + toolbar_height + address_height;
         int list_height = height - list_y - status_height;
 
-        DeferWindowPos(dwp, list_window_, nullptr,
+        DeferWindowPos(dwp, list_, nullptr,
                        0,
                        list_y,
                        width,
@@ -430,7 +422,7 @@ void UiFileManagerPanel::OnDriveChange()
 
     if (index == kComputerIndex)
     {
-        list_window_.DeleteAllItems();
+        list_.DeleteAllItems();
         list_imagelist_.RemoveAll();
         directory_list_.reset();
 
@@ -445,8 +437,8 @@ void UiFileManagerPanel::OnDriveChange()
 
             std::wstring display_name = GetDriveDisplayName(item);
 
-            int item_index = list_window_.AddItem(display_name, index, icon_index);
-            list_window_.SetItemText(item_index, 2, GetDriveDescription(item.type()));
+            int item_index = list_.AddItem(display_name, index, icon_index);
+            list_.SetItemText(item_index, 2, GetDriveDescription(item.type()));
         }
     }
     else if (index == kCurrentFolderIndex)
@@ -469,11 +461,11 @@ void UiFileManagerPanel::OnDriveChange()
 
 void UiFileManagerPanel::OnAddressChange()
 {
-    int item_index = list_window_.GetItemUnderPointer();
+    int item_index = list_.GetItemUnderPointer();
     if (item_index == -1)
         return;
 
-    int index = list_window_.GetItemData<int>(item_index);
+    int index = list_.GetItemData<int>(item_index);
 
     if (!directory_list_)
     {
@@ -535,13 +527,13 @@ void UiFileManagerPanel::OnFolderCreate()
 
     std::wstring folder_name = UiModule::Current().string(IDS_FT_NEW_FOLDER);
 
-    SetFocus(list_window_);
+    SetFocus(list_);
 
     int item_index =
-        list_window_.AddItem(folder_name, kNewFolderIndex, icon_index);
+        list_.AddItem(folder_name, kNewFolderIndex, icon_index);
 
-    list_window_.SetItemText(item_index, 2, GetDirectoryTypeString(folder_name));
-    list_window_.EditLabel(item_index);
+    list_.SetItemText(item_index, 2, GetDirectoryTypeString(folder_name));
+    list_.EditLabel(item_index);
 }
 
 void UiFileManagerPanel::OnRefresh()
@@ -557,11 +549,11 @@ void UiFileManagerPanel::OnRemove()
     if (!directory_list_)
         return;
 
-    int selected_item = list_window_.GetFirstSelectedItem();
+    int selected_item = list_.GetFirstSelectedItem();
     if (selected_item == -1)
         return;
 
-    int index = list_window_.GetItemData<int>(selected_item);
+    int index = list_.GetItemData<int>(selected_item);
     if (index < 0 || index >= directory_list_->item_size())
         return;
 
@@ -610,7 +602,7 @@ void UiFileManagerPanel::OnEndLabelEdit(LPNMLVDISPINFOW disp_info)
     {
         delegate_->OnCreateDirectoryRequest(panel_type_,
                                             directory_list_->path(),
-                                            UTF8fromUNICODE(list_window_.GetTextFromEdit()));
+                                            UTF8fromUNICODE(list_.GetTextFromEdit()));
     }
     else // Rename exists item.
     {
@@ -673,7 +665,7 @@ bool UiFileManagerPanel::OnMessage(UINT msg,
                     delegate_->OnDirectoryListRequest(panel_type_, path.u8string());
                 }
             }
-            else if (header->hwndFrom == list_window_.hwnd())
+            else if (header->hwndFrom == list_.hwnd())
             {
                 switch (header->code)
                 {
