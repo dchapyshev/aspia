@@ -137,6 +137,9 @@ void UiFileManagerPanel::ReadDirectoryList(
         list_.SetItemText(item_index, 2, GetFileTypeString(name));
         list_.SetItemText(item_index, 3, TimeToString(item.modified()));
     }
+
+    // Select first item.
+    list_.SelectItem(0);
 }
 
 void UiFileManagerPanel::SetComputerViews()
@@ -656,6 +659,14 @@ void UiFileManagerPanel::OnEndLabelEdit(LPNMLVDISPINFOW disp_info)
 void UiFileManagerPanel::OnListItemChanged()
 {
     UINT count = list_.GetSelectedCount();
+
+    if (directory_list_)
+    {
+        bool enable = (count != 0);
+
+        toolbar_.EnableButton(ID_DELETE, enable);
+        toolbar_.EnableButton(ID_SEND, enable);
+    }
 
     std::wstring format = module_.string(IDS_FT_SELECTED_OBJECT_COUNT);
     std::wstring status = StringPrintfW(format.c_str(), count);

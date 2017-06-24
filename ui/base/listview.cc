@@ -204,6 +204,18 @@ UINT UiListView::GetSelectedCount()
     return ListView_GetSelectedCount(hwnd());
 }
 
+void UiListView::SelectItem(int item_index)
+{
+    LVITEMW item = { 0 };
+
+    item.mask      = LVIF_STATE;
+    item.iItem     = item_index;
+    item.state     = LVIS_SELECTED;
+    item.stateMask = LVIS_SELECTED;
+
+    ListView_SetItem(hwnd(), &item);
+}
+
 HWND UiListView::EditLabel(int item_index)
 {
     return ListView_EditLabel(hwnd(), item_index);

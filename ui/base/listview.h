@@ -73,6 +73,7 @@ public:
     int GetFirstSelectedItem();
     int GetItemUnderPointer();
     UINT GetSelectedCount();
+    void SelectItem(int item_index);
 
     HWND EditLabel(int item_index);
     std::wstring GetTextFromEdit();
