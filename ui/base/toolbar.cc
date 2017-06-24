@@ -104,15 +104,34 @@ void UiToolBar::SetImageList(HIMAGELIST imagelist)
 
 void UiToolBar::SetButtonText(int command_id, const std::wstring& text)
 {
-    TBBUTTONINFOW button = { 0 };
+    int button_index = CommandIdToIndex(command_id);
+    if (button_index == -1)
+        return;
 
-    button.cbSize  = sizeof(button);
-    button.dwMask  = TBIF_TEXT;
-    button.pszText = const_cast<LPWSTR>(text.c_str());
+    TBBUTTON button = { 0 };
+
+    if (!SendMessageW(hwnd(),
+                      TB_GETBUTTON,
+                      button_index,
+                      reinterpret_cast<LPARAM>(&button)))
+    {
+        return;
+    }
+
+    int string_id = SendMessageW(hwnd(),
+                                 TB_ADDSTRING,
+                                 0,
+                                 reinterpret_cast<LPARAM>(text.c_str()));
+    if (string_id == -1)
+        return;
+
+    button.iString = string_id;
+
+    DeleteButton(button_index);
 
     SendMessageW(hwnd(),
-                 TB_SETBUTTONINFO,
-                 command_id,
+                 TB_INSERTBUTTON,
+                 button_index,
                  reinterpret_cast<LPARAM>(&button));
 }
 
