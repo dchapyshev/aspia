@@ -13,6 +13,8 @@
 
 namespace aspia {
 
+namespace fs = std::experimental::filesystem;
+
 std::unique_ptr<proto::DriveList> ExecuteDriveListRequest(
     const proto::DriveListRequest& drive_list_request)
 {
@@ -86,30 +88,50 @@ std::unique_ptr<proto::DriveList> ExecuteDriveListRequest(
     return drive_list;
 }
 
-std::unique_ptr<proto::DirectoryList> ExecuteDirectoryListRequest(
-    const proto::DirectoryListRequest& directory_list_request)
+proto::Status ExecuteDirectoryListRequest(
+    const proto::DirectoryListRequest& request,
+    std::unique_ptr<proto::DirectoryList>& reply)
 {
-    std::experimental::filesystem::path path =
-        std::experimental::filesystem::u8path(directory_list_request.path());
+    fs::path path = fs::u8path(request.path());
 
-    std::unique_ptr<proto::DirectoryList> directory_list(new proto::DirectoryList());
-
-    directory_list->set_path(path.u8string());
+    if (!request.item().empty())
+    {
+        if (request.item() == "..")
+        {
+            if (path.has_parent_path() && path.parent_path() != path.root_name())
+            {
+                path = path.parent_path();
+            }
+        }
+        else
+        {
+            path.append(fs::u8path(request.item()));
+        }
+    }
 
     std::error_code code;
 
-    for (auto& entry : std::experimental::filesystem::directory_iterator(path, code))
+    if (!fs::exists(path, code))
+        return proto::Status::STATUS_PATH_NOT_FOUND;
+
+    reply.reset(new proto::DirectoryList());
+    reply->set_path(path.u8string());
+
+    if (path.has_parent_path() && path.parent_path() != path.root_name())
     {
-        proto::DirectoryListItem* item = directory_list->add_item();
+        reply->set_has_parent(true);
+    }
+
+    for (auto& entry : fs::directory_iterator(path, code))
+    {
+        proto::DirectoryListItem* item = reply->add_item();
 
         item->set_name(entry.path().filename().u8string());
 
-        std::experimental::filesystem::file_time_type time =
-            std::experimental::filesystem::last_write_time(entry.path(), code);
-
+        fs::file_time_type time = fs::last_write_time(entry.path(), code);
         item->set_modified(decltype(time)::clock::to_time_t(time));
 
-        if (entry.status().type() == std::experimental::filesystem::file_type::directory)
+        if (entry.status().type() == fs::file_type::directory)
         {
             item->set_type(proto::DirectoryListItem::DIRECTORY);
         }
@@ -117,31 +139,29 @@ std::unique_ptr<proto::DirectoryList> ExecuteDirectoryListRequest(
         {
             item->set_type(proto::DirectoryListItem::FILE);
 
-            uintmax_t size = std::experimental::filesystem::file_size(entry.path(), code);
+            uintmax_t size = fs::file_size(entry.path(), code);
             if (size != -1)
                 item->set_size(size);
         }
     }
 
-    return directory_list;
+    return proto::Status::STATUS_SUCCESS;
 }
 
 proto::Status ExecuteCreateDirectoryRequest(
     const proto::CreateDirectoryRequest& create_directory_request)
 {
-    std::experimental::filesystem::path path =
-        std::experimental::filesystem::u8path(create_directory_request.path());
+    fs::path path = fs::u8path(create_directory_request.path());
 
-    path.append(std::experimental::filesystem::u8path(
-        create_directory_request.name()));
+    path.append(fs::u8path(create_directory_request.name()));
 
     std::error_code code;
 
-    if (!std::experimental::filesystem::create_directory(path, code))
+    if (!fs::create_directory(path, code))
     {
-        if (std::experimental::filesystem::exists(path, code))
+        if (fs::exists(path, code))
         {
-            if (std::experimental::filesystem::is_directory(path, code))
+            if (fs::is_directory(path, code))
                 return proto::Status::STATUS_PATH_ALREADY_EXISTS;
             else
                 return proto::Status::STATUS_FILE_ALREADY_EXISTS;
@@ -155,53 +175,42 @@ proto::Status ExecuteCreateDirectoryRequest(
 
 proto::Status ExecuteRenameRequest(const proto::RenameRequest& rename_request)
 {
-    std::experimental::filesystem::path old_path =
-        std::experimental::filesystem::u8path(rename_request.path());
+    fs::path old_path = fs::u8path(rename_request.path());
+    old_path.append(fs::u8path(rename_request.old_item_name()));
 
-    old_path.append(std::experimental::filesystem::u8path(
-        rename_request.old_item_name()));
-
-    std::experimental::filesystem::path new_path =
-        std::experimental::filesystem::u8path(rename_request.path());
-
-    new_path.append(std::experimental::filesystem::u8path(
-        rename_request.new_item_name()));
+    fs::path new_path = fs::u8path(rename_request.path());
+    new_path.append(fs::u8path(rename_request.new_item_name()));
 
     if (old_path == new_path)
         return proto::Status::STATUS_SUCCESS;
 
     std::error_code code;
 
-    if (std::experimental::filesystem::exists(new_path, code))
+    if (fs::exists(new_path, code))
     {
-        if (std::experimental::filesystem::is_directory(new_path, code))
+        if (fs::is_directory(new_path, code))
             return proto::Status::STATUS_PATH_ALREADY_EXISTS;
 
         return proto::Status::STATUS_FILE_ALREADY_EXISTS;
     }
 
-    std::experimental::filesystem::rename(old_path, new_path, code);
+    fs::rename(old_path, new_path, code);
 
     return proto::Status::STATUS_SUCCESS;
 }
 
 proto::Status ExecuteRemoveRequest(const proto::RemoveRequest& remove_request)
 {
-    std::experimental::filesystem::path path =
-        std::experimental::filesystem::u8path(remove_request.path());
-
-    path.append(std::experimental::filesystem::u8path(remove_request.item_name()));
+    fs::path path = fs::u8path(remove_request.path());
+    path.append(fs::u8path(remove_request.item_name()));
 
     std::error_code code;
 
-    if (!std::experimental::filesystem::exists(path, code))
+    if (!fs::exists(path, code))
         return proto::Status::STATUS_PATH_NOT_FOUND;
 
-    if (std::experimental::filesystem::remove_all(path, code) ==
-        static_cast<std::uintmax_t>(-1))
-    {
+    if (fs::remove_all(path, code) == static_cast<std::uintmax_t>(-1))
         return proto::Status::STATUS_ACCESS_DENIED;
-    }
 
     return proto::Status::STATUS_SUCCESS;
 }

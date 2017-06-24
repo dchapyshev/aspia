@@ -101,9 +101,11 @@ void UiFileManager::OnDriveListRequest(UiFileManager::PanelType panel_type)
     delegate_->OnDriveListRequest(panel_type);
 }
 
-void UiFileManager::OnDirectoryListRequest(PanelType panel_type, const std::string& path)
+void UiFileManager::OnDirectoryListRequest(PanelType panel_type,
+                                           const std::string& path,
+                                           const std::string& item)
 {
-    delegate_->OnDirectoryListRequest(panel_type, path);
+    delegate_->OnDirectoryListRequest(panel_type, path, item);
 }
 
 void UiFileManager::OnCreateDirectoryRequest(PanelType panel_type,

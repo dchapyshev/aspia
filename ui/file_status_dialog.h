@@ -11,6 +11,7 @@
 #include "ui/base/dialog.h"
 #include "ui/base/edit.h"
 #include "base/message_loop/message_loop_thread.h"
+#include "proto/file_transfer_session.pb.h"
 #include "proto/status.pb.h"
 
 namespace aspia {
@@ -29,19 +30,16 @@ public:
     UiFileStatusDialog(Delegate* delegate);
     ~UiFileStatusDialog();
 
-    void OnDirectoryOpen(const std::wstring& path);
+    void OnDirectoryOpen(const proto::DirectoryListRequest& request,
+                         proto::Status status);
 
-    void OnCreateDirectory(const std::wstring& path,
-                           const std::wstring& name,
+    void OnCreateDirectory(const proto::CreateDirectoryRequest& request,
                            proto::Status status);
 
-    void OnRename(const std::wstring& path,
-                  const std::wstring& old_name,
-                  const std::wstring& new_name,
+    void OnRename(const proto::RenameRequest& request,
                   proto::Status status);
 
-    void OnRemove(const std::wstring& path,
-                  const std::wstring& item_name,
+    void OnRemove(const proto::RemoveRequest& request,
                   proto::Status status);
 
     void OnFileSend(const std::wstring& path);

@@ -58,12 +58,14 @@ message DirectoryListItem
 message DirectoryList
 {
     string path = 1;
-    repeated DirectoryListItem item = 2;
+    bool has_parent = 2;
+    repeated DirectoryListItem item = 3;
 }
 
 message DirectoryListRequest
 {
     string path = 1;
+    string item = 2;
 }
 
 message File

@@ -367,9 +367,9 @@ BEGIN
     IDS_FT_OP_SESSION_START               "Session started"
     IDS_FT_OP_SESSION_END                 "Session terminated"
     IDS_FT_OP_BROWSE_FOLDERS              "Browse folders: ""%s"""
-    IDS_FT_OP_RENAME                      "Rename: ""%s\\%s"" to ""%s\\%s"""
-    IDS_FT_OP_REMOVE                      "Remove: ""%s\\%s"""
-    IDS_FT_OP_CREATE_FOLDER               "Create folder: ""%s\\%s"""
+    IDS_FT_OP_RENAME                      "Rename: ""%s"" to ""%s"""
+    IDS_FT_OP_REMOVE                      "Remove: ""%s"""
+    IDS_FT_OP_CREATE_FOLDER               "Create folder: ""%s"""
     IDS_FT_SEND                           "Send"
     IDS_FT_RECIEVE                        "Recieve"
 END

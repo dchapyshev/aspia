@@ -35,7 +35,10 @@ private:
     // UiFileManager::Delegate implementation.
     void OnWindowClose() override;
     void OnDriveListRequest(UiFileManager::PanelType panel_type) override;
-    void OnDirectoryListRequest(UiFileManager::PanelType panel_type, const std::string& path) override;
+
+    void OnDirectoryListRequest(UiFileManager::PanelType panel_type,
+                                const std::string& path,
+                                const std::string& item) override;
 
     void OnCreateDirectoryRequest(UiFileManager::PanelType panel_type,
                                   const std::string& path,

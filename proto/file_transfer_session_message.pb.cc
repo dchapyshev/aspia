@@ -1367,6 +1367,7 @@ void DirectoryListItem::set_modified(::google::protobuf::uint64 value) {
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int DirectoryList::kPathFieldNumber;
+const int DirectoryList::kHasParentFieldNumber;
 const int DirectoryList::kItemFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -1388,11 +1389,13 @@ DirectoryList::DirectoryList(const DirectoryList& from)
   if (from.path().size() > 0) {
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
+  has_parent_ = from.has_parent_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.DirectoryList)
 }
 
 void DirectoryList::SharedCtor() {
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  has_parent_ = false;
   _cached_size_ = 0;
 }
 
@@ -1427,6 +1430,7 @@ void DirectoryList::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.DirectoryList)
   item_.Clear();
   path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  has_parent_ = false;
 }
 
 bool DirectoryList::MergePartialFromCodedStream(
@@ -1455,10 +1459,24 @@ bool DirectoryList::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .aspia.proto.DirectoryListItem item = 2;
+      // bool has_parent = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(18u)) {
+            static_cast< ::google::protobuf::uint8>(16u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_parent_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .aspia.proto.DirectoryListItem item = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                 input, add_item()));
         } else {
@@ -1504,10 +1522,15 @@ void DirectoryList::SerializeWithCachedSizes(
       1, this->path(), output);
   }
 
-  // repeated .aspia.proto.DirectoryListItem item = 2;
+  // bool has_parent = 2;
+  if (this->has_parent() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->has_parent(), output);
+  }
+
+  // repeated .aspia.proto.DirectoryListItem item = 3;
   for (unsigned int i = 0, n = this->item_size(); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, this->item(i), output);
+      3, this->item(i), output);
   }
 
   // @@protoc_insertion_point(serialize_end:aspia.proto.DirectoryList)
@@ -1517,7 +1540,7 @@ size_t DirectoryList::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:aspia.proto.DirectoryList)
   size_t total_size = 0;
 
-  // repeated .aspia.proto.DirectoryListItem item = 2;
+  // repeated .aspia.proto.DirectoryListItem item = 3;
   {
     unsigned int count = this->item_size();
     total_size += 1UL * count;
@@ -1533,6 +1556,11 @@ size_t DirectoryList::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->path());
+  }
+
+  // bool has_parent = 2;
+  if (this->has_parent() != 0) {
+    total_size += 1 + 1;
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -1559,6 +1587,9 @@ void DirectoryList::MergeFrom(const DirectoryList& from) {
 
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
+  if (from.has_parent() != 0) {
+    set_has_parent(from.has_parent());
+  }
 }
 
 void DirectoryList::CopyFrom(const DirectoryList& from) {
@@ -1579,6 +1610,7 @@ void DirectoryList::Swap(DirectoryList* other) {
 void DirectoryList::InternalSwap(DirectoryList* other) {
   item_.InternalSwap(&other->item_);
   path_.Swap(&other->path_);
+  std::swap(has_parent_, other->has_parent_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -1642,7 +1674,21 @@ void DirectoryList::set_allocated_path(::std::string* path) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.DirectoryList.path)
 }
 
-// repeated .aspia.proto.DirectoryListItem item = 2;
+// bool has_parent = 2;
+void DirectoryList::clear_has_parent() {
+  has_parent_ = false;
+}
+bool DirectoryList::has_parent() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DirectoryList.has_parent)
+  return has_parent_;
+}
+void DirectoryList::set_has_parent(bool value) {
+  
+  has_parent_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DirectoryList.has_parent)
+}
+
+// repeated .aspia.proto.DirectoryListItem item = 3;
 int DirectoryList::item_size() const {
   return item_.size();
 }
@@ -1678,6 +1724,7 @@ DirectoryList::item() const {
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int DirectoryListRequest::kPathFieldNumber;
+const int DirectoryListRequest::kItemFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 DirectoryListRequest::DirectoryListRequest()
@@ -1697,11 +1744,16 @@ DirectoryListRequest::DirectoryListRequest(const DirectoryListRequest& from)
   if (from.path().size() > 0) {
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
+  item_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.item().size() > 0) {
+    item_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.item_);
+  }
   // @@protoc_insertion_point(copy_constructor:aspia.proto.DirectoryListRequest)
 }
 
 void DirectoryListRequest::SharedCtor() {
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  item_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   _cached_size_ = 0;
 }
 
@@ -1712,6 +1764,7 @@ DirectoryListRequest::~DirectoryListRequest() {
 
 void DirectoryListRequest::SharedDtor() {
   path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  item_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void DirectoryListRequest::SetCachedSize(int size) const {
@@ -1735,6 +1788,7 @@ DirectoryListRequest* DirectoryListRequest::New(::google::protobuf::Arena* arena
 void DirectoryListRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.DirectoryListRequest)
   path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  item_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 bool DirectoryListRequest::MergePartialFromCodedStream(
@@ -1757,6 +1811,22 @@ bool DirectoryListRequest::MergePartialFromCodedStream(
             this->path().data(), this->path().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
             "aspia.proto.DirectoryListRequest.path"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string item = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_item()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->item().data(), this->item().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DirectoryListRequest.item"));
         } else {
           goto handle_unusual;
         }
@@ -1800,6 +1870,16 @@ void DirectoryListRequest::SerializeWithCachedSizes(
       1, this->path(), output);
   }
 
+  // string item = 2;
+  if (this->item().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->item().data(), this->item().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DirectoryListRequest.item");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->item(), output);
+  }
+
   // @@protoc_insertion_point(serialize_end:aspia.proto.DirectoryListRequest)
 }
 
@@ -1812,6 +1892,13 @@ size_t DirectoryListRequest::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->path());
+  }
+
+  // string item = 2;
+  if (this->item().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->item());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -1837,6 +1924,10 @@ void DirectoryListRequest::MergeFrom(const DirectoryListRequest& from) {
 
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
+  if (from.item().size() > 0) {
+
+    item_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.item_);
+  }
 }
 
 void DirectoryListRequest::CopyFrom(const DirectoryListRequest& from) {
@@ -1856,6 +1947,7 @@ void DirectoryListRequest::Swap(DirectoryListRequest* other) {
 }
 void DirectoryListRequest::InternalSwap(DirectoryListRequest* other) {
   path_.Swap(&other->path_);
+  item_.Swap(&other->item_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -1917,6 +2009,59 @@ void DirectoryListRequest::set_allocated_path(::std::string* path) {
   }
   path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.DirectoryListRequest.path)
+}
+
+// string item = 2;
+void DirectoryListRequest::clear_item() {
+  item_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DirectoryListRequest::item() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DirectoryListRequest.item)
+  return item_.GetNoArena();
+}
+void DirectoryListRequest::set_item(const ::std::string& value) {
+  
+  item_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.DirectoryListRequest.item)
+}
+#if LANG_CXX11
+void DirectoryListRequest::set_item(::std::string&& value) {
+  
+  item_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.DirectoryListRequest.item)
+}
+#endif
+void DirectoryListRequest::set_item(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  item_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.DirectoryListRequest.item)
+}
+void DirectoryListRequest::set_item(const char* value, size_t size) {
+  
+  item_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.DirectoryListRequest.item)
+}
+::std::string* DirectoryListRequest::mutable_item() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.DirectoryListRequest.item)
+  return item_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DirectoryListRequest::release_item() {
+  // @@protoc_insertion_point(field_release:aspia.proto.DirectoryListRequest.item)
+  
+  return item_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DirectoryListRequest::set_allocated_item(::std::string* item) {
+  if (item != NULL) {
+    
+  } else {
+    
+  }
+  item_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), item);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DirectoryListRequest.item)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

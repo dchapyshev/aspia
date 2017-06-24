@@ -13,11 +13,6 @@
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 
-#include <clocale>
-#include <filesystem>
-#include <shellapi.h>
-#include <shlobj.h>
-
 namespace aspia {
 
 static const int kNewFolderIndex = -1;
@@ -443,10 +438,10 @@ void UiFileManagerPanel::OnDriveChange()
     }
     else if (index == kCurrentFolderIndex)
     {
-        std::experimental::filesystem::path path =
-            drive_combo_.GetItemText(selected_item);
-
-        delegate_->OnDirectoryListRequest(panel_type_, path.u8string());
+        std::wstring path = drive_combo_.GetItemText(selected_item);
+        delegate_->OnDirectoryListRequest(panel_type_,
+                                          UTF8fromUNICODE(path),
+                                          std::string());
     }
     else if (index < 0 || index >= drive_list_->item_size())
     {
@@ -455,7 +450,8 @@ void UiFileManagerPanel::OnDriveChange()
     else
     {
         delegate_->OnDirectoryListRequest(panel_type_,
-                                          drive_list_->item(index).path());
+                                          drive_list_->item(index).path(),
+                                          std::string());
     }
 }
 
@@ -485,36 +481,25 @@ void UiFileManagerPanel::OnAddressChange()
 
     if (item.type() == proto::DirectoryListItem::DIRECTORY)
     {
-        std::experimental::filesystem::path path =
-            std::experimental::filesystem::u8path(directory_list_->path());
-
-        path.append(std::experimental::filesystem::u8path(item.name()));
-
-        delegate_->OnDirectoryListRequest(panel_type_, path.u8string());
+        delegate_->OnDirectoryListRequest(panel_type_,
+                                          directory_list_->path(),
+                                          item.name());
     }
 }
 
 void UiFileManagerPanel::OnFolderUp()
 {
-    if (!directory_list_)
-        return;
-
-    std::experimental::filesystem::path path =
-        std::experimental::filesystem::u8path(directory_list_->path());
-
-    if (!path.has_parent_path())
-        return;
-
-    path = path.parent_path();
-
-    if (path.has_root_name() && path.root_name() == path)
+    if (!directory_list_ || !directory_list_->has_parent())
     {
         drive_combo_.SelectItemData(kComputerIndex);
         OnDriveChange();
-        return;
     }
-
-    delegate_->OnDirectoryListRequest(panel_type_, path.u8string());
+    else
+    {
+        delegate_->OnDirectoryListRequest(panel_type_,
+                                          directory_list_->path(),
+                                          "..");
+    }
 }
 
 void UiFileManagerPanel::OnFolderCreate()
@@ -541,7 +526,11 @@ void UiFileManagerPanel::OnRefresh()
     delegate_->OnDriveListRequest(panel_type_);
 
     if (directory_list_)
-        delegate_->OnDirectoryListRequest(panel_type_, directory_list_->path());
+    {
+        delegate_->OnDirectoryListRequest(panel_type_,
+                                          directory_list_->path(),
+                                          std::string());
+    }
 }
 
 void UiFileManagerPanel::OnRemove()
@@ -580,7 +569,9 @@ void UiFileManagerPanel::OnRemove()
                                    directory_list_->path(),
                                    item_name);
 
-        delegate_->OnDirectoryListRequest(panel_type_, directory_list_->path());
+        delegate_->OnDirectoryListRequest(panel_type_,
+                                          directory_list_->path(),
+                                          std::string());
     }
 }
 
@@ -618,7 +609,9 @@ void UiFileManagerPanel::OnEndLabelEdit(LPNMLVDISPINFOW disp_info)
                                    UTF8fromUNICODE(disp_info->item.pszText));
     }
 
-    delegate_->OnDirectoryListRequest(panel_type_, directory_list_->path());
+    delegate_->OnDirectoryListRequest(panel_type_,
+                                      directory_list_->path(),
+                                      std::string());
 }
 
 bool UiFileManagerPanel::OnMessage(UINT msg,
@@ -659,7 +652,8 @@ bool UiFileManagerPanel::OnMessage(UINT msg,
                 if (end_edit->fChanged && end_edit->iWhy == CBENF_RETURN && end_edit->szText)
                 {
                     delegate_->OnDirectoryListRequest(panel_type_,
-                                                      UTF8fromUNICODE(end_edit->szText));
+                                                      UTF8fromUNICODE(end_edit->szText),
+                                                      std::string());
                 }
             }
             else if (header->hwndFrom == list_.hwnd())

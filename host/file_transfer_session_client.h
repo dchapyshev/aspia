@@ -37,13 +37,13 @@ private:
     void WriteMessage(const proto::file_transfer::HostToClient& message);
     void WriteStatus(proto::Status status);
 
-    bool ReadDriveListRequestMessage(const proto::DriveListRequest& drive_list_request);
-    void ReadDirectoryListRequestMessage(const proto::DirectoryListRequest& direcrory_list_request);
-    bool ReadFileRequestMessage(const proto::FileRequest& file_request);
+    bool ReadDriveListRequestMessage(const proto::DriveListRequest& request);
+    void ReadDirectoryListRequestMessage(const proto::DirectoryListRequest& request);
+    bool ReadFileRequestMessage(const proto::FileRequest& request);
     bool ReadFileMessage(const proto::File& file);
-    void ReadCreateDirectoryRequest(const proto::CreateDirectoryRequest& create_directory_request);
-    void ReadRenameRequest(const proto::RenameRequest& rename_request);
-    void ReadRemoveRequest(const proto::RemoveRequest& remove_request);
+    void ReadCreateDirectoryRequest(const proto::CreateDirectoryRequest& request);
+    void ReadRenameRequest(const proto::RenameRequest& request);
+    void ReadRemoveRequest(const proto::RemoveRequest& request);
 
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::mutex outgoing_lock_;

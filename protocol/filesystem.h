@@ -18,8 +18,9 @@ namespace aspia {
 std::unique_ptr<proto::DriveList> ExecuteDriveListRequest(
     const proto::DriveListRequest& drive_list_request);
 
-std::unique_ptr<proto::DirectoryList> ExecuteDirectoryListRequest(
-    const proto::DirectoryListRequest& directory_list_request);
+proto::Status ExecuteDirectoryListRequest(
+    const proto::DirectoryListRequest& request,
+    std::unique_ptr<proto::DirectoryList>& reply);
 
 proto::Status ExecuteCreateDirectoryRequest(
     const proto::CreateDirectoryRequest& create_directory_request);

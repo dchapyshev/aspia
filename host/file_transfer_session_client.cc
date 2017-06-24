@@ -6,7 +6,6 @@
 //
 
 #include "host/file_transfer_session_client.h"
-#include "base/strings/unicode.h"
 #include "protocol/message_serialization.h"
 #include "protocol/filesystem.h"
 #include "proto/auth_session.pb.h"
@@ -121,39 +120,45 @@ void FileTransferSessionClient::WriteStatus(proto::Status status)
 }
 
 bool FileTransferSessionClient::ReadDriveListRequestMessage(
-    const proto::DriveListRequest& drive_list_request)
+    const proto::DriveListRequest& request)
 {
-    std::unique_ptr<proto::DriveList> drive_list =
-        ExecuteDriveListRequest(drive_list_request);
-    if (!drive_list)
+    std::unique_ptr<proto::DriveList> reply =
+        ExecuteDriveListRequest(request);
+    if (!reply)
         return false;
 
     proto::file_transfer::HostToClient message;
-    message.set_allocated_drive_list(drive_list.release());
+    message.set_allocated_drive_list(reply.release());
     WriteMessage(message);
 
     return true;
 }
 
 void FileTransferSessionClient::ReadDirectoryListRequestMessage(
-    const proto::DirectoryListRequest& direcrory_list_request)
+    const proto::DirectoryListRequest& request)
 {
-    status_dialog_->OnDirectoryOpen(
-        UNICODEfromUTF8(direcrory_list_request.path()));
+    std::unique_ptr<proto::DirectoryList> reply;
 
-    std::unique_ptr<proto::DirectoryList> directory_list =
-        ExecuteDirectoryListRequest(direcrory_list_request);
+    proto::Status status =
+        ExecuteDirectoryListRequest(request, reply);
 
-    if (!directory_list)
+    status_dialog_->OnDirectoryOpen(request, status);
+
+    if (status != proto::Status::STATUS_SUCCESS)
+    {
+        WriteStatus(status);
         return;
+    }
+
+    DCHECK(reply);
 
     proto::file_transfer::HostToClient message;
-    message.set_allocated_directory_list(directory_list.release());
+    message.set_allocated_directory_list(reply.release());
     WriteMessage(message);
 }
 
 bool FileTransferSessionClient::ReadFileRequestMessage(
-    const proto::FileRequest& file_request)
+    const proto::FileRequest& request)
 {
     return true;
 }
@@ -164,41 +169,34 @@ bool FileTransferSessionClient::ReadFileMessage(const proto::File& file)
 }
 
 void FileTransferSessionClient::ReadCreateDirectoryRequest(
-    const proto::CreateDirectoryRequest& create_directory_request)
+    const proto::CreateDirectoryRequest& request)
 {
     proto::Status status =
-        ExecuteCreateDirectoryRequest(create_directory_request);
+        ExecuteCreateDirectoryRequest(request);
 
-    status_dialog_->OnCreateDirectory(UNICODEfromUTF8(create_directory_request.path()),
-                                      UNICODEfromUTF8(create_directory_request.name()),
-                                      status);
+    status_dialog_->OnCreateDirectory(request, status);
 
     if (status != proto::Status::STATUS_SUCCESS)
         WriteStatus(status);
 }
 
 void FileTransferSessionClient::ReadRenameRequest(
-    const proto::RenameRequest& rename_request)
+    const proto::RenameRequest& request)
 {
-    proto::Status status = ExecuteRenameRequest(rename_request);
+    proto::Status status = ExecuteRenameRequest(request);
 
-    status_dialog_->OnRename(UNICODEfromUTF8(rename_request.path()),
-                             UNICODEfromUTF8(rename_request.old_item_name()),
-                             UNICODEfromUTF8(rename_request.new_item_name()),
-                             status);
+    status_dialog_->OnRename(request, status);
 
     if (status != proto::Status::STATUS_SUCCESS)
         WriteStatus(status);
 }
 
 void FileTransferSessionClient::ReadRemoveRequest(
-    const proto::RemoveRequest& remove_request)
+    const proto::RemoveRequest& request)
 {
-    proto::Status status = ExecuteRemoveRequest(remove_request);
+    proto::Status status = ExecuteRemoveRequest(request);
 
-    status_dialog_->OnRemove(UNICODEfromUTF8(remove_request.path()),
-                             UNICODEfromUTF8(remove_request.item_name()),
-                             status);
+    status_dialog_->OnRemove(request, status);
 
     if (status != proto::Status::STATUS_SUCCESS)
         WriteStatus(status);

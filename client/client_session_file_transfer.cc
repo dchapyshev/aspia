@@ -116,19 +116,22 @@ void ClientSessionFileTransfer::OnDriveListRequest(UiFileManager::PanelType pane
 }
 
 void ClientSessionFileTransfer::OnDirectoryListRequest(UiFileManager::PanelType panel_type,
-                                                       const std::string& path)
+                                                       const std::string& path,
+                                                       const std::string& item)
 {
     if (!worker_->BelongsToCurrentThread())
     {
         worker_->PostTask(std::bind(&ClientSessionFileTransfer::OnDirectoryListRequest,
                                     this,
                                     panel_type,
-                                    path));
+                                    path,
+                                    item));
         return;
     }
 
     proto::file_transfer::ClientToHost message;
     message.mutable_directory_list_request()->set_path(path);
+    message.mutable_directory_list_request()->set_item(item);
 
     if (panel_type == UiFileManager::PanelType::REMOTE)
     {
@@ -138,10 +141,13 @@ void ClientSessionFileTransfer::OnDirectoryListRequest(UiFileManager::PanelType 
     {
         DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
 
-        std::unique_ptr<proto::DirectoryList> directory_list =
-            ExecuteDirectoryListRequest(message.directory_list_request());
+        std::unique_ptr<proto::DirectoryList> directory_list;
 
-        if (directory_list)
+        proto::Status status =
+            ExecuteDirectoryListRequest(message.directory_list_request(),
+                                        directory_list);
+
+        if (status == proto::Status::STATUS_SUCCESS && directory_list)
         {
             file_manager_->ReadDirectoryList(UiFileManager::PanelType::LOCAL,
                                              std::move(directory_list));
