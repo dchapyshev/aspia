@@ -133,7 +133,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CompileAs>CompileAsCpp</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4244;4267;4018;4355;4800;4251;4996;4146;4305</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4244;4267;4018;4355;4800;4251;4996;4146;4305;4506;4309;4065</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -176,7 +176,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CompileAs>CompileAsCpp</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4244;4267;4018;4355;4800;4251;4996;4146;4305</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4244;4267;4018;4355;4800;4251;4996;4146;4305;4506;4309;4065</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -217,7 +217,7 @@
       <AdditionalOptions> /bigobj %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(SolutionDir)/3rdparty/protobuf/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
-      <DisableSpecificWarnings>4244;4267;4018;4355;4800;4251;4996;4146;4305</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4244;4267;4018;4355;4800;4251;4996;4146;4305;4506;4309;4065</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -230,6 +230,7 @@
       <DebugInformationFormat>
       </DebugInformationFormat>
       <StringPooling>true</StringPooling>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -251,6 +252,7 @@
       <SubSystem>Console</SubSystem>
       <Version>
       </Version>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -261,7 +263,7 @@
       <AdditionalOptions> /bigobj %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(SolutionDir)/3rdparty/protobuf/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
-      <DisableSpecificWarnings>4244;4267;4018;4355;4800;4251;4996;4146;4305</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4244;4267;4018;4355;4800;4251;4996;4146;4305;4506;4309;4065</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -274,6 +276,7 @@
       <DebugInformationFormat>
       </DebugInformationFormat>
       <StringPooling>true</StringPooling>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -295,6 +298,7 @@
       <SubSystem>Console</SubSystem>
       <Version>
       </Version>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
