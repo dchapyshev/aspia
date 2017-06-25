@@ -95,12 +95,9 @@ bool HostUserList::IsValidUserList()
 
 static bool GetUserListDirectoryPath(fs::path& path)
 {
-    std::wstring app_data;
-
-    if (!GetPathW(PathKey::DIR_COMMON_APP_DATA, app_data))
+    if (!GetBasePath(PathKey::DIR_COMMON_APP_DATA, path))
         return false;
 
-    path = app_data;
     path.append(L"Aspia");
     path.append(L"Remote Desktop");
 

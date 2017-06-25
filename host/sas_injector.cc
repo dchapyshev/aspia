@@ -57,9 +57,9 @@ void SasInjector::InjectSAS()
     }
     else // For Windows Vista and above.
     {
-        std::wstring command_line;
+        std::experimental::filesystem::path path;
 
-        if (!GetPathW(PathKey::FILE_EXE, command_line))
+        if (!GetBasePath(PathKey::FILE_EXE, path))
             return;
 
         std::wstring service_id =
@@ -71,6 +71,9 @@ void SasInjector::InjectSAS()
         std::wstring unique_full_name =
             ServiceManager::CreateUniqueServiceName(kSasServiceFullName, service_id);
 
+        std::wstring command_line;
+
+        command_line.assign(path);
         command_line.append(L" --run_mode=");
         command_line.append(kSasServiceSwitch);
 

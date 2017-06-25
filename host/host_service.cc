@@ -79,11 +79,14 @@ bool HostService::IsInstalled()
 // static
 bool HostService::Install()
 {
-    std::wstring command_line;
+    std::experimental::filesystem::path path;
 
-    if (!GetPathW(PathKey::FILE_EXE, command_line))
+    if (!GetBasePath(PathKey::FILE_EXE, path))
         return false;
 
+    std::wstring command_line;
+
+    command_line.assign(path);
     command_line.append(L" --run_mode=");
     command_line.append(kHostServiceSwitch);
 

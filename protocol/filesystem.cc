@@ -89,22 +89,22 @@ std::unique_ptr<proto::RequestStatus> ExecuteDriveListRequest(
         }
     }
 
-    std::wstring path;
+    fs::path path;
 
-    if (GetPathW(PathKey::DIR_USER_HOME, path))
+    if (GetBasePath(PathKey::DIR_USER_HOME, path))
     {
         proto::DriveListItem* item = reply->add_item();
 
         item->set_type(proto::DriveListItem::HOME_FOLDER);
-        item->set_path(UTF8fromUNICODE(path));
+        item->set_path(path.u8string());
     }
 
-    if (GetPathW(PathKey::DIR_USER_DESKTOP, path))
+    if (GetBasePath(PathKey::DIR_USER_DESKTOP, path))
     {
         proto::DriveListItem* item = reply->add_item();
 
         item->set_type(proto::DriveListItem::DESKTOP_FOLDER);
-        item->set_path(UTF8fromUNICODE(path));
+        item->set_path(path.u8string());
     }
 
     proto::Status status_code = proto::Status::STATUS_SUCCESS;

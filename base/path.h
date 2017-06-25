@@ -8,7 +8,7 @@
 #ifndef _ASPIA_BASE__PATH_H
 #define _ASPIA_BASE__PATH_H
 
-#include <string>
+#include <filesystem>
 
 namespace aspia {
 
@@ -28,8 +28,7 @@ enum class PathKey
     FILE_EXE
 };
 
-bool GetPathW(PathKey key, std::wstring& result);
-bool GetPath(PathKey key, std::string& result);
+bool GetBasePath(PathKey key, std::experimental::filesystem::path& result);
 
 } // namespace aspia
 

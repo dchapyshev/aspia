@@ -19,9 +19,9 @@ namespace aspia {
 
 bool ElevateProcess()
 {
-    std::wstring path;
+    std::experimental::filesystem::path path;
 
-    if (!GetPathW(PathKey::FILE_EXE, path))
+    if (!GetBasePath(PathKey::FILE_EXE, path))
         return false;
 
     SHELLEXECUTEINFOW sei;

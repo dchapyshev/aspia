@@ -41,9 +41,9 @@ NetworkServerTcp::~NetworkServerTcp()
 
 void NetworkServerTcp::AddFirewallRule()
 {
-    std::wstring exe_path;
+    std::experimental::filesystem::path exe_path;
 
-    if (!GetPathW(PathKey::FILE_EXE, exe_path))
+    if (!GetBasePath(PathKey::FILE_EXE, exe_path))
         return;
 
     if (IsWindowsVistaOrGreater())

@@ -175,9 +175,12 @@ static bool CreateCommandLine(const std::wstring& run_mode,
                               const std::wstring& output_channel_id,
                               std::wstring& command_line)
 {
-    if (!GetPathW(PathKey::FILE_EXE, command_line))
+    std::experimental::filesystem::path path;
+
+    if (!GetBasePath(PathKey::FILE_EXE, path))
         return false;
 
+    command_line.assign(path);
     command_line.append(L" --run_mode=");
     command_line.append(run_mode);
     command_line.append(L" --input_channel_id=");
@@ -236,11 +239,14 @@ static bool LaunchProcessOverService(uint32_t session_id,
     std::wstring unique_full_name =
         ServiceManager::CreateUniqueServiceName(kServiceFullName, service_id);
 
-    std::wstring command_line;
+    std::experimental::filesystem::path path;
 
-    if (!GetPathW(PathKey::FILE_EXE, command_line))
+    if (!GetBasePath(PathKey::FILE_EXE, path))
         return false;
 
+    std::wstring command_line;
+
+    command_line.assign(path);
     command_line.append(L" --input_channel_id=");
     command_line.append(input_channel_id);
     command_line.append(L" --output_channel_id=");
