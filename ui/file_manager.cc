@@ -218,14 +218,6 @@ void UiFileManager::OnCreate()
 
     MoveWindow(hwnd(), 0, 0, kDefaultWindowWidth, kDefaultWindowHeight, TRUE);
     CenterWindow();
-
-    runner_->PostTask(std::bind(&UiFileManager::OnDriveListRequest,
-                                this,
-                                UiFileManager::PanelType::LOCAL));
-
-    runner_->PostTask(std::bind(&UiFileManager::OnDriveListRequest,
-                                this,
-                                UiFileManager::PanelType::REMOTE));
 }
 
 void UiFileManager::OnDestroy()

@@ -278,6 +278,8 @@ void UiFileManagerPanel::OnCreate()
     {
         list_.SetImageList(list_imagelist_, LVSIL_SMALL);
     }
+
+    delegate_->OnDriveListRequest(panel_type_);
 }
 
 void UiFileManagerPanel::OnDestroy()
