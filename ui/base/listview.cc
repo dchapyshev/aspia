@@ -179,7 +179,12 @@ void UiListView::SetImageList(HIMAGELIST imagelist, int type)
 
 int UiListView::GetFirstSelectedItem()
 {
-    return ListView_GetNextItem(hwnd(), -1, LVNI_SELECTED);
+    return GetNextSelectedItem(-1);
+}
+
+int UiListView::GetNextSelectedItem(int item_index)
+{
+    return ListView_GetNextItem(hwnd(), item_index, LVNI_SELECTED);
 }
 
 int UiListView::GetItemUnderPointer()

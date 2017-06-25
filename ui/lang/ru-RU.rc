@@ -366,6 +366,7 @@ BEGIN
     IDS_FT_DRIVE_DESC_UNKNOWN             "Неизвестное устройство"
     IDS_FT_DELETE_CONFORM_FILE            "Вы действительно хотите удалить файл ""%s""?"
     IDS_FT_DELETE_CONFORM_DIR             "Вы действительно хотите удалить директорию ""%s"" и все ее содержимое?"
+    IDS_FT_DELETE_CONFORM_MULTI           "Вы действительно хотите удалить следующие объекты?\r\n%s"
     IDS_FT_OP_SESSION_START               "Сессия запущена"
     IDS_FT_OP_SESSION_END                 "Сессия остановлена"
     IDS_FT_OP_BROWSE_FOLDERS              "Обзор папок: ""%s"""

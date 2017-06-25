@@ -576,35 +576,76 @@ void UiFileManagerPanel::OnRemove()
     if (!directory_list_)
         return;
 
-    int selected_item = list_.GetFirstSelectedItem();
-    if (selected_item == -1)
+    UINT selected_count = list_.GetSelectedCount();
+    if (!selected_count)
         return;
 
-    int index = list_.GetItemData<int>(selected_item);
-    if (index < 0 || index >= directory_list_->item_size())
-        return;
-
+    std::wstring title = module_.string(IDS_CONFIRMATION);
+    std::wstring object_list;
     std::wstring format;
 
-    if (directory_list_->item(index).type() == proto::DirectoryListItem::DIRECTORY)
-        format = module_.string(IDS_FT_DELETE_CONFORM_DIR);
+    if (selected_count == 1)
+    {
+        int selected_item = list_.GetFirstSelectedItem();
+        if (selected_item == -1)
+            return;
+
+        int object_index = list_.GetItemData<int>(selected_item);
+        if (object_index < 0 || object_index >= directory_list_->item_size())
+            return;
+
+        const proto::DirectoryListItem& item =
+            directory_list_->item(object_index);
+
+        if (item.type() == proto::DirectoryListItem::DIRECTORY)
+            format = module_.string(IDS_FT_DELETE_CONFORM_DIR);
+        else
+            format = module_.string(IDS_FT_DELETE_CONFORM_FILE);
+
+        object_list = UNICODEfromUTF8(item.name());
+    }
     else
-        format = module_.string(IDS_FT_DELETE_CONFORM_FILE);
+    {
+        format = module_.string(IDS_FT_DELETE_CONFORM_MULTI);
 
-    const std::string& item_name = directory_list_->item(index).name();
+        for (int item_index = list_.GetFirstSelectedItem();
+             item_index != -1;
+             item_index = list_.GetNextSelectedItem(item_index))
+        {
+            int object_index = list_.GetItemData<int>(item_index);
+            if (object_index < 0 || object_index >= directory_list_->item_size())
+                continue;
 
-    std::wstring message = StringPrintfW(format.c_str(),
-                                         UNICODEfromUTF8(item_name).c_str());
-    std::wstring title = module_.string(IDS_CONFIRMATION);
+            const proto::DirectoryListItem& item =
+                directory_list_->item(object_index);
+
+            object_list.append(UNICODEfromUTF8(item.name()));
+            object_list.append(L"\r\n");
+        }
+    }
+
+    std::wstring message = StringPrintfW(format.c_str(), object_list.c_str());
 
     if (MessageBoxW(hwnd(),
                     message.c_str(),
                     title.c_str(),
                     MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
-        delegate_->OnRemoveRequest(panel_type_,
-                                   directory_list_->path(),
-                                   item_name);
+        for (int item_index = list_.GetFirstSelectedItem();
+             item_index != -1;
+             item_index = list_.GetNextSelectedItem(item_index))
+        {
+            int object_index = list_.GetItemData<int>(item_index);
+            if (object_index < 0 || object_index >= directory_list_->item_size())
+                continue;
+
+            const proto::DirectoryListItem& item =
+                directory_list_->item(object_index);
+
+            delegate_->OnRemoveRequest(panel_type_,
+                                       directory_list_->path(),
+                                       item.name());
+        }
 
         delegate_->OnDirectoryListRequest(panel_type_,
                                           directory_list_->path(),

@@ -208,9 +208,10 @@ void ClientSessionFileTransfer::OnRenameRequest(
 
     proto::file_transfer::ClientToHost message;
 
-    message.mutable_rename_request()->set_path(path);
-    message.mutable_rename_request()->set_old_item_name(old_name);
-    message.mutable_rename_request()->set_new_item_name(new_name);
+    proto::RenameRequest* request = message.mutable_rename_request();
+    request->set_path(path);
+    request->set_old_item_name(old_name);
+    request->set_new_item_name(new_name);
 
     if (panel_type == UiFileManager::PanelType::REMOTE)
     {

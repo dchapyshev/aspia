@@ -71,6 +71,7 @@ public:
     bool ModifyExtendedListViewStyle(DWORD remove, DWORD add);
     void SetImageList(HIMAGELIST imagelist, int type);
     int GetFirstSelectedItem();
+    int GetNextSelectedItem(int item_index);
     int GetItemUnderPointer();
     UINT GetSelectedCount();
     void SelectItem(int item_index);

@@ -223,15 +223,16 @@
 #define IDS_FT_DRIVE_DESC_UNKNOWN             1032
 #define IDS_FT_DELETE_CONFORM_FILE            1033
 #define IDS_FT_DELETE_CONFORM_DIR             1034
-#define IDS_FT_OP_SESSION_START               1035
-#define IDS_FT_OP_SESSION_END                 1036
-#define IDS_FT_OP_BROWSE_FOLDERS              1037
-#define IDS_FT_OP_RENAME                      1038
-#define IDS_FT_OP_REMOVE                      1039
-#define IDS_FT_OP_CREATE_FOLDER               1040
-#define IDS_FT_SEND                           1041
-#define IDS_FT_RECIEVE                        1042
-#define IDS_FT_SELECTED_OBJECT_COUNT          1043
+#define IDS_FT_DELETE_CONFORM_MULTI           1035
+#define IDS_FT_OP_SESSION_START               1036
+#define IDS_FT_OP_SESSION_END                 1037
+#define IDS_FT_OP_BROWSE_FOLDERS              1038
+#define IDS_FT_OP_RENAME                      1039
+#define IDS_FT_OP_REMOVE                      1040
+#define IDS_FT_OP_CREATE_FOLDER               1041
+#define IDS_FT_SEND                           1042
+#define IDS_FT_RECIEVE                        1043
+#define IDS_FT_SELECTED_OBJECT_COUNT          1044
 
 // Status
 #define IDS_STATUS_MIN                        10000
