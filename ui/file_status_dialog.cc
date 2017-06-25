@@ -107,6 +107,12 @@ void UiFileStatusDialog::OnSize(int width, int height)
     }
 }
 
+void UiFileStatusDialog::OnGetMinMaxInfo(LPMINMAXINFO mmi)
+{
+    mmi->ptMinTrackSize.x = 350;
+    mmi->ptMinTrackSize.y = 200;
+}
+
 INT_PTR UiFileStatusDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
@@ -133,6 +139,10 @@ INT_PTR UiFileStatusDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
             }
         }
         break;
+
+        case WM_GETMINMAXINFO:
+            OnGetMinMaxInfo(reinterpret_cast<LPMINMAXINFO>(lparam));
+            break;
 
         case WM_CLOSE:
             PostQuitMessage(0);

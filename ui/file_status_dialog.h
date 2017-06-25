@@ -42,6 +42,7 @@ private:
 
     void OnInitDialog();
     void OnSize(int width, int height);
+    void OnGetMinMaxInfo(LPMINMAXINFO mmi);
     void WriteLog(const std::wstring& message, proto::Status status);
 
     Delegate* delegate_ = nullptr;
