@@ -55,6 +55,9 @@
     <Filter Include="base\process">
       <UniqueIdentifier>{9fcab124-fbce-4f21-b927-5577bf647872}</UniqueIdentifier>
     </Filter>
+    <Filter Include="base\synchronization">
+      <UniqueIdentifier>{919fbe84-52d7-4ff4-a99e-199005d49a7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="proto\desktop_session.pb.cc">
@@ -106,9 +109,6 @@
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="base\thread.cc">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\waitable_timer.cc">
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="client\client_config.cc">
@@ -248,12 +248,6 @@
     </ClCompile>
     <ClCompile Include="base\message_loop\message_pump_default.cc">
       <Filter>base\message_loop</Filter>
-    </ClCompile>
-    <ClCompile Include="base\waitable_event.cc">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\waitable_event_watcher.cc">
-      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="ui\about_dialog.cc">
       <Filter>ui</Filter>
@@ -481,6 +475,15 @@
     <ClCompile Include="base\process\process_helpers.cc">
       <Filter>base\process</Filter>
     </ClCompile>
+    <ClCompile Include="base\synchronization\waitable_event.cc">
+      <Filter>base\synchronization</Filter>
+    </ClCompile>
+    <ClCompile Include="base\synchronization\waitable_event_watcher.cc">
+      <Filter>base\synchronization</Filter>
+    </ClCompile>
+    <ClCompile Include="base\synchronization\waitable_timer.cc">
+      <Filter>base\synchronization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -660,9 +663,6 @@
     <ClInclude Include="base\scoped_privilege.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="base\waitable_timer.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="desktop_capture\desktop_frame.h">
       <Filter>desktop_capture</Filter>
     </ClInclude>
@@ -752,12 +752,6 @@
     </ClInclude>
     <ClInclude Include="base\message_loop\message_pump_default.h">
       <Filter>base\message_loop</Filter>
-    </ClInclude>
-    <ClInclude Include="base\waitable_event.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\waitable_event_watcher.h">
-      <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="ui\about_dialog.h">
       <Filter>ui</Filter>
@@ -1027,6 +1021,15 @@
     </ClInclude>
     <ClInclude Include="base\process\process_helpers.h">
       <Filter>base\process</Filter>
+    </ClInclude>
+    <ClInclude Include="base\synchronization\waitable_event.h">
+      <Filter>base\synchronization</Filter>
+    </ClInclude>
+    <ClInclude Include="base\synchronization\waitable_event_watcher.h">
+      <Filter>base\synchronization</Filter>
+    </ClInclude>
+    <ClInclude Include="base\synchronization\waitable_timer.h">
+      <Filter>base\synchronization</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -9,7 +9,7 @@
 #define _ASPIA_IPC__PIPE_CHANNEL_H
 
 #include "base/scoped_object.h"
-#include "base/waitable_event.h"
+#include "base/synchronization/waitable_event.h"
 #include "base/process/process.h"
 #include "base/thread.h"
 #include "base/macros.h"

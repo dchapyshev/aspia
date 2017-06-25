@@ -10,7 +10,7 @@
 
 #include "base/message_loop/message_loop_thread.h"
 #include "base/object_watcher.h"
-#include "base/waitable_timer.h"
+#include "base/synchronization/waitable_timer.h"
 #include "base/thread.h"
 #include "ipc/pipe_channel.h"
 #include "host/host_session.h"

@@ -8,7 +8,7 @@
 #ifndef _ASPIA_HOST__HOST_H
 #define _ASPIA_HOST__HOST_H
 
-#include "base/waitable_timer.h"
+#include "base/synchronization/waitable_timer.h"
 #include "network/network_channel.h"
 #include "network/network_channel_proxy.h"
 #include "host/host_session.h"

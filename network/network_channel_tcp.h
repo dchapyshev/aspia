@@ -10,7 +10,7 @@
 
 #include "network/network_channel.h"
 #include "network/socket.h"
-#include "base/waitable_event.h"
+#include "base/synchronization/waitable_event.h"
 
 #include <winsock2.h>
 

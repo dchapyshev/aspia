@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/waitable_timer.cc
+// FILE:            base/synchronization/waitable_timer.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/waitable_timer.h"
+#include "base/synchronization/waitable_timer.h"
 #include "base/logging.h"
 
 namespace aspia {

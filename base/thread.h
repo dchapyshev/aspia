@@ -12,7 +12,7 @@
 #include <mutex>
 #include <thread>
 
-#include "base/waitable_event.h"
+#include "base/synchronization/waitable_event.h"
 #include "base/macros.h"
 
 namespace aspia {

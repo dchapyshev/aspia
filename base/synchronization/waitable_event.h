@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/waitable_event.h
+// FILE:            base/synchronization/waitable_event.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__WAITABLE_EVENT_H
-#define _ASPIA_BASE__WAITABLE_EVENT_H
+#ifndef _ASPIA_BASE__SYNCHRONIZATION__WAITABLE_EVENT_H
+#define _ASPIA_BASE__SYNCHRONIZATION__WAITABLE_EVENT_H
 
 #include "base/macros.h"
 #include "base/scoped_object.h"
@@ -85,4 +85,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__WAITABLE_EVENT_H
+#endif // _ASPIA_BASE__SYNCHRONIZATION__WAITABLE_EVENT_H

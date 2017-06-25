@@ -10,7 +10,7 @@
 
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_loop_proxy.h"
-#include "base/waitable_event.h"
+#include "base/synchronization/waitable_event.h"
 
 #include <atomic>
 #include <thread>

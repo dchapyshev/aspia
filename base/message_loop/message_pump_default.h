@@ -9,7 +9,7 @@
 #define _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_PUMP_DEFAULT_H
 
 #include "base/message_loop/message_pump.h"
-#include "base/waitable_event.h"
+#include "base/synchronization/waitable_event.h"
 
 namespace aspia {
 

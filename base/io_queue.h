@@ -13,7 +13,7 @@
 #include <memory>
 #include <mutex>
 
-#include "base/waitable_event.h"
+#include "base/synchronization/waitable_event.h"
 #include "base/thread.h"
 #include "base/macros.h"
 #include "base/io_buffer.h"
