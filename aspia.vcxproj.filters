@@ -472,6 +472,12 @@
     <ClCompile Include="base\files\file_helpers.cc">
       <Filter>base\files</Filter>
     </ClCompile>
+    <ClCompile Include="protocol\file_packetizer.cc">
+      <Filter>protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol\file_depacketizer.cc">
+      <Filter>protocol</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1012,6 +1018,12 @@
     </ClInclude>
     <ClInclude Include="base\files\file_helpers.h">
       <Filter>base\files</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\file_packetizer.h">
+      <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\file_depacketizer.h">
+      <Filter>protocol</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
