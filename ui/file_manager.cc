@@ -216,7 +216,7 @@ void UiFileManager::OnCreate()
 
     splitter_.SetPanels(local_panel_, remote_panel_);
 
-    MoveWindow(hwnd(), 0, 0, kDefaultWindowWidth, kDefaultWindowHeight, TRUE);
+    SetSize(kDefaultWindowWidth, kDefaultWindowHeight);
     CenterWindow();
 }
 
