@@ -6,7 +6,6 @@
 //
 
 #include "protocol/file_packetizer.h"
-#include "base/strings/unicode.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -16,8 +15,8 @@ namespace aspia {
 // This parameter specifies the size of the part.
 static const size_t kPacketPartSize = 5 * 1024; // 5 kB
 
-FilePacketizer::FilePacketizer(std::wstring&& file_path,
-                               std::wifstream&& file_stream) :
+FilePacketizer::FilePacketizer(std::experimental::filesystem::path&& file_path,
+                               std::ifstream&& file_stream) :
     file_path_(std::move(file_path)),
     file_stream_(std::move(file_stream))
 {
@@ -30,10 +29,12 @@ FilePacketizer::FilePacketizer(std::wstring&& file_path,
 
 std::unique_ptr<FilePacketizer> FilePacketizer::Create(const std::string& path)
 {
-    std::wstring file_path = UNICODEfromUTF8(path);
-    std::wifstream file_stream;
+    std::experimental::filesystem::path file_path =
+        std::experimental::filesystem::u8path(path);
 
-    file_stream.open(file_path, std::ofstream::binary);
+    std::ifstream file_stream;
+
+    file_stream.open(file_path, std::ifstream::binary);
     if (!file_stream.is_open())
     {
         LOG(ERROR) << "Unable to open file: " << file_path;
@@ -44,12 +45,10 @@ std::unique_ptr<FilePacketizer> FilePacketizer::Create(const std::string& path)
         new FilePacketizer(std::move(file_path), std::move(file_stream)));
 }
 
-uint8_t* FilePacketizer::GetOutputBuffer(proto::FilePacket* packet, size_t size)
+char* FilePacketizer::GetOutputBuffer(proto::FilePacket* packet, size_t size)
 {
     packet->mutable_data()->resize(size);
-
-    return const_cast<uint8_t*>(
-        reinterpret_cast<const uint8_t*>(packet->mutable_data()->data()));
+    return const_cast<char*>(packet->mutable_data()->data());
 }
 
 FilePacketizer::State FilePacketizer::CreateNextPacket(
@@ -71,10 +70,10 @@ FilePacketizer::State FilePacketizer::CreateNextPacket(
     if (left_size_ < kPacketPartSize)
         packet_buffer_size = static_cast<size_t>(left_size_);
 
-    uint8_t* packet_buffer = GetOutputBuffer(packet.get(), packet_buffer_size);
+    char* packet_buffer = GetOutputBuffer(packet.get(), packet_buffer_size);
 
     file_stream_.seekg(file_size_ - left_size_);
-    file_stream_.read(reinterpret_cast<wchar_t*>(packet_buffer), packet_buffer_size);
+    file_stream_.read(packet_buffer, packet_buffer_size);
     if (file_stream_.fail())
     {
         LOG(WARNING) << "Unable to read file: " << file_path_;
@@ -85,7 +84,7 @@ FilePacketizer::State FilePacketizer::CreateNextPacket(
     if (left_size_ == file_size_)
     {
         packet->set_full_size(file_size_);
-        packet->set_path(UTF8fromUNICODE(file_path_));
+        packet->set_path(file_path_.u8string());
     }
 
     left_size_ -= packet_buffer_size;

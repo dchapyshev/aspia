@@ -11,6 +11,7 @@
 #include "base/macros.h"
 #include "proto/file_transfer_session.pb.h"
 
+#include <filesystem>
 #include <fstream>
 #include <memory>
 
@@ -38,12 +39,14 @@ public:
     State CreateNextPacket(std::unique_ptr<proto::FilePacket>& packet);
 
 private:
-    FilePacketizer(std::wstring&& file_path, std::wifstream&& file_stream);
+    FilePacketizer(std::experimental::filesystem::path&& file_path,
+                   std::ifstream&& file_stream);
 
-    uint8_t* GetOutputBuffer(proto::FilePacket* packet, size_t size);
+    char* GetOutputBuffer(proto::FilePacket* packet, size_t size);
 
-    std::wstring file_path_;
-    std::wifstream file_stream_;
+    // File path in UTF-8 encoding.
+    std::experimental::filesystem::path file_path_;
+    std::ifstream file_stream_;
 
     std::streamoff file_size_ = 0;
     std::streamoff left_size_ = 0;

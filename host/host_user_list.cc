@@ -18,6 +18,8 @@
 
 namespace aspia {
 
+namespace fs = std::experimental::filesystem;
+
 static const size_t kMaximumUserNameLength = 64;
 static const size_t kMinimumPasswordLength = 6;
 static const size_t kMaximumPasswordLength = 64;
@@ -91,27 +93,32 @@ bool HostUserList::IsValidUserList()
     return true;
 }
 
-static bool GetUserListDirectoryPath(std::string& path)
+static bool GetUserListDirectoryPath(fs::path& path)
 {
-    if (!GetPath(PathKey::DIR_COMMON_APP_DATA, path))
+    std::wstring app_data;
+
+    if (!GetPathW(PathKey::DIR_COMMON_APP_DATA, app_data))
         return false;
 
-    path.append("/Aspia/Remote Desktop");
+    path = app_data;
+    path.append(L"Aspia");
+    path.append(L"Remote Desktop");
+
     return true;
 }
 
-static bool GetUserListFilePath(std::string& path)
+static bool GetUserListFilePath(fs::path& path)
 {
     if (!GetUserListDirectoryPath(path))
         return false;
 
-    path.append("/userlist.dat");
+    path.append(L"userlist.dat");
     return true;
 }
 
 bool HostUserList::LoadFromStorage()
 {
-    std::string file_path;
+    fs::path file_path;
 
     if (!GetUserListFilePath(file_path))
         return false;
@@ -143,6 +150,13 @@ bool HostUserList::LoadFromStorage()
     string.resize(static_cast<size_t>(size));
 
     file_stream.read(&string[0], size);
+
+    if (file_stream.fail())
+    {
+        LOG(ERROR) << "Unable to read user list";
+        return false;
+    }
+
     file_stream.close();
 
     if (!list_.ParseFromString(string))
@@ -168,15 +182,15 @@ bool HostUserList::SaveToStorage()
         return false;
     }
 
-    std::string dir_path;
+    fs::path dir_path;
     if (!GetUserListDirectoryPath(dir_path))
         return false;
 
-    if (!std::experimental::filesystem::exists(dir_path))
+    if (!fs::exists(dir_path))
     {
         std::error_code code;
 
-        if (!std::experimental::filesystem::create_directories(dir_path, code))
+        if (!fs::create_directories(dir_path, code))
         {
             LOG(ERROR) << "Unable to create directory: '" << dir_path
                        << "'. Error: " << code.message();
@@ -185,14 +199,14 @@ bool HostUserList::SaveToStorage()
     }
     else
     {
-        if (!std::experimental::filesystem::is_directory(dir_path))
+        if (!fs::is_directory(dir_path))
         {
             LOG(ERROR) << "Path '" << dir_path << "' exist, not it is not a directory";
             return false;
         }
     }
 
-    std::string file_path;
+    fs::path file_path;
     if (!GetUserListFilePath(file_path))
         return false;
 
@@ -208,6 +222,12 @@ bool HostUserList::SaveToStorage()
     SecureString<std::string> string = list_.SerializeAsString();
 
     file_stream.write(string.c_str(), string.size());
+    if (file_stream.fail())
+    {
+        LOG(ERROR) << "Unable to write user list";
+        return false;
+    }
+
     file_stream.close();
 
     return true;

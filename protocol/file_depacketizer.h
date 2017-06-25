@@ -11,6 +11,7 @@
 #include "base/macros.h"
 #include "proto/file_transfer_session.pb.h"
 
+#include <filesystem>
 #include <fstream>
 #include <memory>
 
@@ -32,8 +33,8 @@ public:
     State ReadNextPacket(const proto::FilePacket& packet);
 
 private:
-    std::wstring file_path_;
-    std::wofstream file_stream_;
+    std::experimental::filesystem::path file_path_;
+    std::ofstream file_stream_;
 
     std::streamoff file_size_ = 0;
     std::streamoff left_size_ = 0;

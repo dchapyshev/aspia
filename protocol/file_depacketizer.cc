@@ -6,7 +6,6 @@
 //
 
 #include "protocol/file_depacketizer.h"
-#include "base/strings/unicode.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -17,7 +16,7 @@ FileDepacketizer::State FileDepacketizer::ReadNextPacket(
     // The first package must have the path and the full file size.
     if (!packet.path().empty() && packet.full_size())
     {
-        file_path_ = UNICODEfromUTF8(packet.path());
+        file_path_ = std::experimental::filesystem::u8path(packet.path());
 
         file_stream_.open(file_path_, std::ofstream::binary);
         if (!file_stream_.is_open())
@@ -36,8 +35,7 @@ FileDepacketizer::State FileDepacketizer::ReadNextPacket(
     const size_t packet_size = packet.data().size();
 
     file_stream_.seekp(file_size_ - left_size_);
-    file_stream_.write(reinterpret_cast<const wchar_t*>(packet.data().data()),
-                       packet_size);
+    file_stream_.write(packet.data().data(), packet_size);
     if (file_stream_.fail())
     {
         LOG(WARNING) << "Unable to write file: " << file_path_;
