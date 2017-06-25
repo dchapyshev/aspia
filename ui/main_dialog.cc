@@ -11,7 +11,7 @@
 #include <ws2tcpip.h>
 
 #include "base/version_helpers.h"
-#include "base/process_helpers.h"
+#include "base/process/process_helpers.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "client/client_config.h"

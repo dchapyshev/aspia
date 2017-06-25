@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/process.h
+// FILE:            base/process/process.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__PROCESS_H
-#define _ASPIA_BASE__PROCESS_H
+#ifndef _ASPIA_BASE__PROCESS__PROCESS_H
+#define _ASPIA_BASE__PROCESS__PROCESS_H
 
 #include "base/scoped_object.h"
 #include "base/macros.h"
@@ -91,4 +91,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__PROCESS_H
+#endif // _ASPIA_BASE__PROCESS__PROCESS_H

@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/process_helpers.h
+// FILE:            base/process/process_helpers.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__PROCESS_HELPERS_H
-#define _ASPIA_BASE__PROCESS_HELPERS_H
+#ifndef _ASPIA_BASE__PROCESS__PROCESS_HELPERS_H
+#define _ASPIA_BASE__PROCESS__PROCESS_HELPERS_H
 
 namespace aspia {
 
@@ -20,4 +20,4 @@ bool IsRunningAsService();
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__PROCESS_HELPERS_H
+#endif // _ASPIA_BASE__PROCESS__PROCESS_HELPERS_H

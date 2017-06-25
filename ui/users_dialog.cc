@@ -9,7 +9,7 @@
 #include "ui/base/listview.h"
 #include "ui/user_prop_dialog.h"
 #include "ui/resource.h"
-#include "base/process_helpers.h"
+#include "base/process/process_helpers.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "crypto/secure_string.h"

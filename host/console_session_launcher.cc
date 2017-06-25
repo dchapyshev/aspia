@@ -12,7 +12,8 @@
 #include <string>
 
 #include "base/version_helpers.h"
-#include "base/process_helpers.h"
+#include "base/process/process_helpers.h"
+#include "base/process/process.h"
 #include "base/service_manager.h"
 #include "base/scoped_object.h"
 #include "base/scoped_wts_memory.h"
@@ -20,7 +21,6 @@
 #include "base/object_watcher.h"
 #include "base/strings/unicode.h"
 #include "base/files/path.h"
-#include "base/process.h"
 #include "base/logging.h"
 
 namespace aspia {

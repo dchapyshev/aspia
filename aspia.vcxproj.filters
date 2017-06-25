@@ -52,6 +52,9 @@
     <Filter Include="base\strings">
       <UniqueIdentifier>{75dce182-2556-41f5-a0a6-d7f9afb6e34b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="base\process">
+      <UniqueIdentifier>{9fcab124-fbce-4f21-b927-5577bf647872}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="proto\desktop_session.pb.cc">
@@ -76,9 +79,6 @@
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="base\object_watcher.cc">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\process.cc">
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="base\registry.cc">
@@ -340,9 +340,6 @@
     <ClCompile Include="base\version_helpers.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\process_helpers.cc">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="ui\base\listview.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
@@ -478,15 +475,18 @@
     <ClCompile Include="base\files\path.cc">
       <Filter>base\files</Filter>
     </ClCompile>
+    <ClCompile Include="base\process\process.cc">
+      <Filter>base\process</Filter>
+    </ClCompile>
+    <ClCompile Include="base\process\process_helpers.cc">
+      <Filter>base\process</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\macros.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\process.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\scoped_gdi_object.h">
@@ -869,9 +869,6 @@
     <ClInclude Include="base\version_helpers.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="base\process_helpers.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="network\scoped_addrinfo.h">
       <Filter>network</Filter>
     </ClInclude>
@@ -1024,6 +1021,12 @@
     </ClInclude>
     <ClInclude Include="base\files\path.h">
       <Filter>base\files</Filter>
+    </ClInclude>
+    <ClInclude Include="base\process\process.h">
+      <Filter>base\process</Filter>
+    </ClInclude>
+    <ClInclude Include="base\process\process_helpers.h">
+      <Filter>base\process</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
