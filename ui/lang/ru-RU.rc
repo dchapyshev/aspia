@@ -267,6 +267,7 @@ BEGIN
     END
 END
 
+// General
 STRINGTABLE DISCARDABLE
 BEGIN
     IDS_APPLICATION_NAME          "Aspia Remote Desktop"
@@ -295,26 +296,8 @@ BEGIN
                       • libsodium © 2013-2017 Frank Denis, ISC License\r\n\
                       • Fugue Icons © 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 License"
 
-    IDS_POWER                             "Управление питанием удаленного компьютера"
-    IDS_AUTO_SIZE                         "Автоматический размер окна"
-    IDS_SETTINGS                          "Параметры"
-    IDS_CAD                               "Отправить Ctrl+Alt+Del"
-    IDS_EXIT                              "Закрыть текущее подключение"
-    IDS_FULLSCREEN                        "Переключиться в полноэкранный режим"
-    IDS_SHORTCUTS                         "Отправить комбинацию клавишь"
-    IDS_ABOUT                             "О программе"
-    IDS_CONNECTION                        "Подключение к: %s:%u"
     IDS_CONFIRMATION                      "Подтверждение"
-    IDS_COMPRESSION_RATIO_FORMAT          "Уровень сжатия: %d"
-    IDS_32BIT                             "True color (32 бит)"
-    IDS_24BIT                             "True color (24 бит)"
-    IDS_16BIT                             "High color (16 бит)"
-    IDS_15BIT                             "High color (15 бит)"
-    IDS_12BIT                             "High color (12 бит)"
-    IDS_8BIT                              "256 цветов (8 бит)"
-    IDS_6BIT                              "64 цвета (6 бит)"
-    IDS_3BIT                              "8 цветов (3 бит)"
-    IDS_INFORMATION                       "Информация"
+    IDS_CONNECTION                        "Подключение к: %s:%u"
     IDS_INVALID_USERNAME                  "Имя пользователя не может быть пустым и может содержать только символы алфавита, числа и символы ""_"", ""-"", "".""."
     IDS_USER_ALREADY_EXISTS               "Пользователь с указанным именем уже существует."
     IDS_INVALID_PASSWORD                  "Пароль не может быть короче 6 символов."
@@ -326,6 +309,28 @@ BEGIN
     IDS_SESSION_TYPE_SYSTEM_INFO          "Информация о системе"
     IDS_DELETE_USER_CONFORMATION          "Вы действительно хотите удалить пользователя ""%s""?"
     IDS_USER_LIST_MODIFIED                "Список пользователей (* изменен)"
+END
+
+// Desktop Manage
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_DM_TOOLTIP_POWER                  "Управление питанием удаленного компьютера"
+    IDS_DM_TOOLTIP_AUTO_SIZE              "Автоматический размер окна"
+    IDS_DM_TOOLTIP_SETTINGS               "Параметры"
+    IDS_DM_TOOLTIP_CAD                    "Отправить Ctrl+Alt+Del"
+    IDS_DM_TOOLTIP_EXIT                   "Закрыть текущее подключение"
+    IDS_DM_TOOLTIP_FULLSCREEN             "Переключиться в полноэкранный режим"
+    IDS_DM_TOOLTIP_SHORTCUTS              "Отправить комбинацию клавишь"
+    IDS_DM_TOOLTIP_ABOUT                  "О программе"
+    IDS_DM_COMPRESSION_RATIO_FORMAT       "Уровень сжатия: %d"
+    IDS_DM_32BIT                          "True color (32 бит)"
+    IDS_DM_24BIT                          "True color (24 бит)"
+    IDS_DM_16BIT                          "High color (16 бит)"
+    IDS_DM_15BIT                          "High color (15 бит)"
+    IDS_DM_12BIT                          "High color (12 бит)"
+    IDS_DM_8BIT                           "256 цветов (8 бит)"
+    IDS_DM_6BIT                           "64 цвета (6 бит)"
+    IDS_DM_3BIT                           "8 цветов (3 бит)"
 END
 
 // File Transfer
@@ -374,6 +379,8 @@ BEGIN
     IDS_FT_OP_REMOVE                      "Удаление ""%s"""
     IDS_FT_OP_CREATE_FOLDER               "Создание папки: ""%s"""
     IDS_FT_OP_BROWSE_DRIVES               "Обзор дисков"
+    IDS_FT_OP_SEND_FILE                   "Отправка файла: ""%s"""
+    IDS_FT_OP_RECIEVE_FILE                "Получение файла: ""%s"""
     IDS_FT_SEND                           "Отправить"
     IDS_FT_RECIEVE                        "Получить"
     IDS_FT_SELECTED_OBJECT_COUNT          "%lu объект(ов) выбрано"
@@ -381,7 +388,7 @@ BEGIN
     IDS_FT_OP_RENAME_ERROR                "Произошла ошибка при переименовании объекта ""%s"" в ""%s"": %s"
     IDS_FT_OP_REMOVE_ERROR                "Произошла ошибка при удалении объекта ""%s"": %s"
     IDS_FT_OP_CREATE_FOLDER_ERROR         "Произошла ошибка при попытке создания папки ""%s"": %s"
-    IDS_FT_OP_DRIVE_LIST_ERROR            "Произошла ошибка при получении списка дисков: %s"
+    IDS_FT_OP_BROWSE_DRIVES_ERROR         "Произошла ошибка при получении списка дисков: %s"
 END
 
 // Status

@@ -81,7 +81,7 @@ void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> stat
     {
         case proto::RequestStatus::DRIVE_LIST:
         {
-            message = StringPrintfW(module.string(IDS_FT_OP_DRIVE_LIST_ERROR).c_str(),
+            message = StringPrintfW(module.string(IDS_FT_OP_BROWSE_DRIVES_ERROR).c_str(),
                                     status_code.c_str());
         }
         break;

@@ -267,6 +267,7 @@ BEGIN
     END
 END
 
+// General
 STRINGTABLE DISCARDABLE
 BEGIN
     IDS_APPLICATION_NAME          "Aspia Remote Desktop"
@@ -295,26 +296,8 @@ BEGIN
                       • libsodium © 2013-2017 Frank Denis, ISC License\r\n\
                       • Fugue Icons © 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 Licentie"
 
-    IDS_POWER                             "Power management van de externe computer"
-    IDS_AUTO_SIZE                         "Scherm automatische grootte"
-    IDS_SETTINGS                          "Instellingen"
-    IDS_CAD                               "Stuur Ctrl+Alt+Del"
-    IDS_EXIT                              "Huidige verbinding sluiten"
-    IDS_FULLSCREEN                        "Schakel over naar volledig scherm"
-    IDS_SHORTCUTS                         "Zend een toetsencombinatie"
-    IDS_ABOUT                             "Over programma"
-    IDS_CONNECTION                        "Verbinden naar: %s:%u"
     IDS_CONFIRMATION                      "Bevestiging"
-    IDS_COMPRESSION_RATIO_FORMAT          "Compressie ratio: %d"
-    IDS_32BIT                             "Ware kleuren (32 bit)"
-    IDS_24BIT                             "Ware kleuren (24 bit)"
-    IDS_16BIT                             "Hoge kleuren (16 bit)"
-    IDS_15BIT                             "Hoge kleuren (15 bit)"
-    IDS_12BIT                             "Hoge kleuren (12 bit)"
-    IDS_8BIT                              "256 kleuren (8 bit)"
-    IDS_6BIT                              "64 kleuren (6 bit)"
-    IDS_3BIT                              "8 kleuren (3 bit)"
-    IDS_INFORMATION                       "Informatie"
+    IDS_CONNECTION                        "Verbinden naar: %s:%u"
     IDS_INVALID_USERNAME                  "De gebruikersnaam mag niet leeg zijn, en alleen letters, nummers en ""_"", ""-"", ""."" karakters bevatten."
     IDS_USER_ALREADY_EXISTS               "De gekozen gebruikersnaam bestaat al."
     IDS_INVALID_PASSWORD                  "Wachtwoord mag niet korter dan 6 karakters zijn."
@@ -326,6 +309,28 @@ BEGIN
     IDS_SESSION_TYPE_SYSTEM_INFO          "Systeem informatie"
     IDS_DELETE_USER_CONFORMATION          "Weet u zeker dat u de gebruiker ""%s"" wilt verwijderen?"
     IDS_USER_LIST_MODIFIED                "Gebruiker Lijst (* aangepast)"
+END
+
+// Desktop Manage
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_DM_TOOLTIP_POWER                  "Power management van de externe computer"
+    IDS_DM_TOOLTIP_AUTO_SIZE              "Scherm automatische grootte"
+    IDS_DM_TOOLTIP_SETTINGS               "Instellingen"
+    IDS_DM_TOOLTIP_CAD                    "Stuur Ctrl+Alt+Del"
+    IDS_DM_TOOLTIP_EXIT                   "Huidige verbinding sluiten"
+    IDS_DM_TOOLTIP_FULLSCREEN             "Schakel over naar volledig scherm"
+    IDS_DM_TOOLTIP_SHORTCUTS              "Zend een toetsencombinatie"
+    IDS_DM_TOOLTIP_ABOUT                  "Over programma"
+    IDS_DM_COMPRESSION_RATIO_FORMAT       "Compressie ratio: %d"
+    IDS_DM_32BIT                          "Ware kleuren (32 bit)"
+    IDS_DM_24BIT                          "Ware kleuren (24 bit)"
+    IDS_DM_16BIT                          "Hoge kleuren (16 bit)"
+    IDS_DM_15BIT                          "Hoge kleuren (15 bit)"
+    IDS_DM_12BIT                          "Hoge kleuren (12 bit)"
+    IDS_DM_8BIT                           "256 kleuren (8 bit)"
+    IDS_DM_6BIT                           "64 kleuren (6 bit)"
+    IDS_DM_3BIT                           "8 kleuren (3 bit)"
 END
 
 // File Transfer
@@ -374,6 +379,8 @@ BEGIN
     IDS_FT_OP_REMOVE                      "Remove ""%s"""
     IDS_FT_OP_CREATE_FOLDER               "Create folder: ""%s"""
     IDS_FT_OP_BROWSE_DRIVES               "Browse drives"
+    IDS_FT_OP_SEND_FILE                   "Sending a file: ""%s"""
+    IDS_FT_OP_RECIEVE_FILE                "Recieving a file: ""%s"""
     IDS_FT_SEND                           "Send"
     IDS_FT_RECIEVE                        "Recieve"
     IDS_FT_SELECTED_OBJECT_COUNT          "%lu object(s) selected"
@@ -381,7 +388,7 @@ BEGIN
     IDS_FT_OP_RENAME_ERROR                "An error occurred when renaming object ""%s"" to ""%s"": %s"
     IDS_FT_OP_REMOVE_ERROR                "An error occurred while deleting object ""%s"": %s"
     IDS_FT_OP_CREATE_FOLDER_ERROR         "An error occurred while trying to create the folder ""%s"": %s"
-    IDS_FT_OP_DRIVE_LIST_ERROR            "An error occurred while retrieving the drive list: %s"
+    IDS_FT_OP_BROWSE_DRIVES_ERROR         "An error occurred while retrieving the drive list: %s"
 END
 
 // Status

@@ -640,35 +640,35 @@ void UiViewerWindow::OnGetDispInfo(LPNMHDR phdr)
     switch (header->hdr.idFrom)
     {
         case ID_POWER:
-            header->lpszText = MAKEINTRESOURCEW(IDS_POWER);
+            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_POWER);
             break;
 
         case ID_ABOUT:
-            header->lpszText = MAKEINTRESOURCEW(IDS_ABOUT);
+            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_ABOUT);
             break;
 
         case ID_AUTO_SIZE:
-            header->lpszText = MAKEINTRESOURCEW(IDS_AUTO_SIZE);
+            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_AUTO_SIZE);
             break;
 
         case ID_FULLSCREEN:
-            header->lpszText = MAKEINTRESOURCEW(IDS_FULLSCREEN);
+            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_FULLSCREEN);
             break;
 
         case ID_EXIT:
-            header->lpszText = MAKEINTRESOURCEW(IDS_EXIT);
+            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_EXIT);
             break;
 
         case ID_CAD:
-            header->lpszText = MAKEINTRESOURCEW(IDS_CAD);
+            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_CAD);
             break;
 
         case ID_SHORTCUTS:
-            header->lpszText = MAKEINTRESOURCEW(IDS_SHORTCUTS);
+            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_SHORTCUTS);
             break;
 
         case ID_SETTINGS:
-            header->lpszText = MAKEINTRESOURCEW(IDS_SETTINGS);
+            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_SETTINGS);
             break;
 
         default:

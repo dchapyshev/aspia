@@ -148,44 +148,47 @@
 //
 // Strings
 //
-#define IDS_APPLICATION_NAME                  100
-#define IDS_START                             101
-#define IDS_STOP                              102
-#define IDS_DONATE_LINK                       103
-#define IDS_SITE_LINK                         104
-#define IDS_HELP_LINK                         105
-#define IDS_ABOUT_STRING                      106
-#define IDS_POWER                             107
-#define IDS_AUTO_SIZE                         108
-#define IDS_SETTINGS                          109
-#define IDS_CAD                               110
-#define IDS_EXIT                              111
-#define IDS_FULLSCREEN                        112
-#define IDS_SHORTCUTS                         113
-#define IDS_ABOUT                             114
-#define IDS_CONNECTION                        115
-#define IDS_CONFIRMATION                      116
-#define IDS_COMPRESSION_RATIO_FORMAT          117
-#define IDS_32BIT                             118
-#define IDS_24BIT                             119
-#define IDS_16BIT                             120
-#define IDS_15BIT                             121
-#define IDS_12BIT                             122
-#define IDS_8BIT                              123
-#define IDS_6BIT                              124
-#define IDS_3BIT                              125
-#define IDS_INFORMATION                       126
-#define IDS_INVALID_USERNAME                  127
-#define IDS_USER_ALREADY_EXISTS               128
-#define IDS_INVALID_PASSWORD                  129
-#define IDS_PASSWORDS_NOT_MATCH               130
-#define IDS_SESSION_TYPE_DESKTOP_MANAGE       131
-#define IDS_SESSION_TYPE_DESKTOP_VIEW         132
-#define IDS_SESSION_TYPE_POWER_MANAGE         133
-#define IDS_SESSION_TYPE_FILE_TRANSFER        134
-#define IDS_SESSION_TYPE_SYSTEM_INFO          135
-#define IDS_DELETE_USER_CONFORMATION          136
-#define IDS_USER_LIST_MODIFIED                137
+
+// General
+#define IDS_APPLICATION_NAME                  1
+#define IDS_START                             2
+#define IDS_STOP                              3
+#define IDS_DONATE_LINK                       4
+#define IDS_SITE_LINK                         5
+#define IDS_HELP_LINK                         6
+#define IDS_ABOUT_STRING                      7
+#define IDS_CONFIRMATION                      8
+#define IDS_CONNECTION                        9
+#define IDS_INVALID_USERNAME                  10
+#define IDS_USER_ALREADY_EXISTS               11
+#define IDS_INVALID_PASSWORD                  12
+#define IDS_PASSWORDS_NOT_MATCH               13
+#define IDS_SESSION_TYPE_DESKTOP_MANAGE       14
+#define IDS_SESSION_TYPE_DESKTOP_VIEW         15
+#define IDS_SESSION_TYPE_POWER_MANAGE         16
+#define IDS_SESSION_TYPE_FILE_TRANSFER        17
+#define IDS_SESSION_TYPE_SYSTEM_INFO          18
+#define IDS_DELETE_USER_CONFORMATION          19
+#define IDS_USER_LIST_MODIFIED                20
+
+// Desktop Manage
+#define IDS_DM_TOOLTIP_POWER                  500
+#define IDS_DM_TOOLTIP_AUTO_SIZE              501
+#define IDS_DM_TOOLTIP_SETTINGS               502
+#define IDS_DM_TOOLTIP_CAD                    503
+#define IDS_DM_TOOLTIP_EXIT                   504
+#define IDS_DM_TOOLTIP_FULLSCREEN             505
+#define IDS_DM_TOOLTIP_SHORTCUTS              506
+#define IDS_DM_TOOLTIP_ABOUT                  507
+#define IDS_DM_COMPRESSION_RATIO_FORMAT       508
+#define IDS_DM_32BIT                          509
+#define IDS_DM_24BIT                          510
+#define IDS_DM_16BIT                          511
+#define IDS_DM_15BIT                          512
+#define IDS_DM_12BIT                          513
+#define IDS_DM_8BIT                           514
+#define IDS_DM_6BIT                           515
+#define IDS_DM_3BIT                           516
 
 // File transfer
 #define IDS_FT_FILE_TRANSFER                  1000
@@ -231,14 +234,16 @@
 #define IDS_FT_OP_REMOVE                      1040
 #define IDS_FT_OP_CREATE_FOLDER               1041
 #define IDS_FT_OP_BROWSE_DRIVES               1042
-#define IDS_FT_SEND                           1043
-#define IDS_FT_RECIEVE                        1044
-#define IDS_FT_SELECTED_OBJECT_COUNT          1045
-#define IDS_FT_BROWSE_FOLDERS_ERROR           1046
-#define IDS_FT_OP_RENAME_ERROR                1047
-#define IDS_FT_OP_REMOVE_ERROR                1048
-#define IDS_FT_OP_CREATE_FOLDER_ERROR         1049
-#define IDS_FT_OP_DRIVE_LIST_ERROR            1050
+#define IDS_FT_OP_SEND_FILE                   1043
+#define IDS_FT_OP_RECIEVE_FILE                1044
+#define IDS_FT_SEND                           1045
+#define IDS_FT_RECIEVE                        1046
+#define IDS_FT_SELECTED_OBJECT_COUNT          1047
+#define IDS_FT_BROWSE_FOLDERS_ERROR           1048
+#define IDS_FT_OP_RENAME_ERROR                1049
+#define IDS_FT_OP_REMOVE_ERROR                1050
+#define IDS_FT_OP_CREATE_FOLDER_ERROR         1051
+#define IDS_FT_OP_BROWSE_DRIVES_ERROR         1052
 
 // Status
 #define IDS_STATUS_MIN                        10000

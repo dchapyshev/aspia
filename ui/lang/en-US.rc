@@ -267,6 +267,7 @@ BEGIN
     END
 END
 
+// General
 STRINGTABLE DISCARDABLE
 BEGIN
     IDS_APPLICATION_NAME          "Aspia Remote Desktop"
@@ -295,26 +296,8 @@ BEGIN
                       • libsodium © 2013-2017 Frank Denis, ISC License\r\n\
                       • Fugue Icons © 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 License"
 
-    IDS_POWER                             "Power management of the remote computer"
-    IDS_AUTO_SIZE                         "Auto size window"
-    IDS_SETTINGS                          "Settings"
-    IDS_CAD                               "Send Ctrl+Alt+Del"
-    IDS_EXIT                              "Close the current connection"
-    IDS_FULLSCREEN                        "Switch to full screen mode"
-    IDS_SHORTCUTS                         "Send a keyboard shortcut"
-    IDS_ABOUT                             "About program"
-    IDS_CONNECTION                        "Connection to: %s:%u"
     IDS_CONFIRMATION                      "Confirmation"
-    IDS_COMPRESSION_RATIO_FORMAT          "Compression ratio: %d"
-    IDS_32BIT                             "True color (32 bit)"
-    IDS_24BIT                             "True color (24 bit)"
-    IDS_16BIT                             "High color (16 bit)"
-    IDS_15BIT                             "High color (15 bit)"
-    IDS_12BIT                             "High color (12 bit)"
-    IDS_8BIT                              "256 colors (8 bit)"
-    IDS_6BIT                              "64 colors (6 bit)"
-    IDS_3BIT                              "8 colors (3 bit)"
-    IDS_INFORMATION                       "Information"
+    IDS_CONNECTION                        "Connection to: %s:%u"
     IDS_INVALID_USERNAME                  "The user name can not be empty and can contain only alphabet characters, numbers and ""_"", ""-"", ""."" characters."
     IDS_USER_ALREADY_EXISTS               "A user with the specified name already exists."
     IDS_INVALID_PASSWORD                  "Password can not be shorter than 6 characters."
@@ -326,6 +309,28 @@ BEGIN
     IDS_SESSION_TYPE_SYSTEM_INFO          "System Information"
     IDS_DELETE_USER_CONFORMATION          "Are you sure you want to delete the user ""%s""?"
     IDS_USER_LIST_MODIFIED                "User List (* modified)"
+END
+
+// Desktop Manage
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_DM_TOOLTIP_POWER                  "Power management of the remote computer"
+    IDS_DM_TOOLTIP_AUTO_SIZE              "Auto size window"
+    IDS_DM_TOOLTIP_SETTINGS               "Settings"
+    IDS_DM_TOOLTIP_CAD                    "Send Ctrl+Alt+Del"
+    IDS_DM_TOOLTIP_EXIT                   "Close the current connection"
+    IDS_DM_TOOLTIP_FULLSCREEN             "Switch to full screen mode"
+    IDS_DM_TOOLTIP_SHORTCUTS              "Send a keyboard shortcut"
+    IDS_DM_TOOLTIP_ABOUT                  "About program"
+    IDS_DM_COMPRESSION_RATIO_FORMAT       "Compression ratio: %d"
+    IDS_DM_32BIT                          "True color (32 bit)"
+    IDS_DM_24BIT                          "True color (24 bit)"
+    IDS_DM_16BIT                          "High color (16 bit)"
+    IDS_DM_15BIT                          "High color (15 bit)"
+    IDS_DM_12BIT                          "High color (12 bit)"
+    IDS_DM_8BIT                           "256 colors (8 bit)"
+    IDS_DM_6BIT                           "64 colors (6 bit)"
+    IDS_DM_3BIT                           "8 colors (3 bit)"
 END
 
 // File Transfer
@@ -374,6 +379,8 @@ BEGIN
     IDS_FT_OP_REMOVE                      "Remove: ""%s"""
     IDS_FT_OP_CREATE_FOLDER               "Create folder: ""%s"""
     IDS_FT_OP_BROWSE_DRIVES               "Browse drives"
+    IDS_FT_OP_SEND_FILE                   "Sending a file: ""%s"""
+    IDS_FT_OP_RECIEVE_FILE                "Recieving a file: ""%s"""
     IDS_FT_SEND                           "Send"
     IDS_FT_RECIEVE                        "Recieve"
     IDS_FT_SELECTED_OBJECT_COUNT          "%lu object(s) selected"
@@ -381,7 +388,7 @@ BEGIN
     IDS_FT_OP_RENAME_ERROR                "An error occurred when renaming object ""%s"" to ""%s"": %s"
     IDS_FT_OP_REMOVE_ERROR                "An error occurred while deleting object ""%s"": %s"
     IDS_FT_OP_CREATE_FOLDER_ERROR         "An error occurred while trying to create the folder ""%s"": %s"
-    IDS_FT_OP_DRIVE_LIST_ERROR            "An error occurred while retrieving the drive list: %s"
+    IDS_FT_OP_BROWSE_DRIVES_ERROR         "An error occurred while retrieving the drive list: %s"
 END
 
 // Status
