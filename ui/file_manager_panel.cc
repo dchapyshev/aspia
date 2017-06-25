@@ -155,6 +155,8 @@ void UiFileManagerPanel::SetComputerViews()
     toolbar_.EnableButton(ID_DELETE, false);
     toolbar_.EnableButton(ID_SEND, false);
     toolbar_.EnableButton(ID_HOME, false);
+
+    OnListItemChanged();
 }
 
 void UiFileManagerPanel::SetFolderViews()
@@ -173,6 +175,8 @@ void UiFileManagerPanel::SetFolderViews()
     toolbar_.EnableButton(ID_DELETE, true);
     toolbar_.EnableButton(ID_SEND, true);
     toolbar_.EnableButton(ID_HOME, true);
+
+    OnListItemChanged();
 }
 
 void UiFileManagerPanel::OnCreate()
@@ -274,8 +278,6 @@ void UiFileManagerPanel::OnCreate()
     {
         list_.SetImageList(list_imagelist_, LVSIL_SMALL);
     }
-
-    OnListItemChanged();
 }
 
 void UiFileManagerPanel::OnDestroy()
