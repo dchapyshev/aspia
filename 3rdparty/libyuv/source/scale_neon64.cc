@@ -29,10 +29,8 @@ void ScaleRowDown2_NEON(const uint8* src_ptr,
   asm volatile (
   "1:                                          \n"
     // load even pixels into v0, odd into v1
-    MEMACCESS(0)
     "ld2        {v0.16b,v1.16b}, [%0], #32     \n"
     "subs       %w2, %w2, #16                  \n"  // 16 processed per loop
-    MEMACCESS(1)
     "st1        {v1.16b}, [%1], #16            \n"  // store odd pixels
     "b.gt       1b                             \n"
   : "+r"(src_ptr),          // %0
@@ -51,14 +49,12 @@ void ScaleRowDown2Linear_NEON(const uint8* src_ptr,
   (void)src_stride;
   asm volatile (
   "1:                                          \n"
-    MEMACCESS(0)
     "ld1        {v0.16b,v1.16b}, [%0], #32     \n"  // load pixels and post inc
     "subs       %w2, %w2, #16                  \n"  // 16 processed per loop
     "uaddlp     v0.8h, v0.16b                  \n"  // add adjacent
     "uaddlp     v1.8h, v1.16b                  \n"
     "rshrn      v0.8b, v0.8h, #1               \n"  // downshift, round and pack
     "rshrn2     v0.16b, v1.8h, #1              \n"
-    MEMACCESS(1)
     "st1        {v0.16b}, [%1], #16            \n"
     "b.gt       1b                             \n"
   : "+r"(src_ptr),          // %0
@@ -78,9 +74,7 @@ void ScaleRowDown2Box_NEON(const uint8* src_ptr,
     // change the stride to row 2 pointer
     "add        %1, %1, %0                     \n"
   "1:                                          \n"
-    MEMACCESS(0)
-    "ld1        {v0.16b,v1.16b}, [%0], #32    \n"  // load row 1 and post inc
-    MEMACCESS(1)
+    "ld1        {v0.16b, v1.16b}, [%0], #32    \n"  // load row 1 and post inc
     "ld1        {v2.16b, v3.16b}, [%1], #32    \n"  // load row 2 and post inc
     "subs       %w3, %w3, #16                  \n"  // 16 processed per loop
     "uaddlp     v0.8h, v0.16b                  \n"  // row 1 add adjacent
@@ -89,7 +83,6 @@ void ScaleRowDown2Box_NEON(const uint8* src_ptr,
     "uadalp     v1.8h, v3.16b                  \n"
     "rshrn      v0.8b, v0.8h, #2               \n"  // downshift, round and pack
     "rshrn2     v0.16b, v1.8h, #2              \n"
-    MEMACCESS(2)
     "st1        {v0.16b}, [%2], #16            \n"
     "b.gt       1b                             \n"
   : "+r"(src_ptr),          // %0
@@ -108,10 +101,8 @@ void ScaleRowDown4_NEON(const uint8* src_ptr,
   (void)src_stride;
   asm volatile (
   "1:                                          \n"
-    MEMACCESS(0)
     "ld4     {v0.8b,v1.8b,v2.8b,v3.8b}, [%0], #32          \n"  // src line 0
     "subs       %w2, %w2, #8                   \n"  // 8 processed per loop
-    MEMACCESS(1)
     "st1     {v2.8b}, [%1], #8                 \n"
     "b.gt       1b                             \n"
   : "+r"(src_ptr),          // %0
@@ -131,13 +122,9 @@ void ScaleRowDown4Box_NEON(const uint8* src_ptr,
   const uint8* src_ptr3 = src_ptr + src_stride * 3;
   asm volatile (
   "1:                                          \n"
-    MEMACCESS(0)
     "ld1     {v0.16b}, [%0], #16               \n"   // load up 16x4
-    MEMACCESS(3)
     "ld1     {v1.16b}, [%2], #16               \n"
-    MEMACCESS(4)
     "ld1     {v2.16b}, [%3], #16               \n"
-    MEMACCESS(5)
     "ld1     {v3.16b}, [%4], #16               \n"
     "subs    %w5, %w5, #4                      \n"
     "uaddlp  v0.8h, v0.16b                     \n"
@@ -146,7 +133,6 @@ void ScaleRowDown4Box_NEON(const uint8* src_ptr,
     "uadalp  v0.8h, v3.16b                     \n"
     "addp    v0.8h, v0.8h, v0.8h               \n"
     "rshrn   v0.8b, v0.8h, #4                  \n"   // divide by 16 w/rounding
-    MEMACCESS(1)
     "st1    {v0.s}[0], [%1], #4                \n"
     "b.gt       1b                             \n"
   : "+r"(src_ptr),   // %0
@@ -170,11 +156,9 @@ void ScaleRowDown34_NEON(const uint8* src_ptr,
   (void)src_stride;
   asm volatile (
   "1:                                                  \n"
-    MEMACCESS(0)
     "ld4       {v0.8b,v1.8b,v2.8b,v3.8b}, [%0], #32    \n"  // src line 0
     "subs      %w2, %w2, #24                           \n"
     "orr       v2.16b, v3.16b, v3.16b                  \n"  // order v0, v1, v2
-    MEMACCESS(1)
     "st3       {v0.8b,v1.8b,v2.8b}, [%1], #24          \n"
     "b.gt      1b                                      \n"
   : "+r"(src_ptr),          // %0
@@ -193,9 +177,7 @@ void ScaleRowDown34_0_Box_NEON(const uint8* src_ptr,
     "movi      v20.8b, #3                              \n"
     "add       %3, %3, %0                              \n"
   "1:                                                  \n"
-    MEMACCESS(0)
     "ld4       {v0.8b,v1.8b,v2.8b,v3.8b}, [%0], #32    \n"  // src line 0
-    MEMACCESS(3)
     "ld4       {v4.8b,v5.8b,v6.8b,v7.8b}, [%3], #32    \n"  // src line 1
     "subs         %w2, %w2, #24                        \n"
 
@@ -232,8 +214,7 @@ void ScaleRowDown34_0_Box_NEON(const uint8* src_ptr,
     "umlal     v16.8h, v3.8b, v20.8b                   \n"
     "uqrshrn   v2.8b, v16.8h, #2                       \n"
 
-    MEMACCESS(1)
-    "st3       {v0.8b,v1.8b,v2.8b}, [%1], #24                \n"
+    "st3       {v0.8b,v1.8b,v2.8b}, [%1], #24          \n"
 
     "b.gt      1b                                      \n"
   : "+r"(src_ptr),          // %0
@@ -254,10 +235,8 @@ void ScaleRowDown34_1_Box_NEON(const uint8* src_ptr,
     "movi      v20.8b, #3                              \n"
     "add       %3, %3, %0                              \n"
   "1:                                                  \n"
-    MEMACCESS(0)
-    "ld4       {v0.8b,v1.8b,v2.8b,v3.8b}, [%0], #32                \n"  // src line 0
-    MEMACCESS(3)
-    "ld4       {v4.8b,v5.8b,v6.8b,v7.8b}, [%3], #32                \n"  // src line 1
+    "ld4       {v0.8b,v1.8b,v2.8b,v3.8b}, [%0], #32    \n"  // src line 0
+    "ld4       {v4.8b,v5.8b,v6.8b,v7.8b}, [%3], #32    \n"  // src line 1
     "subs         %w2, %w2, #24                        \n"
     // average src line 0 with src line 1
     "urhadd    v0.8b, v0.8b, v4.8b                     \n"
@@ -278,8 +257,7 @@ void ScaleRowDown34_1_Box_NEON(const uint8* src_ptr,
     "umlal     v4.8h, v3.8b, v20.8b                    \n"
     "uqrshrn   v2.8b, v4.8h, #2                        \n"
 
-    MEMACCESS(1)
-    "st3       {v0.8b,v1.8b,v2.8b}, [%1], #24                \n"
+    "st3       {v0.8b,v1.8b,v2.8b}, [%1], #24          \n"
     "b.gt      1b                                      \n"
   : "+r"(src_ptr),          // %0
     "+r"(dst_ptr),          // %1
@@ -305,16 +283,12 @@ void ScaleRowDown38_NEON(const uint8* src_ptr,
                          int dst_width) {
   (void)src_stride;
   asm volatile (
-    MEMACCESS(3)
     "ld1       {v3.16b}, [%3]                          \n"
   "1:                                                  \n"
-    MEMACCESS(0)
     "ld1       {v0.16b,v1.16b}, [%0], #32              \n"
     "subs      %w2, %w2, #12                           \n"
     "tbl       v2.16b, {v0.16b,v1.16b}, v3.16b         \n"
-    MEMACCESS(1)
     "st1       {v2.8b}, [%1], #8                       \n"
-    MEMACCESS(1)
     "st1       {v2.s}[2], [%1], #4                     \n"
     "b.gt      1b                                      \n"
   : "+r"(src_ptr),          // %0
@@ -334,11 +308,8 @@ void OMITFP ScaleRowDown38_3_Box_NEON(const uint8* src_ptr,
   ptrdiff_t tmp_src_stride = src_stride;
 
   asm volatile (
-    MEMACCESS(5)
     "ld1       {v29.8h}, [%5]                          \n"
-    MEMACCESS(6)
     "ld1       {v30.16b}, [%6]                         \n"
-    MEMACCESS(7)
     "ld1       {v31.8h}, [%7]                          \n"
     "add       %2, %2, %0                              \n"
   "1:                                                  \n"
@@ -347,12 +318,9 @@ void OMITFP ScaleRowDown38_3_Box_NEON(const uint8* src_ptr,
     // 10 50 11 51 12 52 13 53
     // 20 60 21 61 22 62 23 63
     // 30 70 31 71 32 72 33 73
-    MEMACCESS(0)
-    "ld4       {v0.8b,v1.8b,v2.8b,v3.8b}, [%0], #32                \n"
-    MEMACCESS(3)
-    "ld4       {v4.8b,v5.8b,v6.8b,v7.8b}, [%2], #32                \n"
-    MEMACCESS(4)
-    "ld4       {v16.8b,v17.8b,v18.8b,v19.8b}, [%3], #32              \n"
+    "ld4       {v0.8b,v1.8b,v2.8b,v3.8b}, [%0], #32      \n"
+    "ld4       {v4.8b,v5.8b,v6.8b,v7.8b}, [%2], #32      \n"
+    "ld4       {v16.8b,v17.8b,v18.8b,v19.8b}, [%3], #32  \n"
     "subs      %w4, %w4, #12                           \n"
 
     // Shuffle the input data around to get align the data
@@ -436,9 +404,7 @@ void OMITFP ScaleRowDown38_3_Box_NEON(const uint8* src_ptr,
     //  be adjacent
     "tbl       v3.16b, {v0.16b, v1.16b, v2.16b}, v30.16b \n"
 
-    MEMACCESS(1)
     "st1       {v3.8b}, [%1], #8                       \n"
-    MEMACCESS(1)
     "st1       {v3.s}[2], [%1], #4                     \n"
     "b.gt      1b                                      \n"
   : "+r"(src_ptr),          // %0
@@ -463,9 +429,7 @@ void ScaleRowDown38_2_Box_NEON(const uint8* src_ptr,
   // TODO(fbarchard): use src_stride directly for clang 3.5+.
   ptrdiff_t tmp_src_stride = src_stride;
   asm volatile (
-    MEMACCESS(4)
     "ld1       {v30.8h}, [%4]                          \n"
-    MEMACCESS(5)
     "ld1       {v31.16b}, [%5]                         \n"
     "add       %2, %2, %0                              \n"
   "1:                                                  \n"
@@ -474,10 +438,8 @@ void ScaleRowDown38_2_Box_NEON(const uint8* src_ptr,
     // 10 50 11 51 12 52 13 53
     // 20 60 21 61 22 62 23 63
     // 30 70 31 71 32 72 33 73
-    MEMACCESS(0)
-    "ld4       {v0.8b,v1.8b,v2.8b,v3.8b}, [%0], #32                \n"
-    MEMACCESS(3)
-    "ld4       {v4.8b,v5.8b,v6.8b,v7.8b}, [%2], #32                \n"
+    "ld4       {v0.8b,v1.8b,v2.8b,v3.8b}, [%0], #32    \n"
+    "ld4       {v4.8b,v5.8b,v6.8b,v7.8b}, [%2], #32    \n"
     "subs      %w3, %w3, #12                           \n"
 
     // Shuffle the input data around to get align the data
@@ -547,9 +509,7 @@ void ScaleRowDown38_2_Box_NEON(const uint8* src_ptr,
 
     "tbl       v3.16b, {v0.16b, v1.16b, v2.16b}, v31.16b \n"
 
-    MEMACCESS(1)
     "st1       {v3.8b}, [%1], #8                       \n"
-    MEMACCESS(1)
     "st1       {v3.s}[2], [%1], #4                     \n"
     "b.gt      1b                                      \n"
   : "+r"(src_ptr),         // %0
@@ -577,13 +537,11 @@ void ScaleAddRows_NEON(const uint8* src_ptr,
     "eor       v3.16b, v3.16b, v3.16b          \n"
   "2:                                          \n"
     // load 16 pixels into q0
-    MEMACCESS(0)
     "ld1       {v0.16b}, [%0], %3              \n"
     "uaddw2    v3.8h, v3.8h, v0.16b            \n"
     "uaddw     v2.8h, v2.8h, v0.8b             \n"
     "subs      w12, w12, #1                    \n"
     "b.gt      2b                              \n"
-    MEMACCESS(2)
     "st1      {v2.8h, v3.8h}, [%2], #32        \n"  // store pixels
     "add      %1, %1, #16                      \n"
     "subs     %w4, %w4, #16                    \n"  // 16 processed per loop
@@ -606,7 +564,6 @@ void ScaleAddRows_NEON(const uint8* src_ptr,
   "lsr        %5, %3, #16                    \n"            \
   "add        %6, %1, %5                     \n"            \
   "add        %3, %3, %4                     \n"            \
-  MEMACCESS(6)                                              \
   "ld2        {v4.b, v5.b}[" #n "], [%6]     \n"
 // clang-format on
 
@@ -622,7 +579,6 @@ void ScaleFilterCols_NEON(uint8* dst_ptr,
   int dx_offset[4] = {0, 1, 2, 3};
   int* tmp = dx_offset;
   const uint8* src_tmp = src_ptr;
-  int64 dst_width64 = (int64)dst_width;  // Work around ios 64 bit warning.
   int64 x64 = (int64)x;
   int64 dx64 = (int64)dx;
   asm volatile (
@@ -661,7 +617,6 @@ void ScaleFilterCols_NEON(uint8* dst_ptr,
     "add       v4.8h, v4.8h, v6.8h             \n"
     "xtn       v4.8b, v4.8h                    \n"
 
-    MEMACCESS(0)
     "st1       {v4.8b}, [%0], #8               \n"  // store pixels
     "add       v1.4s, v1.4s, v0.4s             \n"
     "add       v2.4s, v2.4s, v0.4s             \n"
@@ -669,7 +624,7 @@ void ScaleFilterCols_NEON(uint8* dst_ptr,
     "b.gt      1b                              \n"
   : "+r"(dst_ptr),          // %0
     "+r"(src_ptr),          // %1
-    "+r"(dst_width64),      // %2
+    "+r"(dst_width),        // %2
     "+r"(x64),              // %3
     "+r"(dx64),             // %4
     "+r"(tmp),              // %5
@@ -704,9 +659,7 @@ void ScaleFilterRows_NEON(uint8* dst_ptr,
     "dup          v4.8b, %w5                   \n"
     // General purpose row blend.
   "1:                                          \n"
-    MEMACCESS(1)
     "ld1          {v0.16b}, [%1], #16          \n"
-    MEMACCESS(2)
     "ld1          {v1.16b}, [%2], #16          \n"
     "subs         %w3, %w3, #16                \n"
     "umull        v6.8h, v0.8b, v4.8b          \n"
@@ -715,63 +668,50 @@ void ScaleFilterRows_NEON(uint8* dst_ptr,
     "umlal2       v7.8h, v1.16b, v5.16b        \n"
     "rshrn        v0.8b, v6.8h, #8             \n"
     "rshrn2       v0.16b, v7.8h, #8            \n"
-    MEMACCESS(0)
     "st1          {v0.16b}, [%0], #16          \n"
     "b.gt         1b                           \n"
     "b            99f                          \n"
 
     // Blend 25 / 75.
   "25:                                         \n"
-    MEMACCESS(1)
     "ld1          {v0.16b}, [%1], #16          \n"
-    MEMACCESS(2)
     "ld1          {v1.16b}, [%2], #16          \n"
     "subs         %w3, %w3, #16                \n"
     "urhadd       v0.16b, v0.16b, v1.16b       \n"
     "urhadd       v0.16b, v0.16b, v1.16b       \n"
-    MEMACCESS(0)
     "st1          {v0.16b}, [%0], #16          \n"
     "b.gt         25b                          \n"
     "b            99f                          \n"
 
     // Blend 50 / 50.
   "50:                                         \n"
-    MEMACCESS(1)
     "ld1          {v0.16b}, [%1], #16          \n"
-    MEMACCESS(2)
     "ld1          {v1.16b}, [%2], #16          \n"
     "subs         %w3, %w3, #16                \n"
     "urhadd       v0.16b, v0.16b, v1.16b       \n"
-    MEMACCESS(0)
     "st1          {v0.16b}, [%0], #16          \n"
     "b.gt         50b                          \n"
     "b            99f                          \n"
 
     // Blend 75 / 25.
   "75:                                         \n"
-    MEMACCESS(1)
     "ld1          {v1.16b}, [%1], #16          \n"
-    MEMACCESS(2)
     "ld1          {v0.16b}, [%2], #16          \n"
     "subs         %w3, %w3, #16                \n"
     "urhadd       v0.16b, v0.16b, v1.16b       \n"
     "urhadd       v0.16b, v0.16b, v1.16b       \n"
-    MEMACCESS(0)
     "st1          {v0.16b}, [%0], #16          \n"
     "b.gt         75b                          \n"
     "b            99f                          \n"
 
     // Blend 100 / 0 - Copy row unchanged.
   "100:                                        \n"
-    MEMACCESS(1)
     "ld1          {v0.16b}, [%1], #16          \n"
     "subs         %w3, %w3, #16                \n"
-    MEMACCESS(0)
     "st1          {v0.16b}, [%0], #16          \n"
     "b.gt         100b                         \n"
 
   "99:                                         \n"
-    MEMACCESS(0)
     "st1          {v0.b}[15], [%0]             \n"
   : "+r"(dst_ptr),          // %0
     "+r"(src_ptr),          // %1
@@ -792,14 +732,10 @@ void ScaleARGBRowDown2_NEON(const uint8* src_ptr,
   asm volatile (
   "1:                                          \n"
     // load even pixels into q0, odd into q1
-    MEMACCESS (0)
     "ld2        {v0.4s, v1.4s}, [%0], #32      \n"
-    MEMACCESS (0)
     "ld2        {v2.4s, v3.4s}, [%0], #32      \n"
     "subs       %w2, %w2, #8                   \n"  // 8 processed per loop
-    MEMACCESS (1)
     "st1        {v1.16b}, [%1], #16            \n"  // store odd pixels
-    MEMACCESS (1)
     "st1        {v3.16b}, [%1], #16            \n"
     "b.gt       1b                             \n"
   : "+r" (src_ptr),          // %0
@@ -817,7 +753,6 @@ void ScaleARGBRowDown2Linear_NEON(const uint8* src_argb,
   (void)src_stride;
   asm volatile (
   "1:                                          \n"
-    MEMACCESS (0)
     // load 8 ARGB pixels.
     "ld4        {v0.16b,v1.16b,v2.16b,v3.16b}, [%0], #64   \n"
     "subs       %w2, %w2, #8                   \n"  // 8 processed per loop.
@@ -829,7 +764,6 @@ void ScaleARGBRowDown2Linear_NEON(const uint8* src_argb,
     "rshrn      v1.8b, v1.8h, #1               \n"
     "rshrn      v2.8b, v2.8h, #1               \n"
     "rshrn      v3.8b, v3.8h, #1               \n"
-    MEMACCESS (1)
     "st4        {v0.8b,v1.8b,v2.8b,v3.8b}, [%1], #32     \n"
     "b.gt       1b                             \n"
   : "+r"(src_argb),         // %0
@@ -848,14 +782,12 @@ void ScaleARGBRowDown2Box_NEON(const uint8* src_ptr,
     // change the stride to row 2 pointer
     "add        %1, %1, %0                     \n"
   "1:                                          \n"
-    MEMACCESS (0)
     "ld4        {v0.16b,v1.16b,v2.16b,v3.16b}, [%0], #64   \n"  // load 8 ARGB pixels.
     "subs       %w3, %w3, #8                   \n"  // 8 processed per loop.
     "uaddlp     v0.8h, v0.16b                  \n"  // B 16 bytes -> 8 shorts.
     "uaddlp     v1.8h, v1.16b                  \n"  // G 16 bytes -> 8 shorts.
     "uaddlp     v2.8h, v2.16b                  \n"  // R 16 bytes -> 8 shorts.
     "uaddlp     v3.8h, v3.16b                  \n"  // A 16 bytes -> 8 shorts.
-    MEMACCESS (1)
     "ld4        {v16.16b,v17.16b,v18.16b,v19.16b}, [%1], #64 \n"  // load 8 more ARGB pixels.
     "uadalp     v0.8h, v16.16b                 \n"  // B 16 bytes -> 8 shorts.
     "uadalp     v1.8h, v17.16b                 \n"  // G 16 bytes -> 8 shorts.
@@ -865,7 +797,6 @@ void ScaleARGBRowDown2Box_NEON(const uint8* src_ptr,
     "rshrn      v1.8b, v1.8h, #2               \n"
     "rshrn      v2.8b, v2.8h, #2               \n"
     "rshrn      v3.8b, v3.8h, #2               \n"
-    MEMACCESS (2)
     "st4        {v0.8b,v1.8b,v2.8b,v3.8b}, [%2], #32     \n"
     "b.gt       1b                             \n"
   : "+r" (src_ptr),          // %0
@@ -887,16 +818,11 @@ void ScaleARGBRowDownEven_NEON(const uint8* src_argb,
   (void)src_stride;
   asm volatile (
   "1:                                          \n"
-    MEMACCESS(0)
     "ld1        {v0.s}[0], [%0], %3            \n"
-    MEMACCESS(0)
     "ld1        {v0.s}[1], [%0], %3            \n"
-    MEMACCESS(0)
     "ld1        {v0.s}[2], [%0], %3            \n"
-    MEMACCESS(0)
     "ld1        {v0.s}[3], [%0], %3            \n"
     "subs       %w2, %w2, #4                   \n"  // 4 pixels per loop.
-    MEMACCESS(1)
     "st1        {v0.16b}, [%1], #16            \n"
     "b.gt       1b                             \n"
   : "+r"(src_argb),    // %0
@@ -919,21 +845,13 @@ void ScaleARGBRowDownEvenBox_NEON(const uint8* src_argb,
   asm volatile (
     "add        %1, %1, %0                     \n"
   "1:                                          \n"
-    MEMACCESS(0)
     "ld1        {v0.8b}, [%0], %4              \n"  // Read 4 2x2 blocks -> 2x1
-    MEMACCESS(1)
     "ld1        {v1.8b}, [%1], %4              \n"
-    MEMACCESS(0)
     "ld1        {v2.8b}, [%0], %4              \n"
-    MEMACCESS(1)
     "ld1        {v3.8b}, [%1], %4              \n"
-    MEMACCESS(0)
     "ld1        {v4.8b}, [%0], %4              \n"
-    MEMACCESS(1)
     "ld1        {v5.8b}, [%1], %4              \n"
-    MEMACCESS(0)
     "ld1        {v6.8b}, [%0], %4              \n"
-    MEMACCESS(1)
     "ld1        {v7.8b}, [%1], %4              \n"
     "uaddl      v0.8h, v0.8b, v1.8b            \n"
     "uaddl      v2.8h, v2.8b, v3.8b            \n"
@@ -950,7 +868,6 @@ void ScaleARGBRowDownEvenBox_NEON(const uint8* src_argb,
     "rshrn      v0.8b, v0.8h, #2               \n"  // first 2 pixels.
     "rshrn2     v0.16b, v4.8h, #2              \n"  // next 2 pixels.
     "subs       %w3, %w3, #4                   \n"  // 4 pixels per loop.
-    MEMACCESS(2)
     "st1     {v0.16b}, [%2], #16               \n"
     "b.gt       1b                             \n"
   : "+r"(src_argb),    // %0
@@ -969,8 +886,7 @@ void ScaleARGBRowDownEvenBox_NEON(const uint8* src_argb,
   "lsr        %5, %3, #16                    \n"            \
   "add        %6, %1, %5, lsl #2             \n"            \
   "add        %3, %3, %4                     \n"            \
-  MEMACCESS(6)                                              \
- "ld1        {" #vn ".s}[" #n "], [%6]       \n"
+  "ld1        {" #vn ".s}[" #n "], [%6]      \n"
 // clang-format on
 
 void ScaleARGBCols_NEON(uint8* dst_argb,
@@ -979,7 +895,6 @@ void ScaleARGBCols_NEON(uint8* dst_argb,
                         int x,
                         int dx) {
   const uint8* src_tmp = src_argb;
-  int64 dst_width64 = (int64)dst_width;  // Work around ios 64 bit warning.
   int64 x64 = (int64)x;
   int64 dx64 = (int64)dx;
   int64 tmp64;
@@ -994,13 +909,12 @@ void ScaleARGBCols_NEON(uint8* dst_argb,
     LOAD1_DATA32_LANE(v1, 2)
     LOAD1_DATA32_LANE(v1, 3)
 
-    MEMACCESS(0)
     "st1        {v0.4s, v1.4s}, [%0], #32      \n"  // store pixels
     "subs       %w2, %w2, #8                   \n"  // 8 processed per loop
-    "b.gt        1b                            \n"
+    "b.gt       1b                             \n"
   : "+r"(dst_argb),     // %0
     "+r"(src_argb),     // %1
-    "+r"(dst_width64),  // %2
+    "+r"(dst_width),    // %2
     "+r"(x64),          // %3
     "+r"(dx64),         // %4
     "=&r"(tmp64),       // %5
@@ -1019,7 +933,6 @@ void ScaleARGBCols_NEON(uint8* dst_argb,
   "lsr        %5, %3, #16                           \n"            \
   "add        %6, %1, %5, lsl #2                    \n"            \
   "add        %3, %3, %4                            \n"            \
-  MEMACCESS(6)                                                     \
   "ld2        {" #vn1 ".s, " #vn2 ".s}[" #n "], [%6]  \n"
 // clang-format on
 
@@ -1031,7 +944,6 @@ void ScaleARGBFilterCols_NEON(uint8* dst_argb,
   int dx_offset[4] = {0, 1, 2, 3};
   int* tmp = dx_offset;
   const uint8* src_tmp = src_argb;
-  int64 dst_width64 = (int64)dst_width;  // Work around ios 64 bit warning.
   int64 x64 = (int64)x;
   int64 dx64 = (int64)dx;
   asm volatile (
@@ -1070,14 +982,13 @@ void ScaleARGBFilterCols_NEON(uint8* dst_argb,
     "shrn       v0.8b, v16.8h, #7              \n"
     "shrn2      v0.16b, v17.8h, #7             \n"
 
-    MEMACCESS(0)
     "st1     {v0.4s}, [%0], #16                \n"  // store pixels
     "add     v5.4s, v5.4s, v6.4s               \n"
     "subs    %w2, %w2, #4                      \n"  // 4 processed per loop
     "b.gt    1b                                \n"
   : "+r"(dst_argb),         // %0
     "+r"(src_argb),         // %1
-    "+r"(dst_width64),      // %2
+    "+r"(dst_width),        // %2
     "+r"(x64),              // %3
     "+r"(dx64),             // %4
     "+r"(tmp),              // %5

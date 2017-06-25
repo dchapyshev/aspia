@@ -50,7 +50,7 @@ CANY(ScaleARGBFilterCols_Any_NEON,
 #define SDANY(NAMEANY, SCALEROWDOWN_SIMD, SCALEROWDOWN_C, FACTOR, BPP, MASK) \
   void NAMEANY(const uint8* src_ptr, ptrdiff_t src_stride, uint8* dst_ptr,   \
                int dst_width) {                                              \
-    int r = (int)((unsigned int)dst_width % (MASK + 1));        /* NOLINT */ \
+    int r = (int)((unsigned int)dst_width % (MASK + 1)); /* NOLINT */        \
     int n = dst_width - r;                                                   \
     if (n > 0) {                                                             \
       SCALEROWDOWN_SIMD(src_ptr, src_stride, dst_ptr, n);                    \
@@ -65,7 +65,7 @@ CANY(ScaleARGBFilterCols_Any_NEON,
 #define SDODD(NAMEANY, SCALEROWDOWN_SIMD, SCALEROWDOWN_C, FACTOR, BPP, MASK) \
   void NAMEANY(const uint8* src_ptr, ptrdiff_t src_stride, uint8* dst_ptr,   \
                int dst_width) {                                              \
-    int r = (int)((unsigned int)(dst_width - 1) % (MASK + 1));  /* NOLINT */ \
+    int r = (int)((unsigned int)(dst_width - 1) % (MASK + 1)); /* NOLINT */  \
     int n = (dst_width - 1) - r;                                             \
     if (n > 0) {                                                             \
       SCALEROWDOWN_SIMD(src_ptr, src_stride, dst_ptr, n);                    \
