@@ -389,6 +389,8 @@ BEGIN
     IDS_FT_OP_REMOVE_ERROR                "Произошла ошибка при удалении объекта ""%s"": %s"
     IDS_FT_OP_CREATE_FOLDER_ERROR         "Произошла ошибка при попытке создания папки ""%s"": %s"
     IDS_FT_OP_BROWSE_DRIVES_ERROR         "Произошла ошибка при получении списка дисков: %s"
+    IDS_FT_OP_SEND_FILE_ERROR             "Произошла ошибка при отправке файла ""%s"": %s"
+    IDS_FT_OP_RECIEVE_FILE_ERROR          "Произошла ошибка при получении файла ""%s"": %s"
 END
 
 // Status

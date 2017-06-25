@@ -119,6 +119,22 @@ void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> stat
         }
         break;
 
+        case proto::RequestStatus::SEND_FILE:
+        {
+            message = StringPrintfW(module.string(IDS_FT_OP_SEND_FILE_ERROR).c_str(),
+                                    first_path.c_str(),
+                                    status_code.c_str());
+        }
+        break;
+
+        case proto::RequestStatus::RECIEVE_FILE:
+        {
+            message = StringPrintfW(module.string(IDS_FT_OP_RECIEVE_FILE_ERROR).c_str(),
+                                    first_path.c_str(),
+                                    status_code.c_str());
+        }
+        break;
+
         default:
         {
             LOG(FATAL) << "Unhandled status code: " << status->type();

@@ -23,6 +23,8 @@ message RequestStatus
         CREATE_DIRECTORY = 3;
         RENAME           = 4;
         REMOVE           = 5;
+        SEND_FILE        = 6;
+        RECIEVE_FILE     = 7;
     }
 
     Type type          = 1;

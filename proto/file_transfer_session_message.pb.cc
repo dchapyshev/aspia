@@ -136,6 +136,8 @@ bool RequestStatus_Type_IsValid(int value) {
     case 3:
     case 4:
     case 5:
+    case 6:
+    case 7:
       return true;
     default:
       return false;
@@ -149,6 +151,8 @@ const RequestStatus_Type RequestStatus::DIRECTORY_LIST;
 const RequestStatus_Type RequestStatus::CREATE_DIRECTORY;
 const RequestStatus_Type RequestStatus::RENAME;
 const RequestStatus_Type RequestStatus::REMOVE;
+const RequestStatus_Type RequestStatus::SEND_FILE;
+const RequestStatus_Type RequestStatus::RECIEVE_FILE;
 const RequestStatus_Type RequestStatus::Type_MIN;
 const RequestStatus_Type RequestStatus::Type_MAX;
 const int RequestStatus::Type_ARRAYSIZE;

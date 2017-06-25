@@ -96,12 +96,14 @@ enum RequestStatus_Type {
   RequestStatus_Type_CREATE_DIRECTORY = 3,
   RequestStatus_Type_RENAME = 4,
   RequestStatus_Type_REMOVE = 5,
+  RequestStatus_Type_SEND_FILE = 6,
+  RequestStatus_Type_RECIEVE_FILE = 7,
   RequestStatus_Type_RequestStatus_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   RequestStatus_Type_RequestStatus_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool RequestStatus_Type_IsValid(int value);
 const RequestStatus_Type RequestStatus_Type_Type_MIN = RequestStatus_Type_UNKNOWN;
-const RequestStatus_Type RequestStatus_Type_Type_MAX = RequestStatus_Type_REMOVE;
+const RequestStatus_Type RequestStatus_Type_Type_MAX = RequestStatus_Type_RECIEVE_FILE;
 const int RequestStatus_Type_Type_ARRAYSIZE = RequestStatus_Type_Type_MAX + 1;
 
 enum DriveListItem_Type {
@@ -208,6 +210,10 @@ class RequestStatus : public ::google::protobuf::MessageLite /* @@protoc_inserti
     RequestStatus_Type_RENAME;
   static const Type REMOVE =
     RequestStatus_Type_REMOVE;
+  static const Type SEND_FILE =
+    RequestStatus_Type_SEND_FILE;
+  static const Type RECIEVE_FILE =
+    RequestStatus_Type_RECIEVE_FILE;
   static inline bool Type_IsValid(int value) {
     return RequestStatus_Type_IsValid(value);
   }
