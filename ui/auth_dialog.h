@@ -8,9 +8,8 @@
 #ifndef _ASPIA_UI__AUTH_DIALOG_H
 #define _ASPIA_UI__AUTH_DIALOG_H
 
-#include <string>
-
 #include "ui/base/modal_dialog.h"
+#include "crypto/secure_string.h"
 
 namespace aspia {
 
@@ -18,7 +17,7 @@ class UiAuthDialog : public UiModalDialog
 {
 public:
     UiAuthDialog() = default;
-    ~UiAuthDialog();
+    ~UiAuthDialog() = default;
 
     INT_PTR DoModal(HWND parent) override;
 
@@ -34,8 +33,8 @@ private:
     void OnCancelButton();
 
 private:
-    std::string username_;
-    std::string password_;
+    SecureString<std::string> username_;
+    SecureString<std::string> password_;
 
     DISALLOW_COPY_AND_ASSIGN(UiAuthDialog);
 };

@@ -10,18 +10,7 @@
 #include "base/strings/unicode.h"
 #include "base/logging.h"
 
-extern "C" {
-#define SODIUM_STATIC
-#include <sodium.h>
-} // extern "C"
-
 namespace aspia {
-
-UiAuthDialog::~UiAuthDialog()
-{
-    sodium_memzero(&username_[0], username_.size());
-    sodium_memzero(&password_[0], password_.size());
-}
 
 INT_PTR UiAuthDialog::DoModal(HWND parent)
 {
@@ -41,21 +30,15 @@ void UiAuthDialog::OnClose()
 
 void UiAuthDialog::OnOkButton()
 {
-    std::wstring username(GetDlgItemString(IDC_USERNAME_EDIT));
+    SecureString<std::wstring> username(GetDlgItemString(IDC_USERNAME_EDIT));
 
     if (!username.empty())
-    {
         UNICODEtoUTF8(username, username_);
-        sodium_memzero(&username[0], username.size());
-    }
 
-    std::wstring password(GetDlgItemString(IDC_PASSWORD_EDIT));
+    SecureString<std::wstring> password(GetDlgItemString(IDC_PASSWORD_EDIT));
 
     if (!password.empty())
-    {
         UNICODEtoUTF8(password, password_);
-        sodium_memzero(&password[0], password.size());
-    }
 
     EndDialog(IDOK);
 }
