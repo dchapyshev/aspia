@@ -230,9 +230,15 @@
 #define IDS_FT_OP_RENAME                      1039
 #define IDS_FT_OP_REMOVE                      1040
 #define IDS_FT_OP_CREATE_FOLDER               1041
-#define IDS_FT_SEND                           1042
-#define IDS_FT_RECIEVE                        1043
-#define IDS_FT_SELECTED_OBJECT_COUNT          1044
+#define IDS_FT_OP_BROWSE_DRIVES               1042
+#define IDS_FT_SEND                           1043
+#define IDS_FT_RECIEVE                        1044
+#define IDS_FT_SELECTED_OBJECT_COUNT          1045
+#define IDS_FT_BROWSE_FOLDERS_ERROR           1046
+#define IDS_FT_OP_RENAME_ERROR                1047
+#define IDS_FT_OP_REMOVE_ERROR                1048
+#define IDS_FT_OP_CREATE_FOLDER_ERROR         1049
+#define IDS_FT_OP_DRIVE_LIST_ERROR            1050
 
 // Status
 #define IDS_STATUS_MIN                        10000
@@ -251,7 +257,8 @@
 #define IDS_STATUS_CONNECT_TIMEOUT            10012
 #define IDS_STATUS_CONNECT_ERROR              10013
 #define IDS_STATUS_CONNECTING                 10014
-#define IDS_STATUS_MAX                        10014
-#define IDS_STATUS_UNKNOWN                    10015
+#define IDS_STATUS_NO_DRIVES_FOUND            10015
+#define IDS_STATUS_MAX                        10015
+#define IDS_STATUS_UNKNOWN                    10016
 
 #endif // _ASPIA_UI__RESOURCE_H

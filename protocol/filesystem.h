@@ -10,24 +10,25 @@
 
 #include "proto/file_transfer_session.pb.h"
 
-#include <filesystem>
 #include <memory>
 
 namespace aspia {
 
-std::unique_ptr<proto::DriveList> ExecuteDriveListRequest(
-    const proto::DriveListRequest& drive_list_request);
+std::unique_ptr<proto::RequestStatus> ExecuteDriveListRequest(
+    const proto::DriveListRequest& request, std::unique_ptr<proto::DriveList>& reply);
 
-proto::Status ExecuteDirectoryListRequest(
+std::unique_ptr<proto::RequestStatus> ExecuteDirectoryListRequest(
     const proto::DirectoryListRequest& request,
     std::unique_ptr<proto::DirectoryList>& reply);
 
-proto::Status ExecuteCreateDirectoryRequest(
-    const proto::CreateDirectoryRequest& create_directory_request);
+std::unique_ptr<proto::RequestStatus> ExecuteCreateDirectoryRequest(
+    const proto::CreateDirectoryRequest& request);
 
-proto::Status ExecuteRenameRequest(const proto::RenameRequest& rename_request);
+std::unique_ptr<proto::RequestStatus> ExecuteRenameRequest(
+    const proto::RenameRequest& request);
 
-proto::Status ExecuteRemoveRequest(const proto::RemoveRequest& remove_request);
+std::unique_ptr<proto::RequestStatus> ExecuteRemoveRequest(
+    const proto::RemoveRequest& request);
 
 } // namespace aspia
 

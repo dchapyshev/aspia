@@ -29,6 +29,7 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include <google/protobuf/generated_enum_util.h>
+#include "status.pb.h"
 // @@protoc_insertion_point(includes)
 namespace aspia {
 namespace proto {
@@ -65,6 +66,9 @@ extern RemoveRequestDefaultTypeInternal _RemoveRequest_default_instance_;
 class RenameRequest;
 class RenameRequestDefaultTypeInternal;
 extern RenameRequestDefaultTypeInternal _RenameRequest_default_instance_;
+class RequestStatus;
+class RequestStatusDefaultTypeInternal;
+extern RequestStatusDefaultTypeInternal _RequestStatus_default_instance_;
 }  // namespace proto
 }  // namespace aspia
 
@@ -84,6 +88,21 @@ struct TableStruct {
 void AddDescriptors();
 void InitDefaults();
 }  // namespace protobuf_file_5ftransfer_5fsession_5fmessage_2eproto
+
+enum RequestStatus_Type {
+  RequestStatus_Type_UNKNOWN = 0,
+  RequestStatus_Type_DRIVE_LIST = 1,
+  RequestStatus_Type_DIRECTORY_LIST = 2,
+  RequestStatus_Type_CREATE_DIRECTORY = 3,
+  RequestStatus_Type_RENAME = 4,
+  RequestStatus_Type_REMOVE = 5,
+  RequestStatus_Type_RequestStatus_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  RequestStatus_Type_RequestStatus_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool RequestStatus_Type_IsValid(int value);
+const RequestStatus_Type RequestStatus_Type_Type_MIN = RequestStatus_Type_UNKNOWN;
+const RequestStatus_Type RequestStatus_Type_Type_MAX = RequestStatus_Type_REMOVE;
+const int RequestStatus_Type_Type_ARRAYSIZE = RequestStatus_Type_Type_MAX + 1;
 
 enum DriveListItem_Type {
   DriveListItem_Type_UNKNOWN = 0,
@@ -116,6 +135,144 @@ const int DirectoryListItem_Type_Type_ARRAYSIZE = DirectoryListItem_Type_Type_MA
 
 // ===================================================================
 
+class RequestStatus : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.RequestStatus) */ {
+ public:
+  RequestStatus();
+  virtual ~RequestStatus();
+
+  RequestStatus(const RequestStatus& from);
+
+  inline RequestStatus& operator=(const RequestStatus& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const RequestStatus& default_instance();
+
+  static inline const RequestStatus* internal_default_instance() {
+    return reinterpret_cast<const RequestStatus*>(
+               &_RequestStatus_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    0;
+
+  void Swap(RequestStatus* other);
+
+  // implements Message ----------------------------------------------
+
+  inline RequestStatus* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  RequestStatus* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const RequestStatus& from);
+  void MergeFrom(const RequestStatus& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(RequestStatus* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef RequestStatus_Type Type;
+  static const Type UNKNOWN =
+    RequestStatus_Type_UNKNOWN;
+  static const Type DRIVE_LIST =
+    RequestStatus_Type_DRIVE_LIST;
+  static const Type DIRECTORY_LIST =
+    RequestStatus_Type_DIRECTORY_LIST;
+  static const Type CREATE_DIRECTORY =
+    RequestStatus_Type_CREATE_DIRECTORY;
+  static const Type RENAME =
+    RequestStatus_Type_RENAME;
+  static const Type REMOVE =
+    RequestStatus_Type_REMOVE;
+  static inline bool Type_IsValid(int value) {
+    return RequestStatus_Type_IsValid(value);
+  }
+  static const Type Type_MIN =
+    RequestStatus_Type_Type_MIN;
+  static const Type Type_MAX =
+    RequestStatus_Type_Type_MAX;
+  static const int Type_ARRAYSIZE =
+    RequestStatus_Type_Type_ARRAYSIZE;
+
+  // accessors -------------------------------------------------------
+
+  // string first_path = 3;
+  void clear_first_path();
+  static const int kFirstPathFieldNumber = 3;
+  const ::std::string& first_path() const;
+  void set_first_path(const ::std::string& value);
+  #if LANG_CXX11
+  void set_first_path(::std::string&& value);
+  #endif
+  void set_first_path(const char* value);
+  void set_first_path(const char* value, size_t size);
+  ::std::string* mutable_first_path();
+  ::std::string* release_first_path();
+  void set_allocated_first_path(::std::string* first_path);
+
+  // string second_path = 4;
+  void clear_second_path();
+  static const int kSecondPathFieldNumber = 4;
+  const ::std::string& second_path() const;
+  void set_second_path(const ::std::string& value);
+  #if LANG_CXX11
+  void set_second_path(::std::string&& value);
+  #endif
+  void set_second_path(const char* value);
+  void set_second_path(const char* value, size_t size);
+  ::std::string* mutable_second_path();
+  ::std::string* release_second_path();
+  void set_allocated_second_path(::std::string* second_path);
+
+  // .aspia.proto.RequestStatus.Type type = 1;
+  void clear_type();
+  static const int kTypeFieldNumber = 1;
+  ::aspia::proto::RequestStatus_Type type() const;
+  void set_type(::aspia::proto::RequestStatus_Type value);
+
+  // .aspia.proto.Status code = 2;
+  void clear_code();
+  static const int kCodeFieldNumber = 2;
+  ::aspia::proto::Status code() const;
+  void set_code(::aspia::proto::Status value);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.RequestStatus)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr first_path_;
+  ::google::protobuf::internal::ArenaStringPtr second_path_;
+  int type_;
+  int code_;
+  mutable int _cached_size_;
+  friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class DriveListItem : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DriveListItem) */ {
  public:
   DriveListItem();
@@ -135,7 +292,7 @@ class DriveListItem : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_DriveListItem_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    0;
+    1;
 
   void Swap(DriveListItem* other);
 
@@ -284,7 +441,7 @@ class DriveList : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
                &_DriveList_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    1;
+    2;
 
   void Swap(DriveList* other);
 
@@ -368,7 +525,7 @@ class DriveListRequest : public ::google::protobuf::MessageLite /* @@protoc_inse
                &_DriveListRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    2;
+    3;
 
   void Swap(DriveListRequest* other);
 
@@ -446,7 +603,7 @@ class DirectoryListItem : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_DirectoryListItem_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    3;
+    4;
 
   void Swap(DirectoryListItem* other);
 
@@ -570,7 +727,7 @@ class DirectoryList : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_DirectoryList_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    4;
+    5;
 
   void Swap(DirectoryList* other);
 
@@ -676,7 +833,7 @@ class DirectoryListRequest : public ::google::protobuf::MessageLite /* @@protoc_
                &_DirectoryListRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
+    6;
 
   void Swap(DirectoryListRequest* other);
 
@@ -777,7 +934,7 @@ class File : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
                &_File_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    6;
+    7;
 
   void Swap(File* other);
 
@@ -885,7 +1042,7 @@ class FileRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_FileRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    8;
 
   void Swap(FileRequest* other);
 
@@ -971,7 +1128,7 @@ class CreateDirectoryRequest : public ::google::protobuf::MessageLite /* @@proto
                &_CreateDirectoryRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    9;
 
   void Swap(CreateDirectoryRequest* other);
 
@@ -1072,7 +1229,7 @@ class RenameRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_RenameRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    10;
 
   void Swap(RenameRequest* other);
 
@@ -1188,7 +1345,7 @@ class RemoveRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_RemoveRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    11;
 
   void Swap(RemoveRequest* other);
 
@@ -1274,6 +1431,144 @@ class RemoveRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
 // ===================================================================
 
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
+// RequestStatus
+
+// .aspia.proto.RequestStatus.Type type = 1;
+inline void RequestStatus::clear_type() {
+  type_ = 0;
+}
+inline ::aspia::proto::RequestStatus_Type RequestStatus::type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RequestStatus.type)
+  return static_cast< ::aspia::proto::RequestStatus_Type >(type_);
+}
+inline void RequestStatus::set_type(::aspia::proto::RequestStatus_Type value) {
+  
+  type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.RequestStatus.type)
+}
+
+// .aspia.proto.Status code = 2;
+inline void RequestStatus::clear_code() {
+  code_ = 0;
+}
+inline ::aspia::proto::Status RequestStatus::code() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RequestStatus.code)
+  return static_cast< ::aspia::proto::Status >(code_);
+}
+inline void RequestStatus::set_code(::aspia::proto::Status value) {
+  
+  code_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.RequestStatus.code)
+}
+
+// string first_path = 3;
+inline void RequestStatus::clear_first_path() {
+  first_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RequestStatus::first_path() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RequestStatus.first_path)
+  return first_path_.GetNoArena();
+}
+inline void RequestStatus::set_first_path(const ::std::string& value) {
+  
+  first_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RequestStatus.first_path)
+}
+#if LANG_CXX11
+inline void RequestStatus::set_first_path(::std::string&& value) {
+  
+  first_path_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RequestStatus.first_path)
+}
+#endif
+inline void RequestStatus::set_first_path(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  first_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RequestStatus.first_path)
+}
+inline void RequestStatus::set_first_path(const char* value, size_t size) {
+  
+  first_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RequestStatus.first_path)
+}
+inline ::std::string* RequestStatus::mutable_first_path() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RequestStatus.first_path)
+  return first_path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RequestStatus::release_first_path() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RequestStatus.first_path)
+  
+  return first_path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RequestStatus::set_allocated_first_path(::std::string* first_path) {
+  if (first_path != NULL) {
+    
+  } else {
+    
+  }
+  first_path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), first_path);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RequestStatus.first_path)
+}
+
+// string second_path = 4;
+inline void RequestStatus::clear_second_path() {
+  second_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RequestStatus::second_path() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RequestStatus.second_path)
+  return second_path_.GetNoArena();
+}
+inline void RequestStatus::set_second_path(const ::std::string& value) {
+  
+  second_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RequestStatus.second_path)
+}
+#if LANG_CXX11
+inline void RequestStatus::set_second_path(::std::string&& value) {
+  
+  second_path_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RequestStatus.second_path)
+}
+#endif
+inline void RequestStatus::set_second_path(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  second_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RequestStatus.second_path)
+}
+inline void RequestStatus::set_second_path(const char* value, size_t size) {
+  
+  second_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RequestStatus.second_path)
+}
+inline ::std::string* RequestStatus::mutable_second_path() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RequestStatus.second_path)
+  return second_path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RequestStatus::release_second_path() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RequestStatus.second_path)
+  
+  return second_path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RequestStatus::set_allocated_second_path(::std::string* second_path) {
+  if (second_path != NULL) {
+    
+  } else {
+    
+  }
+  second_path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), second_path);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RequestStatus.second_path)
+}
+
+// -------------------------------------------------------------------
+
 // DriveListItem
 
 // .aspia.proto.DriveListItem.Type type = 1;
@@ -2371,6 +2666,8 @@ inline void RemoveRequest::set_allocated_item_name(::std::string* item_name) {
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -2382,6 +2679,7 @@ inline void RemoveRequest::set_allocated_item_name(::std::string* item_name) {
 namespace google {
 namespace protobuf {
 
+template <> struct is_proto_enum< ::aspia::proto::RequestStatus_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DriveListItem_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DirectoryListItem_Type> : ::google::protobuf::internal::true_type {};
 

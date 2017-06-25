@@ -10,6 +10,7 @@
 #include "ui/resource.h"
 #include "ui/base/module.h"
 #include "base/strings/string_util.h"
+#include "base/strings/unicode.h"
 #include "base/logging.h"
 
 #include <filesystem>
@@ -177,121 +178,66 @@ void UiFileStatusDialog::WriteLog(const std::wstring& message, proto::Status sta
     edit.AppendText(L"\r\n");
 }
 
-void UiFileStatusDialog::OnDirectoryOpen(const proto::DirectoryListRequest& request,
-                                         proto::Status status)
+void UiFileStatusDialog::SetRequestStatus(const proto::RequestStatus& status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::OnDirectoryOpen,
+        runner_->PostTask(std::bind(&UiFileStatusDialog::SetRequestStatus,
                                     this,
-                                    request,
                                     status));
         return;
     }
 
-    fs::path path = fs::u8path(request.path());
+    std::wstring message;
 
-    if (!request.item().empty())
+    std::wstring first_path = UNICODEfromUTF8(status.first_path());
+    std::wstring second_path = UNICODEfromUTF8(status.second_path());
+
+    switch (status.type())
     {
-        if (request.item() == "..")
+        case proto::RequestStatus::DRIVE_LIST:
         {
-            if (path.has_parent_path() && path.parent_path() != path.root_name())
-            {
-                path = path.parent_path();
-            }
+            message = module().string(IDS_FT_OP_BROWSE_DRIVES);
         }
-        else
+        break;
+
+        case proto::RequestStatus::DIRECTORY_LIST:
         {
-            path.append(fs::u8path(request.item()));
+            message = StringPrintfW(module().string(IDS_FT_OP_BROWSE_FOLDERS).c_str(),
+                                    first_path.c_str());
         }
+        break;
+
+        case proto::RequestStatus::CREATE_DIRECTORY:
+        {
+            message = StringPrintfW(module().string(IDS_FT_OP_CREATE_FOLDER).c_str(),
+                                    first_path.c_str());
+        }
+        break;
+
+        case proto::RequestStatus::RENAME:
+        {
+            message = StringPrintfW(module().string(IDS_FT_OP_RENAME).c_str(),
+                                    first_path.c_str(),
+                                    second_path.c_str());
+        }
+        break;
+
+        case proto::RequestStatus::REMOVE:
+        {
+            message = StringPrintfW(module().string(IDS_FT_OP_REMOVE).c_str(),
+                                    first_path.c_str());
+        }
+        break;
+
+        default:
+        {
+            LOG(FATAL) << "Unhandled status code: " << status.type();
+        }
+        break;
     }
 
-    WriteLog(StringPrintfW(module().string(IDS_FT_OP_BROWSE_FOLDERS).c_str(),
-                           path.c_str()),
-             status);
-}
-
-void UiFileStatusDialog::OnCreateDirectory(
-    const proto::CreateDirectoryRequest& request,
-    proto::Status status)
-{
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::OnCreateDirectory,
-                                    this,
-                                    request,
-                                    status));
-        return;
-    }
-
-    std::wstring format = module().string(IDS_FT_OP_CREATE_FOLDER);
-
-    fs::path path = fs::u8path(request.path());
-    path.append(fs::u8path(request.name()));
-
-    WriteLog(StringPrintfW(format.c_str(), path.c_str()), status);
-}
-
-void UiFileStatusDialog::OnRename(const proto::RenameRequest& request,
-                                  proto::Status status)
-{
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::OnRename,
-                                    this,
-                                    request,
-                                    status));
-        return;
-    }
-
-    std::wstring format = module().string(IDS_FT_OP_RENAME);
-
-    fs::path old_path = fs::u8path(request.path());
-    old_path.append(fs::u8path(request.old_item_name()));
-
-    fs::path new_path = fs::u8path(request.path());
-    new_path.append(fs::u8path(request.new_item_name()));
-
-    WriteLog(StringPrintfW(format.c_str(), old_path.c_str(), new_path.c_str()),
-             status);
-}
-
-void UiFileStatusDialog::OnRemove(const proto::RemoveRequest& request,
-                                  proto::Status status)
-{
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::OnRemove,
-                                    this,
-                                    request,
-                                    status));
-        return;
-    }
-
-    std::wstring format = module().string(IDS_FT_OP_REMOVE);
-
-    fs::path path = fs::u8path(request.path());
-    path.append(fs::u8path(request.item_name()));
-
-    WriteLog(StringPrintfW(format.c_str(), path.c_str()), status);
-}
-
-void UiFileStatusDialog::OnFileSend(const std::wstring& path)
-{
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::OnFileSend, this, path));
-        return;
-    }
-}
-
-void UiFileStatusDialog::OnFileRecieve(const std::wstring& path)
-{
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::OnFileRecieve, this, path));
-        return;
-    }
+    WriteLog(message, status.code());
 }
 
 } // namespace aspia

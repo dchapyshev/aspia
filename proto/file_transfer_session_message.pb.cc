@@ -16,6 +16,8 @@
 
 namespace aspia {
 namespace proto {
+class RequestStatusDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RequestStatus> {
+} _RequestStatus_default_instance_;
 class DriveListItemDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<DriveListItem> {
 } _DriveListItem_default_instance_;
 class DriveListDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<DriveList> {
@@ -63,10 +65,12 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
 };
 
 
 void TableStruct::Shutdown() {
+  _RequestStatus_default_instance_.Shutdown();
   _DriveListItem_default_instance_.Shutdown();
   _DriveList_default_instance_.Shutdown();
   _DriveListRequest_default_instance_.Shutdown();
@@ -84,6 +88,8 @@ void TableStruct::InitDefaultsImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::internal::InitProtobufDefaults();
+  ::aspia::proto::protobuf_status_2eproto::InitDefaults();
+  _RequestStatus_default_instance_.DefaultConstruct();
   _DriveListItem_default_instance_.DefaultConstruct();
   _DriveList_default_instance_.DefaultConstruct();
   _DriveListRequest_default_instance_.DefaultConstruct();
@@ -103,6 +109,7 @@ void InitDefaults() {
 }
 void AddDescriptorsImpl() {
   InitDefaults();
+  ::aspia::proto::protobuf_status_2eproto::AddDescriptors();
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
 }
 
@@ -121,6 +128,31 @@ struct StaticDescriptorInitializer {
 
 }  // namespace protobuf_file_5ftransfer_5fsession_5fmessage_2eproto
 
+bool RequestStatus_Type_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const RequestStatus_Type RequestStatus::UNKNOWN;
+const RequestStatus_Type RequestStatus::DRIVE_LIST;
+const RequestStatus_Type RequestStatus::DIRECTORY_LIST;
+const RequestStatus_Type RequestStatus::CREATE_DIRECTORY;
+const RequestStatus_Type RequestStatus::RENAME;
+const RequestStatus_Type RequestStatus::REMOVE;
+const RequestStatus_Type RequestStatus::Type_MIN;
+const RequestStatus_Type RequestStatus::Type_MAX;
+const int RequestStatus::Type_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool DriveListItem_Type_IsValid(int value) {
   switch (value) {
     case 0:
@@ -169,6 +201,451 @@ const DirectoryListItem_Type DirectoryListItem::Type_MIN;
 const DirectoryListItem_Type DirectoryListItem::Type_MAX;
 const int DirectoryListItem::Type_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int RequestStatus::kTypeFieldNumber;
+const int RequestStatus::kCodeFieldNumber;
+const int RequestStatus::kFirstPathFieldNumber;
+const int RequestStatus::kSecondPathFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+RequestStatus::RequestStatus()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.RequestStatus)
+}
+RequestStatus::RequestStatus(const RequestStatus& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  first_path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.first_path().size() > 0) {
+    first_path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.first_path_);
+  }
+  second_path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.second_path().size() > 0) {
+    second_path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.second_path_);
+  }
+  ::memcpy(&type_, &from.type_,
+    reinterpret_cast<char*>(&code_) -
+    reinterpret_cast<char*>(&type_) + sizeof(code_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.RequestStatus)
+}
+
+void RequestStatus::SharedCtor() {
+  first_path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  second_path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&type_, 0, reinterpret_cast<char*>(&code_) -
+    reinterpret_cast<char*>(&type_) + sizeof(code_));
+  _cached_size_ = 0;
+}
+
+RequestStatus::~RequestStatus() {
+  // @@protoc_insertion_point(destructor:aspia.proto.RequestStatus)
+  SharedDtor();
+}
+
+void RequestStatus::SharedDtor() {
+  first_path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  second_path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void RequestStatus::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const RequestStatus& RequestStatus::default_instance() {
+  protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+RequestStatus* RequestStatus::New(::google::protobuf::Arena* arena) const {
+  RequestStatus* n = new RequestStatus;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void RequestStatus::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.RequestStatus)
+  first_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  second_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&type_, 0, reinterpret_cast<char*>(&code_) -
+    reinterpret_cast<char*>(&type_) + sizeof(code_));
+}
+
+bool RequestStatus::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:aspia.proto.RequestStatus)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // .aspia.proto.RequestStatus.Type type = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_type(static_cast< ::aspia::proto::RequestStatus_Type >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.Status code = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_code(static_cast< ::aspia::proto::Status >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string first_path = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_first_path()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->first_path().data(), this->first_path().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.RequestStatus.first_path"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string second_path = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_second_path()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->second_path().data(), this->second_path().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.RequestStatus.second_path"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.RequestStatus)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.RequestStatus)
+  return false;
+#undef DO_
+}
+
+void RequestStatus::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.RequestStatus)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .aspia.proto.RequestStatus.Type type = 1;
+  if (this->type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->type(), output);
+  }
+
+  // .aspia.proto.Status code = 2;
+  if (this->code() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      2, this->code(), output);
+  }
+
+  // string first_path = 3;
+  if (this->first_path().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->first_path().data(), this->first_path().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.RequestStatus.first_path");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->first_path(), output);
+  }
+
+  // string second_path = 4;
+  if (this->second_path().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->second_path().data(), this->second_path().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.RequestStatus.second_path");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      4, this->second_path(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:aspia.proto.RequestStatus)
+}
+
+size_t RequestStatus::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.RequestStatus)
+  size_t total_size = 0;
+
+  // string first_path = 3;
+  if (this->first_path().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->first_path());
+  }
+
+  // string second_path = 4;
+  if (this->second_path().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->second_path());
+  }
+
+  // .aspia.proto.RequestStatus.Type type = 1;
+  if (this->type() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
+  }
+
+  // .aspia.proto.Status code = 2;
+  if (this->code() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->code());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void RequestStatus::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const RequestStatus*>(&from));
+}
+
+void RequestStatus::MergeFrom(const RequestStatus& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.RequestStatus)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.first_path().size() > 0) {
+
+    first_path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.first_path_);
+  }
+  if (from.second_path().size() > 0) {
+
+    second_path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.second_path_);
+  }
+  if (from.type() != 0) {
+    set_type(from.type());
+  }
+  if (from.code() != 0) {
+    set_code(from.code());
+  }
+}
+
+void RequestStatus::CopyFrom(const RequestStatus& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.RequestStatus)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RequestStatus::IsInitialized() const {
+  return true;
+}
+
+void RequestStatus::Swap(RequestStatus* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void RequestStatus::InternalSwap(RequestStatus* other) {
+  first_path_.Swap(&other->first_path_);
+  second_path_.Swap(&other->second_path_);
+  std::swap(type_, other->type_);
+  std::swap(code_, other->code_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string RequestStatus::GetTypeName() const {
+  return "aspia.proto.RequestStatus";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// RequestStatus
+
+// .aspia.proto.RequestStatus.Type type = 1;
+void RequestStatus::clear_type() {
+  type_ = 0;
+}
+::aspia::proto::RequestStatus_Type RequestStatus::type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RequestStatus.type)
+  return static_cast< ::aspia::proto::RequestStatus_Type >(type_);
+}
+void RequestStatus::set_type(::aspia::proto::RequestStatus_Type value) {
+  
+  type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.RequestStatus.type)
+}
+
+// .aspia.proto.Status code = 2;
+void RequestStatus::clear_code() {
+  code_ = 0;
+}
+::aspia::proto::Status RequestStatus::code() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RequestStatus.code)
+  return static_cast< ::aspia::proto::Status >(code_);
+}
+void RequestStatus::set_code(::aspia::proto::Status value) {
+  
+  code_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.RequestStatus.code)
+}
+
+// string first_path = 3;
+void RequestStatus::clear_first_path() {
+  first_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& RequestStatus::first_path() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RequestStatus.first_path)
+  return first_path_.GetNoArena();
+}
+void RequestStatus::set_first_path(const ::std::string& value) {
+  
+  first_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RequestStatus.first_path)
+}
+#if LANG_CXX11
+void RequestStatus::set_first_path(::std::string&& value) {
+  
+  first_path_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RequestStatus.first_path)
+}
+#endif
+void RequestStatus::set_first_path(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  first_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RequestStatus.first_path)
+}
+void RequestStatus::set_first_path(const char* value, size_t size) {
+  
+  first_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RequestStatus.first_path)
+}
+::std::string* RequestStatus::mutable_first_path() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RequestStatus.first_path)
+  return first_path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* RequestStatus::release_first_path() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RequestStatus.first_path)
+  
+  return first_path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void RequestStatus::set_allocated_first_path(::std::string* first_path) {
+  if (first_path != NULL) {
+    
+  } else {
+    
+  }
+  first_path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), first_path);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RequestStatus.first_path)
+}
+
+// string second_path = 4;
+void RequestStatus::clear_second_path() {
+  second_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& RequestStatus::second_path() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RequestStatus.second_path)
+  return second_path_.GetNoArena();
+}
+void RequestStatus::set_second_path(const ::std::string& value) {
+  
+  second_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RequestStatus.second_path)
+}
+#if LANG_CXX11
+void RequestStatus::set_second_path(::std::string&& value) {
+  
+  second_path_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RequestStatus.second_path)
+}
+#endif
+void RequestStatus::set_second_path(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  second_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RequestStatus.second_path)
+}
+void RequestStatus::set_second_path(const char* value, size_t size) {
+  
+  second_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RequestStatus.second_path)
+}
+::std::string* RequestStatus::mutable_second_path() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RequestStatus.second_path)
+  return second_path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* RequestStatus::release_second_path() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RequestStatus.second_path)
+  
+  return second_path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void RequestStatus::set_allocated_second_path(::std::string* second_path) {
+  if (second_path != NULL) {
+    
+  } else {
+    
+  }
+  second_path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), second_path);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RequestStatus.second_path)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 

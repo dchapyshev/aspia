@@ -373,9 +373,15 @@ BEGIN
     IDS_FT_OP_RENAME                      "Переименование ""%s"" в ""%s"""
     IDS_FT_OP_REMOVE                      "Удаление ""%s"""
     IDS_FT_OP_CREATE_FOLDER               "Создание папки: ""%s"""
+    IDS_FT_OP_BROWSE_DRIVES               "Обзор дисков"
     IDS_FT_SEND                           "Отправить"
     IDS_FT_RECIEVE                        "Получить"
     IDS_FT_SELECTED_OBJECT_COUNT          "%lu объект(ов) выбрано"
+    IDS_FT_BROWSE_FOLDERS_ERROR           "Произошла ошибка при попытке просмотра папки ""%s"": %s"
+    IDS_FT_OP_RENAME_ERROR                "Произошла ошибка при переименовании объекта ""%s"" в ""%s"": %s"
+    IDS_FT_OP_REMOVE_ERROR                "Произошла ошибка при удалении объекта ""%s"": %s"
+    IDS_FT_OP_CREATE_FOLDER_ERROR         "Произошла ошибка при попытке создания папки ""%s"": %s"
+    IDS_FT_OP_DRIVE_LIST_ERROR            "Произошла ошибка при получении списка дисков: %s"
 END
 
 // Status
@@ -396,5 +402,6 @@ BEGIN
     IDS_STATUS_CONNECT_TIMEOUT            "Превышено время ожидания соединения"
     IDS_STATUS_CONNECT_ERROR              "Не удалось установить соединение"
     IDS_STATUS_CONNECTING                 "Подключение"
+    IDS_STATUS_NO_DRIVES_FOUND            "Диски не найдены"
     IDS_STATUS_UNKNOWN                    "Неизвестный код состояния"
 END

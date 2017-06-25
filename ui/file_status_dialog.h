@@ -30,20 +30,7 @@ public:
     UiFileStatusDialog(Delegate* delegate);
     ~UiFileStatusDialog();
 
-    void OnDirectoryOpen(const proto::DirectoryListRequest& request,
-                         proto::Status status);
-
-    void OnCreateDirectory(const proto::CreateDirectoryRequest& request,
-                           proto::Status status);
-
-    void OnRename(const proto::RenameRequest& request,
-                  proto::Status status);
-
-    void OnRemove(const proto::RemoveRequest& request,
-                  proto::Status status);
-
-    void OnFileSend(const std::wstring& path);
-    void OnFileRecieve(const std::wstring& path);
+    void SetRequestStatus(const proto::RequestStatus& status);
 
 private:
     // Dialog implementation.

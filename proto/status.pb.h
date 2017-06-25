@@ -67,12 +67,13 @@ enum Status {
   STATUS_CONNECT_TIMEOUT = 12,
   STATUS_CONNECT_ERROR = 13,
   STATUS_CONNECTING = 14,
+  STATUS_NO_DRIVES_FOUND = 15,
   Status_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   Status_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool Status_IsValid(int value);
 const Status Status_MIN = STATUS_SUCCESS;
-const Status Status_MAX = STATUS_CONNECTING;
+const Status Status_MAX = STATUS_NO_DRIVES_FOUND;
 const int Status_ARRAYSIZE = Status_MAX + 1;
 
 // ===================================================================

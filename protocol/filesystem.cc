@@ -11,16 +11,35 @@
 #include "base/path.h"
 #include "base/logging.h"
 
+#include <filesystem>
+
 namespace aspia {
 
 namespace fs = std::experimental::filesystem;
 
-std::unique_ptr<proto::DriveList> ExecuteDriveListRequest(
-    const proto::DriveListRequest& drive_list_request)
+static std::unique_ptr<proto::RequestStatus>
+CreateRequestStatus(proto::RequestStatus::Type request_type,
+                    const std::string& first_path,
+                    const std::string& second_path,
+                    proto::Status status_code)
 {
-    UNREF(drive_list_request);
+    std::unique_ptr<proto::RequestStatus> status(new proto::RequestStatus());
 
-    std::unique_ptr<proto::DriveList> drive_list(new proto::DriveList());
+    status->set_type(request_type);
+    status->set_code(status_code);
+    status->set_first_path(first_path);
+    status->set_second_path(second_path);
+
+    return status;
+}
+
+std::unique_ptr<proto::RequestStatus> ExecuteDriveListRequest(
+    const proto::DriveListRequest& request,
+    std::unique_ptr<proto::DriveList>& reply)
+{
+    UNREF(request);
+
+    reply.reset(new proto::DriveList());
 
     DriveEnumerator enumerator;
 
@@ -31,7 +50,7 @@ std::unique_ptr<proto::DriveList> ExecuteDriveListRequest(
         if (path.empty())
             break;
 
-        proto::DriveListItem* item = drive_list->add_item();
+        proto::DriveListItem* item = reply->add_item();
 
         item->set_path(UTF8fromUNICODE(path));
 
@@ -73,7 +92,7 @@ std::unique_ptr<proto::DriveList> ExecuteDriveListRequest(
 
     if (GetPathW(PathKey::DIR_USER_HOME, path))
     {
-        proto::DriveListItem* item = drive_list->add_item();
+        proto::DriveListItem* item = reply->add_item();
 
         item->set_type(proto::DriveListItem::HOME_FOLDER);
         item->set_path(UTF8fromUNICODE(path));
@@ -81,16 +100,24 @@ std::unique_ptr<proto::DriveList> ExecuteDriveListRequest(
 
     if (GetPathW(PathKey::DIR_USER_DESKTOP, path))
     {
-        proto::DriveListItem* item = drive_list->add_item();
+        proto::DriveListItem* item = reply->add_item();
 
         item->set_type(proto::DriveListItem::DESKTOP_FOLDER);
         item->set_path(UTF8fromUNICODE(path));
     }
 
-    return drive_list;
+    proto::Status status_code = proto::Status::STATUS_SUCCESS;
+
+    if (!reply->item_size())
+        status_code = proto::Status::STATUS_NO_DRIVES_FOUND;
+
+    return CreateRequestStatus(proto::RequestStatus::DRIVE_LIST,
+                               std::string(),
+                               std::string(),
+                               status_code);
 }
 
-proto::Status ExecuteDirectoryListRequest(
+std::unique_ptr<proto::RequestStatus> ExecuteDirectoryListRequest(
     const proto::DirectoryListRequest& request,
     std::unique_ptr<proto::DirectoryList>& reply)
 {
@@ -114,7 +141,12 @@ proto::Status ExecuteDirectoryListRequest(
     std::error_code code;
 
     if (!fs::exists(path, code))
-        return proto::Status::STATUS_PATH_NOT_FOUND;
+    {
+        return CreateRequestStatus(proto::RequestStatus::DIRECTORY_LIST,
+                                   path.u8string(),
+                                   std::string(),
+                                   proto::Status::STATUS_PATH_NOT_FOUND);
+    }
 
     reply.reset(new proto::DirectoryList());
     reply->set_path(path.u8string());
@@ -147,15 +179,19 @@ proto::Status ExecuteDirectoryListRequest(
         }
     }
 
-    return proto::Status::STATUS_SUCCESS;
+    return CreateRequestStatus(proto::RequestStatus::DIRECTORY_LIST,
+                               path.u8string(),
+                               std::string(),
+                               proto::Status::STATUS_SUCCESS);
 }
 
-proto::Status ExecuteCreateDirectoryRequest(
-    const proto::CreateDirectoryRequest& create_directory_request)
+std::unique_ptr<proto::RequestStatus> ExecuteCreateDirectoryRequest(
+    const proto::CreateDirectoryRequest& request)
 {
-    fs::path path = fs::u8path(create_directory_request.path());
+    proto::Status status_code = proto::Status::STATUS_SUCCESS;
 
-    path.append(fs::u8path(create_directory_request.name()));
+    fs::path path = fs::u8path(request.path());
+    path.append(fs::u8path(request.name()));
 
     std::error_code code;
 
@@ -164,57 +200,90 @@ proto::Status ExecuteCreateDirectoryRequest(
         if (fs::exists(path, code))
         {
             if (fs::is_directory(path, code))
-                return proto::Status::STATUS_PATH_ALREADY_EXISTS;
+            {
+                status_code = proto::Status::STATUS_PATH_ALREADY_EXISTS;
+            }
             else
-                return proto::Status::STATUS_FILE_ALREADY_EXISTS;
+            {
+                status_code = proto::Status::STATUS_FILE_ALREADY_EXISTS;
+            }
         }
-
-        return proto::Status::STATUS_ACCESS_DENIED;
+        else
+        {
+            status_code = proto::Status::STATUS_ACCESS_DENIED;
+        }
     }
 
-    return proto::Status::STATUS_SUCCESS;
+    return CreateRequestStatus(proto::RequestStatus::CREATE_DIRECTORY,
+                               path.u8string(),
+                               std::string(),
+                               status_code);
 }
 
-proto::Status ExecuteRenameRequest(const proto::RenameRequest& rename_request)
+std::unique_ptr<proto::RequestStatus> ExecuteRenameRequest(
+    const proto::RenameRequest& request)
 {
-    fs::path old_path = fs::u8path(rename_request.path());
-    old_path.append(fs::u8path(rename_request.old_item_name()));
+    proto::Status status_code = proto::Status::STATUS_SUCCESS;
 
-    fs::path new_path = fs::u8path(rename_request.path());
-    new_path.append(fs::u8path(rename_request.new_item_name()));
+    fs::path old_path = fs::u8path(request.path());
+    old_path.append(fs::u8path(request.old_item_name()));
 
-    if (old_path == new_path)
-        return proto::Status::STATUS_SUCCESS;
+    fs::path new_path = fs::u8path(request.path());
+    new_path.append(fs::u8path(request.new_item_name()));
 
-    std::error_code code;
-
-    if (fs::exists(new_path, code))
+    if (old_path != new_path)
     {
-        if (fs::is_directory(new_path, code))
-            return proto::Status::STATUS_PATH_ALREADY_EXISTS;
+        std::error_code code;
 
-        return proto::Status::STATUS_FILE_ALREADY_EXISTS;
+        if (fs::exists(new_path, code))
+        {
+            if (fs::is_directory(new_path, code))
+            {
+                status_code = proto::Status::STATUS_PATH_ALREADY_EXISTS;
+            }
+            else
+            {
+                status_code = proto::Status::STATUS_FILE_ALREADY_EXISTS;
+            }
+        }
+        else
+        {
+            fs::rename(old_path, new_path, code);
+        }
     }
 
-    fs::rename(old_path, new_path, code);
-
-    return proto::Status::STATUS_SUCCESS;
+    return CreateRequestStatus(proto::RequestStatus::RENAME,
+                               old_path.u8string(),
+                               new_path.u8string(),
+                               status_code);
 }
 
-proto::Status ExecuteRemoveRequest(const proto::RemoveRequest& remove_request)
+std::unique_ptr<proto::RequestStatus> ExecuteRemoveRequest(
+    const proto::RemoveRequest& request)
 {
-    fs::path path = fs::u8path(remove_request.path());
-    path.append(fs::u8path(remove_request.item_name()));
+    proto::Status status_code = proto::Status::STATUS_SUCCESS;
+
+    fs::path path = fs::u8path(request.path());
+    path.append(fs::u8path(request.item_name()));
 
     std::error_code code;
 
     if (!fs::exists(path, code))
-        return proto::Status::STATUS_PATH_NOT_FOUND;
+    {
+        status_code = proto::Status::STATUS_PATH_NOT_FOUND;
+    }
+    else
+    {
+        if (fs::remove_all(path, code) == static_cast<std::uintmax_t>(-1))
+        {
+            status_code = proto::Status::STATUS_ACCESS_DENIED;
+        }
+    }
 
-    if (fs::remove_all(path, code) == static_cast<std::uintmax_t>(-1))
-        return proto::Status::STATUS_ACCESS_DENIED;
-
-    return proto::Status::STATUS_SUCCESS;
+    return CreateRequestStatus(proto::RequestStatus::RENAME,
+                               path.u8string(),
+                               std::string(),
+                               status_code);
 }
 
 } // namespace aspia

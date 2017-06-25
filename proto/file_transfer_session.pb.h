@@ -29,7 +29,6 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include "file_transfer_session_message.pb.h"
-#include "status.pb.h"
 // @@protoc_insertion_point(includes)
 namespace aspia {
 namespace proto {
@@ -66,6 +65,9 @@ extern RemoveRequestDefaultTypeInternal _RemoveRequest_default_instance_;
 class RenameRequest;
 class RenameRequestDefaultTypeInternal;
 extern RenameRequestDefaultTypeInternal _RenameRequest_default_instance_;
+class RequestStatus;
+class RequestStatusDefaultTypeInternal;
+extern RequestStatusDefaultTypeInternal _RequestStatus_default_instance_;
 namespace file_transfer {
 class ClientToHost;
 class ClientToHostDefaultTypeInternal;
@@ -159,6 +161,15 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
 
   // accessors -------------------------------------------------------
 
+  // .aspia.proto.RequestStatus status = 1;
+  bool has_status() const;
+  void clear_status();
+  static const int kStatusFieldNumber = 1;
+  const ::aspia::proto::RequestStatus& status() const;
+  ::aspia::proto::RequestStatus* mutable_status();
+  ::aspia::proto::RequestStatus* release_status();
+  void set_allocated_status(::aspia::proto::RequestStatus* status);
+
   // .aspia.proto.DriveList drive_list = 2;
   bool has_drive_list() const;
   void clear_drive_list();
@@ -186,20 +197,14 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::File* release_file();
   void set_allocated_file(::aspia::proto::File* file);
 
-  // .aspia.proto.Status status = 1;
-  void clear_status();
-  static const int kStatusFieldNumber = 1;
-  ::aspia::proto::Status status() const;
-  void set_status(::aspia::proto::Status value);
-
   // @@protoc_insertion_point(class_scope:aspia.proto.file_transfer.HostToClient)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::aspia::proto::RequestStatus* status_;
   ::aspia::proto::DriveList* drive_list_;
   ::aspia::proto::DirectoryList* directory_list_;
   ::aspia::proto::File* file_;
-  int status_;
   mutable int _cached_size_;
   friend struct protobuf_file_5ftransfer_5fsession_2eproto::TableStruct;
 };
@@ -352,18 +357,43 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // HostToClient
 
-// .aspia.proto.Status status = 1;
+// .aspia.proto.RequestStatus status = 1;
+inline bool HostToClient::has_status() const {
+  return this != internal_default_instance() && status_ != NULL;
+}
 inline void HostToClient::clear_status() {
-  status_ = 0;
+  if (GetArenaNoVirtual() == NULL && status_ != NULL) delete status_;
+  status_ = NULL;
 }
-inline ::aspia::proto::Status HostToClient::status() const {
+inline const ::aspia::proto::RequestStatus& HostToClient::status() const {
   // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.HostToClient.status)
-  return static_cast< ::aspia::proto::Status >(status_);
+  return status_ != NULL ? *status_
+                         : *::aspia::proto::RequestStatus::internal_default_instance();
 }
-inline void HostToClient::set_status(::aspia::proto::Status value) {
+inline ::aspia::proto::RequestStatus* HostToClient::mutable_status() {
   
-  status_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.file_transfer.HostToClient.status)
+  if (status_ == NULL) {
+    status_ = new ::aspia::proto::RequestStatus;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.file_transfer.HostToClient.status)
+  return status_;
+}
+inline ::aspia::proto::RequestStatus* HostToClient::release_status() {
+  // @@protoc_insertion_point(field_release:aspia.proto.file_transfer.HostToClient.status)
+  
+  ::aspia::proto::RequestStatus* temp = status_;
+  status_ = NULL;
+  return temp;
+}
+inline void HostToClient::set_allocated_status(::aspia::proto::RequestStatus* status) {
+  delete status_;
+  status_ = status;
+  if (status) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.HostToClient.status)
 }
 
 // .aspia.proto.DriveList drive_list = 2;

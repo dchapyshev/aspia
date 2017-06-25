@@ -373,9 +373,15 @@ BEGIN
     IDS_FT_OP_RENAME                      "Rename: ""%s"" to ""%s"""
     IDS_FT_OP_REMOVE                      "Remove: ""%s"""
     IDS_FT_OP_CREATE_FOLDER               "Create folder: ""%s"""
+    IDS_FT_OP_BROWSE_DRIVES               "Browse drives"
     IDS_FT_SEND                           "Send"
     IDS_FT_RECIEVE                        "Recieve"
     IDS_FT_SELECTED_OBJECT_COUNT          "%lu object(s) selected"
+    IDS_FT_BROWSE_FOLDERS_ERROR           "An error occurred while trying to view the folder ""%s"": %s"
+    IDS_FT_OP_RENAME_ERROR                "An error occurred when renaming object ""%s"" to ""%s"": %s"
+    IDS_FT_OP_REMOVE_ERROR                "An error occurred while deleting object ""%s"": %s"
+    IDS_FT_OP_CREATE_FOLDER_ERROR         "An error occurred while trying to create the folder ""%s"": %s"
+    IDS_FT_OP_DRIVE_LIST_ERROR            "An error occurred while retrieving the drive list: %s"
 END
 
 // Status
@@ -396,5 +402,6 @@ BEGIN
     IDS_STATUS_CONNECT_TIMEOUT            "Connection timeout"
     IDS_STATUS_CONNECT_ERROR              "Unable to establish connection"
     IDS_STATUS_CONNECTING                 "Connecting"
+    IDS_STATUS_NO_DRIVES_FOUND            "No drives found"
     IDS_STATUS_UNKNOWN                    "Unknown status code"
 END

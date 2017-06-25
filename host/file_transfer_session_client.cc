@@ -110,22 +110,34 @@ void FileTransferSessionClient::WriteMessage(
     ipc_channel_->Send(buffer);
 }
 
-void FileTransferSessionClient::WriteStatus(proto::Status status)
+void FileTransferSessionClient::WriteStatus(
+    std::unique_ptr<proto::RequestStatus> status)
 {
-    DCHECK(status != proto::Status::STATUS_SUCCESS);
+    DCHECK(status);
+    DCHECK(status->code() != proto::Status::STATUS_SUCCESS);
 
     proto::file_transfer::HostToClient message;
-    message.set_status(status);
+    message.set_allocated_status(status.release());
     WriteMessage(message);
 }
 
 bool FileTransferSessionClient::ReadDriveListRequestMessage(
     const proto::DriveListRequest& request)
 {
-    std::unique_ptr<proto::DriveList> reply =
-        ExecuteDriveListRequest(request);
-    if (!reply)
-        return false;
+    std::unique_ptr<proto::DriveList> reply;
+
+    std::unique_ptr<proto::RequestStatus> status =
+        ExecuteDriveListRequest(request, reply);
+
+    status_dialog_->SetRequestStatus(*status);
+
+    if (status->code() != proto::Status::STATUS_SUCCESS)
+    {
+        WriteStatus(std::move(status));
+        return true;
+    }
+
+    DCHECK(reply);
 
     proto::file_transfer::HostToClient message;
     message.set_allocated_drive_list(reply.release());
@@ -139,14 +151,14 @@ void FileTransferSessionClient::ReadDirectoryListRequestMessage(
 {
     std::unique_ptr<proto::DirectoryList> reply;
 
-    proto::Status status =
+    std::unique_ptr<proto::RequestStatus> status =
         ExecuteDirectoryListRequest(request, reply);
 
-    status_dialog_->OnDirectoryOpen(request, status);
+    status_dialog_->SetRequestStatus(*status);
 
-    if (status != proto::Status::STATUS_SUCCESS)
+    if (status->code() != proto::Status::STATUS_SUCCESS)
     {
-        WriteStatus(status);
+        WriteStatus(std::move(status));
         return;
     }
 
@@ -171,35 +183,37 @@ bool FileTransferSessionClient::ReadFileMessage(const proto::File& file)
 void FileTransferSessionClient::ReadCreateDirectoryRequest(
     const proto::CreateDirectoryRequest& request)
 {
-    proto::Status status =
+    std::unique_ptr<proto::RequestStatus> status =
         ExecuteCreateDirectoryRequest(request);
 
-    status_dialog_->OnCreateDirectory(request, status);
+    status_dialog_->SetRequestStatus(*status);
 
-    if (status != proto::Status::STATUS_SUCCESS)
-        WriteStatus(status);
+    if (status->code() != proto::Status::STATUS_SUCCESS)
+        WriteStatus(std::move(status));
 }
 
 void FileTransferSessionClient::ReadRenameRequest(
     const proto::RenameRequest& request)
 {
-    proto::Status status = ExecuteRenameRequest(request);
+    std::unique_ptr<proto::RequestStatus> status =
+        ExecuteRenameRequest(request);
 
-    status_dialog_->OnRename(request, status);
+    status_dialog_->SetRequestStatus(*status);
 
-    if (status != proto::Status::STATUS_SUCCESS)
-        WriteStatus(status);
+    if (status->code() != proto::Status::STATUS_SUCCESS)
+        WriteStatus(std::move(status));
 }
 
 void FileTransferSessionClient::ReadRemoveRequest(
     const proto::RemoveRequest& request)
 {
-    proto::Status status = ExecuteRemoveRequest(request);
+    std::unique_ptr<proto::RequestStatus> status =
+        ExecuteRemoveRequest(request);
 
-    status_dialog_->OnRemove(request, status);
+    status_dialog_->SetRequestStatus(*status);
 
-    if (status != proto::Status::STATUS_SUCCESS)
-        WriteStatus(status);
+    if (status->code() != proto::Status::STATUS_SUCCESS)
+        WriteStatus(std::move(status));
 }
 
 } // namespace aspia

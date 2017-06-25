@@ -28,4 +28,5 @@ enum Status
     STATUS_CONNECT_TIMEOUT     = 12;
     STATUS_CONNECT_ERROR       = 13;
     STATUS_CONNECTING          = 14;
+    STATUS_NO_DRIVES_FOUND     = 15;
 }

@@ -9,7 +9,27 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
+import "status.proto";
+
 package aspia.proto;
+
+message RequestStatus
+{
+    enum Type
+    {
+        UNKNOWN          = 0;
+        DRIVE_LIST       = 1;
+        DIRECTORY_LIST   = 2;
+        CREATE_DIRECTORY = 3;
+        RENAME           = 4;
+        REMOVE           = 5;
+    }
+
+    Type type          = 1;
+    Status code        = 2;
+    string first_path  = 3;
+    string second_path = 4;
+}
 
 message DriveListItem
 {

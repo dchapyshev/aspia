@@ -10,6 +10,8 @@
 #include "protocol/message_serialization.h"
 #include "protocol/filesystem.h"
 
+#include <memory>
+
 namespace aspia {
 
 ClientSessionFileTransfer::ClientSessionFileTransfer(const ClientConfig& config,
@@ -43,15 +45,14 @@ void ClientSessionFileTransfer::Send(const IOBuffer& buffer)
 
     if (ParseMessage(buffer, message))
     {
-        if (message.status() != proto::Status::STATUS_SUCCESS)
-        {
-            file_manager_->ReadStatusCode(message.status());
-            return;
-        }
-
         bool success = true;
 
-        if (message.has_drive_list())
+        if (message.has_status())
+        {
+            file_manager_->ReadRequestStatus(
+                std::shared_ptr<proto::RequestStatus>(message.release_status()));
+        }
+        else if (message.has_drive_list())
         {
             std::unique_ptr<proto::DriveList> drive_list(message.release_drive_list());
             success = ReadDriveListMessage(std::move(drive_list));
@@ -104,13 +105,21 @@ void ClientSessionFileTransfer::OnDriveListRequest(UiFileManager::PanelType pane
     {
         DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
 
-        std::unique_ptr<proto::DriveList> drive_list =
-            ExecuteDriveListRequest(message.drive_list_request());
+        std::unique_ptr<proto::DriveList> drive_list;
 
-        if (drive_list)
+        std::unique_ptr<proto::RequestStatus> status =
+            ExecuteDriveListRequest(message.drive_list_request(), drive_list);
+
+        if (status->code() == proto::Status::STATUS_SUCCESS)
         {
+            DCHECK(drive_list);
+
             file_manager_->ReadDriveList(UiFileManager::PanelType::LOCAL,
                                          std::move(drive_list));
+        }
+        else
+        {
+            file_manager_->ReadRequestStatus(std::move(status));
         }
     }
 }
@@ -143,14 +152,18 @@ void ClientSessionFileTransfer::OnDirectoryListRequest(UiFileManager::PanelType 
 
         std::unique_ptr<proto::DirectoryList> directory_list;
 
-        proto::Status status =
+        std::unique_ptr<proto::RequestStatus> status =
             ExecuteDirectoryListRequest(message.directory_list_request(),
                                         directory_list);
 
-        if (status == proto::Status::STATUS_SUCCESS && directory_list)
+        if (status->code() == proto::Status::STATUS_SUCCESS)
         {
             file_manager_->ReadDirectoryList(UiFileManager::PanelType::LOCAL,
                                              std::move(directory_list));
+        }
+        else
+        {
+            file_manager_->ReadRequestStatus(std::move(status));
         }
     }
 }
@@ -182,10 +195,13 @@ void ClientSessionFileTransfer::OnCreateDirectoryRequest(
     {
         DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
 
-        proto::Status status =
+        std::unique_ptr<proto::RequestStatus> status =
             ExecuteCreateDirectoryRequest(message.create_directory_request());
-        if (status != proto::Status::STATUS_SUCCESS)
-            file_manager_->ReadStatusCode(status);
+
+        if (status->code() != proto::Status::STATUS_SUCCESS)
+        {
+            file_manager_->ReadRequestStatus(std::move(status));
+        }
     }
 }
 
@@ -221,9 +237,13 @@ void ClientSessionFileTransfer::OnRenameRequest(
     {
         DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
 
-        proto::Status status = ExecuteRenameRequest(message.rename_request());
-        if (status != proto::Status::STATUS_SUCCESS)
-            file_manager_->ReadStatusCode(status);
+        std::unique_ptr<proto::RequestStatus> status =
+            ExecuteRenameRequest(message.rename_request());
+
+        if (status->code() != proto::Status::STATUS_SUCCESS)
+        {
+            file_manager_->ReadRequestStatus(std::move(status));
+        }
     }
 }
 
@@ -254,9 +274,13 @@ void ClientSessionFileTransfer::OnRemoveRequest(
     {
         DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
 
-        proto::Status status = ExecuteRemoveRequest(message.remove_request());
-        if (status != proto::Status::STATUS_SUCCESS)
-            file_manager_->ReadStatusCode(status);
+        std::unique_ptr<proto::RequestStatus> status =
+            ExecuteRemoveRequest(message.remove_request());
+
+        if (status->code() != proto::Status::STATUS_SUCCESS)
+        {
+            file_manager_->ReadRequestStatus(std::move(status));
+        }
     }
 }
 

@@ -444,9 +444,9 @@ void UiFileManagerPanel::OnDriveChange()
     if (selected_item == CB_ERR)
         return;
 
-    int index = drive_combo_.GetItemData(selected_item);
+    int object_index = drive_combo_.GetItemData(selected_item);
 
-    if (index == kComputerIndex)
+    if (object_index == kComputerIndex)
     {
         list_.DeleteAllItems();
         list_imagelist_.RemoveAll();
@@ -475,21 +475,21 @@ void UiFileManagerPanel::OnDriveChange()
                 list_.SetItemText(item_index, 3, SizeToString(item.free_space()));
         }
     }
-    else if (index == kCurrentFolderIndex)
+    else if (object_index == kCurrentFolderIndex)
     {
         std::wstring path = drive_combo_.GetItemText(selected_item);
         delegate_->OnDirectoryListRequest(panel_type_,
                                           UTF8fromUNICODE(path),
                                           std::string());
     }
-    else if (index < 0 || index >= drive_list_->item_size())
+    else if (object_index < 0 || object_index >= drive_list_->item_size())
     {
         return;
     }
     else
     {
         delegate_->OnDirectoryListRequest(panel_type_,
-                                          drive_list_->item(index).path(),
+                                          drive_list_->item(object_index).path(),
                                           std::string());
     }
 }
@@ -500,23 +500,24 @@ void UiFileManagerPanel::OnDirectoryChange()
     if (item_index == -1)
         return;
 
-    int index = list_.GetItemData<int>(item_index);
+    int object_index = list_.GetItemData<int>(item_index);
 
     if (!directory_list_)
     {
         if (!drive_list_)
             return;
 
-        drive_combo_.SelectItemData(index);
+        drive_combo_.SelectItemData(object_index);
         OnDriveChange();
 
         return;
     }
 
-    if (index < 0 || index >= directory_list_->item_size())
+    if (object_index < 0 || object_index >= directory_list_->item_size())
         return;
 
-    const proto::DirectoryListItem& item = directory_list_->item(index);
+    const proto::DirectoryListItem& item =
+        directory_list_->item(object_index);
 
     if (item.type() == proto::DirectoryListItem::DIRECTORY)
     {

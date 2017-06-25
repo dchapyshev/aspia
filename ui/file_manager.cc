@@ -9,6 +9,8 @@
 #include "ui/resource.h"
 #include "ui/status_code.h"
 #include "ui/base/module.h"
+#include "base/strings/string_util.h"
+#include "base/strings/unicode.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -55,15 +57,74 @@ void UiFileManager::OnAfterThreadRunning()
     DestroyWindow();
 }
 
-void UiFileManager::ReadStatusCode(proto::Status status)
+void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> status)
 {
+    DCHECK(status);
+
+    if (status->code() == proto::Status::STATUS_SUCCESS)
+        return;
+
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileManager::ReadStatusCode, this, status));
+        runner_->PostTask(std::bind(&UiFileManager::ReadRequestStatus, this, status));
         return;
     }
 
-    std::wstring message = StatusCodeToString(UiModule::Current(), status);
+    const UiModule& module = UiModule::Current();
+
+    std::wstring status_code = StatusCodeToString(UiModule::Current(), status->code());
+    std::wstring first_path = UNICODEfromUTF8(status->first_path());
+    std::wstring second_path = UNICODEfromUTF8(status->second_path());
+    std::wstring message;
+
+    switch (status->type())
+    {
+        case proto::RequestStatus::DRIVE_LIST:
+        {
+            message = StringPrintfW(module.string(IDS_FT_OP_DRIVE_LIST_ERROR).c_str(),
+                                    status_code.c_str());
+        }
+        break;
+
+        case proto::RequestStatus::DIRECTORY_LIST:
+        {
+            message = StringPrintfW(module.string(IDS_FT_BROWSE_FOLDERS_ERROR).c_str(),
+                                    first_path.c_str(),
+                                    status_code.c_str());
+        }
+        break;
+
+        case proto::RequestStatus::CREATE_DIRECTORY:
+        {
+            message = StringPrintfW(module.string(IDS_FT_OP_CREATE_FOLDER_ERROR).c_str(),
+                                    first_path.c_str(),
+                                    status_code.c_str());
+        }
+        break;
+
+        case proto::RequestStatus::RENAME:
+        {
+            message = StringPrintfW(module.string(IDS_FT_OP_RENAME_ERROR).c_str(),
+                                    first_path.c_str(),
+                                    second_path.c_str(),
+                                    status_code.c_str());
+        }
+        break;
+
+        case proto::RequestStatus::REMOVE:
+        {
+            message = StringPrintfW(module.string(IDS_FT_OP_REMOVE_ERROR).c_str(),
+                                    first_path.c_str(),
+                                    status_code.c_str());
+        }
+        break;
+
+        default:
+        {
+            LOG(FATAL) << "Unhandled status code: " << status->type();
+        }
+        break;
+    }
 
     MessageBoxW(hwnd(), message.c_str(), nullptr, MB_ICONWARNING | MB_OK);
 }
