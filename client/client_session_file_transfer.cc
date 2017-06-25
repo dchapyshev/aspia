@@ -62,9 +62,9 @@ void ClientSessionFileTransfer::Send(const IOBuffer& buffer)
             std::unique_ptr<proto::DirectoryList> directory_list(message.release_directory_list());
             success = ReadDirectoryListMessage(std::move(directory_list));
         }
-        else if (message.has_file())
+        else if (message.has_file_packet())
         {
-            success = ReadFileMessage(message.file());
+            success = ReadFilePacketMessage(message.file_packet());
         }
         else
         {
@@ -318,7 +318,7 @@ bool ClientSessionFileTransfer::ReadDirectoryListMessage(
     return true;
 }
 
-bool ClientSessionFileTransfer::ReadFileMessage(const proto::File& file)
+bool ClientSessionFileTransfer::ReadFilePacketMessage(const proto::FilePacket& file)
 {
     return true;
 }

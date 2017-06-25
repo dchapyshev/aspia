@@ -58,7 +58,7 @@ private:
 
     bool ReadDriveListMessage(std::unique_ptr<proto::DriveList> drive_list);
     bool ReadDirectoryListMessage(std::unique_ptr<proto::DirectoryList> directory_list);
-    bool ReadFileMessage(const proto::File& file);
+    bool ReadFilePacketMessage(const proto::FilePacket& packet);
 
     void WriteMessage(const proto::file_transfer::ClientToHost& message);
 

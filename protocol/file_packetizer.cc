@@ -11,11 +11,13 @@
 
 namespace aspia {
 
-// When transferring a file is divided into parts and each part is transmitted separately.
+// When transferring a file is divided into parts and each part is
+// transmitted separately.
 // This parameter specifies the size of the part.
 static const size_t kPacketPartSize = 5 * 1024; // 5 kB
 
-FilePacketizer::FilePacketizer(std::wstring&& file_path, std::wifstream&& file_stream) :
+FilePacketizer::FilePacketizer(std::wstring&& file_path,
+                               std::wifstream&& file_stream) :
     file_path_(std::move(file_path)),
     file_stream_(std::move(file_stream))
 {
@@ -42,7 +44,7 @@ std::unique_ptr<FilePacketizer> FilePacketizer::Create(const std::string& path)
         new FilePacketizer(std::move(file_path), std::move(file_stream)));
 }
 
-uint8_t* FilePacketizer::GetOutputBuffer(proto::File* packet, size_t size)
+uint8_t* FilePacketizer::GetOutputBuffer(proto::FilePacket* packet, size_t size)
 {
     packet->mutable_data()->resize(size);
 
@@ -50,7 +52,8 @@ uint8_t* FilePacketizer::GetOutputBuffer(proto::File* packet, size_t size)
         reinterpret_cast<const uint8_t*>(packet->mutable_data()->data()));
 }
 
-FilePacketizer::State FilePacketizer::CreateNextPacket(std::unique_ptr<proto::File>& packet)
+FilePacketizer::State FilePacketizer::CreateNextPacket(
+    std::unique_ptr<proto::FilePacket>& packet)
 {
     if (!file_size_ || !left_size_)
         return State::ERROR;
@@ -61,7 +64,7 @@ FilePacketizer::State FilePacketizer::CreateNextPacket(std::unique_ptr<proto::Fi
     if (file_path_.empty())
         return State::ERROR;
 
-    packet.reset(new proto::File());
+    packet.reset(new proto::FilePacket());
 
     size_t packet_buffer_size = kPacketPartSize;
 

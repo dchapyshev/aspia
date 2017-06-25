@@ -29,7 +29,7 @@ public:
     // then |State::ERROR| is returned.
     // If the packet read is the last one, then |State::LAST_PACKET| is returned.
     // If the packet is not the last one, then |State::PACKET| is returned.
-    State ReadNextPacket(const proto::File& packet);
+    State ReadNextPacket(const proto::FilePacket& packet);
 
 private:
     std::wstring file_path_;

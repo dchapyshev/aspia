@@ -713,6 +713,43 @@ void UiFileManagerPanel::OnListItemChanged()
     SetWindowTextW(status_, status.c_str());
 }
 
+void UiFileManagerPanel::OnSend()
+{
+    if (!directory_list_)
+        return;
+
+    UINT selected_count = list_.GetSelectedCount();
+    if (!selected_count)
+        return;
+
+    if (selected_count == 1)
+    {
+        int selected_item = list_.GetFirstSelectedItem();
+        if (selected_item == -1)
+            return;
+
+        int object_index = list_.GetItemData<int>(selected_item);
+        if (object_index < 0 || object_index >= directory_list_->item_size())
+            return;
+
+        const proto::DirectoryListItem& item =
+            directory_list_->item(object_index);
+
+        if (item.type() == proto::DirectoryListItem::DIRECTORY)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
+    else
+    {
+
+    }
+}
+
 bool UiFileManagerPanel::OnMessage(UINT msg,
                                    WPARAM wparam,
                                    LPARAM lparam,
@@ -814,6 +851,10 @@ bool UiFileManagerPanel::OnMessage(UINT msg,
 
                 case ID_HOME:
                     OnMoveToComputer();
+                    break;
+
+                case ID_SEND:
+                    OnSend();
                     break;
             }
         }

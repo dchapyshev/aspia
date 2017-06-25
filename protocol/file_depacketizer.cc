@@ -11,7 +11,8 @@
 
 namespace aspia {
 
-FileDepacketizer::State FileDepacketizer::ReadNextPacket(const proto::File& packet)
+FileDepacketizer::State FileDepacketizer::ReadNextPacket(
+    const proto::FilePacket& packet)
 {
     // The first package must have the path and the full file size.
     if (!packet.path().empty() && packet.full_size())

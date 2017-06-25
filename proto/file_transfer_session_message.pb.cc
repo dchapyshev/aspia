@@ -30,8 +30,8 @@ class DirectoryListDefaultTypeInternal : public ::google::protobuf::internal::Ex
 } _DirectoryList_default_instance_;
 class DirectoryListRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<DirectoryListRequest> {
 } _DirectoryListRequest_default_instance_;
-class FileDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<File> {
-} _File_default_instance_;
+class FilePacketDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<FilePacket> {
+} _FilePacket_default_instance_;
 class FileRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<FileRequest> {
 } _FileRequest_default_instance_;
 class CreateDirectoryRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<CreateDirectoryRequest> {
@@ -77,7 +77,7 @@ void TableStruct::Shutdown() {
   _DirectoryListItem_default_instance_.Shutdown();
   _DirectoryList_default_instance_.Shutdown();
   _DirectoryListRequest_default_instance_.Shutdown();
-  _File_default_instance_.Shutdown();
+  _FilePacket_default_instance_.Shutdown();
   _FileRequest_default_instance_.Shutdown();
   _CreateDirectoryRequest_default_instance_.Shutdown();
   _RenameRequest_default_instance_.Shutdown();
@@ -96,7 +96,7 @@ void TableStruct::InitDefaultsImpl() {
   _DirectoryListItem_default_instance_.DefaultConstruct();
   _DirectoryList_default_instance_.DefaultConstruct();
   _DirectoryListRequest_default_instance_.DefaultConstruct();
-  _File_default_instance_.DefaultConstruct();
+  _FilePacket_default_instance_.DefaultConstruct();
   _FileRequest_default_instance_.DefaultConstruct();
   _CreateDirectoryRequest_default_instance_.DefaultConstruct();
   _RenameRequest_default_instance_.DefaultConstruct();
@@ -2644,20 +2644,20 @@ void DirectoryListRequest::set_allocated_item(::std::string* item) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int File::kPathFieldNumber;
-const int File::kFullSizeFieldNumber;
-const int File::kDataFieldNumber;
+const int FilePacket::kPathFieldNumber;
+const int FilePacket::kFullSizeFieldNumber;
+const int FilePacket::kDataFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-File::File()
+FilePacket::FilePacket()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
     protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.File)
+  // @@protoc_insertion_point(constructor:aspia.proto.FilePacket)
 }
-File::File(const File& from)
+FilePacket::FilePacket(const FilePacket& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
@@ -2671,56 +2671,56 @@ File::File(const File& from)
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
   full_size_ = from.full_size_;
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.File)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.FilePacket)
 }
 
-void File::SharedCtor() {
+void FilePacket::SharedCtor() {
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   full_size_ = GOOGLE_ULONGLONG(0);
   _cached_size_ = 0;
 }
 
-File::~File() {
-  // @@protoc_insertion_point(destructor:aspia.proto.File)
+FilePacket::~FilePacket() {
+  // @@protoc_insertion_point(destructor:aspia.proto.FilePacket)
   SharedDtor();
 }
 
-void File::SharedDtor() {
+void FilePacket::SharedDtor() {
   path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
-void File::SetCachedSize(int size) const {
+void FilePacket::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const File& File::default_instance() {
+const FilePacket& FilePacket::default_instance() {
   protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::InitDefaults();
   return *internal_default_instance();
 }
 
-File* File::New(::google::protobuf::Arena* arena) const {
-  File* n = new File;
+FilePacket* FilePacket::New(::google::protobuf::Arena* arena) const {
+  FilePacket* n = new FilePacket;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void File::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.File)
+void FilePacket::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.FilePacket)
   path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   full_size_ = GOOGLE_ULONGLONG(0);
 }
 
-bool File::MergePartialFromCodedStream(
+bool FilePacket::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:aspia.proto.File)
+  // @@protoc_insertion_point(parse_start:aspia.proto.FilePacket)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -2735,7 +2735,7 @@ bool File::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->path().data(), this->path().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.File.path"));
+            "aspia.proto.FilePacket.path"));
         } else {
           goto handle_unusual;
         }
@@ -2781,17 +2781,17 @@ bool File::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.File)
+  // @@protoc_insertion_point(parse_success:aspia.proto.FilePacket)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.File)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.FilePacket)
   return false;
 #undef DO_
 }
 
-void File::SerializeWithCachedSizes(
+void FilePacket::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.File)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.FilePacket)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -2800,7 +2800,7 @@ void File::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->path().data(), this->path().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.File.path");
+      "aspia.proto.FilePacket.path");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->path(), output);
   }
@@ -2816,11 +2816,11 @@ void File::SerializeWithCachedSizes(
       3, this->data(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:aspia.proto.File)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.FilePacket)
 }
 
-size_t File::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.File)
+size_t FilePacket::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.FilePacket)
   size_t total_size = 0;
 
   // string path = 1;
@@ -2851,13 +2851,13 @@ size_t File::ByteSizeLong() const {
   return total_size;
 }
 
-void File::CheckTypeAndMergeFrom(
+void FilePacket::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const File*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const FilePacket*>(&from));
 }
 
-void File::MergeFrom(const File& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.File)
+void FilePacket::MergeFrom(const FilePacket& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.FilePacket)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -2876,153 +2876,153 @@ void File::MergeFrom(const File& from) {
   }
 }
 
-void File::CopyFrom(const File& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.File)
+void FilePacket::CopyFrom(const FilePacket& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.FilePacket)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool File::IsInitialized() const {
+bool FilePacket::IsInitialized() const {
   return true;
 }
 
-void File::Swap(File* other) {
+void FilePacket::Swap(FilePacket* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void File::InternalSwap(File* other) {
+void FilePacket::InternalSwap(FilePacket* other) {
   path_.Swap(&other->path_);
   data_.Swap(&other->data_);
   std::swap(full_size_, other->full_size_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string File::GetTypeName() const {
-  return "aspia.proto.File";
+::std::string FilePacket::GetTypeName() const {
+  return "aspia.proto.FilePacket";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// File
+// FilePacket
 
 // string path = 1;
-void File::clear_path() {
+void FilePacket::clear_path() {
   path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-const ::std::string& File::path() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.File.path)
+const ::std::string& FilePacket::path() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.FilePacket.path)
   return path_.GetNoArena();
 }
-void File::set_path(const ::std::string& value) {
+void FilePacket::set_path(const ::std::string& value) {
   
   path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.File.path)
+  // @@protoc_insertion_point(field_set:aspia.proto.FilePacket.path)
 }
 #if LANG_CXX11
-void File::set_path(::std::string&& value) {
+void FilePacket::set_path(::std::string&& value) {
   
   path_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.File.path)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.FilePacket.path)
 }
 #endif
-void File::set_path(const char* value) {
+void FilePacket::set_path(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.File.path)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.FilePacket.path)
 }
-void File::set_path(const char* value, size_t size) {
+void FilePacket::set_path(const char* value, size_t size) {
   
   path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.File.path)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.FilePacket.path)
 }
-::std::string* File::mutable_path() {
+::std::string* FilePacket::mutable_path() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.File.path)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.FilePacket.path)
   return path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* File::release_path() {
-  // @@protoc_insertion_point(field_release:aspia.proto.File.path)
+::std::string* FilePacket::release_path() {
+  // @@protoc_insertion_point(field_release:aspia.proto.FilePacket.path)
   
   return path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void File::set_allocated_path(::std::string* path) {
+void FilePacket::set_allocated_path(::std::string* path) {
   if (path != NULL) {
     
   } else {
     
   }
   path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.File.path)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.FilePacket.path)
 }
 
 // uint64 full_size = 2;
-void File::clear_full_size() {
+void FilePacket::clear_full_size() {
   full_size_ = GOOGLE_ULONGLONG(0);
 }
-::google::protobuf::uint64 File::full_size() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.File.full_size)
+::google::protobuf::uint64 FilePacket::full_size() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.FilePacket.full_size)
   return full_size_;
 }
-void File::set_full_size(::google::protobuf::uint64 value) {
+void FilePacket::set_full_size(::google::protobuf::uint64 value) {
   
   full_size_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.File.full_size)
+  // @@protoc_insertion_point(field_set:aspia.proto.FilePacket.full_size)
 }
 
 // bytes data = 3;
-void File::clear_data() {
+void FilePacket::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-const ::std::string& File::data() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.File.data)
+const ::std::string& FilePacket::data() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.FilePacket.data)
   return data_.GetNoArena();
 }
-void File::set_data(const ::std::string& value) {
+void FilePacket::set_data(const ::std::string& value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.File.data)
+  // @@protoc_insertion_point(field_set:aspia.proto.FilePacket.data)
 }
 #if LANG_CXX11
-void File::set_data(::std::string&& value) {
+void FilePacket::set_data(::std::string&& value) {
   
   data_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.File.data)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.FilePacket.data)
 }
 #endif
-void File::set_data(const char* value) {
+void FilePacket::set_data(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.File.data)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.FilePacket.data)
 }
-void File::set_data(const void* value, size_t size) {
+void FilePacket::set_data(const void* value, size_t size) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.File.data)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.FilePacket.data)
 }
-::std::string* File::mutable_data() {
+::std::string* FilePacket::mutable_data() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.File.data)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.FilePacket.data)
   return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* File::release_data() {
-  // @@protoc_insertion_point(field_release:aspia.proto.File.data)
+::std::string* FilePacket::release_data() {
+  // @@protoc_insertion_point(field_release:aspia.proto.FilePacket.data)
   
   return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void File::set_allocated_data(::std::string* data) {
+void FilePacket::set_allocated_data(::std::string* data) {
   if (data != NULL) {
     
   } else {
     
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.File.data)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.FilePacket.data)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

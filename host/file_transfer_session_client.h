@@ -40,7 +40,7 @@ private:
     bool ReadDriveListRequestMessage(const proto::DriveListRequest& request);
     void ReadDirectoryListRequestMessage(const proto::DirectoryListRequest& request);
     bool ReadFileRequestMessage(const proto::FileRequest& request);
-    bool ReadFileMessage(const proto::File& file);
+    bool ReadFilePacketMessage(const proto::FilePacket& file);
     void ReadCreateDirectoryRequest(const proto::CreateDirectoryRequest& request);
     void ReadRenameRequest(const proto::RenameRequest& request);
     void ReadRemoveRequest(const proto::RemoveRequest& request);

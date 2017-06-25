@@ -35,12 +35,12 @@ public:
     // |State::LAST_PACKET| is returned.
     // If the file is not completely read, then |State::PACKET| is returned.
     // Parameter |packet| is valid if the return value is not |State::ERROR|.
-    State CreateNextPacket(std::unique_ptr<proto::File>& packet);
+    State CreateNextPacket(std::unique_ptr<proto::FilePacket>& packet);
 
 private:
     FilePacketizer(std::wstring&& file_path, std::wifstream&& file_stream);
 
-    uint8_t* GetOutputBuffer(proto::File* packet, size_t size);
+    uint8_t* GetOutputBuffer(proto::FilePacket* packet, size_t size);
 
     std::wstring file_path_;
     std::wifstream file_stream_;

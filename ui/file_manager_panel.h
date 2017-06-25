@@ -71,6 +71,7 @@ private:
     void SetComputerViews();
     void SetFolderViews();
     void OnListItemChanged();
+    void OnSend();
 
     // ChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;

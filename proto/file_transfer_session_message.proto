@@ -92,7 +92,7 @@ message DirectoryListRequest
     string item = 2;
 }
 
-message File
+message FilePacket
 {
     string path = 1;
     uint64 full_size = 2;

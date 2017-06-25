@@ -73,9 +73,9 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
         {
             success = ReadFileRequestMessage(message.file_request());
         }
-        else if (message.has_file())
+        else if (message.has_file_packet())
         {
-            success = ReadFileMessage(message.file());
+            success = ReadFilePacketMessage(message.file_packet());
         }
         else if (message.has_create_directory_request())
         {
@@ -175,7 +175,7 @@ bool FileTransferSessionClient::ReadFileRequestMessage(
     return true;
 }
 
-bool FileTransferSessionClient::ReadFileMessage(const proto::File& file)
+bool FileTransferSessionClient::ReadFilePacketMessage(const proto::FilePacket& file)
 {
     return true;
 }
