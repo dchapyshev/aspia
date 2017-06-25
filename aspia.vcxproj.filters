@@ -234,9 +234,6 @@
     <ClCompile Include="proto\power_session_message.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
-    <ClCompile Include="base\io_queue.cc">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="codec\pixel_translator.cc">
       <Filter>codec</Filter>
     </ClCompile>
@@ -484,6 +481,9 @@
     <ClCompile Include="base\synchronization\waitable_timer.cc">
       <Filter>base\synchronization</Filter>
     </ClCompile>
+    <ClCompile Include="protocol\io_queue.cc">
+      <Filter>protocol</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -726,14 +726,8 @@
     <ClInclude Include="base\scoped_object.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="base\io_buffer.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="protocol\message_serialization.h">
       <Filter>protocol</Filter>
-    </ClInclude>
-    <ClInclude Include="base\io_queue.h">
-      <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="network\socket.h">
       <Filter>network</Filter>
@@ -1030,6 +1024,12 @@
     </ClInclude>
     <ClInclude Include="base\synchronization\waitable_timer.h">
       <Filter>base\synchronization</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\io_buffer.h">
+      <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\io_queue.h">
+      <Filter>protocol</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

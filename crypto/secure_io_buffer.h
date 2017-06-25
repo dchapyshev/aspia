@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CRYPTO__SECURE_IO_BUFFER_H
 #define _ASPIA_CRYPTO__SECURE_IO_BUFFER_H
 
-#include "base/io_buffer.h"
+#include "protocol/io_buffer.h"
 
 extern "C" {
 #define SODIUM_STATIC

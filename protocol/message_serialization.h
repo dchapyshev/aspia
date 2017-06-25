@@ -8,7 +8,7 @@
 #ifndef _ASPIA_PROTOCOL__MESSAGE_SERIALIZATION_H
 #define _ASPIA_PROTOCOL__MESSAGE_SERIALIZATION_H
 
-#include "base/io_buffer.h"
+#include "protocol/io_buffer.h"
 #include "base/logging.h"
 #include "crypto/secure_io_buffer.h"
 

@@ -31,7 +31,6 @@
     <ClCompile Include="base\files\drive_enumerator.cc" />
     <ClCompile Include="base\files\file_helpers.cc" />
     <ClCompile Include="base\files\path.cc" />
-    <ClCompile Include="base\io_queue.cc" />
     <ClCompile Include="base\logging.cc" />
     <ClCompile Include="base\memory\aligned_memory.cc" />
     <ClCompile Include="base\message_loop\message_loop.cc" />
@@ -127,6 +126,7 @@
     <ClCompile Include="protocol\filesystem.cc" />
     <ClCompile Include="protocol\file_depacketizer.cc" />
     <ClCompile Include="protocol\file_packetizer.cc" />
+    <ClCompile Include="protocol\io_queue.cc" />
     <ClCompile Include="proto\auth_session.pb.cc" />
     <ClCompile Include="proto\auth_session_message.pb.cc" />
     <ClCompile Include="proto\desktop_session.pb.cc" />
@@ -175,8 +175,6 @@
     <ClInclude Include="base\files\drive_enumerator.h" />
     <ClInclude Include="base\files\file_helpers.h" />
     <ClInclude Include="base\files\path.h" />
-    <ClInclude Include="base\io_buffer.h" />
-    <ClInclude Include="base\io_queue.h" />
     <ClInclude Include="base\logging.h" />
     <ClInclude Include="base\macros.h" />
     <ClInclude Include="base\memory\aligned_memory.h" />
@@ -306,6 +304,8 @@
     <ClInclude Include="protocol\filesystem.h" />
     <ClInclude Include="protocol\file_depacketizer.h" />
     <ClInclude Include="protocol\file_packetizer.h" />
+    <ClInclude Include="protocol\io_buffer.h" />
+    <ClInclude Include="protocol\io_queue.h" />
     <ClInclude Include="protocol\message_serialization.h" />
     <ClInclude Include="proto\auth_session.pb.h" />
     <ClInclude Include="proto\auth_session_message.pb.h" />

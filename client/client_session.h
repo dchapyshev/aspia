@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CLIENT__CLIENT_SESSION_H
 #define _ASPIA_CLIENT__CLIENT_SESSION_H
 
-#include "base/io_buffer.h"
+#include "protocol/io_buffer.h"
 #include "client/client_config.h"
 
 namespace aspia {

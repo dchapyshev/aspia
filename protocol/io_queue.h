@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/io_queue.h
+// FILE:            protocol/io_queue.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__IO_QUEUE_H
-#define _ASPIA_BASE__IO_QUEUE_H
+#ifndef _ASPIA_PROTOCOL__IO_QUEUE_H
+#define _ASPIA_PROTOCOL__IO_QUEUE_H
 
 #include <functional>
 #include <queue>
@@ -16,7 +16,7 @@
 #include "base/synchronization/waitable_event.h"
 #include "base/thread.h"
 #include "base/macros.h"
-#include "base/io_buffer.h"
+#include "protocol/io_buffer.h"
 
 namespace aspia {
 

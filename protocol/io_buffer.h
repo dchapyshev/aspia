@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/io_buffer.h
+// FILE:            protocol/io_buffer.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__IO_BUFFER_H
-#define _ASPIA_BASE__IO_BUFFER_H
+#ifndef _ASPIA_PROTOCOL__IO_BUFFER_H
+#define _ASPIA_PROTOCOL__IO_BUFFER_H
 
 #include "base/macros.h"
 #include "base/logging.h"
@@ -57,4 +57,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__IO_BUFFER_H
+#endif // _ASPIA_PROTOCOL__IO_BUFFER_H

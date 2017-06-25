@@ -8,7 +8,7 @@
 #ifndef _ASPIA_HOST__HOST_SESSION_H
 #define _ASPIA_HOST__HOST_SESSION_H
 
-#include "base/io_buffer.h"
+#include "protocol/io_buffer.h"
 #include "base/logging.h"
 
 namespace aspia {
