@@ -17,6 +17,87 @@ namespace aspia {
 
 namespace fs = std::experimental::filesystem;
 
+// Minimal path name is 2 characters (for example: "C:").
+static const size_t kMinPathLength = 2;
+
+// Under Window the length of a full path is 260 characters.
+static const size_t kMaxPathLength = MAX_PATH;
+
+// The file name can not be shorter than 1 character.
+static const size_t kMinNameLength = 1;
+
+// For FAT: file and folder names may be up to 255 characters long.
+// For NTFS: file and folder names may be up to 256 characters long.
+// We use FAT variant: 255 characters long.
+static const size_t kMaxNameLength = (MAX_PATH - 5);
+
+static bool IsValidNameChar(wchar_t c)
+{
+    switch (c)
+    {
+        case L'/':
+        case L'\\':
+        case L':':
+        case L'*':
+        case L'?':
+        case L'"':
+        case L'<':
+        case L'>':
+        case L'|':
+            return false;
+
+        default:
+            return true;
+    }
+}
+
+static bool IsValidName(const std::string& path)
+{
+    size_t length = path.length();
+    if (length < kMinNameLength || length > kMaxNameLength)
+        return false;
+
+    for (size_t i = 0; i < length; ++i)
+    {
+        if (!IsValidNameChar(path[i]))
+            return false;
+    }
+
+    return true;
+}
+
+static bool IsValidPathChar(wchar_t c)
+{
+    switch (c)
+    {
+        case L'*':
+        case L'?':
+        case L'"':
+        case L'<':
+        case L'>':
+        case L'|':
+            return false;
+
+        default:
+            return true;
+    }
+}
+
+static bool IsValidPath(const std::string& path)
+{
+    size_t length = path.length();
+    if (length < kMinPathLength || length > kMaxPathLength)
+        return false;
+
+    for (size_t i = 0; i < length; ++i)
+    {
+        if (!IsValidPathChar(path[i]))
+            return false;
+    }
+
+    return true;
+}
+
 static std::unique_ptr<proto::RequestStatus>
 CreateRequestStatus(proto::RequestStatus::Type request_type,
                     const std::string& first_path,
@@ -121,6 +202,22 @@ std::unique_ptr<proto::RequestStatus> ExecuteDirectoryListRequest(
     const proto::DirectoryListRequest& request,
     std::unique_ptr<proto::DirectoryList>& reply)
 {
+    if (!IsValidPath(request.path()))
+    {
+        return CreateRequestStatus(proto::RequestStatus::DIRECTORY_LIST,
+                                   std::string(),
+                                   std::string(),
+                                   proto::Status::STATUS_INVALID_PATH_NAME);
+    }
+
+    if (!request.item().empty() && !IsValidName(request.item()))
+    {
+        return CreateRequestStatus(proto::RequestStatus::DIRECTORY_LIST,
+                                   std::string(),
+                                   std::string(),
+                                   proto::Status::STATUS_INVALID_PATH_NAME);
+    }
+
     fs::path path = fs::u8path(request.path());
 
     if (!request.item().empty())
@@ -188,6 +285,14 @@ std::unique_ptr<proto::RequestStatus> ExecuteDirectoryListRequest(
 std::unique_ptr<proto::RequestStatus> ExecuteCreateDirectoryRequest(
     const proto::CreateDirectoryRequest& request)
 {
+    if (!IsValidPath(request.path()) || !IsValidName(request.name()))
+    {
+        return CreateRequestStatus(proto::RequestStatus::CREATE_DIRECTORY,
+                                   std::string(),
+                                   std::string(),
+                                   proto::Status::STATUS_INVALID_PATH_NAME);
+    }
+
     proto::Status status_code = proto::Status::STATUS_SUCCESS;
 
     fs::path path = fs::u8path(request.path());
@@ -223,6 +328,16 @@ std::unique_ptr<proto::RequestStatus> ExecuteCreateDirectoryRequest(
 std::unique_ptr<proto::RequestStatus> ExecuteRenameRequest(
     const proto::RenameRequest& request)
 {
+    if (!IsValidPath(request.path()) ||
+        !IsValidName(request.old_item_name()) ||
+        !IsValidName(request.new_item_name()))
+    {
+        return CreateRequestStatus(proto::RequestStatus::RENAME,
+                                   std::string(),
+                                   std::string(),
+                                   proto::Status::STATUS_INVALID_PATH_NAME);
+    }
+
     proto::Status status_code = proto::Status::STATUS_SUCCESS;
 
     fs::path old_path = fs::u8path(request.path());
@@ -261,6 +376,14 @@ std::unique_ptr<proto::RequestStatus> ExecuteRenameRequest(
 std::unique_ptr<proto::RequestStatus> ExecuteRemoveRequest(
     const proto::RemoveRequest& request)
 {
+    if (!IsValidPath(request.path()) || !IsValidName(request.item_name()))
+    {
+        return CreateRequestStatus(proto::RequestStatus::REMOVE,
+                                   std::string(),
+                                   std::string(),
+                                   proto::Status::STATUS_INVALID_PATH_NAME);
+    }
+
     proto::Status status_code = proto::Status::STATUS_SUCCESS;
 
     fs::path path = fs::u8path(request.path());
@@ -280,7 +403,7 @@ std::unique_ptr<proto::RequestStatus> ExecuteRemoveRequest(
         }
     }
 
-    return CreateRequestStatus(proto::RequestStatus::RENAME,
+    return CreateRequestStatus(proto::RequestStatus::REMOVE,
                                path.u8string(),
                                std::string(),
                                status_code);
