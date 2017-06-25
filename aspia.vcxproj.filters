@@ -78,9 +78,6 @@
     <ClCompile Include="base\object_watcher.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\path.cc">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="base\process.cc">
       <Filter>base</Filter>
     </ClCompile>
@@ -478,6 +475,9 @@
     <ClCompile Include="protocol\file_depacketizer.cc">
       <Filter>protocol</Filter>
     </ClCompile>
+    <ClCompile Include="base\files\path.cc">
+      <Filter>base\files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -634,9 +634,6 @@
       <Filter>ipc</Filter>
     </ClInclude>
     <ClInclude Include="base\scoped_local.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\path.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\scoped_wts_memory.h">
@@ -1024,6 +1021,9 @@
     </ClInclude>
     <ClInclude Include="protocol\file_depacketizer.h">
       <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="base\files\path.h">
+      <Filter>base\files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

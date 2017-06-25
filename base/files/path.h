@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/path.h
+// FILE:            base/files/path.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__PATH_H
-#define _ASPIA_BASE__PATH_H
+#ifndef _ASPIA_BASE__FILES__PATH_H
+#define _ASPIA_BASE__FILES__PATH_H
 
 #include <filesystem>
 
@@ -32,4 +32,4 @@ bool GetBasePath(PathKey key, std::experimental::filesystem::path& result);
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__PATH_H
+#endif // _ASPIA_BASE__FILES__PATH_H

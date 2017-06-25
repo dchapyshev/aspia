@@ -10,7 +10,7 @@
 #include "base/security_helpers.h"
 #include "base/scoped_com_initializer.h"
 #include "base/strings/unicode.h"
-#include "base/path.h"
+#include "base/files/path.h"
 #include "network/scoped_wsa_initializer.h"
 
 #include <sddl.h>

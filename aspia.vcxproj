@@ -30,6 +30,7 @@
     <ClCompile Include="base\desktop.cc" />
     <ClCompile Include="base\files\drive_enumerator.cc" />
     <ClCompile Include="base\files\file_helpers.cc" />
+    <ClCompile Include="base\files\path.cc" />
     <ClCompile Include="base\io_queue.cc" />
     <ClCompile Include="base\logging.cc" />
     <ClCompile Include="base\memory\aligned_memory.cc" />
@@ -42,7 +43,6 @@
     <ClCompile Include="base\message_loop\message_pump_win.cc" />
     <ClCompile Include="base\message_window.cc" />
     <ClCompile Include="base\object_watcher.cc" />
-    <ClCompile Include="base\path.cc" />
     <ClCompile Include="base\process.cc" />
     <ClCompile Include="base\process_helpers.cc" />
     <ClCompile Include="base\registry.cc" />
@@ -174,6 +174,7 @@
     <ClInclude Include="base\desktop.h" />
     <ClInclude Include="base\files\drive_enumerator.h" />
     <ClInclude Include="base\files\file_helpers.h" />
+    <ClInclude Include="base\files\path.h" />
     <ClInclude Include="base\io_buffer.h" />
     <ClInclude Include="base\io_queue.h" />
     <ClInclude Include="base\logging.h" />
@@ -191,7 +192,6 @@
     <ClInclude Include="base\message_loop\task.h" />
     <ClInclude Include="base\message_window.h" />
     <ClInclude Include="base\object_watcher.h" />
-    <ClInclude Include="base\path.h" />
     <ClInclude Include="base\process.h" />
     <ClInclude Include="base\process_helpers.h" />
     <ClInclude Include="base\registry.h" />

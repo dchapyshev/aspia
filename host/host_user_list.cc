@@ -8,7 +8,7 @@
 #include "host/host_user_list.h"
 #include "base/strings/unicode.h"
 #include "base/logging.h"
-#include "base/path.h"
+#include "base/files/path.h"
 #include "crypto/secure_string.h"
 #include "crypto/sha512.h"
 

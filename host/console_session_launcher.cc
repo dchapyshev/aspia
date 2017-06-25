@@ -19,7 +19,7 @@
 #include "base/scoped_impersonator.h"
 #include "base/object_watcher.h"
 #include "base/strings/unicode.h"
-#include "base/path.h"
+#include "base/files/path.h"
 #include "base/process.h"
 #include "base/logging.h"
 

@@ -10,7 +10,7 @@
 #include "base/scoped_object.h"
 #include "base/scoped_local.h"
 #include "base/logging.h"
-#include "base/path.h"
+#include "base/files/path.h"
 
 #include <shellapi.h>
 #include <memory>

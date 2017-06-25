@@ -9,7 +9,7 @@
 #include "base/scoped_thread_desktop.h"
 #include "base/service_manager.h"
 #include "base/version_helpers.h"
-#include "base/path.h"
+#include "base/files/path.h"
 #include "base/logging.h"
 #include "base/strings/unicode.h"
 #include "base/scoped_native_library.h"
