@@ -16,7 +16,9 @@ namespace aspia {
 
 ClientSessionFileTransfer::ClientSessionFileTransfer(const ClientConfig& config,
                                                      ClientSession::Delegate* delegate) :
-    ClientSession(config, delegate)
+    ClientSession(config, delegate),
+    message_reply_event_(WaitableEvent::ResetPolicy::AUTOMATIC,
+                         WaitableEvent::InitialState::NOT_SIGNALED)
 {
     worker_thread_.Start(MessageLoop::Type::TYPE_DEFAULT, this);
 }
@@ -41,42 +43,16 @@ void ClientSessionFileTransfer::OnAfterThreadRunning()
 
 void ClientSessionFileTransfer::Send(const IOBuffer& buffer)
 {
-    proto::file_transfer::HostToClient message;
+    std::unique_ptr<proto::file_transfer::HostToClient> message(
+        new proto::file_transfer::HostToClient());
 
-    if (ParseMessage(buffer, message))
+    if (ParseMessage(buffer, *message))
     {
-        bool success = true;
-
-        if (message.has_status())
-        {
-            file_manager_->ReadRequestStatus(
-                std::shared_ptr<proto::RequestStatus>(message.release_status()));
-        }
-        else if (message.has_drive_list())
-        {
-            std::unique_ptr<proto::DriveList> drive_list(message.release_drive_list());
-            success = ReadDriveListMessage(std::move(drive_list));
-        }
-        else if (message.has_directory_list())
-        {
-            std::unique_ptr<proto::DirectoryList> directory_list(message.release_directory_list());
-            success = ReadDirectoryListMessage(std::move(directory_list));
-        }
-        else if (message.has_file_packet())
-        {
-            success = ReadFilePacketMessage(message.file_packet());
-        }
-        else
-        {
-            // Unknown messages are ignored.
-            DLOG(WARNING) << "Unhandled message from host";
-        }
-
-        if (success)
-            return;
+        std::lock_guard<std::mutex> lock(message_reply_lock_);
+        message_reply_.swap(message);
     }
 
-    delegate_->OnSessionTerminate();
+    message_reply_event_.Signal();
 }
 
 void ClientSessionFileTransfer::OnWindowClose()
@@ -94,32 +70,32 @@ void ClientSessionFileTransfer::OnDriveListRequest(UiFileManager::PanelType pane
         return;
     }
 
-    proto::file_transfer::ClientToHost message;
-    message.mutable_drive_list_request()->set_dummy(1);
+    proto::file_transfer::ClientToHost request;
+    request.mutable_drive_list_request()->set_dummy(1);
+
+    std::unique_ptr<proto::file_transfer::HostToClient> reply;
 
     if (panel_type == UiFileManager::PanelType::REMOTE)
     {
-        WriteMessage(message);
+        reply = SendRemoteRequest(request);
     }
     else
     {
         DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
+        reply = SendLocalRequest(request);
+    }
 
-        std::unique_ptr<proto::DriveList> drive_list;
-
-        std::unique_ptr<proto::RequestStatus> status =
-            ExecuteDriveListRequest(message.drive_list_request(), drive_list);
-
-        if (status->code() == proto::Status::STATUS_SUCCESS)
+    if (reply)
+    {
+        if (reply->has_status())
         {
-            DCHECK(drive_list);
-
-            file_manager_->ReadDriveList(UiFileManager::PanelType::LOCAL,
-                                         std::move(drive_list));
-        }
-        else
-        {
+            std::unique_ptr<proto::RequestStatus> status(reply->release_status());
             file_manager_->ReadRequestStatus(std::move(status));
+        }
+        else if (reply->has_drive_list())
+        {
+            std::unique_ptr<proto::DriveList> drive_list(reply->release_drive_list());
+            file_manager_->ReadDriveList(panel_type, std::move(drive_list));
         }
     }
 }
@@ -138,32 +114,33 @@ void ClientSessionFileTransfer::OnDirectoryListRequest(UiFileManager::PanelType 
         return;
     }
 
-    proto::file_transfer::ClientToHost message;
-    message.mutable_directory_list_request()->set_path(path);
-    message.mutable_directory_list_request()->set_item(item);
+    proto::file_transfer::ClientToHost request;
+    request.mutable_directory_list_request()->set_path(path);
+    request.mutable_directory_list_request()->set_item(item);
+
+    std::unique_ptr<proto::file_transfer::HostToClient> reply;
 
     if (panel_type == UiFileManager::PanelType::REMOTE)
     {
-        WriteMessage(message);
+        reply = SendRemoteRequest(request);
     }
     else
     {
         DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
+        reply = SendLocalRequest(request);
+    }
 
-        std::unique_ptr<proto::DirectoryList> directory_list;
-
-        std::unique_ptr<proto::RequestStatus> status =
-            ExecuteDirectoryListRequest(message.directory_list_request(),
-                                        directory_list);
-
-        if (status->code() == proto::Status::STATUS_SUCCESS)
+    if (reply)
+    {
+        if (reply->has_status())
         {
-            file_manager_->ReadDirectoryList(UiFileManager::PanelType::LOCAL,
-                                             std::move(directory_list));
-        }
-        else
-        {
+            std::unique_ptr<proto::RequestStatus> status(reply->release_status());
             file_manager_->ReadRequestStatus(std::move(status));
+        }
+        else if (reply->has_directory_list())
+        {
+            std::unique_ptr<proto::DirectoryList> directory_list(reply->release_directory_list());
+            file_manager_->ReadDirectoryList(panel_type, std::move(directory_list));
         }
     }
 }
@@ -183,23 +160,27 @@ void ClientSessionFileTransfer::OnCreateDirectoryRequest(
         return;
     }
 
-    proto::file_transfer::ClientToHost message;
-    message.mutable_create_directory_request()->set_path(path);
-    message.mutable_create_directory_request()->set_name(name);
+    proto::file_transfer::ClientToHost request;
+    request.mutable_create_directory_request()->set_path(path);
+    request.mutable_create_directory_request()->set_name(name);
+
+    std::unique_ptr<proto::file_transfer::HostToClient> reply;
 
     if (panel_type == UiFileManager::PanelType::REMOTE)
     {
-        WriteMessage(message);
+        reply = SendRemoteRequest(request);
     }
     else
     {
         DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
+        reply = SendLocalRequest(request);
+    }
 
-        std::unique_ptr<proto::RequestStatus> status =
-            ExecuteCreateDirectoryRequest(message.create_directory_request());
-
-        if (status->code() != proto::Status::STATUS_SUCCESS)
+    if (reply)
+    {
+        if (reply->status().code() != proto::Status::STATUS_SUCCESS)
         {
+            std::unique_ptr<proto::RequestStatus> status(reply->release_status());
             file_manager_->ReadRequestStatus(std::move(status));
         }
     }
@@ -222,26 +203,29 @@ void ClientSessionFileTransfer::OnRenameRequest(
         return;
     }
 
-    proto::file_transfer::ClientToHost message;
+    proto::file_transfer::ClientToHost request;
 
-    proto::RenameRequest* request = message.mutable_rename_request();
-    request->set_path(path);
-    request->set_old_item_name(old_name);
-    request->set_new_item_name(new_name);
+    request.mutable_rename_request()->set_path(path);
+    request.mutable_rename_request()->set_old_item_name(old_name);
+    request.mutable_rename_request()->set_new_item_name(new_name);
+
+    std::unique_ptr<proto::file_transfer::HostToClient> reply;
 
     if (panel_type == UiFileManager::PanelType::REMOTE)
     {
-        WriteMessage(message);
+        reply = SendRemoteRequest(request);
     }
     else
     {
         DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
+        reply = SendLocalRequest(request);
+    }
 
-        std::unique_ptr<proto::RequestStatus> status =
-            ExecuteRenameRequest(message.rename_request());
-
-        if (status->code() != proto::Status::STATUS_SUCCESS)
+    if (reply)
+    {
+        if (reply->status().code() != proto::Status::STATUS_SUCCESS)
         {
+            std::unique_ptr<proto::RequestStatus> status(reply->release_status());
             file_manager_->ReadRequestStatus(std::move(status));
         }
     }
@@ -262,23 +246,27 @@ void ClientSessionFileTransfer::OnRemoveRequest(
         return;
     }
 
-    proto::file_transfer::ClientToHost message;
-    message.mutable_remove_request()->set_path(path);
-    message.mutable_remove_request()->set_item_name(item_name);
+    proto::file_transfer::ClientToHost request;
+    request.mutable_remove_request()->set_path(path);
+    request.mutable_remove_request()->set_item_name(item_name);
+
+    std::unique_ptr<proto::file_transfer::HostToClient> reply;
 
     if (panel_type == UiFileManager::PanelType::REMOTE)
     {
-        WriteMessage(message);
+        reply = SendRemoteRequest(request);
     }
     else
     {
         DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
+        reply = SendLocalRequest(request);
+    }
 
-        std::unique_ptr<proto::RequestStatus> status =
-            ExecuteRemoveRequest(message.remove_request());
-
-        if (status->code() != proto::Status::STATUS_SUCCESS)
+    if (reply)
+    {
+        if (reply->status().code() != proto::Status::STATUS_SUCCESS)
         {
+            std::unique_ptr<proto::RequestStatus> status(reply->release_status());
             file_manager_->ReadRequestStatus(std::move(status));
         }
     }
@@ -323,18 +311,107 @@ bool ClientSessionFileTransfer::ReadFilePacketMessage(const proto::FilePacket& f
     return true;
 }
 
-void ClientSessionFileTransfer::WriteMessage(
-    const proto::file_transfer::ClientToHost& message)
+std::unique_ptr<proto::file_transfer::HostToClient>
+ClientSessionFileTransfer::SendRemoteRequest(
+    const proto::file_transfer::ClientToHost& request)
 {
-    IOBuffer buffer(SerializeMessage<IOBuffer>(message));
+    DCHECK(worker_->BelongsToCurrentThread());
+
+    std::unique_ptr<proto::file_transfer::HostToClient> reply;
+
+    IOBuffer buffer(SerializeMessage<IOBuffer>(request));
 
     if (!buffer.IsEmpty())
     {
         delegate_->OnSessionMessage(std::move(buffer));
-        return;
+        message_reply_event_.Wait();
+
+        std::lock_guard<std::mutex> lock(message_reply_lock_);
+        reply.swap(message_reply_);
     }
 
-    delegate_->OnSessionTerminate();
+    if (!reply)
+    {
+        delegate_->OnSessionTerminate();
+    }
+
+    return reply;
+}
+
+std::unique_ptr<proto::file_transfer::HostToClient>
+ClientSessionFileTransfer::SendLocalRequest(
+    const proto::file_transfer::ClientToHost& request)
+{
+    DCHECK(worker_->BelongsToCurrentThread());
+
+    std::unique_ptr<proto::file_transfer::HostToClient> reply(
+        new proto::file_transfer::HostToClient());
+
+    std::unique_ptr<proto::RequestStatus> status;
+
+    if (request.has_drive_list_request())
+    {
+        std::unique_ptr<proto::DriveList> drive_list;
+
+        status = ExecuteDriveListRequest(request.drive_list_request(),
+                                         drive_list);
+        DCHECK(status);
+
+        if (status->code() == proto::Status::STATUS_SUCCESS)
+        {
+            reply->set_allocated_drive_list(drive_list.release());
+        }
+        else
+        {
+            reply->set_allocated_status(status.release());
+        }
+    }
+    else if (request.has_directory_list_request())
+    {
+        std::unique_ptr<proto::DirectoryList> directory_list;
+
+        status = ExecuteDirectoryListRequest(request.directory_list_request(),
+                                             directory_list);
+        DCHECK(status);
+
+        if (status->code() == proto::Status::STATUS_SUCCESS)
+        {
+            reply->set_allocated_directory_list(directory_list.release());
+        }
+        else
+        {
+            reply->set_allocated_status(status.release());
+        }
+    }
+    else if (request.has_create_directory_request())
+    {
+        status = ExecuteCreateDirectoryRequest(request.create_directory_request());
+        DCHECK(status);
+
+        reply->set_allocated_status(status.release());
+    }
+    else if (request.has_rename_request())
+    {
+        status = ExecuteRenameRequest(request.rename_request());
+        DCHECK(status);
+
+        reply->set_allocated_status(status.release());
+    }
+    else if (request.has_remove_request())
+    {
+        status = ExecuteRemoveRequest(request.remove_request());
+        DCHECK(status);
+
+        reply->set_allocated_status(status.release());
+    }
+    else
+    {
+        // Unknown messages are ignored.
+        DLOG(WARNING) << "Unhandled request";
+        return nullptr;
+    }
+
+    return reply;
 }
 
 } // namespace aspia

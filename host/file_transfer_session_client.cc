@@ -114,7 +114,6 @@ void FileTransferSessionClient::WriteStatus(
     std::unique_ptr<proto::RequestStatus> status)
 {
     DCHECK(status);
-    DCHECK(status->code() != proto::Status::STATUS_SUCCESS);
 
     proto::file_transfer::HostToClient message;
     message.set_allocated_status(status.release());
@@ -188,8 +187,7 @@ void FileTransferSessionClient::ReadCreateDirectoryRequest(
 
     status_dialog_->SetRequestStatus(*status);
 
-    if (status->code() != proto::Status::STATUS_SUCCESS)
-        WriteStatus(std::move(status));
+    WriteStatus(std::move(status));
 }
 
 void FileTransferSessionClient::ReadRenameRequest(
@@ -200,8 +198,7 @@ void FileTransferSessionClient::ReadRenameRequest(
 
     status_dialog_->SetRequestStatus(*status);
 
-    if (status->code() != proto::Status::STATUS_SUCCESS)
-        WriteStatus(std::move(status));
+    WriteStatus(std::move(status));
 }
 
 void FileTransferSessionClient::ReadRemoveRequest(
@@ -212,8 +209,7 @@ void FileTransferSessionClient::ReadRemoveRequest(
 
     status_dialog_->SetRequestStatus(*status);
 
-    if (status->code() != proto::Status::STATUS_SUCCESS)
-        WriteStatus(std::move(status));
+    WriteStatus(std::move(status));
 }
 
 } // namespace aspia

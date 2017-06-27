@@ -9,6 +9,7 @@
 #define _ASPIA_CLIENT__CLIENT_SESSION_FILE_TRANSFER_H
 
 #include "client/client_session.h"
+#include "base/synchronization/waitable_event.h"
 #include "proto/file_transfer_session.pb.h"
 #include "ui/file_manager.h"
 
@@ -60,12 +61,20 @@ private:
     bool ReadDirectoryListMessage(std::unique_ptr<proto::DirectoryList> directory_list);
     bool ReadFilePacketMessage(const proto::FilePacket& packet);
 
-    void WriteMessage(const proto::file_transfer::ClientToHost& message);
+    std::unique_ptr<proto::file_transfer::HostToClient> SendRemoteRequest(
+        const proto::file_transfer::ClientToHost& message);
+
+    std::unique_ptr<proto::file_transfer::HostToClient> SendLocalRequest(
+        const proto::file_transfer::ClientToHost& message);
 
     std::unique_ptr<UiFileManager> file_manager_;
 
     MessageLoopThread worker_thread_;
     std::shared_ptr<MessageLoopProxy> worker_;
+
+    WaitableEvent message_reply_event_;
+    std::unique_ptr<proto::file_transfer::HostToClient> message_reply_;
+    std::mutex message_reply_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);
 };
