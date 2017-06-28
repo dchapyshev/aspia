@@ -48,6 +48,10 @@ void MessagePumpForUI::ScheduleWork()
 
 bool MessagePumpForUI::OnMessage(UINT message, WPARAM wparam, LPARAM lparam, LRESULT* result)
 {
+    UNREF(wparam);
+    UNREF(lparam);
+    UNREF(result);
+
     switch (message)
     {
         case kMsgHaveWork:
