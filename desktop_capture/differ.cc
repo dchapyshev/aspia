@@ -21,13 +21,11 @@ static INLINE uint8_t DiffFullBlock_C(const uint8_t* image1,
 {
     for (int y = 0; y < kBlockSize; ++y)
     {
-        // Если строка имеет отличия
         if (memcmp(image1, image2, kBytesPerBlock) != 0)
         {
             return 1U;
         }
 
-        // Переходим к следующей строке изображениях
         image1 += bytes_per_row;
         image2 += bytes_per_row;
     }
@@ -104,7 +102,8 @@ void Differ::MarkDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
 
         for (int x = 0; x < full_blocks_x_; ++x)
         {
-            // Для x86 и x86_64 мы не поддерживаем процессоры не имеющие инструкций SSE2.
+            // For x86 and x86_64, we do not support processors that do not have SSE2
+            // instructions support.
             if (kBlockSize == 16)
             {
                 // Mark this block as being modified so that it gets incorporated into a dirty rect.
@@ -202,8 +201,9 @@ void Differ::MergeBlocks(DesktopRegion* dirty_region)
             //
             if (*is_different != 0)
             {
-                int width  = 1; // Ширина прямоугольника в блоках
-                int height = 1; // Высота прямоугольника в блоках
+                // Width and height of the rectangle in blocks.
+                int width  = 1;
+                int height = 1;
 
                 *is_different = 0;
 
