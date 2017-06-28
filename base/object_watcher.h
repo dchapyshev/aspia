@@ -8,6 +8,8 @@
 #ifndef _ASPIA_BASE__OBJECT_WATCHER_H
 #define _ASPIA_BASE__OBJECT_WATCHER_H
 
+#include "base/macros.h"
+
 #include <chrono>
 
 namespace aspia {
@@ -58,7 +60,10 @@ public:
         // again.
         virtual void OnObjectSignaled(HANDLE object) = 0;
 
-        virtual void OnObjectTimeout(HANDLE object) { }
+        virtual void OnObjectTimeout(HANDLE object)
+        {
+            UNREF(object);
+        }
     };
 
     // When the object is signaled, the given delegate is notified on the sequence

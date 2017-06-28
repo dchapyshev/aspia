@@ -68,7 +68,7 @@ void Thread::Start()
     state_ = State::Starting;
 
     start_event_.Reset();
-    thread_.swap(std::thread(&Thread::ThreadMain, this));
+    thread_ = std::thread(&Thread::ThreadMain, this);
     start_event_.Wait();
 
     state_ = State::Started;

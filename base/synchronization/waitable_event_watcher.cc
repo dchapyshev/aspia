@@ -37,6 +37,8 @@ void WaitableEventWatcher::StopWatching()
 
 void WaitableEventWatcher::OnObjectSignaled(HANDLE object)
 {
+    UNREF(object);
+
     WaitableEvent* event = event_;
 
     event_ = nullptr;
