@@ -18,6 +18,8 @@ INT_PTR UiPowerManageDialog::DoModal(HWND parent)
 
 INT_PTR UiPowerManageDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
+    UNREF(lparam);
+
     switch (msg)
     {
         case WM_INITDIALOG:

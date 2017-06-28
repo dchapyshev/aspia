@@ -230,6 +230,8 @@ void UiUserPropDialog::OnOkButton()
 
 INT_PTR UiUserPropDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
+    UNREF(lparam);
+
     switch (msg)
     {
         case WM_INITDIALOG:

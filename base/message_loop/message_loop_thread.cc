@@ -37,7 +37,7 @@ void MessageLoopThread::Start(MessageLoop::Type message_loop_type,
     start_event_.Reset();
     thread_ = std::thread(&MessageLoopThread::ThreadMain,
                           this,
-                          message_loop_type));
+                          message_loop_type);
     start_event_.Wait();
 
     state_ = State::Started;

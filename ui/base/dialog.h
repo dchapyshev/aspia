@@ -37,7 +37,7 @@ public:
     T GetDlgItemInt(int item_id)
     {
         const bool is_signed = std::numeric_limits<T>::is_signed;
-        return ::GetDlgItemInt(hwnd(), item_id, nullptr, is_signed);
+        return static_cast<T>(::GetDlgItemInt(hwnd(), item_id, nullptr, is_signed));
     }
 
     template <typename T>

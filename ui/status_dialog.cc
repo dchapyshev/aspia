@@ -77,6 +77,8 @@ void UiStatusDialog::AddMessage(const std::wstring& message)
 
 INT_PTR UiStatusDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
+    UNREF(lparam);
+
     switch (msg)
     {
         case WM_INITDIALOG:
