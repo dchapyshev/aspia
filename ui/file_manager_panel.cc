@@ -148,7 +148,7 @@ void UiFileManagerPanel::SetComputerViews()
     list_.AddColumn(module_.String(IDS_FT_COLUMN_TOTAL_SPACE), 80);
     list_.AddColumn(module_.String(IDS_FT_COLUMN_FREE_SPACE), 80);
 
-    list_.ModifyStyle(0, LVS_SINGLESEL);
+    list_.ModifyStyle(LVS_EDITLABELS, LVS_SINGLESEL);
 
     toolbar_.EnableButton(ID_FOLDER_ADD, false);
     toolbar_.EnableButton(ID_FOLDER_UP, false);
@@ -168,7 +168,7 @@ void UiFileManagerPanel::SetFolderViews()
     list_.AddColumn(module_.String(IDS_FT_COLUMN_TYPE), 100);
     list_.AddColumn(module_.String(IDS_FT_COLUMN_MODIFIED), 100);
 
-    list_.ModifyStyle(LVS_SINGLESEL, 0);
+    list_.ModifyStyle(LVS_SINGLESEL, LVS_EDITLABELS);
 
     toolbar_.EnableButton(ID_FOLDER_ADD, true);
     toolbar_.EnableButton(ID_FOLDER_UP, true);
@@ -223,46 +223,37 @@ void UiFileManagerPanel::OnCreate()
     toolbar_.ButtonStructSize(sizeof(kButtons[0]));
     toolbar_.AddButtons(_countof(kButtons), kButtons);
 
-    if (toolbar_imagelist_.CreateSmall())
-    {
-        toolbar_imagelist_.AddIcon(module_, IDI_REFRESH);
-        toolbar_imagelist_.AddIcon(module_, IDI_DELETE);
-        toolbar_imagelist_.AddIcon(module_, IDI_FOLDER_ADD);
-        toolbar_imagelist_.AddIcon(module_, IDI_FOLDER_UP);
-        toolbar_imagelist_.AddIcon(module_, IDI_HOME);
+    toolbar_imagelist_.CreateSmall();
+    toolbar_.SetImageList(toolbar_imagelist_);
 
-        if (panel_type_ == PanelType::LOCAL)
-        {
-            toolbar_imagelist_.AddIcon(module_, IDI_SEND);
-        }
-        else
-        {
-            DCHECK(panel_type_ == PanelType::REMOTE);
-            toolbar_imagelist_.AddIcon(module_, IDI_RECIEVE);
-        }
-
-        toolbar_.SetImageList(toolbar_imagelist_);
-    }
+    toolbar_imagelist_.AddIcon(module_, IDI_REFRESH);
+    toolbar_imagelist_.AddIcon(module_, IDI_DELETE);
+    toolbar_imagelist_.AddIcon(module_, IDI_FOLDER_ADD);
+    toolbar_imagelist_.AddIcon(module_, IDI_FOLDER_UP);
+    toolbar_imagelist_.AddIcon(module_, IDI_HOME);
 
     if (panel_type_ == PanelType::LOCAL)
+    {
+        toolbar_imagelist_.AddIcon(module_, IDI_SEND);
         toolbar_.SetButtonText(ID_SEND, module_.String(IDS_FT_SEND));
+    }
     else
+    {
+        DCHECK(panel_type_ == PanelType::REMOTE);
+        toolbar_imagelist_.AddIcon(module_, IDI_RECIEVE);
         toolbar_.SetButtonText(ID_SEND, module_.String(IDS_FT_RECIEVE));
+    }
 
     list_.Create(hwnd(),
                  WS_EX_CLIENTEDGE,
-                 LVS_REPORT | LVS_SHOWSELALWAYS | LVS_EDITLABELS,
+                 LVS_REPORT | LVS_SHOWSELALWAYS,
                  module_.Handle());
-
     list_.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
+    list_imagelist_.CreateSmall();
+    list_.SetImageList(list_imagelist_, LVSIL_SMALL);
 
     status_.Create(hwnd(), SS_OWNERDRAW, module_.Handle());
     status_.SetFont(default_font);
-
-    if (list_imagelist_.CreateSmall())
-    {
-        list_.SetImageList(list_imagelist_, LVSIL_SMALL);
-    }
 
     delegate_->OnDriveListRequest(panel_type_);
 }
