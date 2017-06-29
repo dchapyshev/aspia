@@ -51,18 +51,12 @@ void UiEdit::AppendText(const std::wstring& text)
 
 std::wstring UiEdit::GetText()
 {
-    // Returns the length without null-character.
-    int length = GetWindowTextLengthW(hwnd());
-    if (length > 0)
-    {
-        std::wstring string;
-        string.resize(length);
+    return GetWindowString();
+}
 
-        if (GetWindowTextW(hwnd(), &string[0], length + 1))
-             return string;
-    }
-
-    return std::wstring();
+void UiEdit::SetLimitText(int num_characters)
+{
+    SendMessageW(EM_SETLIMITTEXT, num_characters, 0);
 }
 
 } // namespace aspia

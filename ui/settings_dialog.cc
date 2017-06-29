@@ -11,6 +11,7 @@
 #include "ui/base/combobox.h"
 #include "ui/base/updown.h"
 #include "ui/base/trackbar.h"
+#include "ui/base/edit.h"
 #include "desktop_capture/pixel_format.h"
 #include "codec/video_helpers.h"
 #include "base/strings/string_util.h"
@@ -134,7 +135,7 @@ void UiSettingsDialog::OnInitDialog()
     TrackBar_SetRange(ratio, kMinCompressRatio, kMaxCompressRatio);
     TrackBar_SetPos(ratio, config_.compress_ratio());
 
-    SendMessageW(GetDlgItem(IDC_INTERVAL_EDIT), EM_SETLIMITTEXT, 3, 0);
+    UiEdit(GetDlgItem(IDC_INTERVAL_EDIT)).SetLimitText(3);
 
     HWND updown = GetDlgItem(IDC_INTERVAL_UPDOWN);
     UpDown_SetRange(updown, kMinUpdateInterval, kMaxUpdateInterval);

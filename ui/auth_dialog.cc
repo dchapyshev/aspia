@@ -45,7 +45,7 @@ void UiAuthDialog::OnOkButton()
 
 void UiAuthDialog::OnCancelButton()
 {
-    PostMessageW(hwnd(), WM_CLOSE, 0, 0);
+    PostMessageW(WM_CLOSE, 0, 0);
 }
 
 const std::string& UiAuthDialog::UserName() const

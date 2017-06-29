@@ -50,7 +50,7 @@ int UiComboBoxEx::InsertItem(const std::wstring& text,
     item.iIndent        = indent;
     item.lParam         = lparam;
 
-    return SendMessageW(hwnd(), CBEM_INSERTITEM, 0, reinterpret_cast<LPARAM>(&item));
+    return SendMessageW(CBEM_INSERTITEM, 0, reinterpret_cast<LPARAM>(&item));
 }
 
 int UiComboBoxEx::AddItem(const std::wstring& text,
@@ -63,7 +63,7 @@ int UiComboBoxEx::AddItem(const std::wstring& text,
 
 int UiComboBoxEx::DeleteItem(int item_index)
 {
-    return SendMessageW(hwnd(), CBEM_DELETEITEM, item_index, 0);
+    return SendMessageW(CBEM_DELETEITEM, item_index, 0);
 }
 
 int UiComboBoxEx::DeleteItemWithData(LPARAM lparam)
@@ -78,7 +78,7 @@ int UiComboBoxEx::DeleteItemWithData(LPARAM lparam)
 
 void UiComboBoxEx::DeleteAllItems()
 {
-    SendMessageW(hwnd(), CB_RESETCONTENT, 0, 0);
+    SendMessageW(CB_RESETCONTENT, 0, 0);
 }
 
 LPARAM UiComboBoxEx::GetItemData(int item_index)
@@ -89,7 +89,7 @@ LPARAM UiComboBoxEx::GetItemData(int item_index)
     item.mask  = CBEIF_LPARAM;
     item.iItem = item_index;
 
-    if (SendMessageW(hwnd(), CBEM_GETITEM, 0, reinterpret_cast<LPARAM>(&item)) != 0)
+    if (SendMessageW(CBEM_GETITEM, 0, reinterpret_cast<LPARAM>(&item)) != 0)
     {
         return item.lParam;
     }
@@ -107,7 +107,7 @@ LRESULT UiComboBoxEx::SetItemData(int item_index, LPARAM lparam)
     item.iItem  = item_index;
     item.lParam = lparam;
 
-    return SendMessageW(hwnd(), CBEM_SETITEM, 0, reinterpret_cast<LPARAM>(&item));
+    return SendMessageW(CBEM_SETITEM, 0, reinterpret_cast<LPARAM>(&item));
 }
 
 std::wstring UiComboBoxEx::GetItemText(int item_index)
@@ -123,7 +123,7 @@ std::wstring UiComboBoxEx::GetItemText(int item_index)
     item.pszText = buffer;
     item.cchTextMax = _countof(buffer);
 
-    if (SendMessageW(hwnd(), CBEM_GETITEM, 0, reinterpret_cast<LPARAM>(&item)) != 0)
+    if (SendMessageW(CBEM_GETITEM, 0, reinterpret_cast<LPARAM>(&item)) != 0)
         return buffer;
 
     return std::wstring();
@@ -137,7 +137,7 @@ int UiComboBoxEx::GetItemImage(int item_index)
     item.mask = CBEIF_IMAGE;
     item.iItem = item_index;
 
-    if (SendMessageW(hwnd(), CBEM_GETITEM, 0, reinterpret_cast<LPARAM>(&item)) != 0)
+    if (SendMessageW(CBEM_GETITEM, 0, reinterpret_cast<LPARAM>(&item)) != 0)
     {
         return item.iImage;
     }
@@ -154,30 +154,29 @@ LRESULT UiComboBoxEx::SetItemText(int item_index, const std::wstring& text)
     item.iItem   = item_index;
     item.pszText = const_cast<LPWSTR>(text.c_str());
 
-    return SendMessageW(hwnd(), CBEM_SETITEM, 0, reinterpret_cast<LPARAM>(&item));
+    return SendMessageW(CBEM_SETITEM, 0, reinterpret_cast<LPARAM>(&item));
 }
 
 HIMAGELIST UiComboBoxEx::SetImageList(HIMAGELIST imagelist)
 {
-    return reinterpret_cast<HIMAGELIST>(SendMessageW(hwnd(),
-                                                     CBEM_SETIMAGELIST,
+    return reinterpret_cast<HIMAGELIST>(SendMessageW(CBEM_SETIMAGELIST,
                                                      0,
                                                      reinterpret_cast<LPARAM>(imagelist)));
 }
 
 HIMAGELIST UiComboBoxEx::GetImageList()
 {
-    return reinterpret_cast<HIMAGELIST>(SendMessageW(hwnd(), CBEM_GETIMAGELIST, 0, 0));
+    return reinterpret_cast<HIMAGELIST>(SendMessageW(CBEM_GETIMAGELIST, 0, 0));
 }
 
 int UiComboBoxEx::GetItemCount()
 {
-    return SendMessageW(hwnd(), CB_GETCOUNT, 0, 0);
+    return SendMessageW(CB_GETCOUNT, 0, 0);
 }
 
 int UiComboBoxEx::GetSelectedItem()
 {
-    return SendMessageW(hwnd(), CB_GETCURSEL, 0, 0);
+    return SendMessageW(CB_GETCURSEL, 0, 0);
 }
 
 int UiComboBoxEx::GetItemWithData(LPARAM lparam)
@@ -195,7 +194,7 @@ int UiComboBoxEx::GetItemWithData(LPARAM lparam)
 
 void UiComboBoxEx::SelectItem(int item_index)
 {
-    SendMessageW(hwnd(), CB_SETCURSEL, item_index, 0);
+    SendMessageW(CB_SETCURSEL, item_index, 0);
 }
 
 void UiComboBoxEx::SelectItemData(LPARAM lparam)

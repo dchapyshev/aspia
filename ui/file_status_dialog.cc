@@ -73,8 +73,8 @@ void UiFileStatusDialog::OnSize(int width, int height)
         UiWindow stop_button(GetDlgItem(IDC_STOP_BUTTON));
         UiWindow log_edit(GetDlgItem(IDC_STATUS_EDIT));
 
-        DesktopSize stop_size = stop_button.Size();
-        DesktopSize minimize_size = minimize_button.Size();
+        UiSize stop_size = stop_button.Size();
+        UiSize minimize_size = minimize_button.Size();
 
         DeferWindowPos(dwp,
                        log_edit,
@@ -130,11 +130,11 @@ INT_PTR UiFileStatusDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
             switch (LOWORD(wparam))
             {
                 case IDC_MINIMIZE_BUTTON:
-                    ShowWindow(hwnd(), SW_MINIMIZE);
+                    Minimize();
                     break;
 
                 case IDC_STOP_BUTTON:
-                    PostMessageW(hwnd(), WM_CLOSE, 0, 0);
+                    PostMessageW(WM_CLOSE, 0, 0);
                     break;
             }
         }

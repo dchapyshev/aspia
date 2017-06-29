@@ -92,14 +92,32 @@ message DirectoryListRequest
     string item = 2;
 }
 
-message FilePacket
+message DirectorySize
+{
+    uint64 size = 1;
+}
+
+message DirectorySizeRequest
 {
     string path = 1;
-    uint64 full_size = 2;
+}
+
+message FilePacket
+{
+    enum Flags
+    {
+        ERROR        = 0;
+        PACKET       = 1;
+        FIRST_PACKET = 2;
+        LAST_PACKET  = 4;
+    }
+
+    uint32 flags = 1;
+    uint64 file_size = 2;
     bytes data  = 3;
 }
 
-message FileRequest
+message FilePacketRequest
 {
     string path = 1;
 }

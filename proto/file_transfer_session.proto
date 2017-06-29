@@ -18,16 +18,18 @@ message HostToClient
     RequestStatus status         = 1;
     DriveList drive_list         = 2;
     DirectoryList directory_list = 3;
-    FilePacket file_packet       = 4;
+    DirectorySize directory_size = 4;
+    FilePacket file_packet       = 5;
 }
 
 message ClientToHost
 {
     DriveListRequest drive_list_request             = 1;
     DirectoryListRequest directory_list_request     = 2;
-    FileRequest file_request                        = 3;
-    FilePacket file_packet                          = 4;
-    CreateDirectoryRequest create_directory_request = 5;
-    RenameRequest rename_request                    = 6;
-    RemoveRequest remove_request                    = 7;
+    DirectorySizeRequest directory_size_request     = 3;
+    FilePacketRequest file_request                  = 4;
+    FilePacket file_packet                          = 5;
+    CreateDirectoryRequest create_directory_request = 6;
+    RenameRequest rename_request                    = 7;
+    RemoveRequest remove_request                    = 8;
 }

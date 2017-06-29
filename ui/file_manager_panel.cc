@@ -710,7 +710,7 @@ void UiFileManagerPanel::OnListItemChanged()
     std::wstring format = module_.String(IDS_FT_SELECTED_OBJECT_COUNT);
     std::wstring status = StringPrintfW(format.c_str(), count);
 
-    SetWindowTextW(status_, status.c_str());
+    status_.SetWindowString(status);
 }
 
 void UiFileManagerPanel::OnSend()

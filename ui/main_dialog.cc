@@ -289,10 +289,10 @@ void UiMainDialog::OnHelpButton()
 
 void UiMainDialog::OnShowHideButton()
 {
-    if (IsWindowVisible(hwnd()))
-        ShowWindow(hwnd(), SW_HIDE);
+    if (IsVisible())
+        Hide();
     else
-        ShowWindow(hwnd(), SW_SHOWNORMAL);
+        ShowNormal();
 }
 
 void UiMainDialog::OnInstallServiceButton()

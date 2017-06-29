@@ -60,7 +60,7 @@ void UiSplitter::OnDestroy()
     split_panel_.DestroyWindow();
 }
 
-void UiSplitter::OnSize(const DesktopSize& size)
+void UiSplitter::OnSize(const UiSize& size)
 {
     HDWP dwp = BeginDeferWindowPos(3);
 
@@ -75,7 +75,7 @@ void UiSplitter::OnSize(const DesktopSize& size)
             if (prev_size_.IsEmpty())
             {
                 x_ = (size.Width() / 2) - (kSplitPanelWidth / 2);
-                prev_size_ = size;
+                prev_size_.CopyFrom(size);
             }
 
             int prev_x = (prev_size_.Width() / 2) - (kSplitPanelWidth / 2);
@@ -183,9 +183,7 @@ void UiSplitter::OnLButtonUp()
 
 void UiSplitter::OnMouseMove()
 {
-    DesktopPoint pos = split_panel_.CursorPos();
-
-    if (split_panel_.ClientRect().Contains(pos.x(), pos.y()))
+    if (split_panel_.ClientRect().Contains(split_panel_.CursorPos()))
     {
         ::SetCursor(cursor_);
     }
@@ -225,7 +223,7 @@ bool UiSplitter::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* resu
             break;
 
         case WM_SIZE:
-            OnSize(DesktopSize(LOWORD(lparam), HIWORD(lparam)));
+            OnSize(UiSize(lparam));
             break;
 
         case WM_LBUTTONUP:

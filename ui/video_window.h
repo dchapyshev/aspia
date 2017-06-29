@@ -12,7 +12,7 @@
 #include "desktop_capture/desktop_frame_dib.h"
 #include "desktop_capture/mouse_cursor.h"
 #include "ui/base/child_window.h"
-#include "ui/base/window_timer.h"
+#include "ui/base/timer.h"
 
 namespace aspia {
 
@@ -34,7 +34,7 @@ public:
 
     void HasFocus(bool has);
 
-    void OnMouse(UINT msg, WPARAM wParam, LPARAM lParam);
+    void OnMouse(UINT msg, WPARAM wparam, LPARAM lparam);
 
 private:
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;
@@ -46,8 +46,7 @@ private:
     void OnHScroll(UINT code, UINT pos);
     void OnVScroll(UINT code, UINT pos);
 
-    void FillBackgroundRect(HDC paint_dc, const DesktopRect& paint_rect);
-    void DrawBackground(HDC paint_dc, const DesktopRect& paint_rect);
+    void DrawBackground(HDC paint_dc, const UiRect& paint_rect);
     void UpdateScrollBars(int width, int height);
     bool Scroll(int x, int y);
 
@@ -56,23 +55,23 @@ private:
 
     ScopedHBRUSH background_brush_;
 
-    DesktopSize client_size_; // The size of the client area of the window.
-    DesktopPoint center_offset_;
-    DesktopPoint scroll_pos_;
+    UiSize client_size_; // The size of the client area of the window.
+    UiPoint center_offset_;
+    UiPoint scroll_pos_;
 
     ScopedCreateDC screen_dc_;
     ScopedCreateDC memory_dc_;
 
     std::unique_ptr<DesktopFrameDIB> frame_;
 
-    DesktopPoint prev_pos_;
+    UiPoint prev_pos_;
     uint8_t prev_mask_ = 0;
 
     bool has_mouse_ = false; // Is the cursor over the window?
     bool has_focus_ = false; // Is the window in focus?
 
-    UiWindowTimer scroll_timer_;
-    DesktopPoint scroll_delta_;
+    UiTimer scroll_timer_;
+    UiPoint scroll_delta_;
 
     DISALLOW_COPY_AND_ASSIGN(UiVideoWindow);
 };

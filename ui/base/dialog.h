@@ -30,8 +30,8 @@ public:
     void EnableDlgItem(int item_id, bool enable);
 
     std::wstring GetDlgItemString(int item_id);
-    bool SetDlgItemString(int item_id, const std::wstring& string);
-    bool SetDlgItemString(int item_id, UINT resource_id);
+    void SetDlgItemString(int item_id, const std::wstring& string);
+    void SetDlgItemString(int item_id, UINT resource_id);
 
     template <typename T>
     T GetDlgItemInt(int item_id)
@@ -41,10 +41,10 @@ public:
     }
 
     template <typename T>
-    bool SetDlgItemInt(int item_id, T value)
+    void SetDlgItemInt(int item_id, T value)
     {
         const bool is_signed = std::numeric_limits<T>::is_signed;
-        return !!::SetDlgItemInt(hwnd(), item_id, value, is_signed);
+        ::SetDlgItemInt(hwnd(), item_id, value, is_signed);
     }
 
 protected:

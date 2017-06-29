@@ -27,7 +27,7 @@ bool UiDialog::Create(HWND parent, UINT resource_id, const UiModule& module)
     }
 
     // Now we show the window.
-    ShowWindow(hwnd(), SW_SHOWNORMAL);
+    ShowNormal();
     UpdateWindow(hwnd());
 
     return true;
@@ -75,8 +75,8 @@ void UiDialog::SetIcon(UINT resource_id)
                               GetSystemMetrics(SM_CYICON),
                               LR_CREATEDIBSECTION);
 
-    SendMessageW(hwnd(), WM_SETICON, FALSE, reinterpret_cast<LPARAM>(small_icon_.Get()));
-    SendMessageW(hwnd(), WM_SETICON, TRUE, reinterpret_cast<LPARAM>(big_icon_.Get()));
+    SendMessageW(WM_SETICON, FALSE, reinterpret_cast<LPARAM>(small_icon_.Get()));
+    SendMessageW(WM_SETICON, TRUE, reinterpret_cast<LPARAM>(big_icon_.Get()));
 }
 
 HWND UiDialog::GetDlgItem(int item_id)
@@ -91,33 +91,17 @@ void UiDialog::EnableDlgItem(int item_id, bool enable)
 
 std::wstring UiDialog::GetDlgItemString(int item_id)
 {
-    HWND hwnd = GetDlgItem(item_id);
-
-    if (hwnd)
-    {
-        // Returns the length without null-character.
-        int length = GetWindowTextLengthW(hwnd);
-        if (length > 0)
-        {
-            std::wstring string;
-            string.resize(length);
-
-            if (GetWindowTextW(hwnd, &string[0], length + 1))
-                return string;
-        }
-    }
-
-    return std::wstring();
+    return UiWindow(GetDlgItem(item_id)).GetWindowString();
 }
 
-bool UiDialog::SetDlgItemString(int item_id, const std::wstring& string)
+void UiDialog::SetDlgItemString(int item_id, const std::wstring& string)
 {
-    return !!SetDlgItemTextW(hwnd(), item_id, string.c_str());
+    SetDlgItemTextW(hwnd(), item_id, string.c_str());
 }
 
-bool UiDialog::SetDlgItemString(int item_id, UINT resource_id)
+void UiDialog::SetDlgItemString(int item_id, UINT resource_id)
 {
-    return SetDlgItemString(item_id, Module().String(resource_id));
+    SetDlgItemString(item_id, Module().String(resource_id));
 }
 
 } // namespace aspia

@@ -120,7 +120,7 @@ bool UiChildWindow::Create(HWND parent, DWORD style, const std::wstring& title)
         return false;
     }
 
-    ShowWindow(hwnd(), SW_SHOW);
+    Show();
     UpdateWindow(hwnd());
 
     return true;

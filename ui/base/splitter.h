@@ -29,7 +29,7 @@ private:
     void OnLButtonDown();
     void OnLButtonUp();
     void OnMouseMove();
-    void OnSize(const DesktopSize& size);
+    void OnSize(const UiSize& size);
     void OnDrawItem(LPDRAWITEMSTRUCT dis);
     void Draw();
     int NormalizePosition(int position);
@@ -45,7 +45,7 @@ private:
     UiWindow right_panel_;
     UiWindow split_panel_;
 
-    DesktopSize prev_size_;
+    UiSize prev_size_;
 
     bool is_sizing_ = false;
 

@@ -123,8 +123,7 @@ int UiListView::GetItemTextLength(int item_index, int column_index)
 
     item.iSubItem = column_index;
 
-    return SendMessageW(hwnd(),
-                        LVM_GETITEMTEXT,
+    return SendMessageW(LVM_GETITEMTEXT,
                         item_index,
                         reinterpret_cast<LPARAM>(&item));
 }
@@ -194,7 +193,7 @@ int UiListView::GetItemUnderPointer()
 
     if (GetCursorPos(&hti.pt))
     {
-        if (ScreenToClient(hwnd(), &hti.pt) != FALSE)
+        if (ScreenToClient(&hti.pt) != FALSE)
         {
             hti.flags = LVHT_ONITEMICON | LVHT_ONITEMLABEL;
             return ListView_HitTest(hwnd(), &hti);
@@ -228,8 +227,7 @@ HWND UiListView::EditLabel(int item_index)
 
 std::wstring UiListView::GetTextFromEdit()
 {
-    UiEdit edit(reinterpret_cast<HWND>(SendMessageW(hwnd(),
-                                                    LVM_GETEDITCONTROL,
+    UiEdit edit(reinterpret_cast<HWND>(SendMessageW(LVM_GETEDITCONTROL,
                                                     0,
                                                     0)));
     if (!edit)

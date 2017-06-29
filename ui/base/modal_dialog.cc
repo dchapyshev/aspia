@@ -41,7 +41,7 @@ INT_PTR UiModalDialog::Run(const UiModule& module, HWND parent, UINT resource_id
     }
 
     // Now we show the window.
-    ShowWindow(hwnd(), SW_SHOWNORMAL);
+    ShowNormal();
     UpdateWindow(hwnd());
 
     // EndDialog called in WM_INITDIALOG

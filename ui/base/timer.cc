@@ -1,25 +1,25 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/base/window_timer.cc
+// FILE:            ui/base/timer.cc
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/base/window_timer.h"
+#include "ui/base/timer.h"
 
 namespace aspia {
 
-UiWindowTimer::UiWindowTimer(UINT_PTR id) : id_(id)
+UiTimer::UiTimer(UINT_PTR id) : id_(id)
 {
     // Nothing
 }
 
-UiWindowTimer::~UiWindowTimer()
+UiTimer::~UiTimer()
 {
     Stop();
 }
 
-void UiWindowTimer::Start(HWND window, UINT elapse)
+void UiTimer::Start(HWND window, UINT elapse)
 {
     if (!active_)
     {
@@ -30,7 +30,7 @@ void UiWindowTimer::Start(HWND window, UINT elapse)
     }
 }
 
-void UiWindowTimer::Stop()
+void UiTimer::Stop()
 {
     if (active_)
     {

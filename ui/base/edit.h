@@ -22,6 +22,8 @@ public:
 
     void AppendText(const std::wstring& text);
     std::wstring GetText();
+
+    void SetLimitText(int num_characters);
 };
 
 } // namespace aspia

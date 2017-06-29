@@ -19,7 +19,7 @@ void UiWindow::DestroyWindow()
     }
 }
 
-bool UiWindow::CenterWindow(HWND hwnd_center)
+void UiWindow::CenterWindow(HWND hwnd_center)
 {
     LONG_PTR style = GetWindowLongPtrW(hwnd_, GWL_STYLE);
 
@@ -32,11 +32,10 @@ bool UiWindow::CenterWindow(HWND hwnd_center)
     }
 
     // Get coordinates of the window relative to its parent.
-    RECT hwnd_rect;
-    GetWindowRect(hwnd_, &hwnd_rect);
+    UiRect hwnd_rect = Rect();
 
-    RECT center_rect;
-    RECT parent_hwnd_rect;
+    UiRect center_rect;
+    UiRect parent_hwnd_rect;
 
     if (!(style & WS_CHILD))
     {
@@ -65,20 +64,20 @@ bool UiWindow::CenterWindow(HWND hwnd_center)
         minfo.cbSize = sizeof(MONITORINFO);
         GetMonitorInfoW(monitor, &minfo);
 
-        parent_hwnd_rect = minfo.rcWork;
+        parent_hwnd_rect.CopyFrom(minfo.rcWork);
 
         if (!hwnd_center)
-            center_rect = parent_hwnd_rect;
+            center_rect.CopyFrom(parent_hwnd_rect);
         else
-            GetWindowRect(hwnd_center, &center_rect);
+            GetWindowRect(hwnd_center, center_rect.Pointer());
     }
     else
     {
         // Center within parent client coordinates.
         HWND hwnd_parent = GetParent(hwnd_);
 
-        GetClientRect(hwnd_parent, &parent_hwnd_rect);
-        GetClientRect(hwnd_center, &center_rect);
+        GetClientRect(hwnd_parent, parent_hwnd_rect.Pointer());
+        GetClientRect(hwnd_center, center_rect.Pointer());
 
         MapWindowPoints(hwnd_center,
                         hwnd_parent,
@@ -86,27 +85,24 @@ bool UiWindow::CenterWindow(HWND hwnd_center)
                         2);
     }
 
-    int hwnd_width = hwnd_rect.right - hwnd_rect.left;
-    int hwnd_height = hwnd_rect.bottom - hwnd_rect.top;
-
     // Find dialog's upper left based on rcCenter.
-    int left = (center_rect.left + center_rect.right) / 2 - hwnd_width / 2;
-    int top = (center_rect.top + center_rect.bottom) / 2 - hwnd_height / 2;
+    int left = center_rect.Width() / 2 - hwnd_rect.Width() / 2;
+    int top = center_rect.Height() / 2 - hwnd_rect.Height() / 2;
 
     // If the dialog is outside the screen, move it inside.
-    if (left + hwnd_width > parent_hwnd_rect.right)
-        left = parent_hwnd_rect.right - hwnd_width;
-    if (left < parent_hwnd_rect.left)
-        left = parent_hwnd_rect.left;
+    if (left + hwnd_rect.Width() > parent_hwnd_rect.Right())
+        left = parent_hwnd_rect.Right() - hwnd_rect.Width();
+    if (left < parent_hwnd_rect.Left())
+        left = parent_hwnd_rect.Left();
 
-    if (top + hwnd_height > parent_hwnd_rect.bottom)
-        top = parent_hwnd_rect.bottom - hwnd_height;
-    if (top < parent_hwnd_rect.top)
-        top = parent_hwnd_rect.top;
+    if (top + hwnd_rect.Height() > parent_hwnd_rect.Bottom())
+        top = parent_hwnd_rect.Bottom() - hwnd_rect.Height();
+    if (top < parent_hwnd_rect.Top())
+        top = parent_hwnd_rect.Top();
 
     // Map screen coordinates to child coordinates.
-    return !!SetWindowPos(hwnd_, nullptr, left, top, -1, -1,
-                          SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+    SetWindowPos(nullptr, left, top, -1, -1,
+                 SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
 void UiWindow::SetForegroundWindowEx()
@@ -119,8 +115,8 @@ void UiWindow::SetForegroundWindowEx()
     if (active_thread_id != current_thread_id)
     {
         AttachThreadInput(current_thread_id, active_thread_id, TRUE);
-        SetWindowPos(hwnd(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-        SetWindowPos(hwnd(), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+        SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+        SetWindowPos(HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
         SetForegroundWindow(hwnd());
         AttachThreadInput(current_thread_id, active_thread_id, FALSE);
         SetFocus(hwnd());
@@ -157,112 +153,261 @@ bool UiWindow::ModifyStyleEx(LONG_PTR remove, LONG_PTR add)
 
 void UiWindow::SetFont(HFONT font)
 {
-    SendMessageW(hwnd(), WM_SETFONT, reinterpret_cast<WPARAM>(font), TRUE);
+    SendMessageW(WM_SETFONT, reinterpret_cast<WPARAM>(font), TRUE);
 }
 
 int UiWindow::Width()
 {
-    RECT rc = { 0 };
-
-    if (!GetWindowRect(hwnd(), &rc))
-        return 0;
-
-    return rc.right - rc.left;
+    return Size().Width();
 }
 
 int UiWindow::Height()
 {
-    RECT rc = { 0 };
-
-    if (!GetWindowRect(hwnd(), &rc))
-        return 0;
-
-    return rc.bottom - rc.top;
+    return Size().Height();
 }
 
-DesktopSize UiWindow::Size()
+UiSize UiWindow::Size()
 {
-    RECT rc = { 0 };
+    return Rect().Size();
+}
 
-    if (!GetWindowRect(hwnd(), &rc))
-        return DesktopSize();
-
-    return DesktopSize(rc.right - rc.left, rc.bottom - rc.top);
+UiPoint UiWindow::Pos()
+{
+    return Rect().Pos();
 }
 
 int UiWindow::ClientWidth()
 {
-    RECT rc = { 0 };
-
-    if (!GetClientRect(hwnd(), &rc))
-        return 0;
-
-    return rc.right - rc.left;
+    return ClientRect().Width();
 }
 
 int UiWindow::ClientHeight()
 {
-    RECT rc = { 0 };
-
-    if (!GetClientRect(hwnd(), &rc))
-        return 0;
-
-    return rc.bottom - rc.top;
+    return ClientRect().Height();
 }
 
-DesktopSize UiWindow::ClientSize()
+UiSize UiWindow::ClientSize()
 {
-    RECT rc = { 0 };
-
-    if (!GetClientRect(hwnd(), &rc))
-        return DesktopSize();
-
-    return DesktopSize(rc.right - rc.left, rc.bottom - rc.top);
+    return ClientRect().Size();
 }
 
-DesktopRect UiWindow::Rect()
+UiRect UiWindow::Rect()
 {
-    RECT rc = { 0 };
+    UiRect rect;
 
-    if (!GetWindowRect(hwnd(), &rc))
-        return DesktopRect();
+    if (!GetWindowRect(hwnd(), rect.Pointer()))
+        return UiRect();
 
-    return DesktopRect::MakeLTRB(rc.left, rc.top, rc.right, rc.bottom);
+    return rect;
 }
 
-DesktopRect UiWindow::ClientRect()
+UiRect UiWindow::ClientRect()
 {
-    RECT rc = { 0 };
+    UiRect rect;
 
-    if (!GetClientRect(hwnd(), &rc))
-        return DesktopRect();
+    if (!GetClientRect(hwnd(), rect.Pointer()))
+        return UiRect();
 
-    return DesktopRect::MakeLTRB(rc.left, rc.top, rc.right, rc.bottom);
+    return rect;
 }
 
-DesktopPoint UiWindow::CursorPos()
+UiPoint UiWindow::CursorPos()
 {
-    POINT cursor_pos = { 0 };
+    UiPoint cursor_pos;
 
-    if (!GetCursorPos(&cursor_pos))
-        return DesktopPoint();
+    if (!GetCursorPos(cursor_pos.Pointer()))
+        return UiPoint();
 
-    if (!ScreenToClient(hwnd(), &cursor_pos))
-        return DesktopPoint();
+    if (!ScreenToClient(cursor_pos))
+        return UiPoint();
 
-    return DesktopPoint(cursor_pos.x, cursor_pos.y);
+    return cursor_pos;
 }
 
 void UiWindow::SetSize(int width, int height)
 {
-    SetWindowPos(hwnd(), nullptr, 0, 0, width, height,
+    SetWindowPos(nullptr, 0, 0, width, height,
                  SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
+}
+
+void UiWindow::SetSize(const UiSize& size)
+{
+    SetSize(size.Width(), size.Height());
+}
+
+void UiWindow::SetPos(int x, int y)
+{
+    SetWindowPos(nullptr, x, y, 0, 0,
+                 SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOSIZE);
+}
+
+void UiWindow::SetPos(const UiPoint& pos)
+{
+    SetPos(pos.x(), pos.y());
 }
 
 void UiWindow::SetTopMost()
 {
-    SetWindowPos(hwnd(), HWND_TOPMOST, 0, 0, 0, 0,
+    SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0,
                  SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+}
+
+void UiWindow::ShowWindow(int cmd_show)
+{
+    ::ShowWindow(hwnd(), cmd_show);
+}
+
+void UiWindow::Show()
+{
+    ::ShowWindow(hwnd(), SW_SHOW);
+}
+
+void UiWindow::ShowNormal()
+{
+    ::ShowWindow(hwnd(), SW_SHOWNORMAL);
+}
+
+void UiWindow::Hide()
+{
+    ::ShowWindow(hwnd(), SW_HIDE);
+}
+
+void UiWindow::Minimize()
+{
+    ::ShowWindow(hwnd(), SW_MINIMIZE);
+}
+
+void UiWindow::Maximize()
+{
+    ::ShowWindow(hwnd(), SW_MAXIMIZE);
+}
+
+bool UiWindow::IsVisible()
+{
+    return !!IsWindowVisible(hwnd());
+}
+
+bool UiWindow::IsMaximized()
+{
+    WINDOWPLACEMENT wp = { 0 };
+    wp.length = sizeof(wp);
+
+    if (!GetWindowPlacement(wp))
+        return false;
+
+    return (wp.showCmd == SW_MAXIMIZE) ? true : false;
+}
+
+bool UiWindow::IsMinimized()
+{
+    return !!IsIconic(hwnd());
+}
+
+void UiWindow::InvalidateRect(const UiRect& rect, bool erase)
+{
+    ::InvalidateRect(hwnd(), rect.ConstPointer(), erase);
+}
+
+void UiWindow::Invalidate()
+{
+    ::InvalidateRect(hwnd(), nullptr, FALSE);
+}
+
+LRESULT UiWindow::SendMessageW(UINT message, WPARAM wparam, LPARAM lparam)
+{
+    return ::SendMessageW(hwnd(), message, wparam, lparam);
+}
+
+BOOL UiWindow::PostMessageW(UINT message, WPARAM wparam, LPARAM lparam)
+{
+    return ::PostMessageW(hwnd(), message, wparam, lparam);
+}
+
+bool UiWindow::ScreenToClient(POINT* point)
+{
+    return !!::ScreenToClient(hwnd(), point);
+}
+
+bool UiWindow::ScreenToClient(UiPoint& point)
+{
+    return ScreenToClient(point.Pointer());
+}
+
+int UiWindow::ScrollWindowEx(int dx,
+                             int dy,
+                             const RECT* scroll_rect,
+                             const RECT* clip_rect,
+                             HRGN update_region,
+                             LPRECT update_rect,
+                             UINT flags)
+{
+    return ::ScrollWindowEx(hwnd(),
+                            dx,
+                            dy,
+                            scroll_rect,
+                            clip_rect,
+                            update_region,
+                            update_rect,
+                            flags);
+}
+
+int UiWindow::SetScrollInfo(int bar,
+                            LPCSCROLLINFO lpsi,
+                            bool redraw)
+{
+    return ::SetScrollInfo(hwnd(), bar, lpsi, redraw);
+}
+
+void UiWindow::MoveWindow(int x, int y, int width, int height, bool repaint)
+{
+    ::MoveWindow(hwnd(), x, y, width, height, repaint);
+}
+
+bool UiWindow::GetWindowPlacement(WINDOWPLACEMENT& lpwndpl)
+{
+    return !!::GetWindowPlacement(hwnd(), &lpwndpl);
+}
+
+bool UiWindow::SetWindowPlacement(const WINDOWPLACEMENT& lpwndpl)
+{
+    return !!::SetWindowPlacement(hwnd(), &lpwndpl);
+}
+
+bool UiWindow::SetWindowPos(HWND hwnd_insert_after,
+                            int x,
+                            int y,
+                            int cx,
+                            int cy,
+                            UINT flags)
+{
+    return !!::SetWindowPos(hwnd(),
+                            hwnd_insert_after,
+                            x,
+                            y,
+                            cx,
+                            cy,
+                            flags);
+}
+
+void UiWindow::SetWindowString(const std::wstring& string)
+{
+    SetWindowTextW(hwnd(), string.c_str());
+}
+
+std::wstring UiWindow::GetWindowString()
+{
+    // Returns the length without null-character.
+    int length = GetWindowTextLengthW(hwnd());
+    if (length > 0)
+    {
+        std::wstring string;
+        string.resize(length);
+
+        if (GetWindowTextW(hwnd(), &string[0], length + 1))
+            return string;
+    }
+
+    return std::wstring();
 }
 
 } // namespace aspia

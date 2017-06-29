@@ -316,9 +316,6 @@
     <ClCompile Include="ui\base\window.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
-    <ClCompile Include="ui\base\window_timer.cc">
-      <Filter>ui\base</Filter>
-    </ClCompile>
     <ClCompile Include="ui\base\tray_icon.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
@@ -483,6 +480,9 @@
     </ClCompile>
     <ClCompile Include="protocol\io_queue.cc">
       <Filter>protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\base\timer.cc">
+      <Filter>ui\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -836,9 +836,6 @@
     <ClInclude Include="ui\base\window.h">
       <Filter>ui\base</Filter>
     </ClInclude>
-    <ClInclude Include="ui\base\window_timer.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
     <ClInclude Include="ui\base\tray_icon.h">
       <Filter>ui\base</Filter>
     </ClInclude>
@@ -1030,6 +1027,21 @@
     </ClInclude>
     <ClInclude Include="protocol\io_queue.h">
       <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\rect.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\size.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\point.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\scoped_begin_paint.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\timer.h">
+      <Filter>ui\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

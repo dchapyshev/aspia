@@ -75,8 +75,8 @@ void UiViewerWindow::DrawFrame()
 
 void UiViewerWindow::OnVideoFrameResize(WPARAM wparam, LPARAM lparam)
 {
-    const DesktopSize* size = reinterpret_cast<DesktopSize*>(wparam);
-    const PixelFormat* format = reinterpret_cast<PixelFormat*>(lparam);
+    const DesktopSize* size = reinterpret_cast<const DesktopSize*>(wparam);
+    const PixelFormat* format = reinterpret_cast<const PixelFormat*>(lparam);
 
     int show_scroll_bars = -1;
 
@@ -96,8 +96,7 @@ void UiViewerWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& for
 {
     // ResizeFrame method is called from another thread.
     // We need to move the action to UI thread.
-    SendMessageW(hwnd(),
-                 kResizeFrameMessage,
+    SendMessageW(kResizeFrameMessage,
                  reinterpret_cast<WPARAM>(&size),
                  reinterpret_cast<LPARAM>(&format));
 }
@@ -197,7 +196,7 @@ void UiViewerWindow::OnCreate()
     title.append(L" - ");
     title.append(UiModule().Current().String(IDS_APPLICATION_NAME));
 
-    SetWindowTextW(hwnd(), title.c_str());
+    SetWindowString(title);
 
     CreateToolBar();
     video_window_.Create(hwnd(), WS_CHILD);
@@ -218,14 +217,13 @@ void UiViewerWindow::OnSize()
 
     int toolbar_height = toolbar_.Height();
 
-    DesktopSize size = ClientSize();
+    UiSize size = ClientSize();
 
-    MoveWindow(video_window_,
-               0,
-               toolbar_height,
-               size.Width(),
-               size.Height() - toolbar_height,
-               TRUE);
+    video_window_.MoveWindow(0,
+                             toolbar_height,
+                             size.Width(),
+                             size.Height() - toolbar_height,
+                             TRUE);
 }
 
 void UiViewerWindow::OnGetMinMaxInfo(LPMINMAXINFO mmi)
@@ -374,13 +372,12 @@ void UiViewerWindow::OnSettingsButton()
 
 void UiViewerWindow::OnAboutButton()
 {
-    UiAboutDialog dialog;
-    dialog.DoModal(hwnd());
+    UiAboutDialog().DoModal(hwnd());
 }
 
 void UiViewerWindow::OnExitButton()
 {
-    PostMessageW(hwnd(), WM_CLOSE, 0, 0);
+    PostMessageW(WM_CLOSE, 0, 0);
 }
 
 int UiViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
@@ -388,7 +385,7 @@ int UiViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
     if (toolbar_.IsButtonChecked(ID_FULLSCREEN))
         DoFullScreen(false);
 
-    RECT screen_rect = { 0 };
+    UiRect screen_rect;
 
     HMONITOR monitor = MonitorFromWindow(hwnd(), MONITOR_DEFAULTTONEAREST);
 
@@ -397,27 +394,20 @@ int UiViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
 
     if (GetMonitorInfoW(monitor, &info))
     {
-        screen_rect = info.rcWork;
+        screen_rect.CopyFrom(info.rcWork);
     }
     else
     {
-        if (!SystemParametersInfoW(SPI_GETWORKAREA, 0, &screen_rect, 0))
+        if (!SystemParametersInfoW(SPI_GETWORKAREA, 0, screen_rect.Pointer(), 0))
         {
-            if (!::GetClientRect(GetDesktopWindow(), &screen_rect))
+            if (!::GetClientRect(GetDesktopWindow(), screen_rect.Pointer()))
                 return -1;
         }
     }
 
-    WINDOWPLACEMENT wp = { 0 };
-
-    wp.length = sizeof(wp);
-
-    if (!GetWindowPlacement(hwnd(), &wp))
-        return -1;
-
-    DesktopSize full_size = Size();
-    DesktopSize client_size = ClientSize();
-    DesktopSize toolbar_size = toolbar_.Size();
+    UiSize full_size = Size();
+    UiSize client_size = ClientSize();
+    UiSize toolbar_size = toolbar_.Size();
 
     int client_area_width = video_frame_size.Width() +
         full_size.Width() - client_size.Width();
@@ -426,32 +416,26 @@ int UiViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
         full_size.Height() - client_size.Height() +
         toolbar_size.Height();
 
-    int screen_width = screen_rect.right - screen_rect.left;
-    int screen_height = screen_rect.bottom - screen_rect.top;
-
-    if (client_area_width < screen_width && client_area_height < screen_height)
+    if (client_area_width  < screen_rect.Width() &&
+        client_area_height < screen_rect.Height())
     {
-        if (wp.showCmd != SW_MAXIMIZE)
+        if (!IsMaximized())
         {
-            SetWindowPos(hwnd(),
-                         nullptr,
-                         (screen_width - client_area_width) / 2,
-                         (screen_height - client_area_height) / 2,
-                         client_area_width,
-                         client_area_height,
-                         SWP_NOZORDER | SWP_NOACTIVATE);
+            SetSize(client_area_width, client_area_height);
+            SetPos((screen_rect.Width() - client_area_width) / 2,
+                   (screen_rect.Height() - client_area_height) / 2);
         }
 
         return SB_BOTH;
     }
     else
     {
-        if (wp.showCmd != SW_MAXIMIZE)
-            ShowWindow(hwnd(), SW_MAXIMIZE);
+        if (!IsMaximized())
+            Maximize();
 
-        if (client_area_width < screen_width)
+        if (client_area_width < screen_rect.Width())
             return SB_HORZ;
-        else if (client_area_height < screen_height)
+        else if (client_area_height < screen_rect.Height())
             return SB_VERT;
     }
 
@@ -475,9 +459,9 @@ void UiViewerWindow::DoFullScreen(bool fullscreen)
 
     if (fullscreen)
     {
-        if (GetWindowPlacement(hwnd(), &window_pos_))
+        if (GetWindowPlacement(window_pos_))
         {
-            RECT screen_rect = { 0 };
+            UiRect screen_rect;
 
             HMONITOR monitor = MonitorFromWindow(hwnd(), MONITOR_DEFAULTTONEAREST);
 
@@ -486,23 +470,22 @@ void UiViewerWindow::DoFullScreen(bool fullscreen)
 
             if (GetMonitorInfoW(monitor, &info))
             {
-                screen_rect = info.rcMonitor;
+                screen_rect.CopyFrom(info.rcMonitor);
             }
             else
             {
-                if (!GetWindowRect(GetDesktopWindow(), &screen_rect))
+                if (!GetWindowRect(GetDesktopWindow(), screen_rect.Pointer()))
                     return;
             }
 
             ModifyStyle(WS_CAPTION | WS_BORDER | WS_THICKFRAME | WS_MAXIMIZEBOX, WS_MAXIMIZE);
             ModifyStyleEx(0, WS_EX_TOPMOST);
 
-            SetWindowPos(hwnd(),
-                         nullptr,
-                         screen_rect.left,
-                         screen_rect.top,
-                         screen_rect.right - screen_rect.left,
-                         screen_rect.bottom - screen_rect.top,
+            SetWindowPos(nullptr,
+                         screen_rect.Left(),
+                         screen_rect.Top(),
+                         screen_rect.Width(),
+                         screen_rect.Height(),
                          SWP_SHOWWINDOW);
         }
     }
@@ -511,7 +494,7 @@ void UiViewerWindow::DoFullScreen(bool fullscreen)
         ModifyStyle(WS_MAXIMIZE, WS_CAPTION | WS_BORDER | WS_THICKFRAME | WS_MAXIMIZEBOX);
         ModifyStyleEx(WS_EX_TOPMOST, 0);
 
-        SetWindowPlacement(hwnd(), &window_pos_);
+        SetWindowPlacement(window_pos_);
     }
 }
 
@@ -522,9 +505,9 @@ void UiViewerWindow::OnFullScreenButton()
 
 void UiViewerWindow::OnDropDownButton(WORD ctrl_id)
 {
-    RECT rc = { 0 };
-    toolbar_.GetRect(ctrl_id, rc);
-    ShowDropDownMenu(ctrl_id, &rc);
+    UiRect rect;
+    toolbar_.GetRect(ctrl_id, rect);
+    ShowDropDownMenu(ctrl_id, rect);
 }
 
 void UiViewerWindow::OnPowerButton()
@@ -681,26 +664,29 @@ void UiViewerWindow::OnGetDispInfo(LPNMHDR phdr)
 void UiViewerWindow::OnToolBarDropDown(LPNMHDR phdr)
 {
     LPNMTOOLBARW header = reinterpret_cast<LPNMTOOLBARW>(phdr);
-    ShowDropDownMenu(header->iItem, &header->rcButton);
+    ShowDropDownMenu(header->iItem, UiRect(header->rcButton));
 }
 
-void UiViewerWindow::ShowDropDownMenu(int button_id, RECT* button_rect)
+void UiViewerWindow::ShowDropDownMenu(int button_id, UiRect& button_rect)
 {
     if (button_id != ID_SHORTCUTS)
         return;
 
-    if (MapWindowPoints(toolbar_, HWND_DESKTOP, reinterpret_cast<LPPOINT>(button_rect), 2))
+    if (MapWindowPoints(toolbar_,
+                        HWND_DESKTOP,
+                        reinterpret_cast<LPPOINT>(button_rect.Pointer()),
+                        2))
     {
         TPMPARAMS tpm;
         tpm.cbSize = sizeof(TPMPARAMS);
-        tpm.rcExclude = *button_rect;
+        button_rect.CopyTo(tpm.rcExclude);
 
         ScopedHMENU menu(UiModule().Current().Menu(IDR_SHORTCUTS));
 
         TrackPopupMenuEx(GetSubMenu(menu, 0),
                          TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_VERTICAL,
-                         button_rect->left,
-                         button_rect->bottom,
+                         button_rect.Left(),
+                         button_rect.Bottom(),
                          hwnd(),
                          &tpm);
     }
