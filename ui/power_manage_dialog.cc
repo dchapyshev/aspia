@@ -38,13 +38,13 @@ INT_PTR UiPowerManageDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
                 {
                     proto::PowerEvent::Action action = proto::PowerEvent::UNKNOWN;
 
-                    if (IsDlgButtonChecked(hwnd(), ID_POWER_SHUTDOWN) == BST_CHECKED)
+                    if (IsDlgButtonChecked(ID_POWER_SHUTDOWN) == BST_CHECKED)
                         action = proto::PowerEvent::SHUTDOWN;
-                    else if (IsDlgButtonChecked(hwnd(), ID_POWER_REBOOT) == BST_CHECKED)
+                    else if (IsDlgButtonChecked(ID_POWER_REBOOT) == BST_CHECKED)
                         action = proto::PowerEvent::REBOOT;
-                    else if (IsDlgButtonChecked(hwnd(), ID_POWER_HIBERNATE) == BST_CHECKED)
+                    else if (IsDlgButtonChecked(ID_POWER_HIBERNATE) == BST_CHECKED)
                         action = proto::PowerEvent::HIBERNATE;
-                    else if (IsDlgButtonChecked(hwnd(), ID_POWER_SUSPEND) == BST_CHECKED)
+                    else if (IsDlgButtonChecked(ID_POWER_SUSPEND) == BST_CHECKED)
                         action = proto::PowerEvent::SUSPEND;
 
                     EndDialog(action);

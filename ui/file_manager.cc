@@ -142,7 +142,7 @@ void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> stat
         break;
     }
 
-    MessageBoxW(hwnd(), message.c_str(), nullptr, MB_ICONWARNING | MB_OK);
+    MessageBoxW(message, MB_ICONWARNING | MB_OK);
 }
 
 void UiFileManager::ReadDriveList(PanelType panel_type,

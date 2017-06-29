@@ -6,10 +6,11 @@
 //
 
 #include "ui/about_dialog.h"
+#include "ui/base/static.h"
+#include "ui/base/edit.h"
 #include "ui/resource.h"
 #include "base/logging.h"
 
-#include <windowsx.h>
 #include <shellapi.h>
 
 namespace aspia {
@@ -26,10 +27,11 @@ INT_PTR UiAboutDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
         case WM_INITDIALOG:
         {
             icon_ = Module().Icon(IDI_MAIN, 48, 48, LR_CREATEDIBSECTION);
-            Static_SetIcon(GetDlgItem(IDC_ABOUT_ICON), icon_);
 
-            SetWindowTextW(GetDlgItem(IDC_ABOUT_EDIT),
-                           Module().String(IDS_ABOUT_STRING).c_str());
+            UiStatic(GetDlgItem(IDC_ABOUT_ICON)).SetIcon(icon_);
+
+            UiEdit(GetDlgItem(IDC_ABOUT_EDIT)).SetWindowString(
+                Module().String(IDS_ABOUT_STRING));
 
             SetFocus(GetDlgItem(IDC_DONATE_BUTTON));
         }

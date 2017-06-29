@@ -54,16 +54,16 @@ INT_PTR UiSettingsDialog::DoModal(HWND parent)
 
 void UiSettingsDialog::InitColorDepthList()
 {
-    HWND combo = GetDlgItem(IDC_COLOR_DEPTH_COMBO);
+    UiComboBox combo(GetDlgItem(IDC_COLOR_DEPTH_COMBO));
 
-    ComboBox_AddItem(combo, Module().String(IDS_DM_32BIT), kARGB);
-    ComboBox_AddItem(combo, Module().String(IDS_DM_24BIT), kRGB888);
-    ComboBox_AddItem(combo, Module().String(IDS_DM_16BIT), kRGB565);
-    ComboBox_AddItem(combo, Module().String(IDS_DM_15BIT), kRGB555);
-    ComboBox_AddItem(combo, Module().String(IDS_DM_12BIT), kRGB444);
-    ComboBox_AddItem(combo, Module().String(IDS_DM_8BIT),  kRGB332);
-    ComboBox_AddItem(combo, Module().String(IDS_DM_6BIT),  kRGB222);
-    ComboBox_AddItem(combo, Module().String(IDS_DM_3BIT),  kRGB111);
+    combo.AddItem(Module().String(IDS_DM_32BIT), kARGB);
+    combo.AddItem(Module().String(IDS_DM_24BIT), kRGB888);
+    combo.AddItem(Module().String(IDS_DM_16BIT), kRGB565);
+    combo.AddItem(Module().String(IDS_DM_15BIT), kRGB555);
+    combo.AddItem(Module().String(IDS_DM_12BIT), kRGB444);
+    combo.AddItem(Module().String(IDS_DM_8BIT),  kRGB332);
+    combo.AddItem(Module().String(IDS_DM_6BIT),  kRGB222);
+    combo.AddItem(Module().String(IDS_DM_3BIT),  kRGB111);
 
     PixelFormat format(ConvertFromVideoPixelFormat(config_.pixel_format()));
 
@@ -102,18 +102,18 @@ void UiSettingsDialog::InitColorDepthList()
         curr_item = kRGB111;
     }
 
-    ComboBox_SelItemWithData(combo, curr_item);
+    combo.SelectItemWithData(curr_item);
 }
 
 void UiSettingsDialog::InitCodecList()
 {
-    HWND combo = GetDlgItem(IDC_CODEC_COMBO);
+    UiComboBox combo(GetDlgItem(IDC_CODEC_COMBO));
 
-    ComboBox_AddItem(combo, L"VP9", proto::VideoEncoding::VIDEO_ENCODING_VP9);
-    ComboBox_AddItem(combo, L"VP8", proto::VideoEncoding::VIDEO_ENCODING_VP8);
-    ComboBox_AddItem(combo, L"ZLIB", proto::VideoEncoding::VIDEO_ENCODING_ZLIB);
+    combo.AddItem(L"VP9", proto::VideoEncoding::VIDEO_ENCODING_VP9);
+    combo.AddItem(L"VP8", proto::VideoEncoding::VIDEO_ENCODING_VP8);
+    combo.AddItem(L"ZLIB", proto::VideoEncoding::VIDEO_ENCODING_ZLIB);
 
-    ComboBox_SelItemWithData(combo, config_.video_encoding());
+    combo.SelectItemWithData(config_.video_encoding());
 }
 
 void UiSettingsDialog::UpdateCompressionRatio(int compression_ratio)
@@ -172,7 +172,7 @@ void UiSettingsDialog::OnHScroll(HWND ctrl)
 void UiSettingsDialog::OnCodecChanged()
 {
     bool has_pixel_format =
-        (ComboBox_CurItemData(GetDlgItem(IDC_CODEC_COMBO)) ==
+        (UiComboBox(GetDlgItem(IDC_CODEC_COMBO)).CurItemData() ==
             proto::VIDEO_ENCODING_ZLIB);
 
     EnableDlgItem(IDC_COLOR_DEPTH_TEXT, has_pixel_format);
@@ -193,7 +193,7 @@ void UiSettingsDialog::OnOkButton()
 {
     proto::VideoEncoding encoding =
         static_cast<proto::VideoEncoding>(
-            ComboBox_CurItemData(GetDlgItem(IDC_CODEC_COMBO)));
+            UiComboBox(GetDlgItem(IDC_CODEC_COMBO)).CurItemData());
 
     config_.set_video_encoding(encoding);
 
@@ -201,7 +201,7 @@ void UiSettingsDialog::OnOkButton()
     {
         PixelFormat format;
 
-        switch (ComboBox_CurItemData(GetDlgItem(IDC_COLOR_DEPTH_COMBO)))
+        switch (UiComboBox(GetDlgItem(IDC_COLOR_DEPTH_COMBO)).CurItemData())
         {
             case kARGB:
                 format = PixelFormat::ARGB();
@@ -249,10 +249,10 @@ void UiSettingsDialog::OnOkButton()
 
     uint32_t flags = 0;
 
-    if (IsDlgButtonChecked(hwnd(), IDC_ENABLE_CURSOR_SHAPE_CHECK) == BST_CHECKED)
+    if (IsDlgButtonChecked(IDC_ENABLE_CURSOR_SHAPE_CHECK) == BST_CHECKED)
         flags |= proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE;
 
-    if (IsDlgButtonChecked(hwnd(), IDC_ENABLE_CLIPBOARD_CHECK) == BST_CHECKED)
+    if (IsDlgButtonChecked(IDC_ENABLE_CLIPBOARD_CHECK) == BST_CHECKED)
         flags |= proto::DesktopSessionConfig::ENABLE_CLIPBOARD;
 
     config_.set_flags(flags);

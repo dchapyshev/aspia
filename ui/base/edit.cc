@@ -59,4 +59,9 @@ void UiEdit::SetLimitText(int num_characters)
     SendMessageW(EM_SETLIMITTEXT, num_characters, 0);
 }
 
+void UiEdit::SetReadOnly(bool read_only)
+{
+    Edit_SetReadOnly(hwnd(), read_only);
+}
+
 } // namespace aspia

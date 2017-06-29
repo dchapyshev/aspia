@@ -88,6 +88,14 @@ public:
                       int cy,
                       UINT flags);
 
+    int MessageBoxW(const WCHAR* text,
+                    const WCHAR* caption,
+                    UINT type);
+    int MessageBoxW(const std::wstring& text,
+                    const std::wstring& caption,
+                    UINT type);
+    int MessageBoxW(const std::wstring& text, UINT type);
+
     void SetWindowString(const std::wstring& string);
     std::wstring GetWindowString();
 

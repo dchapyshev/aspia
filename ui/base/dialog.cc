@@ -104,4 +104,9 @@ void UiDialog::SetDlgItemString(int item_id, UINT resource_id)
     SetDlgItemString(item_id, Module().String(resource_id));
 }
 
+UINT UiDialog::IsDlgButtonChecked(int button_id)
+{
+    return ::IsDlgButtonChecked(hwnd(), button_id);
+}
+
 } // namespace aspia

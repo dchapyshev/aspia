@@ -18,6 +18,7 @@
 #include "host/host_service.h"
 #include "ui/base/listview.h"
 #include "ui/base/combobox.h"
+#include "ui/base/edit.h"
 #include "ui/viewer_window.h"
 #include "ui/about_dialog.h"
 #include "ui/users_dialog.h"
@@ -95,31 +96,27 @@ void UiMainDialog::InitAddressesList()
 
 void UiMainDialog::InitSessionTypesCombo()
 {
-    HWND combo = GetDlgItem(IDC_SESSION_TYPE_COMBO);
+    UiComboBox combo(GetDlgItem(IDC_SESSION_TYPE_COMBO));
 
-    ComboBox_AddItem(combo,
-                     Module().String(IDS_SESSION_TYPE_DESKTOP_MANAGE),
-                     proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
+    combo.AddItem(Module().String(IDS_SESSION_TYPE_DESKTOP_MANAGE),
+                  proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
 
-    ComboBox_AddItem(combo,
-                     Module().String(IDS_SESSION_TYPE_DESKTOP_VIEW),
-                     proto::SessionType::SESSION_TYPE_DESKTOP_VIEW);
+    combo.AddItem(Module().String(IDS_SESSION_TYPE_DESKTOP_VIEW),
+                  proto::SessionType::SESSION_TYPE_DESKTOP_VIEW);
 
-    ComboBox_AddItem(combo,
-                     Module().String(IDS_SESSION_TYPE_FILE_TRANSFER),
-                     proto::SessionType::SESSION_TYPE_FILE_TRANSFER);
+    combo.AddItem(Module().String(IDS_SESSION_TYPE_FILE_TRANSFER),
+                  proto::SessionType::SESSION_TYPE_FILE_TRANSFER);
 
-    ComboBox_AddItem(combo,
-                     Module().String(IDS_SESSION_TYPE_POWER_MANAGE),
-                     proto::SessionType::SESSION_TYPE_POWER_MANAGE);
+    combo.AddItem(Module().String(IDS_SESSION_TYPE_POWER_MANAGE),
+                  proto::SessionType::SESSION_TYPE_POWER_MANAGE);
 
-    ComboBox_SelItemWithData(combo, proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
+    combo.SelectItemWithData(proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
 }
 
 proto::SessionType UiMainDialog::GetSelectedSessionType()
 {
-    HWND combo = GetDlgItem(IDC_SESSION_TYPE_COMBO);
-    return static_cast<proto::SessionType>(ComboBox_CurItemData(combo));
+    UiComboBox combo(GetDlgItem(IDC_SESSION_TYPE_COMBO));
+    return static_cast<proto::SessionType>(combo.CurItemData());
 }
 
 void UiMainDialog::OnInitDialog()
@@ -141,7 +138,7 @@ void UiMainDialog::OnInitDialog()
     SetDlgItemInt(IDC_SERVER_PORT_EDIT, kDefaultHostTcpPort);
     CheckDlgButton(hwnd(), IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
 
-    Edit_SetReadOnly(GetDlgItem(IDC_SERVER_PORT_EDIT), TRUE);
+    UiEdit(GetDlgItem(IDC_SERVER_PORT_EDIT)).SetReadOnly(true);
 
     bool host_service_installed = HostService::IsInstalled();
 
@@ -167,16 +164,16 @@ void UiMainDialog::OnInitDialog()
 
 void UiMainDialog::OnDefaultPortClicked()
 {
-    HWND port = GetDlgItem(IDC_SERVER_PORT_EDIT);
+    UiEdit port(GetDlgItem(IDC_SERVER_PORT_EDIT));
 
-    if (IsDlgButtonChecked(hwnd(), IDC_SERVER_DEFAULT_PORT_CHECK) == BST_CHECKED)
+    if (IsDlgButtonChecked(IDC_SERVER_DEFAULT_PORT_CHECK) == BST_CHECKED)
     {
         SetDlgItemInt(IDC_SERVER_PORT_EDIT, kDefaultHostTcpPort);
-        Edit_SetReadOnly(port, TRUE);
+        port.SetReadOnly(true);
     }
     else
     {
-        Edit_SetReadOnly(port, FALSE);
+        port.SetReadOnly(false);
     }
 }
 

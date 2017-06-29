@@ -36,7 +36,7 @@ void UiStatusDialog::SetDestonation(const std::wstring& address, uint16_t port)
     std::wstring message =
         StringPrintfW(format.c_str(), address.c_str(), port);
 
-    SetWindowTextW(hwnd(), message.c_str());
+    SetWindowString(message);
 }
 
 void UiStatusDialog::SetStatus(proto::Status status)

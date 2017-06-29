@@ -484,6 +484,12 @@
     <ClCompile Include="ui\base\timer.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
+    <ClCompile Include="ui\base\combobox.cc">
+      <Filter>ui\base</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\base\static.cc">
+      <Filter>ui\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1041,6 +1047,9 @@
       <Filter>ui\base</Filter>
     </ClInclude>
     <ClInclude Include="ui\base\timer.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\static.h">
       <Filter>ui\base</Filter>
     </ClInclude>
   </ItemGroup>

@@ -13,6 +13,7 @@
 #include "ui/base/comboboxex.h"
 #include "ui/base/listview.h"
 #include "ui/base/imagelist.h"
+#include "ui/base/static.h"
 #include "proto/file_transfer_session.pb.h"
 
 namespace aspia {
@@ -80,7 +81,7 @@ private:
     Delegate* delegate_ = nullptr;
 
     UiModule module_;
-    UiWindow title_;
+    UiStatic title_;
 
     std::unique_ptr<proto::DirectoryList> directory_list_;
     UiListView list_;
@@ -93,7 +94,7 @@ private:
     UiComboBoxEx drive_combo_;
     UiImageList drive_imagelist_;
 
-    UiWindow status_;
+    UiStatic status_;
 
     DISALLOW_COPY_AND_ASSIGN(UiFileManagerPanel);
 };

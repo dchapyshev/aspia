@@ -24,6 +24,7 @@ public:
     std::wstring GetText();
 
     void SetLimitText(int num_characters);
+    void SetReadOnly(bool read_only);
 };
 
 } // namespace aspia

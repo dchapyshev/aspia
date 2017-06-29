@@ -47,6 +47,8 @@ public:
         ::SetDlgItemInt(hwnd(), item_id, value, is_signed);
     }
 
+    UINT IsDlgButtonChecked(int button_id);
+
 protected:
     virtual INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) = 0;
 

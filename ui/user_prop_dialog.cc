@@ -148,9 +148,7 @@ void UiUserPropDialog::OnOkButton()
 
     if (!HostUserList::IsValidUserName(username))
     {
-        MessageBoxW(hwnd(),
-                    Module().String(IDS_INVALID_USERNAME).c_str(),
-                    nullptr,
+        MessageBoxW(Module().String(IDS_INVALID_USERNAME),
                     MB_OK | MB_ICONWARNING);
         return;
     }
@@ -166,9 +164,7 @@ void UiUserPropDialog::OnOkButton()
     {
         if (!user_list_.IsUniqueUserName(username))
         {
-            MessageBoxW(hwnd(),
-                        Module().String(IDS_USER_ALREADY_EXISTS).c_str(),
-                        nullptr,
+            MessageBoxW(Module().String(IDS_USER_ALREADY_EXISTS),
                         MB_OK | MB_ICONWARNING);
             return;
         }
@@ -179,9 +175,7 @@ void UiUserPropDialog::OnOkButton()
         SecureString<std::wstring> password(GetDlgItemString(IDC_PASSWORD_EDIT));
         if (!HostUserList::IsValidPassword(password))
         {
-            MessageBoxW(hwnd(),
-                        Module().String(IDS_INVALID_PASSWORD).c_str(),
-                        nullptr,
+            MessageBoxW(Module().String(IDS_INVALID_PASSWORD),
                         MB_OK | MB_ICONWARNING);
             return;
         }
@@ -191,9 +185,7 @@ void UiUserPropDialog::OnOkButton()
 
         if (password != password_retry)
         {
-            MessageBoxW(hwnd(),
-                        Module().String(IDS_PASSWORDS_NOT_MATCH).c_str(),
-                        nullptr,
+            MessageBoxW(Module().String(IDS_PASSWORDS_NOT_MATCH),
                         MB_OK | MB_ICONWARNING);
             return;
         }
@@ -218,7 +210,7 @@ void UiUserPropDialog::OnOkButton()
     }
 
     bool is_enabled =
-        IsDlgButtonChecked(hwnd(), IDC_DISABLE_USER_CHECK) == BST_UNCHECKED;
+        IsDlgButtonChecked(IDC_DISABLE_USER_CHECK) == BST_UNCHECKED;
 
     CHECK(UNICODEtoUTF8(username, *user_->mutable_username()));
 

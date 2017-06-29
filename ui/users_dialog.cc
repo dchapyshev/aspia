@@ -125,10 +125,7 @@ void UiUsersDialog::OnDeleteButton()
     SecureString<std::wstring> message =
         StringPrintfW(message_format.c_str(), username.c_str());
 
-    if (MessageBoxW(hwnd(),
-                    message.c_str(),
-                    title.c_str(),
-                    MB_YESNO | MB_ICONQUESTION) == IDYES)
+    if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
         user_list_.Delete(user_index);
         UpdateUserList();
@@ -191,8 +188,8 @@ void UiUsersDialog::OnUserListClicked()
 
 void UiUsersDialog::SetUserListModified()
 {
-    HWND group = GetDlgItem(IDC_USERS_GROUPBOX);
-    SetWindowTextW(group, Module().String(IDS_USER_LIST_MODIFIED).c_str());
+    UiWindow group(GetDlgItem(IDC_USERS_GROUPBOX));
+    group.SetWindowString(Module().String(IDS_USER_LIST_MODIFIED));
 }
 
 INT_PTR UiUsersDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)

@@ -141,6 +141,7 @@
     <ClCompile Include="ui\about_dialog.cc" />
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\child_window.cc" />
+    <ClCompile Include="ui\base\combobox.cc" />
     <ClCompile Include="ui\base\comboboxex.cc" />
     <ClCompile Include="ui\base\dialog.cc" />
     <ClCompile Include="ui\base\edit.cc" />
@@ -149,6 +150,7 @@
     <ClCompile Include="ui\base\modal_dialog.cc" />
     <ClCompile Include="ui\base\module.cc" />
     <ClCompile Include="ui\base\splitter.cc" />
+    <ClCompile Include="ui\base\static.cc" />
     <ClCompile Include="ui\base\timer.cc" />
     <ClCompile Include="ui\base\toolbar.cc" />
     <ClCompile Include="ui\base\tray_icon.cc" />
@@ -334,6 +336,7 @@
     <ClInclude Include="ui\base\scoped_begin_paint.h" />
     <ClInclude Include="ui\base\size.h" />
     <ClInclude Include="ui\base\splitter.h" />
+    <ClInclude Include="ui\base\static.h" />
     <ClInclude Include="ui\base\timer.h" />
     <ClInclude Include="ui\base\toolbar.h" />
     <ClInclude Include="ui\base\trackbar.h" />

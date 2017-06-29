@@ -389,6 +389,25 @@ bool UiWindow::SetWindowPos(HWND hwnd_insert_after,
                             flags);
 }
 
+int UiWindow::MessageBoxW(const WCHAR* text,
+                          const WCHAR* caption,
+                          UINT type)
+{
+    return ::MessageBoxW(hwnd(), text, caption, type);
+}
+
+int UiWindow::MessageBoxW(const std::wstring& text,
+                          const std::wstring& caption,
+                          UINT type)
+{
+    return MessageBoxW(text.c_str(), caption.c_str(), type);
+}
+
+int UiWindow::MessageBoxW(const std::wstring& text, UINT type)
+{
+    return MessageBoxW(text.c_str(), nullptr, type);
+}
+
 void UiWindow::SetWindowString(const std::wstring& string)
 {
     SetWindowTextW(hwnd(), string.c_str());

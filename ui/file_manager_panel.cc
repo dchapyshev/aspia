@@ -191,15 +191,8 @@ void UiFileManagerPanel::OnCreate()
     else
         panel_name = module_.String(IDS_FT_REMOTE_COMPUTER);
 
-    title_.Attach(CreateWindowExW(0,
-                                  WC_STATICW,
-                                  panel_name.c_str(),
-                                  WS_CHILD | WS_VISIBLE | SS_OWNERDRAW,
-                                  0, 0, 200, 20,
-                                  hwnd(),
-                                  nullptr,
-                                  module_.Handle(),
-                                  nullptr));
+    title_.Create(hwnd(), SS_OWNERDRAW, module_.Handle());
+    title_.SetWindowString(panel_name);
     title_.SetFont(default_font);
 
     drive_combo_.Create(hwnd(),
@@ -263,15 +256,7 @@ void UiFileManagerPanel::OnCreate()
 
     list_.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
 
-    status_.Attach(CreateWindowExW(0,
-                                   WC_STATICW,
-                                   L"",
-                                   WS_CHILD | WS_VISIBLE | SS_OWNERDRAW,
-                                   0, 0, 200, 20,
-                                   hwnd(),
-                                   nullptr,
-                                   module_.Handle(),
-                                   nullptr));
+    status_.Create(hwnd(), SS_OWNERDRAW, module_.Handle());
     status_.SetFont(default_font);
 
     if (list_imagelist_.CreateSmall())
@@ -629,10 +614,7 @@ void UiFileManagerPanel::OnRemove()
 
     std::wstring message = StringPrintfW(format.c_str(), object_list.c_str());
 
-    if (MessageBoxW(hwnd(),
-                    message.c_str(),
-                    title.c_str(),
-                    MB_YESNO | MB_ICONQUESTION) == IDYES)
+    if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
         for (int item_index = list_.GetFirstSelectedItem();
              item_index != -1;
