@@ -15,8 +15,13 @@ UiToolBar::UiToolBar(HWND hwnd) :
     // Nothing
 }
 
-bool UiToolBar::Create(HWND parent, DWORD style, HINSTANCE instance)
+bool UiToolBar::Create(HWND parent, DWORD style)
 {
+    HINSTANCE instance =
+        reinterpret_cast<HINSTANCE>(GetWindowLongPtrW(parent, GWLP_HINSTANCE));
+    if (!instance)
+        return false;
+
     Attach(CreateWindowExW(0,
                            TOOLBARCLASSNAMEW,
                            nullptr,

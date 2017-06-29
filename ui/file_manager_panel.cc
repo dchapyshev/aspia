@@ -191,7 +191,7 @@ void UiFileManagerPanel::OnCreate()
     else
         panel_name = module_.String(IDS_FT_REMOTE_COMPUTER);
 
-    title_.Create(hwnd(), SS_OWNERDRAW, module_.Handle());
+    title_.Create(hwnd(), SS_OWNERDRAW);
     title_.SetWindowString(panel_name);
     title_.SetFont(default_font);
 
@@ -203,9 +203,7 @@ void UiFileManagerPanel::OnCreate()
     if (drive_imagelist_.CreateSmall())
         drive_combo_.SetImageList(drive_imagelist_);
 
-    toolbar_.Create(hwnd(),
-                    TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS,
-                    module_.Handle());
+    toolbar_.Create(hwnd(), TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS);
 
     toolbar_.ModifyExtendedStyle(0, TBSTYLE_EX_MIXEDBUTTONS | TBSTYLE_EX_DOUBLEBUFFER);
 
@@ -244,15 +242,12 @@ void UiFileManagerPanel::OnCreate()
         toolbar_.SetButtonText(ID_SEND, module_.String(IDS_FT_RECIEVE));
     }
 
-    list_.Create(hwnd(),
-                 WS_EX_CLIENTEDGE,
-                 LVS_REPORT | LVS_SHOWSELALWAYS,
-                 module_.Handle());
+    list_.Create(hwnd(), WS_EX_CLIENTEDGE, LVS_REPORT | LVS_SHOWSELALWAYS);
     list_.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
     list_imagelist_.CreateSmall();
     list_.SetImageList(list_imagelist_, LVSIL_SMALL);
 
-    status_.Create(hwnd(), SS_OWNERDRAW, module_.Handle());
+    status_.Create(hwnd(), SS_OWNERDRAW);
     status_.SetFont(default_font);
 
     delegate_->OnDriveListRequest(panel_type_);

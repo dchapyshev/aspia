@@ -18,7 +18,7 @@ public:
     UiStatic() = default;
     UiStatic(HWND hwnd);
 
-    bool Create(HWND parent, DWORD style, HINSTANCE instance);
+    bool Create(HWND parent, DWORD style);
     void SetIcon(HICON icon);
 };
 

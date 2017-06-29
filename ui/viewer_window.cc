@@ -139,9 +139,7 @@ void UiViewerWindow::CreateToolBar()
 {
     const UiModule& module = UiModule().Current();
 
-    toolbar_.Create(hwnd(),
-                    TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS,
-                    module.Handle());
+    toolbar_.Create(hwnd(), TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS);
 
     toolbar_.ModifyExtendedStyle(0, TBSTYLE_EX_DRAWDDARROWS |
                                     TBSTYLE_EX_MIXEDBUTTONS |

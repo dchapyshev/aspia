@@ -17,8 +17,13 @@ UiStatic::UiStatic(HWND hwnd)
     Attach(hwnd);
 }
 
-bool UiStatic::Create(HWND parent, DWORD style, HINSTANCE instance)
+bool UiStatic::Create(HWND parent, DWORD style)
 {
+    HINSTANCE instance =
+        reinterpret_cast<HINSTANCE>(GetWindowLongPtrW(parent, GWLP_HINSTANCE));
+    if (!instance)
+        return false;
+
     Attach(CreateWindowExW(0,
                            WC_STATICW,
                            L"",

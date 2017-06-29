@@ -21,7 +21,7 @@ public:
     UiToolBar(HWND hwnd);
     ~UiToolBar() = default;
 
-    bool Create(HWND parent, DWORD style, HINSTANCE instance);
+    bool Create(HWND parent, DWORD style);
     bool ModifyExtendedStyle(DWORD remove, DWORD add);
     void ButtonStructSize(size_t size);
     void AddButtons(UINT number_buttons, TBBUTTON* buttons);

@@ -21,7 +21,7 @@ public:
     UiListView() = default;
     UiListView(HWND hwnd);
 
-    bool Create(HWND parent, DWORD ex_style, DWORD style, HINSTANCE instance);
+    bool Create(HWND parent, DWORD ex_style, DWORD style);
 
     int GetColumnCount();
     int GetItemCount();

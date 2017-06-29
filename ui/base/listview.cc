@@ -24,8 +24,13 @@ UiListView::UiListView(HWND hwnd)
     }
 }
 
-bool UiListView::Create(HWND parent, DWORD ex_style, DWORD style, HINSTANCE instance)
+bool UiListView::Create(HWND parent, DWORD ex_style, DWORD style)
 {
+    HINSTANCE instance =
+        reinterpret_cast<HINSTANCE>(GetWindowLongPtrW(parent, GWLP_HINSTANCE));
+    if (!instance)
+        return false;
+
     Attach(CreateWindowExW(ex_style,
                            WC_LISTVIEWW,
                            L"",
