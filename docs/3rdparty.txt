@@ -1,16 +1,17 @@
 Third-party components information
 ==================================
 
-Component   | License               | URL
-protobuf      BSD 3-Clause License    https://github.com/google/protobuf/releases
-glog          BSD 3-Clause License    https://github.com/google/glog
-googletest    BSD 3-Clause License    https://github.com/google/googletest
-libyuv        BSD 3-Clause License    https://chromium.googlesource.com/libyuv/libyuv
-libvpx        BSD 3-Clause License    https://chromium.googlesource.com/webm/libvpx
-gflags        BSD 3-Clause License    https://github.com/gflags/gflags
-opus          BSD 3-Clause License    http://opus-codec.org
-zlib-ng       zlib License            https://github.com/Dead2/zlib-ng
-libsodium     ISC License             https://github.com/jedisct1/libsodium/releases
+Component   | License                | URL
+protobuf      BSD 3-Clause License     https://github.com/google/protobuf/releases
+glog          BSD 3-Clause License     https://github.com/google/glog
+googletest    BSD 3-Clause License     https://github.com/google/googletest
+libyuv        BSD 3-Clause License     https://chromium.googlesource.com/libyuv/libyuv
+libvpx        BSD 3-Clause License     https://chromium.googlesource.com/webm/libvpx
+gflags        BSD 3-Clause License     https://github.com/gflags/gflags
+opus          BSD 3-Clause License     http://opus-codec.org
+zlib-ng       zlib License             https://github.com/Dead2/zlib-ng
+libsodium     ISC License              https://github.com/jedisct1/libsodium/releases
+wtl           Microsoft Public License https://sourceforge.net/projects/wtl
 
 Synchronization status
 ======================
@@ -25,3 +26,4 @@ gflags        10.05.2017    trunk
 opus          24.01.2017    1.1.4
 zlib-ng       26.03.2017    trunk
 libsodium     27.05.2017    1.0.12
+wtl           30.06.2017    r636
