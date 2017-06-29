@@ -24,11 +24,22 @@ public:
 
     bool Create(HWND parent, int ctrl_id, DWORD style, HINSTANCE instance);
 
+    int InsertItem(const WCHAR* text,
+                   int item_index,
+                   int image_index,
+                   int indent,
+                   LPARAM lparam);
+
     int InsertItem(const std::wstring& text,
                    int item_index,
                    int image_index,
                    int indent,
                    LPARAM lparam);
+
+    int AddItem(const WCHAR* text,
+                int image_index,
+                int indent,
+                LPARAM lparam);
 
     int AddItem(const std::wstring& text,
                 int image_index,

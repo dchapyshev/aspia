@@ -31,7 +31,7 @@ bool UiComboBoxEx::Create(HWND parent, int ctrl_id, DWORD style, HINSTANCE insta
     return true;
 }
 
-int UiComboBoxEx::InsertItem(const std::wstring& text,
+int UiComboBoxEx::InsertItem(const WCHAR* text,
                              int item_index,
                              int image_index,
                              int indent,
@@ -41,9 +41,9 @@ int UiComboBoxEx::InsertItem(const std::wstring& text,
 
     memset(&item, 0, sizeof(item));
 
-    item.mask           = CBEIF_IMAGE | CBEIF_SELECTEDIMAGE | CBEIF_INDENT |
-                              CBEIF_LPARAM | CBEIF_TEXT;
-    item.pszText        = const_cast<LPWSTR>(text.c_str());
+    item.mask = CBEIF_IMAGE | CBEIF_SELECTEDIMAGE | CBEIF_INDENT |
+        CBEIF_LPARAM | CBEIF_TEXT;
+    item.pszText        = const_cast<LPWSTR>(text);
     item.iItem          = item_index;
     item.iImage         = image_index;
     item.iSelectedImage = image_index;
@@ -51,6 +51,23 @@ int UiComboBoxEx::InsertItem(const std::wstring& text,
     item.lParam         = lparam;
 
     return SendMessageW(CBEM_INSERTITEM, 0, reinterpret_cast<LPARAM>(&item));
+}
+
+int UiComboBoxEx::InsertItem(const std::wstring& text,
+                             int item_index,
+                             int image_index,
+                             int indent,
+                             LPARAM lparam)
+{
+    return InsertItem(text.c_str(), item_index, image_index, indent, lparam);
+}
+
+int UiComboBoxEx::AddItem(const WCHAR* text,
+                          int image_index,
+                          int indent,
+                          LPARAM lparam)
+{
+    return InsertItem(text, -1, image_index, indent, lparam);
 }
 
 int UiComboBoxEx::AddItem(const std::wstring& text,

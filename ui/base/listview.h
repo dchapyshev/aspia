@@ -26,26 +26,30 @@ public:
     int GetColumnCount();
     int GetItemCount();
 
-    void AddOnlyOneColumn(const std::wstring& title = std::wstring());
+    void AddOnlyOneColumn(const std::wstring& title);
+    void AddOnlyOneColumn(const WCHAR* title = nullptr);
 
+    void AddColumn(const WCHAR* title, int width);
     void AddColumn(const std::wstring& title, int width);
     void DeleteColumn(int column_index);
     void DeleteAllColumns();
 
+    int AddItem(const WCHAR* text, LPARAM item_data, int image_index = -1);
+    int AddItem(const std::wstring& text, LPARAM item_data, int image_index = -1);
+
+    template <typename T>
+    int AddItem(const WCHAR* text, T item_data, int image_index = -1)
+    {
+        return AddItem(text, static_cast<LPARAM>(item_data), image_index);
+    }
+
     template <typename T>
     int AddItem(const std::wstring& text, T item_data, int image_index = -1)
     {
-        LVITEMW item = { 0 };
-
-        item.mask    = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
-        item.pszText = const_cast<LPWSTR>(text.c_str());
-        item.iItem   = GetItemCount();
-        item.lParam  = static_cast<LPARAM>(item_data);
-        item.iImage  = image_index;
-
-        return ListView_InsertItem(hwnd(), &item);
+        return AddItem(text, static_cast<LPARAM>(item_data), image_index);
     }
 
+    void SetItemText(int item_index, int column_index, const WCHAR* text);
     void SetItemText(int item_index, int column_index, const std::wstring& text);
 
     template <typename T>

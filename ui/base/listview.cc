@@ -73,20 +73,22 @@ int UiListView::GetItemCount()
 
 void UiListView::AddOnlyOneColumn(const std::wstring& title)
 {
-    RECT list_rect = { 0 };
-    GetClientRect(hwnd(), &list_rect);
+    AddOnlyOneColumn(title.c_str());
+}
 
+void UiListView::AddOnlyOneColumn(const WCHAR* title)
+{
     LVCOLUMNW column = { 0 };
 
     column.mask    = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;
-    column.cx      = (list_rect.right - list_rect.left) - GetSystemMetrics(SM_CXVSCROLL);
+    column.cx      = ClientSize().Width() - GetSystemMetrics(SM_CXVSCROLL);
     column.fmt     = LVCFMT_LEFT;
-    column.pszText = const_cast<LPWSTR>(title.c_str());
+    column.pszText = const_cast<LPWSTR>(title);
 
     ListView_InsertColumn(hwnd(), 0, &column);
 }
 
-void UiListView::AddColumn(const std::wstring& title, int width)
+void UiListView::AddColumn(const WCHAR* title, int width)
 {
     int column_count = GetColumnCount();
 
@@ -95,9 +97,14 @@ void UiListView::AddColumn(const std::wstring& title, int width)
     column.mask    = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;
     column.cx      = width;
     column.fmt     = LVCFMT_LEFT;
-    column.pszText = const_cast<LPWSTR>(title.c_str());
+    column.pszText = const_cast<LPWSTR>(title);
 
     ListView_InsertColumn(hwnd(), column_count, &column);
+}
+
+void UiListView::AddColumn(const std::wstring& title, int width)
+{
+    AddColumn(title.c_str(), width);
 }
 
 void UiListView::DeleteColumn(int column_index)
@@ -113,12 +120,35 @@ void UiListView::DeleteAllColumns()
         DeleteColumn(count);
 }
 
-void UiListView::SetItemText(int item_index, int column_index, const std::wstring& text)
+int UiListView::AddItem(const WCHAR* text, LPARAM item_data, int image_index)
+{
+    LVITEMW item = { 0 };
+
+    item.mask    = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
+    item.pszText = const_cast<LPWSTR>(text);
+    item.iItem   = GetItemCount();
+    item.lParam  = item_data;
+    item.iImage  = image_index;
+
+    return ListView_InsertItem(hwnd(), &item);
+}
+
+int UiListView::AddItem(const std::wstring& text, LPARAM item_data, int image_index)
+{
+    return AddItem(text.c_str(), item_data, image_index);
+}
+
+void UiListView::SetItemText(int item_index, int column_index, const WCHAR* text)
 {
     ListView_SetItemText(hwnd(),
                          item_index,
                          column_index,
-                         const_cast<LPWSTR>(text.c_str()));
+                         const_cast<LPWSTR>(text));
+}
+
+void UiListView::SetItemText(int item_index, int column_index, const std::wstring& text)
+{
+    SetItemText(item_index, column_index, text.c_str());
 }
 
 int UiListView::GetItemTextLength(int item_index, int column_index)

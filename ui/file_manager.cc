@@ -137,7 +137,7 @@ void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> stat
 
         default:
         {
-            LOG(FATAL) << "Unhandled status code: " << status->type();
+            DLOG(FATAL) << "Unhandled status code: " << status->type();
         }
         break;
     }

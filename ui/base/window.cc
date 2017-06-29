@@ -156,6 +156,11 @@ void UiWindow::SetFont(HFONT font)
     SendMessageW(WM_SETFONT, reinterpret_cast<WPARAM>(font), TRUE);
 }
 
+void UiWindow::SetMenu(HMENU menu)
+{
+    ::SetMenu(hwnd(), menu);
+}
+
 int UiWindow::Width()
 {
     return Size().Width();
@@ -410,7 +415,12 @@ int UiWindow::MessageBoxW(const std::wstring& text, UINT type)
 
 void UiWindow::SetWindowString(const std::wstring& string)
 {
-    SetWindowTextW(hwnd(), string.c_str());
+    SetWindowString(string.c_str());
+}
+
+void UiWindow::SetWindowString(const WCHAR* string)
+{
+    SetWindowTextW(hwnd(), string);
 }
 
 std::wstring UiWindow::GetWindowString()

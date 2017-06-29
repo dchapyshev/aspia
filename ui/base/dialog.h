@@ -30,6 +30,7 @@ public:
     void EnableDlgItem(int item_id, bool enable);
 
     std::wstring GetDlgItemString(int item_id);
+    void SetDlgItemString(int item_id, const WCHAR* string);
     void SetDlgItemString(int item_id, const std::wstring& string);
     void SetDlgItemString(int item_id, UINT resource_id);
 
@@ -48,6 +49,7 @@ public:
     }
 
     UINT IsDlgButtonChecked(int button_id);
+    void CheckDlgButton(int button_id, UINT check);
 
 protected:
     virtual INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) = 0;

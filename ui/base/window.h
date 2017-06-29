@@ -33,6 +33,7 @@ public:
     bool ModifyStyle(LONG_PTR remove, LONG_PTR add);
     bool ModifyStyleEx(LONG_PTR remove, LONG_PTR add);
     void SetFont(HFONT font);
+    void SetMenu(HMENU menu);
     int Width();
     int Height();
     UiSize Size();
@@ -97,6 +98,7 @@ public:
     int MessageBoxW(const std::wstring& text, UINT type);
 
     void SetWindowString(const std::wstring& string);
+    void SetWindowString(const WCHAR* string);
     std::wstring GetWindowString();
 
 private:

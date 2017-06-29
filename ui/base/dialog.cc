@@ -94,9 +94,14 @@ std::wstring UiDialog::GetDlgItemString(int item_id)
     return UiWindow(GetDlgItem(item_id)).GetWindowString();
 }
 
+void UiDialog::SetDlgItemString(int item_id, const WCHAR* string)
+{
+    SetDlgItemTextW(hwnd(), item_id, string);
+}
+
 void UiDialog::SetDlgItemString(int item_id, const std::wstring& string)
 {
-    SetDlgItemTextW(hwnd(), item_id, string.c_str());
+    SetDlgItemString(item_id, string.c_str());
 }
 
 void UiDialog::SetDlgItemString(int item_id, UINT resource_id)
@@ -107,6 +112,11 @@ void UiDialog::SetDlgItemString(int item_id, UINT resource_id)
 UINT UiDialog::IsDlgButtonChecked(int button_id)
 {
     return ::IsDlgButtonChecked(hwnd(), button_id);
+}
+
+void UiDialog::CheckDlgButton(int button_id, UINT check)
+{
+    ::CheckDlgButton(hwnd(), button_id, check);
 }
 
 } // namespace aspia

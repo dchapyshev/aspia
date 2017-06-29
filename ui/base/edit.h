@@ -20,6 +20,7 @@ public:
 
     bool Create(HWND parent, DWORD style);
 
+    void AppendText(const WCHAR* text);
     void AppendText(const std::wstring& text);
     std::wstring GetText();
 

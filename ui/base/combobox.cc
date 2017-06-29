@@ -18,7 +18,12 @@ UiComboBox::UiComboBox(HWND hwnd)
 
 int UiComboBox::AddItem(const std::wstring& title, LPARAM item_data)
 {
-    int item_index = ComboBox_AddString(hwnd(), title.c_str());
+    return AddItem(title.c_str(), item_data);
+}
+
+int UiComboBox::AddItem(const WCHAR* title, LPARAM item_data)
+{
+    int item_index = ComboBox_AddString(hwnd(), title);
 
     if (item_index == CB_ERR)
         return CB_ERR;

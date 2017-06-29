@@ -6,6 +6,7 @@
 //
 
 #include "ui/user_prop_dialog.h"
+#include "ui/base/edit.h"
 #include "ui/resource.h"
 #include "base/strings/unicode.h"
 #include "base/logging.h"
@@ -44,13 +45,13 @@ void UiUserPropDialog::InsertSessionType(UiListView& list,
 
 void UiUserPropDialog::OnPasswordEditDblClick()
 {
-    HWND password_edit = GetDlgItem(IDC_PASSWORD_EDIT);
-    HWND password_retry_edit = GetDlgItem(IDC_PASSWORD_RETRY_EDIT);
+    UiEdit password_edit(GetDlgItem(IDC_PASSWORD_EDIT));
+    UiEdit password_retry_edit(GetDlgItem(IDC_PASSWORD_RETRY_EDIT));
 
-    Edit_SetReadOnly(password_edit, FALSE);
-    Edit_SetReadOnly(password_retry_edit, FALSE);
-    Edit_SetText(password_edit, L"");
-    Edit_SetText(password_retry_edit, L"");
+    password_edit.SetReadOnly(false);
+    password_retry_edit.SetReadOnly(false);
+    password_edit.SetWindowString(L"");
+    password_retry_edit.SetWindowString(L"");
 
     password_changed_ = true;
 }
@@ -103,22 +104,22 @@ void UiUserPropDialog::OnInitDialog()
                       proto::SessionType::SESSION_TYPE_SYSTEM_INFO,
                       IDS_SESSION_TYPE_SYSTEM_INFO);
 
-    HWND username_edit = GetDlgItem(IDC_USERNAME_EDIT);
+    UiEdit username_edit(GetDlgItem(IDC_USERNAME_EDIT));
 
     if (mode_ == Mode::Edit)
     {
         password_changed_ = false;
 
-        HWND password_edit = GetDlgItem(IDC_PASSWORD_EDIT);
-        HWND password_retry_edit = GetDlgItem(IDC_PASSWORD_RETRY_EDIT);
+        UiEdit password_edit(GetDlgItem(IDC_PASSWORD_EDIT));
+        UiEdit password_retry_edit(GetDlgItem(IDC_PASSWORD_RETRY_EDIT));
 
         SecureString<std::wstring> username;
         CHECK(UTF8toUNICODE(user_->username(), username));
-        Edit_SetText(username_edit, username.c_str());
+        username_edit.SetWindowString(username);
 
         const WCHAR kNotChangedPassword[] = L"******";
-        Edit_SetText(password_edit, kNotChangedPassword);
-        Edit_SetText(password_retry_edit, kNotChangedPassword);
+        password_edit.SetWindowString(kNotChangedPassword);
+        password_retry_edit.SetWindowString(kNotChangedPassword);
 
         // Setup our message handler.
         SetWindowSubclass(password_edit,
@@ -131,11 +132,10 @@ void UiUserPropDialog::OnInitDialog()
                           0,
                           reinterpret_cast<DWORD_PTR>(this));
 
-        Edit_SetReadOnly(password_edit, TRUE);
-        Edit_SetReadOnly(password_retry_edit, TRUE);
+        password_edit.SetReadOnly(true);
+        password_retry_edit.SetReadOnly(true);
 
-        CheckDlgButton(hwnd(),
-                       IDC_DISABLE_USER_CHECK,
+        CheckDlgButton(IDC_DISABLE_USER_CHECK,
                        user_->enabled() ? BST_UNCHECKED : BST_CHECKED);
     }
 

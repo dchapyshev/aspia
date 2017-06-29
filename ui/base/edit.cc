@@ -40,13 +40,18 @@ bool UiEdit::Create(HWND parent, DWORD style)
     return false;
 }
 
-void UiEdit::AppendText(const std::wstring& text)
+void UiEdit::AppendText(const WCHAR* text)
 {
     int length = GetWindowTextLengthW(hwnd());
 
     Edit_SetSel(hwnd(), length, length);
     Edit_ScrollCaret(hwnd());
-    Edit_ReplaceSel(hwnd(), text.c_str());
+    Edit_ReplaceSel(hwnd(), text);
+}
+
+void UiEdit::AppendText(const std::wstring& text)
+{
+    AppendText(text.c_str());
 }
 
 std::wstring UiEdit::GetText()

@@ -148,11 +148,11 @@ void UiSettingsDialog::OnInitDialog()
     }
     else
     {
-        CheckDlgButton(hwnd(), IDC_ENABLE_CURSOR_SHAPE_CHECK,
+        CheckDlgButton(IDC_ENABLE_CURSOR_SHAPE_CHECK,
             (config_.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE) ?
                 BST_CHECKED : BST_UNCHECKED);
 
-        CheckDlgButton(hwnd(), IDC_ENABLE_CLIPBOARD_CHECK,
+        CheckDlgButton(IDC_ENABLE_CLIPBOARD_CHECK,
             (config_.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD) ?
                 BST_CHECKED : BST_UNCHECKED);
     }

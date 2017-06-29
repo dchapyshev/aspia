@@ -124,7 +124,7 @@ void UiMainDialog::OnInitDialog()
     SetIcon(IDI_MAIN);
 
     main_menu_.Reset(Module().Menu(IDR_MAIN));
-    SetMenu(hwnd(), main_menu_);
+    SetMenu(main_menu_);
 
     tray_icon_.AddIcon(hwnd(),
                        IDI_MAIN,
@@ -136,7 +136,7 @@ void UiMainDialog::OnInitDialog()
     InitSessionTypesCombo();
 
     SetDlgItemInt(IDC_SERVER_PORT_EDIT, kDefaultHostTcpPort);
-    CheckDlgButton(hwnd(), IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
+    CheckDlgButton(IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
 
     UiEdit(GetDlgItem(IDC_SERVER_PORT_EDIT)).SetReadOnly(true);
 

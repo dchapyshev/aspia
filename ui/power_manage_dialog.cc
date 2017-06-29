@@ -25,7 +25,7 @@ INT_PTR UiPowerManageDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
         case WM_INITDIALOG:
         {
             CenterWindow();
-            CheckDlgButton(hwnd(), ID_POWER_SHUTDOWN, BST_CHECKED);
+            CheckDlgButton(ID_POWER_SHUTDOWN, BST_CHECKED);
             SetFocus(GetDlgItem(ID_POWER_SHUTDOWN));
         }
         break;

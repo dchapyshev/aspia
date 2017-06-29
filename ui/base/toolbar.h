@@ -30,6 +30,7 @@ public:
     void DeleteButton(int button_index);
     int CommandIdToIndex(int command_id);
     void SetImageList(HIMAGELIST imagelist);
+    void SetButtonText(int command_id, const WCHAR* text);
     void SetButtonText(int command_id, const std::wstring& text);
     void SetButtonState(int command_id, BYTE state);
     bool IsButtonChecked(int command_id);

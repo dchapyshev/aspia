@@ -19,9 +19,16 @@ public:
     UiComboBox(HWND hwnd);
 
     int AddItem(const std::wstring& title, LPARAM item_data);
+    int AddItem(const WCHAR* title, LPARAM item_data);
 
     template <typename T>
     int AddItem(const std::wstring& title, T item_data)
+    {
+        return AddItem(title, static_cast<LPARAM>(item_data));
+    }
+
+    template <typename T>
+    int AddItem(const WCHAR* title, T item_data)
     {
         return AddItem(title, static_cast<LPARAM>(item_data));
     }

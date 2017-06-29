@@ -104,7 +104,7 @@ void UiToolBar::SetImageList(HIMAGELIST imagelist)
                  reinterpret_cast<LPARAM>(imagelist));
 }
 
-void UiToolBar::SetButtonText(int command_id, const std::wstring& text)
+void UiToolBar::SetButtonText(int command_id, const WCHAR* text)
 {
     int button_index = CommandIdToIndex(command_id);
     if (button_index == -1)
@@ -121,7 +121,7 @@ void UiToolBar::SetButtonText(int command_id, const std::wstring& text)
 
     int string_id = SendMessageW(TB_ADDSTRING,
                                  0,
-                                 reinterpret_cast<LPARAM>(text.c_str()));
+                                 reinterpret_cast<LPARAM>(text));
     if (string_id == -1)
         return;
 
@@ -132,6 +132,11 @@ void UiToolBar::SetButtonText(int command_id, const std::wstring& text)
     SendMessageW(TB_INSERTBUTTON,
                  button_index,
                  reinterpret_cast<LPARAM>(&button));
+}
+
+void UiToolBar::SetButtonText(int command_id, const std::wstring& text)
+{
+    SetButtonText(command_id, text.c_str());
 }
 
 void UiToolBar::SetButtonState(int command_id, BYTE state)
