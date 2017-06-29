@@ -40,7 +40,7 @@
 #define HAVE_USING_OPERATOR
 
 /* The size of `void *', as computed by sizeof. */
-#define SIZEOF_VOID_P 4
+#define SIZEOF_VOID_P sizeof(void*)
 
 /* the namespace where STL code like vector<> is defined */
 #define STL_NAMESPACE std

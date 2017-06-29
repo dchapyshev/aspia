@@ -6,6 +6,9 @@
     <ClCompile Include="src\utilities.cc" />
     <ClCompile Include="src\raw_logging.cc" />
     <ClCompile Include="src\windows\port.cc" />
+    <ClCompile Include="src\symbolize.cc" />
+    <ClCompile Include="src\demangle.cc" />
+    <ClCompile Include="src\signalhandler.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\windows\glog\vlog_is_on.h" />
