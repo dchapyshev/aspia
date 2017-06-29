@@ -172,16 +172,16 @@ static std::wstring CurrentTime()
 
 void UiFileStatusDialog::WriteLog(const std::wstring& message, proto::Status status)
 {
-    UiEdit edit(GetDlgItem(IDC_STATUS_EDIT));
+    CEdit edit(GetDlgItem(IDC_STATUS_EDIT));
 
-    edit.AppendText(CurrentTime());
+    edit.AppendText(CurrentTime().c_str());
     edit.AppendText(L" ");
-    edit.AppendText(message);
+    edit.AppendText(message.c_str());
 
     if (status != proto::Status::STATUS_SUCCESS)
     {
         edit.AppendText(L" (");
-        edit.AppendText(StatusCodeToString(Module(), status));
+        edit.AppendText(StatusCodeToString(Module(), status).c_str());
         edit.AppendText(L")");
     }
 

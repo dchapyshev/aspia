@@ -12,12 +12,42 @@
 #include "base/scoped_gdi_object.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
+#include "base/logging.h"
 
 namespace aspia {
 
 static const int kNewFolderIndex = -1;
 static const int kComputerIndex = -1;
 static const int kCurrentFolderIndex = -2;
+
+static int GetICLColor()
+{
+    DEVMODEW mode = { 0 };
+    mode.dmSize = sizeof(mode);
+
+    if (EnumDisplaySettingsW(nullptr, ENUM_CURRENT_SETTINGS, &mode))
+    {
+        switch (mode.dmBitsPerPel)
+        {
+            case 32:
+                return ILC_COLOR32;
+
+            case 24:
+                return ILC_COLOR24;
+
+            case 16:
+                return ILC_COLOR16;
+
+            case 8:
+                return ILC_COLOR8;
+
+            case 4:
+                return ILC_COLOR4;
+        }
+    }
+
+    return ILC_COLOR32;
+}
 
 bool UiFileManagerPanel::CreatePanel(HWND parent,
                                      PanelType panel_type,
@@ -38,8 +68,7 @@ void UiFileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_l
 
     drive_list_.reset(drive_list.release());
 
-    ScopedHICON icon(GetComputerIcon());
-    DCHECK(icon.IsValid());
+    CIcon icon(GetComputerIcon());
 
     int icon_index = drive_imagelist_.AddIcon(icon);
 
@@ -53,7 +82,7 @@ void UiFileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_l
     {
         const proto::DriveListItem& item = drive_list_->item(index);
 
-        icon.Reset(GetDriveIcon(item.type()));
+        icon = GetDriveIcon(item.type());
         icon_index = drive_imagelist_.AddIcon(icon);
 
         std::wstring display_name = GetDriveDisplayName(item);
@@ -179,6 +208,15 @@ void UiFileManagerPanel::SetFolderViews()
     OnListItemChanged();
 }
 
+void UiFileManagerPanel::AddToolBarIcon(UINT icon_id)
+{
+    CIcon icon(AtlLoadIconImage(icon_id,
+                                LR_CREATEDIBSECTION,
+                                GetSystemMetrics(SM_CXSMICON),
+                                GetSystemMetrics(SM_CYSMICON)));
+    toolbar_imagelist_.AddIcon(icon);
+}
+
 void UiFileManagerPanel::OnCreate()
 {
     HFONT default_font =
@@ -191,8 +229,8 @@ void UiFileManagerPanel::OnCreate()
     else
         panel_name = module_.String(IDS_FT_REMOTE_COMPUTER);
 
-    title_.Create(hwnd(), SS_OWNERDRAW);
-    title_.SetWindowString(panel_name);
+    CRect title_rect(0, 0, 200, 20);
+    title_.Create(hwnd(), title_rect, panel_name.c_str(), WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
     title_.SetFont(default_font);
 
     drive_combo_.Create(hwnd(),
@@ -200,8 +238,11 @@ void UiFileManagerPanel::OnCreate()
                         module_.Handle());
     drive_combo_.SetFont(default_font);
 
-    if (drive_imagelist_.CreateSmall())
-        drive_combo_.SetImageList(drive_imagelist_);
+    drive_imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
+                            GetSystemMetrics(SM_CYSMICON),
+                            ILC_MASK | GetICLColor(),
+                            1, 1);
+    drive_combo_.SetImageList(drive_imagelist_);
 
     toolbar_.Create(hwnd(), TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS);
 
@@ -221,33 +262,40 @@ void UiFileManagerPanel::OnCreate()
     toolbar_.ButtonStructSize(sizeof(kButtons[0]));
     toolbar_.AddButtons(_countof(kButtons), kButtons);
 
-    toolbar_imagelist_.CreateSmall();
+    toolbar_imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
+                              GetSystemMetrics(SM_CYSMICON),
+                              ILC_MASK | GetICLColor(),
+                              1, 1);
     toolbar_.SetImageList(toolbar_imagelist_);
 
-    toolbar_imagelist_.AddIcon(module_, IDI_REFRESH);
-    toolbar_imagelist_.AddIcon(module_, IDI_DELETE);
-    toolbar_imagelist_.AddIcon(module_, IDI_FOLDER_ADD);
-    toolbar_imagelist_.AddIcon(module_, IDI_FOLDER_UP);
-    toolbar_imagelist_.AddIcon(module_, IDI_HOME);
+    AddToolBarIcon(IDI_REFRESH);
+    AddToolBarIcon(IDI_DELETE);
+    AddToolBarIcon(IDI_FOLDER_ADD);
+    AddToolBarIcon(IDI_FOLDER_UP);
+    AddToolBarIcon(IDI_HOME);
 
     if (panel_type_ == PanelType::LOCAL)
     {
-        toolbar_imagelist_.AddIcon(module_, IDI_SEND);
+        AddToolBarIcon(IDI_SEND);
         toolbar_.SetButtonText(ID_SEND, module_.String(IDS_FT_SEND));
     }
     else
     {
         DCHECK(panel_type_ == PanelType::REMOTE);
-        toolbar_imagelist_.AddIcon(module_, IDI_RECIEVE);
+        AddToolBarIcon(IDI_RECIEVE);
         toolbar_.SetButtonText(ID_SEND, module_.String(IDS_FT_RECIEVE));
     }
 
     list_.Create(hwnd(), WS_EX_CLIENTEDGE, LVS_REPORT | LVS_SHOWSELALWAYS);
     list_.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
-    list_imagelist_.CreateSmall();
+    list_imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
+                           GetSystemMetrics(SM_CYSMICON),
+                           ILC_MASK | GetICLColor(),
+                           1, 1);
     list_.SetImageList(list_imagelist_, LVSIL_SMALL);
 
-    status_.Create(hwnd(), SS_OWNERDRAW);
+    CRect status_rect(0, 0, 200, 20);
+    status_.Create(hwnd(), status_rect, L"", WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
     status_.SetFont(default_font);
 
     delegate_->OnDriveListRequest(panel_type_);
@@ -272,32 +320,36 @@ void UiFileManagerPanel::OnSize(int width, int height)
 
         int address_height = drive_combo_.Height();
         int toolbar_height = toolbar_.Height();
-        int title_height = title_.Height();
-        int status_height = status_.Height();
+
+        CRect title_rect;
+        title_.GetWindowRect(title_rect);
+
+        CRect status_rect;
+        status_.GetWindowRect(status_rect);
 
         DeferWindowPos(dwp, title_, nullptr,
                        0,
                        0,
                        width,
-                       title_height,
+                       title_rect.Height(),
                        SWP_NOACTIVATE | SWP_NOZORDER);
 
         DeferWindowPos(dwp, drive_combo_, nullptr,
                        0,
-                       title_height,
+                       title_rect.Height(),
                        width,
                        address_height,
                        SWP_NOACTIVATE | SWP_NOZORDER);
 
         DeferWindowPos(dwp, toolbar_, nullptr,
                        0,
-                       title_height + address_height,
+                       title_rect.Height() + address_height,
                        width,
                        toolbar_height,
                        SWP_NOACTIVATE | SWP_NOZORDER);
 
-        int list_y = title_height + toolbar_height + address_height;
-        int list_height = height - list_y - status_height;
+        int list_y = title_rect.Height() + toolbar_height + address_height;
+        int list_height = height - list_y - status_rect.Height();
 
         DeferWindowPos(dwp, list_, nullptr,
                        0,
@@ -310,7 +362,7 @@ void UiFileManagerPanel::OnSize(int width, int height)
                        0,
                        list_y + list_height,
                        width,
-                       status_height,
+                       status_rect.Height(),
                        SWP_NOACTIVATE | SWP_NOZORDER);
 
         EndDeferWindowPos(dwp);
@@ -319,7 +371,7 @@ void UiFileManagerPanel::OnSize(int width, int height)
 
 void UiFileManagerPanel::OnDrawItem(LPDRAWITEMSTRUCT dis)
 {
-    if (dis->hwndItem == title_.hwnd() || dis->hwndItem == status_.hwnd())
+    if (dis->hwndItem == title_ || dis->hwndItem == status_)
     {
         int saved_dc = SaveDC(dis->hDC);
 
@@ -678,7 +730,7 @@ void UiFileManagerPanel::OnListItemChanged()
     std::wstring format = module_.String(IDS_FT_SELECTED_OBJECT_COUNT);
     std::wstring status = StringPrintfW(format.c_str(), count);
 
-    status_.SetWindowString(status);
+    status_.SetWindowTextW(status.c_str());
 }
 
 void UiFileManagerPanel::OnSend()

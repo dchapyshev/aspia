@@ -8,10 +8,6 @@
 #include "ui/settings_dialog.h"
 #include "ui/resource.h"
 #include "ui/base/module.h"
-#include "ui/base/combobox.h"
-#include "ui/base/updown.h"
-#include "ui/base/trackbar.h"
-#include "ui/base/edit.h"
 #include "desktop_capture/pixel_format.h"
 #include "codec/video_helpers.h"
 #include "base/strings/string_util.h"
@@ -52,18 +48,43 @@ INT_PTR UiSettingsDialog::DoModal(HWND parent)
     return Run(UiModule::Current(), parent, IDD_SETTINGS);
 }
 
+void UiSettingsDialog::AddColorDepth(CComboBox& combobox, UINT string_id, int item_data)
+{
+    CString text;
+    text.LoadStringW(string_id);
+
+    int item_index = combobox.AddString(text);
+    combobox.SetItemData(item_index, item_data);
+}
+
+void UiSettingsDialog::SelectItemWithData(CComboBox& combobox, int item_data)
+{
+    int count = combobox.GetCount();
+
+    for (int i = 0; i < count; ++i)
+    {
+        LPARAM cur_item_data = combobox.GetItemData(i);
+
+        if (cur_item_data == item_data)
+        {
+            combobox.SetCurSel(i);
+            return;
+        }
+    }
+}
+
 void UiSettingsDialog::InitColorDepthList()
 {
-    UiComboBox combo(GetDlgItem(IDC_COLOR_DEPTH_COMBO));
+    CComboBox combo(GetDlgItem(IDC_COLOR_DEPTH_COMBO));
 
-    combo.AddItem(Module().String(IDS_DM_32BIT), kARGB);
-    combo.AddItem(Module().String(IDS_DM_24BIT), kRGB888);
-    combo.AddItem(Module().String(IDS_DM_16BIT), kRGB565);
-    combo.AddItem(Module().String(IDS_DM_15BIT), kRGB555);
-    combo.AddItem(Module().String(IDS_DM_12BIT), kRGB444);
-    combo.AddItem(Module().String(IDS_DM_8BIT),  kRGB332);
-    combo.AddItem(Module().String(IDS_DM_6BIT),  kRGB222);
-    combo.AddItem(Module().String(IDS_DM_3BIT),  kRGB111);
+    AddColorDepth(combo, IDS_DM_32BIT, kARGB);
+    AddColorDepth(combo, IDS_DM_24BIT, kRGB888);
+    AddColorDepth(combo, IDS_DM_16BIT, kRGB565);
+    AddColorDepth(combo, IDS_DM_15BIT, kRGB555);
+    AddColorDepth(combo, IDS_DM_12BIT, kRGB444);
+    AddColorDepth(combo, IDS_DM_8BIT,  kRGB332);
+    AddColorDepth(combo, IDS_DM_6BIT,  kRGB222);
+    AddColorDepth(combo, IDS_DM_3BIT,  kRGB111);
 
     PixelFormat format(ConvertFromVideoPixelFormat(config_.pixel_format()));
 
@@ -102,18 +123,23 @@ void UiSettingsDialog::InitColorDepthList()
         curr_item = kRGB111;
     }
 
-    combo.SelectItemWithData(curr_item);
+    SelectItemWithData(combo, curr_item);
 }
 
 void UiSettingsDialog::InitCodecList()
 {
-    UiComboBox combo(GetDlgItem(IDC_CODEC_COMBO));
+    CComboBox combo(GetDlgItem(IDC_CODEC_COMBO));
 
-    combo.AddItem(L"VP9", proto::VideoEncoding::VIDEO_ENCODING_VP9);
-    combo.AddItem(L"VP8", proto::VideoEncoding::VIDEO_ENCODING_VP8);
-    combo.AddItem(L"ZLIB", proto::VideoEncoding::VIDEO_ENCODING_ZLIB);
+    int item_index = combo.AddString(L"VP9");
+    combo.SetItemData(item_index, proto::VideoEncoding::VIDEO_ENCODING_VP9);
 
-    combo.SelectItemWithData(config_.video_encoding());
+    item_index = combo.AddString(L"VP8");
+    combo.SetItemData(item_index, proto::VideoEncoding::VIDEO_ENCODING_VP8);
+
+    item_index = combo.AddString(L"ZLIB");
+    combo.SetItemData(item_index, proto::VideoEncoding::VIDEO_ENCODING_ZLIB);
+
+    SelectItemWithData(combo, config_.video_encoding());
 }
 
 void UiSettingsDialog::UpdateCompressionRatio(int compression_ratio)
@@ -131,15 +157,15 @@ void UiSettingsDialog::OnInitDialog()
     UpdateCompressionRatio(config_.compress_ratio());
     OnCodecChanged();
 
-    HWND ratio = GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR);
-    TrackBar_SetRange(ratio, kMinCompressRatio, kMaxCompressRatio);
-    TrackBar_SetPos(ratio, config_.compress_ratio());
+    CTrackBarCtrl ratio(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR));
+    ratio.SetRange(kMinCompressRatio, kMaxCompressRatio);
+    ratio.SetPos(config_.compress_ratio());
 
-    UiEdit(GetDlgItem(IDC_INTERVAL_EDIT)).SetLimitText(3);
+    CEdit(GetDlgItem(IDC_INTERVAL_EDIT)).SetLimitText(3);
 
-    HWND updown = GetDlgItem(IDC_INTERVAL_UPDOWN);
-    UpDown_SetRange(updown, kMinUpdateInterval, kMaxUpdateInterval);
-    UpDown_SetPos(updown, config_.update_interval());
+    CUpDownCtrl updown(GetDlgItem(IDC_INTERVAL_UPDOWN));
+    updown.SetRange(kMinUpdateInterval, kMaxUpdateInterval);
+    updown.SetPos(config_.update_interval());
 
     if (session_type_ == proto::SessionType::SESSION_TYPE_DESKTOP_VIEW)
     {
@@ -162,17 +188,17 @@ void UiSettingsDialog::OnHScroll(HWND ctrl)
 {
     if (GetWindowLongPtrW(ctrl, GWLP_ID) == IDC_COMPRESS_RATIO_TRACKBAR)
     {
-        int compression_ratio =
-            TrackBar_GetPos(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR));
-
-        UpdateCompressionRatio(compression_ratio);
+        CTrackBarCtrl ratio(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR));
+        UpdateCompressionRatio(ratio.GetPos());
     }
 }
 
 void UiSettingsDialog::OnCodecChanged()
 {
+    CComboBox codec_combo(GetDlgItem(IDC_CODEC_COMBO));
+
     bool has_pixel_format =
-        (UiComboBox(GetDlgItem(IDC_CODEC_COMBO)).CurItemData() ==
+        (codec_combo.GetItemData(codec_combo.GetCurSel()) ==
             proto::VIDEO_ENCODING_ZLIB);
 
     EnableDlgItem(IDC_COLOR_DEPTH_TEXT, has_pixel_format);
@@ -191,17 +217,20 @@ void UiSettingsDialog::OnCodecChanged(WORD notify_code)
 
 void UiSettingsDialog::OnOkButton()
 {
+    CComboBox codec_combo(GetDlgItem(IDC_CODEC_COMBO));
+
     proto::VideoEncoding encoding =
         static_cast<proto::VideoEncoding>(
-            UiComboBox(GetDlgItem(IDC_CODEC_COMBO)).CurItemData());
+            codec_combo.GetItemData(codec_combo.GetCurSel()));
 
     config_.set_video_encoding(encoding);
 
     if (encoding == proto::VIDEO_ENCODING_ZLIB)
     {
+        CComboBox color_combo(GetDlgItem(IDC_COLOR_DEPTH_COMBO));
         PixelFormat format;
 
-        switch (UiComboBox(GetDlgItem(IDC_COLOR_DEPTH_COMBO)).CurItemData())
+        switch (color_combo.GetItemData(color_combo.GetCurSel()))
         {
             case kARGB:
                 format = PixelFormat::ARGB();
@@ -239,7 +268,7 @@ void UiSettingsDialog::OnOkButton()
         ConvertToVideoPixelFormat(format, config_.mutable_pixel_format());
 
         int compress_ratio =
-            TrackBar_GetPos(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR));
+            CTrackBarCtrl(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR)).GetPos();
 
         if (compress_ratio >= kMinCompressRatio && compress_ratio <= kMaxCompressRatio)
         {
@@ -257,7 +286,7 @@ void UiSettingsDialog::OnOkButton()
 
     config_.set_flags(flags);
 
-    DWORD ret = UpDown_GetPos(GetDlgItem(IDC_INTERVAL_UPDOWN));
+    DWORD ret = CUpDownCtrl(GetDlgItem(IDC_INTERVAL_UPDOWN)).GetPos();
     if (HIWORD(ret) == 0)
     {
         int interval = LOWORD(ret);

@@ -6,7 +6,6 @@
 //
 
 #include "ui/base/listview.h"
-#include "ui/base/edit.h"
 #include "base/version_helpers.h"
 
 #include <uxtheme.h>
@@ -262,13 +261,13 @@ HWND UiListView::EditLabel(int item_index)
 
 std::wstring UiListView::GetTextFromEdit()
 {
-    UiEdit edit(reinterpret_cast<HWND>(SendMessageW(LVM_GETEDITCONTROL,
+    UiWindow edit(reinterpret_cast<HWND>(SendMessageW(LVM_GETEDITCONTROL,
                                                     0,
                                                     0)));
     if (!edit)
         return std::wstring();
 
-    return edit.GetText();
+    return edit.GetWindowString();
 }
 
 } // namespace aspia

@@ -135,6 +135,44 @@ void UiViewerWindow::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent>
     clipboard_.InjectClipboardEvent(clipboard_event);
 }
 
+static int GetICLColor()
+{
+    DEVMODEW mode = { 0 };
+    mode.dmSize = sizeof(mode);
+
+    if (EnumDisplaySettingsW(nullptr, ENUM_CURRENT_SETTINGS, &mode))
+    {
+        switch (mode.dmBitsPerPel)
+        {
+            case 32:
+                return ILC_COLOR32;
+
+            case 24:
+                return ILC_COLOR24;
+
+            case 16:
+                return ILC_COLOR16;
+
+            case 8:
+                return ILC_COLOR8;
+
+            case 4:
+                return ILC_COLOR4;
+        }
+    }
+
+    return ILC_COLOR32;
+}
+
+void UiViewerWindow::AddToolBarIcon(UINT icon_id)
+{
+    CIcon icon = AtlLoadIconImage(icon_id,
+                                  LR_CREATEDIBSECTION,
+                                  GetSystemMetrics(SM_CXSMICON),
+                                  GetSystemMetrics(SM_CYSMICON));
+    toolbar_imagelist_.AddIcon(icon);
+}
+
 void UiViewerWindow::CreateToolBar()
 {
     const UiModule& module = UiModule().Current();
@@ -165,16 +203,19 @@ void UiViewerWindow::CreateToolBar()
     toolbar_.ButtonStructSize(sizeof(kButtons[0]));
     toolbar_.AddButtons(_countof(kButtons), kButtons);
 
-    if (toolbar_imagelist_.CreateSmall())
+    if (toolbar_imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
+                                  GetSystemMetrics(SM_CYSMICON),
+                                  ILC_MASK | GetICLColor(),
+                                  1, 1))
     {
-        toolbar_imagelist_.AddIcon(module, IDI_POWER);
-        toolbar_imagelist_.AddIcon(module, IDI_CAD);
-        toolbar_imagelist_.AddIcon(module, IDI_KEYS);
-        toolbar_imagelist_.AddIcon(module, IDI_AUTOSIZE);
-        toolbar_imagelist_.AddIcon(module, IDI_FULLSCREEN);
-        toolbar_imagelist_.AddIcon(module, IDI_SETTINGS);
-        toolbar_imagelist_.AddIcon(module, IDI_ABOUT);
-        toolbar_imagelist_.AddIcon(module, IDI_EXIT);
+        AddToolBarIcon(IDI_POWER);
+        AddToolBarIcon(IDI_CAD);
+        AddToolBarIcon(IDI_KEYS);
+        AddToolBarIcon(IDI_AUTOSIZE);
+        AddToolBarIcon(IDI_FULLSCREEN);
+        AddToolBarIcon(IDI_SETTINGS);
+        AddToolBarIcon(IDI_ABOUT);
+        AddToolBarIcon(IDI_EXIT);
 
         toolbar_.SetImageList(toolbar_imagelist_);
     }

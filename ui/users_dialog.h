@@ -9,8 +9,13 @@
 #define _ASPIA_UI__USERS_DIALOG_H
 
 #include "ui/base/modal_dialog.h"
-#include "ui/base/imagelist.h"
 #include "host/host_user_list.h"
+
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <atlctrls.h>
+#include <atlmisc.h>
 
 namespace aspia {
 
@@ -37,7 +42,7 @@ private:
     void SetUserListModified();
 
     HostUserList user_list_;
-    UiImageList imagelist_;
+    CImageListManaged imagelist_;
 
     DISALLOW_COPY_AND_ASSIGN(UiUsersDialog);
 };

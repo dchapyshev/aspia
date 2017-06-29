@@ -8,21 +8,39 @@
 #ifndef _ASPIA_UI__ABOUT_DIALOG_H
 #define _ASPIA_UI__ABOUT_DIALOG_H
 
-#include "ui/base/modal_dialog.h"
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+
+#include "base/macros.h"
+#include "ui/resource.h"
 
 namespace aspia {
 
-class UiAboutDialog : public UiModalDialog
+class UiAboutDialog : public CDialogImpl<UiAboutDialog>
 {
 public:
+    enum { IDD = IDD_ABOUT };
+
     UiAboutDialog() = default;
 
-    INT_PTR DoModal(HWND parent) override;
-
 private:
-    INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) override;
+    BEGIN_MSG_MAP(UiAboutDialog)
+        MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+        MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
-    ScopedHICON icon_;
+        COMMAND_ID_HANDLER(IDOK, OnCloseButton)
+        COMMAND_ID_HANDLER(IDC_DONATE_BUTTON, OnDonateButton)
+        COMMAND_ID_HANDLER(IDC_SITE_BUTTON, OnSiteButton)
+    END_MSG_MAP()
+
+    LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnCloseButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnDonateButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnSiteButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+
+    CIcon icon_;
 
     DISALLOW_COPY_AND_ASSIGN(UiAboutDialog);
 };

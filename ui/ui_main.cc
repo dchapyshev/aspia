@@ -11,6 +11,11 @@
 #include "base/scoped_com_initializer.h"
 #include "network/scoped_wsa_initializer.h"
 
+#include <atlbase.h>
+#include <atlapp.h>
+
+#include <atlwin.h>
+#include <atlmisc.h>
 #include <commctrl.h>
 
 namespace aspia {
@@ -23,15 +28,44 @@ void RunUIMain()
     CHECK(com_initializer.IsSucceeded());
     CHECK(wsa_initializer.IsSucceeded());
 
-    INITCOMMONCONTROLSEX iccx;
+    AtlInitCommonControls(ICC_BAR_CLASSES);
 
-    iccx.dwSize = sizeof(iccx);
-    iccx.dwICC = ICC_BAR_CLASSES;
+    HINSTANCE instance = nullptr;
 
-    InitCommonControlsEx(&iccx);
+    if (!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+                            GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                            reinterpret_cast<WCHAR*>(&RunUIMain),
+                            &instance))
+    {
+        LOG(ERROR) << "GetModuleHandleExW() failed: "
+                   << GetLastSystemErrorString();
+        return;
+    }
+
+    CAppModule module;
+    HRESULT hr = module.Init(nullptr, instance);
+    if (FAILED(hr))
+    {
+        LOG(ERROR) << "Module initialization failure: "
+                   << SystemErrorCodeToString(hr);
+        return;
+    }
 
     UiMainDialog main_dialog;
-    main_dialog.DoModal(nullptr);
+    if (!main_dialog.Create(nullptr, 0))
+    {
+        LOG(ERROR) << "Unable to create main dialog: "
+                   << GetLastSystemErrorString();
+    }
+    else
+    {
+        main_dialog.ShowWindow(SW_SHOWNORMAL);
+
+        MessageLoopForUI message_loop;
+        message_loop.Run();
+    }
+
+    module.Term();
 }
 
 } // namespace aspia

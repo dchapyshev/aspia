@@ -8,29 +8,40 @@
 #ifndef _ASPIA_UI__AUTH_DIALOG_H
 #define _ASPIA_UI__AUTH_DIALOG_H
 
-#include "ui/base/modal_dialog.h"
 #include "crypto/secure_string.h"
+#include "ui/resource.h"
+
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <string>
 
 namespace aspia {
 
-class UiAuthDialog : public UiModalDialog
+class UiAuthDialog : public CDialogImpl<UiAuthDialog>
 {
 public:
+    enum { IDD = IDD_AUTH };
+
     UiAuthDialog() = default;
     ~UiAuthDialog() = default;
-
-    INT_PTR DoModal(HWND parent) override;
 
     const std::string& UserName() const;
     const std::string& Password() const;
 
 private:
-    INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) override;
+    BEGIN_MSG_MAP(UiAuthDialog)
+        MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+        MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
-    void OnInitDialog();
-    void OnClose();
-    void OnOkButton();
-    void OnCancelButton();
+        COMMAND_ID_HANDLER(IDOK, OnOkButton)
+        COMMAND_ID_HANDLER(IDC_DONATE_BUTTON, OnCancelButton)
+    END_MSG_MAP()
+
+    LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
 private:
     SecureString<std::string> username_;

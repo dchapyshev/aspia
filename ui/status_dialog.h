@@ -12,6 +12,11 @@
 #include "proto/status.pb.h"
 #include "ui/base/modal_dialog.h"
 
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <atlctrls.h>
+
 namespace aspia {
 
 class UiStatusDialog : public UiModalDialog

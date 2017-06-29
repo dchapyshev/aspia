@@ -8,32 +8,45 @@
 #ifndef _ASPIA_UI__USER_PROP_DIALOG_H
 #define _ASPIA_UI__USER_PROP_DIALOG_H
 
-#include "ui/base/modal_dialog.h"
-#include "ui/base/listview.h"
 #include "host/host_user_list.h"
 #include "proto/auth_session.pb.h"
+#include "ui/resource.h"
+
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <atlctrls.h>
 
 namespace aspia {
 
-class UiUserPropDialog : public UiModalDialog
+class UiUserPropDialog : public CDialogImpl<UiUserPropDialog>
 {
 public:
+    enum { IDD = IDD_USER_PROP };
+
     enum class Mode { Add, Edit };
 
     UiUserPropDialog(Mode mode,
                      proto::HostUser* user,
                      const HostUserList& user_list);
 
-    INT_PTR DoModal(HWND parent) override;
-
 private:
-    INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) override;
+    BEGIN_MSG_MAP(UiUserPropDialog)
+        MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+        MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
-    void OnInitDialog();
-    void OnOkButton();
+        COMMAND_ID_HANDLER(IDOK, OnOkButton)
+        COMMAND_ID_HANDLER(IDCANCEL, OnCancelButton)
+    END_MSG_MAP()
+
+    LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     void OnPasswordEditDblClick();
+    void ShowErrorMessage(UINT string_id);
 
-    void InsertSessionType(UiListView& list,
+    void InsertSessionType(CListViewCtrl& list,
                            proto::SessionType session_type,
                            UINT string_id);
 

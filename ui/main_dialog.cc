@@ -7,8 +7,10 @@
 
 #include "ui/main_dialog.h"
 
+#include <atlmisc.h>
 #include <iphlpapi.h>
 #include <ws2tcpip.h>
+#include <uxtheme.h>
 
 #include "base/version_helpers.h"
 #include "base/process/process_helpers.h"
@@ -16,20 +18,11 @@
 #include "base/strings/unicode.h"
 #include "client/client_config.h"
 #include "host/host_service.h"
-#include "ui/base/listview.h"
-#include "ui/base/combobox.h"
-#include "ui/base/edit.h"
 #include "ui/viewer_window.h"
 #include "ui/about_dialog.h"
 #include "ui/users_dialog.h"
-#include "ui/resource.h"
 
 namespace aspia {
-
-INT_PTR UiMainDialog::DoModal(HWND parent)
-{
-    return Run(UiModule::Current(), parent, IDD_MAIN);
-}
 
 static std::wstring
 AddressToString(const LPSOCKADDR src)
@@ -47,10 +40,23 @@ AddressToString(const LPSOCKADDR src)
 
 void UiMainDialog::InitAddressesList()
 {
-    UiListView list(GetDlgItem(IDC_IP_LIST));
+    CListViewCtrl list(GetDlgItem(IDC_IP_LIST));
 
-    list.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
-    list.AddOnlyOneColumn();
+    DWORD ex_style = LVS_EX_FULLROWSELECT;
+
+    if (IsWindowsVistaOrGreater())
+    {
+        SetWindowTheme(list, L"explorer", nullptr);
+        ex_style |= LVS_EX_DOUBLEBUFFER;
+    }
+
+    list.SetExtendedListViewStyle(ex_style);
+
+    int column_index = list.AddColumn(L"", 0);
+
+    CRect list_rect;
+    list.GetClientRect(list_rect);
+    list.SetColumnWidth(column_index, list_rect.Width() - GetSystemMetrics(SM_CXVSCROLL));
 
     ULONG flags = GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST |
         GAA_FLAG_SKIP_DNS_SERVER | GAA_FLAG_SKIP_FRIENDLY_NAME;
@@ -89,48 +95,77 @@ void UiMainDialog::InitAddressesList()
             std::wstring address_string = AddressToString(address->Address.lpSockaddr);
 
             if (address_string != L"127.0.0.1")
-                list.AddItem(address_string, 0);
+            {
+                list.AddItem(list.GetItemCount(), 0, address_string.c_str(), 0);
+            }
         }
     }
 }
 
+int UiMainDialog::AddSessionType(CComboBox& combobox,
+                                 UINT string_resource_id,
+                                 proto::SessionType session_type)
+{
+    CString text;
+    text.LoadStringW(string_resource_id);
+
+    int item_index = combobox.AddString(text);
+    combobox.SetItemData(item_index, session_type);
+
+    return item_index;
+}
+
 void UiMainDialog::InitSessionTypesCombo()
 {
-    UiComboBox combo(GetDlgItem(IDC_SESSION_TYPE_COMBO));
+    CComboBox combobox(GetDlgItem(IDC_SESSION_TYPE_COMBO));
 
-    combo.AddItem(Module().String(IDS_SESSION_TYPE_DESKTOP_MANAGE),
-                  proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
+    int first_item = AddSessionType(combobox,
+                                    IDS_SESSION_TYPE_DESKTOP_MANAGE,
+                                    proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
 
-    combo.AddItem(Module().String(IDS_SESSION_TYPE_DESKTOP_VIEW),
-                  proto::SessionType::SESSION_TYPE_DESKTOP_VIEW);
+    AddSessionType(combobox,
+                   IDS_SESSION_TYPE_DESKTOP_VIEW,
+                   proto::SessionType::SESSION_TYPE_DESKTOP_VIEW);
 
-    combo.AddItem(Module().String(IDS_SESSION_TYPE_FILE_TRANSFER),
-                  proto::SessionType::SESSION_TYPE_FILE_TRANSFER);
+    AddSessionType(combobox,
+                   IDS_SESSION_TYPE_FILE_TRANSFER,
+                   proto::SessionType::SESSION_TYPE_FILE_TRANSFER);
 
-    combo.AddItem(Module().String(IDS_SESSION_TYPE_POWER_MANAGE),
-                  proto::SessionType::SESSION_TYPE_POWER_MANAGE);
+    AddSessionType(combobox,
+                   IDS_SESSION_TYPE_POWER_MANAGE,
+                   proto::SessionType::SESSION_TYPE_POWER_MANAGE);
 
-    combo.SelectItemWithData(proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
+    combobox.SetCurSel(first_item);
 }
 
 proto::SessionType UiMainDialog::GetSelectedSessionType()
 {
-    UiComboBox combo(GetDlgItem(IDC_SESSION_TYPE_COMBO));
-    return static_cast<proto::SessionType>(combo.CurItemData());
+    CComboBox combo(GetDlgItem(IDC_SESSION_TYPE_COMBO));
+    return static_cast<proto::SessionType>(combo.GetItemData(combo.GetCurSel()));
 }
 
-void UiMainDialog::OnInitDialog()
+LRESULT UiMainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
-    SetIcon(IDI_MAIN);
+    small_icon_ = AtlLoadIconImage(IDI_MAIN,
+                                   LR_CREATEDIBSECTION,
+                                   GetSystemMetrics(SM_CXSMICON),
+                                   GetSystemMetrics(SM_CYSMICON));
+    SetIcon(small_icon_, FALSE);
 
-    main_menu_.Reset(Module().Menu(IDR_MAIN));
+    big_icon_ = AtlLoadIconImage(IDI_MAIN,
+                                 LR_CREATEDIBSECTION,
+                                 GetSystemMetrics(SM_CXSMICON),
+                                 GetSystemMetrics(SM_CYSMICON));
+    SetIcon(small_icon_, TRUE);
+
+    main_menu_ = AtlLoadMenu(IDR_MAIN);
     SetMenu(main_menu_);
 
-    tray_icon_.AddIcon(hwnd(),
-                       IDI_MAIN,
-                       Module().String(IDS_APPLICATION_NAME),
-                       IDR_TRAY);
-    tray_icon_.SetDefaultMenuItem(ID_SHOWHIDE);
+    //tray_icon_.AddIcon(hwnd(),
+    //                   IDI_MAIN,
+    //                   Module().String(IDS_APPLICATION_NAME),
+    //                   IDR_TRAY);
+    //tray_icon_.SetDefaultMenuItem(ID_SHOWHIDE);
 
     InitAddressesList();
     InitSessionTypesCombo();
@@ -138,7 +173,7 @@ void UiMainDialog::OnInitDialog()
     SetDlgItemInt(IDC_SERVER_PORT_EDIT, kDefaultHostTcpPort);
     CheckDlgButton(IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
 
-    UiEdit(GetDlgItem(IDC_SERVER_PORT_EDIT)).SetReadOnly(true);
+    CEdit(GetDlgItem(IDC_SERVER_PORT_EDIT)).SetReadOnly(TRUE);
 
     bool host_service_installed = HostService::IsInstalled();
 
@@ -156,63 +191,94 @@ void UiMainDialog::OnInitDialog()
     }
 
     if (host_service_installed)
-        EnableDlgItem(IDC_START_SERVER_BUTTON, false);
+        GetDlgItem(IDC_START_SERVER_BUTTON).EnableWindow(FALSE);
 
-    OnSessionTypeChanged();
-    SetForegroundWindowEx();
+    UpdateSessionType();
+
+    DWORD active_thread_id =
+        GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
+
+    DWORD current_thread_id = GetCurrentThreadId();
+
+    if (active_thread_id != current_thread_id)
+    {
+        AttachThreadInput(current_thread_id, active_thread_id, TRUE);
+        SetForegroundWindow(*this);
+        AttachThreadInput(current_thread_id, active_thread_id, FALSE);
+    }
+
+    return 0;
 }
 
-void UiMainDialog::OnDefaultPortClicked()
+LRESULT UiMainDialog::OnDefaultPortClicked(WORD notify_code,
+                                           WORD control_id,
+                                           HWND control,
+                                           BOOL& handled)
 {
-    UiEdit port(GetDlgItem(IDC_SERVER_PORT_EDIT));
+    CEdit port(GetDlgItem(IDC_SERVER_PORT_EDIT));
 
     if (IsDlgButtonChecked(IDC_SERVER_DEFAULT_PORT_CHECK) == BST_CHECKED)
     {
         SetDlgItemInt(IDC_SERVER_PORT_EDIT, kDefaultHostTcpPort);
-        port.SetReadOnly(true);
+        port.SetReadOnly(TRUE);
     }
     else
     {
-        port.SetReadOnly(false);
+        port.SetReadOnly(FALSE);
     }
+
+    return 0;
 }
 
-void UiMainDialog::OnClose()
+LRESULT UiMainDialog::OnClose(UINT message,
+                              WPARAM wparam,
+                              LPARAM lparam,
+                              BOOL& handled)
 {
     host_pool_.reset();
     client_pool_.reset();
-    EndDialog();
+    PostQuitMessage(0);
+    return 0;
 }
 
 void UiMainDialog::StopHostMode()
 {
     if (host_pool_)
     {
-        SetDlgItemString(IDC_START_SERVER_BUTTON, IDS_START);
+        CString text;
+        text.LoadStringW(IDS_START);
+        SetDlgItemTextW(IDC_START_SERVER_BUTTON, text);
+
         host_pool_.reset();
     }
 }
 
-void UiMainDialog::OnStartServerButton()
+LRESULT UiMainDialog::OnStartServerButton(WORD notify_code,
+                                          WORD control_id,
+                                          HWND control,
+                                          BOOL& handled)
 {
     if (host_pool_)
     {
         StopHostMode();
-        return;
+        return 0;
     }
 
     host_pool_.reset(new HostPool(MessageLoopProxy::Current()));
 
     if (host_pool_->Start())
     {
-        SetDlgItemString(IDC_START_SERVER_BUTTON, IDS_STOP);
-        return;
+        CString text;
+        text.LoadStringW(IDS_STOP);
+        SetDlgItemTextW(IDC_START_SERVER_BUTTON, text);
+        return 0;
     }
 
     host_pool_.reset();
+    return 0;
 }
 
-void UiMainDialog::OnSessionTypeChanged()
+void UiMainDialog::UpdateSessionType()
 {
     proto::SessionType session_type = GetSelectedSessionType();
 
@@ -222,17 +288,29 @@ void UiMainDialog::OnSessionTypeChanged()
         case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
         {
             config_.SetDefaultDesktopSessionConfig();
-            EnableDlgItem(IDC_SETTINGS_BUTTON, true);
+            GetDlgItem(IDC_SETTINGS_BUTTON).EnableWindow(TRUE);
         }
         break;
 
         default:
-            EnableDlgItem(IDC_SETTINGS_BUTTON, false);
+            GetDlgItem(IDC_SETTINGS_BUTTON).EnableWindow(FALSE);
             break;
     }
 }
 
-void UiMainDialog::OnSettingsButton()
+LRESULT UiMainDialog::OnSessionTypeChanged(WORD notify_code,
+                                           WORD control_id,
+                                           HWND control,
+                                           BOOL& handled)
+{
+    UpdateSessionType();
+    return 0;
+}
+
+LRESULT UiMainDialog::OnSettingsButton(WORD notify_code,
+                                       WORD control_id,
+                                       HWND control,
+                                       BOOL& handled)
 {
     proto::SessionType session_type = GetSelectedSessionType();
 
@@ -243,7 +321,7 @@ void UiMainDialog::OnSettingsButton()
         {
             UiSettingsDialog dialog;
 
-            if (dialog.DoModal(hwnd(),
+            if (dialog.DoModal(*this,
                                session_type,
                                config_.desktop_session_config()) == IDOK)
             {
@@ -255,44 +333,63 @@ void UiMainDialog::OnSettingsButton()
         default:
             break;
     }
+
+    return 0;
 }
 
-void UiMainDialog::OnConnectButton()
+LRESULT UiMainDialog::OnConnectButton(WORD notify_code,
+                                      WORD control_id,
+                                      HWND control,
+                                      BOOL& handled)
 {
     proto::SessionType session_type = GetSelectedSessionType();
 
     if (session_type != proto::SessionType::SESSION_TYPE_UNKNOWN)
     {
-        config_.set_address(GetDlgItemString(IDC_SERVER_ADDRESS_EDIT));
-        config_.set_port(GetDlgItemInt<uint16_t>(IDC_SERVER_PORT_EDIT));
+        WCHAR buffer[128];
+        GetDlgItemTextW(IDC_SERVER_ADDRESS_EDIT, buffer, _countof(buffer));
+
+        config_.set_address(buffer);
+        config_.set_port(GetDlgItemInt(IDC_SERVER_PORT_EDIT, nullptr, FALSE));
         config_.set_session_type(session_type);
 
         if (!client_pool_)
             client_pool_.reset(new ClientPool(MessageLoopProxy::Current()));
 
-        client_pool_->Connect(hwnd(), config_);
+        client_pool_->Connect(*this, config_);
     }
+
+    return 0;
 }
 
-void UiMainDialog::OnHelpButton()
+LRESULT UiMainDialog::OnHelpButton(WORD notify_code,
+                                   WORD control_id,
+                                   HWND control,
+                                   BOOL& handled)
 {
-    ShellExecuteW(nullptr,
-                  L"open",
-                  Module().String(IDS_HELP_LINK).c_str(),
-                  nullptr,
-                  nullptr,
-                  SW_SHOWNORMAL);
+    CString url;
+    url.LoadStringW(IDS_HELP_LINK);
+    ShellExecuteW(nullptr, L"open", url, nullptr, nullptr, SW_SHOWNORMAL);
+    return 0;
 }
 
-void UiMainDialog::OnShowHideButton()
+LRESULT UiMainDialog::OnShowHideButton(WORD notify_code,
+                                       WORD control_id,
+                                       HWND control,
+                                       BOOL& handled)
 {
-    if (IsVisible())
-        Hide();
+    if (IsWindowVisible())
+        ShowWindow(SW_HIDE);
     else
-        ShowNormal();
+        ShowWindow(SW_SHOWNORMAL);
+
+    return 0;
 }
 
-void UiMainDialog::OnInstallServiceButton()
+LRESULT UiMainDialog::OnInstallServiceButton(WORD notify_code,
+                                             WORD control_id,
+                                             HWND control,
+                                             BOOL& handled)
 {
     if (host_pool_)
     {
@@ -303,95 +400,51 @@ void UiMainDialog::OnInstallServiceButton()
     {
         EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_GRAYED);
         EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_ENABLED);
-        EnableDlgItem(IDC_START_SERVER_BUTTON, false);
+        GetDlgItem(IDC_START_SERVER_BUTTON).EnableWindow(FALSE);
     }
+
+    return 0;
 }
 
-void UiMainDialog::OnRemoveServiceButton()
+LRESULT UiMainDialog::OnRemoveServiceButton(WORD notify_code,
+                                            WORD control_id,
+                                            HWND control,
+                                            BOOL& handled)
 {
     if (HostService::Remove())
     {
         EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_ENABLED);
         EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);
-        EnableDlgItem(IDC_START_SERVER_BUTTON, true);
+        GetDlgItem(IDC_START_SERVER_BUTTON).EnableWindow(TRUE);
     }
+
+    return 0;
 }
 
-INT_PTR UiMainDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT UiMainDialog::OnExitButton(WORD notify_code,
+                                   WORD control_id,
+                                   HWND control,
+                                   BOOL& handled)
 {
-    switch (msg)
-    {
-        case WM_INITDIALOG:
-            OnInitDialog();
-            break;
+    EndDialog(0);
+    return 0;
+}
 
-        case WM_COMMAND:
-        {
-            switch (LOWORD(wparam))
-            {
-                case IDC_START_SERVER_BUTTON:
-                    OnStartServerButton();
-                    break;
+LRESULT UiMainDialog::OnAboutButton(WORD notify_code,
+                                    WORD control_id,
+                                    HWND control,
+                                    BOOL& handled)
+{
+    UiAboutDialog().DoModal(*this);
+    return 0;
+}
 
-                case IDC_SETTINGS_BUTTON:
-                    OnSettingsButton();
-                    break;
-
-                case IDC_CONNECT_BUTTON:
-                    OnConnectButton();
-                    break;
-
-                case IDC_SERVER_DEFAULT_PORT_CHECK:
-                    OnDefaultPortClicked();
-                    break;
-
-                case ID_EXIT:
-                    EndDialog();
-                    break;
-
-                case ID_HELP:
-                    OnHelpButton();
-                    break;
-
-                case ID_ABOUT:
-                    UiAboutDialog().DoModal(hwnd());
-                    break;
-
-                case ID_USERS:
-                    UiUsersDialog().DoModal(hwnd());
-                    break;
-
-                case ID_SHOWHIDE:
-                    OnShowHideButton();
-                    break;
-
-                case ID_INSTALL_SERVICE:
-                    OnInstallServiceButton();
-                    break;
-
-                case ID_REMOVE_SERVICE:
-                    OnRemoveServiceButton();
-                    break;
-
-                case IDC_SESSION_TYPE_COMBO:
-                {
-                    if (HIWORD(wparam) == CBN_SELCHANGE)
-                        OnSessionTypeChanged();
-                }
-                break;
-            }
-        }
-        break;
-
-        case WM_CLOSE:
-            OnClose();
-            break;
-
-        default:
-            tray_icon_.HandleMessage(msg, wparam, lparam);
-            break;
-    }
-
+LRESULT UiMainDialog::OnUsersButton(WORD notify_code,
+                                    WORD control_id,
+                                    HWND control,
+                                    BOOL& handled)
+{
+    UiUsersDialog().DoModal(*this);
     return 0;
 }
 

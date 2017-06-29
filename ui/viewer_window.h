@@ -14,8 +14,13 @@
 #include "ui/video_window.h"
 #include "ui/about_dialog.h"
 #include "ui/settings_dialog.h"
-#include "ui/base/imagelist.h"
 #include "ui/base/toolbar.h"
+
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <atlctrls.h>
+#include <atlmisc.h>
 
 namespace aspia {
 
@@ -77,6 +82,7 @@ private:
     void OnToolBarDropDown(LPNMHDR phdr);
     void OnVideoFrameResize(WPARAM wParam, LPARAM lParam);
 
+    void AddToolBarIcon(UINT icon_id);
     void CreateToolBar();
     void ShowDropDownMenu(int button_id, UiRect& button_rect);
     int DoAutoSize(const DesktopSize& video_frame_size);
@@ -90,7 +96,7 @@ private:
     ClientConfig* config_;
 
     UiToolBar toolbar_;
-    UiImageList toolbar_imagelist_;
+    CImageListManaged toolbar_imagelist_;
 
     UiVideoWindow video_window_;
     Clipboard clipboard_;

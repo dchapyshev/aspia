@@ -6,46 +6,69 @@
 //
 
 #include "ui/auth_dialog.h"
-#include "ui/resource.h"
 #include "base/strings/unicode.h"
-#include "base/logging.h"
+
+#include <atlctrls.h>
 
 namespace aspia {
 
-INT_PTR UiAuthDialog::DoModal(HWND parent)
+LRESULT UiAuthDialog::OnInitDialog(UINT message,
+                                   WPARAM wparam,
+                                   LPARAM lparam,
+                                   BOOL& handled)
 {
-    return Run(UiModule().Current(), parent, IDD_AUTH);
-}
-
-void UiAuthDialog::OnInitDialog()
-{
-    SetForegroundWindowEx();
     CenterWindow();
+
+    DWORD active_thread_id =
+        GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
+
+    DWORD current_thread_id = GetCurrentThreadId();
+
+    if (active_thread_id != current_thread_id)
+    {
+        AttachThreadInput(current_thread_id, active_thread_id, TRUE);
+        SetForegroundWindow(*this);
+        AttachThreadInput(current_thread_id, active_thread_id, FALSE);
+    }
+
+    return 0;
 }
 
-void UiAuthDialog::OnClose()
+LRESULT UiAuthDialog::OnClose(UINT message,
+                              WPARAM wparam,
+                              LPARAM lparam,
+                              BOOL& handled)
 {
     EndDialog(IDCANCEL);
+    return 0;
 }
 
-void UiAuthDialog::OnOkButton()
+LRESULT UiAuthDialog::OnOkButton(WORD notify_code,
+                                 WORD control_id,
+                                 HWND control,
+                                 BOOL& handled)
 {
-    SecureString<std::wstring> username(GetDlgItemString(IDC_USERNAME_EDIT));
+    // TODO: Clear memory.
 
-    if (!username.empty())
-        UNICODEtoUTF8(username, username_);
+    WCHAR buffer[128];
 
-    SecureString<std::wstring> password(GetDlgItemString(IDC_PASSWORD_EDIT));
+    GetDlgItemTextW(IDC_USERNAME_EDIT, buffer, _countof(buffer));
+    UNICODEtoUTF8(buffer, username_);
 
-    if (!password.empty())
-        UNICODEtoUTF8(password, password_);
+    GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer, _countof(buffer));
+    UNICODEtoUTF8(buffer, password_);
 
     EndDialog(IDOK);
+    return 0;
 }
 
-void UiAuthDialog::OnCancelButton()
+LRESULT UiAuthDialog::OnCancelButton(WORD notify_code,
+                                     WORD control_id,
+                                     HWND control,
+                                     BOOL& handled)
 {
-    PostMessageW(WM_CLOSE, 0, 0);
+    PostMessageW(WM_CLOSE);
+    return 0;
 }
 
 const std::string& UiAuthDialog::UserName() const
@@ -56,37 +79,6 @@ const std::string& UiAuthDialog::UserName() const
 const std::string& UiAuthDialog::Password() const
 {
     return password_;
-}
-
-INT_PTR UiAuthDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
-{
-    switch (msg)
-    {
-        case WM_INITDIALOG:
-            OnInitDialog();
-            break;
-
-        case WM_COMMAND:
-        {
-            switch (LOWORD(wparam))
-            {
-                case IDOK:
-                    OnOkButton();
-                    break;
-
-                case IDCANCEL:
-                    OnCancelButton();
-                    break;
-            }
-        }
-        break;
-
-        case WM_CLOSE:
-            OnClose();
-            break;
-    }
-
-    return 0;
 }
 
 } // namespace aspia

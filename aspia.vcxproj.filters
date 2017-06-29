@@ -364,9 +364,6 @@
     <ClCompile Include="base\logging.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="ui\base\imagelist.cc">
-      <Filter>ui\base</Filter>
-    </ClCompile>
     <ClCompile Include="crypto\encryptor.cc">
       <Filter>crypto</Filter>
     </ClCompile>
@@ -420,9 +417,6 @@
     </ClCompile>
     <ClCompile Include="ui\get_stock_icon.cc">
       <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\base\edit.cc">
-      <Filter>ui\base</Filter>
     </ClCompile>
     <ClCompile Include="ui\base\dialog.cc">
       <Filter>ui\base</Filter>
@@ -482,12 +476,6 @@
       <Filter>protocol</Filter>
     </ClCompile>
     <ClCompile Include="ui\base\timer.cc">
-      <Filter>ui\base</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\base\combobox.cc">
-      <Filter>ui\base</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\base\static.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
   </ItemGroup>
@@ -830,9 +818,6 @@
     <ClInclude Include="ui\base\child_window.h">
       <Filter>ui\base</Filter>
     </ClInclude>
-    <ClInclude Include="ui\base\imagelist.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
     <ClInclude Include="ui\base\modal_dialog.h">
       <Filter>ui\base</Filter>
     </ClInclude>
@@ -905,15 +890,6 @@
     <ClInclude Include="proto\key_exchange.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
-    <ClInclude Include="ui\base\combobox.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\base\updown.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\base\trackbar.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
     <ClInclude Include="crypto\secure_string.h">
       <Filter>crypto</Filter>
     </ClInclude>
@@ -967,9 +943,6 @@
     </ClInclude>
     <ClInclude Include="ui\get_stock_icon.h">
       <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\base\edit.h">
-      <Filter>ui\base</Filter>
     </ClInclude>
     <ClInclude Include="ui\base\dialog.h">
       <Filter>ui\base</Filter>
@@ -1047,9 +1020,6 @@
       <Filter>ui\base</Filter>
     </ClInclude>
     <ClInclude Include="ui\base\timer.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\base\static.h">
       <Filter>ui\base</Filter>
     </ClInclude>
   </ItemGroup>

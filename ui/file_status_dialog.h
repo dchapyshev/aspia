@@ -9,10 +9,14 @@
 #define _ASPIA_UI__FILE_STATUS_DIALOG_H
 
 #include "ui/base/dialog.h"
-#include "ui/base/edit.h"
 #include "base/message_loop/message_loop_thread.h"
 #include "proto/file_transfer_session.pb.h"
 #include "proto/status.pb.h"
+
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <atlctrls.h>
 
 namespace aspia {
 

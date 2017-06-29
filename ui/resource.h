@@ -10,6 +10,7 @@
 
 #include <windows.h>
 #include <commctrl.h>
+#include <atlres.h>
 
 //
 // Icons
@@ -113,15 +114,14 @@
 #define ID_USERS                              509
 #define ID_ABOUT                              510
 #define ID_EXIT                               511
-#define ID_HELP                               512
-#define ID_EDIT                               513
-#define ID_DELETE                             514
-#define ID_ADD                                515
-#define ID_REFRESH                            516
-#define ID_FOLDER_ADD                         517
-#define ID_FOLDER_UP                          518
-#define ID_HOME                               519
-#define ID_SEND                               520
+#define ID_EDIT                               512
+#define ID_DELETE                             513
+#define ID_ADD                                514
+#define ID_REFRESH                            515
+#define ID_FOLDER_ADD                         516
+#define ID_FOLDER_UP                          517
+#define ID_HOME                               518
+#define ID_SEND                               519
 
 #define ID_KEY_CTRL_ESC                       600
 #define ID_KEY_ALT_TAB                        601

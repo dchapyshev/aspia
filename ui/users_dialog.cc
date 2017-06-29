@@ -12,6 +12,7 @@
 #include "base/process/process_helpers.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
+#include "base/logging.h"
 #include "crypto/secure_string.h"
 
 namespace aspia {
@@ -40,12 +41,55 @@ void UiUsersDialog::UpdateUserList()
     }
 }
 
+static int GetICLColor()
+{
+    DEVMODEW mode = { 0 };
+    mode.dmSize = sizeof(mode);
+
+    if (EnumDisplaySettingsW(nullptr, ENUM_CURRENT_SETTINGS, &mode))
+    {
+        switch (mode.dmBitsPerPel)
+        {
+            case 32:
+                return ILC_COLOR32;
+
+            case 24:
+                return ILC_COLOR24;
+
+            case 16:
+                return ILC_COLOR16;
+
+            case 8:
+                return ILC_COLOR8;
+
+            case 4:
+                return ILC_COLOR4;
+        }
+    }
+
+    return ILC_COLOR32;
+}
+
 void UiUsersDialog::OnInitDialog()
 {
-    if (imagelist_.CreateSmall())
+    if (imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
+                          GetSystemMetrics(SM_CYSMICON),
+                          ILC_MASK | GetICLColor(),
+                          1, 1))
     {
-        imagelist_.AddIcon(Module(), IDI_USER);
-        imagelist_.AddIcon(Module(), IDI_USER_DISABLED);
+        CIcon icon;
+
+        icon = AtlLoadIconImage(IDI_USER,
+                                LR_CREATEDIBSECTION,
+                                GetSystemMetrics(SM_CXSMICON),
+                                GetSystemMetrics(SM_CYSMICON));
+        imagelist_.AddIcon(icon);
+
+        icon = AtlLoadIconImage(IDI_USER_DISABLED,
+                                LR_CREATEDIBSECTION,
+                                GetSystemMetrics(SM_CXSMICON),
+                                GetSystemMetrics(SM_CYSMICON));
+        imagelist_.AddIcon(icon);
     }
 
     UiListView list(GetDlgItem(IDC_USER_LIST));

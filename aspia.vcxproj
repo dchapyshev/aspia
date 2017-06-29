@@ -141,16 +141,12 @@
     <ClCompile Include="ui\about_dialog.cc" />
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\child_window.cc" />
-    <ClCompile Include="ui\base\combobox.cc" />
     <ClCompile Include="ui\base\comboboxex.cc" />
     <ClCompile Include="ui\base\dialog.cc" />
-    <ClCompile Include="ui\base\edit.cc" />
-    <ClCompile Include="ui\base\imagelist.cc" />
     <ClCompile Include="ui\base\listview.cc" />
     <ClCompile Include="ui\base\modal_dialog.cc" />
     <ClCompile Include="ui\base\module.cc" />
     <ClCompile Include="ui\base\splitter.cc" />
-    <ClCompile Include="ui\base\static.cc" />
     <ClCompile Include="ui\base\timer.cc" />
     <ClCompile Include="ui\base\toolbar.cc" />
     <ClCompile Include="ui\base\tray_icon.cc" />
@@ -323,11 +319,8 @@
     <ClInclude Include="ui\about_dialog.h" />
     <ClInclude Include="ui\auth_dialog.h" />
     <ClInclude Include="ui\base\child_window.h" />
-    <ClInclude Include="ui\base\combobox.h" />
     <ClInclude Include="ui\base\comboboxex.h" />
     <ClInclude Include="ui\base\dialog.h" />
-    <ClInclude Include="ui\base\edit.h" />
-    <ClInclude Include="ui\base\imagelist.h" />
     <ClInclude Include="ui\base\listview.h" />
     <ClInclude Include="ui\base\modal_dialog.h" />
     <ClInclude Include="ui\base\module.h" />
@@ -336,12 +329,9 @@
     <ClInclude Include="ui\base\scoped_begin_paint.h" />
     <ClInclude Include="ui\base\size.h" />
     <ClInclude Include="ui\base\splitter.h" />
-    <ClInclude Include="ui\base\static.h" />
     <ClInclude Include="ui\base\timer.h" />
     <ClInclude Include="ui\base\toolbar.h" />
-    <ClInclude Include="ui\base\trackbar.h" />
     <ClInclude Include="ui\base\tray_icon.h" />
-    <ClInclude Include="ui\base\updown.h" />
     <ClInclude Include="ui\base\window.h" />
     <ClInclude Include="ui\file_manager.h" />
     <ClInclude Include="ui\file_manager_helpers.h" />
@@ -559,7 +549,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libglog/src/windows;$(SolutionDir)3rdparty/libvpx;$(SolutionDir)3rdparty/libyuv/include;$(SolutionDir)3rdparty/zlib-ng;$(SolutionDir)3rdparty/protobuf/src;$(SolutionDir)3rdparty/gflags/src;$(SolutionDir)3rdparty/libsodium/src/libsodium/include;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libglog/src/windows;$(SolutionDir)3rdparty/libvpx;$(SolutionDir)3rdparty/libyuv/include;$(SolutionDir)3rdparty/zlib-ng;$(SolutionDir)3rdparty/protobuf/src;$(SolutionDir)3rdparty/gflags/src;$(SolutionDir)3rdparty/libsodium/src/libsodium/include;$(SolutionDir)3rdparty/wtl/include;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -599,6 +589,9 @@
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <ResourceCompile />
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/wtl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

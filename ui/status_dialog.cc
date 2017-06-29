@@ -8,13 +8,10 @@
 #include "ui/status_dialog.h"
 #include "ui/status_code.h"
 #include "ui/resource.h"
-#include "ui/base/edit.h"
 #include "ui/base/module.h"
 #include "base/logging.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
-
-#include <windowsx.h>
 
 namespace aspia {
 
@@ -55,7 +52,7 @@ void UiStatusDialog::OnInitDialog()
 
 void UiStatusDialog::AddMessage(const std::wstring& message)
 {
-    UiEdit status_edit(GetDlgItem(IDC_STATUS_EDIT));
+    CEdit status_edit(GetDlgItem(IDC_STATUS_EDIT));
 
     WCHAR buffer[128];
 
@@ -71,7 +68,7 @@ void UiStatusDialog::AddMessage(const std::wstring& message)
         status_edit.AppendText(L": ");
     }
 
-    status_edit.AppendText(message);
+    status_edit.AppendText(message.c_str());
     status_edit.AppendText(L"\r\n");
 }
 

@@ -12,9 +12,14 @@
 #include "ui/base/toolbar.h"
 #include "ui/base/comboboxex.h"
 #include "ui/base/listview.h"
-#include "ui/base/imagelist.h"
-#include "ui/base/static.h"
+#include "ui/base/module.h"
 #include "proto/file_transfer_session.pb.h"
+
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <atlctrls.h>
+#include <atlmisc.h>
 
 namespace aspia {
 
@@ -73,6 +78,7 @@ private:
     void SetFolderViews();
     void OnListItemChanged();
     void OnSend();
+    void AddToolBarIcon(UINT icon_id);
 
     // ChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;
@@ -81,20 +87,20 @@ private:
     Delegate* delegate_ = nullptr;
 
     UiModule module_;
-    UiStatic title_;
+    CStatic title_;
 
     std::unique_ptr<proto::DirectoryList> directory_list_;
     UiListView list_;
-    UiImageList list_imagelist_;
+    CImageListManaged list_imagelist_;
 
     UiToolBar toolbar_;
-    UiImageList toolbar_imagelist_;
+    CImageListManaged toolbar_imagelist_;
 
     std::unique_ptr<proto::DriveList> drive_list_;
     UiComboBoxEx drive_combo_;
-    UiImageList drive_imagelist_;
+    CImageListManaged drive_imagelist_;
 
-    UiStatic status_;
+    CStatic status_;
 
     DISALLOW_COPY_AND_ASSIGN(UiFileManagerPanel);
 };

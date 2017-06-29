@@ -9,7 +9,6 @@
 #define _ASPIA_UI__BASE__COMBOBOXEX_H
 
 #include "ui/base/window.h"
-#include "ui/base/imagelist.h"
 
 #include <commctrl.h>
 #include <string>

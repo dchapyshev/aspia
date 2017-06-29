@@ -12,40 +12,72 @@
 #include "client/client_pool.h"
 #include "ui/base/modal_dialog.h"
 #include "ui/base/tray_icon.h"
+#include "ui/resource.h"
+
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <atlctrls.h>
 
 namespace aspia {
 
-class UiMainDialog : public UiModalDialog
+class UiMainDialog : public CDialogImpl<UiMainDialog>
 {
 public:
+    enum { IDD = IDD_MAIN };
+
     UiMainDialog() = default;
     ~UiMainDialog() = default;
 
-    INT_PTR DoModal(HWND parent) override;
-
 private:
-    INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) override;
+    BEGIN_MSG_MAP(UiMainDialog)
+        MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+        MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
-    void OnInitDialog();
-    void OnClose();
+        COMMAND_ID_HANDLER(IDC_START_SERVER_BUTTON, OnStartServerButton)
+        COMMAND_ID_HANDLER(IDC_SETTINGS_BUTTON, OnSettingsButton)
+        COMMAND_ID_HANDLER(IDC_CONNECT_BUTTON, OnConnectButton)
+        COMMAND_ID_HANDLER(IDC_SERVER_DEFAULT_PORT_CHECK, OnDefaultPortClicked)
+        COMMAND_ID_HANDLER(ID_EXIT, OnExitButton)
+        COMMAND_ID_HANDLER(ID_HELP, OnHelpButton)
+        COMMAND_ID_HANDLER(ID_ABOUT, OnAboutButton)
+        COMMAND_ID_HANDLER(ID_USERS, OnUsersButton)
+        COMMAND_ID_HANDLER(ID_SHOWHIDE, OnShowHideButton)
+        COMMAND_ID_HANDLER(ID_INSTALL_SERVICE, OnInstallServiceButton)
+        COMMAND_ID_HANDLER(ID_REMOVE_SERVICE, OnRemoveServiceButton)
 
-    void OnDefaultPortClicked();
-    void OnStartServerButton();
-    void OnSessionTypeChanged();
-    void OnSettingsButton();
-    void OnConnectButton();
+        COMMAND_HANDLER(IDC_SESSION_TYPE_COMBO, CBN_SELCHANGE, OnSessionTypeChanged)
+    END_MSG_MAP()
 
-    void OnHelpButton();
-    void OnShowHideButton();
-    void OnInstallServiceButton();
-    void OnRemoveServiceButton();
+    LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+
+    LRESULT OnDefaultPortClicked(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnStartServerButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnSessionTypeChanged(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnSettingsButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnConnectButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+
+    LRESULT OnExitButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnAboutButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnUsersButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnHelpButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnShowHideButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnInstallServiceButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnRemoveServiceButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     void InitAddressesList();
     void InitSessionTypesCombo();
     proto::SessionType GetSelectedSessionType();
+    int AddSessionType(CComboBox& combobox, UINT string_resource_id, proto::SessionType session_type);
+    void UpdateSessionType();
+
     void StopHostMode();
 
-    ScopedHMENU main_menu_;
+    CIcon small_icon_;
+    CIcon big_icon_;
+
+    CMenu main_menu_;
     UiTrayIcon tray_icon_;
 
     std::unique_ptr<HostPool> host_pool_;

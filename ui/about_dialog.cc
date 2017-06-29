@@ -6,75 +6,69 @@
 //
 
 #include "ui/about_dialog.h"
-#include "ui/base/static.h"
-#include "ui/base/edit.h"
-#include "ui/resource.h"
-#include "base/logging.h"
 
+#include <atlctrls.h>
+#include <atlmisc.h>
 #include <shellapi.h>
 
 namespace aspia {
 
-INT_PTR UiAboutDialog::DoModal(HWND parent)
+LRESULT UiAboutDialog::OnInitDialog(UINT message,
+                                    WPARAM wparam,
+                                    LPARAM lparam,
+                                    BOOL& handled)
 {
-    return Run(UiModule::Current(), parent, IDD_ABOUT);
+    icon_ = AtlLoadIconImage(IDI_MAIN, LR_CREATEDIBSECTION, 48, 48);
+
+    CStatic(GetDlgItem(IDC_ABOUT_ICON)).SetIcon(icon_);
+
+    CString about_text;
+    about_text.LoadStringW(IDS_ABOUT_STRING);
+
+    CEdit(GetDlgItem(IDC_ABOUT_EDIT)).SetWindowTextW(about_text);
+
+    GetDlgItem(IDC_DONATE_BUTTON).SetFocus();
+
+    return 0;
 }
 
-INT_PTR UiAboutDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT UiAboutDialog::OnClose(UINT message,
+                               WPARAM wparam,
+                               LPARAM lparam,
+                               BOOL& handled)
 {
-    switch (msg)
-    {
-        case WM_INITDIALOG:
-        {
-            icon_ = Module().Icon(IDI_MAIN, 48, 48, LR_CREATEDIBSECTION);
+    EndDialog(0);
+    return 0;
+}
 
-            UiStatic(GetDlgItem(IDC_ABOUT_ICON)).SetIcon(icon_);
+LRESULT UiAboutDialog::OnCloseButton(WORD notify_code,
+                                     WORD control_id,
+                                     HWND control,
+                                     BOOL& handled)
+{
+    EndDialog(0);
+    return 0;
+}
 
-            UiEdit(GetDlgItem(IDC_ABOUT_EDIT)).SetWindowString(
-                Module().String(IDS_ABOUT_STRING));
+LRESULT UiAboutDialog::OnDonateButton(WORD notify_code,
+                                      WORD control_id,
+                                      HWND control,
+                                      BOOL& handled)
+{
+    CString url;
+    url.LoadStringW(IDS_DONATE_LINK);
+    ShellExecuteW(nullptr, L"open", url, nullptr, nullptr, SW_SHOWNORMAL);
+    return 0;
+}
 
-            SetFocus(GetDlgItem(IDC_DONATE_BUTTON));
-        }
-        break;
-
-        case WM_COMMAND:
-        {
-            switch (LOWORD(wparam))
-            {
-                case IDOK:
-                    EndDialog();
-                    break;
-
-                case IDC_DONATE_BUTTON:
-                {
-                    ShellExecuteW(nullptr,
-                                  L"open",
-                                  Module().String(IDS_DONATE_LINK).c_str(),
-                                  nullptr,
-                                  nullptr,
-                                  SW_SHOWNORMAL);
-                }
-                break;
-
-                case IDC_SITE_BUTTON:
-                {
-                    ShellExecuteW(nullptr,
-                                  L"open",
-                                  Module().String(IDS_SITE_LINK).c_str(),
-                                  nullptr,
-                                  nullptr,
-                                  SW_SHOWNORMAL);
-                }
-                break;
-            }
-        }
-        break;
-
-        case WM_CLOSE:
-            EndDialog();
-            break;
-    }
-
+LRESULT UiAboutDialog::OnSiteButton(WORD notify_code,
+                                    WORD control_id,
+                                    HWND control,
+                                    BOOL& handled)
+{
+    CString url;
+    url.LoadStringW(IDS_SITE_LINK);
+    ShellExecuteW(nullptr, L"open", url, nullptr, nullptr, SW_SHOWNORMAL);
     return 0;
 }
 
