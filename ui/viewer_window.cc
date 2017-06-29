@@ -52,7 +52,7 @@ void UiViewerWindow::OnBeforeThreadRunning()
     }
     else
     {
-        ScopedHICON icon(UiModule::Current().small_icon(IDI_MAIN));
+        ScopedHICON icon(UiModule::Current().SmallIcon(IDI_MAIN));
         SetIcon(icon);
         SetCursor(LoadCursorW(nullptr, IDC_ARROW));
     }
@@ -195,7 +195,7 @@ void UiViewerWindow::OnCreate()
     std::wstring title(config_->address());
 
     title.append(L" - ");
-    title.append(UiModule().Current().string(IDS_APPLICATION_NAME));
+    title.append(UiModule().Current().String(IDS_APPLICATION_NAME));
 
     SetWindowTextW(hwnd(), title.c_str());
 
@@ -695,7 +695,7 @@ void UiViewerWindow::ShowDropDownMenu(int button_id, RECT* button_rect)
         tpm.cbSize = sizeof(TPMPARAMS);
         tpm.rcExclude = *button_rect;
 
-        ScopedHMENU menu(UiModule().Current().menu(IDR_SHORTCUTS));
+        ScopedHMENU menu(UiModule().Current().Menu(IDR_SHORTCUTS));
 
         TrackPopupMenuEx(GetSubMenu(menu, 0),
                          TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_VERTICAL,

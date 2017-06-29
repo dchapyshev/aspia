@@ -44,8 +44,8 @@ void UiUsersDialog::OnInitDialog()
 {
     if (imagelist_.CreateSmall())
     {
-        imagelist_.AddIcon(module(), IDI_USER);
-        imagelist_.AddIcon(module(), IDI_USER_DISABLED);
+        imagelist_.AddIcon(Module(), IDI_USER);
+        imagelist_.AddIcon(Module(), IDI_USER_DISABLED);
     }
 
     UiListView list(GetDlgItem(IDC_USER_LIST));
@@ -116,8 +116,8 @@ void UiUsersDialog::OnDeleteButton()
     if (user_index < 0 || user_index >= user_list_.size())
         return;
 
-    std::wstring title = module().string(IDS_CONFIRMATION);
-    std::wstring message_format = module().string(IDS_DELETE_USER_CONFORMATION);
+    std::wstring title = Module().String(IDS_CONFIRMATION);
+    std::wstring message_format = Module().String(IDS_DELETE_USER_CONFORMATION);
 
     SecureString<std::wstring> username;
     CHECK(UTF8toUNICODE(user_list_.host_user(user_index).username(), username));
@@ -147,7 +147,7 @@ void UiUsersDialog::OnOkButton()
 
 void UiUsersDialog::ShowUserPopupMenu()
 {
-    ScopedHMENU menu(module().menu(IDR_USER));
+    ScopedHMENU menu(Module().Menu(IDR_USER));
 
     if (menu.IsValid())
     {
@@ -192,7 +192,7 @@ void UiUsersDialog::OnUserListClicked()
 void UiUsersDialog::SetUserListModified()
 {
     HWND group = GetDlgItem(IDC_USERS_GROUPBOX);
-    SetWindowTextW(group, module().string(IDS_USER_LIST_MODIFIED).c_str());
+    SetWindowTextW(group, Module().String(IDS_USER_LIST_MODIFIED).c_str());
 }
 
 INT_PTR UiUsersDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)

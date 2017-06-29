@@ -98,19 +98,19 @@ void UiMainDialog::InitSessionTypesCombo()
     HWND combo = GetDlgItem(IDC_SESSION_TYPE_COMBO);
 
     ComboBox_AddItem(combo,
-                     module().string(IDS_SESSION_TYPE_DESKTOP_MANAGE),
+                     Module().String(IDS_SESSION_TYPE_DESKTOP_MANAGE),
                      proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
 
     ComboBox_AddItem(combo,
-                     module().string(IDS_SESSION_TYPE_DESKTOP_VIEW),
+                     Module().String(IDS_SESSION_TYPE_DESKTOP_VIEW),
                      proto::SessionType::SESSION_TYPE_DESKTOP_VIEW);
 
     ComboBox_AddItem(combo,
-                     module().string(IDS_SESSION_TYPE_FILE_TRANSFER),
+                     Module().String(IDS_SESSION_TYPE_FILE_TRANSFER),
                      proto::SessionType::SESSION_TYPE_FILE_TRANSFER);
 
     ComboBox_AddItem(combo,
-                     module().string(IDS_SESSION_TYPE_POWER_MANAGE),
+                     Module().String(IDS_SESSION_TYPE_POWER_MANAGE),
                      proto::SessionType::SESSION_TYPE_POWER_MANAGE);
 
     ComboBox_SelItemWithData(combo, proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
@@ -126,12 +126,12 @@ void UiMainDialog::OnInitDialog()
 {
     SetIcon(IDI_MAIN);
 
-    main_menu_.Reset(module().menu(IDR_MAIN));
+    main_menu_.Reset(Module().Menu(IDR_MAIN));
     SetMenu(hwnd(), main_menu_);
 
     tray_icon_.AddIcon(hwnd(),
                        IDI_MAIN,
-                       module().string(IDS_APPLICATION_NAME),
+                       Module().String(IDS_APPLICATION_NAME),
                        IDR_TRAY);
     tray_icon_.SetDefaultMenuItem(ID_SHOWHIDE);
 
@@ -281,7 +281,7 @@ void UiMainDialog::OnHelpButton()
 {
     ShellExecuteW(nullptr,
                   L"open",
-                  module().string(IDS_HELP_LINK).c_str(),
+                  Module().String(IDS_HELP_LINK).c_str(),
                   nullptr,
                   nullptr,
                   SW_SHOWNORMAL);

@@ -126,10 +126,10 @@ std::wstring GetDriveDisplayName(const proto::DriveListItem& item)
     switch (item.type())
     {
         case proto::DriveListItem::HOME_FOLDER:
-            return UiModule::Current().string(IDS_FT_HOME_FOLDER);
+            return UiModule::Current().String(IDS_FT_HOME_FOLDER);
 
         case proto::DriveListItem::DESKTOP_FOLDER:
-            return UiModule::Current().string(IDS_FT_DESKTOP_FOLDER);
+            return UiModule::Current().String(IDS_FT_DESKTOP_FOLDER);
 
         case proto::DriveListItem::CDROM:
         case proto::DriveListItem::FIXED:
@@ -157,28 +157,28 @@ std::wstring GetDriveDescription(proto::DriveListItem::Type type)
     switch (type)
     {
         case proto::DriveListItem::HOME_FOLDER:
-            return module.string(IDS_FT_DRIVE_DESC_HOME);
+            return module.String(IDS_FT_DRIVE_DESC_HOME);
 
         case proto::DriveListItem::DESKTOP_FOLDER:
-            return module.string(IDS_FT_DRIVE_DESC_DESKTOP);
+            return module.String(IDS_FT_DRIVE_DESC_DESKTOP);
 
         case proto::DriveListItem::CDROM:
-            return module.string(IDS_FT_DRIVE_DESC_CDROM);
+            return module.String(IDS_FT_DRIVE_DESC_CDROM);
 
         case proto::DriveListItem::FIXED:
-            return module.string(IDS_FT_DRIVE_DESC_FIXED);
+            return module.String(IDS_FT_DRIVE_DESC_FIXED);
 
         case proto::DriveListItem::REMOVABLE:
-            return module.string(IDS_FT_DRIVE_DESC_REMOVABLE);
+            return module.String(IDS_FT_DRIVE_DESC_REMOVABLE);
 
         case proto::DriveListItem::REMOTE:
-            return module.string(IDS_FT_DRIVE_DESC_REMOTE);
+            return module.String(IDS_FT_DRIVE_DESC_REMOTE);
 
         case proto::DriveListItem::RAM:
-            return module.string(IDS_FT_DRIVE_DESC_RAM);
+            return module.String(IDS_FT_DRIVE_DESC_RAM);
 
         default:
-            return module.string(IDS_FT_DRIVE_DESC_UNKNOWN);
+            return module.String(IDS_FT_DRIVE_DESC_UNKNOWN);
     }
 }
 
@@ -224,27 +224,27 @@ std::wstring SizeToString(uint64_t size)
 
     if (size >= kTB)
     {
-        units = module.string(IDS_FT_SIZE_TBYTES);
+        units = module.String(IDS_FT_SIZE_TBYTES);
         divider = kTB;
     }
     else if (size >= kGB)
     {
-        units = module.string(IDS_FT_SIZE_GBYTES);
+        units = module.String(IDS_FT_SIZE_GBYTES);
         divider = kGB;
     }
     else if (size >= kMB)
     {
-        units = module.string(IDS_FT_SIZE_MBYTES);
+        units = module.String(IDS_FT_SIZE_MBYTES);
         divider = kMB;
     }
     else if (size >= kKB)
     {
-        units = module.string(IDS_FT_SIZE_KBYTES);
+        units = module.String(IDS_FT_SIZE_KBYTES);
         divider = kKB;
     }
     else
     {
-        units = module.string(IDS_FT_SIZE_BYTES);
+        units = module.String(IDS_FT_SIZE_BYTES);
         divider = 1;
     }
 

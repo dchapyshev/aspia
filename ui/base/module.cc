@@ -68,7 +68,7 @@ static int GetLengthOfStringResource(HINSTANCE instance, UINT string_id)
     return -1;
 }
 
-std::wstring UiModule::string(UINT resource_id) const
+std::wstring UiModule::String(UINT resource_id) const
 {
     int length = GetLengthOfStringResource(instance_, resource_id);
 
@@ -82,7 +82,7 @@ std::wstring UiModule::string(UINT resource_id) const
     return string;
 }
 
-HICON UiModule::icon(UINT resource_id, int width, int height, UINT flags) const
+HICON UiModule::Icon(UINT resource_id, int width, int height, UINT flags) const
 {
     return reinterpret_cast<HICON>(LoadImageW(instance_,
                                               MAKEINTRESOURCEW(resource_id),
@@ -92,15 +92,15 @@ HICON UiModule::icon(UINT resource_id, int width, int height, UINT flags) const
                                               flags));
 }
 
-HICON UiModule::small_icon(UINT resource_id) const
+HICON UiModule::SmallIcon(UINT resource_id) const
 {
-    return icon(resource_id,
+    return Icon(resource_id,
                 GetSystemMetrics(SM_CXSMICON),
                 GetSystemMetrics(SM_CYSMICON),
                 LR_CREATEDIBSECTION);
 }
 
-HMENU UiModule::menu(UINT resource_id) const
+HMENU UiModule::Menu(UINT resource_id) const
 {
     return LoadMenuW(instance_, MAKEINTRESOURCEW(resource_id));
 }

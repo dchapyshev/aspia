@@ -22,7 +22,7 @@ public:
     bool Create(HWND parent, UINT resource_id, const UiModule& module);
 
     // Returns module instance from which the dialog is loaded.
-    const UiModule& module();
+    const UiModule& Module();
 
     void SetIcon(UINT resource_id);
 

@@ -39,14 +39,14 @@ void UiFileManager::OnBeforeThreadRunning()
 
     const UiModule& module = UiModule::Current();
 
-    if (!Create(nullptr, style, module.string(IDS_FT_FILE_TRANSFER)))
+    if (!Create(nullptr, style, module.String(IDS_FT_FILE_TRANSFER)))
     {
         LOG(ERROR) << "File manager window not created";
         runner_->PostQuit();
     }
     else
     {
-        ScopedHICON icon(module.small_icon(IDI_MAIN));
+        ScopedHICON icon(module.SmallIcon(IDI_MAIN));
         SetIcon(icon);
         SetCursor(LoadCursorW(nullptr, IDC_ARROW));
     }
@@ -81,14 +81,14 @@ void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> stat
     {
         case proto::RequestStatus::DRIVE_LIST:
         {
-            message = StringPrintfW(module.string(IDS_FT_OP_BROWSE_DRIVES_ERROR).c_str(),
+            message = StringPrintfW(module.String(IDS_FT_OP_BROWSE_DRIVES_ERROR).c_str(),
                                     status_code.c_str());
         }
         break;
 
         case proto::RequestStatus::DIRECTORY_LIST:
         {
-            message = StringPrintfW(module.string(IDS_FT_BROWSE_FOLDERS_ERROR).c_str(),
+            message = StringPrintfW(module.String(IDS_FT_BROWSE_FOLDERS_ERROR).c_str(),
                                     first_path.c_str(),
                                     status_code.c_str());
         }
@@ -96,7 +96,7 @@ void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> stat
 
         case proto::RequestStatus::CREATE_DIRECTORY:
         {
-            message = StringPrintfW(module.string(IDS_FT_OP_CREATE_FOLDER_ERROR).c_str(),
+            message = StringPrintfW(module.String(IDS_FT_OP_CREATE_FOLDER_ERROR).c_str(),
                                     first_path.c_str(),
                                     status_code.c_str());
         }
@@ -104,7 +104,7 @@ void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> stat
 
         case proto::RequestStatus::RENAME:
         {
-            message = StringPrintfW(module.string(IDS_FT_OP_RENAME_ERROR).c_str(),
+            message = StringPrintfW(module.String(IDS_FT_OP_RENAME_ERROR).c_str(),
                                     first_path.c_str(),
                                     second_path.c_str(),
                                     status_code.c_str());
@@ -113,7 +113,7 @@ void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> stat
 
         case proto::RequestStatus::REMOVE:
         {
-            message = StringPrintfW(module.string(IDS_FT_OP_REMOVE_ERROR).c_str(),
+            message = StringPrintfW(module.String(IDS_FT_OP_REMOVE_ERROR).c_str(),
                                     first_path.c_str(),
                                     status_code.c_str());
         }
@@ -121,7 +121,7 @@ void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> stat
 
         case proto::RequestStatus::SEND_FILE:
         {
-            message = StringPrintfW(module.string(IDS_FT_OP_SEND_FILE_ERROR).c_str(),
+            message = StringPrintfW(module.String(IDS_FT_OP_SEND_FILE_ERROR).c_str(),
                                     first_path.c_str(),
                                     status_code.c_str());
         }
@@ -129,7 +129,7 @@ void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> stat
 
         case proto::RequestStatus::RECIEVE_FILE:
         {
-            message = StringPrintfW(module.string(IDS_FT_OP_RECIEVE_FILE_ERROR).c_str(),
+            message = StringPrintfW(module.String(IDS_FT_OP_RECIEVE_FILE_ERROR).c_str(),
                                     first_path.c_str(),
                                     status_code.c_str());
         }

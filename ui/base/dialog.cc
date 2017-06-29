@@ -58,19 +58,19 @@ INT_PTR CALLBACK UiDialog::DialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM
     return 0;
 }
 
-const UiModule& UiDialog::module()
+const UiModule& UiDialog::Module()
 {
     return module_;
 }
 
 void UiDialog::SetIcon(UINT resource_id)
 {
-    small_icon_ = module().icon(resource_id,
+    small_icon_ = Module().Icon(resource_id,
                                 GetSystemMetrics(SM_CXSMICON),
                                 GetSystemMetrics(SM_CYSMICON),
                                 LR_CREATEDIBSECTION);
 
-    big_icon_ = module().icon(resource_id,
+    big_icon_ = Module().Icon(resource_id,
                               GetSystemMetrics(SM_CXICON),
                               GetSystemMetrics(SM_CYICON),
                               LR_CREATEDIBSECTION);
@@ -117,7 +117,7 @@ bool UiDialog::SetDlgItemString(int item_id, const std::wstring& string)
 
 bool UiDialog::SetDlgItemString(int item_id, UINT resource_id)
 {
-    return SetDlgItemString(item_id, module().string(resource_id));
+    return SetDlgItemString(item_id, Module().String(resource_id));
 }
 
 } // namespace aspia

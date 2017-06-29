@@ -84,7 +84,7 @@ int UiImageList::AddIcon(const UiModule& module, UINT resource_id)
 
     if (ImageList_GetIconSize(list_, &width, &height))
     {
-        ScopedHICON icon(module.icon(resource_id, width, height, LR_CREATEDIBSECTION));
+        ScopedHICON icon(module.Icon(resource_id, width, height, LR_CREATEDIBSECTION));
         return AddIcon(icon);
     }
 

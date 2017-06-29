@@ -36,7 +36,7 @@ void UiUserPropDialog::InsertSessionType(UiListView& list,
                                          proto::SessionType session_type,
                                          UINT string_id)
 {
-    int item_index = list.AddItem(module().string(string_id), session_type);
+    int item_index = list.AddItem(Module().String(string_id), session_type);
 
     list.SetCheckState(item_index,
                        (user_->session_types() & session_type) ? true : false);
@@ -149,7 +149,7 @@ void UiUserPropDialog::OnOkButton()
     if (!HostUserList::IsValidUserName(username))
     {
         MessageBoxW(hwnd(),
-                    module().string(IDS_INVALID_USERNAME).c_str(),
+                    Module().String(IDS_INVALID_USERNAME).c_str(),
                     nullptr,
                     MB_OK | MB_ICONWARNING);
         return;
@@ -167,7 +167,7 @@ void UiUserPropDialog::OnOkButton()
         if (!user_list_.IsUniqueUserName(username))
         {
             MessageBoxW(hwnd(),
-                        module().string(IDS_USER_ALREADY_EXISTS).c_str(),
+                        Module().String(IDS_USER_ALREADY_EXISTS).c_str(),
                         nullptr,
                         MB_OK | MB_ICONWARNING);
             return;
@@ -180,7 +180,7 @@ void UiUserPropDialog::OnOkButton()
         if (!HostUserList::IsValidPassword(password))
         {
             MessageBoxW(hwnd(),
-                        module().string(IDS_INVALID_PASSWORD).c_str(),
+                        Module().String(IDS_INVALID_PASSWORD).c_str(),
                         nullptr,
                         MB_OK | MB_ICONWARNING);
             return;
@@ -192,7 +192,7 @@ void UiUserPropDialog::OnOkButton()
         if (password != password_retry)
         {
             MessageBoxW(hwnd(),
-                        module().string(IDS_PASSWORDS_NOT_MATCH).c_str(),
+                        Module().String(IDS_PASSWORDS_NOT_MATCH).c_str(),
                         nullptr,
                         MB_OK | MB_ICONWARNING);
             return;

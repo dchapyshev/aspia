@@ -25,10 +25,10 @@ public:
 
     HINSTANCE Handle() const;
 
-    std::wstring string(UINT resource_id) const;
-    HICON icon(UINT resource_id, int width, int height, UINT flags) const;
-    HICON small_icon(UINT resource_id) const;
-    HMENU menu(UINT resource_id) const;
+    std::wstring String(UINT resource_id) const;
+    HICON Icon(UINT resource_id, int width, int height, UINT flags) const;
+    HICON SmallIcon(UINT resource_id) const;
+    HMENU Menu(UINT resource_id) const;
 
 private:
     explicit UiModule(HINSTANCE instance);

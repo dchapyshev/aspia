@@ -44,7 +44,7 @@ void UiFileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_l
     int icon_index = drive_imagelist_.AddIcon(icon);
 
     int root_index =
-        drive_combo_.AddItem(module_.string(IDS_FT_COMPUTER),
+        drive_combo_.AddItem(module_.String(IDS_FT_COMPUTER),
                              icon_index, 0, kComputerIndex);
 
     const int count = drive_list_->item_size();
@@ -143,10 +143,10 @@ void UiFileManagerPanel::SetComputerViews()
 {
     list_.DeleteAllColumns();
 
-    list_.AddColumn(module_.string(IDS_FT_COLUMN_NAME), 130);
-    list_.AddColumn(module_.string(IDS_FT_COLUMN_TYPE), 150);
-    list_.AddColumn(module_.string(IDS_FT_COLUMN_TOTAL_SPACE), 80);
-    list_.AddColumn(module_.string(IDS_FT_COLUMN_FREE_SPACE), 80);
+    list_.AddColumn(module_.String(IDS_FT_COLUMN_NAME), 130);
+    list_.AddColumn(module_.String(IDS_FT_COLUMN_TYPE), 150);
+    list_.AddColumn(module_.String(IDS_FT_COLUMN_TOTAL_SPACE), 80);
+    list_.AddColumn(module_.String(IDS_FT_COLUMN_FREE_SPACE), 80);
 
     list_.ModifyStyle(0, LVS_SINGLESEL);
 
@@ -163,10 +163,10 @@ void UiFileManagerPanel::SetFolderViews()
 {
     list_.DeleteAllColumns();
 
-    list_.AddColumn(module_.string(IDS_FT_COLUMN_NAME), 180);
-    list_.AddColumn(module_.string(IDS_FT_COLUMN_SIZE), 70);
-    list_.AddColumn(module_.string(IDS_FT_COLUMN_TYPE), 100);
-    list_.AddColumn(module_.string(IDS_FT_COLUMN_MODIFIED), 100);
+    list_.AddColumn(module_.String(IDS_FT_COLUMN_NAME), 180);
+    list_.AddColumn(module_.String(IDS_FT_COLUMN_SIZE), 70);
+    list_.AddColumn(module_.String(IDS_FT_COLUMN_TYPE), 100);
+    list_.AddColumn(module_.String(IDS_FT_COLUMN_MODIFIED), 100);
 
     list_.ModifyStyle(LVS_SINGLESEL, 0);
 
@@ -187,9 +187,9 @@ void UiFileManagerPanel::OnCreate()
     std::wstring panel_name;
 
     if (panel_type_ == PanelType::LOCAL)
-        panel_name = module_.string(IDS_FT_LOCAL_COMPUTER);
+        panel_name = module_.String(IDS_FT_LOCAL_COMPUTER);
     else
-        panel_name = module_.string(IDS_FT_REMOTE_COMPUTER);
+        panel_name = module_.String(IDS_FT_REMOTE_COMPUTER);
 
     title_.Attach(CreateWindowExW(0,
                                   WC_STATICW,
@@ -252,9 +252,9 @@ void UiFileManagerPanel::OnCreate()
     }
 
     if (panel_type_ == PanelType::LOCAL)
-        toolbar_.SetButtonText(ID_SEND, module_.string(IDS_FT_SEND));
+        toolbar_.SetButtonText(ID_SEND, module_.String(IDS_FT_SEND));
     else
-        toolbar_.SetButtonText(ID_SEND, module_.string(IDS_FT_RECIEVE));
+        toolbar_.SetButtonText(ID_SEND, module_.String(IDS_FT_RECIEVE));
 
     list_.Create(hwnd(),
                  WS_EX_CLIENTEDGE,
@@ -551,7 +551,7 @@ void UiFileManagerPanel::OnFolderCreate()
     ScopedHICON folder_icon(GetDirectoryIcon());
     int icon_index = list_imagelist_.AddIcon(folder_icon);
 
-    std::wstring folder_name = module_.string(IDS_FT_NEW_FOLDER);
+    std::wstring folder_name = module_.String(IDS_FT_NEW_FOLDER);
 
     SetFocus(list_);
 
@@ -583,7 +583,7 @@ void UiFileManagerPanel::OnRemove()
     if (!selected_count)
         return;
 
-    std::wstring title = module_.string(IDS_CONFIRMATION);
+    std::wstring title = module_.String(IDS_CONFIRMATION);
     std::wstring object_list;
     std::wstring format;
 
@@ -601,15 +601,15 @@ void UiFileManagerPanel::OnRemove()
             directory_list_->item(object_index);
 
         if (item.type() == proto::DirectoryListItem::DIRECTORY)
-            format = module_.string(IDS_FT_DELETE_CONFORM_DIR);
+            format = module_.String(IDS_FT_DELETE_CONFORM_DIR);
         else
-            format = module_.string(IDS_FT_DELETE_CONFORM_FILE);
+            format = module_.String(IDS_FT_DELETE_CONFORM_FILE);
 
         object_list = UNICODEfromUTF8(item.name());
     }
     else
     {
-        format = module_.string(IDS_FT_DELETE_CONFORM_MULTI);
+        format = module_.String(IDS_FT_DELETE_CONFORM_MULTI);
 
         for (int item_index = list_.GetFirstSelectedItem();
              item_index != -1;
@@ -707,7 +707,7 @@ void UiFileManagerPanel::OnListItemChanged()
         toolbar_.EnableButton(ID_SEND, enable);
     }
 
-    std::wstring format = module_.string(IDS_FT_SELECTED_OBJECT_COUNT);
+    std::wstring format = module_.String(IDS_FT_SELECTED_OBJECT_COUNT);
     std::wstring status = StringPrintfW(format.c_str(), count);
 
     SetWindowTextW(status_, status.c_str());

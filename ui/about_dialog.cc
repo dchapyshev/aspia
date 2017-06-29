@@ -25,11 +25,11 @@ INT_PTR UiAboutDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
     {
         case WM_INITDIALOG:
         {
-            icon_ = module().icon(IDI_MAIN, 48, 48, LR_CREATEDIBSECTION);
+            icon_ = Module().Icon(IDI_MAIN, 48, 48, LR_CREATEDIBSECTION);
             Static_SetIcon(GetDlgItem(IDC_ABOUT_ICON), icon_);
 
             SetWindowTextW(GetDlgItem(IDC_ABOUT_EDIT),
-                           module().string(IDS_ABOUT_STRING).c_str());
+                           Module().String(IDS_ABOUT_STRING).c_str());
 
             SetFocus(GetDlgItem(IDC_DONATE_BUTTON));
         }
@@ -47,7 +47,7 @@ INT_PTR UiAboutDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
                 {
                     ShellExecuteW(nullptr,
                                   L"open",
-                                  module().string(IDS_DONATE_LINK).c_str(),
+                                  Module().String(IDS_DONATE_LINK).c_str(),
                                   nullptr,
                                   nullptr,
                                   SW_SHOWNORMAL);
@@ -58,7 +58,7 @@ INT_PTR UiAboutDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
                 {
                     ShellExecuteW(nullptr,
                                   L"open",
-                                  module().string(IDS_SITE_LINK).c_str(),
+                                  Module().String(IDS_SITE_LINK).c_str(),
                                   nullptr,
                                   nullptr,
                                   SW_SHOWNORMAL);

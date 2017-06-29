@@ -31,7 +31,7 @@ INT_PTR UiStatusDialog::DoModal(HWND parent)
 
 void UiStatusDialog::SetDestonation(const std::wstring& address, uint16_t port)
 {
-    std::wstring format = module().string(IDS_CONNECTION);
+    std::wstring format = Module().String(IDS_CONNECTION);
 
     std::wstring message =
         StringPrintfW(format.c_str(), address.c_str(), port);
@@ -41,7 +41,7 @@ void UiStatusDialog::SetDestonation(const std::wstring& address, uint16_t port)
 
 void UiStatusDialog::SetStatus(proto::Status status)
 {
-    AddMessage(StatusCodeToString(module(), status));
+    AddMessage(StatusCodeToString(Module(), status));
 }
 
 void UiStatusDialog::OnInitDialog()

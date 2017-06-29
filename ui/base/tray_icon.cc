@@ -58,7 +58,7 @@ bool UiTrayIcon::AddIcon(HWND hwnd, HICON icon, const std::wstring& tooltip, UIN
 
 bool UiTrayIcon::AddIcon(HWND hwnd, UINT icon_id, const std::wstring& tooltip, UINT menu_id)
 {
-    ScopedHICON icon(UiModule::Current().icon(icon_id,
+    ScopedHICON icon(UiModule::Current().Icon(icon_id,
                                               GetSystemMetrics(SM_CXSMICON),
                                               GetSystemMetrics(SM_CYSMICON),
                                               LR_DEFAULTCOLOR | LR_DEFAULTSIZE));
@@ -110,7 +110,7 @@ bool UiTrayIcon::SetIcon(HICON icon)
 
 bool UiTrayIcon::SetIcon(UINT icon_id)
 {
-    ScopedHICON icon(UiModule::Current().icon(icon_id,
+    ScopedHICON icon(UiModule::Current().Icon(icon_id,
                                               GetSystemMetrics(SM_CXSMICON),
                                               GetSystemMetrics(SM_CYSMICON),
                                               LR_DEFAULTCOLOR | LR_DEFAULTSIZE));
@@ -124,7 +124,7 @@ bool UiTrayIcon::HandleMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 
     if (LOWORD(lparam) == WM_RBUTTONUP)
     {
-        ScopedHMENU menu(UiModule::Current().menu(nid_.uID));
+        ScopedHMENU menu(UiModule::Current().Menu(nid_.uID));
 
         HMENU popup_menu = GetSubMenu(menu, 0);
 

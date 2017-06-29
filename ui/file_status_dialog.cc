@@ -57,7 +57,7 @@ void UiFileStatusDialog::OnInitDialog()
     SetTopMost();
     SetIcon(IDI_MAIN);
 
-    WriteLog(module().string(IDS_FT_OP_SESSION_START),
+    WriteLog(Module().String(IDS_FT_OP_SESSION_START),
              proto::Status::STATUS_SUCCESS);
 
     SetFocus(GetDlgItem(IDC_MINIMIZE_BUTTON));
@@ -181,7 +181,7 @@ void UiFileStatusDialog::WriteLog(const std::wstring& message, proto::Status sta
     if (status != proto::Status::STATUS_SUCCESS)
     {
         edit.AppendText(L" (");
-        edit.AppendText(StatusCodeToString(module(), status));
+        edit.AppendText(StatusCodeToString(Module(), status));
         edit.AppendText(L")");
     }
 
@@ -207,27 +207,27 @@ void UiFileStatusDialog::SetRequestStatus(const proto::RequestStatus& status)
     {
         case proto::RequestStatus::DRIVE_LIST:
         {
-            message = module().string(IDS_FT_OP_BROWSE_DRIVES);
+            message = Module().String(IDS_FT_OP_BROWSE_DRIVES);
         }
         break;
 
         case proto::RequestStatus::DIRECTORY_LIST:
         {
-            message = StringPrintfW(module().string(IDS_FT_OP_BROWSE_FOLDERS).c_str(),
+            message = StringPrintfW(Module().String(IDS_FT_OP_BROWSE_FOLDERS).c_str(),
                                     first_path.c_str());
         }
         break;
 
         case proto::RequestStatus::CREATE_DIRECTORY:
         {
-            message = StringPrintfW(module().string(IDS_FT_OP_CREATE_FOLDER).c_str(),
+            message = StringPrintfW(Module().String(IDS_FT_OP_CREATE_FOLDER).c_str(),
                                     first_path.c_str());
         }
         break;
 
         case proto::RequestStatus::RENAME:
         {
-            message = StringPrintfW(module().string(IDS_FT_OP_RENAME).c_str(),
+            message = StringPrintfW(Module().String(IDS_FT_OP_RENAME).c_str(),
                                     first_path.c_str(),
                                     second_path.c_str());
         }
@@ -235,21 +235,21 @@ void UiFileStatusDialog::SetRequestStatus(const proto::RequestStatus& status)
 
         case proto::RequestStatus::REMOVE:
         {
-            message = StringPrintfW(module().string(IDS_FT_OP_REMOVE).c_str(),
+            message = StringPrintfW(Module().String(IDS_FT_OP_REMOVE).c_str(),
                                     first_path.c_str());
         }
         break;
 
         case proto::RequestStatus::SEND_FILE:
         {
-            message = StringPrintfW(module().string(IDS_FT_OP_SEND_FILE).c_str(),
+            message = StringPrintfW(Module().String(IDS_FT_OP_SEND_FILE).c_str(),
                                     first_path.c_str());
         }
         break;
 
         case proto::RequestStatus::RECIEVE_FILE:
         {
-            message = StringPrintfW(module().string(IDS_FT_OP_RECIEVE_FILE).c_str(),
+            message = StringPrintfW(Module().String(IDS_FT_OP_RECIEVE_FILE).c_str(),
                                     first_path.c_str());
         }
         break;

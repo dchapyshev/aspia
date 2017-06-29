@@ -14,14 +14,15 @@
 
 namespace aspia {
 
-static INLINE std::wstring StatusCodeToString(const UiModule& module, proto::Status status)
+static INLINE std::wstring StatusCodeToString(const UiModule& module,
+                                              proto::Status status)
 {
     UINT resource_id = status + IDS_STATUS_MIN;
 
     if (!Status_IsValid(status))
         resource_id = IDS_STATUS_UNKNOWN;
 
-    return module.string(resource_id);
+    return module.String(resource_id);
 }
 
 } // namespace aspia

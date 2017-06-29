@@ -55,14 +55,14 @@ void UiSettingsDialog::InitColorDepthList()
 {
     HWND combo = GetDlgItem(IDC_COLOR_DEPTH_COMBO);
 
-    ComboBox_AddItem(combo, module().string(IDS_DM_32BIT), kARGB);
-    ComboBox_AddItem(combo, module().string(IDS_DM_24BIT), kRGB888);
-    ComboBox_AddItem(combo, module().string(IDS_DM_16BIT), kRGB565);
-    ComboBox_AddItem(combo, module().string(IDS_DM_15BIT), kRGB555);
-    ComboBox_AddItem(combo, module().string(IDS_DM_12BIT), kRGB444);
-    ComboBox_AddItem(combo, module().string(IDS_DM_8BIT),  kRGB332);
-    ComboBox_AddItem(combo, module().string(IDS_DM_6BIT),  kRGB222);
-    ComboBox_AddItem(combo, module().string(IDS_DM_3BIT),  kRGB111);
+    ComboBox_AddItem(combo, Module().String(IDS_DM_32BIT), kARGB);
+    ComboBox_AddItem(combo, Module().String(IDS_DM_24BIT), kRGB888);
+    ComboBox_AddItem(combo, Module().String(IDS_DM_16BIT), kRGB565);
+    ComboBox_AddItem(combo, Module().String(IDS_DM_15BIT), kRGB555);
+    ComboBox_AddItem(combo, Module().String(IDS_DM_12BIT), kRGB444);
+    ComboBox_AddItem(combo, Module().String(IDS_DM_8BIT),  kRGB332);
+    ComboBox_AddItem(combo, Module().String(IDS_DM_6BIT),  kRGB222);
+    ComboBox_AddItem(combo, Module().String(IDS_DM_3BIT),  kRGB111);
 
     PixelFormat format(ConvertFromVideoPixelFormat(config_.pixel_format()));
 
@@ -117,7 +117,7 @@ void UiSettingsDialog::InitCodecList()
 
 void UiSettingsDialog::UpdateCompressionRatio(int compression_ratio)
 {
-    std::wstring format = module().string(IDS_DM_COMPRESSION_RATIO_FORMAT);
+    std::wstring format = Module().String(IDS_DM_COMPRESSION_RATIO_FORMAT);
 
     SetDlgItemString(IDC_COMPRESS_RATIO_TEXT,
                      StringPrintfW(format.c_str(), compression_ratio));
