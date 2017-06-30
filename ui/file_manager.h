@@ -10,20 +10,19 @@
 
 #include "base/message_loop/message_loop_thread.h"
 #include "proto/file_transfer_session.pb.h"
-#include "ui/base/child_window.h"
-#include "ui/base/splitter.h"
 #include "ui/file_manager_panel.h"
 
 #include <atlbase.h>
 #include <atlapp.h>
 #include <atlwin.h>
 #include <atlctrls.h>
+#include <atlsplit.h>
 #include <atlmisc.h>
 
 namespace aspia {
 
 class UiFileManager :
-    public UiChildWindow,
+    public CWindowImpl<UiFileManager, CWindow, CFrameWinTraits>,
     private MessageLoopThread::Delegate,
     private UiFileManagerPanel::Delegate
 {
@@ -93,14 +92,19 @@ private:
                          const std::string& path,
                          const std::string& item_name) override;
 
-    // UiChildWindow implementation.
-    bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;
+    BEGIN_MSG_MAP(UiFileManager)
+        MESSAGE_HANDLER(WM_CREATE, OnCreate)
+        MESSAGE_HANDLER(WM_SIZE, OnSize)
+        MESSAGE_HANDLER(WM_GETMINMAXINFO, OnGetMinMaxInfo)
+        MESSAGE_HANDLER(WM_CLOSE, OnClose)
+        MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+    END_MSG_MAP()
 
-    void OnCreate();
-    void OnDestroy();
-    void OnSize(int width, int height);
-    void OnGetMinMaxInfo(LPMINMAXINFO mmi);
-    void OnClose();
+    LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
 
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
@@ -109,7 +113,10 @@ private:
 
     UiFileManagerPanel local_panel_;
     UiFileManagerPanel remote_panel_;
-    UiSplitter splitter_;
+    CSplitterWindow splitter_;
+
+    CIcon small_icon_;
+    CIcon big_icon_;
 
     DISALLOW_COPY_AND_ASSIGN(UiFileManager);
 };

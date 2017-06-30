@@ -177,11 +177,13 @@ void UiViewerWindow::CreateToolBar()
 {
     const UiModule& module = UiModule().Current();
 
-    toolbar_.Create(hwnd(), TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS);
+    toolbar_.Create(hwnd(), 0, 0,
+                    WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT |
+                    TBSTYLE_LIST | TBSTYLE_TOOLTIPS);
 
-    toolbar_.ModifyExtendedStyle(0, TBSTYLE_EX_DRAWDDARROWS |
-                                    TBSTYLE_EX_MIXEDBUTTONS |
-                                    TBSTYLE_EX_DOUBLEBUFFER);
+    toolbar_.SetExtendedStyle(TBSTYLE_EX_DRAWDDARROWS |
+                              TBSTYLE_EX_MIXEDBUTTONS |
+                              TBSTYLE_EX_DOUBLEBUFFER);
 
     TBBUTTON kButtons[] =
     {
@@ -200,7 +202,7 @@ void UiViewerWindow::CreateToolBar()
         {  7, ID_EXIT,       TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                { 0 }, 0, -1 }
     };
 
-    toolbar_.ButtonStructSize(sizeof(kButtons[0]));
+    toolbar_.SetButtonStructSize(sizeof(kButtons[0]));
     toolbar_.AddButtons(_countof(kButtons), kButtons);
 
     if (toolbar_imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
@@ -222,9 +224,15 @@ void UiViewerWindow::CreateToolBar()
 
     if (config_->session_type() == proto::SessionType::SESSION_TYPE_DESKTOP_VIEW)
     {
-        toolbar_.SetButtonState(ID_POWER, 0);
-        toolbar_.SetButtonState(ID_CAD, 0);
-        toolbar_.SetButtonState(ID_SHORTCUTS, 0);
+        TBBUTTONINFOW button_info;
+
+        button_info.cbSize = sizeof(button_info);
+        button_info.dwMask = TBIF_STATE;
+        button_info.fsState = 0;
+
+        toolbar_.SetButtonInfo(ID_POWER, &button_info);
+        toolbar_.SetButtonInfo(ID_CAD, &button_info);
+        toolbar_.SetButtonInfo(ID_SHORTCUTS, &button_info);
     }
 }
 
@@ -235,7 +243,7 @@ void UiViewerWindow::OnCreate()
     title.append(L" - ");
     title.append(UiModule().Current().String(IDS_APPLICATION_NAME));
 
-    SetWindowString(title);
+    SetWindowTextW(hwnd(), title.c_str());
 
     CreateToolBar();
     video_window_.Create(hwnd(), WS_CHILD);

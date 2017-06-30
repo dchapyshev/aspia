@@ -8,7 +8,6 @@
 #include "ui/file_manager.h"
 #include "ui/resource.h"
 #include "ui/status_code.h"
-#include "ui/base/module.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "base/logging.h"
@@ -17,6 +16,7 @@ namespace aspia {
 
 static const int kDefaultWindowWidth = 980;
 static const int kDefaultWindowHeight = 700;
+static const int kBorderSize = 3;
 
 UiFileManager::UiFileManager(Delegate* delegate) :
     delegate_(delegate)
@@ -37,18 +37,17 @@ void UiFileManager::OnBeforeThreadRunning()
     const DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU |
         WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
 
-    const UiModule& module = UiModule::Current();
+    CString title;
+    title.LoadStringW(IDS_FT_FILE_TRANSFER);
 
-    if (!Create(nullptr, style, module.String(IDS_FT_FILE_TRANSFER)))
+    if (!Create(nullptr, 0, title, style))
     {
         LOG(ERROR) << "File manager window not created";
         runner_->PostQuit();
     }
     else
     {
-        CIcon icon(module.SmallIcon(IDI_MAIN));
-        SetIcon(icon);
-        SetCursor(LoadCursorW(nullptr, IDC_ARROW));
+        ShowWindow(SW_SHOW);
     }
 }
 
@@ -69,8 +68,6 @@ void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> stat
         runner_->PostTask(std::bind(&UiFileManager::ReadRequestStatus, this, status));
         return;
     }
-
-    const UiModule& module = UiModule::Current();
 
     CString status_code = StatusCodeToString(status->code());
     std::wstring first_path = UNICODEfromUTF8(status->first_path());
@@ -143,7 +140,7 @@ void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> stat
         break;
     }
 
-    ::MessageBoxW(hwnd(), message, nullptr, MB_ICONWARNING | MB_OK);
+    MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
 }
 
 void UiFileManager::ReadDriveList(PanelType panel_type,
@@ -208,87 +205,108 @@ void UiFileManager::OnRemoveRequest(PanelType panel_type,
     delegate_->OnRemoveRequest(panel_type, path, item_name);
 }
 
-void UiFileManager::OnCreate()
+LRESULT UiFileManager::OnCreate(UINT message,
+                                WPARAM wparam,
+                                LPARAM lparam,
+                                BOOL& handled)
 {
-    splitter_.CreateWithProportion(hwnd());
+    SetCursor(LoadCursorW(nullptr, IDC_ARROW));
+
+    small_icon_ = AtlLoadIconImage(IDI_MAIN,
+                                   LR_CREATEDIBSECTION,
+                                   GetSystemMetrics(SM_CXSMICON),
+                                   GetSystemMetrics(SM_CYSMICON));
+    SetIcon(small_icon_, FALSE);
+
+    big_icon_ = AtlLoadIconImage(IDI_MAIN,
+                                 LR_CREATEDIBSECTION,
+                                 GetSystemMetrics(SM_CXICON),
+                                 GetSystemMetrics(SM_CYICON));
+    SetIcon(small_icon_, TRUE);
+
+    CRect client_rect;
+    GetClientRect(client_rect);
+
+    splitter_.Create(*this, client_rect, nullptr,
+                     WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
+
+    splitter_.SetActivePane(SPLIT_PANE_LEFT);
+    splitter_.SetSplitterExtendedStyle(SPLIT_PROPORTIONAL);
+    splitter_.SetSplitterPos(-1);
+    splitter_.m_cxySplitBar = 5;
+    splitter_.m_cxyMin = 0;
+    splitter_.m_bFullDrag = false;
 
     local_panel_.CreatePanel(splitter_, UiFileManager::PanelType::LOCAL, this);
     remote_panel_.CreatePanel(splitter_, UiFileManager::PanelType::REMOTE, this);
 
-    splitter_.SetPanels(local_panel_, remote_panel_);
+    splitter_.SetSplitterPane(SPLIT_PANE_LEFT, local_panel_);
+    splitter_.SetSplitterPane(SPLIT_PANE_RIGHT, remote_panel_);
 
     SetWindowPos(nullptr, 0, 0, kDefaultWindowWidth, kDefaultWindowHeight,
                  SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
     CenterWindow();
+
+    return 0;
 }
 
-void UiFileManager::OnDestroy()
+LRESULT UiFileManager::OnDestroy(UINT message,
+                                 WPARAM wparam,
+                                 LPARAM lparam,
+                                 BOOL& handled)
 {
     local_panel_.DestroyWindow();
     remote_panel_.DestroyWindow();
     splitter_.DestroyWindow();
+    return 0;
 }
 
-void UiFileManager::OnSize(int width, int height)
+LRESULT UiFileManager::OnSize(UINT message,
+                              WPARAM wparam,
+                              LPARAM lparam,
+                              BOOL& handled)
 {
     HDWP dwp = BeginDeferWindowPos(1);
 
     if (dwp)
     {
-        DeferWindowPos(dwp,
-                       splitter_,
-                       nullptr,
-                       0,
-                       0,
-                       width,
-                       height,
-                       SWP_NOACTIVATE | SWP_NOZORDER);
+        int width = LOWORD(lparam);
+        int height = HIWORD(lparam);
+
+        splitter_.DeferWindowPos(dwp,
+                                 nullptr,
+                                 kBorderSize,
+                                 kBorderSize,
+                                 width - (kBorderSize * 2),
+                                 height - (kBorderSize * 2),
+                                 SWP_NOACTIVATE | SWP_NOZORDER);
 
         EndDeferWindowPos(dwp);
     }
+
+    return 0;
 }
 
-void UiFileManager::OnGetMinMaxInfo(LPMINMAXINFO mmi)
+LRESULT UiFileManager::OnGetMinMaxInfo(UINT message,
+                                       WPARAM wparam,
+                                       LPARAM lparam,
+                                       BOOL& handled)
 {
+    LPMINMAXINFO mmi = reinterpret_cast<LPMINMAXINFO>(lparam);
+
     mmi->ptMinTrackSize.x = 500;
     mmi->ptMinTrackSize.y = 400;
+
+    return 0;
 }
 
-void UiFileManager::OnClose()
+LRESULT UiFileManager::OnClose(UINT message,
+                               WPARAM wparam,
+                               LPARAM lparam,
+                               BOOL& handled)
 {
     delegate_->OnWindowClose();
-}
-
-bool UiFileManager::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
-{
-    switch (msg)
-    {
-        case WM_CREATE:
-            OnCreate();
-            break;
-
-        case WM_SIZE:
-            OnSize(LOWORD(lparam), HIWORD(lparam));
-            break;
-
-        case WM_GETMINMAXINFO:
-            OnGetMinMaxInfo(reinterpret_cast<LPMINMAXINFO>(lparam));
-            break;
-
-        case WM_CLOSE:
-            OnClose();
-            break;
-
-        case WM_DESTROY:
-            OnDestroy();
-            break;
-
-        default:
-            return false;
-    }
-
-    *result = 0;
-    return true;
+    return 0;
 }
 
 } // namespace aspia

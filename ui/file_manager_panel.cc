@@ -249,6 +249,30 @@ void UiFileManagerPanel::AddToolBarIcon(UINT icon_id)
     toolbar_imagelist_.AddIcon(icon);
 }
 
+void UiFileManagerPanel::SetToolBarButtonText(int command_id, UINT resource_id)
+{
+    int button_index = toolbar_.CommandToIndex(command_id);
+    if (button_index == -1)
+        return;
+
+    TBBUTTON button = { 0 };
+
+    if (!toolbar_.GetButton(button_index, &button))
+        return;
+
+    CString string;
+    string.LoadStringW(resource_id);
+
+    int string_id = toolbar_.AddStrings(string);
+    if (string_id == -1)
+        return;
+
+    button.iString = string_id;
+
+    toolbar_.DeleteButton(button_index);
+    toolbar_.InsertButton(button_index, &button);
+}
+
 void UiFileManagerPanel::OnCreate()
 {
     HFONT default_font =
@@ -276,9 +300,11 @@ void UiFileManagerPanel::OnCreate()
                             1, 1);
     drive_combo_.SetImageList(drive_imagelist_);
 
-    toolbar_.Create(hwnd(), TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TOOLTIPS);
+    toolbar_.Create(hwnd(), 0, 0,
+                    WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT |
+                        TBSTYLE_LIST | TBSTYLE_TOOLTIPS);
 
-    toolbar_.ModifyExtendedStyle(0, TBSTYLE_EX_MIXEDBUTTONS | TBSTYLE_EX_DOUBLEBUFFER);
+    toolbar_.SetExtendedStyle(TBSTYLE_EX_MIXEDBUTTONS | TBSTYLE_EX_DOUBLEBUFFER);
 
     TBBUTTON kButtons[] =
     {
@@ -291,7 +317,7 @@ void UiFileManagerPanel::OnCreate()
         { 5, ID_SEND,       TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_SHOWTEXT, { 0 }, 0, -1 }
     };
 
-    toolbar_.ButtonStructSize(sizeof(kButtons[0]));
+    toolbar_.SetButtonStructSize(sizeof(kButtons[0]));
     toolbar_.AddButtons(_countof(kButtons), kButtons);
 
     toolbar_imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
@@ -309,13 +335,13 @@ void UiFileManagerPanel::OnCreate()
     if (panel_type_ == PanelType::LOCAL)
     {
         AddToolBarIcon(IDI_SEND);
-        toolbar_.SetButtonText(ID_SEND, module_.String(IDS_FT_SEND));
+        SetToolBarButtonText(ID_SEND, IDS_FT_SEND);
     }
     else
     {
         DCHECK(panel_type_ == PanelType::REMOTE);
         AddToolBarIcon(IDI_RECIEVE);
-        toolbar_.SetButtonText(ID_SEND, module_.String(IDS_FT_RECIEVE));
+        SetToolBarButtonText(ID_SEND, IDS_FT_RECIEVE);
     }
 
     const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP |

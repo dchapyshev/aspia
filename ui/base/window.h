@@ -77,10 +77,6 @@ public:
                     UINT type);
     int MessageBoxW(const std::wstring& text, UINT type);
 
-    void SetWindowString(const std::wstring& string);
-    void SetWindowString(const WCHAR* string);
-    std::wstring GetWindowString();
-
 private:
     HWND hwnd_ = nullptr;
 

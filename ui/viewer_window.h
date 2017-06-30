@@ -14,7 +14,6 @@
 #include "ui/video_window.h"
 #include "ui/about_dialog.h"
 #include "ui/settings_dialog.h"
-#include "ui/base/toolbar.h"
 
 #include <atlbase.h>
 #include <atlapp.h>
@@ -95,7 +94,7 @@ private:
     Delegate* delegate_;
     ClientConfig* config_;
 
-    UiToolBar toolbar_;
+    CToolBarCtrl toolbar_;
     CImageListManaged toolbar_imagelist_;
 
     UiVideoWindow video_window_;

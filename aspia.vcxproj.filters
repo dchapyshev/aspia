@@ -313,9 +313,6 @@
     <ClCompile Include="ui\base\window.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
-    <ClCompile Include="ui\base\tray_icon.cc">
-      <Filter>ui\base</Filter>
-    </ClCompile>
     <ClCompile Include="host\host_main.cc">
       <Filter>host</Filter>
     </ClCompile>
@@ -369,9 +366,6 @@
     </ClCompile>
     <ClCompile Include="ui\file_manager.cc">
       <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\base\splitter.cc">
-      <Filter>ui\base</Filter>
     </ClCompile>
     <ClCompile Include="ui\file_manager_panel.cc">
       <Filter>ui</Filter>
@@ -432,9 +426,6 @@
     </ClCompile>
     <ClCompile Include="base\strings\unicode.cc">
       <Filter>base\strings</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\base\toolbar.cc">
-      <Filter>ui\base</Filter>
     </ClCompile>
     <ClCompile Include="base\files\file_helpers.cc">
       <Filter>base\files</Filter>
@@ -887,9 +878,6 @@
     <ClInclude Include="ui\file_manager.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="ui\base\splitter.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
     <ClInclude Include="ui\file_manager_panel.h">
       <Filter>ui</Filter>
     </ClInclude>
@@ -952,9 +940,6 @@
     </ClInclude>
     <ClInclude Include="base\strings\unicode.h">
       <Filter>base\strings</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\base\toolbar.h">
-      <Filter>ui\base</Filter>
     </ClInclude>
     <ClInclude Include="base\files\file_helpers.h">
       <Filter>base\files</Filter>

@@ -10,7 +10,6 @@
 
 #include "host/host_pool.h"
 #include "client/client_pool.h"
-#include "ui/base/modal_dialog.h"
 #include "ui/base/tray_icon.h"
 #include "ui/resource.h"
 
@@ -21,7 +20,9 @@
 
 namespace aspia {
 
-class UiMainDialog : public CDialogImpl<UiMainDialog>
+class UiMainDialog :
+    public CDialogImpl<UiMainDialog>,
+    public CTrayIcon<UiMainDialog>
 {
 public:
     enum { IDD = IDD_MAIN };
@@ -47,6 +48,8 @@ private:
         COMMAND_ID_HANDLER(ID_REMOVE_SERVICE, OnRemoveServiceButton)
 
         COMMAND_HANDLER(IDC_SESSION_TYPE_COMBO, CBN_SELCHANGE, OnSessionTypeChanged)
+
+        CHAIN_MSG_MAP(CTrayIcon<UiMainDialog>)
     END_MSG_MAP()
 
     LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
@@ -78,7 +81,6 @@ private:
     CIcon big_icon_;
 
     CMenu main_menu_;
-    UiTrayIcon tray_icon_;
 
     std::unique_ptr<HostPool> host_pool_;
     std::unique_ptr<ClientPool> client_pool_;

@@ -280,30 +280,4 @@ int UiWindow::MessageBoxW(const std::wstring& text, UINT type)
     return MessageBoxW(text.c_str(), nullptr, type);
 }
 
-void UiWindow::SetWindowString(const std::wstring& string)
-{
-    SetWindowString(string.c_str());
-}
-
-void UiWindow::SetWindowString(const WCHAR* string)
-{
-    SetWindowTextW(hwnd(), string);
-}
-
-std::wstring UiWindow::GetWindowString()
-{
-    // Returns the length without null-character.
-    int length = GetWindowTextLengthW(hwnd());
-    if (length > 0)
-    {
-        std::wstring string;
-        string.resize(length);
-
-        if (GetWindowTextW(hwnd(), &string[0], length + 1))
-            return string;
-    }
-
-    return std::wstring();
-}
-
 } // namespace aspia

@@ -161,11 +161,11 @@ LRESULT UiMainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, B
     main_menu_ = AtlLoadMenu(IDR_MAIN);
     SetMenu(main_menu_);
 
-    //tray_icon_.AddIcon(hwnd(),
-    //                   IDI_MAIN,
-    //                   Module().String(IDS_APPLICATION_NAME),
-    //                   IDR_TRAY);
-    //tray_icon_.SetDefaultMenuItem(ID_SHOWHIDE);
+    CString tray_tooltip;
+    tray_tooltip.LoadStringW(IDS_APPLICATION_NAME);
+
+    AddTrayIcon(small_icon_, tray_tooltip, IDR_TRAY);
+    SetDefaultTrayMenuItem(ID_SHOWHIDE);
 
     InitAddressesList();
     InitSessionTypesCombo();

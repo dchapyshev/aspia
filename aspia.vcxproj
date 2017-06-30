@@ -143,10 +143,7 @@
     <ClCompile Include="ui\base\child_window.cc" />
     <ClCompile Include="ui\base\comboboxex.cc" />
     <ClCompile Include="ui\base\module.cc" />
-    <ClCompile Include="ui\base\splitter.cc" />
     <ClCompile Include="ui\base\timer.cc" />
-    <ClCompile Include="ui\base\toolbar.cc" />
-    <ClCompile Include="ui\base\tray_icon.cc" />
     <ClCompile Include="ui\base\window.cc" />
     <ClCompile Include="ui\file_manager.cc" />
     <ClCompile Include="ui\file_manager_helpers.cc" />
@@ -318,9 +315,7 @@
     <ClInclude Include="ui\base\child_window.h" />
     <ClInclude Include="ui\base\comboboxex.h" />
     <ClInclude Include="ui\base\module.h" />
-    <ClInclude Include="ui\base\splitter.h" />
     <ClInclude Include="ui\base\timer.h" />
-    <ClInclude Include="ui\base\toolbar.h" />
     <ClInclude Include="ui\base\tray_icon.h" />
     <ClInclude Include="ui\base\window.h" />
     <ClInclude Include="ui\file_manager.h" />

@@ -9,7 +9,6 @@
 #define _ASPIA_UI__FILE_MANAGER_PANEL_H
 
 #include "ui/base/child_window.h"
-#include "ui/base/toolbar.h"
 #include "ui/base/comboboxex.h"
 #include "ui/base/module.h"
 #include "proto/file_transfer_session.pb.h"
@@ -82,6 +81,7 @@ private:
     void DeleteAllColumns();
     void AddColumn(UINT string_id, int width);
     int GetItemUnderMousePointer();
+    void SetToolBarButtonText(int command_id, UINT resource_id);
 
     // ChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;
@@ -96,7 +96,7 @@ private:
     CListViewCtrl list_;
     CImageListManaged list_imagelist_;
 
-    UiToolBar toolbar_;
+    CToolBarCtrl toolbar_;
     CImageListManaged toolbar_imagelist_;
 
     std::unique_ptr<proto::DriveList> drive_list_;
