@@ -8,21 +8,38 @@
 #ifndef _ASPIA_UI__FILE_REPLACE_DIALOG_H
 #define _ASPIA_UI__FILE_REPLACE_DIALOG_H
 
-#include "ui/base/modal_dialog.h"
+#include "base/macros.h"
+#include "ui/resource.h"
+
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <atlctrls.h>
+#include <atlmisc.h>
 
 namespace aspia {
 
-class FileReplaceDialog : public UiModalDialog
+class UiFileReplaceDialog : public CDialogImpl<UiFileReplaceDialog>
 {
 public:
-    FileReplaceDialog() = default;
+    enum { IDD = IDD_FILE_REPLACE };
 
-    INT_PTR DoModal(HWND parent) override;
+    UiFileReplaceDialog() = default;
+    ~UiFileReplaceDialog() = default;
 
 private:
-    INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) override;
+    BEGIN_MSG_MAP(UiFileReplaceDialog)
+        MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+        MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
-    DISALLOW_COPY_AND_ASSIGN(FileReplaceDialog);
+        COMMAND_ID_HANDLER(IDCANCEL, OnCancelButton)
+    END_MSG_MAP()
+
+    LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+
+    DISALLOW_COPY_AND_ASSIGN(UiFileReplaceDialog);
 };
 
 } // namespace aspia

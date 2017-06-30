@@ -7,8 +7,6 @@
 
 #include "ui/file_status_dialog.h"
 #include "ui/status_code.h"
-#include "ui/resource.h"
-#include "ui/base/module.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "base/logging.h"
@@ -39,10 +37,15 @@ void UiFileStatusDialog::OnBeforeThreadRunning()
     runner_ = ui_thread_.message_loop_proxy();
     DCHECK(runner_);
 
-    if (!Create(nullptr, IDD_FILE_STATUS, UiModule::Current()))
+    HWND window = Create(nullptr);
+    if (!window)
     {
         LOG(ERROR) << "File status dialog not created";
         runner_->PostQuit();
+    }
+    else
+    {
+        ShowWindow(SW_SHOWNORMAL);
     }
 }
 
@@ -52,103 +55,123 @@ void UiFileStatusDialog::OnAfterThreadRunning()
     delegate_->OnWindowClose();
 }
 
-void UiFileStatusDialog::OnInitDialog()
+LRESULT UiFileStatusDialog::OnInitDialog(UINT message,
+                                         WPARAM wparam,
+                                         LPARAM lparam,
+                                         BOOL& handled)
 {
-    SetTopMost();
-    SetIcon(IDI_MAIN);
+    small_icon_ = AtlLoadIconImage(IDI_MAIN,
+                                   LR_CREATEDIBSECTION,
+                                   GetSystemMetrics(SM_CXSMICON),
+                                   GetSystemMetrics(SM_CYSMICON));
+    SetIcon(small_icon_, FALSE);
 
-    WriteLog(Module().String(IDS_FT_OP_SESSION_START),
-             proto::Status::STATUS_SUCCESS);
+    big_icon_ = AtlLoadIconImage(IDI_MAIN,
+                                 LR_CREATEDIBSECTION,
+                                 GetSystemMetrics(SM_CXICON),
+                                 GetSystemMetrics(SM_CYICON));
+    SetIcon(small_icon_, TRUE);
 
-    SetFocus(GetDlgItem(IDC_MINIMIZE_BUTTON));
+    SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0,
+                 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+
+    CString start_message;
+    start_message.LoadStringW(IDS_FT_OP_SESSION_START);
+
+    WriteLog(start_message, proto::Status::STATUS_SUCCESS);
+
+    GetDlgItem(IDC_MINIMIZE_BUTTON).SetFocus();
+    return 0;
 }
 
-void UiFileStatusDialog::OnSize(int width, int height)
+LRESULT UiFileStatusDialog::OnClose(UINT message,
+                                    WPARAM wparam,
+                                    LPARAM lparam,
+                                    BOOL& handled)
 {
+    PostQuitMessage(0);
+    return 0;
+}
+
+LRESULT UiFileStatusDialog::OnSize(UINT message,
+                                   WPARAM wparam,
+                                   LPARAM lparam,
+                                   BOOL& handled)
+{
+    CSize size(lparam);
+
     HDWP dwp = BeginDeferWindowPos(3);
 
     if (dwp)
     {
-        UiWindow minimize_button(GetDlgItem(IDC_MINIMIZE_BUTTON));
-        UiWindow stop_button(GetDlgItem(IDC_STOP_BUTTON));
-        UiWindow log_edit(GetDlgItem(IDC_STATUS_EDIT));
+        CWindow minimize_button(GetDlgItem(IDC_MINIMIZE_BUTTON));
+        CWindow stop_button(GetDlgItem(IDC_STOP_BUTTON));
+        CWindow log_edit(GetDlgItem(IDC_STATUS_EDIT));
 
-        UiSize stop_size = stop_button.Size();
-        UiSize minimize_size = minimize_button.Size();
+        CRect stop_rect;
+        stop_button.GetWindowRect(stop_rect);
 
-        DeferWindowPos(dwp,
-                       log_edit,
-                       nullptr,
-                       kBorderSize,
-                       kBorderSize,
-                       width - (kBorderSize * 2),
-                       height - (kBorderSize * 3) - stop_size.Height(),
-                       SWP_NOACTIVATE | SWP_NOZORDER);
+        CRect minimize_rect;
+        minimize_button.GetWindowRect(minimize_rect);
 
-        DeferWindowPos(dwp,
-                       stop_button,
-                       nullptr,
-                       width - (stop_size.Width() + kBorderSize),
-                       height - (stop_size.Height() + kBorderSize),
-                       stop_size.Width(),
-                       stop_size.Height(),
-                       SWP_NOACTIVATE | SWP_NOZORDER);
+        log_edit.DeferWindowPos(dwp,
+                                nullptr,
+                                kBorderSize,
+                                kBorderSize,
+                                size.cx - (kBorderSize * 2),
+                                size.cy - (kBorderSize * 3) - stop_rect.Height(),
+                                SWP_NOACTIVATE | SWP_NOZORDER);
 
-        DeferWindowPos(dwp,
-                       minimize_button,
-                       nullptr,
-                       width - (stop_size.Width() + minimize_size.Width() + (kBorderSize * 2)),
-                       height - (minimize_size.Height() + kBorderSize),
-                       minimize_size.Width(),
-                       minimize_size.Height(),
-                       SWP_NOACTIVATE | SWP_NOZORDER);
+        stop_button.DeferWindowPos(dwp,
+                                   nullptr,
+                                   size.cx - (stop_rect.Width() + kBorderSize),
+                                   size.cy - (stop_rect.Height() + kBorderSize),
+                                   stop_rect.Width(),
+                                   stop_rect.Height(),
+                                   SWP_NOACTIVATE | SWP_NOZORDER);
+
+        minimize_button.DeferWindowPos(dwp,
+                                       nullptr,
+                                       size.cx - (stop_rect.Width() + minimize_rect.Width() + (kBorderSize * 2)),
+                                       size.cy - (minimize_rect.Height() + kBorderSize),
+                                       minimize_rect.Width(),
+                                       minimize_rect.Height(),
+                                       SWP_NOACTIVATE | SWP_NOZORDER);
 
         EndDeferWindowPos(dwp);
     }
+
+    return 0;
 }
 
-void UiFileStatusDialog::OnGetMinMaxInfo(LPMINMAXINFO mmi)
+LRESULT UiFileStatusDialog::OnGetMinMaxInfo(UINT message,
+                                            WPARAM wparam,
+                                            LPARAM lparam,
+                                            BOOL& handled)
 {
+    LPMINMAXINFO mmi = reinterpret_cast<LPMINMAXINFO>(lparam);
+
     mmi->ptMinTrackSize.x = 350;
     mmi->ptMinTrackSize.y = 200;
+
+    return 0;
 }
 
-INT_PTR UiFileStatusDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT UiFileStatusDialog::OnMinimizeButton(WORD notify_code,
+                                             WORD control_id,
+                                             HWND control,
+                                             BOOL& handled)
 {
-    switch (msg)
-    {
-        case WM_INITDIALOG:
-            OnInitDialog();
-            break;
+    ShowWindow(SW_MINIMIZE);
+    return 0;
+}
 
-        case WM_SIZE:
-            OnSize(LOWORD(lparam), HIWORD(lparam));
-            break;
-
-        case WM_COMMAND:
-        {
-            switch (LOWORD(wparam))
-            {
-                case IDC_MINIMIZE_BUTTON:
-                    Minimize();
-                    break;
-
-                case IDC_STOP_BUTTON:
-                    PostMessageW(WM_CLOSE, 0, 0);
-                    break;
-            }
-        }
-        break;
-
-        case WM_GETMINMAXINFO:
-            OnGetMinMaxInfo(reinterpret_cast<LPMINMAXINFO>(lparam));
-            break;
-
-        case WM_CLOSE:
-            PostQuitMessage(0);
-            break;
-    }
-
+LRESULT UiFileStatusDialog::OnStopButton(WORD notify_code,
+                                         WORD control_id,
+                                         HWND control,
+                                         BOOL& handled)
+{
+    PostMessageW(WM_CLOSE);
     return 0;
 }
 
@@ -170,18 +193,18 @@ static std::wstring CurrentTime()
     return datetime;
 }
 
-void UiFileStatusDialog::WriteLog(const std::wstring& message, proto::Status status)
+void UiFileStatusDialog::WriteLog(const CString& message, proto::Status status)
 {
     CEdit edit(GetDlgItem(IDC_STATUS_EDIT));
 
     edit.AppendText(CurrentTime().c_str());
     edit.AppendText(L" ");
-    edit.AppendText(message.c_str());
+    edit.AppendText(message);
 
     if (status != proto::Status::STATUS_SUCCESS)
     {
         edit.AppendText(L" (");
-        edit.AppendText(StatusCodeToString(Module(), status).c_str());
+        edit.AppendText(StatusCodeToString(status));
         edit.AppendText(L")");
     }
 
@@ -198,67 +221,46 @@ void UiFileStatusDialog::SetRequestStatus(const proto::RequestStatus& status)
         return;
     }
 
-    std::wstring message;
-
     std::wstring first_path = UNICODEfromUTF8(status.first_path());
     std::wstring second_path = UNICODEfromUTF8(status.second_path());
+
+    CString message;
 
     switch (status.type())
     {
         case proto::RequestStatus::DRIVE_LIST:
-        {
-            message = Module().String(IDS_FT_OP_BROWSE_DRIVES);
-        }
-        break;
+            message.LoadStringW(IDS_FT_OP_BROWSE_DRIVES);
+            break;
 
         case proto::RequestStatus::DIRECTORY_LIST:
-        {
-            message = StringPrintfW(Module().String(IDS_FT_OP_BROWSE_FOLDERS).c_str(),
-                                    first_path.c_str());
-        }
-        break;
+            message.Format(IDS_FT_OP_BROWSE_FOLDERS, first_path.c_str());
+            break;
 
         case proto::RequestStatus::CREATE_DIRECTORY:
-        {
-            message = StringPrintfW(Module().String(IDS_FT_OP_CREATE_FOLDER).c_str(),
-                                    first_path.c_str());
-        }
-        break;
+            message.Format(IDS_FT_OP_CREATE_FOLDER, first_path.c_str());
+            break;
 
         case proto::RequestStatus::RENAME:
-        {
-            message = StringPrintfW(Module().String(IDS_FT_OP_RENAME).c_str(),
-                                    first_path.c_str(),
-                                    second_path.c_str());
-        }
-        break;
+            message.Format(IDS_FT_OP_RENAME,
+                           first_path.c_str(),
+                           second_path.c_str());
+            break;
 
         case proto::RequestStatus::REMOVE:
-        {
-            message = StringPrintfW(Module().String(IDS_FT_OP_REMOVE).c_str(),
-                                    first_path.c_str());
-        }
-        break;
+            message.Format(IDS_FT_OP_REMOVE, first_path.c_str());
+            break;
 
         case proto::RequestStatus::SEND_FILE:
-        {
-            message = StringPrintfW(Module().String(IDS_FT_OP_SEND_FILE).c_str(),
-                                    first_path.c_str());
-        }
-        break;
+            message.Format(IDS_FT_OP_SEND_FILE, first_path.c_str());
+            break;
 
         case proto::RequestStatus::RECIEVE_FILE:
-        {
-            message = StringPrintfW(Module().String(IDS_FT_OP_RECIEVE_FILE).c_str(),
-                                    first_path.c_str());
-        }
-        break;
+            message.Format(IDS_FT_OP_RECIEVE_FILE, first_path.c_str());
+            break;
 
         default:
-        {
             LOG(FATAL) << "Unhandled status code: " << status.type();
-        }
-        break;
+            break;
     }
 
     WriteLog(message, status.code());

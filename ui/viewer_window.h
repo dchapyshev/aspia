@@ -84,7 +84,7 @@ private:
 
     void AddToolBarIcon(UINT icon_id);
     void CreateToolBar();
-    void ShowDropDownMenu(int button_id, UiRect& button_rect);
+    void ShowDropDownMenu(int button_id, RECT* button_rect);
     int DoAutoSize(const DesktopSize& video_frame_size);
     void DoFullScreen(bool fullscreen);
     void ApplyConfig(const proto::DesktopSessionConfig& config);

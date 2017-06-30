@@ -10,9 +10,12 @@
 
 #include "base/message_loop/message_loop.h"
 #include "base/scoped_user_object.h"
-#include "ui/base/rect.h"
-#include "ui/base/point.h"
-#include "ui/base/size.h"
+
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <atlctrls.h>
+#include <atlmisc.h>
 
 namespace aspia {
 
@@ -34,36 +37,13 @@ public:
     bool ModifyStyleEx(LONG_PTR remove, LONG_PTR add);
     void SetFont(HFONT font);
     void SetMenu(HMENU menu);
-    int Width();
-    int Height();
-    UiSize Size();
-    UiPoint Pos();
-    int ClientWidth();
-    int ClientHeight();
-    UiRect Rect();
-    UiRect ClientRect();
-    UiSize ClientSize();
-    UiPoint CursorPos();
-    void SetSize(int width, int height);
-    void SetSize(const UiSize& size);
-    void SetPos(int x, int y);
-    void SetPos(const UiPoint& pos);
-    void SetTopMost();
+    CPoint CursorPos();
     void ShowWindow(int cmd_show);
-    void Show();
-    void ShowNormal();
-    void Hide();
-    void Minimize();
-    void Maximize();
-    bool IsVisible();
-    bool IsMaximized();
-    bool IsMinimized();
-    void InvalidateRect(const UiRect& rect, bool erase);
+    void InvalidateRect(const CRect& rect, bool erase);
     void Invalidate();
     LRESULT SendMessageW(UINT message, WPARAM wparam, LPARAM lparam);
     BOOL PostMessageW(UINT message, WPARAM wparam, LPARAM lparam);
     bool ScreenToClient(POINT* point);
-    bool ScreenToClient(UiPoint& point);
 
     int ScrollWindowEx(int dx,
                        int dy,

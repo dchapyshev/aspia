@@ -6,25 +6,21 @@
 //
 
 #include "ui/users_dialog.h"
-#include "ui/base/listview.h"
 #include "ui/user_prop_dialog.h"
-#include "ui/resource.h"
 #include "base/process/process_helpers.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
+#include "base/version_helpers.h"
 #include "base/logging.h"
 #include "crypto/secure_string.h"
 
-namespace aspia {
+#include <uxtheme.h>
 
-INT_PTR UiUsersDialog::DoModal(HWND parent)
-{
-    return Run(UiModule::Current(), parent, IDD_USERS);
-}
+namespace aspia {
 
 void UiUsersDialog::UpdateUserList()
 {
-    UiListView list(GetDlgItem(IDC_USER_LIST));
+    CListViewCtrl list(GetDlgItem(IDC_USER_LIST));
 
     list.DeleteAllItems();
 
@@ -37,7 +33,12 @@ void UiUsersDialog::UpdateUserList()
         SecureString<std::wstring> username;
         CHECK(UTF8toUNICODE(user.username(), username));
 
-        list.AddItem(username, i, user.enabled() ? 0 : 1);
+        int item_index = list.AddItem(list.GetItemCount(),
+                                      0,
+                                      username.c_str(),
+                                      user.enabled() ? 0 : 1);
+
+        list.SetItemData(item_index, i);
     }
 }
 
@@ -70,7 +71,10 @@ static int GetICLColor()
     return ILC_COLOR32;
 }
 
-void UiUsersDialog::OnInitDialog()
+LRESULT UiUsersDialog::OnInitDialog(UINT message,
+                                    WPARAM wparam,
+                                    LPARAM lparam,
+                                    BOOL& handled)
 {
     if (imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
                           GetSystemMetrics(SM_CYSMICON),
@@ -92,48 +96,78 @@ void UiUsersDialog::OnInitDialog()
         imagelist_.AddIcon(icon);
     }
 
-    UiListView list(GetDlgItem(IDC_USER_LIST));
+    CListViewCtrl list(GetDlgItem(IDC_USER_LIST));
 
-    list.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
+    DWORD ex_style = LVS_EX_FULLROWSELECT;
+
+    if (IsWindowsVistaOrGreater())
+    {
+        SetWindowTheme(list, L"explorer", nullptr);
+        ex_style |= LVS_EX_DOUBLEBUFFER;
+    }
+
+    list.SetExtendedListViewStyle(ex_style);
+
     list.SetImageList(imagelist_, LVSIL_SMALL);
-    list.AddOnlyOneColumn();
+
+    int column_index = list.AddColumn(L"", 0);
+
+    CRect list_rect;
+    list.GetClientRect(list_rect);
+    list.SetColumnWidth(column_index, list_rect.Width() - GetSystemMetrics(SM_CXVSCROLL));
 
     if (!IsCallerHasAdminRights())
     {
-        EnableDlgItem(IDC_USER_LIST, FALSE);
-        EnableDlgItem(ID_ADD, FALSE);
+        GetDlgItem(IDC_USER_LIST).EnableWindow(FALSE);
+        GetDlgItem(ID_ADD).EnableWindow(FALSE);
     }
 
-    EnableDlgItem(ID_EDIT, FALSE);
-    EnableDlgItem(ID_DELETE, FALSE);
+    GetDlgItem(ID_EDIT).EnableWindow(FALSE);
+    GetDlgItem(ID_DELETE).EnableWindow(FALSE);
 
     if (user_list_.LoadFromStorage())
         UpdateUserList();
+
+    return 0;
 }
 
-void UiUsersDialog::OnAddButton()
+LRESULT UiUsersDialog::OnClose(UINT message,
+                               WPARAM wparam,
+                               LPARAM lparam,
+                               BOOL& handled)
+{
+    EndDialog(IDCANCEL);
+    return 0;
+}
+
+LRESULT UiUsersDialog::OnAddButton(WORD notify_code,
+                                   WORD control_id,
+                                   HWND control,
+                                   BOOL& handled)
 {
     std::unique_ptr<proto::HostUser> user(new proto::HostUser());
 
     UiUserPropDialog dialog(UiUserPropDialog::Mode::Add, user.get(), user_list_);
-    if (dialog.DoModal(hwnd()) == IDOK)
+    if (dialog.DoModal(*this) == IDOK)
     {
         user_list_.Add(std::move(user));
         UpdateUserList();
         SetUserListModified();
     }
 
-    EnableDlgItem(ID_EDIT, FALSE);
-    EnableDlgItem(ID_DELETE, FALSE);
+    GetDlgItem(ID_EDIT).EnableWindow(FALSE);
+    GetDlgItem(ID_DELETE).EnableWindow(FALSE);
+
+    return 0;
 }
 
 int UiUsersDialog::GetSelectedUserIndex()
 {
-    UiListView list(GetDlgItem(IDC_USER_LIST));
-    return list.GetItemData<int>(list.GetFirstSelectedItem());
+    CListViewCtrl list(GetDlgItem(IDC_USER_LIST));
+    return list.GetItemData(list.GetNextItem(-1, LVNI_SELECTED));
 }
 
-void UiUsersDialog::OnEditButton()
+void UiUsersDialog::EditSelectedUser()
 {
     int user_index = GetSelectedUserIndex();
 
@@ -143,31 +177,40 @@ void UiUsersDialog::OnEditButton()
     proto::HostUser* user = user_list_.mutable_host_user(user_index);
 
     UiUserPropDialog dialog(UiUserPropDialog::Mode::Edit, user, user_list_);
-    if (dialog.DoModal(hwnd()) == IDOK)
+    if (dialog.DoModal(*this) == IDOK)
     {
         UpdateUserList();
         SetUserListModified();
     }
 
-    EnableDlgItem(ID_EDIT, FALSE);
-    EnableDlgItem(ID_DELETE, FALSE);
+    GetDlgItem(ID_EDIT).EnableWindow(FALSE);
+    GetDlgItem(ID_DELETE).EnableWindow(FALSE);
 }
 
-void UiUsersDialog::OnDeleteButton()
+LRESULT UiUsersDialog::OnEditButton(WORD notify_code,
+                                    WORD control_id,
+                                    HWND control,
+                                    BOOL& handled)
+{
+    EditSelectedUser();
+    return 0;
+}
+
+void UiUsersDialog::DeleteSelectedUser()
 {
     int user_index = GetSelectedUserIndex();
 
     if (user_index < 0 || user_index >= user_list_.size())
         return;
 
-    std::wstring title = Module().String(IDS_CONFIRMATION);
-    std::wstring message_format = Module().String(IDS_DELETE_USER_CONFORMATION);
-
     SecureString<std::wstring> username;
     CHECK(UTF8toUNICODE(user_list_.host_user(user_index).username(), username));
 
-    SecureString<std::wstring> message =
-        StringPrintfW(message_format.c_str(), username.c_str());
+    CString title;
+    title.LoadStringW(IDS_CONFIRMATION);
+
+    CString message;
+    message.Format(IDS_DELETE_USER_CONFORMATION, username.c_str());
 
     if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
@@ -176,145 +219,130 @@ void UiUsersDialog::OnDeleteButton()
         SetUserListModified();
     }
 
-    EnableDlgItem(ID_EDIT, FALSE);
-    EnableDlgItem(ID_DELETE, FALSE);
+    GetDlgItem(ID_EDIT).EnableWindow(FALSE);
+    GetDlgItem(ID_DELETE).EnableWindow(FALSE);
 }
 
-void UiUsersDialog::OnOkButton()
+LRESULT UiUsersDialog::OnDeleteButton(WORD notify_code,
+                                      WORD control_id,
+                                      HWND control,
+                                      BOOL& handled)
+{
+    DeleteSelectedUser();
+    return 0;
+}
+
+LRESULT UiUsersDialog::OnOkButton(WORD notify_code,
+                                  WORD control_id,
+                                  HWND control,
+                                  BOOL& handled)
 {
     user_list_.SaveToStorage();
     EndDialog(IDOK);
+    return 0;
+}
+
+LRESULT UiUsersDialog::OnCancelButton(WORD notify_code,
+                                      WORD control_id,
+                                      HWND control,
+                                      BOOL& handled)
+{
+    EndDialog(IDCANCEL);
+    return 0;
 }
 
 void UiUsersDialog::ShowUserPopupMenu()
 {
-    ScopedHMENU menu(Module().Menu(IDR_USER));
+    CMenu menu(AtlLoadMenu(IDR_USER));
 
-    if (menu.IsValid())
+    if (menu)
     {
         POINT cursor_pos;
 
         if (GetCursorPos(&cursor_pos))
         {
-            SetForegroundWindow(hwnd());
+            SetForegroundWindow(*this);
 
-            HMENU popup_menu = GetSubMenu(menu, 0);
+            CMenuHandle popup_menu(menu.GetSubMenu(0));
             if (popup_menu)
             {
                 if (GetSelectedUserIndex() == -1)
                 {
-                    EnableMenuItem(popup_menu, ID_EDIT, MF_BYCOMMAND | MF_DISABLED);
-                    EnableMenuItem(popup_menu, ID_DELETE, MF_BYCOMMAND | MF_DISABLED);
+                    popup_menu.EnableMenuItem(ID_EDIT, MF_BYCOMMAND | MF_DISABLED);
+                    popup_menu.EnableMenuItem(ID_DELETE, MF_BYCOMMAND | MF_DISABLED);
                 }
 
-                TrackPopupMenu(popup_menu, 0, cursor_pos.x, cursor_pos.y, 0, hwnd(), nullptr);
+                popup_menu.TrackPopupMenu(0, cursor_pos.x, cursor_pos.y, *this, nullptr);
             }
         }
     }
 
-    EnableDlgItem(ID_EDIT, FALSE);
-    EnableDlgItem(ID_DELETE, FALSE);
-}
-
-void UiUsersDialog::OnUserListClicked()
-{
-    if (GetSelectedUserIndex() == -1)
-    {
-        EnableDlgItem(ID_EDIT, FALSE);
-        EnableDlgItem(ID_DELETE, FALSE);
-    }
-    else
-    {
-        EnableDlgItem(ID_EDIT, TRUE);
-        EnableDlgItem(ID_DELETE, TRUE);
-    }
+    GetDlgItem(ID_EDIT).EnableWindow(FALSE);
+    GetDlgItem(ID_DELETE).EnableWindow(FALSE);
 }
 
 void UiUsersDialog::SetUserListModified()
 {
-    UiWindow group(GetDlgItem(IDC_USERS_GROUPBOX));
-    group.SetWindowString(Module().String(IDS_USER_LIST_MODIFIED));
+    CString text;
+    text.LoadStringW(IDS_USER_LIST_MODIFIED);
+
+    CWindow group(GetDlgItem(IDC_USERS_GROUPBOX));
+    group.SetWindowTextW(text);
 }
 
-INT_PTR UiUsersDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT UiUsersDialog::OnUserListDoubleClick(int control_id,
+                                             LPNMHDR hdr,
+                                             BOOL& handled)
 {
-    switch (msg)
+    EditSelectedUser();
+    return 0;
+}
+
+LRESULT UiUsersDialog::OnUserListRightClick(int control_id,
+                                            LPNMHDR hdr,
+                                            BOOL& handled)
+{
+    ShowUserPopupMenu();
+    return 0;
+}
+
+void UiUsersDialog::OnUserSelect()
+{
+    if (GetSelectedUserIndex() == -1)
     {
-        case WM_INITDIALOG:
-            OnInitDialog();
+        GetDlgItem(ID_EDIT).EnableWindow(FALSE);
+        GetDlgItem(ID_DELETE).EnableWindow(FALSE);
+    }
+    else
+    {
+        GetDlgItem(ID_EDIT).EnableWindow(TRUE);
+        GetDlgItem(ID_DELETE).EnableWindow(TRUE);
+    }
+}
+
+LRESULT UiUsersDialog::OnUserListClick(int control_id,
+                                       LPNMHDR hdr,
+                                       BOOL& handled)
+{
+    OnUserSelect();
+    return 0;
+}
+
+LRESULT UiUsersDialog::OnUserListKeyDown(int control_id,
+                                         LPNMHDR hdr,
+                                         BOOL& handled)
+{
+    LPNMLVKEYDOWN keydown_header = reinterpret_cast<LPNMLVKEYDOWN>(hdr);
+
+    switch (keydown_header->wVKey)
+    {
+        case VK_DELETE:
+            DeleteSelectedUser();
             break;
 
-        case WM_NOTIFY:
-        {
-            LPNMHDR header = reinterpret_cast<LPNMHDR>(lparam);
-
-            if (header->idFrom != IDC_USER_LIST)
-                break;
-
-            switch (header->code)
-            {
-                case NM_DBLCLK:
-                    OnEditButton();
-                    break;
-
-                case NM_RCLICK:
-                    ShowUserPopupMenu();
-                    break;
-
-                case NM_CLICK:
-                    OnUserListClicked();
-                    break;
-
-                case LVN_KEYDOWN:
-                {
-                    LPNMLVKEYDOWN keydown_header = reinterpret_cast<LPNMLVKEYDOWN>(header);
-
-                    switch (keydown_header->wVKey)
-                    {
-                        case VK_DELETE:
-                            OnDeleteButton();
-                            break;
-
-                        case VK_UP:
-                        case VK_DOWN:
-                            OnUserListClicked();
-                            break;
-                    }
-                }
-                break;
-            }
-        }
-        break;
-
-        case WM_COMMAND:
-        {
-            switch (LOWORD(wparam))
-            {
-                case ID_ADD:
-                    OnAddButton();
-                    break;
-
-                case ID_EDIT:
-                    OnEditButton();
-                    break;
-
-                case ID_DELETE:
-                    OnDeleteButton();
-                    break;
-
-                case IDOK:
-                    OnOkButton();
-                    break;
-
-                case IDCANCEL:
-                    EndDialog(IDCANCEL);
-                    break;
-            }
-        }
-        break;
-
-        case WM_CLOSE:
-            EndDialog(IDCANCEL);
+        case VK_UP:
+        case VK_DOWN:
+            OnUserSelect();
             break;
     }
 

@@ -12,7 +12,10 @@
 #include "base/scoped_gdi_object.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
+#include "base/version_helpers.h"
 #include "base/logging.h"
+
+#include <uxtheme.h>
 
 namespace aspia {
 
@@ -143,9 +146,10 @@ void UiFileManagerPanel::ReadDirectoryList(
 
         std::wstring name = UNICODEfromUTF8(item.name());
 
-        int item_index = list_.AddItem(name, index, icon_index);
-        list_.SetItemText(item_index, 2, GetDirectoryTypeString(name));
-        list_.SetItemText(item_index, 3, TimeToString(item.modified()));
+        int item_index = list_.AddItem(list_.GetItemCount(), 0, name.c_str(), icon_index);
+        list_.SetItemData(item_index, index);
+        list_.SetItemText(item_index, 2, GetDirectoryTypeString(name).c_str());
+        list_.SetItemText(item_index, 3, TimeToString(item.modified()).c_str());
     }
 
     // Enumerate the files.
@@ -161,21 +165,49 @@ void UiFileManagerPanel::ReadDirectoryList(
         icon.Reset(GetFileIcon(name));
         icon_index = list_imagelist_.AddIcon(icon);
 
-        int item_index = list_.AddItem(name, index, icon_index);
-        list_.SetItemText(item_index, 1, SizeToString(item.size()));
-        list_.SetItemText(item_index, 2, GetFileTypeString(name));
-        list_.SetItemText(item_index, 3, TimeToString(item.modified()));
+        int item_index = list_.AddItem(list_.GetItemCount(), 0, name.c_str(), icon_index);
+        list_.SetItemData(item_index, index);
+        list_.SetItemText(item_index, 1, SizeToString(item.size()).c_str());
+        list_.SetItemText(item_index, 2, GetFileTypeString(name).c_str());
+        list_.SetItemText(item_index, 3, TimeToString(item.modified()).c_str());
     }
+}
+
+int UiFileManagerPanel::GetColumnCount()
+{
+    CHeaderCtrl header(list_.GetHeader());
+
+    if (!header)
+        return 0;
+
+    return header.GetItemCount();
+}
+
+void UiFileManagerPanel::DeleteAllColumns()
+{
+    int count = GetColumnCount();
+
+    while (--count >= 0)
+        list_.DeleteColumn(count);
+}
+
+void UiFileManagerPanel::AddColumn(UINT string_id, int width)
+{
+    CString text;
+    text.LoadStringW(string_id);
+
+    int column_index = list_.AddColumn(text, GetColumnCount());
+    list_.SetColumnWidth(column_index, width);
 }
 
 void UiFileManagerPanel::SetComputerViews()
 {
-    list_.DeleteAllColumns();
+    DeleteAllColumns();
 
-    list_.AddColumn(module_.String(IDS_FT_COLUMN_NAME), 130);
-    list_.AddColumn(module_.String(IDS_FT_COLUMN_TYPE), 150);
-    list_.AddColumn(module_.String(IDS_FT_COLUMN_TOTAL_SPACE), 80);
-    list_.AddColumn(module_.String(IDS_FT_COLUMN_FREE_SPACE), 80);
+    AddColumn(IDS_FT_COLUMN_NAME, 130);
+    AddColumn(IDS_FT_COLUMN_TYPE, 150);
+    AddColumn(IDS_FT_COLUMN_TOTAL_SPACE, 80);
+    AddColumn(IDS_FT_COLUMN_FREE_SPACE, 80);
 
     list_.ModifyStyle(LVS_EDITLABELS, LVS_SINGLESEL);
 
@@ -190,12 +222,12 @@ void UiFileManagerPanel::SetComputerViews()
 
 void UiFileManagerPanel::SetFolderViews()
 {
-    list_.DeleteAllColumns();
+    DeleteAllColumns();
 
-    list_.AddColumn(module_.String(IDS_FT_COLUMN_NAME), 180);
-    list_.AddColumn(module_.String(IDS_FT_COLUMN_SIZE), 70);
-    list_.AddColumn(module_.String(IDS_FT_COLUMN_TYPE), 100);
-    list_.AddColumn(module_.String(IDS_FT_COLUMN_MODIFIED), 100);
+    AddColumn(IDS_FT_COLUMN_NAME, 180);
+    AddColumn(IDS_FT_COLUMN_SIZE, 70);
+    AddColumn(IDS_FT_COLUMN_TYPE, 100);
+    AddColumn(IDS_FT_COLUMN_MODIFIED, 100);
 
     list_.ModifyStyle(LVS_SINGLESEL, LVS_EDITLABELS);
 
@@ -286,8 +318,20 @@ void UiFileManagerPanel::OnCreate()
         toolbar_.SetButtonText(ID_SEND, module_.String(IDS_FT_RECIEVE));
     }
 
-    list_.Create(hwnd(), WS_EX_CLIENTEDGE, LVS_REPORT | LVS_SHOWSELALWAYS);
-    list_.ModifyExtendedListViewStyle(0, LVS_EX_FULLROWSELECT);
+    const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP |
+        LVS_REPORT | LVS_SHOWSELALWAYS;
+
+    list_.Create(hwnd(), 0, 0, style, WS_EX_CLIENTEDGE);
+
+    DWORD ex_style = LVS_EX_FULLROWSELECT;
+
+    if (IsWindowsVistaOrGreater())
+    {
+        SetWindowTheme(list_, L"explorer", nullptr);
+        ex_style |= LVS_EX_DOUBLEBUFFER;
+    }
+
+    list_.SetExtendedListViewStyle(ex_style);
     list_imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
                            GetSystemMetrics(SM_CYSMICON),
                            ILC_MASK | GetICLColor(),
@@ -318,8 +362,11 @@ void UiFileManagerPanel::OnSize(int width, int height)
     {
         toolbar_.AutoSize();
 
-        int address_height = drive_combo_.Height();
-        int toolbar_height = toolbar_.Height();
+        CRect drive_rect;
+        GetWindowRect(drive_combo_, drive_rect);
+
+        CRect toolbar_rect;
+        GetWindowRect(toolbar_, toolbar_rect);
 
         CRect title_rect;
         title_.GetWindowRect(title_rect);
@@ -338,17 +385,17 @@ void UiFileManagerPanel::OnSize(int width, int height)
                        0,
                        title_rect.Height(),
                        width,
-                       address_height,
+                       drive_rect.Height(),
                        SWP_NOACTIVATE | SWP_NOZORDER);
 
         DeferWindowPos(dwp, toolbar_, nullptr,
                        0,
-                       title_rect.Height() + address_height,
+                       title_rect.Height() + drive_rect.Height(),
                        width,
-                       toolbar_height,
+                       toolbar_rect.Height(),
                        SWP_NOACTIVATE | SWP_NOZORDER);
 
-        int list_y = title_rect.Height() + toolbar_height + address_height;
+        int list_y = title_rect.Height() + toolbar_rect.Height() + drive_rect.Height();
         int list_height = height - list_y - status_rect.Height();
 
         DeferWindowPos(dwp, list_, nullptr,
@@ -490,14 +537,15 @@ void UiFileManagerPanel::OnDriveChange()
 
             std::wstring display_name = GetDriveDisplayName(item);
 
-            int item_index = list_.AddItem(display_name, index, icon_index);
-            list_.SetItemText(item_index, 1, GetDriveDescription(item.type()));
+            int item_index = list_.AddItem(list_.GetItemCount(), 0, display_name.c_str(), icon_index);
+            list_.SetItemData(item_index, index);
+            list_.SetItemText(item_index, 1, GetDriveDescription(item.type()).c_str());
 
             if (item.total_space())
-                list_.SetItemText(item_index, 2, SizeToString(item.total_space()));
+                list_.SetItemText(item_index, 2, SizeToString(item.total_space()).c_str());
 
             if (item.free_space())
-                list_.SetItemText(item_index, 3, SizeToString(item.free_space()));
+                list_.SetItemText(item_index, 3, SizeToString(item.free_space()).c_str());
         }
     }
     else if (object_index == kCurrentFolderIndex)
@@ -519,13 +567,30 @@ void UiFileManagerPanel::OnDriveChange()
     }
 }
 
+int UiFileManagerPanel::GetItemUnderMousePointer()
+{
+    LVHITTESTINFO hti;
+    memset(&hti, 0, sizeof(hti));
+
+    if (GetCursorPos(&hti.pt))
+    {
+        if (list_.ScreenToClient(&hti.pt) != FALSE)
+        {
+            hti.flags = LVHT_ONITEMICON | LVHT_ONITEMLABEL;
+            return list_.HitTest(&hti);
+        }
+    }
+
+    return -1;
+}
+
 void UiFileManagerPanel::OnDirectoryChange()
 {
-    int item_index = list_.GetItemUnderPointer();
+    int item_index = GetItemUnderMousePointer();
     if (item_index == -1)
         return;
 
-    int object_index = list_.GetItemData<int>(item_index);
+    int object_index = list_.GetItemData(item_index);
 
     if (!directory_list_)
     {
@@ -579,9 +644,10 @@ void UiFileManagerPanel::OnFolderCreate()
     SetFocus(list_);
 
     int item_index =
-        list_.AddItem(folder_name, kNewFolderIndex, icon_index);
+        list_.AddItem(list_.GetItemCount(), 0, folder_name.c_str(), icon_index);
+    list_.SetItemData(item_index, kNewFolderIndex);
 
-    list_.SetItemText(item_index, 2, GetDirectoryTypeString(folder_name));
+    list_.SetItemText(item_index, 2, GetDirectoryTypeString(folder_name).c_str());
     list_.EditLabel(item_index);
 }
 
@@ -612,11 +678,11 @@ void UiFileManagerPanel::OnRemove()
 
     if (selected_count == 1)
     {
-        int selected_item = list_.GetFirstSelectedItem();
+        int selected_item = list_.GetNextItem(-1, LVNI_SELECTED);
         if (selected_item == -1)
             return;
 
-        int object_index = list_.GetItemData<int>(selected_item);
+        int object_index = list_.GetItemData(selected_item);
         if (object_index < 0 || object_index >= directory_list_->item_size())
             return;
 
@@ -634,11 +700,11 @@ void UiFileManagerPanel::OnRemove()
     {
         format = module_.String(IDS_FT_DELETE_CONFORM_MULTI);
 
-        for (int item_index = list_.GetFirstSelectedItem();
+        for (int item_index = list_.GetNextItem(-1, LVNI_SELECTED);
              item_index != -1;
-             item_index = list_.GetNextSelectedItem(item_index))
+             item_index = list_.GetNextItem(item_index, LVNI_SELECTED))
         {
-            int object_index = list_.GetItemData<int>(item_index);
+            int object_index = list_.GetItemData(item_index);
             if (object_index < 0 || object_index >= directory_list_->item_size())
                 continue;
 
@@ -654,11 +720,11 @@ void UiFileManagerPanel::OnRemove()
 
     if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
-        for (int item_index = list_.GetFirstSelectedItem();
+        for (int item_index = list_.GetNextItem(-1, LVNI_SELECTED);
              item_index != -1;
-             item_index = list_.GetNextSelectedItem(item_index))
+             item_index = list_.GetNextItem(item_index, LVNI_SELECTED))
         {
-            int object_index = list_.GetItemData<int>(item_index);
+            int object_index = list_.GetItemData(item_index);
             if (object_index < 0 || object_index >= directory_list_->item_size())
                 continue;
 
@@ -692,9 +758,14 @@ void UiFileManagerPanel::OnEndLabelEdit(LPNMLVDISPINFOW disp_info)
     // New folder.
     if (index == kNewFolderIndex)
     {
+        CEdit edit(list_.GetEditControl());
+
+        WCHAR buffer[MAX_PATH] = { 0 };
+        edit.GetWindowTextW(buffer, _countof(buffer));
+
         delegate_->OnCreateDirectoryRequest(panel_type_,
                                             directory_list_->path(),
-                                            UTF8fromUNICODE(list_.GetTextFromEdit()));
+                                            UTF8fromUNICODE(buffer));
     }
     else // Rename exists item.
     {
@@ -744,11 +815,11 @@ void UiFileManagerPanel::OnSend()
 
     if (selected_count == 1)
     {
-        int selected_item = list_.GetFirstSelectedItem();
+        int selected_item = list_.GetNextItem(-1, LVNI_SELECTED);
         if (selected_item == -1)
             return;
 
-        int object_index = list_.GetItemData<int>(selected_item);
+        int object_index = list_.GetItemData(selected_item);
         if (object_index < 0 || object_index >= directory_list_->item_size())
             return;
 
@@ -812,7 +883,7 @@ bool UiFileManagerPanel::OnMessage(UINT msg,
                                                       std::string());
                 }
             }
-            else if (header->hwndFrom == list_.hwnd())
+            else if (header->hwndFrom == list_)
             {
                 switch (header->code)
                 {

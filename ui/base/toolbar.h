@@ -11,6 +11,11 @@
 #include "ui/base/window.h"
 
 #include <commctrl.h>
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <atlctrls.h>
+#include <atlmisc.h>
 
 namespace aspia {
 
@@ -40,7 +45,7 @@ public:
     bool IsButtonHidden(int command_id);
     void HideButton(int command_id, bool hide);
     void AutoSize();
-    void GetRect(int command_id, UiRect& rect);
+    void GetRect(int command_id, RECT* rect);
     void SetPadding(int cx, int cy);
 };
 

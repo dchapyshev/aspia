@@ -10,7 +10,8 @@
 namespace aspia {
 
 ClientPool::ClientPool(std::shared_ptr<MessageLoopProxy> runner) :
-    runner_(runner)
+    runner_(runner),
+    status_dialog_(this)
 {
     DCHECK(runner_);
 }
@@ -25,7 +26,7 @@ ClientPool::~ClientPool()
 void ClientPool::Connect(HWND parent, const ClientConfig& config)
 {
     config_.CopyFrom(config);
-    status_dialog_.DoModal(parent, this);
+    status_dialog_.DoModal(parent);
 }
 
 void ClientPool::OnStatusDialogOpen()
@@ -57,7 +58,7 @@ void ClientPool::OnConnectionSuccess(std::unique_ptr<NetworkChannel> channel)
     std::unique_ptr<Client> client(new Client(std::move(channel), config_, this));
     session_list_.push_back(std::move(client));
 
-    status_dialog_.EndDialog();
+    status_dialog_.EndDialog(0);
 }
 
 void ClientPool::OnConnectionTimeout()

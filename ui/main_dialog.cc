@@ -154,8 +154,8 @@ LRESULT UiMainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, B
 
     big_icon_ = AtlLoadIconImage(IDI_MAIN,
                                  LR_CREATEDIBSECTION,
-                                 GetSystemMetrics(SM_CXSMICON),
-                                 GetSystemMetrics(SM_CYSMICON));
+                                 GetSystemMetrics(SM_CXICON),
+                                 GetSystemMetrics(SM_CYICON));
     SetIcon(small_icon_, TRUE);
 
     main_menu_ = AtlLoadMenu(IDR_MAIN);
@@ -179,15 +179,15 @@ LRESULT UiMainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, B
 
     if (!IsCallerHasAdminRights())
     {
-        EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_GRAYED);
-        EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);
+        main_menu_.EnableMenuItem(ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_GRAYED);
+        main_menu_.EnableMenuItem(ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);
     }
     else
     {
         if (host_service_installed)
-            EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_GRAYED);
+            main_menu_.EnableMenuItem(ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_GRAYED);
         else
-            EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);
+            main_menu_.EnableMenuItem(ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);
     }
 
     if (host_service_installed)
@@ -319,11 +319,10 @@ LRESULT UiMainDialog::OnSettingsButton(WORD notify_code,
         case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
         {
-            UiSettingsDialog dialog;
+            UiSettingsDialog dialog(session_type,
+                                    config_.desktop_session_config());
 
-            if (dialog.DoModal(*this,
-                               session_type,
-                               config_.desktop_session_config()) == IDOK)
+            if (dialog.DoModal(*this) == IDOK)
             {
                 config_.mutable_desktop_session_config()->CopyFrom(dialog.Config());
             }
@@ -346,7 +345,7 @@ LRESULT UiMainDialog::OnConnectButton(WORD notify_code,
 
     if (session_type != proto::SessionType::SESSION_TYPE_UNKNOWN)
     {
-        WCHAR buffer[128];
+        WCHAR buffer[128] = { 0 };
         GetDlgItemTextW(IDC_SERVER_ADDRESS_EDIT, buffer, _countof(buffer));
 
         config_.set_address(buffer);
@@ -398,8 +397,8 @@ LRESULT UiMainDialog::OnInstallServiceButton(WORD notify_code,
 
     if (HostService::Install())
     {
-        EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_GRAYED);
-        EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_ENABLED);
+        main_menu_.EnableMenuItem(ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_GRAYED);
+        main_menu_.EnableMenuItem(ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_ENABLED);
         GetDlgItem(IDC_START_SERVER_BUTTON).EnableWindow(FALSE);
     }
 
@@ -413,8 +412,8 @@ LRESULT UiMainDialog::OnRemoveServiceButton(WORD notify_code,
 {
     if (HostService::Remove())
     {
-        EnableMenuItem(main_menu_, ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_ENABLED);
-        EnableMenuItem(main_menu_, ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);
+        main_menu_.EnableMenuItem(ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_ENABLED);
+        main_menu_.EnableMenuItem(ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);
         GetDlgItem(IDC_START_SERVER_BUTTON).EnableWindow(TRUE);
     }
 

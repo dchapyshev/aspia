@@ -46,7 +46,7 @@ void UiFileManager::OnBeforeThreadRunning()
     }
     else
     {
-        ScopedHICON icon(module.SmallIcon(IDI_MAIN));
+        CIcon icon(module.SmallIcon(IDI_MAIN));
         SetIcon(icon);
         SetCursor(LoadCursorW(nullptr, IDC_ARROW));
     }
@@ -72,66 +72,67 @@ void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> stat
 
     const UiModule& module = UiModule::Current();
 
-    std::wstring status_code = StatusCodeToString(UiModule::Current(), status->code());
+    CString status_code = StatusCodeToString(status->code());
     std::wstring first_path = UNICODEfromUTF8(status->first_path());
     std::wstring second_path = UNICODEfromUTF8(status->second_path());
-    std::wstring message;
+
+    CString message;
 
     switch (status->type())
     {
         case proto::RequestStatus::DRIVE_LIST:
         {
-            message = StringPrintfW(module.String(IDS_FT_OP_BROWSE_DRIVES_ERROR).c_str(),
-                                    status_code.c_str());
+            message.Format(IDS_FT_OP_BROWSE_DRIVES_ERROR,
+                           status_code);
         }
         break;
 
         case proto::RequestStatus::DIRECTORY_LIST:
         {
-            message = StringPrintfW(module.String(IDS_FT_BROWSE_FOLDERS_ERROR).c_str(),
-                                    first_path.c_str(),
-                                    status_code.c_str());
+            message.Format(IDS_FT_BROWSE_FOLDERS_ERROR,
+                           first_path.c_str(),
+                           status_code);
         }
         break;
 
         case proto::RequestStatus::CREATE_DIRECTORY:
         {
-            message = StringPrintfW(module.String(IDS_FT_OP_CREATE_FOLDER_ERROR).c_str(),
-                                    first_path.c_str(),
-                                    status_code.c_str());
+            message.Format(IDS_FT_OP_CREATE_FOLDER_ERROR,
+                           first_path.c_str(),
+                           status_code);
         }
         break;
 
         case proto::RequestStatus::RENAME:
         {
-            message = StringPrintfW(module.String(IDS_FT_OP_RENAME_ERROR).c_str(),
-                                    first_path.c_str(),
-                                    second_path.c_str(),
-                                    status_code.c_str());
+            message.Format(IDS_FT_OP_RENAME_ERROR,
+                           first_path.c_str(),
+                           second_path.c_str(),
+                           status_code);
         }
         break;
 
         case proto::RequestStatus::REMOVE:
         {
-            message = StringPrintfW(module.String(IDS_FT_OP_REMOVE_ERROR).c_str(),
-                                    first_path.c_str(),
-                                    status_code.c_str());
+            message.Format(IDS_FT_OP_REMOVE_ERROR,
+                           first_path.c_str(),
+                           status_code);
         }
         break;
 
         case proto::RequestStatus::SEND_FILE:
         {
-            message = StringPrintfW(module.String(IDS_FT_OP_SEND_FILE_ERROR).c_str(),
-                                    first_path.c_str(),
-                                    status_code.c_str());
+            message.Format(IDS_FT_OP_SEND_FILE_ERROR,
+                           first_path.c_str(),
+                           status_code);
         }
         break;
 
         case proto::RequestStatus::RECIEVE_FILE:
         {
-            message = StringPrintfW(module.String(IDS_FT_OP_RECIEVE_FILE_ERROR).c_str(),
-                                    first_path.c_str(),
-                                    status_code.c_str());
+            message.Format(IDS_FT_OP_RECIEVE_FILE_ERROR,
+                           first_path.c_str(),
+                           status_code);
         }
         break;
 
@@ -142,7 +143,7 @@ void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> stat
         break;
     }
 
-    MessageBoxW(message, MB_ICONWARNING | MB_OK);
+    ::MessageBoxW(hwnd(), message, nullptr, MB_ICONWARNING | MB_OK);
 }
 
 void UiFileManager::ReadDriveList(PanelType panel_type,
@@ -216,7 +217,8 @@ void UiFileManager::OnCreate()
 
     splitter_.SetPanels(local_panel_, remote_panel_);
 
-    SetSize(kDefaultWindowWidth, kDefaultWindowHeight);
+    SetWindowPos(nullptr, 0, 0, kDefaultWindowWidth, kDefaultWindowHeight,
+                 SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
     CenterWindow();
 }
 

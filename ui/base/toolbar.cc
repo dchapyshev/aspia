@@ -187,11 +187,11 @@ void UiToolBar::AutoSize()
     SendMessageW(TB_AUTOSIZE, 0, 0);
 }
 
-void UiToolBar::GetRect(int command_id, UiRect& rect)
+void UiToolBar::GetRect(int command_id, RECT* rect)
 {
     SendMessageW(TB_GETRECT,
                  command_id,
-                 reinterpret_cast<LPARAM>(rect.Pointer()));
+                 reinterpret_cast<LPARAM>(rect));
 }
 
 void UiToolBar::SetPadding(int cx, int cy)

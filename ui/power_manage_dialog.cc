@@ -6,63 +6,56 @@
 //
 
 #include "ui/power_manage_dialog.h"
-#include "ui/resource.h"
 #include "proto/power_session.pb.h"
 
 namespace aspia {
 
-INT_PTR UiPowerManageDialog::DoModal(HWND parent)
+LRESULT UiPowerManageDialog::OnInitDialog(UINT message,
+                                          WPARAM wparam,
+                                          LPARAM lparam,
+                                          BOOL& handled)
 {
-    return Run(UiModule::Current(), parent, IDD_POWER);
+    CenterWindow();
+    CheckDlgButton(ID_POWER_SHUTDOWN, BST_CHECKED);
+    GetDlgItem(ID_POWER_SHUTDOWN).SetFocus();
+    return 0;
 }
 
-INT_PTR UiPowerManageDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT UiPowerManageDialog::OnClose(UINT message,
+                                     WPARAM wparam,
+                                     LPARAM lparam,
+                                     BOOL& handled)
 {
-    UNREF(lparam);
+    EndDialog(proto::PowerEvent::UNKNOWN);
+    return 0;
+}
 
-    switch (msg)
-    {
-        case WM_INITDIALOG:
-        {
-            CenterWindow();
-            CheckDlgButton(ID_POWER_SHUTDOWN, BST_CHECKED);
-            SetFocus(GetDlgItem(ID_POWER_SHUTDOWN));
-        }
-        break;
+LRESULT UiPowerManageDialog::OnOkButton(WORD notify_code,
+                                        WORD control_id,
+                                        HWND control,
+                                        BOOL& handled)
+{
+    proto::PowerEvent::Action action = proto::PowerEvent::UNKNOWN;
 
-        case WM_COMMAND:
-        {
-            switch (LOWORD(wparam))
-            {
-                case IDOK:
-                {
-                    proto::PowerEvent::Action action = proto::PowerEvent::UNKNOWN;
+    if (IsDlgButtonChecked(ID_POWER_SHUTDOWN) == BST_CHECKED)
+        action = proto::PowerEvent::SHUTDOWN;
+    else if (IsDlgButtonChecked(ID_POWER_REBOOT) == BST_CHECKED)
+        action = proto::PowerEvent::REBOOT;
+    else if (IsDlgButtonChecked(ID_POWER_HIBERNATE) == BST_CHECKED)
+        action = proto::PowerEvent::HIBERNATE;
+    else if (IsDlgButtonChecked(ID_POWER_SUSPEND) == BST_CHECKED)
+        action = proto::PowerEvent::SUSPEND;
 
-                    if (IsDlgButtonChecked(ID_POWER_SHUTDOWN) == BST_CHECKED)
-                        action = proto::PowerEvent::SHUTDOWN;
-                    else if (IsDlgButtonChecked(ID_POWER_REBOOT) == BST_CHECKED)
-                        action = proto::PowerEvent::REBOOT;
-                    else if (IsDlgButtonChecked(ID_POWER_HIBERNATE) == BST_CHECKED)
-                        action = proto::PowerEvent::HIBERNATE;
-                    else if (IsDlgButtonChecked(ID_POWER_SUSPEND) == BST_CHECKED)
-                        action = proto::PowerEvent::SUSPEND;
+    EndDialog(action);
+    return 0;
+}
 
-                    EndDialog(action);
-                }
-                break;
-
-                case IDCANCEL:
-                    EndDialog(proto::PowerEvent::UNKNOWN);
-                    break;
-            }
-        }
-        break;
-
-        case WM_CLOSE:
-            EndDialog(proto::PowerEvent::UNKNOWN);
-            break;
-    }
-
+LRESULT UiPowerManageDialog::OnCancelButton(WORD notify_code,
+                                            WORD control_id,
+                                            HWND control,
+                                            BOOL& handled)
+{
+    EndDialog(proto::PowerEvent::UNKNOWN);
     return 0;
 }
 

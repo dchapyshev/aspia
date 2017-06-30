@@ -8,9 +8,10 @@
 #ifndef _ASPIA_UI__SETTINGS_DIALOG_H
 #define _ASPIA_UI__SETTINGS_DIALOG_H
 
+#include "base/macros.h"
 #include "proto/auth_session.pb.h"
 #include "proto/desktop_session.pb.h"
-#include "ui/base/modal_dialog.h"
+#include "ui/resource.h"
 
 #include <atlbase.h>
 #include <atlapp.h>
@@ -20,35 +21,45 @@
 
 namespace aspia {
 
-class UiSettingsDialog : public UiModalDialog
+class UiSettingsDialog : public CDialogImpl<UiSettingsDialog>
 {
 public:
-    UiSettingsDialog() = default;
+    enum { IDD = IDD_SETTINGS };
 
-    INT_PTR DoModal(HWND parent,
-                    proto::SessionType session_type,
-                    const proto::DesktopSessionConfig& config);
+    UiSettingsDialog(proto::SessionType session_type,
+                     const proto::DesktopSessionConfig& config);
+    ~UiSettingsDialog() = default;
 
     const proto::DesktopSessionConfig& Config() const { return config_; }
 
 private:
-    INT_PTR DoModal(HWND parent) override;
-    INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) override;
+    BEGIN_MSG_MAP(UiSettingsDialog)
+        MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+        MESSAGE_HANDLER(WM_CLOSE, OnClose)
+        MESSAGE_HANDLER(WM_HSCROLL, OnHScroll)
 
-    void OnInitDialog();
-    void OnHScroll(HWND ctrl);
+        COMMAND_ID_HANDLER(IDOK, OnOkButton)
+        COMMAND_ID_HANDLER(IDCANCEL, OnCancelButton)
 
-    void OnCodecChanged(WORD notify_code);
-    void OnOkButton();
+        COMMAND_HANDLER(IDC_CODEC_COMBO, CBN_SELCHANGE, OnCodecListChanged)
+    END_MSG_MAP()
+
+    LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnHScroll(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+
+    LRESULT OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnCodecListChanged(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     void InitCodecList();
     void AddColorDepth(CComboBox& combobox, UINT string_id, int item_data);
     void InitColorDepthList();
-    void UpdateCompressionRatio(int compression_ratio);
     void OnCodecChanged();
+    void UpdateCompressionRatio(int compression_ratio);
     void SelectItemWithData(CComboBox& combobox, int item_data);
 
-    proto::SessionType session_type_ = proto::SessionType::SESSION_TYPE_UNKNOWN;
+    proto::SessionType session_type_;
     proto::DesktopSessionConfig config_;
 
     DISALLOW_COPY_AND_ASSIGN(UiSettingsDialog);

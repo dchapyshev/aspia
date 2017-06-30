@@ -7,50 +7,85 @@
 
 #include "ui/status_dialog.h"
 #include "ui/status_code.h"
-#include "ui/resource.h"
-#include "ui/base/module.h"
 #include "base/logging.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 
 namespace aspia {
 
-INT_PTR UiStatusDialog::DoModal(HWND parent, Delegate* delegate)
+UiStatusDialog::UiStatusDialog(Delegate* delegate) :
+    delegate_(delegate)
 {
-    delegate_ = delegate;
-    return DoModal(parent);
-}
-
-INT_PTR UiStatusDialog::DoModal(HWND parent)
-{
-    return Run(UiModule::Current(), parent, IDD_STATUS);
+    // Nothing
 }
 
 void UiStatusDialog::SetDestonation(const std::wstring& address, uint16_t port)
 {
-    std::wstring format = Module().String(IDS_CONNECTION);
-
-    std::wstring message =
-        StringPrintfW(format.c_str(), address.c_str(), port);
-
-    SetWindowString(message);
+    CString message;
+    message.Format(IDS_CONNECTION, address.c_str(), port);
+    SetWindowTextW(message);
 }
 
 void UiStatusDialog::SetStatus(proto::Status status)
 {
-    AddMessage(StatusCodeToString(Module(), status));
+    AddMessage(StatusCodeToString(status));
 }
 
-void UiStatusDialog::OnInitDialog()
+LRESULT UiStatusDialog::OnInitDialog(UINT message,
+                                     WPARAM wparam,
+                                     LPARAM lparam,
+                                     BOOL& handled)
 {
-    SetForegroundWindowEx();
-    SetIcon(IDI_MAIN);
-    SetFocus(GetDlgItem(IDCANCEL));
+    small_icon_ = AtlLoadIconImage(IDI_MAIN,
+                                   LR_CREATEDIBSECTION,
+                                   GetSystemMetrics(SM_CXSMICON),
+                                   GetSystemMetrics(SM_CYSMICON));
+    SetIcon(small_icon_, FALSE);
+
+    big_icon_ = AtlLoadIconImage(IDI_MAIN,
+                                 LR_CREATEDIBSECTION,
+                                 GetSystemMetrics(SM_CXICON),
+                                 GetSystemMetrics(SM_CYICON));
+    SetIcon(small_icon_, TRUE);
+
+    GetDlgItem(IDCANCEL).SetFocus();
 
     delegate_->OnStatusDialogOpen();
+
+    DWORD active_thread_id =
+        GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
+
+    DWORD current_thread_id = GetCurrentThreadId();
+
+    if (active_thread_id != current_thread_id)
+    {
+        AttachThreadInput(current_thread_id, active_thread_id, TRUE);
+        SetForegroundWindow(*this);
+        AttachThreadInput(current_thread_id, active_thread_id, FALSE);
+    }
+
+    return 0;
 }
 
-void UiStatusDialog::AddMessage(const std::wstring& message)
+LRESULT UiStatusDialog::OnClose(UINT message,
+                                WPARAM wparam,
+                                LPARAM lparam,
+                                BOOL& handled)
+{
+    EndDialog(0);
+    return 0;
+}
+
+LRESULT UiStatusDialog::OnCloseButton(WORD notify_code,
+                                      WORD control_id,
+                                      HWND control,
+                                      BOOL& handled)
+{
+    EndDialog(0);
+    return 0;
+}
+
+void UiStatusDialog::AddMessage(const CString& message)
 {
     CEdit status_edit(GetDlgItem(IDC_STATUS_EDIT));
 
@@ -68,37 +103,8 @@ void UiStatusDialog::AddMessage(const std::wstring& message)
         status_edit.AppendText(L": ");
     }
 
-    status_edit.AppendText(message.c_str());
+    status_edit.AppendText(message);
     status_edit.AppendText(L"\r\n");
-}
-
-INT_PTR UiStatusDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
-{
-    UNREF(lparam);
-
-    switch (msg)
-    {
-        case WM_INITDIALOG:
-            OnInitDialog();
-            break;
-
-        case WM_COMMAND:
-        {
-            switch (LOWORD(wparam))
-            {
-                case IDCANCEL:
-                    EndDialog();
-                    break;
-            }
-        }
-        break;
-
-        case WM_CLOSE:
-            EndDialog();
-            break;
-    }
-
-    return 0;
 }
 
 } // namespace aspia

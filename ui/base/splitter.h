@@ -10,6 +10,12 @@
 
 #include "ui/base/child_window.h"
 
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <atlctrls.h>
+#include <atlmisc.h>
+
 namespace aspia {
 
 class UiSplitter : public UiChildWindow
@@ -29,7 +35,7 @@ private:
     void OnLButtonDown();
     void OnLButtonUp();
     void OnMouseMove();
-    void OnSize(const UiSize& size);
+    void OnSize(const CSize& size);
     void OnDrawItem(LPDRAWITEMSTRUCT dis);
     void Draw();
     int NormalizePosition(int position);
@@ -45,7 +51,7 @@ private:
     UiWindow right_panel_;
     UiWindow split_panel_;
 
-    UiSize prev_size_;
+    CSize prev_size_;
 
     bool is_sizing_ = false;
 

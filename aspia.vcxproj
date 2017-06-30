@@ -142,9 +142,6 @@
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\child_window.cc" />
     <ClCompile Include="ui\base\comboboxex.cc" />
-    <ClCompile Include="ui\base\dialog.cc" />
-    <ClCompile Include="ui\base\listview.cc" />
-    <ClCompile Include="ui\base\modal_dialog.cc" />
     <ClCompile Include="ui\base\module.cc" />
     <ClCompile Include="ui\base\splitter.cc" />
     <ClCompile Include="ui\base\timer.cc" />
@@ -320,14 +317,7 @@
     <ClInclude Include="ui\auth_dialog.h" />
     <ClInclude Include="ui\base\child_window.h" />
     <ClInclude Include="ui\base\comboboxex.h" />
-    <ClInclude Include="ui\base\dialog.h" />
-    <ClInclude Include="ui\base\listview.h" />
-    <ClInclude Include="ui\base\modal_dialog.h" />
     <ClInclude Include="ui\base\module.h" />
-    <ClInclude Include="ui\base\point.h" />
-    <ClInclude Include="ui\base\rect.h" />
-    <ClInclude Include="ui\base\scoped_begin_paint.h" />
-    <ClInclude Include="ui\base\size.h" />
     <ClInclude Include="ui\base\splitter.h" />
     <ClInclude Include="ui\base\timer.h" />
     <ClInclude Include="ui\base\toolbar.h" />

@@ -60,26 +60,26 @@ void UiSplitter::OnDestroy()
     split_panel_.DestroyWindow();
 }
 
-void UiSplitter::OnSize(const UiSize& size)
+void UiSplitter::OnSize(const CSize& size)
 {
     HDWP dwp = BeginDeferWindowPos(3);
 
     if (dwp)
     {
-        height_ = size.Height();
+        height_ = size.cy;
 
         if (!fixed_left_)
         {
             // Proportional mode.
 
-            if (prev_size_.IsEmpty())
+            if (prev_size_.cx <= 0 || prev_size_.cy <= 0)
             {
-                x_ = (size.Width() / 2) - (kSplitPanelWidth / 2);
-                prev_size_.CopyFrom(size);
+                x_ = (size.cx / 2) - (kSplitPanelWidth / 2);
+                prev_size_ = size;
             }
 
-            int prev_x = (prev_size_.Width() / 2) - (kSplitPanelWidth / 2);
-            int curr_x = (size.Width() / 2) - (kSplitPanelWidth / 2);
+            int prev_x = (prev_size_.cx / 2) - (kSplitPanelWidth / 2);
+            int curr_x = (size.cx / 2) - (kSplitPanelWidth / 2);
 
             x_ += curr_x - prev_x;
         }
@@ -100,7 +100,7 @@ void UiSplitter::OnSize(const UiSize& size)
                        nullptr,
                        x_ + kSplitPanelWidth + kBorderSize,
                        kBorderSize,
-                       size.Width() - x_ - kSplitPanelWidth - (kBorderSize * 2),
+                       size.cx - x_ - kSplitPanelWidth - (kBorderSize * 2),
                        height_ - (kBorderSize * 2),
                        SWP_NOACTIVATE | SWP_NOZORDER);
 
@@ -151,10 +151,11 @@ int UiSplitter::NormalizePosition(int position)
     }
     else
     {
-        int width = ClientWidth();
+        CRect client_rect;
+        GetClientRect(hwnd(), client_rect);
 
-        if (position > (width - kSplitPanelWidth))
-            return width - kSplitPanelWidth;
+        if (position > (client_rect.Width() - kSplitPanelWidth))
+            return client_rect.Width() - kSplitPanelWidth;
     }
 
     return position;
@@ -163,7 +164,7 @@ int UiSplitter::NormalizePosition(int position)
 void UiSplitter::OnLButtonDown()
 {
     is_sizing_ = true;
-    x_ = NormalizePosition(CursorPos().x());
+    x_ = NormalizePosition(CursorPos().x);
 
     SetCapture(hwnd());
     Draw();
@@ -176,14 +177,23 @@ void UiSplitter::OnLButtonUp()
         is_sizing_ = false;
 
         Draw();
-        OnSize(ClientSize());
+
+        CRect client_rect;
+        GetClientRect(hwnd(), client_rect);
+
+        OnSize(client_rect.Size());
         ReleaseCapture();
     }
 }
 
 void UiSplitter::OnMouseMove()
 {
-    if (split_panel_.ClientRect().Contains(split_panel_.CursorPos()))
+    CPoint cursor_pos(split_panel_.CursorPos());
+
+    CRect panel_rect;
+    GetClientRect(split_panel_, panel_rect);
+
+    if (panel_rect.PtInRect(cursor_pos))
     {
         ::SetCursor(cursor_);
     }
@@ -192,7 +202,7 @@ void UiSplitter::OnMouseMove()
         return;
 
     Draw();
-    x_ = NormalizePosition(CursorPos().x());
+    x_ = NormalizePosition(CursorPos().x);
     Draw();
 }
 
@@ -223,7 +233,7 @@ bool UiSplitter::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* resu
             break;
 
         case WM_SIZE:
-            OnSize(UiSize(lparam));
+            OnSize(CSize(lparam));
             break;
 
         case WM_LBUTTONUP:

@@ -6,40 +6,32 @@
 //
 
 #include "ui/file_transfer_dialog.h"
-#include "ui/resource.h"
 
 namespace aspia {
 
-INT_PTR UiFileTransferDialog::DoModal(HWND parent)
+LRESULT UiFileTransferDialog::OnInitDialog(UINT message,
+                                           WPARAM wparam,
+                                           LPARAM lparam,
+                                           BOOL& handled)
 {
-    return Run(UiModule::Current(), parent, IDD_FILE_TRANSFER);
+    // TODO
 }
 
-INT_PTR UiFileTransferDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT UiFileTransferDialog::OnClose(UINT message,
+                                      WPARAM wparam,
+                                      LPARAM lparam,
+                                      BOOL& handled)
 {
-    UNREF(lparam);
+    EndDialog(0);
+    return 0;
+}
 
-    switch (msg)
-    {
-        case WM_INITDIALOG:
-            break;
-
-        case WM_COMMAND:
-        {
-            switch (LOWORD(wparam))
-            {
-                case IDCANCEL:
-                    EndDialog();
-                    break;
-            }
-        }
-        break;
-
-        case WM_CLOSE:
-            EndDialog();
-            break;
-    }
-
+LRESULT UiFileTransferDialog::OnCancelButton(WORD notify_code,
+                                             WORD control_id,
+                                             HWND control,
+                                             BOOL& handled)
+{
+    EndDialog(0);
     return 0;
 }
 

@@ -8,19 +8,36 @@
 #ifndef _ASPIA_UI__FILE_TRANSFER_DIALOG_H
 #define _ASPIA_UI__FILE_TRANSFER_DIALOG_H
 
-#include "ui/base/modal_dialog.h"
+#include "base/macros.h"
+#include "ui/resource.h"
+
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <atlctrls.h>
+#include <atlmisc.h>
 
 namespace aspia {
 
-class UiFileTransferDialog : public UiModalDialog
+class UiFileTransferDialog : public CDialogImpl<UiFileTransferDialog>
 {
 public:
-    UiFileTransferDialog() = default;
+    enum { IDD = IDD_FILE_TRANSFER };
 
-    INT_PTR DoModal(HWND parent) override;
+    UiFileTransferDialog() = default;
+    ~UiFileTransferDialog() = default;
 
 private:
-    INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) override;
+    BEGIN_MSG_MAP(UiFileTransferDialog)
+        MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+        MESSAGE_HANDLER(WM_CLOSE, OnClose)
+
+        COMMAND_ID_HANDLER(IDCANCEL, OnCancelButton)
+    END_MSG_MAP()
+
+    LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     DISALLOW_COPY_AND_ASSIGN(UiFileTransferDialog);
 };

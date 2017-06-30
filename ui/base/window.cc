@@ -32,10 +32,11 @@ void UiWindow::CenterWindow(HWND hwnd_center)
     }
 
     // Get coordinates of the window relative to its parent.
-    UiRect hwnd_rect = Rect();
+    CRect hwnd_rect;
+    GetWindowRect(hwnd(), hwnd_rect);
 
-    UiRect center_rect;
-    UiRect parent_hwnd_rect;
+    CRect center_rect;
+    CRect parent_hwnd_rect;
 
     if (!(style & WS_CHILD))
     {
@@ -64,20 +65,20 @@ void UiWindow::CenterWindow(HWND hwnd_center)
         minfo.cbSize = sizeof(MONITORINFO);
         GetMonitorInfoW(monitor, &minfo);
 
-        parent_hwnd_rect.CopyFrom(minfo.rcWork);
+        parent_hwnd_rect = minfo.rcWork;
 
         if (!hwnd_center)
-            center_rect.CopyFrom(parent_hwnd_rect);
+            center_rect = parent_hwnd_rect;
         else
-            GetWindowRect(hwnd_center, center_rect.Pointer());
+            GetWindowRect(hwnd_center, center_rect);
     }
     else
     {
         // Center within parent client coordinates.
         HWND hwnd_parent = GetParent(hwnd_);
 
-        GetClientRect(hwnd_parent, parent_hwnd_rect.Pointer());
-        GetClientRect(hwnd_center, center_rect.Pointer());
+        GetClientRect(hwnd_parent, parent_hwnd_rect);
+        GetClientRect(hwnd_center, center_rect);
 
         MapWindowPoints(hwnd_center,
                         hwnd_parent,
@@ -90,15 +91,15 @@ void UiWindow::CenterWindow(HWND hwnd_center)
     int top = center_rect.Height() / 2 - hwnd_rect.Height() / 2;
 
     // If the dialog is outside the screen, move it inside.
-    if (left + hwnd_rect.Width() > parent_hwnd_rect.Right())
-        left = parent_hwnd_rect.Right() - hwnd_rect.Width();
-    if (left < parent_hwnd_rect.Left())
-        left = parent_hwnd_rect.Left();
+    if (left + hwnd_rect.Width() > parent_hwnd_rect.right)
+        left = parent_hwnd_rect.right - hwnd_rect.Width();
+    if (left < parent_hwnd_rect.left)
+        left = parent_hwnd_rect.left;
 
-    if (top + hwnd_rect.Height() > parent_hwnd_rect.Bottom())
-        top = parent_hwnd_rect.Bottom() - hwnd_rect.Height();
-    if (top < parent_hwnd_rect.Top())
-        top = parent_hwnd_rect.Top();
+    if (top + hwnd_rect.Height() > parent_hwnd_rect.bottom)
+        top = parent_hwnd_rect.bottom - hwnd_rect.Height();
+    if (top < parent_hwnd_rect.top)
+        top = parent_hwnd_rect.top;
 
     // Map screen coordinates to child coordinates.
     SetWindowPos(nullptr, left, top, -1, -1,
@@ -161,100 +162,17 @@ void UiWindow::SetMenu(HMENU menu)
     ::SetMenu(hwnd(), menu);
 }
 
-int UiWindow::Width()
+CPoint UiWindow::CursorPos()
 {
-    return Size().Width();
-}
+    CPoint cursor_pos;
 
-int UiWindow::Height()
-{
-    return Size().Height();
-}
+    if (!GetCursorPos(&cursor_pos))
+        return CPoint();
 
-UiSize UiWindow::Size()
-{
-    return Rect().Size();
-}
-
-UiPoint UiWindow::Pos()
-{
-    return Rect().Pos();
-}
-
-int UiWindow::ClientWidth()
-{
-    return ClientRect().Width();
-}
-
-int UiWindow::ClientHeight()
-{
-    return ClientRect().Height();
-}
-
-UiSize UiWindow::ClientSize()
-{
-    return ClientRect().Size();
-}
-
-UiRect UiWindow::Rect()
-{
-    UiRect rect;
-
-    if (!GetWindowRect(hwnd(), rect.Pointer()))
-        return UiRect();
-
-    return rect;
-}
-
-UiRect UiWindow::ClientRect()
-{
-    UiRect rect;
-
-    if (!GetClientRect(hwnd(), rect.Pointer()))
-        return UiRect();
-
-    return rect;
-}
-
-UiPoint UiWindow::CursorPos()
-{
-    UiPoint cursor_pos;
-
-    if (!GetCursorPos(cursor_pos.Pointer()))
-        return UiPoint();
-
-    if (!ScreenToClient(cursor_pos))
-        return UiPoint();
+    if (!ScreenToClient(&cursor_pos))
+        return CPoint();
 
     return cursor_pos;
-}
-
-void UiWindow::SetSize(int width, int height)
-{
-    SetWindowPos(nullptr, 0, 0, width, height,
-                 SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
-}
-
-void UiWindow::SetSize(const UiSize& size)
-{
-    SetSize(size.Width(), size.Height());
-}
-
-void UiWindow::SetPos(int x, int y)
-{
-    SetWindowPos(nullptr, x, y, 0, 0,
-                 SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOSIZE);
-}
-
-void UiWindow::SetPos(const UiPoint& pos)
-{
-    SetPos(pos.x(), pos.y());
-}
-
-void UiWindow::SetTopMost()
-{
-    SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0,
-                 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 }
 
 void UiWindow::ShowWindow(int cmd_show)
@@ -262,55 +180,9 @@ void UiWindow::ShowWindow(int cmd_show)
     ::ShowWindow(hwnd(), cmd_show);
 }
 
-void UiWindow::Show()
+void UiWindow::InvalidateRect(const CRect& rect, bool erase)
 {
-    ::ShowWindow(hwnd(), SW_SHOW);
-}
-
-void UiWindow::ShowNormal()
-{
-    ::ShowWindow(hwnd(), SW_SHOWNORMAL);
-}
-
-void UiWindow::Hide()
-{
-    ::ShowWindow(hwnd(), SW_HIDE);
-}
-
-void UiWindow::Minimize()
-{
-    ::ShowWindow(hwnd(), SW_MINIMIZE);
-}
-
-void UiWindow::Maximize()
-{
-    ::ShowWindow(hwnd(), SW_MAXIMIZE);
-}
-
-bool UiWindow::IsVisible()
-{
-    return !!IsWindowVisible(hwnd());
-}
-
-bool UiWindow::IsMaximized()
-{
-    WINDOWPLACEMENT wp = { 0 };
-    wp.length = sizeof(wp);
-
-    if (!GetWindowPlacement(wp))
-        return false;
-
-    return (wp.showCmd == SW_MAXIMIZE) ? true : false;
-}
-
-bool UiWindow::IsMinimized()
-{
-    return !!IsIconic(hwnd());
-}
-
-void UiWindow::InvalidateRect(const UiRect& rect, bool erase)
-{
-    ::InvalidateRect(hwnd(), rect.ConstPointer(), erase);
+    ::InvalidateRect(hwnd(), rect, erase);
 }
 
 void UiWindow::Invalidate()
@@ -331,11 +203,6 @@ BOOL UiWindow::PostMessageW(UINT message, WPARAM wparam, LPARAM lparam)
 bool UiWindow::ScreenToClient(POINT* point)
 {
     return !!::ScreenToClient(hwnd(), point);
-}
-
-bool UiWindow::ScreenToClient(UiPoint& point)
-{
-    return ScreenToClient(point.Pointer());
 }
 
 int UiWindow::ScrollWindowEx(int dx,

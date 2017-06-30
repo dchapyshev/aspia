@@ -6,40 +6,32 @@
 //
 
 #include "ui/file_replace_dialog.h"
-#include "ui/resource.h"
 
 namespace aspia {
 
-INT_PTR FileReplaceDialog::DoModal(HWND parent)
+LRESULT UiFileReplaceDialog::OnInitDialog(UINT message,
+                                          WPARAM wparam,
+                                          LPARAM lparam,
+                                          BOOL& handled)
 {
-    return Run(UiModule::Current(), parent, IDD_FILE_REPLACE);
+    // TODO
 }
 
-INT_PTR FileReplaceDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT UiFileReplaceDialog::OnClose(UINT message,
+                                     WPARAM wparam,
+                                     LPARAM lparam,
+                                     BOOL& handled)
 {
-    UNREF(lparam);
+    EndDialog(0);
+    return 0;
+}
 
-    switch (msg)
-    {
-        case WM_INITDIALOG:
-            break;
-
-        case WM_COMMAND:
-        {
-            switch (LOWORD(wparam))
-            {
-                case IDCANCEL:
-                    EndDialog();
-                    break;
-            }
-        }
-        break;
-
-        case WM_CLOSE:
-            EndDialog();
-            break;
-    }
-
+LRESULT UiFileReplaceDialog::OnCancelButton(WORD notify_code,
+                                            WORD control_id,
+                                            HWND control,
+                                            BOOL& handled)
+{
+    EndDialog(0);
     return 0;
 }
 

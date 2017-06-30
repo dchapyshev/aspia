@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.4
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libyuv", "3rdparty\libyuv\libyuv.vcxproj", "{6A17CB88-F0BC-3A3E-A739-ADA98D51ED38}"
 EndProject
@@ -61,6 +61,32 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aspia", "aspia.vcxproj", "{
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libsodium", "3rdparty\libsodium\libsodium.vcxproj", "{A185B162-6CB6-4502-B03F-B56F7699A8D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wtl", "wtl", "{DFE7AAB4-2168-4E64-87DC-9A763B925B05}"
+	ProjectSection(SolutionItems) = preProject
+		3rdparty\wtl\include\atlapp.h = 3rdparty\wtl\include\atlapp.h
+		3rdparty\wtl\include\atlcrack.h = 3rdparty\wtl\include\atlcrack.h
+		3rdparty\wtl\include\atlctrls.h = 3rdparty\wtl\include\atlctrls.h
+		3rdparty\wtl\include\atlctrlw.h = 3rdparty\wtl\include\atlctrlw.h
+		3rdparty\wtl\include\atlctrlx.h = 3rdparty\wtl\include\atlctrlx.h
+		3rdparty\wtl\include\atlddx.h = 3rdparty\wtl\include\atlddx.h
+		3rdparty\wtl\include\atldlgs.h = 3rdparty\wtl\include\atldlgs.h
+		3rdparty\wtl\include\atldwm.h = 3rdparty\wtl\include\atldwm.h
+		3rdparty\wtl\include\atlfind.h = 3rdparty\wtl\include\atlfind.h
+		3rdparty\wtl\include\atlframe.h = 3rdparty\wtl\include\atlframe.h
+		3rdparty\wtl\include\atlgdi.h = 3rdparty\wtl\include\atlgdi.h
+		3rdparty\wtl\include\atlmisc.h = 3rdparty\wtl\include\atlmisc.h
+		3rdparty\wtl\include\atlprint.h = 3rdparty\wtl\include\atlprint.h
+		3rdparty\wtl\include\atlres.h = 3rdparty\wtl\include\atlres.h
+		3rdparty\wtl\include\atlresce.h = 3rdparty\wtl\include\atlresce.h
+		3rdparty\wtl\include\atlribbon.h = 3rdparty\wtl\include\atlribbon.h
+		3rdparty\wtl\include\atlscrl.h = 3rdparty\wtl\include\atlscrl.h
+		3rdparty\wtl\include\atlsplit.h = 3rdparty\wtl\include\atlsplit.h
+		3rdparty\wtl\include\atltheme.h = 3rdparty\wtl\include\atltheme.h
+		3rdparty\wtl\include\atluser.h = 3rdparty\wtl\include\atluser.h
+		3rdparty\wtl\include\atlwince.h = 3rdparty\wtl\include\atlwince.h
+		3rdparty\wtl\include\atlwinx.h = 3rdparty\wtl\include\atlwinx.h
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -245,5 +271,6 @@ Global
 		{9C4961D2-5DDB-40C7-9BE8-CA918DC4E782} = {FA009D11-9BAC-4721-ABF2-3B7CDE607669}
 		{50F2F748-A976-3AAC-97F5-35A573428CE6} = {9FFC6DBE-A94A-4C0C-993A-D2EEF8A5722F}
 		{A185B162-6CB6-4502-B03F-B56F7699A8D9} = {9FFC6DBE-A94A-4C0C-993A-D2EEF8A5722F}
+		{DFE7AAB4-2168-4E64-87DC-9A763B925B05} = {9FFC6DBE-A94A-4C0C-993A-D2EEF8A5722F}
 	EndGlobalSection
 EndGlobal

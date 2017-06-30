@@ -14,6 +14,12 @@
 #include "ui/base/splitter.h"
 #include "ui/file_manager_panel.h"
 
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <atlctrls.h>
+#include <atlmisc.h>
+
 namespace aspia {
 
 class UiFileManager :

@@ -307,9 +307,6 @@
     <ClCompile Include="ui\base\child_window.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
-    <ClCompile Include="ui\base\modal_dialog.cc">
-      <Filter>ui\base</Filter>
-    </ClCompile>
     <ClCompile Include="ui\base\module.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
@@ -327,9 +324,6 @@
     </ClCompile>
     <ClCompile Include="base\version_helpers.cc">
       <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\base\listview.cc">
-      <Filter>ui\base</Filter>
     </ClCompile>
     <ClCompile Include="ui\power_manage_dialog.cc">
       <Filter>ui</Filter>
@@ -417,9 +411,6 @@
     </ClCompile>
     <ClCompile Include="ui\get_stock_icon.cc">
       <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\base\dialog.cc">
-      <Filter>ui\base</Filter>
     </ClCompile>
     <ClCompile Include="protocol\filesystem.cc">
       <Filter>protocol</Filter>
@@ -818,9 +809,6 @@
     <ClInclude Include="ui\base\child_window.h">
       <Filter>ui\base</Filter>
     </ClInclude>
-    <ClInclude Include="ui\base\modal_dialog.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
     <ClInclude Include="ui\base\module.h">
       <Filter>ui\base</Filter>
     </ClInclude>
@@ -847,9 +835,6 @@
     </ClInclude>
     <ClInclude Include="network\scoped_addrinfo.h">
       <Filter>network</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\base\listview.h">
-      <Filter>ui\base</Filter>
     </ClInclude>
     <ClInclude Include="ui\power_manage_dialog.h">
       <Filter>ui</Filter>
@@ -944,9 +929,6 @@
     <ClInclude Include="ui\get_stock_icon.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="ui\base\dialog.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
     <ClInclude Include="protocol\filesystem.h">
       <Filter>protocol</Filter>
     </ClInclude>
@@ -1006,18 +988,6 @@
     </ClInclude>
     <ClInclude Include="protocol\io_queue.h">
       <Filter>protocol</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\base\rect.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\base\size.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\base\point.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\base\scoped_begin_paint.h">
-      <Filter>ui\base</Filter>
     </ClInclude>
     <ClInclude Include="ui\base\timer.h">
       <Filter>ui\base</Filter>

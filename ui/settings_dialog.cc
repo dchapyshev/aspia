@@ -6,8 +6,6 @@
 //
 
 #include "ui/settings_dialog.h"
-#include "ui/resource.h"
-#include "ui/base/module.h"
 #include "desktop_capture/pixel_format.h"
 #include "codec/video_helpers.h"
 #include "base/strings/string_util.h"
@@ -34,18 +32,12 @@ static const int kMaxCompressRatio = 9;
 static const int kMinCompressRatio = 1;
 static const int kDefCompressRatio = 6;
 
-INT_PTR UiSettingsDialog::DoModal(HWND parent,
-                                  proto::SessionType session_type,
-                                  const proto::DesktopSessionConfig& config)
+UiSettingsDialog::UiSettingsDialog(proto::SessionType session_type,
+                                   const proto::DesktopSessionConfig& config) :
+    session_type_(session_type),
+    config_(config)
 {
-    session_type_ = session_type;
-    config_.CopyFrom(config);
-    return DoModal(parent);
-}
-
-INT_PTR UiSettingsDialog::DoModal(HWND parent)
-{
-    return Run(UiModule::Current(), parent, IDD_SETTINGS);
+    // Nothing
 }
 
 void UiSettingsDialog::AddColorDepth(CComboBox& combobox, UINT string_id, int item_data)
@@ -144,13 +136,15 @@ void UiSettingsDialog::InitCodecList()
 
 void UiSettingsDialog::UpdateCompressionRatio(int compression_ratio)
 {
-    std::wstring format = Module().String(IDS_DM_COMPRESSION_RATIO_FORMAT);
-
-    SetDlgItemString(IDC_COMPRESS_RATIO_TEXT,
-                     StringPrintfW(format.c_str(), compression_ratio));
+    CString text;
+    text.Format(IDS_DM_COMPRESSION_RATIO_FORMAT, compression_ratio);
+    SetDlgItemTextW(IDC_COMPRESS_RATIO_TEXT, text);
 }
 
-void UiSettingsDialog::OnInitDialog()
+LRESULT UiSettingsDialog::OnInitDialog(UINT message,
+                                       WPARAM wparam,
+                                       LPARAM lparam,
+                                       BOOL& handled)
 {
     InitCodecList();
     InitColorDepthList();
@@ -169,8 +163,8 @@ void UiSettingsDialog::OnInitDialog()
 
     if (session_type_ == proto::SessionType::SESSION_TYPE_DESKTOP_VIEW)
     {
-        EnableDlgItem(IDC_ENABLE_CLIPBOARD_CHECK, FALSE);
-        EnableDlgItem(IDC_ENABLE_CURSOR_SHAPE_CHECK, FALSE);
+        GetDlgItem(IDC_ENABLE_CLIPBOARD_CHECK).EnableWindow(FALSE);
+        GetDlgItem(IDC_ENABLE_CURSOR_SHAPE_CHECK).EnableWindow(FALSE);
     }
     else
     {
@@ -182,40 +176,64 @@ void UiSettingsDialog::OnInitDialog()
             (config_.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD) ?
                 BST_CHECKED : BST_UNCHECKED);
     }
+
+    return 0;
 }
 
-void UiSettingsDialog::OnHScroll(HWND ctrl)
+LRESULT UiSettingsDialog::OnClose(UINT message,
+                                  WPARAM wparam,
+                                  LPARAM lparam,
+                                  BOOL& handled)
 {
-    if (GetWindowLongPtrW(ctrl, GWLP_ID) == IDC_COMPRESS_RATIO_TRACKBAR)
+    EndDialog(IDCANCEL);
+    return 0;
+}
+
+LRESULT UiSettingsDialog::OnHScroll(UINT message,
+                                    WPARAM wparam,
+                                    LPARAM lparam,
+                                    BOOL& handled)
+{
+    CWindow control(reinterpret_cast<HWND>(lparam));
+
+    if (control.GetWindowLongPtrW(GWLP_ID) == IDC_COMPRESS_RATIO_TRACKBAR)
     {
-        CTrackBarCtrl ratio(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR));
+        CTrackBarCtrl ratio(control);
         UpdateCompressionRatio(ratio.GetPos());
     }
+
+    return 0;
 }
 
 void UiSettingsDialog::OnCodecChanged()
 {
     CComboBox codec_combo(GetDlgItem(IDC_CODEC_COMBO));
 
-    bool has_pixel_format =
+    BOOL has_pixel_format =
         (codec_combo.GetItemData(codec_combo.GetCurSel()) ==
             proto::VIDEO_ENCODING_ZLIB);
 
-    EnableDlgItem(IDC_COLOR_DEPTH_TEXT, has_pixel_format);
-    EnableDlgItem(IDC_COLOR_DEPTH_COMBO, has_pixel_format);
-    EnableDlgItem(IDC_COMPRESS_RATIO_TEXT, has_pixel_format);
-    EnableDlgItem(IDC_COMPRESS_RATIO_TRACKBAR, has_pixel_format);
-    EnableDlgItem(IDC_FAST_TEXT, has_pixel_format);
-    EnableDlgItem(IDC_BEST_TEXT, has_pixel_format);
+    GetDlgItem(IDC_COLOR_DEPTH_TEXT).EnableWindow(has_pixel_format);
+    GetDlgItem(IDC_COLOR_DEPTH_COMBO).EnableWindow(has_pixel_format);
+    GetDlgItem(IDC_COMPRESS_RATIO_TEXT).EnableWindow(has_pixel_format);
+    GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR).EnableWindow(has_pixel_format);
+    GetDlgItem(IDC_FAST_TEXT).EnableWindow(has_pixel_format);
+    GetDlgItem(IDC_BEST_TEXT).EnableWindow(has_pixel_format);
 }
 
-void UiSettingsDialog::OnCodecChanged(WORD notify_code)
+LRESULT UiSettingsDialog::OnCodecListChanged(WORD notify_code,
+                                             WORD control_id,
+                                             HWND control,
+                                             BOOL& handled)
 {
-    if (notify_code == CBN_SELCHANGE)
-        OnCodecChanged();
+    OnCodecChanged();
+    return 0;
 }
 
-void UiSettingsDialog::OnOkButton()
+LRESULT UiSettingsDialog::OnOkButton(WORD notify_code,
+                                     WORD control_id,
+                                     HWND control,
+                                     BOOL& handled)
 {
     CComboBox codec_combo(GetDlgItem(IDC_CODEC_COMBO));
 
@@ -298,44 +316,15 @@ void UiSettingsDialog::OnOkButton()
     }
 
     EndDialog(IDOK);
+    return 0;
 }
 
-INT_PTR UiSettingsDialog::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT UiSettingsDialog::OnCancelButton(WORD notify_code,
+                                         WORD control_id,
+                                         HWND control,
+                                         BOOL& handled)
 {
-    switch (msg)
-    {
-        case WM_INITDIALOG:
-            OnInitDialog();
-            break;
-
-        case WM_CLOSE:
-            EndDialog(IDCANCEL);
-            break;
-
-        case WM_HSCROLL:
-            OnHScroll(reinterpret_cast<HWND>(lparam));
-            break;
-
-        case WM_COMMAND:
-        {
-            switch (LOWORD(wparam))
-            {
-                case IDC_CODEC_COMBO:
-                    OnCodecChanged(HIWORD(wparam));
-                    break;
-
-                case IDOK:
-                    OnOkButton();
-                    break;
-
-                case IDCANCEL:
-                    EndDialog(IDCANCEL);
-                    break;
-            }
-        }
-        break;
-    }
-
+    EndDialog(IDCANCEL);
     return 0;
 }
 

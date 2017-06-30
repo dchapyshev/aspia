@@ -19,7 +19,8 @@ Client::Client(std::unique_ptr<NetworkChannel> channel,
                Delegate* delegate) :
     channel_(std::move(channel)),
     config_(config),
-    delegate_(delegate)
+    delegate_(delegate),
+    status_dialog_(this)
 {
     ui_thread_.Start(MessageLoop::Type::TYPE_UI, this);
 }
@@ -137,7 +138,7 @@ void Client::OnStatusDialogOpen()
 
 void Client::OpenStatusDialog()
 {
-    status_dialog_.DoModal(nullptr, this);
+    status_dialog_.DoModal(nullptr);
 }
 
 void Client::CreateSession(proto::SessionType session_type)

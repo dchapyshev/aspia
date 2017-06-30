@@ -8,21 +8,22 @@
 #ifndef _ASPIA_UI__STATUS_DIALOG_H
 #define _ASPIA_UI__STATUS_DIALOG_H
 
-#include "base/scoped_gdi_object.h"
+#include "base/macros.h"
 #include "proto/status.pb.h"
-#include "ui/base/modal_dialog.h"
+#include "ui/resource.h"
 
 #include <atlbase.h>
 #include <atlapp.h>
 #include <atlwin.h>
 #include <atlctrls.h>
+#include <atlmisc.h>
 
 namespace aspia {
 
-class UiStatusDialog : public UiModalDialog
+class UiStatusDialog : public CDialogImpl<UiStatusDialog>
 {
 public:
-    UiStatusDialog() = default;
+    enum { IDD = IDD_STATUS };
 
     class Delegate
     {
@@ -30,18 +31,30 @@ public:
         virtual void OnStatusDialogOpen() = 0;
     };
 
-    INT_PTR DoModal(HWND parent, Delegate* delegate);
+    UiStatusDialog(Delegate* delegate);
+    ~UiStatusDialog() = default;
+
     void SetDestonation(const std::wstring& address, uint16_t port);
     void SetStatus(proto::Status status);
 
 private:
-    INT_PTR DoModal(HWND parent) override;
-    INT_PTR OnMessage(UINT msg, WPARAM wparam, LPARAM lparam) override;
+    BEGIN_MSG_MAP(UiStatusDialog)
+        MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+        MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
-    void OnInitDialog();
-    void AddMessage(const std::wstring& message);
+        COMMAND_ID_HANDLER(IDCANCEL, OnCloseButton)
+    END_MSG_MAP()
+
+    LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnCloseButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+
+    void AddMessage(const CString& message);
 
     Delegate* delegate_ = nullptr;
+
+    CIcon small_icon_;
+    CIcon big_icon_;
 
     DISALLOW_COPY_AND_ASSIGN(UiStatusDialog);
 };

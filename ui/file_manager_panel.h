@@ -11,7 +11,6 @@
 #include "ui/base/child_window.h"
 #include "ui/base/toolbar.h"
 #include "ui/base/comboboxex.h"
-#include "ui/base/listview.h"
 #include "ui/base/module.h"
 #include "proto/file_transfer_session.pb.h"
 
@@ -79,6 +78,10 @@ private:
     void OnListItemChanged();
     void OnSend();
     void AddToolBarIcon(UINT icon_id);
+    int GetColumnCount();
+    void DeleteAllColumns();
+    void AddColumn(UINT string_id, int width);
+    int GetItemUnderMousePointer();
 
     // ChildWindow implementation.
     bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;
@@ -90,7 +93,7 @@ private:
     CStatic title_;
 
     std::unique_ptr<proto::DirectoryList> directory_list_;
-    UiListView list_;
+    CListViewCtrl list_;
     CImageListManaged list_imagelist_;
 
     UiToolBar toolbar_;

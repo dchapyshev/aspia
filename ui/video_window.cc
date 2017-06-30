@@ -8,10 +8,10 @@
 #include "ui/video_window.h"
 #include "base/scoped_select_object.h"
 #include "proto/desktop_session_message.pb.h"
-#include "ui/base/scoped_begin_paint.h"
 #include "ui/base/module.h"
 
 #include <algorithm>
+#include <atlgdi.h>
 
 namespace aspia {
 
@@ -31,70 +31,67 @@ UiVideoWindow::UiVideoWindow(Delegate* delegate) :
     // Nothing
 }
 
-void UiVideoWindow::DrawBackground(HDC paint_dc, const UiRect& paint_rect)
+void UiVideoWindow::DrawBackground(HDC paint_dc, const CRect& paint_rect)
 {
-    UiRect left_rect =
-        UiRect::MakeLTRB(paint_rect.Left(),
-                         paint_rect.Top(),
-                         center_offset_.x(),
-                         paint_rect.Bottom());
+    CRect left_rect(paint_rect.left,
+                    paint_rect.top,
+                    center_offset_.x,
+                    paint_rect.bottom);
 
-    UiRect right_rect =
-        UiRect::MakeLTRB(center_offset_.x() + frame_->Size().Width(),
-                         paint_rect.Top(),
-                         paint_rect.Right(),
-                         paint_rect.Bottom());
+    CRect right_rect(center_offset_.x + frame_->Size().Width(),
+                     paint_rect.top,
+                     paint_rect.right,
+                     paint_rect.bottom);
 
-    UiRect top_rect =
-        UiRect::MakeLTRB(paint_rect.Left() + left_rect.Width(),
-                         paint_rect.Top(),
-                         paint_rect.Right() - right_rect.Width(),
-                         center_offset_.y());
+    CRect top_rect(paint_rect.left + left_rect.Width(),
+                   paint_rect.top,
+                   paint_rect.right - right_rect.Width(),
+                   center_offset_.y);
 
-    UiRect bottom_rect =
-        UiRect::MakeLTRB(paint_rect.Left() + left_rect.Width(),
-                         center_offset_.y() + frame_->Size().Height(),
-                         paint_rect.Right() - right_rect.Width(),
-                         paint_rect.Bottom());
+    CRect bottom_rect(paint_rect.left + left_rect.Width(),
+                      center_offset_.y + frame_->Size().Height(),
+                      paint_rect.right - right_rect.Width(),
+                      paint_rect.bottom);
 
-    if (!left_rect.IsEmpty())
-        FillRect(paint_dc, left_rect.ConstPointer(), background_brush_);
+    if (!left_rect.IsRectEmpty())
+        FillRect(paint_dc, left_rect, background_brush_);
 
-    if (!right_rect.IsEmpty())
-        FillRect(paint_dc, right_rect.ConstPointer(), background_brush_);
+    if (!right_rect.IsRectEmpty())
+        FillRect(paint_dc, right_rect, background_brush_);
 
-    if (!top_rect.IsEmpty())
-        FillRect(paint_dc, top_rect.ConstPointer(), background_brush_);
+    if (!top_rect.IsRectEmpty())
+        FillRect(paint_dc, top_rect, background_brush_);
 
-    if (!bottom_rect.IsEmpty())
-        FillRect(paint_dc, bottom_rect.ConstPointer(), background_brush_);
+    if (!bottom_rect.IsRectEmpty())
+        FillRect(paint_dc, bottom_rect, background_brush_);
 }
 
 void UiVideoWindow::OnPaint()
 {
-    ScopedBeginPaint paint(hwnd());
-    UiRect paint_rect = paint.Rect();
+    CPaintDC paint(*this);
 
     if (frame_)
     {
-        UiPoint scroll_pos(center_offset_.x() ? 0 : scroll_pos_.x(),
-                           center_offset_.y() ? 0 : scroll_pos_.y());
+        CPoint scroll_pos(center_offset_.x ? 0 : scroll_pos_.x,
+                          center_offset_.y ? 0 : scroll_pos_.y);
+
+        CRect paint_rect(paint.m_ps.rcPaint);
 
         // When the window size is larger than the size of the remote screen, draw the background.
-        DrawBackground(paint.DC(), paint_rect);
+        DrawBackground(paint.m_hDC, paint.m_ps.rcPaint);
 
         ScopedSelectObject select_object(memory_dc_, frame_->Bitmap());
 
-        BitBlt(paint.DC(),
-               paint_rect.Left() + center_offset_.x(), paint_rect.Top() + center_offset_.y(),
-               paint_rect.Width() - (center_offset_.x() * 2), paint_rect.Height() - (center_offset_.y() * 2),
-               memory_dc_,
-               paint_rect.Left() + scroll_pos.x(), paint_rect.Top() + scroll_pos.y(),
-               SRCCOPY);
+        paint.BitBlt(paint_rect.left + center_offset_.x, paint_rect.top + center_offset_.y,
+                     paint_rect.Width() - (center_offset_.x * 2), paint_rect.Height() - (center_offset_.y * 2),
+                     memory_dc_,
+                     paint_rect.left + scroll_pos.x,
+                     paint_rect.top + scroll_pos.y,
+                     SRCCOPY);
     }
     else
     {
-        FillRect(paint.DC(), paint_rect.ConstPointer(), background_brush_);
+        paint.FillRect(&paint.m_ps.rcPaint, background_brush_);
     }
 }
 
@@ -103,25 +100,28 @@ void UiVideoWindow::OnSize()
     if (!frame_)
         return;
 
-    client_size_ = ClientSize();;
+    CRect client_rect;
+    GetClientRect(hwnd(), client_rect);
+
+    client_size_ = client_rect.Size();
 
     int width = frame_->Size().Width();
     int height = frame_->Size().Height();
 
-    center_offset_.Set((width < client_size_.Width()) ?
-                           (client_size_.Width() / 2) - (width / 2) : 0,
-                       (height < client_size_.Height()) ?
-                           (client_size_.Height() / 2) - (height / 2) : 0);
+    center_offset_.SetPoint((width < client_size_.cx) ?
+                                (client_size_.cx / 2) - (width / 2) : 0,
+                            (height < client_size_.cy) ?
+                                (client_size_.cy / 2) - (height / 2) : 0);
 
-    UiPoint scroll_pos(std::max(0, std::min(scroll_pos_.x(), width - client_size_.Width())),
-                       std::max(0, std::min(scroll_pos_.y(), height - client_size_.Height())));
+    CPoint scroll_pos(std::max(0L, std::min(scroll_pos_.x, width - client_size_.cx)),
+                      std::max(0L, std::min(scroll_pos_.y, height - client_size_.cy)));
 
-    ScrollWindowEx(scroll_pos_.x() - scroll_pos.x(),
-                   scroll_pos_.y() - scroll_pos.y(),
+    ScrollWindowEx(scroll_pos_.x - scroll_pos.x,
+                   scroll_pos_.y - scroll_pos.y,
                    nullptr, nullptr, nullptr, nullptr,
                    SW_INVALIDATE);
 
-    scroll_pos_.CopyFrom(scroll_pos);
+    scroll_pos_ = scroll_pos;
 
     UpdateScrollBars(width, height);
 }
@@ -144,7 +144,7 @@ void UiVideoWindow::OnMouse(UINT msg, WPARAM wparam, LPARAM lparam)
         has_mouse_ = true;
     }
 
-    UiPoint pos(lparam);
+    CPoint pos(lparam);
 
     DWORD flags = static_cast<DWORD>(wparam);
 
@@ -172,7 +172,7 @@ void UiVideoWindow::OnMouse(UINT msg, WPARAM wparam, LPARAM lparam)
         if (!wheel_speed)
             wheel_speed = 1;
 
-        if (!ScreenToClient(pos))
+        if (!::ScreenToClient(hwnd(), &pos))
             return;
     }
     else
@@ -180,23 +180,23 @@ void UiVideoWindow::OnMouse(UINT msg, WPARAM wparam, LPARAM lparam)
         int scroll_delta_x = 0;
         int scroll_delta_y = 0;
 
-        if (client_size_.Width() < frame_->Size().Width())
+        if (client_size_.cx < frame_->Size().Width())
         {
-            if (pos.x() > client_size_.Width() - kScrollBorder)
+            if (pos.x > client_size_.cx - kScrollBorder)
                 scroll_delta_x = kScrollDelta;
-            else if (pos.x() < kScrollBorder)
+            else if (pos.x < kScrollBorder)
                 scroll_delta_x = -kScrollDelta;
         }
 
-        if (client_size_.Height() < frame_->Size().Height())
+        if (client_size_.cy < frame_->Size().Height())
         {
-            if (pos.y() > client_size_.Height() - kScrollBorder)
+            if (pos.y > client_size_.cy - kScrollBorder)
                 scroll_delta_y = kScrollDelta;
-            else if (pos.y() < kScrollBorder)
+            else if (pos.y < kScrollBorder)
                 scroll_delta_y = -kScrollDelta;
         }
 
-        scroll_delta_.Set(scroll_delta_x, scroll_delta_y);
+        scroll_delta_.SetPoint(scroll_delta_x, scroll_delta_y);
 
         if (scroll_delta_x || scroll_delta_y)
             scroll_timer_.Start(hwnd(), kScrollTimerInterval);
@@ -204,27 +204,27 @@ void UiVideoWindow::OnMouse(UINT msg, WPARAM wparam, LPARAM lparam)
             scroll_timer_.Stop();
     }
 
-    pos.Translate(-center_offset_.x() - std::abs(scroll_pos_.x()),
-                  -center_offset_.y() - std::abs(scroll_pos_.y()));
+    pos.Offset(-(center_offset_.x - std::abs(scroll_pos_.x)),
+               -(center_offset_.y - std::abs(scroll_pos_.y)));
 
-    if (frame_->Contains(pos.x(), pos.y()))
+    if (frame_->Contains(pos.x, pos.y))
     {
-        if (!prev_pos_.IsEqual(pos) || mask != prev_mask_)
+        if (prev_pos_ != pos || mask != prev_mask_)
         {
-            prev_pos_.CopyFrom(pos);
+            prev_pos_ = pos;
             prev_mask_ = mask & ~kWheelMask;
 
             if (mask & kWheelMask)
             {
                 for (WORD i = 0; i < wheel_speed; ++i)
                 {
-                    delegate_->OnPointerEvent(pos.desktop_point(), mask);
-                    delegate_->OnPointerEvent(pos.desktop_point(), mask & ~kWheelMask);
+                    delegate_->OnPointerEvent(DesktopPoint(pos.x, pos.y), mask);
+                    delegate_->OnPointerEvent(DesktopPoint(pos.x, pos.y), mask & ~kWheelMask);
                 }
             }
             else
             {
-                delegate_->OnPointerEvent(pos.desktop_point(), mask);
+                delegate_->OnPointerEvent(DesktopPoint(pos.x, pos.y), mask);
             }
         }
     }
@@ -241,7 +241,7 @@ LRESULT UiVideoWindow::OnTimer(UINT_PTR event_id)
     {
         case kScrollTimerId:
         {
-            if (!has_mouse_ || !Scroll(scroll_delta_.x(), scroll_delta_.y()))
+            if (!has_mouse_ || !Scroll(scroll_delta_.x, scroll_delta_.y))
             {
                 scroll_timer_.Stop();
             }
@@ -265,16 +265,16 @@ void UiVideoWindow::OnHScroll(UINT code, UINT pos)
             break;
 
         case SB_PAGEUP:
-            Scroll(client_size_.Width() * -1 / 4, 0);
+            Scroll(client_size_.cx * -1 / 4, 0);
             break;
 
         case SB_PAGEDOWN:
-            Scroll(client_size_.Width() * 1 / 4, 0);
+            Scroll(client_size_.cx * 1 / 4, 0);
             break;
 
         case SB_THUMBPOSITION:
         case SB_THUMBTRACK:
-            Scroll(pos - scroll_pos_.x(), 0);
+            Scroll(pos - scroll_pos_.x, 0);
             break;
     }
 }
@@ -292,16 +292,16 @@ void UiVideoWindow::OnVScroll(UINT code, UINT pos)
             break;
 
         case SB_PAGEUP:
-            Scroll(0, client_size_.Height() * -1 / 4);
+            Scroll(0, client_size_.cy * -1 / 4);
             break;
 
         case SB_PAGEDOWN:
-            Scroll(0, client_size_.Height() * 1 / 4);
+            Scroll(0, client_size_.cy * 1 / 4);
             break;
 
         case SB_THUMBPOSITION:
         case SB_THUMBTRACK:
-            Scroll(0, pos - scroll_pos_.y());
+            Scroll(0, pos - scroll_pos_.y);
             break;
     }
 }
@@ -311,10 +311,10 @@ void UiVideoWindow::UpdateScrollBars(int width, int height)
     int scroolbar_width = 0;
     int scroolbar_height = 0;
 
-    if (client_size_.Width() >= width)
+    if (client_size_.cx >= width)
         scroolbar_width = GetSystemMetrics(SM_CXHSCROLL);
 
-    if (client_size_.Height() >= height)
+    if (client_size_.cy >= height)
         scroolbar_height = GetSystemMetrics(SM_CYVSCROLL);
 
     SCROLLINFO si = { 0 };
@@ -322,44 +322,44 @@ void UiVideoWindow::UpdateScrollBars(int width, int height)
     si.fMask  = SIF_PAGE | SIF_POS | SIF_RANGE;
 
     si.nMax  = width;
-    si.nPage = client_size_.Width() + scroolbar_width;
-    si.nPos  = scroll_pos_.x();
+    si.nPage = client_size_.cx + scroolbar_width;
+    si.nPos  = scroll_pos_.x;
     SetScrollInfo(SB_HORZ, &si, TRUE);
 
     si.nMax  = height;
-    si.nPage = client_size_.Height() + scroolbar_height;
-    si.nPos  = scroll_pos_.y();
+    si.nPage = client_size_.cy + scroolbar_height;
+    si.nPos  = scroll_pos_.y;
     SetScrollInfo(SB_VERT, &si, TRUE);
 
     Invalidate();
 }
 
-bool UiVideoWindow::Scroll(int delta_x, int delta_y)
+bool UiVideoWindow::Scroll(LONG delta_x, LONG delta_y)
 {
     if (!frame_)
         return false;
 
-    int offset_x = 0;
-    int offset_y = 0;
+    LONG offset_x = 0;
+    LONG offset_y = 0;
 
     int width = frame_->Size().Width();
     int height = frame_->Size().Height();
 
     if (delta_x)
     {
-        offset_x = std::max(delta_x, -scroll_pos_.x());
-        offset_x = std::min(offset_x, width - client_size_.Width() - scroll_pos_.x());
+        offset_x = std::max(delta_x, -scroll_pos_.x);
+        offset_x = std::min(offset_x, width - client_size_.cx - scroll_pos_.x);
     }
 
     if (delta_y)
     {
-        offset_y = std::max(delta_y, -scroll_pos_.y());
-        offset_y = std::min(offset_y, height - client_size_.Height() - scroll_pos_.y());
+        offset_y = std::max(delta_y, -scroll_pos_.y);
+        offset_y = std::min(offset_y, height - client_size_.cy - scroll_pos_.y);
     }
 
     if (offset_x || offset_y)
     {
-        scroll_pos_.Translate(offset_x, offset_y);
+        scroll_pos_.Offset(offset_x, offset_y);
 
         ScrollWindowEx(-offset_x, -offset_y,
                        nullptr, nullptr, nullptr, nullptr,
