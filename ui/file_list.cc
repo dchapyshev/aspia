@@ -128,7 +128,11 @@ bool UiFileList::HasParentDirectory() const
 
 const std::string& UiFileList::CurrentPath() const
 {
-    DCHECK(HasDirectoryList());
+    static const std::string empty_path;
+
+    if (!HasDirectoryList())
+        return empty_path;
+
     return list_->path();
 }
 

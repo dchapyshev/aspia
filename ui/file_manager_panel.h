@@ -11,6 +11,7 @@
 #include "base/macros.h"
 #include "proto/file_transfer_session.pb.h"
 #include "ui/file_list.h"
+#include "ui/drive_list.h"
 #include "ui/resource.h"
 
 #include <atlbase.h>
@@ -102,26 +103,20 @@ private:
     LRESULT OnSend(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     void MoveToDrive(int object_index);
-    int GetKnownDriveObjectIndex(const std::string& path);
     void AddToolBarIcon(UINT icon_id, const CSize& icon_size);
     int GetItemUnderMousePointer();
     void SetToolBarButtonText(int command_id, UINT resource_id);
-    int GetDriveIndexByObjectIndex(int object_index);
-    int SelectDriveByObjectIndex(int object_index);
 
     const PanelType panel_type_;
     Delegate* delegate_;
 
     CStatic title_;
 
+    UiDriveList drive_list_;
     UiFileList file_list_;
 
     CToolBarCtrl toolbar_;
     CImageListManaged toolbar_imagelist_;
-
-    std::unique_ptr<proto::DriveList> drive_list_;
-    CComboBoxEx drive_combo_;
-    CImageListManaged drive_imagelist_;
 
     CStatic status_;
 
