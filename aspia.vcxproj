@@ -159,6 +159,7 @@
     <ClCompile Include="ui\users_dialog.cc" />
     <ClCompile Include="ui\user_prop_dialog.cc" />
     <ClCompile Include="ui\video_window.cc" />
+    <ClCompile Include="ui\viewer_toolbar.cc" />
     <ClCompile Include="ui\viewer_window.cc" />
   </ItemGroup>
   <ItemGroup>
@@ -333,6 +334,7 @@
     <ClInclude Include="ui\users_dialog.h" />
     <ClInclude Include="ui\user_prop_dialog.h" />
     <ClInclude Include="ui\video_window.h" />
+    <ClInclude Include="ui\viewer_toolbar.h" />
     <ClInclude Include="ui\viewer_window.h" />
   </ItemGroup>
   <ItemGroup>

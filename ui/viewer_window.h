@@ -12,15 +12,10 @@
 #include "base/scoped_user_object.h"
 #include "client/client_config.h"
 #include "protocol/clipboard.h"
+#include "ui/viewer_toolbar.h"
 #include "ui/video_window.h"
 #include "ui/about_dialog.h"
 #include "ui/settings_dialog.h"
-
-#include <atlbase.h>
-#include <atlapp.h>
-#include <atlwin.h>
-#include <atlctrls.h>
-#include <atlmisc.h>
 
 namespace aspia {
 
@@ -73,7 +68,6 @@ private:
         MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
         MESSAGE_HANDLER(kResizeFrameMessage, OnVideoFrameResize)
 
-        NOTIFY_CODE_HANDLER(TTN_GETDISPINFOW, OnGetDispInfo)
         NOTIFY_CODE_HANDLER(TBN_DROPDOWN, OnToolBarDropDown)
 
         COMMAND_ID_HANDLER(ID_SETTINGS, OnSettingsButton)
@@ -117,11 +111,8 @@ private:
     LRESULT OnPowerButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnCADButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnKeyButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& handled);
 
-    void AddToolBarIcon(UINT icon_id, const CSize& icon_size);
-    void CreateToolBar();
     void ShowDropDownMenu(int button_id, RECT* button_rect);
     int DoAutoSize(const DesktopSize& video_frame_size);
     void DoFullScreen(bool fullscreen);
@@ -133,10 +124,9 @@ private:
     Delegate* delegate_;
     ClientConfig* config_;
 
-    CToolBarCtrl toolbar_;
-    CImageListManaged toolbar_imagelist_;
-
+    UiViewerToolBar toolbar_;
     UiVideoWindow video_window_;
+
     Clipboard clipboard_;
     ScopedHHOOK keyboard_hook_;
     WINDOWPLACEMENT window_pos_ = { 0 };
