@@ -220,11 +220,11 @@ void UiFileManagerPanel::SetComputerViews()
 
     list_.ModifyStyle(LVS_EDITLABELS, LVS_SINGLESEL);
 
-    toolbar_.EnableButton(ID_FOLDER_ADD, false);
-    toolbar_.EnableButton(ID_FOLDER_UP, false);
-    toolbar_.EnableButton(ID_DELETE, false);
-    toolbar_.EnableButton(ID_SEND, false);
-    toolbar_.EnableButton(ID_HOME, false);
+    toolbar_.EnableButton(ID_FOLDER_ADD, FALSE);
+    toolbar_.EnableButton(ID_FOLDER_UP, FALSE);
+    toolbar_.EnableButton(ID_DELETE, FALSE);
+    toolbar_.EnableButton(ID_SEND, FALSE);
+    toolbar_.EnableButton(ID_HOME, FALSE);
 }
 
 void UiFileManagerPanel::SetFolderViews()
@@ -238,19 +238,19 @@ void UiFileManagerPanel::SetFolderViews()
 
     list_.ModifyStyle(LVS_SINGLESEL, LVS_EDITLABELS);
 
-    toolbar_.EnableButton(ID_FOLDER_ADD, true);
-    toolbar_.EnableButton(ID_FOLDER_UP, true);
-    toolbar_.EnableButton(ID_DELETE, true);
-    toolbar_.EnableButton(ID_SEND, true);
-    toolbar_.EnableButton(ID_HOME, true);
+    toolbar_.EnableButton(ID_FOLDER_ADD, TRUE);
+    toolbar_.EnableButton(ID_FOLDER_UP, TRUE);
+    toolbar_.EnableButton(ID_DELETE, TRUE);
+    toolbar_.EnableButton(ID_SEND, TRUE);
+    toolbar_.EnableButton(ID_HOME, TRUE);
 }
 
-void UiFileManagerPanel::AddToolBarIcon(UINT icon_id)
+void UiFileManagerPanel::AddToolBarIcon(UINT icon_id, const CSize& icon_size)
 {
     CIcon icon(AtlLoadIconImage(icon_id,
                                 LR_CREATEDIBSECTION,
-                                GetSystemMetrics(SM_CXSMICON),
-                                GetSystemMetrics(SM_CYSMICON)));
+                                icon_size.cx,
+                                icon_size.cy));
     toolbar_imagelist_.AddIcon(icon);
 }
 
@@ -285,6 +285,9 @@ LPARAM UiFileManagerPanel::OnCreate(UINT message,
 {
     HFONT default_font = AtlGetStockFont(DEFAULT_GUI_FONT);
 
+    CSize small_icon_size(GetSystemMetrics(SM_CXSMICON),
+                          GetSystemMetrics(SM_CYSMICON));
+
     CString panel_name;
 
     if (panel_type_ == PanelType::LOCAL)
@@ -302,10 +305,15 @@ LPARAM UiFileManagerPanel::OnCreate(UINT message,
                         0, kDriveControl);
     drive_combo_.SetFont(default_font);
 
-    drive_imagelist_.CreateSmall();
-    drive_combo_.SetImageList(drive_imagelist_);
+    if (drive_imagelist_.Create(small_icon_size.cx,
+                                small_icon_size.cy,
+                                ILC_MASK | ILC_COLOR32,
+                                1, 1))
+    {
+        drive_combo_.SetImageList(drive_imagelist_);
+    }
 
-    toolbar_.Create(*this, 0, 0,
+    toolbar_.Create(*this, CWindow::rcDefault, nullptr,
                     WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT |
                         TBSTYLE_LIST | TBSTYLE_TOOLTIPS,
                     0, kToolBarControl);
@@ -326,25 +334,30 @@ LPARAM UiFileManagerPanel::OnCreate(UINT message,
     toolbar_.SetButtonStructSize(sizeof(kButtons[0]));
     toolbar_.AddButtons(_countof(kButtons), kButtons);
 
-    toolbar_imagelist_.CreateSmall();
-    toolbar_.SetImageList(toolbar_imagelist_);
-
-    AddToolBarIcon(IDI_REFRESH);
-    AddToolBarIcon(IDI_DELETE);
-    AddToolBarIcon(IDI_FOLDER_ADD);
-    AddToolBarIcon(IDI_FOLDER_UP);
-    AddToolBarIcon(IDI_HOME);
-
-    if (panel_type_ == PanelType::LOCAL)
+    if (toolbar_imagelist_.Create(small_icon_size.cx,
+                                  small_icon_size.cy,
+                                  ILC_MASK | ILC_COLOR32,
+                                  1, 1))
     {
-        AddToolBarIcon(IDI_SEND);
-        SetToolBarButtonText(ID_SEND, IDS_FT_SEND);
-    }
-    else
-    {
-        DCHECK(panel_type_ == PanelType::REMOTE);
-        AddToolBarIcon(IDI_RECIEVE);
-        SetToolBarButtonText(ID_SEND, IDS_FT_RECIEVE);
+        toolbar_.SetImageList(toolbar_imagelist_);
+
+        AddToolBarIcon(IDI_REFRESH, small_icon_size);
+        AddToolBarIcon(IDI_DELETE, small_icon_size);
+        AddToolBarIcon(IDI_FOLDER_ADD, small_icon_size);
+        AddToolBarIcon(IDI_FOLDER_UP, small_icon_size);
+        AddToolBarIcon(IDI_HOME, small_icon_size);
+
+        if (panel_type_ == PanelType::LOCAL)
+        {
+            AddToolBarIcon(IDI_SEND, small_icon_size);
+            SetToolBarButtonText(ID_SEND, IDS_FT_SEND);
+        }
+        else
+        {
+            DCHECK(panel_type_ == PanelType::REMOTE);
+            AddToolBarIcon(IDI_RECIEVE, small_icon_size);
+            SetToolBarButtonText(ID_SEND, IDS_FT_RECIEVE);
+        }
     }
 
     const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP |
@@ -361,15 +374,21 @@ LPARAM UiFileManagerPanel::OnCreate(UINT message,
     }
 
     list_.SetExtendedListViewStyle(ex_style);
-    list_imagelist_.CreateSmall();
-    list_.SetImageList(list_imagelist_, LVSIL_SMALL);
+
+    if (list_imagelist_.Create(small_icon_size.cx,
+                               small_icon_size.cy,
+                               ILC_MASK | ILC_COLOR32,
+                               1, 1))
+    {
+        list_.SetImageList(list_imagelist_, LVSIL_SMALL);
+    }
 
     CRect status_rect(0, 0, 200, 20);
-    status_.Create(*this, status_rect, L"", WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
+    status_.Create(*this, status_rect, nullptr,
+                   WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
     status_.SetFont(default_font);
 
     delegate_->OnDriveListRequest(panel_type_);
-
     return 0;
 }
 
@@ -395,8 +414,7 @@ LRESULT UiFileManagerPanel::OnSize(UINT message,
 
     if (dwp)
     {
-        int width = LOWORD(lparam);
-        int height = HIWORD(lparam);
+        CSize size(lparam);
 
         toolbar_.AutoSize();
 
@@ -415,38 +433,38 @@ LRESULT UiFileManagerPanel::OnSize(UINT message,
         title_.DeferWindowPos(dwp, nullptr,
                               0,
                               0,
-                              width,
+                              size.cx,
                               title_rect.Height(),
                               SWP_NOACTIVATE | SWP_NOZORDER);
 
         drive_combo_.DeferWindowPos(dwp, nullptr,
                                     0,
                                     title_rect.Height(),
-                                    width,
+                                    size.cx,
                                     drive_rect.Height(),
                                     SWP_NOACTIVATE | SWP_NOZORDER);
 
         toolbar_.DeferWindowPos(dwp, nullptr,
                                 0,
                                 title_rect.Height() + drive_rect.Height(),
-                                width,
+                                size.cx,
                                 toolbar_rect.Height(),
                                 SWP_NOACTIVATE | SWP_NOZORDER);
 
         int list_y = title_rect.Height() + toolbar_rect.Height() + drive_rect.Height();
-        int list_height = height - list_y - status_rect.Height();
+        int list_height = size.cy - list_y - status_rect.Height();
 
         list_.DeferWindowPos(dwp, nullptr,
                              0,
                              list_y,
-                             width,
+                             size.cx,
                              list_height,
                              SWP_NOACTIVATE | SWP_NOZORDER);
 
         status_.DeferWindowPos(dwp, nullptr,
                                0,
                                list_y + list_height,
-                               width,
+                               size.cx,
                                status_rect.Height(),
                                SWP_NOACTIVATE | SWP_NOZORDER);
 

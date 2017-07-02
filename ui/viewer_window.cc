@@ -137,12 +137,12 @@ void UiViewerWindow::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent>
     clipboard_.InjectClipboardEvent(clipboard_event);
 }
 
-void UiViewerWindow::AddToolBarIcon(UINT icon_id)
+void UiViewerWindow::AddToolBarIcon(UINT icon_id, const CSize& icon_size)
 {
     CIcon icon = AtlLoadIconImage(icon_id,
                                   LR_CREATEDIBSECTION,
-                                  GetSystemMetrics(SM_CXSMICON),
-                                  GetSystemMetrics(SM_CYSMICON));
+                                  icon_size.cx,
+                                  icon_size.cy);
     toolbar_imagelist_.AddIcon(icon);
 }
 
@@ -176,16 +176,22 @@ void UiViewerWindow::CreateToolBar()
     toolbar_.SetButtonStructSize(sizeof(kButtons[0]));
     toolbar_.AddButtons(_countof(kButtons), kButtons);
 
-    if (toolbar_imagelist_.CreateSmall())
+    CSize small_icon_size(GetSystemMetrics(SM_CXSMICON),
+                          GetSystemMetrics(SM_CYSMICON));
+
+    if (toolbar_imagelist_.Create(small_icon_size.cx,
+                                  small_icon_size.cy,
+                                  ILC_MASK | ILC_COLOR32,
+                                  1, 1))
     {
-        AddToolBarIcon(IDI_POWER);
-        AddToolBarIcon(IDI_CAD);
-        AddToolBarIcon(IDI_KEYS);
-        AddToolBarIcon(IDI_AUTOSIZE);
-        AddToolBarIcon(IDI_FULLSCREEN);
-        AddToolBarIcon(IDI_SETTINGS);
-        AddToolBarIcon(IDI_ABOUT);
-        AddToolBarIcon(IDI_EXIT);
+        AddToolBarIcon(IDI_POWER, small_icon_size);
+        AddToolBarIcon(IDI_CAD, small_icon_size);
+        AddToolBarIcon(IDI_KEYS, small_icon_size);
+        AddToolBarIcon(IDI_AUTOSIZE, small_icon_size);
+        AddToolBarIcon(IDI_FULLSCREEN, small_icon_size);
+        AddToolBarIcon(IDI_SETTINGS, small_icon_size);
+        AddToolBarIcon(IDI_ABOUT, small_icon_size);
+        AddToolBarIcon(IDI_EXIT, small_icon_size);
 
         toolbar_.SetImageList(toolbar_imagelist_);
     }

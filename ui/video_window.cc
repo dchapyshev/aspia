@@ -375,7 +375,7 @@ void UiVideoWindow::UpdateScrollBars(int width, int height)
     si.nPos  = scroll_pos_.y;
     SetScrollInfo(SB_VERT, &si, TRUE);
 
-    Invalidate();
+    Invalidate(FALSE);
 }
 
 bool UiVideoWindow::Scroll(LONG delta_x, LONG delta_y)
@@ -423,7 +423,7 @@ DesktopFrame* UiVideoWindow::Frame()
 
 void UiVideoWindow::DrawFrame()
 {
-    Invalidate();
+    Invalidate(FALSE);
 }
 
 DesktopSize UiVideoWindow::FrameSize()
@@ -446,7 +446,7 @@ void UiVideoWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& form
 
     frame_ = DesktopFrameDIB::Create(size, format, memory_dc_);
 
-    PostMessageW(WM_SIZE, 0, 0);
+    PostMessageW(WM_SIZE);
 }
 
 } // namespace aspia

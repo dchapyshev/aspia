@@ -953,9 +953,6 @@
     <ClInclude Include="ui\base\timer.h">
       <Filter>ui\base</Filter>
     </ClInclude>
-    <ClInclude Include="ui\base\imagelist.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">

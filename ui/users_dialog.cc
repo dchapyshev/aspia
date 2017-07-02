@@ -47,20 +47,26 @@ LRESULT UiUsersDialog::OnInitDialog(UINT message,
                                     LPARAM lparam,
                                     BOOL& handled)
 {
-    if (imagelist_.CreateSmall())
+    CSize small_icon_size(GetSystemMetrics(SM_CXSMICON),
+                          GetSystemMetrics(SM_CYSMICON));
+
+    if (imagelist_.Create(small_icon_size.cx,
+                          small_icon_size.cy,
+                          ILC_MASK | ILC_COLOR32,
+                          1, 1))
     {
         CIcon icon;
 
         icon = AtlLoadIconImage(IDI_USER,
                                 LR_CREATEDIBSECTION,
-                                GetSystemMetrics(SM_CXSMICON),
-                                GetSystemMetrics(SM_CYSMICON));
+                                small_icon_size.cx,
+                                small_icon_size.cy);
         imagelist_.AddIcon(icon);
 
         icon = AtlLoadIconImage(IDI_USER_DISABLED,
                                 LR_CREATEDIBSECTION,
-                                GetSystemMetrics(SM_CXSMICON),
-                                GetSystemMetrics(SM_CYSMICON));
+                                small_icon_size.cx,
+                                small_icon_size.cy);
         imagelist_.AddIcon(icon);
     }
 

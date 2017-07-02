@@ -12,7 +12,6 @@
 #include "base/scoped_user_object.h"
 #include "client/client_config.h"
 #include "protocol/clipboard.h"
-#include "ui/base/imagelist.h"
 #include "ui/video_window.h"
 #include "ui/about_dialog.h"
 #include "ui/settings_dialog.h"
@@ -121,7 +120,7 @@ private:
     LRESULT OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& handled);
 
-    void AddToolBarIcon(UINT icon_id);
+    void AddToolBarIcon(UINT icon_id, const CSize& icon_size);
     void CreateToolBar();
     void ShowDropDownMenu(int button_id, RECT* button_rect);
     int DoAutoSize(const DesktopSize& video_frame_size);
@@ -135,7 +134,7 @@ private:
     ClientConfig* config_;
 
     CToolBarCtrl toolbar_;
-    CImageListCustom toolbar_imagelist_;
+    CImageListManaged toolbar_imagelist_;
 
     UiVideoWindow video_window_;
     Clipboard clipboard_;

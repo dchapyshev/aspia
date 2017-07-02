@@ -8,9 +8,9 @@
 #ifndef _ASPIA_UI__FILE_MANAGER_PANEL_H
 #define _ASPIA_UI__FILE_MANAGER_PANEL_H
 
-#include "ui/base/imagelist.h"
-#include "ui/resource.h"
+#include "base/macros.h"
 #include "proto/file_transfer_session.pb.h"
+#include "ui/resource.h"
 
 #include <atlbase.h>
 #include <atlapp.h>
@@ -105,7 +105,7 @@ private:
     int GetKnownDriveObjectIndex(const std::string& path);
     void SetComputerViews();
     void SetFolderViews();
-    void AddToolBarIcon(UINT icon_id);
+    void AddToolBarIcon(UINT icon_id, const CSize& icon_size);
     int GetColumnCount();
     void DeleteAllColumns();
     void AddColumn(UINT string_id, int width);
@@ -121,14 +121,14 @@ private:
 
     std::unique_ptr<proto::DirectoryList> directory_list_;
     CListViewCtrl list_;
-    CImageListCustom list_imagelist_;
+    CImageListManaged list_imagelist_;
 
     CToolBarCtrl toolbar_;
-    CImageListCustom toolbar_imagelist_;
+    CImageListManaged toolbar_imagelist_;
 
     std::unique_ptr<proto::DriveList> drive_list_;
     CComboBoxEx drive_combo_;
-    CImageListCustom drive_imagelist_;
+    CImageListManaged drive_imagelist_;
 
     CStatic status_;
 
