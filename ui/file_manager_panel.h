@@ -10,6 +10,7 @@
 
 #include "base/macros.h"
 #include "proto/file_transfer_session.pb.h"
+#include "ui/file_list.h"
 #include "ui/resource.h"
 
 #include <atlbase.h>
@@ -100,15 +101,9 @@ private:
     LRESULT OnHome(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSend(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
-    bool IsValidDirectoryObjectIndex(int object_index);
     void MoveToDrive(int object_index);
     int GetKnownDriveObjectIndex(const std::string& path);
-    void SetComputerViews();
-    void SetFolderViews();
     void AddToolBarIcon(UINT icon_id, const CSize& icon_size);
-    int GetColumnCount();
-    void DeleteAllColumns();
-    void AddColumn(UINT string_id, int width);
     int GetItemUnderMousePointer();
     void SetToolBarButtonText(int command_id, UINT resource_id);
     int GetDriveIndexByObjectIndex(int object_index);
@@ -119,9 +114,7 @@ private:
 
     CStatic title_;
 
-    std::unique_ptr<proto::DirectoryList> directory_list_;
-    CListViewCtrl list_;
-    CImageListManaged list_imagelist_;
+    UiFileList file_list_;
 
     CToolBarCtrl toolbar_;
     CImageListManaged toolbar_imagelist_;

@@ -16,7 +16,6 @@
 
 namespace aspia {
 
-static const int kNewFolderObjectIndex = -1;
 static const int kComputerObjectIndex = -1;
 static const int kCurrentFolderObjectIndex = -2;
 
@@ -26,14 +25,6 @@ UiFileManagerPanel::UiFileManagerPanel(PanelType panel_type,
     delegate_(delegate)
 {
     // Nothing
-}
-
-bool UiFileManagerPanel::IsValidDirectoryObjectIndex(int object_index)
-{
-    if (object_index >= 0 && object_index < directory_list_->item_size())
-        return true;
-
-    return false;
 }
 
 void UiFileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_list)
@@ -68,7 +59,7 @@ void UiFileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_l
                              object_index);
     }
 
-    if (!directory_list_)
+    if (!file_list_.HasDirectoryList())
     {
         MoveToDrive(kComputerObjectIndex);
     }
@@ -101,14 +92,9 @@ int UiFileManagerPanel::SelectDriveByObjectIndex(int object_index)
 void UiFileManagerPanel::ReadDirectoryList(
     std::unique_ptr<proto::DirectoryList> directory_list)
 {
-    list_.DeleteAllItems();
-    list_imagelist_.RemoveAll();
-    SetFolderViews();
-
-    directory_list_.reset(directory_list.release());
-
-    // All directories have the same icon.
-    CIcon icon(GetDirectoryIcon());
+    toolbar_.EnableButton(ID_FOLDER_ADD, TRUE);
+    toolbar_.EnableButton(ID_FOLDER_UP, TRUE);
+    toolbar_.EnableButton(ID_HOME, TRUE);
 
     int current_folder_index = GetDriveIndexByObjectIndex(kCurrentFolderObjectIndex);
     if (current_folder_index != CB_ERR)
@@ -125,15 +111,17 @@ void UiFileManagerPanel::ReadDirectoryList(
         drive_combo_.DeleteItem(current_folder_index);
     }
 
-    int known_object_index = GetKnownDriveObjectIndex(directory_list_->path());
+    int known_object_index = GetKnownDriveObjectIndex(directory_list->path());
     if (known_object_index == -1)
     {
         known_object_index = kCurrentFolderObjectIndex;
 
+        // All directories have the same icon.
+        CIcon icon(GetDirectoryIcon());
         int icon_index = drive_imagelist_.AddIcon(icon);
 
         drive_combo_.InsertItem(0,
-                                UNICODEfromUTF8(directory_list_->path()).c_str(),
+                                UNICODEfromUTF8(directory_list->path()).c_str(),
                                 icon_index,
                                 icon_index,
                                 0,
@@ -142,107 +130,7 @@ void UiFileManagerPanel::ReadDirectoryList(
 
     SelectDriveByObjectIndex(known_object_index);
 
-    int icon_index = list_imagelist_.AddIcon(icon);
-    int object_count = directory_list_->item_size();
-
-    // Enumerate the directories first.
-    for (int object_index = 0; object_index < object_count; ++object_index)
-    {
-        const proto::DirectoryListItem& item = directory_list_->item(object_index);
-
-        if (item.type() != proto::DirectoryListItem::DIRECTORY)
-            continue;
-
-        std::wstring name = UNICODEfromUTF8(item.name());
-
-        int item_index = list_.AddItem(list_.GetItemCount(), 0, name.c_str(), icon_index);
-        list_.SetItemData(item_index, object_index);
-        list_.SetItemText(item_index, 2, GetDirectoryTypeString(name));
-        list_.SetItemText(item_index, 3, TimeToString(item.modified()).c_str());
-    }
-
-    // Enumerate the files.
-    for (int object_index = 0; object_index < object_count; ++object_index)
-    {
-        const proto::DirectoryListItem& item = directory_list_->item(object_index);
-
-        if (item.type() != proto::DirectoryListItem::FILE)
-            continue;
-
-        std::wstring name = UNICODEfromUTF8(item.name());
-
-        icon = GetFileIcon(name);
-        icon_index = list_imagelist_.AddIcon(icon);
-
-        int item_index = list_.AddItem(list_.GetItemCount(), 0, name.c_str(), icon_index);
-        list_.SetItemData(item_index, object_index);
-        list_.SetItemText(item_index, 1, SizeToString(item.size()).c_str());
-        list_.SetItemText(item_index, 2, GetFileTypeString(name));
-        list_.SetItemText(item_index, 3, TimeToString(item.modified()).c_str());
-    }
-}
-
-int UiFileManagerPanel::GetColumnCount()
-{
-    CHeaderCtrl header(list_.GetHeader());
-
-    if (!header)
-        return 0;
-
-    return header.GetItemCount();
-}
-
-void UiFileManagerPanel::DeleteAllColumns()
-{
-    int count = GetColumnCount();
-
-    while (--count >= 0)
-        list_.DeleteColumn(count);
-}
-
-void UiFileManagerPanel::AddColumn(UINT string_id, int width)
-{
-    CString text;
-    text.LoadStringW(string_id);
-
-    int column_index = list_.AddColumn(text, GetColumnCount());
-    list_.SetColumnWidth(column_index, width);
-}
-
-void UiFileManagerPanel::SetComputerViews()
-{
-    DeleteAllColumns();
-
-    AddColumn(IDS_FT_COLUMN_NAME, 130);
-    AddColumn(IDS_FT_COLUMN_TYPE, 150);
-    AddColumn(IDS_FT_COLUMN_TOTAL_SPACE, 80);
-    AddColumn(IDS_FT_COLUMN_FREE_SPACE, 80);
-
-    list_.ModifyStyle(LVS_EDITLABELS, LVS_SINGLESEL);
-
-    toolbar_.EnableButton(ID_FOLDER_ADD, FALSE);
-    toolbar_.EnableButton(ID_FOLDER_UP, FALSE);
-    toolbar_.EnableButton(ID_DELETE, FALSE);
-    toolbar_.EnableButton(ID_SEND, FALSE);
-    toolbar_.EnableButton(ID_HOME, FALSE);
-}
-
-void UiFileManagerPanel::SetFolderViews()
-{
-    DeleteAllColumns();
-
-    AddColumn(IDS_FT_COLUMN_NAME, 180);
-    AddColumn(IDS_FT_COLUMN_SIZE, 70);
-    AddColumn(IDS_FT_COLUMN_TYPE, 100);
-    AddColumn(IDS_FT_COLUMN_MODIFIED, 100);
-
-    list_.ModifyStyle(LVS_SINGLESEL, LVS_EDITLABELS);
-
-    toolbar_.EnableButton(ID_FOLDER_ADD, TRUE);
-    toolbar_.EnableButton(ID_FOLDER_UP, TRUE);
-    toolbar_.EnableButton(ID_DELETE, TRUE);
-    toolbar_.EnableButton(ID_SEND, TRUE);
-    toolbar_.EnableButton(ID_HOME, TRUE);
+    file_list_.Read(std::move(directory_list));
 }
 
 void UiFileManagerPanel::AddToolBarIcon(UINT icon_id, const CSize& icon_size)
@@ -363,25 +251,7 @@ LPARAM UiFileManagerPanel::OnCreate(UINT message,
     const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP |
         LVS_REPORT | LVS_SHOWSELALWAYS;
 
-    list_.Create(*this, 0, 0, style, WS_EX_CLIENTEDGE, kListControl);
-
-    DWORD ex_style = LVS_EX_FULLROWSELECT;
-
-    if (IsWindowsVistaOrGreater())
-    {
-        ::SetWindowTheme(list_, L"explorer", nullptr);
-        ex_style |= LVS_EX_DOUBLEBUFFER;
-    }
-
-    list_.SetExtendedListViewStyle(ex_style);
-
-    if (list_imagelist_.Create(small_icon_size.cx,
-                               small_icon_size.cy,
-                               ILC_MASK | ILC_COLOR32,
-                               1, 1))
-    {
-        list_.SetImageList(list_imagelist_, LVSIL_SMALL);
-    }
+    file_list_.Create(*this, CWindow::rcDefault, nullptr, style, WS_EX_CLIENTEDGE, kListControl);
 
     CRect status_rect(0, 0, 200, 20);
     status_.Create(*this, status_rect, nullptr,
@@ -397,7 +267,7 @@ LRESULT UiFileManagerPanel::OnDestroy(UINT message,
                                       LPARAM lparam,
                                       BOOL& handled)
 {
-    list_.DestroyWindow();
+    file_list_.DestroyWindow();
     toolbar_.DestroyWindow();
     title_.DestroyWindow();
     drive_combo_.DestroyWindow();
@@ -454,12 +324,12 @@ LRESULT UiFileManagerPanel::OnSize(UINT message,
         int list_y = title_rect.Height() + toolbar_rect.Height() + drive_rect.Height();
         int list_height = size.cy - list_y - status_rect.Height();
 
-        list_.DeferWindowPos(dwp, nullptr,
-                             0,
-                             list_y,
-                             size.cx,
-                             list_height,
-                             SWP_NOACTIVATE | SWP_NOZORDER);
+        file_list_.DeferWindowPos(dwp, nullptr,
+                                  0,
+                                  list_y,
+                                  size.cx,
+                                  list_height,
+                                  SWP_NOACTIVATE | SWP_NOZORDER);
 
         status_.DeferWindowPos(dwp, nullptr,
                                0,
@@ -600,10 +470,10 @@ int UiFileManagerPanel::GetItemUnderMousePointer()
 
     if (GetCursorPos(&hti.pt))
     {
-        if (list_.ScreenToClient(&hti.pt) != FALSE)
+        if (file_list_.ScreenToClient(&hti.pt) != FALSE)
         {
             hti.flags = LVHT_ONITEMICON | LVHT_ONITEMLABEL;
-            return list_.HitTest(&hti);
+            return file_list_.HitTest(&hti);
         }
     }
 
@@ -618,9 +488,9 @@ LRESULT UiFileManagerPanel::OnListDoubleClock(int control_id,
     if (item_index == -1)
         return 0;
 
-    int object_index = list_.GetItemData(item_index);
+    int object_index = file_list_.GetItemData(item_index);
 
-    if (!directory_list_)
+    if (!file_list_.HasDirectoryList())
     {
         if (!drive_list_)
             return 0;
@@ -629,16 +499,15 @@ LRESULT UiFileManagerPanel::OnListDoubleClock(int control_id,
         return 0;
     }
 
-    if (!IsValidDirectoryObjectIndex(object_index))
+    if (!file_list_.IsValidObjectIndex(object_index))
         return 0;
 
-    const proto::DirectoryListItem& item =
-        directory_list_->item(object_index);
+    const proto::DirectoryListItem& item = file_list_.Object(object_index);
 
     if (item.type() == proto::DirectoryListItem::DIRECTORY)
     {
         delegate_->OnDirectoryListRequest(panel_type_,
-                                          directory_list_->path(),
+                                          file_list_.CurrentPath(),
                                           item.name());
     }
 
@@ -650,14 +519,14 @@ LRESULT UiFileManagerPanel::OnFolderUp(WORD notify_code,
                                        HWND control,
                                        BOOL& handled)
 {
-    if (!directory_list_ || !directory_list_->has_parent())
+    if (!file_list_.HasParentDirectory())
     {
         MoveToDrive(kComputerObjectIndex);
     }
     else
     {
         delegate_->OnDirectoryListRequest(panel_type_,
-                                          directory_list_->path(),
+                                          file_list_.CurrentPath(),
                                           "..");
     }
 
@@ -669,25 +538,7 @@ LRESULT UiFileManagerPanel::OnFolderAdd(WORD notify_code,
                                         HWND control,
                                         BOOL& handled)
 {
-    if (!directory_list_)
-        return 0;
-
-    CIcon folder_icon(GetDirectoryIcon());
-    int icon_index = list_imagelist_.AddIcon(folder_icon);
-
-    CString folder_name;
-    folder_name.LoadStringW(IDS_FT_NEW_FOLDER);
-
-    list_.SetFocus();
-
-    int item_index = list_.AddItem(list_.GetItemCount(),
-                                   0,
-                                   folder_name,
-                                   icon_index);
-
-    list_.SetItemData(item_index, kNewFolderObjectIndex);
-    list_.EditLabel(item_index);
-
+    file_list_.AddDirectory();
     return 0;
 }
 
@@ -698,10 +549,10 @@ LRESULT UiFileManagerPanel::OnRefresh(WORD notify_code,
 {
     delegate_->OnDriveListRequest(panel_type_);
 
-    if (directory_list_)
+    if (file_list_.HasDirectoryList())
     {
         delegate_->OnDirectoryListRequest(panel_type_,
-                                          directory_list_->path(),
+                                          file_list_.CurrentPath(),
                                           std::string());
     }
 
@@ -713,10 +564,10 @@ LRESULT UiFileManagerPanel::OnRemove(WORD notify_code,
                                      HWND control,
                                      BOOL& handled)
 {
-    if (!directory_list_)
+    if (!file_list_.HasDirectoryList())
         return 0;
 
-    UINT selected_count = list_.GetSelectedCount();
+    UINT selected_count = file_list_.GetSelectedCount();
     if (!selected_count)
         return 0;
 
@@ -729,40 +580,28 @@ LRESULT UiFileManagerPanel::OnRemove(WORD notify_code,
 
     if (selected_count == 1)
     {
-        int selected_item = list_.GetNextItem(-1, LVNI_SELECTED);
-        if (selected_item == -1)
+        proto::DirectoryListItem* object = file_list_.FirstSelectedObject();
+        if (!object)
             return 0;
 
-        int object_index = list_.GetItemData(selected_item);
+        object_list = UNICODEfromUTF8(object->name());
 
-        if (!IsValidDirectoryObjectIndex(object_index))
-            return 0;
-
-        const proto::DirectoryListItem& item =
-            directory_list_->item(object_index);
-
-        object_list = UNICODEfromUTF8(item.name());
-
-        if (item.type() == proto::DirectoryListItem::DIRECTORY)
+        if (object->type() == proto::DirectoryListItem::DIRECTORY)
             message.Format(IDS_FT_DELETE_CONFORM_DIR, object_list.c_str());
         else
             message.Format(IDS_FT_DELETE_CONFORM_FILE, object_list.c_str());
     }
     else
     {
-        for (int item_index = list_.GetNextItem(-1, LVNI_SELECTED);
-             item_index != -1;
-             item_index = list_.GetNextItem(item_index, LVNI_SELECTED))
+        for (UiFileList::Iterator iter(file_list_, UiFileList::Iterator::SELECTED);
+             !iter.IsAtEnd();
+             iter.Advance())
         {
-            int object_index = list_.GetItemData(item_index);
-
-            if (!IsValidDirectoryObjectIndex(object_index))
+            proto::DirectoryListItem* object = iter.Object();
+            if (!object)
                 continue;
 
-            const proto::DirectoryListItem& item =
-                directory_list_->item(object_index);
-
-            object_list.append(UNICODEfromUTF8(item.name()));
+            object_list.append(UNICODEfromUTF8(object->name()));
             object_list.append(L"\r\n");
         }
 
@@ -771,24 +610,21 @@ LRESULT UiFileManagerPanel::OnRemove(WORD notify_code,
 
     if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
-        for (int item_index = list_.GetNextItem(-1, LVNI_SELECTED);
-             item_index != -1;
-             item_index = list_.GetNextItem(item_index, LVNI_SELECTED))
+        for (UiFileList::Iterator iter(file_list_, UiFileList::Iterator::SELECTED);
+             !iter.IsAtEnd();
+             iter.Advance())
         {
-            int object_index = list_.GetItemData(item_index);
-            if (!IsValidDirectoryObjectIndex(object_index))
+            proto::DirectoryListItem* object = iter.Object();
+            if (!object)
                 continue;
 
-            const proto::DirectoryListItem& item =
-                directory_list_->item(object_index);
-
             delegate_->OnRemoveRequest(panel_type_,
-                                       directory_list_->path(),
-                                       item.name());
+                                       file_list_.CurrentPath(),
+                                       object->name());
         }
 
         delegate_->OnDirectoryListRequest(panel_type_,
-                                          directory_list_->path(),
+                                          file_list_.CurrentPath(),
                                           std::string());
     }
 
@@ -801,33 +637,13 @@ void UiFileManagerPanel::MoveToDrive(int object_index)
 
     if (object_index == kComputerObjectIndex)
     {
-        list_.DeleteAllItems();
-        list_imagelist_.RemoveAll();
-        directory_list_.reset();
+        toolbar_.EnableButton(ID_FOLDER_ADD, FALSE);
+        toolbar_.EnableButton(ID_FOLDER_UP, FALSE);
+        toolbar_.EnableButton(ID_DELETE, FALSE);
+        toolbar_.EnableButton(ID_SEND, FALSE);
+        toolbar_.EnableButton(ID_HOME, FALSE);
 
-        SetComputerViews();
-
-        const int object_count = drive_list_->item_size();
-
-        for (int object_index = 0; object_index < object_count; ++object_index)
-        {
-            const proto::DriveListItem& item = drive_list_->item(object_index);
-
-            CIcon icon(GetDriveIcon(item.type()));
-            int icon_index = list_imagelist_.AddIcon(icon);
-
-            CString display_name(GetDriveDisplayName(item));
-
-            int item_index = list_.AddItem(list_.GetItemCount(), 0, display_name, icon_index);
-            list_.SetItemData(item_index, object_index);
-            list_.SetItemText(item_index, 1, GetDriveDescription(item.type()));
-
-            if (item.total_space())
-                list_.SetItemText(item_index, 2, SizeToString(item.total_space()).c_str());
-
-            if (item.free_space())
-                list_.SetItemText(item_index, 3, SizeToString(item.free_space()).c_str());
-        }
+        file_list_.Read(*drive_list_);
     }
     else if (object_index == kCurrentFolderObjectIndex)
     {
@@ -858,39 +674,39 @@ LRESULT UiFileManagerPanel::OnListEndLabelEdit(int control_id,
 {
     LPNMLVDISPINFOW disp_info = reinterpret_cast<LPNMLVDISPINFOW>(hdr);
 
-    if (!directory_list_)
+    if (!file_list_.HasDirectoryList())
         return 0;
 
     int object_index = disp_info->item.lParam;
 
     // New folder.
-    if (object_index == kNewFolderObjectIndex)
+    if (object_index == UiFileList::kNewFolderObjectIndex)
     {
-        CEdit edit(list_.GetEditControl());
+        CEdit edit(file_list_.GetEditControl());
 
         WCHAR buffer[MAX_PATH] = { 0 };
         edit.GetWindowTextW(buffer, _countof(buffer));
 
         delegate_->OnCreateDirectoryRequest(panel_type_,
-                                            directory_list_->path(),
+                                            file_list_.CurrentPath(),
                                             UTF8fromUNICODE(buffer));
     }
     else // Rename exists item.
     {
-        DCHECK(IsValidDirectoryObjectIndex(object_index));
+        DCHECK(file_list_.IsValidObjectIndex(object_index));
 
         // User canceled rename.
         if (!disp_info->item.pszText)
             return 0;
 
         delegate_->OnRenameRequest(panel_type_,
-                                   directory_list_->path(),
-                                   directory_list_->item(object_index).name(),
+                                   file_list_.CurrentPath(),
+                                   file_list_.ObjectName(object_index),
                                    UTF8fromUNICODE(disp_info->item.pszText));
     }
 
     delegate_->OnDirectoryListRequest(panel_type_,
-                                      directory_list_->path(),
+                                      file_list_.CurrentPath(),
                                       std::string());
     return 0;
 }
@@ -899,9 +715,9 @@ LRESULT UiFileManagerPanel::OnListItemChanged(int control_id,
                                               LPNMHDR hdr,
                                               BOOL& handled)
 {
-    UINT count = list_.GetSelectedCount();
+    UINT count = file_list_.GetSelectedCount();
 
-    if (directory_list_)
+    if (file_list_.HasDirectoryList())
     {
         bool enable = (count != 0);
 
@@ -921,39 +737,8 @@ LRESULT UiFileManagerPanel::OnSend(WORD notify_code,
                                    HWND control,
                                    BOOL& handled)
 {
-    if (!directory_list_)
+    if (!file_list_.HasDirectoryList())
         return 0;
-
-    UINT selected_count = list_.GetSelectedCount();
-    if (!selected_count)
-        return 0;
-
-    if (selected_count == 1)
-    {
-        int selected_item = list_.GetNextItem(-1, LVNI_SELECTED);
-        if (selected_item == -1)
-            return 0;
-
-        int object_index = list_.GetItemData(selected_item);
-        if (object_index < 0 || object_index >= directory_list_->item_size())
-            return 0;
-
-        const proto::DirectoryListItem& item =
-            directory_list_->item(object_index);
-
-        if (item.type() == proto::DirectoryListItem::DIRECTORY)
-        {
-
-        }
-        else
-        {
-
-        }
-    }
-    else
-    {
-
-    }
 
     return 0;
 }
