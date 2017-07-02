@@ -81,7 +81,7 @@ LRESULT UiFileStatusDialog::OnInitDialog(UINT message,
     WriteLog(start_message, proto::Status::STATUS_SUCCESS);
 
     GetDlgItem(IDC_MINIMIZE_BUTTON).SetFocus();
-    return 0;
+    return TRUE;
 }
 
 LRESULT UiFileStatusDialog::OnClose(UINT message,

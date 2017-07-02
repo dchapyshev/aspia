@@ -10,6 +10,11 @@
 
 #include "proto/file_transfer_session.pb.h"
 
+#include <atlbase.h>
+#include <atlapp.h>
+#include <atlwin.h>
+#include <atlctrls.h>
+#include <atlmisc.h>
 #include <string>
 
 namespace aspia {
@@ -24,13 +29,13 @@ HICON GetDirectoryIcon();
 
 HICON GetFileIcon(const std::wstring& file_name);
 
-std::wstring GetDriveDisplayName(const proto::DriveListItem& item);
+CString GetDriveDisplayName(const proto::DriveListItem& item);
 
-std::wstring GetDriveDescription(proto::DriveListItem::Type type);
+CString GetDriveDescription(proto::DriveListItem::Type type);
 
-std::wstring GetDirectoryTypeString(const std::wstring& dir_name);
+CString GetDirectoryTypeString(const std::wstring& dir_name);
 
-std::wstring GetFileTypeString(const std::wstring& file_name);
+CString GetFileTypeString(const std::wstring& file_name);
 
 std::wstring SizeToString(uint64_t size);
 

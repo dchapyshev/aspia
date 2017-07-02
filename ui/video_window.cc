@@ -8,7 +8,6 @@
 #include "ui/video_window.h"
 #include "base/scoped_select_object.h"
 #include "proto/desktop_session_message.pb.h"
-#include "ui/base/module.h"
 
 #include <algorithm>
 #include <atlgdi.h>
@@ -29,6 +28,15 @@ UiVideoWindow::UiVideoWindow(Delegate* delegate) :
     scroll_timer_(kScrollTimerId)
 {
     // Nothing
+}
+
+LRESULT UiVideoWindow::OnSkipMessage(UINT message,
+                                     WPARAM wparam,
+                                     LPARAM lparam,
+                                     BOOL& handled)
+{
+    // Nothing
+    return 0;
 }
 
 void UiVideoWindow::DrawBackground(HDC paint_dc, const CRect& paint_rect)
@@ -66,7 +74,10 @@ void UiVideoWindow::DrawBackground(HDC paint_dc, const CRect& paint_rect)
         FillRect(paint_dc, bottom_rect, background_brush_);
 }
 
-void UiVideoWindow::OnPaint()
+LRESULT UiVideoWindow::OnPaint(UINT message,
+                               WPARAM wparam,
+                               LPARAM lparam,
+                               BOOL& handled)
 {
     CPaintDC paint(*this);
 
@@ -93,15 +104,20 @@ void UiVideoWindow::OnPaint()
     {
         paint.FillRect(&paint.m_ps.rcPaint, background_brush_);
     }
+
+    return 0;
 }
 
-void UiVideoWindow::OnSize()
+LRESULT UiVideoWindow::OnSize(UINT message,
+                              WPARAM wparam,
+                              LPARAM lparam,
+                              BOOL& handled)
 {
     if (!frame_)
-        return;
+        return 0;
 
     CRect client_rect;
-    GetClientRect(hwnd(), client_rect);
+    GetClientRect(client_rect);
 
     client_size_ = client_rect.Size();
 
@@ -124,20 +140,24 @@ void UiVideoWindow::OnSize()
     scroll_pos_ = scroll_pos;
 
     UpdateScrollBars(width, height);
+    return 0;
 }
 
-void UiVideoWindow::OnMouse(UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT UiVideoWindow::OnMouse(UINT message,
+                               WPARAM wparam,
+                               LPARAM lparam,
+                               BOOL& handled)
 {
     if (!frame_ || !has_focus_)
-        return;
+        return 0;
 
     if (!has_mouse_)
     {
         TRACKMOUSEEVENT tme;
 
-        tme.cbSize = sizeof(TRACKMOUSEEVENT);
-        tme.dwFlags = TME_LEAVE;
-        tme.hwndTrack = hwnd();
+        tme.cbSize    = sizeof(TRACKMOUSEEVENT);
+        tme.dwFlags   = TME_LEAVE;
+        tme.hwndTrack = *this;
 
         TrackMouseEvent(&tme);
 
@@ -154,7 +174,7 @@ void UiVideoWindow::OnMouse(UINT msg, WPARAM wparam, LPARAM lparam)
 
     WORD wheel_speed = 0;
 
-    if (msg == WM_MOUSEWHEEL)
+    if (message == WM_MOUSEWHEEL)
     {
         signed short speed = static_cast<signed short>(HIWORD(flags));
 
@@ -172,8 +192,8 @@ void UiVideoWindow::OnMouse(UINT msg, WPARAM wparam, LPARAM lparam)
         if (!wheel_speed)
             wheel_speed = 1;
 
-        if (!::ScreenToClient(hwnd(), &pos))
-            return;
+        if (!ScreenToClient(&pos))
+            return 0;
     }
     else
     {
@@ -199,7 +219,7 @@ void UiVideoWindow::OnMouse(UINT msg, WPARAM wparam, LPARAM lparam)
         scroll_delta_.SetPoint(scroll_delta_x, scroll_delta_y);
 
         if (scroll_delta_x || scroll_delta_y)
-            scroll_timer_.Start(hwnd(), kScrollTimerInterval);
+            scroll_timer_.Start(*this, kScrollTimerInterval);
         else
             scroll_timer_.Stop();
     }
@@ -228,15 +248,23 @@ void UiVideoWindow::OnMouse(UINT msg, WPARAM wparam, LPARAM lparam)
             }
         }
     }
+
+    return 0;
 }
 
-void UiVideoWindow::OnMouseLeave()
+LRESULT UiVideoWindow::OnMouseLeave(UINT message,
+                                    WPARAM wparam,
+                                    LPARAM lparam,
+                                    BOOL& handled)
 {
     has_mouse_ = false;
+    return 0;
 }
 
-LRESULT UiVideoWindow::OnTimer(UINT_PTR event_id)
+LRESULT UiVideoWindow::OnTimer(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UINT_PTR event_id = static_cast<UINT_PTR>(wparam);
+
     switch (event_id)
     {
         case kScrollTimerId:
@@ -252,8 +280,14 @@ LRESULT UiVideoWindow::OnTimer(UINT_PTR event_id)
     return 0;
 }
 
-void UiVideoWindow::OnHScroll(UINT code, UINT pos)
+LRESULT UiVideoWindow::OnHScroll(UINT message,
+                                 WPARAM wparam,
+                                 LPARAM lparam,
+                                 BOOL& handled)
 {
+    UINT code = LOWORD(wparam);
+    UINT pos = HIWORD(wparam);
+
     switch (code)
     {
         case SB_LINEUP:
@@ -277,10 +311,18 @@ void UiVideoWindow::OnHScroll(UINT code, UINT pos)
             Scroll(pos - scroll_pos_.x, 0);
             break;
     }
+
+    return 0;
 }
 
-void UiVideoWindow::OnVScroll(UINT code, UINT pos)
+LRESULT UiVideoWindow::OnVScroll(UINT message,
+                                 WPARAM wparam,
+                                 LPARAM lparam,
+                                 BOOL& handled)
 {
+    UINT code = LOWORD(wparam);
+    UINT pos = HIWORD(wparam);
+
     switch (code)
     {
         case SB_LINEUP:
@@ -304,6 +346,8 @@ void UiVideoWindow::OnVScroll(UINT code, UINT pos)
             Scroll(0, pos - scroll_pos_.y);
             break;
     }
+
+    return 0;
 }
 
 void UiVideoWindow::UpdateScrollBars(int width, int height)
@@ -403,56 +447,6 @@ void UiVideoWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& form
     frame_ = DesktopFrameDIB::Create(size, format, memory_dc_);
 
     PostMessageW(WM_SIZE, 0, 0);
-}
-
-bool UiVideoWindow::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
-{
-    switch (msg)
-    {
-        case WM_PAINT:
-            OnPaint();
-            break;
-
-        case WM_ERASEBKGND:
-            break;
-
-        case WM_MOUSEMOVE:
-        case WM_LBUTTONDOWN:
-        case WM_LBUTTONUP:
-        case WM_RBUTTONDOWN:
-        case WM_RBUTTONUP:
-        case WM_MBUTTONDOWN:
-        case WM_MBUTTONUP:
-            OnMouse(msg, wparam, lparam);
-            break;
-
-        case WM_WINDOWPOSCHANGED:
-        case WM_SIZE:
-            OnSize();
-            break;
-
-        case WM_TIMER:
-            OnTimer(static_cast<UINT_PTR>(wparam));
-            break;
-
-        case WM_HSCROLL:
-            OnHScroll(LOWORD(wparam), HIWORD(wparam));
-            break;
-
-        case WM_VSCROLL:
-            OnVScroll(LOWORD(wparam), HIWORD(wparam));
-            break;
-
-        case WM_MOUSELEAVE:
-            OnMouseLeave();
-            break;
-
-        default:
-            return false;
-    }
-
-    *result = 0;
-    return true;
 }
 
 } // namespace aspia

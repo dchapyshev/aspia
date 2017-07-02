@@ -19,7 +19,9 @@ static const int kDefaultWindowHeight = 700;
 static const int kBorderSize = 3;
 
 UiFileManager::UiFileManager(Delegate* delegate) :
-    delegate_(delegate)
+    delegate_(delegate),
+    local_panel_(PanelType::LOCAL, this),
+    remote_panel_(PanelType::REMOTE, this)
 {
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
@@ -34,13 +36,10 @@ void UiFileManager::OnBeforeThreadRunning()
     runner_ = ui_thread_.message_loop_proxy();
     DCHECK(runner_);
 
-    const DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU |
-        WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
-
     CString title;
     title.LoadStringW(IDS_FT_FILE_TRANSFER);
 
-    if (!Create(nullptr, 0, title, style))
+    if (!Create(nullptr, 0, title, WS_OVERLAPPEDWINDOW))
     {
         LOG(ERROR) << "File manager window not created";
         runner_->PostQuit();
@@ -48,6 +47,7 @@ void UiFileManager::OnBeforeThreadRunning()
     else
     {
         ShowWindow(SW_SHOW);
+        UpdateWindow();
     }
 }
 
@@ -210,8 +210,6 @@ LRESULT UiFileManager::OnCreate(UINT message,
                                 LPARAM lparam,
                                 BOOL& handled)
 {
-    SetCursor(LoadCursorW(nullptr, IDC_ARROW));
-
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
                                    LR_CREATEDIBSECTION,
                                    GetSystemMetrics(SM_CXSMICON),
@@ -237,8 +235,8 @@ LRESULT UiFileManager::OnCreate(UINT message,
     splitter_.m_cxyMin = 0;
     splitter_.m_bFullDrag = false;
 
-    local_panel_.CreatePanel(splitter_, UiFileManager::PanelType::LOCAL, this);
-    remote_panel_.CreatePanel(splitter_, UiFileManager::PanelType::REMOTE, this);
+    local_panel_.Create(splitter_, 0, 0, WS_CHILD | WS_VISIBLE);
+    remote_panel_.Create(splitter_, 0, 0, WS_CHILD | WS_VISIBLE);
 
     splitter_.SetSplitterPane(SPLIT_PANE_LEFT, local_panel_);
     splitter_.SetSplitterPane(SPLIT_PANE_RIGHT, remote_panel_);
@@ -266,24 +264,14 @@ LRESULT UiFileManager::OnSize(UINT message,
                               LPARAM lparam,
                               BOOL& handled)
 {
-    HDWP dwp = BeginDeferWindowPos(1);
+    int width = LOWORD(lparam);
+    int height = HIWORD(lparam);
 
-    if (dwp)
-    {
-        int width = LOWORD(lparam);
-        int height = HIWORD(lparam);
-
-        splitter_.DeferWindowPos(dwp,
-                                 nullptr,
-                                 kBorderSize,
-                                 kBorderSize,
-                                 width - (kBorderSize * 2),
-                                 height - (kBorderSize * 2),
-                                 SWP_NOACTIVATE | SWP_NOZORDER);
-
-        EndDeferWindowPos(dwp);
-    }
-
+    splitter_.MoveWindow(kBorderSize,
+                         0,
+                         width - (kBorderSize * 2),
+                         height,
+                         FALSE);
     return 0;
 }
 

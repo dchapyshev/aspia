@@ -15,6 +15,7 @@ LRESULT UiFileTransferDialog::OnInitDialog(UINT message,
                                            BOOL& handled)
 {
     // TODO
+    return TRUE;
 }
 
 LRESULT UiFileTransferDialog::OnClose(UINT message,

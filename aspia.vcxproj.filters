@@ -304,15 +304,6 @@
     <ClCompile Include="crypto\sha512.cc">
       <Filter>crypto</Filter>
     </ClCompile>
-    <ClCompile Include="ui\base\child_window.cc">
-      <Filter>ui\base</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\base\module.cc">
-      <Filter>ui\base</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\base\window.cc">
-      <Filter>ui\base</Filter>
-    </ClCompile>
     <ClCompile Include="host\host_main.cc">
       <Filter>host</Filter>
     </ClCompile>
@@ -399,9 +390,6 @@
     </ClCompile>
     <ClCompile Include="ui\file_status_dialog.cc">
       <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\base\comboboxex.cc">
-      <Filter>ui\base</Filter>
     </ClCompile>
     <ClCompile Include="ui\get_stock_icon.cc">
       <Filter>ui</Filter>
@@ -797,15 +785,6 @@
     <ClInclude Include="crypto\sha512.h">
       <Filter>crypto</Filter>
     </ClInclude>
-    <ClInclude Include="ui\base\child_window.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\base\module.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\base\window.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
     <ClInclude Include="ui\base\tray_icon.h">
       <Filter>ui\base</Filter>
     </ClInclude>
@@ -911,9 +890,6 @@
     <ClInclude Include="ui\file_status_dialog.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="ui\base\comboboxex.h">
-      <Filter>ui\base</Filter>
-    </ClInclude>
     <ClInclude Include="ui\get_stock_icon.h">
       <Filter>ui</Filter>
     </ClInclude>
@@ -975,6 +951,9 @@
       <Filter>protocol</Filter>
     </ClInclude>
     <ClInclude Include="ui\base\timer.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\base\imagelist.h">
       <Filter>ui\base</Filter>
     </ClInclude>
   </ItemGroup>

@@ -42,44 +42,12 @@ void UiUsersDialog::UpdateUserList()
     }
 }
 
-static int GetICLColor()
-{
-    DEVMODEW mode = { 0 };
-    mode.dmSize = sizeof(mode);
-
-    if (EnumDisplaySettingsW(nullptr, ENUM_CURRENT_SETTINGS, &mode))
-    {
-        switch (mode.dmBitsPerPel)
-        {
-            case 32:
-                return ILC_COLOR32;
-
-            case 24:
-                return ILC_COLOR24;
-
-            case 16:
-                return ILC_COLOR16;
-
-            case 8:
-                return ILC_COLOR8;
-
-            case 4:
-                return ILC_COLOR4;
-        }
-    }
-
-    return ILC_COLOR32;
-}
-
 LRESULT UiUsersDialog::OnInitDialog(UINT message,
                                     WPARAM wparam,
                                     LPARAM lparam,
                                     BOOL& handled)
 {
-    if (imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
-                          GetSystemMetrics(SM_CYSMICON),
-                          ILC_MASK | GetICLColor(),
-                          1, 1))
+    if (imagelist_.CreateSmall())
     {
         CIcon icon;
 
@@ -128,7 +96,7 @@ LRESULT UiUsersDialog::OnInitDialog(UINT message,
     if (user_list_.LoadFromStorage())
         UpdateUserList();
 
-    return 0;
+    return TRUE;
 }
 
 LRESULT UiUsersDialog::OnClose(UINT message,

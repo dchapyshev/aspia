@@ -11,7 +11,6 @@
 #include "base/scoped_hdc.h"
 #include "desktop_capture/desktop_frame_dib.h"
 #include "desktop_capture/mouse_cursor.h"
-#include "ui/base/child_window.h"
 #include "ui/base/timer.h"
 
 #include <atlbase.h>
@@ -22,7 +21,7 @@
 
 namespace aspia {
 
-class UiVideoWindow : public UiChildWindow
+class UiVideoWindow : public CWindowImpl<UiVideoWindow, CWindow>
 {
 public:
     class Delegate
@@ -40,17 +39,34 @@ public:
 
     void HasFocus(bool has);
 
-    void OnMouse(UINT msg, WPARAM wparam, LPARAM lparam);
+    LRESULT OnMouse(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
 
 private:
-    bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;
+    BEGIN_MSG_MAP(UiVideoWindow)
+        MESSAGE_HANDLER(WM_ERASEBKGND, OnSkipMessage)
+        MESSAGE_HANDLER(WM_PAINT, OnPaint)
+        MESSAGE_HANDLER(WM_MOUSEMOVE, OnMouse)
+        MESSAGE_HANDLER(WM_LBUTTONDOWN, OnMouse)
+        MESSAGE_HANDLER(WM_LBUTTONUP, OnMouse)
+        MESSAGE_HANDLER(WM_RBUTTONDOWN, OnMouse)
+        MESSAGE_HANDLER(WM_RBUTTONUP, OnMouse)
+        MESSAGE_HANDLER(WM_MBUTTONDOWN, OnMouse)
+        MESSAGE_HANDLER(WM_MBUTTONUP, OnMouse)
+        MESSAGE_HANDLER(WM_WINDOWPOSCHANGED, OnSize)
+        MESSAGE_HANDLER(WM_SIZE, OnSize)
+        MESSAGE_HANDLER(WM_MOUSELEAVE, OnMouseLeave)
+        MESSAGE_HANDLER(WM_TIMER, OnTimer)
+        MESSAGE_HANDLER(WM_HSCROLL, OnHScroll)
+        MESSAGE_HANDLER(WM_VSCROLL, OnVScroll)
+    END_MSG_MAP()
 
-    void OnPaint();
-    void OnSize();
-    void OnMouseLeave();
-    LRESULT OnTimer(UINT_PTR event_id);
-    void OnHScroll(UINT code, UINT pos);
-    void OnVScroll(UINT code, UINT pos);
+    LRESULT OnSkipMessage(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnPaint(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnMouseLeave(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnTimer(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnHScroll(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnVScroll(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
 
     void DrawBackground(HDC paint_dc, const CRect& paint_rect);
     void UpdateScrollBars(int width, int height);
@@ -76,7 +92,7 @@ private:
     bool has_mouse_ = false; // Is the cursor over the window?
     bool has_focus_ = false; // Is the window in focus?
 
-    UiTimer scroll_timer_;
+    CTimer scroll_timer_;
     CPoint scroll_delta_;
 
     DISALLOW_COPY_AND_ASSIGN(UiVideoWindow);

@@ -31,7 +31,7 @@ LRESULT UiAuthDialog::OnInitDialog(UINT message,
         AttachThreadInput(current_thread_id, active_thread_id, FALSE);
     }
 
-    return 0;
+    return TRUE;
 }
 
 LRESULT UiAuthDialog::OnClose(UINT message,

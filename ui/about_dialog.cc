@@ -29,7 +29,7 @@ LRESULT UiAboutDialog::OnInitDialog(UINT message,
 
     GetDlgItem(IDC_DONATE_BUTTON).SetFocus();
 
-    return 0;
+    return TRUE;
 }
 
 LRESULT UiAboutDialog::OnClose(UINT message,

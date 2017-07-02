@@ -155,7 +155,7 @@ LRESULT UiUserPropDialog::OnInitDialog(UINT message,
     }
 
     username_edit.SetFocus();
-    return 0;
+    return TRUE;
 }
 
 LRESULT UiUserPropDialog::OnClose(UINT message,

@@ -8,7 +8,6 @@
 #include "ui/viewer_window.h"
 #include "ui/power_manage_dialog.h"
 #include "ui/resource.h"
-#include "ui/base/module.h"
 #include "base/strings/unicode.h"
 #include "desktop_capture/cursor.h"
 #include "proto/desktop_session_message.pb.h"
@@ -17,7 +16,6 @@ namespace aspia {
 
 static const DWORD kKeyUpFlag = 0x80000000;
 static const DWORD kKeyExtendedFlag = 0x1000000;
-static const UINT kResizeFrameMessage = WM_APP + 1;
 
 static const DesktopSize kVideoWindowSize(400, 280);
 
@@ -45,16 +43,15 @@ void UiViewerWindow::OnBeforeThreadRunning()
     const DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU |
         WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
 
-    if (!Create(nullptr, style))
+    if (!Create(nullptr, CWindow::rcDefault, nullptr, style))
     {
         LOG(ERROR) << "Viewer window not created";
         runner_->PostQuit();
     }
     else
     {
-        ScopedHICON icon(UiModule::Current().SmallIcon(IDI_MAIN));
-        SetIcon(icon);
-        SetCursor(LoadCursorW(nullptr, IDC_ARROW));
+        ShowWindow(SW_SHOW);
+        UpdateWindow();
     }
 }
 
@@ -73,7 +70,10 @@ void UiViewerWindow::DrawFrame()
     video_window_.DrawFrame();
 }
 
-void UiViewerWindow::OnVideoFrameResize(WPARAM wparam, LPARAM lparam)
+LRESULT UiViewerWindow::OnVideoFrameResize(UINT message,
+                                           WPARAM wparam,
+                                           LPARAM lparam,
+                                           BOOL& handled)
 {
     const DesktopSize* size = reinterpret_cast<const DesktopSize*>(wparam);
     const PixelFormat* format = reinterpret_cast<const PixelFormat*>(lparam);
@@ -82,14 +82,16 @@ void UiViewerWindow::OnVideoFrameResize(WPARAM wparam, LPARAM lparam)
 
     if (!size->IsEqual(video_window_.FrameSize()))
     {
-        ShowScrollBar(video_window_, SB_BOTH, FALSE);
+        video_window_.ShowScrollBar(SB_BOTH, FALSE);
         show_scroll_bars = DoAutoSize(*size);
     }
 
     video_window_.ResizeFrame(*size, *format);
 
     if (show_scroll_bars != -1)
-        ShowScrollBar(video_window_, show_scroll_bars, FALSE);
+        video_window_.ShowScrollBar(show_scroll_bars, FALSE);
+
+    return 0;
 }
 
 void UiViewerWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& format)
@@ -135,35 +137,6 @@ void UiViewerWindow::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent>
     clipboard_.InjectClipboardEvent(clipboard_event);
 }
 
-static int GetICLColor()
-{
-    DEVMODEW mode = { 0 };
-    mode.dmSize = sizeof(mode);
-
-    if (EnumDisplaySettingsW(nullptr, ENUM_CURRENT_SETTINGS, &mode))
-    {
-        switch (mode.dmBitsPerPel)
-        {
-            case 32:
-                return ILC_COLOR32;
-
-            case 24:
-                return ILC_COLOR24;
-
-            case 16:
-                return ILC_COLOR16;
-
-            case 8:
-                return ILC_COLOR8;
-
-            case 4:
-                return ILC_COLOR4;
-        }
-    }
-
-    return ILC_COLOR32;
-}
-
 void UiViewerWindow::AddToolBarIcon(UINT icon_id)
 {
     CIcon icon = AtlLoadIconImage(icon_id,
@@ -175,9 +148,7 @@ void UiViewerWindow::AddToolBarIcon(UINT icon_id)
 
 void UiViewerWindow::CreateToolBar()
 {
-    const UiModule& module = UiModule().Current();
-
-    toolbar_.Create(hwnd(), 0, 0,
+    toolbar_.Create(*this, 0, 0,
                     WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT |
                     TBSTYLE_LIST | TBSTYLE_TOOLTIPS);
 
@@ -205,10 +176,7 @@ void UiViewerWindow::CreateToolBar()
     toolbar_.SetButtonStructSize(sizeof(kButtons[0]));
     toolbar_.AddButtons(_countof(kButtons), kButtons);
 
-    if (toolbar_imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
-                                  GetSystemMetrics(SM_CYSMICON),
-                                  ILC_MASK | GetICLColor(),
-                                  1, 1))
+    if (toolbar_imagelist_.CreateSmall())
     {
         AddToolBarIcon(IDI_POWER);
         AddToolBarIcon(IDI_CAD);
@@ -236,49 +204,89 @@ void UiViewerWindow::CreateToolBar()
     }
 }
 
-void UiViewerWindow::OnCreate()
+LRESULT UiViewerWindow::OnCreate(UINT message,
+                                 WPARAM wparam,
+                                 LPARAM lparam,
+                                 BOOL& handled)
 {
-    std::wstring title(config_->address());
+    CIcon icon(AtlLoadIconImage(IDI_MAIN,
+                                LR_CREATEDIBSECTION,
+                                GetSystemMetrics(SM_CXSMICON),
+                                GetSystemMetrics(SM_CYSMICON)));
+    SetIcon(icon);
+    SetCursor(LoadCursorW(nullptr, IDC_ARROW));
 
-    title.append(L" - ");
-    title.append(UiModule().Current().String(IDS_APPLICATION_NAME));
+    CString app_name;
+    app_name.LoadStringW(IDS_APPLICATION_NAME);
 
-    SetWindowTextW(hwnd(), title.c_str());
+    CString title(config_->address().c_str());
+    title += L" - ";
+    title += app_name;
+
+    SetWindowTextW(title);
 
     CreateToolBar();
-    video_window_.Create(hwnd(), WS_CHILD);
+
+    video_window_.Create(*this, CWindow::rcDefault, nullptr, WS_CHILD | WS_VISIBLE);
 
     DoAutoSize(kVideoWindowSize);
 
     ApplyConfig(config_->desktop_session_config());
+
+    return 0;
 }
 
-void UiViewerWindow::OnClose()
+LRESULT UiViewerWindow::OnClose(UINT message,
+                                WPARAM wparam,
+                                LPARAM lparam,
+                                BOOL& handled)
 {
     delegate_->OnWindowClose();
+    return 0;
 }
 
-void UiViewerWindow::OnSize()
+LRESULT UiViewerWindow::OnDestroy(UINT message,
+                                  WPARAM wparam,
+                                  LPARAM lparam,
+                                  BOOL& handled)
+{
+    toolbar_.DestroyWindow();
+    video_window_.DestroyWindow();
+    return 0;
+}
+
+LRESULT UiViewerWindow::OnSize(UINT message,
+                               WPARAM wparam,
+                               LPARAM lparam,
+                               BOOL& handled)
 {
     toolbar_.AutoSize();
 
     CRect toolbar_rect;
-    GetWindowRect(toolbar_, toolbar_rect);
+    toolbar_.GetWindowRect(toolbar_rect);
 
     CRect client_rect;
-    GetClientRect(hwnd(), client_rect);
+    GetClientRect(client_rect);
 
     video_window_.MoveWindow(0,
                              toolbar_rect.Height(),
                              client_rect.Width(),
                              client_rect.Height() - toolbar_rect.Height(),
                              TRUE);
+    return 0;
 }
 
-void UiViewerWindow::OnGetMinMaxInfo(LPMINMAXINFO mmi)
+LRESULT UiViewerWindow::OnGetMinMaxInfo(UINT message,
+                                        WPARAM wparam,
+                                        LPARAM lparam,
+                                        BOOL& handled)
 {
+    LPMINMAXINFO mmi = reinterpret_cast<LPMINMAXINFO>(lparam);
+
     mmi->ptMinTrackSize.x = kVideoWindowSize.Width();
     mmi->ptMinTrackSize.y = kVideoWindowSize.Height();
+
+    return 0;
 }
 
 static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wParam, LPARAM lParam)
@@ -334,8 +342,13 @@ static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wParam, LPARAM lParam)
     return CallNextHookEx(nullptr, code, wParam, lParam);
 }
 
-void UiViewerWindow::OnActivate(UINT state)
+LRESULT UiViewerWindow::OnActivate(UINT message,
+                                   WPARAM wparam,
+                                   LPARAM lparam,
+                                   BOOL& handled)
 {
+    UINT state = LOWORD(wparam);
+
     if (state == WA_ACTIVE || state == WA_CLICKACTIVE)
     {
         // To properly handle some key combinations, we need to set a hook
@@ -352,17 +365,22 @@ void UiViewerWindow::OnActivate(UINT state)
         keyboard_hook_.Reset();
         video_window_.HasFocus(false);
     }
+
+    return 0;
 }
 
-void UiViewerWindow::OnKeyboard(WPARAM wParam, LPARAM lParam)
+LRESULT UiViewerWindow::OnKeyboard(UINT message,
+                                   WPARAM wparam,
+                                   LPARAM lparam,
+                                   BOOL& handled)
 {
-    uint8_t key_code = static_cast<uint8_t>(static_cast<uint32_t>(wParam) & 255);
+    uint8_t key_code = static_cast<uint8_t>(static_cast<uint32_t>(wparam) & 255);
 
     // We do not pass CapsLock and NoLock directly. Instead, when sending each
     // keystroke event, a flag is set that indicates the status of these keys.
     if (key_code != VK_CAPITAL && key_code != VK_NUMLOCK)
     {
-        uint32_t key_data = static_cast<uint32_t>(lParam);
+        uint32_t key_data = static_cast<uint32_t>(lparam);
 
         uint32_t flags = 0;
 
@@ -373,16 +391,43 @@ void UiViewerWindow::OnKeyboard(WPARAM wParam, LPARAM lParam)
 
         delegate_->OnKeyEvent(key_code, flags);
     }
+
+    return 0;
 }
 
-void UiViewerWindow::OnSetFocus()
+LRESULT UiViewerWindow::OnSkipMessage(UINT message,
+                                      WPARAM wparam,
+                                      LPARAM lparam,
+                                      BOOL& handled)
+{
+    // Nothing
+    return 0;
+}
+
+LRESULT UiViewerWindow::OnMouseWheel(UINT message,
+                                     WPARAM wparam,
+                                     LPARAM lparam,
+                                     BOOL& handled)
+{
+    return video_window_.OnMouse(message, wparam, lparam, handled);
+}
+
+LRESULT UiViewerWindow::OnSetFocus(UINT message,
+                                   WPARAM wparam,
+                                   LPARAM lparam,
+                                   BOOL& handled)
 {
     video_window_.HasFocus(true);
+    return 0;
 }
 
-void UiViewerWindow::OnKillFocus()
+LRESULT UiViewerWindow::OnKillFocus(UINT message,
+                                    WPARAM wparam,
+                                    LPARAM lparam,
+                                    BOOL& handled)
 {
     video_window_.HasFocus(false);
+    return 0;
 }
 
 void UiViewerWindow::ApplyConfig(const proto::DesktopSessionConfig& config)
@@ -404,28 +449,41 @@ void UiViewerWindow::ApplyConfig(const proto::DesktopSessionConfig& config)
     }
 }
 
-void UiViewerWindow::OnSettingsButton()
+LRESULT UiViewerWindow::OnSettingsButton(WORD notify_code,
+                                         WORD control_id,
+                                         HWND control,
+                                         BOOL& handled)
 {
     UiSettingsDialog dialog(config_->session_type(),
                             config_->desktop_session_config());
 
-    if (dialog.DoModal(hwnd()) == IDOK)
+    if (dialog.DoModal(*this) == IDOK)
     {
         config_->mutable_desktop_session_config()->CopyFrom(dialog.Config());
 
         ApplyConfig(config_->desktop_session_config());
         delegate_->OnConfigChange(config_->desktop_session_config());
     }
+
+    return 0;
 }
 
-void UiViewerWindow::OnAboutButton()
+LRESULT UiViewerWindow::OnAboutButton(WORD notify_code,
+                                      WORD control_id,
+                                      HWND control,
+                                      BOOL& handled)
 {
-    UiAboutDialog().DoModal(hwnd());
+    UiAboutDialog().DoModal(*this);
+    return 0;
 }
 
-void UiViewerWindow::OnExitButton()
+LRESULT UiViewerWindow::OnExitButton(WORD notify_code,
+                                     WORD control_id,
+                                     HWND control,
+                                     BOOL& handled)
 {
     PostMessageW(WM_CLOSE, 0, 0);
+    return 0;
 }
 
 int UiViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
@@ -435,7 +493,7 @@ int UiViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
 
     CRect screen_rect;
 
-    HMONITOR monitor = MonitorFromWindow(hwnd(), MONITOR_DEFAULTTONEAREST);
+    HMONITOR monitor = MonitorFromWindow(*this, MONITOR_DEFAULTTONEAREST);
 
     MONITORINFO info;
     info.cbSize = sizeof(info);
@@ -454,13 +512,13 @@ int UiViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
     }
 
     CRect full_rect;
-    GetWindowRect(hwnd(), full_rect);
+    GetWindowRect(full_rect);
 
     CRect client_rect;
-    GetClientRect(hwnd(), client_rect);
+    GetClientRect(client_rect);
 
     CRect toolbar_rect;
-    GetWindowRect(toolbar_, toolbar_rect);
+    toolbar_.GetWindowRect(toolbar_rect);
 
     int client_area_width = video_frame_size.Width() +
         full_rect.Width() - client_rect.Width();
@@ -472,7 +530,7 @@ int UiViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
     WINDOWPLACEMENT wp = { 0 };
     wp.length = sizeof(wp);
 
-    if (!GetWindowPlacement(wp))
+    if (!GetWindowPlacement(&wp))
         return -1;
 
     if (client_area_width  < screen_rect.Width() &&
@@ -504,15 +562,20 @@ int UiViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
     return -1;
 }
 
-void UiViewerWindow::OnAutoSizeButton()
+LRESULT UiViewerWindow::OnAutoSizeButton(WORD notify_code,
+                                         WORD control_id,
+                                         HWND control,
+                                         BOOL& handled)
 {
     DesktopSize video_frame_size = video_window_.FrameSize();
 
     if (!video_frame_size.IsEmpty())
     {
         if (DoAutoSize(video_frame_size) != -1)
-            ShowScrollBar(video_window_, SB_BOTH, FALSE);
+            video_window_.ShowScrollBar(SB_BOTH, FALSE);
     }
+
+    return 0;
 }
 
 void UiViewerWindow::DoFullScreen(bool fullscreen)
@@ -521,11 +584,11 @@ void UiViewerWindow::DoFullScreen(bool fullscreen)
 
     if (fullscreen)
     {
-        if (GetWindowPlacement(window_pos_))
+        if (GetWindowPlacement(&window_pos_))
         {
             CRect screen_rect;
 
-            HMONITOR monitor = MonitorFromWindow(hwnd(), MONITOR_DEFAULTTONEAREST);
+            HMONITOR monitor = MonitorFromWindow(*this, MONITOR_DEFAULTTONEAREST);
 
             MONITORINFO info;
             info.cbSize = sizeof(info);
@@ -536,7 +599,7 @@ void UiViewerWindow::DoFullScreen(bool fullscreen)
             }
             else
             {
-                if (!GetWindowRect(GetDesktopWindow(), screen_rect))
+                if (!::GetWindowRect(GetDesktopWindow(), screen_rect))
                     return;
             }
 
@@ -556,34 +619,50 @@ void UiViewerWindow::DoFullScreen(bool fullscreen)
         ModifyStyle(WS_MAXIMIZE, WS_CAPTION | WS_BORDER | WS_THICKFRAME | WS_MAXIMIZEBOX);
         ModifyStyleEx(WS_EX_TOPMOST, 0);
 
-        SetWindowPlacement(window_pos_);
+        SetWindowPlacement(&window_pos_);
     }
 }
 
-void UiViewerWindow::OnFullScreenButton()
+LRESULT UiViewerWindow::OnFullScreenButton(WORD notify_code,
+                                           WORD control_id,
+                                           HWND control,
+                                           BOOL& handled)
 {
     DoFullScreen(toolbar_.IsButtonChecked(ID_FULLSCREEN));
+    return 0;
 }
 
-void UiViewerWindow::OnDropDownButton(WORD ctrl_id)
+LRESULT UiViewerWindow::OnDropDownButton(WORD notify_code,
+                                         WORD control_id,
+                                         HWND control,
+                                         BOOL& handled)
 {
     RECT rect = { 0 };
-    toolbar_.GetRect(ctrl_id, &rect);
-    ShowDropDownMenu(ctrl_id, &rect);
+    toolbar_.GetRect(control_id, &rect);
+    ShowDropDownMenu(control_id, &rect);
+    return 0;
 }
 
-void UiViewerWindow::OnPowerButton()
+LRESULT UiViewerWindow::OnPowerButton(WORD notify_code,
+                                      WORD control_id,
+                                      HWND control,
+                                      BOOL& handled)
 {
     UiPowerManageDialog dialog;
 
     proto::PowerEvent::Action action =
-        static_cast<proto::PowerEvent::Action>(dialog.DoModal(hwnd()));
+        static_cast<proto::PowerEvent::Action>(dialog.DoModal(*this));
 
     if (action != proto::PowerEvent::UNKNOWN)
         delegate_->OnPowerEvent(action);
+
+    return 0;
 }
 
-void UiViewerWindow::OnCADButton()
+LRESULT UiViewerWindow::OnCADButton(WORD notify_code,
+                                    WORD control_id,
+                                    HWND control,
+                                    BOOL& handled)
 {
     delegate_->OnKeyEvent(VK_CONTROL, proto::KeyEvent::PRESSED);
     delegate_->OnKeyEvent(VK_MENU, proto::KeyEvent::PRESSED);
@@ -592,11 +671,16 @@ void UiViewerWindow::OnCADButton()
     delegate_->OnKeyEvent(VK_CONTROL, 0);
     delegate_->OnKeyEvent(VK_MENU, 0);
     delegate_->OnKeyEvent(VK_DELETE, proto::KeyEvent::EXTENDED);
+
+    return 0;
 }
 
-void UiViewerWindow::OnKeyButton(WORD ctrl_id)
+LRESULT UiViewerWindow::OnKeyButton(WORD notify_code,
+                                    WORD control_id,
+                                    HWND control,
+                                    BOOL& handled)
 {
-    switch (ctrl_id)
+    switch (control_id)
     {
         case ID_KEY_CTRL_ESC:
         {
@@ -676,11 +760,13 @@ void UiViewerWindow::OnKeyButton(WORD ctrl_id)
         }
         break;
     }
+
+    return 0;
 }
 
-void UiViewerWindow::OnGetDispInfo(LPNMHDR phdr)
+LRESULT UiViewerWindow::OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled)
 {
-    LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(phdr);
+    LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(hdr);
 
     switch (header->hdr.idFrom)
     {
@@ -717,16 +803,18 @@ void UiViewerWindow::OnGetDispInfo(LPNMHDR phdr)
             break;
 
         default:
-            return;
+            return 0;
     }
 
-    header->hinst = UiModule().Current().Handle();
+    header->hinst = GetModuleHandleW(nullptr);
+    return 0;
 }
 
-void UiViewerWindow::OnToolBarDropDown(LPNMHDR phdr)
+LRESULT UiViewerWindow::OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& handled)
 {
-    LPNMTOOLBARW header = reinterpret_cast<LPNMTOOLBARW>(phdr);
+    LPNMTOOLBARW header = reinterpret_cast<LPNMTOOLBARW>(hdr);
     ShowDropDownMenu(header->iItem, &header->rcButton);
+    return 0;
 }
 
 void UiViewerWindow::ShowDropDownMenu(int button_id, RECT* button_rect)
@@ -734,159 +822,25 @@ void UiViewerWindow::ShowDropDownMenu(int button_id, RECT* button_rect)
     if (button_id != ID_SHORTCUTS)
         return;
 
-    if (MapWindowPoints(toolbar_,
-                        HWND_DESKTOP,
-                        reinterpret_cast<LPPOINT>(button_rect),
-                        2))
+    if (toolbar_.MapWindowPoints(HWND_DESKTOP,
+                                 reinterpret_cast<LPPOINT>(button_rect),
+                                 2))
     {
         TPMPARAMS tpm;
         tpm.cbSize = sizeof(TPMPARAMS);
         tpm.rcExclude = *button_rect;
 
-        ScopedHMENU menu(UiModule().Current().Menu(IDR_SHORTCUTS));
+        CMenu menu;
+        menu.LoadMenuW(IDR_SHORTCUTS);
 
-        TrackPopupMenuEx(GetSubMenu(menu, 0),
-                         TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_VERTICAL,
-                         button_rect->left,
-                         button_rect->bottom,
-                         hwnd(),
-                         &tpm);
+        CMenuHandle pupup = menu.GetSubMenu(0);
+
+        pupup.TrackPopupMenuEx(TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_VERTICAL,
+                               button_rect->left,
+                               button_rect->bottom,
+                               *this,
+                               &tpm);
     }
-}
-
-bool UiViewerWindow::OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result)
-{
-    switch (msg)
-    {
-        case WM_CREATE:
-            OnCreate();
-            break;
-
-        case WM_KEYDOWN:
-        case WM_KEYUP:
-        case WM_SYSKEYDOWN:
-        case WM_SYSKEYUP:
-            OnKeyboard(wparam, lparam);
-            break;
-
-        case WM_CHAR:
-        case WM_SYSCHAR:
-        case WM_DEADCHAR:
-        case WM_SYSDEADCHAR:
-            break;
-
-        case WM_MOUSEWHEEL:
-            video_window_.OnMouse(msg, wparam, lparam);
-            break;
-
-        case WM_SIZE:
-            OnSize();
-            break;
-
-        case WM_GETMINMAXINFO:
-            OnGetMinMaxInfo(reinterpret_cast<LPMINMAXINFO>(lparam));
-            break;
-
-        case WM_ACTIVATE:
-            OnActivate(LOWORD(wparam));
-            break;
-
-        case WM_SETFOCUS:
-            OnSetFocus();
-            break;
-
-        case WM_KILLFOCUS:
-            OnKillFocus();
-            break;
-
-        case WM_NOTIFY:
-        {
-            LPNMHDR header = reinterpret_cast<LPNMHDR>(lparam);
-
-            switch (header->code)
-            {
-                case TTN_GETDISPINFO:
-                    OnGetDispInfo(header);
-                    break;
-
-                case TBN_DROPDOWN:
-                    OnToolBarDropDown(header);
-                    break;
-            }
-        }
-        break;
-
-        case WM_COMMAND:
-        {
-            switch (LOWORD(wparam))
-            {
-                case ID_SETTINGS:
-                    OnSettingsButton();
-                    break;
-
-                case ID_ABOUT:
-                    OnAboutButton();
-                    break;
-
-                case ID_EXIT:
-                    OnExitButton();
-                    break;
-
-                case ID_AUTO_SIZE:
-                    OnAutoSizeButton();
-                    break;
-
-                case ID_FULLSCREEN:
-                    OnFullScreenButton();
-                    break;
-
-                case ID_SHORTCUTS:
-                    OnDropDownButton(LOWORD(wparam));
-                    break;
-
-                case ID_CAD:
-                    OnCADButton();
-                    break;
-
-                case ID_KEY_CTRL_ESC:
-                case ID_KEY_ALT_TAB:
-                case ID_KEY_ALT_SHIFT_TAB:
-                case ID_KEY_PRINTSCREEN:
-                case ID_KEY_ALT_PRINTSCREEN:
-                case ID_KEY_CTRL_ALT_F12:
-                case ID_KEY_F12:
-                case ID_KEY_CTRL_F12:
-                    OnKeyButton(LOWORD(wparam));
-                    break;
-
-                case ID_POWER:
-                    OnPowerButton();
-                    break;
-            }
-        }
-        break;
-
-        case WM_CLOSE:
-            OnClose();
-            break;
-
-        case WM_DESTROY:
-        {
-            toolbar_.DestroyWindow();
-            video_window_.DestroyWindow();
-        }
-        break;
-
-        case kResizeFrameMessage:
-            OnVideoFrameResize(wparam, lparam);
-            break;
-
-        default:
-            return false;
-    }
-
-    *result = 0;
-    return true;
 }
 
 void UiViewerWindow::OnPointerEvent(const DesktopPoint& pos, uint32_t mask)

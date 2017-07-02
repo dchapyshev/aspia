@@ -177,7 +177,7 @@ LRESULT UiSettingsDialog::OnInitDialog(UINT message,
                 BST_CHECKED : BST_UNCHECKED);
     }
 
-    return 0;
+    return TRUE;
 }
 
 LRESULT UiSettingsDialog::OnClose(UINT message,

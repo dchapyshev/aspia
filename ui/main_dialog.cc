@@ -207,7 +207,7 @@ LRESULT UiMainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, B
         AttachThreadInput(current_thread_id, active_thread_id, FALSE);
     }
 
-    return 0;
+    return TRUE;
 }
 
 LRESULT UiMainDialog::OnDefaultPortClicked(WORD notify_code,

@@ -15,6 +15,7 @@ LRESULT UiFileReplaceDialog::OnInitDialog(UINT message,
                                           BOOL& handled)
 {
     // TODO
+    return TRUE;
 }
 
 LRESULT UiFileReplaceDialog::OnClose(UINT message,

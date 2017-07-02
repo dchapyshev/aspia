@@ -7,9 +7,6 @@
 
 #include "ui/file_manager_panel.h"
 #include "ui/file_manager_helpers.h"
-#include "ui/base/module.h"
-#include "ui/resource.h"
-#include "base/scoped_gdi_object.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
@@ -19,54 +16,29 @@
 
 namespace aspia {
 
-static const int kNewFolderIndex = -1;
-static const int kComputerIndex = -1;
-static const int kCurrentFolderIndex = -2;
+static const int kNewFolderObjectIndex = -1;
+static const int kComputerObjectIndex = -1;
+static const int kCurrentFolderObjectIndex = -2;
 
-static int GetICLColor()
+UiFileManagerPanel::UiFileManagerPanel(PanelType panel_type,
+                                       Delegate* delegate) :
+    panel_type_(panel_type),
+    delegate_(delegate)
 {
-    DEVMODEW mode = { 0 };
-    mode.dmSize = sizeof(mode);
-
-    if (EnumDisplaySettingsW(nullptr, ENUM_CURRENT_SETTINGS, &mode))
-    {
-        switch (mode.dmBitsPerPel)
-        {
-            case 32:
-                return ILC_COLOR32;
-
-            case 24:
-                return ILC_COLOR24;
-
-            case 16:
-                return ILC_COLOR16;
-
-            case 8:
-                return ILC_COLOR8;
-
-            case 4:
-                return ILC_COLOR4;
-        }
-    }
-
-    return ILC_COLOR32;
+    // Nothing
 }
 
-bool UiFileManagerPanel::CreatePanel(HWND parent,
-                                     PanelType panel_type,
-                                     Delegate* delegate)
+bool UiFileManagerPanel::IsValidDirectoryObjectIndex(int object_index)
 {
-    delegate_ = delegate;
-    panel_type_ = panel_type;
+    if (object_index >= 0 && object_index < directory_list_->item_size())
+        return true;
 
-    module_ = UiModule::Current();
-
-    return Create(parent, WS_CHILD | WS_VISIBLE);
+    return false;
 }
 
 void UiFileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_list)
 {
-    drive_combo_.DeleteAllItems();
+    drive_combo_.ResetContent();
     drive_imagelist_.RemoveAll();
 
     drive_list_.reset(drive_list.release());
@@ -75,29 +47,55 @@ void UiFileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_l
 
     int icon_index = drive_imagelist_.AddIcon(icon);
 
-    int root_index =
-        drive_combo_.AddItem(module_.String(IDS_FT_COMPUTER),
-                             icon_index, 0, kComputerIndex);
+    CString text;
+    text.LoadStringW(IDS_FT_COMPUTER);
 
-    const int count = drive_list_->item_size();
+    drive_combo_.AddItem(text, icon_index, icon_index, 0, kComputerObjectIndex);
 
-    for (int index = 0; index < count; ++index)
+    const int object_count = drive_list_->item_size();
+
+    for (int object_index = 0; object_index < object_count; ++object_index)
     {
-        const proto::DriveListItem& item = drive_list_->item(index);
+        const proto::DriveListItem& item = drive_list_->item(object_index);
 
         icon = GetDriveIcon(item.type());
         icon_index = drive_imagelist_.AddIcon(icon);
 
-        std::wstring display_name = GetDriveDisplayName(item);
-
-        drive_combo_.AddItem(display_name, icon_index, 1, index);
+        drive_combo_.AddItem(GetDriveDisplayName(item),
+                             icon_index,
+                             icon_index,
+                             1,
+                             object_index);
     }
 
     if (!directory_list_)
     {
-        drive_combo_.SelectItem(root_index);
-        OnDriveChange();
+        MoveToDrive(kComputerObjectIndex);
     }
+}
+
+int UiFileManagerPanel::GetDriveIndexByObjectIndex(int object_index)
+{
+    DWORD_PTR data = static_cast<DWORD_PTR>(object_index);
+    int item_count = drive_combo_.GetCount();
+
+    for (int item_index = 0; item_index < item_count; ++item_index)
+    {
+        if (drive_combo_.GetItemData(item_index) == data)
+            return item_index;
+    }
+
+    return CB_ERR;
+}
+
+int UiFileManagerPanel::SelectDriveByObjectIndex(int object_index)
+{
+    int item_index = GetDriveIndexByObjectIndex(object_index);
+
+    if (item_index != CB_ERR)
+        drive_combo_.SetCurSel(item_index);
+
+    return item_index;
 }
 
 void UiFileManagerPanel::ReadDirectoryList(
@@ -110,36 +108,47 @@ void UiFileManagerPanel::ReadDirectoryList(
     directory_list_.reset(directory_list.release());
 
     // All directories have the same icon.
-    ScopedHICON icon(GetDirectoryIcon());
+    CIcon icon(GetDirectoryIcon());
 
-    int current_folder_index = drive_combo_.GetItemWithData(kCurrentFolderIndex);
+    int current_folder_index = GetDriveIndexByObjectIndex(kCurrentFolderObjectIndex);
     if (current_folder_index != CB_ERR)
     {
-        int icon_index = drive_combo_.GetItemImage(current_folder_index);
-        if (icon_index != -1)
-            drive_imagelist_.Remove(icon_index);
+        COMBOBOXEXITEMW item;
+        memset(&item, 0, sizeof(item));
+
+        item.mask = CBEIF_IMAGE;
+        item.iItem = current_folder_index;
+
+        if (drive_combo_.GetItem(&item))
+            drive_imagelist_.Remove(item.iImage);
 
         drive_combo_.DeleteItem(current_folder_index);
     }
 
-    int known_index = GetKnownDriveIndex(directory_list_->path());
-    if (known_index == -1)
+    int known_object_index = GetKnownDriveObjectIndex(directory_list_->path());
+    if (known_object_index == -1)
     {
+        known_object_index = kCurrentFolderObjectIndex;
+
         int icon_index = drive_imagelist_.AddIcon(icon);
-        drive_combo_.InsertItem(UNICODEfromUTF8(directory_list_->path()),
-                                 0, icon_index, 0, kCurrentFolderIndex);
-        known_index = kCurrentFolderIndex;
+
+        drive_combo_.InsertItem(0,
+                                UNICODEfromUTF8(directory_list_->path()).c_str(),
+                                icon_index,
+                                icon_index,
+                                0,
+                                known_object_index);
     }
 
-    drive_combo_.SelectItemData(known_index);
+    SelectDriveByObjectIndex(known_object_index);
 
     int icon_index = list_imagelist_.AddIcon(icon);
-    int count = directory_list_->item_size();
+    int object_count = directory_list_->item_size();
 
     // Enumerate the directories first.
-    for (int index = 0; index < count; ++index)
+    for (int object_index = 0; object_index < object_count; ++object_index)
     {
-        const proto::DirectoryListItem& item = directory_list_->item(index);
+        const proto::DirectoryListItem& item = directory_list_->item(object_index);
 
         if (item.type() != proto::DirectoryListItem::DIRECTORY)
             continue;
@@ -147,28 +156,28 @@ void UiFileManagerPanel::ReadDirectoryList(
         std::wstring name = UNICODEfromUTF8(item.name());
 
         int item_index = list_.AddItem(list_.GetItemCount(), 0, name.c_str(), icon_index);
-        list_.SetItemData(item_index, index);
-        list_.SetItemText(item_index, 2, GetDirectoryTypeString(name).c_str());
+        list_.SetItemData(item_index, object_index);
+        list_.SetItemText(item_index, 2, GetDirectoryTypeString(name));
         list_.SetItemText(item_index, 3, TimeToString(item.modified()).c_str());
     }
 
     // Enumerate the files.
-    for (int index = 0; index < count; ++index)
+    for (int object_index = 0; object_index < object_count; ++object_index)
     {
-        const proto::DirectoryListItem& item = directory_list_->item(index);
+        const proto::DirectoryListItem& item = directory_list_->item(object_index);
 
         if (item.type() != proto::DirectoryListItem::FILE)
             continue;
 
         std::wstring name = UNICODEfromUTF8(item.name());
 
-        icon.Reset(GetFileIcon(name));
+        icon = GetFileIcon(name);
         icon_index = list_imagelist_.AddIcon(icon);
 
         int item_index = list_.AddItem(list_.GetItemCount(), 0, name.c_str(), icon_index);
-        list_.SetItemData(item_index, index);
+        list_.SetItemData(item_index, object_index);
         list_.SetItemText(item_index, 1, SizeToString(item.size()).c_str());
-        list_.SetItemText(item_index, 2, GetFileTypeString(name).c_str());
+        list_.SetItemText(item_index, 2, GetFileTypeString(name));
         list_.SetItemText(item_index, 3, TimeToString(item.modified()).c_str());
     }
 }
@@ -216,8 +225,6 @@ void UiFileManagerPanel::SetComputerViews()
     toolbar_.EnableButton(ID_DELETE, false);
     toolbar_.EnableButton(ID_SEND, false);
     toolbar_.EnableButton(ID_HOME, false);
-
-    OnListItemChanged();
 }
 
 void UiFileManagerPanel::SetFolderViews()
@@ -236,8 +243,6 @@ void UiFileManagerPanel::SetFolderViews()
     toolbar_.EnableButton(ID_DELETE, true);
     toolbar_.EnableButton(ID_SEND, true);
     toolbar_.EnableButton(ID_HOME, true);
-
-    OnListItemChanged();
 }
 
 void UiFileManagerPanel::AddToolBarIcon(UINT icon_id)
@@ -273,36 +278,37 @@ void UiFileManagerPanel::SetToolBarButtonText(int command_id, UINT resource_id)
     toolbar_.InsertButton(button_index, &button);
 }
 
-void UiFileManagerPanel::OnCreate()
+LPARAM UiFileManagerPanel::OnCreate(UINT message,
+                                    WPARAM wparam,
+                                    LPARAM lparam,
+                                    BOOL& handled)
 {
-    HFONT default_font =
-        reinterpret_cast<HFONT>(GetStockObject(DEFAULT_GUI_FONT));
+    HFONT default_font = AtlGetStockFont(DEFAULT_GUI_FONT);
 
-    std::wstring panel_name;
+    CString panel_name;
 
     if (panel_type_ == PanelType::LOCAL)
-        panel_name = module_.String(IDS_FT_LOCAL_COMPUTER);
+        panel_name.LoadStringW(IDS_FT_LOCAL_COMPUTER);
     else
-        panel_name = module_.String(IDS_FT_REMOTE_COMPUTER);
+        panel_name.LoadStringW(IDS_FT_REMOTE_COMPUTER);
 
     CRect title_rect(0, 0, 200, 20);
-    title_.Create(hwnd(), title_rect, panel_name.c_str(), WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
+    title_.Create(*this, title_rect, panel_name, WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
     title_.SetFont(default_font);
 
-    drive_combo_.Create(hwnd(),
-                        IDC_ADDRESS_COMBO, WS_VSCROLL | CBS_DROPDOWN,
-                        module_.Handle());
+    CRect drive_rect(0, 0, 200, 200);
+    drive_combo_.Create(*this, drive_rect, nullptr,
+                        WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWN,
+                        0, kDriveControl);
     drive_combo_.SetFont(default_font);
 
-    drive_imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
-                            GetSystemMetrics(SM_CYSMICON),
-                            ILC_MASK | GetICLColor(),
-                            1, 1);
+    drive_imagelist_.CreateSmall();
     drive_combo_.SetImageList(drive_imagelist_);
 
-    toolbar_.Create(hwnd(), 0, 0,
+    toolbar_.Create(*this, 0, 0,
                     WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT |
-                        TBSTYLE_LIST | TBSTYLE_TOOLTIPS);
+                        TBSTYLE_LIST | TBSTYLE_TOOLTIPS,
+                    0, kToolBarControl);
 
     toolbar_.SetExtendedStyle(TBSTYLE_EX_MIXEDBUTTONS | TBSTYLE_EX_DOUBLEBUFFER);
 
@@ -320,10 +326,7 @@ void UiFileManagerPanel::OnCreate()
     toolbar_.SetButtonStructSize(sizeof(kButtons[0]));
     toolbar_.AddButtons(_countof(kButtons), kButtons);
 
-    toolbar_imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
-                              GetSystemMetrics(SM_CYSMICON),
-                              ILC_MASK | GetICLColor(),
-                              1, 1);
+    toolbar_imagelist_.CreateSmall();
     toolbar_.SetImageList(toolbar_imagelist_);
 
     AddToolBarIcon(IDI_REFRESH);
@@ -347,52 +350,61 @@ void UiFileManagerPanel::OnCreate()
     const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP |
         LVS_REPORT | LVS_SHOWSELALWAYS;
 
-    list_.Create(hwnd(), 0, 0, style, WS_EX_CLIENTEDGE);
+    list_.Create(*this, 0, 0, style, WS_EX_CLIENTEDGE, kListControl);
 
     DWORD ex_style = LVS_EX_FULLROWSELECT;
 
     if (IsWindowsVistaOrGreater())
     {
-        SetWindowTheme(list_, L"explorer", nullptr);
+        ::SetWindowTheme(list_, L"explorer", nullptr);
         ex_style |= LVS_EX_DOUBLEBUFFER;
     }
 
     list_.SetExtendedListViewStyle(ex_style);
-    list_imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
-                           GetSystemMetrics(SM_CYSMICON),
-                           ILC_MASK | GetICLColor(),
-                           1, 1);
+    list_imagelist_.CreateSmall();
     list_.SetImageList(list_imagelist_, LVSIL_SMALL);
 
     CRect status_rect(0, 0, 200, 20);
-    status_.Create(hwnd(), status_rect, L"", WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
+    status_.Create(*this, status_rect, L"", WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
     status_.SetFont(default_font);
 
     delegate_->OnDriveListRequest(panel_type_);
+
+    return 0;
 }
 
-void UiFileManagerPanel::OnDestroy()
+LRESULT UiFileManagerPanel::OnDestroy(UINT message,
+                                      WPARAM wparam,
+                                      LPARAM lparam,
+                                      BOOL& handled)
 {
     list_.DestroyWindow();
     toolbar_.DestroyWindow();
     title_.DestroyWindow();
     drive_combo_.DestroyWindow();
     status_.DestroyWindow();
+    return 0;
 }
 
-void UiFileManagerPanel::OnSize(int width, int height)
+LRESULT UiFileManagerPanel::OnSize(UINT message,
+                                   WPARAM wparam,
+                                   LPARAM lparam,
+                                   BOOL& handled)
 {
     HDWP dwp = BeginDeferWindowPos(5);
 
     if (dwp)
     {
+        int width = LOWORD(lparam);
+        int height = HIWORD(lparam);
+
         toolbar_.AutoSize();
 
         CRect drive_rect;
-        GetWindowRect(drive_combo_, drive_rect);
+        drive_combo_.GetWindowRect(drive_rect);
 
         CRect toolbar_rect;
-        GetWindowRect(toolbar_, toolbar_rect);
+        toolbar_.GetWindowRect(toolbar_rect);
 
         CRect title_rect;
         title_.GetWindowRect(title_rect);
@@ -400,50 +412,57 @@ void UiFileManagerPanel::OnSize(int width, int height)
         CRect status_rect;
         status_.GetWindowRect(status_rect);
 
-        DeferWindowPos(dwp, title_, nullptr,
-                       0,
-                       0,
-                       width,
-                       title_rect.Height(),
-                       SWP_NOACTIVATE | SWP_NOZORDER);
+        title_.DeferWindowPos(dwp, nullptr,
+                              0,
+                              0,
+                              width,
+                              title_rect.Height(),
+                              SWP_NOACTIVATE | SWP_NOZORDER);
 
-        DeferWindowPos(dwp, drive_combo_, nullptr,
-                       0,
-                       title_rect.Height(),
-                       width,
-                       drive_rect.Height(),
-                       SWP_NOACTIVATE | SWP_NOZORDER);
+        drive_combo_.DeferWindowPos(dwp, nullptr,
+                                    0,
+                                    title_rect.Height(),
+                                    width,
+                                    drive_rect.Height(),
+                                    SWP_NOACTIVATE | SWP_NOZORDER);
 
-        DeferWindowPos(dwp, toolbar_, nullptr,
-                       0,
-                       title_rect.Height() + drive_rect.Height(),
-                       width,
-                       toolbar_rect.Height(),
-                       SWP_NOACTIVATE | SWP_NOZORDER);
+        toolbar_.DeferWindowPos(dwp, nullptr,
+                                0,
+                                title_rect.Height() + drive_rect.Height(),
+                                width,
+                                toolbar_rect.Height(),
+                                SWP_NOACTIVATE | SWP_NOZORDER);
 
         int list_y = title_rect.Height() + toolbar_rect.Height() + drive_rect.Height();
         int list_height = height - list_y - status_rect.Height();
 
-        DeferWindowPos(dwp, list_, nullptr,
-                       0,
-                       list_y,
-                       width,
-                       list_height,
-                       SWP_NOACTIVATE | SWP_NOZORDER);
+        list_.DeferWindowPos(dwp, nullptr,
+                             0,
+                             list_y,
+                             width,
+                             list_height,
+                             SWP_NOACTIVATE | SWP_NOZORDER);
 
-        DeferWindowPos(dwp, status_, nullptr,
-                       0,
-                       list_y + list_height,
-                       width,
-                       status_rect.Height(),
-                       SWP_NOACTIVATE | SWP_NOZORDER);
+        status_.DeferWindowPos(dwp, nullptr,
+                               0,
+                               list_y + list_height,
+                               width,
+                               status_rect.Height(),
+                               SWP_NOACTIVATE | SWP_NOZORDER);
 
         EndDeferWindowPos(dwp);
     }
+
+    return 0;
 }
 
-void UiFileManagerPanel::OnDrawItem(LPDRAWITEMSTRUCT dis)
+LRESULT UiFileManagerPanel::OnDrawItem(UINT message,
+                                       WPARAM wparam,
+                                       LPARAM lparam,
+                                       BOOL& handled)
 {
+    LPDRAWITEMSTRUCT dis = reinterpret_cast<LPDRAWITEMSTRUCT>(lparam);
+
     if (dis->hwndItem == title_ || dis->hwndItem == status_)
     {
         int saved_dc = SaveDC(dis->hDC);
@@ -457,7 +476,7 @@ void UiFileManagerPanel::OnDrawItem(LPDRAWITEMSTRUCT dis)
             FillRect(dis->hDC, &dis->rcItem, background_brush);
 
             WCHAR label[256] = { 0 };
-            GetWindowTextW(dis->hwndItem, label, _countof(label));
+            ::GetWindowTextW(dis->hwndItem, label, _countof(label));
 
             if (label[0])
             {
@@ -473,11 +492,15 @@ void UiFileManagerPanel::OnDrawItem(LPDRAWITEMSTRUCT dis)
             RestoreDC(dis->hDC, saved_dc);
         }
     }
+
+    return 0;
 }
 
-void UiFileManagerPanel::OnGetDispInfo(LPNMHDR phdr)
+LRESULT UiFileManagerPanel::OnGetDispInfo(int control_id,
+                                          LPNMHDR hdr,
+                                          BOOL& handled)
 {
-    LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(phdr);
+    LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(hdr);
 
     switch (header->hdr.idFrom)
     {
@@ -511,86 +534,45 @@ void UiFileManagerPanel::OnGetDispInfo(LPNMHDR phdr)
         break;
 
         default:
-            return;
+            return 0;
     }
 
-    header->hinst = module_.Handle();
+    header->hinst = GetModuleHandleW(nullptr);
+    return TRUE;
 }
 
-int UiFileManagerPanel::GetKnownDriveIndex(const std::string& path)
+int UiFileManagerPanel::GetKnownDriveObjectIndex(const std::string& path)
 {
     if (drive_list_)
     {
         const int count = drive_list_->item_size();
 
-        for (int index = 0; index < count; ++index)
+        for (int object_index = 0; object_index < count; ++object_index)
         {
-            if (_stricmp(path.c_str(), drive_list_->item(index).path().c_str()) == 0)
-                return index;
+            if (_stricmp(path.c_str(), drive_list_->item(object_index).path().c_str()) == 0)
+                return object_index;
         }
     }
 
     return -1;
 }
 
-void UiFileManagerPanel::OnDriveChange()
+LRESULT UiFileManagerPanel::OnDriveChange(WORD notify_code,
+                                          WORD control_id,
+                                          HWND control,
+                                          BOOL& handled)
 {
     if (!drive_list_)
-        return;
+        return 0;
 
-    int selected_item = drive_combo_.GetSelectedItem();
+    int selected_item = drive_combo_.GetCurSel();
     if (selected_item == CB_ERR)
-        return;
+        return 0;
 
     int object_index = drive_combo_.GetItemData(selected_item);
 
-    if (object_index == kComputerIndex)
-    {
-        list_.DeleteAllItems();
-        list_imagelist_.RemoveAll();
-        directory_list_.reset();
-
-        SetComputerViews();
-
-        const int count = drive_list_->item_size();
-
-        for (int index = 0; index < count; ++index)
-        {
-            const proto::DriveListItem& item = drive_list_->item(index);
-
-            ScopedHICON icon(GetDriveIcon(item.type()));
-            int icon_index = list_imagelist_.AddIcon(icon);
-
-            std::wstring display_name = GetDriveDisplayName(item);
-
-            int item_index = list_.AddItem(list_.GetItemCount(), 0, display_name.c_str(), icon_index);
-            list_.SetItemData(item_index, index);
-            list_.SetItemText(item_index, 1, GetDriveDescription(item.type()).c_str());
-
-            if (item.total_space())
-                list_.SetItemText(item_index, 2, SizeToString(item.total_space()).c_str());
-
-            if (item.free_space())
-                list_.SetItemText(item_index, 3, SizeToString(item.free_space()).c_str());
-        }
-    }
-    else if (object_index == kCurrentFolderIndex)
-    {
-        std::wstring path = drive_combo_.GetItemText(selected_item);
-        delegate_->OnDirectoryListRequest(panel_type_,
-                                          UTF8fromUNICODE(path),
-                                          std::string());
-    }
-    else if (object_index < 0 || object_index >= drive_list_->item_size())
-    {
-        return;
-    }
-    else
-    {
-        delegate_->OnDirectoryListRequest(panel_type_,
-                                          drive_list_->item(object_index).path(),
-                                          std::string());
-    }
+    MoveToDrive(object_index);
+    return 0;
 }
 
 int UiFileManagerPanel::GetItemUnderMousePointer()
@@ -610,27 +592,27 @@ int UiFileManagerPanel::GetItemUnderMousePointer()
     return -1;
 }
 
-void UiFileManagerPanel::OnDirectoryChange()
+LRESULT UiFileManagerPanel::OnListDoubleClock(int control_id,
+                                              LPNMHDR hdr,
+                                              BOOL& handled)
 {
     int item_index = GetItemUnderMousePointer();
     if (item_index == -1)
-        return;
+        return 0;
 
     int object_index = list_.GetItemData(item_index);
 
     if (!directory_list_)
     {
         if (!drive_list_)
-            return;
+            return 0;
 
-        drive_combo_.SelectItemData(object_index);
-        OnDriveChange();
-
-        return;
+        MoveToDrive(object_index);
+        return 0;
     }
 
-    if (object_index < 0 || object_index >= directory_list_->item_size())
-        return;
+    if (!IsValidDirectoryObjectIndex(object_index))
+        return 0;
 
     const proto::DirectoryListItem& item =
         directory_list_->item(object_index);
@@ -641,13 +623,18 @@ void UiFileManagerPanel::OnDirectoryChange()
                                           directory_list_->path(),
                                           item.name());
     }
+
+    return 0;
 }
 
-void UiFileManagerPanel::OnFolderUp()
+LRESULT UiFileManagerPanel::OnFolderUp(WORD notify_code,
+                                       WORD control_id,
+                                       HWND control,
+                                       BOOL& handled)
 {
     if (!directory_list_ || !directory_list_->has_parent())
     {
-        OnMoveToComputer();
+        MoveToDrive(kComputerObjectIndex);
     }
     else
     {
@@ -655,29 +642,41 @@ void UiFileManagerPanel::OnFolderUp()
                                           directory_list_->path(),
                                           "..");
     }
+
+    return 0;
 }
 
-void UiFileManagerPanel::OnFolderCreate()
+LRESULT UiFileManagerPanel::OnFolderAdd(WORD notify_code,
+                                        WORD control_id,
+                                        HWND control,
+                                        BOOL& handled)
 {
     if (!directory_list_)
-        return;
+        return 0;
 
-    ScopedHICON folder_icon(GetDirectoryIcon());
+    CIcon folder_icon(GetDirectoryIcon());
     int icon_index = list_imagelist_.AddIcon(folder_icon);
 
-    std::wstring folder_name = module_.String(IDS_FT_NEW_FOLDER);
+    CString folder_name;
+    folder_name.LoadStringW(IDS_FT_NEW_FOLDER);
 
-    SetFocus(list_);
+    list_.SetFocus();
 
-    int item_index =
-        list_.AddItem(list_.GetItemCount(), 0, folder_name.c_str(), icon_index);
-    list_.SetItemData(item_index, kNewFolderIndex);
+    int item_index = list_.AddItem(list_.GetItemCount(),
+                                   0,
+                                   folder_name,
+                                   icon_index);
 
-    list_.SetItemText(item_index, 2, GetDirectoryTypeString(folder_name).c_str());
+    list_.SetItemData(item_index, kNewFolderObjectIndex);
     list_.EditLabel(item_index);
+
+    return 0;
 }
 
-void UiFileManagerPanel::OnRefresh()
+LRESULT UiFileManagerPanel::OnRefresh(WORD notify_code,
+                                      WORD control_id,
+                                      HWND control,
+                                      BOOL& handled)
 {
     delegate_->OnDriveListRequest(panel_type_);
 
@@ -687,51 +686,59 @@ void UiFileManagerPanel::OnRefresh()
                                           directory_list_->path(),
                                           std::string());
     }
+
+    return 0;
 }
 
-void UiFileManagerPanel::OnRemove()
+LRESULT UiFileManagerPanel::OnRemove(WORD notify_code,
+                                     WORD control_id,
+                                     HWND control,
+                                     BOOL& handled)
 {
     if (!directory_list_)
-        return;
+        return 0;
 
     UINT selected_count = list_.GetSelectedCount();
     if (!selected_count)
-        return;
+        return 0;
 
-    std::wstring title = module_.String(IDS_CONFIRMATION);
+    CString title;
+    title.LoadStringW(IDS_CONFIRMATION);
+
+    CString message;
+
     std::wstring object_list;
-    std::wstring format;
 
     if (selected_count == 1)
     {
         int selected_item = list_.GetNextItem(-1, LVNI_SELECTED);
         if (selected_item == -1)
-            return;
+            return 0;
 
         int object_index = list_.GetItemData(selected_item);
-        if (object_index < 0 || object_index >= directory_list_->item_size())
-            return;
+
+        if (!IsValidDirectoryObjectIndex(object_index))
+            return 0;
 
         const proto::DirectoryListItem& item =
             directory_list_->item(object_index);
 
-        if (item.type() == proto::DirectoryListItem::DIRECTORY)
-            format = module_.String(IDS_FT_DELETE_CONFORM_DIR);
-        else
-            format = module_.String(IDS_FT_DELETE_CONFORM_FILE);
-
         object_list = UNICODEfromUTF8(item.name());
+
+        if (item.type() == proto::DirectoryListItem::DIRECTORY)
+            message.Format(IDS_FT_DELETE_CONFORM_DIR, object_list.c_str());
+        else
+            message.Format(IDS_FT_DELETE_CONFORM_FILE, object_list.c_str());
     }
     else
     {
-        format = module_.String(IDS_FT_DELETE_CONFORM_MULTI);
-
         for (int item_index = list_.GetNextItem(-1, LVNI_SELECTED);
              item_index != -1;
              item_index = list_.GetNextItem(item_index, LVNI_SELECTED))
         {
             int object_index = list_.GetItemData(item_index);
-            if (object_index < 0 || object_index >= directory_list_->item_size())
+
+            if (!IsValidDirectoryObjectIndex(object_index))
                 continue;
 
             const proto::DirectoryListItem& item =
@@ -740,9 +747,9 @@ void UiFileManagerPanel::OnRemove()
             object_list.append(UNICODEfromUTF8(item.name()));
             object_list.append(L"\r\n");
         }
-    }
 
-    std::wstring message = StringPrintfW(format.c_str(), object_list.c_str());
+        message.Format(IDS_FT_DELETE_CONFORM_MULTI, object_list.c_str());
+    }
 
     if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
@@ -751,7 +758,7 @@ void UiFileManagerPanel::OnRemove()
              item_index = list_.GetNextItem(item_index, LVNI_SELECTED))
         {
             int object_index = list_.GetItemData(item_index);
-            if (object_index < 0 || object_index >= directory_list_->item_size())
+            if (!IsValidDirectoryObjectIndex(object_index))
                 continue;
 
             const proto::DirectoryListItem& item =
@@ -766,23 +773,80 @@ void UiFileManagerPanel::OnRemove()
                                           directory_list_->path(),
                                           std::string());
     }
+
+    return 0;
 }
 
-void UiFileManagerPanel::OnMoveToComputer()
+void UiFileManagerPanel::MoveToDrive(int object_index)
 {
-    drive_combo_.SelectItemData(kComputerIndex);
-    OnDriveChange();
-}
+    int item_index = SelectDriveByObjectIndex(object_index);
 
-void UiFileManagerPanel::OnEndLabelEdit(LPNMLVDISPINFOW disp_info)
-{
-    if (!directory_list_)
+    if (object_index == kComputerObjectIndex)
+    {
+        list_.DeleteAllItems();
+        list_imagelist_.RemoveAll();
+        directory_list_.reset();
+
+        SetComputerViews();
+
+        const int object_count = drive_list_->item_size();
+
+        for (int object_index = 0; object_index < object_count; ++object_index)
+        {
+            const proto::DriveListItem& item = drive_list_->item(object_index);
+
+            CIcon icon(GetDriveIcon(item.type()));
+            int icon_index = list_imagelist_.AddIcon(icon);
+
+            CString display_name(GetDriveDisplayName(item));
+
+            int item_index = list_.AddItem(list_.GetItemCount(), 0, display_name, icon_index);
+            list_.SetItemData(item_index, object_index);
+            list_.SetItemText(item_index, 1, GetDriveDescription(item.type()));
+
+            if (item.total_space())
+                list_.SetItemText(item_index, 2, SizeToString(item.total_space()).c_str());
+
+            if (item.free_space())
+                list_.SetItemText(item_index, 3, SizeToString(item.free_space()).c_str());
+        }
+    }
+    else if (object_index == kCurrentFolderObjectIndex)
+    {
+        WCHAR path[MAX_PATH];
+
+        if (drive_combo_.GetItemText(item_index, path, _countof(path)))
+        {
+            delegate_->OnDirectoryListRequest(panel_type_,
+                                              UTF8fromUNICODE(path),
+                                              std::string());
+        }
+    }
+    else if (object_index < 0 || object_index >= drive_list_->item_size())
+    {
         return;
+    }
+    else
+    {
+        delegate_->OnDirectoryListRequest(panel_type_,
+                                          drive_list_->item(object_index).path(),
+                                          std::string());
+    }
+}
 
-    int index = disp_info->item.lParam;
+LRESULT UiFileManagerPanel::OnListEndLabelEdit(int control_id,
+                                               LPNMHDR hdr,
+                                               BOOL& handled)
+{
+    LPNMLVDISPINFOW disp_info = reinterpret_cast<LPNMLVDISPINFOW>(hdr);
+
+    if (!directory_list_)
+        return 0;
+
+    int object_index = disp_info->item.lParam;
 
     // New folder.
-    if (index == kNewFolderIndex)
+    if (object_index == kNewFolderObjectIndex)
     {
         CEdit edit(list_.GetEditControl());
 
@@ -795,24 +859,27 @@ void UiFileManagerPanel::OnEndLabelEdit(LPNMLVDISPINFOW disp_info)
     }
     else // Rename exists item.
     {
-        DCHECK(index >= 0 || index < directory_list_->item_size());
+        DCHECK(IsValidDirectoryObjectIndex(object_index));
 
         // User canceled rename.
         if (!disp_info->item.pszText)
-            return;
+            return 0;
 
         delegate_->OnRenameRequest(panel_type_,
                                    directory_list_->path(),
-                                   directory_list_->item(index).name(),
+                                   directory_list_->item(object_index).name(),
                                    UTF8fromUNICODE(disp_info->item.pszText));
     }
 
     delegate_->OnDirectoryListRequest(panel_type_,
                                       directory_list_->path(),
                                       std::string());
+    return 0;
 }
 
-void UiFileManagerPanel::OnListItemChanged()
+LRESULT UiFileManagerPanel::OnListItemChanged(int control_id,
+                                              LPNMHDR hdr,
+                                              BOOL& handled)
 {
     UINT count = list_.GetSelectedCount();
 
@@ -824,30 +891,34 @@ void UiFileManagerPanel::OnListItemChanged()
         toolbar_.EnableButton(ID_SEND, enable);
     }
 
-    std::wstring format = module_.String(IDS_FT_SELECTED_OBJECT_COUNT);
-    std::wstring status = StringPrintfW(format.c_str(), count);
+    CString status;
+    status.Format(IDS_FT_SELECTED_OBJECT_COUNT, count);
+    status_.SetWindowTextW(status);
 
-    status_.SetWindowTextW(status.c_str());
+    return 0;
 }
 
-void UiFileManagerPanel::OnSend()
+LRESULT UiFileManagerPanel::OnSend(WORD notify_code,
+                                   WORD control_id,
+                                   HWND control,
+                                   BOOL& handled)
 {
     if (!directory_list_)
-        return;
+        return 0;
 
     UINT selected_count = list_.GetSelectedCount();
     if (!selected_count)
-        return;
+        return 0;
 
     if (selected_count == 1)
     {
         int selected_item = list_.GetNextItem(-1, LVNI_SELECTED);
         if (selected_item == -1)
-            return;
+            return 0;
 
         int object_index = list_.GetItemData(selected_item);
         if (object_index < 0 || object_index >= directory_list_->item_size())
-            return;
+            return 0;
 
         const proto::DirectoryListItem& item =
             directory_list_->item(object_index);
@@ -865,124 +936,33 @@ void UiFileManagerPanel::OnSend()
     {
 
     }
+
+    return 0;
 }
 
-bool UiFileManagerPanel::OnMessage(UINT msg,
-                                   WPARAM wparam,
-                                   LPARAM lparam,
-                                   LRESULT* result)
+LRESULT UiFileManagerPanel::OnDriveEndEdit(int control_id,
+                                           LPNMHDR hdr,
+                                           BOOL& handled)
 {
-    switch (msg)
+    PNMCBEENDEDITW end_edit = reinterpret_cast<PNMCBEENDEDITW>(hdr);
+
+    if (end_edit->fChanged && end_edit->iWhy == CBENF_RETURN && end_edit->szText)
     {
-        case WM_CREATE:
-            OnCreate();
-            break;
-
-        case WM_DESTROY:
-            OnDestroy();
-            break;
-
-        case WM_DRAWITEM:
-            OnDrawItem(reinterpret_cast<LPDRAWITEMSTRUCT>(lparam));
-            break;
-
-        case WM_SIZE:
-            OnSize(LOWORD(lparam), HIWORD(lparam));
-            break;
-
-        case WM_NOTIFY:
-        {
-            LPNMHDR header = reinterpret_cast<LPNMHDR>(lparam);
-
-            if (header->code == TTN_GETDISPINFOW)
-            {
-                OnGetDispInfo(header);
-            }
-            else if (header->code == CBEN_ENDEDITW && header->hwndFrom == drive_combo_.hwnd())
-            {
-                PNMCBEENDEDITW end_edit = reinterpret_cast<PNMCBEENDEDITW>(lparam);
-
-                if (end_edit->fChanged && end_edit->iWhy == CBENF_RETURN && end_edit->szText)
-                {
-                    delegate_->OnDirectoryListRequest(panel_type_,
-                                                      UTF8fromUNICODE(end_edit->szText),
-                                                      std::string());
-                }
-            }
-            else if (header->hwndFrom == list_)
-            {
-                switch (header->code)
-                {
-                    case NM_DBLCLK:
-                        OnDirectoryChange();
-                        break;
-
-                    case NM_RCLICK:
-                        break;
-
-                    case NM_CLICK:
-                        break;
-
-                    case LVN_ENDLABELEDIT:
-                        OnEndLabelEdit(reinterpret_cast<LPNMLVDISPINFOW>(lparam));
-                        break;
-
-                    case LVN_ITEMCHANGED:
-                        OnListItemChanged();
-                        break;
-                }
-            }
-        }
-        break;
-
-        case WM_COMMAND:
-        {
-            switch (LOWORD(wparam))
-            {
-                case IDC_ADDRESS_COMBO:
-                {
-                    switch (HIWORD(wparam))
-                    {
-                        case CBN_SELCHANGE:
-                            OnDriveChange();
-                            break;
-                    }
-                }
-                break;
-
-                case ID_FOLDER_UP:
-                    OnFolderUp();
-                    break;
-
-                case ID_FOLDER_ADD:
-                    OnFolderCreate();
-                    break;
-
-                case ID_REFRESH:
-                    OnRefresh();
-                    break;
-
-                case ID_DELETE:
-                    OnRemove();
-                    break;
-
-                case ID_HOME:
-                    OnMoveToComputer();
-                    break;
-
-                case ID_SEND:
-                    OnSend();
-                    break;
-            }
-        }
-        break;
-
-        default:
-            return false;
+        delegate_->OnDirectoryListRequest(panel_type_,
+                                          UTF8fromUNICODE(end_edit->szText),
+                                          std::string());
     }
 
-    *result = 0;
-    return true;
+    return 0;
+}
+
+LRESULT UiFileManagerPanel::OnHome(WORD notify_code,
+                                   WORD control_id,
+                                   HWND control,
+                                   BOOL& handled)
+{
+    MoveToDrive(kComputerObjectIndex);
+    return 0;
 }
 
 } // namespace aspia

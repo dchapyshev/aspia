@@ -9,8 +9,10 @@
 #define _ASPIA_UI__VIEWER_WINDOW_H
 
 #include "base/message_loop/message_loop_thread.h"
+#include "base/scoped_user_object.h"
 #include "client/client_config.h"
 #include "protocol/clipboard.h"
+#include "ui/base/imagelist.h"
 #include "ui/video_window.h"
 #include "ui/about_dialog.h"
 #include "ui/settings_dialog.h"
@@ -24,7 +26,7 @@
 namespace aspia {
 
 class UiViewerWindow :
-    public UiChildWindow,
+    public CWindowImpl<UiViewerWindow, CWindow>,
     private UiVideoWindow::Delegate,
     private MessageLoopThread::Delegate
 {
@@ -50,36 +52,74 @@ public:
     void InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);
 
 private:
+    static const UINT kResizeFrameMessage = WM_APP + 1;
+
+    BEGIN_MSG_MAP(UiViewerWindow)
+        MESSAGE_HANDLER(WM_CREATE, OnCreate)
+        MESSAGE_HANDLER(WM_KEYDOWN, OnKeyboard)
+        MESSAGE_HANDLER(WM_KEYUP, OnKeyboard)
+        MESSAGE_HANDLER(WM_SYSKEYDOWN, OnKeyboard)
+        MESSAGE_HANDLER(WM_SYSKEYUP, OnKeyboard)
+        MESSAGE_HANDLER(WM_CHAR, OnSkipMessage)
+        MESSAGE_HANDLER(WM_SYSCHAR, OnSkipMessage)
+        MESSAGE_HANDLER(WM_DEADCHAR, OnSkipMessage)
+        MESSAGE_HANDLER(WM_SYSDEADCHAR, OnSkipMessage)
+        MESSAGE_HANDLER(WM_MOUSEWHEEL, OnMouseWheel)
+        MESSAGE_HANDLER(WM_SIZE, OnSize)
+        MESSAGE_HANDLER(WM_GETMINMAXINFO, OnGetMinMaxInfo)
+        MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
+        MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocus)
+        MESSAGE_HANDLER(WM_KILLFOCUS, OnKillFocus)
+        MESSAGE_HANDLER(WM_CLOSE, OnClose)
+        MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+        MESSAGE_HANDLER(kResizeFrameMessage, OnVideoFrameResize)
+
+        NOTIFY_CODE_HANDLER(TTN_GETDISPINFOW, OnGetDispInfo)
+        NOTIFY_CODE_HANDLER(TBN_DROPDOWN, OnToolBarDropDown)
+
+        COMMAND_ID_HANDLER(ID_SETTINGS, OnSettingsButton)
+        COMMAND_ID_HANDLER(ID_ABOUT, OnAboutButton)
+        COMMAND_ID_HANDLER(ID_EXIT, OnExitButton)
+        COMMAND_ID_HANDLER(ID_AUTO_SIZE, OnAutoSizeButton)
+        COMMAND_ID_HANDLER(ID_FULLSCREEN, OnFullScreenButton)
+        COMMAND_ID_HANDLER(ID_SHORTCUTS, OnDropDownButton)
+        COMMAND_ID_HANDLER(ID_CAD, OnCADButton)
+        COMMAND_ID_HANDLER(ID_POWER, OnPowerButton)
+
+        COMMAND_RANGE_HANDLER(ID_KEY_FIRST, ID_KEY_LAST, OnKeyButton)
+    END_MSG_MAP()
+
     // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
-    // UiChildWindow implementation.
-    bool OnMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT* result) override;
-
     // UiVideoWindow::Delegate implementation.
     void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) override;
 
-    void OnCreate();
-    void OnClose();
-    void OnSize();
-    void OnGetMinMaxInfo(LPMINMAXINFO mmi);
-    void OnActivate(UINT state);
-    void OnKeyboard(WPARAM wParam, LPARAM lParam);
-    void OnSetFocus();
-    void OnKillFocus();
-    void OnSettingsButton();
-    void OnAboutButton();
-    void OnExitButton();
-    void OnAutoSizeButton();
-    void OnFullScreenButton();
-    void OnDropDownButton(WORD ctrl_id);
-    void OnPowerButton();
-    void OnCADButton();
-    void OnKeyButton(WORD ctrl_id);
-    void OnGetDispInfo(LPNMHDR phdr);
-    void OnToolBarDropDown(LPNMHDR phdr);
-    void OnVideoFrameResize(WPARAM wParam, LPARAM lParam);
+    LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnActivate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnKeyboard(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnSkipMessage(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnMouseWheel(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnSetFocus(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnKillFocus(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnVideoFrameResize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+
+    LRESULT OnSettingsButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnAboutButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnExitButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnAutoSizeButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnFullScreenButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnDropDownButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnPowerButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnCADButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnKeyButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& handled);
 
     void AddToolBarIcon(UINT icon_id);
     void CreateToolBar();
@@ -95,7 +135,7 @@ private:
     ClientConfig* config_;
 
     CToolBarCtrl toolbar_;
-    CImageListManaged toolbar_imagelist_;
+    CImageListCustom toolbar_imagelist_;
 
     UiVideoWindow video_window_;
     Clipboard clipboard_;

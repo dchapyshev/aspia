@@ -97,7 +97,6 @@
 #define IDC_SKIP_ALL_BUTTON                   142
 #define IDC_STOP_BUTTON                       143
 #define IDC_MINIMIZE_BUTTON                   144
-#define IDC_ADDRESS_COMBO                     145
 
 //
 // Commands
@@ -123,6 +122,7 @@
 #define ID_HOME                               518
 #define ID_SEND                               519
 
+#define ID_KEY_FIRST                          600
 #define ID_KEY_CTRL_ESC                       600
 #define ID_KEY_ALT_TAB                        601
 #define ID_KEY_ALT_SHIFT_TAB                  602
@@ -131,6 +131,7 @@
 #define ID_KEY_CTRL_ALT_F12                   605
 #define ID_KEY_F12                            606
 #define ID_KEY_CTRL_F12                       607
+#define ID_KEY_LAST                           607
 
 #define ID_POWER_SHUTDOWN                     608
 #define ID_POWER_REBOOT                       609

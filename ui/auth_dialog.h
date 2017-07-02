@@ -35,7 +35,7 @@ private:
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
         COMMAND_ID_HANDLER(IDOK, OnOkButton)
-        COMMAND_ID_HANDLER(IDC_DONATE_BUTTON, OnCancelButton)
+        COMMAND_ID_HANDLER(IDCANCEL, OnCancelButton)
     END_MSG_MAP()
 
     LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);

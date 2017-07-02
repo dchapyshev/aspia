@@ -64,7 +64,7 @@ LRESULT UiStatusDialog::OnInitDialog(UINT message,
         AttachThreadInput(current_thread_id, active_thread_id, FALSE);
     }
 
-    return 0;
+    return TRUE;
 }
 
 LRESULT UiStatusDialog::OnClose(UINT message,

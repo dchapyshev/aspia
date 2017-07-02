@@ -9,6 +9,7 @@
 #define _ASPIA_UI__USERS_DIALOG_H
 
 #include "host/host_user_list.h"
+#include "ui/base/imagelist.h"
 #include "ui/resource.h"
 
 #include <atlbase.h>
@@ -66,7 +67,7 @@ private:
     void EditSelectedUser();
 
     HostUserList user_list_;
-    CImageListManaged imagelist_;
+    CImageListCustom imagelist_;
 
     DISALLOW_COPY_AND_ASSIGN(UiUsersDialog);
 };

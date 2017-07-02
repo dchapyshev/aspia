@@ -8,7 +8,6 @@
 #include "ui/file_manager_helpers.h"
 #include "ui/get_stock_icon.h"
 #include "ui/resource.h"
-#include "ui/base/module.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 
@@ -121,15 +120,19 @@ HICON GetFileIcon(const std::wstring& file_name)
     return file_info.hIcon;
 }
 
-std::wstring GetDriveDisplayName(const proto::DriveListItem& item)
+CString GetDriveDisplayName(const proto::DriveListItem& item)
 {
+    CString name;
+
     switch (item.type())
     {
         case proto::DriveListItem::HOME_FOLDER:
-            return UiModule::Current().String(IDS_FT_HOME_FOLDER);
+            name.LoadStringW(IDS_FT_HOME_FOLDER);
+            return name;
 
         case proto::DriveListItem::DESKTOP_FOLDER:
-            return UiModule::Current().String(IDS_FT_DESKTOP_FOLDER);
+            name.LoadStringW(IDS_FT_DESKTOP_FOLDER);
+            return name;
 
         case proto::DriveListItem::CDROM:
         case proto::DriveListItem::FIXED:
@@ -139,50 +142,61 @@ std::wstring GetDriveDisplayName(const proto::DriveListItem& item)
         {
             if (!item.name().empty())
             {
-                return StringPrintfW(L"%s (%s)",
-                                     UNICODEfromUTF8(item.path()).c_str(),
-                                     UNICODEfromUTF8(item.name()).c_str());
+                name.Format(L"%s (%s)",
+                            UNICODEfromUTF8(item.path()).c_str(),
+                            UNICODEfromUTF8(item.name()).c_str());
+                return name;
             }
         }
         break;
     }
 
-    return UNICODEfromUTF8(item.path());
+    return UNICODEfromUTF8(item.path()).c_str();
 }
 
-std::wstring GetDriveDescription(proto::DriveListItem::Type type)
+CString GetDriveDescription(proto::DriveListItem::Type type)
 {
-    const UiModule& module = UiModule::Current();
+    CString desc;
 
     switch (type)
     {
         case proto::DriveListItem::HOME_FOLDER:
-            return module.String(IDS_FT_DRIVE_DESC_HOME);
+            desc.LoadStringW(IDS_FT_DRIVE_DESC_HOME);
+            break;
 
         case proto::DriveListItem::DESKTOP_FOLDER:
-            return module.String(IDS_FT_DRIVE_DESC_DESKTOP);
+            desc.LoadStringW(IDS_FT_DRIVE_DESC_DESKTOP);
+            break;
 
         case proto::DriveListItem::CDROM:
-            return module.String(IDS_FT_DRIVE_DESC_CDROM);
+            desc.LoadStringW(IDS_FT_DRIVE_DESC_CDROM);
+            break;
 
         case proto::DriveListItem::FIXED:
-            return module.String(IDS_FT_DRIVE_DESC_FIXED);
+            desc.LoadStringW(IDS_FT_DRIVE_DESC_FIXED);
+            break;
 
         case proto::DriveListItem::REMOVABLE:
-            return module.String(IDS_FT_DRIVE_DESC_REMOVABLE);
+            desc.LoadStringW(IDS_FT_DRIVE_DESC_REMOVABLE);
+            break;
 
         case proto::DriveListItem::REMOTE:
-            return module.String(IDS_FT_DRIVE_DESC_REMOTE);
+            desc.LoadStringW(IDS_FT_DRIVE_DESC_REMOTE);
+            break;
 
         case proto::DriveListItem::RAM:
-            return module.String(IDS_FT_DRIVE_DESC_RAM);
+            desc.LoadStringW(IDS_FT_DRIVE_DESC_RAM);
+            break;
 
         default:
-            return module.String(IDS_FT_DRIVE_DESC_UNKNOWN);
+            desc.LoadStringW(IDS_FT_DRIVE_DESC_UNKNOWN);
+            break;
     }
+
+    return desc;
 }
 
-std::wstring GetDirectoryTypeString(const std::wstring& dir_name)
+CString GetDirectoryTypeString(const std::wstring& dir_name)
 {
     SHFILEINFO file_info;
     memset(&file_info, 0, sizeof(file_info));
@@ -196,7 +210,7 @@ std::wstring GetDirectoryTypeString(const std::wstring& dir_name)
     return file_info.szTypeName;
 }
 
-std::wstring GetFileTypeString(const std::wstring& file_name)
+CString GetFileTypeString(const std::wstring& file_name)
 {
     SHFILEINFO file_info;
     memset(&file_info, 0, sizeof(file_info));
@@ -217,40 +231,38 @@ std::wstring SizeToString(uint64_t size)
     static const uint64_t kMB = 1024ULL * 1024ULL;
     static const uint64_t kKB = 1024ULL;
 
-    const UiModule& module = UiModule().Current();
-
-    std::wstring units;
+    CString units;
     uint64_t divider;
 
     if (size >= kTB)
     {
-        units = module.String(IDS_FT_SIZE_TBYTES);
+        units.LoadStringW(IDS_FT_SIZE_TBYTES);
         divider = kTB;
     }
     else if (size >= kGB)
     {
-        units = module.String(IDS_FT_SIZE_GBYTES);
+        units.LoadStringW(IDS_FT_SIZE_GBYTES);
         divider = kGB;
     }
     else if (size >= kMB)
     {
-        units = module.String(IDS_FT_SIZE_MBYTES);
+        units.LoadStringW(IDS_FT_SIZE_MBYTES);
         divider = kMB;
     }
     else if (size >= kKB)
     {
-        units = module.String(IDS_FT_SIZE_KBYTES);
+        units.LoadStringW(IDS_FT_SIZE_KBYTES);
         divider = kKB;
     }
     else
     {
-        units = module.String(IDS_FT_SIZE_BYTES);
+        units.LoadStringW(IDS_FT_SIZE_BYTES);
         divider = 1;
     }
 
     return StringPrintfW(L"%.2f %s",
                          double(size) / double(divider),
-                         units.c_str());
+                         units);
 }
 
 } // namespace aspia
