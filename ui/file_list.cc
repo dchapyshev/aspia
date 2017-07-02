@@ -16,6 +16,22 @@
 
 namespace aspia {
 
+bool UiFileList::CreateFileList(HWND parent, int control_id)
+{
+    const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP |
+        LVS_REPORT | LVS_SHOWSELALWAYS;
+
+    if (!Create(parent, CWindow::rcDefault, nullptr, style,
+                WS_EX_CLIENTEDGE, control_id))
+    {
+        DLOG(ERROR) << "Unable to create file list window: "
+                    << GetLastSystemErrorString();
+        return false;
+    }
+
+    return true;
+}
+
 void UiFileList::Read(std::unique_ptr<proto::DirectoryList> list)
 {
     DeleteAllItems();
@@ -277,6 +293,25 @@ proto::DirectoryListItem* UiFileList::Iterator::Object() const
         return nullptr;
 
     return list_.list_->mutable_item(object_index);
+}
+
+int UiFileList::GetObjectUnderMousePointer() const
+{
+    LVHITTESTINFO hti;
+    memset(&hti, 0, sizeof(hti));
+
+    if (!GetCursorPos(&hti.pt))
+        return kInvalidObjectIndex;
+
+    if (!ScreenToClient(&hti.pt))
+        return kInvalidObjectIndex;
+
+    hti.flags = LVHT_ONITEMICON | LVHT_ONITEMLABEL;
+    int item_index = HitTest(&hti);
+    if (item_index == -1)
+        return kInvalidObjectIndex;
+
+    return GetItemData(item_index);
 }
 
 } // namespace aspia

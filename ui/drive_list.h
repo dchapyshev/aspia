@@ -23,18 +23,20 @@ namespace aspia {
 class UiDriveList : public CWindowImpl<UiDriveList, CComboBoxEx>
 {
 public:
-    static const int kComputerObjectIndex = -1;
-    static const int kCurrentFolderObjectIndex = -2;
-    static const int kInvalidObjectIndex = -3;
+    static const int kInvalidObjectIndex = -1;
+    static const int kComputerObjectIndex = -2;
+    static const int kCurrentFolderObjectIndex = -3;
 
     UiDriveList() = default;
     ~UiDriveList() = default;
+
+    bool CreateDriveList(HWND parent, int control_id);
 
     void Read(std::unique_ptr<proto::DriveList> list);
 
     bool HasDriveList() const;
     bool IsValidObjectIndex(int object_index) const;
-    int SelectObject(int object_index);
+    void SelectObject(int object_index);
     int SelectedObject() const;
     const proto::DriveListItem& Object(int object_index) const;
     const proto::DriveList& DriveList() const;

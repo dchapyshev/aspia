@@ -23,10 +23,13 @@ namespace aspia {
 class UiFileList : public CWindowImpl<UiFileList, CListViewCtrl>
 {
 public:
-    static const int kNewFolderObjectIndex = -1;
+    static const int kInvalidObjectIndex = -1;
+    static const int kNewFolderObjectIndex = -2;
 
     UiFileList() = default;
     virtual ~UiFileList() = default;
+
+    bool CreateFileList(HWND parent, int control_id);
 
     void Read(std::unique_ptr<proto::DirectoryList> list);
     void Read(const proto::DriveList& list);
@@ -38,6 +41,7 @@ public:
     const proto::DirectoryListItem& Object(int object_index);
     const std::string& ObjectName(int object_index);
     proto::DirectoryListItem* FirstSelectedObject() const;
+    int GetObjectUnderMousePointer() const;
     void AddDirectory();
 
     class Iterator

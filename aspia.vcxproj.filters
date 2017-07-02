@@ -454,6 +454,9 @@
     <ClCompile Include="ui\drive_list.cc">
       <Filter>ui</Filter>
     </ClCompile>
+    <ClCompile Include="ui\file_toolbar.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -963,6 +966,9 @@
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="ui\drive_list.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_toolbar.h">
       <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>

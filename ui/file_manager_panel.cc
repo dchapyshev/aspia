@@ -16,8 +16,13 @@
 
 namespace aspia {
 
+static_assert(UiFileList::kInvalidObjectIndex == UiDriveList::kInvalidObjectIndex,
+              "Values must be equal");
+
 UiFileManagerPanel::UiFileManagerPanel(PanelType panel_type,
                                        Delegate* delegate) :
+    toolbar_(panel_type == PanelType::LOCAL ?
+             UiFileToolBar::Type::LOCAL : UiFileToolBar::Type::REMOTE),
     panel_type_(panel_type),
     delegate_(delegate)
 {
@@ -45,48 +50,12 @@ void UiFileManagerPanel::ReadDirectoryList(
     drive_list_.SetCurrentPath(file_list_.CurrentPath());
 }
 
-void UiFileManagerPanel::AddToolBarIcon(UINT icon_id, const CSize& icon_size)
-{
-    CIcon icon(AtlLoadIconImage(icon_id,
-                                LR_CREATEDIBSECTION,
-                                icon_size.cx,
-                                icon_size.cy));
-    toolbar_imagelist_.AddIcon(icon);
-}
-
-void UiFileManagerPanel::SetToolBarButtonText(int command_id, UINT resource_id)
-{
-    int button_index = toolbar_.CommandToIndex(command_id);
-    if (button_index == -1)
-        return;
-
-    TBBUTTON button = { 0 };
-
-    if (!toolbar_.GetButton(button_index, &button))
-        return;
-
-    CString string;
-    string.LoadStringW(resource_id);
-
-    int string_id = toolbar_.AddStrings(string);
-    if (string_id == -1)
-        return;
-
-    button.iString = string_id;
-
-    toolbar_.DeleteButton(button_index);
-    toolbar_.InsertButton(button_index, &button);
-}
-
 LPARAM UiFileManagerPanel::OnCreate(UINT message,
                                     WPARAM wparam,
                                     LPARAM lparam,
                                     BOOL& handled)
 {
     HFONT default_font = AtlGetStockFont(DEFAULT_GUI_FONT);
-
-    CSize small_icon_size(GetSystemMetrics(SM_CXSMICON),
-                          GetSystemMetrics(SM_CYSMICON));
 
     CString panel_name;
 
@@ -99,62 +68,9 @@ LPARAM UiFileManagerPanel::OnCreate(UINT message,
     title_.Create(*this, title_rect, panel_name, WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
     title_.SetFont(default_font);
 
-    CRect drive_rect(0, 0, 200, 200);
-    drive_list_.Create(*this, drive_rect, nullptr,
-                        WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWN,
-                        0, kDriveControl);
-
-    toolbar_.Create(*this, CWindow::rcDefault, nullptr,
-                    WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT |
-                        TBSTYLE_LIST | TBSTYLE_TOOLTIPS,
-                    0, kToolBarControl);
-
-    toolbar_.SetExtendedStyle(TBSTYLE_EX_MIXEDBUTTONS | TBSTYLE_EX_DOUBLEBUFFER);
-
-    TBBUTTON kButtons[] =
-    {
-        // iBitmap, idCommand, fsState, fsStyle, bReserved[2], dwData, iString
-        { 0, ID_REFRESH,    TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE, { 0 }, 0, -1 },
-        { 1, ID_DELETE,     TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE, { 0 }, 0, -1 },
-        { 2, ID_FOLDER_ADD, TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE, { 0 }, 0, -1 },
-        { 3, ID_FOLDER_UP,  TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE, { 0 }, 0, -1 },
-        { 4, ID_HOME,       TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE, { 0 }, 0, -1 },
-        { 5, ID_SEND,       TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_SHOWTEXT, { 0 }, 0, -1 }
-    };
-
-    toolbar_.SetButtonStructSize(sizeof(kButtons[0]));
-    toolbar_.AddButtons(_countof(kButtons), kButtons);
-
-    if (toolbar_imagelist_.Create(small_icon_size.cx,
-                                  small_icon_size.cy,
-                                  ILC_MASK | ILC_COLOR32,
-                                  1, 1))
-    {
-        toolbar_.SetImageList(toolbar_imagelist_);
-
-        AddToolBarIcon(IDI_REFRESH, small_icon_size);
-        AddToolBarIcon(IDI_DELETE, small_icon_size);
-        AddToolBarIcon(IDI_FOLDER_ADD, small_icon_size);
-        AddToolBarIcon(IDI_FOLDER_UP, small_icon_size);
-        AddToolBarIcon(IDI_HOME, small_icon_size);
-
-        if (panel_type_ == PanelType::LOCAL)
-        {
-            AddToolBarIcon(IDI_SEND, small_icon_size);
-            SetToolBarButtonText(ID_SEND, IDS_FT_SEND);
-        }
-        else
-        {
-            DCHECK(panel_type_ == PanelType::REMOTE);
-            AddToolBarIcon(IDI_RECIEVE, small_icon_size);
-            SetToolBarButtonText(ID_SEND, IDS_FT_RECIEVE);
-        }
-    }
-
-    const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP |
-        LVS_REPORT | LVS_SHOWSELALWAYS;
-
-    file_list_.Create(*this, CWindow::rcDefault, nullptr, style, WS_EX_CLIENTEDGE, kListControl);
+    drive_list_.CreateDriveList(*this, kDriveListControl);
+    toolbar_.CreateFileToolBar(*this);
+    file_list_.CreateFileList(*this, kFileListControl);
 
     CRect status_rect(0, 0, 200, 20);
     status_.Create(*this, status_rect, nullptr,
@@ -287,51 +203,6 @@ LRESULT UiFileManagerPanel::OnDrawItem(UINT message,
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnGetDispInfo(int control_id,
-                                          LPNMHDR hdr,
-                                          BOOL& handled)
-{
-    LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(hdr);
-
-    switch (header->hdr.idFrom)
-    {
-        case ID_REFRESH:
-            header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_REFRESH);
-            break;
-
-        case ID_DELETE:
-            header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_DELETE);
-            break;
-
-        case ID_FOLDER_ADD:
-            header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_FOLDER_ADD);
-            break;
-
-        case ID_FOLDER_UP:
-            header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_FOLDER_UP);
-            break;
-
-        case ID_HOME:
-            header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_HOME);
-            break;
-
-        case ID_SEND:
-        {
-            if (panel_type_ == PanelType::LOCAL)
-                header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_SEND);
-            else
-                header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_RECIEVE);
-        }
-        break;
-
-        default:
-            return 0;
-    }
-
-    header->hinst = GetModuleHandleW(nullptr);
-    return TRUE;
-}
-
 LRESULT UiFileManagerPanel::OnDriveChange(WORD notify_code,
                                           WORD control_id,
                                           HWND control,
@@ -346,38 +217,14 @@ LRESULT UiFileManagerPanel::OnDriveChange(WORD notify_code,
     return 0;
 }
 
-int UiFileManagerPanel::GetItemUnderMousePointer()
-{
-    LVHITTESTINFO hti;
-    memset(&hti, 0, sizeof(hti));
-
-    if (GetCursorPos(&hti.pt))
-    {
-        if (file_list_.ScreenToClient(&hti.pt) != FALSE)
-        {
-            hti.flags = LVHT_ONITEMICON | LVHT_ONITEMLABEL;
-            return file_list_.HitTest(&hti);
-        }
-    }
-
-    return -1;
-}
-
 LRESULT UiFileManagerPanel::OnListDoubleClock(int control_id,
                                               LPNMHDR hdr,
                                               BOOL& handled)
 {
-    int item_index = GetItemUnderMousePointer();
-    if (item_index == -1)
-        return 0;
-
-    int object_index = file_list_.GetItemData(item_index);
+    int object_index = file_list_.GetObjectUnderMousePointer();
 
     if (!file_list_.HasDirectoryList())
     {
-        if (!drive_list_)
-            return 0;
-
         MoveToDrive(object_index);
         return 0;
     }
@@ -516,7 +363,7 @@ LRESULT UiFileManagerPanel::OnRemove(WORD notify_code,
 
 void UiFileManagerPanel::MoveToDrive(int object_index)
 {
-    int item_index = drive_list_.SelectObject(object_index);
+    drive_list_.SelectObject(object_index);
 
     if (object_index == UiDriveList::kComputerObjectIndex)
     {

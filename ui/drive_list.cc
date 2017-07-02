@@ -13,6 +13,23 @@
 
 namespace aspia {
 
+bool UiDriveList::CreateDriveList(HWND parent, int control_id)
+{
+    const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP |
+        WS_VSCROLL | CBS_DROPDOWN;
+
+    CRect drive_rect(0, 0, 200, 200);
+
+    if (!Create(parent, drive_rect, nullptr, style, 0, control_id))
+    {
+        DLOG(ERROR) << "Unable to create drive list window: "
+                    << GetLastSystemErrorString();
+        return false;
+    }
+
+    return true;
+}
+
 void UiDriveList::Read(std::unique_ptr<proto::DriveList> list)
 {
     ResetContent();
@@ -62,14 +79,12 @@ bool UiDriveList::IsValidObjectIndex(int object_index) const
     return false;
 }
 
-int UiDriveList::SelectObject(int object_index)
+void UiDriveList::SelectObject(int object_index)
 {
     int item_index = GetItemIndexByObjectIndex(object_index);
 
     if (item_index != CB_ERR)
         SetCurSel(item_index);
-
-    return item_index;
 }
 
 int UiDriveList::SelectedObject() const

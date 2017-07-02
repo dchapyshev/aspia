@@ -10,16 +10,10 @@
 
 #include "base/macros.h"
 #include "proto/file_transfer_session.pb.h"
+#include "ui/file_toolbar.h"
 #include "ui/file_list.h"
 #include "ui/drive_list.h"
 #include "ui/resource.h"
-
-#include <atlbase.h>
-#include <atlapp.h>
-#include <atlwin.h>
-#include <atlctrls.h>
-#include <atlmisc.h>
-#include <memory>
 
 namespace aspia {
 
@@ -59,9 +53,8 @@ public:
     void ReadDirectoryList(std::unique_ptr<proto::DirectoryList> directory_list);
 
 private:
-    static const int kToolBarControl = 100;
-    static const int kDriveControl = 101;
-    static const int kListControl = 101;
+    static const int kDriveListControl = 101;
+    static const int kFileListControl = 101;
 
     BEGIN_MSG_MAP(UiFileManagerPanel)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
@@ -69,13 +62,12 @@ private:
         MESSAGE_HANDLER(WM_DRAWITEM, OnDrawItem)
         MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 
-        NOTIFY_CODE_HANDLER(TTN_GETDISPINFOW, OnGetDispInfo)
-        NOTIFY_HANDLER(kDriveControl, CBEN_ENDEDITW, OnDriveEndEdit)
-        NOTIFY_HANDLER(kListControl, NM_DBLCLK, OnListDoubleClock)
-        NOTIFY_HANDLER(kListControl, LVN_ENDLABELEDIT, OnListEndLabelEdit)
-        NOTIFY_HANDLER(kListControl, LVN_ITEMCHANGED, OnListItemChanged)
+        NOTIFY_HANDLER(kDriveListControl, CBEN_ENDEDITW, OnDriveEndEdit)
+        NOTIFY_HANDLER(kFileListControl, NM_DBLCLK, OnListDoubleClock)
+        NOTIFY_HANDLER(kFileListControl, LVN_ENDLABELEDIT, OnListEndLabelEdit)
+        NOTIFY_HANDLER(kFileListControl, LVN_ITEMCHANGED, OnListItemChanged)
 
-        COMMAND_HANDLER(kDriveControl, CBN_SELCHANGE, OnDriveChange)
+        COMMAND_HANDLER(kDriveListControl, CBN_SELCHANGE, OnDriveChange)
         COMMAND_ID_HANDLER(ID_FOLDER_UP, OnFolderUp)
         COMMAND_ID_HANDLER(ID_FOLDER_ADD, OnFolderAdd)
         COMMAND_ID_HANDLER(ID_REFRESH, OnRefresh)
@@ -88,7 +80,6 @@ private:
     LRESULT OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnDrawItem(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
-    LRESULT OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnDriveEndEdit(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnListDoubleClock(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnListEndLabelEdit(int control_id, LPNMHDR hdr, BOOL& handled);
@@ -103,21 +94,14 @@ private:
     LRESULT OnSend(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     void MoveToDrive(int object_index);
-    void AddToolBarIcon(UINT icon_id, const CSize& icon_size);
-    int GetItemUnderMousePointer();
-    void SetToolBarButtonText(int command_id, UINT resource_id);
 
     const PanelType panel_type_;
     Delegate* delegate_;
 
     CStatic title_;
-
     UiDriveList drive_list_;
     UiFileList file_list_;
-
-    CToolBarCtrl toolbar_;
-    CImageListManaged toolbar_imagelist_;
-
+    UiFileToolBar toolbar_;
     CStatic status_;
 
     DISALLOW_COPY_AND_ASSIGN(UiFileManagerPanel);
