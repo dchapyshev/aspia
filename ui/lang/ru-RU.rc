@@ -294,6 +294,7 @@ BEGIN
                       • gflags © 2006 Google Inc., BSD 3-Clause License\r\n\
                       • zlib-ng © 1995-2013 Jean-loup Gailly and Mark Adler, Zlib License\r\n\
                       • libsodium © 2013-2017 Frank Denis, ISC License\r\n\
+                      • WTL © 2015 Microsoft Corporation, WTL Team, Microsoft Public License\r\n\
                       • Fugue Icons © 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 License"
 
     IDS_CONFIRMATION                      "Подтверждение"
