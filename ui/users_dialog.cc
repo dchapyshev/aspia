@@ -110,10 +110,6 @@ LRESULT UiUsersDialog::OnInitDialog(UINT message,
     title.LoadStringW(IDS_USER_LIST);
     int column_index = list.AddColumn(title, 0);
 
-    CRect list_rect;
-    list.GetClientRect(list_rect);
-    list.SetColumnWidth(column_index, list_rect.Width() - GetSystemMetrics(SM_CXVSCROLL));
-
     if (!IsCallerHasAdminRights())
     {
         GetDlgItem(IDC_USER_LIST).EnableWindow(FALSE);

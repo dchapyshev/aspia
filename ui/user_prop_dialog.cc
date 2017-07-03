@@ -97,10 +97,6 @@ LRESULT UiUserPropDialog::OnInitDialog(UINT message,
 
     int column_index = list.AddColumn(L"", 0);
 
-    CRect list_rect;
-    list.GetClientRect(list_rect);
-    list.SetColumnWidth(column_index, list_rect.Width() - GetSystemMetrics(SM_CXVSCROLL));
-
     InsertSessionType(list,
                       proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE,
                       IDS_SESSION_TYPE_DESKTOP_MANAGE);
