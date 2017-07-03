@@ -174,6 +174,7 @@
 #define IDS_SESSION_TYPE_SYSTEM_INFO          18
 #define IDS_DELETE_USER_CONFORMATION          19
 #define IDS_USER_LIST_MODIFIED                20
+#define IDS_USER_LIST                         21
 
 // Desktop Manage
 #define IDS_DM_TOOLTIP_AUTO_SIZE              500

@@ -14,14 +14,14 @@
 
 namespace aspia {
 
-template <bool is_vertical>
+template <bool kIsVertical>
 class UiSplitterT :
-    public CSplitterWindowImpl<UiSplitterT<is_vertical>>
+    public CSplitterWindowImpl<UiSplitterT<kIsVertical>>
 {
 public:
     DECLARE_WND_CLASS_EX(L"UiSplitter", CS_DBLCLKS, COLOR_WINDOW)
 
-    UiSplitterT() : CSplitterWindowImpl<UiSplitterT<is_vertical>>(is_vertical)
+    UiSplitterT() : CSplitterWindowImpl<UiSplitterT<kIsVertical>>(kIsVertical)
     {
         // Nothing
     }

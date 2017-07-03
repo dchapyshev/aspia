@@ -106,7 +106,9 @@ LRESULT UiUsersDialog::OnInitDialog(UINT message,
 
     list.SetImageList(imagelist_, LVSIL_SMALL);
 
-    int column_index = list.AddColumn(L"", 0);
+    CString title;
+    title.LoadStringW(IDS_USER_LIST);
+    int column_index = list.AddColumn(title, 0);
 
     CRect list_rect;
     list.GetClientRect(list_rect);
