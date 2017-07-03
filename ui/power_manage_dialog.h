@@ -40,6 +40,8 @@ private:
     LRESULT OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
+    CIcon icon_;
+
     DISALLOW_COPY_AND_ASSIGN(UiPowerManageDialog);
 };
 

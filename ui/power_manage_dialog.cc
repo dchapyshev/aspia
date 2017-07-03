@@ -16,6 +16,14 @@ LRESULT UiPowerManageDialog::OnInitDialog(UINT message,
                                           BOOL& handled)
 {
     CenterWindow();
+
+    icon_ = AtlLoadIconImage(IDI_POWER_SURGE,
+                             LR_CREATEDIBSECTION,
+                             GetSystemMetrics(SM_CXICON),
+                             GetSystemMetrics(SM_CYICON));
+
+    CStatic(GetDlgItem(IDC_POWER_ICON)).SetIcon(icon_);
+
     CheckDlgButton(ID_POWER_SHUTDOWN, BST_CHECKED);
     GetDlgItem(ID_POWER_SHUTDOWN).SetFocus();
     return 0;

@@ -35,6 +35,7 @@
 #define IDI_SETTINGS                          117
 #define IDI_USER                              118
 #define IDI_USER_DISABLED                     119
+#define IDI_POWER_SURGE                       120
 
 //
 // Dialogs
@@ -99,6 +100,7 @@
 #define IDC_STOP_BUTTON                       142
 #define IDC_MINIMIZE_BUTTON                   143
 #define IDC_BUTTON_GROUP                      144
+#define IDC_POWER_ICON                        145
 
 //
 // Commands

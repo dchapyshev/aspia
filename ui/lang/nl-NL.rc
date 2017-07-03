@@ -88,7 +88,7 @@ BEGIN
     PUSHBUTTON "&Annuleren", IDCANCEL, 121, 165, 60, 14
 END
 
-IDD_ABOUT DIALOGEX 100, 100, 270, 280
+IDD_ABOUT DIALOGEX 100, 100, 271, 280
 STYLE DS_SHELLFONT | WS_BORDER | WS_THICKFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
 CAPTION "Over"
 FONT 8, "MS Shell Dlg"
@@ -103,10 +103,10 @@ BEGIN
     DEFPUSHBUTTON "&Doneer!", IDC_DONATE_BUTTON, 96, 232, 162, 15
     PUSHBUTTON "&Bezoek site", IDC_SITE_BUTTON, 13, 232, 75, 15
 
-    PUSHBUTTON "&Sluiten", IDOK, 215, 259, 50, 14
+    PUSHBUTTON "&Sluiten", IDOK, 205, 259, 60, 14
 END
 
-IDD_USER_PROP DIALOGEX 100, 100, 220, 225
+IDD_USER_PROP DIALOGEX 100, 100, 219, 225
 STYLE DS_SHELLFONT | WS_BORDER | WS_THICKFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
 CAPTION "Gebruikerseigenschappen"
 FONT 8, "MS Shell Dlg"
@@ -123,8 +123,8 @@ BEGIN
     LTEXT "Toegestane sessie typen:", -1, 10, 85, 130, 10
     CONTROL "", IDC_SESSION_TYPES_LIST, "SysListView32", LVS_REPORT | LVS_NOCOLUMNHEADER | LVS_SINGLESEL | WS_BORDER | WS_TABSTOP, 9, 97, 200, 101
 
-    PUSHBUTTON "&OK", IDOK, 104, 204, 50, 14
-    PUSHBUTTON "&Annuleren", IDCANCEL, 160, 204, 50, 14
+    PUSHBUTTON "&OK", IDOK, 84, 204, 60, 14
+    PUSHBUTTON "&Annuleren", IDCANCEL, 150, 204, 60, 14
 END
 
 IDD_USERS DIALOGEX 100, 100, 231, 170
@@ -142,20 +142,22 @@ BEGIN
     PUSHBUTTON "&Annuleren", IDCANCEL, 164, 151, 60, 14
 END
 
-IDD_POWER DIALOGEX 100, 100, 128, 107
+IDD_POWER DIALOGEX 100, 100, 138, 126
 STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
 CAPTION "Power Manage"
 FONT 8, "MS Shell Dlg"
 BEGIN
-    GROUPBOX "Select an action", -1, 6, 6, 116, 76
+    CONTROL -1, IDC_POWER_ICON, "STATIC", SS_ICON | SS_CENTERIMAGE | SS_REALSIZEIMAGE, 8, 4, 32, 32
 
-    AUTORADIOBUTTON "Afsl&uiten",         ID_POWER_SHUTDOWN,  14, 19, 100, 14
-    AUTORADIOBUTTON "&Opnieuw opstarten", ID_POWER_REBOOT,    14, 34, 100, 14
-    AUTORADIOBUTTON "&Sluimerstand",      ID_POWER_HIBERNATE, 14, 49, 100, 14
-    AUTORADIOBUTTON "S&laapstand",        ID_POWER_SUSPEND,   14, 64, 100, 14
+    LTEXT "Select an action:", -1, 50, 15, 150, 10
 
-    DEFPUSHBUTTON "&OK", IDOK, 19, 87, 50, 14
-    PUSHBUTTON "&Annuleren", IDCANCEL, 72, 87, 50, 14
+    AUTORADIOBUTTON "Afsl&uiten",         ID_POWER_SHUTDOWN,  56, 29, 77, 14
+    AUTORADIOBUTTON "&Opnieuw opstarten", ID_POWER_REBOOT,    56, 46, 77, 14
+    AUTORADIOBUTTON "&Sluimerstand",      ID_POWER_HIBERNATE, 56, 63, 77, 14
+    AUTORADIOBUTTON "S&laapstand",        ID_POWER_SUSPEND,   56, 79, 77, 14
+
+    DEFPUSHBUTTON "&OK", IDOK, 6, 107, 60, 14
+    PUSHBUTTON "&Annuleren", IDCANCEL, 72, 107, 60, 14
 END
 
 IDD_FILE_TRANSFER DIALOGEX 100, 100, 400, 173
@@ -291,6 +293,7 @@ BEGIN
                       • zlib-ng © 1995-2013 Jean-loup Gailly and Mark Adler, Zlib Licentie\r\n\
                       • libsodium © 2013-2017 Frank Denis, ISC License\r\n\
                       • WTL © 2015 Microsoft Corporation, WTL Team, Microsoft Public License\r\n\
+                      • FatCow Icons © 2009-2014 FatCow Web Hosting, Creative Commons Attribution 3.0 License\r\n\
                       • Fugue Icons © 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 Licentie"
 
     IDS_CONFIRMATION                      "Bevestiging"
