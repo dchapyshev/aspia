@@ -88,7 +88,7 @@ void VideoEncoderVPX::CreateImage()
     // Allocate a YUV buffer large enough for the aligned data & padding.
     const int buffer_size = y_stride * y_rows + (2 * uv_stride) * uv_rows;
 
-    yuv_image_.reset(new uint8_t[buffer_size]);
+    yuv_image_ = std::make_unique<uint8_t[]>(buffer_size);
 
     // Reset image value to 128 so we just need to fill in the y plane.
     memset(yuv_image_.get(), 128, buffer_size);
@@ -109,7 +109,7 @@ void VideoEncoderVPX::CreateActiveMap()
 
     active_map_size_ = active_map_.cols * active_map_.rows;
 
-    active_map_buffer_.reset(new uint8_t[active_map_size_]);
+    active_map_buffer_ = std::make_unique<uint8_t[]>(active_map_size_);
 
     memset(active_map_buffer_.get(), 0, active_map_size_);
 

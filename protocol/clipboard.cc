@@ -25,7 +25,7 @@ bool Clipboard::Start(ClipboardEventCallback clipboard_event_callback)
 {
     clipboard_event_callback_ = std::move(clipboard_event_callback);
 
-    window_.reset(new MessageWindow());
+    window_ = std::make_unique<MessageWindow>();
 
     if (!window_->Create(std::bind(&Clipboard::OnMessage,
                                    this,
@@ -145,7 +145,8 @@ void Clipboard::OnClipboardUpdate()
 
             if (last_mime_type_ != kMimeTypeTextUtf8 || last_data_ != data)
             {
-                std::unique_ptr<proto::ClipboardEvent> event(new proto::ClipboardEvent);
+                std::unique_ptr<proto::ClipboardEvent> event =
+                    std::make_unique<proto::ClipboardEvent>();
 
                 event->set_mime_type(kMimeTypeTextUtf8);
                 event->set_data(data);

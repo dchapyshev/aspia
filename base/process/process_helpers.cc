@@ -155,7 +155,8 @@ bool IsRunningAsService()
         return false;
     }
 
-    std::unique_ptr<uint8_t[]> buffer(new uint8_t[needed_bytes]);
+    std::unique_ptr<uint8_t[]> buffer =
+        std::make_unique<uint8_t[]>(needed_bytes);
 
     if (!EnumServicesStatusExW(sc_manager,
                                SC_ENUM_PROCESS_INFO,

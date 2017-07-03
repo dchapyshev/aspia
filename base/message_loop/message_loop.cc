@@ -31,15 +31,15 @@ MessageLoop::MessageLoop(Type type) :
     switch (type)
     {
         case TYPE_UI:
-            pump_.reset(new MessagePumpForUI());
+            pump_ = std::make_unique<MessagePumpForUI>();
             break;
 
         case TYPE_IO:
-            pump_.reset(new MessagePumpForIO());
+            pump_ = std::make_unique<MessagePumpForIO>();
             break;
 
         default:
-            pump_.reset(new MessagePumpDefault());
+            pump_ = std::make_unique<MessagePumpDefault>();
             break;
     }
 }

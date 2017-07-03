@@ -37,7 +37,7 @@ bool ConsoleSessionWatcher::StartWatching(Delegate* delegate)
 {
     delegate_ = delegate;
 
-    window_.reset(new MessageWindow());
+    window_ = std::make_unique<MessageWindow>();
 
     if (!window_->Create(std::bind(&ConsoleSessionWatcher::OnMessage,
                                    this,

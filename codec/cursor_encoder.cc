@@ -102,7 +102,8 @@ std::unique_ptr<proto::CursorShape> CursorEncoder::Encode(std::unique_ptr<MouseC
         return nullptr;
     }
 
-    std::unique_ptr<proto::CursorShape> cursor_shape(new proto::CursorShape());
+    std::unique_ptr<proto::CursorShape> cursor_shape =
+        std::make_unique<proto::CursorShape>();
 
     size_t index = cache_.Find(mouse_cursor.get());
 

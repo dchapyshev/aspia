@@ -119,7 +119,7 @@ LRESULT UiUsersDialog::OnAddButton(WORD notify_code,
                                    HWND control,
                                    BOOL& handled)
 {
-    std::unique_ptr<proto::HostUser> user(new proto::HostUser());
+    std::unique_ptr<proto::HostUser> user(std::make_unique<proto::HostUser>());
 
     UiUserPropDialog dialog(UiUserPropDialog::Mode::Add, user.get(), user_list_);
     if (dialog.DoModal(*this) == IDOK)

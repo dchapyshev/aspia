@@ -31,7 +31,7 @@ void ClientSessionDesktopManage::ReadCursorShape(
     const proto::CursorShape& cursor_shape)
 {
     if (!cursor_decoder_)
-        cursor_decoder_.reset(new CursorDecoder());
+        cursor_decoder_ = std::make_unique<CursorDecoder>();
 
     std::shared_ptr<MouseCursor> mouse_cursor =
         cursor_decoder_->Decode(cursor_shape);

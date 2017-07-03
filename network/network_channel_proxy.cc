@@ -12,9 +12,10 @@ namespace aspia {
 NetworkChannelProxy::NetworkChannelProxy(NetworkChannel* channel) :
     channel_(channel)
 {
-    outgoing_queue_.reset(new IOQueue(std::bind(&NetworkChannelProxy::Send,
-                                                this,
-                                                std::placeholders::_1)));
+    outgoing_queue_ =
+        std::make_unique<IOQueue>(std::bind(&NetworkChannelProxy::Send,
+                                            this,
+                                            std::placeholders::_1));
 }
 
 void NetworkChannelProxy::WillDestroyCurrentChannel()

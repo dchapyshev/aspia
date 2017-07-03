@@ -27,7 +27,7 @@ public:
     explicit SecureBuffer(size_t size) :
         data_size_(size)
     {
-        data_.reset(new uint8_t[data_size_]);
+        data_ = std::make_unique<uint8_t[]>(data_size_);
         sodium_memzero(data_.get(), data_size_);
     }
 

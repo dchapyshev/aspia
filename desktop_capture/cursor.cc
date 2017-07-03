@@ -128,7 +128,8 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
     int width = bitmap_info.bmWidth;
     int height = bitmap_info.bmHeight;
 
-    std::unique_ptr<uint32_t[]> mask_data(new uint32_t[width * height]);
+    std::unique_ptr<uint32_t[]> mask_data =
+        std::make_unique<uint32_t[]>(width * height);
 
     // Get pixel data from |scoped_mask| converting it to 32bpp along the way.
     // GetDIBits() sets the alpha component of every pixel to 0.
@@ -166,7 +167,7 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
     if (is_color)
     {
         image_size = width * height * kBytesPerPixel;
-        image.reset(new uint8_t[image_size]);
+        image = std::make_unique<uint8_t[]>(image_size);
 
         // Get the pixels from the color bitmap.
         if (!GetDIBits(dc,
@@ -197,7 +198,7 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
         height /= 2;
 
         image_size = width * height * kBytesPerPixel;
-        image.reset(new uint8_t[image_size]);
+        image = std::make_unique<uint8_t[]>(image_size);
 
         // The XOR mask becomes the color bitmap.
         memcpy(image.get(), mask_plane + (width * height), image_size);

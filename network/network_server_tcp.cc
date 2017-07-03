@@ -48,7 +48,7 @@ void NetworkServerTcp::AddFirewallRule()
 
     if (IsWindowsVistaOrGreater())
     {
-        firewall_manager_.reset(new FirewallManager());
+        firewall_manager_ = std::make_unique<FirewallManager>();
 
         if (!firewall_manager_->Init(kAppName, exe_path))
         {
@@ -64,7 +64,7 @@ void NetworkServerTcp::AddFirewallRule()
     }
     else
     {
-        firewall_manager_legacy_.reset(new FirewallManagerLegacy());
+        firewall_manager_legacy_ = std::make_unique<FirewallManagerLegacy>();
 
         if (!firewall_manager_legacy_->Init(kAppName, exe_path))
         {

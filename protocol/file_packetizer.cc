@@ -63,7 +63,7 @@ FilePacketizer::State FilePacketizer::CreateNextPacket(
     if (file_path_.empty())
         return State::ERROR;
 
-    packet.reset(new proto::FilePacket());
+    packet = std::make_unique<proto::FilePacket>();
 
     size_t packet_buffer_size = kPacketPartSize;
 

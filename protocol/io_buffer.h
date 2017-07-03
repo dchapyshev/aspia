@@ -22,7 +22,7 @@ public:
         data_size_(size)
     {
         DCHECK_NE(data_size_, 0);
-        data_.reset(new uint8_t[data_size_]);
+        data_ = std::make_unique<uint8_t[]>(data_size_);
     }
 
     IOBuffer() = default;

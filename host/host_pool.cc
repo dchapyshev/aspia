@@ -27,7 +27,7 @@ HostPool::~HostPool()
 
 bool HostPool::Start()
 {
-    network_server_.reset(new NetworkServerTcp(runner_));
+    network_server_ = std::make_unique<NetworkServerTcp>(runner_);
     return network_server_->Start(kDefaultHostTcpPort, this);
 }
 

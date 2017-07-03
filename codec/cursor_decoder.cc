@@ -78,7 +78,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::Decode(const proto::CursorShape& cur
         }
 
         size_t image_size = size.Width() * size.Height() * sizeof(uint32_t);
-        std::unique_ptr<uint8_t[]> image(new uint8_t[image_size]);
+        std::unique_ptr<uint8_t[]> image = std::make_unique<uint8_t[]>(image_size);
 
         if (!DecompressCursor(cursor_shape, image.get()))
             return nullptr;
@@ -95,7 +95,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::Decode(const proto::CursorShape& cur
             if (!MouseCursorCache::IsValidCacheSize(cache_size))
                 return nullptr;
 
-            cache_.reset(new MouseCursorCache(cache_size));
+            cache_ = std::make_unique<MouseCursorCache>(cache_size);
         }
 
         if (!cache_)

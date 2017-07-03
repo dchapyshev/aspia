@@ -21,8 +21,11 @@ Encryptor::Encryptor(Mode mode) :
         return;
     }
 
-    std::unique_ptr<SecureBuffer> public_key(new SecureBuffer(crypto_kx_PUBLICKEYBYTES));
-    std::unique_ptr<SecureBuffer> secret_key(new SecureBuffer(crypto_kx_SECRETKEYBYTES));
+    std::unique_ptr<SecureBuffer> public_key =
+        std::make_unique<SecureBuffer>(crypto_kx_PUBLICKEYBYTES);
+
+    std::unique_ptr<SecureBuffer> secret_key =
+        std::make_unique<SecureBuffer>(crypto_kx_SECRETKEYBYTES);
 
     if (crypto_kx_keypair(public_key->data(), secret_key->data()) != 0)
     {
@@ -55,11 +58,14 @@ bool Encryptor::ReadHelloMessage(const SecureIOBuffer& message_buffer)
     if (message.nonce().size() != crypto_secretbox_NONCEBYTES)
         return false;
 
-    decrypt_nonce_.reset(new SecureBuffer(crypto_secretbox_NONCEBYTES));
+    decrypt_nonce_= std::make_unique<SecureBuffer>(crypto_secretbox_NONCEBYTES);
     memcpy(decrypt_nonce_->data(), message.nonce().data(), crypto_secretbox_NONCEBYTES);
 
-    std::unique_ptr<SecureBuffer> decrypt_key(new SecureBuffer(crypto_kx_SESSIONKEYBYTES));
-    std::unique_ptr<SecureBuffer> encrypt_key(new SecureBuffer(crypto_kx_SESSIONKEYBYTES));
+    std::unique_ptr<SecureBuffer> decrypt_key =
+        std::make_unique<SecureBuffer>(crypto_kx_SESSIONKEYBYTES);
+
+    std::unique_ptr<SecureBuffer> encrypt_key =
+        std::make_unique<SecureBuffer>(crypto_kx_SESSIONKEYBYTES);
 
     if (mode_ == Mode::SERVER)
     {
@@ -110,7 +116,7 @@ SecureIOBuffer Encryptor::HelloMessage()
     if (!local_public_key_ || !local_secret_key_)
         return SecureIOBuffer();
 
-    encrypt_nonce_.reset(new SecureBuffer(crypto_secretbox_NONCEBYTES));
+    encrypt_nonce_ = std::make_unique<SecureBuffer>(crypto_secretbox_NONCEBYTES);
 
     // Generate nonce for encryption.
     randombytes_buf(encrypt_nonce_->data(), encrypt_nonce_->size());

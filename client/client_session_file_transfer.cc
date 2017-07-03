@@ -43,8 +43,8 @@ void ClientSessionFileTransfer::OnAfterThreadRunning()
 
 void ClientSessionFileTransfer::Send(const IOBuffer& buffer)
 {
-    std::unique_ptr<proto::file_transfer::HostToClient> message(
-        new proto::file_transfer::HostToClient());
+    std::unique_ptr<proto::file_transfer::HostToClient> message =
+        std::make_unique<proto::file_transfer::HostToClient>();
 
     if (ParseMessage(buffer, *message))
     {
@@ -344,8 +344,8 @@ ClientSessionFileTransfer::SendLocalRequest(
 {
     DCHECK(worker_->BelongsToCurrentThread());
 
-    std::unique_ptr<proto::file_transfer::HostToClient> reply(
-        new proto::file_transfer::HostToClient());
+    std::unique_ptr<proto::file_transfer::HostToClient> reply =
+        std::make_unique<proto::file_transfer::HostToClient>();
 
     std::unique_ptr<proto::RequestStatus> status;
 

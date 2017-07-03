@@ -68,7 +68,7 @@ void UiMainDialog::InitAddressesList()
         return;
     }
 
-    std::unique_ptr<uint8_t[]> buffer(new uint8_t[size]);
+    std::unique_ptr<uint8_t[]> buffer = std::make_unique<uint8_t[]>(size);
 
     PIP_ADAPTER_ADDRESSES addresses =
         reinterpret_cast<PIP_ADAPTER_ADDRESSES>(buffer.get());
@@ -264,7 +264,7 @@ LRESULT UiMainDialog::OnStartServerButton(WORD notify_code,
         return 0;
     }
 
-    host_pool_.reset(new HostPool(MessageLoopProxy::Current()));
+    host_pool_ = std::make_unique<HostPool>(MessageLoopProxy::Current());
 
     if (host_pool_->Start())
     {
@@ -353,7 +353,7 @@ LRESULT UiMainDialog::OnConnectButton(WORD notify_code,
         config_.set_session_type(session_type);
 
         if (!client_pool_)
-            client_pool_.reset(new ClientPool(MessageLoopProxy::Current()));
+            client_pool_ = std::make_unique<ClientPool>(MessageLoopProxy::Current());
 
         client_pool_->Connect(*this, config_);
     }

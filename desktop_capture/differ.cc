@@ -69,7 +69,7 @@ Differ::Differ(const DesktopSize& size) :
 {
     const int diff_info_size = diff_width_ * diff_height_;
 
-    diff_info_.reset(new uint8_t[diff_info_size]);
+    diff_info_ = std::make_unique<uint8_t[]>(diff_info_size);
     memset(diff_info_.get(), 0, diff_info_size);
 
     // Calc size of partial blocks which may be present on right and bottom edge.

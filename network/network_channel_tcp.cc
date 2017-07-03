@@ -109,7 +109,7 @@ bool NetworkChannelTcp::KeyExchange()
 {
     if (mode_ == Mode::CLIENT)
     {
-        encryptor_.reset(new Encryptor(Encryptor::Mode::CLIENT));
+        encryptor_ = std::make_unique<Encryptor>(Encryptor::Mode::CLIENT);
         if (!encryptor_)
             return false;
 
@@ -123,7 +123,7 @@ bool NetworkChannelTcp::KeyExchange()
     {
         DCHECK(mode_ == Mode::SERVER);
 
-        encryptor_.reset(new Encryptor(Encryptor::Mode::SERVER));
+        encryptor_ = std::make_unique<Encryptor>(Encryptor::Mode::SERVER);
         if (!encryptor_)
             return false;
 

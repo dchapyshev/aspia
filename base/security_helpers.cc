@@ -140,7 +140,7 @@ bool GetUserSidString(std::wstring& user_sid)
         return false;
 
     DWORD size = sizeof(TOKEN_USER) + SECURITY_MAX_SID_SIZE;
-    std::unique_ptr<BYTE[]> user_bytes(new BYTE[size]);
+    std::unique_ptr<BYTE[]> user_bytes = std::make_unique<BYTE[]>(size);
 
     TOKEN_USER* user = reinterpret_cast<TOKEN_USER*>(user_bytes.get());
 

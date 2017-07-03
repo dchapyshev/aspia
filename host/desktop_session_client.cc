@@ -167,7 +167,7 @@ bool DesktopSessionClient::ReadPointerEvent(const proto::PointerEvent& event)
         return false;
 
     if (!input_injector_)
-        input_injector_.reset(new InputInjector());
+        input_injector_ = std::make_unique<InputInjector>();
 
     input_injector_->InjectPointerEvent(event);
     return true;
@@ -179,7 +179,7 @@ bool DesktopSessionClient::ReadKeyEvent(const proto::KeyEvent& event)
         return false;
 
     if (!input_injector_)
-        input_injector_.reset(new InputInjector());
+        input_injector_ = std::make_unique<InputInjector>();
 
     input_injector_->InjectKeyEvent(event);
     return true;
@@ -224,7 +224,7 @@ void DesktopSessionClient::SendConfigRequest()
 
 bool DesktopSessionClient::ReadConfig(const proto::DesktopSessionConfig& config)
 {
-    screen_updater_.reset(new ScreenUpdater());
+    screen_updater_ = std::make_unique<ScreenUpdater>();
 
     switch (config.video_encoding())
     {
@@ -258,7 +258,7 @@ bool DesktopSessionClient::ReadConfig(const proto::DesktopSessionConfig& config)
         if (config.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE)
         {
             mode = ScreenUpdater::Mode::SCREEN_AND_CURSOR;
-            cursor_encoder_.reset(new CursorEncoder());
+            cursor_encoder_ = std::make_unique<CursorEncoder>();
         }
         else
         {
@@ -267,7 +267,7 @@ bool DesktopSessionClient::ReadConfig(const proto::DesktopSessionConfig& config)
 
         if (config.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD)
         {
-            clipboard_thread_.reset(new ClipboardThread());
+            clipboard_thread_ = std::make_unique<ClipboardThread>();
 
             clipboard_thread_->Start(std::bind(&DesktopSessionClient::SendClipboardEvent,
                                                this,

@@ -77,7 +77,7 @@ bool CapturerGDI::PrepareCaptureResources()
         }
 
         // Create GDI device contexts to capture from the desktop into memory.
-        desktop_dc_.reset(new ScopedGetDC(nullptr));
+        desktop_dc_ = std::make_unique<ScopedGetDC>(nullptr);
         memory_dc_.Reset(CreateCompatibleDC(*desktop_dc_));
         if (!memory_dc_)
         {
@@ -96,7 +96,7 @@ bool CapturerGDI::PrepareCaptureResources()
                 return false;
         }
 
-        differ_.reset(new Differ(screen_rect.Size()));
+        differ_ = std::make_unique<Differ>(screen_rect.Size());
     }
 
     return true;

@@ -24,7 +24,8 @@ CreateRequestStatus(proto::RequestStatus::Type request_type,
                     const std::string& second_path,
                     proto::Status status_code)
 {
-    std::unique_ptr<proto::RequestStatus> status(new proto::RequestStatus());
+    std::unique_ptr<proto::RequestStatus> status =
+        std::make_unique<proto::RequestStatus>();
 
     status->set_type(request_type);
     status->set_code(status_code);
@@ -40,7 +41,7 @@ std::unique_ptr<proto::RequestStatus> ExecuteDriveListRequest(
 {
     UNREF(request);
 
-    reply.reset(new proto::DriveList());
+    reply = std::make_unique<proto::DriveList>();
 
     DriveEnumerator enumerator;
 
@@ -165,7 +166,7 @@ std::unique_ptr<proto::RequestStatus> ExecuteDirectoryListRequest(
                                    proto::Status::STATUS_PATH_NOT_FOUND);
     }
 
-    reply.reset(new proto::DirectoryList());
+    reply = std::make_unique<proto::DirectoryList>();
     reply->set_path(path.u8string());
 
     if (path.has_parent_path() && path.parent_path() != path.root_name())
