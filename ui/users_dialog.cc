@@ -40,6 +40,8 @@ void UiUsersDialog::UpdateUserList()
 
         list.SetItemData(item_index, i);
     }
+
+    UpdateButtonsState();
 }
 
 LRESULT UiUsersDialog::OnInitDialog(UINT message,
@@ -47,8 +49,28 @@ LRESULT UiUsersDialog::OnInitDialog(UINT message,
                                     LPARAM lparam,
                                     BOOL& handled)
 {
+    DlgResize_Init();
+
     CSize small_icon_size(GetSystemMetrics(SM_CXSMICON),
                           GetSystemMetrics(SM_CYSMICON));
+
+    add_icon_ = AtlLoadIconImage(IDI_PLUS,
+                                 LR_CREATEDIBSECTION,
+                                 small_icon_size.cx,
+                                 small_icon_size.cy);
+    CButton(GetDlgItem(ID_ADD)).SetIcon(add_icon_);
+
+    edit_icon_ = AtlLoadIconImage(IDI_PENCIL,
+                                  LR_CREATEDIBSECTION,
+                                  small_icon_size.cx,
+                                  small_icon_size.cy);
+    CButton(GetDlgItem(ID_EDIT)).SetIcon(edit_icon_);
+
+    delete_icon_ = AtlLoadIconImage(IDI_MINUS,
+                                    LR_CREATEDIBSECTION,
+                                    small_icon_size.cx,
+                                    small_icon_size.cy);
+    CButton(GetDlgItem(ID_DELETE)).SetIcon(delete_icon_);
 
     if (imagelist_.Create(small_icon_size.cx,
                           small_icon_size.cy,
@@ -96,9 +118,6 @@ LRESULT UiUsersDialog::OnInitDialog(UINT message,
         GetDlgItem(ID_ADD).EnableWindow(FALSE);
     }
 
-    GetDlgItem(ID_EDIT).EnableWindow(FALSE);
-    GetDlgItem(ID_DELETE).EnableWindow(FALSE);
-
     if (user_list_.LoadFromStorage())
         UpdateUserList();
 
@@ -114,6 +133,22 @@ LRESULT UiUsersDialog::OnClose(UINT message,
     return 0;
 }
 
+LRESULT UiUsersDialog::OnSize(UINT message,
+                              WPARAM wparam,
+                              LPARAM lparam,
+                              BOOL& handled)
+{
+    CListViewCtrl list(GetDlgItem(IDC_USER_LIST));
+
+    CRect list_rect;
+    list.GetClientRect(list_rect);
+
+    list.SetColumnWidth(0, list_rect.Width() - GetSystemMetrics(SM_CXVSCROLL));
+
+    handled = FALSE;
+    return 0;
+}
+
 LRESULT UiUsersDialog::OnAddButton(WORD notify_code,
                                    WORD control_id,
                                    HWND control,
@@ -121,16 +156,13 @@ LRESULT UiUsersDialog::OnAddButton(WORD notify_code,
 {
     std::unique_ptr<proto::HostUser> user(std::make_unique<proto::HostUser>());
 
-    UiUserPropDialog dialog(UiUserPropDialog::Mode::Add, user.get(), user_list_);
+    UiUserPropDialog dialog(UiUserPropDialog::Mode::ADD, user.get(), user_list_);
     if (dialog.DoModal(*this) == IDOK)
     {
         user_list_.Add(std::move(user));
         UpdateUserList();
         SetUserListModified();
     }
-
-    GetDlgItem(ID_EDIT).EnableWindow(FALSE);
-    GetDlgItem(ID_DELETE).EnableWindow(FALSE);
 
     return 0;
 }
@@ -150,15 +182,12 @@ void UiUsersDialog::EditSelectedUser()
 
     proto::HostUser* user = user_list_.mutable_host_user(user_index);
 
-    UiUserPropDialog dialog(UiUserPropDialog::Mode::Edit, user, user_list_);
+    UiUserPropDialog dialog(UiUserPropDialog::Mode::EDIT, user, user_list_);
     if (dialog.DoModal(*this) == IDOK)
     {
         UpdateUserList();
         SetUserListModified();
     }
-
-    GetDlgItem(ID_EDIT).EnableWindow(FALSE);
-    GetDlgItem(ID_DELETE).EnableWindow(FALSE);
 }
 
 LRESULT UiUsersDialog::OnEditButton(WORD notify_code,
@@ -192,9 +221,6 @@ void UiUsersDialog::DeleteSelectedUser()
         UpdateUserList();
         SetUserListModified();
     }
-
-    GetDlgItem(ID_EDIT).EnableWindow(FALSE);
-    GetDlgItem(ID_DELETE).EnableWindow(FALSE);
 }
 
 LRESULT UiUsersDialog::OnDeleteButton(WORD notify_code,
@@ -250,18 +276,13 @@ void UiUsersDialog::ShowUserPopupMenu()
             }
         }
     }
-
-    GetDlgItem(ID_EDIT).EnableWindow(FALSE);
-    GetDlgItem(ID_DELETE).EnableWindow(FALSE);
 }
 
 void UiUsersDialog::SetUserListModified()
 {
     CString text;
     text.LoadStringW(IDS_USER_LIST_MODIFIED);
-
-    CWindow group(GetDlgItem(IDC_USERS_GROUPBOX));
-    group.SetWindowTextW(text);
+    SetWindowTextW(text);
 }
 
 LRESULT UiUsersDialog::OnUserListDoubleClick(int control_id,
@@ -277,12 +298,15 @@ LRESULT UiUsersDialog::OnUserListRightClick(int control_id,
                                             BOOL& handled)
 {
     ShowUserPopupMenu();
+    UpdateButtonsState();
     return 0;
 }
 
-void UiUsersDialog::OnUserSelect()
+void UiUsersDialog::UpdateButtonsState()
 {
-    if (GetSelectedUserIndex() == -1)
+    CListViewCtrl list(GetDlgItem(IDC_USER_LIST));
+
+    if (!list.GetSelectedCount())
     {
         GetDlgItem(ID_EDIT).EnableWindow(FALSE);
         GetDlgItem(ID_DELETE).EnableWindow(FALSE);
@@ -298,7 +322,7 @@ LRESULT UiUsersDialog::OnUserListClick(int control_id,
                                        LPNMHDR hdr,
                                        BOOL& handled)
 {
-    OnUserSelect();
+    UpdateButtonsState();
     return 0;
 }
 
@@ -316,10 +340,18 @@ LRESULT UiUsersDialog::OnUserListKeyDown(int control_id,
 
         case VK_UP:
         case VK_DOWN:
-            OnUserSelect();
+            UpdateButtonsState();
             break;
     }
 
+    return 0;
+}
+
+LRESULT UiUsersDialog::OnUserListItemChanged(int control_id,
+                                             LPNMHDR hdr,
+                                             BOOL& handled)
+{
+    UpdateButtonsState();
     return 0;
 }
 

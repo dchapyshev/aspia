@@ -81,6 +81,8 @@ LRESULT UiUserPropDialog::OnInitDialog(UINT message,
                                        LPARAM lparam,
                                        BOOL& handled)
 {
+    DlgResize_Init();
+
     CListViewCtrl list(GetDlgItem(IDC_SESSION_TYPES_LIST));
 
     DWORD ex_style = LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT;
@@ -121,7 +123,7 @@ LRESULT UiUserPropDialog::OnInitDialog(UINT message,
 
     CEdit username_edit(GetDlgItem(IDC_USERNAME_EDIT));
 
-    if (mode_ == Mode::Edit)
+    if (mode_ == Mode::EDIT)
     {
         password_changed_ = false;
 
@@ -167,6 +169,22 @@ LRESULT UiUserPropDialog::OnClose(UINT message,
     return 0;
 }
 
+LRESULT UiUserPropDialog::OnSize(UINT message,
+                                 WPARAM wparam,
+                                 LPARAM lparam,
+                                 BOOL& handled)
+{
+    CListViewCtrl list(GetDlgItem(IDC_SESSION_TYPES_LIST));
+
+    CRect list_rect;
+    list.GetClientRect(list_rect);
+
+    list.SetColumnWidth(0, list_rect.Width() - GetSystemMetrics(SM_CXVSCROLL));
+
+    handled = FALSE;
+    return 0;
+}
+
 void UiUserPropDialog::ShowErrorMessage(UINT string_id)
 {
     CString message;
@@ -208,7 +226,7 @@ LRESULT UiUserPropDialog::OnOkButton(WORD notify_code,
         }
     }
 
-    if (mode_ == Mode::Add || password_changed_)
+    if (mode_ == Mode::ADD || password_changed_)
     {
         GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer, _countof(buffer));
 

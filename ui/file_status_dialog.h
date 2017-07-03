@@ -17,12 +17,14 @@
 #include <atlapp.h>
 #include <atlwin.h>
 #include <atlctrls.h>
+#include <atlframe.h>
 #include <atlmisc.h>
 
 namespace aspia {
 
 class UiFileStatusDialog :
     public CDialogImpl<UiFileStatusDialog>,
+    public CDialogResize<UiFileStatusDialog>,
     private MessageLoopThread::Delegate
 {
 public:
@@ -43,12 +45,18 @@ private:
     BEGIN_MSG_MAP(UiFileStatusDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
-        MESSAGE_HANDLER(WM_SIZE, OnSize)
-        MESSAGE_HANDLER(WM_GETMINMAXINFO, OnGetMinMaxInfo)
 
         COMMAND_ID_HANDLER(IDC_MINIMIZE_BUTTON, OnMinimizeButton)
         COMMAND_ID_HANDLER(IDC_STOP_BUTTON, OnStopButton)
+
+        CHAIN_MSG_MAP(CDialogResize<UiFileStatusDialog>)
     END_MSG_MAP()
+
+    BEGIN_DLGRESIZE_MAP(UiFileStatusDialog)
+        DLGRESIZE_CONTROL(IDC_STATUS_EDIT, DLSZ_SIZE_X | DLSZ_SIZE_Y)
+        DLGRESIZE_CONTROL(IDC_STOP_BUTTON, DLSZ_MOVE_X | DLSZ_MOVE_Y)
+        DLGRESIZE_CONTROL(IDC_MINIMIZE_BUTTON, DLSZ_MOVE_X | DLSZ_MOVE_Y)
+    END_DLGRESIZE_MAP()
 
     // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;
@@ -56,8 +64,6 @@ private:
 
     LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
-    LRESULT OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
-    LRESULT OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnMinimizeButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnStopButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 

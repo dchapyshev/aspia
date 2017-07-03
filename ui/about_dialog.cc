@@ -18,6 +18,8 @@ LRESULT UiAboutDialog::OnInitDialog(UINT message,
                                     LPARAM lparam,
                                     BOOL& handled)
 {
+    DlgResize_Init();
+
     icon_ = AtlLoadIconImage(IDI_MAIN, LR_CREATEDIBSECTION, 48, 48);
 
     CStatic(GetDlgItem(IDC_ABOUT_ICON)).SetIcon(icon_);
@@ -26,10 +28,9 @@ LRESULT UiAboutDialog::OnInitDialog(UINT message,
     about_text.LoadStringW(IDS_ABOUT_STRING);
 
     CEdit(GetDlgItem(IDC_ABOUT_EDIT)).SetWindowTextW(about_text);
-
     GetDlgItem(IDC_DONATE_BUTTON).SetFocus();
 
-    return TRUE;
+    return FALSE;
 }
 
 LRESULT UiAboutDialog::OnClose(UINT message,
@@ -38,6 +39,30 @@ LRESULT UiAboutDialog::OnClose(UINT message,
                                BOOL& handled)
 {
     EndDialog(0);
+    return 0;
+}
+
+LRESULT UiAboutDialog::OnDrawItem(UINT message,
+                                  WPARAM wparam,
+                                  LPARAM lparam,
+                                  BOOL& handled)
+{
+    LPDRAWITEMSTRUCT dis = reinterpret_cast<LPDRAWITEMSTRUCT>(lparam);
+
+    int saved_dc = SaveDC(dis->hDC);
+
+    if (saved_dc)
+    {
+        // Transparent background.
+        SetBkMode(dis->hDC, TRANSPARENT);
+
+        HBRUSH background_brush = GetSysColorBrush(COLOR_WINDOW);
+        FillRect(dis->hDC, &dis->rcItem, background_brush);
+        DrawEdge(dis->hDC, &dis->rcItem, EDGE_BUMP, BF_RECT | BF_FLAT | BF_MONO);
+
+        RestoreDC(dis->hDC, saved_dc);
+    }
+
     return 0;
 }
 

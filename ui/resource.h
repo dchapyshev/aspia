@@ -26,12 +26,15 @@
 #define IDI_HOME                              108
 #define IDI_AUTOSIZE                          109
 #define IDI_KEYS                              110
-#define IDI_RECIEVE                           111
-#define IDI_REFRESH                           112
-#define IDI_SEND                              113
-#define IDI_SETTINGS                          114
-#define IDI_USER                              115
-#define IDI_USER_DISABLED                     116
+#define IDI_MINUS                             111
+#define IDI_PENCIL                            112
+#define IDI_PLUS                              113
+#define IDI_RECIEVE                           114
+#define IDI_REFRESH                           115
+#define IDI_SEND                              116
+#define IDI_SETTINGS                          117
+#define IDI_USER                              118
+#define IDI_USER_DISABLED                     119
 
 //
 // Dialogs
@@ -81,21 +84,21 @@
 #define IDC_USER_LIST                         127
 #define IDC_DISABLE_USER_CHECK                128
 #define IDC_SESSION_TYPES_LIST                129
-#define IDC_USERS_GROUPBOX                    130
-#define IDC_SESSION_TYPE_COMBO                131
-#define IDC_FROM_EDIT                         132
-#define IDC_TO_EDIT                           133
-#define IDC_CURRENT_ITEM_EDIT                 134
-#define IDC_TOTAL_PROGRESS_TEXT               135
-#define IDC_TOTAL_PROGRESS                    136
-#define IDC_CURRENT_PROGRESS_TEXT             137
-#define IDC_CURRENT_PROGRESS                  138
-#define IDC_REPLACE_BUTTON                    139
-#define IDC_REPLACE_ALL_BUTTON                140
-#define IDC_SKIP_BUTTON                       141
-#define IDC_SKIP_ALL_BUTTON                   142
-#define IDC_STOP_BUTTON                       143
-#define IDC_MINIMIZE_BUTTON                   144
+#define IDC_SESSION_TYPE_COMBO                130
+#define IDC_FROM_EDIT                         131
+#define IDC_TO_EDIT                           132
+#define IDC_CURRENT_ITEM_EDIT                 133
+#define IDC_TOTAL_PROGRESS_TEXT               134
+#define IDC_TOTAL_PROGRESS                    135
+#define IDC_CURRENT_PROGRESS_TEXT             136
+#define IDC_CURRENT_PROGRESS                  137
+#define IDC_REPLACE_BUTTON                    138
+#define IDC_REPLACE_ALL_BUTTON                139
+#define IDC_SKIP_BUTTON                       140
+#define IDC_SKIP_ALL_BUTTON                   141
+#define IDC_STOP_BUTTON                       142
+#define IDC_MINIMIZE_BUTTON                   143
+#define IDC_BUTTON_GROUP                      144
 
 //
 // Commands

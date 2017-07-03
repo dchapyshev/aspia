@@ -36,6 +36,8 @@ LRESULT UiStatusDialog::OnInitDialog(UINT message,
                                      LPARAM lparam,
                                      BOOL& handled)
 {
+    DlgResize_Init();
+
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
                                    LR_CREATEDIBSECTION,
                                    GetSystemMetrics(SM_CXSMICON),
@@ -64,7 +66,7 @@ LRESULT UiStatusDialog::OnInitDialog(UINT message,
         AttachThreadInput(current_thread_id, active_thread_id, FALSE);
     }
 
-    return TRUE;
+    return FALSE;
 }
 
 LRESULT UiStatusDialog::OnClose(UINT message,

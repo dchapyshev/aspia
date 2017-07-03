@@ -60,6 +60,8 @@ LRESULT UiFileStatusDialog::OnInitDialog(UINT message,
                                          LPARAM lparam,
                                          BOOL& handled)
 {
+    DlgResize_Init();
+
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
                                    LR_CREATEDIBSECTION,
                                    GetSystemMetrics(SM_CXSMICON),
@@ -81,7 +83,7 @@ LRESULT UiFileStatusDialog::OnInitDialog(UINT message,
     WriteLog(start_message, proto::Status::STATUS_SUCCESS);
 
     GetDlgItem(IDC_MINIMIZE_BUTTON).SetFocus();
-    return TRUE;
+    return FALSE;
 }
 
 LRESULT UiFileStatusDialog::OnClose(UINT message,
@@ -90,70 +92,6 @@ LRESULT UiFileStatusDialog::OnClose(UINT message,
                                     BOOL& handled)
 {
     PostQuitMessage(0);
-    return 0;
-}
-
-LRESULT UiFileStatusDialog::OnSize(UINT message,
-                                   WPARAM wparam,
-                                   LPARAM lparam,
-                                   BOOL& handled)
-{
-    CSize size(lparam);
-
-    HDWP dwp = BeginDeferWindowPos(3);
-
-    if (dwp)
-    {
-        CWindow minimize_button(GetDlgItem(IDC_MINIMIZE_BUTTON));
-        CWindow stop_button(GetDlgItem(IDC_STOP_BUTTON));
-        CWindow log_edit(GetDlgItem(IDC_STATUS_EDIT));
-
-        CRect stop_rect;
-        stop_button.GetWindowRect(stop_rect);
-
-        CRect minimize_rect;
-        minimize_button.GetWindowRect(minimize_rect);
-
-        log_edit.DeferWindowPos(dwp,
-                                nullptr,
-                                kBorderSize,
-                                kBorderSize,
-                                size.cx - (kBorderSize * 2),
-                                size.cy - (kBorderSize * 3) - stop_rect.Height(),
-                                SWP_NOACTIVATE | SWP_NOZORDER);
-
-        stop_button.DeferWindowPos(dwp,
-                                   nullptr,
-                                   size.cx - (stop_rect.Width() + kBorderSize),
-                                   size.cy - (stop_rect.Height() + kBorderSize),
-                                   stop_rect.Width(),
-                                   stop_rect.Height(),
-                                   SWP_NOACTIVATE | SWP_NOZORDER);
-
-        minimize_button.DeferWindowPos(dwp,
-                                       nullptr,
-                                       size.cx - (stop_rect.Width() + minimize_rect.Width() + (kBorderSize * 2)),
-                                       size.cy - (minimize_rect.Height() + kBorderSize),
-                                       minimize_rect.Width(),
-                                       minimize_rect.Height(),
-                                       SWP_NOACTIVATE | SWP_NOZORDER);
-
-        EndDeferWindowPos(dwp);
-    }
-
-    return 0;
-}
-
-LRESULT UiFileStatusDialog::OnGetMinMaxInfo(UINT message,
-                                            WPARAM wparam,
-                                            LPARAM lparam,
-                                            BOOL& handled)
-{
-    LPMINMAXINFO mmi = reinterpret_cast<LPMINMAXINFO>(lparam);
-
-    mmi->ptMinTrackSize.x = 350;
-    mmi->ptMinTrackSize.y = 200;
-
     return 0;
 }
 

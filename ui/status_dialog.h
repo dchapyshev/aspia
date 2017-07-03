@@ -16,11 +16,14 @@
 #include <atlapp.h>
 #include <atlwin.h>
 #include <atlctrls.h>
+#include <atlframe.h>
 #include <atlmisc.h>
 
 namespace aspia {
 
-class UiStatusDialog : public CDialogImpl<UiStatusDialog>
+class UiStatusDialog :
+    public CDialogImpl<UiStatusDialog>,
+    public CDialogResize<UiStatusDialog>
 {
 public:
     enum { IDD = IDD_STATUS };
@@ -43,7 +46,14 @@ private:
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
         COMMAND_ID_HANDLER(IDCANCEL, OnCloseButton)
+
+        CHAIN_MSG_MAP(CDialogResize<UiStatusDialog>)
     END_MSG_MAP()
+
+    BEGIN_DLGRESIZE_MAP(UiStatusDialog)
+        DLGRESIZE_CONTROL(IDC_STATUS_EDIT, DLSZ_SIZE_X | DLSZ_SIZE_Y)
+        DLGRESIZE_CONTROL(IDCANCEL, DLSZ_MOVE_X | DLSZ_MOVE_Y)
+    END_DLGRESIZE_MAP()
 
     LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);

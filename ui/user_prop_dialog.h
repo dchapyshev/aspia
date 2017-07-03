@@ -15,16 +15,19 @@
 #include <atlbase.h>
 #include <atlapp.h>
 #include <atlwin.h>
+#include <atlframe.h>
 #include <atlctrls.h>
 
 namespace aspia {
 
-class UiUserPropDialog : public CDialogImpl<UiUserPropDialog>
+class UiUserPropDialog :
+    public CDialogImpl<UiUserPropDialog>,
+    public CDialogResize<UiUserPropDialog>
 {
 public:
     enum { IDD = IDD_USER_PROP };
 
-    enum class Mode { Add, Edit };
+    enum class Mode { ADD, EDIT };
 
     UiUserPropDialog(Mode mode,
                      proto::HostUser* user,
@@ -34,13 +37,26 @@ private:
     BEGIN_MSG_MAP(UiUserPropDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
+        MESSAGE_HANDLER(WM_SIZE, OnSize)
 
         COMMAND_ID_HANDLER(IDOK, OnOkButton)
         COMMAND_ID_HANDLER(IDCANCEL, OnCancelButton)
+
+        CHAIN_MSG_MAP(CDialogResize<UiUserPropDialog>)
     END_MSG_MAP()
+
+    BEGIN_DLGRESIZE_MAP(UiUserPropDialog)
+        DLGRESIZE_CONTROL(IDC_USERNAME_EDIT, DLSZ_SIZE_X)
+        DLGRESIZE_CONTROL(IDC_PASSWORD_EDIT, DLSZ_SIZE_X)
+        DLGRESIZE_CONTROL(IDC_PASSWORD_RETRY_EDIT, DLSZ_SIZE_X)
+        DLGRESIZE_CONTROL(IDC_SESSION_TYPES_LIST, DLSZ_SIZE_X | DLSZ_SIZE_Y)
+        DLGRESIZE_CONTROL(IDOK, DLSZ_MOVE_X | DLSZ_MOVE_Y)
+        DLGRESIZE_CONTROL(IDCANCEL, DLSZ_MOVE_X | DLSZ_MOVE_Y)
+    END_DLGRESIZE_MAP()
 
     LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     void OnPasswordEditDblClick();
