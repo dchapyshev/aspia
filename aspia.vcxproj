@@ -312,6 +312,7 @@
     <ClInclude Include="proto\status.pb.h" />
     <ClInclude Include="ui\about_dialog.h" />
     <ClInclude Include="ui\auth_dialog.h" />
+    <ClInclude Include="ui\base\message_dispatcher.h" />
     <ClInclude Include="ui\base\splitter.h" />
     <ClInclude Include="ui\base\timer.h" />
     <ClInclude Include="ui\base\tray_icon.h" />

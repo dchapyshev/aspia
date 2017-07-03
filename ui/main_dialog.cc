@@ -207,7 +207,9 @@ LRESULT UiMainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, B
         AttachThreadInput(current_thread_id, active_thread_id, FALSE);
     }
 
-    return TRUE;
+    GetDlgItem(IDC_SERVER_ADDRESS_EDIT).SetFocus();
+
+    return FALSE;
 }
 
 LRESULT UiMainDialog::OnDefaultPortClicked(WORD notify_code,

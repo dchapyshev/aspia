@@ -74,7 +74,6 @@ private:
     proto::SessionType GetSelectedSessionType();
     int AddSessionType(CComboBox& combobox, UINT string_resource_id, proto::SessionType session_type);
     void UpdateSessionType();
-
     void StopHostMode();
 
     CIcon small_icon_;

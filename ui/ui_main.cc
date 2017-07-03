@@ -6,6 +6,7 @@
 //
 
 #include "ui/ui_main.h"
+#include "ui/base/message_dispatcher.h"
 #include "ui/main_dialog.h"
 #include "base/message_loop/message_loop.h"
 #include "base/scoped_com_initializer.h"
@@ -60,9 +61,11 @@ void RunUIMain()
     else
     {
         main_dialog.ShowWindow(SW_SHOWNORMAL);
+        main_dialog.UpdateWindow();
 
         MessageLoopForUI message_loop;
-        message_loop.Run();
+        UiMessageDispatcherForDialog dispatcher(main_dialog);
+        message_loop.Run(&dispatcher);
     }
 
     module.Term();

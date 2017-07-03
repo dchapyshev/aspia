@@ -980,6 +980,9 @@
     <ClInclude Include="ui\base\splitter.h">
       <Filter>ui\base</Filter>
     </ClInclude>
+    <ClInclude Include="ui\base\message_dispatcher.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
