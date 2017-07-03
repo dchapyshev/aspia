@@ -314,7 +314,6 @@ END
 // Desktop Manage
 STRINGTABLE DISCARDABLE
 BEGIN
-    IDS_DM_TOOLTIP_POWER                  "Power management of the remote computer"
     IDS_DM_TOOLTIP_AUTO_SIZE              "Auto size window"
     IDS_DM_TOOLTIP_SETTINGS               "Settings"
     IDS_DM_TOOLTIP_CAD                    "Send Ctrl+Alt+Del"

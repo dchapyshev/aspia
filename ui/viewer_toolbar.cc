@@ -32,7 +32,6 @@ bool UiViewerToolBar::CreateViewerToolBar(HWND parent,
         button_info.dwMask = TBIF_STATE;
         button_info.fsState = 0;
 
-        SetButtonInfo(ID_POWER, &button_info);
         SetButtonInfo(ID_CAD, &button_info);
         SetButtonInfo(ID_SHORTCUTS, &button_info);
     }
@@ -54,18 +53,16 @@ LRESULT UiViewerToolBar::OnCreate(UINT message,
     TBBUTTON kButtons[] =
     {
         // iBitmap, idCommand, fsState, fsStyle, bReserved[2], dwData, iString
-        {  0, ID_POWER,      TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                 { 0 }, 0, -1 },
+        {  0, ID_CAD,        TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                 { 0 }, 0, -1 },
+        {  1, ID_SHORTCUTS,  TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_DROPDOWN, { 0 }, 0, -1 },
         { -1, 0,             TBSTATE_ENABLED, BTNS_SEP,                                    { 0 }, 0, -1 },
-        {  1, ID_CAD,        TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                 { 0 }, 0, -1 },
-        {  2, ID_SHORTCUTS,  TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_DROPDOWN, { 0 }, 0, -1 },
+        {  2, ID_AUTO_SIZE,  TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                 { 0 }, 0, -1 },
+        {  3, ID_FULLSCREEN, TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_CHECK,    { 0 }, 0, -1 },
         { -1, 0,             TBSTATE_ENABLED, BTNS_SEP,                                    { 0 }, 0, -1 },
-        {  3, ID_AUTO_SIZE,  TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                 { 0 }, 0, -1 },
-        {  4, ID_FULLSCREEN, TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_CHECK,    { 0 }, 0, -1 },
+        {  4, ID_SETTINGS,   TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                 { 0 }, 0, -1 },
         { -1, 0,             TBSTATE_ENABLED, BTNS_SEP,                                    { 0 }, 0, -1 },
-        {  5, ID_SETTINGS,   TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                 { 0 }, 0, -1 },
-        { -1, 0,             TBSTATE_ENABLED, BTNS_SEP,                                    { 0 }, 0, -1 },
-        {  6, ID_ABOUT,      TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                 { 0 }, 0, -1 },
-        { 7, ID_EXIT,        TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                 { 0 }, 0, -1 }
+        {  5, ID_ABOUT,      TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                 { 0 }, 0, -1 },
+        {  6, ID_EXIT,       TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,                 { 0 }, 0, -1 }
     };
 
     SetButtonStructSize(sizeof(kButtons[0]));
@@ -79,7 +76,8 @@ LRESULT UiViewerToolBar::OnCreate(UINT message,
                           ILC_MASK | ILC_COLOR32,
                           1, 1))
     {
-        AddIcon(IDI_POWER, small_icon_size);
+        SetImageList(imagelist_);
+
         AddIcon(IDI_CAD, small_icon_size);
         AddIcon(IDI_KEYS, small_icon_size);
         AddIcon(IDI_AUTOSIZE, small_icon_size);
@@ -87,8 +85,6 @@ LRESULT UiViewerToolBar::OnCreate(UINT message,
         AddIcon(IDI_SETTINGS, small_icon_size);
         AddIcon(IDI_ABOUT, small_icon_size);
         AddIcon(IDI_EXIT, small_icon_size);
-
-        SetImageList(imagelist_);
     }
 
     return ret;
@@ -102,10 +98,6 @@ LRESULT UiViewerToolBar::OnGetDispInfo(int control_id,
 
     switch (header->hdr.idFrom)
     {
-        case ID_POWER:
-            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_POWER);
-            break;
-
         case ID_ABOUT:
             header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_ABOUT);
             break;

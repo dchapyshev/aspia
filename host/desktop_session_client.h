@@ -47,7 +47,6 @@ private:
     bool ReadPointerEvent(const proto::PointerEvent& event);
     bool ReadKeyEvent(const proto::KeyEvent& event);
     bool ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);
-    bool ReadPowerEvent(const proto::PowerEvent& event);
     bool ReadConfig(const proto::DesktopSessionConfig& config);
 
     void SendClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event);

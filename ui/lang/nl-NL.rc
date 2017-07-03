@@ -314,7 +314,6 @@ END
 // Desktop Manage
 STRINGTABLE DISCARDABLE
 BEGIN
-    IDS_DM_TOOLTIP_POWER                  "Power management van de externe computer"
     IDS_DM_TOOLTIP_AUTO_SIZE              "Scherm automatische grootte"
     IDS_DM_TOOLTIP_SETTINGS               "Instellingen"
     IDS_DM_TOOLTIP_CAD                    "Stuur Ctrl+Alt+Del"

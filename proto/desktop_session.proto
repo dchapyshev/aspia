@@ -10,7 +10,6 @@ syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
 
 import "desktop_session_message.proto";
-import "power_session_message.proto";
 import "status.proto";
 
 package aspia.proto.desktop;
@@ -30,6 +29,5 @@ message ClientToHost
     PointerEvent pointer_event     = 1;
     KeyEvent key_event             = 2;
     ClipboardEvent clipboard_event = 3;
-    PowerEvent power_event         = 4;
-    DesktopSessionConfig config    = 5;
+    DesktopSessionConfig config    = 4;
 }

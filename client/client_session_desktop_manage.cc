@@ -14,8 +14,9 @@
 
 namespace aspia {
 
-ClientSessionDesktopManage::ClientSessionDesktopManage(const ClientConfig& config,
-                                                       ClientSession::Delegate* delegate) :
+ClientSessionDesktopManage::ClientSessionDesktopManage(
+    const ClientConfig& config,
+    ClientSession::Delegate* delegate) :
     ClientSessionDesktopView(config, delegate)
 {
     // Nothing
@@ -26,18 +27,21 @@ ClientSessionDesktopManage::~ClientSessionDesktopManage()
     // Nothing
 }
 
-void ClientSessionDesktopManage::ReadCursorShape(const proto::CursorShape& cursor_shape)
+void ClientSessionDesktopManage::ReadCursorShape(
+    const proto::CursorShape& cursor_shape)
 {
     if (!cursor_decoder_)
         cursor_decoder_.reset(new CursorDecoder());
 
-    std::shared_ptr<MouseCursor> mouse_cursor = cursor_decoder_->Decode(cursor_shape);
+    std::shared_ptr<MouseCursor> mouse_cursor =
+        cursor_decoder_->Decode(cursor_shape);
 
     if (mouse_cursor)
         viewer_->InjectMouseCursor(mouse_cursor);
 }
 
-void ClientSessionDesktopManage::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
+void ClientSessionDesktopManage::ReadClipboardEvent(
+    std::shared_ptr<proto::ClipboardEvent> clipboard_event)
 {
     viewer_->InjectClipboardEvent(clipboard_event);
 }
@@ -115,14 +119,8 @@ void ClientSessionDesktopManage::OnPointerEvent(const DesktopPoint& pos, uint32_
     WriteMessage(message);
 }
 
-void ClientSessionDesktopManage::OnPowerEvent(proto::PowerEvent::Action action)
-{
-    proto::desktop::ClientToHost message;
-    message.mutable_power_event()->set_action(action);
-    WriteMessage(message);
-}
-
-void ClientSessionDesktopManage::OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event)
+void ClientSessionDesktopManage::OnClipboardEvent(
+    std::unique_ptr<proto::ClipboardEvent> clipboard_event)
 {
     proto::desktop::ClientToHost message;
     message.set_allocated_clipboard_event(clipboard_event.release());

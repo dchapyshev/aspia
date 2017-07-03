@@ -39,19 +39,11 @@ public:
 
     void HasFocus(bool has);
 
-    LRESULT OnMouse(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
-
 private:
     BEGIN_MSG_MAP(UiVideoWindow)
+        MESSAGE_RANGE_HANDLER(WM_MOUSEFIRST, WM_MOUSELAST, OnMouse)
         MESSAGE_HANDLER(WM_ERASEBKGND, OnSkipMessage)
         MESSAGE_HANDLER(WM_PAINT, OnPaint)
-        MESSAGE_HANDLER(WM_MOUSEMOVE, OnMouse)
-        MESSAGE_HANDLER(WM_LBUTTONDOWN, OnMouse)
-        MESSAGE_HANDLER(WM_LBUTTONUP, OnMouse)
-        MESSAGE_HANDLER(WM_RBUTTONDOWN, OnMouse)
-        MESSAGE_HANDLER(WM_RBUTTONUP, OnMouse)
-        MESSAGE_HANDLER(WM_MBUTTONDOWN, OnMouse)
-        MESSAGE_HANDLER(WM_MBUTTONUP, OnMouse)
         MESSAGE_HANDLER(WM_WINDOWPOSCHANGED, OnSize)
         MESSAGE_HANDLER(WM_SIZE, OnSize)
         MESSAGE_HANDLER(WM_MOUSELEAVE, OnMouseLeave)
@@ -61,6 +53,7 @@ private:
     END_MSG_MAP()
 
     LRESULT OnSkipMessage(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnMouse(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnPaint(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnMouseLeave(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);

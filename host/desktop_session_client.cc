@@ -85,10 +85,6 @@ void DesktopSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
         {
             success = ReadKeyEvent(message.key_event());
         }
-        else if (message.has_power_event())
-        {
-            success = ReadPowerEvent(message.power_event());
-        }
         else if (message.has_clipboard_event())
         {
             std::shared_ptr<proto::ClipboardEvent> clipboard_event(
@@ -198,15 +194,6 @@ bool DesktopSessionClient::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEv
         return false;
 
     clipboard_thread_->InjectClipboardEvent(clipboard_event);
-    return true;
-}
-
-bool DesktopSessionClient::ReadPowerEvent(const proto::PowerEvent& event)
-{
-    if (session_type_ != proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
-        return false;
-
-    InjectPowerEvent(event);
     return true;
 }
 

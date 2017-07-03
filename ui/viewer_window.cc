@@ -336,14 +336,6 @@ LRESULT UiViewerWindow::OnSkipMessage(UINT message,
     return 0;
 }
 
-LRESULT UiViewerWindow::OnMouseWheel(UINT message,
-                                     WPARAM wparam,
-                                     LPARAM lparam,
-                                     BOOL& handled)
-{
-    return video_window_.OnMouse(message, wparam, lparam, handled);
-}
-
 LRESULT UiViewerWindow::OnSetFocus(UINT message,
                                    WPARAM wparam,
                                    LPARAM lparam,
@@ -572,22 +564,6 @@ LRESULT UiViewerWindow::OnDropDownButton(WORD notify_code,
     RECT rect = { 0 };
     toolbar_.GetRect(control_id, &rect);
     ShowDropDownMenu(control_id, &rect);
-    return 0;
-}
-
-LRESULT UiViewerWindow::OnPowerButton(WORD notify_code,
-                                      WORD control_id,
-                                      HWND control,
-                                      BOOL& handled)
-{
-    UiPowerManageDialog dialog;
-
-    proto::PowerEvent::Action action =
-        static_cast<proto::PowerEvent::Action>(dialog.DoModal(*this));
-
-    if (action != proto::PowerEvent::UNKNOWN)
-        delegate_->OnPowerEvent(action);
-
     return 0;
 }
 

@@ -29,7 +29,6 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include "desktop_session_message.pb.h"
-#include "power_session_message.pb.h"
 #include "status.pb.h"
 // @@protoc_insertion_point(includes)
 namespace aspia {
@@ -55,9 +54,6 @@ extern KeyEventDefaultTypeInternal _KeyEvent_default_instance_;
 class PointerEvent;
 class PointerEventDefaultTypeInternal;
 extern PointerEventDefaultTypeInternal _PointerEvent_default_instance_;
-class PowerEvent;
-class PowerEventDefaultTypeInternal;
-extern PowerEventDefaultTypeInternal _PowerEvent_default_instance_;
 class VideoPacket;
 class VideoPacketDefaultTypeInternal;
 extern VideoPacketDefaultTypeInternal _VideoPacket_default_instance_;
@@ -321,19 +317,10 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::ClipboardEvent* release_clipboard_event();
   void set_allocated_clipboard_event(::aspia::proto::ClipboardEvent* clipboard_event);
 
-  // .aspia.proto.PowerEvent power_event = 4;
-  bool has_power_event() const;
-  void clear_power_event();
-  static const int kPowerEventFieldNumber = 4;
-  const ::aspia::proto::PowerEvent& power_event() const;
-  ::aspia::proto::PowerEvent* mutable_power_event();
-  ::aspia::proto::PowerEvent* release_power_event();
-  void set_allocated_power_event(::aspia::proto::PowerEvent* power_event);
-
-  // .aspia.proto.DesktopSessionConfig config = 5;
+  // .aspia.proto.DesktopSessionConfig config = 4;
   bool has_config() const;
   void clear_config();
-  static const int kConfigFieldNumber = 5;
+  static const int kConfigFieldNumber = 4;
   const ::aspia::proto::DesktopSessionConfig& config() const;
   ::aspia::proto::DesktopSessionConfig* mutable_config();
   ::aspia::proto::DesktopSessionConfig* release_config();
@@ -346,7 +333,6 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::PointerEvent* pointer_event_;
   ::aspia::proto::KeyEvent* key_event_;
   ::aspia::proto::ClipboardEvent* clipboard_event_;
-  ::aspia::proto::PowerEvent* power_event_;
   ::aspia::proto::DesktopSessionConfig* config_;
   mutable int _cached_size_;
   friend struct protobuf_desktop_5fsession_2eproto::TableStruct;
@@ -689,46 +675,7 @@ inline void ClientToHost::set_allocated_clipboard_event(::aspia::proto::Clipboar
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.clipboard_event)
 }
 
-// .aspia.proto.PowerEvent power_event = 4;
-inline bool ClientToHost::has_power_event() const {
-  return this != internal_default_instance() && power_event_ != NULL;
-}
-inline void ClientToHost::clear_power_event() {
-  if (GetArenaNoVirtual() == NULL && power_event_ != NULL) delete power_event_;
-  power_event_ = NULL;
-}
-inline const ::aspia::proto::PowerEvent& ClientToHost::power_event() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.ClientToHost.power_event)
-  return power_event_ != NULL ? *power_event_
-                         : *::aspia::proto::PowerEvent::internal_default_instance();
-}
-inline ::aspia::proto::PowerEvent* ClientToHost::mutable_power_event() {
-  
-  if (power_event_ == NULL) {
-    power_event_ = new ::aspia::proto::PowerEvent;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.ClientToHost.power_event)
-  return power_event_;
-}
-inline ::aspia::proto::PowerEvent* ClientToHost::release_power_event() {
-  // @@protoc_insertion_point(field_release:aspia.proto.desktop.ClientToHost.power_event)
-  
-  ::aspia::proto::PowerEvent* temp = power_event_;
-  power_event_ = NULL;
-  return temp;
-}
-inline void ClientToHost::set_allocated_power_event(::aspia::proto::PowerEvent* power_event) {
-  delete power_event_;
-  power_event_ = power_event;
-  if (power_event) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.power_event)
-}
-
-// .aspia.proto.DesktopSessionConfig config = 5;
+// .aspia.proto.DesktopSessionConfig config = 4;
 inline bool ClientToHost::has_config() const {
   return this != internal_default_instance() && config_ != NULL;
 }

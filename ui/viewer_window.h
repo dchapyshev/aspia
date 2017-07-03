@@ -32,7 +32,6 @@ public:
         virtual void OnConfigChange(const proto::DesktopSessionConfig& config) = 0;
         virtual void OnKeyEvent(uint32_t keycode, uint32_t flags) = 0;
         virtual void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) = 0;
-        virtual void OnPowerEvent(proto::PowerEvent::Action action) = 0;
         virtual void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) = 0;
     };
 
@@ -58,7 +57,6 @@ private:
         MESSAGE_HANDLER(WM_SYSCHAR, OnSkipMessage)
         MESSAGE_HANDLER(WM_DEADCHAR, OnSkipMessage)
         MESSAGE_HANDLER(WM_SYSDEADCHAR, OnSkipMessage)
-        MESSAGE_HANDLER(WM_MOUSEWHEEL, OnMouseWheel)
         MESSAGE_HANDLER(WM_SIZE, OnSize)
         MESSAGE_HANDLER(WM_GETMINMAXINFO, OnGetMinMaxInfo)
         MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
@@ -77,7 +75,6 @@ private:
         COMMAND_ID_HANDLER(ID_FULLSCREEN, OnFullScreenButton)
         COMMAND_ID_HANDLER(ID_SHORTCUTS, OnDropDownButton)
         COMMAND_ID_HANDLER(ID_CAD, OnCADButton)
-        COMMAND_ID_HANDLER(ID_POWER, OnPowerButton)
 
         COMMAND_RANGE_HANDLER(ID_KEY_FIRST, ID_KEY_LAST, OnKeyButton)
     END_MSG_MAP()
@@ -97,7 +94,6 @@ private:
     LRESULT OnActivate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnKeyboard(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnSkipMessage(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
-    LRESULT OnMouseWheel(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnSetFocus(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnKillFocus(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnVideoFrameResize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
@@ -108,7 +104,6 @@ private:
     LRESULT OnAutoSizeButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnFullScreenButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnDropDownButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnPowerButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnCADButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnKeyButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& handled);

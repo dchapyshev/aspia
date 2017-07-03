@@ -26,13 +26,12 @@
 #define IDI_HOME                              108
 #define IDI_AUTOSIZE                          109
 #define IDI_KEYS                              110
-#define IDI_POWER                             111
-#define IDI_RECIEVE                           112
-#define IDI_REFRESH                           113
-#define IDI_SEND                              114
-#define IDI_SETTINGS                          115
-#define IDI_USER                              116
-#define IDI_USER_DISABLED                     117
+#define IDI_RECIEVE                           111
+#define IDI_REFRESH                           112
+#define IDI_SEND                              113
+#define IDI_SETTINGS                          114
+#define IDI_USER                              115
+#define IDI_USER_DISABLED                     116
 
 //
 // Dialogs
@@ -101,26 +100,25 @@
 //
 // Commands
 //
-#define ID_POWER                              500
-#define ID_CAD                                501
-#define ID_SHORTCUTS                          502
-#define ID_AUTO_SIZE                          503
-#define ID_FULLSCREEN                         504
-#define ID_SETTINGS                           505
-#define ID_SHOWHIDE                           506
-#define ID_INSTALL_SERVICE                    507
-#define ID_REMOVE_SERVICE                     508
-#define ID_USERS                              509
-#define ID_ABOUT                              510
-#define ID_EXIT                               511
-#define ID_EDIT                               512
-#define ID_DELETE                             513
-#define ID_ADD                                514
-#define ID_REFRESH                            515
-#define ID_FOLDER_ADD                         516
-#define ID_FOLDER_UP                          517
-#define ID_HOME                               518
-#define ID_SEND                               519
+#define ID_CAD                                500
+#define ID_SHORTCUTS                          501
+#define ID_AUTO_SIZE                          502
+#define ID_FULLSCREEN                         503
+#define ID_SETTINGS                           504
+#define ID_SHOWHIDE                           505
+#define ID_INSTALL_SERVICE                    506
+#define ID_REMOVE_SERVICE                     507
+#define ID_USERS                              508
+#define ID_ABOUT                              509
+#define ID_EXIT                               510
+#define ID_EDIT                               511
+#define ID_DELETE                             512
+#define ID_ADD                                513
+#define ID_REFRESH                            514
+#define ID_FOLDER_ADD                         515
+#define ID_FOLDER_UP                          516
+#define ID_HOME                               517
+#define ID_SEND                               518
 
 #define ID_KEY_FIRST                          600
 #define ID_KEY_CTRL_ESC                       600
@@ -173,23 +171,22 @@
 #define IDS_USER_LIST_MODIFIED                20
 
 // Desktop Manage
-#define IDS_DM_TOOLTIP_POWER                  500
-#define IDS_DM_TOOLTIP_AUTO_SIZE              501
-#define IDS_DM_TOOLTIP_SETTINGS               502
-#define IDS_DM_TOOLTIP_CAD                    503
-#define IDS_DM_TOOLTIP_EXIT                   504
-#define IDS_DM_TOOLTIP_FULLSCREEN             505
-#define IDS_DM_TOOLTIP_SHORTCUTS              506
-#define IDS_DM_TOOLTIP_ABOUT                  507
-#define IDS_DM_COMPRESSION_RATIO_FORMAT       508
-#define IDS_DM_32BIT                          509
-#define IDS_DM_24BIT                          510
-#define IDS_DM_16BIT                          511
-#define IDS_DM_15BIT                          512
-#define IDS_DM_12BIT                          513
-#define IDS_DM_8BIT                           514
-#define IDS_DM_6BIT                           515
-#define IDS_DM_3BIT                           516
+#define IDS_DM_TOOLTIP_AUTO_SIZE              500
+#define IDS_DM_TOOLTIP_SETTINGS               501
+#define IDS_DM_TOOLTIP_CAD                    502
+#define IDS_DM_TOOLTIP_EXIT                   503
+#define IDS_DM_TOOLTIP_FULLSCREEN             504
+#define IDS_DM_TOOLTIP_SHORTCUTS              505
+#define IDS_DM_TOOLTIP_ABOUT                  506
+#define IDS_DM_COMPRESSION_RATIO_FORMAT       507
+#define IDS_DM_32BIT                          508
+#define IDS_DM_24BIT                          509
+#define IDS_DM_16BIT                          510
+#define IDS_DM_15BIT                          511
+#define IDS_DM_12BIT                          512
+#define IDS_DM_8BIT                           513
+#define IDS_DM_6BIT                           514
+#define IDS_DM_3BIT                           515
 
 // File transfer
 #define IDS_FT_FILE_TRANSFER                  1000
