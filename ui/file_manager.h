@@ -10,14 +10,8 @@
 
 #include "base/message_loop/message_loop_thread.h"
 #include "proto/file_transfer_session.pb.h"
+#include "ui/base/splitter.h"
 #include "ui/file_manager_panel.h"
-
-#include <atlbase.h>
-#include <atlapp.h>
-#include <atlwin.h>
-#include <atlctrls.h>
-#include <atlsplit.h>
-#include <atlmisc.h>
 
 namespace aspia {
 
@@ -113,7 +107,7 @@ private:
 
     UiFileManagerPanel local_panel_;
     UiFileManagerPanel remote_panel_;
-    CSplitterWindow splitter_;
+    UiVerticalSplitter splitter_;
 
     CIcon small_icon_;
     CIcon big_icon_;

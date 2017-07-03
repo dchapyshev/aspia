@@ -977,6 +977,9 @@
     <ClInclude Include="ui\viewer_toolbar.h">
       <Filter>ui</Filter>
     </ClInclude>
+    <ClInclude Include="ui\base\splitter.h">
+      <Filter>ui\base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
