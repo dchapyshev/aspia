@@ -6,9 +6,9 @@
 //
 
 #include "ui/ui_main.h"
-#include "ui/base/message_dispatcher.h"
 #include "ui/main_dialog.h"
 #include "base/message_loop/message_loop.h"
+#include "base/message_loop/message_dispatcher.h"
 #include "base/scoped_com_initializer.h"
 #include "network/scoped_wsa_initializer.h"
 
@@ -64,7 +64,7 @@ void RunUIMain()
         main_dialog.UpdateWindow();
 
         MessageLoopForUI message_loop;
-        UiMessageDispatcherForDialog dispatcher(main_dialog);
+        MessageDispatcherForDialog dispatcher(main_dialog);
         message_loop.Run(&dispatcher);
     }
 

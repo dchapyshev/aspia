@@ -170,6 +170,7 @@
     <ClInclude Include="base\logging.h" />
     <ClInclude Include="base\macros.h" />
     <ClInclude Include="base\memory\aligned_memory.h" />
+    <ClInclude Include="base\message_loop\message_dispatcher.h" />
     <ClInclude Include="base\message_loop\message_loop.h" />
     <ClInclude Include="base\message_loop\message_loop_proxy.h" />
     <ClInclude Include="base\message_loop\message_loop_thread.h" />
@@ -312,7 +313,6 @@
     <ClInclude Include="proto\status.pb.h" />
     <ClInclude Include="ui\about_dialog.h" />
     <ClInclude Include="ui\auth_dialog.h" />
-    <ClInclude Include="ui\base\message_dispatcher.h" />
     <ClInclude Include="ui\base\splitter.h" />
     <ClInclude Include="ui\base\timer.h" />
     <ClInclude Include="ui\base\tray_icon.h" />

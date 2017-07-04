@@ -980,8 +980,8 @@
     <ClInclude Include="ui\base\splitter.h">
       <Filter>ui\base</Filter>
     </ClInclude>
-    <ClInclude Include="ui\base\message_dispatcher.h">
-      <Filter>ui\base</Filter>
+    <ClInclude Include="base\message_loop\message_dispatcher.h">
+      <Filter>base\message_loop</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

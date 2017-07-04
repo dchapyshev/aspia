@@ -1,22 +1,22 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/base/message_dispatcher.h
+// FILE:            base/message_loop/message_dispatcher.h
 // LICENSE:         See top-level directory
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__BASE__MESSAGE_DISPATCHER_H
-#define _ASPIA_UI__BASE__MESSAGE_DISPATCHER_H
+#ifndef _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_DISPATCHER_H
+#define _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_DISPATCHER_H
 
 #include "base/message_loop/message_loop.h"
 
 namespace aspia {
 
 template <bool kIsDialogDispatcher>
-class UiMessageDispatcher : public MessageLoopForUI::Dispatcher
+class MessageDispatcher : public MessageLoopForUI::Dispatcher
 {
 public:
-    UiMessageDispatcher(HWND hwnd) :
+    MessageDispatcher(HWND hwnd) :
         hwnd_(hwnd)
     {
         // Nothing
@@ -39,12 +39,12 @@ private:
 
     HWND hwnd_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiMessageDispatcher);
+    DISALLOW_COPY_AND_ASSIGN(MessageDispatcher);
 };
 
-using UiMessageDispatcherForDialog = UiMessageDispatcher<true>;
-using UiMessageDispatcherForWindow = UiMessageDispatcher<false>;
+using MessageDispatcherForDialog = MessageDispatcher<true>;
+using MessageDispatcherForWindow = MessageDispatcher<false>;
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__BASE__MESSAGE_DISPATCHER_H
+#endif // _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_DISPATCHER_H
