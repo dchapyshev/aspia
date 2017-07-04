@@ -122,7 +122,7 @@ void UiSettingsDialog::InitCodecList()
 {
     CComboBox combo(GetDlgItem(IDC_CODEC_COMBO));
 
-    int item_index = combo.AddString(L"VP9");
+    int item_index = combo.AddString(L"VP9 (LossLess)");
     combo.SetItemData(item_index, proto::VideoEncoding::VIDEO_ENCODING_VP9);
 
     item_index = combo.AddString(L"VP8");

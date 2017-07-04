@@ -70,10 +70,7 @@ void UiViewerWindow::DrawFrame()
     video_window_.DrawFrame();
 }
 
-LRESULT UiViewerWindow::OnVideoFrameResize(UINT message,
-                                           WPARAM wparam,
-                                           LPARAM lparam,
-                                           BOOL& handled)
+LRESULT UiViewerWindow::OnVideoFrameResize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     const DesktopSize* size = reinterpret_cast<const DesktopSize*>(wparam);
     const PixelFormat* format = reinterpret_cast<const PixelFormat*>(lparam);
@@ -115,15 +112,15 @@ void UiViewerWindow::InjectMouseCursor(std::shared_ptr<MouseCursor> mouse_cursor
 
     ScopedHCURSOR cursor(CreateHCursorFromMouseCursor(desktop_dc, *mouse_cursor));
 
-    // If we can not get a remote cursor, then we use the default cursor.
     if (!cursor.IsValid())
     {
-        SetCursor(LoadCursorW(nullptr, IDC_ARROW));
+        // If we can not get a remote cursor, then we use the default cursor.
+        cursor = LoadCursorW(nullptr, IDC_ARROW);
     }
-    else
-    {
-        SetCursor(cursor);
-    }
+
+    SetClassLongPtrW(video_window_,
+                     GCLP_HCURSOR,
+                     reinterpret_cast<LONG_PTR>(cursor.Get()));
 }
 
 void UiViewerWindow::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
@@ -137,10 +134,7 @@ void UiViewerWindow::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent>
     clipboard_.InjectClipboardEvent(clipboard_event);
 }
 
-LRESULT UiViewerWindow::OnCreate(UINT message,
-                                 WPARAM wparam,
-                                 LPARAM lparam,
-                                 BOOL& handled)
+LRESULT UiViewerWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     CIcon icon(AtlLoadIconImage(IDI_MAIN,
                                 LR_CREATEDIBSECTION,
@@ -168,29 +162,20 @@ LRESULT UiViewerWindow::OnCreate(UINT message,
     return 0;
 }
 
-LRESULT UiViewerWindow::OnClose(UINT message,
-                                WPARAM wparam,
-                                LPARAM lparam,
-                                BOOL& handled)
+LRESULT UiViewerWindow::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     delegate_->OnWindowClose();
     return 0;
 }
 
-LRESULT UiViewerWindow::OnDestroy(UINT message,
-                                  WPARAM wparam,
-                                  LPARAM lparam,
-                                  BOOL& handled)
+LRESULT UiViewerWindow::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     toolbar_.DestroyWindow();
     video_window_.DestroyWindow();
     return 0;
 }
 
-LRESULT UiViewerWindow::OnSize(UINT message,
-                               WPARAM wparam,
-                               LPARAM lparam,
-                               BOOL& handled)
+LRESULT UiViewerWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     toolbar_.AutoSize();
 
@@ -208,10 +193,7 @@ LRESULT UiViewerWindow::OnSize(UINT message,
     return 0;
 }
 
-LRESULT UiViewerWindow::OnGetMinMaxInfo(UINT message,
-                                        WPARAM wparam,
-                                        LPARAM lparam,
-                                        BOOL& handled)
+LRESULT UiViewerWindow::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     LPMINMAXINFO mmi = reinterpret_cast<LPMINMAXINFO>(lparam);
 
@@ -274,10 +256,7 @@ static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wParam, LPARAM lParam)
     return CallNextHookEx(nullptr, code, wParam, lParam);
 }
 
-LRESULT UiViewerWindow::OnActivate(UINT message,
-                                   WPARAM wparam,
-                                   LPARAM lparam,
-                                   BOOL& handled)
+LRESULT UiViewerWindow::OnActivate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     UINT state = LOWORD(wparam);
 
@@ -301,10 +280,7 @@ LRESULT UiViewerWindow::OnActivate(UINT message,
     return 0;
 }
 
-LRESULT UiViewerWindow::OnKeyboard(UINT message,
-                                   WPARAM wparam,
-                                   LPARAM lparam,
-                                   BOOL& handled)
+LRESULT UiViewerWindow::OnKeyboard(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     uint8_t key_code = static_cast<uint8_t>(static_cast<uint32_t>(wparam) & 255);
 
@@ -327,28 +303,19 @@ LRESULT UiViewerWindow::OnKeyboard(UINT message,
     return 0;
 }
 
-LRESULT UiViewerWindow::OnSkipMessage(UINT message,
-                                      WPARAM wparam,
-                                      LPARAM lparam,
-                                      BOOL& handled)
+LRESULT UiViewerWindow::OnSkipMessage(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     // Nothing
     return 0;
 }
 
-LRESULT UiViewerWindow::OnSetFocus(UINT message,
-                                   WPARAM wparam,
-                                   LPARAM lparam,
-                                   BOOL& handled)
+LRESULT UiViewerWindow::OnSetFocus(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     video_window_.HasFocus(true);
     return 0;
 }
 
-LRESULT UiViewerWindow::OnKillFocus(UINT message,
-                                    WPARAM wparam,
-                                    LPARAM lparam,
-                                    BOOL& handled)
+LRESULT UiViewerWindow::OnKillFocus(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     video_window_.HasFocus(false);
     return 0;
@@ -373,10 +340,7 @@ void UiViewerWindow::ApplyConfig(const proto::DesktopSessionConfig& config)
     }
 }
 
-LRESULT UiViewerWindow::OnSettingsButton(WORD notify_code,
-                                         WORD control_id,
-                                         HWND control,
-                                         BOOL& handled)
+LRESULT UiViewerWindow::OnSettingsButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     UiSettingsDialog dialog(config_->session_type(),
                             config_->desktop_session_config());
@@ -392,19 +356,13 @@ LRESULT UiViewerWindow::OnSettingsButton(WORD notify_code,
     return 0;
 }
 
-LRESULT UiViewerWindow::OnAboutButton(WORD notify_code,
-                                      WORD control_id,
-                                      HWND control,
-                                      BOOL& handled)
+LRESULT UiViewerWindow::OnAboutButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     UiAboutDialog().DoModal(*this);
     return 0;
 }
 
-LRESULT UiViewerWindow::OnExitButton(WORD notify_code,
-                                     WORD control_id,
-                                     HWND control,
-                                     BOOL& handled)
+LRESULT UiViewerWindow::OnExitButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     PostMessageW(WM_CLOSE, 0, 0);
     return 0;
@@ -486,10 +444,7 @@ int UiViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
     return -1;
 }
 
-LRESULT UiViewerWindow::OnAutoSizeButton(WORD notify_code,
-                                         WORD control_id,
-                                         HWND control,
-                                         BOOL& handled)
+LRESULT UiViewerWindow::OnAutoSizeButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     DesktopSize video_frame_size = video_window_.FrameSize();
 
@@ -547,19 +502,13 @@ void UiViewerWindow::DoFullScreen(bool fullscreen)
     }
 }
 
-LRESULT UiViewerWindow::OnFullScreenButton(WORD notify_code,
-                                           WORD control_id,
-                                           HWND control,
-                                           BOOL& handled)
+LRESULT UiViewerWindow::OnFullScreenButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     DoFullScreen(toolbar_.IsButtonChecked(ID_FULLSCREEN));
     return 0;
 }
 
-LRESULT UiViewerWindow::OnDropDownButton(WORD notify_code,
-                                         WORD control_id,
-                                         HWND control,
-                                         BOOL& handled)
+LRESULT UiViewerWindow::OnDropDownButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     RECT rect = { 0 };
     toolbar_.GetRect(control_id, &rect);
@@ -567,10 +516,7 @@ LRESULT UiViewerWindow::OnDropDownButton(WORD notify_code,
     return 0;
 }
 
-LRESULT UiViewerWindow::OnCADButton(WORD notify_code,
-                                    WORD control_id,
-                                    HWND control,
-                                    BOOL& handled)
+LRESULT UiViewerWindow::OnCADButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     delegate_->OnKeyEvent(VK_CONTROL, proto::KeyEvent::PRESSED);
     delegate_->OnKeyEvent(VK_MENU, proto::KeyEvent::PRESSED);
@@ -583,10 +529,7 @@ LRESULT UiViewerWindow::OnCADButton(WORD notify_code,
     return 0;
 }
 
-LRESULT UiViewerWindow::OnKeyButton(WORD notify_code,
-                                    WORD control_id,
-                                    HWND control,
-                                    BOOL& handled)
+LRESULT UiViewerWindow::OnKeyButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     switch (control_id)
     {
