@@ -274,10 +274,12 @@ LRESULT UiMainDialog::OnStartServerButton(WORD notify_code,
         CString text;
         text.LoadStringW(IDS_STOP);
         SetDlgItemTextW(IDC_START_SERVER_BUTTON, text);
-        return 0;
+    }
+    else
+    {
+        host_pool_.reset();
     }
 
-    host_pool_.reset();
     return 0;
 }
 

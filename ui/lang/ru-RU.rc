@@ -255,6 +255,7 @@ BEGIN
         END
         MENUITEM "&Пользователи...", ID_USERS
         MENUITEM SEPARATOR
+        MENUITEM "&Спрятать", ID_SHOWHIDE
         MENUITEM "&Выход\tAlt+F4", ID_EXIT
     END
     POPUP "&Помощь"

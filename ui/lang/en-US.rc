@@ -255,6 +255,7 @@ BEGIN
         END
         MENUITEM "&Users...", ID_USERS
         MENUITEM SEPARATOR
+        MENUITEM "&Hide", ID_SHOWHIDE
         MENUITEM "&Exit\tAlt+F4", ID_EXIT
     END
     POPUP "&Help"
