@@ -167,6 +167,7 @@
     <ClInclude Include="base\files\base_paths.h" />
     <ClInclude Include="base\files\drive_enumerator.h" />
     <ClInclude Include="base\files\file_helpers.h" />
+    <ClInclude Include="base\files\file_path.h" />
     <ClInclude Include="base\logging.h" />
     <ClInclude Include="base\macros.h" />
     <ClInclude Include="base\memory\aligned_memory.h" />

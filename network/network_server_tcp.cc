@@ -41,7 +41,7 @@ NetworkServerTcp::~NetworkServerTcp()
 
 void NetworkServerTcp::AddFirewallRule()
 {
-    std::experimental::filesystem::path exe_path;
+    FilePath exe_path;
 
     if (!GetBasePath(BasePathKey::FILE_EXE, exe_path))
         return;

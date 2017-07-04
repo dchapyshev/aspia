@@ -57,7 +57,7 @@ void SasInjector::InjectSAS()
     }
     else // For Windows Vista and above.
     {
-        std::experimental::filesystem::path path;
+        FilePath path;
 
         if (!GetBasePath(BasePathKey::FILE_EXE, path))
             return;
