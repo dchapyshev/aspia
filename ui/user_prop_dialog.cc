@@ -170,15 +170,19 @@ LRESULT UiUserPropDialog::OnSize(UINT message,
                                  LPARAM lparam,
                                  BOOL& handled)
 {
-    CListViewCtrl list(GetDlgItem(IDC_SESSION_TYPES_LIST));
+    LRESULT ret = 0;
 
-    CRect list_rect;
-    list.GetClientRect(list_rect);
+    if (CDialogResize<UiUserPropDialog>::ProcessWindowMessage(
+        *this, message, wparam, lparam, ret))
+    {
+        CListViewCtrl list(GetDlgItem(IDC_SESSION_TYPES_LIST));
 
-    list.SetColumnWidth(0, list_rect.Width() - GetSystemMetrics(SM_CXVSCROLL));
+        CRect list_rect;
+        list.GetClientRect(list_rect);
+        list.SetColumnWidth(0, list_rect.Width() - GetSystemMetrics(SM_CXVSCROLL));
+    }
 
-    handled = FALSE;
-    return 0;
+    return ret;
 }
 
 void UiUserPropDialog::ShowErrorMessage(UINT string_id)

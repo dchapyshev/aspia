@@ -136,15 +136,19 @@ LRESULT UiUsersDialog::OnSize(UINT message,
                               LPARAM lparam,
                               BOOL& handled)
 {
-    CListViewCtrl list(GetDlgItem(IDC_USER_LIST));
+    LRESULT ret = 0;
 
-    CRect list_rect;
-    list.GetClientRect(list_rect);
+    if (CDialogResize<UiUsersDialog>::ProcessWindowMessage(
+        *this, message, wparam, lparam, ret))
+    {
+        CListViewCtrl list(GetDlgItem(IDC_USER_LIST));
 
-    list.SetColumnWidth(0, list_rect.Width() - GetSystemMetrics(SM_CXVSCROLL));
+        CRect list_rect;
+        list.GetClientRect(list_rect);
+        list.SetColumnWidth(0, list_rect.Width() - GetSystemMetrics(SM_CXVSCROLL));
+    }
 
-    handled = FALSE;
-    return 0;
+    return ret;
 }
 
 LRESULT UiUsersDialog::OnAddButton(WORD notify_code,
