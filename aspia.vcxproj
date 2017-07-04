@@ -28,9 +28,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="base\desktop.cc" />
+    <ClCompile Include="base\files\base_paths.cc" />
     <ClCompile Include="base\files\drive_enumerator.cc" />
     <ClCompile Include="base\files\file_helpers.cc" />
-    <ClCompile Include="base\files\path.cc" />
     <ClCompile Include="base\logging.cc" />
     <ClCompile Include="base\memory\aligned_memory.cc" />
     <ClCompile Include="base\message_loop\message_loop.cc" />
@@ -164,9 +164,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\desktop.h" />
+    <ClInclude Include="base\files\base_paths.h" />
     <ClInclude Include="base\files\drive_enumerator.h" />
     <ClInclude Include="base\files\file_helpers.h" />
-    <ClInclude Include="base\files\path.h" />
     <ClInclude Include="base\logging.h" />
     <ClInclude Include="base\macros.h" />
     <ClInclude Include="base\memory\aligned_memory.h" />

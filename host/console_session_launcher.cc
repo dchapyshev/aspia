@@ -20,7 +20,7 @@
 #include "base/scoped_impersonator.h"
 #include "base/object_watcher.h"
 #include "base/strings/unicode.h"
-#include "base/files/path.h"
+#include "base/files/base_paths.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -177,7 +177,7 @@ static bool CreateCommandLine(const std::wstring& run_mode,
 {
     std::experimental::filesystem::path path;
 
-    if (!GetBasePath(PathKey::FILE_EXE, path))
+    if (!GetBasePath(BasePathKey::FILE_EXE, path))
         return false;
 
     command_line.assign(path);
@@ -241,7 +241,7 @@ static bool LaunchProcessOverService(uint32_t session_id,
 
     std::experimental::filesystem::path path;
 
-    if (!GetBasePath(PathKey::FILE_EXE, path))
+    if (!GetBasePath(BasePathKey::FILE_EXE, path))
         return false;
 
     std::wstring command_line;

@@ -8,7 +8,7 @@
 #include "host/host_user_list.h"
 #include "base/strings/unicode.h"
 #include "base/logging.h"
-#include "base/files/path.h"
+#include "base/files/base_paths.h"
 #include "crypto/secure_string.h"
 #include "crypto/sha512.h"
 
@@ -95,7 +95,7 @@ bool HostUserList::IsValidUserList()
 
 static bool GetUserListDirectoryPath(fs::path& path)
 {
-    if (!GetBasePath(PathKey::DIR_COMMON_APP_DATA, path))
+    if (!GetBasePath(BasePathKey::DIR_COMMON_APP_DATA, path))
         return false;
 
     path.append(L"Aspia");

@@ -10,7 +10,7 @@
 #include "base/security_helpers.h"
 #include "base/scoped_com_initializer.h"
 #include "base/strings/unicode.h"
-#include "base/files/path.h"
+#include "base/files/base_paths.h"
 #include "network/scoped_wsa_initializer.h"
 
 #include <sddl.h>
@@ -81,7 +81,7 @@ bool HostService::Install()
 {
     std::experimental::filesystem::path path;
 
-    if (!GetBasePath(PathKey::FILE_EXE, path))
+    if (!GetBasePath(BasePathKey::FILE_EXE, path))
         return false;
 
     std::wstring command_line;

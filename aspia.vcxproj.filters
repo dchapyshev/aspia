@@ -424,9 +424,6 @@
     <ClCompile Include="protocol\file_depacketizer.cc">
       <Filter>protocol</Filter>
     </ClCompile>
-    <ClCompile Include="base\files\path.cc">
-      <Filter>base\files</Filter>
-    </ClCompile>
     <ClCompile Include="base\process\process.cc">
       <Filter>base\process</Filter>
     </ClCompile>
@@ -459,6 +456,9 @@
     </ClCompile>
     <ClCompile Include="ui\viewer_toolbar.cc">
       <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="base\files\base_paths.cc">
+      <Filter>base\files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -938,9 +938,6 @@
     <ClInclude Include="protocol\file_depacketizer.h">
       <Filter>protocol</Filter>
     </ClInclude>
-    <ClInclude Include="base\files\path.h">
-      <Filter>base\files</Filter>
-    </ClInclude>
     <ClInclude Include="base\process\process.h">
       <Filter>base\process</Filter>
     </ClInclude>
@@ -982,6 +979,9 @@
     </ClInclude>
     <ClInclude Include="base\message_loop\message_dispatcher.h">
       <Filter>base\message_loop</Filter>
+    </ClInclude>
+    <ClInclude Include="base\files\base_paths.h">
+      <Filter>base\files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

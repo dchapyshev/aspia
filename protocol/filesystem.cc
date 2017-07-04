@@ -8,7 +8,7 @@
 #include "protocol/filesystem.h"
 #include "base/files/drive_enumerator.h"
 #include "base/files/file_helpers.h"
-#include "base/files/path.h"
+#include "base/files/base_paths.h"
 #include "base/strings/unicode.h"
 #include "base/logging.h"
 
@@ -92,7 +92,7 @@ std::unique_ptr<proto::RequestStatus> ExecuteDriveListRequest(
 
     fs::path path;
 
-    if (GetBasePath(PathKey::DIR_USER_HOME, path))
+    if (GetBasePath(BasePathKey::DIR_USER_HOME, path))
     {
         proto::DriveListItem* item = reply->add_item();
 
@@ -100,7 +100,7 @@ std::unique_ptr<proto::RequestStatus> ExecuteDriveListRequest(
         item->set_path(path.u8string());
     }
 
-    if (GetBasePath(PathKey::DIR_USER_DESKTOP, path))
+    if (GetBasePath(BasePathKey::DIR_USER_DESKTOP, path))
     {
         proto::DriveListItem* item = reply->add_item();
 

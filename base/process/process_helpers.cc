@@ -10,7 +10,7 @@
 #include "base/scoped_object.h"
 #include "base/scoped_local.h"
 #include "base/logging.h"
-#include "base/files/path.h"
+#include "base/files/base_paths.h"
 
 #include <shellapi.h>
 #include <memory>
@@ -21,7 +21,7 @@ bool ElevateProcess()
 {
     std::experimental::filesystem::path path;
 
-    if (!GetBasePath(PathKey::FILE_EXE, path))
+    if (!GetBasePath(BasePathKey::FILE_EXE, path))
         return false;
 
     SHELLEXECUTEINFOW sei;

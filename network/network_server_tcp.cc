@@ -7,7 +7,7 @@
 
 #include "network/network_server_tcp.h"
 #include "base/version_helpers.h"
-#include "base/files/path.h"
+#include "base/files/base_paths.h"
 
 #include <ws2tcpip.h>
 
@@ -43,7 +43,7 @@ void NetworkServerTcp::AddFirewallRule()
 {
     std::experimental::filesystem::path exe_path;
 
-    if (!GetBasePath(PathKey::FILE_EXE, exe_path))
+    if (!GetBasePath(BasePathKey::FILE_EXE, exe_path))
         return;
 
     if (IsWindowsVistaOrGreater())
