@@ -203,7 +203,7 @@ LRESULT UiViewerWindow::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lpar
     return 0;
 }
 
-static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wParam, LPARAM lParam)
+static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wparam, LPARAM lparam)
 {
     if (code == HC_ACTION)
     {
@@ -213,7 +213,7 @@ static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wParam, LPARAM lParam)
 
         if (GetGUIThreadInfo(0, &gui_info) && gui_info.hwndFocus)
         {
-            PKBDLLHOOKSTRUCT hook_struct = reinterpret_cast<PKBDLLHOOKSTRUCT>(lParam);
+            PKBDLLHOOKSTRUCT hook_struct = reinterpret_cast<PKBDLLHOOKSTRUCT>(lparam);
 
             switch (hook_struct->vkCode)
             {
@@ -234,7 +234,7 @@ static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wParam, LPARAM lParam)
                         flags |= kKeyExtendedFlag;
                     }
 
-                    if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
+                    if (wparam == WM_KEYUP || wparam == WM_SYSKEYUP)
                     {
                         // Bit 31 set to 1 means that the key is not pressed.
                         flags |= kKeyUpFlag;
@@ -242,7 +242,7 @@ static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wParam, LPARAM lParam)
 
                     // Send the message to the window that is in focus.
                     SendMessageW(gui_info.hwndFocus,
-                                 static_cast<UINT>(wParam),
+                                 static_cast<UINT>(wparam),
                                  hook_struct->vkCode,
                                  flags);
 
@@ -253,7 +253,7 @@ static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wParam, LPARAM lParam)
         }
     }
 
-    return CallNextHookEx(nullptr, code, wParam, lParam);
+    return CallNextHookEx(nullptr, code, wparam, lparam);
 }
 
 LRESULT UiViewerWindow::OnActivate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)

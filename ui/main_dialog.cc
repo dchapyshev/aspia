@@ -16,6 +16,7 @@
 #include "base/process/process_helpers.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
+#include "base/scoped_clipboard.h"
 #include "client/client_config.h"
 #include "host/host_service.h"
 #include "ui/viewer_window.h"
@@ -417,6 +418,84 @@ LRESULT UiMainDialog::OnRemoveServiceButton(WORD notify_code,
         main_menu_.EnableMenuItem(ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_ENABLED);
         main_menu_.EnableMenuItem(ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);
         GetDlgItem(IDC_START_SERVER_BUTTON).EnableWindow(TRUE);
+    }
+
+    return 0;
+}
+
+void UiMainDialog::CopySelectedIp()
+{
+    CListViewCtrl list(GetDlgItem(IDC_IP_LIST));
+
+    int selected_item = list.GetNextItem(-1, LVNI_SELECTED);
+    if (selected_item == -1)
+        return;
+
+    WCHAR text[128] = { 0 };
+    if (!list.GetItemText(selected_item, 0, text, _countof(text)))
+        return;
+
+    size_t length = wcslen(text);
+    if (!length)
+        return;
+
+    ScopedClipboard clipboard;
+    if (!clipboard.Init(*this))
+        return;
+
+    clipboard.Empty();
+
+    HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (length + 1) * sizeof(WCHAR));
+    if (!text_global)
+        return;
+
+    LPWSTR text_global_locked = reinterpret_cast<LPWSTR>(GlobalLock(text_global));
+    if (!text_global_locked)
+        return;
+
+    memcpy(text_global_locked, text, length * sizeof(WCHAR));
+    text_global_locked[length] = 0;
+
+    GlobalUnlock(text_global);
+
+    clipboard.SetData(CF_UNICODETEXT, text_global);
+}
+
+LRESULT UiMainDialog::OnCopyButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
+{
+    CopySelectedIp();
+    return 0;
+}
+
+LRESULT UiMainDialog::OnIpListDoubleClick(int control_id, LPNMHDR hdr, BOOL& handled)
+{
+    CopySelectedIp();
+    return 0;
+}
+
+LRESULT UiMainDialog::OnIpListRightClick(int control_id, LPNMHDR hdr, BOOL& handled)
+{
+    CListViewCtrl list(GetDlgItem(IDC_IP_LIST));
+
+    if (!list.GetSelectedCount())
+        return 0;
+
+    CMenu menu(AtlLoadMenu(IDR_IP_LIST));
+
+    if (menu)
+    {
+        CPoint cursor_pos;
+
+        if (GetCursorPos(&cursor_pos))
+        {
+            SetForegroundWindow(*this);
+
+            CMenuHandle popup_menu(menu.GetSubMenu(0));
+            if (popup_menu)
+            {
+                popup_menu.TrackPopupMenu(0, cursor_pos.x, cursor_pos.y, *this, nullptr);
+            }
+        }
     }
 
     return 0;

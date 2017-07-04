@@ -46,8 +46,12 @@ private:
         COMMAND_ID_HANDLER(ID_SHOWHIDE, OnShowHideButton)
         COMMAND_ID_HANDLER(ID_INSTALL_SERVICE, OnInstallServiceButton)
         COMMAND_ID_HANDLER(ID_REMOVE_SERVICE, OnRemoveServiceButton)
+        COMMAND_ID_HANDLER(ID_COPY, OnCopyButton)
 
         COMMAND_HANDLER(IDC_SESSION_TYPE_COMBO, CBN_SELCHANGE, OnSessionTypeChanged)
+
+        NOTIFY_HANDLER(IDC_IP_LIST, NM_DBLCLK, OnIpListDoubleClick)
+        NOTIFY_HANDLER(IDC_IP_LIST, NM_RCLICK, OnIpListRightClick)
 
         CHAIN_MSG_MAP(CTrayIcon<UiMainDialog>)
     END_MSG_MAP()
@@ -68,6 +72,10 @@ private:
     LRESULT OnShowHideButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnInstallServiceButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnRemoveServiceButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnCopyButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+
+    LRESULT OnIpListDoubleClick(int control_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnIpListRightClick(int control_id, LPNMHDR hdr, BOOL& handled);
 
     void InitAddressesList();
     void InitSessionTypesCombo();
@@ -75,6 +83,7 @@ private:
     int AddSessionType(CComboBox& combobox, UINT string_resource_id, proto::SessionType session_type);
     void UpdateSessionType();
     void StopHostMode();
+    void CopySelectedIp();
 
     CIcon small_icon_;
     CIcon big_icon_;

@@ -124,6 +124,7 @@
 #define ID_FOLDER_UP                          516
 #define ID_HOME                               517
 #define ID_SEND                               518
+#define ID_COPY                               519
 
 #define ID_KEY_FIRST                          600
 #define ID_KEY_CTRL_ESC                       600
@@ -148,6 +149,7 @@
 #define IDR_TRAY                              101
 #define IDR_MAIN                              102
 #define IDR_USER                              103
+#define IDR_IP_LIST                           104
 
 //
 // Strings
