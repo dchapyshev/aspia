@@ -46,10 +46,8 @@ public:
 
 private:
     BEGIN_MSG_MAP(UiDriveList)
-        MESSAGE_HANDLER(WM_CREATE, OnCreate)
+        // Nothing
     END_MSG_MAP()
-
-    LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
 
     int GetItemIndexByObjectIndex(int object_index) const;
     int GetKnownObjectIndex(const FilePath& path) const;

@@ -31,6 +31,24 @@ bool UiFileList::CreateFileList(HWND parent, int control_id)
         return false;
     }
 
+    DWORD ex_style = LVS_EX_FULLROWSELECT;
+
+    if (IsWindowsVistaOrGreater())
+    {
+        ::SetWindowTheme(*this, L"explorer", nullptr);
+        ex_style |= LVS_EX_DOUBLEBUFFER;
+    }
+
+    SetExtendedListViewStyle(ex_style);
+
+    if (imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
+                          GetSystemMetrics(SM_CYSMICON),
+                          ILC_MASK | ILC_COLOR32,
+                          1, 1))
+    {
+        SetImageList(imagelist_, LVSIL_SMALL);
+    }
+
     return true;
 }
 
@@ -202,31 +220,6 @@ void UiFileList::AddDirectory()
 
     SetItemData(item_index, kNewFolderObjectIndex);
     EditLabel(item_index);
-}
-
-LRESULT UiFileList::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
-{
-    LRESULT ret = DefWindowProcW(message, wparam, lparam);
-
-    DWORD ex_style = LVS_EX_FULLROWSELECT;
-
-    if (IsWindowsVistaOrGreater())
-    {
-        ::SetWindowTheme(*this, L"explorer", nullptr);
-        ex_style |= LVS_EX_DOUBLEBUFFER;
-    }
-
-    SetExtendedListViewStyle(ex_style);
-
-    if (imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
-                          GetSystemMetrics(SM_CYSMICON),
-                          ILC_MASK | ILC_COLOR32,
-                          1, 1))
-    {
-        SetImageList(imagelist_, LVSIL_SMALL);
-    }
-
-    return ret;
 }
 
 int UiFileList::GetColumnCount() const

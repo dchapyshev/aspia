@@ -19,7 +19,7 @@ namespace fs = std::experimental::filesystem;
 bool UiDriveList::CreateDriveList(HWND parent, int control_id)
 {
     const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP |
-        WS_VSCROLL | CBS_DROPDOWN;
+        CBS_DROPDOWN;
 
     CRect drive_rect(0, 0, 200, 200);
 
@@ -28,6 +28,16 @@ bool UiDriveList::CreateDriveList(HWND parent, int control_id)
         DLOG(ERROR) << "Unable to create drive list window: "
                     << GetLastSystemErrorString();
         return false;
+    }
+
+    SetFont(AtlGetStockFont(DEFAULT_GUI_FONT));
+
+    if (imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
+                          GetSystemMetrics(SM_CYSMICON),
+                          ILC_MASK | ILC_COLOR32,
+                          1, 1))
+    {
+        SetImageList(imagelist_);
     }
 
     return true;
@@ -178,23 +188,6 @@ FilePath UiDriveList::ObjectPath(int object_index) const
         default:
             return fs::u8path(list_->item(object_index).path());
     }
-}
-
-LRESULT UiDriveList::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
-{
-    LRESULT ret = DefWindowProcW(message, wparam, lparam);
-
-    SetFont(AtlGetStockFont(DEFAULT_GUI_FONT));
-
-    if (imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
-                          GetSystemMetrics(SM_CYSMICON),
-                          ILC_MASK | ILC_COLOR32,
-                          1, 1))
-    {
-        SetImageList(imagelist_);
-    }
-
-    return ret;
 }
 
 int UiDriveList::GetItemIndexByObjectIndex(int object_index) const
