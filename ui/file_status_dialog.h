@@ -9,6 +9,7 @@
 #define _ASPIA_UI__FILE_STATUS_DIALOG_H
 
 #include "base/message_loop/message_loop_thread.h"
+#include "base/files/file_path.h"
 #include "proto/file_transfer_session.pb.h"
 #include "proto/status.pb.h"
 #include "ui/resource.h"
@@ -39,7 +40,17 @@ public:
     UiFileStatusDialog(Delegate* delegate);
     ~UiFileStatusDialog();
 
-    void SetRequestStatus(const proto::RequestStatus& status);
+    void SetDriveListRequestStatus(proto::Status status);
+
+    void SetFileListRequestStatus(const FilePath& path, proto::Status status);
+
+    void SetCreateDirectoryRequestStatus(const FilePath& path, proto::Status status);
+
+    void SetRenameRequestStatus(const FilePath& old_name,
+                                const FilePath& new_name,
+                                proto::Status status);
+
+    void SetRemoveRequestStatus(const FilePath& path, proto::Status status);
 
 private:
     BEGIN_MSG_MAP(UiFileStatusDialog)

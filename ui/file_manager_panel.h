@@ -8,7 +8,9 @@
 #ifndef _ASPIA_UI__FILE_MANAGER_PANEL_H
 #define _ASPIA_UI__FILE_MANAGER_PANEL_H
 
+#include "base/files/file_path.h"
 #include "base/macros.h"
+#include "client/file_request_sender.h"
 #include "proto/file_transfer_session.pb.h"
 #include "ui/file_toolbar.h"
 #include "ui/file_list.h"
@@ -17,40 +19,16 @@
 
 namespace aspia {
 
-class UiFileManagerPanel : public CWindowImpl<UiFileManagerPanel, CWindow>
+class UiFileManagerPanel :
+    public CWindowImpl<UiFileManagerPanel, CWindow>,
+    public FileReplyReceiver
 {
 public:
     enum class PanelType { LOCAL, REMOTE };
 
-    class Delegate
-    {
-    public:
-        virtual void OnDriveListRequest(PanelType panel_type) = 0;
-
-        virtual void OnDirectoryListRequest(PanelType _panel_type,
-                                            const std::string& path,
-                                            const std::string& name) = 0;
-
-        virtual void OnCreateDirectoryRequest(PanelType panel_type,
-                                              const std::string& path,
-                                              const std::string& name) = 0;
-
-        virtual void OnRenameRequest(PanelType panel_type,
-                                     const std::string& path,
-                                     const std::string& old_name,
-                                     const std::string& new_name) = 0;
-
-        virtual void OnRemoveRequest(PanelType panel_type,
-                                     const std::string& path,
-                                     const std::string& item_name) = 0;
-    };
-
     UiFileManagerPanel(PanelType panel_type,
-                       Delegate* delegate);
+                       FileRequestSender* sender);
     virtual ~UiFileManagerPanel() = default;
-
-    void ReadDriveList(std::unique_ptr<proto::DriveList> drive_list);
-    void ReadDirectoryList(std::unique_ptr<proto::DirectoryList> directory_list);
 
 private:
     static const int kDriveListControl = 101;
@@ -80,23 +58,31 @@ private:
     LRESULT OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnDrawItem(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
-    LRESULT OnDriveEndEdit(int control_id, LPNMHDR hdr, BOOL& handled);
-    LRESULT OnListDoubleClock(int control_id, LPNMHDR hdr, BOOL& handled);
-    LRESULT OnListEndLabelEdit(int control_id, LPNMHDR hdr, BOOL& handled);
-    LRESULT OnListItemChanged(int control_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnDriveEndEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& handled);
 
-    LRESULT OnDriveChange(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnFolderUp(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnFolderAdd(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnRefresh(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnRemove(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnHome(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnSend(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnDriveChange(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnFolderAdd(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnRefresh(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnHome(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+
+    // FileReplyReceiver implementation.
+    void OnLastRequestFailed(proto::Status status) override;
+    void OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list) override;
+    void OnFileListReply(std::unique_ptr<proto::FileList> file_list) override;
+    void OnCreateDirectoryReply() override;
+    void OnRemoveReply() override;
+    void OnRenameReply() override;
 
     void MoveToDrive(int object_index);
 
     const PanelType panel_type_;
-    Delegate* delegate_;
+    FileRequestSender* sender_;
 
     CStatic title_;
     UiDriveList drive_list_;

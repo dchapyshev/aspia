@@ -16,6 +16,8 @@
 
 namespace aspia {
 
+namespace fs = std::experimental::filesystem;
+
 bool UiFileList::CreateFileList(HWND parent, int control_id)
 {
     const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP |
@@ -32,7 +34,7 @@ bool UiFileList::CreateFileList(HWND parent, int control_id)
     return true;
 }
 
-void UiFileList::Read(std::unique_ptr<proto::DirectoryList> list)
+void UiFileList::Read(std::unique_ptr<proto::FileList> list)
 {
     DeleteAllItems();
     imagelist_.RemoveAll();
@@ -56,9 +58,9 @@ void UiFileList::Read(std::unique_ptr<proto::DirectoryList> list)
     // Enumerate the directories first.
     for (int object_index = 0; object_index < object_count; ++object_index)
     {
-        const proto::DirectoryListItem& item = list_->item(object_index);
+        const proto::FileList::Item& item = list_->item(object_index);
 
-        if (item.type() != proto::DirectoryListItem::DIRECTORY)
+        if (!item.is_directory())
             continue;
 
         std::wstring name = UNICODEfromUTF8(item.name());
@@ -66,18 +68,18 @@ void UiFileList::Read(std::unique_ptr<proto::DirectoryList> list)
         int item_index = AddItem(GetItemCount(), 0, name.c_str(), icon_index);
         SetItemData(item_index, object_index);
         SetItemText(item_index, 2, GetDirectoryTypeString(name));
-        SetItemText(item_index, 3, TimeToString(item.modified()).c_str());
+        SetItemText(item_index, 3, TimeToString(item.modification_time()).c_str());
     }
 
     // Enumerate the files.
     for (int object_index = 0; object_index < object_count; ++object_index)
     {
-        const proto::DirectoryListItem& item = list_->item(object_index);
+        const proto::FileList::Item& object = list_->item(object_index);
 
-        if (item.type() != proto::DirectoryListItem::FILE)
+        if (object.is_directory())
             continue;
 
-        std::wstring name = UNICODEfromUTF8(item.name());
+        std::wstring name = UNICODEfromUTF8(object.name());
 
         icon = GetFileIcon(name);
         icon_index = imagelist_.AddIcon(icon);
@@ -85,9 +87,9 @@ void UiFileList::Read(std::unique_ptr<proto::DirectoryList> list)
         int item_index = AddItem(GetItemCount(), 0, name.c_str(), icon_index);
 
         SetItemData(item_index, object_index);
-        SetItemText(item_index, 1, SizeToString(item.size()).c_str());
+        SetItemText(item_index, 1, SizeToString(object.size()).c_str());
         SetItemText(item_index, 2, GetFileTypeString(name));
-        SetItemText(item_index, 3, TimeToString(item.modified()).c_str());
+        SetItemText(item_index, 3, TimeToString(object.modification_time()).c_str());
     }
 }
 
@@ -110,7 +112,7 @@ void UiFileList::Read(const proto::DriveList& list)
 
     for (int object_index = 0; object_index < object_count; ++object_index)
     {
-        const proto::DriveListItem& object = list.item(object_index);
+        const proto::DriveList::Item& object = list.item(object_index);
 
         CIcon icon(GetDriveIcon(object.type()));
         int icon_index = imagelist_.AddIcon(icon);
@@ -134,39 +136,39 @@ bool UiFileList::HasDirectoryList() const
     return list_ != nullptr;
 }
 
-bool UiFileList::HasParentDirectory() const
+FilePath UiFileList::CurrentPath() const
 {
     if (!HasDirectoryList())
-        return false;
+        return FilePath();
 
-    return list_->has_parent();
+    return fs::u8path(list_->path());
 }
 
-const std::string& UiFileList::CurrentPath() const
-{
-    static const std::string empty_path;
-
-    if (!HasDirectoryList())
-        return empty_path;
-
-    return list_->path();
-}
-
-const proto::DirectoryListItem& UiFileList::Object(int object_index)
+const proto::FileList::Item& UiFileList::Object(int object_index)
 {
     DCHECK(HasDirectoryList());
     DCHECK(IsValidObjectIndex(object_index));
+
     return list_->item(object_index);
 }
 
-const std::string& UiFileList::ObjectName(int object_index)
+FilePath UiFileList::ObjectName(int object_index)
 {
     DCHECK(HasDirectoryList());
     DCHECK(IsValidObjectIndex(object_index));
-    return list_->item(object_index).name();
+
+    return fs::u8path(list_->item(object_index).name());
 }
 
-proto::DirectoryListItem* UiFileList::FirstSelectedObject() const
+bool UiFileList::IsDirectoryObject(int object_index)
+{
+    DCHECK(HasDirectoryList());
+    DCHECK(IsValidObjectIndex(object_index));
+
+    return list_->item(object_index).is_directory();
+}
+
+proto::FileList::Item* UiFileList::FirstSelectedObject() const
 {
     int selected_item = GetNextItem(-1, LVNI_SELECTED);
     if (selected_item == -1)
@@ -282,7 +284,7 @@ void UiFileList::Iterator::Advance()
     item_index_ = list_.GetNextItem(item_index_, mode_);
 }
 
-proto::DirectoryListItem* UiFileList::Iterator::Object() const
+proto::FileList::Item* UiFileList::Iterator::Object() const
 {
     if (item_index_ == -1)
         return nullptr;

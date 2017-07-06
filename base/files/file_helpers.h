@@ -8,13 +8,13 @@
 #ifndef _ASPIA_BASE__FILES__FILE_HELPERS_H
 #define _ASPIA_BASE__FILES__FILE_HELPERS_H
 
-#include <string>
+#include "base/files/file_path.h"
 
 namespace aspia {
 
-bool IsValidFileName(const std::string& path);
+bool IsValidFileName(const FilePath& path);
 
-bool IsValidPathName(const std::string& path);
+bool IsValidPathName(const FilePath& path);
 
 } // namespace aspia
 

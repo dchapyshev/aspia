@@ -149,59 +149,89 @@ void UiFileStatusDialog::WriteLog(const CString& message, proto::Status status)
     edit.AppendText(L"\r\n");
 }
 
-void UiFileStatusDialog::SetRequestStatus(const proto::RequestStatus& status)
+void UiFileStatusDialog::SetDriveListRequestStatus(proto::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::SetRequestStatus,
+        runner_->PostTask(std::bind(&UiFileStatusDialog::SetDriveListRequestStatus,
                                     this,
                                     status));
         return;
     }
 
-    std::wstring first_path = UNICODEfromUTF8(status.first_path());
-    std::wstring second_path = UNICODEfromUTF8(status.second_path());
-
     CString message;
+    message.LoadStringW(IDS_FT_OP_BROWSE_DRIVES);
+    WriteLog(message, status);
+}
 
-    switch (status.type())
+void UiFileStatusDialog::SetFileListRequestStatus(const FilePath& path,
+                                                  proto::Status status)
+{
+    if (!runner_->BelongsToCurrentThread())
     {
-        case proto::RequestStatus::DRIVE_LIST:
-            message.LoadStringW(IDS_FT_OP_BROWSE_DRIVES);
-            break;
-
-        case proto::RequestStatus::DIRECTORY_LIST:
-            message.Format(IDS_FT_OP_BROWSE_FOLDERS, first_path.c_str());
-            break;
-
-        case proto::RequestStatus::CREATE_DIRECTORY:
-            message.Format(IDS_FT_OP_CREATE_FOLDER, first_path.c_str());
-            break;
-
-        case proto::RequestStatus::RENAME:
-            message.Format(IDS_FT_OP_RENAME,
-                           first_path.c_str(),
-                           second_path.c_str());
-            break;
-
-        case proto::RequestStatus::REMOVE:
-            message.Format(IDS_FT_OP_REMOVE, first_path.c_str());
-            break;
-
-        case proto::RequestStatus::SEND_FILE:
-            message.Format(IDS_FT_OP_SEND_FILE, first_path.c_str());
-            break;
-
-        case proto::RequestStatus::RECIEVE_FILE:
-            message.Format(IDS_FT_OP_RECIEVE_FILE, first_path.c_str());
-            break;
-
-        default:
-            LOG(FATAL) << "Unhandled status code: " << status.type();
-            break;
+        runner_->PostTask(std::bind(&UiFileStatusDialog::SetFileListRequestStatus,
+                                    this,
+                                    path,
+                                    status));
+        return;
     }
 
-    WriteLog(message, status.code());
+    CString message;
+    message.Format(IDS_FT_OP_BROWSE_FOLDERS, path.c_str());
+    WriteLog(message, status);
+}
+
+void UiFileStatusDialog::SetCreateDirectoryRequestStatus(const FilePath& path,
+                                                         proto::Status status)
+{
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&UiFileStatusDialog::SetCreateDirectoryRequestStatus,
+                                    this,
+                                    path,
+                                    status));
+        return;
+    }
+
+    CString message;
+    message.Format(IDS_FT_OP_CREATE_FOLDER, path.c_str());
+    WriteLog(message, status);
+}
+
+void UiFileStatusDialog::SetRenameRequestStatus(const FilePath& old_name,
+                                                const FilePath& new_name,
+                                                proto::Status status)
+{
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&UiFileStatusDialog::SetRenameRequestStatus,
+                                    this,
+                                    old_name,
+                                    new_name,
+                                    status));
+        return;
+    }
+
+    CString message;
+    message.Format(IDS_FT_OP_RENAME, old_name.c_str(), new_name.c_str());
+    WriteLog(message, status);
+}
+
+void UiFileStatusDialog::SetRemoveRequestStatus(const FilePath& path,
+                                                proto::Status status)
+{
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&UiFileStatusDialog::SetRemoveRequestStatus,
+                                    this,
+                                    path,
+                                    status));
+        return;
+    }
+
+    CString message;
+    message.Format(IDS_FT_OP_REMOVE, path.c_str());
+    WriteLog(message, status);
 }
 
 } // namespace aspia

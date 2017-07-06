@@ -9,54 +9,32 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "status.proto";
-
 package aspia.proto;
-
-message RequestStatus
-{
-    enum Type
-    {
-        UNKNOWN          = 0;
-        DRIVE_LIST       = 1;
-        DIRECTORY_LIST   = 2;
-        CREATE_DIRECTORY = 3;
-        RENAME           = 4;
-        REMOVE           = 5;
-        SEND_FILE        = 6;
-        RECIEVE_FILE     = 7;
-    }
-
-    Type type          = 1;
-    Status code        = 2;
-    string first_path  = 3;
-    string second_path = 4;
-}
-
-message DriveListItem
-{
-    enum Type
-    {
-        UNKNOWN        = 0;
-        CDROM          = 1;
-        REMOVABLE      = 2;
-        FIXED          = 3;
-        REMOTE         = 4;
-        RAM            = 5;
-        HOME_FOLDER    = 6;
-        DESKTOP_FOLDER = 7;
-    }
-
-    Type type          = 1;
-    string name        = 2;
-    string path        = 3;
-    uint64 total_space = 4;
-    uint64 free_space  = 5;
-}
 
 message DriveList
 {
-    repeated DriveListItem item = 1;
+    message Item
+    {
+        enum Type
+        {
+            UNKNOWN        = 0;
+            CDROM          = 1;
+            REMOVABLE      = 2;
+            FIXED          = 3;
+            REMOTE         = 4;
+            RAM            = 5;
+            HOME_FOLDER    = 6;
+            DESKTOP_FOLDER = 7;
+        }
+
+        Type type          = 1;
+        string name        = 2;
+        string path        = 3;
+        uint64 total_space = 4;
+        uint64 free_space  = 5;
+    }
+
+    repeated Item item = 1;
 }
 
 message DriveListRequest
@@ -64,32 +42,23 @@ message DriveListRequest
     uint32 dummy = 1;
 }
 
-message DirectoryListItem
+message FileList
 {
-    enum Type
+    message Item
     {
-        UNKNOWN   = 0;
-        DIRECTORY = 1;
-        FILE      = 2;
+        string name             = 1;
+        uint64 size             = 2;
+        int64 modification_time = 3;
+        bool is_directory       = 4;
     }
 
-    Type type       = 1;
-    string name     = 2;
-    uint64 size     = 3;
-    uint64 modified = 4;
+    string path = 1;
+    repeated Item item = 2;
 }
 
-message DirectoryList
+message FileListRequest
 {
     string path = 1;
-    bool has_parent = 2;
-    repeated DirectoryListItem item = 3;
-}
-
-message DirectoryListRequest
-{
-    string path = 1;
-    string item = 2;
 }
 
 message DirectorySize
@@ -125,18 +94,15 @@ message FilePacketRequest
 message CreateDirectoryRequest
 {
     string path = 1;
-    string name = 2;
 }
 
 message RenameRequest
 {
-    string path = 1;
-    string old_item_name = 2;
-    string new_item_name = 3;
+    string old_name = 1;
+    string new_name = 2;
 }
 
 message RemoveRequest
 {
     string path = 1;
-    string item_name = 2;
 }

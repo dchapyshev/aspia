@@ -418,12 +418,6 @@
     <ClCompile Include="base\files\file_helpers.cc">
       <Filter>base\files</Filter>
     </ClCompile>
-    <ClCompile Include="protocol\file_packetizer.cc">
-      <Filter>protocol</Filter>
-    </ClCompile>
-    <ClCompile Include="protocol\file_depacketizer.cc">
-      <Filter>protocol</Filter>
-    </ClCompile>
     <ClCompile Include="base\process\process.cc">
       <Filter>base\process</Filter>
     </ClCompile>
@@ -459,6 +453,12 @@
     </ClCompile>
     <ClCompile Include="base\files\base_paths.cc">
       <Filter>base\files</Filter>
+    </ClCompile>
+    <ClCompile Include="client\file_request_sender_local.cc">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="client\file_request_sender_remote.cc">
+      <Filter>client</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -932,12 +932,6 @@
     <ClInclude Include="base\files\file_helpers.h">
       <Filter>base\files</Filter>
     </ClInclude>
-    <ClInclude Include="protocol\file_packetizer.h">
-      <Filter>protocol</Filter>
-    </ClInclude>
-    <ClInclude Include="protocol\file_depacketizer.h">
-      <Filter>protocol</Filter>
-    </ClInclude>
     <ClInclude Include="base\process\process.h">
       <Filter>base\process</Filter>
     </ClInclude>
@@ -985,6 +979,18 @@
     </ClInclude>
     <ClInclude Include="base\files\file_path.h">
       <Filter>base\files</Filter>
+    </ClInclude>
+    <ClInclude Include="client\file_request_sender.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="client\file_reply_receiver.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="client\file_request_sender_local.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="client\file_request_sender_remote.h">
+      <Filter>client</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

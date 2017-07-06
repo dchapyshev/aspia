@@ -35,12 +35,10 @@ private:
     void OnWindowClose() override;
 
     void WriteMessage(const proto::file_transfer::HostToClient& message);
-    void WriteStatus(std::unique_ptr<proto::RequestStatus> status);
+    void WriteStatus(proto::Status status);
 
     bool ReadDriveListRequestMessage(const proto::DriveListRequest& request);
-    void ReadDirectoryListRequestMessage(const proto::DirectoryListRequest& request);
-    bool ReadFileRequestMessage(const proto::FileRequest& request);
-    bool ReadFilePacketMessage(const proto::FilePacket& file);
+    void ReadFileListRequestMessage(const proto::FileListRequest& request);
     void ReadCreateDirectoryRequest(const proto::CreateDirectoryRequest& request);
     void ReadRenameRequest(const proto::RenameRequest& request);
     void ReadRemoveRequest(const proto::RemoveRequest& request);

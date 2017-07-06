@@ -8,6 +8,7 @@
 #ifndef _ASPIA_BASE__FILES__DRIVE_ENUMERATOR_H
 #define _ASPIA_BASE__FILES__DRIVE_ENUMERATOR_H
 
+#include "base/files/file_path.h"
 #include "base/macros.h"
 
 #include <string>
@@ -36,7 +37,7 @@ public:
             RAM        // RAM drives.
         };
 
-        std::wstring Path() const;
+        FilePath Path() const;
         DriveType Type() const;
         uint64_t TotalSpace() const;
         uint64_t FreeSpace() const;
@@ -46,12 +47,12 @@ public:
     private:
         friend class DriveEnumerator;
 
-        DriveInfo(const std::wstring& path);
+        DriveInfo(const FilePath& path);
 
-        std::wstring path_;
+        FilePath path_;
     };
 
-    std::wstring Next();
+    FilePath Next();
 
     DriveInfo GetInfo() const;
 

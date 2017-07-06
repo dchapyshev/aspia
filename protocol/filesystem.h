@@ -8,27 +8,22 @@
 #ifndef _ASPIA_PROTOCOL__FILESYSTEM_H
 #define _ASPIA_PROTOCOL__FILESYSTEM_H
 
+#include "base/files/file_path.h"
 #include "proto/file_transfer_session.pb.h"
 
 #include <memory>
 
 namespace aspia {
 
-std::unique_ptr<proto::RequestStatus> ExecuteDriveListRequest(
-    const proto::DriveListRequest& request, std::unique_ptr<proto::DriveList>& reply);
+proto::Status ExecuteDriveListRequest(proto::DriveList* drive_list);
 
-std::unique_ptr<proto::RequestStatus> ExecuteDirectoryListRequest(
-    const proto::DirectoryListRequest& request,
-    std::unique_ptr<proto::DirectoryList>& reply);
+proto::Status ExecuteFileListRequest(const FilePath& path, proto::FileList* file_list);
 
-std::unique_ptr<proto::RequestStatus> ExecuteCreateDirectoryRequest(
-    const proto::CreateDirectoryRequest& request);
+proto::Status ExecuteCreateDirectoryRequest(const FilePath& path);
 
-std::unique_ptr<proto::RequestStatus> ExecuteRenameRequest(
-    const proto::RenameRequest& request);
+proto::Status ExecuteRenameRequest(const FilePath& old_name, const FilePath& new_name);
 
-std::unique_ptr<proto::RequestStatus> ExecuteRemoveRequest(
-    const proto::RemoveRequest& request);
+proto::Status ExecuteRemoveRequest(const FilePath& request);
 
 } // namespace aspia
 

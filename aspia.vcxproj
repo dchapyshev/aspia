@@ -69,6 +69,8 @@
     <ClCompile Include="client\client_session_desktop_view.cc" />
     <ClCompile Include="client\client_session_file_transfer.cc" />
     <ClCompile Include="client\client_session_power_manage.cc" />
+    <ClCompile Include="client\file_request_sender_local.cc" />
+    <ClCompile Include="client\file_request_sender_remote.cc" />
     <ClCompile Include="codec\compressor_zlib.cc" />
     <ClCompile Include="codec\cursor_decoder.cc" />
     <ClCompile Include="codec\cursor_encoder.cc" />
@@ -124,8 +126,6 @@
     <ClCompile Include="network\network_server_tcp.cc" />
     <ClCompile Include="protocol\clipboard.cc" />
     <ClCompile Include="protocol\filesystem.cc" />
-    <ClCompile Include="protocol\file_depacketizer.cc" />
-    <ClCompile Include="protocol\file_packetizer.cc" />
     <ClCompile Include="protocol\io_queue.cc" />
     <ClCompile Include="proto\auth_session.pb.cc" />
     <ClCompile Include="proto\auth_session_message.pb.cc" />
@@ -227,6 +227,10 @@
     <ClInclude Include="client\client_session_file_transfer.h" />
     <ClInclude Include="client\client_session_power_manage.h" />
     <ClInclude Include="client\client_session_proxy.h" />
+    <ClInclude Include="client\file_reply_receiver.h" />
+    <ClInclude Include="client\file_request_sender.h" />
+    <ClInclude Include="client\file_request_sender_local.h" />
+    <ClInclude Include="client\file_request_sender_remote.h" />
     <ClInclude Include="codec\compressor.h" />
     <ClInclude Include="codec\compressor_zlib.h" />
     <ClInclude Include="codec\cursor_decoder.h" />
@@ -296,8 +300,6 @@
     <ClInclude Include="network\socket.h" />
     <ClInclude Include="protocol\clipboard.h" />
     <ClInclude Include="protocol\filesystem.h" />
-    <ClInclude Include="protocol\file_depacketizer.h" />
-    <ClInclude Include="protocol\file_packetizer.h" />
     <ClInclude Include="protocol\io_buffer.h" />
     <ClInclude Include="protocol\io_queue.h" />
     <ClInclude Include="protocol\message_serialization.h" />

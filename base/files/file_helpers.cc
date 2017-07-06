@@ -23,10 +23,11 @@ static const size_t kMinNameLength = 1;
 // We use FAT variant: 255 characters long.
 static const size_t kMaxNameLength = (MAX_PATH - 5);
 
-static bool IsValidNameChar(wchar_t c)
+static bool IsValidNameChar(wchar_t character)
 {
-    switch (c)
+    switch (character)
     {
+        // Invalid characters for file name.
         case L'/':
         case L'\\':
         case L':':
@@ -43,25 +44,29 @@ static bool IsValidNameChar(wchar_t c)
     }
 }
 
-bool IsValidFileName(const std::string& path)
+bool IsValidFileName(const FilePath& path)
 {
-    size_t length = path.length();
+    std::wstring native_path(path.wstring());
+
+    size_t length = native_path.length();
+
     if (length < kMinNameLength || length > kMaxNameLength)
         return false;
 
-    for (size_t i = 0; i < length; ++i)
+    for (const auto& character : native_path)
     {
-        if (!IsValidNameChar(path[i]))
+        if (!IsValidNameChar(character))
             return false;
     }
 
     return true;
 }
 
-static bool IsValidPathChar(wchar_t c)
+static bool IsValidPathChar(wchar_t character)
 {
-    switch (c)
+    switch (character)
     {
+        // Invalid characters for path name.
         case L'*':
         case L'?':
         case L'"':
@@ -75,15 +80,18 @@ static bool IsValidPathChar(wchar_t c)
     }
 }
 
-bool IsValidPathName(const std::string& path)
+bool IsValidPathName(const FilePath& path)
 {
-    size_t length = path.length();
+    std::wstring native_path(path.wstring());
+
+    size_t length = native_path.length();
+
     if (length < kMinPathLength || length > kMaxPathLength)
         return false;
 
-    for (size_t i = 0; i < length; ++i)
+    for (const auto& character : native_path)
     {
-        if (!IsValidPathChar(path[i]))
+        if (!IsValidPathChar(character))
             return false;
     }
 

@@ -18,10 +18,12 @@ static const int kDefaultWindowWidth = 980;
 static const int kDefaultWindowHeight = 700;
 static const int kBorderSize = 3;
 
-UiFileManager::UiFileManager(Delegate* delegate) :
+UiFileManager::UiFileManager(FileRequestSender* local_sender,
+                             FileRequestSender* remote_sender,
+                             Delegate* delegate) :
     delegate_(delegate),
-    local_panel_(PanelType::LOCAL, this),
-    remote_panel_(PanelType::REMOTE, this)
+    local_panel_(PanelType::LOCAL, local_sender),
+    remote_panel_(PanelType::REMOTE, remote_sender)
 {
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
@@ -56,11 +58,10 @@ void UiFileManager::OnAfterThreadRunning()
     DestroyWindow();
 }
 
-void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> status)
+#if 0
+void UiFileManager::ReadRequestStatus(proto::Status status)
 {
-    DCHECK(status);
-
-    if (status->code() == proto::Status::STATUS_SUCCESS)
+    if (status == proto::Status::STATUS_SUCCESS)
         return;
 
     if (!runner_->BelongsToCurrentThread())
@@ -142,68 +143,7 @@ void UiFileManager::ReadRequestStatus(std::shared_ptr<proto::RequestStatus> stat
 
     MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
 }
-
-void UiFileManager::ReadDriveList(PanelType panel_type,
-                                  std::unique_ptr<proto::DriveList> drive_list)
-{
-    if (panel_type == UiFileManager::PanelType::REMOTE)
-    {
-        remote_panel_.ReadDriveList(std::move(drive_list));
-    }
-    else
-    {
-        DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
-        local_panel_.ReadDriveList(std::move(drive_list));
-    }
-}
-
-void UiFileManager::ReadDirectoryList(PanelType panel_type,
-                                      std::unique_ptr<proto::DirectoryList> directory_list)
-{
-    if (panel_type == UiFileManager::PanelType::REMOTE)
-    {
-        remote_panel_.ReadDirectoryList(std::move(directory_list));
-    }
-    else
-    {
-        DCHECK(panel_type == UiFileManager::PanelType::LOCAL);
-        local_panel_.ReadDirectoryList(std::move(directory_list));
-    }
-}
-
-void UiFileManager::OnDriveListRequest(UiFileManager::PanelType panel_type)
-{
-    delegate_->OnDriveListRequest(panel_type);
-}
-
-void UiFileManager::OnDirectoryListRequest(PanelType panel_type,
-                                           const std::string& path,
-                                           const std::string& item)
-{
-    delegate_->OnDirectoryListRequest(panel_type, path, item);
-}
-
-void UiFileManager::OnCreateDirectoryRequest(PanelType panel_type,
-                                             const std::string& path,
-                                             const std::string& name)
-{
-    delegate_->OnCreateDirectoryRequest(panel_type, path, name);
-}
-
-void UiFileManager::OnRenameRequest(PanelType panel_type,
-                                    const std::string& path,
-                                    const std::string& old_name,
-                                    const std::string& new_name)
-{
-    delegate_->OnRenameRequest(panel_type, path, old_name, new_name);
-}
-
-void UiFileManager::OnRemoveRequest(PanelType panel_type,
-                                    const std::string& path,
-                                    const std::string& item_name)
-{
-    delegate_->OnRemoveRequest(panel_type, path, item_name);
-}
+#endif
 
 LRESULT UiFileManager::OnCreate(UINT message,
                                 WPARAM wparam,

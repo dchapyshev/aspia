@@ -21,7 +21,7 @@ namespace aspia {
 
 std::wstring TimeToString(time_t time);
 
-HICON GetDriveIcon(proto::DriveListItem::Type drive_type);
+HICON GetDriveIcon(proto::DriveList::Item::Type drive_type);
 
 HICON GetComputerIcon();
 
@@ -29,9 +29,9 @@ HICON GetDirectoryIcon();
 
 HICON GetFileIcon(const std::wstring& file_name);
 
-CString GetDriveDisplayName(const proto::DriveListItem& item);
+CString GetDriveDisplayName(const proto::DriveList::Item& item);
 
-CString GetDriveDescription(proto::DriveListItem::Type type);
+CString GetDriveDescription(proto::DriveList::Item::Type type);
 
 CString GetDirectoryTypeString(const std::wstring& dir_name);
 

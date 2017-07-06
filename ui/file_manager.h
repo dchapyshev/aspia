@@ -17,8 +17,7 @@ namespace aspia {
 
 class UiFileManager :
     public CWindowImpl<UiFileManager, CWindow, CFrameWinTraits>,
-    private MessageLoopThread::Delegate,
-    private UiFileManagerPanel::Delegate
+    private MessageLoopThread::Delegate
 {
 public:
     using PanelType = UiFileManagerPanel::PanelType;
@@ -27,64 +26,17 @@ public:
     {
     public:
         virtual void OnWindowClose() = 0;
-        virtual void OnDriveListRequest(PanelType panel_type) = 0;
-
-        virtual void OnDirectoryListRequest(PanelType panel_type,
-                                            const std::string& path,
-                                            const std::string& item) = 0;
-
-        virtual void OnCreateDirectoryRequest(PanelType panel_type,
-                                              const std::string& path,
-                                              const std::string& name) = 0;
-
-        virtual void OnRenameRequest(PanelType panel_type,
-                                     const std::string& path,
-                                     const std::string& old_name,
-                                     const std::string& new_name) = 0;
-
-        virtual void OnRemoveRequest(PanelType panel_type,
-                                     const std::string& path,
-                                     const std::string& item_name) = 0;
-
-        virtual void OnSendFile(const std::wstring& from_path, const std::wstring& to_path) = 0;
-        virtual void OnRecieveFile(const std::wstring& from_path, const std::wstring& to_path) = 0;
     };
 
-    UiFileManager(Delegate* delegate);
+    UiFileManager(FileRequestSender* local_sender,
+                  FileRequestSender* remote_sender,
+                  Delegate* delegate);
     ~UiFileManager();
-
-    void ReadRequestStatus(std::shared_ptr<proto::RequestStatus> status);
-
-    void ReadDriveList(PanelType panel_type,
-                       std::unique_ptr<proto::DriveList> drive_list);
-
-    void ReadDirectoryList(PanelType panel_type,
-                           std::unique_ptr<proto::DirectoryList> directory_list);
 
 private:
     // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
-
-    // UiFileManagerPanel::Delegate implementation.
-    void OnDriveListRequest(PanelType panel_type) override;
-
-    void OnDirectoryListRequest(PanelType panel_type,
-                                const std::string& path,
-                                const std::string& item) override;
-
-    void OnCreateDirectoryRequest(PanelType panel_type,
-                                  const std::string& path,
-                                  const std::string& name) override;
-
-    void OnRenameRequest(PanelType panel_type,
-                         const std::string& path,
-                         const std::string& old_path,
-                         const std::string& new_path) override;
-
-    void OnRemoveRequest(PanelType panel_type,
-                         const std::string& path,
-                         const std::string& item_name) override;
 
     BEGIN_MSG_MAP(UiFileManager)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)

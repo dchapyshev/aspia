@@ -32,7 +32,7 @@ DriveEnumerator::DriveEnumerator()
     next_ = buffer_.data();
 }
 
-std::wstring DriveEnumerator::Next()
+FilePath DriveEnumerator::Next()
 {
     if (!next_ || !next_[0])
         return std::wstring();
@@ -49,13 +49,13 @@ DriveEnumerator::DriveInfo DriveEnumerator::GetInfo() const
     return DriveInfo(current_);
 }
 
-DriveEnumerator::DriveInfo::DriveInfo(const std::wstring& path) :
+DriveEnumerator::DriveInfo::DriveInfo(const FilePath& path) :
     path_(path)
 {
     // Nothing
 }
 
-std::wstring DriveEnumerator::DriveInfo::Path() const
+FilePath DriveEnumerator::DriveInfo::Path() const
 {
     return path_;
 }

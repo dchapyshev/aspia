@@ -16,44 +16,22 @@
 
 namespace aspia {
 
+namespace fs = std::experimental::filesystem;
+
 static_assert(UiFileList::kInvalidObjectIndex == UiDriveList::kInvalidObjectIndex,
               "Values must be equal");
 
 UiFileManagerPanel::UiFileManagerPanel(PanelType panel_type,
-                                       Delegate* delegate) :
+                                       FileRequestSender* sender) :
     toolbar_(panel_type == PanelType::LOCAL ?
              UiFileToolBar::Type::LOCAL : UiFileToolBar::Type::REMOTE),
     panel_type_(panel_type),
-    delegate_(delegate)
+    sender_(sender)
 {
     // Nothing
 }
 
-void UiFileManagerPanel::ReadDriveList(std::unique_ptr<proto::DriveList> drive_list)
-{
-    drive_list_.Read(std::move(drive_list));
-
-    if (!file_list_.HasDirectoryList())
-    {
-        MoveToDrive(UiDriveList::kComputerObjectIndex);
-    }
-}
-
-void UiFileManagerPanel::ReadDirectoryList(
-    std::unique_ptr<proto::DirectoryList> directory_list)
-{
-    toolbar_.EnableButton(ID_FOLDER_ADD, TRUE);
-    toolbar_.EnableButton(ID_FOLDER_UP, TRUE);
-    toolbar_.EnableButton(ID_HOME, TRUE);
-
-    file_list_.Read(std::move(directory_list));
-    drive_list_.SetCurrentPath(file_list_.CurrentPath());
-}
-
-LPARAM UiFileManagerPanel::OnCreate(UINT message,
-                                    WPARAM wparam,
-                                    LPARAM lparam,
-                                    BOOL& handled)
+LPARAM UiFileManagerPanel::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     HFONT default_font = AtlGetStockFont(DEFAULT_GUI_FONT);
 
@@ -77,14 +55,11 @@ LPARAM UiFileManagerPanel::OnCreate(UINT message,
                    WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
     status_.SetFont(default_font);
 
-    delegate_->OnDriveListRequest(panel_type_);
+    sender_->SendDriveListRequest(this);
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnDestroy(UINT message,
-                                      WPARAM wparam,
-                                      LPARAM lparam,
-                                      BOOL& handled)
+LRESULT UiFileManagerPanel::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     drive_list_.DestroyWindow();
     file_list_.DestroyWindow();
@@ -94,10 +69,7 @@ LRESULT UiFileManagerPanel::OnDestroy(UINT message,
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnSize(UINT message,
-                                   WPARAM wparam,
-                                   LPARAM lparam,
-                                   BOOL& handled)
+LRESULT UiFileManagerPanel::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     HDWP dwp = BeginDeferWindowPos(5);
 
@@ -163,10 +135,7 @@ LRESULT UiFileManagerPanel::OnSize(UINT message,
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnDrawItem(UINT message,
-                                       WPARAM wparam,
-                                       LPARAM lparam,
-                                       BOOL& handled)
+LRESULT UiFileManagerPanel::OnDrawItem(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     LPDRAWITEMSTRUCT dis = reinterpret_cast<LPDRAWITEMSTRUCT>(lparam);
 
@@ -203,10 +172,7 @@ LRESULT UiFileManagerPanel::OnDrawItem(UINT message,
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnDriveChange(WORD notify_code,
-                                          WORD control_id,
-                                          HWND control,
-                                          BOOL& handled)
+LRESULT UiFileManagerPanel::OnDriveChange(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     int object_index = drive_list_.SelectedObject();
 
@@ -217,9 +183,7 @@ LRESULT UiFileManagerPanel::OnDriveChange(WORD notify_code,
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnListDoubleClock(int control_id,
-                                              LPNMHDR hdr,
-                                              BOOL& handled)
+LRESULT UiFileManagerPanel::OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     int object_index = file_list_.GetObjectUnderMousePointer();
 
@@ -232,67 +196,54 @@ LRESULT UiFileManagerPanel::OnListDoubleClock(int control_id,
     if (!file_list_.IsValidObjectIndex(object_index))
         return 0;
 
-    const proto::DirectoryListItem& item = file_list_.Object(object_index);
+    const proto::FileList::Item& item = file_list_.Object(object_index);
 
-    if (item.type() == proto::DirectoryListItem::DIRECTORY)
+    if (file_list_.IsDirectoryObject(object_index))
     {
-        delegate_->OnDirectoryListRequest(panel_type_,
-                                          file_list_.CurrentPath(),
-                                          item.name());
+        FilePath path(file_list_.CurrentPath());
+        path.append(file_list_.ObjectName(object_index));
+
+        sender_->SendFileListRequest(this, path);
     }
 
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnFolderUp(WORD notify_code,
-                                       WORD control_id,
-                                       HWND control,
-                                       BOOL& handled)
+LRESULT UiFileManagerPanel::OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
-    if (!file_list_.HasParentDirectory())
+    FilePath path = file_list_.CurrentPath();
+
+    if (!path.has_parent_path() || path.parent_path() == path.root_name())
     {
         MoveToDrive(UiDriveList::kComputerObjectIndex);
     }
     else
     {
-        delegate_->OnDirectoryListRequest(panel_type_,
-                                          file_list_.CurrentPath(),
-                                          "..");
+        sender_->SendFileListRequest(this, path.parent_path());
     }
 
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnFolderAdd(WORD notify_code,
-                                        WORD control_id,
-                                        HWND control,
-                                        BOOL& handled)
+LRESULT UiFileManagerPanel::OnFolderAdd(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     file_list_.AddDirectory();
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnRefresh(WORD notify_code,
-                                      WORD control_id,
-                                      HWND control,
-                                      BOOL& handled)
+LRESULT UiFileManagerPanel::OnRefresh(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
-    delegate_->OnDriveListRequest(panel_type_);
+    sender_->SendDriveListRequest(this);
 
     if (file_list_.HasDirectoryList())
     {
-        delegate_->OnDirectoryListRequest(panel_type_,
-                                          file_list_.CurrentPath(),
-                                          std::string());
+        sender_->SendFileListRequest(this, file_list_.CurrentPath());
     }
 
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnRemove(WORD notify_code,
-                                     WORD control_id,
-                                     HWND control,
-                                     BOOL& handled)
+LRESULT UiFileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     if (!file_list_.HasDirectoryList())
         return 0;
@@ -310,13 +261,13 @@ LRESULT UiFileManagerPanel::OnRemove(WORD notify_code,
 
     if (selected_count == 1)
     {
-        proto::DirectoryListItem* object = file_list_.FirstSelectedObject();
+        proto::FileList::Item* object = file_list_.FirstSelectedObject();
         if (!object)
             return 0;
 
         object_list = UNICODEfromUTF8(object->name());
 
-        if (object->type() == proto::DirectoryListItem::DIRECTORY)
+        if (object->is_directory())
             message.Format(IDS_FT_DELETE_CONFORM_DIR, object_list.c_str());
         else
             message.Format(IDS_FT_DELETE_CONFORM_FILE, object_list.c_str());
@@ -327,7 +278,7 @@ LRESULT UiFileManagerPanel::OnRemove(WORD notify_code,
              !iter.IsAtEnd();
              iter.Advance())
         {
-            proto::DirectoryListItem* object = iter.Object();
+            proto::FileList::Item* object = iter.Object();
             if (!object)
                 continue;
 
@@ -344,18 +295,17 @@ LRESULT UiFileManagerPanel::OnRemove(WORD notify_code,
              !iter.IsAtEnd();
              iter.Advance())
         {
-            proto::DirectoryListItem* object = iter.Object();
+            proto::FileList::Item* object = iter.Object();
             if (!object)
                 continue;
 
-            delegate_->OnRemoveRequest(panel_type_,
-                                       file_list_.CurrentPath(),
-                                       object->name());
+            FilePath path = file_list_.CurrentPath();
+            path.append(fs::u8path(object->name()));
+
+            sender_->SendRemoveRequest(this, path);
         }
 
-        delegate_->OnDirectoryListRequest(panel_type_,
-                                          file_list_.CurrentPath(),
-                                          std::string());
+        sender_->SendFileListRequest(this, file_list_.CurrentPath());
     }
 
     return 0;
@@ -378,20 +328,11 @@ void UiFileManagerPanel::MoveToDrive(int object_index)
     }
     else
     {
-        std::string path = drive_list_.ObjectPath(object_index);
-
-        if (!path.empty())
-        {
-            delegate_->OnDirectoryListRequest(panel_type_,
-                                              path,
-                                              std::string());
-        }
+        sender_->SendFileListRequest(this, drive_list_.ObjectPath(object_index));
     }
 }
 
-LRESULT UiFileManagerPanel::OnListEndLabelEdit(int control_id,
-                                               LPNMHDR hdr,
-                                               BOOL& handled)
+LRESULT UiFileManagerPanel::OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     LPNMLVDISPINFOW disp_info = reinterpret_cast<LPNMLVDISPINFOW>(hdr);
 
@@ -408,9 +349,10 @@ LRESULT UiFileManagerPanel::OnListEndLabelEdit(int control_id,
         WCHAR buffer[MAX_PATH] = { 0 };
         edit.GetWindowTextW(buffer, _countof(buffer));
 
-        delegate_->OnCreateDirectoryRequest(panel_type_,
-                                            file_list_.CurrentPath(),
-                                            UTF8fromUNICODE(buffer));
+        FilePath path = file_list_.CurrentPath();
+        path.append(buffer);
+
+        sender_->SendCreateDirectoryRequest(this, path);
     }
     else // Rename exists item.
     {
@@ -420,21 +362,20 @@ LRESULT UiFileManagerPanel::OnListEndLabelEdit(int control_id,
         if (!disp_info->item.pszText)
             return 0;
 
-        delegate_->OnRenameRequest(panel_type_,
-                                   file_list_.CurrentPath(),
-                                   file_list_.ObjectName(object_index),
-                                   UTF8fromUNICODE(disp_info->item.pszText));
+        FilePath old_name = file_list_.CurrentPath();
+        old_name.append(file_list_.ObjectName(object_index));
+
+        FilePath new_name = file_list_.CurrentPath();
+        new_name.append(disp_info->item.pszText);
+
+        sender_->SendRenameRequest(this, old_name, new_name);
     }
 
-    delegate_->OnDirectoryListRequest(panel_type_,
-                                      file_list_.CurrentPath(),
-                                      std::string());
+    sender_->SendFileListRequest(this, file_list_.CurrentPath());
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnListItemChanged(int control_id,
-                                              LPNMHDR hdr,
-                                              BOOL& handled)
+LRESULT UiFileManagerPanel::OnListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     UINT count = file_list_.GetSelectedCount();
 
@@ -453,10 +394,7 @@ LRESULT UiFileManagerPanel::OnListItemChanged(int control_id,
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnSend(WORD notify_code,
-                                   WORD control_id,
-                                   HWND control,
-                                   BOOL& handled)
+LRESULT UiFileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     if (!file_list_.HasDirectoryList())
         return 0;
@@ -464,29 +402,64 @@ LRESULT UiFileManagerPanel::OnSend(WORD notify_code,
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnDriveEndEdit(int control_id,
-                                           LPNMHDR hdr,
-                                           BOOL& handled)
+LRESULT UiFileManagerPanel::OnDriveEndEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     PNMCBEENDEDITW end_edit = reinterpret_cast<PNMCBEENDEDITW>(hdr);
 
     if (end_edit->fChanged && end_edit->iWhy == CBENF_RETURN && end_edit->szText)
     {
-        delegate_->OnDirectoryListRequest(panel_type_,
-                                          UTF8fromUNICODE(end_edit->szText),
-                                          std::string());
+        FilePath path(end_edit->szText);
+
+        sender_->SendFileListRequest(this, path);
     }
 
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnHome(WORD notify_code,
-                                   WORD control_id,
-                                   HWND control,
-                                   BOOL& handled)
+LRESULT UiFileManagerPanel::OnHome(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     MoveToDrive(UiDriveList::kComputerObjectIndex);
     return 0;
+}
+
+void UiFileManagerPanel::OnLastRequestFailed(proto::Status status)
+{
+
+}
+
+void UiFileManagerPanel::OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list)
+{
+    drive_list_.Read(std::move(drive_list));
+
+    if (!file_list_.HasDirectoryList())
+    {
+        MoveToDrive(UiDriveList::kComputerObjectIndex);
+    }
+}
+
+void UiFileManagerPanel::OnFileListReply(std::unique_ptr<proto::FileList> file_list)
+{
+    toolbar_.EnableButton(ID_FOLDER_ADD, TRUE);
+    toolbar_.EnableButton(ID_FOLDER_UP, TRUE);
+    toolbar_.EnableButton(ID_HOME, TRUE);
+
+    file_list_.Read(std::move(file_list));
+    drive_list_.SetCurrentPath(file_list_.CurrentPath());
+}
+
+void UiFileManagerPanel::OnCreateDirectoryReply()
+{
+
+}
+
+void UiFileManagerPanel::OnRemoveReply()
+{
+
+}
+
+void UiFileManagerPanel::OnRenameReply()
+{
+
 }
 
 } // namespace aspia

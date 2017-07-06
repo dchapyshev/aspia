@@ -8,10 +8,13 @@
 #include "ui/drive_list.h"
 #include "ui/file_manager_helpers.h"
 #include "ui/resource.h"
+#include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "base/logging.h"
 
 namespace aspia {
+
+namespace fs = std::experimental::filesystem;
 
 bool UiDriveList::CreateDriveList(HWND parent, int control_id)
 {
@@ -50,7 +53,7 @@ void UiDriveList::Read(std::unique_ptr<proto::DriveList> list)
 
     for (int object_index = 0; object_index < object_count; ++object_index)
     {
-        const proto::DriveListItem& object = list_->item(object_index);
+        const proto::DriveList::Item& object = list_->item(object_index);
 
         icon = GetDriveIcon(object.type());
         icon_index = imagelist_.AddIcon(icon);
@@ -99,7 +102,7 @@ int UiDriveList::SelectedObject() const
     return GetItemData(selected_item);
 }
 
-const proto::DriveListItem& UiDriveList::Object(int object_index) const
+const proto::DriveList::Item& UiDriveList::Object(int object_index) const
 {
     DCHECK(HasDriveList());
     DCHECK(IsValidObjectIndex(object_index));
@@ -112,7 +115,7 @@ const proto::DriveList& UiDriveList::DriveList() const
     return *list_;
 }
 
-void UiDriveList::SetCurrentPath(const std::string& path)
+void UiDriveList::SetCurrentPath(const FilePath& path)
 {
     int current_folder_item_index =
         GetItemIndexByObjectIndex(kCurrentFolderObjectIndex);
@@ -139,7 +142,7 @@ void UiDriveList::SetCurrentPath(const std::string& path)
         int icon_index = imagelist_.AddIcon(icon);
 
         InsertItem(0,
-                   UNICODEfromUTF8(path).c_str(),
+                   path.c_str(),
                    icon_index,
                    icon_index,
                    0,
@@ -149,7 +152,7 @@ void UiDriveList::SetCurrentPath(const std::string& path)
     SelectObject(known_object_index);
 }
 
-std::string UiDriveList::ObjectPath(int object_index) const
+FilePath UiDriveList::ObjectPath(int object_index) const
 {
     switch (object_index)
     {
@@ -158,22 +161,22 @@ std::string UiDriveList::ObjectPath(int object_index) const
             int item_index = GetItemIndexByObjectIndex(object_index);
 
             if (item_index == CB_ERR)
-                return std::string();
+                return FilePath();
 
             WCHAR path[MAX_PATH];
 
             if (!GetItemText(item_index, path, _countof(path)))
-                return std::string();
+                return FilePath();
 
-            return UTF8fromUNICODE(path);
+            return path;
         }
 
         case kComputerObjectIndex:
         case kInvalidObjectIndex:
-            return std::string();
+            return FilePath();
 
         default:
-            return list_->item(object_index).path();
+            return fs::u8path(list_->item(object_index).path());
     }
 }
 
@@ -208,7 +211,7 @@ int UiDriveList::GetItemIndexByObjectIndex(int object_index) const
     return CB_ERR;
 }
 
-int UiDriveList::GetKnownObjectIndex(const std::string& path) const
+int UiDriveList::GetKnownObjectIndex(const FilePath& path) const
 {
     if (!HasDriveList())
         return kInvalidObjectIndex;
@@ -220,7 +223,9 @@ int UiDriveList::GetKnownObjectIndex(const std::string& path) const
 
     for (int object_index = 0; object_index < count; ++object_index)
     {
-        if (_stricmp(path.c_str(), list_->item(object_index).path().c_str()) == 0)
+        FilePath known_path = fs::u8path(list_->item(object_index).path());
+
+        if (CompareCaseInsensitive(known_path, path) == 0)
             return object_index;
     }
 
