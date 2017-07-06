@@ -45,7 +45,7 @@ x86 or x86_64 CPU with SSE2 support, Windows XP SP3 or higher.
 
 Licensing
 =========
-Project code is available under the GNU Lesser General Public License version 3.
+Project code is available under the Mozilla Public License Version 2.0.
 
 Other information
 =================

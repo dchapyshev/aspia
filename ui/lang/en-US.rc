@@ -284,11 +284,9 @@ BEGIN
     IDS_SITE_LINK                 "https://aspia.org"
     IDS_HELP_LINK                 "https://aspia.org/help"
 
-    IDS_ABOUT_STRING "Aspia Remote Desktop is free software released under GNU LGPL license.\r\n\
-                      You can get a copy of GNU LGPL license here:\r\n\
-                      http://www.gnu.org/licenses/lgpl.html\r\n\r\n\
-                      You can also get a translation of GNU LGPL license here:\r\n\
-                      http://www.gnu.org/licenses/translations.html\r\n\r\n\
+    IDS_ABOUT_STRING "Aspia Remote Desktop is free software released under Mozilla Public License Version 2.0.\r\n\
+                      You can get a copy of license here:\r\n\
+                      https://www.mozilla.org/en-US/MPL/2.0\r\n\r\n\
                       Developers:\r\n\
                       • Dmitry Chapyshev (dmitry@aspia.ru)\r\n\r\n\
                       In the development we used the following projects:\r\n\
