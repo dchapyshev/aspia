@@ -114,11 +114,6 @@ GLOG_DEFINE_bool(drop_log_memory, true, "Drop in-memory buffers of log contents.
                  "Logs can grow very quickly and they are rarely read before they "
                  "need to be evicted from memory. Instead, drop them from memory "
                  "as soon as they are flushed to disk.");
-_START_GOOGLE_NAMESPACE_
-namespace logging {
-static const int64 kPageSize = getpagesize();
-}
-_END_GOOGLE_NAMESPACE_
 #endif
 
 // By default, errors (including fatal errors) get logged to stderr as
@@ -336,6 +331,7 @@ const size_t LogMessage::kMaxLogMessageLen = 30000;
 
 struct LogMessage::LogMessageData  {
   LogMessageData();
+  void reset();
 
   int preserved_errno_;      // preserved errno
   // Buffer space; contains complete message text.
@@ -438,6 +434,7 @@ class LogFileObject : public base::Logger {
   FILE* file_;
   LogSeverity severity_;
   uint32 bytes_since_flush_;
+  uint32 dropped_mem_length_;
   uint32 file_length_;
   unsigned int rollover_attempt_;
   int64 next_flush_time_;         // cycle count at which to flush log
@@ -839,6 +836,7 @@ LogFileObject::LogFileObject(LogSeverity severity,
     file_(NULL),
     severity_(severity),
     bytes_since_flush_(0),
+    dropped_mem_length_(0),
     file_length_(0),
     rollover_attempt_(kRolloverAttemptFrequency-1),
     next_flush_time_(0) {
@@ -976,7 +974,7 @@ void LogFileObject::Write(bool force_flush,
       PidHasChanged()) {
     if (file_ != NULL) fclose(file_);
     file_ = NULL;
-    file_length_ = bytes_since_flush_ = 0;
+    file_length_ = bytes_since_flush_ = dropped_mem_length_ = 0;
     rollover_attempt_ = kRolloverAttemptFrequency-1;
   }
 
@@ -1116,11 +1114,17 @@ void LogFileObject::Write(bool force_flush,
        (CycleClock_Now() >= next_flush_time_) ) {
     FlushUnlocked();
 #ifdef OS_LINUX
-    if (FLAGS_drop_log_memory) {
-      if (file_length_ >= logging::kPageSize) {
-        // don't evict the most recent page
-        uint32 len = file_length_ & ~(logging::kPageSize - 1);
-        posix_fadvise(fileno(file_), 0, len, POSIX_FADV_DONTNEED);
+    // Only consider files >= 3MiB
+    if (FLAGS_drop_log_memory && file_length_ >= (3 << 20)) {
+      // Don't evict the most recent 1-2MiB so as not to impact a tailer
+      // of the log file and to avoid page rounding issue on linux < 4.7
+      uint32 total_drop_length = (file_length_ & ~((1 << 20) - 1)) - (1 << 20);
+      uint32 this_drop_length = total_drop_length - dropped_mem_length_;
+      if (this_drop_length >= (2 << 20)) {
+        // Only advise when >= 2MiB to drop
+        posix_fadvise(fileno(file_), dropped_mem_length_, this_drop_length,
+                      POSIX_FADV_DONTNEED);
+        dropped_mem_length_ = total_drop_length;
       }
     }
 #endif
@@ -1142,8 +1146,20 @@ static bool fatal_msg_exclusive = true;
 static LogMessage::LogMessageData fatal_msg_data_exclusive;
 static LogMessage::LogMessageData fatal_msg_data_shared;
 
+#ifdef GLOG_THREAD_LOCAL_STORAGE
+// Static thread-local log data space to use, because typically at most one
+// LogMessageData object exists (in this case glog makes zero heap memory
+// allocations).
+static GLOG_THREAD_LOCAL_STORAGE bool thread_data_available = true;
+static GLOG_THREAD_LOCAL_STORAGE LogMessage::LogMessageData thread_msg_data;
+#endif // defined(GLOG_THREAD_LOCAL_STORAGE)
+
 LogMessage::LogMessageData::LogMessageData()
   : stream_(message_text_, LogMessage::kMaxLogMessageLen, 0) {
+}
+
+void LogMessage::LogMessageData::reset() {
+    stream_.reset();
 }
 
 LogMessage::LogMessage(const char* file, int line, LogSeverity severity,
@@ -1198,8 +1214,22 @@ void LogMessage::Init(const char* file,
                       void (LogMessage::*send_method)()) {
   allocated_ = NULL;
   if (severity != GLOG_FATAL || !exit_on_dfatal) {
+#ifdef GLOG_THREAD_LOCAL_STORAGE
+    // No need for locking, because this is thread local.
+    if (thread_data_available) {
+      thread_data_available = false;
+      data_ = &thread_msg_data;
+      // Make sure to clear log data since it may have been used and filled with
+      // data. We do not want to append the new message to the previous one.
+      data_->reset();
+    } else {
+      allocated_ = new LogMessageData();
+      data_ = allocated_;
+    }
+#else // !defined(GLOG_THREAD_LOCAL_STORAGE)
     allocated_ = new LogMessageData();
     data_ = allocated_;
+#endif // defined(GLOG_THREAD_LOCAL_STORAGE)
     data_->first_fatal_ = false;
   } else {
     MutexLock l(&fatal_msg_lock);
@@ -1268,6 +1298,10 @@ void LogMessage::Init(const char* file,
 
 LogMessage::~LogMessage() {
   Flush();
+#ifdef GLOG_THREAD_LOCAL_STORAGE
+  if (data_ == &thread_msg_data)
+    thread_data_available = true;
+#endif // defined(GLOG_THREAD_LOCAL_STORAGE)
   delete allocated_;
 }
 
