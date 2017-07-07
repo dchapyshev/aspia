@@ -183,6 +183,7 @@ PipeChannel::PipeChannel(HANDLE read_pipe, HANDLE write_pipe, Mode mode) :
 
 PipeChannel::~PipeChannel()
 {
+    Close();
     Stop();
 }
 
