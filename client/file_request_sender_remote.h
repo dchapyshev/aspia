@@ -15,6 +15,8 @@
 #include "protocol/io_buffer.h"
 
 #include <functional>
+#include <mutex>
+#include <queue>
 
 namespace aspia {
 
@@ -41,10 +43,13 @@ public:
     bool ReadIncommingMessage(const IOBuffer& buffer);
 
 private:
-    void FileRequestSenderRemote::SendRequest(const proto::file_transfer::ClientToHost& request);
+    void FileRequestSenderRemote::SendRequest(FileReplyReceiver* receiver,
+                                              const proto::file_transfer::ClientToHost& request);
 
     ClientSession::Delegate* session_;
-    FileReplyReceiver* receiver_ = nullptr;
+
+    std::queue<FileReplyReceiver*> receiver_queue_;
+    std::mutex receiver_queue_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(FileRequestSenderRemote);
 };
