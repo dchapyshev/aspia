@@ -73,6 +73,9 @@ void UiFileList::Read(std::unique_ptr<proto::FileList> list)
     int icon_index = imagelist_.AddIcon(icon);
     int object_count = list_->item_size();
 
+    CString file_folder;
+    file_folder.LoadStringW(IDS_FT_FILE_FOLDER);
+
     // Enumerate the directories first.
     for (int object_index = 0; object_index < object_count; ++object_index)
     {
@@ -81,11 +84,11 @@ void UiFileList::Read(std::unique_ptr<proto::FileList> list)
         if (!item.is_directory())
             continue;
 
-        std::wstring name = UNICODEfromUTF8(item.name());
+        FilePath name = fs::u8path(item.name());
 
         int item_index = AddItem(GetItemCount(), 0, name.c_str(), icon_index);
         SetItemData(item_index, object_index);
-        SetItemText(item_index, 2, GetDirectoryTypeString(name));
+        SetItemText(item_index, 2, file_folder);
         SetItemText(item_index, 3, TimeToString(item.modification_time()).c_str());
     }
 
@@ -97,7 +100,7 @@ void UiFileList::Read(std::unique_ptr<proto::FileList> list)
         if (object.is_directory())
             continue;
 
-        std::wstring name = UNICODEfromUTF8(object.name());
+        FilePath name = fs::u8path(object.name());
 
         icon = GetFileIcon(name);
         icon_index = imagelist_.AddIcon(icon);

@@ -106,7 +106,7 @@ HICON GetDirectoryIcon()
     return icon_info.hIcon;
 }
 
-HICON GetFileIcon(const std::wstring& file_name)
+HICON GetFileIcon(const FilePath& file_name)
 {
     SHFILEINFO file_info;
     memset(&file_info, 0, sizeof(file_info));
@@ -196,21 +196,7 @@ CString GetDriveDescription(proto::DriveList::Item::Type type)
     return desc;
 }
 
-CString GetDirectoryTypeString(const std::wstring& dir_name)
-{
-    SHFILEINFO file_info;
-    memset(&file_info, 0, sizeof(file_info));
-
-    SHGetFileInfoW(dir_name.c_str(),
-                   FILE_ATTRIBUTE_DIRECTORY,
-                   &file_info,
-                   sizeof(file_info),
-                   SHGFI_USEFILEATTRIBUTES | SHGFI_TYPENAME);
-
-    return file_info.szTypeName;
-}
-
-CString GetFileTypeString(const std::wstring& file_name)
+CString GetFileTypeString(const FilePath& file_name)
 {
     SHFILEINFO file_info;
     memset(&file_info, 0, sizeof(file_info));
@@ -231,37 +217,37 @@ std::wstring SizeToString(uint64_t size)
     static const uint64_t kMB = 1024ULL * 1024ULL;
     static const uint64_t kKB = 1024ULL;
 
-    CString units;
+    WCHAR units[128];
     uint64_t divider;
 
     if (size >= kTB)
     {
-        units.LoadStringW(IDS_FT_SIZE_TBYTES);
+        AtlLoadString(IDS_FT_SIZE_TBYTES, units, _countof(units));
         divider = kTB;
     }
     else if (size >= kGB)
     {
-        units.LoadStringW(IDS_FT_SIZE_GBYTES);
+        AtlLoadString(IDS_FT_SIZE_GBYTES, units, _countof(units));
         divider = kGB;
     }
     else if (size >= kMB)
     {
-        units.LoadStringW(IDS_FT_SIZE_MBYTES);
+        AtlLoadString(IDS_FT_SIZE_MBYTES, units, _countof(units));
         divider = kMB;
     }
     else if (size >= kKB)
     {
-        units.LoadStringW(IDS_FT_SIZE_KBYTES);
+        AtlLoadString(IDS_FT_SIZE_KBYTES, units, _countof(units));
         divider = kKB;
     }
     else
     {
-        units.LoadStringW(IDS_FT_SIZE_BYTES);
+        AtlLoadString(IDS_FT_SIZE_BYTES, units, _countof(units));
         divider = 1;
     }
 
     return StringPrintfW(L"%.2f %s",
-                         double(size) / double(divider),
+                         static_cast<double>(size) / static_cast<double>(divider),
                          units);
 }
 

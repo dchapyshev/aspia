@@ -95,42 +95,43 @@ LRESULT UiViewerToolBar::OnGetDispInfo(int control_id,
                                        BOOL& handled)
 {
     LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(hdr);
+    UINT string_id;
 
     switch (header->hdr.idFrom)
     {
         case ID_ABOUT:
-            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_ABOUT);
+            string_id = IDS_DM_TOOLTIP_ABOUT;
             break;
 
         case ID_AUTO_SIZE:
-            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_AUTO_SIZE);
+            string_id = IDS_DM_TOOLTIP_AUTO_SIZE;
             break;
 
         case ID_FULLSCREEN:
-            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_FULLSCREEN);
+            string_id = IDS_DM_TOOLTIP_FULLSCREEN;
             break;
 
         case ID_EXIT:
-            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_EXIT);
+            string_id = IDS_DM_TOOLTIP_EXIT;
             break;
 
         case ID_CAD:
-            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_CAD);
+            string_id = IDS_DM_TOOLTIP_CAD;
             break;
 
         case ID_SHORTCUTS:
-            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_SHORTCUTS);
+            string_id = IDS_DM_TOOLTIP_SHORTCUTS;
             break;
 
         case ID_SETTINGS:
-            header->lpszText = MAKEINTRESOURCEW(IDS_DM_TOOLTIP_SETTINGS);
+            string_id = IDS_DM_TOOLTIP_SETTINGS;
             break;
 
         default:
             return 0;
     }
 
-    header->hinst = GetModuleHandleW(nullptr);
+    AtlLoadString(string_id, header->szText, _countof(header->szText));
     return 0;
 }
 

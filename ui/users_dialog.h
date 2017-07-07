@@ -60,17 +60,17 @@ private:
     LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
 
-    LRESULT OnAddButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnEditButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnDeleteButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnAddButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnEditButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnDeleteButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnOkButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnCancelButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
 
-    LRESULT OnUserListDoubleClick(int control_id, LPNMHDR hdr, BOOL& handled);
-    LRESULT OnUserListRightClick(int control_id, LPNMHDR hdr, BOOL& handled);
-    LRESULT OnUserListClick(int control_id, LPNMHDR hdr, BOOL& handled);
-    LRESULT OnUserListKeyDown(int control_id, LPNMHDR hdr, BOOL& handled);
-    LRESULT OnUserListItemChanged(int control_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnUserListDoubleClick(int ctrl_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnUserListRightClick(int ctrl_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnUserListClick(int ctrl_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnUserListKeyDown(int ctrl_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnUserListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& handled);
 
     void UpdateUserList();
     int GetSelectedUserIndex();

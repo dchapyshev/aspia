@@ -87,39 +87,40 @@ LRESULT UiFileToolBar::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL
 LRESULT UiFileToolBar::OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled)
 {
     LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(hdr);
+    UINT string_id;
 
     switch (header->hdr.idFrom)
     {
         case ID_REFRESH:
-            header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_REFRESH);
+            string_id = IDS_FT_TOOLTIP_REFRESH;
             break;
 
         case ID_DELETE:
-            header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_DELETE);
+            string_id = IDS_FT_TOOLTIP_DELETE;
             break;
 
         case ID_FOLDER_ADD:
-            header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_FOLDER_ADD);
+            string_id = IDS_FT_TOOLTIP_FOLDER_ADD;
             break;
 
         case ID_FOLDER_UP:
-            header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_FOLDER_UP);
+            string_id = IDS_FT_TOOLTIP_FOLDER_UP;
             break;
 
         case ID_HOME:
-            header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_HOME);
+            string_id = IDS_FT_TOOLTIP_HOME;
             break;
 
         case ID_SEND:
         {
             if (type_ == Type::LOCAL)
             {
-                header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_SEND);
+                string_id = IDS_FT_TOOLTIP_SEND;
             }
             else
             {
                 DCHECK(type_ == Type::REMOTE);
-                header->lpszText = MAKEINTRESOURCEW(IDS_FT_TOOLTIP_RECIEVE);
+                string_id = IDS_FT_TOOLTIP_RECIEVE;
             }
         }
         break;
@@ -128,7 +129,7 @@ LRESULT UiFileToolBar::OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled)
             return 0;
     }
 
-    header->hinst = GetModuleHandleW(nullptr);
+    AtlLoadString(string_id, header->szText, _countof(header->szText));
     return TRUE;
 }
 
@@ -148,7 +149,6 @@ void UiFileToolBar::SetButtonText(int command_id, UINT resource_id)
         return;
 
     TBBUTTON button = { 0 };
-
     if (!GetButton(button_index, &button))
         return;
 

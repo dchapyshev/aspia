@@ -252,6 +252,7 @@
 #define IDS_FT_OP_BROWSE_DRIVES_ERROR         1052
 #define IDS_FT_OP_SEND_FILE_ERROR             1053
 #define IDS_FT_OP_RECIEVE_FILE_ERROR          1054
+#define IDS_FT_FILE_FOLDER                    1055
 
 // Status
 #define IDS_STATUS_MIN                        10000

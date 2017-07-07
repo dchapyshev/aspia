@@ -44,10 +44,7 @@ void UiUsersDialog::UpdateUserList()
     UpdateButtonsState();
 }
 
-LRESULT UiUsersDialog::OnInitDialog(UINT message,
-                                    WPARAM wparam,
-                                    LPARAM lparam,
-                                    BOOL& handled)
+LRESULT UiUsersDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     DlgResize_Init();
 
@@ -122,19 +119,13 @@ LRESULT UiUsersDialog::OnInitDialog(UINT message,
     return TRUE;
 }
 
-LRESULT UiUsersDialog::OnClose(UINT message,
-                               WPARAM wparam,
-                               LPARAM lparam,
-                               BOOL& handled)
+LRESULT UiUsersDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     EndDialog(IDCANCEL);
     return 0;
 }
 
-LRESULT UiUsersDialog::OnSize(UINT message,
-                              WPARAM wparam,
-                              LPARAM lparam,
-                              BOOL& handled)
+LRESULT UiUsersDialog::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     LRESULT ret = 0;
 
@@ -151,10 +142,7 @@ LRESULT UiUsersDialog::OnSize(UINT message,
     return ret;
 }
 
-LRESULT UiUsersDialog::OnAddButton(WORD notify_code,
-                                   WORD control_id,
-                                   HWND control,
-                                   BOOL& handled)
+LRESULT UiUsersDialog::OnAddButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     std::unique_ptr<proto::HostUser> user(std::make_unique<proto::HostUser>());
 
@@ -192,10 +180,7 @@ void UiUsersDialog::EditSelectedUser()
     }
 }
 
-LRESULT UiUsersDialog::OnEditButton(WORD notify_code,
-                                    WORD control_id,
-                                    HWND control,
-                                    BOOL& handled)
+LRESULT UiUsersDialog::OnEditButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     EditSelectedUser();
     return 0;
@@ -225,29 +210,20 @@ void UiUsersDialog::DeleteSelectedUser()
     }
 }
 
-LRESULT UiUsersDialog::OnDeleteButton(WORD notify_code,
-                                      WORD control_id,
-                                      HWND control,
-                                      BOOL& handled)
+LRESULT UiUsersDialog::OnDeleteButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     DeleteSelectedUser();
     return 0;
 }
 
-LRESULT UiUsersDialog::OnOkButton(WORD notify_code,
-                                  WORD control_id,
-                                  HWND control,
-                                  BOOL& handled)
+LRESULT UiUsersDialog::OnOkButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     user_list_.SaveToStorage();
     EndDialog(IDOK);
     return 0;
 }
 
-LRESULT UiUsersDialog::OnCancelButton(WORD notify_code,
-                                      WORD control_id,
-                                      HWND control,
-                                      BOOL& handled)
+LRESULT UiUsersDialog::OnCancelButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     EndDialog(IDCANCEL);
     return 0;
@@ -287,17 +263,13 @@ void UiUsersDialog::SetUserListModified()
     SetWindowTextW(text);
 }
 
-LRESULT UiUsersDialog::OnUserListDoubleClick(int control_id,
-                                             LPNMHDR hdr,
-                                             BOOL& handled)
+LRESULT UiUsersDialog::OnUserListDoubleClick(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     EditSelectedUser();
     return 0;
 }
 
-LRESULT UiUsersDialog::OnUserListRightClick(int control_id,
-                                            LPNMHDR hdr,
-                                            BOOL& handled)
+LRESULT UiUsersDialog::OnUserListRightClick(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     ShowUserPopupMenu();
     UpdateButtonsState();
@@ -320,17 +292,13 @@ void UiUsersDialog::UpdateButtonsState()
     }
 }
 
-LRESULT UiUsersDialog::OnUserListClick(int control_id,
-                                       LPNMHDR hdr,
-                                       BOOL& handled)
+LRESULT UiUsersDialog::OnUserListClick(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     UpdateButtonsState();
     return 0;
 }
 
-LRESULT UiUsersDialog::OnUserListKeyDown(int control_id,
-                                         LPNMHDR hdr,
-                                         BOOL& handled)
+LRESULT UiUsersDialog::OnUserListKeyDown(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     LPNMLVKEYDOWN keydown_header = reinterpret_cast<LPNMLVKEYDOWN>(hdr);
 
@@ -349,9 +317,7 @@ LRESULT UiUsersDialog::OnUserListKeyDown(int control_id,
     return 0;
 }
 
-LRESULT UiUsersDialog::OnUserListItemChanged(int control_id,
-                                             LPNMHDR hdr,
-                                             BOOL& handled)
+LRESULT UiUsersDialog::OnUserListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     UpdateButtonsState();
     return 0;

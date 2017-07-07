@@ -8,6 +8,7 @@
 #ifndef _ASPIA_UI__FILE_MANAGER_HELPERS_H
 #define _ASPIA_UI__FILE_MANAGER_HELPERS_H
 
+#include "base/files/file_path.h"
 #include "proto/file_transfer_session.pb.h"
 
 #include <atlbase.h>
@@ -27,15 +28,13 @@ HICON GetComputerIcon();
 
 HICON GetDirectoryIcon();
 
-HICON GetFileIcon(const std::wstring& file_name);
+HICON GetFileIcon(const FilePath& file_name);
 
 CString GetDriveDisplayName(const proto::DriveList::Item& item);
 
 CString GetDriveDescription(proto::DriveList::Item::Type type);
 
-CString GetDirectoryTypeString(const std::wstring& dir_name);
-
-CString GetFileTypeString(const std::wstring& file_name);
+CString GetFileTypeString(const FilePath& file_name);
 
 std::wstring SizeToString(uint64_t size);
 
