@@ -63,6 +63,10 @@ LRESULT UiFileStatusDialog::OnInitDialog(UINT message,
 {
     DlgResize_Init();
 
+    // Disable close button for dialog.
+    DWORD style = GetClassLongPtrW(*this, GCL_STYLE);
+    SetClassLongPtrW(*this, GCL_STYLE, style | CS_NOCLOSE);
+
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
                                    LR_CREATEDIBSECTION,
                                    GetSystemMetrics(SM_CXSMICON),
