@@ -12,11 +12,8 @@
 #include "client/client_session.h"
 #include "client/file_request_sender.h"
 #include "client/file_reply_receiver.h"
+#include "client/file_reply_receiver_queue.h"
 #include "protocol/io_buffer.h"
-
-#include <functional>
-#include <mutex>
-#include <queue>
 
 namespace aspia {
 
@@ -51,9 +48,7 @@ private:
                                               const proto::file_transfer::ClientToHost& request);
 
     ClientSession::Delegate* session_;
-
-    std::queue<std::shared_ptr<FileReplyReceiverProxy>> receiver_queue_;
-    std::mutex receiver_queue_lock_;
+    FileReplyReceiverQueue receiver_queue_;
 
     DISALLOW_COPY_AND_ASSIGN(FileRequestSenderRemote);
 };

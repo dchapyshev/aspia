@@ -68,20 +68,13 @@ void FileRequestSenderRemote::SendRenameRequest(std::shared_ptr<FileReplyReceive
 
 bool FileRequestSenderRemote::ReadIncommingMessage(const IOBuffer& buffer)
 {
-    std::shared_ptr<FileReplyReceiverProxy> receiver;
+    std::shared_ptr<FileReplyReceiverProxy> receiver = receiver_queue_.NextReceiver();
 
+    if (!receiver)
     {
-        std::lock_guard<std::mutex> lock(receiver_queue_lock_);
-
-        if (receiver_queue_.empty())
-        {
-            LOG(ERROR) << "Unexpected message received";
-            session_->OnSessionTerminate();
-            return false;
-        }
-
-        receiver = std::move(receiver_queue_.front());
-        receiver_queue_.pop();
+        DLOG(ERROR) << "Unexpected message received. Receiver queue is empty";
+        session_->OnSessionTerminate();
+        return false;
     }
 
     proto::file_transfer::HostToClient message;
@@ -117,11 +110,7 @@ bool FileRequestSenderRemote::ReadIncommingMessage(const IOBuffer& buffer)
 void FileRequestSenderRemote::SendRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                           const proto::file_transfer::ClientToHost& request)
 {
-    {
-        std::lock_guard<std::mutex> lock(receiver_queue_lock_);
-        receiver_queue_.push(std::move(receiver));
-    }
-
+    receiver_queue_.AddReceiver(receiver);
     session_->OnSessionMessageAsync(SerializeMessage<IOBuffer>(request));
 }
 
