@@ -72,7 +72,7 @@ bool FileRequestSenderRemote::ReadIncommingMessage(const IOBuffer& buffer)
 
     if (!receiver)
     {
-        DLOG(ERROR) << "Unexpected message received. Receiver queue is empty";
+        LOG(ERROR) << "Unexpected message received. Receiver queue is empty";
         session_->OnSessionTerminate();
         return false;
     }

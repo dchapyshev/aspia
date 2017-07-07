@@ -304,8 +304,6 @@ LRESULT UiFileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& h
 
             sender_->SendRemoveRequest(This(), path);
         }
-
-        sender_->SendFileListRequest(This(), file_list_.CurrentPath());
     }
 
     return 0;
@@ -371,7 +369,6 @@ LRESULT UiFileManagerPanel::OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& h
         sender_->SendRenameRequest(This(), old_name, new_name);
     }
 
-    sender_->SendFileListRequest(This(), file_list_.CurrentPath());
     return 0;
 }
 
@@ -447,17 +444,17 @@ void UiFileManagerPanel::OnFileListReply(std::unique_ptr<proto::FileList> file_l
 
 void UiFileManagerPanel::OnCreateDirectoryReply()
 {
-
+    sender_->SendFileListRequest(This(), file_list_.CurrentPath());
 }
 
 void UiFileManagerPanel::OnRemoveReply()
 {
-
+    sender_->SendFileListRequest(This(), file_list_.CurrentPath());
 }
 
 void UiFileManagerPanel::OnRenameReply()
 {
-
+    sender_->SendFileListRequest(This(), file_list_.CurrentPath());
 }
 
 } // namespace aspia
