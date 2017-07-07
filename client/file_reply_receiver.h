@@ -8,17 +8,24 @@
 #ifndef _ASPIA_CLIENT__FILE_REPLY_RECEIVER_H
 #define _ASPIA_CLIENT__FILE_REPLY_RECEIVER_H
 
-#include <base/files/file_path.h>
+#include "base/macros.h"
+#include "base/files/file_path.h"
 #include "proto/file_transfer_session.pb.h"
 
 #include <memory>
 
 namespace aspia {
 
+class FileReplyReceiverProxy;
+
 class FileReplyReceiver
 {
 public:
-    virtual ~FileReplyReceiver() = default;
+    FileReplyReceiver();
+    virtual ~FileReplyReceiver();
+
+protected:
+    std::shared_ptr<FileReplyReceiverProxy> This();
 
     virtual void OnLastRequestFailed(proto::Status status) = 0;
 
@@ -31,6 +38,13 @@ public:
     virtual void OnRemoveReply() = 0;
 
     virtual void OnRenameReply() = 0;
+
+private:
+    friend class FileReplyReceiverProxy;
+
+    std::shared_ptr<FileReplyReceiverProxy> receiver_proxy_;
+
+    DISALLOW_COPY_AND_ASSIGN(FileReplyReceiver);
 };
 
 } // namespace aspia

@@ -17,14 +17,14 @@ FileRequestSenderRemote::FileRequestSenderRemote(ClientSession::Delegate* sessio
     DCHECK(session_);
 }
 
-void FileRequestSenderRemote::SendDriveListRequest(FileReplyReceiver* receiver)
+void FileRequestSenderRemote::SendDriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver)
 {
     proto::file_transfer::ClientToHost request;
     request.mutable_drive_list_request()->set_dummy(1);
     SendRequest(receiver, request);
 }
 
-void FileRequestSenderRemote::SendFileListRequest(FileReplyReceiver* receiver,
+void FileRequestSenderRemote::SendFileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                   const FilePath& path)
 {
     proto::file_transfer::ClientToHost request;
@@ -32,7 +32,7 @@ void FileRequestSenderRemote::SendFileListRequest(FileReplyReceiver* receiver,
     SendRequest(receiver, request);
 }
 
-void FileRequestSenderRemote::SendCreateDirectoryRequest(FileReplyReceiver* receiver,
+void FileRequestSenderRemote::SendCreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                          const FilePath& path)
 {
     proto::file_transfer::ClientToHost request;
@@ -40,13 +40,13 @@ void FileRequestSenderRemote::SendCreateDirectoryRequest(FileReplyReceiver* rece
     SendRequest(receiver, request);
 }
 
-void FileRequestSenderRemote::SendDirectorySizeRequest(FileReplyReceiver* receiver,
+void FileRequestSenderRemote::SendDirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                        const FilePath& path)
 {
     // TODO
 }
 
-void FileRequestSenderRemote::SendRemoveRequest(FileReplyReceiver* receiver,
+void FileRequestSenderRemote::SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                 const FilePath& path)
 {
     proto::file_transfer::ClientToHost request;
@@ -54,7 +54,7 @@ void FileRequestSenderRemote::SendRemoveRequest(FileReplyReceiver* receiver,
     SendRequest(receiver, request);
 }
 
-void FileRequestSenderRemote::SendRenameRequest(FileReplyReceiver* receiver,
+void FileRequestSenderRemote::SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                 const FilePath& old_name,
                                                 const FilePath& new_name)
 {
@@ -68,7 +68,7 @@ void FileRequestSenderRemote::SendRenameRequest(FileReplyReceiver* receiver,
 
 bool FileRequestSenderRemote::ReadIncommingMessage(const IOBuffer& buffer)
 {
-    FileReplyReceiver* receiver;
+    std::shared_ptr<FileReplyReceiverProxy> receiver;
 
     {
         std::lock_guard<std::mutex> lock(receiver_queue_lock_);
@@ -80,7 +80,7 @@ bool FileRequestSenderRemote::ReadIncommingMessage(const IOBuffer& buffer)
             return false;
         }
 
-        receiver = receiver_queue_.front();
+        receiver = std::move(receiver_queue_.front());
         receiver_queue_.pop();
     }
 
@@ -114,12 +114,12 @@ bool FileRequestSenderRemote::ReadIncommingMessage(const IOBuffer& buffer)
     return true;
 }
 
-void FileRequestSenderRemote::SendRequest(FileReplyReceiver* receiver,
+void FileRequestSenderRemote::SendRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                           const proto::file_transfer::ClientToHost& request)
 {
     {
         std::lock_guard<std::mutex> lock(receiver_queue_lock_);
-        receiver_queue_.push(receiver);
+        receiver_queue_.push(std::move(receiver));
     }
 
     session_->OnSessionMessageAsync(SerializeMessage<IOBuffer>(request));

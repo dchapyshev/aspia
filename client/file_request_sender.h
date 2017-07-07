@@ -9,7 +9,7 @@
 #define _ASPIA_CLIENT__FILE_REQUEST_SENDER_H
 
 #include "base/files/file_path.h"
-#include "client/file_reply_receiver.h"
+#include "client/file_reply_receiver_proxy.h"
 
 namespace aspia {
 
@@ -18,17 +18,21 @@ class FileRequestSender
 public:
     virtual ~FileRequestSender() = default;
 
-    virtual void SendDriveListRequest(FileReplyReceiver* receiver) = 0;
+    virtual void SendDriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver) = 0;
 
-    virtual void SendFileListRequest(FileReplyReceiver* receiver, const FilePath& path) = 0;
+    virtual void SendFileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                     const FilePath& path) = 0;
 
-    virtual void SendCreateDirectoryRequest(FileReplyReceiver* receiver, const FilePath& path) = 0;
+    virtual void SendCreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                            const FilePath& path) = 0;
 
-    virtual void SendDirectorySizeRequest(FileReplyReceiver* receiver, const FilePath& path) = 0;
+    virtual void SendDirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                          const FilePath& path) = 0;
 
-    virtual void SendRemoveRequest(FileReplyReceiver* receiver, const FilePath& path) = 0;
+    virtual void SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                   const FilePath& path) = 0;
 
-    virtual void SendRenameRequest(FileReplyReceiver* receiver,
+    virtual void SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                    const FilePath& old_name,
                                    const FilePath& new_name) = 0;
 };

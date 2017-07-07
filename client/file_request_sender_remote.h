@@ -26,29 +26,33 @@ public:
     FileRequestSenderRemote(ClientSession::Delegate* session);
     ~FileRequestSenderRemote() = default;
 
-    void SendDriveListRequest(FileReplyReceiver* receiver) override;
+    void SendDriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver) override;
 
-    void SendFileListRequest(FileReplyReceiver* receiver, const FilePath& path) override;
+    void SendFileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                             const FilePath& path) override;
 
-    void SendCreateDirectoryRequest(FileReplyReceiver* receiver, const FilePath& path) override;
+    void SendCreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                    const FilePath& path) override;
 
-    void SendDirectorySizeRequest(FileReplyReceiver* receiver, const FilePath& path) override;
+    void SendDirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                  const FilePath& path) override;
 
-    void SendRemoveRequest(FileReplyReceiver* receiver, const FilePath& path) override;
+    void SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                           const FilePath& path) override;
 
-    void SendRenameRequest(FileReplyReceiver* receiver,
+    void SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                            const FilePath& old_name,
                            const FilePath& new_name) override;
 
     bool ReadIncommingMessage(const IOBuffer& buffer);
 
 private:
-    void FileRequestSenderRemote::SendRequest(FileReplyReceiver* receiver,
+    void FileRequestSenderRemote::SendRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                               const proto::file_transfer::ClientToHost& request);
 
     ClientSession::Delegate* session_;
 
-    std::queue<FileReplyReceiver*> receiver_queue_;
+    std::queue<std::shared_ptr<FileReplyReceiverProxy>> receiver_queue_;
     std::mutex receiver_queue_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(FileRequestSenderRemote);

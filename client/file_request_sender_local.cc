@@ -30,7 +30,7 @@ void FileRequestSenderLocal::OnAfterThreadRunning()
     // Nothing
 }
 
-void FileRequestSenderLocal::SendDriveListRequest(FileReplyReceiver* receiver)
+void FileRequestSenderLocal::SendDriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver)
 {
     if (!worker_->BelongsToCurrentThread())
     {
@@ -53,7 +53,7 @@ void FileRequestSenderLocal::SendDriveListRequest(FileReplyReceiver* receiver)
     receiver->OnDriveListReply(std::move(drive_list));
 }
 
-void FileRequestSenderLocal::SendFileListRequest(FileReplyReceiver* receiver,
+void FileRequestSenderLocal::SendFileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                  const FilePath& path)
 {
     if (!worker_->BelongsToCurrentThread())
@@ -76,7 +76,7 @@ void FileRequestSenderLocal::SendFileListRequest(FileReplyReceiver* receiver,
     receiver->OnFileListReply(std::move(file_list));
 }
 
-void FileRequestSenderLocal::SendCreateDirectoryRequest(FileReplyReceiver* receiver,
+void FileRequestSenderLocal::SendCreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                         const FilePath& path)
 {
     if (!worker_->BelongsToCurrentThread())
@@ -97,7 +97,7 @@ void FileRequestSenderLocal::SendCreateDirectoryRequest(FileReplyReceiver* recei
     receiver->OnCreateDirectoryReply();
 }
 
-void FileRequestSenderLocal::SendDirectorySizeRequest(FileReplyReceiver* receiver,
+void FileRequestSenderLocal::SendDirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                       const FilePath& path)
 {
     if (!worker_->BelongsToCurrentThread())
@@ -110,8 +110,8 @@ void FileRequestSenderLocal::SendDirectorySizeRequest(FileReplyReceiver* receive
     // TODO
 }
 
-void FileRequestSenderLocal::SendRemoveRequest(FileReplyReceiver* receiver,
-                                           const FilePath& path)
+void FileRequestSenderLocal::SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                               const FilePath& path)
 {
     if (!worker_->BelongsToCurrentThread())
     {
@@ -131,7 +131,7 @@ void FileRequestSenderLocal::SendRemoveRequest(FileReplyReceiver* receiver,
     receiver->OnRemoveReply();
 }
 
-void FileRequestSenderLocal::SendRenameRequest(FileReplyReceiver* receiver,
+void FileRequestSenderLocal::SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                const FilePath& old_name,
                                                const FilePath& new_name)
 {

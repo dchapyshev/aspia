@@ -55,7 +55,7 @@ LPARAM UiFileManagerPanel::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, 
                    WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
     status_.SetFont(default_font);
 
-    sender_->SendDriveListRequest(this);
+    sender_->SendDriveListRequest(This());
     return 0;
 }
 
@@ -203,7 +203,7 @@ LRESULT UiFileManagerPanel::OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& ha
         FilePath path(file_list_.CurrentPath());
         path.append(file_list_.ObjectName(object_index));
 
-        sender_->SendFileListRequest(this, path);
+        sender_->SendFileListRequest(This(), path);
     }
 
     return 0;
@@ -219,7 +219,7 @@ LRESULT UiFileManagerPanel::OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL&
     }
     else
     {
-        sender_->SendFileListRequest(this, path.parent_path());
+        sender_->SendFileListRequest(This(), path.parent_path());
     }
 
     return 0;
@@ -233,11 +233,11 @@ LRESULT UiFileManagerPanel::OnFolderAdd(WORD code, WORD ctrl_id, HWND ctrl, BOOL
 
 LRESULT UiFileManagerPanel::OnRefresh(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
-    sender_->SendDriveListRequest(this);
+    sender_->SendDriveListRequest(This());
 
     if (file_list_.HasDirectoryList())
     {
-        sender_->SendFileListRequest(this, file_list_.CurrentPath());
+        sender_->SendFileListRequest(This(), file_list_.CurrentPath());
     }
 
     return 0;
@@ -302,10 +302,10 @@ LRESULT UiFileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& h
             FilePath path = file_list_.CurrentPath();
             path.append(fs::u8path(object->name()));
 
-            sender_->SendRemoveRequest(this, path);
+            sender_->SendRemoveRequest(This(), path);
         }
 
-        sender_->SendFileListRequest(this, file_list_.CurrentPath());
+        sender_->SendFileListRequest(This(), file_list_.CurrentPath());
     }
 
     return 0;
@@ -328,7 +328,7 @@ void UiFileManagerPanel::MoveToDrive(int object_index)
     }
     else
     {
-        sender_->SendFileListRequest(this, drive_list_.ObjectPath(object_index));
+        sender_->SendFileListRequest(This(), drive_list_.ObjectPath(object_index));
     }
 }
 
@@ -352,7 +352,7 @@ LRESULT UiFileManagerPanel::OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& h
         FilePath path = file_list_.CurrentPath();
         path.append(buffer);
 
-        sender_->SendCreateDirectoryRequest(this, path);
+        sender_->SendCreateDirectoryRequest(This(), path);
     }
     else // Rename exists item.
     {
@@ -368,10 +368,10 @@ LRESULT UiFileManagerPanel::OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& h
         FilePath new_name = file_list_.CurrentPath();
         new_name.append(disp_info->item.pszText);
 
-        sender_->SendRenameRequest(this, old_name, new_name);
+        sender_->SendRenameRequest(This(), old_name, new_name);
     }
 
-    sender_->SendFileListRequest(this, file_list_.CurrentPath());
+    sender_->SendFileListRequest(This(), file_list_.CurrentPath());
     return 0;
 }
 
@@ -410,7 +410,7 @@ LRESULT UiFileManagerPanel::OnDriveEndEdit(int ctrl_id, LPNMHDR hdr, BOOL& handl
     {
         FilePath path(end_edit->szText);
 
-        sender_->SendFileListRequest(this, path);
+        sender_->SendFileListRequest(This(), path);
     }
 
     return 0;
