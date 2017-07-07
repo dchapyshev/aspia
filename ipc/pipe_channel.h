@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia Remote Desktop
 // FILE:            ipc/pipe_channel.h
-// LICENSE:         See top-level directory
+// LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 

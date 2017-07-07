@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia Remote Desktop
 // FILE:            base/process/process_helpers.h
-// LICENSE:         See top-level directory
+// LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
