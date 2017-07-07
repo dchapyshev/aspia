@@ -9,6 +9,7 @@
 #define _ASPIA_UI__FILE_MANAGER_H
 
 #include "base/message_loop/message_loop_thread.h"
+#include "client/file_request_sender_proxy.h"
 #include "proto/file_transfer_session.pb.h"
 #include "ui/base/splitter.h"
 #include "ui/file_manager_panel.h"
@@ -28,8 +29,8 @@ public:
         virtual void OnWindowClose() = 0;
     };
 
-    UiFileManager(FileRequestSender* local_sender,
-                  FileRequestSender* remote_sender,
+    UiFileManager(std::shared_ptr<FileRequestSenderProxy> local_sender,
+                  std::shared_ptr<FileRequestSenderProxy> remote_sender,
                   Delegate* delegate);
     ~UiFileManager();
 

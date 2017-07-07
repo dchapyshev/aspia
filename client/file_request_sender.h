@@ -13,11 +13,17 @@
 
 namespace aspia {
 
+class FileRequestSenderProxy;
+
 class FileRequestSender
 {
 public:
-    virtual ~FileRequestSender() = default;
+    FileRequestSender();
+    virtual ~FileRequestSender();
 
+    std::shared_ptr<FileRequestSenderProxy> request_sender_proxy();
+
+protected:
     virtual void SendDriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver) = 0;
 
     virtual void SendFileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
@@ -35,6 +41,13 @@ public:
     virtual void SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                    const FilePath& old_name,
                                    const FilePath& new_name) = 0;
+
+private:
+    friend class FileRequestSenderProxy;
+
+    std::shared_ptr<FileRequestSenderProxy> sender_proxy_;
+
+    DISALLOW_COPY_AND_ASSIGN(FileRequestSender);
 };
 
 } // namespace aspia

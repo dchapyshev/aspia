@@ -11,10 +11,12 @@ namespace aspia {
 
 ClientSessionFileTransfer::ClientSessionFileTransfer(const ClientConfig& config,
                                                      ClientSession::Delegate* delegate) :
-    ClientSession(config, delegate),
-    remote_sender_(delegate)
+    ClientSession(config, delegate)
 {
-    file_manager_.reset(new UiFileManager(&local_sender_, &remote_sender_, this));
+    remote_sender_ = std::make_unique<FileRequestSenderRemote>(delegate);
+    local_sender_ = std::make_unique<FileRequestSenderLocal>();
+
+    file_manager_.reset(new UiFileManager(local_sender_->request_sender_proxy(), remote_sender_->request_sender_proxy(), this));
 }
 
 ClientSessionFileTransfer::~ClientSessionFileTransfer()
@@ -24,7 +26,7 @@ ClientSessionFileTransfer::~ClientSessionFileTransfer()
 
 void ClientSessionFileTransfer::Send(const IOBuffer& buffer)
 {
-    remote_sender_.ReadIncommingMessage(buffer);
+    remote_sender_->ReadIncommingMessage(buffer);
 }
 
 void ClientSessionFileTransfer::OnWindowClose()

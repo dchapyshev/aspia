@@ -17,7 +17,7 @@ FileReplyReceiver::FileReplyReceiver()
 
 FileReplyReceiver::~FileReplyReceiver()
 {
-    receiver_proxy_->WillDestroyCurrentClientSession();
+    receiver_proxy_->WillDestroyCurrentReplyReceiver();
     receiver_proxy_ = nullptr;
 }
 

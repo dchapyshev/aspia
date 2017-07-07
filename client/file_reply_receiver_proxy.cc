@@ -15,7 +15,7 @@ FileReplyReceiverProxy::FileReplyReceiverProxy(FileReplyReceiver* receiver) :
     // Nothing
 }
 
-void FileReplyReceiverProxy::WillDestroyCurrentClientSession()
+void FileReplyReceiverProxy::WillDestroyCurrentReplyReceiver()
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
     receiver_ = nullptr;

@@ -22,7 +22,7 @@ static_assert(UiFileList::kInvalidObjectIndex == UiDriveList::kInvalidObjectInde
               "Values must be equal");
 
 UiFileManagerPanel::UiFileManagerPanel(PanelType panel_type,
-                                       FileRequestSender* sender) :
+                                       std::shared_ptr<FileRequestSenderProxy> sender) :
     toolbar_(panel_type == PanelType::LOCAL ?
              UiFileToolBar::Type::LOCAL : UiFileToolBar::Type::REMOTE),
     panel_type_(panel_type),
@@ -408,9 +408,7 @@ LRESULT UiFileManagerPanel::OnDriveEndEdit(int ctrl_id, LPNMHDR hdr, BOOL& handl
 
     if (end_edit->fChanged && end_edit->iWhy == CBENF_RETURN && end_edit->szText)
     {
-        FilePath path(end_edit->szText);
-
-        sender_->SendFileListRequest(This(), path);
+        sender_->SendFileListRequest(This(), FilePath(end_edit->szText));
     }
 
     return 0;

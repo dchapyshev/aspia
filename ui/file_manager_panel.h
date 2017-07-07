@@ -10,7 +10,7 @@
 
 #include "base/files/file_path.h"
 #include "base/macros.h"
-#include "client/file_request_sender.h"
+#include "client/file_request_sender_proxy.h"
 #include "proto/file_transfer_session.pb.h"
 #include "ui/file_toolbar.h"
 #include "ui/file_list.h"
@@ -27,7 +27,7 @@ public:
     enum class PanelType { LOCAL, REMOTE };
 
     UiFileManagerPanel(PanelType panel_type,
-                       FileRequestSender* sender);
+                       std::shared_ptr<FileRequestSenderProxy> sender);
     virtual ~UiFileManagerPanel() = default;
 
 private:
@@ -82,7 +82,7 @@ private:
     void MoveToDrive(int object_index);
 
     const PanelType panel_type_;
-    FileRequestSender* sender_;
+    std::shared_ptr<FileRequestSenderProxy> sender_;
 
     CStatic title_;
     UiDriveList drive_list_;

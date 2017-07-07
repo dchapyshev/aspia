@@ -31,7 +31,7 @@ private:
     explicit FileReplyReceiverProxy(FileReplyReceiver* receiver);
 
     // Called directly by FileReplyReceiver::~FileReplyReceiver.
-    void WillDestroyCurrentClientSession();
+    void WillDestroyCurrentReplyReceiver();
 
     FileReplyReceiver* receiver_;
     std::mutex receiver_lock_;

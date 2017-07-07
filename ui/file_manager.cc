@@ -18,8 +18,8 @@ static const int kDefaultWindowWidth = 980;
 static const int kDefaultWindowHeight = 700;
 static const int kBorderSize = 3;
 
-UiFileManager::UiFileManager(FileRequestSender* local_sender,
-                             FileRequestSender* remote_sender,
+UiFileManager::UiFileManager(std::shared_ptr<FileRequestSenderProxy> local_sender,
+                             std::shared_ptr<FileRequestSenderProxy> remote_sender,
                              Delegate* delegate) :
     delegate_(delegate),
     local_panel_(PanelType::LOCAL, local_sender),

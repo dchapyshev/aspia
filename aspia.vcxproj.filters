@@ -466,6 +466,12 @@
     <ClCompile Include="client\file_reply_receiver.cc">
       <Filter>client</Filter>
     </ClCompile>
+    <ClCompile Include="client\file_request_sender.cc">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="client\file_request_sender_proxy.cc">
+      <Filter>client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -999,6 +1005,9 @@
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="client\file_reply_receiver_proxy.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="client\file_request_sender_proxy.h">
       <Filter>client</Filter>
     </ClInclude>
   </ItemGroup>

@@ -34,8 +34,8 @@ private:
 
     std::unique_ptr<UiFileManager> file_manager_;
 
-    FileRequestSenderLocal local_sender_;
-    FileRequestSenderRemote remote_sender_;
+    std::unique_ptr<FileRequestSenderLocal> local_sender_;
+    std::unique_ptr<FileRequestSenderRemote> remote_sender_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);
 };
