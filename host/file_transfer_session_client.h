@@ -14,9 +14,7 @@
 
 namespace aspia {
 
-class FileTransferSessionClient :
-    private PipeChannel::Delegate,
-    private UiFileStatusDialog::Delegate
+class FileTransferSessionClient : private PipeChannel::Delegate
 {
 public:
     FileTransferSessionClient() = default;
@@ -30,9 +28,6 @@ private:
     void OnPipeChannelConnect(uint32_t user_data) override;
     void OnPipeChannelDisconnect() override;
     void OnPipeChannelMessage(const IOBuffer& buffer) override;
-
-    // UiFileStatusWindow::Delegate implementation.
-    void OnWindowClose() override;
 
     void WriteMessage(const proto::file_transfer::HostToClient& message);
 

@@ -31,14 +31,13 @@ class UiFileStatusDialog :
 public:
     enum { IDD = IDD_FILE_STATUS };
 
-    class Delegate
-    {
-    public:
-        virtual void OnWindowClose() = 0;
-    };
-
-    UiFileStatusDialog(Delegate* delegate);
+    UiFileStatusDialog();
     ~UiFileStatusDialog();
+
+    void WaitForClose();
+
+    void SetSessionStartedStatus();
+    void SetSessionTerminatedStatus();
 
     void SetDriveListRequestStatus(proto::RequestStatus status);
 
@@ -79,8 +78,6 @@ private:
     LRESULT OnStopButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     void WriteLog(const CString& message, proto::RequestStatus status);
-
-    Delegate* delegate_ = nullptr;
 
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;

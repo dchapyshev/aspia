@@ -137,7 +137,11 @@ void HostSessionConsole::OnSessionDetached()
 
     process_watcher_.StopWatching();
 
-    process_.Terminate(0, false);
+    if (session_type_ != proto::SessionType::SESSION_TYPE_FILE_TRANSFER)
+    {
+        process_.Terminate(0, false);
+    }
+
     process_.Close();
 
     ipc_channel_.reset();

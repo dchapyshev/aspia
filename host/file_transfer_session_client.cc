@@ -19,23 +19,21 @@ namespace fs = std::experimental::filesystem;
 void FileTransferSessionClient::Run(const std::wstring& input_channel_name,
                                     const std::wstring& output_channel_name)
 {
+    status_dialog_ = std::make_unique<UiFileStatusDialog>();
+
     ipc_channel_ = PipeChannel::CreateClient(input_channel_name,
                                              output_channel_name);
-    if (!ipc_channel_)
-        return;
-
-    if (ipc_channel_->Connect(GetCurrentProcessId(), this))
+    if (ipc_channel_)
     {
-        // Waiting for the connection to close.
-        ipc_channel_->Wait();
+        if (ipc_channel_->Connect(GetCurrentProcessId(), this))
+        {
+            status_dialog_->WaitForClose();
+        }
+
+        ipc_channel_.reset();
     }
 
-    ipc_channel_.reset();
-}
-
-void FileTransferSessionClient::OnWindowClose()
-{
-    ipc_channel_->Close();
+    status_dialog_.reset();
 }
 
 void FileTransferSessionClient::OnPipeChannelConnect(uint32_t user_data)
@@ -49,12 +47,12 @@ void FileTransferSessionClient::OnPipeChannelConnect(uint32_t user_data)
         return;
     }
 
-    status_dialog_.reset(new UiFileStatusDialog(this));
+    status_dialog_->SetSessionStartedStatus();
 }
 
 void FileTransferSessionClient::OnPipeChannelDisconnect()
 {
-    // Nothing
+    status_dialog_->SetSessionTerminatedStatus();
 }
 
 void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)

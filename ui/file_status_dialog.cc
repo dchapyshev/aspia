@@ -19,17 +19,19 @@ namespace fs = std::experimental::filesystem;
 
 static const int kBorderSize = 10;
 
-UiFileStatusDialog::UiFileStatusDialog(Delegate* delegate) :
-    delegate_(delegate)
+UiFileStatusDialog::UiFileStatusDialog()
 {
-    DCHECK(delegate_);
-
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
 UiFileStatusDialog::~UiFileStatusDialog()
 {
     ui_thread_.Stop();
+}
+
+void UiFileStatusDialog::WaitForClose()
+{
+    ui_thread_.Join();
 }
 
 void UiFileStatusDialog::OnBeforeThreadRunning()
@@ -52,7 +54,6 @@ void UiFileStatusDialog::OnBeforeThreadRunning()
 void UiFileStatusDialog::OnAfterThreadRunning()
 {
     DestroyWindow();
-    delegate_->OnWindowClose();
 }
 
 LRESULT UiFileStatusDialog::OnInitDialog(UINT message,
@@ -76,11 +77,6 @@ LRESULT UiFileStatusDialog::OnInitDialog(UINT message,
 
     SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0,
                  SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
-
-    CString start_message;
-    start_message.LoadStringW(IDS_FT_OP_SESSION_START);
-
-    WriteLog(start_message, proto::RequestStatus::REQUEST_STATUS_SUCCESS);
 
     GetDlgItem(IDC_MINIMIZE_BUTTON).SetFocus();
     return FALSE;
@@ -147,6 +143,32 @@ void UiFileStatusDialog::WriteLog(const CString& message, proto::RequestStatus s
     }
 
     edit.AppendText(L"\r\n");
+}
+
+void UiFileStatusDialog::SetSessionStartedStatus()
+{
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&UiFileStatusDialog::SetSessionStartedStatus, this));
+        return;
+    }
+
+    CString message;
+    message.LoadStringW(IDS_FT_OP_SESSION_START);
+    WriteLog(message, proto::RequestStatus::REQUEST_STATUS_SUCCESS);
+}
+
+void UiFileStatusDialog::SetSessionTerminatedStatus()
+{
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&UiFileStatusDialog::SetSessionTerminatedStatus, this));
+        return;
+    }
+
+    CString message;
+    message.LoadStringW(IDS_FT_OP_SESSION_END);
+    WriteLog(message, proto::RequestStatus::REQUEST_STATUS_SUCCESS);
 }
 
 void UiFileStatusDialog::SetDriveListRequestStatus(proto::RequestStatus status)
