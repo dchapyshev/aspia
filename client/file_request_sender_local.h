@@ -46,6 +46,24 @@ private:
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
+    void DriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver);
+
+    void FileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                             const FilePath& path);
+
+    void CreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                    const FilePath& path);
+
+    void DirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                              const FilePath& path);
+
+    void RemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                       const FilePath& path);
+
+    void RenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                       const FilePath& old_name,
+                       const FilePath& new_name);
+
     MessageLoopThread worker_thread_;
     std::shared_ptr<MessageLoopProxy> worker_;
 

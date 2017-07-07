@@ -40,17 +40,17 @@ public:
     UiFileStatusDialog(Delegate* delegate);
     ~UiFileStatusDialog();
 
-    void SetDriveListRequestStatus(proto::Status status);
+    void SetDriveListRequestStatus(proto::RequestStatus status);
 
-    void SetFileListRequestStatus(const FilePath& path, proto::Status status);
+    void SetFileListRequestStatus(const FilePath& path, proto::RequestStatus status);
 
-    void SetCreateDirectoryRequestStatus(const FilePath& path, proto::Status status);
+    void SetCreateDirectoryRequestStatus(const FilePath& path, proto::RequestStatus status);
 
     void SetRenameRequestStatus(const FilePath& old_name,
                                 const FilePath& new_name,
-                                proto::Status status);
+                                proto::RequestStatus status);
 
-    void SetRemoveRequestStatus(const FilePath& path, proto::Status status);
+    void SetRemoveRequestStatus(const FilePath& path, proto::RequestStatus status);
 
 private:
     BEGIN_MSG_MAP(UiFileStatusDialog)
@@ -78,7 +78,7 @@ private:
     LRESULT OnMinimizeButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnStopButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
-    void WriteLog(const CString& message, proto::Status status);
+    void WriteLog(const CString& message, proto::RequestStatus status);
 
     Delegate* delegate_ = nullptr;
 

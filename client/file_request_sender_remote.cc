@@ -20,7 +20,7 @@ FileRequestSenderRemote::FileRequestSenderRemote(ClientSession::Delegate* sessio
 void FileRequestSenderRemote::SendDriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver)
 {
     proto::file_transfer::ClientToHost request;
-    request.mutable_drive_list_request()->set_dummy(1);
+    request.set_type(proto::RequestType::REQUEST_TYPE_DRIVE_LIST);
     SendRequest(receiver, request);
 }
 
@@ -28,6 +28,7 @@ void FileRequestSenderRemote::SendFileListRequest(std::shared_ptr<FileReplyRecei
                                                   const FilePath& path)
 {
     proto::file_transfer::ClientToHost request;
+    request.set_type(proto::RequestType::REQUEST_TYPE_FILE_LIST);
     request.mutable_file_list_request()->set_path(path.u8string());
     SendRequest(receiver, request);
 }
@@ -36,6 +37,7 @@ void FileRequestSenderRemote::SendCreateDirectoryRequest(std::shared_ptr<FileRep
                                                          const FilePath& path)
 {
     proto::file_transfer::ClientToHost request;
+    request.set_type(proto::RequestType::REQUEST_TYPE_CREATE_DIRECTORY);
     request.mutable_create_directory_request()->set_path(path.u8string());
     SendRequest(receiver, request);
 }
@@ -50,6 +52,7 @@ void FileRequestSenderRemote::SendRemoveRequest(std::shared_ptr<FileReplyReceive
                                                 const FilePath& path)
 {
     proto::file_transfer::ClientToHost request;
+    request.set_type(proto::RequestType::REQUEST_TYPE_REMOVE);
     request.mutable_remove_request()->set_path(path.u8string());
     SendRequest(receiver, request);
 }
@@ -60,6 +63,7 @@ void FileRequestSenderRemote::SendRenameRequest(std::shared_ptr<FileReplyReceive
 {
     proto::file_transfer::ClientToHost request;
 
+    request.set_type(proto::RequestType::REQUEST_TYPE_RENAME);
     request.mutable_rename_request()->set_old_name(old_name.u8string());
     request.mutable_rename_request()->set_new_name(new_name.u8string());
 
@@ -73,35 +77,73 @@ bool FileRequestSenderRemote::ReadIncommingMessage(const IOBuffer& buffer)
     if (!receiver)
     {
         LOG(ERROR) << "Unexpected message received. Receiver queue is empty";
-        session_->OnSessionTerminate();
         return false;
     }
 
     proto::file_transfer::HostToClient message;
 
     if (!ParseMessage(buffer, message))
-    {
-        session_->OnSessionTerminate();
         return false;
-    }
 
-    if (message.status() != proto::Status::STATUS_SUCCESS)
+    switch (message.type())
     {
-        receiver->OnLastRequestFailed(message.status());
-    }
-    else if (message.has_drive_list())
-    {
-        std::unique_ptr<proto::DriveList> drive_list(message.release_drive_list());
-        receiver->OnDriveListReply(std::move(drive_list));
-    }
-    else if (message.has_file_list())
-    {
-        std::unique_ptr<proto::FileList> file_list(message.release_file_list());
-        receiver->OnFileListReply(std::move(file_list));
-    }
-    else
-    {
-        DLOG(WARNING) << "Unhandled message from host";
+        case proto::RequestType::REQUEST_TYPE_DRIVE_LIST:
+        {
+            if (message.status() == proto::RequestStatus::REQUEST_STATUS_SUCCESS)
+            {
+                if (!message.has_drive_list())
+                    return false;
+
+                std::unique_ptr<proto::DriveList> drive_list(message.release_drive_list());
+                receiver->OnDriveListRequestReply(std::move(drive_list));
+            }
+            else
+            {
+                receiver->OnDriveListRequestFailure(message.status());
+            }
+        }
+        break;
+
+        case proto::RequestType::REQUEST_TYPE_FILE_LIST:
+        {
+            if (message.status() == proto::RequestStatus::REQUEST_STATUS_SUCCESS)
+            {
+                if (!message.has_file_list())
+                    return false;
+
+                std::unique_ptr<proto::FileList> file_list(message.release_file_list());
+                receiver->OnFileListRequestReply(std::move(file_list));
+            }
+            else
+            {
+                receiver->OnFileListRequestFailure(message.status());
+            }
+        }
+        break;
+
+        case proto::RequestType::REQUEST_TYPE_DIRECTORY_SIZE:
+        {
+            // TODO
+        }
+        break;
+
+        case proto::RequestType::REQUEST_TYPE_CREATE_DIRECTORY:
+        {
+            receiver->OnCreateDirectoryRequestReply(message.status());
+        }
+        break;
+
+        case proto::RequestType::REQUEST_TYPE_RENAME:
+        {
+            receiver->OnRenameRequestReply(message.status());
+        }
+        break;
+
+        case proto::RequestType::REQUEST_TYPE_REMOVE:
+        {
+            receiver->OnRemoveRequestReply(message.status());
+        }
+        break;
     }
 
     return true;

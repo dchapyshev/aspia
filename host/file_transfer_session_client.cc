@@ -61,49 +61,43 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
 {
     proto::file_transfer::ClientToHost message;
 
-    if (ParseMessage(buffer, message))
+    if (!ParseMessage(buffer, message))
     {
-        bool success = true;
-
-        if (message.has_drive_list_request())
-        {
-            success = ReadDriveListRequestMessage(message.drive_list_request());
-        }
-        else if (message.has_file_list_request())
-        {
-            ReadFileListRequestMessage(message.file_list_request());
-        }
-        else if (message.has_file_request())
-        {
-            //success = ReadFileRequestMessage(message.file_request());
-        }
-        else if (message.has_file_packet())
-        {
-            //success = ReadFilePacketMessage(message.file_packet());
-        }
-        else if (message.has_create_directory_request())
-        {
-            ReadCreateDirectoryRequest(message.create_directory_request());
-        }
-        else if (message.has_rename_request())
-        {
-            ReadRenameRequest(message.rename_request());
-        }
-        else if (message.has_remove_request())
-        {
-            ReadRemoveRequest(message.remove_request());
-        }
-        else
-        {
-            // Unknown messages are ignored.
-            DLOG(WARNING) << "Unhandled message from host";
-        }
-
-        if (success)
-            return;
+        ipc_channel_->Close();
+        return;
     }
 
-    ipc_channel_->Close();
+    switch (message.type())
+    {
+        case proto::RequestType::REQUEST_TYPE_DRIVE_LIST:
+            ReadDriveListRequestMessage();
+            break;
+
+        case proto::RequestType::REQUEST_TYPE_FILE_LIST:
+            ReadFileListRequestMessage(message.file_list_request());
+            break;
+
+        case proto::RequestType::REQUEST_TYPE_DIRECTORY_SIZE:
+            // TODO
+            break;
+
+        case proto::RequestType::REQUEST_TYPE_CREATE_DIRECTORY:
+            ReadCreateDirectoryRequest(message.create_directory_request());
+            break;
+
+        case proto::RequestType::REQUEST_TYPE_RENAME:
+            ReadRenameRequest(message.rename_request());
+            break;
+
+        case proto::RequestType::REQUEST_TYPE_REMOVE:
+            ReadRemoveRequest(message.remove_request());
+            break;
+
+        default:
+            LOG(ERROR) << "Unknown message from client: " << message.type();
+            ipc_channel_->Close();
+            break;
+    }
 }
 
 void FileTransferSessionClient::WriteMessage(
@@ -114,23 +108,14 @@ void FileTransferSessionClient::WriteMessage(
     ipc_channel_->Send(buffer);
 }
 
-void FileTransferSessionClient::WriteStatus(proto::Status status)
+void FileTransferSessionClient::ReadDriveListRequestMessage()
 {
     proto::file_transfer::HostToClient message;
-    message.set_status(status);
-    WriteMessage(message);
-}
-
-bool FileTransferSessionClient::ReadDriveListRequestMessage(
-    const proto::DriveListRequest& request)
-{
-    proto::file_transfer::HostToClient message;
+    message.set_type(proto::RequestType::REQUEST_TYPE_DRIVE_LIST);
     message.set_status(ExecuteDriveListRequest(message.mutable_drive_list()));
 
     status_dialog_->SetDriveListRequestStatus(message.status());
     WriteMessage(message);
-
-    return true;
 }
 
 void FileTransferSessionClient::ReadFileListRequestMessage(
@@ -139,6 +124,8 @@ void FileTransferSessionClient::ReadFileListRequestMessage(
     proto::file_transfer::HostToClient message;
 
     FilePath path = fs::u8path(request.path());
+
+    message.set_type(proto::RequestType::REQUEST_TYPE_FILE_LIST);
     message.set_status(ExecuteFileListRequest(path, message.mutable_file_list()));
 
     status_dialog_->SetFileListRequestStatus(path, message.status());
@@ -151,6 +138,8 @@ void FileTransferSessionClient::ReadCreateDirectoryRequest(
     proto::file_transfer::HostToClient message;
 
     FilePath path = fs::u8path(request.path());
+
+    message.set_type(proto::RequestType::REQUEST_TYPE_CREATE_DIRECTORY);
     message.set_status(ExecuteCreateDirectoryRequest(path));
 
     status_dialog_->SetCreateDirectoryRequestStatus(path, message.status());
@@ -165,6 +154,7 @@ void FileTransferSessionClient::ReadRenameRequest(
     FilePath old_name = fs::u8path(request.old_name());
     FilePath new_name = fs::u8path(request.new_name());
 
+    message.set_type(proto::RequestType::REQUEST_TYPE_RENAME);
     message.set_status(ExecuteRenameRequest(old_name, new_name));
 
     status_dialog_->SetRenameRequestStatus(old_name, new_name, message.status());
@@ -177,6 +167,8 @@ void FileTransferSessionClient::ReadRemoveRequest(
     proto::file_transfer::HostToClient message;
 
     FilePath path = fs::u8path(request.path());
+
+    message.set_type(proto::RequestType::REQUEST_TYPE_REMOVE);
     message.set_status(ExecuteRemoveRequest(path));
 
     status_dialog_->SetRemoveRequestStatus(path, message.status());

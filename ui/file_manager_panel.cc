@@ -256,38 +256,7 @@ LRESULT UiFileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& h
     title.LoadStringW(IDS_CONFIRMATION);
 
     CString message;
-
-    std::wstring object_list;
-
-    if (selected_count == 1)
-    {
-        proto::FileList::Item* object = file_list_.FirstSelectedObject();
-        if (!object)
-            return 0;
-
-        object_list = UNICODEfromUTF8(object->name());
-
-        if (object->is_directory())
-            message.Format(IDS_FT_DELETE_CONFORM_DIR, object_list.c_str());
-        else
-            message.Format(IDS_FT_DELETE_CONFORM_FILE, object_list.c_str());
-    }
-    else
-    {
-        for (UiFileList::Iterator iter(file_list_, UiFileList::Iterator::SELECTED);
-             !iter.IsAtEnd();
-             iter.Advance())
-        {
-            proto::FileList::Item* object = iter.Object();
-            if (!object)
-                continue;
-
-            object_list.append(UNICODEfromUTF8(object->name()));
-            object_list.append(L"\r\n");
-        }
-
-        message.Format(IDS_FT_DELETE_CONFORM_MULTI, object_list.c_str());
-    }
+    message.Format(IDS_FT_DELETE_CONFORM, selected_count);
 
     if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
@@ -417,12 +386,7 @@ LRESULT UiFileManagerPanel::OnHome(WORD code, WORD ctrl_id, HWND ctrl, BOOL& han
     return 0;
 }
 
-void UiFileManagerPanel::OnLastRequestFailed(proto::Status status)
-{
-
-}
-
-void UiFileManagerPanel::OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list)
+void UiFileManagerPanel::OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list)
 {
     drive_list_.Read(std::move(drive_list));
 
@@ -432,7 +396,12 @@ void UiFileManagerPanel::OnDriveListReply(std::unique_ptr<proto::DriveList> driv
     }
 }
 
-void UiFileManagerPanel::OnFileListReply(std::unique_ptr<proto::FileList> file_list)
+void UiFileManagerPanel::OnDriveListRequestFailure(proto::RequestStatus status)
+{
+    // TODO
+}
+
+void UiFileManagerPanel::OnFileListRequestReply(std::unique_ptr<proto::FileList> file_list)
 {
     toolbar_.EnableButton(ID_FOLDER_ADD, TRUE);
     toolbar_.EnableButton(ID_FOLDER_UP, TRUE);
@@ -442,17 +411,22 @@ void UiFileManagerPanel::OnFileListReply(std::unique_ptr<proto::FileList> file_l
     drive_list_.SetCurrentPath(file_list_.CurrentPath());
 }
 
-void UiFileManagerPanel::OnCreateDirectoryReply()
+void UiFileManagerPanel::OnFileListRequestFailure(proto::RequestStatus status)
+{
+    // TODO
+}
+
+void UiFileManagerPanel::OnCreateDirectoryRequestReply(proto::RequestStatus status)
 {
     sender_->SendFileListRequest(This(), file_list_.CurrentPath());
 }
 
-void UiFileManagerPanel::OnRemoveReply()
+void UiFileManagerPanel::OnRemoveRequestReply(proto::RequestStatus status)
 {
     sender_->SendFileListRequest(This(), file_list_.CurrentPath());
 }
 
-void UiFileManagerPanel::OnRenameReply()
+void UiFileManagerPanel::OnRenameRequestReply(proto::RequestStatus status)
 {
     sender_->SendFileListRequest(This(), file_list_.CurrentPath());
 }

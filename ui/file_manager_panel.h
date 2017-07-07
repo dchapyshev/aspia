@@ -72,12 +72,13 @@ private:
     LRESULT OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
 
     // FileReplyReceiver implementation.
-    void OnLastRequestFailed(proto::Status status) override;
-    void OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list) override;
-    void OnFileListReply(std::unique_ptr<proto::FileList> file_list) override;
-    void OnCreateDirectoryReply() override;
-    void OnRemoveReply() override;
-    void OnRenameReply() override;
+    void OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list) override;
+    void OnDriveListRequestFailure(proto::RequestStatus status) override;
+    void OnFileListRequestReply(std::unique_ptr<proto::FileList> file_list) override;
+    void OnFileListRequestFailure(proto::RequestStatus status) override;
+    void OnCreateDirectoryRequestReply(proto::RequestStatus status) override;
+    void OnRemoveRequestReply(proto::RequestStatus status) override;
+    void OnRenameRequestReply(proto::RequestStatus status) override;
 
     void MoveToDrive(int object_index);
 

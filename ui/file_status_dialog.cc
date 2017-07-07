@@ -80,7 +80,7 @@ LRESULT UiFileStatusDialog::OnInitDialog(UINT message,
     CString start_message;
     start_message.LoadStringW(IDS_FT_OP_SESSION_START);
 
-    WriteLog(start_message, proto::Status::STATUS_SUCCESS);
+    WriteLog(start_message, proto::RequestStatus::REQUEST_STATUS_SUCCESS);
 
     GetDlgItem(IDC_MINIMIZE_BUTTON).SetFocus();
     return FALSE;
@@ -131,7 +131,7 @@ static std::wstring CurrentTime()
     return datetime;
 }
 
-void UiFileStatusDialog::WriteLog(const CString& message, proto::Status status)
+void UiFileStatusDialog::WriteLog(const CString& message, proto::RequestStatus status)
 {
     CEdit edit(GetDlgItem(IDC_STATUS_EDIT));
 
@@ -139,17 +139,17 @@ void UiFileStatusDialog::WriteLog(const CString& message, proto::Status status)
     edit.AppendText(L" ");
     edit.AppendText(message);
 
-    if (status != proto::Status::STATUS_SUCCESS)
+    if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
     {
         edit.AppendText(L" (");
-        edit.AppendText(StatusCodeToString(status));
+        edit.AppendText(RequestStatusCodeToString(status));
         edit.AppendText(L")");
     }
 
     edit.AppendText(L"\r\n");
 }
 
-void UiFileStatusDialog::SetDriveListRequestStatus(proto::Status status)
+void UiFileStatusDialog::SetDriveListRequestStatus(proto::RequestStatus status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -165,7 +165,7 @@ void UiFileStatusDialog::SetDriveListRequestStatus(proto::Status status)
 }
 
 void UiFileStatusDialog::SetFileListRequestStatus(const FilePath& path,
-                                                  proto::Status status)
+                                                  proto::RequestStatus status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -182,7 +182,7 @@ void UiFileStatusDialog::SetFileListRequestStatus(const FilePath& path,
 }
 
 void UiFileStatusDialog::SetCreateDirectoryRequestStatus(const FilePath& path,
-                                                         proto::Status status)
+                                                         proto::RequestStatus status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -200,7 +200,7 @@ void UiFileStatusDialog::SetCreateDirectoryRequestStatus(const FilePath& path,
 
 void UiFileStatusDialog::SetRenameRequestStatus(const FilePath& old_name,
                                                 const FilePath& new_name,
-                                                proto::Status status)
+                                                proto::RequestStatus status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -218,7 +218,7 @@ void UiFileStatusDialog::SetRenameRequestStatus(const FilePath& old_name,
 }
 
 void UiFileStatusDialog::SetRemoveRequestStatus(const FilePath& path,
-                                                proto::Status status)
+                                                proto::RequestStatus status)
 {
     if (!runner_->BelongsToCurrentThread())
     {

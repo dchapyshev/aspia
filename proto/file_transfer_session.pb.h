@@ -29,7 +29,6 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include "file_transfer_session_message.pb.h"
-#include "status.pb.h"
 // @@protoc_insertion_point(includes)
 namespace aspia {
 namespace proto {
@@ -45,9 +44,6 @@ extern DirectorySizeRequestDefaultTypeInternal _DirectorySizeRequest_default_ins
 class DriveList;
 class DriveListDefaultTypeInternal;
 extern DriveListDefaultTypeInternal _DriveList_default_instance_;
-class DriveListRequest;
-class DriveListRequestDefaultTypeInternal;
-extern DriveListRequestDefaultTypeInternal _DriveListRequest_default_instance_;
 class DriveList_Item;
 class DriveList_ItemDefaultTypeInternal;
 extern DriveList_ItemDefaultTypeInternal _DriveList_Item_default_instance_;
@@ -165,47 +161,53 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.DriveList drive_list = 2;
+  // .aspia.proto.DriveList drive_list = 3;
   bool has_drive_list() const;
   void clear_drive_list();
-  static const int kDriveListFieldNumber = 2;
+  static const int kDriveListFieldNumber = 3;
   const ::aspia::proto::DriveList& drive_list() const;
   ::aspia::proto::DriveList* mutable_drive_list();
   ::aspia::proto::DriveList* release_drive_list();
   void set_allocated_drive_list(::aspia::proto::DriveList* drive_list);
 
-  // .aspia.proto.FileList file_list = 3;
+  // .aspia.proto.FileList file_list = 4;
   bool has_file_list() const;
   void clear_file_list();
-  static const int kFileListFieldNumber = 3;
+  static const int kFileListFieldNumber = 4;
   const ::aspia::proto::FileList& file_list() const;
   ::aspia::proto::FileList* mutable_file_list();
   ::aspia::proto::FileList* release_file_list();
   void set_allocated_file_list(::aspia::proto::FileList* file_list);
 
-  // .aspia.proto.DirectorySize directory_size = 4;
+  // .aspia.proto.DirectorySize directory_size = 5;
   bool has_directory_size() const;
   void clear_directory_size();
-  static const int kDirectorySizeFieldNumber = 4;
+  static const int kDirectorySizeFieldNumber = 5;
   const ::aspia::proto::DirectorySize& directory_size() const;
   ::aspia::proto::DirectorySize* mutable_directory_size();
   ::aspia::proto::DirectorySize* release_directory_size();
   void set_allocated_directory_size(::aspia::proto::DirectorySize* directory_size);
 
-  // .aspia.proto.FilePacket file_packet = 5;
+  // .aspia.proto.FilePacket file_packet = 6;
   bool has_file_packet() const;
   void clear_file_packet();
-  static const int kFilePacketFieldNumber = 5;
+  static const int kFilePacketFieldNumber = 6;
   const ::aspia::proto::FilePacket& file_packet() const;
   ::aspia::proto::FilePacket* mutable_file_packet();
   ::aspia::proto::FilePacket* release_file_packet();
   void set_allocated_file_packet(::aspia::proto::FilePacket* file_packet);
 
-  // .aspia.proto.Status status = 1;
+  // .aspia.proto.RequestType type = 1;
+  void clear_type();
+  static const int kTypeFieldNumber = 1;
+  ::aspia::proto::RequestType type() const;
+  void set_type(::aspia::proto::RequestType value);
+
+  // .aspia.proto.RequestStatus status = 2;
   void clear_status();
-  static const int kStatusFieldNumber = 1;
-  ::aspia::proto::Status status() const;
-  void set_status(::aspia::proto::Status value);
+  static const int kStatusFieldNumber = 2;
+  ::aspia::proto::RequestStatus status() const;
+  void set_status(::aspia::proto::RequestStatus value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.file_transfer.HostToClient)
  private:
@@ -215,6 +217,7 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::FileList* file_list_;
   ::aspia::proto::DirectorySize* directory_size_;
   ::aspia::proto::FilePacket* file_packet_;
+  int type_;
   int status_;
   mutable int _cached_size_;
   friend struct protobuf_file_5ftransfer_5fsession_2eproto::TableStruct;
@@ -283,15 +286,6 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.DriveListRequest drive_list_request = 1;
-  bool has_drive_list_request() const;
-  void clear_drive_list_request();
-  static const int kDriveListRequestFieldNumber = 1;
-  const ::aspia::proto::DriveListRequest& drive_list_request() const;
-  ::aspia::proto::DriveListRequest* mutable_drive_list_request();
-  ::aspia::proto::DriveListRequest* release_drive_list_request();
-  void set_allocated_drive_list_request(::aspia::proto::DriveListRequest* drive_list_request);
-
   // .aspia.proto.FileListRequest file_list_request = 2;
   bool has_file_list_request() const;
   void clear_file_list_request();
@@ -310,63 +304,69 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::DirectorySizeRequest* release_directory_size_request();
   void set_allocated_directory_size_request(::aspia::proto::DirectorySizeRequest* directory_size_request);
 
-  // .aspia.proto.FilePacketRequest file_request = 4;
-  bool has_file_request() const;
-  void clear_file_request();
-  static const int kFileRequestFieldNumber = 4;
-  const ::aspia::proto::FilePacketRequest& file_request() const;
-  ::aspia::proto::FilePacketRequest* mutable_file_request();
-  ::aspia::proto::FilePacketRequest* release_file_request();
-  void set_allocated_file_request(::aspia::proto::FilePacketRequest* file_request);
-
-  // .aspia.proto.FilePacket file_packet = 5;
-  bool has_file_packet() const;
-  void clear_file_packet();
-  static const int kFilePacketFieldNumber = 5;
-  const ::aspia::proto::FilePacket& file_packet() const;
-  ::aspia::proto::FilePacket* mutable_file_packet();
-  ::aspia::proto::FilePacket* release_file_packet();
-  void set_allocated_file_packet(::aspia::proto::FilePacket* file_packet);
-
-  // .aspia.proto.CreateDirectoryRequest create_directory_request = 6;
+  // .aspia.proto.CreateDirectoryRequest create_directory_request = 4;
   bool has_create_directory_request() const;
   void clear_create_directory_request();
-  static const int kCreateDirectoryRequestFieldNumber = 6;
+  static const int kCreateDirectoryRequestFieldNumber = 4;
   const ::aspia::proto::CreateDirectoryRequest& create_directory_request() const;
   ::aspia::proto::CreateDirectoryRequest* mutable_create_directory_request();
   ::aspia::proto::CreateDirectoryRequest* release_create_directory_request();
   void set_allocated_create_directory_request(::aspia::proto::CreateDirectoryRequest* create_directory_request);
 
-  // .aspia.proto.RenameRequest rename_request = 7;
+  // .aspia.proto.RenameRequest rename_request = 5;
   bool has_rename_request() const;
   void clear_rename_request();
-  static const int kRenameRequestFieldNumber = 7;
+  static const int kRenameRequestFieldNumber = 5;
   const ::aspia::proto::RenameRequest& rename_request() const;
   ::aspia::proto::RenameRequest* mutable_rename_request();
   ::aspia::proto::RenameRequest* release_rename_request();
   void set_allocated_rename_request(::aspia::proto::RenameRequest* rename_request);
 
-  // .aspia.proto.RemoveRequest remove_request = 8;
+  // .aspia.proto.RemoveRequest remove_request = 6;
   bool has_remove_request() const;
   void clear_remove_request();
-  static const int kRemoveRequestFieldNumber = 8;
+  static const int kRemoveRequestFieldNumber = 6;
   const ::aspia::proto::RemoveRequest& remove_request() const;
   ::aspia::proto::RemoveRequest* mutable_remove_request();
   ::aspia::proto::RemoveRequest* release_remove_request();
   void set_allocated_remove_request(::aspia::proto::RemoveRequest* remove_request);
 
+  // .aspia.proto.FilePacketRequest file_request = 7;
+  bool has_file_request() const;
+  void clear_file_request();
+  static const int kFileRequestFieldNumber = 7;
+  const ::aspia::proto::FilePacketRequest& file_request() const;
+  ::aspia::proto::FilePacketRequest* mutable_file_request();
+  ::aspia::proto::FilePacketRequest* release_file_request();
+  void set_allocated_file_request(::aspia::proto::FilePacketRequest* file_request);
+
+  // .aspia.proto.FilePacket file_packet = 8;
+  bool has_file_packet() const;
+  void clear_file_packet();
+  static const int kFilePacketFieldNumber = 8;
+  const ::aspia::proto::FilePacket& file_packet() const;
+  ::aspia::proto::FilePacket* mutable_file_packet();
+  ::aspia::proto::FilePacket* release_file_packet();
+  void set_allocated_file_packet(::aspia::proto::FilePacket* file_packet);
+
+  // .aspia.proto.RequestType type = 1;
+  void clear_type();
+  static const int kTypeFieldNumber = 1;
+  ::aspia::proto::RequestType type() const;
+  void set_type(::aspia::proto::RequestType value);
+
   // @@protoc_insertion_point(class_scope:aspia.proto.file_transfer.ClientToHost)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::aspia::proto::DriveListRequest* drive_list_request_;
   ::aspia::proto::FileListRequest* file_list_request_;
   ::aspia::proto::DirectorySizeRequest* directory_size_request_;
-  ::aspia::proto::FilePacketRequest* file_request_;
-  ::aspia::proto::FilePacket* file_packet_;
   ::aspia::proto::CreateDirectoryRequest* create_directory_request_;
   ::aspia::proto::RenameRequest* rename_request_;
   ::aspia::proto::RemoveRequest* remove_request_;
+  ::aspia::proto::FilePacketRequest* file_request_;
+  ::aspia::proto::FilePacket* file_packet_;
+  int type_;
   mutable int _cached_size_;
   friend struct protobuf_file_5ftransfer_5fsession_2eproto::TableStruct;
 };
@@ -378,21 +378,35 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // HostToClient
 
-// .aspia.proto.Status status = 1;
+// .aspia.proto.RequestType type = 1;
+inline void HostToClient::clear_type() {
+  type_ = 0;
+}
+inline ::aspia::proto::RequestType HostToClient::type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.HostToClient.type)
+  return static_cast< ::aspia::proto::RequestType >(type_);
+}
+inline void HostToClient::set_type(::aspia::proto::RequestType value) {
+  
+  type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.file_transfer.HostToClient.type)
+}
+
+// .aspia.proto.RequestStatus status = 2;
 inline void HostToClient::clear_status() {
   status_ = 0;
 }
-inline ::aspia::proto::Status HostToClient::status() const {
+inline ::aspia::proto::RequestStatus HostToClient::status() const {
   // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.HostToClient.status)
-  return static_cast< ::aspia::proto::Status >(status_);
+  return static_cast< ::aspia::proto::RequestStatus >(status_);
 }
-inline void HostToClient::set_status(::aspia::proto::Status value) {
+inline void HostToClient::set_status(::aspia::proto::RequestStatus value) {
   
   status_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.file_transfer.HostToClient.status)
 }
 
-// .aspia.proto.DriveList drive_list = 2;
+// .aspia.proto.DriveList drive_list = 3;
 inline bool HostToClient::has_drive_list() const {
   return this != internal_default_instance() && drive_list_ != NULL;
 }
@@ -431,7 +445,7 @@ inline void HostToClient::set_allocated_drive_list(::aspia::proto::DriveList* dr
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.HostToClient.drive_list)
 }
 
-// .aspia.proto.FileList file_list = 3;
+// .aspia.proto.FileList file_list = 4;
 inline bool HostToClient::has_file_list() const {
   return this != internal_default_instance() && file_list_ != NULL;
 }
@@ -470,7 +484,7 @@ inline void HostToClient::set_allocated_file_list(::aspia::proto::FileList* file
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.HostToClient.file_list)
 }
 
-// .aspia.proto.DirectorySize directory_size = 4;
+// .aspia.proto.DirectorySize directory_size = 5;
 inline bool HostToClient::has_directory_size() const {
   return this != internal_default_instance() && directory_size_ != NULL;
 }
@@ -509,7 +523,7 @@ inline void HostToClient::set_allocated_directory_size(::aspia::proto::Directory
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.HostToClient.directory_size)
 }
 
-// .aspia.proto.FilePacket file_packet = 5;
+// .aspia.proto.FilePacket file_packet = 6;
 inline bool HostToClient::has_file_packet() const {
   return this != internal_default_instance() && file_packet_ != NULL;
 }
@@ -552,43 +566,18 @@ inline void HostToClient::set_allocated_file_packet(::aspia::proto::FilePacket* 
 
 // ClientToHost
 
-// .aspia.proto.DriveListRequest drive_list_request = 1;
-inline bool ClientToHost::has_drive_list_request() const {
-  return this != internal_default_instance() && drive_list_request_ != NULL;
+// .aspia.proto.RequestType type = 1;
+inline void ClientToHost::clear_type() {
+  type_ = 0;
 }
-inline void ClientToHost::clear_drive_list_request() {
-  if (GetArenaNoVirtual() == NULL && drive_list_request_ != NULL) delete drive_list_request_;
-  drive_list_request_ = NULL;
+inline ::aspia::proto::RequestType ClientToHost::type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.ClientToHost.type)
+  return static_cast< ::aspia::proto::RequestType >(type_);
 }
-inline const ::aspia::proto::DriveListRequest& ClientToHost::drive_list_request() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.ClientToHost.drive_list_request)
-  return drive_list_request_ != NULL ? *drive_list_request_
-                         : *::aspia::proto::DriveListRequest::internal_default_instance();
-}
-inline ::aspia::proto::DriveListRequest* ClientToHost::mutable_drive_list_request() {
+inline void ClientToHost::set_type(::aspia::proto::RequestType value) {
   
-  if (drive_list_request_ == NULL) {
-    drive_list_request_ = new ::aspia::proto::DriveListRequest;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.file_transfer.ClientToHost.drive_list_request)
-  return drive_list_request_;
-}
-inline ::aspia::proto::DriveListRequest* ClientToHost::release_drive_list_request() {
-  // @@protoc_insertion_point(field_release:aspia.proto.file_transfer.ClientToHost.drive_list_request)
-  
-  ::aspia::proto::DriveListRequest* temp = drive_list_request_;
-  drive_list_request_ = NULL;
-  return temp;
-}
-inline void ClientToHost::set_allocated_drive_list_request(::aspia::proto::DriveListRequest* drive_list_request) {
-  delete drive_list_request_;
-  drive_list_request_ = drive_list_request;
-  if (drive_list_request) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.ClientToHost.drive_list_request)
+  type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.file_transfer.ClientToHost.type)
 }
 
 // .aspia.proto.FileListRequest file_list_request = 2;
@@ -669,85 +658,7 @@ inline void ClientToHost::set_allocated_directory_size_request(::aspia::proto::D
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.ClientToHost.directory_size_request)
 }
 
-// .aspia.proto.FilePacketRequest file_request = 4;
-inline bool ClientToHost::has_file_request() const {
-  return this != internal_default_instance() && file_request_ != NULL;
-}
-inline void ClientToHost::clear_file_request() {
-  if (GetArenaNoVirtual() == NULL && file_request_ != NULL) delete file_request_;
-  file_request_ = NULL;
-}
-inline const ::aspia::proto::FilePacketRequest& ClientToHost::file_request() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.ClientToHost.file_request)
-  return file_request_ != NULL ? *file_request_
-                         : *::aspia::proto::FilePacketRequest::internal_default_instance();
-}
-inline ::aspia::proto::FilePacketRequest* ClientToHost::mutable_file_request() {
-  
-  if (file_request_ == NULL) {
-    file_request_ = new ::aspia::proto::FilePacketRequest;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.file_transfer.ClientToHost.file_request)
-  return file_request_;
-}
-inline ::aspia::proto::FilePacketRequest* ClientToHost::release_file_request() {
-  // @@protoc_insertion_point(field_release:aspia.proto.file_transfer.ClientToHost.file_request)
-  
-  ::aspia::proto::FilePacketRequest* temp = file_request_;
-  file_request_ = NULL;
-  return temp;
-}
-inline void ClientToHost::set_allocated_file_request(::aspia::proto::FilePacketRequest* file_request) {
-  delete file_request_;
-  file_request_ = file_request;
-  if (file_request) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.ClientToHost.file_request)
-}
-
-// .aspia.proto.FilePacket file_packet = 5;
-inline bool ClientToHost::has_file_packet() const {
-  return this != internal_default_instance() && file_packet_ != NULL;
-}
-inline void ClientToHost::clear_file_packet() {
-  if (GetArenaNoVirtual() == NULL && file_packet_ != NULL) delete file_packet_;
-  file_packet_ = NULL;
-}
-inline const ::aspia::proto::FilePacket& ClientToHost::file_packet() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.ClientToHost.file_packet)
-  return file_packet_ != NULL ? *file_packet_
-                         : *::aspia::proto::FilePacket::internal_default_instance();
-}
-inline ::aspia::proto::FilePacket* ClientToHost::mutable_file_packet() {
-  
-  if (file_packet_ == NULL) {
-    file_packet_ = new ::aspia::proto::FilePacket;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.file_transfer.ClientToHost.file_packet)
-  return file_packet_;
-}
-inline ::aspia::proto::FilePacket* ClientToHost::release_file_packet() {
-  // @@protoc_insertion_point(field_release:aspia.proto.file_transfer.ClientToHost.file_packet)
-  
-  ::aspia::proto::FilePacket* temp = file_packet_;
-  file_packet_ = NULL;
-  return temp;
-}
-inline void ClientToHost::set_allocated_file_packet(::aspia::proto::FilePacket* file_packet) {
-  delete file_packet_;
-  file_packet_ = file_packet;
-  if (file_packet) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.ClientToHost.file_packet)
-}
-
-// .aspia.proto.CreateDirectoryRequest create_directory_request = 6;
+// .aspia.proto.CreateDirectoryRequest create_directory_request = 4;
 inline bool ClientToHost::has_create_directory_request() const {
   return this != internal_default_instance() && create_directory_request_ != NULL;
 }
@@ -786,7 +697,7 @@ inline void ClientToHost::set_allocated_create_directory_request(::aspia::proto:
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.ClientToHost.create_directory_request)
 }
 
-// .aspia.proto.RenameRequest rename_request = 7;
+// .aspia.proto.RenameRequest rename_request = 5;
 inline bool ClientToHost::has_rename_request() const {
   return this != internal_default_instance() && rename_request_ != NULL;
 }
@@ -825,7 +736,7 @@ inline void ClientToHost::set_allocated_rename_request(::aspia::proto::RenameReq
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.ClientToHost.rename_request)
 }
 
-// .aspia.proto.RemoveRequest remove_request = 8;
+// .aspia.proto.RemoveRequest remove_request = 6;
 inline bool ClientToHost::has_remove_request() const {
   return this != internal_default_instance() && remove_request_ != NULL;
 }
@@ -862,6 +773,84 @@ inline void ClientToHost::set_allocated_remove_request(::aspia::proto::RemoveReq
     
   }
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.ClientToHost.remove_request)
+}
+
+// .aspia.proto.FilePacketRequest file_request = 7;
+inline bool ClientToHost::has_file_request() const {
+  return this != internal_default_instance() && file_request_ != NULL;
+}
+inline void ClientToHost::clear_file_request() {
+  if (GetArenaNoVirtual() == NULL && file_request_ != NULL) delete file_request_;
+  file_request_ = NULL;
+}
+inline const ::aspia::proto::FilePacketRequest& ClientToHost::file_request() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.ClientToHost.file_request)
+  return file_request_ != NULL ? *file_request_
+                         : *::aspia::proto::FilePacketRequest::internal_default_instance();
+}
+inline ::aspia::proto::FilePacketRequest* ClientToHost::mutable_file_request() {
+  
+  if (file_request_ == NULL) {
+    file_request_ = new ::aspia::proto::FilePacketRequest;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.file_transfer.ClientToHost.file_request)
+  return file_request_;
+}
+inline ::aspia::proto::FilePacketRequest* ClientToHost::release_file_request() {
+  // @@protoc_insertion_point(field_release:aspia.proto.file_transfer.ClientToHost.file_request)
+  
+  ::aspia::proto::FilePacketRequest* temp = file_request_;
+  file_request_ = NULL;
+  return temp;
+}
+inline void ClientToHost::set_allocated_file_request(::aspia::proto::FilePacketRequest* file_request) {
+  delete file_request_;
+  file_request_ = file_request;
+  if (file_request) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.ClientToHost.file_request)
+}
+
+// .aspia.proto.FilePacket file_packet = 8;
+inline bool ClientToHost::has_file_packet() const {
+  return this != internal_default_instance() && file_packet_ != NULL;
+}
+inline void ClientToHost::clear_file_packet() {
+  if (GetArenaNoVirtual() == NULL && file_packet_ != NULL) delete file_packet_;
+  file_packet_ = NULL;
+}
+inline const ::aspia::proto::FilePacket& ClientToHost::file_packet() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.ClientToHost.file_packet)
+  return file_packet_ != NULL ? *file_packet_
+                         : *::aspia::proto::FilePacket::internal_default_instance();
+}
+inline ::aspia::proto::FilePacket* ClientToHost::mutable_file_packet() {
+  
+  if (file_packet_ == NULL) {
+    file_packet_ = new ::aspia::proto::FilePacket;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.file_transfer.ClientToHost.file_packet)
+  return file_packet_;
+}
+inline ::aspia::proto::FilePacket* ClientToHost::release_file_packet() {
+  // @@protoc_insertion_point(field_release:aspia.proto.file_transfer.ClientToHost.file_packet)
+  
+  ::aspia::proto::FilePacket* temp = file_packet_;
+  file_packet_ = NULL;
+  return temp;
+}
+inline void ClientToHost::set_allocated_file_packet(::aspia::proto::FilePacket* file_packet) {
+  delete file_packet_;
+  file_packet_ = file_packet;
+  if (file_packet) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.ClientToHost.file_packet)
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS

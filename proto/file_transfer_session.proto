@@ -10,27 +10,27 @@ syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
 
 import "file_transfer_session_message.proto";
-import "status.proto";
 
 package aspia.proto.file_transfer;
 
 message HostToClient
 {
-    Status status                = 1;
-    DriveList drive_list         = 2;
-    FileList file_list           = 3;
-    DirectorySize directory_size = 4;
-    FilePacket file_packet       = 5;
+    RequestType type             = 1;
+    RequestStatus status         = 2;
+    DriveList drive_list         = 3;
+    FileList file_list           = 4;
+    DirectorySize directory_size = 5;
+    FilePacket file_packet       = 6;
 }
 
 message ClientToHost
 {
-    DriveListRequest drive_list_request             = 1;
+    RequestType type                                = 1;
     FileListRequest file_list_request               = 2;
     DirectorySizeRequest directory_size_request     = 3;
-    FilePacketRequest file_request                  = 4;
-    FilePacket file_packet                          = 5;
-    CreateDirectoryRequest create_directory_request = 6;
-    RenameRequest rename_request                    = 7;
-    RemoveRequest remove_request                    = 8;
+    CreateDirectoryRequest create_directory_request = 4;
+    RenameRequest rename_request                    = 5;
+    RemoveRequest remove_request                    = 6;
+    FilePacketRequest file_request                  = 7;
+    FilePacket file_packet                          = 8;
 }

@@ -40,6 +40,7 @@ public:
     FilePath CurrentPath() const;
     const proto::FileList::Item& Object(int object_index);
     FilePath ObjectName(int object_index);
+    FilePath ObjectPath(int object_index);
     bool IsDirectoryObject(int object_index);
     proto::FileList::Item* FirstSelectedObject() const;
     int GetObjectUnderMousePointer() const;

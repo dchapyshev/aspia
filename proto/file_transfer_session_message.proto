@@ -11,6 +11,28 @@ option optimize_for = LITE_RUNTIME;
 
 package aspia.proto;
 
+enum RequestStatus
+{
+    REQUEST_STATUS_SUCCESS             = 0;
+    REQUEST_STATUS_INVALID_PATH_NAME   = 1;
+    REQUEST_STATUS_PATH_NOT_FOUND      = 2;
+    REQUEST_STATUS_PATH_ALREADY_EXISTS = 3;
+    REQUEST_STATUS_NO_DRIVES_FOUND     = 4;
+    REQUEST_STATUS_DISK_FULL           = 5;
+    REQUEST_STATUS_ACCESS_DENIED       = 6;
+}
+
+enum RequestType
+{
+    REQUEST_TYPE_UNKNOWN          = 0;
+    REQUEST_TYPE_DRIVE_LIST       = 1;
+    REQUEST_TYPE_FILE_LIST        = 2;
+    REQUEST_TYPE_DIRECTORY_SIZE   = 3;
+    REQUEST_TYPE_CREATE_DIRECTORY = 4;
+    REQUEST_TYPE_RENAME           = 5;
+    REQUEST_TYPE_REMOVE           = 6;
+}
+
 message DriveList
 {
     message Item
@@ -37,11 +59,6 @@ message DriveList
     repeated Item item = 1;
 }
 
-message DriveListRequest
-{
-    uint32 dummy = 1;
-}
-
 message FileList
 {
     message Item
@@ -58,7 +75,14 @@ message FileList
 
 message FileListRequest
 {
-    string path = 1;
+    enum Flags
+    {
+        DEFAULT   = 0;
+        RECURSIVE = 1;
+    }
+
+    uint32 flags = 1;
+    string path = 2;
 }
 
 message DirectorySize
@@ -83,7 +107,7 @@ message FilePacket
 
     uint32 flags = 1;
     uint64 file_size = 2;
-    bytes data  = 3;
+    bytes data = 3;
 }
 
 message FilePacketRequest

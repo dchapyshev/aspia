@@ -21,69 +21,80 @@ void FileReplyReceiverProxy::WillDestroyCurrentReplyReceiver()
     receiver_ = nullptr;
 }
 
-bool FileReplyReceiverProxy::OnLastRequestFailed(proto::Status status)
+bool FileReplyReceiverProxy::OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
 
-    receiver_->OnLastRequestFailed(status);
+    receiver_->OnDriveListRequestReply(std::move(drive_list));
     return true;
 }
 
-bool FileReplyReceiverProxy::OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list)
+bool FileReplyReceiverProxy::OnDriveListRequestFailure(proto::RequestStatus status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
 
-    receiver_->OnDriveListReply(std::move(drive_list));
+    receiver_->OnDriveListRequestFailure(status);
     return true;
 }
 
-bool FileReplyReceiverProxy::OnFileListReply(std::unique_ptr<proto::FileList> file_list)
+bool FileReplyReceiverProxy::OnFileListRequestReply(std::unique_ptr<proto::FileList> file_list)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
 
-    receiver_->OnFileListReply(std::move(file_list));
+    receiver_->OnFileListRequestReply(std::move(file_list));
     return true;
 }
 
-bool FileReplyReceiverProxy::OnCreateDirectoryReply()
+bool FileReplyReceiverProxy::OnFileListRequestFailure(proto::RequestStatus status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
 
-    receiver_->OnCreateDirectoryReply();
+    receiver_->OnFileListRequestFailure(status);
     return true;
 }
 
-bool FileReplyReceiverProxy::OnRemoveReply()
+bool FileReplyReceiverProxy::OnCreateDirectoryRequestReply(proto::RequestStatus status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
 
-    receiver_->OnRemoveReply();
+    receiver_->OnCreateDirectoryRequestReply(status);
     return true;
 }
 
-bool FileReplyReceiverProxy::OnRenameReply()
+bool FileReplyReceiverProxy::OnRemoveRequestReply(proto::RequestStatus status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
 
-    receiver_->OnRenameReply();
+    receiver_->OnRemoveRequestReply(status);
+    return true;
+}
+
+bool FileReplyReceiverProxy::OnRenameRequestReply(proto::RequestStatus status)
+{
+    std::lock_guard<std::mutex> lock(receiver_lock_);
+
+    if (!receiver_)
+        return false;
+
+    receiver_->OnRenameRequestReply(status);
     return true;
 }
 

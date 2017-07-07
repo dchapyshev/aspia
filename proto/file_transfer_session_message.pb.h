@@ -44,9 +44,6 @@ extern DirectorySizeRequestDefaultTypeInternal _DirectorySizeRequest_default_ins
 class DriveList;
 class DriveListDefaultTypeInternal;
 extern DriveListDefaultTypeInternal _DriveList_default_instance_;
-class DriveListRequest;
-class DriveListRequestDefaultTypeInternal;
-extern DriveListRequestDefaultTypeInternal _DriveListRequest_default_instance_;
 class DriveList_Item;
 class DriveList_ItemDefaultTypeInternal;
 extern DriveList_ItemDefaultTypeInternal _DriveList_Item_default_instance_;
@@ -108,6 +105,17 @@ const DriveList_Item_Type DriveList_Item_Type_Type_MIN = DriveList_Item_Type_UNK
 const DriveList_Item_Type DriveList_Item_Type_Type_MAX = DriveList_Item_Type_DESKTOP_FOLDER;
 const int DriveList_Item_Type_Type_ARRAYSIZE = DriveList_Item_Type_Type_MAX + 1;
 
+enum FileListRequest_Flags {
+  FileListRequest_Flags_DEFAULT = 0,
+  FileListRequest_Flags_RECURSIVE = 1,
+  FileListRequest_Flags_FileListRequest_Flags_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  FileListRequest_Flags_FileListRequest_Flags_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool FileListRequest_Flags_IsValid(int value);
+const FileListRequest_Flags FileListRequest_Flags_Flags_MIN = FileListRequest_Flags_DEFAULT;
+const FileListRequest_Flags FileListRequest_Flags_Flags_MAX = FileListRequest_Flags_RECURSIVE;
+const int FileListRequest_Flags_Flags_ARRAYSIZE = FileListRequest_Flags_Flags_MAX + 1;
+
 enum FilePacket_Flags {
   FilePacket_Flags_ERROR = 0,
   FilePacket_Flags_PACKET = 1,
@@ -120,6 +128,38 @@ bool FilePacket_Flags_IsValid(int value);
 const FilePacket_Flags FilePacket_Flags_Flags_MIN = FilePacket_Flags_ERROR;
 const FilePacket_Flags FilePacket_Flags_Flags_MAX = FilePacket_Flags_LAST_PACKET;
 const int FilePacket_Flags_Flags_ARRAYSIZE = FilePacket_Flags_Flags_MAX + 1;
+
+enum RequestStatus {
+  REQUEST_STATUS_SUCCESS = 0,
+  REQUEST_STATUS_INVALID_PATH_NAME = 1,
+  REQUEST_STATUS_PATH_NOT_FOUND = 2,
+  REQUEST_STATUS_PATH_ALREADY_EXISTS = 3,
+  REQUEST_STATUS_NO_DRIVES_FOUND = 4,
+  REQUEST_STATUS_DISK_FULL = 5,
+  REQUEST_STATUS_ACCESS_DENIED = 6,
+  RequestStatus_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  RequestStatus_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool RequestStatus_IsValid(int value);
+const RequestStatus RequestStatus_MIN = REQUEST_STATUS_SUCCESS;
+const RequestStatus RequestStatus_MAX = REQUEST_STATUS_ACCESS_DENIED;
+const int RequestStatus_ARRAYSIZE = RequestStatus_MAX + 1;
+
+enum RequestType {
+  REQUEST_TYPE_UNKNOWN = 0,
+  REQUEST_TYPE_DRIVE_LIST = 1,
+  REQUEST_TYPE_FILE_LIST = 2,
+  REQUEST_TYPE_DIRECTORY_SIZE = 3,
+  REQUEST_TYPE_CREATE_DIRECTORY = 4,
+  REQUEST_TYPE_RENAME = 5,
+  REQUEST_TYPE_REMOVE = 6,
+  RequestType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  RequestType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool RequestType_IsValid(int value);
+const RequestType RequestType_MIN = REQUEST_TYPE_UNKNOWN;
+const RequestType RequestType_MAX = REQUEST_TYPE_REMOVE;
+const int RequestType_ARRAYSIZE = RequestType_MAX + 1;
 
 // ===================================================================
 
@@ -358,84 +398,6 @@ class DriveList : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
-class DriveListRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DriveListRequest) */ {
- public:
-  DriveListRequest();
-  virtual ~DriveListRequest();
-
-  DriveListRequest(const DriveListRequest& from);
-
-  inline DriveListRequest& operator=(const DriveListRequest& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  static const DriveListRequest& default_instance();
-
-  static inline const DriveListRequest* internal_default_instance() {
-    return reinterpret_cast<const DriveListRequest*>(
-               &_DriveListRequest_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    2;
-
-  void Swap(DriveListRequest* other);
-
-  // implements Message ----------------------------------------------
-
-  inline DriveListRequest* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  DriveListRequest* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const DriveListRequest& from);
-  void MergeFrom(const DriveListRequest& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(DriveListRequest* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // uint32 dummy = 1;
-  void clear_dummy();
-  static const int kDummyFieldNumber = 1;
-  ::google::protobuf::uint32 dummy() const;
-  void set_dummy(::google::protobuf::uint32 value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.DriveListRequest)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::uint32 dummy_;
-  mutable int _cached_size_;
-  friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
-
 class FileList_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.FileList.Item) */ {
  public:
   FileList_Item();
@@ -455,7 +417,7 @@ class FileList_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_FileList_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    3;
+    2;
 
   void Swap(FileList_Item* other);
 
@@ -562,7 +524,7 @@ class FileList : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_FileList_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    4;
+    3;
 
   void Swap(FileList* other);
 
@@ -663,7 +625,7 @@ class FileListRequest : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_FileListRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
+    4;
 
   void Swap(FileListRequest* other);
 
@@ -704,11 +666,26 @@ class FileListRequest : public ::google::protobuf::MessageLite /* @@protoc_inser
 
   // nested types ----------------------------------------------------
 
+  typedef FileListRequest_Flags Flags;
+  static const Flags DEFAULT =
+    FileListRequest_Flags_DEFAULT;
+  static const Flags RECURSIVE =
+    FileListRequest_Flags_RECURSIVE;
+  static inline bool Flags_IsValid(int value) {
+    return FileListRequest_Flags_IsValid(value);
+  }
+  static const Flags Flags_MIN =
+    FileListRequest_Flags_Flags_MIN;
+  static const Flags Flags_MAX =
+    FileListRequest_Flags_Flags_MAX;
+  static const int Flags_ARRAYSIZE =
+    FileListRequest_Flags_Flags_ARRAYSIZE;
+
   // accessors -------------------------------------------------------
 
-  // string path = 1;
+  // string path = 2;
   void clear_path();
-  static const int kPathFieldNumber = 1;
+  static const int kPathFieldNumber = 2;
   const ::std::string& path() const;
   void set_path(const ::std::string& value);
   #if LANG_CXX11
@@ -720,11 +697,18 @@ class FileListRequest : public ::google::protobuf::MessageLite /* @@protoc_inser
   ::std::string* release_path();
   void set_allocated_path(::std::string* path);
 
+  // uint32 flags = 1;
+  void clear_flags();
+  static const int kFlagsFieldNumber = 1;
+  ::google::protobuf::uint32 flags() const;
+  void set_flags(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:aspia.proto.FileListRequest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr path_;
+  ::google::protobuf::uint32 flags_;
   mutable int _cached_size_;
   friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
 };
@@ -749,7 +733,7 @@ class DirectorySize : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_DirectorySize_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    6;
+    5;
 
   void Swap(DirectorySize* other);
 
@@ -827,7 +811,7 @@ class DirectorySizeRequest : public ::google::protobuf::MessageLite /* @@protoc_
                &_DirectorySizeRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    6;
 
   void Swap(DirectorySizeRequest* other);
 
@@ -913,7 +897,7 @@ class FilePacket : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_FilePacket_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    7;
 
   void Swap(FilePacket* other);
 
@@ -1032,7 +1016,7 @@ class FilePacketRequest : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_FilePacketRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    8;
 
   void Swap(FilePacketRequest* other);
 
@@ -1118,7 +1102,7 @@ class CreateDirectoryRequest : public ::google::protobuf::MessageLite /* @@proto
                &_CreateDirectoryRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    9;
 
   void Swap(CreateDirectoryRequest* other);
 
@@ -1204,7 +1188,7 @@ class RenameRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_RenameRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    10;
 
   void Swap(RenameRequest* other);
 
@@ -1305,7 +1289,7 @@ class RemoveRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_RemoveRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    11;
 
   void Swap(RemoveRequest* other);
 
@@ -1562,24 +1546,6 @@ DriveList::item() const {
 
 // -------------------------------------------------------------------
 
-// DriveListRequest
-
-// uint32 dummy = 1;
-inline void DriveListRequest::clear_dummy() {
-  dummy_ = 0u;
-}
-inline ::google::protobuf::uint32 DriveListRequest::dummy() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DriveListRequest.dummy)
-  return dummy_;
-}
-inline void DriveListRequest::set_dummy(::google::protobuf::uint32 value) {
-  
-  dummy_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DriveListRequest.dummy)
-}
-
-// -------------------------------------------------------------------
-
 // FileList_Item
 
 // string name = 1;
@@ -1768,7 +1734,21 @@ FileList::item() const {
 
 // FileListRequest
 
-// string path = 1;
+// uint32 flags = 1;
+inline void FileListRequest::clear_flags() {
+  flags_ = 0u;
+}
+inline ::google::protobuf::uint32 FileListRequest::flags() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.FileListRequest.flags)
+  return flags_;
+}
+inline void FileListRequest::set_flags(::google::protobuf::uint32 value) {
+  
+  flags_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.FileListRequest.flags)
+}
+
+// string path = 2;
 inline void FileListRequest::clear_path() {
   path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -2285,8 +2265,6 @@ inline void RemoveRequest::set_allocated_path(::std::string* path) {
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -2299,7 +2277,10 @@ namespace google {
 namespace protobuf {
 
 template <> struct is_proto_enum< ::aspia::proto::DriveList_Item_Type> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::FileListRequest_Flags> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::FilePacket_Flags> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::RequestStatus> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::RequestType> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
 }  // namespace google

@@ -18,12 +18,15 @@ namespace aspia {
 class FileReplyReceiverProxy
 {
 public:
-    bool OnLastRequestFailed(proto::Status status);
-    bool OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list);
-    bool OnFileListReply(std::unique_ptr<proto::FileList> file_list);
-    bool OnCreateDirectoryReply();
-    bool OnRemoveReply();
-    bool OnRenameReply();
+    bool OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list);
+    bool OnDriveListRequestFailure(proto::RequestStatus status);
+
+    bool OnFileListRequestReply(std::unique_ptr<proto::FileList> file_list);
+    bool OnFileListRequestFailure(proto::RequestStatus status);
+
+    bool OnCreateDirectoryRequestReply(proto::RequestStatus status);
+    bool OnRemoveRequestReply(proto::RequestStatus status);
+    bool OnRenameRequestReply(proto::RequestStatus status);
 
 private:
     friend class FileReplyReceiver;

@@ -376,9 +376,7 @@ BEGIN
     IDS_FT_DRIVE_DESC_REMOTE              "Remote Drive"
     IDS_FT_DRIVE_DESC_RAM                 "RAM Drive"
     IDS_FT_DRIVE_DESC_UNKNOWN             "Unknown Device"
-    IDS_FT_DELETE_CONFORM_FILE            "Are you sure you want to delete file ""%s""?"
-    IDS_FT_DELETE_CONFORM_DIR             "Do you really want to delete directory ""%s"" and all its contents?"
-    IDS_FT_DELETE_CONFORM_MULTI           "Are you sure you want to delete the following objects?\r\n%s"
+    IDS_FT_DELETE_CONFORM                 "Do you really want to delete %u objects?"
     IDS_FT_OP_SESSION_START               "Session started"
     IDS_FT_OP_SESSION_END                 "Session terminated"
     IDS_FT_OP_BROWSE_FOLDERS              "Browse folders: ""%s"""
@@ -401,24 +399,29 @@ BEGIN
     IDS_FT_FILE_FOLDER                    "File Folder"
 END
 
+// Request Status
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_REQUEST_STATUS_SUCCESS              "Successfully completed"
+    IDS_REQUEST_STATUS_INVALID_PATH_NAME    "Invalid directory or file name"
+    IDS_REQUEST_STATUS_PATH_NOT_FOUND       "Path not found"
+    IDS_REQUEST_STATUS_PATH_ALREADY_EXISTS  "Path already exists"
+    IDS_REQUEST_STATUS_NO_DRIVES_FOUND      "No drives found"
+    IDS_REQUEST_STATUS_DISK_FULL            "Disk full"
+    IDS_REQUEST_STATUS_ACCESS_DENIED        "Access denied"
+    IDS_REQUEST_STATUS_UNKNOWN              "Unknown request status code"
+END
+
 // Status
 STRINGTABLE DISCARDABLE
 BEGIN
     IDS_STATUS_SUCCESS                    "Successfully completed"
     IDS_STATUS_NO_CONSOLE_SESSION         "No console session"
     IDS_STATUS_ACCESS_DENIED              "Access denied"
-    IDS_STATUS_FILE_NOT_FOUND             "File not found"
-    IDS_STATUS_PATH_NOT_FOUND             "Path not found"
-    IDS_STATUS_FILE_ALREADY_EXISTS        "File already exists"
-    IDS_STATUS_PATH_ALREADY_EXISTS        "Path already exists"
-    IDS_STATUS_DISK_FULL                  "Disk full"
-    IDS_STATUS_INVALID_FILE_NAME          "Invalid file name"
-    IDS_STATUS_INVALID_PATH_NAME          "Invalid directory name"
     IDS_STATUS_INVALID_ADDRESS            "Invalid address specified"
     IDS_STATUS_INVALID_PORT               "Invalid port specified"
     IDS_STATUS_CONNECT_TIMEOUT            "Connection timeout"
     IDS_STATUS_CONNECT_ERROR              "Unable to establish connection"
     IDS_STATUS_CONNECTING                 "Connecting"
-    IDS_STATUS_NO_DRIVES_FOUND            "No drives found"
     IDS_STATUS_UNKNOWN                    "Unknown status code"
 END

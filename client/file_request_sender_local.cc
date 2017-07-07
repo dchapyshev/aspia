@@ -6,6 +6,7 @@
 //
 
 #include "client/file_request_sender_local.h"
+#include "base/logging.h"
 #include "protocol/filesystem.h"
 
 namespace aspia {
@@ -30,130 +31,117 @@ void FileRequestSenderLocal::OnAfterThreadRunning()
     // Nothing
 }
 
-void FileRequestSenderLocal::SendDriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver)
+void FileRequestSenderLocal::DriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver)
 {
-    if (!worker_->BelongsToCurrentThread())
-    {
-        worker_->PostTask(std::bind(&FileRequestSenderLocal::SendDriveListRequest,
-                                    this, receiver));
-        return;
-    }
+    DCHECK(worker_->BelongsToCurrentThread());
 
     std::unique_ptr<proto::DriveList> drive_list =
         std::make_unique<proto::DriveList>();
 
-    proto::Status status = ExecuteDriveListRequest(drive_list.get());
+    proto::RequestStatus status = ExecuteDriveListRequest(drive_list.get());
 
-    if (status != proto::Status::STATUS_SUCCESS)
+    if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
     {
-        receiver->OnLastRequestFailed(status);
+        receiver->OnDriveListRequestFailure(status);
         return;
     }
 
-    receiver->OnDriveListReply(std::move(drive_list));
+    receiver->OnDriveListRequestReply(std::move(drive_list));
+}
+
+void FileRequestSenderLocal::SendDriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver)
+{
+    worker_->PostTask(std::bind(&FileRequestSenderLocal::DriveListRequest,
+                                this, receiver));
+}
+
+void FileRequestSenderLocal::FileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                             const FilePath& path)
+{
+    DCHECK(worker_->BelongsToCurrentThread());
+
+    std::unique_ptr<proto::FileList> file_list = std::make_unique<proto::FileList>();
+
+    proto::RequestStatus status = ExecuteFileListRequest(path, file_list.get());
+
+    if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
+    {
+        receiver->OnFileListRequestFailure(status);
+        return;
+    }
+
+    receiver->OnFileListRequestReply(std::move(file_list));
 }
 
 void FileRequestSenderLocal::SendFileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                  const FilePath& path)
 {
-    if (!worker_->BelongsToCurrentThread())
-    {
-        worker_->PostTask(std::bind(&FileRequestSenderLocal::SendFileListRequest,
-                                    this, receiver, path));
-        return;
-    }
+    worker_->PostTask(std::bind(&FileRequestSenderLocal::FileListRequest,
+                                this, receiver, path));
+}
 
-    std::unique_ptr<proto::FileList> file_list = std::make_unique<proto::FileList>();
+void FileRequestSenderLocal::CreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                                    const FilePath& path)
+{
+    DCHECK(worker_->BelongsToCurrentThread());
 
-    proto::Status status = ExecuteFileListRequest(path, file_list.get());
-
-    if (status != proto::Status::STATUS_SUCCESS)
-    {
-        receiver->OnLastRequestFailed(status);
-        return;
-    }
-
-    receiver->OnFileListReply(std::move(file_list));
+    receiver->OnCreateDirectoryRequestReply(ExecuteCreateDirectoryRequest(path));
 }
 
 void FileRequestSenderLocal::SendCreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                         const FilePath& path)
 {
-    if (!worker_->BelongsToCurrentThread())
-    {
-        worker_->PostTask(std::bind(&FileRequestSenderLocal::SendCreateDirectoryRequest,
-                                    this, receiver, path));
-        return;
-    }
+    worker_->PostTask(std::bind(&FileRequestSenderLocal::CreateDirectoryRequest,
+                                this, receiver, path));
+}
 
-    proto::Status status = ExecuteCreateDirectoryRequest(path);
-
-    if (status != proto::Status::STATUS_SUCCESS)
-    {
-        receiver->OnLastRequestFailed(status);
-        return;
-    }
-
-    receiver->OnCreateDirectoryReply();
+void FileRequestSenderLocal::DirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                                  const FilePath& path)
+{
+    DCHECK(worker_->BelongsToCurrentThread());
+    // TODO
 }
 
 void FileRequestSenderLocal::SendDirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                       const FilePath& path)
 {
-    if (!worker_->BelongsToCurrentThread())
-    {
-        worker_->PostTask(std::bind(&FileRequestSenderLocal::SendDirectorySizeRequest,
-                                    this, receiver, path));
-        return;
-    }
+    worker_->PostTask(std::bind(&FileRequestSenderLocal::DirectorySizeRequest,
+                                this, receiver, path));
+}
 
-    // TODO
+void FileRequestSenderLocal::RemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                           const FilePath& path)
+{
+    DCHECK(worker_->BelongsToCurrentThread());
+
+    receiver->OnRemoveRequestReply(ExecuteRemoveRequest(path));
 }
 
 void FileRequestSenderLocal::SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                const FilePath& path)
 {
-    if (!worker_->BelongsToCurrentThread())
-    {
-        worker_->PostTask(std::bind(&FileRequestSenderLocal::SendRemoveRequest,
-                                    this, receiver, path));
-        return;
-    }
+    worker_->PostTask(std::bind(&FileRequestSenderLocal::RemoveRequest,
+                                this, receiver, path));
+}
 
-    proto::Status status = ExecuteRemoveRequest(path);
+void FileRequestSenderLocal::RenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                           const FilePath& old_name,
+                                           const FilePath& new_name)
+{
+    DCHECK(worker_->BelongsToCurrentThread());
 
-    if (status != proto::Status::STATUS_SUCCESS)
-    {
-        receiver->OnLastRequestFailed(status);
-        return;
-    }
-
-    receiver->OnRemoveReply();
+    receiver->OnRenameRequestReply(ExecuteRenameRequest(old_name, new_name));
 }
 
 void FileRequestSenderLocal::SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                const FilePath& old_name,
                                                const FilePath& new_name)
 {
-    if (!worker_->BelongsToCurrentThread())
-    {
-        worker_->PostTask(std::bind(&FileRequestSenderLocal::SendRenameRequest,
-                                    this,
-                                    receiver,
-                                    old_name,
-                                    new_name));
-        return;
-    }
-
-    proto::Status status = ExecuteRenameRequest(old_name, new_name);
-
-    if (status != proto::Status::STATUS_SUCCESS)
-    {
-        receiver->OnLastRequestFailed(status);
-        return;
-    }
-
-    receiver->OnRenameReply();
+    worker_->PostTask(std::bind(&FileRequestSenderLocal::RenameRequest,
+                                this,
+                                receiver,
+                                old_name,
+                                new_name));
 }
 
 } // namespace aspia

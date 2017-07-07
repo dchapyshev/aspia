@@ -181,6 +181,16 @@ FilePath UiFileList::ObjectName(int object_index)
     return fs::u8path(list_->item(object_index).name());
 }
 
+FilePath UiFileList::ObjectPath(int object_index)
+{
+    DCHECK(HasDirectoryList());
+    DCHECK(IsValidObjectIndex(object_index));
+
+    FilePath path = CurrentPath();
+    path.append(ObjectName(object_index));
+    return path;
+}
+
 bool UiFileList::IsDirectoryObject(int object_index)
 {
     DCHECK(HasDirectoryList());
