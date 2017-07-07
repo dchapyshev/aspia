@@ -46,6 +46,8 @@ public:
     // already stopped.
     void Stop();
 
+    void Join();
+
     MessageLoop* message_loop() const
     {
         return message_loop_;
