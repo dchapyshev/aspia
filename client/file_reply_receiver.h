@@ -33,6 +33,9 @@ protected:
     virtual void OnFileListRequestReply(std::unique_ptr<proto::FileList> file_list) = 0;
     virtual void OnFileListRequestFailure(proto::RequestStatus status) = 0;
 
+    virtual void OnDirectorySizeRequestReply(uint64_t size) = 0;
+    virtual void OnDirectorySizeRequestFailure(proto::RequestStatus status) = 0;
+
     virtual void OnCreateDirectoryRequestReply(proto::RequestStatus status) = 0;
     virtual void OnRemoveRequestReply(proto::RequestStatus status) = 0;
     virtual void OnRenameRequestReply(proto::RequestStatus status) = 0;

@@ -416,6 +416,16 @@ void UiFileManagerPanel::OnFileListRequestFailure(proto::RequestStatus status)
     // TODO
 }
 
+void UiFileManagerPanel::OnDirectorySizeRequestReply(uint64_t size)
+{
+    // TODO
+}
+
+void UiFileManagerPanel::OnDirectorySizeRequestFailure(proto::RequestStatus status)
+{
+    // TODO
+}
+
 void UiFileManagerPanel::OnCreateDirectoryRequestReply(proto::RequestStatus status)
 {
     sender_->SendFileListRequest(This(), file_list_.CurrentPath());

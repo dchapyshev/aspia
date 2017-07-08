@@ -65,6 +65,28 @@ bool FileReplyReceiverProxy::OnFileListRequestFailure(proto::RequestStatus statu
     return true;
 }
 
+bool FileReplyReceiverProxy::OnDirectorySizeRequestReply(uint64_t size)
+{
+    std::lock_guard<std::mutex> lock(receiver_lock_);
+
+    if (!receiver_)
+        return false;
+
+    receiver_->OnDirectorySizeRequestReply(size);
+    return true;
+}
+
+bool FileReplyReceiverProxy::OnDirectorySizeRequestFailure(proto::RequestStatus status)
+{
+    std::lock_guard<std::mutex> lock(receiver_lock_);
+
+    if (!receiver_)
+        return false;
+
+    receiver_->OnDirectorySizeRequestFailure(status);
+    return true;
+}
+
 bool FileReplyReceiverProxy::OnCreateDirectoryRequestReply(proto::RequestStatus status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);

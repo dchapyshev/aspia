@@ -76,6 +76,8 @@ private:
     void OnDriveListRequestFailure(proto::RequestStatus status) override;
     void OnFileListRequestReply(std::unique_ptr<proto::FileList> file_list) override;
     void OnFileListRequestFailure(proto::RequestStatus status) override;
+    void OnDirectorySizeRequestReply(uint64_t size) override;
+    void OnDirectorySizeRequestFailure(proto::RequestStatus status) override;
     void OnCreateDirectoryRequestReply(proto::RequestStatus status) override;
     void OnRemoveRequestReply(proto::RequestStatus status) override;
     void OnRenameRequestReply(proto::RequestStatus status) override;

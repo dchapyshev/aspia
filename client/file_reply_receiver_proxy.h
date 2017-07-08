@@ -24,6 +24,9 @@ public:
     bool OnFileListRequestReply(std::unique_ptr<proto::FileList> file_list);
     bool OnFileListRequestFailure(proto::RequestStatus status);
 
+    bool OnDirectorySizeRequestReply(uint64_t size);
+    bool OnDirectorySizeRequestFailure(proto::RequestStatus status);
+
     bool OnCreateDirectoryRequestReply(proto::RequestStatus status);
     bool OnRemoveRequestReply(proto::RequestStatus status);
     bool OnRenameRequestReply(proto::RequestStatus status);

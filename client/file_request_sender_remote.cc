@@ -45,7 +45,10 @@ void FileRequestSenderRemote::SendCreateDirectoryRequest(std::shared_ptr<FileRep
 void FileRequestSenderRemote::SendDirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                        const FilePath& path)
 {
-    // TODO
+    proto::file_transfer::ClientToHost request;
+    request.set_type(proto::RequestType::REQUEST_TYPE_DIRECTORY_SIZE);
+    request.mutable_directory_size_request()->set_path(path.u8string());
+    SendRequest(receiver, request);
 }
 
 void FileRequestSenderRemote::SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
@@ -123,7 +126,17 @@ bool FileRequestSenderRemote::ReadIncommingMessage(const IOBuffer& buffer)
 
         case proto::RequestType::REQUEST_TYPE_DIRECTORY_SIZE:
         {
-            // TODO
+            if (message.status() == proto::RequestStatus::REQUEST_STATUS_SUCCESS)
+            {
+                if (!message.has_directory_size())
+                    return false;
+
+                receiver->OnDirectorySizeRequestReply(message.directory_size().size());
+            }
+            else
+            {
+                receiver->OnDirectorySizeRequestFailure(message.status());
+            }
         }
         break;
 
