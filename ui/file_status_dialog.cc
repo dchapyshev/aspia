@@ -170,6 +170,14 @@ void UiFileStatusDialog::SetSessionTerminatedStatus()
         return;
     }
 
+    // Enable close button for dialog.
+    DWORD style = GetClassLongPtrW(*this, GCL_STYLE);
+    SetClassLongPtrW(*this, GCL_STYLE, style & ~CS_NOCLOSE);
+
+    CString button_title;
+    button_title.LoadStringW(IDS_FT_CLOSE_WINDOW);
+    GetDlgItem(IDC_STOP_BUTTON).SetWindowTextW(button_title);
+
     CString message;
     message.LoadStringW(IDS_FT_OP_SESSION_END);
     WriteLog(message, proto::RequestStatus::REQUEST_STATUS_SUCCESS);

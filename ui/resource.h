@@ -251,6 +251,7 @@
 #define IDS_FT_OP_SEND_FILE_ERROR             1051
 #define IDS_FT_OP_RECIEVE_FILE_ERROR          1052
 #define IDS_FT_FILE_FOLDER                    1053
+#define IDS_FT_CLOSE_WINDOW                   1054
 
 // Request Status
 #define IDS_REQUEST_STATUS_FIRST                11000

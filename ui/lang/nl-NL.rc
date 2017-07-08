@@ -397,6 +397,7 @@ BEGIN
     IDS_FT_OP_SEND_FILE_ERROR             "An error occurred while sending the file ""%s"": %s"
     IDS_FT_OP_RECIEVE_FILE_ERROR          "An error occurred while retrieving the file ""%s"": %s"
     IDS_FT_FILE_FOLDER                    "File Folder"
+    IDS_FT_CLOSE_WINDOW                   "Close window"
 END
 
 // Request Status

@@ -397,6 +397,7 @@ BEGIN
     IDS_FT_OP_SEND_FILE_ERROR             "Произошла ошибка при отправке файла ""%s"": %s"
     IDS_FT_OP_RECIEVE_FILE_ERROR          "Произошла ошибка при получении файла ""%s"": %s"
     IDS_FT_FILE_FOLDER                    "Папка с файлами"
+    IDS_FT_CLOSE_WINDOW                   "Закрыть окно"
 END
 
 // Request Status
