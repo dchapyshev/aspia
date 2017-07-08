@@ -44,8 +44,8 @@ public:
     bool ReadIncommingMessage(const IOBuffer& buffer);
 
 private:
-    void FileRequestSenderRemote::SendRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                              const proto::file_transfer::ClientToHost& request);
+    void SendRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                     std::unique_ptr<proto::file_transfer::ClientToHost> request);
 
     ClientSession::Delegate* session_;
     FileReplyReceiverQueue receiver_queue_;

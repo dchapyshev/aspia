@@ -21,11 +21,15 @@ public:
     FileReplyReceiverQueue() = default;
     ~FileReplyReceiverQueue() = default;
 
-    std::shared_ptr<FileReplyReceiverProxy> NextReceiver();
-    void AddReceiver(std::shared_ptr<FileReplyReceiverProxy> receiver);
+    bool ProcessNextReply(std::unique_ptr<proto::file_transfer::HostToClient> reply);
+
+    using Receiver = std::shared_ptr<FileReplyReceiverProxy>;
+    using Request = std::unique_ptr<proto::file_transfer::ClientToHost>;
+
+    void Add(Request request, Receiver receiver);
 
 private:
-    std::queue<std::shared_ptr<FileReplyReceiverProxy>> queue_;
+    std::queue<std::pair<Request, Receiver>> queue_;
     std::mutex queue_lock_;
 };
 
