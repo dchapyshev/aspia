@@ -7,6 +7,7 @@
 
 #include "ui/file_manager_panel.h"
 #include "ui/file_manager_helpers.h"
+#include "ui/status_code.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
@@ -398,7 +399,11 @@ void UiFileManagerPanel::OnDriveListRequestReply(std::unique_ptr<proto::DriveLis
 
 void UiFileManagerPanel::OnDriveListRequestFailure(proto::RequestStatus status)
 {
-    // TODO
+    CString status_string = RequestStatusCodeToString(status);
+
+    CString message;
+    message.Format(IDS_FT_OP_BROWSE_DRIVES_ERROR, status_string.GetBuffer(0));
+    MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
 }
 
 void UiFileManagerPanel::OnFileListRequestReply(const FilePath& path,
@@ -415,7 +420,11 @@ void UiFileManagerPanel::OnFileListRequestReply(const FilePath& path,
 void UiFileManagerPanel::OnFileListRequestFailure(const FilePath& path,
                                                   proto::RequestStatus status)
 {
-    // TODO
+    CString status_string = RequestStatusCodeToString(status);
+
+    CString message;
+    message.Format(IDS_FT_BROWSE_FOLDERS_ERROR, path.c_str(), status_string.GetBuffer(0));
+    MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
 }
 
 void UiFileManagerPanel::OnDirectorySizeRequestReply(const FilePath& path,
@@ -434,12 +443,30 @@ void UiFileManagerPanel::OnCreateDirectoryRequestReply(const FilePath& path,
                                                        proto::RequestStatus status)
 {
     sender_->SendFileListRequest(This(), file_list_.CurrentPath());
+
+    if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
+    {
+        CString status_string = RequestStatusCodeToString(status);
+
+        CString message;
+        message.Format(IDS_FT_OP_CREATE_FOLDER_ERROR, path.c_str(), status_string);
+        MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
+    }
 }
 
 void UiFileManagerPanel::OnRemoveRequestReply(const FilePath& path,
                                               proto::RequestStatus status)
 {
     sender_->SendFileListRequest(This(), file_list_.CurrentPath());
+
+    if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
+    {
+        CString status_string = RequestStatusCodeToString(status);
+
+        CString message;
+        message.Format(IDS_FT_OP_REMOVE_ERROR, path.c_str(), status_string);
+        MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
+    }
 }
 
 void UiFileManagerPanel::OnRenameRequestReply(const FilePath& old_name,
@@ -447,6 +474,19 @@ void UiFileManagerPanel::OnRenameRequestReply(const FilePath& old_name,
                                               proto::RequestStatus status)
 {
     sender_->SendFileListRequest(This(), file_list_.CurrentPath());
+
+    if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
+    {
+        CString status_string = RequestStatusCodeToString(status);
+
+        CString message;
+        message.Format(IDS_FT_OP_RENAME_ERROR,
+                       old_name.c_str(),
+                       new_name.c_str(),
+                       status_string);
+
+        MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
+    }
 }
 
 } // namespace aspia

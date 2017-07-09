@@ -7,7 +7,6 @@
 
 #include "ui/file_manager.h"
 #include "ui/resource.h"
-#include "ui/status_code.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "base/logging.h"
@@ -57,93 +56,6 @@ void UiFileManager::OnAfterThreadRunning()
 {
     DestroyWindow();
 }
-
-#if 0
-void UiFileManager::ReadRequestStatus(proto::Status status)
-{
-    if (status == proto::Status::STATUS_SUCCESS)
-        return;
-
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&UiFileManager::ReadRequestStatus, this, status));
-        return;
-    }
-
-    CString status_code = StatusCodeToString(status->code());
-    std::wstring first_path = UNICODEfromUTF8(status->first_path());
-    std::wstring second_path = UNICODEfromUTF8(status->second_path());
-
-    CString message;
-
-    switch (status->type())
-    {
-        case proto::RequestStatus::DRIVE_LIST:
-        {
-            message.Format(IDS_FT_OP_BROWSE_DRIVES_ERROR,
-                           status_code);
-        }
-        break;
-
-        case proto::RequestStatus::DIRECTORY_LIST:
-        {
-            message.Format(IDS_FT_BROWSE_FOLDERS_ERROR,
-                           first_path.c_str(),
-                           status_code);
-        }
-        break;
-
-        case proto::RequestStatus::CREATE_DIRECTORY:
-        {
-            message.Format(IDS_FT_OP_CREATE_FOLDER_ERROR,
-                           first_path.c_str(),
-                           status_code);
-        }
-        break;
-
-        case proto::RequestStatus::RENAME:
-        {
-            message.Format(IDS_FT_OP_RENAME_ERROR,
-                           first_path.c_str(),
-                           second_path.c_str(),
-                           status_code);
-        }
-        break;
-
-        case proto::RequestStatus::REMOVE:
-        {
-            message.Format(IDS_FT_OP_REMOVE_ERROR,
-                           first_path.c_str(),
-                           status_code);
-        }
-        break;
-
-        case proto::RequestStatus::SEND_FILE:
-        {
-            message.Format(IDS_FT_OP_SEND_FILE_ERROR,
-                           first_path.c_str(),
-                           status_code);
-        }
-        break;
-
-        case proto::RequestStatus::RECIEVE_FILE:
-        {
-            message.Format(IDS_FT_OP_RECIEVE_FILE_ERROR,
-                           first_path.c_str(),
-                           status_code);
-        }
-        break;
-
-        default:
-        {
-            DLOG(FATAL) << "Unhandled status code: " << status->type();
-        }
-        break;
-    }
-
-    MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
-}
-#endif
 
 LRESULT UiFileManager::OnCreate(UINT message,
                                 WPARAM wparam,
