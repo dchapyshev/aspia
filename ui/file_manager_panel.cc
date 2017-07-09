@@ -281,8 +281,6 @@ LRESULT UiFileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& h
 
 void UiFileManagerPanel::MoveToDrive(int object_index)
 {
-    drive_list_.SelectObject(object_index);
-
     if (object_index == UiDriveList::kComputerObjectIndex)
     {
         toolbar_.EnableButton(ID_FOLDER_ADD, FALSE);
