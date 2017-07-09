@@ -475,6 +475,12 @@
     <ClCompile Include="client\file_reply_receiver_queue.cc">
       <Filter>client</Filter>
     </ClCompile>
+    <ClCompile Include="client\file_transfer_uploader.cc">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="client\file_transfer_downloader.cc">
+      <Filter>client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1014,6 +1020,15 @@
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="client\file_reply_receiver_queue.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="client\file_transfer.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="client\file_transfer_uploader.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="client\file_transfer_downloader.h">
       <Filter>client</Filter>
     </ClInclude>
   </ItemGroup>

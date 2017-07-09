@@ -76,6 +76,8 @@
     <ClCompile Include="client\file_request_sender_local.cc" />
     <ClCompile Include="client\file_request_sender_proxy.cc" />
     <ClCompile Include="client\file_request_sender_remote.cc" />
+    <ClCompile Include="client\file_transfer_downloader.cc" />
+    <ClCompile Include="client\file_transfer_uploader.cc" />
     <ClCompile Include="codec\compressor_zlib.cc" />
     <ClCompile Include="codec\cursor_decoder.cc" />
     <ClCompile Include="codec\cursor_encoder.cc" />
@@ -239,6 +241,9 @@
     <ClInclude Include="client\file_request_sender_local.h" />
     <ClInclude Include="client\file_request_sender_proxy.h" />
     <ClInclude Include="client\file_request_sender_remote.h" />
+    <ClInclude Include="client\file_transfer.h" />
+    <ClInclude Include="client\file_transfer_downloader.h" />
+    <ClInclude Include="client\file_transfer_uploader.h" />
     <ClInclude Include="codec\compressor.h" />
     <ClInclude Include="codec\compressor_zlib.h" />
     <ClInclude Include="codec\cursor_decoder.h" />

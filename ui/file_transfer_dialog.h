@@ -12,6 +12,7 @@
 #include "base/macros.h"
 #include "client/file_reply_receiver.h"
 #include "client/file_request_sender_proxy.h"
+#include "client/file_transfer.h"
 #include "proto/file_transfer_session.pb.h"
 #include "ui/resource.h"
 
@@ -25,7 +26,7 @@ namespace aspia {
 
 class UiFileTransferDialog :
     public CDialogImpl<UiFileTransferDialog>,
-    public FileReplyReceiver
+    public FileTransfer::Delegate
 {
 public:
     enum { IDD = IDD_FILE_TRANSFER };
@@ -47,34 +48,22 @@ private:
     LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
-    void OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list) final;
-    void OnDriveListRequestFailure(proto::RequestStatus status) final;
-
-    void OnFileListRequestReply(const FilePath& path,
-                                std::unique_ptr<proto::FileList> file_list) final;
-
-    void OnFileListRequestFailure(const FilePath& path,
-                                  proto::RequestStatus status) final;
-
-    void OnDirectorySizeRequestReply(const FilePath& path, uint64_t size) final;
-
-    void OnDirectorySizeRequestFailure(const FilePath& path,
-                                       proto::RequestStatus status) final;
-
-    void OnCreateDirectoryRequestReply(const FilePath& path,
-                                       proto::RequestStatus status) final;
-
-    void OnRemoveRequestReply(const FilePath& path,
-                              proto::RequestStatus status) final;
-
-    void OnRenameRequestReply(const FilePath& old_name,
-                              const FilePath& new_name,
-                              proto::RequestStatus status) final;
+    // FileTransfer::Delegate implementation.
+    void OnObjectSizeNotify(uint64_t size) final;
+    void OnTransferCompletionNotify() final;
+    void OnObjectTransferNotify(const FilePath& source_path,
+                                const FilePath& target_path) final;
+    void OnDirectoryOverwriteRequest(const FilePath& object_name,
+                                     const FilePath& path) final;
+    void OnFileOverwriteRequest(const FilePath& object_name,
+                                const FilePath& path) final;
 
     std::shared_ptr<FileRequestSenderProxy> sender_;
 
     const FilePath& path_;
     const std::vector<proto::FileList::Item>& file_list_;
+
+    std::unique_ptr<FileTransfer> file_transfer_;
 
     DISALLOW_COPY_AND_ASSIGN(UiFileTransferDialog);
 };

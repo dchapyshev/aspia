@@ -6,6 +6,8 @@
 //
 
 #include "ui/file_transfer_dialog.h"
+#include "client/file_transfer_downloader.h"
+#include "client/file_transfer_uploader.h"
 
 namespace aspia {
 
@@ -21,7 +23,8 @@ UiFileTransferDialog::UiFileTransferDialog(std::shared_ptr<FileRequestSenderProx
 
 LRESULT UiFileTransferDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
-    // TODO
+    file_transfer_.reset(new FileTransferUploader(sender_, this));
+
     return TRUE;
 }
 
@@ -37,54 +40,30 @@ LRESULT UiFileTransferDialog::OnCancelButton(WORD code, WORD ctrl_id, HWND ctrl,
     return 0;
 }
 
-void UiFileTransferDialog::OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list)
+void UiFileTransferDialog::OnObjectSizeNotify(uint64_t size)
 {
     // TODO
 }
 
-void UiFileTransferDialog::OnDriveListRequestFailure(proto::RequestStatus status)
+void UiFileTransferDialog::OnTransferCompletionNotify()
+{
+    PostMessageW(WM_CLOSE);
+}
+
+void UiFileTransferDialog::OnObjectTransferNotify(const FilePath& source_path,
+                                                  const FilePath& target_path)
 {
     // TODO
 }
 
-void UiFileTransferDialog::OnFileListRequestReply(const FilePath& path,
-                                                  std::unique_ptr<proto::FileList> file_list)
+void UiFileTransferDialog::OnDirectoryOverwriteRequest(const FilePath& object_name,
+                                                       const FilePath& path)
 {
     // TODO
 }
 
-void UiFileTransferDialog::OnFileListRequestFailure(const FilePath& path,
-                                                    proto::RequestStatus status)
-{
-    // TODO
-}
-
-void UiFileTransferDialog::OnDirectorySizeRequestReply(const FilePath& path, uint64_t size)
-{
-    // TODO
-}
-
-void UiFileTransferDialog::OnDirectorySizeRequestFailure(const FilePath& path,
-                                                         proto::RequestStatus status)
-{
-    // TODO
-}
-
-void UiFileTransferDialog::OnCreateDirectoryRequestReply(const FilePath& path,
-                                                         proto::RequestStatus status)
-{
-    // TODO
-}
-
-void UiFileTransferDialog::OnRemoveRequestReply(const FilePath& path,
-                                                proto::RequestStatus status)
-{
-    // TODO
-}
-
-void UiFileTransferDialog::OnRenameRequestReply(const FilePath& old_name,
-                                                const FilePath& new_name,
-                                                proto::RequestStatus status)
+void UiFileTransferDialog::OnFileOverwriteRequest(const FilePath& object_name,
+                                                  const FilePath& path)
 {
     // TODO
 }
