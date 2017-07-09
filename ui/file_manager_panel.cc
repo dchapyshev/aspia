@@ -198,8 +198,6 @@ LRESULT UiFileManagerPanel::OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& ha
     if (!file_list_.IsValidObjectIndex(object_index))
         return 0;
 
-    const proto::FileList::Item& item = file_list_.Object(object_index);
-
     if (file_list_.IsDirectoryObject(object_index))
     {
         FilePath path(drive_list_.CurrentPath());
