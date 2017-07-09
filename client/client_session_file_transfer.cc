@@ -28,7 +28,10 @@ ClientSessionFileTransfer::~ClientSessionFileTransfer()
 
 void ClientSessionFileTransfer::Send(const IOBuffer& buffer)
 {
-    remote_sender_->ReadIncommingMessage(buffer);
+    if (!remote_sender_->ReadIncommingMessage(buffer))
+    {
+        delegate_->OnSessionTerminate();
+    }
 }
 
 void ClientSessionFileTransfer::OnWindowClose()
