@@ -10,8 +10,7 @@
 
 namespace aspia {
 
-bool FileReplyReceiverQueue::ProcessNextReply(
-    std::unique_ptr<proto::file_transfer::HostToClient> reply)
+bool FileReplyReceiverQueue::ProcessNextReply(proto::file_transfer::HostToClient& reply)
 {
     Request request;
     Receiver receiver;
@@ -34,80 +33,88 @@ bool FileReplyReceiverQueue::ProcessNextReply(
     DCHECK(request);
     DCHECK(receiver);
 
-    if (reply->type() != request->type())
+    if (reply.type() != request->type())
     {
         LOG(ERROR) << "Request type does not match type of reply. Request type: "
-            << request->type() << " Reply type: " << reply->type();
+            << request->type() << " Reply type: " << reply.type();
         return false;
     }
 
-    switch (reply->type())
+    switch (reply.type())
     {
         case proto::RequestType::REQUEST_TYPE_DRIVE_LIST:
         {
-            if (reply->status() == proto::RequestStatus::REQUEST_STATUS_SUCCESS)
+            if (reply.status() == proto::RequestStatus::REQUEST_STATUS_SUCCESS)
             {
-                if (!reply->has_drive_list())
+                if (!reply.has_drive_list())
                     return false;
 
-                std::unique_ptr<proto::DriveList> drive_list(reply->release_drive_list());
+                std::unique_ptr<proto::DriveList> drive_list(reply.release_drive_list());
                 receiver->OnDriveListRequestReply(std::move(drive_list));
             }
             else
             {
-                receiver->OnDriveListRequestFailure(reply->status());
+                receiver->OnDriveListRequestFailure(reply.status());
             }
         }
         break;
 
         case proto::RequestType::REQUEST_TYPE_FILE_LIST:
         {
-            if (reply->status() == proto::RequestStatus::REQUEST_STATUS_SUCCESS)
+            if (reply.status() == proto::RequestStatus::REQUEST_STATUS_SUCCESS)
             {
-                if (!reply->has_file_list())
+                if (!reply.has_file_list())
                     return false;
 
-                std::unique_ptr<proto::FileList> file_list(reply->release_file_list());
+                std::unique_ptr<proto::FileList> file_list(reply.release_file_list());
                 receiver->OnFileListRequestReply(std::move(file_list));
             }
             else
             {
-                receiver->OnFileListRequestFailure(reply->status());
+                receiver->OnFileListRequestFailure(reply.status());
             }
         }
         break;
 
         case proto::RequestType::REQUEST_TYPE_DIRECTORY_SIZE:
         {
-            if (reply->status() == proto::RequestStatus::REQUEST_STATUS_SUCCESS)
+            if (reply.status() == proto::RequestStatus::REQUEST_STATUS_SUCCESS)
             {
-                if (!reply->has_directory_size())
+                if (!reply.has_directory_size())
                     return false;
 
-                receiver->OnDirectorySizeRequestReply(reply->directory_size().size());
+                receiver->OnDirectorySizeRequestReply(reply.directory_size().size());
             }
             else
             {
-                receiver->OnDirectorySizeRequestFailure(reply->status());
+                receiver->OnDirectorySizeRequestFailure(reply.status());
             }
         }
         break;
 
         case proto::RequestType::REQUEST_TYPE_CREATE_DIRECTORY:
         {
-            receiver->OnCreateDirectoryRequestReply(reply->status());
+            receiver->OnCreateDirectoryRequestReply(reply.status());
         }
         break;
 
         case proto::RequestType::REQUEST_TYPE_RENAME:
         {
-            receiver->OnRenameRequestReply(reply->status());
+            receiver->OnRenameRequestReply(reply.status());
         }
         break;
 
         case proto::RequestType::REQUEST_TYPE_REMOVE:
         {
-            receiver->OnRemoveRequestReply(reply->status());
+            receiver->OnRemoveRequestReply(reply.status());
+        }
+        break;
+
+        case proto::RequestType::REQUEST_TYPE_UNKNOWN:
+        default:
+        {
+            DLOG(FATAL) << "Unknown request type";
+            return false;
         }
         break;
     }

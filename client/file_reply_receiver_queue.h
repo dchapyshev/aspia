@@ -21,7 +21,7 @@ public:
     FileReplyReceiverQueue() = default;
     ~FileReplyReceiverQueue() = default;
 
-    bool ProcessNextReply(std::unique_ptr<proto::file_transfer::HostToClient> reply);
+    bool ProcessNextReply(proto::file_transfer::HostToClient& reply);
 
     using Receiver = std::shared_ptr<FileReplyReceiverProxy>;
     using Request = std::unique_ptr<proto::file_transfer::ClientToHost>;

@@ -91,13 +91,12 @@ void FileRequestSenderRemote::SendRenameRequest(std::shared_ptr<FileReplyReceive
 
 bool FileRequestSenderRemote::ReadIncommingMessage(const IOBuffer& buffer)
 {
-    std::unique_ptr<proto::file_transfer::HostToClient> message =
-        std::make_unique<proto::file_transfer::HostToClient>();
+    proto::file_transfer::HostToClient message;
 
-    if (!ParseMessage(buffer, *message))
+    if (!ParseMessage(buffer, message))
         return false;
 
-    return receiver_queue_.ProcessNextReply(std::move(message));
+    return receiver_queue_.ProcessNextReply(message);
 }
 
 void FileRequestSenderRemote::SendRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
