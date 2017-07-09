@@ -49,8 +49,6 @@ Project code is available under the Mozilla Public License Version 2.0.
 
 Coverity Scan
 =============
-[![Coverity Scan Build Status](https://scan.coverity.com/projects/13117/badge.svg)](https://scan.coverity.com/projects/13117)
-
 <a href="https://scan.coverity.com/projects/aspia-remote-desktop">
   <img alt="Coverity Scan Build Status"
        src="https://scan.coverity.com/projects/13117/badge.svg"/>
