@@ -37,8 +37,8 @@ Also uses:
 Building
 --------
 For building the project requires:
-   - Visual Studio 2017: http://visualstudio.com
-   - YASM compiller: http://yasm.tortall.net/Download.html (version for "general use")
+   - [Visual Studio 2017](http://visualstudio.com "Visual Studio 2017")
+   - [YASM compiller](http://yasm.tortall.net/Download.html "YASM compiller") (version for "general use")
 
 All thrid party dependencies are included in the project.
 
