@@ -94,8 +94,7 @@ LRESULT UiUserPropDialog::OnInitDialog(UINT message,
     }
 
     list.SetExtendedListViewStyle(ex_style);
-
-    int column_index = list.AddColumn(L"", 0);
+    list.AddColumn(L"", 0);
 
     InsertSessionType(list,
                       proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE,
