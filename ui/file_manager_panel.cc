@@ -292,7 +292,7 @@ void UiFileManagerPanel::MoveToDrive(int object_index)
         toolbar_.EnableButton(ID_HOME, FALSE);
 
         file_list_.Read(drive_list_.DriveList());
-        drive_list_.SetCurrentPath(drive_list_.CurrentPath());
+        drive_list_.SetCurrentPath(FilePath());
     }
     else
     {
