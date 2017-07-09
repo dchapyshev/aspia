@@ -152,14 +152,14 @@ void UiFileList::Read(const proto::DriveList& list)
     }
 }
 
-bool UiFileList::HasDirectoryList() const
+bool UiFileList::HasFileList() const
 {
     return list_ != nullptr;
 }
 
 const proto::FileList::Item& UiFileList::Object(int object_index)
 {
-    DCHECK(HasDirectoryList());
+    DCHECK(HasFileList());
     DCHECK(IsValidObjectIndex(object_index));
 
     return list_->item(object_index);
@@ -167,7 +167,7 @@ const proto::FileList::Item& UiFileList::Object(int object_index)
 
 FilePath UiFileList::ObjectName(int object_index)
 {
-    DCHECK(HasDirectoryList());
+    DCHECK(HasFileList());
     DCHECK(IsValidObjectIndex(object_index));
 
     return fs::u8path(list_->item(object_index).name());
@@ -175,7 +175,7 @@ FilePath UiFileList::ObjectName(int object_index)
 
 bool UiFileList::IsDirectoryObject(int object_index)
 {
-    DCHECK(HasDirectoryList());
+    DCHECK(HasFileList());
     DCHECK(IsValidObjectIndex(object_index));
 
     return list_->item(object_index).is_directory();
@@ -197,7 +197,7 @@ proto::FileList::Item* UiFileList::FirstSelectedObject() const
 
 void UiFileList::AddDirectory()
 {
-    if (!HasDirectoryList())
+    if (!HasFileList())
         return;
 
     CIcon folder_icon(GetDirectoryIcon());
@@ -272,17 +272,19 @@ void UiFileList::Iterator::Advance()
     item_index_ = list_.GetNextItem(item_index_, mode_);
 }
 
-proto::FileList::Item* UiFileList::Iterator::Object() const
+const proto::FileList::Item& UiFileList::Iterator::Object() const
 {
+    static const proto::FileList::Item empty_item;
+
     if (item_index_ == -1)
-        return nullptr;
+        return empty_item;
 
     int object_index = list_.GetItemData(item_index_);
 
     if (!list_.IsValidObjectIndex(object_index))
-        return nullptr;
+        return empty_item;
 
-    return list_.list_->mutable_item(object_index);
+    return list_.list_->item(object_index);
 }
 
 int UiFileList::GetObjectUnderMousePointer() const

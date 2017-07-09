@@ -8,6 +8,7 @@
 #include "ui/file_manager_panel.h"
 #include "ui/file_manager_helpers.h"
 #include "ui/status_code.h"
+#include "ui/file_transfer_dialog.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
@@ -188,7 +189,7 @@ LRESULT UiFileManagerPanel::OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& ha
 {
     int object_index = file_list_.GetObjectUnderMousePointer();
 
-    if (!file_list_.HasDirectoryList())
+    if (!file_list_.HasFileList())
     {
         MoveToDrive(object_index);
         return 0;
@@ -236,7 +237,7 @@ LRESULT UiFileManagerPanel::OnRefresh(WORD code, WORD ctrl_id, HWND ctrl, BOOL& 
 {
     sender_->SendDriveListRequest(This());
 
-    if (file_list_.HasDirectoryList())
+    if (file_list_.HasFileList())
     {
         sender_->SendFileListRequest(This(), drive_list_.CurrentPath());
     }
@@ -246,7 +247,7 @@ LRESULT UiFileManagerPanel::OnRefresh(WORD code, WORD ctrl_id, HWND ctrl, BOOL& 
 
 LRESULT UiFileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
-    if (!file_list_.HasDirectoryList())
+    if (!file_list_.HasFileList())
         return 0;
 
     UINT selected_count = file_list_.GetSelectedCount();
@@ -265,12 +266,10 @@ LRESULT UiFileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& h
              !iter.IsAtEnd();
              iter.Advance())
         {
-            proto::FileList::Item* object = iter.Object();
-            if (!object)
-                continue;
+            const proto::FileList::Item& object = iter.Object();
 
             FilePath path = drive_list_.CurrentPath();
-            path.append(fs::u8path(object->name()));
+            path.append(fs::u8path(object.name()));
 
             sender_->SendRemoveRequest(This(), path);
         }
@@ -302,7 +301,7 @@ LRESULT UiFileManagerPanel::OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& h
 {
     LPNMLVDISPINFOW disp_info = reinterpret_cast<LPNMLVDISPINFOW>(hdr);
 
-    if (!file_list_.HasDirectoryList())
+    if (!file_list_.HasFileList())
         return 0;
 
     int object_index = disp_info->item.lParam;
@@ -344,7 +343,7 @@ LRESULT UiFileManagerPanel::OnListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& ha
 {
     UINT count = file_list_.GetSelectedCount();
 
-    if (file_list_.HasDirectoryList())
+    if (file_list_.HasFileList())
     {
         bool enable = (count != 0);
 
@@ -361,8 +360,27 @@ LRESULT UiFileManagerPanel::OnListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& ha
 
 LRESULT UiFileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
-    if (!file_list_.HasDirectoryList())
+    if (!file_list_.HasFileList())
         return 0;
+
+    std::vector<proto::FileList::Item> file_list_to_copy;
+
+    // Create a list of files and directories to copy.
+    for (UiFileList::Iterator iter(file_list_, UiFileList::Iterator::SELECTED);
+         !iter.IsAtEnd();
+         iter.Advance())
+    {
+        file_list_to_copy.push_back(iter.Object());
+    }
+
+    // If the list is empty (there are no selected items).
+    if (file_list_to_copy.empty())
+        return 0;
+
+    UiFileTransferDialog file_transfer_dialog(sender_,
+                                              drive_list_.CurrentPath(),
+                                              file_list_to_copy);
+    file_transfer_dialog.DoModal(*this);
 
     return 0;
 }
@@ -389,7 +407,7 @@ void UiFileManagerPanel::OnDriveListRequestReply(std::unique_ptr<proto::DriveLis
 {
     drive_list_.Read(std::move(drive_list));
 
-    if (!file_list_.HasDirectoryList())
+    if (!file_list_.HasFileList())
     {
         MoveToDrive(UiDriveList::kComputerObjectIndex);
     }

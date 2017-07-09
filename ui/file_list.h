@@ -36,7 +36,7 @@ public:
     void Read(const proto::DriveList& list);
 
     bool IsValidObjectIndex(int object_index) const;
-    bool HasDirectoryList() const;
+    bool HasFileList() const;
     const proto::FileList::Item& Object(int object_index);
     FilePath ObjectName(int object_index);
     bool IsDirectoryObject(int object_index);
@@ -58,7 +58,7 @@ public:
 
         bool IsAtEnd() const;
         void Advance();
-        proto::FileList::Item* Object() const;
+        const proto::FileList::Item& Object() const;
 
     private:
         const UiFileList& list_;
