@@ -453,7 +453,10 @@ void UiMainDialog::CopySelectedIp()
 
     LPWSTR text_global_locked = reinterpret_cast<LPWSTR>(GlobalLock(text_global));
     if (!text_global_locked)
+    {
+        GlobalFree(text_global);
         return;
+    }
 
     memcpy(text_global_locked, text, length * sizeof(WCHAR));
     text_global_locked[length] = 0;

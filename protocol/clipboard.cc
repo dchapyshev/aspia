@@ -263,6 +263,7 @@ void Clipboard::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clip
     if (!text_global_locked)
     {
         LOG(WARNING) << "GlobalLock() failed: " << GetLastSystemErrorString();
+        GlobalFree(text_global);
         return;
     }
 
