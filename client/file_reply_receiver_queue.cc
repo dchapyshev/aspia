@@ -10,6 +10,8 @@
 
 namespace aspia {
 
+namespace fs = std::experimental::filesystem;
+
 bool FileReplyReceiverQueue::ProcessNextReply(proto::file_transfer::HostToClient& reply)
 {
     Request request;
@@ -67,11 +69,14 @@ bool FileReplyReceiverQueue::ProcessNextReply(proto::file_transfer::HostToClient
                     return false;
 
                 std::unique_ptr<proto::FileList> file_list(reply.release_file_list());
-                receiver->OnFileListRequestReply(std::move(file_list));
+
+                receiver->OnFileListRequestReply(fs::u8path(request->file_list_request().path()),
+                                                 std::move(file_list));
             }
             else
             {
-                receiver->OnFileListRequestFailure(reply.status());
+                receiver->OnFileListRequestFailure(fs::u8path(request->file_list_request().path()),
+                                                   reply.status());
             }
         }
         break;
@@ -83,30 +88,36 @@ bool FileReplyReceiverQueue::ProcessNextReply(proto::file_transfer::HostToClient
                 if (!reply.has_directory_size())
                     return false;
 
-                receiver->OnDirectorySizeRequestReply(reply.directory_size().size());
+                receiver->OnDirectorySizeRequestReply(fs::u8path(request->directory_size_request().path()),
+                                                      reply.directory_size().size());
             }
             else
             {
-                receiver->OnDirectorySizeRequestFailure(reply.status());
+                receiver->OnDirectorySizeRequestFailure(fs::u8path(request->directory_size_request().path()),
+                                                        reply.status());
             }
         }
         break;
 
         case proto::RequestType::REQUEST_TYPE_CREATE_DIRECTORY:
         {
-            receiver->OnCreateDirectoryRequestReply(reply.status());
+            receiver->OnCreateDirectoryRequestReply(fs::u8path(request->create_directory_request().path()),
+                                                    reply.status());
         }
         break;
 
         case proto::RequestType::REQUEST_TYPE_RENAME:
         {
-            receiver->OnRenameRequestReply(reply.status());
+            receiver->OnRenameRequestReply(fs::u8path(request->rename_request().old_name()),
+                                           fs::u8path(request->rename_request().new_name()),
+                                           reply.status());
         }
         break;
 
         case proto::RequestType::REQUEST_TYPE_REMOVE:
         {
-            receiver->OnRemoveRequestReply(reply.status());
+            receiver->OnRemoveRequestReply(fs::u8path(request->remove_request().path()),
+                                           reply.status());
         }
         break;
 

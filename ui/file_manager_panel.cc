@@ -401,7 +401,8 @@ void UiFileManagerPanel::OnDriveListRequestFailure(proto::RequestStatus status)
     // TODO
 }
 
-void UiFileManagerPanel::OnFileListRequestReply(std::unique_ptr<proto::FileList> file_list)
+void UiFileManagerPanel::OnFileListRequestReply(const FilePath& path,
+                                                std::unique_ptr<proto::FileList> file_list)
 {
     toolbar_.EnableButton(ID_FOLDER_ADD, TRUE);
     toolbar_.EnableButton(ID_FOLDER_UP, TRUE);
@@ -411,32 +412,39 @@ void UiFileManagerPanel::OnFileListRequestReply(std::unique_ptr<proto::FileList>
     drive_list_.SetCurrentPath(file_list_.CurrentPath());
 }
 
-void UiFileManagerPanel::OnFileListRequestFailure(proto::RequestStatus status)
+void UiFileManagerPanel::OnFileListRequestFailure(const FilePath& path,
+                                                  proto::RequestStatus status)
 {
     // TODO
 }
 
-void UiFileManagerPanel::OnDirectorySizeRequestReply(uint64_t size)
+void UiFileManagerPanel::OnDirectorySizeRequestReply(const FilePath& path,
+                                                     uint64_t size)
 {
     // TODO
 }
 
-void UiFileManagerPanel::OnDirectorySizeRequestFailure(proto::RequestStatus status)
+void UiFileManagerPanel::OnDirectorySizeRequestFailure(const FilePath& path,
+                                                       proto::RequestStatus status)
 {
     // TODO
 }
 
-void UiFileManagerPanel::OnCreateDirectoryRequestReply(proto::RequestStatus status)
+void UiFileManagerPanel::OnCreateDirectoryRequestReply(const FilePath& path,
+                                                       proto::RequestStatus status)
 {
     sender_->SendFileListRequest(This(), file_list_.CurrentPath());
 }
 
-void UiFileManagerPanel::OnRemoveRequestReply(proto::RequestStatus status)
+void UiFileManagerPanel::OnRemoveRequestReply(const FilePath& path,
+                                              proto::RequestStatus status)
 {
     sender_->SendFileListRequest(This(), file_list_.CurrentPath());
 }
 
-void UiFileManagerPanel::OnRenameRequestReply(proto::RequestStatus status)
+void UiFileManagerPanel::OnRenameRequestReply(const FilePath& old_name,
+                                              const FilePath& new_name,
+                                              proto::RequestStatus status)
 {
     sender_->SendFileListRequest(This(), file_list_.CurrentPath());
 }

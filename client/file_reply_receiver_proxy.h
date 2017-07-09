@@ -19,17 +19,26 @@ class FileReplyReceiverProxy
 {
 public:
     bool OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list);
+
     bool OnDriveListRequestFailure(proto::RequestStatus status);
 
-    bool OnFileListRequestReply(std::unique_ptr<proto::FileList> file_list);
-    bool OnFileListRequestFailure(proto::RequestStatus status);
+    bool OnFileListRequestReply(const FilePath& path,
+                                std::unique_ptr<proto::FileList> file_list);
 
-    bool OnDirectorySizeRequestReply(uint64_t size);
-    bool OnDirectorySizeRequestFailure(proto::RequestStatus status);
+    bool OnFileListRequestFailure(const FilePath& path,
+                                  proto::RequestStatus status);
 
-    bool OnCreateDirectoryRequestReply(proto::RequestStatus status);
-    bool OnRemoveRequestReply(proto::RequestStatus status);
-    bool OnRenameRequestReply(proto::RequestStatus status);
+    bool OnDirectorySizeRequestReply(const FilePath& path, uint64_t size);
+
+    bool OnDirectorySizeRequestFailure(const FilePath& path, proto::RequestStatus status);
+
+    bool OnCreateDirectoryRequestReply(const FilePath& path, proto::RequestStatus status);
+
+    bool OnRemoveRequestReply(const FilePath& path, proto::RequestStatus status);
+
+    bool OnRenameRequestReply(const FilePath& old_name,
+                              const FilePath& new_name,
+                              proto::RequestStatus status);
 
 private:
     friend class FileReplyReceiver;

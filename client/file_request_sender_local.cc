@@ -66,11 +66,11 @@ void FileRequestSenderLocal::FileListRequest(std::shared_ptr<FileReplyReceiverPr
 
     if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
     {
-        receiver->OnFileListRequestFailure(status);
+        receiver->OnFileListRequestFailure(path, status);
         return;
     }
 
-    receiver->OnFileListRequestReply(std::move(file_list));
+    receiver->OnFileListRequestReply(path, std::move(file_list));
 }
 
 void FileRequestSenderLocal::SendFileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
@@ -85,7 +85,7 @@ void FileRequestSenderLocal::CreateDirectoryRequest(std::shared_ptr<FileReplyRec
 {
     DCHECK(worker_->BelongsToCurrentThread());
 
-    receiver->OnCreateDirectoryRequestReply(ExecuteCreateDirectoryRequest(path));
+    receiver->OnCreateDirectoryRequestReply(path, ExecuteCreateDirectoryRequest(path));
 }
 
 void FileRequestSenderLocal::SendCreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
@@ -114,7 +114,7 @@ void FileRequestSenderLocal::RemoveRequest(std::shared_ptr<FileReplyReceiverProx
 {
     DCHECK(worker_->BelongsToCurrentThread());
 
-    receiver->OnRemoveRequestReply(ExecuteRemoveRequest(path));
+    receiver->OnRemoveRequestReply(path, ExecuteRemoveRequest(path));
 }
 
 void FileRequestSenderLocal::SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
@@ -130,7 +130,7 @@ void FileRequestSenderLocal::RenameRequest(std::shared_ptr<FileReplyReceiverProx
 {
     DCHECK(worker_->BelongsToCurrentThread());
 
-    receiver->OnRenameRequestReply(ExecuteRenameRequest(old_name, new_name));
+    receiver->OnRenameRequestReply(old_name, new_name, ExecuteRenameRequest(old_name, new_name));
 }
 
 void FileRequestSenderLocal::SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,

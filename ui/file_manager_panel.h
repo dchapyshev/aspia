@@ -74,13 +74,13 @@ private:
     // FileReplyReceiver implementation.
     void OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list) override;
     void OnDriveListRequestFailure(proto::RequestStatus status) override;
-    void OnFileListRequestReply(std::unique_ptr<proto::FileList> file_list) override;
-    void OnFileListRequestFailure(proto::RequestStatus status) override;
-    void OnDirectorySizeRequestReply(uint64_t size) override;
-    void OnDirectorySizeRequestFailure(proto::RequestStatus status) override;
-    void OnCreateDirectoryRequestReply(proto::RequestStatus status) override;
-    void OnRemoveRequestReply(proto::RequestStatus status) override;
-    void OnRenameRequestReply(proto::RequestStatus status) override;
+    void OnFileListRequestReply(const FilePath& path, std::unique_ptr<proto::FileList> file_list) override;
+    void OnFileListRequestFailure(const FilePath& path, proto::RequestStatus status) override;
+    void OnDirectorySizeRequestReply(const FilePath& path, uint64_t size) override;
+    void OnDirectorySizeRequestFailure(const FilePath& path, proto::RequestStatus status) override;
+    void OnCreateDirectoryRequestReply(const FilePath& path, proto::RequestStatus status) override;
+    void OnRemoveRequestReply(const FilePath& path, proto::RequestStatus status) override;
+    void OnRenameRequestReply(const FilePath& old_name, const FilePath& new_name, proto::RequestStatus status) override;
 
     void MoveToDrive(int object_index);
 

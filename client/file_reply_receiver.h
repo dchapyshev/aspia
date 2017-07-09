@@ -28,17 +28,30 @@ protected:
     std::shared_ptr<FileReplyReceiverProxy> This();
 
     virtual void OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list) = 0;
+
     virtual void OnDriveListRequestFailure(proto::RequestStatus status) = 0;
 
-    virtual void OnFileListRequestReply(std::unique_ptr<proto::FileList> file_list) = 0;
-    virtual void OnFileListRequestFailure(proto::RequestStatus status) = 0;
+    virtual void OnFileListRequestReply(const FilePath& path,
+                                        std::unique_ptr<proto::FileList> file_list) = 0;
 
-    virtual void OnDirectorySizeRequestReply(uint64_t size) = 0;
-    virtual void OnDirectorySizeRequestFailure(proto::RequestStatus status) = 0;
+    virtual void OnFileListRequestFailure(const FilePath& path,
+                                          proto::RequestStatus status) = 0;
 
-    virtual void OnCreateDirectoryRequestReply(proto::RequestStatus status) = 0;
-    virtual void OnRemoveRequestReply(proto::RequestStatus status) = 0;
-    virtual void OnRenameRequestReply(proto::RequestStatus status) = 0;
+    virtual void OnDirectorySizeRequestReply(const FilePath& path,
+                                             uint64_t size) = 0;
+
+    virtual void OnDirectorySizeRequestFailure(const FilePath& path,
+                                               proto::RequestStatus status) = 0;
+
+    virtual void OnCreateDirectoryRequestReply(const FilePath& path,
+                                               proto::RequestStatus status) = 0;
+
+    virtual void OnRemoveRequestReply(const FilePath& path,
+                                      proto::RequestStatus status) = 0;
+
+    virtual void OnRenameRequestReply(const FilePath& old_name,
+                                      const FilePath& new_name,
+                                      proto::RequestStatus status) = 0;
 
 private:
     friend class FileReplyReceiverProxy;
