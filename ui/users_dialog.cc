@@ -105,7 +105,7 @@ LRESULT UiUsersDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, 
 
     CString title;
     title.LoadStringW(IDS_USER_LIST);
-    int column_index = list.AddColumn(title, 0);
+    list.AddColumn(title, 0);
 
     if (!IsCallerHasAdminRights())
     {
