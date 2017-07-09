@@ -21,8 +21,6 @@ class UiFileManager :
     private MessageLoopThread::Delegate
 {
 public:
-    using PanelType = UiFileManagerPanel::PanelType;
-
     class Delegate
     {
     public:

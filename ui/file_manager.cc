@@ -21,8 +21,8 @@ UiFileManager::UiFileManager(std::shared_ptr<FileRequestSenderProxy> local_sende
                              std::shared_ptr<FileRequestSenderProxy> remote_sender,
                              Delegate* delegate) :
     delegate_(delegate),
-    local_panel_(PanelType::LOCAL, local_sender),
-    remote_panel_(PanelType::REMOTE, remote_sender)
+    local_panel_(UiFileManagerPanel::PanelType::LOCAL, local_sender),
+    remote_panel_(UiFileManagerPanel::PanelType::REMOTE, remote_sender)
 {
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
