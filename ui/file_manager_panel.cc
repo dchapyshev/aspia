@@ -201,7 +201,7 @@ LRESULT UiFileManagerPanel::OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& ha
 
     if (file_list_.IsDirectoryObject(object_index))
     {
-        FilePath path(file_list_.CurrentPath());
+        FilePath path(drive_list_.CurrentPath());
         path.append(file_list_.ObjectName(object_index));
 
         sender_->SendFileListRequest(This(), path);
@@ -212,7 +212,7 @@ LRESULT UiFileManagerPanel::OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& ha
 
 LRESULT UiFileManagerPanel::OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
-    FilePath path = file_list_.CurrentPath();
+    FilePath path = drive_list_.CurrentPath();
 
     if (!path.has_parent_path() || path.parent_path() == path.root_name())
     {
@@ -238,7 +238,7 @@ LRESULT UiFileManagerPanel::OnRefresh(WORD code, WORD ctrl_id, HWND ctrl, BOOL& 
 
     if (file_list_.HasDirectoryList())
     {
-        sender_->SendFileListRequest(This(), file_list_.CurrentPath());
+        sender_->SendFileListRequest(This(), drive_list_.CurrentPath());
     }
 
     return 0;
@@ -269,7 +269,7 @@ LRESULT UiFileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& h
             if (!object)
                 continue;
 
-            FilePath path = file_list_.CurrentPath();
+            FilePath path = drive_list_.CurrentPath();
             path.append(fs::u8path(object->name()));
 
             sender_->SendRemoveRequest(This(), path);
@@ -292,7 +292,7 @@ void UiFileManagerPanel::MoveToDrive(int object_index)
         toolbar_.EnableButton(ID_HOME, FALSE);
 
         file_list_.Read(drive_list_.DriveList());
-        drive_list_.SetCurrentPath(file_list_.CurrentPath());
+        drive_list_.SetCurrentPath(drive_list_.CurrentPath());
     }
     else
     {
@@ -317,7 +317,7 @@ LRESULT UiFileManagerPanel::OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& h
         WCHAR buffer[MAX_PATH] = { 0 };
         edit.GetWindowTextW(buffer, _countof(buffer));
 
-        FilePath path = file_list_.CurrentPath();
+        FilePath path = drive_list_.CurrentPath();
         path.append(buffer);
 
         sender_->SendCreateDirectoryRequest(This(), path);
@@ -330,10 +330,10 @@ LRESULT UiFileManagerPanel::OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& h
         if (!disp_info->item.pszText)
             return 0;
 
-        FilePath old_name = file_list_.CurrentPath();
+        FilePath old_name = drive_list_.CurrentPath();
         old_name.append(file_list_.ObjectName(object_index));
 
-        FilePath new_name = file_list_.CurrentPath();
+        FilePath new_name = drive_list_.CurrentPath();
         new_name.append(disp_info->item.pszText);
 
         sender_->SendRenameRequest(This(), old_name, new_name);
@@ -414,7 +414,7 @@ void UiFileManagerPanel::OnFileListRequestReply(const FilePath& path,
     toolbar_.EnableButton(ID_HOME, TRUE);
 
     file_list_.Read(std::move(file_list));
-    drive_list_.SetCurrentPath(file_list_.CurrentPath());
+    drive_list_.SetCurrentPath(path);
 }
 
 void UiFileManagerPanel::OnFileListRequestFailure(const FilePath& path,
@@ -442,7 +442,7 @@ void UiFileManagerPanel::OnDirectorySizeRequestFailure(const FilePath& path,
 void UiFileManagerPanel::OnCreateDirectoryRequestReply(const FilePath& path,
                                                        proto::RequestStatus status)
 {
-    sender_->SendFileListRequest(This(), file_list_.CurrentPath());
+    sender_->SendFileListRequest(This(), drive_list_.CurrentPath());
 
     if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
     {
@@ -457,7 +457,7 @@ void UiFileManagerPanel::OnCreateDirectoryRequestReply(const FilePath& path,
 void UiFileManagerPanel::OnRemoveRequestReply(const FilePath& path,
                                               proto::RequestStatus status)
 {
-    sender_->SendFileListRequest(This(), file_list_.CurrentPath());
+    sender_->SendFileListRequest(This(), drive_list_.CurrentPath());
 
     if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
     {
@@ -473,7 +473,7 @@ void UiFileManagerPanel::OnRenameRequestReply(const FilePath& old_name,
                                               const FilePath& new_name,
                                               proto::RequestStatus status)
 {
-    sender_->SendFileListRequest(This(), file_list_.CurrentPath());
+    sender_->SendFileListRequest(This(), drive_list_.CurrentPath());
 
     if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
     {

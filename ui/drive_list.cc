@@ -127,6 +127,8 @@ const proto::DriveList& UiDriveList::DriveList() const
 
 void UiDriveList::SetCurrentPath(const FilePath& path)
 {
+    current_path_ = path;
+
     int current_folder_item_index =
         GetItemIndexByObjectIndex(kCurrentFolderObjectIndex);
 
@@ -160,6 +162,11 @@ void UiDriveList::SetCurrentPath(const FilePath& path)
     }
 
     SelectObject(known_object_index);
+}
+
+const FilePath& UiDriveList::CurrentPath() const
+{
+    return current_path_;
 }
 
 FilePath UiDriveList::ObjectPath(int object_index) const

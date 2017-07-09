@@ -105,17 +105,6 @@ const DriveList_Item_Type DriveList_Item_Type_Type_MIN = DriveList_Item_Type_UNK
 const DriveList_Item_Type DriveList_Item_Type_Type_MAX = DriveList_Item_Type_DESKTOP_FOLDER;
 const int DriveList_Item_Type_Type_ARRAYSIZE = DriveList_Item_Type_Type_MAX + 1;
 
-enum FileListRequest_Flags {
-  FileListRequest_Flags_DEFAULT = 0,
-  FileListRequest_Flags_RECURSIVE = 1,
-  FileListRequest_Flags_FileListRequest_Flags_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  FileListRequest_Flags_FileListRequest_Flags_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool FileListRequest_Flags_IsValid(int value);
-const FileListRequest_Flags FileListRequest_Flags_Flags_MIN = FileListRequest_Flags_DEFAULT;
-const FileListRequest_Flags FileListRequest_Flags_Flags_MAX = FileListRequest_Flags_RECURSIVE;
-const int FileListRequest_Flags_Flags_ARRAYSIZE = FileListRequest_Flags_Flags_MAX + 1;
-
 enum FilePacket_Flags {
   FilePacket_Flags_ERROR = 0,
   FilePacket_Flags_PACKET = 1,
@@ -569,10 +558,10 @@ class FileList : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
 
   // accessors -------------------------------------------------------
 
-  // repeated .aspia.proto.FileList.Item item = 2;
+  // repeated .aspia.proto.FileList.Item item = 1;
   int item_size() const;
   void clear_item();
-  static const int kItemFieldNumber = 2;
+  static const int kItemFieldNumber = 1;
   const ::aspia::proto::FileList_Item& item(int index) const;
   ::aspia::proto::FileList_Item* mutable_item(int index);
   ::aspia::proto::FileList_Item* add_item();
@@ -581,26 +570,11 @@ class FileList : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   const ::google::protobuf::RepeatedPtrField< ::aspia::proto::FileList_Item >&
       item() const;
 
-  // string path = 1;
-  void clear_path();
-  static const int kPathFieldNumber = 1;
-  const ::std::string& path() const;
-  void set_path(const ::std::string& value);
-  #if LANG_CXX11
-  void set_path(::std::string&& value);
-  #endif
-  void set_path(const char* value);
-  void set_path(const char* value, size_t size);
-  ::std::string* mutable_path();
-  ::std::string* release_path();
-  void set_allocated_path(::std::string* path);
-
   // @@protoc_insertion_point(class_scope:aspia.proto.FileList)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::aspia::proto::FileList_Item > item_;
-  ::google::protobuf::internal::ArenaStringPtr path_;
   mutable int _cached_size_;
   friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
 };
@@ -666,26 +640,11 @@ class FileListRequest : public ::google::protobuf::MessageLite /* @@protoc_inser
 
   // nested types ----------------------------------------------------
 
-  typedef FileListRequest_Flags Flags;
-  static const Flags DEFAULT =
-    FileListRequest_Flags_DEFAULT;
-  static const Flags RECURSIVE =
-    FileListRequest_Flags_RECURSIVE;
-  static inline bool Flags_IsValid(int value) {
-    return FileListRequest_Flags_IsValid(value);
-  }
-  static const Flags Flags_MIN =
-    FileListRequest_Flags_Flags_MIN;
-  static const Flags Flags_MAX =
-    FileListRequest_Flags_Flags_MAX;
-  static const int Flags_ARRAYSIZE =
-    FileListRequest_Flags_Flags_ARRAYSIZE;
-
   // accessors -------------------------------------------------------
 
-  // string path = 2;
+  // string path = 1;
   void clear_path();
-  static const int kPathFieldNumber = 2;
+  static const int kPathFieldNumber = 1;
   const ::std::string& path() const;
   void set_path(const ::std::string& value);
   #if LANG_CXX11
@@ -697,18 +656,11 @@ class FileListRequest : public ::google::protobuf::MessageLite /* @@protoc_inser
   ::std::string* release_path();
   void set_allocated_path(::std::string* path);
 
-  // uint32 flags = 1;
-  void clear_flags();
-  static const int kFlagsFieldNumber = 1;
-  ::google::protobuf::uint32 flags() const;
-  void set_flags(::google::protobuf::uint32 value);
-
   // @@protoc_insertion_point(class_scope:aspia.proto.FileListRequest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr path_;
-  ::google::protobuf::uint32 flags_;
   mutable int _cached_size_;
   friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
 };
@@ -1647,60 +1599,7 @@ inline void FileList_Item::set_is_directory(bool value) {
 
 // FileList
 
-// string path = 1;
-inline void FileList::clear_path() {
-  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& FileList::path() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.FileList.path)
-  return path_.GetNoArena();
-}
-inline void FileList::set_path(const ::std::string& value) {
-  
-  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.FileList.path)
-}
-#if LANG_CXX11
-inline void FileList::set_path(::std::string&& value) {
-  
-  path_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.FileList.path)
-}
-#endif
-inline void FileList::set_path(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.FileList.path)
-}
-inline void FileList::set_path(const char* value, size_t size) {
-  
-  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.FileList.path)
-}
-inline ::std::string* FileList::mutable_path() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.FileList.path)
-  return path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* FileList::release_path() {
-  // @@protoc_insertion_point(field_release:aspia.proto.FileList.path)
-  
-  return path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void FileList::set_allocated_path(::std::string* path) {
-  if (path != NULL) {
-    
-  } else {
-    
-  }
-  path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.FileList.path)
-}
-
-// repeated .aspia.proto.FileList.Item item = 2;
+// repeated .aspia.proto.FileList.Item item = 1;
 inline int FileList::item_size() const {
   return item_.size();
 }
@@ -1734,21 +1633,7 @@ FileList::item() const {
 
 // FileListRequest
 
-// uint32 flags = 1;
-inline void FileListRequest::clear_flags() {
-  flags_ = 0u;
-}
-inline ::google::protobuf::uint32 FileListRequest::flags() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.FileListRequest.flags)
-  return flags_;
-}
-inline void FileListRequest::set_flags(::google::protobuf::uint32 value) {
-  
-  flags_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.FileListRequest.flags)
-}
-
-// string path = 2;
+// string path = 1;
 inline void FileListRequest::clear_path() {
   path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -2277,7 +2162,6 @@ namespace google {
 namespace protobuf {
 
 template <> struct is_proto_enum< ::aspia::proto::DriveList_Item_Type> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::FileListRequest_Flags> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::FilePacket_Flags> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::RequestStatus> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::RequestType> : ::google::protobuf::internal::true_type {};

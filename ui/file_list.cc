@@ -157,14 +157,6 @@ bool UiFileList::HasDirectoryList() const
     return list_ != nullptr;
 }
 
-FilePath UiFileList::CurrentPath() const
-{
-    if (!HasDirectoryList())
-        return FilePath();
-
-    return fs::u8path(list_->path());
-}
-
 const proto::FileList::Item& UiFileList::Object(int object_index)
 {
     DCHECK(HasDirectoryList());
@@ -179,16 +171,6 @@ FilePath UiFileList::ObjectName(int object_index)
     DCHECK(IsValidObjectIndex(object_index));
 
     return fs::u8path(list_->item(object_index).name());
-}
-
-FilePath UiFileList::ObjectPath(int object_index)
-{
-    DCHECK(HasDirectoryList());
-    DCHECK(IsValidObjectIndex(object_index));
-
-    FilePath path = CurrentPath();
-    path.append(ObjectName(object_index));
-    return path;
 }
 
 bool UiFileList::IsDirectoryObject(int object_index)

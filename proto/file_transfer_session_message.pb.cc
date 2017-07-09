@@ -155,23 +155,6 @@ const DriveList_Item_Type DriveList_Item::Type_MIN;
 const DriveList_Item_Type DriveList_Item::Type_MAX;
 const int DriveList_Item::Type_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool FileListRequest_Flags_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const FileListRequest_Flags FileListRequest::DEFAULT;
-const FileListRequest_Flags FileListRequest::RECURSIVE;
-const FileListRequest_Flags FileListRequest::Flags_MIN;
-const FileListRequest_Flags FileListRequest::Flags_MAX;
-const int FileListRequest::Flags_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool FilePacket_Flags_IsValid(int value) {
   switch (value) {
     case 0:
@@ -1315,7 +1298,6 @@ void FileList_Item::set_is_directory(bool value) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int FileList::kPathFieldNumber;
 const int FileList::kItemFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -1333,15 +1315,10 @@ FileList::FileList(const FileList& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.path().size() > 0) {
-    path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
-  }
   // @@protoc_insertion_point(copy_constructor:aspia.proto.FileList)
 }
 
 void FileList::SharedCtor() {
-  path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   _cached_size_ = 0;
 }
 
@@ -1351,7 +1328,6 @@ FileList::~FileList() {
 }
 
 void FileList::SharedDtor() {
-  path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void FileList::SetCachedSize(int size) const {
@@ -1375,7 +1351,6 @@ FileList* FileList::New(::google::protobuf::Arena* arena) const {
 void FileList::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.FileList)
   item_.Clear();
-  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 bool FileList::MergePartialFromCodedStream(
@@ -1388,26 +1363,10 @@ bool FileList::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // string path = 1;
+      // repeated .aspia.proto.FileList.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_path()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->path().data(), this->path().length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.FileList.path"));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // repeated .aspia.proto.FileList.Item item = 2;
-      case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(18u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                 input, add_item()));
         } else {
@@ -1443,20 +1402,10 @@ void FileList::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string path = 1;
-  if (this->path().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->path().data(), this->path().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.FileList.path");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->path(), output);
-  }
-
-  // repeated .aspia.proto.FileList.Item item = 2;
+  // repeated .aspia.proto.FileList.Item item = 1;
   for (unsigned int i = 0, n = this->item_size(); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, this->item(i), output);
+      1, this->item(i), output);
   }
 
   // @@protoc_insertion_point(serialize_end:aspia.proto.FileList)
@@ -1466,7 +1415,7 @@ size_t FileList::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:aspia.proto.FileList)
   size_t total_size = 0;
 
-  // repeated .aspia.proto.FileList.Item item = 2;
+  // repeated .aspia.proto.FileList.Item item = 1;
   {
     unsigned int count = this->item_size();
     total_size += 1UL * count;
@@ -1475,13 +1424,6 @@ size_t FileList::ByteSizeLong() const {
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->item(i));
     }
-  }
-
-  // string path = 1;
-  if (this->path().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->path());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -1504,10 +1446,6 @@ void FileList::MergeFrom(const FileList& from) {
   (void) cached_has_bits;
 
   item_.MergeFrom(from.item_);
-  if (from.path().size() > 0) {
-
-    path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
-  }
 }
 
 void FileList::CopyFrom(const FileList& from) {
@@ -1527,7 +1465,6 @@ void FileList::Swap(FileList* other) {
 }
 void FileList::InternalSwap(FileList* other) {
   item_.InternalSwap(&other->item_);
-  path_.Swap(&other->path_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -1538,60 +1475,7 @@ void FileList::InternalSwap(FileList* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // FileList
 
-// string path = 1;
-void FileList::clear_path() {
-  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-const ::std::string& FileList::path() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.FileList.path)
-  return path_.GetNoArena();
-}
-void FileList::set_path(const ::std::string& value) {
-  
-  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.FileList.path)
-}
-#if LANG_CXX11
-void FileList::set_path(::std::string&& value) {
-  
-  path_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.FileList.path)
-}
-#endif
-void FileList::set_path(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.FileList.path)
-}
-void FileList::set_path(const char* value, size_t size) {
-  
-  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.FileList.path)
-}
-::std::string* FileList::mutable_path() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.FileList.path)
-  return path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-::std::string* FileList::release_path() {
-  // @@protoc_insertion_point(field_release:aspia.proto.FileList.path)
-  
-  return path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-void FileList::set_allocated_path(::std::string* path) {
-  if (path != NULL) {
-    
-  } else {
-    
-  }
-  path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.FileList.path)
-}
-
-// repeated .aspia.proto.FileList.Item item = 2;
+// repeated .aspia.proto.FileList.Item item = 1;
 int FileList::item_size() const {
   return item_.size();
 }
@@ -1626,7 +1510,6 @@ FileList::item() const {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int FileListRequest::kFlagsFieldNumber;
 const int FileListRequest::kPathFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -1647,13 +1530,11 @@ FileListRequest::FileListRequest(const FileListRequest& from)
   if (from.path().size() > 0) {
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
-  flags_ = from.flags_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.FileListRequest)
 }
 
 void FileListRequest::SharedCtor() {
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  flags_ = 0u;
   _cached_size_ = 0;
 }
 
@@ -1687,7 +1568,6 @@ FileListRequest* FileListRequest::New(::google::protobuf::Arena* arena) const {
 void FileListRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.FileListRequest)
   path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  flags_ = 0u;
 }
 
 bool FileListRequest::MergePartialFromCodedStream(
@@ -1700,24 +1580,10 @@ bool FileListRequest::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // uint32 flags = 1;
+      // string path = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(8u)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &flags_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // string path = 2;
-      case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(18u)) {
+            static_cast< ::google::protobuf::uint8>(10u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_path()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -1757,19 +1623,14 @@ void FileListRequest::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 flags = 1;
-  if (this->flags() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->flags(), output);
-  }
-
-  // string path = 2;
+  // string path = 1;
   if (this->path().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->path().data(), this->path().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.proto.FileListRequest.path");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      2, this->path(), output);
+      1, this->path(), output);
   }
 
   // @@protoc_insertion_point(serialize_end:aspia.proto.FileListRequest)
@@ -1779,18 +1640,11 @@ size_t FileListRequest::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:aspia.proto.FileListRequest)
   size_t total_size = 0;
 
-  // string path = 2;
+  // string path = 1;
   if (this->path().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->path());
-  }
-
-  // uint32 flags = 1;
-  if (this->flags() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->flags());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -1816,9 +1670,6 @@ void FileListRequest::MergeFrom(const FileListRequest& from) {
 
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
-  if (from.flags() != 0) {
-    set_flags(from.flags());
-  }
 }
 
 void FileListRequest::CopyFrom(const FileListRequest& from) {
@@ -1838,7 +1689,6 @@ void FileListRequest::Swap(FileListRequest* other) {
 }
 void FileListRequest::InternalSwap(FileListRequest* other) {
   path_.Swap(&other->path_);
-  std::swap(flags_, other->flags_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -1849,21 +1699,7 @@ void FileListRequest::InternalSwap(FileListRequest* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // FileListRequest
 
-// uint32 flags = 1;
-void FileListRequest::clear_flags() {
-  flags_ = 0u;
-}
-::google::protobuf::uint32 FileListRequest::flags() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.FileListRequest.flags)
-  return flags_;
-}
-void FileListRequest::set_flags(::google::protobuf::uint32 value) {
-  
-  flags_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.FileListRequest.flags)
-}
-
-// string path = 2;
+// string path = 1;
 void FileListRequest::clear_path() {
   path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }

@@ -105,8 +105,6 @@ proto::RequestStatus ExecuteFileListRequest(const FilePath& path, proto::FileLis
     if (!fs::exists(path, code))
         return proto::RequestStatus::REQUEST_STATUS_PATH_NOT_FOUND;
 
-    file_list->set_path(path.u8string());
-
     for (auto& entry : fs::directory_iterator(path, code))
     {
         proto::FileList::Item* item = file_list->add_item();

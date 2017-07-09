@@ -69,20 +69,12 @@ message FileList
         bool is_directory       = 4;
     }
 
-    string path = 1;
-    repeated Item item = 2;
+    repeated Item item = 1;
 }
 
 message FileListRequest
 {
-    enum Flags
-    {
-        DEFAULT   = 0;
-        RECURSIVE = 1;
-    }
-
-    uint32 flags = 1;
-    string path = 2;
+    string path = 1;
 }
 
 message DirectorySize

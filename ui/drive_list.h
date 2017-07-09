@@ -42,6 +42,7 @@ public:
     const proto::DriveList::Item& Object(int object_index) const;
     const proto::DriveList& DriveList() const;
     void SetCurrentPath(const FilePath& path);
+    const FilePath& CurrentPath() const;
     FilePath ObjectPath(int object_index) const;
 
 private:
@@ -54,6 +55,7 @@ private:
 
     std::unique_ptr<proto::DriveList> list_;
     CImageListManaged imagelist_;
+    FilePath current_path_;
 
     DISALLOW_COPY_AND_ASSIGN(UiDriveList);
 };
