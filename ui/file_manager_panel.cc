@@ -387,7 +387,7 @@ LRESULT UiFileManagerPanel::OnDriveEndEdit(int ctrl_id, LPNMHDR hdr, BOOL& handl
 {
     PNMCBEENDEDITW end_edit = reinterpret_cast<PNMCBEENDEDITW>(hdr);
 
-    if (end_edit->fChanged && end_edit->iWhy == CBENF_RETURN && end_edit->szText)
+    if (end_edit->fChanged && end_edit->iWhy == CBENF_RETURN && end_edit->szText[0])
     {
         sender_->SendFileListRequest(This(), FilePath(end_edit->szText));
     }
