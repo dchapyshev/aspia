@@ -41,7 +41,7 @@ private:
         int32_t right;
     };
 
-    typedef std::vector<RowSpan> RowSpanSet;
+    using RowSpanSet = std::vector<RowSpan>;
 
     // Row represents a single row of a region. A row is set of rectangles that
     // have the same vertical position.
@@ -61,7 +61,7 @@ private:
     // Type used to store list of rows in the region. The bottom position of row
     // is used as the key so that rows are always ordered by their position. The
     // map stores pointers to make Translate() more efficient.
-    typedef std::map<int, Row*> Rows;
+    using Rows = std::map<int, Row*>;
 
 public:
     // Iterator that can be used to iterate over rectangles of a DesktopRegion.
