@@ -2,6 +2,10 @@ Aspia Remote Desktop
 ====================
 Remote desktop implementation (client and server) based on Google Protocol Buffers.
 
+|Build Status|Coverity Scan Status|
+|:--:|:--:|
+|[![Build Status](https://ci.appveyor.com/api/projects/status/2btp04gonyiy0nj1/branch/master?svg=true)](https://ci.appveyor.com/project/aspia-org/remote-desktop/branch/master)|[![Coverity Scan Status](https://scan.coverity.com/projects/13117/badge.svg)](https://scan.coverity.com/projects/aspia-remote-desktop)|
+
 Currently supported
 -------------------
    - Remote desktop management
@@ -47,13 +51,6 @@ All thrid party dependencies are included in the project.
 System requirements
 -------------------
 x86 or x86_64 CPU with SSE2 support, Windows XP SP3 or higher.
-
-Coverity Scan
--------------
-<a href="https://scan.coverity.com/projects/aspia-remote-desktop">
-  <img alt="Coverity Scan Build Status"
-       src="https://scan.coverity.com/projects/13117/badge.svg"/>
-</a>
 
 Other information
 -----------------
