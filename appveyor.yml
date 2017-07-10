@@ -30,7 +30,7 @@ matrix:
   fast_finish: true
 
 build:
-  parallel: true
+  parallel: false
   project: aspia-remote-desktop.sln
   verbosity: minimal
 
