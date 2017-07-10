@@ -431,6 +431,8 @@ DrvEnablePDEV(__in     DEVMODEW   *pDevmode,                /* Pointer to DEVMOD
     /* Save the screen handle in the PDEV. */
     DeviceData->hDriver = hDriver;
 
+    RtlZeroMemory(&GdiInfo, sizeof(GdiInfo));
+
     /* Get the current screen mode information.  Set up device caps and devinfo. */
     if (bInitPDEV(DeviceData, pDevmode, &GdiInfo, &DevInfo) == FALSE)
     {
