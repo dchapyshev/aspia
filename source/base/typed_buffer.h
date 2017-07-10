@@ -8,7 +8,7 @@
 #ifndef _ASPIA_BASE__TYPED_BUFFER_H
 #define _ASPIA_BASE__TYPED_BUFFER_H
 
-#include <stdint.h>
+#include <cstdint>
 
 #include "base/macros.h"
 

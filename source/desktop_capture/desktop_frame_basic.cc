@@ -6,7 +6,7 @@
 //
 
 #include "desktop_capture/desktop_frame_basic.h"
-#include <malloc.h>
+#include <memory>
 
 namespace aspia {
 

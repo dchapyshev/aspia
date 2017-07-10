@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CODEC__COMPRESSOR_H
 #define _ASPIA_CODEC__COMPRESSOR_H
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace aspia {
 

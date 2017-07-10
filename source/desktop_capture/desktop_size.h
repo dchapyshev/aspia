@@ -8,7 +8,7 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__DESKTOP_SIZE_H
 #define _ASPIA_DESKTOP_CAPTURE__DESKTOP_SIZE_H
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace aspia {
 

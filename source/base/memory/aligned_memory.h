@@ -37,9 +37,8 @@
 #ifndef _ASPIA_BASE__MEMORY__ALIGNED_MEMORY_H
 #define _ASPIA_BASE__MEMORY__ALIGNED_MEMORY_H
 
-#include <stddef.h>
-#include <stdint.h>
-#include <malloc.h>
+#include <cstdint>
+#include <memory>
 
 namespace aspia {
 

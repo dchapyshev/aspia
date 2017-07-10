@@ -11,7 +11,7 @@
 #include "base/scoped_object.h"
 #include "base/macros.h"
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace aspia {
 

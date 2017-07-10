@@ -9,7 +9,7 @@
 #define _ASPIA_BASE__SCOPED_VARIANT_H
 
 #include <oleauto.h>
-#include <stdint.h>
+#include <cstdint>
 
 #include "base/macros.h"
 

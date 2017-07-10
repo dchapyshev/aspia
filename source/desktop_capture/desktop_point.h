@@ -8,7 +8,7 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__DESKTOP_POINT_H
 #define _ASPIA_DESKTOP_CAPTURE__DESKTOP_POINT_H
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace aspia {
 
