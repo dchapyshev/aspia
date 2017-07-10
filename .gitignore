@@ -6,5 +6,11 @@
 /Release/
 /Debug/
 
+# VS generated files
+*.obj
+*.pdb
+*.res
+*.exe
+
 # libsodium auto generated header
 /3rdparty/libsodium/src/libsodium/include/sodium/version.h
