@@ -20,7 +20,7 @@ DesktopRect::DesktopRect(const DesktopRect& other) :
     // Nothing
 }
 
-DesktopRect::DesktopRect(int l, int t, int r, int b) :
+DesktopRect::DesktopRect(int32_t l, int32_t t, int32_t r, int32_t b) :
     left_(l),
     top_(t),
     right_(r),
@@ -30,19 +30,19 @@ DesktopRect::DesktopRect(int l, int t, int r, int b) :
 }
 
 // static
-DesktopRect DesktopRect::MakeXYWH(int x, int y, int width, int height)
+DesktopRect DesktopRect::MakeXYWH(int32_t x, int32_t y, int32_t width, int32_t height)
 {
     return DesktopRect(x, y, x + width, y + height);
 }
 
 // static
-DesktopRect DesktopRect::MakeWH(int width, int height)
+DesktopRect DesktopRect::MakeWH(int32_t width, int32_t height)
 {
     return DesktopRect(0, 0, width, height);
 }
 
 // static
-DesktopRect DesktopRect::MakeLTRB(int l, int t, int r, int b)
+DesktopRect DesktopRect::MakeLTRB(int32_t l, int32_t t, int32_t r, int32_t b)
 {
     return DesktopRect(l, t, r, b);
 }
@@ -53,42 +53,42 @@ DesktopRect DesktopRect::MakeSize(const DesktopSize& size)
     return DesktopRect(0, 0, size.Width(), size.Height());
 }
 
-int DesktopRect::Left() const
+int32_t DesktopRect::Left() const
 {
     return left_;
 }
 
-int DesktopRect::Top() const
+int32_t DesktopRect::Top() const
 {
     return top_;
 }
 
-int DesktopRect::Right() const
+int32_t DesktopRect::Right() const
 {
     return right_;
 }
 
-int DesktopRect::Bottom() const
+int32_t DesktopRect::Bottom() const
 {
     return bottom_;
 }
 
-int DesktopRect::x() const
+int32_t DesktopRect::x() const
 {
     return left_;
 }
 
-int DesktopRect::y() const
+int32_t DesktopRect::y() const
 {
     return top_;
 }
 
-int DesktopRect::Width() const
+int32_t DesktopRect::Width() const
 {
     return right_ - left_;
 }
 
-int DesktopRect::Height() const
+int32_t DesktopRect::Height() const
 {
     return bottom_ - top_;
 }
@@ -121,7 +121,7 @@ DesktopSize DesktopRect::Size() const
     return DesktopSize(Width(), Height());
 }
 
-bool DesktopRect::Contains(int x, int y) const
+bool DesktopRect::Contains(int32_t x, int32_t y) const
 {
     return (x >= left_ && x < right_ && y >= top_ && y < bottom_);
 }
@@ -132,7 +132,7 @@ bool DesktopRect::ContainsRect(const DesktopRect& other) const
             other.top_  >= top_  && other.bottom_ <= bottom_);
 }
 
-void DesktopRect::Translate(int dx, int dy)
+void DesktopRect::Translate(int32_t dx, int32_t dy)
 {
     left_   += dx;
     right_  += dx;
@@ -156,10 +156,10 @@ void DesktopRect::IntersectWith(const DesktopRect& other)
     }
 }
 
-void DesktopRect::Extend(int left_offset,
-                         int top_offset,
-                         int right_offset,
-                         int bottom_offset)
+void DesktopRect::Extend(int32_t left_offset,
+                         int32_t top_offset,
+                         int32_t right_offset,
+                         int32_t bottom_offset)
 {
     left_   -= left_offset;
     top_    -= top_offset;

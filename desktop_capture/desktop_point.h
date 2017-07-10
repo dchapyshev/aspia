@@ -16,17 +16,17 @@ class DesktopPoint
 {
 public:
     DesktopPoint() = default;
-    DesktopPoint(int x, int y);
+    DesktopPoint(int32_t x, int32_t y);
     DesktopPoint(const DesktopPoint& point);
     ~DesktopPoint() = default;
 
-    int x() const;
-    int y() const;
+    int32_t x() const;
+    int32_t y() const;
 
-    void Set(int x, int y);
+    void Set(int32_t x, int32_t y);
 
     bool IsEqual(const DesktopPoint& other) const;
-    void Translate(int x_offset, int y_offset);
+    void Translate(int32_t x_offset, int32_t y_offset);
 
     DesktopPoint& operator=(const DesktopPoint& other);
 

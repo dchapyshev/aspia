@@ -9,7 +9,7 @@
 
 namespace aspia {
 
-DesktopPoint::DesktopPoint(int x, int y) :
+DesktopPoint::DesktopPoint(int32_t x, int32_t y) :
     x_(x),
     y_(y)
 {
@@ -23,17 +23,17 @@ DesktopPoint::DesktopPoint(const DesktopPoint& point) :
     // Nothing
 }
 
-int DesktopPoint::x() const
+int32_t DesktopPoint::x() const
 {
     return x_;
 }
 
-int DesktopPoint::y() const
+int32_t DesktopPoint::y() const
 {
     return y_;
 }
 
-void DesktopPoint::Set(int x, int y)
+void DesktopPoint::Set(int32_t x, int32_t y)
 {
     x_ = x;
     y_ = y;
@@ -44,7 +44,7 @@ bool DesktopPoint::IsEqual(const DesktopPoint& other) const
     return (x_ == other.x_ && y_ == other.y_);
 }
 
-void DesktopPoint::Translate(int x_offset, int y_offset)
+void DesktopPoint::Translate(int32_t x_offset, int32_t y_offset)
 {
     x_ += x_offset;
     y_ += y_offset;

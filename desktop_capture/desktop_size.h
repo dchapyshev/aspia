@@ -16,14 +16,14 @@ class DesktopSize
 {
 public:
     DesktopSize() = default;
-    DesktopSize(int width, int height);
+    DesktopSize(int32_t width, int32_t height);
     DesktopSize(const DesktopSize& other);
     ~DesktopSize() = default;
 
-    int Width() const;
-    int Height() const;
+    int32_t Width() const;
+    int32_t Height() const;
 
-    void Set(int width, int height);
+    void Set(int32_t width, int32_t height);
     bool IsEmpty() const;
     bool IsEqual(const DesktopSize& other) const;
     void Clear();
