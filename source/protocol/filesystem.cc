@@ -12,8 +12,6 @@
 #include "base/strings/unicode.h"
 #include "base/logging.h"
 
-#include <filesystem>
-
 namespace aspia {
 
 namespace fs = std::experimental::filesystem;

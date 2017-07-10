@@ -16,7 +16,6 @@
 #include "protocol/io_buffer.h"
 
 #include <memory>
-#include <mutex>
 #include <string>
 
 namespace aspia {

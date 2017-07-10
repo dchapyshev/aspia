@@ -12,8 +12,6 @@
 #include "desktop_capture/capture_scheduler.h"
 #include "desktop_capture/capturer_gdi.h"
 
-#include <chrono>
-
 namespace aspia {
 
 class ScreenUpdater : private Thread

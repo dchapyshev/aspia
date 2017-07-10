@@ -11,7 +11,6 @@
 #include <functional>
 #include <queue>
 #include <memory>
-#include <mutex>
 
 #include "base/synchronization/waitable_event.h"
 #include "base/thread.h"

@@ -8,8 +8,6 @@
 #ifndef _ASPIA_NETWORK__NETWORK_SERVER_TCP_H
 #define _ASPIA_NETWORK__NETWORK_SERVER_TCP_H
 
-#include <memory>
-
 #include "base/message_loop/message_loop_proxy.h"
 #include "base/object_watcher.h"
 #include "network/network_channel_tcp.h"

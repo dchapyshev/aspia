@@ -12,8 +12,6 @@
 #include "base/message_loop/message_loop_thread.h"
 #include "proto/power_session.pb.h"
 
-#include <memory>
-
 namespace aspia {
 
 class HostSessionPower :

@@ -8,9 +8,7 @@
 #ifndef _ASPIA_PROTOCOL__CLIPBOARD_H
 #define _ASPIA_PROTOCOL__CLIPBOARD_H
 
-#include <functional>
 #include <memory>
-#include <string>
 
 #include "base/message_window.h"
 #include "proto/desktop_session_message.pb.h"

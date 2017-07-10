@@ -10,8 +10,6 @@
 
 #include "network/network_channel.h"
 
-#include <mutex>
-
 namespace aspia {
 
 class NetworkChannelProxy
