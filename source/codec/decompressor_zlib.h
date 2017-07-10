@@ -9,8 +9,9 @@
 #define _ASPIA_CODEC__DECOMPRESSOR_ZLIB_H
 
 #include "base/macros.h"
-#include "3rdparty/zlib-ng/zlib.h"
 #include "codec/decompressor.h"
+
+#include <zlib.h>
 
 namespace aspia {
 

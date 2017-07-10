@@ -8,9 +8,10 @@
 #ifndef _ASPIA_CODEC__COMPRESSOR_ZLIB_H
 #define _ASPIA_CODEC__COMPRESSOR_ZLIB_H
 
-#include "3rdparty/zlib-ng/zlib.h"
 #include "base/macros.h"
 #include "codec/compressor.h"
+
+#include <zlib.h>
 
 namespace aspia {
 
