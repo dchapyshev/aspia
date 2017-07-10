@@ -77,25 +77,25 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
-    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
-    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
-    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
-    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -115,6 +115,9 @@
     <PreBuildEvent>
       <Command>"$(SolutionDir)/3rdparty/libsodium/msvc-scripts/process.bat"</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>call "$(SolutionDir)3rdparty/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -134,6 +137,9 @@
     <PreBuildEvent>
       <Command>"$(SolutionDir)/3rdparty/libsodium/msvc-scripts/process.bat"</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>call "$(SolutionDir)3rdparty/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -163,6 +169,9 @@
     <PreBuildEvent>
       <Command>"$(SolutionDir)/3rdparty/libsodium/msvc-scripts/process.bat"</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>call "$(SolutionDir)3rdparty/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -198,7 +207,7 @@
       <Command>"$(SolutionDir)/3rdparty/libsodium/msvc-scripts/process.bat"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>"$(SolutionDir)3rdparty/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
+      <Command>call "$(SolutionDir)3rdparty/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalOptions> /machine:X64 %(AdditionalOptions)</AdditionalOptions>
