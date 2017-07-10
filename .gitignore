@@ -1,0 +1,10 @@
+# VS *.vcxproj.user files
+*.vcxproj.user
+
+# VS build folders
+/.vs/
+/Release/
+/Debug/
+
+# libsodium auto generated header
+/3rdparty/libsodium/src/libsodium/include/sodium/version.h

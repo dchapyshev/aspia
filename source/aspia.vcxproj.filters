@@ -1091,8 +1091,6 @@
     </Manifest>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="README.txt" />
-    <Text Include="LICENSE.txt" />
     <Text Include="protocol\README.txt">
       <Filter>protocol</Filter>
     </Text>

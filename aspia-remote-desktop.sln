@@ -71,6 +71,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wtl", "wtl", "{DFE7AAB4-216
 		3rdparty\wtl\include\atlwinx.h = 3rdparty\wtl\include\atlwinx.h
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9CC3DEF8-9A4B-43D1-9FC3-FEA984A64FF7}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		appveyor.yml = appveyor.yml
+		clean.cmd = clean.cmd
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
