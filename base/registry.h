@@ -119,7 +119,7 @@ private:
     void Initialize(HKEY root_key, const WCHAR* folder_key, REGSAM wow64access);
 
     // The registry key being iterated.
-    HKEY key_;
+    HKEY key_ = nullptr;
 
     // Current index of the iteration.
     int index_;
@@ -167,7 +167,7 @@ private:
     void Initialize(HKEY root_key, const WCHAR* folder_key, REGSAM wow64access);
 
     // The registry key being iterated.
-    HKEY key_;
+    HKEY key_ = nullptr;
 
     // Current index of the iteration.
     int index_;
