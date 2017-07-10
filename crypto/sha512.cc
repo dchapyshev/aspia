@@ -18,7 +18,12 @@ namespace aspia {
 
 bool CreateSHA512(const std::string& data, std::string& data_hash, size_t iter_count)
 {
+    if (!iter_count)
+        return false;
+
     uint8_t hash_buffer[crypto_hash_sha512_BYTES];
+
+    sodium_memzero(hash_buffer, sizeof(hash_buffer));
 
     size_t source_buffer_size = data.size();
     const uint8_t* source_buffer = reinterpret_cast<const uint8_t*>(data.data());
