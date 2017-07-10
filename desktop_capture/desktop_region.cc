@@ -480,7 +480,7 @@ bool DesktopRegion::CompareSpanLeft(const RowSpan& r, int32_t value)
 }
 
 // static
-void DesktopRegion::AddSpanToRow(Row* row, int left, int right)
+void DesktopRegion::AddSpanToRow(Row* row, int32_t left, int32_t right)
 {
     // First check if the new span is located to the right of all existing spans.
     // This is an optimization to avoid binary search in the case when rectangles
