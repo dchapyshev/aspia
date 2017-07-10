@@ -82,12 +82,10 @@ public:
         return reinterpret_cast<T*>(reinterpret_cast<uint8_t*>(buffer_) + offset);
     }
 
-    // Allow TypedBuffer<T> to be used in boolean expressions, but not
-    // implicitly convertible to a real bool (which is dangerous).
-    typedef T* TypedBuffer::*Testable;
-    operator Testable() const
+    // Allow TypedBuffer<T> to be used in boolean expressions.
+    explicit operator bool() const
     {
-        return buffer_ ? &TypedBuffer::buffer_ : nullptr;
+        return buffer_ != nullptr;
     }
 
     // Swap two buffers.
