@@ -606,7 +606,7 @@ void DesktopRegion::Iterator::Advance()
 {
     assert(!IsAtEnd());
 
-    while (true)
+    for (;;)
     {
         ++row_span_;
         if (row_span_ == row_->second->spans.end())
