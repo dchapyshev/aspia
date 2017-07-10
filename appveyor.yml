@@ -1,0 +1,19 @@
+platform:
+  - x86
+  - x64
+install:
+  - npm --version
+  - npm config set -g msvs_version 2017
+  - mkdir c:\yasm
+  - set PATH=%APPDATA%\npm;c:\yasm;%PATH%
+  - set CI=true
+  - if "%PLATFORM%" == "x64" curl -o "c:\yasm\yasm.exe" http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
+  - if "%PLATFORM%" == "x86" curl -o "c:\yasm\yasm.exe" http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win32.exe
+  - yasm --version
+  - git submodule update --init
+  - npm install
+  - npm run prebuilt-bindings -- clean build pack
+matrix:
+  fast_finish: true
+build: off
+clone_depth: 1
