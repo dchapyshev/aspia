@@ -22,7 +22,7 @@ glog          07.07.2017    trunk
 googletest    26.10.2016    trunk
 libyuv        25.06.2017    trunk
 libvpx        26.01.2017    1.6.1
-gflags        10.05.2017    trunk
+gflags        12.07.2017    trunk
 opus          24.01.2017    1.1.4
 zlib-ng       26.03.2017    trunk
 libsodium     27.05.2017    1.0.12
