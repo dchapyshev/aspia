@@ -78,77 +78,12 @@ bool Process::IsCurrent() const
 
 Process::Priority Process::GetPriority()
 {
-    DWORD value = GetPriorityClass(Handle());
-
-    if (!value)
-    {
-        LOG(ERROR) << "GetPriorityClass() failed: "
-                   << GetLastSystemErrorString();
-        return Priority::Unknown;
-    }
-
-    switch (value)
-    {
-        case IDLE_PRIORITY_CLASS:
-            return Priority::Idle;
-
-        case BELOW_NORMAL_PRIORITY_CLASS:
-            return Priority::BelowNormal;
-
-        case NORMAL_PRIORITY_CLASS:
-            return Priority::Normal;
-
-        case ABOVE_NORMAL_PRIORITY_CLASS:
-            return Priority::AboveNormal;
-
-        case HIGH_PRIORITY_CLASS:
-            return Priority::High;
-
-        case REALTIME_PRIORITY_CLASS:
-            return Priority::RealTime;
-
-        default:
-            LOG(ERROR) << "Unknown process priority: " << value;
-            return Priority::Unknown;
-    }
+    return static_cast<Priority>(GetPriorityClass(Handle()));
 }
 
 bool Process::SetPriority(Priority priority)
 {
-    DWORD value = NORMAL_PRIORITY_CLASS;
-
-    switch (priority)
-    {
-        case Priority::Idle:
-            value = IDLE_PRIORITY_CLASS;
-            break;
-
-        case Priority::BelowNormal:
-            value = BELOW_NORMAL_PRIORITY_CLASS;
-            break;
-
-        case Priority::Normal:
-            value = NORMAL_PRIORITY_CLASS;
-            break;
-
-        case Priority::AboveNormal:
-            value = ABOVE_NORMAL_PRIORITY_CLASS;
-            break;
-
-        case Priority::High:
-            value = HIGH_PRIORITY_CLASS;
-            break;
-
-        case Priority::RealTime:
-            value = REALTIME_PRIORITY_CLASS;
-            break;
-
-        default:
-            LOG(ERROR) << "Unknown process priority.";
-            return false;
-    }
-
-    if (!SetPriorityClass(Handle(), value))
+    if (!SetPriorityClass(Handle(), static_cast<DWORD>(priority)))
     {
         LOG(ERROR) << "SetPriorityClass() failed: "
                    << GetLastSystemErrorString();

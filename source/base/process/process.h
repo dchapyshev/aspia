@@ -27,7 +27,16 @@ public:
     Process(Process&& other);
     ~Process() = default;
 
-    enum class Priority { Unknown, Idle, BelowNormal, Normal, AboveNormal, High, RealTime };
+    enum class Priority
+    {
+        UNKNOWN      = 0,
+        IDLE         = IDLE_PRIORITY_CLASS,
+        BELOW_NORMAL = BELOW_NORMAL_PRIORITY_CLASS,
+        NORMAL       = NORMAL_PRIORITY_CLASS,
+        ABOVE_NORMAL = ABOVE_NORMAL_PRIORITY_CLASS,
+        HIGH         = HIGH_PRIORITY_CLASS,
+        REALTIME     = REALTIME_PRIORITY_CLASS
+    };
 
     // Returns an object for the current process.
     static Process Current();
