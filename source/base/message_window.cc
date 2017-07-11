@@ -109,7 +109,7 @@ LRESULT CALLBACK MessageWindow::WindowProc(HWND window, UINT msg, WPARAM wParam,
     {
         LRESULT message_result;
 
-        if (self->message_callback_(msg, wParam, lParam, &message_result))
+        if (self->message_callback_(msg, wParam, lParam, message_result))
             return message_result;
     }
 

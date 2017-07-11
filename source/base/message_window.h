@@ -26,7 +26,7 @@ public:
     using MessageCallback = std::function<bool(UINT message,
                                                WPARAM wparam,
                                                LPARAM lparam,
-                                               LRESULT* result)>;
+                                               LRESULT& result)>;
 
     // Creates a message-only window. The incoming messages will be passed by
     // |message_callback|. |message_callback| must outlive |this|.

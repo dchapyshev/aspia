@@ -34,7 +34,7 @@ public:
 
 private:
     // Handles messages received by |window_|.
-    bool OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* result);
+    bool OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result);
 
     bool HaveClipboardListenerApi();
     void OnClipboardUpdate();

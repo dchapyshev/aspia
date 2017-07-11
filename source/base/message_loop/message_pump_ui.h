@@ -24,7 +24,7 @@ public:
     virtual void ScheduleWork() override;
 
 private:
-    bool OnMessage(UINT message, WPARAM wparam, LPARAM lparam, LRESULT* result);
+    bool OnMessage(UINT message, WPARAM wparam, LPARAM lparam, LRESULT& result);
     void DoRunLoop() override;
     void WaitForWork();
     void HandleWorkMessage();

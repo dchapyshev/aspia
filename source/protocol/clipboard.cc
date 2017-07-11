@@ -157,7 +157,7 @@ void Clipboard::OnClipboardUpdate()
     }
 }
 
-bool Clipboard::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* result)
+bool Clipboard::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result)
 {
     UNREF(wParam);
     UNREF(lParam);
@@ -206,7 +206,7 @@ bool Clipboard::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* r
             return false;
     }
 
-    *result = 0;
+    result = 0;
     return true;
 }
 

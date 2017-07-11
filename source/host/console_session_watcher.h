@@ -37,7 +37,7 @@ public:
     void StopWatching();
 
 private:
-    bool OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* result);
+    bool OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result);
 
     typedef BOOL(WINAPI *WTSRegisterSessionNotificationFn)(HWND, DWORD);
     typedef BOOL(WINAPI *WTSUnRegisterSessionNotificationFn)(HWND);

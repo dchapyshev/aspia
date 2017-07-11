@@ -71,7 +71,7 @@ void ConsoleSessionWatcher::StopWatching()
     }
 }
 
-bool ConsoleSessionWatcher::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* result)
+bool ConsoleSessionWatcher::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result)
 {
     if (message == WM_WTSSESSION_CHANGE)
     {
@@ -87,7 +87,7 @@ bool ConsoleSessionWatcher::OnMessage(UINT message, WPARAM wParam, LPARAM lParam
                 break;
         }
 
-        *result = 0;
+        result = 0;
         return true;
     }
 

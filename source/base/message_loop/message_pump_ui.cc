@@ -46,7 +46,7 @@ void MessagePumpForUI::ScheduleWork()
     InterlockedExchange(&work_state_, READY); // Clarify that we didn't really insert.
 }
 
-bool MessagePumpForUI::OnMessage(UINT message, WPARAM wparam, LPARAM lparam, LRESULT* result)
+bool MessagePumpForUI::OnMessage(UINT message, WPARAM wparam, LPARAM lparam, LRESULT& result)
 {
     UNREF(wparam);
     UNREF(lparam);
