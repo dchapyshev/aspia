@@ -17,7 +17,7 @@ Synchronization status
 ======================
 
 Component   | Sync date   | Version
-protobuf      25.06.2017    3.3.2
+protobuf      12.07.2017    3.3.2
 glog          07.07.2017    trunk
 googletest    26.10.2016    trunk
 libyuv        12.07.2017    trunk
