@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Wizard97Test", "Wizard97Test.vcproj", "{AADB8628-DC1E-4AC9-ABE6-0C692A68F56F}"
+EndProject
+Global
+	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
+		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
+	EndGlobalSection
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+		ConfigName.2 = Unicode Debug
+		ConfigName.3 = Unicode Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{AADB8628-DC1E-4AC9-ABE6-0C692A68F56F}.Debug.ActiveCfg = Debug|Win32
+		{AADB8628-DC1E-4AC9-ABE6-0C692A68F56F}.Debug.Build.0 = Debug|Win32
+		{AADB8628-DC1E-4AC9-ABE6-0C692A68F56F}.Release.ActiveCfg = Release|Win32
+		{AADB8628-DC1E-4AC9-ABE6-0C692A68F56F}.Release.Build.0 = Release|Win32
+		{AADB8628-DC1E-4AC9-ABE6-0C692A68F56F}.Unicode Debug.ActiveCfg = Unicode Debug|Win32
+		{AADB8628-DC1E-4AC9-ABE6-0C692A68F56F}.Unicode Debug.Build.0 = Unicode Debug|Win32
+		{AADB8628-DC1E-4AC9-ABE6-0C692A68F56F}.Unicode Release.ActiveCfg = Unicode Release|Win32
+		{AADB8628-DC1E-4AC9-ABE6-0C692A68F56F}.Unicode Release.Build.0 = Unicode Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

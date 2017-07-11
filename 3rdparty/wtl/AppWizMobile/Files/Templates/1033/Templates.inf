@@ -1,0 +1,42 @@
+stdafx.cpp
+stdafx.h
+root.cpp
+root.ico
+
+[!if POCKETPC2003_UI_MODEL]
+rootppc.rc
+[!endif]
+[!if SMARTPHONE2003_UI_MODEL]
+rootsp.rc
+[!endif]
+
+root.rc2
+resource.h
+
+[!if WTL_APPTYPE_SDI]
+[!if POCKETPC2003_UI_MODEL && !WTL_MENU_TYPE_2005]
+toolbar.bmp
+[!endif]
+frame.h
+[!if WTL_USE_CPP_FILES]
+frame.cpp
+[!endif]
+[!if WTL_USE_VIEW_CLASS]
+view.h
+[!if WTL_USE_CPP_FILES]
+view.cpp
+[!endif]
+[!endif]
+[!endif]
+
+[!if WTL_APPTYPE_DLG]
+MainDlg.h
+[!if WTL_USE_CPP_FILES]
+MainDlg.cpp
+[!endif]
+[!endif]
+
+AboutDlg.h
+[!if WTL_USE_CPP_FILES]
+AboutDlg.cpp
+[!endif]

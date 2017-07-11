@@ -1,0 +1,488 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+// Generated Help ID header file
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "resource.hm"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "atlres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""atlres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#ifndef _EMBEDDED_MANIFEST\r\n"
+    "CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST ""res\\\\Wizard97Test.exe.manifest""\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\Wizard97Test.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_WIZ97_HEADER       BITMAP  DISCARDABLE      "res\\header.bmp"
+IDB_WIZ97_WATERMARK    BITMAP  DISCARDABLE      "res\\watermark.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+// NOTE: In order to have the "Windows 2000" dialog look, all property pages
+//  in a property sheet or wizard must do the following:
+//  1. Use a DIALOGEX template instead of a DIALOG template.
+//  2. Set the DS_SHELLFONT flag in your dialog styles.
+//  3. Set the dialog font to "MS Shell Dlg".
+//
+// DS_SHELLFONT is equal to DS_SETFONT | DS_FIXEDSYS.
+// If you change the resource file in VC 7.0/7.1, DS_SHELLFONT will
+//  change to DS_SETFONT | DS_FIXEDSYS (which means the same thing).
+// VC 6 however will change DS_SHELLFONT on you to DS_FIXEDSYS,
+//  so you have to manually edit the RC file to fix it.
+//
+// See
+//  http://msdn.microsoft.com/library/default.asp?url=/library/en-us/apcompat/apcompat/use_dialogex_to_have_the_system_font.asp
+//  http://weblogs.asp.net/oldnewthing/archive/2005/02/04/366987.aspx
+//  http://weblogs.asp.net/oldnewthing/archive/2004/02/17/74811.aspx#74927
+
+IDD_WIZ97_INTERIOR_BLANK DIALOGEX  0, 0, 317, 143
+STYLE DS_SHELLFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Wizard97 Property Page - Interior"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+END
+
+IDD_WIZ97_EXTERIOR_BLANK DIALOGEX  0, 0, 317, 193
+STYLE DS_SHELLFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Wizard97 Property Page - Welcome/Complete"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    LTEXT           "Welcome to the X Wizard",IDC_WIZ97_EXTERIOR_TITLE,115,8,
+                    195,24
+    LTEXT           "Wizard Explanation\r\n(The height of the static text should be in multiples of 8 dlus)",
+                    IDC_WIZ97_EXTERIOR_DESC,115,40,195,16
+    LTEXT           "h",IDC_WIZ97_BULLET1,118,64,8,8
+    LTEXT           "List Item 1 (the h is turned into a bullet)",
+                    IDC_WIZ97_BULLET1_DESC,127,63,122,8
+    LTEXT           "h",IDC_WIZ97_BULLET2,118,79,8,8
+    LTEXT           "List Item 2. Keep 7 dlus between paragraphs",
+                    IDC_WIZ97_BULLET2_DESC,127,78,33,8
+    CONTROL         "&Do not show this Welcome page again",
+                    IDC_WIZ97_WELCOME_NOTAGAIN,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,115,169,138,10
+END
+
+IDD_WIZ97_WELCOME DIALOGEX  0, 0, 317, 193
+STYLE DS_SHELLFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Test Wizard"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    LTEXT           "Welcome to the Test Wizard",IDC_WIZ97_EXTERIOR_TITLE,
+                    115,8,195,24
+    LTEXT           "This wizard will take you through an example of a Wizard97-based wizard.  The steps include:",
+                    IDC_WIZ97_EXTERIOR_DESC,115,40,195,16
+    LTEXT           "h",IDC_WIZ97_BULLET1,118,64,9,8
+    LTEXT           "Select the path and filter identifying a list of files.",
+                    IDC_WIZ97_BULLET1_DESC,127,63,183,8
+    LTEXT           "h",IDC_WIZ97_BULLET2,118,79,9,8
+    LTEXT           "Preview the list of files identified by the path and filter.",
+                    IDC_WIZ97_BULLET2_DESC,127,78,183,8
+    LTEXT           "h",IDC_WIZ97_BULLET3,118,94,9,8
+    LTEXT           "Choose where to output the list of files.",
+                    IDC_WIZ97_BULLET3_DESC,127,93,183,8
+    LTEXT           "h",IDC_WIZ97_BULLET4,118,109,9,8
+    LTEXT           "Output the list of files in the way you select.",
+                    IDC_WIZ97_BULLET4_DESC,127,108,183,8
+    LTEXT           "To continue, click Next.",IDC_STATIC,115,146,76,8
+    CONTROL         "&Skip this welcome page in the future.",
+                    IDC_WIZ97_WELCOME_NOTAGAIN,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,115,169,132,10
+END
+
+IDD_WIZ97_COMPLETION DIALOGEX 0, 0, 317, 193
+STYLE DS_SHELLFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Completing Test Wizard"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    LTEXT           "Completing the Test Wizard",IDC_WIZ97_EXTERIOR_TITLE,
+                    115,8,195,24
+    LTEXT           "The wizard has collected the information required to determine the list of files and where to output that list.",
+                    IDC_WIZ97_EXTERIOR_DESC,115,40,195,16
+    CONTROL         "",IDC_WIZ97_SUMMARY,"RichEdit20A",WS_VSCROLL | 
+                    WS_HSCROLL | 0x884,115,63,195,100,WS_EX_CLIENTEDGE | 
+                    WS_EX_STATICEDGE
+    LTEXT           "Please make certain the information is correct, then click Finish to output the list.",
+                    IDC_WIZ97_EXTERIOR_CLICKFINISH,115,170,195,16,
+                    SS_NOPREFIX
+END
+
+IDD_WIZ97_PATHFILTER DIALOGEX 0, 0, 317, 143
+STYLE DS_SHELLFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Path and Filter to Find Files"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    LTEXT           "Please enter the directory where you would like to search for files.",
+                    IDC_LABEL_DESCRIPTION,21,8,275,24
+    LTEXT           "Path:",IDC_LABEL_PATH,31,34,21,8
+    EDITTEXT        IDC_EDIT_PATH,57,32,221,12,ES_AUTOHSCROLL | ES_READONLY,
+                    0,HIDC_EDIT_PATH
+    PUSHBUTTON      "&...",IDC_BTN_BROWSEPATH,284,32,12,12,0,0,
+                    HIDC_BTN_BROWSEPATH
+    CONTROL         "Include files in this directory and sub-directories",
+                    IDC_RADIO_RECURSE,"Button",BS_AUTORADIOBUTTON,57,48,239,
+                    10,0,HIDC_RADIO_RECURSE
+    CONTROL         "Include files in this directory only",
+                    IDC_RADIO_NORECURSE,"Button",BS_AUTORADIOBUTTON,57,60,
+                    239,10,0,HIDC_RADIO_NORECURSE
+    LTEXT           "Filter:",IDC_LABEL_FILTER,31,73,21,8
+    CONTROL         "All files (*.*)",IDC_RADIO_FILTER_ALL,"Button",
+                    BS_AUTORADIOBUTTON,57,73,102,10,0,HIDC_RADIO_FILTER_ALL
+    CONTROL         "Custom filter:",IDC_RADIO_FILTER_CUSTOM,"Button",
+                    BS_AUTORADIOBUTTON,57,86,63,10,0,
+                    HIDC_RADIO_FILTER_CUSTOM
+    EDITTEXT        IDC_EDIT_FILTER,125,85,60,12,ES_AUTOHSCROLL,0,
+                    HIDC_EDIT_FILTER
+END
+
+IDD_WIZ97_FILEPREVIEW DIALOGEX 0, 0, 317, 143
+STYLE DS_SHELLFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Preview File List"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    LTEXT           "The following is a list of files currently found by the locations you've specified.",
+                    IDC_LABEL_DESCRIPTION,21,8,275,24
+    CONTROL         "",IDC_LIST_FILES,"SysListView32",LVS_REPORT | 
+                    LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_BORDER | 
+                    WS_TABSTOP,21,32,275,86
+    PUSHBUTTON      "Preview File List",IDC_BTN_PREVIEW,21,122,79,14
+END
+
+IDD_WIZ97_OUTPUT DIALOGEX  0, 0, 317, 143
+STYLE DS_SHELLFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "How to Output List"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    LTEXT           "Please select how you would like to output the file list.  The list will contain the full path of each file found, with one file on each line.",
+                    IDC_LABEL_DESCRIPTION,21,8,275,24
+    CONTROL         "Copy to &Clipboard",IDC_RADIO_COPYTOCLIPBOARD,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,31,32,255,10
+    CONTROL         "Send in an &E-mail (using default mail client)",
+                    IDC_RADIO_SENDEMAIL,"Button",BS_AUTORADIOBUTTON | 
+                    WS_TABSTOP,31,44,149,10
+    CONTROL         "Save to &File: ",IDC_RADIO_SAVETOFILE,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,31,56,61,10
+    LTEXT           "File Name:",IDC_LABEL_FILENAME,43,70,49,8
+    EDITTEXT        IDC_EDIT_SAVETOFILE,98,68,183,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "&...",IDC_BTN_FILEBROWSE,286,68,12,12
+    LTEXT           "File Encoding:",IDC_LABEL_FILEENCODING,43,85,49,8
+    COMBOBOX        IDC_COMBO_FILEENCODING,98,83,76,53,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_WIZ97_INTERIOR_BLANK, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 310
+        VERTGUIDE, 21
+        VERTGUIDE, 31
+        VERTGUIDE, 286
+        VERTGUIDE, 296
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 136
+        HORZGUIDE, 8
+    END
+
+    IDD_WIZ97_EXTERIOR_BLANK, DIALOG
+    BEGIN
+        RIGHTMARGIN, 310
+        VERTGUIDE, 115
+        VERTGUIDE, 118
+        VERTGUIDE, 127
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 186
+        HORZGUIDE, 8
+        HORZGUIDE, 32
+        HORZGUIDE, 40
+        HORZGUIDE, 169
+    END
+
+    IDD_WIZ97_WELCOME, DIALOG
+    BEGIN
+        RIGHTMARGIN, 310
+        VERTGUIDE, 115
+        VERTGUIDE, 118
+        VERTGUIDE, 127
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 186
+        HORZGUIDE, 8
+        HORZGUIDE, 32
+        HORZGUIDE, 40
+        HORZGUIDE, 169
+    END
+
+    IDD_WIZ97_COMPLETION, DIALOG
+    BEGIN
+        RIGHTMARGIN, 310
+        VERTGUIDE, 115
+        VERTGUIDE, 117
+        VERTGUIDE, 127
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 186
+        HORZGUIDE, 8
+        HORZGUIDE, 32
+        HORZGUIDE, 40
+        HORZGUIDE, 169
+    END
+
+    IDD_WIZ97_PATHFILTER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 310
+        VERTGUIDE, 21
+        VERTGUIDE, 31
+        VERTGUIDE, 43
+        VERTGUIDE, 286
+        VERTGUIDE, 296
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 136
+        HORZGUIDE, 8
+    END
+
+    IDD_WIZ97_FILEPREVIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 310
+        VERTGUIDE, 21
+        VERTGUIDE, 31
+        VERTGUIDE, 43
+        VERTGUIDE, 286
+        VERTGUIDE, 296
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 136
+        HORZGUIDE, 8
+    END
+
+    IDD_WIZ97_OUTPUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 310
+        VERTGUIDE, 21
+        VERTGUIDE, 31
+        VERTGUIDE, 43
+        VERTGUIDE, 92
+        VERTGUIDE, 98
+        VERTGUIDE, 286
+        VERTGUIDE, 296
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 136
+        HORZGUIDE, 8
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "WTL Inc.\0"
+            VALUE "FileDescription", "Wizard97 Test\0"
+            VALUE "FileVersion", "1.0\0"
+            VALUE "InternalName", "Wizard97Test\0"
+            VALUE "LegalCopyright", "Copyright 2005\0"
+            VALUE "OriginalFilename", "Wizard97Test.exe\0"
+            VALUE "ProductName", "Wizard97 Test\0"
+            VALUE "ProductVersion", "1.0\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_NEW             "Create a new document\nNew"
+    ID_FILE_OPEN            "Open an existing document\nOpen"
+    ID_FILE_CLOSE           "Close the active document\nClose"
+    ID_FILE_SAVE            "Save the active document\nSave"
+    ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
+    ID_FILE_PAGE_SETUP      "Change the printing options\nPage Setup"
+    ID_FILE_PRINT_SETUP     "Change the printer and printing options\nPrint Setup"
+    ID_FILE_PRINT           "Print the active document\nPrint"
+    ID_FILE_PRINT_PREVIEW   "Display full pages\nPrint Preview"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+    ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
+    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_WINDOW_NEW           "Open another window for the active document\nNew Window"
+    ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window\nArrange Icons"
+    ID_WINDOW_CASCADE       "Arrange windows so they overlap\nCascade Windows"
+    ID_WINDOW_TILE_HORZ     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_TILE_VERT     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection\nErase"
+    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_FIND            "Find the specified text\nFind"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+    ID_EDIT_REPEAT          "Repeat the last action\nRepeat"
+    ID_EDIT_REPLACE         "Replace specific text with different text\nReplace"
+    ID_EDIT_SELECT_ALL      "Select the entire document\nSelect All"
+    ID_EDIT_UNDO            "Undo the last action\nUndo"
+    ID_EDIT_REDO            "Redo the previously undone action\nRedo"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_VIEW_TOOLBAR         "Show or hide the toolbar\nToggle ToolBar"
+    ID_VIEW_STATUS_BAR      "Show or hide the status bar\nToggle StatusBar"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ATL_IDS_SCSIZE          "Change the window size"
+    ATL_IDS_SCMOVE          "Change the window position"
+    ATL_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    ATL_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    ATL_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    ATL_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    ATL_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ATL_IDS_SCRESTORE       "Restore the window to normal size"
+    ATL_IDS_SCTASKLIST      "Activate Task List"
+    ATL_IDS_MDICHILD        "Activate this window"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ATL_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ATL_IDS_MRU_FILE        "Open this document"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#ifndef _EMBEDDED_MANIFEST
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "res\\Wizard97Test.exe.manifest"
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

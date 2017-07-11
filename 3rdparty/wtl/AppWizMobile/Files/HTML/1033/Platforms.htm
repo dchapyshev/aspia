@@ -1,0 +1,772 @@
+<!--
+// Windows Template Library - WTL version 9.10
+// Copyright (C) Microsoft Corporation, WTL Team. All rights reserved.
+//
+// This file is a part of the Windows Template Library.
+// The use and distribution terms for this software are covered by the
+// Microsoft Public License (http://opensource.org/licenses/MS-PL)
+// which can be found in the file MS-PL.txt at the root folder.
+-->
+
+<HTML DIR="ltr">
+	<HEAD>
+		<TITLE>'ATL/WTL Application Wizard for Windows CE'</TITLE>
+		<META NAME="vs_targetSchema" CONTENT="http://schemas.microsoft.com/intellisense/ie5">
+		<META HTTP-EQUIV="MSThemeCompatible" CONTENT="Yes">
+		<STYLE TYPE="text/css">@import url();
+		</STYLE>
+		<SCRIPT>
+		var strURL = window.external.FindSymbol("PRODUCT_INSTALLATION_DIR");
+		strURL += "VCWizards/";
+		strURL += window.external.GetHostLocale();
+		strURL += "/NewStyles.css";
+		document.styleSheets(0).imports(0).href = strURL;
+		</SCRIPT>
+
+	    <OBJECT id="ProjWiz80" classid="CLSID:D245F352-3F45-4516-B1E6-04608DA126CC" VIEWASTEXT>
+		</OBJECT>
+        <OBJECT id="ProjWiz90" classid="CLSID:5AFCAD52-F3CC-43BB-A605-6602EE5BD94A" VIEWASTEXT>
+        </OBJECT>
+
+        <SCRIPT>
+            // Load the New Project Wizard DLL
+            var ProjWiz;
+            try {
+                var WizardVersion = window.external.FindSymbol('WIZARD_VERSION');
+                if (WizardVersion >= 9.0)
+                    ProjWiz = document.all.tags("OBJECT").item("ProjWiz90");
+                else
+                    ProjWiz = document.all.tags("OBJECT").item("ProjWiz80");
+                ProjWiz.Init(window.external);
+            }
+            catch (e) {
+				window.external.Finish(document, 'cancel');
+			}
+		</SCRIPT>
+	</HEAD>
+	<BODY BGCOLOR="buttonface" TOPMARGIN="0" LEFTMARGIN="0" RIGHTMARGIN="0" BOTTOMMARGIN="0" ONLOAD="InitDocument(document);" ONKEYDOWN="OnKey();" ONKEYPRESS="OnPress();">
+		<TABLE CLASS="ONE" HEIGHT="100%" WIDTH="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+			<COLGROUP>
+				<COL WIDTH="178">
+				<COL>
+				<!--OPEN OF INTRODUCTORY INFORMATION TABLE//-->
+				<TR VALIGN="top">
+					<TD HEIGHT="79" WIDTH="100%" COLSPAN="2">
+						<TABLE CLASS="TWO" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+							<COLGROUP>
+								<COL WIDTH="12">
+								<COL>
+								<COL WIDTH="12">
+								<TR>
+									<TD VALIGN="top" HEIGHT="12" WIDTH="12">
+										&nbsp;
+									</TD>
+									<TD VALIGN="top" HEIGHT="12">
+										&nbsp;
+									</TD>
+									<TD VALIGN="top" HEIGHT="12" WIDTH="12">
+										&nbsp;
+									</TD>
+									<TD CLASS="IMAGE" VALIGN="bottom" WIDTH="110" ROWSPAN="2">
+										<DIV CLASS="SMALLA" ID="Layer0">
+											<IMG CLASS="SMALLEST" SRC="../../Images/WTLApp70.gif" WIDTH="63" HEIGHT="63" ALT="" BORDER="0">
+										</DIV>
+									</TD>
+									<TD VALIGN="top" HEIGHT="12" WIDTH="6" ROWSPAN="2">
+										&nbsp;
+									</TD>
+								</TR>
+								<TR>
+									<TD VALIGN="top" HEIGHT="65" WIDTH="12">
+										&nbsp;
+									</TD>
+									<TD VALIGN="top" HEIGHT="65">
+										<H4 CLASS="HEAD" ID="HEAD">Platforms</H4>
+										<P CLASS="SUBHEAD" ID="SUBHEAD">Specify the platforms to be supported by your WTL project.</P>
+									</TD>
+									<TD VALIGN="top" HEIGHT="65" WIDTH="12">
+										&nbsp;
+									</TD>
+								</TR>
+								<TR>
+									<TD VALIGN="top" CLASS="RULE" COLSPAN="5" HEIGHT="2">
+										<TABLE BORDER="0" WIDTH="100%" HEIGHT="1" CELLPADDING="0" CELLSPACING="0">
+											<TR VALIGN="top">
+												<TD HEIGHT="1" WIDTH="100%" BGCOLOR="buttonshadow"><IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="1" ALT=""></TD>
+												<TD HEIGHT="1" WIDTH="1" BGCOLOR="window"><IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="1" ALT=""></TD>
+											</TR>
+										</TABLE>
+									</TD>
+								</TR>
+						</TABLE>
+					</TD>
+				</TR>
+				<!--CLOSE OF INTRODUCTORY INFORMATION TABLE//-->
+				<!--OPEN OF NAVIGATION, CONTENT, AND BUTTON TABLES//-->
+				<TR VALIGN="top">
+					<TD CLASS="THREE" VALIGN="top" HEIGHT="100%" WIDTH="178" STYLE="BACKGROUND-IMAGE: url(../../Images/WTLApp70_Background.gif)">
+						<!--OPEN OF NAVIGATION TABLE//-->
+						<TABLE CLASS="THREE" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+							<COLGROUP>
+								<COL WIDTH="12">
+								<COL WIDTH="166">
+								<COL WIDTH="1">
+								<TR>
+									<TD VALIGN="top" COLSPAN="3" HEIGHT="12">
+										&nbsp;
+									</TD>
+								</TR>
+								<TR>
+									<TD VALIGN="top" HEIGHT="100%" WIDTH="12">
+										&nbsp;
+									</TD>
+									<TD VALIGN="top" HEIGHT="100%" WIDTH="165">
+										<!--OPEN OF NAVIGATIONAL LINKS//-->
+										<DIV CLASS="LINK">
+											<TABLE WIDTH="166" HEIGHT="28" BORDER="0" CELLPADDING="0" CELLSPACING="0" CLASS="LINKTEXT">
+												<TR VALIGN="center">
+													<TD WIDTH="162">
+														<SPAN CLASS="ACTIVELINK" ID="Default" TITLE="Examine an overview of selections" onClick="Next(document, 'default.htm');" TABINDEX="1">Overview</SPAN>
+													</TD>
+													<TD WIDTH="4">
+														<IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="4">
+													</TD>
+												</TR>
+											</TABLE>
+										</DIV>
+										<DIV CLASS="LINKSELECTED">
+											<SPAN CLASS="VERTLINE1"><IMG SRC="../../Images/spacer.gif" WIDTH="1" HEIGHT="1" ALT="" BORDER="0">
+											</SPAN><SPAN CLASS="HORILINE1">
+												<TABLE WIDTH="167" HEIGHT="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+													<TR VALIGN="top">
+														<TD CLASS="DOTTEDLINE" HEIGHT="1">
+														</TD>
+													</TR>
+													<TR VALIGN="top">
+														<TD HEIGHT="100%">
+															<IMG SRC="../../Images/spacer.gif" WIDTH="1" HEIGHT="28" ALT="" BORDER="0">
+														</TD>
+													</TR>
+													<TR VALIGN="top">
+														<TD CLASS="DOTTEDLINE" HEIGHT="1">
+														</TD>
+													</TR>
+												</TABLE>
+											</SPAN>
+											<TABLE WIDTH="160" HEIGHT="28" BORDER="0" CELLPADDING="0" CELLSPACING="0" CLASS="LINKTEXTSELECTED">
+												<TR VALIGN="center">
+													<TD WIDTH="156">
+														<SPAN ID="Platforms" TITLE="Specify the application platforms (TMP)." onClick="Next(document, 'Platforms.htm');" TABINDEX="1">
+															Platforms</SPAN>
+													</TD>
+													<TD WIDTH="4">
+														<IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="4">
+													</TD>
+												</TR>
+											</TABLE>
+										</DIV>
+										<DIV CLASS="LINK">
+											<TABLE WIDTH="166" HEIGHT="28" BORDER="0" CELLPADDING="0" CELLSPACING="0" CLASS="LINKTEXT">
+												<TR VALIGN="center">
+													<TD WIDTH="162">
+														<SPAN CLASS="ACTIVELINK" ID="AppType" TITLE="Specify the application type and project options." onClick="Next(document, 'AppType.htm');" TABINDEX="1">
+															Application Type</SPAN>
+													</TD>
+													<TD WIDTH="4">
+														<IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="4">
+													</TD>
+												</TR>
+											</TABLE>
+										</DIV>
+										<DIV CLASS="LINK">
+											<TABLE WIDTH="166" HEIGHT="28" BORDER="0" CELLPADDING="0" CELLSPACING="0" CLASS="LINKTEXT">
+												<TR VALIGN="center">
+													<TD WIDTH="162">
+														<SPAN CLASS="ACTIVELINK" ID="UIFeatures" TITLE="Specify features for the selected application type." onClick="Next(document, 'UIFeatures.htm');" TABINDEX="1">
+															User Interface Features</SPAN>
+													</TD>
+													<TD WIDTH="4">
+														<IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="4">
+													</TD>
+												</TR>
+											</TABLE>
+										</DIV>
+										<!--CLOSE OF NAVIGATIONAL LINKS//-->
+									</TD>
+									<TD WIDTH="1">
+										<DIV CLASS="VERTLINE">
+											<IMG SRC="../../Images/spacer.gif" WIDTH="1" HEIGHT="1" ALT="" BORDER="0">
+										</DIV>
+									</TD>
+								</TR>
+						</TABLE>
+						<!--CLOSE OF NAVIGATION TABLE//-->
+					</TD>
+					<TD VALIGN="top" HEIGHT="100%">
+						<!--OPEN OF CONTENT AND BUTTON TABLE//-->
+						<TABLE CLASS="ONE" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+							<COLGROUP>
+								<COL WIDTH="100%">
+								<TR VALIGN="top">
+									<TD HEIGHT="100%">
+										<!--OPEN OF CONTENT//-->
+
+										<table class="content" border="0" cellSpacing="0" cellpadding="0" id="PLATFORM_TABLE">
+											<col width="12"><col width="398"><col width="12">
+											<tr>
+												<td vAlign="top" height="12" colspan="3">&nbsp;</td>
+											</tr>
+											<tr>
+												<td vAlign="top" width="12">&nbsp;</td>
+												<td vAlign="top" align="left" width="398">Select platform SDKs to be added to the current project.</td>
+												<td vAlign="top" width="12">&nbsp;</td>
+											</tr>
+											<tr>
+												<td vAlign="top" width="12">
+												</td>
+											</tr>
+											<tr>
+												<td vAlign="top" width="12">&nbsp;</td>
+												<!--<td style="border-style:inset; border-width:0; padding:0;" ID="PLATFORM_OPTIONS" align="left" valign="top" height="120" width="398">-->
+												<td>
+													<table>
+														<tr>
+															<td vAlign="top" align="left" width="125">
+																<SPAN CLASS="itemTextTop" ID="AVAILABLE_SDK_SPAN" TITLE="List of platform SDKs that can be added to the project."><U>I</U>nstalled SDKs:
+																	<BR>
+																	<SELECT NAME="AvailableSDKs" ACCESSKEY="I" ID="AvailableSDKs" onDblClick="OnSelectOne(true);" onChange="CurrentSelectionChanged(true);" STYLE="width: 125pt" size="9">
+																	</SELECT>
+																</SPAN>
+															</td>
+															<td VALIGN="TOP" ALIGN="MIDDLE" WIDTH="20">
+																<P CLASS="ElementSpacer4">&nbsp;</P>
+																<BUTTON ID="SELECT_ONE" CLASS="ButtonClass4" TITLE="Add selected platform SDK to project." onClick="OnSelectOne(true);" ALIGN="CENTER" STYLE="MARGIN-BOTTOM:2PX;"><B CLASS="BigFont">&rsaquo;</B></BUTTON>
+																<BUTTON ID="SELECT_ALL" CLASS="ButtonClass4" TITLE="Add all platform SDKs to project." onClick="OnSelectAll(true);" ALIGN="CENTER"><B CLASS="BigFont">&raquo;</B></BUTTON>
+																<P STYLE="MARGIN-TOP:0PX; MARGIN-BOTTOM:7PX;"></P>
+																<BUTTON ID="DESELECT_ONE" CLASS="ButtonClass4" TITLE="Remove selected platform SDK from project." onClick="OnSelectOne(false);" ALIGN="CENTER" STYLE="MARGIN-LEFT:0PX; MARGIN-BOTTOM:2PX;"><B CLASS="BigFont">&lsaquo;</B></BUTTON>
+																<BUTTON ID="DESELECT_ALL" CLASS="ButtonClass4" TITLE="Remove all platform SDKs from project." onClick="OnSelectAll(false);" ALIGN="CENTER"><B CLASS="BigFont">&laquo;</B></BUTTON>
+															</td>
+															<td vAlign="top" align="left" width="130">
+																<SPAN CLASS="itemTextTop" ID="SUPPORTED_SDK_SPAN" TITLE="List of platform SDKs that will be added to the project."><U>S</U>elected SDKs:
+																	<BR>
+																	<SELECT NAME="SelectedSDKs" ACCESSKEY="S" ID="SelectedSDKs" onDblClick="OnSelectOne(false);" onChange="CurrentSelectionChanged(false);" STYLE="width: 130pt" size="9">
+																	</SELECT>
+																</SPAN>
+															</td>
+														</tr>
+													</table>
+												</td>                                
+												<td vAlign="top" width="12">&nbsp;</td>
+											</tr>
+											<tr>
+												<td vAlign="top" height="12" colspan="3">&nbsp;</td>
+											</tr>
+											<tr>
+												<td vAlign="top" width="12">&nbsp;</td>
+												<td id="PLATFORM_INFO" title="Platform Info" vAlign="top" align="center" width="398">
+													<form method="POST" action="--WEBBOT-SELF--">
+														<!--webbot bot="SaveResults" u-file="fpweb:///_private/form_results.csv" s-format="TEXT/CSV" s-label-fields="TRUE" -->
+														<fieldset style="padding:6px;">
+															<legend id="PLATFORM_NAME">Platform Name</legend>
+															<table id="PLATFORM_INFO_TABLE" height="42" border="0" cellpadding="0" cellspacing="0" bordercolor="#FFFFFF" bordercolorlight="#FFFFFF" bordercolordark="#FFFFFF" style="border-collapse:collapse;">
+																<tr>
+																	<td width="8" height="42" bordercolorlight="#FFFFFF" bordercolordark="#FFFFFF">&nbsp;</td>
+																	<td width="100" height="42" bordercolorlight="#FFFFFF" bordercolordark="#FFFFFF" TITLE="INSTRUCTION_SETS">
+																		Instruction sets:
+																	</td>
+																	<td height="42" bordercolorlight="#FFFFFF" bordercolordark="#FFFFFF" id="INSTRUCTION_SETS" vAlign="center" align="left">&nbsp;</td>
+																	<td width="8" height="42" bordercolorlight="#FFFFFF" bordercolordark="#FFFFFF">&nbsp;</td>
+																</tr>
+															</table>
+														</fieldset>
+													</form>
+												</td>
+												<td vAlign="top" width="12">&nbsp;</td>
+											</tr>
+										</table>
+										<!--CLOSE OF CONTENT//-->
+									</TD>
+								</TR>
+								<TR VALIGN="bottom">
+									<TD HEIGHT="48">
+										<!--OPEN OF BUTTON HTML//-->
+										<TABLE HEIGHT="48" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+											<COLGROUP>
+												<COL WIDTH="12">
+												<COL>
+												<COL WIDTH="75">
+												<COL WIDTH="4">
+												<COL WIDTH="75">
+												<COL WIDTH="4">
+												<COL WIDTH="75">
+												<COL WIDTH="12">
+												<TR>
+													<TD VALIGN="top" CLASS="RULE" COLSPAN="8" HEIGHT="2">
+														<TABLE BORDER="0" WIDTH="100%" HEIGHT="1" CELLPADDING="0" CELLSPACING="0">
+															<TR VALIGN="top">
+																<TD HEIGHT="1" WIDTH="100%" BGCOLOR="buttonshadow"><IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="1" ALT=""></TD>
+																<TD HEIGHT="1" WIDTH="1" BGCOLOR="window"><IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="1" ALT=""></TD>
+															</TR>
+														</TABLE>
+													</TD>
+												</TR>
+												<TR>
+													<TD VALIGN="top" HEIGHT="11" COLSPAN="8">
+														&nbsp;
+													</TD>
+												</TR>
+												<TR>
+													<TD VALIGN="center" HEIGHT="23" WIDTH="12">
+														&nbsp;
+													</TD>
+													<TD VALIGN="top" HEIGHT="23">
+														&nbsp;
+													</TD>
+													<TD VALIGN="center" HEIGHT="23" WIDTH="75">
+														<BUTTON CLASS="BUTTONS" ID="FinishBtn" ACCESSKEY="F" onClick="OnFinish(document);" type="button">
+															<U>F</U>inish</BUTTON>
+													</TD>
+													<TD VALIGN="center" HEIGHT="23" WIDTH="4">
+														&nbsp;
+													</TD>
+													<TD VALIGN="center" HEIGHT="23" WIDTH="75">
+														<BUTTON CLASS="BUTTONS" ID="CancelBtn" ACCESSKEY="C" onClick="window.external.Finish(document, 'cancel');" type="button">
+															<U>C</U>ancel</BUTTON>
+													</TD>
+													<TD VALIGN="center" HEIGHT="23" WIDTH="4">
+														&nbsp;
+													</TD>
+													<TD VALIGN="center" HEIGHT="23" WIDTH="75">
+														<BUTTON CLASS="BUTTONS" ID="HelpBtn" ACCESSKEY="H" onClick="window.external.OnHelp('vc.appwiz.custom.overview');" type="button">
+															<U>H</U>elp</BUTTON>
+													</TD>
+													<TD VALIGN="center" HEIGHT="23" WIDTH="12">
+														&nbsp;
+													</TD>
+												</TR>
+												<TR>
+													<TD VALIGN="top" HEIGHT="12" COLSPAN="8">
+														&nbsp;
+													</TD>
+												</TR>
+										</TABLE>
+										<!--CLOSE OF BUTTON HTML//-->
+									</TD>
+								</TR>
+						</TABLE>
+						<!--CLOSE OF NAVIGATION, CONTENT, AND BUTTON TABLES//-->
+					</TD>
+				</TR>
+		</TABLE>
+		<SCRIPT LANGUAGE="JSCRIPT">
+
+var tab_array = new Array();
+tab_array[0] = Default;
+tab_array[1] = Platforms;
+tab_array[2] = AppType;
+tab_array[3] = UIFeatures;
+
+function InitDocument(document)
+{
+	setDirection();
+	
+	if (window.external.FindSymbol('DOCUMENT_FIRST_LOAD'))
+	{
+		// This function sets the default symbols based 
+		// on the values specified in the SYMBOL tags above
+		window.external.SetDefaults(document);
+	}
+
+	// Load the document and initialize the controls with the appropriate symbol values
+	window.external.Load(document);
+
+	// Do additional initialization
+	OnInit();
+}
+
+function Next(document, linkto)
+{
+	var selectedPlatform;
+	var checkedPlatforms = new Array();
+	var uncheckedPlatforms = new Array();
+	if (AvailableSDKs.selectedIndex != -1)
+	{
+		selectedPlatform = AvailableSDKs.options(AvailableSDKs.selectedIndex).text;
+	}
+	else
+	{
+		selectedPlatform = SelectedSDKs.options(SelectedSDKs.selectedIndex).text;
+	}
+	
+	var spCompat = SetWTLSymbols(checkedPlatforms);
+
+	for (cur = 0; cur < SelectedSDKs.options.length; cur++)
+	{
+		checkedPlatforms[cur] = SelectedSDKs.options(cur).text;
+	}
+	for (cur = 0; cur < AvailableSDKs.options.length; cur++)
+	{
+		uncheckedPlatforms[cur] = AvailableSDKs.options(cur).text;   
+	}
+
+	if (0 == checkedPlatforms.length)
+	{
+		L_Err_Text = "You must specify at least one target platform for your application.";
+		window.external.ReportError(L_Err_Text);
+		return;
+	}
+
+	window.external.AddSymbol("SELECTED_PLATFORM", selectedPlatform);
+	window.external.AddSymbol("CHECKED_PLATFORMS", checkedPlatforms);
+	window.external.AddSymbol("UNCHECKED_PLATFORMS", uncheckedPlatforms);
+
+	var nativePlatforms = new Array();
+	for (i = 0, nPlatform = 0 ; i < checkedPlatforms.length ; i++)
+	{
+		var nInstructionSets = ProjWiz.GetInstructionSetsForBaseNativePlatform(checkedPlatforms[i]);
+		for (j = 0 ; j < nInstructionSets ; j++)
+		{
+			nativePlatforms[nPlatform++] = ProjWiz.GetNativePlatformName(checkedPlatforms[i], ProjWiz.GetInstructionSetForBaseNativePlatform(checkedPlatforms[i], j));
+		}
+	}
+	window.external.AddSymbol("NATIVE_PLATFORMS", nativePlatforms);
+
+	if (!spCompat && window.external.OkCancelAlert("For Smartphone compatibility some of your options have been changed: do you want to review them?"))
+			linkto = window.external.FindSymbol("WTL_APPTYPE_DLG") ? "AppType.htm" : "UIFeatures.htm";
+			
+	if(!(linkto == "UIFeatures.htm" && window.external.FindSymbol("WTL_APPTYPE_DLG")))
+		window.external.Next(document, linkto);
+}
+
+function OnFinish(document)
+{
+	var selectedPlatform;
+	var checkedPlatforms = new Array();
+	var uncheckedPlatforms = new Array();
+	if (AvailableSDKs.selectedIndex != -1)
+	{
+		selectedPlatform = AvailableSDKs.options(AvailableSDKs.selectedIndex).text;
+	}
+	else
+	{
+		selectedPlatform = SelectedSDKs.options(SelectedSDKs.selectedIndex).text;
+	}
+	
+	var spCompat = SetWTLSymbols(checkedPlatforms);
+
+	for (cur = 0; cur < SelectedSDKs.options.length; cur++)
+	{
+		checkedPlatforms[cur] = SelectedSDKs.options(cur).text;
+	}
+	for (cur = 0; cur < AvailableSDKs.options.length; cur++)
+	{
+		uncheckedPlatforms[cur] = AvailableSDKs.options(cur).text;   
+	}
+
+	if (0 == checkedPlatforms.length)
+	{
+		L_Err_Text = "You must specify at least one target platform for your application.";
+		window.external.ReportError(L_Err_Text);
+		return;
+	}
+
+	window.external.AddSymbol("SELECTED_PLATFORM", selectedPlatform);
+	window.external.AddSymbol("CHECKED_PLATFORMS", checkedPlatforms);
+	window.external.AddSymbol("UNCHECKED_PLATFORMS", uncheckedPlatforms);
+
+	if (0 == checkedPlatforms.length)
+	{
+		L_Err_Text = "You must specify at least one target platform for your application.";
+		window.external.ReportError(L_Err_Text);
+		return;
+	}
+
+	window.external.AddSymbol("SELECTED_PLATFORM", selectedPlatform);
+	window.external.AddSymbol("CHECKED_PLATFORMS", checkedPlatforms);
+
+	var nativePlatforms = new Array();
+	for (i = 0 ; i < checkedPlatforms.length ; i++)
+	{
+		var nInstructionSets = ProjWiz.GetInstructionSetsForBaseNativePlatform(checkedPlatforms[i]);
+		for (j = 0 ; j < nInstructionSets ; j++)
+		{
+			nativePlatforms.push(ProjWiz.GetNativePlatformName(checkedPlatforms[i], ProjWiz.GetInstructionSetForBaseNativePlatform(checkedPlatforms[i], j)));
+		}
+	}
+	window.external.AddSymbol("NATIVE_PLATFORMS", nativePlatforms);
+
+	if (!spCompat && window.external.OkCancelAlert("For Smartphone compatibility some of your options have been changed: do you want to review them?"))
+			window.external.Next(document, window.external.FindSymbol("WTL_APPTYPE_DLG") ? "AppType.htm" : "UIFeatures.htm");
+	else OnWizFinish(document);
+}
+
+function OnInit()
+{
+	if(window.external.FindSymbol("WTL_APPTYPE_DLG"))
+		UIFeatures.className = "inactivelink";
+	else
+		UIFeatures.className = "activelink";
+
+	// sticky to the checked item(s)
+	var checkedPlatforms = new Array();
+	var uncheckedPlatforms = new Array();
+	var reload = window.external.FindSymbol("PLATFORM_PAGE_LOADED");	
+	checkedPlatforms = window.external.FindSymbol("CHECKED_PLATFORMS");
+	uncheckedPlatforms = window.external.FindSymbol("UNCHECKED_PLATFORMS");
+
+	if (reload)
+	{
+		var selectedPlatform  = window.external.FindSymbol("SELECTED_PLATFORM");
+		var bSelect;
+		for (cur = 0; cur < checkedPlatforms.length; cur++)
+		{     
+			var oOption = document.createElement("OPTION");
+			oOption.text = checkedPlatforms[cur];
+			oOption.value = checkedPlatforms[cur];
+			SelectedSDKs.options.add(oOption);
+			if (checkedPlatforms[cur] == selectedPlatform)
+			{
+				SelectedSDKs.selectedIndex = cur;
+				bSelect = false;
+			}
+		}
+		for (cur = 0; cur < uncheckedPlatforms.length; cur++)
+		{     
+			var oOption = document.createElement("OPTION");
+			oOption.text = uncheckedPlatforms[cur];
+			oOption.value = uncheckedPlatforms[cur];
+			AvailableSDKs.options.add(oOption);
+			if (uncheckedPlatforms[cur] == selectedPlatform)
+			{
+				AvailableSDKs.selectedIndex = cur;
+				bSelect = true;
+			}
+		}
+		CurrentSelectionChanged(bSelect);      
+	}
+	else
+	{
+		var count = ProjWiz.GetBaseNativePlatforms();
+		for (var cur = 0; cur < count; cur++)
+		{
+			var oOption = document.createElement("OPTION");
+			oOption.text = ProjWiz.GetBaseNativePlatform(cur);
+			oOption.value = ProjWiz.GetBaseNativePlatform(cur);
+			AvailableSDKs.options.add(oOption);
+		}
+		var node = AvailableSDKs.options(0);
+		if (node)
+		{
+			AvailableSDKs.options.remove(node);
+			SelectedSDKs.options.add(node);
+			SelectedSDKs.selectedIndex = 0
+			AvailableSDKs.selectedIndex = -1;
+		}
+		CurrentSelectionChanged(false);
+		window.external.AddSymbol("PLATFORM_PAGE_LOADED", true);
+	}                                                  
+}
+
+function OnSelectOne(bSelect)
+{
+	var lstFrom;
+	var lstTo;
+	if (bSelect)
+	{
+		lstFrom = AvailableSDKs;
+		lstTo = SelectedSDKs;
+	}
+	else
+	{
+		lstFrom = SelectedSDKs;
+		lstTo = AvailableSDKs;
+	}
+	var nSelectedIndex = lstFrom.selectedIndex;
+
+	if (nSelectedIndex < 0)
+		return false;
+
+	var oOption = document.createElement("OPTION");
+	var strValue = lstFrom.options[nSelectedIndex].value
+	oOption.value = strValue;
+	oOption.text = lstFrom.options[nSelectedIndex].text;
+
+	//Figure out where to add new item
+	for (nCntr = 0; nCntr < lstTo.length; nCntr++)
+	{
+		if (oOption.text < lstTo.options[nCntr].text)
+		{
+			lstTo.add(oOption, nCntr);
+			break;
+		}
+	}
+	if (nCntr == lstTo.length)
+		lstTo.add(oOption);
+
+	window.external.AddSymbol(strValue, bSelect);
+	lstFrom.remove(nSelectedIndex);
+	lstFrom.selectedIndex = -1;
+	lstTo.selectedIndex = nCntr;
+	CurrentSelectionChanged(!bSelect);
+}
+
+function OnSelectAll(bSelect)
+{
+	var lstTo;
+	var count = ProjWiz.GetBaseNativePlatforms();
+	// clear both lists, then re-add all platforms to one or the other.
+	AvailableSDKs.options.length = 0;
+	SelectedSDKs.options.length = 0;
+
+	if (bSelect)
+	{
+		lstTo = SelectedSDKs;
+	}
+	else
+	{
+		lstTo = AvailableSDKs;
+	}
+
+	for (var cur = 0; cur < count; cur++)
+	{
+		var sel;
+		var oOption = document.createElement("OPTION");
+		oOption.text = ProjWiz.GetBaseNativePlatform(cur);
+		oOption.value = ProjWiz.GetBaseNativePlatform(cur);
+		lstTo.options.add(oOption);
+	}
+	lstTo.selectedIndex = 0;
+	CurrentSelectionChanged(!bSelect);
+}
+ 
+function EnableDisableButtons()
+{
+	if (AvailableSDKs.length)
+		SELECT_ALL.disabled = false;
+	else
+		SELECT_ALL.disabled = true;
+
+	if (SelectedSDKs.length)
+		DESELECT_ALL.disabled = false;
+	else
+		DESELECT_ALL.disabled = true;
+
+	if (AvailableSDKs.selectedIndex != -1)
+		SELECT_ONE.disabled = false;
+	else
+		SELECT_ONE.disabled = true;
+
+	if (SelectedSDKs.selectedIndex != -1)
+		DESELECT_ONE.disabled = false;
+	else
+		DESELECT_ONE.disabled = true;
+}
+
+function GetInstructionSetsText(selectedPlatform)
+{
+	var nInstructionSets = ProjWiz.GetInstructionSetsForBaseNativePlatform(selectedPlatform);
+
+	var L_INSTRUCTIONSETS_Text = "";
+	for (i = 0 ; i < nInstructionSets ; i++)
+	{
+		L_INSTRUCTIONSETS_Text += ProjWiz.GetInstructionSetForBaseNativePlatform(selectedPlatform, i);
+
+		if (i < nInstructionSets - 1)
+		{
+			L_INSTRUCTIONSETS_Text += ", ";
+		}
+	}
+
+	return L_INSTRUCTIONSETS_Text;
+}
+
+function CurrentSelectionChanged(bSelect)
+{
+	var lstActive;
+	var lstInactive;
+	if (bSelect)
+	{
+		lstActive = AvailableSDKs;
+		lstInactive = SelectedSDKs;
+	}
+	else
+	{
+		lstActive = SelectedSDKs;
+		lstInactive = AvailableSDKs;    
+	}
+	lstInactive.selectedIndex = -1;
+	var curSel = lstActive.selectedIndex;
+	if (curSel != -1)
+	{
+		PLATFORM_NAME.innerText = lstActive.options(curSel).text;
+		INSTRUCTION_SETS.innerText = GetInstructionSetsText(lstActive.options(curSel).text);  
+	}
+	EnableDisableButtons();
+}
+
+function SetWTLSymbols(checkedPlatforms)
+{
+    window.external.AddSymbol("WTL_PLATFORM_SP", false);
+    window.external.AddSymbol("WTL_PLATFORM_PPC2003", false);
+    window.external.AddSymbol("WTL_PLATFORM_PPC2005", false);
+    var spCompat = true;
+
+    for (cur = 0; cur < SelectedSDKs.options.length; cur++)
+    {
+        checkedPlatforms[cur] = SelectedSDKs.options(cur).text;
+        if (checkedPlatforms[cur].search(/smartphone|mobile 6 standard/i) != -1)
+        {
+			if(window.external.FindSymbol("WTL_APPTYPE_DLG") 
+				&& window.external.FindSymbol("WTL_APP_DLG_ORIENT_AWARE"))
+					spCompat = window.external.FindSymbol("WTL_APP_DLG_RESIZE");
+					
+			if(window.external.FindSymbol("WTL_APPTYPE_SDI") && window.external.FindSymbol("WTL_USE_VIEW"))
+				spCompat = window.external.FindSymbol("WTL_COMBO_VIEW_TYPE") != "WTL_VIEWTYPE_PROPSHEET"
+						&& window.external.FindSymbol("WTL_COMBO_VIEW_TYPE") != "WTL_VIEWTYPE_INKX"
+						&& window.external.FindSymbol("WTL_COMBO_VIEW_TYPE") != "WTL_VIEWTYPE_RICHINK";
+			
+            window.external.AddSymbol("WTL_PLATFORM_SP",true);
+		}
+        else if(checkedPlatforms[cur].search(/2003/) != -1)
+            window.external.AddSymbol("WTL_PLATFORM_PPC2003",true);
+        else if(checkedPlatforms[cur].search(/Mobile [56]/i) != -1)
+            window.external.AddSymbol("WTL_PLATFORM_PPC2005",true);
+    }
+
+	var b2003 = window.external.FindSymbol("WTL_PLATFORM_PPC2003"); 
+	var b2005 = window.external.FindSymbol("WTL_PLATFORM_PPC2005");	
+	if (b2003 || b2005)
+	{ 
+	    window.external.AddSymbol("WTL_MENU_TYPE_2003", b2003 && !b2005);
+	    window.external.AddSymbol("WTL_MENU_TYPE_2005", !b2003 && b2005); 
+	    window.external.AddSymbol("WTL_MENU_TYPE_BOTH", b2003 && b2005); 
+    }
+    else
+    {
+	    window.external.AddSymbol("WTL_MENU_TYPE_2003", false);
+	    window.external.AddSymbol("WTL_MENU_TYPE_2005", false); 
+	    window.external.AddSymbol("WTL_MENU_TYPE_BOTH", false); 
+        window.external.AddSymbol("WTL_PPC_MENU", false);
+    }
+    return spCompat;
+}
+
+		</SCRIPT>
+		<SCRIPT ID="INCLUDE_SCRIPT" LANGUAGE="JSCRIPT"></SCRIPT>
+		<SCRIPT ID="INCLUDE_COMMON" LANGUAGE="JSCRIPT"></SCRIPT>
+		<!-- 
+Common.js is a script file which contains the helper functions 
+used by the wizards.  Include this line if you want to
+call these functions from your html scripts.
+//-->
+		<SCRIPT>
+	var strPath = window.external.FindSymbol("PRODUCT_INSTALLATION_DIR");
+	strPath += "VCWizards/";
+	strPath += window.external.GetHostLocale();
+	var strScriptPath = strPath + "/Script.js";
+	var strCommonPath = strPath + "/Common.js";
+	document.scripts("INCLUDE_SCRIPT").src = strScriptPath;
+	document.scripts("INCLUDE_COMMON").src = strCommonPath;
+		</SCRIPT>
+	</BODY>
+</HTML>

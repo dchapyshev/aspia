@@ -1,0 +1,10 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by Wizard97Test.rc
+//
+#define HIDC_BTN_BROWSEPATH             0x80750451    // IDD_WIZ97_PATHFILTER
+#define HIDC_EDIT_FILTER                0x80750452    // IDD_WIZ97_PATHFILTER
+#define HIDC_EDIT_PATH                  0x80750453    // IDD_WIZ97_PATHFILTER
+#define HIDC_RADIO_FILTER_ALL           0x80750454    // IDD_WIZ97_PATHFILTER
+#define HIDC_RADIO_FILTER_CUSTOM        0x80750455    // IDD_WIZ97_PATHFILTER
+#define HIDC_RADIO_NORECURSE            0x80750456    // IDD_WIZ97_PATHFILTER
+#define HIDC_RADIO_RECURSE              0x80750457    // IDD_WIZ97_PATHFILTER

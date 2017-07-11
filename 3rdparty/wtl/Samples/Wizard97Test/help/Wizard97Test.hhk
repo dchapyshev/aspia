@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+<OBJECT type="text/site properties">
+	<param name="WindowName" value="$global_main">
+</OBJECT>
+<UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Clipboard">
+		<param name="Name" value="Test Wizard - Select Output Page">
+		<param name="Local" value="TestWizard_Output.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Completion">
+		<param name="Name" value="Test Wizard - Completion Page">
+		<param name="Local" value="TestWizard_Completion.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="E-Mail">
+		<param name="Name" value="Test Wizard - Select Output Page">
+		<param name="Local" value="TestWizard_Output.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Filter">
+		<param name="Name" value="Test Wizard - Path and Filter Page">
+		<param name="Local" value="TestWizard_PathFilter.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Output">
+		<param name="Name" value="Test Wizard - Select Output Page">
+		<param name="Local" value="TestWizard_Output.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Path">
+		<param name="Name" value="Test Wizard - Path and Filter Page">
+		<param name="Local" value="TestWizard_PathFilter.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Preview">
+		<param name="Name" value="Test Wizard - Preview File List Page">
+		<param name="Local" value="TestWizard_PreviewFileList.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Recurse">
+		<param name="Name" value="Test Wizard - Path and Filter Page">
+		<param name="Local" value="TestWizard_PathFilter.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Save to File">
+		<param name="Name" value="Test Wizard - Select Output Page">
+		<param name="Local" value="TestWizard_Output.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Test Wizard">
+		<param name="Name" value="Test Wizard Help">
+		<param name="Local" value="Wizard97Test.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Welcome">
+		<param name="Name" value="Test Wizard - Welcome Page">
+		<param name="Local" value="TestWizard_Welcome.html">
+		</OBJECT>
+</UL>
+</BODY></HTML>

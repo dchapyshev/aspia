@@ -1,0 +1,7 @@
+VSWIZARD 7.0
+Wizard=VsWizard.VsWizardEngine
+
+Param="WIZARD_NAME = WTLAppWiz"
+Param="WIZARD_VERSION = 7.0"
+Param="ABSOLUTE_PATH = ."
+Param="FALLBACK_LCID = 1033"

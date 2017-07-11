@@ -1,0 +1,20 @@
+.topic HIDC_BTN_BROWSEPATH
+Browse to choose a root directory
+
+.topic HIDC_EDIT_FILTER
+A filename or wildcard to use when searching
+
+.topic HIDC_EDIT_PATH
+The root directory to start the search
+
+.topic HIDC_RADIO_FILTER_ALL
+Reference all files
+
+.topic HIDC_RADIO_FILTER_CUSTOM
+Custom wildcard or filename.  The wildcard "*" means 0 or more of any character, and "?" means 1 of any character.
+
+.topic HIDC_RADIO_NORECURSE
+When searching, look only in the directory specified
+
+.topic HIDC_RADIO_RECURSE
+When searching, look in the directory specified plus all sub-directories

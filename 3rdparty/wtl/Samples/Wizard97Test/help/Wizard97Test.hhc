@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+<OBJECT type="text/site properties">
+	<param name="WindowName" value="$global_main">
+	<param name="ExWindow Styles" value="0x100">
+	<param name="Window Styles" value="0x800027">
+</OBJECT>
+<UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Test Wizard Help">
+		<param name="Local" value="Wizard97Test.html">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Welcome Page">
+			<param name="Local" value="TestWizard_Welcome.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Path and Filter Page">
+			<param name="Local" value="TestWizard_PathFilter.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Preview File List Page">
+			<param name="Local" value="TestWizard_PreviewFileList.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Select Output Page">
+			<param name="Local" value="TestWizard_Output.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Completion Page">
+			<param name="Local" value="TestWizard_Completion.html">
+			</OBJECT>
+	</UL>
+</UL>
+</BODY></HTML>

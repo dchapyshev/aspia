@@ -26,4 +26,4 @@ gflags        12.07.2017    trunk
 opus          24.01.2017    1.1.4
 zlib-ng       12.07.2017    trunk
 libsodium     27.05.2017    1.0.12
-wtl           30.06.2017    r636
+wtl           12.07.2017    r636

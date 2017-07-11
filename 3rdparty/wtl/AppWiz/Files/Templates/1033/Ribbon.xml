@@ -1,0 +1,185 @@
+<!-- Ribbon.xml -->
+
+<Application xmlns="http://schemas.microsoft.com/windows/2009/Ribbon">
+
+    <Application.Commands>
+
+        <!-- [!output PROJECT_NAME].rc Commands -->
+        <Command Name="wtl_FILE_NEW" Symbol="ID_FILE_NEW" Id="0xE100"/>
+        <Command Name="wtl_FILE_OPEN" Symbol="ID_FILE_OPEN" Id="0xE101"/>
+        <Command Name="wtl_FILE_CLOSE" Symbol="ID_FILE_CLOSE" Id="0xE102"/>
+        <Command Name="wtl_FILE_SAVE" Symbol="ID_FILE_SAVE" Id="0xE103"/>
+        <Command Name="wtl_FILE_SAVE_AS" Symbol="ID_FILE_SAVE_AS" Id="0xE104"/>
+
+        <Command Name="wtl_FILE_PAGE_SETUP" Symbol="ID_FILE_PAGE_SETUP" Id="0xE105"/>
+        <Command Name="wtl_FILE_PRINT_SETUP" Symbol="ID_FILE_PRINT_SETUP" Id="0xE106"/>
+        <Command Name="wtl_FILE_PRINT" Symbol="ID_FILE_PRINT" Id="0xE107"/>
+        <Command Name="wtl_FILE_PRINT_DIRECT" Symbol="ID_FILE_PRINT_DIRECT" Id="0xE108"/>
+        <Command Name="wtl_FILE_PRINT_PREVIEW" Symbol="ID_FILE_PRINT_PREVIEW" Id="0xE109"/>
+
+        <Command Name="wtl_EDIT_COPY" Symbol="ID_EDIT_COPY" Id="0xE122"/>
+        <Command Name="wtl_EDIT_CUT" Symbol="ID_EDIT_CUT" Id="0xE123"/>
+        <Command Name="wtl_EDIT_FIND" Symbol="ID_EDIT_FIND" Id="0xE124"/>
+        <Command Name="wtl_EDIT_PASTE" Symbol="ID_EDIT_PASTE" Id="0xE125"/>
+        
+        <Command Name="wtl_EDIT_SELECT_ALL" Symbol="ID_EDIT_SELECT_ALL" Id="0xE12A"/>
+        <Command Name="wtl_EDIT_UNDO" Symbol="ID_EDIT_UNDO" Id="0xE12B"/>
+        <Command Name="wtl_EDIT_REDO" Symbol="ID_EDIT_REDO" Id="0xE12C"/>
+
+        <Command Name="wtl_WINDOW_NEW" Symbol="ID_WINDOW_NEW" Id="0xE130"/>
+        <Command Name="wtl_WINDOW_SPLIT" Symbol="ID_WINDOW_SPLIT" Id="0xE135"/>
+
+        <Command Name="wtl_APP_ABOUT" Symbol="ID_APP_ABOUT" Id="0xE140"/>
+        <Command Name="wtl_APP_EXIT" Symbol="ID_APP_EXIT" Id="0xE141"/>
+
+        <Command Name="wtl_NEXT_PANE" Symbol="ID_NEXT_PANE" Id="0xE150"/>
+        <Command Name="wtl_PREV_PANE" Symbol="ID_PREV_PANE" Id="0xE151"/>
+        <Command Name="wtl_PANE_CLOSE" Symbol="ID_PANE_CLOSE" Id="0xE152"/>
+
+        <Command Name="wtl_VIEW_TOOLBAR" Symbol="ID_VIEW_TOOLBAR" Id="0xE800"/>
+        <Command Name="wtl_VIEW_STATUS_BAR" Symbol="ID_VIEW_STATUS_BAR" Id="0xE801"/>
+        <Command Name="wtl_VIEW_RIBBON" Symbol="ID_VIEW_RIBBON" Id="0xE804"/>
+
+
+        <!-- Tabs -->
+        <Command Name="TabHome" Symbol="ID_TAB_HOME"
+                 LabelTitle="Home" />
+
+        <!-- Groups -->
+        <Command Name="GroupClipboard" Symbol="ID_GROUP_CLIPBOARD"
+                 LabelTitle="Clipboard" />
+        <Command Name="GroupView" Symbol="ID_GROUP_VIEW"
+                 LabelTitle="View" />
+
+        <!-- App Menu, MRU list, Help button and Quick Access Toolbar -->
+        <Command Name="AppMenu" Symbol="ID_RIBBON_APP_MENU"/>
+        <Command Name="SaveMore" Symbol="ID_SAVEMORE"/>
+        <Command Name="PrintMore" Symbol="ID_PRINTMORE"/>
+
+        <Command Name="QAT" Symbol="ID_RIBBON_QAT"/>
+    </Application.Commands>
+
+    <Application.Views>
+        <Ribbon>
+            <!-- Application Menu -->
+            <Ribbon.ApplicationMenu >
+                <ApplicationMenu CommandName="AppMenu" >
+                    <MenuGroup Class="StandardItems" >
+                        <Button CommandName="wtl_FILE_NEW"/>
+                        <Button CommandName="wtl_FILE_OPEN"/>
+                        <!-- Saving SplitButton -->
+                        <SplitButton CommandName="SaveMore">
+                            <SplitButton.ButtonItem>
+                                <Button CommandName="wtl_FILE_SAVE" />
+                            </SplitButton.ButtonItem>
+                            <SplitButton.MenuGroups>
+                                <MenuGroup Class="StandardItems">
+                                    <Button CommandName="wtl_FILE_SAVE" />
+                                    <Button CommandName="wtl_FILE_SAVE_AS" />
+                                </MenuGroup>
+                            </SplitButton.MenuGroups>
+                        </SplitButton>
+                        <!-- Printing SplitButton -->
+                        <SplitButton CommandName="PrintMore">
+                            <SplitButton.ButtonItem>
+                                <Button CommandName="wtl_FILE_PRINT"/>
+                            </SplitButton.ButtonItem>
+                            <SplitButton.MenuGroups>
+                                <MenuGroup Class="StandardItems">
+                                    <Button CommandName="wtl_FILE_PRINT" />
+                                    <Button CommandName="wtl_FILE_PRINT_PREVIEW"/>
+                                    <Button CommandName="wtl_FILE_PRINT_SETUP"/>
+                                </MenuGroup>
+                            </SplitButton.MenuGroups>
+                        </SplitButton>
+                    </MenuGroup>
+                    <MenuGroup >
+                        <Button CommandName="wtl_APP_EXIT"/>
+                    </MenuGroup>
+                </ApplicationMenu>
+            </Ribbon.ApplicationMenu >
+
+            <!-- Help button -->
+            <Ribbon.HelpButton>
+                <HelpButton CommandName="wtl_APP_ABOUT" />
+            </Ribbon.HelpButton>
+
+            <!-- QAT (Quick Access Toolbar) -->
+            <Ribbon.QuickAccessToolbar>
+                <QuickAccessToolbar CommandName="QAT">
+                    <QuickAccessToolbar.ApplicationDefaults>
+                        <Button CommandName="wtl_FILE_NEW"/>
+                        <Button CommandName="wtl_FILE_OPEN"/>
+                        <Button CommandName="wtl_FILE_SAVE"/>
+                        <Button CommandName="wtl_FILE_PRINT"/>
+                    </QuickAccessToolbar.ApplicationDefaults>
+                </QuickAccessToolbar>
+            </Ribbon.QuickAccessToolbar>
+
+            <Ribbon.Tabs>
+
+                <Tab CommandName="TabHome">
+                    <Tab.ScalingPolicy>
+                        <ScalingPolicy>
+                            <ScalingPolicy.IdealSizes>
+                                <Scale Group="GroupClipboard" Size="Medium"/>
+                                <Scale Group="GroupView" Size="Large"/>
+                            </ScalingPolicy.IdealSizes>
+                        </ScalingPolicy>
+                    </Tab.ScalingPolicy>
+
+                    <Group CommandName="GroupClipboard" SizeDefinition="ThreeButtons">
+                        <Button CommandName="wtl_EDIT_PASTE"/>
+                        <Button CommandName="wtl_EDIT_CUT"/>
+                        <Button CommandName="wtl_EDIT_COPY"/>
+                    </Group>
+
+                    <Group CommandName="GroupView">
+                        <SizeDefinition>
+                            <ControlNameMap>
+[!if WTL_RIBBON_DUAL_UI]
+                                <ControlNameDefinition Name="wtl_VIEW_RIBBON"/>
+[!endif]
+                                <ControlNameDefinition Name="wtl_VIEW_STATUS_BAR"/>
+                            </ControlNameMap>
+                            <GroupSizeDefinition Size="Large">
+[!if WTL_RIBBON_DUAL_UI]
+                                <ControlSizeDefinition ControlName="wtl_VIEW_RIBBON"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+[!endif]
+                                <ControlSizeDefinition ControlName="wtl_VIEW_STATUS_BAR"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+                            </GroupSizeDefinition>
+                            <GroupSizeDefinition Size="Medium">
+[!if WTL_RIBBON_DUAL_UI]
+                                <ControlSizeDefinition ControlName="wtl_VIEW_RIBBON"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+[!endif]
+                                <ControlSizeDefinition ControlName="wtl_VIEW_STATUS_BAR"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+                            </GroupSizeDefinition>
+                            <GroupSizeDefinition Size="Small">
+[!if WTL_RIBBON_DUAL_UI]
+                                <ControlSizeDefinition ControlName="wtl_VIEW_RIBBON"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="false" />
+[!endif]
+                                <ControlSizeDefinition ControlName="wtl_VIEW_STATUS_BAR"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="false" />
+                            </GroupSizeDefinition>
+                        </SizeDefinition>
+[!if WTL_RIBBON_DUAL_UI]
+                        <CheckBox CommandName="wtl_VIEW_RIBBON"/>
+[!endif]
+                        <CheckBox CommandName="wtl_VIEW_STATUS_BAR"/>
+                    </Group>
+                </Tab>
+            </Ribbon.Tabs>
+        </Ribbon>
+    </Application.Views>
+</Application>

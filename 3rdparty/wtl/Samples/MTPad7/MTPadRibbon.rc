@@ -1,0 +1,78 @@
+// ******************************************************************************
+// * This is an automatically generated file containing the ribbon resource for *
+// * your application.                                                          *
+// ******************************************************************************
+
+#include ".\MTPadRibbon.h"
+
+STRINGTABLE 
+BEGIN
+    ID_PP_FORWARD_LabelTitle_RESID L"Next Page" /* LabelTitle ID_PP_FORWARD_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    ID_PP_BACK_LabelTitle_RESID L"Previous Page" /* LabelTitle ID_PP_BACK_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    ID_PP_CLOSE_LabelTitle_RESID L"Close Preview" /* LabelTitle ID_PP_CLOSE_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    ID_RIBBON_FONT_LabelTitle_RESID L"Font" /* LabelTitle ID_RIBBON_FONT_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    ID_PAGE_SPINNER_LabelTitle_RESID L"View page:" /* LabelTitle ID_PAGE_SPINNER_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    ID_RIBBON_RECENT_FILES_LabelTitle_RESID L"Recent Files" /* LabelTitle ID_RIBBON_RECENT_FILES_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    ID_TAB_HOME_LabelTitle_RESID L"Home" /* LabelTitle ID_TAB_HOME_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    ID_TAB_PREVIEW_LabelTitle_RESID L"Preview" /* LabelTitle ID_TAB_PREVIEW_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    ID_GROUP_CLIPBOARD_LabelTitle_RESID L"Edit" /* LabelTitle ID_GROUP_CLIPBOARD_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    ID_GROUP_TEST_LabelTitle_RESID L"Font" /* LabelTitle ID_GROUP_TEST_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    ID_GROUP_FONT_LabelTitle_RESID L"Font" /* LabelTitle ID_GROUP_FONT_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    ID_GROUP_FIND_LabelTitle_RESID L"Find" /* LabelTitle ID_GROUP_FIND_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    ID_GROUP_VIEW_LabelTitle_RESID L"View" /* LabelTitle ID_GROUP_VIEW_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    ID_GROUP_VIEW_PREVIEW_LabelTitle_RESID L"View" /* LabelTitle ID_GROUP_VIEW_PREVIEW_LabelTitle_RESID: (null) */
+END
+
+APPLICATION_RIBBON    UIFILE    "MTPadRibbon.bml"

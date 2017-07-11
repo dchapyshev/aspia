@@ -1,0 +1,535 @@
+<!--
+// Windows Template Library - WTL version 9.10
+// Copyright (C) Microsoft Corporation, WTL Team. All rights reserved.
+//
+// This file is a part of the Windows Template Library.
+// The use and distribution terms for this software are covered by the
+// Microsoft Public License (http://opensource.org/licenses/MS-PL)
+// which can be found in the file MS-PL.txt at the root folder.
+-->
+
+<HTML DIR="ltr">
+	<HEAD>
+		<TITLE>'ATL/WTL Application Wizard for Windows CE'</TITLE>
+		<META NAME="vs_targetSchema" CONTENT="http://schemas.microsoft.com/intellisense/ie5">
+		<META HTTP-EQUIV="MSThemeCompatible" CONTENT="Yes">
+		<STYLE TYPE="text/css">@import url();
+		</STYLE>
+		<!-- This closing tag is here only to avoid security warning -->
+		</OBJECT>
+		<SCRIPT>
+		var strURL = window.external.FindSymbol("PRODUCT_INSTALLATION_DIR");
+		strURL += "VCWizards/";
+		strURL += window.external.GetHostLocale();
+		strURL += "/NewStyles.css";
+		document.styleSheets(0).imports(0).href = strURL;
+		</SCRIPT>
+		<!--  -->
+		<!-- The SYMBOL tag is used to set the default values for the user-defined symbols.-->
+		<!--  -->
+		<SYMBOL NAME='WIZARD_DIALOG_TITLE' TYPE="text" VALUE="ATL/WTL Application Wizard for Windows CE"></SYMBOL>
+
+		<SYMBOL NAME='APP_TYPE_SUMMARY' TYPE="text" VALUE=""></SYMBOL>
+		<SYMBOL NAME='USE_AYGSHELL_SUMMARY' TYPE="text" VALUE=""></SYMBOL>
+		<SYMBOL NAME='COM_SERVER_SUMMARY' TYPE="text" VALUE=""></SYMBOL>
+		<SYMBOL NAME='VIEW_SUMMARY' TYPE="text" VALUE=""></SYMBOL>
+
+		<SYMBOL NAME="SAFE_PROJECT_NAME" TYPE="text"></SYMBOL>
+		<SYMBOL NAME="NICE_SAFE_PROJECT_NAME" TYPE="text"></SYMBOL>
+		<SYMBOL NAME="UPPERCASE_SAFE_PROJECT_NAME" TYPE="text"></SYMBOL>
+
+		<SYMBOL NAME='SOURCE_FILTER' TYPE="text" VALUE="cpp;c;cxx;def;odl;idl;hpj;bat;asm"></SYMBOL>
+		<SYMBOL NAME="INCLUDE_FILTER" TYPE="text" VALUE="h;hpp;hxx;hm;inl;inc"></SYMBOL>
+		<SYMBOL NAME="RESOURCE_FILTER" TYPE="text" VALUE="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;jpg;jpeg;jpe;manifest"></SYMBOL>
+
+		<SYMBOL NAME="WTL_CURRENT_YEAR" TYPE="text" VALUE="2005"></SYMBOL>
+		<SYMBOL NAME="WTL_LIBID" TYPE=text></SYMBOL>
+
+		<SYMBOL NAME='WTL_VIEWTYPE_GENERIC' TYPE="checkbox" VALUE="true"></SYMBOL>
+		<SYMBOL NAME='WTL_VIEWTYPE_FORM' TYPE="checkbox" VALUE="false"></SYMBOL>
+		<SYMBOL NAME='WTL_VIEWTYPE_LISTBOX' TYPE="checkbox" VALUE="false"></SYMBOL>
+		<SYMBOL NAME='WTL_VIEWTYPE_EDIT' TYPE="checkbox" VALUE="false"></SYMBOL>
+		<SYMBOL NAME='WTL_VIEWTYPE_LISTVIEW' TYPE="checkbox" VALUE="false"></SYMBOL>
+		<SYMBOL NAME='WTL_VIEWTYPE_TREEVIEW' TYPE="checkbox" VALUE="false"></SYMBOL>
+		<SYMBOL NAME='WTL_VIEWTYPE_HTML' TYPE="checkbox" VALUE="false"></SYMBOL>
+
+		<SYMBOL NAME='WTL_FRAME_CLASS' TYPE="text" VALUE="CMainFrame"></SYMBOL>
+		<SYMBOL NAME='WTL_FRAME_BASE_CLASS' TYPE="text" VALUE="CFrameWindowImpl"></SYMBOL>
+
+		<SYMBOL NAME='WTL_MAINDLG_CLASS' TYPE="text" VALUE="CMainDlg"></SYMBOL>
+		<SYMBOL NAME='WTL_MAINDLG_BASE_CLASS' TYPE="text" VALUE="CDialogImpl"></SYMBOL>
+
+		<SYMBOL NAME='WTL_VIEW_CLASS' TYPE="text" VALUE="CView"></SYMBOL>
+		<SYMBOL NAME='WTL_VIEW_BASE_CLASS' TYPE="text" VALUE="CWindowImpl"></SYMBOL>
+		<SYMBOL NAME='WTL_VIEW_BASE' TYPE="text" VALUE="CWindow"></SYMBOL>
+		<SYMBOL NAME='WTL_VIEW_STYLES' TYPE="text" VALUE="WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN"></SYMBOL>
+		<SYMBOL NAME='WTL_VIEW_EX_STYLES' TYPE="text" VALUE="WS_EX_CLIENTEDGE"></SYMBOL>
+
+		<SYMBOL NAME='WTL_FRAME_FILE' TYPE="text" VALUE="MainFrm"></SYMBOL>
+		<SYMBOL NAME='WTL_MAINDLG_FILE' TYPE="text" VALUE="MainDlg"></SYMBOL>
+		<SYMBOL NAME='WTL_VIEW_FILE' TYPE="text" VALUE=""></SYMBOL>
+
+		<!-- Page 2 Controls -->
+		<!-- No symbols here -->
+
+		<!-- Page 3 Controls -->
+		<SYMBOL NAME='WTL_APPTYPE_SDI' TYPE="checkbox" VALUE="true"></SYMBOL>
+		<SYMBOL NAME='WTL_APPTYPE_MTSDI' TYPE="checkbox" VALUE="false"></SYMBOL>
+		<SYMBOL NAME='WTL_APPTYPE_DLG' TYPE="checkbox" VALUE="false"></SYMBOL>
+		<SYMBOL NAME='WTL_APPTYPE_DLG_MODAL' TYPE="checkbox" VALUE="false"></SYMBOL>
+
+		<SYMBOL NAME='WTL_USE_AYGSHELL' TYPE="checkbox" VALUE="true"></SYMBOL>
+		<SYMBOL NAME='WTL_USE_SP03_COMPAT_MENUS' TYPE="checkbox" VALUE="true"></SYMBOL>
+		<SYMBOL NAME='WTL_USE_SINGLE_APP_INSTANCE' TYPE="checkbox" VALUE="false"></SYMBOL>
+		<SYMBOL NAME='WTL_ENABLE_AX' TYPE="checkbox" VALUE="false"></SYMBOL>
+		<SYMBOL NAME='WTL_COM_SERVER' TYPE="checkbox" VALUE="false"></SYMBOL>
+		<SYMBOL NAME='WTL_USE_CPP_FILES' TYPE="checkbox" VALUE="false"></SYMBOL>
+
+		<SYMBOL NAME='WTL_WAS_DLG' TYPE="checkbox" VALUE="false"></SYMBOL>
+		<SYMBOL NAME='WTL_HAD_AYGSHELL' TYPE="checkbox" VALUE="false"></SYMBOL>
+
+		<!-- Page 4 Controls -->
+		<SYMBOL NAME='WTL_USE_TOOLBAR' TYPE="checkbox" VALUE="false"></SYMBOL>
+		<SYMBOL NAME='WTL_USE_STATUSBAR' TYPE="checkbox" VALUE="false"></SYMBOL>
+		<SYMBOL NAME='WTL_USE_VIEW' TYPE="checkbox" VALUE="true"></SYMBOL>
+		<SYMBOL NAME='WTL_COMBO_VIEW_TYPE' TYPE="select-one" VALUE='WTL_VIEWTYPE_GENERIC'></SYMBOL>
+		<SYMBOL NAME='WTL_HOST_AX' TYPE="checkbox" VALUE="false"></SYMBOL>
+	</HEAD>
+	<BODY BGCOLOR="buttonface" TOPMARGIN="0" LEFTMARGIN="0" RIGHTMARGIN="0" BOTTOMMARGIN="0" ONLOAD="InitDocument(document);" ONKEYDOWN="OnKey();" ONKEYPRESS="OnPress();">
+		<TABLE CLASS="ONE" HEIGHT="100%" WIDTH="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+			<COLGROUP>
+				<COL WIDTH="178">
+				<COL>
+				<!--OPEN OF INTRODUCTORY INFORMATION TABLE//-->
+				<TR VALIGN="top">
+					<TD HEIGHT="79" WIDTH="100%" COLSPAN="2">
+						<TABLE CLASS="TWO" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+							<COLGROUP>
+								<COL WIDTH="12">
+								<COL>
+								<COL WIDTH="12">
+								<TR>
+									<TD VALIGN="top" HEIGHT="12" WIDTH="12">
+										&nbsp;
+									</TD>
+									<TD VALIGN="top" HEIGHT="12">
+										&nbsp;
+									</TD>
+									<TD VALIGN="top" HEIGHT="12" WIDTH="12">
+										&nbsp;
+									</TD>
+									<TD CLASS="IMAGE" VALIGN="bottom" WIDTH="110" ROWSPAN="2">
+										<DIV CLASS="SMALLA" ID="Layer0">
+											<IMG CLASS="SMALLEST" SRC="../../Images/WTLApp70.gif" WIDTH="63" HEIGHT="63" ALT="" BORDER="0">
+										</DIV>
+									</TD>
+									<TD VALIGN="top" HEIGHT="12" WIDTH="6" ROWSPAN="2">
+										&nbsp;
+									</TD>
+								</TR>
+								<TR>
+									<TD VALIGN="top" HEIGHT="65" WIDTH="12">
+										&nbsp;
+									</TD>
+									<TD VALIGN="top" HEIGHT="65">
+										<H4 CLASS="HEAD" ID="HEAD">Welcome to the WTL Application Wizard</H4>
+										<P CLASS="SUBHEAD" ID="SUBHEAD">This wizard generates a WTL application project 
+											with the properties you specify.</P>
+									</TD>
+									<TD VALIGN="top" HEIGHT="65" WIDTH="12">
+										&nbsp;
+									</TD>
+								</TR>
+								<TR>
+									<TD VALIGN="top" CLASS="RULE" COLSPAN="5" HEIGHT="2">
+										<TABLE BORDER="0" WIDTH="100%" HEIGHT="1" CELLPADDING="0" CELLSPACING="0">
+											<TR VALIGN="top">
+												<TD HEIGHT="1" WIDTH="100%" BGCOLOR="buttonshadow"><IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="1" ALT=""></TD>
+												<TD HEIGHT="1" WIDTH="1" BGCOLOR="window"><IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="1" ALT=""></TD>
+											</TR>
+										</TABLE>
+									</TD>
+								</TR>
+						</TABLE>
+					</TD>
+				</TR>
+				<!--CLOSE OF INTRODUCTORY INFORMATION TABLE//-->
+				<!--OPEN OF NAVIGATION, CONTENT, AND BUTTON TABLES//-->
+				<TR VALIGN="top">
+					<TD CLASS="THREE" VALIGN="top" HEIGHT="100%" WIDTH="178" STYLE="BACKGROUND-IMAGE: url(../../Images/WTLApp70_Background.gif)">
+						<!--OPEN OF NAVIGATION TABLE//-->
+						<TABLE CLASS="THREE" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+							<COLGROUP>
+								<COL WIDTH="12">
+								<COL WIDTH="166">
+								<COL WIDTH="1">
+								<TR>
+									<TD VALIGN="top" COLSPAN="3" HEIGHT="12">
+										&nbsp;
+									</TD>
+								</TR>
+								<TR>
+									<TD VALIGN="top" HEIGHT="100%" WIDTH="12">
+										&nbsp;
+									</TD>
+									<TD VALIGN="top" HEIGHT="100%" WIDTH="165">
+										<!--OPEN OF NAVIGATIONAL LINKS//-->
+										<DIV CLASS="LINKSELECTED">
+											<SPAN CLASS="VERTLINE1"><IMG SRC="../../Images/spacer.gif" WIDTH="1" HEIGHT="1" ALT="" BORDER="0">
+											</SPAN><SPAN CLASS="HORILINE1">
+												<TABLE WIDTH="167" HEIGHT="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+													<TR VALIGN="top">
+														<TD CLASS="DOTTEDLINE" HEIGHT="1">
+														</TD>
+													</TR>
+													<TR VALIGN="top">
+														<TD HEIGHT="100%">
+															<IMG SRC="../../Images/spacer.gif" WIDTH="1" HEIGHT="28" ALT="" BORDER="0">
+														</TD>
+													</TR>
+													<TR VALIGN="top">
+														<TD CLASS="DOTTEDLINE" HEIGHT="1">
+														</TD>
+													</TR>
+												</TABLE>
+											</SPAN>
+											<TABLE WIDTH="160" HEIGHT="28" BORDER="0" CELLPADDING="0" CELLSPACING="0" CLASS="LINKTEXTSELECTED">
+												<TR VALIGN="center">
+													<TD WIDTH="156">
+														<SPAN ID="Default" TITLE="Examine an overview of selections" onClick="Next(document, 'default.htm');" TABINDEX="1">Overview</SPAN>
+													</TD>
+													<TD WIDTH="4">
+														<IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="4">
+													</TD>
+												</TR>
+											</TABLE>
+										</DIV>
+										<DIV CLASS="LINK">
+											<TABLE WIDTH="166" HEIGHT="28" BORDER="0" CELLPADDING="0" CELLSPACING="0" CLASS="LINKTEXT">
+												<TR VALIGN="center">
+													<TD WIDTH="162">
+														<SPAN CLASS="ACTIVELINK" ID="Platforms" TITLE="Specify the platforms to be supported by your WTL project." onClick="Next(document, 'Platforms.htm');" TABINDEX="1">
+															Platforms</SPAN>
+													</TD>
+													<TD WIDTH="4">
+														<IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="4">
+													</TD>
+												</TR>
+											</TABLE>
+										</DIV>
+										<DIV CLASS="LINK">
+											<TABLE WIDTH="166" HEIGHT="28" BORDER="0" CELLPADDING="0" CELLSPACING="0" CLASS="LINKTEXT">
+												<TR VALIGN="center">
+													<TD WIDTH="162">
+														<SPAN CLASS="ACTIVELINK" ID="AppType" TITLE="Specify the application type and project options." onClick="Next(document, 'AppType.htm');" TABINDEX="1">
+															Application Type</SPAN>
+													</TD>
+													<TD WIDTH="4">
+														<IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="4">
+													</TD>
+												</TR>
+											</TABLE>
+										</DIV>
+										<DIV CLASS="LINK">
+											<TABLE WIDTH="166" HEIGHT="28" BORDER="0" CELLPADDING="0" CELLSPACING="0" CLASS="LINKTEXT">
+												<TR VALIGN="center">
+													<TD WIDTH="162">
+														<SPAN CLASS="ACTIVELINK" ID="UIFeatures" TITLE="Specify features for the selected application type." onClick="Next(document, 'UIFeatures.htm');" TABINDEX="1">
+															User Interface Features</SPAN>
+													</TD>
+													<TD WIDTH="4">
+														<IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="4">
+													</TD>
+												</TR>
+											</TABLE>
+										</DIV>
+										<!--CLOSE OF NAVIGATIONAL LINKS//-->
+									</TD>
+									<TD WIDTH="1">
+										<DIV CLASS="VERTLINE">
+											<IMG SRC="../../Images/spacer.gif" WIDTH="1" HEIGHT="1" ALT="" BORDER="0">
+										</DIV>
+									</TD>
+								</TR>
+						</TABLE>
+						<!--CLOSE OF NAVIGATION TABLE//-->
+					</TD>
+					<TD VALIGN="top" HEIGHT="100%">
+						<!--OPEN OF CONTENT AND BUTTON TABLE//-->
+						<TABLE CLASS="ONE" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+							<COLGROUP>
+								<COL WIDTH="100%">
+								<TR VALIGN="top">
+									<TD HEIGHT="100%">
+										<!--OPEN OF CONTENT//-->
+
+										<TABLE CLASS="CONTENT" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+										<COL WIDTH="12"><COL WIDTH="398"><COL WIDTH="12">
+											<TR>
+												<TD VALIGN="TOP" HEIGHT="12" COLSPAN="3">
+													&nbsp;
+												</TD>
+											</TR>
+
+											<TR>
+												<TD VALIGN="TOP" WIDTH="12">
+													&nbsp;
+												</TD>
+
+												<TD VALIGN="TOP">
+													<SPAN CLASS="ItemTextTop" ID="PROJECT_SETTINGS">These are the current project settings:</SPAN>
+													<UL>
+														<LI CLASS="LIST">
+															<SPAN CLASS="SideBtnHidden" ID="APP_TYPE_SUMMARY" TITLE="">	
+																<LABEL FOR="APP_TYPE_SUMMARY"></LABEL>
+															</SPAN>
+														</LI>
+														<LI CLASS="LIST">
+															<SPAN CLASS="SideBtnHidden" ID="USE_AYGSHELL_SUMMARY" TITLE="">
+																<LABEL FOR="USE_AYGSHELL_SUMMARY"></LABEL>
+															</SPAN>
+														</LI>
+														<LI CLASS="LIST">
+															<SPAN CLASS="SideBtnHidden" ID="COM_SERVER_SUMMARY" TITLE="">
+																<LABEL FOR="COM_SERVER_SUMMARY"></LABEL>
+															</SPAN>
+														</LI>
+														<LI CLASS="LIST">
+															<SPAN CLASS="SideBtnHidden" ID="VIEW_SUMMARY" TITLE="">
+																<LABEL FOR="VIEW_SUMMARY"></LABEL>
+															</SPAN>
+														</LI>
+													</UL>
+
+													<SPAN CLASS="ItemText" ID="FinishText">Click <B>Finish</B> from any window to accept the current settings.</SPAN>
+
+													<P CLASS="ElementSpacer2">&nbsp;</P>
+					 
+													<!-- SPAN CLASS="ItemText" ID="README_REMINDER" TITLE="">After you create the project, see the project's readme.txt file for information about the project features and files that are generated.</SPAN -->
+													<SPAN CLASS="ItemText" ID="README_REMINDER" TITLE="">After you create the project, examine the project's files for more information about the classes and resources that are generated.</SPAN>
+												</TD>
+  
+												<TD VALIGN="TOP" WIDTH="12">
+													&nbsp;
+												</TD>
+											</TR>
+										</TABLE>
+										<!--CLOSE OF CONTENT//-->
+									</TD>
+								</TR>
+								<TR VALIGN="bottom">
+									<TD HEIGHT="48">
+										<!--OPEN OF BUTTON HTML//-->
+										<TABLE HEIGHT="48" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+											<COLGROUP>
+												<COL WIDTH="12">
+												<COL>
+												<COL WIDTH="75">
+												<COL WIDTH="4">
+												<COL WIDTH="75">
+												<COL WIDTH="4">
+												<COL WIDTH="75">
+												<COL WIDTH="12">
+												<TR>
+													<TD VALIGN="top" CLASS="RULE" COLSPAN="8" HEIGHT="2">
+														<TABLE BORDER="0" WIDTH="100%" HEIGHT="1" CELLPADDING="0" CELLSPACING="0">
+															<TR VALIGN="top">
+																<TD HEIGHT="1" WIDTH="100%" BGCOLOR="buttonshadow"><IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="1" ALT=""></TD>
+																<TD HEIGHT="1" WIDTH="1" BGCOLOR="window"><IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="1" ALT=""></TD>
+															</TR>
+														</TABLE>
+													</TD>
+												</TR>
+												<TR>
+													<TD VALIGN="top" HEIGHT="11" COLSPAN="8">
+														&nbsp;
+													</TD>
+												</TR>
+												<TR>
+													<TD VALIGN="center" HEIGHT="23" WIDTH="12">
+														&nbsp;
+													</TD>
+													<TD VALIGN="top" HEIGHT="23">
+														&nbsp;
+													</TD>
+													<TD VALIGN="center" HEIGHT="23" WIDTH="75">
+														<BUTTON CLASS="BUTTONS" ID="FinishBtn" ACCESSKEY="F" onClick="OnFinish(document);" type="button">
+															<U>F</U>inish</BUTTON>
+													</TD>
+													<TD VALIGN="center" HEIGHT="23" WIDTH="4">
+														&nbsp;
+													</TD>
+													<TD VALIGN="center" HEIGHT="23" WIDTH="75">
+														<BUTTON CLASS="BUTTONS" ID="CancelBtn" ACCESSKEY="C" onClick="window.external.Finish(document, 'cancel');" type="button">
+															<U>C</U>ancel</BUTTON>
+													</TD>
+													<TD VALIGN="center" HEIGHT="23" WIDTH="4">
+														&nbsp;
+													</TD>
+													<TD VALIGN="center" HEIGHT="23" WIDTH="75">
+														<BUTTON CLASS="BUTTONS" ID="HelpBtn" ACCESSKEY="H" onClick="window.external.OnHelp('vc.appwiz.custom.overview');" type="button">
+															<U>H</U>elp</BUTTON>
+													</TD>
+													<TD VALIGN="center" HEIGHT="23" WIDTH="12">
+														&nbsp;
+													</TD>
+												</TR>
+												<TR>
+													<TD VALIGN="top" HEIGHT="12" COLSPAN="8">
+														&nbsp;
+													</TD>
+												</TR>
+										</TABLE>
+										<!--CLOSE OF BUTTON HTML//-->
+									</TD>
+								</TR>
+						</TABLE>
+						<!--CLOSE OF NAVIGATION, CONTENT, AND BUTTON TABLES//-->
+					</TD>
+				</TR>
+		</TABLE>
+		<SCRIPT LANGUAGE="JSCRIPT">
+
+var tab_array = new Array();
+tab_array[0] = Default;
+tab_array[1] = Platforms;
+tab_array[2] = AppType;
+tab_array[3] = UIFeatures;
+
+function InitDocument(document)
+{
+	setDirection();
+	
+	if (window.external.FindSymbol('DOCUMENT_FIRST_LOAD'))
+	{
+		// This function sets the default symbols based 
+		// on the values specified in the SYMBOL tags above
+		window.external.SetDefaults(document);
+	}
+
+	// Load the document and initialize the controls with the appropriate symbol values
+	window.external.Load(document);
+
+	// Do additional initialization
+	OnInit();
+}
+
+function Next(document, linkto)
+{
+	if(!(linkto == "UIFeatures.htm" && window.external.FindSymbol("WTL_APPTYPE_DLG")))
+		window.external.Next(document, linkto);
+}
+
+function OnFinish(document)
+{
+	OnWizFinish(document);
+}
+
+function OnInit()
+{
+	if(window.external.FindSymbol("WTL_APPTYPE_DLG"))
+		UIFeatures.className = "inactivelink";
+	else
+		UIFeatures.className = "activelink";
+
+	if(window.external.FindSymbol("WTL_APPTYPE_SDI"))
+	{
+		APP_TYPE_SUMMARY.innerText = "SDI Application";
+	}
+	else if(window.external.FindSymbol("WTL_APPTYPE_MTSDI"))
+	{
+		APP_TYPE_SUMMARY.innerText = "Multi-Thread SDI Application";
+	}
+	else if(window.external.FindSymbol("WTL_APPTYPE_DLG"))
+	{
+		var strText = "";
+		if(window.external.FindSymbol("WTL_APPTYPE_DLG_MODAL"))
+			strText = "Modal Dialog Application";
+		else
+			strText = "Dialog-based Application";
+
+		if(window.external.FindSymbol("WTL_ENABLE_AX") && window.external.FindSymbol("WTL_HOST_AX"))
+			strText += " with support for ActiveX controls";
+
+		APP_TYPE_SUMMARY.innerText = strText;
+	}
+
+	if(window.external.FindSymbol("WTL_USE_AYGSHELL"))
+	{
+		USE_AYGSHELL_SUMMARY.innerText = "Use AYGShell";
+		USE_AYGSHELL_SUMMARY.parentNode.style.display = 'block';
+	}
+	else
+	{
+		USE_AYGSHELL_SUMMARY.parentNode.style.display = 'none';
+	}
+
+	if(window.external.FindSymbol("WTL_COM_SERVER"))
+	{
+		COM_SERVER_SUMMARY.innerText = "COM server support";
+		COM_SERVER_SUMMARY.parentNode.style.display = 'block';
+	}
+	else
+	{
+		COM_SERVER_SUMMARY.parentNode.style.display = 'none';
+	}
+
+	if(!window.external.FindSymbol("WTL_APPTYPE_DLG") && window.external.FindSymbol("WTL_USE_VIEW"))
+	{
+		var strText = "View window";
+
+		var strView = window.external.FindSymbol("WTL_COMBO_VIEW_TYPE");
+		switch(strView)
+		{
+		case "WTL_VIEWTYPE_FORM":
+			strText += ", dialog based";
+			if(window.external.FindSymbol("WTL_ENABLE_AX") && window.external.FindSymbol("WTL_HOST_AX"))
+				strText += " with support for ActiveX controls";
+			break;
+		case "WTL_VIEWTYPE_LISTBOX":
+			strText += ", list box based";
+			break;
+		case "WTL_VIEWTYPE_EDIT":
+			strText += ", edit based";
+			break;
+		case "WTL_VIEWTYPE_LISTVIEW":
+			strText += ", list view based";
+			break;
+		case "WTL_VIEWTYPE_TREEVIEW":
+			strText += ", tree view based";
+			break;
+		case "WTL_VIEWTYPE_HTML":
+			strText += ", HTML based";
+			break;
+		default:
+			break;
+		}
+
+		VIEW_SUMMARY.innerText = strText;
+		VIEW_SUMMARY.parentNode.style.display = 'block';
+	}
+	else
+	{
+		VIEW_SUMMARY.parentNode.style.display = 'none';
+	}
+}
+
+		</SCRIPT>
+		<SCRIPT ID="INCLUDE_SCRIPT" LANGUAGE="JSCRIPT"></SCRIPT>
+		<SCRIPT ID="INCLUDE_COMMON" LANGUAGE="JSCRIPT"></SCRIPT>
+		<!-- 
+Common.js is a script file which contains the helper functions 
+used by the wizards.  Include this line if you want to
+call these functions from your html scripts.
+//-->
+		<SCRIPT>
+	var strPath = window.external.FindSymbol("PRODUCT_INSTALLATION_DIR");
+	strPath += "VCWizards/";
+	strPath += window.external.GetHostLocale();
+	var strScriptPath = strPath + "/Script.js";
+	var strCommonPath = strPath + "/Common.js";
+	document.scripts("INCLUDE_SCRIPT").src = strScriptPath;
+	document.scripts("INCLUDE_COMMON").src = strCommonPath;
+		</SCRIPT>
+	</BODY>
+</HTML>

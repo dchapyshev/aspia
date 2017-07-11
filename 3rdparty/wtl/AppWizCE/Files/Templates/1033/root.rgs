@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		{[!output WTL_APPID]} = s '[!output PROJECT_NAME]'
+		'[!output PROJECT_NAME].EXE'
+		{
+			val AppID = s {[!output WTL_APPID]}
+		}
+	}
+}

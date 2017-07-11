@@ -1,0 +1,20 @@
+// [!output PROJECT_NAME].idl : IDL source for [!output PROJECT_NAME].exe
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library ([!output PROJECT_NAME].tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid([!output WTL_LIBID]),
+	version(1.0),
+	helpstring("[!output PROJECT_NAME] 1.0 Type Library")
+]
+library [!output SAFE_PROJECT_NAME]Lib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+};

@@ -1,0 +1,389 @@
+<!-- MTPadRibbon.xml -->
+
+<Application xmlns="http://schemas.microsoft.com/windows/2009/Ribbon">
+
+    <Application.Commands>
+        
+        <Command Name="wtl_FILE_NEW" Symbol="ID_FILE_NEW" Id="0xE100"/>
+        <Command Name="wtl_FILE_OPEN" Symbol="ID_FILE_OPEN" Id="0xE101"/>
+        <Command Name="wtl_FILE_SAVE" Symbol="ID_FILE_SAVE" Id="0xE103"/>
+        <Command Name="wtl_FILE_SAVE_AS" Symbol="ID_FILE_SAVE_AS" Id="0xE104"/>
+
+        <Command Name="wtl_FILE_PRINT" Symbol="ID_FILE_PRINT" Id="0xE107"/>
+        <Command Name="wtl_FILE_PRINT_PREVIEW" Symbol="ID_FILE_PRINT_PREVIEW" Id="0xE109"/>
+        <Command Name="wtl_FILE_PRINT_SETUP" Symbol="ID_FILE_PRINT_SETUP" Id="0xE106"/>
+        <Command Name="wtl_FILE_PAGE_SETUP" Symbol="ID_FILE_PAGE_SETUP" Id="0xE105"/>
+
+        <Command Name="wtl_APP_ABOUT" Symbol="ID_APP_ABOUT" Id="0xE140"/>
+        <Command Name="wtl_APP_EXIT" Symbol="ID_APP_EXIT" Id="0xE141"/>
+
+        <Command Name="wtl_EDIT_CUT" Symbol="ID_EDIT_CUT" Id="0xE123"/>
+        <Command Name="wtl_EDIT_COPY" Symbol="ID_EDIT_COPY" Id="0xE122"/>
+        <Command Name="wtl_EDIT_PASTE" Symbol="ID_EDIT_PASTE" Id="0xE125"/>
+        <Command Name="wtl_EDIT_FIND" Symbol="ID_EDIT_FIND" Id="0xE124"/>
+        <Command Name="wtl_EDIT_REPEAT" Symbol="ID_EDIT_REPEAT" Id="0xE128"/>
+        <Command Name="wtl_EDIT_REPLACE" Symbol="ID_EDIT_REPLACE" Id="0xE129"/>
+        <Command Name="wtl_EDIT_SELECT_ALL" Symbol="ID_EDIT_SELECT_ALL" Id="0xE12A"/>
+        <Command Name="wtl_EDIT_UNDO" Symbol="ID_EDIT_UNDO" Id="0xE12B"/>
+
+        <Command Name="wtl_FORMAT_FONT" Symbol="ID_FORMAT_FONT" Id="0xE160"/>
+        
+        <Command Name="wtl_VIEW_TOOLBAR" Symbol="ID_VIEW_TOOLBAR" Id="0xE800"/>
+        <Command Name="wtl_VIEW_STATUS_BAR" Symbol="ID_VIEW_STATUS_BAR" Id="0xE801"/>
+        <Command Name="wtl_VIEW_RIBBON" Symbol="ID_VIEW_RIBBON" Id="0xE804"/>
+
+
+        <Command Name="NewWindow" Symbol="ID_FILE_NEW_WINDOW" Id="32771"/>
+        <Command Name="WordWrap" Symbol="ID_EDIT_WORD_WRAP" Id="40003"/>
+
+        <Command Name="NextPage" Symbol="ID_PP_FORWARD" Id="40011"
+                LabelTitle="Next Page"/>
+        <Command Name="PrevPage" Symbol="ID_PP_BACK" Id="40006"
+                LabelTitle="Previous Page"/>
+        <Command Name="ClosePreview" Symbol="ID_PP_CLOSE" Id="40008"
+                LabelTitle="Close Preview"/>
+
+
+        <Command Name="Font" Symbol="ID_RIBBON_FONT" 
+                 LabelTitle="Font"/>
+        
+        <Command Name="PageSpinner" Symbol="ID_PAGE_SPINNER"
+                LabelTitle="View page:"/>
+        <Command Name="RecentFiles" Symbol="ID_RIBBON_RECENT_FILES"
+                LabelTitle="Recent Files" />
+
+        <!-- Tabs -->
+        <Command Name="TabHome" Symbol="ID_TAB_HOME"
+                LabelTitle="Home" />
+        <Command Name="TabPreview" Symbol="ID_TAB_PREVIEW"
+                LabelTitle="Preview" />
+
+        <!-- Groups -->
+        <Command Name="GroupClipboard" Symbol="ID_GROUP_CLIPBOARD"
+                LabelTitle="Edit" />
+        <Command Name="GroupTest" Symbol="ID_GROUP_TEST"
+                LabelTitle="Font" />
+        <Command Name="GroupFont" Symbol="ID_GROUP_FONT"
+                LabelTitle="Font" />
+        <Command Name="GroupFind" Symbol="ID_GROUP_FIND"
+                LabelTitle="Find"/>
+        <Command Name="GroupView" Symbol="ID_GROUP_VIEW"
+                LabelTitle="View"/>
+        <Command Name="GroupViewPreview" Symbol="ID_GROUP_VIEW_PREVIEW"
+                LabelTitle="View"/>
+        <Command Name="GroupPage" Symbol="ID_GROUP_PAGE"/>
+        <!--<Command Name="GroupPage" Symbol="ID_GROUP_PAGE"
+                LabelTitle="Page"/>-->
+
+
+        <!-- App Menu, Quick Access Toolbar and Context Menu  -->
+        <Command Name="AppMenu" Symbol="ID_RIBBON_APP_MENU" />
+        <Command Name="SaveMore" Symbol="ID_SAVEMORE"/>
+        <Command Name="PrintMore" Symbol="ID_PRINTMORE"/>
+
+        <Command Name="QAT" Symbol="ID_RIBBON_QAT"/>
+
+        <Command Name="MiniToolbar" Symbol="ID_MINITOOLBAR"/>
+        <Command Name="ContextMenu" Symbol="ID_CONTEXTMENU"/>
+        <Command Name="ContextMap" Symbol="ID_CONTEXTMAP" />
+    </Application.Commands>
+
+    <Application.Views>
+
+        <Ribbon>
+            <!-- Application Menu -->
+            <Ribbon.ApplicationMenu >
+                <ApplicationMenu CommandName="AppMenu" >
+                    <ApplicationMenu.RecentItems>
+                        <RecentItems CommandName="RecentFiles" MaxCount="16" EnablePinning="false"/>
+                    </ApplicationMenu.RecentItems>
+                    <MenuGroup Class="StandardItems" >
+                        <Button CommandName="NewWindow"  ApplicationModes ='0,1'/>
+                        <Button CommandName="wtl_FILE_NEW" />
+                        <Button CommandName="wtl_FILE_OPEN" />
+                        <!-- Saving SplitButton -->
+                        <SplitButton CommandName="SaveMore" ApplicationModes ='0,1'>
+                            <SplitButton.ButtonItem>
+                                <Button CommandName="wtl_FILE_SAVE" />
+                            </SplitButton.ButtonItem>
+                            <SplitButton.MenuGroups>
+                                <MenuGroup Class="StandardItems">
+                                    <Button CommandName="wtl_FILE_SAVE" />
+                                    <Button CommandName="wtl_FILE_SAVE_AS" />
+                                </MenuGroup>
+                            </SplitButton.MenuGroups>
+                        </SplitButton>
+                        <!-- Printing SplitButton -->
+                        <SplitButton CommandName="PrintMore" ApplicationModes ='0,1'>
+                            <SplitButton.ButtonItem>
+                                <Button CommandName="wtl_FILE_PRINT"/>
+                            </SplitButton.ButtonItem>
+                            <SplitButton.MenuGroups>
+                                <MenuGroup Class="StandardItems">
+                                    <Button CommandName="wtl_FILE_PRINT" />
+                                    <Button CommandName="wtl_FILE_PAGE_SETUP" />
+                                </MenuGroup>
+                            </SplitButton.MenuGroups>
+                        </SplitButton>
+                    </MenuGroup>
+                    <MenuGroup>
+                        <Button CommandName="wtl_APP_EXIT" ApplicationModes ='0,1'/>
+                    </MenuGroup>
+
+                </ApplicationMenu>
+            </Ribbon.ApplicationMenu >
+
+            <!-- Help button -->
+            <Ribbon.HelpButton>
+                <HelpButton CommandName="wtl_APP_ABOUT" />
+            </Ribbon.HelpButton>
+
+            <!-- QAT (Quick Access Toolbar) -->
+            <Ribbon.QuickAccessToolbar>
+                <QuickAccessToolbar CommandName="QAT">
+                    <QuickAccessToolbar.ApplicationDefaults>
+                        <Button CommandName="NewWindow" />
+                        <Button CommandName="wtl_FILE_OPEN" />
+                        <Button CommandName="wtl_FILE_SAVE" />
+                        <Button CommandName="wtl_FILE_PRINT" />
+                        <Button CommandName="wtl_EDIT_UNDO" />
+                    </QuickAccessToolbar.ApplicationDefaults>
+                </QuickAccessToolbar>
+            </Ribbon.QuickAccessToolbar>
+
+            <Ribbon.Tabs>
+
+                <Tab CommandName="TabHome">
+                    <Tab.ScalingPolicy>
+                        <ScalingPolicy>
+                            <ScalingPolicy.IdealSizes>
+                                <Scale Group="GroupClipboard" Size="Medium"/>
+                                <Scale Group="GroupFind" Size="Medium"/>
+                                <Scale Group="GroupView" Size="Large"/>
+                                <Scale Group="GroupFont" Size="Large"/>
+                            </ScalingPolicy.IdealSizes>
+                            <Scale Group="GroupFont" Size="Medium"/>
+                            <Scale Group="GroupFont" Size="Popup"/>
+                            <Scale Group="GroupFind" Size="Small"/>
+                            <Scale Group="GroupView" Size="Medium"/>
+                            <Scale Group="GroupClipboard" Size="Small"/>
+                            <Scale Group="GroupView" Size="Small"/>
+                            <Scale Group="GroupClipboard" Size="Popup"/>
+                        </ScalingPolicy>
+                    </Tab.ScalingPolicy>
+
+                    <Group CommandName="GroupClipboard" SizeDefinition="FiveOrSixButtons">
+                        <Button CommandName="wtl_EDIT_PASTE"/>
+                        <Button CommandName="wtl_EDIT_CUT"/>
+                        <Button CommandName="wtl_EDIT_COPY"/>
+                        <Button CommandName="wtl_EDIT_SELECT_ALL"/>
+                        <Button CommandName="wtl_EDIT_UNDO"/>
+                    </Group>
+
+                    <Group CommandName="GroupFind">
+                        <SizeDefinition>
+                            <ControlNameMap>
+                                <ControlNameDefinition Name="wtl_EDIT_FIND"/>
+                                <ControlNameDefinition Name="wtl_EDIT_REPEAT"/>
+                                <ControlNameDefinition Name="wtl_EDIT_REPLACE"/>
+                            </ControlNameMap>
+                            <GroupSizeDefinition Size="Large">
+                                <ControlSizeDefinition ControlName="wtl_EDIT_FIND"
+                                                       ImageSize="Large"
+                                                       IsLabelVisible="true" />
+                                <ControlSizeDefinition ControlName="wtl_EDIT_REPEAT"
+                                                       ImageSize="Large"
+                                                       IsLabelVisible="true" />
+                                <ControlSizeDefinition ControlName="wtl_EDIT_REPLACE"
+                                                       ImageSize="Large"
+                                                       IsLabelVisible="true" />
+                            </GroupSizeDefinition>
+                            <GroupSizeDefinition Size="Medium">
+                                <ControlSizeDefinition ControlName="wtl_EDIT_FIND"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+                                <ControlSizeDefinition ControlName="wtl_EDIT_REPEAT"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+                                <ControlSizeDefinition ControlName="wtl_EDIT_REPLACE"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+                            </GroupSizeDefinition>
+                            <GroupSizeDefinition Size="Small">
+                                <ControlSizeDefinition ControlName="wtl_EDIT_FIND"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="false" />
+                                <ControlSizeDefinition ControlName="wtl_EDIT_REPEAT"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="false" />
+                                <ControlSizeDefinition ControlName="wtl_EDIT_REPLACE"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="false" />
+                            </GroupSizeDefinition>
+                        </SizeDefinition>
+                            <Button CommandName="wtl_EDIT_FIND"/>
+                            <Button CommandName="wtl_EDIT_REPEAT"/>
+                            <Button CommandName="wtl_EDIT_REPLACE"/>
+                    </Group>
+
+                    <Group CommandName="GroupFont" SizeDefinition="OneFontControl">
+                        <FontControl CommandName="Font" 
+                                     FontType="FontWithColor"
+                                     ShowTrueTypeOnly="false"
+                                     ShowVerticalFonts="false"/>
+                    </Group>
+
+                    <Group CommandName="GroupView">
+                        <SizeDefinition>
+                            <ControlNameMap>
+                                <ControlNameDefinition Name="wtl_FILE_PRINT_PREVIEW"/>
+                                <ControlNameDefinition Name="wtl_VIEW_RIBBON"/>
+                                <ControlNameDefinition Name="wtl_VIEW_STATUS_BAR"/>
+                                <ControlNameDefinition Name="WordWrap"/>
+                            </ControlNameMap>
+                            <GroupSizeDefinition Size="Large">
+                                <ControlSizeDefinition ControlName="wtl_FILE_PRINT_PREVIEW"
+                                                       ImageSize="Large"
+                                                       IsLabelVisible="true" />
+                                <ControlSizeDefinition ControlName="wtl_VIEW_RIBBON"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+                                <ControlSizeDefinition ControlName="wtl_VIEW_STATUS_BAR"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+                                <ControlSizeDefinition ControlName="WordWrap"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+                            </GroupSizeDefinition>
+                            <GroupSizeDefinition Size="Medium">
+                                <ControlSizeDefinition ControlName="wtl_FILE_PRINT_PREVIEW"
+                                                       ImageSize="Large"
+                                                       IsLabelVisible="false" />
+                                <ControlSizeDefinition ControlName="wtl_VIEW_RIBBON"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+                                <ControlSizeDefinition ControlName="wtl_VIEW_STATUS_BAR"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+                                <ControlSizeDefinition ControlName="WordWrap"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+                            </GroupSizeDefinition>
+                            <GroupSizeDefinition Size="Small">
+                                <ControlSizeDefinition ControlName="wtl_FILE_PRINT_PREVIEW"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="false" />
+                                <ControlSizeDefinition ControlName="wtl_VIEW_RIBBON"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="false" />
+                                <ControlSizeDefinition ControlName="wtl_VIEW_STATUS_BAR"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="false" />
+                                <ControlSizeDefinition ControlName="WordWrap"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="false" />
+                            </GroupSizeDefinition>
+                        </SizeDefinition>
+                        <Button CommandName="wtl_FILE_PRINT_PREVIEW"/>
+                        <CheckBox CommandName="wtl_VIEW_RIBBON"/>
+                        <CheckBox CommandName="wtl_VIEW_STATUS_BAR"/>
+                        <CheckBox CommandName="WordWrap"/>
+                    </Group>
+                </Tab>
+
+                <!--<Tab CommandName="TabPreview">-->
+                <Tab CommandName="TabPreview" ApplicationModes="1">
+                    <Group CommandName="GroupViewPreview" ApplicationModes="1">
+                        <SizeDefinition>
+                            <ControlNameMap>
+                                <ControlNameDefinition Name="ClosePreview"/>
+                                <ControlNameDefinition Name="wtl_VIEW_RIBBON"/>
+                                <ControlNameDefinition Name="wtl_VIEW_STATUS_BAR"/>
+                            </ControlNameMap>
+                            <GroupSizeDefinition Size="Large">
+                                <ControlSizeDefinition ControlName="ClosePreview"
+                                                       ImageSize="Large"
+                                                       IsLabelVisible="true" />
+                                <ControlSizeDefinition ControlName="wtl_VIEW_RIBBON"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+                                <ControlSizeDefinition ControlName="wtl_VIEW_STATUS_BAR"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+                            </GroupSizeDefinition>
+                            <GroupSizeDefinition Size="Medium">
+                                <ControlSizeDefinition ControlName="ClosePreview"
+                                                       ImageSize="Large"
+                                                       IsLabelVisible="false" />
+                                <ControlSizeDefinition ControlName="wtl_VIEW_RIBBON"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+                                <ControlSizeDefinition ControlName="wtl_VIEW_STATUS_BAR"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="true" />
+                            </GroupSizeDefinition>
+                            <GroupSizeDefinition Size="Small">
+                                <ControlSizeDefinition ControlName="ClosePreview"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="false" />
+                                <ControlSizeDefinition ControlName="wtl_VIEW_RIBBON"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="false" />
+                                <ControlSizeDefinition ControlName="wtl_VIEW_STATUS_BAR"
+                                                       ImageSize="Small"
+                                                       IsLabelVisible="false" />
+                            </GroupSizeDefinition>
+                        </SizeDefinition>
+                        <Button CommandName="ClosePreview"/>
+                        <CheckBox CommandName="wtl_VIEW_RIBBON"/>
+                        <CheckBox CommandName="wtl_VIEW_STATUS_BAR"/>
+                    </Group>
+                    <Group CommandName="GroupPage" ApplicationModes="1">
+                        <Spinner CommandName="PageSpinner" />
+                        <Button CommandName="NextPage"/>
+                        <Button CommandName="PrevPage"/>
+                    </Group>
+                </Tab>
+            </Ribbon.Tabs>
+
+        </Ribbon>
+
+        <ContextPopup>
+            <!--
+        The MiniToolbars and Context Menus are the basic ingredients for the contextual UI popup.
+        You may mix-and-match them and associate that combination with a ContextMap Command invoked in code.
+      -->
+            <ContextPopup.MiniToolbars>
+                <MiniToolbar Name="MiniToolbar">
+                   <MenuGroup>
+                        <Button CommandName="wtl_FILE_OPEN" />
+                        <Button CommandName="wtl_FILE_NEW" />
+                        <Button CommandName="wtl_FILE_SAVE" />
+                    </MenuGroup>
+                </MiniToolbar>
+            </ContextPopup.MiniToolbars>
+            <ContextPopup.ContextMenus>
+                <ContextMenu Name="ContextMenu">
+                    <MenuGroup>
+                        <Button CommandName="wtl_EDIT_UNDO" />
+                    </MenuGroup>
+                    <MenuGroup>
+                        <Button CommandName="wtl_EDIT_CUT" />
+                        <Button CommandName="wtl_EDIT_COPY" />
+                        <Button CommandName="wtl_EDIT_PASTE" />
+                    </MenuGroup>
+                    <MenuGroup>
+                        <Button CommandName="wtl_EDIT_SELECT_ALL" />
+                    </MenuGroup>
+                </ContextMenu>
+            </ContextPopup.ContextMenus>
+            <ContextPopup.ContextMaps>
+                <ContextMap CommandName="ContextMap"
+                            ContextMenu="ContextMenu"
+                            MiniToolbar="MiniToolbar"/>
+            </ContextPopup.ContextMaps>
+        </ContextPopup>
+    </Application.Views>
+
+</Application>
+

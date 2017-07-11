@@ -1,0 +1,196 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "atlresce.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""atlresce.h""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\SPcontrols.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG  0, 0, 113, 103
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About"
+FONT 9, "Nina"
+BEGIN
+    CTEXT           "SPcontrols\nsample WTL SmartPhone Application v1.0\n(c) Copyright 2005",IDC_INFOSTATIC,17,51,78,32,WS_BORDER
+    ICON            IDR_MAINFRAME,IDC_STATIC,47,19,20,20
+    GROUPBOX        "",IDC_STATIC,7,7,97,88
+END
+
+IDD_MAINDLG DIALOG  0, 0, 116, 104
+STYLE DS_SETFONT | WS_MINIMIZEBOX | WS_CAPTION | WS_VSCROLL | WS_SYSMENU
+CAPTION "SPcontrols"
+FONT 9, "Nina"
+BEGIN
+    CONTROL         "",IDC_CAPEDIT,"CAPEDIT",WS_BORDER | WS_TABSTOP,26,11,64,12
+    LISTBOX         IDC_LISTBOX,27,31,64,11,NOT LBS_NOTIFY | LBS_NOINTEGRALHEIGHT | WS_TABSTOP
+    LISTBOX         IDC_LISTBOX2,26,50,64,11,NOT LBS_NOTIFY | LBS_MULTIPLESEL | LBS_NOINTEGRALHEIGHT | WS_TABSTOP
+    EDITTEXT        IDC_EDIT1,25,69,64,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "&About",ID_APP_ABOUT,57,86,32,14
+    LTEXT           "CExpandCapEdit:",IDC_STATIC,6,3,64,8,NOT WS_GROUP
+    LTEXT           "CSpinListBox:",IDC_STATIC,6,23,52,8,NOT WS_GROUP
+    LTEXT           "CExpandListBox:",IDC_STATIC,6,42,64,8,NOT WS_GROUP
+    LTEXT           "CExpandEdit:",IDC_STATIC,6,61,52,8,NOT WS_GROUP
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 106
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 96
+    END
+
+    IDD_MAINDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 98
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 97
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS 
+BEGIN
+    VK_RETURN,      ID_MENU_CANCEL,         VIRTKEY, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x80000L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "sample WTL SmartPhone Application"
+            VALUE "FileDescription", "SPcontrols Module"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "SPcontrols"
+            VALUE "LegalCopyright", "Copyright 2005"
+            VALUE "OriginalFilename", "SPcontrols.exe"
+            VALUE "ProductName", "SPcontrols Module"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDR_MAINFRAME           "SPcontrols"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_MENU_OK              "Done"
+    ID_MENU_CANCEL          "Cancel"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#include "atlcesp.rc"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

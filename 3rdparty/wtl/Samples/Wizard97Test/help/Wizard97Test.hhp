@@ -1,0 +1,35 @@
+[OPTIONS]
+Binary Index=No
+Binary TOC=Yes
+Compatibility=1.1 or later
+Compiled file=Wizard97Test.chm
+Contents file=Wizard97Test.hhc
+Default Window=$global_main
+Default topic=Wizard97Test.html
+Display compile progress=No
+Enhanced decompilation=Yes
+Full-text search=Yes
+Index file=Wizard97Test.hhk
+Language=0x409 English (United States)
+Title=Test Wizard Help
+
+[WINDOWS]
+$global_main="Test Wizard Help","Wizard97Test.hhc","Wizard97Test.hhk","Wizard97Test.html","Wizard97Test.html",,,,,0x42420,,0x387e,,,,,,,,0
+
+
+[FILES]
+Wizard97Test.html
+Context.h
+Context.txt
+TestWizard_Completion.html
+TestWizard_Output.html
+TestWizard_PathFilter.html
+TestWizard_PreviewFileList.html
+TestWizard_Welcome.html
+
+[TEXT POPUPS]
+Context.h
+Context.txt
+
+[INFOTYPES]
+

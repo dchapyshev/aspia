@@ -1,0 +1,360 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resourceppc.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "atlresce.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resourceppc.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""atlresce.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#include ""[!output PROJECT_NAME]ppc.rc2""\r\n"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+[!if WTL_APPTYPE_SDI && !WTL_MENU_TYPE_2005]
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR  16, 15
+BEGIN
+    BUTTON      ID_FILE_NEW
+    BUTTON      ID_FILE_OPEN
+    BUTTON      ID_FILE_SAVE
+    SEPARATOR
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_APP_ABOUT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+[!endif]
+[!if WTL_APPTYPE_SDI]
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "Menu"
+    BEGIN
+[!if WTL_FULLSCREEN]
+        MENUITEM "Full screen",            ID_VIEW_FULLSCREEN    
+[!endif]
+[!if WTL_USE_STATUSBAR]
+        MENUITEM "Show status bar",        ID_VIEW_STATUS_BAR    
+[!endif]
+        MENUITEM "New",                    ID_FILE_NEW
+        MENUITEM "Open",                   ID_FILE_OPEN
+        MENUITEM "Save",                   ID_FILE_SAVE
+        MENUITEM "Save As",                ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        POPUP "Edit"
+        BEGIN
+            MENUITEM "Undo",               ID_EDIT_UNDO
+            MENUITEM SEPARATOR
+            MENUITEM "Cut",                ID_EDIT_CUT
+            MENUITEM "Copy",               ID_EDIT_COPY
+            MENUITEM "Paste",              ID_EDIT_PASTE
+        END
+        MENUITEM "About [!output PROJECT_NAME]",           ID_APP_ABOUT
+        MENUITEM "Exit",                       ID_APP_EXIT
+    END
+END
+
+[!endif]
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\[!output PROJECT_NAME].ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG  0, 0, 125, 55
+STYLE WS_POPUP | DS_CENTER
+CAPTION "About [!output PROJECT_NAME]"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "[!output PROJECT_NAME] v1.0",IDC_STATIC,38,10,70,8,SS_NOPREFIX
+    LTEXT           "(c) Copyright [!output WTL_CURRENT_YEAR]",IDC_STATIC,38,25,70,8
+END
+[!if WTL_APPTYPE_DLG]
+
+IDD_MAINDLG DIALOG  0, 0, 156, 166
+STYLE WS_POPUP | DS_CENTER
+CAPTION "[!output PROJECT_NAME]"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    PUSHBUTTON      "&About",ID_APP_ABOUT,99,144,50,14
+    CTEXT           "TODO: Place your controls on this dialog.",IDC_INFOSTATIC,7,7,142,131,WS_BORDER
+END
+[!if WTL_APP_DLG_ORIENT]
+
+IDD_MAINDLG_L DIALOG  0, 0, 210, 113
+STYLE WS_POPUP | DS_CENTER
+CAPTION "[!output PROJECT_NAME]"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    PUSHBUTTON      "&About",ID_APP_ABOUT,153,92,50,14
+    CTEXT           "TODO: Place your controls on this dialog.",IDC_INFOSTATIC,7,7,141,99,WS_BORDER
+END
+[!endif]
+[!endif]
+
+[!if WTL_VIEWTYPE_FORM]
+IDD_[!output UPPERCASE_SAFE_PROJECT_NAME]_FORM DIALOG 0, 0, 156, 129
+[!endif]
+[!if WTL_VIEWTYPE_PROPSHEET]
+IDD_[!output UPPERCASE_SAFE_PROJECT_NAME]_PAGE DIALOG 0, 0, 156, 129
+[!endif]
+[!if WTL_VIEWTYPE_FORM || WTL_VIEWTYPE_PROPSHEET]
+STYLE WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
+FONT 8, "MS Shell Dlg"
+BEGIN
+	CTEXT	"TODO: Place form controls on this dialog.",IDC_STATIC,24,48,112,23
+END
+
+[!endif]
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 118
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+[!if WTL_APPTYPE_DLG]
+
+    IDD_MAINDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 129
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 91
+    END
+[!endif]
+[!if WTL_VIEWTYPE_FORM]
+
+    IDD_[!output UPPERCASE_SAFE_PROJECT_NAME]_FORM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 178
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 86
+    END
+[!endif]
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS 
+BEGIN
+    "Q",            ID_APP_EXIT,            VIRTKEY, CONTROL
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
+[!if !WTL_VIEWTYPE_FORM]
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
+[!endif]
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "[!output PROJECT_NAME] Module\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "[!output PROJECT_NAME]\0"
+            VALUE "LegalCopyright", "Copyright [!output WTL_CURRENT_YEAR]\0"
+            VALUE "OriginalFilename", "[!output PROJECT_NAME].exe\0"
+            VALUE "ProductName", "[!output PROJECT_NAME] Module\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 0x04B0
+    END
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDR_MAINFRAME	"[!output PROJECT_NAME]"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_NEW             "New"
+    ID_FILE_OPEN            "Open"
+    ID_FILE_CLOSE           "Close"
+    ID_FILE_SAVE            "Save"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_APP_ABOUT            "Program information"
+    ID_APP_EXIT             "Quit"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_NEXT_PANE            "Next Pane"
+    ID_PREV_PANE            "Previous Pane"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_WINDOW_SPLIT         "Split to panes"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_EDIT_CLEAR           "Erase"
+    ID_EDIT_CLEAR_ALL       "Erase All"
+    ID_EDIT_COPY            "Copy"
+    ID_EDIT_CUT             "Cut"
+    ID_EDIT_FIND            "Find"
+    ID_EDIT_PASTE           "Paste"
+    ID_EDIT_REPEAT          "Repeat"
+    ID_EDIT_REPLACE         "Replace"
+    ID_EDIT_SELECT_ALL      "Select All"
+    ID_EDIT_UNDO            "Undo"
+    ID_EDIT_REDO            "Redo"
+END
+
+[!if WTL_FULLSCREEN || WTL_USE_STATUSBAR]
+STRINGTABLE 
+BEGIN
+[!if WTL_FULLSCREEN]
+    ID_VIEW_TOOLBAR         "Toggle full screen"
+[!endif]
+[!if WTL_USE_STATUSBAR]
+    ID_VIEW_STATUS_BAR      "Toggle status bar"
+[!endif]
+END
+
+[!endif]
+
+STRINGTABLE 
+BEGIN
+    ATL_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_MENU_OK              "Done"
+    ID_MENU_CANCEL          "Cancel"
+    ID_MENU                 "Menu"
+    ID_ACTION               "Action"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_FULLSCREEN      "Full screen"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#include "[!output PROJECT_NAME]ppc.rc2"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED

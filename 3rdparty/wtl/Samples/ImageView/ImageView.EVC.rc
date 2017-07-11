@@ -1,0 +1,486 @@
+//Microsoft eMbedded Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "atlresce.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP  MOVEABLE PURE   "res\\bitmap1.bmp"
+IDB_BITMAP2             BITMAP  MOVEABLE PURE   "res\\bitmap2.bmp"
+#endif    // Neutral resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE MOVEABLE PURE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE MOVEABLE PURE 
+BEGIN
+    "#include ""atlresce.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE MOVEABLE PURE 
+BEGIN
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Data
+//
+
+IDR_POPUP SHMENUBAR DISCARDABLE 
+BEGIN
+    IDR_POPUP, 1,
+    I_IMAGENONE, ID_MENU, TBSTATE_ENABLED, 
+    TBSTYLE_DROPDOWN | TBSTYLE_AUTOSIZE, IDS_CAP_MENU, 0, 0,
+END
+
+IDR_MAINFRAME SHMENUBAR DISCARDABLE 
+BEGIN
+    IDR_MAINFRAME, 8,
+    I_IMAGENONE, ID_MENU, TBSTATE_ENABLED, 
+    TBSTYLE_DROPDOWN | TBSTYLE_AUTOSIZE, IDS_CAP_MENU, 0, 0,
+    7, 57601, TBSTATE_ENABLED, TBSTYLE_AUTOSIZE, 0, ID_FILE_OPEN, NOMENU,
+    5, 57602, TBSTATE_ENABLED, TBSTYLE_AUTOSIZE, 0, ID_FILE_CLOSE, NOMENU,
+    10, 32774, TBSTATE_ENABLED, TBSTYLE_AUTOSIZE, 0, ID_VIEW_PROPERTIES, 
+    NOMENU,
+    I_IMAGENONE, ID_ZOOM, TBSTATE_ENABLED, TBSTYLE_AUTOSIZE, 
+    IDS_CAP_ZOOMTRACK, ID_ZOOM, NOMENU,
+    1, 57634, TBSTATE_ENABLED, TBSTYLE_AUTOSIZE, 0, ID_EDIT_COPY, NOMENU,
+    2, 57637, TBSTATE_ENABLED, TBSTYLE_AUTOSIZE, 0, ID_EDIT_PASTE, NOMENU,
+    11, 57664, TBSTATE_ENABLED, TBSTYLE_AUTOSIZE, 0, ID_APP_ABOUT, NOMENU,
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menubar
+//
+
+IDR_POPUP MENU DISCARDABLE 
+BEGIN
+    POPUP "Options"
+    BEGIN
+        MENUITEM "Full Screen",                 ID_VIEW_TOOLBAR
+        MENUITEM "ScrollBars",                  ID_VIEW_SCROLLBARS
+        MENUITEM "Title bar",                   ID_VIEW_STATUS_BAR
+        MENUITEM "Properties",                  ID_VIEW_PROPERTIES
+        MENUITEM "About ImageView",             ID_APP_ABOUT
+        MENUITEM "Open",                        ID_FILE_OPEN, MENUBARBREAK
+        MENUITEM "Close",                       ID_FILE_CLOSE
+        MENUITEM "Copy",                        ID_EDIT_COPY
+        MENUITEM "Paste",                       ID_EDIT_PASTE
+    END
+END
+
+IDR_MAINFRAME MENU DISCARDABLE 
+BEGIN
+    POPUP "Options"
+    BEGIN
+        MENUITEM "Register",                    ID_FILE_REGISTER
+        MENUITEM SEPARATOR
+        MENUITEM "Full Screen",                 ID_VIEW_TOOLBAR
+        MENUITEM "ScrollBars",                  ID_VIEW_SCROLLBARS
+        MENUITEM "Title bar",                   ID_VIEW_STATUS_BAR
+    END
+    MENUITEM "Zoom Track",                  ID_ZOOM
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 164, 166
+STYLE DS_MODALFRAME | WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | 
+    WS_CAPTION | WS_SYSMENU
+EXSTYLE 0x80000000L
+CAPTION "About ImageView"
+FONT 8, "Tahoma"
+BEGIN
+    CTEXT           "ImageView  v1.1\nWTL 7.5\nsample image viewer",IDC_HEAD,
+                    27,16,73,27,WS_BORDER | NOT WS_GROUP
+    LTEXT           "Use the 'Action' key to toggle full screen.\nUse the arrow keys to zoom in and out, slowly with horizontal arrows, quickly with vertical.\nKeep the stylus pressed in place to get the menu.\nMove the pressed stylus to move the image.",
+                    IDC_INFOSTATIC,3,77,153,56,SS_NOTIFY | WS_BORDER | NOT 
+                    WS_GROUP
+    ICON            IDR_MAINFRAME,IDC_APPICON,115,20,20,20
+END
+
+IDD_PROP_FILE DIALOG DISCARDABLE  0, 0, 159, 137
+STYLE WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION
+CAPTION "File"
+FONT 8, "Tahoma"
+BEGIN
+    RTEXT           "Type:",IDC_TYPENAME_H,10,8,36,8
+    CONTROL         "Test",IDC_TYPENAME,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_NOPREFIX | SS_NOTIFY,52,8,68,8
+    RTEXT           "Location:",IDC_FILELOCATION_H,10,24,36,8
+    CONTROL         "",IDC_FILELOCATION,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_NOPREFIX | SS_NOTIFY | WS_GROUP,48,24,101,8
+    RTEXT           "Name:",IDC_FILENAME_H,10,37,36,8
+    CONTROL         "",IDC_FILENAME,"Static",SS_LEFTNOWORDWRAP | SS_NOPREFIX | 
+                    SS_NOTIFY | WS_GROUP,52,37,97,8
+    RTEXT           "Created:",IDC_FILEDATE_H,10,50,36,8
+    CONTROL         "",IDC_FILEDATE,"Static",SS_LEFTNOWORDWRAP | SS_NOPREFIX | 
+                    SS_NOTIFY | WS_GROUP,52,50,100,8
+    RTEXT           "Size:",IDC_FILESIZE_H,10,63,36,8
+    CONTROL         "",IDC_FILESIZE,"Static",SS_LEFTNOWORDWRAP | SS_NOPREFIX | 
+                    SS_NOTIFY | WS_GROUP,52,63,94,8
+    RTEXT           "Attributes:",IDC_FILEATTRIB_H,10,76,36,8
+    CONTROL         "",IDC_FILEATTRIB,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_NOPREFIX | SS_NOTIFY | WS_GROUP,51,76,101,8
+    ICON            "",IDC_FILEICON,126,4,21,20,SS_NOTIFY
+END
+
+IDD_MOVE DIALOG DISCARDABLE  0, 0, 159, 166
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | 
+    WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU
+CAPTION "Move ImageView"
+FONT 8, "Tahoma"
+BEGIN
+    CONTROL         "Static",IDC_FILELOCATION,"Static",SS_LEFTNOWORDWRAP | 
+                    SS_NOPREFIX | SS_NOTIFY | WS_GROUP,13,15,132,8
+    GROUPBOX        "ImageView present location",IDC_FILELOCATION_H,7,4,145,
+                    24
+    RTEXT           "Move ImageView to Windows folder",IDC_MOVE_T,7,95,116,8
+    DEFPUSHBUTTON   "Move",IDC_MOVE,125,93,27,13,BS_NOTIFY
+    LTEXT           "To register ImageView as default program for image files, ImageView.exe must be moved to the  \\Windows folder.\nTap Move to proceed, or Cancel.",
+                    IDC_INFOSTATIC,7,33,145,35,SS_NOTIFY | WS_BORDER | NOT 
+                    WS_GROUP
+    CONTROL         "Create a shortcut at present location      ",
+                    IDC_SHORTCUT,"Button",BS_AUTOCHECKBOX | BS_RIGHTBUTTON | 
+                    BS_RIGHT | BS_VCENTER | BS_NOTIFY,7,76,145,12
+    PUSHBUTTON      "Cancel",IDCANCEL,125,113,27,13,BS_NOTIFY
+END
+
+IDD_PROP_IMAGE DIALOG DISCARDABLE  0, 0, 153, 150
+STYLE WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION
+CAPTION "Image"
+FONT 8, "Tahoma"
+BEGIN
+    RTEXT           "Colors:",IDC_NUMCOLORS_H,1,36,50,8
+    RTEXT           "Size:",IDC_IMAGESIZE_H,1,19,50,8
+    LTEXT           "",IDC_IMAGESIZE,55,19,92,8
+    LTEXT           "",IDC_NUMCOLORS,55,36,34,8,SS_NOPREFIX | SS_NOTIFY
+    LTEXT           "Device Independant Bitmap",IDC_TYPENAME,55,2,92,8,NOT 
+                    WS_GROUP
+    RTEXT           "Bits per pixel:",IDC_BITDEPTH_H,1,53,50,8
+    CONTROL         "",IDC_BITDEPTH,"Static",SS_LEFTNOWORDWRAP | SS_NOPREFIX | 
+                    SS_NOTIFY | WS_GROUP,55,54,34,8
+    RTEXT           "Type:",IDC_TYPENAME_H,1,2,50,8
+    RTEXT           "Image bytes:",IDC_NUMBYTES_H,1,70,50,8
+    LTEXT           "",IDC_NUMBYTES,55,70,34,8
+    CONTROL         209,IDC_IMAGE,"Static",SS_BITMAP | WS_BORDER,93,31,55,50
+END
+
+IDD_PROP_VIEW DIALOG DISCARDABLE  0, 0, 162, 150
+STYLE DS_CENTER | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION
+CAPTION "View"
+FONT 8, "Tahoma"
+BEGIN
+    LTEXT           "Size:",-1,5,18,36,8
+    LTEXT           "",IDC_IMAGESIZE,54,18,102,9
+    LTEXT           "",IDC_ZOOM,54,3,102,9,NOT WS_GROUP
+    LTEXT           "Zoom:",-1,5,3,36,8
+    CONTROL         208,IDC_VIEW,"Static",SS_BITMAP | WS_BORDER,34,34,95,87
+END
+
+IDD_REGISTER DIALOG DISCARDABLE  0, 0, 156, 161
+STYLE WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION
+CAPTION "Register ImageView"
+FONT 8, "Tahoma"
+BEGIN
+    CONTROL         "",IDC_BMP,"Button",BS_AUTOCHECKBOX | BS_LEFT | 
+                    BS_VCENTER | WS_TABSTOP,60,43,59,10
+    CONTROL         "",IDC_JPG,"Button",BS_AUTOCHECKBOX | BS_LEFT | 
+                    BS_VCENTER | WS_TABSTOP,60,69,59,10
+    CONTROL         "",IDC_PNG,"Button",BS_AUTOCHECKBOX | BS_LEFT | 
+                    BS_VCENTER | WS_TABSTOP,60,95,59,10
+    CONTROL         "",IDC_GIF,"Button",BS_AUTOCHECKBOX | BS_LEFT | 
+                    BS_VCENTER | WS_TABSTOP,60,121,59,10
+    CTEXT           "To register ImageView as the default program for image files, check the file type. To unregister uncheck.",
+                    65534,4,2,141,27,SS_NOTIFY | WS_BORDER | NOT WS_GROUP
+    ICON            "",IDC_IBMP,32,38,20,20
+    ICON            "",IDC_IJPG,32,64,20,20
+    ICON            "",IDC_IPNG,32,90,20,20
+    ICON            "",IDC_IGIF,32,116,20,20
+    GROUPBOX        "ImageView registration",IDC_REGISTER_H,4,28,141,116
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO MOVEABLE PURE 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 157
+        BOTTOMMARGIN, 159
+    END
+
+    IDD_PROP_FILE, DIALOG
+    BEGIN
+        LEFTMARGIN, 10
+        RIGHTMARGIN, 152
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 128
+    END
+
+    IDD_MOVE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 152
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 159
+    END
+
+    IDD_PROP_IMAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 143
+    END
+
+    IDD_PROP_VIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 155
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 143
+    END
+
+    IDD_REGISTER, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 152
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 153
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS MOVEABLE PURE 
+BEGIN
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
+    "Q",            ID_APP_EXIT,            VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    VK_RETURN,      ID_VIEW_TOOLBAR,        VIRTKEY, NOINVERT
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,1,0,1
+ PRODUCTVERSION 7,5,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "WTL 7.5 ImageView sample\0"
+            VALUE "FileVersion", "1, 1, 0, 1\0"
+            VALUE "InternalName", "ImageView\0"
+            VALUE "LegalCopyright", "\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "ImageView.exe\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "ImageView Module\0"
+            VALUE "ProductVersion", "7, 5, 0, 1\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\BmpView.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDR_MAINFRAME           "ImageView"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_NEW             "Create a new document\nNew"
+    ID_FILE_OPEN            "Select and view an image"
+    ID_FILE_CLOSE           "Stop viewing current image"
+    ID_FILE_SAVE            "Save the active document\nSave"
+    ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_APP_ABOUT            "ImageView information"
+    ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
+    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_WINDOW_NEW           "Open another window for the active document\nNew Window"
+    ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window\nArrange Icons"
+    ID_WINDOW_CASCADE       "Arrange windows so they overlap\nCascade Windows"
+    ID_WINDOW_TILE_HORZ     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_TILE_VERT     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection\nErase"
+    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
+    ID_EDIT_COPY            "Copy the zoomed image to the clipboard"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_FIND            "Find the specified text\nFind"
+    ID_EDIT_PASTE           "View image in device clipboard"
+    ID_EDIT_REPEAT          "Repeat the last action\nRepeat"
+    ID_EDIT_REPLACE         "Replace specific text with different text\nReplace"
+    ID_EDIT_SELECT_ALL      "Select the entire document\nSelect All"
+    ID_EDIT_UNDO            "Undo the last action\nUndo"
+    ID_EDIT_REDO            "Redo the previously undone action\nRedo"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ATL_IDS_SCSIZE          "Change the window size"
+    ATL_IDS_SCMOVE          "Change the window position"
+    ATL_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    ATL_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    ATL_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    ATL_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    ATL_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ATL_IDS_SCRESTORE       "Restore the window to normal size"
+    ATL_IDS_SCTASKLIST      "Activate Task List"
+    ATL_IDS_MDICHILD        "Activate this window"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ATL_IDS_IDLEMESSAGE     "Ready\t\tNo zoom"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ATL_IDS_MRU_FILE        "Open this document"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CAP_ZOOMTRACK       "Zoom Track"
+    IDS_CAP_VIEW            "View"
+    IDS_CAP_MENU            "Options"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_ZOOM                 "Zoom in and out"
+    ID_VIEW_PROPERTIES      "Image, file and view informations"
+    IDS_CAP_FILE            "File"
+    IDS_CAP_HELP            "Help"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
