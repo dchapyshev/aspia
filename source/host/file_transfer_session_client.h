@@ -10,6 +10,8 @@
 
 #include "ipc/pipe_channel.h"
 #include "proto/file_transfer_session.pb.h"
+#include "protocol/file_depacketizer.h"
+#include "protocol/file_packetizer.h"
 #include "ui/file_status_dialog.h"
 
 namespace aspia {
@@ -29,16 +31,23 @@ private:
     void OnPipeChannelDisconnect() override;
     void OnPipeChannelMessage(const IOBuffer& buffer) override;
 
-    void WriteMessage(const proto::file_transfer::HostToClient& message);
+    void SendReply(const proto::file_transfer::HostToClient& reply);
 
-    void ReadDriveListRequestMessage();
-    void ReadFileListRequestMessage(const proto::FileListRequest& request);
+    void ReadDriveListRequest();
+    void ReadFileListRequest(const proto::FileListRequest& request);
     void ReadCreateDirectoryRequest(const proto::CreateDirectoryRequest& request);
     void ReadRenameRequest(const proto::RenameRequest& request);
     void ReadRemoveRequest(const proto::RemoveRequest& request);
+    void ReadFileUploadRequest(const proto::FileUploadRequest& request);
+    bool ReadFileUploadDataRequest(const proto::FilePacket& file_packet);
+    void ReadFileDownloadRequest(const proto::FileDownloadRequest& request);
+    bool ReadFileDownloadDataRequest();
 
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::mutex outgoing_lock_;
+
+    std::unique_ptr<FileDepacketizer> file_depacketizer_;
+    std::unique_ptr<FilePacketizer> file_packetizer_;
 
     std::unique_ptr<UiFileStatusDialog> status_dialog_;
 

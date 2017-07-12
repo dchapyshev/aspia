@@ -68,11 +68,11 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
     switch (message.type())
     {
         case proto::RequestType::REQUEST_TYPE_DRIVE_LIST:
-            ReadDriveListRequestMessage();
+            ReadDriveListRequest();
             break;
 
         case proto::RequestType::REQUEST_TYPE_FILE_LIST:
-            ReadFileListRequestMessage(message.file_list_request());
+            ReadFileListRequest(message.file_list_request());
             break;
 
         case proto::RequestType::REQUEST_TYPE_DIRECTORY_SIZE:
@@ -91,6 +91,28 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
             ReadRemoveRequest(message.remove_request());
             break;
 
+        case proto::RequestType::REQUEST_TYPE_FILE_UPLOAD:
+            ReadFileUploadRequest(message.file_upload_request());
+            break;
+
+        case proto::RequestType::REQUEST_TYPE_FILE_UPLOAD_DATA:
+        {
+            if (!ReadFileUploadDataRequest(message.file_packet()))
+                ipc_channel_->Close();
+        }
+        break;
+
+        case proto::RequestType::REQUEST_TYPE_FILE_DOWNLOAD:
+            ReadFileDownloadRequest(message.file_download_request());
+            break;
+
+        case proto::RequestType::REQUEST_TYPE_FILE_DOWNLOAD_DATA:
+        {
+            if (!ReadFileDownloadDataRequest())
+                ipc_channel_->Close();
+        }
+        break;
+
         default:
             LOG(ERROR) << "Unknown message from client: " << message.type();
             ipc_channel_->Close();
@@ -98,79 +120,185 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
     }
 }
 
-void FileTransferSessionClient::WriteMessage(
-    const proto::file_transfer::HostToClient& message)
+void FileTransferSessionClient::SendReply(
+    const proto::file_transfer::HostToClient& reply)
 {
-    IOBuffer buffer(SerializeMessage<IOBuffer>(message));
+    IOBuffer buffer(SerializeMessage<IOBuffer>(reply));
     std::lock_guard<std::mutex> lock(outgoing_lock_);
     ipc_channel_->Send(buffer);
 }
 
-void FileTransferSessionClient::ReadDriveListRequestMessage()
+void FileTransferSessionClient::ReadDriveListRequest()
 {
-    proto::file_transfer::HostToClient message;
-    message.set_type(proto::RequestType::REQUEST_TYPE_DRIVE_LIST);
-    message.set_status(ExecuteDriveListRequest(message.mutable_drive_list()));
+    proto::file_transfer::HostToClient reply;
+    reply.set_type(proto::RequestType::REQUEST_TYPE_DRIVE_LIST);
+    reply.set_status(ExecuteDriveListRequest(reply.mutable_drive_list()));
 
-    status_dialog_->SetDriveListRequestStatus(message.status());
-    WriteMessage(message);
+    status_dialog_->SetDriveListRequestStatus(reply.status());
+    SendReply(reply);
 }
 
-void FileTransferSessionClient::ReadFileListRequestMessage(
+void FileTransferSessionClient::ReadFileListRequest(
     const proto::FileListRequest& request)
 {
-    proto::file_transfer::HostToClient message;
+    proto::file_transfer::HostToClient reply;
 
     FilePath path = fs::u8path(request.path());
 
-    message.set_type(proto::RequestType::REQUEST_TYPE_FILE_LIST);
-    message.set_status(ExecuteFileListRequest(path, message.mutable_file_list()));
+    reply.set_type(proto::RequestType::REQUEST_TYPE_FILE_LIST);
+    reply.set_status(ExecuteFileListRequest(path, reply.mutable_file_list()));
 
-    status_dialog_->SetFileListRequestStatus(path, message.status());
-    WriteMessage(message);
+    status_dialog_->SetFileListRequestStatus(path, reply.status());
+    SendReply(reply);
 }
 
 void FileTransferSessionClient::ReadCreateDirectoryRequest(
     const proto::CreateDirectoryRequest& request)
 {
-    proto::file_transfer::HostToClient message;
+    proto::file_transfer::HostToClient reply;
 
     FilePath path = fs::u8path(request.path());
 
-    message.set_type(proto::RequestType::REQUEST_TYPE_CREATE_DIRECTORY);
-    message.set_status(ExecuteCreateDirectoryRequest(path));
+    reply.set_type(proto::RequestType::REQUEST_TYPE_CREATE_DIRECTORY);
+    reply.set_status(ExecuteCreateDirectoryRequest(path));
 
-    status_dialog_->SetCreateDirectoryRequestStatus(path, message.status());
-    WriteMessage(message);
+    status_dialog_->SetCreateDirectoryRequestStatus(path, reply.status());
+    SendReply(reply);
 }
 
 void FileTransferSessionClient::ReadRenameRequest(
     const proto::RenameRequest& request)
 {
-    proto::file_transfer::HostToClient message;
+    proto::file_transfer::HostToClient reply;
 
     FilePath old_name = fs::u8path(request.old_name());
     FilePath new_name = fs::u8path(request.new_name());
 
-    message.set_type(proto::RequestType::REQUEST_TYPE_RENAME);
-    message.set_status(ExecuteRenameRequest(old_name, new_name));
+    reply.set_type(proto::RequestType::REQUEST_TYPE_RENAME);
+    reply.set_status(ExecuteRenameRequest(old_name, new_name));
 
-    status_dialog_->SetRenameRequestStatus(old_name, new_name, message.status());
-    WriteMessage(message);
+    status_dialog_->SetRenameRequestStatus(old_name, new_name, reply.status());
+    SendReply(reply);
 }
 
 void FileTransferSessionClient::ReadRemoveRequest(
     const proto::RemoveRequest& request)
 {
-    proto::file_transfer::HostToClient message;
+    proto::file_transfer::HostToClient reply;
 
     FilePath path = fs::u8path(request.path());
 
-    message.set_type(proto::RequestType::REQUEST_TYPE_REMOVE);
-    message.set_status(ExecuteRemoveRequest(path));
+    reply.set_type(proto::RequestType::REQUEST_TYPE_REMOVE);
+    reply.set_status(ExecuteRemoveRequest(path));
 
-    status_dialog_->SetRemoveRequestStatus(path, message.status());
-    WriteMessage(message);
+    status_dialog_->SetRemoveRequestStatus(path, reply.status());
+    SendReply(reply);
+}
+
+void FileTransferSessionClient::ReadFileUploadRequest(
+    const proto::FileUploadRequest& request)
+{
+    proto::file_transfer::HostToClient reply;
+    reply.set_type(proto::RequestType::REQUEST_TYPE_FILE_UPLOAD);
+
+    FilePath file_path = fs::u8path(request.file_path());
+
+    if (!IsValidPathName(file_path))
+    {
+        reply.set_status(proto::RequestStatus::REQUEST_STATUS_INVALID_PATH_NAME);
+    }
+    else
+    {
+        file_depacketizer_ = FileDepacketizer::Create(file_path);
+        if (!file_depacketizer_)
+        {
+            reply.set_status(proto::RequestStatus::REQUEST_STATUS_FILE_CREATE_ERROR);
+        }
+    }
+
+    SendReply(reply);
+}
+
+bool FileTransferSessionClient::ReadFileUploadDataRequest(
+    const proto::FilePacket& file_packet)
+{
+    if (!file_depacketizer_)
+    {
+        LOG(ERROR) << "Unexpected upload data request";
+        return false;
+    }
+
+    proto::file_transfer::HostToClient reply;
+    reply.set_type(proto::RequestType::REQUEST_TYPE_FILE_UPLOAD_DATA);
+
+    if (!file_depacketizer_->ReadNextPacket(file_packet))
+    {
+        reply.set_status(proto::RequestStatus::REQUEST_STATUS_FILE_WRITE_ERROR);
+    }
+
+    if (file_packet.flags() & proto::FilePacket::LAST_PACKET)
+    {
+        file_depacketizer_.reset();
+    }
+
+    SendReply(reply);
+    return true;
+}
+
+void FileTransferSessionClient::ReadFileDownloadRequest(
+    const proto::FileDownloadRequest& request)
+{
+    proto::file_transfer::HostToClient reply;
+    reply.set_type(proto::RequestType::REQUEST_TYPE_FILE_DOWNLOAD);
+
+    FilePath file_path = fs::u8path(request.file_path());
+
+    if (!IsValidPathName(file_path))
+    {
+        reply.set_status(proto::RequestStatus::REQUEST_STATUS_INVALID_PATH_NAME);
+    }
+    else
+    {
+        file_packetizer_ = FilePacketizer::Create(file_path);
+        if (!file_packetizer_)
+        {
+            reply.set_status(proto::RequestStatus::REQUEST_STATUS_FILE_OPEN_ERROR);
+        }
+    }
+
+    SendReply(reply);
+}
+
+bool FileTransferSessionClient::ReadFileDownloadDataRequest()
+{
+    if (!file_packetizer_)
+    {
+        LOG(ERROR) << "Unexpected download data request";
+        return false;
+    }
+
+    proto::file_transfer::HostToClient reply;
+    reply.set_type(proto::RequestType::REQUEST_TYPE_FILE_DOWNLOAD_DATA);
+
+    std::unique_ptr<proto::FilePacket> packet =
+        file_packetizer_->CreateNextPacket();
+
+    if (!packet)
+    {
+        reply.set_status(proto::RequestStatus::REQUEST_STATUS_FILE_READ_ERROR);
+    }
+    else
+    {
+        if (packet->flags() & proto::FilePacket::LAST_PACKET)
+        {
+            file_packetizer_.reset();
+        }
+
+        reply.set_allocated_file_packet(packet.release());
+    }
+
+    SendReply(reply);
+    return true;
 }
 
 } // namespace aspia

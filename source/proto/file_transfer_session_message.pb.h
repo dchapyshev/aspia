@@ -129,12 +129,16 @@ enum RequestStatus {
   REQUEST_STATUS_NO_DRIVES_FOUND = 4,
   REQUEST_STATUS_DISK_FULL = 5,
   REQUEST_STATUS_ACCESS_DENIED = 6,
+  REQUEST_STATUS_FILE_OPEN_ERROR = 7,
+  REQUEST_STATUS_FILE_CREATE_ERROR = 8,
+  REQUEST_STATUS_FILE_WRITE_ERROR = 9,
+  REQUEST_STATUS_FILE_READ_ERROR = 10,
   RequestStatus_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   RequestStatus_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool RequestStatus_IsValid(int value);
 const RequestStatus RequestStatus_MIN = REQUEST_STATUS_SUCCESS;
-const RequestStatus RequestStatus_MAX = REQUEST_STATUS_ACCESS_DENIED;
+const RequestStatus RequestStatus_MAX = REQUEST_STATUS_FILE_READ_ERROR;
 const int RequestStatus_ARRAYSIZE = RequestStatus_MAX + 1;
 
 enum RequestType {
@@ -146,14 +150,15 @@ enum RequestType {
   REQUEST_TYPE_RENAME = 5,
   REQUEST_TYPE_REMOVE = 6,
   REQUEST_TYPE_FILE_DOWNLOAD = 7,
-  REQUEST_TYPE_FILE_UPLOAD = 8,
-  REQUEST_TYPE_FILE_PACKET = 9,
+  REQUEST_TYPE_FILE_DOWNLOAD_DATA = 8,
+  REQUEST_TYPE_FILE_UPLOAD = 9,
+  REQUEST_TYPE_FILE_UPLOAD_DATA = 10,
   RequestType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   RequestType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool RequestType_IsValid(int value);
 const RequestType RequestType_MIN = REQUEST_TYPE_UNKNOWN;
-const RequestType RequestType_MAX = REQUEST_TYPE_FILE_PACKET;
+const RequestType RequestType_MAX = REQUEST_TYPE_FILE_UPLOAD_DATA;
 const int RequestType_ARRAYSIZE = RequestType_MAX + 1;
 
 // ===================================================================
