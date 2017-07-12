@@ -13,11 +13,9 @@ namespace aspia {
 // When transferring a file is divided into parts and each part is
 // transmitted separately.
 // This parameter specifies the size of the part.
-static const size_t kPacketPartSize = 5 * 1024; // 5 kB
+static const size_t kPacketPartSize = 10 * 1024; // 10 kB
 
-FilePacketizer::FilePacketizer(std::experimental::filesystem::path&& file_path,
-                               std::ifstream&& file_stream) :
-    file_path_(std::move(file_path)),
+FilePacketizer::FilePacketizer(std::ifstream&& file_stream) :
     file_stream_(std::move(file_stream))
 {
     file_stream_.seekg(0, file_stream_.end);
@@ -27,11 +25,8 @@ FilePacketizer::FilePacketizer(std::experimental::filesystem::path&& file_path,
     left_size_ = file_size_;
 }
 
-std::unique_ptr<FilePacketizer> FilePacketizer::Create(const std::string& path)
+std::unique_ptr<FilePacketizer> FilePacketizer::Create(const FilePath& file_path)
 {
-    std::experimental::filesystem::path file_path =
-        std::experimental::filesystem::u8path(path);
-
     std::ifstream file_stream;
 
     file_stream.open(file_path, std::ifstream::binary);
@@ -42,7 +37,7 @@ std::unique_ptr<FilePacketizer> FilePacketizer::Create(const std::string& path)
     }
 
     return std::unique_ptr<FilePacketizer>(
-        new FilePacketizer(std::move(file_path), std::move(file_stream)));
+        new FilePacketizer(std::move(file_stream)));
 }
 
 char* FilePacketizer::GetOutputBuffer(proto::FilePacket* packet, size_t size)
@@ -51,19 +46,19 @@ char* FilePacketizer::GetOutputBuffer(proto::FilePacket* packet, size_t size)
     return const_cast<char*>(packet->mutable_data()->data());
 }
 
-FilePacketizer::State FilePacketizer::CreateNextPacket(
-    std::unique_ptr<proto::FilePacket>& packet)
+std::unique_ptr<proto::FilePacket> FilePacketizer::CreateNextPacket()
 {
+    DCHECK(file_stream_.is_open());
+
     if (!file_size_ || !left_size_)
-        return State::ERROR;
+        return nullptr;
 
-    if (!file_stream_.is_open())
-        return State::ERROR;
+    // Create a new file packet.
+    std::unique_ptr<proto::FilePacket> packet =
+        std::make_unique<proto::FilePacket>();
 
-    if (file_path_.empty())
-        return State::ERROR;
-
-    packet = std::make_unique<proto::FilePacket>();
+    // All file packets must have the flag.
+    packet->set_flags(proto::FilePacket::PACKET);
 
     size_t packet_buffer_size = kPacketPartSize;
 
@@ -72,19 +67,22 @@ FilePacketizer::State FilePacketizer::CreateNextPacket(
 
     char* packet_buffer = GetOutputBuffer(packet.get(), packet_buffer_size);
 
+    // Moving to a new position in file.
     file_stream_.seekg(file_size_ - left_size_);
+
     file_stream_.read(packet_buffer, packet_buffer_size);
     if (file_stream_.fail())
     {
-        LOG(WARNING) << "Unable to read file: " << file_path_;
-        return State::ERROR;
+        DLOG(ERROR) << "Unable to read file";
+        return nullptr;
     }
 
-    // Set file path and size in first packet.
     if (left_size_ == file_size_)
     {
-        packet->set_full_size(file_size_);
-        packet->set_path(file_path_.u8string());
+        packet->set_flags(packet->flags() | proto::FilePacket::FIRST_PACKET);
+
+        // Set file path and size in first packet.
+        packet->set_file_size(file_size_);
     }
 
     left_size_ -= packet_buffer_size;
@@ -93,12 +91,11 @@ FilePacketizer::State FilePacketizer::CreateNextPacket(
     {
         file_size_ = 0;
         file_stream_.close();
-        file_path_.clear();
 
-        return State::LAST_PACKET;
+        packet->set_flags(packet->flags() | proto::FilePacket::LAST_PACKET);
     }
 
-    return State::PACKET;
+    return packet;
 }
 
 } // namespace aspia

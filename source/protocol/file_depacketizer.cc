@@ -10,27 +10,39 @@
 
 namespace aspia {
 
-FileDepacketizer::State FileDepacketizer::ReadNextPacket(
-    const proto::FilePacket& packet)
+FileDepacketizer::FileDepacketizer(std::ofstream&& file_stream) :
+    file_stream_(std::move(file_stream))
 {
-    // The first package must have the path and the full file size.
-    if (!packet.path().empty() && packet.full_size())
+    // Nothing
+}
+
+// static
+std::unique_ptr<FileDepacketizer> FileDepacketizer::Create(
+    const FilePath& file_path)
+{
+    std::ofstream file_stream;
+
+    file_stream.open(file_path, std::ofstream::binary);
+    if (!file_stream.is_open())
     {
-        file_path_ = std::experimental::filesystem::u8path(packet.path());
-
-        file_stream_.open(file_path_, std::ofstream::binary);
-        if (!file_stream_.is_open())
-        {
-            LOG(ERROR) << "Unable to create file: " << file_path_;
-            return State::ERROR;
-        }
-
-        file_size_ = packet.full_size();
-        left_size_ = packet.full_size();
+        LOG(ERROR) << "Unable to create file: " << file_path;
+        return nullptr;
     }
 
-    if (!file_stream_.is_open())
-        return State::ERROR;
+    return std::unique_ptr<FileDepacketizer>(
+        new FileDepacketizer(std::move(file_stream)));
+}
+
+bool FileDepacketizer::ReadNextPacket(const proto::FilePacket& packet)
+{
+    DCHECK(file_stream_.is_open());
+
+    // The first packet must have the full file size.
+    if (packet.flags() & proto::FilePacket::FIRST_PACKET)
+    {
+        file_size_ = packet.file_size();
+        left_size_ = packet.file_size();
+    }
 
     const size_t packet_size = packet.data().size();
 
@@ -38,21 +50,19 @@ FileDepacketizer::State FileDepacketizer::ReadNextPacket(
     file_stream_.write(packet.data().data(), packet_size);
     if (file_stream_.fail())
     {
-        LOG(WARNING) << "Unable to write file: " << file_path_;
-        return State::ERROR;
+        DLOG(WARNING) << "Unable to write file";
+        return false;
     }
 
     left_size_ -= packet_size;
 
-    if (!left_size_)
+    if (packet.flags() & proto::FilePacket::LAST_PACKET)
     {
         file_size_ = 0;
         file_stream_.close();
-
-        return State::LAST_PACKET;
     }
 
-    return State::PACKET;
+    return true;
 }
 
 } // namespace aspia

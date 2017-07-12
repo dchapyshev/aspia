@@ -16,8 +16,14 @@ namespace aspia {
 class FileTransferDownloader : public FileTransfer
 {
 public:
-    FileTransferDownloader(std::shared_ptr<FileRequestSenderProxy> sender, Delegate* delegate);
+    FileTransferDownloader(std::shared_ptr<FileRequestSenderProxy> sender,
+                           Delegate* delegate);
+
     ~FileTransferDownloader() = default;
+
+    void Start(const FilePath& source_path,
+               const FilePath& target_path,
+               const FileList& file_list) final;
 
 private:
     // FileReplyReceiver implementation.

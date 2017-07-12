@@ -30,10 +30,12 @@ class DirectorySizeDefaultTypeInternal : public ::google::protobuf::internal::Ex
 } _DirectorySize_default_instance_;
 class DirectorySizeRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<DirectorySizeRequest> {
 } _DirectorySizeRequest_default_instance_;
+class FileUploadRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<FileUploadRequest> {
+} _FileUploadRequest_default_instance_;
+class FileDownloadRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<FileDownloadRequest> {
+} _FileDownloadRequest_default_instance_;
 class FilePacketDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<FilePacket> {
 } _FilePacket_default_instance_;
-class FilePacketRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<FilePacketRequest> {
-} _FilePacketRequest_default_instance_;
 class CreateDirectoryRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<CreateDirectoryRequest> {
 } _CreateDirectoryRequest_default_instance_;
 class RenameRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RenameRequest> {
@@ -66,6 +68,7 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
 };
 
 
@@ -77,8 +80,9 @@ void TableStruct::Shutdown() {
   _FileListRequest_default_instance_.Shutdown();
   _DirectorySize_default_instance_.Shutdown();
   _DirectorySizeRequest_default_instance_.Shutdown();
+  _FileUploadRequest_default_instance_.Shutdown();
+  _FileDownloadRequest_default_instance_.Shutdown();
   _FilePacket_default_instance_.Shutdown();
-  _FilePacketRequest_default_instance_.Shutdown();
   _CreateDirectoryRequest_default_instance_.Shutdown();
   _RenameRequest_default_instance_.Shutdown();
   _RemoveRequest_default_instance_.Shutdown();
@@ -95,8 +99,9 @@ void TableStruct::InitDefaultsImpl() {
   _FileListRequest_default_instance_.DefaultConstruct();
   _DirectorySize_default_instance_.DefaultConstruct();
   _DirectorySizeRequest_default_instance_.DefaultConstruct();
+  _FileUploadRequest_default_instance_.DefaultConstruct();
+  _FileDownloadRequest_default_instance_.DefaultConstruct();
   _FilePacket_default_instance_.DefaultConstruct();
-  _FilePacketRequest_default_instance_.DefaultConstruct();
   _CreateDirectoryRequest_default_instance_.DefaultConstruct();
   _RenameRequest_default_instance_.DefaultConstruct();
   _RemoveRequest_default_instance_.DefaultConstruct();
@@ -200,6 +205,9 @@ bool RequestType_IsValid(int value) {
     case 4:
     case 5:
     case 6:
+    case 7:
+    case 8:
+    case 9:
       return true;
     default:
       return false;
@@ -2200,6 +2208,546 @@ void DirectorySizeRequest::set_allocated_path(::std::string* path) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int FileUploadRequest::kFilePathFieldNumber;
+const int FileUploadRequest::kOverwriteFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+FileUploadRequest::FileUploadRequest()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.FileUploadRequest)
+}
+FileUploadRequest::FileUploadRequest(const FileUploadRequest& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  file_path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.file_path().size() > 0) {
+    file_path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.file_path_);
+  }
+  overwrite_ = from.overwrite_;
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.FileUploadRequest)
+}
+
+void FileUploadRequest::SharedCtor() {
+  file_path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  overwrite_ = false;
+  _cached_size_ = 0;
+}
+
+FileUploadRequest::~FileUploadRequest() {
+  // @@protoc_insertion_point(destructor:aspia.proto.FileUploadRequest)
+  SharedDtor();
+}
+
+void FileUploadRequest::SharedDtor() {
+  file_path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void FileUploadRequest::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const FileUploadRequest& FileUploadRequest::default_instance() {
+  protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+FileUploadRequest* FileUploadRequest::New(::google::protobuf::Arena* arena) const {
+  FileUploadRequest* n = new FileUploadRequest;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void FileUploadRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.FileUploadRequest)
+  file_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  overwrite_ = false;
+}
+
+bool FileUploadRequest::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:aspia.proto.FileUploadRequest)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string file_path = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_file_path()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->file_path().data(), this->file_path().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.FileUploadRequest.file_path"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool overwrite = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &overwrite_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.FileUploadRequest)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.FileUploadRequest)
+  return false;
+#undef DO_
+}
+
+void FileUploadRequest::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.FileUploadRequest)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string file_path = 1;
+  if (this->file_path().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->file_path().data(), this->file_path().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.FileUploadRequest.file_path");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->file_path(), output);
+  }
+
+  // bool overwrite = 2;
+  if (this->overwrite() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->overwrite(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:aspia.proto.FileUploadRequest)
+}
+
+size_t FileUploadRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.FileUploadRequest)
+  size_t total_size = 0;
+
+  // string file_path = 1;
+  if (this->file_path().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->file_path());
+  }
+
+  // bool overwrite = 2;
+  if (this->overwrite() != 0) {
+    total_size += 1 + 1;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void FileUploadRequest::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const FileUploadRequest*>(&from));
+}
+
+void FileUploadRequest::MergeFrom(const FileUploadRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.FileUploadRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.file_path().size() > 0) {
+
+    file_path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.file_path_);
+  }
+  if (from.overwrite() != 0) {
+    set_overwrite(from.overwrite());
+  }
+}
+
+void FileUploadRequest::CopyFrom(const FileUploadRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.FileUploadRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool FileUploadRequest::IsInitialized() const {
+  return true;
+}
+
+void FileUploadRequest::Swap(FileUploadRequest* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void FileUploadRequest::InternalSwap(FileUploadRequest* other) {
+  file_path_.Swap(&other->file_path_);
+  std::swap(overwrite_, other->overwrite_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string FileUploadRequest::GetTypeName() const {
+  return "aspia.proto.FileUploadRequest";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// FileUploadRequest
+
+// string file_path = 1;
+void FileUploadRequest::clear_file_path() {
+  file_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& FileUploadRequest::file_path() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.FileUploadRequest.file_path)
+  return file_path_.GetNoArena();
+}
+void FileUploadRequest::set_file_path(const ::std::string& value) {
+  
+  file_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.FileUploadRequest.file_path)
+}
+#if LANG_CXX11
+void FileUploadRequest::set_file_path(::std::string&& value) {
+  
+  file_path_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.FileUploadRequest.file_path)
+}
+#endif
+void FileUploadRequest::set_file_path(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  file_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.FileUploadRequest.file_path)
+}
+void FileUploadRequest::set_file_path(const char* value, size_t size) {
+  
+  file_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.FileUploadRequest.file_path)
+}
+::std::string* FileUploadRequest::mutable_file_path() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.FileUploadRequest.file_path)
+  return file_path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* FileUploadRequest::release_file_path() {
+  // @@protoc_insertion_point(field_release:aspia.proto.FileUploadRequest.file_path)
+  
+  return file_path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void FileUploadRequest::set_allocated_file_path(::std::string* file_path) {
+  if (file_path != NULL) {
+    
+  } else {
+    
+  }
+  file_path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), file_path);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.FileUploadRequest.file_path)
+}
+
+// bool overwrite = 2;
+void FileUploadRequest::clear_overwrite() {
+  overwrite_ = false;
+}
+bool FileUploadRequest::overwrite() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.FileUploadRequest.overwrite)
+  return overwrite_;
+}
+void FileUploadRequest::set_overwrite(bool value) {
+  
+  overwrite_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.FileUploadRequest.overwrite)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int FileDownloadRequest::kFilePathFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+FileDownloadRequest::FileDownloadRequest()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.FileDownloadRequest)
+}
+FileDownloadRequest::FileDownloadRequest(const FileDownloadRequest& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  file_path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.file_path().size() > 0) {
+    file_path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.file_path_);
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.FileDownloadRequest)
+}
+
+void FileDownloadRequest::SharedCtor() {
+  file_path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _cached_size_ = 0;
+}
+
+FileDownloadRequest::~FileDownloadRequest() {
+  // @@protoc_insertion_point(destructor:aspia.proto.FileDownloadRequest)
+  SharedDtor();
+}
+
+void FileDownloadRequest::SharedDtor() {
+  file_path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void FileDownloadRequest::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const FileDownloadRequest& FileDownloadRequest::default_instance() {
+  protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+FileDownloadRequest* FileDownloadRequest::New(::google::protobuf::Arena* arena) const {
+  FileDownloadRequest* n = new FileDownloadRequest;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void FileDownloadRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.FileDownloadRequest)
+  file_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+bool FileDownloadRequest::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:aspia.proto.FileDownloadRequest)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string file_path = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_file_path()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->file_path().data(), this->file_path().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.FileDownloadRequest.file_path"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.FileDownloadRequest)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.FileDownloadRequest)
+  return false;
+#undef DO_
+}
+
+void FileDownloadRequest::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.FileDownloadRequest)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string file_path = 1;
+  if (this->file_path().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->file_path().data(), this->file_path().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.FileDownloadRequest.file_path");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->file_path(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:aspia.proto.FileDownloadRequest)
+}
+
+size_t FileDownloadRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.FileDownloadRequest)
+  size_t total_size = 0;
+
+  // string file_path = 1;
+  if (this->file_path().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->file_path());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void FileDownloadRequest::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const FileDownloadRequest*>(&from));
+}
+
+void FileDownloadRequest::MergeFrom(const FileDownloadRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.FileDownloadRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.file_path().size() > 0) {
+
+    file_path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.file_path_);
+  }
+}
+
+void FileDownloadRequest::CopyFrom(const FileDownloadRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.FileDownloadRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool FileDownloadRequest::IsInitialized() const {
+  return true;
+}
+
+void FileDownloadRequest::Swap(FileDownloadRequest* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void FileDownloadRequest::InternalSwap(FileDownloadRequest* other) {
+  file_path_.Swap(&other->file_path_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string FileDownloadRequest::GetTypeName() const {
+  return "aspia.proto.FileDownloadRequest";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// FileDownloadRequest
+
+// string file_path = 1;
+void FileDownloadRequest::clear_file_path() {
+  file_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& FileDownloadRequest::file_path() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.FileDownloadRequest.file_path)
+  return file_path_.GetNoArena();
+}
+void FileDownloadRequest::set_file_path(const ::std::string& value) {
+  
+  file_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.FileDownloadRequest.file_path)
+}
+#if LANG_CXX11
+void FileDownloadRequest::set_file_path(::std::string&& value) {
+  
+  file_path_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.FileDownloadRequest.file_path)
+}
+#endif
+void FileDownloadRequest::set_file_path(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  file_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.FileDownloadRequest.file_path)
+}
+void FileDownloadRequest::set_file_path(const char* value, size_t size) {
+  
+  file_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.FileDownloadRequest.file_path)
+}
+::std::string* FileDownloadRequest::mutable_file_path() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.FileDownloadRequest.file_path)
+  return file_path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* FileDownloadRequest::release_file_path() {
+  // @@protoc_insertion_point(field_release:aspia.proto.FileDownloadRequest.file_path)
+  
+  return file_path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void FileDownloadRequest::set_allocated_file_path(::std::string* file_path) {
+  if (file_path != NULL) {
+    
+  } else {
+    
+  }
+  file_path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), file_path);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.FileDownloadRequest.file_path)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int FilePacket::kFlagsFieldNumber;
 const int FilePacket::kFileSizeFieldNumber;
 const int FilePacket::kDataFieldNumber;
@@ -2529,253 +3077,6 @@ void FilePacket::set_allocated_data(::std::string* data) {
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.FilePacket.data)
-}
-
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int FilePacketRequest::kPathFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-FilePacketRequest::FilePacketRequest()
-  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::InitDefaults();
-  }
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.FilePacketRequest)
-}
-FilePacketRequest::FilePacketRequest(const FilePacketRequest& from)
-  : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.path().size() > 0) {
-    path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
-  }
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.FilePacketRequest)
-}
-
-void FilePacketRequest::SharedCtor() {
-  path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _cached_size_ = 0;
-}
-
-FilePacketRequest::~FilePacketRequest() {
-  // @@protoc_insertion_point(destructor:aspia.proto.FilePacketRequest)
-  SharedDtor();
-}
-
-void FilePacketRequest::SharedDtor() {
-  path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-
-void FilePacketRequest::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const FilePacketRequest& FilePacketRequest::default_instance() {
-  protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::InitDefaults();
-  return *internal_default_instance();
-}
-
-FilePacketRequest* FilePacketRequest::New(::google::protobuf::Arena* arena) const {
-  FilePacketRequest* n = new FilePacketRequest;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void FilePacketRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.FilePacketRequest)
-  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-
-bool FilePacketRequest::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:aspia.proto.FilePacketRequest)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // string path = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(10u)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_path()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->path().data(), this->path().length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.FilePacketRequest.path"));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.FilePacketRequest)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.FilePacketRequest)
-  return false;
-#undef DO_
-}
-
-void FilePacketRequest::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.FilePacketRequest)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // string path = 1;
-  if (this->path().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->path().data(), this->path().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.FilePacketRequest.path");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->path(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:aspia.proto.FilePacketRequest)
-}
-
-size_t FilePacketRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.FilePacketRequest)
-  size_t total_size = 0;
-
-  // string path = 1;
-  if (this->path().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->path());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void FilePacketRequest::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const FilePacketRequest*>(&from));
-}
-
-void FilePacketRequest::MergeFrom(const FilePacketRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.FilePacketRequest)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if (from.path().size() > 0) {
-
-    path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
-  }
-}
-
-void FilePacketRequest::CopyFrom(const FilePacketRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.FilePacketRequest)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool FilePacketRequest::IsInitialized() const {
-  return true;
-}
-
-void FilePacketRequest::Swap(FilePacketRequest* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void FilePacketRequest::InternalSwap(FilePacketRequest* other) {
-  path_.Swap(&other->path_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string FilePacketRequest::GetTypeName() const {
-  return "aspia.proto.FilePacketRequest";
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// FilePacketRequest
-
-// string path = 1;
-void FilePacketRequest::clear_path() {
-  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-const ::std::string& FilePacketRequest::path() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.FilePacketRequest.path)
-  return path_.GetNoArena();
-}
-void FilePacketRequest::set_path(const ::std::string& value) {
-  
-  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.FilePacketRequest.path)
-}
-#if LANG_CXX11
-void FilePacketRequest::set_path(::std::string&& value) {
-  
-  path_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.FilePacketRequest.path)
-}
-#endif
-void FilePacketRequest::set_path(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.FilePacketRequest.path)
-}
-void FilePacketRequest::set_path(const char* value, size_t size) {
-  
-  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.FilePacketRequest.path)
-}
-::std::string* FilePacketRequest::mutable_path() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.FilePacketRequest.path)
-  return path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-::std::string* FilePacketRequest::release_path() {
-  // @@protoc_insertion_point(field_release:aspia.proto.FilePacketRequest.path)
-  
-  return path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-void FilePacketRequest::set_allocated_path(::std::string* path) {
-  if (path != NULL) {
-    
-  } else {
-    
-  }
-  path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.FilePacketRequest.path)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

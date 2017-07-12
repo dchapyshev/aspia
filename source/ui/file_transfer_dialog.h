@@ -31,9 +31,13 @@ class UiFileTransferDialog :
 public:
     enum { IDD = IDD_FILE_TRANSFER };
 
-    UiFileTransferDialog(std::shared_ptr<FileRequestSenderProxy> sender,
-                         const FilePath& path,
-                         const std::vector<proto::FileList::Item>& file_list);
+    enum class Mode { UPLOAD, DOWNLOAD };
+
+    UiFileTransferDialog(Mode mode,
+                         std::shared_ptr<FileRequestSenderProxy> sender,
+                         const FilePath& source_path,
+                         const FilePath& target_path,
+                         const FileTransfer::FileList& file_list);
     ~UiFileTransferDialog() = default;
 
 private:
@@ -60,10 +64,13 @@ private:
 
     std::shared_ptr<FileRequestSenderProxy> sender_;
 
-    const FilePath& path_;
-    const std::vector<proto::FileList::Item>& file_list_;
+    const FilePath& source_path_;
+    const FilePath& target_path_;
+    const FileTransfer::FileList& file_list_;
+    const Mode mode_;
 
     std::unique_ptr<FileTransfer> file_transfer_;
+    size_t current_object_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(UiFileTransferDialog);
 };

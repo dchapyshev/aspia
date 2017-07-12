@@ -31,6 +31,7 @@ message ClientToHost
     CreateDirectoryRequest create_directory_request = 4;
     RenameRequest rename_request                    = 5;
     RemoveRequest remove_request                    = 6;
-    FilePacketRequest file_request                  = 7;
-    FilePacket file_packet                          = 8;
+    FileDownloadRequest file_download_request       = 7;
+    FileUploadRequest file_upload_request           = 8;
+    FilePacket file_packet                          = 9;
 }

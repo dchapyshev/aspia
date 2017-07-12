@@ -31,6 +31,9 @@ enum RequestType
     REQUEST_TYPE_CREATE_DIRECTORY = 4;
     REQUEST_TYPE_RENAME           = 5;
     REQUEST_TYPE_REMOVE           = 6;
+    REQUEST_TYPE_FILE_DOWNLOAD    = 7;
+    REQUEST_TYPE_FILE_UPLOAD      = 8;
+    REQUEST_TYPE_FILE_PACKET      = 9;
 }
 
 message DriveList
@@ -87,6 +90,17 @@ message DirectorySizeRequest
     string path = 1;
 }
 
+message FileUploadRequest
+{
+    string file_path = 1;
+    bool overwrite = 2;
+}
+
+message FileDownloadRequest
+{
+   string file_path = 1;
+}
+
 message FilePacket
 {
     enum Flags
@@ -100,11 +114,6 @@ message FilePacket
     uint32 flags = 1;
     uint64 file_size = 2;
     bytes data = 3;
-}
-
-message FilePacketRequest
-{
-    string path = 1;
 }
 
 message CreateDirectoryRequest

@@ -8,10 +8,10 @@
 #ifndef _ASPIA_PROTOCOL__FILE_DEPACKETIZER_H
 #define _ASPIA_PROTOCOL__FILE_DEPACKETIZER_H
 
+#include "base/files/file_path.h"
 #include "base/macros.h"
 #include "proto/file_transfer_session.pb.h"
 
-#include <filesystem>
 #include <fstream>
 #include <memory>
 
@@ -20,20 +20,16 @@ namespace aspia {
 class FileDepacketizer
 {
 public:
-    FileDepacketizer() = default;
     ~FileDepacketizer() = default;
 
-    enum class State { ERROR, PACKET, LAST_PACKET };
+    static std::unique_ptr<FileDepacketizer> Create(const FilePath& file_path);
 
     // Reads the packet and writes its contents to a file.
-    // If an error occurred while reading a package or writing a file,
-    // then |State::ERROR| is returned.
-    // If the packet read is the last one, then |State::LAST_PACKET| is returned.
-    // If the packet is not the last one, then |State::PACKET| is returned.
-    State ReadNextPacket(const proto::FilePacket& packet);
+    bool ReadNextPacket(const proto::FilePacket& packet);
 
 private:
-    std::experimental::filesystem::path file_path_;
+    FileDepacketizer(std::ofstream&& file_stream);
+
     std::ofstream file_stream_;
 
     std::streamoff file_size_ = 0;

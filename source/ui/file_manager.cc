@@ -6,7 +6,7 @@
 //
 
 #include "ui/file_manager.h"
-#include "ui/resource.h"
+#include "ui/file_transfer_dialog.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "base/logging.h"
@@ -21,8 +21,10 @@ UiFileManager::UiFileManager(std::shared_ptr<FileRequestSenderProxy> local_sende
                              std::shared_ptr<FileRequestSenderProxy> remote_sender,
                              Delegate* delegate) :
     delegate_(delegate),
-    local_panel_(UiFileManagerPanel::PanelType::LOCAL, local_sender),
-    remote_panel_(UiFileManagerPanel::PanelType::REMOTE, remote_sender)
+    local_sender_(local_sender),
+    remote_sender_(remote_sender),
+    local_panel_(UiFileManagerPanel::PanelType::LOCAL, local_sender, this),
+    remote_panel_(UiFileManagerPanel::PanelType::REMOTE, remote_sender, this)
 {
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
@@ -55,6 +57,33 @@ void UiFileManager::OnBeforeThreadRunning()
 void UiFileManager::OnAfterThreadRunning()
 {
     DestroyWindow();
+}
+
+void UiFileManager::SendFiles(UiFileManagerPanel::PanelType panel_type,
+                              const FilePath& source_path,
+                              const FileTransfer::FileList& file_list)
+{
+    UiFileTransferDialog::Mode mode;
+    FilePath target_path;
+
+    if (panel_type == UiFileManagerPanel::PanelType::LOCAL)
+    {
+        mode = UiFileTransferDialog::Mode::UPLOAD;
+        target_path = remote_panel_.GetCurrentPath();
+    }
+    else
+    {
+        DCHECK(panel_type == UiFileManagerPanel::PanelType::REMOTE);
+        mode = UiFileTransferDialog::Mode::DOWNLOAD;
+        target_path = local_panel_.GetCurrentPath();
+    }
+
+    // If the path is empty, the panel displays a list of drives.
+    if (source_path.empty() || target_path.empty())
+        return;
+
+    UiFileTransferDialog dialog(mode, remote_sender_, source_path, target_path, file_list);
+    dialog.DoModal(*this);
 }
 
 LRESULT UiFileManager::OnCreate(UINT message,

@@ -18,7 +18,8 @@ namespace aspia {
 
 class UiFileManager :
     public CWindowImpl<UiFileManager, CWindow, CFrameWinTraits>,
-    private MessageLoopThread::Delegate
+    private MessageLoopThread::Delegate,
+    private UiFileManagerPanel::Delegate
 {
 public:
     class Delegate
@@ -37,6 +38,11 @@ private:
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
+    // UiFileManagerPanel::Delegate implementation.
+    void SendFiles(UiFileManagerPanel::PanelType panel_type,
+                   const FilePath& source_path,
+                   const FileTransfer::FileList& file_list) override;
+
     BEGIN_MSG_MAP(UiFileManager)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
         MESSAGE_HANDLER(WM_SIZE, OnSize)
@@ -53,6 +59,9 @@ private:
 
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
+
+    std::shared_ptr<FileRequestSenderProxy> local_sender_;
+    std::shared_ptr<FileRequestSenderProxy> remote_sender_;
 
     Delegate* delegate_;
 

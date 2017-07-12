@@ -1,4 +1,4 @@
-version: 1.0.{build}
+version: {build}
 
 branches:
   only:
@@ -20,7 +20,7 @@ configuration:
 
 install:
   - mkdir c:\yasm
-  - set PATH=%APPDATA%\npm;c:\yasm;%PATH%
+  - set PATH=c:\yasm;%PATH%
   - set CI=true
   - if "%PLATFORM%" == "x86_64" curl -o "c:\yasm\yasm.exe" http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
   - if "%PLATFORM%" == "x86" curl -o "c:\yasm\yasm.exe" http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win32.exe

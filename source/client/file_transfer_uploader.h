@@ -18,12 +18,14 @@ namespace aspia {
 class FileTransferUploader : public FileTransfer
 {
 public:
-    FileTransferUploader(std::shared_ptr<FileRequestSenderProxy> sender, Delegate* delegate);
+    FileTransferUploader(std::shared_ptr<FileRequestSenderProxy> sender,
+                         Delegate* delegate);
+
     ~FileTransferUploader() = default;
 
-    void UploadObject(const FilePath& object_name,
-                      const FilePath& source_path,
-                      const FilePath& target_path);
+    void Start(const FilePath& source_path,
+               const FilePath& target_path,
+               const FileList& file_list) final;
 
 private:
     class Task

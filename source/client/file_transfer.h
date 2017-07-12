@@ -43,6 +43,12 @@ public:
 
     virtual ~FileTransfer() = default;
 
+    using FileList = std::vector<proto::FileList::Item>;
+
+    virtual void Start(const FilePath& source_path,
+                       const FilePath& target_path,
+                       const FileList& file_list) = 0;
+
 protected:
     std::shared_ptr<FileRequestSenderProxy> sender_;
     Delegate* delegate_;

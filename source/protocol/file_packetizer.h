@@ -8,10 +8,10 @@
 #ifndef _ASPIA_PROTOCOL__FILE_PACKETIZER_H
 #define _ASPIA_PROTOCOL__FILE_PACKETIZER_H
 
+#include "base/files/file_path.h"
 #include "base/macros.h"
 #include "proto/file_transfer_session.pb.h"
 
-#include <filesystem>
 #include <fstream>
 #include <memory>
 
@@ -23,29 +23,18 @@ public:
     ~FilePacketizer() = default;
 
     // Creates an instance of the class.
-    // Parameter |path| contains the full path to the file in the UTF-8 encoding.
+    // Parameter |file_path| contains the full path to the file.
     // If the specified file can not be opened for reading, then returns nullptr.
-    static std::unique_ptr<FilePacketizer> Create(const std::string& path);
-
-    enum class State { ERROR, PACKET, LAST_PACKET };
+    static std::unique_ptr<FilePacketizer> Create(const FilePath& file_path);
 
     // Creates a packet for transferring.
-    // If an error occurred while creating the packet (for example, it could not
-    // read the data from the file), then |State::ERROR| is returned.
-    // If the file is read completely and there are no further packets, then 
-    // |State::LAST_PACKET| is returned.
-    // If the file is not completely read, then |State::PACKET| is returned.
-    // Parameter |packet| is valid if the return value is not |State::ERROR|.
-    State CreateNextPacket(std::unique_ptr<proto::FilePacket>& packet);
+    std::unique_ptr<proto::FilePacket> CreateNextPacket();
 
 private:
-    FilePacketizer(std::experimental::filesystem::path&& file_path,
-                   std::ifstream&& file_stream);
+    FilePacketizer(std::ifstream&& file_stream);
 
     char* GetOutputBuffer(proto::FilePacket* packet, size_t size);
 
-    // File path in UTF-8 encoding.
-    std::experimental::filesystem::path file_path_;
     std::ifstream file_stream_;
 
     std::streamoff file_size_ = 0;

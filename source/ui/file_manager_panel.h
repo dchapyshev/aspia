@@ -11,6 +11,7 @@
 #include "base/files/file_path.h"
 #include "base/macros.h"
 #include "client/file_request_sender_proxy.h"
+#include "client/file_transfer.h"
 #include "proto/file_transfer_session.pb.h"
 #include "ui/file_toolbar.h"
 #include "ui/file_list.h"
@@ -26,13 +27,24 @@ class UiFileManagerPanel :
 public:
     enum class PanelType { LOCAL, REMOTE };
 
+    class Delegate
+    {
+    public:
+        virtual void SendFiles(PanelType panel_type,
+                               const FilePath& source_path,
+                               const FileTransfer::FileList& file_list) = 0;
+    };
+
     UiFileManagerPanel(PanelType panel_type,
-                       std::shared_ptr<FileRequestSenderProxy> sender);
+                       std::shared_ptr<FileRequestSenderProxy> sender,
+                       Delegate* delegate);
     virtual ~UiFileManagerPanel() = default;
+
+    FilePath GetCurrentPath() const;
 
 private:
     static const int kDriveListControl = 101;
-    static const int kFileListControl = 101;
+    static const int kFileListControl = 102;
 
     BEGIN_MSG_MAP(UiFileManagerPanel)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
@@ -85,6 +97,7 @@ private:
     void MoveToDrive(int object_index);
 
     const PanelType panel_type_;
+    Delegate* delegate_;
     std::shared_ptr<FileRequestSenderProxy> sender_;
 
     CStatic title_;

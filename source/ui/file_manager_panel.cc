@@ -6,9 +6,9 @@
 //
 
 #include "ui/file_manager_panel.h"
+#include "ui/file_manager.h"
 #include "ui/file_manager_helpers.h"
 #include "ui/status_code.h"
-#include "ui/file_transfer_dialog.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
@@ -24,13 +24,20 @@ static_assert(UiFileList::kInvalidObjectIndex == UiDriveList::kInvalidObjectInde
               "Values must be equal");
 
 UiFileManagerPanel::UiFileManagerPanel(PanelType panel_type,
-                                       std::shared_ptr<FileRequestSenderProxy> sender) :
+                                       std::shared_ptr<FileRequestSenderProxy> sender,
+                                       Delegate* delegate) :
     toolbar_(panel_type == PanelType::LOCAL ?
              UiFileToolBar::Type::LOCAL : UiFileToolBar::Type::REMOTE),
     panel_type_(panel_type),
-    sender_(sender)
+    sender_(sender),
+    delegate_(delegate)
 {
     // Nothing
+}
+
+FilePath UiFileManagerPanel::GetCurrentPath() const
+{
+    return drive_list_.CurrentPath();
 }
 
 LPARAM UiFileManagerPanel::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
@@ -264,10 +271,10 @@ LRESULT UiFileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& h
              !iter.IsAtEnd();
              iter.Advance())
         {
-            const proto::FileList::Item& object = iter.Object();
-
             FilePath path = drive_list_.CurrentPath();
-            path.append(fs::u8path(object.name()));
+            FilePath name = fs::u8path(iter.Object().name());
+
+            path.append(name);
 
             sender_->SendRemoveRequest(This(), path);
         }
@@ -358,27 +365,27 @@ LRESULT UiFileManagerPanel::OnListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& ha
 
 LRESULT UiFileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
-    if (!file_list_.HasFileList())
+    FilePath source_path = drive_list_.CurrentPath();
+
+    // If the path is empty, the panel displays a list of drives.
+    if (source_path.empty())
         return 0;
 
-    std::vector<proto::FileList::Item> file_list_to_copy;
+    FileTransfer::FileList file_list;
 
     // Create a list of files and directories to copy.
     for (UiFileList::Iterator iter(file_list_, UiFileList::Iterator::SELECTED);
          !iter.IsAtEnd();
          iter.Advance())
     {
-        file_list_to_copy.push_back(iter.Object());
+        file_list.push_back(iter.Object());
     }
 
     // If the list is empty (there are no selected items).
-    if (file_list_to_copy.empty())
+    if (file_list.empty())
         return 0;
 
-    UiFileTransferDialog file_transfer_dialog(sender_,
-                                              drive_list_.CurrentPath(),
-                                              file_list_to_copy);
-    file_transfer_dialog.DoModal(*this);
+    delegate_->SendFiles(panel_type_, drive_list_.CurrentPath(), file_list);
 
     return 0;
 }
