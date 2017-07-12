@@ -117,7 +117,7 @@ proto::RequestStatus ExecuteFileListRequest(const FilePath& path, proto::FileLis
         if (!item->is_directory())
         {
             uintmax_t size = fs::file_size(entry.path(), code);
-            if (size != -1)
+            if (size != static_cast<uintmax_t>(-1))
                 item->set_size(size);
         }
     }
@@ -141,6 +141,29 @@ proto::RequestStatus ExecuteCreateDirectoryRequest(const FilePath& path)
         else
         {
             return proto::RequestStatus::REQUEST_STATUS_ACCESS_DENIED;
+        }
+    }
+
+    return proto::RequestStatus::REQUEST_STATUS_SUCCESS;
+}
+
+proto::RequestStatus ExecuteDirectorySizeRequest(const FilePath& path, uint64_t& size)
+{
+    if (!IsValidPathName(path))
+        return proto::RequestStatus::REQUEST_STATUS_INVALID_PATH_NAME;
+
+    size = 0;
+
+    for (const auto& entry : fs::recursive_directory_iterator())
+    {
+        if (!fs::is_directory(entry.status()))
+        {
+            std::error_code code;
+
+            uintmax_t file_size = fs::file_size(entry.path(), code);
+
+            if (file_size != static_cast<uintmax_t>(-1))
+                size += file_size;
         }
     }
 

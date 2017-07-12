@@ -82,7 +82,10 @@ void FileTransferUploader::Start(const FilePath& source_path,
         {
             task_queue_.push(Task(source_object_path, target_object_path, false));
 
-            total_size += fs::file_size(source_object_path, code);
+            uintmax_t file_size = fs::file_size(source_object_path, code);
+
+            if (file_size != static_cast<uintmax_t>(-1))
+                total_size += file_size;
         }
     }
 

@@ -76,7 +76,7 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
             break;
 
         case proto::RequestType::REQUEST_TYPE_DIRECTORY_SIZE:
-            // TODO
+            ReadDirectorySizeRequest(message.directory_size_request());
             break;
 
         case proto::RequestType::REQUEST_TYPE_CREATE_DIRECTORY:
@@ -163,6 +163,23 @@ void FileTransferSessionClient::ReadCreateDirectoryRequest(
     reply.set_status(ExecuteCreateDirectoryRequest(path));
 
     status_dialog_->SetCreateDirectoryRequestStatus(path, reply.status());
+    SendReply(reply);
+}
+
+void FileTransferSessionClient::ReadDirectorySizeRequest(
+    const proto::DirectorySizeRequest& request)
+{
+    proto::file_transfer::HostToClient reply;
+
+    FilePath path = fs::u8path(request.path());
+
+    reply.set_type(proto::RequestType::REQUEST_TYPE_DIRECTORY_SIZE);
+
+    uint64_t directory_size = 0;
+
+    reply.set_status(ExecuteDirectorySizeRequest(path, directory_size));
+    reply.mutable_directory_size()->set_size(directory_size);
+
     SendReply(reply);
 }
 

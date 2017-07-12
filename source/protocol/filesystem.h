@@ -21,6 +21,8 @@ proto::RequestStatus ExecuteFileListRequest(const FilePath& path, proto::FileLis
 
 proto::RequestStatus ExecuteCreateDirectoryRequest(const FilePath& path);
 
+proto::RequestStatus ExecuteDirectorySizeRequest(const FilePath& path, uint64_t& size);
+
 proto::RequestStatus ExecuteRenameRequest(const FilePath& old_name, const FilePath& new_name);
 
 proto::RequestStatus ExecuteRemoveRequest(const FilePath& request);

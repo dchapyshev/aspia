@@ -36,6 +36,7 @@ private:
     void ReadDriveListRequest();
     void ReadFileListRequest(const proto::FileListRequest& request);
     void ReadCreateDirectoryRequest(const proto::CreateDirectoryRequest& request);
+    void ReadDirectorySizeRequest(const proto::DirectorySizeRequest& request);
     void ReadRenameRequest(const proto::RenameRequest& request);
     void ReadRemoveRequest(const proto::RemoveRequest& request);
     void ReadFileUploadRequest(const proto::FileUploadRequest& request);
