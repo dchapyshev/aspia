@@ -45,7 +45,10 @@ uint64_t FileTransferUploader::BuildTaskListForDirectoryContent(
         {
             task_queue_.push(Task(entry.path(), target_object_path, false));
 
-            size += fs::file_size(entry.path(), code);
+            uintmax_t file_size = fs::file_size(entry.path(), code);
+
+            if (file_size != static_cast<uintmax_t>(-1))
+                size += file_size;
         }
     }
 
