@@ -10,6 +10,7 @@
 
 #include "client/file_transfer.h"
 #include "proto/file_transfer_session.pb.h"
+#include "protocol/file_packetizer.h"
 
 #include <queue>
 
@@ -94,7 +95,16 @@ private:
                               const FilePath& new_name,
                               proto::RequestStatus status) final;
 
+    void OnFileUploadRequestReply(const FilePath& file_path,
+                                  proto::RequestStatus status) final;
+
+    void OnFileUploadDataRequestReply(
+        std::unique_ptr<proto::FilePacket> file_packet,
+        proto::RequestStatus status) final;
+
     std::queue<Task> task_queue_;
+
+    std::unique_ptr<FilePacketizer> file_packetizer_;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransferUploader);
 };

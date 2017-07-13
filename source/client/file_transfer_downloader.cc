@@ -86,4 +86,18 @@ void FileTransferDownloader::OnRenameRequestReply(
     // TODO
 }
 
+void FileTransferDownloader::OnFileUploadRequestReply(
+    const FilePath& file_path,
+    proto::RequestStatus status)
+{
+    // TODO
+}
+
+void FileTransferDownloader::OnFileUploadDataRequestReply(
+    std::unique_ptr<proto::FilePacket> file_packet,
+    proto::RequestStatus status)
+{
+    // TODO
+}
+
 } // namespace aspia

@@ -42,6 +42,12 @@ protected:
                                    const FilePath& old_name,
                                    const FilePath& new_name) = 0;
 
+    virtual void SendFileUploadRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                       const FilePath& file_path) = 0;
+
+    virtual void SendFileUploadDataRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                           std::unique_ptr<proto::FilePacket> file_packet) = 0;
+
 private:
     friend class FileRequestSenderProxy;
 

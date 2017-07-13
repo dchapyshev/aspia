@@ -23,29 +23,44 @@ public:
     FileRequestSenderRemote(ClientSession::Delegate* session);
     ~FileRequestSenderRemote() = default;
 
-    void SendDriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver) override;
+    void SendDriveListRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver) override;
 
-    void SendFileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                             const FilePath& path) override;
+    void SendFileListRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& path) override;
 
-    void SendCreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                    const FilePath& path) override;
+    void SendCreateDirectoryRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& path) override;
 
-    void SendDirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                  const FilePath& path) override;
+    void SendDirectorySizeRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& path) override;
 
-    void SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                           const FilePath& path) override;
+    void SendRemoveRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& path) override;
 
-    void SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                           const FilePath& old_name,
-                           const FilePath& new_name) override;
+    void SendRenameRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& old_name,
+        const FilePath& new_name) override;
+
+    void SendFileUploadRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& file_path) override;
+
+    void SendFileUploadDataRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        std::unique_ptr<proto::FilePacket> file_packet) override;
 
     bool ReadIncommingMessage(const IOBuffer& buffer);
 
 private:
-    void SendRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                     std::unique_ptr<proto::file_transfer::ClientToHost> request);
+    void SendRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        std::unique_ptr<proto::file_transfer::ClientToHost> request);
 
     ClientSession::Delegate* session_;
     FileReplyReceiverQueue receiver_queue_;

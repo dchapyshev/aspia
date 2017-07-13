@@ -31,14 +31,16 @@ void FileRequestSenderLocal::OnAfterThreadRunning()
     // Nothing
 }
 
-void FileRequestSenderLocal::DriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver)
+void FileRequestSenderLocal::DriveListRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver)
 {
     DCHECK(worker_->BelongsToCurrentThread());
 
     std::unique_ptr<proto::DriveList> drive_list =
         std::make_unique<proto::DriveList>();
 
-    proto::RequestStatus status = ExecuteDriveListRequest(drive_list.get());
+    proto::RequestStatus status =
+        ExecuteDriveListRequest(drive_list.get());
 
     if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
     {
@@ -49,20 +51,24 @@ void FileRequestSenderLocal::DriveListRequest(std::shared_ptr<FileReplyReceiverP
     receiver->OnDriveListRequestReply(std::move(drive_list));
 }
 
-void FileRequestSenderLocal::SendDriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver)
+void FileRequestSenderLocal::SendDriveListRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver)
 {
     worker_->PostTask(std::bind(&FileRequestSenderLocal::DriveListRequest,
                                 this, receiver));
 }
 
-void FileRequestSenderLocal::FileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                             const FilePath& path)
+void FileRequestSenderLocal::FileListRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const FilePath& path)
 {
     DCHECK(worker_->BelongsToCurrentThread());
 
-    std::unique_ptr<proto::FileList> file_list = std::make_unique<proto::FileList>();
+    std::unique_ptr<proto::FileList> file_list =
+        std::make_unique<proto::FileList>();
 
-    proto::RequestStatus status = ExecuteFileListRequest(path, file_list.get());
+    proto::RequestStatus status =
+        ExecuteFileListRequest(path, file_list.get());
 
     if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
     {
@@ -73,75 +79,100 @@ void FileRequestSenderLocal::FileListRequest(std::shared_ptr<FileReplyReceiverPr
     receiver->OnFileListRequestReply(path, std::move(file_list));
 }
 
-void FileRequestSenderLocal::SendFileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                                 const FilePath& path)
+void FileRequestSenderLocal::SendFileListRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const FilePath& path)
 {
     worker_->PostTask(std::bind(&FileRequestSenderLocal::FileListRequest,
                                 this, receiver, path));
 }
 
-void FileRequestSenderLocal::CreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                                    const FilePath& path)
+void FileRequestSenderLocal::CreateDirectoryRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const FilePath& path)
 {
     DCHECK(worker_->BelongsToCurrentThread());
 
-    receiver->OnCreateDirectoryRequestReply(path, ExecuteCreateDirectoryRequest(path));
+    receiver->OnCreateDirectoryRequestReply(
+        path, ExecuteCreateDirectoryRequest(path));
 }
 
-void FileRequestSenderLocal::SendCreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                                        const FilePath& path)
+void FileRequestSenderLocal::SendCreateDirectoryRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const FilePath& path)
 {
     worker_->PostTask(std::bind(&FileRequestSenderLocal::CreateDirectoryRequest,
                                 this, receiver, path));
 }
 
-void FileRequestSenderLocal::DirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                                  const FilePath& path)
+void FileRequestSenderLocal::DirectorySizeRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const FilePath& path)
 {
     DCHECK(worker_->BelongsToCurrentThread());
     // TODO
 }
 
-void FileRequestSenderLocal::SendDirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                                      const FilePath& path)
+void FileRequestSenderLocal::SendDirectorySizeRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const FilePath& path)
 {
     worker_->PostTask(std::bind(&FileRequestSenderLocal::DirectorySizeRequest,
                                 this, receiver, path));
 }
 
-void FileRequestSenderLocal::RemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                           const FilePath& path)
+void FileRequestSenderLocal::RemoveRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const FilePath& path)
 {
     DCHECK(worker_->BelongsToCurrentThread());
 
     receiver->OnRemoveRequestReply(path, ExecuteRemoveRequest(path));
 }
 
-void FileRequestSenderLocal::SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                               const FilePath& path)
+void FileRequestSenderLocal::SendRemoveRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const FilePath& path)
 {
     worker_->PostTask(std::bind(&FileRequestSenderLocal::RemoveRequest,
                                 this, receiver, path));
 }
 
-void FileRequestSenderLocal::RenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                           const FilePath& old_name,
-                                           const FilePath& new_name)
+void FileRequestSenderLocal::RenameRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const FilePath& old_name,
+    const FilePath& new_name)
 {
     DCHECK(worker_->BelongsToCurrentThread());
 
-    receiver->OnRenameRequestReply(old_name, new_name, ExecuteRenameRequest(old_name, new_name));
+    receiver->OnRenameRequestReply(old_name, new_name,
+                                   ExecuteRenameRequest(old_name, new_name));
 }
 
-void FileRequestSenderLocal::SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                               const FilePath& old_name,
-                                               const FilePath& new_name)
+void FileRequestSenderLocal::SendRenameRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const FilePath& old_name,
+    const FilePath& new_name)
 {
     worker_->PostTask(std::bind(&FileRequestSenderLocal::RenameRequest,
                                 this,
                                 receiver,
                                 old_name,
                                 new_name));
+}
+
+void FileRequestSenderLocal::SendFileUploadRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const FilePath& file_path)
+{
+    DLOG(FATAL) << "The request type is not allowed for local processing";
+}
+
+void FileRequestSenderLocal::SendFileUploadDataRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    std::unique_ptr<proto::FilePacket> file_packet)
+{
+    DLOG(FATAL) << "The request type is not allowed for local processing";
 }
 
 } // namespace aspia

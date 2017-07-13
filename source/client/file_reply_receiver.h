@@ -27,12 +27,14 @@ public:
 protected:
     std::shared_ptr<FileReplyReceiverProxy> This();
 
-    virtual void OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list) = 0;
+    virtual void OnDriveListRequestReply(
+        std::unique_ptr<proto::DriveList> drive_list) = 0;
 
     virtual void OnDriveListRequestFailure(proto::RequestStatus status) = 0;
 
-    virtual void OnFileListRequestReply(const FilePath& path,
-                                        std::unique_ptr<proto::FileList> file_list) = 0;
+    virtual void OnFileListRequestReply(
+        const FilePath& path,
+        std::unique_ptr<proto::FileList> file_list) = 0;
 
     virtual void OnFileListRequestFailure(const FilePath& path,
                                           proto::RequestStatus status) = 0;
@@ -52,6 +54,13 @@ protected:
     virtual void OnRenameRequestReply(const FilePath& old_name,
                                       const FilePath& new_name,
                                       proto::RequestStatus status) = 0;
+
+    virtual void OnFileUploadRequestReply(const FilePath& file_path,
+                                          proto::RequestStatus status) = 0;
+
+    virtual void OnFileUploadDataRequestReply(
+        std::unique_ptr<proto::FilePacket> file_packet,
+        proto::RequestStatus status) = 0;
 
 private:
     friend class FileReplyReceiverProxy;

@@ -121,6 +121,21 @@ bool FileReplyReceiverQueue::ProcessNextReply(proto::file_transfer::HostToClient
         }
         break;
 
+        case proto::RequestType::REQUEST_TYPE_FILE_UPLOAD:
+        {
+            receiver->OnFileUploadRequestReply(
+                fs::u8path(request->file_upload_request().file_path()),
+                reply.status());
+        }
+        break;
+
+        case proto::RequestType::REQUEST_TYPE_FILE_UPLOAD_DATA:
+        {
+            std::unique_ptr<proto::FilePacket> file_packet(request->release_file_packet());
+            receiver->OnFileUploadDataRequestReply(std::move(file_packet), reply.status());
+        }
+        break;
+
         case proto::RequestType::REQUEST_TYPE_UNKNOWN:
         default:
         {

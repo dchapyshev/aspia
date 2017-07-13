@@ -127,4 +127,30 @@ bool FileReplyReceiverProxy::OnRenameRequestReply(const FilePath& old_name,
     return true;
 }
 
+bool FileReplyReceiverProxy::OnFileUploadRequestReply(
+    const FilePath& file_path,
+    proto::RequestStatus status)
+{
+    std::lock_guard<std::mutex> lock(receiver_lock_);
+
+    if (!receiver_)
+        return false;
+
+    receiver_->OnFileUploadRequestReply(file_path, status);
+    return true;
+}
+
+bool FileReplyReceiverProxy::OnFileUploadDataRequestReply(
+    std::unique_ptr<proto::FilePacket> file_packet,
+    proto::RequestStatus status)
+{
+    std::lock_guard<std::mutex> lock(receiver_lock_);
+
+    if (!receiver_)
+        return false;
+
+    receiver_->OnFileUploadDataRequestReply(std::move(file_packet), status);
+    return true;
+}
+
 } // namespace aspia

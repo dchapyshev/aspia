@@ -106,7 +106,7 @@ void FileTransferUploader::RunTask(const Task& task)
     }
     else
     {
-        // TODO: Start file uploading.
+        sender_->SendFileUploadRequest(This(), task.TargetPath());
     }
 }
 
@@ -190,6 +190,65 @@ void FileTransferUploader::OnRenameRequestReply(
     proto::RequestStatus status)
 {
     // TODO
+}
+
+void FileTransferUploader::OnFileUploadRequestReply(
+    const FilePath& file_path,
+    proto::RequestStatus status)
+{
+    if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
+    {
+        // TODO
+    }
+
+    const Task& current_task = task_queue_.front();
+
+    file_packetizer_ = FilePacketizer::Create(current_task.SourcePath());
+    if (!file_packetizer_)
+    {
+        // TODO
+    }
+
+    std::unique_ptr<proto::FilePacket> file_packet =
+        file_packetizer_->CreateNextPacket();
+    if (!file_packet)
+    {
+        // TODO
+    }
+
+    sender_->SendFileUploadDataRequest(This(), std::move(file_packet));
+}
+
+void FileTransferUploader::OnFileUploadDataRequestReply(
+    std::unique_ptr<proto::FilePacket> prev_file_packet,
+    proto::RequestStatus status)
+{
+    if (!file_packetizer_)
+    {
+        LOG(ERROR) << "Unexpected reply: file upload data";
+        // TODO: Handle error.
+    }
+
+    if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
+    {
+        // TODO
+    }
+
+    if (prev_file_packet->flags() & proto::FilePacket::LAST_PACKET)
+    {
+        file_packetizer_.reset();
+        RunNextTask();
+        return;
+    }
+
+    std::unique_ptr<proto::FilePacket> new_file_packet =
+        file_packetizer_->CreateNextPacket();
+    if (!new_file_packet)
+    {
+        // TODO
+    }
+
+    sender_->SendFileUploadDataRequest(This(), std::move(new_file_packet));
 }
 
 } // namespace aspia

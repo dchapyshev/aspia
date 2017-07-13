@@ -99,4 +99,30 @@ bool FileRequestSenderProxy::SendRenameRequest(
     return true;
 }
 
+bool FileRequestSenderProxy::SendFileUploadRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const FilePath& file_path)
+{
+    std::lock_guard<std::mutex> lock(sender_lock_);
+
+    if (!sender_)
+        return false;
+
+    sender_->SendFileUploadRequest(receiver, file_path);
+    return true;
+}
+
+bool FileRequestSenderProxy::SendFileUploadDataRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    std::unique_ptr<proto::FilePacket> file_packet)
+{
+    std::lock_guard<std::mutex> lock(sender_lock_);
+
+    if (!sender_)
+        return false;
+
+    sender_->SendFileUploadDataRequest(receiver, std::move(file_packet));
+    return true;
+}
+
 } // namespace aspia

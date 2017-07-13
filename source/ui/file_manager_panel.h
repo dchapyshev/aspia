@@ -94,6 +94,13 @@ private:
     void OnRemoveRequestReply(const FilePath& path, proto::RequestStatus status) override;
     void OnRenameRequestReply(const FilePath& old_name, const FilePath& new_name, proto::RequestStatus status) override;
 
+    void OnFileUploadRequestReply(const FilePath& file_path,
+                                  proto::RequestStatus status) override;
+
+    void OnFileUploadDataRequestReply(
+        std::unique_ptr<proto::FilePacket> file_packet,
+        proto::RequestStatus status) override;
+
     void MoveToDrive(int object_index);
 
     const PanelType panel_type_;

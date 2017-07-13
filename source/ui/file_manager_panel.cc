@@ -510,4 +510,17 @@ void UiFileManagerPanel::OnRenameRequestReply(const FilePath& old_name,
     }
 }
 
+void UiFileManagerPanel::OnFileUploadRequestReply(const FilePath& file_path,
+                                                  proto::RequestStatus status)
+{
+    DLOG(FATAL) << "Unexpected reply: file upload request";
+}
+
+void UiFileManagerPanel::OnFileUploadDataRequestReply(
+    std::unique_ptr<proto::FilePacket> file_packet,
+    proto::RequestStatus status)
+{
+    DLOG(FATAL) << "Unexpected reply: file upload data request";
+}
+
 } // namespace aspia
