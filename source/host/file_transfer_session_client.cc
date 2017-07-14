@@ -41,7 +41,7 @@ void FileTransferSessionClient::OnPipeChannelConnect(uint32_t user_data)
     // The server sends the session type in user_data.
     proto::SessionType session_type = static_cast<proto::SessionType>(user_data);
 
-    if (session_type != proto::SessionType::SESSION_TYPE_FILE_TRANSFER)
+    if (session_type != proto::SESSION_TYPE_FILE_TRANSFER)
     {
         LOG(FATAL) << "Invalid session type passed: " << session_type;
         return;
@@ -67,46 +67,46 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
 
     switch (message.type())
     {
-        case proto::RequestType::REQUEST_TYPE_DRIVE_LIST:
+        case proto::REQUEST_TYPE_DRIVE_LIST:
             ReadDriveListRequest();
             break;
 
-        case proto::RequestType::REQUEST_TYPE_FILE_LIST:
+        case proto::REQUEST_TYPE_FILE_LIST:
             ReadFileListRequest(message.file_list_request());
             break;
 
-        case proto::RequestType::REQUEST_TYPE_DIRECTORY_SIZE:
+        case proto::REQUEST_TYPE_DIRECTORY_SIZE:
             ReadDirectorySizeRequest(message.directory_size_request());
             break;
 
-        case proto::RequestType::REQUEST_TYPE_CREATE_DIRECTORY:
+        case proto::REQUEST_TYPE_CREATE_DIRECTORY:
             ReadCreateDirectoryRequest(message.create_directory_request());
             break;
 
-        case proto::RequestType::REQUEST_TYPE_RENAME:
+        case proto::REQUEST_TYPE_RENAME:
             ReadRenameRequest(message.rename_request());
             break;
 
-        case proto::RequestType::REQUEST_TYPE_REMOVE:
+        case proto::REQUEST_TYPE_REMOVE:
             ReadRemoveRequest(message.remove_request());
             break;
 
-        case proto::RequestType::REQUEST_TYPE_FILE_UPLOAD:
+        case proto::REQUEST_TYPE_FILE_UPLOAD:
             ReadFileUploadRequest(message.file_upload_request());
             break;
 
-        case proto::RequestType::REQUEST_TYPE_FILE_UPLOAD_DATA:
+        case proto::REQUEST_TYPE_FILE_UPLOAD_DATA:
         {
             if (!ReadFileUploadDataRequest(message.file_packet()))
                 ipc_channel_->Close();
         }
         break;
 
-        case proto::RequestType::REQUEST_TYPE_FILE_DOWNLOAD:
+        case proto::REQUEST_TYPE_FILE_DOWNLOAD:
             ReadFileDownloadRequest(message.file_download_request());
             break;
 
-        case proto::RequestType::REQUEST_TYPE_FILE_DOWNLOAD_DATA:
+        case proto::REQUEST_TYPE_FILE_DOWNLOAD_DATA:
         {
             if (!ReadFileDownloadDataRequest())
                 ipc_channel_->Close();
@@ -131,7 +131,7 @@ void FileTransferSessionClient::SendReply(
 void FileTransferSessionClient::ReadDriveListRequest()
 {
     proto::file_transfer::HostToClient reply;
-    reply.set_type(proto::RequestType::REQUEST_TYPE_DRIVE_LIST);
+    reply.set_type(proto::REQUEST_TYPE_DRIVE_LIST);
     reply.set_status(ExecuteDriveListRequest(reply.mutable_drive_list()));
 
     status_dialog_->SetDriveListRequestStatus(reply.status());
@@ -145,7 +145,7 @@ void FileTransferSessionClient::ReadFileListRequest(
 
     FilePath path = fs::u8path(request.path());
 
-    reply.set_type(proto::RequestType::REQUEST_TYPE_FILE_LIST);
+    reply.set_type(proto::REQUEST_TYPE_FILE_LIST);
     reply.set_status(ExecuteFileListRequest(path, reply.mutable_file_list()));
 
     status_dialog_->SetFileListRequestStatus(path, reply.status());
@@ -159,7 +159,7 @@ void FileTransferSessionClient::ReadCreateDirectoryRequest(
 
     FilePath path = fs::u8path(request.path());
 
-    reply.set_type(proto::RequestType::REQUEST_TYPE_CREATE_DIRECTORY);
+    reply.set_type(proto::REQUEST_TYPE_CREATE_DIRECTORY);
     reply.set_status(ExecuteCreateDirectoryRequest(path));
 
     status_dialog_->SetCreateDirectoryRequestStatus(path, reply.status());
@@ -173,7 +173,7 @@ void FileTransferSessionClient::ReadDirectorySizeRequest(
 
     FilePath path = fs::u8path(request.path());
 
-    reply.set_type(proto::RequestType::REQUEST_TYPE_DIRECTORY_SIZE);
+    reply.set_type(proto::REQUEST_TYPE_DIRECTORY_SIZE);
 
     uint64_t directory_size = 0;
 
@@ -191,7 +191,7 @@ void FileTransferSessionClient::ReadRenameRequest(
     FilePath old_name = fs::u8path(request.old_name());
     FilePath new_name = fs::u8path(request.new_name());
 
-    reply.set_type(proto::RequestType::REQUEST_TYPE_RENAME);
+    reply.set_type(proto::REQUEST_TYPE_RENAME);
     reply.set_status(ExecuteRenameRequest(old_name, new_name));
 
     status_dialog_->SetRenameRequestStatus(old_name, new_name, reply.status());
@@ -205,7 +205,7 @@ void FileTransferSessionClient::ReadRemoveRequest(
 
     FilePath path = fs::u8path(request.path());
 
-    reply.set_type(proto::RequestType::REQUEST_TYPE_REMOVE);
+    reply.set_type(proto::REQUEST_TYPE_REMOVE);
     reply.set_status(ExecuteRemoveRequest(path));
 
     status_dialog_->SetRemoveRequestStatus(path, reply.status());
@@ -216,20 +216,29 @@ void FileTransferSessionClient::ReadFileUploadRequest(
     const proto::FileUploadRequest& request)
 {
     proto::file_transfer::HostToClient reply;
-    reply.set_type(proto::RequestType::REQUEST_TYPE_FILE_UPLOAD);
+    reply.set_type(proto::REQUEST_TYPE_FILE_UPLOAD);
 
     FilePath file_path = fs::u8path(request.file_path());
 
     if (!IsValidPathName(file_path))
     {
-        reply.set_status(proto::RequestStatus::REQUEST_STATUS_INVALID_PATH_NAME);
+        reply.set_status(proto::REQUEST_STATUS_INVALID_PATH_NAME);
     }
     else
     {
-        file_depacketizer_ = FileDepacketizer::Create(file_path);
-        if (!file_depacketizer_)
+        std::error_code code;
+
+        if (fs::exists(file_path, code))
         {
-            reply.set_status(proto::RequestStatus::REQUEST_STATUS_FILE_CREATE_ERROR);
+            reply.set_status(proto::REQUEST_STATUS_PATH_ALREADY_EXISTS);
+        }
+        else
+        {
+            file_depacketizer_ = FileDepacketizer::Create(file_path);
+            if (!file_depacketizer_)
+            {
+                reply.set_status(proto::REQUEST_STATUS_FILE_CREATE_ERROR);
+            }
         }
     }
 
@@ -248,11 +257,11 @@ bool FileTransferSessionClient::ReadFileUploadDataRequest(
     }
 
     proto::file_transfer::HostToClient reply;
-    reply.set_type(proto::RequestType::REQUEST_TYPE_FILE_UPLOAD_DATA);
+    reply.set_type(proto::REQUEST_TYPE_FILE_UPLOAD_DATA);
 
     if (!file_depacketizer_->ReadNextPacket(file_packet))
     {
-        reply.set_status(proto::RequestStatus::REQUEST_STATUS_FILE_WRITE_ERROR);
+        reply.set_status(proto::REQUEST_STATUS_FILE_WRITE_ERROR);
     }
 
     if (file_packet.flags() & proto::FilePacket::LAST_PACKET)
@@ -268,20 +277,20 @@ void FileTransferSessionClient::ReadFileDownloadRequest(
     const proto::FileDownloadRequest& request)
 {
     proto::file_transfer::HostToClient reply;
-    reply.set_type(proto::RequestType::REQUEST_TYPE_FILE_DOWNLOAD);
+    reply.set_type(proto::REQUEST_TYPE_FILE_DOWNLOAD);
 
     FilePath file_path = fs::u8path(request.file_path());
 
     if (!IsValidPathName(file_path))
     {
-        reply.set_status(proto::RequestStatus::REQUEST_STATUS_INVALID_PATH_NAME);
+        reply.set_status(proto::REQUEST_STATUS_INVALID_PATH_NAME);
     }
     else
     {
         file_packetizer_ = FilePacketizer::Create(file_path);
         if (!file_packetizer_)
         {
-            reply.set_status(proto::RequestStatus::REQUEST_STATUS_FILE_OPEN_ERROR);
+            reply.set_status(proto::REQUEST_STATUS_FILE_OPEN_ERROR);
         }
     }
 
@@ -297,14 +306,14 @@ bool FileTransferSessionClient::ReadFileDownloadDataRequest()
     }
 
     proto::file_transfer::HostToClient reply;
-    reply.set_type(proto::RequestType::REQUEST_TYPE_FILE_DOWNLOAD_DATA);
+    reply.set_type(proto::REQUEST_TYPE_FILE_DOWNLOAD_DATA);
 
     std::unique_ptr<proto::FilePacket> packet =
         file_packetizer_->CreateNextPacket();
 
     if (!packet)
     {
-        reply.set_status(proto::RequestStatus::REQUEST_STATUS_FILE_READ_ERROR);
+        reply.set_status(proto::REQUEST_STATUS_FILE_READ_ERROR);
     }
     else
     {
