@@ -57,6 +57,9 @@ public:
     void SetFileUploadRequestStatus(const FilePath& file_path,
                                     proto::RequestStatus status);
 
+    void SetFileDownloadRequestStatus(const FilePath& file_path,
+                                      proto::RequestStatus status);
+
 private:
     BEGIN_MSG_MAP(UiFileStatusDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)

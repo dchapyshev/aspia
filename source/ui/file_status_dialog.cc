@@ -290,4 +290,21 @@ void UiFileStatusDialog::SetFileUploadRequestStatus(const FilePath& file_path,
     WriteLog(message, status);
 }
 
+void UiFileStatusDialog::SetFileDownloadRequestStatus(const FilePath& file_path,
+                                                      proto::RequestStatus status)
+{
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&UiFileStatusDialog::SetFileDownloadRequestStatus,
+                                    this,
+                                    file_path,
+                                    status));
+        return;
+    }
+
+    CString message;
+    message.Format(IDS_FT_OP_SEND_FILE, file_path.c_str());
+    WriteLog(message, status);
+}
+
 } // namespace aspia
