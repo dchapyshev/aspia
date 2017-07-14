@@ -11,6 +11,10 @@
 #include "base/strings/unicode.h"
 #include "base/logging.h"
 
+#include <chrono>
+#include <clocale>
+#include <ctime>
+
 namespace aspia {
 
 namespace fs = std::experimental::filesystem;
@@ -109,29 +113,34 @@ LRESULT UiFileStatusDialog::OnStopButton(WORD notify_code,
     return 0;
 }
 
-static std::wstring CurrentTime()
+static std::wstring GetCurrentDateTime()
 {
-    WCHAR buffer[128];
+    std::chrono::system_clock::time_point now =
+        std::chrono::system_clock::now();
 
-    if (!GetDateFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, buffer, _countof(buffer)))
-        return std::wstring();
+    std::time_t time = std::chrono::system_clock::to_time_t(now);
 
-    std::wstring datetime(buffer);
+    tm* local_time = std::localtime(&time);
+    if (local_time)
+    {
+        // Set the locale obtained from system.
+        std::setlocale(LC_TIME, "");
 
-    if (!GetTimeFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, buffer, _countof(buffer)))
-        return std::wstring();
+        WCHAR string[128];
+        if (std::wcsftime(string, _countof(string), L"%x %X", local_time))
+        {
+            return string;
+        }
+    }
 
-    datetime.append(L" ");
-    datetime.append(buffer);
-
-    return datetime;
+    return std::wstring();
 }
 
 void UiFileStatusDialog::WriteLog(const CString& message, proto::RequestStatus status)
 {
     CEdit edit(GetDlgItem(IDC_STATUS_EDIT));
 
-    edit.AppendText(CurrentTime().c_str());
+    edit.AppendText(GetCurrentDateTime().c_str());
     edit.AppendText(L" ");
     edit.AppendText(message);
 

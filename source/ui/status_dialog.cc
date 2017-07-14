@@ -11,6 +11,10 @@
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 
+#include <chrono>
+#include <clocale>
+#include <ctime>
+
 namespace aspia {
 
 UiStatusDialog::UiStatusDialog(Delegate* delegate) :
@@ -31,10 +35,8 @@ void UiStatusDialog::SetStatus(proto::Status status)
     AddMessage(StatusCodeToString(status));
 }
 
-LRESULT UiStatusDialog::OnInitDialog(UINT message,
-                                     WPARAM wparam,
-                                     LPARAM lparam,
-                                     BOOL& handled)
+LRESULT UiStatusDialog::OnInitDialog(UINT message, WPARAM wparam,
+                                     LPARAM lparam, BOOL& handled)
 {
     DlgResize_Init();
 
@@ -69,42 +71,49 @@ LRESULT UiStatusDialog::OnInitDialog(UINT message,
     return FALSE;
 }
 
-LRESULT UiStatusDialog::OnClose(UINT message,
-                                WPARAM wparam,
-                                LPARAM lparam,
-                                BOOL& handled)
+LRESULT UiStatusDialog::OnClose(UINT message, WPARAM wparam,
+                                LPARAM lparam, BOOL& handled)
 {
     EndDialog(0);
     return 0;
 }
 
-LRESULT UiStatusDialog::OnCloseButton(WORD notify_code,
-                                      WORD control_id,
-                                      HWND control,
-                                      BOOL& handled)
+LRESULT UiStatusDialog::OnCloseButton(WORD notify_code, WORD control_id,
+                                      HWND control, BOOL& handled)
 {
     EndDialog(0);
     return 0;
+}
+
+static std::wstring GetCurrentDateTime()
+{
+    std::chrono::system_clock::time_point now =
+        std::chrono::system_clock::now();
+
+    std::time_t time = std::chrono::system_clock::to_time_t(now);
+
+    tm* local_time = std::localtime(&time);
+    if (local_time)
+    {
+        // Set the locale obtained from system.
+        std::setlocale(LC_TIME, "");
+
+        WCHAR string[128];
+        if (std::wcsftime(string, _countof(string), L"%x %X", local_time))
+        {
+            return string;
+        }
+    }
+
+    return std::wstring();
 }
 
 void UiStatusDialog::AddMessage(const CString& message)
 {
     CEdit status_edit(GetDlgItem(IDC_STATUS_EDIT));
 
-    WCHAR buffer[128];
-
-    if (GetDateFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, buffer, _countof(buffer)))
-    {
-        status_edit.AppendText(buffer);
-        status_edit.AppendText(L" ");
-    }
-
-    if (GetTimeFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, buffer, _countof(buffer)))
-    {
-        status_edit.AppendText(buffer);
-        status_edit.AppendText(L": ");
-    }
-
+    status_edit.AppendText(GetCurrentDateTime().c_str());
+    status_edit.AppendText(L": ");
     status_edit.AppendText(message);
     status_edit.AppendText(L"\r\n");
 }
