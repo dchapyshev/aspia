@@ -410,6 +410,10 @@ BEGIN
     IDS_REQUEST_STATUS_NO_DRIVES_FOUND      "Диски не найдены"
     IDS_REQUEST_STATUS_DISK_FULL            "Нет свободного места на диске"
     IDS_REQUEST_STATUS_ACCESS_DENIED        "Доступ запрещен"
+    IDS_REQUEST_STATUS_FILE_OPEN_ERROR      "Не удалось открыть файл для чтения"
+    IDS_REQUEST_STATUS_FILE_CREATE_ERROR    "Не удалось создать или заменить файл"
+    IDS_REQUEST_STATUS_FILE_WRITE_ERROR     "Не удалось выполнить запись в файл"
+    IDS_REQUEST_STATUS_FILE_READ_ERROR      "Не удалось выполнить чтение из файла"
     IDS_REQUEST_STATUS_UNKNOWN              "Неизвестный код состояния запроса"
 END
 

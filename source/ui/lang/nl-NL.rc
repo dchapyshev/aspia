@@ -410,6 +410,10 @@ BEGIN
     IDS_REQUEST_STATUS_NO_DRIVES_FOUND      "No drives found"
     IDS_REQUEST_STATUS_DISK_FULL            "Disk full"
     IDS_REQUEST_STATUS_ACCESS_DENIED        "Access denied"
+    IDS_REQUEST_STATUS_FILE_OPEN_ERROR      "Could not open file for reading"
+    IDS_REQUEST_STATUS_FILE_CREATE_ERROR    "Could not create or replace file"
+    IDS_REQUEST_STATUS_FILE_WRITE_ERROR     "Could not write to file"
+    IDS_REQUEST_STATUS_FILE_READ_ERROR      "Could not read file"
     IDS_REQUEST_STATUS_UNKNOWN              "Unknown request status code"
 END
 
