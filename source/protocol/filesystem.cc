@@ -86,9 +86,9 @@ proto::RequestStatus ExecuteDriveListRequest(proto::DriveList* drive_list)
     }
 
     if (!drive_list->item_size())
-        return proto::RequestStatus::REQUEST_STATUS_NO_DRIVES_FOUND;
+        return proto::REQUEST_STATUS_NO_DRIVES_FOUND;
 
-    return proto::RequestStatus::REQUEST_STATUS_SUCCESS;
+    return proto::REQUEST_STATUS_SUCCESS;
 }
 
 proto::RequestStatus ExecuteFileListRequest(const FilePath& path,
@@ -97,12 +97,12 @@ proto::RequestStatus ExecuteFileListRequest(const FilePath& path,
     DCHECK(file_list);
 
     if (!IsValidPathName(path))
-        return proto::RequestStatus::REQUEST_STATUS_INVALID_PATH_NAME;
+        return proto::REQUEST_STATUS_INVALID_PATH_NAME;
 
     std::error_code code;
 
     if (!fs::exists(path, code))
-        return proto::RequestStatus::REQUEST_STATUS_PATH_NOT_FOUND;
+        return proto::REQUEST_STATUS_PATH_NOT_FOUND;
 
     for (auto& entry : fs::directory_iterator(path, code))
     {
@@ -123,13 +123,13 @@ proto::RequestStatus ExecuteFileListRequest(const FilePath& path,
         }
     }
 
-    return proto::RequestStatus::REQUEST_STATUS_SUCCESS;
+    return proto::REQUEST_STATUS_SUCCESS;
 }
 
 proto::RequestStatus ExecuteCreateDirectoryRequest(const FilePath& path)
 {
     if (!IsValidPathName(path))
-        return proto::RequestStatus::REQUEST_STATUS_INVALID_PATH_NAME;
+        return proto::REQUEST_STATUS_INVALID_PATH_NAME;
 
     std::error_code code;
 
@@ -137,22 +137,22 @@ proto::RequestStatus ExecuteCreateDirectoryRequest(const FilePath& path)
     {
         if (fs::exists(path, code))
         {
-            return proto::RequestStatus::REQUEST_STATUS_PATH_ALREADY_EXISTS;
+            return proto::REQUEST_STATUS_PATH_ALREADY_EXISTS;
         }
         else
         {
-            return proto::RequestStatus::REQUEST_STATUS_ACCESS_DENIED;
+            return proto::REQUEST_STATUS_ACCESS_DENIED;
         }
     }
 
-    return proto::RequestStatus::REQUEST_STATUS_SUCCESS;
+    return proto::REQUEST_STATUS_SUCCESS;
 }
 
 proto::RequestStatus ExecuteDirectorySizeRequest(const FilePath& path,
                                                  uint64_t& size)
 {
     if (!IsValidPathName(path))
-        return proto::RequestStatus::REQUEST_STATUS_INVALID_PATH_NAME;
+        return proto::REQUEST_STATUS_INVALID_PATH_NAME;
 
     size = 0;
 
@@ -169,7 +169,7 @@ proto::RequestStatus ExecuteDirectorySizeRequest(const FilePath& path,
         }
     }
 
-    return proto::RequestStatus::REQUEST_STATUS_SUCCESS;
+    return proto::REQUEST_STATUS_SUCCESS;
 }
 
 proto::RequestStatus ExecuteRenameRequest(const FilePath& old_name,
@@ -177,7 +177,7 @@ proto::RequestStatus ExecuteRenameRequest(const FilePath& old_name,
 {
     if (!IsValidPathName(old_name) || !IsValidPathName(new_name))
     {
-        return proto::RequestStatus::REQUEST_STATUS_INVALID_PATH_NAME;
+        return proto::REQUEST_STATUS_INVALID_PATH_NAME;
     }
 
     if (old_name != new_name)
@@ -185,34 +185,34 @@ proto::RequestStatus ExecuteRenameRequest(const FilePath& old_name,
         std::error_code code;
 
         if (fs::exists(new_name, code))
-            return proto::RequestStatus::REQUEST_STATUS_PATH_ALREADY_EXISTS;
+            return proto::REQUEST_STATUS_PATH_ALREADY_EXISTS;
 
         fs::rename(old_name, new_name, code);
     }
 
-    return proto::RequestStatus::REQUEST_STATUS_SUCCESS;
+    return proto::REQUEST_STATUS_SUCCESS;
 }
 
 proto::RequestStatus ExecuteRemoveRequest(const FilePath& path)
 {
     if (!IsValidPathName(path))
-        return proto::RequestStatus::REQUEST_STATUS_INVALID_PATH_NAME;
+        return proto::REQUEST_STATUS_INVALID_PATH_NAME;
 
     std::error_code code;
 
     if (!fs::exists(path, code))
     {
-        return proto::RequestStatus::REQUEST_STATUS_PATH_NOT_FOUND;
+        return proto::REQUEST_STATUS_PATH_NOT_FOUND;
     }
     else
     {
         if (!fs::remove(path, code))
         {
-            return proto::RequestStatus::REQUEST_STATUS_ACCESS_DENIED;
+            return proto::REQUEST_STATUS_ACCESS_DENIED;
         }
     }
 
-    return proto::RequestStatus::REQUEST_STATUS_SUCCESS;
+    return proto::REQUEST_STATUS_SUCCESS;
 }
 
 } // namespace aspia
