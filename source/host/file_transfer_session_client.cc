@@ -233,6 +233,8 @@ void FileTransferSessionClient::ReadFileUploadRequest(
         }
     }
 
+    status_dialog_->SetFileUploadRequestStatus(file_path, reply.status());
+
     SendReply(reply);
 }
 

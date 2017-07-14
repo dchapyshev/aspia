@@ -11,13 +11,9 @@
 #include "base/strings/unicode.h"
 #include "base/logging.h"
 
-#include <filesystem>
-
 namespace aspia {
 
 namespace fs = std::experimental::filesystem;
-
-static const int kBorderSize = 10;
 
 UiFileStatusDialog::UiFileStatusDialog()
 {
@@ -265,6 +261,23 @@ void UiFileStatusDialog::SetRemoveRequestStatus(const FilePath& path,
 
     CString message;
     message.Format(IDS_FT_OP_REMOVE, path.c_str());
+    WriteLog(message, status);
+}
+
+void UiFileStatusDialog::SetFileUploadRequestStatus(const FilePath& file_path,
+                                                    proto::RequestStatus status)
+{
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&UiFileStatusDialog::SetFileUploadRequestStatus,
+                                    this,
+                                    file_path,
+                                    status));
+        return;
+    }
+
+    CString message;
+    message.Format(IDS_FT_OP_RECIEVE_FILE, file_path.c_str());
     WriteLog(message, status);
 }
 
