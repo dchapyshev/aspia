@@ -200,8 +200,8 @@ from_base64(void *dst, size_t *dst_len, const char *src)
 static const char *
 decode_decimal(const char *str, unsigned long *v)
 {
-    const char *  orig;
-    unsigned long acc;
+    const char    *orig;
+    unsigned long  acc;
 
     acc = 0;
     for (orig = str;; str++) {
@@ -288,6 +288,17 @@ decode_string(argon2_context *ctx, const char *str, argon2_type type)
         (x) = dec_x;                       \
     } while ((void) 0, 0)
 
+/* Decoding prefix into uint32_t decimal */
+#define DECIMAL_U32(x)                           \
+    do {                                         \
+        unsigned long dec_x;                     \
+        str = decode_decimal(str, &dec_x);       \
+        if (str == NULL || dec_x > UINT32_MAX) { \
+            return ARGON2_DECODING_FAIL;         \
+        }                                        \
+        (x) = (uint32_t)dec_x;                   \
+    } while ((void)0, 0)
+
 /* Decoding base64 into a binary buffer */
 #define BIN(buf, max_len, len)                            \
     do {                                                  \
@@ -301,41 +312,39 @@ decode_string(argon2_context *ctx, const char *str, argon2_type type)
 
     size_t        maxsaltlen = ctx->saltlen;
     size_t        maxoutlen  = ctx->outlen;
-    unsigned long val;
-    unsigned long version = 0;
     int           validation_result;
+    uint32_t      version = 0;
 
     ctx->saltlen = 0;
     ctx->outlen  = 0;
 
-    if (type == Argon2_i) {
+    if (type == Argon2_id) {
+        CC("$argon2id");
+    } else if (type == Argon2_i) {
         CC("$argon2i");
     } else {
         return ARGON2_INCORRECT_TYPE;
     }
     CC("$v=");
-    DECIMAL(version);
+    DECIMAL_U32(version);
     if (version != ARGON2_VERSION_NUMBER) {
         return ARGON2_INCORRECT_TYPE;
     }
     CC("$m=");
-    DECIMAL(val);
-    if (val > UINT32_MAX) {
+    DECIMAL_U32(ctx->m_cost);
+    if (ctx->m_cost > UINT32_MAX) {
         return ARGON2_INCORRECT_TYPE;
     }
-    ctx->m_cost = (uint32_t) val;
     CC(",t=");
-    DECIMAL(val);
-    if (val > UINT32_MAX) {
+    DECIMAL_U32(ctx->t_cost);
+    if (ctx->t_cost > UINT32_MAX) {
         return ARGON2_INCORRECT_TYPE;
     }
-    ctx->t_cost = (uint32_t) val;
     CC(",p=");
-    DECIMAL(val);
-    if (val > UINT32_MAX) {
+    DECIMAL_U32(ctx->lanes);
+    if (ctx->lanes > UINT32_MAX) {
         return ARGON2_INCORRECT_TYPE;
     }
-    ctx->lanes   = (uint32_t) val;
     ctx->threads = ctx->lanes;
 
     CC("$");
@@ -419,9 +428,12 @@ encode_string(char *dst, size_t dst_len, argon2_context *ctx, argon2_type type)
 
     int validation_result;
 
-    if (type == Argon2_i) {
-        SS("$argon2i$v=");
-    } else {
+    switch (type) {
+    case Argon2_id:
+        SS("$argon2id$v="); break;
+    case Argon2_i:
+        SS("$argon2i$v="); break;
+    default:
         return ARGON2_ENCODING_FAIL;
     }
     validation_result = validate_inputs(ctx);

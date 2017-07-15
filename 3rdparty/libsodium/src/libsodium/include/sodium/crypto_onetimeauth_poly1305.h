@@ -16,7 +16,7 @@ extern "C" {
 
 #include "export.h"
 
-typedef CRYPTO_ALIGN(16) struct crypto_onetimeauth_poly1305_state {
+typedef struct CRYPTO_ALIGN(16) crypto_onetimeauth_poly1305_state {
     unsigned char opaque[256];
 } crypto_onetimeauth_poly1305_state;
 
@@ -59,10 +59,6 @@ int crypto_onetimeauth_poly1305_final(crypto_onetimeauth_poly1305_state *state,
 
 SODIUM_EXPORT
 void crypto_onetimeauth_poly1305_keygen(unsigned char k[crypto_onetimeauth_poly1305_KEYBYTES]);
-
-/* ------------------------------------------------------------------------- */
-
-int _crypto_onetimeauth_poly1305_pick_best_implementation(void);
 
 #ifdef __cplusplus
 }

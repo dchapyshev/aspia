@@ -113,9 +113,9 @@ blkxor(escrypt_block_t *dest, const escrypt_block_t *src, size_t len)
 static void
 salsa20_8(uint32_t B[16])
 {
-    escrypt_block_t X;
-    uint32_t *      x = X.w;
-    size_t          i;
+    escrypt_block_t  X;
+    uint32_t        *x = X.w;
+    size_t           i;
 
     blkcpy_64(&X, (escrypt_block_t *) B);
     for (i = 0; i < 8; i += 2) {
@@ -334,7 +334,7 @@ escrypt_kdf_nosse(escrypt_local_t *local, const uint8_t *passwd,
 
     /* Allocate memory. */
     B_size = (size_t) 128 * r * p;
-    V_size = (size_t) 128 * r * N;
+    V_size = (size_t) 128 * r * (size_t) N;
     need   = B_size + V_size;
     if (need < V_size) {
         errno = ENOMEM;

@@ -48,6 +48,9 @@
     <ClCompile Include="src\libsodium\crypto_box\curve25519xchacha20poly1305\box_curve25519xchacha20poly1305.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\libsodium\crypto_box\curve25519xchacha20poly1305\box_seal_curve25519xchacha20poly1305.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\libsodium\crypto_box\curve25519xsalsa20poly1305\box_curve25519xsalsa20poly1305.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -135,6 +138,9 @@
     <ClCompile Include="src\libsodium\crypto_pwhash\argon2\argon2-encoding.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\libsodium\crypto_pwhash\argon2\argon2-fill-block-avx2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\libsodium\crypto_pwhash\argon2\argon2-fill-block-ref.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -148,6 +154,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\libsodium\crypto_pwhash\argon2\pwhash_argon2i.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libsodium\crypto_pwhash\argon2\pwhash_argon2id.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\libsodium\crypto_pwhash\scryptsalsa208sha256\crypto_scrypt-common.c">
@@ -386,6 +395,9 @@
     <ClInclude Include="src\libsodium\crypto_pwhash\argon2\blake2b-long.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\libsodium\crypto_pwhash\argon2\blamka-round-avx2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\libsodium\crypto_pwhash\argon2\blamka-round-ref.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -587,6 +599,9 @@
     <ClInclude Include="src\libsodium\include\sodium\crypto_pwhash_argon2i.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\libsodium\include\sodium\crypto_pwhash_argon2id.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\libsodium\include\sodium\crypto_pwhash_scryptsalsa208sha256.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -680,11 +695,22 @@
     <ClInclude Include="src\libsodium\include\sodium\private\curve25519_ref10.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\libsodium\include\sodium\private\implementations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\libsodium\include\sodium\private\mutex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\libsodium\include\sodium\private\sse2_64_32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="builds\msvc\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="builds\msvc\resource.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

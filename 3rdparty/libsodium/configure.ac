@@ -1,5 +1,5 @@
 AC_PREREQ([2.65])
-AC_INIT([libsodium],[1.0.12],
+AC_INIT([libsodium],[1.0.13],
   [https://github.com/jedisct1/libsodium/issues],
   [libsodium],
   [https://github.com/jedisct1/libsodium])
@@ -17,9 +17,9 @@ ISODATE=`date +%Y-%m-%d`
 AC_SUBST(ISODATE)
 
 SODIUM_LIBRARY_VERSION_MAJOR=9
-SODIUM_LIBRARY_VERSION_MINOR=4
+SODIUM_LIBRARY_VERSION_MINOR=5
 DLL_VERSION=8
-SODIUM_LIBRARY_VERSION=20:0:2
+SODIUM_LIBRARY_VERSION=21:0:3
 #                       | | |
 #                +------+ | +---+
 #                |        |     |
@@ -61,7 +61,7 @@ AC_ARG_ENABLE(ssp,
 ])
 
 AC_ARG_ENABLE(asm,
-[AS_HELP_STRING(--disable-asm,Disable assembly implementations)],
+[AS_HELP_STRING(--disable-asm,Do not compile assembly code -- This disables all (including non-assembly) platform-specific optimizations on Unix systems)],
 [
   AS_IF([test "x$enableval" = "xno"], [
     enable_asm="no"
@@ -285,6 +285,7 @@ AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wnormalized=id], [CWFLAGS="$CWFLAGS -Wnormalize
 AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wnull-dereference], [CWFLAGS="$CWFLAGS -Wnull-dereference"])
 AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wpointer-arith], [CWFLAGS="$CWFLAGS -Wpointer-arith"])
 AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wredundant-decls], [CWFLAGS="$CWFLAGS -Wredundant-decls"])
+AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wshorten-64-to-32], [CWFLAGS="$CWFLAGS -Wshorten-64-to-32"])
 AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wstrict-prototypes], [CWFLAGS="$CWFLAGS -Wstrict-prototypes"])
 AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wswitch-enum], [CWFLAGS="$CWFLAGS -Wswitch-enum"])
 AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wvariable-decl], [CWFLAGS="$CWFLAGS -Wvariable-decl"])
@@ -293,6 +294,8 @@ AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wno-type-limits], [CWFLAGS="$CWFLAGS -Wno-type-
 AX_CHECK_LINK_FLAG([-Wl,-z,relro], [LDFLAGS="$LDFLAGS -Wl,-z,relro"])
 AX_CHECK_LINK_FLAG([-Wl,-z,now], [LDFLAGS="$LDFLAGS -Wl,-z,now"])
 AX_CHECK_LINK_FLAG([-Wl,-z,noexecstack], [LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"])
+
+AX_CHECK_CATCHABLE_SEGV
 
 LT_INIT
 AC_SUBST(LIBTOOL_DEPS)
@@ -459,7 +462,7 @@ AC_SUBST(CFLAGS_PCLMUL)
 AC_CHECK_HEADERS([sys/mman.h intrin.h])
 
 AC_MSG_CHECKING([if _xgetbv() is available])
-AC_COMPILE_IFELSE(
+AC_LINK_IFELSE(
   [AC_LANG_PROGRAM([[ #include <intrin.h> ]], [[ (void) _xgetbv(0) ]])],
   [AC_MSG_RESULT(yes)
    AC_DEFINE([HAVE__XGETBV], [1], [_xgetbv() is available])],

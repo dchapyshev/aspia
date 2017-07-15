@@ -54,11 +54,11 @@ size_t crypto_pwhash_argon2i_opslimit_min(void);
 SODIUM_EXPORT
 size_t crypto_pwhash_argon2i_opslimit_max(void);
 
-#define crypto_pwhash_argon2i_MEMLIMIT_MIN 1U
+#define crypto_pwhash_argon2i_MEMLIMIT_MIN 8192U
 SODIUM_EXPORT
 size_t crypto_pwhash_argon2i_memlimit_min(void);
 
-#define crypto_pwhash_argon2i_MEMLIMIT_MAX ((SIZE_MAX >= 1ULL << 48) ? 4398046510080U : (SIZE_MAX >= 1ULL << 32) ? 2147483648U : 32768U)
+#define crypto_pwhash_argon2i_MEMLIMIT_MAX ((SIZE_MAX >= 4398046510080U) ? 4398046510080U : (SIZE_MAX >= 2147483648U) ? 2147483648U : 32768U)
 SODIUM_EXPORT
 size_t crypto_pwhash_argon2i_memlimit_max(void);
 
@@ -108,10 +108,6 @@ int crypto_pwhash_argon2i_str_verify(const char str[crypto_pwhash_argon2i_STRBYT
                                      const char * const passwd,
                                      unsigned long long passwdlen)
             __attribute__ ((warn_unused_result));
-
-/* ------------------------------------------------------------------------- */
-
-int _crypto_pwhash_argon2i_pick_best_implementation(void);
 
 #ifdef __cplusplus
 }
