@@ -10,8 +10,8 @@
 
 namespace aspia {
 
-FileDepacketizer::FileDepacketizer(std::ofstream&& file_stream) :
-    file_stream_(std::move(file_stream))
+FileDepacketizer::FileDepacketizer(std::ofstream&& file_stream)
+    : file_stream_(std::move(file_stream))
 {
     // Nothing
 }

@@ -15,8 +15,8 @@ namespace aspia {
 // This parameter specifies the size of the part.
 static const size_t kPacketPartSize = 10 * 1024; // 10 kB
 
-FilePacketizer::FilePacketizer(std::ifstream&& file_stream) :
-    file_stream_(std::move(file_stream))
+FilePacketizer::FilePacketizer(std::ifstream&& file_stream)
+    : file_stream_(std::move(file_stream))
 {
     file_stream_.seekg(0, file_stream_.end);
     file_size_ = static_cast<size_t>(file_stream_.tellg());
@@ -40,7 +40,7 @@ std::unique_ptr<FilePacketizer> FilePacketizer::Create(const FilePath& file_path
         new FilePacketizer(std::move(file_stream)));
 }
 
-char* FilePacketizer::GetOutputBuffer(proto::FilePacket* packet, size_t size)
+static char* GetOutputBuffer(proto::FilePacket* packet, size_t size)
 {
     packet->mutable_data()->resize(size);
     return const_cast<char*>(packet->mutable_data()->data());

@@ -24,12 +24,10 @@ public:
     std::unique_ptr<proto::CursorShape> Encode(std::unique_ptr<MouseCursor> mouse_cursor);
 
 private:
-    uint8_t* GetOutputBuffer(proto::CursorShape* cursor_shape, size_t size);
     void CompressCursor(proto::CursorShape* cursor_shape, const MouseCursor* mouse_cursor);
 
-private:
-    MouseCursorCache cache_;
     CompressorZLIB compressor_;
+    MouseCursorCache cache_;
 
     DISALLOW_COPY_AND_ASSIGN(CursorEncoder);
 };

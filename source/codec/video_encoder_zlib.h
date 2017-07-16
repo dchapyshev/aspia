@@ -31,13 +31,6 @@ private:
     VideoEncoderZLIB(const PixelFormat& format, int compression_ratio);
     void CompressPacket(proto::VideoPacket* packet, size_t source_data_size);
 
-    //
-    // Retrieves a pointer to the output buffer in |update| used for storing the
-    // encoded rectangle data. Will resize the buffer to |size|.
-    //
-    uint8_t* GetOutputBuffer(proto::VideoPacket* packet, size_t size);
-
-private:
     // The current frame size.
     DesktopSize screen_size_;
 

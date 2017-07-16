@@ -17,22 +17,24 @@ static const uint8_t kCacheSize = 16;
 // The compression ratio can be in the range of 1 to 9.
 static const int32_t kCompressionRatio = 6;
 
-CursorEncoder::CursorEncoder() :
-    compressor_(kCompressionRatio),
-    cache_(kCacheSize)
+CursorEncoder::CursorEncoder()
+    : compressor_(kCompressionRatio),
+      cache_(kCacheSize)
 {
     static_assert(kCacheSize >= 2 && kCacheSize <= 31, "Invalid cache size");
     static_assert(kCompressionRatio >= 1 && kCompressionRatio <= 9, "Invalid compression ratio");
 }
 
-uint8_t* CursorEncoder::GetOutputBuffer(proto::CursorShape* cursor_shape, size_t size)
+static uint8_t* GetOutputBuffer(proto::CursorShape* cursor_shape, size_t size)
 {
     cursor_shape->mutable_data()->resize(size);
 
-    return const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(cursor_shape->mutable_data()->data()));
+    return const_cast<uint8_t*>(
+        reinterpret_cast<const uint8_t*>(cursor_shape->mutable_data()->data()));
 }
 
-void CursorEncoder::CompressCursor(proto::CursorShape* cursor_shape, const MouseCursor* mouse_cursor)
+void CursorEncoder::CompressCursor(proto::CursorShape* cursor_shape,
+                                   const MouseCursor* mouse_cursor)
 {
     compressor_.Reset();
 
@@ -88,7 +90,8 @@ void CursorEncoder::CompressCursor(proto::CursorShape* cursor_shape, const Mouse
     }
 }
 
-std::unique_ptr<proto::CursorShape> CursorEncoder::Encode(std::unique_ptr<MouseCursor> mouse_cursor)
+std::unique_ptr<proto::CursorShape> CursorEncoder::Encode(
+    std::unique_ptr<MouseCursor> mouse_cursor)
 {
     if (!mouse_cursor)
         return nullptr;

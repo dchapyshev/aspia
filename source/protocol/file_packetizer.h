@@ -33,8 +33,6 @@ public:
 private:
     FilePacketizer(std::ifstream&& file_stream);
 
-    char* GetOutputBuffer(proto::FilePacket* packet, size_t size);
-
     std::ifstream file_stream_;
 
     std::streamoff file_size_ = 0;
