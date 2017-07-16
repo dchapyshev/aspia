@@ -30,7 +30,7 @@ public:
     ClientSession(const ClientConfig& config, Delegate* delegate);
     virtual ~ClientSession();
 
-    std::shared_ptr<ClientSessionProxy> client_session_proxy();
+    std::shared_ptr<ClientSessionProxy> client_session_proxy() const;
 
 protected:
     ClientConfig config_;

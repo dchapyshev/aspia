@@ -24,7 +24,7 @@ class ClientPool :
     private Client::Delegate
 {
 public:
-    ClientPool(std::shared_ptr<MessageLoopProxy> runner);
+    explicit ClientPool(std::shared_ptr<MessageLoopProxy> runner);
     ~ClientPool();
 
     void Connect(HWND parent, const ClientConfig& config);

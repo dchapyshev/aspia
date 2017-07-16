@@ -16,8 +16,8 @@ namespace aspia {
 
 ClientSessionDesktopManage::ClientSessionDesktopManage(
     const ClientConfig& config,
-    ClientSession::Delegate* delegate) :
-    ClientSessionDesktopView(config, delegate)
+    ClientSession::Delegate* delegate)
+    : ClientSessionDesktopView(config, delegate)
 {
     // Nothing
 }

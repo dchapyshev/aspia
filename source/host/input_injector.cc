@@ -106,7 +106,7 @@ void InputInjector::InjectPointerEvent(const proto::PointerEvent& event)
     prev_mouse_button_mask_ = mask;
 }
 
-void InputInjector::SendKeyboardInput(WORD key_code, DWORD flags)
+static void SendKeyboardInput(WORD key_code, DWORD flags)
 {
     INPUT input;
 

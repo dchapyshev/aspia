@@ -17,9 +17,9 @@ namespace aspia {
 
 static const std::chrono::seconds kAuthTimeout{ 60 };
 
-Host::Host(std::unique_ptr<NetworkChannel> channel, Delegate* delegate) :
-    channel_(std::move(channel)),
-    delegate_(delegate)
+Host::Host(std::unique_ptr<NetworkChannel> channel, Delegate* delegate)
+    : channel_(std::move(channel)),
+      delegate_(delegate)
 {
     channel_proxy_ = channel_->network_channel_proxy();
     channel_->StartListening(this);

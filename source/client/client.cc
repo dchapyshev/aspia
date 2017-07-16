@@ -17,13 +17,13 @@ namespace aspia {
 
 Client::Client(std::unique_ptr<NetworkChannel> channel,
                const ClientConfig& config,
-               Delegate* delegate) :
-    channel_(std::move(channel)),
-    config_(config),
-    delegate_(delegate),
-    status_dialog_(this)
+               Delegate* delegate)
+    : channel_(std::move(channel)),
+      config_(config),
+      delegate_(delegate),
+      status_dialog_(this)
 {
-    ui_thread_.Start(MessageLoop::Type::TYPE_UI, this);
+    ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
 Client::~Client()
@@ -146,19 +146,19 @@ void Client::CreateSession(proto::SessionType session_type)
 {
     switch (session_type)
     {
-        case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SESSION_TYPE_DESKTOP_MANAGE:
             session_.reset(new ClientSessionDesktopManage(config_, this));
             break;
 
-        case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::SESSION_TYPE_DESKTOP_VIEW:
             session_.reset(new ClientSessionDesktopView(config_, this));
             break;
 
-        case proto::SessionType::SESSION_TYPE_FILE_TRANSFER:
+        case proto::SESSION_TYPE_FILE_TRANSFER:
             session_.reset(new ClientSessionFileTransfer(config_, this));
             break;
 
-        case proto::SessionType::SESSION_TYPE_POWER_MANAGE:
+        case proto::SESSION_TYPE_POWER_MANAGE:
             session_.reset(new ClientSessionPowerManage(config_, this));
             break;
 

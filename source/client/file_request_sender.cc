@@ -21,7 +21,7 @@ FileRequestSender::~FileRequestSender()
     sender_proxy_ = nullptr;
 }
 
-std::shared_ptr<FileRequestSenderProxy> FileRequestSender::request_sender_proxy()
+std::shared_ptr<FileRequestSenderProxy> FileRequestSender::request_sender_proxy() const
 {
     return sender_proxy_;
 }

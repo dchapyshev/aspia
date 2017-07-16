@@ -27,9 +27,7 @@ public:
 
 private:
     void SwitchToInputDesktop();
-    void SendKeyboardInput(WORD key_code, DWORD flags);
 
-private:
     ScopedThreadDesktop desktop_;
 
     DesktopPoint prev_mouse_pos_;

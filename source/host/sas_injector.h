@@ -28,7 +28,6 @@ private:
     void Worker() override;
     void OnStop() override;
 
-private:
     DISALLOW_COPY_AND_ASSIGN(SasInjector);
 };
 

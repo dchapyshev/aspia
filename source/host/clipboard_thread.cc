@@ -22,7 +22,8 @@ void ClipboardThread::Start(Clipboard::ClipboardEventCallback event_callback)
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
-void ClipboardThread::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
+void ClipboardThread::InjectClipboardEvent(
+    std::shared_ptr<proto::ClipboardEvent> clipboard_event)
 {
     if (!runner_->BelongsToCurrentThread())
     {

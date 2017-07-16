@@ -57,7 +57,7 @@ private:
     void OnNetworkChannelConnect() override;
 
     // UiStatusDialog::Delegate implementation.
-    void OnStatusDialogOpen();
+    void OnStatusDialogOpen() override;
 
     void CreateSession(proto::SessionType session_type);
     void OpenStatusDialog();

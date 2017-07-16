@@ -21,32 +21,40 @@ public:
     FileRequestSender();
     virtual ~FileRequestSender();
 
-    std::shared_ptr<FileRequestSenderProxy> request_sender_proxy();
+    std::shared_ptr<FileRequestSenderProxy> request_sender_proxy() const;
 
 protected:
-    virtual void SendDriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver) = 0;
+    virtual void SendDriveListRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver) = 0;
 
-    virtual void SendFileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                     const FilePath& path) = 0;
+    virtual void SendFileListRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& path) = 0;
 
-    virtual void SendCreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                            const FilePath& path) = 0;
+    virtual void SendCreateDirectoryRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& path) = 0;
 
-    virtual void SendDirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                          const FilePath& path) = 0;
+    virtual void SendDirectorySizeRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& path) = 0;
 
-    virtual void SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                   const FilePath& path) = 0;
+    virtual void SendRemoveRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& path) = 0;
 
-    virtual void SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                   const FilePath& old_name,
-                                   const FilePath& new_name) = 0;
+    virtual void SendRenameRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& old_name,
+        const FilePath& new_name) = 0;
 
-    virtual void SendFileUploadRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                       const FilePath& file_path) = 0;
+    virtual void SendFileUploadRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& file_path) = 0;
 
-    virtual void SendFileUploadDataRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                           std::unique_ptr<proto::FilePacket> file_packet) = 0;
+    virtual void SendFileUploadDataRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        std::unique_ptr<proto::FilePacket> file_packet) = 0;
 
 private:
     friend class FileRequestSenderProxy;

@@ -21,13 +21,14 @@ class HostSessionPower :
 public:
     ~HostSessionPower();
 
-    static std::unique_ptr<HostSessionPower> Create(HostSession::Delegate* delegate);
+    static std::unique_ptr<HostSessionPower> Create(
+        HostSession::Delegate* delegate);
 
     // HostSession implementation.
     void Send(const IOBuffer& buffer) override;
 
 private:
-    HostSessionPower(HostSession::Delegate* delegate);
+    explicit HostSessionPower(HostSession::Delegate* delegate);
 
     // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;

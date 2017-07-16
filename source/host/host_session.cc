@@ -10,7 +10,8 @@
 
 namespace aspia {
 
-HostSession::HostSession(Delegate* delegate) : delegate_(delegate)
+HostSession::HostSession(Delegate* delegate)
+    : delegate_(delegate)
 {
     DCHECK(delegate_);
     session_proxy_.reset(new HostSessionProxy(this));

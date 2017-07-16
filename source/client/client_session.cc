@@ -24,7 +24,7 @@ ClientSession::~ClientSession()
     session_proxy_ = nullptr;
 }
 
-std::shared_ptr<ClientSessionProxy> ClientSession::client_session_proxy()
+std::shared_ptr<ClientSessionProxy> ClientSession::client_session_proxy() const
 {
     return session_proxy_;
 }

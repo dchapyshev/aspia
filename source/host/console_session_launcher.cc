@@ -300,23 +300,20 @@ bool LaunchDesktopSession(uint32_t session_id,
                                               input_channel_id,
                                               output_channel_id);
     }
-    else
+
+    if (!IsRunningAsService())
     {
-        if (!IsRunningAsService())
-        {
-            return LaunchProcessOverService(session_id,
-                                            input_channel_id,
-                                            output_channel_id);
-        }
-        else // The code is executed from the service.
-        {
-            // Start the process directly.
-            return LaunchProcessInSession(kDesktopSessionSwitch,
-                                          session_id,
-                                          input_channel_id,
-                                          output_channel_id);
-        }
+        return LaunchProcessOverService(session_id,
+                                        input_channel_id,
+                                        output_channel_id);
     }
+
+    // The code is executed from the service.
+    // Start the process directly.
+    return LaunchProcessInSession(kDesktopSessionSwitch,
+                                  session_id,
+                                  input_channel_id,
+                                  output_channel_id);
 }
 
 bool LaunchFileTransferSession(uint32_t session_id,
