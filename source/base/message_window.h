@@ -32,10 +32,10 @@ public:
     // |message_callback|. |message_callback| must outlive |this|.
     bool Create(MessageCallback message_callback);
 
-    HWND hwnd();
+    HWND hwnd() const;
 
 private:
-    bool RegisterWindowClass(HINSTANCE instance);
+    static bool RegisterWindowClass(HINSTANCE instance);
     static LRESULT CALLBACK WindowProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
 
     MessageCallback message_callback_;

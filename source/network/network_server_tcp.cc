@@ -59,7 +59,6 @@ void NetworkServerTcp::AddFirewallRule()
         if (!firewall_manager_->AddTCPRule(kRuleName, kRuleDesc, port_))
         {
             firewall_manager_.reset();
-            return;
         }
     }
     else
@@ -75,7 +74,6 @@ void NetworkServerTcp::AddFirewallRule()
         if (!firewall_manager_legacy_->SetAllowIncomingConnection(true))
         {
             firewall_manager_legacy_.reset();
-            return;
         }
     }
 }

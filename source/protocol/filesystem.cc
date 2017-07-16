@@ -136,13 +136,9 @@ proto::RequestStatus ExecuteCreateDirectoryRequest(const FilePath& path)
     if (!fs::create_directory(path, code))
     {
         if (fs::exists(path, code))
-        {
             return proto::REQUEST_STATUS_PATH_ALREADY_EXISTS;
-        }
-        else
-        {
-            return proto::REQUEST_STATUS_ACCESS_DENIED;
-        }
+
+        return proto::REQUEST_STATUS_ACCESS_DENIED;
     }
 
     return proto::REQUEST_STATUS_SUCCESS;
@@ -201,16 +197,10 @@ proto::RequestStatus ExecuteRemoveRequest(const FilePath& path)
     std::error_code code;
 
     if (!fs::exists(path, code))
-    {
         return proto::REQUEST_STATUS_PATH_NOT_FOUND;
-    }
-    else
-    {
-        if (!fs::remove(path, code))
-        {
-            return proto::REQUEST_STATUS_ACCESS_DENIED;
-        }
-    }
+
+    if (!fs::remove(path, code))
+        return proto::REQUEST_STATUS_ACCESS_DENIED;
 
     return proto::REQUEST_STATUS_SUCCESS;
 }

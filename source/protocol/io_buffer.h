@@ -27,7 +27,7 @@ public:
 
     IOBuffer() = default;
 
-    IOBuffer(IOBuffer&& other)
+    IOBuffer(IOBuffer&& other) noexcept
     {
         data_ = std::move(other.data_);
         data_size_ = other.data_size_;
@@ -40,7 +40,7 @@ public:
     size_t size() const { return data_size_; }
     bool IsEmpty() const { return data_ == nullptr || data_size_ == 0; }
 
-    IOBuffer& operator=(IOBuffer&& other)
+    IOBuffer& operator=(IOBuffer&& other) noexcept
     {
         data_ = std::move(other.data_);
         data_size_ = other.data_size_;

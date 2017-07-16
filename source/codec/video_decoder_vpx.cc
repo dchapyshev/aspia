@@ -58,9 +58,9 @@ VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
     CHECK_EQ(VPX_CODEC_OK, ret);
 }
 
-bool VideoDecoderVPX::ConvertImage(const proto::VideoPacket& packet,
-                                   vpx_image_t* image,
-                                   DesktopFrame* frame)
+static bool ConvertImage(const proto::VideoPacket& packet,
+                         vpx_image_t* image,
+                         DesktopFrame* frame)
 {
     DesktopRect frame_rect(DesktopRect::MakeSize(frame->Size()));
 

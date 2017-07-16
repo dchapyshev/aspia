@@ -26,7 +26,6 @@ public:
 private:
     bool DecompressCursor(const proto::CursorShape& cursor_shape, uint8_t* image);
 
-private:
     std::unique_ptr<MouseCursorCache> cache_;
     DecompressorZLIB decompressor_;
 

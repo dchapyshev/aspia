@@ -63,7 +63,7 @@ bool MessageWindow::Create(MessageCallback message_callback)
     return true;
 }
 
-HWND MessageWindow::hwnd()
+HWND MessageWindow::hwnd() const
 {
     return hwnd_;
 }
@@ -119,6 +119,7 @@ LRESULT CALLBACK MessageWindow::WindowProc(HWND window, UINT msg, WPARAM wParam,
     return DefWindowProcW(window, msg, wParam, lParam);
 }
 
+// static
 bool MessageWindow::RegisterWindowClass(HINSTANCE instance)
 {
     if (_class_registered)

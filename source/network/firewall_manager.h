@@ -26,7 +26,7 @@ public:
     bool Init(const std::wstring& app_name, const std::wstring& app_path);
 
     // Returns true if firewall is enabled.
-    bool IsFirewallEnabled();
+    bool IsFirewallEnabled() const;
 
     // Adds a firewall rule allowing inbound connections to the application on TCP
     // port |port|. Replaces the rule if it already exists. Needs elevation.

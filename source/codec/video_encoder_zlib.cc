@@ -11,19 +11,22 @@
 
 namespace aspia {
 
-VideoEncoderZLIB::VideoEncoderZLIB(const PixelFormat& format, int compression_ratio) :
-    format_(format),
-    compressor_(compression_ratio),
-    translator_(format)
+VideoEncoderZLIB::VideoEncoderZLIB(const PixelFormat& format,
+                                   int compression_ratio)
+    : format_(format),
+      compressor_(compression_ratio),
+      translator_(format)
 {
     // Nothing
 }
 
 // static
-std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(const PixelFormat& format,
-                                                           int compression_ratio)
+std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(
+    const PixelFormat& format,
+    int compression_ratio)
 {
-    if (compression_ratio < Z_BEST_SPEED || compression_ratio > Z_BEST_COMPRESSION)
+    if (compression_ratio < Z_BEST_SPEED ||
+        compression_ratio > Z_BEST_COMPRESSION)
     {
         LOG(ERROR) << "Wrong compression ratio: " << compression_ratio;
         return nullptr;
@@ -42,7 +45,8 @@ std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(const PixelFormat& fo
             return nullptr;
     }
 
-    return std::unique_ptr<VideoEncoderZLIB>(new VideoEncoderZLIB(format, compression_ratio));
+    return std::unique_ptr<VideoEncoderZLIB>(
+        new VideoEncoderZLIB(format, compression_ratio));
 }
 
 // Retrieves a pointer to the output buffer in |update| used for storing the
@@ -55,7 +59,8 @@ static uint8_t* GetOutputBuffer(proto::VideoPacket* packet, size_t size)
         reinterpret_cast<const uint8_t*>(packet->mutable_data()->data()));
 }
 
-void VideoEncoderZLIB::CompressPacket(proto::VideoPacket* packet, size_t source_data_size)
+void VideoEncoderZLIB::CompressPacket(proto::VideoPacket* packet,
+                                      size_t source_data_size)
 {
     compressor_.Reset();
 
@@ -72,9 +77,10 @@ void VideoEncoderZLIB::CompressPacket(proto::VideoPacket* packet, size_t source_
         int consumed = 0; // Number of bytes that was taken from the source buffer.
         int written = 0;  // Number of bytes that were written to the destination buffer.
 
-        compress_again = compressor_.Process(translate_buffer_.get() + pos, source_data_size - pos,
-                                             compress_pos + filled, packet_size - filled,
-                                             Compressor::CompressorFinish, &consumed, &written);
+        compress_again = compressor_.Process(
+            translate_buffer_.get() + pos, source_data_size - pos,
+            compress_pos + filled, packet_size - filled,
+            Compressor::CompressorFinish, &consumed, &written);
 
         pos += consumed;
         filled += written;
@@ -88,16 +94,21 @@ void VideoEncoderZLIB::CompressPacket(proto::VideoPacket* packet, size_t source_
     }
 }
 
-std::unique_ptr<proto::VideoPacket> VideoEncoderZLIB::Encode(const DesktopFrame* frame)
+std::unique_ptr<proto::VideoPacket> VideoEncoderZLIB::Encode(
+    const DesktopFrame* frame)
 {
-    std::unique_ptr<proto::VideoPacket> packet(CreateVideoPacket(proto::VIDEO_ENCODING_ZLIB));
+    std::unique_ptr<proto::VideoPacket> packet(
+        CreateVideoPacket(proto::VIDEO_ENCODING_ZLIB));
 
     if (!screen_size_.IsEqual(frame->Size()))
     {
         screen_size_ = frame->Size();
 
-        ConvertToVideoSize(screen_size_, packet->mutable_format()->mutable_screen_size());
-        ConvertToVideoPixelFormat(format_, packet->mutable_format()->mutable_pixel_format());
+        ConvertToVideoSize(screen_size_,
+                           packet->mutable_format()->mutable_screen_size());
+
+        ConvertToVideoPixelFormat(format_,
+                                  packet->mutable_format()->mutable_pixel_format());
     }
 
     size_t data_size = 0;

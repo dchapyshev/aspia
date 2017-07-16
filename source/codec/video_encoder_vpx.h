@@ -44,13 +44,11 @@ private:
 
     void CreateImage();
     void CreateActiveMap();
-    void SetCommonCodecParameters(vpx_codec_enc_cfg_t* config);
     void CreateVp8Codec();
     void CreateVp9Codec();
     void PrepareImageAndActiveMap(const DesktopFrame* frame, proto::VideoPacket* packet);
     void SetActiveMap(const DesktopRect& rect);
 
-private:
     const proto::VideoEncoding encoding_;
 
     // The current frame size.

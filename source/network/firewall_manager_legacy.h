@@ -30,7 +30,7 @@ public:
     bool Init(const std::wstring& app_name, const std::wstring& app_path);
 
     // Returns true if firewall is enabled.
-    bool IsFirewallEnabled();
+    bool IsFirewallEnabled() const;
 
     // Returns true if function can read rule for the current app. Sets |value|
     // true, if rule allows incoming connections, or false otherwise.

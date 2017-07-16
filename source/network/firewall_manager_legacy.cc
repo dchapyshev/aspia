@@ -43,7 +43,7 @@ bool FirewallManagerLegacy::Init(const std::wstring& app_name, const std::wstrin
     return true;
 }
 
-bool FirewallManagerLegacy::IsFirewallEnabled()
+bool FirewallManagerLegacy::IsFirewallEnabled() const
 {
     VARIANT_BOOL is_enabled = VARIANT_TRUE;
     HRESULT hr = current_profile_->get_FirewallEnabled(&is_enabled);

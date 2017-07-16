@@ -17,7 +17,7 @@ namespace aspia {
 class PixelTranslator
 {
 public:
-    PixelTranslator(const PixelFormat& format);
+    explicit PixelTranslator(const PixelFormat& format);
     ~PixelTranslator() = default;
 
     void Translate(const uint8_t* src,

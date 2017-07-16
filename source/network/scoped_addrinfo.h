@@ -25,7 +25,7 @@ public:
         // Nothing
     }
 
-    ScopedAddrInfo(ScopedAddrInfo&& other)
+    ScopedAddrInfo(ScopedAddrInfo&& other) noexcept
     {
         ptr_ = other.ptr_;
         other.ptr_ = nullptr;
@@ -36,7 +36,7 @@ public:
         Close();
     }
 
-    ADDRINFOW* Get()
+    ADDRINFOW* Get() const
     {
         return ptr_;
     }
@@ -71,7 +71,7 @@ public:
         return *this;
     }
 
-    ScopedAddrInfo& operator=(ScopedAddrInfo&& other)
+    ScopedAddrInfo& operator=(ScopedAddrInfo&& other) noexcept
     {
         Close();
         ptr_ = other.ptr_;
@@ -79,7 +79,7 @@ public:
         return *this;
     }
 
-    operator ADDRINFOW*()
+    operator ADDRINFOW*() const
     {
         return ptr_;
     }

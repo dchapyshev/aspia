@@ -63,7 +63,7 @@ private:
 #ifndef NDEBUG
         thread_id_ = GetCurrentThreadId();
 #endif
-        hr_ = CoInitializeEx(NULL, init);
+        hr_ = CoInitializeEx(nullptr, init);
 #ifndef NDEBUG
         if (hr_ == S_FALSE)
             LOG(ERROR) << "Multiple CoInitialize() calls for thread " << thread_id_;

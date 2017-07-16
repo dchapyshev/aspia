@@ -42,7 +42,7 @@ bool FirewallManager::Init(const std::wstring& app_name, const std::wstring& app
     return true;
 }
 
-bool FirewallManager::IsFirewallEnabled()
+bool FirewallManager::IsFirewallEnabled() const
 {
     long profile_types = 0;
 

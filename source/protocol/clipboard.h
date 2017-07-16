@@ -36,7 +36,7 @@ private:
     // Handles messages received by |window_|.
     bool OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result);
 
-    bool HaveClipboardListenerApi();
+    bool HaveClipboardListenerApi() const;
     void OnClipboardUpdate();
 
     typedef BOOL(WINAPI AddClipboardFormatListenerFn)(HWND);

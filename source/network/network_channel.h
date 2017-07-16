@@ -44,7 +44,7 @@ public:
 
     void StartListening(Listener* listener);
 
-    std::shared_ptr<NetworkChannelProxy> network_channel_proxy()
+    std::shared_ptr<NetworkChannelProxy> network_channel_proxy() const
     {
         return proxy_;
     }

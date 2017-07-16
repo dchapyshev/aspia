@@ -38,13 +38,8 @@ public:
     bool Decode(const proto::VideoPacket& packet, DesktopFrame* frame) override;
 
 private:
-    VideoDecoderVPX(proto::VideoEncoding encoding);
+    explicit VideoDecoderVPX(proto::VideoEncoding encoding);
 
-    bool ConvertImage(const proto::VideoPacket& packet,
-                      vpx_image_t* image,
-                      DesktopFrame* frame);
-
-private:
     ScopedVpxCodec codec_;
 
     DISALLOW_COPY_AND_ASSIGN(VideoDecoderVPX);

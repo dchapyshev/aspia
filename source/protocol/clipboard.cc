@@ -92,7 +92,7 @@ void Clipboard::Stop()
     }
 }
 
-bool Clipboard::HaveClipboardListenerApi()
+bool Clipboard::HaveClipboardListenerApi() const
 {
     return add_clipboard_format_listener_ && remove_clipboard_format_listener_;
 }

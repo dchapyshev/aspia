@@ -40,8 +40,8 @@ std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::CreateVP9()
         new VideoEncoderVPX(proto::VideoEncoding::VIDEO_ENCODING_VP9));
 }
 
-VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding) :
-    encoding_(encoding)
+VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
+    : encoding_(encoding)
 {
     memset(&active_map_, 0, sizeof(active_map_));
     memset(&image_, 0, sizeof(image_));
@@ -116,14 +116,15 @@ void VideoEncoderVPX::CreateActiveMap()
     active_map_.active_map = active_map_buffer_.get();
 }
 
-void VideoEncoderVPX::SetCommonCodecParameters(vpx_codec_enc_cfg_t* config)
+static void SetCommonCodecParameters(vpx_codec_enc_cfg_t* config,
+                                     const DesktopSize& size)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
     config->g_timebase.den = 1000;
 
-    config->g_w = screen_size_.Width();
-    config->g_h = screen_size_.Height();
+    config->g_w = size.Width();
+    config->g_h = size.Height();
     config->g_pass = VPX_RC_ONE_PASS;
 
     // Start emitting packets immediately.
@@ -160,7 +161,7 @@ void VideoEncoderVPX::CreateVp8Codec()
     config.rc_target_bitrate = screen_size_.Width() * screen_size_.Height() *
         config.rc_target_bitrate / config.g_w / config.g_h;
 
-    SetCommonCodecParameters(&config);
+    SetCommonCodecParameters(&config, screen_size_);
 
     //
     // Value of 2 means using the real time profile. This is basically a
@@ -203,7 +204,7 @@ void VideoEncoderVPX::CreateVp9Codec()
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config, 0);
     DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to fetch default configuration";
 
-    SetCommonCodecParameters(&config);
+    SetCommonCodecParameters(&config, screen_size_);
 
     // Configure VP9 for I444 source frames.
     config.g_profile = kVp9I444ProfileNumber;
