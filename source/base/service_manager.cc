@@ -37,7 +37,7 @@ ServiceManager::ServiceManager(const std::wstring& service_short_name) :
     }
 }
 
-ServiceManager::ServiceManager(ServiceManager&& other)
+ServiceManager::ServiceManager(ServiceManager&& other) noexcept
 {
     sc_manager_.Reset(other.sc_manager_.Release());
     service_.Reset(other.service_.Release());
@@ -224,7 +224,7 @@ bool ServiceManager::Remove()
     return true;
 }
 
-ServiceManager& ServiceManager::operator=(ServiceManager&& other)
+ServiceManager& ServiceManager::operator=(ServiceManager&& other) noexcept
 {
     service_.Reset(other.service_.Release());
     sc_manager_.Reset(other.sc_manager_.Release());

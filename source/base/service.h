@@ -55,7 +55,6 @@ private:
 
     void SetStatus(DWORD state);
 
-private:
     std::wstring service_name_;
     std::atomic_bool terminating_;
 

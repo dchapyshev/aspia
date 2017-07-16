@@ -28,14 +28,14 @@ public:
         // Nothing
     }
 
-    SecureIOBuffer(SecureIOBuffer&& other) :
-        IOBuffer(std::move(other))
+    SecureIOBuffer(SecureIOBuffer&& other) noexcept
+        : IOBuffer(std::move(other))
     {
         // Nothing
     }
 
-    SecureIOBuffer(IOBuffer&& other) :
-        IOBuffer(std::move(other))
+    explicit SecureIOBuffer(IOBuffer&& other) noexcept
+        : IOBuffer(std::move(other))
     {
         // Nothing
     }

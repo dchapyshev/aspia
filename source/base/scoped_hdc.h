@@ -43,7 +43,7 @@ public:
             ReleaseDC(hwnd_, hdc_);
     }
 
-    operator HDC() { return hdc_; }
+    operator HDC() const { return hdc_; }
 
 private:
     HWND hwnd_;

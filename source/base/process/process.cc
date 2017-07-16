@@ -22,7 +22,7 @@ Process::Process(ProcessHandle process_handle) :
     // Nothing
 }
 
-Process::Process(Process&& other)
+Process::Process(Process&& other) noexcept
 {
     process_handle_ = other.process_handle_;
     other.process_handle_ = kNullProcessHandle;
@@ -75,7 +75,7 @@ bool Process::IsCurrent() const
     return process_handle_ == GetCurrentProcess();
 }
 
-Process::Priority Process::GetPriority()
+Process::Priority Process::GetPriority() const
 {
     return static_cast<Priority>(GetPriorityClass(Handle()));
 }
@@ -141,7 +141,7 @@ bool Process::WaitForExitWithTimeout(uint32_t timeout_ms, int* exit_code) const
     return true;
 }
 
-Process& Process::operator=(Process&& other)
+Process& Process::operator=(Process&& other) noexcept
 {
     Close();
 

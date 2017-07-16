@@ -43,8 +43,8 @@ protected:
     void PostTask(Task::Callback callback);
     Task::Callback QuitClosure();
 
-    MessagePumpWin* pump_win();
-    std::shared_ptr<MessageLoopProxy> message_loop_proxy() { return proxy_; }
+    MessagePumpWin* pump_win() const;
+    std::shared_ptr<MessageLoopProxy> message_loop_proxy() const { return proxy_; }
 
     // Runs the specified PendingTask.
     void RunTask(const Task& pending_task);
@@ -65,7 +65,7 @@ protected:
     void DeletePendingTasks();
 
     // MessagePump::Delegate methods:
-    virtual bool DoWork() override;
+    bool DoWork() override;
 
     const Type type_;
 
@@ -93,13 +93,13 @@ private:
 class MessageLoopForUI : public MessageLoop
 {
 public:
-    MessageLoopForUI() : MessageLoop(MessageLoop::TYPE_UI) { }
+    MessageLoopForUI() : MessageLoop(TYPE_UI) { }
 
     // Returns the MessageLoopUI of the current thread.
     static MessageLoopForUI* Current();
 
 protected:
-    MessagePumpForUI* pump_ui();
+    MessagePumpForUI* pump_ui() const;
 };
 
 class MessageLoopForIO : public MessageLoop
@@ -108,7 +108,7 @@ public:
     using IOHandler = MessagePumpForIO::IOHandler;
     using IOContext = MessagePumpForIO::IOContext;
 
-    MessageLoopForIO() : MessageLoop(MessageLoop::TYPE_IO) { }
+    MessageLoopForIO() : MessageLoop(TYPE_IO) { }
 
     // Returns the MessageLoopIO of the current thread.
     static MessageLoopForIO* Current();
@@ -118,7 +118,7 @@ public:
     bool WaitForIOCompletion(DWORD timeout, IOHandler* filter);
 
 protected:
-    MessagePumpForIO* pump_io();
+    MessagePumpForIO* pump_io() const;
 };
 
 } // namespace aspia

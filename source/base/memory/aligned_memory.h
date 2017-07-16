@@ -52,7 +52,7 @@ inline void AlignedFree(void* ptr)
 //   std::unique_ptr<Foo, base::AlignedFreeDeleter> foo;
 struct AlignedFreeDeleter
 {
-    inline void operator()(void* ptr) const
+    void operator()(void* ptr) const
     {
         AlignedFree(ptr);
     }

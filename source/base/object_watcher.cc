@@ -6,7 +6,6 @@
 //
 
 #include "base/object_watcher.h"
-
 #include "base/logging.h"
 
 namespace aspia {

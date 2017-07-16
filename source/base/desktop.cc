@@ -10,7 +10,7 @@
 
 namespace aspia {
 
-Desktop::Desktop(Desktop&& other)
+Desktop::Desktop(Desktop&& other) noexcept
 {
     desktop_ = other.desktop_;
     own_ = other.own_;
@@ -135,7 +135,7 @@ void Desktop::Close()
     desktop_ = nullptr;
 }
 
-Desktop& Desktop::operator=(Desktop&& other)
+Desktop& Desktop::operator=(Desktop&& other) noexcept
 {
     Close();
 

@@ -18,7 +18,7 @@ class ScopedLocal
 public:
     ScopedLocal() = default;
 
-    ScopedLocal(ScopedLocal&& other)
+    ScopedLocal(ScopedLocal&& other) noexcept
     {
         local_ = other.local_;
         other.local_ = nullptr;
@@ -74,7 +74,7 @@ public:
         return *this;
     }
 
-    ScopedLocal& operator=(ScopedLocal&& other)
+    ScopedLocal& operator=(ScopedLocal&& other) noexcept
     {
         Close();
         local_ = other.local_;

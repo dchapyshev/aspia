@@ -22,7 +22,7 @@ ScopedThreadDesktop::~ScopedThreadDesktop()
     Revert();
 }
 
-bool ScopedThreadDesktop::IsSame(const Desktop& desktop)
+bool ScopedThreadDesktop::IsSame(const Desktop& desktop) const
 {
     if (assigned_.IsValid())
     {

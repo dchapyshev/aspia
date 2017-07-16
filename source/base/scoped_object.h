@@ -23,7 +23,7 @@ public:
         // Nothing
     }
 
-    ScopedObject(ScopedObject&& other)
+    ScopedObject(ScopedObject&& other) noexcept
     {
         object_ = other.object_;
         other.object_ = nullptr;
@@ -69,7 +69,7 @@ public:
         return *this;
     }
 
-    ScopedObject& operator=(ScopedObject&& other)
+    ScopedObject& operator=(ScopedObject&& other) noexcept
     {
         Traits::Close(object_);
         object_ = other.object_;

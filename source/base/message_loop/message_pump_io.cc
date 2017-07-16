@@ -120,8 +120,7 @@ bool MessagePumpForIO::MatchCompletedIOItem(IOHandler* filter, IOItem* item)
 {
     DCHECK(!completed_io_.empty());
 
-    for (std::list<IOItem>::iterator it = completed_io_.begin();
-         it != completed_io_.end(); ++it)
+    for (auto it = completed_io_.begin(); it != completed_io_.end(); ++it)
     {
         if (!filter || it->handler == filter)
         {

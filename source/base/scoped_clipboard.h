@@ -27,7 +27,7 @@ public:
     // copy the clipboard data, and unlock the handle. All this must be done
     // before this ScopedClipboard is destroyed.
     //
-    HANDLE GetData(UINT format);
+    HANDLE GetData(UINT format) const;
 
 private:
     bool opened_ = false;

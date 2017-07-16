@@ -12,8 +12,8 @@
 
 namespace aspia {
 
-Encryptor::Encryptor(Mode mode) :
-    mode_(mode)
+Encryptor::Encryptor(Mode mode)
+    : mode_(mode)
 {
     if (sodium_init() == -1)
     {

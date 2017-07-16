@@ -71,8 +71,7 @@ bool HostUserList::IsValidUser(const proto::HostUser& user)
 bool HostUserList::CreatePasswordHash(const std::string& password,
                                       std::string& password_hash)
 {
-    SecureString<std::wstring> password_unicode =
-        UNICODEfromUTF8(password);
+    SecureString<std::wstring> password_unicode(UNICODEfromUTF8(password));
 
     if (!IsValidPassword(password_unicode))
         return false;
@@ -216,7 +215,7 @@ bool HostUserList::SaveToStorage()
         return false;
     }
 
-    SecureString<std::string> string = list_.SerializeAsString();
+    SecureString<std::string> string(list_.SerializeAsString());
 
     file_stream.write(string.c_str(), string.size());
     if (file_stream.fail())

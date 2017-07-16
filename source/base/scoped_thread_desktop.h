@@ -25,7 +25,7 @@ public:
     // Returns false in any other case including failing Win32 APIs and
     // uninitialized desktop handles.
     //
-    bool IsSame(const Desktop& desktop);
+    bool IsSame(const Desktop& desktop) const;
 
     // Reverts the calling thread to use the initial desktop.
     void Revert();

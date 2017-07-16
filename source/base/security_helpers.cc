@@ -17,12 +17,12 @@
 
 namespace aspia {
 
-bool MakeScopedAbsoluteSd(const ScopedSd& relative_sd,
-                          ScopedSd* absolute_sd,
-                          ScopedAcl* dacl,
-                          ScopedSid* group,
-                          ScopedSid* owner,
-                          ScopedAcl* sacl)
+static bool MakeScopedAbsoluteSd(const ScopedSd& relative_sd,
+                                 ScopedSd& absolute_sd,
+                                 ScopedAcl& dacl,
+                                 ScopedSid& group,
+                                 ScopedSid& owner,
+                                 ScopedAcl& sacl)
 {
     // Get buffer sizes.
     DWORD absolute_sd_size = 0;
@@ -72,11 +72,11 @@ bool MakeScopedAbsoluteSd(const ScopedSd& relative_sd,
         return false;
     }
 
-    absolute_sd->Swap(local_absolute_sd);
-    dacl->Swap(local_dacl);
-    group->Swap(local_group);
-    owner->Swap(local_owner);
-    sacl->Swap(local_sacl);
+    absolute_sd.Swap(local_absolute_sd);
+    dacl.Swap(local_dacl);
+    group.Swap(local_group);
+    owner.Swap(local_owner);
+    sacl.Swap(local_sacl);
 
     return true;
 }
@@ -101,7 +101,7 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
     ScopedSid owner;
     ScopedAcl sacl;
 
-    if (!MakeScopedAbsoluteSd(relative_sd, &absolute_sd, &dacl, &group, &owner, &sacl))
+    if (!MakeScopedAbsoluteSd(relative_sd, absolute_sd, dacl, group, owner, sacl))
     {
         LOG(ERROR) << "MakeScopedAbsoluteSd() failed";
         return false;

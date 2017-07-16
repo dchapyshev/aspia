@@ -26,7 +26,7 @@ public:
         // Nothing
     }
 
-    ~Task() {}
+    ~Task() = default;
 
     // The task to run.
     Callback callback;

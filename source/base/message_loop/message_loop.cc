@@ -90,7 +90,7 @@ void MessageLoop::PostTask(Task::Callback callback)
     AddToIncomingQueue(&pending_task);
 }
 
-MessagePumpWin* MessageLoop::pump_win()
+MessagePumpWin* MessageLoop::pump_win() const
 {
     return static_cast<MessagePumpWin*>(pump_.get());
 }
@@ -187,7 +187,7 @@ MessageLoopForUI* MessageLoopForUI::Current()
     return static_cast<MessageLoopForUI*>(loop);
 }
 
-MessagePumpForUI* MessageLoopForUI::pump_ui()
+MessagePumpForUI* MessageLoopForUI::pump_ui() const
 {
     return static_cast<MessagePumpForUI*>(pump_.get());
 }
@@ -215,7 +215,7 @@ bool MessageLoopForIO::WaitForIOCompletion(DWORD timeout, IOHandler* filter)
     return pump_io()->WaitForIOCompletion(timeout, filter);
 }
 
-MessagePumpForIO* MessageLoopForIO::pump_io()
+MessagePumpForIO* MessageLoopForIO::pump_io() const
 {
     return static_cast<MessagePumpForIO*>(pump_.get());
 }

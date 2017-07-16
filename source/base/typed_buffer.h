@@ -33,7 +33,8 @@ public:
             buffer_ = reinterpret_cast<T*>(new uint8_t[length_]);
     }
 
-    TypedBuffer(TypedBuffer&& rvalue) : TypedBuffer()
+    TypedBuffer(TypedBuffer&& rvalue) noexcept
+        : TypedBuffer()
     {
         Swap(rvalue);
     }
@@ -47,7 +48,7 @@ public:
         }
     }
 
-    TypedBuffer& operator=(TypedBuffer&& rvalue)
+    TypedBuffer& operator=(TypedBuffer&& rvalue) noexcept
     {
         Swap(rvalue);
         return *this;

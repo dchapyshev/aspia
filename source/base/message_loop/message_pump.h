@@ -16,12 +16,12 @@ public:
     class Delegate
     {
     public:
-        virtual ~Delegate() { }
+        virtual ~Delegate() = default;
 
         virtual bool DoWork() = 0;
     };
 
-    virtual ~MessagePump() { }
+    virtual ~MessagePump() = default;
 
     virtual void Run(Delegate* delegate) = 0;
     virtual void Quit() = 0;

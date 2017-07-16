@@ -25,7 +25,7 @@ public:
         // Nothing
     }
 
-    ScopedUserObject(ScopedUserObject&& other)
+    ScopedUserObject(ScopedUserObject&& other) noexcept
     {
         object_ = other.object_;
         other.object_ = nullptr;
@@ -66,7 +66,7 @@ public:
         return object_ != nullptr;
     }
 
-    ScopedUserObject& operator=(ScopedUserObject&& other)
+    ScopedUserObject& operator=(ScopedUserObject&& other) noexcept
     {
         Traits::Close(object_);
         object_ = other.object_;

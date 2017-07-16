@@ -21,7 +21,7 @@ public:
     ~MessagePumpForUI() = default;
 
     // MessagePump methods:
-    virtual void ScheduleWork() override;
+    void ScheduleWork() override;
 
 private:
     bool OnMessage(UINT message, WPARAM wparam, LPARAM lparam, LRESULT& result);

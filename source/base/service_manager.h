@@ -20,18 +20,11 @@ class ServiceManager
 public:
     ServiceManager() = default;
     explicit ServiceManager(const std::wstring& service_short_name);
-    ServiceManager(ServiceManager&& other);
+    ServiceManager(ServiceManager&& other) noexcept;
     ~ServiceManager();
 
-    //
-    // Создает службу в системе и возвращает указатель на экземпляр класса
-    // для управления ей.
-    // Если параметр replace установлен в true и служба с указанным именем
-    // уже существует в системе, то установленная служба будет остановлена
-    // и удалена, а вместо нее создана новая.
-    // Если параметр replace установлен в false, то при наличии службы с
-    // совпадающим именем будет возвращен нулевой указатель.
-    //
+    // Creates a service in the system and returns a pointer to the instance
+    // of the class to manage it.
     static ServiceManager Create(const std::wstring& command_line,
                                  const std::wstring& service_name,
                                  const std::wstring& service_short_name,
@@ -44,32 +37,24 @@ public:
 
     static bool IsServiceInstalled(const std::wstring& service_name);
 
-    //
-    // Проверяет валидность экземпляра класса.
-    // Если экземпляр класса валидный, то возвращается true, если нет, то false.
-    //
+    // Checks the validity of a class instance.
+    // If the class instance is valid, then it returns true, if not, false.
     bool IsValid() const;
 
-    //
-    // Запускает службу.
-    // Если служба успешно запущена, то возвращается true, если нет, то false.
-    //
+    // Starts the service.
+    // If the service is successfully started, it returns true, if not, then false.
     bool Start() const;
 
-    //
-    // Останавливает службу.
-    // Если служба успешно остановлена, то возвращается true, если нет, то false.
-    //
+    // Stops the service.
+    // If the service is successfully stopped, it returns true, if not, then false.
     bool Stop() const;
 
-    //
-    // Удаляет службу из системы.
-    // После вызова метода класс становится невалидным, вызовы других методов
-    // будут возвращаться с ошибкой и метод IsValid() возвратит false.
-    //
+    // Removes the service from the system.
+    // After calling the method, the class becomes invalid, calls to other methods
+    // will return with an error and the IsValid() method returns false.
     bool Remove();
 
-    ServiceManager& operator=(ServiceManager&& other);
+    ServiceManager& operator=(ServiceManager&& other) noexcept;
 
 private:
     ServiceManager(SC_HANDLE sc_manager, SC_HANDLE service);

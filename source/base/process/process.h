@@ -23,7 +23,7 @@ class Process
 {
 public:
     Process() = default;
-    Process(Process&& other);
+    Process(Process&& other) noexcept;
     ~Process() = default;
 
     enum class Priority
@@ -58,7 +58,7 @@ public:
     // Returns true if this process is the current process.
     bool IsCurrent() const;
 
-    Priority GetPriority();
+    Priority GetPriority() const;
     bool SetPriority(Priority priority);
 
     // Get the PID for this process.
@@ -87,7 +87,7 @@ public:
     // Close the process handle. This will not terminate the process.
     void Close();
 
-    Process& operator=(Process&& other);
+    Process& operator=(Process&& other) noexcept;
 
 private:
     explicit Process(ProcessHandle process_handle);

@@ -36,8 +36,8 @@ class SecureString : public StringType
 public:
     SecureString() = default;
 
-    SecureString(StringType&& other) :
-        StringType(std::move(other))
+    explicit SecureString(StringType&& other) noexcept
+      : StringType(std::move(other))
     {
         // Nothing
     }

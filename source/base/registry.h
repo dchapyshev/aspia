@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__REGISTRY_H
 #define _ASPIA_BASE__REGISTRY_H
 
-#include <string>
 #include <vector>
 
 #include "base/macros.h"

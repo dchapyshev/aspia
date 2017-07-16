@@ -6,7 +6,6 @@
 //
 
 #include "base/registry.h"
-
 #include "base/logging.h"
 
 namespace aspia {
@@ -131,7 +130,7 @@ bool RegistryKey::HasValue(const WCHAR* name) const
 {
     return (RegQueryValueExW(key_,
                              name,
-                             0,
+                             nullptr,
                              nullptr,
                              nullptr,
                              nullptr) == ERROR_SUCCESS);
@@ -144,7 +143,7 @@ LONG RegistryKey::ReadValue(const WCHAR* name,
 {
     return RegQueryValueExW(key_,
                             name,
-                            0,
+                            nullptr,
                             dtype,
                             reinterpret_cast<LPBYTE>(data),
                             dsize);
@@ -303,7 +302,7 @@ RegistryValueIterator::~RegistryValueIterator()
 DWORD RegistryValueIterator::ValueCount() const
 {
     DWORD count = 0;
-    LONG result = RegQueryInfoKeyW(key_, nullptr, 0, nullptr, nullptr, nullptr, nullptr,
+    LONG result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
                                    &count, nullptr, nullptr, nullptr, nullptr);
     if (result != ERROR_SUCCESS)
         return 0;
@@ -332,7 +331,7 @@ bool RegistryValueIterator::Read()
         // |value_size_| is in bytes. Reserve the last character for a NUL.
         value_size_ = static_cast<DWORD>((value_.size() - 1) * sizeof(WCHAR));
 
-        LONG result = RegEnumValueW(key_, index_, WriteInto(&name_, name_size), &name_size, NULL, &type_,
+        LONG result = RegEnumValueW(key_, index_, WriteInto(&name_, name_size), &name_size, nullptr, &type_,
                                     reinterpret_cast<BYTE*>(value_.data()), &value_size_);
 
         if (result == ERROR_MORE_DATA)
@@ -351,7 +350,7 @@ bool RegistryValueIterator::Read()
             value_size_ = static_cast<DWORD>((value_.size() - 1) * sizeof(WCHAR));
             name_size = name_size == capacity ? MAX_REGISTRY_NAME_SIZE : capacity;
 
-            result = RegEnumValueW(key_, index_, WriteInto(&name_, name_size), &name_size, NULL, &type_,
+            result = RegEnumValueW(key_, index_, WriteInto(&name_, name_size), &name_size, nullptr, &type_,
                                    reinterpret_cast<BYTE*>(value_.data()), &value_size_);
         }
 
@@ -391,7 +390,7 @@ RegistryKeyIterator::~RegistryKeyIterator()
 DWORD RegistryKeyIterator::SubkeyCount() const
 {
     DWORD count = 0;
-    LONG result = RegQueryInfoKeyW(key_, nullptr, 0, nullptr, &count, nullptr, nullptr,
+    LONG result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, &count, nullptr, nullptr,
                                    nullptr, nullptr, nullptr, nullptr, nullptr);
     if (result != ERROR_SUCCESS)
         return 0;
@@ -438,7 +437,7 @@ void RegistryKeyIterator::Initialize(HKEY root_key, const WCHAR* folder_key, REG
     else
     {
         DWORD count = 0;
-        result = RegQueryInfoKeyW(key_, nullptr, 0, nullptr, &count, nullptr, nullptr, nullptr,
+        result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, &count, nullptr, nullptr, nullptr,
                                   nullptr, nullptr, nullptr, nullptr);
 
         if (result != ERROR_SUCCESS)

@@ -10,7 +10,10 @@
 
 #include <objbase.h>
 
+#ifndef NDEBUG
 #include "base/logging.h"
+#endif
+
 #include "base/macros.h"
 
 namespace aspia {

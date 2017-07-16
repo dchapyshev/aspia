@@ -16,7 +16,7 @@ class Desktop
 {
 public:
     Desktop() = default;
-    Desktop(Desktop&& other);
+    Desktop(Desktop&& other) noexcept;
     ~Desktop();
 
     //
@@ -59,7 +59,7 @@ public:
 
     void Close();
 
-    Desktop& operator=(Desktop&& other);
+    Desktop& operator=(Desktop&& other) noexcept;
 
 private:
     Desktop(HDESK desktop, bool own);

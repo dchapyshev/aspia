@@ -27,7 +27,7 @@ public:
     class IOHandler
     {
     public:
-        virtual ~IOHandler() {}
+        virtual ~IOHandler() = default;
         // This will be called once the pending IO operation associated with
         // |context| completes. |error| is the Win32 error code of the IO operation
         // (ERROR_SUCCESS if there was no error). |bytes_transfered| will be zero
@@ -43,7 +43,7 @@ public:
     };
 
     // MessagePump methods:
-    virtual void ScheduleWork() override;
+    void ScheduleWork() override;
 
     // Register the handler to be used when asynchronous IO for the given file
     // completes. The registration persists as long as |file_handle| is valid, so

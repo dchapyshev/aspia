@@ -81,7 +81,7 @@ void ScopedClipboard::SetData(UINT format, HANDLE mem)
     SetClipboardData(format, mem);
 }
 
-HANDLE ScopedClipboard::GetData(UINT format)
+HANDLE ScopedClipboard::GetData(UINT format) const
 {
     if (!opened_)
     {

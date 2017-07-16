@@ -20,9 +20,9 @@ public:
     ~MessagePumpDefault() = default;
 
     // MessagePump methods:
-    virtual void Run(Delegate* delegate) override;
-    virtual void Quit() override;
-    virtual void ScheduleWork() override;
+    void Run(Delegate* delegate) override;
+    void Quit() override;
+    void ScheduleWork() override;
 
 private:
     // This flag is set to false when Run should return.

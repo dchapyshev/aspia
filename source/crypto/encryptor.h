@@ -26,7 +26,7 @@ class Encryptor
 public:
     enum class Mode { SERVER, CLIENT };
 
-    Encryptor(Mode mode);
+    explicit Encryptor(Mode mode);
     ~Encryptor();
 
     bool ReadHelloMessage(const SecureIOBuffer& message_buffer);
