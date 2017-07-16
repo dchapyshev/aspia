@@ -275,6 +275,9 @@ LRESULT UiVideoWindow::OnTimer(UINT message, WPARAM wparam, LPARAM lparam, BOOL&
             }
         }
         break;
+
+        default:
+            break;
     }
 
     return 0;
@@ -310,6 +313,9 @@ LRESULT UiVideoWindow::OnHScroll(UINT message,
         case SB_THUMBTRACK:
             Scroll(pos - scroll_pos_.x, 0);
             break;
+
+        default:
+            break;
     }
 
     return 0;
@@ -344,6 +350,9 @@ LRESULT UiVideoWindow::OnVScroll(UINT message,
         case SB_THUMBPOSITION:
         case SB_THUMBTRACK:
             Scroll(0, pos - scroll_pos_.y);
+            break;
+
+        default:
             break;
     }
 

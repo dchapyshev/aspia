@@ -8,7 +8,6 @@
 #ifndef _ASPIA_HOST__CONSOLE_SESSION_WATCHER_H
 #define _ASPIA_HOST__CONSOLE_SESSION_WATCHER_H
 
-#include <functional>
 #include <memory>
 
 #include "base/scoped_native_library.h"
@@ -25,6 +24,7 @@ public:
     class Delegate
     {
     public:
+        virtual ~Delegate() = default;
         virtual void OnSessionDetached() = 0;
         virtual void OnSessionAttached(uint32_t session_id) = 0;
     };

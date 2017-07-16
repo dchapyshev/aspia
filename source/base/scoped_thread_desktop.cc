@@ -7,6 +7,8 @@
 
 #include "base/scoped_thread_desktop.h"
 
+#include <utility>
+
 namespace aspia {
 
 ScopedThreadDesktop::ScopedThreadDesktop() :

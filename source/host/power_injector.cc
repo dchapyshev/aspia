@@ -7,9 +7,6 @@
 
 #include "host/power_injector.h"
 #include "base/scoped_privilege.h"
-#include "base/scoped_impersonator.h"
-
-#include <wtsapi32.h>
 
 namespace aspia {
 
@@ -68,7 +65,6 @@ bool InjectPowerEvent(const proto::PowerEvent& event)
             DLOG(WARNING) << "Unknown power control action requested: " << event.action();
             return false;
         }
-        break;
     }
 
     return true;

@@ -10,8 +10,6 @@
 
 #include "base/macros.h"
 
-#include <string>
-
 namespace aspia {
 
 class ScopedNativeLibrary

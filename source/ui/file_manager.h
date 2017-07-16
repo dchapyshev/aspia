@@ -10,7 +10,6 @@
 
 #include "base/message_loop/message_loop_thread.h"
 #include "client/file_request_sender_proxy.h"
-#include "proto/file_transfer_session.pb.h"
 #include "ui/base/splitter.h"
 #include "ui/file_manager_panel.h"
 
@@ -25,6 +24,7 @@ public:
     class Delegate
     {
     public:
+        virtual ~Delegate() = default;
         virtual void OnWindowClose() = 0;
     };
 

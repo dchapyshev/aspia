@@ -7,6 +7,7 @@
 
 #include "client/client_session_power_manage.h"
 #include "protocol/message_serialization.h"
+#include "proto/power_session.pb.h"
 #include "ui/power_manage_dialog.h"
 
 namespace aspia {

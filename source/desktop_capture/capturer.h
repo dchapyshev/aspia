@@ -9,7 +9,6 @@
 #define _ASPIA_DESKTOP_CAPTURE__CAPTURER_H
 
 #include "desktop_capture/desktop_frame.h"
-#include "desktop_capture/desktop_region.h"
 #include "desktop_capture/mouse_cursor.h"
 
 namespace aspia {

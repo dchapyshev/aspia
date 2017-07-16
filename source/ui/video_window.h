@@ -16,7 +16,6 @@
 #include <atlbase.h>
 #include <atlapp.h>
 #include <atlwin.h>
-#include <atlctrls.h>
 #include <atlmisc.h>
 
 namespace aspia {
@@ -27,6 +26,7 @@ public:
     class Delegate
     {
     public:
+        virtual ~Delegate() = default;
         virtual void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) = 0;
     };
 

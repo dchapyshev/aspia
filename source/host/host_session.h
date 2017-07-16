@@ -9,7 +9,6 @@
 #define _ASPIA_HOST__HOST_SESSION_H
 
 #include "protocol/io_buffer.h"
-#include "base/logging.h"
 
 namespace aspia {
 
@@ -21,6 +20,7 @@ public:
     class Delegate
     {
     public:
+        virtual ~Delegate() = default;
         virtual void OnSessionMessage(const IOBuffer& message) = 0;
         virtual void OnSessionTerminate() = 0;
     };

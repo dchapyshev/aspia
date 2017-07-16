@@ -10,7 +10,6 @@
 
 #include <functional>
 #include <queue>
-#include <memory>
 
 #include "base/synchronization/waitable_event.h"
 #include "base/thread.h"

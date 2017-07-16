@@ -8,9 +8,8 @@
 #include "ui/status_dialog.h"
 #include "ui/status_code.h"
 #include "base/logging.h"
-#include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
 
+#include <atlctrls.h>
 #include <chrono>
 #include <clocale>
 #include <ctime>

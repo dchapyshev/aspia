@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_LOOP_H
 #define _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_LOOP_H
 
-#include "base/message_loop/message_pump_default.h"
 #include "base/message_loop/message_pump_ui.h"
 #include "base/message_loop/message_pump_io.h"
 #include "base/message_loop/task.h"

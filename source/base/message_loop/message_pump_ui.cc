@@ -57,6 +57,9 @@ bool MessagePumpForUI::OnMessage(UINT message, WPARAM wparam, LPARAM lparam, LRE
         case kMsgHaveWork:
             HandleWorkMessage();
             break;
+
+        default:
+            break;
     }
 
     return false;

@@ -14,7 +14,6 @@
 #include "protocol/clipboard.h"
 #include "ui/viewer_toolbar.h"
 #include "ui/video_window.h"
-#include "ui/about_dialog.h"
 #include "ui/settings_dialog.h"
 
 namespace aspia {
@@ -28,6 +27,7 @@ public:
     class Delegate
     {
     public:
+        virtual ~Delegate() = default;
         virtual void OnWindowClose() = 0;
         virtual void OnConfigChange(const proto::DesktopSessionConfig& config) = 0;
         virtual void OnKeyEvent(uint32_t keycode, uint32_t flags) = 0;

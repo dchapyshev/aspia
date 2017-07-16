@@ -10,6 +10,8 @@
 #include "codec/video_helpers.h"
 #include "base/strings/string_util.h"
 
+#include <atlmisc.h>
+
 namespace aspia {
 
 enum PixelFormats

@@ -16,7 +16,6 @@
 #include <atlapp.h>
 
 #include <atlwin.h>
-#include <atlmisc.h>
 #include <commctrl.h>
 
 namespace aspia {

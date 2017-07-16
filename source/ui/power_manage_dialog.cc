@@ -8,6 +8,8 @@
 #include "ui/power_manage_dialog.h"
 #include "proto/power_session.pb.h"
 
+#include <atlctrls.h>
+
 namespace aspia {
 
 LRESULT UiPowerManageDialog::OnInitDialog(UINT message,

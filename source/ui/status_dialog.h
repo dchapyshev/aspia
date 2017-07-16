@@ -15,7 +15,6 @@
 #include <atlbase.h>
 #include <atlapp.h>
 #include <atlwin.h>
-#include <atlctrls.h>
 #include <atlframe.h>
 #include <atlmisc.h>
 
@@ -31,6 +30,7 @@ public:
     class Delegate
     {
     public:
+        virtual ~Delegate() = default;
         virtual void OnStatusDialogOpen() = 0;
     };
 

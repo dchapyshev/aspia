@@ -12,8 +12,6 @@
 #include "network/socket.h"
 #include "base/synchronization/waitable_event.h"
 
-#include <winsock2.h>
-
 namespace aspia {
 
 class NetworkChannelTcp : public NetworkChannel

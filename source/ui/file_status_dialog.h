@@ -11,13 +11,11 @@
 #include "base/message_loop/message_loop_thread.h"
 #include "base/files/file_path.h"
 #include "proto/file_transfer_session.pb.h"
-#include "proto/status.pb.h"
 #include "ui/resource.h"
 
 #include <atlbase.h>
 #include <atlapp.h>
 #include <atlwin.h>
-#include <atlctrls.h>
 #include <atlframe.h>
 #include <atlmisc.h>
 

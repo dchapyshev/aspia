@@ -9,7 +9,6 @@
 #define _ASPIA_CODEC__VIDEO_ENCODER_H
 
 #include "desktop_capture/desktop_frame.h"
-#include "desktop_capture/pixel_format.h"
 #include "proto/desktop_session.pb.h"
 
 #include <memory>

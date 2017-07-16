@@ -7,7 +7,6 @@
 
 #include "crypto/sha512.h"
 #include "base/logging.h"
-#include "base/macros.h"
 
 extern "C" {
 #define SODIUM_STATIC

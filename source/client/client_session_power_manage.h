@@ -10,7 +10,6 @@
 
 #include "client/client_session.h"
 #include "base/message_loop/message_loop_thread.h"
-#include "proto/power_session.pb.h"
 
 namespace aspia {
 

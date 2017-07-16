@@ -12,7 +12,6 @@
 #include "base/macros.h"
 
 #include <netfw.h>
-#include <string>
 
 namespace aspia {
 

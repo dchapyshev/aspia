@@ -8,18 +8,12 @@
 #include "host/console_session_launcher.h"
 
 #include <userenv.h>
-#include <wtsapi32.h>
 #include <string>
 
-#include "base/version_helpers.h"
 #include "base/process/process_helpers.h"
-#include "base/process/process.h"
 #include "base/service_manager.h"
 #include "base/scoped_object.h"
-#include "base/scoped_wts_memory.h"
 #include "base/scoped_impersonator.h"
-#include "base/object_watcher.h"
-#include "base/strings/unicode.h"
 #include "base/files/base_paths.h"
 #include "base/logging.h"
 

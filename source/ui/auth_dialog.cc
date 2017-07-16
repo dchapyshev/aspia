@@ -8,8 +8,6 @@
 #include "ui/auth_dialog.h"
 #include "base/strings/unicode.h"
 
-#include <atlctrls.h>
-
 namespace aspia {
 
 LRESULT UiAuthDialog::OnInitDialog(UINT message,

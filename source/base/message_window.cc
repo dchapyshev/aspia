@@ -102,6 +102,9 @@ LRESULT CALLBACK MessageWindow::WindowProc(HWND window, UINT msg, WPARAM wParam,
             CHECK(result != 0 || GetLastError() == ERROR_SUCCESS);
         }
         break;
+
+        default:
+            break;
     }
 
     // Handle the message.

@@ -21,6 +21,8 @@ public:
     class Listener
     {
     public:
+        virtual ~Listener() = default;
+
         // The method is called when the connection is successfully established.
         virtual void OnNetworkChannelConnect() = 0;
 

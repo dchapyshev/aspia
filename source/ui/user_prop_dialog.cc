@@ -10,7 +10,6 @@
 #include "base/version_helpers.h"
 #include "base/logging.h"
 #include "host/host_user_list.h"
-#include "crypto/sha512.h"
 #include "crypto/secure_string.h"
 
 #include <atlmisc.h>

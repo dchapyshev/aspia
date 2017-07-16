@@ -78,9 +78,10 @@ DriveEnumerator::DriveInfo::DriveType DriveEnumerator::DriveInfo::Type() const
 
         case DRIVE_RAMDISK:
             return DriveType::RAM;
-    }
 
-    return DriveType::UNKNOWN;
+        default:
+            return DriveType::UNKNOWN;
+    }
 }
 
 uint64_t DriveEnumerator::DriveInfo::TotalSpace() const

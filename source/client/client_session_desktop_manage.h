@@ -10,7 +10,6 @@
 
 #include "client/client_session_desktop_view.h"
 #include "codec/cursor_decoder.h"
-#include "protocol/clipboard.h"
 
 namespace aspia {
 

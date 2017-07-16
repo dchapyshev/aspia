@@ -26,6 +26,7 @@ public:
     class Delegate
     {
     public:
+        virtual ~Delegate() = default;
         virtual void OnChannelConnected(std::unique_ptr<NetworkChannel> channel) = 0;
     };
 

@@ -23,6 +23,7 @@ public:
     class Delegate
     {
     public:
+        virtual ~Delegate() = default;
         virtual void OnScreenUpdate(const DesktopFrame* screen_frame) = 0;
         virtual void OnCursorUpdate(std::unique_ptr<MouseCursor> mouse_cursor) = 0;
         virtual void OnScreenUpdateError() = 0;

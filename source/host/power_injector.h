@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__POWER_INJECTOR_H
 #define _ASPIA_BASE__POWER_INJECTOR_H
 
-#include "base/scoped_object.h"
 #include "proto/power_session_message.pb.h"
 
 namespace aspia {

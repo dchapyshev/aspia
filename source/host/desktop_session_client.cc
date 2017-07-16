@@ -6,7 +6,6 @@
 //
 
 #include "host/desktop_session_client.h"
-#include "host/power_injector.h"
 #include "codec/video_encoder_zlib.h"
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_helpers.h"

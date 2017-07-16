@@ -25,6 +25,7 @@ public:
     class Delegate
     {
     public:
+        virtual ~Delegate() = default;
         virtual void OnSessionTerminate() = 0;
     };
 

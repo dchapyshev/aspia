@@ -15,7 +15,6 @@
 #include "network/network_channel_proxy.h"
 #include "proto/auth_session.pb.h"
 #include "ui/status_dialog.h"
-#include "ui/auth_dialog.h"
 
 namespace aspia {
 
@@ -29,6 +28,7 @@ public:
     class Delegate
     {
     public:
+        virtual ~Delegate() = default;
         virtual void OnSessionTerminate() = 0;
     };
 

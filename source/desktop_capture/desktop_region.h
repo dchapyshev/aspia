@@ -11,7 +11,6 @@
 #include <map>
 #include <vector>
 
-#include "base/macros.h"
 #include "desktop_capture/desktop_rect.h"
 
 namespace aspia {

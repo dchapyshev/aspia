@@ -142,7 +142,6 @@ bool FileReplyReceiverQueue::ProcessNextReply(proto::file_transfer::HostToClient
             DLOG(FATAL) << "Unknown request type";
             return false;
         }
-        break;
     }
 
     return true;

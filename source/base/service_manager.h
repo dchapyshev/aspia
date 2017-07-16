@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__SERVICE_MANAGER_H
 #define _ASPIA_BASE__SERVICE_MANAGER_H
 
-#include <memory>
 #include <string>
 
 #include "base/macros.h"

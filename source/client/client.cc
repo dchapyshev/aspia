@@ -11,6 +11,7 @@
 #include "client/client_session_power_manage.h"
 #include "crypto/secure_string.h"
 #include "protocol/message_serialization.h"
+#include "ui/auth_dialog.h"
 
 namespace aspia {
 

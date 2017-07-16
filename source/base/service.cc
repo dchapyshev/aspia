@@ -53,7 +53,6 @@ DWORD WINAPI Service::ServiceControlHandler(DWORD control_code,
 
             return NO_ERROR;
         }
-        break;
 
         default:
             return ERROR_CALL_NOT_IMPLEMENTED;

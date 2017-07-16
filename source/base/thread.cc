@@ -6,7 +6,6 @@
 //
 
 #include "base/thread.h"
-#include "base/logging.h"
 
 namespace aspia {
 

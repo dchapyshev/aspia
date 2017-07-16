@@ -10,13 +10,11 @@
 
 #include "base/scoped_object.h"
 #include "base/synchronization/waitable_event.h"
-#include "base/process/process.h"
 #include "base/thread.h"
 #include "base/macros.h"
 #include "protocol/io_buffer.h"
 
 #include <memory>
-#include <string>
 
 namespace aspia {
 
@@ -34,6 +32,7 @@ public:
     class Delegate
     {
     public:
+        virtual ~Delegate() = default;
         virtual void OnPipeChannelMessage(const IOBuffer& buffer) = 0;
         virtual void OnPipeChannelConnect(uint32_t user_data) = 0;
         virtual void OnPipeChannelDisconnect() = 0;

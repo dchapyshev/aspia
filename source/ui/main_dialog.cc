@@ -15,7 +15,6 @@
 #include "base/version_helpers.h"
 #include "base/process/process_helpers.h"
 #include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
 #include "base/scoped_clipboard.h"
 #include "client/client_config.h"
 #include "host/host_service.h"

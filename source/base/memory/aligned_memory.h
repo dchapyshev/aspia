@@ -37,7 +37,6 @@
 #ifndef _ASPIA_BASE__MEMORY__ALIGNED_MEMORY_H
 #define _ASPIA_BASE__MEMORY__ALIGNED_MEMORY_H
 
-#include <cstdint>
 #include <memory>
 
 namespace aspia {

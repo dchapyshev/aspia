@@ -6,6 +6,7 @@
 //
 
 #include "ui/viewer_window.h"
+#include "ui/about_dialog.h"
 #include "ui/power_manage_dialog.h"
 #include "ui/resource.h"
 #include "base/strings/unicode.h"
@@ -248,7 +249,9 @@ static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wparam, LPARAM lparam)
 
                     return TRUE;
                 }
-                break;
+
+                default:
+                    break;
             }
         }
     }
@@ -610,6 +613,9 @@ LRESULT UiViewerWindow::OnKeyButton(WORD notify_code, WORD control_id, HWND cont
             delegate_->OnKeyEvent(VK_CONTROL, 0);
         }
         break;
+
+        default:
+            break;
     }
 
     return 0;

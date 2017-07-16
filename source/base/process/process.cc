@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <string>
 
-#include "base/scoped_impersonator.h"
 #include "base/logging.h"
 
 namespace aspia {

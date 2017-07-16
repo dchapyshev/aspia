@@ -9,7 +9,6 @@
 #include "ui/file_manager_helpers.h"
 #include "ui/resource.h"
 #include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
 #include "base/logging.h"
 
 namespace aspia {

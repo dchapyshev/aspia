@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__PROCESS__PROCESS_H
 #define _ASPIA_BASE__PROCESS__PROCESS_H
 
-#include "base/scoped_object.h"
 #include "base/macros.h"
 
 #include <cstdint>

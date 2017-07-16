@@ -8,12 +8,12 @@
 #include "ui/users_dialog.h"
 #include "ui/user_prop_dialog.h"
 #include "base/process/process_helpers.h"
-#include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
 #include "base/logging.h"
 #include "crypto/secure_string.h"
 
+#include <atlmisc.h>
 #include <uxtheme.h>
 
 namespace aspia {

@@ -11,7 +11,6 @@
 #include "base/version_helpers.h"
 #include "base/files/base_paths.h"
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 #include "base/scoped_native_library.h"
 #include "host/scoped_sas_police.h"
 

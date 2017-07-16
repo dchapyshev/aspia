@@ -21,6 +21,7 @@ public:
     class Delegate
     {
     public:
+        virtual ~Delegate() = default;
         virtual void OnSessionMessageAsync(IOBuffer buffer) = 0;
         virtual void OnSessionMessage(const IOBuffer& buffer) = 0;
         virtual void OnSessionTerminate() = 0;

@@ -8,8 +8,6 @@
 #ifndef _ASPIA_BASE__SCOPED_THREAD_DESKTOP_H
 #define _ASPIA_BASE__SCOPED_THREAD_DESKTOP_H
 
-#include <memory>
-
 #include "base/macros.h"
 #include "base/desktop.h"
 

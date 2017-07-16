@@ -11,8 +11,6 @@
 #include "base/files/file_path.h"
 #include "proto/file_transfer_session.pb.h"
 
-#include <memory>
-
 namespace aspia {
 
 proto::RequestStatus ExecuteDriveListRequest(proto::DriveList* drive_list);

@@ -7,13 +7,11 @@
 
 #include "ui/file_status_dialog.h"
 #include "ui/status_code.h"
-#include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
 #include "base/logging.h"
 
+#include <atlctrls.h>
 #include <chrono>
 #include <clocale>
-#include <ctime>
 
 namespace aspia {
 

@@ -26,6 +26,8 @@ public:
     class Delegate
     {
     public:
+        virtual ~Delegate() = default;
+
         // Called just prior to starting the message loop.
         virtual void OnBeforeThreadRunning() { }
 

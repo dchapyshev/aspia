@@ -84,18 +84,44 @@ private:
     LRESULT OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
 
     // FileReplyReceiver implementation.
-    void OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list) override;
-    void OnDriveListRequestFailure(proto::RequestStatus status) override;
-    void OnFileListRequestReply(const FilePath& path, std::unique_ptr<proto::FileList> file_list) override;
-    void OnFileListRequestFailure(const FilePath& path, proto::RequestStatus status) override;
-    void OnDirectorySizeRequestReply(const FilePath& path, uint64_t size) override;
-    void OnDirectorySizeRequestFailure(const FilePath& path, proto::RequestStatus status) override;
-    void OnCreateDirectoryRequestReply(const FilePath& path, proto::RequestStatus status) override;
-    void OnRemoveRequestReply(const FilePath& path, proto::RequestStatus status) override;
-    void OnRenameRequestReply(const FilePath& old_name, const FilePath& new_name, proto::RequestStatus status) override;
+    void OnDriveListRequestReply(
+        std::unique_ptr<proto::DriveList> drive_list) override;
 
-    void OnFileUploadRequestReply(const FilePath& file_path,
-                                  proto::RequestStatus status) override;
+    void OnDriveListRequestFailure(
+        proto::RequestStatus status) override;
+
+    void OnFileListRequestReply(
+        const FilePath& path,
+        std::unique_ptr<proto::FileList> file_list) override;
+
+    void OnFileListRequestFailure(
+        const FilePath& path,
+        proto::RequestStatus status) override;
+
+    void OnDirectorySizeRequestReply(
+        const FilePath& path,
+        uint64_t size) override;
+
+    void OnDirectorySizeRequestFailure(
+        const FilePath& path,
+        proto::RequestStatus status) override;
+
+    void OnCreateDirectoryRequestReply(
+        const FilePath& path,
+        proto::RequestStatus status) override;
+
+    void OnRemoveRequestReply(
+        const FilePath& path,
+        proto::RequestStatus status) override;
+
+    void OnRenameRequestReply(
+        const FilePath& old_name,
+        const FilePath& new_name,
+        proto::RequestStatus status) override;
+
+    void OnFileUploadRequestReply(
+        const FilePath& file_path,
+        proto::RequestStatus status) override;
 
     void OnFileUploadDataRequestReply(
         std::unique_ptr<proto::FilePacket> file_packet,

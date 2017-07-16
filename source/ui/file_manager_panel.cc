@@ -40,7 +40,8 @@ FilePath UiFileManagerPanel::GetCurrentPath() const
     return drive_list_.CurrentPath();
 }
 
-LPARAM UiFileManagerPanel::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LPARAM UiFileManagerPanel::OnCreate(UINT message, WPARAM wparam,
+                                    LPARAM lparam, BOOL& handled)
 {
     HFONT default_font = AtlGetStockFont(DEFAULT_GUI_FONT);
 
@@ -52,7 +53,9 @@ LPARAM UiFileManagerPanel::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, 
         panel_name.LoadStringW(IDS_FT_REMOTE_COMPUTER);
 
     CRect title_rect(0, 0, 200, 20);
-    title_.Create(*this, title_rect, panel_name, WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
+
+    title_.Create(*this, title_rect, panel_name,
+                  WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
     title_.SetFont(default_font);
 
     drive_list_.CreateDriveList(*this, kDriveListControl);
@@ -68,7 +71,8 @@ LPARAM UiFileManagerPanel::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, 
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT UiFileManagerPanel::OnDestroy(UINT message, WPARAM wparam,
+                                      LPARAM lparam, BOOL& handled)
 {
     drive_list_.DestroyWindow();
     file_list_.DestroyWindow();
@@ -78,7 +82,8 @@ LRESULT UiFileManagerPanel::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT UiFileManagerPanel::OnSize(UINT message, WPARAM wparam,
+                                   LPARAM lparam, BOOL& handled)
 {
     HDWP dwp = BeginDeferWindowPos(5);
 
@@ -121,7 +126,9 @@ LRESULT UiFileManagerPanel::OnSize(UINT message, WPARAM wparam, LPARAM lparam, B
                                 toolbar_rect.Height(),
                                 SWP_NOACTIVATE | SWP_NOZORDER);
 
-        int list_y = title_rect.Height() + toolbar_rect.Height() + drive_rect.Height();
+        int list_y = title_rect.Height() + toolbar_rect.Height() +
+            drive_rect.Height();
+
         int list_height = size.cy - list_y - status_rect.Height();
 
         file_list_.DeferWindowPos(dwp, nullptr,
@@ -144,7 +151,8 @@ LRESULT UiFileManagerPanel::OnSize(UINT message, WPARAM wparam, LPARAM lparam, B
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnDrawItem(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT UiFileManagerPanel::OnDrawItem(UINT message, WPARAM wparam,
+                                       LPARAM lparam, BOOL& handled)
 {
     LPDRAWITEMSTRUCT dis = reinterpret_cast<LPDRAWITEMSTRUCT>(lparam);
 
@@ -181,7 +189,8 @@ LRESULT UiFileManagerPanel::OnDrawItem(UINT message, WPARAM wparam, LPARAM lpara
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnDriveChange(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT UiFileManagerPanel::OnDriveChange(WORD code, WORD ctrl_id,
+                                          HWND ctrl, BOOL& handled)
 {
     int object_index = drive_list_.SelectedObject();
 
@@ -192,7 +201,8 @@ LRESULT UiFileManagerPanel::OnDriveChange(WORD code, WORD ctrl_id, HWND ctrl, BO
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& handled)
+LRESULT UiFileManagerPanel::OnListDoubleClock(int ctrl_id, LPNMHDR hdr,
+                                              BOOL& handled)
 {
     int object_index = file_list_.GetObjectUnderMousePointer();
 
@@ -216,7 +226,8 @@ LRESULT UiFileManagerPanel::OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& ha
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT UiFileManagerPanel::OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl,
+                                       BOOL& handled)
 {
     FilePath path = drive_list_.CurrentPath();
 
@@ -232,13 +243,15 @@ LRESULT UiFileManagerPanel::OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL&
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnFolderAdd(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT UiFileManagerPanel::OnFolderAdd(WORD code, WORD ctrl_id, HWND ctrl,
+                                        BOOL& handled)
 {
     file_list_.AddDirectory();
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnRefresh(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT UiFileManagerPanel::OnRefresh(WORD code, WORD ctrl_id, HWND ctrl,
+                                      BOOL& handled)
 {
     sender_->SendDriveListRequest(This());
 
@@ -250,7 +263,8 @@ LRESULT UiFileManagerPanel::OnRefresh(WORD code, WORD ctrl_id, HWND ctrl, BOOL& 
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT UiFileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl,
+                                     BOOL& handled)
 {
     if (!file_list_.HasFileList())
         return 0;
@@ -298,11 +312,13 @@ void UiFileManagerPanel::MoveToDrive(int object_index)
     }
     else
     {
-        sender_->SendFileListRequest(This(), drive_list_.ObjectPath(object_index));
+        sender_->SendFileListRequest(
+            This(), drive_list_.ObjectPath(object_index));
     }
 }
 
-LRESULT UiFileManagerPanel::OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled)
+LRESULT UiFileManagerPanel::OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr,
+                                               BOOL& handled)
 {
     LPNMLVDISPINFOW disp_info = reinterpret_cast<LPNMLVDISPINFOW>(hdr);
 
@@ -344,7 +360,8 @@ LRESULT UiFileManagerPanel::OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& h
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& handled)
+LRESULT UiFileManagerPanel::OnListItemChanged(int ctrl_id, LPNMHDR hdr,
+                                              BOOL& handled)
 {
     UINT count = file_list_.GetSelectedCount();
 
@@ -363,7 +380,8 @@ LRESULT UiFileManagerPanel::OnListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& ha
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT UiFileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl,
+                                   BOOL& handled)
 {
     FilePath source_path = drive_list_.CurrentPath();
 
@@ -390,11 +408,14 @@ LRESULT UiFileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& han
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnDriveEndEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled)
+LRESULT UiFileManagerPanel::OnDriveEndEdit(int ctrl_id, LPNMHDR hdr,
+                                           BOOL& handled)
 {
     PNMCBEENDEDITW end_edit = reinterpret_cast<PNMCBEENDEDITW>(hdr);
 
-    if (end_edit->fChanged && end_edit->iWhy == CBENF_RETURN && end_edit->szText[0])
+    if (end_edit->fChanged &&
+        end_edit->iWhy == CBENF_RETURN &&
+        end_edit->szText[0])
     {
         sender_->SendFileListRequest(This(), FilePath(end_edit->szText));
     }
@@ -402,13 +423,15 @@ LRESULT UiFileManagerPanel::OnDriveEndEdit(int ctrl_id, LPNMHDR hdr, BOOL& handl
     return 0;
 }
 
-LRESULT UiFileManagerPanel::OnHome(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT UiFileManagerPanel::OnHome(WORD code, WORD ctrl_id, HWND ctrl,
+                                   BOOL& handled)
 {
     MoveToDrive(UiDriveList::kComputerObjectIndex);
     return 0;
 }
 
-void UiFileManagerPanel::OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list)
+void UiFileManagerPanel::OnDriveListRequestReply(
+    std::unique_ptr<proto::DriveList> drive_list)
 {
     drive_list_.Read(std::move(drive_list));
 
@@ -418,17 +441,21 @@ void UiFileManagerPanel::OnDriveListRequestReply(std::unique_ptr<proto::DriveLis
     }
 }
 
-void UiFileManagerPanel::OnDriveListRequestFailure(proto::RequestStatus status)
+void UiFileManagerPanel::OnDriveListRequestFailure(
+    proto::RequestStatus status)
 {
     CString status_string = RequestStatusCodeToString(status);
 
     CString message;
-    message.Format(IDS_FT_OP_BROWSE_DRIVES_ERROR, status_string.GetBuffer(0));
+    message.Format(IDS_FT_OP_BROWSE_DRIVES_ERROR,
+                   status_string.GetBuffer(0));
+
     MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
 }
 
-void UiFileManagerPanel::OnFileListRequestReply(const FilePath& path,
-                                                std::unique_ptr<proto::FileList> file_list)
+void UiFileManagerPanel::OnFileListRequestReply(
+    const FilePath& path,
+    std::unique_ptr<proto::FileList> file_list)
 {
     toolbar_.EnableButton(ID_FOLDER_ADD, TRUE);
     toolbar_.EnableButton(ID_FOLDER_UP, TRUE);
@@ -438,30 +465,37 @@ void UiFileManagerPanel::OnFileListRequestReply(const FilePath& path,
     drive_list_.SetCurrentPath(path);
 }
 
-void UiFileManagerPanel::OnFileListRequestFailure(const FilePath& path,
-                                                  proto::RequestStatus status)
+void UiFileManagerPanel::OnFileListRequestFailure(
+    const FilePath& path,
+    proto::RequestStatus status)
 {
     CString status_string = RequestStatusCodeToString(status);
 
     CString message;
-    message.Format(IDS_FT_BROWSE_FOLDERS_ERROR, path.c_str(), status_string.GetBuffer(0));
+    message.Format(IDS_FT_BROWSE_FOLDERS_ERROR,
+                   path.c_str(),
+                   status_string.GetBuffer(0));
+
     MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
 }
 
-void UiFileManagerPanel::OnDirectorySizeRequestReply(const FilePath& path,
-                                                     uint64_t size)
+void UiFileManagerPanel::OnDirectorySizeRequestReply(
+    const FilePath& path,
+    uint64_t size)
 {
     // TODO
 }
 
-void UiFileManagerPanel::OnDirectorySizeRequestFailure(const FilePath& path,
-                                                       proto::RequestStatus status)
+void UiFileManagerPanel::OnDirectorySizeRequestFailure(
+    const FilePath& path,
+    proto::RequestStatus status)
 {
     // TODO
 }
 
-void UiFileManagerPanel::OnCreateDirectoryRequestReply(const FilePath& path,
-                                                       proto::RequestStatus status)
+void UiFileManagerPanel::OnCreateDirectoryRequestReply(
+    const FilePath& path,
+    proto::RequestStatus status)
 {
     sender_->SendFileListRequest(This(), drive_list_.CurrentPath());
 
@@ -470,7 +504,9 @@ void UiFileManagerPanel::OnCreateDirectoryRequestReply(const FilePath& path,
         CString status_string = RequestStatusCodeToString(status);
 
         CString message;
-        message.Format(IDS_FT_OP_CREATE_FOLDER_ERROR, path.c_str(), status_string);
+        message.Format(IDS_FT_OP_CREATE_FOLDER_ERROR,
+                       path.c_str(), status_string);
+
         MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
     }
 }
@@ -510,8 +546,9 @@ void UiFileManagerPanel::OnRenameRequestReply(const FilePath& old_name,
     }
 }
 
-void UiFileManagerPanel::OnFileUploadRequestReply(const FilePath& file_path,
-                                                  proto::RequestStatus status)
+void UiFileManagerPanel::OnFileUploadRequestReply(
+    const FilePath& file_path,
+    proto::RequestStatus status)
 {
     DLOG(FATAL) << "Unexpected reply: file upload request";
 }

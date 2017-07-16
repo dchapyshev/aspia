@@ -9,7 +9,6 @@
 #include "base/scoped_object.h"
 #include "base/scoped_local.h"
 #include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
 #include "base/logging.h"
 
 #include <objidl.h>

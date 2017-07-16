@@ -7,8 +7,6 @@
 
 #include "ui/file_manager.h"
 #include "ui/file_transfer_dialog.h"
-#include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
 #include "base/logging.h"
 
 namespace aspia {
