@@ -9,7 +9,6 @@
 #define _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_LOOP_H
 
 #include "base/message_loop/message_pump_ui.h"
-#include "base/message_loop/message_pump_io.h"
 #include "base/message_loop/task.h"
 
 #include <memory>
@@ -23,7 +22,7 @@ class MessageThread;
 class MessageLoop : public MessagePump::Delegate
 {
 public:
-    enum Type { TYPE_DEFAULT, TYPE_UI, TYPE_IO };
+    enum Type { TYPE_DEFAULT, TYPE_UI };
 
     using Dispatcher = MessagePumpDispatcher;
 
@@ -100,25 +99,6 @@ public:
 
 protected:
     MessagePumpForUI* pump_ui() const;
-};
-
-class MessageLoopForIO : public MessageLoop
-{
-public:
-    using IOHandler = MessagePumpForIO::IOHandler;
-    using IOContext = MessagePumpForIO::IOContext;
-
-    MessageLoopForIO() : MessageLoop(TYPE_IO) { }
-
-    // Returns the MessageLoopIO of the current thread.
-    static MessageLoopForIO* Current();
-
-    // Please see MessagePumpIO for definitions of these methods.
-    void RegisterIOHandler(HANDLE file_handle, IOHandler* handler);
-    bool WaitForIOCompletion(DWORD timeout, IOHandler* filter);
-
-protected:
-    MessagePumpForIO* pump_io() const;
 };
 
 } // namespace aspia

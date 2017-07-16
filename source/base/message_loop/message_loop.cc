@@ -37,10 +37,6 @@ MessageLoop::MessageLoop(Type type) :
             pump_ = std::make_unique<MessagePumpForUI>();
             break;
 
-        case TYPE_IO:
-            pump_ = std::make_unique<MessagePumpForIO>();
-            break;
-
         default:
             pump_ = std::make_unique<MessagePumpDefault>();
             break;
@@ -190,34 +186,6 @@ MessageLoopForUI* MessageLoopForUI::Current()
 MessagePumpForUI* MessageLoopForUI::pump_ui() const
 {
     return static_cast<MessagePumpForUI*>(pump_.get());
-}
-
-// static
-MessageLoopForIO* MessageLoopForIO::Current()
-{
-    MessageLoop* loop = MessageLoop::Current();
-
-    if (loop)
-    {
-        DCHECK_EQ(MessageLoop::TYPE_IO, loop->type());
-    }
-
-    return static_cast<MessageLoopForIO*>(loop);
-}
-
-void MessageLoopForIO::RegisterIOHandler(HANDLE file_handle, IOHandler* handler)
-{
-    pump_io()->RegisterIOHandler(file_handle, handler);
-}
-
-bool MessageLoopForIO::WaitForIOCompletion(DWORD timeout, IOHandler* filter)
-{
-    return pump_io()->WaitForIOCompletion(timeout, filter);
-}
-
-MessagePumpForIO* MessageLoopForIO::pump_io() const
-{
-    return static_cast<MessagePumpForIO*>(pump_.get());
 }
 
 } // namespace aspia
