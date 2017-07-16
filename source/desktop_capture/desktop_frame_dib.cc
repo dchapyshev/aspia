@@ -89,11 +89,12 @@ std::unique_ptr<DesktopFrameDIB> DesktopFrameDIB::Create(const DesktopSize& size
         return nullptr;
     }
 
-    return std::unique_ptr<DesktopFrameDIB>(new DesktopFrameDIB(size,
-                                                                format,
-                                                                bytes_per_row,
-                                                                reinterpret_cast<uint8_t*>(data),
-                                                                bitmap));
+    return std::unique_ptr<DesktopFrameDIB>(
+        new DesktopFrameDIB(size,
+                            format,
+                            bytes_per_row,
+                            reinterpret_cast<uint8_t*>(data),
+                            bitmap));
 }
 
 HBITMAP DesktopFrameDIB::Bitmap()

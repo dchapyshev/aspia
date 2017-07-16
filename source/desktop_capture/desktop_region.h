@@ -47,7 +47,7 @@ private:
     struct Row
     {
         Row(const Row&);
-        Row(Row&&);
+        Row(Row&&) noexcept;
         Row(int32_t top, int32_t bottom);
         ~Row();
 

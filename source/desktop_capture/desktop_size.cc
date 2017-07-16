@@ -9,16 +9,16 @@
 
 namespace aspia {
 
-DesktopSize::DesktopSize(int32_t width, int32_t height) :
-    width_(width),
-    height_(height)
+DesktopSize::DesktopSize(int32_t width, int32_t height)
+    : width_(width),
+      height_(height)
 {
     // Nothing
 }
 
-DesktopSize::DesktopSize(const DesktopSize& other) :
-    width_(other.width_),
-    height_(other.height_)
+DesktopSize::DesktopSize(const DesktopSize& other)
+    : width_(other.width_),
+      height_(other.height_)
 {
     // Nothing
 }

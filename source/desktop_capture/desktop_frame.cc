@@ -13,16 +13,11 @@ namespace aspia {
 DesktopFrame::DesktopFrame(const DesktopSize& size,
                            const PixelFormat& format,
                            int stride,
-                           uint8_t* data) :
-    size_(size),
-    format_(format),
-    stride_(stride),
-    data_(data)
-{
-    // Nothing
-}
-
-DesktopFrame::~DesktopFrame()
+                           uint8_t* data)
+    : size_(size),
+      format_(format),
+      stride_(stride),
+      data_(data)
 {
     // Nothing
 }
@@ -42,7 +37,7 @@ int DesktopFrame::Stride() const
     return stride_;
 }
 
-bool DesktopFrame::Contains(int32_t x, int32_t y)
+bool DesktopFrame::Contains(int32_t x, int32_t y) const
 {
     return (x > 0 && x <= size_.Width() && y > 0 && y <= size_.Height());
 }

@@ -21,15 +21,15 @@ PixelFormat::PixelFormat(uint8_t bits_per_pixel,
                          uint16_t blue_max,
                          uint8_t red_shift,
                          uint8_t green_shift,
-                         uint8_t blue_shift) :
-    bits_per_pixel_(bits_per_pixel),
-    bytes_per_pixel_(bits_per_pixel / 8),
-    red_max_(red_max),
-    green_max_(green_max),
-    blue_max_(blue_max),
-    red_shift_(red_shift),
-    green_shift_(green_shift),
-    blue_shift_(blue_shift)
+                         uint8_t blue_shift)
+    : bits_per_pixel_(bits_per_pixel),
+      bytes_per_pixel_(bits_per_pixel / 8),
+      red_max_(red_max),
+      green_max_(green_max),
+      blue_max_(blue_max),
+      red_shift_(red_shift),
+      green_shift_(green_shift),
+      blue_shift_(blue_shift)
 {
     // Nothing
 }
@@ -240,12 +240,12 @@ PixelFormat& PixelFormat::operator=(const PixelFormat& other)
     return *this;
 }
 
-bool PixelFormat::operator==(const PixelFormat& other)
+bool PixelFormat::operator==(const PixelFormat& other) const
 {
     return IsEqual(other);
 }
 
-bool PixelFormat::operator!=(const PixelFormat& other)
+bool PixelFormat::operator!=(const PixelFormat& other) const
 {
     return !IsEqual(other);
 }

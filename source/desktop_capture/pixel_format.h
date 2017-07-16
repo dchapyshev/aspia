@@ -96,8 +96,8 @@ public:
     void Set(const PixelFormat& other);
 
     PixelFormat& operator=(const PixelFormat& other);
-    bool operator==(const PixelFormat& other);
-    bool operator!=(const PixelFormat& other);
+    bool operator==(const PixelFormat& other) const;
+    bool operator!=(const PixelFormat& other) const;
 
 private:
     uint8_t bits_per_pixel_ = 0;

@@ -9,16 +9,16 @@
 
 namespace aspia {
 
-DesktopPoint::DesktopPoint(int32_t x, int32_t y) :
-    x_(x),
-    y_(y)
+DesktopPoint::DesktopPoint(int32_t x, int32_t y)
+    : x_(x),
+      y_(y)
 {
     // Nothing
 }
 
-DesktopPoint::DesktopPoint(const DesktopPoint& point) :
-    x_(point.x_),
-    y_(point.y_)
+DesktopPoint::DesktopPoint(const DesktopPoint& point)
+    : x_(point.x_),
+      y_(point.y_)
 {
     // Nothing
 }

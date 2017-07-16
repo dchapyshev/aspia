@@ -20,7 +20,7 @@ void CaptureScheduler::BeginCapture()
     begin_time_ = std::chrono::high_resolution_clock::now();
 }
 
-std::chrono::milliseconds CaptureScheduler::NextCaptureDelay()
+std::chrono::milliseconds CaptureScheduler::NextCaptureDelay() const
 {
     std::chrono::time_point<std::chrono::high_resolution_clock> end_time =
         std::chrono::high_resolution_clock::now();
@@ -31,10 +31,6 @@ std::chrono::milliseconds CaptureScheduler::NextCaptureDelay()
     if (diff_time > max_delay_)
     {
         return std::chrono::milliseconds(0);
-    }
-    else if (diff_time < std::chrono::milliseconds(0))
-    {
-        return max_delay_;
     }
 
     return max_delay_ - diff_time;

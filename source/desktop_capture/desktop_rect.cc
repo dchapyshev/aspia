@@ -11,20 +11,20 @@
 
 namespace aspia {
 
-DesktopRect::DesktopRect(const DesktopRect& other) :
-    left_(other.left_),
-    top_(other.top_),
-    right_(other.right_),
-    bottom_(other.bottom_)
+DesktopRect::DesktopRect(const DesktopRect& other)
+    : left_(other.left_),
+      top_(other.top_),
+      right_(other.right_),
+      bottom_(other.bottom_)
 {
     // Nothing
 }
 
-DesktopRect::DesktopRect(int32_t l, int32_t t, int32_t r, int32_t b) :
-    left_(l),
-    top_(t),
-    right_(r),
-    bottom_(b)
+DesktopRect::DesktopRect(int32_t l, int32_t t, int32_t r, int32_t b)
+    : left_(l),
+      top_(t),
+      right_(r),
+      bottom_(b)
 {
     // Nothing
 }

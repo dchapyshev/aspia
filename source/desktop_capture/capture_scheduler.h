@@ -21,7 +21,7 @@ public:
     ~CaptureScheduler() = default;
 
     void BeginCapture();
-    std::chrono::milliseconds NextCaptureDelay();
+    std::chrono::milliseconds NextCaptureDelay() const;
 
 private:
     std::chrono::time_point<std::chrono::high_resolution_clock> begin_time_;

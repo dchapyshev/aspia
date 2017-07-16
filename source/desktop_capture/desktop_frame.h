@@ -19,7 +19,7 @@ namespace aspia {
 class DesktopFrame
 {
 public:
-    virtual ~DesktopFrame();
+    virtual ~DesktopFrame() = default;
 
     uint8_t* GetFrameDataAtPos(const DesktopPoint& pos) const;
     uint8_t* GetFrameDataAtPos(int32_t x, int32_t y) const;
@@ -27,7 +27,7 @@ public:
     const DesktopSize& Size() const;
     const PixelFormat& Format() const;
     int Stride() const;
-    bool Contains(int32_t x, int32_t y);
+    bool Contains(int32_t x, int32_t y) const;
 
     const DesktopRegion& UpdatedRegion() const;
     DesktopRegion* MutableUpdatedRegion();
