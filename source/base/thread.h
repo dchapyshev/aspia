@@ -42,6 +42,9 @@ public:
     // Returns true if the StopSoon method was called.
     bool IsStopping() const;
 
+    // Returns if the Run method is running.
+    bool IsRunning() const;
+
 protected:
     virtual void Run() = 0;
 

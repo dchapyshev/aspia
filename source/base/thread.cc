@@ -57,6 +57,11 @@ bool Thread::IsStopping() const
     return state_ == State::Stopping;
 }
 
+bool Thread::IsRunning() const
+{
+    return running_;
+}
+
 void Thread::Start()
 {
     std::lock_guard<std::mutex> lock(thread_lock_);
