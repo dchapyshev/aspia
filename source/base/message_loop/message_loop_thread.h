@@ -70,9 +70,9 @@ private:
 
     Delegate* delegate_ = nullptr;
 
-    enum class State { Starting, Started, Stopping, Stopped };
+    enum class State { STARTING, STARTED, STOPPING, STOPPED };
 
-    std::atomic<State> state_ = State::Stopped;
+    std::atomic<State> state_ = State::STOPPED;
 
     std::thread thread_;
     std::mutex thread_lock_;

@@ -32,7 +32,7 @@ void MessageLoopThread::Start(MessageLoop::Type message_loop_type,
 
     delegate_ = delegate;
 
-    state_ = State::Starting;
+    state_ = State::STARTING;
 
     start_event_.Reset();
     thread_ = std::thread(&MessageLoopThread::ThreadMain,
@@ -40,24 +40,24 @@ void MessageLoopThread::Start(MessageLoop::Type message_loop_type,
                           message_loop_type);
     start_event_.Wait();
 
-    state_ = State::Started;
+    state_ = State::STARTED;
 
     DCHECK(message_loop_);
 }
 
 void MessageLoopThread::StopSoon()
 {
-    if (state_ == State::Stopping || !message_loop_)
+    if (state_ == State::STOPPING || !message_loop_)
         return;
 
-    state_ = State::Stopping;
+    state_ = State::STOPPING;
 
     message_loop_->PostTask(message_loop_->QuitClosure());
 }
 
 void MessageLoopThread::Stop()
 {
-    if (state_ == State::Stopped)
+    if (state_ == State::STOPPED)
         return;
 
     StopSoon();
@@ -77,7 +77,7 @@ void MessageLoopThread::Join()
 {
     std::lock_guard<std::mutex> lock(thread_lock_);
 
-    if (state_ == State::Stopped)
+    if (state_ == State::STOPPED)
         return;
 
     // Wait for the thread to exit.
@@ -85,7 +85,7 @@ void MessageLoopThread::Join()
         thread_.join();
 
     // The thread no longer needs to be joined.
-    state_ = State::Stopped;
+    state_ = State::STOPPED;
 }
 
 void MessageLoopThread::ThreadMain(MessageLoop::Type message_loop_type)
