@@ -27,6 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="base\byte_order.cc" />
     <ClCompile Include="base\desktop.cc" />
     <ClCompile Include="base\files\base_paths.cc" />
     <ClCompile Include="base\files\drive_enumerator.cc" />
@@ -37,7 +38,6 @@
     <ClCompile Include="base\message_loop\message_loop_proxy.cc" />
     <ClCompile Include="base\message_loop\message_loop_thread.cc" />
     <ClCompile Include="base\message_loop\message_pump_default.cc" />
-    <ClCompile Include="base\message_loop\message_pump_io.cc" />
     <ClCompile Include="base\message_loop\message_pump_ui.cc" />
     <ClCompile Include="base\message_loop\message_pump_win.cc" />
     <ClCompile Include="base\message_window.cc" />
@@ -172,6 +172,7 @@
     <ClCompile Include="ui\viewer_window.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="base\byte_order.h" />
     <ClInclude Include="base\desktop.h" />
     <ClInclude Include="base\files\base_paths.h" />
     <ClInclude Include="base\files\drive_enumerator.h" />
@@ -187,7 +188,6 @@
     <ClInclude Include="base\message_loop\message_pump.h" />
     <ClInclude Include="base\message_loop\message_pump_default.h" />
     <ClInclude Include="base\message_loop\message_pump_dispatcher.h" />
-    <ClInclude Include="base\message_loop\message_pump_io.h" />
     <ClInclude Include="base\message_loop\message_pump_ui.h" />
     <ClInclude Include="base\message_loop\message_pump_win.h" />
     <ClInclude Include="base\message_loop\task.h" />
@@ -498,7 +498,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libglog/src/windows;$(SolutionDir)3rdparty/libvpx;$(SolutionDir)3rdparty/libyuv/include;$(SolutionDir)3rdparty/zlib-ng;$(SolutionDir)3rdparty/protobuf/src;$(SolutionDir)3rdparty/gflags/src;$(SolutionDir)3rdparty/libsodium/src/libsodium/include;$(SolutionDir)3rdparty/wtl/include;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libglog/src/windows;$(SolutionDir)3rdparty/libvpx;$(SolutionDir)3rdparty/libyuv/include;$(SolutionDir)3rdparty/zlib-ng;$(SolutionDir)3rdparty/protobuf/src;$(SolutionDir)3rdparty/gflags/src;$(SolutionDir)3rdparty/libsodium/src/libsodium/include;$(SolutionDir)3rdparty/wtl/include;$(SolutionDir)3rdparty/asio/include;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <CompileAs>CompileAsCpp</CompileAs>
       <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
@@ -529,7 +529,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libglog/src/windows;$(SolutionDir)3rdparty/libvpx;$(SolutionDir)3rdparty/libyuv/include;$(SolutionDir)3rdparty/zlib-ng;$(SolutionDir)3rdparty/protobuf/src;$(SolutionDir)3rdparty/gflags/src;$(SolutionDir)3rdparty/libsodium/src/libsodium/include;$(SolutionDir)3rdparty/wtl/include;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libglog/src/windows;$(SolutionDir)3rdparty/libvpx;$(SolutionDir)3rdparty/libyuv/include;$(SolutionDir)3rdparty/zlib-ng;$(SolutionDir)3rdparty/protobuf/src;$(SolutionDir)3rdparty/gflags/src;$(SolutionDir)3rdparty/libsodium/src/libsodium/include;$(SolutionDir)3rdparty/wtl/include;$(SolutionDir)3rdparty/asio/include;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <CompileAs>CompileAsCpp</CompileAs>
       <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
@@ -560,7 +560,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libglog/src/windows;$(SolutionDir)3rdparty/libvpx;$(SolutionDir)3rdparty/libyuv/include;$(SolutionDir)3rdparty/zlib-ng;$(SolutionDir)3rdparty/protobuf/src;$(SolutionDir)3rdparty/gflags/src;$(SolutionDir)3rdparty/libsodium/src/libsodium/include;$(SolutionDir)3rdparty/wtl/include;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libglog/src/windows;$(SolutionDir)3rdparty/libvpx;$(SolutionDir)3rdparty/libyuv/include;$(SolutionDir)3rdparty/zlib-ng;$(SolutionDir)3rdparty/protobuf/src;$(SolutionDir)3rdparty/gflags/src;$(SolutionDir)3rdparty/libsodium/src/libsodium/include;$(SolutionDir)3rdparty/wtl/include;$(SolutionDir)3rdparty/asio/include;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -584,7 +584,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -612,7 +612,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libglog/src/windows;$(SolutionDir)3rdparty/libvpx;$(SolutionDir)3rdparty/libyuv/include;$(SolutionDir)3rdparty/zlib-ng;$(SolutionDir)3rdparty/protobuf/src;$(SolutionDir)3rdparty/gflags/src;$(SolutionDir)3rdparty/libsodium/src/libsodium/include;$(SolutionDir)3rdparty/wtl/include;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libglog/src/windows;$(SolutionDir)3rdparty/libvpx;$(SolutionDir)3rdparty/libyuv/include;$(SolutionDir)3rdparty/zlib-ng;$(SolutionDir)3rdparty/protobuf/src;$(SolutionDir)3rdparty/gflags/src;$(SolutionDir)3rdparty/libsodium/src/libsodium/include;$(SolutionDir)3rdparty/wtl/include;$(SolutionDir)3rdparty/asio/include;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -635,7 +635,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

@@ -271,9 +271,6 @@
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="main.cc" />
-    <ClCompile Include="base\message_loop\message_pump_io.cc">
-      <Filter>base\message_loop</Filter>
-    </ClCompile>
     <ClCompile Include="base\message_loop\message_pump_win.cc">
       <Filter>base\message_loop</Filter>
     </ClCompile>
@@ -486,6 +483,9 @@
     </ClCompile>
     <ClCompile Include="protocol\file_packetizer.cc">
       <Filter>protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="base\byte_order.cc">
+      <Filter>base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -708,9 +708,6 @@
     <ClInclude Include="network\network_server_tcp.h">
       <Filter>network</Filter>
     </ClInclude>
-    <ClInclude Include="network\scoped_wsa_initializer.h">
-      <Filter>network</Filter>
-    </ClInclude>
     <ClInclude Include="proto\auth_session_message.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
@@ -731,9 +728,6 @@
     </ClInclude>
     <ClInclude Include="protocol\message_serialization.h">
       <Filter>protocol</Filter>
-    </ClInclude>
-    <ClInclude Include="network\socket.h">
-      <Filter>network</Filter>
     </ClInclude>
     <ClInclude Include="codec\pixel_translator.h">
       <Filter>codec</Filter>
@@ -781,9 +775,6 @@
     <ClInclude Include="global.h" />
     <ClInclude Include="base\scoped_user_object.h">
       <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\message_loop\message_pump_io.h">
-      <Filter>base\message_loop</Filter>
     </ClInclude>
     <ClInclude Include="base\message_loop\message_pump_dispatcher.h">
       <Filter>base\message_loop</Filter>
@@ -841,9 +832,6 @@
     </ClInclude>
     <ClInclude Include="base\version_helpers.h">
       <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="network\scoped_addrinfo.h">
-      <Filter>network</Filter>
     </ClInclude>
     <ClInclude Include="ui\power_manage_dialog.h">
       <Filter>ui</Filter>
@@ -1042,6 +1030,18 @@
     </ClInclude>
     <ClInclude Include="protocol\file_packetizer.h">
       <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="base\byte_order.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="network\scoped_addrinfo.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="network\scoped_wsa_initializer.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="network\socket.h">
+      <Filter>network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
