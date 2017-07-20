@@ -28,7 +28,7 @@ void Thread::ThreadMain()
 
 void Thread::StopSoon()
 {
-    state_ = State::Stopping;
+    state_ = State::STOPPING;
 }
 
 void Thread::Stop()
@@ -41,7 +41,7 @@ void Thread::Join()
 {
     std::lock_guard<std::mutex> lock(thread_lock_);
 
-    if (state_ == State::Stopped)
+    if (state_ == State::STOPPED)
         return;
 
     // Wait for the thread to exit.
@@ -49,12 +49,12 @@ void Thread::Join()
         thread_.join();
 
     // The thread no longer needs to be joined.
-    state_ = State::Stopped;
+    state_ = State::STOPPED;
 }
 
 bool Thread::IsStopping() const
 {
-    return state_ == State::Stopping;
+    return state_ == State::STOPPING;
 }
 
 bool Thread::IsRunning() const
@@ -66,16 +66,16 @@ void Thread::Start()
 {
     std::lock_guard<std::mutex> lock(thread_lock_);
 
-    if (state_ != State::Stopped)
+    if (state_ != State::STOPPED)
         return;
 
-    state_ = State::Starting;
+    state_ = State::STARTING;
 
     start_event_.Reset();
     thread_ = std::thread(&Thread::ThreadMain, this);
     start_event_.Wait();
 
-    state_ = State::Started;
+    state_ = State::STARTED;
 }
 
 } // namespace aspia

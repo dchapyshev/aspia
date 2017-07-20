@@ -54,9 +54,9 @@ private:
     std::thread thread_;
     std::mutex thread_lock_;
 
-    enum class State { Starting, Started, Stopping, Stopped };
+    enum class State { STARTING, STARTED, STOPPING, STOPPED };
 
-    std::atomic<State> state_ = State::Stopped;
+    std::atomic<State> state_ = State::STOPPED;
 
     // True while inside of Run().
     std::atomic_bool running_ = false;
