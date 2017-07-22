@@ -334,11 +334,15 @@ void NetworkChannelTcp::Send(const IOBuffer& buffer)
 
         message_size = HostByteOrderToNetwork(message_size);
 
-        if (asio::write(socket_, asio::buffer(&message_size,
-                                              sizeof(MessageSizeType))))
+        std::error_code ignored_code;
+        if (asio::write(socket_,
+                        asio::buffer(&message_size, sizeof(MessageSizeType)),
+                        ignored_code) == sizeof(MessageSizeType))
         {
-            if (asio::write(socket_, asio::buffer(encrypted_buffer.data(),
-                                                  encrypted_buffer.size())))
+            if (asio::write(socket_,
+                            asio::buffer(encrypted_buffer.data(),
+                                         encrypted_buffer.size()),
+                            ignored_code) == encrypted_buffer.size())
             {
                 return;
             }
