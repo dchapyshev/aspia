@@ -9,9 +9,9 @@
 
 namespace aspia {
 
-ClientPool::ClientPool(std::shared_ptr<MessageLoopProxy> runner) :
-    runner_(runner),
-    status_dialog_(this)
+ClientPool::ClientPool(std::shared_ptr<MessageLoopProxy> runner)
+    : runner_(runner),
+      status_dialog_(this)
 {
     DCHECK(runner_);
 }
@@ -27,6 +27,7 @@ void ClientPool::Connect(HWND parent, const ClientConfig& config)
 {
     config_.CopyFrom(config);
     status_dialog_.DoModal(parent);
+    network_client_.reset();
 }
 
 void ClientPool::OnStatusDialogOpen()
@@ -44,31 +45,31 @@ void ClientPool::OnStatusDialogOpen()
         status_dialog_.SetDestonation(config_.address(), config_.port());
         status_dialog_.SetStatus(proto::Status::STATUS_CONNECTING);
 
-        network_client_ = std::make_unique<NetworkClientTcp>(runner_);
-
-        if (!network_client_->Connect(config_.address(), config_.port(), this))
-        {
-            status_dialog_.SetStatus(proto::Status::STATUS_CONNECT_ERROR);
-        }
+        network_client_ = std::make_unique<NetworkClientTcp>(
+            config_.address(),
+            config_.port(),
+            std::bind(&ClientPool::OnConnect, this, std::placeholders::_1));
     }
 }
 
-void ClientPool::OnConnectionSuccess(std::unique_ptr<NetworkChannel> channel)
+void ClientPool::OnConnect(std::shared_ptr<NetworkChannel> channel)
 {
-    std::unique_ptr<Client> client(new Client(std::move(channel), config_, this));
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&ClientPool::OnConnect, this, channel));
+        return;
+    }
+
+    if (!channel)
+    {
+        status_dialog_.SetStatus(proto::Status::STATUS_CONNECT_ERROR);
+        return;
+    }
+
+    std::unique_ptr<Client> client(new Client(channel, config_, this));
     session_list_.push_back(std::move(client));
 
     status_dialog_.EndDialog(0);
-}
-
-void ClientPool::OnConnectionTimeout()
-{
-    status_dialog_.SetStatus(proto::Status::STATUS_CONNECT_TIMEOUT);
-}
-
-void ClientPool::OnConnectionError()
-{
-    status_dialog_.SetStatus(proto::Status::STATUS_CONNECT_ERROR);
 }
 
 void ClientPool::OnSessionTerminate()

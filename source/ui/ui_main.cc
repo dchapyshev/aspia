@@ -10,7 +10,6 @@
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_dispatcher.h"
 #include "base/scoped_com_initializer.h"
-#include "network/scoped_wsa_initializer.h"
 
 #include <atlbase.h>
 #include <atlapp.h>
@@ -23,10 +22,7 @@ namespace aspia {
 void RunUIMain()
 {
     ScopedCOMInitializer com_initializer;
-    ScopedWsaInitializer wsa_initializer;
-
     CHECK(com_initializer.IsSucceeded());
-    CHECK(wsa_initializer.IsSucceeded());
 
     AtlInitCommonControls(ICC_BAR_CLASSES);
 

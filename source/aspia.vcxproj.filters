@@ -58,6 +58,9 @@
     <Filter Include="base\synchronization">
       <UniqueIdentifier>{919fbe84-52d7-4ff4-a99e-199005d49a7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="base\threading">
+      <UniqueIdentifier>{df245d8f-fb70-4356-845f-f1bf8fa142dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="proto\desktop_session.pb.cc">
@@ -106,9 +109,6 @@
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="base\service_manager.cc">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\thread.cc">
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="client\client_config.cc">
@@ -487,6 +487,12 @@
     <ClCompile Include="base\byte_order.cc">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="base\threading\thread.cc">
+      <Filter>base\threading</Filter>
+    </ClCompile>
+    <ClCompile Include="base\threading\thread_checker.cc">
+      <Filter>base\threading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -505,9 +511,6 @@
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\scoped_thread_desktop.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\thread.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="codec\compressor.h">
@@ -1034,14 +1037,11 @@
     <ClInclude Include="base\byte_order.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="network\scoped_addrinfo.h">
-      <Filter>network</Filter>
+    <ClInclude Include="base\threading\thread.h">
+      <Filter>base\threading</Filter>
     </ClInclude>
-    <ClInclude Include="network\scoped_wsa_initializer.h">
-      <Filter>network</Filter>
-    </ClInclude>
-    <ClInclude Include="network\socket.h">
-      <Filter>network</Filter>
+    <ClInclude Include="base\threading\thread_checker.h">
+      <Filter>base\threading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

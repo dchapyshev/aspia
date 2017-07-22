@@ -9,28 +9,38 @@
 #include "base/version_helpers.h"
 #include "base/files/base_paths.h"
 
-#include <ws2tcpip.h>
-
 namespace aspia {
-
-static const int kMaxClientCount = 10;
 
 static const WCHAR kAppName[] = L"Aspia Remote Desktop";
 static const WCHAR kRuleName[] = L"Aspia Remote Desktop Host";
 static const WCHAR kRuleDesc[] = L"Allow incoming connections";
 
-NetworkServerTcp::NetworkServerTcp(std::shared_ptr<MessageLoopProxy> runner) :
-    accept_event_(WaitableEvent::ResetPolicy::MANUAL,
-                  WaitableEvent::InitialState::NOT_SIGNALED),
-    runner_(runner)
+static bool IsFailureCode(const std::error_code& code)
 {
-    // Nothing
+    return code.value() != 0;
+}
+
+NetworkServerTcp::NetworkServerTcp(uint16_t port,
+                                   ConnectCallback connect_callback)
+    : connect_callback_(std::move(connect_callback)),
+      port_(port)
+{
+    AddFirewallRule();
+    DoAccept();
 }
 
 NetworkServerTcp::~NetworkServerTcp()
 {
-    accept_watcher_.StopWatching();
-    server_socket_.Reset();
+    {
+        std::lock_guard<std::mutex> lock(channel_lock_);
+
+        if (channel_)
+        {
+            channel_->io_service().dispatch(
+                std::bind(&NetworkServerTcp::DoStop, this));
+            channel_.reset();
+        }
+    }
 
     if (firewall_manager_)
         firewall_manager_->DeleteRuleByName(kRuleName);
@@ -78,115 +88,49 @@ void NetworkServerTcp::AddFirewallRule()
     }
 }
 
-bool NetworkServerTcp::Start(uint16_t port, Delegate* delegate)
+
+void NetworkServerTcp::OnAccept(const std::error_code& code)
 {
-    DCHECK(delegate);
-
-    if (IsStarted())
-    {
-        LOG(ERROR) << "Trying to start an already starting server";
-        return false;
-    }
-
-    port_ = port;
-    delegate_ = delegate;
-
-    AddFirewallRule();
-
-    server_socket_.Reset(socket(AF_INET, SOCK_STREAM, IPPROTO_TCP));
-    if (!server_socket_.IsValid())
-    {
-        LOG(ERROR) << "socket() failed: " << GetLastSystemErrorString();
-        return false;
-    }
-
-    sockaddr_in local_addr;
-
-    memset(&local_addr, 0, sizeof(local_addr));
-
-    local_addr.sin_family = AF_INET;
-    local_addr.sin_port = htons(port_);
-    local_addr.sin_addr = in4addr_any;
-
-    if (bind(server_socket_,
-             reinterpret_cast<const sockaddr*>(&local_addr),
-             sizeof(local_addr)) == SOCKET_ERROR)
-    {
-        LOG(ERROR) << "bind() failed: " << GetLastSystemErrorString();
-        return false;
-    }
-
-    if (listen(server_socket_, kMaxClientCount) == SOCKET_ERROR)
-    {
-        LOG(ERROR) << "listen() failed: " << GetLastSystemErrorString();
-        return false;
-    }
-
-    if (WSAEventSelect(server_socket_, accept_event_.Handle(), FD_ACCEPT) == SOCKET_ERROR)
-    {
-        LOG(ERROR) << "WSAEventSelect() failed: " << GetLastSystemErrorString();
-        return false;
-    }
-
-    return accept_watcher_.StartWatching(accept_event_.Handle(), this);
-}
-
-bool NetworkServerTcp::IsStarted() const
-{
-    return server_socket_.IsValid();
-}
-
-void NetworkServerTcp::OnObjectSignaled(HANDLE object)
-{
-    DCHECK_EQ(object, accept_event_.Handle());
-
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&NetworkServerTcp::OnObjectSignaled, this, object));
-        return;
-    }
-
-    accept_watcher_.StopWatching();
-
-    if (!server_socket_.IsValid())
+    if (!acceptor_ || !acceptor_->is_open())
         return;
 
-    accept_event_.Reset();
-    accept_watcher_.StartWatching(accept_event_.Handle(), this);
-
-    WSANETWORKEVENTS events;
-    memset(&events, 0, sizeof(events));
-
-    if (WSAEnumNetworkEvents(server_socket_, accept_event_.Handle(), &events) == SOCKET_ERROR)
     {
-        LOG(ERROR) << "WSAEnumNetworkEvents() failed: " << GetLastSystemErrorString();
+        std::lock_guard<std::mutex> lock(channel_lock_);
+
+        if (!channel_)
+            return;
+
+        if (!IsFailureCode(code))
+            connect_callback_(std::move(channel_));
     }
-    else if ((events.lNetworkEvents & FD_ACCEPT) &&
-             (events.iErrorCode[FD_ACCEPT_BIT] == 0))
+
+    DoAccept();
+}
+
+void NetworkServerTcp::DoAccept()
+{
+    std::lock_guard<std::mutex> lock(channel_lock_);
+
+    channel_ = std::make_unique<NetworkChannelTcp>(
+        NetworkChannelTcp::Mode::SERVER);
+
+    acceptor_ = std::make_unique<asio::ip::tcp::acceptor>(
+        channel_->io_service(),
+        asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port_));
+
+    acceptor_->async_accept(channel_->socket(),
+                            std::bind(&NetworkServerTcp::OnAccept,
+                                      this,
+                                      std::placeholders::_1));
+}
+
+void NetworkServerTcp::DoStop()
+{
+    if (acceptor_)
     {
-        Socket client_socket(WSAAccept(server_socket_, nullptr, nullptr, nullptr, 0));
-
-        if (!client_socket.IsValid())
-        {
-            LOG(ERROR) << "WSAAccept() failed: " << GetLastSystemErrorString();
-            return;
-        }
-
-        u_long non_blocking = 1;
-
-        if (ioctlsocket(client_socket, FIONBIO, &non_blocking) == SOCKET_ERROR)
-        {
-            LOG(ERROR) << "ioctlsocket() failed: " << GetLastSystemErrorString();
-            return;
-        }
-
-        std::unique_ptr<NetworkChannelTcp> channel =
-            NetworkChannelTcp::CreateServer(std::move(client_socket));
-
-        if (!channel)
-            return;
-
-        delegate_->OnChannelConnected(std::move(channel));
+        std::error_code ignored_code;
+        acceptor_->close(ignored_code);
+        acceptor_.reset();
     }
 }
 

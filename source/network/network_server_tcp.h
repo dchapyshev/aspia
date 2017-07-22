@@ -8,41 +8,29 @@
 #ifndef _ASPIA_NETWORK__NETWORK_SERVER_TCP_H
 #define _ASPIA_NETWORK__NETWORK_SERVER_TCP_H
 
-#include "base/message_loop/message_loop_proxy.h"
-#include "base/object_watcher.h"
 #include "network/network_channel_tcp.h"
 #include "network/firewall_manager.h"
 #include "network/firewall_manager_legacy.h"
-#include "network/socket.h"
 
 namespace aspia {
 
-class NetworkServerTcp : private ObjectWatcher::Delegate
+class NetworkServerTcp
 {
 public:
-    NetworkServerTcp(std::shared_ptr<MessageLoopProxy> runner);
+    using ConnectCallback =
+        std::function<void(std::shared_ptr<NetworkChannel> channel)>;
+
+    NetworkServerTcp(uint16_t port, ConnectCallback connect_callback);
     ~NetworkServerTcp();
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-        virtual void OnChannelConnected(std::unique_ptr<NetworkChannel> channel) = 0;
-    };
-
-    bool Start(uint16_t port, Delegate* delegate);
-    bool IsStarted() const;
-
 private:
-    // ObjectWatcher::Delegate implementation.
-    void OnObjectSignaled(HANDLE object) override;
-
+    void OnAccept(const std::error_code& code);
+    void DoAccept();
+    void DoStop();
     void AddFirewallRule();
 
-    std::shared_ptr<MessageLoopProxy> runner_;
-
-    ObjectWatcher accept_watcher_;
-    Delegate* delegate_ = nullptr;
+    ConnectCallback connect_callback_;
+    uint16_t port_ = 0;
 
     // For Vista and later.
     std::unique_ptr<FirewallManager> firewall_manager_;
@@ -50,9 +38,9 @@ private:
     // For XP/2003.
     std::unique_ptr<FirewallManagerLegacy> firewall_manager_legacy_;
 
-    uint16_t port_ = 0;
-    Socket server_socket_;
-    WaitableEvent accept_event_;
+    std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
+    std::unique_ptr<NetworkChannelTcp> channel_;
+    std::mutex channel_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(NetworkServerTcp);
 };

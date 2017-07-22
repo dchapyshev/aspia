@@ -32,7 +32,7 @@ public:
         virtual void OnSessionTerminate() = 0;
     };
 
-    Client(std::unique_ptr<NetworkChannel> channel,
+    Client(std::shared_ptr<NetworkChannel> channel,
            const ClientConfig& config,
            Delegate* delegate);
 
@@ -53,12 +53,12 @@ private:
     // NetworkChannel::Listener implementation.
     void OnNetworkChannelMessage(const IOBuffer& buffer) override;
     void OnNetworkChannelDisconnect() override;
-    bool OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer) override;
     void OnNetworkChannelConnect() override;
 
     // UiStatusDialog::Delegate implementation.
     void OnStatusDialogOpen() override;
 
+    bool DoAuthorize(const IOBuffer& buffer);
     void CreateSession(proto::SessionType session_type);
     void OpenStatusDialog();
 
@@ -70,7 +70,7 @@ private:
     proto::Status status_;
     UiStatusDialog status_dialog_;
 
-    std::unique_ptr<NetworkChannel> channel_;
+    std::shared_ptr<NetworkChannel> channel_;
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;
 
     ClientConfig config_;

@@ -8,44 +8,36 @@
 #ifndef _ASPIA_NETWORK__NETWORK_CLIENT_TCP_H
 #define _ASPIA_NETWORK__NETWORK_CLIENT_TCP_H
 
-#include "base/message_loop/message_loop_proxy.h"
-#include "base/object_watcher.h"
 #include "network/network_channel_tcp.h"
 
 namespace aspia {
 
-class NetworkClientTcp : private ObjectWatcher::Delegate
+class NetworkClientTcp
 {
 public:
-    NetworkClientTcp(std::shared_ptr<MessageLoopProxy> runner);
+    using ConnectCallback =
+        std::function<void(std::shared_ptr<NetworkChannel> channel)>;
+
+    NetworkClientTcp(const std::wstring& address,
+                     uint16_t port,
+                     ConnectCallback connect_callback);
     ~NetworkClientTcp();
-
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-        virtual void OnConnectionSuccess(std::unique_ptr<NetworkChannel> channel) = 0;
-        virtual void OnConnectionTimeout() = 0;
-        virtual void OnConnectionError() = 0;
-    };
-
-    bool Connect(const std::wstring& address, uint16_t port, Delegate* delegate);
 
     static bool IsValidHostName(const std::wstring& hostname);
     static bool IsValidPort(uint16_t port);
 
 private:
-    // ObjectWatcher::Delegate implementation.
-    void OnObjectSignaled(HANDLE object) override;
-    void OnObjectTimeout(HANDLE object) override;
+    void OnResolve(const std::error_code& code,
+                   asio::ip::tcp::resolver::iterator endpoint_iterator);
 
-    std::shared_ptr<MessageLoopProxy> runner_;
+    void OnConnect(const std::error_code& code);
+    void DoStop();
 
-    ObjectWatcher connect_watcher_;
-    Delegate* delegate_ = nullptr;
-
-    Socket socket_;
-    WaitableEvent connect_event_;
+    ConnectCallback connect_callback_;
+    std::unique_ptr<asio::ip::tcp::resolver> resolver_;
+    std::unique_ptr<NetworkChannelTcp> channel_;
+    std::mutex channel_lock_;
+    bool terminating_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(NetworkClientTcp);
 };

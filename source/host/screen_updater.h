@@ -8,7 +8,7 @@
 #ifndef _ASPIA_HOST__SCREEN_UPDATER_H
 #define _ASPIA_HOST__SCREEN_UPDATER_H
 
-#include "base/thread.h"
+#include "base/threading/thread.h"
 #include "desktop_capture/capture_scheduler.h"
 #include "desktop_capture/capturer_gdi.h"
 

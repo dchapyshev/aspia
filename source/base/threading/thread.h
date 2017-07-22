@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/thread.h
+// FILE:            base/threading/thread.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__THREAD_H
-#define _ASPIA_BASE__THREAD_H
+#ifndef _ASPIA_BASE__THREADING__THREAD_H
+#define _ASPIA_BASE__THREADING__THREAD_H
 
 #include <atomic>
 #include <mutex>
@@ -68,4 +68,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__THREAD_H
+#endif // _ASPIA_BASE__THREADING__THREAD_H

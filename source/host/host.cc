@@ -17,7 +17,7 @@ namespace aspia {
 
 static const std::chrono::seconds kAuthTimeout{ 60 };
 
-Host::Host(std::unique_ptr<NetworkChannel> channel, Delegate* delegate)
+Host::Host(std::shared_ptr<NetworkChannel> channel, Delegate* delegate)
     : channel_(std::move(channel)),
       delegate_(delegate)
 {
@@ -50,8 +50,7 @@ void Host::OnNetworkChannelConnect()
     // If the authorization request is not received within the specified time
     // interval, the connection will be closed.
     auth_timer_.Start(kAuthTimeout,
-                      std::bind(&NetworkChannelProxy::Disconnect,
-                                channel_proxy_.get()));
+                      std::bind(&Host::OnSessionTerminate, this));
 }
 
 static proto::Status DoBasicAuthorization(const std::string& username,
@@ -92,7 +91,7 @@ static proto::Status DoBasicAuthorization(const std::string& username,
     return proto::Status::STATUS_ACCESS_DENIED;
 }
 
-bool Host::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
+bool Host::DoAuthorize(const IOBuffer& buffer)
 {
     // Authorization request received, stop the timer.
     auth_timer_.Stop();
@@ -160,7 +159,13 @@ bool Host::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
 
 void Host::OnNetworkChannelMessage(const IOBuffer& buffer)
 {
-    DCHECK(session_proxy_);
+    if (!session_proxy_)
+    {
+        if (!DoAuthorize(buffer))
+            channel_proxy_->Disconnect();
+        return;
+    }
+
     session_proxy_->Send(buffer);
 }
 
@@ -168,6 +173,7 @@ void Host::OnNetworkChannelDisconnect()
 {
     auth_timer_.Stop();
     session_.reset();
+
     delegate_->OnSessionTerminate();
 }
 

@@ -31,6 +31,27 @@ void NetworkChannelProxy::WillDestroyCurrentChannel()
     }
 }
 
+bool NetworkChannelProxy::Disconnect()
+{
+    std::lock_guard<std::mutex> lock(channel_lock_);
+
+    if (!channel_)
+        return false;
+
+    channel_->Disconnect();
+    return true;
+}
+
+bool NetworkChannelProxy::IsConnected() const
+{
+    std::lock_guard<std::mutex> lock(channel_lock_);
+
+    if (!channel_)
+        return false;
+
+    return channel_->IsConnected();
+}
+
 bool NetworkChannelProxy::Send(const IOBuffer& buffer)
 {
     std::lock_guard<std::mutex> lock(channel_lock_);
@@ -52,29 +73,6 @@ bool NetworkChannelProxy::SendAsync(IOBuffer buffer)
     {
         outgoing_queue_->Add(std::move(buffer));
         return true;
-    }
-
-    return false;
-}
-
-void NetworkChannelProxy::Disconnect()
-{
-    std::lock_guard<std::mutex> lock(channel_lock_);
-
-    if (channel_)
-    {
-        if (channel_->IsConnected())
-            channel_->Disconnect();
-    }
-}
-
-bool NetworkChannelProxy::IsConnected() const
-{
-    std::lock_guard<std::mutex> lock(channel_lock_);
-
-    if (channel_)
-    {
-        return channel_->IsConnected();
     }
 
     return false;

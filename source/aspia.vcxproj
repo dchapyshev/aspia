@@ -59,7 +59,8 @@
     <ClCompile Include="base\synchronization\waitable_event.cc" />
     <ClCompile Include="base\synchronization\waitable_event_watcher.cc" />
     <ClCompile Include="base\synchronization\waitable_timer.cc" />
-    <ClCompile Include="base\thread.cc" />
+    <ClCompile Include="base\threading\thread.cc" />
+    <ClCompile Include="base\threading\thread_checker.cc" />
     <ClCompile Include="base\version_helpers.cc" />
     <ClCompile Include="client\client.cc" />
     <ClCompile Include="client\client_config.cc" />
@@ -223,7 +224,8 @@
     <ClInclude Include="base\synchronization\waitable_event.h" />
     <ClInclude Include="base\synchronization\waitable_event_watcher.h" />
     <ClInclude Include="base\synchronization\waitable_timer.h" />
-    <ClInclude Include="base\thread.h" />
+    <ClInclude Include="base\threading\thread.h" />
+    <ClInclude Include="base\threading\thread_checker.h" />
     <ClInclude Include="base\typed_buffer.h" />
     <ClInclude Include="base\version_helpers.h" />
     <ClInclude Include="build_config.h" />
@@ -310,9 +312,6 @@
     <ClInclude Include="network\network_channel_tcp.h" />
     <ClInclude Include="network\network_client_tcp.h" />
     <ClInclude Include="network\network_server_tcp.h" />
-    <ClInclude Include="network\scoped_addrinfo.h" />
-    <ClInclude Include="network\scoped_wsa_initializer.h" />
-    <ClInclude Include="network\socket.h" />
     <ClInclude Include="protocol\clipboard.h" />
     <ClInclude Include="protocol\filesystem.h" />
     <ClInclude Include="protocol\file_depacketizer.h" />

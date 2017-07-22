@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/thread.cc
+// FILE:            base/threading/thread.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/thread.h"
+#include "base/threading/thread.h"
 
 namespace aspia {
 

@@ -10,7 +10,6 @@
 #include "base/security_helpers.h"
 #include "base/scoped_com_initializer.h"
 #include "base/files/base_paths.h"
-#include "network/scoped_wsa_initializer.h"
 
 #include <sddl.h>
 
@@ -46,9 +45,6 @@ HostService::HostService() :
 
 void HostService::Worker()
 {
-    ScopedWsaInitializer wsa_initializer;
-    CHECK(wsa_initializer.IsSucceeded());
-
     ScopedCOMInitializer com_initializer;
     CHECK(com_initializer.IsSucceeded());
 
@@ -58,9 +54,7 @@ void HostService::Worker()
     runner_ = MessageLoopProxy::Current();
 
     HostPool host_pool(runner_);
-
-    if (host_pool.Start())
-        loop.Run();
+    loop.Run();
 }
 
 void HostService::OnStop()

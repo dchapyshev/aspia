@@ -29,7 +29,7 @@ public:
         virtual void OnSessionTerminate() = 0;
     };
 
-    Host(std::unique_ptr<NetworkChannel> channel, Delegate* delegate);
+    Host(std::shared_ptr<NetworkChannel> channel, Delegate* delegate);
     ~Host();
 
     bool IsAliveSession() const;
@@ -41,11 +41,12 @@ private:
 
     // NetworkChannel::Listener implementation.
     void OnNetworkChannelConnect() override;
-    bool OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer) override;
     void OnNetworkChannelMessage(const IOBuffer& buffer) override;
     void OnNetworkChannelDisconnect() override;
 
-    std::unique_ptr<NetworkChannel> channel_;
+    bool DoAuthorize(const IOBuffer& buffer);
+
+    std::shared_ptr<NetworkChannel> channel_;
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;
 
     std::unique_ptr<HostSession> session_;

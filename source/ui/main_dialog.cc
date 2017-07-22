@@ -232,13 +232,12 @@ LRESULT UiMainDialog::OnDefaultPortClicked(WORD notify_code,
     return 0;
 }
 
-LRESULT UiMainDialog::OnClose(UINT message,
-                              WPARAM wparam,
-                              LPARAM lparam,
-                              BOOL& handled)
+LRESULT UiMainDialog::OnClose(UINT message, WPARAM wparam,
+                              LPARAM lparam, BOOL& handled)
 {
     host_pool_.reset();
     client_pool_.reset();
+    DestroyWindow();
     PostQuitMessage(0);
     return 0;
 }
@@ -255,10 +254,8 @@ void UiMainDialog::StopHostMode()
     }
 }
 
-LRESULT UiMainDialog::OnStartServerButton(WORD notify_code,
-                                          WORD control_id,
-                                          HWND control,
-                                          BOOL& handled)
+LRESULT UiMainDialog::OnStartServerButton(WORD notify_code, WORD control_id,
+                                          HWND control, BOOL& handled)
 {
     if (host_pool_)
     {
@@ -268,16 +265,9 @@ LRESULT UiMainDialog::OnStartServerButton(WORD notify_code,
 
     host_pool_ = std::make_unique<HostPool>(MessageLoopProxy::Current());
 
-    if (host_pool_->Start())
-    {
-        CString text;
-        text.LoadStringW(IDS_STOP);
-        SetDlgItemTextW(IDC_START_SERVER_BUTTON, text);
-    }
-    else
-    {
-        host_pool_.reset();
-    }
+    CString text;
+    text.LoadStringW(IDS_STOP);
+    SetDlgItemTextW(IDC_START_SERVER_BUTTON, text);
 
     return 0;
 }
@@ -302,19 +292,15 @@ void UiMainDialog::UpdateSessionType()
     }
 }
 
-LRESULT UiMainDialog::OnSessionTypeChanged(WORD notify_code,
-                                           WORD control_id,
-                                           HWND control,
-                                           BOOL& handled)
+LRESULT UiMainDialog::OnSessionTypeChanged(WORD notify_code, WORD control_id,
+                                           HWND control, BOOL& handled)
 {
     UpdateSessionType();
     return 0;
 }
 
-LRESULT UiMainDialog::OnSettingsButton(WORD notify_code,
-                                       WORD control_id,
-                                       HWND control,
-                                       BOOL& handled)
+LRESULT UiMainDialog::OnSettingsButton(WORD notify_code, WORD control_id,
+                                       HWND control, BOOL& handled)
 {
     proto::SessionType session_type = GetSelectedSessionType();
 
@@ -340,10 +326,8 @@ LRESULT UiMainDialog::OnSettingsButton(WORD notify_code,
     return 0;
 }
 
-LRESULT UiMainDialog::OnConnectButton(WORD notify_code,
-                                      WORD control_id,
-                                      HWND control,
-                                      BOOL& handled)
+LRESULT UiMainDialog::OnConnectButton(WORD notify_code, WORD control_id,
+                                      HWND control, BOOL& handled)
 {
     proto::SessionType session_type = GetSelectedSessionType();
 
@@ -365,10 +349,8 @@ LRESULT UiMainDialog::OnConnectButton(WORD notify_code,
     return 0;
 }
 
-LRESULT UiMainDialog::OnHelpButton(WORD notify_code,
-                                   WORD control_id,
-                                   HWND control,
-                                   BOOL& handled)
+LRESULT UiMainDialog::OnHelpButton(WORD notify_code, WORD control_id,
+                                   HWND control, BOOL& handled)
 {
     CString url;
     url.LoadStringW(IDS_HELP_LINK);
@@ -376,10 +358,8 @@ LRESULT UiMainDialog::OnHelpButton(WORD notify_code,
     return 0;
 }
 
-LRESULT UiMainDialog::OnShowHideButton(WORD notify_code,
-                                       WORD control_id,
-                                       HWND control,
-                                       BOOL& handled)
+LRESULT UiMainDialog::OnShowHideButton(WORD notify_code, WORD control_id,
+                                       HWND control, BOOL& handled)
 {
     if (IsWindowVisible())
         ShowWindow(SW_HIDE);
@@ -389,10 +369,8 @@ LRESULT UiMainDialog::OnShowHideButton(WORD notify_code,
     return 0;
 }
 
-LRESULT UiMainDialog::OnInstallServiceButton(WORD notify_code,
-                                             WORD control_id,
-                                             HWND control,
-                                             BOOL& handled)
+LRESULT UiMainDialog::OnInstallServiceButton(WORD notify_code, WORD control_id,
+                                             HWND control, BOOL& handled)
 {
     if (host_pool_)
     {
@@ -409,10 +387,8 @@ LRESULT UiMainDialog::OnInstallServiceButton(WORD notify_code,
     return 0;
 }
 
-LRESULT UiMainDialog::OnRemoveServiceButton(WORD notify_code,
-                                            WORD control_id,
-                                            HWND control,
-                                            BOOL& handled)
+LRESULT UiMainDialog::OnRemoveServiceButton(WORD notify_code, WORD control_id,
+                                            HWND control, BOOL& handled)
 {
     if (HostService::Remove())
     {
@@ -465,7 +441,8 @@ void UiMainDialog::CopySelectedIp()
     clipboard.SetData(CF_UNICODETEXT, text_global);
 }
 
-LRESULT UiMainDialog::OnCopyButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
+LRESULT UiMainDialog::OnCopyButton(WORD notify_code, WORD control_id,
+                                   HWND control, BOOL& handled)
 {
     CopySelectedIp();
     return 0;
@@ -505,28 +482,22 @@ LRESULT UiMainDialog::OnIpListRightClick(int control_id, LPNMHDR hdr, BOOL& hand
     return 0;
 }
 
-LRESULT UiMainDialog::OnExitButton(WORD notify_code,
-                                   WORD control_id,
-                                   HWND control,
-                                   BOOL& handled)
+LRESULT UiMainDialog::OnExitButton(WORD notify_code, WORD control_id,
+                                   HWND control, BOOL& handled)
 {
     EndDialog(0);
     return 0;
 }
 
-LRESULT UiMainDialog::OnAboutButton(WORD notify_code,
-                                    WORD control_id,
-                                    HWND control,
-                                    BOOL& handled)
+LRESULT UiMainDialog::OnAboutButton(WORD notify_code, WORD control_id,
+                                    HWND control, BOOL& handled)
 {
     UiAboutDialog().DoModal(*this);
     return 0;
 }
 
-LRESULT UiMainDialog::OnUsersButton(WORD notify_code,
-                                    WORD control_id,
-                                    HWND control,
-                                    BOOL& handled)
+LRESULT UiMainDialog::OnUsersButton(WORD notify_code, WORD control_id,
+                                    HWND control, BOOL& handled)
 {
     UiUsersDialog().DoModal(*this);
     return 0;

@@ -89,7 +89,7 @@ static std::wstring GetCurrentDateTime()
     std::chrono::system_clock::time_point now =
         std::chrono::system_clock::now();
 
-    std::time_t time = std::chrono::system_clock::to_time_t(now);
+    time_t time = std::chrono::system_clock::to_time_t(now);
 
     tm* local_time = std::localtime(&time);
     if (local_time)

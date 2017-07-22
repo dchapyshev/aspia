@@ -8,6 +8,7 @@
 #ifndef _ASPIA_HOST__HOST_POOL_H
 #define _ASPIA_HOST__HOST_POOL_H
 
+#include "base/message_loop/message_loop_proxy.h"
 #include "host/host.h"
 #include "network/network_server_tcp.h"
 
@@ -15,19 +16,14 @@
 
 namespace aspia {
 
-class HostPool :
-    private NetworkServerTcp::Delegate,
-    private Host::Delegate
+class HostPool : private Host::Delegate
 {
 public:
     HostPool(std::shared_ptr<MessageLoopProxy> runner);
     ~HostPool();
 
-    bool Start();
-
 private:
-    // NetworkServerTcp::Delegate implementation.
-    void OnChannelConnected(std::unique_ptr<NetworkChannel> channel) override;
+    void OnChannelConnected(std::shared_ptr<NetworkChannel> channel);
 
     // Host:Delegate implementation.
     void OnSessionTerminate() override;

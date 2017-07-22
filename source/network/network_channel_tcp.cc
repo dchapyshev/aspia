@@ -6,238 +6,351 @@
 //
 
 #include "network/network_channel_tcp.h"
+#include "base/byte_order.h"
 #include "base/logging.h"
 
 namespace aspia {
 
-static const std::chrono::milliseconds kWriteTimeout{ 15000 };
+static const size_t kMaxMessageSize = 5 * 1024 * 1024; // 5MB
 
-// static
-std::unique_ptr<NetworkChannelTcp> NetworkChannelTcp::CreateClient(Socket socket)
+static bool IsFailureCode(const std::error_code& code)
 {
-    DCHECK(socket.IsValid());
-    return std::unique_ptr<NetworkChannelTcp>(
-        new NetworkChannelTcp(std::move(socket), Mode::CLIENT));
+    return code.value() != 0;
 }
 
-// static
-std::unique_ptr<NetworkChannelTcp> NetworkChannelTcp::CreateServer(Socket socket)
+NetworkChannelTcp::NetworkChannelTcp(Mode mode)
+    : socket_(io_service_),
+      mode_(mode)
 {
-    DCHECK(socket.IsValid());
-    return std::unique_ptr<NetworkChannelTcp>(
-        new NetworkChannelTcp(std::move(socket), Mode::SERVER));
-}
-
-NetworkChannelTcp::NetworkChannelTcp(Socket socket, Mode mode) :
-    socket_(std::move(socket)),
-    mode_(mode),
-    read_event_(WaitableEvent::ResetPolicy::MANUAL,
-                WaitableEvent::InitialState::NOT_SIGNALED),
-    write_event_(WaitableEvent::ResetPolicy::MANUAL,
-                 WaitableEvent::InitialState::NOT_SIGNALED)
-{
-    DWORD value = 1; // Disable the algorithm of Nagle.
-
-    if (setsockopt(socket_,
-                   IPPROTO_TCP,
-                   TCP_NODELAY,
-                   reinterpret_cast<const char*>(&value),
-                   sizeof(value)) == SOCKET_ERROR)
-    {
-        LOG(ERROR) << "setsockopt() failed: " << GetLastSystemErrorString();
-    }
+    static_assert(sizeof(message_size_) == sizeof(MessageSizeType),
+                  "Wrong message size field");
+    Start();
 }
 
 NetworkChannelTcp::~NetworkChannelTcp()
 {
-    Close();
+    io_service_.dispatch(std::bind(&NetworkChannelTcp::DoDisconnect, this));
+    Stop();
 }
 
-bool NetworkChannelTcp::ClientKeyExchange()
+void NetworkChannelTcp::StartListening(Listener* listener)
 {
-    {
-        SecureIOBuffer client_hello_message(encryptor_->HelloMessage());
+    DCHECK(!listener_);
+    listener_ = listener;
 
-        if (!WriteMessage(client_hello_message))
-            return false;
-    }
-
-    size_t message_size = ReadMessageSize();
-    if (!message_size)
-        return false;
-
-    {
-        SecureIOBuffer server_hello_message(message_size);
-
-        if (!ReadData(server_hello_message.data(), message_size))
-            return false;
-
-        if (!encryptor_->ReadHelloMessage(server_hello_message))
-            return false;
-    }
-
-    return true;
+    io_service_.post(std::bind(&NetworkChannelTcp::DoConnect, this));
 }
 
-bool NetworkChannelTcp::ServerKeyExchange()
+void NetworkChannelTcp::DoConnect()
 {
-    size_t message_size = ReadMessageSize();
-    if (!message_size)
-        return false;
+    // Disable the algorithm of Nagle.
+    asio::ip::tcp::no_delay option(true);
 
+    asio::error_code code;
+    socket_.set_option(option, code);
+
+    if (IsFailureCode(code))
     {
-        SecureIOBuffer client_hello_message(message_size);
-
-        if (!ReadData(client_hello_message.data(), message_size))
-            return false;
-
-        if (!encryptor_->ReadHelloMessage(client_hello_message))
-            return false;
+        LOG(ERROR) << "Failed to disable Nagle's algorithm: "
+                   << code.message();
     }
 
-    {
-        SecureIOBuffer server_hello_message(encryptor_->HelloMessage());
+    const Encryptor::Mode encryptor_mode = (mode_ == Mode::CLIENT) ?
+        Encryptor::Mode::CLIENT : Encryptor::Mode::SERVER;
 
-        if (!WriteMessage(server_hello_message))
-            return false;
-    }
+    encryptor_ = std::make_unique<Encryptor>(encryptor_mode);
 
-    return true;
-}
-
-bool NetworkChannelTcp::KeyExchange()
-{
     if (mode_ == Mode::CLIENT)
     {
-        encryptor_ = std::make_unique<Encryptor>(Encryptor::Mode::CLIENT);
-        if (!encryptor_)
-            return false;
-
-        if (!ClientKeyExchange())
-        {
-            LOG(ERROR) << "Client key exchange failure";
-            return false;
-        }
+        DoSendHelloSize();
     }
     else
     {
         DCHECK(mode_ == Mode::SERVER);
-
-        encryptor_ = std::make_unique<Encryptor>(Encryptor::Mode::SERVER);
-        if (!encryptor_)
-            return false;
-
-        if (!ServerKeyExchange())
-        {
-            LOG(ERROR) << "Server key exchange failure";
-            return false;
-        }
+        DoReceiveHelloSize();
     }
-
-    return true;
 }
 
-bool NetworkChannelTcp::WriteData(const uint8_t* buffer, size_t size)
+void NetworkChannelTcp::DoDisconnect()
 {
-    while (size)
+    StopSoon();
+
+    if (socket_.is_open())
     {
-        write_event_.Reset();
+        std::error_code ignored_code;
 
-        OVERLAPPED overlapped = { 0 };
-        overlapped.hEvent = write_event_.Handle();
+        socket_.shutdown(asio::ip::tcp::socket::shutdown_both,
+                         ignored_code);
+        socket_.close(ignored_code);
+    }
 
-        WSABUF data;
-        data.buf = const_cast<char*>(reinterpret_cast<const char*>(buffer));
-        data.len = static_cast<ULONG>(size);
+    incomming_queue_.reset();
+    work_.reset();
 
-        DWORD flags = 0;
-        DWORD written = 0;
+    if (!io_service_.stopped())
+        io_service_.stop();
+}
 
-        int ret = WSASend(socket_, &data, 1, nullptr, flags, &overlapped, nullptr);
-        if (ret == SOCKET_ERROR)
+void NetworkChannelTcp::DoSendHelloSize()
+{
+    message_ = encryptor_->HelloMessage();
+    if (message_.IsEmpty())
+    {
+        DoDisconnect();
+        return;
+    }
+
+    message_size_ = static_cast<MessageSizeType>(message_.size());
+
+    asio::async_write(socket_,
+                      asio::buffer(&message_size_, sizeof(MessageSizeType)),
+                      std::bind(&NetworkChannelTcp::OnSendHelloSize,
+                                this,
+                                std::placeholders::_1,
+                                std::placeholders::_2));
+}
+
+void NetworkChannelTcp::OnSendHelloSize(const std::error_code& code,
+                                        size_t bytes_transferred)
+{
+    if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
+    {
+        DoDisconnect();
+        return;
+    }
+
+    DoSendHello();
+}
+
+void NetworkChannelTcp::DoSendHello()
+{
+    asio::async_write(socket_,
+                      asio::buffer(message_.data(), message_.size()),
+                      std::bind(&NetworkChannelTcp::OnSendHello,
+                                this,
+                                std::placeholders::_1,
+                                std::placeholders::_2));
+}
+
+void NetworkChannelTcp::OnSendHello(const std::error_code& code,
+                                    size_t bytes_transferred)
+{
+    if (IsFailureCode(code) || bytes_transferred != message_.size())
+    {
+        DoDisconnect();
+        return;
+    }
+
+    if (mode_ == Mode::CLIENT)
+    {
+        DoReceiveHelloSize();
+    }
+    else
+    {
+        DCHECK(mode_ == Mode::SERVER);
+        DoStartListening();
+    }
+}
+
+void NetworkChannelTcp::DoReceiveHelloSize()
+{
+    asio::async_read(socket_,
+                     asio::buffer(&message_size_, sizeof(MessageSizeType)),
+                     std::bind(&NetworkChannelTcp::OnReceiveHelloSize,
+                               this,
+                               std::placeholders::_1,
+                               std::placeholders::_2));
+}
+
+void NetworkChannelTcp::OnReceiveHelloSize(const std::error_code& code,
+                                           size_t bytes_transferred)
+{
+    if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
+    {
+        DoDisconnect();
+        return;
+    }
+
+    DoReceiveHello();
+}
+
+void NetworkChannelTcp::DoReceiveHello()
+{
+    message_ = IOBuffer(message_size_);
+
+    asio::async_read(socket_,
+                     asio::buffer(message_.data(), message_.size()),
+                     std::bind(&NetworkChannelTcp::OnReceiveHello,
+                               this,
+                               std::placeholders::_1,
+                               std::placeholders::_2));
+}
+
+void NetworkChannelTcp::OnReceiveHello(const std::error_code& code,
+                                       size_t bytes_transferred)
+{
+    if (IsFailureCode(code) || message_size_ != bytes_transferred)
+    {
+        DoDisconnect();
+        return;
+    }
+
+    if (!encryptor_->ReadHelloMessage(message_))
+    {
+        DoDisconnect();
+        return;
+    }
+
+    if (mode_ == Mode::CLIENT)
+    {
+        DoStartListening();
+    }
+    else
+    {
+        DCHECK(mode_ == Mode::SERVER);
+        DoSendHelloSize();
+    }
+}
+
+void NetworkChannelTcp::DoStartListening()
+{
+    incomming_queue_ = std::make_unique<IOQueue>(
+        std::bind(&NetworkChannelTcp::DoDecryptMessage,
+                  this,
+                  std::placeholders::_1));
+
+    if (listener_)
+        listener_->OnNetworkChannelConnect();
+
+    DoReadMessageSize();
+}
+
+void NetworkChannelTcp::DoReadMessageSize()
+{
+    asio::async_read(socket_,
+                     asio::buffer(&message_size_, sizeof(MessageSizeType)),
+                     std::bind(&NetworkChannelTcp::OnReadMessageSize,
+                               this,
+                               std::placeholders::_1,
+                               std::placeholders::_2));
+}
+
+void NetworkChannelTcp::OnReadMessageSize(const std::error_code& code,
+                                          size_t bytes_transferred)
+{
+    if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
+    {
+        DoDisconnect();
+        return;
+    }
+
+    message_size_ = NetworkByteOrderToHost(message_size_);
+
+    if (message_size_ > kMaxMessageSize)
+    {
+        DoDisconnect();
+        return;
+    }
+
+    DoReadMessage();
+}
+
+void NetworkChannelTcp::DoReadMessage()
+{
+    message_ = IOBuffer(message_size_);
+
+    asio::async_read(socket_,
+                     asio::buffer(message_.data(), message_.size()),
+                     std::bind(&NetworkChannelTcp::OnReadMessage,
+                               this,
+                               std::placeholders::_1,
+                               std::placeholders::_2));
+}
+
+void NetworkChannelTcp::OnReadMessage(const std::error_code& code,
+                                      size_t bytes_transferred)
+{
+    if (IsFailureCode(code) || message_size_ != bytes_transferred)
+    {
+        DoDisconnect();
+        return;
+    }
+
+    if (!incomming_queue_)
+        return;
+
+    incomming_queue_->Add(std::move(message_));
+
+    DoReadMessageSize();
+}
+
+void NetworkChannelTcp::DoDecryptMessage(const IOBuffer& buffer)
+{
+    IOBuffer message_buffer(encryptor_->Decrypt(buffer));
+
+    if (message_buffer.IsEmpty())
+    {
+        DoDisconnect();
+        return;
+    }
+
+    if (listener_)
+    {
+        listener_->OnNetworkChannelMessage(message_buffer);
+    }
+}
+
+void NetworkChannelTcp::Disconnect()
+{
+    if (!IsStopping())
+    {
+        io_service_.post(std::bind(&NetworkChannelTcp::DoDisconnect, this));
+    }
+}
+
+bool NetworkChannelTcp::IsConnected() const
+{
+    return !IsStopping();
+}
+
+void NetworkChannelTcp::Send(const IOBuffer& buffer)
+{
+    IOBuffer encrypted_buffer = encryptor_->Encrypt(buffer);
+
+    if (!encrypted_buffer.IsEmpty() &&
+        encrypted_buffer.size() <= kMaxMessageSize)
+    {
+        MessageSizeType message_size = static_cast<MessageSizeType>(
+            encrypted_buffer.size());
+
+        message_size = HostByteOrderToNetwork(message_size);
+
+        if (asio::write(socket_, asio::buffer(&message_size,
+                                              sizeof(MessageSizeType))))
         {
-            SystemErrorCode err = GetLastSystemErrorCode();
-
-            if (err != ERROR_IO_PENDING)
+            if (asio::write(socket_, asio::buffer(encrypted_buffer.data(),
+                                                  encrypted_buffer.size())))
             {
-                LOG(ERROR) << "WSASend() failed: " << SystemErrorCodeToString(err);
-                return false;
+                return;
             }
         }
-
-        if (!write_event_.TimedWait(kWriteTimeout))
-            return false;
-
-        if (!WSAGetOverlappedResult(socket_, &overlapped, &written, FALSE, &flags))
-        {
-            DLOG(ERROR) << "WSAGetOverlappedResult() failed: "
-                        << GetLastSystemErrorString();
-            return false;
-        }
-
-        if (!written)
-            return false;
-
-        buffer += written;
-        size -= written;
     }
 
-    return true;
+    io_service_.post(std::bind(&NetworkChannelTcp::DoDisconnect, this));
 }
 
-bool NetworkChannelTcp::ReadData(uint8_t* buffer, size_t size)
+void NetworkChannelTcp::Run()
 {
-    while (size)
+    work_ = std::make_unique<asio::io_service::work>(io_service_);
+
+    std::error_code ignored_code;
+    io_service_.run(ignored_code);
+
+    if (listener_)
     {
-        read_event_.Reset();
-
-        OVERLAPPED overlapped = { 0 };
-        overlapped.hEvent = read_event_.Handle();
-
-        WSABUF data;
-        data.buf = reinterpret_cast<char*>(buffer);
-        data.len = static_cast<ULONG>(size);
-
-        DWORD flags = 0;
-        DWORD read = 0;
-
-        int ret = WSARecv(socket_, &data, 1, nullptr, &flags, &overlapped, nullptr);
-        if (ret == SOCKET_ERROR)
-        {
-            SystemErrorCode err = GetLastSystemErrorCode();
-
-            if (err != ERROR_IO_PENDING)
-            {
-                LOG(ERROR) << "WSARecv() failed: " << SystemErrorCodeToString(err);
-                return false;
-            }
-        }
-
-        read_event_.Wait();
-
-        if (!WSAGetOverlappedResult(socket_, &overlapped, &read, FALSE, &flags))
-        {
-            DLOG(ERROR) << "WSAGetOverlappedResult() failed: "
-                        << GetLastSystemErrorString();
-            return false;
-        }
-
-        if (!read)
-            return false;
-
-        buffer += read;
-        size -= read;
+        listener_->OnNetworkChannelDisconnect();
+        listener_ = nullptr;
     }
-
-    return true;
-}
-
-void NetworkChannelTcp::Close()
-{
-    shutdown(socket_, SD_BOTH);
-
-    read_event_.Signal();
-    write_event_.Signal();
 }
 
 } // namespace aspia

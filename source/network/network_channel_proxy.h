@@ -9,16 +9,17 @@
 #define _ASPIA_NETWORK__NETWORK_CHANNEL_PROXY_H
 
 #include "network/network_channel.h"
+#include "protocol/io_queue.h"
 
 namespace aspia {
 
 class NetworkChannelProxy
 {
 public:
+    bool Disconnect();
+    bool IsConnected() const;
     bool Send(const IOBuffer& buffer);
     bool SendAsync(IOBuffer buffer);
-    void Disconnect();
-    bool IsConnected() const;
 
 private:
     friend class NetworkChannel;

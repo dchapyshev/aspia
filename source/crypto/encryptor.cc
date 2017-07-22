@@ -42,7 +42,7 @@ Encryptor::~Encryptor()
     // Nothing
 }
 
-bool Encryptor::ReadHelloMessage(const SecureIOBuffer& message_buffer)
+bool Encryptor::ReadHelloMessage(const IOBuffer& message_buffer)
 {
     if (!local_public_key_ || !local_secret_key_)
         return false;
@@ -111,10 +111,10 @@ bool Encryptor::ReadHelloMessage(const SecureIOBuffer& message_buffer)
     return true;
 }
 
-SecureIOBuffer Encryptor::HelloMessage()
+IOBuffer Encryptor::HelloMessage()
 {
     if (!local_public_key_ || !local_secret_key_)
-        return SecureIOBuffer();
+        return IOBuffer();
 
     encrypt_nonce_ = std::make_unique<SecureBuffer>(crypto_secretbox_NONCEBYTES);
 
@@ -126,7 +126,7 @@ SecureIOBuffer Encryptor::HelloMessage()
     message.set_public_key(local_public_key_->data(), local_public_key_->size());
     message.set_nonce(encrypt_nonce_->data(), encrypt_nonce_->size());
 
-    SecureIOBuffer message_buffer(SerializeMessage<SecureIOBuffer>(message));
+    IOBuffer message_buffer(SerializeMessage<IOBuffer>(message));
 
     SecureClearString(*message.mutable_public_key());
     SecureClearString(*message.mutable_nonce());

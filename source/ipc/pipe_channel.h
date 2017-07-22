@@ -10,7 +10,7 @@
 
 #include "base/scoped_object.h"
 #include "base/synchronization/waitable_event.h"
-#include "base/thread.h"
+#include "base/threading/thread.h"
 #include "base/macros.h"
 #include "protocol/io_buffer.h"
 

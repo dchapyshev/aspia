@@ -9,7 +9,7 @@
 #define _ASPIA_CRYPTO__ENCRYPTOR_H
 
 #include "crypto/secure_buffer.h"
-#include "crypto/secure_io_buffer.h"
+#include "protocol/io_buffer.h"
 
 extern "C" {
 #define SODIUM_STATIC
@@ -29,8 +29,8 @@ public:
     explicit Encryptor(Mode mode);
     ~Encryptor();
 
-    bool ReadHelloMessage(const SecureIOBuffer& message_buffer);
-    SecureIOBuffer HelloMessage();
+    bool ReadHelloMessage(const IOBuffer& message_buffer);
+    IOBuffer HelloMessage();
 
     IOBuffer Encrypt(const IOBuffer& source_buffer);
     IOBuffer Decrypt(const IOBuffer& source_buffer);

@@ -6,19 +6,23 @@
 //
 
 #include "network/network_client_tcp.h"
-#include "network/scoped_addrinfo.h"
+#include "base/strings/unicode.h"
 
 namespace aspia {
 
-static const std::chrono::milliseconds kConnectTimeout{ 10000 };
-static const size_t kMaximumHostNameLength = 64;
+static const size_t kMaxHostNameLength = 64;
+
+static bool IsFailureCode(const std::error_code& code)
+{
+    return code.value() != 0;
+}
 
 static bool IsValidHostNameChar(wchar_t c)
 {
-    if (isalnum(c) != 0)
+    if (iswalnum(c) != 0)
         return true;
 
-    if (c == '.' || c == ' ' || c == '_' || c == '-')
+    if (c == L'.' || c == L' ' || c == L'_' || c == L'-')
         return true;
 
     return false;
@@ -32,7 +36,7 @@ bool NetworkClientTcp::IsValidHostName(const std::wstring& hostname)
 
     size_t length = hostname.length();
 
-    if (length > kMaximumHostNameLength)
+    if (length > kMaxHostNameLength)
         return false;
 
     for (size_t i = 0; i < length; ++i)
@@ -53,142 +57,86 @@ bool NetworkClientTcp::IsValidPort(uint16_t port)
     return true;
 }
 
-NetworkClientTcp::NetworkClientTcp(std::shared_ptr<MessageLoopProxy> runner) :
-    connect_event_(WaitableEvent::ResetPolicy::MANUAL,
-                   WaitableEvent::InitialState::NOT_SIGNALED),
-    runner_(runner)
+NetworkClientTcp::NetworkClientTcp(const std::wstring& address,
+                                   uint16_t port,
+                                   ConnectCallback connect_callback)
+    : connect_callback_(std::move(connect_callback))
 {
-    // Nothing
+    asio::ip::tcp::resolver::query query(ANSIfromUNICODE(address),
+                                         std::to_string(port));
+
+    channel_ = std::make_unique<NetworkChannelTcp>(
+        NetworkChannelTcp::Mode::CLIENT);
+
+    resolver_ = std::make_unique<asio::ip::tcp::resolver>(
+        channel_->io_service());
+
+    resolver_->async_resolve(query,
+                             std::bind(&NetworkClientTcp::OnResolve,
+                                       this,
+                                       std::placeholders::_1,
+                                       std::placeholders::_2));
 }
 
 NetworkClientTcp::~NetworkClientTcp()
 {
-    connect_watcher_.StopWatching();
-    socket_.Reset();
+    std::lock_guard<std::mutex> lock(channel_lock_);
+
+    if (channel_)
+    {
+        channel_->io_service().dispatch(
+            std::bind(&NetworkClientTcp::DoStop, this));
+        channel_.reset();
+    }
 }
 
-bool NetworkClientTcp::Connect(const std::wstring& address, uint16_t port, Delegate* delegate)
+void NetworkClientTcp::OnResolve(
+    const std::error_code& code,
+    asio::ip::tcp::resolver::iterator endpoint_iterator)
 {
-    if (!IsValidHostName(address) || !IsValidPort(port))
-        return false;
-
-    delegate_ = delegate;
-
-    ADDRINFOW hints;
-    memset(&hints, 0, sizeof(hints));
-
-    hints.ai_family   = AF_INET;
-    hints.ai_socktype = SOCK_STREAM;
-    hints.ai_protocol = IPPROTO_TCP;
-
-    ScopedAddrInfo result;
-
-    int ret = GetAddrInfoW(address.c_str(),
-                           std::to_wstring(port).c_str(),
-                           &hints,
-                           result.Recieve());
-    if (ret != 0)
+    if (IsFailureCode(code))
     {
-        LOG(ERROR) << "getaddrinfo() failed: " << ret;
-        return false;
-    }
-
-    for (ADDRINFOW* curr = result.Get(); curr != nullptr; curr = curr->ai_next)
-    {
-        socket_.Reset(socket(curr->ai_family, curr->ai_socktype, curr->ai_protocol));
-        if (!socket_.IsValid())
-        {
-            LOG(ERROR) << "socket() failed: " << GetLastSystemErrorString();
-            continue;
-        }
-
-        u_long non_blocking = 1;
-
-        if (ioctlsocket(socket_, FIONBIO, &non_blocking) == SOCKET_ERROR)
-        {
-            LOG(ERROR) << "ioctlsocket() failed: " << GetLastSystemErrorString();
-            continue;
-        }
-
-        connect_event_.Reset();
-
-        if (WSAEventSelect(socket_, connect_event_.Handle(), FD_CONNECT) == SOCKET_ERROR)
-        {
-            LOG(ERROR) << "WSAEventSelect() failed: " << GetLastSystemErrorString();
-            continue;
-        }
-
-        if (WSAConnect(socket_, curr->ai_addr, static_cast<int>(curr->ai_addrlen),
-                       nullptr, nullptr, nullptr, nullptr) == SOCKET_ERROR)
-        {
-            ret = WSAGetLastError();
-
-            if (ret != WSAEWOULDBLOCK)
-            {
-                LOG(ERROR) << "WSAConnect() failed: " << SystemErrorCodeToString(ret);
-                continue;
-            }
-        }
-
-        return connect_watcher_.StartTimedWatching(connect_event_.Handle(),
-                                                   kConnectTimeout,
-                                                   this);
-    }
-
-    return false;
-}
-
-void NetworkClientTcp::OnObjectSignaled(HANDLE object)
-{
-    DCHECK_EQ(object, connect_event_.Handle());
-
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&NetworkClientTcp::OnObjectSignaled, this, object));
+        if (!terminating_)
+            connect_callback_(nullptr);
         return;
     }
 
-    connect_watcher_.StopWatching();
+    std::lock_guard<std::mutex> lock(channel_lock_);
 
-    WSANETWORKEVENTS events;
-    memset(&events, 0, sizeof(events));
+    if (!channel_)
+        return;
 
-    if (WSAEnumNetworkEvents(socket_, connect_event_.Handle(), &events) == SOCKET_ERROR)
-    {
-        LOG(ERROR) << "WSAEnumNetworkEvents() failed: " << GetLastSystemErrorString();
-    }
-    else if ((events.lNetworkEvents & FD_CONNECT) &&
-             (events.iErrorCode[FD_CONNECT_BIT] == 0))
-    {
-        std::unique_ptr<NetworkChannel> channel =
-            NetworkChannelTcp::CreateClient(std::move(socket_));
-
-        if (channel)
-        {
-            delegate_->OnConnectionSuccess(std::move(channel));
-            return;
-        }
-    }
-
-    delegate_->OnConnectionError();
+    channel_->socket().async_connect(
+        endpoint_iterator->endpoint(),
+        std::bind(&NetworkClientTcp::OnConnect,
+                  this, std::placeholders::_1));
 }
 
-void NetworkClientTcp::OnObjectTimeout(HANDLE object)
+void NetworkClientTcp::OnConnect(const std::error_code& code)
 {
-    DCHECK_EQ(object, connect_event_.Handle());
-
-    if (!runner_->BelongsToCurrentThread())
+    if (IsFailureCode(code))
     {
-        runner_->PostTask(std::bind(&NetworkClientTcp::OnObjectTimeout, this, object));
+        if (!terminating_)
+            connect_callback_(nullptr);
         return;
     }
 
-    connect_watcher_.StopWatching();
+    std::lock_guard<std::mutex> lock(channel_lock_);
 
-    if (socket_.IsValid())
+    if (!channel_)
+        return;
+
+    connect_callback_(std::move(channel_));
+}
+
+void NetworkClientTcp::DoStop()
+{
+    terminating_ = true;
+
+    if (resolver_)
     {
-        socket_.Reset();
-        delegate_->OnConnectionTimeout();
+        resolver_->cancel();
+        resolver_.reset();
     }
 }
 

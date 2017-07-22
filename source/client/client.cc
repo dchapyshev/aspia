@@ -15,7 +15,7 @@
 
 namespace aspia {
 
-Client::Client(std::unique_ptr<NetworkChannel> channel,
+Client::Client(std::shared_ptr<NetworkChannel> channel,
                const ClientConfig& config,
                Delegate* delegate)
     : channel_(std::move(channel)),
@@ -63,28 +63,15 @@ void Client::OnSessionTerminate()
     channel_proxy_->Disconnect();
 }
 
-bool Client::OnNetworkChannelFirstMessage(const SecureIOBuffer& buffer)
-{
-    proto::auth::HostToClient result;
-
-    if (!ParseMessage(buffer, result))
-        return false;
-
-    status_ = result.status();
-
-    if (status_ != proto::Status::STATUS_SUCCESS)
-    {
-        runner_->PostTask(std::bind(&Client::OpenStatusDialog, this));
-        return false;
-    }
-
-    CreateSession(result.session_type());
-    return true;
-}
-
 void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
 {
-    DCHECK(session_proxy_);
+    if (!session_proxy_)
+    {
+        if (!DoAuthorize(buffer))
+            channel_proxy_->Disconnect();
+        return;
+    }
+
     session_proxy_->Send(buffer);
 }
 
@@ -140,6 +127,25 @@ void Client::OnStatusDialogOpen()
 void Client::OpenStatusDialog()
 {
     status_dialog_.DoModal(nullptr);
+}
+
+bool Client::DoAuthorize(const IOBuffer& buffer)
+{
+    proto::auth::HostToClient result;
+
+    if (!ParseMessage(buffer, result))
+        return false;
+
+    status_ = result.status();
+
+    if (status_ != proto::Status::STATUS_SUCCESS)
+    {
+        runner_->PostTask(std::bind(&Client::OpenStatusDialog, this));
+        return false;
+    }
+
+    CreateSession(result.session_type());
+    return true;
 }
 
 void Client::CreateSession(proto::SessionType session_type)

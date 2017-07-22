@@ -9,31 +9,37 @@
 
 namespace aspia {
 
-HostPool::HostPool(std::shared_ptr<MessageLoopProxy> runner) :
-    runner_(runner)
+HostPool::HostPool(std::shared_ptr<MessageLoopProxy> runner)
+    : runner_(runner)
 {
     DCHECK(runner_);
+
+    network_server_ = std::make_unique<NetworkServerTcp>(
+        kDefaultHostTcpPort,
+        std::bind(&HostPool::OnChannelConnected, this, std::placeholders::_1));
 }
 
 HostPool::~HostPool()
 {
-    terminating_ = true;
-
     DCHECK(runner_->BelongsToCurrentThread());
+
+    terminating_ = true;
 
     network_server_.reset();
     session_list_.clear();
 }
 
-bool HostPool::Start()
+void HostPool::OnChannelConnected(std::shared_ptr<NetworkChannel> channel)
 {
-    network_server_ = std::make_unique<NetworkServerTcp>(runner_);
-    return network_server_->Start(kDefaultHostTcpPort, this);
-}
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&HostPool::OnChannelConnected,
+                                    this,
+                                    channel));
+        return;
+    }
 
-void HostPool::OnChannelConnected(std::unique_ptr<NetworkChannel> channel)
-{
-    std::unique_ptr<Host> host(new Host(std::move(channel), this));
+    std::unique_ptr<Host> host(new Host(channel, this));
     session_list_.push_back(std::move(host));
 }
 

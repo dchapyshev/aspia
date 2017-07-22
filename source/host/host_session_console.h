@@ -12,7 +12,6 @@
 #include "base/object_watcher.h"
 #include "base/process/process.h"
 #include "base/synchronization/waitable_timer.h"
-#include "base/thread.h"
 #include "ipc/pipe_channel.h"
 #include "host/host_session.h"
 #include "host/console_session_watcher.h"

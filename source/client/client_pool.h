@@ -18,10 +18,9 @@
 
 namespace aspia {
 
-class ClientPool :
-    private NetworkClientTcp::Delegate,
-    private UiStatusDialog::Delegate,
-    private Client::Delegate
+class ClientPool
+    : private UiStatusDialog::Delegate,
+      private Client::Delegate
 {
 public:
     explicit ClientPool(std::shared_ptr<MessageLoopProxy> runner);
@@ -33,10 +32,7 @@ private:
     // UiStatusDialog::Delegate implementation.
     void OnStatusDialogOpen() override;
 
-    // NetworkClientTcp::Delegate implementation.
-    void OnConnectionSuccess(std::unique_ptr<NetworkChannel> channel) override;
-    void OnConnectionTimeout() override;
-    void OnConnectionError() override;
+    void OnConnect(std::shared_ptr<NetworkChannel> channel);
 
     // Client::Delegate implementation.
     void OnSessionTerminate() override;
