@@ -2,16 +2,17 @@ Third-party components information
 ==================================
 
 Component   | License                 | URL
-protobuf      BSD 3-Clause License      https://github.com/google/protobuf/releases
-glog          BSD 3-Clause License      https://github.com/google/glog
-googletest    BSD 3-Clause License      https://github.com/google/googletest
-libyuv        BSD 3-Clause License      https://chromium.googlesource.com/libyuv/libyuv
-libvpx        BSD 3-Clause License      https://chromium.googlesource.com/webm/libvpx
-gflags        BSD 3-Clause License      https://github.com/gflags/gflags
-opus          BSD 3-Clause License      http://opus-codec.org
-zlib-ng       zlib License              https://github.com/Dead2/zlib-ng
-libsodium     ISC License               https://github.com/jedisct1/libsodium/releases
-wtl           Common Public License 1.0 https://sourceforge.net/projects/wtl
+protobuf      BSD 3-Clause License       https://github.com/google/protobuf/releases
+glog          BSD 3-Clause License       https://github.com/google/glog
+googletest    BSD 3-Clause License       https://github.com/google/googletest
+libyuv        BSD 3-Clause License       https://chromium.googlesource.com/libyuv/libyuv
+libvpx        BSD 3-Clause License       https://chromium.googlesource.com/webm/libvpx
+gflags        BSD 3-Clause License       https://github.com/gflags/gflags
+opus          BSD 3-Clause License       http://opus-codec.org
+zlib-ng       zlib License               https://github.com/Dead2/zlib-ng
+libsodium     ISC License                https://github.com/jedisct1/libsodium/releases
+wtl           Common Public License 1.0  https://sourceforge.net/projects/wtl
+asio          Boost Software License 1.0 https://github.com/chriskohlhoff/asio
 
 Synchronization status
 ======================
@@ -27,3 +28,4 @@ opus          24.01.2017    1.1.4
 zlib-ng       12.07.2017    trunk
 libsodium     16.07.2017    1.0.13
 wtl           12.07.2017    r636
+asio          17.07.2017    1.10.8

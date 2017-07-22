@@ -37,6 +37,7 @@ Also uses:
    - [gtest](https://github.com/google/googletest "gtest") (unit testing)
    - [libsodium](https://github.com/jedisct1/libsodium/releases "libsodium") (encryption)
    - [WTL](https://sourceforge.net/projects/wtl "WTL") (for UI in Windows)
+   - [asio](https://github.com/chriskohlhoff/asio "asio") (for networking)
    - [FatCow Icons](http://www.fatcow.com/free-icons "FatCow Icons")
    - [Fugue Icons](https://github.com/yusukekamiyamane/fugue-icons "Fugue Icons")
 
