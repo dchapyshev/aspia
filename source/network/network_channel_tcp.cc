@@ -84,7 +84,13 @@ void NetworkChannelTcp::DoDisconnect()
         socket_.close(ignored_code);
     }
 
-    incomming_queue_.reset();
+    incoming_queue_.reset();
+
+    {
+        std::lock_guard<std::mutex> lock(outgoing_queue_lock_);
+        outgoing_queue_.reset();
+    }
+
     work_.reset();
 
     if (!io_service_.stopped())
@@ -214,10 +220,11 @@ void NetworkChannelTcp::OnReceiveHello(const std::error_code& code,
 
 void NetworkChannelTcp::DoStartListening()
 {
-    incomming_queue_ = std::make_unique<IOQueue>(
-        std::bind(&NetworkChannelTcp::DoDecryptMessage,
-                  this,
-                  std::placeholders::_1));
+    incoming_queue_ = std::make_unique<IOQueue>(
+        std::bind(&NetworkChannelTcp::DoDecryptMessage, this, std::placeholders::_1));
+
+    outgoing_queue_ = std::make_unique<IOQueue>(
+        std::bind(&NetworkChannelTcp::Send, this, std::placeholders::_1));
 
     if (listener_)
         listener_->OnNetworkChannelConnect();
@@ -276,10 +283,10 @@ void NetworkChannelTcp::OnReadMessage(const std::error_code& code,
         return;
     }
 
-    if (!incomming_queue_)
+    if (!incoming_queue_)
         return;
 
-    incomming_queue_->Add(std::move(message_));
+    incoming_queue_->Add(std::move(message_));
 
     DoReadMessageSize();
 }
@@ -315,6 +322,8 @@ bool NetworkChannelTcp::IsConnected() const
 
 void NetworkChannelTcp::Send(const IOBuffer& buffer)
 {
+    std::lock_guard<std::mutex> lock(outgoing_lock_);
+
     IOBuffer encrypted_buffer = encryptor_->Encrypt(buffer);
 
     if (!encrypted_buffer.IsEmpty() &&
@@ -337,6 +346,16 @@ void NetworkChannelTcp::Send(const IOBuffer& buffer)
     }
 
     io_service_.post(std::bind(&NetworkChannelTcp::DoDisconnect, this));
+}
+
+void NetworkChannelTcp::SendAsync(IOBuffer buffer)
+{
+    std::lock_guard<std::mutex> lock(outgoing_queue_lock_);
+
+    if (!outgoing_queue_)
+        return;
+
+    outgoing_queue_->Add(std::move(buffer));
 }
 
 void NetworkChannelTcp::Run()

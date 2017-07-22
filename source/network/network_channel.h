@@ -47,6 +47,7 @@ protected:
     virtual void Disconnect() = 0;
     virtual bool IsConnected() const = 0;
     virtual void Send(const IOBuffer& buffer) = 0;
+    virtual void SendAsync(IOBuffer buffer) = 0;
 
 private:
     std::shared_ptr<NetworkChannelProxy> proxy_;

@@ -32,9 +32,6 @@ private:
     NetworkChannel* channel_;
     mutable std::mutex channel_lock_;
 
-    std::unique_ptr<IOQueue> outgoing_queue_;
-    std::mutex outgoing_queue_lock_;
-
     DISALLOW_COPY_AND_ASSIGN(NetworkChannelProxy);
 };
 

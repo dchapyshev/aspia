@@ -12,23 +12,13 @@ namespace aspia {
 NetworkChannelProxy::NetworkChannelProxy(NetworkChannel* channel) :
     channel_(channel)
 {
-    outgoing_queue_ =
-        std::make_unique<IOQueue>(std::bind(&NetworkChannelProxy::Send,
-                                            this,
-                                            std::placeholders::_1));
+    // Nothing
 }
 
 void NetworkChannelProxy::WillDestroyCurrentChannel()
 {
-    {
-        std::lock_guard<std::mutex> lock(outgoing_queue_lock_);
-        outgoing_queue_.reset();
-    }
-
-    {
-        std::lock_guard<std::mutex> lock(channel_lock_);
-        channel_ = nullptr;
-    }
+    std::lock_guard<std::mutex> lock(channel_lock_);
+    channel_ = nullptr;
 }
 
 bool NetworkChannelProxy::Disconnect()
@@ -67,15 +57,13 @@ bool NetworkChannelProxy::Send(const IOBuffer& buffer)
 
 bool NetworkChannelProxy::SendAsync(IOBuffer buffer)
 {
-    std::lock_guard<std::mutex> lock(outgoing_queue_lock_);
+    std::lock_guard<std::mutex> lock(channel_lock_);
 
-    if (outgoing_queue_)
-    {
-        outgoing_queue_->Add(std::move(buffer));
-        return true;
-    }
+    if (!channel_)
+        return false;
 
-    return false;
+    channel_->SendAsync(std::move(buffer));
+    return true;
 }
 
 } // namespace aspia

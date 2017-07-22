@@ -55,6 +55,7 @@ protected:
     void Disconnect() override;
     bool IsConnected() const override;
     void Send(const IOBuffer& buffer) override;
+    void SendAsync(IOBuffer buffer) override;
 
 private:
     friend class NetworkServerTcp;
@@ -107,7 +108,11 @@ private:
     MessageSizeType message_size_ = 0;
     IOBuffer message_;
 
-    std::unique_ptr<IOQueue> incomming_queue_;
+    std::unique_ptr<IOQueue> incoming_queue_;
+    std::unique_ptr<IOQueue> outgoing_queue_;
+    std::mutex outgoing_queue_lock_;
+    std::mutex outgoing_lock_;
+
     std::unique_ptr<Encryptor> encryptor_;
 
     DISALLOW_COPY_AND_ASSIGN(NetworkChannelTcp);
