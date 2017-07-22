@@ -38,6 +38,34 @@ std::string CollapseWhitespaceASCII(const std::string& text,
 int CompareCaseInsensitive(const std::string& first, const std::string& second);
 int CompareCaseInsensitive(const std::wstring& first, const std::wstring& second);
 
+enum TrimPositions
+{
+    TRIM_NONE     = 0,
+    TRIM_LEADING  = 1 << 0,
+    TRIM_TRAILING = 1 << 1,
+    TRIM_ALL      = TRIM_LEADING | TRIM_TRAILING,
+};
+
+// Trims any whitespace from either end of the input string.
+//
+// The StringPiece versions return a substring referencing the input buffer.
+// The ASCII versions look only for ASCII whitespace.
+//
+// The std::string versions return where whitespace was found.
+// NOTE: Safe to use the same variable for both input and output.
+TrimPositions TrimWhitespace(const std::wstring& input,
+                             TrimPositions positions,
+                             std::wstring& output);
+TrimPositions TrimWhitespaceASCII(const std::string& input,
+                                  TrimPositions positions,
+                                  std::string& output);
+
+void ToUpper(std::wstring& string);
+std::wstring ToUpperCopy(const std::wstring& string);
+
+void ToLower(std::wstring& string);
+std::wstring ToLowerCopy(const std::wstring& string);
+
 } // namespace aspia
 
 #endif // _ASPIA_BASE__STRINGS__STRING_UTIL_H

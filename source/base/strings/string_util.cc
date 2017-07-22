@@ -9,6 +9,8 @@
 #include "base/strings/string_util_constants.h"
 #include "base/logging.h"
 
+#include <algorithm>
+#include <cwctype>
 #include <strsafe.h>
 
 namespace aspia {
@@ -232,6 +234,81 @@ int CompareCaseInsensitive(const std::string& first, const std::string& second)
 int CompareCaseInsensitive(const std::wstring& first, const std::wstring& second)
 {
     return _wcsicmp(first.c_str(), second.c_str());
+}
+
+template <class Str>
+TrimPositions TrimStringT(const Str& input,
+                          const typename Str::value_type* trim_chars,
+                          TrimPositions positions,
+                          Str& output)
+{
+    // Find the edges of leading/trailing whitespace as desired. Need to use
+    // a StringPiece version of input to be able to call find* on it with the
+    // StringPiece version of trim_chars (normally the trim_chars will be a
+    // constant so avoid making a copy).
+    Str input_piece(input);
+    const size_t last_char = input.length() - 1;
+    const size_t first_good_char = (positions & TRIM_LEADING) ?
+        input_piece.find_first_not_of(trim_chars) : 0;
+    const size_t last_good_char = (positions & TRIM_TRAILING) ?
+        input_piece.find_last_not_of(trim_chars) : last_char;
+
+    // When the string was all trimmed, report that we stripped off characters
+    // from whichever position the caller was interested in. For empty input, we
+    // stripped no characters, but we still need to clear |output|.
+    if (input.empty() ||
+        (first_good_char == Str::npos) || (last_good_char == Str::npos))
+    {
+        bool input_was_empty = input.empty();  // in case output == &input
+        output.clear();
+        return input_was_empty ? TRIM_NONE : positions;
+    }
+
+    // Trim.
+    output = input.substr(first_good_char, last_good_char - first_good_char + 1);
+
+    // Return where we trimmed from.
+    return static_cast<TrimPositions>(
+        ((first_good_char == 0) ? TRIM_NONE : TRIM_LEADING) |
+        ((last_good_char == last_char) ? TRIM_NONE : TRIM_TRAILING));
+}
+
+TrimPositions TrimWhitespace(const std::wstring& input,
+                             TrimPositions positions,
+                             std::wstring& output)
+{
+    return TrimStringT(input, kWhitespaceWide, positions, output);
+}
+
+TrimPositions TrimWhitespaceASCII(const std::string& input,
+                                  TrimPositions positions,
+                                  std::string& output)
+{
+    return TrimStringT(input, kWhitespaceASCII, positions, output);
+}
+
+void ToUpper(std::wstring& string)
+{
+    std::transform(string.begin(), string.end(), string.begin(), std::towupper);
+}
+
+std::wstring ToUpperCopy(const std::wstring& in)
+{
+    std::wstring out(in);
+    ToUpper(out);
+    return out;
+}
+
+void ToLower(std::wstring& string)
+{
+    std::transform(string.begin(), string.end(), string.begin(), std::towlower);
+}
+
+std::wstring ToLowerCopy(const std::wstring& in)
+{
+    std::wstring out(in);
+    ToLower(out);
+    return out;
 }
 
 } // namespace aspia
