@@ -30,6 +30,11 @@
 #define ASIO_WINDOWS
 #define ASIO_HAS_GETADDRINFO
 #define ASIO_HAS_THREADS
+
+#ifdef NDEBUG
+#define ASIO_DISABLE_BUFFER_DEBUGGING
+#endif // NDEBUG
+
 #include <asio.hpp>
 
 namespace aspia {
