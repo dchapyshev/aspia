@@ -91,6 +91,9 @@ void NetworkServerTcp::AddFirewallRule()
 
 void NetworkServerTcp::OnAccept(const std::error_code& code)
 {
+    if (IsFailureCode(code))
+        return;
+
     if (!acceptor_ || !acceptor_->is_open())
         return;
 
@@ -100,8 +103,7 @@ void NetworkServerTcp::OnAccept(const std::error_code& code)
         if (!channel_)
             return;
 
-        if (!IsFailureCode(code))
-            connect_callback_(std::move(channel_));
+        connect_callback_(std::move(channel_));
     }
 
     DoAccept();

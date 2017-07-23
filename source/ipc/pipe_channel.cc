@@ -167,14 +167,10 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateClient(const std::wstring& input
                                                         Mode::CLIENT));
 }
 
-PipeChannel::PipeChannel(HANDLE read_pipe, HANDLE write_pipe, Mode mode) :
-    read_pipe_(read_pipe),
-    write_pipe_(write_pipe),
-    mode_(mode),
-    read_event_(WaitableEvent::ResetPolicy::AUTOMATIC,
-                WaitableEvent::InitialState::NOT_SIGNALED),
-    write_event_(WaitableEvent::ResetPolicy::AUTOMATIC,
-                 WaitableEvent::InitialState::NOT_SIGNALED)
+PipeChannel::PipeChannel(HANDLE read_pipe, HANDLE write_pipe, Mode mode)
+    : read_pipe_(read_pipe),
+      write_pipe_(write_pipe),
+      mode_(mode)
 {
     // Nothing
 }
@@ -227,11 +223,9 @@ bool PipeChannel::Read(void* buffer, size_t buffer_size)
 
             return transfered_bytes == buffer_size;
         }
-        else
-        {
-            LOG(ERROR) << "ReadFile() failed: " << SystemErrorCodeToString(error);
-            return false;
-        }
+
+        LOG(ERROR) << "ReadFile() failed: " << SystemErrorCodeToString(error);
+        return false;
     }
 
     return read_bytes == buffer_size;
@@ -279,11 +273,9 @@ bool PipeChannel::Write(const void* buffer, size_t buffer_size)
 
             return transfered_bytes == buffer_size;
         }
-        else
-        {
-            LOG(ERROR) << "WriteFile() failed: " << SystemErrorCodeToString(error);
-            return false;
-        }
+
+        LOG(ERROR) << "WriteFile() failed: " << SystemErrorCodeToString(error);
+        return false;
     }
 
     return written_bytes == buffer_size;

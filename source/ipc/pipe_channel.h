@@ -62,8 +62,10 @@ private:
     ScopedHandle read_pipe_;
     ScopedHandle write_pipe_;
 
-    WaitableEvent read_event_;
-    WaitableEvent write_event_;
+    WaitableEvent read_event_{ WaitableEvent::ResetPolicy::AUTOMATIC,
+                               WaitableEvent::InitialState::NOT_SIGNALED };
+    WaitableEvent write_event_{ WaitableEvent::ResetPolicy::AUTOMATIC,
+                                WaitableEvent::InitialState::NOT_SIGNALED };
 
     std::mutex read_lock_;
     std::mutex write_lock_;
