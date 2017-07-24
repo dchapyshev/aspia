@@ -493,6 +493,9 @@
     <ClCompile Include="base\threading\thread_checker.cc">
       <Filter>base\threading</Filter>
     </ClCompile>
+    <ClCompile Include="base\message_loop\pending_task.cc">
+      <Filter>base\message_loop</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -788,9 +791,6 @@
     <ClInclude Include="base\message_loop\message_loop_proxy.h">
       <Filter>base\message_loop</Filter>
     </ClInclude>
-    <ClInclude Include="base\message_loop\task.h">
-      <Filter>base\message_loop</Filter>
-    </ClInclude>
     <ClInclude Include="client\client_pool.h">
       <Filter>client</Filter>
     </ClInclude>
@@ -1042,6 +1042,9 @@
     </ClInclude>
     <ClInclude Include="base\threading\thread_checker.h">
       <Filter>base\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="base\message_loop\pending_task.h">
+      <Filter>base\message_loop</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

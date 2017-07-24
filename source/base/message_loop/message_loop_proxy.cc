@@ -20,13 +20,27 @@ std::shared_ptr<MessageLoopProxy> MessageLoopProxy::Current()
     return current->message_loop_proxy();
 }
 
-bool MessageLoopProxy::PostTask(Task::Callback callback)
+bool MessageLoopProxy::PostTask(PendingTask::Callback callback)
 {
     std::lock_guard<std::mutex> lock(loop_lock_);
 
     if (loop_)
     {
         loop_->PostTask(std::move(callback));
+        return true;
+    }
+
+    return false;
+}
+
+bool MessageLoopProxy::PostDelayedTask(PendingTask::Callback callback,
+                                       const PendingTask::TimeDelta& delay)
+{
+    std::lock_guard<std::mutex> lock(loop_lock_);
+
+    if (loop_)
+    {
+        loop_->PostDelayedTask(std::move(callback), delay);
         return true;
     }
 

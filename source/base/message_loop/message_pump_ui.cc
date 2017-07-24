@@ -46,6 +46,42 @@ void MessagePumpForUI::ScheduleWork()
     InterlockedExchange(&work_state_, READY); // Clarify that we didn't really insert.
 }
 
+void MessagePumpForUI::ScheduleDelayedWork(
+    const TimePoint& delayed_work_time)
+{
+    //
+    // We would *like* to provide high resolution timers.  Windows timers using
+    // SetTimer() have a 10ms granularity.  We have to use WM_TIMER as a wakeup
+    // mechanism because the application can enter modal windows loops where it
+    // is not running our MessageLoop; the only way to have our timers fire in
+    // these cases is to post messages there.
+    //
+    // To provide sub-10ms timers, we process timers directly from our run loop.
+    // For the common case, timers will be processed there as the run loop does
+    // its normal work.  However, we *also* set the system timer so that WM_TIMER
+    // events fire.  This mops up the case of timers not being able to work in
+    // modal message loops.  It is possible for the SetTimer to pop and have no
+    // pending timers, because they could have already been processed by the
+    // run loop itself.
+    //
+    // We use a single SetTimer corresponding to the timer that will expire
+    // soonest.  As new timers are created and destroyed, we update SetTimer.
+    // Getting a spurrious SetTimer event firing is benign, as we'll just be
+    // processing an empty timer queue.
+    //
+    delayed_work_time_ = delayed_work_time;
+
+    int delay_msec = GetCurrentDelay();
+    DCHECK(delay_msec > 0);
+    if (delay_msec < USER_TIMER_MINIMUM)
+        delay_msec = USER_TIMER_MINIMUM;
+
+    // Create a WM_TIMER event that will wake us up to check for any pending
+    // timers (in case we are running within a nested, external sub-pump).
+    SetTimer(message_window_.hwnd(), reinterpret_cast<UINT_PTR>(this),
+             delay_msec, nullptr);
+}
+
 bool MessagePumpForUI::OnMessage(UINT message, WPARAM wparam, LPARAM lparam, LRESULT& result)
 {
     UNREF(wparam);
@@ -56,6 +92,10 @@ bool MessagePumpForUI::OnMessage(UINT message, WPARAM wparam, LPARAM lparam, LRE
     {
         case kMsgHaveWork:
             HandleWorkMessage();
+            break;
+
+        case WM_TIMER:
+            HandleTimerMessage();
             break;
 
         default:
@@ -95,6 +135,17 @@ void MessagePumpForUI::DoRunLoop()
             break;
 
         more_work_is_plausible |= state_->delegate->DoWork();
+        if (state_->should_quit)
+            break;
+
+        more_work_is_plausible |=
+            state_->delegate->DoDelayedWork(&delayed_work_time_);
+        // If we did not process any delayed work, then we can assume that our
+        // existing WM_TIMER if any will fire when delayed work should run.  We
+        // don't want to disturb that timer if it is already in flight.  However,
+        // if we did do all remaining delayed work, then lets kill the WM_TIMER.
+        if (more_work_is_plausible && delayed_work_time_ == TimePoint())
+            KillTimer(message_window_.hwnd(), reinterpret_cast<UINT_PTR>(this));
         if (state_->should_quit)
             break;
 
@@ -174,6 +225,24 @@ void MessagePumpForUI::HandleWorkMessage()
     // needs to do more work.
     if (state_->delegate->DoWork())
         ScheduleWork();
+}
+
+void MessagePumpForUI::HandleTimerMessage()
+{
+    KillTimer(message_window_.hwnd(), reinterpret_cast<UINT_PTR>(this));
+
+    // If we are being called outside of the context of Run, then don't do
+    // anything.  This could correspond to a MessageBox call or something of
+    // that sort.
+    if (!state_)
+        return;
+
+    state_->delegate->DoDelayedWork(&delayed_work_time_);
+    if (delayed_work_time_ != TimePoint())
+    {
+        // A bit gratuitous to set delayed_work_time_ again, but oh well.
+        ScheduleDelayedWork(delayed_work_time_);
+    }
 }
 
 bool MessagePumpForUI::ProcessNextWindowsMessage()

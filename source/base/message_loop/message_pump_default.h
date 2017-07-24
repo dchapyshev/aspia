@@ -16,20 +16,25 @@ namespace aspia {
 class MessagePumpDefault : public MessagePump
 {
 public:
-    MessagePumpDefault();
+    MessagePumpDefault() = default;
     ~MessagePumpDefault() = default;
 
     // MessagePump methods:
     void Run(Delegate* delegate) override;
     void Quit() override;
     void ScheduleWork() override;
+    void ScheduleDelayedWork(const TimePoint& delayed_work_time) override;
 
 private:
     // This flag is set to false when Run should return.
     bool keep_running_ = true;
 
     // Used to sleep until there is more work to do.
-    WaitableEvent event_;
+    WaitableEvent event_ { WaitableEvent::ResetPolicy::AUTOMATIC,
+                           WaitableEvent::InitialState::NOT_SIGNALED };
+
+    // The time at which we should call DoDelayedWork.
+    TimePoint delayed_work_time_;
 
     DISALLOW_COPY_AND_ASSIGN(MessagePumpDefault);
 };

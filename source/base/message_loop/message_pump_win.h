@@ -48,6 +48,10 @@ protected:
     };
 
     virtual void DoRunLoop() = 0;
+    int GetCurrentDelay() const;
+
+    // The time at which delayed work should run.
+    TimePoint delayed_work_time_;
 
     // A value used to indicate if there is a kMsgDoWork message pending
     // in the Windows Message queue.  There is at most one such message, and it

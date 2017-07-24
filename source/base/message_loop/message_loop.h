@@ -9,7 +9,7 @@
 #define _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_LOOP_H
 
 #include "base/message_loop/message_pump_ui.h"
-#include "base/message_loop/task.h"
+#include "base/message_loop/pending_task.h"
 
 #include <memory>
 #include <mutex>
@@ -39,14 +39,21 @@ protected:
     friend class MessageLoopProxy;
     friend class MessageLoopThread;
 
-    void PostTask(Task::Callback callback);
-    Task::Callback QuitClosure();
+    void PostTask(PendingTask::Callback callback);
+
+    void PostDelayedTask(PendingTask::Callback callback,
+                         const PendingTask::TimeDelta& delay);
+
+    PendingTask::Callback QuitClosure();
 
     MessagePumpWin* pump_win() const;
     std::shared_ptr<MessageLoopProxy> message_loop_proxy() const { return proxy_; }
 
     // Runs the specified PendingTask.
-    void RunTask(const Task& pending_task);
+    void RunTask(const PendingTask& pending_task);
+
+    // Adds the pending task to delayed_work_queue_.
+    void AddToDelayedWorkQueue(const PendingTask& pending_task);
 
     // Adds the pending task to our incoming_queue_.
     //
@@ -54,7 +61,7 @@ protected:
     // reset the value of pending_task->task.  This is needed to ensure
     // that the posting call stack does not retain pending_task->task
     // beyond this function call.
-    void AddToIncomingQueue(Task* pending_task);
+    void AddToIncomingQueue(PendingTask* pending_task);
 
     // Load tasks from the incoming_queue_ into work_queue_ if the latter is
     // empty.  The former requires a lock to access, while the latter is directly
@@ -63,10 +70,21 @@ protected:
 
     void DeletePendingTasks();
 
+    // Calculates the time at which a PendingTask should run.
+    static PendingTask::TimePoint CalculateDelayedRuntime(
+        const PendingTask::TimeDelta& delay);
+
     // MessagePump::Delegate methods:
     bool DoWork() override;
+    bool DoDelayedWork(PendingTask::TimePoint* next_delayed_work_time) override;
 
     const Type type_;
+
+    // Contains delayed tasks, sorted by their 'delayed_run_time' property.
+    DelayedTaskQueue delayed_work_queue_;
+
+    // A recent snapshot of Time::Now(), used to check delayed_work_queue_.
+    PendingTask::TimePoint recent_time_;
 
     // A list of tasks that need to be processed by this instance.  Note that
     // this queue is only accessed (push/pop) by our current thread.
@@ -80,6 +98,9 @@ protected:
 
     TaskQueue incoming_queue_;
     std::mutex incoming_queue_lock_;
+
+    // The next sequence number to use for delayed tasks.
+    int next_sequence_num_ = 0;
 
     std::shared_ptr<MessageLoopProxy> proxy_;
 

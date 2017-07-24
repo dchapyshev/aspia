@@ -22,12 +22,14 @@ public:
 
     // MessagePump methods:
     void ScheduleWork() override;
+    void ScheduleDelayedWork(const TimePoint& delayed_work_time) override;
 
 private:
     bool OnMessage(UINT message, WPARAM wparam, LPARAM lparam, LRESULT& result);
     void DoRunLoop() override;
     void WaitForWork();
     void HandleWorkMessage();
+    void HandleTimerMessage();
     bool ProcessNextWindowsMessage();
     bool ProcessMessageHelper(const MSG& msg);
     bool ProcessPumpReplacementMessage();

@@ -75,14 +75,27 @@ void MessageLoop::Quit()
     pump_->Quit();
 }
 
-Task::Callback MessageLoop::QuitClosure()
+PendingTask::Callback MessageLoop::QuitClosure()
 {
     return std::bind(&MessageLoop::Quit, this);
 }
 
-void MessageLoop::PostTask(Task::Callback callback)
+void MessageLoop::PostTask(PendingTask::Callback callback)
 {
-    Task pending_task(std::move(callback));
+    DCHECK(callback != nullptr);
+
+    PendingTask pending_task(std::move(callback),
+                             CalculateDelayedRuntime(PendingTask::TimeDelta::zero()));
+    AddToIncomingQueue(&pending_task);
+}
+
+void MessageLoop::PostDelayedTask(PendingTask::Callback callback,
+                                  const PendingTask::TimeDelta& delay)
+{
+    DCHECK(callback != nullptr);
+
+    PendingTask pending_task(std::move(callback),
+                             CalculateDelayedRuntime(delay));
     AddToIncomingQueue(&pending_task);
 }
 
@@ -91,7 +104,7 @@ MessagePumpWin* MessageLoop::pump_win() const
     return static_cast<MessagePumpWin*>(pump_.get());
 }
 
-void MessageLoop::RunTask(const Task& pending_task)
+void MessageLoop::RunTask(const PendingTask& pending_task)
 {
     DCHECK(nestable_tasks_allowed_);
 
@@ -103,7 +116,18 @@ void MessageLoop::RunTask(const Task& pending_task)
     nestable_tasks_allowed_ = true;
 }
 
-void MessageLoop::AddToIncomingQueue(Task* pending_task)
+void MessageLoop::AddToDelayedWorkQueue(const PendingTask& pending_task)
+{
+    // Move to the delayed work queue.  Initialize the sequence number
+    // before inserting into the delayed_work_queue_.  The sequence number
+    // is used to faciliate FIFO sorting when two tasks have the same
+    // delayed_run_time value.
+    PendingTask new_pending_task(pending_task);
+    new_pending_task.sequence_num = next_sequence_num_++;
+    delayed_work_queue_.push(new_pending_task);
+}
+
+void MessageLoop::AddToIncomingQueue(PendingTask* pending_task)
 {
     std::shared_ptr<MessagePump> pump;
 
@@ -145,6 +169,23 @@ void MessageLoop::DeletePendingTasks()
 {
     while (!work_queue_.empty())
         work_queue_.pop();
+
+    while (!delayed_work_queue_.empty())
+        delayed_work_queue_.pop();
+}
+
+// static
+PendingTask::TimePoint MessageLoop::CalculateDelayedRuntime(
+    const PendingTask::TimeDelta& delay)
+{
+    PendingTask::TimePoint delayed_run_time;
+
+    if (delay > PendingTask::TimeDelta::zero())
+    {
+        delayed_run_time = std::chrono::high_resolution_clock::now() + delay;
+    }
+
+    return delayed_run_time;
 }
 
 bool MessageLoop::DoWork()
@@ -162,11 +203,62 @@ bool MessageLoop::DoWork()
 
     do
     {
-        RunTask(work_queue_.front());
+        PendingTask pending_task = work_queue_.front();
         work_queue_.pop();
+
+        if (pending_task.delayed_run_time != PendingTask::TimePoint())
+        {
+            bool reschedule = delayed_work_queue_.empty();
+
+            AddToDelayedWorkQueue(pending_task);
+
+            // If we changed the topmost task, then it is time to reschedule.
+            //if (reschedule)
+                pump_->ScheduleDelayedWork(pending_task.delayed_run_time);
+        }
+        else
+        {
+            RunTask(pending_task);
+        }
     }
     while (!work_queue_.empty());
 
+    return true;
+}
+
+bool MessageLoop::DoDelayedWork(PendingTask::TimePoint* next_delayed_work_time)
+{
+    if (!nestable_tasks_allowed_ || delayed_work_queue_.empty())
+    {
+        recent_time_ = *next_delayed_work_time = PendingTask::TimePoint();
+        return false;
+    }
+
+    // When we "fall behind," there will be a lot of tasks in the delayed work
+    // queue that are ready to run.  To increase efficiency when we fall behind,
+    // we will only call Time::Now() intermittently, and then process all tasks
+    // that are ready to run before calling it again.  As a result, the more we
+    // fall behind (and have a lot of ready-to-run delayed tasks), the more
+    // efficient we'll be at handling the tasks.
+
+    PendingTask::TimePoint next_run_time = delayed_work_queue_.top().delayed_run_time;
+    if (next_run_time > recent_time_)
+    {
+        recent_time_ = std::chrono::high_resolution_clock::now();
+        if (next_run_time > recent_time_)
+        {
+            *next_delayed_work_time = next_run_time;
+            return false;
+        }
+    }
+
+    PendingTask pending_task = delayed_work_queue_.top();
+    delayed_work_queue_.pop();
+
+    if (!delayed_work_queue_.empty())
+        *next_delayed_work_time = delayed_work_queue_.top().delayed_run_time;
+
+    RunTask(pending_task);
     return true;
 }
 

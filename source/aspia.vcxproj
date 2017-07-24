@@ -40,6 +40,7 @@
     <ClCompile Include="base\message_loop\message_pump_default.cc" />
     <ClCompile Include="base\message_loop\message_pump_ui.cc" />
     <ClCompile Include="base\message_loop\message_pump_win.cc" />
+    <ClCompile Include="base\message_loop\pending_task.cc" />
     <ClCompile Include="base\message_window.cc" />
     <ClCompile Include="base\object_watcher.cc" />
     <ClCompile Include="base\process\process.cc" />
@@ -191,7 +192,7 @@
     <ClInclude Include="base\message_loop\message_pump_dispatcher.h" />
     <ClInclude Include="base\message_loop\message_pump_ui.h" />
     <ClInclude Include="base\message_loop\message_pump_win.h" />
-    <ClInclude Include="base\message_loop\task.h" />
+    <ClInclude Include="base\message_loop\pending_task.h" />
     <ClInclude Include="base\message_window.h" />
     <ClInclude Include="base\object_watcher.h" />
     <ClInclude Include="base\process\process.h" />
