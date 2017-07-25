@@ -8,8 +8,6 @@
 #ifndef _ASPIA_IPC__PIPE_CHANNEL_H
 #define _ASPIA_IPC__PIPE_CHANNEL_H
 
-#include "base/scoped_object.h"
-#include "base/synchronization/waitable_event.h"
 #include "base/threading/thread.h"
 #include "base/macros.h"
 #include "protocol/io_buffer.h"
