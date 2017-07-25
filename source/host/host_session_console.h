@@ -9,8 +9,7 @@
 #define _ASPIA_HOST__HOST_SESSION_CONSOLE_H
 
 #include "base/message_loop/message_loop_thread.h"
-#include "base/object_watcher.h"
-#include "base/process/process.h"
+#include "base/process/process_watcher.h"
 #include "base/synchronization/waitable_timer.h"
 #include "ipc/pipe_channel.h"
 #include "host/host_session.h"
@@ -22,7 +21,6 @@ namespace aspia {
 class HostSessionConsole :
     public HostSession,
     private ConsoleSessionWatcher::Delegate,
-    private ObjectWatcher::Delegate,
     private MessageLoopThread::Delegate
 {
 public:
@@ -52,8 +50,7 @@ private:
     void OnSessionAttached(uint32_t session_id) override;
     void OnSessionDetached() override;
 
-    // ObjectWatcher::Delegate implementation.
-    void OnObjectSignaled(HANDLE object) override;
+    void OnProcessClose();
 
     void OnPipeChannelConnect(uint32_t user_data);
     void OnPipeChannelDisconnect();
@@ -75,7 +72,7 @@ private:
     ConsoleSessionWatcher session_watcher_;
 
     Process process_;
-    ObjectWatcher process_watcher_;
+    ProcessWatcher process_watcher_;
 
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::shared_ptr<PipeChannelProxy> ipc_channel_proxy_;

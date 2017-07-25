@@ -45,6 +45,7 @@
     <ClCompile Include="base\object_watcher.cc" />
     <ClCompile Include="base\process\process.cc" />
     <ClCompile Include="base\process\process_helpers.cc" />
+    <ClCompile Include="base\process\process_watcher.cc" />
     <ClCompile Include="base\registry.cc" />
     <ClCompile Include="base\scoped_bstr.cc" />
     <ClCompile Include="base\scoped_clipboard.cc" />
@@ -197,6 +198,7 @@
     <ClInclude Include="base\object_watcher.h" />
     <ClInclude Include="base\process\process.h" />
     <ClInclude Include="base\process\process_helpers.h" />
+    <ClInclude Include="base\process\process_watcher.h" />
     <ClInclude Include="base\registry.h" />
     <ClInclude Include="base\scoped_bstr.h" />
     <ClInclude Include="base\scoped_clipboard.h" />

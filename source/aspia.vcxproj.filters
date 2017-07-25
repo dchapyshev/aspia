@@ -496,6 +496,9 @@
     <ClCompile Include="ipc\pipe_channel_proxy.cc">
       <Filter>ipc</Filter>
     </ClCompile>
+    <ClCompile Include="base\process\process_watcher.cc">
+      <Filter>base\process</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1045,6 +1048,9 @@
     </ClInclude>
     <ClInclude Include="ipc\pipe_channel_proxy.h">
       <Filter>ipc</Filter>
+    </ClInclude>
+    <ClInclude Include="base\process\process_watcher.h">
+      <Filter>base\process</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

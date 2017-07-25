@@ -163,17 +163,13 @@ void HostSessionConsole::OnSessionDetached()
                  std::bind(&HostSessionConsole::OnSessionAttachTimeout, this));
 }
 
-void HostSessionConsole::OnObjectSignaled(HANDLE object)
+void HostSessionConsole::OnProcessClose()
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&HostSessionConsole::OnObjectSignaled,
-                                    this,
-                                    object));
+        runner_->PostTask(std::bind(&HostSessionConsole::OnProcessClose, this));
         return;
     }
-
-    DCHECK_EQ(object, process_.Handle());
 
     switch (state_)
     {
@@ -213,7 +209,9 @@ void HostSessionConsole::OnPipeChannelConnect(uint32_t user_data)
 
     if (ok)
     {
-        ok = process_watcher_.StartWatching(process_.Handle(), this);
+        ok = process_watcher_.StartWatching(
+            process_, std::bind(&HostSessionConsole::OnProcessClose, this));
+
         if (!ok)
         {
             LOG(ERROR) << "Process watcher not started";
