@@ -32,9 +32,9 @@ Host::~Host()
     channel_.reset();
 }
 
-bool Host::IsAliveSession() const
+bool Host::IsTerminatedSession() const
 {
-    return channel_ != nullptr;
+    return channel_proxy_->IsDiconnecting();
 }
 
 void Host::OnSessionMessage(IOBuffer buffer)
@@ -44,7 +44,7 @@ void Host::OnSessionMessage(IOBuffer buffer)
 
 void Host::OnSessionTerminate()
 {
-    delegate_->OnSessionTerminate();
+    channel_proxy_->Disconnect();
 }
 
 void Host::OnNetworkChannelStatusChange(NetworkChannel::Status status)
@@ -117,7 +117,7 @@ void Host::DoAuthorize(IOBuffer buffer)
 
     if (!ParseMessage(buffer, request))
     {
-        channel_.reset();
+        channel_proxy_->Disconnect();
         return;
     }
 
@@ -177,7 +177,7 @@ void Host::DoAuthorize(IOBuffer buffer)
         }
     }
 
-    channel_.reset();
+    channel_proxy_->Disconnect();
 }
 
 void Host::OnNetworkChannelMessage(IOBuffer buffer)

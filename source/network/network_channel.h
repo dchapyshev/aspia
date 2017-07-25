@@ -37,6 +37,8 @@ protected:
 
     virtual void Send(IOBuffer buffer, SendCompleteHandler handler) = 0;
     virtual void Receive(ReceiveCompleteHandler handler) = 0;
+    virtual void Disconnect() = 0;
+    virtual bool IsDiconnecting() const = 0;
 
 private:
     std::shared_ptr<NetworkChannelProxy> proxy_;

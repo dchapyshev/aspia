@@ -59,6 +59,8 @@ public:
 protected:
     void Send(IOBuffer buffer, SendCompleteHandler handler) override;
     void Receive(ReceiveCompleteHandler handler) override;
+    void Disconnect() override;
+    bool IsDiconnecting() const override;
 
 private:
     friend class NetworkServerTcp;

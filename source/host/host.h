@@ -30,7 +30,7 @@ public:
     Host(std::shared_ptr<NetworkChannel> channel, Delegate* delegate);
     ~Host();
 
-    bool IsAliveSession() const;
+    bool IsTerminatedSession() const;
 
 private:
     // HostSession::Delegate implementation.

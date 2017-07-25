@@ -373,6 +373,16 @@ void NetworkChannelTcp::Send(IOBuffer buffer, SendCompleteHandler handler)
         ScheduleWrite();
 }
 
+void NetworkChannelTcp::Disconnect()
+{
+    io_service_.post(std::bind(&NetworkChannelTcp::DoDisconnect, this));
+}
+
+bool NetworkChannelTcp::IsDiconnecting() const
+{
+    return IsStopping();
+}
+
 void NetworkChannelTcp::Run()
 {
     work_ = std::make_unique<asio::io_service::work>(io_service_);

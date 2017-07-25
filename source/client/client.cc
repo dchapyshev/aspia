@@ -44,9 +44,9 @@ void Client::OnAfterThreadRunning()
     channel_.reset();
 }
 
-bool Client::IsAliveSession() const
+bool Client::IsTerminatedSession() const
 {
-    return channel_ != nullptr;
+    return channel_proxy_->IsDiconnecting();
 }
 
 void Client::OnSessionMessage(IOBuffer buffer)
@@ -56,7 +56,7 @@ void Client::OnSessionMessage(IOBuffer buffer)
 
 void Client::OnSessionTerminate()
 {
-    delegate_->OnSessionTerminate();
+    channel_proxy_->Disconnect();
 }
 
 void Client::OnNetworkChannelMessage(IOBuffer buffer)
@@ -148,7 +148,7 @@ void Client::DoAuthorize(IOBuffer buffer)
         runner_->PostTask(std::bind(&Client::OpenStatusDialog, this));
     }
 
-    delegate_->OnSessionTerminate();
+    channel_proxy_->Disconnect();
 }
 
 void Client::CreateSession(proto::SessionType session_type)

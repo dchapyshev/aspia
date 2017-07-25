@@ -58,7 +58,7 @@ void HostPool::OnSessionTerminate()
 
     while (iter != session_list_.end())
     {
-        if (!iter->get()->IsAliveSession())
+        if (iter->get()->IsTerminatedSession())
         {
             iter = session_list_.erase(iter);
         }

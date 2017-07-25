@@ -48,4 +48,25 @@ bool NetworkChannelProxy::Receive(NetworkChannel::ReceiveCompleteHandler handler
     return false;
 }
 
+bool NetworkChannelProxy::Disconnect()
+{
+    std::lock_guard<std::mutex> lock(channel_lock_);
+
+    if (!channel_)
+        return false;
+
+    channel_->Disconnect();
+    return true;
+}
+
+bool NetworkChannelProxy::IsDiconnecting() const
+{
+    std::lock_guard<std::mutex> lock(channel_lock_);
+
+    if (!channel_)
+        return true;
+
+    return channel_->IsDiconnecting();
+}
+
 } // namespace aspia

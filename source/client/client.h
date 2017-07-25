@@ -37,7 +37,7 @@ public:
 
     ~Client();
 
-    bool IsAliveSession() const;
+    bool IsTerminatedSession() const;
 
 private:
     // MessageLoopThread::Delegate implementation.
