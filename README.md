@@ -13,6 +13,7 @@ Currently supported
    - Remote power management
    - Encryption (all transmitted information is encrypted using the algorithms XSalsa20 + Poly1305)
    - Authorization (it is possible to add users with different access rights)
+   - Work in service or application mode
 
 It is planned to implement
 --------------------------
