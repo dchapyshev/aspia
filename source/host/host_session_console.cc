@@ -82,14 +82,14 @@ void HostSessionConsole::OnAfterThreadRunning()
 void HostSessionConsole::OnSessionAttached(uint32_t session_id)
 {
     DCHECK(runner_->BelongsToCurrentThread());
-    DCHECK(state_ == State::Detached);
+    DCHECK(state_ == State::DETACHED);
     DCHECK(!process_.IsValid());
     DCHECK(!ipc_channel_);
 
     {
         std::lock_guard<std::mutex> lock(ipc_channel_lock_);
 
-        state_ = State::Starting;
+        state_ = State::STARTING;
 
         std::wstring channel_id;
 
@@ -126,10 +126,10 @@ void HostSessionConsole::OnSessionDetached()
 {
     DCHECK(runner_->BelongsToCurrentThread());
 
-    if (state_ == State::Detached)
+    if (state_ == State::DETACHED)
         return;
 
-    state_ = State::Detached;
+    state_ = State::DETACHED;
 
     std::lock_guard<std::mutex> lock(ipc_channel_lock_);
 
@@ -164,12 +164,12 @@ void HostSessionConsole::OnObjectSignaled(HANDLE object)
 
     switch (state_)
     {
-        case State::Attached:
-        case State::Starting:
+        case State::ATTACHED:
+        case State::STARTING:
             OnSessionDetached();
             break;
 
-        case State::Detached:
+        case State::DETACHED:
             break;
     }
 }
@@ -212,12 +212,12 @@ void HostSessionConsole::OnPipeChannelConnect(uint32_t user_data)
 
     if (!ok)
     {
-        state_ = State::Detached;
+        state_ = State::DETACHED;
         runner_->PostQuit();
         return;
     }
 
-    state_ = State::Attached;
+    state_ = State::ATTACHED;
 }
 
 void HostSessionConsole::OnPipeChannelDisconnect()
@@ -230,16 +230,16 @@ void HostSessionConsole::OnPipeChannelDisconnect()
 
     switch (state_)
     {
-        case State::Detached:
+        case State::DETACHED:
             break;
 
-        case State::Attached:
+        case State::ATTACHED:
         {
             OnSessionDetached();
 
             if (session_type_ == proto::SessionType::SESSION_TYPE_FILE_TRANSFER)
             {
-                state_ = State::Detached;
+                state_ = State::DETACHED;
 
                 timer_.Stop();
                 runner_->PostQuit();
@@ -247,11 +247,11 @@ void HostSessionConsole::OnPipeChannelDisconnect()
         }
         break;
 
-        case State::Starting:
+        case State::STARTING:
         {
             DCHECK(!process_.IsValid());
 
-            state_ = State::Detached;
+            state_ = State::DETACHED;
 
             timer_.Stop();
             runner_->PostQuit();
@@ -275,12 +275,12 @@ void HostSessionConsole::OnSessionAttachTimeout()
 
     switch (state_)
     {
-        case State::Detached:
-        case State::Starting:
+        case State::DETACHED:
+        case State::STARTING:
             runner_->PostQuit();
             break;
 
-        case State::Attached:
+        case State::ATTACHED:
             LOG(FATAL) << "In the attached state, the timer must me stopped";
             break;
     }

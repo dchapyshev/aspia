@@ -68,9 +68,9 @@ private:
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
-    enum class State { Starting, Detached, Attached };
+    enum class State { STARTING, DETACHED, ATTACHED };
 
-    State state_ = State::Detached;
+    State state_ = State::DETACHED;
 
     WaitableTimer timer_;
 
