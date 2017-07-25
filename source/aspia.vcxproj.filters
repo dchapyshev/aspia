@@ -430,9 +430,6 @@
     <ClCompile Include="base\synchronization\waitable_timer.cc">
       <Filter>base\synchronization</Filter>
     </ClCompile>
-    <ClCompile Include="protocol\io_queue.cc">
-      <Filter>protocol</Filter>
-    </ClCompile>
     <ClCompile Include="ui\base\timer.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
@@ -969,9 +966,6 @@
       <Filter>base\synchronization</Filter>
     </ClInclude>
     <ClInclude Include="protocol\io_buffer.h">
-      <Filter>protocol</Filter>
-    </ClInclude>
-    <ClInclude Include="protocol\io_queue.h">
       <Filter>protocol</Filter>
     </ClInclude>
     <ClInclude Include="ui\base\timer.h">

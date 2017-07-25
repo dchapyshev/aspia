@@ -9,7 +9,8 @@
 #define _ASPIA_NETWORK__NETWORK_CHANNEL_PROXY_H
 
 #include "network/network_channel.h"
-#include "protocol/io_queue.h"
+
+#include <mutex>
 
 namespace aspia {
 

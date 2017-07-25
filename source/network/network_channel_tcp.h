@@ -11,7 +11,6 @@
 #include "base/threading/thread.h"
 #include "crypto/encryptor.h"
 #include "network/network_channel.h"
-#include "protocol/io_queue.h"
 
 #define ASIO_STANDALONE
 #define ASIO_HEADER_ONLY
@@ -36,6 +35,7 @@
 #endif // NDEBUG
 
 #include <asio.hpp>
+#include <queue>
 
 namespace aspia {
 

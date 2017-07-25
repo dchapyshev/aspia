@@ -138,7 +138,6 @@
     <ClCompile Include="protocol\filesystem.cc" />
     <ClCompile Include="protocol\file_depacketizer.cc" />
     <ClCompile Include="protocol\file_packetizer.cc" />
-    <ClCompile Include="protocol\io_queue.cc" />
     <ClCompile Include="proto\auth_session.pb.cc" />
     <ClCompile Include="proto\auth_session_message.pb.cc" />
     <ClCompile Include="proto\desktop_session.pb.cc" />
@@ -320,7 +319,6 @@
     <ClInclude Include="protocol\file_depacketizer.h" />
     <ClInclude Include="protocol\file_packetizer.h" />
     <ClInclude Include="protocol\io_buffer.h" />
-    <ClInclude Include="protocol\io_queue.h" />
     <ClInclude Include="protocol\message_serialization.h" />
     <ClInclude Include="proto\auth_session.pb.h" />
     <ClInclude Include="proto\auth_session_message.pb.h" />
