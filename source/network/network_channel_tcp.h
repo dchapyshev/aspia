@@ -112,7 +112,7 @@ private:
     IOBuffer write_buffer_;
     MessageSizeType write_size_ = 0;
 
-    ReceiveCompleteHandler receive_handler_;
+    ReceiveCompleteHandler receive_complete_handler_;
 
     IOBuffer read_buffer_;
     MessageSizeType read_size_ = 0;

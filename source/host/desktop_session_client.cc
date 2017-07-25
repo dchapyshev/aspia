@@ -9,6 +9,7 @@
 #include "codec/video_encoder_zlib.h"
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_helpers.h"
+#include "ipc/pipe_channel_proxy.h"
 #include "protocol/message_serialization.h"
 
 namespace aspia {
@@ -30,17 +31,17 @@ void DesktopSessionClient::Run(const std::wstring& channel_id)
     if (!ipc_channel_)
         return;
 
+    ipc_channel_proxy_ = ipc_channel_->pipe_channel_proxy();
+
     if (ipc_channel_->Connect(GetCurrentProcessId(), this))
     {
         // Waiting for the connection to close.
-        ipc_channel_->Wait();
+        ipc_channel_proxy_->WaitForDisconnect();
 
         // Stop the threads.
         clipboard_thread_.reset();
         screen_updater_.reset();
     }
-
-    ipc_channel_.reset();
 }
 
 void DesktopSessionClient::OnPipeChannelConnect(uint32_t user_data)
@@ -60,6 +61,9 @@ void DesktopSessionClient::OnPipeChannelConnect(uint32_t user_data)
     }
 
     SendConfigRequest();
+
+    ipc_channel_proxy_->Receive(std::bind(
+        &DesktopSessionClient::OnPipeChannelMessage, this, std::placeholders::_1));
 }
 
 void DesktopSessionClient::OnPipeChannelDisconnect()
@@ -101,10 +105,15 @@ void DesktopSessionClient::OnPipeChannelMessage(IOBuffer buffer)
         }
 
         if (success)
+        {
+            ipc_channel_proxy_->Receive(std::bind(
+                &DesktopSessionClient::OnPipeChannelMessage, this, std::placeholders::_1));
+
             return;
+        }
     }
 
-    ipc_channel_->Disconnect();
+    ipc_channel_.reset();
 }
 
 void DesktopSessionClient::OnScreenUpdate(const DesktopFrame* screen_frame,
@@ -149,10 +158,10 @@ void DesktopSessionClient::OnScreenUpdated()
 
 void DesktopSessionClient::WriteMessage(
     const proto::desktop::HostToClient& message,
-    PipeChannel::CompleteHandler handler)
+    PipeChannel::SendCompleteHandler handler)
 {
     IOBuffer buffer(SerializeMessage<IOBuffer>(message));
-    ipc_channel_->Send(std::move(buffer), std::move(handler));
+    ipc_channel_proxy_->Send(std::move(buffer), std::move(handler));
 }
 
 void DesktopSessionClient::WriteMessage(const proto::desktop::HostToClient& message)

@@ -31,7 +31,7 @@ private:
     // PipeChannel::Delegate implementation.
     void OnPipeChannelConnect(uint32_t user_data) override;
     void OnPipeChannelDisconnect() override;
-    void OnPipeChannelMessage(IOBuffer buffer) override;
+    void OnPipeChannelMessage(IOBuffer buffer);
 
     void OnScreenUpdate(const DesktopFrame* screen_frame,
                         std::unique_ptr<MouseCursor> mouse_cursor);
@@ -39,7 +39,7 @@ private:
 
     void WriteMessage(const proto::desktop::HostToClient& message);
     void WriteMessage(const proto::desktop::HostToClient& message,
-                      PipeChannel::CompleteHandler handler);
+                      PipeChannel::SendCompleteHandler handler);
     void WriteStatus(proto::Status status);
 
     bool ReadPointerEvent(const proto::PointerEvent& event);
@@ -51,6 +51,7 @@ private:
     void SendConfigRequest();
 
     std::unique_ptr<PipeChannel> ipc_channel_;
+    std::shared_ptr<PipeChannelProxy> ipc_channel_proxy_;
 
     proto::SessionType session_type_ = proto::SessionType::SESSION_TYPE_UNKNOWN;
 

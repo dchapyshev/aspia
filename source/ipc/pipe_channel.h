@@ -41,6 +41,8 @@
 
 namespace aspia {
 
+class PipeChannelProxy;
+
 class PipeChannel : protected Thread
 {
 public:
@@ -53,23 +55,29 @@ public:
     {
     public:
         virtual ~Delegate() = default;
-        virtual void OnPipeChannelMessage(IOBuffer buffer) = 0;
         virtual void OnPipeChannelConnect(uint32_t user_data) = 0;
         virtual void OnPipeChannelDisconnect() = 0;
     };
 
     bool Connect(uint32_t user_data, Delegate* delegate);
-    void Disconnect();
 
-    using CompleteHandler = std::function<void()>;
+    std::shared_ptr<PipeChannelProxy> pipe_channel_proxy() const
+    {
+        return proxy_;
+    }
 
-    void Send(IOBuffer buffer, CompleteHandler handler);
-    void Wait();
+    using SendCompleteHandler = std::function<void()>;
+    using ReceiveCompleteHandler = std::function<void(IOBuffer)>;
 
 private:
+    friend class PipeChannelProxy;
+
     enum class Mode { SERVER, CLIENT };
 
     PipeChannel(HANDLE pipe, Mode mode);
+
+    void Send(IOBuffer buffer, SendCompleteHandler handler);
+    void Receive(ReceiveCompleteHandler handler);
 
     void ScheduleWrite();
     void OnWriteSizeComplete(const std::error_code& code, size_t bytes_transferred);
@@ -88,14 +96,18 @@ private:
     std::unique_ptr<asio::io_service::work> work_;
     asio::windows::stream_handle stream_{ io_service_ };
 
-    std::queue<std::pair<IOBuffer, CompleteHandler>> write_queue_;
+    std::queue<std::pair<IOBuffer, SendCompleteHandler>> write_queue_;
     std::mutex write_queue_lock_;
 
     IOBuffer write_buffer_;
     uint32_t write_size_ = 0;
 
+    ReceiveCompleteHandler receive_complete_handler_;
+
     IOBuffer read_buffer_;
     uint32_t read_size_ = 0;
+
+    std::shared_ptr<PipeChannelProxy> proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(PipeChannel);
 };

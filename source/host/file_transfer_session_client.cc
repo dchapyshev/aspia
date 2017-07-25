@@ -7,6 +7,7 @@
 
 #include "host/file_transfer_session_client.h"
 #include "base/files/file_helpers.h"
+#include "ipc/pipe_channel_proxy.h"
 #include "protocol/message_serialization.h"
 #include "protocol/filesystem.h"
 #include "proto/auth_session.pb.h"
@@ -22,6 +23,8 @@ void FileTransferSessionClient::Run(const std::wstring& channel_id)
     ipc_channel_ = PipeChannel::CreateClient(channel_id);
     if (ipc_channel_)
     {
+        ipc_channel_proxy_ = ipc_channel_->pipe_channel_proxy();
+
         if (ipc_channel_->Connect(GetCurrentProcessId(), this))
         {
             status_dialog_->WaitForClose();
@@ -45,6 +48,9 @@ void FileTransferSessionClient::OnPipeChannelConnect(uint32_t user_data)
     }
 
     status_dialog_->SetSessionStartedStatus();
+
+    ipc_channel_proxy_->Receive(std::bind(
+        &FileTransferSessionClient::OnPipeChannelMessage, this, std::placeholders::_1));
 }
 
 void FileTransferSessionClient::OnPipeChannelDisconnect()
@@ -58,7 +64,7 @@ void FileTransferSessionClient::OnPipeChannelMessage(IOBuffer buffer)
 
     if (!ParseMessage(buffer, message))
     {
-        ipc_channel_->Disconnect();
+        ipc_channel_.reset();
         return;
     }
 
@@ -95,7 +101,7 @@ void FileTransferSessionClient::OnPipeChannelMessage(IOBuffer buffer)
         case proto::REQUEST_TYPE_FILE_UPLOAD_DATA:
         {
             if (!ReadFileUploadDataRequest(message.file_packet()))
-                ipc_channel_->Disconnect();
+                ipc_channel_.reset();
         }
         break;
 
@@ -106,13 +112,13 @@ void FileTransferSessionClient::OnPipeChannelMessage(IOBuffer buffer)
         case proto::REQUEST_TYPE_FILE_DOWNLOAD_DATA:
         {
             if (!ReadFileDownloadDataRequest())
-                ipc_channel_->Disconnect();
+                ipc_channel_.reset();
         }
         break;
 
         default:
             LOG(ERROR) << "Unknown message from client: " << message.type();
-            ipc_channel_->Disconnect();
+            ipc_channel_.reset();
             break;
     }
 }
@@ -121,8 +127,7 @@ void FileTransferSessionClient::SendReply(
     const proto::file_transfer::HostToClient& reply)
 {
     IOBuffer buffer(SerializeMessage<IOBuffer>(reply));
-    std::lock_guard<std::mutex> lock(outgoing_lock_);
-    ipc_channel_->Send(std::move(buffer), nullptr);
+    ipc_channel_proxy_->Send(std::move(buffer), nullptr);
 }
 
 void FileTransferSessionClient::ReadDriveListRequest()

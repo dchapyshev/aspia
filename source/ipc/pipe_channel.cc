@@ -6,6 +6,7 @@
 //
 
 #include "ipc/pipe_channel.h"
+#include "ipc/pipe_channel_proxy.h"
 #include "base/version_helpers.h"
 #include "base/security_helpers.h"
 #include "base/strings/string_util.h"
@@ -135,13 +136,19 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateClient(const std::wstring& chann
 PipeChannel::PipeChannel(HANDLE pipe, Mode mode)
     : mode_(mode)
 {
+    proxy_.reset(new PipeChannelProxy(this));
+
     std::error_code ignored_code;
     stream_.assign(pipe, ignored_code);
+
     Start();
 }
 
 PipeChannel::~PipeChannel()
 {
+    proxy_->WillDestroyCurrentChannel();
+    proxy_ = nullptr;
+
     io_service_.dispatch(std::bind(&PipeChannel::DoDisconnect, this));
     Stop();
 }
@@ -193,7 +200,7 @@ void PipeChannel::OnWriteComplete(const std::error_code& code,
         return;
     }
 
-    CompleteHandler complete_handler;
+    SendCompleteHandler complete_handler;
 
     {
         std::lock_guard<std::mutex> lock(write_queue_lock_);
@@ -212,13 +219,13 @@ void PipeChannel::OnWriteComplete(const std::error_code& code,
         complete_handler();
 }
 
-void PipeChannel::Send(IOBuffer buffer, CompleteHandler handler)
+void PipeChannel::Send(IOBuffer buffer, SendCompleteHandler handler)
 {
     std::lock_guard<std::mutex> lock(write_queue_lock_);
 
     bool schedule_write = write_queue_.empty();
 
-    write_queue_.push(std::make_pair<IOBuffer, CompleteHandler>(
+    write_queue_.push(std::make_pair<IOBuffer, SendCompleteHandler>(
         std::move(buffer), std::move(handler)));
 
     if (schedule_write)
@@ -268,17 +275,8 @@ bool PipeChannel::Connect(uint32_t user_data, Delegate* delegate)
     }
 
     delegate_->OnPipeChannelConnect(user_data_);
-    ScheduleRead();
 
     return true;
-}
-
-void PipeChannel::Disconnect()
-{
-    if (!IsStopping())
-    {
-        io_service_.post(std::bind(&PipeChannel::DoDisconnect, this));
-    }
 }
 
 void PipeChannel::ScheduleRead()
@@ -319,12 +317,14 @@ void PipeChannel::OnReadComplete(const std::error_code& code,
         return;
     }
 
-    if (delegate_)
-    {
-        delegate_->OnPipeChannelMessage(std::move(read_buffer_));
-    }
+    receive_complete_handler_(std::move(read_buffer_));
+}
 
-    ScheduleRead();
+void PipeChannel::Receive(ReceiveCompleteHandler handler)
+{
+    DCHECK(handler != nullptr);
+    receive_complete_handler_ = std::move(handler);
+    io_service_.post(std::bind(&PipeChannel::ScheduleRead, this));
 }
 
 void PipeChannel::DoDisconnect()
@@ -338,11 +338,6 @@ void PipeChannel::DoDisconnect()
 
     if (!io_service_.stopped())
         io_service_.stop();
-}
-
-void PipeChannel::Wait()
-{
-    Join();
 }
 
 void PipeChannel::Run()

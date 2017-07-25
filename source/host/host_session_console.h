@@ -59,7 +59,7 @@ private:
     // PipeChannel::Delegate implementation.
     void OnPipeChannelConnect(uint32_t user_data) override;
     void OnPipeChannelDisconnect() override;
-    void OnPipeChannelMessage(IOBuffer buffer) override;
+    void OnPipeChannelMessage(IOBuffer buffer);
 
     void OnSessionAttachTimeout();
 
@@ -80,6 +80,7 @@ private:
     ObjectWatcher process_watcher_;
 
     std::unique_ptr<PipeChannel> ipc_channel_;
+    std::shared_ptr<PipeChannelProxy> ipc_channel_proxy_;
     std::mutex ipc_channel_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionConsole);

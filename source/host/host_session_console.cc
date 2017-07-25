@@ -9,6 +9,7 @@
 #include "host/console_session_launcher.h"
 #include "base/version_helpers.h"
 #include "base/scoped_privilege.h"
+#include "ipc/pipe_channel_proxy.h"
 
 namespace aspia {
 
@@ -96,6 +97,8 @@ void HostSessionConsole::OnSessionAttached(uint32_t session_id)
         ipc_channel_ = PipeChannel::CreateServer(channel_id);
         if (ipc_channel_)
         {
+            ipc_channel_proxy_ = ipc_channel_->pipe_channel_proxy();
+
             bool launched;
 
             switch (session_type_)
@@ -218,6 +221,9 @@ void HostSessionConsole::OnPipeChannelConnect(uint32_t user_data)
     }
 
     state_ = State::ATTACHED;
+
+    ipc_channel_proxy_->Receive(
+        std::bind(&HostSessionConsole::OnPipeChannelMessage, this, std::placeholders::_1));
 }
 
 void HostSessionConsole::OnPipeChannelDisconnect()
@@ -263,6 +269,9 @@ void HostSessionConsole::OnPipeChannelDisconnect()
 void HostSessionConsole::OnPipeChannelMessage(IOBuffer buffer)
 {
     delegate_->OnSessionMessage(std::move(buffer));
+
+    ipc_channel_proxy_->Receive(
+        std::bind(&HostSessionConsole::OnPipeChannelMessage, this, std::placeholders::_1));
 }
 
 void HostSessionConsole::OnSessionAttachTimeout()
@@ -289,11 +298,7 @@ void HostSessionConsole::OnSessionAttachTimeout()
 void HostSessionConsole::Send(IOBuffer buffer)
 {
     std::lock_guard<std::mutex> lock(ipc_channel_lock_);
-
-    if (!ipc_channel_)
-        return;
-
-    ipc_channel_->Send(std::move(buffer), nullptr);
+    ipc_channel_proxy_->Send(std::move(buffer), nullptr);
 }
 
 } // namespace aspia

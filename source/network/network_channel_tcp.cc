@@ -273,13 +273,13 @@ void NetworkChannelTcp::OnReadMessageComplete(const std::error_code& code,
         return;
     }
 
-    receive_handler_(std::move(decrypted_buffer));
+    receive_complete_handler_(std::move(decrypted_buffer));
 }
 
 void NetworkChannelTcp::Receive(ReceiveCompleteHandler handler)
 {
     DCHECK(handler != nullptr);
-    receive_handler_ = std::move(handler);
+    receive_complete_handler_ = std::move(handler);
     io_service_.post(std::bind(&NetworkChannelTcp::DoReadMessage, this));
 }
 

@@ -125,6 +125,7 @@
     <ClCompile Include="host\scoped_sas_police.cc" />
     <ClCompile Include="host\screen_updater.cc" />
     <ClCompile Include="ipc\pipe_channel.cc" />
+    <ClCompile Include="ipc\pipe_channel_proxy.cc" />
     <ClCompile Include="main.cc" />
     <ClCompile Include="network\firewall_manager.cc" />
     <ClCompile Include="network\firewall_manager_legacy.cc" />
@@ -306,6 +307,7 @@
     <ClInclude Include="host\screen_updater.h" />
     <ClInclude Include="host\host_session.h" />
     <ClInclude Include="ipc\pipe_channel.h" />
+    <ClInclude Include="ipc\pipe_channel_proxy.h" />
     <ClInclude Include="network\firewall_manager.h" />
     <ClInclude Include="network\firewall_manager_legacy.h" />
     <ClInclude Include="network\network_channel.h" />

@@ -28,7 +28,7 @@ private:
     // PipeChannel::Delegate implementation.
     void OnPipeChannelConnect(uint32_t user_data) override;
     void OnPipeChannelDisconnect() override;
-    void OnPipeChannelMessage(IOBuffer buffer) override;
+    void OnPipeChannelMessage(IOBuffer buffer);
 
     void SendReply(const proto::file_transfer::HostToClient& reply);
 
@@ -44,7 +44,7 @@ private:
     bool ReadFileDownloadDataRequest();
 
     std::unique_ptr<PipeChannel> ipc_channel_;
-    std::mutex outgoing_lock_;
+    std::shared_ptr<PipeChannelProxy> ipc_channel_proxy_;
 
     std::unique_ptr<FileDepacketizer> file_depacketizer_;
     std::unique_ptr<FilePacketizer> file_packetizer_;
