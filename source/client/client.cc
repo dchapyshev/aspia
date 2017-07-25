@@ -35,7 +35,8 @@ void Client::OnBeforeThreadRunning()
 {
     runner_ = ui_thread_.message_loop_proxy();
     channel_proxy_ = channel_->network_channel_proxy();
-    channel_->StartListening(this);
+    channel_->StartChannel(std::bind(
+        &Client::OnNetworkChannelStatusChange, this, std::placeholders::_1));
 }
 
 void Client::OnAfterThreadRunning()
@@ -66,48 +67,47 @@ void Client::OnNetworkChannelMessage(IOBuffer buffer)
         std::bind(&Client::OnNetworkChannelMessage, this, std::placeholders::_1));
 }
 
-void Client::OnNetworkChannelDisconnect()
+void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&Client::OnNetworkChannelDisconnect, this));
+        runner_->PostTask(
+            std::bind(&Client::OnNetworkChannelStatusChange, this, status));
         return;
     }
 
-    session_.reset();
-    ui_thread_.StopSoon();
-    delegate_->OnSessionTerminate();
-}
-
-void Client::OnNetworkChannelConnect()
-{
-    if (!runner_->BelongsToCurrentThread())
+    if (status == NetworkChannel::Status::CONNECTED)
     {
-        runner_->PostTask(std::bind(&Client::OnNetworkChannelConnect, this));
-        return;
+        UiAuthDialog auth_dialog;
+
+        if (auth_dialog.DoModal(nullptr) != IDOK)
+        {
+            channel_.reset();
+            return;
+        }
+
+        proto::auth::ClientToHost request;
+
+        request.set_method(proto::AuthMethod::AUTH_METHOD_BASIC);
+        request.set_session_type(config_.session_type());
+
+        request.set_username(auth_dialog.UserName());
+        request.set_password(auth_dialog.Password());
+
+        channel_proxy_->Send(SerializeMessage<IOBuffer>(request),
+                             std::bind(&Client::OnAuthRequestSended, this));
+
+        SecureClearString(*request.mutable_username());
+        SecureClearString(*request.mutable_password());
     }
-
-    UiAuthDialog auth_dialog;
-
-    if (auth_dialog.DoModal(nullptr) != IDOK)
+    else
     {
-        channel_.reset();
-        return;
+        DCHECK(status == NetworkChannel::Status::DISCONNECTED);
+
+        session_.reset();
+        ui_thread_.StopSoon();
+        delegate_->OnSessionTerminate();
     }
-
-    proto::auth::ClientToHost request;
-
-    request.set_method(proto::AuthMethod::AUTH_METHOD_BASIC);
-    request.set_session_type(config_.session_type());
-
-    request.set_username(auth_dialog.UserName());
-    request.set_password(auth_dialog.Password());
-
-    channel_proxy_->Send(SerializeMessage<IOBuffer>(request),
-                         std::bind(&Client::OnAuthRequestSended, this));
-
-    SecureClearString(*request.mutable_username());
-    SecureClearString(*request.mutable_password());
 }
 
 void Client::OnStatusDialogOpen()

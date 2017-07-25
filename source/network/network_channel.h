@@ -22,26 +22,15 @@ public:
     NetworkChannel();
     virtual ~NetworkChannel();
 
-    class Listener
-    {
-    public:
-        virtual ~Listener() = default;
+    enum class Status { CONNECTED, DISCONNECTED };
 
-        // The method is called when the connection is successfully established.
-        virtual void OnNetworkChannelConnect() = 0;
-
-        // Called when the connection is disconnected.
-        // The method will be called even if method |OnNetworkChannelConnect|
-        // was not called (for example, if an encryption key exchange error occurred).
-        virtual void OnNetworkChannelDisconnect() = 0;
-    };
-
-    virtual void StartListening(Listener* listener) = 0;
-
-    std::shared_ptr<NetworkChannelProxy> network_channel_proxy() const;
-
+    using StatusChangeHandler = std::function<void(Status status)>;
     using SendCompleteHandler = std::function<void()>;
     using ReceiveCompleteHandler = std::function<void(IOBuffer)>;
+
+    virtual void StartChannel(StatusChangeHandler status_change_callback) = 0;
+
+    std::shared_ptr<NetworkChannelProxy> network_channel_proxy() const;
 
 protected:
     friend class NetworkChannelProxy;

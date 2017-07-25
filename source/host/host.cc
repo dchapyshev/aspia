@@ -22,7 +22,9 @@ Host::Host(std::shared_ptr<NetworkChannel> channel, Delegate* delegate)
       delegate_(delegate)
 {
     channel_proxy_ = channel_->network_channel_proxy();
-    channel_->StartListening(this);
+
+    channel_->StartChannel(std::bind(
+        &Host::OnNetworkChannelStatusChange, this, std::placeholders::_1));
 }
 
 Host::~Host()
@@ -45,15 +47,27 @@ void Host::OnSessionTerminate()
     channel_.reset();
 }
 
-void Host::OnNetworkChannelConnect()
+void Host::OnNetworkChannelStatusChange(NetworkChannel::Status status)
 {
-    // If the authorization request is not received within the specified time
-    // interval, the connection will be closed.
-    auth_timer_.Start(kAuthTimeout,
-                      std::bind(&Host::OnSessionTerminate, this));
+    if (status == NetworkChannel::Status::CONNECTED)
+    {
+        // If the authorization request is not received within the specified time
+        // interval, the connection will be closed.
+        auth_timer_.Start(kAuthTimeout,
+                          std::bind(&Host::OnSessionTerminate, this));
 
-    channel_proxy_->Receive(
-        std::bind(&Host::DoAuthorize, this, std::placeholders::_1));
+        channel_proxy_->Receive(
+            std::bind(&Host::DoAuthorize, this, std::placeholders::_1));
+    }
+    else
+    {
+        DCHECK(status == NetworkChannel::Status::DISCONNECTED);
+
+        auth_timer_.Stop();
+        session_.reset();
+
+        delegate_->OnSessionTerminate();
+    }
 }
 
 static proto::Status DoBasicAuthorization(const std::string& username,
@@ -172,14 +186,6 @@ void Host::OnNetworkChannelMessage(IOBuffer buffer)
 
     channel_proxy_->Receive(std::bind(
         &Host::OnNetworkChannelMessage, this, std::placeholders::_1));
-}
-
-void Host::OnNetworkChannelDisconnect()
-{
-    auth_timer_.Stop();
-    session_.reset();
-
-    delegate_->OnSessionTerminate();
 }
 
 } // namespace aspia

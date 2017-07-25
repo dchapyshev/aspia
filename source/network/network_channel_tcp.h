@@ -54,7 +54,7 @@ public:
     NetworkChannelTcp(Mode mode);
     ~NetworkChannelTcp();
 
-    void StartListening(Listener* listener) override;
+    void StartChannel(StatusChangeHandler handler) override;
 
 protected:
     void Send(IOBuffer buffer, SendCompleteHandler handler) override;
@@ -82,8 +82,6 @@ private:
     void OnReceiveHelloComplete(const std::error_code& code,
                                 size_t bytes_transferred);
 
-    void DoStartListening();
-
     void DoReadMessage();
     void OnReadMessageSizeComplete(const std::error_code& code,
                                    size_t bytes_transferred);
@@ -102,7 +100,7 @@ private:
     std::unique_ptr<asio::io_service::work> work_;
     asio::ip::tcp::socket socket_ { io_service_ };
 
-    Listener* listener_ = nullptr;
+    StatusChangeHandler status_change_handler_;
 
     std::queue<std::pair<IOBuffer, SendCompleteHandler>> write_queue_;
     std::mutex write_queue_lock_;

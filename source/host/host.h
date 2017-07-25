@@ -17,9 +17,7 @@
 
 namespace aspia {
 
-class Host :
-    private HostSession::Delegate,
-    private NetworkChannel::Listener
+class Host : private HostSession::Delegate
 {
 public:
     class Delegate
@@ -39,10 +37,8 @@ private:
     void OnSessionMessage(IOBuffer buffer) override;
     void OnSessionTerminate() override;
 
-    // NetworkChannel::Listener implementation.
-    void OnNetworkChannelConnect() override;
+    void OnNetworkChannelStatusChange(NetworkChannel::Status status);
     void OnNetworkChannelMessage(IOBuffer buffer);
-    void OnNetworkChannelDisconnect() override;
 
     void DoAuthorize(IOBuffer buffer);
 

@@ -30,11 +30,12 @@ NetworkChannelTcp::~NetworkChannelTcp()
     Stop();
 }
 
-void NetworkChannelTcp::StartListening(Listener* listener)
+void NetworkChannelTcp::StartChannel(StatusChangeHandler handler)
 {
-    DCHECK(!listener_);
-    listener_ = listener;
+    DCHECK(status_change_handler_ == nullptr);
+    DCHECK(handler != nullptr);
 
+    status_change_handler_ = std::move(handler);
     io_service_.post(std::bind(&NetworkChannelTcp::DoConnect, this));
 }
 
@@ -146,7 +147,7 @@ void NetworkChannelTcp::OnSendHelloComplete(const std::error_code& code,
     else
     {
         DCHECK(mode_ == Mode::SERVER);
-        DoStartListening();
+        status_change_handler_(Status::CONNECTED);
     }
 }
 
@@ -204,19 +205,13 @@ void NetworkChannelTcp::OnReceiveHelloComplete(const std::error_code& code,
 
     if (mode_ == Mode::CLIENT)
     {
-        DoStartListening();
+        status_change_handler_(Status::CONNECTED);
     }
     else
     {
         DCHECK(mode_ == Mode::SERVER);
         DoSendHello();
     }
-}
-
-void NetworkChannelTcp::DoStartListening()
-{
-    if (listener_)
-        listener_->OnNetworkChannelConnect();
 }
 
 void NetworkChannelTcp::DoReadMessage()
@@ -385,11 +380,7 @@ void NetworkChannelTcp::Run()
     std::error_code ignored_code;
     io_service_.run(ignored_code);
 
-    if (listener_)
-    {
-        listener_->OnNetworkChannelDisconnect();
-        listener_ = nullptr;
-    }
+    status_change_handler_(Status::DISCONNECTED);
 }
 
 } // namespace aspia

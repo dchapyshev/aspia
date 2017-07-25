@@ -20,7 +20,6 @@ namespace aspia {
 
 class Client :
     private MessageLoopThread::Delegate,
-    private NetworkChannel::Listener,
     private ClientSession::Delegate,
     private UiStatusDialog::Delegate
 {
@@ -49,10 +48,8 @@ private:
     void OnSessionMessage(IOBuffer buffer) override;
     void OnSessionTerminate() override;
 
-    // NetworkChannel::Listener implementation.
     void OnNetworkChannelMessage(IOBuffer buffer);
-    void OnNetworkChannelDisconnect() override;
-    void OnNetworkChannelConnect() override;
+    void OnNetworkChannelStatusChange(NetworkChannel::Status status);
 
     // UiStatusDialog::Delegate implementation.
     void OnStatusDialogOpen() override;
