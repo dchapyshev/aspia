@@ -380,7 +380,8 @@ void NetworkChannelTcp::Run()
     std::error_code ignored_code;
     io_service_.run(ignored_code);
 
-    status_change_handler_(Status::DISCONNECTED);
+    if (status_change_handler_ != nullptr)
+        status_change_handler_(Status::DISCONNECTED);
 }
 
 } // namespace aspia
