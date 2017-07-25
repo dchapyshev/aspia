@@ -27,9 +27,9 @@ bool ProcessWatcher::StartWatching(const Process& process,
 
 void ProcessWatcher::StopWatching()
 {
+    watcher_.StopWatching();
     process_handle_ = kNullProcessHandle;
     callback_ = nullptr;
-    watcher_.StopWatching();
 }
 
 void ProcessWatcher::OnObjectSignaled(HANDLE object)
