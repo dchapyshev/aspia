@@ -23,7 +23,6 @@ class HostSessionConsole :
     public HostSession,
     private ConsoleSessionWatcher::Delegate,
     private ObjectWatcher::Delegate,
-    private PipeChannel::Delegate,
     private MessageLoopThread::Delegate
 {
 public:
@@ -56,9 +55,8 @@ private:
     // ObjectWatcher::Delegate implementation.
     void OnObjectSignaled(HANDLE object) override;
 
-    // PipeChannel::Delegate implementation.
-    void OnPipeChannelConnect(uint32_t user_data) override;
-    void OnPipeChannelDisconnect() override;
+    void OnPipeChannelConnect(uint32_t user_data);
+    void OnPipeChannelDisconnect();
     void OnPipeChannelMessage(IOBuffer buffer);
 
     void OnSessionAttachTimeout();

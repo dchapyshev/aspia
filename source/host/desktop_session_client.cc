@@ -33,7 +33,10 @@ void DesktopSessionClient::Run(const std::wstring& channel_id)
 
     ipc_channel_proxy_ = ipc_channel_->pipe_channel_proxy();
 
-    if (ipc_channel_->Connect(GetCurrentProcessId(), this))
+    PipeChannel::ConnectHandler connect_handler =
+        std::bind(&DesktopSessionClient::OnPipeChannelConnect, this, std::placeholders::_1);
+
+    if (ipc_channel_->Connect(GetCurrentProcessId(), std::move(connect_handler)))
     {
         // Waiting for the connection to close.
         ipc_channel_proxy_->WaitForDisconnect();
@@ -64,11 +67,6 @@ void DesktopSessionClient::OnPipeChannelConnect(uint32_t user_data)
 
     ipc_channel_proxy_->Receive(std::bind(
         &DesktopSessionClient::OnPipeChannelMessage, this, std::placeholders::_1));
-}
-
-void DesktopSessionClient::OnPipeChannelDisconnect()
-{
-    // Nothing
 }
 
 void DesktopSessionClient::OnPipeChannelMessage(IOBuffer buffer)

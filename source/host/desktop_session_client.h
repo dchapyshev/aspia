@@ -19,7 +19,7 @@
 
 namespace aspia {
 
-class DesktopSessionClient : private PipeChannel::Delegate
+class DesktopSessionClient
 {
 public:
     DesktopSessionClient() = default;
@@ -28,9 +28,7 @@ public:
     void Run(const std::wstring& channel_id);
 
 private:
-    // PipeChannel::Delegate implementation.
-    void OnPipeChannelConnect(uint32_t user_data) override;
-    void OnPipeChannelDisconnect() override;
+    void OnPipeChannelConnect(uint32_t user_data);
     void OnPipeChannelMessage(IOBuffer buffer);
 
     void OnScreenUpdate(const DesktopFrame* screen_frame,

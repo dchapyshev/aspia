@@ -232,14 +232,16 @@ void PipeChannel::Send(IOBuffer buffer, SendCompleteHandler handler)
         ScheduleWrite();
 }
 
-bool PipeChannel::Connect(uint32_t user_data, Delegate* delegate)
+bool PipeChannel::Connect(uint32_t user_data,
+                          ConnectHandler connect_handler,
+                          DisconnectHandler disconnect_handler)
 {
-    DCHECK(!delegate_);
-    DCHECK(delegate);
+    DCHECK(connect_handler != nullptr);
 
-    delegate_ = delegate;
+    disconnect_handler_ = std::move(disconnect_handler);
 
     std::error_code ignored_code;
+    uint32_t remote_user_data;
 
     if (mode_ == Mode::SERVER)
     {
@@ -250,8 +252,8 @@ bool PipeChannel::Connect(uint32_t user_data, Delegate* delegate)
         }
 
         if (asio::read(stream_,
-                       asio::buffer(&user_data_, sizeof(user_data_)),
-                       ignored_code) != sizeof(user_data_))
+                       asio::buffer(&remote_user_data, sizeof(remote_user_data)),
+                       ignored_code) != sizeof(remote_user_data))
             return false;
 
         if (asio::write(stream_,
@@ -269,13 +271,12 @@ bool PipeChannel::Connect(uint32_t user_data, Delegate* delegate)
             return false;
 
         if (asio::read(stream_,
-                       asio::buffer(&user_data_, sizeof(user_data_)),
-                       ignored_code) != sizeof(user_data_))
+                       asio::buffer(&remote_user_data, sizeof(remote_user_data)),
+                       ignored_code) != sizeof(remote_user_data))
             return false;
     }
 
-    delegate_->OnPipeChannelConnect(user_data_);
-
+    connect_handler(remote_user_data);
     return true;
 }
 
@@ -347,11 +348,8 @@ void PipeChannel::Run()
     std::error_code ignored_code;
     io_service_.run(ignored_code);
 
-    if (delegate_)
-    {
-        delegate_->OnPipeChannelDisconnect();
-        delegate_ = nullptr;
-    }
+    if (disconnect_handler_ != nullptr)
+        disconnect_handler_();
 }
 
 } // namespace aspia

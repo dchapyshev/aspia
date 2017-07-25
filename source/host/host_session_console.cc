@@ -117,8 +117,18 @@ void HostSessionConsole::OnSessionAttached(uint32_t session_id)
                     break;
             }
 
-            if (launched && ipc_channel_->Connect(session_type_, this))
+            PipeChannel::ConnectHandler connect_handler =
+                std::bind(&HostSessionConsole::OnPipeChannelConnect, this, std::placeholders::_1);
+
+            PipeChannel::DisconnectHandler disconnect_handler =
+                std::bind(&HostSessionConsole::OnPipeChannelDisconnect, this);
+
+            if (launched && ipc_channel_->Connect(session_type_,
+                                                  std::move(connect_handler),
+                                                  std::move(disconnect_handler)))
+            {
                 return;
+            }
         }
     }
 

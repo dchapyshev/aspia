@@ -51,23 +51,19 @@ public:
     static std::unique_ptr<PipeChannel> CreateServer(std::wstring& channel_id);
     static std::unique_ptr<PipeChannel> CreateClient(const std::wstring& channel_id);
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-        virtual void OnPipeChannelConnect(uint32_t user_data) = 0;
-        virtual void OnPipeChannelDisconnect() = 0;
-    };
+    using ConnectHandler = std::function<void(uint32_t user_data)>;
+    using DisconnectHandler = std::function<void()>;
+    using SendCompleteHandler = std::function<void()>;
+    using ReceiveCompleteHandler = std::function<void(IOBuffer)>;
 
-    bool Connect(uint32_t user_data, Delegate* delegate);
+    bool Connect(uint32_t user_data,
+                 ConnectHandler connect_handler,
+                 DisconnectHandler disconnect_handler = nullptr);
 
     std::shared_ptr<PipeChannelProxy> pipe_channel_proxy() const
     {
         return proxy_;
     }
-
-    using SendCompleteHandler = std::function<void()>;
-    using ReceiveCompleteHandler = std::function<void(IOBuffer)>;
 
 private:
     friend class PipeChannelProxy;
@@ -89,8 +85,7 @@ private:
     void Run() override;
 
     const Mode mode_;
-    Delegate* delegate_ = nullptr;
-    uint32_t user_data_ = 0;
+    DisconnectHandler disconnect_handler_;
 
     asio::io_service io_service_;
     std::unique_ptr<asio::io_service::work> work_;
