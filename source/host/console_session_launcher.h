@@ -25,9 +25,7 @@ public:
     ConsoleSessionLauncher(const std::wstring& service_id);
     ~ConsoleSessionLauncher() = default;
 
-    void ExecuteService(uint32_t session_id,
-                        const std::wstring& input_channel_id,
-                        const std::wstring& output_channel_id);
+    void ExecuteService(uint32_t session_id, const std::wstring& channel_id);
 
 private:
     void Worker() override;
@@ -37,19 +35,14 @@ private:
     static const uint32_t kInvalidSessionId = 0xFFFFFFFF;
 
     uint32_t session_id_ = kInvalidSessionId;
-    std::wstring input_channel_id_;
-    std::wstring output_channel_id_;
+    std::wstring channel_id_;
 
     DISALLOW_COPY_AND_ASSIGN(ConsoleSessionLauncher);
 };
 
-bool LaunchDesktopSession(uint32_t session_id,
-                          const std::wstring& input_channel_id,
-                          const std::wstring& output_channel_id);
+bool LaunchDesktopSession(uint32_t session_id, const std::wstring& channel_id);
 
-bool LaunchFileTransferSession(uint32_t session_id,
-                               const std::wstring& input_channel_id,
-                               const std::wstring& output_channel_id);
+bool LaunchFileTransferSession(uint32_t session_id, const std::wstring& channel_id);
 
 } // namespace aspia
 

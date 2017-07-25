@@ -157,7 +157,7 @@ bool Host::DoAuthorize(const IOBuffer& buffer)
     return false;
 }
 
-void Host::OnNetworkChannelMessage(const IOBuffer& buffer)
+void Host::OnNetworkChannelMessage(IOBuffer buffer)
 {
     if (!session_proxy_)
     {
@@ -166,7 +166,7 @@ void Host::OnNetworkChannelMessage(const IOBuffer& buffer)
         return;
     }
 
-    session_proxy_->Send(buffer);
+    session_proxy_->Send(std::move(buffer));
 }
 
 void Host::OnNetworkChannelDisconnect()

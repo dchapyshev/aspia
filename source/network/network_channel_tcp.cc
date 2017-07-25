@@ -303,7 +303,7 @@ void NetworkChannelTcp::DoDecryptMessage(const IOBuffer& buffer)
 
     if (listener_)
     {
-        listener_->OnNetworkChannelMessage(message_buffer);
+        listener_->OnNetworkChannelMessage(std::move(message_buffer));
     }
 }
 

@@ -17,9 +17,13 @@ namespace aspia {
 
 static const WCHAR kPipeNamePrefix[] = L"\\\\.\\pipe\\aspia.";
 static const DWORD kPipeBufferSize = 512 * 1024; // 512 KB
-static const std::chrono::milliseconds kConnectTimeout{ 5000 };
 
 static std::atomic_uint32_t _last_channel_id = 0;
+
+static bool IsFailureCode(const std::error_code& code)
+{
+    return code.value() != 0;
+}
 
 static std::wstring GenerateUniqueRandomChannelID()
 {
@@ -45,8 +49,7 @@ static std::wstring CreatePipeName(const std::wstring& channel_id)
 }
 
 // static
-std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& input_channel_id,
-                                                       std::wstring& output_channel_id)
+std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& channel_id)
 {
     std::wstring user_sid;
 
@@ -78,8 +81,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& input_chann
     security_attributes.lpSecurityDescriptor = sd.get();
     security_attributes.bInheritHandle = FALSE;
 
-    std::wstring server_input_channel_id = GenerateUniqueRandomChannelID();
-    std::wstring server_output_channel_id = GenerateUniqueRandomChannelID();
+    channel_id = GenerateUniqueRandomChannelID();
 
     DWORD open_mode = FILE_FLAG_OVERLAPPED | FILE_FLAG_FIRST_PIPE_INSTANCE;
     DWORD pipe_mode = PIPE_TYPE_BYTE | PIPE_READMODE_BYTE;
@@ -88,319 +90,254 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& input_chann
     if (IsWindowsVistaOrGreater())
         pipe_mode |= PIPE_REJECT_REMOTE_CLIENTS;
 
-    ScopedHandle read_pipe(CreateNamedPipeW(CreatePipeName(server_input_channel_id).c_str(),
-                                            open_mode | PIPE_ACCESS_INBOUND,
-                                            pipe_mode,
-                                            1,
-                                            kPipeBufferSize,
-                                            kPipeBufferSize,
-                                            5000,
-                                            &security_attributes));
+    ScopedHandle pipe(CreateNamedPipeW(CreatePipeName(channel_id).c_str(),
+                                       open_mode | PIPE_ACCESS_DUPLEX,
+                                       pipe_mode,
+                                       1,
+                                       kPipeBufferSize,
+                                       kPipeBufferSize,
+                                       5000,
+                                       &security_attributes));
 
-    if (!read_pipe.IsValid())
+    if (!pipe.IsValid())
     {
         LOG(ERROR) << "CreateNamedPipeW() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
-    ScopedHandle write_pipe(CreateNamedPipeW(CreatePipeName(server_output_channel_id).c_str(),
-                                             open_mode | PIPE_ACCESS_OUTBOUND,
-                                             pipe_mode,
-                                             1,
-                                             kPipeBufferSize,
-                                             kPipeBufferSize,
-                                             5000,
-                                             &security_attributes));
-
-    if (!write_pipe.IsValid())
-    {
-        LOG(ERROR) << "CreateNamedPipeW() failed: " << GetLastSystemErrorString();
-        return nullptr;
-    }
-
-    // We return the ID of the channels to which the client will be connected,
-    // and in relation to the client, the outgoing server channel will be incoming,
-    // and the incoming server channel will be outgoing.
-    input_channel_id = std::move(server_output_channel_id);
-    output_channel_id = std::move(server_input_channel_id);
-
-    return std::unique_ptr<PipeChannel>(new PipeChannel(read_pipe.Release(),
-                                                        write_pipe.Release(),
-                                                        Mode::SERVER));
+    return std::unique_ptr<PipeChannel>(
+        new PipeChannel(pipe.Release(), Mode::SERVER));
 }
 
 // static
-std::unique_ptr<PipeChannel> PipeChannel::CreateClient(const std::wstring& input_channel_id,
-                                                       const std::wstring& output_channel_id)
+std::unique_ptr<PipeChannel> PipeChannel::CreateClient(const std::wstring& channel_id)
 {
     DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION |
                   FILE_FLAG_OVERLAPPED;
 
-    ScopedHandle write_pipe(CreateFileW(CreatePipeName(output_channel_id).c_str(),
-                                        GENERIC_WRITE,
-                                        0,
-                                        nullptr,
-                                        OPEN_EXISTING,
-                                        flags,
-                                        nullptr));
-    if (!write_pipe.IsValid())
+    ScopedHandle pipe(CreateFileW(CreatePipeName(channel_id).c_str(),
+                                  GENERIC_WRITE | GENERIC_READ,
+                                  0,
+                                  nullptr,
+                                  OPEN_EXISTING,
+                                  flags,
+                                  nullptr));
+    if (!pipe.IsValid())
     {
         LOG(ERROR) << "CreateFileW() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
-    ScopedHandle read_pipe(CreateFileW(CreatePipeName(input_channel_id).c_str(),
-                                       GENERIC_READ,
-                                       0,
-                                       nullptr,
-                                       OPEN_EXISTING,
-                                       flags,
-                                       nullptr));
-    if (!read_pipe.IsValid())
-    {
-        LOG(ERROR) << "CreateFileW() failed: " << GetLastSystemErrorString();
-        return nullptr;
-    }
-
-    return std::unique_ptr<PipeChannel>(new PipeChannel(read_pipe.Release(),
-                                                        write_pipe.Release(),
-                                                        Mode::CLIENT));
+    return std::unique_ptr<PipeChannel>(
+        new PipeChannel(pipe.Release(), Mode::CLIENT));
 }
 
-PipeChannel::PipeChannel(HANDLE read_pipe, HANDLE write_pipe, Mode mode)
-    : read_pipe_(read_pipe),
-      write_pipe_(write_pipe),
-      mode_(mode)
+PipeChannel::PipeChannel(HANDLE pipe, Mode mode)
+    : mode_(mode)
 {
-    // Nothing
+    std::error_code ignored_code;
+    stream_.assign(pipe, ignored_code);
+    Start();
 }
 
 PipeChannel::~PipeChannel()
 {
-    Close();
+    io_service_.dispatch(std::bind(&PipeChannel::DoDisconnect, this));
     Stop();
 }
 
-bool PipeChannel::Read(void* buffer, size_t buffer_size)
+void PipeChannel::ScheduleWrite()
 {
-    OVERLAPPED overlapped = { 0 };
-    overlapped.hEvent = read_event_.Handle();
+    DCHECK(!write_queue_.empty());
 
-    DWORD read_bytes = 0;
-    BOOL ret;
+    write_buffer_ = std::move(write_queue_.front().first);
+    write_size_ = write_buffer_.size();
 
+    if (write_buffer_.IsEmpty())
     {
-        std::lock_guard<std::mutex> lock(read_lock_);
-
-        if (!read_pipe_.IsValid())
-            return false;
-
-        ret = ReadFile(read_pipe_, buffer, static_cast<DWORD>(buffer_size),
-                       &read_bytes, &overlapped);
+        DoDisconnect();
+        return;
     }
 
-    if (!ret)
-    {
-        DWORD error = GetLastError();
-
-        if (error == ERROR_IO_PENDING)
-        {
-            read_event_.Wait();
-
-            std::lock_guard<std::mutex> lock(read_lock_);
-
-            if (!read_pipe_.IsValid())
-                return false;
-
-            DWORD transfered_bytes = 0;
-
-            if (!GetOverlappedResult(read_pipe_, &overlapped, &transfered_bytes, FALSE))
-            {
-                LOG(ERROR) << "GetOverlappedResult() failed: "
-                           << GetLastSystemErrorString();
-                return false;
-            }
-
-            return transfered_bytes == buffer_size;
-        }
-
-        LOG(ERROR) << "ReadFile() failed: " << SystemErrorCodeToString(error);
-        return false;
-    }
-
-    return read_bytes == buffer_size;
+    asio::async_write(stream_,
+                      asio::buffer(&write_size_, sizeof(uint32_t)),
+                      std::bind(&PipeChannel::OnWriteSizeComplete,
+                                this,
+                                std::placeholders::_1,
+                                std::placeholders::_2));
 }
 
-bool PipeChannel::Write(const void* buffer, size_t buffer_size)
+void PipeChannel::OnWriteSizeComplete(const std::error_code& code,
+                                      size_t bytes_transferred)
 {
-    OVERLAPPED overlapped = { 0 };
-    overlapped.hEvent = write_event_.Handle();
-
-    DWORD written_bytes = 0;
-    BOOL ret;
-
+    if (IsFailureCode(code) || bytes_transferred != sizeof(uint32_t))
     {
-        std::lock_guard<std::mutex> lock(write_lock_);
-
-        if (!write_pipe_.IsValid())
-            return false;
-
-        ret = WriteFile(write_pipe_, buffer, static_cast<DWORD>(buffer_size),
-                        &written_bytes, &overlapped);
+        DoDisconnect();
+        return;
     }
 
-    if (!ret)
-    {
-        DWORD error = GetLastError();
-
-        if (error == ERROR_IO_PENDING)
-        {
-            write_event_.Wait();
-
-            std::lock_guard<std::mutex> lock(write_lock_);
-
-            if (!write_pipe_.IsValid())
-                return false;
-
-            DWORD transfered_bytes = 0;
-
-            if (!GetOverlappedResult(write_pipe_, &overlapped, &transfered_bytes, FALSE))
-            {
-                LOG(ERROR) << "GetOverlappedResult() failed: "
-                           << GetLastSystemErrorString();
-                return false;
-            }
-
-            return transfered_bytes == buffer_size;
-        }
-
-        LOG(ERROR) << "WriteFile() failed: " << SystemErrorCodeToString(error);
-        return false;
-    }
-
-    return written_bytes == buffer_size;
+    asio::async_write(stream_,
+                      asio::buffer(write_buffer_.data(), write_buffer_.size()),
+                      std::bind(&PipeChannel::OnWriteComplete,
+                                this,
+                                std::placeholders::_1,
+                                std::placeholders::_2));
 }
 
-void PipeChannel::Send(const IOBuffer& buffer)
+void PipeChannel::OnWriteComplete(const std::error_code& code,
+                                  size_t bytes_transferred)
 {
-    if (!buffer.IsEmpty())
+    if (IsFailureCode(code) || bytes_transferred != write_buffer_.size())
     {
-        uint32_t message_size = static_cast<uint32_t>(buffer.size());
-
-        if (Write(&message_size, sizeof(message_size)))
-        {
-            if (Write(buffer.data(), buffer.size()))
-                return;
-        }
+        DoDisconnect();
+        return;
     }
 
-    Close();
+    CompleteHandler complete_handler;
+
+    {
+        std::lock_guard<std::mutex> lock(write_queue_lock_);
+
+        // The queue must contain the current write task.
+        DCHECK(!write_queue_.empty());
+
+        complete_handler = std::move(write_queue_.front().second);
+        write_queue_.pop();
+
+        if (!write_queue_.empty())
+            ScheduleWrite();
+    }
+
+    if (complete_handler != nullptr)
+        complete_handler();
 }
 
-static bool ConnectToClientPipe(HANDLE pipe_handle)
+void PipeChannel::Send(IOBuffer buffer, CompleteHandler handler)
 {
-    OVERLAPPED overlapped = { 0 };
+    std::lock_guard<std::mutex> lock(write_queue_lock_);
 
-    WaitableEvent event(WaitableEvent::ResetPolicy::AUTOMATIC,
-                        WaitableEvent::InitialState::NOT_SIGNALED);
+    bool schedule_write = write_queue_.empty();
 
-    overlapped.hEvent = event.Handle();
+    write_queue_.push(std::make_pair<IOBuffer, CompleteHandler>(
+        std::move(buffer), std::move(handler)));
 
-    if (ConnectNamedPipe(pipe_handle, &overlapped))
-    {
-        // API documentation says that this function should never return success
-        // when used in overlapped mode.
-        LOG(ERROR) << "ConnectNamedPipe() failed: " << GetLastSystemErrorString();
-        return false;
-    }
-
-    DWORD error = GetLastError();
-
-    switch (error)
-    {
-        case ERROR_IO_PENDING:
-        {
-            event.TimedWait(kConnectTimeout);
-
-            DWORD dummy;
-
-            if (!GetOverlappedResult(pipe_handle, &overlapped, &dummy, FALSE))
-            {
-                LOG(ERROR) << "GetOverlappedResult() failed: "
-                           << GetLastSystemErrorString();
-                return false;
-            }
-        }
-        break;
-
-        case ERROR_PIPE_CONNECTED:
-            break;
-
-        default:
-        {
-            LOG(ERROR) << "ConnectNamedPipe() failed: "
-                       << SystemErrorCodeToString(error);
-            return false;
-        }
-    }
-
-    return true;
+    if (schedule_write)
+        ScheduleWrite();
 }
 
 bool PipeChannel::Connect(uint32_t user_data, Delegate* delegate)
 {
+    DCHECK(!delegate_);
     DCHECK(delegate);
+
+    delegate_ = delegate;
+
+    std::error_code ignored_code;
 
     if (mode_ == Mode::SERVER)
     {
-        if (!ConnectToClientPipe(read_pipe_) || !ConnectToClientPipe(write_pipe_))
+        if (!ConnectNamedPipe(stream_.native_handle(), nullptr))
+        {
+            LOG(ERROR) << "ConnectNamedPipe() failed: " << GetLastSystemErrorString();
+            return false;
+        }
+
+        if (asio::read(stream_,
+                       asio::buffer(&user_data_, sizeof(user_data_)),
+                       ignored_code) != sizeof(user_data_))
             return false;
 
-        if (!Read(&user_data_, sizeof(user_data_)))
-            return false;
-
-        if (!Write(&user_data, sizeof(user_data)))
+        if (asio::write(stream_,
+                        asio::buffer(&user_data, sizeof(user_data)),
+                        ignored_code) != sizeof(user_data))
             return false;
     }
     else
     {
         DCHECK(mode_ == Mode::CLIENT);
 
-        if (!Write(&user_data, sizeof(user_data)))
+        if (asio::write(stream_,
+                        asio::buffer(&user_data, sizeof(user_data)),
+                        ignored_code) != sizeof(user_data))
             return false;
 
-        if (!Read(&user_data_, sizeof(user_data_)))
+        if (asio::read(stream_,
+                       asio::buffer(&user_data_, sizeof(user_data_)),
+                       ignored_code) != sizeof(user_data_))
             return false;
     }
 
-    delegate_ = delegate;
-    Start();
+    delegate_->OnPipeChannelConnect(user_data_);
+    ScheduleRead();
 
     return true;
 }
 
-void PipeChannel::Close()
+void PipeChannel::Disconnect()
 {
+    if (!IsStopping())
     {
-        std::lock_guard<std::mutex> lock(read_lock_);
+        io_service_.post(std::bind(&PipeChannel::DoDisconnect, this));
+    }
+}
 
-        if (mode_ == Mode::SERVER)
-            DisconnectNamedPipe(read_pipe_);
+void PipeChannel::ScheduleRead()
+{
+    asio::async_read(stream_,
+                     asio::buffer(&read_size_, sizeof(uint32_t)),
+                     std::bind(&PipeChannel::OnReadSizeComplete,
+                               this,
+                               std::placeholders::_1,
+                               std::placeholders::_2));
+}
 
-        read_pipe_.Reset();
+void PipeChannel::OnReadSizeComplete(const std::error_code& code,
+                                     size_t bytes_transferred)
+{
+    if (IsFailureCode(code) || bytes_transferred != sizeof(uint32_t))
+    {
+        DoDisconnect();
+        return;
     }
 
+    read_buffer_ = IOBuffer(read_size_);
+
+    asio::async_read(stream_,
+                     asio::buffer(read_buffer_.data(), read_buffer_.size()),
+                     std::bind(&PipeChannel::OnReadComplete,
+                               this,
+                               std::placeholders::_1,
+                               std::placeholders::_2));
+}
+
+void PipeChannel::OnReadComplete(const std::error_code& code,
+                                 size_t bytes_transferred)
+{
+    if (IsFailureCode(code) || bytes_transferred != read_buffer_.size())
     {
-        std::lock_guard<std::mutex> lock(write_lock_);
-
-        if (mode_ == Mode::SERVER)
-            DisconnectNamedPipe(write_pipe_);
-
-        write_pipe_.Reset();
+        DoDisconnect();
+        return;
     }
 
-    read_event_.Signal();
-    write_event_.Signal();
+    if (delegate_)
+    {
+        delegate_->OnPipeChannelMessage(read_buffer_);
+    }
+
+    ScheduleRead();
+}
+
+void PipeChannel::DoDisconnect()
+{
+    StopSoon();
+
+    std::error_code ignored_code;
+    stream_.close(ignored_code);
+
+    work_.reset();
+
+    if (!io_service_.stopped())
+        io_service_.stop();
 }
 
 void PipeChannel::Wait()
@@ -410,31 +347,16 @@ void PipeChannel::Wait()
 
 void PipeChannel::Run()
 {
-    delegate_->OnPipeChannelConnect(user_data_);
+    work_ = std::make_unique<asio::io_service::work>(io_service_);
 
-    while (!IsStopping())
+    std::error_code ignored_code;
+    io_service_.run(ignored_code);
+
+    if (delegate_)
     {
-        uint32_t message_size = 0;
-
-        if (Read(&message_size, sizeof(message_size)))
-        {
-            if (message_size)
-            {
-                IOBuffer buffer(message_size);
-
-                if (Read(buffer.data(), buffer.size()))
-                {
-                    delegate_->OnPipeChannelMessage(buffer);
-                    continue;
-                }
-            }
-        }
-
-        break;
+        delegate_->OnPipeChannelDisconnect();
+        delegate_ = nullptr;
     }
-
-    Close();
-    delegate_->OnPipeChannelDisconnect();
 }
 
 } // namespace aspia

@@ -46,7 +46,7 @@ void ClientSessionDesktopManage::ReadClipboardEvent(
     viewer_->InjectClipboardEvent(clipboard_event);
 }
 
-void ClientSessionDesktopManage::Send(const IOBuffer& buffer)
+void ClientSessionDesktopManage::Send(IOBuffer buffer)
 {
     proto::desktop::HostToClient message;
 
@@ -60,17 +60,17 @@ void ClientSessionDesktopManage::Send(const IOBuffer& buffer)
 
         bool success = true;
 
-        if (message.has_video_packet())
+        if (message.has_video_packet() || message.has_cursor_shape())
         {
-            success = ReadVideoPacket(message.video_packet());
+            if (message.has_video_packet())
+                success = ReadVideoPacket(message.video_packet());
+
+            if (message.has_cursor_shape())
+                ReadCursorShape(message.cursor_shape());
         }
         else if (message.has_audio_packet())
         {
             LOG(WARNING) << "Audio not implemented yet";
-        }
-        else if (message.has_cursor_shape())
-        {
-            ReadCursorShape(message.cursor_shape());
         }
         else if (message.has_clipboard_event())
         {

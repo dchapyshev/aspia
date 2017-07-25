@@ -24,7 +24,7 @@ ClientSessionPowerManage::~ClientSessionPowerManage()
     ui_thread_.Stop();
 }
 
-void ClientSessionPowerManage::Send(const IOBuffer& buffer)
+void ClientSessionPowerManage::Send(IOBuffer buffer)
 {
     // The power management session does not receive any messages.
 }

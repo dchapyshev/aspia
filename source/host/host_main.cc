@@ -18,8 +18,7 @@
 namespace aspia {
 
 DEFINE_uint32(session_id, 0xFFFFFFFF, "Session Id");
-DEFINE_string(input_channel_id, "", "Input channel Id");
-DEFINE_string(output_channel_id, "", "Output channel Id");
+DEFINE_string(channel_id, "", "Channel Id");
 DEFINE_string(service_id, "", "Service Id");
 
 void RunHostMain(const std::wstring& run_mode)
@@ -46,37 +45,28 @@ void RunHostMain(const std::wstring& run_mode)
     }
     else if (run_mode == kDesktopSessionLauncherSwitch)
     {
-        std::wstring input_channel_id;
-        CHECK(ANSItoUNICODE(FLAGS_input_channel_id, input_channel_id));
-
-        std::wstring output_channel_id;
-        CHECK(ANSItoUNICODE(FLAGS_output_channel_id, output_channel_id));
+        std::wstring channel_id;
+        CHECK(ANSItoUNICODE(FLAGS_channel_id, channel_id));
 
         std::wstring service_id;
         CHECK(ANSItoUNICODE(FLAGS_service_id, service_id));
 
         ConsoleSessionLauncher launcher(service_id);
-        launcher.ExecuteService(FLAGS_session_id, input_channel_id, output_channel_id);
+        launcher.ExecuteService(FLAGS_session_id, channel_id);
     }
     else if (run_mode == kDesktopSessionSwitch)
     {
-        std::wstring input_channel_id;
-        CHECK(ANSItoUNICODE(FLAGS_input_channel_id, input_channel_id));
+        std::wstring channel_id;
+        CHECK(ANSItoUNICODE(FLAGS_channel_id, channel_id));
 
-        std::wstring output_channel_id;
-        CHECK(ANSItoUNICODE(FLAGS_output_channel_id, output_channel_id));
-
-        DesktopSessionClient().Run(input_channel_id, output_channel_id);
+        DesktopSessionClient().Run(channel_id);
     }
     else if (run_mode == kFileTransferSessionSwitch)
     {
-        std::wstring input_channel_id;
-        CHECK(ANSItoUNICODE(FLAGS_input_channel_id, input_channel_id));
+        std::wstring channel_id;
+        CHECK(ANSItoUNICODE(FLAGS_channel_id, channel_id));
 
-        std::wstring output_channel_id;
-        CHECK(ANSItoUNICODE(FLAGS_output_channel_id, output_channel_id));
-
-        FileTransferSessionClient().Run(input_channel_id, output_channel_id);
+        FileTransferSessionClient().Run(channel_id);
     }
 }
 

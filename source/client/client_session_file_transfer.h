@@ -26,7 +26,7 @@ public:
 
 private:
     // ClientSession implementation.
-    void Send(const IOBuffer& buffer) override;
+    void Send(IOBuffer buffer) override;
 
     // UiFileManager::Delegate implementation.
     void OnWindowClose() override;

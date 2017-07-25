@@ -36,7 +36,7 @@ protected:
 private:
     friend class HostSessionProxy;
 
-    virtual void Send(const IOBuffer& buffer) = 0;
+    virtual void Send(IOBuffer buffer) = 0;
 
     std::shared_ptr<HostSessionProxy> session_proxy_;
 

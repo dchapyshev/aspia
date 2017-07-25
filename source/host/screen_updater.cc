@@ -9,75 +9,74 @@
 
 namespace aspia {
 
-static const std::chrono::milliseconds kMinUpdateInterval{ 15 };
-static const std::chrono::milliseconds kMaxUpdateInterval{ 100 };
+ScreenUpdater::ScreenUpdater(Mode mode,
+                             const std::chrono::milliseconds& update_interval,
+                             ScreenUpdateCallback screen_update_callback)
+    : screen_update_callback_(std::move(screen_update_callback)),
+      mode_(mode),
+      update_interval_(update_interval)
+{
+    DCHECK(screen_update_callback_ != nullptr);
+    thread_.Start(MessageLoop::TYPE_DEFAULT);
+    runner_ = thread_.message_loop_proxy();
+    DCHECK(runner_);
+}
 
 ScreenUpdater::~ScreenUpdater()
 {
-    Stop();
+    thread_.Stop();
 }
 
-bool ScreenUpdater::StartUpdating(Mode mode,
-                                  const std::chrono::milliseconds& interval,
-                                  Delegate* delegate)
+void ScreenUpdater::PostUpdateRequest()
 {
-    DCHECK(delegate);
-
-    if (interval < kMinUpdateInterval || interval > kMaxUpdateInterval)
+    if (!runner_->BelongsToCurrentThread())
     {
-        LOG(ERROR) << "Wrong update interval: " << interval.count();
-        return false;
-    }
-
-    delegate_ = delegate;
-    mode_ = mode;
-    interval_ = interval;
-
-    Start();
-
-    return true;
-}
-
-void ScreenUpdater::Run()
-{
-    std::unique_ptr<Capturer> capturer(CapturerGDI::Create());
-
-    if (!capturer)
-    {
-        delegate_->OnScreenUpdateError();
+        runner_->PostTask(std::bind(&ScreenUpdater::PostUpdateRequest, this));
         return;
     }
 
-    CaptureScheduler scheduler(interval_);
-
-    while (!IsStopping())
+    if (!capturer_)
     {
-        scheduler.BeginCapture();
+        capturer_ = CapturerGDI::Create();
+        if (capturer_)
+            UpdateScreen();
 
-        const DesktopFrame* screen_frame = capturer->CaptureImage();
+        return;
+    }
 
-        if (!screen_frame)
-        {
-            delegate_->OnScreenUpdateError();
-            break;
-        }
+    std::chrono::milliseconds delay =
+        scheduler_.NextCaptureDelay(update_interval_);
 
-        if (!screen_frame->UpdatedRegion().IsEmpty())
-        {
-            delegate_->OnScreenUpdate(screen_frame);
-        }
+    runner_->PostDelayedTask(
+        std::bind(&ScreenUpdater::UpdateScreen, this), delay);
+}
 
-        if (mode_ == Mode::SCREEN_AND_CURSOR)
-        {
-            std::unique_ptr<MouseCursor> mouse_cursor(capturer->CaptureCursor());
+void ScreenUpdater::UpdateScreen()
+{
+    DCHECK(runner_->BelongsToCurrentThread());
 
-            if (mouse_cursor)
-            {
-                delegate_->OnCursorUpdate(std::move(mouse_cursor));
-            }
-        }
+    scheduler_.BeginCapture();
 
-        std::this_thread::sleep_for(scheduler.NextCaptureDelay());
+    const DesktopFrame* screen_frame = capturer_->CaptureImage();
+    if (!screen_frame)
+        return;
+
+    if (screen_frame->UpdatedRegion().IsEmpty())
+        screen_frame = nullptr;
+
+    std::unique_ptr<MouseCursor> mouse_cursor;
+
+    if (mode_ == Mode::SCREEN_AND_CURSOR)
+        mouse_cursor = capturer_->CaptureCursor();
+
+    if (screen_frame || mouse_cursor)
+    {
+        screen_update_callback_(screen_frame, std::move(mouse_cursor));
+    }
+    else
+    {
+        runner_->PostDelayedTask(
+            std::bind(&ScreenUpdater::UpdateScreen, this), update_interval_);
     }
 }
 

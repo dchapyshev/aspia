@@ -26,7 +26,7 @@ ClientSessionFileTransfer::~ClientSessionFileTransfer()
     file_manager_.reset();
 }
 
-void ClientSessionFileTransfer::Send(const IOBuffer& buffer)
+void ClientSessionFileTransfer::Send(IOBuffer buffer)
 {
     if (!remote_sender_->ReadIncommingMessage(buffer))
     {

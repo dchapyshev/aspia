@@ -27,7 +27,7 @@ private:
     void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) override;
 
     // ClientSession implementation.
-    void Send(const IOBuffer& buffer) override;
+    void Send(IOBuffer buffer) override;
 
     void ReadCursorShape(const proto::CursorShape& cursor_shape);
     void ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);

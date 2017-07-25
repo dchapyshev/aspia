@@ -25,7 +25,7 @@ public:
         HostSession::Delegate* delegate);
 
     // HostSession implementation.
-    void Send(const IOBuffer& buffer) override;
+    void Send(IOBuffer buffer) override;
 
 private:
     explicit HostSessionPower(HostSession::Delegate* delegate);

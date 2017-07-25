@@ -25,7 +25,7 @@ public:
 
 private:
     // ClientSession implementation.
-    void Send(const IOBuffer& buffer) override;
+    void Send(IOBuffer buffer) override;
 
     // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;

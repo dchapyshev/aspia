@@ -51,7 +51,7 @@ private:
     void OnSessionTerminate() override;
 
     // NetworkChannel::Listener implementation.
-    void OnNetworkChannelMessage(const IOBuffer& buffer) override;
+    void OnNetworkChannelMessage(IOBuffer buffer) override;
     void OnNetworkChannelDisconnect() override;
     void OnNetworkChannelConnect() override;
 

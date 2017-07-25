@@ -14,7 +14,8 @@
 namespace aspia {
 
 static const uint32_t kSupportedVideoEncodings =
-    proto::VideoEncoding::VIDEO_ENCODING_ZLIB | proto::VideoEncoding::VIDEO_ENCODING_VP8 |
+    proto::VideoEncoding::VIDEO_ENCODING_ZLIB |
+    proto::VideoEncoding::VIDEO_ENCODING_VP8 |
     proto::VideoEncoding::VIDEO_ENCODING_VP9;
 
 static const uint32_t kSupportedAudioEncodings = 0;
@@ -23,11 +24,9 @@ static const uint32_t kSupportedFeatures =
     proto::DesktopSessionFeatures::FEATURE_CURSOR_SHAPE |
     proto::DesktopSessionFeatures::FEATURE_CLIPBOARD;
 
-void DesktopSessionClient::Run(const std::wstring& input_channel_name,
-                               const std::wstring& output_channel_name)
+void DesktopSessionClient::Run(const std::wstring& channel_id)
 {
-    ipc_channel_ = PipeChannel::CreateClient(input_channel_name,
-                                             output_channel_name);
+    ipc_channel_ = PipeChannel::CreateClient(channel_id);
     if (!ipc_channel_)
         return;
 
@@ -105,50 +104,60 @@ void DesktopSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
             return;
     }
 
-    ipc_channel_->Close();
+    ipc_channel_->Disconnect();
 }
 
-void DesktopSessionClient::OnScreenUpdate(const DesktopFrame* screen_frame)
+void DesktopSessionClient::OnScreenUpdate(const DesktopFrame* screen_frame,
+                                          std::unique_ptr<MouseCursor> mouse_cursor)
 {
+    DCHECK(screen_frame || mouse_cursor);
     DCHECK(video_encoder_);
 
-    std::unique_ptr<proto::VideoPacket> packet =
-        video_encoder_->Encode(screen_frame);
+    proto::desktop::HostToClient message;
 
-    if (packet)
+    // If the screen image has changes.
+    if (screen_frame)
     {
-        proto::desktop::HostToClient message;
+        std::unique_ptr<proto::VideoPacket> packet =
+            video_encoder_->Encode(screen_frame);
+
         message.set_allocated_video_packet(packet.release());
-        WriteMessage(message);
     }
-}
 
-void DesktopSessionClient::OnCursorUpdate(std::unique_ptr<MouseCursor> mouse_cursor)
-{
-    DCHECK_EQ(session_type_, proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
-    DCHECK(cursor_encoder_);
-
-    std::unique_ptr<proto::CursorShape> cursor_shape =
-        cursor_encoder_->Encode(std::move(mouse_cursor));
-
-    if (cursor_shape)
+    // If the mouse cursor has changes.
+    if (mouse_cursor)
     {
-        proto::desktop::HostToClient message;
+        DCHECK_EQ(session_type_, proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
+        DCHECK(cursor_encoder_);
+
+        std::unique_ptr<proto::CursorShape> cursor_shape =
+            cursor_encoder_->Encode(std::move(mouse_cursor));
+
         message.set_allocated_cursor_shape(cursor_shape.release());
-        WriteMessage(message);
     }
+
+    WriteMessage(message, std::bind(&DesktopSessionClient::OnScreenUpdated, this));
 }
 
-void DesktopSessionClient::OnScreenUpdateError()
+void DesktopSessionClient::OnScreenUpdated()
 {
-    ipc_channel_->Close();
+    if (!screen_updater_)
+        return;
+
+    screen_updater_->PostUpdateRequest();
+}
+
+void DesktopSessionClient::WriteMessage(
+    const proto::desktop::HostToClient& message,
+    PipeChannel::CompleteHandler handler)
+{
+    IOBuffer buffer(SerializeMessage<IOBuffer>(message));
+    ipc_channel_->Send(std::move(buffer), std::move(handler));
 }
 
 void DesktopSessionClient::WriteMessage(const proto::desktop::HostToClient& message)
 {
-    IOBuffer buffer(SerializeMessage<IOBuffer>(message));
-    std::lock_guard<std::mutex> lock(outgoing_lock_);
-    ipc_channel_->Send(buffer);
+    WriteMessage(message, nullptr);
 }
 
 void DesktopSessionClient::WriteStatus(proto::Status status)
@@ -184,7 +193,8 @@ bool DesktopSessionClient::ReadKeyEvent(const proto::KeyEvent& event)
     return true;
 }
 
-bool DesktopSessionClient::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
+bool DesktopSessionClient::ReadClipboardEvent(
+    std::shared_ptr<proto::ClipboardEvent> clipboard_event)
 {
     if (session_type_ != proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
@@ -196,7 +206,8 @@ bool DesktopSessionClient::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEv
     return true;
 }
 
-void DesktopSessionClient::SendClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event)
+void DesktopSessionClient::SendClipboardEvent(
+    std::unique_ptr<proto::ClipboardEvent> clipboard_event)
 {
     proto::desktop::HostToClient message;
     message.set_allocated_clipboard_event(clipboard_event.release());
@@ -223,7 +234,36 @@ void DesktopSessionClient::SendConfigRequest()
 
 bool DesktopSessionClient::ReadConfig(const proto::DesktopSessionConfig& config)
 {
-    screen_updater_ = std::make_unique<ScreenUpdater>();
+    screen_updater_.reset();
+
+    bool enable_cursor_shape = false;
+
+    if (session_type_ == proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        enable_cursor_shape =
+            (config.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE) ? true : false;
+
+        if (enable_cursor_shape)
+        {
+            cursor_encoder_ = std::make_unique<CursorEncoder>();
+        }
+        else
+        {
+            cursor_encoder_.reset();
+        }
+
+        if (config.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD)
+        {
+            clipboard_thread_ = std::make_unique<ClipboardThread>();
+
+            clipboard_thread_->Start(std::bind(
+                &DesktopSessionClient::SendClipboardEvent, this, std::placeholders::_1));
+        }
+        else
+        {
+            clipboard_thread_.reset();
+        }
+    }
 
     switch (config.video_encoding())
     {
@@ -236,9 +276,8 @@ bool DesktopSessionClient::ReadConfig(const proto::DesktopSessionConfig& config)
             break;
 
         case proto::VIDEO_ENCODING_ZLIB:
-            video_encoder_ =
-                VideoEncoderZLIB::Create(ConvertFromVideoPixelFormat(config.pixel_format()),
-                                                                     config.compress_ratio());
+            video_encoder_ = VideoEncoderZLIB::Create(
+                ConvertFromVideoPixelFormat(config.pixel_format()), config.compress_ratio());
             break;
 
         default:
@@ -250,38 +289,21 @@ bool DesktopSessionClient::ReadConfig(const proto::DesktopSessionConfig& config)
     if (!video_encoder_)
         return false;
 
-    ScreenUpdater::Mode mode = ScreenUpdater::Mode::SCREEN_ONLY;
+    ScreenUpdater::ScreenUpdateCallback screen_update_callback =
+        std::bind(&DesktopSessionClient::OnScreenUpdate,
+                  this,
+                  std::placeholders::_1,
+                  std::placeholders::_2);
 
-    if (session_type_ == proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        if (config.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE)
-        {
-            mode = ScreenUpdater::Mode::SCREEN_AND_CURSOR;
-            cursor_encoder_ = std::make_unique<CursorEncoder>();
-        }
-        else
-        {
-            cursor_encoder_.reset();
-        }
+    ScreenUpdater::Mode update_mode = enable_cursor_shape ?
+        ScreenUpdater::Mode::SCREEN_AND_CURSOR : ScreenUpdater::Mode::SCREEN;
 
-        if (config.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD)
-        {
-            clipboard_thread_ = std::make_unique<ClipboardThread>();
+    screen_updater_ = std::make_unique<ScreenUpdater>(
+        update_mode,
+        std::chrono::milliseconds(config.update_interval()),
+        std::move(screen_update_callback));
 
-            clipboard_thread_->Start(std::bind(&DesktopSessionClient::SendClipboardEvent,
-                                               this,
-                                               std::placeholders::_1));
-        }
-        else
-        {
-            clipboard_thread_.reset();
-        }
-    }
-
-    if (!screen_updater_->StartUpdating(mode,
-                                        std::chrono::milliseconds(config.update_interval()),
-                                        this))
-        return false;
+    screen_updater_->PostUpdateRequest();
 
     return true;
 }

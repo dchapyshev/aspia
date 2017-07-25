@@ -41,7 +41,7 @@ private:
 
     // NetworkChannel::Listener implementation.
     void OnNetworkChannelConnect() override;
-    void OnNetworkChannelMessage(const IOBuffer& buffer) override;
+    void OnNetworkChannelMessage(IOBuffer buffer) override;
     void OnNetworkChannelDisconnect() override;
 
     bool DoAuthorize(const IOBuffer& buffer);

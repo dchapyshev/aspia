@@ -15,13 +15,11 @@ namespace aspia {
 
 namespace fs = std::experimental::filesystem;
 
-void FileTransferSessionClient::Run(const std::wstring& input_channel_name,
-                                    const std::wstring& output_channel_name)
+void FileTransferSessionClient::Run(const std::wstring& channel_id)
 {
     status_dialog_ = std::make_unique<UiFileStatusDialog>();
 
-    ipc_channel_ = PipeChannel::CreateClient(input_channel_name,
-                                             output_channel_name);
+    ipc_channel_ = PipeChannel::CreateClient(channel_id);
     if (ipc_channel_)
     {
         if (ipc_channel_->Connect(GetCurrentProcessId(), this))
@@ -60,7 +58,7 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
 
     if (!ParseMessage(buffer, message))
     {
-        ipc_channel_->Close();
+        ipc_channel_->Disconnect();
         return;
     }
 
@@ -97,7 +95,7 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
         case proto::REQUEST_TYPE_FILE_UPLOAD_DATA:
         {
             if (!ReadFileUploadDataRequest(message.file_packet()))
-                ipc_channel_->Close();
+                ipc_channel_->Disconnect();
         }
         break;
 
@@ -108,13 +106,13 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
         case proto::REQUEST_TYPE_FILE_DOWNLOAD_DATA:
         {
             if (!ReadFileDownloadDataRequest())
-                ipc_channel_->Close();
+                ipc_channel_->Disconnect();
         }
         break;
 
         default:
             LOG(ERROR) << "Unknown message from client: " << message.type();
-            ipc_channel_->Close();
+            ipc_channel_->Disconnect();
             break;
     }
 }
@@ -124,7 +122,7 @@ void FileTransferSessionClient::SendReply(
 {
     IOBuffer buffer(SerializeMessage<IOBuffer>(reply));
     std::lock_guard<std::mutex> lock(outgoing_lock_);
-    ipc_channel_->Send(buffer);
+    ipc_channel_->Send(std::move(buffer), nullptr);
 }
 
 void FileTransferSessionClient::ReadDriveListRequest()

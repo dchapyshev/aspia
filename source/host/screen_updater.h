@@ -8,39 +8,40 @@
 #ifndef _ASPIA_HOST__SCREEN_UPDATER_H
 #define _ASPIA_HOST__SCREEN_UPDATER_H
 
-#include "base/threading/thread.h"
+#include "base/message_loop/message_loop_thread.h"
 #include "desktop_capture/capture_scheduler.h"
 #include "desktop_capture/capturer_gdi.h"
 
 namespace aspia {
 
-class ScreenUpdater : private Thread
+class ScreenUpdater
 {
 public:
-    ScreenUpdater() = default;
+    enum class Mode { SCREEN_AND_CURSOR, SCREEN };
+
+    using ScreenUpdateCallback =
+        std::function<void(const DesktopFrame* screen_frame,
+                           std::unique_ptr<MouseCursor> mouse_cursor)>;
+
+    ScreenUpdater(Mode mode,
+                  const std::chrono::milliseconds& update_interval,
+                  ScreenUpdateCallback screen_update_callback);
     ~ScreenUpdater();
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-        virtual void OnScreenUpdate(const DesktopFrame* screen_frame) = 0;
-        virtual void OnCursorUpdate(std::unique_ptr<MouseCursor> mouse_cursor) = 0;
-        virtual void OnScreenUpdateError() = 0;
-    };
-
-    enum class Mode { SCREEN_AND_CURSOR, SCREEN_ONLY };
-
-    bool StartUpdating(Mode mode,
-                       const std::chrono::milliseconds& interval,
-                       Delegate* delegate);
+    void PostUpdateRequest();
 
 private:
-    void Run() override;
+    void UpdateScreen();
 
-    Delegate* delegate_ = nullptr;
-    Mode mode_ = Mode::SCREEN_AND_CURSOR;
-    std::chrono::milliseconds interval_{ 0 };
+    ScreenUpdateCallback screen_update_callback_;
+
+    MessageLoopThread thread_;
+    std::shared_ptr<MessageLoopProxy> runner_;
+    std::unique_ptr<Capturer> capturer_;
+    CaptureScheduler scheduler_;
+
+    const Mode mode_;
+    const std::chrono::milliseconds update_interval_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenUpdater);
 };

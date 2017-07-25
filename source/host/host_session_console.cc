@@ -91,28 +91,26 @@ void HostSessionConsole::OnSessionAttached(uint32_t session_id)
 
         state_ = State::Starting;
 
-        std::wstring input_channel_id;
-        std::wstring output_channel_id;
+        std::wstring channel_id;
 
-        ipc_channel_ = PipeChannel::CreateServer(input_channel_id,
-                                                 output_channel_id);
+        ipc_channel_ = PipeChannel::CreateServer(channel_id);
         if (ipc_channel_)
         {
-            bool launched = false;
+            bool launched;
 
             switch (session_type_)
             {
                 case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
                 case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
-                    launched = LaunchDesktopSession(session_id,
-                                                    input_channel_id,
-                                                    output_channel_id);
+                    launched = LaunchDesktopSession(session_id, channel_id);
                     break;
 
                 case proto::SessionType::SESSION_TYPE_FILE_TRANSFER:
-                    launched = LaunchFileTransferSession(session_id,
-                                                         input_channel_id,
-                                                         output_channel_id);
+                    launched = LaunchFileTransferSession(session_id, channel_id);
+                    break;
+
+                default:
+                    launched = false;
                     break;
             }
 
@@ -180,9 +178,8 @@ void HostSessionConsole::OnPipeChannelConnect(uint32_t user_data)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&HostSessionConsole::OnPipeChannelConnect,
-                                    this,
-                                    user_data));
+        runner_->PostTask(std::bind(
+            &HostSessionConsole::OnPipeChannelConnect, this, user_data));
         return;
     }
 
@@ -289,14 +286,14 @@ void HostSessionConsole::OnSessionAttachTimeout()
     }
 }
 
-void HostSessionConsole::Send(const IOBuffer& buffer)
+void HostSessionConsole::Send(IOBuffer buffer)
 {
     std::lock_guard<std::mutex> lock(ipc_channel_lock_);
 
     if (!ipc_channel_)
         return;
 
-    ipc_channel_->Send(buffer);
+    ipc_channel_->Send(std::move(buffer), nullptr);
 }
 
 } // namespace aspia

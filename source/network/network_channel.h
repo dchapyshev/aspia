@@ -34,7 +34,7 @@ public:
         virtual void OnNetworkChannelDisconnect() = 0;
 
         // Called when a new message is received.
-        virtual void OnNetworkChannelMessage(const IOBuffer& buffer) = 0;
+        virtual void OnNetworkChannelMessage(IOBuffer buffer) = 0;
     };
 
     virtual void StartListening(Listener* listener) = 0;

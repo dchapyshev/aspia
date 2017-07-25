@@ -40,7 +40,7 @@ private:
     void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) override { }
 
     // ClientSession implementation.
-    void Send(const IOBuffer& buffer) override;
+    void Send(IOBuffer buffer) override;
 
     std::unique_ptr<VideoDecoder> video_decoder_;
 

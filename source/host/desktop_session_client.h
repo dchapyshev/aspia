@@ -19,16 +19,13 @@
 
 namespace aspia {
 
-class DesktopSessionClient :
-    private PipeChannel::Delegate,
-    private ScreenUpdater::Delegate
+class DesktopSessionClient : private PipeChannel::Delegate
 {
 public:
     DesktopSessionClient() = default;
     ~DesktopSessionClient() = default;
 
-    void Run(const std::wstring& input_channel_name,
-             const std::wstring& output_channel_name);
+    void Run(const std::wstring& channel_id);
 
 private:
     // PipeChannel::Delegate implementation.
@@ -36,12 +33,13 @@ private:
     void OnPipeChannelDisconnect() override;
     void OnPipeChannelMessage(const IOBuffer& buffer) override;
 
-    // ScreenUpdater::Delegate implementation.
-    void OnScreenUpdate(const DesktopFrame* screen_frame) override;
-    void OnCursorUpdate(std::unique_ptr<MouseCursor> mouse_cursor) override;
-    void OnScreenUpdateError() override;
+    void OnScreenUpdate(const DesktopFrame* screen_frame,
+                        std::unique_ptr<MouseCursor> mouse_cursor);
+    void OnScreenUpdated();
 
     void WriteMessage(const proto::desktop::HostToClient& message);
+    void WriteMessage(const proto::desktop::HostToClient& message,
+                      PipeChannel::CompleteHandler handler);
     void WriteStatus(proto::Status status);
 
     bool ReadPointerEvent(const proto::PointerEvent& event);
@@ -53,7 +51,6 @@ private:
     void SendConfigRequest();
 
     std::unique_ptr<PipeChannel> ipc_channel_;
-    std::mutex outgoing_lock_;
 
     proto::SessionType session_type_ = proto::SessionType::SESSION_TYPE_UNKNOWN;
 

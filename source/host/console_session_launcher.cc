@@ -165,8 +165,7 @@ static bool CreateProcessWithToken(HANDLE user_token,
 }
 
 static bool CreateCommandLine(const std::wstring& run_mode,
-                              const std::wstring& input_channel_id,
-                              const std::wstring& output_channel_id,
+                              const std::wstring& channel_id,
                               std::wstring& command_line)
 {
     FilePath path;
@@ -177,22 +176,19 @@ static bool CreateCommandLine(const std::wstring& run_mode,
     command_line.assign(path);
     command_line.append(L" --run_mode=");
     command_line.append(run_mode);
-    command_line.append(L" --input_channel_id=");
-    command_line.append(input_channel_id);
-    command_line.append(L" --output_channel_id=");
-    command_line.append(output_channel_id);
+    command_line.append(L" --channel_id=");
+    command_line.append(channel_id);
 
     return true;
 }
 
 static bool LaunchProcessInSession(const std::wstring& run_mode,
                                    uint32_t session_id,
-                                   const std::wstring& input_channel_id,
-                                   const std::wstring& output_channel_id)
+                                   const std::wstring& channel_id)
 {
     std::wstring command_line;
 
-    if (!CreateCommandLine(run_mode, input_channel_id, output_channel_id, command_line))
+    if (!CreateCommandLine(run_mode, channel_id, command_line))
         return false;
 
     ScopedHandle session_token;
@@ -204,12 +200,11 @@ static bool LaunchProcessInSession(const std::wstring& run_mode,
 }
 
 static bool LaunchProcessWithCurrentRights(const std::wstring& run_mode,
-                                           const std::wstring& input_channel_id,
-                                           const std::wstring& output_channel_id)
+                                           const std::wstring& channel_id)
 {
     std::wstring command_line;
 
-    if (!CreateCommandLine(run_mode, input_channel_id, output_channel_id, command_line))
+    if (!CreateCommandLine(run_mode, channel_id, command_line))
         return false;
 
     ScopedHandle token;
@@ -221,8 +216,7 @@ static bool LaunchProcessWithCurrentRights(const std::wstring& run_mode,
 }
 
 static bool LaunchProcessOverService(uint32_t session_id,
-                                     const std::wstring& input_channel_id,
-                                     const std::wstring& output_channel_id)
+                                     const std::wstring& channel_id)
 {
     std::wstring service_id =
         ServiceManager::GenerateUniqueServiceId();
@@ -241,10 +235,8 @@ static bool LaunchProcessOverService(uint32_t session_id,
     std::wstring command_line;
 
     command_line.assign(path);
-    command_line.append(L" --input_channel_id=");
-    command_line.append(input_channel_id);
-    command_line.append(L" --output_channel_id=");
-    command_line.append(output_channel_id);
+    command_line.append(L" --channel_id=");
+    command_line.append(channel_id);
     command_line.append(L" --run_mode=");
     command_line.append(kDesktopSessionLauncherSwitch);
     command_line.append(L" --session_id=");
@@ -268,8 +260,7 @@ void ConsoleSessionLauncher::Worker()
 {
     LaunchProcessInSession(kDesktopSessionSwitch,
                            session_id_,
-                           input_channel_id_,
-                           output_channel_id_);
+                           channel_id_);
 }
 
 void ConsoleSessionLauncher::OnStop()
@@ -278,59 +269,48 @@ void ConsoleSessionLauncher::OnStop()
 }
 
 void ConsoleSessionLauncher::ExecuteService(uint32_t session_id,
-                                            const std::wstring& input_channel_id,
-                                            const std::wstring& output_channel_id)
+                                            const std::wstring& channel_id)
 {
     session_id_ = session_id;
-    input_channel_id_ = input_channel_id;
-    output_channel_id_ = output_channel_id;
+    channel_id_ = channel_id;
 
     Run();
 
     ServiceManager(ServiceName()).Remove();
 }
 
-bool LaunchDesktopSession(uint32_t session_id,
-                          const std::wstring& input_channel_id,
-                          const std::wstring& output_channel_id)
+bool LaunchDesktopSession(uint32_t session_id, const std::wstring& channel_id)
 {
     if (!IsCallerHasAdminRights())
     {
         return LaunchProcessWithCurrentRights(kDesktopSessionSwitch,
-                                              input_channel_id,
-                                              output_channel_id);
+                                              channel_id);
     }
 
     if (!IsRunningAsService())
     {
-        return LaunchProcessOverService(session_id,
-                                        input_channel_id,
-                                        output_channel_id);
+        return LaunchProcessOverService(session_id, channel_id);
     }
 
     // The code is executed from the service.
     // Start the process directly.
     return LaunchProcessInSession(kDesktopSessionSwitch,
                                   session_id,
-                                  input_channel_id,
-                                  output_channel_id);
+                                  channel_id);
 }
 
 bool LaunchFileTransferSession(uint32_t session_id,
-                               const std::wstring& input_channel_id,
-                               const std::wstring& output_channel_id)
+                               const std::wstring& channel_id)
 {
     if (IsRunningAsService())
     {
         return LaunchProcessInSession(kFileTransferSessionSwitch,
                                       session_id,
-                                      input_channel_id,
-                                      output_channel_id);
+                                      channel_id);
     }
 
     return LaunchProcessWithCurrentRights(kFileTransferSessionSwitch,
-                                          input_channel_id,
-                                          output_channel_id);
+                                          channel_id);
 }
 
 } // namespace aspia

@@ -40,7 +40,7 @@ void HostSessionPower::OnAfterThreadRunning()
     delegate_->OnSessionTerminate();
 }
 
-void HostSessionPower::Send(const IOBuffer& buffer)
+void HostSessionPower::Send(IOBuffer buffer)
 {
     proto::power::ClientToHost message;
 

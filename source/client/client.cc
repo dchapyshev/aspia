@@ -63,7 +63,7 @@ void Client::OnSessionTerminate()
     channel_proxy_->Disconnect();
 }
 
-void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
+void Client::OnNetworkChannelMessage(IOBuffer buffer)
 {
     if (!session_proxy_)
     {
@@ -72,7 +72,7 @@ void Client::OnNetworkChannelMessage(const IOBuffer& buffer)
         return;
     }
 
-    session_proxy_->Send(buffer);
+    session_proxy_->Send(std::move(buffer));
 }
 
 void Client::OnNetworkChannelDisconnect()

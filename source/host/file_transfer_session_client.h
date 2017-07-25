@@ -22,8 +22,7 @@ public:
     FileTransferSessionClient() = default;
     ~FileTransferSessionClient() = default;
 
-    void Run(const std::wstring& input_channel_name,
-             const std::wstring& output_channel_name);
+    void Run(const std::wstring& channel_id);
 
 private:
     // PipeChannel::Delegate implementation.

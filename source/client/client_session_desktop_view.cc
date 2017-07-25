@@ -107,7 +107,7 @@ void ClientSessionDesktopView::ReadConfigRequest(
     OnConfigChange(config_.desktop_session_config());
 }
 
-void ClientSessionDesktopView::Send(const IOBuffer& buffer)
+void ClientSessionDesktopView::Send(IOBuffer buffer)
 {
     proto::desktop::HostToClient message;
 

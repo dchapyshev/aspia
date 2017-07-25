@@ -39,7 +39,7 @@ public:
         CreateForFileTransfer(HostSession::Delegate* delegate);
 
     // HostSession implementation.
-    void Send(const IOBuffer& buffer) override;
+    void Send(IOBuffer buffer) override;
 
 private:
     HostSessionConsole(proto::SessionType session_type,

@@ -17,14 +17,14 @@ namespace aspia {
 class HostSessionProxy
 {
 public:
-    bool Send(const IOBuffer& buffer)
+    bool Send(IOBuffer buffer)
     {
         std::lock_guard<std::mutex> lock(host_session_lock_);
 
         if (!host_session_)
             return false;
 
-        host_session_->Send(buffer);
+        host_session_->Send(std::move(buffer));
 
         return true;
     }
