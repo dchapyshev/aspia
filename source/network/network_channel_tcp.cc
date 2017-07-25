@@ -19,11 +19,8 @@ static bool IsFailureCode(const std::error_code& code)
 }
 
 NetworkChannelTcp::NetworkChannelTcp(Mode mode)
-    : socket_(io_service_),
-      mode_(mode)
+    : mode_(mode)
 {
-    static_assert(sizeof(message_size_) == sizeof(MessageSizeType),
-                  "Wrong message size field");
     Start();
 }
 
@@ -62,12 +59,12 @@ void NetworkChannelTcp::DoConnect()
 
     if (mode_ == Mode::CLIENT)
     {
-        DoSendHelloSize();
+        DoSendHello();
     }
     else
     {
         DCHECK(mode_ == Mode::SERVER);
-        DoReceiveHelloSize();
+        DoReceiveHello();
     }
 }
 
@@ -97,27 +94,34 @@ void NetworkChannelTcp::DoDisconnect()
         io_service_.stop();
 }
 
-void NetworkChannelTcp::DoSendHelloSize()
+void NetworkChannelTcp::DoSendHello()
 {
-    message_ = encryptor_->HelloMessage();
-    if (message_.IsEmpty())
+    write_buffer_ = encryptor_->HelloMessage();
+    if (write_buffer_.IsEmpty())
     {
         DoDisconnect();
         return;
     }
 
-    message_size_ = static_cast<MessageSizeType>(message_.size());
+    write_size_ = static_cast<MessageSizeType>(write_buffer_.size());
+    if (!write_size_ || write_size_ > kMaxMessageSize)
+    {
+        DoDisconnect();
+        return;
+    }
+
+    write_size_ = HostByteOrderToNetwork(write_size_);
 
     asio::async_write(socket_,
-                      asio::buffer(&message_size_, sizeof(MessageSizeType)),
-                      std::bind(&NetworkChannelTcp::OnSendHelloSize,
+                      asio::buffer(&write_size_, sizeof(MessageSizeType)),
+                      std::bind(&NetworkChannelTcp::OnSendHelloSizeComplete,
                                 this,
                                 std::placeholders::_1,
                                 std::placeholders::_2));
 }
 
-void NetworkChannelTcp::OnSendHelloSize(const std::error_code& code,
-                                        size_t bytes_transferred)
+void NetworkChannelTcp::OnSendHelloSizeComplete(const std::error_code& code,
+                                                size_t bytes_transferred)
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
@@ -125,23 +129,18 @@ void NetworkChannelTcp::OnSendHelloSize(const std::error_code& code,
         return;
     }
 
-    DoSendHello();
-}
-
-void NetworkChannelTcp::DoSendHello()
-{
     asio::async_write(socket_,
-                      asio::buffer(message_.data(), message_.size()),
-                      std::bind(&NetworkChannelTcp::OnSendHello,
+                      asio::buffer(write_buffer_.data(), write_buffer_.size()),
+                      std::bind(&NetworkChannelTcp::OnSendHelloComplete,
                                 this,
                                 std::placeholders::_1,
                                 std::placeholders::_2));
 }
 
-void NetworkChannelTcp::OnSendHello(const std::error_code& code,
-                                    size_t bytes_transferred)
+void NetworkChannelTcp::OnSendHelloComplete(const std::error_code& code,
+                                            size_t bytes_transferred)
 {
-    if (IsFailureCode(code) || bytes_transferred != message_.size())
+    if (IsFailureCode(code) || bytes_transferred != write_buffer_.size())
     {
         DoDisconnect();
         return;
@@ -149,59 +148,62 @@ void NetworkChannelTcp::OnSendHello(const std::error_code& code,
 
     if (mode_ == Mode::CLIENT)
     {
-        DoReceiveHelloSize();
+        DoReceiveHello();
     }
     else
     {
         DCHECK(mode_ == Mode::SERVER);
         DoStartListening();
     }
-}
-
-void NetworkChannelTcp::DoReceiveHelloSize()
-{
-    asio::async_read(socket_,
-                     asio::buffer(&message_size_, sizeof(MessageSizeType)),
-                     std::bind(&NetworkChannelTcp::OnReceiveHelloSize,
-                               this,
-                               std::placeholders::_1,
-                               std::placeholders::_2));
-}
-
-void NetworkChannelTcp::OnReceiveHelloSize(const std::error_code& code,
-                                           size_t bytes_transferred)
-{
-    if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
-    {
-        DoDisconnect();
-        return;
-    }
-
-    DoReceiveHello();
 }
 
 void NetworkChannelTcp::DoReceiveHello()
 {
-    message_ = IOBuffer(message_size_);
-
     asio::async_read(socket_,
-                     asio::buffer(message_.data(), message_.size()),
-                     std::bind(&NetworkChannelTcp::OnReceiveHello,
+                     asio::buffer(&read_size_, sizeof(MessageSizeType)),
+                     std::bind(&NetworkChannelTcp::OnReceiveHelloSizeComplete,
                                this,
                                std::placeholders::_1,
                                std::placeholders::_2));
 }
 
-void NetworkChannelTcp::OnReceiveHello(const std::error_code& code,
-                                       size_t bytes_transferred)
+void NetworkChannelTcp::OnReceiveHelloSizeComplete(const std::error_code& code,
+                                                   size_t bytes_transferred)
 {
-    if (IsFailureCode(code) || message_size_ != bytes_transferred)
+    if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
         DoDisconnect();
         return;
     }
 
-    if (!encryptor_->ReadHelloMessage(message_))
+    read_size_ = NetworkByteOrderToHost(read_size_);
+    if (!read_size_ || read_size_ > kMaxMessageSize)
+    {
+        DoDisconnect();
+        return;
+    }
+
+    read_buffer_ = IOBuffer(read_size_);
+
+    asio::async_read(socket_,
+                     asio::buffer(read_buffer_.data(), read_buffer_.size()),
+                     std::bind(&NetworkChannelTcp::OnReceiveHelloComplete,
+                               this,
+                               std::placeholders::_1,
+                               std::placeholders::_2));
+}
+
+
+void NetworkChannelTcp::OnReceiveHelloComplete(const std::error_code& code,
+                                               size_t bytes_transferred)
+{
+    if (IsFailureCode(code) || bytes_transferred != read_buffer_.size())
+    {
+        DoDisconnect();
+        return;
+    }
+
+    if (!encryptor_->ReadHelloMessage(read_buffer_))
     {
         DoDisconnect();
         return;
@@ -214,7 +216,7 @@ void NetworkChannelTcp::OnReceiveHello(const std::error_code& code,
     else
     {
         DCHECK(mode_ == Mode::SERVER);
-        DoSendHelloSize();
+        DoSendHello();
     }
 }
 
@@ -229,21 +231,21 @@ void NetworkChannelTcp::DoStartListening()
     if (listener_)
         listener_->OnNetworkChannelConnect();
 
-    DoReadMessageSize();
+    DoReadMessage();
 }
 
-void NetworkChannelTcp::DoReadMessageSize()
+void NetworkChannelTcp::DoReadMessage()
 {
     asio::async_read(socket_,
-                     asio::buffer(&message_size_, sizeof(MessageSizeType)),
-                     std::bind(&NetworkChannelTcp::OnReadMessageSize,
+                     asio::buffer(&read_size_, sizeof(MessageSizeType)),
+                     std::bind(&NetworkChannelTcp::OnReadMessageSizeComplete,
                                this,
                                std::placeholders::_1,
                                std::placeholders::_2));
 }
 
-void NetworkChannelTcp::OnReadMessageSize(const std::error_code& code,
-                                          size_t bytes_transferred)
+void NetworkChannelTcp::OnReadMessageSizeComplete(const std::error_code& code,
+                                                  size_t bytes_transferred)
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
@@ -251,33 +253,28 @@ void NetworkChannelTcp::OnReadMessageSize(const std::error_code& code,
         return;
     }
 
-    message_size_ = NetworkByteOrderToHost(message_size_);
+    read_size_ = NetworkByteOrderToHost(read_size_);
 
-    if (message_size_ > kMaxMessageSize)
+    if (!read_size_ || read_size_ > kMaxMessageSize)
     {
         DoDisconnect();
         return;
     }
 
-    DoReadMessage();
-}
-
-void NetworkChannelTcp::DoReadMessage()
-{
-    message_ = IOBuffer(message_size_);
+    read_buffer_ = IOBuffer(read_size_);
 
     asio::async_read(socket_,
-                     asio::buffer(message_.data(), message_.size()),
-                     std::bind(&NetworkChannelTcp::OnReadMessage,
+                     asio::buffer(read_buffer_.data(), read_buffer_.size()),
+                     std::bind(&NetworkChannelTcp::OnReadMessageComplete,
                                this,
                                std::placeholders::_1,
                                std::placeholders::_2));
 }
 
-void NetworkChannelTcp::OnReadMessage(const std::error_code& code,
-                                      size_t bytes_transferred)
+void NetworkChannelTcp::OnReadMessageComplete(const std::error_code& code,
+                                              size_t bytes_transferred)
 {
-    if (IsFailureCode(code) || message_size_ != bytes_transferred)
+    if (IsFailureCode(code) || bytes_transferred != read_buffer_.size())
     {
         DoDisconnect();
         return;
@@ -286,9 +283,9 @@ void NetworkChannelTcp::OnReadMessage(const std::error_code& code,
     if (!incoming_queue_)
         return;
 
-    incoming_queue_->Add(std::move(message_));
+    incoming_queue_->Add(std::move(read_buffer_));
 
-    DoReadMessageSize();
+    DoReadMessage();
 }
 
 void NetworkChannelTcp::DoDecryptMessage(const IOBuffer& buffer)

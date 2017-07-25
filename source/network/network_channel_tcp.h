@@ -72,31 +72,25 @@ private:
     void DoConnect();
     void DoDisconnect();
 
-    void DoSendHelloSize();
-    void OnSendHelloSize(const std::error_code& code,
-                         size_t bytes_transferred);
-
     void DoSendHello();
-    void OnSendHello(const std::error_code& code,
-                     size_t bytes_transferred);
-
-    void DoReceiveHelloSize();
-    void OnReceiveHelloSize(const std::error_code& code,
-                            size_t bytes_transferred);
+    void OnSendHelloSizeComplete(const std::error_code& code,
+                                 size_t bytes_transferred);
+    void OnSendHelloComplete(const std::error_code& code,
+                             size_t bytes_transferred);
 
     void DoReceiveHello();
-    void OnReceiveHello(const std::error_code& code,
-                        size_t bytes_transferred);
+    void OnReceiveHelloSizeComplete(const std::error_code& code,
+                                    size_t bytes_transferred);
+    void OnReceiveHelloComplete(const std::error_code& code,
+                                size_t bytes_transferred);
 
     void DoStartListening();
 
-    void DoReadMessageSize();
-    void OnReadMessageSize(const std::error_code& code,
-                           size_t bytes_transferred);
-
     void DoReadMessage();
-    void OnReadMessage(const std::error_code& code,
-                       size_t bytes_transferred);
+    void OnReadMessageSizeComplete(const std::error_code& code,
+                                   size_t bytes_transferred);
+    void OnReadMessageComplete(const std::error_code& code,
+                               size_t bytes_transferred);
 
     void DoDecryptMessage(const IOBuffer& buffer);
 
@@ -106,17 +100,20 @@ private:
     const Mode mode_;
     asio::io_service io_service_;
     std::unique_ptr<asio::io_service::work> work_;
-    asio::ip::tcp::socket socket_;
+    asio::ip::tcp::socket socket_ { io_service_ };
 
     Listener* listener_ = nullptr;
-
-    MessageSizeType message_size_ = 0;
-    IOBuffer message_;
 
     std::unique_ptr<IOQueue> incoming_queue_;
     std::unique_ptr<IOQueue> outgoing_queue_;
     std::mutex outgoing_queue_lock_;
     std::mutex outgoing_lock_;
+
+    IOBuffer write_buffer_;
+    MessageSizeType write_size_ = 0;
+
+    IOBuffer read_buffer_;
+    MessageSizeType read_size_ = 0;
 
     std::unique_ptr<Encryptor> encryptor_;
 
