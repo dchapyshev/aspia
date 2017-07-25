@@ -127,7 +127,7 @@ void Client::OnAuthRequestSended()
         std::bind(&Client::DoAuthorize, this, std::placeholders::_1));
 }
 
-void Client::DoAuthorize(IOBuffer buffer)
+void Client::DoAuthorize(const IOBuffer& buffer)
 {
     proto::auth::HostToClient result;
 

@@ -108,7 +108,7 @@ static proto::Status DoBasicAuthorization(const std::string& username,
     return proto::Status::STATUS_ACCESS_DENIED;
 }
 
-void Host::DoAuthorize(IOBuffer buffer)
+void Host::DoAuthorize(const IOBuffer& buffer)
 {
     // Authorization request received, stop the timer.
     auth_timer_.Stop();

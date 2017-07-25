@@ -69,7 +69,7 @@ void DesktopSessionClient::OnPipeChannelConnect(uint32_t user_data)
         &DesktopSessionClient::OnPipeChannelMessage, this, std::placeholders::_1));
 }
 
-void DesktopSessionClient::OnPipeChannelMessage(IOBuffer buffer)
+void DesktopSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
 {
     proto::desktop::ClientToHost message;
 

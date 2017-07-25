@@ -66,7 +66,7 @@ void FileTransferSessionClient::OnPipeChannelDisconnect()
     status_dialog_->SetSessionTerminatedStatus();
 }
 
-void FileTransferSessionClient::OnPipeChannelMessage(IOBuffer buffer)
+void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
 {
     proto::file_transfer::ClientToHost message;
 

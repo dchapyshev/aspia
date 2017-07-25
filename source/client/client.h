@@ -55,7 +55,7 @@ private:
     void OnStatusDialogOpen() override;
 
     void OnAuthRequestSended();
-    void DoAuthorize(IOBuffer buffer);
+    void DoAuthorize(const IOBuffer& buffer);
     void CreateSession(proto::SessionType session_type);
     void OpenStatusDialog();
 

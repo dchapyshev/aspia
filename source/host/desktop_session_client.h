@@ -29,7 +29,7 @@ public:
 
 private:
     void OnPipeChannelConnect(uint32_t user_data);
-    void OnPipeChannelMessage(IOBuffer buffer);
+    void OnPipeChannelMessage(const IOBuffer& buffer);
 
     void OnScreenUpdate(const DesktopFrame* screen_frame,
                         std::unique_ptr<MouseCursor> mouse_cursor);
