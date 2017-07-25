@@ -44,7 +44,7 @@ void Host::OnSessionMessage(IOBuffer buffer)
 
 void Host::OnSessionTerminate()
 {
-    channel_.reset();
+    delegate_->OnSessionTerminate();
 }
 
 void Host::OnNetworkChannelStatusChange(NetworkChannel::Status status)

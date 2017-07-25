@@ -56,7 +56,7 @@ void Client::OnSessionMessage(IOBuffer buffer)
 
 void Client::OnSessionTerminate()
 {
-    channel_.reset();
+    delegate_->OnSessionTerminate();
 }
 
 void Client::OnNetworkChannelMessage(IOBuffer buffer)
@@ -148,7 +148,7 @@ void Client::DoAuthorize(IOBuffer buffer)
         runner_->PostTask(std::bind(&Client::OpenStatusDialog, this));
     }
 
-    channel_.reset();
+    delegate_->OnSessionTerminate();
 }
 
 void Client::CreateSession(proto::SessionType session_type)
