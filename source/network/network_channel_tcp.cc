@@ -283,19 +283,6 @@ void NetworkChannelTcp::Receive(ReceiveCompleteHandler handler)
     io_service_.post(std::bind(&NetworkChannelTcp::DoReadMessage, this));
 }
 
-void NetworkChannelTcp::Disconnect()
-{
-    if (!IsStopping())
-    {
-        io_service_.post(std::bind(&NetworkChannelTcp::DoDisconnect, this));
-    }
-}
-
-bool NetworkChannelTcp::IsConnected() const
-{
-    return !IsStopping();
-}
-
 void NetworkChannelTcp::ScheduleWrite()
 {
     DCHECK(!write_queue_.empty());

@@ -46,8 +46,6 @@ public:
 protected:
     friend class NetworkChannelProxy;
 
-    virtual void Disconnect() = 0;
-    virtual bool IsConnected() const = 0;
     virtual void Send(IOBuffer buffer, SendCompleteHandler handler) = 0;
     virtual void Receive(ReceiveCompleteHandler handler) = 0;
 

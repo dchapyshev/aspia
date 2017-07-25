@@ -57,8 +57,6 @@ public:
     void StartListening(Listener* listener) override;
 
 protected:
-    void Disconnect() override;
-    bool IsConnected() const override;
     void Send(IOBuffer buffer, SendCompleteHandler handler) override;
     void Receive(ReceiveCompleteHandler handler) override;
 

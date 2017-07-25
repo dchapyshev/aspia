@@ -45,7 +45,7 @@ void Client::OnAfterThreadRunning()
 
 bool Client::IsAliveSession() const
 {
-    return channel_proxy_->IsConnected();
+    return channel_ != nullptr;
 }
 
 void Client::OnSessionMessage(IOBuffer buffer)
@@ -55,7 +55,7 @@ void Client::OnSessionMessage(IOBuffer buffer)
 
 void Client::OnSessionTerminate()
 {
-    channel_proxy_->Disconnect();
+    channel_.reset();
 }
 
 void Client::OnNetworkChannelMessage(IOBuffer buffer)
@@ -91,7 +91,7 @@ void Client::OnNetworkChannelConnect()
 
     if (auth_dialog.DoModal(nullptr) != IDOK)
     {
-        channel_proxy_->Disconnect();
+        channel_.reset();
         return;
     }
 

@@ -17,8 +17,6 @@ namespace aspia {
 class NetworkChannelProxy
 {
 public:
-    bool Disconnect();
-    bool IsConnected() const;
     bool Send(IOBuffer buffer, NetworkChannel::SendCompleteHandler handler);
     bool Receive(NetworkChannel::ReceiveCompleteHandler handler);
 

@@ -21,27 +21,6 @@ void NetworkChannelProxy::WillDestroyCurrentChannel()
     channel_ = nullptr;
 }
 
-bool NetworkChannelProxy::Disconnect()
-{
-    std::lock_guard<std::mutex> lock(channel_lock_);
-
-    if (!channel_)
-        return false;
-
-    channel_->Disconnect();
-    return true;
-}
-
-bool NetworkChannelProxy::IsConnected() const
-{
-    std::lock_guard<std::mutex> lock(channel_lock_);
-
-    if (!channel_)
-        return false;
-
-    return channel_->IsConnected();
-}
-
 bool NetworkChannelProxy::Send(IOBuffer buffer,
                                NetworkChannel::SendCompleteHandler handler)
 {

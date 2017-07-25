@@ -32,7 +32,7 @@ Host::~Host()
 
 bool Host::IsAliveSession() const
 {
-    return channel_proxy_->IsConnected();
+    return channel_ != nullptr;
 }
 
 void Host::OnSessionMessage(IOBuffer buffer)
@@ -42,7 +42,7 @@ void Host::OnSessionMessage(IOBuffer buffer)
 
 void Host::OnSessionTerminate()
 {
-    channel_proxy_->Disconnect();
+    channel_.reset();
 }
 
 void Host::OnNetworkChannelConnect()
