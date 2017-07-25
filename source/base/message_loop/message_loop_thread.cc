@@ -11,13 +11,6 @@
 
 namespace aspia {
 
-MessageLoopThread::MessageLoopThread() :
-    start_event_(WaitableEvent::ResetPolicy::MANUAL,
-                 WaitableEvent::InitialState::NOT_SIGNALED)
-{
-    // Nothing
-}
-
 MessageLoopThread::~MessageLoopThread()
 {
     Stop();

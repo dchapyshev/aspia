@@ -20,7 +20,7 @@ namespace aspia {
 class MessageLoopThread
 {
 public:
-    MessageLoopThread();
+    MessageLoopThread() = default;
     ~MessageLoopThread();
 
     class Delegate
@@ -81,7 +81,8 @@ private:
     // True while inside of Run().
     std::atomic_bool running_ = false;
 
-    WaitableEvent start_event_;
+    WaitableEvent start_event_ { WaitableEvent::ResetPolicy::MANUAL,
+                                 WaitableEvent::InitialState::NOT_SIGNALED };
 
     MessageLoop* message_loop_ = nullptr;
 

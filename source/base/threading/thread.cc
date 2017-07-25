@@ -9,13 +9,6 @@
 
 namespace aspia {
 
-Thread::Thread() :
-    start_event_(WaitableEvent::ResetPolicy::MANUAL,
-                 WaitableEvent::InitialState::NOT_SIGNALED)
-{
-    // Nothing
-}
-
 void Thread::ThreadMain()
 {
     running_ = true;

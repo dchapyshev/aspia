@@ -20,7 +20,7 @@ namespace aspia {
 class Thread
 {
 public:
-    Thread();
+    Thread() = default;
     virtual ~Thread() = default;
 
     // Starts the thread and waits for its real start
@@ -61,7 +61,8 @@ private:
     // True while inside of Run().
     std::atomic_bool running_ = false;
 
-    WaitableEvent start_event_;
+    WaitableEvent start_event_ { WaitableEvent::ResetPolicy::MANUAL,
+                                 WaitableEvent::InitialState::NOT_SIGNALED };
 
     DISALLOW_COPY_AND_ASSIGN(Thread);
 };
