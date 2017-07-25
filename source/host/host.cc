@@ -35,9 +35,9 @@ bool Host::IsAliveSession() const
     return channel_proxy_->IsConnected();
 }
 
-void Host::OnSessionMessage(const IOBuffer& buffer)
+void Host::OnSessionMessage(IOBuffer buffer)
 {
-    channel_proxy_->Send(buffer);
+    channel_proxy_->Send(std::move(buffer), nullptr);
 }
 
 void Host::OnSessionTerminate()
@@ -51,6 +51,9 @@ void Host::OnNetworkChannelConnect()
     // interval, the connection will be closed.
     auth_timer_.Start(kAuthTimeout,
                       std::bind(&Host::OnSessionTerminate, this));
+
+    channel_proxy_->Receive(
+        std::bind(&Host::DoAuthorize, this, std::placeholders::_1));
 }
 
 static proto::Status DoBasicAuthorization(const std::string& username,
@@ -91,7 +94,7 @@ static proto::Status DoBasicAuthorization(const std::string& username,
     return proto::Status::STATUS_ACCESS_DENIED;
 }
 
-bool Host::DoAuthorize(const IOBuffer& buffer)
+void Host::DoAuthorize(IOBuffer buffer)
 {
     // Authorization request received, stop the timer.
     auth_timer_.Stop();
@@ -99,7 +102,10 @@ bool Host::DoAuthorize(const IOBuffer& buffer)
     proto::auth::ClientToHost request;
 
     if (!ParseMessage(buffer, request))
-        return false;
+    {
+        channel_.reset();
+        return;
+    }
 
     proto::auth::HostToClient result;
     result.set_session_type(request.session_type());
@@ -120,7 +126,7 @@ bool Host::DoAuthorize(const IOBuffer& buffer)
     SecureClearString(*request.mutable_username());
     SecureClearString(*request.mutable_password());
 
-    channel_proxy_->Send(SerializeMessage<SecureIOBuffer>(result));
+    channel_proxy_->Send(SerializeMessage<IOBuffer>(result), nullptr);
 
     if (result.status() == proto::Status::STATUS_SUCCESS)
     {
@@ -150,23 +156,22 @@ bool Host::DoAuthorize(const IOBuffer& buffer)
         if (session_)
         {
             session_proxy_ = session_->host_session_proxy();
-            return true;
+
+            channel_proxy_->Receive(std::bind(
+                &Host::OnNetworkChannelMessage, this, std::placeholders::_1));
+            return;
         }
     }
 
-    return false;
+    channel_.reset();
 }
 
 void Host::OnNetworkChannelMessage(IOBuffer buffer)
 {
-    if (!session_proxy_)
-    {
-        if (!DoAuthorize(buffer))
-            channel_proxy_->Disconnect();
-        return;
-    }
-
     session_proxy_->Send(std::move(buffer));
+
+    channel_proxy_->Receive(std::bind(
+        &Host::OnNetworkChannelMessage, this, std::placeholders::_1));
 }
 
 void Host::OnNetworkChannelDisconnect()

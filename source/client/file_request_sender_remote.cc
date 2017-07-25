@@ -137,7 +137,7 @@ void FileRequestSenderRemote::SendRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
     std::unique_ptr<proto::file_transfer::ClientToHost> request)
 {
-    session_->OnSessionMessageAsync(SerializeMessage<IOBuffer>(*request));
+    session_->OnSessionMessage(SerializeMessage<IOBuffer>(*request));
     receiver_queue_.Add(std::move(request), receiver);
 }
 

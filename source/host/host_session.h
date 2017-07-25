@@ -21,7 +21,7 @@ public:
     {
     public:
         virtual ~Delegate() = default;
-        virtual void OnSessionMessage(const IOBuffer& message) = 0;
+        virtual void OnSessionMessage(IOBuffer message) = 0;
         virtual void OnSessionTerminate() = 0;
     };
 

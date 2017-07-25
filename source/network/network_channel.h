@@ -8,7 +8,9 @@
 #ifndef _ASPIA_NETWORK__NETWORK_CHANNEL_H
 #define _ASPIA_NETWORK__NETWORK_CHANNEL_H
 
-#include "crypto/secure_io_buffer.h"
+#include "protocol/io_buffer.h"
+
+#include <functional>
 
 namespace aspia {
 
@@ -32,22 +34,22 @@ public:
         // The method will be called even if method |OnNetworkChannelConnect|
         // was not called (for example, if an encryption key exchange error occurred).
         virtual void OnNetworkChannelDisconnect() = 0;
-
-        // Called when a new message is received.
-        virtual void OnNetworkChannelMessage(IOBuffer buffer) = 0;
     };
 
     virtual void StartListening(Listener* listener) = 0;
 
     std::shared_ptr<NetworkChannelProxy> network_channel_proxy() const;
 
+    using SendCompleteHandler = std::function<void()>;
+    using ReceiveCompleteHandler = std::function<void(IOBuffer)>;
+
 protected:
     friend class NetworkChannelProxy;
 
     virtual void Disconnect() = 0;
     virtual bool IsConnected() const = 0;
-    virtual void Send(const IOBuffer& buffer) = 0;
-    virtual void SendAsync(IOBuffer buffer) = 0;
+    virtual void Send(IOBuffer buffer, SendCompleteHandler handler) = 0;
+    virtual void Receive(ReceiveCompleteHandler handler) = 0;
 
 private:
     std::shared_ptr<NetworkChannelProxy> proxy_;

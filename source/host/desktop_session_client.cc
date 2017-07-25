@@ -67,7 +67,7 @@ void DesktopSessionClient::OnPipeChannelDisconnect()
     // Nothing
 }
 
-void DesktopSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
+void DesktopSessionClient::OnPipeChannelMessage(IOBuffer buffer)
 {
     proto::desktop::ClientToHost message;
 

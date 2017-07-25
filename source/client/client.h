@@ -46,19 +46,19 @@ private:
     void OnAfterThreadRunning() override;
 
     // ClientSession::Delegate implementation.
-    void OnSessionMessageAsync(IOBuffer buffer) override;
-    void OnSessionMessage(const IOBuffer& buffer) override;
+    void OnSessionMessage(IOBuffer buffer) override;
     void OnSessionTerminate() override;
 
     // NetworkChannel::Listener implementation.
-    void OnNetworkChannelMessage(IOBuffer buffer) override;
+    void OnNetworkChannelMessage(IOBuffer buffer);
     void OnNetworkChannelDisconnect() override;
     void OnNetworkChannelConnect() override;
 
     // UiStatusDialog::Delegate implementation.
     void OnStatusDialogOpen() override;
 
-    bool DoAuthorize(const IOBuffer& buffer);
+    void OnAuthRequestSended();
+    void DoAuthorize(IOBuffer buffer);
     void CreateSession(proto::SessionType session_type);
     void OpenStatusDialog();
 

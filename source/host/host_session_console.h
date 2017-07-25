@@ -59,7 +59,7 @@ private:
     // PipeChannel::Delegate implementation.
     void OnPipeChannelConnect(uint32_t user_data) override;
     void OnPipeChannelDisconnect() override;
-    void OnPipeChannelMessage(const IOBuffer& buffer) override;
+    void OnPipeChannelMessage(IOBuffer buffer) override;
 
     void OnSessionAttachTimeout();
 

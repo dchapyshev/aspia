@@ -42,28 +42,31 @@ bool NetworkChannelProxy::IsConnected() const
     return channel_->IsConnected();
 }
 
-bool NetworkChannelProxy::Send(const IOBuffer& buffer)
+bool NetworkChannelProxy::Send(IOBuffer buffer,
+                               NetworkChannel::SendCompleteHandler handler)
 {
     std::lock_guard<std::mutex> lock(channel_lock_);
 
     if (channel_)
     {
-        channel_->Send(buffer);
+        channel_->Send(std::move(buffer), std::move(handler));
         return true;
     }
 
     return false;
 }
 
-bool NetworkChannelProxy::SendAsync(IOBuffer buffer)
+bool NetworkChannelProxy::Receive(NetworkChannel::ReceiveCompleteHandler handler)
 {
     std::lock_guard<std::mutex> lock(channel_lock_);
 
-    if (!channel_)
-        return false;
+    if (channel_)
+    {
+        channel_->Receive(std::move(handler));
+        return true;
+    }
 
-    channel_->SendAsync(std::move(buffer));
-    return true;
+    return false;
 }
 
 } // namespace aspia

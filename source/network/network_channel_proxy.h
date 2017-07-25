@@ -18,8 +18,8 @@ class NetworkChannelProxy
 public:
     bool Disconnect();
     bool IsConnected() const;
-    bool Send(const IOBuffer& buffer);
-    bool SendAsync(IOBuffer buffer);
+    bool Send(IOBuffer buffer, NetworkChannel::SendCompleteHandler handler);
+    bool Receive(NetworkChannel::ReceiveCompleteHandler handler);
 
 private:
     friend class NetworkChannel;

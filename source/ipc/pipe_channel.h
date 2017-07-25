@@ -53,7 +53,7 @@ public:
     {
     public:
         virtual ~Delegate() = default;
-        virtual void OnPipeChannelMessage(const IOBuffer& buffer) = 0;
+        virtual void OnPipeChannelMessage(IOBuffer buffer) = 0;
         virtual void OnPipeChannelConnect(uint32_t user_data) = 0;
         virtual void OnPipeChannelDisconnect() = 0;
     };

@@ -36,15 +36,15 @@ public:
 
 private:
     // HostSession::Delegate implementation.
-    void OnSessionMessage(const IOBuffer& buffer) override;
+    void OnSessionMessage(IOBuffer buffer) override;
     void OnSessionTerminate() override;
 
     // NetworkChannel::Listener implementation.
     void OnNetworkChannelConnect() override;
-    void OnNetworkChannelMessage(IOBuffer buffer) override;
+    void OnNetworkChannelMessage(IOBuffer buffer);
     void OnNetworkChannelDisconnect() override;
 
-    bool DoAuthorize(const IOBuffer& buffer);
+    void DoAuthorize(IOBuffer buffer);
 
     std::shared_ptr<NetworkChannel> channel_;
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;

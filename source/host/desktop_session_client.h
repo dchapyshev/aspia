@@ -31,7 +31,7 @@ private:
     // PipeChannel::Delegate implementation.
     void OnPipeChannelConnect(uint32_t user_data) override;
     void OnPipeChannelDisconnect() override;
-    void OnPipeChannelMessage(const IOBuffer& buffer) override;
+    void OnPipeChannelMessage(IOBuffer buffer) override;
 
     void OnScreenUpdate(const DesktopFrame* screen_frame,
                         std::unique_ptr<MouseCursor> mouse_cursor);

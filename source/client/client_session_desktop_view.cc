@@ -153,7 +153,7 @@ void ClientSessionDesktopView::WriteMessage(
 
     if (!buffer.IsEmpty())
     {
-        delegate_->OnSessionMessageAsync(std::move(buffer));
+        delegate_->OnSessionMessage(std::move(buffer));
         return;
     }
 

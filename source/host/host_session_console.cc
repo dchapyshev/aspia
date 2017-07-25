@@ -260,9 +260,9 @@ void HostSessionConsole::OnPipeChannelDisconnect()
     }
 }
 
-void HostSessionConsole::OnPipeChannelMessage(const IOBuffer& buffer)
+void HostSessionConsole::OnPipeChannelMessage(IOBuffer buffer)
 {
-    delegate_->OnSessionMessage(buffer);
+    delegate_->OnSessionMessage(std::move(buffer));
 }
 
 void HostSessionConsole::OnSessionAttachTimeout()

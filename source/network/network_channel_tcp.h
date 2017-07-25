@@ -59,8 +59,8 @@ public:
 protected:
     void Disconnect() override;
     bool IsConnected() const override;
-    void Send(const IOBuffer& buffer) override;
-    void SendAsync(IOBuffer buffer) override;
+    void Send(IOBuffer buffer, SendCompleteHandler handler) override;
+    void Receive(ReceiveCompleteHandler handler) override;
 
 private:
     friend class NetworkServerTcp;
@@ -92,7 +92,9 @@ private:
     void OnReadMessageComplete(const std::error_code& code,
                                size_t bytes_transferred);
 
-    void DoDecryptMessage(const IOBuffer& buffer);
+    void ScheduleWrite();
+    void OnWriteSizeComplete(const std::error_code& code, size_t bytes_transferred);
+    void OnWriteComplete(const std::error_code& code, size_t bytes_transferred);
 
     // Thread implementation.
     void Run() override;
@@ -104,13 +106,13 @@ private:
 
     Listener* listener_ = nullptr;
 
-    std::unique_ptr<IOQueue> incoming_queue_;
-    std::unique_ptr<IOQueue> outgoing_queue_;
-    std::mutex outgoing_queue_lock_;
-    std::mutex outgoing_lock_;
+    std::queue<std::pair<IOBuffer, SendCompleteHandler>> write_queue_;
+    std::mutex write_queue_lock_;
 
     IOBuffer write_buffer_;
     MessageSizeType write_size_ = 0;
+
+    ReceiveCompleteHandler receive_handler_;
 
     IOBuffer read_buffer_;
     MessageSizeType read_size_ = 0;

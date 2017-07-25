@@ -48,14 +48,9 @@ bool Client::IsAliveSession() const
     return channel_proxy_->IsConnected();
 }
 
-void Client::OnSessionMessageAsync(IOBuffer buffer)
+void Client::OnSessionMessage(IOBuffer buffer)
 {
-    channel_proxy_->SendAsync(std::move(buffer));
-}
-
-void Client::OnSessionMessage(const IOBuffer& buffer)
-{
-    channel_proxy_->Send(buffer);
+    channel_proxy_->Send(std::move(buffer), nullptr);
 }
 
 void Client::OnSessionTerminate()
@@ -65,14 +60,10 @@ void Client::OnSessionTerminate()
 
 void Client::OnNetworkChannelMessage(IOBuffer buffer)
 {
-    if (!session_proxy_)
-    {
-        if (!DoAuthorize(buffer))
-            channel_proxy_->Disconnect();
-        return;
-    }
-
     session_proxy_->Send(std::move(buffer));
+
+    channel_proxy_->Receive(
+        std::bind(&Client::OnNetworkChannelMessage, this, std::placeholders::_1));
 }
 
 void Client::OnNetworkChannelDisconnect()
@@ -112,7 +103,8 @@ void Client::OnNetworkChannelConnect()
     request.set_username(auth_dialog.UserName());
     request.set_password(auth_dialog.Password());
 
-    channel_proxy_->Send(SerializeMessage<SecureIOBuffer>(request));
+    channel_proxy_->Send(SerializeMessage<IOBuffer>(request),
+                         std::bind(&Client::OnAuthRequestSended, this));
 
     SecureClearString(*request.mutable_username());
     SecureClearString(*request.mutable_password());
@@ -129,23 +121,34 @@ void Client::OpenStatusDialog()
     status_dialog_.DoModal(nullptr);
 }
 
-bool Client::DoAuthorize(const IOBuffer& buffer)
+void Client::OnAuthRequestSended()
+{
+    channel_proxy_->Receive(
+        std::bind(&Client::DoAuthorize, this, std::placeholders::_1));
+}
+
+void Client::DoAuthorize(IOBuffer buffer)
 {
     proto::auth::HostToClient result;
 
-    if (!ParseMessage(buffer, result))
-        return false;
-
-    status_ = result.status();
-
-    if (status_ != proto::Status::STATUS_SUCCESS)
+    if (ParseMessage(buffer, result))
     {
+        status_ = result.status();
+
+        if (status_ == proto::Status::STATUS_SUCCESS)
+        {
+            CreateSession(result.session_type());
+
+            channel_proxy_->Receive(
+                std::bind(&Client::OnNetworkChannelMessage, this, std::placeholders::_1));
+
+            return;
+        }
+
         runner_->PostTask(std::bind(&Client::OpenStatusDialog, this));
-        return false;
     }
 
-    CreateSession(result.session_type());
-    return true;
+    channel_.reset();
 }
 
 void Client::CreateSession(proto::SessionType session_type)

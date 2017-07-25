@@ -321,7 +321,7 @@ void PipeChannel::OnReadComplete(const std::error_code& code,
 
     if (delegate_)
     {
-        delegate_->OnPipeChannelMessage(read_buffer_);
+        delegate_->OnPipeChannelMessage(std::move(read_buffer_));
     }
 
     ScheduleRead();

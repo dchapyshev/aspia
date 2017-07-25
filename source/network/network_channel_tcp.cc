@@ -81,13 +81,6 @@ void NetworkChannelTcp::DoDisconnect()
         socket_.close(ignored_code);
     }
 
-    incoming_queue_.reset();
-
-    {
-        std::lock_guard<std::mutex> lock(outgoing_queue_lock_);
-        outgoing_queue_.reset();
-    }
-
     work_.reset();
 
     if (!io_service_.stopped())
@@ -222,16 +215,8 @@ void NetworkChannelTcp::OnReceiveHelloComplete(const std::error_code& code,
 
 void NetworkChannelTcp::DoStartListening()
 {
-    incoming_queue_ = std::make_unique<IOQueue>(
-        std::bind(&NetworkChannelTcp::DoDecryptMessage, this, std::placeholders::_1));
-
-    outgoing_queue_ = std::make_unique<IOQueue>(
-        std::bind(&NetworkChannelTcp::Send, this, std::placeholders::_1));
-
     if (listener_)
         listener_->OnNetworkChannelConnect();
-
-    DoReadMessage();
 }
 
 void NetworkChannelTcp::DoReadMessage()
@@ -280,28 +265,22 @@ void NetworkChannelTcp::OnReadMessageComplete(const std::error_code& code,
         return;
     }
 
-    if (!incoming_queue_)
-        return;
+    IOBuffer decrypted_buffer = encryptor_->Decrypt(read_buffer_);
 
-    incoming_queue_->Add(std::move(read_buffer_));
-
-    DoReadMessage();
-}
-
-void NetworkChannelTcp::DoDecryptMessage(const IOBuffer& buffer)
-{
-    IOBuffer message_buffer(encryptor_->Decrypt(buffer));
-
-    if (message_buffer.IsEmpty())
+    if (decrypted_buffer.IsEmpty())
     {
         DoDisconnect();
         return;
     }
 
-    if (listener_)
-    {
-        listener_->OnNetworkChannelMessage(std::move(message_buffer));
-    }
+    receive_handler_(std::move(decrypted_buffer));
+}
+
+void NetworkChannelTcp::Receive(ReceiveCompleteHandler handler)
+{
+    DCHECK(handler != nullptr);
+    receive_handler_ = std::move(handler);
+    io_service_.post(std::bind(&NetworkChannelTcp::DoReadMessage, this));
 }
 
 void NetworkChannelTcp::Disconnect()
@@ -317,46 +296,99 @@ bool NetworkChannelTcp::IsConnected() const
     return !IsStopping();
 }
 
-void NetworkChannelTcp::Send(const IOBuffer& buffer)
+void NetworkChannelTcp::ScheduleWrite()
 {
-    std::lock_guard<std::mutex> lock(outgoing_lock_);
+    DCHECK(!write_queue_.empty());
 
-    IOBuffer encrypted_buffer = encryptor_->Encrypt(buffer);
+    IOBuffer source_buffer = std::move(write_queue_.front().first);
 
-    if (!encrypted_buffer.IsEmpty() &&
-        encrypted_buffer.size() <= kMaxMessageSize)
+    if (source_buffer.IsEmpty())
     {
-        MessageSizeType message_size = static_cast<MessageSizeType>(
-            encrypted_buffer.size());
-
-        message_size = HostByteOrderToNetwork(message_size);
-
-        std::error_code ignored_code;
-        if (asio::write(socket_,
-                        asio::buffer(&message_size, sizeof(MessageSizeType)),
-                        ignored_code) == sizeof(MessageSizeType))
-        {
-            if (asio::write(socket_,
-                            asio::buffer(encrypted_buffer.data(),
-                                         encrypted_buffer.size()),
-                            ignored_code) == encrypted_buffer.size())
-            {
-                return;
-            }
-        }
+        DoDisconnect();
+        return;
     }
 
-    io_service_.post(std::bind(&NetworkChannelTcp::DoDisconnect, this));
+    write_buffer_ = encryptor_->Encrypt(source_buffer);
+    if (write_buffer_.IsEmpty())
+    {
+        DoDisconnect();
+        return;
+    }
+
+    write_size_ = write_buffer_.size();
+
+    if (!write_size_ || write_size_ > kMaxMessageSize)
+    {
+        DoDisconnect();
+        return;
+    }
+
+    write_size_ = HostByteOrderToNetwork(write_size_);
+
+    asio::async_write(socket_,
+                      asio::buffer(&write_size_, sizeof(MessageSizeType)),
+                      std::bind(&NetworkChannelTcp::OnWriteSizeComplete,
+                                this,
+                                std::placeholders::_1,
+                                std::placeholders::_2));
 }
 
-void NetworkChannelTcp::SendAsync(IOBuffer buffer)
+void NetworkChannelTcp::OnWriteSizeComplete(const std::error_code& code,
+                                            size_t bytes_transferred)
 {
-    std::lock_guard<std::mutex> lock(outgoing_queue_lock_);
-
-    if (!outgoing_queue_)
+    if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
+    {
+        DoDisconnect();
         return;
+    }
 
-    outgoing_queue_->Add(std::move(buffer));
+    asio::async_write(socket_,
+                      asio::buffer(write_buffer_.data(), write_buffer_.size()),
+                      std::bind(&NetworkChannelTcp::OnWriteComplete,
+                                this,
+                                std::placeholders::_1,
+                                std::placeholders::_2));
+}
+
+void NetworkChannelTcp::OnWriteComplete(const std::error_code& code,
+                                        size_t bytes_transferred)
+{
+    if (IsFailureCode(code) || bytes_transferred != write_buffer_.size())
+    {
+        DoDisconnect();
+        return;
+    }
+
+    SendCompleteHandler complete_handler;
+
+    {
+        std::lock_guard<std::mutex> lock(write_queue_lock_);
+
+        // The queue must contain the current write task.
+        DCHECK(!write_queue_.empty());
+
+        complete_handler = std::move(write_queue_.front().second);
+        write_queue_.pop();
+
+        if (!write_queue_.empty())
+            ScheduleWrite();
+    }
+
+    if (complete_handler != nullptr)
+        complete_handler();
+}
+
+void NetworkChannelTcp::Send(IOBuffer buffer, SendCompleteHandler handler)
+{
+    std::lock_guard<std::mutex> lock(write_queue_lock_);
+
+    bool schedule_write = write_queue_.empty();
+
+    write_queue_.push(std::make_pair<IOBuffer, SendCompleteHandler>(
+        std::move(buffer), std::move(handler)));
+
+    if (schedule_write)
+        ScheduleWrite();
 }
 
 void NetworkChannelTcp::Run()
