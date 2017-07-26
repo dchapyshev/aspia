@@ -82,7 +82,7 @@ void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
 
         if (auth_dialog.DoModal(nullptr) != IDOK)
         {
-            channel_.reset();
+            channel_proxy_->Disconnect();
             return;
         }
 
