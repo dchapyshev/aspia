@@ -14,9 +14,10 @@
 
 namespace aspia {
 
-ClientSessionDesktopView::ClientSessionDesktopView(const ClientConfig& config,
-                                                   ClientSession::Delegate* delegate) :
-    ClientSession(config, delegate)
+ClientSessionDesktopView::ClientSessionDesktopView(
+    const ClientConfig& config,
+    std::shared_ptr<NetworkChannelProxy> channel_proxy)
+    : ClientSession(config, channel_proxy)
 {
     viewer_.reset(new UiViewerWindow(&config_, this));
 }
@@ -107,7 +108,7 @@ void ClientSessionDesktopView::ReadConfigRequest(
     OnConfigChange(config_.desktop_session_config());
 }
 
-void ClientSessionDesktopView::Send(IOBuffer buffer)
+void ClientSessionDesktopView::OnMessageReceive(const IOBuffer& buffer)
 {
     proto::desktop::HostToClient message;
 
@@ -140,29 +141,25 @@ void ClientSessionDesktopView::Send(IOBuffer buffer)
         }
 
         if (success)
+        {
+            channel_proxy_->Receive(std::bind(
+                &ClientSessionDesktopView::OnMessageReceive, this, std::placeholders::_1));
             return;
+        }
     }
 
-    delegate_->OnSessionTerminate();
+    channel_proxy_->Disconnect();
 }
 
 void ClientSessionDesktopView::WriteMessage(
     const proto::desktop::ClientToHost& message)
 {
-    IOBuffer buffer(SerializeMessage<IOBuffer>(message));
-
-    if (!buffer.IsEmpty())
-    {
-        delegate_->OnSessionMessage(std::move(buffer));
-        return;
-    }
-
-    delegate_->OnSessionTerminate();
+    channel_proxy_->Send(SerializeMessage<IOBuffer>(message));
 }
 
 void ClientSessionDesktopView::OnWindowClose()
 {
-    delegate_->OnSessionTerminate();
+    channel_proxy_->Disconnect();
 }
 
 void ClientSessionDesktopView::OnConfigChange(

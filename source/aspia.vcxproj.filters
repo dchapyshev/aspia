@@ -331,9 +331,6 @@
     <ClCompile Include="host\host_session_power.cc">
       <Filter>host</Filter>
     </ClCompile>
-    <ClCompile Include="client\client_session.cc">
-      <Filter>client</Filter>
-    </ClCompile>
     <ClCompile Include="host\host_session.cc">
       <Filter>host</Filter>
     </ClCompile>
@@ -859,9 +856,6 @@
     </ClInclude>
     <ClInclude Include="host\host_session_power.h">
       <Filter>host</Filter>
-    </ClInclude>
-    <ClInclude Include="client\client_session_proxy.h">
-      <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="host\host_session_proxy.h">
       <Filter>host</Filter>

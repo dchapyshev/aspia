@@ -21,7 +21,7 @@ class ClientSessionDesktopView :
 {
 public:
     ClientSessionDesktopView(const ClientConfig& config,
-                             ClientSession::Delegate* delegate);
+                             std::shared_ptr<NetworkChannelProxy> channel_proxy);
     ~ClientSessionDesktopView();
 
 protected:
@@ -39,11 +39,9 @@ private:
     void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) override { }
     void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) override { }
 
-    // ClientSession implementation.
-    void Send(IOBuffer buffer) override;
+    void OnMessageReceive(const IOBuffer& buffer) override;
 
     std::unique_ptr<VideoDecoder> video_decoder_;
-
     proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktopView);

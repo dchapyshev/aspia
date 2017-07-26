@@ -9,11 +9,12 @@
 
 namespace aspia {
 
-ClientSessionFileTransfer::ClientSessionFileTransfer(const ClientConfig& config,
-                                                     ClientSession::Delegate* delegate) :
-    ClientSession(config, delegate)
+ClientSessionFileTransfer::ClientSessionFileTransfer(
+    const ClientConfig& config,
+    std::shared_ptr<NetworkChannelProxy> channel_proxy)
+    : ClientSession(config, channel_proxy)
 {
-    remote_sender_ = std::make_unique<FileRequestSenderRemote>(delegate);
+    remote_sender_ = std::make_unique<FileRequestSenderRemote>(channel_proxy);
     local_sender_ = std::make_unique<FileRequestSenderLocal>();
 
     file_manager_.reset(new UiFileManager(local_sender_->request_sender_proxy(),
@@ -26,17 +27,17 @@ ClientSessionFileTransfer::~ClientSessionFileTransfer()
     file_manager_.reset();
 }
 
-void ClientSessionFileTransfer::Send(IOBuffer buffer)
+void ClientSessionFileTransfer::OnMessageReceive(const IOBuffer& buffer)
 {
     if (!remote_sender_->ReadIncommingMessage(buffer))
     {
-        delegate_->OnSessionTerminate();
+        channel_proxy_->Disconnect();
     }
 }
 
 void ClientSessionFileTransfer::OnWindowClose()
 {
-    delegate_->OnSessionTerminate();
+    channel_proxy_->Disconnect();
 }
 
 } // namespace aspia

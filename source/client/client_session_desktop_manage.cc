@@ -16,8 +16,8 @@ namespace aspia {
 
 ClientSessionDesktopManage::ClientSessionDesktopManage(
     const ClientConfig& config,
-    ClientSession::Delegate* delegate)
-    : ClientSessionDesktopView(config, delegate)
+    std::shared_ptr<NetworkChannelProxy> channel_proxy)
+    : ClientSessionDesktopView(config, channel_proxy)
 {
     // Nothing
 }
@@ -46,7 +46,7 @@ void ClientSessionDesktopManage::ReadClipboardEvent(
     viewer_->InjectClipboardEvent(clipboard_event);
 }
 
-void ClientSessionDesktopManage::Send(IOBuffer buffer)
+void ClientSessionDesktopManage::OnMessageReceive(const IOBuffer& buffer)
 {
     proto::desktop::HostToClient message;
 
@@ -90,10 +90,14 @@ void ClientSessionDesktopManage::Send(IOBuffer buffer)
         }
 
         if (success)
+        {
+            channel_proxy_->Receive(std::bind(
+                &ClientSessionDesktopManage::OnMessageReceive, this, std::placeholders::_1));
             return;
+        }
     }
 
-    delegate_->OnSessionTerminate();
+    channel_proxy_->Disconnect();
 }
 
 void ClientSessionDesktopManage::OnKeyEvent(uint32_t keycode, uint32_t flags)

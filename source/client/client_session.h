@@ -8,40 +8,32 @@
 #ifndef _ASPIA_CLIENT__CLIENT_SESSION_H
 #define _ASPIA_CLIENT__CLIENT_SESSION_H
 
-#include "protocol/io_buffer.h"
 #include "client/client_config.h"
+#include "network/network_channel_proxy.h"
 
 namespace aspia {
-
-class ClientSessionProxy;
 
 class ClientSession
 {
 public:
-    class Delegate
+    ClientSession(const ClientConfig& config,
+                  std::shared_ptr<NetworkChannelProxy> channel_proxy)
+        : channel_proxy_(channel_proxy),
+          config_(config)
     {
-    public:
-        virtual ~Delegate() = default;
-        virtual void OnSessionMessage(IOBuffer buffer) = 0;
-        virtual void OnSessionTerminate() = 0;
-    };
+        channel_proxy_->Receive(std::bind(
+            &ClientSession::OnMessageReceive, this, std::placeholders::_1));
+    }
 
-    ClientSession(const ClientConfig& config, Delegate* delegate);
-    virtual ~ClientSession();
+    virtual ~ClientSession() = default;
 
-    std::shared_ptr<ClientSessionProxy> client_session_proxy() const;
+    virtual void OnMessageReceive(const IOBuffer& buffer) = 0;
 
 protected:
+    std::shared_ptr<NetworkChannelProxy> channel_proxy_;
     ClientConfig config_;
-    Delegate* delegate_;
 
 private:
-    friend class ClientSessionProxy;
-
-    virtual void Send(IOBuffer buffer) = 0;
-
-    std::shared_ptr<ClientSessionProxy> session_proxy_;
-
     DISALLOW_COPY_AND_ASSIGN(ClientSession);
 };
 

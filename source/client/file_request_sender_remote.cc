@@ -12,10 +12,10 @@
 namespace aspia {
 
 FileRequestSenderRemote::FileRequestSenderRemote(
-    ClientSession::Delegate* session)
-    : session_(session)
+    std::shared_ptr<NetworkChannelProxy> channel_proxy)
+    : channel_proxy_(channel_proxy)
 {
-    DCHECK(session_);
+    DCHECK(channel_proxy_);
 }
 
 void FileRequestSenderRemote::SendDriveListRequest(
@@ -137,7 +137,7 @@ void FileRequestSenderRemote::SendRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
     std::unique_ptr<proto::file_transfer::ClientToHost> request)
 {
-    session_->OnSessionMessage(SerializeMessage<IOBuffer>(*request));
+    channel_proxy_->Send(SerializeMessage<IOBuffer>(*request));
     receiver_queue_.Add(std::move(request), receiver);
 }
 

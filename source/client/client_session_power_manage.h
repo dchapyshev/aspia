@@ -19,14 +19,13 @@ class ClientSessionPowerManage :
 {
 public:
     ClientSessionPowerManage(const ClientConfig& config,
-                             ClientSession::Delegate* delegate);
+                             std::shared_ptr<NetworkChannelProxy> channel_proxy);
 
     ~ClientSessionPowerManage();
 
-private:
-    // ClientSession implementation.
-    void Send(IOBuffer buffer) override;
+    void OnMessageReceive(const IOBuffer& buffer) final {};
 
+private:
     // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;

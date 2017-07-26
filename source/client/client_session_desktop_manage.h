@@ -17,7 +17,7 @@ class ClientSessionDesktopManage : public ClientSessionDesktopView
 {
 public:
     ClientSessionDesktopManage(const ClientConfig& config,
-                               ClientSession::Delegate* delegate);
+                               std::shared_ptr<NetworkChannelProxy> channel_proxy);
     ~ClientSessionDesktopManage();
 
 private:
@@ -26,8 +26,7 @@ private:
     void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) override;
     void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) override;
 
-    // ClientSession implementation.
-    void Send(IOBuffer buffer) override;
+    void OnMessageReceive(const IOBuffer& buffer) final;
 
     void ReadCursorShape(const proto::CursorShape& cursor_shape);
     void ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);

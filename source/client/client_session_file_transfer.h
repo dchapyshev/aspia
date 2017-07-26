@@ -21,12 +21,11 @@ class ClientSessionFileTransfer :
 {
 public:
     ClientSessionFileTransfer(const ClientConfig& config,
-                              ClientSession::Delegate* delegate);
+                              std::shared_ptr<NetworkChannelProxy> channel_proxy);
     ~ClientSessionFileTransfer();
 
 private:
-    // ClientSession implementation.
-    void Send(IOBuffer buffer) override;
+    void OnMessageReceive(const IOBuffer& buffer) final;
 
     // UiFileManager::Delegate implementation.
     void OnWindowClose() override;

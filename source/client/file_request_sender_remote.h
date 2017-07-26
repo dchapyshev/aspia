@@ -20,7 +20,7 @@ namespace aspia {
 class FileRequestSenderRemote : public FileRequestSender
 {
 public:
-    FileRequestSenderRemote(ClientSession::Delegate* session);
+    FileRequestSenderRemote(std::shared_ptr<NetworkChannelProxy> channel_proxy);
     ~FileRequestSenderRemote() = default;
 
     void SendDriveListRequest(
@@ -62,7 +62,7 @@ private:
         std::shared_ptr<FileReplyReceiverProxy> receiver,
         std::unique_ptr<proto::file_transfer::ClientToHost> request);
 
-    ClientSession::Delegate* session_;
+    std::shared_ptr<NetworkChannelProxy> channel_proxy_;
     FileReplyReceiverQueue receiver_queue_;
 
     DISALLOW_COPY_AND_ASSIGN(FileRequestSenderRemote);

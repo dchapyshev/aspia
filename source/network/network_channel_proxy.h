@@ -20,7 +20,7 @@ public:
     // Sends |buffer| and executes |handler| after successful sending.
     // |handler| may be absent. This case, instead of the parameter, you
     // must specify |nullptr|.
-    bool Send(IOBuffer buffer, NetworkChannel::SendCompleteHandler handler);
+    bool Send(IOBuffer buffer, NetworkChannel::SendCompleteHandler handler = nullptr);
 
     // Asynchronously gives a command to receive data. After the data is
     // received, |handler| is executed.

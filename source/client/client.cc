@@ -49,24 +49,6 @@ bool Client::IsTerminatedSession() const
     return channel_proxy_->IsDiconnecting();
 }
 
-void Client::OnSessionMessage(IOBuffer buffer)
-{
-    channel_proxy_->Send(std::move(buffer), nullptr);
-}
-
-void Client::OnSessionTerminate()
-{
-    channel_proxy_->Disconnect();
-}
-
-void Client::OnNetworkChannelMessage(IOBuffer buffer)
-{
-    session_proxy_->Send(std::move(buffer));
-
-    channel_proxy_->Receive(
-        std::bind(&Client::OnNetworkChannelMessage, this, std::placeholders::_1));
-}
-
 void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
@@ -138,10 +120,6 @@ void Client::DoAuthorize(const IOBuffer& buffer)
         if (status_ == proto::Status::STATUS_SUCCESS)
         {
             CreateSession(result.session_type());
-
-            channel_proxy_->Receive(
-                std::bind(&Client::OnNetworkChannelMessage, this, std::placeholders::_1));
-
             return;
         }
 
@@ -156,27 +134,25 @@ void Client::CreateSession(proto::SessionType session_type)
     switch (session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
-            session_.reset(new ClientSessionDesktopManage(config_, this));
+            session_.reset(new ClientSessionDesktopManage(config_, channel_proxy_));
             break;
 
         case proto::SESSION_TYPE_DESKTOP_VIEW:
-            session_.reset(new ClientSessionDesktopView(config_, this));
+            session_.reset(new ClientSessionDesktopView(config_, channel_proxy_));
             break;
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
-            session_.reset(new ClientSessionFileTransfer(config_, this));
+            session_.reset(new ClientSessionFileTransfer(config_, channel_proxy_));
             break;
 
         case proto::SESSION_TYPE_POWER_MANAGE:
-            session_.reset(new ClientSessionPowerManage(config_, this));
+            session_.reset(new ClientSessionPowerManage(config_, channel_proxy_));
             break;
 
         default:
             LOG(FATAL) << "Invalid session type: " << session_type;
-            return;
+            break;
     }
-
-    session_proxy_ = session_->client_session_proxy();
 }
 
 } // namespace aspia

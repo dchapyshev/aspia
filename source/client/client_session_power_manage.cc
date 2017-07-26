@@ -12,9 +12,10 @@
 
 namespace aspia {
 
-ClientSessionPowerManage::ClientSessionPowerManage(const ClientConfig& config,
-                                                   ClientSession::Delegate* delegate) :
-    ClientSession(config, delegate)
+ClientSessionPowerManage::ClientSessionPowerManage(
+    const ClientConfig& config,
+    std::shared_ptr<NetworkChannelProxy> channel_proxy)
+    : ClientSession(config, channel_proxy)
 {
     ui_thread_.Start(MessageLoop::Type::TYPE_UI, this);
 }
@@ -22,11 +23,6 @@ ClientSessionPowerManage::ClientSessionPowerManage(const ClientConfig& config,
 ClientSessionPowerManage::~ClientSessionPowerManage()
 {
     ui_thread_.Stop();
-}
-
-void ClientSessionPowerManage::Send(IOBuffer buffer)
-{
-    // The power management session does not receive any messages.
 }
 
 void ClientSessionPowerManage::OnBeforeThreadRunning()
@@ -46,12 +42,10 @@ void ClientSessionPowerManage::OnAfterThreadRunning()
         proto::power::ClientToHost message;
         message.mutable_power_event()->set_action(action);
 
-        IOBuffer buffer(SerializeMessage<IOBuffer>(message));
-
-        delegate_->OnSessionMessage(std::move(buffer));
+        channel_proxy_->Send(SerializeMessage<IOBuffer>(message));
     }
 
-    delegate_->OnSessionTerminate();
+    channel_proxy_->Disconnect();
 }
 
 } // namespace aspia
