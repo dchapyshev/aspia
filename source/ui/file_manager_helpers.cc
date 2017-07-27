@@ -12,7 +12,6 @@
 #include "base/strings/unicode.h"
 
 #include <clocale>
-#include <ctime>
 
 namespace aspia {
 
@@ -134,11 +133,7 @@ CString GetDriveDisplayName(const proto::DriveList::Item& item)
             name.LoadStringW(IDS_FT_DESKTOP_FOLDER);
             return name;
 
-        case proto::DriveList::Item::CDROM:
-        case proto::DriveList::Item::FIXED:
-        case proto::DriveList::Item::REMOVABLE:
-        case proto::DriveList::Item::REMOTE:
-        case proto::DriveList::Item::RAM:
+        default:
         {
             if (!item.name().empty())
             {

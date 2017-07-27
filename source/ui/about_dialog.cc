@@ -13,10 +13,8 @@
 
 namespace aspia {
 
-LRESULT UiAboutDialog::OnInitDialog(UINT message,
-                                    WPARAM wparam,
-                                    LPARAM lparam,
-                                    BOOL& handled)
+LRESULT UiAboutDialog::OnInitDialog(UINT message, WPARAM wparam,
+                                    LPARAM lparam, BOOL& handled)
 {
     DlgResize_Init();
 
@@ -33,19 +31,15 @@ LRESULT UiAboutDialog::OnInitDialog(UINT message,
     return FALSE;
 }
 
-LRESULT UiAboutDialog::OnClose(UINT message,
-                               WPARAM wparam,
-                               LPARAM lparam,
-                               BOOL& handled)
+LRESULT UiAboutDialog::OnClose(UINT message, WPARAM wparam,
+                               LPARAM lparam, BOOL& handled)
 {
     EndDialog(0);
     return 0;
 }
 
-LRESULT UiAboutDialog::OnDrawItem(UINT message,
-                                  WPARAM wparam,
-                                  LPARAM lparam,
-                                  BOOL& handled)
+LRESULT UiAboutDialog::OnDrawItem(UINT message, WPARAM wparam,
+                                  LPARAM lparam, BOOL& handled)
 {
     LPDRAWITEMSTRUCT dis = reinterpret_cast<LPDRAWITEMSTRUCT>(lparam);
 
@@ -66,19 +60,15 @@ LRESULT UiAboutDialog::OnDrawItem(UINT message,
     return 0;
 }
 
-LRESULT UiAboutDialog::OnCloseButton(WORD notify_code,
-                                     WORD control_id,
-                                     HWND control,
-                                     BOOL& handled)
+LRESULT UiAboutDialog::OnCloseButton(WORD notify_code, WORD control_id,
+                                     HWND control, BOOL& handled)
 {
     EndDialog(0);
     return 0;
 }
 
-LRESULT UiAboutDialog::OnDonateButton(WORD notify_code,
-                                      WORD control_id,
-                                      HWND control,
-                                      BOOL& handled)
+LRESULT UiAboutDialog::OnDonateButton(WORD notify_code, WORD control_id,
+                                      HWND control, BOOL& handled)
 {
     CString url;
     url.LoadStringW(IDS_DONATE_LINK);
@@ -86,10 +76,8 @@ LRESULT UiAboutDialog::OnDonateButton(WORD notify_code,
     return 0;
 }
 
-LRESULT UiAboutDialog::OnSiteButton(WORD notify_code,
-                                    WORD control_id,
-                                    HWND control,
-                                    BOOL& handled)
+LRESULT UiAboutDialog::OnSiteButton(WORD notify_code, WORD control_id,
+                                    HWND control, BOOL& handled)
 {
     CString url;
     url.LoadStringW(IDS_SITE_LINK);

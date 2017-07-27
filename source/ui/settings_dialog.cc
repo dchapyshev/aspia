@@ -42,7 +42,9 @@ UiSettingsDialog::UiSettingsDialog(proto::SessionType session_type,
     // Nothing
 }
 
-void UiSettingsDialog::AddColorDepth(CComboBox& combobox, UINT string_id, int item_data)
+void UiSettingsDialog::AddColorDepth(CComboBox& combobox,
+                                     UINT string_id,
+                                     int item_data)
 {
     CString text;
     text.LoadStringW(string_id);
@@ -143,10 +145,8 @@ void UiSettingsDialog::UpdateCompressionRatio(int compression_ratio)
     SetDlgItemTextW(IDC_COMPRESS_RATIO_TEXT, text);
 }
 
-LRESULT UiSettingsDialog::OnInitDialog(UINT message,
-                                       WPARAM wparam,
-                                       LPARAM lparam,
-                                       BOOL& handled)
+LRESULT UiSettingsDialog::OnInitDialog(UINT message, WPARAM wparam,
+                                       LPARAM lparam, BOOL& handled)
 {
     InitCodecList();
     InitColorDepthList();
@@ -182,19 +182,15 @@ LRESULT UiSettingsDialog::OnInitDialog(UINT message,
     return TRUE;
 }
 
-LRESULT UiSettingsDialog::OnClose(UINT message,
-                                  WPARAM wparam,
-                                  LPARAM lparam,
-                                  BOOL& handled)
+LRESULT UiSettingsDialog::OnClose(UINT message, WPARAM wparam,
+                                  LPARAM lparam, BOOL& handled)
 {
     EndDialog(IDCANCEL);
     return 0;
 }
 
-LRESULT UiSettingsDialog::OnHScroll(UINT message,
-                                    WPARAM wparam,
-                                    LPARAM lparam,
-                                    BOOL& handled)
+LRESULT UiSettingsDialog::OnHScroll(UINT message, WPARAM wparam,
+                                    LPARAM lparam, BOOL& handled)
 {
     CWindow control(reinterpret_cast<HWND>(lparam));
 
@@ -223,19 +219,15 @@ void UiSettingsDialog::OnCodecChanged()
     GetDlgItem(IDC_BEST_TEXT).EnableWindow(has_pixel_format);
 }
 
-LRESULT UiSettingsDialog::OnCodecListChanged(WORD notify_code,
-                                             WORD control_id,
-                                             HWND control,
-                                             BOOL& handled)
+LRESULT UiSettingsDialog::OnCodecListChanged(WORD notify_code, WORD control_id,
+                                             HWND control, BOOL& handled)
 {
     OnCodecChanged();
     return 0;
 }
 
-LRESULT UiSettingsDialog::OnOkButton(WORD notify_code,
-                                     WORD control_id,
-                                     HWND control,
-                                     BOOL& handled)
+LRESULT UiSettingsDialog::OnOkButton(WORD notify_code, WORD control_id,
+                                     HWND control, BOOL& handled)
 {
     CComboBox codec_combo(GetDlgItem(IDC_CODEC_COMBO));
 
@@ -321,10 +313,8 @@ LRESULT UiSettingsDialog::OnOkButton(WORD notify_code,
     return 0;
 }
 
-LRESULT UiSettingsDialog::OnCancelButton(WORD notify_code,
-                                         WORD control_id,
-                                         HWND control,
-                                         BOOL& handled)
+LRESULT UiSettingsDialog::OnCancelButton(WORD notify_code, WORD control_id,
+                                         HWND control, BOOL& handled)
 {
     EndDialog(IDCANCEL);
     return 0;

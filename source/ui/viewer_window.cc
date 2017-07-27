@@ -7,7 +7,6 @@
 
 #include "ui/viewer_window.h"
 #include "ui/about_dialog.h"
-#include "ui/power_manage_dialog.h"
 #include "ui/resource.h"
 #include "base/strings/unicode.h"
 #include "desktop_capture/cursor.h"
