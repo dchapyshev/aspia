@@ -51,14 +51,11 @@ public:
     static std::unique_ptr<PipeChannel> CreateServer(std::wstring& channel_id);
     static std::unique_ptr<PipeChannel> CreateClient(const std::wstring& channel_id);
 
-    using ConnectHandler = std::function<void(uint32_t user_data)>;
     using DisconnectHandler = std::function<void()>;
     using SendCompleteHandler = std::function<void()>;
     using ReceiveCompleteHandler = std::function<void(IOBuffer)>;
 
-    bool Connect(uint32_t user_data,
-                 ConnectHandler connect_handler,
-                 DisconnectHandler disconnect_handler = nullptr);
+    bool Connect(uint32_t& user_data, DisconnectHandler disconnect_handler = nullptr);
 
     std::shared_ptr<PipeChannelProxy> pipe_channel_proxy() const
     {
@@ -73,6 +70,7 @@ private:
     PipeChannel(HANDLE pipe, Mode mode);
 
     void Send(IOBuffer buffer, SendCompleteHandler handler);
+    void Send(IOBuffer buffer);
     void Receive(ReceiveCompleteHandler handler);
 
     void ScheduleWrite();

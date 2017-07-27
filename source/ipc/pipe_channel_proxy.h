@@ -17,6 +17,7 @@ class PipeChannelProxy
 {
 public:
     bool Send(IOBuffer buffer, PipeChannel::SendCompleteHandler handler);
+    bool Send(IOBuffer buffer);
     bool Receive(PipeChannel::ReceiveCompleteHandler handler);
 
     void WaitForDisconnect();

@@ -232,12 +232,13 @@ void PipeChannel::Send(IOBuffer buffer, SendCompleteHandler handler)
         ScheduleWrite();
 }
 
-bool PipeChannel::Connect(uint32_t user_data,
-                          ConnectHandler connect_handler,
-                          DisconnectHandler disconnect_handler)
+void PipeChannel::Send(IOBuffer buffer)
 {
-    DCHECK(connect_handler != nullptr);
+    Send(std::move(buffer), nullptr);
+}
 
+bool PipeChannel::Connect(uint32_t& user_data, DisconnectHandler disconnect_handler)
+{
     disconnect_handler_ = std::move(disconnect_handler);
 
     std::error_code ignored_code;
@@ -276,7 +277,7 @@ bool PipeChannel::Connect(uint32_t user_data,
             return false;
     }
 
-    connect_handler(remote_user_data);
+    user_data = remote_user_data;
     return true;
 }
 

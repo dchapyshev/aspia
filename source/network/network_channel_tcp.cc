@@ -373,6 +373,11 @@ void NetworkChannelTcp::Send(IOBuffer buffer, SendCompleteHandler handler)
         ScheduleWrite();
 }
 
+void NetworkChannelTcp::Send(IOBuffer buffer)
+{
+    Send(std::move(buffer), nullptr);
+}
+
 void NetworkChannelTcp::Disconnect()
 {
     io_service_.post(std::bind(&NetworkChannelTcp::DoDisconnect, this));

@@ -58,6 +58,7 @@ public:
 
 protected:
     void Send(IOBuffer buffer, SendCompleteHandler handler) override;
+    void Send(IOBuffer buffer) override;
     void Receive(ReceiveCompleteHandler handler) override;
     void Disconnect() override;
     bool IsDiconnecting() const override;

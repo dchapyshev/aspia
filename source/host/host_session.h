@@ -8,39 +8,13 @@
 #ifndef _ASPIA_HOST__HOST_SESSION_H
 #define _ASPIA_HOST__HOST_SESSION_H
 
-#include "protocol/io_buffer.h"
-
 namespace aspia {
-
-class HostSessionProxy;
 
 class HostSession
 {
 public:
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-        virtual void OnSessionMessage(IOBuffer message) = 0;
-        virtual void OnSessionTerminate() = 0;
-    };
-
-    HostSession(Delegate* delegate);
-    virtual ~HostSession();
-
-    std::shared_ptr<HostSessionProxy> host_session_proxy();
-
-protected:
-    Delegate* delegate_;
-
-private:
-    friend class HostSessionProxy;
-
-    virtual void Send(IOBuffer buffer) = 0;
-
-    std::shared_ptr<HostSessionProxy> session_proxy_;
-
-    DISALLOW_COPY_AND_ASSIGN(HostSession);
+    HostSession() = default;
+    virtual ~HostSession() = default;
 };
 
 } // namespace aspia

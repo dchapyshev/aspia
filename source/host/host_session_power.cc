@@ -11,8 +11,8 @@
 
 namespace aspia {
 
-HostSessionPower::HostSessionPower(HostSession::Delegate* delegate) :
-    HostSession(delegate)
+HostSessionPower::HostSessionPower(
+    std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
     thread_.Start(MessageLoop::Type::TYPE_DEFAULT, this);
     runner_ = thread_.message_loop_proxy();
@@ -25,22 +25,24 @@ HostSessionPower::~HostSessionPower()
 }
 
 // static
-std::unique_ptr<HostSessionPower> HostSessionPower::Create(HostSession::Delegate* delegate)
+std::unique_ptr<HostSessionPower> HostSessionPower::Create(
+    std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
-    return std::unique_ptr<HostSessionPower>(new HostSessionPower(delegate));
+    return std::unique_ptr<HostSessionPower>(new HostSessionPower(channel_proxy));
 }
 
 void HostSessionPower::OnBeforeThreadRunning()
 {
-    // Nothing
+    channel_proxy_->Receive(std::bind(
+        &HostSessionPower::OnMessageReceive, this, std::placeholders::_1));
 }
 
 void HostSessionPower::OnAfterThreadRunning()
 {
-    delegate_->OnSessionTerminate();
+    channel_proxy_->Disconnect();
 }
 
-void HostSessionPower::Send(IOBuffer buffer)
+void HostSessionPower::OnMessageReceive(IOBuffer buffer)
 {
     proto::power::ClientToHost message;
 

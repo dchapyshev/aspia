@@ -10,6 +10,7 @@
 
 #include "host/host_session.h"
 #include "base/message_loop/message_loop_thread.h"
+#include "network/network_channel_proxy.h"
 #include "proto/power_session.pb.h"
 
 namespace aspia {
@@ -22,13 +23,12 @@ public:
     ~HostSessionPower();
 
     static std::unique_ptr<HostSessionPower> Create(
-        HostSession::Delegate* delegate);
+        std::shared_ptr<NetworkChannelProxy> channel_proxy);
 
-    // HostSession implementation.
-    void Send(IOBuffer buffer) override;
+    void OnMessageReceive(IOBuffer buffer);
 
 private:
-    explicit HostSessionPower(HostSession::Delegate* delegate);
+    explicit HostSessionPower(std::shared_ptr<NetworkChannelProxy> channel_proxy);
 
     // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;
@@ -38,6 +38,7 @@ private:
 
     MessageLoopThread thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
+    std::shared_ptr<NetworkChannelProxy> channel_proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionPower);
 };

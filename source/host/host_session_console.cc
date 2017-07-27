@@ -9,43 +9,44 @@
 #include "host/console_session_launcher.h"
 #include "base/version_helpers.h"
 #include "base/scoped_privilege.h"
-#include "ipc/pipe_channel_proxy.h"
 
 namespace aspia {
 
-static const std::chrono::milliseconds kAttachTimeout{ 30000 };
+static const std::chrono::seconds kAttachTimeout{ 30 };
 
 // static
-std::unique_ptr<HostSessionConsole>
-HostSessionConsole::CreateForDesktopManage(HostSession::Delegate* delegate)
+std::unique_ptr<HostSessionConsole> HostSessionConsole::CreateForDesktopManage(
+    std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
     return std::unique_ptr<HostSessionConsole>(
         new HostSessionConsole(proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE,
-                               delegate));
+                               channel_proxy));
 }
 
 // static
-std::unique_ptr<HostSessionConsole>
-HostSessionConsole::CreateForDesktopView(HostSession::Delegate* delegate)
+std::unique_ptr<HostSessionConsole> HostSessionConsole::CreateForDesktopView(
+    std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
     return std::unique_ptr<HostSessionConsole>(
         new HostSessionConsole(proto::SessionType::SESSION_TYPE_DESKTOP_VIEW,
-                               delegate));
+                               channel_proxy));
 }
 
 // static
-std::unique_ptr<HostSessionConsole>
-HostSessionConsole::CreateForFileTransfer(HostSession::Delegate* delegate)
+std::unique_ptr<HostSessionConsole> HostSessionConsole::CreateForFileTransfer(
+    std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
     return std::unique_ptr<HostSessionConsole>(
         new HostSessionConsole(proto::SessionType::SESSION_TYPE_FILE_TRANSFER,
-                               delegate));
+                               channel_proxy));
 }
 
-HostSessionConsole::HostSessionConsole(proto::SessionType session_type,
-                                       HostSession::Delegate* delegate) :
-    HostSession(delegate),
-    session_type_(session_type)
+HostSessionConsole::HostSessionConsole(
+    proto::SessionType session_type,
+    std::shared_ptr<NetworkChannelProxy> channel_proxy)
+    : session_type_(session_type),
+      channel_proxy_(channel_proxy),
+      process_connector_(channel_proxy)
 {
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
@@ -76,8 +77,7 @@ void HostSessionConsole::OnAfterThreadRunning()
     session_watcher_.StopWatching();
     OnSessionDetached();
     timer_.Stop();
-
-    delegate_->OnSessionTerminate();
+    channel_proxy_->Disconnect();
 }
 
 void HostSessionConsole::OnSessionAttached(uint32_t session_id)
@@ -85,50 +85,40 @@ void HostSessionConsole::OnSessionAttached(uint32_t session_id)
     DCHECK(runner_->BelongsToCurrentThread());
     DCHECK(state_ == State::DETACHED);
     DCHECK(!process_.IsValid());
-    DCHECK(!ipc_channel_);
 
+    state_ = State::STARTING;
+
+    std::wstring channel_id;
+
+    if (process_connector_.StartServer(channel_id))
     {
-        std::lock_guard<std::mutex> lock(ipc_channel_lock_);
+        bool launched;
 
-        state_ = State::STARTING;
-
-        std::wstring channel_id;
-
-        ipc_channel_ = PipeChannel::CreateServer(channel_id);
-        if (ipc_channel_)
+        switch (session_type_)
         {
-            ipc_channel_proxy_ = ipc_channel_->pipe_channel_proxy();
+            case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
+            case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
+                launched = LaunchDesktopSession(session_id, channel_id);
+                break;
 
-            bool launched;
+            case proto::SessionType::SESSION_TYPE_FILE_TRANSFER:
+                launched = LaunchFileTransferSession(session_id, channel_id);
+                break;
 
-            switch (session_type_)
-            {
-                case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
-                case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
-                    launched = LaunchDesktopSession(session_id, channel_id);
-                    break;
+            default:
+                launched = false;
+                break;
+        }
 
-                case proto::SessionType::SESSION_TYPE_FILE_TRANSFER:
-                    launched = LaunchFileTransferSession(session_id, channel_id);
-                    break;
+        PipeChannel::DisconnectHandler disconnect_handler =
+            std::bind(&HostSessionConsole::OnIpcChannelDisconnect, this);
 
-                default:
-                    launched = false;
-                    break;
-            }
+        uint32_t user_data = static_cast<uint32_t>(session_type_);
 
-            PipeChannel::ConnectHandler connect_handler =
-                std::bind(&HostSessionConsole::OnPipeChannelConnect, this, std::placeholders::_1);
-
-            PipeChannel::DisconnectHandler disconnect_handler =
-                std::bind(&HostSessionConsole::OnPipeChannelDisconnect, this);
-
-            if (launched && ipc_channel_->Connect(session_type_,
-                                                  std::move(connect_handler),
-                                                  std::move(disconnect_handler)))
-            {
-                return;
-            }
+        if (launched && process_connector_.Accept(user_data, std::move(disconnect_handler)))
+        {
+            OnIpcChannelConnect(user_data);
+            return;
         }
     }
 
@@ -144,8 +134,7 @@ void HostSessionConsole::OnSessionDetached()
 
     state_ = State::DETACHED;
 
-    std::lock_guard<std::mutex> lock(ipc_channel_lock_);
-
+    process_connector_.Disconnect();
     process_watcher_.StopWatching();
 
     if (session_type_ != proto::SessionType::SESSION_TYPE_FILE_TRANSFER)
@@ -154,8 +143,6 @@ void HostSessionConsole::OnSessionDetached()
     }
 
     process_.Close();
-
-    ipc_channel_.reset();
 
     // If the new session is not connected within the specified time interval,
     // an error occurred.
@@ -183,12 +170,12 @@ void HostSessionConsole::OnProcessClose()
     }
 }
 
-void HostSessionConsole::OnPipeChannelConnect(uint32_t user_data)
+void HostSessionConsole::OnIpcChannelConnect(uint32_t user_data)
 {
     if (!runner_->BelongsToCurrentThread())
     {
         runner_->PostTask(std::bind(
-            &HostSessionConsole::OnPipeChannelConnect, this, user_data));
+            &HostSessionConsole::OnIpcChannelConnect, this, user_data));
         return;
     }
 
@@ -229,16 +216,14 @@ void HostSessionConsole::OnPipeChannelConnect(uint32_t user_data)
     }
 
     state_ = State::ATTACHED;
-
-    ipc_channel_proxy_->Receive(
-        std::bind(&HostSessionConsole::OnPipeChannelMessage, this, std::placeholders::_1));
 }
 
-void HostSessionConsole::OnPipeChannelDisconnect()
+void HostSessionConsole::OnIpcChannelDisconnect()
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&HostSessionConsole::OnPipeChannelDisconnect, this));
+        runner_->PostTask(std::bind(
+            &HostSessionConsole::OnIpcChannelDisconnect, this));
         return;
     }
 
@@ -251,7 +236,7 @@ void HostSessionConsole::OnPipeChannelDisconnect()
         {
             OnSessionDetached();
 
-            if (session_type_ == proto::SessionType::SESSION_TYPE_FILE_TRANSFER)
+            if (session_type_ == proto::SESSION_TYPE_FILE_TRANSFER)
             {
                 state_ = State::DETACHED;
 
@@ -274,19 +259,12 @@ void HostSessionConsole::OnPipeChannelDisconnect()
     }
 }
 
-void HostSessionConsole::OnPipeChannelMessage(IOBuffer buffer)
-{
-    delegate_->OnSessionMessage(std::move(buffer));
-
-    ipc_channel_proxy_->Receive(
-        std::bind(&HostSessionConsole::OnPipeChannelMessage, this, std::placeholders::_1));
-}
-
 void HostSessionConsole::OnSessionAttachTimeout()
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&HostSessionConsole::OnSessionAttachTimeout, this));
+        runner_->PostTask(std::bind(
+            &HostSessionConsole::OnSessionAttachTimeout, this));
         return;
     }
 
@@ -301,12 +279,6 @@ void HostSessionConsole::OnSessionAttachTimeout()
             LOG(FATAL) << "In the attached state, the timer must me stopped";
             break;
     }
-}
-
-void HostSessionConsole::Send(IOBuffer buffer)
-{
-    std::lock_guard<std::mutex> lock(ipc_channel_lock_);
-    ipc_channel_proxy_->Send(std::move(buffer), nullptr);
 }
 
 } // namespace aspia

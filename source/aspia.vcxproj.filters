@@ -331,9 +331,6 @@
     <ClCompile Include="host\host_session_power.cc">
       <Filter>host</Filter>
     </ClCompile>
-    <ClCompile Include="host\host_session.cc">
-      <Filter>host</Filter>
-    </ClCompile>
     <ClCompile Include="network\firewall_manager_legacy.cc">
       <Filter>network</Filter>
     </ClCompile>
@@ -495,6 +492,9 @@
     </ClCompile>
     <ClCompile Include="base\process\process_watcher.cc">
       <Filter>base\process</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host_process_connector.cc">
+      <Filter>host</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -857,9 +857,6 @@
     <ClInclude Include="host\host_session_power.h">
       <Filter>host</Filter>
     </ClInclude>
-    <ClInclude Include="host\host_session_proxy.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="network\firewall_manager_legacy.h">
       <Filter>network</Filter>
     </ClInclude>
@@ -1045,6 +1042,9 @@
     </ClInclude>
     <ClInclude Include="base\process\process_watcher.h">
       <Filter>base\process</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_process_connector.h">
+      <Filter>host</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

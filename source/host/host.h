@@ -12,12 +12,10 @@
 #include "network/network_channel.h"
 #include "network/network_channel_proxy.h"
 #include "host/host_session.h"
-#include "host/host_session_proxy.h"
-#include "proto/auth_session.pb.h"
 
 namespace aspia {
 
-class Host : private HostSession::Delegate
+class Host
 {
 public:
     class Delegate
@@ -33,20 +31,13 @@ public:
     bool IsTerminatedSession() const;
 
 private:
-    // HostSession::Delegate implementation.
-    void OnSessionMessage(IOBuffer buffer) override;
-    void OnSessionTerminate() override;
-
     void OnNetworkChannelStatusChange(NetworkChannel::Status status);
-    void OnNetworkChannelMessage(IOBuffer buffer);
-
     void DoAuthorize(const IOBuffer& buffer);
 
     std::shared_ptr<NetworkChannel> channel_;
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;
 
     std::unique_ptr<HostSession> session_;
-    std::shared_ptr<HostSessionProxy> session_proxy_;
 
     Delegate* delegate_;
 

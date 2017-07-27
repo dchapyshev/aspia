@@ -37,16 +37,6 @@ bool Host::IsTerminatedSession() const
     return channel_proxy_->IsDiconnecting();
 }
 
-void Host::OnSessionMessage(IOBuffer buffer)
-{
-    channel_proxy_->Send(std::move(buffer), nullptr);
-}
-
-void Host::OnSessionTerminate()
-{
-    channel_proxy_->Disconnect();
-}
-
 void Host::OnNetworkChannelStatusChange(NetworkChannel::Status status)
 {
     if (status == NetworkChannel::Status::CONNECTED)
@@ -54,7 +44,7 @@ void Host::OnNetworkChannelStatusChange(NetworkChannel::Status status)
         // If the authorization request is not received within the specified time
         // interval, the connection will be closed.
         auth_timer_.Start(kAuthTimeout,
-                          std::bind(&Host::OnSessionTerminate, this));
+                          std::bind(&NetworkChannelProxy::Disconnect, channel_proxy_));
 
         channel_proxy_->Receive(
             std::bind(&Host::DoAuthorize, this, std::placeholders::_1));
@@ -147,19 +137,19 @@ void Host::DoAuthorize(const IOBuffer& buffer)
         switch (request.session_type())
         {
             case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
-                session_ = HostSessionConsole::CreateForDesktopManage(this);
+                session_ = HostSessionConsole::CreateForDesktopManage(channel_proxy_);
                 break;
 
             case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
-                session_ = HostSessionConsole::CreateForDesktopView(this);
+                session_ = HostSessionConsole::CreateForDesktopView(channel_proxy_);
                 break;
 
             case proto::SessionType::SESSION_TYPE_FILE_TRANSFER:
-                session_ = HostSessionConsole::CreateForFileTransfer(this);
+                session_ = HostSessionConsole::CreateForFileTransfer(channel_proxy_);
                 break;
 
             case proto::SessionType::SESSION_TYPE_POWER_MANAGE:
-                session_ = HostSessionPower::Create(this);
+                session_ = HostSessionPower::Create(channel_proxy_);
                 break;
 
             default:
@@ -168,24 +158,10 @@ void Host::DoAuthorize(const IOBuffer& buffer)
         }
 
         if (session_)
-        {
-            session_proxy_ = session_->host_session_proxy();
-
-            channel_proxy_->Receive(std::bind(
-                &Host::OnNetworkChannelMessage, this, std::placeholders::_1));
             return;
-        }
     }
 
     channel_proxy_->Disconnect();
-}
-
-void Host::OnNetworkChannelMessage(IOBuffer buffer)
-{
-    session_proxy_->Send(std::move(buffer));
-
-    channel_proxy_->Receive(std::bind(
-        &Host::OnNetworkChannelMessage, this, std::placeholders::_1));
 }
 
 } // namespace aspia

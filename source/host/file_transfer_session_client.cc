@@ -25,16 +25,14 @@ void FileTransferSessionClient::Run(const std::wstring& channel_id)
     {
         ipc_channel_proxy_ = ipc_channel_->pipe_channel_proxy();
 
-        PipeChannel::ConnectHandler connect_handler =
-            std::bind(&FileTransferSessionClient::OnPipeChannelConnect, this, std::placeholders::_1);
+        uint32_t user_data = GetCurrentProcessId();
 
         PipeChannel::DisconnectHandler disconnect_handler =
             std::bind(&FileTransferSessionClient::OnPipeChannelDisconnect, this);
 
-        if (ipc_channel_->Connect(GetCurrentProcessId(),
-                                  std::move(connect_handler),
-                                  std::move(disconnect_handler)))
+        if (ipc_channel_->Connect(user_data, std::move(disconnect_handler)))
         {
+            OnPipeChannelConnect(user_data);
             status_dialog_->WaitForClose();
         }
 

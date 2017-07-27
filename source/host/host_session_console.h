@@ -11,9 +11,11 @@
 #include "base/message_loop/message_loop_thread.h"
 #include "base/process/process_watcher.h"
 #include "base/synchronization/waitable_timer.h"
-#include "ipc/pipe_channel.h"
+#include "host/host_process_connector.h"
 #include "host/host_session.h"
 #include "host/console_session_watcher.h"
+#include "ipc/pipe_channel.h"
+#include "network/network_channel_proxy.h"
 #include "proto/auth_session.pb.h"
 
 namespace aspia {
@@ -27,20 +29,17 @@ public:
     ~HostSessionConsole();
 
     static std::unique_ptr<HostSessionConsole>
-        CreateForDesktopManage(HostSession::Delegate* delegate);
+        CreateForDesktopManage(std::shared_ptr<NetworkChannelProxy> channel_proxy);
 
     static std::unique_ptr<HostSessionConsole>
-        CreateForDesktopView(HostSession::Delegate* delegate);
+        CreateForDesktopView(std::shared_ptr<NetworkChannelProxy> channel_proxy);
 
     static std::unique_ptr<HostSessionConsole>
-        CreateForFileTransfer(HostSession::Delegate* delegate);
-
-    // HostSession implementation.
-    void Send(IOBuffer buffer) override;
+        CreateForFileTransfer(std::shared_ptr<NetworkChannelProxy> channel_proxy);
 
 private:
     HostSessionConsole(proto::SessionType session_type,
-                       HostSession::Delegate* delegate);
+                       std::shared_ptr<NetworkChannelProxy> channel_proxy);
 
     // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;
@@ -52,9 +51,8 @@ private:
 
     void OnProcessClose();
 
-    void OnPipeChannelConnect(uint32_t user_data);
-    void OnPipeChannelDisconnect();
-    void OnPipeChannelMessage(IOBuffer buffer);
+    void OnIpcChannelConnect(uint32_t user_data);
+    void OnIpcChannelDisconnect();
 
     void OnSessionAttachTimeout();
 
@@ -68,15 +66,12 @@ private:
     State state_ = State::DETACHED;
 
     WaitableTimer timer_;
-
     ConsoleSessionWatcher session_watcher_;
-
     Process process_;
     ProcessWatcher process_watcher_;
 
-    std::unique_ptr<PipeChannel> ipc_channel_;
-    std::shared_ptr<PipeChannelProxy> ipc_channel_proxy_;
-    std::mutex ipc_channel_lock_;
+    std::shared_ptr<NetworkChannelProxy> channel_proxy_;
+    HostProcessConnector process_connector_;
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionConsole);
 };

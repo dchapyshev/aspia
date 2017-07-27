@@ -36,6 +36,19 @@ bool PipeChannelProxy::Send(IOBuffer buffer,
     return false;
 }
 
+bool PipeChannelProxy::Send(IOBuffer buffer)
+{
+    std::lock_guard<std::mutex> lock(channel_lock_);
+
+    if (channel_)
+    {
+        channel_->Send(std::move(buffer));
+        return true;
+    }
+
+    return false;
+}
+
 bool PipeChannelProxy::Receive(PipeChannel::ReceiveCompleteHandler handler)
 {
     std::lock_guard<std::mutex> lock(channel_lock_);
