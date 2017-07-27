@@ -14,8 +14,6 @@
 
 namespace aspia {
 
-namespace fs = std::experimental::filesystem;
-
 void FileTransferSessionClient::Run(const std::wstring& channel_id)
 {
     status_dialog_ = std::make_unique<UiFileStatusDialog>();
@@ -151,7 +149,7 @@ void FileTransferSessionClient::ReadFileListRequest(
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath path = fs::u8path(request.path());
+    FilePath path = std::experimental::filesystem::u8path(request.path());
 
     reply.set_type(proto::REQUEST_TYPE_FILE_LIST);
     reply.set_status(ExecuteFileListRequest(path, reply.mutable_file_list()));
@@ -165,7 +163,7 @@ void FileTransferSessionClient::ReadCreateDirectoryRequest(
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath path = fs::u8path(request.path());
+    FilePath path = std::experimental::filesystem::u8path(request.path());
 
     reply.set_type(proto::REQUEST_TYPE_CREATE_DIRECTORY);
     reply.set_status(ExecuteCreateDirectoryRequest(path));
@@ -179,7 +177,7 @@ void FileTransferSessionClient::ReadDirectorySizeRequest(
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath path = fs::u8path(request.path());
+    FilePath path = std::experimental::filesystem::u8path(request.path());
 
     reply.set_type(proto::REQUEST_TYPE_DIRECTORY_SIZE);
 
@@ -196,8 +194,8 @@ void FileTransferSessionClient::ReadRenameRequest(
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath old_name = fs::u8path(request.old_name());
-    FilePath new_name = fs::u8path(request.new_name());
+    FilePath old_name = std::experimental::filesystem::u8path(request.old_name());
+    FilePath new_name = std::experimental::filesystem::u8path(request.new_name());
 
     reply.set_type(proto::REQUEST_TYPE_RENAME);
     reply.set_status(ExecuteRenameRequest(old_name, new_name));
@@ -211,7 +209,7 @@ void FileTransferSessionClient::ReadRemoveRequest(
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath path = fs::u8path(request.path());
+    FilePath path = std::experimental::filesystem::u8path(request.path());
 
     reply.set_type(proto::REQUEST_TYPE_REMOVE);
     reply.set_status(ExecuteRemoveRequest(path));
@@ -226,7 +224,7 @@ void FileTransferSessionClient::ReadFileUploadRequest(
     proto::file_transfer::HostToClient reply;
     reply.set_type(proto::REQUEST_TYPE_FILE_UPLOAD);
 
-    FilePath file_path = fs::u8path(request.file_path());
+    FilePath file_path = std::experimental::filesystem::u8path(request.file_path());
 
     if (!IsValidPathName(file_path))
     {
@@ -236,7 +234,7 @@ void FileTransferSessionClient::ReadFileUploadRequest(
     {
         std::error_code code;
 
-        if (fs::exists(file_path, code))
+        if (std::experimental::filesystem::exists(file_path, code))
         {
             reply.set_status(proto::REQUEST_STATUS_PATH_ALREADY_EXISTS);
         }
@@ -287,7 +285,7 @@ void FileTransferSessionClient::ReadFileDownloadRequest(
     proto::file_transfer::HostToClient reply;
     reply.set_type(proto::REQUEST_TYPE_FILE_DOWNLOAD);
 
-    FilePath file_path = fs::u8path(request.file_path());
+    FilePath file_path = std::experimental::filesystem::u8path(request.file_path());
 
     if (!IsValidPathName(file_path))
     {

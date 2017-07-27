@@ -16,8 +16,6 @@
 
 namespace aspia {
 
-namespace fs = std::experimental::filesystem;
-
 bool UiFileList::CreateFileList(HWND parent, int control_id)
 {
     const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP |
@@ -84,7 +82,7 @@ void UiFileList::Read(std::unique_ptr<proto::FileList> list)
         if (!item.is_directory())
             continue;
 
-        FilePath name = fs::u8path(item.name());
+        FilePath name = std::experimental::filesystem::u8path(item.name());
 
         int item_index = AddItem(GetItemCount(), 0, name.c_str(), icon_index);
         SetItemData(item_index, object_index);
@@ -100,7 +98,7 @@ void UiFileList::Read(std::unique_ptr<proto::FileList> list)
         if (object.is_directory())
             continue;
 
-        FilePath name = fs::u8path(object.name());
+        FilePath name = std::experimental::filesystem::u8path(object.name());
 
         icon = GetFileIcon(name);
         icon_index = imagelist_.AddIcon(icon);
@@ -170,7 +168,7 @@ FilePath UiFileList::ObjectName(int object_index)
     DCHECK(HasFileList());
     DCHECK(IsValidObjectIndex(object_index));
 
-    return fs::u8path(list_->item(object_index).name());
+    return std::experimental::filesystem::u8path(list_->item(object_index).name());
 }
 
 bool UiFileList::IsDirectoryObject(int object_index)

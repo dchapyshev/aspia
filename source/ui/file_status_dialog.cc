@@ -15,8 +15,6 @@
 
 namespace aspia {
 
-namespace fs = std::experimental::filesystem;
-
 UiFileStatusDialog::UiFileStatusDialog()
 {
     ui_thread_.Start(MessageLoop::TYPE_UI, this);

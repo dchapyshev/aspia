@@ -10,8 +10,6 @@
 
 namespace aspia {
 
-namespace fs = std::experimental::filesystem;
-
 bool FileReplyReceiverQueue::ProcessNextReply(proto::file_transfer::HostToClient& reply)
 {
     Request request;
@@ -71,13 +69,13 @@ bool FileReplyReceiverQueue::ProcessNextReply(proto::file_transfer::HostToClient
                 std::unique_ptr<proto::FileList> file_list(reply.release_file_list());
 
                 receiver->OnFileListRequestReply(
-                    fs::u8path(request->file_list_request().path()),
+                    std::experimental::filesystem::u8path(request->file_list_request().path()),
                     std::move(file_list));
             }
             else
             {
                 receiver->OnFileListRequestFailure(
-                    fs::u8path(request->file_list_request().path()),
+                    std::experimental::filesystem::u8path(request->file_list_request().path()),
                     reply.status());
             }
         }
@@ -91,13 +89,13 @@ bool FileReplyReceiverQueue::ProcessNextReply(proto::file_transfer::HostToClient
                     return false;
 
                 receiver->OnDirectorySizeRequestReply(
-                    fs::u8path(request->directory_size_request().path()),
+                    std::experimental::filesystem::u8path(request->directory_size_request().path()),
                     reply.directory_size().size());
             }
             else
             {
                 receiver->OnDirectorySizeRequestFailure(
-                    fs::u8path(request->directory_size_request().path()),
+                    std::experimental::filesystem::u8path(request->directory_size_request().path()),
                     reply.status());
             }
         }
@@ -106,7 +104,7 @@ bool FileReplyReceiverQueue::ProcessNextReply(proto::file_transfer::HostToClient
         case proto::REQUEST_TYPE_CREATE_DIRECTORY:
         {
             receiver->OnCreateDirectoryRequestReply(
-                fs::u8path(request->create_directory_request().path()),
+                std::experimental::filesystem::u8path(request->create_directory_request().path()),
                 reply.status());
         }
         break;
@@ -114,8 +112,8 @@ bool FileReplyReceiverQueue::ProcessNextReply(proto::file_transfer::HostToClient
         case proto::REQUEST_TYPE_RENAME:
         {
             receiver->OnRenameRequestReply(
-                fs::u8path(request->rename_request().old_name()),
-                fs::u8path(request->rename_request().new_name()),
+                std::experimental::filesystem::u8path(request->rename_request().old_name()),
+                std::experimental::filesystem::u8path(request->rename_request().new_name()),
                 reply.status());
         }
         break;
@@ -123,7 +121,7 @@ bool FileReplyReceiverQueue::ProcessNextReply(proto::file_transfer::HostToClient
         case proto::REQUEST_TYPE_REMOVE:
         {
             receiver->OnRemoveRequestReply(
-                fs::u8path(request->remove_request().path()),
+                std::experimental::filesystem::u8path(request->remove_request().path()),
                 reply.status());
         }
         break;
@@ -131,7 +129,7 @@ bool FileReplyReceiverQueue::ProcessNextReply(proto::file_transfer::HostToClient
         case proto::REQUEST_TYPE_FILE_UPLOAD:
         {
             receiver->OnFileUploadRequestReply(
-                fs::u8path(request->file_upload_request().file_path()),
+                std::experimental::filesystem::u8path(request->file_upload_request().file_path()),
                 reply.status());
         }
         break;

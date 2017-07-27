@@ -18,8 +18,6 @@
 
 namespace aspia {
 
-namespace fs = std::experimental::filesystem;
-
 static const size_t kMaximumUserNameLength = 64;
 static const size_t kMinimumPasswordLength = 6;
 static const size_t kMaximumPasswordLength = 64;
@@ -182,11 +180,11 @@ bool HostUserList::SaveToStorage()
     if (!GetUserListDirectoryPath(dir_path))
         return false;
 
-    if (!fs::exists(dir_path))
+    if (!std::experimental::filesystem::exists(dir_path))
     {
         std::error_code code;
 
-        if (!fs::create_directories(dir_path, code))
+        if (!std::experimental::filesystem::create_directories(dir_path, code))
         {
             LOG(ERROR) << "Unable to create directory: '" << dir_path
                        << "'. Error: " << code.message();
@@ -195,7 +193,7 @@ bool HostUserList::SaveToStorage()
     }
     else
     {
-        if (!fs::is_directory(dir_path))
+        if (!std::experimental::filesystem::is_directory(dir_path))
         {
             LOG(ERROR) << "Path '" << dir_path << "' exist, not it is not a directory";
             return false;

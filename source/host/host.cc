@@ -9,9 +9,9 @@
 #include "host/host_session_console.h"
 #include "host/host_session_power.h"
 #include "host/host_user_list.h"
+#include "crypto/secure_string.h"
 #include "proto/auth_session.pb.h"
 #include "protocol/message_serialization.h"
-#include "crypto/secure_string.h"
 
 namespace aspia {
 

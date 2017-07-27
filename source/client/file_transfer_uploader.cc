@@ -10,8 +10,6 @@
 
 namespace aspia {
 
-namespace fs = std::experimental::filesystem;
-
 FileTransferUploader::FileTransferUploader(
     std::shared_ptr<FileRequestSenderProxy> sender,
     Delegate* delegate)
@@ -27,14 +25,15 @@ uint64_t FileTransferUploader::BuildTaskListForDirectoryContent(
     std::error_code code;
     uint64_t size = 0;
 
-    for (const auto& entry : fs::directory_iterator(source_path, code))
+    for (const auto& entry :
+            std::experimental::filesystem::directory_iterator(source_path, code))
     {
         FilePath target_object_path;
 
         target_object_path.assign(target_path);
         target_object_path.append(entry.path().filename());
 
-        if (fs::is_directory(entry.status()))
+        if (std::experimental::filesystem::is_directory(entry.status()))
         {
             task_queue_.push(Task(entry.path(), target_object_path, true));
 
@@ -45,7 +44,8 @@ uint64_t FileTransferUploader::BuildTaskListForDirectoryContent(
         {
             task_queue_.push(Task(entry.path(), target_object_path, false));
 
-            uintmax_t file_size = fs::file_size(entry.path(), code);
+            uintmax_t file_size =
+                std::experimental::filesystem::file_size(entry.path(), code);
 
             if (file_size != static_cast<uintmax_t>(-1))
                 size += file_size;
@@ -67,12 +67,12 @@ void FileTransferUploader::Start(const FilePath& source_path,
         FilePath source_object_path;
 
         source_object_path.assign(source_path);
-        source_object_path.append(fs::u8path(file.name()));
+        source_object_path.append(std::experimental::filesystem::u8path(file.name()));
 
         FilePath target_object_path;
 
         target_object_path.assign(target_path);
-        target_object_path.append(fs::u8path(file.name()));
+        target_object_path.append(std::experimental::filesystem::u8path(file.name()));
 
         if (file.is_directory())
         {
@@ -85,7 +85,8 @@ void FileTransferUploader::Start(const FilePath& source_path,
         {
             task_queue_.push(Task(source_object_path, target_object_path, false));
 
-            uintmax_t file_size = fs::file_size(source_object_path, code);
+            uintmax_t file_size =
+                std::experimental::filesystem::file_size(source_object_path, code);
 
             if (file_size != static_cast<uintmax_t>(-1))
                 total_size += file_size;

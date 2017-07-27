@@ -14,8 +14,6 @@
 
 namespace aspia {
 
-namespace fs = std::experimental::filesystem;
-
 proto::RequestStatus ExecuteDriveListRequest(proto::DriveList* drive_list)
 {
     DCHECK(drive_list);
@@ -101,23 +99,25 @@ proto::RequestStatus ExecuteFileListRequest(const FilePath& path,
 
     std::error_code code;
 
-    if (!fs::exists(path, code))
+    if (!std::experimental::filesystem::exists(path, code))
         return proto::REQUEST_STATUS_PATH_NOT_FOUND;
 
-    for (auto& entry : fs::directory_iterator(path, code))
+    for (auto& entry : std::experimental::filesystem::directory_iterator(path, code))
     {
         proto::FileList::Item* item = file_list->add_item();
 
         item->set_name(entry.path().filename().u8string());
 
-        fs::file_time_type time = fs::last_write_time(entry.path(), code);
+        std::experimental::filesystem::file_time_type time =
+            std::experimental::filesystem::last_write_time(entry.path(), code);
+
         item->set_modification_time(decltype(time)::clock::to_time_t(time));
 
-        item->set_is_directory(fs::is_directory(entry.status()));
+        item->set_is_directory(std::experimental::filesystem::is_directory(entry.status()));
 
         if (!item->is_directory())
         {
-            uintmax_t size = fs::file_size(entry.path(), code);
+            uintmax_t size = std::experimental::filesystem::file_size(entry.path(), code);
             if (size != static_cast<uintmax_t>(-1))
                 item->set_size(size);
         }
@@ -133,9 +133,9 @@ proto::RequestStatus ExecuteCreateDirectoryRequest(const FilePath& path)
 
     std::error_code code;
 
-    if (!fs::create_directory(path, code))
+    if (!std::experimental::filesystem::create_directory(path, code))
     {
-        if (fs::exists(path, code))
+        if (std::experimental::filesystem::exists(path, code))
             return proto::REQUEST_STATUS_PATH_ALREADY_EXISTS;
 
         return proto::REQUEST_STATUS_ACCESS_DENIED;
@@ -152,13 +152,14 @@ proto::RequestStatus ExecuteDirectorySizeRequest(const FilePath& path,
 
     size = 0;
 
-    for (const auto& entry : fs::recursive_directory_iterator())
+    for (const auto& entry : std::experimental::filesystem::recursive_directory_iterator())
     {
-        if (!fs::is_directory(entry.status()))
+        if (!std::experimental::filesystem::is_directory(entry.status()))
         {
             std::error_code code;
 
-            uintmax_t file_size = fs::file_size(entry.path(), code);
+            uintmax_t file_size =
+                std::experimental::filesystem::file_size(entry.path(), code);
 
             if (file_size != static_cast<uintmax_t>(-1))
                 size += file_size;
@@ -180,10 +181,10 @@ proto::RequestStatus ExecuteRenameRequest(const FilePath& old_name,
     {
         std::error_code code;
 
-        if (fs::exists(new_name, code))
+        if (std::experimental::filesystem::exists(new_name, code))
             return proto::REQUEST_STATUS_PATH_ALREADY_EXISTS;
 
-        fs::rename(old_name, new_name, code);
+        std::experimental::filesystem::rename(old_name, new_name, code);
     }
 
     return proto::REQUEST_STATUS_SUCCESS;
@@ -196,10 +197,10 @@ proto::RequestStatus ExecuteRemoveRequest(const FilePath& path)
 
     std::error_code code;
 
-    if (!fs::exists(path, code))
+    if (!std::experimental::filesystem::exists(path, code))
         return proto::REQUEST_STATUS_PATH_NOT_FOUND;
 
-    if (!fs::remove(path, code))
+    if (!std::experimental::filesystem::remove(path, code))
         return proto::REQUEST_STATUS_ACCESS_DENIED;
 
     return proto::REQUEST_STATUS_SUCCESS;

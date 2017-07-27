@@ -13,8 +13,6 @@
 
 namespace aspia {
 
-namespace fs = std::experimental::filesystem;
-
 bool UiDriveList::CreateDriveList(HWND parent, int control_id)
 {
     const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP |
@@ -192,7 +190,8 @@ FilePath UiDriveList::ObjectPath(int object_index) const
             return FilePath();
 
         default:
-            return fs::u8path(list_->item(object_index).path());
+            return std::experimental::filesystem::u8path(
+                list_->item(object_index).path());
     }
 }
 
@@ -222,7 +221,8 @@ int UiDriveList::GetKnownObjectIndex(const FilePath& path) const
 
     for (int object_index = 0; object_index < count; ++object_index)
     {
-        FilePath known_path = fs::u8path(list_->item(object_index).path());
+        FilePath known_path =
+            std::experimental::filesystem::u8path(list_->item(object_index).path());
 
         if (CompareCaseInsensitive(known_path, path) == 0)
             return object_index;

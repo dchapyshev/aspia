@@ -9,28 +9,23 @@
 #include "ui/file_manager.h"
 #include "ui/file_manager_helpers.h"
 #include "ui/status_code.h"
-#include "base/strings/string_util.h"
-#include "base/strings/unicode.h"
-#include "base/version_helpers.h"
 #include "base/logging.h"
 
 #include <uxtheme.h>
 
 namespace aspia {
 
-namespace fs = std::experimental::filesystem;
-
 static_assert(UiFileList::kInvalidObjectIndex == UiDriveList::kInvalidObjectIndex,
               "Values must be equal");
 
 UiFileManagerPanel::UiFileManagerPanel(PanelType panel_type,
                                        std::shared_ptr<FileRequestSenderProxy> sender,
-                                       Delegate* delegate) :
-    toolbar_(panel_type == PanelType::LOCAL ?
-             UiFileToolBar::Type::LOCAL : UiFileToolBar::Type::REMOTE),
-    panel_type_(panel_type),
-    sender_(sender),
-    delegate_(delegate)
+                                       Delegate* delegate)
+    : toolbar_(panel_type == PanelType::LOCAL ?
+          UiFileToolBar::Type::LOCAL : UiFileToolBar::Type::REMOTE),
+      panel_type_(panel_type),
+      sender_(sender),
+      delegate_(delegate)
 {
     // Nothing
 }
@@ -286,7 +281,7 @@ LRESULT UiFileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl,
              iter.Advance())
         {
             FilePath path = drive_list_.CurrentPath();
-            FilePath name = fs::u8path(iter.Object().name());
+            FilePath name = std::experimental::filesystem::u8path(iter.Object().name());
 
             path.append(name);
 

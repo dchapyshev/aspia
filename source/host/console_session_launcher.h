@@ -8,8 +8,6 @@
 #ifndef _ASPIA_HOST__CONSOLE_SESSION_LAUNCHER_H
 #define _ASPIA_HOST__CONSOLE_SESSION_LAUNCHER_H
 
-#include <memory>
-
 #include "base/macros.h"
 #include "base/service.h"
 
