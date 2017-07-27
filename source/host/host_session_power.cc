@@ -12,8 +12,10 @@
 namespace aspia {
 
 HostSessionPower::HostSessionPower(
-    std::shared_ptr<NetworkChannelProxy> channel_proxy)
+    std::shared_ptr<NetworkChannelProxy> channel_proxy) :
+    channel_proxy_(channel_proxy)
 {
+    DCHECK(channel_proxy_);
     thread_.Start(MessageLoop::Type::TYPE_DEFAULT, this);
     runner_ = thread_.message_loop_proxy();
     DCHECK(runner_);
