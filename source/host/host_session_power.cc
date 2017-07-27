@@ -42,7 +42,7 @@ void HostSessionPower::OnAfterThreadRunning()
     channel_proxy_->Disconnect();
 }
 
-void HostSessionPower::OnMessageReceive(IOBuffer buffer)
+void HostSessionPower::OnMessageReceive(const IOBuffer& buffer)
 {
     proto::power::ClientToHost message;
 
