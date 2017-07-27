@@ -172,12 +172,7 @@ void HostSessionConsole::OnProcessClose()
 
 void HostSessionConsole::OnIpcChannelConnect(uint32_t user_data)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(
-            &HostSessionConsole::OnIpcChannelConnect, this, user_data));
-        return;
-    }
+    DCHECK(runner_->BelongsToCurrentThread());
 
     // To open a host process and terminate it, additional privileges are required.
     // If the current process is running from the service, then the privilege
