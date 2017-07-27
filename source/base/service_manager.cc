@@ -37,12 +37,6 @@ ServiceManager::ServiceManager(const std::wstring& service_short_name) :
     }
 }
 
-ServiceManager::ServiceManager(ServiceManager&& other) noexcept
-{
-    sc_manager_.Reset(other.sc_manager_.Release());
-    service_.Reset(other.service_.Release());
-}
-
 // private
 ServiceManager::ServiceManager(SC_HANDLE sc_manager, SC_HANDLE service) :
     sc_manager_(sc_manager),
@@ -58,17 +52,18 @@ ServiceManager::~ServiceManager()
 }
 
 // static
-ServiceManager ServiceManager::Create(const std::wstring& command_line,
-                                      const std::wstring& service_full_name,
-                                      const std::wstring& service_short_name,
-                                      const std::wstring& service_description)
+std::unique_ptr<ServiceManager>
+ServiceManager::Create(const std::wstring& command_line,
+                       const std::wstring& service_full_name,
+                       const std::wstring& service_short_name,
+                       const std::wstring& service_description)
 {
     // Открываем менеджер служб.
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager)
     {
         LOG(ERROR) << "OpenSCManagerW() failed: " << GetLastSystemErrorString();
-        return ServiceManager();
+        return nullptr;
     }
 
     // Пытаемся создать службу.
@@ -88,7 +83,7 @@ ServiceManager ServiceManager::Create(const std::wstring& command_line,
     if (!service.IsValid())
     {
         LOG(ERROR) << "CreateServiceW() failed: " << GetLastSystemErrorString();
-        return ServiceManager();
+        return nullptr;
     }
 
     if (!service_description.empty())
@@ -123,7 +118,8 @@ ServiceManager ServiceManager::Create(const std::wstring& command_line,
                      << GetLastSystemErrorString();
     }
 
-    return ServiceManager(sc_manager.Release(), service.Release());
+    return std::unique_ptr<ServiceManager>(
+        new ServiceManager(sc_manager.Release(), service.Release()));
 }
 
 // static
@@ -181,11 +177,6 @@ bool ServiceManager::IsServiceInstalled(const std::wstring& service_name)
     return true;
 }
 
-bool ServiceManager::IsValid() const
-{
-    return sc_manager_.IsValid() && service_.IsValid();
-}
-
 bool ServiceManager::Start() const
 {
     if (!StartServiceW(service_, 0, nullptr))
@@ -222,14 +213,6 @@ bool ServiceManager::Remove()
     sc_manager_.Reset();
 
     return true;
-}
-
-ServiceManager& ServiceManager::operator=(ServiceManager&& other) noexcept
-{
-    service_.Reset(other.service_.Release());
-    sc_manager_.Reset(other.sc_manager_.Release());
-
-    return *this;
 }
 
 } // namespace aspia

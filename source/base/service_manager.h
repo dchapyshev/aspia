@@ -8,6 +8,7 @@
 #ifndef _ASPIA_BASE__SERVICE_MANAGER_H
 #define _ASPIA_BASE__SERVICE_MANAGER_H
 
+#include <memory>
 #include <string>
 
 #include "base/macros.h"
@@ -20,15 +21,15 @@ class ServiceManager
 public:
     ServiceManager() = default;
     explicit ServiceManager(const std::wstring& service_short_name);
-    ServiceManager(ServiceManager&& other) noexcept;
     ~ServiceManager();
 
     // Creates a service in the system and returns a pointer to the instance
     // of the class to manage it.
-    static ServiceManager Create(const std::wstring& command_line,
-                                 const std::wstring& service_name,
-                                 const std::wstring& service_short_name,
-                                 const std::wstring& service_description = std::wstring());
+    static std::unique_ptr<ServiceManager>
+    Create(const std::wstring& command_line,
+           const std::wstring& service_name,
+           const std::wstring& service_short_name,
+           const std::wstring& service_description = std::wstring());
 
     static std::wstring GenerateUniqueServiceId();
 
@@ -36,10 +37,6 @@ public:
                                                 const std::wstring& service_id);
 
     static bool IsServiceInstalled(const std::wstring& service_name);
-
-    // Checks the validity of a class instance.
-    // If the class instance is valid, then it returns true, if not, false.
-    bool IsValid() const;
 
     // Starts the service.
     // If the service is successfully started, it returns true, if not, then false.
@@ -53,8 +50,6 @@ public:
     // After calling the method, the class becomes invalid, calls to other methods
     // will return with an error and the IsValid() method returns false.
     bool Remove();
-
-    ServiceManager& operator=(ServiceManager&& other) noexcept;
 
 private:
     ServiceManager(SC_HANDLE sc_manager, SC_HANDLE service);

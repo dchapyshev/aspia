@@ -83,12 +83,13 @@ bool HostService::Install()
     command_line.append(L" --run_mode=");
     command_line.append(kHostServiceSwitch);
 
-    ServiceManager manager(ServiceManager::Create(command_line,
-                                                  kHostServiceFullName,
-                                                  kHostServiceShortName,
-                                                  kHostServiceFullName));
-    if (manager.IsValid())
-        return manager.Start();
+    std::unique_ptr<ServiceManager> manager =
+        ServiceManager::Create(command_line,
+                               kHostServiceFullName,
+                               kHostServiceShortName,
+                               kHostServiceFullName);
+    if (manager)
+        return manager->Start();
 
     return false;
 }

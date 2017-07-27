@@ -80,13 +80,16 @@ void SasInjector::InjectSAS()
         command_line.append(service_id);
 
         // Install the service in the system.
-        ServiceManager manager(ServiceManager::Create(command_line,
-                                                      unique_full_name,
-                                                      unique_short_name));
+        std::unique_ptr<ServiceManager> manager =
+            ServiceManager::Create(command_line,
+                                   unique_full_name,
+                                   unique_short_name);
 
         // If the service is installed.
-        if (manager.IsValid())
-            manager.Start();
+        if (manager)
+        {
+            manager->Start();
+        }
     }
 }
 
