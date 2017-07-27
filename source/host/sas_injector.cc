@@ -35,14 +35,14 @@ void SasInjector::InjectSAS()
         const wchar_t kSasWindowClassName[] = L"SAS window class";
         const wchar_t kSasWindowTitle[] = L"SAS window";
 
-        Desktop winlogon_desktop(Desktop::GetDesktop(kWinlogonDesktopName));
+        std::unique_ptr<Desktop> winlogon_desktop(Desktop::GetDesktop(kWinlogonDesktopName));
 
-        if (!winlogon_desktop.IsValid())
+        if (!winlogon_desktop)
             return;
 
         ScopedThreadDesktop desktop;
 
-        if (!desktop.SetThreadDesktop(std::move(winlogon_desktop)))
+        if (!desktop.SetThreadDesktop(winlogon_desktop.release()))
             return;
 
         HWND window = FindWindowW(kSasWindowClassName, kSasWindowTitle);

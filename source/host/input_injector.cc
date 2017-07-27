@@ -14,11 +14,11 @@ namespace aspia {
 
 void InputInjector::SwitchToInputDesktop()
 {
-    Desktop input_desktop(Desktop::GetInputDesktop());
+    std::unique_ptr<Desktop> input_desktop(Desktop::GetInputDesktop());
 
-    if (input_desktop.IsValid() && !desktop_.IsSame(input_desktop))
+    if (input_desktop && !desktop_.IsSame(*input_desktop))
     {
-        desktop_.SetThreadDesktop(std::move(input_desktop));
+        desktop_.SetThreadDesktop(input_desktop.release());
     }
 
     // We send a notification to the system that it is used to prevent

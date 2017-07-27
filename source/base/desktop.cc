@@ -10,71 +10,22 @@
 
 namespace aspia {
 
-Desktop::Desktop(Desktop&& other) noexcept
-{
-    desktop_ = other.desktop_;
-    own_ = other.own_;
-
-    other.desktop_ = nullptr;
-}
-
-Desktop::Desktop(HDESK desktop, bool own) :
-    desktop_(desktop),
-    own_(own)
+Desktop::Desktop(HDESK desktop, bool own)
+    : desktop_(desktop), own_(own)
 {
     // Nothing
 }
 
 Desktop::~Desktop()
 {
-    Close();
-}
-
-// static
-Desktop Desktop::GetDesktop(const WCHAR* desktop_name)
-{
-    const ACCESS_MASK desired_access =
-        DESKTOP_CREATEMENU | DESKTOP_CREATEWINDOW |
-        DESKTOP_ENUMERATE | DESKTOP_HOOKCONTROL |
-        DESKTOP_WRITEOBJECTS | DESKTOP_READOBJECTS |
-        DESKTOP_SWITCHDESKTOP | GENERIC_WRITE;
-
-    HDESK desktop = OpenDesktopW(desktop_name, 0, FALSE, desired_access);
-    if (!desktop)
+    if (own_ && !desktop_)
     {
-        LOG(ERROR) << "OpenDesktopW() failed: " << GetLastSystemErrorString();
-        return Desktop();
+        if (!CloseDesktop(desktop_))
+        {
+            LOG(ERROR) << "Failed to close the owned desktop handle: "
+                       << GetLastSystemErrorString();
+        }
     }
-
-    return Desktop(desktop, true);
-}
-
-// static
-Desktop Desktop::GetInputDesktop()
-{
-    const ACCESS_MASK desired_access = GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE;
-
-    HDESK desktop = OpenInputDesktop(0, FALSE, desired_access);
-    if (!desktop)
-    {
-        LOG(ERROR) << "OpenInputDesktop() failed: " << GetLastSystemErrorString();
-        return Desktop();
-    }
-
-    return Desktop(desktop, true);
-}
-
-// static
-Desktop Desktop::GetThreadDesktop()
-{
-    HDESK desktop = ::GetThreadDesktop(GetCurrentThreadId());
-    if (!desktop)
-    {
-        LOG(ERROR) << "GetThreadDesktop() failed: " << GetLastSystemErrorString();
-        return Desktop();
-    }
-
-    return Desktop(desktop, false);
 }
 
 bool Desktop::GetName(WCHAR* name, DWORD length) const
@@ -84,7 +35,8 @@ bool Desktop::GetName(WCHAR* name, DWORD length) const
 
     if (!GetUserObjectInformationW(desktop_, UOI_NAME, name, length, nullptr))
     {
-        LOG(ERROR) << "Failed to query the desktop name: " << GetLastSystemErrorString();
+        LOG(ERROR) << "Failed to query the desktop name: "
+                   << GetLastSystemErrorString();
         return false;
     }
 
@@ -110,41 +62,53 @@ bool Desktop::SetThreadDesktop() const
 {
     if (!::SetThreadDesktop(desktop_))
     {
-        LOG(ERROR) << "SetThreadDesktop() failed: " << GetLastSystemErrorString();
+        LOG(ERROR) << "Failed to assign the desktop to the current thread: "
+                   << GetLastSystemErrorString();
         return false;
     }
 
     return true;
 }
 
-bool Desktop::IsValid() const
+Desktop* Desktop::GetDesktop(const WCHAR* desktop_name)
 {
-    return (desktop_ != nullptr);
-}
-
-void Desktop::Close()
-{
-    if (own_ && desktop_)
+    ACCESS_MASK desired_access =
+        DESKTOP_CREATEMENU | DESKTOP_CREATEWINDOW | DESKTOP_ENUMERATE |
+        DESKTOP_HOOKCONTROL | DESKTOP_WRITEOBJECTS | DESKTOP_READOBJECTS |
+        DESKTOP_SWITCHDESKTOP | GENERIC_WRITE;
+    HDESK desktop = OpenDesktop(desktop_name, 0, FALSE, desired_access);
+    if (!desktop)
     {
-        if (!CloseDesktop(desktop_))
-        {
-            LOG(ERROR) << "CloseDesktop() failed: " << GetLastSystemErrorString();
-        }
+        LOG(ERROR) << "Failed to open the desktop '" << desktop_name << "': "
+                   << GetLastSystemErrorString();
+        return nullptr;
     }
 
-    desktop_ = nullptr;
+    return new Desktop(desktop, true);
 }
 
-Desktop& Desktop::operator=(Desktop&& other) noexcept
+Desktop* Desktop::GetInputDesktop()
 {
-    Close();
+    HDESK desktop = OpenInputDesktop(
+        0, FALSE, GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE);
+    if (!desktop)
+        return nullptr;
 
-    desktop_ = other.desktop_;
-    own_ = other.own_;
+    return new Desktop(desktop, true);
+}
 
-    other.desktop_ = nullptr;
+Desktop* Desktop::GetThreadDesktop()
+{
+    HDESK desktop = ::GetThreadDesktop(GetCurrentThreadId());
+    if (!desktop)
+    {
+        LOG(ERROR) << "Failed to retrieve the handle of the desktop assigned to "
+                      "the current thread: "
+                   << GetLastSystemErrorString();
+        return nullptr;
+    }
 
-    return *this;
+    return new Desktop(desktop, false);
 }
 
 } // namespace aspia
