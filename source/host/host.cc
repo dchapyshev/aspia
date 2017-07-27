@@ -98,14 +98,14 @@ static proto::Status DoBasicAuthorization(const std::string& username,
     return proto::Status::STATUS_ACCESS_DENIED;
 }
 
-void Host::DoAuthorize(const IOBuffer& buffer)
+void Host::DoAuthorize(std::unique_ptr<IOBuffer> buffer)
 {
     // Authorization request received, stop the timer.
     auth_timer_.Stop();
 
     proto::auth::ClientToHost request;
 
-    if (!ParseMessage(buffer, request))
+    if (!ParseMessage(*buffer, request))
     {
         channel_proxy_->Disconnect();
         return;

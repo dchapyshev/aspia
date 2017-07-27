@@ -57,8 +57,8 @@ public:
     void StartChannel(StatusChangeHandler handler) override;
 
 protected:
-    void Send(IOBuffer buffer, SendCompleteHandler handler) override;
-    void Send(IOBuffer buffer) override;
+    void Send(std::unique_ptr<IOBuffer> buffer, SendCompleteHandler handler) override;
+    void Send(std::unique_ptr<IOBuffer> buffer) override;
     void Receive(ReceiveCompleteHandler handler) override;
     void Disconnect() override;
     bool IsDiconnecting() const override;
@@ -105,15 +105,15 @@ private:
 
     StatusChangeHandler status_change_handler_;
 
-    std::queue<std::pair<IOBuffer, SendCompleteHandler>> write_queue_;
+    std::queue<std::pair<std::unique_ptr<IOBuffer>, SendCompleteHandler>> write_queue_;
     std::mutex write_queue_lock_;
 
-    IOBuffer write_buffer_;
+    std::unique_ptr<IOBuffer> write_buffer_;
     MessageSizeType write_size_ = 0;
 
     ReceiveCompleteHandler receive_complete_handler_;
 
-    IOBuffer read_buffer_;
+    std::unique_ptr<IOBuffer> read_buffer_;
     MessageSizeType read_size_ = 0;
 
     std::unique_ptr<Encryptor> encryptor_;

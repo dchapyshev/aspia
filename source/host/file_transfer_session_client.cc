@@ -62,11 +62,11 @@ void FileTransferSessionClient::OnPipeChannelDisconnect()
     status_dialog_->SetSessionTerminatedStatus();
 }
 
-void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
+void FileTransferSessionClient::OnPipeChannelMessage(std::unique_ptr<IOBuffer> buffer)
 {
     proto::file_transfer::ClientToHost message;
 
-    if (!ParseMessage(buffer, message))
+    if (!ParseMessage(*buffer, message))
     {
         ipc_channel_.reset();
         return;
@@ -130,7 +130,7 @@ void FileTransferSessionClient::OnPipeChannelMessage(const IOBuffer& buffer)
 void FileTransferSessionClient::SendReply(
     const proto::file_transfer::HostToClient& reply)
 {
-    IOBuffer buffer(SerializeMessage<IOBuffer>(reply));
+    std::unique_ptr<IOBuffer> buffer = SerializeMessage<IOBuffer>(reply);
     ipc_channel_proxy_->Send(std::move(buffer), nullptr);
 }
 

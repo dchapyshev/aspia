@@ -28,7 +28,7 @@ private:
     // PipeChannel::Delegate implementation.
     void OnPipeChannelConnect(uint32_t user_data);
     void OnPipeChannelDisconnect();
-    void OnPipeChannelMessage(const IOBuffer& buffer);
+    void OnPipeChannelMessage(std::unique_ptr<IOBuffer> buffer);
 
     void SendReply(const proto::file_transfer::HostToClient& reply);
 

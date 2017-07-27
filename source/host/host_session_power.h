@@ -25,7 +25,7 @@ public:
     static std::unique_ptr<HostSessionPower> Create(
         std::shared_ptr<NetworkChannelProxy> channel_proxy);
 
-    void OnMessageReceive(const IOBuffer& buffer);
+    void OnMessageReceive(std::unique_ptr<IOBuffer> buffer);
 
 private:
     explicit HostSessionPower(std::shared_ptr<NetworkChannelProxy> channel_proxy);

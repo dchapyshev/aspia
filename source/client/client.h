@@ -48,7 +48,7 @@ private:
     void OnStatusDialogOpen() override;
 
     void OnAuthRequestSended();
-    void DoAuthorize(const IOBuffer& buffer);
+    void DoAuthorize(std::unique_ptr<IOBuffer> buffer);
     void CreateSession(proto::SessionType session_type);
     void OpenStatusDialog();
 

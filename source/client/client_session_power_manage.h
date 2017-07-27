@@ -23,7 +23,7 @@ public:
 
     ~ClientSessionPowerManage();
 
-    void OnMessageReceive(const IOBuffer& buffer) final {};
+    void OnMessageReceive(std::unique_ptr<IOBuffer> buffer) final {};
 
 private:
     // MessageLoopThread::Delegate implementation.

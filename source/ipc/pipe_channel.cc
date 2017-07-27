@@ -158,13 +158,14 @@ void PipeChannel::ScheduleWrite()
     DCHECK(!write_queue_.empty());
 
     write_buffer_ = std::move(write_queue_.front().first);
-    write_size_ = write_buffer_.size();
 
-    if (write_buffer_.IsEmpty())
+    if (!write_buffer_)
     {
         DoDisconnect();
         return;
     }
+
+    write_size_ = write_buffer_->size();
 
     asio::async_write(stream_,
                       asio::buffer(&write_size_, sizeof(uint32_t)),
@@ -184,7 +185,7 @@ void PipeChannel::OnWriteSizeComplete(const std::error_code& code,
     }
 
     asio::async_write(stream_,
-                      asio::buffer(write_buffer_.data(), write_buffer_.size()),
+                      asio::buffer(write_buffer_->data(), write_buffer_->size()),
                       std::bind(&PipeChannel::OnWriteComplete,
                                 this,
                                 std::placeholders::_1,
@@ -194,7 +195,7 @@ void PipeChannel::OnWriteSizeComplete(const std::error_code& code,
 void PipeChannel::OnWriteComplete(const std::error_code& code,
                                   size_t bytes_transferred)
 {
-    if (IsFailureCode(code) || bytes_transferred != write_buffer_.size())
+    if (IsFailureCode(code) || bytes_transferred != write_buffer_->size())
     {
         DoDisconnect();
         return;
@@ -219,20 +220,20 @@ void PipeChannel::OnWriteComplete(const std::error_code& code,
         complete_handler();
 }
 
-void PipeChannel::Send(IOBuffer buffer, SendCompleteHandler handler)
+void PipeChannel::Send(std::unique_ptr<IOBuffer> buffer, SendCompleteHandler handler)
 {
     std::lock_guard<std::mutex> lock(write_queue_lock_);
 
     bool schedule_write = write_queue_.empty();
 
-    write_queue_.push(std::make_pair<IOBuffer, SendCompleteHandler>(
+    write_queue_.push(std::make_pair<std::unique_ptr<IOBuffer>, SendCompleteHandler>(
         std::move(buffer), std::move(handler)));
 
     if (schedule_write)
         ScheduleWrite();
 }
 
-void PipeChannel::Send(IOBuffer buffer)
+void PipeChannel::Send(std::unique_ptr<IOBuffer> buffer)
 {
     Send(std::move(buffer), nullptr);
 }
@@ -300,10 +301,16 @@ void PipeChannel::OnReadSizeComplete(const std::error_code& code,
         return;
     }
 
-    read_buffer_ = IOBuffer(read_size_);
+    if (!read_size_)
+    {
+        DoDisconnect();
+        return;
+    }
+
+    read_buffer_ = std::make_unique<IOBuffer>(read_size_);
 
     asio::async_read(stream_,
-                     asio::buffer(read_buffer_.data(), read_buffer_.size()),
+                     asio::buffer(read_buffer_->data(), read_buffer_->size()),
                      std::bind(&PipeChannel::OnReadComplete,
                                this,
                                std::placeholders::_1,
@@ -313,7 +320,7 @@ void PipeChannel::OnReadSizeComplete(const std::error_code& code,
 void PipeChannel::OnReadComplete(const std::error_code& code,
                                  size_t bytes_transferred)
 {
-    if (IsFailureCode(code) || bytes_transferred != read_buffer_.size())
+    if (IsFailureCode(code) || bytes_transferred != read_buffer_->size())
     {
         DoDisconnect();
         return;

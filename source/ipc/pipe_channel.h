@@ -53,7 +53,7 @@ public:
 
     using DisconnectHandler = std::function<void()>;
     using SendCompleteHandler = std::function<void()>;
-    using ReceiveCompleteHandler = std::function<void(IOBuffer)>;
+    using ReceiveCompleteHandler = std::function<void(std::unique_ptr<IOBuffer>)>;
 
     bool Connect(uint32_t& user_data, DisconnectHandler disconnect_handler = nullptr);
 
@@ -69,8 +69,8 @@ private:
 
     PipeChannel(HANDLE pipe, Mode mode);
 
-    void Send(IOBuffer buffer, SendCompleteHandler handler);
-    void Send(IOBuffer buffer);
+    void Send(std::unique_ptr<IOBuffer> buffer, SendCompleteHandler handler);
+    void Send(std::unique_ptr<IOBuffer> buffer);
     void Receive(ReceiveCompleteHandler handler);
 
     void ScheduleWrite();
@@ -89,15 +89,15 @@ private:
     std::unique_ptr<asio::io_service::work> work_;
     asio::windows::stream_handle stream_{ io_service_ };
 
-    std::queue<std::pair<IOBuffer, SendCompleteHandler>> write_queue_;
+    std::queue<std::pair<std::unique_ptr<IOBuffer>, SendCompleteHandler>> write_queue_;
     std::mutex write_queue_lock_;
 
-    IOBuffer write_buffer_;
+    std::unique_ptr<IOBuffer> write_buffer_;
     uint32_t write_size_ = 0;
 
     ReceiveCompleteHandler receive_complete_handler_;
 
-    IOBuffer read_buffer_;
+    std::unique_ptr<IOBuffer> read_buffer_;
     uint32_t read_size_ = 0;
 
     std::shared_ptr<PipeChannelProxy> proxy_;

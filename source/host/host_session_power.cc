@@ -44,11 +44,11 @@ void HostSessionPower::OnAfterThreadRunning()
     channel_proxy_->Disconnect();
 }
 
-void HostSessionPower::OnMessageReceive(const IOBuffer& buffer)
+void HostSessionPower::OnMessageReceive(std::unique_ptr<IOBuffer> buffer)
 {
     proto::power::ClientToHost message;
 
-    if (ParseMessage(buffer, message))
+    if (ParseMessage(*buffer, message))
     {
         std::shared_ptr<proto::PowerEvent> power_event(message.release_power_event());
         runner_->PostTask(std::bind(&HostSessionPower::Inject, this, power_event));

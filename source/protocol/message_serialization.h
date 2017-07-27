@@ -16,19 +16,19 @@
 namespace aspia {
 
 template <class T>
-static T SerializeMessage(const google::protobuf::MessageLite& message)
+static std::unique_ptr<T> SerializeMessage(const google::protobuf::MessageLite& message)
 {
     size_t size = message.ByteSizeLong();
 
     if (!size)
     {
         LOG(ERROR) << "Empty messages are not allowed";
-        return T();
+        return nullptr;
     }
 
-    T buffer(size);
+    std::unique_ptr<T> buffer = std::make_unique<T>(size);
 
-    message.SerializeWithCachedSizesToArray(buffer.data());
+    message.SerializeWithCachedSizesToArray(buffer->data());
 
     return buffer;
 }

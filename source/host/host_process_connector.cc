@@ -70,7 +70,7 @@ void HostProcessConnector::Disconnect()
     ipc_channel_.reset();
 }
 
-void HostProcessConnector::OnIpcChannelMessage(IOBuffer buffer)
+void HostProcessConnector::OnIpcChannelMessage(std::unique_ptr<IOBuffer> buffer)
 {
     network_channel_proxy_->Send(std::move(buffer));
 
@@ -84,7 +84,7 @@ void HostProcessConnector::OnIpcChannelMessage(IOBuffer buffer)
         &HostProcessConnector::OnIpcChannelMessage, this, std::placeholders::_1));
 }
 
-void HostProcessConnector::OnNetworkChannelMessage(IOBuffer buffer)
+void HostProcessConnector::OnNetworkChannelMessage(std::unique_ptr<IOBuffer> buffer)
 {
     // A network channel can start receiving messages before connecting IPC channel.
     // We are waiting for the connection of IPC channel. If the channel is already

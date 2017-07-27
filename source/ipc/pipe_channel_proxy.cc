@@ -22,7 +22,7 @@ void PipeChannelProxy::WillDestroyCurrentChannel()
     stop_event_.Signal();
 }
 
-bool PipeChannelProxy::Send(IOBuffer buffer,
+bool PipeChannelProxy::Send(std::unique_ptr<IOBuffer> buffer,
                             PipeChannel::SendCompleteHandler handler)
 {
     std::lock_guard<std::mutex> lock(channel_lock_);
@@ -36,7 +36,7 @@ bool PipeChannelProxy::Send(IOBuffer buffer,
     return false;
 }
 
-bool PipeChannelProxy::Send(IOBuffer buffer)
+bool PipeChannelProxy::Send(std::unique_ptr<IOBuffer> buffer)
 {
     std::lock_guard<std::mutex> lock(channel_lock_);
 

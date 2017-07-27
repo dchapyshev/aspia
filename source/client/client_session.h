@@ -27,7 +27,7 @@ public:
 
     virtual ~ClientSession() = default;
 
-    virtual void OnMessageReceive(const IOBuffer& buffer) = 0;
+    virtual void OnMessageReceive(std::unique_ptr<IOBuffer> buffer) = 0;
 
 protected:
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;

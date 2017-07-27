@@ -46,11 +46,11 @@ void ClientSessionDesktopManage::ReadClipboardEvent(
     viewer_->InjectClipboardEvent(clipboard_event);
 }
 
-void ClientSessionDesktopManage::OnMessageReceive(const IOBuffer& buffer)
+void ClientSessionDesktopManage::OnMessageReceive(std::unique_ptr<IOBuffer> buffer)
 {
     proto::desktop::HostToClient message;
 
-    if (ParseMessage(buffer, message))
+    if (ParseMessage(*buffer, message))
     {
         if (message.status() != proto::Status::STATUS_SUCCESS)
         {

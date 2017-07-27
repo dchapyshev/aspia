@@ -108,11 +108,11 @@ void ClientSessionDesktopView::ReadConfigRequest(
     OnConfigChange(config_.desktop_session_config());
 }
 
-void ClientSessionDesktopView::OnMessageReceive(const IOBuffer& buffer)
+void ClientSessionDesktopView::OnMessageReceive(std::unique_ptr<IOBuffer> buffer)
 {
     proto::desktop::HostToClient message;
 
-    if (ParseMessage(buffer, message))
+    if (ParseMessage(*buffer, message))
     {
         if (message.status() != proto::Status::STATUS_SUCCESS)
         {

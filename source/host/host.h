@@ -32,7 +32,7 @@ public:
 
 private:
     void OnNetworkChannelStatusChange(NetworkChannel::Status status);
-    void DoAuthorize(const IOBuffer& buffer);
+    void DoAuthorize(std::unique_ptr<IOBuffer> buffer);
 
     std::shared_ptr<NetworkChannel> channel_;
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;

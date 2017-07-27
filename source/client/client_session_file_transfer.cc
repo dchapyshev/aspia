@@ -27,9 +27,9 @@ ClientSessionFileTransfer::~ClientSessionFileTransfer()
     file_manager_.reset();
 }
 
-void ClientSessionFileTransfer::OnMessageReceive(const IOBuffer& buffer)
+void ClientSessionFileTransfer::OnMessageReceive(std::unique_ptr<IOBuffer> buffer)
 {
-    if (!remote_sender_->ReadIncommingMessage(buffer))
+    if (!remote_sender_->ReadIncommingMessage(*buffer))
     {
         channel_proxy_->Disconnect();
     }

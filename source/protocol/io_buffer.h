@@ -25,32 +25,14 @@ public:
         data_ = std::make_unique<uint8_t[]>(data_size_);
     }
 
-    IOBuffer() = default;
-
-    IOBuffer(IOBuffer&& other) noexcept
-    {
-        data_ = std::move(other.data_);
-        data_size_ = other.data_size_;
-        other.data_size_ = 0;
-    }
-
     virtual ~IOBuffer() = default;
 
     uint8_t* data() const { return data_.get(); }
     size_t size() const { return data_size_; }
-    bool IsEmpty() const { return data_ == nullptr || data_size_ == 0; }
-
-    IOBuffer& operator=(IOBuffer&& other) noexcept
-    {
-        data_ = std::move(other.data_);
-        data_size_ = other.data_size_;
-        other.data_size_ = 0;
-        return *this;
-    }
 
 private:
     std::unique_ptr<uint8_t[]> data_;
-    size_t data_size_ = 0;
+    const size_t data_size_;
 
     DISALLOW_COPY_AND_ASSIGN(IOBuffer);
 };

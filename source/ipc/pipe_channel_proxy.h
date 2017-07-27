@@ -16,8 +16,11 @@ namespace aspia {
 class PipeChannelProxy
 {
 public:
-    bool Send(IOBuffer buffer, PipeChannel::SendCompleteHandler handler);
-    bool Send(IOBuffer buffer);
+    bool Send(std::unique_ptr<IOBuffer> buffer,
+              PipeChannel::SendCompleteHandler handler);
+
+    bool Send(std::unique_ptr<IOBuffer> buffer);
+
     bool Receive(PipeChannel::ReceiveCompleteHandler handler);
 
     void WaitForDisconnect();

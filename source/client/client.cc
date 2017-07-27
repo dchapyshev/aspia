@@ -109,11 +109,11 @@ void Client::OnAuthRequestSended()
         std::bind(&Client::DoAuthorize, this, std::placeholders::_1));
 }
 
-void Client::DoAuthorize(const IOBuffer& buffer)
+void Client::DoAuthorize(std::unique_ptr<IOBuffer> buffer)
 {
     proto::auth::HostToClient result;
 
-    if (ParseMessage(buffer, result))
+    if (ParseMessage(*buffer, result))
     {
         status_ = result.status();
 
