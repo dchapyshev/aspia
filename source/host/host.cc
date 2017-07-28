@@ -41,10 +41,11 @@ void Host::OnNetworkChannelStatusChange(NetworkChannel::Status status)
 {
     if (status == NetworkChannel::Status::CONNECTED)
     {
-        // If the authorization request is not received within the specified time
-        // interval, the connection will be closed.
+        // If the authorization request is not received within the specified
+        // time interval, the connection will be closed.
         auth_timer_.Start(kAuthTimeout,
-                          std::bind(&NetworkChannelProxy::Disconnect, channel_proxy_));
+                          std::bind(&NetworkChannelProxy::Disconnect,
+                                    channel_proxy_));
 
         channel_proxy_->Receive(
             std::bind(&Host::DoAuthorize, this, std::placeholders::_1));

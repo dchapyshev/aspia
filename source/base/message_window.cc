@@ -69,10 +69,12 @@ HWND MessageWindow::hwnd() const
 }
 
 // static
-LRESULT CALLBACK MessageWindow::WindowProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK MessageWindow::WindowProc(HWND window, UINT msg,
+                                           WPARAM wParam, LPARAM lParam)
 {
     MessageWindow* self =
-        reinterpret_cast<MessageWindow*>(GetWindowLongPtrW(window, GWLP_USERDATA));
+        reinterpret_cast<MessageWindow*>(
+            GetWindowLongPtrW(window, GWLP_USERDATA));
 
     switch (msg)
     {
@@ -82,13 +84,15 @@ LRESULT CALLBACK MessageWindow::WindowProc(HWND window, UINT msg, WPARAM wParam,
             LPCREATESTRUCT cs = reinterpret_cast<LPCREATESTRUCT>(lParam);
             self = reinterpret_cast<MessageWindow*>(cs->lpCreateParams);
 
-            // Make |hwnd| available to the message handler. At this point the control
-            // hasn't returned from CreateWindow() yet.
+            // Make |hwnd| available to the message handler. At this point the
+            // control hasn't returned from CreateWindow() yet.
             self->hwnd_ = window;
 
             // Store pointer to the self to the window's user data.
             SetLastError(ERROR_SUCCESS);
-            LONG_PTR result = SetWindowLongPtrW(window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(self));
+            LONG_PTR result =
+                SetWindowLongPtrW(window, GWLP_USERDATA,
+                                  reinterpret_cast<LONG_PTR>(self));
             CHECK(result != 0 || GetLastError() == ERROR_SUCCESS);
         }
         break;

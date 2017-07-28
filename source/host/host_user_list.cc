@@ -195,7 +195,8 @@ bool HostUserList::SaveToStorage()
     {
         if (!std::experimental::filesystem::is_directory(dir_path))
         {
-            LOG(ERROR) << "Path '" << dir_path << "' exist, not it is not a directory";
+            LOG(ERROR) << "Path '" << dir_path
+                       << "' exist, not it is not a directory";
             return false;
         }
     }
@@ -260,8 +261,12 @@ static bool IsValidUserNameChar(wchar_t username_char)
     if (iswdigit(username_char))
         return true;
 
-    if (username_char == L'.' || username_char == L'_' || username_char == L'-')
+    if (username_char == L'.' ||
+        username_char == L'_' ||
+        username_char == L'-')
+    {
         return true;
+    }
 
     return false;
 }

@@ -13,8 +13,11 @@
 
 namespace aspia {
 
-static const WCHAR kDesktopSessionLauncherSwitch[] = L"desktop-session-launcher";
+static const WCHAR kDesktopSessionLauncherSwitch[] =
+    L"desktop-session-launcher";
+
 static const WCHAR kDesktopSessionSwitch[] = L"desktop-session";
+
 static const WCHAR kFileTransferSessionSwitch[] = L"file-transfer-session";
 
 class ConsoleSessionLauncher : private Service
@@ -40,7 +43,8 @@ private:
 
 bool LaunchDesktopSession(uint32_t session_id, const std::wstring& channel_id);
 
-bool LaunchFileTransferSession(uint32_t session_id, const std::wstring& channel_id);
+bool LaunchFileTransferSession(uint32_t session_id,
+                               const std::wstring& channel_id);
 
 } // namespace aspia
 

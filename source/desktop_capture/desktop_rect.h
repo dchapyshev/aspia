@@ -20,7 +20,8 @@ public:
     DesktopRect(const DesktopRect& other);
     ~DesktopRect() = default;
 
-    static DesktopRect MakeXYWH(int32_t x, int32_t y, int32_t width, int32_t height);
+    static DesktopRect MakeXYWH(int32_t x, int32_t y,
+                                int32_t width, int32_t height);
     static DesktopRect MakeWH(int32_t width, int32_t height);
     static DesktopRect MakeLTRB(int32_t l, int32_t t, int32_t r, int32_t b);
     static DesktopRect MakeSize(const DesktopSize& size);
@@ -54,7 +55,8 @@ public:
     // |left_| and |top_| may be less than zero or larger than |right_| and
     // |bottom_|.
     //
-    void Extend(int32_t left_offset, int32_t top_offset, int32_t right_offset, int32_t bottom_offset);
+    void Extend(int32_t left_offset, int32_t top_offset,
+                int32_t right_offset, int32_t bottom_offset);
 
     DesktopRect& operator=(const DesktopRect& other);
 

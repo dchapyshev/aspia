@@ -36,7 +36,8 @@ public:
 
 private:
     static bool RegisterWindowClass(HINSTANCE instance);
-    static LRESULT CALLBACK WindowProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
+    static LRESULT CALLBACK WindowProc(HWND window, UINT msg,
+                                       WPARAM wParam, LPARAM lParam);
 
     MessageCallback message_callback_;
     HWND hwnd_ = nullptr;

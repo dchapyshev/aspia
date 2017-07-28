@@ -28,7 +28,8 @@ public:
     void OnMessageReceive(std::unique_ptr<IOBuffer> buffer);
 
 private:
-    explicit HostSessionPower(std::shared_ptr<NetworkChannelProxy> channel_proxy);
+    explicit HostSessionPower(
+        std::shared_ptr<NetworkChannelProxy> channel_proxy);
 
     // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;

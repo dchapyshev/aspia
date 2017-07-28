@@ -103,10 +103,12 @@ void SasInjector::Worker()
 {
     ScopedNativeLibrary wmsgapi(L"wmsgapi.dll");
 
-    typedef DWORD(WINAPI *WmsgSendMessageFn)(DWORD session_id, UINT msg, WPARAM wParam, LPARAM lParam);
+    typedef DWORD(WINAPI *WmsgSendMessageFn)(DWORD session_id, UINT msg,
+                                             WPARAM wParam, LPARAM lParam);
 
     WmsgSendMessageFn send_message_func =
-        reinterpret_cast<WmsgSendMessageFn>(wmsgapi.GetFunctionPointer("WmsgSendMessage"));
+        reinterpret_cast<WmsgSendMessageFn>(
+            wmsgapi.GetFunctionPointer("WmsgSendMessage"));
 
     if (!send_message_func)
     {

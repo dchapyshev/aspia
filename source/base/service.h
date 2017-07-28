@@ -21,21 +21,15 @@ public:
     explicit Service(const std::wstring& service_name);
     virtual ~Service();
 
-    //
-    // Метод запускает выполнение службы и возвращает управление после ее остановки.
-    // Если служба была успшено запущена и выполнена, то возвращается true, если
-    // запустить выполнение службы не удалось, то возвращается false.
-    //
+    // The method starts execution of the service and returns control when
+    // it stops.
+    // If the service was launched and executed, it returns true, if the
+    // service execution fails, false is returned.
     bool Run();
 
     const std::wstring& ServiceName() const;
 
 protected:
-    //
-    // Метод, в котором выполняется работа службы. После его завершения служба
-    // переходит в состояние "Остановлена".
-    // Метод должн быть реализован потомком класса.
-    //
     virtual void Worker() = 0;
 
     //

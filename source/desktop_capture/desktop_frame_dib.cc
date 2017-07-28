@@ -22,9 +22,10 @@ DesktopFrameDIB::DesktopFrameDIB(const DesktopSize& size,
 }
 
 // static
-std::unique_ptr<DesktopFrameDIB> DesktopFrameDIB::Create(const DesktopSize& size,
-                                                         const PixelFormat& format,
-                                                         HDC hdc)
+std::unique_ptr<DesktopFrameDIB>
+DesktopFrameDIB::Create(const DesktopSize& size,
+                        const PixelFormat& format,
+                        HDC hdc)
 {
     int bytes_per_row = size.Width() * format.BytesPerPixel();
 

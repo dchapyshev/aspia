@@ -250,7 +250,9 @@ LONG RegistryKey::WriteValue(const WCHAR* name, const WCHAR* in_value)
 
 // RegistryValueIterator ------------------------------------------------------
 
-RegistryValueIterator::RegistryValueIterator(HKEY root_key, const WCHAR* folder_key, REGSAM wow64access) :
+RegistryValueIterator::RegistryValueIterator(HKEY root_key,
+                                             const WCHAR* folder_key,
+                                             REGSAM wow64access) :
     name_(MAX_PATH, L'\0'),
     value_(MAX_PATH, L'\0')
 {
@@ -264,11 +266,14 @@ RegistryValueIterator::RegistryValueIterator(HKEY root_key, const WCHAR* folder_
     Initialize(root_key, folder_key, 0);
 }
 
-void RegistryValueIterator::Initialize(HKEY root_key, const WCHAR* folder_key, REGSAM wow64access)
+void RegistryValueIterator::Initialize(HKEY root_key,
+                                       const WCHAR* folder_key,
+                                       REGSAM wow64access)
 {
     DCHECK_EQ(wow64access & ~kWow64AccessMask, static_cast<REGSAM>(0));
 
-    LONG result = RegOpenKeyExW(root_key, folder_key, 0, KEY_READ | wow64access, &key_);
+    LONG result = RegOpenKeyExW(root_key, folder_key, 0,
+                                KEY_READ | wow64access, &key_);
     if (result != ERROR_SUCCESS)
     {
         key_ = nullptr;
@@ -276,8 +281,9 @@ void RegistryValueIterator::Initialize(HKEY root_key, const WCHAR* folder_key, R
     else
     {
         DWORD count = 0;
-        result = RegQueryInfoKeyW(key_, nullptr, 0, nullptr, nullptr, nullptr, nullptr, &count,
-                                  nullptr, nullptr, nullptr, nullptr);
+        result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, nullptr,
+                                  nullptr, nullptr, &count, nullptr, nullptr,
+                                  nullptr, nullptr);
 
         if (result != ERROR_SUCCESS)
         {
@@ -302,8 +308,9 @@ RegistryValueIterator::~RegistryValueIterator()
 DWORD RegistryValueIterator::ValueCount() const
 {
     DWORD count = 0;
-    LONG result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-                                   &count, nullptr, nullptr, nullptr, nullptr);
+    LONG result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, nullptr,
+                                   nullptr, nullptr, &count, nullptr, nullptr,
+                                   nullptr, nullptr);
     if (result != ERROR_SUCCESS)
         return 0;
 
@@ -331,8 +338,10 @@ bool RegistryValueIterator::Read()
         // |value_size_| is in bytes. Reserve the last character for a NUL.
         value_size_ = static_cast<DWORD>((value_.size() - 1) * sizeof(WCHAR));
 
-        LONG result = RegEnumValueW(key_, index_, WriteInto(&name_, name_size), &name_size, nullptr, &type_,
-                                    reinterpret_cast<BYTE*>(value_.data()), &value_size_);
+        LONG result = RegEnumValueW(key_, index_, WriteInto(&name_, name_size),
+                                    &name_size, nullptr, &type_,
+                                    reinterpret_cast<BYTE*>(value_.data()),
+                                    &value_size_);
 
         if (result == ERROR_MORE_DATA)
         {
@@ -350,8 +359,10 @@ bool RegistryValueIterator::Read()
             value_size_ = static_cast<DWORD>((value_.size() - 1) * sizeof(WCHAR));
             name_size = name_size == capacity ? MAX_REGISTRY_NAME_SIZE : capacity;
 
-            result = RegEnumValueW(key_, index_, WriteInto(&name_, name_size), &name_size, nullptr, &type_,
-                                   reinterpret_cast<BYTE*>(value_.data()), &value_size_);
+            result = RegEnumValueW(key_, index_, WriteInto(&name_, name_size),
+                                   &name_size, nullptr, &type_,
+                                   reinterpret_cast<BYTE*>(value_.data()),
+                                   &value_size_);
         }
 
         if (result == ERROR_SUCCESS)
@@ -376,7 +387,9 @@ RegistryKeyIterator::RegistryKeyIterator(HKEY root_key, const WCHAR* folder_key)
     Initialize(root_key, folder_key, 0);
 }
 
-RegistryKeyIterator::RegistryKeyIterator(HKEY root_key, const WCHAR* folder_key, REGSAM wow64access)
+RegistryKeyIterator::RegistryKeyIterator(HKEY root_key,
+                                         const WCHAR* folder_key,
+                                         REGSAM wow64access)
 {
     Initialize(root_key, folder_key, wow64access);
 }
@@ -390,8 +403,9 @@ RegistryKeyIterator::~RegistryKeyIterator()
 DWORD RegistryKeyIterator::SubkeyCount() const
 {
     DWORD count = 0;
-    LONG result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, &count, nullptr, nullptr,
-                                   nullptr, nullptr, nullptr, nullptr, nullptr);
+    LONG result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, &count,
+                                   nullptr, nullptr, nullptr, nullptr, nullptr,
+                                   nullptr, nullptr);
     if (result != ERROR_SUCCESS)
         return 0;
 
@@ -416,7 +430,8 @@ bool RegistryKeyIterator::Read()
         DWORD ncount = ARRAYSIZE(name_);
         FILETIME written;
 
-        LONG r = RegEnumKeyExW(key_, index_, name_, &ncount, nullptr, nullptr, nullptr, &written);
+        LONG r = RegEnumKeyExW(key_, index_, name_, &ncount, nullptr, nullptr,
+                               nullptr, &written);
         if (ERROR_SUCCESS == r)
             return true;
     }
@@ -425,7 +440,9 @@ bool RegistryKeyIterator::Read()
     return false;
 }
 
-void RegistryKeyIterator::Initialize(HKEY root_key, const WCHAR* folder_key, REGSAM wow64access)
+void RegistryKeyIterator::Initialize(HKEY root_key,
+                                     const WCHAR* folder_key,
+                                     REGSAM wow64access)
 {
     DCHECK_EQ(wow64access & ~kWow64AccessMask, static_cast<REGSAM>(0));
 
@@ -437,8 +454,9 @@ void RegistryKeyIterator::Initialize(HKEY root_key, const WCHAR* folder_key, REG
     else
     {
         DWORD count = 0;
-        result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, &count, nullptr, nullptr, nullptr,
-                                  nullptr, nullptr, nullptr, nullptr);
+        result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, &count,
+                                  nullptr, nullptr, nullptr, nullptr, nullptr,
+                                  nullptr, nullptr);
 
         if (result != ERROR_SUCCESS)
         {

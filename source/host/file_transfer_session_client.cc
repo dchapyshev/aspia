@@ -54,7 +54,8 @@ void FileTransferSessionClient::OnPipeChannelConnect(uint32_t user_data)
     status_dialog_->SetSessionStartedStatus();
 
     ipc_channel_proxy_->Receive(std::bind(
-        &FileTransferSessionClient::OnPipeChannelMessage, this, std::placeholders::_1));
+        &FileTransferSessionClient::OnPipeChannelMessage, this,
+        std::placeholders::_1));
 }
 
 void FileTransferSessionClient::OnPipeChannelDisconnect()
@@ -62,7 +63,8 @@ void FileTransferSessionClient::OnPipeChannelDisconnect()
     status_dialog_->SetSessionTerminatedStatus();
 }
 
-void FileTransferSessionClient::OnPipeChannelMessage(std::unique_ptr<IOBuffer> buffer)
+void FileTransferSessionClient::OnPipeChannelMessage(
+    std::unique_ptr<IOBuffer> buffer)
 {
     proto::file_transfer::ClientToHost message;
 
@@ -194,8 +196,10 @@ void FileTransferSessionClient::ReadRenameRequest(
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath old_name = std::experimental::filesystem::u8path(request.old_name());
-    FilePath new_name = std::experimental::filesystem::u8path(request.new_name());
+    FilePath old_name =
+        std::experimental::filesystem::u8path(request.old_name());
+    FilePath new_name =
+        std::experimental::filesystem::u8path(request.new_name());
 
     reply.set_type(proto::REQUEST_TYPE_RENAME);
     reply.set_status(ExecuteRenameRequest(old_name, new_name));
@@ -224,7 +228,8 @@ void FileTransferSessionClient::ReadFileUploadRequest(
     proto::file_transfer::HostToClient reply;
     reply.set_type(proto::REQUEST_TYPE_FILE_UPLOAD);
 
-    FilePath file_path = std::experimental::filesystem::u8path(request.file_path());
+    FilePath file_path =
+        std::experimental::filesystem::u8path(request.file_path());
 
     if (!IsValidPathName(file_path))
     {
@@ -285,7 +290,8 @@ void FileTransferSessionClient::ReadFileDownloadRequest(
     proto::file_transfer::HostToClient reply;
     reply.set_type(proto::REQUEST_TYPE_FILE_DOWNLOAD);
 
-    FilePath file_path = std::experimental::filesystem::u8path(request.file_path());
+    FilePath file_path =
+        std::experimental::filesystem::u8path(request.file_path());
 
     if (!IsValidPathName(file_path))
     {

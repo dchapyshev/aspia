@@ -44,8 +44,8 @@ public:
     static Process Open(ProcessId pid);
 
     // Returns a Process for the given |pid|. On Windows the handle is opened
-    // with more access rights and must only be used by trusted code (can read the
-    // address space and duplicate handles).
+    // with more access rights and must only be used by trusted code (can read
+    // the address space and duplicate handles).
     static Process OpenWithExtraPrivileges(ProcessId pid);
 
     // Returns a Process for the given |pid|, using some |desired_access|.
@@ -68,9 +68,9 @@ public:
     // handle becomes invalid because this object retains ownership.
     ProcessHandle Handle() const;
 
-    // Terminates the process with extreme prejudice. The given |exit_code| will
-    // be the exit code of the process. If |wait| is true, this method will wait
-    // for up to one minute for the process to actually terminate.
+    // Terminates the process with extreme prejudice. The given |exit_code|
+    // will be the exit code of the process. If |wait| is true, this method
+    // will wait for up to one minute for the process to actually terminate.
     // Returns true if the process terminates within the allowed time.
     bool Terminate(uint32_t exit_code, bool wait);
 

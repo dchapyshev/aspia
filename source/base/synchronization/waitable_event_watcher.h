@@ -61,14 +61,15 @@ public:
     WaitableEventWatcher();
     ~WaitableEventWatcher();
 
-    // When |event| is signaled, |callback| is called on the sequence that called
-    // StartWatching().
+    // When |event| is signaled, |callback| is called on the sequence that
+    // called StartWatching().
     bool StartWatching(WaitableEvent* event, EventCallback callback);
 
     // Cancel the current watch. Must be called from the same sequence which
     // started the watch.
     //
-    // Does nothing if no event is being watched, nor if the watch has completed.
+    // Does nothing if no event is being watched, nor if the watch has
+    // completed.
     // The callback will *not* be called for the current watch after this
     // function returns. Since the callback runs on the same sequence as this
     // function, it cannot be called during this function either.

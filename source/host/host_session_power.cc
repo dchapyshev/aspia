@@ -30,7 +30,8 @@ HostSessionPower::~HostSessionPower()
 std::unique_ptr<HostSessionPower> HostSessionPower::Create(
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
-    return std::unique_ptr<HostSessionPower>(new HostSessionPower(channel_proxy));
+    return std::unique_ptr<HostSessionPower>(
+        new HostSessionPower(channel_proxy));
 }
 
 void HostSessionPower::OnBeforeThreadRunning()
@@ -50,8 +51,11 @@ void HostSessionPower::OnMessageReceive(std::unique_ptr<IOBuffer> buffer)
 
     if (ParseMessage(*buffer, message))
     {
-        std::shared_ptr<proto::PowerEvent> power_event(message.release_power_event());
-        runner_->PostTask(std::bind(&HostSessionPower::Inject, this, power_event));
+        std::shared_ptr<proto::PowerEvent> power_event(
+            message.release_power_event());
+
+        runner_->PostTask(std::bind(
+            &HostSessionPower::Inject, this, power_event));
     }
 }
 

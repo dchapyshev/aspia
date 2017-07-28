@@ -44,7 +44,8 @@ static bool MakeScopedAbsoluteSd(const ScopedSd& relative_sd,
                        &group_size) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        LOG(ERROR) << "MakeAbsoluteSD() failed: " << GetLastSystemErrorString();
+        LOG(ERROR) << "MakeAbsoluteSD() failed: "
+                   << GetLastSystemErrorString();
         return false;
     }
 
@@ -68,7 +69,8 @@ static bool MakeScopedAbsoluteSd(const ScopedSd& relative_sd,
                         local_group.get(),
                         &group_size))
     {
-        LOG(ERROR) << "MakeAbsoluteSD() failed: " << GetLastSystemErrorString();
+        LOG(ERROR) << "MakeAbsoluteSD() failed: "
+                   << GetLastSystemErrorString();
         return false;
     }
 
@@ -87,7 +89,8 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
 {
     std::wstring sddl = security_descriptor + mandatory_label;
 
-    // Convert the SDDL description into a security descriptor in absolute format.
+    // Convert the SDDL description into a security descriptor in absolute
+    // format.
     ScopedSd relative_sd = ConvertSddlToSd(sddl);
     if (!relative_sd)
     {
@@ -101,7 +104,8 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
     ScopedSid owner;
     ScopedAcl sacl;
 
-    if (!MakeScopedAbsoluteSd(relative_sd, absolute_sd, dacl, group, owner, sacl))
+    if (!MakeScopedAbsoluteSd(relative_sd, absolute_sd, dacl,
+                              group, owner, sacl))
     {
         LOG(ERROR) << "MakeScopedAbsoluteSd() failed";
         return false;
@@ -113,15 +117,16 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
 
     // Apply the security descriptor and default security settings. See
     // InitializeComSecurity's declaration for details.
-    HRESULT result = CoInitializeSecurity(absolute_sd.get(),
-                                          -1,          // Let COM choose which authentication services to register.
-                                          nullptr,     // See above.
-                                          nullptr,     // Reserved, must be nullptr.
-                                          RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
-                                          RPC_C_IMP_LEVEL_IDENTIFY,
-                                          nullptr,     // Default authentication information is not provided.
-                                          capabilities,
-                                          nullptr);    // Reserved, must be nullptr
+    HRESULT result = CoInitializeSecurity(
+        absolute_sd.get(),
+        -1,        // Let COM choose which authentication services to register.
+        nullptr,   // See above.
+        nullptr,   // Reserved, must be nullptr.
+        RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
+        RPC_C_IMP_LEVEL_IDENTIFY,
+        nullptr,   // Default authentication information is not provided.
+        capabilities,
+        nullptr);  // Reserved, must be nullptr
     if (FAILED(result))
     {
         LOG(ERROR) << "CoInitializeSecurity() failed: " << result;

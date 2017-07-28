@@ -30,7 +30,8 @@ DesktopRect::DesktopRect(int32_t l, int32_t t, int32_t r, int32_t b)
 }
 
 // static
-DesktopRect DesktopRect::MakeXYWH(int32_t x, int32_t y, int32_t width, int32_t height)
+DesktopRect DesktopRect::MakeXYWH(int32_t x, int32_t y,
+                                  int32_t width, int32_t height)
 {
     return DesktopRect(x, y, x + width, y + height);
 }

@@ -67,10 +67,12 @@ void DesktopSessionClient::OnPipeChannelConnect(uint32_t user_data)
     SendConfigRequest();
 
     ipc_channel_proxy_->Receive(std::bind(
-        &DesktopSessionClient::OnPipeChannelMessage, this, std::placeholders::_1));
+        &DesktopSessionClient::OnPipeChannelMessage, this,
+        std::placeholders::_1));
 }
 
-void DesktopSessionClient::OnPipeChannelMessage(std::unique_ptr<IOBuffer> buffer)
+void DesktopSessionClient::OnPipeChannelMessage(
+    std::unique_ptr<IOBuffer> buffer)
 {
     proto::desktop::ClientToHost message;
 
@@ -106,7 +108,8 @@ void DesktopSessionClient::OnPipeChannelMessage(std::unique_ptr<IOBuffer> buffer
         if (success)
         {
             ipc_channel_proxy_->Receive(std::bind(
-                &DesktopSessionClient::OnPipeChannelMessage, this, std::placeholders::_1));
+                &DesktopSessionClient::OnPipeChannelMessage, this,
+                std::placeholders::_1));
 
             return;
         }
@@ -115,8 +118,9 @@ void DesktopSessionClient::OnPipeChannelMessage(std::unique_ptr<IOBuffer> buffer
     ipc_channel_.reset();
 }
 
-void DesktopSessionClient::OnScreenUpdate(const DesktopFrame* screen_frame,
-                                          std::unique_ptr<MouseCursor> mouse_cursor)
+void DesktopSessionClient::OnScreenUpdate(
+    const DesktopFrame* screen_frame,
+    std::unique_ptr<MouseCursor> mouse_cursor)
 {
     DCHECK(screen_frame || mouse_cursor);
     DCHECK(video_encoder_);
@@ -144,7 +148,8 @@ void DesktopSessionClient::OnScreenUpdate(const DesktopFrame* screen_frame,
         message.set_allocated_cursor_shape(cursor_shape.release());
     }
 
-    WriteMessage(message, std::bind(&DesktopSessionClient::OnScreenUpdated, this));
+    WriteMessage(message,
+                 std::bind(&DesktopSessionClient::OnScreenUpdated, this));
 }
 
 void DesktopSessionClient::OnScreenUpdated()
@@ -163,7 +168,8 @@ void DesktopSessionClient::WriteMessage(
     ipc_channel_proxy_->Send(std::move(buffer), std::move(handler));
 }
 
-void DesktopSessionClient::WriteMessage(const proto::desktop::HostToClient& message)
+void DesktopSessionClient::WriteMessage(
+    const proto::desktop::HostToClient& message)
 {
     WriteMessage(message, nullptr);
 }
@@ -248,8 +254,8 @@ bool DesktopSessionClient::ReadConfig(const proto::DesktopSessionConfig& config)
 
     if (session_type_ == proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        enable_cursor_shape =
-            (config.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE) ? true : false;
+        if (config.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE)
+            enable_cursor_shape = true;
 
         if (enable_cursor_shape)
         {
@@ -265,7 +271,8 @@ bool DesktopSessionClient::ReadConfig(const proto::DesktopSessionConfig& config)
             clipboard_thread_ = std::make_unique<ClipboardThread>();
 
             clipboard_thread_->Start(std::bind(
-                &DesktopSessionClient::SendClipboardEvent, this, std::placeholders::_1));
+                &DesktopSessionClient::SendClipboardEvent, this,
+                std::placeholders::_1));
         }
         else
         {
@@ -285,11 +292,13 @@ bool DesktopSessionClient::ReadConfig(const proto::DesktopSessionConfig& config)
 
         case proto::VIDEO_ENCODING_ZLIB:
             video_encoder_ = VideoEncoderZLIB::Create(
-                ConvertFromVideoPixelFormat(config.pixel_format()), config.compress_ratio());
+                ConvertFromVideoPixelFormat(config.pixel_format()),
+                                            config.compress_ratio());
             break;
 
         default:
-            LOG(ERROR) << "Unsupported video encoding: " << config.video_encoding();
+            LOG(ERROR) << "Unsupported video encoding: "
+                       << config.video_encoding();
             video_encoder_.reset();
             break;
     }

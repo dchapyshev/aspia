@@ -115,7 +115,9 @@ void HostSessionConsole::OnSessionAttached(uint32_t session_id)
 
         uint32_t user_data = static_cast<uint32_t>(session_type_);
 
-        if (launched && process_connector_.Accept(user_data, std::move(disconnect_handler)))
+        if (launched &&
+            process_connector_.Accept(user_data,
+                                      std::move(disconnect_handler)))
         {
             OnIpcChannelConnect(user_data);
             return;
@@ -154,7 +156,8 @@ void HostSessionConsole::OnProcessClose()
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&HostSessionConsole::OnProcessClose, this));
+        runner_->PostTask(std::bind(
+            &HostSessionConsole::OnProcessClose, this));
         return;
     }
 
@@ -174,9 +177,9 @@ void HostSessionConsole::OnIpcChannelConnect(uint32_t user_data)
 {
     DCHECK(runner_->BelongsToCurrentThread());
 
-    // To open a host process and terminate it, additional privileges are required.
-    // If the current process is running from the service, then the privilege
-    // already exists, if not, then enable it.
+    // To open a host process and terminate it, additional privileges are
+    // required. If the current process is running from the service, then the
+    // privilege already exists, if not, then enable it.
     ScopedProcessPrivilege privilege(SE_DEBUG_NAME);
 
     // The client sends a process ID in user_data.

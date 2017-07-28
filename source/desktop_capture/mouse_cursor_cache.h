@@ -23,7 +23,8 @@ public:
     static const size_t kInvalidIndex = std::numeric_limits<size_t>::max();
 
     // Looks for a matching cursor in the cache.
-    // If the cursor is already in the cache, the cursor index in the cache is returned.
+    // If the cursor is already in the cache, the cursor index in the cache is
+    // returned.
     // If the cursor is not in the cache, -1 is returned.
     size_t Find(const MouseCursor* mouse_cursor);
 

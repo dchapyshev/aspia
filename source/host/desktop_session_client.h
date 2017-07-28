@@ -42,16 +42,17 @@ private:
 
     bool ReadPointerEvent(const proto::PointerEvent& event);
     bool ReadKeyEvent(const proto::KeyEvent& event);
-    bool ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);
+    bool ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> event);
     bool ReadConfig(const proto::DesktopSessionConfig& config);
 
-    void SendClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event);
+    void SendClipboardEvent(std::unique_ptr<proto::ClipboardEvent> event);
     void SendConfigRequest();
 
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::shared_ptr<PipeChannelProxy> ipc_channel_proxy_;
 
-    proto::SessionType session_type_ = proto::SessionType::SESSION_TYPE_UNKNOWN;
+    proto::SessionType session_type_ =
+        proto::SessionType::SESSION_TYPE_UNKNOWN;
 
     std::unique_ptr<VideoEncoder> video_encoder_;
     std::unique_ptr<CursorEncoder> cursor_encoder_;

@@ -31,7 +31,6 @@ private:
     void MarkDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_image);
     void MergeBlocks(DesktopRegion* dirty_region);
 
-private:
     const DesktopSize size_;
 
     const int bytes_per_row_;

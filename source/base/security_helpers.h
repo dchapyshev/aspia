@@ -38,8 +38,8 @@ using ScopedSid = TypedBuffer<SID>;
 //  - Server can impersonate clients to check their identity but cannot act on
 //    their behalf.
 //  - Caller's identity is verified on every call (Dynamic cloaking).
-//  - Unless |activate_as_activator| is true, activations where the server would
-//    run under this process's identity are prohibited.
+//  - Unless |activate_as_activator| is true, activations where the server
+//    would run under this process's identity are prohibited.
 //
 bool InitializeComSecurity(const std::wstring& security_descriptor,
                            const std::wstring& mandatory_label,

@@ -10,12 +10,15 @@
 
 namespace aspia {
 
+static const WCHAR kSoftwareSASGenerationPath[] =
+    L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
+
 static const WCHAR kSoftwareSASGeneration[] = L"SoftwareSASGeneration";
 
 ScopedSasPolice::ScopedSasPolice()
 {
     LONG status = key_.Create(HKEY_LOCAL_MACHINE,
-                              L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+                              kSoftwareSASGenerationPath,
                               KEY_READ | KEY_WRITE);
     if (status != ERROR_SUCCESS)
     {

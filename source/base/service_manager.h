@@ -33,28 +33,31 @@ public:
 
     static std::wstring GenerateUniqueServiceId();
 
-    static std::wstring CreateUniqueServiceName(const std::wstring& service_name,
-                                                const std::wstring& service_id);
+    static std::wstring CreateUniqueServiceName(
+        const std::wstring& service_name,
+        const std::wstring& service_id);
 
     static bool IsServiceInstalled(const std::wstring& service_name);
 
     // Starts the service.
-    // If the service is successfully started, it returns true, if not, then false.
+    // If the service is successfully started, it returns true, if not,
+    // then false.
     bool Start() const;
 
     // Stops the service.
-    // If the service is successfully stopped, it returns true, if not, then false.
+    // If the service is successfully stopped, it returns true, if not,
+    // then false.
     bool Stop() const;
 
     // Removes the service from the system.
-    // After calling the method, the class becomes invalid, calls to other methods
-    // will return with an error and the IsValid() method returns false.
+    // After calling the method, the class becomes invalid, calls to other
+    // methods will return with an error and the IsValid() method returns
+    // false.
     bool Remove();
 
 private:
     ServiceManager(SC_HANDLE sc_manager, SC_HANDLE service);
 
-private:
     mutable ScopedScHandle sc_manager_;
     mutable ScopedScHandle service_;
 

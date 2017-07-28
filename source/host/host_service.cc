@@ -18,10 +18,8 @@ namespace aspia {
 static const WCHAR kHostServiceShortName[] = L"aspia-remote-desktop-host";
 static const WCHAR kHostServiceFullName[] = L"Aspia Remote Desktop Host";
 
-//
 // Security descriptor allowing local processes running under SYSTEM or
 // LocalService accounts to call COM methods exposed by the daemon.
-//
 const WCHAR kComProcessSd[] =
     SDDL_OWNER L":" SDDL_LOCAL_SYSTEM
     SDDL_GROUP L":" SDDL_LOCAL_SYSTEM
@@ -29,10 +27,9 @@ const WCHAR kComProcessSd[] =
     SDDL_ACE(SDDL_ACCESS_ALLOWED, SDDL_COM_EXECUTE_LOCAL, SDDL_LOCAL_SYSTEM)
     SDDL_ACE(SDDL_ACCESS_ALLOWED, SDDL_COM_EXECUTE_LOCAL, SDDL_LOCAL_SERVICE);
 
-//
-// Appended to |kComProcessSd| to specify that only callers running at medium or
-// higher integrity level are allowed to call COM methods exposed by the daemon.
-//
+// Appended to |kComProcessSd| to specify that only callers running at medium
+// or higher integrity level are allowed to call COM methods exposed by the
+// daemon.
 const WCHAR kComProcessMandatoryLabel[] =
     SDDL_SACL L":"
     SDDL_ACE(SDDL_MANDATORY_LABEL, SDDL_NO_EXECUTE_UP, SDDL_ML_MEDIUM);

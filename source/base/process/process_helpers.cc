@@ -122,7 +122,8 @@ bool IsRunningAsService()
 
     if (!sc_manager.IsValid())
     {
-        LOG(ERROR) << "OpenSCManagerW() failed: " << GetLastSystemErrorString();
+        LOG(ERROR) << "OpenSCManagerW() failed: "
+                   << GetLastSystemErrorString();
         return false;
     }
 

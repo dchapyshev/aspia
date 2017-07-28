@@ -36,7 +36,8 @@ std::unique_ptr<CapturerGDI> CapturerGDI::Create()
 
 bool CapturerGDI::PrepareCaptureResources()
 {
-    // Switch to the desktop receiving user input if different from the current one.
+    // Switch to the desktop receiving user input if different from the
+    // current one.
     std::unique_ptr<Desktop> input_desktop(Desktop::GetInputDesktop());
 
     if (input_desktop && !desktop_.IsSame(*input_desktop))
@@ -50,10 +51,11 @@ bool CapturerGDI::PrepareCaptureResources()
         desktop_.SetThreadDesktop(input_desktop.release());
     }
 
-    DesktopRect screen_rect(DesktopRect::MakeXYWH(GetSystemMetrics(SM_XVIRTUALSCREEN),
-                                                  GetSystemMetrics(SM_YVIRTUALSCREEN),
-                                                  GetSystemMetrics(SM_CXVIRTUALSCREEN),
-                                                  GetSystemMetrics(SM_CYVIRTUALSCREEN)));
+    DesktopRect screen_rect =
+        DesktopRect::MakeXYWH(GetSystemMetrics(SM_XVIRTUALSCREEN),
+                              GetSystemMetrics(SM_YVIRTUALSCREEN),
+                              GetSystemMetrics(SM_CXVIRTUALSCREEN),
+                              GetSystemMetrics(SM_CYVIRTUALSCREEN));
 
     // If the display bounds have changed then recreate GDI resources.
     if (!screen_rect.IsEqual(desktop_dc_rect_))
@@ -68,9 +70,9 @@ bool CapturerGDI::PrepareCaptureResources()
     {
         DCHECK(!memory_dc_);
 
-        // Vote to disable Aero composited desktop effects while capturing. Windows
-        // will restore Aero automatically if the process exits. This has no effect
-        // under Windows 8 or higher. See crbug.com/124018.
+        // Vote to disable Aero composited desktop effects while capturing.
+        // Windows will restore Aero automatically if the process exits.
+        // This has no effect under Windows 8 or higher. See crbug.com/124018.
         if (composition_func_)
         {
             composition_func_(DWM_EC_DISABLECOMPOSITION);
@@ -155,15 +157,16 @@ std::unique_ptr<MouseCursor> CapturerGDI::CaptureCursor()
         {
             if (cursor_info.flags == 0)
             {
-                // Host machine does not have a hardware mouse attached, we will send a
-                // default one instead.
-                // Note, Windows automatically caches cursor resource, so we do not need
-                // to cache the result of LoadCursor.
+                // Host machine does not have a hardware mouse attached, we
+                // will send a default one instead.
+                // Note, Windows automatically caches cursor resource, so we
+                // do not need to cache the result of LoadCursor.
                 cursor_info.hCursor = LoadCursorW(nullptr, IDC_ARROW);
             }
 
             std::unique_ptr<MouseCursor> mouse_cursor =
-                CreateMouseCursorFromHCursor(*desktop_dc_, cursor_info.hCursor);
+                CreateMouseCursorFromHCursor(*desktop_dc_,
+                                             cursor_info.hCursor);
 
             if (mouse_cursor)
             {

@@ -35,8 +35,10 @@ std::wstring CollapseWhitespace(const std::wstring& text,
 std::string CollapseWhitespaceASCII(const std::string& text,
                                     bool trim_sequences_with_line_breaks);
 
-int CompareCaseInsensitive(const std::string& first, const std::string& second);
-int CompareCaseInsensitive(const std::wstring& first, const std::wstring& second);
+int CompareCaseInsensitive(const std::string& first,
+                           const std::string& second);
+int CompareCaseInsensitive(const std::wstring& first,
+                           const std::wstring& second);
 
 enum TrimPositions
 {

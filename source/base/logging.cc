@@ -21,7 +21,10 @@ std::string SystemErrorCodeToString(SystemErrorCode error_code)
     const size_t kErrorMessageBufferSize = 256;
     char buffer[kErrorMessageBufferSize];
 
-    DWORD len = FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+    const DWORD flags =
+        FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
+
+    DWORD len = FormatMessageA(flags,
                                nullptr,
                                error_code,
                                0,

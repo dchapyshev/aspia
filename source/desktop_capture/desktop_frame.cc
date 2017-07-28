@@ -49,7 +49,8 @@ uint8_t* DesktopFrame::GetFrameData() const
 
 uint8_t* DesktopFrame::GetFrameDataAtPos(const DesktopPoint& pos) const
 {
-    return GetFrameData() + Stride() * pos.y() + format_.BytesPerPixel() * pos.x();
+    return GetFrameData() + Stride() * pos.y() +
+        format_.BytesPerPixel() * pos.x();
 }
 
 uint8_t* DesktopFrame::GetFrameDataAtPos(int32_t x, int32_t y) const

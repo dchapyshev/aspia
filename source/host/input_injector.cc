@@ -30,10 +30,11 @@ void InputInjector::InjectPointerEvent(const proto::PointerEvent& event)
 {
     SwitchToInputDesktop();
 
-    DesktopRect screen_rect = DesktopRect::MakeXYWH(GetSystemMetrics(SM_XVIRTUALSCREEN),
-                                                    GetSystemMetrics(SM_YVIRTUALSCREEN),
-                                                    GetSystemMetrics(SM_CXVIRTUALSCREEN),
-                                                    GetSystemMetrics(SM_CYVIRTUALSCREEN));
+    DesktopRect screen_rect =
+        DesktopRect::MakeXYWH(GetSystemMetrics(SM_XVIRTUALSCREEN),
+                              GetSystemMetrics(SM_YVIRTUALSCREEN),
+                              GetSystemMetrics(SM_CXVIRTUALSCREEN),
+                              GetSystemMetrics(SM_CYVIRTUALSCREEN));
     if (!screen_rect.Contains(event.x(), event.y()))
         return;
 

@@ -59,12 +59,13 @@ static void AddCursorOutline(int width, int height, uint32_t* data)
     {
         for (int x = 0; x < width; ++x)
         {
-            // If this is a transparent pixel (bgr == 0 and alpha = 0), check the
-            // neighbor pixels to see if this should be changed to an outline pixel.
+            // If this is a transparent pixel (bgr == 0 and alpha = 0), check
+            // the neighbor pixels to see if this should be changed to an
+            // outline pixel.
             if (*data == kPixelRgbaTransparent)
             {
-                // Change to white pixel if any neighbors (top, bottom, left, right)
-                // are black.
+                // Change to white pixel if any neighbors (top, bottom, left,
+                // right) are black.
                 if ((y > 0 && data[-width] == kPixelRgbaBlack) ||
                     (y < height - 1 && data[width] == kPixelRgbaBlack) ||
                     (x > 0 && data[-1] == kPixelRgbaBlack) ||
@@ -93,14 +94,20 @@ static void AlphaMul(uint32_t* data, int width, int height)
         RGBQUAD* from = reinterpret_cast<RGBQUAD*>(data);
         RGBQUAD* to = reinterpret_cast<RGBQUAD*>(data);
 
-        to->rgbBlue  = (static_cast<uint16_t>(from->rgbBlue)  * from->rgbReserved) / 0xFF;
-        to->rgbGreen = (static_cast<uint16_t>(from->rgbGreen) * from->rgbReserved) / 0xFF;
-        to->rgbRed   = (static_cast<uint16_t>(from->rgbRed)   * from->rgbReserved) / 0xFF;
+        to->rgbBlue =
+            (static_cast<uint16_t>(from->rgbBlue)  * from->rgbReserved) / 0xFF;
+
+        to->rgbGreen =
+            (static_cast<uint16_t>(from->rgbGreen) * from->rgbReserved) / 0xFF;
+
+        to->rgbRed =
+            (static_cast<uint16_t>(from->rgbRed)   * from->rgbReserved) / 0xFF;
     }
 }
 
 // Converts an HCURSOR into a |MouseCursor| instance.
-std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor)
+std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(
+    HDC dc, HCURSOR cursor)
 {
     ICONINFO icon_info = { 0 };
 
@@ -182,19 +189,16 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
             return nullptr;
         }
 
-        //
-        // GetDIBits() does not provide any indication whether the bitmap has alpha
-        // channel, so we use HasAlphaChannel() below to find it out.
-        //
-        has_alpha = HasAlphaChannel(reinterpret_cast<const uint32_t*>(image.get()), width, height);
+        // GetDIBits() does not provide any indication whether the bitmap has
+        // alpha channel, so we use HasAlphaChannel() below to find it out.
+        has_alpha = HasAlphaChannel(
+            reinterpret_cast<const uint32_t*>(image.get()), width, height);
     }
     else
     {
-        //
-        // For non-color cursors, the mask contains both an AND and an XOR mask and
-        // the height includes both. Thus, the width is correct, but we need to
-        // divide by 2 to get the correct mask height.
-        //
+        // For non-color cursors, the mask contains both an AND and an XOR mask
+        // and the height includes both. Thus, the width is correct, but we
+        // need to divide by 2 to get the correct mask height.
         height /= 2;
 
         image_size = width * height * kBytesPerPixel;
@@ -225,9 +229,10 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
                 //   1     00      Screen           Transparent   00    00
                 //   1     ff      Reverse-screen   Black         00    ff
                 //
-                // Since we don't support XOR cursors, we replace the "Reverse Screen"
-                // with black. In this case, we also add an outline around the cursor
-                // so that it is visible against a dark background.
+                // Since we don't support XOR cursors, we replace the "Reverse
+                // Screen" with black. In this case, we also add an outline
+                // around the cursor so that it is visible against a dark
+                // background.
                 if (*mask == kPixelRgbWhite)
                 {
                     if (*dst != 0)
@@ -252,16 +257,19 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
 
         if (add_outline)
         {
-            AddCursorOutline(width, height, reinterpret_cast<uint32_t*>(image.get()));
+            AddCursorOutline(width, height,
+                             reinterpret_cast<uint32_t*>(image.get()));
         }
     }
 
-    // Pre-multiply the resulting pixels since MouseCursor uses premultiplied images.
+    // Pre-multiply the resulting pixels since MouseCursor uses premultiplied
+    // images.
     AlphaMul(reinterpret_cast<uint32_t*>(image.get()), width, height);
 
     return MouseCursor::Create(std::move(image),
                                DesktopSize(width, height),
-                               DesktopPoint(icon_info.xHotspot, icon_info.yHotspot));
+                               DesktopPoint(icon_info.xHotspot,
+                                            icon_info.yHotspot));
 }
 
 HCURSOR CreateHCursorFromMouseCursor(HDC dc, const MouseCursor& mouse_cursor)
@@ -300,15 +308,17 @@ HCURSOR CreateHCursorFromMouseCursor(HDC dc, const MouseCursor& mouse_cursor)
     bmi.u.mask.green          = 0x0000FF00;
     bmi.u.mask.blue           = 0x000000FF;
 
-    ScopedHBITMAP color_bitmap(CreateDIBitmap(dc,
-                                              reinterpret_cast<const LPBITMAPINFOHEADER>(&bmi.header),
-                                              CBM_INIT,
-                                              mouse_cursor.Data(),
-                                              reinterpret_cast<const LPBITMAPINFO>(&bmi),
-                                              DIB_RGB_COLORS));
+    ScopedHBITMAP color_bitmap(CreateDIBitmap(
+        dc,
+        reinterpret_cast<const LPBITMAPINFOHEADER>(&bmi.header),
+        CBM_INIT,
+        mouse_cursor.Data(),
+        reinterpret_cast<const LPBITMAPINFO>(&bmi),
+        DIB_RGB_COLORS));
     if (!color_bitmap)
     {
-        LOG(ERROR) << "CreateDIBitmap() failed: " << GetLastSystemErrorString();
+        LOG(ERROR) << "CreateDIBitmap() failed: "
+                   << GetLastSystemErrorString();
         return nullptr;
     }
 

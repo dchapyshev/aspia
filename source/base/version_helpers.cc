@@ -9,7 +9,8 @@
 
 namespace aspia {
 
-static bool IsWindowsVersionOrGreater(WORD major, WORD minor, WORD service_pack_major)
+static bool IsWindowsVersionOrGreater(WORD major, WORD minor,
+                                      WORD service_pack_major)
 {
     OSVERSIONINFOEXW osvi = { 0 };
     osvi.dwOSVersionInfoSize = sizeof(osvi);
@@ -26,7 +27,8 @@ static bool IsWindowsVersionOrGreater(WORD major, WORD minor, WORD service_pack_
     osvi.wServicePackMajor = service_pack_major;
 
     return VerifyVersionInfoW(&osvi,
-                              VER_MAJORVERSION | VER_MINORVERSION | VER_SERVICEPACKMAJOR,
+                              VER_MAJORVERSION | VER_MINORVERSION |
+                                  VER_SERVICEPACKMAJOR,
                               condition_mask) != FALSE;
 }
 

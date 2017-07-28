@@ -10,11 +10,13 @@
 namespace aspia {
 
 // static
-std::unique_ptr<MouseCursor> MouseCursor::Create(std::unique_ptr<uint8_t[]> data,
-                                                 const DesktopSize& size,
-                                                 const DesktopPoint& hotspot)
+std::unique_ptr<MouseCursor>
+MouseCursor::Create(std::unique_ptr<uint8_t[]> data,
+                    const DesktopSize& size,
+                    const DesktopPoint& hotspot)
 {
-    return std::unique_ptr<MouseCursor>(new MouseCursor(std::move(data), size, hotspot));
+    return std::unique_ptr<MouseCursor>(
+        new MouseCursor(std::move(data), size, hotspot));
 }
 
 MouseCursor::MouseCursor(std::unique_ptr<uint8_t[]> data,

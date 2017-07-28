@@ -21,7 +21,8 @@ std::chrono::milliseconds CaptureScheduler::NextCaptureDelay(
         std::chrono::high_resolution_clock::now();
 
     std::chrono::milliseconds diff_time =
-        std::chrono::duration_cast<std::chrono::milliseconds>(end_time - begin_time_);
+        std::chrono::duration_cast<std::chrono::milliseconds>(
+            end_time - begin_time_);
 
     if (diff_time > max_delay)
         diff_time = max_delay;

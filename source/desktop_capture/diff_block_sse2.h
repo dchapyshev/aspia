@@ -48,7 +48,8 @@ static INLINE uint8_t DiffFullBlock_32x32_SSE2(const uint8_t* image1,
         sad = _mm_sad_epu8(_mm_loadu_si128(i1 + 7), _mm_loadu_si128(i2 + 7));
         acc = _mm_adds_epu16(acc, sad);
 
-        // This essential means sad = acc >> 64. We only care about the lower 16 bits.
+        // This essential means sad = acc >> 64. We only care about the lower
+        // 16 bits.
         sad = _mm_shuffle_epi32(acc, 0xEE);
         sad = _mm_adds_epu16(sad, acc);
 
@@ -88,7 +89,8 @@ static INLINE uint8_t DiffFullBlock_16x16_SSE2(const uint8_t* image1,
         sad = _mm_sad_epu8(_mm_loadu_si128(i1 + 3), _mm_loadu_si128(i2 + 3));
         acc = _mm_adds_epu16(acc, sad);
 
-        // This essential means sad = acc >> 64. We only care about the lower 16 bits.
+        // This essential means sad = acc >> 64. We only care about the lower
+        //16 bits.
         sad = _mm_shuffle_epi32(acc, 0xEE);
         sad = _mm_adds_epu16(sad, acc);
 

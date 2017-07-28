@@ -42,10 +42,12 @@ bool ObjectWatcher::StartTimedWatching(HANDLE object,
 {
     DCHECK(timeout.count() < std::numeric_limits<DWORD>::max());
 
-    return StartWatchingInternal(object, static_cast<DWORD>(timeout.count()), delegate);
+    return StartWatchingInternal(
+        object, static_cast<DWORD>(timeout.count()), delegate);
 }
 
-bool ObjectWatcher::StartWatchingInternal(HANDLE object, DWORD timeout, Delegate* delegate)
+bool ObjectWatcher::StartWatchingInternal(
+    HANDLE object, DWORD timeout, Delegate* delegate)
 {
     if (wait_object_)
     {

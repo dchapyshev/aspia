@@ -17,7 +17,8 @@ namespace aspia {
 class HostProcessConnector
 {
 public:
-    HostProcessConnector(std::shared_ptr<NetworkChannelProxy> network_channel_proxy);
+    HostProcessConnector(
+        std::shared_ptr<NetworkChannelProxy> network_channel_proxy);
     ~HostProcessConnector();
 
     bool StartServer(std::wstring& channel_id);

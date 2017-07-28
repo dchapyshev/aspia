@@ -29,9 +29,10 @@ public:
     // Signals the thread to exit in the near future.
     void StopSoon();
 
-    // Signals the thread to exit and returns once the thread has exited.  After
-    // this method returns, the Thread object is completely reset and may be used
-    // as if it were newly constructed (i.e., Start may be called again).
+    // Signals the thread to exit and returns once the thread has exited.
+    // After this method returns, the Thread object is completely reset and may
+    // be used as if it were newly constructed (i.e., Start may be called
+    // again).
     // Stop may be called multiple times and is simply ignored if the thread is
     // already stopped.
     void Stop();
