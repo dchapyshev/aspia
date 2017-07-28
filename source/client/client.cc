@@ -109,6 +109,35 @@ void Client::OnAuthRequestSended()
         std::bind(&Client::DoAuthorize, this, std::placeholders::_1));
 }
 
+static std::unique_ptr<ClientSession> CreateSession(
+    proto::SessionType session_type,
+    const ClientConfig& config,
+    std::shared_ptr<NetworkChannelProxy> channel_proxy)
+{
+    switch (session_type)
+    {
+        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+            return std::make_unique<ClientSessionDesktopManage>(
+                config, channel_proxy);
+
+        case proto::SESSION_TYPE_DESKTOP_VIEW:
+            return std::make_unique<ClientSessionDesktopView>(
+                config, channel_proxy);
+
+        case proto::SESSION_TYPE_FILE_TRANSFER:
+            return std::make_unique<ClientSessionFileTransfer>(
+                config, channel_proxy);
+
+        case proto::SESSION_TYPE_POWER_MANAGE:
+            return std::make_unique<ClientSessionPowerManage>(
+                config, channel_proxy);
+
+        default:
+            LOG(ERROR) << "Invalid session type: " << session_type;
+            return nullptr;
+    }
+}
+
 void Client::DoAuthorize(std::unique_ptr<IOBuffer> buffer)
 {
     proto::auth::HostToClient result;
@@ -119,40 +148,19 @@ void Client::DoAuthorize(std::unique_ptr<IOBuffer> buffer)
 
         if (status_ == proto::Status::STATUS_SUCCESS)
         {
-            CreateSession(result.session_type());
-            return;
+            session_ = CreateSession(result.session_type(),
+                                     config_,
+                                     channel_proxy_);
+            if (session_)
+                return;
         }
-
-        runner_->PostTask(std::bind(&Client::OpenStatusDialog, this));
+        else
+        {
+            runner_->PostTask(std::bind(&Client::OpenStatusDialog, this));
+        }
     }
 
     channel_proxy_->Disconnect();
-}
-
-void Client::CreateSession(proto::SessionType session_type)
-{
-    switch (session_type)
-    {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
-            session_.reset(new ClientSessionDesktopManage(config_, channel_proxy_));
-            break;
-
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
-            session_.reset(new ClientSessionDesktopView(config_, channel_proxy_));
-            break;
-
-        case proto::SESSION_TYPE_FILE_TRANSFER:
-            session_.reset(new ClientSessionFileTransfer(config_, channel_proxy_));
-            break;
-
-        case proto::SESSION_TYPE_POWER_MANAGE:
-            session_.reset(new ClientSessionPowerManage(config_, channel_proxy_));
-            break;
-
-        default:
-            LOG(FATAL) << "Invalid session type: " << session_type;
-            break;
-    }
 }
 
 } // namespace aspia

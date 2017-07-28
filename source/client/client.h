@@ -49,7 +49,6 @@ private:
 
     void OnAuthRequestSended();
     void DoAuthorize(std::unique_ptr<IOBuffer> buffer);
-    void CreateSession(proto::SessionType session_type);
     void OpenStatusDialog();
 
     Delegate* delegate_;
