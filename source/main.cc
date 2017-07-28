@@ -15,8 +15,6 @@
 
 DEFINE_string(run_mode, "", "Run Mode");
 
-using namespace aspia;
-
 int main(int argc, char *argv[])
 {
     gflags::ParseCommandLineFlags(&argc, &argv, true);
@@ -26,21 +24,21 @@ int main(int argc, char *argv[])
 
     if (FLAGS_run_mode.empty())
     {
-        if (IsWindowsVistaOrGreater() && !IsProcessElevated())
+        if (aspia::IsWindowsVistaOrGreater() && !aspia::IsProcessElevated())
         {
-            if (!ElevateProcess())
-                RunUIMain();
+            if (!aspia::ElevateProcess())
+                aspia::RunUIMain();
         }
         else
         {
-            RunUIMain();
+            aspia::RunUIMain();
         }
     }
     else
     {
         std::wstring run_mode;
-        CHECK(ANSItoUNICODE(FLAGS_run_mode, run_mode));
-        RunHostMain(run_mode);
+        CHECK(aspia::ANSItoUNICODE(FLAGS_run_mode, run_mode));
+        aspia::RunHostMain(run_mode);
     }
 
     google::ShutdownGoogleLogging();

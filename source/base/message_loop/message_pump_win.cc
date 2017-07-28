@@ -44,9 +44,9 @@ int MessagePumpWin::GetCurrentDelay() const
     if (delayed_work_time_ == TimePoint())
         return -1;
 
-    // Be careful here.  TimeDelta has a precision of microseconds, but we want a
-    // value in milliseconds.  If there are 5.5ms left, should the delay be 5 or
-    // 6?  It should be 6 to avoid executing delayed work too early.
+    // Be careful here.  TimeDelta has a precision of microseconds, but we want
+    // a value in milliseconds.  If there are 5.5ms left, should the delay be 5
+    // or 6?  It should be 6 to avoid executing delayed work too early.
     std::chrono::time_point<std::chrono::high_resolution_clock> current_time =
         std::chrono::high_resolution_clock::now();
 

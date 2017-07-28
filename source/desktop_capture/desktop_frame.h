@@ -33,13 +33,12 @@ public:
     DesktopRegion* MutableUpdatedRegion();
 
 protected:
-    DesktopFrame(const DesktopSize& size, const PixelFormat& format, int stride, uint8_t* data);
+    DesktopFrame(const DesktopSize& size, const PixelFormat& format,
+                 int stride, uint8_t* data);
 
-    //
-    // Ownership of the buffers is defined by the classes that inherit from this
-    // class. They must guarantee that the buffer is not deleted before the frame
-    // is deleted.
-    //
+    // Ownership of the buffers is defined by the classes that inherit from
+    // this class. They must guarantee that the buffer is not deleted before
+    // the frame is deleted.
     uint8_t* const data_;
 
 private:

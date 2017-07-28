@@ -46,8 +46,8 @@ void MessagePumpDefault::Run(Delegate* delegate)
             }
             else
             {
-                // It looks like delayed_work_time_ indicates a time in the past, so we
-                // need to call DoDelayedWork now.
+                // It looks like delayed_work_time_ indicates a time in the
+                // past, so we need to call DoDelayedWork now.
                 delayed_work_time_ = TimePoint();
             }
         }
@@ -68,7 +68,8 @@ void MessagePumpDefault::ScheduleWork()
     event_.Signal();
 }
 
-void MessagePumpDefault::ScheduleDelayedWork(const TimePoint& delayed_work_time)
+void MessagePumpDefault::ScheduleDelayedWork(
+    const TimePoint& delayed_work_time)
 {
     // We know that we can't be blocked on Wait right now since this method can
     // only be called on the same thread as Run, so we only need to update our

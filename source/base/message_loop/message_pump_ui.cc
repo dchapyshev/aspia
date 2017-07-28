@@ -10,18 +10,19 @@
 
 namespace aspia {
 
-// Message sent to get an additional time slice for pumping (processing) another
-// task (a series of such messages creates a continuous task pump).
+// Message sent to get an additional time slice for pumping (processing)
+// another task (a series of such messages creates a continuous task pump).
 static const UINT kMsgHaveWork = WM_USER + 1;
 
 MessagePumpForUI::MessagePumpForUI()
 {
-    bool succeeded = message_window_.Create(std::bind(&MessagePumpForUI::OnMessage,
-                                                      this,
-                                                      std::placeholders::_1,
-                                                      std::placeholders::_2,
-                                                      std::placeholders::_3,
-                                                      std::placeholders::_4));
+    bool succeeded = message_window_.Create(
+        std::bind(&MessagePumpForUI::OnMessage,
+                  this,
+                  std::placeholders::_1,
+                  std::placeholders::_2,
+                  std::placeholders::_3,
+                  std::placeholders::_4));
     DCHECK(succeeded);
 }
 
@@ -35,15 +36,16 @@ void MessagePumpForUI::ScheduleWork()
     if (ret)
         return; // There was room in the Window Message queue.
 
-    // We have failed to insert a have-work message, so there is a chance that we
-    // will starve tasks/timers while sitting in a nested message loop.  Nested
-    // loops only look at Windows Message queues, and don't look at *our* task
-    // queues, etc., so we might not get a time slice in such. :-(
+    // We have failed to insert a have-work message, so there is a chance that
+    // we will starve tasks/timers while sitting in a nested message loop.
+    // Nested loops only look at Windows Message queues, and don't look at
+    // *our* task queues, etc., so we might not get a time slice in such. :-(
     // We could abort here, but the fear is that this failure mode is plausibly
-    // common (queue is full, of about 2000 messages), so we'll do a near-graceful
-    // recovery.  Nested loops are pretty transient (we think), so this will
-    // probably be recoverable.
-    InterlockedExchange(&work_state_, READY); // Clarify that we didn't really insert.
+    // common (queue is full, of about 2000 messages), so we'll do a
+    // near-graceful recovery.  Nested loops are pretty transient (we think),
+    // so this will probably be recoverable.
+    // Clarify that we didn't really insert.
+    InterlockedExchange(&work_state_, READY);
 }
 
 void MessagePumpForUI::ScheduleDelayedWork(
@@ -56,13 +58,13 @@ void MessagePumpForUI::ScheduleDelayedWork(
     // is not running our MessageLoop; the only way to have our timers fire in
     // these cases is to post messages there.
     //
-    // To provide sub-10ms timers, we process timers directly from our run loop.
-    // For the common case, timers will be processed there as the run loop does
-    // its normal work.  However, we *also* set the system timer so that WM_TIMER
-    // events fire.  This mops up the case of timers not being able to work in
-    // modal message loops.  It is possible for the SetTimer to pop and have no
-    // pending timers, because they could have already been processed by the
-    // run loop itself.
+    // To provide sub-10ms timers, we process timers directly from our run
+    // loop. For the common case, timers will be processed there as the run
+    // loop does its normal work.  However, we *also* set the system timer so
+    // that WM_TIMER events fire.  This mops up the case of timers not being
+    // able to work in modal message loops.  It is possible for the SetTimer to
+    // pop and have no pending timers, because they could have already been
+    // processed by the run loop itself.
     //
     // We use a single SetTimer corresponding to the timer that will expire
     // soonest.  As new timers are created and destroyed, we update SetTimer.
@@ -82,7 +84,8 @@ void MessagePumpForUI::ScheduleDelayedWork(
              delay_msec, nullptr);
 }
 
-bool MessagePumpForUI::OnMessage(UINT message, WPARAM wparam, LPARAM lparam, LRESULT& result)
+bool MessagePumpForUI::OnMessage(UINT message, WPARAM wparam,
+                                 LPARAM lparam, LRESULT& result)
 {
     UNREF(wparam);
     UNREF(lparam);
@@ -170,18 +173,18 @@ void MessagePumpForUI::WaitForWork()
         if (result == WAIT_OBJECT_0)
         {
             // A WM_* message is available.
-            // If a parent child relationship exists between windows across threads
-            // then their thread inputs are implicitly attached.
-            // This causes the MsgWaitForMultipleObjectsEx API to return indicating
-            // that messages are ready for processing (Specifically, mouse messages
-            // intended for the child window may appear if the child window has
-            // capture).
-            // The subsequent PeekMessages call may fail to return any messages thus
-            // causing us to enter a tight loop at times.
+            // If a parent child relationship exists between windows across
+            // threads then their thread inputs are implicitly attached.
+            // This causes the MsgWaitForMultipleObjectsEx API to return
+            // indicating that messages are ready for processing (Specifically,
+            // mouse messages intended for the child window may appear if the
+            // child window has capture).
+            // The subsequent PeekMessages call may fail to return any messages
+            // thus causing us to enter a tight loop at times.
             // The code below is a workaround to give the child window
             // some time to process its input messages by looping back to
-            // MsgWaitForMultipleObjectsEx above when there are no messages for the
-            // current thread.
+            // MsgWaitForMultipleObjectsEx above when there are no messages for
+            // the current thread.
 
             MSG msg = { 0 };
 
@@ -194,9 +197,9 @@ void MessagePumpForUI::WaitForWork()
                 return;
             }
 
-            // We know there are no more messages for this thread because PeekMessage
-            // has returned false. Reset |wait_flags| so that we wait for a *new*
-            // message.
+            // We know there are no more messages for this thread because
+            // PeekMessage has returned false. Reset |wait_flags| so that we
+            // wait for a *new* message.
             wait_flags = 0;
         }
 
@@ -206,9 +209,9 @@ void MessagePumpForUI::WaitForWork()
 
 void MessagePumpForUI::HandleWorkMessage()
 {
-    // If we are being called outside of the context of Run, then don't try to do
-    // any work. This could correspond to a MessageBox call or something of that
-    // sort.
+    // If we are being called outside of the context of Run, then don't try to
+    // do any work. This could correspond to a MessageBox call or something of
+    // that sort.
     if (!state_)
     {
         // Since we handled a kMsgHaveWork message, we must still update this flag.
@@ -308,10 +311,12 @@ bool MessagePumpForUI::ProcessPumpReplacementMessage()
 
     MSG msg;
 
-    const bool have_message = (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE) != FALSE);
+    const bool have_message =
+        (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE) != FALSE);
 
     // Expect no message or a message different than kMsgHaveWork.
-    DCHECK(!have_message || kMsgHaveWork != msg.message || msg.hwnd != message_window_.hwnd());
+    DCHECK(!have_message || kMsgHaveWork != msg.message ||
+           msg.hwnd != message_window_.hwnd());
 
     // Since we discarded a kMsgHaveWork message, we must update the flag.
     int old_have_work = InterlockedExchange(&work_state_, READY);

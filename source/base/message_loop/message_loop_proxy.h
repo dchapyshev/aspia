@@ -19,7 +19,8 @@ public:
     static std::shared_ptr<MessageLoopProxy> Current();
 
     bool PostTask(PendingTask::Callback callback);
-    bool PostDelayedTask(PendingTask::Callback callback, const PendingTask::TimeDelta& delay);
+    bool PostDelayedTask(PendingTask::Callback callback,
+                         const PendingTask::TimeDelta& delay);
     bool PostQuit();
     bool BelongsToCurrentThread() const;
 

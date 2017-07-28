@@ -25,9 +25,9 @@ PendingTask::PendingTask(const Callback& callback,
 
 bool PendingTask::operator<(const PendingTask& other) const
 {
-    // Since the top of a priority queue is defined as the "greatest" element, we
-    // need to invert the comparison here.  We want the smaller time to be at the
-    // top of the heap.
+    // Since the top of a priority queue is defined as the "greatest" element,
+    // we need to invert the comparison here.  We want the smaller time to be
+    // at the top of the heap.
 
     if (delayed_run_time < other.delayed_run_time)
         return false;

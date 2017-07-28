@@ -47,7 +47,7 @@ protected:
     PendingTask::Callback QuitClosure();
 
     MessagePumpWin* pump_win() const;
-    std::shared_ptr<MessageLoopProxy> message_loop_proxy() const { return proxy_; }
+    std::shared_ptr<MessageLoopProxy> message_loop_proxy() const;
 
     // Runs the specified PendingTask.
     void RunTask(const PendingTask& pending_task);
@@ -64,8 +64,8 @@ protected:
     void AddToIncomingQueue(PendingTask* pending_task);
 
     // Load tasks from the incoming_queue_ into work_queue_ if the latter is
-    // empty.  The former requires a lock to access, while the latter is directly
-    // accessible on this thread.
+    // empty.  The former requires a lock to access, while the latter is
+    // directly accessible on this thread.
     void ReloadWorkQueue();
 
     void DeletePendingTasks();
@@ -90,8 +90,8 @@ protected:
     // this queue is only accessed (push/pop) by our current thread.
     TaskQueue work_queue_;
 
-    // A recursion block that prevents accidentally running additional tasks when
-    // insider a (accidentally induced?) nested message pump.
+    // A recursion block that prevents accidentally running additional tasks
+    // when insider a (accidentally induced?) nested message pump.
     bool nestable_tasks_allowed_ = true;
 
     std::shared_ptr<MessagePump> pump_;

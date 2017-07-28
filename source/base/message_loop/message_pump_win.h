@@ -24,7 +24,8 @@ public:
     void Quit() override;
 
     // Like MessagePump::Run, but MSG objects are routed through dispatcher.
-    void RunWithDispatcher(Delegate* delegate, MessagePumpDispatcher* dispatcher);
+    void RunWithDispatcher(Delegate* delegate,
+                           MessagePumpDispatcher* dispatcher);
 
 protected:
     struct RunState

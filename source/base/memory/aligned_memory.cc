@@ -18,12 +18,12 @@ void* AlignedAlloc(size_t size, size_t alignment)
 
     void* ptr =  _aligned_malloc(size, alignment);
 
-    // Since aligned allocations may fail for non-memory related reasons, force a
-    // crash if we encounter a failed allocation; maintaining consistent behavior
-    // with a normal allocation failure in Chrome.
+    // Since aligned allocations may fail for non-memory related reasons,
+    // force a crash if we encounter a failed allocation; maintaining
+    // consistent behavior with a normal allocation failure in Chrome.
     if (!ptr)
     {
-        DLOG(ERROR) << "If you crashed here, your aligned allocation is incorrect: "
+        DLOG(ERROR) << "Aligned allocation is incorrect: "
                     << "size=" << size << ", alignment=" << alignment;
         CHECK(false);
     }

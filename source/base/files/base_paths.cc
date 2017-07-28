@@ -37,8 +37,8 @@ bool GetBasePath(BasePathKey key, FilePath& result)
 
         case BasePathKey::DIR_COMMON_DESKTOP:
         {
-            if (FAILED(SHGetFolderPathW(nullptr, CSIDL_COMMON_DESKTOPDIRECTORY, nullptr,
-                                        SHGFP_TYPE_CURRENT, buffer)))
+            if (FAILED(SHGetFolderPathW(nullptr, CSIDL_COMMON_DESKTOPDIRECTORY,
+                                        nullptr, SHGFP_TYPE_CURRENT, buffer)))
             {
                 return false;
             }
@@ -47,8 +47,8 @@ bool GetBasePath(BasePathKey key, FilePath& result)
 
         case BasePathKey::DIR_USER_DESKTOP:
         {
-            if (FAILED(SHGetFolderPathW(nullptr, CSIDL_DESKTOPDIRECTORY, nullptr,
-                                        SHGFP_TYPE_CURRENT, buffer)))
+            if (FAILED(SHGetFolderPathW(nullptr, CSIDL_DESKTOPDIRECTORY,
+                                        nullptr, SHGFP_TYPE_CURRENT, buffer)))
             {
                 return false;
             }

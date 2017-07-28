@@ -85,7 +85,8 @@ void MessageLoop::PostTask(PendingTask::Callback callback)
     DCHECK(callback != nullptr);
 
     PendingTask pending_task(std::move(callback),
-                             CalculateDelayedRuntime(PendingTask::TimeDelta::zero()));
+                             CalculateDelayedRuntime(
+                                 PendingTask::TimeDelta::zero()));
     AddToIncomingQueue(&pending_task);
 }
 
@@ -241,7 +242,9 @@ bool MessageLoop::DoDelayedWork(PendingTask::TimePoint* next_delayed_work_time)
     // fall behind (and have a lot of ready-to-run delayed tasks), the more
     // efficient we'll be at handling the tasks.
 
-    PendingTask::TimePoint next_run_time = delayed_work_queue_.top().delayed_run_time;
+    PendingTask::TimePoint next_run_time =
+        delayed_work_queue_.top().delayed_run_time;
+
     if (next_run_time > recent_time_)
     {
         recent_time_ = std::chrono::high_resolution_clock::now();
@@ -260,6 +263,11 @@ bool MessageLoop::DoDelayedWork(PendingTask::TimePoint* next_delayed_work_time)
 
     RunTask(pending_task);
     return true;
+}
+
+std::shared_ptr<MessageLoopProxy> MessageLoop::message_loop_proxy() const
+{
+    return proxy_;
 }
 
 // static
