@@ -27,12 +27,14 @@ public:
 
 private:
     // FileReplyReceiver implementation.
-    void OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list) final;
+    void OnDriveListRequestReply(
+        std::unique_ptr<proto::DriveList> drive_list) final;
 
     void OnDriveListRequestFailure(proto::RequestStatus status) final;
 
-    void OnFileListRequestReply(const FilePath& path,
-                                std::unique_ptr<proto::FileList> file_list) final;
+    void OnFileListRequestReply(
+        const FilePath& path,
+        std::unique_ptr<proto::FileList> file_list) final;
 
     void OnFileListRequestFailure(const FilePath& path,
                                   proto::RequestStatus status) final;

@@ -47,7 +47,8 @@ CreateVideoDecoder(proto::VideoEncoding encoding)
     }
 }
 
-bool ClientSessionDesktopView::ReadVideoPacket(const proto::VideoPacket& video_packet)
+bool ClientSessionDesktopView::ReadVideoPacket(
+    const proto::VideoPacket& video_packet)
 {
     if (video_encoding_ != video_packet.encoding())
     {
@@ -65,7 +66,8 @@ bool ClientSessionDesktopView::ReadVideoPacket(const proto::VideoPacket& video_p
         if (video_encoding_ == proto::VideoEncoding::VIDEO_ENCODING_ZLIB)
         {
             pixel_format =
-                ConvertFromVideoPixelFormat(video_packet.format().pixel_format());
+                ConvertFromVideoPixelFormat(
+                    video_packet.format().pixel_format());
         }
         else
         {
@@ -108,7 +110,8 @@ void ClientSessionDesktopView::ReadConfigRequest(
     OnConfigChange(config_.desktop_session_config());
 }
 
-void ClientSessionDesktopView::OnMessageReceive(std::unique_ptr<IOBuffer> buffer)
+void ClientSessionDesktopView::OnMessageReceive(
+    std::unique_ptr<IOBuffer> buffer)
 {
     proto::desktop::HostToClient message;
 
@@ -143,7 +146,8 @@ void ClientSessionDesktopView::OnMessageReceive(std::unique_ptr<IOBuffer> buffer
         if (success)
         {
             channel_proxy_->Receive(std::bind(
-                &ClientSessionDesktopView::OnMessageReceive, this, std::placeholders::_1));
+                &ClientSessionDesktopView::OnMessageReceive, this,
+                std::placeholders::_1));
             return;
         }
     }

@@ -9,8 +9,8 @@
 
 namespace aspia {
 
-FileReplyReceiverProxy::FileReplyReceiverProxy(FileReplyReceiver* receiver) :
-    receiver_(receiver)
+FileReplyReceiverProxy::FileReplyReceiverProxy(FileReplyReceiver* receiver)
+    : receiver_(receiver)
 {
     // Nothing
 }
@@ -21,7 +21,8 @@ void FileReplyReceiverProxy::WillDestroyCurrentReplyReceiver()
     receiver_ = nullptr;
 }
 
-bool FileReplyReceiverProxy::OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list)
+bool FileReplyReceiverProxy::OnDriveListRequestReply(
+    std::unique_ptr<proto::DriveList> drive_list)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
@@ -32,7 +33,8 @@ bool FileReplyReceiverProxy::OnDriveListRequestReply(std::unique_ptr<proto::Driv
     return true;
 }
 
-bool FileReplyReceiverProxy::OnDriveListRequestFailure(proto::RequestStatus status)
+bool FileReplyReceiverProxy::OnDriveListRequestFailure(
+    proto::RequestStatus status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
@@ -43,8 +45,9 @@ bool FileReplyReceiverProxy::OnDriveListRequestFailure(proto::RequestStatus stat
     return true;
 }
 
-bool FileReplyReceiverProxy::OnFileListRequestReply(const FilePath& path,
-                                                    std::unique_ptr<proto::FileList> file_list)
+bool FileReplyReceiverProxy::OnFileListRequestReply(
+    const FilePath& path,
+    std::unique_ptr<proto::FileList> file_list)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
@@ -55,8 +58,9 @@ bool FileReplyReceiverProxy::OnFileListRequestReply(const FilePath& path,
     return true;
 }
 
-bool FileReplyReceiverProxy::OnFileListRequestFailure(const FilePath& path,
-                                                      proto::RequestStatus status)
+bool FileReplyReceiverProxy::OnFileListRequestFailure(
+    const FilePath& path,
+    proto::RequestStatus status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
@@ -67,7 +71,8 @@ bool FileReplyReceiverProxy::OnFileListRequestFailure(const FilePath& path,
     return true;
 }
 
-bool FileReplyReceiverProxy::OnDirectorySizeRequestReply(const FilePath& path, uint64_t size)
+bool FileReplyReceiverProxy::OnDirectorySizeRequestReply(const FilePath& path,
+                                                         uint64_t size)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
@@ -78,8 +83,9 @@ bool FileReplyReceiverProxy::OnDirectorySizeRequestReply(const FilePath& path, u
     return true;
 }
 
-bool FileReplyReceiverProxy::OnDirectorySizeRequestFailure(const FilePath& path,
-                                                           proto::RequestStatus status)
+bool FileReplyReceiverProxy::OnDirectorySizeRequestFailure(
+    const FilePath& path,
+    proto::RequestStatus status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
@@ -90,8 +96,9 @@ bool FileReplyReceiverProxy::OnDirectorySizeRequestFailure(const FilePath& path,
     return true;
 }
 
-bool FileReplyReceiverProxy::OnCreateDirectoryRequestReply(const FilePath& path,
-                                                           proto::RequestStatus status)
+bool FileReplyReceiverProxy::OnCreateDirectoryRequestReply(
+    const FilePath& path,
+    proto::RequestStatus status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 

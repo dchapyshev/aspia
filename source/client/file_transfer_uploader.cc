@@ -26,7 +26,8 @@ uint64_t FileTransferUploader::BuildTaskListForDirectoryContent(
     uint64_t size = 0;
 
     for (const auto& entry :
-            std::experimental::filesystem::directory_iterator(source_path, code))
+            std::experimental::filesystem::directory_iterator(source_path,
+                                                              code))
     {
         FilePath target_object_path;
 
@@ -67,26 +68,33 @@ void FileTransferUploader::Start(const FilePath& source_path,
         FilePath source_object_path;
 
         source_object_path.assign(source_path);
-        source_object_path.append(std::experimental::filesystem::u8path(file.name()));
+        source_object_path.append(
+            std::experimental::filesystem::u8path(file.name()));
 
         FilePath target_object_path;
 
         target_object_path.assign(target_path);
-        target_object_path.append(std::experimental::filesystem::u8path(file.name()));
+        target_object_path.append(
+            std::experimental::filesystem::u8path(file.name()));
 
         if (file.is_directory())
         {
-            task_queue_.push(Task(source_object_path, target_object_path, true));
+            task_queue_.push(Task(source_object_path,
+                                  target_object_path,
+                                  true));
 
             total_size += BuildTaskListForDirectoryContent(source_object_path,
                                                            target_object_path);
         }
         else
         {
-            task_queue_.push(Task(source_object_path, target_object_path, false));
+            task_queue_.push(Task(source_object_path,
+                                  target_object_path,
+                                  false));
 
             uintmax_t file_size =
-                std::experimental::filesystem::file_size(source_object_path, code);
+                std::experimental::filesystem::file_size(
+                    source_object_path, code);
 
             if (file_size != static_cast<uintmax_t>(-1))
                 total_size += file_size;

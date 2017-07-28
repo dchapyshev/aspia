@@ -34,9 +34,10 @@ public:
                                             const FilePath& path) = 0;
     };
 
-    FileTransfer(std::shared_ptr<FileRequestSenderProxy> sender, Delegate* delegate) :
-        sender_(std::move(sender)),
-        delegate_(delegate)
+    FileTransfer(std::shared_ptr<FileRequestSenderProxy> sender,
+                 Delegate* delegate)
+        : sender_(std::move(sender)),
+          delegate_(delegate)
     {
         // Nothing
     }

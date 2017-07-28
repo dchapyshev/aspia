@@ -46,7 +46,8 @@ void ClientSessionDesktopManage::ReadClipboardEvent(
     viewer_->InjectClipboardEvent(clipboard_event);
 }
 
-void ClientSessionDesktopManage::OnMessageReceive(std::unique_ptr<IOBuffer> buffer)
+void ClientSessionDesktopManage::OnMessageReceive(
+    std::unique_ptr<IOBuffer> buffer)
 {
     proto::desktop::HostToClient message;
 
@@ -92,7 +93,8 @@ void ClientSessionDesktopManage::OnMessageReceive(std::unique_ptr<IOBuffer> buff
         if (success)
         {
             channel_proxy_->Receive(std::bind(
-                &ClientSessionDesktopManage::OnMessageReceive, this, std::placeholders::_1));
+                &ClientSessionDesktopManage::OnMessageReceive, this,
+                std::placeholders::_1));
             return;
         }
     }
@@ -111,7 +113,8 @@ void ClientSessionDesktopManage::OnKeyEvent(uint32_t keycode, uint32_t flags)
     WriteMessage(message);
 }
 
-void ClientSessionDesktopManage::OnPointerEvent(const DesktopPoint& pos, uint32_t mask)
+void ClientSessionDesktopManage::OnPointerEvent(const DesktopPoint& pos,
+                                                uint32_t mask)
 {
     proto::desktop::ClientToHost message;
 

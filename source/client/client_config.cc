@@ -22,10 +22,12 @@ ClientConfig::ClientConfig(const ClientConfig& other)
 
 void ClientConfig::SetDefaultDesktopSessionConfig()
 {
-    desktop_session_config_.set_flags(proto::DesktopSessionConfig::ENABLE_CLIPBOARD |
-                                      proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE);
+    desktop_session_config_.set_flags(
+        proto::DesktopSessionConfig::ENABLE_CLIPBOARD |
+        proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE);
 
-    desktop_session_config_.set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_ZLIB);
+    desktop_session_config_.set_video_encoding(
+        proto::VideoEncoding::VIDEO_ENCODING_ZLIB);
 
     desktop_session_config_.set_update_interval(30);
     desktop_session_config_.set_compress_ratio(6);

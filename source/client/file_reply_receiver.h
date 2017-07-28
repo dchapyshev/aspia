@@ -42,11 +42,13 @@ protected:
     virtual void OnDirectorySizeRequestReply(const FilePath& path,
                                              uint64_t size) = 0;
 
-    virtual void OnDirectorySizeRequestFailure(const FilePath& path,
-                                               proto::RequestStatus status) = 0;
+    virtual void OnDirectorySizeRequestFailure(
+        const FilePath& path,
+        proto::RequestStatus status) = 0;
 
-    virtual void OnCreateDirectoryRequestReply(const FilePath& path,
-                                               proto::RequestStatus status) = 0;
+    virtual void OnCreateDirectoryRequestReply(
+        const FilePath& path,
+        proto::RequestStatus status) = 0;
 
     virtual void OnRemoveRequestReply(const FilePath& path,
                                       proto::RequestStatus status) = 0;

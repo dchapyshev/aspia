@@ -18,8 +18,9 @@ class ClientSessionPowerManage :
     private MessageLoopThread::Delegate
 {
 public:
-    ClientSessionPowerManage(const ClientConfig& config,
-                             std::shared_ptr<NetworkChannelProxy> channel_proxy);
+    ClientSessionPowerManage(
+        const ClientConfig& config,
+        std::shared_ptr<NetworkChannelProxy> channel_proxy);
 
     ~ClientSessionPowerManage();
 

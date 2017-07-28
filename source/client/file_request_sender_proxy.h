@@ -18,16 +18,19 @@ namespace aspia {
 class FileRequestSenderProxy
 {
 public:
-    bool SendDriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver);
+    bool SendDriveListRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver);
 
     bool SendFileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                              const FilePath& path);
 
-    bool SendCreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                    const FilePath& path);
+    bool SendCreateDirectoryRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& path);
 
-    bool SendDirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                  const FilePath& path);
+    bool SendDirectorySizeRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& path);
 
     bool SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                            const FilePath& path);
@@ -36,11 +39,13 @@ public:
                            const FilePath& old_name,
                            const FilePath& new_name);
 
-    bool SendFileUploadRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                               const FilePath& file_path);
+    bool SendFileUploadRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& file_path);
 
-    bool SendFileUploadDataRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                   std::unique_ptr<proto::FilePacket> file_packet);
+    bool SendFileUploadDataRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        std::unique_ptr<proto::FilePacket> file_packet);
 
 private:
     friend class FileRequestSender;

@@ -42,7 +42,9 @@ private:
     std::wstring address_;
     uint16_t port_ = kDefaultHostTcpPort;
 
-    proto::SessionType session_type_ = proto::SessionType::SESSION_TYPE_UNKNOWN;
+    proto::SessionType session_type_ =
+        proto::SessionType::SESSION_TYPE_UNKNOWN;
+
     proto::DesktopSessionConfig desktop_session_config_;
 };
 

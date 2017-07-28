@@ -63,10 +63,11 @@ private:
     void DriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver);
 
     void FileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                             const FilePath& path);
+                         const FilePath& path);
 
-    void CreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                    const FilePath& path);
+    void CreateDirectoryRequest(
+        std::shared_ptr<FileReplyReceiverProxy> receiver,
+        const FilePath& path);
 
     void DirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                               const FilePath& path);
