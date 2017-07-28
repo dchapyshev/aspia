@@ -15,7 +15,8 @@
 
 namespace aspia {
 
-bool FirewallManager::Init(const std::wstring& app_name, const std::wstring& app_path)
+bool FirewallManager::Init(const std::wstring& app_name,
+                           const std::wstring& app_path)
 {
     firewall_rules_ = nullptr;
 
@@ -23,7 +24,8 @@ bool FirewallManager::Init(const std::wstring& app_name, const std::wstring& app
     HRESULT hr = firewall_policy_.CreateInstance(CLSID_NetFwPolicy2);
     if (FAILED(hr))
     {
-        LOG(ERROR) << "CreateInstance() failed: " << SystemErrorCodeToString(hr);
+        LOG(ERROR) << "CreateInstance() failed: "
+                   << SystemErrorCodeToString(hr);
         firewall_policy_ = nullptr;
         return false;
     }
@@ -64,7 +66,8 @@ bool FirewallManager::IsFirewallEnabled() const
         {
             VARIANT_BOOL enabled = VARIANT_TRUE;
 
-            hr = firewall_policy_->get_FirewallEnabled(kProfileTypes[i], &enabled);
+            hr = firewall_policy_->get_FirewallEnabled(
+                kProfileTypes[i], &enabled);
 
             // Assume the firewall is enabled if we can't determine.
             if (FAILED(hr) || enabled != VARIANT_FALSE)
@@ -86,7 +89,8 @@ bool FirewallManager::AddTCPRule(const std::wstring& rule_name,
     HRESULT hr = rule.CreateInstance(CLSID_NetFwRule);
     if (FAILED(hr))
     {
-        LOG(ERROR) << "CoCreateInstance() failed: " << SystemErrorCodeToString(hr);
+        LOG(ERROR) << "CoCreateInstance() failed: "
+                   << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -127,7 +131,8 @@ void FirewallManager::DeleteRuleByName(const std::wstring& rule_name)
     hr = rules_enum.QueryFrom(rules_enum_unknown.get());
     if (FAILED(hr))
     {
-        LOG(ERROR) << "QueryInterface() failed: " << SystemErrorCodeToString(hr);
+        LOG(ERROR) << "QueryInterface() failed: "
+                   << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -149,7 +154,8 @@ void FirewallManager::DeleteRuleByName(const std::wstring& rule_name)
         hr = rule.QueryFrom(V_DISPATCH(&rule_var));
         if (FAILED(hr))
         {
-            DLOG(ERROR) << "QueryInterface() failed: " << SystemErrorCodeToString(hr);
+            DLOG(ERROR) << "QueryInterface() failed: "
+                        << SystemErrorCodeToString(hr);
             continue;
         }
 
@@ -158,7 +164,8 @@ void FirewallManager::DeleteRuleByName(const std::wstring& rule_name)
         hr = rule->get_Name(bstr_rule_name.Receive());
         if (FAILED(hr))
         {
-            DLOG(ERROR) << "get_Name() failed: " << SystemErrorCodeToString(hr);
+            DLOG(ERROR) << "get_Name() failed: "
+                        << SystemErrorCodeToString(hr);
             continue;
         }
 
@@ -167,8 +174,8 @@ void FirewallManager::DeleteRuleByName(const std::wstring& rule_name)
             hr = firewall_rules_->Remove(bstr_rule_name);
             if (FAILED(hr))
             {
-                DLOG(ERROR) << "Remove() failed: " << SystemErrorCodeToString(hr);
-                continue;
+                DLOG(ERROR) << "Remove() failed: "
+                            << SystemErrorCodeToString(hr);
             }
         }
     }

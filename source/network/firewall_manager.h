@@ -28,8 +28,8 @@ public:
     // Returns true if firewall is enabled.
     bool IsFirewallEnabled() const;
 
-    // Adds a firewall rule allowing inbound connections to the application on TCP
-    // port |port|. Replaces the rule if it already exists. Needs elevation.
+    // Adds a firewall rule allowing inbound connections to the application on
+    // TCP port |port|. Replaces the rule if it already exists. Needs elevation.
     bool AddTCPRule(const std::wstring& rule_name,
                     const std::wstring& description,
                     uint16_t port);

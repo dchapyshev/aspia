@@ -23,9 +23,11 @@ class VideoEncoderZLIB : public VideoEncoder
 public:
     ~VideoEncoderZLIB() = default;
 
-    static std::unique_ptr<VideoEncoderZLIB> Create(const PixelFormat& format, int compression_ratio);
+    static std::unique_ptr<VideoEncoderZLIB> Create(const PixelFormat& format,
+                                                    int compression_ratio);
 
-    std::unique_ptr<proto::VideoPacket> Encode(const DesktopFrame* frame) override;
+    std::unique_ptr<proto::VideoPacket> Encode(
+        const DesktopFrame* frame) override;
 
 private:
     VideoEncoderZLIB(const PixelFormat& format, int compression_ratio);

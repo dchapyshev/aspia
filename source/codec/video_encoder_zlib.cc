@@ -74,8 +74,11 @@ void VideoEncoderZLIB::CompressPacket(proto::VideoPacket* packet,
 
     while (compress_again)
     {
-        int consumed = 0; // Number of bytes that was taken from the source buffer.
-        int written = 0;  // Number of bytes that were written to the destination buffer.
+        // Number of bytes that was taken from the source buffer.
+        int consumed = 0;
+
+        // Number of bytes that were written to the destination buffer.
+        int written = 0;
 
         compress_again = compressor_.Process(
             translate_buffer_.get() + pos, source_data_size - pos,
@@ -104,16 +107,16 @@ std::unique_ptr<proto::VideoPacket> VideoEncoderZLIB::Encode(
     {
         screen_size_ = frame->Size();
 
-        ConvertToVideoSize(screen_size_,
-                           packet->mutable_format()->mutable_screen_size());
+        proto::VideoPacketFormat* format = packet->mutable_format();
 
-        ConvertToVideoPixelFormat(format_,
-                                  packet->mutable_format()->mutable_pixel_format());
+        ConvertToVideoSize(screen_size_, format->mutable_screen_size());
+        ConvertToVideoPixelFormat(format_, format->mutable_pixel_format());
     }
 
     size_t data_size = 0;
 
-    for (DesktopRegion::Iterator iter(frame->UpdatedRegion()); !iter.IsAtEnd(); iter.Advance())
+    for (DesktopRegion::Iterator iter(frame->UpdatedRegion());
+         !iter.IsAtEnd(); iter.Advance())
     {
         const DesktopRect& rect = iter.rect();
 
@@ -124,13 +127,15 @@ std::unique_ptr<proto::VideoPacket> VideoEncoderZLIB::Encode(
 
     if (translate_buffer_size_ < data_size)
     {
-        translate_buffer_.reset(static_cast<uint8_t*>(AlignedAlloc(data_size, 16)));
+        translate_buffer_.reset(static_cast<uint8_t*>(
+            AlignedAlloc(data_size, 16)));
         translate_buffer_size_ = data_size;
     }
 
     uint8_t* translate_pos = translate_buffer_.get();
 
-    for (DesktopRegion::Iterator iter(frame->UpdatedRegion()); !iter.IsAtEnd(); iter.Advance())
+    for (DesktopRegion::Iterator iter(frame->UpdatedRegion());
+         !iter.IsAtEnd(); iter.Advance())
     {
         const DesktopRect& rect = iter.rect();
         const int stride = rect.Width() * format_.BytesPerPixel();

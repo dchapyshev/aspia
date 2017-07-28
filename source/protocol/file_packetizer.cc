@@ -25,7 +25,8 @@ FilePacketizer::FilePacketizer(std::ifstream&& file_stream)
     left_size_ = file_size_;
 }
 
-std::unique_ptr<FilePacketizer> FilePacketizer::Create(const FilePath& file_path)
+std::unique_ptr<FilePacketizer> FilePacketizer::Create(
+    const FilePath& file_path)
 {
     std::ifstream file_stream;
 

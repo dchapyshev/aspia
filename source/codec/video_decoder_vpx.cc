@@ -140,7 +140,8 @@ static bool ConvertImage(const proto::VideoPacket& packet,
     return true;
 }
 
-bool VideoDecoderVPX::Decode(const proto::VideoPacket& packet, DesktopFrame* frame)
+bool VideoDecoderVPX::Decode(const proto::VideoPacket& packet,
+                             DesktopFrame* frame)
 {
     // Do the actual decoding.
     vpx_codec_err_t ret =

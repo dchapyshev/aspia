@@ -260,7 +260,8 @@ void NetworkChannelTcp::OnReadMessageComplete(const std::error_code& code,
         return;
     }
 
-    std::unique_ptr<IOBuffer> decrypted_buffer = encryptor_->Decrypt(*read_buffer_);
+    std::unique_ptr<IOBuffer> decrypted_buffer =
+        encryptor_->Decrypt(*read_buffer_);
 
     if (!decrypted_buffer)
     {
@@ -282,7 +283,8 @@ void NetworkChannelTcp::ScheduleWrite()
 {
     DCHECK(!write_queue_.empty());
 
-    std::unique_ptr<IOBuffer> source_buffer = std::move(write_queue_.front().first);
+    std::unique_ptr<IOBuffer> source_buffer =
+        std::move(write_queue_.front().first);
 
     if (!source_buffer)
     {
@@ -360,7 +362,8 @@ void NetworkChannelTcp::OnWriteComplete(const std::error_code& code,
         complete_handler();
 }
 
-void NetworkChannelTcp::Send(std::unique_ptr<IOBuffer> buffer, SendCompleteHandler handler)
+void NetworkChannelTcp::Send(std::unique_ptr<IOBuffer> buffer,
+                             SendCompleteHandler handler)
 {
     std::lock_guard<std::mutex> lock(write_queue_lock_);
 

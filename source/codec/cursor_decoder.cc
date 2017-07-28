@@ -10,9 +10,11 @@
 
 namespace aspia {
 
-bool CursorDecoder::DecompressCursor(const proto::CursorShape& cursor_shape, uint8_t* image)
+bool CursorDecoder::DecompressCursor(const proto::CursorShape& cursor_shape,
+                                     uint8_t* image)
 {
-    const uint8_t* src = reinterpret_cast<const uint8_t*>(cursor_shape.data().data());
+    const uint8_t* src =
+        reinterpret_cast<const uint8_t*>(cursor_shape.data().data());
     const int src_size = cursor_shape.data().size();
     const int row_size = cursor_shape.width() * sizeof(uint32_t);
 
@@ -56,7 +58,8 @@ bool CursorDecoder::DecompressCursor(const proto::CursorShape& cursor_shape, uin
     return true;
 }
 
-std::shared_ptr<MouseCursor> CursorDecoder::Decode(const proto::CursorShape& cursor_shape)
+std::shared_ptr<MouseCursor> CursorDecoder::Decode(
+    const proto::CursorShape& cursor_shape)
 {
     size_t cache_index;
 
@@ -86,7 +89,8 @@ std::shared_ptr<MouseCursor> CursorDecoder::Decode(const proto::CursorShape& cur
         std::unique_ptr<MouseCursor> mouse_cursor =
             MouseCursor::Create(std::move(image),
                                 size,
-                                DesktopPoint(cursor_shape.hotspot_x(), cursor_shape.hotspot_y()));
+                                DesktopPoint(cursor_shape.hotspot_x(),
+                                             cursor_shape.hotspot_y()));
 
         if (cursor_shape.flags() & proto::CursorShape::RESET_CACHE)
         {

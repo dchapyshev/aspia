@@ -17,9 +17,11 @@ std::unique_ptr<VideoDecoderZLIB> VideoDecoderZLIB::Create()
     return std::unique_ptr<VideoDecoderZLIB>(new VideoDecoderZLIB());
 }
 
-bool VideoDecoderZLIB::Decode(const proto::VideoPacket& packet, DesktopFrame* frame)
+bool VideoDecoderZLIB::Decode(const proto::VideoPacket& packet,
+                              DesktopFrame* frame)
 {
-    const uint8_t* src = reinterpret_cast<const uint8_t*>(packet.data().data());
+    const uint8_t* src =
+        reinterpret_cast<const uint8_t*>(packet.data().data());
     const int src_size = packet.data().size();
     int used = 0;
 
@@ -46,7 +48,8 @@ bool VideoDecoderZLIB::Decode(const proto::VideoPacket& packet, DesktopFrame* fr
 
         while (decompress_again && used < src_size)
         {
-            // If we have reached the end of the current rectangle, then proceed to the next one.
+            // If we have reached the end of the current rectangle, then
+            // proceed to the next one.
             if (row_y > rect.Height() - 1)
                 break;
 

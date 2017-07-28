@@ -48,7 +48,8 @@ bool NetworkChannelProxy::Send(std::unique_ptr<IOBuffer> buffer)
     return false;
 }
 
-bool NetworkChannelProxy::Receive(NetworkChannel::ReceiveCompleteHandler handler)
+bool NetworkChannelProxy::Receive(
+    NetworkChannel::ReceiveCompleteHandler handler)
 {
     std::lock_guard<std::mutex> lock(channel_lock_);
 

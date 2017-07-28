@@ -22,7 +22,8 @@ CursorEncoder::CursorEncoder()
       cache_(kCacheSize)
 {
     static_assert(kCacheSize >= 2 && kCacheSize <= 31, "Invalid cache size");
-    static_assert(kCompressionRatio >= 1 && kCompressionRatio <= 9, "Invalid compression ratio");
+    static_assert(kCompressionRatio >= 1 && kCompressionRatio <= 9,
+                  "Invalid compression ratio");
 }
 
 static uint8_t* GetOutputBuffer(proto::CursorShape* cursor_shape, size_t size)
@@ -30,7 +31,8 @@ static uint8_t* GetOutputBuffer(proto::CursorShape* cursor_shape, size_t size)
     cursor_shape->mutable_data()->resize(size);
 
     return const_cast<uint8_t*>(
-        reinterpret_cast<const uint8_t*>(cursor_shape->mutable_data()->data()));
+        reinterpret_cast<const uint8_t*>(
+            cursor_shape->mutable_data()->data()));
 }
 
 void CursorEncoder::CompressCursor(proto::CursorShape* cursor_shape,
@@ -65,9 +67,10 @@ void CursorEncoder::CompressCursor(proto::CursorShape* cursor_shape,
         int consumed = 0;
         int written = 0;
 
-        compress_again = compressor_.Process(source_pos + row_pos, row_size - row_pos,
-                                             compressed_pos + filled, packet_size - filled,
-                                             flush, &consumed, &written);
+        compress_again = compressor_.Process(
+            source_pos + row_pos, row_size - row_pos,
+            compressed_pos + filled, packet_size - filled,
+            flush, &consumed, &written);
 
         row_pos += consumed;
         filled += written;
@@ -97,11 +100,13 @@ std::unique_ptr<proto::CursorShape> CursorEncoder::Encode(
         return nullptr;
 
     const DesktopSize& size = mouse_cursor->Size();
+    const int16_t kMaxSize = std::numeric_limits<int16_t>::max() / 2;
 
-    if (size.Width() <= 0 || size.Width() > (std::numeric_limits<int16_t>::max() / 2) ||
-        size.Height() <= 0 || size.Height() > (std::numeric_limits<int16_t>::max() / 2))
+    if (size.Width() <= 0 || size.Width() > kMaxSize ||
+        size.Height() <= 0 || size.Height() > kMaxSize)
     {
-        DLOG(ERROR) << "Wrong size of cursor: " << size.Width() << "x" << size.Height();
+        DLOG(ERROR) << "Wrong size of cursor: "
+                    << size.Width() << "x" << size.Height();
         return nullptr;
     }
 

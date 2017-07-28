@@ -22,7 +22,7 @@ public:
     ~Clipboard();
 
     using ClipboardEventCallback =
-        std::function<void(std::unique_ptr<proto::ClipboardEvent> clipboard_event)>;
+        std::function<void(std::unique_ptr<proto::ClipboardEvent> event)>;
 
     // Callback is called when there is an outgoing clipboard.
     bool Start(ClipboardEventCallback clipboard_event_callback);
@@ -30,7 +30,7 @@ public:
     void Stop();
 
     // Receiving the incoming clipboard.
-    void InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);
+    void InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> event);
 
 private:
     // Handles messages received by |window_|.

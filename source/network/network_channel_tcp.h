@@ -57,7 +57,8 @@ public:
     void StartChannel(StatusChangeHandler handler) override;
 
 protected:
-    void Send(std::unique_ptr<IOBuffer> buffer, SendCompleteHandler handler) override;
+    void Send(std::unique_ptr<IOBuffer> buffer,
+              SendCompleteHandler handler) override;
     void Send(std::unique_ptr<IOBuffer> buffer) override;
     void Receive(ReceiveCompleteHandler handler) override;
     void Disconnect() override;
@@ -92,8 +93,10 @@ private:
                                size_t bytes_transferred);
 
     void ScheduleWrite();
-    void OnWriteSizeComplete(const std::error_code& code, size_t bytes_transferred);
-    void OnWriteComplete(const std::error_code& code, size_t bytes_transferred);
+    void OnWriteSizeComplete(const std::error_code& code,
+                             size_t bytes_transferred);
+    void OnWriteComplete(const std::error_code& code,
+                         size_t bytes_transferred);
 
     // Thread implementation.
     void Run() override;

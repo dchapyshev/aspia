@@ -23,7 +23,8 @@ public:
 
     static std::unique_ptr<VideoDecoderZLIB> Create();
 
-    bool Decode(const proto::VideoPacket& packet, DesktopFrame* frame) override;
+    bool Decode(const proto::VideoPacket& packet,
+                DesktopFrame* frame) override;
 
 private:
     VideoDecoderZLIB() = default;

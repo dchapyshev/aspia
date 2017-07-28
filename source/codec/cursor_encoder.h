@@ -21,10 +21,12 @@ public:
     CursorEncoder();
     ~CursorEncoder() = default;
 
-    std::unique_ptr<proto::CursorShape> Encode(std::unique_ptr<MouseCursor> mouse_cursor);
+    std::unique_ptr<proto::CursorShape> Encode(
+        std::unique_ptr<MouseCursor> mouse_cursor);
 
 private:
-    void CompressCursor(proto::CursorShape* cursor_shape, const MouseCursor* mouse_cursor);
+    void CompressCursor(proto::CursorShape* cursor_shape,
+                        const MouseCursor* mouse_cursor);
 
     CompressorZLIB compressor_;
     MouseCursorCache cache_;

@@ -103,7 +103,8 @@ void Clipboard::OnClipboardUpdate()
     {
         std::string data;
 
-        // Add a scope, so that we keep the clipboard open for as short a time as possible.
+        // Add a scope, so that we keep the clipboard open for as short a time
+        // as possible.
         {
             ScopedClipboard clipboard;
 
@@ -157,7 +158,8 @@ void Clipboard::OnClipboardUpdate()
     }
 }
 
-bool Clipboard::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result)
+bool Clipboard::OnMessage(UINT message, WPARAM wParam,
+                          LPARAM lParam, LRESULT& result)
 {
     UNREF(wParam);
     UNREF(lParam);
@@ -187,9 +189,11 @@ bool Clipboard::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& r
             if (HaveClipboardListenerApi())
                 return false;
 
-            // wParam - A handle to the window being removed from the clipboard viewer chain.
-            // lParam - A handle to the next window in the chain following the window being removed.
-            //          This parameter is NULL if the window being removed is the last window in the chain.
+            // wParam - A handle to the window being removed from the clipboard
+            // viewer chain.
+            // lParam - A handle to the next window in the chain following the
+            // window being removed. This parameter is NULL if the window being
+            // removed is the last window in the chain.
 
             if (reinterpret_cast<HWND>(wParam) == next_viewer_window_)
             {
@@ -210,7 +214,8 @@ bool Clipboard::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& r
     return true;
 }
 
-void Clipboard::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
+void Clipboard::InjectClipboardEvent(
+    std::shared_ptr<proto::ClipboardEvent> clipboard_event)
 {
     if (!window_ || !clipboard_event)
         return;
@@ -218,11 +223,13 @@ void Clipboard::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clip
     // Currently we only handle UTF-8 text.
     if (clipboard_event->mime_type() != kMimeTypeTextUtf8)
     {
-        LOG(WARNING) << "Unsupported mime type: " << clipboard_event->mime_type();
+        LOG(WARNING) << "Unsupported mime type: "
+                     << clipboard_event->mime_type();
         return;
     }
 
-    if (!StringIsUtf8(clipboard_event->data().c_str(), clipboard_event->data().length()))
+    if (!StringIsUtf8(clipboard_event->data().c_str(),
+                      clipboard_event->data().length()))
     {
         LOG(WARNING) << "Clipboard data is not UTF-8 encoded";
         return;
@@ -251,14 +258,16 @@ void Clipboard::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clip
 
     clipboard.Empty();
 
-    HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(WCHAR));
+    HGLOBAL text_global =
+        GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(WCHAR));
     if (!text_global)
     {
         LOG(WARNING) << "GlobalAlloc() failed: " << GetLastSystemErrorString();
         return;
     }
 
-    LPWSTR text_global_locked = reinterpret_cast<LPWSTR>(GlobalLock(text_global));
+    LPWSTR text_global_locked =
+        reinterpret_cast<LPWSTR>(GlobalLock(text_global));
 
     if (!text_global_locked)
     {

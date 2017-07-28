@@ -21,7 +21,8 @@ NetworkChannel::~NetworkChannel()
     proxy_ = nullptr;
 }
 
-std::shared_ptr<NetworkChannelProxy> NetworkChannel::network_channel_proxy() const
+std::shared_ptr<NetworkChannelProxy>
+NetworkChannel::network_channel_proxy() const
 {
     return proxy_;
 }
