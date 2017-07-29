@@ -24,8 +24,6 @@ public:
 
     ~ClientSessionPowerManage();
 
-    void OnMessageReceive(std::unique_ptr<IOBuffer> buffer) final {};
-
 private:
     // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;

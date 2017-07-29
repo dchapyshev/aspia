@@ -26,11 +26,11 @@ void FileTransferSessionClient::Run(const std::wstring& channel_id)
         uint32_t user_data = GetCurrentProcessId();
 
         PipeChannel::DisconnectHandler disconnect_handler =
-            std::bind(&FileTransferSessionClient::OnPipeChannelDisconnect, this);
+            std::bind(&FileTransferSessionClient::OnIpcChannelDisconnect, this);
 
         if (ipc_channel_->Connect(user_data, std::move(disconnect_handler)))
         {
-            OnPipeChannelConnect(user_data);
+            OnIpcChannelConnect(user_data);
             status_dialog_->WaitForClose();
         }
 
@@ -40,7 +40,7 @@ void FileTransferSessionClient::Run(const std::wstring& channel_id)
     status_dialog_.reset();
 }
 
-void FileTransferSessionClient::OnPipeChannelConnect(uint32_t user_data)
+void FileTransferSessionClient::OnIpcChannelConnect(uint32_t user_data)
 {
     // The server sends the session type in user_data.
     proto::SessionType session_type = static_cast<proto::SessionType>(user_data);
@@ -54,16 +54,16 @@ void FileTransferSessionClient::OnPipeChannelConnect(uint32_t user_data)
     status_dialog_->SetSessionStartedStatus();
 
     ipc_channel_proxy_->Receive(std::bind(
-        &FileTransferSessionClient::OnPipeChannelMessage, this,
+        &FileTransferSessionClient::OnIpcChannelMessage, this,
         std::placeholders::_1));
 }
 
-void FileTransferSessionClient::OnPipeChannelDisconnect()
+void FileTransferSessionClient::OnIpcChannelDisconnect()
 {
     status_dialog_->SetSessionTerminatedStatus();
 }
 
-void FileTransferSessionClient::OnPipeChannelMessage(
+void FileTransferSessionClient::OnIpcChannelMessage(
     std::unique_ptr<IOBuffer> buffer)
 {
     proto::file_transfer::ClientToHost message;
@@ -132,8 +132,17 @@ void FileTransferSessionClient::OnPipeChannelMessage(
 void FileTransferSessionClient::SendReply(
     const proto::file_transfer::HostToClient& reply)
 {
-    std::unique_ptr<IOBuffer> buffer = SerializeMessage<IOBuffer>(reply);
-    ipc_channel_proxy_->Send(std::move(buffer), nullptr);
+    ipc_channel_proxy_->Send(
+        SerializeMessage<IOBuffer>(reply),
+        std::bind(&FileTransferSessionClient::OnReplySended, this));
+}
+
+void FileTransferSessionClient::OnReplySended()
+{
+    // Receive next request.
+    ipc_channel_proxy_->Receive(std::bind(
+        &FileTransferSessionClient::OnIpcChannelMessage, this,
+        std::placeholders::_1));
 }
 
 void FileTransferSessionClient::ReadDriveListRequest()

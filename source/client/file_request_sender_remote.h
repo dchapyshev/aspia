@@ -55,12 +55,13 @@ public:
         std::shared_ptr<FileReplyReceiverProxy> receiver,
         std::unique_ptr<proto::FilePacket> file_packet) override;
 
-    bool ReadIncommingMessage(const IOBuffer& buffer);
-
 private:
     void SendRequest(
         std::shared_ptr<FileReplyReceiverProxy> receiver,
         std::unique_ptr<proto::file_transfer::ClientToHost> request);
+
+    void OnRequestSended();
+    void OnReplyReceived(std::unique_ptr<IOBuffer> buffer);
 
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;
     FileReplyReceiverQueue receiver_queue_;

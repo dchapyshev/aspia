@@ -26,8 +26,6 @@ public:
     ~ClientSessionFileTransfer();
 
 private:
-    void OnMessageReceive(std::unique_ptr<IOBuffer> buffer) final;
-
     // UiFileManager::Delegate implementation.
     void OnWindowClose() override;
 

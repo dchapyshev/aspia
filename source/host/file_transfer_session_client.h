@@ -25,12 +25,12 @@ public:
     void Run(const std::wstring& channel_id);
 
 private:
-    // PipeChannel::Delegate implementation.
-    void OnPipeChannelConnect(uint32_t user_data);
-    void OnPipeChannelDisconnect();
-    void OnPipeChannelMessage(std::unique_ptr<IOBuffer> buffer);
+    void OnIpcChannelConnect(uint32_t user_data);
+    void OnIpcChannelDisconnect();
+    void OnIpcChannelMessage(std::unique_ptr<IOBuffer> buffer);
 
     void SendReply(const proto::file_transfer::HostToClient& reply);
+    void OnReplySended();
 
     void ReadDriveListRequest();
     void ReadFileListRequest(const proto::FileListRequest& request);

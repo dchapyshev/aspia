@@ -20,6 +20,10 @@ ClientSessionDesktopView::ClientSessionDesktopView(
     : ClientSession(config, channel_proxy)
 {
     viewer_.reset(new UiViewerWindow(&config_, this));
+
+    channel_proxy_->Receive(std::bind(
+        &ClientSessionDesktopView::OnMessageReceived, this,
+        std::placeholders::_1));
 }
 
 ClientSessionDesktopView::~ClientSessionDesktopView()
@@ -110,7 +114,7 @@ void ClientSessionDesktopView::ReadConfigRequest(
     OnConfigChange(config_.desktop_session_config());
 }
 
-void ClientSessionDesktopView::OnMessageReceive(
+void ClientSessionDesktopView::OnMessageReceived(
     std::unique_ptr<IOBuffer> buffer)
 {
     proto::desktop::HostToClient message;
@@ -146,7 +150,7 @@ void ClientSessionDesktopView::OnMessageReceive(
         if (success)
         {
             channel_proxy_->Receive(std::bind(
-                &ClientSessionDesktopView::OnMessageReceive, this,
+                &ClientSessionDesktopView::OnMessageReceived, this,
                 std::placeholders::_1));
             return;
         }

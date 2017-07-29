@@ -42,7 +42,7 @@ private:
     void OnClipboardEvent(
         std::unique_ptr<proto::ClipboardEvent> clipboard_event) override { }
 
-    void OnMessageReceive(std::unique_ptr<IOBuffer> buffer) override;
+    virtual void OnMessageReceived(std::unique_ptr<IOBuffer> buffer);
 
     std::unique_ptr<VideoDecoder> video_decoder_;
     proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;

@@ -123,22 +123,37 @@ void FileRequestSenderRemote::SendFileUploadDataRequest(
     SendRequest(receiver, std::move(request));
 }
 
-bool FileRequestSenderRemote::ReadIncommingMessage(const IOBuffer& buffer)
-{
-    proto::file_transfer::HostToClient message;
-
-    if (!ParseMessage(buffer, message))
-        return false;
-
-    return receiver_queue_.ProcessNextReply(message);
-}
-
 void FileRequestSenderRemote::SendRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
     std::unique_ptr<proto::file_transfer::ClientToHost> request)
 {
-    channel_proxy_->Send(SerializeMessage<IOBuffer>(*request));
+    channel_proxy_->Send(
+        SerializeMessage<IOBuffer>(*request),
+        std::bind(&FileRequestSenderRemote::OnRequestSended, this));
     receiver_queue_.Add(std::move(request), receiver);
+}
+
+void FileRequestSenderRemote::OnRequestSended()
+{
+    channel_proxy_->Receive(std::bind(
+        &FileRequestSenderRemote::OnReplyReceived, this,
+        std::placeholders::_1));
+}
+
+void FileRequestSenderRemote::OnReplyReceived(std::unique_ptr<IOBuffer> buffer)
+{
+    proto::file_transfer::HostToClient reply;
+
+    if (!ParseMessage(*buffer, reply))
+    {
+        channel_proxy_->Disconnect();
+        return;
+    }
+
+    if (!receiver_queue_.ProcessNextReply(reply))
+    {
+        channel_proxy_->Disconnect();
+    }
 }
 
 } // namespace aspia

@@ -21,13 +21,10 @@ public:
         : channel_proxy_(channel_proxy),
           config_(config)
     {
-        channel_proxy_->Receive(std::bind(
-            &ClientSession::OnMessageReceive, this, std::placeholders::_1));
+        // Nothing
     }
 
     virtual ~ClientSession() = default;
-
-    virtual void OnMessageReceive(std::unique_ptr<IOBuffer> buffer) = 0;
 
 protected:
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;
