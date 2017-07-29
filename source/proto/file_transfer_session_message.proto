@@ -27,21 +27,6 @@ enum RequestStatus
     REQUEST_STATUS_FILE_READ_ERROR     = 11;
 }
 
-enum RequestType
-{
-    REQUEST_TYPE_UNKNOWN            = 0;
-    REQUEST_TYPE_DRIVE_LIST         = 1;
-    REQUEST_TYPE_FILE_LIST          = 2;
-    REQUEST_TYPE_DIRECTORY_SIZE     = 3;
-    REQUEST_TYPE_CREATE_DIRECTORY   = 4;
-    REQUEST_TYPE_RENAME             = 5;
-    REQUEST_TYPE_REMOVE             = 6;
-    REQUEST_TYPE_FILE_DOWNLOAD      = 7;
-    REQUEST_TYPE_FILE_DOWNLOAD_DATA = 8;
-    REQUEST_TYPE_FILE_UPLOAD        = 9;
-    REQUEST_TYPE_FILE_UPLOAD_DATA   = 10;
-}
-
 message DriveList
 {
     message Item
@@ -66,6 +51,11 @@ message DriveList
     }
 
     repeated Item item = 1;
+}
+
+message DriveListRequest
+{
+    uint32 dummy = 1;
 }
 
 message FileList
@@ -105,6 +95,11 @@ message FileUploadRequest
 message FileDownloadRequest
 {
    string file_path = 1;
+}
+
+message FilePacketRequest
+{
+    uint32 dummy = 1;
 }
 
 message FilePacket

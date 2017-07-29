@@ -74,58 +74,52 @@ void FileTransferSessionClient::OnIpcChannelMessage(
         return;
     }
 
-    switch (message.type())
+    if (message.has_drive_list_request())
     {
-        case proto::REQUEST_TYPE_DRIVE_LIST:
-            ReadDriveListRequest();
-            break;
-
-        case proto::REQUEST_TYPE_FILE_LIST:
-            ReadFileListRequest(message.file_list_request());
-            break;
-
-        case proto::REQUEST_TYPE_DIRECTORY_SIZE:
-            ReadDirectorySizeRequest(message.directory_size_request());
-            break;
-
-        case proto::REQUEST_TYPE_CREATE_DIRECTORY:
-            ReadCreateDirectoryRequest(message.create_directory_request());
-            break;
-
-        case proto::REQUEST_TYPE_RENAME:
-            ReadRenameRequest(message.rename_request());
-            break;
-
-        case proto::REQUEST_TYPE_REMOVE:
-            ReadRemoveRequest(message.remove_request());
-            break;
-
-        case proto::REQUEST_TYPE_FILE_UPLOAD:
-            ReadFileUploadRequest(message.file_upload_request());
-            break;
-
-        case proto::REQUEST_TYPE_FILE_UPLOAD_DATA:
-        {
-            if (!ReadFileUploadDataRequest(message.file_packet()))
-                ipc_channel_.reset();
-        }
-        break;
-
-        case proto::REQUEST_TYPE_FILE_DOWNLOAD:
-            ReadFileDownloadRequest(message.file_download_request());
-            break;
-
-        case proto::REQUEST_TYPE_FILE_DOWNLOAD_DATA:
-        {
-            if (!ReadFileDownloadDataRequest())
-                ipc_channel_.reset();
-        }
-        break;
-
-        default:
-            LOG(ERROR) << "Unknown message from client: " << message.type();
+        ReadDriveListRequest();
+    }
+    else if (message.has_file_list_request())
+    {
+        ReadFileListRequest(message.file_list_request());
+    }
+    else if (message.has_directory_size_request())
+    {
+        ReadDirectorySizeRequest(message.directory_size_request());
+    }
+    else if (message.has_create_directory_request())
+    {
+        ReadCreateDirectoryRequest(message.create_directory_request());
+    }
+    else if (message.has_rename_request())
+    {
+        ReadRenameRequest(message.rename_request());
+    }
+    else if (message.has_remove_request())
+    {
+        ReadRemoveRequest(message.remove_request());
+    }
+    else if (message.has_file_upload_request())
+    {
+        ReadFileUploadRequest(message.file_upload_request());
+    }
+    else if (message.has_file_packet())
+    {
+        if (!ReadFileUploadDataRequest(message.file_packet()))
             ipc_channel_.reset();
-            break;
+    }
+    else if (message.has_file_download_request())
+    {
+        ReadFileDownloadRequest(message.file_download_request());
+    }
+    else if (message.has_file_packet_request())
+    {
+        if (!ReadFilePacketRequest())
+            ipc_channel_.reset();
+    }
+    else
+    {
+        LOG(ERROR) << "Unknown message from client";
+        ipc_channel_.reset();
     }
 }
 
@@ -308,7 +302,7 @@ void FileTransferSessionClient::ReadFileDownloadRequest(
     SendReply(reply);
 }
 
-bool FileTransferSessionClient::ReadFileDownloadDataRequest()
+bool FileTransferSessionClient::ReadFilePacketRequest()
 {
     if (!file_packetizer_)
     {

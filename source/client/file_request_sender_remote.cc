@@ -24,7 +24,7 @@ void FileRequestSenderRemote::SendDriveListRequest(
     std::unique_ptr<proto::file_transfer::ClientToHost> request =
         std::make_unique<proto::file_transfer::ClientToHost>();
 
-    request->set_type(proto::RequestType::REQUEST_TYPE_DRIVE_LIST);
+    request->mutable_drive_list_request()->set_dummy(1);
 
     SendRequest(receiver, std::move(request));
 }
@@ -36,7 +36,6 @@ void FileRequestSenderRemote::SendFileListRequest(
     std::unique_ptr<proto::file_transfer::ClientToHost> request =
         std::make_unique<proto::file_transfer::ClientToHost>();
 
-    request->set_type(proto::RequestType::REQUEST_TYPE_FILE_LIST);
     request->mutable_file_list_request()->set_path(path.u8string());
 
     SendRequest(receiver, std::move(request));
@@ -49,7 +48,6 @@ void FileRequestSenderRemote::SendCreateDirectoryRequest(
     std::unique_ptr<proto::file_transfer::ClientToHost> request =
         std::make_unique<proto::file_transfer::ClientToHost>();
 
-    request->set_type(proto::RequestType::REQUEST_TYPE_CREATE_DIRECTORY);
     request->mutable_create_directory_request()->set_path(path.u8string());
 
     SendRequest(receiver, std::move(request));
@@ -62,7 +60,6 @@ void FileRequestSenderRemote::SendDirectorySizeRequest(
     std::unique_ptr<proto::file_transfer::ClientToHost> request =
         std::make_unique<proto::file_transfer::ClientToHost>();
 
-    request->set_type(proto::RequestType::REQUEST_TYPE_DIRECTORY_SIZE);
     request->mutable_directory_size_request()->set_path(path.u8string());
 
     SendRequest(receiver, std::move(request));
@@ -75,7 +72,6 @@ void FileRequestSenderRemote::SendRemoveRequest(
     std::unique_ptr<proto::file_transfer::ClientToHost> request =
         std::make_unique<proto::file_transfer::ClientToHost>();
 
-    request->set_type(proto::RequestType::REQUEST_TYPE_REMOVE);
     request->mutable_remove_request()->set_path(path.u8string());
 
     SendRequest(receiver, std::move(request));
@@ -89,7 +85,6 @@ void FileRequestSenderRemote::SendRenameRequest(
     std::unique_ptr<proto::file_transfer::ClientToHost> request =
         std::make_unique<proto::file_transfer::ClientToHost>();
 
-    request->set_type(proto::RequestType::REQUEST_TYPE_RENAME);
     request->mutable_rename_request()->set_old_name(old_name.u8string());
     request->mutable_rename_request()->set_new_name(new_name.u8string());
 
@@ -103,7 +98,6 @@ void FileRequestSenderRemote::SendFileUploadRequest(
     std::unique_ptr<proto::file_transfer::ClientToHost> request =
         std::make_unique<proto::file_transfer::ClientToHost>();
 
-    request->set_type(proto::RequestType::REQUEST_TYPE_FILE_UPLOAD);
     request->mutable_file_upload_request()->set_file_path(file_path.u8string());
     request->mutable_file_upload_request()->set_overwrite(false);
 
@@ -117,7 +111,6 @@ void FileRequestSenderRemote::SendFileUploadDataRequest(
     std::unique_ptr<proto::file_transfer::ClientToHost> request =
         std::make_unique<proto::file_transfer::ClientToHost>();
 
-    request->set_type(proto::RequestType::REQUEST_TYPE_FILE_UPLOAD_DATA);
     request->set_allocated_file_packet(file_packet.release());
 
     SendRequest(receiver, std::move(request));

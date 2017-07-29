@@ -41,7 +41,7 @@ private:
     void ReadFileUploadRequest(const proto::FileUploadRequest& request);
     bool ReadFileUploadDataRequest(const proto::FilePacket& file_packet);
     void ReadFileDownloadRequest(const proto::FileDownloadRequest& request);
-    bool ReadFileDownloadDataRequest();
+    bool ReadFilePacketRequest();
 
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::shared_ptr<PipeChannelProxy> ipc_channel_proxy_;

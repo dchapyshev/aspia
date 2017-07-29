@@ -34,127 +34,108 @@ bool FileReplyReceiverQueue::ProcessNextReply(
     DCHECK(request);
     DCHECK(receiver);
 
-    switch (request->type())
+    if (request->has_drive_list_request())
     {
-        case proto::REQUEST_TYPE_DRIVE_LIST:
+        if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
         {
-            if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
-            {
-                if (!reply.has_drive_list())
-                    return false;
+            if (!reply.has_drive_list())
+                return false;
 
-                std::unique_ptr<proto::DriveList> drive_list(
-                    reply.release_drive_list());
+            std::unique_ptr<proto::DriveList> drive_list(
+                reply.release_drive_list());
 
-                receiver->OnDriveListRequestReply(std::move(drive_list));
-            }
-            else
-            {
-                receiver->OnDriveListRequestFailure(reply.status());
-            }
+            receiver->OnDriveListRequestReply(std::move(drive_list));
         }
-        break;
-
-        case proto::REQUEST_TYPE_FILE_LIST:
+        else
         {
-            if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
-            {
-                if (!reply.has_file_list())
-                    return false;
-
-                std::unique_ptr<proto::FileList> file_list(
-                    reply.release_file_list());
-
-                receiver->OnFileListRequestReply(
-                    std::experimental::filesystem::u8path(
-                        request->file_list_request().path()),
-                    std::move(file_list));
-            }
-            else
-            {
-                receiver->OnFileListRequestFailure(
-                    std::experimental::filesystem::u8path(
-                        request->file_list_request().path()),
-                    reply.status());
-            }
+            receiver->OnDriveListRequestFailure(reply.status());
         }
-        break;
-
-        case proto::REQUEST_TYPE_DIRECTORY_SIZE:
+    }
+    else if (request->has_file_list_request())
+    {
+        if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
         {
-            if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
-            {
-                if (!reply.has_directory_size())
-                    return false;
+            if (!reply.has_file_list())
+                return false;
 
-                receiver->OnDirectorySizeRequestReply(
-                    std::experimental::filesystem::u8path(
-                        request->directory_size_request().path()),
-                    reply.directory_size().size());
-            }
-            else
-            {
-                receiver->OnDirectorySizeRequestFailure(
-                    std::experimental::filesystem::u8path(
-                        request->directory_size_request().path()),
-                    reply.status());
-            }
-        }
-        break;
+            std::unique_ptr<proto::FileList> file_list(
+                reply.release_file_list());
 
-        case proto::REQUEST_TYPE_CREATE_DIRECTORY:
-        {
-            receiver->OnCreateDirectoryRequestReply(
+            receiver->OnFileListRequestReply(
                 std::experimental::filesystem::u8path(
-                    request->create_directory_request().path()),
+                    request->file_list_request().path()),
+                std::move(file_list));
+        }
+        else
+        {
+            receiver->OnFileListRequestFailure(
+                std::experimental::filesystem::u8path(
+                    request->file_list_request().path()),
                 reply.status());
         }
-        break;
-
-        case proto::REQUEST_TYPE_RENAME:
+    }
+    else if (request->has_directory_size_request())
+    {
+        if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
         {
-            receiver->OnRenameRequestReply(
+            if (!reply.has_directory_size())
+                return false;
+
+            receiver->OnDirectorySizeRequestReply(
                 std::experimental::filesystem::u8path(
-                    request->rename_request().old_name()),
+                    request->directory_size_request().path()),
+                reply.directory_size().size());
+        }
+        else
+        {
+            receiver->OnDirectorySizeRequestFailure(
                 std::experimental::filesystem::u8path(
-                    request->rename_request().new_name()),
+                    request->directory_size_request().path()),
                 reply.status());
         }
-        break;
+    }
+    else if (request->has_create_directory_request())
+    {
+        receiver->OnCreateDirectoryRequestReply(
+            std::experimental::filesystem::u8path(
+                request->create_directory_request().path()),
+            reply.status());
+    }
+    else if (request->has_rename_request())
+    {
+        receiver->OnRenameRequestReply(
+            std::experimental::filesystem::u8path(
+                request->rename_request().old_name()),
+            std::experimental::filesystem::u8path(
+                request->rename_request().new_name()),
+            reply.status());
+    }
+    else if (request->has_remove_request())
+    {
+        receiver->OnRemoveRequestReply(
+            std::experimental::filesystem::u8path(
+                request->remove_request().path()),
+            reply.status());
+    }
+    else if (request->has_file_upload_request())
+    {
+        receiver->OnFileUploadRequestReply(
+            std::experimental::filesystem::u8path(
+                request->file_upload_request().file_path()),
+            reply.status());
+    }
+    else if (request->has_file_packet())
+    {
+        std::unique_ptr<proto::FilePacket> file_packet(
+            request->release_file_packet());
 
-        case proto::REQUEST_TYPE_REMOVE:
-        {
-            receiver->OnRemoveRequestReply(
-                std::experimental::filesystem::u8path(
-                    request->remove_request().path()),
-                reply.status());
-        }
-        break;
-
-        case proto::REQUEST_TYPE_FILE_UPLOAD:
-        {
-            receiver->OnFileUploadRequestReply(
-                std::experimental::filesystem::u8path(
-                    request->file_upload_request().file_path()),
-                reply.status());
-        }
-        break;
-
-        case proto::REQUEST_TYPE_FILE_UPLOAD_DATA:
-        {
-            std::unique_ptr<proto::FilePacket> file_packet(
-                request->release_file_packet());
-            receiver->OnFileUploadDataRequestReply(
-                std::move(file_packet), reply.status());
-        }
-        break;
-
-        case proto::REQUEST_TYPE_UNKNOWN:
-        default:
-        {
-            DLOG(FATAL) << "Unknown request type";
-            return false;
-        }
+        receiver->OnFileUploadDataRequestReply(
+            std::move(file_packet), reply.status());
+    }
+    else
+    {
+        DLOG(ERROR) << "Unhandled request type";
+        return false;
     }
 
     return true;

@@ -24,7 +24,7 @@ message HostToClient
 
 message ClientToHost
 {
-    RequestType type                                = 1;
+    DriveListRequest drive_list_request             = 1;
     FileListRequest file_list_request               = 2;
     DirectorySizeRequest directory_size_request     = 3;
     CreateDirectoryRequest create_directory_request = 4;
@@ -32,5 +32,6 @@ message ClientToHost
     RemoveRequest remove_request                    = 6;
     FileDownloadRequest file_download_request       = 7;
     FileUploadRequest file_upload_request           = 8;
-    FilePacket file_packet                          = 9;
+    FilePacketRequest file_packet_request           = 9;
+    FilePacket file_packet                          = 10;
 }

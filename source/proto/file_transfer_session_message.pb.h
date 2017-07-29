@@ -44,6 +44,9 @@ extern DirectorySizeRequestDefaultTypeInternal _DirectorySizeRequest_default_ins
 class DriveList;
 class DriveListDefaultTypeInternal;
 extern DriveListDefaultTypeInternal _DriveList_default_instance_;
+class DriveListRequest;
+class DriveListRequestDefaultTypeInternal;
+extern DriveListRequestDefaultTypeInternal _DriveListRequest_default_instance_;
 class DriveList_Item;
 class DriveList_ItemDefaultTypeInternal;
 extern DriveList_ItemDefaultTypeInternal _DriveList_Item_default_instance_;
@@ -62,6 +65,9 @@ extern FileList_ItemDefaultTypeInternal _FileList_Item_default_instance_;
 class FilePacket;
 class FilePacketDefaultTypeInternal;
 extern FilePacketDefaultTypeInternal _FilePacket_default_instance_;
+class FilePacketRequest;
+class FilePacketRequestDefaultTypeInternal;
+extern FilePacketRequestDefaultTypeInternal _FilePacketRequest_default_instance_;
 class FileUploadRequest;
 class FileUploadRequestDefaultTypeInternal;
 extern FileUploadRequestDefaultTypeInternal _FileUploadRequest_default_instance_;
@@ -141,26 +147,6 @@ bool RequestStatus_IsValid(int value);
 const RequestStatus RequestStatus_MIN = REQUEST_STATUS_UNKNOWN;
 const RequestStatus RequestStatus_MAX = REQUEST_STATUS_FILE_READ_ERROR;
 const int RequestStatus_ARRAYSIZE = RequestStatus_MAX + 1;
-
-enum RequestType {
-  REQUEST_TYPE_UNKNOWN = 0,
-  REQUEST_TYPE_DRIVE_LIST = 1,
-  REQUEST_TYPE_FILE_LIST = 2,
-  REQUEST_TYPE_DIRECTORY_SIZE = 3,
-  REQUEST_TYPE_CREATE_DIRECTORY = 4,
-  REQUEST_TYPE_RENAME = 5,
-  REQUEST_TYPE_REMOVE = 6,
-  REQUEST_TYPE_FILE_DOWNLOAD = 7,
-  REQUEST_TYPE_FILE_DOWNLOAD_DATA = 8,
-  REQUEST_TYPE_FILE_UPLOAD = 9,
-  REQUEST_TYPE_FILE_UPLOAD_DATA = 10,
-  RequestType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  RequestType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool RequestType_IsValid(int value);
-const RequestType RequestType_MIN = REQUEST_TYPE_UNKNOWN;
-const RequestType RequestType_MAX = REQUEST_TYPE_FILE_UPLOAD_DATA;
-const int RequestType_ARRAYSIZE = RequestType_MAX + 1;
 
 // ===================================================================
 
@@ -399,6 +385,84 @@ class DriveList : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
+class DriveListRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DriveListRequest) */ {
+ public:
+  DriveListRequest();
+  virtual ~DriveListRequest();
+
+  DriveListRequest(const DriveListRequest& from);
+
+  inline DriveListRequest& operator=(const DriveListRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const DriveListRequest& default_instance();
+
+  static inline const DriveListRequest* internal_default_instance() {
+    return reinterpret_cast<const DriveListRequest*>(
+               &_DriveListRequest_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    2;
+
+  void Swap(DriveListRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  inline DriveListRequest* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  DriveListRequest* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const DriveListRequest& from);
+  void MergeFrom(const DriveListRequest& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(DriveListRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // uint32 dummy = 1;
+  void clear_dummy();
+  static const int kDummyFieldNumber = 1;
+  ::google::protobuf::uint32 dummy() const;
+  void set_dummy(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.DriveListRequest)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::uint32 dummy_;
+  mutable int _cached_size_;
+  friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class FileList_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.FileList.Item) */ {
  public:
   FileList_Item();
@@ -418,7 +482,7 @@ class FileList_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_FileList_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    2;
+    3;
 
   void Swap(FileList_Item* other);
 
@@ -525,7 +589,7 @@ class FileList : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_FileList_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    3;
+    4;
 
   void Swap(FileList* other);
 
@@ -611,7 +675,7 @@ class FileListRequest : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_FileListRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    4;
+    5;
 
   void Swap(FileListRequest* other);
 
@@ -697,7 +761,7 @@ class DirectorySize : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_DirectorySize_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
+    6;
 
   void Swap(DirectorySize* other);
 
@@ -775,7 +839,7 @@ class DirectorySizeRequest : public ::google::protobuf::MessageLite /* @@protoc_
                &_DirectorySizeRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    6;
+    7;
 
   void Swap(DirectorySizeRequest* other);
 
@@ -861,7 +925,7 @@ class FileUploadRequest : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_FileUploadRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    8;
 
   void Swap(FileUploadRequest* other);
 
@@ -954,7 +1018,7 @@ class FileDownloadRequest : public ::google::protobuf::MessageLite /* @@protoc_i
                &_FileDownloadRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    9;
 
   void Swap(FileDownloadRequest* other);
 
@@ -1021,6 +1085,84 @@ class FileDownloadRequest : public ::google::protobuf::MessageLite /* @@protoc_i
 };
 // -------------------------------------------------------------------
 
+class FilePacketRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.FilePacketRequest) */ {
+ public:
+  FilePacketRequest();
+  virtual ~FilePacketRequest();
+
+  FilePacketRequest(const FilePacketRequest& from);
+
+  inline FilePacketRequest& operator=(const FilePacketRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const FilePacketRequest& default_instance();
+
+  static inline const FilePacketRequest* internal_default_instance() {
+    return reinterpret_cast<const FilePacketRequest*>(
+               &_FilePacketRequest_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    10;
+
+  void Swap(FilePacketRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  inline FilePacketRequest* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  FilePacketRequest* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const FilePacketRequest& from);
+  void MergeFrom(const FilePacketRequest& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(FilePacketRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // uint32 dummy = 1;
+  void clear_dummy();
+  static const int kDummyFieldNumber = 1;
+  ::google::protobuf::uint32 dummy() const;
+  void set_dummy(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.FilePacketRequest)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::uint32 dummy_;
+  mutable int _cached_size_;
+  friend struct protobuf_file_5ftransfer_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class FilePacket : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.FilePacket) */ {
  public:
   FilePacket();
@@ -1040,7 +1182,7 @@ class FilePacket : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_FilePacket_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    11;
 
   void Swap(FilePacket* other);
 
@@ -1159,7 +1301,7 @@ class CreateDirectoryRequest : public ::google::protobuf::MessageLite /* @@proto
                &_CreateDirectoryRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    12;
 
   void Swap(CreateDirectoryRequest* other);
 
@@ -1245,7 +1387,7 @@ class RenameRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_RenameRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    13;
 
   void Swap(RenameRequest* other);
 
@@ -1346,7 +1488,7 @@ class RemoveRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_RemoveRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    14;
 
   void Swap(RemoveRequest* other);
 
@@ -1599,6 +1741,24 @@ inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DriveList_Ite
 DriveList::item() const {
   // @@protoc_insertion_point(field_list:aspia.proto.DriveList.item)
   return item_;
+}
+
+// -------------------------------------------------------------------
+
+// DriveListRequest
+
+// uint32 dummy = 1;
+inline void DriveListRequest::clear_dummy() {
+  dummy_ = 0u;
+}
+inline ::google::protobuf::uint32 DriveListRequest::dummy() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DriveListRequest.dummy)
+  return dummy_;
+}
+inline void DriveListRequest::set_dummy(::google::protobuf::uint32 value) {
+  
+  dummy_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DriveListRequest.dummy)
 }
 
 // -------------------------------------------------------------------
@@ -1996,6 +2156,24 @@ inline void FileDownloadRequest::set_allocated_file_path(::std::string* file_pat
 
 // -------------------------------------------------------------------
 
+// FilePacketRequest
+
+// uint32 dummy = 1;
+inline void FilePacketRequest::clear_dummy() {
+  dummy_ = 0u;
+}
+inline ::google::protobuf::uint32 FilePacketRequest::dummy() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.FilePacketRequest.dummy)
+  return dummy_;
+}
+inline void FilePacketRequest::set_dummy(::google::protobuf::uint32 value) {
+  
+  dummy_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.FilePacketRequest.dummy)
+}
+
+// -------------------------------------------------------------------
+
 // FilePacket
 
 // uint32 flags = 1;
@@ -2328,6 +2506,10 @@ inline void RemoveRequest::set_allocated_path(::std::string* path) {
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -2342,7 +2524,6 @@ namespace protobuf {
 template <> struct is_proto_enum< ::aspia::proto::DriveList_Item_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::FilePacket_Flags> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::RequestStatus> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::RequestType> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
 }  // namespace google
