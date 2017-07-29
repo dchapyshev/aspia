@@ -25,8 +25,9 @@ static const WCHAR kServiceFullName[] = L"Aspia Desktop Session Launcher";
 // Name of the default session desktop.
 static WCHAR kDefaultDesktopName[] = L"winsta0\\default";
 
-ConsoleSessionLauncher::ConsoleSessionLauncher(const std::wstring& service_id) :
-    Service(ServiceManager::CreateUniqueServiceName(kServiceShortName, service_id))
+ConsoleSessionLauncher::ConsoleSessionLauncher(const std::wstring& service_id)
+    : Service(ServiceManager::CreateUniqueServiceName(
+          kServiceShortName, service_id))
 {
     // Nothing
 }
@@ -74,7 +75,8 @@ static bool CreatePrivilegedToken(ScopedHandle& token_out)
     state.PrivilegeCount = 1;
     state.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    if (!LookupPrivilegeValueW(nullptr, SE_TCB_NAME, &state.Privileges[0].Luid))
+    if (!LookupPrivilegeValueW(nullptr, SE_TCB_NAME,
+                               &state.Privileges[0].Luid))
     {
         LOG(ERROR) << "LookupPrivilegeValueW() failed: "
                    << GetLastSystemErrorString();
@@ -82,7 +84,8 @@ static bool CreatePrivilegedToken(ScopedHandle& token_out)
     }
 
     // Enable the SE_TCB_NAME privilege.
-    if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0, nullptr, 0))
+    if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0,
+                               nullptr, nullptr))
     {
         LOG(ERROR) << "AdjustTokenPrivileges() failed: "
                    << GetLastSystemErrorString();
