@@ -63,11 +63,11 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(
     }
 
     // Create a security descriptor that gives full access to the caller and
-    // BUILTIN_ADMINISTRATORS and denies access by anyone else.
+    // authenticated users and denies access by anyone else.
     // Local admins need access because the privileged host process will run
     // as a local admin which may not be the same user as the current user.
     std::wstring security_descriptor =
-        StringPrintfW(L"O:%sG:%sD:(A;;GA;;;%s)(A;;GA;;;BA)",
+        StringPrintfW(L"O:%sG:%sD:(A;;GA;;;%s)(A;;GA;;;AU)",
                       user_sid.c_str(),
                       user_sid.c_str(),
                       user_sid.c_str());
