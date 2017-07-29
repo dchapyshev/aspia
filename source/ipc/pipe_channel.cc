@@ -32,7 +32,8 @@ static std::wstring GenerateUniqueRandomChannelID()
     uint32_t last_channel_id = _last_channel_id;
 
     std::random_device device;
-    std::uniform_int_distribution<uint32_t> uniform(0, std::numeric_limits<uint32_t>::max());
+    std::uniform_int_distribution<uint32_t> uniform(
+        0, std::numeric_limits<uint32_t>::max());
 
     uint32_t random = uniform(device);
 
@@ -50,7 +51,8 @@ static std::wstring CreatePipeName(const std::wstring& channel_id)
 }
 
 // static
-std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& channel_id)
+std::unique_ptr<PipeChannel> PipeChannel::CreateServer(
+    std::wstring& channel_id)
 {
     std::wstring user_sid;
 
@@ -102,7 +104,8 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& channel_id)
 
     if (!pipe.IsValid())
     {
-        LOG(ERROR) << "CreateNamedPipeW() failed: " << GetLastSystemErrorString();
+        LOG(ERROR) << "CreateNamedPipeW() failed: "
+                   << GetLastSystemErrorString();
         return nullptr;
     }
 
@@ -111,7 +114,8 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& channel_id)
 }
 
 // static
-std::unique_ptr<PipeChannel> PipeChannel::CreateClient(const std::wstring& channel_id)
+std::unique_ptr<PipeChannel> PipeChannel::CreateClient(
+    const std::wstring& channel_id)
 {
     DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION |
                   FILE_FLAG_OVERLAPPED;
@@ -185,7 +189,8 @@ void PipeChannel::OnWriteSizeComplete(const std::error_code& code,
     }
 
     asio::async_write(stream_,
-                      asio::buffer(write_buffer_->data(), write_buffer_->size()),
+                      asio::buffer(write_buffer_->data(),
+                                   write_buffer_->size()),
                       std::bind(&PipeChannel::OnWriteComplete,
                                 this,
                                 std::placeholders::_1,
@@ -220,14 +225,16 @@ void PipeChannel::OnWriteComplete(const std::error_code& code,
         complete_handler();
 }
 
-void PipeChannel::Send(std::unique_ptr<IOBuffer> buffer, SendCompleteHandler handler)
+void PipeChannel::Send(std::unique_ptr<IOBuffer> buffer,
+                       SendCompleteHandler handler)
 {
     std::lock_guard<std::mutex> lock(write_queue_lock_);
 
     bool schedule_write = write_queue_.empty();
 
-    write_queue_.push(std::make_pair<std::unique_ptr<IOBuffer>, SendCompleteHandler>(
-        std::move(buffer), std::move(handler)));
+    write_queue_.push(
+        std::make_pair<std::unique_ptr<IOBuffer>, SendCompleteHandler>(
+            std::move(buffer), std::move(handler)));
 
     if (schedule_write)
         ScheduleWrite();
@@ -238,7 +245,8 @@ void PipeChannel::Send(std::unique_ptr<IOBuffer> buffer)
     Send(std::move(buffer), nullptr);
 }
 
-bool PipeChannel::Connect(uint32_t& user_data, DisconnectHandler disconnect_handler)
+bool PipeChannel::Connect(uint32_t& user_data,
+                          DisconnectHandler disconnect_handler)
 {
     disconnect_handler_ = std::move(disconnect_handler);
 
@@ -249,12 +257,14 @@ bool PipeChannel::Connect(uint32_t& user_data, DisconnectHandler disconnect_hand
     {
         if (!ConnectNamedPipe(stream_.native_handle(), nullptr))
         {
-            LOG(ERROR) << "ConnectNamedPipe() failed: " << GetLastSystemErrorString();
+            LOG(ERROR) << "ConnectNamedPipe() failed: "
+                       << GetLastSystemErrorString();
             return false;
         }
 
         if (asio::read(stream_,
-                       asio::buffer(&remote_user_data, sizeof(remote_user_data)),
+                       asio::buffer(&remote_user_data,
+                                    sizeof(remote_user_data)),
                        ignored_code) != sizeof(remote_user_data))
             return false;
 
@@ -273,7 +283,8 @@ bool PipeChannel::Connect(uint32_t& user_data, DisconnectHandler disconnect_hand
             return false;
 
         if (asio::read(stream_,
-                       asio::buffer(&remote_user_data, sizeof(remote_user_data)),
+                       asio::buffer(&remote_user_data,
+                                    sizeof(remote_user_data)),
                        ignored_code) != sizeof(remote_user_data))
             return false;
     }
