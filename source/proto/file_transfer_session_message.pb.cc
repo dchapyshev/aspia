@@ -194,6 +194,7 @@ bool RequestStatus_IsValid(int value) {
     case 8:
     case 9:
     case 10:
+    case 11:
       return true;
     default:
       return false;

@@ -15,12 +15,11 @@ package aspia.proto.file_transfer;
 
 message HostToClient
 {
-    RequestType type             = 1;
-    RequestStatus status         = 2;
-    DriveList drive_list         = 3;
-    FileList file_list           = 4;
-    DirectorySize directory_size = 5;
-    FilePacket file_packet       = 6;
+    RequestStatus status         = 1;
+    DriveList drive_list         = 2;
+    FileList file_list           = 3;
+    DirectorySize directory_size = 4;
+    FilePacket file_packet       = 5;
 }
 
 message ClientToHost

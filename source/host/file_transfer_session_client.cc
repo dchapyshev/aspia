@@ -148,7 +148,6 @@ void FileTransferSessionClient::OnReplySended()
 void FileTransferSessionClient::ReadDriveListRequest()
 {
     proto::file_transfer::HostToClient reply;
-    reply.set_type(proto::REQUEST_TYPE_DRIVE_LIST);
     reply.set_status(ExecuteDriveListRequest(reply.mutable_drive_list()));
 
     status_dialog_->SetDriveListRequestStatus(reply.status());
@@ -162,7 +161,6 @@ void FileTransferSessionClient::ReadFileListRequest(
 
     FilePath path = std::experimental::filesystem::u8path(request.path());
 
-    reply.set_type(proto::REQUEST_TYPE_FILE_LIST);
     reply.set_status(ExecuteFileListRequest(path, reply.mutable_file_list()));
 
     status_dialog_->SetFileListRequestStatus(path, reply.status());
@@ -176,7 +174,6 @@ void FileTransferSessionClient::ReadCreateDirectoryRequest(
 
     FilePath path = std::experimental::filesystem::u8path(request.path());
 
-    reply.set_type(proto::REQUEST_TYPE_CREATE_DIRECTORY);
     reply.set_status(ExecuteCreateDirectoryRequest(path));
 
     status_dialog_->SetCreateDirectoryRequestStatus(path, reply.status());
@@ -189,8 +186,6 @@ void FileTransferSessionClient::ReadDirectorySizeRequest(
     proto::file_transfer::HostToClient reply;
 
     FilePath path = std::experimental::filesystem::u8path(request.path());
-
-    reply.set_type(proto::REQUEST_TYPE_DIRECTORY_SIZE);
 
     uint64_t directory_size = 0;
 
@@ -210,7 +205,6 @@ void FileTransferSessionClient::ReadRenameRequest(
     FilePath new_name =
         std::experimental::filesystem::u8path(request.new_name());
 
-    reply.set_type(proto::REQUEST_TYPE_RENAME);
     reply.set_status(ExecuteRenameRequest(old_name, new_name));
 
     status_dialog_->SetRenameRequestStatus(old_name, new_name, reply.status());
@@ -224,7 +218,6 @@ void FileTransferSessionClient::ReadRemoveRequest(
 
     FilePath path = std::experimental::filesystem::u8path(request.path());
 
-    reply.set_type(proto::REQUEST_TYPE_REMOVE);
     reply.set_status(ExecuteRemoveRequest(path));
 
     status_dialog_->SetRemoveRequestStatus(path, reply.status());
@@ -235,7 +228,6 @@ void FileTransferSessionClient::ReadFileUploadRequest(
     const proto::FileUploadRequest& request)
 {
     proto::file_transfer::HostToClient reply;
-    reply.set_type(proto::REQUEST_TYPE_FILE_UPLOAD);
 
     FilePath file_path =
         std::experimental::filesystem::u8path(request.file_path());
@@ -277,7 +269,6 @@ bool FileTransferSessionClient::ReadFileUploadDataRequest(
     }
 
     proto::file_transfer::HostToClient reply;
-    reply.set_type(proto::REQUEST_TYPE_FILE_UPLOAD_DATA);
 
     if (!file_depacketizer_->ReadNextPacket(file_packet))
     {
@@ -297,7 +288,6 @@ void FileTransferSessionClient::ReadFileDownloadRequest(
     const proto::FileDownloadRequest& request)
 {
     proto::file_transfer::HostToClient reply;
-    reply.set_type(proto::REQUEST_TYPE_FILE_DOWNLOAD);
 
     FilePath file_path =
         std::experimental::filesystem::u8path(request.file_path());
@@ -327,7 +317,6 @@ bool FileTransferSessionClient::ReadFileDownloadDataRequest()
     }
 
     proto::file_transfer::HostToClient reply;
-    reply.set_type(proto::REQUEST_TYPE_FILE_DOWNLOAD_DATA);
 
     std::unique_ptr<proto::FilePacket> packet =
         file_packetizer_->CreateNextPacket();

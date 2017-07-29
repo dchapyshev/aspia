@@ -34,14 +34,7 @@ bool FileReplyReceiverQueue::ProcessNextReply(
     DCHECK(request);
     DCHECK(receiver);
 
-    if (reply.type() != request->type())
-    {
-        LOG(ERROR) << "Request type does not match type of reply. Request type: "
-                   << request->type() << " Reply type: " << reply.type();
-        return false;
-    }
-
-    switch (reply.type())
+    switch (request->type())
     {
         case proto::REQUEST_TYPE_DRIVE_LIST:
         {

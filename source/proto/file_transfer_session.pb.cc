@@ -107,7 +107,6 @@ struct StaticDescriptorInitializer {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int HostToClient::kTypeFieldNumber;
 const int HostToClient::kStatusFieldNumber;
 const int HostToClient::kDriveListFieldNumber;
 const int HostToClient::kFileListFieldNumber;
@@ -148,9 +147,7 @@ HostToClient::HostToClient(const HostToClient& from)
   } else {
     file_packet_ = NULL;
   }
-  ::memcpy(&type_, &from.type_,
-    reinterpret_cast<char*>(&status_) -
-    reinterpret_cast<char*>(&type_) + sizeof(status_));
+  status_ = from.status_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.HostToClient)
 }
 
@@ -216,8 +213,7 @@ void HostToClient::Clear() {
     delete file_packet_;
   }
   file_packet_ = NULL;
-  ::memset(&type_, 0, reinterpret_cast<char*>(&status_) -
-    reinterpret_cast<char*>(&type_) + sizeof(status_));
+  status_ = 0;
 }
 
 bool HostToClient::MergePartialFromCodedStream(
@@ -230,25 +226,10 @@ bool HostToClient::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.RequestType type = 1;
+      // .aspia.proto.RequestStatus status = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_type(static_cast< ::aspia::proto::RequestType >(value));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // .aspia.proto.RequestStatus status = 2;
-      case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(16u)) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
@@ -260,10 +241,10 @@ bool HostToClient::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.DriveList drive_list = 3;
-      case 3: {
+      // .aspia.proto.DriveList drive_list = 2;
+      case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(26u)) {
+            static_cast< ::google::protobuf::uint8>(18u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_drive_list()));
         } else {
@@ -272,10 +253,10 @@ bool HostToClient::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.FileList file_list = 4;
-      case 4: {
+      // .aspia.proto.FileList file_list = 3;
+      case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(34u)) {
+            static_cast< ::google::protobuf::uint8>(26u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_file_list()));
         } else {
@@ -284,10 +265,10 @@ bool HostToClient::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.DirectorySize directory_size = 5;
-      case 5: {
+      // .aspia.proto.DirectorySize directory_size = 4;
+      case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(42u)) {
+            static_cast< ::google::protobuf::uint8>(34u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_directory_size()));
         } else {
@@ -296,10 +277,10 @@ bool HostToClient::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.FilePacket file_packet = 6;
-      case 6: {
+      // .aspia.proto.FilePacket file_packet = 5;
+      case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(50u)) {
+            static_cast< ::google::protobuf::uint8>(42u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_file_packet()));
         } else {
@@ -335,40 +316,34 @@ void HostToClient::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.RequestType type = 1;
-  if (this->type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->type(), output);
-  }
-
-  // .aspia.proto.RequestStatus status = 2;
+  // .aspia.proto.RequestStatus status = 1;
   if (this->status() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      2, this->status(), output);
+      1, this->status(), output);
   }
 
-  // .aspia.proto.DriveList drive_list = 3;
+  // .aspia.proto.DriveList drive_list = 2;
   if (this->has_drive_list()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      3, *this->drive_list_, output);
+      2, *this->drive_list_, output);
   }
 
-  // .aspia.proto.FileList file_list = 4;
+  // .aspia.proto.FileList file_list = 3;
   if (this->has_file_list()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      4, *this->file_list_, output);
+      3, *this->file_list_, output);
   }
 
-  // .aspia.proto.DirectorySize directory_size = 5;
+  // .aspia.proto.DirectorySize directory_size = 4;
   if (this->has_directory_size()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      5, *this->directory_size_, output);
+      4, *this->directory_size_, output);
   }
 
-  // .aspia.proto.FilePacket file_packet = 6;
+  // .aspia.proto.FilePacket file_packet = 5;
   if (this->has_file_packet()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      6, *this->file_packet_, output);
+      5, *this->file_packet_, output);
   }
 
   // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.HostToClient)
@@ -378,41 +353,35 @@ size_t HostToClient::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.HostToClient)
   size_t total_size = 0;
 
-  // .aspia.proto.DriveList drive_list = 3;
+  // .aspia.proto.DriveList drive_list = 2;
   if (this->has_drive_list()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->drive_list_);
   }
 
-  // .aspia.proto.FileList file_list = 4;
+  // .aspia.proto.FileList file_list = 3;
   if (this->has_file_list()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->file_list_);
   }
 
-  // .aspia.proto.DirectorySize directory_size = 5;
+  // .aspia.proto.DirectorySize directory_size = 4;
   if (this->has_directory_size()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->directory_size_);
   }
 
-  // .aspia.proto.FilePacket file_packet = 6;
+  // .aspia.proto.FilePacket file_packet = 5;
   if (this->has_file_packet()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         *this->file_packet_);
   }
 
-  // .aspia.proto.RequestType type = 1;
-  if (this->type() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
-  }
-
-  // .aspia.proto.RequestStatus status = 2;
+  // .aspia.proto.RequestStatus status = 1;
   if (this->status() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
@@ -449,9 +418,6 @@ void HostToClient::MergeFrom(const HostToClient& from) {
   if (from.has_file_packet()) {
     mutable_file_packet()->::aspia::proto::FilePacket::MergeFrom(from.file_packet());
   }
-  if (from.type() != 0) {
-    set_type(from.type());
-  }
   if (from.status() != 0) {
     set_status(from.status());
   }
@@ -477,7 +443,6 @@ void HostToClient::InternalSwap(HostToClient* other) {
   std::swap(file_list_, other->file_list_);
   std::swap(directory_size_, other->directory_size_);
   std::swap(file_packet_, other->file_packet_);
-  std::swap(type_, other->type_);
   std::swap(status_, other->status_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -489,21 +454,7 @@ void HostToClient::InternalSwap(HostToClient* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // HostToClient
 
-// .aspia.proto.RequestType type = 1;
-void HostToClient::clear_type() {
-  type_ = 0;
-}
-::aspia::proto::RequestType HostToClient::type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.HostToClient.type)
-  return static_cast< ::aspia::proto::RequestType >(type_);
-}
-void HostToClient::set_type(::aspia::proto::RequestType value) {
-  
-  type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.file_transfer.HostToClient.type)
-}
-
-// .aspia.proto.RequestStatus status = 2;
+// .aspia.proto.RequestStatus status = 1;
 void HostToClient::clear_status() {
   status_ = 0;
 }
@@ -517,7 +468,7 @@ void HostToClient::set_status(::aspia::proto::RequestStatus value) {
   // @@protoc_insertion_point(field_set:aspia.proto.file_transfer.HostToClient.status)
 }
 
-// .aspia.proto.DriveList drive_list = 3;
+// .aspia.proto.DriveList drive_list = 2;
 bool HostToClient::has_drive_list() const {
   return this != internal_default_instance() && drive_list_ != NULL;
 }
@@ -556,7 +507,7 @@ void HostToClient::set_allocated_drive_list(::aspia::proto::DriveList* drive_lis
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.HostToClient.drive_list)
 }
 
-// .aspia.proto.FileList file_list = 4;
+// .aspia.proto.FileList file_list = 3;
 bool HostToClient::has_file_list() const {
   return this != internal_default_instance() && file_list_ != NULL;
 }
@@ -595,7 +546,7 @@ void HostToClient::set_allocated_file_list(::aspia::proto::FileList* file_list) 
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.HostToClient.file_list)
 }
 
-// .aspia.proto.DirectorySize directory_size = 5;
+// .aspia.proto.DirectorySize directory_size = 4;
 bool HostToClient::has_directory_size() const {
   return this != internal_default_instance() && directory_size_ != NULL;
 }
@@ -634,7 +585,7 @@ void HostToClient::set_allocated_directory_size(::aspia::proto::DirectorySize* d
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.HostToClient.directory_size)
 }
 
-// .aspia.proto.FilePacket file_packet = 6;
+// .aspia.proto.FilePacket file_packet = 5;
 bool HostToClient::has_file_packet() const {
   return this != internal_default_instance() && file_packet_ != NULL;
 }
