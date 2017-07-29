@@ -12,6 +12,7 @@
 
 #include "base/process/process_helpers.h"
 #include "base/service_manager.h"
+#include "base/scoped_native_library.h"
 #include "base/scoped_object.h"
 #include "base/scoped_impersonator.h"
 #include "base/files/base_paths.h"
@@ -144,25 +145,37 @@ static bool CreateProcessWithToken(HANDLE user_token,
     startup_info.cb = sizeof(startup_info);
     startup_info.lpDesktop = kDefaultDesktopName;
 
+    PVOID environment;
+
+    if (!CreateEnvironmentBlock(&environment, user_token, FALSE))
+    {
+        LOG(ERROR) << "CreateEnvironmentBlock() failed: "
+                   << GetLastSystemErrorString();
+        return false;
+    }
+
     if (!CreateProcessAsUserW(user_token,
                               nullptr,
                               const_cast<LPWSTR>(command_line.c_str()),
                               nullptr,
                               nullptr,
                               FALSE,
-                              0,
-                              nullptr,
+                              CREATE_UNICODE_ENVIRONMENT,
+                              environment,
                               nullptr,
                               &startup_info,
                               &process_info))
     {
         LOG(ERROR) << "CreateProcessAsUserW() failed: "
                    << GetLastSystemErrorString();
+        DestroyEnvironmentBlock(environment);
         return false;
     }
 
     CloseHandle(process_info.hThread);
     CloseHandle(process_info.hProcess);
+
+    DestroyEnvironmentBlock(environment);
 
     return true;
 }
@@ -308,9 +321,49 @@ bool LaunchFileTransferSession(uint32_t session_id,
 {
     if (IsRunningAsService())
     {
-        return LaunchProcessInSession(kFileTransferSessionSwitch,
-                                      session_id,
-                                      channel_id);
+        ScopedHandle privileged_token;
+
+        if (!CreatePrivilegedToken(privileged_token))
+            return false;
+
+        ScopedNativeLibrary wtsapi32_library(L"wtsapi32.dll");
+
+        typedef BOOL(WINAPI * WTSQueryUserTokenFunc)(ULONG, PHANDLE);
+
+        WTSQueryUserTokenFunc query_user_token_func =
+            reinterpret_cast<WTSQueryUserTokenFunc>(
+                wtsapi32_library.GetFunctionPointer("WTSQueryUserToken"));
+
+        if (!query_user_token_func)
+        {
+            LOG(ERROR) << "WTSQueryUserToken function not found in wtsapi32.dll";
+            return false;
+        }
+
+        ScopedHandle session_token;
+
+        {
+            ScopedImpersonator impersonator;
+
+            if (!impersonator.ImpersonateLoggedOnUser(privileged_token))
+                return false;
+
+            if (!query_user_token_func(session_id,
+                                       session_token.Recieve()))
+            {
+                LOG(ERROR) << "WTSQueryUserToken() failed: "
+                           << GetLastSystemErrorString();
+                return false;
+            }
+        }
+
+        std::wstring command_line;
+
+        if (!CreateCommandLine(kFileTransferSessionSwitch,
+                               channel_id, command_line))
+            return false;
+
+        return CreateProcessWithToken(session_token, command_line);
     }
 
     return LaunchProcessWithCurrentRights(kFileTransferSessionSwitch,
