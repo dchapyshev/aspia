@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/host_session_console.cc
+// FILE:            host/host_session.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "host/host_session_console.h"
+#include "host/host_session.h"
 #include "host/console_session_launcher.h"
 #include "base/version_helpers.h"
 #include "base/scoped_privilege.h"
@@ -15,42 +15,38 @@ namespace aspia {
 static const std::chrono::seconds kAttachTimeout{ 30 };
 
 // static
-std::unique_ptr<HostSessionConsole> HostSessionConsole::CreateForDesktopManage(
+std::unique_ptr<HostSession> HostSession::CreateForDesktopManage(
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
-    return std::unique_ptr<HostSessionConsole>(
-        new HostSessionConsole(proto::SESSION_TYPE_DESKTOP_MANAGE,
-                               channel_proxy));
+    return std::unique_ptr<HostSession>(
+        new HostSession(proto::SESSION_TYPE_DESKTOP_MANAGE, channel_proxy));
 }
 
 // static
-std::unique_ptr<HostSessionConsole> HostSessionConsole::CreateForDesktopView(
+std::unique_ptr<HostSession> HostSession::CreateForDesktopView(
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
-    return std::unique_ptr<HostSessionConsole>(
-        new HostSessionConsole(proto::SESSION_TYPE_DESKTOP_VIEW,
-                               channel_proxy));
+    return std::unique_ptr<HostSession>(
+        new HostSession(proto::SESSION_TYPE_DESKTOP_VIEW, channel_proxy));
 }
 
 // static
-std::unique_ptr<HostSessionConsole> HostSessionConsole::CreateForFileTransfer(
+std::unique_ptr<HostSession> HostSession::CreateForFileTransfer(
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
-    return std::unique_ptr<HostSessionConsole>(
-        new HostSessionConsole(proto::SESSION_TYPE_FILE_TRANSFER,
-                               channel_proxy));
+    return std::unique_ptr<HostSession>(
+        new HostSession(proto::SESSION_TYPE_FILE_TRANSFER, channel_proxy));
 }
 
 // static
-std::unique_ptr<HostSessionConsole> HostSessionConsole::CreateForPowerManage(
+std::unique_ptr<HostSession> HostSession::CreateForPowerManage(
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
-        return std::unique_ptr<HostSessionConsole>(
-            new HostSessionConsole(proto::SESSION_TYPE_POWER_MANAGE,
-                                   channel_proxy));
+        return std::unique_ptr<HostSession>(
+            new HostSession(proto::SESSION_TYPE_POWER_MANAGE, channel_proxy));
 }
 
-HostSessionConsole::HostSessionConsole(
+HostSession::HostSession(
     proto::SessionType session_type,
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
     : session_type_(session_type),
@@ -60,12 +56,12 @@ HostSessionConsole::HostSessionConsole(
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
-HostSessionConsole::~HostSessionConsole()
+HostSession::~HostSession()
 {
     ui_thread_.Stop();
 }
 
-void HostSessionConsole::OnBeforeThreadRunning()
+void HostSession::OnBeforeThreadRunning()
 {
     runner_ = ui_thread_.message_loop_proxy();
     DCHECK(runner_);
@@ -81,7 +77,7 @@ void HostSessionConsole::OnBeforeThreadRunning()
     }
 }
 
-void HostSessionConsole::OnAfterThreadRunning()
+void HostSession::OnAfterThreadRunning()
 {
     session_watcher_.StopWatching();
     OnSessionDetached();
@@ -89,7 +85,7 @@ void HostSessionConsole::OnAfterThreadRunning()
     channel_proxy_->Disconnect();
 }
 
-void HostSessionConsole::OnSessionAttached(uint32_t session_id)
+void HostSession::OnSessionAttached(uint32_t session_id)
 {
     DCHECK(runner_->BelongsToCurrentThread());
     DCHECK(state_ == State::DETACHED);
@@ -124,7 +120,7 @@ void HostSessionConsole::OnSessionAttached(uint32_t session_id)
         }
 
         PipeChannel::DisconnectHandler disconnect_handler =
-            std::bind(&HostSessionConsole::OnIpcChannelDisconnect, this);
+            std::bind(&HostSession::OnIpcChannelDisconnect, this);
 
         uint32_t user_data = static_cast<uint32_t>(session_type_);
 
@@ -140,7 +136,7 @@ void HostSessionConsole::OnSessionAttached(uint32_t session_id)
     runner_->PostQuit();
 }
 
-void HostSessionConsole::OnSessionDetached()
+void HostSession::OnSessionDetached()
 {
     DCHECK(runner_->BelongsToCurrentThread());
 
@@ -163,15 +159,14 @@ void HostSessionConsole::OnSessionDetached()
     // If the new session is not connected within the specified time interval,
     // an error occurred.
     timer_.Start(kAttachTimeout,
-                 std::bind(&HostSessionConsole::OnSessionAttachTimeout, this));
+                 std::bind(&HostSession::OnSessionAttachTimeout, this));
 }
 
-void HostSessionConsole::OnProcessClose()
+void HostSession::OnProcessClose()
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(
-            &HostSessionConsole::OnProcessClose, this));
+        runner_->PostTask(std::bind(&HostSession::OnProcessClose, this));
         return;
     }
 
@@ -187,7 +182,7 @@ void HostSessionConsole::OnProcessClose()
     }
 }
 
-void HostSessionConsole::OnIpcChannelConnect(uint32_t user_data)
+void HostSession::OnIpcChannelConnect(uint32_t user_data)
 {
     DCHECK(runner_->BelongsToCurrentThread());
 
@@ -209,7 +204,7 @@ void HostSessionConsole::OnIpcChannelConnect(uint32_t user_data)
     if (ok)
     {
         ok = process_watcher_.StartWatching(
-            process_, std::bind(&HostSessionConsole::OnProcessClose, this));
+            process_, std::bind(&HostSession::OnProcessClose, this));
 
         if (!ok)
         {
@@ -230,12 +225,11 @@ void HostSessionConsole::OnIpcChannelConnect(uint32_t user_data)
     state_ = State::ATTACHED;
 }
 
-void HostSessionConsole::OnIpcChannelDisconnect()
+void HostSession::OnIpcChannelDisconnect()
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(
-            &HostSessionConsole::OnIpcChannelDisconnect, this));
+        runner_->PostTask(std::bind(&HostSession::OnIpcChannelDisconnect, this));
         return;
     }
 
@@ -272,12 +266,11 @@ void HostSessionConsole::OnIpcChannelDisconnect()
     }
 }
 
-void HostSessionConsole::OnSessionAttachTimeout()
+void HostSession::OnSessionAttachTimeout()
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(
-            &HostSessionConsole::OnSessionAttachTimeout, this));
+        runner_->PostTask(std::bind(&HostSession::OnSessionAttachTimeout, this));
         return;
     }
 

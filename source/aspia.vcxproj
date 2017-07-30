@@ -116,7 +116,7 @@
     <ClCompile Include="host\host_pool.cc" />
     <ClCompile Include="host\host_process_connector.cc" />
     <ClCompile Include="host\host_service.cc" />
-    <ClCompile Include="host\host_session_console.cc" />
+    <ClCompile Include="host\host_session.cc" />
     <ClCompile Include="host\host_user_list.cc" />
     <ClCompile Include="host\input_injector.cc" />
     <ClCompile Include="host\power_injector.cc" />
@@ -297,7 +297,7 @@
     <ClInclude Include="host\host_pool.h" />
     <ClInclude Include="host\host_process_connector.h" />
     <ClInclude Include="host\host_service.h" />
-    <ClInclude Include="host\host_session_console.h" />
+    <ClInclude Include="host\host_session.h" />
     <ClInclude Include="host\host_user_list.h" />
     <ClInclude Include="host\input_injector.h" />
     <ClInclude Include="host\power_injector.h" />

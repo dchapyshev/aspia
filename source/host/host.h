@@ -11,7 +11,7 @@
 #include "base/synchronization/waitable_timer.h"
 #include "network/network_channel.h"
 #include "network/network_channel_proxy.h"
-#include "host/host_session_console.h"
+#include "host/host_session.h"
 
 namespace aspia {
 
@@ -37,7 +37,7 @@ private:
     std::shared_ptr<NetworkChannel> channel_;
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;
 
-    std::unique_ptr<HostSessionConsole> session_;
+    std::unique_ptr<HostSession> session_;
 
     Delegate* delegate_;
 

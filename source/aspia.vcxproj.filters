@@ -361,9 +361,6 @@
     <ClCompile Include="host\console_session_launcher.cc">
       <Filter>host</Filter>
     </ClCompile>
-    <ClCompile Include="host\host_session_console.cc">
-      <Filter>host</Filter>
-    </ClCompile>
     <ClCompile Include="host\file_transfer_session_client.cc">
       <Filter>host</Filter>
     </ClCompile>
@@ -497,6 +494,9 @@
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="host\power_session_client.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host_session.cc">
       <Filter>host</Filter>
     </ClCompile>
   </ItemGroup>
@@ -893,9 +893,6 @@
     <ClInclude Include="host\console_session_launcher.h">
       <Filter>host</Filter>
     </ClInclude>
-    <ClInclude Include="host\host_session_console.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="host\file_transfer_session_client.h">
       <Filter>host</Filter>
     </ClInclude>
@@ -1047,6 +1044,9 @@
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="host\power_session_client.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_session.h">
       <Filter>host</Filter>
     </ClInclude>
   </ItemGroup>
