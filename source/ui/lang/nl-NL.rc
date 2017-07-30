@@ -160,6 +160,18 @@ BEGIN
     PUSHBUTTON "&Annuleren", IDCANCEL, 72, 107, 60, 14
 END
 
+IDD_POWER_HOST DIALOGEX 100, 100, 293, 59
+STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
+CAPTION "Information"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT "", IDC_POWER_ACTION, 7, 7, 278, 10
+    LTEXT "", IDC_POWER_TIME, 7, 24, 126, 10
+
+    DEFPUSHBUTTON "&Execute now", IDOK, 164, 40, 60, 14
+    PUSHBUTTON "&Cancel", IDCANCEL, 228, 40, 60, 14
+END
+
 IDD_FILE_TRANSFER DIALOGEX 100, 100, 400, 173
 STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
 CAPTION "File Transfer"
@@ -399,6 +411,16 @@ BEGIN
     IDS_FT_OP_RECIEVE_FILE_ERROR          "An error occurred while retrieving the file ""%s"": %s"
     IDS_FT_FILE_FOLDER                    "File Folder"
     IDS_FT_CLOSE_WINDOW                   "Close window"
+END
+
+// Power Manage
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_PM_SHUTDOWN_COMMAND "A command to shutdown the computer has been received."
+    IDS_PM_REBOOT_COMMAND "A command to reboot the computer has been received."
+    IDS_PM_HIBERNATE_COMMAND "A command to hibernate the computer has been received."
+    IDS_PM_SUSPEND_COMMAND "A command to suspend the computer has been received."
+    IDS_PM_TIME_LEFT "Time left before execution: %d seconds."
 END
 
 // Request Status

@@ -51,6 +51,7 @@
 #define IDD_FILE_TRANSFER                     108
 #define IDD_FILE_REPLACE                      109
 #define IDD_FILE_STATUS                       110
+#define IDD_POWER_HOST                        111
 
 //
 // Controls
@@ -101,6 +102,8 @@
 #define IDC_MINIMIZE_BUTTON                   143
 #define IDC_BUTTON_GROUP                      144
 #define IDC_POWER_ICON                        145
+#define IDC_POWER_ACTION                      146
+#define IDC_POWER_TIME                        147
 
 //
 // Commands
@@ -252,6 +255,13 @@
 #define IDS_FT_OP_RECIEVE_FILE_ERROR          1052
 #define IDS_FT_FILE_FOLDER                    1053
 #define IDS_FT_CLOSE_WINDOW                   1054
+
+// Power Manage
+#define IDS_PM_SHUTDOWN_COMMAND               2000
+#define IDS_PM_REBOOT_COMMAND                 2001
+#define IDS_PM_HIBERNATE_COMMAND              2002
+#define IDS_PM_SUSPEND_COMMAND                2003
+#define IDS_PM_TIME_LEFT                      2004
 
 // Request Status
 #define IDS_REQUEST_STATUS_FIRST                11000

@@ -164,6 +164,7 @@
     <ClCompile Include="ui\get_stock_icon.cc" />
     <ClCompile Include="ui\main_dialog.cc" />
     <ClCompile Include="ui\power_manage_dialog.cc" />
+    <ClCompile Include="ui\power_session_dialog.cc" />
     <ClCompile Include="ui\settings_dialog.cc" />
     <ClCompile Include="ui\status_dialog.cc" />
     <ClCompile Include="ui\ui_main.cc" />
@@ -348,6 +349,7 @@
     <ClInclude Include="ui\get_stock_icon.h" />
     <ClInclude Include="ui\main_dialog.h" />
     <ClInclude Include="ui\power_manage_dialog.h" />
+    <ClInclude Include="ui\power_session_dialog.h" />
     <ClInclude Include="ui\resource.h" />
     <ClInclude Include="ui\settings_dialog.h" />
     <ClInclude Include="ui\status_code.h" />
