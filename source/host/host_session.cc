@@ -65,35 +65,15 @@ void HostSession::OnSessionAttached(uint32_t session_id)
 
     if (process_connector_.StartServer(channel_id))
     {
-        bool launched;
-
-        switch (session_type_)
-        {
-            case proto::SESSION_TYPE_DESKTOP_MANAGE:
-            case proto::SESSION_TYPE_DESKTOP_VIEW:
-                launched = LaunchDesktopSession(session_id, channel_id);
-                break;
-
-            case proto::SESSION_TYPE_FILE_TRANSFER:
-                launched = LaunchFileTransferSession(session_id, channel_id);
-                break;
-
-            case proto::SESSION_TYPE_POWER_MANAGE:
-                launched = LaunchPowerManageSession(session_id, channel_id);
-                break;
-
-            default:
-                DLOG(ERROR) << "Unknown session type: " << session_type_;
-                launched = false;
-                break;
-        }
+        bool session_process_launched =
+            LaunchSessionProcess(session_type_, session_id, channel_id);
 
         PipeChannel::DisconnectHandler disconnect_handler =
             std::bind(&HostSession::OnIpcChannelDisconnect, this);
 
         uint32_t user_data = static_cast<uint32_t>(session_type_);
 
-        if (launched &&
+        if (session_process_launched &&
             process_connector_.Accept(user_data,
                                       std::move(disconnect_handler)))
         {

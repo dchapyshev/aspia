@@ -499,6 +499,9 @@
     <ClCompile Include="host\host_session_launcher.cc">
       <Filter>host</Filter>
     </ClCompile>
+    <ClCompile Include="host\host_session_launcher_service.cc">
+      <Filter>host</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1047,6 +1050,9 @@
       <Filter>host</Filter>
     </ClInclude>
     <ClInclude Include="host\host_session_launcher.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_session_launcher_service.h">
       <Filter>host</Filter>
     </ClInclude>
   </ItemGroup>

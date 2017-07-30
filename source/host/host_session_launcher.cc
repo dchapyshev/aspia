@@ -6,32 +6,21 @@
 //
 
 #include "host/host_session_launcher.h"
-
-#include <userenv.h>
-#include <string>
-
+#include "host/host_session_launcher_service.h"
 #include "base/process/process_helpers.h"
-#include "base/service_manager.h"
 #include "base/scoped_native_library.h"
 #include "base/scoped_object.h"
 #include "base/scoped_impersonator.h"
 #include "base/files/base_paths.h"
 #include "base/logging.h"
 
-namespace aspia {
+#include <userenv.h>
+#include <string>
 
-static const WCHAR kServiceShortName[] = L"aspia-desktop-session-launcher";
-static const WCHAR kServiceFullName[] = L"Aspia Desktop Session Launcher";
+namespace aspia {
 
 // Name of the default session desktop.
 static WCHAR kDefaultDesktopName[] = L"winsta0\\default";
-
-HostSessionLauncher::HostSessionLauncher(const std::wstring& service_id)
-    : Service(ServiceManager::CreateUniqueServiceName(
-          kServiceShortName, service_id))
-{
-    // Nothing
-}
 
 static bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
 {
@@ -198,9 +187,9 @@ static bool CreateCommandLine(const std::wstring& run_mode,
     return true;
 }
 
-static bool LaunchProcessInSession(const std::wstring& run_mode,
-                                   uint32_t session_id,
-                                   const std::wstring& channel_id)
+bool LaunchSessionProcessFromService(const std::wstring& run_mode,
+                                     uint32_t session_id,
+                                     const std::wstring& channel_id)
 {
     std::wstring command_line;
 
@@ -231,92 +220,9 @@ static bool LaunchProcessWithCurrentRights(const std::wstring& run_mode,
     return CreateProcessWithToken(token, command_line);
 }
 
-static bool LaunchProcessOverService(uint32_t session_id,
-                                     const std::wstring& channel_id)
-{
-    std::wstring service_id =
-        ServiceManager::GenerateUniqueServiceId();
-
-    std::wstring unique_short_name =
-        ServiceManager::CreateUniqueServiceName(kServiceShortName, service_id);
-
-    std::wstring unique_full_name =
-        ServiceManager::CreateUniqueServiceName(kServiceFullName, service_id);
-
-    FilePath path;
-
-    if (!GetBasePath(BasePathKey::FILE_EXE, path))
-        return false;
-
-    std::wstring command_line;
-
-    command_line.assign(path);
-    command_line.append(L" --channel_id=");
-    command_line.append(channel_id);
-    command_line.append(L" --run_mode=");
-    command_line.append(kDesktopSessionLauncherSwitch);
-    command_line.append(L" --session_id=");
-    command_line.append(std::to_wstring(session_id));
-    command_line.append(L" --service_id=");
-    command_line.append(service_id);
-
-    // Install the service in the system.
-    std::unique_ptr<ServiceManager> manager =
-        ServiceManager::Create(command_line,
-                               unique_full_name,
-                               unique_short_name);
-
-    // If the service was not installed.
-    if (!manager)
-        return false;
-
-    return manager->Start();
-}
-
-void HostSessionLauncher::Worker()
-{
-    LaunchProcessInSession(kDesktopSessionSwitch, session_id_, channel_id_);
-}
-
-void HostSessionLauncher::OnStop()
-{
-    // Nothing
-}
-
-void HostSessionLauncher::ExecuteService(uint32_t session_id,
-                                         const std::wstring& channel_id)
-{
-    session_id_ = session_id;
-    channel_id_ = channel_id;
-
-    Run();
-
-    ServiceManager(ServiceName()).Remove();
-}
-
-bool LaunchDesktopSession(uint32_t session_id, const std::wstring& channel_id)
-{
-    if (!IsCallerHasAdminRights())
-    {
-        return LaunchProcessWithCurrentRights(kDesktopSessionSwitch,
-                                              channel_id);
-    }
-
-    if (!IsRunningAsService())
-    {
-        return LaunchProcessOverService(session_id, channel_id);
-    }
-
-    // The code is executed from the service.
-    // Start the process directly.
-    return LaunchProcessInSession(kDesktopSessionSwitch,
-                                  session_id,
-                                  channel_id);
-}
-
-static bool LaunchSession(const std::wstring& run_mode,
-                          uint32_t session_id,
-                          const std::wstring& channel_id)
+static bool LaunchSessionProcess(const std::wstring& run_mode,
+                                 uint32_t session_id,
+                                 const std::wstring& channel_id)
 {
     if (IsRunningAsService())
     {
@@ -367,16 +273,54 @@ static bool LaunchSession(const std::wstring& run_mode,
     return LaunchProcessWithCurrentRights(run_mode, channel_id);
 }
 
-bool LaunchFileTransferSession(uint32_t session_id,
-                               const std::wstring& channel_id)
+bool LaunchSessionProcess(proto::SessionType session_type,
+                          uint32_t session_id,
+                          const std::wstring& channel_id)
 {
-    return LaunchSession(kFileTransferSessionSwitch, session_id, channel_id);
-}
+    switch (session_type)
+    {
+        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        {
+            if (!IsCallerHasAdminRights())
+            {
+                return LaunchProcessWithCurrentRights(kDesktopSessionSwitch,
+                                                      channel_id);
+            }
 
-bool LaunchPowerManageSession(uint32_t session_id,
-                              const std::wstring& channel_id)
-{
-    return LaunchSession(kPowerManageSessionSwitch, session_id, channel_id);
+            if (!IsRunningAsService())
+            {
+                return HostSessionLauncherService::CreateStarted(session_id,
+                                                                 channel_id);
+            }
+
+            // The code is executed from the service.
+            // Start the process directly.
+            return LaunchSessionProcessFromService(kDesktopSessionSwitch,
+                                                   session_id,
+                                                   channel_id);
+        }
+
+        case proto::SESSION_TYPE_FILE_TRANSFER:
+        {
+            return LaunchSessionProcess(kFileTransferSessionSwitch,
+                                        session_id,
+                                        channel_id);
+        }
+
+        case proto::SESSION_TYPE_POWER_MANAGE:
+        {
+            return LaunchSessionProcess(kPowerManageSessionSwitch,
+                                        session_id,
+                                        channel_id);
+        }
+
+        default:
+        {
+            DLOG(ERROR) << "Unknown session type: " << session_type;
+            return false;
+        }
+    }
 }
 
 } // namespace aspia
