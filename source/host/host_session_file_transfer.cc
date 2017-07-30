@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/file_transfer_session_client.cc
+// FILE:            host/host_session_file_transfer.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "host/file_transfer_session_client.h"
+#include "host/host_session_file_transfer.h"
 #include "base/files/file_helpers.h"
 #include "ipc/pipe_channel_proxy.h"
 #include "protocol/message_serialization.h"
@@ -14,7 +14,7 @@
 
 namespace aspia {
 
-void FileTransferSessionClient::Run(const std::wstring& channel_id)
+void HostSessionFileTransfer::Run(const std::wstring& channel_id)
 {
     status_dialog_ = std::make_unique<UiFileStatusDialog>();
 
@@ -26,7 +26,7 @@ void FileTransferSessionClient::Run(const std::wstring& channel_id)
         uint32_t user_data = GetCurrentProcessId();
 
         PipeChannel::DisconnectHandler disconnect_handler =
-            std::bind(&FileTransferSessionClient::OnIpcChannelDisconnect, this);
+            std::bind(&HostSessionFileTransfer::OnIpcChannelDisconnect, this);
 
         if (ipc_channel_->Connect(user_data, std::move(disconnect_handler)))
         {
@@ -40,7 +40,7 @@ void FileTransferSessionClient::Run(const std::wstring& channel_id)
     status_dialog_.reset();
 }
 
-void FileTransferSessionClient::OnIpcChannelConnect(uint32_t user_data)
+void HostSessionFileTransfer::OnIpcChannelConnect(uint32_t user_data)
 {
     // The server sends the session type in user_data.
     proto::SessionType session_type =
@@ -55,16 +55,16 @@ void FileTransferSessionClient::OnIpcChannelConnect(uint32_t user_data)
     status_dialog_->SetSessionStartedStatus();
 
     ipc_channel_proxy_->Receive(std::bind(
-        &FileTransferSessionClient::OnIpcChannelMessage, this,
+        &HostSessionFileTransfer::OnIpcChannelMessage, this,
         std::placeholders::_1));
 }
 
-void FileTransferSessionClient::OnIpcChannelDisconnect()
+void HostSessionFileTransfer::OnIpcChannelDisconnect()
 {
     status_dialog_->SetSessionTerminatedStatus();
 }
 
-void FileTransferSessionClient::OnIpcChannelMessage(
+void HostSessionFileTransfer::OnIpcChannelMessage(
     std::unique_ptr<IOBuffer> buffer)
 {
     proto::file_transfer::ClientToHost message;
@@ -124,23 +124,23 @@ void FileTransferSessionClient::OnIpcChannelMessage(
     }
 }
 
-void FileTransferSessionClient::SendReply(
+void HostSessionFileTransfer::SendReply(
     const proto::file_transfer::HostToClient& reply)
 {
     ipc_channel_proxy_->Send(
         SerializeMessage<IOBuffer>(reply),
-        std::bind(&FileTransferSessionClient::OnReplySended, this));
+        std::bind(&HostSessionFileTransfer::OnReplySended, this));
 }
 
-void FileTransferSessionClient::OnReplySended()
+void HostSessionFileTransfer::OnReplySended()
 {
     // Receive next request.
     ipc_channel_proxy_->Receive(std::bind(
-        &FileTransferSessionClient::OnIpcChannelMessage, this,
+        &HostSessionFileTransfer::OnIpcChannelMessage, this,
         std::placeholders::_1));
 }
 
-void FileTransferSessionClient::ReadDriveListRequest()
+void HostSessionFileTransfer::ReadDriveListRequest()
 {
     proto::file_transfer::HostToClient reply;
     reply.set_status(ExecuteDriveListRequest(reply.mutable_drive_list()));
@@ -149,7 +149,7 @@ void FileTransferSessionClient::ReadDriveListRequest()
     SendReply(reply);
 }
 
-void FileTransferSessionClient::ReadFileListRequest(
+void HostSessionFileTransfer::ReadFileListRequest(
     const proto::FileListRequest& request)
 {
     proto::file_transfer::HostToClient reply;
@@ -162,7 +162,7 @@ void FileTransferSessionClient::ReadFileListRequest(
     SendReply(reply);
 }
 
-void FileTransferSessionClient::ReadCreateDirectoryRequest(
+void HostSessionFileTransfer::ReadCreateDirectoryRequest(
     const proto::CreateDirectoryRequest& request)
 {
     proto::file_transfer::HostToClient reply;
@@ -175,7 +175,7 @@ void FileTransferSessionClient::ReadCreateDirectoryRequest(
     SendReply(reply);
 }
 
-void FileTransferSessionClient::ReadDirectorySizeRequest(
+void HostSessionFileTransfer::ReadDirectorySizeRequest(
     const proto::DirectorySizeRequest& request)
 {
     proto::file_transfer::HostToClient reply;
@@ -190,7 +190,7 @@ void FileTransferSessionClient::ReadDirectorySizeRequest(
     SendReply(reply);
 }
 
-void FileTransferSessionClient::ReadRenameRequest(
+void HostSessionFileTransfer::ReadRenameRequest(
     const proto::RenameRequest& request)
 {
     proto::file_transfer::HostToClient reply;
@@ -206,7 +206,7 @@ void FileTransferSessionClient::ReadRenameRequest(
     SendReply(reply);
 }
 
-void FileTransferSessionClient::ReadRemoveRequest(
+void HostSessionFileTransfer::ReadRemoveRequest(
     const proto::RemoveRequest& request)
 {
     proto::file_transfer::HostToClient reply;
@@ -219,7 +219,7 @@ void FileTransferSessionClient::ReadRemoveRequest(
     SendReply(reply);
 }
 
-void FileTransferSessionClient::ReadFileUploadRequest(
+void HostSessionFileTransfer::ReadFileUploadRequest(
     const proto::FileUploadRequest& request)
 {
     proto::file_transfer::HostToClient reply;
@@ -254,7 +254,7 @@ void FileTransferSessionClient::ReadFileUploadRequest(
     SendReply(reply);
 }
 
-bool FileTransferSessionClient::ReadFileUploadDataRequest(
+bool HostSessionFileTransfer::ReadFileUploadDataRequest(
     const proto::FilePacket& file_packet)
 {
     if (!file_depacketizer_)
@@ -279,7 +279,7 @@ bool FileTransferSessionClient::ReadFileUploadDataRequest(
     return true;
 }
 
-void FileTransferSessionClient::ReadFileDownloadRequest(
+void HostSessionFileTransfer::ReadFileDownloadRequest(
     const proto::FileDownloadRequest& request)
 {
     proto::file_transfer::HostToClient reply;
@@ -303,7 +303,7 @@ void FileTransferSessionClient::ReadFileDownloadRequest(
     SendReply(reply);
 }
 
-bool FileTransferSessionClient::ReadFilePacketRequest()
+bool HostSessionFileTransfer::ReadFilePacketRequest()
 {
     if (!file_packetizer_)
     {

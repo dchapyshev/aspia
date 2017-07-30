@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/file_transfer_session_client.h
+// FILE:            host/host_session_file_transfer.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_HOST__FILE_TRANSFER_SESSION_CLIENT_H
-#define _ASPIA_HOST__FILE_TRANSFER_SESSION_CLIENT_H
+#ifndef _ASPIA_HOST__HOST_SESSION_FILE_TRANSFER_H
+#define _ASPIA_HOST__HOST_SESSION_FILE_TRANSFER_H
 
 #include "ipc/pipe_channel.h"
 #include "proto/file_transfer_session.pb.h"
@@ -16,11 +16,11 @@
 
 namespace aspia {
 
-class FileTransferSessionClient
+class HostSessionFileTransfer
 {
 public:
-    FileTransferSessionClient() = default;
-    ~FileTransferSessionClient() = default;
+    HostSessionFileTransfer() = default;
+    ~HostSessionFileTransfer() = default;
 
     void Run(const std::wstring& channel_id);
 
@@ -51,9 +51,9 @@ private:
 
     std::unique_ptr<UiFileStatusDialog> status_dialog_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileTransferSessionClient);
+    DISALLOW_COPY_AND_ASSIGN(HostSessionFileTransfer);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__FILE_TRANSFER_SESSION_CLIENT_H
+#endif // _ASPIA_HOST__HOST_SESSION_FILE_TRANSFER_H
