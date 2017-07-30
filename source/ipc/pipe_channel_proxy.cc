@@ -22,6 +22,27 @@ void PipeChannelProxy::WillDestroyCurrentChannel()
     stop_event_.Signal();
 }
 
+bool PipeChannelProxy::Disconnect()
+{
+    std::lock_guard<std::mutex> lock(channel_lock_);
+
+    if (!channel_)
+        return false;
+
+    channel_->Disconnect();
+    return true;
+}
+
+bool PipeChannelProxy::IsDisconnecting() const
+{
+    std::lock_guard<std::mutex> lock(channel_lock_);
+
+    if (!channel_)
+        return true;
+
+    return channel_->IsDisconnecting();
+}
+
 bool PipeChannelProxy::Send(std::unique_ptr<IOBuffer> buffer,
                             PipeChannel::SendCompleteHandler handler)
 {

@@ -360,6 +360,16 @@ void PipeChannel::DoDisconnect()
         io_service_.stop();
 }
 
+void PipeChannel::Disconnect()
+{
+    io_service_.post(std::bind(&PipeChannel::DoDisconnect, this));
+}
+
+bool PipeChannel::IsDisconnecting() const
+{
+    return IsStopping();
+}
+
 void PipeChannel::Run()
 {
     work_ = std::make_unique<asio::io_service::work>(io_service_);

@@ -69,6 +69,8 @@ private:
 
     PipeChannel(HANDLE pipe, Mode mode);
 
+    void Disconnect();
+    bool IsDisconnecting() const;
     void Send(std::unique_ptr<IOBuffer> buffer, SendCompleteHandler handler);
     void Send(std::unique_ptr<IOBuffer> buffer);
     void Receive(ReceiveCompleteHandler handler);
