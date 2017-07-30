@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/desktop_session_client.cc
+// FILE:            host/host_session_desktop.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "host/desktop_session_client.h"
+#include "host/host_session_desktop.h"
 #include "codec/video_encoder_zlib.h"
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_helpers.h"
@@ -25,7 +25,7 @@ static const uint32_t kSupportedFeatures =
     proto::DesktopSessionFeatures::FEATURE_CURSOR_SHAPE |
     proto::DesktopSessionFeatures::FEATURE_CLIPBOARD;
 
-void DesktopSessionClient::Run(const std::wstring& channel_id)
+void HostSessionDesktop::Run(const std::wstring& channel_id)
 {
     ipc_channel_ = PipeChannel::CreateClient(channel_id);
     if (!ipc_channel_)
@@ -48,7 +48,7 @@ void DesktopSessionClient::Run(const std::wstring& channel_id)
     }
 }
 
-void DesktopSessionClient::OnPipeChannelConnect(uint32_t user_data)
+void HostSessionDesktop::OnPipeChannelConnect(uint32_t user_data)
 {
     // The server sends the session type in user_data.
     session_type_ = static_cast<proto::SessionType>(user_data);
@@ -67,11 +67,10 @@ void DesktopSessionClient::OnPipeChannelConnect(uint32_t user_data)
     SendConfigRequest();
 
     ipc_channel_proxy_->Receive(std::bind(
-        &DesktopSessionClient::OnPipeChannelMessage, this,
-        std::placeholders::_1));
+        &HostSessionDesktop::OnPipeChannelMessage, this, std::placeholders::_1));
 }
 
-void DesktopSessionClient::OnPipeChannelMessage(
+void HostSessionDesktop::OnPipeChannelMessage(
     std::unique_ptr<IOBuffer> buffer)
 {
     proto::desktop::ClientToHost message;
@@ -108,7 +107,7 @@ void DesktopSessionClient::OnPipeChannelMessage(
         if (success)
         {
             ipc_channel_proxy_->Receive(std::bind(
-                &DesktopSessionClient::OnPipeChannelMessage, this,
+                &HostSessionDesktop::OnPipeChannelMessage, this,
                 std::placeholders::_1));
 
             return;
@@ -118,7 +117,7 @@ void DesktopSessionClient::OnPipeChannelMessage(
     ipc_channel_.reset();
 }
 
-void DesktopSessionClient::OnScreenUpdate(
+void HostSessionDesktop::OnScreenUpdate(
     const DesktopFrame* screen_frame,
     std::unique_ptr<MouseCursor> mouse_cursor)
 {
@@ -149,10 +148,10 @@ void DesktopSessionClient::OnScreenUpdate(
     }
 
     WriteMessage(message,
-                 std::bind(&DesktopSessionClient::OnScreenUpdated, this));
+                 std::bind(&HostSessionDesktop::OnScreenUpdated, this));
 }
 
-void DesktopSessionClient::OnScreenUpdated()
+void HostSessionDesktop::OnScreenUpdated()
 {
     if (!screen_updater_)
         return;
@@ -160,7 +159,7 @@ void DesktopSessionClient::OnScreenUpdated()
     screen_updater_->PostUpdateRequest();
 }
 
-void DesktopSessionClient::WriteMessage(
+void HostSessionDesktop::WriteMessage(
     const proto::desktop::HostToClient& message,
     PipeChannel::SendCompleteHandler handler)
 {
@@ -168,13 +167,13 @@ void DesktopSessionClient::WriteMessage(
     ipc_channel_proxy_->Send(std::move(buffer), std::move(handler));
 }
 
-void DesktopSessionClient::WriteMessage(
+void HostSessionDesktop::WriteMessage(
     const proto::desktop::HostToClient& message)
 {
     WriteMessage(message, nullptr);
 }
 
-void DesktopSessionClient::WriteStatus(proto::Status status)
+void HostSessionDesktop::WriteStatus(proto::Status status)
 {
     DCHECK(status != proto::Status::STATUS_SUCCESS);
 
@@ -183,7 +182,7 @@ void DesktopSessionClient::WriteStatus(proto::Status status)
     WriteMessage(message);
 }
 
-bool DesktopSessionClient::ReadPointerEvent(const proto::PointerEvent& event)
+bool HostSessionDesktop::ReadPointerEvent(const proto::PointerEvent& event)
 {
     if (session_type_ != proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
@@ -195,7 +194,7 @@ bool DesktopSessionClient::ReadPointerEvent(const proto::PointerEvent& event)
     return true;
 }
 
-bool DesktopSessionClient::ReadKeyEvent(const proto::KeyEvent& event)
+bool HostSessionDesktop::ReadKeyEvent(const proto::KeyEvent& event)
 {
     if (session_type_ != proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
@@ -207,7 +206,7 @@ bool DesktopSessionClient::ReadKeyEvent(const proto::KeyEvent& event)
     return true;
 }
 
-bool DesktopSessionClient::ReadClipboardEvent(
+bool HostSessionDesktop::ReadClipboardEvent(
     std::shared_ptr<proto::ClipboardEvent> clipboard_event)
 {
     if (session_type_ != proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
@@ -220,7 +219,7 @@ bool DesktopSessionClient::ReadClipboardEvent(
     return true;
 }
 
-void DesktopSessionClient::SendClipboardEvent(
+void HostSessionDesktop::SendClipboardEvent(
     std::unique_ptr<proto::ClipboardEvent> clipboard_event)
 {
     proto::desktop::HostToClient message;
@@ -228,7 +227,7 @@ void DesktopSessionClient::SendClipboardEvent(
     WriteMessage(message);
 }
 
-void DesktopSessionClient::SendConfigRequest()
+void HostSessionDesktop::SendConfigRequest()
 {
     proto::desktop::HostToClient message;
 
@@ -246,7 +245,7 @@ void DesktopSessionClient::SendConfigRequest()
     WriteMessage(message);
 }
 
-bool DesktopSessionClient::ReadConfig(const proto::DesktopSessionConfig& config)
+bool HostSessionDesktop::ReadConfig(const proto::DesktopSessionConfig& config)
 {
     screen_updater_.reset();
 
@@ -271,7 +270,7 @@ bool DesktopSessionClient::ReadConfig(const proto::DesktopSessionConfig& config)
             clipboard_thread_ = std::make_unique<ClipboardThread>();
 
             clipboard_thread_->Start(std::bind(
-                &DesktopSessionClient::SendClipboardEvent, this,
+                &HostSessionDesktop::SendClipboardEvent, this,
                 std::placeholders::_1));
         }
         else
@@ -307,7 +306,7 @@ bool DesktopSessionClient::ReadConfig(const proto::DesktopSessionConfig& config)
         return false;
 
     ScreenUpdater::ScreenUpdateCallback screen_update_callback =
-        std::bind(&DesktopSessionClient::OnScreenUpdate,
+        std::bind(&HostSessionDesktop::OnScreenUpdate,
                   this,
                   std::placeholders::_1,
                   std::placeholders::_2);

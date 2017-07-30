@@ -9,7 +9,7 @@
 #include "host/host_service.h"
 #include "host/sas_injector.h"
 #include "host/console_session_launcher.h"
-#include "host/desktop_session_client.h"
+#include "host/host_session_desktop.h"
 #include "host/file_transfer_session_client.h"
 #include "host/power_session_client.h"
 #include "base/strings/unicode.h"
@@ -60,7 +60,7 @@ void RunHostMain(const std::wstring& run_mode)
         std::wstring channel_id;
         CHECK(ANSItoUNICODE(FLAGS_channel_id, channel_id));
 
-        DesktopSessionClient().Run(channel_id);
+        HostSessionDesktop().Run(channel_id);
     }
     else if (run_mode == kFileTransferSessionSwitch)
     {

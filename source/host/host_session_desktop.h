@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/desktop_session_client.h
+// FILE:            host/host_session_desktop.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_HOST__DESKTOP_SESSION_CLIENT_H
-#define _ASPIA_HOST__DESKTOP_SESSION_CLIENT_H
+#ifndef _ASPIA_HOST__HOST_SESSION_DESKTOP_H
+#define _ASPIA_HOST__HOST_SESSION_DESKTOP_H
 
 #include "codec/video_encoder.h"
 #include "codec/cursor_encoder.h"
@@ -19,11 +19,11 @@
 
 namespace aspia {
 
-class DesktopSessionClient
+class HostSessionDesktop
 {
 public:
-    DesktopSessionClient() = default;
-    ~DesktopSessionClient() = default;
+    HostSessionDesktop() = default;
+    ~HostSessionDesktop() = default;
 
     void Run(const std::wstring& channel_id);
 
@@ -60,9 +60,9 @@ private:
     std::unique_ptr<InputInjector> input_injector_;
     std::unique_ptr<ClipboardThread> clipboard_thread_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopSessionClient);
+    DISALLOW_COPY_AND_ASSIGN(HostSessionDesktop);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__DESKTOP_SESSION_CLIENT_H
+#endif // _ASPIA_HOST__HOST_SESSION_DESKTOP_H

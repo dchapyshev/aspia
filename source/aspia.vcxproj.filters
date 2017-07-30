@@ -325,9 +325,6 @@
     <ClCompile Include="client\client_session_desktop_view.cc">
       <Filter>client</Filter>
     </ClCompile>
-    <ClCompile Include="host\desktop_session_client.cc">
-      <Filter>host</Filter>
-    </ClCompile>
     <ClCompile Include="network\firewall_manager_legacy.cc">
       <Filter>network</Filter>
     </ClCompile>
@@ -497,6 +494,9 @@
       <Filter>host</Filter>
     </ClCompile>
     <ClCompile Include="host\host_session.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host_session_desktop.cc">
       <Filter>host</Filter>
     </ClCompile>
   </ItemGroup>
@@ -851,9 +851,6 @@
     <ClInclude Include="client\client_session_desktop_view.h">
       <Filter>client</Filter>
     </ClInclude>
-    <ClInclude Include="host\desktop_session_client.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="network\firewall_manager_legacy.h">
       <Filter>network</Filter>
     </ClInclude>
@@ -1047,6 +1044,9 @@
       <Filter>host</Filter>
     </ClInclude>
     <ClInclude Include="host\host_session.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_session_desktop.h">
       <Filter>host</Filter>
     </ClInclude>
   </ItemGroup>

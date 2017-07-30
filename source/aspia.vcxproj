@@ -109,7 +109,6 @@
     <ClCompile Include="host\clipboard_thread.cc" />
     <ClCompile Include="host\console_session_launcher.cc" />
     <ClCompile Include="host\console_session_watcher.cc" />
-    <ClCompile Include="host\desktop_session_client.cc" />
     <ClCompile Include="host\file_transfer_session_client.cc" />
     <ClCompile Include="host\host.cc" />
     <ClCompile Include="host\host_main.cc" />
@@ -117,6 +116,7 @@
     <ClCompile Include="host\host_process_connector.cc" />
     <ClCompile Include="host\host_service.cc" />
     <ClCompile Include="host\host_session.cc" />
+    <ClCompile Include="host\host_session_desktop.cc" />
     <ClCompile Include="host\host_user_list.cc" />
     <ClCompile Include="host\input_injector.cc" />
     <ClCompile Include="host\power_injector.cc" />
@@ -290,7 +290,6 @@
     <ClInclude Include="host\clipboard_thread.h" />
     <ClInclude Include="host\console_session_launcher.h" />
     <ClInclude Include="host\console_session_watcher.h" />
-    <ClInclude Include="host\desktop_session_client.h" />
     <ClInclude Include="host\file_transfer_session_client.h" />
     <ClInclude Include="host\host.h" />
     <ClInclude Include="host\host_main.h" />
@@ -298,6 +297,7 @@
     <ClInclude Include="host\host_process_connector.h" />
     <ClInclude Include="host\host_service.h" />
     <ClInclude Include="host\host_session.h" />
+    <ClInclude Include="host\host_session_desktop.h" />
     <ClInclude Include="host\host_user_list.h" />
     <ClInclude Include="host\input_injector.h" />
     <ClInclude Include="host\power_injector.h" />
