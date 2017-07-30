@@ -305,7 +305,6 @@
     <ClInclude Include="host\sas_injector.h" />
     <ClInclude Include="host\scoped_sas_police.h" />
     <ClInclude Include="host\screen_updater.h" />
-    <ClInclude Include="host\host_session.h" />
     <ClInclude Include="ipc\pipe_channel.h" />
     <ClInclude Include="ipc\pipe_channel_proxy.h" />
     <ClInclude Include="network\firewall_manager.h" />

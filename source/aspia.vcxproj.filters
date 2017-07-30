@@ -696,9 +696,6 @@
     <ClInclude Include="base\security_helpers.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="host\host_session.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="codec\video_encoder_vpx.h">
       <Filter>codec</Filter>
     </ClInclude>

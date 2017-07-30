@@ -12,7 +12,6 @@
 #include "base/process/process_watcher.h"
 #include "base/synchronization/waitable_timer.h"
 #include "host/host_process_connector.h"
-#include "host/host_session.h"
 #include "host/console_session_watcher.h"
 #include "ipc/pipe_channel.h"
 #include "network/network_channel_proxy.h"
@@ -21,7 +20,6 @@
 namespace aspia {
 
 class HostSessionConsole :
-    public HostSession,
     private ConsoleSessionWatcher::Delegate,
     private MessageLoopThread::Delegate
 {
