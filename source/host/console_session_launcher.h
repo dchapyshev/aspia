@@ -32,7 +32,6 @@ private:
     void Worker() override;
     void OnStop() override;
 
-private:
     static const uint32_t kInvalidSessionId = 0xFFFFFFFF;
 
     uint32_t session_id_ = kInvalidSessionId;
