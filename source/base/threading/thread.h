@@ -46,6 +46,18 @@ public:
     // Returns if the Run method is running.
     bool IsRunning() const;
 
+    enum class Priority
+    {
+        ABOVE_NORMAL = THREAD_PRIORITY_ABOVE_NORMAL,
+        BELOW_NORMAL = THREAD_PRIORITY_BELOW_NORMAL,
+        HIGHEST      = THREAD_PRIORITY_HIGHEST,
+        IDLE         = THREAD_PRIORITY_IDLE,
+        LOWEST       = THREAD_PRIORITY_LOWEST,
+        NORMAL       = THREAD_PRIORITY_NORMAL
+    };
+
+    bool SetPriority(Priority priority);
+
 protected:
     virtual void Run() = 0;
 

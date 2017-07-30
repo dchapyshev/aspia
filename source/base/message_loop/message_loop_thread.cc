@@ -114,4 +114,11 @@ void MessageLoopThread::ThreadMain(MessageLoop::Type message_loop_type)
     message_loop_ = nullptr;
 }
 
+bool MessageLoopThread::SetPriority(Priority priority)
+{
+    DCHECK(IsRunning());
+    return !!SetThreadPriority(thread_.native_handle(),
+                               static_cast<int>(priority));
+}
+
 } // namespace aspia

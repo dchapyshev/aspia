@@ -6,6 +6,7 @@
 //
 
 #include "base/threading/thread.h"
+#include "base/logging.h"
 
 namespace aspia {
 
@@ -69,6 +70,13 @@ void Thread::Start()
     start_event_.Wait();
 
     state_ = State::STARTED;
+}
+
+bool Thread::SetPriority(Priority priority)
+{
+    DCHECK(IsRunning());
+    return !!SetThreadPriority(thread_.native_handle(),
+                               static_cast<int>(priority));
 }
 
 } // namespace aspia

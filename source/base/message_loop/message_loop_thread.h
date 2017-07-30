@@ -50,6 +50,8 @@ public:
 
     void Join();
 
+    bool IsRunning() const { return running_; }
+
     MessageLoop* message_loop() const
     {
         return message_loop_;
@@ -64,6 +66,18 @@ public:
     {
         return thread_id_;
     }
+
+    enum class Priority
+    {
+        ABOVE_NORMAL = THREAD_PRIORITY_ABOVE_NORMAL,
+        BELOW_NORMAL = THREAD_PRIORITY_BELOW_NORMAL,
+        HIGHEST      = THREAD_PRIORITY_HIGHEST,
+        IDLE         = THREAD_PRIORITY_IDLE,
+        LOWEST       = THREAD_PRIORITY_LOWEST,
+        NORMAL       = THREAD_PRIORITY_NORMAL
+    };
+
+    bool SetPriority(Priority priority);
 
 private:
     void ThreadMain(MessageLoop::Type message_loop_type);
