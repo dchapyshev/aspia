@@ -250,12 +250,6 @@ LRESULT UiFileManagerPanel::OnRefresh(WORD code, WORD ctrl_id, HWND ctrl,
                                       BOOL& handled)
 {
     sender_->SendDriveListRequest(This());
-
-    if (file_list_.HasFileList())
-    {
-        sender_->SendFileListRequest(This(), drive_list_.CurrentPath());
-    }
-
     return 0;
 }
 
@@ -432,7 +426,11 @@ void UiFileManagerPanel::OnDriveListRequestReply(
 {
     drive_list_.Read(std::move(drive_list));
 
-    if (!file_list_.HasFileList())
+    if (file_list_.HasFileList())
+    {
+        sender_->SendFileListRequest(This(), drive_list_.CurrentPath());
+    }
+    else
     {
         MoveToDrive(UiDriveList::kComputerObjectIndex);
     }
