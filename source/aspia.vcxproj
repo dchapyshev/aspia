@@ -107,7 +107,6 @@
     <ClCompile Include="desktop_capture\mouse_cursor_cache.cc" />
     <ClCompile Include="desktop_capture\pixel_format.cc" />
     <ClCompile Include="host\clipboard_thread.cc" />
-    <ClCompile Include="host\console_session_launcher.cc" />
     <ClCompile Include="host\console_session_watcher.cc" />
     <ClCompile Include="host\host.cc" />
     <ClCompile Include="host\host_main.cc" />
@@ -117,10 +116,11 @@
     <ClCompile Include="host\host_session.cc" />
     <ClCompile Include="host\host_session_desktop.cc" />
     <ClCompile Include="host\host_session_file_transfer.cc" />
+    <ClCompile Include="host\host_session_launcher.cc" />
+    <ClCompile Include="host\host_session_power.cc" />
     <ClCompile Include="host\host_user_list.cc" />
     <ClCompile Include="host\input_injector.cc" />
     <ClCompile Include="host\power_injector.cc" />
-    <ClCompile Include="host\power_session_client.cc" />
     <ClCompile Include="host\sas_injector.cc" />
     <ClCompile Include="host\scoped_sas_police.cc" />
     <ClCompile Include="host\screen_updater.cc" />
@@ -288,7 +288,6 @@
     <ClInclude Include="desktop_capture\pixel_format.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="host\clipboard_thread.h" />
-    <ClInclude Include="host\console_session_launcher.h" />
     <ClInclude Include="host\console_session_watcher.h" />
     <ClInclude Include="host\host.h" />
     <ClInclude Include="host\host_main.h" />
@@ -298,10 +297,11 @@
     <ClInclude Include="host\host_session.h" />
     <ClInclude Include="host\host_session_desktop.h" />
     <ClInclude Include="host\host_session_file_transfer.h" />
+    <ClInclude Include="host\host_session_launcher.h" />
+    <ClInclude Include="host\host_session_power.h" />
     <ClInclude Include="host\host_user_list.h" />
     <ClInclude Include="host\input_injector.h" />
     <ClInclude Include="host\power_injector.h" />
-    <ClInclude Include="host\power_session_client.h" />
     <ClInclude Include="host\sas_injector.h" />
     <ClInclude Include="host\scoped_sas_police.h" />
     <ClInclude Include="host\screen_updater.h" />

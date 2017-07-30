@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/power_session_client.cc
+// FILE:            base/host_session_power.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "host/power_session_client.h"
+#include "host/host_session_power.h"
 #include "host/power_injector.h"
 #include "ipc/pipe_channel_proxy.h"
 #include "proto/auth_session.pb.h"
@@ -14,7 +14,7 @@
 
 namespace aspia {
 
-void PowerSessionClient::Run(const std::wstring& channel_id)
+void HostSessionPower::Run(const std::wstring& channel_id)
 {
     ipc_channel_ = PipeChannel::CreateClient(channel_id);
     if (ipc_channel_)
@@ -33,7 +33,7 @@ void PowerSessionClient::Run(const std::wstring& channel_id)
     }
 }
 
-void PowerSessionClient::OnIpcChannelConnect(uint32_t user_data)
+void HostSessionPower::OnIpcChannelConnect(uint32_t user_data)
 {
     // The server sends the session type in user_data.
     proto::SessionType session_type =
@@ -46,11 +46,11 @@ void PowerSessionClient::OnIpcChannelConnect(uint32_t user_data)
     }
 
     ipc_channel_proxy_->Receive(std::bind(
-        &PowerSessionClient::OnIpcChannelMessage, this,
+        &HostSessionPower::OnIpcChannelMessage, this,
         std::placeholders::_1));
 }
 
-void PowerSessionClient::OnIpcChannelMessage(std::unique_ptr<IOBuffer> buffer)
+void HostSessionPower::OnIpcChannelMessage(std::unique_ptr<IOBuffer> buffer)
 {
     proto::power::ClientToHost message;
 

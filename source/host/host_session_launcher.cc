@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            host/console_session_launcher.cc
+// FILE:            host/host_session_launcher.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "host/console_session_launcher.h"
+#include "host/host_session_launcher.h"
 
 #include <userenv.h>
 #include <string>
@@ -26,7 +26,7 @@ static const WCHAR kServiceFullName[] = L"Aspia Desktop Session Launcher";
 // Name of the default session desktop.
 static WCHAR kDefaultDesktopName[] = L"winsta0\\default";
 
-ConsoleSessionLauncher::ConsoleSessionLauncher(const std::wstring& service_id)
+HostSessionLauncher::HostSessionLauncher(const std::wstring& service_id)
     : Service(ServiceManager::CreateUniqueServiceName(
           kServiceShortName, service_id))
 {
@@ -273,20 +273,18 @@ static bool LaunchProcessOverService(uint32_t session_id,
     return manager->Start();
 }
 
-void ConsoleSessionLauncher::Worker()
+void HostSessionLauncher::Worker()
 {
-    LaunchProcessInSession(kDesktopSessionSwitch,
-                           session_id_,
-                           channel_id_);
+    LaunchProcessInSession(kDesktopSessionSwitch, session_id_, channel_id_);
 }
 
-void ConsoleSessionLauncher::OnStop()
+void HostSessionLauncher::OnStop()
 {
     // Nothing
 }
 
-void ConsoleSessionLauncher::ExecuteService(uint32_t session_id,
-                                            const std::wstring& channel_id)
+void HostSessionLauncher::ExecuteService(uint32_t session_id,
+                                         const std::wstring& channel_id)
 {
     session_id_ = session_id;
     channel_id_ = channel_id;

@@ -355,9 +355,6 @@
     <ClCompile Include="proto\file_transfer_session_message.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
-    <ClCompile Include="host\console_session_launcher.cc">
-      <Filter>host</Filter>
-    </ClCompile>
     <ClCompile Include="proto\status.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
@@ -487,9 +484,6 @@
     <ClCompile Include="ui\power_session_dialog.cc">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="host\power_session_client.cc">
-      <Filter>host</Filter>
-    </ClCompile>
     <ClCompile Include="host\host_session.cc">
       <Filter>host</Filter>
     </ClCompile>
@@ -497,6 +491,12 @@
       <Filter>host</Filter>
     </ClCompile>
     <ClCompile Include="host\host_session_file_transfer.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host_session_power.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host_session_launcher.cc">
       <Filter>host</Filter>
     </ClCompile>
   </ItemGroup>
@@ -887,9 +887,6 @@
     <ClInclude Include="proto\file_transfer_session_message.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
-    <ClInclude Include="host\console_session_launcher.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="proto\status.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
@@ -1037,9 +1034,6 @@
     <ClInclude Include="ui\power_session_dialog.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="host\power_session_client.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="host\host_session.h">
       <Filter>host</Filter>
     </ClInclude>
@@ -1047,6 +1041,12 @@
       <Filter>host</Filter>
     </ClInclude>
     <ClInclude Include="host\host_session_file_transfer.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_session_power.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_session_launcher.h">
       <Filter>host</Filter>
     </ClInclude>
   </ItemGroup>

@@ -8,10 +8,10 @@
 #include "host/host_main.h"
 #include "host/host_service.h"
 #include "host/sas_injector.h"
-#include "host/console_session_launcher.h"
+#include "host/host_session_launcher.h"
 #include "host/host_session_desktop.h"
 #include "host/host_session_file_transfer.h"
-#include "host/power_session_client.h"
+#include "host/host_session_power.h"
 #include "base/strings/unicode.h"
 
 #include <gflags/gflags.h>
@@ -52,7 +52,7 @@ void RunHostMain(const std::wstring& run_mode)
         std::wstring service_id;
         CHECK(ANSItoUNICODE(FLAGS_service_id, service_id));
 
-        ConsoleSessionLauncher launcher(service_id);
+        HostSessionLauncher launcher(service_id);
         launcher.ExecuteService(FLAGS_session_id, channel_id);
     }
     else if (run_mode == kDesktopSessionSwitch)
@@ -74,7 +74,7 @@ void RunHostMain(const std::wstring& run_mode)
         std::wstring channel_id;
         CHECK(ANSItoUNICODE(FLAGS_channel_id, channel_id));
 
-        PowerSessionClient().Run(channel_id);
+        HostSessionPower().Run(channel_id);
     }
 }
 

@@ -6,7 +6,7 @@
 //
 
 #include "host/host_session.h"
-#include "host/console_session_launcher.h"
+#include "host/host_session_launcher.h"
 #include "base/version_helpers.h"
 #include "base/scoped_privilege.h"
 
