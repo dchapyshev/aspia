@@ -83,6 +83,7 @@ void HostSession::OnSessionAttached(uint32_t session_id)
                 break;
 
             default:
+                DLOG(ERROR) << "Unknown session type: " << session_type_;
                 launched = false;
                 break;
         }
