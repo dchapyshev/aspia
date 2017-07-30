@@ -18,9 +18,10 @@ namespace aspia {
 static_assert(UiFileList::kInvalidObjectIndex == UiDriveList::kInvalidObjectIndex,
               "Values must be equal");
 
-UiFileManagerPanel::UiFileManagerPanel(PanelType panel_type,
-                                       std::shared_ptr<FileRequestSenderProxy> sender,
-                                       Delegate* delegate)
+UiFileManagerPanel::UiFileManagerPanel(
+    PanelType panel_type,
+    std::shared_ptr<FileRequestSenderProxy> sender,
+    Delegate* delegate)
     : toolbar_(panel_type == PanelType::LOCAL ?
           UiFileToolBar::Type::LOCAL : UiFileToolBar::Type::REMOTE),
       panel_type_(panel_type),
@@ -274,19 +275,20 @@ LRESULT UiFileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl,
     CString message;
     message.Format(IDS_FT_DELETE_CONFORM, selected_count);
 
-    if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) == IDYES)
+    if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) != IDYES)
+        return 0;
+
+    for (UiFileList::Iterator iter(file_list_, UiFileList::Iterator::SELECTED);
+         !iter.IsAtEnd();
+         iter.Advance())
     {
-        for (UiFileList::Iterator iter(file_list_, UiFileList::Iterator::SELECTED);
-             !iter.IsAtEnd();
-             iter.Advance())
-        {
-            FilePath path = drive_list_.CurrentPath();
-            FilePath name = std::experimental::filesystem::u8path(iter.Object().name());
+        FilePath path = drive_list_.CurrentPath();
+        FilePath name =
+            std::experimental::filesystem::u8path(iter.Object().name());
 
-            path.append(name);
+        path.append(name);
 
-            sender_->SendRemoveRequest(This(), path);
-        }
+        sender_->SendRemoveRequest(This(), path);
     }
 
     return 0;

@@ -43,7 +43,8 @@ void FileTransferSessionClient::Run(const std::wstring& channel_id)
 void FileTransferSessionClient::OnIpcChannelConnect(uint32_t user_data)
 {
     // The server sends the session type in user_data.
-    proto::SessionType session_type = static_cast<proto::SessionType>(user_data);
+    proto::SessionType session_type =
+        static_cast<proto::SessionType>(user_data);
 
     if (session_type != proto::SESSION_TYPE_FILE_TRANSFER)
     {
