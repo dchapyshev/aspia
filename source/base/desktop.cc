@@ -18,7 +18,7 @@ Desktop::Desktop(HDESK desktop, bool own)
 
 Desktop::~Desktop()
 {
-    if (own_ && !desktop_)
+    if (own_ && desktop_)
     {
         if (!CloseDesktop(desktop_))
         {
