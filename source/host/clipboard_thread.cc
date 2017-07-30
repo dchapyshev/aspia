@@ -38,11 +38,7 @@ void ClipboardThread::InjectClipboardEvent(
 
 void ClipboardThread::OnBeforeThreadRunning()
 {
-    if (!SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_LOWEST))
-    {
-        LOG(ERROR) << "SetThreadPriority() failed: "
-                   << GetLastSystemErrorString();
-    }
+    ui_thread_.SetPriority(MessageLoopThread::Priority::LOWEST);
 
     runner_ = ui_thread_.message_loop_proxy();
     DCHECK(runner_);

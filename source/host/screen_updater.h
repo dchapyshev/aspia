@@ -14,7 +14,7 @@
 
 namespace aspia {
 
-class ScreenUpdater
+class ScreenUpdater : private MessageLoopThread::Delegate
 {
 public:
     enum class Mode { SCREEN_AND_CURSOR, SCREEN };
@@ -31,6 +31,10 @@ public:
     void PostUpdateRequest();
 
 private:
+    // MessageLoopThread::Delegate implementation.
+    void OnBeforeThreadRunning();
+    void OnAfterThreadRunning();
+
     void UpdateScreen();
 
     ScreenUpdateCallback screen_update_callback_;

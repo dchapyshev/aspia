@@ -17,9 +17,7 @@ ScreenUpdater::ScreenUpdater(Mode mode,
       update_interval_(update_interval)
 {
     DCHECK(screen_update_callback_ != nullptr);
-    thread_.Start(MessageLoop::TYPE_DEFAULT);
-    runner_ = thread_.message_loop_proxy();
-    DCHECK(runner_);
+    thread_.Start(MessageLoop::TYPE_DEFAULT, this);
 }
 
 ScreenUpdater::~ScreenUpdater()
@@ -78,6 +76,19 @@ void ScreenUpdater::UpdateScreen()
         runner_->PostDelayedTask(
             std::bind(&ScreenUpdater::UpdateScreen, this), update_interval_);
     }
+}
+
+void ScreenUpdater::OnBeforeThreadRunning()
+{
+    thread_.SetPriority(MessageLoopThread::Priority::HIGHEST);
+
+    runner_ = thread_.message_loop_proxy();
+    DCHECK(runner_);
+}
+
+void ScreenUpdater::OnAfterThreadRunning()
+{
+    // Nothing
 }
 
 } // namespace aspia
