@@ -24,24 +24,11 @@ class HostSession :
     private MessageLoopThread::Delegate
 {
 public:
-    ~HostSession();
-
-    static std::unique_ptr<HostSession>
-        CreateForDesktopManage(std::shared_ptr<NetworkChannelProxy> channel_proxy);
-
-    static std::unique_ptr<HostSession>
-        CreateForDesktopView(std::shared_ptr<NetworkChannelProxy> channel_proxy);
-
-    static std::unique_ptr<HostSession>
-        CreateForFileTransfer(std::shared_ptr<NetworkChannelProxy> channel_proxy);
-
-    static std::unique_ptr<HostSession>
-        CreateForPowerManage(std::shared_ptr<NetworkChannelProxy> channel_proxy);
-
-private:
     HostSession(proto::SessionType session_type,
                 std::shared_ptr<NetworkChannelProxy> channel_proxy);
+    ~HostSession();
 
+private:
     // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;

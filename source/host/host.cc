@@ -136,19 +136,11 @@ void Host::DoAuthorize(std::unique_ptr<IOBuffer> buffer)
         switch (request.session_type())
         {
             case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
-                session_ = HostSession::CreateForDesktopManage(channel_proxy_);
-                break;
-
             case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
-                session_ = HostSession::CreateForDesktopView(channel_proxy_);
-                break;
-
             case proto::SessionType::SESSION_TYPE_FILE_TRANSFER:
-                session_ = HostSession::CreateForFileTransfer(channel_proxy_);
-                break;
-
             case proto::SessionType::SESSION_TYPE_POWER_MANAGE:
-                session_ = HostSession::CreateForPowerManage(channel_proxy_);
+                session_ = std::make_unique<HostSession>(
+                    request.session_type(), channel_proxy_);
                 break;
 
             default:

@@ -14,38 +14,6 @@ namespace aspia {
 
 static const std::chrono::seconds kAttachTimeout{ 30 };
 
-// static
-std::unique_ptr<HostSession> HostSession::CreateForDesktopManage(
-    std::shared_ptr<NetworkChannelProxy> channel_proxy)
-{
-    return std::unique_ptr<HostSession>(
-        new HostSession(proto::SESSION_TYPE_DESKTOP_MANAGE, channel_proxy));
-}
-
-// static
-std::unique_ptr<HostSession> HostSession::CreateForDesktopView(
-    std::shared_ptr<NetworkChannelProxy> channel_proxy)
-{
-    return std::unique_ptr<HostSession>(
-        new HostSession(proto::SESSION_TYPE_DESKTOP_VIEW, channel_proxy));
-}
-
-// static
-std::unique_ptr<HostSession> HostSession::CreateForFileTransfer(
-    std::shared_ptr<NetworkChannelProxy> channel_proxy)
-{
-    return std::unique_ptr<HostSession>(
-        new HostSession(proto::SESSION_TYPE_FILE_TRANSFER, channel_proxy));
-}
-
-// static
-std::unique_ptr<HostSession> HostSession::CreateForPowerManage(
-    std::shared_ptr<NetworkChannelProxy> channel_proxy)
-{
-        return std::unique_ptr<HostSession>(
-            new HostSession(proto::SESSION_TYPE_POWER_MANAGE, channel_proxy));
-}
-
 HostSession::HostSession(
     proto::SessionType session_type,
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
