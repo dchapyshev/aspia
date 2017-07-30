@@ -117,10 +117,10 @@
     <ClCompile Include="host\host_process_connector.cc" />
     <ClCompile Include="host\host_service.cc" />
     <ClCompile Include="host\host_session_console.cc" />
-    <ClCompile Include="host\host_session_power.cc" />
     <ClCompile Include="host\host_user_list.cc" />
     <ClCompile Include="host\input_injector.cc" />
     <ClCompile Include="host\power_injector.cc" />
+    <ClCompile Include="host\power_session_client.cc" />
     <ClCompile Include="host\sas_injector.cc" />
     <ClCompile Include="host\scoped_sas_police.cc" />
     <ClCompile Include="host\screen_updater.cc" />
@@ -298,10 +298,10 @@
     <ClInclude Include="host\host_process_connector.h" />
     <ClInclude Include="host\host_service.h" />
     <ClInclude Include="host\host_session_console.h" />
-    <ClInclude Include="host\host_session_power.h" />
     <ClInclude Include="host\host_user_list.h" />
     <ClInclude Include="host\input_injector.h" />
     <ClInclude Include="host\power_injector.h" />
+    <ClInclude Include="host\power_session_client.h" />
     <ClInclude Include="host\sas_injector.h" />
     <ClInclude Include="host\scoped_sas_police.h" />
     <ClInclude Include="host\screen_updater.h" />

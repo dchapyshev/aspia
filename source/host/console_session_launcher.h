@@ -17,8 +17,8 @@ static const WCHAR kDesktopSessionLauncherSwitch[] =
     L"desktop-session-launcher";
 
 static const WCHAR kDesktopSessionSwitch[] = L"desktop-session";
-
 static const WCHAR kFileTransferSessionSwitch[] = L"file-transfer-session";
+static const WCHAR kPowerManageSessionSwitch[] = L"power-manage-session";
 
 class ConsoleSessionLauncher : private Service
 {
@@ -44,6 +44,9 @@ bool LaunchDesktopSession(uint32_t session_id, const std::wstring& channel_id);
 
 bool LaunchFileTransferSession(uint32_t session_id,
                                const std::wstring& channel_id);
+
+bool LaunchPowerManageSession(uint32_t session_id,
+                              const std::wstring& channel_id);
 
 } // namespace aspia
 

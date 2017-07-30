@@ -161,12 +161,14 @@ BEGIN
 END
 
 IDD_POWER_HOST DIALOGEX 100, 100, 293, 59
-STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
-CAPTION "Информация"
+STYLE DS_SHELLFONT | WS_BORDER | DS_MODALFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "Aspia Remote Desktop"
 FONT 8, "MS Shell Dlg"
 BEGIN
-    LTEXT "", IDC_POWER_ACTION, 7, 7, 278, 10
-    LTEXT "", IDC_POWER_TIME, 7, 24, 126, 10
+    CONTROL -1, IDC_POWER_ICON, "STATIC", SS_ICON | SS_CENTERIMAGE | SS_REALSIZEIMAGE, 8, 4, 32, 32
+
+    LTEXT "", IDC_POWER_ACTION, 55, 8, 234, 10
+    LTEXT "", IDC_POWER_TIME, 55, 24, 234, 10
 
     DEFPUSHBUTTON "&Выполнить сейчас", IDOK, 146, 40, 78, 14
     PUSHBUTTON "&Отмена", IDCANCEL, 228, 40, 60, 14
@@ -416,11 +418,11 @@ END
 // Power Manage
 STRINGTABLE DISCARDABLE
 BEGIN
-    IDS_PM_SHUTDOWN_COMMAND "A command to shutdown the computer has been received."
-    IDS_PM_REBOOT_COMMAND "A command to reboot the computer has been received."
-    IDS_PM_HIBERNATE_COMMAND "A command to hibernate the computer has been received."
-    IDS_PM_SUSPEND_COMMAND "A command to suspend the computer has been received."
-    IDS_PM_TIME_LEFT "Time left before execution: %d seconds."
+    IDS_PM_SHUTDOWN_COMMAND "Получена команда выключения компьютера."
+    IDS_PM_REBOOT_COMMAND "Получена команда перезагрузки компьютера."
+    IDS_PM_HIBERNATE_COMMAND "Получена команда перевода компьютера в режим гибернации."
+    IDS_PM_SUSPEND_COMMAND "Получена команда перевода компьютера в режим сна."
+    IDS_PM_TIME_LEFT "Осталось времени до выполнения: %d секунд."
 END
 
 // Request Status

@@ -60,6 +60,10 @@ private:
     int time_left_;
     CTimer timer_;
 
+    CIcon small_icon_;
+    CIcon big_icon_;
+    CIcon power_icon_;
+
     DISALLOW_COPY_AND_ASSIGN(UiPowerSessionDialog);
 };
 

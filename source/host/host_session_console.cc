@@ -19,7 +19,7 @@ std::unique_ptr<HostSessionConsole> HostSessionConsole::CreateForDesktopManage(
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
     return std::unique_ptr<HostSessionConsole>(
-        new HostSessionConsole(proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE,
+        new HostSessionConsole(proto::SESSION_TYPE_DESKTOP_MANAGE,
                                channel_proxy));
 }
 
@@ -28,7 +28,7 @@ std::unique_ptr<HostSessionConsole> HostSessionConsole::CreateForDesktopView(
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
     return std::unique_ptr<HostSessionConsole>(
-        new HostSessionConsole(proto::SessionType::SESSION_TYPE_DESKTOP_VIEW,
+        new HostSessionConsole(proto::SESSION_TYPE_DESKTOP_VIEW,
                                channel_proxy));
 }
 
@@ -37,8 +37,17 @@ std::unique_ptr<HostSessionConsole> HostSessionConsole::CreateForFileTransfer(
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
     return std::unique_ptr<HostSessionConsole>(
-        new HostSessionConsole(proto::SessionType::SESSION_TYPE_FILE_TRANSFER,
+        new HostSessionConsole(proto::SESSION_TYPE_FILE_TRANSFER,
                                channel_proxy));
+}
+
+// static
+std::unique_ptr<HostSessionConsole> HostSessionConsole::CreateForPowerManage(
+    std::shared_ptr<NetworkChannelProxy> channel_proxy)
+{
+        return std::unique_ptr<HostSessionConsole>(
+            new HostSessionConsole(proto::SESSION_TYPE_POWER_MANAGE,
+                                   channel_proxy));
 }
 
 HostSessionConsole::HostSessionConsole(
@@ -96,13 +105,17 @@ void HostSessionConsole::OnSessionAttached(uint32_t session_id)
 
         switch (session_type_)
         {
-            case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
-            case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
+            case proto::SESSION_TYPE_DESKTOP_MANAGE:
+            case proto::SESSION_TYPE_DESKTOP_VIEW:
                 launched = LaunchDesktopSession(session_id, channel_id);
                 break;
 
-            case proto::SessionType::SESSION_TYPE_FILE_TRANSFER:
+            case proto::SESSION_TYPE_FILE_TRANSFER:
                 launched = LaunchFileTransferSession(session_id, channel_id);
+                break;
+
+            case proto::SESSION_TYPE_POWER_MANAGE:
+                launched = LaunchPowerManageSession(session_id, channel_id);
                 break;
 
             default:
@@ -139,7 +152,8 @@ void HostSessionConsole::OnSessionDetached()
     process_connector_.Disconnect();
     process_watcher_.StopWatching();
 
-    if (session_type_ != proto::SessionType::SESSION_TYPE_FILE_TRANSFER)
+    if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE ||
+        session_type_ == proto::SESSION_TYPE_DESKTOP_VIEW)
     {
         process_.Terminate(0, false);
     }
@@ -234,7 +248,8 @@ void HostSessionConsole::OnIpcChannelDisconnect()
         {
             OnSessionDetached();
 
-            if (session_type_ == proto::SESSION_TYPE_FILE_TRANSFER)
+            if (session_type_ == proto::SESSION_TYPE_FILE_TRANSFER ||
+                session_type_ == proto::SESSION_TYPE_POWER_MANAGE)
             {
                 state_ = State::DETACHED;
 

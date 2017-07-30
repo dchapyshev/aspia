@@ -37,6 +37,9 @@ public:
     static std::unique_ptr<HostSessionConsole>
         CreateForFileTransfer(std::shared_ptr<NetworkChannelProxy> channel_proxy);
 
+    static std::unique_ptr<HostSessionConsole>
+        CreateForPowerManage(std::shared_ptr<NetworkChannelProxy> channel_proxy);
+
 private:
     HostSessionConsole(proto::SessionType session_type,
                        std::shared_ptr<NetworkChannelProxy> channel_proxy);

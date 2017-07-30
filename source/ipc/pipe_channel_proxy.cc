@@ -30,6 +30,7 @@ bool PipeChannelProxy::Disconnect()
         return false;
 
     channel_->Disconnect();
+    stop_event_.Signal();
     return true;
 }
 

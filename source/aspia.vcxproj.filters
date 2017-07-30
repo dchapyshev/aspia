@@ -328,9 +328,6 @@
     <ClCompile Include="host\desktop_session_client.cc">
       <Filter>host</Filter>
     </ClCompile>
-    <ClCompile Include="host\host_session_power.cc">
-      <Filter>host</Filter>
-    </ClCompile>
     <ClCompile Include="network\firewall_manager_legacy.cc">
       <Filter>network</Filter>
     </ClCompile>
@@ -498,6 +495,9 @@
     </ClCompile>
     <ClCompile Include="ui\power_session_dialog.cc">
       <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="host\power_session_client.cc">
+      <Filter>host</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -857,9 +857,6 @@
     <ClInclude Include="host\desktop_session_client.h">
       <Filter>host</Filter>
     </ClInclude>
-    <ClInclude Include="host\host_session_power.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="network\firewall_manager_legacy.h">
       <Filter>network</Filter>
     </ClInclude>
@@ -1051,6 +1048,9 @@
     </ClInclude>
     <ClInclude Include="ui\power_session_dialog.h">
       <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="host\power_session_client.h">
+      <Filter>host</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

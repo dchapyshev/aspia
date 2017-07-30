@@ -7,7 +7,6 @@
 
 #include "host/host.h"
 #include "host/host_session_console.h"
-#include "host/host_session_power.h"
 #include "host/host_user_list.h"
 #include "crypto/secure_string.h"
 #include "proto/auth_session.pb.h"
@@ -150,7 +149,7 @@ void Host::DoAuthorize(std::unique_ptr<IOBuffer> buffer)
                 break;
 
             case proto::SessionType::SESSION_TYPE_POWER_MANAGE:
-                session_ = HostSessionPower::Create(channel_proxy_);
+                session_ = HostSessionConsole::CreateForPowerManage(channel_proxy_);
                 break;
 
             default:

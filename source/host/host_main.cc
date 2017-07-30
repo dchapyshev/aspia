@@ -11,6 +11,7 @@
 #include "host/console_session_launcher.h"
 #include "host/desktop_session_client.h"
 #include "host/file_transfer_session_client.h"
+#include "host/power_session_client.h"
 #include "base/strings/unicode.h"
 
 #include <gflags/gflags.h>
@@ -67,6 +68,13 @@ void RunHostMain(const std::wstring& run_mode)
         CHECK(ANSItoUNICODE(FLAGS_channel_id, channel_id));
 
         FileTransferSessionClient().Run(channel_id);
+    }
+    else if (run_mode == kPowerManageSessionSwitch)
+    {
+        std::wstring channel_id;
+        CHECK(ANSItoUNICODE(FLAGS_channel_id, channel_id));
+
+        PowerSessionClient().Run(channel_id);
     }
 }
 

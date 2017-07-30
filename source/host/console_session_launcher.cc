@@ -316,8 +316,9 @@ bool LaunchDesktopSession(uint32_t session_id, const std::wstring& channel_id)
                                   channel_id);
 }
 
-bool LaunchFileTransferSession(uint32_t session_id,
-                               const std::wstring& channel_id)
+static bool LaunchSession(const std::wstring& run_mode,
+                          uint32_t session_id,
+                          const std::wstring& channel_id)
 {
     if (IsRunningAsService())
     {
@@ -359,15 +360,25 @@ bool LaunchFileTransferSession(uint32_t session_id,
 
         std::wstring command_line;
 
-        if (!CreateCommandLine(kFileTransferSessionSwitch,
-                               channel_id, command_line))
+        if (!CreateCommandLine(run_mode, channel_id, command_line))
             return false;
 
         return CreateProcessWithToken(session_token, command_line);
     }
 
-    return LaunchProcessWithCurrentRights(kFileTransferSessionSwitch,
-                                          channel_id);
+    return LaunchProcessWithCurrentRights(run_mode, channel_id);
+}
+
+bool LaunchFileTransferSession(uint32_t session_id,
+                               const std::wstring& channel_id)
+{
+    return LaunchSession(kFileTransferSessionSwitch, session_id, channel_id);
+}
+
+bool LaunchPowerManageSession(uint32_t session_id,
+                              const std::wstring& channel_id)
+{
+    return LaunchSession(kPowerManageSessionSwitch, session_id, channel_id);
 }
 
 } // namespace aspia

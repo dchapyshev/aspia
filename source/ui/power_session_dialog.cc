@@ -8,6 +8,7 @@
 #include "ui/power_session_dialog.h"
 #include "base/logging.h"
 
+#include <atlctrls.h>
 #include <atlmisc.h>
 
 namespace aspia {
@@ -27,6 +28,21 @@ LRESULT UiPowerSessionDialog::OnInitDialog(UINT message, WPARAM wparam,
                                            LPARAM lparam, BOOL& handled)
 {
     CenterWindow();
+
+    small_icon_ = AtlLoadIconImage(IDI_MAIN,
+                                   LR_CREATEDIBSECTION,
+                                   GetSystemMetrics(SM_CXSMICON),
+                                   GetSystemMetrics(SM_CYSMICON));
+    SetIcon(small_icon_, FALSE);
+
+    big_icon_ = AtlLoadIconImage(IDI_MAIN,
+                                 LR_CREATEDIBSECTION,
+                                 GetSystemMetrics(SM_CXICON),
+                                 GetSystemMetrics(SM_CYICON));
+    SetIcon(small_icon_, TRUE);
+
+    power_icon_ = AtlLoadIconImage(IDI_POWER_SURGE, LR_CREATEDIBSECTION, 32, 32);
+    CStatic(GetDlgItem(IDC_POWER_ICON)).SetIcon(power_icon_);
 
     CString title;
 
@@ -57,6 +73,22 @@ LRESULT UiPowerSessionDialog::OnInitDialog(UINT message, WPARAM wparam,
     UpdateTimer();
 
     timer_.Start(*this, 1000);
+
+    SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0,
+                 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+
+    DWORD active_thread_id =
+        GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
+
+    DWORD current_thread_id = GetCurrentThreadId();
+
+    if (active_thread_id != current_thread_id)
+    {
+        AttachThreadInput(current_thread_id, active_thread_id, TRUE);
+        SetForegroundWindow(*this);
+        AttachThreadInput(current_thread_id, active_thread_id, FALSE);
+    }
+
     return TRUE;
 }
 
