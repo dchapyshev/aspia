@@ -56,26 +56,23 @@ void RunHostMain(const std::wstring& run_mode)
         HostSessionLauncherService launcher(service_id);
         launcher.RunLauncher(FLAGS_session_id, channel_id);
     }
-    else if (run_mode == kDesktopSessionSwitch)
+    else
     {
         std::wstring channel_id;
         CHECK(ANSItoUNICODE(FLAGS_channel_id, channel_id));
 
-        HostSessionDesktop().Run(channel_id);
-    }
-    else if (run_mode == kFileTransferSessionSwitch)
-    {
-        std::wstring channel_id;
-        CHECK(ANSItoUNICODE(FLAGS_channel_id, channel_id));
-
-        HostSessionFileTransfer().Run(channel_id);
-    }
-    else if (run_mode == kPowerManageSessionSwitch)
-    {
-        std::wstring channel_id;
-        CHECK(ANSItoUNICODE(FLAGS_channel_id, channel_id));
-
-        HostSessionPower().Run(channel_id);
+        if (run_mode == kDesktopSessionSwitch)
+        {
+            HostSessionDesktop().Run(channel_id);
+        }
+        else if (run_mode == kFileTransferSessionSwitch)
+        {
+            HostSessionFileTransfer().Run(channel_id);
+        }
+        else if (run_mode == kPowerManageSessionSwitch)
+        {
+            HostSessionPower().Run(channel_id);
+        }
     }
 }
 
