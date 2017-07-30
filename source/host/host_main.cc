@@ -14,6 +14,7 @@
 #include "host/host_session_file_transfer.h"
 #include "host/host_session_power.h"
 #include "base/strings/unicode.h"
+#include "base/process/process.h"
 
 #include <gflags/gflags.h>
 
@@ -25,6 +26,8 @@ DEFINE_string(service_id, "", "Service Id");
 
 void RunHostMain(const std::wstring& run_mode)
 {
+    Process::Current().SetPriority(Process::Priority::HIGH);
+
     if (run_mode == kSasServiceSwitch)
     {
         std::wstring service_id;
