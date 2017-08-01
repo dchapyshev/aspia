@@ -214,7 +214,7 @@ bool MessageLoop::DoWork()
             AddToDelayedWorkQueue(pending_task);
 
             // If we changed the topmost task, then it is time to reschedule.
-            //if (reschedule)
+            if (reschedule)
                 pump_->ScheduleDelayedWork(pending_task.delayed_run_time);
         }
         else
