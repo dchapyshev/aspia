@@ -105,7 +105,7 @@ void HostSessionFileTransfer::OnIpcChannelMessage(
     }
     else if (message.has_file_packet())
     {
-        if (!ReadFileUploadDataRequest(message.file_packet()))
+        if (!ReadFilePacket(message.file_packet()))
             ipc_channel_proxy_->Disconnect();
     }
     else if (message.has_file_download_request())
@@ -246,6 +246,10 @@ void HostSessionFileTransfer::ReadFileUploadRequest(
             {
                 reply.set_status(proto::REQUEST_STATUS_FILE_CREATE_ERROR);
             }
+            else
+            {
+                reply.set_status(proto::REQUEST_STATUS_SUCCESS);
+            }
         }
     }
 
@@ -254,12 +258,12 @@ void HostSessionFileTransfer::ReadFileUploadRequest(
     SendReply(reply);
 }
 
-bool HostSessionFileTransfer::ReadFileUploadDataRequest(
+bool HostSessionFileTransfer::ReadFilePacket(
     const proto::FilePacket& file_packet)
 {
     if (!file_depacketizer_)
     {
-        LOG(ERROR) << "Unexpected upload data request";
+        LOG(ERROR) << "Unexpected file packet";
         return false;
     }
 
@@ -268,6 +272,10 @@ bool HostSessionFileTransfer::ReadFileUploadDataRequest(
     if (!file_depacketizer_->ReadNextPacket(file_packet))
     {
         reply.set_status(proto::REQUEST_STATUS_FILE_WRITE_ERROR);
+    }
+    else
+    {
+        reply.set_status(proto::REQUEST_STATUS_SUCCESS);
     }
 
     if (file_packet.flags() & proto::FilePacket::LAST_PACKET)
@@ -298,6 +306,10 @@ void HostSessionFileTransfer::ReadFileDownloadRequest(
         {
             reply.set_status(proto::REQUEST_STATUS_FILE_OPEN_ERROR);
         }
+        else
+        {
+            reply.set_status(proto::REQUEST_STATUS_SUCCESS);
+        }
     }
 
     SendReply(reply);
@@ -327,6 +339,7 @@ bool HostSessionFileTransfer::ReadFilePacketRequest()
             file_packetizer_.reset();
         }
 
+        reply.set_status(proto::REQUEST_STATUS_SUCCESS);
         reply.set_allocated_file_packet(packet.release());
     }
 

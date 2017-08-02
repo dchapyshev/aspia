@@ -39,7 +39,7 @@ private:
     void ReadRenameRequest(const proto::RenameRequest& request);
     void ReadRemoveRequest(const proto::RemoveRequest& request);
     void ReadFileUploadRequest(const proto::FileUploadRequest& request);
-    bool ReadFileUploadDataRequest(const proto::FilePacket& file_packet);
+    bool ReadFilePacket(const proto::FilePacket& file_packet);
     void ReadFileDownloadRequest(const proto::FileDownloadRequest& request);
     bool ReadFilePacketRequest();
 
