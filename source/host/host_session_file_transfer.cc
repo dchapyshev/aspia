@@ -71,7 +71,7 @@ void HostSessionFileTransfer::OnIpcChannelMessage(
 
     if (!ParseMessage(*buffer, message))
     {
-        ipc_channel_.reset();
+        ipc_channel_proxy_->Disconnect();
         return;
     }
 
@@ -106,7 +106,7 @@ void HostSessionFileTransfer::OnIpcChannelMessage(
     else if (message.has_file_packet())
     {
         if (!ReadFileUploadDataRequest(message.file_packet()))
-            ipc_channel_.reset();
+            ipc_channel_proxy_->Disconnect();
     }
     else if (message.has_file_download_request())
     {
@@ -115,12 +115,12 @@ void HostSessionFileTransfer::OnIpcChannelMessage(
     else if (message.has_file_packet_request())
     {
         if (!ReadFilePacketRequest())
-            ipc_channel_.reset();
+            ipc_channel_proxy_->Disconnect();
     }
     else
     {
         LOG(ERROR) << "Unknown message from client";
-        ipc_channel_.reset();
+        ipc_channel_proxy_->Disconnect();
     }
 }
 
