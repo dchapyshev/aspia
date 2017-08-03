@@ -24,6 +24,31 @@ void FileTransferDownloader::Start(const FilePath& source_path,
     // TODO
 }
 
+void FileTransferDownloader::OnUnableToCreateDirectoryAction(Action action)
+{
+    // TODO
+}
+
+void FileTransferDownloader::OnUnableToCreateFileAction(Action action)
+{
+    // TODO
+}
+
+void FileTransferDownloader::OnUnableToOpenFileAction(Action action)
+{
+    // TODO
+}
+
+void FileTransferDownloader::OnUnableToReadFileAction(Action action)
+{
+    // TODO
+}
+
+void FileTransferDownloader::OnUnableToWriteFileAction(Action action)
+{
+    // TODO
+}
+
 void FileTransferDownloader::OnDriveListRequestReply(
     std::unique_ptr<proto::DriveList> drive_list)
 {

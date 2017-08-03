@@ -24,6 +24,11 @@ public:
     void Start(const FilePath& source_path,
                const FilePath& target_path,
                const FileList& file_list) final;
+    void OnUnableToCreateDirectoryAction(Action action) final;
+    void OnUnableToCreateFileAction(Action action) final;
+    void OnUnableToOpenFileAction(Action action) final;
+    void OnUnableToReadFileAction(Action action) final;
+    void OnUnableToWriteFileAction(Action action) final;
 
 private:
     // FileReplyReceiver implementation.
