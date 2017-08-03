@@ -30,6 +30,8 @@ public:
     // Creates a packet for transferring.
     std::unique_ptr<proto::FilePacket> CreateNextPacket();
 
+    uint64_t LeftSize() const { return left_size_; }
+
 private:
     FilePacketizer(std::ifstream&& file_stream);
 

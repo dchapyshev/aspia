@@ -18,11 +18,17 @@ FileDepacketizer::FileDepacketizer(std::ofstream&& file_stream)
 
 // static
 std::unique_ptr<FileDepacketizer> FileDepacketizer::Create(
-    const FilePath& file_path)
+    const FilePath& file_path,
+    bool overwrite)
 {
+    std::ofstream::openmode mode = std::ofstream::binary;
+
+    if (overwrite)
+        mode |= std::ofstream::trunc;
+
     std::ofstream file_stream;
 
-    file_stream.open(file_path, std::ofstream::binary);
+    file_stream.open(file_path, mode);
     if (!file_stream.is_open())
     {
         LOG(ERROR) << "Unable to create file: " << file_path;

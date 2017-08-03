@@ -163,7 +163,8 @@ void FileRequestSenderLocal::SendRenameRequest(
 
 void FileRequestSenderLocal::SendFileUploadRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& file_path)
+    const FilePath& file_path,
+    Overwrite overwrite)
 {
     DLOG(FATAL) << "The request type is not allowed for local processing";
 }

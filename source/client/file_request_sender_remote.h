@@ -23,42 +23,34 @@ public:
     FileRequestSenderRemote(std::shared_ptr<NetworkChannelProxy> channel_proxy);
     ~FileRequestSenderRemote() = default;
 
-    void SendDriveListRequest(
-        std::shared_ptr<FileReplyReceiverProxy> receiver) override;
+    void SendDriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver) override;
 
-    void SendFileListRequest(
-        std::shared_ptr<FileReplyReceiverProxy> receiver,
-        const FilePath& path) override;
+    void SendFileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                             const FilePath& path) override;
 
-    void SendCreateDirectoryRequest(
-        std::shared_ptr<FileReplyReceiverProxy> receiver,
-        const FilePath& path) override;
+    void SendCreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                    const FilePath& path) override;
 
-    void SendDirectorySizeRequest(
-        std::shared_ptr<FileReplyReceiverProxy> receiver,
-        const FilePath& path) override;
+    void SendDirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                  const FilePath& path) override;
 
-    void SendRemoveRequest(
-        std::shared_ptr<FileReplyReceiverProxy> receiver,
-        const FilePath& path) override;
+    void SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                           const FilePath& path) override;
 
-    void SendRenameRequest(
-        std::shared_ptr<FileReplyReceiverProxy> receiver,
-        const FilePath& old_name,
-        const FilePath& new_name) override;
+    void SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                           const FilePath& old_name,
+                           const FilePath& new_name) override;
 
-    void SendFileUploadRequest(
-        std::shared_ptr<FileReplyReceiverProxy> receiver,
-        const FilePath& file_path) override;
+    void SendFileUploadRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                               const FilePath& file_path,
+                               Overwrite overwrite) override;
 
-    void SendFileUploadDataRequest(
-        std::shared_ptr<FileReplyReceiverProxy> receiver,
-        std::unique_ptr<proto::FilePacket> file_packet) override;
+    void SendFileUploadDataRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                   std::unique_ptr<proto::FilePacket> file_packet) override;
 
 private:
-    void SendRequest(
-        std::shared_ptr<FileReplyReceiverProxy> receiver,
-        std::unique_ptr<proto::file_transfer::ClientToHost> request);
+    void SendRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                     std::unique_ptr<proto::file_transfer::ClientToHost> request);
 
     void OnRequestSended();
     void OnReplyReceived(std::unique_ptr<IOBuffer> buffer);

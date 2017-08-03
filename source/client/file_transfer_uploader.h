@@ -16,12 +16,12 @@
 
 namespace aspia {
 
-class FileTransferUploader : public FileTransfer
+class FileTransferUploader
+    : public FileTransfer
 {
 public:
     FileTransferUploader(std::shared_ptr<FileRequestSenderProxy> sender,
                          Delegate* delegate);
-
     ~FileTransferUploader() = default;
 
     void Start(const FilePath& source_path,
@@ -34,39 +34,39 @@ private:
     public:
         Task(const FilePath& source_object_path,
              const FilePath& target_object_path,
-             bool is_directory) :
-            source_object_path_(source_object_path),
-            target_object_path_(target_object_path),
-            is_directory_(is_directory)
+             uint64_t size,
+             bool is_directory)
+            : source_object_path_(source_object_path),
+              target_object_path_(target_object_path),
+              size_(size),
+              is_directory_(is_directory)
         {
             // Nothing
         }
 
-        const FilePath& SourcePath() const
-        {
-            return source_object_path_;
-        }
-
-        const FilePath& TargetPath() const
-        {
-            return target_object_path_;
-        }
-
-        bool IsDirectory() const
-        {
-            return is_directory_;
-        }
+        const FilePath& SourcePath() const { return source_object_path_; }
+        const FilePath& TargetPath() const { return target_object_path_; }
+        uint64_t Size() const { return size_; }
+        bool IsDirectory() const { return is_directory_; }
 
     private:
         const FilePath source_object_path_;
         const FilePath target_object_path_;
+        const uint64_t size_;
         const bool is_directory_;
     };
 
     uint64_t BuildTaskListForDirectoryContent(const FilePath& source_path,
                                               const FilePath& target_path);
-    void RunTask(const Task& task);
+
+    void RunTask(const Task& task, FileRequestSender::Overwrite overwrite);
     void RunNextTask();
+
+    void OnUnableToCreateDirectoryAction(Action action);
+    void OnUnableToCreateFileAction(Action action);
+    void OnUnableToOpenFileAction(Action action);
+    void OnUnableToReadFileAction(Action action);
+    void OnUnableToWriteFileAction(Action action);
 
     // FileReplyReceiver implementation.
     void OnDriveListRequestReply(
@@ -74,38 +74,29 @@ private:
 
     void OnDriveListRequestFailure(proto::RequestStatus status) final;
 
-    void OnFileListRequestReply(
-        const FilePath& path,
-        std::unique_ptr<proto::FileList> file_list) final;
+    void OnFileListRequestReply(const FilePath& path,
+                                std::unique_ptr<proto::FileList> file_list) final;
 
-    void OnFileListRequestFailure(const FilePath& path,
-                                  proto::RequestStatus status) final;
+    void OnFileListRequestFailure(const FilePath& path, proto::RequestStatus status) final;
 
-    void OnDirectorySizeRequestReply(const FilePath& path,
-                                     uint64_t size) final;
+    void OnDirectorySizeRequestReply(const FilePath& path, uint64_t size) final;
 
-    void OnDirectorySizeRequestFailure(const FilePath& path,
-                                       proto::RequestStatus status) final;
+    void OnDirectorySizeRequestFailure(const FilePath& path, proto::RequestStatus status) final;
 
-    void OnCreateDirectoryRequestReply(const FilePath& path,
-                                       proto::RequestStatus status) final;
+    void OnCreateDirectoryRequestReply(const FilePath& path, proto::RequestStatus status) final;
 
-    void OnRemoveRequestReply(const FilePath& path,
-                              proto::RequestStatus status) final;
+    void OnRemoveRequestReply(const FilePath& path, proto::RequestStatus status) final;
 
     void OnRenameRequestReply(const FilePath& old_name,
                               const FilePath& new_name,
                               proto::RequestStatus status) final;
 
-    void OnFileUploadRequestReply(const FilePath& file_path,
-                                  proto::RequestStatus status) final;
+    void OnFileUploadRequestReply(const FilePath& file_path, proto::RequestStatus status) final;
 
-    void OnFileUploadDataRequestReply(
-        std::unique_ptr<proto::FilePacket> file_packet,
-        proto::RequestStatus status) final;
+    void OnFileUploadDataRequestReply(std::unique_ptr<proto::FilePacket> file_packet,
+                                      proto::RequestStatus status) final;
 
     std::queue<Task> task_queue_;
-
     std::unique_ptr<FilePacketizer> file_packetizer_;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransferUploader);

@@ -22,7 +22,7 @@ class FileDepacketizer
 public:
     ~FileDepacketizer() = default;
 
-    static std::unique_ptr<FileDepacketizer> Create(const FilePath& file_path);
+    static std::unique_ptr<FileDepacketizer> Create(const FilePath& file_path, bool overwrite);
 
     // Reads the packet and writes its contents to a file.
     bool ReadNextPacket(const proto::FilePacket& packet);

@@ -224,8 +224,7 @@ void HostSessionFileTransfer::ReadFileUploadRequest(
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath file_path =
-        std::experimental::filesystem::u8path(request.file_path());
+    FilePath file_path = std::experimental::filesystem::u8path(request.file_path());
 
     if (!IsValidPathName(file_path))
     {
@@ -241,7 +240,7 @@ void HostSessionFileTransfer::ReadFileUploadRequest(
         }
         else
         {
-            file_depacketizer_ = FileDepacketizer::Create(file_path);
+            file_depacketizer_ = FileDepacketizer::Create(file_path, request.overwrite());
             if (!file_depacketizer_)
             {
                 reply.set_status(proto::REQUEST_STATUS_FILE_CREATE_ERROR);

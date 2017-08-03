@@ -93,13 +93,15 @@ void FileRequestSenderRemote::SendRenameRequest(
 
 void FileRequestSenderRemote::SendFileUploadRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& file_path)
+    const FilePath& file_path,
+    Overwrite overwrite)
 {
     std::unique_ptr<proto::file_transfer::ClientToHost> request =
         std::make_unique<proto::file_transfer::ClientToHost>();
 
     request->mutable_file_upload_request()->set_file_path(file_path.u8string());
-    request->mutable_file_upload_request()->set_overwrite(false);
+    request->mutable_file_upload_request()->set_overwrite(
+        overwrite == Overwrite::YES ? true : false);
 
     SendRequest(receiver, std::move(request));
 }

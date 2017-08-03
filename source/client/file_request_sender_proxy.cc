@@ -101,14 +101,15 @@ bool FileRequestSenderProxy::SendRenameRequest(
 
 bool FileRequestSenderProxy::SendFileUploadRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& file_path)
+    const FilePath& file_path,
+    FileRequestSender::Overwrite overwrite)
 {
     std::lock_guard<std::mutex> lock(sender_lock_);
 
     if (!sender_)
         return false;
 
-    sender_->SendFileUploadRequest(receiver, file_path);
+    sender_->SendFileUploadRequest(receiver, file_path, overwrite);
     return true;
 }
 

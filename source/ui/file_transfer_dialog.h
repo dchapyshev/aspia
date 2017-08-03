@@ -8,6 +8,7 @@
 #ifndef _ASPIA_UI__FILE_TRANSFER_DIALOG_H
 #define _ASPIA_UI__FILE_TRANSFER_DIALOG_H
 
+#include "base/message_loop/message_loop_proxy.h"
 #include "base/files/file_path.h"
 #include "base/macros.h"
 #include "client/file_reply_receiver.h"
@@ -51,15 +52,36 @@ private:
     LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     // FileTransfer::Delegate implementation.
-    void OnObjectSizeNotify(uint64_t size) final;
-    void OnTransferCompletionNotify() final;
-    void OnObjectTransferNotify(const FilePath& source_path,
-                                const FilePath& target_path) final;
-    void OnDirectoryOverwriteRequest(const FilePath& object_name,
-                                     const FilePath& path) final;
-    void OnFileOverwriteRequest(const FilePath& object_name,
-                                const FilePath& path) final;
+    void OnTransferStarted(const FilePath& source_path,
+                           const FilePath& target_path,
+                           uint64_t size) final;
+    void OnTransferComplete() final;
 
+    void OnUnableToCreateDirectory(const FilePath& directory_path,
+                                   proto::RequestStatus status,
+                                   FileTransfer::ActionCallback callback) final;
+
+    void OnUnableToCreateFile(const FilePath& file_path,
+                              proto::RequestStatus status,
+                              FileTransfer::ActionCallback callback) final;
+
+    void OnUnableToOpenFile(const FilePath& file_path,
+                            proto::RequestStatus status,
+                            FileTransfer::ActionCallback callback) final;
+
+    void OnUnableToWriteFile(const FilePath& file_path,
+                             proto::RequestStatus status,
+                             FileTransfer::ActionCallback callback) final;
+
+    void OnUnableToReadFile(const FilePath& file_path,
+                            proto::RequestStatus status,
+                            FileTransfer::ActionCallback callback) final;
+
+    void OnObjectTransfer(const FilePath& object_name,
+                          uint64_t total_object_size,
+                          uint64_t left_object_size) final;
+
+    std::shared_ptr<MessageLoopProxy> runner_;
     std::shared_ptr<FileRequestSenderProxy> sender_;
 
     const FilePath& source_path_;
@@ -68,7 +90,6 @@ private:
     const Mode mode_;
 
     std::unique_ptr<FileTransfer> file_transfer_;
-    size_t current_object_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(UiFileTransferDialog);
 };
