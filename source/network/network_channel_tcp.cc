@@ -307,9 +307,6 @@ void NetworkChannelTcp::ScheduleWrite()
 
 void NetworkChannelTcp::DoNextWriteTask()
 {
-    if (work_write_queue_.empty())
-        return;
-
     const std::unique_ptr<IOBuffer>& source_buffer = work_write_queue_.front().first;
 
     if (!source_buffer)
