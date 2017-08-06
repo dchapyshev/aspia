@@ -128,10 +128,8 @@ void Differ::MarkDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
             ++is_different;
         }
 
-        //
         // If there is a partial column at the end, handle it.
         // This condition should rarely, if ever, occur.
-        //
         if (partial_column_width_ != 0)
         {
             *is_different = DiffPartialBlock(prev_block,
@@ -139,8 +137,6 @@ void Differ::MarkDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
                                              bytes_per_row_,
                                              kBytesPerBlock,
                                              kBlockSize);
-
-            ++is_different;
         }
 
         // Update pointers for next row.
