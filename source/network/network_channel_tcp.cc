@@ -49,8 +49,7 @@ void NetworkChannelTcp::DoConnect()
 
     if (IsFailureCode(code))
     {
-        LOG(ERROR) << "Failed to disable Nagle's algorithm: "
-                   << code.message();
+        LOG(ERROR) << "Failed to disable Nagle's algorithm: " << code.message();
     }
 
     const Encryptor::Mode encryptor_mode = (mode_ == Mode::CLIENT) ?
@@ -77,8 +76,7 @@ void NetworkChannelTcp::DoDisconnect()
     {
         std::error_code ignored_code;
 
-        socket_.shutdown(asio::ip::tcp::socket::shutdown_both,
-                         ignored_code);
+        socket_.shutdown(asio::ip::tcp::socket::shutdown_both, ignored_code);
         socket_.close(ignored_code);
     }
 

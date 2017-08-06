@@ -57,8 +57,7 @@ public:
     void StartChannel(StatusChangeHandler handler) override;
 
 protected:
-    void Send(std::unique_ptr<IOBuffer> buffer,
-              SendCompleteHandler handler) override;
+    void Send(std::unique_ptr<IOBuffer> buffer, SendCompleteHandler handler) override;
     void Send(std::unique_ptr<IOBuffer> buffer) override;
     void Receive(ReceiveCompleteHandler handler) override;
     void Disconnect() override;
@@ -75,30 +74,22 @@ private:
     void DoDisconnect();
 
     void DoSendHello();
-    void OnSendHelloSizeComplete(const std::error_code& code,
-                                 size_t bytes_transferred);
-    void OnSendHelloComplete(const std::error_code& code,
-                             size_t bytes_transferred);
+    void OnSendHelloSizeComplete(const std::error_code& code, size_t bytes_transferred);
+    void OnSendHelloComplete(const std::error_code& code, size_t bytes_transferred);
 
     void DoReceiveHello();
-    void OnReceiveHelloSizeComplete(const std::error_code& code,
-                                    size_t bytes_transferred);
-    void OnReceiveHelloComplete(const std::error_code& code,
-                                size_t bytes_transferred);
+    void OnReceiveHelloSizeComplete(const std::error_code& code, size_t bytes_transferred);
+    void OnReceiveHelloComplete(const std::error_code& code, size_t bytes_transferred);
 
     void DoReadMessage();
-    void OnReadMessageSizeComplete(const std::error_code& code,
-                                   size_t bytes_transferred);
-    void OnReadMessageComplete(const std::error_code& code,
-                               size_t bytes_transferred);
+    void OnReadMessageSizeComplete(const std::error_code& code, size_t bytes_transferred);
+    void OnReadMessageComplete(const std::error_code& code, size_t bytes_transferred);
 
     bool ReloadWriteQueue();
     void ScheduleWrite();
     void DoNextWriteTask();
-    void OnWriteSizeComplete(const std::error_code& code,
-                             size_t bytes_transferred);
-    void OnWriteComplete(const std::error_code& code,
-                         size_t bytes_transferred);
+    void OnWriteSizeComplete(const std::error_code& code, size_t bytes_transferred);
+    void OnWriteComplete(const std::error_code& code, size_t bytes_transferred);
 
     // Thread implementation.
     void Run() override;

@@ -32,8 +32,7 @@ static std::wstring GenerateUniqueRandomChannelID()
     uint32_t last_channel_id = _last_channel_id;
 
     std::random_device device;
-    std::uniform_int_distribution<uint32_t> uniform(
-        0, std::numeric_limits<uint32_t>::max());
+    std::uniform_int_distribution<uint32_t> uniform(0, std::numeric_limits<uint32_t>::max());
 
     uint32_t random = uniform(device);
 
@@ -51,8 +50,7 @@ static std::wstring CreatePipeName(const std::wstring& channel_id)
 }
 
 // static
-std::unique_ptr<PipeChannel> PipeChannel::CreateServer(
-    std::wstring& channel_id)
+std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& channel_id)
 {
     std::wstring user_sid;
 
@@ -62,10 +60,8 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(
         return nullptr;
     }
 
-    // Create a security descriptor that gives full access to the caller and
-    // authenticated users and denies access by anyone else.
-    // Local admins need access because the privileged host process will run
-    // as a local admin which may not be the same user as the current user.
+    // Create a security descriptor that gives full access to the caller and authenticated users
+    // and denies access by anyone else.
     std::wstring security_descriptor =
         StringPrintfW(L"O:%sG:%sD:(A;;GA;;;%s)(A;;GA;;;AU)",
                       user_sid.c_str(),
@@ -104,21 +100,17 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(
 
     if (!pipe.IsValid())
     {
-        LOG(ERROR) << "CreateNamedPipeW() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "CreateNamedPipeW() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
-    return std::unique_ptr<PipeChannel>(
-        new PipeChannel(pipe.Release(), Mode::SERVER));
+    return std::unique_ptr<PipeChannel>(new PipeChannel(pipe.Release(), Mode::SERVER));
 }
 
 // static
-std::unique_ptr<PipeChannel> PipeChannel::CreateClient(
-    const std::wstring& channel_id)
+std::unique_ptr<PipeChannel> PipeChannel::CreateClient(const std::wstring& channel_id)
 {
-    DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION |
-                  FILE_FLAG_OVERLAPPED;
+    DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
 
     ScopedHandle pipe(CreateFileW(CreatePipeName(channel_id).c_str(),
                                   GENERIC_WRITE | GENERIC_READ,
@@ -133,8 +125,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateClient(
         return nullptr;
     }
 
-    return std::unique_ptr<PipeChannel>(
-        new PipeChannel(pipe.Release(), Mode::CLIENT));
+    return std::unique_ptr<PipeChannel>(new PipeChannel(pipe.Release(), Mode::CLIENT));
 }
 
 PipeChannel::PipeChannel(HANDLE pipe, Mode mode)
@@ -206,8 +197,7 @@ void PipeChannel::DoNextWriteTask()
                                 std::placeholders::_2));
 }
 
-void PipeChannel::OnWriteSizeComplete(const std::error_code& code,
-                                      size_t bytes_transferred)
+void PipeChannel::OnWriteSizeComplete(const std::error_code& code, size_t bytes_transferred)
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(uint32_t))
     {
@@ -216,16 +206,14 @@ void PipeChannel::OnWriteSizeComplete(const std::error_code& code,
     }
 
     asio::async_write(stream_,
-                      asio::buffer(write_buffer_->data(),
-                                   write_buffer_->size()),
+                      asio::buffer(write_buffer_->data(), write_buffer_->size()),
                       std::bind(&PipeChannel::OnWriteComplete,
                                 this,
                                 std::placeholders::_1,
                                 std::placeholders::_2));
 }
 
-void PipeChannel::OnWriteComplete(const std::error_code& code,
-                                  size_t bytes_transferred)
+void PipeChannel::OnWriteComplete(const std::error_code& code, size_t bytes_transferred)
 {
     if (IsFailureCode(code) || bytes_transferred != write_buffer_->size())
     {
@@ -249,8 +237,7 @@ void PipeChannel::OnWriteComplete(const std::error_code& code,
     DoNextWriteTask();
 }
 
-void PipeChannel::Send(std::unique_ptr<IOBuffer> buffer,
-                       SendCompleteHandler handler)
+void PipeChannel::Send(std::unique_ptr<IOBuffer> buffer, SendCompleteHandler handler)
 {
     {
         std::lock_guard<std::mutex> lock(incoming_write_queue_lock_);
@@ -273,8 +260,7 @@ void PipeChannel::Send(std::unique_ptr<IOBuffer> buffer)
     Send(std::move(buffer), nullptr);
 }
 
-bool PipeChannel::Connect(uint32_t& user_data,
-                          DisconnectHandler disconnect_handler)
+bool PipeChannel::Connect(uint32_t& user_data, DisconnectHandler disconnect_handler)
 {
     disconnect_handler_ = std::move(disconnect_handler);
 
@@ -285,14 +271,12 @@ bool PipeChannel::Connect(uint32_t& user_data,
     {
         if (!ConnectNamedPipe(stream_.native_handle(), nullptr))
         {
-            LOG(ERROR) << "ConnectNamedPipe() failed: "
-                       << GetLastSystemErrorString();
+            LOG(ERROR) << "ConnectNamedPipe() failed: " << GetLastSystemErrorString();
             return false;
         }
 
         if (asio::read(stream_,
-                       asio::buffer(&remote_user_data,
-                                    sizeof(remote_user_data)),
+                       asio::buffer(&remote_user_data, sizeof(remote_user_data)),
                        ignored_code) != sizeof(remote_user_data))
             return false;
 
@@ -311,8 +295,7 @@ bool PipeChannel::Connect(uint32_t& user_data,
             return false;
 
         if (asio::read(stream_,
-                       asio::buffer(&remote_user_data,
-                                    sizeof(remote_user_data)),
+                       asio::buffer(&remote_user_data, sizeof(remote_user_data)),
                        ignored_code) != sizeof(remote_user_data))
             return false;
     }
@@ -331,8 +314,7 @@ void PipeChannel::ScheduleRead()
                                std::placeholders::_2));
 }
 
-void PipeChannel::OnReadSizeComplete(const std::error_code& code,
-                                     size_t bytes_transferred)
+void PipeChannel::OnReadSizeComplete(const std::error_code& code, size_t bytes_transferred)
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(uint32_t))
     {
@@ -356,8 +338,7 @@ void PipeChannel::OnReadSizeComplete(const std::error_code& code,
                                std::placeholders::_2));
 }
 
-void PipeChannel::OnReadComplete(const std::error_code& code,
-                                 size_t bytes_transferred)
+void PipeChannel::OnReadComplete(const std::error_code& code, size_t bytes_transferred)
 {
     if (IsFailureCode(code) || bytes_transferred != read_buffer_->size())
     {

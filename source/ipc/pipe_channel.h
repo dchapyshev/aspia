@@ -57,10 +57,7 @@ public:
 
     bool Connect(uint32_t& user_data, DisconnectHandler disconnect_handler = nullptr);
 
-    std::shared_ptr<PipeChannelProxy> pipe_channel_proxy() const
-    {
-        return proxy_;
-    }
+    std::shared_ptr<PipeChannelProxy> pipe_channel_proxy() const { return proxy_; }
 
 private:
     friend class PipeChannelProxy;
