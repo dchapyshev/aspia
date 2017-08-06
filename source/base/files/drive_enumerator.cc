@@ -15,8 +15,7 @@ DriveEnumerator::DriveEnumerator()
     DWORD size = GetLogicalDriveStringsW(0, nullptr);
     if (!size)
     {
-        LOG(ERROR) << "GetLogicalDriveStringsW() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "GetLogicalDriveStringsW() failed: " << GetLastSystemErrorString();
         return;
     }
 
@@ -24,8 +23,7 @@ DriveEnumerator::DriveEnumerator()
 
     if (!GetLogicalDriveStringsW(size, buffer_.data()))
     {
-        LOG(ERROR) << "GetLogicalDriveStringsW() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "GetLogicalDriveStringsW() failed: " << GetLastSystemErrorString();
         return;
     }
 
@@ -88,13 +86,9 @@ uint64_t DriveEnumerator::DriveInfo::TotalSpace() const
 {
     ULARGE_INTEGER total_space;
 
-    if (!GetDiskFreeSpaceExW(path_.c_str(),
-                             nullptr,
-                             &total_space,
-                             nullptr))
+    if (!GetDiskFreeSpaceExW(path_.c_str(), nullptr, &total_space, nullptr))
     {
-        DLOG(ERROR) << "GetDiskFreeSpaceExW() failed: "
-                    << GetLastSystemErrorString();
+        DLOG(ERROR) << "GetDiskFreeSpaceExW() failed: " << GetLastSystemErrorString();
         return 0;
     }
 
@@ -105,13 +99,9 @@ uint64_t DriveEnumerator::DriveInfo::FreeSpace() const
 {
     ULARGE_INTEGER free_space;
 
-    if (!GetDiskFreeSpaceExW(path_.c_str(),
-                             nullptr,
-                             nullptr,
-                             &free_space))
+    if (!GetDiskFreeSpaceExW(path_.c_str(), nullptr, nullptr, &free_space))
     {
-        DLOG(ERROR) << "GetDiskFreeSpaceExW() failed: "
-                    << GetLastSystemErrorString();
+        DLOG(ERROR) << "GetDiskFreeSpaceExW() failed: " << GetLastSystemErrorString();
         return 0;
     }
 
@@ -127,8 +117,7 @@ std::wstring DriveEnumerator::DriveInfo::FileSystem() const
                                nullptr, nullptr, nullptr,
                                fs, _countof(fs)))
     {
-        DLOG(ERROR) << "GetVolumeInformationW() failed: "
-                    << GetLastSystemErrorString();
+        DLOG(ERROR) << "GetVolumeInformationW() failed: " << GetLastSystemErrorString();
         return std::wstring();
     }
 
@@ -144,8 +133,7 @@ std::wstring DriveEnumerator::DriveInfo::VolumeName() const
                                nullptr, nullptr, nullptr,
                                nullptr, 0))
     {
-        DLOG(ERROR) << "GetVolumeInformationW() failed: "
-                    << GetLastSystemErrorString();
+        DLOG(ERROR) << "GetVolumeInformationW() failed: " << GetLastSystemErrorString();
         return std::wstring();
     }
 
