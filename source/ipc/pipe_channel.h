@@ -75,7 +75,9 @@ private:
     void Send(std::unique_ptr<IOBuffer> buffer);
     void Receive(ReceiveCompleteHandler handler);
 
+    bool ReloadWriteQueue();
     void ScheduleWrite();
+    void DoNextWriteTask();
     void OnWriteSizeComplete(const std::error_code& code, size_t bytes_transferred);
     void OnWriteComplete(const std::error_code& code, size_t bytes_transferred);
     void ScheduleRead();
@@ -84,6 +86,16 @@ private:
     void DoDisconnect();
     void Run() override;
 
+    class WriteTaskQueue
+        : public std::queue<std::pair<std::unique_ptr<IOBuffer>, SendCompleteHandler>>
+    {
+    public:
+        void Swap(WriteTaskQueue& queue)
+        {
+            c.swap(queue.c); // Calls std::deque::swap.
+        }
+    };
+
     const Mode mode_;
     DisconnectHandler disconnect_handler_;
 
@@ -91,8 +103,9 @@ private:
     std::unique_ptr<asio::io_service::work> work_;
     asio::windows::stream_handle stream_{ io_service_ };
 
-    std::queue<std::pair<std::unique_ptr<IOBuffer>, SendCompleteHandler>> write_queue_;
-    std::mutex write_queue_lock_;
+    WriteTaskQueue work_write_queue_;
+    WriteTaskQueue incoming_write_queue_;
+    std::mutex incoming_write_queue_lock_;
 
     std::unique_ptr<IOBuffer> write_buffer_;
     uint32_t write_size_ = 0;
