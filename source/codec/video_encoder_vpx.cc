@@ -82,8 +82,7 @@ void VideoEncoderVPX::CreateImage()
     // Assuming macroblocks are 16x16, aligning the planes' strides above also
     // macroblock aligned them.
     //
-    const int y_rows =
-        ((image_.h - 1) & ~(kMacroBlockSize - 1)) + kMacroBlockSize;
+    const int y_rows = ((image_.h - 1) & ~(kMacroBlockSize - 1)) + kMacroBlockSize;
 
     const int uv_rows = y_rows >> image_.y_chroma_shift;
 
@@ -106,23 +105,16 @@ void VideoEncoderVPX::CreateImage()
 
 void VideoEncoderVPX::CreateActiveMap()
 {
-    active_map_.cols =
-        (screen_size_.Width() + kMacroBlockSize - 1) / kMacroBlockSize;
-
-    active_map_.rows =
-        (screen_size_.Height() + kMacroBlockSize - 1) / kMacroBlockSize;
-
+    active_map_.cols = (screen_size_.Width() + kMacroBlockSize - 1) / kMacroBlockSize;
+    active_map_.rows = (screen_size_.Height() + kMacroBlockSize - 1) / kMacroBlockSize;
     active_map_size_ = active_map_.cols * active_map_.rows;
-
     active_map_buffer_ = std::make_unique<uint8_t[]>(active_map_size_);
 
     memset(active_map_buffer_.get(), 0, active_map_size_);
-
     active_map_.active_map = active_map_buffer_.get();
 }
 
-static void SetCommonCodecParameters(vpx_codec_enc_cfg_t* config,
-                                     const DesktopSize& size)
+static void SetCommonCodecParameters(vpx_codec_enc_cfg_t* config, const DesktopSize& size)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
@@ -335,8 +327,7 @@ void VideoEncoderVPX::PrepareImageAndActiveMap(const DesktopFrame* frame,
     }
 }
 
-std::unique_ptr<proto::VideoPacket> VideoEncoderVPX::Encode(
-    const DesktopFrame* frame)
+std::unique_ptr<proto::VideoPacket> VideoEncoderVPX::Encode(const DesktopFrame* frame)
 {
     DCHECK(encoding_ == proto::VideoEncoding::VIDEO_ENCODING_VP8 ||
            encoding_ == proto::VideoEncoding::VIDEO_ENCODING_VP9);
@@ -359,8 +350,7 @@ std::unique_ptr<proto::VideoPacket> VideoEncoderVPX::Encode(
             CreateVp9Codec();
         }
 
-        ConvertToVideoSize(screen_size_,
-                           packet->mutable_format()->mutable_screen_size());
+        ConvertToVideoSize(screen_size_, packet->mutable_format()->mutable_screen_size());
     }
 
     //
@@ -370,9 +360,7 @@ std::unique_ptr<proto::VideoPacket> VideoEncoderVPX::Encode(
     PrepareImageAndActiveMap(frame, packet.get());
 
     // Apply active map to the encoder.
-    vpx_codec_err_t ret = vpx_codec_control(codec_.get(),
-                                            VP8E_SET_ACTIVEMAP,
-                                            &active_map_);
+    vpx_codec_err_t ret = vpx_codec_control(codec_.get(), VP8E_SET_ACTIVEMAP, &active_map_);
     DCHECK_EQ(ret, VPX_CODEC_OK) << "Unable to apply active map";
 
     // Do the actual encoding.
@@ -388,13 +376,11 @@ std::unique_ptr<proto::VideoPacket> VideoEncoderVPX::Encode(
 
     while (true)
     {
-        const vpx_codec_cx_pkt_t* vpx_packet =
-            vpx_codec_get_cx_data(codec_.get(), &iter);
+        const vpx_codec_cx_pkt_t* vpx_packet = vpx_codec_get_cx_data(codec_.get(), &iter);
 
         if (vpx_packet && vpx_packet->kind == VPX_CODEC_CX_FRAME_PKT)
         {
-            packet->set_data(vpx_packet->data.frame.buf,
-                             vpx_packet->data.frame.sz);
+            packet->set_data(vpx_packet->data.frame.buf, vpx_packet->data.frame.sz);
             break;
         }
     }

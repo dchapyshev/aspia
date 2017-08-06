@@ -26,8 +26,7 @@ public:
 
     using StatusChangeHandler = std::function<void(Status status)>;
     using SendCompleteHandler = std::function<void()>;
-    using ReceiveCompleteHandler =
-        std::function<void(std::unique_ptr<IOBuffer>)>;
+    using ReceiveCompleteHandler = std::function<void(std::unique_ptr<IOBuffer>)>;
 
     virtual void StartChannel(StatusChangeHandler status_change_callback) = 0;
 
@@ -36,8 +35,7 @@ public:
 protected:
     friend class NetworkChannelProxy;
 
-    virtual void Send(std::unique_ptr<IOBuffer> buffer,
-                      SendCompleteHandler handler) = 0;
+    virtual void Send(std::unique_ptr<IOBuffer> buffer, SendCompleteHandler handler) = 0;
     virtual void Send(std::unique_ptr<IOBuffer> buffer) = 0;
     virtual void Receive(ReceiveCompleteHandler handler) = 0;
     virtual void Disconnect() = 0;

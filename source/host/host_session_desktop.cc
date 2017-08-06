@@ -70,8 +70,7 @@ void HostSessionDesktop::OnPipeChannelConnect(uint32_t user_data)
         &HostSessionDesktop::OnPipeChannelMessage, this, std::placeholders::_1));
 }
 
-void HostSessionDesktop::OnPipeChannelMessage(
-    std::unique_ptr<IOBuffer> buffer)
+void HostSessionDesktop::OnPipeChannelMessage(std::unique_ptr<IOBuffer> buffer)
 {
     proto::desktop::ClientToHost message;
 
@@ -107,8 +106,7 @@ void HostSessionDesktop::OnPipeChannelMessage(
         if (success)
         {
             ipc_channel_proxy_->Receive(std::bind(
-                &HostSessionDesktop::OnPipeChannelMessage, this,
-                std::placeholders::_1));
+                &HostSessionDesktop::OnPipeChannelMessage, this, std::placeholders::_1));
 
             return;
         }
@@ -117,9 +115,8 @@ void HostSessionDesktop::OnPipeChannelMessage(
     ipc_channel_.reset();
 }
 
-void HostSessionDesktop::OnScreenUpdate(
-    const DesktopFrame* screen_frame,
-    std::unique_ptr<MouseCursor> mouse_cursor)
+void HostSessionDesktop::OnScreenUpdate(const DesktopFrame* screen_frame,
+                                        std::unique_ptr<MouseCursor> mouse_cursor)
 {
     DCHECK(screen_frame || mouse_cursor);
     DCHECK(video_encoder_);
@@ -129,9 +126,7 @@ void HostSessionDesktop::OnScreenUpdate(
     // If the screen image has changes.
     if (screen_frame)
     {
-        std::unique_ptr<proto::VideoPacket> packet =
-            video_encoder_->Encode(screen_frame);
-
+        std::unique_ptr<proto::VideoPacket> packet = video_encoder_->Encode(screen_frame);
         message.set_allocated_video_packet(packet.release());
     }
 
@@ -147,8 +142,7 @@ void HostSessionDesktop::OnScreenUpdate(
         message.set_allocated_cursor_shape(cursor_shape.release());
     }
 
-    WriteMessage(message,
-                 std::bind(&HostSessionDesktop::OnScreenUpdated, this));
+    WriteMessage(message, std::bind(&HostSessionDesktop::OnScreenUpdated, this));
 }
 
 void HostSessionDesktop::OnScreenUpdated()
@@ -159,16 +153,14 @@ void HostSessionDesktop::OnScreenUpdated()
     screen_updater_->PostUpdateRequest();
 }
 
-void HostSessionDesktop::WriteMessage(
-    const proto::desktop::HostToClient& message,
-    PipeChannel::SendCompleteHandler handler)
+void HostSessionDesktop::WriteMessage(const proto::desktop::HostToClient& message,
+                                      PipeChannel::SendCompleteHandler handler)
 {
     std::unique_ptr<IOBuffer> buffer = SerializeMessage<IOBuffer>(message);
     ipc_channel_proxy_->Send(std::move(buffer), std::move(handler));
 }
 
-void HostSessionDesktop::WriteMessage(
-    const proto::desktop::HostToClient& message)
+void HostSessionDesktop::WriteMessage(const proto::desktop::HostToClient& message)
 {
     WriteMessage(message, nullptr);
 }
@@ -206,8 +198,7 @@ bool HostSessionDesktop::ReadKeyEvent(const proto::KeyEvent& event)
     return true;
 }
 
-bool HostSessionDesktop::ReadClipboardEvent(
-    std::shared_ptr<proto::ClipboardEvent> clipboard_event)
+bool HostSessionDesktop::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
 {
     if (session_type_ != proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
@@ -219,8 +210,7 @@ bool HostSessionDesktop::ReadClipboardEvent(
     return true;
 }
 
-void HostSessionDesktop::SendClipboardEvent(
-    std::unique_ptr<proto::ClipboardEvent> clipboard_event)
+void HostSessionDesktop::SendClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event)
 {
     proto::desktop::HostToClient message;
     message.set_allocated_clipboard_event(clipboard_event.release());
@@ -231,9 +221,7 @@ void HostSessionDesktop::SendConfigRequest()
 {
     proto::desktop::HostToClient message;
 
-    proto::DesktopSessionConfigRequest* request =
-        message.mutable_config_request();
-
+    proto::DesktopSessionConfigRequest* request = message.mutable_config_request();
     request->set_video_encodings(kSupportedVideoEncodings);
     request->set_audio_encodings(kSupportedAudioEncodings);
 
@@ -270,8 +258,7 @@ bool HostSessionDesktop::ReadConfig(const proto::DesktopSessionConfig& config)
             clipboard_thread_ = std::make_unique<ClipboardThread>();
 
             clipboard_thread_->Start(std::bind(
-                &HostSessionDesktop::SendClipboardEvent, this,
-                std::placeholders::_1));
+                &HostSessionDesktop::SendClipboardEvent, this, std::placeholders::_1));
         }
         else
         {
@@ -291,13 +278,11 @@ bool HostSessionDesktop::ReadConfig(const proto::DesktopSessionConfig& config)
 
         case proto::VIDEO_ENCODING_ZLIB:
             video_encoder_ = VideoEncoderZLIB::Create(
-                ConvertFromVideoPixelFormat(config.pixel_format()),
-                                            config.compress_ratio());
+                ConvertFromVideoPixelFormat(config.pixel_format()), config.compress_ratio());
             break;
 
         default:
-            LOG(ERROR) << "Unsupported video encoding: "
-                       << config.video_encoding();
+            LOG(ERROR) << "Unsupported video encoding: " << config.video_encoding();
             video_encoder_.reset();
             break;
     }
@@ -307,9 +292,7 @@ bool HostSessionDesktop::ReadConfig(const proto::DesktopSessionConfig& config)
 
     ScreenUpdater::ScreenUpdateCallback screen_update_callback =
         std::bind(&HostSessionDesktop::OnScreenUpdate,
-                  this,
-                  std::placeholders::_1,
-                  std::placeholders::_2);
+                  this, std::placeholders::_1, std::placeholders::_2);
 
     ScreenUpdater::Mode update_mode = enable_cursor_shape ?
         ScreenUpdater::Mode::SCREEN_AND_CURSOR : ScreenUpdater::Mode::SCREEN;

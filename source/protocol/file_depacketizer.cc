@@ -17,9 +17,8 @@ FileDepacketizer::FileDepacketizer(std::ofstream&& file_stream)
 }
 
 // static
-std::unique_ptr<FileDepacketizer> FileDepacketizer::Create(
-    const FilePath& file_path,
-    bool overwrite)
+std::unique_ptr<FileDepacketizer> FileDepacketizer::Create(const FilePath& file_path,
+                                                           bool overwrite)
 {
     std::ofstream::openmode mode = std::ofstream::binary;
 
@@ -35,8 +34,7 @@ std::unique_ptr<FileDepacketizer> FileDepacketizer::Create(
         return nullptr;
     }
 
-    return std::unique_ptr<FileDepacketizer>(
-        new FileDepacketizer(std::move(file_stream)));
+    return std::unique_ptr<FileDepacketizer>(new FileDepacketizer(std::move(file_stream)));
 }
 
 bool FileDepacketizer::ReadNextPacket(const proto::FilePacket& packet)

@@ -37,8 +37,7 @@ public:
     static std::unique_ptr<VideoEncoderVPX> CreateVP8();
     static std::unique_ptr<VideoEncoderVPX> CreateVP9();
 
-    std::unique_ptr<proto::VideoPacket> Encode(
-        const DesktopFrame* frame) override;
+    std::unique_ptr<proto::VideoPacket> Encode(const DesktopFrame* frame) override;
 
 private:
     VideoEncoderVPX(proto::VideoEncoding encoding);
@@ -47,8 +46,7 @@ private:
     void CreateActiveMap();
     void CreateVp8Codec();
     void CreateVp9Codec();
-    void PrepareImageAndActiveMap(const DesktopFrame* frame,
-                                  proto::VideoPacket* packet);
+    void PrepareImageAndActiveMap(const DesktopFrame* frame, proto::VideoPacket* packet);
     void SetActiveMap(const DesktopRect& rect);
 
     const proto::VideoEncoding encoding_;

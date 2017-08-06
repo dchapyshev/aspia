@@ -31,8 +31,7 @@ ClientSessionDesktopView::~ClientSessionDesktopView()
     viewer_.reset();
 }
 
-static std::unique_ptr<VideoDecoder>
-CreateVideoDecoder(proto::VideoEncoding encoding)
+static std::unique_ptr<VideoDecoder> CreateVideoDecoder(proto::VideoEncoding encoding)
 {
     switch (encoding)
     {
@@ -51,8 +50,7 @@ CreateVideoDecoder(proto::VideoEncoding encoding)
     }
 }
 
-bool ClientSessionDesktopView::ReadVideoPacket(
-    const proto::VideoPacket& video_packet)
+bool ClientSessionDesktopView::ReadVideoPacket(const proto::VideoPacket& video_packet)
 {
     if (video_encoding_ != video_packet.encoding())
     {
@@ -70,8 +68,7 @@ bool ClientSessionDesktopView::ReadVideoPacket(
         if (video_encoding_ == proto::VideoEncoding::VIDEO_ENCODING_ZLIB)
         {
             pixel_format =
-                ConvertFromVideoPixelFormat(
-                    video_packet.format().pixel_format());
+                ConvertFromVideoPixelFormat(video_packet.format().pixel_format());
         }
         else
         {
@@ -84,8 +81,7 @@ bool ClientSessionDesktopView::ReadVideoPacket(
             return false;
         }
 
-        DesktopSize size =
-            ConvertFromVideoSize(video_packet.format().screen_size());
+        DesktopSize size = ConvertFromVideoSize(video_packet.format().screen_size());
 
         if (size.IsEmpty())
         {
@@ -114,8 +110,7 @@ void ClientSessionDesktopView::ReadConfigRequest(
     OnConfigChange(config_.desktop_session_config());
 }
 
-void ClientSessionDesktopView::OnMessageReceived(
-    std::unique_ptr<IOBuffer> buffer)
+void ClientSessionDesktopView::OnMessageReceived(std::unique_ptr<IOBuffer> buffer)
 {
     proto::desktop::HostToClient message;
 
@@ -150,8 +145,7 @@ void ClientSessionDesktopView::OnMessageReceived(
         if (success)
         {
             channel_proxy_->Receive(std::bind(
-                &ClientSessionDesktopView::OnMessageReceived, this,
-                std::placeholders::_1));
+                &ClientSessionDesktopView::OnMessageReceived, this, std::placeholders::_1));
             return;
         }
     }
@@ -159,8 +153,7 @@ void ClientSessionDesktopView::OnMessageReceived(
     channel_proxy_->Disconnect();
 }
 
-void ClientSessionDesktopView::WriteMessage(
-    const proto::desktop::ClientToHost& message)
+void ClientSessionDesktopView::WriteMessage(const proto::desktop::ClientToHost& message)
 {
     channel_proxy_->Send(SerializeMessage<IOBuffer>(message));
 }
@@ -170,8 +163,7 @@ void ClientSessionDesktopView::OnWindowClose()
     channel_proxy_->Disconnect();
 }
 
-void ClientSessionDesktopView::OnConfigChange(
-    const proto::DesktopSessionConfig& config)
+void ClientSessionDesktopView::OnConfigChange(const proto::DesktopSessionConfig& config)
 {
     proto::desktop::ClientToHost message;
     message.mutable_config()->CopyFrom(config);

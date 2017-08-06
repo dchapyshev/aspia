@@ -41,16 +41,13 @@ bool ConsoleSessionWatcher::StartWatching(Delegate* delegate)
 
     if (!window_->Create(std::bind(&ConsoleSessionWatcher::OnMessage,
                                    this,
-                                   std::placeholders::_1,
-                                   std::placeholders::_2,
-                                   std::placeholders::_3,
-                                   std::placeholders::_4)))
+                                   std::placeholders::_1, std::placeholders::_2,
+                                   std::placeholders::_3, std::placeholders::_4)))
     {
         return false;
     }
 
-    if (!register_session_notification_(window_->hwnd(),
-                                        NOTIFY_FOR_ALL_SESSIONS))
+    if (!register_session_notification_(window_->hwnd(), NOTIFY_FOR_ALL_SESSIONS))
     {
         LOG(ERROR) << "WTSRegisterSessionNotification() failed: "
                    << GetLastSystemErrorString();
@@ -71,8 +68,7 @@ void ConsoleSessionWatcher::StopWatching()
     }
 }
 
-bool ConsoleSessionWatcher::OnMessage(UINT message, WPARAM wParam,
-                                      LPARAM lParam, LRESULT& result)
+bool ConsoleSessionWatcher::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result)
 {
     if (message == WM_WTSSESSION_CHANGE)
     {

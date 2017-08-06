@@ -46,8 +46,7 @@ bool ObjectWatcher::StartTimedWatching(HANDLE object,
         object, static_cast<DWORD>(timeout.count()), delegate);
 }
 
-bool ObjectWatcher::StartWatchingInternal(
-    HANDLE object, DWORD timeout, Delegate* delegate)
+bool ObjectWatcher::StartWatchingInternal(HANDLE object, DWORD timeout, Delegate* delegate)
 {
     if (wait_object_)
     {
@@ -89,8 +88,7 @@ bool ObjectWatcher::StopWatching()
 
     if (!UnregisterWaitEx(wait_object_, INVALID_HANDLE_VALUE))
     {
-        LOG(ERROR) << "UnregisterWaitEx() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "UnregisterWaitEx() failed: " << GetLastSystemErrorString();
         return false;
     }
 

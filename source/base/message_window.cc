@@ -38,8 +38,7 @@ bool MessageWindow::Create(MessageCallback message_callback)
                             reinterpret_cast<WCHAR*>(&WindowProc),
                             &instance))
     {
-        LOG(ERROR) << "GetModuleHandleExW() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "GetModuleHandleExW() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -55,8 +54,7 @@ bool MessageWindow::Create(MessageCallback message_callback)
                           this);
     if (!hwnd_)
     {
-        LOG(ERROR) << "CreateWindowW() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "CreateWindowW() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -69,12 +67,10 @@ HWND MessageWindow::hwnd() const
 }
 
 // static
-LRESULT CALLBACK MessageWindow::WindowProc(HWND window, UINT msg,
-                                           WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK MessageWindow::WindowProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    MessageWindow* self =
-        reinterpret_cast<MessageWindow*>(
-            GetWindowLongPtrW(window, GWLP_USERDATA));
+    MessageWindow* self = reinterpret_cast<MessageWindow*>(
+        GetWindowLongPtrW(window, GWLP_USERDATA));
 
     switch (msg)
     {
@@ -91,8 +87,7 @@ LRESULT CALLBACK MessageWindow::WindowProc(HWND window, UINT msg,
             // Store pointer to the self to the window's user data.
             SetLastError(ERROR_SUCCESS);
             LONG_PTR result =
-                SetWindowLongPtrW(window, GWLP_USERDATA,
-                                  reinterpret_cast<LONG_PTR>(self));
+                SetWindowLongPtrW(window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(self));
             CHECK(result != 0 || GetLastError() == ERROR_SUCCESS);
         }
         break;
@@ -139,8 +134,7 @@ bool MessageWindow::RegisterWindowClass(HINSTANCE instance)
 
     if (!RegisterClassExW(&window_class))
     {
-        LOG(ERROR) << "RegisterClassExW() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "RegisterClassExW() failed: " << GetLastSystemErrorString();
         return false;
     }
 

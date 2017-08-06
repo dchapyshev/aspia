@@ -89,8 +89,7 @@ proto::RequestStatus ExecuteDriveListRequest(proto::DriveList* drive_list)
     return proto::REQUEST_STATUS_SUCCESS;
 }
 
-proto::RequestStatus ExecuteFileListRequest(const FilePath& path,
-                                            proto::FileList* file_list)
+proto::RequestStatus ExecuteFileListRequest(const FilePath& path, proto::FileList* file_list)
 {
     DCHECK(file_list);
 
@@ -144,8 +143,7 @@ proto::RequestStatus ExecuteCreateDirectoryRequest(const FilePath& path)
     return proto::REQUEST_STATUS_SUCCESS;
 }
 
-proto::RequestStatus ExecuteDirectorySizeRequest(const FilePath& path,
-                                                 uint64_t& size)
+proto::RequestStatus ExecuteDirectorySizeRequest(const FilePath& path, uint64_t& size)
 {
     if (!IsValidPathName(path))
         return proto::REQUEST_STATUS_INVALID_PATH_NAME;
@@ -169,8 +167,7 @@ proto::RequestStatus ExecuteDirectorySizeRequest(const FilePath& path,
     return proto::REQUEST_STATUS_SUCCESS;
 }
 
-proto::RequestStatus ExecuteRenameRequest(const FilePath& old_name,
-                                          const FilePath& new_name)
+proto::RequestStatus ExecuteRenameRequest(const FilePath& old_name, const FilePath& new_name)
 {
     if (!IsValidPathName(old_name) || !IsValidPathName(new_name))
     {

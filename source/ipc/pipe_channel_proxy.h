@@ -18,14 +18,9 @@ class PipeChannelProxy
 public:
     bool Disconnect();
     bool IsDisconnecting() const;
-
-    bool Send(std::unique_ptr<IOBuffer> buffer,
-              PipeChannel::SendCompleteHandler handler);
-
+    bool Send(std::unique_ptr<IOBuffer> buffer, PipeChannel::SendCompleteHandler handler);
     bool Send(std::unique_ptr<IOBuffer> buffer);
-
     bool Receive(PipeChannel::ReceiveCompleteHandler handler);
-
     void WaitForDisconnect();
 
 private:

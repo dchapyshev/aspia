@@ -35,8 +35,7 @@ bool Desktop::GetName(WCHAR* name, DWORD length) const
 
     if (!GetUserObjectInformationW(desktop_, UOI_NAME, name, length, nullptr))
     {
-        LOG(ERROR) << "Failed to query the desktop name: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "Failed to query the desktop name: " << GetLastSystemErrorString();
         return false;
     }
 

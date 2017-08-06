@@ -117,20 +117,16 @@ static std::unique_ptr<ClientSession> CreateSession(
     switch (session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
-            return std::make_unique<ClientSessionDesktopManage>(
-                config, channel_proxy);
+            return std::make_unique<ClientSessionDesktopManage>(config, channel_proxy);
 
         case proto::SESSION_TYPE_DESKTOP_VIEW:
-            return std::make_unique<ClientSessionDesktopView>(
-                config, channel_proxy);
+            return std::make_unique<ClientSessionDesktopView>(config, channel_proxy);
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
-            return std::make_unique<ClientSessionFileTransfer>(
-                config, channel_proxy);
+            return std::make_unique<ClientSessionFileTransfer>(config, channel_proxy);
 
         case proto::SESSION_TYPE_POWER_MANAGE:
-            return std::make_unique<ClientSessionPowerManage>(
-                config, channel_proxy);
+            return std::make_unique<ClientSessionPowerManage>(config, channel_proxy);
 
         default:
             LOG(ERROR) << "Invalid session type: " << session_type;
@@ -148,9 +144,7 @@ void Client::DoAuthorize(std::unique_ptr<IOBuffer> buffer)
 
         if (status_ == proto::Status::STATUS_SUCCESS)
         {
-            session_ = CreateSession(result.session_type(),
-                                     config_,
-                                     channel_proxy_);
+            session_ = CreateSession(result.session_type(), config_, channel_proxy_);
             if (session_)
                 return;
         }

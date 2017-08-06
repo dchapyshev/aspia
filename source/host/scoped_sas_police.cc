@@ -17,9 +17,7 @@ static const WCHAR kSoftwareSASGeneration[] = L"SoftwareSASGeneration";
 
 ScopedSasPolice::ScopedSasPolice()
 {
-    LONG status = key_.Create(HKEY_LOCAL_MACHINE,
-                              kSoftwareSASGenerationPath,
-                              KEY_READ | KEY_WRITE);
+    LONG status = key_.Create(HKEY_LOCAL_MACHINE, kSoftwareSASGenerationPath, KEY_READ | KEY_WRITE);
     if (status != ERROR_SUCCESS)
     {
         LOG(WARNING) << "Create() failed: " << status;

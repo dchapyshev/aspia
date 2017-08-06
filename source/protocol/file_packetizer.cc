@@ -25,8 +25,7 @@ FilePacketizer::FilePacketizer(std::ifstream&& file_stream)
     left_size_ = file_size_;
 }
 
-std::unique_ptr<FilePacketizer> FilePacketizer::Create(
-    const FilePath& file_path)
+std::unique_ptr<FilePacketizer> FilePacketizer::Create(const FilePath& file_path)
 {
     std::ifstream file_stream;
 
@@ -55,8 +54,7 @@ std::unique_ptr<proto::FilePacket> FilePacketizer::CreateNextPacket()
         return nullptr;
 
     // Create a new file packet.
-    std::unique_ptr<proto::FilePacket> packet =
-        std::make_unique<proto::FilePacket>();
+    std::unique_ptr<proto::FilePacket> packet = std::make_unique<proto::FilePacket>();
 
     // All file packets must have the flag.
     packet->set_flags(proto::FilePacket::PACKET);

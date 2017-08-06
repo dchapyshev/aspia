@@ -20,8 +20,7 @@ static bool IsFailureCode(const std::error_code& code)
     return code.value() != 0;
 }
 
-NetworkServerTcp::NetworkServerTcp(uint16_t port,
-                                   ConnectCallback connect_callback)
+NetworkServerTcp::NetworkServerTcp(uint16_t port, ConnectCallback connect_callback)
     : connect_callback_(std::move(connect_callback)),
       port_(port)
 {
@@ -36,8 +35,7 @@ NetworkServerTcp::~NetworkServerTcp()
 
         if (channel_)
         {
-            channel_->io_service().dispatch(
-                std::bind(&NetworkServerTcp::DoStop, this));
+            channel_->io_service().dispatch(std::bind(&NetworkServerTcp::DoStop, this));
             channel_.reset();
         }
     }
@@ -113,17 +111,14 @@ void NetworkServerTcp::DoAccept()
 {
     std::lock_guard<std::mutex> lock(channel_lock_);
 
-    channel_ = std::make_unique<NetworkChannelTcp>(
-        NetworkChannelTcp::Mode::SERVER);
+    channel_ = std::make_unique<NetworkChannelTcp>(NetworkChannelTcp::Mode::SERVER);
 
     acceptor_ = std::make_unique<asio::ip::tcp::acceptor>(
         channel_->io_service(),
         asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port_));
 
     acceptor_->async_accept(channel_->socket(),
-                            std::bind(&NetworkServerTcp::OnAccept,
-                                      this,
-                                      std::placeholders::_1));
+                            std::bind(&NetworkServerTcp::OnAccept, this, std::placeholders::_1));
 }
 
 void NetworkServerTcp::DoStop()

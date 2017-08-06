@@ -16,8 +16,7 @@
 namespace aspia {
 
 template <class T>
-static std::unique_ptr<T> SerializeMessage(
-    const google::protobuf::MessageLite& message)
+static std::unique_ptr<T> SerializeMessage(const google::protobuf::MessageLite& message)
 {
     size_t size = message.ByteSizeLong();
 
@@ -37,8 +36,7 @@ static std::unique_ptr<T> SerializeMessage(
 template <class T>
 bool ParseMessage(const IOBuffer& buffer, T& message)
 {
-    if (!message.ParseFromArray(buffer.data(),
-                                static_cast<int>(buffer.size())))
+    if (!message.ParseFromArray(buffer.data(), static_cast<int>(buffer.size())))
     {
         LOG(ERROR) << "Received message that is not a valid protocol buffer.";
         return false;

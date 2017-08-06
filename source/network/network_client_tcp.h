@@ -15,12 +15,9 @@ namespace aspia {
 class NetworkClientTcp
 {
 public:
-    using ConnectCallback =
-        std::function<void(std::shared_ptr<NetworkChannel> channel)>;
+    using ConnectCallback = std::function<void(std::shared_ptr<NetworkChannel> channel)>;
 
-    NetworkClientTcp(const std::wstring& address,
-                     uint16_t port,
-                     ConnectCallback connect_callback);
+    NetworkClientTcp(const std::wstring& address, uint16_t port, ConnectCallback connect_callback);
     ~NetworkClientTcp();
 
     static bool IsValidHostName(const std::wstring& hostname);

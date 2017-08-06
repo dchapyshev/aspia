@@ -16,8 +16,7 @@ namespace aspia {
 class ClientSession
 {
 public:
-    ClientSession(const ClientConfig& config,
-                  std::shared_ptr<NetworkChannelProxy> channel_proxy)
+    ClientSession(const ClientConfig& config, std::shared_ptr<NetworkChannelProxy> channel_proxy)
         : channel_proxy_(channel_proxy),
           config_(config)
     {

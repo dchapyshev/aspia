@@ -101,8 +101,7 @@ void Service::SetStatus(DWORD state)
 
     if (state == SERVICE_RUNNING)
     {
-        status_.dwControlsAccepted =
-            SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SHUTDOWN;
+        status_.dwControlsAccepted = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SHUTDOWN;
     }
 
     if (state != SERVICE_RUNNING && state != SERVICE_STOPPED)
@@ -126,8 +125,7 @@ bool Service::Run()
 
     if (!StartServiceCtrlDispatcherW(service_table))
     {
-        LOG(ERROR) << "StartServiceCtrlDispatcherW() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "StartServiceCtrlDispatcherW() failed: " << GetLastSystemErrorString();
         return false;
     }
 

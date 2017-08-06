@@ -11,16 +11,14 @@
 
 namespace aspia {
 
-bool FirewallManagerLegacy::Init(const std::wstring& app_name,
-                                 const std::wstring& app_path)
+bool FirewallManagerLegacy::Init(const std::wstring& app_name, const std::wstring& app_path)
 {
     ScopedComPtr<INetFwMgr> firewall_manager;
 
     HRESULT hr = firewall_manager.CreateInstance(CLSID_NetFwMgr);
     if (FAILED(hr))
     {
-        DLOG(ERROR) << "CreateInstance() failed: "
-                    << SystemErrorCodeToString(hr);
+        DLOG(ERROR) << "CreateInstance() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -28,16 +26,14 @@ bool FirewallManagerLegacy::Init(const std::wstring& app_name,
     hr = firewall_manager->get_LocalPolicy(firewall_policy.Receive());
     if (FAILED(hr))
     {
-        DLOG(ERROR) << "get_LocalPolicy() failed: "
-                    << SystemErrorCodeToString(hr);
+        DLOG(ERROR) << "get_LocalPolicy() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
     hr = firewall_policy->get_CurrentProfile(current_profile_.Receive());
     if (FAILED(hr))
     {
-        DLOG(ERROR) << "get_CurrentProfile() failed: "
-                    << SystemErrorCodeToString(hr);
+        DLOG(ERROR) << "get_CurrentProfile() failed: " << SystemErrorCodeToString(hr);
         current_profile_ = nullptr;
         return false;
     }
@@ -59,12 +55,10 @@ FirewallManagerLegacy::GetAuthorizedApplications()
 {
     ScopedComPtr<INetFwAuthorizedApplications> authorized_apps;
 
-    HRESULT hr = current_profile_->get_AuthorizedApplications(
-        authorized_apps.Receive());
+    HRESULT hr = current_profile_->get_AuthorizedApplications(authorized_apps.Receive());
     if (FAILED(hr))
     {
-        DLOG(ERROR) << "get_AuthorizedApplications() failed: "
-                    << SystemErrorCodeToString(hr);
+        DLOG(ERROR) << "get_AuthorizedApplications() failed: " << SystemErrorCodeToString(hr);
         return ScopedComPtr<INetFwAuthorizedApplications>();
     }
 
@@ -79,8 +73,7 @@ FirewallManagerLegacy::CreateAuthorization(bool allow)
     HRESULT hr = application.CreateInstance(CLSID_NetFwAuthorizedApplication);
     if (FAILED(hr))
     {
-        DLOG(ERROR) << "CreateInstance() failed: "
-                    << SystemErrorCodeToString(hr);
+        DLOG(ERROR) << "CreateInstance() failed: " << SystemErrorCodeToString(hr);
         return ScopedComPtr<INetFwAuthorizedApplication>();
     }
 
@@ -104,8 +97,7 @@ bool FirewallManagerLegacy::GetAllowIncomingConnection(bool& value)
         return false;
 
     ScopedComPtr<INetFwAuthorizedApplication> application;
-    HRESULT hr = authorized_apps->Item(ScopedBstr(app_path_.c_str()),
-                                       application.Receive());
+    HRESULT hr = authorized_apps->Item(ScopedBstr(app_path_.c_str()), application.Receive());
     if (FAILED(hr))
         return false;
 
@@ -122,28 +114,24 @@ bool FirewallManagerLegacy::GetAllowIncomingConnection(bool& value)
 // The SharedAccess service must be running.
 bool FirewallManagerLegacy::SetAllowIncomingConnection(bool allow)
 {
-    ScopedComPtr<INetFwAuthorizedApplications> authorized_apps(
-        GetAuthorizedApplications());
+    ScopedComPtr<INetFwAuthorizedApplications> authorized_apps(GetAuthorizedApplications());
     if (!authorized_apps.get())
         return false;
 
     // Authorize.
-    ScopedComPtr<INetFwAuthorizedApplication> authorization =
-        CreateAuthorization(allow);
+    ScopedComPtr<INetFwAuthorizedApplication> authorization = CreateAuthorization(allow);
     if (!authorization.get())
         return false;
 
     HRESULT hr = authorized_apps->Add(authorization.get());
-    DLOG_IF(ERROR, FAILED(hr)) << "Add() failed: "
-                               << SystemErrorCodeToString(hr);
+    DLOG_IF(ERROR, FAILED(hr)) << "Add() failed: " << SystemErrorCodeToString(hr);
 
     return SUCCEEDED(hr);
 }
 
 void FirewallManagerLegacy::DeleteRule()
 {
-    ScopedComPtr<INetFwAuthorizedApplications> authorized_apps(
-        GetAuthorizedApplications());
+    ScopedComPtr<INetFwAuthorizedApplications> authorized_apps(GetAuthorizedApplications());
     if (!authorized_apps.get())
         return;
 

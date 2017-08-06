@@ -20,9 +20,8 @@ class ClientSessionFileTransfer :
     private UiFileManager::Delegate
 {
 public:
-    ClientSessionFileTransfer(
-        const ClientConfig& config,
-        std::shared_ptr<NetworkChannelProxy> channel_proxy);
+    ClientSessionFileTransfer(const ClientConfig& config,
+                              std::shared_ptr<NetworkChannelProxy> channel_proxy);
     ~ClientSessionFileTransfer();
 
 private:

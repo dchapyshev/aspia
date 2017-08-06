@@ -18,8 +18,8 @@ const UINT DWM_EC_ENABLECOMPOSITION = 1;
 
 const wchar_t kDwmapiLibraryName[] = L"dwmapi.dll";
 
-CapturerGDI::CapturerGDI() :
-    dwmapi_library_(kDwmapiLibraryName)
+CapturerGDI::CapturerGDI()
+    : dwmapi_library_(kDwmapiLibraryName)
 {
     memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
 
@@ -165,8 +165,7 @@ std::unique_ptr<MouseCursor> CapturerGDI::CaptureCursor()
             }
 
             std::unique_ptr<MouseCursor> mouse_cursor =
-                CreateMouseCursorFromHCursor(*desktop_dc_,
-                                             cursor_info.hCursor);
+                CreateMouseCursorFromHCursor(*desktop_dc_, cursor_info.hCursor);
 
             if (mouse_cursor)
             {

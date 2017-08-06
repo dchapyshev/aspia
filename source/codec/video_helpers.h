@@ -28,10 +28,7 @@ CreateVideoPacket(proto::VideoEncoding encoding)
 static INLINE DesktopRect
 ConvertFromVideoRect(const proto::VideoRect& rect)
 {
-    return DesktopRect::MakeXYWH(rect.x(),
-                                 rect.y(),
-                                 rect.width(),
-                                 rect.height());
+    return DesktopRect::MakeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
 static INLINE void
@@ -69,8 +66,7 @@ ConvertFromVideoPixelFormat(const proto::VideoPixelFormat& format)
 }
 
 static INLINE void
-ConvertToVideoPixelFormat(const PixelFormat& from,
-                          proto::VideoPixelFormat* to)
+ConvertToVideoPixelFormat(const PixelFormat& from, proto::VideoPixelFormat* to)
 {
     to->set_bits_per_pixel(from.BitsPerPixel());
 

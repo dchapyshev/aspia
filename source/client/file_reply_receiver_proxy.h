@@ -22,33 +22,26 @@ public:
 
     bool OnDriveListRequestFailure(proto::RequestStatus status);
 
-    bool OnFileListRequestReply(const FilePath& path,
-                                std::unique_ptr<proto::FileList> file_list);
+    bool OnFileListRequestReply(const FilePath& path, std::unique_ptr<proto::FileList> file_list);
 
-    bool OnFileListRequestFailure(const FilePath& path,
-                                  proto::RequestStatus status);
+    bool OnFileListRequestFailure(const FilePath& path, proto::RequestStatus status);
 
     bool OnDirectorySizeRequestReply(const FilePath& path, uint64_t size);
 
-    bool OnDirectorySizeRequestFailure(const FilePath& path,
-                                       proto::RequestStatus status);
+    bool OnDirectorySizeRequestFailure(const FilePath& path, proto::RequestStatus status);
 
-    bool OnCreateDirectoryRequestReply(const FilePath& path,
-                                       proto::RequestStatus status);
+    bool OnCreateDirectoryRequestReply(const FilePath& path, proto::RequestStatus status);
 
-    bool OnRemoveRequestReply(const FilePath& path,
-                              proto::RequestStatus status);
+    bool OnRemoveRequestReply(const FilePath& path, proto::RequestStatus status);
 
     bool OnRenameRequestReply(const FilePath& old_name,
                               const FilePath& new_name,
                               proto::RequestStatus status);
 
-    bool OnFileUploadRequestReply(const FilePath& file_path,
-                                  proto::RequestStatus status);
+    bool OnFileUploadRequestReply(const FilePath& file_path, proto::RequestStatus status);
 
-    bool OnFileUploadDataRequestReply(
-        std::unique_ptr<proto::FilePacket> file_packet,
-        proto::RequestStatus status);
+    bool OnFileUploadDataRequestReply(std::unique_ptr<proto::FilePacket> file_packet,
+                                      proto::RequestStatus status);
 
 private:
     friend class FileReplyReceiver;

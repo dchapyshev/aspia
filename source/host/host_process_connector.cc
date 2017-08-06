@@ -15,8 +15,7 @@ HostProcessConnector::HostProcessConnector(
 {
     // Start receiving messages from the network channel.
     network_channel_proxy_->Receive(std::bind(
-        &HostProcessConnector::OnNetworkChannelMessage, this,
-        std::placeholders::_1));
+        &HostProcessConnector::OnNetworkChannelMessage, this, std::placeholders::_1));
 }
 
 HostProcessConnector::~HostProcessConnector()
@@ -40,9 +39,8 @@ bool HostProcessConnector::StartServer(std::wstring& channel_id)
     return true;
 }
 
-bool HostProcessConnector::Accept(
-    uint32_t& user_data,
-    PipeChannel::DisconnectHandler disconnect_handler)
+bool HostProcessConnector::Accept(uint32_t& user_data,
+                                  PipeChannel::DisconnectHandler disconnect_handler)
 {
     // Connecting to the host process.
     if (ipc_channel_->Connect(user_data, std::move(disconnect_handler)))
@@ -73,8 +71,7 @@ void HostProcessConnector::Disconnect()
     ipc_channel_.reset();
 }
 
-void HostProcessConnector::OnIpcChannelMessage(
-    std::unique_ptr<IOBuffer> buffer)
+void HostProcessConnector::OnIpcChannelMessage(std::unique_ptr<IOBuffer> buffer)
 {
     network_channel_proxy_->Send(std::move(buffer));
 
@@ -85,12 +82,10 @@ void HostProcessConnector::OnIpcChannelMessage(
 
     // Receive next message.
     ipc_channel_proxy_->Receive(std::bind(
-        &HostProcessConnector::OnIpcChannelMessage, this,
-        std::placeholders::_1));
+        &HostProcessConnector::OnIpcChannelMessage, this, std::placeholders::_1));
 }
 
-void HostProcessConnector::OnNetworkChannelMessage(
-    std::unique_ptr<IOBuffer> buffer)
+void HostProcessConnector::OnNetworkChannelMessage(std::unique_ptr<IOBuffer> buffer)
 {
     // A network channel can start receiving messages before connecting IPC
     // channel. We are waiting for the connection of IPC channel. If the
@@ -108,8 +103,7 @@ void HostProcessConnector::OnNetworkChannelMessage(
 
     // Receive next message.
     network_channel_proxy_->Receive(std::bind(
-        &HostProcessConnector::OnNetworkChannelMessage, this,
-        std::placeholders::_1));
+        &HostProcessConnector::OnNetworkChannelMessage, this, std::placeholders::_1));
 }
 
 } // namespace aspia

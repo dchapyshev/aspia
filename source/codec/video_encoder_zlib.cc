@@ -11,8 +11,7 @@
 
 namespace aspia {
 
-VideoEncoderZLIB::VideoEncoderZLIB(const PixelFormat& format,
-                                   int compression_ratio)
+VideoEncoderZLIB::VideoEncoderZLIB(const PixelFormat& format, int compression_ratio)
     : format_(format),
       compressor_(compression_ratio),
       translator_(format)
@@ -21,9 +20,8 @@ VideoEncoderZLIB::VideoEncoderZLIB(const PixelFormat& format,
 }
 
 // static
-std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(
-    const PixelFormat& format,
-    int compression_ratio)
+std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(const PixelFormat& format,
+                                                           int compression_ratio)
 {
     if (compression_ratio < Z_BEST_SPEED ||
         compression_ratio > Z_BEST_COMPRESSION)
@@ -45,8 +43,7 @@ std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(
             return nullptr;
     }
 
-    return std::unique_ptr<VideoEncoderZLIB>(
-        new VideoEncoderZLIB(format, compression_ratio));
+    return std::unique_ptr<VideoEncoderZLIB>(new VideoEncoderZLIB(format, compression_ratio));
 }
 
 // Retrieves a pointer to the output buffer in |update| used for storing the
@@ -54,13 +51,10 @@ std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(
 static uint8_t* GetOutputBuffer(proto::VideoPacket* packet, size_t size)
 {
     packet->mutable_data()->resize(size);
-
-    return const_cast<uint8_t*>(
-        reinterpret_cast<const uint8_t*>(packet->mutable_data()->data()));
+    return const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(packet->mutable_data()->data()));
 }
 
-void VideoEncoderZLIB::CompressPacket(proto::VideoPacket* packet,
-                                      size_t source_data_size)
+void VideoEncoderZLIB::CompressPacket(proto::VideoPacket* packet, size_t source_data_size)
 {
     compressor_.Reset();
 
@@ -97,11 +91,9 @@ void VideoEncoderZLIB::CompressPacket(proto::VideoPacket* packet,
     }
 }
 
-std::unique_ptr<proto::VideoPacket> VideoEncoderZLIB::Encode(
-    const DesktopFrame* frame)
+std::unique_ptr<proto::VideoPacket> VideoEncoderZLIB::Encode(const DesktopFrame* frame)
 {
-    std::unique_ptr<proto::VideoPacket> packet(
-        CreateVideoPacket(proto::VIDEO_ENCODING_ZLIB));
+    std::unique_ptr<proto::VideoPacket> packet(CreateVideoPacket(proto::VIDEO_ENCODING_ZLIB));
 
     if (!screen_size_.IsEqual(frame->Size()))
     {
@@ -115,8 +107,7 @@ std::unique_ptr<proto::VideoPacket> VideoEncoderZLIB::Encode(
 
     size_t data_size = 0;
 
-    for (DesktopRegion::Iterator iter(frame->UpdatedRegion());
-         !iter.IsAtEnd(); iter.Advance())
+    for (DesktopRegion::Iterator iter(frame->UpdatedRegion()); !iter.IsAtEnd(); iter.Advance())
     {
         const DesktopRect& rect = iter.rect();
 
@@ -127,15 +118,13 @@ std::unique_ptr<proto::VideoPacket> VideoEncoderZLIB::Encode(
 
     if (translate_buffer_size_ < data_size)
     {
-        translate_buffer_.reset(static_cast<uint8_t*>(
-            AlignedAlloc(data_size, 16)));
+        translate_buffer_.reset(static_cast<uint8_t*>(AlignedAlloc(data_size, 16)));
         translate_buffer_size_ = data_size;
     }
 
     uint8_t* translate_pos = translate_buffer_.get();
 
-    for (DesktopRegion::Iterator iter(frame->UpdatedRegion());
-         !iter.IsAtEnd(); iter.Advance())
+    for (DesktopRegion::Iterator iter(frame->UpdatedRegion()); !iter.IsAtEnd(); iter.Advance())
     {
         const DesktopRect& rect = iter.rect();
         const int stride = rect.Width() * format_.BytesPerPixel();

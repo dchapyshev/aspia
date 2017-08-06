@@ -62,20 +62,15 @@ NetworkClientTcp::NetworkClientTcp(const std::wstring& address,
                                    ConnectCallback connect_callback)
     : connect_callback_(std::move(connect_callback))
 {
-    asio::ip::tcp::resolver::query query(ANSIfromUNICODE(address),
-                                         std::to_string(port));
+    asio::ip::tcp::resolver::query query(ANSIfromUNICODE(address), std::to_string(port));
 
-    channel_ = std::make_unique<NetworkChannelTcp>(
-        NetworkChannelTcp::Mode::CLIENT);
+    channel_ = std::make_unique<NetworkChannelTcp>(NetworkChannelTcp::Mode::CLIENT);
 
-    resolver_ = std::make_unique<asio::ip::tcp::resolver>(
-        channel_->io_service());
+    resolver_ = std::make_unique<asio::ip::tcp::resolver>(channel_->io_service());
 
     resolver_->async_resolve(query,
                              std::bind(&NetworkClientTcp::OnResolve,
-                                       this,
-                                       std::placeholders::_1,
-                                       std::placeholders::_2));
+                                       this, std::placeholders::_1, std::placeholders::_2));
 }
 
 NetworkClientTcp::~NetworkClientTcp()
@@ -84,15 +79,13 @@ NetworkClientTcp::~NetworkClientTcp()
 
     if (channel_)
     {
-        channel_->io_service().dispatch(
-            std::bind(&NetworkClientTcp::DoStop, this));
+        channel_->io_service().dispatch(std::bind(&NetworkClientTcp::DoStop, this));
         channel_.reset();
     }
 }
 
-void NetworkClientTcp::OnResolve(
-    const std::error_code& code,
-    asio::ip::tcp::resolver::iterator endpoint_iterator)
+void NetworkClientTcp::OnResolve(const std::error_code& code,
+                                 asio::ip::tcp::resolver::iterator endpoint_iterator)
 {
     if (IsFailureCode(code))
     {

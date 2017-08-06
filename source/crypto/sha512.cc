@@ -15,9 +15,7 @@ extern "C" {
 
 namespace aspia {
 
-bool CreateSHA512(const std::string& data,
-                  std::string& data_hash,
-                  size_t iter_count)
+bool CreateSHA512(const std::string& data, std::string& data_hash, size_t iter_count)
 {
     if (!iter_count)
         return false;
@@ -27,14 +25,11 @@ bool CreateSHA512(const std::string& data,
     sodium_memzero(hash_buffer, sizeof(hash_buffer));
 
     size_t source_buffer_size = data.size();
-    const uint8_t* source_buffer =
-        reinterpret_cast<const uint8_t*>(data.data());
+    const uint8_t* source_buffer = reinterpret_cast<const uint8_t*>(data.data());
 
     for (size_t i = 0; i < iter_count; ++i)
     {
-        if (crypto_hash_sha512(hash_buffer,
-                               source_buffer,
-                               source_buffer_size) != 0)
+        if (crypto_hash_sha512(hash_buffer, source_buffer, source_buffer_size) != 0)
         {
             LOG(ERROR) << "crypto_hash_sha512() failed";
             return false;

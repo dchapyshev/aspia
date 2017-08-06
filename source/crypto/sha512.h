@@ -14,9 +14,7 @@ namespace aspia {
 
 // Creates a hash of the content |data| and saves it to the |data_hash|.
 // Parameter |iter_count| specifies how many iterations must be done.
-bool CreateSHA512(const std::string& data,
-                  std::string& data_hash,
-                  size_t iter_count);
+bool CreateSHA512(const std::string& data, std::string& data_hash, size_t iter_count);
 
 } // namespace aspia
 

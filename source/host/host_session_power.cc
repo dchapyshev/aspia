@@ -46,8 +46,7 @@ void HostSessionPower::OnIpcChannelConnect(uint32_t user_data)
     }
 
     ipc_channel_proxy_->Receive(std::bind(
-        &HostSessionPower::OnIpcChannelMessage, this,
-        std::placeholders::_1));
+        &HostSessionPower::OnIpcChannelMessage, this, std::placeholders::_1));
 }
 
 void HostSessionPower::OnIpcChannelMessage(std::unique_ptr<IOBuffer> buffer)
@@ -63,12 +62,10 @@ void HostSessionPower::OnIpcChannelMessage(std::unique_ptr<IOBuffer> buffer)
             case proto::PowerEvent::HIBERNATE:
             case proto::PowerEvent::SUSPEND:
             {
-                UiPowerSessionDialog session_dialog(
-                    message.power_event().action());
+                UiPowerSessionDialog session_dialog(message.power_event().action());
 
                 UiPowerSessionDialog::Result result =
-                    static_cast<UiPowerSessionDialog::Result>(
-                        session_dialog.DoModal());
+                    static_cast<UiPowerSessionDialog::Result>(session_dialog.DoModal());
 
                 if (result == UiPowerSessionDialog::Result::EXECUTE)
                 {
@@ -79,8 +76,7 @@ void HostSessionPower::OnIpcChannelMessage(std::unique_ptr<IOBuffer> buffer)
 
             default:
             {
-                LOG(ERROR) << "Unknown power action: "
-                           << message.power_event().action();
+                LOG(ERROR) << "Unknown power action: " << message.power_event().action();
             }
             break;
         }

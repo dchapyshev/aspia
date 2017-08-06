@@ -94,20 +94,14 @@ static void AlphaMul(uint32_t* data, int width, int height)
         RGBQUAD* from = reinterpret_cast<RGBQUAD*>(data);
         RGBQUAD* to = reinterpret_cast<RGBQUAD*>(data);
 
-        to->rgbBlue =
-            (static_cast<uint16_t>(from->rgbBlue)  * from->rgbReserved) / 0xFF;
-
-        to->rgbGreen =
-            (static_cast<uint16_t>(from->rgbGreen) * from->rgbReserved) / 0xFF;
-
-        to->rgbRed =
-            (static_cast<uint16_t>(from->rgbRed)   * from->rgbReserved) / 0xFF;
+        to->rgbBlue  = (static_cast<uint16_t>(from->rgbBlue)  * from->rgbReserved) / 0xFF;
+        to->rgbGreen = (static_cast<uint16_t>(from->rgbGreen) * from->rgbReserved) / 0xFF;
+        to->rgbRed   = (static_cast<uint16_t>(from->rgbRed)   * from->rgbReserved) / 0xFF;
     }
 }
 
 // Converts an HCURSOR into a |MouseCursor| instance.
-std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(
-    HDC dc, HCURSOR cursor)
+std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 {
     ICONINFO icon_info = { 0 };
 
@@ -191,8 +185,7 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(
 
         // GetDIBits() does not provide any indication whether the bitmap has
         // alpha channel, so we use HasAlphaChannel() below to find it out.
-        has_alpha = HasAlphaChannel(
-            reinterpret_cast<const uint32_t*>(image.get()), width, height);
+        has_alpha = HasAlphaChannel(reinterpret_cast<const uint32_t*>(image.get()), width, height);
     }
     else
     {
@@ -257,8 +250,7 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(
 
         if (add_outline)
         {
-            AddCursorOutline(width, height,
-                             reinterpret_cast<uint32_t*>(image.get()));
+            AddCursorOutline(width, height, reinterpret_cast<uint32_t*>(image.get()));
         }
     }
 
@@ -268,8 +260,7 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(
 
     return MouseCursor::Create(std::move(image),
                                DesktopSize(width, height),
-                               DesktopPoint(icon_info.xHotspot,
-                                            icon_info.yHotspot));
+                               DesktopPoint(icon_info.xHotspot, icon_info.yHotspot));
 }
 
 HCURSOR CreateHCursorFromMouseCursor(HDC dc, const MouseCursor& mouse_cursor)
@@ -317,8 +308,7 @@ HCURSOR CreateHCursorFromMouseCursor(HDC dc, const MouseCursor& mouse_cursor)
         DIB_RGB_COLORS));
     if (!color_bitmap)
     {
-        LOG(ERROR) << "CreateDIBitmap() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "CreateDIBitmap() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 

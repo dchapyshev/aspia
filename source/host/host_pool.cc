@@ -33,9 +33,7 @@ void HostPool::OnChannelConnected(std::shared_ptr<NetworkChannel> channel)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&HostPool::OnChannelConnected,
-                                    this,
-                                    channel));
+        runner_->PostTask(std::bind(&HostPool::OnChannelConnected, this, channel));
         return;
     }
 

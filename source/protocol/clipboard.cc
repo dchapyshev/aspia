@@ -29,10 +29,8 @@ bool Clipboard::Start(ClipboardEventCallback clipboard_event_callback)
 
     if (!window_->Create(std::bind(&Clipboard::OnMessage,
                                    this,
-                                   std::placeholders::_1,
-                                   std::placeholders::_2,
-                                   std::placeholders::_3,
-                                   std::placeholders::_4)))
+                                   std::placeholders::_1, std::placeholders::_2,
+                                   std::placeholders::_3, std::placeholders::_4)))
     {
         LOG(ERROR) << "Couldn't create clipboard window.";
         return false;
@@ -221,13 +219,11 @@ void Clipboard::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clip
     // Currently we only handle UTF-8 text.
     if (clipboard_event->mime_type() != kMimeTypeTextUtf8)
     {
-        LOG(WARNING) << "Unsupported mime type: "
-                     << clipboard_event->mime_type();
+        LOG(WARNING) << "Unsupported mime type: " << clipboard_event->mime_type();
         return;
     }
 
-    if (!StringIsUtf8(clipboard_event->data().c_str(),
-                      clipboard_event->data().length()))
+    if (!StringIsUtf8(clipboard_event->data().c_str(), clipboard_event->data().length()))
     {
         LOG(WARNING) << "Clipboard data is not UTF-8 encoded";
         return;
@@ -249,24 +245,20 @@ void Clipboard::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clip
 
     if (!clipboard.Init(window_->hwnd()))
     {
-        LOG(WARNING) << "Couldn't open the clipboard."
-                     << GetLastSystemErrorString();
+        LOG(WARNING) << "Couldn't open the clipboard." << GetLastSystemErrorString();
         return;
     }
 
     clipboard.Empty();
 
-    HGLOBAL text_global =
-        GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(WCHAR));
+    HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(WCHAR));
     if (!text_global)
     {
         LOG(WARNING) << "GlobalAlloc() failed: " << GetLastSystemErrorString();
         return;
     }
 
-    LPWSTR text_global_locked =
-        reinterpret_cast<LPWSTR>(GlobalLock(text_global));
-
+    LPWSTR text_global_locked = reinterpret_cast<LPWSTR>(GlobalLock(text_global));
     if (!text_global_locked)
     {
         LOG(WARNING) << "GlobalLock() failed: " << GetLastSystemErrorString();

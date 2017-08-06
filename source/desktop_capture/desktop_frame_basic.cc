@@ -13,8 +13,8 @@ namespace aspia {
 DesktopFrameBasic::DesktopFrameBasic(const DesktopSize& size,
                                      const PixelFormat& format,
                                      int stride,
-                                     uint8_t* data) :
-    DesktopFrame(size, format, stride, data)
+                                     uint8_t* data)
+    : DesktopFrame(size, format, stride, data)
 {
     // Nothing
 }
@@ -26,13 +26,11 @@ DesktopFrameBasic::~DesktopFrameBasic()
 
 // static
 std::unique_ptr<DesktopFrameBasic>
-DesktopFrameBasic::Create(const DesktopSize& size,
-                          const PixelFormat& format)
+DesktopFrameBasic::Create(const DesktopSize& size, const PixelFormat& format)
 {
     int bytes_per_row = size.Width() * format.BytesPerPixel();
 
-    uint8_t* data = reinterpret_cast<uint8_t*>(
-        malloc(bytes_per_row * size.Height()));
+    uint8_t* data = reinterpret_cast<uint8_t*>(malloc(bytes_per_row * size.Height()));
     if (!data)
         return nullptr;
 

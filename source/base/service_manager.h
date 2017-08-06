@@ -33,9 +33,8 @@ public:
 
     static std::wstring GenerateUniqueServiceId();
 
-    static std::wstring CreateUniqueServiceName(
-        const std::wstring& service_name,
-        const std::wstring& service_id);
+    static std::wstring CreateUniqueServiceName(const std::wstring& service_name,
+                                                const std::wstring& service_id);
 
     static bool IsServiceInstalled(const std::wstring& service_name);
 

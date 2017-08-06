@@ -14,18 +14,10 @@
 namespace aspia {
 
 proto::RequestStatus ExecuteDriveListRequest(proto::DriveList* drive_list);
-
-proto::RequestStatus ExecuteFileListRequest(const FilePath& path,
-                                            proto::FileList* file_list);
-
+proto::RequestStatus ExecuteFileListRequest(const FilePath& path, proto::FileList* file_list);
 proto::RequestStatus ExecuteCreateDirectoryRequest(const FilePath& path);
-
-proto::RequestStatus ExecuteDirectorySizeRequest(const FilePath& path,
-                                                 uint64_t& size);
-
-proto::RequestStatus ExecuteRenameRequest(const FilePath& old_name,
-                                          const FilePath& new_name);
-
+proto::RequestStatus ExecuteDirectorySizeRequest(const FilePath& path, uint64_t& size);
+proto::RequestStatus ExecuteRenameRequest(const FilePath& old_name, const FilePath& new_name);
 proto::RequestStatus ExecuteRemoveRequest(const FilePath& request);
 
 } // namespace aspia

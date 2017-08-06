@@ -21,8 +21,7 @@ static const WCHAR kSasServiceFullName[] = L"Aspia SAS Injector";
 static const DWORD kInvalidSessionId = 0xFFFFFFFF;
 
 SasInjector::SasInjector(const std::wstring& service_id)
-    : Service(ServiceManager::CreateUniqueServiceName(
-          kSasServiceShortName, service_id))
+    : Service(ServiceManager::CreateUniqueServiceName(kSasServiceShortName, service_id))
 {
     // Nothing
 }
@@ -36,8 +35,7 @@ void SasInjector::InjectSAS()
         const wchar_t kSasWindowClassName[] = L"SAS window class";
         const wchar_t kSasWindowTitle[] = L"SAS window";
 
-        std::unique_ptr<Desktop> winlogon_desktop(
-            Desktop::GetDesktop(kWinlogonDesktopName));
+        std::unique_ptr<Desktop> winlogon_desktop(Desktop::GetDesktop(kWinlogonDesktopName));
 
         if (!winlogon_desktop)
             return;
@@ -51,10 +49,7 @@ void SasInjector::InjectSAS()
         if (!window)
             return;
 
-        PostMessageW(window,
-                     WM_HOTKEY,
-                     0,
-                     MAKELONG(MOD_ALT | MOD_CONTROL, VK_DELETE));
+        PostMessageW(window, WM_HOTKEY, 0, MAKELONG(MOD_ALT | MOD_CONTROL, VK_DELETE));
     }
     else // For Windows Vista and above.
     {
@@ -63,16 +58,13 @@ void SasInjector::InjectSAS()
         if (!GetBasePath(BasePathKey::FILE_EXE, path))
             return;
 
-        std::wstring service_id =
-            ServiceManager::GenerateUniqueServiceId();
+        std::wstring service_id = ServiceManager::GenerateUniqueServiceId();
 
         std::wstring unique_short_name =
-            ServiceManager::CreateUniqueServiceName(kSasServiceShortName,
-                                                    service_id);
+            ServiceManager::CreateUniqueServiceName(kSasServiceShortName, service_id);
 
         std::wstring unique_full_name =
-            ServiceManager::CreateUniqueServiceName(kSasServiceFullName,
-                                                    service_id);
+            ServiceManager::CreateUniqueServiceName(kSasServiceFullName, service_id);
 
         std::wstring command_line;
 
@@ -85,9 +77,7 @@ void SasInjector::InjectSAS()
 
         // Install the service in the system.
         std::unique_ptr<ServiceManager> manager =
-            ServiceManager::Create(command_line,
-                                   unique_full_name,
-                                   unique_short_name);
+            ServiceManager::Create(command_line, unique_full_name, unique_short_name);
 
         // If the service is installed.
         if (manager)
@@ -111,8 +101,7 @@ void SasInjector::Worker()
                                              WPARAM wParam, LPARAM lParam);
 
     WmsgSendMessageFn send_message_func =
-        reinterpret_cast<WmsgSendMessageFn>(
-            wmsgapi.GetFunctionPointer("WmsgSendMessage"));
+        reinterpret_cast<WmsgSendMessageFn>(wmsgapi.GetFunctionPointer("WmsgSendMessage"));
 
     if (!send_message_func)
     {
@@ -136,16 +125,14 @@ void SasInjector::Worker()
     DWORD session_id = get_active_console_session_id_func();
     if (session_id == kInvalidSessionId)
     {
-        LOG(ERROR) << "WTSGetActiveConsoleSessionId() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "WTSGetActiveConsoleSessionId() failed: " << GetLastSystemErrorString();
         return;
     }
 
     ScopedSasPolice sas_police;
 
     BOOL as_user_ = FALSE;
-    send_message_func(session_id, 0x208, 0,
-                      reinterpret_cast<LPARAM>(&as_user_));
+    send_message_func(session_id, 0x208, 0, reinterpret_cast<LPARAM>(&as_user_));
 }
 
 void SasInjector::OnStop()

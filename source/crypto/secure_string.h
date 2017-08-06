@@ -24,8 +24,7 @@ void SecureClearString(StringType& str)
 
     if (memory_size)
     {
-        sodium_memzero(const_cast<StringType::value_type*>(str.data()),
-                       memory_size);
+        sodium_memzero(const_cast<StringType::value_type*>(str.data()), memory_size);
         str.clear();
     }
 }

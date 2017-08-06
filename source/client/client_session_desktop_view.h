@@ -20,15 +20,13 @@ class ClientSessionDesktopView :
     private UiViewerWindow::Delegate
 {
 public:
-    ClientSessionDesktopView(
-        const ClientConfig& config,
-        std::shared_ptr<NetworkChannelProxy> channel_proxy);
+    ClientSessionDesktopView(const ClientConfig& config,
+                             std::shared_ptr<NetworkChannelProxy> channel_proxy);
     ~ClientSessionDesktopView();
 
 protected:
     void WriteMessage(const proto::desktop::ClientToHost& message);
-    void ReadConfigRequest(
-        const proto::DesktopSessionConfigRequest& config_request);
+    void ReadConfigRequest(const proto::DesktopSessionConfigRequest& config_request);
     bool ReadVideoPacket(const proto::VideoPacket& video_packet);
 
     std::unique_ptr<UiViewerWindow> viewer_;
@@ -39,8 +37,7 @@ private:
     void OnConfigChange(const proto::DesktopSessionConfig& config) override;
     void OnKeyEvent(uint32_t keycode, uint32_t flags) override { }
     void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) override { }
-    void OnClipboardEvent(
-        std::unique_ptr<proto::ClipboardEvent> clipboard_event) override { }
+    void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) override { }
 
     virtual void OnMessageReceived(std::unique_ptr<IOBuffer> buffer);
 

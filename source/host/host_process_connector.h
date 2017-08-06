@@ -23,8 +23,7 @@ public:
 
     bool StartServer(std::wstring& channel_id);
 
-    bool Accept(uint32_t& user_data,
-                PipeChannel::DisconnectHandler disconnect_handler);
+    bool Accept(uint32_t& user_data, PipeChannel::DisconnectHandler disconnect_handler);
 
     void Disconnect();
 

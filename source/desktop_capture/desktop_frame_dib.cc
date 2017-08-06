@@ -14,9 +14,9 @@ DesktopFrameDIB::DesktopFrameDIB(const DesktopSize& size,
                                  const PixelFormat& format,
                                  int stride,
                                  uint8_t* data,
-                                 HBITMAP bitmap) :
-    DesktopFrame(size, format, stride, data),
-    bitmap_(bitmap)
+                                 HBITMAP bitmap)
+    : DesktopFrame(size, format, stride, data),
+      bitmap_(bitmap)
 {
     // Nothing
 }

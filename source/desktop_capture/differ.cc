@@ -59,13 +59,13 @@ static INLINE uint8_t DiffPartialBlock(const uint8_t* prev_image,
     return 0U;
 }
 
-Differ::Differ(const DesktopSize& size) :
-    size_(size),
-    bytes_per_row_(size.Width() * kBytesPerPixel),
-    diff_width_(((size.Width() + kBlockSize - 1) / kBlockSize) + 1),
-    diff_height_(((size.Height() + kBlockSize - 1) / kBlockSize) + 1),
-    full_blocks_x_(size.Width() / kBlockSize),
-    full_blocks_y_(size.Height() / kBlockSize)
+Differ::Differ(const DesktopSize& size)
+    : size_(size),
+      bytes_per_row_(size.Width() * kBytesPerPixel),
+      diff_width_(((size.Width() + kBlockSize - 1) / kBlockSize) + 1),
+      diff_height_(((size.Height() + kBlockSize - 1) / kBlockSize) + 1),
+      full_blocks_x_(size.Width() / kBlockSize),
+      full_blocks_y_(size.Height() / kBlockSize)
 {
     const int diff_info_size = diff_width_ * diff_height_;
 
@@ -84,8 +84,7 @@ Differ::Differ(const DesktopSize& size) :
 //
 // Identify all of the blocks that contain changed pixels.
 //
-void Differ::MarkDirtyBlocks(const uint8_t* prev_image,
-                             const uint8_t* curr_image)
+void Differ::MarkDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_image)
 {
     const uint8_t* prev_block_row_start = prev_image;
     const uint8_t* curr_block_row_start = curr_image;

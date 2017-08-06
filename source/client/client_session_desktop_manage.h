@@ -16,23 +16,20 @@ namespace aspia {
 class ClientSessionDesktopManage : public ClientSessionDesktopView
 {
 public:
-    ClientSessionDesktopManage(
-        const ClientConfig& config,
-        std::shared_ptr<NetworkChannelProxy> channel_proxy);
+    ClientSessionDesktopManage(const ClientConfig& config,
+                               std::shared_ptr<NetworkChannelProxy> channel_proxy);
     ~ClientSessionDesktopManage();
 
 private:
     // ViewerWindow::Delegate implementation.
     void OnKeyEvent(uint32_t keycode, uint32_t flags) override;
     void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) override;
-    void OnClipboardEvent(
-        std::unique_ptr<proto::ClipboardEvent> clipboard_event) override;
+    void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) override;
 
     void OnMessageReceived(std::unique_ptr<IOBuffer> buffer) override;
 
     void ReadCursorShape(const proto::CursorShape& cursor_shape);
-    void ReadClipboardEvent(
-        std::shared_ptr<proto::ClipboardEvent> clipboard_event);
+    void ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);
 
     std::unique_ptr<CursorDecoder> cursor_decoder_;
 

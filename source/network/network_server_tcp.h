@@ -17,8 +17,7 @@ namespace aspia {
 class NetworkServerTcp
 {
 public:
-    using ConnectCallback =
-        std::function<void(std::shared_ptr<NetworkChannel> channel)>;
+    using ConnectCallback = std::function<void(std::shared_ptr<NetworkChannel> channel)>;
 
     NetworkServerTcp(uint16_t port, ConnectCallback connect_callback);
     ~NetworkServerTcp();
