@@ -34,8 +34,7 @@ void MessagePumpDefault::Run(Delegate* delegate)
         }
         else
         {
-            TimePoint current_time =
-                std::chrono::high_resolution_clock::now();
+            TimePoint current_time = std::chrono::high_resolution_clock::now();
 
             TimeDelta delay = std::chrono::duration_cast<TimeDelta>(
                 delayed_work_time_ - current_time);
@@ -68,8 +67,7 @@ void MessagePumpDefault::ScheduleWork()
     event_.Signal();
 }
 
-void MessagePumpDefault::ScheduleDelayedWork(
-    const TimePoint& delayed_work_time)
+void MessagePumpDefault::ScheduleDelayedWork(const TimePoint& delayed_work_time)
 {
     // We know that we can't be blocked on Wait right now since this method can
     // only be called on the same thread as Run, so we only need to update our
