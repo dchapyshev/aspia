@@ -19,10 +19,8 @@ MessagePumpForUI::MessagePumpForUI()
     bool succeeded = message_window_.Create(
         std::bind(&MessagePumpForUI::OnMessage,
                   this,
-                  std::placeholders::_1,
-                  std::placeholders::_2,
-                  std::placeholders::_3,
-                  std::placeholders::_4));
+                  std::placeholders::_1, std::placeholders::_2,
+                  std::placeholders::_3, std::placeholders::_4));
     DCHECK(succeeded);
 }
 
@@ -48,8 +46,7 @@ void MessagePumpForUI::ScheduleWork()
     InterlockedExchange(&work_state_, READY);
 }
 
-void MessagePumpForUI::ScheduleDelayedWork(
-    const TimePoint& delayed_work_time)
+void MessagePumpForUI::ScheduleDelayedWork(const TimePoint& delayed_work_time)
 {
     //
     // We would *like* to provide high resolution timers.  Windows timers using
@@ -80,8 +77,7 @@ void MessagePumpForUI::ScheduleDelayedWork(
 
     // Create a WM_TIMER event that will wake us up to check for any pending
     // timers (in case we are running within a nested, external sub-pump).
-    SetTimer(message_window_.hwnd(), reinterpret_cast<UINT_PTR>(this),
-             delay_msec, nullptr);
+    SetTimer(message_window_.hwnd(), reinterpret_cast<UINT_PTR>(this), delay_msec, nullptr);
 }
 
 bool MessagePumpForUI::OnMessage(UINT message, WPARAM wparam,
@@ -141,8 +137,7 @@ void MessagePumpForUI::DoRunLoop()
         if (state_->should_quit)
             break;
 
-        more_work_is_plausible |=
-            state_->delegate->DoDelayedWork(&delayed_work_time_);
+        more_work_is_plausible |= state_->delegate->DoDelayedWork(delayed_work_time_);
         // If we did not process any delayed work, then we can assume that our
         // existing WM_TIMER if any will fire when delayed work should run.  We
         // don't want to disturb that timer if it is already in flight.  However,
@@ -165,11 +160,7 @@ void MessagePumpForUI::WaitForWork()
 
     for (;;)
     {
-        DWORD result = MsgWaitForMultipleObjectsEx(0,
-                                                   nullptr,
-                                                   INFINITE,
-                                                   QS_ALLINPUT,
-                                                   wait_flags);
+        DWORD result = MsgWaitForMultipleObjectsEx(0, nullptr, INFINITE, QS_ALLINPUT, wait_flags);
         if (result == WAIT_OBJECT_0)
         {
             // A WM_* message is available.
@@ -240,7 +231,7 @@ void MessagePumpForUI::HandleTimerMessage()
     if (!state_)
         return;
 
-    state_->delegate->DoDelayedWork(&delayed_work_time_);
+    state_->delegate->DoDelayedWork(delayed_work_time_);
     if (delayed_work_time_ != TimePoint())
     {
         // A bit gratuitous to set delayed_work_time_ again, but oh well.
@@ -311,12 +302,10 @@ bool MessagePumpForUI::ProcessPumpReplacementMessage()
 
     MSG msg;
 
-    const bool have_message =
-        (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE) != FALSE);
+    const bool have_message = (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE) != FALSE);
 
     // Expect no message or a message different than kMsgHaveWork.
-    DCHECK(!have_message || kMsgHaveWork != msg.message ||
-           msg.hwnd != message_window_.hwnd());
+    DCHECK(!have_message || kMsgHaveWork != msg.message || msg.hwnd != message_window_.hwnd());
 
     // Since we discarded a kMsgHaveWork message, we must update the flag.
     int old_have_work = InterlockedExchange(&work_state_, READY);

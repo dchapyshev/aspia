@@ -223,11 +223,11 @@ bool MessageLoop::DoWork()
     return true;
 }
 
-bool MessageLoop::DoDelayedWork(PendingTask::TimePoint* next_delayed_work_time)
+bool MessageLoop::DoDelayedWork(PendingTask::TimePoint& next_delayed_work_time)
 {
     if (!nestable_tasks_allowed_ || delayed_work_queue_.empty())
     {
-        recent_time_ = *next_delayed_work_time = PendingTask::TimePoint();
+        recent_time_ = next_delayed_work_time = PendingTask::TimePoint();
         return false;
     }
 
@@ -244,7 +244,7 @@ bool MessageLoop::DoDelayedWork(PendingTask::TimePoint* next_delayed_work_time)
         recent_time_ = std::chrono::high_resolution_clock::now();
         if (next_run_time > recent_time_)
         {
-            *next_delayed_work_time = next_run_time;
+            next_delayed_work_time = next_run_time;
             return false;
         }
     }
@@ -253,7 +253,7 @@ bool MessageLoop::DoDelayedWork(PendingTask::TimePoint* next_delayed_work_time)
     delayed_work_queue_.pop();
 
     if (!delayed_work_queue_.empty())
-        *next_delayed_work_time = delayed_work_queue_.top().delayed_run_time;
+        next_delayed_work_time = delayed_work_queue_.top().delayed_run_time;
 
     RunTask(pending_task);
     return true;

@@ -21,7 +21,7 @@ void MessagePumpDefault::Run(Delegate* delegate)
         if (!keep_running_)
             break;
 
-        did_work |= delegate->DoDelayedWork(&delayed_work_time_);
+        did_work |= delegate->DoDelayedWork(delayed_work_time_);
         if (!keep_running_)
             break;
 

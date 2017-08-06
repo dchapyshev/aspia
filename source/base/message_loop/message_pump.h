@@ -37,7 +37,7 @@ public:
         // |next_delayed_work_time| is null (per Time::is_null), then the queue of
         // future delayed work (timer events) is currently empty, and no additional
         // calls to this function need to be scheduled.
-        virtual bool DoDelayedWork(TimePoint* next_delayed_work_time) = 0;
+        virtual bool DoDelayedWork(TimePoint& next_delayed_work_time) = 0;
     };
 
     virtual ~MessagePump() = default;

@@ -73,7 +73,7 @@ protected:
 
     // MessagePump::Delegate methods:
     bool DoWork() override;
-    bool DoDelayedWork(PendingTask::TimePoint* next_delayed_work_time) override;
+    bool DoDelayedWork(PendingTask::TimePoint& next_delayed_work_time) override;
 
     const Type type_;
 
