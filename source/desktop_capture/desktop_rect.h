@@ -63,7 +63,6 @@ public:
 private:
     DesktopRect(int32_t l, int32_t t, int32_t r, int32_t b);
 
-private:
     int32_t left_   = 0;
     int32_t top_    = 0;
     int32_t right_  = 0;
