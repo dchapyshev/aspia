@@ -38,20 +38,11 @@ private:
         COMMAND_ID_HANDLER(IDCANCEL, OnCancelButton)
     END_MSG_MAP()
 
-    LRESULT OnInitDialog(UINT message, WPARAM wparam,
-                         LPARAM lparam, BOOL& handled);
-
-    LRESULT OnClose(UINT message, WPARAM wparam,
-                    LPARAM lparam, BOOL& handled);
-
-    LRESULT OnTimer(UINT message, WPARAM wparam,
-                    LPARAM lparam, BOOL& handled);
-
-    LRESULT OnOkButton(WORD notify_code, WORD control_id,
-                       HWND control, BOOL& handled);
-
-    LRESULT OnCancelButton(WORD notify_code, WORD control_id,
-                           HWND control, BOOL& handled);
+    LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnTimer(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     void UpdateTimer();
     void Exit(Result result);

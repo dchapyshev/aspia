@@ -92,15 +92,13 @@ LRESULT UiPowerSessionDialog::OnInitDialog(UINT message, WPARAM wparam,
     return TRUE;
 }
 
-LRESULT UiPowerSessionDialog::OnClose(UINT message, WPARAM wparam,
-                                      LPARAM lparam, BOOL& handled)
+LRESULT UiPowerSessionDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     Exit(Result::CANCEL);
     return 0;
 }
 
-LRESULT UiPowerSessionDialog::OnTimer(UINT message, WPARAM wparam,
-                                      LPARAM lparam, BOOL& handled)
+LRESULT UiPowerSessionDialog::OnTimer(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     UINT_PTR event_id = static_cast<UINT_PTR>(wparam);
 

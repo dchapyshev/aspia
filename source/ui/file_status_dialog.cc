@@ -52,10 +52,8 @@ void UiFileStatusDialog::OnAfterThreadRunning()
     DestroyWindow();
 }
 
-LRESULT UiFileStatusDialog::OnInitDialog(UINT message,
-                                         WPARAM wparam,
-                                         LPARAM lparam,
-                                         BOOL& handled)
+LRESULT UiFileStatusDialog::OnInitDialog(UINT message, WPARAM wparam,
+                                         LPARAM lparam, BOOL& handled)
 {
     DlgResize_Init();
 
@@ -82,28 +80,22 @@ LRESULT UiFileStatusDialog::OnInitDialog(UINT message,
     return FALSE;
 }
 
-LRESULT UiFileStatusDialog::OnClose(UINT message,
-                                    WPARAM wparam,
-                                    LPARAM lparam,
-                                    BOOL& handled)
+LRESULT UiFileStatusDialog::OnClose(UINT message, WPARAM wparam,
+                                    LPARAM lparam, BOOL& handled)
 {
     PostQuitMessage(0);
     return 0;
 }
 
-LRESULT UiFileStatusDialog::OnMinimizeButton(WORD notify_code,
-                                             WORD control_id,
-                                             HWND control,
-                                             BOOL& handled)
+LRESULT UiFileStatusDialog::OnMinimizeButton(WORD notify_code, WORD control_id,
+                                             HWND control, BOOL& handled)
 {
     ShowWindow(SW_MINIMIZE);
     return 0;
 }
 
-LRESULT UiFileStatusDialog::OnStopButton(WORD notify_code,
-                                         WORD control_id,
-                                         HWND control,
-                                         BOOL& handled)
+LRESULT UiFileStatusDialog::OnStopButton(WORD notify_code, WORD control_id,
+                                         HWND control, BOOL& handled)
 {
     PostMessageW(WM_CLOSE);
     return 0;
@@ -188,9 +180,7 @@ void UiFileStatusDialog::SetDriveListRequestStatus(proto::RequestStatus status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::SetDriveListRequestStatus,
-                                    this,
-                                    status));
+        runner_->PostTask(std::bind(&UiFileStatusDialog::SetDriveListRequestStatus, this, status));
         return;
     }
 
@@ -204,10 +194,8 @@ void UiFileStatusDialog::SetFileListRequestStatus(const FilePath& path,
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::SetFileListRequestStatus,
-                                    this,
-                                    path,
-                                    status));
+        runner_->PostTask(std::bind(
+            &UiFileStatusDialog::SetFileListRequestStatus, this, path, status));
         return;
     }
 
@@ -221,10 +209,8 @@ void UiFileStatusDialog::SetCreateDirectoryRequestStatus(const FilePath& path,
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::SetCreateDirectoryRequestStatus,
-                                    this,
-                                    path,
-                                    status));
+        runner_->PostTask(std::bind(
+            &UiFileStatusDialog::SetCreateDirectoryRequestStatus, this, path, status));
         return;
     }
 
@@ -239,11 +225,8 @@ void UiFileStatusDialog::SetRenameRequestStatus(const FilePath& old_name,
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::SetRenameRequestStatus,
-                                    this,
-                                    old_name,
-                                    new_name,
-                                    status));
+        runner_->PostTask(std::bind(
+            &UiFileStatusDialog::SetRenameRequestStatus, this, old_name, new_name, status));
         return;
     }
 
@@ -257,10 +240,8 @@ void UiFileStatusDialog::SetRemoveRequestStatus(const FilePath& path,
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::SetRemoveRequestStatus,
-                                    this,
-                                    path,
-                                    status));
+        runner_->PostTask(std::bind(
+            &UiFileStatusDialog::SetRemoveRequestStatus, this, path, status));
         return;
     }
 
@@ -274,10 +255,8 @@ void UiFileStatusDialog::SetFileUploadRequestStatus(const FilePath& file_path,
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::SetFileUploadRequestStatus,
-                                    this,
-                                    file_path,
-                                    status));
+        runner_->PostTask(std::bind(
+            &UiFileStatusDialog::SetFileUploadRequestStatus, this, file_path, status));
         return;
     }
 
@@ -291,10 +270,8 @@ void UiFileStatusDialog::SetFileDownloadRequestStatus(const FilePath& file_path,
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::SetFileDownloadRequestStatus,
-                                    this,
-                                    file_path,
-                                    status));
+        runner_->PostTask(std::bind(
+            &UiFileStatusDialog::SetFileDownloadRequestStatus, this, file_path, status));
         return;
     }
 

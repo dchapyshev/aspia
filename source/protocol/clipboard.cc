@@ -158,8 +158,7 @@ void Clipboard::OnClipboardUpdate()
     }
 }
 
-bool Clipboard::OnMessage(UINT message, WPARAM wParam,
-                          LPARAM lParam, LRESULT& result)
+bool Clipboard::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result)
 {
     UNREF(wParam);
     UNREF(lParam);
@@ -214,8 +213,7 @@ bool Clipboard::OnMessage(UINT message, WPARAM wParam,
     return true;
 }
 
-void Clipboard::InjectClipboardEvent(
-    std::shared_ptr<proto::ClipboardEvent> clipboard_event)
+void Clipboard::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
 {
     if (!window_ || !clipboard_event)
         return;

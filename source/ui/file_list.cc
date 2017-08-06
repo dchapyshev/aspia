@@ -206,11 +206,7 @@ void UiFileList::AddDirectory()
 
     SetFocus();
 
-    int item_index = AddItem(GetItemCount(),
-                             0,
-                             folder_name,
-                             icon_index);
-
+    int item_index = AddItem(GetItemCount(), 0, folder_name, icon_index);
     SetItemData(item_index, kNewFolderObjectIndex);
     EditLabel(item_index);
 }

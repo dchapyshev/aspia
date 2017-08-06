@@ -15,12 +15,11 @@
 
 namespace aspia {
 
-UiFileTransferDialog::UiFileTransferDialog(
-    Mode mode,
-    std::shared_ptr<FileRequestSenderProxy> sender,
-    const FilePath& source_path,
-    const FilePath& target_path,
-    const FileTransfer::FileList& file_list)
+UiFileTransferDialog::UiFileTransferDialog(Mode mode,
+                                           std::shared_ptr<FileRequestSenderProxy> sender,
+                                           const FilePath& source_path,
+                                           const FilePath& target_path,
+                                           const FileTransfer::FileList& file_list)
     : mode_(mode),
       sender_(std::move(sender)),
       source_path_(source_path),
@@ -50,16 +49,14 @@ LRESULT UiFileTransferDialog::OnInitDialog(UINT message, WPARAM wparam,
     return TRUE;
 }
 
-LRESULT UiFileTransferDialog::OnClose(UINT message, WPARAM wparam,
-                                      LPARAM lparam, BOOL& handled)
+LRESULT UiFileTransferDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     file_transfer_.reset();
     EndDialog(0);
     return 0;
 }
 
-LRESULT UiFileTransferDialog::OnCancelButton(WORD code, WORD ctrl_id,
-                                             HWND ctrl, BOOL& handled)
+LRESULT UiFileTransferDialog::OnCancelButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     EndDialog(0);
     return 0;

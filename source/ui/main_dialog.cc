@@ -212,10 +212,8 @@ LRESULT UiMainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, B
     return FALSE;
 }
 
-LRESULT UiMainDialog::OnDefaultPortClicked(WORD notify_code,
-                                           WORD control_id,
-                                           HWND control,
-                                           BOOL& handled)
+LRESULT UiMainDialog::OnDefaultPortClicked(WORD notify_code, WORD control_id,
+                                           HWND control, BOOL& handled)
 {
     CEdit port(GetDlgItem(IDC_SERVER_PORT_EDIT));
 
@@ -232,8 +230,7 @@ LRESULT UiMainDialog::OnDefaultPortClicked(WORD notify_code,
     return 0;
 }
 
-LRESULT UiMainDialog::OnClose(UINT message, WPARAM wparam,
-                              LPARAM lparam, BOOL& handled)
+LRESULT UiMainDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     host_pool_.reset();
     client_pool_.reset();

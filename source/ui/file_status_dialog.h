@@ -36,27 +36,17 @@ public:
 
     void SetSessionStartedStatus();
     void SetSessionTerminatedStatus();
-
     void SetDriveListRequestStatus(proto::RequestStatus status);
-
-    void SetFileListRequestStatus(const FilePath& path,
-                                  proto::RequestStatus status);
-
-    void SetCreateDirectoryRequestStatus(const FilePath& path,
-                                         proto::RequestStatus status);
+    void SetFileListRequestStatus(const FilePath& path, proto::RequestStatus status);
+    void SetCreateDirectoryRequestStatus(const FilePath& path, proto::RequestStatus status);
 
     void SetRenameRequestStatus(const FilePath& old_name,
                                 const FilePath& new_name,
                                 proto::RequestStatus status);
 
-    void SetRemoveRequestStatus(const FilePath& path,
-                                proto::RequestStatus status);
-
-    void SetFileUploadRequestStatus(const FilePath& file_path,
-                                    proto::RequestStatus status);
-
-    void SetFileDownloadRequestStatus(const FilePath& file_path,
-                                      proto::RequestStatus status);
+    void SetRemoveRequestStatus(const FilePath& path, proto::RequestStatus status);
+    void SetFileUploadRequestStatus(const FilePath& file_path, proto::RequestStatus status);
+    void SetFileDownloadRequestStatus(const FilePath& file_path, proto::RequestStatus status);
 
 private:
     BEGIN_MSG_MAP(UiFileStatusDialog)

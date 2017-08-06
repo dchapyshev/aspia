@@ -9,28 +9,22 @@
 
 namespace aspia {
 
-LRESULT UiFileReplaceDialog::OnInitDialog(UINT message,
-                                          WPARAM wparam,
-                                          LPARAM lparam,
-                                          BOOL& handled)
+LRESULT UiFileReplaceDialog::OnInitDialog(UINT message, WPARAM wparam,
+                                          LPARAM lparam, BOOL& handled)
 {
     // TODO
     return TRUE;
 }
 
-LRESULT UiFileReplaceDialog::OnClose(UINT message,
-                                     WPARAM wparam,
-                                     LPARAM lparam,
-                                     BOOL& handled)
+LRESULT UiFileReplaceDialog::OnClose(UINT message, WPARAM wparam,
+                                     LPARAM lparam, BOOL& handled)
 {
     EndDialog(0);
     return 0;
 }
 
-LRESULT UiFileReplaceDialog::OnCancelButton(WORD notify_code,
-                                            WORD control_id,
-                                            HWND control,
-                                            BOOL& handled)
+LRESULT UiFileReplaceDialog::OnCancelButton(WORD notify_code, WORD control_id,
+                                            HWND control, BOOL& handled)
 {
     EndDialog(0);
     return 0;
