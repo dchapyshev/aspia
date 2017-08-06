@@ -151,8 +151,7 @@ void UiFileTransferDialog::OnUnableToOpenFile(const FilePath& file_path,
     if (!runner_->BelongsToCurrentThread())
     {
         runner_->PostTask(std::bind(
-            &UiFileTransferDialog::OnUnableToOpenFile,
-            this, file_path, status));
+            &UiFileTransferDialog::OnUnableToOpenFile, this, file_path, status));
         return;
     }
 
