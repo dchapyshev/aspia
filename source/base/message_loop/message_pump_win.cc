@@ -21,8 +21,7 @@ void MessagePumpWin::Quit()
     state_->should_quit = true;
 }
 
-void MessagePumpWin::RunWithDispatcher(Delegate* delegate,
-                                       MessagePumpDispatcher* dispatcher)
+void MessagePumpWin::RunWithDispatcher(Delegate* delegate, MessagePumpDispatcher* dispatcher)
 {
     RunState state;
 

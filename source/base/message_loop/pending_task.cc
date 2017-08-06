@@ -15,7 +15,7 @@ PendingTask::PendingTask(Callback callback)
     // Nothing
 }
 
-PendingTask::PendingTask(const Callback& callback, const TimePoint& delayed_run_time)
+PendingTask::PendingTask(Callback callback, const TimePoint& delayed_run_time)
     : callback(std::move(callback)),
       delayed_run_time(delayed_run_time)
 {

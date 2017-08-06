@@ -24,7 +24,7 @@ public:
     using TimeDelta = std::chrono::milliseconds;
 
     PendingTask(Callback callback);
-    PendingTask(const Callback& callback, const TimePoint& delayed_run_time);
+    PendingTask(Callback callback, const TimePoint& delayed_run_time);
     ~PendingTask() = default;
 
     // Used to support sorting.
