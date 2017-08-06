@@ -100,9 +100,6 @@ public:
     bool operator!=(const PixelFormat& other) const;
 
 private:
-    uint8_t bits_per_pixel_ = 0;
-    uint8_t bytes_per_pixel_ = 0;
-
     uint16_t red_max_ = 0;
     uint16_t green_max_ = 0;
     uint16_t blue_max_ = 0;
@@ -110,6 +107,9 @@ private:
     uint8_t red_shift_ = 0;
     uint8_t green_shift_ = 0;
     uint8_t blue_shift_ = 0;
+
+    uint8_t bits_per_pixel_ = 0;
+    uint8_t bytes_per_pixel_ = 0;
 };
 
 } // namespace aspia

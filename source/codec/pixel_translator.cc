@@ -15,14 +15,9 @@ PixelTranslator::PixelTranslator(const PixelFormat& format)
 
     for (uint32_t i = 0; i < 256; ++i)
     {
-        red_table_[i] = ((i * format.RedMax()   + 255 / 2) / 255)
-            << format.RedShift();
-
-        green_table_[i] = ((i * format.GreenMax() + 255 / 2) / 255)
-            << format.GreenShift();
-
-        blue_table_[i] = ((i * format.BlueMax()  + 255 / 2) / 255)
-            << format.BlueShift();
+        red_table_[i]   = ((i * format.RedMax()   + 255 / 2) / 255) << format.RedShift();
+        green_table_[i] = ((i * format.GreenMax() + 255 / 2) / 255) << format.GreenShift();
+        blue_table_[i]  = ((i * format.BlueMax()  + 255 / 2) / 255) << format.BlueShift();
     }
 }
 
