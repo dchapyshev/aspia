@@ -14,8 +14,8 @@
 
 namespace aspia {
 
-// Contains data about a pending task. Stored in TaskQueue and DelayedTaskQueue
-// for use by classes that queue and execute tasks.
+// Contains data about a pending task. Stored in TaskQueue and DelayedTaskQueue for use by classes
+// that queue and execute tasks.
 class PendingTask
 {
 public:
@@ -24,9 +24,7 @@ public:
     using TimeDelta = std::chrono::milliseconds;
 
     PendingTask(Callback callback);
-
     PendingTask(const Callback& callback, const TimePoint& delayed_run_time);
-
     ~PendingTask() = default;
 
     // Used to support sorting.
@@ -41,14 +39,13 @@ public:
     Callback callback;
 };
 
-// Wrapper around std::queue specialized for PendingTask which adds a Swap
-// helper method.
+// Wrapper around std::queue specialized for PendingTask which adds a Swap helper method.
 class TaskQueue : public std::queue<PendingTask>
 {
 public:
-    void Swap(TaskQueue* queue)
+    void Swap(TaskQueue& queue)
     {
-        c.swap(queue->c); // Calls std::deque::swap.
+        c.swap(queue.c); // Calls std::deque::swap.
     }
 };
 

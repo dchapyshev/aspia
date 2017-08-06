@@ -85,9 +85,8 @@ void MessageLoop::PostTask(PendingTask::Callback callback)
     DCHECK(callback != nullptr);
 
     PendingTask pending_task(std::move(callback),
-                             CalculateDelayedRuntime(
-                                 PendingTask::TimeDelta::zero()));
-    AddToIncomingQueue(&pending_task);
+                             CalculateDelayedRuntime(PendingTask::TimeDelta::zero()));
+    AddToIncomingQueue(pending_task);
 }
 
 void MessageLoop::PostDelayedTask(PendingTask::Callback callback,
@@ -95,9 +94,8 @@ void MessageLoop::PostDelayedTask(PendingTask::Callback callback,
 {
     DCHECK(callback != nullptr);
 
-    PendingTask pending_task(std::move(callback),
-                             CalculateDelayedRuntime(delay));
-    AddToIncomingQueue(&pending_task);
+    PendingTask pending_task(std::move(callback), CalculateDelayedRuntime(delay));
+    AddToIncomingQueue(pending_task);
 }
 
 MessagePumpWin* MessageLoop::pump_win() const
@@ -119,16 +117,15 @@ void MessageLoop::RunTask(const PendingTask& pending_task)
 
 void MessageLoop::AddToDelayedWorkQueue(const PendingTask& pending_task)
 {
-    // Move to the delayed work queue.  Initialize the sequence number
-    // before inserting into the delayed_work_queue_.  The sequence number
-    // is used to faciliate FIFO sorting when two tasks have the same
-    // delayed_run_time value.
+    // Move to the delayed work queue.  Initialize the sequence number before inserting into the
+    // delayed_work_queue_. The sequence number is used to faciliate FIFO sorting when two tasks
+    // have the same delayed_run_time value.
     PendingTask new_pending_task(pending_task);
     new_pending_task.sequence_num = next_sequence_num_++;
     delayed_work_queue_.push(new_pending_task);
 }
 
-void MessageLoop::AddToIncomingQueue(PendingTask* pending_task)
+void MessageLoop::AddToIncomingQueue(PendingTask& pending_task)
 {
     std::shared_ptr<MessagePump> pump;
 
@@ -137,9 +134,9 @@ void MessageLoop::AddToIncomingQueue(PendingTask* pending_task)
 
         bool empty = incoming_queue_.empty();
 
-        incoming_queue_.push(*pending_task);
+        incoming_queue_.push(pending_task);
 
-        pending_task->callback = nullptr;
+        pending_task.callback = nullptr;
 
         if (!empty)
             return;
@@ -161,7 +158,7 @@ void MessageLoop::ReloadWorkQueue()
         if (incoming_queue_.empty())
             return;
 
-        incoming_queue_.Swap(&work_queue_);
+        incoming_queue_.Swap(work_queue_);
         DCHECK(incoming_queue_.empty());
     }
 }
@@ -176,8 +173,7 @@ void MessageLoop::DeletePendingTasks()
 }
 
 // static
-PendingTask::TimePoint MessageLoop::CalculateDelayedRuntime(
-    const PendingTask::TimeDelta& delay)
+PendingTask::TimePoint MessageLoop::CalculateDelayedRuntime(const PendingTask::TimeDelta& delay)
 {
     PendingTask::TimePoint delayed_run_time;
 
@@ -235,15 +231,13 @@ bool MessageLoop::DoDelayedWork(PendingTask::TimePoint* next_delayed_work_time)
         return false;
     }
 
-    // When we "fall behind," there will be a lot of tasks in the delayed work
-    // queue that are ready to run.  To increase efficiency when we fall behind,
-    // we will only call Time::Now() intermittently, and then process all tasks
-    // that are ready to run before calling it again.  As a result, the more we
-    // fall behind (and have a lot of ready-to-run delayed tasks), the more
+    // When we "fall behind," there will be a lot of tasks in the delayed work queue that are ready
+    // to run.  To increase efficiency when we fall behind, we will only call Time::Now()
+    // intermittently, and then process all tasks that are ready to run before calling it again.
+    // As a result, the more we fall behind (and have a lot of ready-to-run delayed tasks), the more
     // efficient we'll be at handling the tasks.
 
-    PendingTask::TimePoint next_run_time =
-        delayed_work_queue_.top().delayed_run_time;
+    PendingTask::TimePoint next_run_time = delayed_work_queue_.top().delayed_run_time;
 
     if (next_run_time > recent_time_)
     {

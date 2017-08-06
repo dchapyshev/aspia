@@ -40,9 +40,7 @@ protected:
     friend class MessageLoopThread;
 
     void PostTask(PendingTask::Callback callback);
-
-    void PostDelayedTask(PendingTask::Callback callback,
-                         const PendingTask::TimeDelta& delay);
+    void PostDelayedTask(PendingTask::Callback callback, const PendingTask::TimeDelta& delay);
 
     PendingTask::Callback QuitClosure();
 
@@ -61,7 +59,7 @@ protected:
     // reset the value of pending_task->task.  This is needed to ensure
     // that the posting call stack does not retain pending_task->task
     // beyond this function call.
-    void AddToIncomingQueue(PendingTask* pending_task);
+    void AddToIncomingQueue(PendingTask& pending_task);
 
     // Load tasks from the incoming_queue_ into work_queue_ if the latter is
     // empty.  The former requires a lock to access, while the latter is
@@ -71,8 +69,7 @@ protected:
     void DeletePendingTasks();
 
     // Calculates the time at which a PendingTask should run.
-    static PendingTask::TimePoint CalculateDelayedRuntime(
-        const PendingTask::TimeDelta& delay);
+    static PendingTask::TimePoint CalculateDelayedRuntime(const PendingTask::TimeDelta& delay);
 
     // MessagePump::Delegate methods:
     bool DoWork() override;
