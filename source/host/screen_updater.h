@@ -32,8 +32,8 @@ public:
 
 private:
     // MessageLoopThread::Delegate implementation.
-    void OnBeforeThreadRunning();
-    void OnAfterThreadRunning();
+    void OnBeforeThreadRunning() final;
+    void OnAfterThreadRunning() final;
 
     void UpdateScreen();
 
