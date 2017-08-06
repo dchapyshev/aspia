@@ -32,7 +32,7 @@ uint64_t FileTransferUploader::BuildTaskListForDirectoryContent(const FilePath& 
 
         if (std::experimental::filesystem::is_directory(entry.status()))
         {
-            task_queue_.push(Task(entry.path(), target_object_path, 0, true));
+            task_queue_.emplace(entry.path(), target_object_path, 0, true);
             size += BuildTaskListForDirectoryContent(entry.path(), target_object_path);
         }
         else
@@ -42,7 +42,7 @@ uint64_t FileTransferUploader::BuildTaskListForDirectoryContent(const FilePath& 
             if (file_size == static_cast<uintmax_t>(-1))
                 file_size = 0;
 
-            task_queue_.push(Task(entry.path(), target_object_path, file_size, false));
+            task_queue_.emplace(entry.path(), target_object_path, file_size, false);
 
             size += file_size;
         }
@@ -72,7 +72,7 @@ void FileTransferUploader::Start(const FilePath& source_path,
 
         if (file.is_directory())
         {
-            task_queue_.push(Task(source_object_path, target_object_path, 0, true));
+            task_queue_.emplace(source_object_path, target_object_path, 0, true);
 
             total_size += BuildTaskListForDirectoryContent(source_object_path,
                                                            target_object_path);
@@ -85,7 +85,7 @@ void FileTransferUploader::Start(const FilePath& source_path,
             if (file_size == static_cast<uintmax_t>(-1))
                 file_size = 0;
 
-            task_queue_.push(Task(source_object_path, target_object_path, file_size, false));
+            task_queue_.emplace(source_object_path, target_object_path, file_size, false);
 
             total_size += file_size;
         }

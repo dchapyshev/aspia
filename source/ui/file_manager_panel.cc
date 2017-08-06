@@ -371,7 +371,7 @@ LRESULT UiFileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& han
          !iter.IsAtEnd();
          iter.Advance())
     {
-        file_list.push_back(iter.Object());
+        file_list.emplace_back(iter.Object());
     }
 
     // If the list is empty (there are no selected items).
