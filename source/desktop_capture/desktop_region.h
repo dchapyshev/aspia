@@ -69,7 +69,7 @@ public:
     {
     public:
         explicit Iterator(const DesktopRegion& target);
-        ~Iterator();
+        ~Iterator() = default;
 
         bool IsAtEnd() const;
         void Advance();
@@ -146,13 +146,9 @@ private:
     static bool IsSpanInRow(const Row& row, const RowSpan& rect);
 
     // Calculates the intersection of two sets of spans.
-    static void IntersectRows(const RowSpanSet& set1,
-                              const RowSpanSet& set2,
-                              RowSpanSet* output);
+    static void IntersectRows(const RowSpanSet& set1, const RowSpanSet& set2, RowSpanSet& output);
 
-    static void SubtractRows(const RowSpanSet& set_a,
-                             const RowSpanSet& set_b,
-                             RowSpanSet* output);
+    static void SubtractRows(const RowSpanSet& set_a, const RowSpanSet& set_b, RowSpanSet& output);
 
     // Merges |row| with the row above it if they contain the same spans. Doesn't
     // do anything if called with |row| set to rows_.begin() (i.e. first row of

@@ -245,8 +245,7 @@ void DesktopRegion::Intersect(const DesktopRegion& region1,
         Rows::iterator new_row =
             rows_.insert(rows_.end(), Rows::value_type(bottom, new Row(top, bottom)));
 
-        IntersectRows(it1->second->spans, it2->second->spans,
-                      &new_row->second->spans);
+        IntersectRows(it1->second->spans, it2->second->spans, new_row->second->spans);
         if (new_row->second->spans.empty())
         {
             delete new_row->second;
@@ -269,7 +268,7 @@ void DesktopRegion::Intersect(const DesktopRegion& region1,
 // static
 void DesktopRegion::IntersectRows(const RowSpanSet& set1,
                                   const RowSpanSet& set2,
-                                  RowSpanSet* output)
+                                  RowSpanSet& output)
 {
     RowSpanSet::const_iterator it1 = set1.begin();
     RowSpanSet::const_iterator end1 = set1.end();
@@ -297,7 +296,7 @@ void DesktopRegion::IntersectRows(const RowSpanSet& set1,
         int32_t right = std::min(it1->right, it2->right);
         assert(left < right);
 
-        output->push_back(RowSpan(left, right));
+        output.emplace_back(left, right);
 
         // If |it1| was completely consumed, move to the next one.
         if (it1->right == right)
@@ -394,7 +393,7 @@ void DesktopRegion::Subtract(const DesktopRegion& region)
         // At this point the vertical range covered by |row_a| lays within the
         // range covered by |row_b|. Subtract |row_b| spans from |row_a|.
         RowSpanSet new_spans;
-        SubtractRows(row_a->second->spans, row_b->second->spans, &new_spans);
+        SubtractRows(row_a->second->spans, row_b->second->spans, new_spans);
         new_spans.swap(row_a->second->spans);
         top = row_a->second->bottom;
 
@@ -487,7 +486,7 @@ void DesktopRegion::AddSpanToRow(Row* row, int32_t left, int32_t right)
     // are inserted sequentially from left to right.
     if (row->spans.empty() || left > row->spans.back().right)
     {
-        row->spans.push_back(RowSpan(left, right));
+        row->spans.emplace_back(left, right);
         return;
     }
 
@@ -544,7 +543,7 @@ bool DesktopRegion::IsSpanInRow(const Row& row, const RowSpan& span)
 // static
 void DesktopRegion::SubtractRows(const RowSpanSet& set_a,
                                  const RowSpanSet& set_b,
-                                 RowSpanSet* output)
+                                 RowSpanSet& output)
 {
     assert(!set_a.empty() && !set_b.empty());
 
@@ -557,7 +556,7 @@ void DesktopRegion::SubtractRows(const RowSpanSet& set_a,
         // If there is no intersection then append the current span and continue.
         if (it_b == set_b.end() || it_a->right < it_b->left)
         {
-            output->push_back(*it_a);
+            output.emplace_back(*it_a);
             continue;
         }
 
@@ -567,7 +566,7 @@ void DesktopRegion::SubtractRows(const RowSpanSet& set_a,
         while (it_b != set_b.end() && it_b->left < it_a->right)
         {
             if (it_b->left > pos)
-                output->push_back(RowSpan(pos, it_b->left));
+                output.emplace_back(pos, it_b->left);
             if (it_b->right > pos)
             {
                 pos = it_b->right;
@@ -578,14 +577,14 @@ void DesktopRegion::SubtractRows(const RowSpanSet& set_a,
         }
 
         if (pos < it_a->right)
-            output->push_back(RowSpan(pos, it_a->right));
+            output.emplace_back(pos, it_a->right);
     }
 }
 
-DesktopRegion::Iterator::Iterator(const DesktopRegion& region) :
-    region_(region),
-    row_(region.rows_.begin()),
-    previous_row_(region.rows_.end())
+DesktopRegion::Iterator::Iterator(const DesktopRegion& region)
+    : region_(region),
+      row_(region.rows_.begin()),
+      previous_row_(region.rows_.end())
 {
     if (!IsAtEnd())
     {
@@ -594,8 +593,6 @@ DesktopRegion::Iterator::Iterator(const DesktopRegion& region) :
         UpdateCurrentRect();
     }
 }
-
-DesktopRegion::Iterator::~Iterator() {}
 
 bool DesktopRegion::Iterator::IsAtEnd() const
 {
