@@ -131,8 +131,7 @@ void NetworkChannelTcp::OnSendHelloSizeComplete(const std::error_code& code,
                                 std::placeholders::_2));
 }
 
-void NetworkChannelTcp::OnSendHelloComplete(const std::error_code& code,
-                                            size_t bytes_transferred)
+void NetworkChannelTcp::OnSendHelloComplete(const std::error_code& code, size_t bytes_transferred)
 {
     if (IsFailureCode(code) || bytes_transferred != write_buffer_->size())
     {
@@ -279,12 +278,41 @@ void NetworkChannelTcp::Receive(ReceiveCompleteHandler handler)
     io_service_.post(std::bind(&NetworkChannelTcp::DoReadMessage, this));
 }
 
+bool NetworkChannelTcp::ReloadWriteQueue()
+{
+    if (!work_write_queue_.empty())
+        return false;
+
+    {
+        std::lock_guard<std::mutex> lock(incoming_write_queue_lock_);
+
+        if (incoming_write_queue_.empty())
+            return false;
+
+        incoming_write_queue_.Swap(work_write_queue_);
+        DCHECK(incoming_write_queue_.empty());
+    }
+
+    return true;
+}
+
 void NetworkChannelTcp::ScheduleWrite()
 {
-    DCHECK(!write_queue_.empty());
+    if (!work_write_queue_.empty())
+        return;
 
-    std::unique_ptr<IOBuffer> source_buffer =
-        std::move(write_queue_.front().first);
+    if (!ReloadWriteQueue())
+        return;
+
+    DoNextWriteTask();
+}
+
+void NetworkChannelTcp::DoNextWriteTask()
+{
+    if (work_write_queue_.empty())
+        return;
+
+    const std::unique_ptr<IOBuffer>& source_buffer = work_write_queue_.front().first;
 
     if (!source_buffer)
     {
@@ -317,8 +345,7 @@ void NetworkChannelTcp::ScheduleWrite()
                                 std::placeholders::_2));
 }
 
-void NetworkChannelTcp::OnWriteSizeComplete(const std::error_code& code,
-                                            size_t bytes_transferred)
+void NetworkChannelTcp::OnWriteSizeComplete(const std::error_code& code, size_t bytes_transferred)
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
@@ -334,8 +361,7 @@ void NetworkChannelTcp::OnWriteSizeComplete(const std::error_code& code,
                                 std::placeholders::_2));
 }
 
-void NetworkChannelTcp::OnWriteComplete(const std::error_code& code,
-                                        size_t bytes_transferred)
+void NetworkChannelTcp::OnWriteComplete(const std::error_code& code, size_t bytes_transferred)
 {
     if (IsFailureCode(code) || bytes_transferred != write_buffer_->size())
     {
@@ -343,37 +369,38 @@ void NetworkChannelTcp::OnWriteComplete(const std::error_code& code,
         return;
     }
 
-    SendCompleteHandler complete_handler;
+    // The queue must contain the current write task.
+    DCHECK(!work_write_queue_.empty());
 
-    {
-        std::lock_guard<std::mutex> lock(write_queue_lock_);
-
-        // The queue must contain the current write task.
-        DCHECK(!write_queue_.empty());
-
-        complete_handler = std::move(write_queue_.front().second);
-        write_queue_.pop();
-
-        if (!write_queue_.empty())
-            ScheduleWrite();
-    }
+    const SendCompleteHandler& complete_handler = work_write_queue_.front().second;
 
     if (complete_handler != nullptr)
         complete_handler();
+
+    work_write_queue_.pop();
+
+    if (work_write_queue_.empty() && !ReloadWriteQueue())
+        return;
+
+    DoNextWriteTask();
 }
 
-void NetworkChannelTcp::Send(std::unique_ptr<IOBuffer> buffer,
-                             SendCompleteHandler handler)
+void NetworkChannelTcp::Send(std::unique_ptr<IOBuffer> buffer, SendCompleteHandler handler)
 {
-    std::lock_guard<std::mutex> lock(write_queue_lock_);
+    {
+        std::lock_guard<std::mutex> lock(incoming_write_queue_lock_);
 
-    bool schedule_write = write_queue_.empty();
+        bool schedule_write = incoming_write_queue_.empty();
 
-    write_queue_.push(std::make_pair<std::unique_ptr<IOBuffer>, SendCompleteHandler>(
-        std::move(buffer), std::move(handler)));
+        incoming_write_queue_.push(
+            std::make_pair<std::unique_ptr<IOBuffer>, SendCompleteHandler>(
+                std::move(buffer), std::move(handler)));
 
-    if (schedule_write)
-        ScheduleWrite();
+        if (!schedule_write)
+            return;
+    }
+
+    io_service_.post(std::bind(&NetworkChannelTcp::ScheduleWrite, this));
 }
 
 void NetworkChannelTcp::Send(std::unique_ptr<IOBuffer> buffer)

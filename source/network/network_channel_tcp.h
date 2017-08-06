@@ -92,7 +92,9 @@ private:
     void OnReadMessageComplete(const std::error_code& code,
                                size_t bytes_transferred);
 
+    bool ReloadWriteQueue();
     void ScheduleWrite();
+    void DoNextWriteTask();
     void OnWriteSizeComplete(const std::error_code& code,
                              size_t bytes_transferred);
     void OnWriteComplete(const std::error_code& code,
@@ -101,6 +103,16 @@ private:
     // Thread implementation.
     void Run() override;
 
+    class WriteTaskQueue
+        : public std::queue<std::pair<std::unique_ptr<IOBuffer>, SendCompleteHandler>>
+    {
+    public:
+        void Swap(WriteTaskQueue& queue)
+        {
+            c.swap(queue.c); // Calls std::deque::swap.
+        }
+    };
+
     const Mode mode_;
     asio::io_service io_service_;
     std::unique_ptr<asio::io_service::work> work_;
@@ -108,8 +120,9 @@ private:
 
     StatusChangeHandler status_change_handler_;
 
-    std::queue<std::pair<std::unique_ptr<IOBuffer>, SendCompleteHandler>> write_queue_;
-    std::mutex write_queue_lock_;
+    WriteTaskQueue work_write_queue_;
+    WriteTaskQueue incoming_write_queue_;
+    std::mutex incoming_write_queue_lock_;
 
     std::unique_ptr<IOBuffer> write_buffer_;
     MessageSizeType write_size_ = 0;
