@@ -100,7 +100,7 @@ std::unique_ptr<proto::CursorShape> CursorEncoder::Encode(
         return nullptr;
 
     const DesktopSize& size = mouse_cursor->Size();
-    const int16_t kMaxSize = std::numeric_limits<int16_t>::max() / 2;
+    const int32_t kMaxSize = std::numeric_limits<int16_t>::max() / 2;
 
     if (size.Width() <= 0 || size.Width() > kMaxSize ||
         size.Height() <= 0 || size.Height() > kMaxSize)
