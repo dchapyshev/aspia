@@ -52,8 +52,8 @@ protected:
                                        const FilePath& file_path,
                                        Overwrite overwrite) = 0;
 
-    virtual void SendFileUploadDataRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                           std::unique_ptr<proto::FilePacket> file_packet) = 0;
+    virtual void SendFilePacket(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                std::unique_ptr<proto::FilePacket> file_packet) = 0;
 
 private:
     friend class FileRequestSenderProxy;

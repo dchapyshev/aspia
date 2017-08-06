@@ -41,8 +41,8 @@ public:
                                const FilePath& file_path,
                                FileRequestSender::Overwrite overwrite);
 
-    bool SendFileUploadDataRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                   std::unique_ptr<proto::FilePacket> file_packet);
+    bool SendFilePacket(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                        std::unique_ptr<proto::FilePacket> file_packet);
 
 private:
     friend class FileRequestSender;

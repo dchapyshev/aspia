@@ -65,9 +65,8 @@ void FileRequestSenderRemote::SendDirectorySizeRequest(
     SendRequest(receiver, std::move(request));
 }
 
-void FileRequestSenderRemote::SendRemoveRequest(
-    std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& path)
+void FileRequestSenderRemote::SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                                const FilePath& path)
 {
     std::unique_ptr<proto::file_transfer::ClientToHost> request =
         std::make_unique<proto::file_transfer::ClientToHost>();
@@ -77,10 +76,9 @@ void FileRequestSenderRemote::SendRemoveRequest(
     SendRequest(receiver, std::move(request));
 }
 
-void FileRequestSenderRemote::SendRenameRequest(
-    std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& old_name,
-    const FilePath& new_name)
+void FileRequestSenderRemote::SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                                const FilePath& old_name,
+                                                const FilePath& new_name)
 {
     std::unique_ptr<proto::file_transfer::ClientToHost> request =
         std::make_unique<proto::file_transfer::ClientToHost>();
@@ -106,9 +104,8 @@ void FileRequestSenderRemote::SendFileUploadRequest(
     SendRequest(receiver, std::move(request));
 }
 
-void FileRequestSenderRemote::SendFileUploadDataRequest(
-    std::shared_ptr<FileReplyReceiverProxy> receiver,
-    std::unique_ptr<proto::FilePacket> file_packet)
+void FileRequestSenderRemote::SendFilePacket(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                             std::unique_ptr<proto::FilePacket> file_packet)
 {
     std::unique_ptr<proto::file_transfer::ClientToHost> request =
         std::make_unique<proto::file_transfer::ClientToHost>();

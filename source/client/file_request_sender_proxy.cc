@@ -113,7 +113,7 @@ bool FileRequestSenderProxy::SendFileUploadRequest(
     return true;
 }
 
-bool FileRequestSenderProxy::SendFileUploadDataRequest(
+bool FileRequestSenderProxy::SendFilePacket(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
     std::unique_ptr<proto::FilePacket> file_packet)
 {
@@ -122,7 +122,7 @@ bool FileRequestSenderProxy::SendFileUploadDataRequest(
     if (!sender_)
         return false;
 
-    sender_->SendFileUploadDataRequest(receiver, std::move(file_packet));
+    sender_->SendFilePacket(receiver, std::move(file_packet));
     return true;
 }
 

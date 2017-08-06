@@ -347,7 +347,7 @@ void FileTransferUploader::OnFileUploadRequestReply(const FilePath& file_path,
         return;
     }
 
-    sender_->SendFileUploadDataRequest(This(), std::move(file_packet));
+    sender_->SendFilePacket(This(), std::move(file_packet));
 }
 
 void FileTransferUploader::OnUnableToWriteFileAction(Action action)
@@ -429,7 +429,7 @@ void FileTransferUploader::OnFileUploadDataRequestReply(
         return;
     }
 
-    sender_->SendFileUploadDataRequest(This(), std::move(new_file_packet));
+    sender_->SendFilePacket(This(), std::move(new_file_packet));
 }
 
 } // namespace aspia
