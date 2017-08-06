@@ -66,8 +66,7 @@ void ClientPool::OnConnect(std::shared_ptr<NetworkChannel> channel)
         return;
     }
 
-    std::unique_ptr<Client> client(new Client(channel, config_, this));
-    session_list_.push_back(std::move(client));
+    session_list_.emplace_back(new Client(channel, config_, this));
 
     status_dialog_.EndDialog(0);
 }

@@ -37,8 +37,7 @@ void HostPool::OnChannelConnected(std::shared_ptr<NetworkChannel> channel)
         return;
     }
 
-    std::unique_ptr<Host> host(new Host(channel, this));
-    session_list_.push_back(std::move(host));
+    session_list_.emplace_back(new Host(channel, this));
 }
 
 void HostPool::OnSessionTerminate()
