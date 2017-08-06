@@ -43,7 +43,7 @@ size_t MouseCursorCache::Add(std::unique_ptr<MouseCursor> mouse_cursor)
     DCHECK(mouse_cursor);
 
     // Add the cursor to the end of the list.
-    cache_.push_back(std::move(mouse_cursor));
+    cache_.emplace_back(std::move(mouse_cursor));
 
     // If the current cache size exceeds the maximum cache size.
     if (cache_.size() > cache_size_)

@@ -41,8 +41,7 @@ bool FileReplyReceiverQueue::ProcessNextReply(
             if (!reply.has_drive_list())
                 return false;
 
-            std::unique_ptr<proto::DriveList> drive_list(
-                reply.release_drive_list());
+            std::unique_ptr<proto::DriveList> drive_list(reply.release_drive_list());
 
             receiver->OnDriveListRequestReply(std::move(drive_list));
         }
@@ -58,12 +57,10 @@ bool FileReplyReceiverQueue::ProcessNextReply(
             if (!reply.has_file_list())
                 return false;
 
-            std::unique_ptr<proto::FileList> file_list(
-                reply.release_file_list());
+            std::unique_ptr<proto::FileList> file_list(reply.release_file_list());
 
             receiver->OnFileListRequestReply(
-                std::experimental::filesystem::u8path(
-                    request->file_list_request().path()),
+                std::experimental::filesystem::u8path(request->file_list_request().path()),
                 std::move(file_list));
         }
         else
@@ -126,11 +123,9 @@ bool FileReplyReceiverQueue::ProcessNextReply(
     }
     else if (request->has_file_packet())
     {
-        std::unique_ptr<proto::FilePacket> file_packet(
-            request->release_file_packet());
+        std::unique_ptr<proto::FilePacket> file_packet(request->release_file_packet());
 
-        receiver->OnFileUploadDataRequestReply(
-            std::move(file_packet), reply.status());
+        receiver->OnFileUploadDataRequestReply(std::move(file_packet), reply.status());
     }
     else
     {
@@ -144,9 +139,7 @@ bool FileReplyReceiverQueue::ProcessNextReply(
 void FileReplyReceiverQueue::Add(Request request, Receiver receiver)
 {
     std::lock_guard<std::mutex> lock(queue_lock_);
-
-    queue_.push(std::make_pair<Request, Receiver>(std::move(request),
-                                                  std::move(receiver)));
+    queue_.emplace(std::move(request), std::move(receiver));
 }
 
 } // namespace aspia

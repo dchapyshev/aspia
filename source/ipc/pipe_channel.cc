@@ -244,9 +244,7 @@ void PipeChannel::Send(std::unique_ptr<IOBuffer> buffer, SendCompleteHandler han
 
         bool schedule_write = incoming_write_queue_.empty();
 
-        incoming_write_queue_.push(
-            std::make_pair<std::unique_ptr<IOBuffer>, SendCompleteHandler>(
-                std::move(buffer), std::move(handler)));
+        incoming_write_queue_.emplace(std::move(buffer), std::move(handler));
 
         if (!schedule_write)
             return;

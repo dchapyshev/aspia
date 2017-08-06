@@ -122,7 +122,7 @@ void MessageLoop::AddToDelayedWorkQueue(const PendingTask& pending_task)
     // have the same delayed_run_time value.
     PendingTask new_pending_task(pending_task);
     new_pending_task.sequence_num = next_sequence_num_++;
-    delayed_work_queue_.push(new_pending_task);
+    delayed_work_queue_.emplace(new_pending_task);
 }
 
 void MessageLoop::AddToIncomingQueue(PendingTask& pending_task)
@@ -134,7 +134,7 @@ void MessageLoop::AddToIncomingQueue(PendingTask& pending_task)
 
         bool empty = incoming_queue_.empty();
 
-        incoming_queue_.push(pending_task);
+        incoming_queue_.emplace(pending_task);
 
         pending_task.callback = nullptr;
 
