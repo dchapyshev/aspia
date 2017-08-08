@@ -55,8 +55,7 @@ void HostSessionFileTransfer::OnIpcChannelConnect(uint32_t user_data)
     status_dialog_->SetSessionStartedStatus();
 
     ipc_channel_proxy_->Receive(std::bind(
-        &HostSessionFileTransfer::OnIpcChannelMessage, this,
-        std::placeholders::_1));
+        &HostSessionFileTransfer::OnIpcChannelMessage, this, std::placeholders::_1));
 }
 
 void HostSessionFileTransfer::OnIpcChannelDisconnect()
@@ -189,10 +188,8 @@ void HostSessionFileTransfer::ReadRenameRequest(const proto::RenameRequest& requ
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath old_name =
-        std::experimental::filesystem::u8path(request.old_name());
-    FilePath new_name =
-        std::experimental::filesystem::u8path(request.new_name());
+    FilePath old_name = std::experimental::filesystem::u8path(request.old_name());
+    FilePath new_name = std::experimental::filesystem::u8path(request.new_name());
 
     reply.set_status(ExecuteRenameRequest(old_name, new_name));
 
