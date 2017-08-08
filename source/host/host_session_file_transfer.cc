@@ -314,9 +314,7 @@ bool HostSessionFileTransfer::ReadFilePacketRequest()
 
     proto::file_transfer::HostToClient reply;
 
-    std::unique_ptr<proto::FilePacket> packet =
-        file_packetizer_->CreateNextPacket();
-
+    std::unique_ptr<proto::FilePacket> packet = file_packetizer_->CreateNextPacket();
     if (!packet)
     {
         reply.set_status(proto::REQUEST_STATUS_FILE_READ_ERROR);

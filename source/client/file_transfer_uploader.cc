@@ -287,7 +287,7 @@ void FileTransferUploader::OnUnableToReadFileAction(Action action)
         case Action::SKIP_ALL:
         {
             if (action == Action::SKIP_ALL)
-                file_open_failure_action_ = action;
+                file_read_failure_action_ = action;
 
             RunNextTask();
         }
