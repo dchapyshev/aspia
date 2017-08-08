@@ -9,9 +9,8 @@
 
 namespace aspia {
 
-FileTransferDownloader::FileTransferDownloader(
-    std::shared_ptr<FileRequestSenderProxy> sender,
-    Delegate* delegate)
+FileTransferDownloader::FileTransferDownloader(std::shared_ptr<FileRequestSenderProxy> sender,
+                                               Delegate* delegate)
     : FileTransfer(std::move(sender), delegate)
 {
     // Nothing
@@ -29,91 +28,60 @@ void FileTransferDownloader::OnUnableToCreateDirectoryAction(Action action)
     // TODO
 }
 
-void FileTransferDownloader::OnUnableToCreateFileAction(Action action)
+void FileTransferDownloader::OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list)
 {
     // TODO
 }
 
-void FileTransferDownloader::OnUnableToOpenFileAction(Action action)
+void FileTransferDownloader::OnDriveListRequestFailure(proto::RequestStatus status)
 {
     // TODO
 }
 
-void FileTransferDownloader::OnUnableToReadFileAction(Action action)
+void FileTransferDownloader::OnFileListRequestReply(const FilePath& path,
+                                                    std::unique_ptr<proto::FileList> file_list)
 {
     // TODO
 }
 
-void FileTransferDownloader::OnUnableToWriteFileAction(Action action)
+void FileTransferDownloader::OnFileListRequestFailure(const FilePath& path,
+                                                      proto::RequestStatus status)
 {
     // TODO
 }
 
-void FileTransferDownloader::OnDriveListRequestReply(
-    std::unique_ptr<proto::DriveList> drive_list)
+void FileTransferDownloader::OnDirectorySizeRequestReply(const FilePath& path, uint64_t size)
 {
     // TODO
 }
 
-void FileTransferDownloader::OnDriveListRequestFailure(
-    proto::RequestStatus status)
+void FileTransferDownloader::OnDirectorySizeRequestFailure(const FilePath& path,
+                                                           proto::RequestStatus status)
 {
     // TODO
 }
 
-void FileTransferDownloader::OnFileListRequestReply(
-    const FilePath& path,
-    std::unique_ptr<proto::FileList> file_list)
+void FileTransferDownloader::OnCreateDirectoryRequestReply(const FilePath& path,
+                                                           proto::RequestStatus status)
 {
     // TODO
 }
 
-void FileTransferDownloader::OnFileListRequestFailure(
-    const FilePath& path,
-    proto::RequestStatus status)
+void FileTransferDownloader::OnRemoveRequestReply(const FilePath& path,
+                                                  proto::RequestStatus status)
 {
     // TODO
 }
 
-void FileTransferDownloader::OnDirectorySizeRequestReply(
-    const FilePath& path,
-    uint64_t size)
+void FileTransferDownloader::OnRenameRequestReply(const FilePath& old_name,
+                                                  const FilePath& new_name,
+                                                  proto::RequestStatus status)
 {
     // TODO
 }
 
-void FileTransferDownloader::OnDirectorySizeRequestFailure(
-    const FilePath& path,
-    proto::RequestStatus status)
-{
-    // TODO
-}
-
-void FileTransferDownloader::OnCreateDirectoryRequestReply(
-    const FilePath& path,
-    proto::RequestStatus status)
-{
-    // TODO
-}
-
-void FileTransferDownloader::OnRemoveRequestReply(
-    const FilePath& path,
-    proto::RequestStatus status)
-{
-    // TODO
-}
-
-void FileTransferDownloader::OnRenameRequestReply(
-    const FilePath& old_name,
-    const FilePath& new_name,
-    proto::RequestStatus status)
-{
-    // TODO
-}
-
-void FileTransferDownloader::OnFileUploadRequestReply(
-    const FilePath& file_path,
-    proto::RequestStatus status)
+void FileTransferDownloader::OnFileUploadRequestReply(const FilePath& file_path,
+                                                      proto::RequestStatus status)
 {
     // TODO
 }

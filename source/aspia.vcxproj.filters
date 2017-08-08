@@ -361,9 +361,6 @@
     <ClCompile Include="ui\file_transfer_dialog.cc">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="ui\file_replace_dialog.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="ui\file_status_dialog.cc">
       <Filter>ui</Filter>
     </ClCompile>
@@ -501,6 +498,9 @@
     </ClCompile>
     <ClCompile Include="host\host_session_launcher_service.cc">
       <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\file_action_dialog.cc">
+      <Filter>ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -896,9 +896,6 @@
     <ClInclude Include="ui\file_transfer_dialog.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="ui\file_replace_dialog.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="ui\file_status_dialog.h">
       <Filter>ui</Filter>
     </ClInclude>
@@ -1054,6 +1051,9 @@
     </ClInclude>
     <ClInclude Include="host\host_session_launcher_service.h">
       <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_action_dialog.h">
+      <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

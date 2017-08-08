@@ -55,22 +55,12 @@ private:
     void OnTransferStarted(const FilePath& source_path,
                            const FilePath& target_path,
                            uint64_t size) final;
+
     void OnTransferComplete() final;
 
-    void OnUnableToCreateDirectory(const FilePath& directory_path,
-                                   proto::RequestStatus status) final;
-
-    void OnUnableToCreateFile(const FilePath& file_path,
-                              proto::RequestStatus status) final;
-
-    void OnUnableToOpenFile(const FilePath& file_path,
-                            proto::RequestStatus status) final;
-
-    void OnUnableToWriteFile(const FilePath& file_path,
-                             proto::RequestStatus status) final;
-
-    void OnUnableToReadFile(const FilePath& file_path,
-                            proto::RequestStatus status) final;
+    void OnFileOperationFailure(const FilePath& file_path,
+                                proto::RequestStatus status,
+                                FileTransfer::ActionCallback callback) final;
 
     void OnObjectTransfer(const FilePath& object_name,
                           uint64_t total_object_size,

@@ -25,47 +25,34 @@ public:
                const FilePath& target_path,
                const FileList& file_list) final;
     void OnUnableToCreateDirectoryAction(Action action) final;
-    void OnUnableToCreateFileAction(Action action) final;
-    void OnUnableToOpenFileAction(Action action) final;
-    void OnUnableToReadFileAction(Action action) final;
-    void OnUnableToWriteFileAction(Action action) final;
 
 private:
     // FileReplyReceiver implementation.
-    void OnDriveListRequestReply(
-        std::unique_ptr<proto::DriveList> drive_list) final;
+    void OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list) final;
 
     void OnDriveListRequestFailure(proto::RequestStatus status) final;
 
-    void OnFileListRequestReply(
-        const FilePath& path,
-        std::unique_ptr<proto::FileList> file_list) final;
+    void OnFileListRequestReply(const FilePath& path,
+                                std::unique_ptr<proto::FileList> file_list) final;
 
-    void OnFileListRequestFailure(const FilePath& path,
-                                  proto::RequestStatus status) final;
+    void OnFileListRequestFailure(const FilePath& path, proto::RequestStatus status) final;
 
-    void OnDirectorySizeRequestReply(const FilePath& path,
-                                     uint64_t size) final;
+    void OnDirectorySizeRequestReply(const FilePath& path, uint64_t size) final;
 
-    void OnDirectorySizeRequestFailure(const FilePath& path,
-                                       proto::RequestStatus status) final;
+    void OnDirectorySizeRequestFailure(const FilePath& path, proto::RequestStatus status) final;
 
-    void OnCreateDirectoryRequestReply(const FilePath& path,
-                                       proto::RequestStatus status) final;
+    void OnCreateDirectoryRequestReply(const FilePath& path, proto::RequestStatus status) final;
 
-    void OnRemoveRequestReply(const FilePath& path,
-                              proto::RequestStatus status) final;
+    void OnRemoveRequestReply(const FilePath& path, proto::RequestStatus status) final;
 
     void OnRenameRequestReply(const FilePath& old_name,
                               const FilePath& new_name,
                               proto::RequestStatus status) final;
 
-    void OnFileUploadRequestReply(const FilePath& file_path,
-                                  proto::RequestStatus status) final;
+    void OnFileUploadRequestReply(const FilePath& file_path, proto::RequestStatus status) final;
 
-    void OnFileUploadDataRequestReply(
-        std::unique_ptr<proto::FilePacket> file_packet,
-        proto::RequestStatus status) final;
+    void OnFileUploadDataRequestReply(std::unique_ptr<proto::FilePacket> file_packet,
+                                      proto::RequestStatus status) final;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransferDownloader);
 };

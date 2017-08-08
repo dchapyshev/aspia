@@ -29,10 +29,6 @@ public:
                const FilePath& target_path,
                const FileList& file_list) final;
     void OnUnableToCreateDirectoryAction(Action action) final;
-    void OnUnableToCreateFileAction(Action action) final;
-    void OnUnableToOpenFileAction(Action action) final;
-    void OnUnableToReadFileAction(Action action) final;
-    void OnUnableToWriteFileAction(Action action) final;
 
 private:
     class Task
@@ -95,6 +91,11 @@ private:
 
     void OnFileUploadDataRequestReply(std::unique_ptr<proto::FilePacket> file_packet,
                                       proto::RequestStatus status) final;
+
+    void OnUnableToCreateFileAction(Action action);
+    void OnUnableToOpenFileAction(Action action);
+    void OnUnableToReadFileAction(Action action);
+    void OnUnableToWriteFileAction(Action action);
 
     std::queue<Task> task_queue_;
     std::unique_ptr<FilePacketizer> file_packetizer_;

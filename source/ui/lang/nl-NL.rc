@@ -197,20 +197,19 @@ BEGIN
     PUSHBUTTON "&Cancel", IDCANCEL, 332, 152, 60, 14
 END
 
-IDD_FILE_REPLACE DIALOGEX 100, 100, 309, 78
+IDD_FILE_ACTION DIALOGEX 100, 100, 309, 95
 STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
 CAPTION "File Transfer"
 FONT 8, "MS Shell Dlg"
 BEGIN
-    LTEXT "Item already exists:", -1, 7, 6, 200, 10
-    EDITTEXT IDC_CURRENT_ITEM_EDIT, 7, 17, 295, 14, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_READONLY
+    EDITTEXT IDC_CURRENT_ITEM_EDIT, 7, 7, 295, 42, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_READONLY | ES_MULTILINE
 
-    PUSHBUTTON "&Replace", IDC_REPLACE_BUTTON, 7, 37, 70, 14
-    PUSHBUTTON "R&eplace all", IDC_REPLACE_ALL_BUTTON, 82, 37, 70, 14
-    PUSHBUTTON "&Skip", IDC_SKIP_BUTTON, 157, 37, 70, 14
-    PUSHBUTTON "S&kip all", IDC_SKIP_ALL_BUTTON, 232, 37, 70, 14
+    PUSHBUTTON "&Replace", IDC_REPLACE_BUTTON, 7, 55, 70, 14
+    PUSHBUTTON "R&eplace all", IDC_REPLACE_ALL_BUTTON, 82, 55, 70, 14
+    PUSHBUTTON "&Skip", IDC_SKIP_BUTTON, 157, 55, 70, 14
+    PUSHBUTTON "S&kip all", IDC_SKIP_ALL_BUTTON, 232, 55, 70, 14
 
-    PUSHBUTTON "&Cancel", IDCANCEL, 232, 57, 70, 14
+    PUSHBUTTON "&Cancel", IDCANCEL, 232, 75, 70, 14
 END
 
 IDD_FILE_STATUS DIALOGEX 100, 100, 275, 175
@@ -409,10 +408,9 @@ BEGIN
     IDS_FT_OP_REMOVE_ERROR                "An error occurred while deleting object ""%s"": %s"
     IDS_FT_OP_CREATE_FOLDER_ERROR         "An error occurred while trying to create the folder ""%s"": %s"
     IDS_FT_OP_BROWSE_DRIVES_ERROR         "An error occurred while retrieving the drive list: %s"
-    IDS_FT_OP_SEND_DIRECTORY_ERROR        "An error occurred while copying the directory ""%s"": %s.\r\n\
-                                           Skip the directory"
     IDS_FT_FILE_FOLDER                    "File Folder"
     IDS_FT_CLOSE_WINDOW                   "Close window"
+    IDS_FT_OP_FAILURE                     "An error occurred during the operation with object ""%s"": %s."
 END
 
 // Power Manage

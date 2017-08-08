@@ -200,7 +200,10 @@ void FileTransferUploader::OnCreateDirectoryRequestReply(const FilePath& path,
         return;
     }
 
-    delegate_->OnUnableToCreateDirectory(path, status);
+    ActionCallback callback = std::bind(
+        &FileTransferUploader::OnUnableToCreateDirectoryAction, this, std::placeholders::_1);
+
+    delegate_->OnFileOperationFailure(path, status, std::move(callback));
 }
 
 void FileTransferUploader::OnRemoveRequestReply(const FilePath& path, proto::RequestStatus status)
@@ -303,7 +306,10 @@ void FileTransferUploader::OnFileUploadRequestReply(const FilePath& file_path,
     {
         if (file_create_failure_action_ == Action::ASK)
         {
-            delegate_->OnUnableToCreateFile(file_path, status);
+            ActionCallback callback = std::bind(
+                &FileTransferUploader::OnUnableToCreateFileAction, this, std::placeholders::_1);
+
+            delegate_->OnFileOperationFailure(file_path, status, std::move(callback));
         }
         else
         {
@@ -320,8 +326,12 @@ void FileTransferUploader::OnFileUploadRequestReply(const FilePath& file_path,
     {
         if (file_open_failure_action_ == Action::ASK)
         {
-            delegate_->OnUnableToOpenFile(current_task.SourcePath(),
-                                          proto::REQUEST_STATUS_ACCESS_DENIED);
+            ActionCallback callback = std::bind(
+                &FileTransferUploader::OnUnableToOpenFileAction, this, std::placeholders::_1);
+
+            delegate_->OnFileOperationFailure(current_task.SourcePath(),
+                                              proto::REQUEST_STATUS_ACCESS_DENIED,
+                                              std::move(callback));
         }
         else
         {
@@ -336,8 +346,12 @@ void FileTransferUploader::OnFileUploadRequestReply(const FilePath& file_path,
     {
         if (file_read_failure_action_ == Action::ASK)
         {
-            delegate_->OnUnableToReadFile(current_task.SourcePath(),
-                                          proto::REQUEST_STATUS_ACCESS_DENIED);
+            ActionCallback callback = std::bind(
+                &FileTransferUploader::OnUnableToReadFileAction, this, std::placeholders::_1);
+
+            delegate_->OnFileOperationFailure(current_task.SourcePath(),
+                                              proto::REQUEST_STATUS_ACCESS_DENIED,
+                                              std::move(callback));
         }
         else
         {
@@ -389,8 +403,14 @@ void FileTransferUploader::OnFileUploadDataRequestReply(
     {
         if (file_write_failure_action_ == Action::ASK)
         {
+            ActionCallback callback = std::bind(
+                &FileTransferUploader::OnUnableToWriteFileAction, this, std::placeholders::_1);
+
             const Task& current_task = task_queue_.front();
-            delegate_->OnUnableToWriteFile(current_task.TargetPath(), status);
+
+            delegate_->OnFileOperationFailure(current_task.TargetPath(),
+                                              status,
+                                              std::move(callback));
         }
         else
         {
@@ -418,8 +438,12 @@ void FileTransferUploader::OnFileUploadDataRequestReply(
     {
         if (file_read_failure_action_ == Action::ASK)
         {
-            delegate_->OnUnableToReadFile(current_task.SourcePath(),
-                                          proto::REQUEST_STATUS_ACCESS_DENIED);
+            ActionCallback callback = std::bind(
+                &FileTransferUploader::OnUnableToReadFileAction, this, std::placeholders::_1);
+
+            delegate_->OnFileOperationFailure(current_task.SourcePath(),
+                                              proto::REQUEST_STATUS_ACCESS_DENIED,
+                                              std::move(callback));
         }
         else
         {

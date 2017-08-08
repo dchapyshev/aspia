@@ -197,20 +197,19 @@ BEGIN
     PUSHBUTTON "&Отмена", IDCANCEL, 332, 152, 60, 14
 END
 
-IDD_FILE_REPLACE DIALOGEX 100, 100, 309, 78
+IDD_FILE_ACTION DIALOGEX 100, 100, 309, 95
 STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
 CAPTION "Передача файлов"
 FONT 8, "MS Shell Dlg"
 BEGIN
-    LTEXT "Элемент уже существует:", -1, 7, 6, 200, 10
-    EDITTEXT IDC_CURRENT_ITEM_EDIT, 7, 17, 295, 14, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_READONLY
+    EDITTEXT IDC_CURRENT_ITEM_EDIT, 7, 7, 295, 42, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_READONLY | ES_MULTILINE
 
-    PUSHBUTTON "&Заменить", IDC_REPLACE_BUTTON, 7, 37, 70, 14
-    PUSHBUTTON "З&аменить все", IDC_REPLACE_ALL_BUTTON, 82, 37, 70, 14
-    PUSHBUTTON "&Пропустить", IDC_SKIP_BUTTON, 157, 37, 70, 14
-    PUSHBUTTON "П&ропустить все", IDC_SKIP_ALL_BUTTON, 232, 37, 70, 14
+    PUSHBUTTON "&Заменить", IDC_REPLACE_BUTTON, 7, 55, 70, 14
+    PUSHBUTTON "З&аменить все", IDC_REPLACE_ALL_BUTTON, 82, 55, 70, 14
+    PUSHBUTTON "&Пропустить", IDC_SKIP_BUTTON, 157, 55, 70, 14
+    PUSHBUTTON "П&ропустить все", IDC_SKIP_ALL_BUTTON, 232, 55, 70, 14
 
-    PUSHBUTTON "&Отмена", IDCANCEL, 232, 57, 70, 14
+    PUSHBUTTON "&Отмена", IDCANCEL, 232, 75, 70, 14
 END
 
 IDD_FILE_STATUS DIALOGEX 100, 100, 275, 175
@@ -409,10 +408,9 @@ BEGIN
     IDS_FT_OP_REMOVE_ERROR                "Произошла ошибка при удалении объекта ""%s"": %s"
     IDS_FT_OP_CREATE_FOLDER_ERROR         "Произошла ошибка при попытке создания папки ""%s"": %s"
     IDS_FT_OP_BROWSE_DRIVES_ERROR         "Произошла ошибка при получении списка дисков: %s"
-    IDS_FT_OP_SEND_DIRECTORY_ERROR        "Произошла ошибка при копировании директории ""%s"": %s.\r\n\
-                                           Пропустить директорию?"
     IDS_FT_FILE_FOLDER                    "Папка с файлами"
     IDS_FT_CLOSE_WINDOW                   "Закрыть окно"
+    IDS_FT_OP_FAILURE                     "Произошла ошибка при операции с объектом ""%s"": %s."
 END
 
 // Power Manage

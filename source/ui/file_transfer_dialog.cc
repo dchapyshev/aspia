@@ -9,9 +9,8 @@
 #include "base/logging.h"
 #include "client/file_transfer_downloader.h"
 #include "client/file_transfer_uploader.h"
+#include "ui/file_action_dialog.h"
 #include "ui/status_code.h"
-
-#include <atlmisc.h>
 
 namespace aspia {
 
@@ -94,103 +93,33 @@ void UiFileTransferDialog::OnObjectTransfer(const FilePath& object_name,
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileTransferDialog::OnObjectTransfer,
-                                    this, object_name, total_object_size, left_object_size));
+        runner_->PostTask(std::bind(
+            &UiFileTransferDialog::OnObjectTransfer, this, object_name, total_object_size,
+            left_object_size));
         return;
     }
 
     GetDlgItem(IDC_CURRENT_ITEM_EDIT).SetWindowTextW(object_name.c_str());
 }
 
-void UiFileTransferDialog::OnUnableToCreateDirectory(const FilePath& directory_path,
-                                                     proto::RequestStatus status)
+void UiFileTransferDialog::OnFileOperationFailure(const FilePath& file_path,
+                                                  proto::RequestStatus status,
+                                                  FileTransfer::ActionCallback callback)
 {
     if (!runner_->BelongsToCurrentThread())
     {
         runner_->PostTask(std::bind(
-            &UiFileTransferDialog::OnUnableToCreateDirectory, this, directory_path, status));
+            &UiFileTransferDialog::OnFileOperationFailure, this, file_path, status, callback));
         return;
     }
 
     if (!file_transfer_)
         return;
 
-    CString message;
-    message.Format(IDS_FT_OP_SEND_DIRECTORY_ERROR,
-                   directory_path.c_str(),
-                   RequestStatusCodeToString(status).GetBuffer(0));
+    UiFileActionDialog dialog(file_path, status);
+    dialog.DoModal(*this);
 
-    if (MessageBoxW(message, nullptr, MB_ICONQUESTION | MB_YESNO) == IDYES)
-    {
-        file_transfer_->OnUnableToCreateDirectoryAction(FileTransfer::Action::SKIP);
-        return;
-    }
-
-    file_transfer_->OnUnableToCreateDirectoryAction(FileTransfer::Action::ABORT);
-}
-
-void UiFileTransferDialog::OnUnableToCreateFile(const FilePath& file_path,
-                                                proto::RequestStatus status)
-{
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(
-            &UiFileTransferDialog::OnUnableToCreateFile, this, file_path, status));
-        return;
-    }
-
-    if (!file_transfer_)
-        return;
-
-    file_transfer_->OnUnableToCreateFileAction(FileTransfer::Action::SKIP);
-}
-
-void UiFileTransferDialog::OnUnableToOpenFile(const FilePath& file_path,
-                                              proto::RequestStatus status)
-{
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(
-            &UiFileTransferDialog::OnUnableToOpenFile, this, file_path, status));
-        return;
-    }
-
-    if (!file_transfer_)
-        return;
-
-    file_transfer_->OnUnableToOpenFileAction(FileTransfer::Action::SKIP);
-}
-
-void UiFileTransferDialog::OnUnableToWriteFile(const FilePath& file_path,
-                                               proto::RequestStatus status)
-{
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(
-            &UiFileTransferDialog::OnUnableToWriteFile, this, file_path, status));
-        return;
-    }
-
-    if (!file_transfer_)
-        return;
-
-    file_transfer_->OnUnableToWriteFileAction(FileTransfer::Action::SKIP);
-}
-
-void UiFileTransferDialog::OnUnableToReadFile(const FilePath& file_path,
-                                              proto::RequestStatus status)
-{
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(
-            &UiFileTransferDialog::OnUnableToReadFile, this, file_path, status));
-        return;
-    }
-
-    if (!file_transfer_)
-        return;
-
-    file_transfer_->OnUnableToReadFileAction(FileTransfer::Action::SKIP);
+    callback(dialog.GetAction());
 }
 
 } // namespace aspia

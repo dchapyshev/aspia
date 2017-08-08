@@ -41,20 +41,9 @@ public:
 
         virtual void OnTransferComplete() = 0;
 
-        virtual void OnUnableToCreateDirectory(const FilePath& directory_path,
-                                               proto::RequestStatus status) = 0;
-
-        virtual void OnUnableToCreateFile(const FilePath& file_path,
-                                          proto::RequestStatus status) = 0;
-
-        virtual void OnUnableToOpenFile(const FilePath& file_path,
-                                        proto::RequestStatus status) = 0;
-
-        virtual void OnUnableToWriteFile(const FilePath& file_path,
-                                         proto::RequestStatus status) = 0;
-
-        virtual void OnUnableToReadFile(const FilePath& file_path,
-                                        proto::RequestStatus status) = 0;
+        virtual void OnFileOperationFailure(const FilePath& file_path,
+                                            proto::RequestStatus status,
+                                            ActionCallback callback) = 0;
 
         virtual void OnObjectTransfer(const FilePath& object_name,
                                       uint64_t total_object_size,
@@ -77,10 +66,6 @@ public:
                        const FileList& file_list) = 0;
 
     virtual void OnUnableToCreateDirectoryAction(Action action) = 0;
-    virtual void OnUnableToCreateFileAction(Action action) = 0;
-    virtual void OnUnableToOpenFileAction(Action action) = 0;
-    virtual void OnUnableToReadFileAction(Action action) = 0;
-    virtual void OnUnableToWriteFileAction(Action action) = 0;
 
 protected:
     std::shared_ptr<FileRequestSenderProxy> sender_;
