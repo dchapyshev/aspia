@@ -64,8 +64,7 @@ void HostSessionFileTransfer::OnIpcChannelDisconnect()
     status_dialog_->SetSessionTerminatedStatus();
 }
 
-void HostSessionFileTransfer::OnIpcChannelMessage(
-    std::unique_ptr<IOBuffer> buffer)
+void HostSessionFileTransfer::OnIpcChannelMessage(std::unique_ptr<IOBuffer> buffer)
 {
     proto::file_transfer::ClientToHost message;
 
@@ -124,8 +123,7 @@ void HostSessionFileTransfer::OnIpcChannelMessage(
     }
 }
 
-void HostSessionFileTransfer::SendReply(
-    const proto::file_transfer::HostToClient& reply)
+void HostSessionFileTransfer::SendReply(const proto::file_transfer::HostToClient& reply)
 {
     ipc_channel_proxy_->Send(
         SerializeMessage<IOBuffer>(reply),
@@ -136,8 +134,7 @@ void HostSessionFileTransfer::OnReplySended()
 {
     // Receive next request.
     ipc_channel_proxy_->Receive(std::bind(
-        &HostSessionFileTransfer::OnIpcChannelMessage, this,
-        std::placeholders::_1));
+        &HostSessionFileTransfer::OnIpcChannelMessage, this, std::placeholders::_1));
 }
 
 void HostSessionFileTransfer::ReadDriveListRequest()
@@ -149,8 +146,7 @@ void HostSessionFileTransfer::ReadDriveListRequest()
     SendReply(reply);
 }
 
-void HostSessionFileTransfer::ReadFileListRequest(
-    const proto::FileListRequest& request)
+void HostSessionFileTransfer::ReadFileListRequest(const proto::FileListRequest& request)
 {
     proto::file_transfer::HostToClient reply;
 
@@ -175,8 +171,7 @@ void HostSessionFileTransfer::ReadCreateDirectoryRequest(
     SendReply(reply);
 }
 
-void HostSessionFileTransfer::ReadDirectorySizeRequest(
-    const proto::DirectorySizeRequest& request)
+void HostSessionFileTransfer::ReadDirectorySizeRequest(const proto::DirectorySizeRequest& request)
 {
     proto::file_transfer::HostToClient reply;
 
@@ -190,8 +185,7 @@ void HostSessionFileTransfer::ReadDirectorySizeRequest(
     SendReply(reply);
 }
 
-void HostSessionFileTransfer::ReadRenameRequest(
-    const proto::RenameRequest& request)
+void HostSessionFileTransfer::ReadRenameRequest(const proto::RenameRequest& request)
 {
     proto::file_transfer::HostToClient reply;
 
@@ -206,8 +200,7 @@ void HostSessionFileTransfer::ReadRenameRequest(
     SendReply(reply);
 }
 
-void HostSessionFileTransfer::ReadRemoveRequest(
-    const proto::RemoveRequest& request)
+void HostSessionFileTransfer::ReadRemoveRequest(const proto::RemoveRequest& request)
 {
     proto::file_transfer::HostToClient reply;
 
@@ -219,46 +212,48 @@ void HostSessionFileTransfer::ReadRemoveRequest(
     SendReply(reply);
 }
 
-void HostSessionFileTransfer::ReadFileUploadRequest(
-    const proto::FileUploadRequest& request)
+void HostSessionFileTransfer::ReadFileUploadRequest(const proto::FileUploadRequest& request)
 {
     proto::file_transfer::HostToClient reply;
 
     FilePath file_path = std::experimental::filesystem::u8path(request.file_path());
 
-    if (!IsValidPathName(file_path))
+    do
     {
-        reply.set_status(proto::REQUEST_STATUS_INVALID_PATH_NAME);
-    }
-    else
-    {
-        std::error_code code;
+        if (!IsValidPathName(file_path))
+        {
+            reply.set_status(proto::REQUEST_STATUS_INVALID_PATH_NAME);
+            break;
+        }
 
-        if (std::experimental::filesystem::exists(file_path, code))
+        if (!request.overwrite())
         {
-            reply.set_status(proto::REQUEST_STATUS_PATH_ALREADY_EXISTS);
-        }
-        else
-        {
-            file_depacketizer_ = FileDepacketizer::Create(file_path, request.overwrite());
-            if (!file_depacketizer_)
+            std::error_code code;
+
+            if (std::experimental::filesystem::exists(file_path, code))
             {
-                reply.set_status(proto::REQUEST_STATUS_FILE_CREATE_ERROR);
-            }
-            else
-            {
-                reply.set_status(proto::REQUEST_STATUS_SUCCESS);
+                reply.set_status(proto::REQUEST_STATUS_PATH_ALREADY_EXISTS);
+                break;
             }
         }
+
+        file_depacketizer_ = FileDepacketizer::Create(file_path, request.overwrite());
+        if (!file_depacketizer_)
+        {
+            reply.set_status(proto::REQUEST_STATUS_FILE_CREATE_ERROR);
+            break;
+        }
+
+        reply.set_status(proto::REQUEST_STATUS_SUCCESS);
     }
+    while (false);
 
     status_dialog_->SetFileUploadRequestStatus(file_path, reply.status());
 
     SendReply(reply);
 }
 
-bool HostSessionFileTransfer::ReadFilePacket(
-    const proto::FilePacket& file_packet)
+bool HostSessionFileTransfer::ReadFilePacket(const proto::FilePacket& file_packet)
 {
     if (!file_depacketizer_)
     {
@@ -286,13 +281,11 @@ bool HostSessionFileTransfer::ReadFilePacket(
     return true;
 }
 
-void HostSessionFileTransfer::ReadFileDownloadRequest(
-    const proto::FileDownloadRequest& request)
+void HostSessionFileTransfer::ReadFileDownloadRequest(const proto::FileDownloadRequest& request)
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath file_path =
-        std::experimental::filesystem::u8path(request.file_path());
+    FilePath file_path = std::experimental::filesystem::u8path(request.file_path());
 
     if (!IsValidPathName(file_path))
     {
