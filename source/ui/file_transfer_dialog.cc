@@ -12,6 +12,8 @@
 #include "ui/file_action_dialog.h"
 #include "ui/status_code.h"
 
+#include <atlctrls.h>
+
 namespace aspia {
 
 UiFileTransferDialog::UiFileTransferDialog(Mode mode,
@@ -33,6 +35,14 @@ UiFileTransferDialog::UiFileTransferDialog(Mode mode,
 LRESULT UiFileTransferDialog::OnInitDialog(UINT message, WPARAM wparam,
                                            LPARAM lparam, BOOL& handled)
 {
+    CProgressBarCtrl total_progress(GetDlgItem(IDC_TOTAL_PROGRESS));
+    total_progress.SetRange(0, 100);
+    total_progress.SetPos(0);
+
+    CProgressBarCtrl current_progress(GetDlgItem(IDC_CURRENT_PROGRESS));
+    current_progress.SetRange(0, 100);
+    current_progress.SetPos(0);
+
     if (mode_ == Mode::UPLOAD)
     {
         file_transfer_.reset(new FileTransferUploader(sender_, this));
@@ -57,7 +67,7 @@ LRESULT UiFileTransferDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam
 
 LRESULT UiFileTransferDialog::OnCancelButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
-    EndDialog(0);
+    PostMessageW(WM_CLOSE);
     return 0;
 }
 
@@ -71,6 +81,11 @@ void UiFileTransferDialog::OnTransferStarted(const FilePath& source_path,
             &UiFileTransferDialog::OnTransferStarted, this, source_path, target_path, size));
         return;
     }
+
+    // Save the total size of all the transferred objects.
+    total_size_ = size;
+    transferred_total_ = 0;
+    transferred_per_object_ = 0;
 
     GetDlgItem(IDC_FROM_EDIT).SetWindowTextW(source_path.c_str());
     GetDlgItem(IDC_TO_EDIT).SetWindowTextW(target_path.c_str());
@@ -100,6 +115,30 @@ void UiFileTransferDialog::OnObjectTransfer(const FilePath& object_name,
     }
 
     GetDlgItem(IDC_CURRENT_ITEM_EDIT).SetWindowTextW(object_name.c_str());
+
+    uint64_t transferred = total_object_size - left_object_size;
+
+    if (total_size_ != 0)
+    {
+        transferred_total_ += transferred - transferred_per_object_;
+        transferred_per_object_ = transferred;
+
+        int percentage = static_cast<int>((transferred_total_ * 100ULL) / total_size_);
+
+        CProgressBarCtrl total_progress(GetDlgItem(IDC_TOTAL_PROGRESS));
+        total_progress.SetPos(percentage);
+    }
+
+    if (total_object_size != 0)
+    {
+        int percentage = static_cast<int>((transferred * 100ULL) / total_object_size);
+
+        CProgressBarCtrl current_progress(GetDlgItem(IDC_CURRENT_PROGRESS));
+        current_progress.SetPos(percentage);
+    }
+
+    if (left_object_size == 0)
+        transferred_per_object_ = 0;
 }
 
 void UiFileTransferDialog::OnFileOperationFailure(const FilePath& file_path,

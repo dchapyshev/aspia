@@ -20,6 +20,7 @@
 #include <atlbase.h>
 #include <atlapp.h>
 #include <atlwin.h>
+#include <atlctrls.h>
 
 namespace aspia {
 
@@ -71,6 +72,9 @@ private:
 
     const FilePath& source_path_;
     const FilePath& target_path_;
+    uint64_t total_size_ = 0;
+    uint64_t transferred_total_ = 0;
+    uint64_t transferred_per_object_ = 0;
     const FileTransfer::FileList& file_list_;
     const Mode mode_;
 
