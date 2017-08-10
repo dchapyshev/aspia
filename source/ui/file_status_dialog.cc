@@ -76,8 +76,7 @@ LRESULT UiFileStatusDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpa
                                  GetSystemMetrics(SM_CYICON));
     SetIcon(small_icon_, TRUE);
 
-    SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0,
-                 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+    SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 
     GetDlgItem(IDC_MINIMIZE_BUTTON).SetFocus();
     return FALSE;
@@ -110,7 +109,13 @@ void UiFileStatusDialog::WriteMessage(const WCHAR* message)
     if (GetTimeFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, time, _countof(time)))
     {
         std::wstring text = StringPrintfW(L"%s %s\r\n", time, message);
-        edit_.AppendText(text.c_str());
+
+        SETTEXTEX settext;
+        settext.codepage = 1200; // Unicode.
+        settext.flags = ST_SELECTION;
+
+        edit_.SetTextEx(&settext, text.c_str());
+        edit_.SendMessageW(WM_VSCROLL, SB_BOTTOM);
     }
 }
 
