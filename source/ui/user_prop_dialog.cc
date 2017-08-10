@@ -62,10 +62,23 @@ LRESULT CALLBACK UiUserPropDialog::PasswordEditWindowProc(HWND hwnd,
                                                           UINT_PTR subclass_id,
                                                           DWORD_PTR ref_data)
 {
-    if (msg == WM_LBUTTONDBLCLK)
+    switch (msg)
     {
-        UiUserPropDialog* self = reinterpret_cast<UiUserPropDialog*>(ref_data);
-        self->OnPasswordEditDblClick();
+        case WM_LBUTTONDBLCLK:
+        {
+            UiUserPropDialog* self = reinterpret_cast<UiUserPropDialog*>(ref_data);
+            self->OnPasswordEditDblClick();
+        }
+        break;
+
+        case WM_NCDESTROY:
+        {
+            RemoveWindowSubclass(hwnd, PasswordEditWindowProc, subclass_id);
+        }
+        break;
+
+        default:
+            break;
     }
 
     // Get the default message handler for edit control.
@@ -75,10 +88,7 @@ LRESULT CALLBACK UiUserPropDialog::PasswordEditWindowProc(HWND hwnd,
     return window_proc(hwnd, msg, wparam, lparam);
 }
 
-LRESULT UiUserPropDialog::OnInitDialog(UINT message,
-                                       WPARAM wparam,
-                                       LPARAM lparam,
-                                       BOOL& handled)
+LRESULT UiUserPropDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     DlgResize_Init();
 
@@ -154,19 +164,13 @@ LRESULT UiUserPropDialog::OnInitDialog(UINT message,
     return TRUE;
 }
 
-LRESULT UiUserPropDialog::OnClose(UINT message,
-                                  WPARAM wparam,
-                                  LPARAM lparam,
-                                  BOOL& handled)
+LRESULT UiUserPropDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     EndDialog(IDCANCEL);
     return 0;
 }
 
-LRESULT UiUserPropDialog::OnSize(UINT message,
-                                 WPARAM wparam,
-                                 LPARAM lparam,
-                                 BOOL& handled)
+LRESULT UiUserPropDialog::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     LRESULT ret = 0;
 
@@ -190,10 +194,7 @@ void UiUserPropDialog::ShowErrorMessage(UINT string_id)
     MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
 }
 
-LRESULT UiUserPropDialog::OnOkButton(WORD notify_code,
-                                     WORD control_id,
-                                     HWND control,
-                                     BOOL& handled)
+LRESULT UiUserPropDialog::OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     // TODO: Clear memory.
 
@@ -276,9 +277,7 @@ LRESULT UiUserPropDialog::OnOkButton(WORD notify_code,
     return 0;
 }
 
-LRESULT UiUserPropDialog::OnCancelButton(WORD notify_code,
-                                         WORD control_id,
-                                         HWND control,
+LRESULT UiUserPropDialog::OnCancelButton(WORD notify_code, WORD control_id, HWND control,
                                          BOOL& handled)
 {
     EndDialog(IDCANCEL);
