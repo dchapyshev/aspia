@@ -9,8 +9,6 @@
 #define _ASPIA_UI__FILE_TRANSFER_DIALOG_H
 
 #include "base/message_loop/message_loop_proxy.h"
-#include "base/files/file_path.h"
-#include "base/macros.h"
 #include "client/file_reply_receiver.h"
 #include "client/file_request_sender_proxy.h"
 #include "client/file_transfer.h"
@@ -20,7 +18,6 @@
 #include <atlbase.h>
 #include <atlapp.h>
 #include <atlwin.h>
-#include <atlctrls.h>
 
 namespace aspia {
 

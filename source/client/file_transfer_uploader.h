@@ -65,8 +65,7 @@ private:
     void RunNextTask();
 
     // FileReplyReceiver implementation.
-    void OnDriveListRequestReply(
-        std::unique_ptr<proto::DriveList> drive_list) final;
+    void OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list) final;
 
     void OnDriveListRequestFailure(proto::RequestStatus status) final;
 

@@ -84,10 +84,7 @@ void UiFileManager::SendFiles(UiFileManagerPanel::PanelType panel_type,
     dialog.DoModal(*this);
 }
 
-LRESULT UiFileManager::OnCreate(UINT message,
-                                WPARAM wparam,
-                                LPARAM lparam,
-                                BOOL& handled)
+LRESULT UiFileManager::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
                                    LR_CREATEDIBSECTION,
@@ -127,10 +124,7 @@ LRESULT UiFileManager::OnCreate(UINT message,
     return 0;
 }
 
-LRESULT UiFileManager::OnDestroy(UINT message,
-                                 WPARAM wparam,
-                                 LPARAM lparam,
-                                 BOOL& handled)
+LRESULT UiFileManager::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     local_panel_.DestroyWindow();
     remote_panel_.DestroyWindow();
@@ -138,10 +132,7 @@ LRESULT UiFileManager::OnDestroy(UINT message,
     return 0;
 }
 
-LRESULT UiFileManager::OnSize(UINT message,
-                              WPARAM wparam,
-                              LPARAM lparam,
-                              BOOL& handled)
+LRESULT UiFileManager::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     int width = LOWORD(lparam);
     int height = HIWORD(lparam);
@@ -154,10 +145,7 @@ LRESULT UiFileManager::OnSize(UINT message,
     return 0;
 }
 
-LRESULT UiFileManager::OnGetMinMaxInfo(UINT message,
-                                       WPARAM wparam,
-                                       LPARAM lparam,
-                                       BOOL& handled)
+LRESULT UiFileManager::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     LPMINMAXINFO mmi = reinterpret_cast<LPMINMAXINFO>(lparam);
 
@@ -167,10 +155,7 @@ LRESULT UiFileManager::OnGetMinMaxInfo(UINT message,
     return 0;
 }
 
-LRESULT UiFileManager::OnClose(UINT message,
-                               WPARAM wparam,
-                               LPARAM lparam,
-                               BOOL& handled)
+LRESULT UiFileManager::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     delegate_->OnWindowClose();
     return 0;
