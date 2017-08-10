@@ -75,6 +75,11 @@ extern "C" {
 #define VISUALC_HAS_AVX2 1
 #endif  // VisualStudio >= 2012
 
+// clang 6 mips issue https://bugs.chromium.org/p/libyuv/issues/detail?id=715
+#if defined(__clang__)
+#define DISABLE_CLANG_MSA 1
+#endif
+
 // The following are available on all x86 platforms:
 #if !defined(LIBYUV_DISABLE_X86) && \
     (defined(_M_IX86) || defined(__x86_64__) || defined(__i386__))
@@ -354,6 +359,11 @@ extern "C" {
 #define HAS_SOBELYROW_NEON
 #endif
 
+// The following are available on AArch64 platforms:
+#if !defined(LIBYUV_DISABLE_NEON) && defined(__aarch64__)
+#define HAS_SCALESUMSAMPLES_NEON
+#endif
+
 // The following are available on Mips platforms:
 #if !defined(LIBYUV_DISABLE_DSPR2) && defined(__mips__) && \
     (_MIPS_SIM == _MIPS_SIM_ABI32) && (__mips_isa_rev < 6)
@@ -385,72 +395,75 @@ extern "C" {
 #endif
 
 #if !defined(LIBYUV_DISABLE_MSA) && defined(__mips_msa)
+#define HAS_ARGB4444TOARGBROW_MSA
+#define HAS_ARGBADDROW_MSA
+#define HAS_ARGBATTENUATEROW_MSA
+#define HAS_ARGBGRAYROW_MSA
 #define HAS_ARGBMIRRORROW_MSA
+#define HAS_ARGBMULTIPLYROW_MSA
+#define HAS_ARGBSHADEROW_MSA
+#define HAS_ARGBSHUFFLEROW_MSA
+#define HAS_ARGBSUBTRACTROW_MSA
+#define HAS_ARGBTOARGB1555ROW_MSA
+#define HAS_ARGBTOARGB4444ROW_MSA
+#define HAS_ARGBTORAWROW_MSA
+#define HAS_ARGBTORGB24ROW_MSA
+#define HAS_ARGBTORGB565ROW_MSA
 #define HAS_I422TOUYVYROW_MSA
 #define HAS_I422TOYUY2ROW_MSA
+#define HAS_INTERPOLATEROW_MSA
+#define HAS_MERGEUVROW_MSA
 #define HAS_MIRRORROW_MSA
+#define HAS_RAWTORGB24ROW_MSA
+#define HAS_SOBELTOPLANEROW_MSA
 #define HAS_UYVYTOUVROW_MSA
 #define HAS_UYVYTOYROW_MSA
 #define HAS_YUY2TOUV422ROW_MSA
 #define HAS_YUY2TOUVROW_MSA
 #define HAS_YUY2TOYROW_MSA
-#define HAS_ARGB4444TOARGBROW_MSA
-#define HAS_ARGBTOYROW_MSA
-#define HAS_ARGBTOUVROW_MSA
-#define HAS_I422TOARGBROW_MSA
-#define HAS_I422TORGBAROW_MSA
-#define HAS_I422ALPHATOARGBROW_MSA
-#define HAS_I422TORGB24ROW_MSA
-#define HAS_ARGBTORGB24ROW_MSA
-#define HAS_ARGBTORAWROW_MSA
-#define HAS_ARGBTORGB565ROW_MSA
-#define HAS_ARGBTOARGB1555ROW_MSA
-#define HAS_ARGBTOARGB4444ROW_MSA
-#define HAS_ARGBTOUV444ROW_MSA
-#define HAS_ARGBMULTIPLYROW_MSA
-#define HAS_ARGBADDROW_MSA
-#define HAS_ARGBSUBTRACTROW_MSA
-#define HAS_ARGBATTENUATEROW_MSA
-#define HAS_ARGBTORGB565DITHERROW_MSA
-#define HAS_ARGBSHUFFLEROW_MSA
-#define HAS_ARGBSHADEROW_MSA
-#define HAS_ARGBGRAYROW_MSA
-#define HAS_ARGBSEPIAROW_MSA
+
+#ifndef DISABLE_CLANG_MSA
+#define HAS_ABGRTOUVROW_MSA
+#define HAS_ABGRTOYROW_MSA
 #define HAS_ARGB1555TOARGBROW_MSA
-#define HAS_RGB565TOARGBROW_MSA
-#define HAS_RGB24TOARGBROW_MSA
-#define HAS_RAWTOARGBROW_MSA
-#define HAS_ARGB1555TOYROW_MSA
-#define HAS_RGB565TOYROW_MSA
-#define HAS_RGB24TOYROW_MSA
-#define HAS_RAWTOYROW_MSA
 #define HAS_ARGB1555TOUVROW_MSA
-#define HAS_RGB565TOUVROW_MSA
-#define HAS_RGB24TOUVROW_MSA
-#define HAS_RAWTOUVROW_MSA
+#define HAS_ARGB1555TOYROW_MSA
+#define HAS_ARGBSEPIAROW_MSA
+#define HAS_ARGBSETROW_MSA
+#define HAS_ARGBTORGB565DITHERROW_MSA
+#define HAS_ARGBTOUV444ROW_MSA
+#define HAS_ARGBTOUVJROW_MSA
+#define HAS_ARGBTOUVROW_MSA
+#define HAS_ARGBTOYJROW_MSA
+#define HAS_ARGBTOYROW_MSA
+#define HAS_BGRATOUVROW_MSA
+#define HAS_BGRATOYROW_MSA
+#define HAS_I400TOARGBROW_MSA
+#define HAS_I422ALPHATOARGBROW_MSA
+#define HAS_I422TOARGBROW_MSA
+#define HAS_I422TORGB24ROW_MSA
+#define HAS_I422TORGBAROW_MSA
+#define HAS_I444TOARGBROW_MSA
+#define HAS_J400TOARGBROW_MSA
 #define HAS_NV12TOARGBROW_MSA
 #define HAS_NV12TORGB565ROW_MSA
 #define HAS_NV21TOARGBROW_MSA
-#define HAS_SOBELROW_MSA
-#define HAS_SOBELTOPLANEROW_MSA
-#define HAS_SOBELXYROW_MSA
-#define HAS_ARGBTOYJROW_MSA
-#define HAS_BGRATOYROW_MSA
-#define HAS_ABGRTOYROW_MSA
-#define HAS_RGBATOYROW_MSA
-#define HAS_ARGBTOUVJROW_MSA
-#define HAS_BGRATOUVROW_MSA
-#define HAS_ABGRTOUVROW_MSA
+#define HAS_RAWTOARGBROW_MSA
+#define HAS_RAWTOUVROW_MSA
+#define HAS_RAWTOYROW_MSA
+#define HAS_RGB24TOARGBROW_MSA
+#define HAS_RGB24TOUVROW_MSA
+#define HAS_RGB24TOYROW_MSA
+#define HAS_RGB565TOARGBROW_MSA
+#define HAS_RGB565TOUVROW_MSA
+#define HAS_RGB565TOYROW_MSA
 #define HAS_RGBATOUVROW_MSA
-#define HAS_I444TOARGBROW_MSA
-#define HAS_I400TOARGBROW_MSA
-#define HAS_J400TOARGBROW_MSA
-#define HAS_YUY2TOARGBROW_MSA
+#define HAS_RGBATOYROW_MSA
+#define HAS_SOBELROW_MSA
+#define HAS_SOBELXYROW_MSA
 #define HAS_UYVYTOARGBROW_MSA
-#define HAS_INTERPOLATEROW_MSA
-#define HAS_ARGBSETROW_MSA
-#define HAS_RAWTORGB24ROW_MSA
-#define HAS_MERGEUVROW_MSA
+#define HAS_YUY2TOARGBROW_MSA
+#endif
 #endif
 
 #if defined(_MSC_VER) && !defined(__CLR_VER) && !defined(__clang__)
@@ -3143,6 +3156,14 @@ void ARGBLumaColorTableRow_SSSE3(const uint8* src_argb,
                                  int width,
                                  const uint8* luma,
                                  uint32 lumacoeff);
+
+float ScaleSumSamples_C(const float* src, float* dst, float scale, int width);
+float ScaleSumSamples_NEON(const float* src,
+                           float* dst,
+                           float scale,
+                           int width);
+void ScaleSamples_C(const float* src, float* dst, float scale, int width);
+void ScaleSamples_NEON(const float* src, float* dst, float scale, int width);
 
 #ifdef __cplusplus
 }  // extern "C"

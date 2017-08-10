@@ -1,7 +1,7 @@
 vars = {
   'chromium_git': 'https://chromium.googlesource.com',
-  'chromium_revision': '964fc7fe50b27ffb527e3e237e46650c18599578',
-  'swarming_revision': 'af6b06ca68ba7a618024f28856418296a9acf375',
+  'chromium_revision': 'da6245e7c4b489a4dc73be76fcb54483add1eb2b',
+  'swarming_revision': 'a56c2b39ca23bdf41458421a7f825ddbf3f43f28',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling lss
   # and whatever else without interference from each other.
@@ -9,18 +9,18 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling catapult
   # and whatever else without interference from each other.
-  'catapult_revision': '7ba431f75da5234ec64fe83dfe1d11d19a97581d',
+  'catapult_revision': '9629af7533357c245a90fb7130fbfba53a162284',
 }
 
 deps = {
   'src/build':
-    Var('chromium_git') + '/chromium/src/build' + '@' + 'b887a61b49dc53baa63177f448ecfd5750086d04',
+    Var('chromium_git') + '/chromium/src/build' + '@' + '5a3f439e92d3a55858c4eeda57917664657f45fb',
   'src/buildtools':
-    Var('chromium_git') + '/chromium/buildtools.git' + '@' + 'b53a03df323e7fa7dafd892adbe70bf9f3cc97f7',
+    Var('chromium_git') + '/chromium/buildtools.git' + '@' + '5ad14542a6a74dd914f067b948c5d3e8d170396b',
   'src/testing':
-    Var('chromium_git') + '/chromium/src/testing' + '@' + '4d1ed658b76be14c3634b9a401e7e9a86f1cfaa7',
+    Var('chromium_git') + '/chromium/src/testing' + '@' + 'ebf1c4622eba176624b5084a727b8fe308d2896b',
   'src/third_party':
-    Var('chromium_git') + '/chromium/src/third_party' + '@' + 'd09084e5dd3ed2a63589c3751098b3bd194793ac',
+    Var('chromium_git') + '/chromium/src/third_party' + '@' + 'd58cf433a5327d71ff38bfeab37bd42932f9740b',
   'src/third_party/catapult':
    Var('chromium_git') + '/external/github.com/catapult-project/catapult.git' + '@' + Var('catapult_revision'),
   'src/third_party/colorama/src':
@@ -32,9 +32,9 @@ deps = {
   'src/third_party/yasm/source/patched-yasm':
     Var('chromium_git') + '/chromium/deps/yasm/patched-yasm.git' + '@' + '7da28c6c7c6a1387217352ce02b31754deb54d2a',
   'src/tools':
-    Var('chromium_git') + '/chromium/src/tools' + '@' + 'b8af3bf606479e3cca4af19a1c576a3162806160',
+    Var('chromium_git') + '/chromium/src/tools' + '@' + 'f79809d0346e8191983826dee15df3f2c71b1343',
   'src/tools/gyp':
-    Var('chromium_git') + '/external/gyp.git' + '@' + 'eb296f67da078ec01f5e3a9ea9cdc6d26d680161',
+    Var('chromium_git') + '/external/gyp.git' + '@' + 'd61a9397e668fa9843c4aa7da9e79460fe590bfb',
    'src/tools/swarming_client':
      Var('chromium_git') + '/external/swarming.client.git' + '@' +  Var('swarming_revision'),
 
@@ -50,13 +50,13 @@ deps = {
 deps_os = {
   'android': {
     'src/base':
-      Var('chromium_git') + '/chromium/src/base' + '@' + '7830ef61f5f7a76c211b5e963a58d18fce2bc58f',
+      Var('chromium_git') + '/chromium/src/base' + '@' + '8c06e7a9f6d085c70d25f29a1261c4b01bba7470',
     'src/third_party/android_tools':
-      Var('chromium_git') + '/android_tools.git' + '@' + '023e2f65409a2b7886b8d644d6a88542ead6cd0a',
+      Var('chromium_git') + '/android_tools.git' + '@' + 'e9d4018e149d50172ed462a7c21137aa915940ec',
     'src/third_party/ced/src':
       Var('chromium_git') + '/external/github.com/google/compact_enc_det.git' + '@' + '910cca22d881b02cbc8950fa02ccbcdcfb782456',
     'src/third_party/icu':
-      Var('chromium_git') + '/chromium/deps/icu.git' + '@' + 'dfa798fe694702b43a3debc3290761f22b1acaf8',
+      Var('chromium_git') + '/chromium/deps/icu.git' + '@' + '1fec0c83e9ad7f5a075ae0b50af9a3889f54be0e',
     'src/third_party/jsr-305/src':
       Var('chromium_git') + '/external/jsr-305.git' + '@' + '642c508235471f7220af6d5df2d3210e3bfc0919',
     'src/third_party/junit/src':
@@ -74,7 +74,7 @@ deps_os = {
   },
   'ios': {
     'src/ios':
-      Var('chromium_git') + '/chromium/src/ios' + '@' + '4243f190b318065a3cb6ff3c4acb97d1b56dbf87',
+      Var('chromium_git') + '/chromium/src/ios' + '@' + 'e5a58b0b437af90c301a3bbbd25f8c620546168b',
   },
   'unix': {
     'src/third_party/lss':

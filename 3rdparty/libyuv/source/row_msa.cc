@@ -16,6 +16,12 @@
 #if !defined(LIBYUV_DISABLE_MSA) && defined(__mips_msa)
 #include "libyuv/macros_msa.h"
 
+// caveat - as of clang 6, some functions do not build under clang.
+// The macro DISABLE_CLANG_MSA is set for clang builds to disable
+// affected functions.
+// __msa_fill_w() is one affected intrinsic.
+// See Also: https://bugs.chromium.org/p/libyuv/issues/detail?id=715
+
 #ifdef __cplusplus
 namespace libyuv {
 extern "C" {
@@ -367,6 +373,7 @@ void I422ToUYVYRow_MSA(const uint8* src_y,
   }
 }
 
+#ifndef DISABLE_CLANG_MSA
 void I422ToARGBRow_MSA(const uint8* src_y,
                        const uint8* src_u,
                        const uint8* src_v,
@@ -637,6 +644,7 @@ void I422ToARGB1555Row_MSA(const uint8* src_y,
     dst_argb1555 += 16;
   }
 }
+#endif
 
 void YUY2ToYRow_MSA(const uint8* src_yuy2, uint8* dst_y, int width) {
   int x;
@@ -767,6 +775,8 @@ void UYVYToUV422Row_MSA(const uint8* src_uyvy,
     dst_v += 16;
   }
 }
+
+#ifndef DISABLE_CLANG_MSA
 
 void ARGBToYRow_MSA(const uint8* src_argb0, uint8* dst_y, int width) {
   int x;
@@ -931,6 +941,7 @@ void ARGBToUVRow_MSA(const uint8* src_argb0,
     dst_v += 16;
   }
 }
+#endif
 
 void ARGBToRGB24Row_MSA(const uint8* src_argb, uint8* dst_rgb, int width) {
   int x;
@@ -1077,6 +1088,7 @@ void ARGBToARGB4444Row_MSA(const uint8* src_argb, uint8* dst_rgb, int width) {
   }
 }
 
+#ifndef DISABLE_CLANG_MSA
 void ARGBToUV444Row_MSA(const uint8* src_argb,
                         uint8* dst_u,
                         uint8* dst_v,
@@ -1148,6 +1160,7 @@ void ARGBToUV444Row_MSA(const uint8* src_argb,
     dst_v += 16;
   }
 }
+#endif
 
 void ARGBMultiplyRow_MSA(const uint8* src_argb0,
                          const uint8* src_argb1,
@@ -1295,6 +1308,7 @@ void ARGBAttenuateRow_MSA(const uint8* src_argb, uint8* dst_argb, int width) {
   }
 }
 
+#ifndef DISABLE_CLANG_MSA
 void ARGBToRGB565DitherRow_MSA(const uint8* src_argb,
                                uint8* dst_rgb,
                                uint32 dither4,
@@ -1338,6 +1352,7 @@ void ARGBToRGB565DitherRow_MSA(const uint8* src_argb,
     dst_rgb += 16;
   }
 }
+#endif
 
 void ARGBShuffleRow_MSA(const uint8* src_argb,
                         uint8* dst_argb,
@@ -1427,6 +1442,7 @@ void ARGBGrayRow_MSA(const uint8* src_argb, uint8* dst_argb, int width) {
   }
 }
 
+#ifndef DISABLE_CLANG_MSA
 void ARGBSepiaRow_MSA(uint8* dst_argb, int width) {
   int x;
   v16u8 src0, src1, dst0, dst1, vec0, vec1, vec2, vec3, vec4, vec5;
@@ -1467,6 +1483,7 @@ void ARGBSepiaRow_MSA(uint8* dst_argb, int width) {
     dst_argb += 32;
   }
 }
+#endif
 
 void ARGB4444ToARGBRow_MSA(const uint8* src_argb4444,
                            uint8* dst_argb,
@@ -1497,6 +1514,7 @@ void ARGB4444ToARGBRow_MSA(const uint8* src_argb4444,
   }
 }
 
+#ifndef DISABLE_CLANG_MSA
 void ARGB1555ToARGBRow_MSA(const uint8* src_argb1555,
                            uint8* dst_argb,
                            int width) {
@@ -2354,6 +2372,7 @@ void SobelRow_MSA(const uint8* src_sobelx,
     dst_argb += 64;
   }
 }
+#endif
 
 void SobelToPlaneRow_MSA(const uint8* src_sobelx,
                          const uint8* src_sobely,
@@ -2376,6 +2395,7 @@ void SobelToPlaneRow_MSA(const uint8* src_sobelx,
   }
 }
 
+#ifndef DISABLE_CLANG_MSA
 void SobelXYRow_MSA(const uint8* src_sobelx,
                     const uint8* src_sobely,
                     uint8* dst_argb,
@@ -2850,6 +2870,7 @@ void UYVYToARGBRow_MSA(const uint8* src_uyvy,
     rgb_buf += 32;
   }
 }
+#endif
 
 void InterpolateRow_MSA(uint8* dst_ptr,
                         const uint8* src_ptr,
@@ -2915,15 +2936,17 @@ void InterpolateRow_MSA(uint8* dst_ptr,
   }
 }
 
+#ifndef DISABLE_CLANG_MSA
 void ARGBSetRow_MSA(uint8* dst_argb, uint32 v32, int width) {
   int x;
-  v16u8 dst0 = (v16u8)__msa_fill_w(v32);
+  v4i32 dst0 = __builtin_msa_fill_w(v32);
 
   for (x = 0; x < width; x += 4) {
     ST_UB(dst0, dst_argb);
     dst_argb += 16;
   }
 }
+#endif
 
 void RAWToRGB24Row_MSA(const uint8* src_raw, uint8* dst_rgb24, int width) {
   int x;

@@ -36,6 +36,9 @@ static __inline int Abs(int v) {
   return v >= 0 ? v : -v;
 }
 
+static __inline float FAbs(float v) {
+  return v >= 0 ? v : -v;
+}
 #define OFFBY 0
 
 // Scaling uses 16.16 fixed point to step thru the source image, so a
@@ -70,8 +73,11 @@ static inline bool SizeValid(int src_width,
   uint8* var;                                                                 \
   uint8* var##_mem;                                                           \
   var##_mem = reinterpret_cast<uint8*>(malloc(((size) + 4095 + 63) & ~4095)); \
-  var = (uint8*)((intptr_t)(var##_mem + (((size) + 4095 + 63) &  /* NOLINT */ \
-      ~4095) - (size)) & ~63);
+  var = (uint8*)((intptr_t)(var##_mem +                                       \
+                            (((size) + 4095 + 63) & /* NOLINT */              \
+                             ~4095) -                                         \
+                            (size)) &                                         \
+                 ~63);
 
 #define free_aligned_buffer_page_end(var) \
   free(var##_mem);                        \

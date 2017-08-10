@@ -60,14 +60,14 @@ LOCAL_OBJ_FILES := \
 .c.o:
 	$(CC) -c $(CFLAGS) $*.c -o $*.o
 
-all: libyuv.a convert cpuid psnr
+all: libyuv.a yuvconvert cpuid psnr
 
 libyuv.a: $(LOCAL_OBJ_FILES)
 	$(AR) $(ARFLAGS) $@ $(LOCAL_OBJ_FILES)
 
 # A C++ test utility that uses libyuv conversion.
-convert: util/convert.cc libyuv.a
-	$(CXX) $(CXXFLAGS) -Iutil/ -o $@ util/convert.cc libyuv.a
+yuvconvert: util/yuvconvert.cc libyuv.a
+	$(CXX) $(CXXFLAGS) -Iutil/ -o $@ util/yuvconvert.cc libyuv.a
 
 # A standalone test utility
 psnr: util/psnr.cc

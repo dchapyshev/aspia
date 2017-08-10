@@ -47,3 +47,6 @@ exec_script_whitelist = [
   "//build/toolchain/win/BUILD.gn",
 ]
 
+default_args = {
+  mac_sdk_min = "10.11"
+}

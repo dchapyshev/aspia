@@ -300,14 +300,12 @@
     <ClCompile Include="source/rotate_any.cc" />
     <ClCompile Include="source/rotate_argb.cc" />
     <ClCompile Include="source/rotate_common.cc" />
-    <ClCompile Include="source/rotate_mips.cc" />
     <ClCompile Include="source/rotate_neon.cc" />
     <ClCompile Include="source/rotate_neon64.cc" />
     <ClCompile Include="source/rotate_gcc.cc" />
     <ClCompile Include="source/rotate_win.cc" />
     <ClCompile Include="source/row_any.cc" />
     <ClCompile Include="source/row_common.cc" />
-    <ClCompile Include="source/row_mips.cc" />
     <ClCompile Include="source/row_msa.cc" />
     <ClCompile Include="source/row_neon.cc" />
     <ClCompile Include="source/row_neon64.cc" />
@@ -317,7 +315,6 @@
     <ClCompile Include="source/scale_any.cc" />
     <ClCompile Include="source/scale_argb.cc" />
     <ClCompile Include="source/scale_common.cc" />
-    <ClCompile Include="source/scale_mips.cc" />
     <ClCompile Include="source/scale_neon.cc" />
     <ClCompile Include="source/scale_neon64.cc" />
     <ClCompile Include="source/scale_gcc.cc" />

@@ -47,7 +47,7 @@ group("libyuv") {
   if (is_win && target_cpu == "x64") {
     # Compile with clang in order to get inline assembly
     public_deps = [
-      ":libyuv_internal(//build/toolchain/win:clang_x64)",
+      ":libyuv_internal(//build/toolchain/win:win_clang_x64)",
     ]
   } else {
     public_deps = [
@@ -158,10 +158,11 @@ static_library("libyuv_internal") {
   }
 
   # To enable AVX2 or other cpu optimization, pass flag here
-  # cflags = [ "-mavx2" ]
-  # cflags = [ "-mpopcnt" ]
+  # cflags = [ "-mavx2", "-mpopcnt", "-mavx2", "-mfma" ]
+  if (!is_win) {
+    cflags = [ "-ffp-contract=fast" ]   # Enable fma vectorization for NEON.
+  }
 }
-
 if (libyuv_use_neon) {
   static_library("libyuv_neon") {
     sources = [
@@ -308,6 +309,7 @@ if (libyuv_include_tests) {
     ]
     deps = [
       ":libyuv",
+      "//build/config:exe_and_shlib_deps",  # for asan on llvm libc++
     ]
     if (is_linux) {
       cflags = [ "-fexceptions" ]
@@ -321,6 +323,7 @@ if (libyuv_include_tests) {
     ]
     deps = [
       ":libyuv",
+      "//build/config:exe_and_shlib_deps",  # for new[] on llvm libc++
     ]
     if (is_linux) {
       cflags = [ "-fexceptions" ]
@@ -336,6 +339,7 @@ if (libyuv_include_tests) {
     ]
     deps = [
       ":libyuv",
+      "//build/config:exe_and_shlib_deps",  # for new[] on llvm libc++
     ]
 
     if (!is_ios && !libyuv_disable_jpeg) {
@@ -350,6 +354,7 @@ if (libyuv_include_tests) {
     ]
     deps = [
       ":libyuv",
+      "//build/config:exe_and_shlib_deps",  # for asan on llvm libc++
     ]
   }
 }
