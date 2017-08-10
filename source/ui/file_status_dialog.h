@@ -16,6 +16,7 @@
 #include <atlbase.h>
 #include <atlapp.h>
 #include <atlwin.h>
+#include <atlctrls.h>
 #include <atlframe.h>
 #include <atlmisc.h>
 
@@ -34,19 +35,15 @@ public:
 
     void WaitForClose();
 
-    void SetSessionStartedStatus();
-    void SetSessionTerminatedStatus();
-    void SetDriveListRequestStatus(proto::RequestStatus status);
-    void SetFileListRequestStatus(const FilePath& path, proto::RequestStatus status);
-    void SetCreateDirectoryRequestStatus(const FilePath& path, proto::RequestStatus status);
-
-    void SetRenameRequestStatus(const FilePath& old_name,
-                                const FilePath& new_name,
-                                proto::RequestStatus status);
-
-    void SetRemoveRequestStatus(const FilePath& path, proto::RequestStatus status);
-    void SetFileUploadRequestStatus(const FilePath& file_path, proto::RequestStatus status);
-    void SetFileDownloadRequestStatus(const FilePath& file_path, proto::RequestStatus status);
+    void OnSessionStarted();
+    void OnSessionTerminated();
+    void OnDriveListRequest();
+    void OnFileListRequest(const FilePath& path);
+    void OnCreateDirectoryRequest(const FilePath& path);
+    void OnRenameRequest(const FilePath& old_name, const FilePath& new_name);
+    void OnRemoveRequest(const FilePath& path);
+    void OnFileUploadRequest(const FilePath& file_path);
+    void OnFileDownloadRequest(const FilePath& file_path);
 
 private:
     BEGIN_MSG_MAP(UiFileStatusDialog)
@@ -74,13 +71,14 @@ private:
     LRESULT OnMinimizeButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnStopButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
-    void WriteLog(const CString& message, proto::RequestStatus status);
+    void WriteMessage(const WCHAR* text);
 
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
     CIcon small_icon_;
     CIcon big_icon_;
+    CRichEditCtrl edit_;
 
     DISALLOW_COPY_AND_ASSIGN(UiFileStatusDialog);
 };

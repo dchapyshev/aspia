@@ -6,12 +6,10 @@
 //
 
 #include "ui/file_status_dialog.h"
-#include "ui/status_code.h"
+#include "base/strings/string_util.h"
 #include "base/logging.h"
 
 #include <atlctrls.h>
-#include <chrono>
-#include <clocale>
 
 namespace aspia {
 
@@ -32,6 +30,8 @@ void UiFileStatusDialog::WaitForClose()
 
 void UiFileStatusDialog::OnBeforeThreadRunning()
 {
+    LoadLibraryW(L"msftedit.dll");
+
     runner_ = ui_thread_.message_loop_proxy();
     DCHECK(runner_);
 
@@ -44,6 +44,10 @@ void UiFileStatusDialog::OnBeforeThreadRunning()
     else
     {
         ShowWindow(SW_SHOWNORMAL);
+
+        // The default text limit is 64K characters.
+        edit_ = GetDlgItem(IDC_STATUS_EDIT);
+        edit_.LimitText(0xFFFFFFFF);
     }
 }
 
@@ -52,8 +56,7 @@ void UiFileStatusDialog::OnAfterThreadRunning()
     DestroyWindow();
 }
 
-LRESULT UiFileStatusDialog::OnInitDialog(UINT message, WPARAM wparam,
-                                         LPARAM lparam, BOOL& handled)
+LRESULT UiFileStatusDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     DlgResize_Init();
 
@@ -80,8 +83,7 @@ LRESULT UiFileStatusDialog::OnInitDialog(UINT message, WPARAM wparam,
     return FALSE;
 }
 
-LRESULT UiFileStatusDialog::OnClose(UINT message, WPARAM wparam,
-                                    LPARAM lparam, BOOL& handled)
+LRESULT UiFileStatusDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     PostQuitMessage(0);
     return 0;
@@ -101,65 +103,29 @@ LRESULT UiFileStatusDialog::OnStopButton(WORD notify_code, WORD control_id,
     return 0;
 }
 
-static std::wstring GetCurrentDateTime()
+void UiFileStatusDialog::WriteMessage(const WCHAR* message)
 {
-    std::chrono::system_clock::time_point now =
-        std::chrono::system_clock::now();
+    WCHAR time[128];
 
-    std::time_t time = std::chrono::system_clock::to_time_t(now);
-
-    tm* local_time = std::localtime(&time);
-    if (local_time)
+    if (GetTimeFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, time, _countof(time)))
     {
-        // Set the locale obtained from system.
-        std::setlocale(LC_TIME, "");
-
-        WCHAR string[128];
-        if (std::wcsftime(string, _countof(string), L"%x %X", local_time))
-        {
-            return string;
-        }
+        std::wstring text = StringPrintfW(L"%s %s\r\n", time, message);
+        edit_.AppendText(text.c_str());
     }
-
-    return std::wstring();
 }
 
-void UiFileStatusDialog::WriteLog(const CString& message, proto::RequestStatus status)
+void UiFileStatusDialog::OnSessionStarted()
 {
-    CEdit edit(GetDlgItem(IDC_STATUS_EDIT));
-
-    edit.AppendText(GetCurrentDateTime().c_str());
-    edit.AppendText(L" ");
-    edit.AppendText(message);
-
-    if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
-    {
-        edit.AppendText(L" (");
-        edit.AppendText(RequestStatusCodeToString(status));
-        edit.AppendText(L")");
-    }
-
-    edit.AppendText(L"\r\n");
-}
-
-void UiFileStatusDialog::SetSessionStartedStatus()
-{
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::SetSessionStartedStatus, this));
-        return;
-    }
-
     CString message;
     message.LoadStringW(IDS_FT_OP_SESSION_START);
-    WriteLog(message, proto::RequestStatus::REQUEST_STATUS_SUCCESS);
+    WriteMessage(message);
 }
 
-void UiFileStatusDialog::SetSessionTerminatedStatus()
+void UiFileStatusDialog::OnSessionTerminated()
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::SetSessionTerminatedStatus, this));
+        runner_->PostTask(std::bind(&UiFileStatusDialog::OnSessionTerminated, this));
         return;
     }
 
@@ -173,111 +139,56 @@ void UiFileStatusDialog::SetSessionTerminatedStatus()
 
     CString message;
     message.LoadStringW(IDS_FT_OP_SESSION_END);
-    WriteLog(message, proto::RequestStatus::REQUEST_STATUS_SUCCESS);
+    WriteMessage(message);
 }
 
-void UiFileStatusDialog::SetDriveListRequestStatus(proto::RequestStatus status)
+void UiFileStatusDialog::OnDriveListRequest()
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::SetDriveListRequestStatus, this, status));
-        return;
-    }
-
     CString message;
     message.LoadStringW(IDS_FT_OP_BROWSE_DRIVES);
-    WriteLog(message, status);
+    WriteMessage(message);
 }
 
-void UiFileStatusDialog::SetFileListRequestStatus(const FilePath& path,
-                                                  proto::RequestStatus status)
+void UiFileStatusDialog::OnFileListRequest(const FilePath& path)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(
-            &UiFileStatusDialog::SetFileListRequestStatus, this, path, status));
-        return;
-    }
-
     CString message;
     message.Format(IDS_FT_OP_BROWSE_FOLDERS, path.c_str());
-    WriteLog(message, status);
+    WriteMessage(message);
 }
 
-void UiFileStatusDialog::SetCreateDirectoryRequestStatus(const FilePath& path,
-                                                         proto::RequestStatus status)
+void UiFileStatusDialog::OnCreateDirectoryRequest(const FilePath& path)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(
-            &UiFileStatusDialog::SetCreateDirectoryRequestStatus, this, path, status));
-        return;
-    }
-
     CString message;
     message.Format(IDS_FT_OP_CREATE_FOLDER, path.c_str());
-    WriteLog(message, status);
+    WriteMessage(message);
 }
 
-void UiFileStatusDialog::SetRenameRequestStatus(const FilePath& old_name,
-                                                const FilePath& new_name,
-                                                proto::RequestStatus status)
+void UiFileStatusDialog::OnRenameRequest(const FilePath& old_name, const FilePath& new_name)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(
-            &UiFileStatusDialog::SetRenameRequestStatus, this, old_name, new_name, status));
-        return;
-    }
-
     CString message;
     message.Format(IDS_FT_OP_RENAME, old_name.c_str(), new_name.c_str());
-    WriteLog(message, status);
+    WriteMessage(message);
 }
 
-void UiFileStatusDialog::SetRemoveRequestStatus(const FilePath& path,
-                                                proto::RequestStatus status)
+void UiFileStatusDialog::OnRemoveRequest(const FilePath& path)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(
-            &UiFileStatusDialog::SetRemoveRequestStatus, this, path, status));
-        return;
-    }
-
     CString message;
     message.Format(IDS_FT_OP_REMOVE, path.c_str());
-    WriteLog(message, status);
+    WriteMessage(message);
 }
 
-void UiFileStatusDialog::SetFileUploadRequestStatus(const FilePath& file_path,
-                                                    proto::RequestStatus status)
+void UiFileStatusDialog::OnFileUploadRequest(const FilePath& file_path)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(
-            &UiFileStatusDialog::SetFileUploadRequestStatus, this, file_path, status));
-        return;
-    }
-
     CString message;
     message.Format(IDS_FT_OP_RECIEVE_FILE, file_path.c_str());
-    WriteLog(message, status);
+    WriteMessage(message);
 }
 
-void UiFileStatusDialog::SetFileDownloadRequestStatus(const FilePath& file_path,
-                                                      proto::RequestStatus status)
+void UiFileStatusDialog::OnFileDownloadRequest(const FilePath& file_path)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(
-            &UiFileStatusDialog::SetFileDownloadRequestStatus, this, file_path, status));
-        return;
-    }
-
     CString message;
     message.Format(IDS_FT_OP_SEND_FILE, file_path.c_str());
-    WriteLog(message, status);
+    WriteMessage(message);
 }
 
 } // namespace aspia

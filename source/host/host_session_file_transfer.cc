@@ -52,7 +52,7 @@ void HostSessionFileTransfer::OnIpcChannelConnect(uint32_t user_data)
         return;
     }
 
-    status_dialog_->SetSessionStartedStatus();
+    status_dialog_->OnSessionStarted();
 
     ipc_channel_proxy_->Receive(std::bind(
         &HostSessionFileTransfer::OnIpcChannelMessage, this, std::placeholders::_1));
@@ -60,7 +60,7 @@ void HostSessionFileTransfer::OnIpcChannelConnect(uint32_t user_data)
 
 void HostSessionFileTransfer::OnIpcChannelDisconnect()
 {
-    status_dialog_->SetSessionTerminatedStatus();
+    status_dialog_->OnSessionTerminated();
 }
 
 void HostSessionFileTransfer::OnIpcChannelMessage(std::unique_ptr<IOBuffer> buffer)
@@ -141,7 +141,11 @@ void HostSessionFileTransfer::ReadDriveListRequest()
     proto::file_transfer::HostToClient reply;
     reply.set_status(ExecuteDriveListRequest(reply.mutable_drive_list()));
 
-    status_dialog_->SetDriveListRequestStatus(reply.status());
+    if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+    {
+        status_dialog_->OnDriveListRequest();
+    }
+
     SendReply(reply);
 }
 
@@ -153,7 +157,11 @@ void HostSessionFileTransfer::ReadFileListRequest(const proto::FileListRequest& 
 
     reply.set_status(ExecuteFileListRequest(path, reply.mutable_file_list()));
 
-    status_dialog_->SetFileListRequestStatus(path, reply.status());
+    if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+    {
+        status_dialog_->OnFileListRequest(path);
+    }
+
     SendReply(reply);
 }
 
@@ -166,7 +174,11 @@ void HostSessionFileTransfer::ReadCreateDirectoryRequest(
 
     reply.set_status(ExecuteCreateDirectoryRequest(path));
 
-    status_dialog_->SetCreateDirectoryRequestStatus(path, reply.status());
+    if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+    {
+        status_dialog_->OnCreateDirectoryRequest(path);
+    }
+
     SendReply(reply);
 }
 
@@ -193,7 +205,11 @@ void HostSessionFileTransfer::ReadRenameRequest(const proto::RenameRequest& requ
 
     reply.set_status(ExecuteRenameRequest(old_name, new_name));
 
-    status_dialog_->SetRenameRequestStatus(old_name, new_name, reply.status());
+    if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+    {
+        status_dialog_->OnRenameRequest(old_name, new_name);
+    }
+
     SendReply(reply);
 }
 
@@ -205,7 +221,11 @@ void HostSessionFileTransfer::ReadRemoveRequest(const proto::RemoveRequest& requ
 
     reply.set_status(ExecuteRemoveRequest(path));
 
-    status_dialog_->SetRemoveRequestStatus(path, reply.status());
+    if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+    {
+        status_dialog_->OnRemoveRequest(path);
+    }
+
     SendReply(reply);
 }
 
@@ -245,7 +265,10 @@ void HostSessionFileTransfer::ReadFileUploadRequest(const proto::FileUploadReque
     }
     while (false);
 
-    status_dialog_->SetFileUploadRequestStatus(file_path, reply.status());
+    if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+    {
+        status_dialog_->OnFileUploadRequest(file_path);
+    }
 
     SendReply(reply);
 }

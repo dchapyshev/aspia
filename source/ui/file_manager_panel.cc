@@ -195,6 +195,9 @@ LRESULT UiFileManagerPanel::OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& ha
 {
     int object_index = file_list_.GetObjectUnderMousePointer();
 
+    if (object_index == UiFileList::kInvalidObjectIndex)
+        return 0;
+
     if (!file_list_.HasFileList())
     {
         MoveToDrive(object_index);
