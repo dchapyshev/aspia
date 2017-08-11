@@ -139,16 +139,14 @@ bool FileReplyReceiverProxy::OnFileUploadRequestReply(const FilePath& file_path,
     return true;
 }
 
-bool FileReplyReceiverProxy::OnFileUploadDataRequestReply(
-    std::unique_ptr<proto::FilePacket> file_packet,
-    proto::RequestStatus status)
+bool FileReplyReceiverProxy::OnFileUploadDataRequestReply(uint32_t flags, proto::RequestStatus status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
 
-    receiver_->OnFileUploadDataRequestReply(std::move(file_packet), status);
+    receiver_->OnFileUploadDataRequestReply(flags, status);
     return true;
 }
 

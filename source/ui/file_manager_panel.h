@@ -104,8 +104,7 @@ private:
 
     void OnFileUploadRequestReply(const FilePath& file_path, proto::RequestStatus status) override;
 
-    void OnFileUploadDataRequestReply(std::unique_ptr<proto::FilePacket> file_packet,
-                                      proto::RequestStatus status) override;
+    void OnFileUploadDataRequestReply(uint32_t flags, proto::RequestStatus status) override;
 
     void MoveToDrive(int object_index);
 

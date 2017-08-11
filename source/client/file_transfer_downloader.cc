@@ -86,9 +86,7 @@ void FileTransferDownloader::OnFileUploadRequestReply(const FilePath& file_path,
     // TODO
 }
 
-void FileTransferDownloader::OnFileUploadDataRequestReply(
-    std::unique_ptr<proto::FilePacket> file_packet,
-    proto::RequestStatus status)
+void FileTransferDownloader::OnFileUploadDataRequestReply(uint32_t flags, proto::RequestStatus status)
 {
     // TODO
 }

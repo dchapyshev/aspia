@@ -88,23 +88,19 @@
 #define IDC_DISABLE_USER_CHECK                128
 #define IDC_SESSION_TYPES_LIST                129
 #define IDC_SESSION_TYPE_COMBO                130
-#define IDC_FROM_EDIT                         131
-#define IDC_TO_EDIT                           132
-#define IDC_CURRENT_ITEM_EDIT                 133
-#define IDC_TOTAL_PROGRESS_TEXT               134
-#define IDC_TOTAL_PROGRESS                    135
-#define IDC_CURRENT_PROGRESS_TEXT             136
-#define IDC_CURRENT_PROGRESS                  137
-#define IDC_REPLACE_BUTTON                    138
-#define IDC_REPLACE_ALL_BUTTON                139
-#define IDC_SKIP_BUTTON                       140
-#define IDC_SKIP_ALL_BUTTON                   141
-#define IDC_STOP_BUTTON                       142
-#define IDC_MINIMIZE_BUTTON                   143
-#define IDC_BUTTON_GROUP                      144
-#define IDC_POWER_ICON                        145
-#define IDC_POWER_ACTION                      146
-#define IDC_POWER_TIME                        147
+#define IDC_CURRENT_ITEM_EDIT                 131
+#define IDC_TOTAL_PROGRESS                    132
+#define IDC_CURRENT_PROGRESS                  133
+#define IDC_REPLACE_BUTTON                    134
+#define IDC_REPLACE_ALL_BUTTON                135
+#define IDC_SKIP_BUTTON                       136
+#define IDC_SKIP_ALL_BUTTON                   137
+#define IDC_STOP_BUTTON                       138
+#define IDC_MINIMIZE_BUTTON                   139
+#define IDC_BUTTON_GROUP                      140
+#define IDC_POWER_ICON                        141
+#define IDC_POWER_ACTION                      142
+#define IDC_POWER_TIME                        143
 
 //
 // Commands

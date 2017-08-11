@@ -59,6 +59,7 @@ void UiFileStatusDialog::OnAfterThreadRunning()
 LRESULT UiFileStatusDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     DlgResize_Init();
+    CenterWindow();
 
     // Disable close button for dialog.
     DWORD style = GetClassLongPtrW(*this, GCL_STYLE);

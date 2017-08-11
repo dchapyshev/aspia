@@ -35,9 +35,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void OnTransferStarted(const FilePath& source_path,
-                                       const FilePath& target_path,
-                                       uint64_t size) = 0;
+        virtual void OnTransferStarted(uint64_t size) = 0;
 
         virtual void OnTransferComplete() = 0;
 
@@ -45,7 +43,7 @@ public:
                                             proto::RequestStatus status,
                                             ActionCallback callback) = 0;
 
-        virtual void OnObjectTransfer(const FilePath& object_name,
+        virtual void OnObjectTransfer(const FilePath& source_path,
                                       uint64_t total_object_size,
                                       uint64_t left_object_size) = 0;
     };

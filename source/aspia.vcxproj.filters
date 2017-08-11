@@ -1055,6 +1055,9 @@
     <ClInclude Include="ui\file_action_dialog.h">
       <Filter>ui</Filter>
     </ClInclude>
+    <ClInclude Include="client\file_task.h">
+      <Filter>client</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">

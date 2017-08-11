@@ -79,66 +79,54 @@ LRESULT UiFileManagerPanel::OnSize(UINT message, WPARAM wparam, LPARAM lparam, B
 {
     HDWP dwp = BeginDeferWindowPos(5);
 
-    if (dwp)
-    {
-        CSize size(lparam);
+    if (!dwp)
+        return 0;
 
-        toolbar_.AutoSize();
+    CSize size(lparam);
 
-        CRect drive_rect;
-        drive_list_.GetWindowRect(drive_rect);
+    toolbar_.AutoSize();
 
-        CRect toolbar_rect;
-        toolbar_.GetWindowRect(toolbar_rect);
+    CRect drive_rect;
+    drive_list_.GetWindowRect(drive_rect);
 
-        CRect title_rect;
-        title_.GetWindowRect(title_rect);
+    CRect toolbar_rect;
+    toolbar_.GetWindowRect(toolbar_rect);
 
-        CRect status_rect;
-        status_.GetWindowRect(status_rect);
+    CRect title_rect;
+    title_.GetWindowRect(title_rect);
 
-        title_.DeferWindowPos(dwp, nullptr,
-                              0,
-                              0,
-                              size.cx,
-                              title_rect.Height(),
-                              SWP_NOACTIVATE | SWP_NOZORDER);
+    CRect status_rect;
+    status_.GetWindowRect(status_rect);
 
-        drive_list_.DeferWindowPos(dwp, nullptr,
-                                   0,
-                                   title_rect.Height(),
-                                   size.cx,
-                                   drive_rect.Height(),
-                                   SWP_NOACTIVATE | SWP_NOZORDER);
+    title_.DeferWindowPos(dwp, nullptr,
+                          0, 0,
+                          size.cx, title_rect.Height(),
+                          SWP_NOACTIVATE | SWP_NOZORDER);
 
-        toolbar_.DeferWindowPos(dwp, nullptr,
-                                0,
-                                title_rect.Height() + drive_rect.Height(),
-                                size.cx,
-                                toolbar_rect.Height(),
-                                SWP_NOACTIVATE | SWP_NOZORDER);
-
-        int list_y = title_rect.Height() + toolbar_rect.Height() +
-            drive_rect.Height();
-
-        int list_height = size.cy - list_y - status_rect.Height();
-
-        file_list_.DeferWindowPos(dwp, nullptr,
-                                  0,
-                                  list_y,
-                                  size.cx,
-                                  list_height,
-                                  SWP_NOACTIVATE | SWP_NOZORDER);
-
-        status_.DeferWindowPos(dwp, nullptr,
-                               0,
-                               list_y + list_height,
-                               size.cx,
-                               status_rect.Height(),
+    drive_list_.DeferWindowPos(dwp, nullptr,
+                               0, title_rect.Height(),
+                               size.cx, drive_rect.Height(),
                                SWP_NOACTIVATE | SWP_NOZORDER);
 
-        EndDeferWindowPos(dwp);
-    }
+    toolbar_.DeferWindowPos(dwp, nullptr,
+                            0, title_rect.Height() + drive_rect.Height(),
+                            size.cx, toolbar_rect.Height(),
+                            SWP_NOACTIVATE | SWP_NOZORDER);
+
+    int list_y = title_rect.Height() + toolbar_rect.Height() + drive_rect.Height();
+    int list_height = size.cy - list_y - status_rect.Height();
+
+    file_list_.DeferWindowPos(dwp, nullptr,
+                              0, list_y,
+                              size.cx, list_height,
+                              SWP_NOACTIVATE | SWP_NOZORDER);
+
+    status_.DeferWindowPos(dwp, nullptr,
+                           0, list_y + list_height,
+                           size.cx, status_rect.Height(),
+                           SWP_NOACTIVATE | SWP_NOZORDER);
+
+    EndDeferWindowPos(dwp);
 
     return 0;
 }
@@ -147,35 +135,29 @@ LRESULT UiFileManagerPanel::OnDrawItem(UINT message, WPARAM wparam, LPARAM lpara
 {
     LPDRAWITEMSTRUCT dis = reinterpret_cast<LPDRAWITEMSTRUCT>(lparam);
 
-    if (dis->hwndItem == title_ || dis->hwndItem == status_)
+    if (dis->hwndItem != title_ && dis->hwndItem != status_)
+        return 0;
+
+    int saved_dc = SaveDC(dis->hDC);
+    if (!saved_dc)
+        return 0;
+
+    // Transparent background.
+    SetBkMode(dis->hDC, TRANSPARENT);
+
+    HBRUSH background_brush = GetSysColorBrush(COLOR_WINDOW);
+    FillRect(dis->hDC, &dis->rcItem, background_brush);
+
+    WCHAR label[256] = { 0 };
+    ::GetWindowTextW(dis->hwndItem, label, _countof(label));
+
+    if (label[0])
     {
-        int saved_dc = SaveDC(dis->hDC);
-
-        if (saved_dc)
-        {
-            // Transparent background.
-            SetBkMode(dis->hDC, TRANSPARENT);
-
-            HBRUSH background_brush = GetSysColorBrush(COLOR_WINDOW);
-            FillRect(dis->hDC, &dis->rcItem, background_brush);
-
-            WCHAR label[256] = { 0 };
-            ::GetWindowTextW(dis->hwndItem, label, _countof(label));
-
-            if (label[0])
-            {
-                SetTextColor(dis->hDC, GetSysColor(COLOR_WINDOWTEXT));
-
-                DrawTextW(dis->hDC,
-                          label,
-                          wcslen(label),
-                          &dis->rcItem,
-                          DT_VCENTER | DT_SINGLELINE);
-            }
-
-            RestoreDC(dis->hDC, saved_dc);
-        }
+        SetTextColor(dis->hDC, GetSysColor(COLOR_WINDOWTEXT));
+        DrawTextW(dis->hDC, label, wcslen(label), &dis->rcItem, DT_VCENTER | DT_SINGLELINE);
     }
+
+    RestoreDC(dis->hDC, saved_dc);
 
     return 0;
 }
@@ -519,9 +501,7 @@ void UiFileManagerPanel::OnFileUploadRequestReply(const FilePath& file_path,
     DLOG(FATAL) << "Unexpected reply: file upload request";
 }
 
-void UiFileManagerPanel::OnFileUploadDataRequestReply(
-    std::unique_ptr<proto::FilePacket> file_packet,
-    proto::RequestStatus status)
+void UiFileManagerPanel::OnFileUploadDataRequestReply(uint32_t flags, proto::RequestStatus status)
 {
     DLOG(FATAL) << "Unexpected reply: file upload data request";
 }

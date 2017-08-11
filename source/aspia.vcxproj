@@ -248,6 +248,7 @@
     <ClInclude Include="client\file_request_sender_local.h" />
     <ClInclude Include="client\file_request_sender_proxy.h" />
     <ClInclude Include="client\file_request_sender_remote.h" />
+    <ClInclude Include="client\file_task.h" />
     <ClInclude Include="client\file_transfer.h" />
     <ClInclude Include="client\file_transfer_downloader.h" />
     <ClInclude Include="client\file_transfer_uploader.h" />

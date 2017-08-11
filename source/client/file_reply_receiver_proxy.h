@@ -40,8 +40,7 @@ public:
 
     bool OnFileUploadRequestReply(const FilePath& file_path, proto::RequestStatus status);
 
-    bool OnFileUploadDataRequestReply(std::unique_ptr<proto::FilePacket> file_packet,
-                                      proto::RequestStatus status);
+    bool OnFileUploadDataRequestReply(uint32_t flags, proto::RequestStatus status);
 
 private:
     friend class FileReplyReceiver;

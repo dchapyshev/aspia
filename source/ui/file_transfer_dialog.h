@@ -50,9 +50,7 @@ private:
     LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     // FileTransfer::Delegate implementation.
-    void OnTransferStarted(const FilePath& source_path,
-                           const FilePath& target_path,
-                           uint64_t size) final;
+    void OnTransferStarted(uint64_t size) final;
 
     void OnTransferComplete() final;
 
@@ -60,7 +58,8 @@ private:
                                 proto::RequestStatus status,
                                 FileTransfer::ActionCallback callback) final;
 
-    void OnObjectTransfer(const FilePath& object_name,
+    void OnObjectTransfer(const FilePath& source_path,
+
                           uint64_t total_object_size,
                           uint64_t left_object_size) final;
 

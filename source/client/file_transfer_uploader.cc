@@ -11,8 +11,24 @@
 namespace aspia {
 
 FileTransferUploader::FileTransferUploader(std::shared_ptr<FileRequestSenderProxy> sender,
-                                           Delegate* delegate)
+                                           FileTransfer::Delegate* delegate)
     : FileTransfer(std::move(sender), delegate)
+{
+    thread_.Start(MessageLoop::TYPE_DEFAULT, this);
+}
+
+FileTransferUploader::~FileTransferUploader()
+{
+    thread_.Stop();
+}
+
+void FileTransferUploader::OnBeforeThreadRunning()
+{
+    runner_ = thread_.message_loop_proxy();
+    DCHECK(runner_);
+}
+
+void FileTransferUploader::OnAfterThreadRunning()
 {
     // Nothing
 }
@@ -55,6 +71,13 @@ void FileTransferUploader::Start(const FilePath& source_path,
                                  const FilePath& target_path,
                                  const FileList& file_list)
 {
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(
+            &FileTransferUploader::Start, this, source_path, target_path, file_list));
+        return;
+    }
+
     uint64_t total_size = 0;
     std::error_code code;
 
@@ -91,13 +114,13 @@ void FileTransferUploader::Start(const FilePath& source_path,
         }
     }
 
-    delegate_->OnTransferStarted(source_path, target_path, total_size);
+    delegate_->OnTransferStarted(total_size);
 
     // Run first task.
     RunTask(task_queue_.front(), FileRequestSender::Overwrite::NO);
 }
 
-void FileTransferUploader::RunTask(const Task& task, FileRequestSender::Overwrite overwrite)
+void FileTransferUploader::RunTask(const FileTask& task, FileRequestSender::Overwrite overwrite)
 {
     if (task.IsDirectory())
     {
@@ -114,8 +137,8 @@ void FileTransferUploader::RunNextTask()
     // Delete the task only after confirmation of its successful execution.
     if (!task_queue_.empty())
     {
-        const Task& task = task_queue_.front();
-        delegate_->OnObjectTransfer(task.SourcePath().filename(), task.Size(), 0);
+        const FileTask& task = task_queue_.front();
+        delegate_->OnObjectTransfer(task.SourcePath(), task.Size(), 0);
         task_queue_.pop();
     }
 
@@ -125,9 +148,9 @@ void FileTransferUploader::RunNextTask()
         return;
     }
 
-    const Task& task = task_queue_.front();
+    const FileTask& task = task_queue_.front();
 
-    delegate_->OnObjectTransfer(task.SourcePath().filename(), task.Size(), task.Size());
+    delegate_->OnObjectTransfer(task.SourcePath(), task.Size(), task.Size());
 
     // Run next task.
     RunTask(task, FileRequestSender::Overwrite::NO);
@@ -187,6 +210,13 @@ void FileTransferUploader::OnUnableToCreateDirectoryAction(Action action)
 void FileTransferUploader::OnCreateDirectoryRequestReply(const FilePath& path,
                                                          proto::RequestStatus status)
 {
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(
+            &FileTransferUploader::OnCreateDirectoryRequestReply, this, path, status));
+        return;
+    }
+
     if (status == proto::REQUEST_STATUS_SUCCESS ||
         status == proto::REQUEST_STATUS_PATH_ALREADY_EXISTS)
     {
@@ -302,6 +332,13 @@ void FileTransferUploader::OnUnableToReadFileAction(Action action)
 void FileTransferUploader::OnFileUploadRequestReply(const FilePath& file_path,
                                                     proto::RequestStatus status)
 {
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(
+            &FileTransferUploader::OnFileUploadRequestReply, this, file_path, status));
+        return;
+    }
+
     if (status != proto::REQUEST_STATUS_SUCCESS)
     {
         if (file_create_failure_action_ == Action::ASK)
@@ -319,7 +356,7 @@ void FileTransferUploader::OnFileUploadRequestReply(const FilePath& file_path,
         return;
     }
 
-    const Task& current_task = task_queue_.front();
+    const FileTask& current_task = task_queue_.front();
 
     file_packetizer_ = FilePacketizer::Create(current_task.SourcePath());
     if (!file_packetizer_)
@@ -388,10 +425,15 @@ void FileTransferUploader::OnUnableToWriteFileAction(Action action)
     }
 }
 
-void FileTransferUploader::OnFileUploadDataRequestReply(
-    std::unique_ptr<proto::FilePacket> prev_file_packet,
-    proto::RequestStatus status)
+void FileTransferUploader::OnFileUploadDataRequestReply(uint32_t flags, proto::RequestStatus status)
 {
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(
+            &FileTransferUploader::OnFileUploadDataRequestReply, this, flags, status));
+        return;
+    }
+
     if (!file_packetizer_)
     {
         LOG(ERROR) << "Unexpected reply: file upload data";
@@ -406,7 +448,7 @@ void FileTransferUploader::OnFileUploadDataRequestReply(
             ActionCallback callback = std::bind(
                 &FileTransferUploader::OnUnableToWriteFileAction, this, std::placeholders::_1);
 
-            const Task& current_task = task_queue_.front();
+            const FileTask& current_task = task_queue_.front();
 
             delegate_->OnFileOperationFailure(current_task.TargetPath(),
                                               status,
@@ -420,16 +462,16 @@ void FileTransferUploader::OnFileUploadDataRequestReply(
         return;
     }
 
-    if (prev_file_packet->flags() & proto::FilePacket::LAST_PACKET)
+    if (flags & proto::FilePacket::LAST_PACKET)
     {
         file_packetizer_.reset();
         RunNextTask();
         return;
     }
 
-    const Task& current_task = task_queue_.front();
+    const FileTask& current_task = task_queue_.front();
 
-    delegate_->OnObjectTransfer(current_task.SourcePath().filename(),
+    delegate_->OnObjectTransfer(current_task.SourcePath(),
                                 current_task.Size(),
                                 file_packetizer_->LeftSize());
 

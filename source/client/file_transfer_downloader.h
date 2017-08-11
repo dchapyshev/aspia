@@ -51,8 +51,7 @@ private:
 
     void OnFileUploadRequestReply(const FilePath& file_path, proto::RequestStatus status) final;
 
-    void OnFileUploadDataRequestReply(std::unique_ptr<proto::FilePacket> file_packet,
-                                      proto::RequestStatus status) final;
+    void OnFileUploadDataRequestReply(uint32_t flags, proto::RequestStatus status) final;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransferDownloader);
 };

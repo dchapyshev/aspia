@@ -125,7 +125,7 @@ bool FileReplyReceiverQueue::ProcessNextReply(
     {
         std::unique_ptr<proto::FilePacket> file_packet(request->release_file_packet());
 
-        receiver->OnFileUploadDataRequestReply(std::move(file_packet), reply.status());
+        receiver->OnFileUploadDataRequestReply(request->file_packet().flags(), reply.status());
     }
     else
     {

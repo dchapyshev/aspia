@@ -51,8 +51,7 @@ protected:
     virtual void OnFileUploadRequestReply(const FilePath& file_path,
                                           proto::RequestStatus status) = 0;
 
-    virtual void OnFileUploadDataRequestReply(std::unique_ptr<proto::FilePacket> file_packet,
-                                              proto::RequestStatus status) = 0;
+    virtual void OnFileUploadDataRequestReply(uint32_t flags, proto::RequestStatus status) = 0;
 
 private:
     friend class FileReplyReceiverProxy;
