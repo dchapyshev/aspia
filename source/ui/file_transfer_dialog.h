@@ -18,6 +18,7 @@
 #include <atlbase.h>
 #include <atlapp.h>
 #include <atlwin.h>
+#include <atlctrls.h>
 
 namespace aspia {
 
@@ -51,15 +52,11 @@ private:
 
     // FileTransfer::Delegate implementation.
     void OnTransferStarted(uint64_t size) final;
-
     void OnTransferComplete() final;
-
     void OnFileOperationFailure(const FilePath& file_path,
                                 proto::RequestStatus status,
                                 FileTransfer::ActionCallback callback) final;
-
     void OnObjectTransfer(const FilePath& source_path,
-
                           uint64_t total_object_size,
                           uint64_t left_object_size) final;
 
@@ -75,6 +72,10 @@ private:
     const Mode mode_;
 
     std::unique_ptr<FileTransfer> file_transfer_;
+
+    CProgressBarCtrl total_progress_;
+    CProgressBarCtrl current_progress_;
+    CEdit current_item_edit_;
 
     DISALLOW_COPY_AND_ASSIGN(UiFileTransferDialog);
 };
