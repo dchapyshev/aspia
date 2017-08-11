@@ -10,6 +10,7 @@
 #include "base/logging.h"
 
 #include <atlctrls.h>
+#include <atlmisc.h>
 
 namespace aspia {
 
@@ -30,6 +31,7 @@ void UiFileStatusDialog::WaitForClose()
 
 void UiFileStatusDialog::OnBeforeThreadRunning()
 {
+    // We need to load the library to work with RichEdit before creating a dialog.
     LoadLibraryW(L"msftedit.dll");
 
     runner_ = ui_thread_.message_loop_proxy();
@@ -45,8 +47,8 @@ void UiFileStatusDialog::OnBeforeThreadRunning()
     {
         ShowWindow(SW_SHOWNORMAL);
 
-        // The default text limit is 64K characters.
         edit_ = GetDlgItem(IDC_STATUS_EDIT);
+        // The default text limit is 64K characters. We increase this size.
         edit_.LimitText(0xFFFFFFFF);
     }
 }
