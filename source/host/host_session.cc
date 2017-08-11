@@ -14,9 +14,8 @@ namespace aspia {
 
 static const std::chrono::seconds kAttachTimeout{ 30 };
 
-HostSession::HostSession(
-    proto::SessionType session_type,
-    std::shared_ptr<NetworkChannelProxy> channel_proxy)
+HostSession::HostSession(proto::SessionType session_type,
+                         std::shared_ptr<NetworkChannelProxy> channel_proxy)
     : session_type_(session_type),
       channel_proxy_(channel_proxy),
       process_connector_(channel_proxy)
@@ -65,8 +64,7 @@ void HostSession::OnSessionAttached(uint32_t session_id)
 
     if (process_connector_.StartServer(channel_id))
     {
-        bool session_process_launched =
-            LaunchSessionProcess(session_type_, session_id, channel_id);
+        bool session_process_launched = LaunchSessionProcess(session_type_, session_id, channel_id);
 
         PipeChannel::DisconnectHandler disconnect_handler =
             std::bind(&HostSession::OnIpcChannelDisconnect, this);
@@ -74,8 +72,7 @@ void HostSession::OnSessionAttached(uint32_t session_id)
         uint32_t user_data = static_cast<uint32_t>(session_type_);
 
         if (session_process_launched &&
-            process_connector_.Accept(user_data,
-                                      std::move(disconnect_handler)))
+            process_connector_.Accept(user_data, std::move(disconnect_handler)))
         {
             OnIpcChannelConnect(user_data);
             return;
@@ -100,15 +97,26 @@ void HostSession::OnSessionDetached()
     if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE ||
         session_type_ == proto::SESSION_TYPE_DESKTOP_VIEW)
     {
+        // We close the session process only for desktop manage and desktop view sessions.
+        // Processes for other types of sessions are left open so that the user can see the fact
+        // of connection to his computer.
         process_.Terminate(0, false);
     }
 
     process_.Close();
 
-    // If the new session is not connected within the specified time interval,
-    // an error occurred.
-    timer_.Start(kAttachTimeout,
-                 std::bind(&HostSession::OnSessionAttachTimeout, this));
+    if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE ||
+        session_type_ == proto::SESSION_TYPE_DESKTOP_VIEW)
+    {
+        // If the new session is not connected within the specified time interval,
+        // an error occurred.
+        timer_.Start(kAttachTimeout, std::bind(&HostSession::OnSessionAttachTimeout, this));
+    }
+    else
+    {
+        // All other types of sessions do not allow reconnection. Closing the session.
+        runner_->PostQuit();
+    }
 }
 
 void HostSession::OnProcessClose()
@@ -146,14 +154,13 @@ void HostSession::OnIpcChannelConnect(uint32_t user_data)
     bool ok = process_.IsValid();
     if (!ok)
     {
-        LOG(ERROR) << "Unable to open session process: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "Unable to open session process: " << GetLastSystemErrorString();
     }
 
     if (ok)
     {
-        ok = process_watcher_.StartWatching(
-            process_, std::bind(&HostSession::OnProcessClose, this));
+        ok = process_watcher_.StartWatching(process_,
+                                            std::bind(&HostSession::OnProcessClose, this));
 
         if (!ok)
         {
@@ -188,19 +195,8 @@ void HostSession::OnIpcChannelDisconnect()
             break;
 
         case State::ATTACHED:
-        {
             OnSessionDetached();
-
-            if (session_type_ == proto::SESSION_TYPE_FILE_TRANSFER ||
-                session_type_ == proto::SESSION_TYPE_POWER_MANAGE)
-            {
-                state_ = State::DETACHED;
-
-                timer_.Stop();
-                runner_->PostQuit();
-            }
-        }
-        break;
+            break;
 
         case State::STARTING:
         {
