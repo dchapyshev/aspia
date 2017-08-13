@@ -7,8 +7,10 @@
 
 #include "protocol/filesystem.h"
 #include "base/files/drive_enumerator.h"
+#include "base/files/file_enumerator.h"
 #include "base/files/file_helpers.h"
 #include "base/files/base_paths.h"
+#include "base/files/file_util.h"
 #include "base/strings/unicode.h"
 #include "base/logging.h"
 
@@ -98,28 +100,20 @@ proto::RequestStatus ExecuteFileListRequest(const FilePath& path, proto::FileLis
 
     std::error_code code;
 
-    if (!std::experimental::filesystem::exists(path, code))
+    if (!DirectoryExists(path))
         return proto::REQUEST_STATUS_PATH_NOT_FOUND;
 
-    for (auto& entry : std::experimental::filesystem::directory_iterator(path, code))
+    FileEnumerator enumerator(path, false, FileEnumerator::FILES | FileEnumerator::DIRECTORIES);
+
+    for (FilePath current = enumerator.Next(); !current.empty(); current = enumerator.Next())
     {
+        FileEnumerator::FileInfo info = enumerator.GetInfo();
         proto::FileList::Item* item = file_list->add_item();
 
-        item->set_name(entry.path().filename().u8string());
-
-        std::experimental::filesystem::file_time_type time =
-            std::experimental::filesystem::last_write_time(entry.path(), code);
-
-        item->set_modification_time(decltype(time)::clock::to_time_t(time));
-
-        item->set_is_directory(std::experimental::filesystem::is_directory(entry.status()));
-
-        if (!item->is_directory())
-        {
-            uintmax_t size = std::experimental::filesystem::file_size(entry.path(), code);
-            if (size != static_cast<uintmax_t>(-1))
-                item->set_size(size);
-        }
+        item->set_name(info.GetName().u8string());
+        item->set_modification_time(info.GetLastModifiedTime());
+        item->set_is_directory(info.IsDirectory());
+        item->set_size(info.GetSize());
     }
 
     return proto::REQUEST_STATUS_SUCCESS;
@@ -134,7 +128,7 @@ proto::RequestStatus ExecuteCreateDirectoryRequest(const FilePath& path)
 
     if (!std::experimental::filesystem::create_directory(path, code))
     {
-        if (std::experimental::filesystem::exists(path, code))
+        if (PathExists(path))
             return proto::REQUEST_STATUS_PATH_ALREADY_EXISTS;
 
         return proto::REQUEST_STATUS_ACCESS_DENIED;
@@ -148,21 +142,7 @@ proto::RequestStatus ExecuteDirectorySizeRequest(const FilePath& path, uint64_t&
     if (!IsValidPathName(path))
         return proto::REQUEST_STATUS_INVALID_PATH_NAME;
 
-    size = 0;
-
-    for (const auto& entry : std::experimental::filesystem::recursive_directory_iterator())
-    {
-        if (!std::experimental::filesystem::is_directory(entry.status()))
-        {
-            std::error_code code;
-
-            uintmax_t file_size =
-                std::experimental::filesystem::file_size(entry.path(), code);
-
-            if (file_size != static_cast<uintmax_t>(-1))
-                size += file_size;
-        }
-    }
+    size = ComputeDirectorySize(path);
 
     return proto::REQUEST_STATUS_SUCCESS;
 }
@@ -176,11 +156,10 @@ proto::RequestStatus ExecuteRenameRequest(const FilePath& old_name, const FilePa
 
     if (old_name != new_name)
     {
-        std::error_code code;
-
-        if (std::experimental::filesystem::exists(new_name, code))
+        if (PathExists(new_name))
             return proto::REQUEST_STATUS_PATH_ALREADY_EXISTS;
 
+        std::error_code code;
         std::experimental::filesystem::rename(old_name, new_name, code);
     }
 
@@ -192,12 +171,10 @@ proto::RequestStatus ExecuteRemoveRequest(const FilePath& path)
     if (!IsValidPathName(path))
         return proto::REQUEST_STATUS_INVALID_PATH_NAME;
 
-    std::error_code code;
-
-    if (!std::experimental::filesystem::exists(path, code))
+    if (!PathExists(path))
         return proto::REQUEST_STATUS_PATH_NOT_FOUND;
 
-    if (!std::experimental::filesystem::remove(path, code))
+    if (!DeleteFile(path))
         return proto::REQUEST_STATUS_ACCESS_DENIED;
 
     return proto::REQUEST_STATUS_SUCCESS;

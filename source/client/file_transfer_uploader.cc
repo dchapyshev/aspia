@@ -6,6 +6,8 @@
 //
 
 #include "client/file_transfer_uploader.h"
+#include "base/files/file_enumerator.h"
+#include "base/files/file_util.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -36,30 +38,33 @@ void FileTransferUploader::OnAfterThreadRunning()
 uint64_t FileTransferUploader::BuildTaskListForDirectoryContent(const FilePath& source_path,
                                                                 const FilePath& target_path)
 {
-    std::error_code code;
+    FileEnumerator enumerator(source_path,
+                              false,
+                              FileEnumerator::FILES | FileEnumerator::DIRECTORIES);
     uint64_t size = 0;
 
-    for (const auto& entry : std::experimental::filesystem::directory_iterator(source_path, code))
+    for (;;)
     {
+        FilePath source_object_path = enumerator.Next();
+        if (source_object_path.empty())
+            break;
+
         FilePath target_object_path;
 
         target_object_path.assign(target_path);
-        target_object_path.append(entry.path().filename());
+        target_object_path.append(source_object_path.filename());
 
-        if (std::experimental::filesystem::is_directory(entry.status()))
+        FileEnumerator::FileInfo info = enumerator.GetInfo();
+
+        if (info.IsDirectory())
         {
-            task_queue_.emplace(entry.path(), target_object_path, 0, true);
-            size += BuildTaskListForDirectoryContent(entry.path(), target_object_path);
+            task_queue_.emplace(source_object_path, target_object_path, 0, true);
+            size += BuildTaskListForDirectoryContent(source_object_path, target_object_path);
         }
         else
         {
-            uintmax_t file_size = std::experimental::filesystem::file_size(entry.path(), code);
-
-            if (file_size == static_cast<uintmax_t>(-1))
-                file_size = 0;
-
-            task_queue_.emplace(entry.path(), target_object_path, file_size, false);
-
+            int64_t file_size = info.GetSize();
+            task_queue_.emplace(source_object_path, target_object_path, file_size, false);
             size += file_size;
         }
     }
@@ -79,7 +84,6 @@ void FileTransferUploader::Start(const FilePath& source_path,
     }
 
     uint64_t total_size = 0;
-    std::error_code code;
 
     for (const auto& file : file_list)
     {
@@ -97,16 +101,12 @@ void FileTransferUploader::Start(const FilePath& source_path,
         {
             task_queue_.emplace(source_object_path, target_object_path, 0, true);
 
-            total_size += BuildTaskListForDirectoryContent(source_object_path,
-                                                           target_object_path);
+            total_size += BuildTaskListForDirectoryContent(source_object_path, target_object_path);
         }
         else
         {
-            uintmax_t file_size =
-                std::experimental::filesystem::file_size(source_object_path, code);
-
-            if (file_size == static_cast<uintmax_t>(-1))
-                file_size = 0;
+            int64_t file_size = 0;
+            GetFileSize(source_object_path, file_size);
 
             task_queue_.emplace(source_object_path, target_object_path, file_size, false);
 
@@ -122,6 +122,8 @@ void FileTransferUploader::Start(const FilePath& source_path,
 
 void FileTransferUploader::RunTask(const FileTask& task, FileRequestSender::Overwrite overwrite)
 {
+    delegate_->OnObjectTransferStarted(task.SourcePath(), task.Size());
+
     if (task.IsDirectory())
     {
         sender_->SendCreateDirectoryRequest(This(), task.TargetPath());
@@ -137,8 +139,7 @@ void FileTransferUploader::RunNextTask()
     // Delete the task only after confirmation of its successful execution.
     if (!task_queue_.empty())
     {
-        const FileTask& task = task_queue_.front();
-        delegate_->OnObjectTransfer(task.SourcePath(), task.Size(), 0);
+        delegate_->OnObjectTransfer(0);
         task_queue_.pop();
     }
 
@@ -148,12 +149,8 @@ void FileTransferUploader::RunNextTask()
         return;
     }
 
-    const FileTask& task = task_queue_.front();
-
-    delegate_->OnObjectTransfer(task.SourcePath(), task.Size(), task.Size());
-
     // Run next task.
-    RunTask(task, FileRequestSender::Overwrite::NO);
+    RunTask(task_queue_.front(), FileRequestSender::Overwrite::NO);
 }
 
 void FileTransferUploader::OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list)
@@ -469,11 +466,7 @@ void FileTransferUploader::OnFileUploadDataRequestReply(uint32_t flags, proto::R
         return;
     }
 
-    const FileTask& current_task = task_queue_.front();
-
-    delegate_->OnObjectTransfer(current_task.SourcePath(),
-                                current_task.Size(),
-                                file_packetizer_->LeftSize());
+    delegate_->OnObjectTransfer(file_packetizer_->LeftSize());
 
     std::unique_ptr<proto::FilePacket> new_file_packet = file_packetizer_->CreateNextPacket();
     if (!new_file_packet)
@@ -482,6 +475,8 @@ void FileTransferUploader::OnFileUploadDataRequestReply(uint32_t flags, proto::R
         {
             ActionCallback callback = std::bind(
                 &FileTransferUploader::OnUnableToReadFileAction, this, std::placeholders::_1);
+
+            const FileTask& current_task = task_queue_.front();
 
             delegate_->OnFileOperationFailure(current_task.SourcePath(),
                                               proto::REQUEST_STATUS_ACCESS_DENIED,

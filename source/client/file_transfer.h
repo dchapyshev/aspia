@@ -43,9 +43,10 @@ public:
                                             proto::RequestStatus status,
                                             ActionCallback callback) = 0;
 
-        virtual void OnObjectTransfer(const FilePath& source_path,
-                                      uint64_t total_object_size,
-                                      uint64_t left_object_size) = 0;
+        virtual void OnObjectTransferStarted(const FilePath& object_path,
+                                             uint64_t object_size) = 0;
+
+        virtual void OnObjectTransfer(uint64_t left_object_size) = 0;
     };
 
     FileTransfer(std::shared_ptr<FileRequestSenderProxy> sender, Delegate* delegate)

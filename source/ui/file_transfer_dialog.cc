@@ -79,8 +79,7 @@ void FileTransferDialog::OnTransferStarted(uint64_t size)
 {
     // Save the total size of all the transferred objects.
     total_size_ = size;
-    transferred_total_ = 0;
-    transferred_per_object_ = 0;
+    total_transferred_size_ = 0;
 }
 
 void FileTransferDialog::OnTransferComplete()
@@ -88,31 +87,47 @@ void FileTransferDialog::OnTransferComplete()
     PostMessageW(WM_CLOSE);
 }
 
-void FileTransferDialog::OnObjectTransfer(const FilePath& source_path,
-                                          uint64_t total_object_size,
-                                          uint64_t left_object_size)
+void FileTransferDialog::OnObjectTransferStarted(const FilePath& object_path, uint64_t object_size)
 {
-    current_item_edit_.SetWindowTextW(source_path.c_str());
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(
+            &FileTransferDialog::OnObjectTransferStarted, this, object_path, object_size));
+        return;
+    }
 
-    uint64_t transferred = total_object_size - left_object_size;
+    current_item_edit_.SetWindowTextW(object_path.c_str());
+    object_size_ = object_size;
+    object_transferred_size_ = 0;
+}
+
+void FileTransferDialog::OnObjectTransfer(uint64_t left_size)
+{
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&FileTransferDialog::OnObjectTransfer, this, left_size));
+        return;
+    }
 
     if (total_size_ != 0)
     {
-        transferred_total_ += transferred - transferred_per_object_;
-        transferred_per_object_ = transferred;
+        uint64_t transferred = 0;
 
-        int percentage = static_cast<int>((transferred_total_ * 100ULL) / total_size_);
+        if (object_size_ != 0)
+            transferred = object_size_ - left_size;
+
+        total_transferred_size_ += transferred - object_transferred_size_;
+        object_transferred_size_ = transferred;
+
+        int percentage = static_cast<int>((total_transferred_size_ * 100ULL) / total_size_);
         total_progress_.SetPos(percentage);
     }
 
-    if (total_object_size != 0)
+    if (object_size_ != 0)
     {
-        int percentage = static_cast<int>((transferred * 100ULL) / total_object_size);
+        int percentage = static_cast<int>((object_transferred_size_ * 100ULL) / object_size_);
         current_progress_.SetPos(percentage);
     }
-
-    if (left_object_size == 0)
-        transferred_per_object_ = 0;
 }
 
 void FileTransferDialog::OnFileOperationFailure(const FilePath& file_path,

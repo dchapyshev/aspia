@@ -56,9 +56,8 @@ private:
     void OnFileOperationFailure(const FilePath& file_path,
                                 proto::RequestStatus status,
                                 FileTransfer::ActionCallback callback) final;
-    void OnObjectTransfer(const FilePath& source_path,
-                          uint64_t total_object_size,
-                          uint64_t left_object_size) final;
+    void OnObjectTransferStarted(const FilePath& object_path, uint64_t object_size) final;
+    void OnObjectTransfer(uint64_t left_size) final;
 
     std::shared_ptr<MessageLoopProxy> runner_;
     std::shared_ptr<FileRequestSenderProxy> sender_;
@@ -66,8 +65,9 @@ private:
     const FilePath& source_path_;
     const FilePath& target_path_;
     uint64_t total_size_ = 0;
-    uint64_t transferred_total_ = 0;
-    uint64_t transferred_per_object_ = 0;
+    uint64_t total_transferred_size_ = 0;
+    uint64_t object_size_ = 0;
+    uint64_t object_transferred_size_ = 0;
     const FileTransfer::FileList& file_list_;
     const Mode mode_;
 

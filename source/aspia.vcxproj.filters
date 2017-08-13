@@ -502,6 +502,12 @@
     <ClCompile Include="ui\file_action_dialog.cc">
       <Filter>ui</Filter>
     </ClCompile>
+    <ClCompile Include="base\files\file_enumerator.cc">
+      <Filter>base\files</Filter>
+    </ClCompile>
+    <ClCompile Include="base\files\file_util.cc">
+      <Filter>base\files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1057,6 +1063,12 @@
     </ClInclude>
     <ClInclude Include="client\file_task.h">
       <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="base\files\file_enumerator.h">
+      <Filter>base\files</Filter>
+    </ClInclude>
+    <ClInclude Include="base\files\file_util.h">
+      <Filter>base\files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
