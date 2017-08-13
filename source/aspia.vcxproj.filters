@@ -508,6 +508,12 @@
     <ClCompile Include="base\files\file_util.cc">
       <Filter>base\files</Filter>
     </ClCompile>
+    <ClCompile Include="base\files\file.cc">
+      <Filter>base\files</Filter>
+    </ClCompile>
+    <ClCompile Include="base\files\file_win.cc">
+      <Filter>base\files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1068,6 +1074,15 @@
       <Filter>base\files</Filter>
     </ClInclude>
     <ClInclude Include="base\files\file_util.h">
+      <Filter>base\files</Filter>
+    </ClInclude>
+    <ClInclude Include="base\files\file.h">
+      <Filter>base\files</Filter>
+    </ClInclude>
+    <ClInclude Include="base\files\platform_file.h">
+      <Filter>base\files</Filter>
+    </ClInclude>
+    <ClInclude Include="base\files\scoped_file.h">
       <Filter>base\files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -124,9 +124,7 @@ proto::RequestStatus ExecuteCreateDirectoryRequest(const FilePath& path)
     if (!IsValidPathName(path))
         return proto::REQUEST_STATUS_INVALID_PATH_NAME;
 
-    std::error_code code;
-
-    if (!std::experimental::filesystem::create_directory(path, code))
+    if (!CreateDirectory(path, nullptr))
     {
         if (PathExists(path))
             return proto::REQUEST_STATUS_PATH_ALREADY_EXISTS;
@@ -159,8 +157,8 @@ proto::RequestStatus ExecuteRenameRequest(const FilePath& old_name, const FilePa
         if (PathExists(new_name))
             return proto::REQUEST_STATUS_PATH_ALREADY_EXISTS;
 
-        std::error_code code;
-        std::experimental::filesystem::rename(old_name, new_name, code);
+        if (!ReplaceFile(old_name, new_name, nullptr))
+            return proto::REQUEST_STATUS_ACCESS_DENIED;
     }
 
     return proto::REQUEST_STATUS_SUCCESS;

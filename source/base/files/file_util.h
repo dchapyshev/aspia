@@ -8,7 +8,7 @@
 #ifndef _ASPIA_BASE__FILES__FILE_UTIL_H
 #define _ASPIA_BASE__FILES__FILE_UTIL_H
 
-#include "base/files/file_path.h"
+#include "base/files/file.h"
 
 namespace aspia {
 
@@ -35,30 +35,10 @@ bool DeleteFile(const FilePath& path);
 
 time_t UnixTimeFromFileTime(const FILETIME& file_time);
 
-struct FileInfo
-{
-    // The size of the file in bytes.  Undefined when is_directory is true.
-    int64_t size = 0;
-
-    // True if the file corresponds to a directory.
-    bool is_directory = false;
-
-    // True if the file corresponds to a symbolic link.  For Windows currently
-    // not supported and thus always false.
-    bool is_symbolic_link = false;
-
-    // The last modified time of a file.
-    time_t last_modified = 0;
-
-    // The last accessed time of a file.
-    time_t last_accessed = 0;
-
-    // The creation time of a file.
-    time_t creation_time = 0;
-};
+FILETIME FileTimeFromUnixTime(time_t time);
 
 // Returns information about the given file path.
-bool GetFileInfo(const FilePath& file_path, FileInfo& info);
+bool GetFileInfo(const FilePath& file_path, File::Info& info);
 
 bool GetFileSize(const FilePath& file_path, int64_t& file_size);
 
@@ -75,6 +55,21 @@ bool DirectoryExists(const FilePath& path);
 // Returns true if the contents of the two files given are equal, false
 // otherwise.  If either file can't be read, returns false.
 bool ContentsEqual(const FilePath& filename1, const FilePath& filename2);
+
+// Renames file |from_path| to |to_path|. Both paths must be on the same
+// volume, or the function will fail. Destination file will be created
+// if it doesn't exist. Prefer this function over Move when dealing with
+// temporary files. On Windows it preserves attributes of the target file.
+// Returns true on success, leaving *error unchanged.
+// Returns false on failure and sets *error appropriately, if it is non-NULL.
+bool ReplaceFile(const FilePath& from_path, const FilePath& to_path, File::Error* error);
+
+// Creates a directory, as well as creating any parent directories, if they
+// don't exist. Returns 'true' on successful creation, or if the directory
+// already exists.  The directory is only readable by the current user.
+// Returns true on success, leaving *error unchanged.
+// Returns false on failure and sets *error appropriately, if it is non-NULL.
+bool CreateDirectory(const FilePath& full_path, File::Error* error);
 
 } // namespace aspia
 

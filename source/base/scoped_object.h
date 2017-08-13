@@ -34,7 +34,7 @@ public:
         Traits::Close(object_);
     }
 
-    T Get()
+    T Get() const
     {
         return object_;
     }
