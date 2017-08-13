@@ -409,12 +409,6 @@
     <ClCompile Include="ui\base\timer.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
-    <ClCompile Include="ui\file_list.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\drive_list.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="ui\file_toolbar.cc">
       <Filter>ui</Filter>
     </ClCompile>
@@ -513,6 +507,12 @@
     </ClCompile>
     <ClCompile Include="base\files\file_win.cc">
       <Filter>base\files</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\drive_list_window.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\file_list_window.cc">
+      <Filter>ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -962,12 +962,6 @@
     <ClInclude Include="ui\base\timer.h">
       <Filter>ui\base</Filter>
     </ClInclude>
-    <ClInclude Include="ui\file_list.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\drive_list.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="ui\file_toolbar.h">
       <Filter>ui</Filter>
     </ClInclude>
@@ -1084,6 +1078,12 @@
     </ClInclude>
     <ClInclude Include="base\files\scoped_file.h">
       <Filter>base\files</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\drive_list_window.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_list_window.h">
+      <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

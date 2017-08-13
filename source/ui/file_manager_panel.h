@@ -14,8 +14,8 @@
 #include "client/file_transfer.h"
 #include "proto/file_transfer_session.pb.h"
 #include "ui/file_toolbar.h"
-#include "ui/file_list.h"
-#include "ui/drive_list.h"
+#include "ui/file_list_window.h"
+#include "ui/drive_list_window.h"
 #include "ui/resource.h"
 
 namespace aspia {
