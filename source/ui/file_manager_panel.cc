@@ -35,6 +35,11 @@ FilePath FileManagerPanel::GetCurrentPath() const
     return drive_list_.CurrentPath();
 }
 
+void FileManagerPanel::Refresh()
+{
+    sender_->SendFileListRequest(This(), GetCurrentPath());
+}
+
 LPARAM FileManagerPanel::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     HFONT default_font = AtlGetStockFont(DEFAULT_GUI_FONT);
@@ -193,7 +198,6 @@ LRESULT FileManagerPanel::OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& hand
     {
         FilePath path(drive_list_.CurrentPath());
         path.append(file_list_.ObjectName(object_index));
-
         sender_->SendFileListRequest(This(), path);
     }
 
@@ -363,6 +367,7 @@ LRESULT FileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handl
     if (file_list.empty())
         return 0;
 
+    // Sending files. After the method is completed, the operation must be completed.
     delegate_->SendFiles(type_, drive_list_.CurrentPath(), file_list);
 
     return 0;
@@ -372,9 +377,7 @@ LRESULT FileManagerPanel::OnDriveEndEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled
 {
     PNMCBEENDEDITW end_edit = reinterpret_cast<PNMCBEENDEDITW>(hdr);
 
-    if (end_edit->fChanged &&
-        end_edit->iWhy == CBENF_RETURN &&
-        end_edit->szText[0])
+    if (end_edit->fChanged && end_edit->iWhy == CBENF_RETURN && end_edit->szText[0])
     {
         sender_->SendFileListRequest(This(), FilePath(end_edit->szText));
     }
@@ -394,7 +397,7 @@ void FileManagerPanel::OnDriveListRequestReply(std::unique_ptr<proto::DriveList>
 
     if (file_list_.HasFileList())
     {
-        sender_->SendFileListRequest(This(), drive_list_.CurrentPath());
+        Refresh();
     }
     else
     {
@@ -448,8 +451,6 @@ void FileManagerPanel::OnDirectorySizeRequestFailure(const FilePath& path,
 void FileManagerPanel::OnCreateDirectoryRequestReply(const FilePath& path,
                                                      proto::RequestStatus status)
 {
-    sender_->SendFileListRequest(This(), drive_list_.CurrentPath());
-
     if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
     {
         CString status_string = RequestStatusCodeToString(status);
@@ -458,12 +459,14 @@ void FileManagerPanel::OnCreateDirectoryRequestReply(const FilePath& path,
         message.Format(IDS_FT_OP_CREATE_FOLDER_ERROR, path.c_str(), status_string);
         MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
     }
+    else
+    {
+        Refresh();
+    }
 }
 
 void FileManagerPanel::OnRemoveRequestReply(const FilePath& path, proto::RequestStatus status)
 {
-    sender_->SendFileListRequest(This(), drive_list_.CurrentPath());
-
     if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
     {
         CString status_string = RequestStatusCodeToString(status);
@@ -472,25 +475,27 @@ void FileManagerPanel::OnRemoveRequestReply(const FilePath& path, proto::Request
         message.Format(IDS_FT_OP_REMOVE_ERROR, path.c_str(), status_string);
         MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
     }
+    else
+    {
+        Refresh();
+    }
 }
 
 void FileManagerPanel::OnRenameRequestReply(const FilePath& old_name,
                                             const FilePath& new_name,
                                             proto::RequestStatus status)
 {
-    sender_->SendFileListRequest(This(), drive_list_.CurrentPath());
-
     if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
     {
         CString status_string = RequestStatusCodeToString(status);
 
         CString message;
-        message.Format(IDS_FT_OP_RENAME_ERROR,
-                       old_name.c_str(),
-                       new_name.c_str(),
-                       status_string);
-
+        message.Format(IDS_FT_OP_RENAME_ERROR, old_name.c_str(), new_name.c_str(), status_string);
         MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
+    }
+    else
+    {
+        Refresh();
     }
 }
 

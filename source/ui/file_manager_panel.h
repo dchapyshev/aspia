@@ -43,6 +43,7 @@ public:
     virtual ~FileManagerPanel() = default;
 
     FilePath GetCurrentPath() const;
+    void Refresh();
 
 private:
     static const int kDriveListControl = 101;

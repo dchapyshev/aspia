@@ -90,6 +90,16 @@ void FileManagerWindow::SendFiles(FileManagerPanel::Type panel_type,
 
     FileTransferDialog dialog(mode, remote_sender_, source_path, target_path, file_list);
     dialog.DoModal(*this);
+
+    // Now update the list of files in the panel.
+    if (panel_type == FileManagerPanel::Type::LOCAL)
+    {
+        remote_panel_.Refresh();
+    }
+    else
+    {
+        local_panel_.Refresh();
+    }
 }
 
 LRESULT FileManagerWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
