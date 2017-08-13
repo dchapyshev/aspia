@@ -152,14 +152,8 @@ LRESULT FileManagerWindow::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam,
 
 LRESULT FileManagerWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
-    int width = LOWORD(lparam);
-    int height = HIWORD(lparam);
-
-    splitter_.MoveWindow(kBorderSize,
-                         0,
-                         width - (kBorderSize * 2),
-                         height,
-                         FALSE);
+    CSize size(lparam);
+    splitter_.MoveWindow(kBorderSize, 0, size.cx - (kBorderSize * 2), size.cy, FALSE);
     return 0;
 }
 

@@ -62,12 +62,12 @@ void HostSessionPower::OnIpcChannelMessage(std::unique_ptr<IOBuffer> buffer)
             case proto::PowerEvent::HIBERNATE:
             case proto::PowerEvent::SUSPEND:
             {
-                UiPowerSessionDialog session_dialog(message.power_event().action());
+                PowerSessionDialog session_dialog(message.power_event().action());
 
-                UiPowerSessionDialog::Result result =
-                    static_cast<UiPowerSessionDialog::Result>(session_dialog.DoModal());
+                PowerSessionDialog::Result result =
+                    static_cast<PowerSessionDialog::Result>(session_dialog.DoModal());
 
-                if (result == UiPowerSessionDialog::Result::EXECUTE)
+                if (result == PowerSessionDialog::Result::EXECUTE)
                 {
                     InjectPowerEvent(message.power_event());
                 }

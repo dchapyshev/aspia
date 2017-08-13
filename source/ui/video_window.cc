@@ -22,24 +22,21 @@ static const int kScrollBorder = 15;
 static const uint8_t kWheelMask =
     proto::PointerEvent::WHEEL_DOWN | proto::PointerEvent::WHEEL_UP;
 
-UiVideoWindow::UiVideoWindow(Delegate* delegate) :
-    delegate_(delegate),
-    background_brush_(CreateSolidBrush(RGB(25, 25, 25))),
-    scroll_timer_(kScrollTimerId)
+VideoWindow::VideoWindow(Delegate* delegate)
+    : delegate_(delegate),
+      background_brush_(CreateSolidBrush(RGB(25, 25, 25))),
+      scroll_timer_(kScrollTimerId)
 {
     // Nothing
 }
 
-LRESULT UiVideoWindow::OnSkipMessage(UINT message,
-                                     WPARAM wparam,
-                                     LPARAM lparam,
-                                     BOOL& handled)
+LRESULT VideoWindow::OnSkipMessage(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     // Nothing
     return 0;
 }
 
-void UiVideoWindow::DrawBackground(HDC paint_dc, const CRect& paint_rect)
+void VideoWindow::DrawBackground(HDC paint_dc, const CRect& paint_rect)
 {
     CRect left_rect(paint_rect.left,
                     paint_rect.top,
@@ -74,10 +71,7 @@ void UiVideoWindow::DrawBackground(HDC paint_dc, const CRect& paint_rect)
         FillRect(paint_dc, bottom_rect, background_brush_);
 }
 
-LRESULT UiVideoWindow::OnPaint(UINT message,
-                               WPARAM wparam,
-                               LPARAM lparam,
-                               BOOL& handled)
+LRESULT VideoWindow::OnPaint(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     CPaintDC paint(*this);
 
@@ -108,10 +102,7 @@ LRESULT UiVideoWindow::OnPaint(UINT message,
     return 0;
 }
 
-LRESULT UiVideoWindow::OnSize(UINT message,
-                              WPARAM wparam,
-                              LPARAM lparam,
-                              BOOL& handled)
+LRESULT VideoWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     if (!frame_)
         return 0;
@@ -143,10 +134,7 @@ LRESULT UiVideoWindow::OnSize(UINT message,
     return 0;
 }
 
-LRESULT UiVideoWindow::OnMouse(UINT message,
-                               WPARAM wparam,
-                               LPARAM lparam,
-                               BOOL& handled)
+LRESULT VideoWindow::OnMouse(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     if (!frame_ || !has_focus_)
         return 0;
@@ -252,16 +240,13 @@ LRESULT UiVideoWindow::OnMouse(UINT message,
     return 0;
 }
 
-LRESULT UiVideoWindow::OnMouseLeave(UINT message,
-                                    WPARAM wparam,
-                                    LPARAM lparam,
-                                    BOOL& handled)
+LRESULT VideoWindow::OnMouseLeave(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     has_mouse_ = false;
     return 0;
 }
 
-LRESULT UiVideoWindow::OnTimer(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT VideoWindow::OnTimer(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     UINT_PTR event_id = static_cast<UINT_PTR>(wparam);
 
@@ -283,10 +268,7 @@ LRESULT UiVideoWindow::OnTimer(UINT message, WPARAM wparam, LPARAM lparam, BOOL&
     return 0;
 }
 
-LRESULT UiVideoWindow::OnHScroll(UINT message,
-                                 WPARAM wparam,
-                                 LPARAM lparam,
-                                 BOOL& handled)
+LRESULT VideoWindow::OnHScroll(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     UINT code = LOWORD(wparam);
     UINT pos = HIWORD(wparam);
@@ -321,10 +303,7 @@ LRESULT UiVideoWindow::OnHScroll(UINT message,
     return 0;
 }
 
-LRESULT UiVideoWindow::OnVScroll(UINT message,
-                                 WPARAM wparam,
-                                 LPARAM lparam,
-                                 BOOL& handled)
+LRESULT VideoWindow::OnVScroll(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     UINT code = LOWORD(wparam);
     UINT pos = HIWORD(wparam);
@@ -359,7 +338,7 @@ LRESULT UiVideoWindow::OnVScroll(UINT message,
     return 0;
 }
 
-void UiVideoWindow::UpdateScrollBars(int width, int height)
+void VideoWindow::UpdateScrollBars(int width, int height)
 {
     int scroolbar_width = 0;
     int scroolbar_height = 0;
@@ -387,7 +366,7 @@ void UiVideoWindow::UpdateScrollBars(int width, int height)
     Invalidate(FALSE);
 }
 
-bool UiVideoWindow::Scroll(LONG delta_x, LONG delta_y)
+bool VideoWindow::Scroll(LONG delta_x, LONG delta_y)
 {
     if (!frame_)
         return false;
@@ -425,17 +404,17 @@ bool UiVideoWindow::Scroll(LONG delta_x, LONG delta_y)
     return false;
 }
 
-DesktopFrame* UiVideoWindow::Frame()
+DesktopFrame* VideoWindow::Frame()
 {
     return frame_.get();
 }
 
-void UiVideoWindow::DrawFrame()
+void VideoWindow::DrawFrame()
 {
     Invalidate(FALSE);
 }
 
-DesktopSize UiVideoWindow::FrameSize()
+DesktopSize VideoWindow::FrameSize()
 {
     if (!frame_)
         return DesktopSize();
@@ -443,12 +422,12 @@ DesktopSize UiVideoWindow::FrameSize()
     return frame_->Size();
 }
 
-void UiVideoWindow::HasFocus(bool has)
+void VideoWindow::HasFocus(bool has)
 {
     has_focus_ = has;
 }
 
-void UiVideoWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& format)
+void VideoWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& format)
 {
     screen_dc_.Reset(CreateCompatibleDC(nullptr));
     memory_dc_.Reset(CreateCompatibleDC(screen_dc_));

@@ -23,10 +23,10 @@
 namespace aspia {
 
 template <class T>
-class CTrayIcon
+class TrayIcon
 {
 public:
-    CTrayIcon()
+    TrayIcon()
     {
         memset(&nid_, 0, sizeof(nid_));
         nid_.cbSize = sizeof(nid_);
@@ -39,7 +39,7 @@ public:
         }
     }
 
-    ~CTrayIcon()
+    ~TrayIcon()
     {
         RemoveTrayIcon();
     }
@@ -117,7 +117,7 @@ public:
     }
 
 private:
-    BEGIN_MSG_MAP(CTrayIcon)
+    BEGIN_MSG_MAP(TrayIcon)
         MESSAGE_HANDLER(message_id_, OnTrayIcon)
     END_MSG_MAP()
 
@@ -166,7 +166,7 @@ private:
     BOOL is_installed_ = FALSE;
     UINT default_menu_item_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(CTrayIcon);
+    DISALLOW_COPY_AND_ASSIGN(TrayIcon);
 };
 
 } // namespace aspia

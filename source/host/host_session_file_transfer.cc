@@ -16,7 +16,7 @@ namespace aspia {
 
 void HostSessionFileTransfer::Run(const std::wstring& channel_id)
 {
-    status_dialog_ = std::make_unique<UiFileStatusDialog>();
+    status_dialog_ = std::make_unique<FileStatusDialog>();
 
     ipc_channel_ = PipeChannel::CreateClient(channel_id);
     if (ipc_channel_)

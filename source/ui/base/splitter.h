@@ -15,13 +15,13 @@
 namespace aspia {
 
 template <bool kIsVertical>
-class UiSplitterT :
-    public CSplitterWindowImpl<UiSplitterT<kIsVertical>>
+class SplitterT :
+    public CSplitterWindowImpl<SplitterT<kIsVertical>>
 {
 public:
     DECLARE_WND_CLASS_EX(L"UiSplitter", CS_DBLCLKS, COLOR_WINDOW)
 
-    UiSplitterT() : CSplitterWindowImpl<UiSplitterT<kIsVertical>>(kIsVertical)
+    SplitterT() : CSplitterWindowImpl<SplitterT<kIsVertical>>(kIsVertical)
     {
         // Nothing
     }
@@ -37,8 +37,8 @@ public:
     }
 };
 
-using UiVerticalSplitter = UiSplitterT<true>;
-using UiHorizontalSplitter = UiSplitterT<false>;
+using VerticalSplitter = SplitterT<true>;
+using HorizontalSplitter = SplitterT<false>;
 
 } // namespace aspia
 

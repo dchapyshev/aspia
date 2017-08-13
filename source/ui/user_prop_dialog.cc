@@ -17,19 +17,17 @@
 
 namespace aspia {
 
-UiUserPropDialog::UiUserPropDialog(Mode mode,
-                                   proto::HostUser* user,
-                                   const HostUserList& user_list) :
-    mode_(mode),
-    user_(user),
-    user_list_(user_list)
+UserPropDialog::UserPropDialog(Mode mode, proto::HostUser* user, const HostUserList& user_list)
+    : mode_(mode),
+      user_(user),
+      user_list_(user_list)
 {
     DCHECK(user_);
 }
 
-void UiUserPropDialog::InsertSessionType(CListViewCtrl& list,
-                                         proto::SessionType session_type,
-                                         UINT string_id)
+void UserPropDialog::InsertSessionType(CListViewCtrl& list,
+                                       proto::SessionType session_type,
+                                       UINT string_id)
 {
     CString text;
     text.LoadStringW(string_id);
@@ -41,7 +39,7 @@ void UiUserPropDialog::InsertSessionType(CListViewCtrl& list,
                        (user_->session_types() & session_type));
 }
 
-void UiUserPropDialog::OnPasswordEditDblClick()
+void UserPropDialog::OnPasswordEditDblClick()
 {
     CEdit password_edit(GetDlgItem(IDC_PASSWORD_EDIT));
     CEdit password_retry_edit(GetDlgItem(IDC_PASSWORD_RETRY_EDIT));
@@ -55,18 +53,18 @@ void UiUserPropDialog::OnPasswordEditDblClick()
 }
 
 //static
-LRESULT CALLBACK UiUserPropDialog::PasswordEditWindowProc(HWND hwnd,
-                                                          UINT msg,
-                                                          WPARAM wparam,
-                                                          LPARAM lparam,
-                                                          UINT_PTR subclass_id,
-                                                          DWORD_PTR ref_data)
+LRESULT CALLBACK UserPropDialog::PasswordEditWindowProc(HWND hwnd,
+                                                        UINT msg,
+                                                        WPARAM wparam,
+                                                        LPARAM lparam,
+                                                        UINT_PTR subclass_id,
+                                                        DWORD_PTR ref_data)
 {
     switch (msg)
     {
         case WM_LBUTTONDBLCLK:
         {
-            UiUserPropDialog* self = reinterpret_cast<UiUserPropDialog*>(ref_data);
+            UserPropDialog* self = reinterpret_cast<UserPropDialog*>(ref_data);
             self->OnPasswordEditDblClick();
         }
         break;
@@ -82,13 +80,12 @@ LRESULT CALLBACK UiUserPropDialog::PasswordEditWindowProc(HWND hwnd,
     }
 
     // Get the default message handler for edit control.
-    WNDPROC window_proc =
-        reinterpret_cast<WNDPROC>(GetClassLongPtrW(hwnd, GCLP_WNDPROC));
+    WNDPROC window_proc = reinterpret_cast<WNDPROC>(GetClassLongPtrW(hwnd, GCLP_WNDPROC));
 
     return window_proc(hwnd, msg, wparam, lparam);
 }
 
-LRESULT UiUserPropDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT UserPropDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     DlgResize_Init();
 
@@ -164,17 +161,17 @@ LRESULT UiUserPropDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpara
     return TRUE;
 }
 
-LRESULT UiUserPropDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT UserPropDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     EndDialog(IDCANCEL);
     return 0;
 }
 
-LRESULT UiUserPropDialog::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT UserPropDialog::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     LRESULT ret = 0;
 
-    if (CDialogResize<UiUserPropDialog>::ProcessWindowMessage(
+    if (CDialogResize<UserPropDialog>::ProcessWindowMessage(
         *this, message, wparam, lparam, ret))
     {
         CListViewCtrl list(GetDlgItem(IDC_SESSION_TYPES_LIST));
@@ -187,14 +184,14 @@ LRESULT UiUserPropDialog::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOO
     return ret;
 }
 
-void UiUserPropDialog::ShowErrorMessage(UINT string_id)
+void UserPropDialog::ShowErrorMessage(UINT string_id)
 {
     CString message;
     message.LoadStringW(string_id);
     MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
 }
 
-LRESULT UiUserPropDialog::OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
+LRESULT UserPropDialog::OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     // TODO: Clear memory.
 
@@ -265,8 +262,7 @@ LRESULT UiUserPropDialog::OnOkButton(WORD notify_code, WORD control_id, HWND con
             session_types |= static_cast<uint32_t>(list.GetItemData(i));
     }
 
-    bool is_enabled =
-        IsDlgButtonChecked(IDC_DISABLE_USER_CHECK) == BST_UNCHECKED;
+    bool is_enabled = IsDlgButtonChecked(IDC_DISABLE_USER_CHECK) == BST_UNCHECKED;
 
     CHECK(UNICODEtoUTF8(username, *user_->mutable_username()));
 
@@ -277,8 +273,8 @@ LRESULT UiUserPropDialog::OnOkButton(WORD notify_code, WORD control_id, HWND con
     return 0;
 }
 
-LRESULT UiUserPropDialog::OnCancelButton(WORD notify_code, WORD control_id, HWND control,
-                                         BOOL& handled)
+LRESULT UserPropDialog::OnCancelButton(WORD notify_code, WORD control_id, HWND control,
+                                       BOOL& handled)
 {
     EndDialog(IDCANCEL);
     return 0;

@@ -16,26 +16,25 @@
 
 namespace aspia {
 
-UiStatusDialog::UiStatusDialog(Delegate* delegate) :
+StatusDialog::StatusDialog(Delegate* delegate) :
     delegate_(delegate)
 {
     // Nothing
 }
 
-void UiStatusDialog::SetDestonation(const std::wstring& address, uint16_t port)
+void StatusDialog::SetDestonation(const std::wstring& address, uint16_t port)
 {
     CString message;
     message.Format(IDS_CONNECTION, address.c_str(), port);
     SetWindowTextW(message);
 }
 
-void UiStatusDialog::SetStatus(proto::Status status)
+void StatusDialog::SetStatus(proto::Status status)
 {
     AddMessage(StatusCodeToString(status));
 }
 
-LRESULT UiStatusDialog::OnInitDialog(UINT message, WPARAM wparam,
-                                     LPARAM lparam, BOOL& handled)
+LRESULT StatusDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     DlgResize_Init();
 
@@ -49,15 +48,13 @@ LRESULT UiStatusDialog::OnInitDialog(UINT message, WPARAM wparam,
                                  LR_CREATEDIBSECTION,
                                  GetSystemMetrics(SM_CXICON),
                                  GetSystemMetrics(SM_CYICON));
-    SetIcon(small_icon_, TRUE);
+    SetIcon(big_icon_, TRUE);
 
     GetDlgItem(IDCANCEL).SetFocus();
 
     delegate_->OnStatusDialogOpen();
 
-    DWORD active_thread_id =
-        GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
-
+    DWORD active_thread_id = GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
     DWORD current_thread_id = GetCurrentThreadId();
 
     if (active_thread_id != current_thread_id)
@@ -70,15 +67,13 @@ LRESULT UiStatusDialog::OnInitDialog(UINT message, WPARAM wparam,
     return FALSE;
 }
 
-LRESULT UiStatusDialog::OnClose(UINT message, WPARAM wparam,
-                                LPARAM lparam, BOOL& handled)
+LRESULT StatusDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     EndDialog(0);
     return 0;
 }
 
-LRESULT UiStatusDialog::OnCloseButton(WORD notify_code, WORD control_id,
-                                      HWND control, BOOL& handled)
+LRESULT StatusDialog::OnCloseButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     EndDialog(0);
     return 0;
@@ -86,9 +81,7 @@ LRESULT UiStatusDialog::OnCloseButton(WORD notify_code, WORD control_id,
 
 static std::wstring GetCurrentDateTime()
 {
-    std::chrono::system_clock::time_point now =
-        std::chrono::system_clock::now();
-
+    std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
     time_t time = std::chrono::system_clock::to_time_t(now);
 
     tm* local_time = std::localtime(&time);
@@ -107,7 +100,7 @@ static std::wstring GetCurrentDateTime()
     return std::wstring();
 }
 
-void UiStatusDialog::AddMessage(const CString& message)
+void StatusDialog::AddMessage(const CString& message)
 {
     CEdit status_edit(GetDlgItem(IDC_STATUS_EDIT));
 

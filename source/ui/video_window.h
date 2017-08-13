@@ -20,7 +20,7 @@
 
 namespace aspia {
 
-class UiVideoWindow : public CWindowImpl<UiVideoWindow, CWindow>
+class VideoWindow : public CWindowImpl<VideoWindow, CWindow>
 {
 public:
     class Delegate
@@ -30,7 +30,7 @@ public:
         virtual void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) = 0;
     };
 
-    explicit UiVideoWindow(Delegate* delegate);
+    explicit VideoWindow(Delegate* delegate);
 
     DesktopFrame* Frame();
     void DrawFrame();
@@ -40,7 +40,7 @@ public:
     void HasFocus(bool has);
 
 private:
-    BEGIN_MSG_MAP(UiVideoWindow)
+    BEGIN_MSG_MAP(VideoWindow)
         MESSAGE_RANGE_HANDLER(WM_MOUSEFIRST, WM_MOUSELAST, OnMouse)
         MESSAGE_HANDLER(WM_ERASEBKGND, OnSkipMessage)
         MESSAGE_HANDLER(WM_PAINT, OnPaint)
@@ -85,10 +85,10 @@ private:
     bool has_mouse_ = false; // Is the cursor over the window?
     bool has_focus_ = false; // Is the window in focus?
 
-    CTimer scroll_timer_;
+    Timer scroll_timer_;
     CPoint scroll_delta_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiVideoWindow);
+    DISALLOW_COPY_AND_ASSIGN(VideoWindow);
 };
 
 } // namespace aspia

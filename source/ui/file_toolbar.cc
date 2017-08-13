@@ -11,13 +11,13 @@
 
 namespace aspia {
 
-UiFileToolBar::UiFileToolBar(Type type) :
+FileToolBar::FileToolBar(Type type) :
     type_(type)
 {
     // Nothing
 }
 
-bool UiFileToolBar::CreateFileToolBar(HWND parent)
+bool FileToolBar::CreateFileToolBar(HWND parent)
 {
     const DWORD style = WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT |
         TBSTYLE_LIST | TBSTYLE_TOOLTIPS;
@@ -32,7 +32,7 @@ bool UiFileToolBar::CreateFileToolBar(HWND parent)
     return true;
 }
 
-LRESULT UiFileToolBar::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileToolBar::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     LRESULT ret = DefWindowProcW(message, wparam, lparam);
 
@@ -84,7 +84,7 @@ LRESULT UiFileToolBar::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL
     return ret;
 }
 
-LRESULT UiFileToolBar::OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled)
+LRESULT FileToolBar::OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled)
 {
     LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(hdr);
     UINT string_id;
@@ -133,7 +133,7 @@ LRESULT UiFileToolBar::OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled)
     return TRUE;
 }
 
-void UiFileToolBar::AddIcon(UINT icon_id, const CSize& icon_size)
+void FileToolBar::AddIcon(UINT icon_id, const CSize& icon_size)
 {
     CIcon icon(AtlLoadIconImage(icon_id,
                                 LR_CREATEDIBSECTION,
@@ -142,7 +142,7 @@ void UiFileToolBar::AddIcon(UINT icon_id, const CSize& icon_size)
     imagelist_.AddIcon(icon);
 }
 
-void UiFileToolBar::SetButtonText(int command_id, UINT resource_id)
+void FileToolBar::SetButtonText(int command_id, UINT resource_id)
 {
     int button_index = CommandToIndex(command_id);
     if (button_index == -1)

@@ -18,7 +18,7 @@
 
 namespace aspia {
 
-void UiUsersDialog::UpdateUserList()
+void UsersDialog::UpdateUserList()
 {
     CListViewCtrl list(GetDlgItem(IDC_USER_LIST));
 
@@ -44,12 +44,11 @@ void UiUsersDialog::UpdateUserList()
     UpdateButtonsState();
 }
 
-LRESULT UiUsersDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT UsersDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     DlgResize_Init();
 
-    CSize small_icon_size(GetSystemMetrics(SM_CXSMICON),
-                          GetSystemMetrics(SM_CYSMICON));
+    CSize small_icon_size(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
 
     add_icon_ = AtlLoadIconImage(IDI_PLUS,
                                  LR_CREATEDIBSECTION,
@@ -119,17 +118,17 @@ LRESULT UiUsersDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, 
     return TRUE;
 }
 
-LRESULT UiUsersDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT UsersDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     EndDialog(IDCANCEL);
     return 0;
 }
 
-LRESULT UiUsersDialog::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT UsersDialog::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     LRESULT ret = 0;
 
-    if (CDialogResize<UiUsersDialog>::ProcessWindowMessage(
+    if (CDialogResize<UsersDialog>::ProcessWindowMessage(
         *this, message, wparam, lparam, ret))
     {
         CListViewCtrl list(GetDlgItem(IDC_USER_LIST));
@@ -142,11 +141,11 @@ LRESULT UiUsersDialog::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& 
     return ret;
 }
 
-LRESULT UiUsersDialog::OnAddButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT UsersDialog::OnAddButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     std::unique_ptr<proto::HostUser> user(std::make_unique<proto::HostUser>());
 
-    UiUserPropDialog dialog(UiUserPropDialog::Mode::ADD, user.get(), user_list_);
+    UserPropDialog dialog(UserPropDialog::Mode::ADD, user.get(), user_list_);
     if (dialog.DoModal(*this) == IDOK)
     {
         user_list_.Add(std::move(user));
@@ -157,13 +156,13 @@ LRESULT UiUsersDialog::OnAddButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& han
     return 0;
 }
 
-int UiUsersDialog::GetSelectedUserIndex()
+int UsersDialog::GetSelectedUserIndex()
 {
     CListViewCtrl list(GetDlgItem(IDC_USER_LIST));
     return list.GetItemData(list.GetNextItem(-1, LVNI_SELECTED));
 }
 
-void UiUsersDialog::EditSelectedUser()
+void UsersDialog::EditSelectedUser()
 {
     int user_index = GetSelectedUserIndex();
 
@@ -172,7 +171,7 @@ void UiUsersDialog::EditSelectedUser()
 
     proto::HostUser* user = user_list_.mutable_host_user(user_index);
 
-    UiUserPropDialog dialog(UiUserPropDialog::Mode::EDIT, user, user_list_);
+    UserPropDialog dialog(UserPropDialog::Mode::EDIT, user, user_list_);
     if (dialog.DoModal(*this) == IDOK)
     {
         UpdateUserList();
@@ -180,13 +179,13 @@ void UiUsersDialog::EditSelectedUser()
     }
 }
 
-LRESULT UiUsersDialog::OnEditButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT UsersDialog::OnEditButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     EditSelectedUser();
     return 0;
 }
 
-void UiUsersDialog::DeleteSelectedUser()
+void UsersDialog::DeleteSelectedUser()
 {
     int user_index = GetSelectedUserIndex();
 
@@ -210,26 +209,26 @@ void UiUsersDialog::DeleteSelectedUser()
     }
 }
 
-LRESULT UiUsersDialog::OnDeleteButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT UsersDialog::OnDeleteButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     DeleteSelectedUser();
     return 0;
 }
 
-LRESULT UiUsersDialog::OnOkButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT UsersDialog::OnOkButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     user_list_.SaveToStorage();
     EndDialog(IDOK);
     return 0;
 }
 
-LRESULT UiUsersDialog::OnCancelButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT UsersDialog::OnCancelButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     EndDialog(IDCANCEL);
     return 0;
 }
 
-void UiUsersDialog::ShowUserPopupMenu()
+void UsersDialog::ShowUserPopupMenu()
 {
     CMenu menu(AtlLoadMenu(IDR_USER));
 
@@ -256,27 +255,27 @@ void UiUsersDialog::ShowUserPopupMenu()
     }
 }
 
-void UiUsersDialog::SetUserListModified()
+void UsersDialog::SetUserListModified()
 {
     CString text;
     text.LoadStringW(IDS_USER_LIST_MODIFIED);
     SetWindowTextW(text);
 }
 
-LRESULT UiUsersDialog::OnUserListDoubleClick(int ctrl_id, LPNMHDR hdr, BOOL& handled)
+LRESULT UsersDialog::OnUserListDoubleClick(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     EditSelectedUser();
     return 0;
 }
 
-LRESULT UiUsersDialog::OnUserListRightClick(int ctrl_id, LPNMHDR hdr, BOOL& handled)
+LRESULT UsersDialog::OnUserListRightClick(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     ShowUserPopupMenu();
     UpdateButtonsState();
     return 0;
 }
 
-void UiUsersDialog::UpdateButtonsState()
+void UsersDialog::UpdateButtonsState()
 {
     CListViewCtrl list(GetDlgItem(IDC_USER_LIST));
 
@@ -292,13 +291,13 @@ void UiUsersDialog::UpdateButtonsState()
     }
 }
 
-LRESULT UiUsersDialog::OnUserListClick(int ctrl_id, LPNMHDR hdr, BOOL& handled)
+LRESULT UsersDialog::OnUserListClick(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     UpdateButtonsState();
     return 0;
 }
 
-LRESULT UiUsersDialog::OnUserListKeyDown(int ctrl_id, LPNMHDR hdr, BOOL& handled)
+LRESULT UsersDialog::OnUserListKeyDown(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     LPNMLVKEYDOWN keydown_header = reinterpret_cast<LPNMLVKEYDOWN>(hdr);
 
@@ -312,12 +311,15 @@ LRESULT UiUsersDialog::OnUserListKeyDown(int ctrl_id, LPNMHDR hdr, BOOL& handled
         case VK_DOWN:
             UpdateButtonsState();
             break;
+
+        default:
+            break;
     }
 
     return 0;
 }
 
-LRESULT UiUsersDialog::OnUserListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& handled)
+LRESULT UsersDialog::OnUserListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     UpdateButtonsState();
     return 0;

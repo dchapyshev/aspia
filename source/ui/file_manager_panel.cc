@@ -15,14 +15,14 @@
 
 namespace aspia {
 
-static_assert(UiFileList::kInvalidObjectIndex == UiDriveList::kInvalidObjectIndex,
+static_assert(FileListWindow::kInvalidObjectIndex == DriveListWindow::kInvalidObjectIndex,
               "Values must be equal");
 
 FileManagerPanel::FileManagerPanel(Type type,
                                    std::shared_ptr<FileRequestSenderProxy> sender,
                                    Delegate* delegate)
     : toolbar_(type == Type::LOCAL ?
-          UiFileToolBar::Type::LOCAL : UiFileToolBar::Type::REMOTE),
+          FileToolBar::Type::LOCAL : FileToolBar::Type::REMOTE),
       type_(type),
       sender_(sender),
       delegate_(delegate)
@@ -171,7 +171,7 @@ LRESULT FileManagerPanel::OnDriveChange(WORD code, WORD ctrl_id, HWND ctrl, BOOL
 {
     int object_index = drive_list_.SelectedObject();
 
-    if (object_index == UiDriveList::kInvalidObjectIndex)
+    if (object_index == DriveListWindow::kInvalidObjectIndex)
         return 0;
 
     MoveToDrive(object_index);
@@ -182,7 +182,7 @@ LRESULT FileManagerPanel::OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& hand
 {
     int object_index = file_list_.GetObjectUnderMousePointer();
 
-    if (object_index == UiFileList::kInvalidObjectIndex)
+    if (object_index == FileListWindow::kInvalidObjectIndex)
         return 0;
 
     if (!file_list_.HasFileList())
@@ -210,7 +210,7 @@ LRESULT FileManagerPanel::OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL& h
 
     if (!path.has_parent_path() || path.parent_path() == path.root_name())
     {
-        MoveToDrive(UiDriveList::kComputerObjectIndex);
+        MoveToDrive(DriveListWindow::kComputerObjectIndex);
     }
     else
     {
@@ -250,7 +250,7 @@ LRESULT FileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& han
     if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) != IDYES)
         return 0;
 
-    for (UiFileList::Iterator iter(file_list_, UiFileList::Iterator::SELECTED);
+    for (FileListWindow::Iterator iter(file_list_, FileListWindow::Iterator::SELECTED);
          !iter.IsAtEnd();
          iter.Advance())
     {
@@ -267,7 +267,7 @@ LRESULT FileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& han
 
 void FileManagerPanel::MoveToDrive(int object_index)
 {
-    if (object_index == UiDriveList::kComputerObjectIndex)
+    if (object_index == DriveListWindow::kComputerObjectIndex)
     {
         toolbar_.EnableButton(ID_FOLDER_ADD, FALSE);
         toolbar_.EnableButton(ID_FOLDER_UP, FALSE);
@@ -294,7 +294,7 @@ LRESULT FileManagerPanel::OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& han
     int object_index = disp_info->item.lParam;
 
     // New folder.
-    if (object_index == UiFileList::kNewFolderObjectIndex)
+    if (object_index == FileListWindow::kNewFolderObjectIndex)
     {
         CEdit edit(file_list_.GetEditControl());
 
@@ -356,7 +356,7 @@ LRESULT FileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handl
     FileTransfer::FileList file_list;
 
     // Create a list of files and directories to copy.
-    for (UiFileList::Iterator iter(file_list_, UiFileList::Iterator::SELECTED);
+    for (FileListWindow::Iterator iter(file_list_, FileListWindow::Iterator::SELECTED);
          !iter.IsAtEnd();
          iter.Advance())
     {
@@ -387,7 +387,7 @@ LRESULT FileManagerPanel::OnDriveEndEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled
 
 LRESULT FileManagerPanel::OnHome(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
-    MoveToDrive(UiDriveList::kComputerObjectIndex);
+    MoveToDrive(DriveListWindow::kComputerObjectIndex);
     return 0;
 }
 
@@ -401,7 +401,7 @@ void FileManagerPanel::OnDriveListRequestReply(std::unique_ptr<proto::DriveList>
     }
     else
     {
-        MoveToDrive(UiDriveList::kComputerObjectIndex);
+        MoveToDrive(DriveListWindow::kComputerObjectIndex);
     }
 }
 
@@ -430,10 +430,7 @@ void FileManagerPanel::OnFileListRequestFailure(const FilePath& path, proto::Req
     CString status_string = RequestStatusCodeToString(status);
 
     CString message;
-    message.Format(IDS_FT_BROWSE_FOLDERS_ERROR,
-                   path.c_str(),
-                   status_string.GetBuffer(0));
-
+    message.Format(IDS_FT_BROWSE_FOLDERS_ERROR, path.c_str(), status_string.GetBuffer(0));
     MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
 }
 

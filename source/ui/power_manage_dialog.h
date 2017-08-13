@@ -17,16 +17,16 @@
 
 namespace aspia {
 
-class UiPowerManageDialog : public CDialogImpl<UiPowerManageDialog>
+class PowerManageDialog : public CDialogImpl<PowerManageDialog>
 {
 public:
     enum { IDD = IDD_POWER };
 
-    UiPowerManageDialog() = default;
-    ~UiPowerManageDialog() = default;
+    PowerManageDialog() = default;
+    ~PowerManageDialog() = default;
 
 private:
-    BEGIN_MSG_MAP(UiPowerManageDialog)
+    BEGIN_MSG_MAP(PowerManageDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
@@ -41,7 +41,7 @@ private:
 
     CIcon icon_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiPowerManageDialog);
+    DISALLOW_COPY_AND_ASSIGN(PowerManageDialog);
 };
 
 } // namespace aspia

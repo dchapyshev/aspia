@@ -10,16 +10,11 @@
 
 namespace aspia {
 
-LRESULT UiAuthDialog::OnInitDialog(UINT message,
-                                   WPARAM wparam,
-                                   LPARAM lparam,
-                                   BOOL& handled)
+LRESULT UiAuthDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     CenterWindow();
 
-    DWORD active_thread_id =
-        GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
-
+    DWORD active_thread_id = GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
     DWORD current_thread_id = GetCurrentThreadId();
 
     if (active_thread_id != current_thread_id)
@@ -32,19 +27,13 @@ LRESULT UiAuthDialog::OnInitDialog(UINT message,
     return TRUE;
 }
 
-LRESULT UiAuthDialog::OnClose(UINT message,
-                              WPARAM wparam,
-                              LPARAM lparam,
-                              BOOL& handled)
+LRESULT UiAuthDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     EndDialog(IDCANCEL);
     return 0;
 }
 
-LRESULT UiAuthDialog::OnOkButton(WORD notify_code,
-                                 WORD control_id,
-                                 HWND control,
-                                 BOOL& handled)
+LRESULT UiAuthDialog::OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     // TODO: Clear memory.
 
@@ -60,9 +49,7 @@ LRESULT UiAuthDialog::OnOkButton(WORD notify_code,
     return 0;
 }
 
-LRESULT UiAuthDialog::OnCancelButton(WORD notify_code,
-                                     WORD control_id,
-                                     HWND control,
+LRESULT UiAuthDialog::OnCancelButton(WORD notify_code, WORD control_id, HWND control,
                                      BOOL& handled)
 {
     PostMessageW(WM_CLOSE);

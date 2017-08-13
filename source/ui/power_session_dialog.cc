@@ -16,7 +16,7 @@ namespace aspia {
 static const UINT_PTR kTimerId = 100;
 static const int kTimeout = 60; // 60 seconds
 
-UiPowerSessionDialog::UiPowerSessionDialog(proto::PowerEvent::Action action)
+PowerSessionDialog::PowerSessionDialog(proto::PowerEvent::Action action)
     : action_(action),
       timer_(kTimerId),
       time_left_(kTimeout)
@@ -24,8 +24,7 @@ UiPowerSessionDialog::UiPowerSessionDialog(proto::PowerEvent::Action action)
     // Nothing
 }
 
-LRESULT UiPowerSessionDialog::OnInitDialog(UINT message, WPARAM wparam,
-                                           LPARAM lparam, BOOL& handled)
+LRESULT PowerSessionDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     CenterWindow();
 
@@ -39,7 +38,7 @@ LRESULT UiPowerSessionDialog::OnInitDialog(UINT message, WPARAM wparam,
                                  LR_CREATEDIBSECTION,
                                  GetSystemMetrics(SM_CXICON),
                                  GetSystemMetrics(SM_CYICON));
-    SetIcon(small_icon_, TRUE);
+    SetIcon(big_icon_, TRUE);
 
     power_icon_ = AtlLoadIconImage(IDI_POWER_SURGE, LR_CREATEDIBSECTION, 32, 32);
     CStatic(GetDlgItem(IDC_POWER_ICON)).SetIcon(power_icon_);
@@ -74,12 +73,9 @@ LRESULT UiPowerSessionDialog::OnInitDialog(UINT message, WPARAM wparam,
 
     timer_.Start(*this, 1000);
 
-    SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0,
-                 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+    SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 
-    DWORD active_thread_id =
-        GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
-
+    DWORD active_thread_id = GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
     DWORD current_thread_id = GetCurrentThreadId();
 
     if (active_thread_id != current_thread_id)
@@ -92,13 +88,13 @@ LRESULT UiPowerSessionDialog::OnInitDialog(UINT message, WPARAM wparam,
     return TRUE;
 }
 
-LRESULT UiPowerSessionDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT PowerSessionDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     Exit(Result::CANCEL);
     return 0;
 }
 
-LRESULT UiPowerSessionDialog::OnTimer(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT PowerSessionDialog::OnTimer(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     UINT_PTR event_id = static_cast<UINT_PTR>(wparam);
 
@@ -119,28 +115,28 @@ LRESULT UiPowerSessionDialog::OnTimer(UINT message, WPARAM wparam, LPARAM lparam
     return 0;
 }
 
-LRESULT UiPowerSessionDialog::OnOkButton(WORD notify_code, WORD control_id,
-                                         HWND control, BOOL& handled)
+LRESULT PowerSessionDialog::OnOkButton(WORD notify_code, WORD control_id, HWND control,
+                                       BOOL& handled)
 {
     Exit(Result::EXECUTE);
     return 0;
 }
 
-LRESULT UiPowerSessionDialog::OnCancelButton(WORD notify_code, WORD control_id,
-                                             HWND control, BOOL& handled)
+LRESULT PowerSessionDialog::OnCancelButton(WORD notify_code, WORD control_id, HWND control,
+                                           BOOL& handled)
 {
     Exit(Result::CANCEL);
     return 0;
 }
 
-void UiPowerSessionDialog::UpdateTimer()
+void PowerSessionDialog::UpdateTimer()
 {
     CString string;
     string.Format(IDS_PM_TIME_LEFT, time_left_);
     GetDlgItem(IDC_POWER_TIME).SetWindowTextW(string);
 }
 
-void UiPowerSessionDialog::Exit(Result result)
+void PowerSessionDialog::Exit(Result result)
 {
     timer_.Stop();
     EndDialog(static_cast<int>(result));

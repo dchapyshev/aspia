@@ -20,9 +20,9 @@
 
 namespace aspia {
 
-class UiStatusDialog :
-    public CDialogImpl<UiStatusDialog>,
-    public CDialogResize<UiStatusDialog>
+class StatusDialog :
+    public CDialogImpl<StatusDialog>,
+    public CDialogResize<StatusDialog>
 {
 public:
     enum { IDD = IDD_STATUS };
@@ -34,20 +34,20 @@ public:
         virtual void OnStatusDialogOpen() = 0;
     };
 
-    UiStatusDialog(Delegate* delegate);
-    ~UiStatusDialog() = default;
+    StatusDialog(Delegate* delegate);
+    ~StatusDialog() = default;
 
     void SetDestonation(const std::wstring& address, uint16_t port);
     void SetStatus(proto::Status status);
 
 private:
-    BEGIN_MSG_MAP(UiStatusDialog)
+    BEGIN_MSG_MAP(StatusDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
         COMMAND_ID_HANDLER(IDCANCEL, OnCloseButton)
 
-        CHAIN_MSG_MAP(CDialogResize<UiStatusDialog>)
+        CHAIN_MSG_MAP(CDialogResize<StatusDialog>)
     END_MSG_MAP()
 
     BEGIN_DLGRESIZE_MAP(UiStatusDialog)
@@ -66,7 +66,7 @@ private:
     CIcon small_icon_;
     CIcon big_icon_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiStatusDialog);
+    DISALLOW_COPY_AND_ASSIGN(StatusDialog);
 };
 
 } // namespace aspia

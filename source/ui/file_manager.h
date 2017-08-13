@@ -67,7 +67,7 @@ private:
 
     FileManagerPanel local_panel_;
     FileManagerPanel remote_panel_;
-    UiVerticalSplitter splitter_;
+    VerticalSplitter splitter_;
 
     CIcon small_icon_;
     CIcon big_icon_;

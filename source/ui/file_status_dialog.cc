@@ -14,22 +14,22 @@
 
 namespace aspia {
 
-UiFileStatusDialog::UiFileStatusDialog()
+FileStatusDialog::FileStatusDialog()
 {
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
-UiFileStatusDialog::~UiFileStatusDialog()
+FileStatusDialog::~FileStatusDialog()
 {
     ui_thread_.Stop();
 }
 
-void UiFileStatusDialog::WaitForClose()
+void FileStatusDialog::WaitForClose()
 {
     ui_thread_.Join();
 }
 
-void UiFileStatusDialog::OnBeforeThreadRunning()
+void FileStatusDialog::OnBeforeThreadRunning()
 {
     // We need to load the library to work with RichEdit before creating a dialog.
     LoadLibraryW(L"msftedit.dll");
@@ -53,12 +53,12 @@ void UiFileStatusDialog::OnBeforeThreadRunning()
     }
 }
 
-void UiFileStatusDialog::OnAfterThreadRunning()
+void FileStatusDialog::OnAfterThreadRunning()
 {
     DestroyWindow();
 }
 
-LRESULT UiFileStatusDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileStatusDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     DlgResize_Init();
     CenterWindow();
@@ -77,7 +77,7 @@ LRESULT UiFileStatusDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpa
                                  LR_CREATEDIBSECTION,
                                  GetSystemMetrics(SM_CXICON),
                                  GetSystemMetrics(SM_CYICON));
-    SetIcon(small_icon_, TRUE);
+    SetIcon(big_icon_, TRUE);
 
     SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 
@@ -85,27 +85,27 @@ LRESULT UiFileStatusDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpa
     return FALSE;
 }
 
-LRESULT UiFileStatusDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileStatusDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     PostQuitMessage(0);
     return 0;
 }
 
-LRESULT UiFileStatusDialog::OnMinimizeButton(WORD notify_code, WORD control_id,
-                                             HWND control, BOOL& handled)
+LRESULT FileStatusDialog::OnMinimizeButton(WORD notify_code, WORD control_id, HWND control,
+                                           BOOL& handled)
 {
     ShowWindow(SW_MINIMIZE);
     return 0;
 }
 
-LRESULT UiFileStatusDialog::OnStopButton(WORD notify_code, WORD control_id,
-                                         HWND control, BOOL& handled)
+LRESULT FileStatusDialog::OnStopButton(WORD notify_code, WORD control_id, HWND control,
+                                       BOOL& handled)
 {
     PostMessageW(WM_CLOSE);
     return 0;
 }
 
-void UiFileStatusDialog::WriteMessage(const WCHAR* message)
+void FileStatusDialog::WriteMessage(const WCHAR* message)
 {
     WCHAR time[128];
 
@@ -122,18 +122,18 @@ void UiFileStatusDialog::WriteMessage(const WCHAR* message)
     }
 }
 
-void UiFileStatusDialog::OnSessionStarted()
+void FileStatusDialog::OnSessionStarted()
 {
     CString message;
     message.LoadStringW(IDS_FT_OP_SESSION_START);
     WriteMessage(message);
 }
 
-void UiFileStatusDialog::OnSessionTerminated()
+void FileStatusDialog::OnSessionTerminated()
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&UiFileStatusDialog::OnSessionTerminated, this));
+        runner_->PostTask(std::bind(&FileStatusDialog::OnSessionTerminated, this));
         return;
     }
 
@@ -150,49 +150,49 @@ void UiFileStatusDialog::OnSessionTerminated()
     WriteMessage(message);
 }
 
-void UiFileStatusDialog::OnDriveListRequest()
+void FileStatusDialog::OnDriveListRequest()
 {
     CString message;
     message.LoadStringW(IDS_FT_OP_BROWSE_DRIVES);
     WriteMessage(message);
 }
 
-void UiFileStatusDialog::OnFileListRequest(const FilePath& path)
+void FileStatusDialog::OnFileListRequest(const FilePath& path)
 {
     CString message;
     message.Format(IDS_FT_OP_BROWSE_FOLDERS, path.c_str());
     WriteMessage(message);
 }
 
-void UiFileStatusDialog::OnCreateDirectoryRequest(const FilePath& path)
+void FileStatusDialog::OnCreateDirectoryRequest(const FilePath& path)
 {
     CString message;
     message.Format(IDS_FT_OP_CREATE_FOLDER, path.c_str());
     WriteMessage(message);
 }
 
-void UiFileStatusDialog::OnRenameRequest(const FilePath& old_name, const FilePath& new_name)
+void FileStatusDialog::OnRenameRequest(const FilePath& old_name, const FilePath& new_name)
 {
     CString message;
     message.Format(IDS_FT_OP_RENAME, old_name.c_str(), new_name.c_str());
     WriteMessage(message);
 }
 
-void UiFileStatusDialog::OnRemoveRequest(const FilePath& path)
+void FileStatusDialog::OnRemoveRequest(const FilePath& path)
 {
     CString message;
     message.Format(IDS_FT_OP_REMOVE, path.c_str());
     WriteMessage(message);
 }
 
-void UiFileStatusDialog::OnFileUploadRequest(const FilePath& file_path)
+void FileStatusDialog::OnFileUploadRequest(const FilePath& file_path)
 {
     CString message;
     message.Format(IDS_FT_OP_RECIEVE_FILE, file_path.c_str());
     WriteMessage(message);
 }
 
-void UiFileStatusDialog::OnFileDownloadRequest(const FilePath& file_path)
+void FileStatusDialog::OnFileDownloadRequest(const FilePath& file_path)
 {
     CString message;
     message.Format(IDS_FT_OP_SEND_FILE, file_path.c_str());

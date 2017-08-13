@@ -114,9 +114,9 @@ private:
     std::shared_ptr<FileRequestSenderProxy> sender_;
 
     CStatic title_;
-    UiDriveList drive_list_;
-    UiFileList file_list_;
-    UiFileToolBar toolbar_;
+    DriveListWindow drive_list_;
+    FileListWindow file_list_;
+    FileToolBar toolbar_;
     CStatic status_;
 
     DISALLOW_COPY_AND_ASSIGN(FileManagerPanel);

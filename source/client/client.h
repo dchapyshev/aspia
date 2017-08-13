@@ -19,7 +19,7 @@ namespace aspia {
 
 class Client :
     private MessageLoopThread::Delegate,
-    private UiStatusDialog::Delegate
+    private StatusDialog::Delegate
 {
 public:
     class Delegate
@@ -44,7 +44,7 @@ private:
 
     void OnNetworkChannelStatusChange(NetworkChannel::Status status);
 
-    // UiStatusDialog::Delegate implementation.
+    // StatusDialog::Delegate implementation.
     void OnStatusDialogOpen() override;
 
     void OnAuthRequestSended();
@@ -57,7 +57,7 @@ private:
     std::shared_ptr<MessageLoopProxy> runner_;
 
     proto::Status status_;
-    UiStatusDialog status_dialog_;
+    StatusDialog status_dialog_;
 
     std::shared_ptr<NetworkChannel> channel_;
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;

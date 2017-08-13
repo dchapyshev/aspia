@@ -20,18 +20,18 @@
 
 namespace aspia {
 
-class UiMainDialog :
-    public CDialogImpl<UiMainDialog>,
-    public CTrayIcon<UiMainDialog>
+class MainDialog :
+    public CDialogImpl<MainDialog>,
+    public TrayIcon<MainDialog>
 {
 public:
     enum { IDD = IDD_MAIN };
 
-    UiMainDialog() = default;
-    ~UiMainDialog() = default;
+    MainDialog() = default;
+    ~MainDialog() = default;
 
 private:
-    BEGIN_MSG_MAP(UiMainDialog)
+    BEGIN_MSG_MAP(MainDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
@@ -53,7 +53,7 @@ private:
         NOTIFY_HANDLER(IDC_IP_LIST, NM_DBLCLK, OnIpListDoubleClick)
         NOTIFY_HANDLER(IDC_IP_LIST, NM_RCLICK, OnIpListRightClick)
 
-        CHAIN_MSG_MAP(CTrayIcon<UiMainDialog>)
+        CHAIN_MSG_MAP(TrayIcon<MainDialog>)
     END_MSG_MAP()
 
     LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
@@ -94,7 +94,7 @@ private:
     std::unique_ptr<ClientPool> client_pool_;
     ClientConfig config_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiMainDialog);
+    DISALLOW_COPY_AND_ASSIGN(MainDialog);
 };
 
 } // namespace aspia

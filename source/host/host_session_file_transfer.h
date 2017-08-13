@@ -49,7 +49,7 @@ private:
     std::unique_ptr<FileDepacketizer> file_depacketizer_;
     std::unique_ptr<FilePacketizer> file_packetizer_;
 
-    std::unique_ptr<UiFileStatusDialog> status_dialog_;
+    std::unique_ptr<FileStatusDialog> status_dialog_;
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionFileTransfer);
 };

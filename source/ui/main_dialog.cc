@@ -38,7 +38,7 @@ AddressToString(const LPSOCKADDR src)
                          addr->sin_addr.S_un.S_un_b.s_b4);
 }
 
-void UiMainDialog::InitAddressesList()
+void MainDialog::InitAddressesList()
 {
     CListViewCtrl list(GetDlgItem(IDC_IP_LIST));
 
@@ -102,9 +102,9 @@ void UiMainDialog::InitAddressesList()
     }
 }
 
-int UiMainDialog::AddSessionType(CComboBox& combobox,
-                                 UINT string_resource_id,
-                                 proto::SessionType session_type)
+int MainDialog::AddSessionType(CComboBox& combobox,
+                               UINT string_resource_id,
+                               proto::SessionType session_type)
 {
     CString text;
     text.LoadStringW(string_resource_id);
@@ -115,7 +115,7 @@ int UiMainDialog::AddSessionType(CComboBox& combobox,
     return item_index;
 }
 
-void UiMainDialog::InitSessionTypesCombo()
+void MainDialog::InitSessionTypesCombo()
 {
     CComboBox combobox(GetDlgItem(IDC_SESSION_TYPE_COMBO));
 
@@ -138,13 +138,13 @@ void UiMainDialog::InitSessionTypesCombo()
     combobox.SetCurSel(first_item);
 }
 
-proto::SessionType UiMainDialog::GetSelectedSessionType()
+proto::SessionType MainDialog::GetSelectedSessionType()
 {
     CComboBox combo(GetDlgItem(IDC_SESSION_TYPE_COMBO));
     return static_cast<proto::SessionType>(combo.GetItemData(combo.GetCurSel()));
 }
 
-LRESULT UiMainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT MainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
                                    LR_CREATEDIBSECTION,
@@ -156,7 +156,7 @@ LRESULT UiMainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, B
                                  LR_CREATEDIBSECTION,
                                  GetSystemMetrics(SM_CXICON),
                                  GetSystemMetrics(SM_CYICON));
-    SetIcon(small_icon_, TRUE);
+    SetIcon(big_icon_, TRUE);
 
     main_menu_ = AtlLoadMenu(IDR_MAIN);
     SetMenu(main_menu_);
@@ -212,8 +212,8 @@ LRESULT UiMainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, B
     return FALSE;
 }
 
-LRESULT UiMainDialog::OnDefaultPortClicked(WORD notify_code, WORD control_id,
-                                           HWND control, BOOL& handled)
+LRESULT MainDialog::OnDefaultPortClicked(WORD notify_code, WORD control_id, HWND control,
+                                         BOOL& handled)
 {
     CEdit port(GetDlgItem(IDC_SERVER_PORT_EDIT));
 
@@ -230,7 +230,7 @@ LRESULT UiMainDialog::OnDefaultPortClicked(WORD notify_code, WORD control_id,
     return 0;
 }
 
-LRESULT UiMainDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT MainDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     host_pool_.reset();
     client_pool_.reset();
@@ -239,7 +239,7 @@ LRESULT UiMainDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& 
     return 0;
 }
 
-void UiMainDialog::StopHostMode()
+void MainDialog::StopHostMode()
 {
     if (host_pool_)
     {
@@ -251,8 +251,8 @@ void UiMainDialog::StopHostMode()
     }
 }
 
-LRESULT UiMainDialog::OnStartServerButton(WORD notify_code, WORD control_id,
-                                          HWND control, BOOL& handled)
+LRESULT MainDialog::OnStartServerButton(WORD notify_code, WORD control_id, HWND control,
+                                        BOOL& handled)
 {
     if (host_pool_)
     {
@@ -269,7 +269,7 @@ LRESULT UiMainDialog::OnStartServerButton(WORD notify_code, WORD control_id,
     return 0;
 }
 
-void UiMainDialog::UpdateSessionType()
+void MainDialog::UpdateSessionType()
 {
     proto::SessionType session_type = GetSelectedSessionType();
 
@@ -289,15 +289,15 @@ void UiMainDialog::UpdateSessionType()
     }
 }
 
-LRESULT UiMainDialog::OnSessionTypeChanged(WORD notify_code, WORD control_id,
-                                           HWND control, BOOL& handled)
+LRESULT MainDialog::OnSessionTypeChanged(WORD notify_code, WORD control_id, HWND control,
+                                         BOOL& handled)
 {
     UpdateSessionType();
     return 0;
 }
 
-LRESULT UiMainDialog::OnSettingsButton(WORD notify_code, WORD control_id,
-                                       HWND control, BOOL& handled)
+LRESULT MainDialog::OnSettingsButton(WORD notify_code, WORD control_id, HWND control,
+                                     BOOL& handled)
 {
     proto::SessionType session_type = GetSelectedSessionType();
 
@@ -306,8 +306,7 @@ LRESULT UiMainDialog::OnSettingsButton(WORD notify_code, WORD control_id,
         case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
         {
-            UiSettingsDialog dialog(session_type,
-                                    config_.desktop_session_config());
+            SettingsDialog dialog(session_type, config_.desktop_session_config());
 
             if (dialog.DoModal(*this) == IDOK)
             {
@@ -323,8 +322,7 @@ LRESULT UiMainDialog::OnSettingsButton(WORD notify_code, WORD control_id,
     return 0;
 }
 
-LRESULT UiMainDialog::OnConnectButton(WORD notify_code, WORD control_id,
-                                      HWND control, BOOL& handled)
+LRESULT MainDialog::OnConnectButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     proto::SessionType session_type = GetSelectedSessionType();
 
@@ -346,8 +344,7 @@ LRESULT UiMainDialog::OnConnectButton(WORD notify_code, WORD control_id,
     return 0;
 }
 
-LRESULT UiMainDialog::OnHelpButton(WORD notify_code, WORD control_id,
-                                   HWND control, BOOL& handled)
+LRESULT MainDialog::OnHelpButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     CString url;
     url.LoadStringW(IDS_HELP_LINK);
@@ -355,8 +352,8 @@ LRESULT UiMainDialog::OnHelpButton(WORD notify_code, WORD control_id,
     return 0;
 }
 
-LRESULT UiMainDialog::OnShowHideButton(WORD notify_code, WORD control_id,
-                                       HWND control, BOOL& handled)
+LRESULT MainDialog::OnShowHideButton(WORD notify_code, WORD control_id, HWND control,
+                                     BOOL& handled)
 {
     if (IsWindowVisible())
         ShowWindow(SW_HIDE);
@@ -366,8 +363,8 @@ LRESULT UiMainDialog::OnShowHideButton(WORD notify_code, WORD control_id,
     return 0;
 }
 
-LRESULT UiMainDialog::OnInstallServiceButton(WORD notify_code, WORD control_id,
-                                             HWND control, BOOL& handled)
+LRESULT MainDialog::OnInstallServiceButton(WORD notify_code, WORD control_id, HWND control,
+                                           BOOL& handled)
 {
     if (host_pool_)
     {
@@ -384,8 +381,8 @@ LRESULT UiMainDialog::OnInstallServiceButton(WORD notify_code, WORD control_id,
     return 0;
 }
 
-LRESULT UiMainDialog::OnRemoveServiceButton(WORD notify_code, WORD control_id,
-                                            HWND control, BOOL& handled)
+LRESULT MainDialog::OnRemoveServiceButton(WORD notify_code, WORD control_id, HWND control,
+                                          BOOL& handled)
 {
     if (HostService::Remove())
     {
@@ -397,7 +394,7 @@ LRESULT UiMainDialog::OnRemoveServiceButton(WORD notify_code, WORD control_id,
     return 0;
 }
 
-void UiMainDialog::CopySelectedIp()
+void MainDialog::CopySelectedIp()
 {
     CListViewCtrl list(GetDlgItem(IDC_IP_LIST));
 
@@ -438,20 +435,19 @@ void UiMainDialog::CopySelectedIp()
     clipboard.SetData(CF_UNICODETEXT, text_global);
 }
 
-LRESULT UiMainDialog::OnCopyButton(WORD notify_code, WORD control_id,
-                                   HWND control, BOOL& handled)
+LRESULT MainDialog::OnCopyButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     CopySelectedIp();
     return 0;
 }
 
-LRESULT UiMainDialog::OnIpListDoubleClick(int control_id, LPNMHDR hdr, BOOL& handled)
+LRESULT MainDialog::OnIpListDoubleClick(int control_id, LPNMHDR hdr, BOOL& handled)
 {
     CopySelectedIp();
     return 0;
 }
 
-LRESULT UiMainDialog::OnIpListRightClick(int control_id, LPNMHDR hdr, BOOL& handled)
+LRESULT MainDialog::OnIpListRightClick(int control_id, LPNMHDR hdr, BOOL& handled)
 {
     CListViewCtrl list(GetDlgItem(IDC_IP_LIST));
 
@@ -479,24 +475,21 @@ LRESULT UiMainDialog::OnIpListRightClick(int control_id, LPNMHDR hdr, BOOL& hand
     return 0;
 }
 
-LRESULT UiMainDialog::OnExitButton(WORD notify_code, WORD control_id,
-                                   HWND control, BOOL& handled)
+LRESULT MainDialog::OnExitButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     EndDialog(0);
     return 0;
 }
 
-LRESULT UiMainDialog::OnAboutButton(WORD notify_code, WORD control_id,
-                                    HWND control, BOOL& handled)
+LRESULT MainDialog::OnAboutButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
-    UiAboutDialog().DoModal(*this);
+    AboutDialog().DoModal(*this);
     return 0;
 }
 
-LRESULT UiMainDialog::OnUsersButton(WORD notify_code, WORD control_id,
-                                    HWND control, BOOL& handled)
+LRESULT MainDialog::OnUsersButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
-    UiUsersDialog().DoModal(*this);
+    UsersDialog().DoModal(*this);
     return 0;
 }
 

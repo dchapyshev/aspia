@@ -11,13 +11,12 @@
 
 namespace aspia {
 
-bool UiViewerToolBar::CreateViewerToolBar(HWND parent,
-                                          proto::SessionType session_type)
+bool ViewerToolBar::CreateViewerToolBar(HWND parent, proto::SessionType session_type)
 {
     const DWORD style = WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT |
         TBSTYLE_LIST | TBSTYLE_TOOLTIPS;
 
-    if (!Create(parent, 0, 0, style))
+    if (!Create(parent, nullptr, nullptr, style))
     {
         DLOG(ERROR) << "Unable to create viewer toolbar window: "
                     << GetLastSystemErrorString();
@@ -39,16 +38,11 @@ bool UiViewerToolBar::CreateViewerToolBar(HWND parent,
     return true;
 }
 
-LRESULT UiViewerToolBar::OnCreate(UINT message,
-                                  WPARAM wparam,
-                                  LPARAM lparam,
-                                  BOOL& handled)
+LRESULT ViewerToolBar::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     LRESULT ret = DefWindowProcW(message, wparam, lparam);
 
-    SetExtendedStyle(TBSTYLE_EX_DRAWDDARROWS |
-                     TBSTYLE_EX_MIXEDBUTTONS |
-                     TBSTYLE_EX_DOUBLEBUFFER);
+    SetExtendedStyle(TBSTYLE_EX_DRAWDDARROWS | TBSTYLE_EX_MIXEDBUTTONS | TBSTYLE_EX_DOUBLEBUFFER);
 
     TBBUTTON kButtons[] =
     {
@@ -68,8 +62,7 @@ LRESULT UiViewerToolBar::OnCreate(UINT message,
     SetButtonStructSize(sizeof(kButtons[0]));
     AddButtons(_countof(kButtons), kButtons);
 
-    CSize small_icon_size(GetSystemMetrics(SM_CXSMICON),
-                          GetSystemMetrics(SM_CYSMICON));
+    CSize small_icon_size(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
 
     if (imagelist_.Create(small_icon_size.cx,
                           small_icon_size.cy,
@@ -90,9 +83,7 @@ LRESULT UiViewerToolBar::OnCreate(UINT message,
     return ret;
 }
 
-LRESULT UiViewerToolBar::OnGetDispInfo(int control_id,
-                                       LPNMHDR hdr,
-                                       BOOL& handled)
+LRESULT ViewerToolBar::OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled)
 {
     LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(hdr);
     UINT string_id;
@@ -135,7 +126,7 @@ LRESULT UiViewerToolBar::OnGetDispInfo(int control_id,
     return 0;
 }
 
-void UiViewerToolBar::AddIcon(UINT icon_id, const CSize& icon_size)
+void ViewerToolBar::AddIcon(UINT icon_id, const CSize& icon_size)
 {
     CIcon icon = AtlLoadIconImage(icon_id,
                                   LR_CREATEDIBSECTION,

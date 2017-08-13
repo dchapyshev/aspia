@@ -47,7 +47,7 @@ void RunUIMain()
         return;
     }
 
-    UiMainDialog main_dialog;
+    MainDialog main_dialog;
     if (!main_dialog.Create(nullptr, 0))
     {
         LOG(ERROR) << "Unable to create main dialog: "

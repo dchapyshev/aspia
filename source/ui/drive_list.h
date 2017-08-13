@@ -20,15 +20,15 @@
 
 namespace aspia {
 
-class UiDriveList : public CWindowImpl<UiDriveList, CComboBoxEx>
+class DriveListWindow : public CWindowImpl<DriveListWindow, CComboBoxEx>
 {
 public:
     static const int kInvalidObjectIndex = -1;
     static const int kComputerObjectIndex = -2;
     static const int kCurrentFolderObjectIndex = -3;
 
-    UiDriveList() = default;
-    ~UiDriveList() = default;
+    DriveListWindow() = default;
+    ~DriveListWindow() = default;
 
     bool CreateDriveList(HWND parent, int control_id);
 
@@ -45,7 +45,7 @@ public:
     FilePath ObjectPath(int object_index) const;
 
 private:
-    BEGIN_MSG_MAP(UiDriveList)
+    BEGIN_MSG_MAP(DriveListWindow)
         // Nothing
     END_MSG_MAP()
 
@@ -56,7 +56,7 @@ private:
     CImageListManaged imagelist_;
     FilePath current_path_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiDriveList);
+    DISALLOW_COPY_AND_ASSIGN(DriveListWindow);
 };
 
 } // namespace aspia

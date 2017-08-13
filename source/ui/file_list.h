@@ -20,14 +20,14 @@
 
 namespace aspia {
 
-class UiFileList : public CWindowImpl<UiFileList, CListViewCtrl>
+class FileListWindow : public CWindowImpl<FileListWindow, CListViewCtrl>
 {
 public:
     static const int kInvalidObjectIndex = -1;
     static const int kNewFolderObjectIndex = -2;
 
-    UiFileList() = default;
-    virtual ~UiFileList() = default;
+    FileListWindow() = default;
+    virtual ~FileListWindow() = default;
 
     bool CreateFileList(HWND parent, int control_id);
 
@@ -52,7 +52,7 @@ public:
             SELECTED = LVNI_SELECTED
         };
 
-        Iterator(const UiFileList& list, Mode mode);
+        Iterator(const FileListWindow& list, Mode mode);
         ~Iterator() = default;
 
         bool IsAtEnd() const;
@@ -60,13 +60,13 @@ public:
         const proto::FileList::Item& Object() const;
 
     private:
-        const UiFileList& list_;
+        const FileListWindow& list_;
         const Mode mode_;
         int item_index_;
     };
 
 private:
-    BEGIN_MSG_MAP(UiFileList)
+    BEGIN_MSG_MAP(FileListWindow)
         // Nothing
     END_MSG_MAP()
 
@@ -77,7 +77,7 @@ private:
     CImageListManaged imagelist_;
     std::unique_ptr<proto::FileList> list_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiFileList);
+    DISALLOW_COPY_AND_ASSIGN(FileListWindow);
 };
 
 } // namespace aspia

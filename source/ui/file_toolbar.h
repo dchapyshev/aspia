@@ -18,13 +18,13 @@
 
 namespace aspia {
 
-class UiFileToolBar : public CWindowImpl<UiFileToolBar, CToolBarCtrl>
+class FileToolBar : public CWindowImpl<FileToolBar, CToolBarCtrl>
 {
 public:
     enum class Type { LOCAL, REMOTE };
 
-    UiFileToolBar(Type type);
-    virtual ~UiFileToolBar() = default;
+    FileToolBar(Type type);
+    virtual ~FileToolBar() = default;
 
     bool CreateFileToolBar(HWND parent);
 
@@ -43,7 +43,7 @@ private:
     const Type type_;
     CImageListManaged imagelist_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiFileToolBar);
+    DISALLOW_COPY_AND_ASSIGN(FileToolBar);
 };
 
 } // namespace aspia

@@ -34,17 +34,15 @@ static const int kMaxCompressRatio = 9;
 static const int kMinCompressRatio = 1;
 static const int kDefCompressRatio = 6;
 
-UiSettingsDialog::UiSettingsDialog(proto::SessionType session_type,
-                                   const proto::DesktopSessionConfig& config) :
-    session_type_(session_type),
-    config_(config)
+SettingsDialog::SettingsDialog(proto::SessionType session_type,
+                               const proto::DesktopSessionConfig& config)
+    : session_type_(session_type),
+      config_(config)
 {
     // Nothing
 }
 
-void UiSettingsDialog::AddColorDepth(CComboBox& combobox,
-                                     UINT string_id,
-                                     int item_data)
+void SettingsDialog::AddColorDepth(CComboBox& combobox, UINT string_id, int item_data)
 {
     CString text;
     text.LoadStringW(string_id);
@@ -53,7 +51,7 @@ void UiSettingsDialog::AddColorDepth(CComboBox& combobox,
     combobox.SetItemData(item_index, item_data);
 }
 
-void UiSettingsDialog::SelectItemWithData(CComboBox& combobox, int item_data)
+void SettingsDialog::SelectItemWithData(CComboBox& combobox, int item_data)
 {
     int count = combobox.GetCount();
 
@@ -69,7 +67,7 @@ void UiSettingsDialog::SelectItemWithData(CComboBox& combobox, int item_data)
     }
 }
 
-void UiSettingsDialog::InitColorDepthList()
+void SettingsDialog::InitColorDepthList()
 {
     CComboBox combo(GetDlgItem(IDC_COLOR_DEPTH_COMBO));
 
@@ -122,7 +120,7 @@ void UiSettingsDialog::InitColorDepthList()
     SelectItemWithData(combo, curr_item);
 }
 
-void UiSettingsDialog::InitCodecList()
+void SettingsDialog::InitCodecList()
 {
     CComboBox combo(GetDlgItem(IDC_CODEC_COMBO));
 
@@ -138,15 +136,14 @@ void UiSettingsDialog::InitCodecList()
     SelectItemWithData(combo, config_.video_encoding());
 }
 
-void UiSettingsDialog::UpdateCompressionRatio(int compression_ratio)
+void SettingsDialog::UpdateCompressionRatio(int compression_ratio)
 {
     CString text;
     text.Format(IDS_DM_COMPRESSION_RATIO_FORMAT, compression_ratio);
     SetDlgItemTextW(IDC_COMPRESS_RATIO_TEXT, text);
 }
 
-LRESULT UiSettingsDialog::OnInitDialog(UINT message, WPARAM wparam,
-                                       LPARAM lparam, BOOL& handled)
+LRESULT SettingsDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     InitCodecList();
     InitColorDepthList();
@@ -182,15 +179,13 @@ LRESULT UiSettingsDialog::OnInitDialog(UINT message, WPARAM wparam,
     return TRUE;
 }
 
-LRESULT UiSettingsDialog::OnClose(UINT message, WPARAM wparam,
-                                  LPARAM lparam, BOOL& handled)
+LRESULT SettingsDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     EndDialog(IDCANCEL);
     return 0;
 }
 
-LRESULT UiSettingsDialog::OnHScroll(UINT message, WPARAM wparam,
-                                    LPARAM lparam, BOOL& handled)
+LRESULT SettingsDialog::OnHScroll(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     CWindow control(reinterpret_cast<HWND>(lparam));
 
@@ -203,7 +198,7 @@ LRESULT UiSettingsDialog::OnHScroll(UINT message, WPARAM wparam,
     return 0;
 }
 
-void UiSettingsDialog::OnCodecChanged()
+void SettingsDialog::OnCodecChanged()
 {
     CComboBox codec_combo(GetDlgItem(IDC_CODEC_COMBO));
 
@@ -219,21 +214,19 @@ void UiSettingsDialog::OnCodecChanged()
     GetDlgItem(IDC_BEST_TEXT).EnableWindow(has_pixel_format);
 }
 
-LRESULT UiSettingsDialog::OnCodecListChanged(WORD notify_code, WORD control_id,
-                                             HWND control, BOOL& handled)
+LRESULT SettingsDialog::OnCodecListChanged(WORD notify_code, WORD control_id, HWND control,
+                                           BOOL& handled)
 {
     OnCodecChanged();
     return 0;
 }
 
-LRESULT UiSettingsDialog::OnOkButton(WORD notify_code, WORD control_id,
-                                     HWND control, BOOL& handled)
+LRESULT SettingsDialog::OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     CComboBox codec_combo(GetDlgItem(IDC_CODEC_COMBO));
 
     proto::VideoEncoding encoding =
-        static_cast<proto::VideoEncoding>(
-            codec_combo.GetItemData(codec_combo.GetCurSel()));
+        static_cast<proto::VideoEncoding>(codec_combo.GetItemData(codec_combo.GetCurSel()));
 
     config_.set_video_encoding(encoding);
 
@@ -279,9 +272,7 @@ LRESULT UiSettingsDialog::OnOkButton(WORD notify_code, WORD control_id,
 
         ConvertToVideoPixelFormat(format, config_.mutable_pixel_format());
 
-        int compress_ratio =
-            CTrackBarCtrl(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR)).GetPos();
-
+        int compress_ratio = CTrackBarCtrl(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR)).GetPos();
         if (compress_ratio >= kMinCompressRatio && compress_ratio <= kMaxCompressRatio)
         {
             config_.set_compress_ratio(compress_ratio);
@@ -313,8 +304,8 @@ LRESULT UiSettingsDialog::OnOkButton(WORD notify_code, WORD control_id,
     return 0;
 }
 
-LRESULT UiSettingsDialog::OnCancelButton(WORD notify_code, WORD control_id,
-                                         HWND control, BOOL& handled)
+LRESULT SettingsDialog::OnCancelButton(WORD notify_code, WORD control_id, HWND control,
+                                       BOOL& handled)
 {
     EndDialog(IDCANCEL);
     return 0;

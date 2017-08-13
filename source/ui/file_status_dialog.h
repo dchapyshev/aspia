@@ -20,16 +20,16 @@
 
 namespace aspia {
 
-class UiFileStatusDialog :
-    public CDialogImpl<UiFileStatusDialog>,
-    public CDialogResize<UiFileStatusDialog>,
+class FileStatusDialog :
+    public CDialogImpl<FileStatusDialog>,
+    public CDialogResize<FileStatusDialog>,
     private MessageLoopThread::Delegate
 {
 public:
     enum { IDD = IDD_FILE_STATUS };
 
-    UiFileStatusDialog();
-    ~UiFileStatusDialog();
+    FileStatusDialog();
+    ~FileStatusDialog();
 
     void WaitForClose();
 
@@ -44,14 +44,14 @@ public:
     void OnFileDownloadRequest(const FilePath& file_path);
 
 private:
-    BEGIN_MSG_MAP(UiFileStatusDialog)
+    BEGIN_MSG_MAP(FileStatusDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
         COMMAND_ID_HANDLER(IDC_MINIMIZE_BUTTON, OnMinimizeButton)
         COMMAND_ID_HANDLER(IDC_STOP_BUTTON, OnStopButton)
 
-        CHAIN_MSG_MAP(CDialogResize<UiFileStatusDialog>)
+        CHAIN_MSG_MAP(CDialogResize<FileStatusDialog>)
     END_MSG_MAP()
 
     BEGIN_DLGRESIZE_MAP(UiFileStatusDialog)
@@ -78,7 +78,7 @@ private:
     CIcon big_icon_;
     CRichEditCtrl edit_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiFileStatusDialog);
+    DISALLOW_COPY_AND_ASSIGN(FileStatusDialog);
 };
 
 } // namespace aspia

@@ -19,17 +19,17 @@
 
 namespace aspia {
 
-class UiUsersDialog :
-    public CDialogImpl<UiUsersDialog>,
-    public CDialogResize<UiUsersDialog>
+class UsersDialog :
+    public CDialogImpl<UsersDialog>,
+    public CDialogResize<UsersDialog>
 {
 public:
     enum { IDD = IDD_USERS };
 
-    UiUsersDialog() = default;
+    UsersDialog() = default;
 
 private:
-    BEGIN_MSG_MAP(UiUsersDialog)
+    BEGIN_MSG_MAP(UsersDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
         MESSAGE_HANDLER(WM_SIZE, OnSize)
@@ -46,7 +46,7 @@ private:
         NOTIFY_HANDLER(IDC_USER_LIST, LVN_KEYDOWN, OnUserListKeyDown)
         NOTIFY_HANDLER(IDC_USER_LIST, LVN_ITEMCHANGED, OnUserListItemChanged)
 
-        CHAIN_MSG_MAP(CDialogResize<UiUsersDialog>)
+        CHAIN_MSG_MAP(CDialogResize<UsersDialog>)
     END_MSG_MAP()
 
     BEGIN_DLGRESIZE_MAP(UiUsersDialog)
@@ -85,7 +85,7 @@ private:
     CIcon edit_icon_;
     CIcon delete_icon_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiUsersDialog);
+    DISALLOW_COPY_AND_ASSIGN(UsersDialog);
 };
 
 } // namespace aspia

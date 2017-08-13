@@ -18,17 +18,17 @@
 
 namespace aspia {
 
-class UiAboutDialog :
-    public CDialogImpl<UiAboutDialog>,
-    public CDialogResize<UiAboutDialog>
+class AboutDialog :
+    public CDialogImpl<AboutDialog>,
+    public CDialogResize<AboutDialog>
 {
 public:
     enum { IDD = IDD_ABOUT };
 
-    UiAboutDialog() = default;
+    AboutDialog() = default;
 
 private:
-    BEGIN_MSG_MAP(UiAboutDialog)
+    BEGIN_MSG_MAP(AboutDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
         MESSAGE_HANDLER(WM_DRAWITEM, OnDrawItem)
@@ -37,7 +37,7 @@ private:
         COMMAND_ID_HANDLER(IDC_DONATE_BUTTON, OnDonateButton)
         COMMAND_ID_HANDLER(IDC_SITE_BUTTON, OnSiteButton)
 
-        CHAIN_MSG_MAP(CDialogResize<UiAboutDialog>)
+        CHAIN_MSG_MAP(CDialogResize<AboutDialog>)
     END_MSG_MAP()
 
     BEGIN_DLGRESIZE_MAP(UiAboutDialog)
@@ -57,7 +57,7 @@ private:
 
     CIcon icon_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiAboutDialog);
+    DISALLOW_COPY_AND_ASSIGN(AboutDialog);
 };
 
 } // namespace aspia

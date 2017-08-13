@@ -19,17 +19,17 @@
 
 namespace aspia {
 
-class UiPowerSessionDialog : public CDialogImpl<UiPowerSessionDialog>
+class PowerSessionDialog : public CDialogImpl<PowerSessionDialog>
 {
 public:
     enum { IDD = IDD_POWER_HOST };
     enum class Result { CANCEL, EXECUTE };
 
-    UiPowerSessionDialog(proto::PowerEvent::Action action);
-    ~UiPowerSessionDialog() = default;
+    PowerSessionDialog(proto::PowerEvent::Action action);
+    ~PowerSessionDialog() = default;
 
 private:
-    BEGIN_MSG_MAP(UiPowerSessionDialog)
+    BEGIN_MSG_MAP(PowerSessionDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
         MESSAGE_HANDLER(WM_TIMER, OnTimer)
@@ -49,13 +49,13 @@ private:
 
     const proto::PowerEvent::Action action_;
     int time_left_;
-    CTimer timer_;
+    Timer timer_;
 
     CIcon small_icon_;
     CIcon big_icon_;
     CIcon power_icon_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiPowerSessionDialog);
+    DISALLOW_COPY_AND_ASSIGN(PowerSessionDialog);
 };
 
 } // namespace aspia

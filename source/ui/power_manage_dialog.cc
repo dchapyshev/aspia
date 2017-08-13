@@ -12,8 +12,7 @@
 
 namespace aspia {
 
-LRESULT UiPowerManageDialog::OnInitDialog(UINT message, WPARAM wparam,
-                                          LPARAM lparam, BOOL& handled)
+LRESULT PowerManageDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     CenterWindow();
 
@@ -29,15 +28,14 @@ LRESULT UiPowerManageDialog::OnInitDialog(UINT message, WPARAM wparam,
     return 0;
 }
 
-LRESULT UiPowerManageDialog::OnClose(UINT message, WPARAM wparam,
-                                     LPARAM lparam, BOOL& handled)
+LRESULT PowerManageDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     EndDialog(proto::PowerEvent::UNKNOWN);
     return 0;
 }
 
-LRESULT UiPowerManageDialog::OnOkButton(WORD notify_code, WORD control_id,
-                                        HWND control, BOOL& handled)
+LRESULT PowerManageDialog::OnOkButton(WORD notify_code, WORD control_id, HWND control,
+                                      BOOL& handled)
 {
     proto::PowerEvent::Action action = proto::PowerEvent::UNKNOWN;
 
@@ -54,8 +52,8 @@ LRESULT UiPowerManageDialog::OnOkButton(WORD notify_code, WORD control_id,
     return 0;
 }
 
-LRESULT UiPowerManageDialog::OnCancelButton(WORD notify_code, WORD control_id,
-                                            HWND control, BOOL& handled)
+LRESULT PowerManageDialog::OnCancelButton(WORD notify_code, WORD control_id, HWND control,
+                                          BOOL& handled)
 {
     EndDialog(proto::PowerEvent::UNKNOWN);
     return 0;

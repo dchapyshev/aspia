@@ -18,9 +18,9 @@
 
 namespace aspia {
 
-class UiViewerWindow :
-    public CWindowImpl<UiViewerWindow, CWindow>,
-    private UiVideoWindow::Delegate,
+class ViewerWindow :
+    public CWindowImpl<ViewerWindow, CWindow>,
+    private VideoWindow::Delegate,
     private MessageLoopThread::Delegate
 {
 public:
@@ -35,8 +35,8 @@ public:
         virtual void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) = 0;
     };
 
-    UiViewerWindow(ClientConfig* config, Delegate* delegate);
-    ~UiViewerWindow();
+    ViewerWindow(ClientConfig* config, Delegate* delegate);
+    ~ViewerWindow();
 
     DesktopFrame* Frame();
     void DrawFrame();
@@ -47,7 +47,7 @@ public:
 private:
     static const UINT kResizeFrameMessage = WM_APP + 1;
 
-    BEGIN_MSG_MAP(UiViewerWindow)
+    BEGIN_MSG_MAP(ViewerWindow)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
         MESSAGE_HANDLER(WM_KEYDOWN, OnKeyboard)
         MESSAGE_HANDLER(WM_KEYUP, OnKeyboard)
@@ -83,7 +83,7 @@ private:
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
-    // UiVideoWindow::Delegate implementation.
+    // VideoWindow::Delegate implementation.
     void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) override;
 
     LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
@@ -119,14 +119,14 @@ private:
     Delegate* delegate_;
     ClientConfig* config_;
 
-    UiViewerToolBar toolbar_;
-    UiVideoWindow video_window_;
+    ViewerToolBar toolbar_;
+    VideoWindow video_window_;
 
     Clipboard clipboard_;
     ScopedHHOOK keyboard_hook_;
     WINDOWPLACEMENT window_pos_ = { 0 };
 
-    DISALLOW_COPY_AND_ASSIGN(UiViewerWindow);
+    DISALLOW_COPY_AND_ASSIGN(ViewerWindow);
 };
 
 } // namespace aspia

@@ -19,7 +19,7 @@
 namespace aspia {
 
 class ClientPool
-    : private UiStatusDialog::Delegate,
+    : private StatusDialog::Delegate,
       private Client::Delegate
 {
 public:
@@ -29,7 +29,7 @@ public:
     void Connect(HWND parent, const ClientConfig& config);
 
 private:
-    // UiStatusDialog::Delegate implementation.
+    // StatusDialog::Delegate implementation.
     void OnStatusDialogOpen() override;
 
     void OnConnect(std::shared_ptr<NetworkChannel> channel);
@@ -40,7 +40,7 @@ private:
     bool terminating_ = false;
 
     ClientConfig config_;
-    UiStatusDialog status_dialog_;
+    StatusDialog status_dialog_;
 
     std::shared_ptr<MessageLoopProxy> runner_;
     std::unique_ptr<NetworkClientTcp> network_client_;

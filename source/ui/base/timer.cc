@@ -9,17 +9,17 @@
 
 namespace aspia {
 
-CTimer::CTimer(UINT_PTR id) : id_(id)
+Timer::Timer(UINT_PTR id) : id_(id)
 {
     // Nothing
 }
 
-CTimer::~CTimer()
+Timer::~Timer()
 {
     Stop();
 }
 
-void CTimer::Start(HWND window, UINT elapse)
+void Timer::Start(HWND window, UINT elapse)
 {
     if (!active_)
     {
@@ -30,7 +30,7 @@ void CTimer::Start(HWND window, UINT elapse)
     }
 }
 
-void CTimer::Stop()
+void Timer::Stop()
 {
     if (active_)
     {

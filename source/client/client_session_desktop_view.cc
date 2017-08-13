@@ -19,7 +19,7 @@ ClientSessionDesktopView::ClientSessionDesktopView(
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
     : ClientSession(config, channel_proxy)
 {
-    viewer_.reset(new UiViewerWindow(&config_, this));
+    viewer_.reset(new ViewerWindow(&config_, this));
 
     channel_proxy_->Receive(std::bind(
         &ClientSessionDesktopView::OnMessageReceived, this,

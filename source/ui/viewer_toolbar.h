@@ -19,16 +19,16 @@
 
 namespace aspia {
 
-class UiViewerToolBar : public CWindowImpl<UiViewerToolBar, CToolBarCtrl>
+class ViewerToolBar : public CWindowImpl<ViewerToolBar, CToolBarCtrl>
 {
 public:
-    UiViewerToolBar() = default;
-    ~UiViewerToolBar() = default;
+    ViewerToolBar() = default;
+    ~ViewerToolBar() = default;
 
     bool CreateViewerToolBar(HWND parent, proto::SessionType session_type);
 
 private:
-    BEGIN_MSG_MAP(UiViewerToolBar)
+    BEGIN_MSG_MAP(ViewerToolBar)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
         NOTIFY_CODE_HANDLER(TTN_GETDISPINFOW, OnGetDispInfo)
     END_MSG_MAP()
@@ -40,7 +40,7 @@ private:
 
     CImageListManaged imagelist_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiViewerToolBar);
+    DISALLOW_COPY_AND_ASSIGN(ViewerToolBar);
 };
 
 } // namespace aspia

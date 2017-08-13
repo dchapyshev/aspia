@@ -20,19 +20,18 @@
 
 namespace aspia {
 
-class UiSettingsDialog : public CDialogImpl<UiSettingsDialog>
+class SettingsDialog : public CDialogImpl<SettingsDialog>
 {
 public:
     enum { IDD = IDD_SETTINGS };
 
-    UiSettingsDialog(proto::SessionType session_type,
-                     const proto::DesktopSessionConfig& config);
-    ~UiSettingsDialog() = default;
+    SettingsDialog(proto::SessionType session_type,const proto::DesktopSessionConfig& config);
+    ~SettingsDialog() = default;
 
     const proto::DesktopSessionConfig& Config() const { return config_; }
 
 private:
-    BEGIN_MSG_MAP(UiSettingsDialog)
+    BEGIN_MSG_MAP(SettingsDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
         MESSAGE_HANDLER(WM_HSCROLL, OnHScroll)
@@ -61,7 +60,7 @@ private:
     proto::SessionType session_type_;
     proto::DesktopSessionConfig config_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiSettingsDialog);
+    DISALLOW_COPY_AND_ASSIGN(SettingsDialog);
 };
 
 } // namespace aspia

@@ -20,21 +20,19 @@
 
 namespace aspia {
 
-class UiUserPropDialog :
-    public CDialogImpl<UiUserPropDialog>,
-    public CDialogResize<UiUserPropDialog>
+class UserPropDialog :
+    public CDialogImpl<UserPropDialog>,
+    public CDialogResize<UserPropDialog>
 {
 public:
     enum { IDD = IDD_USER_PROP };
 
     enum class Mode { ADD, EDIT };
 
-    UiUserPropDialog(Mode mode,
-                     proto::HostUser* user,
-                     const HostUserList& user_list);
+    UserPropDialog(Mode mode, proto::HostUser* user, const HostUserList& user_list);
 
 private:
-    BEGIN_MSG_MAP(UiUserPropDialog)
+    BEGIN_MSG_MAP(UserPropDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
         MESSAGE_HANDLER(WM_SIZE, OnSize)
@@ -42,7 +40,7 @@ private:
         COMMAND_ID_HANDLER(IDOK, OnOkButton)
         COMMAND_ID_HANDLER(IDCANCEL, OnCancelButton)
 
-        CHAIN_MSG_MAP(CDialogResize<UiUserPropDialog>)
+        CHAIN_MSG_MAP(CDialogResize<UserPropDialog>)
     END_MSG_MAP()
 
     BEGIN_DLGRESIZE_MAP(UiUserPropDialog)
@@ -61,10 +59,7 @@ private:
     LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     void OnPasswordEditDblClick();
     void ShowErrorMessage(UINT string_id);
-
-    void InsertSessionType(CListViewCtrl& list,
-                           proto::SessionType session_type,
-                           UINT string_id);
+    void InsertSessionType(CListViewCtrl& list, proto::SessionType session_type, UINT string_id);
 
     static LRESULT CALLBACK PasswordEditWindowProc(HWND hwnd,
                                                    UINT msg,
@@ -77,7 +72,7 @@ private:
     const HostUserList& user_list_;
     bool password_changed_ = true;
 
-    DISALLOW_COPY_AND_ASSIGN(UiUserPropDialog);
+    DISALLOW_COPY_AND_ASSIGN(UserPropDialog);
 };
 
 } // namespace aspia
