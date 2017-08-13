@@ -20,27 +20,27 @@
 
 namespace aspia {
 
-class UiFileManagerPanel :
-    public CWindowImpl<UiFileManagerPanel, CWindow>,
+class FileManagerPanel :
+    public CWindowImpl<FileManagerPanel, CWindow>,
     public FileReplyReceiver
 {
 public:
-    enum class PanelType { LOCAL, REMOTE };
+    enum class Type { LOCAL, REMOTE };
 
     class Delegate
     {
     public:
         virtual ~Delegate() = default;
 
-        virtual void SendFiles(PanelType panel_type,
+        virtual void SendFiles(Type type,
                                const FilePath& source_path,
                                const FileTransfer::FileList& file_list) = 0;
     };
 
-    UiFileManagerPanel(PanelType panel_type,
-                       std::shared_ptr<FileRequestSenderProxy> sender,
-                       Delegate* delegate);
-    virtual ~UiFileManagerPanel() = default;
+    FileManagerPanel(Type type,
+                     std::shared_ptr<FileRequestSenderProxy> sender,
+                     Delegate* delegate);
+    virtual ~FileManagerPanel() = default;
 
     FilePath GetCurrentPath() const;
 
@@ -48,7 +48,7 @@ private:
     static const int kDriveListControl = 101;
     static const int kFileListControl = 102;
 
-    BEGIN_MSG_MAP(UiFileManagerPanel)
+    BEGIN_MSG_MAP(FileManagerPanel)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
         MESSAGE_HANDLER(WM_SIZE, OnSize)
         MESSAGE_HANDLER(WM_DRAWITEM, OnDrawItem)
@@ -108,7 +108,7 @@ private:
 
     void MoveToDrive(int object_index);
 
-    const PanelType panel_type_;
+    const Type type_;
     Delegate* delegate_;
     std::shared_ptr<FileRequestSenderProxy> sender_;
 
@@ -118,7 +118,7 @@ private:
     UiFileToolBar toolbar_;
     CStatic status_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiFileManagerPanel);
+    DISALLOW_COPY_AND_ASSIGN(FileManagerPanel);
 };
 
 } // namespace aspia

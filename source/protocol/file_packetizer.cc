@@ -13,7 +13,7 @@ namespace aspia {
 // When transferring a file is divided into parts and each part is
 // transmitted separately.
 // This parameter specifies the size of the part.
-static const size_t kPacketPartSize = 32 * 1024; // 32 kB
+static const size_t kPacketPartSize = 16 * 1024; // 16 kB
 
 FilePacketizer::FilePacketizer(std::ifstream&& file_stream)
     : file_stream_(std::move(file_stream))
@@ -36,8 +36,7 @@ std::unique_ptr<FilePacketizer> FilePacketizer::Create(const FilePath& file_path
         return nullptr;
     }
 
-    return std::unique_ptr<FilePacketizer>(
-        new FilePacketizer(std::move(file_stream)));
+    return std::unique_ptr<FilePacketizer>(new FilePacketizer(std::move(file_stream)));
 }
 
 static char* GetOutputBuffer(proto::FilePacket* packet, size_t size)

@@ -15,24 +15,32 @@ static const int kDefaultWindowWidth = 980;
 static const int kDefaultWindowHeight = 700;
 static const int kBorderSize = 3;
 
-UiFileManager::UiFileManager(std::shared_ptr<FileRequestSenderProxy> local_sender,
-                             std::shared_ptr<FileRequestSenderProxy> remote_sender,
-                             Delegate* delegate) :
-    delegate_(delegate),
-    local_sender_(local_sender),
-    remote_sender_(remote_sender),
-    local_panel_(UiFileManagerPanel::PanelType::LOCAL, local_sender, this),
-    remote_panel_(UiFileManagerPanel::PanelType::REMOTE, remote_sender, this)
+FileManagerWindow::FileManagerWindow(std::shared_ptr<FileRequestSenderProxy> local_sender,
+                                     std::shared_ptr<FileRequestSenderProxy> remote_sender,
+                                     Delegate* delegate)
+    : delegate_(delegate),
+      local_sender_(local_sender),
+      remote_sender_(remote_sender),
+      local_panel_(FileManagerPanel::Type::LOCAL, local_sender, this),
+      remote_panel_(FileManagerPanel::Type::REMOTE, remote_sender, this)
 {
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
-UiFileManager::~UiFileManager()
+FileManagerWindow::~FileManagerWindow()
 {
+    GUITHREADINFO thread_info;
+    thread_info.cbSize = sizeof(thread_info);
+
+    if (GetGUIThreadInfo(ui_thread_.thread_id(), &thread_info))
+    {
+        ::PostMessageW(thread_info.hwndActive, WM_CLOSE, 0, 0);
+    }
+
     ui_thread_.Stop();
 }
 
-void UiFileManager::OnBeforeThreadRunning()
+void FileManagerWindow::OnBeforeThreadRunning()
 {
     runner_ = ui_thread_.message_loop_proxy();
     DCHECK(runner_);
@@ -40,7 +48,7 @@ void UiFileManager::OnBeforeThreadRunning()
     CString title;
     title.LoadStringW(IDS_FT_FILE_TRANSFER);
 
-    if (!Create(nullptr, 0, title, WS_OVERLAPPEDWINDOW))
+    if (!Create(nullptr, nullptr, title, WS_OVERLAPPEDWINDOW))
     {
         LOG(ERROR) << "File manager window not created";
         runner_->PostQuit();
@@ -52,27 +60,27 @@ void UiFileManager::OnBeforeThreadRunning()
     }
 }
 
-void UiFileManager::OnAfterThreadRunning()
+void FileManagerWindow::OnAfterThreadRunning()
 {
     DestroyWindow();
 }
 
-void UiFileManager::SendFiles(UiFileManagerPanel::PanelType panel_type,
-                              const FilePath& source_path,
-                              const FileTransfer::FileList& file_list)
+void FileManagerWindow::SendFiles(FileManagerPanel::Type panel_type,
+                                  const FilePath& source_path,
+                                  const FileTransfer::FileList& file_list)
 {
-    UiFileTransferDialog::Mode mode;
+    FileTransferDialog::Mode mode;
     FilePath target_path;
 
-    if (panel_type == UiFileManagerPanel::PanelType::LOCAL)
+    if (panel_type == FileManagerPanel::Type::LOCAL)
     {
-        mode = UiFileTransferDialog::Mode::UPLOAD;
+        mode = FileTransferDialog::Mode::UPLOAD;
         target_path = remote_panel_.GetCurrentPath();
     }
     else
     {
-        DCHECK(panel_type == UiFileManagerPanel::PanelType::REMOTE);
-        mode = UiFileTransferDialog::Mode::DOWNLOAD;
+        DCHECK(panel_type == FileManagerPanel::Type::REMOTE);
+        mode = FileTransferDialog::Mode::DOWNLOAD;
         target_path = local_panel_.GetCurrentPath();
     }
 
@@ -80,11 +88,11 @@ void UiFileManager::SendFiles(UiFileManagerPanel::PanelType panel_type,
     if (source_path.empty() || target_path.empty())
         return;
 
-    UiFileTransferDialog dialog(mode, remote_sender_, source_path, target_path, file_list);
+    FileTransferDialog dialog(mode, remote_sender_, source_path, target_path, file_list);
     dialog.DoModal(*this);
 }
 
-LRESULT UiFileManager::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileManagerWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
                                    LR_CREATEDIBSECTION,
@@ -96,7 +104,7 @@ LRESULT UiFileManager::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL
                                  LR_CREATEDIBSECTION,
                                  GetSystemMetrics(SM_CXICON),
                                  GetSystemMetrics(SM_CYICON));
-    SetIcon(small_icon_, TRUE);
+    SetIcon(big_icon_, TRUE);
 
     CRect client_rect;
     GetClientRect(client_rect);
@@ -111,8 +119,8 @@ LRESULT UiFileManager::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL
     splitter_.m_cxyMin = 0;
     splitter_.m_bFullDrag = false;
 
-    local_panel_.Create(splitter_, 0, 0, WS_CHILD | WS_VISIBLE);
-    remote_panel_.Create(splitter_, 0, 0, WS_CHILD | WS_VISIBLE);
+    local_panel_.Create(splitter_, nullptr, nullptr, WS_CHILD | WS_VISIBLE);
+    remote_panel_.Create(splitter_, nullptr, nullptr, WS_CHILD | WS_VISIBLE);
 
     splitter_.SetSplitterPane(SPLIT_PANE_LEFT, local_panel_);
     splitter_.SetSplitterPane(SPLIT_PANE_RIGHT, remote_panel_);
@@ -124,7 +132,7 @@ LRESULT UiFileManager::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL
     return 0;
 }
 
-LRESULT UiFileManager::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileManagerWindow::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     local_panel_.DestroyWindow();
     remote_panel_.DestroyWindow();
@@ -132,7 +140,7 @@ LRESULT UiFileManager::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOO
     return 0;
 }
 
-LRESULT UiFileManager::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileManagerWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     int width = LOWORD(lparam);
     int height = HIWORD(lparam);
@@ -145,7 +153,7 @@ LRESULT UiFileManager::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& 
     return 0;
 }
 
-LRESULT UiFileManager::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileManagerWindow::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     LPMINMAXINFO mmi = reinterpret_cast<LPMINMAXINFO>(lparam);
 
@@ -155,7 +163,7 @@ LRESULT UiFileManager::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lpara
     return 0;
 }
 
-LRESULT UiFileManager::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileManagerWindow::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     delegate_->OnWindowClose();
     return 0;

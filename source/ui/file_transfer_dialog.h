@@ -22,8 +22,8 @@
 
 namespace aspia {
 
-class UiFileTransferDialog :
-    public CDialogImpl<UiFileTransferDialog>,
+class FileTransferDialog :
+    public CDialogImpl<FileTransferDialog>,
     public FileTransfer::Delegate
 {
 public:
@@ -31,15 +31,15 @@ public:
 
     enum class Mode { UPLOAD, DOWNLOAD };
 
-    UiFileTransferDialog(Mode mode,
-                         std::shared_ptr<FileRequestSenderProxy> sender,
-                         const FilePath& source_path,
-                         const FilePath& target_path,
-                         const FileTransfer::FileList& file_list);
-    ~UiFileTransferDialog() = default;
+    FileTransferDialog(Mode mode,
+                       std::shared_ptr<FileRequestSenderProxy> sender,
+                       const FilePath& source_path,
+                       const FilePath& target_path,
+                       const FileTransfer::FileList& file_list);
+    ~FileTransferDialog() = default;
 
 private:
-    BEGIN_MSG_MAP(UiFileTransferDialog)
+    BEGIN_MSG_MAP(FileTransferDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
@@ -77,7 +77,7 @@ private:
     CProgressBarCtrl current_progress_;
     CEdit current_item_edit_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiFileTransferDialog);
+    DISALLOW_COPY_AND_ASSIGN(FileTransferDialog);
 };
 
 } // namespace aspia

@@ -17,7 +17,7 @@ namespace aspia {
 
 class ClientSessionFileTransfer :
     public ClientSession,
-    private UiFileManager::Delegate
+    private FileManagerWindow::Delegate
 {
 public:
     ClientSessionFileTransfer(const ClientConfig& config,
@@ -25,10 +25,10 @@ public:
     ~ClientSessionFileTransfer();
 
 private:
-    // UiFileManager::Delegate implementation.
+    // FileManagerWindow::Delegate implementation.
     void OnWindowClose() override;
 
-    std::unique_ptr<UiFileManager> file_manager_;
+    std::unique_ptr<FileManagerWindow> file_manager_;
 
     std::unique_ptr<FileRequestSenderLocal> local_sender_;
     std::unique_ptr<FileRequestSenderRemote> remote_sender_;

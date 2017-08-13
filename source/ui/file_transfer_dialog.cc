@@ -16,11 +16,11 @@
 
 namespace aspia {
 
-UiFileTransferDialog::UiFileTransferDialog(Mode mode,
-                                           std::shared_ptr<FileRequestSenderProxy> sender,
-                                           const FilePath& source_path,
-                                           const FilePath& target_path,
-                                           const FileTransfer::FileList& file_list)
+FileTransferDialog::FileTransferDialog(Mode mode,
+                                       std::shared_ptr<FileRequestSenderProxy> sender,
+                                       const FilePath& source_path,
+                                       const FilePath& target_path,
+                                       const FileTransfer::FileList& file_list)
     : mode_(mode),
       sender_(std::move(sender)),
       source_path_(source_path),
@@ -32,7 +32,7 @@ UiFileTransferDialog::UiFileTransferDialog(Mode mode,
     DCHECK(runner_->BelongsToCurrentThread());
 }
 
-LRESULT UiFileTransferDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileTransferDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     CenterWindow();
 
@@ -62,55 +62,36 @@ LRESULT UiFileTransferDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM l
     return TRUE;
 }
 
-LRESULT UiFileTransferDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileTransferDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     file_transfer_.reset();
     EndDialog(0);
     return 0;
 }
 
-LRESULT UiFileTransferDialog::OnCancelButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT FileTransferDialog::OnCancelButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     PostMessageW(WM_CLOSE);
     return 0;
 }
 
-void UiFileTransferDialog::OnTransferStarted(uint64_t size)
+void FileTransferDialog::OnTransferStarted(uint64_t size)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&UiFileTransferDialog::OnTransferStarted, this, size));
-        return;
-    }
-
-    if (!file_transfer_)
-        return;
-
     // Save the total size of all the transferred objects.
     total_size_ = size;
     transferred_total_ = 0;
     transferred_per_object_ = 0;
 }
 
-void UiFileTransferDialog::OnTransferComplete()
+void FileTransferDialog::OnTransferComplete()
 {
     PostMessageW(WM_CLOSE);
 }
 
-void UiFileTransferDialog::OnObjectTransfer(const FilePath& source_path,
-                                            uint64_t total_object_size,
-                                            uint64_t left_object_size)
+void FileTransferDialog::OnObjectTransfer(const FilePath& source_path,
+                                          uint64_t total_object_size,
+                                          uint64_t left_object_size)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&UiFileTransferDialog::OnObjectTransfer, this, source_path,
-                                    total_object_size, left_object_size));
-        return;
-    }
-
-    if (!file_transfer_)
-        return;
-
     current_item_edit_.SetWindowTextW(source_path.c_str());
 
     uint64_t transferred = total_object_size - left_object_size;
@@ -134,14 +115,14 @@ void UiFileTransferDialog::OnObjectTransfer(const FilePath& source_path,
         transferred_per_object_ = 0;
 }
 
-void UiFileTransferDialog::OnFileOperationFailure(const FilePath& file_path,
-                                                  proto::RequestStatus status,
-                                                  FileTransfer::ActionCallback callback)
+void FileTransferDialog::OnFileOperationFailure(const FilePath& file_path,
+                                                proto::RequestStatus status,
+                                                FileTransfer::ActionCallback callback)
 {
     if (!runner_->BelongsToCurrentThread())
     {
         runner_->PostTask(std::bind(
-            &UiFileTransferDialog::OnFileOperationFailure, this, file_path, status, callback));
+            &FileTransferDialog::OnFileOperationFailure, this, file_path, status, callback));
         return;
     }
 

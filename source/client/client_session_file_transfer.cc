@@ -17,10 +17,9 @@ ClientSessionFileTransfer::ClientSessionFileTransfer(
     remote_sender_ = std::make_unique<FileRequestSenderRemote>(channel_proxy);
     local_sender_ = std::make_unique<FileRequestSenderLocal>();
 
-    file_manager_.reset(
-        new UiFileManager(local_sender_->request_sender_proxy(),
-                          remote_sender_->request_sender_proxy(),
-                          this));
+    file_manager_.reset(new FileManagerWindow(local_sender_->request_sender_proxy(),
+                                              remote_sender_->request_sender_proxy(),
+                                              this));
 }
 
 ClientSessionFileTransfer::~ClientSessionFileTransfer()

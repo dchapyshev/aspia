@@ -53,8 +53,7 @@ void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(
-            std::bind(&Client::OnNetworkChannelStatusChange, this, status));
+        runner_->PostTask(std::bind(&Client::OnNetworkChannelStatusChange, this, status));
         return;
     }
 
@@ -72,7 +71,6 @@ void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
 
         request.set_method(proto::AuthMethod::AUTH_METHOD_BASIC);
         request.set_session_type(config_.session_type());
-
         request.set_username(auth_dialog.UserName());
         request.set_password(auth_dialog.Password());
 
@@ -105,8 +103,7 @@ void Client::OpenStatusDialog()
 
 void Client::OnAuthRequestSended()
 {
-    channel_proxy_->Receive(
-        std::bind(&Client::DoAuthorize, this, std::placeholders::_1));
+    channel_proxy_->Receive(std::bind(&Client::DoAuthorize, this, std::placeholders::_1));
 }
 
 static std::unique_ptr<ClientSession> CreateSession(

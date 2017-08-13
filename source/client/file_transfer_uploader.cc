@@ -30,7 +30,7 @@ void FileTransferUploader::OnBeforeThreadRunning()
 
 void FileTransferUploader::OnAfterThreadRunning()
 {
-    // Nothing
+    delegate_->OnTransferComplete();
 }
 
 uint64_t FileTransferUploader::BuildTaskListForDirectoryContent(const FilePath& source_path,
@@ -144,7 +144,7 @@ void FileTransferUploader::RunNextTask()
 
     if (task_queue_.empty())
     {
-        delegate_->OnTransferComplete();
+        runner_->PostQuit();
         return;
     }
 
@@ -194,7 +194,7 @@ void FileTransferUploader::OnUnableToCreateDirectoryAction(Action action)
     switch (action)
     {
         case Action::ABORT:
-            delegate_->OnTransferComplete();
+            runner_->PostQuit();
             break;
 
         case Action::SKIP:
@@ -253,7 +253,7 @@ void FileTransferUploader::OnUnableToCreateFileAction(Action action)
     switch (action)
     {
         case Action::ABORT:
-            delegate_->OnTransferComplete();
+            runner_->PostQuit();
             break;
 
         case Action::REPLACE:
@@ -287,7 +287,7 @@ void FileTransferUploader::OnUnableToOpenFileAction(Action action)
     switch (action)
     {
         case Action::ABORT:
-            delegate_->OnTransferComplete();
+            runner_->PostQuit();
             break;
 
         case Action::SKIP:
@@ -406,7 +406,7 @@ void FileTransferUploader::OnUnableToWriteFileAction(Action action)
     switch (action)
     {
         case Action::ABORT:
-            delegate_->OnTransferComplete();
+            runner_->PostQuit();
             break;
 
         case Action::SKIP:
@@ -437,7 +437,7 @@ void FileTransferUploader::OnFileUploadDataRequestReply(uint32_t flags, proto::R
     if (!file_packetizer_)
     {
         LOG(ERROR) << "Unexpected reply: file upload data";
-        delegate_->OnTransferComplete();
+        runner_->PostQuit();
         return;
     }
 

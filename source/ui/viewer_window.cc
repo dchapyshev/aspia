@@ -404,11 +404,9 @@ int UiViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
     CRect toolbar_rect;
     toolbar_.GetWindowRect(toolbar_rect);
 
-    int client_area_width = video_frame_size.Width() +
-        full_rect.Width() - client_rect.Width();
+    int client_area_width = video_frame_size.Width() + full_rect.Width() - client_rect.Width();
 
-    int client_area_height = video_frame_size.Height() +
-        full_rect.Height() - client_rect.Height() +
+    int client_area_height = video_frame_size.Height() + full_rect.Height() - client_rect.Height() +
         toolbar_rect.Height();
 
     WINDOWPLACEMENT wp = { 0 };
@@ -632,9 +630,7 @@ void UiViewerWindow::ShowDropDownMenu(int button_id, RECT* button_rect)
     if (button_id != ID_SHORTCUTS)
         return;
 
-    if (toolbar_.MapWindowPoints(HWND_DESKTOP,
-                                 reinterpret_cast<LPPOINT>(button_rect),
-                                 2))
+    if (toolbar_.MapWindowPoints(HWND_DESKTOP, reinterpret_cast<LPPOINT>(button_rect), 2))
     {
         TPMPARAMS tpm;
         tpm.cbSize = sizeof(TPMPARAMS);
