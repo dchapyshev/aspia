@@ -2612,6 +2612,36 @@ void HalfFloatRow_NEON(const uint16* src, uint16* dst, float scale, int width) {
       : "cc", "memory", "v1", "v2", "v3");
 }
 
+float ScaleMaxSamples_NEON(const float* src,
+                           float* dst,
+                           float scale,
+                           int width) {
+  float fmax;
+  asm volatile(
+      "movi       v5.4s, #0                      \n"  // max
+      "movi       v6.4s, #0                      \n"
+
+      "1:                                        \n"
+      "ld1        {v1.4s, v2.4s}, [%0], #32      \n"  // load 8 samples
+      "subs       %w2, %w2, #8                   \n"  // 8 processed per loop
+      "fmul       v3.4s, v1.4s, %4.s[0]          \n"  // scale
+      "fmul       v4.4s, v2.4s, %4.s[0]          \n"  // scale
+      "fmax       v5.4s, v5.4s, v1.4s            \n"  // max
+      "fmax       v6.4s, v6.4s, v2.4s            \n"
+      "st1        {v3.4s, v4.4s}, [%1], #32      \n"  // store 8 samples
+      "b.gt       1b                             \n"
+      "fmax       v5.4s, v5.4s, v6.4s            \n"  // max
+      "fmaxv      %s3, v5.4s                     \n"  // signed max acculator
+
+      : "+r"(src),    // %0
+        "+r"(dst),    // %1
+        "+r"(width),  // %2
+        "=w"(fmax)    // %3
+      : "w"(scale)    // %4
+      : "cc", "memory", "v1", "v2", "v3", "v4", "v5", "v6");
+  return fmax;
+}
+
 float ScaleSumSamples_NEON(const float* src,
                            float* dst,
                            float scale,

@@ -421,6 +421,7 @@ extern "C" {
 #define HAS_YUY2TOUV422ROW_MSA
 #define HAS_YUY2TOUVROW_MSA
 #define HAS_YUY2TOYROW_MSA
+#define HAS_ARGBEXTRACTALPHAROW_MSA
 
 #ifndef DISABLE_CLANG_MSA
 #define HAS_ABGRTOUVROW_MSA
@@ -463,6 +464,9 @@ extern "C" {
 #define HAS_SOBELXYROW_MSA
 #define HAS_UYVYTOARGBROW_MSA
 #define HAS_YUY2TOARGBROW_MSA
+#define HAS_ARGBBLENDROW_MSA
+#define HAS_ARGBQUANTIZEROW_MSA
+#define HAS_ARGBCOLORMATRIXROW_MSA
 #endif
 #endif
 
@@ -1467,6 +1471,7 @@ void ARGBExtractAlphaRow_C(const uint8* src_argb, uint8* dst_a, int width);
 void ARGBExtractAlphaRow_SSE2(const uint8* src_argb, uint8* dst_a, int width);
 void ARGBExtractAlphaRow_AVX2(const uint8* src_argb, uint8* dst_a, int width);
 void ARGBExtractAlphaRow_NEON(const uint8* src_argb, uint8* dst_a, int width);
+void ARGBExtractAlphaRow_MSA(const uint8* src_argb, uint8* dst_a, int width);
 void ARGBExtractAlphaRow_Any_SSE2(const uint8* src_argb,
                                   uint8* dst_a,
                                   int width);
@@ -1476,6 +1481,9 @@ void ARGBExtractAlphaRow_Any_AVX2(const uint8* src_argb,
 void ARGBExtractAlphaRow_Any_NEON(const uint8* src_argb,
                                   uint8* dst_a,
                                   int width);
+void ARGBExtractAlphaRow_Any_MSA(const uint8* src_argb,
+                                 uint8* dst_a,
+                                 int width);
 
 void ARGBCopyYToAlphaRow_C(const uint8* src_y, uint8* dst_argb, int width);
 void ARGBCopyYToAlphaRow_SSE2(const uint8* src_y, uint8* dst_argb, int width);
@@ -2135,6 +2143,10 @@ void ARGBBlendRow_NEON(const uint8* src_argb,
                        const uint8* src_argb1,
                        uint8* dst_argb,
                        int width);
+void ARGBBlendRow_MSA(const uint8* src_argb,
+                      const uint8* src_argb1,
+                      uint8* dst_argb,
+                      int width);
 void ARGBBlendRow_C(const uint8* src_argb,
                     const uint8* src_argb1,
                     uint8* dst_argb,
@@ -2848,6 +2860,10 @@ void ARGBColorMatrixRow_NEON(const uint8* src_argb,
                              uint8* dst_argb,
                              const int8* matrix_argb,
                              int width);
+void ARGBColorMatrixRow_MSA(const uint8* src_argb,
+                            uint8* dst_argb,
+                            const int8* matrix_argb,
+                            int width);
 
 void ARGBColorTableRow_C(uint8* dst_argb, const uint8* table_argb, int width);
 void ARGBColorTableRow_X86(uint8* dst_argb, const uint8* table_argb, int width);
@@ -2870,6 +2886,11 @@ void ARGBQuantizeRow_NEON(uint8* dst_argb,
                           int interval_size,
                           int interval_offset,
                           int width);
+void ARGBQuantizeRow_MSA(uint8* dst_argb,
+                         int scale,
+                         int interval_size,
+                         int interval_offset,
+                         int width);
 
 void ARGBShadeRow_C(const uint8* src_argb,
                     uint8* dst_argb,
@@ -3157,6 +3178,11 @@ void ARGBLumaColorTableRow_SSSE3(const uint8* src_argb,
                                  const uint8* luma,
                                  uint32 lumacoeff);
 
+float ScaleMaxSamples_C(const float* src, float* dst, float scale, int width);
+float ScaleMaxSamples_NEON(const float* src,
+                           float* dst,
+                           float scale,
+                           int width);
 float ScaleSumSamples_C(const float* src, float* dst, float scale, int width);
 float ScaleSumSamples_NEON(const float* src,
                            float* dst,

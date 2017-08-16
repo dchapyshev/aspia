@@ -2521,6 +2521,74 @@ TEST_F(LibYUVPlanarTest, SplitUVPlane_Opt) {
   free_aligned_buffer_page_end(dst_pixels_c);
 }
 
+float TestScaleMaxSamples(int benchmark_width,
+                          int benchmark_height,
+                          int benchmark_iterations,
+                          float scale,
+                          bool opt) {
+  int i, j;
+  float max_c, max_opt = 0.f;
+  const int y_plane_size = benchmark_width * benchmark_height * 4;
+
+  align_buffer_page_end(orig_y, y_plane_size * 3);
+  uint8* dst_opt = orig_y + y_plane_size;
+  uint8* dst_c = orig_y + y_plane_size * 2;
+
+  // Randomize works but may contain some denormals affecting performance.
+  // MemRandomize(orig_y, y_plane_size);
+  for (i = 0; i < y_plane_size / 4; ++i) {
+    (reinterpret_cast<float*>(orig_y))[i] = (i - y_plane_size / 8) * 3.1415f;
+  }
+  memset(dst_c, 0, y_plane_size);
+  memset(dst_opt, 1, y_plane_size);
+
+  max_c = ScaleMaxSamples_C(reinterpret_cast<float*>(orig_y),
+                            reinterpret_cast<float*>(dst_c), scale,
+                            benchmark_width * benchmark_height);
+
+  for (j = 0; j < benchmark_iterations; j++) {
+    if (opt) {
+#ifdef HAS_SCALESUMSAMPLES_NEON
+      max_opt = ScaleMaxSamples_NEON(reinterpret_cast<float*>(orig_y),
+                                     reinterpret_cast<float*>(dst_opt), scale,
+                                     benchmark_width * benchmark_height);
+#else
+      max_opt = ScaleMaxSamples_C(reinterpret_cast<float*>(orig_y),
+                                  reinterpret_cast<float*>(dst_opt), scale,
+                                  benchmark_width * benchmark_height);
+#endif
+    } else {
+      max_opt = ScaleMaxSamples_C(reinterpret_cast<float*>(orig_y),
+                                  reinterpret_cast<float*>(dst_opt), scale,
+                                  benchmark_width * benchmark_height);
+    }
+  }
+
+  float max_diff = FAbs(max_opt - max_c);
+  for (i = 0; i < y_plane_size / 4; ++i) {
+    float abs_diff = FAbs((reinterpret_cast<float*>(dst_c)[i]) -
+                          (reinterpret_cast<float*>(dst_opt)[i]));
+    if (abs_diff > max_diff) {
+      max_diff = abs_diff;
+    }
+  }
+
+  free_aligned_buffer_page_end(orig_y);
+  return max_diff;
+}
+
+TEST_F(LibYUVPlanarTest, TestScaleMaxSamples_C) {
+  float diff = TestScaleMaxSamples(benchmark_width_, benchmark_height_,
+                                   benchmark_iterations_, 1.2f, false);
+  EXPECT_EQ(0, diff);
+}
+
+TEST_F(LibYUVPlanarTest, TestScaleMaxSamples_Opt) {
+  float diff = TestScaleMaxSamples(benchmark_width_, benchmark_height_,
+                                   benchmark_iterations_, 1.2f, true);
+  EXPECT_EQ(0, diff);
+}
+
 float TestScaleSumSamples(int benchmark_width,
                           int benchmark_height,
                           int benchmark_iterations,
@@ -2632,7 +2700,7 @@ float TestScaleSamples(int benchmark_width,
     }
   }
 
-  float max_diff =0.f;
+  float max_diff = 0.f;
   for (i = 0; i < y_plane_size / 4; ++i) {
     float abs_diff = FAbs((reinterpret_cast<float*>(dst_c)[i]) -
                           (reinterpret_cast<float*>(dst_opt)[i]));

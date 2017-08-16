@@ -2640,15 +2640,27 @@ void NV12ToRGB565Row_AVX2(const uint8* src_y,
 #endif
 
 float ScaleSumSamples_C(const float* src, float* dst, float scale, int width) {
-  float fmax = 0.f;
+  float fsum = 0.f;
   int i;
 #if defined(__clang__)
   #pragma clang loop vectorize_width(4)
-#endif  
+#endif
   for (i = 0; i < width; ++i) {
     float v = *src++;
-    fmax += v * v;
+    fsum += v * v;
     *dst++ = v * scale;
+  }
+  return fsum;
+}
+
+float ScaleMaxSamples_C(const float* src, float* dst, float scale, int width) {
+  float fmax = 0.f;
+  int i;
+  for (i = 0; i < width; ++i) {
+    float v = *src++;
+    float vs = v * scale;
+    fmax = (v > fmax) ? v : fmax;
+    *dst++ = vs;
   }
   return fmax;
 }

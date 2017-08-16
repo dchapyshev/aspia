@@ -846,6 +846,11 @@ ARGBBlendRow GetARGBBlend() {
     ARGBBlendRow = ARGBBlendRow_NEON;
   }
 #endif
+#if defined(HAS_ARGBBLENDROW_MSA)
+  if (TestCpuFlag(kCpuHasMSA)) {
+    ARGBBlendRow = ARGBBlendRow_MSA;
+  }
+#endif
   return ARGBBlendRow;
 }
 
@@ -1974,6 +1979,11 @@ int ARGBColorMatrix(const uint8* src_argb,
     ARGBColorMatrixRow = ARGBColorMatrixRow_NEON;
   }
 #endif
+#if defined(HAS_ARGBCOLORMATRIXROW_MSA)
+  if (TestCpuFlag(kCpuHasMSA) && IS_ALIGNED(width, 8)) {
+    ARGBColorMatrixRow = ARGBColorMatrixRow_MSA;
+  }
+#endif
   for (y = 0; y < height; ++y) {
     ARGBColorMatrixRow(src_argb, dst_argb, matrix_argb, width);
     src_argb += src_stride_argb;
@@ -2132,6 +2142,11 @@ int ARGBQuantize(uint8* dst_argb,
 #if defined(HAS_ARGBQUANTIZEROW_NEON)
   if (TestCpuFlag(kCpuHasNEON) && IS_ALIGNED(width, 8)) {
     ARGBQuantizeRow = ARGBQuantizeRow_NEON;
+  }
+#endif
+#if defined(HAS_ARGBQUANTIZEROW_MSA)
+  if (TestCpuFlag(kCpuHasMSA) && IS_ALIGNED(width, 8)) {
+    ARGBQuantizeRow = ARGBQuantizeRow_MSA;
   }
 #endif
   for (y = 0; y < height; ++y) {
@@ -3046,6 +3061,12 @@ int ARGBExtractAlpha(const uint8* src_argb,
   if (TestCpuFlag(kCpuHasNEON)) {
     ARGBExtractAlphaRow = IS_ALIGNED(width, 16) ? ARGBExtractAlphaRow_NEON
                                                 : ARGBExtractAlphaRow_Any_NEON;
+  }
+#endif
+#if defined(HAS_ARGBEXTRACTALPHAROW_MSA)
+  if (TestCpuFlag(kCpuHasMSA)) {
+    ARGBExtractAlphaRow = IS_ALIGNED(width, 16) ? ARGBExtractAlphaRow_MSA
+                                                : ARGBExtractAlphaRow_Any_MSA;
   }
 #endif
 
