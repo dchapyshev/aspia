@@ -72,7 +72,7 @@ struct FileToc well_known_types_js[] = {
   " *     the binary data properly.\n"
   " * @param {string} name The expected type name of this message object.\n"
   " * @return {?T} If the name matched the expected name, returns the deserialized\n"
-  " *     object, otherwise returns undefined.\n"
+  " *     object, otherwise returns null.\n"
   " */\n"
   "proto.google.protobuf.Any.prototype.unpack = function(deserialize, name) {\n"
   "  if (this.getTypeName() == name) {\n"

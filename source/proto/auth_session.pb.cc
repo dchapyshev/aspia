@@ -17,33 +17,33 @@
 namespace aspia {
 namespace proto {
 namespace auth {
-class HostToClientDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<HostToClient> {
+class HostToClientDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<HostToClient>
+     _instance;
 } _HostToClient_default_instance_;
-class ClientToHostDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ClientToHost> {
+class ClientToHostDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<ClientToHost>
+     _instance;
 } _ClientToHost_default_instance_;
 
 namespace protobuf_auth_5fsession_2eproto {
 
 PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTableField
-    const TableStruct::entries[] = {
+    const TableStruct::entries[] GOOGLE_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   {0, 0, 0, ::google::protobuf::internal::kInvalidMask, 0, 0},
 };
 
 PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::AuxillaryParseTableField
-    const TableStruct::aux[] = {
+    const TableStruct::aux[] GOOGLE_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   ::google::protobuf::internal::AuxillaryParseTableField(),
 };
 PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
-    TableStruct::schema[] = {
-  { NULL, NULL, 0, -1, -1, false },
-  { NULL, NULL, 0, -1, -1, false },
+    TableStruct::schema[] GOOGLE_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
 };
-
-
-void TableStruct::Shutdown() {
-  _HostToClient_default_instance_.Shutdown();
-  _ClientToHost_default_instance_.Shutdown();
-}
 
 void TableStruct::InitDefaultsImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -51,33 +51,28 @@ void TableStruct::InitDefaultsImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
   ::aspia::proto::protobuf_auth_5fsession_5fmessage_2eproto::InitDefaults();
   ::aspia::proto::protobuf_status_2eproto::InitDefaults();
-  _HostToClient_default_instance_.DefaultConstruct();
-  _ClientToHost_default_instance_.DefaultConstruct();
-}
+  _HostToClient_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_HostToClient_default_instance_);_ClientToHost_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_ClientToHost_default_instance_);}
 
 void InitDefaults() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
   ::google::protobuf::GoogleOnceInit(&once, &TableStruct::InitDefaultsImpl);
 }
+namespace {
 void AddDescriptorsImpl() {
   InitDefaults();
   ::aspia::proto::protobuf_auth_5fsession_5fmessage_2eproto::AddDescriptors();
   ::aspia::proto::protobuf_status_2eproto::AddDescriptors();
-  ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
 }
+} // anonymous namespace
 
 void AddDescriptors() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
   ::google::protobuf::GoogleOnceInit(&once, &AddDescriptorsImpl);
 }
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-// Force AddDescriptors() to be called at static initialization time.
-struct StaticDescriptorInitializer {
-  StaticDescriptorInitializer() {
-    AddDescriptors();
-  }
-} static_descriptor_initializer;
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
 
 }  // namespace protobuf_auth_5fsession_2eproto
 
@@ -103,14 +98,15 @@ HostToClient::HostToClient(const HostToClient& from)
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::memcpy(&session_type_, &from.session_type_,
-    reinterpret_cast<char*>(&status_) -
-    reinterpret_cast<char*>(&session_type_) + sizeof(status_));
+    static_cast<size_t>(reinterpret_cast<char*>(&status_) -
+    reinterpret_cast<char*>(&session_type_)) + sizeof(status_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.auth.HostToClient)
 }
 
 void HostToClient::SharedCtor() {
-  ::memset(&session_type_, 0, reinterpret_cast<char*>(&status_) -
-    reinterpret_cast<char*>(&session_type_) + sizeof(status_));
+  ::memset(&session_type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&status_) -
+      reinterpret_cast<char*>(&session_type_)) + sizeof(status_));
   _cached_size_ = 0;
 }
 
@@ -142,14 +138,26 @@ HostToClient* HostToClient::New(::google::protobuf::Arena* arena) const {
 
 void HostToClient::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.auth.HostToClient)
-  ::memset(&session_type_, 0, reinterpret_cast<char*>(&status_) -
-    reinterpret_cast<char*>(&session_type_) + sizeof(status_));
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&session_type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&status_) -
+      reinterpret_cast<char*>(&session_type_)) + sizeof(status_));
+  _internal_metadata_.Clear();
 }
 
 bool HostToClient::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.auth.HostToClient)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
@@ -159,7 +167,7 @@ bool HostToClient::MergePartialFromCodedStream(
       // .aspia.proto.SessionType session_type = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(8u)) {
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
@@ -174,7 +182,7 @@ bool HostToClient::MergePartialFromCodedStream(
       // .aspia.proto.Status status = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(16u)) {
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
@@ -188,12 +196,11 @@ bool HostToClient::MergePartialFromCodedStream(
 
       default: {
       handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+        if (tag == 0) {
           goto success;
         }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
         break;
       }
     }
@@ -225,12 +232,16 @@ void HostToClient::SerializeWithCachedSizes(
       2, this->status(), output);
   }
 
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
   // @@protoc_insertion_point(serialize_end:aspia.proto.auth.HostToClient)
 }
 
 size_t HostToClient::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:aspia.proto.auth.HostToClient)
   size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
   // .aspia.proto.SessionType session_type = 1;
   if (this->session_type() != 0) {
@@ -287,9 +298,11 @@ void HostToClient::Swap(HostToClient* other) {
   InternalSwap(other);
 }
 void HostToClient::InternalSwap(HostToClient* other) {
-  std::swap(session_type_, other->session_type_);
-  std::swap(status_, other->status_);
-  std::swap(_cached_size_, other->_cached_size_);
+  using std::swap;
+  swap(session_type_, other->session_type_);
+  swap(status_, other->status_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string HostToClient::GetTypeName() const {
@@ -360,16 +373,17 @@ ClientToHost::ClientToHost(const ClientToHost& from)
     password_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.password_);
   }
   ::memcpy(&session_type_, &from.session_type_,
-    reinterpret_cast<char*>(&method_) -
-    reinterpret_cast<char*>(&session_type_) + sizeof(method_));
+    static_cast<size_t>(reinterpret_cast<char*>(&method_) -
+    reinterpret_cast<char*>(&session_type_)) + sizeof(method_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.auth.ClientToHost)
 }
 
 void ClientToHost::SharedCtor() {
   username_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   password_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&session_type_, 0, reinterpret_cast<char*>(&method_) -
-    reinterpret_cast<char*>(&session_type_) + sizeof(method_));
+  ::memset(&session_type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&method_) -
+      reinterpret_cast<char*>(&session_type_)) + sizeof(method_));
   _cached_size_ = 0;
 }
 
@@ -403,16 +417,28 @@ ClientToHost* ClientToHost::New(::google::protobuf::Arena* arena) const {
 
 void ClientToHost::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.auth.ClientToHost)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
   username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&session_type_, 0, reinterpret_cast<char*>(&method_) -
-    reinterpret_cast<char*>(&session_type_) + sizeof(method_));
+  ::memset(&session_type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&method_) -
+      reinterpret_cast<char*>(&session_type_)) + sizeof(method_));
+  _internal_metadata_.Clear();
 }
 
 bool ClientToHost::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.auth.ClientToHost)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
@@ -422,7 +448,7 @@ bool ClientToHost::MergePartialFromCodedStream(
       // .aspia.proto.SessionType session_type = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(8u)) {
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
@@ -437,7 +463,7 @@ bool ClientToHost::MergePartialFromCodedStream(
       // .aspia.proto.AuthMethod method = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(16u)) {
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
@@ -452,11 +478,11 @@ bool ClientToHost::MergePartialFromCodedStream(
       // string username = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(26u)) {
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_username()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->username().data(), this->username().length(),
+            this->username().data(), static_cast<int>(this->username().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
             "aspia.proto.auth.ClientToHost.username"));
         } else {
@@ -468,7 +494,7 @@ bool ClientToHost::MergePartialFromCodedStream(
       // bytes password = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(34u)) {
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_password()));
         } else {
@@ -479,12 +505,11 @@ bool ClientToHost::MergePartialFromCodedStream(
 
       default: {
       handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+        if (tag == 0) {
           goto success;
         }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
         break;
       }
     }
@@ -519,7 +544,7 @@ void ClientToHost::SerializeWithCachedSizes(
   // string username = 3;
   if (this->username().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->username().data(), this->username().length(),
+      this->username().data(), static_cast<int>(this->username().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.proto.auth.ClientToHost.username");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
@@ -532,12 +557,16 @@ void ClientToHost::SerializeWithCachedSizes(
       4, this->password(), output);
   }
 
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
   // @@protoc_insertion_point(serialize_end:aspia.proto.auth.ClientToHost)
 }
 
 size_t ClientToHost::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:aspia.proto.auth.ClientToHost)
   size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
   // string username = 3;
   if (this->username().size() > 0) {
@@ -616,11 +645,13 @@ void ClientToHost::Swap(ClientToHost* other) {
   InternalSwap(other);
 }
 void ClientToHost::InternalSwap(ClientToHost* other) {
+  using std::swap;
   username_.Swap(&other->username_);
   password_.Swap(&other->password_);
-  std::swap(session_type_, other->session_type_);
-  std::swap(method_, other->method_);
-  std::swap(_cached_size_, other->_cached_size_);
+  swap(session_type_, other->session_type_);
+  swap(method_, other->method_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string ClientToHost::GetTypeName() const {

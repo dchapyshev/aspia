@@ -16,63 +16,58 @@
 
 namespace aspia {
 namespace proto {
-class HostUserDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<HostUser> {
+class HostUserDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<HostUser>
+     _instance;
 } _HostUser_default_instance_;
-class HostUserListDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<HostUserList> {
+class HostUserListDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<HostUserList>
+     _instance;
 } _HostUserList_default_instance_;
 
 namespace protobuf_host_5fuser_2eproto {
 
 PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTableField
-    const TableStruct::entries[] = {
+    const TableStruct::entries[] GOOGLE_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   {0, 0, 0, ::google::protobuf::internal::kInvalidMask, 0, 0},
 };
 
 PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::AuxillaryParseTableField
-    const TableStruct::aux[] = {
+    const TableStruct::aux[] GOOGLE_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   ::google::protobuf::internal::AuxillaryParseTableField(),
 };
 PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
-    TableStruct::schema[] = {
-  { NULL, NULL, 0, -1, -1, false },
-  { NULL, NULL, 0, -1, -1, false },
+    TableStruct::schema[] GOOGLE_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
 };
-
-
-void TableStruct::Shutdown() {
-  _HostUser_default_instance_.Shutdown();
-  _HostUserList_default_instance_.Shutdown();
-}
 
 void TableStruct::InitDefaultsImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::internal::InitProtobufDefaults();
-  _HostUser_default_instance_.DefaultConstruct();
-  _HostUserList_default_instance_.DefaultConstruct();
-}
+  _HostUser_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_HostUser_default_instance_);_HostUserList_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_HostUserList_default_instance_);}
 
 void InitDefaults() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
   ::google::protobuf::GoogleOnceInit(&once, &TableStruct::InitDefaultsImpl);
 }
+namespace {
 void AddDescriptorsImpl() {
   InitDefaults();
-  ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
 }
+} // anonymous namespace
 
 void AddDescriptors() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
   ::google::protobuf::GoogleOnceInit(&once, &AddDescriptorsImpl);
 }
-#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-// Force AddDescriptors() to be called at static initialization time.
-struct StaticDescriptorInitializer {
-  StaticDescriptorInitializer() {
-    AddDescriptors();
-  }
-} static_descriptor_initializer;
-#endif  // GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
 
 }  // namespace protobuf_host_5fuser_2eproto
 
@@ -108,16 +103,17 @@ HostUser::HostUser(const HostUser& from)
     password_hash_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.password_hash_);
   }
   ::memcpy(&enabled_, &from.enabled_,
-    reinterpret_cast<char*>(&session_types_) -
-    reinterpret_cast<char*>(&enabled_) + sizeof(session_types_));
+    static_cast<size_t>(reinterpret_cast<char*>(&session_types_) -
+    reinterpret_cast<char*>(&enabled_)) + sizeof(session_types_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.HostUser)
 }
 
 void HostUser::SharedCtor() {
   username_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   password_hash_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&enabled_, 0, reinterpret_cast<char*>(&session_types_) -
-    reinterpret_cast<char*>(&enabled_) + sizeof(session_types_));
+  ::memset(&enabled_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&session_types_) -
+      reinterpret_cast<char*>(&enabled_)) + sizeof(session_types_));
   _cached_size_ = 0;
 }
 
@@ -151,16 +147,28 @@ HostUser* HostUser::New(::google::protobuf::Arena* arena) const {
 
 void HostUser::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.HostUser)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
   username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   password_hash_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&enabled_, 0, reinterpret_cast<char*>(&session_types_) -
-    reinterpret_cast<char*>(&enabled_) + sizeof(session_types_));
+  ::memset(&enabled_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&session_types_) -
+      reinterpret_cast<char*>(&enabled_)) + sizeof(session_types_));
+  _internal_metadata_.Clear();
 }
 
 bool HostUser::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.HostUser)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
@@ -170,7 +178,7 @@ bool HostUser::MergePartialFromCodedStream(
       // bool enabled = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(8u)) {
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -184,11 +192,11 @@ bool HostUser::MergePartialFromCodedStream(
       // string username = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(18u)) {
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_username()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->username().data(), this->username().length(),
+            this->username().data(), static_cast<int>(this->username().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
             "aspia.proto.HostUser.username"));
         } else {
@@ -200,7 +208,7 @@ bool HostUser::MergePartialFromCodedStream(
       // bytes password_hash = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(26u)) {
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_password_hash()));
         } else {
@@ -212,7 +220,7 @@ bool HostUser::MergePartialFromCodedStream(
       // uint32 session_types = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(32u)) {
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -225,12 +233,11 @@ bool HostUser::MergePartialFromCodedStream(
 
       default: {
       handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+        if (tag == 0) {
           goto success;
         }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
         break;
       }
     }
@@ -258,7 +265,7 @@ void HostUser::SerializeWithCachedSizes(
   // string username = 2;
   if (this->username().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->username().data(), this->username().length(),
+      this->username().data(), static_cast<int>(this->username().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.proto.HostUser.username");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
@@ -276,12 +283,16 @@ void HostUser::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->session_types(), output);
   }
 
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
   // @@protoc_insertion_point(serialize_end:aspia.proto.HostUser)
 }
 
 size_t HostUser::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:aspia.proto.HostUser)
   size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
   // string username = 2;
   if (this->username().size() > 0) {
@@ -360,11 +371,13 @@ void HostUser::Swap(HostUser* other) {
   InternalSwap(other);
 }
 void HostUser::InternalSwap(HostUser* other) {
+  using std::swap;
   username_.Swap(&other->username_);
   password_hash_.Swap(&other->password_hash_);
-  std::swap(enabled_, other->enabled_);
-  std::swap(session_types_, other->session_types_);
-  std::swap(_cached_size_, other->_cached_size_);
+  swap(enabled_, other->enabled_);
+  swap(session_types_, other->session_types_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string HostUser::GetTypeName() const {
@@ -565,13 +578,24 @@ HostUserList* HostUserList::New(::google::protobuf::Arena* arena) const {
 
 void HostUserList::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.HostUserList)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
   user_list_.Clear();
+  _internal_metadata_.Clear();
 }
 
 bool HostUserList::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.HostUserList)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
@@ -581,7 +605,7 @@ bool HostUserList::MergePartialFromCodedStream(
       // repeated .aspia.proto.HostUser user_list = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(10u)) {
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                 input, add_user_list()));
         } else {
@@ -592,12 +616,11 @@ bool HostUserList::MergePartialFromCodedStream(
 
       default: {
       handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+        if (tag == 0) {
           goto success;
         }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
         break;
       }
     }
@@ -618,11 +641,14 @@ void HostUserList::SerializeWithCachedSizes(
   (void) cached_has_bits;
 
   // repeated .aspia.proto.HostUser user_list = 1;
-  for (unsigned int i = 0, n = this->user_list_size(); i < n; i++) {
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->user_list_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1, this->user_list(i), output);
+      1, this->user_list(static_cast<int>(i)), output);
   }
 
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
   // @@protoc_insertion_point(serialize_end:aspia.proto.HostUserList)
 }
 
@@ -630,14 +656,16 @@ size_t HostUserList::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:aspia.proto.HostUserList)
   size_t total_size = 0;
 
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
   // repeated .aspia.proto.HostUser user_list = 1;
   {
-    unsigned int count = this->user_list_size();
+    unsigned int count = static_cast<unsigned int>(this->user_list_size());
     total_size += 1UL * count;
     for (unsigned int i = 0; i < count; i++) {
       total_size +=
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->user_list(i));
+          this->user_list(static_cast<int>(i)));
     }
   }
 
@@ -679,8 +707,10 @@ void HostUserList::Swap(HostUserList* other) {
   InternalSwap(other);
 }
 void HostUserList::InternalSwap(HostUserList* other) {
+  using std::swap;
   user_list_.InternalSwap(&other->user_list_);
-  std::swap(_cached_size_, other->_cached_size_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string HostUserList::GetTypeName() const {

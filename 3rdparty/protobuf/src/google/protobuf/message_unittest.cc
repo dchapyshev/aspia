@@ -37,9 +37,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#ifdef _MSC_VER
-#include <io.h>
-#else
+#ifndef _MSC_VER
 #include <unistd.h>
 #endif
 #include <sstream>
@@ -51,17 +49,26 @@
 #include <google/protobuf/io/zero_copy_stream.h>
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 #include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/arena.h>
 #include <google/protobuf/descriptor.h>
 #include <google/protobuf/generated_message_reflection.h>
 
 #include <google/protobuf/stubs/logging.h>
 #include <google/protobuf/stubs/common.h>
+#include <google/protobuf/stubs/io_win32.h>
 #include <google/protobuf/stubs/logging.h>
 #include <google/protobuf/testing/googletest.h>
 #include <gtest/gtest.h>
 
 namespace google {
 namespace protobuf {
+
+#if defined(_MSC_VER)
+// DO NOT include <io.h>, instead create functions in io_win32.{h,cc} and import
+// them like we do below.
+using google::protobuf::internal::win32::close;
+using google::protobuf::internal::win32::open;
+#endif
 
 #ifndef O_BINARY
 #ifdef _O_BINARY
@@ -112,8 +119,9 @@ TEST(MessageTest, ParseFromFileDescriptor) {
   string filename = TestSourceDir() +
                     "/google/protobuf/testdata/golden_message";
   int file = open(filename.c_str(), O_RDONLY | O_BINARY);
+  ASSERT_GE(file, 0);
 
-  unittest::TestAllTypes message;
+  protobuf_unittest::TestAllTypes message;
   EXPECT_TRUE(message.ParseFromFileDescriptor(file));
   TestUtil::ExpectAllFieldsSet(message);
 
@@ -125,8 +133,9 @@ TEST(MessageTest, ParsePackedFromFileDescriptor) {
       TestSourceDir() +
       "/google/protobuf/testdata/golden_packed_fields_message";
   int file = open(filename.c_str(), O_RDONLY | O_BINARY);
+  ASSERT_GE(file, 0);
 
-  unittest::TestPackedTypes message;
+  protobuf_unittest::TestPackedTypes message;
   EXPECT_TRUE(message.ParseFromFileDescriptor(file));
   TestUtil::ExpectPackedFieldsSet(message);
 
@@ -267,6 +276,8 @@ TEST(MessageTest, CheckOverflow) {
 }
 
 TEST(MessageTest, CheckBigOverflow) {
+  // Checking for 4GB buffers on 32 bit systems is problematic.
+  if (sizeof(void*) < 8) return;
   unittest::TestAllTypes message;
   // Create a message with size just over 4GB. We should be able to detect this
   // too, even though it will make a plain "int" wrap back to a positive number.
@@ -422,6 +433,18 @@ TEST(MessageTest, MessageIsStillValidAfterParseFails) {
   EXPECT_FALSE(message.ParseFromString(invalid_data));
   message.Clear();
   EXPECT_EQ(0, message.optional_uint64());
+
+  // invalid data for field "optional_string". Length prefix is 1 but no
+  // payload.
+  string invalid_string_data = "\x72\x01";
+  {
+    google::protobuf::Arena arena;
+    unittest::TestAllTypes* arena_message =
+        google::protobuf::Arena::CreateMessage<unittest::TestAllTypes>(&arena);
+    EXPECT_FALSE(arena_message->ParseFromString(invalid_string_data));
+    arena_message->Clear();
+    EXPECT_EQ("", arena_message->optional_string());
+  }
 }
 
 namespace {

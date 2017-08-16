@@ -2,6 +2,8 @@ syntax = "proto3";
 
 import 'proto/test_include.proto';
 import 'proto/test_no_namespace.proto';
+import 'proto/test_php_namespace.proto';
+import 'proto/test_empty_php_namespace.proto';
 import 'proto/test_prefix.proto';
 
 package foo;
@@ -173,4 +175,20 @@ message TestPhpDoc {
 
 message TestIncludePrefixMessage {
   TestPrefix prefix_message = 1;
+}
+
+message TestIncludeNamespaceMessage {
+  TestNamespace namespace_message = 1;
+  TestEmptyNamespace empty_namespace_message = 2;
+}
+
+// This will cause upb fields not ordered by the order in the generated code.
+message TestRandomFieldOrder {
+  int64 tag13 = 150;
+  string tag14 = 160;
+}
+
+message TestReverseFieldOrder {
+  repeated int32 a = 2;
+  string b = 1;
 }
