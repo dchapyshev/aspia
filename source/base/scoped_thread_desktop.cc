@@ -7,10 +7,12 @@
 
 #include "base/scoped_thread_desktop.h"
 
+#include <utility>
+
 namespace aspia {
 
-ScopedThreadDesktop::ScopedThreadDesktop()
-    : initial_(Desktop::GetThreadDesktop())
+ScopedThreadDesktop::ScopedThreadDesktop() :
+    initial_(Desktop::GetThreadDesktop())
 {
     // Nothing
 }
@@ -20,40 +22,37 @@ ScopedThreadDesktop::~ScopedThreadDesktop()
     Revert();
 }
 
-bool ScopedThreadDesktop::IsSame(const Desktop& desktop)
+bool ScopedThreadDesktop::IsSame(const Desktop& desktop) const
 {
-    if (assigned_)
+    if (assigned_.IsValid())
     {
-        return assigned_->IsSame(desktop);
+        return assigned_.IsSame(desktop);
     }
-    else
-    {
-        return initial_->IsSame(desktop);
-    }
+
+    return initial_.IsSame(desktop);
 }
 
 void ScopedThreadDesktop::Revert()
 {
-    if (assigned_)
+    if (assigned_.IsValid())
     {
-        initial_->SetThreadDesktop();
-        assigned_.reset();
+        initial_.SetThreadDesktop();
+        assigned_.Close();
     }
 }
 
-bool ScopedThreadDesktop::SetThreadDesktop(Desktop* desktop)
+bool ScopedThreadDesktop::SetThreadDesktop(Desktop desktop)
 {
     Revert();
 
-    std::unique_ptr<Desktop> scoped_desktop(desktop);
-
-    if (initial_->IsSame(*desktop))
+    if (initial_.IsSame(desktop))
         return true;
 
-    if (!desktop->SetThreadDesktop())
+    if (!desktop.SetThreadDesktop())
         return false;
 
-    assigned_.reset(scoped_desktop.release());
+    assigned_ = std::move(desktop);
+
     return true;
 }
 

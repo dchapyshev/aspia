@@ -50,9 +50,9 @@ bool CapturerGDI::PrepareCaptureResources()
 {
     // Switch to the desktop receiving user input if different from the
     // current one.
-    std::unique_ptr<Desktop> input_desktop(Desktop::GetInputDesktop());
+    Desktop input_desktop(Desktop::GetInputDesktop());
 
-    if (input_desktop && !desktop_.IsSame(*input_desktop))
+    if (input_desktop.IsValid() && !desktop_.IsSame(input_desktop))
     {
         // Release GDI resources otherwise SetThreadDesktop will fail.
         desktop_dc_.reset();
@@ -60,7 +60,7 @@ bool CapturerGDI::PrepareCaptureResources()
 
         // If SetThreadDesktop() fails, the thread is still assigned a desktop.
         // So we can continue capture screen bits, just from the wrong desktop.
-        desktop_.SetThreadDesktop(input_desktop.release());
+        desktop_.SetThreadDesktop(std::move(input_desktop));
     }
 
     DesktopRect screen_rect =
