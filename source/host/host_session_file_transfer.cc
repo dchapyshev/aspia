@@ -8,6 +8,7 @@
 #include "host/host_session_file_transfer.h"
 #include "base/files/file_helpers.h"
 #include "base/files/file_util.h"
+#include "base/process/process.h"
 #include "ipc/pipe_channel_proxy.h"
 #include "protocol/message_serialization.h"
 #include "protocol/filesystem.h"
@@ -24,7 +25,7 @@ void HostSessionFileTransfer::Run(const std::wstring& channel_id)
     {
         ipc_channel_proxy_ = ipc_channel_->pipe_channel_proxy();
 
-        uint32_t user_data = GetCurrentProcessId();
+        uint32_t user_data = Process::Current().Pid();
 
         PipeChannel::DisconnectHandler disconnect_handler =
             std::bind(&HostSessionFileTransfer::OnIpcChannelDisconnect, this);
