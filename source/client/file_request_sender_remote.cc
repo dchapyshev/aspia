@@ -119,17 +119,25 @@ void FileRequestSenderRemote::SendRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
     std::unique_ptr<proto::file_transfer::ClientToHost> request)
 {
-    channel_proxy_->Send(
-        SerializeMessage<IOBuffer>(*request),
-        std::bind(&FileRequestSenderRemote::OnRequestSended, this));
-    receiver_queue_.Add(std::move(request), receiver);
+    std::lock_guard<std::mutex> lock(send_lock_);
+
+    if (last_request_ || last_receiver_)
+    {
+        DLOG(ERROR) << "No response to previous request. New request ignored";
+        return;
+    }
+
+    last_request_ = std::move(request);
+    last_receiver_ = std::move(receiver);
+
+    channel_proxy_->Send(SerializeMessage<IOBuffer>(*last_request_),
+                         std::bind(&FileRequestSenderRemote::OnRequestSended, this));
 }
 
 void FileRequestSenderRemote::OnRequestSended()
 {
     channel_proxy_->Receive(std::bind(
-        &FileRequestSenderRemote::OnReplyReceived, this,
-        std::placeholders::_1));
+        &FileRequestSenderRemote::OnReplyReceived, this, std::placeholders::_1));
 }
 
 void FileRequestSenderRemote::OnReplyReceived(std::unique_ptr<IOBuffer> buffer)
@@ -142,10 +150,117 @@ void FileRequestSenderRemote::OnReplyReceived(std::unique_ptr<IOBuffer> buffer)
         return;
     }
 
-    if (!receiver_queue_.ProcessNextReply(reply))
+    if (!ProcessNextReply(reply))
     {
         channel_proxy_->Disconnect();
     }
+}
+
+bool FileRequestSenderRemote::ProcessNextReply(proto::file_transfer::HostToClient& reply)
+{
+    std::unique_ptr<proto::file_transfer::ClientToHost> request;
+    std::shared_ptr<FileReplyReceiverProxy> receiver;
+
+    {
+        std::lock_guard<std::mutex> lock(send_lock_);
+
+        DCHECK(last_request_);
+        DCHECK(last_receiver_);
+
+        request = std::move(last_request_);
+        receiver = std::move(last_receiver_);
+    }
+
+    if (request->has_drive_list_request())
+    {
+        if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+        {
+            if (!reply.has_drive_list())
+                return false;
+
+            std::unique_ptr<proto::DriveList> drive_list(reply.release_drive_list());
+
+            receiver->OnDriveListRequestReply(std::move(drive_list));
+        }
+        else
+        {
+            receiver->OnDriveListRequestFailure(reply.status());
+        }
+    }
+    else if (request->has_file_list_request())
+    {
+        if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+        {
+            if (!reply.has_file_list())
+                return false;
+
+            std::unique_ptr<proto::FileList> file_list(reply.release_file_list());
+
+            receiver->OnFileListRequestReply(
+                std::experimental::filesystem::u8path(request->file_list_request().path()),
+                std::move(file_list));
+        }
+        else
+        {
+            receiver->OnFileListRequestFailure(
+                std::experimental::filesystem::u8path(request->file_list_request().path()),
+                reply.status());
+        }
+    }
+    else if (request->has_directory_size_request())
+    {
+        if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+        {
+            if (!reply.has_directory_size())
+                return false;
+
+            receiver->OnDirectorySizeRequestReply(
+                std::experimental::filesystem::u8path(request->directory_size_request().path()),
+                reply.directory_size().size());
+        }
+        else
+        {
+            receiver->OnDirectorySizeRequestFailure(
+                std::experimental::filesystem::u8path(request->directory_size_request().path()),
+                reply.status());
+        }
+    }
+    else if (request->has_create_directory_request())
+    {
+        receiver->OnCreateDirectoryRequestReply(
+            std::experimental::filesystem::u8path(request->create_directory_request().path()),
+            reply.status());
+    }
+    else if (request->has_rename_request())
+    {
+        receiver->OnRenameRequestReply(
+            std::experimental::filesystem::u8path(request->rename_request().old_name()),
+            std::experimental::filesystem::u8path(request->rename_request().new_name()),
+            reply.status());
+    }
+    else if (request->has_remove_request())
+    {
+        receiver->OnRemoveRequestReply(
+            std::experimental::filesystem::u8path(request->remove_request().path()),
+            reply.status());
+    }
+    else if (request->has_file_upload_request())
+    {
+        receiver->OnFileUploadRequestReply(
+            std::experimental::filesystem::u8path(request->file_upload_request().file_path()),
+            reply.status());
+    }
+    else if (request->has_file_packet())
+    {
+        receiver->OnFileUploadDataRequestReply(request->file_packet().flags(), reply.status());
+    }
+    else
+    {
+        DLOG(ERROR) << "Unhandled request type";
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace aspia

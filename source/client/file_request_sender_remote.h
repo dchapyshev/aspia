@@ -12,7 +12,6 @@
 #include "client/client_session.h"
 #include "client/file_request_sender.h"
 #include "client/file_reply_receiver.h"
-#include "client/file_reply_receiver_queue.h"
 #include "protocol/io_buffer.h"
 
 namespace aspia {
@@ -54,9 +53,13 @@ private:
 
     void OnRequestSended();
     void OnReplyReceived(std::unique_ptr<IOBuffer> buffer);
+    bool ProcessNextReply(proto::file_transfer::HostToClient& reply);
 
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;
-    FileReplyReceiverQueue receiver_queue_;
+
+    std::unique_ptr<proto::file_transfer::ClientToHost> last_request_;
+    std::shared_ptr<FileReplyReceiverProxy> last_receiver_;
+    std::mutex send_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(FileRequestSenderRemote);
 };

@@ -459,6 +459,8 @@ void FileTransferUploader::OnFileUploadDataRequestReply(uint32_t flags, proto::R
         return;
     }
 
+    delegate_->OnObjectTransfer(file_packetizer_->LeftSize());
+
     if (flags & proto::FilePacket::LAST_PACKET)
     {
         file_packetizer_.reset();
@@ -466,10 +468,8 @@ void FileTransferUploader::OnFileUploadDataRequestReply(uint32_t flags, proto::R
         return;
     }
 
-    delegate_->OnObjectTransfer(file_packetizer_->LeftSize());
-
-    std::unique_ptr<proto::FilePacket> new_file_packet = file_packetizer_->CreateNextPacket();
-    if (!new_file_packet)
+    std::unique_ptr<proto::FilePacket> file_packet = file_packetizer_->CreateNextPacket();
+    if (!file_packet)
     {
         if (file_read_failure_action_ == Action::ASK)
         {
@@ -490,7 +490,7 @@ void FileTransferUploader::OnFileUploadDataRequestReply(uint32_t flags, proto::R
         return;
     }
 
-    sender_->SendFilePacket(This(), std::move(new_file_packet));
+    sender_->SendFilePacket(This(), std::move(file_packet));
 }
 
 } // namespace aspia

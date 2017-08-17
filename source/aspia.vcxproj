@@ -77,7 +77,6 @@
     <ClCompile Include="client\client_session_power_manage.cc" />
     <ClCompile Include="client\file_reply_receiver.cc" />
     <ClCompile Include="client\file_reply_receiver_proxy.cc" />
-    <ClCompile Include="client\file_reply_receiver_queue.cc" />
     <ClCompile Include="client\file_request_sender.cc" />
     <ClCompile Include="client\file_request_sender_local.cc" />
     <ClCompile Include="client\file_request_sender_proxy.cc" />
@@ -252,7 +251,6 @@
     <ClInclude Include="client\client_session_power_manage.h" />
     <ClInclude Include="client\file_reply_receiver.h" />
     <ClInclude Include="client\file_reply_receiver_proxy.h" />
-    <ClInclude Include="client\file_reply_receiver_queue.h" />
     <ClInclude Include="client\file_request_sender.h" />
     <ClInclude Include="client\file_request_sender_local.h" />
     <ClInclude Include="client\file_request_sender_proxy.h" />
