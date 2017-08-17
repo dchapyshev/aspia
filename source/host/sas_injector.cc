@@ -95,7 +95,15 @@ void SasInjector::ExecuteService()
 
 void SasInjector::Worker()
 {
-    ScopedNativeLibrary wmsgapi(L"wmsgapi.dll");
+    FilePath library_path;
+    if (!GetBasePath(BasePathKey::DIR_SYSTEM, library_path))
+        return;
+
+    library_path.append(L"wmsgapi.dll");
+
+    ScopedNativeLibrary wmsgapi(library_path.c_str());
+    if (!wmsgapi.IsLoaded())
+        return;
 
     typedef DWORD(WINAPI *WmsgSendMessageFn)(DWORD session_id, UINT msg,
                                              WPARAM wParam, LPARAM lParam);

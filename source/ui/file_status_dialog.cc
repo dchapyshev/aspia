@@ -6,6 +6,7 @@
 //
 
 #include "ui/file_status_dialog.h"
+#include "base/files/base_paths.h"
 #include "base/strings/string_util.h"
 #include "base/logging.h"
 
@@ -13,6 +14,8 @@
 #include <atlmisc.h>
 
 namespace aspia {
+
+static const WCHAR kRichEditLibraryName[] = L"msftedit.dll";
 
 FileStatusDialog::FileStatusDialog()
 {
@@ -31,26 +34,34 @@ void FileStatusDialog::WaitForClose()
 
 void FileStatusDialog::OnBeforeThreadRunning()
 {
-    // We need to load the library to work with RichEdit before creating a dialog.
-    LoadLibraryW(L"msftedit.dll");
+    FilePath library_path;
 
-    runner_ = ui_thread_.message_loop_proxy();
-    DCHECK(runner_);
-
-    HWND window = Create(nullptr);
-    if (!window)
+    if (GetBasePath(BasePathKey::DIR_SYSTEM, library_path))
     {
-        LOG(ERROR) << "File status dialog not created";
-        runner_->PostQuit();
-    }
-    else
-    {
-        ShowWindow(SW_SHOWNORMAL);
+        library_path.append(kRichEditLibraryName);
 
-        edit_ = GetDlgItem(IDC_STATUS_EDIT);
-        // The default text limit is 64K characters. We increase this size.
-        edit_.LimitText(0xFFFFFFFF);
+        // We need to load the library to work with RichEdit before creating a dialog.
+        richedit_library_ = std::make_unique<ScopedNativeLibrary>(library_path.c_str());
+
+        if (richedit_library_->IsLoaded())
+        {
+            runner_ = ui_thread_.message_loop_proxy();
+            DCHECK(runner_);
+
+            HWND window = Create(nullptr);
+            if (window)
+            {
+                ShowWindow(SW_SHOWNORMAL);
+
+                edit_ = GetDlgItem(IDC_STATUS_EDIT);
+                // The default text limit is 64K characters. We increase this size.
+                edit_.LimitText(0xFFFFFFFF);
+                return;
+            }
+        }
     }
+
+    runner_->PostQuit();
 }
 
 void FileStatusDialog::OnAfterThreadRunning()

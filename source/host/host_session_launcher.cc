@@ -30,8 +30,7 @@ static bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
                           TOKEN_DUPLICATE | desired_access,
                           process_token.Recieve()))
     {
-        LOG(ERROR) << "OpenProcessToken() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "OpenProcessToken() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -42,8 +41,7 @@ static bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
                           TokenPrimary,
                           token_out.Recieve()))
     {
-        LOG(ERROR) << "DuplicateTokenEx() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "DuplicateTokenEx() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -65,11 +63,9 @@ static bool CreatePrivilegedToken(ScopedHandle& token_out)
     state.PrivilegeCount = 1;
     state.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    if (!LookupPrivilegeValueW(nullptr, SE_TCB_NAME,
-                               &state.Privileges[0].Luid))
+    if (!LookupPrivilegeValueW(nullptr, SE_TCB_NAME, &state.Privileges[0].Luid))
     {
-        LOG(ERROR) << "LookupPrivilegeValueW() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "LookupPrivilegeValueW() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -77,8 +73,7 @@ static bool CreatePrivilegedToken(ScopedHandle& token_out)
     if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0,
                                nullptr, nullptr))
     {
-        LOG(ERROR) << "AdjustTokenPrivileges() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "AdjustTokenPrivileges() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -115,8 +110,7 @@ static bool CreateSessionToken(uint32_t session_id, ScopedHandle& token_out)
                                  &new_session_id,
                                  sizeof(new_session_id)))
         {
-            LOG(ERROR) << "SetTokenInformation() failed: "
-                       << GetLastSystemErrorString();
+            LOG(ERROR) << "SetTokenInformation() failed: " << GetLastSystemErrorString();
             return false;
         }
     }
@@ -125,8 +119,7 @@ static bool CreateSessionToken(uint32_t session_id, ScopedHandle& token_out)
     return true;
 }
 
-static bool CreateProcessWithToken(HANDLE user_token,
-                                   const std::wstring& command_line)
+static bool CreateProcessWithToken(HANDLE user_token, const std::wstring& command_line)
 {
     PROCESS_INFORMATION process_info = { 0 };
     STARTUPINFOW startup_info = { 0 };
@@ -138,8 +131,7 @@ static bool CreateProcessWithToken(HANDLE user_token,
 
     if (!CreateEnvironmentBlock(&environment, user_token, FALSE))
     {
-        LOG(ERROR) << "CreateEnvironmentBlock() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "CreateEnvironmentBlock() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -155,8 +147,7 @@ static bool CreateProcessWithToken(HANDLE user_token,
                               &startup_info,
                               &process_info))
     {
-        LOG(ERROR) << "CreateProcessAsUserW() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "CreateProcessAsUserW() failed: " << GetLastSystemErrorString();
         DestroyEnvironmentBlock(environment);
         return false;
     }
@@ -231,7 +222,15 @@ static bool LaunchSessionProcess(const std::wstring& run_mode,
         if (!CreatePrivilegedToken(privileged_token))
             return false;
 
-        ScopedNativeLibrary wtsapi32_library(L"wtsapi32.dll");
+        FilePath library_path;
+        if (!GetBasePath(BasePathKey::DIR_SYSTEM, library_path))
+            return false;
+
+        library_path.append(L"wtsapi32.dll");
+
+        ScopedNativeLibrary wtsapi32_library(library_path.c_str());
+        if (!wtsapi32_library.IsLoaded())
+            return false;
 
         typedef BOOL(WINAPI * WTSQueryUserTokenFunc)(ULONG, PHANDLE);
 
@@ -253,11 +252,9 @@ static bool LaunchSessionProcess(const std::wstring& run_mode,
             if (!impersonator.ImpersonateLoggedOnUser(privileged_token))
                 return false;
 
-            if (!query_user_token_func(session_id,
-                                       session_token.Recieve()))
+            if (!query_user_token_func(session_id, session_token.Recieve()))
             {
-                LOG(ERROR) << "WTSQueryUserToken() failed: "
-                           << GetLastSystemErrorString();
+                LOG(ERROR) << "WTSQueryUserToken() failed: " << GetLastSystemErrorString();
                 return false;
             }
         }
@@ -284,35 +281,27 @@ bool LaunchSessionProcess(proto::SessionType session_type,
         {
             if (!IsCallerHasAdminRights())
             {
-                return LaunchProcessWithCurrentRights(kDesktopSessionSwitch,
-                                                      channel_id);
+                return LaunchProcessWithCurrentRights(kDesktopSessionSwitch, channel_id);
             }
 
             if (!IsRunningAsService())
             {
-                return HostSessionLauncherService::CreateStarted(session_id,
-                                                                 channel_id);
+                return HostSessionLauncherService::CreateStarted(session_id, channel_id);
             }
 
             // The code is executed from the service.
             // Start the process directly.
-            return LaunchSessionProcessFromService(kDesktopSessionSwitch,
-                                                   session_id,
-                                                   channel_id);
+            return LaunchSessionProcessFromService(kDesktopSessionSwitch, session_id, channel_id);
         }
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
         {
-            return LaunchSessionProcess(kFileTransferSessionSwitch,
-                                        session_id,
-                                        channel_id);
+            return LaunchSessionProcess(kFileTransferSessionSwitch, session_id, channel_id);
         }
 
         case proto::SESSION_TYPE_POWER_MANAGE:
         {
-            return LaunchSessionProcess(kPowerManageSessionSwitch,
-                                        session_id,
-                                        channel_id);
+            return LaunchSessionProcess(kPowerManageSessionSwitch, session_id, channel_id);
         }
 
         default:

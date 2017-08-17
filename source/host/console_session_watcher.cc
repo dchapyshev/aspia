@@ -6,6 +6,7 @@
 //
 
 #include "host/console_session_watcher.h"
+#include "base/files/base_paths.h"
 #include "base/logging.h"
 
 #include <wtsapi32.h>
@@ -14,16 +15,27 @@ namespace aspia {
 
 const wchar_t kWtsApi32LibraryName[] = L"wtsapi32.dll";
 
-ConsoleSessionWatcher::ConsoleSessionWatcher() :
-    wtsapi32_library_(kWtsApi32LibraryName)
+ConsoleSessionWatcher::ConsoleSessionWatcher()
 {
-    register_session_notification_ =
-        reinterpret_cast<WTSRegisterSessionNotificationFn>(
-            wtsapi32_library_.GetFunctionPointer("WTSRegisterSessionNotification"));
+    FilePath library_path;
 
-    unregister_session_notification_ =
-        reinterpret_cast<WTSUnRegisterSessionNotificationFn>(
-            wtsapi32_library_.GetFunctionPointer("WTSUnRegisterSessionNotification"));
+    if (GetBasePath(BasePathKey::DIR_SYSTEM, library_path))
+    {
+        library_path.append(kWtsApi32LibraryName);
+
+        wtsapi32_library_ = std::make_unique<ScopedNativeLibrary>(library_path.c_str());
+
+        if (wtsapi32_library_->IsLoaded())
+        {
+            register_session_notification_ =
+                reinterpret_cast<WTSRegisterSessionNotificationFn>(
+                    wtsapi32_library_->GetFunctionPointer("WTSRegisterSessionNotification"));
+
+            unregister_session_notification_ =
+                reinterpret_cast<WTSUnRegisterSessionNotificationFn>(
+                    wtsapi32_library_->GetFunctionPointer("WTSUnRegisterSessionNotification"));
+        }
+    }
 
     CHECK(register_session_notification_ && unregister_session_notification_);
 }

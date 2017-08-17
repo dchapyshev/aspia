@@ -33,7 +33,7 @@ private:
     CapturerGDI();
     bool PrepareCaptureResources();
 
-    ScopedNativeLibrary dwmapi_library_;
+    std::unique_ptr<ScopedNativeLibrary> dwmapi_library_;
     DwmEnableCompositionFunc composition_func_ = nullptr;
 
     ScopedThreadDesktop desktop_;

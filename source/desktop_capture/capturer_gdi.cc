@@ -6,6 +6,7 @@
 //
 
 #include "desktop_capture/capturer_gdi.h"
+#include "base/files/base_paths.h"
 #include "base/logging.h"
 #include "base/scoped_select_object.h"
 #include "desktop_capture/cursor.h"
@@ -19,13 +20,24 @@ const UINT DWM_EC_ENABLECOMPOSITION = 1;
 const wchar_t kDwmapiLibraryName[] = L"dwmapi.dll";
 
 CapturerGDI::CapturerGDI()
-    : dwmapi_library_(kDwmapiLibraryName)
 {
     memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
 
-    composition_func_ =
-        reinterpret_cast<DwmEnableCompositionFunc>(
-            dwmapi_library_.GetFunctionPointer("DwmEnableComposition"));
+    FilePath library_path;
+
+    if (GetBasePath(BasePathKey::DIR_SYSTEM, library_path))
+    {
+        library_path.append(kDwmapiLibraryName);
+
+        dwmapi_library_ = std::make_unique<ScopedNativeLibrary>(library_path.c_str());
+
+        if (dwmapi_library_->IsLoaded())
+        {
+            composition_func_ =
+                reinterpret_cast<DwmEnableCompositionFunc>(
+                    dwmapi_library_->GetFunctionPointer("DwmEnableComposition"));
+        }
+    }
 }
 
 // static

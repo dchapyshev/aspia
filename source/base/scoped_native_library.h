@@ -22,7 +22,7 @@ public:
 
     virtual ~ScopedNativeLibrary()
     {
-        if (lib_)
+        if (IsLoaded())
             FreeLibrary(lib_);
     }
 
@@ -30,6 +30,8 @@ public:
     {
         return GetProcAddress(lib_, function_name);
     }
+
+    bool IsLoaded() const { return lib_ != nullptr; }
 
 private:
     HMODULE lib_;

@@ -10,6 +10,7 @@
 
 #include "base/message_loop/message_loop_thread.h"
 #include "base/files/file_path.h"
+#include "base/scoped_native_library.h"
 #include "ui/resource.h"
 
 #include <atlbase.h>
@@ -73,6 +74,8 @@ private:
 
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
+
+    std::unique_ptr<ScopedNativeLibrary> richedit_library_;
 
     CIcon small_icon_;
     CIcon big_icon_;
