@@ -21,8 +21,7 @@ public:
     Clipboard() = default;
     ~Clipboard();
 
-    using ClipboardEventCallback =
-        std::function<void(std::unique_ptr<proto::ClipboardEvent> event)>;
+    using ClipboardEventCallback = std::function<void(proto::ClipboardEvent& event)>;
 
     // Callback is called when there is an outgoing clipboard.
     bool Start(ClipboardEventCallback clipboard_event_callback);

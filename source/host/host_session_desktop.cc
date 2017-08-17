@@ -210,10 +210,10 @@ bool HostSessionDesktop::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEven
     return true;
 }
 
-void HostSessionDesktop::SendClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event)
+void HostSessionDesktop::SendClipboardEvent(proto::ClipboardEvent& clipboard_event)
 {
     proto::desktop::HostToClient message;
-    message.set_allocated_clipboard_event(clipboard_event.release());
+    message.mutable_clipboard_event()->Swap(&clipboard_event);
     WriteMessage(message);
 }
 

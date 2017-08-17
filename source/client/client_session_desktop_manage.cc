@@ -122,11 +122,10 @@ void ClientSessionDesktopManage::OnPointerEvent(const DesktopPoint& pos, uint32_
     WriteMessage(message);
 }
 
-void ClientSessionDesktopManage::OnClipboardEvent(
-    std::unique_ptr<proto::ClipboardEvent> clipboard_event)
+void ClientSessionDesktopManage::OnClipboardEvent(proto::ClipboardEvent& clipboard_event)
 {
     proto::desktop::ClientToHost message;
-    message.set_allocated_clipboard_event(clipboard_event.release());
+    message.mutable_clipboard_event()->Swap(&clipboard_event);
     WriteMessage(message);
 }
 

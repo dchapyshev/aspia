@@ -45,7 +45,7 @@ private:
     bool ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> event);
     bool ReadConfig(const proto::DesktopSessionConfig& config);
 
-    void SendClipboardEvent(std::unique_ptr<proto::ClipboardEvent> event);
+    void SendClipboardEvent(proto::ClipboardEvent& event);
     void SendConfigRequest();
 
     std::unique_ptr<PipeChannel> ipc_channel_;

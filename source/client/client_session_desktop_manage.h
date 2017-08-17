@@ -24,7 +24,7 @@ private:
     // ViewerWindow::Delegate implementation.
     void OnKeyEvent(uint32_t keycode, uint32_t flags) override;
     void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) override;
-    void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) override;
+    void OnClipboardEvent(proto::ClipboardEvent& clipboard_event) override;
 
     void OnMessageReceived(const IOBuffer& buffer) override;
 

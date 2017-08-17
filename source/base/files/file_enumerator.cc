@@ -232,7 +232,7 @@ bool FileEnumerator::IsPatternMatched(const FilePath& src) const
         case FolderSearchPolicy::ALL:
             // ALL policy enumerates all files, we need to check pattern match
             // manually.
-            return PathMatchSpec(src.c_str(), pattern_.c_str()) == TRUE;
+            return !!PathMatchSpecW(src.c_str(), pattern_.c_str());
     }
 
     return false;

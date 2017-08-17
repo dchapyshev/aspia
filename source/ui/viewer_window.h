@@ -32,7 +32,7 @@ public:
         virtual void OnConfigChange(const proto::DesktopSessionConfig& config) = 0;
         virtual void OnKeyEvent(uint32_t keycode, uint32_t flags) = 0;
         virtual void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) = 0;
-        virtual void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) = 0;
+        virtual void OnClipboardEvent(proto::ClipboardEvent& clipboard_event) = 0;
     };
 
     ViewerWindow(ClientConfig* config, Delegate* delegate);

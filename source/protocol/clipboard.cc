@@ -144,13 +144,12 @@ void Clipboard::OnClipboardUpdate()
 
             if (last_mime_type_ != kMimeTypeTextUtf8 || last_data_ != data)
             {
-                std::unique_ptr<proto::ClipboardEvent> event =
-                    std::make_unique<proto::ClipboardEvent>();
+                proto::ClipboardEvent event;
 
-                event->set_mime_type(kMimeTypeTextUtf8);
-                event->set_data(data);
+                event.set_mime_type(kMimeTypeTextUtf8);
+                event.set_data(data);
 
-                clipboard_event_callback_(std::move(event));
+                clipboard_event_callback_(event);
             }
         }
     }
