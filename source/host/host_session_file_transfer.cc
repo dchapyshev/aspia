@@ -7,6 +7,7 @@
 
 #include "host/host_session_file_transfer.h"
 #include "base/files/file_helpers.h"
+#include "base/files/file_util.h"
 #include "ipc/pipe_channel_proxy.h"
 #include "protocol/message_serialization.h"
 #include "protocol/filesystem.h"
@@ -245,9 +246,7 @@ void HostSessionFileTransfer::ReadFileUploadRequest(const proto::FileUploadReque
 
         if (!request.overwrite())
         {
-            std::error_code code;
-
-            if (std::experimental::filesystem::exists(file_path, code))
+            if (PathExists(file_path))
             {
                 reply.set_status(proto::REQUEST_STATUS_PATH_ALREADY_EXISTS);
                 break;
