@@ -24,6 +24,7 @@ FileRequestSenderLocal::~FileRequestSenderLocal()
 void FileRequestSenderLocal::OnBeforeThreadRunning()
 {
     worker_ = worker_thread_.message_loop_proxy();
+    DCHECK(worker_);
 }
 
 void FileRequestSenderLocal::OnAfterThreadRunning()

@@ -27,8 +27,7 @@ ClientSessionDesktopManage::~ClientSessionDesktopManage()
     // Nothing
 }
 
-void ClientSessionDesktopManage::ReadCursorShape(
-    const proto::CursorShape& cursor_shape)
+void ClientSessionDesktopManage::ReadCursorShape(const proto::CursorShape& cursor_shape)
 {
     if (!cursor_decoder_)
         cursor_decoder_ = std::make_unique<CursorDecoder>();
@@ -46,12 +45,11 @@ void ClientSessionDesktopManage::ReadClipboardEvent(
     viewer_->InjectClipboardEvent(clipboard_event);
 }
 
-void ClientSessionDesktopManage::OnMessageReceived(
-    std::unique_ptr<IOBuffer> buffer)
+void ClientSessionDesktopManage::OnMessageReceived(const IOBuffer& buffer)
 {
     proto::desktop::HostToClient message;
 
-    if (ParseMessage(*buffer, message))
+    if (ParseMessage(buffer, message))
     {
         if (message.status() != proto::Status::STATUS_SUCCESS)
         {
@@ -93,8 +91,7 @@ void ClientSessionDesktopManage::OnMessageReceived(
         if (success)
         {
             channel_proxy_->Receive(std::bind(
-                &ClientSessionDesktopManage::OnMessageReceived, this,
-                std::placeholders::_1));
+                &ClientSessionDesktopManage::OnMessageReceived, this, std::placeholders::_1));
             return;
         }
     }
@@ -113,8 +110,7 @@ void ClientSessionDesktopManage::OnKeyEvent(uint32_t keycode, uint32_t flags)
     WriteMessage(message);
 }
 
-void ClientSessionDesktopManage::OnPointerEvent(const DesktopPoint& pos,
-                                                uint32_t mask)
+void ClientSessionDesktopManage::OnPointerEvent(const DesktopPoint& pos, uint32_t mask)
 {
     proto::desktop::ClientToHost message;
 

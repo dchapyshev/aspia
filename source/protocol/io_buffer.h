@@ -18,6 +18,8 @@ namespace aspia {
 class IOBuffer
 {
 public:
+    IOBuffer() = default;
+
     explicit IOBuffer(size_t size) :
         data_size_(size)
     {
@@ -25,14 +27,30 @@ public:
         data_ = std::make_unique<uint8_t[]>(data_size_);
     }
 
+    IOBuffer(IOBuffer&& other) noexcept
+    {
+        data_ = std::move(other.data_);
+        data_size_ = other.data_size_;
+        other.data_size_ = 0;
+    }
+
+    IOBuffer& operator=(IOBuffer&& other) noexcept
+    {
+        data_ = std::move(other.data_);
+        data_size_ = other.data_size_;
+        other.data_size_ = 0;
+        return *this;
+    }
+
     virtual ~IOBuffer() = default;
 
     uint8_t* data() const { return data_.get(); }
     size_t size() const { return data_size_; }
+    bool empty() const { return data_size_ == 0 || data_ == nullptr; }
 
 private:
     std::unique_ptr<uint8_t[]> data_;
-    const size_t data_size_;
+    size_t data_size_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(IOBuffer);
 };

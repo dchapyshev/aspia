@@ -44,7 +44,7 @@ bool PipeChannelProxy::IsDisconnecting() const
     return channel_->IsDisconnecting();
 }
 
-bool PipeChannelProxy::Send(std::unique_ptr<IOBuffer> buffer,
+bool PipeChannelProxy::Send(IOBuffer&& buffer,
                             PipeChannel::SendCompleteHandler handler)
 {
     std::lock_guard<std::mutex> lock(channel_lock_);
@@ -58,7 +58,7 @@ bool PipeChannelProxy::Send(std::unique_ptr<IOBuffer> buffer,
     return false;
 }
 
-bool PipeChannelProxy::Send(std::unique_ptr<IOBuffer> buffer)
+bool PipeChannelProxy::Send(IOBuffer&& buffer)
 {
     std::lock_guard<std::mutex> lock(channel_lock_);
 

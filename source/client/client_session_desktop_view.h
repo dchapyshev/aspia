@@ -39,7 +39,7 @@ private:
     void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) override { }
     void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) override { }
 
-    virtual void OnMessageReceived(std::unique_ptr<IOBuffer> buffer);
+    virtual void OnMessageReceived(const IOBuffer& buffer);
 
     std::unique_ptr<VideoDecoder> video_decoder_;
     proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;

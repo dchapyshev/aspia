@@ -22,7 +22,7 @@ public:
 
 private:
     void OnIpcChannelConnect(uint32_t user_data);
-    void OnIpcChannelMessage(std::unique_ptr<IOBuffer> buffer);
+    void OnIpcChannelMessage(const IOBuffer& buffer);
 
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::shared_ptr<PipeChannelProxy> ipc_channel_proxy_;

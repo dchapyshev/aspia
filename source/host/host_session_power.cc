@@ -49,11 +49,11 @@ void HostSessionPower::OnIpcChannelConnect(uint32_t user_data)
         &HostSessionPower::OnIpcChannelMessage, this, std::placeholders::_1));
 }
 
-void HostSessionPower::OnIpcChannelMessage(std::unique_ptr<IOBuffer> buffer)
+void HostSessionPower::OnIpcChannelMessage(const IOBuffer& buffer)
 {
     proto::power::ClientToHost message;
 
-    if (ParseMessage(*buffer, message))
+    if (ParseMessage(buffer, message))
     {
         switch (message.power_event().action())
         {

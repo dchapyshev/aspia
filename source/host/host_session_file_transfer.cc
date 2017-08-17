@@ -63,11 +63,11 @@ void HostSessionFileTransfer::OnIpcChannelDisconnect()
     status_dialog_->OnSessionTerminated();
 }
 
-void HostSessionFileTransfer::OnIpcChannelMessage(std::unique_ptr<IOBuffer> buffer)
+void HostSessionFileTransfer::OnIpcChannelMessage(const IOBuffer& buffer)
 {
     proto::file_transfer::ClientToHost message;
 
-    if (!ParseMessage(*buffer, message))
+    if (!ParseMessage(buffer, message))
     {
         ipc_channel_proxy_->Disconnect();
         return;

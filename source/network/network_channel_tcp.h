@@ -57,8 +57,8 @@ public:
     void StartChannel(StatusChangeHandler handler) override;
 
 protected:
-    void Send(std::unique_ptr<IOBuffer> buffer, SendCompleteHandler handler) override;
-    void Send(std::unique_ptr<IOBuffer> buffer) override;
+    void Send(IOBuffer&& buffer, SendCompleteHandler handler) override;
+    void Send(IOBuffer&& buffer) override;
     void Receive(ReceiveCompleteHandler handler) override;
     void Disconnect() override;
     bool IsDiconnecting() const override;
@@ -95,7 +95,7 @@ private:
     void Run() override;
 
     class WriteTaskQueue
-        : public std::queue<std::pair<std::unique_ptr<IOBuffer>, SendCompleteHandler>>
+        : public std::queue<std::pair<IOBuffer, SendCompleteHandler>>
     {
     public:
         void Swap(WriteTaskQueue& queue)
@@ -115,12 +115,12 @@ private:
     WriteTaskQueue incoming_write_queue_;
     std::mutex incoming_write_queue_lock_;
 
-    std::unique_ptr<IOBuffer> write_buffer_;
+    IOBuffer write_buffer_;
     MessageSizeType write_size_ = 0;
 
     ReceiveCompleteHandler receive_complete_handler_;
 
-    std::unique_ptr<IOBuffer> read_buffer_;
+    IOBuffer read_buffer_;
     MessageSizeType read_size_ = 0;
 
     std::unique_ptr<Encryptor> encryptor_;

@@ -48,7 +48,7 @@ private:
     void OnStatusDialogOpen() override;
 
     void OnAuthRequestSended();
-    void DoAuthorize(std::unique_ptr<IOBuffer> buffer);
+    void DoAuthorize(const IOBuffer& buffer);
     void OpenStatusDialog();
 
     Delegate* delegate_;

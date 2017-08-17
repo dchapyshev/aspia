@@ -54,15 +54,15 @@ public:
 
 private:
     void SendRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                     std::unique_ptr<proto::file_transfer::ClientToHost> request);
+                     proto::file_transfer::ClientToHost&& request);
 
     void OnRequestSended();
-    void OnReplyReceived(std::unique_ptr<IOBuffer> buffer);
+    void OnReplyReceived(const IOBuffer& buffer);
     bool ProcessNextReply(proto::file_transfer::HostToClient& reply);
 
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;
 
-    std::unique_ptr<proto::file_transfer::ClientToHost> last_request_;
+    proto::file_transfer::ClientToHost last_request_;
     std::shared_ptr<FileReplyReceiverProxy> last_receiver_;
     std::mutex send_lock_;
 

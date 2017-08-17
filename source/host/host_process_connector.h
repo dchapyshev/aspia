@@ -28,8 +28,8 @@ public:
     void Disconnect();
 
 private:
-    void OnIpcChannelMessage(std::unique_ptr<IOBuffer> buffer);
-    void OnNetworkChannelMessage(std::unique_ptr<IOBuffer> buffer);
+    void OnIpcChannelMessage(IOBuffer& buffer);
+    void OnNetworkChannelMessage(IOBuffer& buffer);
 
     std::shared_ptr<NetworkChannelProxy> network_channel_proxy_;
 

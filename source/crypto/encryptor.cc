@@ -111,10 +111,10 @@ bool Encryptor::ReadHelloMessage(const IOBuffer& message_buffer)
     return true;
 }
 
-std::unique_ptr<IOBuffer> Encryptor::HelloMessage()
+IOBuffer Encryptor::HelloMessage()
 {
     if (!local_public_key_ || !local_secret_key_)
-        return nullptr;
+        return IOBuffer();
 
     encrypt_nonce_ = std::make_unique<SecureBuffer>(crypto_secretbox_NONCEBYTES);
 
@@ -126,7 +126,7 @@ std::unique_ptr<IOBuffer> Encryptor::HelloMessage()
     message.set_public_key(local_public_key_->data(), local_public_key_->size());
     message.set_nonce(encrypt_nonce_->data(), encrypt_nonce_->size());
 
-    std::unique_ptr<IOBuffer> message_buffer = SerializeMessage<IOBuffer>(message);
+    IOBuffer message_buffer = SerializeMessage<IOBuffer>(message);
 
     SecureClearString(*message.mutable_public_key());
     SecureClearString(*message.mutable_nonce());
@@ -140,7 +140,7 @@ std::unique_ptr<IOBuffer> Encryptor::HelloMessage()
     return message_buffer;
 }
 
-std::unique_ptr<IOBuffer> Encryptor::Encrypt(const IOBuffer& source_buffer)
+IOBuffer Encryptor::Encrypt(const IOBuffer& source_buffer)
 {
     DCHECK(!local_public_key_);
     DCHECK(!local_secret_key_);
@@ -150,24 +150,23 @@ std::unique_ptr<IOBuffer> Encryptor::Encrypt(const IOBuffer& source_buffer)
 
     sodium_increment(encrypt_nonce_->data(), crypto_secretbox_NONCEBYTES);
 
-    std::unique_ptr<IOBuffer> encrypted_buffer =
-        std::make_unique<IOBuffer>(source_buffer.size() + crypto_secretbox_MACBYTES);
+    IOBuffer encrypted_buffer(source_buffer.size() + crypto_secretbox_MACBYTES);
 
     // Encrypt message.
-    if (crypto_secretbox_easy(encrypted_buffer->data(),
+    if (crypto_secretbox_easy(encrypted_buffer.data(),
                               source_buffer.data(),
                               source_buffer.size(),
                               encrypt_nonce_->data(),
                               encrypt_key_->data()) != 0)
     {
         LOG(ERROR) << "crypto_secretbox_easy() failed";
-        return nullptr;
+        return IOBuffer();
     }
 
     return encrypted_buffer;
 }
 
-std::unique_ptr<IOBuffer> Encryptor::Decrypt(const IOBuffer& source_buffer)
+IOBuffer Encryptor::Decrypt(const IOBuffer& source_buffer)
 {
     DCHECK(!local_public_key_);
     DCHECK(!local_secret_key_);
@@ -177,18 +176,17 @@ std::unique_ptr<IOBuffer> Encryptor::Decrypt(const IOBuffer& source_buffer)
 
     sodium_increment(decrypt_nonce_->data(), crypto_secretbox_NONCEBYTES);
 
-    std::unique_ptr<IOBuffer> decrypted_buffer =
-        std::make_unique<IOBuffer>(source_buffer.size() - crypto_secretbox_MACBYTES);
+    IOBuffer decrypted_buffer(source_buffer.size() - crypto_secretbox_MACBYTES);
 
     // Decrypt message.
-    if (crypto_secretbox_open_easy(decrypted_buffer->data(),
+    if (crypto_secretbox_open_easy(decrypted_buffer.data(),
                                    source_buffer.data(),
                                    source_buffer.size(),
                                    decrypt_nonce_->data(),
                                    decrypt_key_->data()) != 0)
     {
         LOG(ERROR) << "crypto_secretbox_open_easy() failed";
-        return nullptr;
+        return IOBuffer();
     }
 
     return decrypted_buffer;

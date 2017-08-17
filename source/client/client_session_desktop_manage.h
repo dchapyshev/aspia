@@ -26,7 +26,7 @@ private:
     void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) override;
     void OnClipboardEvent(std::unique_ptr<proto::ClipboardEvent> clipboard_event) override;
 
-    void OnMessageReceived(std::unique_ptr<IOBuffer> buffer) override;
+    void OnMessageReceived(const IOBuffer& buffer) override;
 
     void ReadCursorShape(const proto::CursorShape& cursor_shape);
     void ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);

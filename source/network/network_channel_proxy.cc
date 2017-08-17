@@ -21,7 +21,7 @@ void NetworkChannelProxy::WillDestroyCurrentChannel()
     channel_ = nullptr;
 }
 
-bool NetworkChannelProxy::Send(std::unique_ptr<IOBuffer> buffer,
+bool NetworkChannelProxy::Send(IOBuffer&& buffer,
                                NetworkChannel::SendCompleteHandler handler)
 {
     std::lock_guard<std::mutex> lock(channel_lock_);
@@ -35,7 +35,7 @@ bool NetworkChannelProxy::Send(std::unique_ptr<IOBuffer> buffer,
     return false;
 }
 
-bool NetworkChannelProxy::Send(std::unique_ptr<IOBuffer> buffer)
+bool NetworkChannelProxy::Send(IOBuffer&& buffer)
 {
     std::lock_guard<std::mutex> lock(channel_lock_);
 

@@ -131,11 +131,11 @@ static std::unique_ptr<ClientSession> CreateSession(
     }
 }
 
-void Client::DoAuthorize(std::unique_ptr<IOBuffer> buffer)
+void Client::DoAuthorize(const IOBuffer& buffer)
 {
     proto::auth::HostToClient result;
 
-    if (ParseMessage(*buffer, result))
+    if (ParseMessage(buffer, result))
     {
         status_ = result.status();
 

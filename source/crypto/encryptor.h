@@ -30,10 +30,10 @@ public:
     ~Encryptor();
 
     bool ReadHelloMessage(const IOBuffer& message_buffer);
-    std::unique_ptr<IOBuffer> HelloMessage();
+    IOBuffer HelloMessage();
 
-    std::unique_ptr<IOBuffer> Encrypt(const IOBuffer& source_buffer);
-    std::unique_ptr<IOBuffer> Decrypt(const IOBuffer& source_buffer);
+    IOBuffer Encrypt(const IOBuffer& source_buffer);
+    IOBuffer Decrypt(const IOBuffer& source_buffer);
 
 private:
     const Mode mode_;

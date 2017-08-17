@@ -53,7 +53,7 @@ public:
 
     using DisconnectHandler = std::function<void()>;
     using SendCompleteHandler = std::function<void()>;
-    using ReceiveCompleteHandler = std::function<void(std::unique_ptr<IOBuffer>)>;
+    using ReceiveCompleteHandler = std::function<void(IOBuffer&)>;
 
     bool Connect(uint32_t& user_data, DisconnectHandler disconnect_handler = nullptr);
 
@@ -68,8 +68,8 @@ private:
 
     void Disconnect();
     bool IsDisconnecting() const;
-    void Send(std::unique_ptr<IOBuffer> buffer, SendCompleteHandler handler);
-    void Send(std::unique_ptr<IOBuffer> buffer);
+    void Send(IOBuffer&& buffer, SendCompleteHandler handler);
+    void Send(IOBuffer&& buffer);
     void Receive(ReceiveCompleteHandler handler);
 
     bool ReloadWriteQueue();
@@ -84,7 +84,7 @@ private:
     void Run() override;
 
     class WriteTaskQueue
-        : public std::queue<std::pair<std::unique_ptr<IOBuffer>, SendCompleteHandler>>
+        : public std::queue<std::pair<IOBuffer, SendCompleteHandler>>
     {
     public:
         void Swap(WriteTaskQueue& queue)
@@ -104,12 +104,12 @@ private:
     WriteTaskQueue incoming_write_queue_;
     std::mutex incoming_write_queue_lock_;
 
-    std::unique_ptr<IOBuffer> write_buffer_;
+    IOBuffer write_buffer_;
     uint32_t write_size_ = 0;
 
     ReceiveCompleteHandler receive_complete_handler_;
 
-    std::unique_ptr<IOBuffer> read_buffer_;
+    IOBuffer read_buffer_;
     uint32_t read_size_ = 0;
 
     std::shared_ptr<PipeChannelProxy> proxy_;

@@ -22,8 +22,7 @@ ClientSessionDesktopView::ClientSessionDesktopView(
     viewer_.reset(new ViewerWindow(&config_, this));
 
     channel_proxy_->Receive(std::bind(
-        &ClientSessionDesktopView::OnMessageReceived, this,
-        std::placeholders::_1));
+        &ClientSessionDesktopView::OnMessageReceived, this, std::placeholders::_1));
 }
 
 ClientSessionDesktopView::~ClientSessionDesktopView()
@@ -67,8 +66,7 @@ bool ClientSessionDesktopView::ReadVideoPacket(const proto::VideoPacket& video_p
 
         if (video_encoding_ == proto::VideoEncoding::VIDEO_ENCODING_ZLIB)
         {
-            pixel_format =
-                ConvertFromVideoPixelFormat(video_packet.format().pixel_format());
+            pixel_format = ConvertFromVideoPixelFormat(video_packet.format().pixel_format());
         }
         else
         {
@@ -110,11 +108,11 @@ void ClientSessionDesktopView::ReadConfigRequest(
     OnConfigChange(config_.desktop_session_config());
 }
 
-void ClientSessionDesktopView::OnMessageReceived(std::unique_ptr<IOBuffer> buffer)
+void ClientSessionDesktopView::OnMessageReceived(const IOBuffer& buffer)
 {
     proto::desktop::HostToClient message;
 
-    if (ParseMessage(*buffer, message))
+    if (ParseMessage(buffer, message))
     {
         if (message.status() != proto::Status::STATUS_SUCCESS)
         {

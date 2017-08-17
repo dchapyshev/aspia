@@ -21,11 +21,8 @@ FileRequestSenderRemote::FileRequestSenderRemote(
 void FileRequestSenderRemote::SendDriveListRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver)
 {
-    std::unique_ptr<proto::file_transfer::ClientToHost> request =
-        std::make_unique<proto::file_transfer::ClientToHost>();
-
-    request->mutable_drive_list_request()->set_dummy(1);
-
+    proto::file_transfer::ClientToHost request;
+    request.mutable_drive_list_request()->set_dummy(1);
     SendRequest(receiver, std::move(request));
 }
 
@@ -33,11 +30,8 @@ void FileRequestSenderRemote::SendFileListRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
     const FilePath& path)
 {
-    std::unique_ptr<proto::file_transfer::ClientToHost> request =
-        std::make_unique<proto::file_transfer::ClientToHost>();
-
-    request->mutable_file_list_request()->set_path(path.u8string());
-
+    proto::file_transfer::ClientToHost request;
+    request.mutable_file_list_request()->set_path(path.u8string());
     SendRequest(receiver, std::move(request));
 }
 
@@ -45,11 +39,8 @@ void FileRequestSenderRemote::SendCreateDirectoryRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
     const FilePath& path)
 {
-    std::unique_ptr<proto::file_transfer::ClientToHost> request =
-        std::make_unique<proto::file_transfer::ClientToHost>();
-
-    request->mutable_create_directory_request()->set_path(path.u8string());
-
+    proto::file_transfer::ClientToHost request;
+    request.mutable_create_directory_request()->set_path(path.u8string());
     SendRequest(receiver, std::move(request));
 }
 
@@ -57,22 +48,16 @@ void FileRequestSenderRemote::SendDirectorySizeRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
     const FilePath& path)
 {
-    std::unique_ptr<proto::file_transfer::ClientToHost> request =
-        std::make_unique<proto::file_transfer::ClientToHost>();
-
-    request->mutable_directory_size_request()->set_path(path.u8string());
-
+    proto::file_transfer::ClientToHost request;
+    request.mutable_directory_size_request()->set_path(path.u8string());
     SendRequest(receiver, std::move(request));
 }
 
 void FileRequestSenderRemote::SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                 const FilePath& path)
 {
-    std::unique_ptr<proto::file_transfer::ClientToHost> request =
-        std::make_unique<proto::file_transfer::ClientToHost>();
-
-    request->mutable_remove_request()->set_path(path.u8string());
-
+    proto::file_transfer::ClientToHost request;
+    request.mutable_remove_request()->set_path(path.u8string());
     SendRequest(receiver, std::move(request));
 }
 
@@ -80,12 +65,9 @@ void FileRequestSenderRemote::SendRenameRequest(std::shared_ptr<FileReplyReceive
                                                 const FilePath& old_name,
                                                 const FilePath& new_name)
 {
-    std::unique_ptr<proto::file_transfer::ClientToHost> request =
-        std::make_unique<proto::file_transfer::ClientToHost>();
-
-    request->mutable_rename_request()->set_old_name(old_name.u8string());
-    request->mutable_rename_request()->set_new_name(new_name.u8string());
-
+    proto::file_transfer::ClientToHost request;
+    request.mutable_rename_request()->set_old_name(old_name.u8string());
+    request.mutable_rename_request()->set_new_name(new_name.u8string());
     SendRequest(receiver, std::move(request));
 }
 
@@ -94,11 +76,10 @@ void FileRequestSenderRemote::SendFileUploadRequest(
     const FilePath& file_path,
     Overwrite overwrite)
 {
-    std::unique_ptr<proto::file_transfer::ClientToHost> request =
-        std::make_unique<proto::file_transfer::ClientToHost>();
+    proto::file_transfer::ClientToHost request;
 
-    request->mutable_file_upload_request()->set_file_path(file_path.u8string());
-    request->mutable_file_upload_request()->set_overwrite(
+    request.mutable_file_upload_request()->set_file_path(file_path.u8string());
+    request.mutable_file_upload_request()->set_overwrite(
         overwrite == Overwrite::YES ? true : false);
 
     SendRequest(receiver, std::move(request));
@@ -108,43 +89,34 @@ void FileRequestSenderRemote::SendFileDownloadRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
     const FilePath& file_path)
 {
-    std::unique_ptr<proto::file_transfer::ClientToHost> request =
-        std::make_unique<proto::file_transfer::ClientToHost>();
-
-    request->mutable_file_download_request()->set_file_path(file_path.u8string());
-
+    proto::file_transfer::ClientToHost request;
+    request.mutable_file_download_request()->set_file_path(file_path.u8string());
     SendRequest(receiver, std::move(request));
 }
 
 void FileRequestSenderRemote::SendFilePacket(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                              std::unique_ptr<proto::FilePacket> file_packet)
 {
-    std::unique_ptr<proto::file_transfer::ClientToHost> request =
-        std::make_unique<proto::file_transfer::ClientToHost>();
-
-    request->set_allocated_file_packet(file_packet.release());
-
+    proto::file_transfer::ClientToHost request;
+    request.set_allocated_file_packet(file_packet.release());
     SendRequest(receiver, std::move(request));
 }
 
 void FileRequestSenderRemote::SendFilePacketRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver)
 {
-    std::unique_ptr<proto::file_transfer::ClientToHost> request =
-        std::make_unique<proto::file_transfer::ClientToHost>();
-
-    request->mutable_file_packet_request()->set_dummy(1);
-
+    proto::file_transfer::ClientToHost request;
+    request.mutable_file_packet_request()->set_dummy(1);
     SendRequest(receiver, std::move(request));
 }
 
 void FileRequestSenderRemote::SendRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    std::unique_ptr<proto::file_transfer::ClientToHost> request)
+    proto::file_transfer::ClientToHost&& request)
 {
     std::lock_guard<std::mutex> lock(send_lock_);
 
-    if (last_request_ || last_receiver_)
+    if (last_receiver_)
     {
         DLOG(ERROR) << "No response to previous request. New request ignored";
         return;
@@ -153,7 +125,7 @@ void FileRequestSenderRemote::SendRequest(
     last_request_ = std::move(request);
     last_receiver_ = std::move(receiver);
 
-    channel_proxy_->Send(SerializeMessage<IOBuffer>(*last_request_),
+    channel_proxy_->Send(SerializeMessage<IOBuffer>(last_request_),
                          std::bind(&FileRequestSenderRemote::OnRequestSended, this));
 }
 
@@ -163,11 +135,11 @@ void FileRequestSenderRemote::OnRequestSended()
         &FileRequestSenderRemote::OnReplyReceived, this, std::placeholders::_1));
 }
 
-void FileRequestSenderRemote::OnReplyReceived(std::unique_ptr<IOBuffer> buffer)
+void FileRequestSenderRemote::OnReplyReceived(const IOBuffer& buffer)
 {
     proto::file_transfer::HostToClient reply;
 
-    if (!ParseMessage(*buffer, reply))
+    if (!ParseMessage(buffer, reply))
     {
         channel_proxy_->Disconnect();
         return;
@@ -181,20 +153,19 @@ void FileRequestSenderRemote::OnReplyReceived(std::unique_ptr<IOBuffer> buffer)
 
 bool FileRequestSenderRemote::ProcessNextReply(proto::file_transfer::HostToClient& reply)
 {
-    std::unique_ptr<proto::file_transfer::ClientToHost> request;
+    proto::file_transfer::ClientToHost request;
     std::shared_ptr<FileReplyReceiverProxy> receiver;
 
     {
         std::lock_guard<std::mutex> lock(send_lock_);
 
-        DCHECK(last_request_);
         DCHECK(last_receiver_);
 
         request = std::move(last_request_);
         receiver = std::move(last_receiver_);
     }
 
-    if (request->has_drive_list_request())
+    if (request.has_drive_list_request())
     {
         if (reply.status() == proto::REQUEST_STATUS_SUCCESS && !reply.has_drive_list())
             return false;
@@ -202,7 +173,7 @@ bool FileRequestSenderRemote::ProcessNextReply(proto::file_transfer::HostToClien
         std::unique_ptr<proto::DriveList> drive_list(reply.release_drive_list());
         receiver->OnDriveListReply(std::move(drive_list), reply.status());
     }
-    else if (request->has_file_list_request())
+    else if (request.has_file_list_request())
     {
         if (reply.status() == proto::REQUEST_STATUS_SUCCESS && !reply.has_file_list())
             return false;
@@ -210,52 +181,52 @@ bool FileRequestSenderRemote::ProcessNextReply(proto::file_transfer::HostToClien
         std::unique_ptr<proto::FileList> file_list(reply.release_file_list());
 
         receiver->OnFileListReply(
-            std::experimental::filesystem::u8path(request->file_list_request().path()),
+            std::experimental::filesystem::u8path(request.file_list_request().path()),
             std::move(file_list),
             reply.status());
     }
-    else if (request->has_directory_size_request())
+    else if (request.has_directory_size_request())
     {
         if (reply.status() == proto::REQUEST_STATUS_SUCCESS && !reply.has_directory_size())
             return false;
 
         receiver->OnDirectorySizeReply(
-            std::experimental::filesystem::u8path(request->directory_size_request().path()),
+            std::experimental::filesystem::u8path(request.directory_size_request().path()),
             reply.directory_size().size(),
             reply.status());
     }
-    else if (request->has_create_directory_request())
+    else if (request.has_create_directory_request())
     {
         receiver->OnCreateDirectoryReply(
-            std::experimental::filesystem::u8path(request->create_directory_request().path()),
+            std::experimental::filesystem::u8path(request.create_directory_request().path()),
             reply.status());
     }
-    else if (request->has_rename_request())
+    else if (request.has_rename_request())
     {
         receiver->OnRenameReply(
-            std::experimental::filesystem::u8path(request->rename_request().old_name()),
-            std::experimental::filesystem::u8path(request->rename_request().new_name()),
+            std::experimental::filesystem::u8path(request.rename_request().old_name()),
+            std::experimental::filesystem::u8path(request.rename_request().new_name()),
             reply.status());
     }
-    else if (request->has_remove_request())
+    else if (request.has_remove_request())
     {
         receiver->OnRemoveReply(
-            std::experimental::filesystem::u8path(request->remove_request().path()),
+            std::experimental::filesystem::u8path(request.remove_request().path()),
             reply.status());
     }
-    else if (request->has_file_upload_request())
+    else if (request.has_file_upload_request())
     {
         receiver->OnFileUploadReply(
-            std::experimental::filesystem::u8path(request->file_upload_request().file_path()),
+            std::experimental::filesystem::u8path(request.file_upload_request().file_path()),
             reply.status());
     }
-    else if (request->has_file_download_request())
+    else if (request.has_file_download_request())
     {
         receiver->OnFileDownloadReply(
-            std::experimental::filesystem::u8path(request->file_download_request().file_path()),
+            std::experimental::filesystem::u8path(request.file_download_request().file_path()),
             reply.status());
     }
-    else if (request->has_file_packet_request())
+    else if (request.has_file_packet_request())
     {
         if (reply.status() == proto::REQUEST_STATUS_SUCCESS && !reply.has_file_packet())
             return false;
@@ -263,9 +234,9 @@ bool FileRequestSenderRemote::ProcessNextReply(proto::file_transfer::HostToClien
         std::unique_ptr<proto::FilePacket> file_packet(reply.release_file_packet());
         receiver->OnFilePacketReceived(std::move(file_packet), reply.status());
     }
-    else if (request->has_file_packet())
+    else if (request.has_file_packet())
     {
-        receiver->OnFilePacketSended(request->file_packet().flags(), reply.status());
+        receiver->OnFilePacketSended(request.file_packet().flags(), reply.status());
     }
     else
     {
