@@ -9,6 +9,7 @@
 #define _ASPIA_CLIENT__FILE_TASK_H
 
 #include "base/files/file_path.h"
+#include <queue>
 
 namespace aspia {
 
@@ -53,6 +54,8 @@ private:
     const uint64_t size_;
     const bool is_directory_;
 };
+
+using FileTaskQueue = std::queue<FileTask>;
 
 } // namespace aspia
 

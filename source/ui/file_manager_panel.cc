@@ -391,62 +391,63 @@ LRESULT FileManagerPanel::OnHome(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handl
     return 0;
 }
 
-void FileManagerPanel::OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list)
+void FileManagerPanel::OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list,
+                                        proto::RequestStatus status)
 {
-    drive_list_.Read(std::move(drive_list));
-
-    if (file_list_.HasFileList())
+    if (status != proto::REQUEST_STATUS_SUCCESS)
     {
-        Refresh();
+        CString status_string = RequestStatusCodeToString(status);
+
+        CString message;
+        message.Format(IDS_FT_OP_BROWSE_DRIVES_ERROR, status_string.GetBuffer(0));
+        MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
     }
     else
     {
-        MoveToDrive(DriveListWindow::kComputerObjectIndex);
+        drive_list_.Read(std::move(drive_list));
+
+        if (file_list_.HasFileList())
+        {
+            Refresh();
+        }
+        else
+        {
+            MoveToDrive(DriveListWindow::kComputerObjectIndex);
+        }
     }
 }
 
-void FileManagerPanel::OnDriveListRequestFailure(proto::RequestStatus status)
+void FileManagerPanel::OnFileListReply(const FilePath& path,
+                                       std::unique_ptr<proto::FileList> file_list,
+                                       proto::RequestStatus status)
 {
-    CString status_string = RequestStatusCodeToString(status);
+    if (status != proto::REQUEST_STATUS_SUCCESS)
+    {
+        CString status_string = RequestStatusCodeToString(status);
 
-    CString message;
-    message.Format(IDS_FT_OP_BROWSE_DRIVES_ERROR, status_string.GetBuffer(0));
-    MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
+        CString message;
+        message.Format(IDS_FT_BROWSE_FOLDERS_ERROR, path.c_str(), status_string.GetBuffer(0));
+        MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
+    }
+    else
+    {
+        toolbar_.EnableButton(ID_FOLDER_ADD, TRUE);
+        toolbar_.EnableButton(ID_FOLDER_UP, TRUE);
+        toolbar_.EnableButton(ID_HOME, TRUE);
+
+        file_list_.Read(std::move(file_list));
+        drive_list_.SetCurrentPath(path);
+    }
 }
 
-void FileManagerPanel::OnFileListRequestReply(const FilePath& path,
-                                              std::unique_ptr<proto::FileList> file_list)
-{
-    toolbar_.EnableButton(ID_FOLDER_ADD, TRUE);
-    toolbar_.EnableButton(ID_FOLDER_UP, TRUE);
-    toolbar_.EnableButton(ID_HOME, TRUE);
-
-    file_list_.Read(std::move(file_list));
-    drive_list_.SetCurrentPath(path);
-}
-
-void FileManagerPanel::OnFileListRequestFailure(const FilePath& path, proto::RequestStatus status)
-{
-    CString status_string = RequestStatusCodeToString(status);
-
-    CString message;
-    message.Format(IDS_FT_BROWSE_FOLDERS_ERROR, path.c_str(), status_string.GetBuffer(0));
-    MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
-}
-
-void FileManagerPanel::OnDirectorySizeRequestReply(const FilePath& path, uint64_t size)
+void FileManagerPanel::OnDirectorySizeReply(const FilePath& path,
+                                            uint64_t size,
+                                            proto::RequestStatus status)
 {
     // TODO
 }
 
-void FileManagerPanel::OnDirectorySizeRequestFailure(const FilePath& path,
-                                                     proto::RequestStatus status)
-{
-    // TODO
-}
-
-void FileManagerPanel::OnCreateDirectoryRequestReply(const FilePath& path,
-                                                     proto::RequestStatus status)
+void FileManagerPanel::OnCreateDirectoryReply(const FilePath& path, proto::RequestStatus status)
 {
     if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
     {
@@ -462,7 +463,7 @@ void FileManagerPanel::OnCreateDirectoryRequestReply(const FilePath& path,
     }
 }
 
-void FileManagerPanel::OnRemoveRequestReply(const FilePath& path, proto::RequestStatus status)
+void FileManagerPanel::OnRemoveReply(const FilePath& path, proto::RequestStatus status)
 {
     if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
     {
@@ -478,9 +479,9 @@ void FileManagerPanel::OnRemoveRequestReply(const FilePath& path, proto::Request
     }
 }
 
-void FileManagerPanel::OnRenameRequestReply(const FilePath& old_name,
-                                            const FilePath& new_name,
-                                            proto::RequestStatus status)
+void FileManagerPanel::OnRenameReply(const FilePath& old_name,
+                                     const FilePath& new_name,
+                                     proto::RequestStatus status)
 {
     if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
     {
@@ -496,15 +497,25 @@ void FileManagerPanel::OnRenameRequestReply(const FilePath& old_name,
     }
 }
 
-void FileManagerPanel::OnFileUploadRequestReply(const FilePath& file_path,
-                                                proto::RequestStatus status)
+void FileManagerPanel::OnFileUploadReply(const FilePath& file_path, proto::RequestStatus status)
 {
     DLOG(FATAL) << "Unexpected reply: file upload request";
 }
 
-void FileManagerPanel::OnFileUploadDataRequestReply(uint32_t flags, proto::RequestStatus status)
+void FileManagerPanel::OnFileDownloadReply(const FilePath& file_path, proto::RequestStatus status)
 {
-    DLOG(FATAL) << "Unexpected reply: file upload data request";
+    DLOG(FATAL) << "Unexpected reply: download request";
+}
+
+void FileManagerPanel::OnFilePacketSended(uint32_t flags, proto::RequestStatus status)
+{
+    DLOG(FATAL) << "Unexpected reply: file packet sended";
+}
+
+void FileManagerPanel::OnFilePacketReceived(std::unique_ptr<proto::FilePacket> file_packet,
+                                            proto::RequestStatus status)
+{
+    DLOG(FATAL) << "Unexpected reply: file packet received";
 }
 
 } // namespace aspia

@@ -43,17 +43,22 @@ private:
     void RunNextTask();
 
     // FileReplyReceiver implementation.
-    void OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list) final;
-    void OnDriveListRequestFailure(proto::RequestStatus status) final;
-    void OnFileListRequestReply(const FilePath& path, std::unique_ptr<proto::FileList> file_list) final;
-    void OnFileListRequestFailure(const FilePath& path, proto::RequestStatus status) final;
-    void OnDirectorySizeRequestReply(const FilePath& path, uint64_t size) final;
-    void OnDirectorySizeRequestFailure(const FilePath& path, proto::RequestStatus status) final;
-    void OnCreateDirectoryRequestReply(const FilePath& path, proto::RequestStatus status) final;
-    void OnRemoveRequestReply(const FilePath& path, proto::RequestStatus status) final;
-    void OnRenameRequestReply(const FilePath& old_name, const FilePath& new_name, proto::RequestStatus status) final;
-    void OnFileUploadRequestReply(const FilePath& file_path, proto::RequestStatus status) final;
-    void OnFileUploadDataRequestReply(uint32_t flags, proto::RequestStatus status) final;
+    void OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list,
+                          proto::RequestStatus status) final;
+    void OnFileListReply(const FilePath& path,
+                         std::unique_ptr<proto::FileList> file_list,
+                         proto::RequestStatus status) final;
+    void OnDirectorySizeReply(const FilePath& path,
+                              uint64_t size,
+                              proto::RequestStatus status) final;
+    void OnCreateDirectoryReply(const FilePath& path, proto::RequestStatus status) final;
+    void OnRemoveReply(const FilePath& path, proto::RequestStatus status) final;
+    void OnRenameReply(const FilePath& old_name, const FilePath& new_name, proto::RequestStatus status) final;
+    void OnFileUploadReply(const FilePath& file_path, proto::RequestStatus status) final;
+    void OnFileDownloadReply(const FilePath& file_path, proto::RequestStatus status) final;
+    void OnFilePacketSended(uint32_t flags, proto::RequestStatus status) final;
+    void OnFilePacketReceived(std::unique_ptr<proto::FilePacket> file_packet,
+                              proto::RequestStatus status) final;
 
     void OnUnableToCreateFileAction(Action action);
     void OnUnableToOpenFileAction(Action action);
@@ -63,7 +68,7 @@ private:
     MessageLoopThread thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
-    std::queue<FileTask> task_queue_;
+    FileTaskQueue task_queue_;
     std::unique_ptr<FilePacketizer> file_packetizer_;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransferUploader);

@@ -113,6 +113,19 @@ bool FileRequestSenderProxy::SendFileUploadRequest(
     return true;
 }
 
+bool FileRequestSenderProxy::SendFileDownloadRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const FilePath& file_path)
+{
+    std::lock_guard<std::mutex> lock(sender_lock_);
+
+    if (!sender_)
+        return false;
+
+    sender_->SendFileDownloadRequest(receiver, file_path);
+    return true;
+}
+
 bool FileRequestSenderProxy::SendFilePacket(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
     std::unique_ptr<proto::FilePacket> file_packet)
@@ -123,6 +136,18 @@ bool FileRequestSenderProxy::SendFilePacket(
         return false;
 
     sender_->SendFilePacket(receiver, std::move(file_packet));
+    return true;
+}
+
+bool FileRequestSenderProxy::SendFilePacketRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver)
+{
+    std::lock_guard<std::mutex> lock(sender_lock_);
+
+    if (!sender_)
+        return false;
+
+    sender_->SendFilePacketRequest(receiver);
     return true;
 }
 

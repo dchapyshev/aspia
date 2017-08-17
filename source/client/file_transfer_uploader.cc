@@ -153,35 +153,22 @@ void FileTransferUploader::RunNextTask()
     RunTask(task_queue_.front(), FileRequestSender::Overwrite::NO);
 }
 
-void FileTransferUploader::OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list)
+void FileTransferUploader::OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list,
+                                            proto::RequestStatus status)
 {
     DLOG(FATAL) << "Unexpectedly received: drive list";
 }
 
-void FileTransferUploader::OnDriveListRequestFailure(proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly received: drive list";
-}
-
-void FileTransferUploader::OnFileListRequestReply(const FilePath& path,
-                                                  std::unique_ptr<proto::FileList> file_list)
+void FileTransferUploader::OnFileListReply(const FilePath& path,
+                                           std::unique_ptr<proto::FileList> file_list,
+                                           proto::RequestStatus status)
 {
     DLOG(FATAL) << "Unexpectedly received: file list";
 }
 
-void FileTransferUploader::OnFileListRequestFailure(const FilePath& path,
-                                                    proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly received: file list";
-}
-
-void FileTransferUploader::OnDirectorySizeRequestReply(const FilePath& path, uint64_t size)
-{
-    DLOG(FATAL) << "Unexpectedly received: directory size";
-}
-
-void FileTransferUploader::OnDirectorySizeRequestFailure(const FilePath& path,
-                                                         proto::RequestStatus status)
+void FileTransferUploader::OnDirectorySizeReply(const FilePath& path,
+                                                uint64_t size,
+                                                proto::RequestStatus status)
 {
     DLOG(FATAL) << "Unexpectedly received: directory size";
 }
@@ -204,13 +191,13 @@ void FileTransferUploader::OnUnableToCreateDirectoryAction(Action action)
     }
 }
 
-void FileTransferUploader::OnCreateDirectoryRequestReply(const FilePath& path,
-                                                         proto::RequestStatus status)
+void FileTransferUploader::OnCreateDirectoryReply(const FilePath& path,
+                                                  proto::RequestStatus status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
         runner_->PostTask(std::bind(
-            &FileTransferUploader::OnCreateDirectoryRequestReply, this, path, status));
+            &FileTransferUploader::OnCreateDirectoryReply, this, path, status));
         return;
     }
 
@@ -233,14 +220,14 @@ void FileTransferUploader::OnCreateDirectoryRequestReply(const FilePath& path,
     delegate_->OnFileOperationFailure(path, status, std::move(callback));
 }
 
-void FileTransferUploader::OnRemoveRequestReply(const FilePath& path, proto::RequestStatus status)
+void FileTransferUploader::OnRemoveReply(const FilePath& path, proto::RequestStatus status)
 {
     DLOG(FATAL) << "Unexpectedly reply: remove";
 }
 
-void FileTransferUploader::OnRenameRequestReply(const FilePath& old_name,
-                                                const FilePath& new_name,
-                                                proto::RequestStatus status)
+void FileTransferUploader::OnRenameReply(const FilePath& old_name,
+                                         const FilePath& new_name,
+                                         proto::RequestStatus status)
 {
     DLOG(FATAL) << "Unexpectedly reply: rename";
 }
@@ -326,13 +313,13 @@ void FileTransferUploader::OnUnableToReadFileAction(Action action)
     }
 }
 
-void FileTransferUploader::OnFileUploadRequestReply(const FilePath& file_path,
-                                                    proto::RequestStatus status)
+void FileTransferUploader::OnFileUploadReply(const FilePath& file_path,
+                                             proto::RequestStatus status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
         runner_->PostTask(std::bind(
-            &FileTransferUploader::OnFileUploadRequestReply, this, file_path, status));
+            &FileTransferUploader::OnFileUploadReply, this, file_path, status));
         return;
     }
 
@@ -354,6 +341,8 @@ void FileTransferUploader::OnFileUploadRequestReply(const FilePath& file_path,
     }
 
     const FileTask& current_task = task_queue_.front();
+
+    DCHECK(!file_packetizer_);
 
     file_packetizer_ = FilePacketizer::Create(current_task.SourcePath());
     if (!file_packetizer_)
@@ -398,6 +387,12 @@ void FileTransferUploader::OnFileUploadRequestReply(const FilePath& file_path,
     sender_->SendFilePacket(This(), std::move(file_packet));
 }
 
+void FileTransferUploader::OnFileDownloadReply(const FilePath& file_path,
+                                               proto::RequestStatus status)
+{
+    DLOG(FATAL) << "Unexpectedly received: download reply";
+}
+
 void FileTransferUploader::OnUnableToWriteFileAction(Action action)
 {
     switch (action)
@@ -422,12 +417,11 @@ void FileTransferUploader::OnUnableToWriteFileAction(Action action)
     }
 }
 
-void FileTransferUploader::OnFileUploadDataRequestReply(uint32_t flags, proto::RequestStatus status)
+void FileTransferUploader::OnFilePacketSended(uint32_t flags, proto::RequestStatus status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(
-            &FileTransferUploader::OnFileUploadDataRequestReply, this, flags, status));
+        runner_->PostTask(std::bind(&FileTransferUploader::OnFilePacketSended, this, flags, status));
         return;
     }
 
@@ -491,6 +485,12 @@ void FileTransferUploader::OnFileUploadDataRequestReply(uint32_t flags, proto::R
     }
 
     sender_->SendFilePacket(This(), std::move(file_packet));
+}
+
+void FileTransferUploader::OnFilePacketReceived(std::unique_ptr<proto::FilePacket> file_packet,
+                                                proto::RequestStatus status)
+{
+    DLOG(FATAL) << "Unexpectedly reply: file packet received";
 }
 
 } // namespace aspia

@@ -8,50 +8,58 @@
 #ifndef _ASPIA_CLIENT__FILE_TRANSFER_DOWNLOADER_H
 #define _ASPIA_CLIENT__FILE_TRANSFER_DOWNLOADER_H
 
+#include "base/message_loop/message_loop_thread.h"
 #include "client/file_transfer.h"
-#include "proto/file_transfer_session.pb.h"
+#include "client/file_task.h"
+#include "protocol/file_depacketizer.h"
 
 namespace aspia {
 
-class FileTransferDownloader : public FileTransfer
+class FileTransferDownloader
+    : public FileTransfer,
+      private MessageLoopThread::Delegate
 {
 public:
     FileTransferDownloader(std::shared_ptr<FileRequestSenderProxy> sender,
-                           Delegate* delegate);
-
-    ~FileTransferDownloader() = default;
+                           FileTransfer::Delegate* delegate);
+    ~FileTransferDownloader();
 
     void Start(const FilePath& source_path,
                const FilePath& target_path,
                const FileList& file_list) final;
-    void OnUnableToCreateDirectoryAction(Action action) final;
 
 private:
+    // MessageLoopThread::Delegate implementation.
+    void OnBeforeThreadRunning() override;
+    void OnAfterThreadRunning() override;
+
     // FileReplyReceiver implementation.
-    void OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list) final;
-
-    void OnDriveListRequestFailure(proto::RequestStatus status) final;
-
-    void OnFileListRequestReply(const FilePath& path,
-                                std::unique_ptr<proto::FileList> file_list) final;
-
-    void OnFileListRequestFailure(const FilePath& path, proto::RequestStatus status) final;
-
-    void OnDirectorySizeRequestReply(const FilePath& path, uint64_t size) final;
-
-    void OnDirectorySizeRequestFailure(const FilePath& path, proto::RequestStatus status) final;
-
-    void OnCreateDirectoryRequestReply(const FilePath& path, proto::RequestStatus status) final;
-
-    void OnRemoveRequestReply(const FilePath& path, proto::RequestStatus status) final;
-
-    void OnRenameRequestReply(const FilePath& old_name,
-                              const FilePath& new_name,
+    void OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list,
+                          proto::RequestStatus status) final;
+    void OnFileListReply(const FilePath& path,
+                         std::unique_ptr<proto::FileList> file_list,
+                         proto::RequestStatus status) final;
+    void OnDirectorySizeReply(const FilePath& path,
+                              uint64_t size,
+                              proto::RequestStatus status) final;
+    void OnCreateDirectoryReply(const FilePath& path, proto::RequestStatus status) final;
+    void OnRemoveReply(const FilePath& path, proto::RequestStatus status) final;
+    void OnRenameReply(const FilePath& old_name,
+                       const FilePath& new_name,
+                       proto::RequestStatus status) final;
+    void OnFileUploadReply(const FilePath& file_path, proto::RequestStatus status) final;
+    void OnFileDownloadReply(const FilePath& file_path, proto::RequestStatus status) final;
+    void OnFilePacketSended(uint32_t flags, proto::RequestStatus status) final;
+    void OnFilePacketReceived(std::unique_ptr<proto::FilePacket> file_packet,
                               proto::RequestStatus status) final;
 
-    void OnFileUploadRequestReply(const FilePath& file_path, proto::RequestStatus status) final;
+    void OnUnableToCreateDirectoryAction(Action action);
 
-    void OnFileUploadDataRequestReply(uint32_t flags, proto::RequestStatus status) final;
+    MessageLoopThread thread_;
+    std::shared_ptr<MessageLoopProxy> runner_;
+
+    FileTaskQueue task_queue_;
+    std::unique_ptr<FileDepacketizer> file_depacketizer_;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransferDownloader);
 };

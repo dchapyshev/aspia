@@ -104,6 +104,18 @@ void FileRequestSenderRemote::SendFileUploadRequest(
     SendRequest(receiver, std::move(request));
 }
 
+void FileRequestSenderRemote::SendFileDownloadRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const FilePath& file_path)
+{
+    std::unique_ptr<proto::file_transfer::ClientToHost> request =
+        std::make_unique<proto::file_transfer::ClientToHost>();
+
+    request->mutable_file_download_request()->set_file_path(file_path.u8string());
+
+    SendRequest(receiver, std::move(request));
+}
+
 void FileRequestSenderRemote::SendFilePacket(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                              std::unique_ptr<proto::FilePacket> file_packet)
 {
@@ -111,6 +123,17 @@ void FileRequestSenderRemote::SendFilePacket(std::shared_ptr<FileReplyReceiverPr
         std::make_unique<proto::file_transfer::ClientToHost>();
 
     request->set_allocated_file_packet(file_packet.release());
+
+    SendRequest(receiver, std::move(request));
+}
+
+void FileRequestSenderRemote::SendFilePacketRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver)
+{
+    std::unique_ptr<proto::file_transfer::ClientToHost> request =
+        std::make_unique<proto::file_transfer::ClientToHost>();
+
+    request->mutable_file_packet_request()->set_dummy(1);
 
     SendRequest(receiver, std::move(request));
 }
@@ -173,86 +196,76 @@ bool FileRequestSenderRemote::ProcessNextReply(proto::file_transfer::HostToClien
 
     if (request->has_drive_list_request())
     {
-        if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
-        {
-            if (!reply.has_drive_list())
-                return false;
+        if (reply.status() == proto::REQUEST_STATUS_SUCCESS && !reply.has_drive_list())
+            return false;
 
-            std::unique_ptr<proto::DriveList> drive_list(reply.release_drive_list());
-
-            receiver->OnDriveListRequestReply(std::move(drive_list));
-        }
-        else
-        {
-            receiver->OnDriveListRequestFailure(reply.status());
-        }
+        std::unique_ptr<proto::DriveList> drive_list(reply.release_drive_list());
+        receiver->OnDriveListReply(std::move(drive_list), reply.status());
     }
     else if (request->has_file_list_request())
     {
-        if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
-        {
-            if (!reply.has_file_list())
-                return false;
+        if (reply.status() == proto::REQUEST_STATUS_SUCCESS && !reply.has_file_list())
+            return false;
 
-            std::unique_ptr<proto::FileList> file_list(reply.release_file_list());
+        std::unique_ptr<proto::FileList> file_list(reply.release_file_list());
 
-            receiver->OnFileListRequestReply(
-                std::experimental::filesystem::u8path(request->file_list_request().path()),
-                std::move(file_list));
-        }
-        else
-        {
-            receiver->OnFileListRequestFailure(
-                std::experimental::filesystem::u8path(request->file_list_request().path()),
-                reply.status());
-        }
+        receiver->OnFileListReply(
+            std::experimental::filesystem::u8path(request->file_list_request().path()),
+            std::move(file_list),
+            reply.status());
     }
     else if (request->has_directory_size_request())
     {
-        if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
-        {
-            if (!reply.has_directory_size())
-                return false;
+        if (reply.status() == proto::REQUEST_STATUS_SUCCESS && !reply.has_directory_size())
+            return false;
 
-            receiver->OnDirectorySizeRequestReply(
-                std::experimental::filesystem::u8path(request->directory_size_request().path()),
-                reply.directory_size().size());
-        }
-        else
-        {
-            receiver->OnDirectorySizeRequestFailure(
-                std::experimental::filesystem::u8path(request->directory_size_request().path()),
-                reply.status());
-        }
+        receiver->OnDirectorySizeReply(
+            std::experimental::filesystem::u8path(request->directory_size_request().path()),
+            reply.directory_size().size(),
+            reply.status());
     }
     else if (request->has_create_directory_request())
     {
-        receiver->OnCreateDirectoryRequestReply(
+        receiver->OnCreateDirectoryReply(
             std::experimental::filesystem::u8path(request->create_directory_request().path()),
             reply.status());
     }
     else if (request->has_rename_request())
     {
-        receiver->OnRenameRequestReply(
+        receiver->OnRenameReply(
             std::experimental::filesystem::u8path(request->rename_request().old_name()),
             std::experimental::filesystem::u8path(request->rename_request().new_name()),
             reply.status());
     }
     else if (request->has_remove_request())
     {
-        receiver->OnRemoveRequestReply(
+        receiver->OnRemoveReply(
             std::experimental::filesystem::u8path(request->remove_request().path()),
             reply.status());
     }
     else if (request->has_file_upload_request())
     {
-        receiver->OnFileUploadRequestReply(
+        receiver->OnFileUploadReply(
             std::experimental::filesystem::u8path(request->file_upload_request().file_path()),
             reply.status());
     }
+    else if (request->has_file_download_request())
+    {
+        receiver->OnFileDownloadReply(
+            std::experimental::filesystem::u8path(request->file_download_request().file_path()),
+            reply.status());
+    }
+    else if (request->has_file_packet_request())
+    {
+        if (reply.status() == proto::REQUEST_STATUS_SUCCESS && !reply.has_file_packet())
+            return false;
+
+        std::unique_ptr<proto::FilePacket> file_packet(reply.release_file_packet());
+        receiver->OnFilePacketReceived(std::move(file_packet), reply.status());
+    }
     else if (request->has_file_packet())
     {
-        receiver->OnFileUploadDataRequestReply(request->file_packet().flags(), reply.status());
+        receiver->OnFilePacketSended(request->file_packet().flags(), reply.status());
     }
     else
     {

@@ -27,31 +27,36 @@ public:
 protected:
     std::shared_ptr<FileReplyReceiverProxy> This();
 
-    virtual void OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list) = 0;
-    virtual void OnDriveListRequestFailure(proto::RequestStatus status) = 0;
+    virtual void OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list,
+                                  proto::RequestStatus status) = 0;
 
-    virtual void OnFileListRequestReply(const FilePath& path,
-                                        std::unique_ptr<proto::FileList> file_list) = 0;
+    virtual void OnFileListReply(const FilePath& path,
+                                 std::unique_ptr<proto::FileList> file_list,
+                                 proto::RequestStatus status) = 0;
 
-    virtual void OnFileListRequestFailure(const FilePath& path, proto::RequestStatus status) = 0;
-    virtual void OnDirectorySizeRequestReply(const FilePath& path, uint64_t size) = 0;
-
-    virtual void OnDirectorySizeRequestFailure(const FilePath& path,
-                                               proto::RequestStatus status) = 0;
-
-    virtual void OnCreateDirectoryRequestReply(const FilePath& path,
-                                               proto::RequestStatus status) = 0;
-
-    virtual void OnRemoveRequestReply(const FilePath& path, proto::RequestStatus status) = 0;
-
-    virtual void OnRenameRequestReply(const FilePath& old_name,
-                                      const FilePath& new_name,
+    virtual void OnDirectorySizeReply(const FilePath& path,
+                                      uint64_t size,
                                       proto::RequestStatus status) = 0;
 
-    virtual void OnFileUploadRequestReply(const FilePath& file_path,
-                                          proto::RequestStatus status) = 0;
+    virtual void OnCreateDirectoryReply(const FilePath& path,
+                                        proto::RequestStatus status) = 0;
 
-    virtual void OnFileUploadDataRequestReply(uint32_t flags, proto::RequestStatus status) = 0;
+    virtual void OnRemoveReply(const FilePath& path, proto::RequestStatus status) = 0;
+
+    virtual void OnRenameReply(const FilePath& old_name,
+                               const FilePath& new_name,
+                               proto::RequestStatus status) = 0;
+
+    virtual void OnFileUploadReply(const FilePath& file_path,
+                                   proto::RequestStatus status) = 0;
+
+    virtual void OnFileDownloadReply(const FilePath& file_path,
+                                     proto::RequestStatus status) = 0;
+
+    virtual void OnFilePacketSended(uint32_t flags, proto::RequestStatus status) = 0;
+
+    virtual void OnFilePacketReceived(std::unique_ptr<proto::FilePacket> file_packet,
+                                      proto::RequestStatus status) = 0;
 
 private:
     friend class FileReplyReceiverProxy;

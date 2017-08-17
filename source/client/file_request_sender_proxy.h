@@ -41,8 +41,13 @@ public:
                                const FilePath& file_path,
                                FileRequestSender::Overwrite overwrite);
 
+    bool SendFileDownloadRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                 const FilePath& file_path);
+
     bool SendFilePacket(std::shared_ptr<FileReplyReceiverProxy> receiver,
                         std::unique_ptr<proto::FilePacket> file_packet);
+
+    bool SendFilePacketRequest(std::shared_ptr<FileReplyReceiverProxy> receiver);
 
 private:
     friend class FileRequestSender;

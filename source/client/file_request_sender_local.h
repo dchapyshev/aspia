@@ -45,8 +45,13 @@ public:
                                const FilePath& file_path,
                                Overwrite overwrite) override;
 
+    void SendFileDownloadRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
+                                 const FilePath& file_path) override;
+
     void SendFilePacket(std::shared_ptr<FileReplyReceiverProxy> receiver,
                         std::unique_ptr<proto::FilePacket> file_packet) override;
+
+    void SendFilePacketRequest(std::shared_ptr<FileReplyReceiverProxy> receiver) override;
 
 private:
     // MessageLoopThread::Delegate implementation.

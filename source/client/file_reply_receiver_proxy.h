@@ -18,29 +18,31 @@ namespace aspia {
 class FileReplyReceiverProxy
 {
 public:
-    bool OnDriveListRequestReply(std::unique_ptr<proto::DriveList> drive_list);
+    bool OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list,
+                          proto::RequestStatus status);
 
-    bool OnDriveListRequestFailure(proto::RequestStatus status);
+    bool OnFileListReply(const FilePath& path,
+                         std::unique_ptr<proto::FileList> file_list,
+                         proto::RequestStatus status);
 
-    bool OnFileListRequestReply(const FilePath& path, std::unique_ptr<proto::FileList> file_list);
+    bool OnDirectorySizeReply(const FilePath& path, uint64_t size, proto::RequestStatus status);
 
-    bool OnFileListRequestFailure(const FilePath& path, proto::RequestStatus status);
+    bool OnCreateDirectoryReply(const FilePath& path, proto::RequestStatus status);
 
-    bool OnDirectorySizeRequestReply(const FilePath& path, uint64_t size);
+    bool OnRemoveReply(const FilePath& path, proto::RequestStatus status);
 
-    bool OnDirectorySizeRequestFailure(const FilePath& path, proto::RequestStatus status);
+    bool OnRenameReply(const FilePath& old_name,
+                       const FilePath& new_name,
+                       proto::RequestStatus status);
 
-    bool OnCreateDirectoryRequestReply(const FilePath& path, proto::RequestStatus status);
+    bool OnFileUploadReply(const FilePath& file_path, proto::RequestStatus status);
 
-    bool OnRemoveRequestReply(const FilePath& path, proto::RequestStatus status);
+    bool OnFileDownloadReply(const FilePath& file_path, proto::RequestStatus status);
 
-    bool OnRenameRequestReply(const FilePath& old_name,
-                              const FilePath& new_name,
+    bool OnFilePacketSended(uint32_t flags, proto::RequestStatus status);
+
+    bool OnFilePacketReceived(std::unique_ptr<proto::FilePacket> file_packet,
                               proto::RequestStatus status);
-
-    bool OnFileUploadRequestReply(const FilePath& file_path, proto::RequestStatus status);
-
-    bool OnFileUploadDataRequestReply(uint32_t flags, proto::RequestStatus status);
 
 private:
     friend class FileReplyReceiver;
