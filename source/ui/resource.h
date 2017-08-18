@@ -49,7 +49,7 @@
 #define IDD_USERS                             105
 #define IDD_USER_PROP                         106
 #define IDD_POWER                             107
-#define IDD_FILE_TRANSFER                     108
+#define IDD_FILE_PROGRESS                     108
 #define IDD_FILE_ACTION                       109
 #define IDD_FILE_STATUS                       110
 #define IDD_POWER_HOST                        111

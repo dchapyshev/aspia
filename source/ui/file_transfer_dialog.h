@@ -27,7 +27,7 @@ class FileTransferDialog :
     public FileTransfer::Delegate
 {
 public:
-    enum { IDD = IDD_FILE_TRANSFER };
+    enum { IDD = IDD_FILE_PROGRESS };
 
     enum class Mode { UPLOAD, DOWNLOAD };
 
