@@ -42,11 +42,9 @@ void ScreenUpdater::PostUpdateRequest()
         return;
     }
 
-    std::chrono::milliseconds delay =
-        scheduler_.NextCaptureDelay(update_interval_);
+    std::chrono::milliseconds delay = scheduler_.NextCaptureDelay(update_interval_);
 
-    runner_->PostDelayedTask(
-        std::bind(&ScreenUpdater::UpdateScreen, this), delay);
+    runner_->PostDelayedTask(std::bind(&ScreenUpdater::UpdateScreen, this), delay);
 }
 
 void ScreenUpdater::UpdateScreen()
@@ -73,8 +71,7 @@ void ScreenUpdater::UpdateScreen()
     }
     else
     {
-        runner_->PostDelayedTask(
-            std::bind(&ScreenUpdater::UpdateScreen, this), update_interval_);
+        runner_->PostDelayedTask(std::bind(&ScreenUpdater::UpdateScreen, this), update_interval_);
     }
 }
 

@@ -49,9 +49,6 @@ std::unique_ptr<proto::FilePacket> FilePacketizer::CreateNextPacket()
 {
     DCHECK(file_stream_.is_open());
 
-    if (!file_size_ || !left_size_)
-        return nullptr;
-
     // Create a new file packet.
     std::unique_ptr<proto::FilePacket> packet = std::make_unique<proto::FilePacket>();
 

@@ -8,7 +8,6 @@
 #ifndef _ASPIA_HOST__INPUT_INJECTOR_H
 #define _ASPIA_HOST__INPUT_INJECTOR_H
 
-#include "base/macros.h"
 #include "base/scoped_thread_desktop.h"
 #include "proto/desktop_session_message.pb.h"
 #include "desktop_capture/desktop_point.h"
