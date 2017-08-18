@@ -391,7 +391,7 @@ LRESULT FileManagerPanel::OnHome(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handl
     return 0;
 }
 
-void FileManagerPanel::OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list,
+void FileManagerPanel::OnDriveListReply(std::shared_ptr<proto::DriveList> drive_list,
                                         proto::RequestStatus status)
 {
     if (status != proto::REQUEST_STATUS_SUCCESS)
@@ -418,7 +418,7 @@ void FileManagerPanel::OnDriveListReply(std::unique_ptr<proto::DriveList> drive_
 }
 
 void FileManagerPanel::OnFileListReply(const FilePath& path,
-                                       std::unique_ptr<proto::FileList> file_list,
+                                       std::shared_ptr<proto::FileList> file_list,
                                        proto::RequestStatus status)
 {
     if (status != proto::REQUEST_STATUS_SUCCESS)
@@ -512,7 +512,7 @@ void FileManagerPanel::OnFilePacketSended(uint32_t flags, proto::RequestStatus s
     DLOG(FATAL) << "Unexpected reply: file packet sended";
 }
 
-void FileManagerPanel::OnFilePacketReceived(std::unique_ptr<proto::FilePacket> file_packet,
+void FileManagerPanel::OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
                                             proto::RequestStatus status)
 {
     DLOG(FATAL) << "Unexpected reply: file packet received";

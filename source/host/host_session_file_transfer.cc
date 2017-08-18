@@ -324,6 +324,11 @@ void HostSessionFileTransfer::ReadFileDownloadRequest(const proto::FileDownloadR
         }
     }
 
+    if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+    {
+        status_dialog_->OnFileDownloadRequest(file_path);
+    }
+
     SendReply(reply);
 }
 

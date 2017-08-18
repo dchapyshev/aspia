@@ -9,53 +9,42 @@
 #define _ASPIA_CLIENT__FILE_TASK_H
 
 #include "base/files/file_path.h"
-#include <queue>
+#include "base/macros.h"
+#include <deque>
 
 namespace aspia {
 
 class FileTask
 {
 public:
+    FileTask() = default;
+
     FileTask(const FilePath& source_object_path,
              const FilePath& target_object_path,
              uint64_t size,
-             bool is_directory)
-        : source_object_path_(source_object_path),
-        target_object_path_(target_object_path),
-        size_(size),
-        is_directory_(is_directory)
-    {
-        // Nothing
-    }
+             bool is_directory);
 
-    const FilePath& SourcePath() const
-    {
-        return source_object_path_;
-    }
+    FileTask(FileTask&& other) noexcept;
+    FileTask& operator=(FileTask&& other) noexcept;
 
-    const FilePath& TargetPath() const
-    {
-        return target_object_path_;
-    }
+    ~FileTask() = default;
 
-    uint64_t Size() const
-    {
-        return size_;
-    }
+    const FilePath& SourcePath() const { return source_object_path_; }
+    const FilePath& TargetPath() const { return target_object_path_; }
 
-    bool IsDirectory() const
-    {
-        return is_directory_;
-    }
+    uint64_t Size() const { return size_; }
+    bool IsDirectory() const { return is_directory_; }
 
 private:
-    const FilePath source_object_path_;
-    const FilePath target_object_path_;
-    const uint64_t size_;
-    const bool is_directory_;
+    FilePath source_object_path_;
+    FilePath target_object_path_;
+    uint64_t size_ = 0;
+    bool is_directory_ = false;
+
+    DISALLOW_COPY_AND_ASSIGN(FileTask);
 };
 
-using FileTaskQueue = std::queue<FileTask>;
+using FileTaskQueue = std::deque<FileTask>;
 
 } // namespace aspia
 

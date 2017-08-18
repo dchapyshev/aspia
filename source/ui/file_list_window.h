@@ -31,7 +31,7 @@ public:
 
     bool CreateFileList(HWND parent, int control_id);
 
-    void Read(std::unique_ptr<proto::FileList> list);
+    void Read(std::shared_ptr<proto::FileList> list);
     void Read(const proto::DriveList& list);
 
     bool IsValidObjectIndex(int object_index) const;
@@ -75,7 +75,7 @@ private:
     void AddNewColumn(UINT string_id, int width);
 
     CImageListManaged imagelist_;
-    std::unique_ptr<proto::FileList> list_;
+    std::shared_ptr<proto::FileList> list_;
 
     DISALLOW_COPY_AND_ASSIGN(FileListWindow);
 };

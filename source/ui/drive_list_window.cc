@@ -40,12 +40,12 @@ bool DriveListWindow::CreateDriveList(HWND parent, int control_id)
     return true;
 }
 
-void DriveListWindow::Read(std::unique_ptr<proto::DriveList> list)
+void DriveListWindow::Read(std::shared_ptr<proto::DriveList> list)
 {
     ResetContent();
     imagelist_.RemoveAll();
 
-    list_.reset(list.release());
+    list_ = std::move(list);
 
     CIcon icon(GetComputerIcon());
 

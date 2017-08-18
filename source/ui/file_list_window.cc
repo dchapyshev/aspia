@@ -47,7 +47,7 @@ bool FileListWindow::CreateFileList(HWND parent, int control_id)
     return true;
 }
 
-void FileListWindow::Read(std::unique_ptr<proto::FileList> list)
+void FileListWindow::Read(std::shared_ptr<proto::FileList> list)
 {
     DeleteAllItems();
     imagelist_.RemoveAll();
@@ -60,7 +60,7 @@ void FileListWindow::Read(std::unique_ptr<proto::FileList> list)
     AddNewColumn(IDS_FT_COLUMN_TYPE, 100);
     AddNewColumn(IDS_FT_COLUMN_MODIFIED, 100);
 
-    list_.reset(list.release());
+    list_ = std::move(list);
 
     // All directories have the same icon.
     CIcon icon(GetDirectoryIcon());

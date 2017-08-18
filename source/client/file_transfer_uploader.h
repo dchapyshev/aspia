@@ -29,24 +29,22 @@ public:
     void Start(const FilePath& source_path,
                const FilePath& target_path,
                const FileList& file_list) final;
-    void OnUnableToCreateDirectoryAction(Action action) final;
 
 private:
     // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
-    uint64_t BuildTaskListForDirectoryContent(const FilePath& source_path,
-                                              const FilePath& target_path);
+    uint64_t BuildTaskQueueForDirectory(const FilePath& source_path, const FilePath& target_path);
 
     void RunTask(const FileTask& task, FileRequestSender::Overwrite overwrite);
     void RunNextTask();
 
     // FileReplyReceiver implementation.
-    void OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list,
+    void OnDriveListReply(std::shared_ptr<proto::DriveList> drive_list,
                           proto::RequestStatus status) final;
     void OnFileListReply(const FilePath& path,
-                         std::unique_ptr<proto::FileList> file_list,
+                         std::shared_ptr<proto::FileList> file_list,
                          proto::RequestStatus status) final;
     void OnDirectorySizeReply(const FilePath& path,
                               uint64_t size,
@@ -57,9 +55,10 @@ private:
     void OnFileUploadReply(const FilePath& file_path, proto::RequestStatus status) final;
     void OnFileDownloadReply(const FilePath& file_path, proto::RequestStatus status) final;
     void OnFilePacketSended(uint32_t flags, proto::RequestStatus status) final;
-    void OnFilePacketReceived(std::unique_ptr<proto::FilePacket> file_packet,
+    void OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
                               proto::RequestStatus status) final;
 
+    void OnUnableToCreateDirectoryAction(Action action);
     void OnUnableToCreateFileAction(Action action);
     void OnUnableToOpenFileAction(Action action);
     void OnUnableToReadFileAction(Action action);

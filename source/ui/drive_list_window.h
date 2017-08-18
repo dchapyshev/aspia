@@ -32,7 +32,7 @@ public:
 
     bool CreateDriveList(HWND parent, int control_id);
 
-    void Read(std::unique_ptr<proto::DriveList> list);
+    void Read(std::shared_ptr<proto::DriveList> list);
 
     bool HasDriveList() const;
     bool IsValidObjectIndex(int object_index) const;
@@ -52,7 +52,7 @@ private:
     int GetItemIndexByObjectIndex(int object_index) const;
     int GetKnownObjectIndex(const FilePath& path) const;
 
-    std::unique_ptr<proto::DriveList> list_;
+    std::shared_ptr<proto::DriveList> list_;
     CImageListManaged imagelist_;
     FilePath current_path_;
 

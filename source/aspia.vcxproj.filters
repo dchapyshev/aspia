@@ -511,6 +511,9 @@
     <ClCompile Include="ui\file_list_window.cc">
       <Filter>ui</Filter>
     </ClCompile>
+    <ClCompile Include="client\file_task.cc">
+      <Filter>client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">

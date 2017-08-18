@@ -18,11 +18,11 @@ namespace aspia {
 class FileReplyReceiverProxy
 {
 public:
-    bool OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list,
+    bool OnDriveListReply(std::shared_ptr<proto::DriveList> drive_list,
                           proto::RequestStatus status);
 
     bool OnFileListReply(const FilePath& path,
-                         std::unique_ptr<proto::FileList> file_list,
+                         std::shared_ptr<proto::FileList> file_list,
                          proto::RequestStatus status);
 
     bool OnDirectorySizeReply(const FilePath& path, uint64_t size, proto::RequestStatus status);
@@ -41,7 +41,7 @@ public:
 
     bool OnFilePacketSended(uint32_t flags, proto::RequestStatus status);
 
-    bool OnFilePacketReceived(std::unique_ptr<proto::FilePacket> file_packet,
+    bool OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
                               proto::RequestStatus status);
 
 private:

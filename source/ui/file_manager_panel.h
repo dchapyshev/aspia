@@ -87,10 +87,10 @@ private:
     LRESULT OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
 
     // FileReplyReceiver implementation.
-    void OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list,
+    void OnDriveListReply(std::shared_ptr<proto::DriveList> drive_list,
                           proto::RequestStatus status) override;
     void OnFileListReply(const FilePath& path,
-                         std::unique_ptr<proto::FileList> file_list,
+                         std::shared_ptr<proto::FileList> file_list,
                          proto::RequestStatus status) override;
     void OnDirectorySizeReply(const FilePath& path,
                                      uint64_t size,
@@ -105,7 +105,7 @@ private:
     void OnFileUploadReply(const FilePath& file_path, proto::RequestStatus status) override;
     void OnFileDownloadReply(const FilePath& file_path, proto::RequestStatus status) override;
     void OnFilePacketSended(uint32_t flags, proto::RequestStatus status) override;
-    void OnFilePacketReceived(std::unique_ptr<proto::FilePacket> file_packet,
+    void OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
                               proto::RequestStatus status) override;
 
     void MoveToDrive(int object_index);

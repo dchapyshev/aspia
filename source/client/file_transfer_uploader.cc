@@ -35,8 +35,8 @@ void FileTransferUploader::OnAfterThreadRunning()
     delegate_->OnTransferComplete();
 }
 
-uint64_t FileTransferUploader::BuildTaskListForDirectoryContent(const FilePath& source_path,
-                                                                const FilePath& target_path)
+uint64_t FileTransferUploader::BuildTaskQueueForDirectory(const FilePath& source_path,
+                                                          const FilePath& target_path)
 {
     FileEnumerator enumerator(source_path,
                               false,
@@ -58,13 +58,13 @@ uint64_t FileTransferUploader::BuildTaskListForDirectoryContent(const FilePath& 
 
         if (info.IsDirectory())
         {
-            task_queue_.emplace(source_object_path, target_object_path, 0, true);
-            size += BuildTaskListForDirectoryContent(source_object_path, target_object_path);
+            task_queue_.emplace_back(source_object_path, target_object_path, 0, true);
+            size += BuildTaskQueueForDirectory(source_object_path, target_object_path);
         }
         else
         {
             int64_t file_size = info.GetSize();
-            task_queue_.emplace(source_object_path, target_object_path, file_size, false);
+            task_queue_.emplace_back(source_object_path, target_object_path, file_size, false);
             size += file_size;
         }
     }
@@ -99,16 +99,16 @@ void FileTransferUploader::Start(const FilePath& source_path,
 
         if (file.is_directory())
         {
-            task_queue_.emplace(source_object_path, target_object_path, 0, true);
+            task_queue_.emplace_back(source_object_path, target_object_path, 0, true);
 
-            total_size += BuildTaskListForDirectoryContent(source_object_path, target_object_path);
+            total_size += BuildTaskQueueForDirectory(source_object_path, target_object_path);
         }
         else
         {
             int64_t file_size = 0;
             GetFileSize(source_object_path, file_size);
 
-            task_queue_.emplace(source_object_path, target_object_path, file_size, false);
+            task_queue_.emplace_back(source_object_path, target_object_path, file_size, false);
 
             total_size += file_size;
         }
@@ -140,7 +140,7 @@ void FileTransferUploader::RunNextTask()
     if (!task_queue_.empty())
     {
         delegate_->OnObjectTransfer(0);
-        task_queue_.pop();
+        task_queue_.pop_front();
     }
 
     if (task_queue_.empty())
@@ -153,14 +153,14 @@ void FileTransferUploader::RunNextTask()
     RunTask(task_queue_.front(), FileRequestSender::Overwrite::NO);
 }
 
-void FileTransferUploader::OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list,
+void FileTransferUploader::OnDriveListReply(std::shared_ptr<proto::DriveList> drive_list,
                                             proto::RequestStatus status)
 {
     DLOG(FATAL) << "Unexpectedly received: drive list";
 }
 
 void FileTransferUploader::OnFileListReply(const FilePath& path,
-                                           std::unique_ptr<proto::FileList> file_list,
+                                           std::shared_ptr<proto::FileList> file_list,
                                            proto::RequestStatus status)
 {
     DLOG(FATAL) << "Unexpectedly received: file list";
@@ -182,8 +182,14 @@ void FileTransferUploader::OnUnableToCreateDirectoryAction(Action action)
             break;
 
         case Action::SKIP:
+        case Action::SKIP_ALL:
+        {
+            if (action == Action::SKIP_ALL)
+                create_directory_failure_action_ = action;
+
             RunNextTask();
-            break;
+        }
+        break;
 
         default:
             DLOG(FATAL) << "Unexpected action: " << static_cast<int>(action);
@@ -295,6 +301,7 @@ void FileTransferUploader::OnUnableToReadFileAction(Action action)
     switch (action)
     {
         case Action::ABORT:
+            runner_->PostQuit();
             break;
 
         case Action::SKIP:
@@ -341,8 +348,6 @@ void FileTransferUploader::OnFileUploadReply(const FilePath& file_path,
     }
 
     const FileTask& current_task = task_queue_.front();
-
-    DCHECK(!file_packetizer_);
 
     file_packetizer_ = FilePacketizer::Create(current_task.SourcePath());
     if (!file_packetizer_)
@@ -487,7 +492,7 @@ void FileTransferUploader::OnFilePacketSended(uint32_t flags, proto::RequestStat
     sender_->SendFilePacket(This(), std::move(file_packet));
 }
 
-void FileTransferUploader::OnFilePacketReceived(std::unique_ptr<proto::FilePacket> file_packet,
+void FileTransferUploader::OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
                                                 proto::RequestStatus status)
 {
     DLOG(FATAL) << "Unexpectedly reply: file packet received";

@@ -27,11 +27,11 @@ public:
 protected:
     std::shared_ptr<FileReplyReceiverProxy> This();
 
-    virtual void OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list,
+    virtual void OnDriveListReply(std::shared_ptr<proto::DriveList> drive_list,
                                   proto::RequestStatus status) = 0;
 
     virtual void OnFileListReply(const FilePath& path,
-                                 std::unique_ptr<proto::FileList> file_list,
+                                 std::shared_ptr<proto::FileList> file_list,
                                  proto::RequestStatus status) = 0;
 
     virtual void OnDirectorySizeReply(const FilePath& path,
@@ -55,7 +55,7 @@ protected:
 
     virtual void OnFilePacketSended(uint32_t flags, proto::RequestStatus status) = 0;
 
-    virtual void OnFilePacketReceived(std::unique_ptr<proto::FilePacket> file_packet,
+    virtual void OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
                                       proto::RequestStatus status) = 0;
 
 private:

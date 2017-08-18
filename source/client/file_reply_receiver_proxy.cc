@@ -21,7 +21,7 @@ void FileReplyReceiverProxy::WillDestroyCurrentReplyReceiver()
     receiver_ = nullptr;
 }
 
-bool FileReplyReceiverProxy::OnDriveListReply(std::unique_ptr<proto::DriveList> drive_list,
+bool FileReplyReceiverProxy::OnDriveListReply(std::shared_ptr<proto::DriveList> drive_list,
                                               proto::RequestStatus status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
@@ -34,7 +34,7 @@ bool FileReplyReceiverProxy::OnDriveListReply(std::unique_ptr<proto::DriveList> 
 }
 
 bool FileReplyReceiverProxy::OnFileListReply(const FilePath& path,
-                                             std::unique_ptr<proto::FileList> file_list,
+                                             std::shared_ptr<proto::FileList> file_list,
                                              proto::RequestStatus status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
@@ -130,7 +130,7 @@ bool FileReplyReceiverProxy::OnFilePacketSended(uint32_t flags, proto::RequestSt
     return true;
 }
 
-bool FileReplyReceiverProxy::OnFilePacketReceived(std::unique_ptr<proto::FilePacket> file_packet,
+bool FileReplyReceiverProxy::OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
                                                   proto::RequestStatus status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);

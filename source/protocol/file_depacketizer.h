@@ -27,6 +27,8 @@ public:
     // Reads the packet and writes its contents to a file.
     bool ReadNextPacket(const proto::FilePacket& packet);
 
+    uint64_t LeftSize() const { return left_size_; }
+
 private:
     FileDepacketizer(std::ofstream&& file_stream);
 
