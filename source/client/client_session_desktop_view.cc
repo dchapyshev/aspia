@@ -114,12 +114,6 @@ void ClientSessionDesktopView::OnMessageReceived(const IOBuffer& buffer)
 
     if (ParseMessage(buffer, message))
     {
-        if (message.status() != proto::Status::STATUS_SUCCESS)
-        {
-            // TODO: Status processing.
-            return;
-        }
-
         bool success = true;
 
         if (message.has_video_packet())

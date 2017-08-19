@@ -51,12 +51,6 @@ void ClientSessionDesktopManage::OnMessageReceived(const IOBuffer& buffer)
 
     if (ParseMessage(buffer, message))
     {
-        if (message.status() != proto::Status::STATUS_SUCCESS)
-        {
-            // TODO: Status processing.
-            return;
-        }
-
         bool success = true;
 
         if (message.has_video_packet() || message.has_cursor_shape())

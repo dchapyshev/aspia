@@ -38,7 +38,6 @@ private:
     void WriteMessage(const proto::desktop::HostToClient& message);
     void WriteMessage(const proto::desktop::HostToClient& message,
                       PipeChannel::SendCompleteHandler handler);
-    void WriteStatus(proto::Status status);
 
     bool ReadPointerEvent(const proto::PointerEvent& event);
     bool ReadKeyEvent(const proto::KeyEvent& event);

@@ -165,15 +165,6 @@ void HostSessionDesktop::WriteMessage(const proto::desktop::HostToClient& messag
     WriteMessage(message, nullptr);
 }
 
-void HostSessionDesktop::WriteStatus(proto::Status status)
-{
-    DCHECK(status != proto::Status::STATUS_SUCCESS);
-
-    proto::desktop::HostToClient message;
-    message.set_status(status);
-    WriteMessage(message);
-}
-
 bool HostSessionDesktop::ReadPointerEvent(const proto::PointerEvent& event)
 {
     if (session_type_ != proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
