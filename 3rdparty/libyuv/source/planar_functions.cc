@@ -321,6 +321,14 @@ void SplitUVPlane(const uint8* src_uv,
     }
   }
 #endif
+#if defined(HAS_SPLITUVROW_MSA)
+  if (TestCpuFlag(kCpuHasMSA)) {
+    SplitUVRow = SplitUVRow_Any_MSA;
+    if (IS_ALIGNED(width, 32)) {
+      SplitUVRow = SplitUVRow_MSA;
+    }
+  }
+#endif
 
   for (y = 0; y < height; ++y) {
     // Copy a row of UV.
@@ -1579,6 +1587,11 @@ void SetPlane(uint8* dst_y,
     SetRow = SetRow_ERMS;
   }
 #endif
+#if defined(HAS_SETROW_MSA)
+  if (TestCpuFlag(kCpuHasMSA) && IS_ALIGNED(width, 16)) {
+    SetRow = SetRow_MSA;
+  }
+#endif
 
   // Set plane
   for (y = 0; y < height; ++y) {
@@ -2634,6 +2647,11 @@ static int ARGBSobelize(const uint8* src_argb,
     SobelYRow = SobelYRow_NEON;
   }
 #endif
+#if defined(HAS_SOBELYROW_MSA)
+  if (TestCpuFlag(kCpuHasMSA)) {
+    SobelYRow = SobelYRow_MSA;
+  }
+#endif
 #if defined(HAS_SOBELXROW_SSE2)
   if (TestCpuFlag(kCpuHasSSE2)) {
     SobelXRow = SobelXRow_SSE2;
@@ -2642,6 +2660,11 @@ static int ARGBSobelize(const uint8* src_argb,
 #if defined(HAS_SOBELXROW_NEON)
   if (TestCpuFlag(kCpuHasNEON)) {
     SobelXRow = SobelXRow_NEON;
+  }
+#endif
+#if defined(HAS_SOBELXROW_MSA)
+  if (TestCpuFlag(kCpuHasMSA)) {
+    SobelXRow = SobelXRow_MSA;
   }
 #endif
   {
@@ -3181,6 +3204,14 @@ int YUY2ToNV12(const uint8* src_yuy2,
     }
   }
 #endif
+#if defined(HAS_SPLITUVROW_MSA)
+  if (TestCpuFlag(kCpuHasMSA)) {
+    SplitUVRow = SplitUVRow_Any_MSA;
+    if (IS_ALIGNED(width, 32)) {
+      SplitUVRow = SplitUVRow_MSA;
+    }
+  }
+#endif
 #if defined(HAS_INTERPOLATEROW_SSSE3)
   if (TestCpuFlag(kCpuHasSSSE3)) {
     InterpolateRow = InterpolateRow_Any_SSSE3;
@@ -3286,6 +3317,14 @@ int UYVYToNV12(const uint8* src_uyvy,
     SplitUVRow = SplitUVRow_Any_NEON;
     if (IS_ALIGNED(width, 16)) {
       SplitUVRow = SplitUVRow_NEON;
+    }
+  }
+#endif
+#if defined(HAS_SPLITUVROW_MSA)
+  if (TestCpuFlag(kCpuHasMSA)) {
+    SplitUVRow = SplitUVRow_Any_MSA;
+    if (IS_ALIGNED(width, 32)) {
+      SplitUVRow = SplitUVRow_MSA;
     }
   }
 #endif

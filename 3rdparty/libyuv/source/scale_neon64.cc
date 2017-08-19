@@ -1002,7 +1002,7 @@ void ScaleRowDown2Box_16_NEON(const uint16* src_ptr,
                               int dst_width) {
   asm volatile(
       // change the stride to row 2 pointer
-      "add        %1, %1, %0                     \n"
+      "add        %1, %0, %1, lsl #1             \n"  // ptr + stide * 2
       "1:                                        \n"
       "ld1        {v0.8h, v1.8h}, [%0], #32      \n"  // load row 1 and post inc
       "ld1        {v2.8h, v3.8h}, [%1], #32      \n"  // load row 2 and post inc
@@ -1033,8 +1033,7 @@ void ScaleRowUp2_16_NEON(const uint16* src_ptr,
                          uint16* dst,
                          int dst_width) {
   asm volatile(
-      // change the stride to row 2 pointer
-      "add        %1, %1, %0                     \n"
+      "add        %1, %0, %1, lsl #1             \n"  // ptr + stide * 2
       "movi       v20.4h, #1                     \n"
       "movi       v21.4h, #3                     \n"  // constants
       "movi       v22.4h, #9                     \n"
@@ -1043,39 +1042,40 @@ void ScaleRowUp2_16_NEON(const uint16* src_ptr,
       "ld2        {v0.4h, v1.4h}, [%0], %4       \n"  // load row 1 even pixels
       "ld2        {v2.4h, v3.4h}, [%1], %4       \n"  // load row 2
 
-// consider a variation of this for last 8x2 that replicates the last pixel.
+      // consider a variation of this for last 8x2 that replicates the last
+      // pixel.
       "ld2        {v4.4h, v5.4h}, [%0], %5       \n"  // load row 1 odd pixels
       "ld2        {v6.4h, v7.4h}, [%1], %5       \n"  // load row 2
 
       "subs       %w3, %w3, #16                  \n"  // 16 dst pixels per loop
 
-// filter first 2x2 group to produce 1st and 4th dest pixels
-// 9 3
-// 3 1
+      // filter first 2x2 group to produce 1st and 4th dest pixels
+      // 9 3
+      // 3 1
       "umull      v8.4s, v0.4h, v22.4h           \n"
       "umlal      v8.4s, v1.4h, v21.4h           \n"
       "umlal      v8.4s, v2.4h, v21.4h           \n"
       "umlal      v8.4s, v3.4h, v20.4h           \n"
 
-// filter first 2x2 group to produce 2nd and 5th dest pixel
-// 3 9
-// 1 3
+      // filter first 2x2 group to produce 2nd and 5th dest pixel
+      // 3 9
+      // 1 3
       "umull      v9.4s, v0.4h, v21.4h           \n"
       "umlal      v9.4s, v1.4h, v22.4h           \n"
       "umlal      v9.4s, v2.4h, v20.4h           \n"
       "umlal      v9.4s, v3.4h, v21.4h           \n"
 
-// filter second 2x2 group to produce 3rd and 6th dest pixels
-// 9 3
-// 3 1
+      // filter second 2x2 group to produce 3rd and 6th dest pixels
+      // 9 3
+      // 3 1
       "umull      v10.4s, v4.4h, v22.4h          \n"
       "umlal      v10.4s, v5.4h, v21.4h          \n"
       "umlal      v10.4s, v6.4h, v21.4h          \n"
       "umlal      v10.4s, v7.4h, v20.4h          \n"
 
-// filter second 2x2 group to produce 4th and 7th dest pixel
-// 3 9
-// 1 3
+      // filter second 2x2 group to produce 4th and 7th dest pixel
+      // 3 9
+      // 1 3
       "umull      v11.4s, v4.4h, v21.4h          \n"
       "umlal      v11.4s, v5.4h, v22.4h          \n"
       "umlal      v11.4s, v6.4h, v20.4h          \n"
@@ -1095,11 +1095,10 @@ void ScaleRowUp2_16_NEON(const uint16* src_ptr,
       : "r"(2LL),          // %4
         "r"(14LL)          // %5
 
-      : "v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7",
-        "v8", "v9", "v10", "v11", "v20", "v21", "v22"   // Clobber List
+      : "v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10",
+        "v11", "v20", "v21", "v22"  // Clobber List
       );
 }
-
 
 #endif  // !defined(LIBYUV_DISABLE_NEON) && defined(__aarch64__)
 

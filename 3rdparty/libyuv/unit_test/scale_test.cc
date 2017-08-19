@@ -450,14 +450,13 @@ TEST_F(LibYUVScaleTest, TestScaleOdd) {
 }
 #endif  // HAS_SCALEROWDOWN2_SSSE3
 
-
 #if !defined(LIBYUV_DISABLE_NEON) && defined(__aarch64__)
 
 extern "C" void ScaleRowUp2_16_NEON(const uint16* src_ptr,
                                     ptrdiff_t src_stride,
                                     uint16* dst,
                                     int dst_width);
-           
+
 TEST_F(LibYUVScaleTest, TestScaleRowUp2_16) {
   SIMD_ALIGNED(uint16 orig_pixels[640 * 2 + 1]);  // 2 rows + 1 pixel overrun
   SIMD_ALIGNED(uint16 dst_pixels_opt[1280]);
@@ -470,16 +469,10 @@ TEST_F(LibYUVScaleTest, TestScaleRowUp2_16) {
   for (int i = 0; i < 640 * 2 + 1; ++i) {
     orig_pixels[i] = i;
   }
-  ScaleRowUp2_16_NEON(&orig_pixels[0],
-                      640 * 2,
-                      &dst_pixels_c[0],
-                      1280);
+  ScaleRowUp2_16_NEON(&orig_pixels[0], 640, &dst_pixels_c[0], 1280);
 
   for (int i = 0; i < benchmark_pixels_div1280_; ++i) {
-    ScaleRowUp2_16_NEON(&orig_pixels[0],
-                        640 * 2,
-                        &dst_pixels_opt[0],
-                        1280);
+    ScaleRowUp2_16_NEON(&orig_pixels[0], 640, &dst_pixels_opt[0], 1280);
   }
 
   for (int i = 0; i < 1280; ++i) {
@@ -488,42 +481,45 @@ TEST_F(LibYUVScaleTest, TestScaleRowUp2_16) {
   EXPECT_EQ(dst_pixels_c[0], (0 * 9 + 1 * 3 + 640 * 3 + 641 * 1 + 8) / 16);
   EXPECT_EQ(dst_pixels_c[1279], 800);
 }
+#endif
 
 extern "C" void ScaleRowDown2Box_16_NEON(const uint16* src_ptr,
                                          ptrdiff_t src_stride,
                                          uint16* dst,
                                          int dst_width);
-           
+
 TEST_F(LibYUVScaleTest, TestScaleRowDown2Box_16) {
   SIMD_ALIGNED(uint16 orig_pixels[2560 * 2]);
-  SIMD_ALIGNED(uint16 dst_pixels_opt[1280]);
   SIMD_ALIGNED(uint16 dst_pixels_c[1280]);
+  SIMD_ALIGNED(uint16 dst_pixels_opt[1280]);
 
   memset(orig_pixels, 0, sizeof(orig_pixels));
-  memset(dst_pixels_opt, 1, sizeof(dst_pixels_opt));
-  memset(dst_pixels_c, 2, sizeof(dst_pixels_c));
+  memset(dst_pixels_c, 1, sizeof(dst_pixels_c));
+  memset(dst_pixels_opt, 2, sizeof(dst_pixels_opt));
 
   for (int i = 0; i < 2560 * 2; ++i) {
     orig_pixels[i] = i;
   }
-  ScaleRowDown2Box_16_NEON(&orig_pixels[0],
-                           2560 * 2,
-                           &dst_pixels_c[0],
-                           1280);
-
+  ScaleRowDown2Box_16_C(&orig_pixels[0], 2560, &dst_pixels_c[0], 1280);
   for (int i = 0; i < benchmark_pixels_div1280_; ++i) {
-    ScaleRowDown2Box_16_NEON(&orig_pixels[0],
-                             2560 * 2,
-                             &dst_pixels_opt[0],
-                             1280);
+#if !defined(LIBYUV_DISABLE_NEON) && defined(__aarch64__)
+    int has_neon = TestCpuFlag(kCpuHasNEON);
+    if (has_neon) {
+      ScaleRowDown2Box_16_NEON(&orig_pixels[0], 2560, &dst_pixels_opt[0], 1280);
+    } else {
+      ScaleRowDown2Box_16_C(&orig_pixels[0], 2560, &dst_pixels_opt[0], 1280);
+    }
+#else
+    ScaleRowDown2Box_16_C(&orig_pixels[0], 2560, &dst_pixels_opt[0], 1280);
+#endif
   }
 
   for (int i = 0; i < 1280; ++i) {
     EXPECT_EQ(dst_pixels_c[i], dst_pixels_opt[i]);
   }
-  EXPECT_EQ(dst_pixels_c[0], 1281);
+
+  EXPECT_EQ(dst_pixels_c[0], (0 + 1 + 2560 + 2561 + 2) / 4);
   EXPECT_EQ(dst_pixels_c[1279], 3839);
 }
-#endif  // __aarch64__
 
 }  // namespace libyuv

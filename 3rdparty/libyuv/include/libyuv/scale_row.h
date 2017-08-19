@@ -114,9 +114,14 @@ extern "C" {
 #define HAS_SCALEROWDOWN2_MSA
 #define HAS_SCALEROWDOWN4_MSA
 #define HAS_SCALEADDROW_MSA
+#define HAS_SCALEARGBCOLS_MSA
+#define HAS_SCALEROWDOWN34_MSA
+
 #ifndef DISABLE_CLANG_MSA
 #define HAS_SCALEARGBROWDOWNEVEN_MSA
 #define HAS_SCALEROWDOWN38_MSA
+#define HAS_SCALEFILTERCOLS_MSA
+#define HAS_SCALEARGBFILTERCOLS_MSA
 #endif
 #endif
 
@@ -553,6 +558,26 @@ void ScaleARGBCols_Any_NEON(uint8* dst_argb,
                             int dst_width,
                             int x,
                             int dx);
+void ScaleARGBFilterCols_MSA(uint8* dst_argb,
+                             const uint8* src_argb,
+                             int dst_width,
+                             int x,
+                             int dx);
+void ScaleARGBCols_MSA(uint8* dst_argb,
+                       const uint8* src_argb,
+                       int dst_width,
+                       int x,
+                       int dx);
+void ScaleARGBFilterCols_Any_MSA(uint8* dst_argb,
+                                 const uint8* src_argb,
+                                 int dst_width,
+                                 int x,
+                                 int dx);
+void ScaleARGBCols_Any_MSA(uint8* dst_argb,
+                           const uint8* src_argb,
+                           int dst_width,
+                           int x,
+                           int dx);
 
 // ARGB Row functions
 void ScaleARGBRowDown2_SSE2(const uint8* src_argb,
@@ -892,6 +917,24 @@ void ScaleRowDown38_3_Box_MSA(const uint8_t* src_ptr,
                               uint8_t* dst_ptr,
                               int dst_width);
 void ScaleAddRow_MSA(const uint8_t* src_ptr, uint16_t* dst_ptr, int src_width);
+void ScaleFilterCols_MSA(uint8* dst_ptr,
+                         const uint8* src_ptr,
+                         int dst_width,
+                         int x,
+                         int dx);
+void ScaleRowDown34_MSA(const uint8* src_ptr,
+                        ptrdiff_t src_stride,
+                        uint8* dst_ptr,
+                        int dst_width);
+void ScaleRowDown34_0_Box_MSA(const uint8* src_ptr,
+                              ptrdiff_t src_stride,
+                              uint8* dst_ptr,
+                              int dst_width);
+void ScaleRowDown34_1_Box_MSA(const uint8* src_ptr,
+                              ptrdiff_t src_stride,
+                              uint8* dst_ptr,
+                              int dst_width);
+
 void ScaleRowDown2_Any_MSA(const uint8_t* src_ptr,
                            ptrdiff_t src_stride,
                            uint8_t* dst,
@@ -927,6 +970,23 @@ void ScaleRowDown38_3_Box_Any_MSA(const uint8_t* src_ptr,
 void ScaleAddRow_Any_MSA(const uint8_t* src_ptr,
                          uint16_t* dst_ptr,
                          int src_width);
+void ScaleFilterCols_Any_MSA(uint8* dst_ptr,
+                             const uint8* src_ptr,
+                             int dst_width,
+                             int x,
+                             int dx);
+void ScaleRowDown34_Any_MSA(const uint8* src_ptr,
+                            ptrdiff_t src_stride,
+                            uint8* dst_ptr,
+                            int dst_width);
+void ScaleRowDown34_0_Box_Any_MSA(const uint8* src_ptr,
+                                  ptrdiff_t src_stride,
+                                  uint8* dst_ptr,
+                                  int dst_width);
+void ScaleRowDown34_1_Box_Any_MSA(const uint8* src_ptr,
+                                  ptrdiff_t src_stride,
+                                  uint8* dst_ptr,
+                                  int dst_width);
 
 #ifdef __cplusplus
 }  // extern "C"

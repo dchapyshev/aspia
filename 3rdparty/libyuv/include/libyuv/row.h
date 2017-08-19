@@ -422,6 +422,8 @@ extern "C" {
 #define HAS_YUY2TOUVROW_MSA
 #define HAS_YUY2TOYROW_MSA
 #define HAS_ARGBEXTRACTALPHAROW_MSA
+#define HAS_SPLITUVROW_MSA
+#define HAS_MIRRORUVROW_MSA
 
 #ifndef DISABLE_CLANG_MSA
 #define HAS_ABGRTOUVROW_MSA
@@ -467,6 +469,9 @@ extern "C" {
 #define HAS_ARGBBLENDROW_MSA
 #define HAS_ARGBQUANTIZEROW_MSA
 #define HAS_ARGBCOLORMATRIXROW_MSA
+#define HAS_SETROW_MSA
+#define HAS_SOBELXROW_MSA
+#define HAS_SOBELYROW_MSA
 #endif
 #endif
 
@@ -1362,6 +1367,10 @@ void MirrorUVRow_DSPR2(const uint8* src_uv,
                        uint8* dst_u,
                        uint8* dst_v,
                        int width);
+void MirrorUVRow_MSA(const uint8* src_uv,
+                     uint8* dst_u,
+                     uint8* dst_v,
+                     int width);
 void MirrorUVRow_C(const uint8* src_uv, uint8* dst_u, uint8* dst_v, int width);
 
 void ARGBMirrorRow_AVX2(const uint8* src, uint8* dst, int width);
@@ -1391,6 +1400,7 @@ void SplitUVRow_DSPR2(const uint8* src_uv,
                       uint8* dst_u,
                       uint8* dst_v,
                       int width);
+void SplitUVRow_MSA(const uint8* src_uv, uint8* dst_u, uint8* dst_v, int width);
 void SplitUVRow_Any_SSE2(const uint8* src_uv,
                          uint8* dst_u,
                          uint8* dst_v,
@@ -1407,6 +1417,10 @@ void SplitUVRow_Any_DSPR2(const uint8* src_uv,
                           uint8* dst_u,
                           uint8* dst_v,
                           int width);
+void SplitUVRow_Any_MSA(const uint8* src_uv,
+                        uint8* dst_u,
+                        uint8* dst_v,
+                        int width);
 
 void MergeUVRow_C(const uint8* src_u,
                   const uint8* src_v,
@@ -1496,6 +1510,7 @@ void ARGBCopyYToAlphaRow_Any_AVX2(const uint8* src_y,
                                   int width);
 
 void SetRow_C(uint8* dst, uint8 v8, int count);
+void SetRow_MSA(uint8* dst, uint8 v8, int count);
 void SetRow_X86(uint8* dst, uint8 v8, int count);
 void SetRow_ERMS(uint8* dst, uint8 v8, int count);
 void SetRow_NEON(uint8* dst, uint8 v8, int count);
@@ -3024,6 +3039,11 @@ void SobelXRow_NEON(const uint8* src_y0,
                     const uint8* src_y2,
                     uint8* dst_sobelx,
                     int width);
+void SobelXRow_MSA(const uint8* src_y0,
+                   const uint8* src_y1,
+                   const uint8* src_y2,
+                   uint8* dst_sobelx,
+                   int width);
 void SobelYRow_C(const uint8* src_y0,
                  const uint8* src_y1,
                  uint8* dst_sobely,
@@ -3036,6 +3056,10 @@ void SobelYRow_NEON(const uint8* src_y0,
                     const uint8* src_y1,
                     uint8* dst_sobely,
                     int width);
+void SobelYRow_MSA(const uint8* src_y0,
+                   const uint8* src_y1,
+                   uint8* dst_sobely,
+                   int width);
 void SobelRow_C(const uint8* src_sobelx,
                 const uint8* src_sobely,
                 uint8* dst_argb,
