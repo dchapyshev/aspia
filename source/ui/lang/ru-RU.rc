@@ -405,6 +405,7 @@ BEGIN
     IDS_FT_FILE_FOLDER                    "Папка с файлами"
     IDS_FT_CLOSE_WINDOW                   "Закрыть окно"
     IDS_FT_OP_FAILURE                     "Произошла ошибка при операции с объектом ""%s"": %s."
+    IDS_FT_FILE_LIST_BUILDING             "Построение списка файлов..."
 END
 
 // Power Manage

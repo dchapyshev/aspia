@@ -251,6 +251,7 @@
 #define IDS_FT_FILE_FOLDER                    1051
 #define IDS_FT_CLOSE_WINDOW                   1052
 #define IDS_FT_OP_FAILURE                     1053
+#define IDS_FT_FILE_LIST_BUILDING             1054
 
 // Power Manage
 #define IDS_PM_SHUTDOWN_COMMAND               2000

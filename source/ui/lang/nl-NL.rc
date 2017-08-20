@@ -405,6 +405,7 @@ BEGIN
     IDS_FT_FILE_FOLDER                    "File Folder"
     IDS_FT_CLOSE_WINDOW                   "Close window"
     IDS_FT_OP_FAILURE                     "An error occurred during the operation with object ""%s"": %s."
+    IDS_FT_FILE_LIST_BUILDING             "Building a list of files..."
 END
 
 // Power Manage

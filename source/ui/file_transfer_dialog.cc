@@ -40,6 +40,10 @@ LRESULT FileTransferDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpa
 
     current_item_edit_ = GetDlgItem(IDC_CURRENT_ITEM_EDIT);
 
+    CString building_text;
+    building_text.LoadStringW(IDS_FT_FILE_LIST_BUILDING);
+    current_item_edit_.SetWindowTextW(building_text);
+
     total_progress_ = GetDlgItem(IDC_TOTAL_PROGRESS);
     total_progress_.SetRange(0, 100);
     total_progress_.SetPos(0);
