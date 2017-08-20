@@ -30,6 +30,14 @@ void FileTaskQueueBuilder::Start(std::shared_ptr<FileRequestSenderProxy> sender,
     ProcessNextIncommingTask();
 }
 
+void FileTaskQueueBuilder::Start(std::shared_ptr<FileRequestSenderProxy> sender,
+                                 const FilePath& target_path,
+                                 const FileList& file_list,
+                                 FinishCallback callback)
+{
+    Start(sender, FilePath(), target_path, file_list, callback);
+}
+
 void FileTaskQueueBuilder::OnFileListReply(const FilePath& path,
                                            std::shared_ptr<proto::FileList> file_list,
                                            proto::RequestStatus status)

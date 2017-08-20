@@ -75,8 +75,7 @@
     <ClCompile Include="client\client_session_desktop_view.cc" />
     <ClCompile Include="client\client_session_file_transfer.cc" />
     <ClCompile Include="client\client_session_power_manage.cc" />
-    <ClCompile Include="client\file_remover_local.cc" />
-    <ClCompile Include="client\file_remover_remote.cc" />
+    <ClCompile Include="client\file_remover.cc" />
     <ClCompile Include="client\file_reply_receiver.cc" />
     <ClCompile Include="client\file_reply_receiver_proxy.cc" />
     <ClCompile Include="client\file_request_sender.cc" />
@@ -255,8 +254,6 @@
     <ClInclude Include="client\client_session_file_transfer.h" />
     <ClInclude Include="client\client_session_power_manage.h" />
     <ClInclude Include="client\file_remover.h" />
-    <ClInclude Include="client\file_remover_local.h" />
-    <ClInclude Include="client\file_remover_remote.h" />
     <ClInclude Include="client\file_reply_receiver.h" />
     <ClInclude Include="client\file_reply_receiver_proxy.h" />
     <ClInclude Include="client\file_request_sender.h" />

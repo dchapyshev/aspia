@@ -517,13 +517,10 @@
     <ClCompile Include="ui\file_remove_dialog.cc">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="client\file_remover_local.cc">
-      <Filter>client</Filter>
-    </ClCompile>
-    <ClCompile Include="client\file_remover_remote.cc">
-      <Filter>client</Filter>
-    </ClCompile>
     <ClCompile Include="client\file_task_queue_builder.cc">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="client\file_remover.cc">
       <Filter>client</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1096,12 +1093,6 @@
     </ClInclude>
     <ClInclude Include="ui\file_remove_dialog.h">
       <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="client\file_remover_local.h">
-      <Filter>client</Filter>
-    </ClInclude>
-    <ClInclude Include="client\file_remover_remote.h">
-      <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="client\file_remover.h">
       <Filter>client</Filter>
