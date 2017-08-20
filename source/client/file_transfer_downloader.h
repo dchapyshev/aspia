@@ -39,22 +39,10 @@ private:
     void RunNextTask();
 
     // FileReplyReceiver implementation.
-    void OnDriveListReply(std::shared_ptr<proto::DriveList> drive_list,
-                          proto::RequestStatus status) final;
     void OnFileListReply(const FilePath& path,
                          std::shared_ptr<proto::FileList> file_list,
                          proto::RequestStatus status) final;
-    void OnDirectorySizeReply(const FilePath& path,
-                              uint64_t size,
-                              proto::RequestStatus status) final;
-    void OnCreateDirectoryReply(const FilePath& path, proto::RequestStatus status) final;
-    void OnRemoveReply(const FilePath& path, proto::RequestStatus status) final;
-    void OnRenameReply(const FilePath& old_name,
-                       const FilePath& new_name,
-                       proto::RequestStatus status) final;
-    void OnFileUploadReply(const FilePath& file_path, proto::RequestStatus status) final;
     void OnFileDownloadReply(const FilePath& file_path, proto::RequestStatus status) final;
-    void OnFilePacketSended(uint32_t flags, proto::RequestStatus status) final;
     void OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
                               proto::RequestStatus status) final;
 

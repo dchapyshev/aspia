@@ -194,12 +194,6 @@ void FileTransferDownloader::RunNextTask()
     RunTask(pending_task_queue_.front());
 }
 
-void FileTransferDownloader::OnDriveListReply(std::shared_ptr<proto::DriveList> drive_list,
-                                              proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly received: drive list";
-}
-
 void FileTransferDownloader::OnFileListReply(const FilePath& path,
                                              std::shared_ptr<proto::FileList> file_list,
                                              proto::RequestStatus status)
@@ -227,38 +221,6 @@ void FileTransferDownloader::OnFileListReply(const FilePath& path,
     }
 
     ProcessNextIncommingTask();
-}
-
-void FileTransferDownloader::OnDirectorySizeReply(const FilePath& path,
-                                                  uint64_t size,
-                                                  proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly received: directory size";
-}
-
-void FileTransferDownloader::OnCreateDirectoryReply(const FilePath& path,
-                                                    proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly received: create directory";
-}
-
-void FileTransferDownloader::OnRemoveReply(const FilePath& path,
-                                           proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly received: remove";
-}
-
-void FileTransferDownloader::OnRenameReply(const FilePath& old_name,
-                                           const FilePath& new_name,
-                                           proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly received: rename";
-}
-
-void FileTransferDownloader::OnFileUploadReply(const FilePath& file_path,
-                                               proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly received: file upload";
 }
 
 void FileTransferDownloader::CreateDepacketizer(const FilePath& file_path, bool overwrite)
@@ -403,11 +365,6 @@ void FileTransferDownloader::OnFileDownloadReply(const FilePath& file_path,
     }
 
     CreateDepacketizer(current_task.TargetPath(), false);
-}
-
-void FileTransferDownloader::OnFilePacketSended(uint32_t flags, proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly received: file packet sended";
 }
 
 void FileTransferDownloader::OnUnableToReadFileAction(Action action)

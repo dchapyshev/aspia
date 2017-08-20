@@ -92,21 +92,11 @@ private:
     void OnFileListReply(const FilePath& path,
                          std::shared_ptr<proto::FileList> file_list,
                          proto::RequestStatus status) override;
-    void OnDirectorySizeReply(const FilePath& path,
-                                     uint64_t size,
-                                     proto::RequestStatus status) override;
     void OnCreateDirectoryReply( const FilePath& path, proto::RequestStatus status) override;
     void OnRemoveReply(const FilePath& path, proto::RequestStatus status) override;
-
     void OnRenameReply(const FilePath& old_name,
                        const FilePath& new_name,
                        proto::RequestStatus status) override;
-
-    void OnFileUploadReply(const FilePath& file_path, proto::RequestStatus status) override;
-    void OnFileDownloadReply(const FilePath& file_path, proto::RequestStatus status) override;
-    void OnFilePacketSended(uint32_t flags, proto::RequestStatus status) override;
-    void OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
-                              proto::RequestStatus status) override;
 
     void MoveToDrive(int object_index);
 

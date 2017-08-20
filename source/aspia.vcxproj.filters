@@ -523,6 +523,9 @@
     <ClCompile Include="client\file_remover_remote.cc">
       <Filter>client</Filter>
     </ClCompile>
+    <ClCompile Include="client\file_task_queue_builder.cc">
+      <Filter>client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1101,6 +1104,9 @@
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="client\file_remover.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="client\file_task_queue_builder.h">
       <Filter>client</Filter>
     </ClInclude>
   </ItemGroup>

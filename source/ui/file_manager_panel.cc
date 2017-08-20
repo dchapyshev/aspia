@@ -440,13 +440,6 @@ void FileManagerPanel::OnFileListReply(const FilePath& path,
     }
 }
 
-void FileManagerPanel::OnDirectorySizeReply(const FilePath& path,
-                                            uint64_t size,
-                                            proto::RequestStatus status)
-{
-    // TODO
-}
-
 void FileManagerPanel::OnCreateDirectoryReply(const FilePath& path, proto::RequestStatus status)
 {
     if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
@@ -495,27 +488,6 @@ void FileManagerPanel::OnRenameReply(const FilePath& old_name,
     {
         Refresh();
     }
-}
-
-void FileManagerPanel::OnFileUploadReply(const FilePath& file_path, proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpected reply: file upload request";
-}
-
-void FileManagerPanel::OnFileDownloadReply(const FilePath& file_path, proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpected reply: download request";
-}
-
-void FileManagerPanel::OnFilePacketSended(uint32_t flags, proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpected reply: file packet sended";
-}
-
-void FileManagerPanel::OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
-                                            proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpected reply: file packet received";
 }
 
 } // namespace aspia

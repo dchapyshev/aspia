@@ -153,26 +153,6 @@ void FileTransferUploader::RunNextTask()
     RunTask(task_queue_.front(), FileRequestSender::Overwrite::NO);
 }
 
-void FileTransferUploader::OnDriveListReply(std::shared_ptr<proto::DriveList> drive_list,
-                                            proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly received: drive list";
-}
-
-void FileTransferUploader::OnFileListReply(const FilePath& path,
-                                           std::shared_ptr<proto::FileList> file_list,
-                                           proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly received: file list";
-}
-
-void FileTransferUploader::OnDirectorySizeReply(const FilePath& path,
-                                                uint64_t size,
-                                                proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly received: directory size";
-}
-
 void FileTransferUploader::OnUnableToCreateDirectoryAction(Action action)
 {
     switch (action)
@@ -224,18 +204,6 @@ void FileTransferUploader::OnCreateDirectoryReply(const FilePath& path,
         &FileTransferUploader::OnUnableToCreateDirectoryAction, this, std::placeholders::_1);
 
     delegate_->OnFileOperationFailure(path, status, std::move(callback));
-}
-
-void FileTransferUploader::OnRemoveReply(const FilePath& path, proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly reply: remove";
-}
-
-void FileTransferUploader::OnRenameReply(const FilePath& old_name,
-                                         const FilePath& new_name,
-                                         proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly reply: rename";
 }
 
 void FileTransferUploader::OnUnableToCreateFileAction(Action action)
@@ -392,12 +360,6 @@ void FileTransferUploader::OnFileUploadReply(const FilePath& file_path,
     sender_->SendFilePacket(This(), std::move(file_packet));
 }
 
-void FileTransferUploader::OnFileDownloadReply(const FilePath& file_path,
-                                               proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly received: download reply";
-}
-
 void FileTransferUploader::OnUnableToWriteFileAction(Action action)
 {
     switch (action)
@@ -490,12 +452,6 @@ void FileTransferUploader::OnFilePacketSended(uint32_t flags, proto::RequestStat
     }
 
     sender_->SendFilePacket(This(), std::move(file_packet));
-}
-
-void FileTransferUploader::OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
-                                                proto::RequestStatus status)
-{
-    DLOG(FATAL) << "Unexpectedly reply: file packet received";
 }
 
 } // namespace aspia
