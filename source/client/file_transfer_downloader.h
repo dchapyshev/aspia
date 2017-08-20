@@ -9,7 +9,6 @@
 #define _ASPIA_CLIENT__FILE_TRANSFER_DOWNLOADER_H
 
 #include "base/message_loop/message_loop_thread.h"
-#include "client/file_task_queue_builder.h"
 #include "client/file_transfer.h"
 #include "protocol/file_depacketizer.h"
 
@@ -27,7 +26,7 @@ public:
 
     void Start(const FilePath& source_path,
                const FilePath& target_path,
-               const FileList& file_list) final;
+               const FileTaskQueueBuilder::FileList& file_list) final;
 
 private:
     // MessageLoopThread::Delegate implementation.

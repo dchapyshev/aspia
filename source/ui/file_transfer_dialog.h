@@ -36,7 +36,7 @@ public:
                        std::shared_ptr<FileRequestSenderProxy> remote_sender,
                        const FilePath& source_path,
                        const FilePath& target_path,
-                       const FileTransfer::FileList& file_list);
+                       const FileTaskQueueBuilder::FileList& file_list);
     ~FileTransferDialog() = default;
 
 private:
@@ -70,7 +70,7 @@ private:
     uint64_t total_transferred_size_ = 0;
     uint64_t object_size_ = 0;
     uint64_t object_transferred_size_ = 0;
-    const FileTransfer::FileList& file_list_;
+    const FileTaskQueueBuilder::FileList& file_list_;
     const Mode mode_;
 
     std::unique_ptr<FileTransfer> file_transfer_;

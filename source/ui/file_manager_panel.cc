@@ -353,7 +353,7 @@ LRESULT FileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handl
     if (source_path.empty())
         return 0;
 
-    FileTransfer::FileList file_list;
+    FileTaskQueueBuilder::FileList file_list;
 
     // Create a list of files and directories to copy.
     for (FileListWindow::Iterator iter(file_list_, FileListWindow::Iterator::SELECTED);

@@ -21,7 +21,7 @@ FileTransferDialog::FileTransferDialog(Mode mode,
                                        std::shared_ptr<FileRequestSenderProxy> remote_sender,
                                        const FilePath& source_path,
                                        const FilePath& target_path,
-                                       const FileTransfer::FileList& file_list)
+                                       const FileTaskQueueBuilder::FileList& file_list)
     : mode_(mode),
       local_sender_(local_sender),
       remote_sender_(remote_sender),

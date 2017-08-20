@@ -9,6 +9,7 @@
 #define _ASPIA_CLIENT__FILE_REMOVER_H
 
 #include "base/files/file_path.h"
+#include "client/file_task_queue_builder.h"
 #include "proto/file_transfer_session_message.pb.h"
 
 namespace aspia {
@@ -18,11 +19,9 @@ class FileRemover
 public:
     virtual ~FileRemover() = default;
 
-    using FileList = std::vector<proto::FileList::Item>;
-
     virtual void Start(const FilePath& source_path,
                        const FilePath& target_path,
-                       const FileList& file_list) = 0;
+                       const FileTaskQueueBuilder::FileList& file_list) = 0;
 };
 
 } // namespace aspia

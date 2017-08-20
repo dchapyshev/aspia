@@ -21,7 +21,7 @@ public:
 
     void Start(const FilePath& source_path,
                const FilePath& target_path,
-               const FileList& file_list) override;
+               const FileTaskQueueBuilder::FileList& file_list) override;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(FileRemoverLocal);

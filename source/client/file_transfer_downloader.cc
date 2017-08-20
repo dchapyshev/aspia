@@ -38,7 +38,7 @@ void FileTransferDownloader::OnAfterThreadRunning()
 
 void FileTransferDownloader::Start(const FilePath& source_path,
                                    const FilePath& target_path,
-                                   const FileList& file_list)
+                                   const FileTaskQueueBuilder::FileList& file_list)
 {
     if (!runner_->BelongsToCurrentThread())
     {

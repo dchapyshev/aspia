@@ -11,6 +11,7 @@
 #include "base/files/file_path.h"
 #include "client/file_reply_receiver.h"
 #include "client/file_request_sender_proxy.h"
+#include "client/file_task_queue_builder.h"
 
 namespace aspia {
 
@@ -61,11 +62,9 @@ public:
 
     virtual ~FileTransfer() = default;
 
-    using FileList = std::list<proto::FileList::Item>;
-
     virtual void Start(const FilePath& source_path,
                        const FilePath& target_path,
-                       const FileList& file_list) = 0;
+                       const FileTaskQueueBuilder::FileList& file_list) = 0;
 
 protected:
     std::shared_ptr<FileRequestSenderProxy> remote_sender_;

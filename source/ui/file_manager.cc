@@ -67,7 +67,7 @@ void FileManagerWindow::OnAfterThreadRunning()
 
 void FileManagerWindow::SendFiles(FileManagerPanel::Type panel_type,
                                   const FilePath& source_path,
-                                  const FileTransfer::FileList& file_list)
+                                  const FileTaskQueueBuilder::FileList& file_list)
 {
     FileTransferDialog::Mode mode;
     FilePath target_path;

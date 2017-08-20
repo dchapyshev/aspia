@@ -34,7 +34,7 @@ public:
 
         virtual void SendFiles(Type type,
                                const FilePath& source_path,
-                               const FileTransfer::FileList& file_list) = 0;
+                               const FileTaskQueueBuilder::FileList& file_list) = 0;
     };
 
     FileManagerPanel(Type type,

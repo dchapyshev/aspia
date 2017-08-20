@@ -41,7 +41,7 @@ private:
     // FileManagerPanel::Delegate implementation.
     void SendFiles(FileManagerPanel::Type panel_type,
                    const FilePath& source_path,
-                   const FileTransfer::FileList& file_list) override;
+                   const FileTaskQueueBuilder::FileList& file_list) override;
 
     BEGIN_MSG_MAP(FileManagerWindow)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
