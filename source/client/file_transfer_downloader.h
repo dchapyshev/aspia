@@ -9,11 +9,9 @@
 #define _ASPIA_CLIENT__FILE_TRANSFER_DOWNLOADER_H
 
 #include "base/message_loop/message_loop_thread.h"
+#include "client/file_task_queue_builder.h"
 #include "client/file_transfer.h"
-#include "client/file_task.h"
 #include "protocol/file_depacketizer.h"
-
-#include <stack>
 
 namespace aspia {
 
@@ -22,7 +20,8 @@ class FileTransferDownloader
       private MessageLoopThread::Delegate
 {
 public:
-    FileTransferDownloader(std::shared_ptr<FileRequestSenderProxy> sender,
+    FileTransferDownloader(std::shared_ptr<FileRequestSenderProxy> local_sender,
+                           std::shared_ptr<FileRequestSenderProxy> remote_sender,
                            FileTransfer::Delegate* delegate);
     ~FileTransferDownloader();
 
@@ -35,22 +34,17 @@ private:
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
+    void OnTaskQueueBuilded(FileTaskQueue& task_queue,
+                            int64_t task_object_size,
+                            int64_t task_object_count);
     void RunTask(const FileTask& task);
     void RunNextTask();
 
     // FileReplyReceiver implementation.
-    void OnFileListReply(const FilePath& path,
-                         std::shared_ptr<proto::FileList> file_list,
-                         proto::RequestStatus status) final;
+    void OnCreateDirectoryReply(const FilePath& path, proto::RequestStatus status) final;
     void OnFileDownloadReply(const FilePath& file_path, proto::RequestStatus status) final;
     void OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
                               proto::RequestStatus status) final;
-
-    void AddIncomingTask(const FilePath& source_path,
-                         const FilePath& target_path,
-                         const proto::FileList::Item& file);
-    void FrontIncomingToBackPending();
-    void ProcessNextIncommingTask();
     void CreateDepacketizer(const FilePath& file_path, bool overwrite);
 
     void OnUnableToCreateDirectoryAction(Action action);
@@ -62,12 +56,8 @@ private:
     MessageLoopThread thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
-    FileTaskQueue pending_task_queue_;
-    FileTaskQueue incoming_task_queue_;
-
-    // The total size of all transferred files.
-    uint64_t total_size_ = 0;
-
+    FileTaskQueueBuilder task_queue_builder_;
+    FileTaskQueue task_queue_;
     std::unique_ptr<FileDepacketizer> file_depacketizer_;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransferDownloader);

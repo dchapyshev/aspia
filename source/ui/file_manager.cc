@@ -88,7 +88,8 @@ void FileManagerWindow::SendFiles(FileManagerPanel::Type panel_type,
     if (source_path.empty() || target_path.empty())
         return;
 
-    FileTransferDialog dialog(mode, remote_sender_, source_path, target_path, file_list);
+    FileTransferDialog dialog(mode, local_sender_, remote_sender_,
+                              source_path, target_path, file_list);
     dialog.DoModal(*this);
 
     // Now update the list of files in the panel.

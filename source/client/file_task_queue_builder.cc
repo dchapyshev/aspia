@@ -10,29 +10,12 @@
 
 namespace aspia {
 
-FileTaskQueueBuilder::FileTaskQueueBuilder()
-{
-    thread_.Start(MessageLoop::TYPE_DEFAULT, this);
-}
-
-FileTaskQueueBuilder::~FileTaskQueueBuilder()
-{
-    thread_.Stop();
-}
-
 void FileTaskQueueBuilder::Start(std::shared_ptr<FileRequestSenderProxy> sender,
                                  const FilePath& source_path,
                                  const FilePath& target_path,
                                  const FileList& file_list,
                                  FinishCallback callback)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&FileTaskQueueBuilder::Start, this, sender,
-                                    source_path, target_path, file_list, callback));
-        return;
-    }
-
     finish_callback_ = std::move(callback);
     sender_ = sender;
 
@@ -51,16 +34,8 @@ void FileTaskQueueBuilder::OnFileListReply(const FilePath& path,
                                            std::shared_ptr<proto::FileList> file_list,
                                            proto::RequestStatus status)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(
-            &FileTaskQueueBuilder::OnFileListReply, this, path, file_list, status));
-        return;
-    }
-
     if (status != proto::REQUEST_STATUS_SUCCESS)
     {
-        runner_->PostQuit();
         return;
     }
 
@@ -76,23 +51,10 @@ void FileTaskQueueBuilder::OnFileListReply(const FilePath& path,
     ProcessNextIncommingTask();
 }
 
-void FileTaskQueueBuilder::OnBeforeThreadRunning()
-{
-    runner_ = thread_.message_loop_proxy();
-    DCHECK(runner_);
-}
-
-void FileTaskQueueBuilder::OnAfterThreadRunning()
-{
-    // Nothing
-}
-
 void FileTaskQueueBuilder::AddIncomingTask(const FilePath& source_path,
                                            const FilePath& target_path,
                                            const proto::FileList::Item& file)
 {
-    DCHECK(runner_->BelongsToCurrentThread());
-
     FilePath object_name(std::experimental::filesystem::u8path(file.name()));
 
     FilePath source_object_path(source_path);
@@ -107,7 +69,6 @@ void FileTaskQueueBuilder::AddIncomingTask(const FilePath& source_path,
 
 void FileTaskQueueBuilder::FrontIncomingToBackPending()
 {
-    DCHECK(runner_->BelongsToCurrentThread());
     DCHECK(!incoming_task_queue_.empty());
 
     FileTask current_task = std::move(incoming_task_queue_.front());
@@ -121,8 +82,6 @@ void FileTaskQueueBuilder::FrontIncomingToBackPending()
 
 void FileTaskQueueBuilder::ProcessNextIncommingTask()
 {
-    DCHECK(runner_->BelongsToCurrentThread());
-
     if (incoming_task_queue_.empty())
     {
         if (finish_callback_ != nullptr)

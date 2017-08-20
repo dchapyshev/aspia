@@ -32,7 +32,8 @@ public:
     enum class Mode { UPLOAD, DOWNLOAD };
 
     FileTransferDialog(Mode mode,
-                       std::shared_ptr<FileRequestSenderProxy> sender,
+                       std::shared_ptr<FileRequestSenderProxy> local_sender,
+                       std::shared_ptr<FileRequestSenderProxy> remote_sender,
                        const FilePath& source_path,
                        const FilePath& target_path,
                        const FileTransfer::FileList& file_list);
@@ -60,7 +61,8 @@ private:
     void OnObjectTransfer(uint64_t left_size) final;
 
     std::shared_ptr<MessageLoopProxy> runner_;
-    std::shared_ptr<FileRequestSenderProxy> sender_;
+    std::shared_ptr<FileRequestSenderProxy> local_sender_;
+    std::shared_ptr<FileRequestSenderProxy> remote_sender_;
 
     const FilePath& source_path_;
     const FilePath& target_path_;

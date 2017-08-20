@@ -17,12 +17,14 @@
 namespace aspia {
 
 FileTransferDialog::FileTransferDialog(Mode mode,
-                                       std::shared_ptr<FileRequestSenderProxy> sender,
+                                       std::shared_ptr<FileRequestSenderProxy> local_sender,
+                                       std::shared_ptr<FileRequestSenderProxy> remote_sender,
                                        const FilePath& source_path,
                                        const FilePath& target_path,
                                        const FileTransfer::FileList& file_list)
     : mode_(mode),
-      sender_(std::move(sender)),
+      local_sender_(local_sender),
+      remote_sender_(remote_sender),
       source_path_(source_path),
       target_path_(target_path),
       file_list_(file_list)
@@ -48,12 +50,12 @@ LRESULT FileTransferDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpa
 
     if (mode_ == Mode::UPLOAD)
     {
-        file_transfer_.reset(new FileTransferUploader(sender_, this));
+        file_transfer_.reset(new FileTransferUploader(local_sender_, remote_sender_, this));
     }
     else
     {
         DCHECK(mode_ == Mode::DOWNLOAD);
-        file_transfer_.reset(new FileTransferDownloader(sender_, this));
+        file_transfer_.reset(new FileTransferDownloader(local_sender_, remote_sender_, this));
     }
 
     file_transfer_->Start(source_path_, target_path_, file_list_);

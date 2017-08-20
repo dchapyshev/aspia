@@ -11,9 +11,11 @@
 
 namespace aspia {
 
-FileTransferDownloader::FileTransferDownloader(std::shared_ptr<FileRequestSenderProxy> sender,
-                                               FileTransfer::Delegate* delegate)
-    : FileTransfer(std::move(sender), delegate)
+FileTransferDownloader::FileTransferDownloader(
+    std::shared_ptr<FileRequestSenderProxy> local_sender,
+    std::shared_ptr<FileRequestSenderProxy> remote_sender,
+    FileTransfer::Delegate* delegate)
+    : FileTransfer(local_sender, remote_sender, delegate)
 {
     thread_.Start(MessageLoop::TYPE_DEFAULT, this);
 }
@@ -34,64 +36,6 @@ void FileTransferDownloader::OnAfterThreadRunning()
     delegate_->OnTransferComplete();
 }
 
-void FileTransferDownloader::AddIncomingTask(const FilePath& source_path,
-                                             const FilePath& target_path,
-                                             const proto::FileList::Item& file)
-{
-    DCHECK(runner_->BelongsToCurrentThread());
-
-    FilePath object_name(std::experimental::filesystem::u8path(file.name()));
-
-    FilePath source_object_path(source_path);
-    source_object_path.append(object_name);
-
-    FilePath target_object_path(target_path);
-    target_object_path.append(object_name);
-
-    incoming_task_queue_.emplace_back(source_object_path, target_object_path,
-                                      file.size(), file.is_directory());
-}
-
-void FileTransferDownloader::FrontIncomingToBackPending()
-{
-    DCHECK(runner_->BelongsToCurrentThread());
-    DCHECK(!incoming_task_queue_.empty());
-
-    FileTask current_task = std::move(incoming_task_queue_.front());
-    incoming_task_queue_.pop_front();
-
-    total_size_ += current_task.Size();
-
-    pending_task_queue_.emplace_back(std::move(current_task));
-}
-
-void FileTransferDownloader::ProcessNextIncommingTask()
-{
-    DCHECK(runner_->BelongsToCurrentThread());
-
-    if (incoming_task_queue_.empty())
-    {
-        delegate_->OnTransferStarted(total_size_);
-
-        // Run first task.
-        RunTask(pending_task_queue_.front());
-        return;
-    }
-
-    FrontIncomingToBackPending();
-
-    const FileTask& current_task = pending_task_queue_.back();
-
-    if (current_task.IsDirectory())
-    {
-        sender_->SendFileListRequest(This(), current_task.SourcePath());
-    }
-    else
-    {
-        ProcessNextIncommingTask();
-    }
-}
-
 void FileTransferDownloader::Start(const FilePath& source_path,
                                    const FilePath& target_path,
                                    const FileList& file_list)
@@ -103,14 +47,24 @@ void FileTransferDownloader::Start(const FilePath& source_path,
         return;
     }
 
-    DCHECK(!file_list.empty());
+    FileTaskQueueBuilder::FinishCallback callback =
+        std::bind(&FileTransferDownloader::OnTaskQueueBuilded, this,
+                  std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 
-    for (const auto& file : file_list)
-    {
-        AddIncomingTask(source_path, target_path, file);
-    }
+    task_queue_builder_.Start(
+        remote_sender_, source_path, target_path, file_list, std::move(callback));
+}
 
-    ProcessNextIncommingTask();
+void FileTransferDownloader::OnTaskQueueBuilded(FileTaskQueue& task_queue,
+                                                int64_t task_object_size,
+                                                int64_t task_object_count)
+{
+    task_queue_.swap(task_queue);
+
+    delegate_->OnTransferStarted(task_object_size);
+
+    // Run first task.
+    RunTask(task_queue_.front());
 }
 
 void FileTransferDownloader::OnUnableToCreateDirectoryAction(Action action)
@@ -145,31 +99,11 @@ void FileTransferDownloader::RunTask(const FileTask& task)
 
     if (task.IsDirectory())
     {
-        if (!CreateDirectory(task.TargetPath(), nullptr))
-        {
-            if (create_directory_failure_action_ == Action::ASK)
-            {
-                ActionCallback callback =
-                    std::bind(&FileTransferDownloader::OnUnableToCreateDirectoryAction, this,
-                              std::placeholders::_1);
-
-                delegate_->OnFileOperationFailure(task.TargetPath(),
-                                                  proto::REQUEST_STATUS_ACCESS_DENIED,
-                                                  std::move(callback));
-            }
-            else
-            {
-                OnUnableToCreateDirectoryAction(create_directory_failure_action_);
-            }
-        }
-        else
-        {
-            RunNextTask();
-        }
+        local_sender_->SendCreateDirectoryRequest(This(), task.TargetPath());
     }
     else
     {
-        sender_->SendFileDownloadRequest(This(), task.SourcePath());
+        remote_sender_->SendFileDownloadRequest(This(), task.SourcePath());
     }
 }
 
@@ -178,49 +112,48 @@ void FileTransferDownloader::RunNextTask()
     DCHECK(runner_->BelongsToCurrentThread());
 
     // Delete the task only after confirmation of its successful execution.
-    if (!pending_task_queue_.empty())
+    if (!task_queue_.empty())
     {
         delegate_->OnObjectTransfer(0);
-        pending_task_queue_.pop_front();
+        task_queue_.pop_front();
     }
 
-    if (pending_task_queue_.empty())
+    if (task_queue_.empty())
     {
         runner_->PostQuit();
         return;
     }
 
     // Run next task.
-    RunTask(pending_task_queue_.front());
+    RunTask(task_queue_.front());
 }
 
-void FileTransferDownloader::OnFileListReply(const FilePath& path,
-                                             std::shared_ptr<proto::FileList> file_list,
-                                             proto::RequestStatus status)
+void FileTransferDownloader::OnCreateDirectoryReply(const FilePath& path,
+                                                    proto::RequestStatus status)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(
-            &FileTransferDownloader::OnFileListReply, this, path, file_list, status));
-        return;
-    }
-
     if (status != proto::REQUEST_STATUS_SUCCESS)
     {
-        runner_->PostQuit();
-        return;
+        if (create_directory_failure_action_ == Action::ASK)
+        {
+            ActionCallback callback =
+                std::bind(&FileTransferDownloader::OnUnableToCreateDirectoryAction, this,
+                          std::placeholders::_1);
+
+            const FileTask& current_task = task_queue_.front();
+
+            delegate_->OnFileOperationFailure(current_task.TargetPath(),
+                                              proto::REQUEST_STATUS_ACCESS_DENIED,
+                                              std::move(callback));
+        }
+        else
+        {
+            OnUnableToCreateDirectoryAction(create_directory_failure_action_);
+        }
     }
-
-    DCHECK(!pending_task_queue_.empty());
-    const FileTask& last_task = pending_task_queue_.back();
-    DCHECK(last_task.IsDirectory());
-
-    for (int index = 0; index < file_list->item_size(); ++index)
+    else
     {
-        AddIncomingTask(last_task.SourcePath(), last_task.TargetPath(), file_list->item(index));
+        RunNextTask();
     }
-
-    ProcessNextIncommingTask();
 }
 
 void FileTransferDownloader::CreateDepacketizer(const FilePath& file_path, bool overwrite)
@@ -249,7 +182,7 @@ void FileTransferDownloader::CreateDepacketizer(const FilePath& file_path, bool 
 
     if (status == proto::REQUEST_STATUS_SUCCESS)
     {
-        sender_->SendFilePacketRequest(This());
+        remote_sender_->SendFilePacketRequest(This());
         return;
     }
 
@@ -287,7 +220,7 @@ void FileTransferDownloader::OnUnableToCreateFileAction(Action action)
             if (action == Action::REPLACE_ALL)
                 file_create_failure_action_ = action;
 
-            const FileTask& current_task = pending_task_queue_.front();
+            const FileTask& current_task = task_queue_.front();
             CreateDepacketizer(current_task.TargetPath(), true);
         }
         break;
@@ -342,8 +275,8 @@ void FileTransferDownloader::OnFileDownloadReply(const FilePath& file_path,
         return;
     }
 
-    DCHECK(!pending_task_queue_.empty());
-    const FileTask& current_task = pending_task_queue_.front();
+    DCHECK(!task_queue_.empty());
+    const FileTask& current_task = task_queue_.front();
 
     if (status != proto::REQUEST_STATUS_SUCCESS)
     {
@@ -439,7 +372,7 @@ void FileTransferDownloader::OnFilePacketReceived(std::shared_ptr<proto::FilePac
             ActionCallback callback = std::bind(
                 &FileTransferDownloader::OnUnableToReadFileAction, this, std::placeholders::_1);
 
-            const FileTask& current_task = pending_task_queue_.front();
+            const FileTask& current_task = task_queue_.front();
 
             delegate_->OnFileOperationFailure(current_task.SourcePath(),
                                               proto::REQUEST_STATUS_ACCESS_DENIED,
@@ -460,7 +393,7 @@ void FileTransferDownloader::OnFilePacketReceived(std::shared_ptr<proto::FilePac
             ActionCallback callback = std::bind(
                 &FileTransferDownloader::OnUnableToWriteFileAction, this, std::placeholders::_1);
 
-            const FileTask& current_task = pending_task_queue_.front();
+            const FileTask& current_task = task_queue_.front();
 
             delegate_->OnFileOperationFailure(current_task.TargetPath(),
                                               proto::REQUEST_STATUS_ACCESS_DENIED,
@@ -483,7 +416,7 @@ void FileTransferDownloader::OnFilePacketReceived(std::shared_ptr<proto::FilePac
     }
     else
     {
-        sender_->SendFilePacketRequest(This());
+        remote_sender_->SendFilePacketRequest(This());
     }
 }
 

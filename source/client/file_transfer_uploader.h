@@ -9,8 +9,8 @@
 #define _ASPIA_CLIENT__FILE_TRANSFER_UPLOADER_H
 
 #include "base/message_loop/message_loop_thread.h"
+#include "client/file_task_queue_builder.h"
 #include "client/file_transfer.h"
-#include "client/file_task.h"
 #include "proto/file_transfer_session.pb.h"
 #include "protocol/file_packetizer.h"
 
@@ -21,7 +21,8 @@ class FileTransferUploader
       private MessageLoopThread::Delegate
 {
 public:
-    FileTransferUploader(std::shared_ptr<FileRequestSenderProxy> sender,
+    FileTransferUploader(std::shared_ptr<FileRequestSenderProxy> local_sender,
+                         std::shared_ptr<FileRequestSenderProxy> remote_sender,
                          FileTransfer::Delegate* delegate);
     ~FileTransferUploader();
 
@@ -32,11 +33,12 @@ public:
 
 private:
     // MessageLoopThread::Delegate implementation.
-    void OnBeforeThreadRunning() override;
-    void OnAfterThreadRunning() override;
+    void OnBeforeThreadRunning() final;
+    void OnAfterThreadRunning() final;
 
-    uint64_t BuildTaskQueueForDirectory(const FilePath& source_path, const FilePath& target_path);
-
+    void OnTaskQueueBuilded(FileTaskQueue& task_queue,
+                            int64_t task_object_size,
+                            int64_t task_object_count);
     void RunTask(const FileTask& task, FileRequestSender::Overwrite overwrite);
     void RunNextTask();
 
@@ -54,6 +56,7 @@ private:
     MessageLoopThread thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
+    FileTaskQueueBuilder task_queue_builder_;
     FileTaskQueue task_queue_;
     std::unique_ptr<FilePacketizer> file_packetizer_;
 

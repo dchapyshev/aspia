@@ -8,21 +8,17 @@
 #ifndef _ASPIA_CLIENT__FILE_TASK_QUEUE_BUILDER_H
 #define _ASPIA_CLIENT__FILE_TASK_QUEUE_BUILDER_H
 
-#include "base/message_loop/message_loop_thread.h"
 #include "client/file_request_sender_proxy.h"
 #include "client/file_reply_receiver.h"
-#include "client/file_transfer.h"
 #include "client/file_task.h"
 
 namespace aspia {
 
-class FileTaskQueueBuilder
-    : private FileReplyReceiver,
-      private MessageLoopThread::Delegate
+class FileTaskQueueBuilder : private FileReplyReceiver
 {
 public:
-    FileTaskQueueBuilder();
-    ~FileTaskQueueBuilder();
+    FileTaskQueueBuilder() = default;
+    ~FileTaskQueueBuilder() = default;
 
     using FinishCallback = std::function<void(FileTaskQueue& task_queue,
                                               int64_t task_object_size,
@@ -42,18 +38,11 @@ private:
                          std::shared_ptr<proto::FileList> file_list,
                          proto::RequestStatus status) final;
 
-    // MessageLoopThread::Delegate implementation.
-    void OnBeforeThreadRunning() final;
-    void OnAfterThreadRunning() final;
-
     void AddIncomingTask(const FilePath& source_path,
                          const FilePath& target_path,
                          const proto::FileList::Item& file);
     void FrontIncomingToBackPending();
     void ProcessNextIncommingTask();
-
-    MessageLoopThread thread_;
-    std::shared_ptr<MessageLoopProxy> runner_;
 
     std::shared_ptr<FileRequestSenderProxy> sender_;
 

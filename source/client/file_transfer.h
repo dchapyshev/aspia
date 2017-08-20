@@ -49,8 +49,11 @@ public:
         virtual void OnObjectTransfer(uint64_t left_object_size) = 0;
     };
 
-    FileTransfer(std::shared_ptr<FileRequestSenderProxy> sender, Delegate* delegate)
-        : sender_(std::move(sender)),
+    FileTransfer(std::shared_ptr<FileRequestSenderProxy> local_sender,
+                 std::shared_ptr<FileRequestSenderProxy> remote_sender,
+                 Delegate* delegate)
+        : local_sender_(local_sender),
+          remote_sender_(remote_sender),
           delegate_(delegate)
     {
         // Nothing
@@ -65,7 +68,8 @@ public:
                        const FileList& file_list) = 0;
 
 protected:
-    std::shared_ptr<FileRequestSenderProxy> sender_;
+    std::shared_ptr<FileRequestSenderProxy> remote_sender_;
+    std::shared_ptr<FileRequestSenderProxy> local_sender_;
     Delegate* delegate_;
 
     Action create_directory_failure_action_ = Action::ASK;

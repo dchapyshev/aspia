@@ -7,14 +7,14 @@
 
 #include "client/file_transfer_uploader.h"
 #include "base/files/file_enumerator.h"
-#include "base/files/file_util.h"
 #include "base/logging.h"
 
 namespace aspia {
 
-FileTransferUploader::FileTransferUploader(std::shared_ptr<FileRequestSenderProxy> sender,
+FileTransferUploader::FileTransferUploader(std::shared_ptr<FileRequestSenderProxy> local_sender,
+                                           std::shared_ptr<FileRequestSenderProxy> remote_sender,
                                            FileTransfer::Delegate* delegate)
-    : FileTransfer(std::move(sender), delegate)
+    : FileTransfer(local_sender, remote_sender, delegate)
 {
     thread_.Start(MessageLoop::TYPE_DEFAULT, this);
 }
@@ -35,43 +35,6 @@ void FileTransferUploader::OnAfterThreadRunning()
     delegate_->OnTransferComplete();
 }
 
-uint64_t FileTransferUploader::BuildTaskQueueForDirectory(const FilePath& source_path,
-                                                          const FilePath& target_path)
-{
-    FileEnumerator enumerator(source_path,
-                              false,
-                              FileEnumerator::FILES | FileEnumerator::DIRECTORIES);
-    uint64_t size = 0;
-
-    for (;;)
-    {
-        FilePath source_object_path = enumerator.Next();
-        if (source_object_path.empty())
-            break;
-
-        FilePath target_object_path;
-
-        target_object_path.assign(target_path);
-        target_object_path.append(source_object_path.filename());
-
-        FileEnumerator::FileInfo info = enumerator.GetInfo();
-
-        if (info.IsDirectory())
-        {
-            task_queue_.emplace_back(source_object_path, target_object_path, 0, true);
-            size += BuildTaskQueueForDirectory(source_object_path, target_object_path);
-        }
-        else
-        {
-            int64_t file_size = info.GetSize();
-            task_queue_.emplace_back(source_object_path, target_object_path, file_size, false);
-            size += file_size;
-        }
-    }
-
-    return size;
-}
-
 void FileTransferUploader::Start(const FilePath& source_path,
                                  const FilePath& target_path,
                                  const FileList& file_list)
@@ -83,38 +46,21 @@ void FileTransferUploader::Start(const FilePath& source_path,
         return;
     }
 
-    uint64_t total_size = 0;
+    FileTaskQueueBuilder::FinishCallback callback =
+        std::bind(&FileTransferUploader::OnTaskQueueBuilded, this,
+                  std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 
-    for (const auto& file : file_list)
-    {
-        FilePath source_object_path;
+    task_queue_builder_.Start(
+        local_sender_, source_path, target_path, file_list, std::move(callback));
+}
 
-        source_object_path.assign(source_path);
-        source_object_path.append(std::experimental::filesystem::u8path(file.name()));
+void FileTransferUploader::OnTaskQueueBuilded(FileTaskQueue& task_queue,
+                                              int64_t task_object_size,
+                                              int64_t task_object_count)
+{
+    task_queue_.swap(task_queue);
 
-        FilePath target_object_path;
-
-        target_object_path.assign(target_path);
-        target_object_path.append(std::experimental::filesystem::u8path(file.name()));
-
-        if (file.is_directory())
-        {
-            task_queue_.emplace_back(source_object_path, target_object_path, 0, true);
-
-            total_size += BuildTaskQueueForDirectory(source_object_path, target_object_path);
-        }
-        else
-        {
-            int64_t file_size = 0;
-            GetFileSize(source_object_path, file_size);
-
-            task_queue_.emplace_back(source_object_path, target_object_path, file_size, false);
-
-            total_size += file_size;
-        }
-    }
-
-    delegate_->OnTransferStarted(total_size);
+    delegate_->OnTransferStarted(task_object_size);
 
     // Run first task.
     RunTask(task_queue_.front(), FileRequestSender::Overwrite::NO);
@@ -126,11 +72,11 @@ void FileTransferUploader::RunTask(const FileTask& task, FileRequestSender::Over
 
     if (task.IsDirectory())
     {
-        sender_->SendCreateDirectoryRequest(This(), task.TargetPath());
+        remote_sender_->SendCreateDirectoryRequest(This(), task.TargetPath());
     }
     else
     {
-        sender_->SendFileUploadRequest(This(), task.TargetPath(), overwrite);
+        remote_sender_->SendFileUploadRequest(This(), task.TargetPath(), overwrite);
     }
 }
 
@@ -357,7 +303,7 @@ void FileTransferUploader::OnFileUploadReply(const FilePath& file_path,
         return;
     }
 
-    sender_->SendFilePacket(This(), std::move(file_packet));
+    remote_sender_->SendFilePacket(This(), std::move(file_packet));
 }
 
 void FileTransferUploader::OnUnableToWriteFileAction(Action action)
@@ -451,7 +397,7 @@ void FileTransferUploader::OnFilePacketSended(uint32_t flags, proto::RequestStat
         return;
     }
 
-    sender_->SendFilePacket(This(), std::move(file_packet));
+    remote_sender_->SendFilePacket(This(), std::move(file_packet));
 }
 
 } // namespace aspia
