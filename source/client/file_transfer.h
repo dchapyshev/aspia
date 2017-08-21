@@ -12,6 +12,7 @@
 #include "client/file_reply_receiver.h"
 #include "client/file_request_sender_proxy.h"
 #include "client/file_task_queue_builder.h"
+#include "client/file_constants.h"
 
 namespace aspia {
 
@@ -19,17 +20,7 @@ class FileTransfer
     : public FileReplyReceiver
 {
 public:
-    enum class Action
-    {
-        ASK         = 0,
-        ABORT       = 1,
-        SKIP        = 2,
-        SKIP_ALL    = 3,
-        REPLACE     = 4,
-        REPLACE_ALL = 5
-    };
-
-    using ActionCallback = std::function<void(Action action)>;
+    using ActionCallback = std::function<void(FileAction action)>;
 
     class Delegate
     {
@@ -71,11 +62,11 @@ protected:
     std::shared_ptr<FileRequestSenderProxy> local_sender_;
     Delegate* delegate_;
 
-    Action create_directory_failure_action_ = Action::ASK;
-    Action file_create_failure_action_ = Action::ASK;
-    Action file_open_failure_action_ = Action::ASK;
-    Action file_write_failure_action_ = Action::ASK;
-    Action file_read_failure_action_ = Action::ASK;
+    FileAction create_directory_failure_action_ = FileAction::ASK;
+    FileAction file_create_failure_action_ = FileAction::ASK;
+    FileAction file_open_failure_action_ = FileAction::ASK;
+    FileAction file_write_failure_action_ = FileAction::ASK;
+    FileAction file_read_failure_action_ = FileAction::ASK;
 };
 
 } // namespace aspia

@@ -10,14 +10,14 @@
 
 namespace aspia {
 
-UiFileActionDialog::UiFileActionDialog(const FilePath& path, proto::RequestStatus status)
+FileActionDialog::FileActionDialog(const FilePath& path, proto::RequestStatus status)
     : path_(path),
       status_(status)
 {
     // Nothing
 }
 
-LRESULT UiFileActionDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileActionDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     CenterWindow();
 
@@ -38,46 +38,46 @@ LRESULT UiFileActionDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpa
     return FALSE;
 }
 
-LRESULT UiFileActionDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileActionDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     EndDialog(0);
     return 0;
 }
 
-LRESULT UiFileActionDialog::OnReplaceButton(WORD notify_code, WORD control_id, HWND control,
-                                            BOOL& handled)
+LRESULT FileActionDialog::OnReplaceButton(WORD notify_code, WORD control_id, HWND control,
+                                          BOOL& handled)
 {
-    action_ = FileTransfer::Action::REPLACE;
+    action_ = FileAction::REPLACE;
     EndDialog(0);
     return 0;
 }
 
-LRESULT UiFileActionDialog::OnReplaceAllButton(WORD notify_code, WORD control_id, HWND control,
-                                               BOOL& handled)
+LRESULT FileActionDialog::OnReplaceAllButton(WORD notify_code, WORD control_id, HWND control,
+                                             BOOL& handled)
 {
-    action_ = FileTransfer::Action::REPLACE_ALL;
+    action_ = FileAction::REPLACE_ALL;
     EndDialog(0);
     return 0;
 }
 
-LRESULT UiFileActionDialog::OnSkipButton(WORD notify_code, WORD control_id, HWND control,
+LRESULT FileActionDialog::OnSkipButton(WORD notify_code, WORD control_id, HWND control,
+                                       BOOL& handled)
+{
+    action_ = FileAction::SKIP;
+    EndDialog(0);
+    return 0;
+}
+
+LRESULT FileActionDialog::OnSkipAllButton(WORD notify_code, WORD control_id, HWND control,
+                                          BOOL& handled)
+{
+    action_ = FileAction::SKIP_ALL;
+    EndDialog(0);
+    return 0;
+}
+
+LRESULT FileActionDialog::OnCancelButton(WORD notify_code, WORD control_id, HWND control,
                                          BOOL& handled)
-{
-    action_ = FileTransfer::Action::SKIP;
-    EndDialog(0);
-    return 0;
-}
-
-LRESULT UiFileActionDialog::OnSkipAllButton(WORD notify_code, WORD control_id, HWND control,
-                                            BOOL& handled)
-{
-    action_ = FileTransfer::Action::SKIP_ALL;
-    EndDialog(0);
-    return 0;
-}
-
-LRESULT UiFileActionDialog::OnCancelButton(WORD notify_code, WORD control_id, HWND control,
-                                           BOOL& handled)
 {
     EndDialog(0);
     return 0;

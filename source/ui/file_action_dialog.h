@@ -18,18 +18,18 @@
 
 namespace aspia {
 
-class UiFileActionDialog : public CDialogImpl<UiFileActionDialog>
+class FileActionDialog : public CDialogImpl<FileActionDialog>
 {
 public:
     enum { IDD = IDD_FILE_ACTION };
 
-    UiFileActionDialog(const FilePath& path, proto::RequestStatus status);
-    ~UiFileActionDialog() = default;
+    FileActionDialog(const FilePath& path, proto::RequestStatus status);
+    ~FileActionDialog() = default;
 
-    FileTransfer::Action GetAction() const { return action_; }
+    FileAction GetAction() const { return action_; }
 
 private:
-    BEGIN_MSG_MAP(UiFileReplaceDialog)
+    BEGIN_MSG_MAP(FileReplaceDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
@@ -50,9 +50,9 @@ private:
 
     const FilePath path_;
     const proto::RequestStatus status_;
-    FileTransfer::Action action_ = FileTransfer::Action::ABORT;
+    FileAction action_ = FileAction::ABORT;
 
-    DISALLOW_COPY_AND_ASSIGN(UiFileActionDialog);
+    DISALLOW_COPY_AND_ASSIGN(FileActionDialog);
 };
 
 } // namespace aspia

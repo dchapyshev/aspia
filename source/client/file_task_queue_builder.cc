@@ -31,11 +31,11 @@ void FileTaskQueueBuilder::Start(std::shared_ptr<FileRequestSenderProxy> sender,
 }
 
 void FileTaskQueueBuilder::Start(std::shared_ptr<FileRequestSenderProxy> sender,
-                                 const FilePath& target_path,
+                                 const FilePath& path,
                                  const FileList& file_list,
                                  FinishCallback callback)
 {
-    Start(sender, FilePath(), target_path, file_list, callback);
+    Start(sender, path, FilePath(), file_list, callback);
 }
 
 void FileTaskQueueBuilder::OnFileListReply(const FilePath& path,
@@ -92,8 +92,7 @@ void FileTaskQueueBuilder::ProcessNextIncommingTask()
 {
     if (incoming_task_queue_.empty())
     {
-        if (finish_callback_ != nullptr)
-            finish_callback_(pending_task_queue_, task_object_size_, task_object_count_);
+        finish_callback_(pending_task_queue_, task_object_size_, task_object_count_);
         return;
     }
 

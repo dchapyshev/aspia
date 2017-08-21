@@ -245,13 +245,12 @@
 #define IDS_FT_SELECTED_OBJECT_COUNT          1045
 #define IDS_FT_BROWSE_FOLDERS_ERROR           1046
 #define IDS_FT_OP_RENAME_ERROR                1047
-#define IDS_FT_OP_REMOVE_ERROR                1048
-#define IDS_FT_OP_CREATE_FOLDER_ERROR         1049
-#define IDS_FT_OP_BROWSE_DRIVES_ERROR         1050
-#define IDS_FT_FILE_FOLDER                    1051
-#define IDS_FT_CLOSE_WINDOW                   1052
-#define IDS_FT_OP_FAILURE                     1053
-#define IDS_FT_FILE_LIST_BUILDING             1054
+#define IDS_FT_OP_CREATE_FOLDER_ERROR         1048
+#define IDS_FT_OP_BROWSE_DRIVES_ERROR         1049
+#define IDS_FT_FILE_FOLDER                    1050
+#define IDS_FT_CLOSE_WINDOW                   1051
+#define IDS_FT_OP_FAILURE                     1052
+#define IDS_FT_FILE_LIST_BUILDING             1053
 
 // Power Manage
 #define IDS_PM_SHUTDOWN_COMMAND               2000

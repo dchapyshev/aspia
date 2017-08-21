@@ -93,7 +93,6 @@ private:
                          std::shared_ptr<proto::FileList> file_list,
                          proto::RequestStatus status) override;
     void OnCreateDirectoryReply( const FilePath& path, proto::RequestStatus status) override;
-    void OnRemoveReply(const FilePath& path, proto::RequestStatus status) override;
     void OnRenameReply(const FilePath& old_name,
                        const FilePath& new_name,
                        proto::RequestStatus status) override;

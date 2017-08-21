@@ -1100,6 +1100,9 @@
     <ClInclude Include="client\file_task_queue_builder.h">
       <Filter>client</Filter>
     </ClInclude>
+    <ClInclude Include="client\file_constants.h">
+      <Filter>client</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">

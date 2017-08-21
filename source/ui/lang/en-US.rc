@@ -176,17 +176,17 @@ END
 
 IDD_FILE_PROGRESS DIALOGEX 100, 100, 315, 115
 STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
-CAPTION "File Transfer"
+CAPTION "Progress"
 FONT 8, "MS Shell Dlg"
 BEGIN
     LTEXT "Current item:", -1, 7, 6, 300, 10
     EDITTEXT IDC_CURRENT_ITEM_EDIT, 7, 17, 300, 14, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_READONLY
 
     LTEXT "Total progress:", -1, 7, 34, 300, 10
-    CONTROL "", IDC_TOTAL_PROGRESS, PROGRESS_CLASS, WS_BORDER | WS_TABSTOP | PBS_SMOOTH, 7, 45, 300, 14
+    CONTROL "", IDC_TOTAL_PROGRESS, PROGRESS_CLASS, WS_BORDER | WS_TABSTOP | PBS_SMOOTH | PBS_MARQUEE, 7, 45, 300, 14
 
     LTEXT "Progress for the current item:", -1, 7, 62, 300, 10
-    CONTROL "", IDC_CURRENT_PROGRESS, PROGRESS_CLASS, WS_BORDER | WS_TABSTOP | PBS_SMOOTH, 7, 73, 300, 14
+    CONTROL "", IDC_CURRENT_PROGRESS, PROGRESS_CLASS, WS_BORDER | WS_TABSTOP | PBS_SMOOTH | PBS_MARQUEE, 7, 73, 300, 14
 
     DEFPUSHBUTTON "&Cancel", IDCANCEL, 247, 95, 60, 14
 END
@@ -399,7 +399,6 @@ BEGIN
     IDS_FT_SELECTED_OBJECT_COUNT          "%lu object(s) selected"
     IDS_FT_BROWSE_FOLDERS_ERROR           "An error occurred while trying to view the folder ""%s"": %s"
     IDS_FT_OP_RENAME_ERROR                "An error occurred when renaming object ""%s"" to ""%s"": %s"
-    IDS_FT_OP_REMOVE_ERROR                "An error occurred while deleting object ""%s"": %s"
     IDS_FT_OP_CREATE_FOLDER_ERROR         "An error occurred while trying to create the folder ""%s"": %s"
     IDS_FT_OP_BROWSE_DRIVES_ERROR         "An error occurred while retrieving the drive list: %s"
     IDS_FT_FILE_FOLDER                    "File Folder"

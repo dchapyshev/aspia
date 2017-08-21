@@ -45,12 +45,10 @@ LRESULT FileTransferDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpa
     current_item_edit_.SetWindowTextW(building_text);
 
     total_progress_ = GetDlgItem(IDC_TOTAL_PROGRESS);
-    total_progress_.SetRange(0, 100);
-    total_progress_.SetPos(0);
+    total_progress_.SetMarquee(TRUE, 30);
 
     current_progress_ = GetDlgItem(IDC_CURRENT_PROGRESS);
-    current_progress_.SetRange(0, 100);
-    current_progress_.SetPos(0);
+    current_progress_.SetMarquee(TRUE, 30);
 
     if (mode_ == Mode::UPLOAD)
     {
@@ -83,6 +81,20 @@ LRESULT FileTransferDialog::OnCancelButton(WORD code, WORD ctrl_id, HWND ctrl, B
 
 void FileTransferDialog::OnTransferStarted(uint64_t size)
 {
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&FileTransferDialog::OnTransferStarted, this, size));
+        return;
+    }
+
+    total_progress_.ModifyStyle(PBS_MARQUEE, 0);
+    total_progress_.SetRange(0, 100);
+    total_progress_.SetPos(0);
+
+    current_progress_.ModifyStyle(PBS_MARQUEE, 0);
+    current_progress_.SetRange(0, 100);
+    current_progress_.SetPos(0);
+
     // Save the total size of all the transferred objects.
     total_size_ = size;
     total_transferred_size_ = 0;
@@ -150,7 +162,7 @@ void FileTransferDialog::OnFileOperationFailure(const FilePath& file_path,
     if (!file_transfer_)
         return;
 
-    UiFileActionDialog dialog(file_path, status);
+    FileActionDialog dialog(file_path, status);
     dialog.DoModal(*this);
     callback(dialog.GetAction());
 }

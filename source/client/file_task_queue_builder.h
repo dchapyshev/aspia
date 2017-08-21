@@ -33,7 +33,7 @@ public:
                FinishCallback callback);
 
     void Start(std::shared_ptr<FileRequestSenderProxy> sender,
-               const FilePath& target_path,
+               const FilePath& path,
                const FileList& file_list,
                FinishCallback callback);
 

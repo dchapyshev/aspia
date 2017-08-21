@@ -6,6 +6,7 @@
 //
 
 #include "ui/file_manager_panel.h"
+#include "ui/file_remove_dialog.h"
 #include "ui/file_manager.h"
 #include "ui/file_manager_helpers.h"
 #include "ui/status_code.h"
@@ -250,17 +251,24 @@ LRESULT FileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& han
     if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) != IDYES)
         return 0;
 
+    FileTaskQueueBuilder::FileList file_list;
+
+    // Create a list of files and directories to remove.
     for (FileListWindow::Iterator iter(file_list_, FileListWindow::Iterator::SELECTED);
          !iter.IsAtEnd();
          iter.Advance())
     {
-        FilePath path = drive_list_.CurrentPath();
-        FilePath name = std::experimental::filesystem::u8path(iter.Object().name());
-
-        path.append(name);
-
-        sender_->SendRemoveRequest(This(), path);
+        file_list.emplace_back(iter.Object());
     }
+
+    // If the list is empty (there are no selected items).
+    if (file_list.empty())
+        return 0;
+
+    FileRemoveDialog dialog(sender_, drive_list_.CurrentPath(), file_list);
+    dialog.DoModal(*this);
+
+    Refresh();
 
     return 0;
 }
@@ -448,22 +456,6 @@ void FileManagerPanel::OnCreateDirectoryReply(const FilePath& path, proto::Reque
 
         CString message;
         message.Format(IDS_FT_OP_CREATE_FOLDER_ERROR, path.c_str(), status_string);
-        MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
-    }
-    else
-    {
-        Refresh();
-    }
-}
-
-void FileManagerPanel::OnRemoveReply(const FilePath& path, proto::RequestStatus status)
-{
-    if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
-    {
-        CString status_string = RequestStatusCodeToString(status);
-
-        CString message;
-        message.Format(IDS_FT_OP_REMOVE_ERROR, path.c_str(), status_string);
         MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
     }
     else

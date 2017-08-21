@@ -46,11 +46,11 @@ private:
     void OnFileUploadReply(const FilePath& file_path, proto::RequestStatus status) final;
     void OnFilePacketSended(uint32_t flags, proto::RequestStatus status) final;
 
-    void OnUnableToCreateDirectoryAction(Action action);
-    void OnUnableToCreateFileAction(Action action);
-    void OnUnableToOpenFileAction(Action action);
-    void OnUnableToReadFileAction(Action action);
-    void OnUnableToWriteFileAction(Action action);
+    void OnUnableToCreateDirectoryAction(FileAction action);
+    void OnUnableToCreateFileAction(FileAction action);
+    void OnUnableToOpenFileAction(FileAction action);
+    void OnUnableToReadFileAction(FileAction action);
+    void OnUnableToWriteFileAction(FileAction action);
 
     MessageLoopThread thread_;
     std::shared_ptr<MessageLoopProxy> runner_;

@@ -33,12 +33,11 @@ void FileRemover::OnAfterThreadRunning()
     delegate_->OnRemovingComplete();
 }
 
-void FileRemover::Start(const FilePath& target_path,
-                        const FileTaskQueueBuilder::FileList& file_list)
+void FileRemover::Start(const FilePath& path, const FileTaskQueueBuilder::FileList& file_list)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&FileRemover::Start, this, target_path, file_list));
+        runner_->PostTask(std::bind(&FileRemover::Start, this, path, file_list));
         return;
     }
 
@@ -46,17 +45,18 @@ void FileRemover::Start(const FilePath& target_path,
         std::bind(&FileRemover::OnTaskQueueBuilded, this,
                   std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 
-    task_queue_builder_.Start(sender_, FilePath(), target_path, file_list, std::move(callback));
+    task_queue_builder_.Start(sender_, path, file_list, callback);
 }
 
 void FileRemover::OnTaskQueueBuilded(FileTaskQueue& task_queue,
                                      int64_t task_object_size,
                                      int64_t task_object_count)
 {
-    task_queue_.swap(task_queue_);
+    task_queue_.swap(task_queue);
 
     delegate_->OnRemovingStarted(task_object_count);
 
+    // When deleting, we bypass the task queue from the end.
     RunTask(task_queue_.back());
 }
 
@@ -64,9 +64,9 @@ void FileRemover::RunTask(const FileTask& task)
 {
     DCHECK(runner_->BelongsToCurrentThread());
 
-    delegate_->OnRemoveObject(task.TargetPath());
+    delegate_->OnRemoveObject(task.SourcePath());
 
-    sender_->SendRemoveRequest(This(), task.TargetPath());
+    sender_->SendRemoveRequest(This(), task.SourcePath());
 }
 
 void FileRemover::RunNextTask()
@@ -89,6 +89,30 @@ void FileRemover::RunNextTask()
     RunTask(task_queue_.back());
 }
 
+void FileRemover::OnRemoveObjectFailureAction(FileAction action)
+{
+    switch (action)
+    {
+        case FileAction::ABORT:
+            runner_->PostQuit();
+            break;
+
+        case FileAction::SKIP:
+        case FileAction::SKIP_ALL:
+        {
+            if (action == FileAction::SKIP_ALL)
+                file_remove_failure_action_ = action;
+
+            RunNextTask();
+        }
+        break;
+
+        default:
+            DLOG(FATAL) << "Unexpected action: " << static_cast<int>(action);
+            break;
+    }
+}
+
 void FileRemover::OnRemoveReply(const FilePath& path, proto::RequestStatus status)
 {
     if (!runner_->BelongsToCurrentThread())
@@ -97,13 +121,23 @@ void FileRemover::OnRemoveReply(const FilePath& path, proto::RequestStatus statu
         return;
     }
 
-    if (status != proto::REQUEST_STATUS_SUCCESS)
+    if (status == proto::REQUEST_STATUS_SUCCESS)
     {
-        // TODO
+        RunNextTask();
         return;
     }
 
-    RunNextTask();
+    if (file_remove_failure_action_ == FileAction::ASK)
+    {
+        ActionCallback callback = std::bind(
+            &FileRemover::OnRemoveObjectFailureAction, this, std::placeholders::_1);
+
+        delegate_->OnRemoveObjectFailure(path, status, callback);
+    }
+    else
+    {
+        OnRemoveObjectFailureAction(file_remove_failure_action_);
+    }
 }
 
 } // namespace aspia

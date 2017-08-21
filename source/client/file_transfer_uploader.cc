@@ -99,18 +99,18 @@ void FileTransferUploader::RunNextTask()
     RunTask(task_queue_.front(), FileRequestSender::Overwrite::NO);
 }
 
-void FileTransferUploader::OnUnableToCreateDirectoryAction(Action action)
+void FileTransferUploader::OnUnableToCreateDirectoryAction(FileAction action)
 {
     switch (action)
     {
-        case Action::ABORT:
+        case FileAction::ABORT:
             runner_->PostQuit();
             break;
 
-        case Action::SKIP:
-        case Action::SKIP_ALL:
+        case FileAction::SKIP:
+        case FileAction::SKIP_ALL:
         {
-            if (action == Action::SKIP_ALL)
+            if (action == FileAction::SKIP_ALL)
                 create_directory_failure_action_ = action;
 
             RunNextTask();
@@ -140,7 +140,7 @@ void FileTransferUploader::OnCreateDirectoryReply(const FilePath& path,
         return;
     }
 
-    if (create_directory_failure_action_ != Action::ASK)
+    if (create_directory_failure_action_ != FileAction::ASK)
     {
         OnUnableToCreateDirectoryAction(create_directory_failure_action_);
         return;
@@ -152,28 +152,28 @@ void FileTransferUploader::OnCreateDirectoryReply(const FilePath& path,
     delegate_->OnFileOperationFailure(path, status, std::move(callback));
 }
 
-void FileTransferUploader::OnUnableToCreateFileAction(Action action)
+void FileTransferUploader::OnUnableToCreateFileAction(FileAction action)
 {
     switch (action)
     {
-        case Action::ABORT:
+        case FileAction::ABORT:
             runner_->PostQuit();
             break;
 
-        case Action::REPLACE:
-        case Action::REPLACE_ALL:
+        case FileAction::REPLACE:
+        case FileAction::REPLACE_ALL:
         {
-            if (action == Action::REPLACE_ALL)
+            if (action == FileAction::REPLACE_ALL)
                 file_create_failure_action_ = action;
 
             RunTask(task_queue_.front(), FileRequestSender::Overwrite::YES);
         }
         break;
 
-        case Action::SKIP:
-        case Action::SKIP_ALL:
+        case FileAction::SKIP:
+        case FileAction::SKIP_ALL:
         {
-            if (action == Action::SKIP_ALL)
+            if (action == FileAction::SKIP_ALL)
                 file_create_failure_action_ = action;
 
             RunNextTask();
@@ -186,18 +186,18 @@ void FileTransferUploader::OnUnableToCreateFileAction(Action action)
     }
 }
 
-void FileTransferUploader::OnUnableToOpenFileAction(Action action)
+void FileTransferUploader::OnUnableToOpenFileAction(FileAction action)
 {
     switch (action)
     {
-        case Action::ABORT:
+        case FileAction::ABORT:
             runner_->PostQuit();
             break;
 
-        case Action::SKIP:
-        case Action::SKIP_ALL:
+        case FileAction::SKIP:
+        case FileAction::SKIP_ALL:
         {
-            if (action == Action::SKIP_ALL)
+            if (action == FileAction::SKIP_ALL)
                 file_open_failure_action_ = action;
 
             RunNextTask();
@@ -210,18 +210,18 @@ void FileTransferUploader::OnUnableToOpenFileAction(Action action)
     }
 }
 
-void FileTransferUploader::OnUnableToReadFileAction(Action action)
+void FileTransferUploader::OnUnableToReadFileAction(FileAction action)
 {
     switch (action)
     {
-        case Action::ABORT:
+        case FileAction::ABORT:
             runner_->PostQuit();
             break;
 
-        case Action::SKIP:
-        case Action::SKIP_ALL:
+        case FileAction::SKIP:
+        case FileAction::SKIP_ALL:
         {
-            if (action == Action::SKIP_ALL)
+            if (action == FileAction::SKIP_ALL)
                 file_read_failure_action_ = action;
 
             RunNextTask();
@@ -246,7 +246,7 @@ void FileTransferUploader::OnFileUploadReply(const FilePath& file_path,
 
     if (status != proto::REQUEST_STATUS_SUCCESS)
     {
-        if (file_create_failure_action_ == Action::ASK)
+        if (file_create_failure_action_ == FileAction::ASK)
         {
             ActionCallback callback = std::bind(
                 &FileTransferUploader::OnUnableToCreateFileAction, this, std::placeholders::_1);
@@ -266,7 +266,7 @@ void FileTransferUploader::OnFileUploadReply(const FilePath& file_path,
     file_packetizer_ = FilePacketizer::Create(current_task.SourcePath());
     if (!file_packetizer_)
     {
-        if (file_open_failure_action_ == Action::ASK)
+        if (file_open_failure_action_ == FileAction::ASK)
         {
             ActionCallback callback = std::bind(
                 &FileTransferUploader::OnUnableToOpenFileAction, this, std::placeholders::_1);
@@ -286,7 +286,7 @@ void FileTransferUploader::OnFileUploadReply(const FilePath& file_path,
     std::unique_ptr<proto::FilePacket> file_packet = file_packetizer_->CreateNextPacket();
     if (!file_packet)
     {
-        if (file_read_failure_action_ == Action::ASK)
+        if (file_read_failure_action_ == FileAction::ASK)
         {
             ActionCallback callback = std::bind(
                 &FileTransferUploader::OnUnableToReadFileAction, this, std::placeholders::_1);
@@ -306,18 +306,18 @@ void FileTransferUploader::OnFileUploadReply(const FilePath& file_path,
     remote_sender_->SendFilePacket(This(), std::move(file_packet));
 }
 
-void FileTransferUploader::OnUnableToWriteFileAction(Action action)
+void FileTransferUploader::OnUnableToWriteFileAction(FileAction action)
 {
     switch (action)
     {
-        case Action::ABORT:
+        case FileAction::ABORT:
             runner_->PostQuit();
             break;
 
-        case Action::SKIP:
-        case Action::SKIP_ALL:
+        case FileAction::SKIP:
+        case FileAction::SKIP_ALL:
         {
-            if (action == Action::SKIP_ALL)
+            if (action == FileAction::SKIP_ALL)
                 file_write_failure_action_ = action;
 
             RunNextTask();
@@ -347,7 +347,7 @@ void FileTransferUploader::OnFilePacketSended(uint32_t flags, proto::RequestStat
 
     if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
     {
-        if (file_write_failure_action_ == Action::ASK)
+        if (file_write_failure_action_ == FileAction::ASK)
         {
             ActionCallback callback = std::bind(
                 &FileTransferUploader::OnUnableToWriteFileAction, this, std::placeholders::_1);
@@ -378,7 +378,7 @@ void FileTransferUploader::OnFilePacketSended(uint32_t flags, proto::RequestStat
     std::unique_ptr<proto::FilePacket> file_packet = file_packetizer_->CreateNextPacket();
     if (!file_packet)
     {
-        if (file_read_failure_action_ == Action::ASK)
+        if (file_read_failure_action_ == FileAction::ASK)
         {
             ActionCallback callback = std::bind(
                 &FileTransferUploader::OnUnableToReadFileAction, this, std::placeholders::_1);

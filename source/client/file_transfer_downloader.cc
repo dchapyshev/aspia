@@ -67,18 +67,18 @@ void FileTransferDownloader::OnTaskQueueBuilded(FileTaskQueue& task_queue,
     RunTask(task_queue_.front());
 }
 
-void FileTransferDownloader::OnUnableToCreateDirectoryAction(Action action)
+void FileTransferDownloader::OnUnableToCreateDirectoryAction(FileAction action)
 {
     switch (action)
     {
-        case Action::ABORT:
+        case FileAction::ABORT:
             runner_->PostQuit();
             break;
 
-        case Action::SKIP:
-        case Action::SKIP_ALL:
+        case FileAction::SKIP:
+        case FileAction::SKIP_ALL:
         {
-            if (action == Action::SKIP_ALL)
+            if (action == FileAction::SKIP_ALL)
                 create_directory_failure_action_ = action;
 
             RunNextTask();
@@ -133,7 +133,7 @@ void FileTransferDownloader::OnCreateDirectoryReply(const FilePath& path,
 {
     if (status != proto::REQUEST_STATUS_SUCCESS)
     {
-        if (create_directory_failure_action_ == Action::ASK)
+        if (create_directory_failure_action_ == FileAction::ASK)
         {
             ActionCallback callback =
                 std::bind(&FileTransferDownloader::OnUnableToCreateDirectoryAction, this,
@@ -186,7 +186,7 @@ void FileTransferDownloader::CreateDepacketizer(const FilePath& file_path, bool 
         return;
     }
 
-    if (file_create_failure_action_ == Action::ASK)
+    if (file_create_failure_action_ == FileAction::ASK)
     {
         ActionCallback callback = std::bind(
             &FileTransferDownloader::OnUnableToCreateFileAction, this, std::placeholders::_1);
@@ -199,7 +199,7 @@ void FileTransferDownloader::CreateDepacketizer(const FilePath& file_path, bool 
     }
 }
 
-void FileTransferDownloader::OnUnableToCreateFileAction(Action action)
+void FileTransferDownloader::OnUnableToCreateFileAction(FileAction action)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -210,14 +210,14 @@ void FileTransferDownloader::OnUnableToCreateFileAction(Action action)
 
     switch (action)
     {
-        case Action::ABORT:
+        case FileAction::ABORT:
             runner_->PostQuit();
             break;
 
-        case Action::REPLACE:
-        case Action::REPLACE_ALL:
+        case FileAction::REPLACE:
+        case FileAction::REPLACE_ALL:
         {
-            if (action == Action::REPLACE_ALL)
+            if (action == FileAction::REPLACE_ALL)
                 file_create_failure_action_ = action;
 
             const FileTask& current_task = task_queue_.front();
@@ -225,10 +225,10 @@ void FileTransferDownloader::OnUnableToCreateFileAction(Action action)
         }
         break;
 
-        case Action::SKIP:
-        case Action::SKIP_ALL:
+        case FileAction::SKIP:
+        case FileAction::SKIP_ALL:
         {
-            if (action == Action::SKIP_ALL)
+            if (action == FileAction::SKIP_ALL)
                 file_create_failure_action_ = action;
 
             RunNextTask();
@@ -241,18 +241,18 @@ void FileTransferDownloader::OnUnableToCreateFileAction(Action action)
     }
 }
 
-void FileTransferDownloader::OnUnableToOpenFileAction(Action action)
+void FileTransferDownloader::OnUnableToOpenFileAction(FileAction action)
 {
     switch (action)
     {
-        case Action::ABORT:
+        case FileAction::ABORT:
             runner_->PostQuit();
             break;
 
-        case Action::SKIP:
-        case Action::SKIP_ALL:
+        case FileAction::SKIP:
+        case FileAction::SKIP_ALL:
         {
-            if (action == Action::SKIP_ALL)
+            if (action == FileAction::SKIP_ALL)
                 file_open_failure_action_ = action;
 
             RunNextTask();
@@ -280,7 +280,7 @@ void FileTransferDownloader::OnFileDownloadReply(const FilePath& file_path,
 
     if (status != proto::REQUEST_STATUS_SUCCESS)
     {
-        if (file_open_failure_action_ == Action::ASK)
+        if (file_open_failure_action_ == FileAction::ASK)
         {
             ActionCallback callback = std::bind(
                 &FileTransferDownloader::OnUnableToOpenFileAction, this, std::placeholders::_1);
@@ -300,18 +300,18 @@ void FileTransferDownloader::OnFileDownloadReply(const FilePath& file_path,
     CreateDepacketizer(current_task.TargetPath(), false);
 }
 
-void FileTransferDownloader::OnUnableToReadFileAction(Action action)
+void FileTransferDownloader::OnUnableToReadFileAction(FileAction action)
 {
     switch (action)
     {
-        case Action::ABORT:
+        case FileAction::ABORT:
             runner_->PostQuit();
             break;
 
-        case Action::SKIP:
-        case Action::SKIP_ALL:
+        case FileAction::SKIP:
+        case FileAction::SKIP_ALL:
         {
-            if (action == Action::SKIP_ALL)
+            if (action == FileAction::SKIP_ALL)
                 file_read_failure_action_ = action;
 
             RunNextTask();
@@ -324,18 +324,18 @@ void FileTransferDownloader::OnUnableToReadFileAction(Action action)
     }
 }
 
-void FileTransferDownloader::OnUnableToWriteFileAction(Action action)
+void FileTransferDownloader::OnUnableToWriteFileAction(FileAction action)
 {
     switch (action)
     {
-        case Action::ABORT:
+        case FileAction::ABORT:
             runner_->PostQuit();
             break;
 
-        case Action::SKIP:
-        case Action::SKIP_ALL:
+        case FileAction::SKIP:
+        case FileAction::SKIP_ALL:
         {
-            if (action == Action::SKIP_ALL)
+            if (action == FileAction::SKIP_ALL)
                 file_write_failure_action_ = action;
 
             RunNextTask();
@@ -367,7 +367,7 @@ void FileTransferDownloader::OnFilePacketReceived(std::shared_ptr<proto::FilePac
 
     if (status != proto::REQUEST_STATUS_SUCCESS)
     {
-        if (file_read_failure_action_ == Action::ASK)
+        if (file_read_failure_action_ == FileAction::ASK)
         {
             ActionCallback callback = std::bind(
                 &FileTransferDownloader::OnUnableToReadFileAction, this, std::placeholders::_1);
@@ -388,7 +388,7 @@ void FileTransferDownloader::OnFilePacketReceived(std::shared_ptr<proto::FilePac
 
     if (!file_depacketizer_->ReadNextPacket(*file_packet))
     {
-        if (file_write_failure_action_ == Action::ASK)
+        if (file_write_failure_action_ == FileAction::ASK)
         {
             ActionCallback callback = std::bind(
                 &FileTransferDownloader::OnUnableToWriteFileAction, this, std::placeholders::_1);
