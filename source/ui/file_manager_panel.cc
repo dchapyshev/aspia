@@ -454,6 +454,47 @@ LRESULT FileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handl
     return 0;
 }
 
+// static
+int CALLBACK FileManagerPanel::CompareFunc(LPARAM lparam1, LPARAM lparam2, LPARAM lparam_sort)
+{
+    SortContext* context = reinterpret_cast<SortContext*>(lparam_sort);
+    const FileListWindow& list = context->self->file_list_;
+
+    LVFINDINFOW find_info;
+    find_info.flags = LVFI_PARAM;
+
+    find_info.lParam = lparam1;
+    int index = list.FindItem(&find_info, -1);
+
+    WCHAR item1[MAX_PATH];
+    list.GetItemText(index, context->column_index, item1, _countof(item1));
+
+    find_info.lParam = lparam2;
+    index = list.FindItem(&find_info, -1);
+
+    WCHAR item2[MAX_PATH];
+    list.GetItemText(index, context->column_index, item2, _countof(item2));
+
+    if (context->self->sort_ascending_)
+        return wcscmp(item2, item1);
+    else
+        return wcscmp(item1, item2);
+}
+
+LRESULT FileManagerPanel::OnListColumnClick(int ctrl_id, LPNMHDR hdr, BOOL& handled)
+{
+    LPNMLISTVIEW pnmv = reinterpret_cast<LPNMLISTVIEW>(hdr);
+
+    SortContext context;
+    context.self = this;
+    context.column_index = pnmv->iSubItem;
+
+    file_list_.SortItems(CompareFunc, reinterpret_cast<LPARAM>(&context));
+    sort_ascending_ = !sort_ascending_;
+
+    return 0;
+}
+
 LRESULT FileManagerPanel::OnDriveEndEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     PNMCBEENDEDITW end_edit = reinterpret_cast<PNMCBEENDEDITW>(hdr);

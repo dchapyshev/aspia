@@ -64,6 +64,7 @@ private:
         NOTIFY_HANDLER(kFileListControl, LVN_ENDLABELEDIT, OnListEndLabelEdit)
         NOTIFY_HANDLER(kFileListControl, LVN_ITEMCHANGED, OnListItemChanged)
         NOTIFY_HANDLER(kFileListControl, LVN_BEGINDRAG, OnListBeginDrag)
+        NOTIFY_HANDLER(kFileListControl, LVN_COLUMNCLICK, OnListColumnClick)
 
         COMMAND_HANDLER(kDriveListControl, CBN_SELCHANGE, OnDriveChange)
         COMMAND_ID_HANDLER(ID_FOLDER_UP, OnFolderUp)
@@ -85,6 +86,7 @@ private:
     LRESULT OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnListBeginDrag(int ctrl_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnListColumnClick(int ctrl_id, LPNMHDR hdr, BOOL& handled);
 
     LRESULT OnDriveChange(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
     LRESULT OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
@@ -108,6 +110,14 @@ private:
     void MoveToDrive(int object_index);
     void SendSelectedFiles();
 
+    struct SortContext
+    {
+        FileManagerPanel* self;
+        int column_index;
+    };
+
+    static int CALLBACK CompareFunc(LPARAM lparam1, LPARAM lparam2, LPARAM lparam_sort);
+
     const Type type_;
     Delegate* delegate_;
     std::shared_ptr<FileRequestSenderProxy> sender_;
@@ -120,6 +130,8 @@ private:
 
     CImageListManaged drag_imagelist_;
     bool dragging_ = false;
+
+    bool sort_ascending_ = true;
 
     DISALLOW_COPY_AND_ASSIGN(FileManagerPanel);
 };
