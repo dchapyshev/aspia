@@ -60,7 +60,7 @@ void FileListWindow::Read(std::shared_ptr<proto::FileList> list)
     AddNewColumn(IDS_FT_COLUMN_TYPE, 100);
     AddNewColumn(IDS_FT_COLUMN_MODIFIED, 100);
 
-    list_ = std::move(list);
+    list_ = list;
 
     // All directories have the same icon.
     CIcon icon(GetDirectoryIcon());

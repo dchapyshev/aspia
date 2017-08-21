@@ -35,6 +35,8 @@ public:
         virtual void SendFiles(Type type,
                                const FilePath& source_path,
                                const FileTaskQueueBuilder::FileList& file_list) = 0;
+
+        virtual bool GetPanelTypeInPoint(const CPoint& pt, Type& type) = 0;
     };
 
     FileManagerPanel(Type type,
@@ -54,11 +56,14 @@ private:
         MESSAGE_HANDLER(WM_SIZE, OnSize)
         MESSAGE_HANDLER(WM_DRAWITEM, OnDrawItem)
         MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+        MESSAGE_HANDLER(WM_MOUSEMOVE, OnMouseMove)
+        MESSAGE_HANDLER(WM_LBUTTONUP, OnLButtonUp)
 
         NOTIFY_HANDLER(kDriveListControl, CBEN_ENDEDITW, OnDriveEndEdit)
         NOTIFY_HANDLER(kFileListControl, NM_DBLCLK, OnListDoubleClock)
         NOTIFY_HANDLER(kFileListControl, LVN_ENDLABELEDIT, OnListEndLabelEdit)
         NOTIFY_HANDLER(kFileListControl, LVN_ITEMCHANGED, OnListItemChanged)
+        NOTIFY_HANDLER(kFileListControl, LVN_BEGINDRAG, OnListBeginDrag)
 
         COMMAND_HANDLER(kDriveListControl, CBN_SELCHANGE, OnDriveChange)
         COMMAND_ID_HANDLER(ID_FOLDER_UP, OnFolderUp)
@@ -73,10 +78,13 @@ private:
     LRESULT OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnDrawItem(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnMouseMove(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnLButtonUp(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnDriveEndEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnListBeginDrag(int ctrl_id, LPNMHDR hdr, BOOL& handled);
 
     LRESULT OnDriveChange(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
     LRESULT OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
@@ -98,6 +106,7 @@ private:
                        proto::RequestStatus status) override;
 
     void MoveToDrive(int object_index);
+    void SendSelectedFiles();
 
     const Type type_;
     Delegate* delegate_;
@@ -108,6 +117,9 @@ private:
     FileListWindow file_list_;
     FileToolBar toolbar_;
     CStatic status_;
+
+    CImageListManaged drag_imagelist_;
+    bool dragging_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(FileManagerPanel);
 };

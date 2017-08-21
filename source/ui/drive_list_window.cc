@@ -22,8 +22,7 @@ bool DriveListWindow::CreateDriveList(HWND parent, int control_id)
 
     if (!Create(parent, drive_rect, nullptr, style, 0, control_id))
     {
-        DLOG(ERROR) << "Unable to create drive list window: "
-                    << GetLastSystemErrorString();
+        DLOG(ERROR) << "Unable to create drive list window: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -45,7 +44,7 @@ void DriveListWindow::Read(std::shared_ptr<proto::DriveList> list)
     ResetContent();
     imagelist_.RemoveAll();
 
-    list_ = std::move(list);
+    list_ = list;
 
     CIcon icon(GetComputerIcon());
 
@@ -126,8 +125,7 @@ void DriveListWindow::SetCurrentPath(const FilePath& path)
 {
     current_path_ = path;
 
-    int current_folder_item_index =
-        GetItemIndexByObjectIndex(kCurrentFolderObjectIndex);
+    int current_folder_item_index = GetItemIndexByObjectIndex(kCurrentFolderObjectIndex);
 
     if (current_folder_item_index != CB_ERR)
     {
@@ -190,8 +188,7 @@ FilePath DriveListWindow::ObjectPath(int object_index) const
             return FilePath();
 
         default:
-            return std::experimental::filesystem::u8path(
-                list_->item(object_index).path());
+            return std::experimental::filesystem::u8path(list_->item(object_index).path());
     }
 }
 

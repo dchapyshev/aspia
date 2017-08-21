@@ -54,8 +54,7 @@ LPARAM FileManagerPanel::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BO
 
     CRect title_rect(0, 0, 200, 20);
 
-    title_.Create(*this, title_rect, panel_name,
-                  WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
+    title_.Create(*this, title_rect, panel_name, WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
     title_.SetFont(default_font);
 
     drive_list_.CreateDriveList(*this, kDriveListControl);
@@ -63,8 +62,7 @@ LPARAM FileManagerPanel::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BO
     file_list_.CreateFileList(*this, kFileListControl);
 
     CRect status_rect(0, 0, 200, 20);
-    status_.Create(*this, status_rect, nullptr,
-                   WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
+    status_.Create(*this, status_rect, nullptr, WS_CHILD | WS_VISIBLE | SS_OWNERDRAW);
     status_.SetFont(default_font);
 
     sender_->SendDriveListRequest(This());
@@ -160,7 +158,7 @@ LRESULT FileManagerPanel::OnDrawItem(UINT message, WPARAM wparam, LPARAM lparam,
     if (label[0])
     {
         SetTextColor(dis->hDC, GetSysColor(COLOR_WINDOWTEXT));
-        DrawTextW(dis->hDC, label, wcslen(label), &dis->rcItem, DT_VCENTER | DT_SINGLELINE);
+        DrawTextW(dis->hDC, label, -1, &dis->rcItem, DT_VCENTER | DT_SINGLELINE);
     }
 
     RestoreDC(dis->hDC, saved_dc);
@@ -353,13 +351,84 @@ LRESULT FileManagerPanel::OnListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& hand
     return 0;
 }
 
-LRESULT FileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT FileManagerPanel::OnListBeginDrag(int ctrl_id, LPNMHDR hdr, BOOL& handled)
+{
+    if (!file_list_.HasFileList())
+        return 0;
+
+    int first_selected_item = file_list_.GetNextItem(-1, LVNI_SELECTED);
+    if (first_selected_item == -1)
+        return 0;
+
+    CPoint pt;
+    drag_imagelist_ = file_list_.CreateDragImage(first_selected_item, &pt);
+    if (drag_imagelist_.IsNull())
+        return 0;
+
+    if (drag_imagelist_.BeginDrag(0, 0, 0))
+    {
+        pt = reinterpret_cast<LPNMLISTVIEW>(hdr)->ptAction;
+        ClientToScreen(&pt);
+
+        if (drag_imagelist_.DragEnter(GetDesktopWindow(), pt))
+        {
+            dragging_ = true;
+            SetCapture();
+            return 0;
+        }
+
+        drag_imagelist_.EndDrag();
+    }
+
+    drag_imagelist_.Destroy();
+    return 0;
+}
+
+LRESULT FileManagerPanel::OnMouseMove(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+{
+    if (!dragging_)
+        return 0;
+
+    CPoint pt(lparam);
+    ClientToScreen(&pt);
+
+    drag_imagelist_.DragMove(pt);
+    return 0;
+}
+
+LRESULT FileManagerPanel::OnLButtonUp(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+{
+    if (!dragging_)
+        return 0;
+
+    dragging_ = false;
+
+    drag_imagelist_.DragLeave(file_list_);
+    drag_imagelist_.EndDrag();
+    drag_imagelist_.Destroy();
+
+    ReleaseCapture();
+
+    CPoint pt(lparam);
+    ClientToScreen(&pt);
+
+    Type type;
+
+    if (delegate_->GetPanelTypeInPoint(pt, type) && type != type_)
+    {
+        SendSelectedFiles();
+    }
+
+    return 0;
+}
+
+void FileManagerPanel::SendSelectedFiles()
 {
     FilePath source_path = drive_list_.CurrentPath();
 
     // If the path is empty, the panel displays a list of drives.
     if (source_path.empty())
-        return 0;
+        return;
 
     FileTaskQueueBuilder::FileList file_list;
 
@@ -373,11 +442,15 @@ LRESULT FileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handl
 
     // If the list is empty (there are no selected items).
     if (file_list.empty())
-        return 0;
+        return;
 
     // Sending files. After the method is completed, the operation must be completed.
     delegate_->SendFiles(type_, drive_list_.CurrentPath(), file_list);
+}
 
+LRESULT FileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+{
+    SendSelectedFiles();
     return 0;
 }
 
@@ -412,7 +485,7 @@ void FileManagerPanel::OnDriveListReply(std::shared_ptr<proto::DriveList> drive_
     }
     else
     {
-        drive_list_.Read(std::move(drive_list));
+        drive_list_.Read(drive_list);
 
         if (file_list_.HasFileList())
         {
@@ -443,7 +516,7 @@ void FileManagerPanel::OnFileListReply(const FilePath& path,
         toolbar_.EnableButton(ID_FOLDER_UP, TRUE);
         toolbar_.EnableButton(ID_HOME, TRUE);
 
-        file_list_.Read(std::move(file_list));
+        file_list_.Read(file_list);
         drive_list_.SetCurrentPath(path);
     }
 }

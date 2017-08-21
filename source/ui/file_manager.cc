@@ -103,6 +103,28 @@ void FileManagerWindow::SendFiles(FileManagerPanel::Type panel_type,
     }
 }
 
+bool FileManagerWindow::GetPanelTypeInPoint(const CPoint& pt, FileManagerPanel::Type& type)
+{
+    CRect panel_rect;
+    local_panel_.GetWindowRect(panel_rect);
+
+    if (panel_rect.PtInRect(pt))
+    {
+        type = FileManagerPanel::Type::LOCAL;
+        return true;
+    }
+
+    remote_panel_.GetWindowRect(panel_rect);
+
+    if (panel_rect.PtInRect(pt))
+    {
+        type = FileManagerPanel::Type::REMOTE;
+        return true;
+    }
+
+    return false;
+}
+
 LRESULT FileManagerWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
@@ -171,6 +193,13 @@ LRESULT FileManagerWindow::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM l
 LRESULT FileManagerWindow::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     delegate_->OnWindowClose();
+    return 0;
+}
+
+LRESULT FileManagerWindow::OnMouseMove(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+{
+    CPoint pt(lparam);
+    ChildWindowFromPoint(pt).SendMessageW(message, wparam, lparam);
     return 0;
 }
 

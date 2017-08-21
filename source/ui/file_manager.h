@@ -42,6 +42,7 @@ private:
     void SendFiles(FileManagerPanel::Type panel_type,
                    const FilePath& source_path,
                    const FileTaskQueueBuilder::FileList& file_list) override;
+    bool GetPanelTypeInPoint(const CPoint& pt, FileManagerPanel::Type& type) override;
 
     BEGIN_MSG_MAP(FileManagerWindow)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
@@ -49,6 +50,7 @@ private:
         MESSAGE_HANDLER(WM_GETMINMAXINFO, OnGetMinMaxInfo)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
         MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+        MESSAGE_HANDLER(WM_MOUSEMOVE, OnMouseMove)
     END_MSG_MAP()
 
     LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
@@ -56,6 +58,7 @@ private:
     LRESULT OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnMouseMove(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
 
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
