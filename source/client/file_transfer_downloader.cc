@@ -51,8 +51,7 @@ void FileTransferDownloader::Start(const FilePath& source_path,
         std::bind(&FileTransferDownloader::OnTaskQueueBuilded, this,
                   std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 
-    task_queue_builder_.Start(
-        remote_sender_, source_path, target_path, file_list, std::move(callback));
+    task_queue_builder_.Start(remote_sender_, source_path, target_path, file_list, callback);
 }
 
 void FileTransferDownloader::OnTaskQueueBuilded(FileTaskQueue& task_queue,

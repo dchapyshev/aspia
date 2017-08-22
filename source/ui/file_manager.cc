@@ -45,12 +45,14 @@ void FileManagerWindow::OnBeforeThreadRunning()
     runner_ = ui_thread_.message_loop_proxy();
     DCHECK(runner_);
 
+    accelerator_.LoadAcceleratorsW(IDC_FILE_MANAGER_ACCELERATORS);
+
     CString title;
     title.LoadStringW(IDS_FT_FILE_TRANSFER);
 
-    if (!Create(nullptr, nullptr, title, WS_OVERLAPPEDWINDOW))
+    if (!Create(nullptr, rcDefault, title, WS_OVERLAPPEDWINDOW))
     {
-        LOG(ERROR) << "File manager window not created";
+        LOG(ERROR) << "File manager window not created: " << GetLastSystemErrorString();
         runner_->PostQuit();
     }
     else
@@ -60,9 +62,26 @@ void FileManagerWindow::OnBeforeThreadRunning()
     }
 }
 
+void FileManagerWindow::OnThreadRunning(MessageLoop* message_loop)
+{
+    // Run message loop with this message dispatcher.
+    message_loop->Run(this);
+}
+
 void FileManagerWindow::OnAfterThreadRunning()
 {
     DestroyWindow();
+}
+
+bool FileManagerWindow::Dispatch(const NativeEvent& event)
+{
+    if (!accelerator_.TranslateAcceleratorW(*this, const_cast<NativeEvent*>(&event)))
+    {
+        TranslateMessage(&event);
+        DispatchMessageW(&event);
+    }
+
+    return true;
 }
 
 void FileManagerWindow::SendFiles(FileManagerPanel::Type panel_type,
@@ -162,6 +181,8 @@ LRESULT FileManagerWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, 
                  SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
     CenterWindow();
 
+    local_panel_.SetFocus();
+
     return 0;
 }
 
@@ -190,9 +211,119 @@ LRESULT FileManagerWindow::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM l
     return 0;
 }
 
+bool FileManagerWindow::GetFocusedPanelType(FileManagerPanel::Type& type)
+{
+    CWindow focused_window(GetFocus());
+
+    CRect focused_window_rect;
+    focused_window.GetWindowRect(&focused_window_rect);
+
+    return GetPanelTypeInPoint(focused_window_rect.CenterPoint(), type);
+}
+
 LRESULT FileManagerWindow::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     delegate_->OnWindowClose();
+    return 0;
+}
+
+LRESULT FileManagerWindow::OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+{
+    FileManagerPanel::Type type;
+
+    if (GetFocusedPanelType(type))
+    {
+        if (type == FileManagerPanel::Type::LOCAL)
+        {
+            local_panel_.FolderUp();
+        }
+        else
+        {
+            DCHECK(type == FileManagerPanel::Type::REMOTE);
+            remote_panel_.FolderUp();
+        }
+    }
+
+    return 0;
+}
+
+LRESULT FileManagerWindow::OnRefresh(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+{
+    FileManagerPanel::Type type;
+
+    if (GetFocusedPanelType(type))
+    {
+        if (type == FileManagerPanel::Type::LOCAL)
+        {
+            local_panel_.Refresh();
+        }
+        else
+        {
+            DCHECK(type == FileManagerPanel::Type::REMOTE);
+            remote_panel_.Refresh();
+        }
+    }
+
+    return 0;
+}
+
+LRESULT FileManagerWindow::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+{
+    FileManagerPanel::Type type;
+
+    if (GetFocusedPanelType(type))
+    {
+        if (type == FileManagerPanel::Type::LOCAL)
+        {
+            local_panel_.RemoveSelectedFiles();
+        }
+        else
+        {
+            DCHECK(type == FileManagerPanel::Type::REMOTE);
+            remote_panel_.RemoveSelectedFiles();
+        }
+    }
+
+    return 0;
+}
+
+LRESULT FileManagerWindow::OnHome(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+{
+    FileManagerPanel::Type type;
+
+    if (GetFocusedPanelType(type))
+    {
+        if (type == FileManagerPanel::Type::LOCAL)
+        {
+            local_panel_.Home();
+        }
+        else
+        {
+            DCHECK(type == FileManagerPanel::Type::REMOTE);
+            remote_panel_.Home();
+        }
+    }
+
+    return 0;
+}
+
+LRESULT FileManagerWindow::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+{
+    FileManagerPanel::Type type;
+
+    if (GetFocusedPanelType(type))
+    {
+        if (type == FileManagerPanel::Type::LOCAL)
+        {
+            local_panel_.SendSelectedFiles();
+        }
+        else
+        {
+            DCHECK(type == FileManagerPanel::Type::REMOTE);
+            remote_panel_.SendSelectedFiles();
+        }
+    }
+
     return 0;
 }
 

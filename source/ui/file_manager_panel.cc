@@ -38,7 +38,7 @@ FilePath FileManagerPanel::GetCurrentPath() const
 
 void FileManagerPanel::Refresh()
 {
-    sender_->SendFileListRequest(This(), GetCurrentPath());
+    sender_->SendDriveListRequest(This());
 }
 
 LPARAM FileManagerPanel::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
@@ -203,7 +203,7 @@ LRESULT FileManagerPanel::OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& hand
     return 0;
 }
 
-LRESULT FileManagerPanel::OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+void FileManagerPanel::FolderUp()
 {
     FilePath path = drive_list_.CurrentPath();
 
@@ -215,7 +215,11 @@ LRESULT FileManagerPanel::OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL& h
     {
         sender_->SendFileListRequest(This(), path.parent_path());
     }
+}
 
+LRESULT FileManagerPanel::OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+{
+    FolderUp();
     return 0;
 }
 
@@ -227,18 +231,18 @@ LRESULT FileManagerPanel::OnFolderAdd(WORD code, WORD ctrl_id, HWND ctrl, BOOL& 
 
 LRESULT FileManagerPanel::OnRefresh(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
-    sender_->SendDriveListRequest(This());
+    Refresh();
     return 0;
 }
 
-LRESULT FileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+void FileManagerPanel::RemoveSelectedFiles()
 {
     if (!file_list_.HasFileList())
-        return 0;
+        return;
 
     UINT selected_count = file_list_.GetSelectedCount();
     if (!selected_count)
-        return 0;
+        return;
 
     CString title;
     title.LoadStringW(IDS_CONFIRMATION);
@@ -247,7 +251,7 @@ LRESULT FileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& han
     message.Format(IDS_FT_DELETE_CONFORM, selected_count);
 
     if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) != IDYES)
-        return 0;
+        return;
 
     FileTaskQueueBuilder::FileList file_list;
 
@@ -261,13 +265,17 @@ LRESULT FileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& han
 
     // If the list is empty (there are no selected items).
     if (file_list.empty())
-        return 0;
+        return;
 
     FileRemoveDialog dialog(sender_, drive_list_.CurrentPath(), file_list);
     dialog.DoModal(*this);
 
     Refresh();
+}
 
+LRESULT FileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+{
+    RemoveSelectedFiles();
     return 0;
 }
 
@@ -507,9 +515,14 @@ LRESULT FileManagerPanel::OnDriveEndEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled
     return 0;
 }
 
-LRESULT FileManagerPanel::OnHome(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+void FileManagerPanel::Home()
 {
     MoveToDrive(DriveListWindow::kComputerObjectIndex);
+}
+
+LRESULT FileManagerPanel::OnHome(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+{
+    Home();
     return 0;
 }
 
@@ -530,7 +543,7 @@ void FileManagerPanel::OnDriveListReply(std::shared_ptr<proto::DriveList> drive_
 
         if (file_list_.HasFileList())
         {
-            Refresh();
+            sender_->SendFileListRequest(This(), GetCurrentPath());
         }
         else
         {

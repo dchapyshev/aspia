@@ -46,6 +46,10 @@ public:
 
     FilePath GetCurrentPath() const;
     void Refresh();
+    void Home();
+    void FolderUp();
+    void RemoveSelectedFiles();
+    void SendSelectedFiles();
 
 private:
     static const int kDriveListControl = 101;
@@ -108,7 +112,6 @@ private:
                        proto::RequestStatus status) override;
 
     void MoveToDrive(int object_index);
-    void SendSelectedFiles();
 
     struct SortContext
     {

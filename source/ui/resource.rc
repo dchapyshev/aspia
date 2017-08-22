@@ -33,3 +33,12 @@ IDI_SEND          ICON "resource/send.ico"
 IDI_SETTINGS      ICON "resource/settings.ico"
 IDI_USER          ICON "resource/user.ico"
 IDI_USER_DISABLED ICON "resource/user_disabled.ico"
+
+IDC_FILE_MANAGER_ACCELERATORS ACCELERATORS
+BEGIN
+    VK_F5, ID_REFRESH, VIRTKEY         // F5
+    VK_BACK, ID_HOME, CONTROL, VIRTKEY // Ctrl + Backspace
+    VK_BACK, ID_FOLDER_UP, VIRTKEY     // Backspace
+    VK_DELETE, ID_DELETE, VIRTKEY      // Delete
+    VK_F11, ID_SEND, VIRTKEY           // F11
+END

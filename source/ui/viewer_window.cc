@@ -40,12 +40,9 @@ void ViewerWindow::OnBeforeThreadRunning()
     runner_ = ui_thread_.message_loop_proxy();
     DCHECK(runner_);
 
-    const DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU |
-        WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
-
-    if (!Create(nullptr, CWindow::rcDefault, nullptr, style))
+    if (!Create(nullptr, rcDefault, nullptr, WS_OVERLAPPEDWINDOW))
     {
-        LOG(ERROR) << "Viewer window not created";
+        LOG(ERROR) << "Viewer window not created: " << GetLastSystemErrorString();
         runner_->PostQuit();
     }
     else
@@ -136,11 +133,18 @@ void ViewerWindow::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> c
 
 LRESULT ViewerWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
-    CIcon icon(AtlLoadIconImage(IDI_MAIN,
-                                LR_CREATEDIBSECTION,
-                                GetSystemMetrics(SM_CXSMICON),
-                                GetSystemMetrics(SM_CYSMICON)));
-    SetIcon(icon);
+    small_icon_ = AtlLoadIconImage(IDI_MAIN,
+                                   LR_CREATEDIBSECTION,
+                                   GetSystemMetrics(SM_CXSMICON),
+                                   GetSystemMetrics(SM_CYSMICON));
+    SetIcon(small_icon_, FALSE);
+
+    big_icon_ = AtlLoadIconImage(IDI_MAIN,
+                                 LR_CREATEDIBSECTION,
+                                 GetSystemMetrics(SM_CXICON),
+                                 GetSystemMetrics(SM_CYICON));
+    SetIcon(big_icon_, TRUE);
+
     SetCursor(LoadCursorW(nullptr, IDC_ARROW));
 
     CString app_name;
@@ -153,7 +157,7 @@ LRESULT ViewerWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL&
     SetWindowTextW(title);
 
     toolbar_.CreateViewerToolBar(*this, config_->session_type());
-    video_window_.Create(*this, CWindow::rcDefault, nullptr, WS_CHILD | WS_VISIBLE);
+    video_window_.Create(*this, rcDefault, nullptr, WS_CHILD | WS_VISIBLE);
 
     DoAutoSize(kVideoWindowSize);
 
@@ -366,7 +370,7 @@ LRESULT ViewerWindow::OnAboutButton(WORD notify_code, WORD control_id, HWND cont
 
 LRESULT ViewerWindow::OnExitButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
-    PostMessageW(WM_CLOSE, 0, 0);
+    PostMessageW(WM_CLOSE);
     return 0;
 }
 
@@ -430,16 +434,15 @@ int ViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
 
         return SB_BOTH;
     }
-    else
-    {
-        if (wp.showCmd != SW_MAXIMIZE)
-            ShowWindow(SW_MAXIMIZE);
 
-        if (client_area_width < screen_rect.Width())
-            return SB_HORZ;
-        else if (client_area_height < screen_rect.Height())
-            return SB_VERT;
-    }
+    if (wp.showCmd != SW_MAXIMIZE)
+        ShowWindow(SW_MAXIMIZE);
+
+    if (client_area_width < screen_rect.Width())
+        return SB_HORZ;
+
+    if (client_area_height < screen_rect.Height())
+        return SB_VERT;
 
     return -1;
 }
@@ -513,7 +516,7 @@ LRESULT ViewerWindow::OnFullScreenButton(WORD notify_code, WORD control_id, HWND
 LRESULT ViewerWindow::OnDropDownButton(WORD notify_code, WORD control_id, HWND control,
                                        BOOL& handled)
 {
-    RECT rect = { 0 };
+    CRect rect;
     toolbar_.GetRect(control_id, &rect);
     ShowDropDownMenu(control_id, &rect);
     return 0;
@@ -633,7 +636,7 @@ void ViewerWindow::ShowDropDownMenu(int button_id, RECT* button_rect)
     if (button_id != ID_SHORTCUTS)
         return;
 
-    if (toolbar_.MapWindowPoints(HWND_DESKTOP, reinterpret_cast<LPPOINT>(button_rect), 2))
+    if (toolbar_.MapWindowPoints(HWND_DESKTOP, button_rect))
     {
         TPMPARAMS tpm;
         tpm.cbSize = sizeof(TPMPARAMS);

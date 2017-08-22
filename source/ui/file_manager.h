@@ -18,6 +18,7 @@ namespace aspia {
 class FileManagerWindow :
     public CWindowImpl<FileManagerWindow, CWindow, CFrameWinTraits>,
     private MessageLoopThread::Delegate,
+    private MessageLoop::Dispatcher,
     private FileManagerPanel::Delegate
 {
 public:
@@ -36,7 +37,11 @@ public:
 private:
     // MessageLoopThread::Delegate implementation.
     void OnBeforeThreadRunning() override;
+    void OnThreadRunning(MessageLoop* message_loop) override;
     void OnAfterThreadRunning() override;
+
+    // MessageLoop::Dispatcher implementation.
+    bool Dispatch(const NativeEvent& event) override;
 
     // FileManagerPanel::Delegate implementation.
     void SendFiles(FileManagerPanel::Type panel_type,
@@ -50,6 +55,12 @@ private:
         MESSAGE_HANDLER(WM_GETMINMAXINFO, OnGetMinMaxInfo)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
         MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+
+        COMMAND_ID_HANDLER(ID_FOLDER_UP, OnFolderUp)
+        COMMAND_ID_HANDLER(ID_REFRESH, OnRefresh)
+        COMMAND_ID_HANDLER(ID_DELETE, OnRemove)
+        COMMAND_ID_HANDLER(ID_HOME, OnHome)
+        COMMAND_ID_HANDLER(ID_SEND, OnSend)
     END_MSG_MAP()
 
     LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
@@ -57,6 +68,14 @@ private:
     LRESULT OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+
+    LRESULT OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnRefresh(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnHome(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+
+    bool GetFocusedPanelType(FileManagerPanel::Type& type);
 
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
@@ -66,6 +85,7 @@ private:
 
     Delegate* delegate_;
 
+    CAccelerator accelerator_;
     FileManagerPanel local_panel_;
     FileManagerPanel remote_panel_;
     VerticalSplitter splitter_;

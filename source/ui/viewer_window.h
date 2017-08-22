@@ -126,6 +126,9 @@ private:
     ScopedHHOOK keyboard_hook_;
     WINDOWPLACEMENT window_pos_ = { 0 };
 
+    CIcon small_icon_;
+    CIcon big_icon_;
+
     DISALLOW_COPY_AND_ASSIGN(ViewerWindow);
 };
 

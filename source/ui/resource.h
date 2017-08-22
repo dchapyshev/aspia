@@ -101,6 +101,7 @@
 #define IDC_POWER_ICON                        141
 #define IDC_POWER_ACTION                      142
 #define IDC_POWER_TIME                        143
+#define IDC_FILE_MANAGER_ACCELERATORS         144
 
 //
 // Commands

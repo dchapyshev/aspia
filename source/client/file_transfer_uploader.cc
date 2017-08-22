@@ -50,8 +50,7 @@ void FileTransferUploader::Start(const FilePath& source_path,
         std::bind(&FileTransferUploader::OnTaskQueueBuilded, this,
                   std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 
-    task_queue_builder_.Start(
-        local_sender_, source_path, target_path, file_list, std::move(callback));
+    task_queue_builder_.Start(local_sender_, source_path, target_path, file_list, callback);
 }
 
 void FileTransferUploader::OnTaskQueueBuilded(FileTaskQueue& task_queue,

@@ -81,6 +81,11 @@ void MessageLoopThread::Join()
     state_ = State::STOPPED;
 }
 
+void MessageLoopThread::Delegate::OnThreadRunning(MessageLoop* message_loop)
+{
+    message_loop->Run();
+}
+
 void MessageLoopThread::ThreadMain(MessageLoop::Type message_loop_type)
 {
     // The message loop for this thread.
@@ -102,7 +107,7 @@ void MessageLoopThread::ThreadMain(MessageLoop::Type message_loop_type)
     running_ = true;
     start_event_.Signal();
 
-    message_loop_->Run();
+    delegate_->OnThreadRunning(message_loop_);
 
     running_ = false;
 

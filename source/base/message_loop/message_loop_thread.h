@@ -31,6 +31,8 @@ public:
         // Called just prior to starting the message loop.
         virtual void OnBeforeThreadRunning() { }
 
+        virtual void OnThreadRunning(MessageLoop* message_loop);
+
         // Called just after the message loop ends.
         virtual void OnAfterThreadRunning() { }
     };

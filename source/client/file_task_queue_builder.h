@@ -30,12 +30,12 @@ public:
                const FilePath& source_path,
                const FilePath& target_path,
                const FileList& file_list,
-               FinishCallback callback);
+               const FinishCallback& callback);
 
     void Start(std::shared_ptr<FileRequestSenderProxy> sender,
                const FilePath& path,
                const FileList& file_list,
-               FinishCallback callback);
+               const FinishCallback& callback);
 
 private:
     // FileReplyReceiver implementation.
