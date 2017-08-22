@@ -44,7 +44,7 @@ void DriveListWindow::Read(std::shared_ptr<proto::DriveList> list)
     ResetContent();
     imagelist_.RemoveAll();
 
-    list_ = list;
+    list_.swap(list);
 
     CIcon icon(GetComputerIcon());
 

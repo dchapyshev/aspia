@@ -11,16 +11,6 @@
 
 namespace aspia {
 
-File::Info::Info()
-    : size(0),
-      is_directory(false),
-      is_symbolic_link(false)
-{
-    // Nothing
-}
-
-File::Info::~Info() = default;
-
 File::File()
     : error_details_(FILE_ERROR_FAILED),
       created_(false),
@@ -54,7 +44,7 @@ File::File(Error error_details)
     // Nothing
 }
 
-File::File(File&& other)
+File::File(File&& other) noexcept
     : file_(other.TakePlatformFile()),
       error_details_(other.error_details()),
       created_(other.created()),
@@ -79,7 +69,7 @@ File File::CreateForAsyncHandle(PlatformFile platform_file)
     return file;
 }
 
-File& File::operator=(File&& other)
+File& File::operator=(File&& other) noexcept
 {
     Close();
     SetPlatformFile(other.TakePlatformFile());

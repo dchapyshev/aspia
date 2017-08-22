@@ -109,27 +109,27 @@ public:
     // ipc/ipc_message_utils.cc.
     struct Info
     {
-        Info();
-        ~Info();
+        Info() = default;
+        ~Info() = default;
 
         // The size of the file in bytes.  Undefined when is_directory is true.
-        int64_t size;
+        int64_t size = 0;
 
         // True if the file corresponds to a directory.
-        bool is_directory;
+        bool is_directory = false;
 
         // True if the file corresponds to a symbolic link.  For Windows currently
         // not supported and thus always false.
-        bool is_symbolic_link;
+        bool is_symbolic_link = false;
 
         // The last modified time of a file.
-        time_t last_modified;
+        time_t last_modified = 0;
 
         // The last accessed time of a file.
-        time_t last_accessed;
+        time_t last_accessed = 0;
 
         // The creation time of a file.
-        time_t creation_time;
+        time_t creation_time = 0;
     };
 
     File();
@@ -144,14 +144,14 @@ public:
     // Creates an object with a specific error_details code.
     explicit File(Error error_details);
 
-    File(File&& other);
+    File(File&& other) noexcept;
 
     ~File();
 
     // Takes ownership of |platform_file|.
     static File CreateForAsyncHandle(PlatformFile platform_file);
 
-    File& operator=(File&& other);
+    File& operator=(File&& other) noexcept;
 
     // Creates or opens the given file.
     void Initialize(const FilePath& path, uint32_t flags);

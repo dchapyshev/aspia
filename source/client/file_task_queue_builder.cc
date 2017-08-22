@@ -17,7 +17,7 @@ void FileTaskQueueBuilder::Start(std::shared_ptr<FileRequestSenderProxy> sender,
                                  FinishCallback callback)
 {
     finish_callback_ = std::move(callback);
-    sender_ = sender;
+    sender_.swap(sender);
 
     DCHECK(finish_callback_ != nullptr);
     DCHECK(!file_list.empty());
