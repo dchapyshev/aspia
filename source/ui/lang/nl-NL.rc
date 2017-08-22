@@ -30,7 +30,7 @@ BEGIN
     EDITTEXT IDC_SERVER_PORT_EDIT, 177, 58, 50, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | ES_AUTOHSCROLL | ES_NUMBER
     AUTOCHECKBOX "Gebruik standaard", IDC_SERVER_DEFAULT_PORT_CHECK, 235, 60, 85, 8
 
-    LTEXT "Session Type:", -1, 177, 77, 90, 9
+    LTEXT "Sessie Type:", -1, 177, 77, 90, 9
     COMBOBOX IDC_SESSION_TYPE_COMBO, 177, 88, 146, 150, CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL
 
     DEFPUSHBUTTON "&Verbinden...", IDC_CONNECT_BUTTON, 199, 115, 60, 14
@@ -144,12 +144,12 @@ END
 
 IDD_POWER DIALOGEX 100, 100, 138, 126
 STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
-CAPTION "Power Manage"
+CAPTION "Energiebeheer"
 FONT 8, "MS Shell Dlg"
 BEGIN
     CONTROL -1, IDC_POWER_ICON, "STATIC", SS_ICON | SS_CENTERIMAGE | SS_REALSIZEIMAGE, 8, 4, 32, 32
 
-    LTEXT "Select an action:", -1, 50, 15, 150, 10
+    LTEXT "Selecteer een actie:", -1, 50, 15, 150, 10
 
     AUTORADIOBUTTON "Afsl&uiten",         ID_POWER_SHUTDOWN,  56, 29, 77, 14
     AUTORADIOBUTTON "&Opnieuw opstarten", ID_POWER_REBOOT,    56, 46, 77, 14
@@ -170,50 +170,50 @@ BEGIN
     LTEXT "", IDC_POWER_ACTION, 55, 8, 234, 10
     LTEXT "", IDC_POWER_TIME, 55, 24, 234, 10
 
-    DEFPUSHBUTTON "&Execute now", IDOK, 164, 40, 60, 14
-    PUSHBUTTON "&Cancel", IDCANCEL, 228, 40, 60, 14
+    DEFPUSHBUTTON "&Nu uitvoeren", IDOK, 164, 40, 60, 14
+    PUSHBUTTON "&Annuleren", IDCANCEL, 228, 40, 60, 14
 END
 
 IDD_FILE_PROGRESS DIALOGEX 100, 100, 315, 115
 STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
-CAPTION "Progress"
+CAPTION "Voortgang"
 FONT 8, "MS Shell Dlg"
 BEGIN
-    LTEXT "Current item:", -1, 7, 6, 300, 10
+    LTEXT "Huidig item:", -1, 7, 6, 300, 10
     EDITTEXT IDC_CURRENT_ITEM_EDIT, 7, 17, 300, 14, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_READONLY
 
-    LTEXT "Total progress:", -1, 7, 34, 300, 10
+    LTEXT "Algehele voortgang:", -1, 7, 34, 300, 10
     CONTROL "", IDC_TOTAL_PROGRESS, PROGRESS_CLASS, WS_BORDER | WS_TABSTOP | PBS_SMOOTH | PBS_MARQUEE, 7, 45, 300, 14
 
-    LTEXT "Progress for the current item:", -1, 7, 62, 300, 10
+    LTEXT "Voortgang van het huidige item:", -1, 7, 62, 300, 10
     CONTROL "", IDC_CURRENT_PROGRESS, PROGRESS_CLASS, WS_BORDER | WS_TABSTOP | PBS_SMOOTH | PBS_MARQUEE, 7, 73, 300, 14
 
-    DEFPUSHBUTTON "&Cancel", IDCANCEL, 247, 95, 60, 14
+    DEFPUSHBUTTON "&Annuleren", IDCANCEL, 247, 95, 60, 14
 END
 
 IDD_FILE_ACTION DIALOGEX 100, 100, 309, 95
 STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
-CAPTION "File Transfer"
+CAPTION "Bestandsoverdracht"
 FONT 8, "MS Shell Dlg"
 BEGIN
     EDITTEXT IDC_CURRENT_ITEM_EDIT, 7, 7, 295, 42, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_READONLY | ES_MULTILINE
 
-    PUSHBUTTON "&Replace", IDC_REPLACE_BUTTON, 7, 55, 70, 14
-    PUSHBUTTON "R&eplace all", IDC_REPLACE_ALL_BUTTON, 82, 55, 70, 14
-    PUSHBUTTON "&Skip", IDC_SKIP_BUTTON, 157, 55, 70, 14
-    PUSHBUTTON "S&kip all", IDC_SKIP_ALL_BUTTON, 232, 55, 70, 14
+    PUSHBUTTON "&Vervangen", IDC_REPLACE_BUTTON, 7, 55, 70, 14
+    PUSHBUTTON "&Alle vervangen", IDC_REPLACE_ALL_BUTTON, 82, 55, 70, 14
+    PUSHBUTTON "&Overslaan", IDC_SKIP_BUTTON, 157, 55, 70, 14
+    PUSHBUTTON "A&lle overslaan", IDC_SKIP_ALL_BUTTON, 232, 55, 70, 14
 
-    PUSHBUTTON "&Cancel", IDCANCEL, 232, 75, 70, 14
+    PUSHBUTTON "&Annuleren", IDCANCEL, 232, 75, 70, 14
 END
 
 IDD_FILE_STATUS DIALOGEX 100, 100, 275, 175
 STYLE DS_SHELLFONT | WS_BORDER | WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX
-CAPTION "File Transfer"
+CAPTION "Bestandsoverdracht"
 FONT 8, "MS Shell Dlg"
 BEGIN
     CONTROL -1, IDC_STATUS_EDIT, MSFTEDIT_CLASS, WS_CHILD | WS_BORDER | WS_VISIBLE | WS_VSCROLL | WS_TABSTOP | ES_MULTILINE | ES_READONLY, 5, 5, 265, 148
-    PUSHBUTTON "&Stop transferring files", IDC_STOP_BUTTON, 70, 157, 125, 14
-    PUSHBUTTON "&Minimize", IDC_MINIMIZE_BUTTON, 200, 157, 70, 14
+    PUSHBUTTON "&Stop bestandsoverdracht", IDC_STOP_BUTTON, 70, 157, 125, 14
+    PUSHBUTTON "&Minimaliseren", IDC_MINIMIZE_BUTTON, 200, 157, 70, 14
 END
 
 IDR_SHORTCUTS MENU
@@ -255,15 +255,15 @@ IDR_MAIN MENU
 BEGIN
     POPUP "&Aspia"
     BEGIN
-        POPUP "Service"
+        POPUP "&Service"
         BEGIN
             MENUITEM "&Installeren", ID_INSTALL_SERVICE
             MENUITEM "&Verwijderen", ID_REMOVE_SERVICE
         END
         MENUITEM "&Gebruikers...", ID_USERS
         MENUITEM SEPARATOR
-        MENUITEM "&Hide", ID_SHOWHIDE
-        MENUITEM "&Exit\tAlt+F4", ID_EXIT
+        MENUITEM "&Verbergen", ID_SHOWHIDE
+        MENUITEM "&Afsluiten\tAlt+F4", ID_EXIT
     END
     POPUP "&Help"
     BEGIN
@@ -277,7 +277,7 @@ IDR_IP_LIST MENU
 BEGIN
     POPUP "popup"
     BEGIN
-        MENUITEM "&Copy", ID_COPY
+        MENUITEM "&Kopieren", ID_COPY
     END
 END
 
@@ -324,7 +324,7 @@ BEGIN
     IDS_SESSION_TYPE_SYSTEM_INFO          "Systeem informatie"
     IDS_DELETE_USER_CONFORMATION          "Weet u zeker dat u de gebruiker ""%s"" wilt verwijderen?"
     IDS_USER_LIST_MODIFIED                "Gebruikers Beheer (*aangepast)"
-    IDS_USER_LIST                         "User List"
+    IDS_USER_LIST                         "Gebruikerslijst"
 END
 
 // Desktop Manage
@@ -351,99 +351,99 @@ END
 // File Transfer
 STRINGTABLE DISCARDABLE
 BEGIN
-    IDS_FT_FILE_TRANSFER                  "File Transfer"
-    IDS_FT_LOCAL_COMPUTER                 "Local Computer"
-    IDS_FT_REMOTE_COMPUTER                "Remote Computer"
-    IDS_FT_COLUMN_NAME                    "Name"
-    IDS_FT_COLUMN_SIZE                    "Size"
+    IDS_FT_FILE_TRANSFER                  "Bestandsoverdracht"
+    IDS_FT_LOCAL_COMPUTER                 "Lokale Computer"
+    IDS_FT_REMOTE_COMPUTER                "Externe Computer"
+    IDS_FT_COLUMN_NAME                    "Naam"
+    IDS_FT_COLUMN_SIZE                    "Grootte"
     IDS_FT_COLUMN_TYPE                    "Type"
-    IDS_FT_COLUMN_MODIFIED                "Modified"
-    IDS_FT_COLUMN_TOTAL_SPACE             "Total Space"
-    IDS_FT_COLUMN_FREE_SPACE              "Free Space"
-    IDS_FT_TOOLTIP_REFRESH                "Refresh the file list (F5)"
-    IDS_FT_TOOLTIP_DELETE                 "Delete selected object(s) (Delete)"
-    IDS_FT_TOOLTIP_FOLDER_ADD             "Create a new folder"
-    IDS_FT_TOOLTIP_FOLDER_UP              "Browse to parent folder (Backspace)"
-    IDS_FT_TOOLTIP_HOME                   "Browse to drives (Ctrl+Backspace)"
-    IDS_FT_TOOLTIP_SEND                   "Send selected object(s) to remote computer (F11)"
-    IDS_FT_TOOLTIP_RECIEVE                "Send selected object(s) to local computer (F11)"
+    IDS_FT_COLUMN_MODIFIED                "Gewijzigd"
+    IDS_FT_COLUMN_TOTAL_SPACE             "Totale grootte"
+    IDS_FT_COLUMN_FREE_SPACE              "Vrije ruimte"
+    IDS_FT_TOOLTIP_REFRESH                "Ververs de bestandslijst (F5)"
+    IDS_FT_TOOLTIP_DELETE                 "Verwijder de geselecteerde bestanden (Delete)"
+    IDS_FT_TOOLTIP_FOLDER_ADD             "Nieuwe map aanmaken"
+    IDS_FT_TOOLTIP_FOLDER_UP              "Navigeer een map terug (Backspace)"
+    IDS_FT_TOOLTIP_HOME                   "Navigeer naar de schijf (Ctrl+Backspace)"
+    IDS_FT_TOOLTIP_SEND                   "Stuur de geselecteerde objecten naar de externe computer (F11)"
+    IDS_FT_TOOLTIP_RECIEVE                "Stuur de geselecteerde objecten naar de lokale computer (F11)"
     IDS_FT_HOME_FOLDER                    "Home Folder"
-    IDS_FT_DESKTOP_FOLDER                 "Desktop"
+    IDS_FT_DESKTOP_FOLDER                 "Bureaublad"
     IDS_FT_SIZE_TBYTES                    "TB"
     IDS_FT_SIZE_GBYTES                    "GB"
     IDS_FT_SIZE_MBYTES                    "MB"
     IDS_FT_SIZE_KBYTES                    "kB"
     IDS_FT_SIZE_BYTES                     "B"
-    IDS_FT_NEW_FOLDER                     "New Folder"
+    IDS_FT_NEW_FOLDER                     "Nieuwe map"
     IDS_FT_COMPUTER                       "Computer"
-    IDS_FT_DRIVE_DESC_DESKTOP             "User's Desktop Folder"
-    IDS_FT_DRIVE_DESC_HOME                "User's Home Folder"
-    IDS_FT_DRIVE_DESC_CDROM               "Optical Drive"
-    IDS_FT_DRIVE_DESC_FIXED               "Fixed Device"
-    IDS_FT_DRIVE_DESC_REMOVABLE           "Removable Device"
-    IDS_FT_DRIVE_DESC_REMOTE              "Remote Drive"
-    IDS_FT_DRIVE_DESC_RAM                 "RAM Drive"
-    IDS_FT_DRIVE_DESC_UNKNOWN             "Unknown Device"
-    IDS_FT_DELETE_CONFORM                 "Do you really want to delete %u objects?"
-    IDS_FT_OP_SESSION_START               "Session started"
-    IDS_FT_OP_SESSION_END                 "Session terminated"
-    IDS_FT_OP_BROWSE_FOLDERS              "Browse folders: ""%s"""
-    IDS_FT_OP_RENAME                      "Rename ""%s"" to ""%s"""
-    IDS_FT_OP_REMOVE                      "Remove ""%s"""
-    IDS_FT_OP_CREATE_FOLDER               "Create folder: ""%s"""
-    IDS_FT_OP_BROWSE_DRIVES               "Browse drives"
-    IDS_FT_OP_SEND_FILE                   "Sending a file: ""%s"""
-    IDS_FT_OP_RECIEVE_FILE                "Recieving a file: ""%s"""
-    IDS_FT_SEND                           "Send"
-    IDS_FT_RECIEVE                        "Recieve"
-    IDS_FT_SELECTED_OBJECT_COUNT          "%lu object(s) selected"
-    IDS_FT_BROWSE_FOLDERS_ERROR           "An error occurred while trying to view the folder ""%s"": %s"
-    IDS_FT_OP_RENAME_ERROR                "An error occurred when renaming object ""%s"" to ""%s"": %s"
-    IDS_FT_OP_CREATE_FOLDER_ERROR         "An error occurred while trying to create the folder ""%s"": %s"
-    IDS_FT_OP_BROWSE_DRIVES_ERROR         "An error occurred while retrieving the drive list: %s"
-    IDS_FT_FILE_FOLDER                    "File Folder"
-    IDS_FT_CLOSE_WINDOW                   "Close window"
-    IDS_FT_OP_FAILURE                     "An error occurred during the operation with object ""%s"": %s."
-    IDS_FT_FILE_LIST_BUILDING             "Building a list of files..."
+    IDS_FT_DRIVE_DESC_DESKTOP             "Gebruikers Bureaublad"
+    IDS_FT_DRIVE_DESC_HOME                "Gebruikers Home Folder"
+    IDS_FT_DRIVE_DESC_CDROM               "Optische schijf"
+    IDS_FT_DRIVE_DESC_FIXED               "Lokale schijf"
+    IDS_FT_DRIVE_DESC_REMOVABLE           "Verwijderbare schijf"
+    IDS_FT_DRIVE_DESC_REMOTE              "Externe schijf"
+    IDS_FT_DRIVE_DESC_RAM                 "RAM schijf"
+    IDS_FT_DRIVE_DESC_UNKNOWN             "Onbekend apparaat"
+    IDS_FT_DELETE_CONFORM                 "Weet u zeker dat u %u objecten wilt verwijderen?"
+    IDS_FT_OP_SESSION_START               "Sessie begonnen"
+    IDS_FT_OP_SESSION_END                 "Sessie afgesloten"
+    IDS_FT_OP_BROWSE_FOLDERS              "Navigeer mappen: ""%s"""
+    IDS_FT_OP_RENAME                      "Hernoem ""%s"" naar ""%s"""
+    IDS_FT_OP_REMOVE                      "Verwijder ""%s"""
+    IDS_FT_OP_CREATE_FOLDER               "Maak map: ""%s"""
+    IDS_FT_OP_BROWSE_DRIVES               "Navigeer schijven"
+    IDS_FT_OP_SEND_FILE                   "Bestand versturen: ""%s"""
+    IDS_FT_OP_RECIEVE_FILE                "Bestand ontvangen: ""%s"""
+    IDS_FT_SEND                           "Zenden"
+    IDS_FT_RECIEVE                        "Ontvangen"
+    IDS_FT_SELECTED_OBJECT_COUNT          "%lu object(en) geselecteerd"
+    IDS_FT_BROWSE_FOLDERS_ERROR           "Er is een error opgetreden bij het bekijken van de map ""%s"": %s"
+    IDS_FT_OP_RENAME_ERROR                "Er is een error opgetreden bij het hernoemen van ""%s"" naar ""%s"": %s"
+    IDS_FT_OP_CREATE_FOLDER_ERROR         "Er is een error opgetreden bij het maken van de map ""%s"": %s"
+    IDS_FT_OP_BROWSE_DRIVES_ERROR         "Er is een error opgetreden bij het ophalen van de lijst met schijven: %s"
+    IDS_FT_FILE_FOLDER                    "Bestands map"
+    IDS_FT_CLOSE_WINDOW                   "Sluit scherm"
+    IDS_FT_OP_FAILURE                     "Er is een error opgetreden met het object ""%s"": %s."
+    IDS_FT_FILE_LIST_BUILDING             "Lijst van bestanden genereren..."
 END
 
 // Power Manage
 STRINGTABLE DISCARDABLE
 BEGIN
-    IDS_PM_SHUTDOWN_COMMAND "A command to shutdown the computer has been received."
-    IDS_PM_REBOOT_COMMAND "A command to reboot the computer has been received."
-    IDS_PM_HIBERNATE_COMMAND "A command to hibernate the computer has been received."
-    IDS_PM_SUSPEND_COMMAND "A command to suspend the computer has been received."
-    IDS_PM_TIME_LEFT "Time left before execution: %d seconds."
+    IDS_PM_SHUTDOWN_COMMAND "Er is een commando ontvangen om de computer af te sluiten."
+    IDS_PM_REBOOT_COMMAND "Er is een commando ontvangen om de computer opnieuw op te starten"
+    IDS_PM_HIBERNATE_COMMAND "Er is een commando ontvangen om de computer in sluimerstand te zettten."
+    IDS_PM_SUSPEND_COMMAND "Er is een commando ontvangen om de computer in slaapstand te zetten."
+    IDS_PM_TIME_LEFT "%d seconden voor toepassen."
 END
 
 // Request Status
 STRINGTABLE DISCARDABLE
 BEGIN
-    IDS_REQUEST_STATUS_SUCCESS              "Successfully completed"
-    IDS_REQUEST_STATUS_INVALID_PATH_NAME    "Invalid directory or file name"
-    IDS_REQUEST_STATUS_PATH_NOT_FOUND       "Path not found"
-    IDS_REQUEST_STATUS_PATH_ALREADY_EXISTS  "Path already exists"
-    IDS_REQUEST_STATUS_NO_DRIVES_FOUND      "No drives found"
-    IDS_REQUEST_STATUS_DISK_FULL            "Disk full"
-    IDS_REQUEST_STATUS_ACCESS_DENIED        "Access denied"
-    IDS_REQUEST_STATUS_FILE_OPEN_ERROR      "Could not open file for reading"
-    IDS_REQUEST_STATUS_FILE_CREATE_ERROR    "Could not create or replace file"
-    IDS_REQUEST_STATUS_FILE_WRITE_ERROR     "Could not write to file"
-    IDS_REQUEST_STATUS_FILE_READ_ERROR      "Could not read file"
-    IDS_REQUEST_STATUS_UNKNOWN              "Unknown request status code"
+    IDS_REQUEST_STATUS_SUCCESS              "Successvol afgerond"
+    IDS_REQUEST_STATUS_INVALID_PATH_NAME    "Ongeldige bestands/map naam"
+    IDS_REQUEST_STATUS_PATH_NOT_FOUND       "Pad niet gevonden"
+    IDS_REQUEST_STATUS_PATH_ALREADY_EXISTS  "Pad bestaat al"
+    IDS_REQUEST_STATUS_NO_DRIVES_FOUND      "Geen schijven gevonden"
+    IDS_REQUEST_STATUS_DISK_FULL            "Schijf vol"
+    IDS_REQUEST_STATUS_ACCESS_DENIED        "Geen toegang"
+    IDS_REQUEST_STATUS_FILE_OPEN_ERROR      "Kon het bestand niet openen om te lezen"
+    IDS_REQUEST_STATUS_FILE_CREATE_ERROR    "Kon het bestand niet maken of vervangen"
+    IDS_REQUEST_STATUS_FILE_WRITE_ERROR     "Kon niet naar het bestand schrijven"
+    IDS_REQUEST_STATUS_FILE_READ_ERROR      "Kon het bestand niet lezen"
+    IDS_REQUEST_STATUS_UNKNOWN              "Onbekende status code"
 END
 
 // Status
 STRINGTABLE DISCARDABLE
 BEGIN
-    IDS_STATUS_SUCCESS                    "Successfully completed"
-    IDS_STATUS_NO_CONSOLE_SESSION         "No console session"
-    IDS_STATUS_ACCESS_DENIED              "Access denied"
+    IDS_STATUS_SUCCESS                    "Successvol afgerond"
+    IDS_STATUS_NO_CONSOLE_SESSION         "Geen console sessie"
+    IDS_STATUS_ACCESS_DENIED              "Geen toegang"
     IDS_STATUS_INVALID_ADDRESS            "Ongeldig adres opgegeven"
-    IDS_STATUS_INVALID_PORT               "Ongelide poort opgegeven"
+    IDS_STATUS_INVALID_PORT               "Ongeldige poort opgegeven"
     IDS_STATUS_CONNECT_TIMEOUT            "Verbinding timeout"
     IDS_STATUS_CONNECT_ERROR              "Kan geen verbinding opzetten"
     IDS_STATUS_CONNECTING                 "Verbinden"
-    IDS_STATUS_UNKNOWN                    "Unknown status code"
+    IDS_STATUS_UNKNOWN                    "Onbekende status code"
 END
