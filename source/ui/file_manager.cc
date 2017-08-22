@@ -196,11 +196,4 @@ LRESULT FileManagerWindow::OnClose(UINT message, WPARAM wparam, LPARAM lparam, B
     return 0;
 }
 
-LRESULT FileManagerWindow::OnMouseMove(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
-{
-    CPoint pt(lparam);
-    ChildWindowFromPoint(pt).SendMessageW(message, wparam, lparam);
-    return 0;
-}
-
 } // namespace aspia
