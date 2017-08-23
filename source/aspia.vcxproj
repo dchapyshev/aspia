@@ -177,6 +177,7 @@
     <ClCompile Include="ui\power_session_dialog.cc" />
     <ClCompile Include="ui\settings_dialog.cc" />
     <ClCompile Include="ui\status_dialog.cc" />
+    <ClCompile Include="ui\system_info_toolbar.cc" />
     <ClCompile Include="ui\system_info_window.cc" />
     <ClCompile Include="ui\ui_main.cc" />
     <ClCompile Include="ui\users_dialog.cc" />
@@ -376,6 +377,7 @@
     <ClInclude Include="ui\settings_dialog.h" />
     <ClInclude Include="ui\status_code.h" />
     <ClInclude Include="ui\status_dialog.h" />
+    <ClInclude Include="ui\system_info_toolbar.h" />
     <ClInclude Include="ui\system_info_window.h" />
     <ClInclude Include="ui\ui_main.h" />
     <ClInclude Include="ui\users_dialog.h" />

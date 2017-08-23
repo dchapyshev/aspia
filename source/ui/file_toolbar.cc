@@ -22,7 +22,7 @@ bool FileToolBar::CreateFileToolBar(HWND parent)
     const DWORD style = WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT |
         TBSTYLE_LIST | TBSTYLE_TOOLTIPS;
 
-    if (!Create(parent, CWindow::rcDefault, nullptr, style))
+    if (!Create(parent, rcDefault, nullptr, style))
     {
         DLOG(ERROR) << "Unable to create file toolbar window: "
                     << GetLastSystemErrorString();

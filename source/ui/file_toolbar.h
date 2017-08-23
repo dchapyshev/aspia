@@ -29,7 +29,7 @@ public:
     bool CreateFileToolBar(HWND parent);
 
 private:
-    BEGIN_MSG_MAP(UiFileToolBar)
+    BEGIN_MSG_MAP(FileToolBar)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
         NOTIFY_CODE_HANDLER(TTN_GETDISPINFOW, OnGetDispInfo)
     END_MSG_MAP()

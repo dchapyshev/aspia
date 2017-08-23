@@ -18,25 +18,42 @@
 //
 #define IDI_MAIN                              100
 #define IDI_ABOUT                             101
-#define IDI_CAD                               102
-#define IDI_DELETE                            103
-#define IDI_EXIT                              104
-#define IDI_FOLDER_ADD                        105
-#define IDI_FOLDER_UP                         106
-#define IDI_FULLSCREEN                        107
-#define IDI_HOME                              108
-#define IDI_AUTOSIZE                          109
-#define IDI_KEYS                              110
-#define IDI_MINUS                             111
-#define IDI_PENCIL                            112
-#define IDI_PLUS                              113
-#define IDI_RECIEVE                           114
-#define IDI_REFRESH                           115
-#define IDI_SEND                              116
-#define IDI_SETTINGS                          117
-#define IDI_USER                              118
-#define IDI_USER_DISABLED                     119
-#define IDI_POWER_SURGE                       120
+#define IDI_AUTOSIZE                          102
+#define IDI_BATTERY                           103
+#define IDI_CAD                               104
+#define IDI_COMPUTER                          105
+#define IDI_DELETE                            106
+#define IDI_DISK                              107
+#define IDI_DRIVE                             108
+#define IDI_DRIVE_DISK                        109
+#define IDI_EXIT                              110
+#define IDI_FOLDER_ADD                        111
+#define IDI_FOLDER_UP                         112
+#define IDI_FOLDER_NETWORK                    113
+#define IDI_FULLSCREEN                        114
+#define IDI_HOME                              115
+#define IDI_KEYS                              116
+#define IDI_LICENSE_KEY                       117
+#define IDI_MEMORY                            118
+#define IDI_MINUS                             119
+#define IDI_MONITOR                           120
+#define IDI_MOTHERBOARD                       121
+#define IDI_NETWORK_ADAPTER                   122
+#define IDI_PENCIL                            123
+#define IDI_PLUS                              124
+#define IDI_POWER_SURGE                       125
+#define IDI_POWER_SUPPLY                      126
+#define IDI_PRINTER                           127
+#define IDI_PROCESSOR                         128
+#define IDI_RECIEVE                           129
+#define IDI_REFRESH                           130
+#define IDI_SEND                              131
+#define IDI_SETTINGS                          132
+#define IDI_SYSTEM_MONITOR                    133
+#define IDI_TELEPHONE_FAX                     134
+#define IDI_USER                              135
+#define IDI_USER_DISABLED                     136
+#define IDI_USERS                             137
 
 //
 // Dialogs
@@ -126,6 +143,10 @@
 #define ID_HOME                               517
 #define ID_SEND                               518
 #define ID_COPY                               519
+#define ID_SAVE                               520
+#define ID_SAVE_ALL                           521
+#define ID_SAVE_SELECTED                      522
+#define ID_SAVE_CURRENT                       523
 
 #define ID_KEY_FIRST                          600
 #define ID_KEY_CTRL_ESC                       600
@@ -262,6 +283,12 @@
 
 // System Information
 #define IDS_SI_SYSTEM_INFORMATION             3000
+#define IDS_SI_SAVE_REPORT                    3001
+#define IDS_SI_TOOLTIP_SAVE                   3002
+#define IDS_SI_TOOLTIP_HOME                   3003
+#define IDS_SI_TOOLTIP_REFRESH                3004
+#define IDS_SI_TOOLTIP_ABOUT                  3005
+#define IDS_SI_TOOLTIP_EXIT                   3006
 
 // Request Status
 #define IDS_REQUEST_STATUS_FIRST                11000

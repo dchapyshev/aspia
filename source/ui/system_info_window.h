@@ -9,7 +9,10 @@
 #define _ASPIA_UI__SYSTEM_INFO_WINDOW_H
 
 #include "base/message_loop/message_loop_thread.h"
+#include "ui/system_info_toolbar.h"
 #include "ui/base/splitter.h"
+
+#include <atlctrls.h>
 
 namespace aspia {
 
@@ -38,6 +41,9 @@ private:
     // MessageLoop::Dispatcher implementation.
     bool Dispatch(const NativeEvent& event) override;
 
+    static const int kTreeControl = 100;
+    static const int kListControl = 101;
+
     BEGIN_MSG_MAP(SystemInfoWindow)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
         MESSAGE_HANDLER(WM_SIZE, OnSize)
@@ -57,6 +63,9 @@ private:
 
     Delegate* delegate_;
 
+    SystemInfoToolbar toolbar_;
+    CTreeViewCtrl tree_;
+    CListViewCtrl list_;
     VerticalSplitter splitter_;
 
     CIcon small_icon_;

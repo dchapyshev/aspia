@@ -532,6 +532,9 @@
     <ClCompile Include="client\client_session_system_info.cc">
       <Filter>client</Filter>
     </ClCompile>
+    <ClCompile Include="ui\system_info_toolbar.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1120,6 +1123,9 @@
     </ClInclude>
     <ClInclude Include="client\client_session_system_info.h">
       <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info_toolbar.h">
+      <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

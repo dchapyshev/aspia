@@ -421,6 +421,12 @@ END
 STRINGTABLE DISCARDABLE
 BEGIN
     IDS_SI_SYSTEM_INFORMATION               "Информация о системе"
+    IDS_SI_SAVE_REPORT                      "Сохранить отчет"
+    IDS_SI_TOOLTIP_SAVE                     "Сохранить отчет в файл"
+    IDS_SI_TOOLTIP_HOME                     "Перейти на домашнюю категорию"
+    IDS_SI_TOOLTIP_REFRESH                  "Обновить текущую страницу"
+    IDS_SI_TOOLTIP_ABOUT                    "О программе"
+    IDS_SI_TOOLTIP_EXIT                     "Закрыть окно и завершить сессию"
 END
 
 // Request Status

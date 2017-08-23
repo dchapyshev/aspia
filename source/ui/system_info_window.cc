@@ -15,7 +15,6 @@ namespace aspia {
 
 static const int kDefaultWindowWidth = 980;
 static const int kDefaultWindowHeight = 700;
-static const int kBorderSize = 3;
 
 SystemInfoWindow::SystemInfoWindow(Delegate* delegate)
     : delegate_(delegate)
@@ -80,6 +79,11 @@ LRESULT SystemInfoWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
                                  GetSystemMetrics(SM_CYICON));
     SetIcon(big_icon_, TRUE);
 
+    const DWORD toolbar_style = WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT |
+        TBSTYLE_LIST | TBSTYLE_TOOLTIPS;
+
+    toolbar_.Create(*this, rcDefault, nullptr, toolbar_style);
+
     CRect client_rect;
     GetClientRect(client_rect);
 
@@ -87,10 +91,22 @@ LRESULT SystemInfoWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
                      WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
 
     splitter_.SetActivePane(SPLIT_PANE_LEFT);
-    splitter_.SetSplitterPos(250);
+    splitter_.SetSplitterPos(350);
     splitter_.m_cxySplitBar = 5;
     splitter_.m_cxyMin = 0;
     splitter_.m_bFullDrag = false;
+
+    const DWORD tree_style = WS_CHILD | WS_VISIBLE | WS_TABSTOP | TVS_HASLINES |
+        TVS_SHOWSELALWAYS | TVS_HASBUTTONS | TVS_LINESATROOT;
+
+    tree_.Create(splitter_, nullptr, nullptr, tree_style, WS_EX_CLIENTEDGE, kTreeControl);
+
+    const DWORD list_style = WS_CHILD | WS_VISIBLE | LVS_REPORT | WS_TABSTOP | LVS_SHOWSELALWAYS;
+
+    list_.Create(splitter_, nullptr, nullptr, list_style, WS_EX_CLIENTEDGE, kListControl);
+
+    splitter_.SetSplitterPane(SPLIT_PANE_LEFT, tree_);
+    splitter_.SetSplitterPane(SPLIT_PANE_RIGHT, list_);
 
     SetWindowPos(nullptr, 0, 0, kDefaultWindowWidth, kDefaultWindowHeight,
                  SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
@@ -101,6 +117,9 @@ LRESULT SystemInfoWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
 
 LRESULT SystemInfoWindow::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    toolbar_.DestroyWindow();
+    tree_.DestroyWindow();
+    list_.DestroyWindow();
     splitter_.DestroyWindow();
     return 0;
 }
@@ -108,7 +127,15 @@ LRESULT SystemInfoWindow::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, 
 LRESULT SystemInfoWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     CSize size(lparam);
-    splitter_.MoveWindow(kBorderSize, 0, size.cx - (kBorderSize * 2), size.cy, FALSE);
+
+    toolbar_.AutoSize();
+
+    CRect toolbar_rect;
+    toolbar_.GetWindowRect(toolbar_rect);
+
+    splitter_.MoveWindow(0, toolbar_rect.Height(),
+                         size.cx, size.cy - toolbar_rect.Height(),
+                         FALSE);
     return 0;
 }
 
