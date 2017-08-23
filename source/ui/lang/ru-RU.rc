@@ -410,11 +410,17 @@ END
 // Power Manage
 STRINGTABLE DISCARDABLE
 BEGIN
-    IDS_PM_SHUTDOWN_COMMAND "Получена команда выключения компьютера."
-    IDS_PM_REBOOT_COMMAND "Получена команда перезагрузки компьютера."
-    IDS_PM_HIBERNATE_COMMAND "Получена команда перевода компьютера в режим гибернации."
-    IDS_PM_SUSPEND_COMMAND "Получена команда перевода компьютера в режим сна."
-    IDS_PM_TIME_LEFT "Осталось времени до выполнения: %d секунд."
+    IDS_PM_SHUTDOWN_COMMAND               "Получена команда выключения компьютера."
+    IDS_PM_REBOOT_COMMAND                 "Получена команда перезагрузки компьютера."
+    IDS_PM_HIBERNATE_COMMAND              "Получена команда перевода компьютера в режим гибернации."
+    IDS_PM_SUSPEND_COMMAND                "Получена команда перевода компьютера в режим сна."
+    IDS_PM_TIME_LEFT                      "Осталось времени до выполнения: %d секунд."
+END
+
+// System Information
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_SI_SYSTEM_INFORMATION               "Информация о системе"
 END
 
 // Request Status

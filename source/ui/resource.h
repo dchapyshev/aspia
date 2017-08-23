@@ -260,6 +260,9 @@
 #define IDS_PM_SUSPEND_COMMAND                2003
 #define IDS_PM_TIME_LEFT                      2004
 
+// System Information
+#define IDS_SI_SYSTEM_INFORMATION             3000
+
 // Request Status
 #define IDS_REQUEST_STATUS_FIRST                11000
 #define IDS_REQUEST_STATUS_UNKNOWN              11000

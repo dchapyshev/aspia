@@ -75,6 +75,7 @@
     <ClCompile Include="client\client_session_desktop_view.cc" />
     <ClCompile Include="client\client_session_file_transfer.cc" />
     <ClCompile Include="client\client_session_power_manage.cc" />
+    <ClCompile Include="client\client_session_system_info.cc" />
     <ClCompile Include="client\file_remover.cc" />
     <ClCompile Include="client\file_reply_receiver.cc" />
     <ClCompile Include="client\file_reply_receiver_proxy.cc" />
@@ -125,6 +126,7 @@
     <ClCompile Include="host\host_session_launcher.cc" />
     <ClCompile Include="host\host_session_launcher_service.cc" />
     <ClCompile Include="host\host_session_power.cc" />
+    <ClCompile Include="host\host_session_system_info.cc" />
     <ClCompile Include="host\host_user_list.cc" />
     <ClCompile Include="host\input_injector.cc" />
     <ClCompile Include="host\power_injector.cc" />
@@ -175,6 +177,7 @@
     <ClCompile Include="ui\power_session_dialog.cc" />
     <ClCompile Include="ui\settings_dialog.cc" />
     <ClCompile Include="ui\status_dialog.cc" />
+    <ClCompile Include="ui\system_info_window.cc" />
     <ClCompile Include="ui\ui_main.cc" />
     <ClCompile Include="ui\users_dialog.cc" />
     <ClCompile Include="ui\user_prop_dialog.cc" />
@@ -253,6 +256,7 @@
     <ClInclude Include="client\client_session_desktop_view.h" />
     <ClInclude Include="client\client_session_file_transfer.h" />
     <ClInclude Include="client\client_session_power_manage.h" />
+    <ClInclude Include="client\client_session_system_info.h" />
     <ClInclude Include="client\file_constants.h" />
     <ClInclude Include="client\file_remover.h" />
     <ClInclude Include="client\file_reply_receiver.h" />
@@ -316,6 +320,7 @@
     <ClInclude Include="host\host_session_launcher.h" />
     <ClInclude Include="host\host_session_launcher_service.h" />
     <ClInclude Include="host\host_session_power.h" />
+    <ClInclude Include="host\host_session_system_info.h" />
     <ClInclude Include="host\host_user_list.h" />
     <ClInclude Include="host\input_injector.h" />
     <ClInclude Include="host\power_injector.h" />
@@ -371,6 +376,7 @@
     <ClInclude Include="ui\settings_dialog.h" />
     <ClInclude Include="ui\status_code.h" />
     <ClInclude Include="ui\status_dialog.h" />
+    <ClInclude Include="ui\system_info_window.h" />
     <ClInclude Include="ui\ui_main.h" />
     <ClInclude Include="ui\users_dialog.h" />
     <ClInclude Include="ui\user_prop_dialog.h" />

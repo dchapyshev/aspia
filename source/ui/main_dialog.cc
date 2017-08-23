@@ -132,6 +132,10 @@ void MainDialog::InitSessionTypesCombo()
                    proto::SessionType::SESSION_TYPE_FILE_TRANSFER);
 
     AddSessionType(combobox,
+                   IDS_SESSION_TYPE_SYSTEM_INFO,
+                   proto::SessionType::SESSION_TYPE_SYSTEM_INFO);
+
+    AddSessionType(combobox,
                    IDS_SESSION_TYPE_POWER_MANAGE,
                    proto::SessionType::SESSION_TYPE_POWER_MANAGE);
 

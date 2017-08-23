@@ -18,10 +18,13 @@ public:
     HostSessionLauncherService(const std::wstring& service_id);
     ~HostSessionLauncherService() = default;
 
-    static bool CreateStarted(uint32_t session_id,
+    static bool CreateStarted(const std::wstring& launcher_mode,
+                              uint32_t session_id,
                               const std::wstring& channel_id);
 
-    void RunLauncher(uint32_t session_id, const std::wstring& channel_id);
+    void RunLauncher(const std::wstring& launcher_mode,
+                     uint32_t session_id,
+                     const std::wstring& channel_id);
 
 private:
     void Worker() override;
@@ -29,6 +32,7 @@ private:
 
     static const uint32_t kInvalidSessionId = 0xFFFFFFFF;
 
+    std::wstring launcher_mode_;
     uint32_t session_id_ = kInvalidSessionId;
     std::wstring channel_id_;
 

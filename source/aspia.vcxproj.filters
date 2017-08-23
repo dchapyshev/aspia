@@ -523,6 +523,15 @@
     <ClCompile Include="client\file_remover.cc">
       <Filter>client</Filter>
     </ClCompile>
+    <ClCompile Include="ui\system_info_window.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host_session_system_info.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="client\client_session_system_info.cc">
+      <Filter>client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1101,6 +1110,15 @@
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="client\file_constants.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info_window.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="host\host_session_system_info.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="client\client_session_system_info.h">
       <Filter>client</Filter>
     </ClInclude>
   </ItemGroup>

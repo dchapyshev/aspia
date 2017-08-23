@@ -181,8 +181,6 @@ LRESULT FileManagerWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, 
                  SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
     CenterWindow();
 
-    local_panel_.SetFocus();
-
     return 0;
 }
 

@@ -8,27 +8,26 @@
 #include "host/host_session_launcher_service.h"
 #include "base/files/base_paths.h"
 #include "base/service_manager.h"
+#include "base/logging.h"
 #include "host/host_session_launcher.h"
 
 namespace aspia {
 
-static const WCHAR kServiceShortName[] = L"aspia-desktop-session-launcher";
-static const WCHAR kServiceFullName[] = L"Aspia Desktop Session Launcher";
+static const WCHAR kServiceShortName[] = L"aspia-session-launcher";
+static const WCHAR kServiceFullName[] = L"Aspia Session Launcher";
 
-HostSessionLauncherService::HostSessionLauncherService(
-    const std::wstring& service_id)
-    : Service(ServiceManager::CreateUniqueServiceName(
-        kServiceShortName, service_id))
+HostSessionLauncherService::HostSessionLauncherService(const std::wstring& service_id)
+    : Service(ServiceManager::CreateUniqueServiceName(kServiceShortName, service_id))
 {
     // Nothing
 }
 
 // static
-bool HostSessionLauncherService::CreateStarted(uint32_t session_id,
+bool HostSessionLauncherService::CreateStarted(const std::wstring& launcher_mode,
+                                               uint32_t session_id,
                                                const std::wstring& channel_id)
 {
-    std::wstring service_id =
-        ServiceManager::GenerateUniqueServiceId();
+    std::wstring service_id = ServiceManager::GenerateUniqueServiceId();
 
     std::wstring unique_short_name =
         ServiceManager::CreateUniqueServiceName(kServiceShortName, service_id);
@@ -47,7 +46,9 @@ bool HostSessionLauncherService::CreateStarted(uint32_t session_id,
     command_line.append(L" --channel_id=");
     command_line.append(channel_id);
     command_line.append(L" --run_mode=");
-    command_line.append(kDesktopSessionLauncherSwitch);
+    command_line.append(kSessionLauncherSwitch);
+    command_line.append(L" --launcher_mode");
+    command_line.append(launcher_mode);
     command_line.append(L" --session_id=");
     command_line.append(std::to_wstring(session_id));
     command_line.append(L" --service_id=");
@@ -55,9 +56,7 @@ bool HostSessionLauncherService::CreateStarted(uint32_t session_id,
 
     // Install the service in the system.
     std::unique_ptr<ServiceManager> manager =
-        ServiceManager::Create(command_line,
-                               unique_full_name,
-                               unique_short_name);
+        ServiceManager::Create(command_line, unique_full_name, unique_short_name);
 
     // If the service was not installed.
     if (!manager)
@@ -68,9 +67,7 @@ bool HostSessionLauncherService::CreateStarted(uint32_t session_id,
 
 void HostSessionLauncherService::Worker()
 {
-    LaunchSessionProcessFromService(kDesktopSessionSwitch,
-                                    session_id_,
-                                    channel_id_);
+    LaunchSessionProcessFromService(launcher_mode_, session_id_, channel_id_);
 }
 
 void HostSessionLauncherService::OnStop()
@@ -78,9 +75,13 @@ void HostSessionLauncherService::OnStop()
     // Nothing
 }
 
-void HostSessionLauncherService::RunLauncher(uint32_t session_id,
+void HostSessionLauncherService::RunLauncher(const std::wstring& launcher_mode,
+                                             uint32_t session_id,
                                              const std::wstring& channel_id)
 {
+    CHECK(launcher_mode == kDesktopSessionSwitch || launcher_mode == kSystemInfoSessionSwitch);
+
+    launcher_mode_ = launcher_mode;
     session_id_ = session_id;
     channel_id_ = channel_id;
 

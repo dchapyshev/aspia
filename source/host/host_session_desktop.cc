@@ -6,6 +6,7 @@
 //
 
 #include "host/host_session_desktop.h"
+#include "base/process/process.h"
 #include "codec/video_encoder_zlib.h"
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_helpers.h"
@@ -33,7 +34,7 @@ void HostSessionDesktop::Run(const std::wstring& channel_id)
 
     ipc_channel_proxy_ = ipc_channel_->pipe_channel_proxy();
 
-    uint32_t user_data = GetCurrentProcessId();
+    uint32_t user_data = Process::Current().Pid();
 
     if (ipc_channel_->Connect(user_data))
     {

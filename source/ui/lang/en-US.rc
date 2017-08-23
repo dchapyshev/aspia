@@ -410,11 +410,17 @@ END
 // Power Manage
 STRINGTABLE DISCARDABLE
 BEGIN
-    IDS_PM_SHUTDOWN_COMMAND "A command to shutdown the computer has been received."
-    IDS_PM_REBOOT_COMMAND "A command to reboot the computer has been received."
-    IDS_PM_HIBERNATE_COMMAND "A command to hibernate the computer has been received."
-    IDS_PM_SUSPEND_COMMAND "A command to suspend the computer has been received."
-    IDS_PM_TIME_LEFT "Time left before execution: %d seconds."
+    IDS_PM_SHUTDOWN_COMMAND               "A command to shutdown the computer has been received."
+    IDS_PM_REBOOT_COMMAND                 "A command to reboot the computer has been received."
+    IDS_PM_HIBERNATE_COMMAND              "A command to hibernate the computer has been received."
+    IDS_PM_SUSPEND_COMMAND                "A command to suspend the computer has been received."
+    IDS_PM_TIME_LEFT                      "Time left before execution: %d seconds."
+END
+
+// System Information
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_SI_SYSTEM_INFORMATION               "System Information"
 END
 
 // Request Status

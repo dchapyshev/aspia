@@ -13,6 +13,7 @@
 #include "host/host_session_desktop.h"
 #include "host/host_session_file_transfer.h"
 #include "host/host_session_power.h"
+#include "host/host_session_system_info.h"
 #include "base/strings/unicode.h"
 #include "base/process/process.h"
 
@@ -23,6 +24,7 @@ namespace aspia {
 DEFINE_uint32(session_id, 0xFFFFFFFF, "Session Id");
 DEFINE_string(channel_id, "", "Channel Id");
 DEFINE_string(service_id, "", "Service Id");
+DEFINE_string(launcher_mode, "", "Launcher Mode");
 
 void RunHostMain(const std::wstring& run_mode)
 {
@@ -48,8 +50,11 @@ void RunHostMain(const std::wstring& run_mode)
     {
         HostService::Remove();
     }
-    else if (run_mode == kDesktopSessionLauncherSwitch)
+    else if (run_mode == kSessionLauncherSwitch)
     {
+        std::wstring launcher_mode;
+        CHECK(ANSItoUNICODE(FLAGS_launcher_mode, launcher_mode));
+
         std::wstring channel_id;
         CHECK(ANSItoUNICODE(FLAGS_channel_id, channel_id));
 
@@ -57,7 +62,7 @@ void RunHostMain(const std::wstring& run_mode)
         CHECK(ANSItoUNICODE(FLAGS_service_id, service_id));
 
         HostSessionLauncherService launcher(service_id);
-        launcher.RunLauncher(FLAGS_session_id, channel_id);
+        launcher.RunLauncher(launcher_mode, FLAGS_session_id, channel_id);
     }
     else
     {
@@ -75,6 +80,10 @@ void RunHostMain(const std::wstring& run_mode)
         else if (run_mode == kPowerManageSessionSwitch)
         {
             HostSessionPower().Run(channel_id);
+        }
+        else if (run_mode == kSystemInfoSessionSwitch)
+        {
+            HostSessionSystemInfo().Run(channel_id);
         }
     }
 }

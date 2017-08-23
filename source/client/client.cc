@@ -9,6 +9,7 @@
 #include "client/client_session_desktop_manage.h"
 #include "client/client_session_file_transfer.h"
 #include "client/client_session_power_manage.h"
+#include "client/client_session_system_info.h"
 #include "crypto/secure_string.h"
 #include "protocol/message_serialization.h"
 #include "ui/auth_dialog.h"
@@ -124,6 +125,9 @@ static std::unique_ptr<ClientSession> CreateSession(
 
         case proto::SESSION_TYPE_POWER_MANAGE:
             return std::make_unique<ClientSessionPowerManage>(config, channel_proxy);
+
+        case proto::SESSION_TYPE_SYSTEM_INFO:
+            return std::make_unique<ClientSessionSystemInfo>(config, channel_proxy);
 
         default:
             LOG(ERROR) << "Invalid session type: " << session_type;

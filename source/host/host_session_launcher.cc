@@ -278,20 +278,28 @@ bool LaunchSessionProcess(proto::SessionType session_type,
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::SESSION_TYPE_SYSTEM_INFO:
         {
+            const WCHAR* launcher_mode = kDesktopSessionSwitch;
+
+            if (session_type == proto::SESSION_TYPE_SYSTEM_INFO)
+                launcher_mode = kSystemInfoSessionSwitch;
+
             if (!IsCallerHasAdminRights())
             {
-                return LaunchProcessWithCurrentRights(kDesktopSessionSwitch, channel_id);
+                return LaunchProcessWithCurrentRights(launcher_mode, channel_id);
             }
 
             if (!IsRunningAsService())
             {
-                return HostSessionLauncherService::CreateStarted(session_id, channel_id);
+                return HostSessionLauncherService::CreateStarted(launcher_mode,
+                                                                 session_id,
+                                                                 channel_id);
             }
 
             // The code is executed from the service.
             // Start the process directly.
-            return LaunchSessionProcessFromService(kDesktopSessionSwitch, session_id, channel_id);
+            return LaunchSessionProcessFromService(launcher_mode, session_id, channel_id);
         }
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
