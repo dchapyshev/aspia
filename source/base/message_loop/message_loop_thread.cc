@@ -107,7 +107,14 @@ void MessageLoopThread::ThreadMain(MessageLoop::Type message_loop_type)
     running_ = true;
     start_event_.Signal();
 
-    delegate_->OnThreadRunning(message_loop_);
+    if (delegate_)
+    {
+        delegate_->OnThreadRunning(message_loop_);
+    }
+    else
+    {
+        message_loop_->Run();
+    }
 
     running_ = false;
 
