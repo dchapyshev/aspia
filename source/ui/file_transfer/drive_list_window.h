@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/drive_list_window.h
+// FILE:            ui/file_transfer/drive_list_window.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__DRIVE_LIST_WINDOW_H
-#define _ASPIA_UI__DRIVE_LIST_WINDOW_H
+#ifndef _ASPIA_UI__FILE_TRANSFER__DRIVE_LIST_WINDOW_H
+#define _ASPIA_UI__FILE_TRANSFER__DRIVE_LIST_WINDOW_H
 
 #include "base/files/file_path.h"
 #include "base/macros.h"
@@ -61,4 +61,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__DRIVE_LIST_WINDOW_H
+#endif // _ASPIA_UI__FILE_TRANSFER__DRIVE_LIST_WINDOW_H

@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_toolbar.cc
+// FILE:            ui/file_transfer/file_toolbar.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/file_toolbar.h"
+#include "ui/file_transfer/file_toolbar.h"
 #include "ui/resource.h"
 #include "base/logging.h"
 

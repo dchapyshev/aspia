@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_manager_helpers.h
+// FILE:            ui/file_transfer/file_manager_helpers.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__FILE_MANAGER_HELPERS_H
-#define _ASPIA_UI__FILE_MANAGER_HELPERS_H
+#ifndef _ASPIA_UI__FILE_TRANSFER__FILE_MANAGER_HELPERS_H
+#define _ASPIA_UI__FILE_TRANSFER__FILE_MANAGER_HELPERS_H
 
 #include "base/files/file_path.h"
 #include "proto/file_transfer_session.pb.h"
@@ -39,4 +39,4 @@ std::wstring SizeToString(uint64_t size);
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__FILE_MANAGER_HELPERS_H
+#endif // _ASPIA_UI__FILE_TRANSFER__FILE_MANAGER_HELPERS_H

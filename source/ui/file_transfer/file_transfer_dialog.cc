@@ -1,15 +1,15 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_transfer_dialog.cc
+// FILE:            ui/file_transfer/file_transfer_dialog.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/file_transfer_dialog.h"
+#include "ui/file_transfer/file_transfer_dialog.h"
 #include "base/logging.h"
 #include "client/file_transfer_downloader.h"
 #include "client/file_transfer_uploader.h"
-#include "ui/file_action_dialog.h"
+#include "ui/file_transfer/file_action_dialog.h"
 #include "ui/status_code.h"
 
 #include <atlctrls.h>

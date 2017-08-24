@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_remove_dialog.h
+// FILE:            ui/file_transfer/file_remove_dialog.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__FILE_REMOVE_DIALOG_H
-#define _ASPIA_UI__FILE_REMOVE_DIALOG_H
+#ifndef _ASPIA_UI__FILE_TRANSFER__FILE_REMOVE_DIALOG_H
+#define _ASPIA_UI__FILE_TRANSFER__FILE_REMOVE_DIALOG_H
 
 #include "base/message_loop/message_loop_proxy.h"
 #include "client/file_reply_receiver.h"
@@ -72,4 +72,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__FILE_REMOVE_DIALOG_H
+#endif // _ASPIA_UI__FILE_TRANSFER__FILE_REMOVE_DIALOG_H

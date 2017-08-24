@@ -1,17 +1,17 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_manager.h
+// FILE:            ui/file_transfer/file_manager.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__FILE_MANAGER_H
-#define _ASPIA_UI__FILE_MANAGER_H
+#ifndef _ASPIA_UI__FILE_TRANSFER__FILE_MANAGER_H
+#define _ASPIA_UI__FILE_TRANSFER__FILE_MANAGER_H
 
 #include "base/message_loop/message_loop_thread.h"
 #include "client/file_request_sender_proxy.h"
 #include "ui/base/splitter.h"
-#include "ui/file_manager_panel.h"
+#include "ui/file_transfer/file_manager_panel.h"
 
 namespace aspia {
 
@@ -98,4 +98,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__FILE_MANAGER_H
+#endif // _ASPIA_UI__FILE_TRANSFER__FILE_MANAGER_H

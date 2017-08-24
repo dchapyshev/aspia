@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_toolbar.h
+// FILE:            ui/file_transfer/file_toolbar.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__FILE_TOOLBAR_H
-#define _ASPIA_UI__FILE_TOOLBAR_H
+#ifndef _ASPIA_UI__FILE_TRANSFER__FILE_TOOLBAR_H
+#define _ASPIA_UI__FILE_TRANSFER__FILE_TOOLBAR_H
 
 #include "base/macros.h"
 
@@ -48,4 +48,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__FILE_TOOLBAR_H
+#endif // _ASPIA_UI__FILE_TRANSFER__FILE_TOOLBAR_H

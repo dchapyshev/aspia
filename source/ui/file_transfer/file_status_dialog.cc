@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_status_dialog.cc
+// FILE:            ui/file_transfer/file_status_dialog.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/file_status_dialog.h"
+#include "ui/file_transfer/file_status_dialog.h"
 #include "base/files/base_paths.h"
 #include "base/strings/string_util.h"
 #include "base/logging.h"

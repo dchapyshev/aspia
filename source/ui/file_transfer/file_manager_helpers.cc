@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_manager_helpers.cc
+// FILE:            ui/file_transfer/file_manager_helpers.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/file_manager_helpers.h"
+#include "ui/file_transfer/file_manager_helpers.h"
 #include "ui/get_stock_icon.h"
 #include "ui/resource.h"
 #include "base/strings/string_util.h"

@@ -12,7 +12,7 @@
 #include "proto/file_transfer_session.pb.h"
 #include "protocol/file_depacketizer.h"
 #include "protocol/file_packetizer.h"
-#include "ui/file_status_dialog.h"
+#include "ui/file_transfer/file_status_dialog.h"
 
 namespace aspia {
 

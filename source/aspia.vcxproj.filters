@@ -61,6 +61,9 @@
     <Filter Include="base\threading">
       <UniqueIdentifier>{df245d8f-fb70-4356-845f-f1bf8fa142dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ui\file_transfer">
+      <UniqueIdentifier>{6b1d00ca-cb54-4662-bb49-17420fc84ad0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="proto\desktop_session.pb.cc">
@@ -340,12 +343,6 @@
     <ClCompile Include="host\host_user_list.cc">
       <Filter>host</Filter>
     </ClCompile>
-    <ClCompile Include="ui\file_manager.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\file_manager_panel.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="client\client_session_file_transfer.cc">
       <Filter>client</Filter>
     </ClCompile>
@@ -358,20 +355,11 @@
     <ClCompile Include="proto\status.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
-    <ClCompile Include="ui\file_transfer_dialog.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\file_status_dialog.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="ui\get_stock_icon.cc">
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="protocol\filesystem.cc">
       <Filter>protocol</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\file_manager_helpers.cc">
-      <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="base\files\drive_enumerator.cc">
       <Filter>base\files</Filter>
@@ -408,9 +396,6 @@
     </ClCompile>
     <ClCompile Include="ui\base\timer.cc">
       <Filter>ui\base</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\file_toolbar.cc">
-      <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="ui\viewer_toolbar.cc">
       <Filter>ui</Filter>
@@ -490,9 +475,6 @@
     <ClCompile Include="host\host_session_launcher_service.cc">
       <Filter>host</Filter>
     </ClCompile>
-    <ClCompile Include="ui\file_action_dialog.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="base\files\file_enumerator.cc">
       <Filter>base\files</Filter>
     </ClCompile>
@@ -505,17 +487,8 @@
     <ClCompile Include="base\files\file_win.cc">
       <Filter>base\files</Filter>
     </ClCompile>
-    <ClCompile Include="ui\drive_list_window.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\file_list_window.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="client\file_task.cc">
       <Filter>client</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\file_remove_dialog.cc">
-      <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="client\file_task_queue_builder.cc">
       <Filter>client</Filter>
@@ -534,6 +507,36 @@
     </ClCompile>
     <ClCompile Include="ui\system_info_toolbar.cc">
       <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\file_transfer\drive_list_window.cc">
+      <Filter>ui\file_transfer</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\file_transfer\file_action_dialog.cc">
+      <Filter>ui\file_transfer</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\file_transfer\file_list_window.cc">
+      <Filter>ui\file_transfer</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\file_transfer\file_manager.cc">
+      <Filter>ui\file_transfer</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\file_transfer\file_manager_helpers.cc">
+      <Filter>ui\file_transfer</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\file_transfer\file_manager_panel.cc">
+      <Filter>ui\file_transfer</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\file_transfer\file_remove_dialog.cc">
+      <Filter>ui\file_transfer</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\file_transfer\file_status_dialog.cc">
+      <Filter>ui\file_transfer</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\file_transfer\file_toolbar.cc">
+      <Filter>ui\file_transfer</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\file_transfer\file_transfer_dialog.cc">
+      <Filter>ui\file_transfer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -908,12 +911,6 @@
     <ClInclude Include="crypto\secure_io_buffer.h">
       <Filter>crypto</Filter>
     </ClInclude>
-    <ClInclude Include="ui\file_manager.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\file_manager_panel.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="client\client_session_file_transfer.h">
       <Filter>client</Filter>
     </ClInclude>
@@ -926,12 +923,6 @@
     <ClInclude Include="proto\status.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
-    <ClInclude Include="ui\file_transfer_dialog.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\file_status_dialog.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="ui\get_stock_icon.h">
       <Filter>ui</Filter>
     </ClInclude>
@@ -939,9 +930,6 @@
       <Filter>protocol</Filter>
     </ClInclude>
     <ClInclude Include="ui\status_code.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\file_manager_helpers.h">
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="base\files\drive_enumerator.h">
@@ -982,9 +970,6 @@
     </ClInclude>
     <ClInclude Include="ui\base\timer.h">
       <Filter>ui\base</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\file_toolbar.h">
-      <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="ui\viewer_toolbar.h">
       <Filter>ui</Filter>
@@ -1076,9 +1061,6 @@
     <ClInclude Include="host\host_session_launcher_service.h">
       <Filter>host</Filter>
     </ClInclude>
-    <ClInclude Include="ui\file_action_dialog.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="client\file_task.h">
       <Filter>client</Filter>
     </ClInclude>
@@ -1096,15 +1078,6 @@
     </ClInclude>
     <ClInclude Include="base\files\scoped_file.h">
       <Filter>base\files</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\drive_list_window.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\file_list_window.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\file_remove_dialog.h">
-      <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="client\file_remover.h">
       <Filter>client</Filter>
@@ -1126,6 +1099,36 @@
     </ClInclude>
     <ClInclude Include="ui\system_info_toolbar.h">
       <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_transfer\drive_list_window.h">
+      <Filter>ui\file_transfer</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_transfer\file_action_dialog.h">
+      <Filter>ui\file_transfer</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_transfer\file_list_window.h">
+      <Filter>ui\file_transfer</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_transfer\file_manager.h">
+      <Filter>ui\file_transfer</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_transfer\file_manager_helpers.h">
+      <Filter>ui\file_transfer</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_transfer\file_manager_panel.h">
+      <Filter>ui\file_transfer</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_transfer\file_remove_dialog.h">
+      <Filter>ui\file_transfer</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_transfer\file_status_dialog.h">
+      <Filter>ui\file_transfer</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_transfer\file_toolbar.h">
+      <Filter>ui\file_transfer</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\file_transfer\file_transfer_dialog.h">
+      <Filter>ui\file_transfer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

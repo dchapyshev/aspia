@@ -1,14 +1,14 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_manager_panel.cc
+// FILE:            ui/file_transfer/file_manager_panel.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/file_manager_panel.h"
-#include "ui/file_remove_dialog.h"
-#include "ui/file_manager.h"
-#include "ui/file_manager_helpers.h"
+#include "ui/file_transfer/file_manager_panel.h"
+#include "ui/file_transfer/file_remove_dialog.h"
+#include "ui/file_transfer/file_manager.h"
+#include "ui/file_transfer/file_manager_helpers.h"
 #include "ui/status_code.h"
 #include "base/logging.h"
 

@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_list_window.cc
+// FILE:            ui/file_transfer/file_list_window.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/file_list_window.h"
-#include "ui/file_manager_helpers.h"
+#include "ui/file_transfer/file_list_window.h"
+#include "ui/file_transfer/file_manager_helpers.h"
 #include "ui/resource.h"
 #include "base/version_helpers.h"
 #include "base/strings/unicode.h"

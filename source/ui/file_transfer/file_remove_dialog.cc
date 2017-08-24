@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_remove_dialog.cc
+// FILE:            ui/file_transfer/file_remove_dialog.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/file_remove_dialog.h"
-#include "ui/file_action_dialog.h"
+#include "ui/file_transfer/file_remove_dialog.h"
+#include "ui/file_transfer/file_action_dialog.h"
 #include "base/logging.h"
 
 #include <atlmisc.h>

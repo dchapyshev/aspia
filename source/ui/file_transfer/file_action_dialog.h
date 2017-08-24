@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_action_dialog.h
+// FILE:            ui/file_transfer/file_action_dialog.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__FILE_ACTION_DIALOG_H
-#define _ASPIA_UI__FILE_ACTION_DIALOG_H
+#ifndef _ASPIA_UI__FILE_TRANSFER__FILE_ACTION_DIALOG_H
+#define _ASPIA_UI__FILE_TRANSFER__FILE_ACTION_DIALOG_H
 
 #include "base/macros.h"
 #include "client/file_transfer.h"
@@ -57,4 +57,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__FILE_ACTION_DIALOG_H
+#endif // _ASPIA_UI__FILE_TRANSFER__FILE_ACTION_DIALOG_H

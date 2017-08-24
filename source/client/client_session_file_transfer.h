@@ -11,7 +11,7 @@
 #include "client/client_session.h"
 #include "client/file_request_sender_local.h"
 #include "client/file_request_sender_remote.h"
-#include "ui/file_manager.h"
+#include "ui/file_transfer/file_manager.h"
 
 namespace aspia {
 
