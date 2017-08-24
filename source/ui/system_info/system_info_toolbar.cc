@@ -5,7 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/system_info_toolbar.h"
+#include "ui/system_info/system_info_toolbar.h"
 #include "ui/resource.h"
 
 namespace aspia {

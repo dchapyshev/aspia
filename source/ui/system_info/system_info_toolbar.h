@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/system_info_toolbar.h
+// FILE:            ui/system_info/system_info_toolbar.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SYSTEM_INFO_TOOLBAR_H
-#define _ASPIA_UI__SYSTEM_INFO_TOOLBAR_H
+#ifndef _ASPIA_UI__SYSTEM_INFO__SYSTEM_INFO_TOOLBAR_H
+#define _ASPIA_UI__SYSTEM_INFO__SYSTEM_INFO_TOOLBAR_H
 
 #include "base/macros.h"
 
@@ -43,4 +43,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SYSTEM_INFO_TOOLBAR_H
+#endif // _ASPIA_UI__SYSTEM_INFO__SYSTEM_INFO_TOOLBAR_H

@@ -9,7 +9,7 @@
 #define _ASPIA_CLIENT__CLIENT_SESSION_SYSTEM_INFO_H
 
 #include "client/client_session.h"
-#include "ui/system_info_window.h"
+#include "ui/system_info/system_info_window.h"
 
 namespace aspia {
 

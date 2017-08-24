@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/system_info_window.cc
+// FILE:            ui/system_info/system_info_window.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/system_info_window.h"
+#include "ui/system_info/system_info_window.h"
 #include "ui/resource.h"
 #include "base/logging.h"
 

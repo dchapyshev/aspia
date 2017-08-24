@@ -1,15 +1,15 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/system_info_window.h
+// FILE:            ui/system_info/system_info_window.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SYSTEM_INFO_WINDOW_H
-#define _ASPIA_UI__SYSTEM_INFO_WINDOW_H
+#ifndef _ASPIA_UI__SYSTEM_INFO__SYSTEM_INFO_WINDOW_H
+#define _ASPIA_UI__SYSTEM_INFO__SYSTEM_INFO_WINDOW_H
 
 #include "base/message_loop/message_loop_thread.h"
-#include "ui/system_info_toolbar.h"
+#include "ui/system_info/system_info_toolbar.h"
 #include "ui/base/splitter.h"
 
 #include <atlctrls.h>
@@ -76,4 +76,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SYSTEM_INFO_WINDOW_H
+#endif // _ASPIA_UI__SYSTEM_INFO__SYSTEM_INFO_WINDOW_H
