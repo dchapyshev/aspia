@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/video_window.h
+// FILE:            ui/desktop/video_window.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__VIDEO_WINDOW_H
-#define _ASPIA_UI__VIDEO_WINDOW_H
+#ifndef _ASPIA_UI__DESKTOP__VIDEO_WINDOW_H
+#define _ASPIA_UI__DESKTOP__VIDEO_WINDOW_H
 
 #include "base/scoped_hdc.h"
 #include "desktop_capture/desktop_frame_dib.h"
@@ -93,4 +93,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__VIDEO_WINDOW_H
+#endif // _ASPIA_UI__DESKTOP__VIDEO_WINDOW_H

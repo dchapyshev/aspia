@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/viewer_window.cc
+// FILE:            ui/desktop/viewer_window.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/viewer_window.h"
+#include "ui/desktop/viewer_window.h"
 #include "ui/about_dialog.h"
 #include "ui/resource.h"
 #include "base/strings/unicode.h"

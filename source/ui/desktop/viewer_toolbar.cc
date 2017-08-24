@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/viewer_toolbar.cc
+// FILE:            ui/desktop/viewer_toolbar.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/viewer_toolbar.h"
+#include "ui/desktop/viewer_toolbar.h"
 #include "ui/resource.h"
 #include "base/logging.h"
 

@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/settings_dialog.h
+// FILE:            ui/desktop/settings_dialog.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SETTINGS_DIALOG_H
-#define _ASPIA_UI__SETTINGS_DIALOG_H
+#ifndef _ASPIA_UI__DESKTOP__SETTINGS_DIALOG_H
+#define _ASPIA_UI__DESKTOP__SETTINGS_DIALOG_H
 
 #include "base/macros.h"
 #include "proto/auth_session.pb.h"
@@ -65,4 +65,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SETTINGS_DIALOG_H
+#endif // _ASPIA_UI__DESKTOP__SETTINGS_DIALOG_H

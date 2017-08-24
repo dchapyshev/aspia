@@ -161,6 +161,10 @@
     <ClCompile Include="ui\about_dialog.cc" />
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\timer.cc" />
+    <ClCompile Include="ui\desktop\settings_dialog.cc" />
+    <ClCompile Include="ui\desktop\video_window.cc" />
+    <ClCompile Include="ui\desktop\viewer_toolbar.cc" />
+    <ClCompile Include="ui\desktop\viewer_window.cc" />
     <ClCompile Include="ui\file_transfer\drive_list_window.cc" />
     <ClCompile Include="ui\file_transfer\file_action_dialog.cc" />
     <ClCompile Include="ui\file_transfer\file_list_window.cc" />
@@ -175,16 +179,12 @@
     <ClCompile Include="ui\main_dialog.cc" />
     <ClCompile Include="ui\power_manage_dialog.cc" />
     <ClCompile Include="ui\power_session_dialog.cc" />
-    <ClCompile Include="ui\settings_dialog.cc" />
     <ClCompile Include="ui\status_dialog.cc" />
     <ClCompile Include="ui\system_info_toolbar.cc" />
     <ClCompile Include="ui\system_info_window.cc" />
     <ClCompile Include="ui\ui_main.cc" />
     <ClCompile Include="ui\users_dialog.cc" />
     <ClCompile Include="ui\user_prop_dialog.cc" />
-    <ClCompile Include="ui\video_window.cc" />
-    <ClCompile Include="ui\viewer_toolbar.cc" />
-    <ClCompile Include="ui\viewer_window.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\byte_order.h" />
@@ -359,6 +359,10 @@
     <ClInclude Include="ui\base\splitter.h" />
     <ClInclude Include="ui\base\timer.h" />
     <ClInclude Include="ui\base\tray_icon.h" />
+    <ClInclude Include="ui\desktop\settings_dialog.h" />
+    <ClInclude Include="ui\desktop\video_window.h" />
+    <ClInclude Include="ui\desktop\viewer_toolbar.h" />
+    <ClInclude Include="ui\desktop\viewer_window.h" />
     <ClInclude Include="ui\file_transfer\drive_list_window.h" />
     <ClInclude Include="ui\file_transfer\file_action_dialog.h" />
     <ClInclude Include="ui\file_transfer\file_list_window.h" />
@@ -374,7 +378,6 @@
     <ClInclude Include="ui\power_manage_dialog.h" />
     <ClInclude Include="ui\power_session_dialog.h" />
     <ClInclude Include="ui\resource.h" />
-    <ClInclude Include="ui\settings_dialog.h" />
     <ClInclude Include="ui\status_code.h" />
     <ClInclude Include="ui\status_dialog.h" />
     <ClInclude Include="ui\system_info_toolbar.h" />
@@ -382,9 +385,6 @@
     <ClInclude Include="ui\ui_main.h" />
     <ClInclude Include="ui\users_dialog.h" />
     <ClInclude Include="ui\user_prop_dialog.h" />
-    <ClInclude Include="ui\video_window.h" />
-    <ClInclude Include="ui\viewer_toolbar.h" />
-    <ClInclude Include="ui\viewer_window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\auth_session.proto" />

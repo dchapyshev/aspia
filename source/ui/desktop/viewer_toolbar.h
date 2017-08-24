@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/viewer_toolbar.h
+// FILE:            ui/desktop/viewer_toolbar.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__VIEWER_TOOLBAR_H
-#define _ASPIA_UI__VIEWER_TOOLBAR_H
+#ifndef _ASPIA_UI__DESKTOP__VIEWER_TOOLBAR_H
+#define _ASPIA_UI__DESKTOP__VIEWER_TOOLBAR_H
 
 #include "base/macros.h"
 #include "proto/auth_session.pb.h"
@@ -45,4 +45,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__VIEWER_TOOLBAR_H
+#endif // _ASPIA_UI__DESKTOP__VIEWER_TOOLBAR_H

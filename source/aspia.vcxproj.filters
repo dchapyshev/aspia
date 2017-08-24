@@ -64,6 +64,9 @@
     <Filter Include="ui\file_transfer">
       <UniqueIdentifier>{6b1d00ca-cb54-4662-bb49-17420fc84ad0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ui\desktop">
+      <UniqueIdentifier>{53d032b1-0b58-4546-9933-b480b286ecbd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="proto\desktop_session.pb.cc">
@@ -258,19 +261,10 @@
     <ClCompile Include="ui\main_dialog.cc">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="ui\settings_dialog.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="ui\status_dialog.cc">
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="ui\users_dialog.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\video_window.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\viewer_window.cc">
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="main.cc" />
@@ -396,9 +390,6 @@
     </ClCompile>
     <ClCompile Include="ui\base\timer.cc">
       <Filter>ui\base</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\viewer_toolbar.cc">
-      <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="base\files\base_paths.cc">
       <Filter>base\files</Filter>
@@ -537,6 +528,18 @@
     </ClCompile>
     <ClCompile Include="ui\file_transfer\file_transfer_dialog.cc">
       <Filter>ui\file_transfer</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\desktop\settings_dialog.cc">
+      <Filter>ui\desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\desktop\video_window.cc">
+      <Filter>ui\desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\desktop\viewer_toolbar.cc">
+      <Filter>ui\desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\desktop\viewer_window.cc">
+      <Filter>ui\desktop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -801,19 +804,10 @@
     <ClInclude Include="ui\resource.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="ui\settings_dialog.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="ui\status_dialog.h">
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="ui\users_dialog.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\video_window.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\viewer_window.h">
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="build_config.h" />
@@ -971,9 +965,6 @@
     <ClInclude Include="ui\base\timer.h">
       <Filter>ui\base</Filter>
     </ClInclude>
-    <ClInclude Include="ui\viewer_toolbar.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="ui\base\splitter.h">
       <Filter>ui\base</Filter>
     </ClInclude>
@@ -1129,6 +1120,18 @@
     </ClInclude>
     <ClInclude Include="ui\file_transfer\file_transfer_dialog.h">
       <Filter>ui\file_transfer</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\desktop\settings_dialog.h">
+      <Filter>ui\desktop</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\desktop\video_window.h">
+      <Filter>ui\desktop</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\desktop\viewer_toolbar.h">
+      <Filter>ui\desktop</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\desktop\viewer_window.h">
+      <Filter>ui\desktop</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

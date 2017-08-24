@@ -1,20 +1,20 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/viewer_window.h
+// FILE:            ui/desktop/viewer_window.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__VIEWER_WINDOW_H
-#define _ASPIA_UI__VIEWER_WINDOW_H
+#ifndef _ASPIA_UI__DESKTOP__VIEWER_WINDOW_H
+#define _ASPIA_UI__DESKTOP__VIEWER_WINDOW_H
 
 #include "base/message_loop/message_loop_thread.h"
 #include "base/scoped_user_object.h"
 #include "client/client_config.h"
 #include "protocol/clipboard.h"
-#include "ui/viewer_toolbar.h"
-#include "ui/video_window.h"
-#include "ui/settings_dialog.h"
+#include "ui/desktop/viewer_toolbar.h"
+#include "ui/desktop/video_window.h"
+#include "ui/desktop/settings_dialog.h"
 
 namespace aspia {
 

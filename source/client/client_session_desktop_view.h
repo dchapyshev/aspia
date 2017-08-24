@@ -11,7 +11,7 @@
 #include "codec/video_decoder.h"
 #include "codec/cursor_decoder.h"
 #include "client/client_session.h"
-#include "ui/viewer_window.h"
+#include "ui/desktop/viewer_window.h"
 
 namespace aspia {
 

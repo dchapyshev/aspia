@@ -18,7 +18,7 @@
 #include "base/scoped_clipboard.h"
 #include "client/client_config.h"
 #include "host/host_service.h"
-#include "ui/viewer_window.h"
+#include "ui/desktop/viewer_window.h"
 #include "ui/about_dialog.h"
 #include "ui/users_dialog.h"
 
