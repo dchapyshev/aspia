@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/power_session_dialog.cc
+// FILE:            ui/power/power_session_dialog.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/power_session_dialog.h"
+#include "ui/power/power_session_dialog.h"
 #include "base/logging.h"
 
 #include <atlctrls.h>

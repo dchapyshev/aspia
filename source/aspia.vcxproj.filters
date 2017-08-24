@@ -67,6 +67,9 @@
     <Filter Include="ui\desktop">
       <UniqueIdentifier>{53d032b1-0b58-4546-9933-b480b286ecbd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ui\power">
+      <UniqueIdentifier>{ee7dcae2-69be-4771-a30e-9368e0432fe0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="proto\desktop_session.pb.cc">
@@ -307,9 +310,6 @@
     <ClCompile Include="base\version_helpers.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="ui\power_manage_dialog.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="network\network_channel_proxy.cc">
       <Filter>network</Filter>
     </ClCompile>
@@ -445,9 +445,6 @@
     <ClCompile Include="host\host_process_connector.cc">
       <Filter>host</Filter>
     </ClCompile>
-    <ClCompile Include="ui\power_session_dialog.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="host\host_session.cc">
       <Filter>host</Filter>
     </ClCompile>
@@ -540,6 +537,12 @@
     </ClCompile>
     <ClCompile Include="ui\desktop\viewer_window.cc">
       <Filter>ui\desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\power\power_manage_dialog.cc">
+      <Filter>ui\power</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\power\power_session_dialog.cc">
+      <Filter>ui\power</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -869,9 +872,6 @@
     <ClInclude Include="base\version_helpers.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="ui\power_manage_dialog.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="network\network_channel_proxy.h">
       <Filter>network</Filter>
     </ClInclude>
@@ -1031,9 +1031,6 @@
     <ClInclude Include="host\host_process_connector.h">
       <Filter>host</Filter>
     </ClInclude>
-    <ClInclude Include="ui\power_session_dialog.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="host\host_session.h">
       <Filter>host</Filter>
     </ClInclude>
@@ -1132,6 +1129,12 @@
     </ClInclude>
     <ClInclude Include="ui\desktop\viewer_window.h">
       <Filter>ui\desktop</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\power\power_manage_dialog.h">
+      <Filter>ui\power</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\power\power_session_dialog.h">
+      <Filter>ui\power</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

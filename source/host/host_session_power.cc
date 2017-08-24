@@ -10,7 +10,7 @@
 #include "ipc/pipe_channel_proxy.h"
 #include "proto/auth_session.pb.h"
 #include "protocol/message_serialization.h"
-#include "ui/power_session_dialog.h"
+#include "ui/power/power_session_dialog.h"
 
 namespace aspia {
 
