@@ -80,6 +80,7 @@ private:
     CategoryTreeCtrl tree_;
     InfoListCtrl list_;
     VerticalSplitter splitter_;
+    CStatusBarCtrl statusbar_;
 
     CIcon small_icon_;
     CIcon big_icon_;

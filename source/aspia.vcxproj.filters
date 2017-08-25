@@ -1172,9 +1172,6 @@
     <ClInclude Include="ui\power\power_session_dialog.h">
       <Filter>ui\power</Filter>
     </ClInclude>
-    <ClInclude Include="ui\system_info\system_info_toolbar.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
     <ClInclude Include="ui\system_info\system_info_window.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
@@ -1224,6 +1221,9 @@
       <Filter>ui\system_info</Filter>
     </ClInclude>
     <ClInclude Include="ui\system_info\category_group_event_log.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\system_info_toolbar.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
   </ItemGroup>

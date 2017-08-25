@@ -106,6 +106,10 @@ LRESULT SystemInfoWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
     splitter_.SetSplitterPane(SPLIT_PANE_LEFT, tree_);
     splitter_.SetSplitterPane(SPLIT_PANE_RIGHT, list_);
 
+    statusbar_.Create(*this, rcDefault, nullptr, WS_CHILD | WS_VISIBLE | SBARS_SIZEGRIP);
+    int part_width = 240;
+    statusbar_.SetParts(1, &part_width);
+
     SetWindowPos(nullptr, 0, 0, kDefaultWindowWidth, kDefaultWindowHeight,
                  SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
     CenterWindow();
@@ -119,6 +123,7 @@ LRESULT SystemInfoWindow::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, 
     tree_.DestroyWindow();
     list_.DestroyWindow();
     splitter_.DestroyWindow();
+    statusbar_.DestroyWindow();
     return 0;
 }
 
@@ -127,12 +132,16 @@ LRESULT SystemInfoWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOO
     CSize size(lparam);
 
     toolbar_.AutoSize();
+    statusbar_.SendMessageW(WM_SIZE);
 
     CRect toolbar_rect;
     toolbar_.GetWindowRect(toolbar_rect);
 
+    CRect statusbar_rect;
+    statusbar_.GetWindowRect(statusbar_rect);
+
     splitter_.MoveWindow(0, toolbar_rect.Height(),
-                         size.cx, size.cy - toolbar_rect.Height(),
+                         size.cx, size.cy - toolbar_rect.Height() - statusbar_rect.Height(),
                          FALSE);
     return 0;
 }
