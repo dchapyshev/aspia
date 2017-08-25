@@ -36,10 +36,23 @@ void CategoryTreeCtrl::AddChildItems(const CategoryList& list, HTREEITEM parent_
         HTREEITEM tree_item = InsertItem(
             child->Name(), icon_index, icon_index, parent_tree_item, TVI_LAST);
 
+        SetItemData(tree_item, reinterpret_cast<DWORD_PTR>(&child));
+
         if (child->type() == Category::Type::GROUP)
         {
             AddChildItems(child->child_list(), tree_item);
         }
+    }
+}
+
+void CategoryTreeCtrl::ExpandCategoryGroups(HTREEITEM parent_tree_item)
+{
+    HTREEITEM child = GetChildItem(parent_tree_item);
+
+    while (child)
+    {
+        Expand(child);
+        child = GetNextItem(child, TVGN_NEXT);
     }
 }
 
@@ -65,6 +78,7 @@ LRESULT CategoryTreeCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
     }
 
     AddChildItems(category_list_, TVI_ROOT);
+    ExpandCategoryGroups(TVI_ROOT);
 
     return ret;
 }

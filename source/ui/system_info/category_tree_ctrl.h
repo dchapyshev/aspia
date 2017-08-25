@@ -33,6 +33,7 @@ private:
 
     void InitializeCategoryList();
     void AddChildItems(const CategoryList& list, HTREEITEM parent_tree_item);
+    void ExpandCategoryGroups(HTREEITEM parent_tree_item);
 
     CategoryList category_list_;
     CImageListManaged imagelist_;
