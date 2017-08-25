@@ -281,6 +281,16 @@ BEGIN
     END
 END
 
+IDR_SAVE_REPORT MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "Save &Current Page", ID_SAVE_CURRENT
+        MENUITEM "Save &Selected", ID_SAVE_SELECTED
+        MENUITEM "Save &All", ID_SAVE_ALL
+    END
+END
+
 // General
 STRINGTABLE DISCARDABLE
 BEGIN
@@ -439,7 +449,6 @@ BEGIN
     IDS_SI_CATEGORY_POWER_OPTIONS           "Power Options"
     IDS_SI_CATEGORY_PRINTERS                "Printers"
     IDS_SI_CATEGORY_WINDOWS_DEVICES         "Windows Devices"
-    IDS_SI_CATEGORY_PROGRAMS_AND_UPDATES    "Programs and Updates"
     IDS_SI_CATEGORY_SERVICES                "Services"
     IDS_SI_CATEGORY_DRIVERS                 "Drivers"
     IDS_SI_CATEGORY_PROCESSES               "Processes"
@@ -483,6 +492,9 @@ BEGIN
     IDS_SI_CATEGORY_EVENT_LOG_APPLICATIONS  "Applications"
     IDS_SI_CATEGORY_EVENT_LOG_SECURITY      "Security"
     IDS_SI_CATEGORY_EVENT_LOG_SYSTEM        "System"
+    IDS_SI_COLUMN_CATEGORY_NAME             "Category Name"
+    IDS_SI_COLUMN_PARAMETER                 "Parameter"
+    IDS_SI_COLUMN_VALUE                     "Value"
 END
 
 // Request Status

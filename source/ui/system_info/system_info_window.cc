@@ -6,10 +6,8 @@
 //
 
 #include "ui/system_info/system_info_window.h"
-#include "ui/resource.h"
+#include "ui/about_dialog.h"
 #include "base/logging.h"
-
-#include <atlmisc.h>
 
 namespace aspia {
 
@@ -99,11 +97,11 @@ LRESULT SystemInfoWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
     const DWORD tree_style = WS_CHILD | WS_VISIBLE | WS_TABSTOP | TVS_HASLINES |
         TVS_SHOWSELALWAYS | TVS_HASBUTTONS | TVS_LINESATROOT;
 
-    tree_.Create(splitter_, nullptr, nullptr, tree_style, WS_EX_CLIENTEDGE, kTreeControl);
+    tree_.Create(splitter_, rcDefault, nullptr, tree_style, WS_EX_CLIENTEDGE, kTreeControl);
 
     const DWORD list_style = WS_CHILD | WS_VISIBLE | LVS_REPORT | WS_TABSTOP | LVS_SHOWSELALWAYS;
 
-    list_.Create(splitter_, nullptr, nullptr, list_style, WS_EX_CLIENTEDGE, kListControl);
+    list_.Create(splitter_, rcDefault, nullptr, list_style, WS_EX_CLIENTEDGE, kListControl);
 
     splitter_.SetSplitterPane(SPLIT_PANE_LEFT, tree_);
     splitter_.SetSplitterPane(SPLIT_PANE_RIGHT, list_);
@@ -139,7 +137,8 @@ LRESULT SystemInfoWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOO
     return 0;
 }
 
-LRESULT SystemInfoWindow::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT SystemInfoWindow::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam,
+                                          BOOL& handled)
 {
     LPMINMAXINFO mmi = reinterpret_cast<LPMINMAXINFO>(lparam);
 
@@ -152,6 +151,51 @@ LRESULT SystemInfoWindow::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lp
 LRESULT SystemInfoWindow::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     delegate_->OnWindowClose();
+    return 0;
+}
+
+void SystemInfoWindow::ShowDropDownMenu(int button_id, RECT* button_rect)
+{
+    if (button_id != ID_SAVE)
+        return;
+
+    if (toolbar_.MapWindowPoints(HWND_DESKTOP, button_rect))
+    {
+        TPMPARAMS tpm;
+        tpm.cbSize = sizeof(TPMPARAMS);
+        tpm.rcExclude = *button_rect;
+
+        CMenu menu;
+        menu.LoadMenuW(IDR_SAVE_REPORT);
+
+        CMenuHandle pupup = menu.GetSubMenu(0);
+
+        pupup.TrackPopupMenuEx(TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_VERTICAL,
+                               button_rect->left,
+                               button_rect->bottom,
+                               *this,
+                               &tpm);
+    }
+}
+
+LRESULT SystemInfoWindow::OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& handled)
+{
+    LPNMTOOLBARW header = reinterpret_cast<LPNMTOOLBARW>(hdr);
+    ShowDropDownMenu(header->iItem, &header->rcButton);
+    return 0;
+}
+
+LRESULT SystemInfoWindow::OnAboutButton(WORD notify_code, WORD control_id, HWND control,
+                                        BOOL& handled)
+{
+    AboutDialog().DoModal(*this);
+    return 0;
+}
+
+LRESULT SystemInfoWindow::OnExitButton(WORD notify_code, WORD control_id, HWND control,
+                                       BOOL& handled)
+{
+    PostMessageW(WM_CLOSE);
     return 0;
 }
 

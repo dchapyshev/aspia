@@ -10,9 +10,10 @@
 
 #include "base/message_loop/message_loop_thread.h"
 #include "ui/system_info/system_info_toolbar.h"
+#include "ui/system_info/category_tree_ctrl.h"
+#include "ui/system_info/info_list_ctrl.h"
 #include "ui/base/splitter.h"
-
-#include <atlctrls.h>
+#include "ui/resource.h"
 
 namespace aspia {
 
@@ -50,6 +51,11 @@ private:
         MESSAGE_HANDLER(WM_GETMINMAXINFO, OnGetMinMaxInfo)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
         MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+
+        NOTIFY_CODE_HANDLER(TBN_DROPDOWN, OnToolBarDropDown)
+
+        COMMAND_ID_HANDLER(ID_ABOUT, OnAboutButton)
+        COMMAND_ID_HANDLER(ID_EXIT, OnExitButton)
     END_MSG_MAP()
 
     LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
@@ -58,14 +64,21 @@ private:
     LRESULT OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
 
+    LRESULT OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& handled);
+
+    LRESULT OnAboutButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnExitButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+
+    void ShowDropDownMenu(int button_id, RECT* button_rect);
+
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
     Delegate* delegate_;
 
     SystemInfoToolbar toolbar_;
-    CTreeViewCtrl tree_;
-    CListViewCtrl list_;
+    CategoryTreeCtrl tree_;
+    InfoListCtrl list_;
     VerticalSplitter splitter_;
 
     CIcon small_icon_;

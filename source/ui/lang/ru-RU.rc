@@ -281,6 +281,16 @@ BEGIN
     END
 END
 
+IDR_SAVE_REPORT MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "Сохранить &текущую страницу", ID_SAVE_CURRENT
+        MENUITEM "&Сохранить выбранное", ID_SAVE_SELECTED
+        MENUITEM "Сохранить &все", ID_SAVE_ALL
+    END
+END
+
 // General
 STRINGTABLE DISCARDABLE
 BEGIN
@@ -439,7 +449,6 @@ BEGIN
     IDS_SI_CATEGORY_POWER_OPTIONS           "Электропитание"
     IDS_SI_CATEGORY_PRINTERS                "Принтеры"
     IDS_SI_CATEGORY_WINDOWS_DEVICES         "Устройства Windows"
-    IDS_SI_CATEGORY_PROGRAMS_AND_UPDATES    "Программы и обновления"
     IDS_SI_CATEGORY_SERVICES                "Службы"
     IDS_SI_CATEGORY_DRIVERS                 "Драйверы"
     IDS_SI_CATEGORY_PROCESSES               "Процессы"
@@ -483,6 +492,9 @@ BEGIN
     IDS_SI_CATEGORY_EVENT_LOG_APPLICATIONS  "Приложения"
     IDS_SI_CATEGORY_EVENT_LOG_SECURITY      "Безопасность"
     IDS_SI_CATEGORY_EVENT_LOG_SYSTEM        "Система"
+    IDS_SI_COLUMN_CATEGORY_NAME             "Имя категории"
+    IDS_SI_COLUMN_PARAMETER                 "Параметр"
+    IDS_SI_COLUMN_VALUE                     "Значение"
 END
 
 // Request Status

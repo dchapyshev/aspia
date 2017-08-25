@@ -547,6 +547,45 @@
     <ClCompile Include="ui\system_info\system_info_window.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
+    <ClCompile Include="ui\system_info\category_tree_ctrl.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\info_list_ctrl.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\category_summary.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\category_group_dmi.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\category_group_hardware.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\category_group_storage.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\category_group_display.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\category_group_windows_devices.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\category_group_software.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\category_group_network.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\category_group_os.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\category_group_users.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\category_group_event_log.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1137,6 +1176,54 @@
       <Filter>ui\system_info</Filter>
     </ClInclude>
     <ClInclude Include="ui\system_info\system_info_window.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\category.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\category_group.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\column.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\category_tree_ctrl.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\info_list_ctrl.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\category_summary.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\category_group_hardware.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\category_group_network.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\category_group_os.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\category_group_software.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\category_group_dmi.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\category_group_storage.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\category_group_display.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\category_group_windows_devices.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\category_group_users.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\category_group_event_log.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
   </ItemGroup>
