@@ -128,9 +128,13 @@ void MessageLoopThread::ThreadMain(MessageLoop::Type message_loop_type)
 
 bool MessageLoopThread::SetPriority(Priority priority)
 {
-    DCHECK(IsRunning());
-    return !!SetThreadPriority(thread_.native_handle(),
-                               static_cast<int>(priority));
+    if (!SetThreadPriority(thread_.native_handle(), static_cast<int>(priority)))
+    {
+        DLOG(ERROR) << "Unable to set thread priority: " << GetLastSystemErrorString();
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace aspia
