@@ -277,17 +277,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="zconf.h" />
-    <ClInclude Include="zlib.h" />
-    <ClInclude Include="crc32.h" />
-    <ClInclude Include="deflate.h" />
-    <ClInclude Include="gzguts.h" />
-    <ClInclude Include="inffast.h" />
-    <ClInclude Include="inffixed.h" />
-    <ClInclude Include="inflate.h" />
-    <ClInclude Include="inftrees.h" />
-    <ClInclude Include="trees.h" />
-    <ClInclude Include="zutil.h" />
     <ClCompile Include="adler32.c" />
     <ClCompile Include="compress.c" />
     <ClCompile Include="crc32.c" />
@@ -295,6 +284,7 @@
     <ClCompile Include="deflate_fast.c" />
     <ClCompile Include="deflate_medium.c" />
     <ClCompile Include="deflate_slow.c" />
+    <ClCompile Include="functable.c" />
     <ClCompile Include="inflate.c" />
     <ClCompile Include="infback.c" />
     <ClCompile Include="inftrees.c" />
@@ -304,6 +294,10 @@
     <ClCompile Include="uncompr.c" />
     <ClCompile Include="zutil.c" />
     <ClCompile Include="arch\x86\x86.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="functable.h" />
+    <ClInclude Include="memcopy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
