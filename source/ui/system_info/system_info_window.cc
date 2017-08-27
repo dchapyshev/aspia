@@ -114,6 +114,8 @@ LRESULT SystemInfoWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
                  SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
     CenterWindow();
 
+    tree_.SelectItem(tree_.GetChildItem(TVI_ROOT));
+    tree_.SetFocus();
     return 0;
 }
 
@@ -129,7 +131,7 @@ LRESULT SystemInfoWindow::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, 
 
 LRESULT SystemInfoWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
-    CSize size(lparam);
+    const CSize size(lparam);
 
     toolbar_.AutoSize();
     statusbar_.SendMessageW(WM_SIZE);
@@ -191,6 +193,29 @@ LRESULT SystemInfoWindow::OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& h
 {
     LPNMTOOLBARW header = reinterpret_cast<LPNMTOOLBARW>(hdr);
     ShowDropDownMenu(header->iItem, &header->rcButton);
+    return 0;
+}
+
+LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& handled)
+{
+    LPNMTREEVIEWW nmtv = reinterpret_cast<LPNMTREEVIEWW>(hdr);
+
+    Category* category = tree_.GetItemCategory(nmtv->itemNew.hItem);
+    if (!category)
+        return 0;
+
+    list_.DeleteAllItems();
+    list_.DeleteAllColumns();
+
+    for (const auto& column : category->column_list())
+    {
+        const int column_index = list_.AddColumn(column.Name(), list_.GetColumnCount());
+        list_.SetColumnWidth(column_index, column.Width());
+    }
+
+    statusbar_.SetText(0, category->Name());
+    statusbar_.SetIcon(0, category->Icon());
+
     return 0;
 }
 

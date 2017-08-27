@@ -37,4 +37,22 @@ LRESULT InfoListCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL&
     return ret;
 }
 
+void InfoListCtrl::DeleteAllColumns()
+{
+    int count = GetColumnCount();
+
+    while (--count >= 0)
+        DeleteColumn(count);
+}
+
+int InfoListCtrl::GetColumnCount() const
+{
+    CHeaderCtrl header(GetHeader());
+
+    if (!header)
+        return 0;
+
+    return header.GetItemCount();
+}
+
 } // namespace aspia

@@ -33,10 +33,10 @@ void UsersDialog::UpdateUserList()
         SecureString<std::wstring> username;
         CHECK(UTF8toUNICODE(user.username(), username));
 
-        int item_index = list.AddItem(list.GetItemCount(),
-                                      0,
-                                      username.c_str(),
-                                      user.enabled() ? 0 : 1);
+        const int item_index = list.AddItem(list.GetItemCount(),
+                                            0,
+                                            username.c_str(),
+                                            user.enabled() ? 0 : 1);
 
         list.SetItemData(item_index, i);
     }
@@ -164,7 +164,7 @@ int UsersDialog::GetSelectedUserIndex()
 
 void UsersDialog::EditSelectedUser()
 {
-    int user_index = GetSelectedUserIndex();
+    const int user_index = GetSelectedUserIndex();
 
     if (user_index < 0 || user_index >= user_list_.size())
         return;

@@ -31,12 +31,13 @@ void CategoryTreeCtrl::AddChildItems(const CategoryList& list, HTREEITEM parent_
 {
     for (const auto& child : list)
     {
-        int icon_index = imagelist_.AddIcon(child->Icon());
+        const int icon_index = imagelist_.AddIcon(child->Icon());
 
         HTREEITEM tree_item = InsertItem(
             child->Name(), icon_index, icon_index, parent_tree_item, TVI_LAST);
 
-        SetItemData(tree_item, reinterpret_cast<DWORD_PTR>(&child));
+        // Each element in the tree contains a pointer to the category.
+        SetItemData(tree_item, reinterpret_cast<DWORD_PTR>(child.get()));
 
         if (child->type() == Category::Type::GROUP)
         {
@@ -45,13 +46,19 @@ void CategoryTreeCtrl::AddChildItems(const CategoryList& list, HTREEITEM parent_
     }
 }
 
-void CategoryTreeCtrl::ExpandCategoryGroups(HTREEITEM parent_tree_item)
+void CategoryTreeCtrl::ExpandChildGroups(HTREEITEM parent_tree_item)
 {
     HTREEITEM child = GetChildItem(parent_tree_item);
 
     while (child)
     {
-        Expand(child);
+        Category* category = GetItemCategory(child);
+
+        if (category && category->type() == Category::Type::GROUP)
+        {
+            Expand(child);
+        }
+
         child = GetNextItem(child, TVGN_NEXT);
     }
 }
@@ -78,9 +85,14 @@ LRESULT CategoryTreeCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
     }
 
     AddChildItems(category_list_, TVI_ROOT);
-    ExpandCategoryGroups(TVI_ROOT);
+    ExpandChildGroups(TVI_ROOT);
 
     return ret;
+}
+
+Category* CategoryTreeCtrl::GetItemCategory(HTREEITEM tree_item) const
+{
+    return reinterpret_cast<Category*>(GetItemData(tree_item));
 }
 
 } // namespace aspia

@@ -24,6 +24,9 @@ public:
     CategoryTreeCtrl() = default;
     ~CategoryTreeCtrl() = default;
 
+    Category* GetItemCategory(HTREEITEM tree_item) const;
+    void ExpandChildGroups(HTREEITEM parent_tree_item);
+
 private:
     BEGIN_MSG_MAP(CategoryTreeCtrl)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
@@ -33,7 +36,6 @@ private:
 
     void InitializeCategoryList();
     void AddChildItems(const CategoryList& list, HTREEITEM parent_tree_item);
-    void ExpandCategoryGroups(HTREEITEM parent_tree_item);
 
     CategoryList category_list_;
     CImageListManaged imagelist_;

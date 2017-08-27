@@ -16,7 +16,6 @@
 #include <atlapp.h>
 #include <atlwin.h>
 #include <atlctrls.h>
-#include <atlmisc.h>
 #include <memory>
 
 namespace aspia {
@@ -37,9 +36,9 @@ public:
 
     bool IsValidObjectIndex(int object_index) const;
     bool HasFileList() const;
-    const proto::FileList::Item& Object(int object_index);
-    FilePath ObjectName(int object_index);
-    bool IsDirectoryObject(int object_index);
+    const proto::FileList::Item& Object(int object_index) const;
+    FilePath ObjectName(int object_index) const;
+    bool IsDirectoryObject(int object_index) const;
     proto::FileList::Item* FirstSelectedObject() const;
     int GetObjectUnderMousePointer() const;
     void AddDirectory();

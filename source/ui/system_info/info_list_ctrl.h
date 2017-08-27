@@ -23,6 +23,9 @@ public:
     InfoListCtrl() = default;
     ~InfoListCtrl() = default;
 
+    void DeleteAllColumns();
+    int GetColumnCount() const;
+
 private:
     BEGIN_MSG_MAP(InfoListCtrl)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)

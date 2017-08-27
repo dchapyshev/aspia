@@ -66,7 +66,7 @@ void FileListWindow::Read(std::shared_ptr<proto::FileList> list)
     CIcon icon(GetDirectoryIcon());
 
     int icon_index = imagelist_.AddIcon(icon);
-    int object_count = list_->item_size();
+    const int object_count = list_->item_size();
 
     CString file_folder;
     file_folder.LoadStringW(IDS_FT_FILE_FOLDER);
@@ -81,7 +81,7 @@ void FileListWindow::Read(std::shared_ptr<proto::FileList> list)
 
         FilePath name = std::experimental::filesystem::u8path(item.name());
 
-        int item_index = AddItem(GetItemCount(), 0, name.c_str(), icon_index);
+        const int item_index = AddItem(GetItemCount(), 0, name.c_str(), icon_index);
         SetItemData(item_index, object_index);
         SetItemText(item_index, 2, file_folder);
         SetItemText(item_index, 3, TimeToString(item.modification_time()).c_str());
@@ -100,7 +100,7 @@ void FileListWindow::Read(std::shared_ptr<proto::FileList> list)
         icon = GetFileIcon(name);
         icon_index = imagelist_.AddIcon(icon);
 
-        int item_index = AddItem(GetItemCount(), 0, name.c_str(), icon_index);
+        const int item_index = AddItem(GetItemCount(), 0, name.c_str(), icon_index);
 
         SetItemData(item_index, object_index);
         SetItemText(item_index, 1, SizeToString(object.size()).c_str());
@@ -130,12 +130,12 @@ void FileListWindow::Read(const proto::DriveList& list)
     {
         const proto::DriveList::Item& object = list.item(object_index);
 
-        CIcon icon(GetDriveIcon(object.type()));
-        int icon_index = imagelist_.AddIcon(icon);
+        const CIcon icon(GetDriveIcon(object.type()));
+        const int icon_index = imagelist_.AddIcon(icon);
 
-        CString display_name(GetDriveDisplayName(object));
+        const CString display_name(GetDriveDisplayName(object));
 
-        int item_index = AddItem(GetItemCount(), 0, display_name, icon_index);
+        const int item_index = AddItem(GetItemCount(), 0, display_name, icon_index);
         SetItemData(item_index, object_index);
         SetItemText(item_index, 1, GetDriveDescription(object.type()));
 
@@ -152,7 +152,7 @@ bool FileListWindow::HasFileList() const
     return list_ != nullptr;
 }
 
-const proto::FileList::Item& FileListWindow::Object(int object_index)
+const proto::FileList::Item& FileListWindow::Object(int object_index) const
 {
     DCHECK(HasFileList());
     DCHECK(IsValidObjectIndex(object_index));
@@ -160,7 +160,7 @@ const proto::FileList::Item& FileListWindow::Object(int object_index)
     return list_->item(object_index);
 }
 
-FilePath FileListWindow::ObjectName(int object_index)
+FilePath FileListWindow::ObjectName(int object_index) const
 {
     DCHECK(HasFileList());
     DCHECK(IsValidObjectIndex(object_index));
@@ -168,7 +168,7 @@ FilePath FileListWindow::ObjectName(int object_index)
     return std::experimental::filesystem::u8path(list_->item(object_index).name());
 }
 
-bool FileListWindow::IsDirectoryObject(int object_index)
+bool FileListWindow::IsDirectoryObject(int object_index) const
 {
     DCHECK(HasFileList());
     DCHECK(IsValidObjectIndex(object_index));
@@ -178,11 +178,11 @@ bool FileListWindow::IsDirectoryObject(int object_index)
 
 proto::FileList::Item* FileListWindow::FirstSelectedObject() const
 {
-    int selected_item = GetNextItem(-1, LVNI_SELECTED);
+    const int selected_item = GetNextItem(-1, LVNI_SELECTED);
     if (selected_item == -1)
         return nullptr;
 
-    int object_index = GetItemData(selected_item);
+    const int object_index = GetItemData(selected_item);
 
     if (!IsValidObjectIndex(object_index))
         return nullptr;
@@ -195,15 +195,15 @@ void FileListWindow::AddDirectory()
     if (!HasFileList())
         return;
 
-    CIcon folder_icon(GetDirectoryIcon());
-    int icon_index = imagelist_.AddIcon(folder_icon);
+    const CIcon folder_icon(GetDirectoryIcon());
+    const int icon_index = imagelist_.AddIcon(folder_icon);
 
     CString folder_name;
     folder_name.LoadStringW(IDS_FT_NEW_FOLDER);
 
     SetFocus();
 
-    int item_index = AddItem(GetItemCount(), 0, folder_name, icon_index);
+    const int item_index = AddItem(GetItemCount(), 0, folder_name, icon_index);
     SetItemData(item_index, kNewFolderObjectIndex);
     EditLabel(item_index);
 }
@@ -231,7 +231,7 @@ void FileListWindow::AddNewColumn(UINT string_id, int width)
     CString text;
     text.LoadStringW(string_id);
 
-    int column_index = AddColumn(text, GetColumnCount());
+    const int column_index = AddColumn(text, GetColumnCount());
     SetColumnWidth(column_index, width);
 }
 
@@ -270,7 +270,7 @@ const proto::FileList::Item& FileListWindow::Iterator::Object() const
     if (item_index_ == -1)
         return empty_item;
 
-    int object_index = list_.GetItemData(item_index_);
+    const int object_index = list_.GetItemData(item_index_);
 
     if (!list_.IsValidObjectIndex(object_index))
         return empty_item;
@@ -290,7 +290,7 @@ int FileListWindow::GetObjectUnderMousePointer() const
         return kInvalidObjectIndex;
 
     hti.flags = LVHT_ONITEMICON | LVHT_ONITEMLABEL;
-    int item_index = HitTest(&hti);
+    const int item_index = HitTest(&hti);
     if (item_index == -1)
         return kInvalidObjectIndex;
 

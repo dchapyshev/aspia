@@ -52,6 +52,7 @@ private:
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
         MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 
+        NOTIFY_HANDLER(kTreeControl, TVN_SELCHANGED, OnCategorySelected)
         NOTIFY_CODE_HANDLER(TBN_DROPDOWN, OnToolBarDropDown)
 
         COMMAND_ID_HANDLER(ID_ABOUT, OnAboutButton)
@@ -64,6 +65,7 @@ private:
     LRESULT OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
 
+    LRESULT OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& handled);
 
     LRESULT OnAboutButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
