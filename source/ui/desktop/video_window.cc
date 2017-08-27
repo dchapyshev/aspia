@@ -374,8 +374,8 @@ bool VideoWindow::Scroll(LONG delta_x, LONG delta_y)
     LONG offset_x = 0;
     LONG offset_y = 0;
 
-    int width = frame_->Size().Width();
-    int height = frame_->Size().Height();
+    const int width = frame_->Size().Width();
+    const int height = frame_->Size().Height();
 
     if (delta_x)
     {
@@ -420,11 +420,6 @@ DesktopSize VideoWindow::FrameSize() const
         return DesktopSize();
 
     return frame_->Size();
-}
-
-void VideoWindow::HasFocus(bool has)
-{
-    has_focus_ = has;
 }
 
 void VideoWindow::ResizeFrame(const DesktopSize& size, const PixelFormat& format)

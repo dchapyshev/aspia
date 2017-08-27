@@ -267,7 +267,7 @@ static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wparam, LPARAM lparam)
 
 LRESULT ViewerWindow::OnActivate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
-    UINT state = LOWORD(wparam);
+    const UINT state = LOWORD(wparam);
 
     if (state == WA_ACTIVE || state == WA_CLICKACTIVE)
     {
@@ -278,12 +278,12 @@ LRESULT ViewerWindow::OnActivate(UINT message, WPARAM wparam, LPARAM lparam, BOO
                                                KeyboardHookProc,
                                                GetModuleHandleW(nullptr),
                                                0));
-        video_window_.HasFocus(true);
+        video_window_.SetHasFocus(true);
     }
     else if (state == WA_INACTIVE)
     {
         keyboard_hook_.Reset();
-        video_window_.HasFocus(false);
+        video_window_.SetHasFocus(false);
     }
 
     return 0;
@@ -320,13 +320,13 @@ LRESULT ViewerWindow::OnSkipMessage(UINT message, WPARAM wparam, LPARAM lparam, 
 
 LRESULT ViewerWindow::OnSetFocus(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
-    video_window_.HasFocus(true);
+    video_window_.SetHasFocus(true);
     return 0;
 }
 
 LRESULT ViewerWindow::OnKillFocus(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
-    video_window_.HasFocus(false);
+    video_window_.SetHasFocus(false);
     return 0;
 }
 

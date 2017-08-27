@@ -37,7 +37,7 @@ public:
     void ResizeFrame(const DesktopSize& size, const PixelFormat& format);
     DesktopSize FrameSize() const;
 
-    void HasFocus(bool has);
+    void SetHasFocus(bool value) { has_focus_ = value; };
 
 private:
     BEGIN_MSG_MAP(VideoWindow)

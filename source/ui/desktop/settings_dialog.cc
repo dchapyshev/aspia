@@ -9,6 +9,7 @@
 #include "desktop_capture/pixel_format.h"
 #include "codec/video_helpers.h"
 #include "base/strings/string_util.h"
+#include "base/logging.h"
 
 #include <atlmisc.h>
 
@@ -28,11 +29,9 @@ enum PixelFormats
 
 static const int kMaxUpdateInterval = 100;
 static const int kMinUpdateInterval = 15;
-static const int kDefUpdateInterval = 30;
 
 static const int kMaxCompressRatio = 9;
 static const int kMinCompressRatio = 1;
-static const int kDefCompressRatio = 6;
 
 SettingsDialog::SettingsDialog(proto::SessionType session_type,
                                const proto::DesktopSessionConfig& config)
@@ -47,13 +46,13 @@ void SettingsDialog::AddColorDepth(CComboBox& combobox, UINT string_id, int item
     CString text;
     text.LoadStringW(string_id);
 
-    int item_index = combobox.AddString(text);
+    const int item_index = combobox.AddString(text);
     combobox.SetItemData(item_index, item_data);
 }
 
 void SettingsDialog::SelectItemWithData(CComboBox& combobox, int item_data)
 {
-    int count = combobox.GetCount();
+    const int count = combobox.GetCount();
 
     for (int i = 0; i < count; ++i)
     {
@@ -268,11 +267,15 @@ LRESULT SettingsDialog::OnOkButton(WORD notify_code, WORD control_id, HWND contr
             case kRGB111:
                 format = PixelFormat::RGB111();
                 break;
+
+            default:
+                DLOG(FATAL) << "Unexpected pixel format";
+                return 0;
         }
 
         ConvertToVideoPixelFormat(format, config_.mutable_pixel_format());
 
-        int compress_ratio = CTrackBarCtrl(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR)).GetPos();
+        const int compress_ratio = CTrackBarCtrl(GetDlgItem(IDC_COMPRESS_RATIO_TRACKBAR)).GetPos();
         if (compress_ratio >= kMinCompressRatio && compress_ratio <= kMaxCompressRatio)
         {
             config_.set_compress_ratio(compress_ratio);
