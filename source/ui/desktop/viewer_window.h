@@ -109,6 +109,13 @@ private:
     LRESULT OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& handled);
 
     void ShowDropDownMenu(int button_id, RECT* button_rect);
+
+    // Returns the size of the monitor on which the window is located.
+    CSize GetMonitorSize() const;
+
+    // Calculates the window size for the specified video frame size.
+    CSize CalculateWindowSize(const DesktopSize &video_frame_size) const;
+
     int DoAutoSize(const DesktopSize& video_frame_size);
     void DoFullScreen(bool fullscreen);
     void ApplyConfig(const proto::DesktopSessionConfig& config);

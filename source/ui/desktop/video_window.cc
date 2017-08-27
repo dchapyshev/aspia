@@ -77,8 +77,8 @@ LRESULT VideoWindow::OnPaint(UINT message, WPARAM wparam, LPARAM lparam, BOOL& h
 
     if (frame_)
     {
-        CPoint scroll_pos(center_offset_.x ? 0 : scroll_pos_.x,
-                          center_offset_.y ? 0 : scroll_pos_.y);
+        const CPoint scroll_pos(center_offset_.x ? 0 : scroll_pos_.x,
+                                center_offset_.y ? 0 : scroll_pos_.y);
 
         CRect paint_rect(paint.m_ps.rcPaint);
 
@@ -112,16 +112,16 @@ LRESULT VideoWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& ha
 
     client_size_ = client_rect.Size();
 
-    int width = frame_->Size().Width();
-    int height = frame_->Size().Height();
+    const int width = frame_->Size().Width();
+    const int height = frame_->Size().Height();
 
     center_offset_.SetPoint((width < client_size_.cx) ?
                                 (client_size_.cx / 2) - (width / 2) : 0,
                             (height < client_size_.cy) ?
                                 (client_size_.cy / 2) - (height / 2) : 0);
 
-    CPoint scroll_pos(std::max(0L, std::min(scroll_pos_.x, width - client_size_.cx)),
-                      std::max(0L, std::min(scroll_pos_.y, height - client_size_.cy)));
+    const CPoint scroll_pos(std::max(0L, std::min(scroll_pos_.x, width - client_size_.cx)),
+                            std::max(0L, std::min(scroll_pos_.y, height - client_size_.cy)));
 
     ScrollWindowEx(scroll_pos_.x - scroll_pos.x,
                    scroll_pos_.y - scroll_pos.y,
@@ -164,7 +164,7 @@ LRESULT VideoWindow::OnMouse(UINT message, WPARAM wparam, LPARAM lparam, BOOL& h
 
     if (message == WM_MOUSEWHEEL)
     {
-        signed short speed = static_cast<signed short>(HIWORD(flags));
+        const signed short speed = static_cast<signed short>(HIWORD(flags));
 
         if (speed < 0)
         {
@@ -248,7 +248,7 @@ LRESULT VideoWindow::OnMouseLeave(UINT message, WPARAM wparam, LPARAM lparam, BO
 
 LRESULT VideoWindow::OnTimer(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
-    UINT_PTR event_id = static_cast<UINT_PTR>(wparam);
+    const UINT_PTR event_id = static_cast<UINT_PTR>(wparam);
 
     switch (event_id)
     {
@@ -270,8 +270,8 @@ LRESULT VideoWindow::OnTimer(UINT message, WPARAM wparam, LPARAM lparam, BOOL& h
 
 LRESULT VideoWindow::OnHScroll(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
-    UINT code = LOWORD(wparam);
-    UINT pos = HIWORD(wparam);
+    const UINT code = LOWORD(wparam);
+    const UINT pos = HIWORD(wparam);
 
     switch (code)
     {
@@ -305,8 +305,8 @@ LRESULT VideoWindow::OnHScroll(UINT message, WPARAM wparam, LPARAM lparam, BOOL&
 
 LRESULT VideoWindow::OnVScroll(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
-    UINT code = LOWORD(wparam);
-    UINT pos = HIWORD(wparam);
+    const UINT code = LOWORD(wparam);
+    const UINT pos = HIWORD(wparam);
 
     switch (code)
     {
@@ -414,7 +414,7 @@ void VideoWindow::DrawFrame()
     Invalidate(FALSE);
 }
 
-DesktopSize VideoWindow::FrameSize()
+DesktopSize VideoWindow::FrameSize() const
 {
     if (!frame_)
         return DesktopSize();

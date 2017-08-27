@@ -35,7 +35,7 @@ public:
     DesktopFrame* Frame();
     void DrawFrame();
     void ResizeFrame(const DesktopSize& size, const PixelFormat& format);
-    DesktopSize FrameSize();
+    DesktopSize FrameSize() const;
 
     void HasFocus(bool has);
 

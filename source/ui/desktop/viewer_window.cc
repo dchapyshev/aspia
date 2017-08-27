@@ -181,6 +181,9 @@ LRESULT ViewerWindow::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL
 
 LRESULT ViewerWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    if (wparam == SIZE_MINIMIZED)
+        return 0;
+
     toolbar_.AutoSize();
 
     CRect toolbar_rect;
@@ -288,13 +291,13 @@ LRESULT ViewerWindow::OnActivate(UINT message, WPARAM wparam, LPARAM lparam, BOO
 
 LRESULT ViewerWindow::OnKeyboard(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
-    uint8_t key_code = static_cast<uint8_t>(static_cast<uint32_t>(wparam) & 255);
+    const uint8_t key_code = static_cast<uint8_t>(static_cast<uint32_t>(wparam) & 255);
 
     // We do not pass CapsLock and NoLock directly. Instead, when sending each
     // keystroke event, a flag is set that indicates the status of these keys.
     if (key_code != VK_CAPITAL && key_code != VK_NUMLOCK)
     {
-        uint32_t key_data = static_cast<uint32_t>(lparam);
+        const uint32_t key_data = static_cast<uint32_t>(lparam);
 
         uint32_t flags = 0;
 
@@ -374,11 +377,8 @@ LRESULT ViewerWindow::OnExitButton(WORD notify_code, WORD control_id, HWND contr
     return 0;
 }
 
-int ViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
+CSize ViewerWindow::GetMonitorSize() const
 {
-    if (toolbar_.IsButtonChecked(ID_FULLSCREEN))
-        DoFullScreen(false);
-
     CRect screen_rect;
 
     HMONITOR monitor = MonitorFromWindow(*this, MONITOR_DEFAULTTONEAREST);
@@ -395,10 +395,15 @@ int ViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
         if (!SystemParametersInfoW(SPI_GETWORKAREA, 0, screen_rect, 0))
         {
             if (!::GetClientRect(GetDesktopWindow(), screen_rect))
-                return -1;
+                return CSize();
         }
     }
 
+    return screen_rect.Size();
+}
+
+CSize ViewerWindow::CalculateWindowSize(const DesktopSize &video_frame_size) const
+{
     CRect full_rect;
     GetWindowRect(full_rect);
 
@@ -408,10 +413,18 @@ int ViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
     CRect toolbar_rect;
     toolbar_.GetWindowRect(toolbar_rect);
 
-    int client_area_width = video_frame_size.Width() + full_rect.Width() - client_rect.Width();
+    return CSize(video_frame_size.Width() + full_rect.Width() - client_rect.Width(),
+                 video_frame_size.Height() + full_rect.Height() - client_rect.Height() +
+                 toolbar_rect.Height());
+}
 
-    int client_area_height = video_frame_size.Height() + full_rect.Height() - client_rect.Height() +
-        toolbar_rect.Height();
+int ViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
+{
+    if (toolbar_.IsButtonChecked(ID_FULLSCREEN))
+        DoFullScreen(false);
+
+    const CSize screen_size = GetMonitorSize();
+    const CSize window_size = CalculateWindowSize(video_frame_size);
 
     WINDOWPLACEMENT wp = { 0 };
     wp.length = sizeof(wp);
@@ -419,16 +432,15 @@ int ViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
     if (!GetWindowPlacement(&wp))
         return -1;
 
-    if (client_area_width  < screen_rect.Width() &&
-        client_area_height < screen_rect.Height())
+    if (window_size.cx < screen_size.cx && window_size.cy < screen_size.cy)
     {
         if (wp.showCmd != SW_MAXIMIZE)
         {
             SetWindowPos(nullptr,
-                         (screen_rect.Width() - client_area_width) / 2,
-                         (screen_rect.Height() - client_area_height) / 2,
-                         client_area_width,
-                         client_area_height,
+                         (screen_size.cx - window_size.cx) / 2,
+                         (screen_size.cy - window_size.cy) / 2,
+                         window_size.cx,
+                         window_size.cy,
                          SWP_NOZORDER | SWP_NOACTIVATE);
         }
 
@@ -438,10 +450,10 @@ int ViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
     if (wp.showCmd != SW_MAXIMIZE)
         ShowWindow(SW_MAXIMIZE);
 
-    if (client_area_width < screen_rect.Width())
+    if (window_size.cx < screen_size.cx)
         return SB_HORZ;
 
-    if (client_area_height < screen_rect.Height())
+    if (window_size.cy < screen_size.cy)
         return SB_VERT;
 
     return -1;
