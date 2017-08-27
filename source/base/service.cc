@@ -60,7 +60,7 @@ DWORD WINAPI Service::ServiceControlHandler(DWORD control_code,
 }
 
 // static
-void Service::ServiceMain(int argc, LPWSTR argv)
+void Service::ServiceMain(DWORD argc, LPWSTR* argv)
 {
     UNREF(argc);
     UNREF(argv);
@@ -118,10 +118,12 @@ void Service::SetStatus(DWORD state)
 
 bool Service::Run()
 {
-    SERVICE_TABLE_ENTRYW service_table[1] = { 0 };
+    SERVICE_TABLE_ENTRYW service_table[1];
+
+    memset(&service_table, 0, sizeof(service_table));
 
     service_table[0].lpServiceName = &service_name_[0];
-    service_table[0].lpServiceProc = reinterpret_cast<LPSERVICE_MAIN_FUNCTIONW>(ServiceMain);
+    service_table[0].lpServiceProc = ServiceMain;
 
     if (!StartServiceCtrlDispatcherW(service_table))
     {

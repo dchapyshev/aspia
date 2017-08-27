@@ -40,7 +40,7 @@ protected:
     bool IsTerminating() const;
 
 private:
-    static void WINAPI ServiceMain(int argc, LPWSTR argv);
+    static void WINAPI ServiceMain(DWORD argc, LPWSTR* argv);
 
     static DWORD WINAPI ServiceControlHandler(DWORD control_code,
                                               DWORD event_type,
