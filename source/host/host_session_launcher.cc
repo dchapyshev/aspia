@@ -52,7 +52,7 @@ static bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
 static bool CreatePrivilegedToken(ScopedHandle& token_out)
 {
     ScopedHandle privileged_token;
-    DWORD desired_access = TOKEN_ADJUST_PRIVILEGES | TOKEN_IMPERSONATE |
+    const DWORD desired_access = TOKEN_ADJUST_PRIVILEGES | TOKEN_IMPERSONATE |
         TOKEN_DUPLICATE | TOKEN_QUERY;
 
     if (!CopyProcessToken(desired_access, privileged_token))
@@ -86,7 +86,7 @@ static bool CreatePrivilegedToken(ScopedHandle& token_out)
 static bool CreateSessionToken(uint32_t session_id, ScopedHandle& token_out)
 {
     ScopedHandle session_token;
-    DWORD desired_access = TOKEN_ADJUST_DEFAULT | TOKEN_ADJUST_SESSIONID |
+    const DWORD desired_access = TOKEN_ADJUST_DEFAULT | TOKEN_ADJUST_SESSIONID |
         TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
     if (!CopyProcessToken(desired_access, session_token))

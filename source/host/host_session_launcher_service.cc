@@ -27,12 +27,12 @@ bool HostSessionLauncherService::CreateStarted(const std::wstring& launcher_mode
                                                uint32_t session_id,
                                                const std::wstring& channel_id)
 {
-    std::wstring service_id = ServiceManager::GenerateUniqueServiceId();
+    const std::wstring service_id = ServiceManager::GenerateUniqueServiceId();
 
-    std::wstring unique_short_name =
+    const std::wstring unique_short_name =
         ServiceManager::CreateUniqueServiceName(kServiceShortName, service_id);
 
-    std::wstring unique_full_name =
+    const std::wstring unique_full_name =
         ServiceManager::CreateUniqueServiceName(kServiceFullName, service_id);
 
     FilePath path;
@@ -40,14 +40,13 @@ bool HostSessionLauncherService::CreateStarted(const std::wstring& launcher_mode
     if (!GetBasePath(BasePathKey::FILE_EXE, path))
         return false;
 
-    std::wstring command_line;
+    std::wstring command_line(path);
 
-    command_line.assign(path);
     command_line.append(L" --channel_id=");
     command_line.append(channel_id);
     command_line.append(L" --run_mode=");
     command_line.append(kSessionLauncherSwitch);
-    command_line.append(L" --launcher_mode");
+    command_line.append(L" --launcher_mode=");
     command_line.append(launcher_mode);
     command_line.append(L" --session_id=");
     command_line.append(std::to_wstring(session_id));
@@ -62,7 +61,13 @@ bool HostSessionLauncherService::CreateStarted(const std::wstring& launcher_mode
     if (!manager)
         return false;
 
-    return manager->Start();
+    if (!manager->Start())
+    {
+        manager->Remove();
+        return false;
+    }
+
+    return true;
 }
 
 void HostSessionLauncherService::Worker()
@@ -87,7 +92,9 @@ void HostSessionLauncherService::RunLauncher(const std::wstring& launcher_mode,
 
     Run();
 
-    ServiceManager(ServiceName()).Remove();
+    ServiceManager manager(ServiceName());
+    manager.Stop();
+    manager.Remove();
 }
 
 } // namespace aspia
