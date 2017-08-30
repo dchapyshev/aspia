@@ -73,6 +73,9 @@
     <Filter Include="ui\system_info">
       <UniqueIdentifier>{0d8f4bac-ac29-4549-8ce0-65565c17fdc1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="base\devices">
+      <UniqueIdentifier>{c4ed6713-4dbe-4d95-a8b6-b80a8fc6570a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="proto\desktop_session.pb.cc">
@@ -585,6 +588,12 @@
     </ClCompile>
     <ClCompile Include="ui\system_info\category_group_event_log.cc">
       <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="base\devices\device.cc">
+      <Filter>base\devices</Filter>
+    </ClCompile>
+    <ClCompile Include="base\devices\device_battery.cc">
+      <Filter>base\devices</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1225,6 +1234,12 @@
     </ClInclude>
     <ClInclude Include="ui\system_info\system_info_toolbar.h">
       <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="base\devices\device.h">
+      <Filter>base\devices</Filter>
+    </ClInclude>
+    <ClInclude Include="base\devices\device_battery.h">
+      <Filter>base\devices</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
