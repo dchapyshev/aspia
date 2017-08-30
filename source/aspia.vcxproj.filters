@@ -595,6 +595,9 @@
     <ClCompile Include="base\devices\device_battery.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
+    <ClCompile Include="base\service_enumerator.cc">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1240,6 +1243,9 @@
     </ClInclude>
     <ClInclude Include="base\devices\device_battery.h">
       <Filter>base\devices</Filter>
+    </ClInclude>
+    <ClInclude Include="base\service_enumerator.h">
+      <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
