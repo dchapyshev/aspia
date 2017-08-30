@@ -598,6 +598,9 @@
     <ClCompile Include="base\service_enumerator.cc">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="base\printer_enumerator.cc">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1245,6 +1248,9 @@
       <Filter>base\devices</Filter>
     </ClInclude>
     <ClInclude Include="base\service_enumerator.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\printer_enumerator.h">
       <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>

@@ -49,6 +49,7 @@
     <ClCompile Include="base\message_loop\pending_task.cc" />
     <ClCompile Include="base\message_window.cc" />
     <ClCompile Include="base\object_watcher.cc" />
+    <ClCompile Include="base\printer_enumerator.cc" />
     <ClCompile Include="base\process\process.cc" />
     <ClCompile Include="base\process\process_helpers.cc" />
     <ClCompile Include="base\process\process_watcher.cc" />
@@ -231,6 +232,7 @@
     <ClInclude Include="base\message_loop\pending_task.h" />
     <ClInclude Include="base\message_window.h" />
     <ClInclude Include="base\object_watcher.h" />
+    <ClInclude Include="base\printer_enumerator.h" />
     <ClInclude Include="base\process\process.h" />
     <ClInclude Include="base\process\process_helpers.h" />
     <ClInclude Include="base\process\process_watcher.h" />
