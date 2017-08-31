@@ -134,7 +134,7 @@ std::string ServiceEnumerator::GetName() const
 {
     ENUM_SERVICE_STATUS_PROCESS* service = GetCurrentService();
 
-    if (!service || !service->lpServiceName)
+    if (!service)
         return std::string();
 
     return UTF8fromUNICODE(service->lpServiceName);
@@ -144,7 +144,7 @@ std::string ServiceEnumerator::GetDisplayName() const
 {
     ENUM_SERVICE_STATUS_PROCESS* service = GetCurrentService();
 
-    if (!service || !service->lpDisplayName)
+    if (!service)
         return std::string();
 
     return UTF8fromUNICODE(service->lpDisplayName);
@@ -180,9 +180,6 @@ std::string ServiceEnumerator::GetDescription() const
     }
 
     SERVICE_DESCRIPTION* description = reinterpret_cast<SERVICE_DESCRIPTION*>(result.get());
-
-    if (!description->lpDescription)
-        return std::string();
 
     return UTF8fromUNICODE(description->lpDescription);
 }
@@ -255,7 +252,7 @@ std::string ServiceEnumerator::GetBinaryPath() const
 {
     LPQUERY_SERVICE_CONFIG config = GetCurrentServiceConfig();
 
-    if (!config || !config->lpBinaryPathName)
+    if (!config)
         return std::string();
 
     return UTF8fromUNICODE(config->lpBinaryPathName);
@@ -265,7 +262,7 @@ std::string ServiceEnumerator::GetStartName() const
 {
     LPQUERY_SERVICE_CONFIG config = GetCurrentServiceConfig();
 
-    if (!config || !config->lpServiceStartName)
+    if (!config)
         return std::string();
 
     return UTF8fromUNICODE(config->lpServiceStartName);

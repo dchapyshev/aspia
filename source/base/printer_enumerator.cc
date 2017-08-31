@@ -61,9 +61,6 @@ void PrinterEnumerator::Advance()
 
 std::string PrinterEnumerator::GetName() const
 {
-    if (!printers_info_[current_].pPrinterName || !printers_info_[current_].pPrinterName[0])
-        return std::string();
-
     return UTF8fromUNICODE(printers_info_[current_].pPrinterName);
 }
 
@@ -88,31 +85,22 @@ std::string PrinterEnumerator::GetShareName() const
     if (!IsShared())
         return std::string();
 
-    if (!printers_info_[current_].pShareName)
-        return std::string();
-
     return UTF8fromUNICODE(printers_info_[current_].pShareName);
 }
 
 std::string PrinterEnumerator::GetPortName() const
 {
-    if (!printers_info_[current_].pPortName)
-        return std::string();
-
     return UTF8fromUNICODE(printers_info_[current_].pPortName);
 }
 
 std::string PrinterEnumerator::GetDriverName() const
 {
-    if (!printers_info_[current_].pDriverName)
-        return std::string();
-
     return UTF8fromUNICODE(printers_info_[current_].pDriverName);
 }
 
 std::string PrinterEnumerator::GetDeviceName() const
 {
-    if (!printers_info_[current_].pDevMode || !printers_info_[current_].pDevMode->dmDeviceName)
+    if (!printers_info_[current_].pDevMode)
         return std::string();
 
     return UTF8fromUNICODE(printers_info_[current_].pDevMode->dmDeviceName);
@@ -120,41 +108,26 @@ std::string PrinterEnumerator::GetDeviceName() const
 
 std::string PrinterEnumerator::GetPrintProcessor() const
 {
-    if (!printers_info_[current_].pPrintProcessor)
-        return std::string();
-
     return UTF8fromUNICODE(printers_info_[current_].pPrintProcessor);
 }
 
 std::string PrinterEnumerator::GetDataType() const
 {
-    if (!printers_info_[current_].pDatatype)
-        return std::string();
-
     return UTF8fromUNICODE(printers_info_[current_].pDatatype);
 }
 
 std::string PrinterEnumerator::GetServerName() const
 {
-    if (!printers_info_[current_].pServerName)
-        return std::string();
-
     return UTF8fromUNICODE(printers_info_[current_].pServerName);
 }
 
 std::string PrinterEnumerator::GetLocation() const
 {
-    if (!printers_info_[current_].pLocation)
-        return std::string();
-
     return UTF8fromUNICODE(printers_info_[current_].pLocation);
 }
 
 std::string PrinterEnumerator::GetComment() const
 {
-    if (!printers_info_[current_].pComment)
-        return std::string();
-
     return UTF8fromUNICODE(printers_info_[current_].pComment);
 }
 
