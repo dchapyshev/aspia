@@ -4,7 +4,7 @@ Remote desktop implementation (client and server) based on Google Protocol Buffe
 
 |Build Status|Coverity Scan Status|
 |:--:|:--:|
-|[![Build Status](https://ci.appveyor.com/api/projects/status/2btp04gonyiy0nj1/branch/master?svg=true)](https://ci.appveyor.com/project/aspia-org/remote-desktop/branch/master)|[![Coverity Scan Status](https://scan.coverity.com/projects/13117/badge.svg)](https://scan.coverity.com/projects/aspia-remote-desktop)|
+|[![Build Status](https://ci.appveyor.com/api/projects/status/2btp04gonyiy0nj1/branch/master?svg=true)](https://ci.appveyor.com/project/dchapyshev/remote-desktop/branch/master)|[![Coverity Scan Status](https://scan.coverity.com/projects/13117/badge.svg)](https://scan.coverity.com/projects/aspia-remote-desktop)|
 
 Currently supported
 -------------------
