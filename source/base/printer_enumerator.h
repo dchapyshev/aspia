@@ -25,18 +25,18 @@ public:
     bool IsAtEnd() const;
     void Advance();
 
-    std::wstring GetName() const;
+    std::string GetName() const;
     bool IsDefault() const;
     bool IsShared() const;
-    std::wstring GetShareName() const;
-    std::wstring GetPortName() const;
-    std::wstring GetDriverName() const;
-    std::wstring GetDeviceName() const;
-    std::wstring GetPrintProcessor() const;
-    std::wstring GetDataType() const;
-    std::wstring GetServerName() const;
-    std::wstring GetLocation() const;
-    std::wstring GetComment() const;
+    std::string GetShareName() const;
+    std::string GetPortName() const;
+    std::string GetDriverName() const;
+    std::string GetDeviceName() const;
+    std::string GetPrintProcessor() const;
+    std::string GetDataType() const;
+    std::string GetServerName() const;
+    std::string GetLocation() const;
+    std::string GetComment() const;
     int GetJobsCount() const;
     int GetPaperWidth() const;
     int GetPaperLength() const;

@@ -7,6 +7,7 @@
 
 #include "base/devices/device_enumerator.h"
 #include "base/strings/string_util.h"
+#include "base/strings/unicode.h"
 #include "base/registry.h"
 #include "base/logging.h"
 
@@ -48,7 +49,7 @@ void DeviceEnumerator::Advance()
     ++device_index_;
 }
 
-std::wstring DeviceEnumerator::GetFriendlyName() const
+std::string DeviceEnumerator::GetFriendlyName() const
 {
     WCHAR friendly_name[MAX_PATH] = { 0 };
 
@@ -62,13 +63,13 @@ std::wstring DeviceEnumerator::GetFriendlyName() const
     {
         DLOG(WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed: "
                       << GetLastSystemErrorString();
-        return std::wstring();
+        return std::string();
     }
 
-    return friendly_name;
+    return UTF8fromUNICODE(friendly_name);
 }
 
-std::wstring DeviceEnumerator::GetDescription() const
+std::string DeviceEnumerator::GetDescription() const
 {
     WCHAR description[MAX_PATH] = { 0 };
 
@@ -82,10 +83,10 @@ std::wstring DeviceEnumerator::GetDescription() const
     {
         DLOG(WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed: "
                       << GetLastSystemErrorString();
-        return std::wstring();
+        return std::string();
     }
 
-    return description;
+    return UTF8fromUNICODE(description);
 }
 
 std::wstring DeviceEnumerator::GetDriverRegistryValue(const WCHAR* key_name) const
@@ -124,22 +125,22 @@ std::wstring DeviceEnumerator::GetDriverRegistryValue(const WCHAR* key_name) con
     return std::wstring();
 }
 
-std::wstring DeviceEnumerator::GetDriverVersion() const
+std::string DeviceEnumerator::GetDriverVersion() const
 {
-    return GetDriverRegistryValue(kDriverVersionKey);
+    return UTF8fromUNICODE(GetDriverRegistryValue(kDriverVersionKey));
 }
 
-std::wstring DeviceEnumerator::GetDriverDate() const
+std::string DeviceEnumerator::GetDriverDate() const
 {
-    return GetDriverRegistryValue(kDriverDateKey);
+    return UTF8fromUNICODE(GetDriverRegistryValue(kDriverDateKey));
 }
 
-std::wstring DeviceEnumerator::GetDriverVendor() const
+std::string DeviceEnumerator::GetDriverVendor() const
 {
-    return GetDriverRegistryValue(kProviderNameKey);
+    return UTF8fromUNICODE(GetDriverRegistryValue(kProviderNameKey));
 }
 
-std::wstring DeviceEnumerator::GetDeviceID() const
+std::string DeviceEnumerator::GetDeviceID() const
 {
     WCHAR device_id[MAX_PATH] = { 0 };
 
@@ -150,10 +151,10 @@ std::wstring DeviceEnumerator::GetDeviceID() const
                                      nullptr))
     {
         DLOG(WARNING) << "SetupDiGetDeviceInstanceIdW() failed: " << GetLastSystemErrorString();
-        return std::wstring();
+        return std::string();
     }
 
-    return device_id;
+    return UTF8fromUNICODE(device_id);
 }
 
 } // namespace aspia

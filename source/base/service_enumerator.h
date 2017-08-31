@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__SERVICE_ENUMERATOR_H
 #define _ASPIA_BASE__SERVICE_ENUMERATOR_H
 
-#include "base/files/file_path.h"
 #include "base/scoped_object.h"
 
 #include <memory>
@@ -27,9 +26,9 @@ public:
     bool IsAtEnd() const;
     void Advance();
 
-    std::wstring GetName() const;
-    std::wstring GetDisplayName() const;
-    std::wstring GetDescription() const;
+    std::string GetName() const;
+    std::string GetDisplayName() const;
+    std::string GetDescription() const;
 
     enum class Status
     {
@@ -56,8 +55,8 @@ public:
     };
 
     StartupType GetStartupType() const;
-    FilePath GetBinaryPath() const;
-    std::wstring GetStartName() const;
+    std::string GetBinaryPath() const;
+    std::string GetStartName() const;
 
 private:
     ENUM_SERVICE_STATUS_PROCESS* GetCurrentService() const;

@@ -6,6 +6,7 @@
 //
 
 #include "base/printer_enumerator.h"
+#include "base/strings/unicode.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -58,22 +59,20 @@ void PrinterEnumerator::Advance()
     ++current_;
 }
 
-std::wstring PrinterEnumerator::GetName() const
+std::string PrinterEnumerator::GetName() const
 {
     if (!printers_info_[current_].pPrinterName || !printers_info_[current_].pPrinterName[0])
-        return std::wstring();
+        return std::string();
 
-    return printers_info_[current_].pPrinterName;
+    return UTF8fromUNICODE(printers_info_[current_].pPrinterName);
 }
 
 bool PrinterEnumerator::IsDefault() const
 {
-    std::wstring name = GetName();
-
-    if (name.empty() || default_printer_name_.empty())
+    if (!printers_info_[current_].pPrinterName || default_printer_name_.empty())
         return false;
 
-    if (name == default_printer_name_)
+    if (default_printer_name_ == printers_info_[current_].pPrinterName)
         return true;
 
     return false;
@@ -84,80 +83,79 @@ bool PrinterEnumerator::IsShared() const
     return printers_info_[current_].Attributes & PRINTER_ATTRIBUTE_SHARED;
 }
 
-std::wstring PrinterEnumerator::GetShareName() const
+std::string PrinterEnumerator::GetShareName() const
 {
     if (!IsShared())
-        return std::wstring();
+        return std::string();
 
-    if (!printers_info_[current_].pShareName || !printers_info_[current_].pShareName[0])
-        return std::wstring();
+    if (!printers_info_[current_].pShareName)
+        return std::string();
 
-    return printers_info_[current_].pShareName;
+    return UTF8fromUNICODE(printers_info_[current_].pShareName);
 }
 
-std::wstring PrinterEnumerator::GetPortName() const
+std::string PrinterEnumerator::GetPortName() const
 {
-    if (!printers_info_[current_].pPortName || !printers_info_[current_].pPortName[0])
-        return std::wstring();
+    if (!printers_info_[current_].pPortName)
+        return std::string();
 
-    return printers_info_[current_].pPortName;
+    return UTF8fromUNICODE(printers_info_[current_].pPortName);
 }
 
-std::wstring PrinterEnumerator::GetDriverName() const
+std::string PrinterEnumerator::GetDriverName() const
 {
-    if (!printers_info_[current_].pDriverName || !printers_info_[current_].pDriverName[0])
-        return std::wstring();
+    if (!printers_info_[current_].pDriverName)
+        return std::string();
 
-    return printers_info_[current_].pDriverName;
+    return UTF8fromUNICODE(printers_info_[current_].pDriverName);
 }
 
-std::wstring PrinterEnumerator::GetDeviceName() const
+std::string PrinterEnumerator::GetDeviceName() const
 {
-    if (!printers_info_[current_].pDevMode || !printers_info_[current_].pDevMode->dmDeviceName ||
-        !printers_info_[current_].pDevMode->dmDeviceName[0])
-        return std::wstring();
+    if (!printers_info_[current_].pDevMode || !printers_info_[current_].pDevMode->dmDeviceName)
+        return std::string();
 
-    return printers_info_[current_].pDevMode->dmDeviceName;
+    return UTF8fromUNICODE(printers_info_[current_].pDevMode->dmDeviceName);
 }
 
-std::wstring PrinterEnumerator::GetPrintProcessor() const
+std::string PrinterEnumerator::GetPrintProcessor() const
 {
-    if (!printers_info_[current_].pPrintProcessor || !printers_info_[current_].pPrintProcessor[0])
-        return std::wstring();
+    if (!printers_info_[current_].pPrintProcessor)
+        return std::string();
 
-    return printers_info_[current_].pPrintProcessor;
+    return UTF8fromUNICODE(printers_info_[current_].pPrintProcessor);
 }
 
-std::wstring PrinterEnumerator::GetDataType() const
+std::string PrinterEnumerator::GetDataType() const
 {
-    if (!printers_info_[current_].pDatatype || !printers_info_[current_].pDatatype[0])
-        return std::wstring();
+    if (!printers_info_[current_].pDatatype)
+        return std::string();
 
-    return printers_info_[current_].pDatatype;
+    return UTF8fromUNICODE(printers_info_[current_].pDatatype);
 }
 
-std::wstring PrinterEnumerator::GetServerName() const
+std::string PrinterEnumerator::GetServerName() const
 {
-    if (!printers_info_[current_].pServerName || !printers_info_[current_].pServerName[0])
-        return std::wstring();
+    if (!printers_info_[current_].pServerName)
+        return std::string();
 
-    return printers_info_[current_].pServerName;
+    return UTF8fromUNICODE(printers_info_[current_].pServerName);
 }
 
-std::wstring PrinterEnumerator::GetLocation() const
+std::string PrinterEnumerator::GetLocation() const
 {
-    if (!printers_info_[current_].pLocation || !printers_info_[current_].pLocation[0])
-        return std::wstring();
+    if (!printers_info_[current_].pLocation)
+        return std::string();
 
-    return printers_info_[current_].pLocation;
+    return UTF8fromUNICODE(printers_info_[current_].pLocation);
 }
 
-std::wstring PrinterEnumerator::GetComment() const
+std::string PrinterEnumerator::GetComment() const
 {
-    if (!printers_info_[current_].pComment || !printers_info_[current_].pComment[0])
-        return std::wstring();
+    if (!printers_info_[current_].pComment)
+        return std::string();
 
-    return printers_info_[current_].pComment;
+    return UTF8fromUNICODE(printers_info_[current_].pComment);
 }
 
 int PrinterEnumerator::GetJobsCount() const

@@ -24,12 +24,12 @@ public:
     bool IsAtEnd() const;
     void Advance();
 
-    std::wstring GetFriendlyName() const;
-    std::wstring GetDescription() const;
-    std::wstring GetDriverVersion() const;
-    std::wstring GetDriverDate() const;
-    std::wstring GetDriverVendor() const;
-    std::wstring GetDeviceID() const;
+    std::string GetFriendlyName() const;
+    std::string GetDescription() const;
+    std::string GetDriverVersion() const;
+    std::string GetDriverDate() const;
+    std::string GetDriverVendor() const;
+    std::string GetDeviceID() const;
 
 private:
     std::wstring GetDriverRegistryValue(const WCHAR* key_name) const;
