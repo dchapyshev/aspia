@@ -601,6 +601,12 @@
     <ClCompile Include="base\printer_enumerator.cc">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="network\network_adapter_enumerator.cc">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="network\open_connection_enumerator.cc">
+      <Filter>network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1252,6 +1258,12 @@
     </ClInclude>
     <ClInclude Include="base\printer_enumerator.h">
       <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="network\network_adapter_enumerator.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="network\open_connection_enumerator.h">
+      <Filter>network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

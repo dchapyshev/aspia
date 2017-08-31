@@ -8,35 +8,20 @@
 #include "ui/main_dialog.h"
 
 #include <atlmisc.h>
-#include <iphlpapi.h>
-#include <ws2tcpip.h>
 #include <uxtheme.h>
 
 #include "base/version_helpers.h"
 #include "base/process/process_helpers.h"
-#include "base/strings/string_util.h"
+#include "base/strings/unicode.h"
 #include "base/scoped_clipboard.h"
 #include "client/client_config.h"
 #include "host/host_service.h"
+#include "network/network_adapter_enumerator.h"
 #include "ui/desktop/viewer_window.h"
 #include "ui/about_dialog.h"
 #include "ui/users_dialog.h"
 
 namespace aspia {
-
-static std::wstring
-AddressToString(const LPSOCKADDR src)
-{
-    DCHECK_EQ(src->sa_family, AF_INET);
-
-    sockaddr_in *addr = reinterpret_cast<sockaddr_in*>(src);
-
-    return StringPrintfW(L"%u.%u.%u.%u",
-                         addr->sin_addr.S_un.S_un_b.s_b1,
-                         addr->sin_addr.S_un.S_un_b.s_b2,
-                         addr->sin_addr.S_un.S_un_b.s_b3,
-                         addr->sin_addr.S_un.S_un_b.s_b4);
-}
 
 void MainDialog::InitAddressesList()
 {
@@ -52,52 +37,22 @@ void MainDialog::InitAddressesList()
 
     list.SetExtendedListViewStyle(ex_style);
 
-    int column_index = list.AddColumn(L"", 0);
+    const int column_index = list.AddColumn(L"", 0);
 
     CRect list_rect;
     list.GetClientRect(list_rect);
     list.SetColumnWidth(column_index, list_rect.Width() - GetSystemMetrics(SM_CXVSCROLL));
 
-    ULONG flags = GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST |
-        GAA_FLAG_SKIP_DNS_SERVER | GAA_FLAG_SKIP_FRIENDLY_NAME;
-
-    ULONG size = 0;
-    if (GetAdaptersAddresses(AF_UNSPEC, flags, nullptr, nullptr, &size) != ERROR_BUFFER_OVERFLOW)
+    for (NetworkAdapterEnumerator adapter; !adapter.IsAtEnd(); adapter.Advance())
     {
-        LOG(ERROR) << "GetAdaptersAddresses() failed with unexpected error code";
-        return;
-    }
-
-    std::unique_ptr<uint8_t[]> buffer = std::make_unique<uint8_t[]>(size);
-
-    PIP_ADAPTER_ADDRESSES addresses =
-        reinterpret_cast<PIP_ADAPTER_ADDRESSES>(buffer.get());
-
-    ULONG result = GetAdaptersAddresses(AF_UNSPEC, flags, nullptr, addresses, &size);
-    if (result != ERROR_SUCCESS)
-    {
-        LOG(ERROR) << "GetAdaptersAddresses() failed: " << result;
-        return;
-    }
-
-    for (PIP_ADAPTER_ADDRESSES adapter = addresses; adapter != nullptr; adapter = adapter->Next)
-    {
-        if (adapter->OperStatus != IfOperStatusUp)
-            continue;
-
-        for (PIP_ADAPTER_UNICAST_ADDRESS address = adapter->FirstUnicastAddress;
-             address != nullptr;
-             address = address->Next)
+        for (NetworkAdapterEnumerator::IpAddressEnumerator address(adapter);
+             !address.IsAtEnd();
+             address.Advance())
         {
-            if (address->Address.lpSockaddr->sa_family != AF_INET)
-                continue;
-
-            std::wstring address_string = AddressToString(address->Address.lpSockaddr);
-
-            if (address_string != L"127.0.0.1")
-            {
-                list.AddItem(list.GetItemCount(), 0, address_string.c_str(), 0);
-            }
+            list.AddItem(list.GetItemCount(),
+                         0,
+                         UNICODEfromUTF8(address.GetIpAddress()).c_str(),
+                         0);
         }
     }
 }
