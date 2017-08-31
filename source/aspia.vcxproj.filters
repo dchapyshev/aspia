@@ -607,6 +607,9 @@
     <ClCompile Include="network\open_connection_enumerator.cc">
       <Filter>network</Filter>
     </ClCompile>
+    <ClCompile Include="base\devices\device_enumerator.cc">
+      <Filter>base\devices</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1264,6 +1267,9 @@
     </ClInclude>
     <ClInclude Include="network\open_connection_enumerator.h">
       <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="base\devices\device_enumerator.h">
+      <Filter>base\devices</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
