@@ -193,10 +193,10 @@ bool ANSItoUTF8(const char* in, std::string& out)
 {
     std::wstring uni;
 
-    if (!UTF8toUNICODE(in, uni))
+    if (!ANSItoUNICODE(in, uni))
         return false;
 
-    return UNICODEtoANSI(uni, out);
+    return UNICODEtoUTF8(uni, out);
 }
 
 bool UTF8toANSI(const char* in, std::string& out)
