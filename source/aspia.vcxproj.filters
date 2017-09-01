@@ -610,6 +610,12 @@
     <ClCompile Include="base\devices\device_enumerator.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
+    <ClCompile Include="network\route_enumerator.cc">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="network\share_enumerator.cc">
+      <Filter>network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1270,6 +1276,12 @@
     </ClInclude>
     <ClInclude Include="base\devices\device_enumerator.h">
       <Filter>base\devices</Filter>
+    </ClInclude>
+    <ClInclude Include="network\route_enumerator.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="network\share_enumerator.h">
+      <Filter>network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
