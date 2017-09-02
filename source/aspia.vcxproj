@@ -72,6 +72,8 @@
     <ClCompile Include="base\synchronization\waitable_timer.cc" />
     <ClCompile Include="base\threading\thread.cc" />
     <ClCompile Include="base\threading\thread_checker.cc" />
+    <ClCompile Include="base\user_enumerator.cc" />
+    <ClCompile Include="base\user_group_enumerator.cc" />
     <ClCompile Include="base\version_helpers.cc" />
     <ClCompile Include="client\client.cc" />
     <ClCompile Include="client\client_config.cc" />
@@ -274,6 +276,8 @@
     <ClInclude Include="base\threading\thread.h" />
     <ClInclude Include="base\threading\thread_checker.h" />
     <ClInclude Include="base\typed_buffer.h" />
+    <ClInclude Include="base\user_enumerator.h" />
+    <ClInclude Include="base\user_group_enumerator.h" />
     <ClInclude Include="base\version_helpers.h" />
     <ClInclude Include="build_config.h" />
     <ClInclude Include="client\client.h" />
