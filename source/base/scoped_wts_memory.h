@@ -69,6 +69,11 @@ public:
         return memory_;
     }
 
+    T operator [](DWORD index) const
+    {
+        return &memory_[index];
+    }
+
 private:
     void Close()
     {

@@ -622,6 +622,9 @@
     <ClCompile Include="base\user_group_enumerator.cc">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="base\session_enumerator.cc">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1293,6 +1296,9 @@
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\user_group_enumerator.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\session_enumerator.h">
       <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
