@@ -2521,6 +2521,101 @@ TEST_F(LibYUVPlanarTest, SplitUVPlane_Opt) {
   free_aligned_buffer_page_end(dst_pixels_c);
 }
 
+TEST_F(LibYUVPlanarTest, MergeRGBPlane_Opt) {
+  const int kPixels = benchmark_width_ * benchmark_height_;
+  align_buffer_page_end(src_pixels, kPixels * 3);
+  align_buffer_page_end(tmp_pixels_r, kPixels);
+  align_buffer_page_end(tmp_pixels_g, kPixels);
+  align_buffer_page_end(tmp_pixels_b, kPixels);
+  align_buffer_page_end(dst_pixels_opt, kPixels * 3);
+  align_buffer_page_end(dst_pixels_c, kPixels * 3);
+
+  MemRandomize(src_pixels, kPixels * 3);
+  MemRandomize(tmp_pixels_r, kPixels);
+  MemRandomize(tmp_pixels_g, kPixels);
+  MemRandomize(tmp_pixels_b, kPixels);
+  MemRandomize(dst_pixels_opt, kPixels * 3);
+  MemRandomize(dst_pixels_c, kPixels * 3);
+
+  MaskCpuFlags(disable_cpu_flags_);
+  SplitRGBPlane(src_pixels, benchmark_width_ * 3, tmp_pixels_r,
+                benchmark_width_, tmp_pixels_g, benchmark_width_, tmp_pixels_b,
+                benchmark_width_, benchmark_width_, benchmark_height_);
+  MergeRGBPlane(tmp_pixels_r, benchmark_width_, tmp_pixels_g, benchmark_width_,
+                tmp_pixels_b, benchmark_width_, dst_pixels_c,
+                benchmark_width_ * 3, benchmark_width_, benchmark_height_);
+  MaskCpuFlags(benchmark_cpu_info_);
+
+  SplitRGBPlane(src_pixels, benchmark_width_ * 3, tmp_pixels_r,
+                benchmark_width_, tmp_pixels_g, benchmark_width_, tmp_pixels_b,
+                benchmark_width_, benchmark_width_, benchmark_height_);
+
+  for (int i = 0; i < benchmark_iterations_; ++i) {
+    MergeRGBPlane(tmp_pixels_r, benchmark_width_, tmp_pixels_g,
+                  benchmark_width_, tmp_pixels_b, benchmark_width_,
+                  dst_pixels_opt, benchmark_width_ * 3, benchmark_width_,
+                  benchmark_height_);
+  }
+
+  for (int i = 0; i < kPixels * 3; ++i) {
+    EXPECT_EQ(dst_pixels_c[i], dst_pixels_opt[i]);
+  }
+
+  free_aligned_buffer_page_end(src_pixels);
+  free_aligned_buffer_page_end(tmp_pixels_r);
+  free_aligned_buffer_page_end(tmp_pixels_g);
+  free_aligned_buffer_page_end(tmp_pixels_b);
+  free_aligned_buffer_page_end(dst_pixels_opt);
+  free_aligned_buffer_page_end(dst_pixels_c);
+}
+
+TEST_F(LibYUVPlanarTest, SplitRGBPlane_Opt) {
+  const int kPixels = benchmark_width_ * benchmark_height_;
+  align_buffer_page_end(src_pixels, kPixels * 3);
+  align_buffer_page_end(tmp_pixels_r, kPixels);
+  align_buffer_page_end(tmp_pixels_g, kPixels);
+  align_buffer_page_end(tmp_pixels_b, kPixels);
+  align_buffer_page_end(dst_pixels_opt, kPixels * 3);
+  align_buffer_page_end(dst_pixels_c, kPixels * 3);
+
+  MemRandomize(src_pixels, kPixels * 3);
+  MemRandomize(tmp_pixels_r, kPixels);
+  MemRandomize(tmp_pixels_g, kPixels);
+  MemRandomize(tmp_pixels_b, kPixels);
+  MemRandomize(dst_pixels_opt, kPixels * 3);
+  MemRandomize(dst_pixels_c, kPixels * 3);
+
+  MaskCpuFlags(disable_cpu_flags_);
+  SplitRGBPlane(src_pixels, benchmark_width_ * 3, tmp_pixels_r,
+                benchmark_width_, tmp_pixels_g, benchmark_width_, tmp_pixels_b,
+                benchmark_width_, benchmark_width_, benchmark_height_);
+  MergeRGBPlane(tmp_pixels_r, benchmark_width_, tmp_pixels_g, benchmark_width_,
+                tmp_pixels_b, benchmark_width_, dst_pixels_c,
+                benchmark_width_ * 3, benchmark_width_, benchmark_height_);
+  MaskCpuFlags(benchmark_cpu_info_);
+
+  for (int i = 0; i < benchmark_iterations_; ++i) {
+    SplitRGBPlane(src_pixels, benchmark_width_ * 3, tmp_pixels_r,
+                  benchmark_width_, tmp_pixels_g, benchmark_width_,
+                  tmp_pixels_b, benchmark_width_, benchmark_width_,
+                  benchmark_height_);
+  }
+  MergeRGBPlane(tmp_pixels_r, benchmark_width_, tmp_pixels_g, benchmark_width_,
+                tmp_pixels_b, benchmark_width_, dst_pixels_opt,
+                benchmark_width_ * 3, benchmark_width_, benchmark_height_);
+
+  for (int i = 0; i < kPixels * 3; ++i) {
+    EXPECT_EQ(dst_pixels_c[i], dst_pixels_opt[i]);
+  }
+
+  free_aligned_buffer_page_end(src_pixels);
+  free_aligned_buffer_page_end(tmp_pixels_r);
+  free_aligned_buffer_page_end(tmp_pixels_g);
+  free_aligned_buffer_page_end(tmp_pixels_b);
+  free_aligned_buffer_page_end(dst_pixels_opt);
+  free_aligned_buffer_page_end(dst_pixels_c);
+}
+
 float TestScaleMaxSamples(int benchmark_width,
                           int benchmark_height,
                           int benchmark_iterations,
@@ -2723,6 +2818,103 @@ TEST_F(LibYUVPlanarTest, TestScaleSamples_Opt) {
   float diff = TestScaleSamples(benchmark_width_, benchmark_height_,
                                 benchmark_iterations_, 1.2f, true);
   EXPECT_EQ(0, diff);
+}
+
+extern "C" void GaussRow_NEON(const uint32* src, uint16* dst, int width);
+extern "C" void GaussRow_C(const uint32* src, uint16* dst, int width);
+
+TEST_F(LibYUVPlanarTest, TestGaussRow_Opt) {
+  SIMD_ALIGNED(uint32 orig_pixels[640 + 4]);
+  SIMD_ALIGNED(uint16 dst_pixels_c[640]);
+  SIMD_ALIGNED(uint16 dst_pixels_opt[640]);
+
+  memset(orig_pixels, 0, sizeof(orig_pixels));
+  memset(dst_pixels_c, 1, sizeof(dst_pixels_c));
+  memset(dst_pixels_opt, 2, sizeof(dst_pixels_opt));
+
+  for (int i = 0; i < 640 + 4; ++i) {
+    orig_pixels[i] = i * 256;
+  }
+  GaussRow_C(&orig_pixels[0], &dst_pixels_c[0], 640);
+  for (int i = 0; i < benchmark_pixels_div1280_ * 2; ++i) {
+#if !defined(LIBYUV_DISABLE_NEON) && defined(__aarch64__)
+    int has_neon = TestCpuFlag(kCpuHasNEON);
+    if (has_neon) {
+      GaussRow_NEON(&orig_pixels[0], &dst_pixels_opt[0], 640);
+    } else {
+      GaussRow_C(&orig_pixels[0], &dst_pixels_opt[0], 640);
+    }
+#else
+    GaussRow_C(&orig_pixels[0], &dst_pixels_opt[0], 640);
+#endif
+  }
+
+  for (int i = 0; i < 640; ++i) {
+    EXPECT_EQ(dst_pixels_c[i], dst_pixels_opt[i]);
+  }
+
+  EXPECT_EQ(dst_pixels_c[0],
+            static_cast<uint16>(0 * 1 + 1 * 4 + 2 * 6 + 3 * 4 + 4 * 1));
+  EXPECT_EQ(dst_pixels_c[639], static_cast<uint16>(10256));
+}
+
+extern "C" void GaussCol_NEON(const uint16* src0,
+                              const uint16* src1,
+                              const uint16* src2,
+                              const uint16* src3,
+                              const uint16* src4,
+                              uint32* dst,
+                              int width);
+
+extern "C" void GaussCol_C(const uint16* src0,
+                           const uint16* src1,
+                           const uint16* src2,
+                           const uint16* src3,
+                           const uint16* src4,
+                           uint32* dst,
+                           int width);
+
+TEST_F(LibYUVPlanarTest, TestGaussCol_Opt) {
+  SIMD_ALIGNED(uint16 orig_pixels[640 * 5]);
+  SIMD_ALIGNED(uint32 dst_pixels_c[640]);
+  SIMD_ALIGNED(uint32 dst_pixels_opt[640]);
+
+  memset(orig_pixels, 0, sizeof(orig_pixels));
+  memset(dst_pixels_c, 1, sizeof(dst_pixels_c));
+  memset(dst_pixels_opt, 2, sizeof(dst_pixels_opt));
+
+  for (int i = 0; i < 640 * 5; ++i) {
+    orig_pixels[i] = i;
+  }
+  GaussCol_C(&orig_pixels[0], &orig_pixels[640], &orig_pixels[640 * 2],
+             &orig_pixels[640 * 3], &orig_pixels[640 * 4], &dst_pixels_c[0],
+             640);
+  for (int i = 0; i < benchmark_pixels_div1280_ * 2; ++i) {
+#if !defined(LIBYUV_DISABLE_NEON) && defined(__aarch64__)
+    int has_neon = TestCpuFlag(kCpuHasNEON);
+    if (has_neon) {
+      GaussCol_NEON(&orig_pixels[0], &orig_pixels[640], &orig_pixels[640 * 2],
+                    &orig_pixels[640 * 3], &orig_pixels[640 * 4],
+                    &dst_pixels_opt[0], 640);
+    } else {
+      GaussCol_C(&orig_pixels[0], &orig_pixels[640], &orig_pixels[640 * 2],
+                 &orig_pixels[640 * 3], &orig_pixels[640 * 4],
+                 &dst_pixels_opt[0], 640);
+    }
+#else
+    GaussCol_C(&orig_pixels[0], &orig_pixels[640], &orig_pixels[640 * 2],
+               &orig_pixels[640 * 3], &orig_pixels[640 * 4], &dst_pixels_opt[0],
+               640);
+#endif
+  }
+
+  for (int i = 0; i < 640; ++i) {
+    EXPECT_EQ(dst_pixels_c[i], dst_pixels_opt[i]);
+  }
+
+  EXPECT_EQ(dst_pixels_c[0], static_cast<uint32>(0 * 1 + 640 * 4 + 640 * 2 * 6 +
+                                                 640 * 3 * 4 + 640 * 4 * 1));
+  EXPECT_EQ(dst_pixels_c[639], static_cast<uint32>(30704));
 }
 
 }  // namespace libyuv

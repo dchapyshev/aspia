@@ -1770,6 +1770,34 @@ void MergeUVRow_C(const uint8* src_u,
   }
 }
 
+void SplitRGBRow_C(const uint8* src_rgb,
+                   uint8* dst_r,
+                   uint8* dst_g,
+                   uint8* dst_b,
+                   int width) {
+  int x;
+  for (x = 0; x < width; ++x) {
+    dst_r[x] = src_rgb[0];
+    dst_g[x] = src_rgb[1];
+    dst_b[x] = src_rgb[2];
+    src_rgb += 3;
+  }
+}
+
+void MergeRGBRow_C(const uint8* src_r,
+                   const uint8* src_g,
+                   const uint8* src_b,
+                   uint8* dst_rgb,
+                   int width) {
+  int x;
+  for (x = 0; x < width; ++x) {
+    dst_rgb[0] = src_r[x];
+    dst_rgb[1] = src_g[x];
+    dst_rgb[2] = src_b[x];
+    dst_rgb += 3;
+  }
+}
+
 void CopyRow_C(const uint8* src, uint8* dst, int count) {
   memcpy(dst, src, count);
 }
@@ -2669,6 +2697,29 @@ void ScaleSamples_C(const float* src, float* dst, float scale, int width) {
   int i;
   for (i = 0; i < width; ++i) {
     *dst++ = *src++ * scale;
+  }
+}
+
+void GaussRow_C(const uint32* src, uint16* dst, int width) {
+  int i;
+  for (i = 0; i < width; ++i) {
+    *dst++ =
+        (src[0] + src[1] * 4 + src[2] * 6 + src[3] * 4 + src[4] + 128) >> 8;
+    ++src;
+  }
+}
+
+// filter 5 rows with 1, 4, 6, 4, 1 coefficients to produce 1 row.
+void GaussCol_C(const uint16* src0,
+                const uint16* src1,
+                const uint16* src2,
+                const uint16* src3,
+                const uint16* src4,
+                uint32* dst,
+                int width) {
+  int i;
+  for (i = 0; i < width; ++i) {
+    *dst++ = *src0++ + *src1++ * 4 + *src2++ * 6 + *src3++ * 4 + *src4++;
   }
 }
 

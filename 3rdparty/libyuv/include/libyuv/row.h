@@ -76,8 +76,10 @@ extern "C" {
 #endif  // VisualStudio >= 2012
 
 // clang 6 mips issue https://bugs.chromium.org/p/libyuv/issues/detail?id=715
+// broken in clang version 6.0.0 (trunk 308728)
+// fixed in clang version 6.0.0 (trunk 310694)
 #if defined(__clang__)
-#define DISABLE_CLANG_MSA 1
+// #define DISABLE_CLANG_MSA 1
 #endif
 
 // The following are available on all x86 platforms:
@@ -269,6 +271,14 @@ extern "C" {
 #define HAS_I422TOARGBROW_SSSE3
 #endif
 
+// The following are available forr gcc/clang x86 platforms:
+// TODO(fbarchard): Port to Visual C
+#if !defined(LIBYUV_DISABLE_X86) && \
+    (defined(__x86_64__) || (defined(__i386__) && !defined(_MSC_VER)))
+#define HAS_MERGERGBROW_SSSE3
+#define HAS_SPLITRGBROW_SSSE3
+#endif
+
 // The following are available on Neon platforms:
 #if !defined(LIBYUV_DISABLE_NEON) && \
     (defined(__aarch64__) || defined(__ARM_NEON__) || defined(LIBYUV_NEON))
@@ -328,6 +338,7 @@ extern "C" {
 #define HAS_RGBATOUVROW_NEON
 #define HAS_RGBATOYROW_NEON
 #define HAS_SETROW_NEON
+#define HAS_SPLITRGBROW_NEON
 #define HAS_SPLITUVROW_NEON
 #define HAS_UYVYTOARGBROW_NEON
 #define HAS_UYVYTOUV422ROW_NEON
@@ -424,6 +435,7 @@ extern "C" {
 #define HAS_ARGBEXTRACTALPHAROW_MSA
 #define HAS_SPLITUVROW_MSA
 #define HAS_MIRRORUVROW_MSA
+#define HAS_HALFFLOATROW_MSA
 
 #ifndef DISABLE_CLANG_MSA
 #define HAS_ABGRTOUVROW_MSA
@@ -1458,6 +1470,58 @@ void MergeUVRow_Any_MSA(const uint8* src_u,
                         const uint8* src_v,
                         uint8* dst_uv,
                         int width);
+
+void SplitRGBRow_C(const uint8* src_rgb,
+                   uint8* dst_r,
+                   uint8* dst_g,
+                   uint8* dst_b,
+                   int width);
+void SplitRGBRow_SSSE3(const uint8* src_rgb,
+                       uint8* dst_r,
+                       uint8* dst_g,
+                       uint8* dst_b,
+                       int width);
+void SplitRGBRow_NEON(const uint8* src_rgb,
+                      uint8* dst_r,
+                      uint8* dst_g,
+                      uint8* dst_b,
+                      int width);
+void SplitRGBRow_Any_SSSE3(const uint8* src_rgb,
+                           uint8* dst_r,
+                           uint8* dst_g,
+                           uint8* dst_b,
+                           int width);
+void SplitRGBRow_Any_NEON(const uint8* src_rgb,
+                          uint8* dst_r,
+                          uint8* dst_g,
+                          uint8* dst_b,
+                          int width);
+
+void MergeRGBRow_C(const uint8* src_r,
+                   const uint8* src_g,
+                   const uint8* src_b,
+                   uint8* dst_rgb,
+                   int width);
+void MergeRGBRow_SSSE3(const uint8* src_r,
+                       const uint8* src_g,
+                       const uint8* src_b,
+                       uint8* dst_rgb,
+                       int width);
+void MergeRGBRow_NEON(const uint8* src_r,
+                      const uint8* src_g,
+                      const uint8* src_b,
+                      uint8* dst_rgb,
+                      int width);
+void MergeRGBRow_Any_SSSE3(const uint8* src_r,
+                           const uint8* src_g,
+                           const uint8* src_b,
+                           uint8* dst_rgb,
+                           int width);
+void MergeRGBRow_Any_NEON(const uint8* src_r,
+                          const uint8* src_g,
+                          const uint8* src_b,
+                          uint8* dst_rgb,
+                          int width);
 
 void CopyRow_SSE2(const uint8* src, uint8* dst, int count);
 void CopyRow_AVX(const uint8* src, uint8* dst, int count);
@@ -3190,6 +3254,11 @@ void HalfFloat1Row_Any_NEON(const uint16* src,
                             uint16* dst,
                             float scale,
                             int width);
+void HalfFloatRow_MSA(const uint16* src, uint16* dst, float scale, int width);
+void HalfFloatRow_Any_MSA(const uint16* src,
+                          uint16* dst,
+                          float scale,
+                          int width);
 
 void ARGBLumaColorTableRow_C(const uint8* src_argb,
                              uint8* dst_argb,

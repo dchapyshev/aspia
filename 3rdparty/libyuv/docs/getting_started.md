@@ -277,10 +277,10 @@ Then run:
 
 ## Sanitizers
 
-    gn gen out/Debug "--args=is_debug=true is_asan=true"
-    ninja -v -C out/Debug
+    gn gen out/Release "--args=is_debug=false is_msan=true"
+    ninja -v -C out/Release
 
-    Sanitizers available: tsan, msan, asan, ubsan, lsan
+    Sanitizers available: asan, msan, tsan, ubsan, lsan, ubsan_vptr
 
 ### Running Dr Memory memcheck for Windows
 

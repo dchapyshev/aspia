@@ -3458,6 +3458,64 @@ void SobelYRow_MSA(const uint8* src_y0,
 }
 #endif
 
+void HalfFloatRow_MSA(const uint16* src, uint16* dst, float scale, int width) {
+  int i;
+  v8u16 src0, src1, src2, src3, dst0, dst1, dst2, dst3;
+  v4u32 vec0, vec1, vec2, vec3, vec4, vec5, vec6, vec7;
+  v4f32 fvec0, fvec1, fvec2, fvec3, fvec4, fvec5, fvec6, fvec7;
+  v4f32 mult_vec;
+  v8i16 zero = {0};
+  mult_vec[0] = 1.9259299444e-34f * scale;
+  mult_vec = (v4f32)__msa_splati_w((v4i32)mult_vec, 0);
+
+  for (i = 0; i < width; i += 32) {
+    src0 = (v8u16)__msa_ld_h((v8i16*)src, 0);
+    src1 = (v8u16)__msa_ld_h((v8i16*)src, 16);
+    src2 = (v8u16)__msa_ld_h((v8i16*)src, 32);
+    src3 = (v8u16)__msa_ld_h((v8i16*)src, 48);
+    vec0 = (v4u32)__msa_ilvr_h(zero, (v8i16)src0);
+    vec1 = (v4u32)__msa_ilvl_h(zero, (v8i16)src0);
+    vec2 = (v4u32)__msa_ilvr_h(zero, (v8i16)src1);
+    vec3 = (v4u32)__msa_ilvl_h(zero, (v8i16)src1);
+    vec4 = (v4u32)__msa_ilvr_h(zero, (v8i16)src2);
+    vec5 = (v4u32)__msa_ilvl_h(zero, (v8i16)src2);
+    vec6 = (v4u32)__msa_ilvr_h(zero, (v8i16)src3);
+    vec7 = (v4u32)__msa_ilvl_h(zero, (v8i16)src3);
+    fvec0 = __msa_ffint_u_w(vec0);
+    fvec1 = __msa_ffint_u_w(vec1);
+    fvec2 = __msa_ffint_u_w(vec2);
+    fvec3 = __msa_ffint_u_w(vec3);
+    fvec4 = __msa_ffint_u_w(vec4);
+    fvec5 = __msa_ffint_u_w(vec5);
+    fvec6 = __msa_ffint_u_w(vec6);
+    fvec7 = __msa_ffint_u_w(vec7);
+    fvec0 *= mult_vec;
+    fvec1 *= mult_vec;
+    fvec2 *= mult_vec;
+    fvec3 *= mult_vec;
+    fvec4 *= mult_vec;
+    fvec5 *= mult_vec;
+    fvec6 *= mult_vec;
+    fvec7 *= mult_vec;
+    vec0 = ((v4u32)fvec0) >> 13;
+    vec1 = ((v4u32)fvec1) >> 13;
+    vec2 = ((v4u32)fvec2) >> 13;
+    vec3 = ((v4u32)fvec3) >> 13;
+    vec4 = ((v4u32)fvec4) >> 13;
+    vec5 = ((v4u32)fvec5) >> 13;
+    vec6 = ((v4u32)fvec6) >> 13;
+    vec7 = ((v4u32)fvec7) >> 13;
+    dst0 = (v8u16)__msa_pckev_h((v8i16)vec1, (v8i16)vec0);
+    dst1 = (v8u16)__msa_pckev_h((v8i16)vec3, (v8i16)vec2);
+    dst2 = (v8u16)__msa_pckev_h((v8i16)vec5, (v8i16)vec4);
+    dst3 = (v8u16)__msa_pckev_h((v8i16)vec7, (v8i16)vec6);
+    ST_UH2(dst0, dst1, dst, 8);
+    ST_UH2(dst2, dst3, dst + 16, 8);
+    src += 32;
+    dst += 32;
+  }
+}
+
 #ifdef __cplusplus
 }  // extern "C"
 }  // namespace libyuv

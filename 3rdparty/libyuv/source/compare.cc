@@ -135,6 +135,11 @@ uint64 ComputeHammingDistance(const uint8* src_a,
     HammingDistance = HammingDistance_AVX2;
   }
 #endif
+#if defined(HAS_HAMMINGDISTANCE_MSA)
+  if (TestCpuFlag(kCpuHasMSA)) {
+    HammingDistance = HammingDistance_MSA;
+  }
+#endif
 #ifdef _OPENMP
 #pragma omp parallel for reduction(+ : diff)
 #endif
@@ -184,6 +189,11 @@ uint64 ComputeSumSquareError(const uint8* src_a,
   if (TestCpuFlag(kCpuHasAVX2)) {
     // Note only used for multiples of 32 so count is not checked.
     SumSquareError = SumSquareError_AVX2;
+  }
+#endif
+#if defined(HAS_SUMSQUAREERROR_MSA)
+  if (TestCpuFlag(kCpuHasMSA)) {
+    SumSquareError = SumSquareError_MSA;
   }
 #endif
 #ifdef _OPENMP

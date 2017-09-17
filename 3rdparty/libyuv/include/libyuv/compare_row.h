@@ -42,6 +42,13 @@ extern "C" {
 #endif  // clang >= 3.4
 #endif  // __clang__
 
+// clang 6 mips issue https://bugs.chromium.org/p/libyuv/issues/detail?id=715
+// broken in clang version 6.0.0 (trunk 308728)
+// fixed in clang version 6.0.0 (trunk 310694)
+#if defined(__clang__)
+// #define DISABLE_CLANG_MSA 1
+#endif
+
 #if !defined(LIBYUV_DISABLE_X86) && defined(_M_IX86) && \
     (defined(VISUALC_HAS_AVX2) || defined(CLANG_HAS_AVX2))
 #define HAS_HASHDJB2_AVX2
@@ -69,14 +76,24 @@ extern "C" {
 #define HAS_HAMMINGDISTANCE_NEON
 #endif
 
+#if !defined(LIBYUV_DISABLE_MSA) && defined(__mips_msa)
+#define HAS_HAMMINGDISTANCE_MSA
+
+#ifndef DISABLE_CLANG_MSA
+#define HAS_SUMSQUAREERROR_MSA
+#endif
+#endif
+
 uint32 HammingDistance_C(const uint8* src_a, const uint8* src_b, int count);
 uint32 HammingDistance_X86(const uint8* src_a, const uint8* src_b, int count);
 uint32 HammingDistance_NEON(const uint8* src_a, const uint8* src_b, int count);
+uint32 HammingDistance_MSA(const uint8* src_a, const uint8* src_b, int count);
 
 uint32 SumSquareError_C(const uint8* src_a, const uint8* src_b, int count);
 uint32 SumSquareError_SSE2(const uint8* src_a, const uint8* src_b, int count);
 uint32 SumSquareError_AVX2(const uint8* src_a, const uint8* src_b, int count);
 uint32 SumSquareError_NEON(const uint8* src_a, const uint8* src_b, int count);
+uint32 SumSquareError_MSA(const uint8* src_a, const uint8* src_b, int count);
 
 uint32 HashDjb2_C(const uint8* src, int count, uint32 seed);
 uint32 HashDjb2_SSE41(const uint8* src, int count, uint32 seed);

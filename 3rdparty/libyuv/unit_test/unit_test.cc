@@ -17,6 +17,7 @@
 #ifdef LIBYUV_USE_GFLAGS
 #include "gflags/gflags.h"
 #endif
+#include "libyuv/cpu_id.h"
 
 // Change this to 1000 for benchmarking.
 // TODO(fbarchard): Add command line parsing to pass this as option.
@@ -90,6 +91,7 @@ LibYUVConvertTest::LibYUVConvertTest()
   if (FLAGS_libyuv_cpu_info) {
     benchmark_cpu_info_ = FLAGS_libyuv_cpu_info;
   }
+  libyuv::MaskCpuFlags(benchmark_cpu_info_);
   benchmark_pixels_div256_ =
       static_cast<int>((static_cast<double>(Abs(benchmark_width_)) *
                             static_cast<double>(Abs(benchmark_height_)) *
@@ -149,6 +151,7 @@ LibYUVColorTest::LibYUVColorTest()
   if (FLAGS_libyuv_cpu_info) {
     benchmark_cpu_info_ = FLAGS_libyuv_cpu_info;
   }
+  libyuv::MaskCpuFlags(benchmark_cpu_info_);
   benchmark_pixels_div256_ =
       static_cast<int>((static_cast<double>(Abs(benchmark_width_)) *
                             static_cast<double>(Abs(benchmark_height_)) *
@@ -208,6 +211,7 @@ LibYUVScaleTest::LibYUVScaleTest()
   if (FLAGS_libyuv_cpu_info) {
     benchmark_cpu_info_ = FLAGS_libyuv_cpu_info;
   }
+  libyuv::MaskCpuFlags(benchmark_cpu_info_);
   benchmark_pixels_div256_ =
       static_cast<int>((static_cast<double>(Abs(benchmark_width_)) *
                             static_cast<double>(Abs(benchmark_height_)) *
@@ -267,6 +271,7 @@ LibYUVRotateTest::LibYUVRotateTest()
   if (FLAGS_libyuv_cpu_info) {
     benchmark_cpu_info_ = FLAGS_libyuv_cpu_info;
   }
+  libyuv::MaskCpuFlags(benchmark_cpu_info_);
   benchmark_pixels_div256_ =
       static_cast<int>((static_cast<double>(Abs(benchmark_width_)) *
                             static_cast<double>(Abs(benchmark_height_)) *
@@ -326,6 +331,7 @@ LibYUVPlanarTest::LibYUVPlanarTest()
   if (FLAGS_libyuv_cpu_info) {
     benchmark_cpu_info_ = FLAGS_libyuv_cpu_info;
   }
+  libyuv::MaskCpuFlags(benchmark_cpu_info_);
   benchmark_pixels_div256_ =
       static_cast<int>((static_cast<double>(Abs(benchmark_width_)) *
                             static_cast<double>(Abs(benchmark_height_)) *
@@ -385,6 +391,7 @@ LibYUVBaseTest::LibYUVBaseTest()
   if (FLAGS_libyuv_cpu_info) {
     benchmark_cpu_info_ = FLAGS_libyuv_cpu_info;
   }
+  libyuv::MaskCpuFlags(benchmark_cpu_info_);
   benchmark_pixels_div256_ =
       static_cast<int>((static_cast<double>(Abs(benchmark_width_)) *
                             static_cast<double>(Abs(benchmark_height_)) *
@@ -444,6 +451,7 @@ LibYUVCompareTest::LibYUVCompareTest()
   if (FLAGS_libyuv_cpu_info) {
     benchmark_cpu_info_ = FLAGS_libyuv_cpu_info;
   }
+  libyuv::MaskCpuFlags(benchmark_cpu_info_);
   benchmark_pixels_div256_ =
       static_cast<int>((static_cast<double>(Abs(benchmark_width_)) *
                             static_cast<double>(Abs(benchmark_height_)) *

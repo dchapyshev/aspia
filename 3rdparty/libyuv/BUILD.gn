@@ -199,6 +199,7 @@ if (libyuv_use_msa) {
   static_library("libyuv_msa") {
     sources = [
       # MSA Source Files
+      "source/compare_msa.cc",
       "source/rotate_msa.cc",
       "source/row_msa.cc",
       "source/scale_msa.cc",

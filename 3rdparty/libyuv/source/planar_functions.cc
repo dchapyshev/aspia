@@ -407,6 +407,122 @@ void MergeUVPlane(const uint8* src_u,
   }
 }
 
+// Support function for NV12 etc RGB channels.
+// Width and height are plane sizes (typically half pixel width).
+LIBYUV_API
+void SplitRGBPlane(const uint8* src_rgb,
+                   int src_stride_rgb,
+                   uint8* dst_r,
+                   int dst_stride_r,
+                   uint8* dst_g,
+                   int dst_stride_g,
+                   uint8* dst_b,
+                   int dst_stride_b,
+                   int width,
+                   int height) {
+  int y;
+  void (*SplitRGBRow)(const uint8* src_rgb, uint8* dst_r, uint8* dst_g,
+                      uint8* dst_b, int width) = SplitRGBRow_C;
+  // Negative height means invert the image.
+  if (height < 0) {
+    height = -height;
+    dst_r = dst_r + (height - 1) * dst_stride_r;
+    dst_g = dst_g + (height - 1) * dst_stride_g;
+    dst_b = dst_b + (height - 1) * dst_stride_b;
+    dst_stride_r = -dst_stride_r;
+    dst_stride_g = -dst_stride_g;
+    dst_stride_b = -dst_stride_b;
+  }
+  // Coalesce rows.
+  if (src_stride_rgb == width * 3 && dst_stride_r == width &&
+      dst_stride_g == width && dst_stride_b == width) {
+    width *= height;
+    height = 1;
+    src_stride_rgb = dst_stride_r = dst_stride_g = dst_stride_b = 0;
+  }
+#if defined(HAS_SPLITRGBROW_SSSE3)
+  if (TestCpuFlag(kCpuHasSSSE3)) {
+    SplitRGBRow = SplitRGBRow_Any_SSSE3;
+    if (IS_ALIGNED(width, 16)) {
+      SplitRGBRow = SplitRGBRow_SSSE3;
+    }
+  }
+#endif
+#if defined(HAS_SPLITRGBROW_NEON)
+  if (TestCpuFlag(kCpuHasNEON)) {
+    SplitRGBRow = SplitRGBRow_Any_NEON;
+    if (IS_ALIGNED(width, 16)) {
+      SplitRGBRow = SplitRGBRow_NEON;
+    }
+  }
+#endif
+
+  for (y = 0; y < height; ++y) {
+    // Copy a row of RGB.
+    SplitRGBRow(src_rgb, dst_r, dst_g, dst_b, width);
+    dst_r += dst_stride_r;
+    dst_g += dst_stride_g;
+    dst_b += dst_stride_b;
+    src_rgb += src_stride_rgb;
+  }
+}
+
+LIBYUV_API
+void MergeRGBPlane(const uint8* src_r,
+                   int src_stride_r,
+                   const uint8* src_g,
+                   int src_stride_g,
+                   const uint8* src_b,
+                   int src_stride_b,
+                   uint8* dst_rgb,
+                   int dst_stride_rgb,
+                   int width,
+                   int height) {
+  int y;
+  void (*MergeRGBRow)(const uint8* src_r, const uint8* src_g,
+                      const uint8* src_b, uint8* dst_rgb, int width) =
+      MergeRGBRow_C;
+  // Coalesce rows.
+  // Negative height means invert the image.
+  if (height < 0) {
+    height = -height;
+    dst_rgb = dst_rgb + (height - 1) * dst_stride_rgb;
+    dst_stride_rgb = -dst_stride_rgb;
+  }
+  // Coalesce rows.
+  if (src_stride_r == width && src_stride_g == width && src_stride_b == width &&
+      dst_stride_rgb == width * 3) {
+    width *= height;
+    height = 1;
+    src_stride_r = src_stride_g = src_stride_b = dst_stride_rgb = 0;
+  }
+#if defined(HAS_MERGERGBROW_SSSE3)
+  if (TestCpuFlag(kCpuHasSSSE3)) {
+    MergeRGBRow = MergeRGBRow_Any_SSSE3;
+    if (IS_ALIGNED(width, 16)) {
+      MergeRGBRow = MergeRGBRow_SSSE3;
+    }
+  }
+#endif
+#if defined(HAS_MERGERGBROW_NEON)
+  if (TestCpuFlag(kCpuHasNEON)) {
+    MergeRGBRow = MergeRGBRow_Any_NEON;
+    if (IS_ALIGNED(width, 16)) {
+      MergeRGBRow = MergeRGBRow_NEON;
+    }
+  }
+#endif
+
+  for (y = 0; y < height; ++y) {
+    // Merge a row of U and V into a row of RGB.
+    MergeRGBRow(src_r, src_g, src_b, dst_rgb, width);
+    src_r += src_stride_r;
+    src_g += src_stride_g;
+    src_b += src_stride_b;
+    dst_rgb += dst_stride_rgb;
+  }
+}
+
 // Mirror a plane of data.
 void MirrorPlane(const uint8* src_y,
                  int src_stride_y,
@@ -2938,6 +3054,14 @@ int HalfFloatPlane(const uint16* src_y,
         (scale == 1.0f) ? HalfFloat1Row_Any_NEON : HalfFloatRow_Any_NEON;
     if (IS_ALIGNED(width, 8)) {
       HalfFloatRow = (scale == 1.0f) ? HalfFloat1Row_NEON : HalfFloatRow_NEON;
+    }
+  }
+#endif
+#if defined(HAS_HALFFLOATROW_MSA)
+  if (TestCpuFlag(kCpuHasMSA)) {
+    HalfFloatRow = HalfFloatRow_Any_MSA;
+    if (IS_ALIGNED(width, 32)) {
+      HalfFloatRow = HalfFloatRow_MSA;
     }
   }
 #endif

@@ -124,7 +124,7 @@ void CpuId(int eax, int ecx, int* cpu_info) {
 int GetXCR0() {
   int xcr0 = 0;
 #if defined(_MSC_FULL_VER) && (_MSC_FULL_VER >= 160040219)
-  xcr0 = _xgetbv(0);  // VS2010 SP1 required.
+  xcr0 = (int) _xgetbv(0);  // VS2010 SP1 required.  NOLINT
 #elif defined(__i386__) || defined(__x86_64__)
   asm(".byte 0x0f, 0x01, 0xd0" : "=a"(xcr0) : "c"(0) : "%edx");
 #endif  // defined(__i386__) || defined(__x86_64__)
