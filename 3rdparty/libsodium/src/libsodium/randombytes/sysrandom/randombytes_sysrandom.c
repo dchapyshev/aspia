@@ -24,6 +24,8 @@
 # include <poll.h>
 #endif
 
+#include "core.h"
+#include "private/common.h"
 #include "randombytes.h"
 #include "randombytes_sysrandom.h"
 #include "utils.h"
@@ -34,6 +36,15 @@
  *     memory overhead if this API is not being used for other purposes
  *  - `RtlGenRandom` is thus called directly instead. A detailed explanation
  *     can be found here: https://blogs.msdn.microsoft.com/michael_howard/2005/01/14/cryptographically-secure-random-number-on-windows-without-using-cryptoapi/
+ *
+ * In spite of the disclaimer on the `RtlGenRandom` documentation page that was
+ * written back in the Windows XP days, this function is here to stay. The CRT
+ * function `rand_s()` directly depends on it, so touching it would break many
+ * applications released since Windows XP.
+ *
+ * Also note that Rust, Firefox and BoringSSL (thus, Google Chrome and everything
+ * based on Chromium) also depend on it, and that libsodium allows the RNG to be
+ * replaced without patching nor recompiling the library.
  */
 # include <windows.h>
 # define RtlGenRandom SystemFunction036
@@ -68,7 +79,7 @@ randombytes_sysrandom_stir(void)
 static void
 randombytes_sysrandom_buf(void * const buf, const size_t size)
 {
-    return arc4random_buf(buf, size);
+    arc4random_buf(buf, size);
 }
 
 static int
@@ -156,7 +167,7 @@ randombytes_sysrandom_random_dev_open(void)
 # endif
         "/dev/random", NULL
     };
-    const char **      device = devices;
+    const char       **device = devices;
     int                fd;
 
 # if defined(__linux__) && !defined(USE_BLOCKING_RANDOM) && !defined(NO_BLOCKING_RANDOM_POLL)
@@ -253,7 +264,7 @@ randombytes_sysrandom_init(void)
 
     if ((stream.random_data_source_fd =
          randombytes_sysrandom_random_dev_open()) == -1) {
-        abort(); /* LCOV_EXCL_LINE */
+        sodium_misuse(); /* LCOV_EXCL_LINE */
     }
     errno = errno_save;
 }
@@ -323,21 +334,22 @@ randombytes_sysrandom_buf(void * const buf, const size_t size)
 # if defined(SYS_getrandom) && defined(__NR_getrandom)
     if (stream.getrandom_available != 0) {
         if (randombytes_linux_getrandom(buf, size) != 0) {
-            abort();
+            sodium_misuse(); /* LCOV_EXCL_LINE */
         }
         return;
     }
 # endif
     if (stream.random_data_source_fd == -1 ||
         safe_read(stream.random_data_source_fd, buf, size) != (ssize_t) size) {
-        abort(); /* LCOV_EXCL_LINE */
+        sodium_misuse(); /* LCOV_EXCL_LINE */
     }
 #else
-    if (size > (size_t) 0xffffffff) {
-        abort(); /* LCOV_EXCL_LINE */
+    COMPILER_ASSERT(randombytes_BYTES_MAX <= 0xffffffffUL);
+    if (size > (size_t) 0xffffffffUL) {
+        sodium_misuse(); /* LCOV_EXCL_LINE */
     }
     if (! RtlGenRandom((PVOID) buf, (ULONG) size)) {
-        abort(); /* LCOV_EXCL_LINE */
+        sodium_misuse(); /* LCOV_EXCL_LINE */
     }
 #endif
 }

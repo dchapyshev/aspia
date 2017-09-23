@@ -10,9 +10,9 @@ static void
 tv(void)
 {
     static struct {
-        const char *       passwd_hex;
+        const char        *passwd_hex;
         size_t             passwdlen;
-        const char *       salt_hex;
+        const char        *salt_hex;
         size_t             outlen;
         unsigned long long opslimit;
         size_t             memlimit;
@@ -117,9 +117,9 @@ static void
 tv2(void)
 {
     static struct {
-        const char *       passwd_hex;
+        const char        *passwd_hex;
         size_t             passwdlen;
-        const char *       salt_hex;
+        const char        *salt_hex;
         size_t             outlen;
         unsigned long long opslimit;
         size_t             memlimit;
@@ -260,8 +260,19 @@ tv3(void)
         { "Y0!?iQa9M%5ekffW(`", "$7$" },
         { "Y0!?iQa9M%5ekffW(`", "" },
         { "Y0!?iQa9M%5ekffW(`",
-          "$7$A6....1....TrXs5Zk6s8sWHpQgWDIXTR8kUU3s6Jc3s.DtdS8M2i4$"
-          "" },
+          "$7$A6....1....TrXs5Zk6s8sWHpQgWDIXTR8kUU3s6Jc3s.DtdS8M2i4$" },
+        { "test",
+          "$7$.6..../.....lgPchkGHqbeONR/xtuXyjCrt9kUSg6NlKFQO0OSxo/$.DbajbPYH9T7sg3fOtcgxvJzzfIgJBIxMkeQ8b24YQ." },
+        { "test",
+          "$7$z6..../.....lgPchkGHqbeONR/xtuXyjCrt9kUSg6NlKFQO0OSxo/$.DbajbPYH9T7sg3fOtcgxvJzzfIgJBIxMkeQ8b24YQ." },
+        { "test",
+          "$7$8zzzzz/.....lgPchkGHqbeONR/xtuXyjCrt9kUSg6NlKFQO0OSxo/$.DbajbPYH9T7sg3fOtcgxvJzzfIgJBIxMkeQ8b24YQ." },
+        { "test",
+          "$7$8zzzzzzzzzz.lgPchkGHqbeONR/xtuXyjCrt9kUSg6NlKFQO0OSxo/$.DbajbPYH9T7sg3fOtcgxvJzzfIgJBIxMkeQ8b24YQ." },
+        { "test",
+          "$7$8.....zzzzz.lgPchkGHqbeONR/xtuXyjCrt9kUSg6NlKFQO0OSxo/$.DbajbPYH9T7sg3fOtcgxvJzzfIgJBIxMkeQ8b24YQ." },
+        { "test",
+          "$7$86..../..../lgPchkGHqbeONR/xtuXyjCrt9kUSg6NlKFQO0OSxo/$.DbajbPYH9T7sg3fOtcgxvJzzfIgJBIxMkeQ8b24YQ." }
     };
     char * out;
     char * passwd;
@@ -283,17 +294,14 @@ tv3(void)
     } while (++i < (sizeof tests) / (sizeof tests[0]));
 }
 
-int
-main(void)
+static void
+str_tests(void)
 {
-    char *      str_out;
-    char *      str_out2;
-    char *      salt;
+    char       *str_out;
+    char       *str_out2;
+    char       *salt;
     const char *passwd = "Correct Horse Battery Staple";
 
-    tv();
-    tv2();
-    tv3();
     salt = (char *) sodium_malloc(crypto_pwhash_scryptsalsa208sha256_SALTBYTES);
     str_out =
         (char *) sodium_malloc(crypto_pwhash_scryptsalsa208sha256_STRBYTES);
@@ -312,6 +320,24 @@ main(void)
     if (strcmp(str_out, str_out2) == 0) {
         printf("pwhash_str doesn't generate different salts\n");
     }
+    if (crypto_pwhash_scryptsalsa208sha256_str_needs_rehash
+        (str_out, OPSLIMIT, MEMLIMIT) != 0) {
+        printf("needs_rehash() false positive\n");
+    }
+    if (crypto_pwhash_scryptsalsa208sha256_str_needs_rehash
+        (str_out, OPSLIMIT, MEMLIMIT / 2) != 1 ||
+        crypto_pwhash_scryptsalsa208sha256_str_needs_rehash
+        (str_out, OPSLIMIT / 2, MEMLIMIT) != 1 ||
+        crypto_pwhash_scryptsalsa208sha256_str_needs_rehash
+        (str_out, OPSLIMIT, MEMLIMIT * 2) != 1 ||
+        crypto_pwhash_scryptsalsa208sha256_str_needs_rehash
+        (str_out, OPSLIMIT * 2, MEMLIMIT) != 1) {
+        printf("needs_rehash() false negative\n");
+    }
+    if (crypto_pwhash_scryptsalsa208sha256_str_needs_rehash
+        (str_out + 1, OPSLIMIT, MEMLIMIT) != -1) {
+        printf("needs_rehash() didn't fail with an invalid hash string\n");
+    }
     if (crypto_pwhash_scryptsalsa208sha256_str_verify(str_out, passwd,
                                                       strlen(passwd)) != 0) {
         printf("pwhash_str_verify failure\n");
@@ -328,6 +354,27 @@ main(void)
     str_out[14]--;
 
     assert(str_out[crypto_pwhash_scryptsalsa208sha256_STRBYTES - 1U] == 0);
+
+    assert(crypto_pwhash_scryptsalsa208sha256_str_needs_rehash
+           (str_out, 0, 0) == 1);
+    assert(crypto_pwhash_str_needs_rehash(str_out, 0, 0) == -1);
+    assert(crypto_pwhash_str_needs_rehash(str_out, OPSLIMIT, MEMLIMIT) == -1);
+    assert(crypto_pwhash_scryptsalsa208sha256_str_needs_rehash
+           ("", OPSLIMIT, MEMLIMIT) == -1);
+
+    sodium_free(salt);
+    sodium_free(str_out);
+    sodium_free(str_out2);
+}
+
+int
+main(void)
+{
+    tv();
+    tv2();
+    tv3();
+    str_tests();
+
     assert(crypto_pwhash_scryptsalsa208sha256_bytes_min() > 0U);
     assert(crypto_pwhash_scryptsalsa208sha256_bytes_max() >
            crypto_pwhash_scryptsalsa208sha256_bytes_min());
@@ -346,10 +393,6 @@ main(void)
     assert(crypto_pwhash_scryptsalsa208sha256_memlimit_interactive() > 0U);
     assert(crypto_pwhash_scryptsalsa208sha256_opslimit_sensitive() > 0U);
     assert(crypto_pwhash_scryptsalsa208sha256_memlimit_sensitive() > 0U);
-
-    sodium_free(salt);
-    sodium_free(str_out);
-    sodium_free(str_out2);
 
     printf("OK\n");
 

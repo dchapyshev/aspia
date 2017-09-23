@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "core.h"
 #include "crypto_stream_chacha20.h"
 #include "private/common.h"
 #include "private/sse2_64_32.h"
@@ -76,8 +77,8 @@ chacha20_encrypt_bytes(chacha_ctx *ctx, const uint8_t *m, uint8_t *c,
     if (!bytes) {
         return; /* LCOV_EXCL_LINE */
     }
-    if (bytes > 64ULL * (1ULL << 32) - 64ULL) {
-        abort();
+    if (bytes > crypto_stream_chacha20_MESSAGEBYTES_MAX) {
+        sodium_misuse();
     }
 # include "u8.h"
 # include "u4.h"

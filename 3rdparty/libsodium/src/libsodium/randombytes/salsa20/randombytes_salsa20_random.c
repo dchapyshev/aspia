@@ -25,13 +25,14 @@
 # include <poll.h>
 #endif
 
+#include "core.h"
 #include "crypto_core_salsa20.h"
 #include "crypto_generichash.h"
 #include "crypto_stream_salsa20.h"
+#include "private/common.h"
 #include "randombytes.h"
 #include "randombytes_salsa20_random.h"
 #include "utils.h"
-#include "private/common.h"
 
 #ifdef _WIN32
 # include <windows.h>
@@ -98,7 +99,7 @@ sodium_hrtime(void)
         struct timeval tv;
 
         if (gettimeofday(&tv, NULL) != 0) {
-            abort(); /* LCOV_EXCL_LINE */
+            sodium_misuse(); /* LCOV_EXCL_LINE */
         }
         ts = ((uint64_t) tv.tv_sec) * 1000000U + (uint64_t) tv.tv_usec;
     }
@@ -172,7 +173,7 @@ randombytes_salsa20_random_random_dev_open(void)
 #  endif
         "/dev/random", NULL
     };
-    const char **     device = devices;
+    const char      **device = devices;
     int               fd;
 
 # if defined(__linux__) && !defined(USE_BLOCKING_RANDOM) && !defined(NO_BLOCKING_RANDOM_POLL)
@@ -277,7 +278,7 @@ randombytes_salsa20_random_init(void)
 
     if ((stream.random_data_source_fd =
          randombytes_salsa20_random_random_dev_open()) == -1) {
-        abort(); /* LCOV_EXCL_LINE */
+        sodium_misuse(); /* LCOV_EXCL_LINE */
     }
     errno = errno_save;
 # endif /* HAVE_SAFE_ARC4RANDOM */
@@ -331,29 +332,29 @@ randombytes_salsa20_random_stir(void)
 # elif defined(SYS_getrandom) && defined(__NR_getrandom)
     if (stream.getrandom_available != 0) {
         if (randombytes_linux_getrandom(m0, sizeof m0) != 0) {
-            abort(); /* LCOV_EXCL_LINE */
+            sodium_misuse(); /* LCOV_EXCL_LINE */
         }
     } else if (stream.random_data_source_fd == -1 ||
                safe_read(stream.random_data_source_fd, m0,
                          sizeof m0) != (ssize_t) sizeof m0) {
-        abort(); /* LCOV_EXCL_LINE */
+        sodium_misuse(); /* LCOV_EXCL_LINE */
     }
 # else
     if (stream.random_data_source_fd == -1 ||
         safe_read(stream.random_data_source_fd, m0,
                   sizeof m0) != (ssize_t) sizeof m0) {
-        abort(); /* LCOV_EXCL_LINE */
+        sodium_misuse(); /* LCOV_EXCL_LINE */
     }
 # endif
 
 #else /* _WIN32 */
     if (! RtlGenRandom((PVOID) m0, (ULONG) sizeof m0)) {
-        abort(); /* LCOV_EXCL_LINE */
+        sodium_misuse(); /* LCOV_EXCL_LINE */
     }
 #endif
     if (crypto_generichash(stream.key, sizeof stream.key, k0, sizeof_k0,
                            hsigma, sizeof hsigma) != 0) {
-        abort(); /* LCOV_EXCL_LINE */
+        abort(); /* really abort -- it should never happen */ /* LCOV_EXCL_LINE */
     }
     COMPILER_ASSERT(sizeof stream.key <= sizeof m0);
     randombytes_salsa20_random_rekey(m0);
@@ -370,7 +371,7 @@ randombytes_salsa20_random_stir_if_needed(void)
     if (stream.initialized == 0) {
         randombytes_salsa20_random_stir();
     } else if (stream.pid != getpid()) {
-        abort();
+        sodium_misuse(); /* LCOV_EXCL_LINE */
     }
 #else
     if (stream.initialized == 0) {

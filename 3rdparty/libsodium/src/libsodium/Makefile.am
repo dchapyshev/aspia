@@ -62,6 +62,7 @@ libsodium_la_SOURCES = \
 	crypto_secretbox/crypto_secretbox.c \
 	crypto_secretbox/crypto_secretbox_easy.c \
 	crypto_secretbox/xsalsa20poly1305/secretbox_xsalsa20poly1305.c \
+	crypto_secretstream/xchacha20poly1305/secretstream_xchacha20poly1305.c \
 	crypto_shorthash/crypto_shorthash.c \
 	crypto_shorthash/siphash24/shorthash_siphash24.c \
 	crypto_shorthash/siphash24/ref/shorthash_siphash24_ref.c \
@@ -87,6 +88,7 @@ libsodium_la_SOURCES = \
 	include/sodium/private/mutex.h \
 	include/sodium/private/sse2_64_32.h \
 	randombytes/randombytes.c \
+	sodium/codecs.c \
 	sodium/core.c \
 	sodium/runtime.c \
 	sodium/utils.c \
@@ -206,8 +208,8 @@ endif
 SUBDIRS = \
 	include
 
-libsodium_la_LIBADD = libaesni.la libsse2.la libssse3.la libsse41.la libavx2.la
-noinst_LTLIBRARIES =  libaesni.la libsse2.la libssse3.la libsse41.la libavx2.la
+libsodium_la_LIBADD = libaesni.la libsse2.la libssse3.la libsse41.la libavx2.la libavx512f.la
+noinst_LTLIBRARIES =  libaesni.la libsse2.la libssse3.la libsse41.la libavx2.la libavx512f.la
 
 libaesni_la_LDFLAGS = $(libsodium_la_LDFLAGS)
 libaesni_la_CPPFLAGS = $(libsodium_la_CPPFLAGS) \
@@ -273,3 +275,10 @@ libavx2_la_SOURCES = \
 	crypto_stream/salsa20/xmm6int/u1.h \
 	crypto_stream/salsa20/xmm6int/u4.h \
 	crypto_stream/salsa20/xmm6int/u8.h
+
+libavx512f_la_LDFLAGS = $(libsodium_la_LDFLAGS)
+libavx512f_la_CPPFLAGS = $(libsodium_la_CPPFLAGS) \
+	@CFLAGS_SSE2@ @CFLAGS_SSSE3@ @CFLAGS_SSE41@ @CFLAGS_AVX@ @CFLAGS_AVX2@ @CFLAGS_AVX512F@
+libavx512f_la_SOURCES = \
+	crypto_pwhash/argon2/argon2-fill-block-avx512f.c \
+	crypto_pwhash/argon2/blamka-round-avx512f.h

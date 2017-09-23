@@ -3,11 +3,15 @@
 #include <limits.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "argon2-core.h"
+#include "argon2-encoding.h"
 #include "argon2.h"
+#include "crypto_pwhash.h"
 #include "crypto_pwhash_argon2i.h"
+#include "crypto_pwhash_argon2id.h"
 #include "randombytes.h"
 #include "utils.h"
 
@@ -210,4 +214,56 @@ crypto_pwhash_argon2i_str_verify(const char str[crypto_pwhash_argon2i_STRBYTES],
         errno = EINVAL;
     }
     return -1;
+}
+
+static int
+_needs_rehash(const char *str, unsigned long long opslimit, size_t memlimit,
+              argon2_type type)
+{
+    unsigned char  *fodder;
+    argon2_context  ctx;
+    size_t          fodder_len;
+    int             ret = -1;
+
+    fodder_len = strlen(str);
+    memlimit /= 1024U;
+    if (opslimit > UINT32_MAX || memlimit > UINT32_MAX ||
+        fodder_len >= crypto_pwhash_STRBYTES) {
+        errno = EINVAL;
+        return -1;
+    }
+    memset(&ctx, 0, sizeof ctx);
+    if ((fodder = (unsigned char *) calloc(fodder_len, 1U)) == NULL) {
+        return -1; /* LCOV_EXCL_LINE */
+    }
+    ctx.out    = ctx.pwd       = ctx.salt    = fodder;
+    ctx.outlen = ctx.pwdlen    = ctx.saltlen = (uint32_t) fodder_len;
+    ctx.ad     = ctx.secret    = NULL;
+    ctx.adlen  = ctx.secretlen = 0U;
+    if (decode_string(&ctx, str, type) != 0) {
+        errno = EINVAL;
+        ret = -1;
+    } else if (ctx.t_cost != (uint32_t) opslimit ||
+               ctx.m_cost != (uint32_t) memlimit) {
+        ret = 1;
+    } else {
+        ret = 0;
+    }
+    free(fodder);
+
+    return ret;
+}
+
+int
+crypto_pwhash_argon2i_str_needs_rehash(const char str[crypto_pwhash_argon2i_STRBYTES],
+                                       unsigned long long opslimit, size_t memlimit)
+{
+    return _needs_rehash(str, opslimit, memlimit, Argon2_i);
+}
+
+int
+crypto_pwhash_argon2id_str_needs_rehash(const char str[crypto_pwhash_argon2id_STRBYTES],
+                                        unsigned long long opslimit, size_t memlimit)
+{
+    return _needs_rehash(str, opslimit, memlimit, Argon2_id);
 }

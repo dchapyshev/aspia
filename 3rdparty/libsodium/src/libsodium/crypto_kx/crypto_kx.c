@@ -1,6 +1,7 @@
 
 #include <stddef.h>
 
+#include "core.h"
 #include "crypto_generichash.h"
 #include "crypto_kx.h"
 #include "crypto_scalarmult.h"
@@ -47,6 +48,9 @@ crypto_kx_client_session_keys(unsigned char rx[crypto_kx_SESSIONKEYBYTES],
     if (tx == NULL) {
         tx = rx;
     }
+    if (rx == NULL) {
+        sodium_misuse(); /* LCOV_EXCL_LINE */
+    }
     if (crypto_scalarmult(q, client_sk, server_pk) != 0) {
         return -1;
     }
@@ -84,6 +88,9 @@ crypto_kx_server_session_keys(unsigned char rx[crypto_kx_SESSIONKEYBYTES],
     }
     if (tx == NULL) {
         tx = rx;
+    }
+    if (rx == NULL) {
+        sodium_misuse(); /* LCOV_EXCL_LINE */
     }
     if (crypto_scalarmult(q, server_sk, client_pk) != 0) {
         return -1;

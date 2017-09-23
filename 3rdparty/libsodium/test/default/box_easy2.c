@@ -88,10 +88,10 @@ main(void)
 
     memset(m2, 0, m2_size);
 
-    if (crypto_box_easy_afternm(c, m, SIZE_MAX - 1U, nonce, k1) == 0) {
+    if (crypto_box_easy_afternm(c, m, 0, nonce, k1) != 0) {
         printf(
-            "crypto_box_easy_afternm() with a short ciphertext should have "
-            "failed\n");
+            "crypto_box_easy_afternm() with a null ciphertext should have "
+            "worked\n");
     }
     crypto_box_easy_afternm(c, m, (unsigned long long) mlen, nonce, k1);
     if (crypto_box_open_easy_afternm(
@@ -113,6 +113,10 @@ main(void)
     ret = crypto_box_detached(c, mac, m, (unsigned long long) mlen, nonce,
                               alicepk, bobsk);
     assert(ret == 0);
+    if (crypto_box_open_detached(m2, c, mac, (unsigned long long) mlen, nonce,
+                                 small_order_p, alicesk) != -1) {
+        printf("crypto_box_open_detached() with a weak key passed\n");
+    }
     if (crypto_box_open_detached(m2, c, mac, (unsigned long long) mlen, nonce,
                                  bobpk, alicesk) != 0) {
         printf("crypto_box_open_detached() failed\n");

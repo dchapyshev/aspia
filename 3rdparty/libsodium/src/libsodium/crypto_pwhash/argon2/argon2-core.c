@@ -36,28 +36,6 @@
 
 static fill_segment_fn fill_segment = fill_segment_ref;
 
-/***************Instance and Position constructors**********/
-void
-init_block_value(block *b, uint8_t in)
-{
-    memset(b->v, in, sizeof(b->v));
-}
-
-void
-copy_block(block *dst, const block *src)
-{
-    memcpy(dst->v, src->v, sizeof(uint64_t) * ARGON2_QWORDS_IN_BLOCK);
-}
-
-void
-xor_block(block *dst, const block *src)
-{
-    int i;
-    for (i = 0; i < ARGON2_QWORDS_IN_BLOCK; ++i) {
-        dst->v[i] ^= src->v[i];
-    }
-}
-
 static void
 load_block(block *dst, const void *input)
 {
@@ -105,6 +83,7 @@ allocate_memory(block_region **region, uint32_t m_cost)
     if (!*region) {
         return ARGON2_MEMORY_ALLOCATION_ERROR; /* LCOV_EXCL_LINE */
     }
+    (*region)->base = (*region)->memory = NULL;
 
 #if defined(MAP_ANON) && defined(HAVE_MMAP)
     if ((base = mmap(NULL, memory_size, PROT_READ | PROT_WRITE,
@@ -154,12 +133,18 @@ static void clear_memory(argon2_instance_t *instance, int clear);
 static void
 clear_memory(argon2_instance_t *instance, int clear)
 {
-    if (instance->region != NULL && clear) {
-        /* LCOV_EXCL_START */
-        sodium_memzero(instance->region->memory,
-                       sizeof(block) * instance->memory_blocks);
-        /* LCOV_EXCL_STOP */
+    /* LCOV_EXCL_START */
+    if (clear) {
+        if (instance->region != NULL) {
+            sodium_memzero(instance->region->memory,
+                           sizeof(block) * instance->memory_blocks);
+        }
+        if (instance->pseudo_rands != NULL) {
+            sodium_memzero(instance->pseudo_rands,
+                           sizeof(uint64_t) * instance->segment_length);
+        }
     }
+    /* LCOV_EXCL_STOP */
 }
 
 /* Deallocates memory
@@ -170,7 +155,7 @@ static void free_memory(block_region *memory);
 static void
 free_memory(block_region *region)
 {
-    if (region->base) {
+    if (region && region->base) {
 #if defined(MAP_ANON) && defined(HAVE_MMAP)
         if (munmap(region->base, region->size)) {
             return; /* LCOV_EXCL_LINE */
@@ -180,6 +165,19 @@ free_memory(block_region *region)
 #endif
     }
     free(region);
+}
+
+void
+free_instance(argon2_instance_t *instance, int flags)
+{
+    /* Clear memory */
+    clear_memory(instance, flags & ARGON2_FLAG_CLEAR_MEMORY);
+
+    /* Deallocate the memory */
+    free(instance->pseudo_rands);
+    instance->pseudo_rands = NULL;
+    free_memory(instance->region);
+    instance->region = NULL;
 }
 
 void
@@ -212,11 +210,7 @@ finalize(const argon2_context *context, argon2_instance_t *instance)
                            ARGON2_BLOCK_SIZE); /* clear blockhash_bytes */
         }
 
-        /* Clear memory */
-        clear_memory(instance, context->flags & ARGON2_FLAG_CLEAR_PASSWORD);
-
-        /* Deallocate the memory */
-        free_memory(instance->region);
+        free_instance(instance, context->flags);
     }
 }
 
@@ -292,14 +286,13 @@ index_alpha(const argon2_instance_t *instance,
     return absolute_position;
 }
 
-int
+void
 fill_memory_blocks(argon2_instance_t *instance)
 {
-    int      result;
     uint32_t r, s;
 
     if (instance == NULL || instance->lanes == 0) {
-        return ARGON2_OK; /* LCOV_EXCL_LINE */
+        return; /* LCOV_EXCL_LINE */
     }
 
     for (r = 0; r < instance->passes; ++r) {
@@ -313,14 +306,10 @@ fill_memory_blocks(argon2_instance_t *instance)
                 position.lane  = l;
                 position.slice = (uint8_t) s;
                 position.index = 0;
-                result         = fill_segment(instance, position);
-                if (ARGON2_OK != result) {
-                    return result; /* LCOV_EXCL_LINE */
-                }
+                fill_segment(instance, position);
             }
         }
     }
-    return ARGON2_OK;
 }
 
 int
@@ -510,10 +499,12 @@ initial_hash(uint8_t *blockhash, argon2_context *context, argon2_type type)
         crypto_generichash_blake2b_update(
             &BlakeHash, (const uint8_t *) context->pwd, context->pwdlen);
 
+        /* LCOV_EXCL_START */
         if (context->flags & ARGON2_FLAG_CLEAR_PASSWORD) {
-            sodium_memzero(context->pwd, context->pwdlen); /* LCOV_EXCL_LINE */
-            context->pwdlen = 0;                           /* LCOV_EXCL_LINE */
+            sodium_memzero(context->pwd, context->pwdlen);
+            context->pwdlen = 0;
         }
+        /* LCOV_EXCL_STOP */
     }
 
     STORE32_LE(value, context->saltlen);
@@ -527,8 +518,8 @@ initial_hash(uint8_t *blockhash, argon2_context *context, argon2_type type)
     STORE32_LE(value, context->secretlen);
     crypto_generichash_blake2b_update(&BlakeHash, value, sizeof(value));
 
+    /* LCOV_EXCL_START */
     if (context->secret != NULL) {
-        /* LCOV_EXCL_START */
         crypto_generichash_blake2b_update(
             &BlakeHash, (const uint8_t *) context->secret, context->secretlen);
 
@@ -536,18 +527,18 @@ initial_hash(uint8_t *blockhash, argon2_context *context, argon2_type type)
             sodium_memzero(context->secret, context->secretlen);
             context->secretlen = 0;
         }
-        /* LCOV_EXCL_STOP */
     }
+    /* LCOV_EXCL_STOP */
 
     STORE32_LE(value, context->adlen);
     crypto_generichash_blake2b_update(&BlakeHash, value, sizeof(value));
 
+    /* LCOV_EXCL_START */
     if (context->ad != NULL) {
-        /* LCOV_EXCL_START */
         crypto_generichash_blake2b_update(
             &BlakeHash, (const uint8_t *) context->ad, context->adlen);
-        /* LCOV_EXCL_STOP */
     }
+    /* LCOV_EXCL_STOP */
 
     crypto_generichash_blake2b_final(&BlakeHash, blockhash,
                                      ARGON2_PREHASH_DIGEST_LENGTH);
@@ -559,13 +550,20 @@ initialize(argon2_instance_t *instance, argon2_context *context)
     uint8_t blockhash[ARGON2_PREHASH_SEED_LENGTH];
     int     result = ARGON2_OK;
 
-    if (instance == NULL || context == NULL)
+    if (instance == NULL || context == NULL) {
         return ARGON2_INCORRECT_PARAMETER;
+    }
 
     /* 1. Memory allocation */
 
+    if ((instance->pseudo_rands = (uint64_t *)
+         malloc(sizeof(uint64_t) * instance->segment_length)) == NULL) {
+        return ARGON2_MEMORY_ALLOCATION_ERROR;
+    }
+
     result = allocate_memory(&(instance->region), instance->memory_blocks);
     if (ARGON2_OK != result) {
+        free_instance(instance, context->flags);
         return result;
     }
 
@@ -591,6 +589,13 @@ int
 argon2_pick_best_implementation(void)
 {
 /* LCOV_EXCL_START */
+#if defined(HAVE_AVX512FINTRIN_H) && defined(HAVE_AVX2INTRIN_H) && \
+    defined(HAVE_TMMINTRIN_H) && defined(HAVE_SMMINTRIN_H)
+    if (sodium_runtime_has_avx512f()) {
+        fill_segment = fill_segment_avx512f;
+        return 0;
+    }
+#endif
 #if defined(HAVE_AVX2INTRIN_H) && defined(HAVE_TMMINTRIN_H) && \
     defined(HAVE_SMMINTRIN_H)
     if (sodium_runtime_has_avx2()) {

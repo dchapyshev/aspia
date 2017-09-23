@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "core.h"
 #include "crypto_box.h"
 #include "crypto_secretbox.h"
 #include "private/common.h"
@@ -40,8 +41,8 @@ crypto_box_easy_afternm(unsigned char *c, const unsigned char *m,
                         unsigned long long mlen, const unsigned char *n,
                         const unsigned char *k)
 {
-    if (mlen > SIZE_MAX - crypto_box_MACBYTES) {
-        return -1;
+    if (mlen > crypto_box_MESSAGEBYTES_MAX) {
+        sodium_misuse();
     }
     return crypto_box_detached_afternm(c + crypto_box_MACBYTES, c, m, mlen, n,
                                        k);
@@ -52,8 +53,8 @@ crypto_box_easy(unsigned char *c, const unsigned char *m,
                 unsigned long long mlen, const unsigned char *n,
                 const unsigned char *pk, const unsigned char *sk)
 {
-    if (mlen > SIZE_MAX - crypto_box_MACBYTES) {
-        return -1;
+    if (mlen > crypto_box_MESSAGEBYTES_MAX) {
+        sodium_misuse();
     }
     return crypto_box_detached(c + crypto_box_MACBYTES, c, m, mlen, n,
                                pk, sk);

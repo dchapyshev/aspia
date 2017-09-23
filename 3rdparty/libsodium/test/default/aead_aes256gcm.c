@@ -3185,6 +3185,11 @@ tv(void)
             printf("Verification of test vector #%u with a truncated tag failed\n",
                    (unsigned int) i);
         }
+        if (i == 0 && crypto_aead_aes256gcm_decrypt(NULL, NULL,
+                                                    NULL, ciphertext, ciphertext_len,
+                                                    ad, ad_len, nonce, key) != 0) {
+            printf("Verification of test vector #%u's tag failed\n", (unsigned int) i);
+        }
         if (crypto_aead_aes256gcm_decrypt(decrypted, &found_message_len,
                                           NULL, ciphertext, ciphertext_len,
                                           ad, ad_len, nonce, key) != 0) {
@@ -3231,6 +3236,7 @@ main(void)
     assert(crypto_aead_aes256gcm_npubbytes() == crypto_aead_aes256gcm_NPUBBYTES);
     assert(crypto_aead_aes256gcm_abytes() == crypto_aead_aes256gcm_ABYTES);
     assert(crypto_aead_aes256gcm_statebytes() >= sizeof(crypto_aead_aes256gcm_state));
+    assert(crypto_aead_aes256gcm_messagebytes_max() == crypto_aead_aes256gcm_MESSAGEBYTES_MAX);
     printf("OK\n");
 
     return 0;

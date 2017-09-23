@@ -119,7 +119,7 @@ fe_add(fe h, const fe f, const fe g)
  Preconditions: b in {0,1}.
  */
 
-void
+static void
 fe_cmov(fe f, const fe g, unsigned int b)
 {
     int32_t f0 = f[0];
@@ -428,7 +428,7 @@ fe_tobytes(unsigned char *s, const fe h)
  |f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
  */
 
-int
+static int
 fe_isnegative(const fe f)
 {
     unsigned char s[32];
@@ -759,7 +759,7 @@ fe_mul(fe h, const fe f, const fe g)
  |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
  */
 
-void
+static void
 fe_neg(fe h, const fe f)
 {
     int32_t f0 = f[0];
@@ -987,7 +987,7 @@ fe_sq(fe h, const fe f)
  See fe_mul.c for discussion of implementation strategy.
  */
 
-void
+static void
 fe_sq2(fe h, const fe f)
 {
     int32_t f0 = f[0];
@@ -1217,7 +1217,7 @@ fe_invert(fe out, const fe z)
     fe_mul(out, t1, t0);
 }
 
-void
+static void
 fe_pow22523(fe out, const fe z)
 {
     fe  t0;
@@ -1457,7 +1457,7 @@ ge_frombytes_negate_vartime(ge_p3 *h, const unsigned char *s)
  r = p + q
  */
 
-void
+static void
 ge_madd(ge_p1p1 *r, const ge_p3 *p, const ge_precomp *q)
 {
     fe t0;
@@ -1478,7 +1478,7 @@ ge_madd(ge_p1p1 *r, const ge_p3 *p, const ge_precomp *q)
  r = p - q
  */
 
-void
+static void
 ge_msub(ge_p1p1 *r, const ge_p3 *p, const ge_precomp *q)
 {
     fe t0;
@@ -1499,7 +1499,7 @@ ge_msub(ge_p1p1 *r, const ge_p3 *p, const ge_precomp *q)
  r = p
  */
 
-extern void
+void
 ge_p1p1_to_p2(ge_p2 *r, const ge_p1p1 *p)
 {
     fe_mul(r->X, p->X, p->T);
@@ -1511,7 +1511,7 @@ ge_p1p1_to_p2(ge_p2 *r, const ge_p1p1 *p)
  r = p
  */
 
-extern void
+static void
 ge_p1p1_to_p3(ge_p3 *r, const ge_p1p1 *p)
 {
     fe_mul(r->X, p->X, p->T);
@@ -1520,7 +1520,7 @@ ge_p1p1_to_p3(ge_p3 *r, const ge_p1p1 *p)
     fe_mul(r->T, p->X, p->Y);
 }
 
-void
+static void
 ge_p2_0(ge_p2 *h)
 {
     fe_0(h->X);
@@ -1532,7 +1532,7 @@ ge_p2_0(ge_p2 *h)
  r = 2 * p
  */
 
-void
+static void
 ge_p2_dbl(ge_p1p1 *r, const ge_p2 *p)
 {
     fe t0;
@@ -1548,7 +1548,7 @@ ge_p2_dbl(ge_p1p1 *r, const ge_p2 *p)
     fe_sub(r->T, r->T, r->Z);
 }
 
-void
+static void
 ge_p3_0(ge_p3 *h)
 {
     fe_0(h->X);
@@ -1567,7 +1567,7 @@ ge_p3_0(ge_p3 *h)
 static const fe d2 = { -21827239, -5839606,  -30745221, 13898782, 229458,
                        15978800,  -12551817, -6495438,  29715968, 9444199 };
 
-extern void
+void
 ge_p3_to_cached(ge_cached *r, const ge_p3 *p)
 {
     fe_add(r->YplusX, p->Y, p->X);
@@ -1580,7 +1580,7 @@ ge_p3_to_cached(ge_cached *r, const ge_p3 *p)
  r = p
  */
 
-extern void
+static void
 ge_p3_to_p2(ge_p2 *r, const ge_p3 *p)
 {
     fe_copy(r->X, p->X);
@@ -1606,7 +1606,7 @@ ge_p3_tobytes(unsigned char *s, const ge_p3 *h)
  r = 2 * p
  */
 
-void
+static void
 ge_p3_dbl(ge_p1p1 *r, const ge_p3 *p)
 {
     ge_p2 q;
@@ -1614,7 +1614,7 @@ ge_p3_dbl(ge_p1p1 *r, const ge_p3 *p)
     ge_p2_dbl(r, &q);
 }
 
-void
+static void
 ge_precomp_0(ge_precomp *h)
 {
     fe_1(h->yplusx);
@@ -1686,7 +1686,7 @@ ge_select(ge_precomp *t, int pos, signed char b)
  r = p - q
  */
 
-void
+static void
 ge_sub(ge_p1p1 *r, const ge_p3 *p, const ge_cached *q)
 {
     fe t0;
@@ -1804,6 +1804,10 @@ ge_double_scalarmult_vartime(ge_p2 *r, const unsigned char *a, const ge_p3 *A,
     }
 }
 
+#ifndef MINIMAL
+
+/* only used for verification of legacy (edwards25519sha512batch) signatures */
+
 void
 ge_scalarmult_vartime(ge_p3 *r, const unsigned char *a, const ge_p3 *A)
 {
@@ -1863,6 +1867,8 @@ ge_scalarmult_vartime(ge_p3 *r, const unsigned char *a, const ge_p3 *A)
     }
 }
 
+#endif
+
 void
 ge_scalarmult_base(ge_p3 *h, const unsigned char *a)
 {
@@ -1910,6 +1916,61 @@ ge_scalarmult_base(ge_p3 *h, const unsigned char *a)
         ge_select(&t, i / 2, e[i]);
         ge_madd(&r, h, &t);
         ge_p1p1_to_p3(h, &r);
+    }
+}
+
+/* multiply by the order of the main subgroup l = 2^252+27742317777372353535851937790883648493 */
+void
+ge_mul_l(ge_p3 *r, const ge_p3 *A)
+{
+    static const signed char aslide[253] = {
+        13, 0, 0, 0, 0, -1, 0, 0, 0, 0, -11, 0, 0, 0, 0, 0, 0, -5, 0, 0, 0, 0, 0, 0, -3, 0, 0, 0, 0, -13, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, -13, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, -13, 0, 0, 0, 0, 0, 0, -3, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 3, 0, 0, 0, 0, -11, 0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 7, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+    };
+    ge_cached Ai[8];
+    ge_p1p1   t;
+    ge_p3     u;
+    ge_p3     A2;
+    int       i;
+
+    ge_p3_to_cached(&Ai[0], A);
+    ge_p3_dbl(&t, A);
+    ge_p1p1_to_p3(&A2, &t);
+    ge_add(&t, &A2, &Ai[0]);
+    ge_p1p1_to_p3(&u, &t);
+    ge_p3_to_cached(&Ai[1], &u);
+    ge_add(&t, &A2, &Ai[1]);
+    ge_p1p1_to_p3(&u, &t);
+    ge_p3_to_cached(&Ai[2], &u);
+    ge_add(&t, &A2, &Ai[2]);
+    ge_p1p1_to_p3(&u, &t);
+    ge_p3_to_cached(&Ai[3], &u);
+    ge_add(&t, &A2, &Ai[3]);
+    ge_p1p1_to_p3(&u, &t);
+    ge_p3_to_cached(&Ai[4], &u);
+    ge_add(&t, &A2, &Ai[4]);
+    ge_p1p1_to_p3(&u, &t);
+    ge_p3_to_cached(&Ai[5], &u);
+    ge_add(&t, &A2, &Ai[5]);
+    ge_p1p1_to_p3(&u, &t);
+    ge_p3_to_cached(&Ai[6], &u);
+    ge_add(&t, &A2, &Ai[6]);
+    ge_p1p1_to_p3(&u, &t);
+    ge_p3_to_cached(&Ai[7], &u);
+
+    ge_p3_0(r);
+
+    for (i = 252; i >= 0; --i) {
+        ge_p3_dbl(&t, r);
+
+        if (aslide[i] > 0) {
+            ge_p1p1_to_p3(&u, &t);
+            ge_add(&t, &u, &Ai[aslide[i] / 2]);
+        } else if (aslide[i] < 0) {
+            ge_p1p1_to_p3(&u, &t);
+            ge_sub(&t, &u, &Ai[(-aslide[i]) / 2]);
+        }
+
+        ge_p1p1_to_p3(r, &t);
     }
 }
 

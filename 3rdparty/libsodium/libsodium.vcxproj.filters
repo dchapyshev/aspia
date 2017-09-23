@@ -141,6 +141,9 @@
     <ClCompile Include="src\libsodium\crypto_pwhash\argon2\argon2-fill-block-avx2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\libsodium\crypto_pwhash\argon2\argon2-fill-block-avx512f.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\libsodium\crypto_pwhash\argon2\argon2-fill-block-ref.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -208,6 +211,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\libsodium\crypto_secretbox\xsalsa20poly1305\secretbox_xsalsa20poly1305.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libsodium\crypto_secretstream\xchacha20poly1305\secretstream_xchacha20poly1305.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\libsodium\crypto_shorthash\crypto_shorthash.c">
@@ -327,6 +333,9 @@
     <ClCompile Include="src\libsodium\randombytes\sysrandom\randombytes_sysrandom.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\libsodium\sodium\codecs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\libsodium\sodium\core.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -396,6 +405,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\libsodium\crypto_pwhash\argon2\blamka-round-avx2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\libsodium\crypto_pwhash\argon2\blamka-round-avx512f.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\libsodium\crypto_pwhash\argon2\blamka-round-ref.h">
@@ -620,6 +632,9 @@
     <ClInclude Include="src\libsodium\include\sodium\crypto_secretbox_xsalsa20poly1305.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\libsodium\include\sodium\crypto_secretstream_xchacha20poly1305.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\libsodium\include\sodium\crypto_shorthash.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -687,6 +702,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\libsodium\include\sodium\utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\libsodium\include\sodium\version.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\libsodium\include\sodium\private\common.h">

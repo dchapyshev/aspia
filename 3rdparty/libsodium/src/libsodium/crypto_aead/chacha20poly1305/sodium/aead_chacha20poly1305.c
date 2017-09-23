@@ -4,6 +4,7 @@
 #include <limits.h>
 #include <string.h>
 
+#include "core.h"
 #include "crypto_aead_chacha20poly1305.h"
 #include "crypto_onetimeauth_poly1305.h"
 #include "crypto_stream_chacha20.h"
@@ -69,8 +70,8 @@ crypto_aead_chacha20poly1305_encrypt(unsigned char *c,
     unsigned long long clen = 0ULL;
     int                ret;
 
-    if (mlen > UINT64_MAX - crypto_aead_chacha20poly1305_ABYTES) {
-        abort(); /* LCOV_EXCL_LINE */
+    if (mlen > crypto_aead_chacha20poly1305_MESSAGEBYTES_MAX) {
+        sodium_misuse();
     }
     ret = crypto_aead_chacha20poly1305_encrypt_detached(c,
                                                         c + mlen, NULL,
@@ -144,8 +145,8 @@ crypto_aead_chacha20poly1305_ietf_encrypt(unsigned char *c,
     unsigned long long clen = 0ULL;
     int                ret;
 
-    if (mlen > UINT64_MAX - crypto_aead_chacha20poly1305_ietf_ABYTES) {
-        abort(); /* LCOV_EXCL_LINE */
+    if (mlen > crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX) {
+        sodium_misuse();
     }
     ret = crypto_aead_chacha20poly1305_ietf_encrypt_detached(c,
                                                              c + mlen, NULL,
@@ -349,6 +350,12 @@ crypto_aead_chacha20poly1305_ietf_abytes(void)
     return crypto_aead_chacha20poly1305_ietf_ABYTES;
 }
 
+size_t
+crypto_aead_chacha20poly1305_ietf_messagebytes_max(void)
+{
+    return crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX;
+}
+
 void
 crypto_aead_chacha20poly1305_ietf_keygen(unsigned char k[crypto_aead_chacha20poly1305_ietf_KEYBYTES])
 {
@@ -377,6 +384,12 @@ size_t
 crypto_aead_chacha20poly1305_abytes(void)
 {
     return crypto_aead_chacha20poly1305_ABYTES;
+}
+
+size_t
+crypto_aead_chacha20poly1305_messagebytes_max(void)
+{
+    return crypto_aead_chacha20poly1305_MESSAGEBYTES_MAX;
 }
 
 void

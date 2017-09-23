@@ -14,11 +14,13 @@
 */
 
 #include <assert.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "blake2.h"
+#include "core.h"
 #include "private/common.h"
 #include "runtime.h"
 #include "utils.h"
@@ -159,11 +161,12 @@ static inline int
 blake2b_init0(blake2b_state *S)
 {
     int i;
-    memset(S, 0, sizeof(blake2b_state));
 
     for (i  = 0; i < 8; i++) {
         S->h[i] = blake2b_IV[i];
     }
+    memset(S->t, 0, offsetof(blake2b_state, last_node) + sizeof(S->last_node)
+           - offsetof(blake2b_state, t));
     return 0;
 }
 
@@ -190,9 +193,9 @@ blake2b_init(blake2b_state *S, const uint8_t outlen)
 {
     blake2b_param P[1];
 
-    if ((!outlen) || (outlen > BLAKE2B_OUTBYTES))
-        abort();
-
+    if ((!outlen) || (outlen > BLAKE2B_OUTBYTES)) {
+        sodium_misuse();
+    }
     P->digest_length = outlen;
     P->key_length    = 0;
     P->fanout        = 1;
@@ -213,9 +216,9 @@ blake2b_init_salt_personal(blake2b_state *S, const uint8_t outlen,
 {
     blake2b_param P[1];
 
-    if ((!outlen) || (outlen > BLAKE2B_OUTBYTES))
-        abort();
-
+    if ((!outlen) || (outlen > BLAKE2B_OUTBYTES)) {
+        sodium_misuse();
+    }
     P->digest_length = outlen;
     P->key_length    = 0;
     P->fanout        = 1;
@@ -244,12 +247,12 @@ blake2b_init_key(blake2b_state *S, const uint8_t outlen, const void *key,
 {
     blake2b_param P[1];
 
-    if ((!outlen) || (outlen > BLAKE2B_OUTBYTES))
-        abort();
-
-    if (!key || !keylen || keylen > BLAKE2B_KEYBYTES)
-        abort();
-
+    if ((!outlen) || (outlen > BLAKE2B_OUTBYTES)) {
+        sodium_misuse();
+    }
+    if (!key || !keylen || keylen > BLAKE2B_KEYBYTES) {
+        sodium_misuse();
+    }
     P->digest_length = outlen;
     P->key_length    = keylen;
     P->fanout        = 1;
@@ -262,9 +265,9 @@ blake2b_init_key(blake2b_state *S, const uint8_t outlen, const void *key,
     memset(P->salt, 0, sizeof(P->salt));
     memset(P->personal, 0, sizeof(P->personal));
 
-    if (blake2b_init_param(S, P) < 0)
-        abort();
-
+    if (blake2b_init_param(S, P) < 0) {
+        sodium_misuse();
+    }
     {
         uint8_t block[BLAKE2B_BLOCKBYTES];
         memset(block, 0, BLAKE2B_BLOCKBYTES);
@@ -282,12 +285,12 @@ blake2b_init_key_salt_personal(blake2b_state *S, const uint8_t outlen,
 {
     blake2b_param P[1];
 
-    if ((!outlen) || (outlen > BLAKE2B_OUTBYTES))
-        abort();
-
-    if (!key || !keylen || keylen > BLAKE2B_KEYBYTES)
-        abort();
-
+    if ((!outlen) || (outlen > BLAKE2B_OUTBYTES)) {
+        sodium_misuse();
+    }
+    if (!key || !keylen || keylen > BLAKE2B_KEYBYTES) {
+        sodium_misuse();
+    }
     P->digest_length = outlen;
     P->key_length    = keylen;
     P->fanout        = 1;
@@ -308,9 +311,9 @@ blake2b_init_key_salt_personal(blake2b_state *S, const uint8_t outlen,
         memset(P->personal, 0, sizeof(P->personal));
     }
 
-    if (blake2b_init_param(S, P) < 0)
-        abort();
-
+    if (blake2b_init_param(S, P) < 0) {
+        sodium_misuse();
+    }
     {
         uint8_t block[BLAKE2B_BLOCKBYTES];
         memset(block, 0, BLAKE2B_BLOCKBYTES);
@@ -355,7 +358,7 @@ int
 blake2b_final(blake2b_state *S, uint8_t *out, uint8_t outlen)
 {
     if (!outlen || outlen > BLAKE2B_OUTBYTES) {
-        abort(); /* LCOV_EXCL_LINE */
+        sodium_misuse();
     }
     if (blake2b_is_lastblock(S)) {
         return -1;
@@ -387,6 +390,9 @@ blake2b_final(blake2b_state *S, uint8_t *out, uint8_t outlen)
         memcpy(out, buffer, outlen);
     }
 #endif
+    sodium_memzero(S->h, sizeof S->h);
+    sodium_memzero(S->buf, sizeof S->buf);
+
     return 0;
 }
 
@@ -398,27 +404,29 @@ blake2b(uint8_t *out, const void *in, const void *key, const uint8_t outlen,
     blake2b_state S[1];
 
     /* Verify parameters */
-    if (NULL == in && inlen > 0)
-        abort();
-
-    if (NULL == out)
-        abort();
-
-    if (!outlen || outlen > BLAKE2B_OUTBYTES)
-        abort();
-
-    if (NULL == key && keylen > 0)
-        abort();
-
-    if (keylen > BLAKE2B_KEYBYTES)
-        abort();
-
+    if (NULL == in && inlen > 0) {
+        sodium_misuse();
+    }
+    if (NULL == out) {
+        sodium_misuse();
+    }
+    if (!outlen || outlen > BLAKE2B_OUTBYTES) {
+        sodium_misuse();
+    }
+    if (NULL == key && keylen > 0) {
+        sodium_misuse();
+    }
+    if (keylen > BLAKE2B_KEYBYTES) {
+        sodium_misuse();
+    }
     if (keylen > 0) {
-        if (blake2b_init_key(S, outlen, key, keylen) < 0)
-            abort();
+        if (blake2b_init_key(S, outlen, key, keylen) < 0) {
+            sodium_misuse();
+        }
     } else {
-        if (blake2b_init(S, outlen) < 0)
-            abort();
+        if (blake2b_init(S, outlen) < 0) {
+            sodium_misuse();
+        }
     }
 
     blake2b_update(S, (const uint8_t *) in, inlen);
@@ -434,28 +442,30 @@ blake2b_salt_personal(uint8_t *out, const void *in, const void *key,
     blake2b_state S[1];
 
     /* Verify parameters */
-    if (NULL == in && inlen > 0)
-        abort();
-
-    if (NULL == out)
-        abort();
-
-    if (!outlen || outlen > BLAKE2B_OUTBYTES)
-        abort();
-
-    if (NULL == key && keylen > 0)
-        abort();
-
-    if (keylen > BLAKE2B_KEYBYTES)
-        abort();
-
+    if (NULL == in && inlen > 0) {
+        sodium_misuse();
+    }
+    if (NULL == out) {
+        sodium_misuse();
+    }
+    if (!outlen || outlen > BLAKE2B_OUTBYTES) {
+        sodium_misuse();
+    }
+    if (NULL == key && keylen > 0) {
+        sodium_misuse();
+    }
+    if (keylen > BLAKE2B_KEYBYTES) {
+        sodium_misuse();
+    }
     if (keylen > 0) {
         if (blake2b_init_key_salt_personal(S, outlen, key, keylen, salt,
-                                           personal) < 0)
-            abort();
+                                           personal) < 0) {
+            sodium_misuse();
+        }
     } else {
-        if (blake2b_init_salt_personal(S, outlen, salt, personal) < 0)
-            abort();
+        if (blake2b_init_salt_personal(S, outlen, salt, personal) < 0) {
+            sodium_misuse();
+        }
     }
 
     blake2b_update(S, (const uint8_t *) in, inlen);

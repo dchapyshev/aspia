@@ -76,7 +76,7 @@ main(void)
     }
     printf("\n");
 
-    assert(crypto_secretbox_easy(c, m, SIZE_MAX - 1U, nonce, firstkey) == -1);
+    assert(crypto_secretbox_easy(c, m, 0, nonce, firstkey) == 0);
 
     /* Null message */
 
@@ -98,6 +98,24 @@ main(void)
                                    firstkey) != -1) {
         printf("Null tampered crypto_secretbox_open_easy() failed\n");
     }
+
+    /* No overlap, but buffers are next to each other */
+
+    memset(c, 0, 131 + crypto_secretbox_MACBYTES + 1);
+    memcpy(c, m, 20);
+    crypto_secretbox_easy(c, c + 10, 10, nonce, firstkey);
+    for (i = 0; i < 10 + crypto_secretbox_MACBYTES; ++i) {
+        printf(",0x%02x", (unsigned int) c[i]);
+    }
+    printf("\n");
+
+    memset(c, 0, 131 + crypto_secretbox_MACBYTES + 1);
+    memcpy(c, m, 20);
+    crypto_secretbox_easy(c + 10, c, 10, nonce, firstkey);
+    for (i = 0; i < 10 + crypto_secretbox_MACBYTES; ++i) {
+        printf(",0x%02x", (unsigned int) c[i]);
+    }
+    printf("\n");
 
     sodium_free(mac);
     sodium_free(c);

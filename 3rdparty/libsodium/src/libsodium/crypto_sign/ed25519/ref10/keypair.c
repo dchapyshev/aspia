@@ -4,6 +4,7 @@
 #include "crypto_hash_sha512.h"
 #include "crypto_scalarmult_curve25519.h"
 #include "crypto_sign_ed25519.h"
+#include "ed25519_ref10.h"
 #include "private/curve25519_ref10.h"
 #include "randombytes.h"
 #include "utils.h"
@@ -46,10 +47,16 @@ crypto_sign_ed25519_pk_to_curve25519(unsigned char *curve25519_pk,
                                      const unsigned char *ed25519_pk)
 {
     ge_p3 A;
+    ge_p3 pl;
     fe    x;
     fe    one_minus_y;
 
-    if (ge_frombytes_negate_vartime(&A, ed25519_pk) != 0) {
+    if (_crypto_sign_ed25519_small_order(ed25519_pk) ||
+        ge_frombytes_negate_vartime(&A, ed25519_pk) != 0) {
+        return -1;
+    }
+    ge_mul_l(&pl, &A);
+    if (fe_isnonzero(pl.X)) {
         return -1;
     }
     fe_1(one_minus_y);
@@ -71,7 +78,7 @@ crypto_sign_ed25519_sk_to_curve25519(unsigned char *curve25519_sk,
 
     crypto_hash_sha512(h, ed25519_sk,
                        crypto_sign_ed25519_SECRETKEYBYTES -
-                           crypto_sign_ed25519_PUBLICKEYBYTES);
+                       crypto_sign_ed25519_PUBLICKEYBYTES);
     h[0] &= 248;
     h[31] &= 127;
     h[31] |= 64;

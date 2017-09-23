@@ -28,6 +28,10 @@ size_t crypto_stream_xchacha20_keybytes(void);
 SODIUM_EXPORT
 size_t crypto_stream_xchacha20_noncebytes(void);
 
+#define crypto_stream_xchacha20_MESSAGEBYTES_MAX SODIUM_SIZE_MAX
+SODIUM_EXPORT
+size_t crypto_stream_xchacha20_messagebytes_max(void);
+
 SODIUM_EXPORT
 int crypto_stream_xchacha20(unsigned char *c, unsigned long long clen,
                             const unsigned char *n, const unsigned char *k);

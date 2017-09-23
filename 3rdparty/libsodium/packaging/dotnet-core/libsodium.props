@@ -2,7 +2,7 @@
 <Project>
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.1;net46</TargetFrameworks>
+    <TargetFramework>netstandard1.1</TargetFramework>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <NoBuild>true</NoBuild>
     <IncludeBuildOutput>false</IncludeBuildOutput>
@@ -23,11 +23,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="LICENSE" PackagePath="" />
     <Content Include="AUTHORS" PackagePath="" />
     <Content Include="ChangeLog" PackagePath="" />
     <Content Include="runtimes\**\*.*" PackagePath="runtimes\" />
-    <Content Include="build\**\*.*" PackagePath="build\" />
   </ItemGroup>
 
 </Project>

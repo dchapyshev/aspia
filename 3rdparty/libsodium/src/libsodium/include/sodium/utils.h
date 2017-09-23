@@ -61,6 +61,34 @@ int sodium_hex2bin(unsigned char * const bin, const size_t bin_maxlen,
                    const char * const ignore, size_t * const bin_len,
                    const char ** const hex_end);
 
+#define sodium_base64_VARIANT_ORIGINAL            1
+#define sodium_base64_VARIANT_ORIGINAL_NO_PADDING 3
+#define sodium_base64_VARIANT_URLSAFE             5
+#define sodium_base64_VARIANT_URLSAFE_NO_PADDING  7
+
+/*
+ * Computes the required length to encode BIN_LEN bytes as a base64 string
+ * using the given variant. The computed length includes a trailing \0.
+ */
+#define sodium_base64_ENCODED_LEN(BIN_LEN, VARIANT) \
+    (((BIN_LEN) / 3U) * 4U + \
+    ((((BIN_LEN) - ((BIN_LEN) / 3U) * 3U) | (((BIN_LEN) - ((BIN_LEN) / 3U) * 3U) >> 1)) & 1U) * \
+     (4U - (~((((VARIANT) & 2U) >> 1) - 1U) & (3U - ((BIN_LEN) - ((BIN_LEN) / 3U) * 3U)))) + 1U)
+
+SODIUM_EXPORT
+size_t sodium_base64_encoded_len(const size_t bin_len, const int variant);
+
+SODIUM_EXPORT
+char *sodium_bin2base64(char * const b64, const size_t b64_maxlen,
+                        const unsigned char * const bin, const size_t bin_len,
+                        const int variant);
+
+SODIUM_EXPORT
+int sodium_base642bin(unsigned char * const bin, const size_t bin_maxlen,
+                      const char * const b64, const size_t b64_len,
+                      const char * const ignore, size_t * const bin_len,
+                      const char ** const b64_end, const int variant);
+
 SODIUM_EXPORT
 int sodium_mlock(void * const addr, const size_t len);
 
@@ -119,6 +147,14 @@ int sodium_mprotect_readonly(void *ptr);
 
 SODIUM_EXPORT
 int sodium_mprotect_readwrite(void *ptr);
+
+SODIUM_EXPORT
+int sodium_pad(size_t *padded_buflen_p, unsigned char *buf,
+               size_t unpadded_buflen, size_t blocksize, size_t max_buflen);
+
+SODIUM_EXPORT
+int sodium_unpad(size_t *unpadded_buflen_p, const unsigned char *buf,
+                 size_t padded_buflen, size_t blocksize);
 
 /* -------- */
 

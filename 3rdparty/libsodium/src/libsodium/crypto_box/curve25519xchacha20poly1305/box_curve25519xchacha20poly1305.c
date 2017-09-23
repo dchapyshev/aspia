@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "core.h"
 #include "crypto_box_curve25519xchacha20poly1305.h"
 #include "crypto_core_hchacha20.h"
 #include "crypto_hash_sha512.h"
@@ -86,8 +87,8 @@ crypto_box_curve25519xchacha20poly1305_easy_afternm(unsigned char *c,
                                                     const unsigned char *n,
                                                     const unsigned char *k)
 {
-    if (mlen > SIZE_MAX - crypto_box_curve25519xchacha20poly1305_MACBYTES) {
-        return -1;
+    if (mlen > crypto_box_curve25519xchacha20poly1305_MESSAGEBYTES_MAX) {
+        sodium_misuse();
     }
     return crypto_box_curve25519xchacha20poly1305_detached_afternm(
         c + crypto_box_curve25519xchacha20poly1305_MACBYTES, c, m, mlen, n, k);
@@ -98,8 +99,8 @@ crypto_box_curve25519xchacha20poly1305_easy(
     unsigned char *c, const unsigned char *m, unsigned long long mlen,
     const unsigned char *n, const unsigned char *pk, const unsigned char *sk)
 {
-    if (mlen > SIZE_MAX - crypto_box_curve25519xchacha20poly1305_MACBYTES) {
-        return -1;
+    if (mlen > crypto_box_curve25519xchacha20poly1305_MESSAGEBYTES_MAX) {
+        sodium_misuse();
     }
     return crypto_box_curve25519xchacha20poly1305_detached(
         c + crypto_box_curve25519xchacha20poly1305_MACBYTES, c, m, mlen, n, pk,
@@ -194,4 +195,10 @@ size_t
 crypto_box_curve25519xchacha20poly1305_macbytes(void)
 {
     return crypto_box_curve25519xchacha20poly1305_MACBYTES;
+}
+
+size_t
+crypto_box_curve25519xchacha20poly1305_messagebytes_max(void)
+{
+    return crypto_box_curve25519xchacha20poly1305_MESSAGEBYTES_MAX;
 }
