@@ -160,7 +160,7 @@ static_library("libyuv_internal") {
   # To enable AVX2 or other cpu optimization, pass flag here
   # cflags = [ "-mavx2", "-mpopcnt", "-mavx2", "-mfma" ]
   if (!is_win) {
-    cflags = [ "-ffp-contract=fast" ]   # Enable fma vectorization for NEON.
+    cflags = [ "-ffp-contract=fast" ]  # Enable fma vectorization for NEON.
   }
 }
 if (libyuv_use_neon) {
@@ -185,6 +185,7 @@ if (libyuv_use_neon) {
       configs -= [ "//build/config/compiler:default_optimization" ]
 
       # Enable optimize for speed (-O2) over size (-Os).
+      # TODO(fbarchard): Consider optimize_speed which is O3.
       configs += [ "//build/config/compiler:optimize_max" ]
     }
 

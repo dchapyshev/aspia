@@ -2646,11 +2646,11 @@ float ScaleMaxSamples_NEON(const float* src,
       "b.gt       1b                             \n"
       "fmax       v5.4s, v5.4s, v6.4s            \n"  // max
       "fmaxv      %s3, v5.4s                     \n"  // signed max acculator
-      : "+r"(src),    // %0
-        "+r"(dst),    // %1
-        "+r"(width),  // %2
-        "=w"(fmax)    // %3
-      : "w"(scale)    // %4
+      : "+r"(src),                                    // %0
+        "+r"(dst),                                    // %1
+        "+r"(width),                                  // %2
+        "=w"(fmax)                                    // %3
+      : "w"(scale)                                    // %4
       : "cc", "memory", "v1", "v2", "v3", "v4", "v5", "v6");
   return fmax;
 }
@@ -2676,11 +2676,11 @@ float ScaleSumSamples_NEON(const float* src,
       "faddp      v5.4s, v5.4s, v6.4s            \n"
       "faddp      v5.4s, v5.4s, v5.4s            \n"
       "faddp      %3.4s, v5.4s, v5.4s            \n"  // sum
-      : "+r"(src),    // %0
-        "+r"(dst),    // %1
-        "+r"(width),  // %2
-        "=w"(fsum)    // %3
-      : "w"(scale)    // %4
+      : "+r"(src),                                    // %0
+        "+r"(dst),                                    // %1
+        "+r"(width),                                  // %2
+        "=w"(fsum)                                    // %3
+      : "w"(scale)                                    // %4
       : "cc", "memory", "v1", "v2", "v3", "v4", "v5", "v6");
   return fsum;
 }
