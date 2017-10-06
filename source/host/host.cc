@@ -39,8 +39,8 @@ void Host::OnNetworkChannelStatusChange(NetworkChannel::Status status)
 {
     if (status == NetworkChannel::Status::CONNECTED)
     {
-        // If the authorization request is not received within the specified
-        // time interval, the connection will be closed.
+        // If authorization is not completed within the specified time interval
+        // the connection will be closed.
         auth_timer_.Start(kAuthTimeout,
                           std::bind(&NetworkChannelProxy::Disconnect, channel_proxy_));
 
@@ -97,9 +97,6 @@ static proto::Status DoBasicAuthorization(const std::string& username,
 
 void Host::DoAuthorize(IOBuffer& buffer)
 {
-    // Authorization request received, stop the timer.
-    auth_timer_.Stop();
-
     proto::auth::ClientToHost request;
 
     if (!ParseMessage(buffer, request))
@@ -127,22 +124,31 @@ void Host::DoAuthorize(IOBuffer& buffer)
     SecureClearString(*request.mutable_username());
     SecureClearString(*request.mutable_password());
 
-    channel_proxy_->Send(SerializeMessage<IOBuffer>(result), nullptr);
+    channel_proxy_->Send(
+        SerializeMessage<IOBuffer>(result),
+        std::bind(&Host::OnAuthResultSended, this, request.session_type(), result.status()));
+}
 
-    if (result.status() == proto::STATUS_SUCCESS)
+void Host::OnAuthResultSended(proto::SessionType session_type, proto::Status status)
+{
+    // Authorization result sended, stop the timer.
+    auth_timer_.Stop();
+
+    // If authorization was successful, then start the session.
+    if (status == proto::STATUS_SUCCESS)
     {
-        switch (request.session_type())
+        switch (session_type)
         {
             case proto::SESSION_TYPE_DESKTOP_MANAGE:
             case proto::SESSION_TYPE_DESKTOP_VIEW:
             case proto::SESSION_TYPE_FILE_TRANSFER:
             case proto::SESSION_TYPE_POWER_MANAGE:
             case proto::SESSION_TYPE_SYSTEM_INFO:
-                session_ = std::make_unique<HostSession>(request.session_type(), channel_proxy_);
+                session_ = std::make_unique<HostSession>(session_type, channel_proxy_);
                 break;
 
             default:
-                LOG(ERROR) << "Unsupported session type: " << request.session_type();
+                LOG(ERROR) << "Unsupported session type: " << session_type;
                 break;
         }
 

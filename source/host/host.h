@@ -12,6 +12,7 @@
 #include "network/network_channel.h"
 #include "network/network_channel_proxy.h"
 #include "host/host_session.h"
+#include "proto/auth_session.pb.h"
 
 namespace aspia {
 
@@ -32,6 +33,7 @@ public:
 
 private:
     void OnNetworkChannelStatusChange(NetworkChannel::Status status);
+    void OnAuthResultSended(proto::SessionType session_type, proto::Status status);
     void DoAuthorize(IOBuffer& buffer);
 
     std::shared_ptr<NetworkChannel> channel_;
