@@ -38,7 +38,7 @@ void HostSessionDesktop::Run(const std::wstring& channel_id)
 
     if (ipc_channel_->Connect(user_data))
     {
-        OnPipeChannelConnect(user_data);
+        OnIpcChannelConnect(user_data);
 
         // Waiting for the connection to close.
         ipc_channel_proxy_->WaitForDisconnect();
@@ -49,7 +49,7 @@ void HostSessionDesktop::Run(const std::wstring& channel_id)
     }
 }
 
-void HostSessionDesktop::OnPipeChannelConnect(uint32_t user_data)
+void HostSessionDesktop::OnIpcChannelConnect(uint32_t user_data)
 {
     // The server sends the session type in user_data.
     session_type_ = static_cast<proto::SessionType>(user_data);
@@ -68,10 +68,10 @@ void HostSessionDesktop::OnPipeChannelConnect(uint32_t user_data)
     SendConfigRequest();
 
     ipc_channel_proxy_->Receive(std::bind(
-        &HostSessionDesktop::OnPipeChannelMessage, this, std::placeholders::_1));
+        &HostSessionDesktop::OnIpcChannelMessage, this, std::placeholders::_1));
 }
 
-void HostSessionDesktop::OnPipeChannelMessage(const IOBuffer& buffer)
+void HostSessionDesktop::OnIpcChannelMessage(const IOBuffer& buffer)
 {
     proto::desktop::ClientToHost message;
 
@@ -107,7 +107,7 @@ void HostSessionDesktop::OnPipeChannelMessage(const IOBuffer& buffer)
         if (success)
         {
             ipc_channel_proxy_->Receive(std::bind(
-                &HostSessionDesktop::OnPipeChannelMessage, this, std::placeholders::_1));
+                &HostSessionDesktop::OnIpcChannelMessage, this, std::placeholders::_1));
 
             return;
         }

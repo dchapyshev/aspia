@@ -28,8 +28,8 @@ public:
     void Run(const std::wstring& channel_id);
 
 private:
-    void OnPipeChannelConnect(uint32_t user_data);
-    void OnPipeChannelMessage(const IOBuffer& buffer);
+    void OnIpcChannelConnect(uint32_t user_data);
+    void OnIpcChannelMessage(const IOBuffer& buffer);
 
     void OnScreenUpdate(const DesktopFrame* screen_frame,
                         std::unique_ptr<MouseCursor> mouse_cursor);
