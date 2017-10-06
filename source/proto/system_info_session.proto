@@ -1,0 +1,29 @@
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            proto/system_info_session.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto.system_info;
+
+message HostToClient
+{
+    enum Compressor
+    {
+        COMPRESSOR_RAW = 0;
+        COMPRESSOR_ZLIB = 1;
+    }
+
+    Compressor compressor = 1;
+    bytes data = 2;
+}
+
+message ClientToHost
+{
+    string request = 1;
+}
