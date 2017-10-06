@@ -23,7 +23,7 @@
 
 namespace aspia {
 
-void MainDialog::InitAddressesList()
+void MainDialog::InitIpList()
 {
     CListViewCtrl list(GetDlgItem(IDC_IP_LIST));
 
@@ -42,6 +42,13 @@ void MainDialog::InitAddressesList()
     CRect list_rect;
     list.GetClientRect(list_rect);
     list.SetColumnWidth(column_index, list_rect.Width() - GetSystemMetrics(SM_CXVSCROLL));
+}
+
+void MainDialog::UpdateIpList()
+{
+    CListViewCtrl list(GetDlgItem(IDC_IP_LIST));
+
+    list.DeleteAllItems();
 
     for (NetworkAdapterEnumerator adapter; !adapter.IsAtEnd(); adapter.Advance())
     {
@@ -64,7 +71,7 @@ int MainDialog::AddSessionType(CComboBox& combobox,
     CString text;
     text.LoadStringW(string_resource_id);
 
-    int item_index = combobox.AddString(text);
+    const int item_index = combobox.AddString(text);
     combobox.SetItemData(item_index, session_type);
 
     return item_index;
@@ -74,9 +81,9 @@ void MainDialog::InitSessionTypesCombo()
 {
     CComboBox combobox(GetDlgItem(IDC_SESSION_TYPE_COMBO));
 
-    int first_item = AddSessionType(combobox,
-                                    IDS_SESSION_TYPE_DESKTOP_MANAGE,
-                                    proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
+    const int first_item = AddSessionType(combobox,
+                                          IDS_SESSION_TYPE_DESKTOP_MANAGE,
+                                          proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
 
     AddSessionType(combobox,
                    IDS_SESSION_TYPE_DESKTOP_VIEW,
@@ -97,7 +104,7 @@ void MainDialog::InitSessionTypesCombo()
     combobox.SetCurSel(first_item);
 }
 
-proto::SessionType MainDialog::GetSelectedSessionType()
+proto::SessionType MainDialog::GetSelectedSessionType() const
 {
     CComboBox combo(GetDlgItem(IDC_SESSION_TYPE_COMBO));
     return static_cast<proto::SessionType>(combo.GetItemData(combo.GetCurSel()));
@@ -117,6 +124,12 @@ LRESULT MainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOO
                                  GetSystemMetrics(SM_CYICON));
     SetIcon(big_icon_, TRUE);
 
+    refresh_icon_ = AtlLoadIconImage(IDI_REFRESH,
+                                     LR_CREATEDIBSECTION,
+                                     GetSystemMetrics(SM_CXSMICON),
+                                     GetSystemMetrics(SM_CYSMICON));
+    CButton(GetDlgItem(IDC_UPDATE_IP_LIST_BUTTON)).SetIcon(refresh_icon_);
+
     main_menu_ = AtlLoadMenu(IDR_MAIN);
     SetMenu(main_menu_);
 
@@ -126,7 +139,8 @@ LRESULT MainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOO
     AddTrayIcon(small_icon_, tray_tooltip, IDR_TRAY);
     SetDefaultTrayMenuItem(ID_SHOWHIDE);
 
-    InitAddressesList();
+    InitIpList();
+    UpdateIpList();
     InitSessionTypesCombo();
 
     SetDlgItemInt(IDC_SERVER_PORT_EDIT, kDefaultHostTcpPort);
@@ -134,7 +148,7 @@ LRESULT MainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOO
 
     CEdit(GetDlgItem(IDC_SERVER_PORT_EDIT)).SetReadOnly(TRUE);
 
-    bool host_service_installed = HostService::IsInstalled();
+    const bool host_service_installed = HostService::IsInstalled();
 
     if (!IsCallerHasAdminRights())
     {
@@ -154,10 +168,10 @@ LRESULT MainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOO
 
     UpdateSessionType();
 
-    DWORD active_thread_id =
+    const DWORD active_thread_id =
         GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
 
-    DWORD current_thread_id = GetCurrentThreadId();
+    const DWORD current_thread_id = GetCurrentThreadId();
 
     if (active_thread_id != current_thread_id)
     {
@@ -228,11 +242,16 @@ LRESULT MainDialog::OnStartServerButton(WORD notify_code, WORD control_id, HWND 
     return 0;
 }
 
+LRESULT MainDialog::OnUpdateIpListButton(WORD notify_code, WORD control_id, HWND control,
+                                         BOOL& handled)
+{
+    UpdateIpList();
+    return 0;
+}
+
 void MainDialog::UpdateSessionType()
 {
-    proto::SessionType session_type = GetSelectedSessionType();
-
-    switch (session_type)
+    switch (GetSelectedSessionType())
     {
         case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
@@ -258,7 +277,7 @@ LRESULT MainDialog::OnSessionTypeChanged(WORD notify_code, WORD control_id, HWND
 LRESULT MainDialog::OnSettingsButton(WORD notify_code, WORD control_id, HWND control,
                                      BOOL& handled)
 {
-    proto::SessionType session_type = GetSelectedSessionType();
+    const proto::SessionType session_type = GetSelectedSessionType();
 
     switch (session_type)
     {
@@ -283,7 +302,7 @@ LRESULT MainDialog::OnSettingsButton(WORD notify_code, WORD control_id, HWND con
 
 LRESULT MainDialog::OnConnectButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
-    proto::SessionType session_type = GetSelectedSessionType();
+    const proto::SessionType session_type = GetSelectedSessionType();
 
     if (session_type != proto::SessionType::SESSION_TYPE_UNKNOWN)
     {
@@ -357,7 +376,7 @@ void MainDialog::CopySelectedIp()
 {
     CListViewCtrl list(GetDlgItem(IDC_IP_LIST));
 
-    int selected_item = list.GetNextItem(-1, LVNI_SELECTED);
+    const int selected_item = list.GetNextItem(-1, LVNI_SELECTED);
     if (selected_item == -1)
         return;
 
@@ -365,7 +384,7 @@ void MainDialog::CopySelectedIp()
     if (!list.GetItemText(selected_item, 0, text, _countof(text)))
         return;
 
-    size_t length = wcslen(text);
+    const size_t length = wcslen(text);
     if (!length)
         return;
 

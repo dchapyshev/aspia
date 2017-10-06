@@ -36,6 +36,7 @@ private:
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
         COMMAND_ID_HANDLER(IDC_START_SERVER_BUTTON, OnStartServerButton)
+        COMMAND_ID_HANDLER(IDC_UPDATE_IP_LIST_BUTTON, OnUpdateIpListButton)
         COMMAND_ID_HANDLER(IDC_SETTINGS_BUTTON, OnSettingsButton)
         COMMAND_ID_HANDLER(IDC_CONNECT_BUTTON, OnConnectButton)
         COMMAND_ID_HANDLER(IDC_SERVER_DEFAULT_PORT_CHECK, OnDefaultPortClicked)
@@ -61,6 +62,7 @@ private:
 
     LRESULT OnDefaultPortClicked(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnStartServerButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnUpdateIpListButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSessionTypeChanged(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSettingsButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnConnectButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
@@ -77,9 +79,10 @@ private:
     LRESULT OnIpListDoubleClick(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnIpListRightClick(int control_id, LPNMHDR hdr, BOOL& handled);
 
-    void InitAddressesList();
+    void InitIpList();
+    void UpdateIpList();
     void InitSessionTypesCombo();
-    proto::SessionType GetSelectedSessionType();
+    proto::SessionType GetSelectedSessionType() const;
     int AddSessionType(CComboBox& combobox, UINT string_resource_id, proto::SessionType session_type);
     void UpdateSessionType();
     void StopHostMode();
@@ -87,6 +90,7 @@ private:
 
     CIcon small_icon_;
     CIcon big_icon_;
+    CIcon refresh_icon_;
 
     CMenu main_menu_;
 
