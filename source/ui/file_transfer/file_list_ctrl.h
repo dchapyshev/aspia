@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_transfer/file_list_window.h
+// FILE:            ui/file_transfer/file_list_ctrl.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__FILE_TRANSFER__FILE_LIST_WINDOW_H
-#define _ASPIA_UI__FILE_TRANSFER__FILE_LIST_WINDOW_H
+#ifndef _ASPIA_UI__FILE_TRANSFER__FILE_LIST_CTRL_H
+#define _ASPIA_UI__FILE_TRANSFER__FILE_LIST_CTRL_H
 
 #include "base/files/file_path.h"
 #include "base/macros.h"
@@ -20,14 +20,14 @@
 
 namespace aspia {
 
-class FileListWindow : public CWindowImpl<FileListWindow, CListViewCtrl>
+class FileListCtrl : public CWindowImpl<FileListCtrl, CListViewCtrl>
 {
 public:
     static const int kInvalidObjectIndex = -1;
     static const int kNewFolderObjectIndex = -2;
 
-    FileListWindow() = default;
-    virtual ~FileListWindow() = default;
+    FileListCtrl() = default;
+    virtual ~FileListCtrl() = default;
 
     bool CreateFileList(HWND parent, int control_id);
 
@@ -52,7 +52,7 @@ public:
             SELECTED = LVNI_SELECTED
         };
 
-        Iterator(const FileListWindow& list, Mode mode);
+        Iterator(const FileListCtrl& list, Mode mode);
         ~Iterator() = default;
 
         bool IsAtEnd() const;
@@ -60,13 +60,13 @@ public:
         const proto::FileList::Item& Object() const;
 
     private:
-        const FileListWindow& list_;
+        const FileListCtrl& list_;
         const Mode mode_;
         int item_index_;
     };
 
 private:
-    BEGIN_MSG_MAP(FileListWindow)
+    BEGIN_MSG_MAP(FileListCtrl)
         // Nothing
     END_MSG_MAP()
 
@@ -77,9 +77,9 @@ private:
     CImageListManaged imagelist_;
     std::shared_ptr<proto::FileList> list_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileListWindow);
+    DISALLOW_COPY_AND_ASSIGN(FileListCtrl);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__FILE_TRANSFER__FILE_LIST_WINDOW_H
+#endif // _ASPIA_UI__FILE_TRANSFER__FILE_LIST_CTRL_H

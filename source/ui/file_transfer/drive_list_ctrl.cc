@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_transfer/drive_list_window.cc
+// FILE:            ui/file_transfer/drive_list_ctrl.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/file_transfer/drive_list_window.h"
+#include "ui/file_transfer/drive_list_ctrl.h"
 #include "ui/file_transfer/file_manager_helpers.h"
 #include "ui/resource.h"
 #include "base/strings/string_util.h"
@@ -13,10 +13,9 @@
 
 namespace aspia {
 
-bool DriveListWindow::CreateDriveList(HWND parent, int control_id)
+bool DriveListCtrl::CreateDriveList(HWND parent, int control_id)
 {
-    const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP |
-        CBS_DROPDOWN;
+    const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP | CBS_DROPDOWN;
 
     CRect drive_rect(0, 0, 200, 200);
 
@@ -39,7 +38,7 @@ bool DriveListWindow::CreateDriveList(HWND parent, int control_id)
     return true;
 }
 
-void DriveListWindow::Read(std::shared_ptr<proto::DriveList> list)
+void DriveListCtrl::Read(std::shared_ptr<proto::DriveList> list)
 {
     ResetContent();
     imagelist_.RemoveAll();
@@ -72,12 +71,12 @@ void DriveListWindow::Read(std::shared_ptr<proto::DriveList> list)
     }
 }
 
-bool DriveListWindow::HasDriveList() const
+bool DriveListCtrl::HasDriveList() const
 {
     return list_ != nullptr;
 }
 
-bool DriveListWindow::IsValidObjectIndex(int object_index) const
+bool DriveListCtrl::IsValidObjectIndex(int object_index) const
 {
     if (!HasDriveList())
         return false;
@@ -88,7 +87,7 @@ bool DriveListWindow::IsValidObjectIndex(int object_index) const
     return false;
 }
 
-void DriveListWindow::SelectObject(int object_index)
+void DriveListCtrl::SelectObject(int object_index)
 {
     int item_index = GetItemIndexByObjectIndex(object_index);
 
@@ -96,7 +95,7 @@ void DriveListWindow::SelectObject(int object_index)
         SetCurSel(item_index);
 }
 
-int DriveListWindow::SelectedObject() const
+int DriveListCtrl::SelectedObject() const
 {
     if (!HasDriveList())
         return kInvalidObjectIndex;
@@ -108,20 +107,20 @@ int DriveListWindow::SelectedObject() const
     return GetItemData(selected_item);
 }
 
-const proto::DriveList::Item& DriveListWindow::Object(int object_index) const
+const proto::DriveList::Item& DriveListCtrl::Object(int object_index) const
 {
     DCHECK(HasDriveList());
     DCHECK(IsValidObjectIndex(object_index));
     return list_->item(object_index);
 }
 
-const proto::DriveList& DriveListWindow::DriveList() const
+const proto::DriveList& DriveListCtrl::DriveList() const
 {
     DCHECK(HasDriveList());
     return *list_;
 }
 
-void DriveListWindow::SetCurrentPath(const FilePath& path)
+void DriveListCtrl::SetCurrentPath(const FilePath& path)
 {
     current_path_ = path;
 
@@ -159,12 +158,12 @@ void DriveListWindow::SetCurrentPath(const FilePath& path)
     SelectObject(known_object_index);
 }
 
-const FilePath& DriveListWindow::CurrentPath() const
+const FilePath& DriveListCtrl::CurrentPath() const
 {
     return current_path_;
 }
 
-FilePath DriveListWindow::ObjectPath(int object_index) const
+FilePath DriveListCtrl::ObjectPath(int object_index) const
 {
     switch (object_index)
     {
@@ -192,7 +191,7 @@ FilePath DriveListWindow::ObjectPath(int object_index) const
     }
 }
 
-int DriveListWindow::GetItemIndexByObjectIndex(int object_index) const
+int DriveListCtrl::GetItemIndexByObjectIndex(int object_index) const
 {
     DWORD_PTR data = static_cast<DWORD_PTR>(object_index);
     int item_count = GetCount();
@@ -206,7 +205,7 @@ int DriveListWindow::GetItemIndexByObjectIndex(int object_index) const
     return CB_ERR;
 }
 
-int DriveListWindow::GetKnownObjectIndex(const FilePath& path) const
+int DriveListCtrl::GetKnownObjectIndex(const FilePath& path) const
 {
     if (!HasDriveList())
         return kInvalidObjectIndex;

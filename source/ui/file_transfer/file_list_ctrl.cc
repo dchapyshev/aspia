@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_transfer/file_list_window.cc
+// FILE:            ui/file_transfer/file_list_ctrl.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/file_transfer/file_list_window.h"
+#include "ui/file_transfer/file_list_ctrl.h"
 #include "ui/file_transfer/file_manager_helpers.h"
 #include "ui/resource.h"
 #include "base/version_helpers.h"
@@ -16,7 +16,7 @@
 
 namespace aspia {
 
-bool FileListWindow::CreateFileList(HWND parent, int control_id)
+bool FileListCtrl::CreateFileList(HWND parent, int control_id)
 {
     const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP | LVS_REPORT | LVS_SHOWSELALWAYS;
 
@@ -47,7 +47,7 @@ bool FileListWindow::CreateFileList(HWND parent, int control_id)
     return true;
 }
 
-void FileListWindow::Read(std::shared_ptr<proto::FileList> list)
+void FileListCtrl::Read(std::shared_ptr<proto::FileList> list)
 {
     DeleteAllItems();
     imagelist_.RemoveAll();
@@ -109,7 +109,7 @@ void FileListWindow::Read(std::shared_ptr<proto::FileList> list)
     }
 }
 
-void FileListWindow::Read(const proto::DriveList& list)
+void FileListCtrl::Read(const proto::DriveList& list)
 {
     DeleteAllItems();
     imagelist_.RemoveAll();
@@ -147,12 +147,12 @@ void FileListWindow::Read(const proto::DriveList& list)
     }
 }
 
-bool FileListWindow::HasFileList() const
+bool FileListCtrl::HasFileList() const
 {
     return list_ != nullptr;
 }
 
-const proto::FileList::Item& FileListWindow::Object(int object_index) const
+const proto::FileList::Item& FileListCtrl::Object(int object_index) const
 {
     DCHECK(HasFileList());
     DCHECK(IsValidObjectIndex(object_index));
@@ -160,7 +160,7 @@ const proto::FileList::Item& FileListWindow::Object(int object_index) const
     return list_->item(object_index);
 }
 
-FilePath FileListWindow::ObjectName(int object_index) const
+FilePath FileListCtrl::ObjectName(int object_index) const
 {
     DCHECK(HasFileList());
     DCHECK(IsValidObjectIndex(object_index));
@@ -168,7 +168,7 @@ FilePath FileListWindow::ObjectName(int object_index) const
     return std::experimental::filesystem::u8path(list_->item(object_index).name());
 }
 
-bool FileListWindow::IsDirectoryObject(int object_index) const
+bool FileListCtrl::IsDirectoryObject(int object_index) const
 {
     DCHECK(HasFileList());
     DCHECK(IsValidObjectIndex(object_index));
@@ -176,7 +176,7 @@ bool FileListWindow::IsDirectoryObject(int object_index) const
     return list_->item(object_index).is_directory();
 }
 
-proto::FileList::Item* FileListWindow::FirstSelectedObject() const
+proto::FileList::Item* FileListCtrl::FirstSelectedObject() const
 {
     const int selected_item = GetNextItem(-1, LVNI_SELECTED);
     if (selected_item == -1)
@@ -190,7 +190,7 @@ proto::FileList::Item* FileListWindow::FirstSelectedObject() const
     return list_->mutable_item(object_index);
 }
 
-void FileListWindow::AddDirectory()
+void FileListCtrl::AddDirectory()
 {
     if (!HasFileList())
         return;
@@ -208,7 +208,7 @@ void FileListWindow::AddDirectory()
     EditLabel(item_index);
 }
 
-int FileListWindow::GetColumnCount() const
+int FileListCtrl::GetColumnCount() const
 {
     CHeaderCtrl header(GetHeader());
 
@@ -218,7 +218,7 @@ int FileListWindow::GetColumnCount() const
     return header.GetItemCount();
 }
 
-void FileListWindow::DeleteAllColumns()
+void FileListCtrl::DeleteAllColumns()
 {
     int count = GetColumnCount();
 
@@ -226,7 +226,7 @@ void FileListWindow::DeleteAllColumns()
         DeleteColumn(count);
 }
 
-void FileListWindow::AddNewColumn(UINT string_id, int width)
+void FileListCtrl::AddNewColumn(UINT string_id, int width)
 {
     CString text;
     text.LoadStringW(string_id);
@@ -235,7 +235,7 @@ void FileListWindow::AddNewColumn(UINT string_id, int width)
     SetColumnWidth(column_index, width);
 }
 
-bool FileListWindow::IsValidObjectIndex(int object_index) const
+bool FileListCtrl::IsValidObjectIndex(int object_index) const
 {
     if (!list_)
         return false;
@@ -246,24 +246,24 @@ bool FileListWindow::IsValidObjectIndex(int object_index) const
     return false;
 }
 
-FileListWindow::Iterator::Iterator(const FileListWindow& list, Mode mode)
+FileListCtrl::Iterator::Iterator(const FileListCtrl& list, Mode mode)
     : list_(list),
       mode_(mode)
 {
     item_index_ = list.GetNextItem(-1, mode_);
 }
 
-bool FileListWindow::Iterator::IsAtEnd() const
+bool FileListCtrl::Iterator::IsAtEnd() const
 {
     return item_index_ == -1;
 }
 
-void FileListWindow::Iterator::Advance()
+void FileListCtrl::Iterator::Advance()
 {
     item_index_ = list_.GetNextItem(item_index_, mode_);
 }
 
-const proto::FileList::Item& FileListWindow::Iterator::Object() const
+const proto::FileList::Item& FileListCtrl::Iterator::Object() const
 {
     static const proto::FileList::Item empty_item;
 
@@ -278,7 +278,7 @@ const proto::FileList::Item& FileListWindow::Iterator::Object() const
     return list_.list_->item(object_index);
 }
 
-int FileListWindow::GetObjectUnderMousePointer() const
+int FileListCtrl::GetObjectUnderMousePointer() const
 {
     LVHITTESTINFO hti;
     memset(&hti, 0, sizeof(hti));

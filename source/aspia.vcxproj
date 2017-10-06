@@ -177,9 +177,9 @@
     <ClCompile Include="ui\desktop\video_window.cc" />
     <ClCompile Include="ui\desktop\viewer_toolbar.cc" />
     <ClCompile Include="ui\desktop\viewer_window.cc" />
-    <ClCompile Include="ui\file_transfer\drive_list_window.cc" />
+    <ClCompile Include="ui\file_transfer\drive_list_ctrl.cc" />
     <ClCompile Include="ui\file_transfer\file_action_dialog.cc" />
-    <ClCompile Include="ui\file_transfer\file_list_window.cc" />
+    <ClCompile Include="ui\file_transfer\file_list_ctrl.cc" />
     <ClCompile Include="ui\file_transfer\file_manager.cc" />
     <ClCompile Include="ui\file_transfer\file_manager_helpers.cc" />
     <ClCompile Include="ui\file_transfer\file_manager_panel.cc" />
@@ -400,9 +400,9 @@
     <ClInclude Include="ui\desktop\video_window.h" />
     <ClInclude Include="ui\desktop\viewer_toolbar.h" />
     <ClInclude Include="ui\desktop\viewer_window.h" />
-    <ClInclude Include="ui\file_transfer\drive_list_window.h" />
+    <ClInclude Include="ui\file_transfer\drive_list_ctrl.h" />
     <ClInclude Include="ui\file_transfer\file_action_dialog.h" />
-    <ClInclude Include="ui\file_transfer\file_list_window.h" />
+    <ClInclude Include="ui\file_transfer\file_list_ctrl.h" />
     <ClInclude Include="ui\file_transfer\file_manager.h" />
     <ClInclude Include="ui\file_transfer\file_manager_helpers.h" />
     <ClInclude Include="ui\file_transfer\file_manager_panel.h" />

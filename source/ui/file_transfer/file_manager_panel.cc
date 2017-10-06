@@ -16,7 +16,7 @@
 
 namespace aspia {
 
-static_assert(FileListWindow::kInvalidObjectIndex == DriveListWindow::kInvalidObjectIndex,
+static_assert(FileListCtrl::kInvalidObjectIndex == DriveListCtrl::kInvalidObjectIndex,
               "Values must be equal");
 
 FileManagerPanel::FileManagerPanel(Type type,
@@ -170,7 +170,7 @@ LRESULT FileManagerPanel::OnDriveChange(WORD code, WORD ctrl_id, HWND ctrl, BOOL
 {
     int object_index = drive_list_.SelectedObject();
 
-    if (object_index == DriveListWindow::kInvalidObjectIndex)
+    if (object_index == DriveListCtrl::kInvalidObjectIndex)
         return 0;
 
     MoveToDrive(object_index);
@@ -181,7 +181,7 @@ LRESULT FileManagerPanel::OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& hand
 {
     int object_index = file_list_.GetObjectUnderMousePointer();
 
-    if (object_index == FileListWindow::kInvalidObjectIndex)
+    if (object_index == FileListCtrl::kInvalidObjectIndex)
         return 0;
 
     if (!file_list_.HasFileList())
@@ -209,7 +209,7 @@ void FileManagerPanel::FolderUp()
 
     if (!path.has_parent_path() || path.parent_path() == path.root_name())
     {
-        MoveToDrive(DriveListWindow::kComputerObjectIndex);
+        MoveToDrive(DriveListCtrl::kComputerObjectIndex);
     }
     else
     {
@@ -256,7 +256,7 @@ void FileManagerPanel::RemoveSelectedFiles()
     FileTaskQueueBuilder::FileList file_list;
 
     // Create a list of files and directories to remove.
-    for (FileListWindow::Iterator iter(file_list_, FileListWindow::Iterator::SELECTED);
+    for (FileListCtrl::Iterator iter(file_list_, FileListCtrl::Iterator::SELECTED);
          !iter.IsAtEnd();
          iter.Advance())
     {
@@ -281,7 +281,7 @@ LRESULT FileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& han
 
 void FileManagerPanel::MoveToDrive(int object_index)
 {
-    if (object_index == DriveListWindow::kComputerObjectIndex)
+    if (object_index == DriveListCtrl::kComputerObjectIndex)
     {
         toolbar_.EnableButton(ID_FOLDER_ADD, FALSE);
         toolbar_.EnableButton(ID_FOLDER_UP, FALSE);
@@ -308,7 +308,7 @@ LRESULT FileManagerPanel::OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& han
     int object_index = disp_info->item.lParam;
 
     // New folder.
-    if (object_index == FileListWindow::kNewFolderObjectIndex)
+    if (object_index == FileListCtrl::kNewFolderObjectIndex)
     {
         CEdit edit(file_list_.GetEditControl());
 
@@ -441,7 +441,7 @@ void FileManagerPanel::SendSelectedFiles()
     FileTaskQueueBuilder::FileList file_list;
 
     // Create a list of files and directories to copy.
-    for (FileListWindow::Iterator iter(file_list_, FileListWindow::Iterator::SELECTED);
+    for (FileListCtrl::Iterator iter(file_list_, FileListCtrl::Iterator::SELECTED);
          !iter.IsAtEnd();
          iter.Advance())
     {
@@ -466,7 +466,7 @@ LRESULT FileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handl
 int CALLBACK FileManagerPanel::CompareFunc(LPARAM lparam1, LPARAM lparam2, LPARAM lparam_sort)
 {
     SortContext* context = reinterpret_cast<SortContext*>(lparam_sort);
-    const FileListWindow& list = context->self->file_list_;
+    const FileListCtrl& list = context->self->file_list_;
 
     LVFINDINFOW find_info;
     find_info.flags = LVFI_PARAM;
@@ -517,7 +517,7 @@ LRESULT FileManagerPanel::OnDriveEndEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled
 
 void FileManagerPanel::Home()
 {
-    MoveToDrive(DriveListWindow::kComputerObjectIndex);
+    MoveToDrive(DriveListCtrl::kComputerObjectIndex);
 }
 
 LRESULT FileManagerPanel::OnHome(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
@@ -547,7 +547,7 @@ void FileManagerPanel::OnDriveListReply(std::shared_ptr<proto::DriveList> drive_
         }
         else
         {
-            MoveToDrive(DriveListWindow::kComputerObjectIndex);
+            MoveToDrive(DriveListCtrl::kComputerObjectIndex);
         }
     }
 }

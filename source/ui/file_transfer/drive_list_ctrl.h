@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/file_transfer/drive_list_window.h
+// FILE:            ui/file_transfer/drive_list_ctrl.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__FILE_TRANSFER__DRIVE_LIST_WINDOW_H
-#define _ASPIA_UI__FILE_TRANSFER__DRIVE_LIST_WINDOW_H
+#ifndef _ASPIA_UI__FILE_TRANSFER__DRIVE_LIST_CTRL_H
+#define _ASPIA_UI__FILE_TRANSFER__DRIVE_LIST_CTRL_H
 
 #include "base/files/file_path.h"
 #include "base/macros.h"
@@ -20,15 +20,15 @@
 
 namespace aspia {
 
-class DriveListWindow : public CWindowImpl<DriveListWindow, CComboBoxEx>
+class DriveListCtrl : public CWindowImpl<DriveListCtrl, CComboBoxEx>
 {
 public:
     static const int kInvalidObjectIndex = -1;
     static const int kComputerObjectIndex = -2;
     static const int kCurrentFolderObjectIndex = -3;
 
-    DriveListWindow() = default;
-    ~DriveListWindow() = default;
+    DriveListCtrl() = default;
+    ~DriveListCtrl() = default;
 
     bool CreateDriveList(HWND parent, int control_id);
 
@@ -45,7 +45,7 @@ public:
     FilePath ObjectPath(int object_index) const;
 
 private:
-    BEGIN_MSG_MAP(DriveListWindow)
+    BEGIN_MSG_MAP(DriveListCtrl)
         // Nothing
     END_MSG_MAP()
 
@@ -56,9 +56,9 @@ private:
     CImageListManaged imagelist_;
     FilePath current_path_;
 
-    DISALLOW_COPY_AND_ASSIGN(DriveListWindow);
+    DISALLOW_COPY_AND_ASSIGN(DriveListCtrl);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__FILE_TRANSFER__DRIVE_LIST_WINDOW_H
+#endif // _ASPIA_UI__FILE_TRANSFER__DRIVE_LIST_CTRL_H

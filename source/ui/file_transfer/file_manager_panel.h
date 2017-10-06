@@ -9,13 +9,12 @@
 #define _ASPIA_UI__FILE_TRANSFER__FILE_MANAGER_PANEL_H
 
 #include "base/files/file_path.h"
-#include "base/macros.h"
 #include "client/file_request_sender_proxy.h"
 #include "client/file_transfer.h"
 #include "proto/file_transfer_session.pb.h"
 #include "ui/file_transfer/file_toolbar.h"
-#include "ui/file_transfer/file_list_window.h"
-#include "ui/file_transfer/drive_list_window.h"
+#include "ui/file_transfer/file_list_ctrl.h"
+#include "ui/file_transfer/drive_list_ctrl.h"
 #include "ui/resource.h"
 
 namespace aspia {
@@ -126,8 +125,8 @@ private:
     std::shared_ptr<FileRequestSenderProxy> sender_;
 
     CStatic title_;
-    DriveListWindow drive_list_;
-    FileListWindow file_list_;
+    DriveListCtrl drive_list_;
+    FileListCtrl file_list_;
     FileToolBar toolbar_;
     CStatic status_;
 
