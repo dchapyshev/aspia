@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "protocol/system_info_constants.h"
 #include "ui/system_info/category_group_storage.h"
 
 namespace aspia {
@@ -26,6 +27,8 @@ private:
 CategoryOpticalDrives::CategoryOpticalDrives()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_STORAGE_OPTICAL_DRIVES, IDI_DRIVE_DISK)
 {
+    set_guid(system_info::hardware::storage::kOpticalDrives);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -48,6 +51,8 @@ private:
 CategoryATA::CategoryATA()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_STORAGE_ATA, IDI_DRIVE)
 {
+    set_guid(system_info::hardware::storage::kATA);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -70,6 +75,8 @@ private:
 CategorySMART::CategorySMART()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_STORAGE_SMART, IDI_DRIVE)
 {
+    set_guid(system_info::hardware::storage::kSMART);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);

@@ -13,17 +13,19 @@ package aspia.proto.system_info;
 
 message HostToClient
 {
+    string guid = 1;
+
     enum Compressor
     {
         COMPRESSOR_RAW = 0;
         COMPRESSOR_ZLIB = 1;
     }
 
-    Compressor compressor = 1;
-    bytes data = 2;
+    Compressor compressor = 2;
+    bytes data = 3;
 }
 
 message ClientToHost
 {
-    string request = 1;
+    string guid = 1;
 }

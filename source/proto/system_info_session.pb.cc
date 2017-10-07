@@ -93,6 +93,7 @@ const int HostToClient::Compressor_ARRAYSIZE;
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int HostToClient::kGuidFieldNumber;
 const int HostToClient::kCompressorFieldNumber;
 const int HostToClient::kDataFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -110,6 +111,10 @@ HostToClient::HostToClient(const HostToClient& from)
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  guid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.guid().size() > 0) {
+    guid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.guid_);
+  }
   data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.data().size() > 0) {
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
@@ -119,6 +124,7 @@ HostToClient::HostToClient(const HostToClient& from)
 }
 
 void HostToClient::SharedCtor() {
+  guid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   compressor_ = 0;
   _cached_size_ = 0;
@@ -130,6 +136,7 @@ HostToClient::~HostToClient() {
 }
 
 void HostToClient::SharedDtor() {
+  guid_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
@@ -157,6 +164,7 @@ void HostToClient::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  guid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   compressor_ = 0;
   _internal_metadata_.Clear();
@@ -178,10 +186,26 @@ bool HostToClient::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.system_info.HostToClient.Compressor compressor = 1;
+      // string guid = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_guid()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->guid().data(), static_cast<int>(this->guid().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.system_info.HostToClient.guid"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.system_info.HostToClient.Compressor compressor = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
@@ -193,10 +217,10 @@ bool HostToClient::MergePartialFromCodedStream(
         break;
       }
 
-      // bytes data = 2;
-      case 2: {
+      // bytes data = 3;
+      case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_data()));
         } else {
@@ -231,16 +255,26 @@ void HostToClient::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.system_info.HostToClient.Compressor compressor = 1;
-  if (this->compressor() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->compressor(), output);
+  // string guid = 1;
+  if (this->guid().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->guid().data(), static_cast<int>(this->guid().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.system_info.HostToClient.guid");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->guid(), output);
   }
 
-  // bytes data = 2;
+  // .aspia.proto.system_info.HostToClient.Compressor compressor = 2;
+  if (this->compressor() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      2, this->compressor(), output);
+  }
+
+  // bytes data = 3;
   if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      2, this->data(), output);
+      3, this->data(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -254,14 +288,21 @@ size_t HostToClient::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // bytes data = 2;
+  // string guid = 1;
+  if (this->guid().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->guid());
+  }
+
+  // bytes data = 3;
   if (this->data().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
         this->data());
   }
 
-  // .aspia.proto.system_info.HostToClient.Compressor compressor = 1;
+  // .aspia.proto.system_info.HostToClient.Compressor compressor = 2;
   if (this->compressor() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->compressor());
@@ -286,6 +327,10 @@ void HostToClient::MergeFrom(const HostToClient& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from.guid().size() > 0) {
+
+    guid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.guid_);
+  }
   if (from.data().size() > 0) {
 
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
@@ -312,6 +357,7 @@ void HostToClient::Swap(HostToClient* other) {
 }
 void HostToClient::InternalSwap(HostToClient* other) {
   using std::swap;
+  guid_.Swap(&other->guid_);
   data_.Swap(&other->data_);
   swap(compressor_, other->compressor_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
@@ -325,7 +371,60 @@ void HostToClient::InternalSwap(HostToClient* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // HostToClient
 
-// .aspia.proto.system_info.HostToClient.Compressor compressor = 1;
+// string guid = 1;
+void HostToClient::clear_guid() {
+  guid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& HostToClient::guid() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.system_info.HostToClient.guid)
+  return guid_.GetNoArena();
+}
+void HostToClient::set_guid(const ::std::string& value) {
+  
+  guid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.system_info.HostToClient.guid)
+}
+#if LANG_CXX11
+void HostToClient::set_guid(::std::string&& value) {
+  
+  guid_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.system_info.HostToClient.guid)
+}
+#endif
+void HostToClient::set_guid(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  guid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.system_info.HostToClient.guid)
+}
+void HostToClient::set_guid(const char* value, size_t size) {
+  
+  guid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.system_info.HostToClient.guid)
+}
+::std::string* HostToClient::mutable_guid() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.system_info.HostToClient.guid)
+  return guid_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* HostToClient::release_guid() {
+  // @@protoc_insertion_point(field_release:aspia.proto.system_info.HostToClient.guid)
+  
+  return guid_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void HostToClient::set_allocated_guid(::std::string* guid) {
+  if (guid != NULL) {
+    
+  } else {
+    
+  }
+  guid_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), guid);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.system_info.HostToClient.guid)
+}
+
+// .aspia.proto.system_info.HostToClient.Compressor compressor = 2;
 void HostToClient::clear_compressor() {
   compressor_ = 0;
 }
@@ -339,7 +438,7 @@ void HostToClient::set_compressor(::aspia::proto::system_info::HostToClient_Comp
   // @@protoc_insertion_point(field_set:aspia.proto.system_info.HostToClient.compressor)
 }
 
-// bytes data = 2;
+// bytes data = 3;
 void HostToClient::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -397,7 +496,7 @@ void HostToClient::set_allocated_data(::std::string* data) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int ClientToHost::kRequestFieldNumber;
+const int ClientToHost::kGuidFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ClientToHost::ClientToHost()
@@ -413,15 +512,15 @@ ClientToHost::ClientToHost(const ClientToHost& from)
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  request_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.request().size() > 0) {
-    request_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.request_);
+  guid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.guid().size() > 0) {
+    guid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.guid_);
   }
   // @@protoc_insertion_point(copy_constructor:aspia.proto.system_info.ClientToHost)
 }
 
 void ClientToHost::SharedCtor() {
-  request_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  guid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   _cached_size_ = 0;
 }
 
@@ -431,7 +530,7 @@ ClientToHost::~ClientToHost() {
 }
 
 void ClientToHost::SharedDtor() {
-  request_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  guid_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void ClientToHost::SetCachedSize(int size) const {
@@ -458,7 +557,7 @@ void ClientToHost::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  request_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  guid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   _internal_metadata_.Clear();
 }
 
@@ -478,16 +577,16 @@ bool ClientToHost::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // string request = 1;
+      // string guid = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_request()));
+                input, this->mutable_guid()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->request().data(), static_cast<int>(this->request().length()),
+            this->guid().data(), static_cast<int>(this->guid().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.system_info.ClientToHost.request"));
+            "aspia.proto.system_info.ClientToHost.guid"));
         } else {
           goto handle_unusual;
         }
@@ -520,14 +619,14 @@ void ClientToHost::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string request = 1;
-  if (this->request().size() > 0) {
+  // string guid = 1;
+  if (this->guid().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->request().data(), static_cast<int>(this->request().length()),
+      this->guid().data(), static_cast<int>(this->guid().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.system_info.ClientToHost.request");
+      "aspia.proto.system_info.ClientToHost.guid");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->request(), output);
+      1, this->guid(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -541,11 +640,11 @@ size_t ClientToHost::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // string request = 1;
-  if (this->request().size() > 0) {
+  // string guid = 1;
+  if (this->guid().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->request());
+        this->guid());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -567,9 +666,9 @@ void ClientToHost::MergeFrom(const ClientToHost& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.request().size() > 0) {
+  if (from.guid().size() > 0) {
 
-    request_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.request_);
+    guid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.guid_);
   }
 }
 
@@ -590,7 +689,7 @@ void ClientToHost::Swap(ClientToHost* other) {
 }
 void ClientToHost::InternalSwap(ClientToHost* other) {
   using std::swap;
-  request_.Swap(&other->request_);
+  guid_.Swap(&other->guid_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
@@ -602,57 +701,57 @@ void ClientToHost::InternalSwap(ClientToHost* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // ClientToHost
 
-// string request = 1;
-void ClientToHost::clear_request() {
-  request_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// string guid = 1;
+void ClientToHost::clear_guid() {
+  guid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-const ::std::string& ClientToHost::request() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.system_info.ClientToHost.request)
-  return request_.GetNoArena();
+const ::std::string& ClientToHost::guid() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.system_info.ClientToHost.guid)
+  return guid_.GetNoArena();
 }
-void ClientToHost::set_request(const ::std::string& value) {
+void ClientToHost::set_guid(const ::std::string& value) {
   
-  request_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.system_info.ClientToHost.request)
+  guid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.system_info.ClientToHost.guid)
 }
 #if LANG_CXX11
-void ClientToHost::set_request(::std::string&& value) {
+void ClientToHost::set_guid(::std::string&& value) {
   
-  request_.SetNoArena(
+  guid_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.system_info.ClientToHost.request)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.system_info.ClientToHost.guid)
 }
 #endif
-void ClientToHost::set_request(const char* value) {
+void ClientToHost::set_guid(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
-  request_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.system_info.ClientToHost.request)
+  guid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.system_info.ClientToHost.guid)
 }
-void ClientToHost::set_request(const char* value, size_t size) {
+void ClientToHost::set_guid(const char* value, size_t size) {
   
-  request_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  guid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.system_info.ClientToHost.request)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.system_info.ClientToHost.guid)
 }
-::std::string* ClientToHost::mutable_request() {
+::std::string* ClientToHost::mutable_guid() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.system_info.ClientToHost.request)
-  return request_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:aspia.proto.system_info.ClientToHost.guid)
+  return guid_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* ClientToHost::release_request() {
-  // @@protoc_insertion_point(field_release:aspia.proto.system_info.ClientToHost.request)
+::std::string* ClientToHost::release_guid() {
+  // @@protoc_insertion_point(field_release:aspia.proto.system_info.ClientToHost.guid)
   
-  return request_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return guid_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void ClientToHost::set_allocated_request(::std::string* request) {
-  if (request != NULL) {
+void ClientToHost::set_allocated_guid(::std::string* guid) {
+  if (guid != NULL) {
     
   } else {
     
   }
-  request_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), request);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.system_info.ClientToHost.request)
+  guid_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), guid);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.system_info.ClientToHost.guid)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

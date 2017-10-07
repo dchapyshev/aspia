@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "protocol/system_info_constants.h"
 #include "ui/system_info/category_group_software.h"
 
 namespace aspia {
@@ -26,6 +27,8 @@ private:
 CategoryPrograms::CategoryPrograms()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_SOFTWARE_PROGRAMS, IDI_APPLICATIONS)
 {
+    set_guid(system_info::software::kPrograms);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -48,6 +51,8 @@ private:
 CategoryUpdates::CategoryUpdates()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_SOFTWARE_UPDATES, IDI_APPLICATIONS)
 {
+    set_guid(system_info::software::kUpdates);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -70,6 +75,8 @@ private:
 CategoryServices::CategoryServices()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_SERVICES, IDI_GEAR)
 {
+    set_guid(system_info::software::kServices);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -92,6 +99,8 @@ private:
 CategoryDrivers::CategoryDrivers()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_DRIVERS, IDI_PCI)
 {
+    set_guid(system_info::software::kDrivers);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -114,6 +123,8 @@ private:
 CategoryProcesses::CategoryProcesses()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_PROCESSES, IDI_SYSTEM_MONITOR)
 {
+    set_guid(system_info::software::kProcesses);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -136,6 +147,8 @@ private:
 CategoryLicenses::CategoryLicenses()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_LICENSES, IDI_LICENSE_KEY)
 {
+    set_guid(system_info::software::kLicenses);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);

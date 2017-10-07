@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "protocol/system_info_constants.h"
 #include "ui/system_info/category_group_hardware.h"
 #include "ui/system_info/category_group_dmi.h"
 #include "ui/system_info/category_group_storage.h"
@@ -30,6 +31,8 @@ private:
 CategoryCPU::CategoryCPU()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_CPU, IDI_PROCESSOR)
 {
+    set_guid(system_info::hardware::kCPU);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -52,6 +55,8 @@ private:
 CategoryPrinters::CategoryPrinters()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_PRINTERS, IDI_PRINTER)
 {
+    set_guid(system_info::hardware::kPrinters);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -74,6 +79,8 @@ private:
 CategoryPowerOptions::CategoryPowerOptions()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_POWER_OPTIONS, IDI_POWER_SUPPLY)
 {
+    set_guid(system_info::hardware::kPowerOptions);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);

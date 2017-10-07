@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "protocol/system_info_constants.h"
 #include "ui/system_info/category_group_users.h"
 
 namespace aspia {
@@ -26,6 +27,8 @@ private:
 CategoryUsers::CategoryUsers()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_USERS, IDI_USER)
 {
+    set_guid(system_info::operating_system::users_and_groups::kUsers);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -48,6 +51,8 @@ private:
 CategoryUserGroups::CategoryUserGroups()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_USER_GROUPS, IDI_USERS)
 {
+    set_guid(system_info::operating_system::users_and_groups::kUserGroups);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -70,6 +75,8 @@ private:
 CategoryActiveSessions::CategoryActiveSessions()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_ACTIVE_SESSIONS, IDI_USERS)
 {
+    set_guid(system_info::operating_system::users_and_groups::kActiveSessions);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);

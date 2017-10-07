@@ -10,6 +10,8 @@
 
 #include "ipc/pipe_channel.h"
 
+#include <map>
+
 namespace aspia {
 
 class HostSessionSystemInfo
@@ -23,9 +25,14 @@ public:
 private:
     void OnIpcChannelConnect(uint32_t user_data);
     void OnIpcChannelMessage(const IOBuffer& buffer);
+    void OnIpcChannelMessageSended();
+
+    void RegisterSupportedCategories();
 
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::shared_ptr<PipeChannelProxy> ipc_channel_proxy_;
+
+    std::map<std::string, std::function<std::string()>> map_;
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionSystemInfo);
 };

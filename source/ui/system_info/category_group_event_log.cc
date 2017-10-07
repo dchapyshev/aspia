@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "protocol/system_info_constants.h"
 #include "ui/system_info/category_group_event_log.h"
 
 namespace aspia {
@@ -26,6 +27,8 @@ private:
 CategoryApplications::CategoryApplications()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_EVENT_LOG_APPLICATIONS, IDI_ERROR_LOG)
 {
+    set_guid(system_info::operating_system::event_logs::kApplications);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -48,6 +51,8 @@ private:
 CategorySecurity::CategorySecurity()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_EVENT_LOG_SECURITY, IDI_ERROR_LOG)
 {
+    set_guid(system_info::operating_system::event_logs::kSecurity);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -70,6 +75,8 @@ private:
 CategorySystem::CategorySystem()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_EVENT_LOG_SYSTEM, IDI_ERROR_LOG)
 {
+    set_guid(system_info::operating_system::event_logs::kSystem);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);

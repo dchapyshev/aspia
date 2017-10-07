@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "protocol/system_info_constants.h"
 #include "ui/system_info/category_group_os.h"
 #include "ui/system_info/category_group_users.h"
 #include "ui/system_info/category_group_event_log.h"
@@ -28,6 +29,8 @@ private:
 CategoryRegistrationInformation::CategoryRegistrationInformation()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_REGISTRATION_INFO, IDI_COMPUTER)
 {
+    set_guid(system_info::operating_system::kRegistrationInformation);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -50,6 +53,8 @@ private:
 CategoryTaskScheduler::CategoryTaskScheduler()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_TASK_SCHEDULER, IDI_CLOCK)
 {
+    set_guid(system_info::operating_system::kTaskScheduler);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -72,6 +77,8 @@ private:
 CategoryEnvironmentVariables::CategoryEnvironmentVariables()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_ENVIRONMENT_VARIABLES, IDI_APPLICATIONS)
 {
+    set_guid(system_info::operating_system::kEnvironmentVariables);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);

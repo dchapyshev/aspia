@@ -27,6 +27,7 @@ public:
     {
     public:
         virtual ~Delegate() = default;
+        virtual void OnCategoryRequest(const char* guid) = 0;
         virtual void OnWindowClose() = 0;
     };
 

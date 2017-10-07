@@ -24,7 +24,11 @@ public:
 
 private:
     // SystemInfoWindow::Delegate implementation.
+    void OnCategoryRequest(const char* guid) override;
     void OnWindowClose() override;
+
+    void OnMessageSended();
+    void OnMessageReceived(const IOBuffer& buffer);
 
     std::unique_ptr<SystemInfoWindow> window_;
 

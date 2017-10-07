@@ -17,6 +17,7 @@ static const int kDefaultWindowHeight = 700;
 SystemInfoWindow::SystemInfoWindow(Delegate* delegate)
     : delegate_(delegate)
 {
+    DCHECK(delegate);
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
@@ -215,6 +216,11 @@ LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& 
 
     statusbar_.SetText(0, category->Name());
     statusbar_.SetIcon(0, category->Icon());
+
+    if (category->guid())
+    {
+        delegate_->OnCategoryRequest(category->guid());
+    }
 
     return 0;
 }

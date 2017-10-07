@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "protocol/system_info_constants.h"
 #include "ui/system_info/category_group_windows_devices.h"
 
 namespace aspia {
@@ -26,6 +27,8 @@ private:
 CategoryAllDevices::CategoryAllDevices()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_WINDOWS_DEVICES_ALL, IDI_PCI)
 {
+    set_guid(system_info::hardware::windows_devices::kAll);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -48,6 +51,8 @@ private:
 CategoryUnknownDevices::CategoryUnknownDevices()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_WINDOWS_DEVICES_UNK, IDI_PCI)
 {
+    set_guid(system_info::hardware::windows_devices::kUnknown);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);

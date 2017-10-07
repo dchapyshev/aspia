@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "protocol/system_info_constants.h"
 #include "ui/system_info/category_group_network.h"
 
 namespace aspia {
@@ -26,6 +27,8 @@ private:
 CategoryNetworkCards::CategoryNetworkCards()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_NETWORK_CARDS, IDI_NETWORK_ADAPTER)
 {
+    set_guid(system_info::network::kNetworkCards);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -48,6 +51,8 @@ private:
 CategoryRasConnections::CategoryRasConnections()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_RAS_CONNECTIONS, IDI_TELEPHONE_FAX)
 {
+    set_guid(system_info::network::kRASConnections);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -70,6 +75,8 @@ private:
 CategoryOpenConnections::CategoryOpenConnections()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_OPEN_CONNECTIONS, IDI_SERVERS_NETWORK)
 {
+    set_guid(system_info::network::kOpenConnections);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -92,6 +99,8 @@ private:
 CategorySharedResources::CategorySharedResources()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_SHARED_RESOURCES, IDI_FOLDER_NETWORK)
 {
+    set_guid(system_info::network::kSharedResources);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -114,6 +123,8 @@ private:
 CategoryOpenFiles::CategoryOpenFiles()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_OPEN_FILES, IDI_FOLDER_NETWORK)
 {
+    set_guid(system_info::network::kOpenFiles);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -136,6 +147,8 @@ private:
 CategoryRoutes::CategoryRoutes()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_ROUTES, IDI_ROUTE)
 {
+    set_guid(system_info::network::kRoutes);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);

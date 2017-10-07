@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "protocol/system_info_constants.h"
 #include "ui/system_info/category_group_display.h"
 
 namespace aspia {
@@ -26,6 +27,8 @@ private:
 CategoryWindowsVideo::CategoryWindowsVideo()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_DISPLAY_WINDOWS_VIDEO, IDI_MONITOR)
 {
+    set_guid(system_info::hardware::display::kWindowsVideo);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -48,6 +51,8 @@ private:
 CategoryMonitor::CategoryMonitor()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_DISPLAY_MONITOR, IDI_MONITOR)
 {
+    set_guid(system_info::hardware::display::kMonitor);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
@@ -70,6 +75,8 @@ private:
 CategoryOpenGL::CategoryOpenGL()
     : Category(Type::REGULAR, IDS_SI_CATEGORY_DISPLAY_OPENGL, IDI_CLAPPERBOARD)
 {
+    set_guid(system_info::hardware::display::kOpenGL);
+
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
