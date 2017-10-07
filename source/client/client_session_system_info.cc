@@ -8,6 +8,7 @@
 #include "client/client_session_system_info.h"
 #include "proto/system_info_session.pb.h"
 #include "protocol/message_serialization.h"
+#include "protocol/system_info_constants.h"
 
 namespace aspia {
 
@@ -27,6 +28,9 @@ ClientSessionSystemInfo::~ClientSessionSystemInfo()
 void ClientSessionSystemInfo::OnCategoryRequest(const char* guid)
 {
     DCHECK(guid);
+
+    last_guid_.assign(guid);
+    DCHECK(last_guid_.length() == system_info::kGuidLength);
 
     proto::system_info::ClientToHost message;
     message.set_guid(guid);
@@ -48,13 +52,20 @@ void ClientSessionSystemInfo::OnMessageSended()
 
 void ClientSessionSystemInfo::OnMessageReceived(const IOBuffer& buffer)
 {
+    DCHECK(last_guid_.length() == system_info::kGuidLength);
+
     proto::system_info::HostToClient message;
 
     if (ParseMessage(buffer, message))
     {
-        LOG(WARNING) << "reply: " << message.guid();
-        // TODO
-        return;
+        const std::string& guid = message.guid();
+
+        if (guid.length() == system_info::kGuidLength && guid == last_guid_)
+        {
+            LOG(WARNING) << "reply: " << guid;
+            // TODO
+            return;
+        }
     }
 
     channel_proxy_->Disconnect();

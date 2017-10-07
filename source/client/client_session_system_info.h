@@ -31,6 +31,7 @@ private:
     void OnMessageReceived(const IOBuffer& buffer);
 
     std::unique_ptr<SystemInfoWindow> window_;
+    std::string last_guid_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionSystemInfo);
 };
