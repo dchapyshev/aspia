@@ -196,7 +196,7 @@ bool ServiceManager::Stop() const
 
     if (!ControlService(service_, SERVICE_CONTROL_STOP, &status))
     {
-        LOG(ERROR) << "ControlService() failed: " << GetLastSystemErrorString();
+        DLOG(ERROR) << "ControlService() failed: " << GetLastSystemErrorString();
         return false;
     }
 
