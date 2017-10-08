@@ -631,6 +631,9 @@
     <ClCompile Include="protocol\system_info_constants.cc">
       <Filter>protocol</Filter>
     </ClCompile>
+    <ClCompile Include="proto\system_info_session_message.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1313,6 +1316,9 @@
     <ClInclude Include="protocol\system_info_constants.h">
       <Filter>protocol</Filter>
     </ClInclude>
+    <ClInclude Include="proto\system_info_session_message.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -1352,6 +1358,9 @@
       <Filter>proto</Filter>
     </None>
     <None Include="proto\system_info_session.proto">
+      <Filter>proto</Filter>
+    </None>
+    <None Include="proto\system_info_session_message.proto">
       <Filter>proto</Filter>
     </None>
   </ItemGroup>

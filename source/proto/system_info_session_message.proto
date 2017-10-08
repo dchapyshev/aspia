@@ -1,0 +1,222 @@
+//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            proto/system_info/printers.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.system_info;
+
+message Printers
+{
+    message Item
+    {
+        string name            = 1;
+        bool is_default        = 2;
+        bool is_shared         = 3;
+        string share_name      = 4;
+        string port_name       = 5;
+        string driver_name     = 6;
+        string device_name     = 7;
+        string print_processor = 8;
+        string data_type       = 9;
+        string server_name     = 10;
+        string location        = 11;
+        string comment         = 12;
+        int32 jobs_count       = 13;
+        int32 paper_width      = 14;
+        int32 paper_length     = 15;
+        int32 print_quality    = 16;
+
+        enum Orientation
+        {
+            ORIENTATION_UNKNOWN   = 0;
+            ORIENTATION_PORTRAIT  = 1;
+            ORIENTATION_LANDSCAPE = 2;
+        }
+
+        Orientation orientation = 17;
+    }
+
+    repeated Item item = 1;
+}
+
+message Services
+{
+    message Item
+    {
+        string name         = 1;
+        string display_name = 2;
+        string description  = 3;
+
+        enum Status
+        {
+            STATUS_UNKNOWN          = 0;
+            STATUS_CONTINUE_PENDING = 1;
+            STATUS_PAUSE_PENDING    = 2;
+            STATUS_PAUSED           = 3;
+            STATUS_RUNNING          = 4;
+            STATUS_START_PENDING    = 5;
+            STATUS_STOP_PENDING     = 6;
+            STATUS_STOPPED          = 7;
+        }
+
+        Status status = 4;
+
+        enum StartupType
+        {
+            STARTUP_TYPE_UNKNOWN      = 0;
+            STARTUP_TYPE_AUTO_START   = 1;
+            STARTUP_TYPE_DEMAND_START = 2;
+            STARTUP_TYPE_DISABLED     = 3;
+            STARTUP_TYPE_BOOT_START   = 4;
+            STARTUP_TYPE_SYSTEM_START = 5;
+        }
+
+        StartupType startup_type = 5;
+        string binary_path       = 6;
+        string start_name        = 7;
+    }
+
+    repeated Item item = 1;
+}
+
+message NetworkCards
+{
+    message Item
+    {
+        string adapter_name          = 1;
+        string connection_name       = 2;
+        string interface_type        = 3;
+        uint32 mtu                   = 4;
+        uint32 speed                 = 5;
+        string mac_address           = 6;
+        bool is_wins_enabled         = 7;
+        string primary_wins_server   = 8;
+        string secondary_wins_server = 9;
+        bool is_dhcp_enabled         = 10;
+
+        message IpAddress
+        {
+            string address = 1;
+            string mask    = 2;
+        }
+
+        repeated IpAddress ip_address       = 11;
+        repeated string gateway_address     = 12;
+        repeated string dhcp_server_address = 13;
+        repeated string dns_server_address  = 14;
+    }
+
+    repeated Item item = 1;
+}
+
+message OpenConnections
+{
+    message Item
+    {
+        string process_name   = 1;
+        string local_address  = 2;
+        string remote_address = 3;
+        uint32 local_port     = 4;
+        uint32 remote_port    = 5;
+        string state          = 6;
+    }
+
+    repeated Item item = 1;
+}
+
+message SharedResources
+{
+    message Item
+    {
+        string name = 1;
+
+        enum Type
+        {
+            TYPE_UNKNOWN   = 0;
+            TYPE_DISK      = 1;
+            TYPE_PRINTER   = 2;
+            TYPE_DEVICE    = 3;
+            TYPE_IPC       = 4;
+            TYPE_SPECIAL   = 5;
+            TYPE_TEMPORARY = 6;
+        }
+
+        Type type           = 2;
+        string description  = 3;
+        uint32 current_uses = 4;
+        uint32 maximum_uses = 5;
+    }
+
+    repeated Item item = 1;
+}
+
+message Routes
+{
+    message Item
+    {
+        string destonation = 1;
+        string mask        = 2;
+        string gateway     = 3;
+        uint32 metric      = 4;
+    }
+
+    repeated Item item = 1;
+}
+
+message Users
+{
+    message Item
+    {
+        string full_name             = 1;
+        string comment               = 2;
+        bool is_disabled             = 3;
+        bool is_password_cant_change = 4;
+        bool is_password_expired     = 5;
+        bool is_dont_expire_password = 6;
+        bool is_lockout              = 7;
+        uint32 number_logons         = 8;
+        uint32 bad_password_count    = 9;
+        int64 last_logon_time        = 10;
+        uint32 user_id               = 11;
+        string profile_directory     = 12;
+        string home_directory        = 13;
+        string script_path           = 14;
+        uint32 country_code          = 15;
+        uint32 codepage              = 16;
+        uint32 primary_group_id      = 17;
+    }
+
+    repeated Item item = 1;
+}
+
+message UserGroups
+{
+    message Item
+    {
+        string name    = 1;
+        string comment = 2;
+    }
+
+    repeated Item item = 1;
+}
+
+message Sessions
+{
+    message Item
+    {
+        string user_name       = 1;
+        string domain_name     = 2;
+        uint32 session_id      = 3;
+        string connect_state   = 4;
+        string client_name     = 5;
+        string winstation_name = 6;
+    }
+
+    repeated Item item = 1;
+}

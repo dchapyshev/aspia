@@ -172,6 +172,7 @@
     <ClCompile Include="proto\power_session_message.pb.cc" />
     <ClCompile Include="proto\status.pb.cc" />
     <ClCompile Include="proto\system_info_session.pb.cc" />
+    <ClCompile Include="proto\system_info_session_message.pb.cc" />
     <ClCompile Include="ui\about_dialog.cc" />
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\timer.cc" />
@@ -395,6 +396,7 @@
     <ClInclude Include="proto\power_session_message.pb.h" />
     <ClInclude Include="proto\status.pb.h" />
     <ClInclude Include="proto\system_info_session.pb.h" />
+    <ClInclude Include="proto\system_info_session_message.pb.h" />
     <ClInclude Include="ui\about_dialog.h" />
     <ClInclude Include="ui\auth_dialog.h" />
     <ClInclude Include="ui\base\splitter.h" />
@@ -457,6 +459,7 @@
     <None Include="proto\power_session_message.proto" />
     <None Include="proto\status.proto" />
     <None Include="proto\system_info_session.proto" />
+    <None Include="proto\system_info_session_message.proto" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ui\lang\en-US.rc" />
