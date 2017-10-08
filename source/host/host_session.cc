@@ -64,7 +64,8 @@ void HostSession::OnSessionAttached(uint32_t session_id)
 
     if (process_connector_.StartServer(channel_id))
     {
-        bool session_process_launched = LaunchSessionProcess(session_type_, session_id, channel_id);
+        bool session_process_launched =
+            LaunchSessionProcess(session_type_, session_id, channel_id);
 
         PipeChannel::DisconnectHandler disconnect_handler =
             std::bind(&HostSession::OnIpcChannelDisconnect, this);
@@ -95,7 +96,8 @@ void HostSession::OnSessionDetached()
     process_watcher_.StopWatching();
 
     if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE ||
-        session_type_ == proto::SESSION_TYPE_DESKTOP_VIEW)
+        session_type_ == proto::SESSION_TYPE_DESKTOP_VIEW ||
+        session_type_ == proto::SESSION_TYPE_SYSTEM_INFO)
     {
         // We close the session process only for desktop manage and desktop view sessions.
         // Processes for other types of sessions are left open so that the user can see the fact
