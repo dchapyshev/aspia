@@ -208,6 +208,10 @@
     <ClCompile Include="ui\system_info\category_summary.cc" />
     <ClCompile Include="ui\system_info\category_tree_ctrl.cc" />
     <ClCompile Include="ui\system_info\info_list_ctrl.cc" />
+    <ClCompile Include="ui\system_info\output_html_file.cc" />
+    <ClCompile Include="ui\system_info\output_json_file.cc" />
+    <ClCompile Include="ui\system_info\output_listview.cc" />
+    <ClCompile Include="ui\system_info\output_xml_file.cc" />
     <ClCompile Include="ui\system_info\system_info_toolbar.cc" />
     <ClCompile Include="ui\system_info\system_info_window.cc" />
     <ClCompile Include="ui\ui_main.cc" />
@@ -439,6 +443,11 @@
     <ClInclude Include="ui\system_info\category_tree_ctrl.h" />
     <ClInclude Include="ui\system_info\column.h" />
     <ClInclude Include="ui\system_info\info_list_ctrl.h" />
+    <ClInclude Include="ui\system_info\output.h" />
+    <ClInclude Include="ui\system_info\output_html_file.h" />
+    <ClInclude Include="ui\system_info\output_json_file.h" />
+    <ClInclude Include="ui\system_info\output_listview.h" />
+    <ClInclude Include="ui\system_info\output_xml_file.h" />
     <ClInclude Include="ui\system_info\system_info_toolbar.h" />
     <ClInclude Include="ui\system_info\system_info_window.h" />
     <ClInclude Include="ui\ui_main.h" />
