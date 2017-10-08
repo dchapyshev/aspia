@@ -413,7 +413,7 @@ void HostSessionSystemInfo::OnIpcChannelMessage(const IOBuffer& buffer)
         }
     }
 
-    ipc_channel_.reset();
+    ipc_channel_proxy_->Disconnect();
 }
 
 void HostSessionSystemInfo::OnIpcChannelMessageSended()

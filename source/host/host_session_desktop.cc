@@ -113,7 +113,7 @@ void HostSessionDesktop::OnIpcChannelMessage(const IOBuffer& buffer)
         }
     }
 
-    ipc_channel_.reset();
+    ipc_channel_proxy_->Disconnect();
 }
 
 void HostSessionDesktop::OnScreenUpdate(const DesktopFrame* screen_frame,
