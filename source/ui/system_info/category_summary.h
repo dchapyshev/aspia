@@ -8,15 +8,18 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__CATEGORY_SUMMARY_H
 #define _ASPIA_UI__SYSTEM_INFO__CATEGORY_SUMMARY_H
 
-#include "ui/system_info/category.h"
+#include "ui/system_info/category_info.h"
 
 namespace aspia {
 
-class CategorySummary : public Category
+class CategorySummary : public CategoryInfo
 {
 public:
     CategorySummary();
     ~CategorySummary() = default;
+
+    // CategoryInfo implementation.
+    void Parse(const std::string& data, Output* output) final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategorySummary);

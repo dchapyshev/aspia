@@ -22,7 +22,7 @@ using CategoryList = std::list<std::unique_ptr<Category>>;
 class Category
 {
 public:
-    enum class Type { GROUP, REGULAR };
+    enum class Type { GROUP, INFO };
 
     virtual ~Category() = default;
 
@@ -58,14 +58,6 @@ public:
         return &child_list_;
     }
 
-    void set_guid(const char* guid)
-    {
-        DCHECK(guid);
-        guid_ = guid;
-    }
-
-    const char* guid() const { return guid_; }
-
 protected:
     Category(Type type, UINT name_id, UINT icon_id)
         : type_(type),
@@ -79,7 +71,6 @@ private:
     const Type type_;
     const UINT name_id_;
     const UINT icon_id_;
-    const char* guid_ = nullptr;
 
     ColumnList column_list_;
     CategoryList child_list_;

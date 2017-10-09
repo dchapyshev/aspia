@@ -439,6 +439,7 @@
     <ClInclude Include="ui\system_info\category_group_storage.h" />
     <ClInclude Include="ui\system_info\category_group_users.h" />
     <ClInclude Include="ui\system_info\category_group_windows_devices.h" />
+    <ClInclude Include="ui\system_info\category_info.h" />
     <ClInclude Include="ui\system_info\category_summary.h" />
     <ClInclude Include="ui\system_info\category_tree_ctrl.h" />
     <ClInclude Include="ui\system_info\column.h" />

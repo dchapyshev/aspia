@@ -7,84 +7,81 @@
 
 #include "protocol/system_info_constants.h"
 #include "ui/system_info/category_group_users.h"
+#include "ui/system_info/category_info.h"
 
 namespace aspia {
 
-//
-// Users
-//
-
-class CategoryUsers : public Category
+class CategoryUsers : public CategoryInfo
 {
 public:
-    CategoryUsers();
+    CategoryUsers()
+        : CategoryInfo(system_info::operating_system::users_and_groups::kUsers,
+                       IDS_SI_CATEGORY_USERS,
+                       IDI_USER)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryUsers() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryUsers);
 };
 
-CategoryUsers::CategoryUsers()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_USERS, IDI_USER)
-{
-    set_guid(system_info::operating_system::users_and_groups::kUsers);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// User Groups
-//
-
-class CategoryUserGroups : public Category
+class CategoryUserGroups : public CategoryInfo
 {
 public:
-    CategoryUserGroups();
+    CategoryUserGroups()
+        : CategoryInfo(system_info::operating_system::users_and_groups::kUserGroups,
+                       IDS_SI_CATEGORY_USER_GROUPS,
+                       IDI_USERS)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryUserGroups() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryUserGroups);
 };
 
-CategoryUserGroups::CategoryUserGroups()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_USER_GROUPS, IDI_USERS)
-{
-    set_guid(system_info::operating_system::users_and_groups::kUserGroups);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Active Sessions
-//
-
-class CategoryActiveSessions : public Category
+class CategoryActiveSessions : public CategoryInfo
 {
 public:
-    CategoryActiveSessions();
+    CategoryActiveSessions()
+        : CategoryInfo(system_info::operating_system::users_and_groups::kActiveSessions,
+                       IDS_SI_CATEGORY_ACTIVE_SESSIONS,
+                       IDI_USERS)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryActiveSessions() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryActiveSessions);
 };
-
-CategoryActiveSessions::CategoryActiveSessions()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_ACTIVE_SESSIONS, IDI_USERS)
-{
-    set_guid(system_info::operating_system::users_and_groups::kActiveSessions);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Users and user groups
-//
 
 CategoryGroupUsers::CategoryGroupUsers()
     : CategoryGroup(IDS_SI_CATEGORY_USERS_AND_GROUPS, IDI_USERS)

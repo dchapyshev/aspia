@@ -201,25 +201,30 @@ LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& 
 {
     LPNMTREEVIEWW nmtv = reinterpret_cast<LPNMTREEVIEWW>(hdr);
 
-    Category* category = tree_.GetItemCategory(nmtv->itemNew.hItem);
-    if (!category)
-        return 0;
-
     list_.DeleteAllItems();
     list_.DeleteAllColumns();
 
-    for (const auto& column : category->column_list())
+    const CategoryTreeCtrl::ItemType type = tree_.GetItemType(nmtv->itemNew.hItem);
+
+    if (type == CategoryTreeCtrl::ItemType::CATEGORY)
     {
-        const int column_index = list_.AddColumn(column.Name(), list_.GetColumnCount());
-        list_.SetColumnWidth(column_index, column.Width());
+        CategoryInfo* category = tree_.GetItemCategory(nmtv->itemNew.hItem);
+        if (!category)
+            return 0;
+
+        statusbar_.SetText(0, category->Name());
+        statusbar_.SetIcon(0, category->Icon());
+
+        if (category->guid())
+        {
+            delegate_->OnCategoryRequest(category->guid());
+        }
     }
-
-    statusbar_.SetText(0, category->Name());
-    statusbar_.SetIcon(0, category->Icon());
-
-    if (category->guid())
+    else if (type == CategoryTreeCtrl::ItemType::GROUP)
     {
-        delegate_->OnCategoryRequest(category->guid());
+        CategoryGroup* group = tree_.GetItemGroup(nmtv->itemNew.hItem);
+        if (!group)
+            return 0;
     }
 
     return 0;

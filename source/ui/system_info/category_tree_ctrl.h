@@ -8,8 +8,8 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__CATEGORY_TREE_CTRL_H
 #define _ASPIA_UI__SYSTEM_INFO__CATEGORY_TREE_CTRL_H
 
-#include "base/macros.h"
-#include "ui/system_info/category.h"
+#include "ui/system_info/category_group.h"
+#include "ui/system_info/category_info.h"
 
 #include <atlbase.h>
 #include <atlapp.h>
@@ -24,7 +24,11 @@ public:
     CategoryTreeCtrl() = default;
     ~CategoryTreeCtrl() = default;
 
-    Category* GetItemCategory(HTREEITEM tree_item) const;
+    enum class ItemType { UNKNOWN, GROUP, CATEGORY };
+
+    ItemType GetItemType(HTREEITEM tree_item) const;
+    CategoryInfo* GetItemCategory(HTREEITEM tree_item) const;
+    CategoryGroup* GetItemGroup(HTREEITEM tree_item) const;
     void ExpandChildGroups(HTREEITEM parent_tree_item);
 
 private:

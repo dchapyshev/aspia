@@ -11,84 +11,81 @@
 #include "ui/system_info/category_group_storage.h"
 #include "ui/system_info/category_group_display.h"
 #include "ui/system_info/category_group_windows_devices.h"
+#include "ui/system_info/category_info.h"
 
 namespace aspia {
 
-//
-// Central Processor
-//
-
-class CategoryCPU : public Category
+class CategoryCPU : public CategoryInfo
 {
 public:
-    CategoryCPU();
+    CategoryCPU()
+        : CategoryInfo(system_info::hardware::kCPU,
+                       IDS_SI_CATEGORY_CPU,
+                       IDI_PROCESSOR)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryCPU() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryCPU);
 };
 
-CategoryCPU::CategoryCPU()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_CPU, IDI_PROCESSOR)
-{
-    set_guid(system_info::hardware::kCPU);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Printers
-//
-
-class CategoryPrinters : public Category
+class CategoryPrinters : public CategoryInfo
 {
 public:
-    CategoryPrinters();
+    CategoryPrinters()
+        : CategoryInfo(system_info::hardware::kPrinters,
+                       IDS_SI_CATEGORY_PRINTERS,
+                       IDI_PRINTER)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryPrinters() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryPrinters);
 };
 
-CategoryPrinters::CategoryPrinters()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_PRINTERS, IDI_PRINTER)
-{
-    set_guid(system_info::hardware::kPrinters);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Power Options
-//
-
-class CategoryPowerOptions : public Category
+class CategoryPowerOptions : public CategoryInfo
 {
 public:
-    CategoryPowerOptions();
+    CategoryPowerOptions()
+        : CategoryInfo(system_info::hardware::kPowerOptions,
+                       IDS_SI_CATEGORY_POWER_OPTIONS,
+                       IDI_POWER_SUPPLY)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryPowerOptions() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryPowerOptions);
 };
-
-CategoryPowerOptions::CategoryPowerOptions()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_POWER_OPTIONS, IDI_POWER_SUPPLY)
-{
-    set_guid(system_info::hardware::kPowerOptions);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Hardware Group
-//
 
 CategoryGroupHardware::CategoryGroupHardware()
     : CategoryGroup(IDS_SI_CATEGORY_HARDWARE, IDI_HARDWARE)

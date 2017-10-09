@@ -7,84 +7,81 @@
 
 #include "protocol/system_info_constants.h"
 #include "ui/system_info/category_group_storage.h"
+#include "ui/system_info/category_info.h"
 
 namespace aspia {
 
-//
-// Optical Drives
-//
-
-class CategoryOpticalDrives : public Category
+class CategoryOpticalDrives : public CategoryInfo
 {
 public:
-    CategoryOpticalDrives();
+    CategoryOpticalDrives()
+        : CategoryInfo(system_info::hardware::storage::kOpticalDrives,
+                       IDS_SI_CATEGORY_STORAGE_OPTICAL_DRIVES,
+                       IDI_DRIVE_DISK)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryOpticalDrives() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryOpticalDrives);
 };
 
-CategoryOpticalDrives::CategoryOpticalDrives()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_STORAGE_OPTICAL_DRIVES, IDI_DRIVE_DISK)
-{
-    set_guid(system_info::hardware::storage::kOpticalDrives);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// ATA
-//
-
-class CategoryATA : public Category
+class CategoryATA : public CategoryInfo
 {
 public:
-    CategoryATA();
+    CategoryATA()
+        : CategoryInfo(system_info::hardware::storage::kATA,
+                       IDS_SI_CATEGORY_STORAGE_ATA,
+                       IDI_DRIVE)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryATA() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryATA);
 };
 
-CategoryATA::CategoryATA()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_STORAGE_ATA, IDI_DRIVE)
-{
-    set_guid(system_info::hardware::storage::kATA);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// S.M.A.R.T.
-//
-
-class CategorySMART : public Category
+class CategorySMART : public CategoryInfo
 {
 public:
-    CategorySMART();
+    CategorySMART()
+        : CategoryInfo(system_info::hardware::storage::kSMART,
+                       IDS_SI_CATEGORY_STORAGE_SMART,
+                       IDI_DRIVE)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategorySMART() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategorySMART);
 };
-
-CategorySMART::CategorySMART()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_STORAGE_SMART, IDI_DRIVE)
-{
-    set_guid(system_info::hardware::storage::kSMART);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Storage Group
-//
 
 CategoryGroupStorage::CategoryGroupStorage()
     : CategoryGroup(IDS_SI_CATEGORY_STORAGE, IDI_DRIVE)

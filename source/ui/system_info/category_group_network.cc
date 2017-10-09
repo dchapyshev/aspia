@@ -7,156 +7,153 @@
 
 #include "protocol/system_info_constants.h"
 #include "ui/system_info/category_group_network.h"
+#include "ui/system_info/category_info.h"
 
 namespace aspia {
 
-//
-// Network Cards
-//
-
-class CategoryNetworkCards : public Category
+class CategoryNetworkCards : public CategoryInfo
 {
 public:
-    CategoryNetworkCards();
+    CategoryNetworkCards()
+        : CategoryInfo(system_info::network::kNetworkCards,
+                       IDS_SI_CATEGORY_NETWORK_CARDS,
+                       IDI_NETWORK_ADAPTER)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryNetworkCards() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryNetworkCards);
 };
 
-CategoryNetworkCards::CategoryNetworkCards()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_NETWORK_CARDS, IDI_NETWORK_ADAPTER)
-{
-    set_guid(system_info::network::kNetworkCards);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// RAS Connections
-//
-
-class CategoryRasConnections : public Category
+class CategoryRasConnections : public CategoryInfo
 {
 public:
-    CategoryRasConnections();
+    CategoryRasConnections()
+        : CategoryInfo(system_info::network::kRASConnections,
+                       IDS_SI_CATEGORY_RAS_CONNECTIONS,
+                       IDI_TELEPHONE_FAX)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryRasConnections() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryRasConnections);
 };
 
-CategoryRasConnections::CategoryRasConnections()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_RAS_CONNECTIONS, IDI_TELEPHONE_FAX)
-{
-    set_guid(system_info::network::kRASConnections);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Open Connections
-//
-
-class CategoryOpenConnections : public Category
+class CategoryOpenConnections : public CategoryInfo
 {
 public:
-    CategoryOpenConnections();
+    CategoryOpenConnections()
+        : CategoryInfo(system_info::network::kOpenConnections,
+                       IDS_SI_CATEGORY_OPEN_CONNECTIONS,
+                       IDI_SERVERS_NETWORK)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryOpenConnections() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryOpenConnections);
 };
 
-CategoryOpenConnections::CategoryOpenConnections()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_OPEN_CONNECTIONS, IDI_SERVERS_NETWORK)
-{
-    set_guid(system_info::network::kOpenConnections);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Shared Resources
-//
-
-class CategorySharedResources : public Category
+class CategorySharedResources : public CategoryInfo
 {
 public:
-    CategorySharedResources();
+    CategorySharedResources()
+        : CategoryInfo(system_info::network::kSharedResources,
+                       IDS_SI_CATEGORY_SHARED_RESOURCES,
+                       IDI_FOLDER_NETWORK)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategorySharedResources() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategorySharedResources);
 };
 
-CategorySharedResources::CategorySharedResources()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_SHARED_RESOURCES, IDI_FOLDER_NETWORK)
-{
-    set_guid(system_info::network::kSharedResources);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Open Files
-//
-
-class CategoryOpenFiles : public Category
+class CategoryOpenFiles : public CategoryInfo
 {
 public:
-    CategoryOpenFiles();
+    CategoryOpenFiles()
+        : CategoryInfo(system_info::network::kOpenFiles,
+                       IDS_SI_CATEGORY_OPEN_FILES,
+                       IDI_FOLDER_NETWORK)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryOpenFiles() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryOpenFiles);
 };
 
-CategoryOpenFiles::CategoryOpenFiles()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_OPEN_FILES, IDI_FOLDER_NETWORK)
-{
-    set_guid(system_info::network::kOpenFiles);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Routes
-//
-
-class CategoryRoutes : public Category
+class CategoryRoutes : public CategoryInfo
 {
 public:
-    CategoryRoutes();
+    CategoryRoutes()
+        : CategoryInfo(system_info::network::kRoutes,
+                       IDS_SI_CATEGORY_ROUTES,
+                       IDI_ROUTE)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryRoutes() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryRoutes);
 };
-
-CategoryRoutes::CategoryRoutes()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_ROUTES, IDI_ROUTE)
-{
-    set_guid(system_info::network::kRoutes);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Network Group
-//
 
 CategoryGroupNetwork::CategoryGroupNetwork()
     : CategoryGroup(IDS_SI_CATEGORY_NETWORK, IDI_NETWORK)

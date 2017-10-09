@@ -9,84 +9,81 @@
 #include "ui/system_info/category_group_os.h"
 #include "ui/system_info/category_group_users.h"
 #include "ui/system_info/category_group_event_log.h"
+#include "ui/system_info/category_info.h"
 
 namespace aspia {
 
-//
-// Registration Information
-//
-
-class CategoryRegistrationInformation : public Category
+class CategoryRegistrationInformation : public CategoryInfo
 {
 public:
-    CategoryRegistrationInformation();
+    CategoryRegistrationInformation()
+        : CategoryInfo(system_info::operating_system::kRegistrationInformation,
+                       IDS_SI_CATEGORY_REGISTRATION_INFO,
+                       IDI_COMPUTER)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryRegistrationInformation() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryRegistrationInformation);
 };
 
-CategoryRegistrationInformation::CategoryRegistrationInformation()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_REGISTRATION_INFO, IDI_COMPUTER)
-{
-    set_guid(system_info::operating_system::kRegistrationInformation);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Task Scheduler
-//
-
-class CategoryTaskScheduler : public Category
+class CategoryTaskScheduler : public CategoryInfo
 {
 public:
-    CategoryTaskScheduler();
+    CategoryTaskScheduler()
+        : CategoryInfo(system_info::operating_system::kTaskScheduler,
+                       IDS_SI_CATEGORY_TASK_SCHEDULER,
+                       IDI_CLOCK)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryTaskScheduler() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryTaskScheduler);
 };
 
-CategoryTaskScheduler::CategoryTaskScheduler()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_TASK_SCHEDULER, IDI_CLOCK)
-{
-    set_guid(system_info::operating_system::kTaskScheduler);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Environment Variables
-//
-
-class CategoryEnvironmentVariables : public Category
+class CategoryEnvironmentVariables : public CategoryInfo
 {
 public:
-    CategoryEnvironmentVariables();
+    CategoryEnvironmentVariables()
+        : CategoryInfo(system_info::operating_system::kEnvironmentVariables,
+                       IDS_SI_CATEGORY_ENVIRONMENT_VARIABLES,
+                       IDI_APPLICATIONS)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryEnvironmentVariables() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryEnvironmentVariables);
 };
-
-CategoryEnvironmentVariables::CategoryEnvironmentVariables()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_ENVIRONMENT_VARIABLES, IDI_APPLICATIONS)
-{
-    set_guid(system_info::operating_system::kEnvironmentVariables);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Operating System Group
-//
 
 CategoryGroupOS::CategoryGroupOS()
     : CategoryGroup(IDS_SI_CATEGORY_OS, IDI_OS)

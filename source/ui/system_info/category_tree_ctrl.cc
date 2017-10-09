@@ -90,9 +90,39 @@ LRESULT CategoryTreeCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
     return ret;
 }
 
-Category* CategoryTreeCtrl::GetItemCategory(HTREEITEM tree_item) const
+CategoryTreeCtrl::ItemType CategoryTreeCtrl::GetItemType(HTREEITEM tree_item) const
 {
-    return reinterpret_cast<Category*>(GetItemData(tree_item));
+    Category* item = reinterpret_cast<Category*>(GetItemData(tree_item));
+
+    if (!item)
+        return ItemType::UNKNOWN;
+
+    if (item->type() == Category::Type::GROUP)
+        return ItemType::GROUP;
+
+    DCHECK(item->type() == Category::Type::INFO);
+
+    return ItemType::CATEGORY;
+}
+
+CategoryInfo* CategoryTreeCtrl::GetItemCategory(HTREEITEM tree_item) const
+{
+    Category* item = reinterpret_cast<Category*>(GetItemData(tree_item));
+
+    if (!item || item->type() == Category::Type::GROUP)
+        return nullptr;
+
+    return reinterpret_cast<CategoryInfo*>(item);
+}
+
+CategoryGroup* CategoryTreeCtrl::GetItemGroup(HTREEITEM tree_item) const
+{
+    Category* item = reinterpret_cast<Category*>(GetItemData(tree_item));
+
+    if (!item || item->type() == Category::Type::INFO)
+        return nullptr;
+
+    return reinterpret_cast<CategoryGroup*>(item);
 }
 
 } // namespace aspia

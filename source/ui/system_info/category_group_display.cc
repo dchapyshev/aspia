@@ -7,84 +7,81 @@
 
 #include "protocol/system_info_constants.h"
 #include "ui/system_info/category_group_display.h"
+#include "ui/system_info/category_info.h"
 
 namespace aspia {
 
-//
-// Windows Video
-//
-
-class CategoryWindowsVideo : public Category
+class CategoryWindowsVideo : public CategoryInfo
 {
 public:
-    CategoryWindowsVideo();
+    CategoryWindowsVideo()
+        : CategoryInfo(system_info::hardware::display::kWindowsVideo,
+                       IDS_SI_CATEGORY_DISPLAY_WINDOWS_VIDEO,
+                       IDI_MONITOR)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryWindowsVideo() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryWindowsVideo);
 };
 
-CategoryWindowsVideo::CategoryWindowsVideo()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_DISPLAY_WINDOWS_VIDEO, IDI_MONITOR)
-{
-    set_guid(system_info::hardware::display::kWindowsVideo);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Monitor
-//
-
-class CategoryMonitor : public Category
+class CategoryMonitor : public CategoryInfo
 {
 public:
-    CategoryMonitor();
+    CategoryMonitor()
+        : CategoryInfo(system_info::hardware::display::kMonitor,
+                       IDS_SI_CATEGORY_DISPLAY_MONITOR,
+                       IDI_MONITOR)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryMonitor() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryMonitor);
 };
 
-CategoryMonitor::CategoryMonitor()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_DISPLAY_MONITOR, IDI_MONITOR)
-{
-    set_guid(system_info::hardware::display::kMonitor);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// OpenGL
-//
-
-class CategoryOpenGL : public Category
+class CategoryOpenGL : public CategoryInfo
 {
 public:
-    CategoryOpenGL();
+    CategoryOpenGL()
+        : CategoryInfo(system_info::hardware::display::kOpenGL,
+                       IDS_SI_CATEGORY_DISPLAY_OPENGL,
+                       IDI_CLAPPERBOARD)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryOpenGL() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryOpenGL);
 };
-
-CategoryOpenGL::CategoryOpenGL()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_DISPLAY_OPENGL, IDI_CLAPPERBOARD)
-{
-    set_guid(system_info::hardware::display::kOpenGL);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Display Group
-//
 
 CategoryGroupDisplay::CategoryGroupDisplay()
     : CategoryGroup(IDS_SI_CATEGORY_DISPLAY, IDI_MONITOR)

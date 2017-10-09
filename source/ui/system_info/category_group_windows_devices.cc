@@ -7,60 +7,57 @@
 
 #include "protocol/system_info_constants.h"
 #include "ui/system_info/category_group_windows_devices.h"
+#include "ui/system_info/category_info.h"
 
 namespace aspia {
 
-//
-// All Devices
-//
-
-class CategoryAllDevices : public Category
+class CategoryAllDevices : public CategoryInfo
 {
 public:
-    CategoryAllDevices();
+    CategoryAllDevices()
+        : CategoryInfo(system_info::hardware::windows_devices::kAll,
+                       IDS_SI_CATEGORY_WINDOWS_DEVICES_ALL,
+                       IDI_PCI)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryAllDevices() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryAllDevices);
 };
 
-CategoryAllDevices::CategoryAllDevices()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_WINDOWS_DEVICES_ALL, IDI_PCI)
-{
-    set_guid(system_info::hardware::windows_devices::kAll);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Unknown Devices
-//
-
-class CategoryUnknownDevices : public Category
+class CategoryUnknownDevices : public CategoryInfo
 {
 public:
-    CategoryUnknownDevices();
+    CategoryUnknownDevices()
+        : CategoryInfo(system_info::hardware::windows_devices::kUnknown,
+                       IDS_SI_CATEGORY_WINDOWS_DEVICES_UNK,
+                       IDI_PCI)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryUnknownDevices() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryUnknownDevices);
 };
-
-CategoryUnknownDevices::CategoryUnknownDevices()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_WINDOWS_DEVICES_UNK, IDI_PCI)
-{
-    set_guid(system_info::hardware::windows_devices::kUnknown);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Windows Devices Group
-//
 
 CategoryGroupWindowDevices::CategoryGroupWindowDevices()
     : CategoryGroup(IDS_SI_CATEGORY_WINDOWS_DEVICES, IDI_PCI)

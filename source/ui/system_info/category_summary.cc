@@ -12,13 +12,18 @@
 namespace aspia {
 
 CategorySummary::CategorySummary()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_SUMMARY, IDI_COMPUTER)
+    : CategoryInfo(system_info::kSummary,
+                   IDS_SI_CATEGORY_SUMMARY,
+                   IDI_COMPUTER)
 {
-    set_guid(system_info::kSummary);
-
     ColumnList* column_list = mutable_column_list();
     column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
     column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+}
+
+void CategorySummary::Parse(const std::string& data, Output* output)
+{
+    // TODO
 }
 
 } // namespace aspia

@@ -7,80 +7,81 @@
 
 #include "protocol/system_info_constants.h"
 #include "ui/system_info/category_group_event_log.h"
+#include "ui/system_info/category_info.h"
 
 namespace aspia {
 
-//
-// Applications
-//
-
-class CategoryApplications : public Category
+class CategoryApplications : public CategoryInfo
 {
 public:
-    CategoryApplications();
+    CategoryApplications()
+        : CategoryInfo(system_info::operating_system::event_logs::kApplications,
+                       IDS_SI_CATEGORY_EVENT_LOG_APPLICATIONS,
+                       IDI_ERROR_LOG)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategoryApplications() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryApplications);
 };
 
-CategoryApplications::CategoryApplications()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_EVENT_LOG_APPLICATIONS, IDI_ERROR_LOG)
-{
-    set_guid(system_info::operating_system::event_logs::kApplications);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// Security
-//
-
-class CategorySecurity : public Category
+class CategorySecurity : public CategoryInfo
 {
 public:
-    CategorySecurity();
+    CategorySecurity()
+        : CategoryInfo(system_info::operating_system::event_logs::kSecurity,
+                       IDS_SI_CATEGORY_EVENT_LOG_SECURITY,
+                       IDI_ERROR_LOG)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategorySecurity() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategorySecurity);
 };
 
-CategorySecurity::CategorySecurity()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_EVENT_LOG_SECURITY, IDI_ERROR_LOG)
-{
-    set_guid(system_info::operating_system::event_logs::kSecurity);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
-
-//
-// System
-//
-
-class CategorySystem : public Category
+class CategorySystem : public CategoryInfo
 {
 public:
-    CategorySystem();
+    CategorySystem()
+        : CategoryInfo(system_info::operating_system::event_logs::kSystem,
+                       IDS_SI_CATEGORY_EVENT_LOG_SYSTEM,
+                       IDI_ERROR_LOG)
+    {
+        ColumnList* column_list = mutable_column_list();
+        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
+        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    }
+
     ~CategorySystem() = default;
+
+    void Parse(const std::string& data, Output* output) final
+    {
+        // TODO
+    }
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategorySystem);
 };
-
-CategorySystem::CategorySystem()
-    : Category(Type::REGULAR, IDS_SI_CATEGORY_EVENT_LOG_SYSTEM, IDI_ERROR_LOG)
-{
-    set_guid(system_info::operating_system::event_logs::kSystem);
-
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
-}
 
 //
 // Event Log Group
