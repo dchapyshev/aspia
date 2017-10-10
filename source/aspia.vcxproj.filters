@@ -553,19 +553,7 @@
     <ClCompile Include="ui\system_info\category_summary.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
-    <ClCompile Include="ui\system_info\category_group_dmi.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
     <ClCompile Include="ui\system_info\category_group_hardware.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\category_group_storage.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\category_group_display.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\category_group_windows_devices.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
     <ClCompile Include="ui\system_info\category_group_software.cc">
@@ -575,12 +563,6 @@
       <Filter>ui\system_info</Filter>
     </ClCompile>
     <ClCompile Include="ui\system_info\category_group_os.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\category_group_users.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\category_group_event_log.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
     <ClCompile Include="base\devices\device.cc">
@@ -1257,24 +1239,6 @@
       <Filter>ui\system_info</Filter>
     </ClInclude>
     <ClInclude Include="ui\system_info\category_group_software.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\category_group_dmi.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\category_group_storage.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\category_group_display.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\category_group_windows_devices.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\category_group_users.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\category_group_event_log.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
     <ClInclude Include="ui\system_info\system_info_toolbar.h">
