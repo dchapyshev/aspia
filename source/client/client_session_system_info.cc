@@ -25,11 +25,18 @@ ClientSessionSystemInfo::~ClientSessionSystemInfo()
     window_.reset();
 }
 
-void ClientSessionSystemInfo::OnCategoryRequest(const char* guid)
+void ClientSessionSystemInfo::OnCategoryRequest(const char* guid,
+                                                ParseCallback parse_callback,
+                                                std::shared_ptr<OutputProxy> output)
 {
+    DCHECK(parse_callback);
+    DCHECK(output);
     DCHECK(guid);
 
-    last_guid_.assign(guid);
+    last_guid_ = guid;
+    parse_callback_ = parse_callback;
+    output_ = output;
+
     DCHECK(last_guid_.length() == system_info::kGuidLength);
 
     proto::system_info::ClientToHost message;
@@ -62,8 +69,9 @@ void ClientSessionSystemInfo::OnMessageReceived(const IOBuffer& buffer)
 
         if (guid.length() == system_info::kGuidLength && guid == last_guid_)
         {
-            LOG(WARNING) << "reply: " << guid;
-            // TODO
+            parse_callback_(output_, message.data());
+            parse_callback_ = nullptr;
+            output_ = nullptr;
             return;
         }
     }

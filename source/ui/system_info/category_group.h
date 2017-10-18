@@ -10,18 +10,17 @@
 
 #include "base/macros.h"
 #include "ui/system_info/category.h"
-#include "ui/resource.h"
 
 namespace aspia {
 
 class CategoryGroup : public Category
 {
 public:
-    CategoryGroup(UINT name_id, UINT icon_id)
-        : Category(Type::GROUP, name_id, icon_id)
+    CategoryGroup(const std::string& name, int icon_id)
+        : Category(Type::GROUP, name, icon_id)
     {
         ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back(IDS_SI_COLUMN_CATEGORY_NAME, 250);
+        column_list->emplace_back("Category Name", 250);
     }
 
 private:

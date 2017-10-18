@@ -8,6 +8,7 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__OUTPUT_HTML_FILE_H
 #define _ASPIA_UI__SYSTEM_INFO__OUTPUT_HTML_FILE_H
 
+#include "base/macros.h"
 #include "ui/system_info/output.h"
 
 namespace aspia {

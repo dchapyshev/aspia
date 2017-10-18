@@ -5,9 +5,10 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/strings/unicode.h"
+#include "base/logging.h"
 #include "ui/system_info/system_info_window.h"
 #include "ui/about_dialog.h"
-#include "base/logging.h"
 
 namespace aspia {
 
@@ -212,19 +213,26 @@ LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& 
         if (!category)
             return 0;
 
-        statusbar_.SetText(0, category->Name());
-        statusbar_.SetIcon(0, category->Icon());
+        statusbar_.SetText(0, UNICODEfromUTF8(category->Name()).c_str());
+        statusbar_.SetIcon(0, AtlLoadIconImage(category->Icon(),
+                                               LR_CREATEDIBSECTION,
+                                               GetSystemMetrics(SM_CXSMICON),
+                                               GetSystemMetrics(SM_CYSMICON)));
 
-        if (category->guid())
-        {
-            delegate_->OnCategoryRequest(category->guid());
-        }
+        delegate_->OnCategoryRequest(
+            category->guid(),
+            std::bind(&CategoryInfo::Parse, category, std::placeholders::_1, std::placeholders::_2),
+            list_.output_proxy());
     }
     else if (type == CategoryTreeCtrl::ItemType::GROUP)
     {
         CategoryGroup* group = tree_.GetItemGroup(nmtv->itemNew.hItem);
         if (!group)
             return 0;
+    }
+    else
+    {
+        DLOG(FATAL) << "Unexpected item type: " << static_cast<int>(type);
     }
 
     return 0;

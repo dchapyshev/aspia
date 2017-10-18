@@ -11,17 +11,14 @@
 
 namespace aspia {
 
-CategorySummary::CategorySummary()
-    : CategoryInfo(system_info::kSummary,
-                   IDS_SI_CATEGORY_SUMMARY,
-                   IDI_COMPUTER)
+CategorySummary::CategorySummary() : CategoryInfo(system_info::kSummary, "Summary", IDI_COMPUTER)
 {
     ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-    column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+    column_list->emplace_back("Parameter", 200);
+    column_list->emplace_back("Value", 200);
 }
 
-void CategorySummary::Parse(const std::string& data, Output* output)
+void CategorySummary::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
     // TODO
 }

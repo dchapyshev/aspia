@@ -535,6 +535,7 @@ std::string GetSharedResources()
                 break;
         }
 
+        item->set_local_path(enumerator.GetLocalPath());
         item->set_current_uses(enumerator.GetCurrentUses());
         item->set_maximum_uses(enumerator.GetMaximumUses());
     }
@@ -585,6 +586,7 @@ std::string GetUsers()
     {
         system_info::Users::Item* item = message.add_item();
 
+        item->set_name(enumerator.GetName());
         item->set_full_name(enumerator.GetFullName());
         item->set_comment(enumerator.GetComment());
         item->set_is_disabled(enumerator.IsDisabled());
@@ -595,13 +597,6 @@ std::string GetUsers()
         item->set_number_logons(enumerator.GetNumberLogons());
         item->set_bad_password_count(enumerator.GetBadPasswordCount());
         item->set_last_logon_time(enumerator.GetLastLogonTime());
-        item->set_user_id(enumerator.GetUserId());
-        item->set_profile_directory(enumerator.GetProfileDirectory());
-        item->set_home_directory(enumerator.GetHomeDirectory());
-        item->set_script_path(enumerator.GetScriptPath());
-        item->set_country_code(enumerator.GetCountryCode());
-        item->set_codepage(enumerator.GetCodePage());
-        item->set_primary_group_id(enumerator.GetPrimaryGroupId());
     }
 
     return message.SerializeAsString();

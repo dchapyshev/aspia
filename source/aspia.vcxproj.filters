@@ -616,17 +616,14 @@
     <ClCompile Include="proto\system_info_session_message.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
-    <ClCompile Include="ui\system_info\output_html_file.cc">
+    <ClCompile Include="ui\system_info\output_proxy.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
-    <ClCompile Include="ui\system_info\output_json_file.cc">
+    <ClCompile Include="ui\system_info\output.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
-    <ClCompile Include="ui\system_info\output_listview.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\output_xml_file.cc">
-      <Filter>ui\system_info</Filter>
+    <ClCompile Include="base\datetime.cc">
+      <Filter>base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1295,23 +1292,17 @@
     <ClInclude Include="proto\system_info_session_message.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
+    <ClInclude Include="ui\system_info\category_info.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
     <ClInclude Include="ui\system_info\output.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
-    <ClInclude Include="ui\system_info\output_html_file.h">
+    <ClInclude Include="ui\system_info\output_proxy.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
-    <ClInclude Include="ui\system_info\output_json_file.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\output_listview.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\output_xml_file.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\category_info.h">
-      <Filter>ui\system_info</Filter>
+    <ClInclude Include="base\datetime.h">
+      <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

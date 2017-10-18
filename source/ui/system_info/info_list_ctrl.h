@@ -9,6 +9,7 @@
 #define _ASPIA_UI__SYSTEM_INFO__INFO_LIST_CTRL_H
 
 #include "base/macros.h"
+#include "ui/system_info/output.h"
 
 #include <atlbase.h>
 #include <atlapp.h>
@@ -17,14 +18,35 @@
 
 namespace aspia {
 
-class InfoListCtrl : public CWindowImpl<InfoListCtrl, CListViewCtrl>
+class InfoListCtrl
+    : public CWindowImpl<InfoListCtrl, CListViewCtrl>,
+      public Output
 {
 public:
-    InfoListCtrl() = default;
+    InfoListCtrl()
+    {
+        // Nothing
+    }
+
     ~InfoListCtrl() = default;
 
     void DeleteAllColumns();
     int GetColumnCount() const;
+
+protected:
+    void StartDocument(const std::string& name) final;
+    void EndDocument() final;
+    void StartTable(const std::string& name, const ColumnList& column_list) final;
+    void EndTable() final;
+    void StartGroup(const std::string& name, IconId icon_id) final;
+    void EndGroup() final;
+    void AddParam(Output::IconId icon_id,
+                  const std::string& param,
+                  const std::string& value,
+                  const char* unit) final;
+    void StartRow(IconId icon_id) final;
+    void EndRow() final;
+    void AddValue(const std::string& value, const char* unit) final;
 
 private:
     BEGIN_MSG_MAP(InfoListCtrl)
@@ -34,6 +56,10 @@ private:
     LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
 
     CImageListManaged imagelist_;
+
+    int column_count_ = 0;
+    int current_column_ = 0;
+    int indent_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(InfoListCtrl);
 };

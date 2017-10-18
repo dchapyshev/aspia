@@ -10,6 +10,7 @@
 #include "ui/resource.h"
 #include "base/version_helpers.h"
 #include "base/strings/unicode.h"
+#include "base/datetime.h"
 #include "base/logging.h"
 
 #include <uxtheme.h>
@@ -84,7 +85,7 @@ void FileListCtrl::Read(std::shared_ptr<proto::FileList> list)
         const int item_index = AddItem(GetItemCount(), 0, name.c_str(), icon_index);
         SetItemData(item_index, object_index);
         SetItemText(item_index, 2, file_folder);
-        SetItemText(item_index, 3, TimeToString(item.modification_time()).c_str());
+        SetItemText(item_index, 3, TimeToStringW(item.modification_time()).c_str());
     }
 
     // Enumerate the files.
@@ -105,7 +106,7 @@ void FileListCtrl::Read(std::shared_ptr<proto::FileList> list)
         SetItemData(item_index, object_index);
         SetItemText(item_index, 1, SizeToString(object.size()).c_str());
         SetItemText(item_index, 2, GetFileTypeString(name));
-        SetItemText(item_index, 3, TimeToString(object.modification_time()).c_str());
+        SetItemText(item_index, 3, TimeToStringW(object.modification_time()).c_str());
     }
 }
 

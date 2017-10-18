@@ -5,9 +5,13 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/datetime.h"
 #include "protocol/system_info_constants.h"
+#include "proto/system_info_session_message.pb.h"
 #include "ui/system_info/category_group_os.h"
 #include "ui/system_info/category_info.h"
+#include "ui/system_info/output_proxy.h"
+#include "ui/resource.h"
 
 namespace aspia {
 
@@ -16,17 +20,15 @@ class CategoryRegistrationInformation : public CategoryInfo
 public:
     CategoryRegistrationInformation()
         : CategoryInfo(system_info::operating_system::kRegistrationInformation,
-                       IDS_SI_CATEGORY_REGISTRATION_INFO,
+                       "Registration Information",
                        IDI_COMPUTER)
     {
         ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+        column_list->emplace_back("Parameter", 200);
+        column_list->emplace_back("Value", 200);
     }
 
-    ~CategoryRegistrationInformation() = default;
-
-    void Parse(const std::string& data, Output* output) final
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
     }
@@ -40,17 +42,15 @@ class CategoryTaskScheduler : public CategoryInfo
 public:
     CategoryTaskScheduler()
         : CategoryInfo(system_info::operating_system::kTaskScheduler,
-                       IDS_SI_CATEGORY_TASK_SCHEDULER,
+                       "Task Scheduler",
                        IDI_CLOCK)
     {
         ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+        column_list->emplace_back("Parameter", 200);
+        column_list->emplace_back("Value", 200);
     }
 
-    ~CategoryTaskScheduler() = default;
-
-    void Parse(const std::string& data, Output* output) final
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
     }
@@ -64,17 +64,15 @@ class CategoryEnvironmentVariables : public CategoryInfo
 public:
     CategoryEnvironmentVariables()
         : CategoryInfo(system_info::operating_system::kEnvironmentVariables,
-                       IDS_SI_CATEGORY_ENVIRONMENT_VARIABLES,
+                       "Environment Variables",
                        IDI_APPLICATIONS)
     {
         ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+        column_list->emplace_back("Parameter", 200);
+        column_list->emplace_back("Value", 200);
     }
 
-    ~CategoryEnvironmentVariables() = default;
-
-    void Parse(const std::string& data, Output* output) final
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
     }
@@ -88,17 +86,15 @@ class CategoryApplications : public CategoryInfo
 public:
     CategoryApplications()
         : CategoryInfo(system_info::operating_system::event_logs::kApplications,
-                       IDS_SI_CATEGORY_EVENT_LOG_APPLICATIONS,
+                       "Applications",
                        IDI_ERROR_LOG)
     {
         ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+        column_list->emplace_back("Parameter", 200);
+        column_list->emplace_back("Value", 200);
     }
 
-    ~CategoryApplications() = default;
-
-    void Parse(const std::string& data, Output* output) final
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
     }
@@ -112,17 +108,15 @@ class CategorySecurity : public CategoryInfo
 public:
     CategorySecurity()
         : CategoryInfo(system_info::operating_system::event_logs::kSecurity,
-                       IDS_SI_CATEGORY_EVENT_LOG_SECURITY,
+                       "Security",
                        IDI_ERROR_LOG)
     {
         ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+        column_list->emplace_back("Parameter", 200);
+        column_list->emplace_back("Value", 200);
     }
 
-    ~CategorySecurity() = default;
-
-    void Parse(const std::string& data, Output* output) final
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
     }
@@ -136,17 +130,15 @@ class CategorySystem : public CategoryInfo
 public:
     CategorySystem()
         : CategoryInfo(system_info::operating_system::event_logs::kSystem,
-                       IDS_SI_CATEGORY_EVENT_LOG_SYSTEM,
+                       "System",
                        IDI_ERROR_LOG)
     {
         ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+        column_list->emplace_back("Parameter", 200);
+        column_list->emplace_back("Value", 200);
     }
 
-    ~CategorySystem() = default;
-
-    void Parse(const std::string& data, Output* output) final
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
     }
@@ -158,8 +150,7 @@ private:
 class CategoryGroupEventLog : public CategoryGroup
 {
 public:
-    CategoryGroupEventLog()
-        : CategoryGroup(IDS_SI_CATEGORY_EVENT_LOGS, IDI_BOOKS_STACK)
+    CategoryGroupEventLog() : CategoryGroup("Event Logs", IDI_BOOKS_STACK)
     {
         CategoryList* child_list = mutable_child_list();
         child_list->emplace_back(std::make_unique<CategoryApplications>());
@@ -176,19 +167,66 @@ class CategoryUsers : public CategoryInfo
 public:
     CategoryUsers()
         : CategoryInfo(system_info::operating_system::users_and_groups::kUsers,
-                       IDS_SI_CATEGORY_USERS,
+                      "Users",
                        IDI_USER)
     {
         ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+        column_list->emplace_back("Parameter", 200);
+        column_list->emplace_back("Value", 200);
     }
 
-    ~CategoryUsers() = default;
-
-    void Parse(const std::string& data, Output* output) final
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
-        // TODO
+        system_info::Users message;
+
+        if (!message.ParseFromString(data))
+            return;
+
+        Output::Table table(output, Name(), column_list());
+
+        for (int index = 0; index < message.item_size(); ++index)
+        {
+            const system_info::Users::Item& item = message.item(index);
+
+            Output::Group group(output, item.name(), Icon());
+
+            if (!item.full_name().empty())
+            {
+                output->AddParam(IDI_USER, "Full Name", item.full_name());
+            }
+
+            if (!item.comment().empty())
+            {
+                output->AddParam(IDI_DOCUMENT_TEXT, "Description", item.comment());
+            }
+
+            output->AddParam(item.is_disabled() ? IDI_CHECKED : IDI_UNCHECKED,
+                             "Disabled",
+                             item.is_disabled() ? "Yes" : "No");
+
+            output->AddParam(item.is_password_cant_change() ? IDI_CHECKED : IDI_UNCHECKED,
+                             "Password Can't Change",
+                             item.is_password_cant_change() ? "Yes" : "No");
+
+            output->AddParam(item.is_password_expired() ? IDI_CHECKED : IDI_UNCHECKED,
+                             "Password Expired",
+                             item.is_password_expired() ? "Yes" : "No");
+
+            output->AddParam(item.is_dont_expire_password() ? IDI_CHECKED : IDI_UNCHECKED,
+                             "Don't Expire Password",
+                             item.is_dont_expire_password() ? "Yes" : "No");
+
+            output->AddParam(item.is_lockout() ? IDI_CHECKED : IDI_UNCHECKED,
+                             "Lockout",
+                             item.is_lockout() ? "Yes" : "No");
+
+            output->AddParam(IDI_CLOCK, "Last Logon", TimeToString(item.last_logon_time()));
+            output->AddParam(IDI_COUNTER, "Number Logons", std::to_string(item.number_logons()));
+
+            output->AddParam(IDI_COUNTER,
+                             "Bad Password Count",
+                             std::to_string(item.bad_password_count()));
+        }
     }
 
 private:
@@ -200,19 +238,32 @@ class CategoryUserGroups : public CategoryInfo
 public:
     CategoryUserGroups()
         : CategoryInfo(system_info::operating_system::users_and_groups::kUserGroups,
-                       IDS_SI_CATEGORY_USER_GROUPS,
+                       "User Groups",
                        IDI_USERS)
     {
         ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+        column_list->emplace_back("Group Name", 250);
+        column_list->emplace_back("Description", 250);
     }
 
-    ~CategoryUserGroups() = default;
-
-    void Parse(const std::string& data, Output* output) final
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
-        // TODO
+        system_info::UserGroups message;
+
+        if (!message.ParseFromString(data))
+            return;
+
+        Output::Table table(output, Name(), column_list());
+
+        for (int index = 0; index < message.item_size(); ++index)
+        {
+            const system_info::UserGroups::Item& item = message.item(index);
+
+            Output::Row row(output, Icon());
+
+            output->AddValue(item.name());
+            output->AddValue(item.comment());
+        }
     }
 
 private:
@@ -224,19 +275,40 @@ class CategoryActiveSessions : public CategoryInfo
 public:
     CategoryActiveSessions()
         : CategoryInfo(system_info::operating_system::users_and_groups::kActiveSessions,
-                       IDS_SI_CATEGORY_ACTIVE_SESSIONS,
+                       "Active Sessions",
                        IDI_USERS)
     {
         ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back(IDS_SI_COLUMN_PARAMETER, 200);
-        column_list->emplace_back(IDS_SI_COLUMN_VALUE, 200);
+        column_list->emplace_back("User Name", 200);
+        column_list->emplace_back("Domain", 200);
+        column_list->emplace_back("ID", 200);
+        column_list->emplace_back("State", 200);
+        column_list->emplace_back("Client Name", 200);
+        column_list->emplace_back("Logon Type", 200);
     }
 
-    ~CategoryActiveSessions() = default;
-
-    void Parse(const std::string& data, Output* output) final
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
-        // TODO
+        system_info::Sessions message;
+
+        if (!message.ParseFromString(data))
+            return;
+
+        Output::Table table(output, Name(), column_list());
+
+        for (int index = 0; index < message.item_size(); ++index)
+        {
+            const system_info::Sessions::Item& item = message.item(index);
+
+            Output::Row row(output, Icon());
+
+            output->AddValue(item.user_name());
+            output->AddValue(item.domain_name());
+            output->AddValue(std::to_string(item.session_id()));
+            output->AddValue(item.connect_state());
+            output->AddValue(item.client_name());
+            output->AddValue(item.winstation_name());
+        }
     }
 
 private:
@@ -247,7 +319,7 @@ class CategoryGroupUsers : public CategoryGroup
 {
 public:
     CategoryGroupUsers()
-        : CategoryGroup(IDS_SI_CATEGORY_USERS_AND_GROUPS, IDI_USERS)
+        : CategoryGroup("Users and groups", IDI_USERS)
     {
         CategoryList* child_list = mutable_child_list();
         child_list->emplace_back(std::make_unique<CategoryUsers>());
@@ -260,7 +332,7 @@ private:
 };
 
 CategoryGroupOS::CategoryGroupOS()
-    : CategoryGroup(IDS_SI_CATEGORY_OS, IDI_OS)
+    : CategoryGroup("Operating System", IDI_OS)
 {
     CategoryList* child_list = mutable_child_list();
     child_list->emplace_back(std::make_unique<CategoryRegistrationInformation>());

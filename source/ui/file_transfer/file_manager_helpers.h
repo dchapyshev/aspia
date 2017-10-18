@@ -14,12 +14,9 @@
 #include <atlbase.h>
 #include <atlapp.h>
 #include <atlwin.h>
-#include <atlctrls.h>
 #include <atlmisc.h>
 
 namespace aspia {
-
-std::wstring TimeToString(time_t time);
 
 HICON GetDriveIcon(proto::DriveList::Item::Type drive_type);
 

@@ -1817,21 +1817,35 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
   ::std::string* release_description();
   void set_allocated_description(::std::string* description);
 
+  // string local_path = 4;
+  void clear_local_path();
+  static const int kLocalPathFieldNumber = 4;
+  const ::std::string& local_path() const;
+  void set_local_path(const ::std::string& value);
+  #if LANG_CXX11
+  void set_local_path(::std::string&& value);
+  #endif
+  void set_local_path(const char* value);
+  void set_local_path(const char* value, size_t size);
+  ::std::string* mutable_local_path();
+  ::std::string* release_local_path();
+  void set_allocated_local_path(::std::string* local_path);
+
   // .aspia.system_info.SharedResources.Item.Type type = 2;
   void clear_type();
   static const int kTypeFieldNumber = 2;
   ::aspia::system_info::SharedResources_Item_Type type() const;
   void set_type(::aspia::system_info::SharedResources_Item_Type value);
 
-  // uint32 current_uses = 4;
+  // uint32 current_uses = 5;
   void clear_current_uses();
-  static const int kCurrentUsesFieldNumber = 4;
+  static const int kCurrentUsesFieldNumber = 5;
   ::google::protobuf::uint32 current_uses() const;
   void set_current_uses(::google::protobuf::uint32 value);
 
-  // uint32 maximum_uses = 5;
+  // uint32 maximum_uses = 6;
   void clear_maximum_uses();
-  static const int kMaximumUsesFieldNumber = 5;
+  static const int kMaximumUsesFieldNumber = 6;
   ::google::protobuf::uint32 maximum_uses() const;
   void set_maximum_uses(::google::protobuf::uint32 value);
 
@@ -1841,6 +1855,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr name_;
   ::google::protobuf::internal::ArenaStringPtr description_;
+  ::google::protobuf::internal::ArenaStringPtr local_path_;
   int type_;
   ::google::protobuf::uint32 current_uses_;
   ::google::protobuf::uint32 maximum_uses_;
@@ -2274,9 +2289,23 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
 
   // accessors -------------------------------------------------------
 
-  // string full_name = 1;
+  // string name = 1;
+  void clear_name();
+  static const int kNameFieldNumber = 1;
+  const ::std::string& name() const;
+  void set_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_name(::std::string&& value);
+  #endif
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  ::std::string* mutable_name();
+  ::std::string* release_name();
+  void set_allocated_name(::std::string* name);
+
+  // string full_name = 2;
   void clear_full_name();
-  static const int kFullNameFieldNumber = 1;
+  static const int kFullNameFieldNumber = 2;
   const ::std::string& full_name() const;
   void set_full_name(const ::std::string& value);
   #if LANG_CXX11
@@ -2288,9 +2317,9 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
   ::std::string* release_full_name();
   void set_allocated_full_name(::std::string* full_name);
 
-  // string comment = 2;
+  // string comment = 3;
   void clear_comment();
-  static const int kCommentFieldNumber = 2;
+  static const int kCommentFieldNumber = 3;
   const ::std::string& comment() const;
   void set_comment(const ::std::string& value);
   #if LANG_CXX11
@@ -2302,129 +2331,61 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
   ::std::string* release_comment();
   void set_allocated_comment(::std::string* comment);
 
-  // string profile_directory = 12;
-  void clear_profile_directory();
-  static const int kProfileDirectoryFieldNumber = 12;
-  const ::std::string& profile_directory() const;
-  void set_profile_directory(const ::std::string& value);
-  #if LANG_CXX11
-  void set_profile_directory(::std::string&& value);
-  #endif
-  void set_profile_directory(const char* value);
-  void set_profile_directory(const char* value, size_t size);
-  ::std::string* mutable_profile_directory();
-  ::std::string* release_profile_directory();
-  void set_allocated_profile_directory(::std::string* profile_directory);
-
-  // string home_directory = 13;
-  void clear_home_directory();
-  static const int kHomeDirectoryFieldNumber = 13;
-  const ::std::string& home_directory() const;
-  void set_home_directory(const ::std::string& value);
-  #if LANG_CXX11
-  void set_home_directory(::std::string&& value);
-  #endif
-  void set_home_directory(const char* value);
-  void set_home_directory(const char* value, size_t size);
-  ::std::string* mutable_home_directory();
-  ::std::string* release_home_directory();
-  void set_allocated_home_directory(::std::string* home_directory);
-
-  // string script_path = 14;
-  void clear_script_path();
-  static const int kScriptPathFieldNumber = 14;
-  const ::std::string& script_path() const;
-  void set_script_path(const ::std::string& value);
-  #if LANG_CXX11
-  void set_script_path(::std::string&& value);
-  #endif
-  void set_script_path(const char* value);
-  void set_script_path(const char* value, size_t size);
-  ::std::string* mutable_script_path();
-  ::std::string* release_script_path();
-  void set_allocated_script_path(::std::string* script_path);
-
-  // bool is_disabled = 3;
+  // bool is_disabled = 4;
   void clear_is_disabled();
-  static const int kIsDisabledFieldNumber = 3;
+  static const int kIsDisabledFieldNumber = 4;
   bool is_disabled() const;
   void set_is_disabled(bool value);
 
-  // bool is_password_cant_change = 4;
+  // bool is_password_cant_change = 5;
   void clear_is_password_cant_change();
-  static const int kIsPasswordCantChangeFieldNumber = 4;
+  static const int kIsPasswordCantChangeFieldNumber = 5;
   bool is_password_cant_change() const;
   void set_is_password_cant_change(bool value);
 
-  // bool is_password_expired = 5;
+  // bool is_password_expired = 6;
   void clear_is_password_expired();
-  static const int kIsPasswordExpiredFieldNumber = 5;
+  static const int kIsPasswordExpiredFieldNumber = 6;
   bool is_password_expired() const;
   void set_is_password_expired(bool value);
 
-  // bool is_dont_expire_password = 6;
+  // bool is_dont_expire_password = 7;
   void clear_is_dont_expire_password();
-  static const int kIsDontExpirePasswordFieldNumber = 6;
+  static const int kIsDontExpirePasswordFieldNumber = 7;
   bool is_dont_expire_password() const;
   void set_is_dont_expire_password(bool value);
 
-  // bool is_lockout = 7;
+  // bool is_lockout = 8;
   void clear_is_lockout();
-  static const int kIsLockoutFieldNumber = 7;
+  static const int kIsLockoutFieldNumber = 8;
   bool is_lockout() const;
   void set_is_lockout(bool value);
 
-  // uint32 number_logons = 8;
+  // uint32 number_logons = 9;
   void clear_number_logons();
-  static const int kNumberLogonsFieldNumber = 8;
+  static const int kNumberLogonsFieldNumber = 9;
   ::google::protobuf::uint32 number_logons() const;
   void set_number_logons(::google::protobuf::uint32 value);
 
-  // uint32 bad_password_count = 9;
+  // uint32 bad_password_count = 10;
   void clear_bad_password_count();
-  static const int kBadPasswordCountFieldNumber = 9;
+  static const int kBadPasswordCountFieldNumber = 10;
   ::google::protobuf::uint32 bad_password_count() const;
   void set_bad_password_count(::google::protobuf::uint32 value);
 
-  // int64 last_logon_time = 10;
+  // int64 last_logon_time = 11;
   void clear_last_logon_time();
-  static const int kLastLogonTimeFieldNumber = 10;
+  static const int kLastLogonTimeFieldNumber = 11;
   ::google::protobuf::int64 last_logon_time() const;
   void set_last_logon_time(::google::protobuf::int64 value);
-
-  // uint32 user_id = 11;
-  void clear_user_id();
-  static const int kUserIdFieldNumber = 11;
-  ::google::protobuf::uint32 user_id() const;
-  void set_user_id(::google::protobuf::uint32 value);
-
-  // uint32 country_code = 15;
-  void clear_country_code();
-  static const int kCountryCodeFieldNumber = 15;
-  ::google::protobuf::uint32 country_code() const;
-  void set_country_code(::google::protobuf::uint32 value);
-
-  // uint32 codepage = 16;
-  void clear_codepage();
-  static const int kCodepageFieldNumber = 16;
-  ::google::protobuf::uint32 codepage() const;
-  void set_codepage(::google::protobuf::uint32 value);
-
-  // uint32 primary_group_id = 17;
-  void clear_primary_group_id();
-  static const int kPrimaryGroupIdFieldNumber = 17;
-  ::google::protobuf::uint32 primary_group_id() const;
-  void set_primary_group_id(::google::protobuf::uint32 value);
 
   // @@protoc_insertion_point(class_scope:aspia.system_info.Users.Item)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr name_;
   ::google::protobuf::internal::ArenaStringPtr full_name_;
   ::google::protobuf::internal::ArenaStringPtr comment_;
-  ::google::protobuf::internal::ArenaStringPtr profile_directory_;
-  ::google::protobuf::internal::ArenaStringPtr home_directory_;
-  ::google::protobuf::internal::ArenaStringPtr script_path_;
   bool is_disabled_;
   bool is_password_cant_change_;
   bool is_password_expired_;
@@ -2433,10 +2394,6 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
   ::google::protobuf::uint32 number_logons_;
   ::google::protobuf::uint32 bad_password_count_;
   ::google::protobuf::int64 last_logon_time_;
-  ::google::protobuf::uint32 user_id_;
-  ::google::protobuf::uint32 country_code_;
-  ::google::protobuf::uint32 codepage_;
-  ::google::protobuf::uint32 primary_group_id_;
   mutable int _cached_size_;
   friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
 };
@@ -5203,7 +5160,60 @@ inline void SharedResources_Item::set_allocated_description(::std::string* descr
   // @@protoc_insertion_point(field_set_allocated:aspia.system_info.SharedResources.Item.description)
 }
 
-// uint32 current_uses = 4;
+// string local_path = 4;
+inline void SharedResources_Item::clear_local_path() {
+  local_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& SharedResources_Item::local_path() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.SharedResources.Item.local_path)
+  return local_path_.GetNoArena();
+}
+inline void SharedResources_Item::set_local_path(const ::std::string& value) {
+  
+  local_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.SharedResources.Item.local_path)
+}
+#if LANG_CXX11
+inline void SharedResources_Item::set_local_path(::std::string&& value) {
+  
+  local_path_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.SharedResources.Item.local_path)
+}
+#endif
+inline void SharedResources_Item::set_local_path(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  local_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.SharedResources.Item.local_path)
+}
+inline void SharedResources_Item::set_local_path(const char* value, size_t size) {
+  
+  local_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.SharedResources.Item.local_path)
+}
+inline ::std::string* SharedResources_Item::mutable_local_path() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.SharedResources.Item.local_path)
+  return local_path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* SharedResources_Item::release_local_path() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.SharedResources.Item.local_path)
+  
+  return local_path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void SharedResources_Item::set_allocated_local_path(::std::string* local_path) {
+  if (local_path != NULL) {
+    
+  } else {
+    
+  }
+  local_path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), local_path);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.SharedResources.Item.local_path)
+}
+
+// uint32 current_uses = 5;
 inline void SharedResources_Item::clear_current_uses() {
   current_uses_ = 0u;
 }
@@ -5217,7 +5227,7 @@ inline void SharedResources_Item::set_current_uses(::google::protobuf::uint32 va
   // @@protoc_insertion_point(field_set:aspia.system_info.SharedResources.Item.current_uses)
 }
 
-// uint32 maximum_uses = 5;
+// uint32 maximum_uses = 6;
 inline void SharedResources_Item::clear_maximum_uses() {
   maximum_uses_ = 0u;
 }
@@ -5480,7 +5490,60 @@ Routes::item() const {
 
 // Users_Item
 
-// string full_name = 1;
+// string name = 1;
+inline void Users_Item::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Users_Item::name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Users.Item.name)
+  return name_.GetNoArena();
+}
+inline void Users_Item::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.name)
+}
+#if LANG_CXX11
+inline void Users_Item::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Users.Item.name)
+}
+#endif
+inline void Users_Item::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Users.Item.name)
+}
+inline void Users_Item::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Users.Item.name)
+}
+inline ::std::string* Users_Item::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Users.Item.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Users_Item::release_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Users.Item.name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Users_Item::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Users.Item.name)
+}
+
+// string full_name = 2;
 inline void Users_Item::clear_full_name() {
   full_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -5533,7 +5596,7 @@ inline void Users_Item::set_allocated_full_name(::std::string* full_name) {
   // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Users.Item.full_name)
 }
 
-// string comment = 2;
+// string comment = 3;
 inline void Users_Item::clear_comment() {
   comment_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -5586,7 +5649,7 @@ inline void Users_Item::set_allocated_comment(::std::string* comment) {
   // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Users.Item.comment)
 }
 
-// bool is_disabled = 3;
+// bool is_disabled = 4;
 inline void Users_Item::clear_is_disabled() {
   is_disabled_ = false;
 }
@@ -5600,7 +5663,7 @@ inline void Users_Item::set_is_disabled(bool value) {
   // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.is_disabled)
 }
 
-// bool is_password_cant_change = 4;
+// bool is_password_cant_change = 5;
 inline void Users_Item::clear_is_password_cant_change() {
   is_password_cant_change_ = false;
 }
@@ -5614,7 +5677,7 @@ inline void Users_Item::set_is_password_cant_change(bool value) {
   // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.is_password_cant_change)
 }
 
-// bool is_password_expired = 5;
+// bool is_password_expired = 6;
 inline void Users_Item::clear_is_password_expired() {
   is_password_expired_ = false;
 }
@@ -5628,7 +5691,7 @@ inline void Users_Item::set_is_password_expired(bool value) {
   // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.is_password_expired)
 }
 
-// bool is_dont_expire_password = 6;
+// bool is_dont_expire_password = 7;
 inline void Users_Item::clear_is_dont_expire_password() {
   is_dont_expire_password_ = false;
 }
@@ -5642,7 +5705,7 @@ inline void Users_Item::set_is_dont_expire_password(bool value) {
   // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.is_dont_expire_password)
 }
 
-// bool is_lockout = 7;
+// bool is_lockout = 8;
 inline void Users_Item::clear_is_lockout() {
   is_lockout_ = false;
 }
@@ -5656,7 +5719,7 @@ inline void Users_Item::set_is_lockout(bool value) {
   // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.is_lockout)
 }
 
-// uint32 number_logons = 8;
+// uint32 number_logons = 9;
 inline void Users_Item::clear_number_logons() {
   number_logons_ = 0u;
 }
@@ -5670,7 +5733,7 @@ inline void Users_Item::set_number_logons(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.number_logons)
 }
 
-// uint32 bad_password_count = 9;
+// uint32 bad_password_count = 10;
 inline void Users_Item::clear_bad_password_count() {
   bad_password_count_ = 0u;
 }
@@ -5684,7 +5747,7 @@ inline void Users_Item::set_bad_password_count(::google::protobuf::uint32 value)
   // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.bad_password_count)
 }
 
-// int64 last_logon_time = 10;
+// int64 last_logon_time = 11;
 inline void Users_Item::clear_last_logon_time() {
   last_logon_time_ = GOOGLE_LONGLONG(0);
 }
@@ -5696,221 +5759,6 @@ inline void Users_Item::set_last_logon_time(::google::protobuf::int64 value) {
   
   last_logon_time_ = value;
   // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.last_logon_time)
-}
-
-// uint32 user_id = 11;
-inline void Users_Item::clear_user_id() {
-  user_id_ = 0u;
-}
-inline ::google::protobuf::uint32 Users_Item::user_id() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.Users.Item.user_id)
-  return user_id_;
-}
-inline void Users_Item::set_user_id(::google::protobuf::uint32 value) {
-  
-  user_id_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.user_id)
-}
-
-// string profile_directory = 12;
-inline void Users_Item::clear_profile_directory() {
-  profile_directory_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& Users_Item::profile_directory() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.Users.Item.profile_directory)
-  return profile_directory_.GetNoArena();
-}
-inline void Users_Item::set_profile_directory(const ::std::string& value) {
-  
-  profile_directory_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.profile_directory)
-}
-#if LANG_CXX11
-inline void Users_Item::set_profile_directory(::std::string&& value) {
-  
-  profile_directory_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Users.Item.profile_directory)
-}
-#endif
-inline void Users_Item::set_profile_directory(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  profile_directory_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.system_info.Users.Item.profile_directory)
-}
-inline void Users_Item::set_profile_directory(const char* value, size_t size) {
-  
-  profile_directory_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Users.Item.profile_directory)
-}
-inline ::std::string* Users_Item::mutable_profile_directory() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.system_info.Users.Item.profile_directory)
-  return profile_directory_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* Users_Item::release_profile_directory() {
-  // @@protoc_insertion_point(field_release:aspia.system_info.Users.Item.profile_directory)
-  
-  return profile_directory_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void Users_Item::set_allocated_profile_directory(::std::string* profile_directory) {
-  if (profile_directory != NULL) {
-    
-  } else {
-    
-  }
-  profile_directory_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), profile_directory);
-  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Users.Item.profile_directory)
-}
-
-// string home_directory = 13;
-inline void Users_Item::clear_home_directory() {
-  home_directory_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& Users_Item::home_directory() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.Users.Item.home_directory)
-  return home_directory_.GetNoArena();
-}
-inline void Users_Item::set_home_directory(const ::std::string& value) {
-  
-  home_directory_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.home_directory)
-}
-#if LANG_CXX11
-inline void Users_Item::set_home_directory(::std::string&& value) {
-  
-  home_directory_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Users.Item.home_directory)
-}
-#endif
-inline void Users_Item::set_home_directory(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  home_directory_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.system_info.Users.Item.home_directory)
-}
-inline void Users_Item::set_home_directory(const char* value, size_t size) {
-  
-  home_directory_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Users.Item.home_directory)
-}
-inline ::std::string* Users_Item::mutable_home_directory() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.system_info.Users.Item.home_directory)
-  return home_directory_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* Users_Item::release_home_directory() {
-  // @@protoc_insertion_point(field_release:aspia.system_info.Users.Item.home_directory)
-  
-  return home_directory_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void Users_Item::set_allocated_home_directory(::std::string* home_directory) {
-  if (home_directory != NULL) {
-    
-  } else {
-    
-  }
-  home_directory_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), home_directory);
-  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Users.Item.home_directory)
-}
-
-// string script_path = 14;
-inline void Users_Item::clear_script_path() {
-  script_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& Users_Item::script_path() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.Users.Item.script_path)
-  return script_path_.GetNoArena();
-}
-inline void Users_Item::set_script_path(const ::std::string& value) {
-  
-  script_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.script_path)
-}
-#if LANG_CXX11
-inline void Users_Item::set_script_path(::std::string&& value) {
-  
-  script_path_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Users.Item.script_path)
-}
-#endif
-inline void Users_Item::set_script_path(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  script_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.system_info.Users.Item.script_path)
-}
-inline void Users_Item::set_script_path(const char* value, size_t size) {
-  
-  script_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Users.Item.script_path)
-}
-inline ::std::string* Users_Item::mutable_script_path() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.system_info.Users.Item.script_path)
-  return script_path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* Users_Item::release_script_path() {
-  // @@protoc_insertion_point(field_release:aspia.system_info.Users.Item.script_path)
-  
-  return script_path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void Users_Item::set_allocated_script_path(::std::string* script_path) {
-  if (script_path != NULL) {
-    
-  } else {
-    
-  }
-  script_path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), script_path);
-  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Users.Item.script_path)
-}
-
-// uint32 country_code = 15;
-inline void Users_Item::clear_country_code() {
-  country_code_ = 0u;
-}
-inline ::google::protobuf::uint32 Users_Item::country_code() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.Users.Item.country_code)
-  return country_code_;
-}
-inline void Users_Item::set_country_code(::google::protobuf::uint32 value) {
-  
-  country_code_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.country_code)
-}
-
-// uint32 codepage = 16;
-inline void Users_Item::clear_codepage() {
-  codepage_ = 0u;
-}
-inline ::google::protobuf::uint32 Users_Item::codepage() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.Users.Item.codepage)
-  return codepage_;
-}
-inline void Users_Item::set_codepage(::google::protobuf::uint32 value) {
-  
-  codepage_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.codepage)
-}
-
-// uint32 primary_group_id = 17;
-inline void Users_Item::clear_primary_group_id() {
-  primary_group_id_ = 0u;
-}
-inline ::google::protobuf::uint32 Users_Item::primary_group_id() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.Users.Item.primary_group_id)
-  return primary_group_id_;
-}
-inline void Users_Item::set_primary_group_id(::google::protobuf::uint32 value) {
-  
-  primary_group_id_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.Users.Item.primary_group_id)
 }
 
 // -------------------------------------------------------------------

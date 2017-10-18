@@ -16,15 +16,15 @@ namespace aspia {
 class CategoryInfo : public Category
 {
 public:
-    CategoryInfo(const char* guid, UINT name_id, UINT icon_id)
-        : Category(Type::INFO, name_id, icon_id),
+    CategoryInfo(const char* guid, const std::string& name, int icon_id)
+        : Category(Type::INFO, name, icon_id),
           guid_(guid)
     {
         DCHECK(guid);
     }
 
     virtual ~CategoryInfo() = default;
-    virtual void Parse(const std::string& data, Output* output) = 0;
+    virtual void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) = 0;
 
     const char* guid() const { return guid_; }
 

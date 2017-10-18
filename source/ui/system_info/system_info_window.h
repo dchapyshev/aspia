@@ -12,6 +12,7 @@
 #include "ui/system_info/system_info_toolbar.h"
 #include "ui/system_info/category_tree_ctrl.h"
 #include "ui/system_info/info_list_ctrl.h"
+#include "ui/system_info/output_proxy.h"
 #include "ui/base/splitter.h"
 #include "ui/resource.h"
 
@@ -27,7 +28,14 @@ public:
     {
     public:
         virtual ~Delegate() = default;
-        virtual void OnCategoryRequest(const char* guid) = 0;
+
+        using ParseCallback = std::function<void(std::shared_ptr<OutputProxy> output,
+                                                 const std::string& data)>;
+
+        virtual void OnCategoryRequest(const char* guid,
+                                       ParseCallback parse_callback,
+                                       std::shared_ptr<OutputProxy> output) = 0;
+
         virtual void OnWindowClose() = 0;
     };
 

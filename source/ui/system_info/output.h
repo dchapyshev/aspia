@@ -8,67 +8,93 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__OUTPUT_H
 #define _ASPIA_UI__SYSTEM_INFO__OUTPUT_H
 
-#include "base/macros.h"
 #include "ui/system_info/column.h"
 
+#include <memory>
 #include <string>
 
 namespace aspia {
 
+class OutputProxy;
+
 class Output
 {
 public:
-    virtual ~Output() = default;
+    Output();
+    virtual ~Output();
 
-    virtual void AddItem(const std::string& parameter, const std::string& value) = 0;
-    virtual void AddItem(const std::string& value) = 0;
+    std::shared_ptr<OutputProxy> output_proxy() const { return proxy_; }
 
-    class ScopedTable
+    using IconId = int;
+
+    class Document
     {
     public:
-        ScopedTable(Output& output, const ColumnList& column_list)
-            : output_(output)
-        {
-            output_.BeginTable(column_list);
-        }
-
-        ~ScopedTable()
-        {
-            output_.EndTable();
-        }
+        Document(std::shared_ptr<OutputProxy> output, const std::string& name);
+        ~Document();
 
     private:
-        Output& output_;
-
-        DISALLOW_COPY_AND_ASSIGN(ScopedTable);
+        std::shared_ptr<OutputProxy> output_;
+        DISALLOW_COPY_AND_ASSIGN(Document);
     };
 
-    class ScopedItemGroup
+    class Table
     {
     public:
-        ScopedItemGroup(Output& output, const std::string& name)
-            : output_(output)
-        {
-            output_.BeginItemGroup(name);
-        }
-
-        ~ScopedItemGroup()
-        {
-            output_.EndItemGroup();
-        }
+        Table(std::shared_ptr<OutputProxy> output,
+              const std::string& name,
+              const ColumnList& column_list);
+        ~Table();
 
     private:
-        Output& output_;
+        std::shared_ptr<OutputProxy> output_;
+        DISALLOW_COPY_AND_ASSIGN(Table);
+    };
 
-        DISALLOW_COPY_AND_ASSIGN(ScopedItemGroup);
+    class Group
+    {
+    public:
+        Group(std::shared_ptr<OutputProxy> output, const std::string& name, IconId icon_id);
+        ~Group();
+
+    private:
+        std::shared_ptr<OutputProxy> output_;
+        DISALLOW_COPY_AND_ASSIGN(Group);
+    };
+
+    class Row
+    {
+    public:
+        Row(std::shared_ptr<OutputProxy> output, IconId icon_id);
+        ~Row();
+
+    private:
+        std::shared_ptr<OutputProxy> output_;
+        DISALLOW_COPY_AND_ASSIGN(Row);
     };
 
 protected:
-    virtual void BeginTable(const ColumnList& column_list) = 0;
+    virtual void StartDocument(const std::string& name) = 0;
+    virtual void EndDocument() = 0;
+
+    virtual void StartTable(const std::string& name, const ColumnList& column_list) = 0;
     virtual void EndTable() = 0;
 
-    virtual void BeginItemGroup(const std::string& name) = 0;
-    virtual void EndItemGroup() = 0;
+    virtual void StartGroup(const std::string& name, IconId icon_id) = 0;
+    virtual void EndGroup() = 0;
+    virtual void AddParam(IconId icon_id,
+                          const std::string& param,
+                          const std::string& value,
+                          const char* unit) = 0;
+
+    virtual void StartRow(IconId icon_id) = 0;
+    virtual void EndRow() = 0;
+    virtual void AddValue(const std::string& value, const char* unit) = 0;
+
+private:
+    friend class OutputProxy;
+
+    std::shared_ptr<OutputProxy> proxy_;
 };
 
 } // namespace aspia

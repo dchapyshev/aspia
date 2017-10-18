@@ -15,23 +15,6 @@
 
 namespace aspia {
 
-std::wstring TimeToString(time_t time)
-{
-    tm* local_time = std::localtime(&time);
-
-    if (!local_time)
-        return std::wstring();
-
-    // Set the locale obtained from system.
-    std::setlocale(LC_TIME, "");
-
-    wchar_t string[128];
-    if (!std::wcsftime(string, _countof(string), L"%x %X", local_time))
-        return std::wstring();
-
-    return string;
-}
-
 HICON GetDriveIcon(proto::DriveList::Item::Type drive_type)
 {
     SHSTOCKICONID icon_id;

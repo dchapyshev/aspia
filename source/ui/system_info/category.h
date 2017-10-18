@@ -27,22 +27,8 @@ public:
     virtual ~Category() = default;
 
     Type type() const { return type_; }
-
-    CIcon Icon() const
-    {
-        return AtlLoadIconImage(icon_id_,
-                                LR_CREATEDIBSECTION,
-                                GetSystemMetrics(SM_CXSMICON),
-                                GetSystemMetrics(SM_CYSMICON));
-    }
-
-    CString Name() const
-    {
-        CString name;
-        name.LoadStringW(name_id_);
-        return name;
-    }
-
+    int Icon() const { return icon_id_; }
+    const std::string& Name() const { return name_; }
     const ColumnList& column_list() const { return column_list_; }
     ColumnList* mutable_column_list() { return &column_list_; }
 
@@ -59,9 +45,9 @@ public:
     }
 
 protected:
-    Category(Type type, UINT name_id, UINT icon_id)
+    Category(Type type, const std::string& name, int icon_id)
         : type_(type),
-          name_id_(name_id),
+          name_(name),
           icon_id_(icon_id)
     {
         // Nothing
@@ -69,8 +55,8 @@ protected:
 
 private:
     const Type type_;
-    const UINT name_id_;
-    const UINT icon_id_;
+    const std::string name_;
+    const int icon_id_;
 
     ColumnList column_list_;
     CategoryList child_list_;

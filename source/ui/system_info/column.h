@@ -8,9 +8,7 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__COLUMN_H
 #define _ASPIA_UI__SYSTEM_INFO__COLUMN_H
 
-#include <atlbase.h>
-#include <atlapp.h>
-#include <atlmisc.h>
+#include "base/logging.h"
 #include <list>
 
 namespace aspia {
@@ -18,39 +16,48 @@ namespace aspia {
 class Column
 {
 public:
-    Column(UINT name_id, int width)
-        : name_id_(name_id),
+    Column(const std::string& name, int width)
+        : name_(name),
           width_(width)
     {
         // Nothing
     }
 
-    Column(const Column& other)
-        : Column(other.name_id_, other.width_)
+    Column(std::string&& name, int width)
+        : name_(std::move(name)),
+          width_(width)
+    {
+        // Nothing
+    }
+
+    Column(const char* name, int width)
+    {
+        DCHECK(name);
+        name_.assign(name);
+        width_ = width;
+    }
+
+    explicit Column(const Column& other)
+        : name_(other.name_),
+          width_(other.width_)
     {
         // Nothing
     }
 
     Column& operator=(const Column& other)
     {
-        name_id_ = other.name_id_;
+        name_ = other.name_;
         width_ = other.width_;
         return *this;
     }
 
     ~Column() = default;
 
-    CString Name() const
-    {
-        CString name;
-        name.LoadStringW(name_id_);
-        return name;
-    }
-
+    const std::string& Name() const { return name_; }
     int Width() const { return width_; }
 
 private:
-    UINT name_id_;
+    std::string name_;
     int width_;
 };
 

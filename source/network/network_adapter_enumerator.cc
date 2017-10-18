@@ -60,6 +60,14 @@ void NetworkAdapterEnumerator::Advance()
     adapter_ = adapter_->Next;
 }
 
+static std::wstring GetAdapterRegistryPath(const char* adapter_name)
+{
+    const WCHAR kFormat[] =
+        L"SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}\\%S\\Connection";
+
+    return StringPrintfW(kFormat, adapter_name);
+}
+
 std::string NetworkAdapterEnumerator::GetAdapterName() const
 {
     HDEVINFO device_info =
@@ -68,10 +76,7 @@ std::string NetworkAdapterEnumerator::GetAdapterName() const
     if (device_info == INVALID_HANDLE_VALUE)
         return std::string();
 
-    const WCHAR kFormat[] =
-        L"SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}\\%S\\Connection";
-
-    std::wstring key_path = StringPrintfW(kFormat, adapter_->AdapterName);
+    std::wstring key_path = GetAdapterRegistryPath(adapter_->AdapterName);
 
     RegistryKey key(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ);
     if (!key.IsValid())
@@ -89,6 +94,8 @@ std::string NetworkAdapterEnumerator::GetAdapterName() const
     }
 
     SP_DEVINFO_DATA device_info_data;
+    device_info_data.cbSize = sizeof(device_info_data);
+
     DWORD device_index = 0;
 
     while (SetupDiEnumDeviceInfo(device_info, device_index, &device_info_data))
@@ -144,15 +151,18 @@ std::string NetworkAdapterEnumerator::GetAdapterName() const
 
 std::string NetworkAdapterEnumerator::GetConnectionName() const
 {
-    MIB_IFROW adapter_if_entry;
+    std::wstring key_path = GetAdapterRegistryPath(adapter_->AdapterName);
 
-    memset(&adapter_if_entry, 0, sizeof(adapter_if_entry));
-    adapter_if_entry.dwIndex = adapter_->Index;
-
-    if (GetIfEntry(&adapter_if_entry) != NO_ERROR)
+    RegistryKey key(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ);
+    if (!key.IsValid())
         return std::string();
 
-    return UTF8fromUNICODE(adapter_if_entry.wszName);
+    std::wstring name;
+
+    if (key.ReadValue(L"Name", &name) != ERROR_SUCCESS)
+        return std::string();
+
+    return UTF8fromUNICODE(name);
 }
 
 std::string NetworkAdapterEnumerator::GetInterfaceType() const
@@ -284,8 +294,11 @@ NetworkAdapterEnumerator::IpAddressEnumerator::IpAddressEnumerator(
         if (!address_)
             break;
 
-        if (strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
+        if (address_->IpAddress.String[0] != 0 &&
+            strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
+        {
             break;
+        }
 
         address_ = address_->Next;
     }
@@ -300,8 +313,11 @@ void NetworkAdapterEnumerator::IpAddressEnumerator::Advance()
         if (!address_)
             break;
 
-        if (strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
+        if (address_->IpAddress.String[0] != 0 &&
+            strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
+        {
             break;
+        }
     }
 }
 
@@ -328,8 +344,11 @@ NetworkAdapterEnumerator::GatewayEnumerator::GatewayEnumerator(
         if (!address_)
             break;
 
-        if (strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
+        if (address_->IpAddress.String[0] != 0 &&
+            strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
+        {
             break;
+        }
 
         address_ = address_->Next;
     }
@@ -367,8 +386,11 @@ NetworkAdapterEnumerator::DhcpEnumerator::DhcpEnumerator(
         if (!address_)
             break;
 
-        if (strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
+        if (address_->IpAddress.String[0] != 0 &&
+            strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
+        {
             break;
+        }
 
         address_ = address_->Next;
     }
@@ -383,8 +405,11 @@ void NetworkAdapterEnumerator::DhcpEnumerator::Advance()
         if (!address_)
             break;
 
-        if (strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
+        if (address_->IpAddress.String[0] != 0 &&
+            strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
+        {
             break;
+        }
     }
 }
 
@@ -433,8 +458,11 @@ NetworkAdapterEnumerator::DnsEnumerator::DnsEnumerator(const NetworkAdapterEnume
             if (!address_)
                 break;
 
-            if (strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
+            if (address_->IpAddress.String[0] != 0 &&
+                strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
+            {
                 break;
+            }
 
             address_ = address_->Next;
         }
@@ -450,8 +478,11 @@ void NetworkAdapterEnumerator::DnsEnumerator::Advance()
         if (!address_)
             break;
 
-        if (strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
+        if (address_->IpAddress.String[0] != 0 &&
+            strcmp(address_->IpAddress.String, "0.0.0.0") != 0)
+        {
             break;
+        }
     }
 }
 

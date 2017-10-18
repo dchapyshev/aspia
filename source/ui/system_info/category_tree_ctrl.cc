@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/strings/unicode.h"
 #include "base/version_helpers.h"
 #include "ui/system_info/category_tree_ctrl.h"
 #include "ui/system_info/category_group_hardware.h"
@@ -31,10 +32,18 @@ void CategoryTreeCtrl::AddChildItems(const CategoryList& list, HTREEITEM parent_
 {
     for (const auto& child : list)
     {
-        const int icon_index = imagelist_.AddIcon(child->Icon());
+        const int icon_index =
+            imagelist_.AddIcon(AtlLoadIconImage(child->Icon(),
+                                                LR_CREATEDIBSECTION,
+                                                GetSystemMetrics(SM_CXSMICON),
+                                                GetSystemMetrics(SM_CYSMICON)));
 
         HTREEITEM tree_item = InsertItem(
-            child->Name(), icon_index, icon_index, parent_tree_item, TVI_LAST);
+            UNICODEfromUTF8(child->Name()).c_str(),
+            icon_index,
+            icon_index,
+            parent_tree_item,
+            TVI_LAST);
 
         // Each element in the tree contains a pointer to the category.
         SetItemData(tree_item, reinterpret_cast<DWORD_PTR>(child.get()));

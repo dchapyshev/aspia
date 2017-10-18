@@ -39,6 +39,7 @@ public:
 
     Type GetType() const;
     std::string GetDescription() const;
+    std::string GetLocalPath() const;
     uint32_t GetCurrentUses() const;
     uint32_t GetMaximumUses() const;
 

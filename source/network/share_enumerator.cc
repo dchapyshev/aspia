@@ -86,6 +86,11 @@ std::string ShareEnumerator::GetDescription() const
     return UTF8fromUNICODE(share_info_[current_entry_].shi502_remark);
 }
 
+std::string ShareEnumerator::GetLocalPath() const
+{
+    return UTF8fromUNICODE(share_info_[current_entry_].shi502_path);
+}
+
 uint32_t ShareEnumerator::GetCurrentUses() const
 {
     return share_info_[current_entry_].shi502_current_uses;

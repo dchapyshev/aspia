@@ -19,7 +19,7 @@ public:
     ~CategorySummary() = default;
 
     // CategoryInfo implementation.
-    void Parse(const std::string& data, Output* output) final;
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategorySummary);
