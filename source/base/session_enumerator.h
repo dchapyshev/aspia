@@ -34,7 +34,7 @@ public:
 private:
     ScopedWtsMemory<PWTS_SESSION_INFOW> session_info_;
     DWORD count_ = 0;
-    DWORD current_ = 0;
+    mutable DWORD current_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(SessionEnumerator);
 };

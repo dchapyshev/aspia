@@ -26,7 +26,21 @@ bool SessionEnumerator::IsAtEnd() const
     if (!session_info_.IsValid())
         return true;
 
-    return current_ >= count_;
+    while (true)
+    {
+        if (current_ >= count_)
+            return true;
+
+        // We skip the system account.
+        if (session_info_[current_]->SessionId == 0)
+        {
+            ++current_;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
 
 void SessionEnumerator::Advance()
