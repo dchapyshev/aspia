@@ -141,7 +141,7 @@ int PrinterEnumerator::GetPaperWidth() const
     if (!printers_info_[current_].pDevMode)
         return 0;
 
-    return printers_info_[current_].pDevMode->dmPaperWidth;
+    return printers_info_[current_].pDevMode->dmPaperWidth / 10;
 }
 
 int PrinterEnumerator::GetPaperLength() const
@@ -149,7 +149,7 @@ int PrinterEnumerator::GetPaperLength() const
     if (!printers_info_[current_].pDevMode)
         return 0;
 
-    return printers_info_[current_].pDevMode->dmPaperLength;
+    return printers_info_[current_].pDevMode->dmPaperLength / 10;
 }
 
 int PrinterEnumerator::GetPrintQuality() const
