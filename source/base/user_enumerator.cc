@@ -50,6 +50,11 @@ void UserEnumerator::Advance()
     ++current_entry_;
 }
 
+std::string UserEnumerator::GetName() const
+{
+    return UTF8fromUNICODE(user_info_[current_entry_].usri3_name);
+}
+
 std::string UserEnumerator::GetFullName() const
 {
     return UTF8fromUNICODE(user_info_[current_entry_].usri3_full_name);
@@ -98,41 +103,6 @@ uint32_t UserEnumerator::GetBadPasswordCount() const
 time_t UserEnumerator::GetLastLogonTime() const
 {
     return user_info_[current_entry_].usri3_last_logon;
-}
-
-uint32_t UserEnumerator::GetUserId() const
-{
-    return user_info_[current_entry_].usri3_user_id;
-}
-
-std::string UserEnumerator::GetProfileDirectory() const
-{
-    return UTF8fromUNICODE(user_info_[current_entry_].usri3_profile);
-}
-
-std::string UserEnumerator::GetHomeDirectory() const
-{
-    return UTF8fromUNICODE(user_info_[current_entry_].usri3_home_dir);
-}
-
-std::string UserEnumerator::GetScriptPath() const
-{
-    return UTF8fromUNICODE(user_info_[current_entry_].usri3_script_path);
-}
-
-uint32_t UserEnumerator::GetCountryCode() const
-{
-    return user_info_[current_entry_].usri3_country_code;
-}
-
-uint32_t UserEnumerator::GetCodePage() const
-{
-    return user_info_[current_entry_].usri3_code_page;
-}
-
-uint32_t UserEnumerator::GetPrimaryGroupId() const
-{
-    return user_info_[current_entry_].usri3_primary_group_id;
 }
 
 } // namespace aspia

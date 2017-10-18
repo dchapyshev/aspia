@@ -24,6 +24,7 @@ public:
     bool IsAtEnd() const;
     void Advance();
 
+    std::string GetName() const;
     std::string GetFullName() const;
     std::string GetComment() const;
     bool IsDisabled() const;
@@ -34,13 +35,6 @@ public:
     uint32_t GetNumberLogons() const;
     uint32_t GetBadPasswordCount() const;
     time_t GetLastLogonTime() const;
-    uint32_t GetUserId() const;
-    std::string GetProfileDirectory() const;
-    std::string GetHomeDirectory() const;
-    std::string GetScriptPath() const;
-    uint32_t GetCountryCode() const;
-    uint32_t GetCodePage() const;
-    uint32_t GetPrimaryGroupId() const;
 
 private:
     PUSER_INFO_3 user_info_ = nullptr;
