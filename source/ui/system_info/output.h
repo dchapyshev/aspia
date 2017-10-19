@@ -8,8 +8,8 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__OUTPUT_H
 #define _ASPIA_UI__SYSTEM_INFO__OUTPUT_H
 
-#include "ui/system_info/category.h"
-#include "ui/system_info/column.h"
+#include "protocol/category.h"
+#include "protocol/column.h"
 
 #include <memory>
 #include <string>

@@ -1,15 +1,15 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/system_info/category_group_hardware.cc
+// FILE:            protocol/category_group_hardware.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #include "base/printer_enumerator.h"
 #include "protocol/system_info_constants.h"
+#include "protocol/category_group_hardware.h"
+#include "protocol/category_info.h"
 #include "proto/system_info_session_message.pb.h"
-#include "ui/system_info/category_group_hardware.h"
-#include "ui/system_info/category_info.h"
 #include "ui/system_info/output_proxy.h"
 #include "ui/resource.h"
 

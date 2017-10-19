@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/system_info/category_summary.cc
+// FILE:            protocol/category_summary.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #include "protocol/system_info_constants.h"
-#include "ui/system_info/category_summary.h"
+#include "protocol/category_summary.h"
 #include "ui/resource.h"
 
 namespace aspia {

@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/system_info/column.h
+// FILE:            protocol/column.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SYSTEM_INFO__COLUMN_H
-#define _ASPIA_UI__SYSTEM_INFO__COLUMN_H
+#ifndef _ASPIA_PROTOCOL__COLUMN_H
+#define _ASPIA_PROTOCOL__COLUMN_H
 
 #include "base/logging.h"
 #include <list>
@@ -65,4 +65,4 @@ using ColumnList = std::list<Column>;
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SYSTEM_INFO__COLUMN_H
+#endif // _ASPIA_PROTOCOL__COLUMN_H

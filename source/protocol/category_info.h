@@ -1,14 +1,14 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/system_info/category_info.h
+// FILE:            protocol/category_info.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SYSTEM_INFO__CATEGORY_INFO_H
-#define _ASPIA_UI__SYSTEM_INFO__CATEGORY_INFO_H
+#ifndef _ASPIA_PROTOCOL__CATEGORY_INFO_H
+#define _ASPIA_PROTOCOL__CATEGORY_INFO_H
 
-#include "ui/system_info/category.h"
+#include "protocol/category.h"
 #include "ui/system_info/output.h"
 
 namespace aspia {
@@ -35,4 +35,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SYSTEM_INFO__CATEGORY_INFO_H
+#endif // _ASPIA_PROTOCOL__CATEGORY_INFO_H

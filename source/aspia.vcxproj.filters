@@ -550,21 +550,6 @@
     <ClCompile Include="ui\system_info\info_list_ctrl.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
-    <ClCompile Include="ui\system_info\category_summary.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\category_group_hardware.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\category_group_software.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\category_group_network.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\category_group_os.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
     <ClCompile Include="base\devices\device.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
@@ -624,6 +609,21 @@
     </ClCompile>
     <ClCompile Include="base\datetime.cc">
       <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol\category_group_hardware.cc">
+      <Filter>protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol\category_group_network.cc">
+      <Filter>protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol\category_group_os.cc">
+      <Filter>protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol\category_group_software.cc">
+      <Filter>protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol\category_summary.cc">
+      <Filter>protocol</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1208,34 +1208,10 @@
     <ClInclude Include="ui\system_info\system_info_window.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
-    <ClInclude Include="ui\system_info\category.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\category_group.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\column.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
     <ClInclude Include="ui\system_info\category_tree_ctrl.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
     <ClInclude Include="ui\system_info\info_list_ctrl.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\category_summary.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\category_group_hardware.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\category_group_network.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\category_group_os.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\category_group_software.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
     <ClInclude Include="ui\system_info\system_info_toolbar.h">
@@ -1292,9 +1268,6 @@
     <ClInclude Include="proto\system_info_session_message.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
-    <ClInclude Include="ui\system_info\category_info.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
     <ClInclude Include="ui\system_info\output.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
@@ -1303,6 +1276,33 @@
     </ClInclude>
     <ClInclude Include="base\datetime.h">
       <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\category.h">
+      <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\category_group.h">
+      <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\category_group_hardware.h">
+      <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\category_group_network.h">
+      <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\category_group_os.h">
+      <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\category_group_software.h">
+      <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\category_info.h">
+      <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\category_summary.h">
+      <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\column.h">
+      <Filter>protocol</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

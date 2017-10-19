@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/system_info/category_group_os.cc
+// FILE:            protocol/category_group_os.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
@@ -10,9 +10,9 @@
 #include "base/session_enumerator.h"
 #include "base/datetime.h"
 #include "protocol/system_info_constants.h"
+#include "protocol/category_group_os.h"
+#include "protocol/category_info.h"
 #include "proto/system_info_session_message.pb.h"
-#include "ui/system_info/category_group_os.h"
-#include "ui/system_info/category_info.h"
 #include "ui/system_info/output_proxy.h"
 #include "ui/resource.h"
 
