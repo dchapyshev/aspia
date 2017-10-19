@@ -5,6 +5,9 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/user_enumerator.h"
+#include "base/user_group_enumerator.h"
+#include "base/session_enumerator.h"
 #include "base/datetime.h"
 #include "protocol/system_info_constants.h"
 #include "proto/system_info_session_message.pb.h"
@@ -33,6 +36,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryRegistrationInformation);
 };
@@ -53,6 +62,12 @@ public:
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
+    }
+
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
     }
 
 private:
@@ -77,6 +92,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryEnvironmentVariables);
 };
@@ -97,6 +118,12 @@ public:
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
+    }
+
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
     }
 
 private:
@@ -121,6 +148,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategorySecurity);
 };
@@ -141,6 +174,12 @@ public:
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
+    }
+
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
     }
 
 private:
@@ -229,6 +268,30 @@ public:
         }
     }
 
+    std::string Serialize() final
+    {
+        system_info::Users message;
+
+        for (UserEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+        {
+            system_info::Users::Item* item = message.add_item();
+
+            item->set_name(enumerator.GetName());
+            item->set_full_name(enumerator.GetFullName());
+            item->set_comment(enumerator.GetComment());
+            item->set_is_disabled(enumerator.IsDisabled());
+            item->set_is_password_cant_change(enumerator.IsPasswordCantChange());
+            item->set_is_password_expired(enumerator.IsPasswordExpired());
+            item->set_is_dont_expire_password(enumerator.IsDontExpirePassword());
+            item->set_is_lockout(enumerator.IsLockout());
+            item->set_number_logons(enumerator.GetNumberLogons());
+            item->set_bad_password_count(enumerator.GetBadPasswordCount());
+            item->set_last_logon_time(enumerator.GetLastLogonTime());
+        }
+
+        return message.SerializeAsString();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryUsers);
 };
@@ -264,6 +327,21 @@ public:
             output->AddValue(item.name());
             output->AddValue(item.comment());
         }
+    }
+
+    std::string Serialize() final
+    {
+        system_info::UserGroups message;
+
+        for (UserGroupEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+        {
+            system_info::UserGroups::Item* item = message.add_item();
+
+            item->set_name(enumerator.GetName());
+            item->set_comment(enumerator.GetComment());
+        }
+
+        return message.SerializeAsString();
     }
 
 private:
@@ -311,6 +389,25 @@ public:
         }
     }
 
+    std::string Serialize() final
+    {
+        system_info::Sessions message;
+
+        for (SessionEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+        {
+            system_info::Sessions::Item* item = message.add_item();
+
+            item->set_user_name(enumerator.GetUserName());
+            item->set_domain_name(enumerator.GetDomainName());
+            item->set_session_id(enumerator.GetSessionId());
+            item->set_connect_state(enumerator.GetConnectState());
+            item->set_client_name(enumerator.GetClientName());
+            item->set_winstation_name(enumerator.GetWinStationName());
+        }
+
+        return message.SerializeAsString();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryActiveSessions);
 };
@@ -318,8 +415,7 @@ private:
 class CategoryGroupUsers : public CategoryGroup
 {
 public:
-    CategoryGroupUsers()
-        : CategoryGroup("Users and groups", IDI_USERS)
+    CategoryGroupUsers() : CategoryGroup("Users and groups", IDI_USERS)
     {
         CategoryList* child_list = mutable_child_list();
         child_list->emplace_back(std::make_unique<CategoryUsers>());
@@ -331,8 +427,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryGroupUsers);
 };
 
-CategoryGroupOS::CategoryGroupOS()
-    : CategoryGroup("Operating System", IDI_OS)
+CategoryGroupOS::CategoryGroupOS() : CategoryGroup("Operating System", IDI_OS)
 {
     CategoryList* child_list = mutable_child_list();
     child_list->emplace_back(std::make_unique<CategoryRegistrationInformation>());

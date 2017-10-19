@@ -16,7 +16,7 @@ namespace aspia {
 class CategoryGroup : public Category
 {
 public:
-    CategoryGroup(const std::string& name, int icon_id)
+    CategoryGroup(const std::string& name, IconId icon_id)
         : Category(Type::GROUP, name, icon_id)
     {
         ColumnList* column_list = mutable_column_list();

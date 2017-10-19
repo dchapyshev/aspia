@@ -46,7 +46,7 @@ public:
     }
 
 protected:
-    Category(Type type, const std::string& name, int icon_id)
+    Category(Type type, const std::string& name, IconId icon_id)
         : type_(type),
           name_(name),
           icon_id_(icon_id)

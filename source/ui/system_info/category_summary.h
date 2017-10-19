@@ -20,6 +20,7 @@ public:
 
     // CategoryInfo implementation.
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    std::string Serialize() final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategorySummary);

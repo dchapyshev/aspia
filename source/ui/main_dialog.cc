@@ -453,6 +453,13 @@ LRESULT MainDialog::OnIpListRightClick(int control_id, LPNMHDR hdr, BOOL& handle
     return 0;
 }
 
+LRESULT MainDialog::OnSystemInfoButton(WORD notify_code, WORD control_id, HWND control,
+                                       BOOL& handled)
+{
+    // TODO
+    return 0;
+}
+
 LRESULT MainDialog::OnExitButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
     EndDialog(0);

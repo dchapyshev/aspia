@@ -16,7 +16,7 @@ namespace aspia {
 class CategoryInfo : public Category
 {
 public:
-    CategoryInfo(const char* guid, const std::string& name, int icon_id)
+    CategoryInfo(const char* guid, const std::string& name, IconId icon_id)
         : Category(Type::INFO, name, icon_id),
           guid_(guid)
     {
@@ -25,6 +25,7 @@ public:
 
     virtual ~CategoryInfo() = default;
     virtual void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) = 0;
+    virtual std::string Serialize() = 0;
 
     const char* guid() const { return guid_; }
 

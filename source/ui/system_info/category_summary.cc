@@ -23,4 +23,10 @@ void CategorySummary::Parse(std::shared_ptr<OutputProxy> output, const std::stri
     // TODO
 }
 
+std::string CategorySummary::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
 } // namespace aspia

@@ -48,6 +48,7 @@ private:
         COMMAND_ID_HANDLER(ID_INSTALL_SERVICE, OnInstallServiceButton)
         COMMAND_ID_HANDLER(ID_REMOVE_SERVICE, OnRemoveServiceButton)
         COMMAND_ID_HANDLER(ID_COPY, OnCopyButton)
+        COMMAND_ID_HANDLER(ID_SYSTEM_INFO, OnSystemInfoButton)
 
         COMMAND_HANDLER(IDC_SESSION_TYPE_COMBO, CBN_SELCHANGE, OnSessionTypeChanged)
 
@@ -67,6 +68,7 @@ private:
     LRESULT OnSettingsButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnConnectButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
+    LRESULT OnSystemInfoButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnExitButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnAboutButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnUsersButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);

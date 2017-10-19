@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/printer_enumerator.h"
 #include "protocol/system_info_constants.h"
 #include "proto/system_info_session_message.pb.h"
 #include "ui/system_info/category_group_hardware.h"
@@ -17,7 +18,7 @@ namespace aspia {
 class CategoryDmi : public CategoryInfo
 {
 public:
-    CategoryDmi(const char* guid, const std::string& name, int icon_id)
+    CategoryDmi(const char* guid, const std::string& name, IconId icon_id)
         : CategoryInfo(guid, name, icon_id)
     {
         ColumnList* column_list = mutable_column_list();
@@ -39,6 +40,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiBios);
 };
@@ -54,6 +61,12 @@ public:
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
+    }
+
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
     }
 
 private:
@@ -74,6 +87,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiMotherboard);
 };
@@ -91,6 +110,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiChassis);
 };
@@ -106,6 +131,12 @@ public:
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
+    }
+
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
     }
 
 private:
@@ -126,6 +157,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiProcessors);
 };
@@ -142,6 +179,12 @@ public:
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
+    }
+
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
     }
 
 private:
@@ -162,6 +205,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiSystemSlots);
 };
@@ -178,6 +227,12 @@ public:
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
+    }
+
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
     }
 
 private:
@@ -200,6 +255,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiOnboardDevices);
 };
@@ -218,6 +279,12 @@ public:
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
+    }
+
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
     }
 
 private:
@@ -240,6 +307,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiPortableBattery);
 };
@@ -247,8 +320,7 @@ private:
 class CategoryGroupDMI : public CategoryGroup
 {
 public:
-    CategoryGroupDMI()
-        : CategoryGroup("DMI", IDI_COMPUTER)
+    CategoryGroupDMI() : CategoryGroup("DMI", IDI_COMPUTER)
     {
         CategoryList* child_list = mutable_child_list();
 
@@ -286,6 +358,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryCPU);
 };
@@ -303,11 +381,15 @@ public:
         column_list->emplace_back("Value", 200);
     }
 
-    ~CategoryOpticalDrives() = default;
-
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
+    }
+
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
     }
 
 private:
@@ -329,6 +411,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryATA);
 };
@@ -347,6 +435,12 @@ public:
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
+    }
+
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
     }
 
 private:
@@ -387,6 +481,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryWindowsVideo);
 };
@@ -407,6 +507,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryMonitor);
 };
@@ -425,6 +531,12 @@ public:
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
+    }
+
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
     }
 
 private:
@@ -510,6 +622,50 @@ public:
         }
     }
 
+    std::string Serialize() final
+    {
+        system_info::Printers message;
+
+        for (PrinterEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+        {
+            system_info::Printers::Item* item = message.add_item();
+
+            item->set_name(enumerator.GetName());
+            item->set_is_default(enumerator.IsDefault());
+            item->set_is_shared(enumerator.IsShared());
+            item->set_share_name(enumerator.GetShareName());
+            item->set_port_name(enumerator.GetPortName());
+            item->set_driver_name(enumerator.GetDriverName());
+            item->set_device_name(enumerator.GetDeviceName());
+            item->set_print_processor(enumerator.GetPrintProcessor());
+            item->set_data_type(enumerator.GetDataType());
+            item->set_server_name(enumerator.GetServerName());
+            item->set_location(enumerator.GetLocation());
+            item->set_comment(enumerator.GetComment());
+            item->set_jobs_count(enumerator.GetJobsCount());
+            item->set_paper_width(enumerator.GetPaperWidth());
+            item->set_paper_length(enumerator.GetPaperLength());
+            item->set_print_quality(enumerator.GetPrintQuality());
+
+            switch (enumerator.GetOrientation())
+            {
+                case PrinterEnumerator::Orientation::PORTRAIT:
+                    item->set_orientation(system_info::Printers::Item::ORIENTATION_PORTRAIT);
+                    break;
+
+                case PrinterEnumerator::Orientation::LANDSCAPE:
+                    item->set_orientation(system_info::Printers::Item::ORIENTATION_LANDSCAPE);
+                    break;
+
+                default:
+                    item->set_orientation(system_info::Printers::Item::ORIENTATION_UNKNOWN);
+                    break;
+            }
+        }
+
+        return message.SerializeAsString();
+    }
+
 private:
     static const char* OrientationToString(system_info::Printers::Item::Orientation orientation)
     {
@@ -545,6 +701,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryPowerOptions);
 };
@@ -563,6 +725,12 @@ public:
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
+    }
+
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
     }
 
 private:
@@ -585,6 +753,12 @@ public:
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
+    }
+
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
     }
 
 private:

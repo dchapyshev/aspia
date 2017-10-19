@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/service_enumerator.h"
 #include "protocol/system_info_constants.h"
 #include "proto/system_info_session_message.pb.h"
 #include "ui/system_info/category_group_software.h"
@@ -30,6 +31,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryPrograms);
 };
@@ -48,6 +55,12 @@ public:
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
+    }
+
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
     }
 
 private:
@@ -92,6 +105,89 @@ public:
             output->AddValue(item.start_name());
             output->AddValue(item.binary_path());
         }
+    }
+
+    std::string Serialize() final
+    {
+        system_info::Services message;
+
+        for (ServiceEnumerator enumerator(ServiceEnumerator::Type::SERVICES);
+             !enumerator.IsAtEnd();
+             enumerator.Advance())
+        {
+            system_info::Services::Item* item = message.add_item();
+
+            item->set_name(enumerator.GetName());
+            item->set_display_name(enumerator.GetDisplayName());
+            item->set_description(enumerator.GetDescription());
+
+            switch (enumerator.GetStatus())
+            {
+                case ServiceEnumerator::Status::CONTINUE_PENDING:
+                    item->set_status(system_info::Services::Item::STATUS_CONTINUE_PENDING);
+                    break;
+
+                case ServiceEnumerator::Status::PAUSE_PENDING:
+                    item->set_status(system_info::Services::Item::STATUS_PAUSE_PENDING);
+                    break;
+
+                case ServiceEnumerator::Status::PAUSED:
+                    item->set_status(system_info::Services::Item::STATUS_PAUSED);
+                    break;
+
+                case ServiceEnumerator::Status::RUNNING:
+                    item->set_status(system_info::Services::Item::STATUS_RUNNING);
+                    break;
+
+                case ServiceEnumerator::Status::START_PENDING:
+                    item->set_status(system_info::Services::Item::STATUS_START_PENDING);
+                    break;
+
+                case ServiceEnumerator::Status::STOP_PENDING:
+                    item->set_status(system_info::Services::Item::STATUS_STOP_PENDING);
+                    break;
+
+                case ServiceEnumerator::Status::STOPPED:
+                    item->set_status(system_info::Services::Item::STATUS_STOPPED);
+                    break;
+
+                default:
+                    item->set_status(system_info::Services::Item::STATUS_UNKNOWN);
+                    break;
+            }
+
+            switch (enumerator.GetStartupType())
+            {
+                case ServiceEnumerator::StartupType::AUTO_START:
+                    item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_AUTO_START);
+                    break;
+
+                case ServiceEnumerator::StartupType::DEMAND_START:
+                    item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_DEMAND_START);
+                    break;
+
+                case ServiceEnumerator::StartupType::DISABLED:
+                    item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_DISABLED);
+                    break;
+
+                case ServiceEnumerator::StartupType::BOOT_START:
+                    item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_BOOT_START);
+                    break;
+
+                case ServiceEnumerator::StartupType::SYSTEM_START:
+                    item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_SYSTEM_START);
+                    break;
+
+                default:
+                    item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_UNKNOWN);
+                    break;
+            }
+
+            item->set_binary_path(enumerator.GetBinaryPath());
+            item->set_start_name(enumerator.GetStartName());
+        }
+
+        return message.SerializeAsString();
     }
 
     static const char* StatusToString(system_info::Services::Item::Status status)
@@ -190,6 +286,89 @@ public:
         }
     }
 
+    std::string Serialize() final
+    {
+        system_info::Services message;
+
+        for (ServiceEnumerator enumerator(ServiceEnumerator::Type::DRIVERS);
+             !enumerator.IsAtEnd();
+             enumerator.Advance())
+        {
+            system_info::Services::Item* item = message.add_item();
+
+            item->set_name(enumerator.GetName());
+            item->set_display_name(enumerator.GetDisplayName());
+            item->set_description(enumerator.GetDescription());
+
+            switch (enumerator.GetStatus())
+            {
+                case ServiceEnumerator::Status::CONTINUE_PENDING:
+                    item->set_status(system_info::Services::Item::STATUS_CONTINUE_PENDING);
+                    break;
+
+                case ServiceEnumerator::Status::PAUSE_PENDING:
+                    item->set_status(system_info::Services::Item::STATUS_PAUSE_PENDING);
+                    break;
+
+                case ServiceEnumerator::Status::PAUSED:
+                    item->set_status(system_info::Services::Item::STATUS_PAUSED);
+                    break;
+
+                case ServiceEnumerator::Status::RUNNING:
+                    item->set_status(system_info::Services::Item::STATUS_RUNNING);
+                    break;
+
+                case ServiceEnumerator::Status::START_PENDING:
+                    item->set_status(system_info::Services::Item::STATUS_START_PENDING);
+                    break;
+
+                case ServiceEnumerator::Status::STOP_PENDING:
+                    item->set_status(system_info::Services::Item::STATUS_STOP_PENDING);
+                    break;
+
+                case ServiceEnumerator::Status::STOPPED:
+                    item->set_status(system_info::Services::Item::STATUS_STOPPED);
+                    break;
+
+                default:
+                    item->set_status(system_info::Services::Item::STATUS_UNKNOWN);
+                    break;
+            }
+
+            switch (enumerator.GetStartupType())
+            {
+                case ServiceEnumerator::StartupType::AUTO_START:
+                    item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_AUTO_START);
+                    break;
+
+                case ServiceEnumerator::StartupType::DEMAND_START:
+                    item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_DEMAND_START);
+                    break;
+
+                case ServiceEnumerator::StartupType::DISABLED:
+                    item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_DISABLED);
+                    break;
+
+                case ServiceEnumerator::StartupType::BOOT_START:
+                    item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_BOOT_START);
+                    break;
+
+                case ServiceEnumerator::StartupType::SYSTEM_START:
+                    item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_SYSTEM_START);
+                    break;
+
+                default:
+                    item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_UNKNOWN);
+                    break;
+            }
+
+            item->set_binary_path(enumerator.GetBinaryPath());
+            item->set_start_name(enumerator.GetStartName());
+        }
+
+        return message.SerializeAsString();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDrivers);
 };
@@ -210,6 +389,12 @@ public:
         // TODO
     }
 
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
+    }
+
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryProcesses);
 };
@@ -228,6 +413,12 @@ public:
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
     {
         // TODO
+    }
+
+    std::string Serialize() final
+    {
+        // TODO
+        return std::string();
     }
 
 private:

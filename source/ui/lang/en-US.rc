@@ -266,6 +266,10 @@ BEGIN
         MENUITEM "&Hide", ID_SHOWHIDE
         MENUITEM "&Exit\tAlt+F4", ID_EXIT
     END
+    POPUP "&Tools"
+    BEGIN
+        MENUITEM "&System Information", ID_SYSTEM_INFO
+    END
     POPUP "&Help"
     BEGIN
         MENUITEM "&Online Help...\tF1", ID_HELP

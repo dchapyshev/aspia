@@ -190,6 +190,8 @@
 #define ID_POWER_HIBERNATE                         610
 #define ID_POWER_SUSPEND                           611
 
+#define ID_SYSTEM_INFO                             700
+
 //
 // Menu
 //
