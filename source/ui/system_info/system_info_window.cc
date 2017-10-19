@@ -7,8 +7,6 @@
 
 #include "base/strings/unicode.h"
 #include "base/logging.h"
-#include "protocol/category_info.h"
-#include "protocol/category_group.h"
 #include "ui/system_info/system_info_window.h"
 #include "ui/about_dialog.h"
 
@@ -222,7 +220,7 @@ LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& 
                                                GetSystemMetrics(SM_CYSMICON)));
 
         delegate_->OnCategoryRequest(
-            category->guid(),
+            category->Guid(),
             std::bind(&CategoryInfo::Parse, category, std::placeholders::_1, std::placeholders::_2),
             list_.output_proxy());
     }

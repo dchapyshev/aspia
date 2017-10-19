@@ -5,15 +5,24 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "protocol/system_info_constants.h"
 #include "protocol/category_summary.h"
 #include "ui/resource.h"
 
 namespace aspia {
 
-CategorySummary::CategorySummary() : CategoryInfo(system_info::kSummary, "Summary", IDI_COMPUTER)
+const char* CategorySummary::Name() const
 {
-    // Nothing
+    return "Summary";
+}
+
+Category::IconId CategorySummary::Icon() const
+{
+    return IDI_COMPUTER;
+}
+
+const char* CategorySummary::Guid() const
+{
+    return "8A66762A-0B23-47CB-B66E-A371B3B7111A";
 }
 
 void CategorySummary::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)

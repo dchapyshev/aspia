@@ -9,8 +9,7 @@
 #define _ASPIA_HOST__HOST_SESSION_SYSTEM_INFO_H
 
 #include "ipc/pipe_channel.h"
-
-#include <map>
+#include "protocol/category.h"
 
 namespace aspia {
 
@@ -27,12 +26,10 @@ private:
     void OnIpcChannelMessage(const IOBuffer& buffer);
     void OnIpcChannelMessageSended();
 
-    void RegisterSupportedCategories();
-
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::shared_ptr<PipeChannelProxy> ipc_channel_proxy_;
 
-    std::map<std::string, std::function<std::string()>> map_;
+    CategoryMap map_;
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionSystemInfo);
 };

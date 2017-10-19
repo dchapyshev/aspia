@@ -6,762 +6,875 @@
 //
 
 #include "base/printer_enumerator.h"
-#include "protocol/system_info_constants.h"
 #include "protocol/category_group_hardware.h"
-#include "protocol/category_info.h"
 #include "proto/system_info_session_message.pb.h"
 #include "ui/system_info/output_proxy.h"
 #include "ui/resource.h"
 
 namespace aspia {
 
-class CategoryDmiBios : public CategoryInfo
+//
+// CategoryDmiBios
+//
+
+const char* CategoryDmiBios::Name() const
 {
-public:
-    CategoryDmiBios() : CategoryInfo(system_info::hardware::dmi::kBIOS, "BIOS", IDI_BIOS)
-    {
-        // Nothing
-    }
+    return "BIOS";
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiBios);
-};
-
-class CategoryDmiSystem : public CategoryInfo
+Category::IconId CategoryDmiBios::Icon() const
 {
-public:
-    CategoryDmiSystem() : CategoryInfo(system_info::hardware::dmi::kSystem, "System", IDI_COMPUTER)
-    {
-        // Nothing
-    }
+    return IDI_BIOS;
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiSystem);
-};
-
-class CategoryDmiMotherboard : public CategoryInfo
+const char* CategoryDmiBios::Guid() const
 {
-public:
-    CategoryDmiMotherboard()
-        : CategoryInfo(system_info::hardware::dmi::kMotherboard, "Motherboard", IDI_MOTHERBOARD)
-    {
-        // Nothing
-    }
+    return "B0B73D57-2CDC-4814-9AE0-C7AF7DDDD60E";
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiMotherboard);
-};
-
-class CategoryDmiChassis : public CategoryInfo
+void CategoryDmiBios::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-public:
-    CategoryDmiChassis()
-        : CategoryInfo(system_info::hardware::dmi::kChassis, "Chassis", IDI_SERVER)
-    {
-        // Nothing
-    }
+    // TODO
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiChassis);
-};
-
-class CategoryDmiCaches : public CategoryInfo
+std::string CategoryDmiBios::Serialize()
 {
-public:
-    CategoryDmiCaches() : CategoryInfo(system_info::hardware::dmi::kCaches, "Caches", IDI_CHIP)
-    {
-        // Nothing
-    }
+    // TODO
+    return std::string();
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
+//
+// CategoryDmiSystem
+//
 
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiCaches);
-};
-
-class CategoryDmiProcessors : public CategoryInfo
+const char* CategoryDmiSystem::Name() const
 {
-public:
-    CategoryDmiProcessors()
-        : CategoryInfo(system_info::hardware::dmi::kProcessors, "Processors", IDI_PROCESSOR)
-    {
-        // Nothing
-    }
+    return "System";
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiProcessors);
-};
-
-class CategoryDmiMemoryDevices : public CategoryInfo
+Category::IconId CategoryDmiSystem::Icon() const
 {
-public:
-    CategoryDmiMemoryDevices()
-        : CategoryInfo(system_info::hardware::dmi::kMemoryDevices, "Memory Devices", IDI_MEMORY)
-    {
-        // Nothing
-    }
+    return IDI_COMPUTER;
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiMemoryDevices);
-};
-
-class CategoryDmiSystemSlots : public CategoryInfo
+const char* CategoryDmiSystem::Guid() const
 {
-public:
-    CategoryDmiSystemSlots()
-        : CategoryInfo(system_info::hardware::dmi::kSystemSlots, "System Slots", IDI_PORT)
-    {
-        // Nothing
-    }
+    return "F599BBA4-AEBB-4583-A15E-9848F4C98601";
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiSystemSlots);
-};
-
-class CategoryDmiPortConnectors : public CategoryInfo
+void CategoryDmiSystem::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-public:
-    CategoryDmiPortConnectors()
-        : CategoryInfo(system_info::hardware::dmi::kPortConnectors, "Port Connectors", IDI_PORT)
-    {
-        // Nothing
-    }
+    // TODO
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiPortConnectors);
-};
-
-class CategoryDmiOnboardDevices : public CategoryInfo
+std::string CategoryDmiSystem::Serialize()
 {
-public:
-    CategoryDmiOnboardDevices()
-        : CategoryInfo(system_info::hardware::dmi::kOnboardDevices,
-                       "Onboard Devices",
-                       IDI_MOTHERBOARD)
-    {
-        // Nothing
-    }
+    // TODO
+    return std::string();
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
+//
+// CategoryDmiMotherboard
+//
 
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiOnboardDevices);
-};
-
-class CategoryDmiBuildinPointing : public CategoryInfo
+const char* CategoryDmiMotherboard::Name() const
 {
-public:
-    CategoryDmiBuildinPointing()
-        : CategoryInfo(system_info::hardware::dmi::kBuildinPointing,
-                       "Build-in Pointing",
-                       IDI_MOUSE)
-    {
-        // Nothing
-    }
+    return "Motherboard";
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiBuildinPointing);
-};
-
-class CategoryDmiPortableBattery : public CategoryInfo
+Category::IconId CategoryDmiMotherboard::Icon() const
 {
-public:
-    CategoryDmiPortableBattery()
-        : CategoryInfo(system_info::hardware::dmi::kPortableBattery,
-                       "Portable Battery",
-                       IDI_BATTERY)
-    {
-        // Nothing
-    }
+    return IDI_MOTHERBOARD;
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiPortableBattery);
-};
-
-class CategoryGroupDMI : public CategoryGroup
+const char* CategoryDmiMotherboard::Guid() const
 {
-public:
-    CategoryGroupDMI() : CategoryGroup("DMI", IDI_COMPUTER)
-    {
-        CategoryList* child_list = mutable_child_list();
+    return "8143642D-3248-40F5-8FCF-629C581FFF01";
+}
 
-        child_list->emplace_back(std::make_unique<CategoryDmiBios>());
-        child_list->emplace_back(std::make_unique<CategoryDmiSystem>());
-        child_list->emplace_back(std::make_unique<CategoryDmiMotherboard>());
-        child_list->emplace_back(std::make_unique<CategoryDmiChassis>());
-        child_list->emplace_back(std::make_unique<CategoryDmiCaches>());
-        child_list->emplace_back(std::make_unique<CategoryDmiProcessors>());
-        child_list->emplace_back(std::make_unique<CategoryDmiMemoryDevices>());
-        child_list->emplace_back(std::make_unique<CategoryDmiSystemSlots>());
-        child_list->emplace_back(std::make_unique<CategoryDmiPortConnectors>());
-        child_list->emplace_back(std::make_unique<CategoryDmiOnboardDevices>());
-        child_list->emplace_back(std::make_unique<CategoryDmiBuildinPointing>());
-        child_list->emplace_back(std::make_unique<CategoryDmiPortableBattery>());
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryGroupDMI);
-};
-
-class CategoryCPU : public CategoryInfo
+void CategoryDmiMotherboard::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-public:
-    CategoryCPU()
-        : CategoryInfo(system_info::hardware::kCPU, "Central Processor", IDI_PROCESSOR)
-    {
-        // Nothing
-    }
+    // TODO
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryCPU);
-};
-
-class CategoryOpticalDrives : public CategoryInfo
+std::string CategoryDmiMotherboard::Serialize()
 {
-public:
-    CategoryOpticalDrives()
-        : CategoryInfo(system_info::hardware::storage::kOpticalDrives,
-                       "Optical Drives",
-                       IDI_DRIVE_DISK)
-    {
-        // Nothing
-    }
+    // TODO
+    return std::string();
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
+//
+// CategoryDmiChassis
+//
 
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryOpticalDrives);
-};
-
-class CategoryATA : public CategoryInfo
+const char* CategoryDmiChassis::Name() const
 {
-public:
-    CategoryATA() : CategoryInfo(system_info::hardware::storage::kATA, "ATA", IDI_DRIVE)
-    {
-        // Nothing
-    }
+    return "Chassis";
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryATA);
-};
-
-class CategorySMART : public CategoryInfo
+Category::IconId CategoryDmiChassis::Icon() const
 {
-public:
-    CategorySMART()
-        : CategoryInfo(system_info::hardware::storage::kSMART, "S.M.A.R.T.", IDI_DRIVE)
-    {
-        // Nothing
-    }
+    return IDI_SERVER;
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategorySMART);
-};
-
-class CategoryGroupStorage : public CategoryGroup
+const char* CategoryDmiChassis::Guid() const
 {
-public:
-    CategoryGroupStorage()
-        : CategoryGroup("Storage", IDI_DRIVE)
-    {
-        CategoryList* child_list = mutable_child_list();
-        child_list->emplace_back(std::make_unique<CategoryOpticalDrives>());
-        child_list->emplace_back(std::make_unique<CategoryATA>());
-        child_list->emplace_back(std::make_unique<CategorySMART>());
-    }
+    return "81D9E51F-4A86-49FC-A37F-232D6A62EC45";
+}
 
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryGroupStorage);
-};
-
-class CategoryWindowsVideo : public CategoryInfo
+void CategoryDmiChassis::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-public:
-    CategoryWindowsVideo()
-        : CategoryInfo(system_info::hardware::display::kWindowsVideo,
-                       "Windows Video",
-                       IDI_MONITOR)
-    {
-        // Nothing
-    }
+    // TODO
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryWindowsVideo);
-};
-
-class CategoryMonitor : public CategoryInfo
+std::string CategoryDmiChassis::Serialize()
 {
-public:
-    CategoryMonitor()
-        : CategoryInfo(system_info::hardware::display::kMonitor, "Monitor", IDI_MONITOR)
-    {
-        // Nothing
-    }
+    // TODO
+    return std::string();
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
+//
+// CategoryDmiCaches
+//
 
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryMonitor);
-};
-
-class CategoryOpenGL : public CategoryInfo
+const char* CategoryDmiCaches::Name() const
 {
-public:
-    CategoryOpenGL()
-        : CategoryInfo(system_info::hardware::display::kOpenGL, "OpenGL", IDI_CLAPPERBOARD)
-    {
-        // Nothing
-    }
+    return "Caches";
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryOpenGL);
-};
-
-class CategoryGroupDisplay : public CategoryGroup
+Category::IconId CategoryDmiCaches::Icon() const
 {
-public:
-    CategoryGroupDisplay() : CategoryGroup("Display", IDI_MONITOR)
-    {
-        CategoryList* child_list = mutable_child_list();
-        child_list->emplace_back(std::make_unique<CategoryWindowsVideo>());
-        child_list->emplace_back(std::make_unique<CategoryMonitor>());
-        child_list->emplace_back(std::make_unique<CategoryOpenGL>());
-    }
+    return IDI_CHIP;
+}
 
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryGroupDisplay);
-};
-
-class CategoryPrinters : public CategoryInfo
+const char* CategoryDmiCaches::Guid() const
 {
-public:
-    CategoryPrinters() : CategoryInfo(system_info::hardware::kPrinters, "Printers", IDI_PRINTER)
+    return "BA9258E7-0046-4A77-A97B-0407453706A3";
+}
+
+void CategoryDmiCaches::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryDmiCaches::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryDmiProcessors
+//
+
+const char* CategoryDmiProcessors::Name() const
+{
+    return "Processors";
+}
+
+Category::IconId CategoryDmiProcessors::Icon() const
+{
+    return IDI_PROCESSOR;
+}
+
+const char* CategoryDmiProcessors::Guid() const
+{
+    return "84D8B0C3-37A4-4825-A523-40B62E0CADC3";
+}
+
+void CategoryDmiProcessors::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryDmiProcessors::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryDmiMemoryDevices
+//
+
+const char* CategoryDmiMemoryDevices::Name() const
+{
+    return "Memory Devices";
+}
+
+Category::IconId CategoryDmiMemoryDevices::Icon() const
+{
+    return IDI_MEMORY;
+}
+
+const char* CategoryDmiMemoryDevices::Guid() const
+{
+    return "9C591459-A83F-4F48-883D-927765C072B0";
+}
+
+void CategoryDmiMemoryDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryDmiMemoryDevices::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryDmiSystemSlots
+//
+
+const char* CategoryDmiSystemSlots::Name() const
+{
+    return "System Slots";
+}
+
+Category::IconId CategoryDmiSystemSlots::Icon() const
+{
+    return IDI_PORT;
+}
+
+const char* CategoryDmiSystemSlots::Guid() const
+{
+    return "7A4F71C6-557F-48A5-AC94-E430F69154F1";
+}
+
+void CategoryDmiSystemSlots::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryDmiSystemSlots::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryDmiPortConnectors
+//
+
+const char* CategoryDmiPortConnectors::Name() const
+{
+    return "Port Connectors";
+}
+
+Category::IconId CategoryDmiPortConnectors::Icon() const
+{
+    return IDI_PORT;
+}
+
+const char* CategoryDmiPortConnectors::Guid() const
+{
+    return "FF4CE0FE-261F-46EF-852F-42420E68CFD2";
+}
+
+void CategoryDmiPortConnectors::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryDmiPortConnectors::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryDmiOnboardDevices
+//
+
+const char* CategoryDmiOnboardDevices::Name() const
+{
+    return "Onboard Devices";
+}
+
+Category::IconId CategoryDmiOnboardDevices::Icon() const
+{
+    return IDI_MOTHERBOARD;
+}
+
+const char* CategoryDmiOnboardDevices::Guid() const
+{
+    return "6C62195C-5E5F-41BA-B6AD-99041594DAC6";
+}
+
+void CategoryDmiOnboardDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryDmiOnboardDevices::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryDmiBuildinPointing
+//
+
+const char* CategoryDmiBuildinPointing::Name() const
+{
+    return "Build-in Pointing";
+}
+
+Category::IconId CategoryDmiBuildinPointing::Icon() const
+{
+    return IDI_MOUSE;
+}
+
+const char* CategoryDmiBuildinPointing::Guid() const
+{
+    return "6883684B-3CEC-451B-A2E3-34C16348BA1B";
+}
+
+void CategoryDmiBuildinPointing::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryDmiBuildinPointing::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryDmiPortableBattery
+//
+
+const char* CategoryDmiPortableBattery::Name() const
+{
+    return "Portable Battery";
+}
+
+Category::IconId CategoryDmiPortableBattery::Icon() const
+{
+    return IDI_BATTERY;
+}
+
+const char* CategoryDmiPortableBattery::Guid() const
+{
+    return "0CA213B5-12EE-4828-A399-BA65244E65FD";
+}
+
+void CategoryDmiPortableBattery::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryDmiPortableBattery::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryGroupDMI
+//
+
+const char* CategoryGroupDMI::Name() const
+{
+    return "DMI";
+}
+
+Category::IconId CategoryGroupDMI::Icon() const
+{
+    return IDI_COMPUTER;
+}
+
+//
+// CategoryCPU
+//
+
+const char* CategoryCPU::Name() const
+{
+    return "Central Processor";
+}
+
+Category::IconId CategoryCPU::Icon() const
+{
+    return IDI_PROCESSOR;
+}
+
+const char* CategoryCPU::Guid() const
+{
+    return "31D1312E-85A9-419A-91B4-BA81129B3CCC";
+}
+
+void CategoryCPU::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryCPU::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryOpticalDrives
+//
+
+const char* CategoryOpticalDrives::Name() const
+{
+    return "Optical Drives";
+}
+
+Category::IconId CategoryOpticalDrives::Icon() const
+{
+    return IDI_DRIVE_DISK;
+}
+
+const char* CategoryOpticalDrives::Guid() const
+{
+    return "68E028FE-3DA6-4BAF-9E18-CDB828372860";
+}
+
+void CategoryOpticalDrives::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryOpticalDrives::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryATA
+//
+
+const char* CategoryATA::Name() const
+{
+    return "ATA";
+}
+
+Category::IconId CategoryATA::Icon() const
+{
+    return IDI_DRIVE;
+}
+
+const char* CategoryATA::Guid() const
+{
+    return "79D80586-D264-46E6-8718-09E267730B78";
+}
+
+void CategoryATA::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryATA::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategorySMART
+//
+
+const char* CategorySMART::Name() const
+{
+    return "S.M.A.R.T.";
+}
+
+Category::IconId CategorySMART::Icon() const
+{
+    return IDI_DRIVE;
+}
+
+const char* CategorySMART::Guid() const
+{
+    return "7B1F2ED7-7A2E-4F5C-A70B-A56AB5B8CE00";
+}
+
+void CategorySMART::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategorySMART::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryGroupStorage
+//
+
+const char* CategoryGroupStorage::Name() const
+{
+    return "Storage";
+}
+
+Category::IconId CategoryGroupStorage::Icon() const
+{
+    return IDI_DRIVE;
+}
+
+//
+// CategoryWindowsVideo
+//
+
+const char* CategoryWindowsVideo::Name() const
+{
+    return "Windows Video";
+}
+
+Category::IconId CategoryWindowsVideo::Icon() const
+{
+    return IDI_MONITOR;
+}
+
+const char* CategoryWindowsVideo::Guid() const
+{
+    return "09E9069D-C394-4CD7-8252-E5CF83B7674C";
+}
+
+void CategoryWindowsVideo::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryWindowsVideo::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryMonitor
+//
+
+const char* CategoryMonitor::Name() const
+{
+    return "Monitor";
+}
+
+Category::IconId CategoryMonitor::Icon() const
+{
+    return IDI_MONITOR;
+}
+
+const char* CategoryMonitor::Guid() const
+{
+    return "281100E4-88ED-4AE2-BC4A-3A37282BBAB5";
+}
+
+void CategoryMonitor::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryMonitor::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryOpenGL
+//
+
+const char* CategoryOpenGL::Name() const
+{
+    return "OpenGL";
+}
+
+Category::IconId CategoryOpenGL::Icon() const
+{
+    return IDI_CLAPPERBOARD;
+}
+
+const char* CategoryOpenGL::Guid() const
+{
+    return "05E4437C-A0CD-41CB-8B50-9A627E13CB97";
+}
+
+void CategoryOpenGL::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryOpenGL::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryGroupDisplay
+//
+
+const char* CategoryGroupDisplay::Name() const
+{
+    return "Display";
+}
+
+Category::IconId CategoryGroupDisplay::Icon() const
+{
+    return IDI_MONITOR;
+}
+
+//
+// CategoryPrinters
+//
+
+const char* CategoryPrinters::Name() const
+{
+    return "Printers";
+}
+
+Category::IconId CategoryPrinters::Icon() const
+{
+    return IDI_PRINTER;
+}
+
+const char* CategoryPrinters::Guid() const
+{
+    return "ACBDCE39-CE38-4A79-9626-8C8BA2E3A26A";
+}
+
+void CategoryPrinters::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    system_info::Printers message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
     {
-        // Nothing
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 200);
+        output->AddHeaderItem("Value", 200);
     }
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
+    for (int index = 0; index < message.item_size(); ++index)
     {
-        system_info::Printers message;
+        const system_info::Printers::Item& item = message.item(index);
 
-        if (!message.ParseFromString(data))
-            return;
+        Output::Group group(output, item.name(), Icon());
 
-        Output::Table table(output, Name());
+        output->AddParam(IDI_PRINTER, "Default Printer", item.is_default() ? "Yes" : "No");
+        output->AddParam(IDI_PRINTER_SHARE, "Shared Printer", item.is_shared() ? "Yes" : "No");
+        output->AddParam(IDI_PORT, "Port", item.port_name());
+        output->AddParam(IDI_PCI, "Driver", item.driver_name());
+        output->AddParam(IDI_PCI, "Device Name", item.device_name());
+        output->AddParam(IDI_PRINTER, "Print Processor", item.print_processor());
+        output->AddParam(IDI_PRINTER, "Data Type", item.data_type());
+        output->AddParam(IDI_PRINTER, "Print Jobs Queued", std::to_string(item.jobs_count()));
 
+        if (item.paper_width())
         {
-            Output::TableHeader header(output);
-            output->AddHeaderItem("Parameter", 200);
-            output->AddHeaderItem("Value", 200);
-        }
-
-        for (int index = 0; index < message.item_size(); ++index)
-        {
-            const system_info::Printers::Item& item = message.item(index);
-
-            Output::Group group(output, item.name(), Icon());
-
-            output->AddParam(IDI_PRINTER, "Default Printer", item.is_default() ? "Yes" : "No");
-            output->AddParam(IDI_PRINTER_SHARE, "Shared Printer", item.is_shared() ? "Yes" : "No");
-            output->AddParam(IDI_PORT, "Port", item.port_name());
-            output->AddParam(IDI_PCI, "Driver", item.driver_name());
-            output->AddParam(IDI_PCI, "Device Name", item.device_name());
-            output->AddParam(IDI_PRINTER, "Print Processor", item.print_processor());
-            output->AddParam(IDI_PRINTER, "Data Type", item.data_type());
-            output->AddParam(IDI_PRINTER, "Print Jobs Queued", std::to_string(item.jobs_count()));
-
-            if (item.paper_width())
-            {
-                output->AddParam(IDI_DOCUMENT_TEXT,
-                                 "Paper Width",
-                                 std::to_string(item.paper_width()),
-                                 "mm");
-            }
-
-            if (item.paper_length())
-            {
-                output->AddParam(IDI_DOCUMENT_TEXT,
-                                 "Paper Length",
-                                 std::to_string(item.paper_length()),
-                                 "mm");
-            }
-
-            if (item.print_quality())
-            {
-                output->AddParam(IDI_DOCUMENT_TEXT,
-                                 "Print Quality",
-                                 std::to_string(item.print_quality()),
-                                 "dpi");
-            }
-
             output->AddParam(IDI_DOCUMENT_TEXT,
-                             "Orientation",
-                             OrientationToString(item.orientation()));
+                             "Paper Width",
+                             std::to_string(item.paper_width()),
+                             "mm");
         }
-    }
 
-    std::string Serialize() final
-    {
-        system_info::Printers message;
-
-        for (PrinterEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+        if (item.paper_length())
         {
-            system_info::Printers::Item* item = message.add_item();
-
-            item->set_name(enumerator.GetName());
-            item->set_is_default(enumerator.IsDefault());
-            item->set_is_shared(enumerator.IsShared());
-            item->set_share_name(enumerator.GetShareName());
-            item->set_port_name(enumerator.GetPortName());
-            item->set_driver_name(enumerator.GetDriverName());
-            item->set_device_name(enumerator.GetDeviceName());
-            item->set_print_processor(enumerator.GetPrintProcessor());
-            item->set_data_type(enumerator.GetDataType());
-            item->set_server_name(enumerator.GetServerName());
-            item->set_location(enumerator.GetLocation());
-            item->set_comment(enumerator.GetComment());
-            item->set_jobs_count(enumerator.GetJobsCount());
-            item->set_paper_width(enumerator.GetPaperWidth());
-            item->set_paper_length(enumerator.GetPaperLength());
-            item->set_print_quality(enumerator.GetPrintQuality());
-
-            switch (enumerator.GetOrientation())
-            {
-                case PrinterEnumerator::Orientation::PORTRAIT:
-                    item->set_orientation(system_info::Printers::Item::ORIENTATION_PORTRAIT);
-                    break;
-
-                case PrinterEnumerator::Orientation::LANDSCAPE:
-                    item->set_orientation(system_info::Printers::Item::ORIENTATION_LANDSCAPE);
-                    break;
-
-                default:
-                    item->set_orientation(system_info::Printers::Item::ORIENTATION_UNKNOWN);
-                    break;
-            }
+            output->AddParam(IDI_DOCUMENT_TEXT,
+                             "Paper Length",
+                             std::to_string(item.paper_length()),
+                             "mm");
         }
 
-        return message.SerializeAsString();
-    }
+        if (item.print_quality())
+        {
+            output->AddParam(IDI_DOCUMENT_TEXT,
+                             "Print Quality",
+                             std::to_string(item.print_quality()),
+                             "dpi");
+        }
 
-private:
-    static const char* OrientationToString(system_info::Printers::Item::Orientation orientation)
-    {
-        switch (orientation)
+        switch (item.orientation())
         {
             case system_info::Printers::Item::ORIENTATION_LANDSCAPE:
-                return "Landscape";
+                output->AddParam(IDI_DOCUMENT_TEXT, "Orientation", "Landscape");
+                break;
 
             case system_info::Printers::Item::ORIENTATION_PORTRAIT:
-                return "Portrait";
+                output->AddParam(IDI_DOCUMENT_TEXT, "Orientation", "Portrait");
+                break;
 
             default:
-                return "Unknown";
+                output->AddParam(IDI_DOCUMENT_TEXT, "Orientation", "Unknown");
+                break;
+        }
+    }
+}
+
+std::string CategoryPrinters::Serialize()
+{
+    system_info::Printers message;
+
+    for (PrinterEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+    {
+        system_info::Printers::Item* item = message.add_item();
+
+        item->set_name(enumerator.GetName());
+        item->set_is_default(enumerator.IsDefault());
+        item->set_is_shared(enumerator.IsShared());
+        item->set_share_name(enumerator.GetShareName());
+        item->set_port_name(enumerator.GetPortName());
+        item->set_driver_name(enumerator.GetDriverName());
+        item->set_device_name(enumerator.GetDeviceName());
+        item->set_print_processor(enumerator.GetPrintProcessor());
+        item->set_data_type(enumerator.GetDataType());
+        item->set_server_name(enumerator.GetServerName());
+        item->set_location(enumerator.GetLocation());
+        item->set_comment(enumerator.GetComment());
+        item->set_jobs_count(enumerator.GetJobsCount());
+        item->set_paper_width(enumerator.GetPaperWidth());
+        item->set_paper_length(enumerator.GetPaperLength());
+        item->set_print_quality(enumerator.GetPrintQuality());
+
+        switch (enumerator.GetOrientation())
+        {
+            case PrinterEnumerator::Orientation::PORTRAIT:
+                item->set_orientation(system_info::Printers::Item::ORIENTATION_PORTRAIT);
+                break;
+
+            case PrinterEnumerator::Orientation::LANDSCAPE:
+                item->set_orientation(system_info::Printers::Item::ORIENTATION_LANDSCAPE);
+                break;
+
+            default:
+                item->set_orientation(system_info::Printers::Item::ORIENTATION_UNKNOWN);
+                break;
         }
     }
 
-    DISALLOW_COPY_AND_ASSIGN(CategoryPrinters);
-};
+    return message.SerializeAsString();
+}
 
-class CategoryPowerOptions : public CategoryInfo
+//
+// CategoryPowerOptions
+//
+
+const char* CategoryPowerOptions::Name() const
 {
-public:
-    CategoryPowerOptions()
-        : CategoryInfo(system_info::hardware::kPowerOptions, "Power Options", IDI_POWER_SUPPLY)
-    {
-        // Nothing
-    }
+    return "Power Options";
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryPowerOptions);
-};
-
-class CategoryAllDevices : public CategoryInfo
+Category::IconId CategoryPowerOptions::Icon() const
 {
-public:
-    CategoryAllDevices()
-        : CategoryInfo(system_info::hardware::windows_devices::kAll, "All Devices", IDI_PCI)
-    {
-        // Nothing
-    }
+    return IDI_POWER_SUPPLY;
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryAllDevices);
-};
-
-class CategoryUnknownDevices : public CategoryInfo
+const char* CategoryPowerOptions::Guid() const
 {
-public:
-    CategoryUnknownDevices()
-        : CategoryInfo(system_info::hardware::windows_devices::kUnknown,
-                       "Unknown Devices",
-                       IDI_PCI)
-    {
-        // Nothing
-    }
+    return "42E04A9E-36F7-42A1-BCDA-F3ED70112DFF";
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryUnknownDevices);
-};
-
-class CategoryGroupWindowDevices : public CategoryGroup
+void CategoryPowerOptions::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-public:
-    CategoryGroupWindowDevices() : CategoryGroup("Windows Devices", IDI_PCI)
-    {
-        CategoryList* child_list = mutable_child_list();
-        child_list->emplace_back(std::make_unique<CategoryAllDevices>());
-        child_list->emplace_back(std::make_unique<CategoryUnknownDevices>());
-    }
+    // TODO
+}
 
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryGroupWindowDevices);
-};
-
-CategoryGroupHardware::CategoryGroupHardware() : CategoryGroup("Hardware", IDI_HARDWARE)
+std::string CategoryPowerOptions::Serialize()
 {
-    CategoryList* child_list = mutable_child_list();
-    child_list->emplace_back(std::make_unique<CategoryGroupDMI>());
-    child_list->emplace_back(std::make_unique<CategoryCPU>());
-    child_list->emplace_back(std::make_unique<CategoryGroupStorage>());
-    child_list->emplace_back(std::make_unique<CategoryGroupDisplay>());
-    child_list->emplace_back(std::make_unique<CategoryPowerOptions>());
-    child_list->emplace_back(std::make_unique<CategoryPrinters>());
-    child_list->emplace_back(std::make_unique<CategoryGroupWindowDevices>());
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryAllDevices
+//
+
+const char* CategoryAllDevices::Name() const
+{
+    return "All Devices";
+}
+
+Category::IconId CategoryAllDevices::Icon() const
+{
+    return IDI_PCI;
+}
+
+const char* CategoryAllDevices::Guid() const
+{
+    return "22C4F1A6-67F2-4445-B807-9D39E1A80636";
+}
+
+void CategoryAllDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryAllDevices::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryUnknownDevices
+//
+
+const char* CategoryUnknownDevices::Name() const
+{
+    return "Unknown Devices";
+}
+
+Category::IconId CategoryUnknownDevices::Icon() const
+{
+    return IDI_PCI;
+}
+
+const char* CategoryUnknownDevices::Guid() const
+{
+    return "5BE9FAA9-5F94-4420-8650-B649F35A1DA0";
+}
+
+void CategoryUnknownDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryUnknownDevices::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryGroupWindowDevices
+//
+
+const char* CategoryGroupWindowDevices::Name() const
+{
+    return "Windows Devices";
+}
+
+Category::IconId CategoryGroupWindowDevices::Icon() const
+{
+    return IDI_PCI;
+}
+
+//
+// CategoryGroupHardware
+//
+
+const char* CategoryGroupHardware::Name() const
+{
+    return "Hardware";
+}
+
+Category::IconId CategoryGroupHardware::Icon() const
+{
+    return IDI_HARDWARE;
 }
 
 } // namespace aspia

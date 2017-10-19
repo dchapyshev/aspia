@@ -8,8 +8,8 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__CATEGORY_TREE_CTRL_H
 #define _ASPIA_UI__SYSTEM_INFO__CATEGORY_TREE_CTRL_H
 
-#include "protocol/category_group.h"
-#include "protocol/category_info.h"
+#include "base/macros.h"
+#include "protocol/category.h"
 
 #include <atlbase.h>
 #include <atlapp.h>
@@ -38,10 +38,9 @@ private:
 
     LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
 
-    void InitializeCategoryList();
-    void AddChildItems(const CategoryList& list, HTREEITEM parent_tree_item);
+    void AddChildItems(const CategoryList& tree, HTREEITEM parent_tree_item);
 
-    CategoryList category_list_;
+    CategoryList category_tree_;
     CImageListManaged imagelist_;
 
     DISALLOW_COPY_AND_ASSIGN(CategoryTreeCtrl);

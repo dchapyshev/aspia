@@ -7,30 +7,17 @@
 
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
+#include "base/logging.h"
 #include "ui/system_info/category_tree_ctrl.h"
-#include "protocol/category_group_hardware.h"
-#include "protocol/category_group_software.h"
-#include "protocol/category_group_network.h"
-#include "protocol/category_group_os.h"
-#include "protocol/category_summary.h"
 #include "ui/resource.h"
 
 #include <uxtheme.h>
 
 namespace aspia {
 
-void CategoryTreeCtrl::InitializeCategoryList()
+void CategoryTreeCtrl::AddChildItems(const CategoryList& tree, HTREEITEM parent_tree_item)
 {
-    category_list_.emplace_back(std::make_unique<CategorySummary>());
-    category_list_.emplace_back(std::make_unique<CategoryGroupHardware>());
-    category_list_.emplace_back(std::make_unique<CategoryGroupSoftware>());
-    category_list_.emplace_back(std::make_unique<CategoryGroupNetwork>());
-    category_list_.emplace_back(std::make_unique<CategoryGroupOS>());
-}
-
-void CategoryTreeCtrl::AddChildItems(const CategoryList& list, HTREEITEM parent_tree_item)
-{
-    for (const auto& child : list)
+    for (const auto& child : tree)
     {
         const int icon_index =
             imagelist_.AddIcon(AtlLoadIconImage(child->Icon(),
@@ -50,7 +37,7 @@ void CategoryTreeCtrl::AddChildItems(const CategoryList& list, HTREEITEM parent_
 
         if (child->type() == Category::Type::GROUP)
         {
-            AddChildItems(child->child_list(), tree_item);
+            AddChildItems(child->category_group()->child_list(), tree_item);
         }
     }
 }
@@ -83,7 +70,7 @@ LRESULT CategoryTreeCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
         SetExtendedStyle(kDoubleBuffer, kDoubleBuffer);
     }
 
-    InitializeCategoryList();
+    category_tree_ = std::move(CreateCategoryTree());
 
     if (imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
                           GetSystemMetrics(SM_CYSMICON),
@@ -93,7 +80,7 @@ LRESULT CategoryTreeCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
         SetImageList(imagelist_);
     }
 
-    AddChildItems(category_list_, TVI_ROOT);
+    AddChildItems(category_tree_, TVI_ROOT);
     ExpandChildGroups(TVI_ROOT);
 
     return ret;

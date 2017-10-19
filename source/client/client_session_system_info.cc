@@ -8,9 +8,10 @@
 #include "client/client_session_system_info.h"
 #include "proto/system_info_session.pb.h"
 #include "protocol/message_serialization.h"
-#include "protocol/system_info_constants.h"
 
 namespace aspia {
+
+static const size_t kGuidLength = 36;
 
 ClientSessionSystemInfo::ClientSessionSystemInfo(
     const ClientConfig& config,
@@ -37,7 +38,7 @@ void ClientSessionSystemInfo::OnCategoryRequest(const char* guid,
     parse_callback_ = parse_callback;
     output_ = std::move(output);
 
-    DCHECK(last_guid_.length() == system_info::kGuidLength);
+    DCHECK(last_guid_.length() == kGuidLength);
 
     proto::system_info::ClientToHost message;
     message.set_guid(guid);
@@ -59,7 +60,7 @@ void ClientSessionSystemInfo::OnMessageSended()
 
 void ClientSessionSystemInfo::OnMessageReceived(const IOBuffer& buffer)
 {
-    DCHECK(last_guid_.length() == system_info::kGuidLength);
+    DCHECK(last_guid_.length() == kGuidLength);
 
     proto::system_info::HostToClient message;
 
@@ -67,7 +68,7 @@ void ClientSessionSystemInfo::OnMessageReceived(const IOBuffer& buffer)
     {
         const std::string& guid = message.guid();
 
-        if (guid.length() == system_info::kGuidLength && guid == last_guid_)
+        if (guid.length() == kGuidLength && guid == last_guid_)
         {
             parse_callback_(output_, message.data());
             parse_callback_ = nullptr;

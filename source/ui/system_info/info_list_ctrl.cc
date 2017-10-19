@@ -7,6 +7,7 @@
 
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
+#include "base/logging.h"
 #include "ui/system_info/info_list_ctrl.h"
 
 #include <uxtheme.h>

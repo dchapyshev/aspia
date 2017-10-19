@@ -8,14 +8,117 @@
 #ifndef _ASPIA_PROTOCOL__CATEGORY_GROUP_NETWORK_H
 #define _ASPIA_PROTOCOL__CATEGORY_GROUP_NETWORK_H
 
-#include "protocol/category_group.h"
+#include "base/macros.h"
+#include "proto/system_info_session_message.pb.h"
+#include "protocol/category.h"
 
 namespace aspia {
+
+class CategoryNetworkCards : public CategoryInfo
+{
+public:
+    CategoryNetworkCards() = default;
+
+    const char* Name() const final;
+    IconId Icon() const final;
+
+    const char* Guid() const final;
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    std::string Serialize() final;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(CategoryNetworkCards);
+};
+
+class CategoryRasConnections : public CategoryInfo
+{
+public:
+    CategoryRasConnections() = default;
+
+    const char* Name() const final;
+    IconId Icon() const final;
+
+    const char* Guid() const final;
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    std::string Serialize() final;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(CategoryRasConnections);
+};
+
+class CategoryOpenConnections : public CategoryInfo
+{
+public:
+    CategoryOpenConnections() = default;
+
+    const char* Name() const final;
+    IconId Icon() const final;
+
+    const char* Guid() const final;
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    std::string Serialize() final;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(CategoryOpenConnections);
+};
+
+class CategorySharedResources : public CategoryInfo
+{
+public:
+    CategorySharedResources() = default;
+
+    const char* Name() const final;
+    IconId Icon() const final;
+
+    const char* Guid() const final;
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    std::string Serialize() final;
+
+private:
+    static const char* TypeToString(system_info::SharedResources::Item::Type type);
+
+    DISALLOW_COPY_AND_ASSIGN(CategorySharedResources);
+};
+
+class CategoryOpenFiles : public CategoryInfo
+{
+public:
+    CategoryOpenFiles() = default;
+
+    const char* Name() const final;
+    IconId Icon() const final;
+
+    const char* Guid() const final;
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    std::string Serialize() final;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(CategoryOpenFiles);
+};
+
+class CategoryRoutes : public CategoryInfo
+{
+public:
+    CategoryRoutes() = default;
+
+    const char* Name() const final;
+    IconId Icon() const final;
+
+    const char* Guid() const final;
+    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    std::string Serialize() final;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(CategoryRoutes);
+};
 
 class CategoryGroupNetwork : public CategoryGroup
 {
 public:
-    CategoryGroupNetwork();
+    CategoryGroupNetwork() = default;
+
+    const char* Name() const final;
+    IconId Icon() const final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryGroupNetwork);

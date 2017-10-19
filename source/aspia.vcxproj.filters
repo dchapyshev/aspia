@@ -595,9 +595,6 @@
     <ClCompile Include="proto\system_info_session.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
-    <ClCompile Include="protocol\system_info_constants.cc">
-      <Filter>protocol</Filter>
-    </ClCompile>
     <ClCompile Include="proto\system_info_session_message.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
@@ -623,6 +620,9 @@
       <Filter>protocol</Filter>
     </ClCompile>
     <ClCompile Include="protocol\category_summary.cc">
+      <Filter>protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol\category.cc">
       <Filter>protocol</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1262,9 +1262,6 @@
     <ClInclude Include="proto\system_info_session.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
-    <ClInclude Include="protocol\system_info_constants.h">
-      <Filter>protocol</Filter>
-    </ClInclude>
     <ClInclude Include="proto\system_info_session_message.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
@@ -1280,9 +1277,6 @@
     <ClInclude Include="protocol\category.h">
       <Filter>protocol</Filter>
     </ClInclude>
-    <ClInclude Include="protocol\category_group.h">
-      <Filter>protocol</Filter>
-    </ClInclude>
     <ClInclude Include="protocol\category_group_hardware.h">
       <Filter>protocol</Filter>
     </ClInclude>
@@ -1293,9 +1287,6 @@
       <Filter>protocol</Filter>
     </ClInclude>
     <ClInclude Include="protocol\category_group_software.h">
-      <Filter>protocol</Filter>
-    </ClInclude>
-    <ClInclude Include="protocol\category_info.h">
       <Filter>protocol</Filter>
     </ClInclude>
     <ClInclude Include="protocol\category_summary.h">

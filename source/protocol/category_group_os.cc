@@ -9,432 +9,468 @@
 #include "base/user_group_enumerator.h"
 #include "base/session_enumerator.h"
 #include "base/datetime.h"
-#include "protocol/system_info_constants.h"
 #include "protocol/category_group_os.h"
-#include "protocol/category_info.h"
 #include "proto/system_info_session_message.pb.h"
 #include "ui/system_info/output_proxy.h"
 #include "ui/resource.h"
 
 namespace aspia {
 
-class CategoryRegistrationInformation : public CategoryInfo
+//
+// CategoryRegistrationInformation
+//
+
+const char* CategoryRegistrationInformation::Name() const
 {
-public:
-    CategoryRegistrationInformation()
-        : CategoryInfo(system_info::operating_system::kRegistrationInformation,
-                       "Registration Information",
-                       IDI_COMPUTER)
-    {
-        // Nothing
-    }
+    return "Registration Information";
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryRegistrationInformation);
-};
-
-class CategoryTaskScheduler : public CategoryInfo
+Category::IconId CategoryRegistrationInformation::Icon() const
 {
-public:
-    CategoryTaskScheduler()
-        : CategoryInfo(system_info::operating_system::kTaskScheduler,
-                       "Task Scheduler",
-                       IDI_CLOCK)
-    {
-        // Nothing
-    }
+    return IDI_COMPUTER;
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryTaskScheduler);
-};
-
-class CategoryEnvironmentVariables : public CategoryInfo
+const char* CategoryRegistrationInformation::Guid() const
 {
-public:
-    CategoryEnvironmentVariables()
-        : CategoryInfo(system_info::operating_system::kEnvironmentVariables,
-                       "Environment Variables",
-                       IDI_APPLICATIONS)
-    {
-        // Nothing
-    }
+    return "2DDA7127-6ECF-49E1-9C6A-549AEF4B9E87";
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryEnvironmentVariables);
-};
-
-class CategoryApplications : public CategoryInfo
+void CategoryRegistrationInformation::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-public:
-    CategoryApplications()
-        : CategoryInfo(system_info::operating_system::event_logs::kApplications,
-                       "Applications",
-                       IDI_ERROR_LOG)
-    {
-        // Nothing
-    }
+    // TODO
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryApplications);
-};
-
-class CategorySecurity : public CategoryInfo
+std::string CategoryRegistrationInformation::Serialize()
 {
-public:
-    CategorySecurity()
-        : CategoryInfo(system_info::operating_system::event_logs::kSecurity,
-                       "Security",
-                       IDI_ERROR_LOG)
-    {
-        // Nothing
-    }
+    // TODO
+    return std::string();
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
+//
+// CategoryTaskScheduler
+//
 
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategorySecurity);
-};
-
-class CategorySystem : public CategoryInfo
+const char* CategoryTaskScheduler::Name() const
 {
-public:
-    CategorySystem()
-        : CategoryInfo(system_info::operating_system::event_logs::kSystem,
-                       "System",
-                       IDI_ERROR_LOG)
-    {
-        // Nothing
-    }
+    return "Task Scheduler";
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        // TODO
-    }
-
-    std::string Serialize() final
-    {
-        // TODO
-        return std::string();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategorySystem);
-};
-
-class CategoryGroupEventLog : public CategoryGroup
+Category::IconId CategoryTaskScheduler::Icon() const
 {
-public:
-    CategoryGroupEventLog() : CategoryGroup("Event Logs", IDI_BOOKS_STACK)
-    {
-        CategoryList* child_list = mutable_child_list();
-        child_list->emplace_back(std::make_unique<CategoryApplications>());
-        child_list->emplace_back(std::make_unique<CategorySecurity>());
-        child_list->emplace_back(std::make_unique<CategorySystem>());
-    }
+    return IDI_CLOCK;
+}
 
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryGroupEventLog);
-};
-
-class CategoryUsers : public CategoryInfo
+const char* CategoryTaskScheduler::Guid() const
 {
-public:
-    CategoryUsers()
-        : CategoryInfo(system_info::operating_system::users_and_groups::kUsers,
-                      "Users",
-                       IDI_USER)
+    return "1B27C27F-847E-47CC-92DF-6B8F5CB4827A";
+}
+
+void CategoryTaskScheduler::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryTaskScheduler::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryEnvironmentVariables
+//
+
+const char* CategoryEnvironmentVariables::Name() const
+{
+    return "Environment Variables";
+}
+
+Category::IconId CategoryEnvironmentVariables::Icon() const
+{
+    return IDI_APPLICATIONS;
+}
+
+const char* CategoryEnvironmentVariables::Guid() const
+{
+    return "AAB8670A-3C90-4F75-A907-512ACBAD1BE6";
+}
+
+void CategoryEnvironmentVariables::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryEnvironmentVariables::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryEventLogsApplications
+//
+
+const char* CategoryEventLogsApplications::Name() const
+{
+    return "Applications";
+}
+
+Category::IconId CategoryEventLogsApplications::Icon() const
+{
+    return IDI_ERROR_LOG;
+}
+
+const char* CategoryEventLogsApplications::Guid() const
+{
+    return "0DD03A20-D1AF-4D1F-938F-956EE9003EE9";
+}
+
+void CategoryEventLogsApplications::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryEventLogsApplications::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryEventLogsSecurity
+//
+
+const char* CategoryEventLogsSecurity::Name() const
+{
+    return "Security";
+}
+
+Category::IconId CategoryEventLogsSecurity::Icon() const
+{
+    return IDI_ERROR_LOG;
+}
+
+const char* CategoryEventLogsSecurity::Guid() const
+{
+    return "7E0220A8-AC51-4C9E-8834-F0F805D40977";
+}
+
+void CategoryEventLogsSecurity::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryEventLogsSecurity::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryEventLogsSystem
+//
+
+const char* CategoryEventLogsSystem::Name() const
+{
+    return "System";
+}
+
+Category::IconId CategoryEventLogsSystem::Icon() const
+{
+    return IDI_ERROR_LOG;
+}
+
+const char* CategoryEventLogsSystem::Guid() const
+{
+    return "8421A38A-4757-4298-A5CB-9493C7726515";
+}
+
+void CategoryEventLogsSystem::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    // TODO
+}
+
+std::string CategoryEventLogsSystem::Serialize()
+{
+    // TODO
+    return std::string();
+}
+
+//
+// CategoryGroupEventLog
+//
+
+const char* CategoryGroupEventLog::Name() const
+{
+    return "Event Logs";
+}
+
+Category::IconId CategoryGroupEventLog::Icon() const
+{
+    return IDI_BOOKS_STACK;
+}
+
+//
+// CategoryUsers
+//
+
+const char* CategoryUsers::Name() const
+{
+    return "Users";
+}
+
+Category::IconId CategoryUsers::Icon() const
+{
+    return IDI_USER;
+}
+
+const char* CategoryUsers::Guid() const
+{
+    return "838AD22A-82BB-47F2-9001-1CD9714ED298";
+}
+
+void CategoryUsers::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    system_info::Users message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
     {
-        // Nothing
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 200);
+        output->AddHeaderItem("Value", 200);
     }
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
+    for (int index = 0; index < message.item_size(); ++index)
     {
-        system_info::Users message;
+        const system_info::Users::Item& item = message.item(index);
 
-        if (!message.ParseFromString(data))
-            return;
+        Output::Group group(output, item.name(), Icon());
 
-        Output::Table table(output, Name());
-
+        if (!item.full_name().empty())
         {
-            Output::TableHeader header(output);
-            output->AddHeaderItem("Parameter", 200);
-            output->AddHeaderItem("Value", 200);
+            output->AddParam(IDI_USER, "Full Name", item.full_name());
         }
 
-        for (int index = 0; index < message.item_size(); ++index)
+        if (!item.comment().empty())
         {
-            const system_info::Users::Item& item = message.item(index);
-
-            Output::Group group(output, item.name(), Icon());
-
-            if (!item.full_name().empty())
-            {
-                output->AddParam(IDI_USER, "Full Name", item.full_name());
-            }
-
-            if (!item.comment().empty())
-            {
-                output->AddParam(IDI_DOCUMENT_TEXT, "Description", item.comment());
-            }
-
-            output->AddParam(item.is_disabled() ? IDI_CHECKED : IDI_UNCHECKED,
-                             "Disabled",
-                             item.is_disabled() ? "Yes" : "No");
-
-            output->AddParam(item.is_password_cant_change() ? IDI_CHECKED : IDI_UNCHECKED,
-                             "Password Can't Change",
-                             item.is_password_cant_change() ? "Yes" : "No");
-
-            output->AddParam(item.is_password_expired() ? IDI_CHECKED : IDI_UNCHECKED,
-                             "Password Expired",
-                             item.is_password_expired() ? "Yes" : "No");
-
-            output->AddParam(item.is_dont_expire_password() ? IDI_CHECKED : IDI_UNCHECKED,
-                             "Don't Expire Password",
-                             item.is_dont_expire_password() ? "Yes" : "No");
-
-            output->AddParam(item.is_lockout() ? IDI_CHECKED : IDI_UNCHECKED,
-                             "Lockout",
-                             item.is_lockout() ? "Yes" : "No");
-
-            output->AddParam(IDI_CLOCK, "Last Logon", TimeToString(item.last_logon_time()));
-            output->AddParam(IDI_COUNTER, "Number Logons", std::to_string(item.number_logons()));
-
-            output->AddParam(IDI_COUNTER,
-                             "Bad Password Count",
-                             std::to_string(item.bad_password_count()));
-        }
-    }
-
-    std::string Serialize() final
-    {
-        system_info::Users message;
-
-        for (UserEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
-        {
-            system_info::Users::Item* item = message.add_item();
-
-            item->set_name(enumerator.GetName());
-            item->set_full_name(enumerator.GetFullName());
-            item->set_comment(enumerator.GetComment());
-            item->set_is_disabled(enumerator.IsDisabled());
-            item->set_is_password_cant_change(enumerator.IsPasswordCantChange());
-            item->set_is_password_expired(enumerator.IsPasswordExpired());
-            item->set_is_dont_expire_password(enumerator.IsDontExpirePassword());
-            item->set_is_lockout(enumerator.IsLockout());
-            item->set_number_logons(enumerator.GetNumberLogons());
-            item->set_bad_password_count(enumerator.GetBadPasswordCount());
-            item->set_last_logon_time(enumerator.GetLastLogonTime());
+            output->AddParam(IDI_DOCUMENT_TEXT, "Description", item.comment());
         }
 
-        return message.SerializeAsString();
+        output->AddParam(item.is_disabled() ? IDI_CHECKED : IDI_UNCHECKED,
+                         "Disabled",
+                         item.is_disabled() ? "Yes" : "No");
+
+        output->AddParam(item.is_password_cant_change() ? IDI_CHECKED : IDI_UNCHECKED,
+                         "Password Can't Change",
+                         item.is_password_cant_change() ? "Yes" : "No");
+
+        output->AddParam(item.is_password_expired() ? IDI_CHECKED : IDI_UNCHECKED,
+                         "Password Expired",
+                         item.is_password_expired() ? "Yes" : "No");
+
+        output->AddParam(item.is_dont_expire_password() ? IDI_CHECKED : IDI_UNCHECKED,
+                         "Don't Expire Password",
+                         item.is_dont_expire_password() ? "Yes" : "No");
+
+        output->AddParam(item.is_lockout() ? IDI_CHECKED : IDI_UNCHECKED,
+                         "Lockout",
+                         item.is_lockout() ? "Yes" : "No");
+
+        output->AddParam(IDI_CLOCK, "Last Logon", TimeToString(item.last_logon_time()));
+        output->AddParam(IDI_COUNTER, "Number Logons", std::to_string(item.number_logons()));
+
+        output->AddParam(IDI_COUNTER,
+                         "Bad Password Count",
+                         std::to_string(item.bad_password_count()));
     }
+}
 
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryUsers);
-};
-
-class CategoryUserGroups : public CategoryInfo
+std::string CategoryUsers::Serialize()
 {
-public:
-    CategoryUserGroups()
-        : CategoryInfo(system_info::operating_system::users_and_groups::kUserGroups,
-                       "User Groups",
-                       IDI_USERS)
+    system_info::Users message;
+
+    for (UserEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
-        // Nothing
+        system_info::Users::Item* item = message.add_item();
+
+        item->set_name(enumerator.GetName());
+        item->set_full_name(enumerator.GetFullName());
+        item->set_comment(enumerator.GetComment());
+        item->set_is_disabled(enumerator.IsDisabled());
+        item->set_is_password_cant_change(enumerator.IsPasswordCantChange());
+        item->set_is_password_expired(enumerator.IsPasswordExpired());
+        item->set_is_dont_expire_password(enumerator.IsDontExpirePassword());
+        item->set_is_lockout(enumerator.IsLockout());
+        item->set_number_logons(enumerator.GetNumberLogons());
+        item->set_bad_password_count(enumerator.GetBadPasswordCount());
+        item->set_last_logon_time(enumerator.GetLastLogonTime());
     }
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        system_info::UserGroups message;
+    return message.SerializeAsString();
+}
 
-        if (!message.ParseFromString(data))
-            return;
+//
+// CategoryUserGroups
+//
 
-        Output::Table table(output, Name());
-
-        {
-            Output::TableHeader header(output);
-            output->AddHeaderItem("Group Name", 250);
-            output->AddHeaderItem("Description", 250);
-        }
-
-        for (int index = 0; index < message.item_size(); ++index)
-        {
-            const system_info::UserGroups::Item& item = message.item(index);
-
-            Output::Row row(output, Icon());
-
-            output->AddValue(item.name());
-            output->AddValue(item.comment());
-        }
-    }
-
-    std::string Serialize() final
-    {
-        system_info::UserGroups message;
-
-        for (UserGroupEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
-        {
-            system_info::UserGroups::Item* item = message.add_item();
-
-            item->set_name(enumerator.GetName());
-            item->set_comment(enumerator.GetComment());
-        }
-
-        return message.SerializeAsString();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryUserGroups);
-};
-
-class CategoryActiveSessions : public CategoryInfo
+const char* CategoryUserGroups::Name() const
 {
-public:
-    CategoryActiveSessions()
-        : CategoryInfo(system_info::operating_system::users_and_groups::kActiveSessions,
-                       "Active Sessions",
-                       IDI_USERS)
-    {
-        // Nothing
-    }
+    return "User Groups";
+}
 
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
-    {
-        system_info::Sessions message;
-
-        if (!message.ParseFromString(data))
-            return;
-
-        Output::Table table(output, Name());
-
-        {
-            Output::TableHeader header(output);
-            output->AddHeaderItem("User Name", 150);
-            output->AddHeaderItem("Domain", 100);
-            output->AddHeaderItem("ID", 50);
-            output->AddHeaderItem("State", 80);
-            output->AddHeaderItem("Client Name", 100);
-            output->AddHeaderItem("Logon Type", 100);
-        }
-
-        for (int index = 0; index < message.item_size(); ++index)
-        {
-            const system_info::Sessions::Item& item = message.item(index);
-
-            Output::Row row(output, Icon());
-
-            output->AddValue(item.user_name());
-            output->AddValue(item.domain_name());
-            output->AddValue(std::to_string(item.session_id()));
-            output->AddValue(item.connect_state());
-            output->AddValue(item.client_name());
-            output->AddValue(item.winstation_name());
-        }
-    }
-
-    std::string Serialize() final
-    {
-        system_info::Sessions message;
-
-        for (SessionEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
-        {
-            system_info::Sessions::Item* item = message.add_item();
-
-            item->set_user_name(enumerator.GetUserName());
-            item->set_domain_name(enumerator.GetDomainName());
-            item->set_session_id(enumerator.GetSessionId());
-            item->set_connect_state(enumerator.GetConnectState());
-            item->set_client_name(enumerator.GetClientName());
-            item->set_winstation_name(enumerator.GetWinStationName());
-        }
-
-        return message.SerializeAsString();
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryActiveSessions);
-};
-
-class CategoryGroupUsers : public CategoryGroup
+Category::IconId CategoryUserGroups::Icon() const
 {
-public:
-    CategoryGroupUsers() : CategoryGroup("Users and groups", IDI_USERS)
+    return IDI_USERS;
+}
+
+const char* CategoryUserGroups::Guid() const
+{
+    return "B560FDED-5E88-4116-98A5-12462C07AC90";
+}
+
+void CategoryUserGroups::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    system_info::UserGroups message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
     {
-        CategoryList* child_list = mutable_child_list();
-        child_list->emplace_back(std::make_unique<CategoryUsers>());
-        child_list->emplace_back(std::make_unique<CategoryUserGroups>());
-        child_list->emplace_back(std::make_unique<CategoryActiveSessions>());
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Group Name", 250);
+        output->AddHeaderItem("Description", 250);
     }
 
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryGroupUsers);
-};
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::UserGroups::Item& item = message.item(index);
 
-CategoryGroupOS::CategoryGroupOS() : CategoryGroup("Operating System", IDI_OS)
+        Output::Row row(output, Icon());
+
+        output->AddValue(item.name());
+        output->AddValue(item.comment());
+    }
+}
+
+std::string CategoryUserGroups::Serialize()
 {
-    CategoryList* child_list = mutable_child_list();
-    child_list->emplace_back(std::make_unique<CategoryRegistrationInformation>());
-    child_list->emplace_back(std::make_unique<CategoryTaskScheduler>());
-    child_list->emplace_back(std::make_unique<CategoryGroupUsers>());
-    child_list->emplace_back(std::make_unique<CategoryEnvironmentVariables>());
-    child_list->emplace_back(std::make_unique<CategoryGroupEventLog>());
+    system_info::UserGroups message;
+
+    for (UserGroupEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+    {
+        system_info::UserGroups::Item* item = message.add_item();
+
+        item->set_name(enumerator.GetName());
+        item->set_comment(enumerator.GetComment());
+    }
+
+    return message.SerializeAsString();
+}
+
+//
+// CategoryActiveSessions
+//
+
+const char* CategoryActiveSessions::Name() const
+{
+    return "Active Sessions";
+}
+
+Category::IconId CategoryActiveSessions::Icon() const
+{
+    return IDI_USERS;
+}
+
+const char* CategoryActiveSessions::Guid() const
+{
+    return "8702E4A1-C9A2-4BA3-BBDE-CFCB6937D2C8";
+}
+
+void CategoryActiveSessions::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    system_info::Sessions message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("User Name", 150);
+        output->AddHeaderItem("Domain", 100);
+        output->AddHeaderItem("ID", 50);
+        output->AddHeaderItem("State", 80);
+        output->AddHeaderItem("Client Name", 100);
+        output->AddHeaderItem("Logon Type", 100);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::Sessions::Item& item = message.item(index);
+
+        Output::Row row(output, Icon());
+
+        output->AddValue(item.user_name());
+        output->AddValue(item.domain_name());
+        output->AddValue(std::to_string(item.session_id()));
+        output->AddValue(item.connect_state());
+        output->AddValue(item.client_name());
+        output->AddValue(item.winstation_name());
+    }
+}
+
+std::string CategoryActiveSessions::Serialize()
+{
+    system_info::Sessions message;
+
+    for (SessionEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+    {
+        system_info::Sessions::Item* item = message.add_item();
+
+        item->set_user_name(enumerator.GetUserName());
+        item->set_domain_name(enumerator.GetDomainName());
+        item->set_session_id(enumerator.GetSessionId());
+        item->set_connect_state(enumerator.GetConnectState());
+        item->set_client_name(enumerator.GetClientName());
+        item->set_winstation_name(enumerator.GetWinStationName());
+    }
+
+    return message.SerializeAsString();
+}
+
+//
+// CategoryGroupUsers
+//
+
+const char* CategoryGroupUsers::Name() const
+{
+    return "Users and groups";
+}
+
+Category::IconId CategoryGroupUsers::Icon() const
+{
+    return IDI_USERS;
+}
+
+//
+// CategoryGroupOS
+//
+
+const char* CategoryGroupOS::Name() const
+{
+    return "Operating System";
+}
+
+Category::IconId CategoryGroupOS::Icon() const
+{
+    return IDI_OS;
 }
 
 } // namespace aspia

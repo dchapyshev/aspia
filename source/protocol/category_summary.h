@@ -8,17 +8,20 @@
 #ifndef _ASPIA_PROTOCOL__CATEGORY_SUMMARY_H
 #define _ASPIA_PROTOCOL__CATEGORY_SUMMARY_H
 
-#include "protocol/category_info.h"
+#include "base/macros.h"
+#include "protocol/category.h"
 
 namespace aspia {
 
 class CategorySummary : public CategoryInfo
 {
 public:
-    CategorySummary();
-    ~CategorySummary() = default;
+    CategorySummary() = default;
 
-    // CategoryInfo implementation.
+    const char* Name() const final;
+    IconId Icon() const final;
+
+    const char* Guid() const final;
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
     std::string Serialize() final;
 

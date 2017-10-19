@@ -8,16 +8,19 @@
 #ifndef _ASPIA_PROTOCOL__CATEGORY_H
 #define _ASPIA_PROTOCOL__CATEGORY_H
 
-#include "base/macros.h"
-#include "base/logging.h"
-
 #include <list>
+#include <map>
 #include <memory>
 
 namespace aspia {
 
+class OutputProxy;
 class Category;
+class CategoryGroup;
+class CategoryInfo;
+
 using CategoryList = std::list<std::unique_ptr<Category>>;
+using CategoryMap = std::map<std::string, std::unique_ptr<CategoryInfo>>;
 
 class Category
 {
@@ -27,40 +30,50 @@ public:
 
     virtual ~Category() = default;
 
+    virtual IconId Icon() const = 0;
+    virtual const char* Name() const = 0;
+
     Type type() const { return type_; }
-    IconId Icon() const { return icon_id_; }
-    const std::string& Name() const { return name_; }
-
-    const CategoryList& child_list() const
-    {
-        DCHECK(type_ == Type::GROUP);
-        return child_list_;
-    }
-
-    CategoryList* mutable_child_list()
-    {
-        DCHECK(type_ == Type::GROUP);
-        return &child_list_;
-    }
+    CategoryGroup* category_group();
+    CategoryInfo* category_info();
 
 protected:
-    Category(Type type, const std::string& name, IconId icon_id)
-        : type_(type),
-          name_(name),
-          icon_id_(icon_id)
-    {
-        // Nothing
-    }
+    Category(Type type);
 
 private:
     const Type type_;
-    const std::string name_;
-    const IconId icon_id_;
-
-    CategoryList child_list_;
-
-    DISALLOW_COPY_AND_ASSIGN(Category);
 };
+
+class CategoryGroup : public Category
+{
+public:
+    virtual ~CategoryGroup() = default;
+
+    const CategoryList& child_list() const;
+    CategoryList* mutable_child_list();
+
+protected:
+    CategoryGroup();
+
+private:
+    CategoryList child_list_;
+};
+
+class CategoryInfo : public Category
+{
+public:
+    virtual ~CategoryInfo() = default;
+
+    virtual const char* Guid() const = 0;
+    virtual void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) = 0;
+    virtual std::string Serialize() = 0;
+
+protected:
+    CategoryInfo();
+};
+
+CategoryList CreateCategoryTree();
+CategoryMap CreateCategoryMap();
 
 } // namespace aspia
 

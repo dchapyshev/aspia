@@ -156,6 +156,7 @@
     <ClCompile Include="network\open_connection_enumerator.cc" />
     <ClCompile Include="network\route_enumerator.cc" />
     <ClCompile Include="network\share_enumerator.cc" />
+    <ClCompile Include="protocol\category.cc" />
     <ClCompile Include="protocol\category_group_hardware.cc" />
     <ClCompile Include="protocol\category_group_network.cc" />
     <ClCompile Include="protocol\category_group_os.cc" />
@@ -165,7 +166,6 @@
     <ClCompile Include="protocol\filesystem.cc" />
     <ClCompile Include="protocol\file_depacketizer.cc" />
     <ClCompile Include="protocol\file_packetizer.cc" />
-    <ClCompile Include="protocol\system_info_constants.cc" />
     <ClCompile Include="proto\auth_session.pb.cc" />
     <ClCompile Include="proto\auth_session_message.pb.cc" />
     <ClCompile Include="proto\desktop_session.pb.cc" />
@@ -376,12 +376,10 @@
     <ClInclude Include="network\route_enumerator.h" />
     <ClInclude Include="network\share_enumerator.h" />
     <ClInclude Include="protocol\category.h" />
-    <ClInclude Include="protocol\category_group.h" />
     <ClInclude Include="protocol\category_group_hardware.h" />
     <ClInclude Include="protocol\category_group_network.h" />
     <ClInclude Include="protocol\category_group_os.h" />
     <ClInclude Include="protocol\category_group_software.h" />
-    <ClInclude Include="protocol\category_info.h" />
     <ClInclude Include="protocol\category_summary.h" />
     <ClInclude Include="protocol\clipboard.h" />
     <ClInclude Include="protocol\filesystem.h" />
@@ -389,7 +387,6 @@
     <ClInclude Include="protocol\file_packetizer.h" />
     <ClInclude Include="protocol\io_buffer.h" />
     <ClInclude Include="protocol\message_serialization.h" />
-    <ClInclude Include="protocol\system_info_constants.h" />
     <ClInclude Include="proto\auth_session.pb.h" />
     <ClInclude Include="proto\auth_session_message.pb.h" />
     <ClInclude Include="proto\desktop_session.pb.h" />
