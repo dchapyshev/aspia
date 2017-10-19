@@ -384,7 +384,6 @@
     <ClInclude Include="protocol\category_info.h" />
     <ClInclude Include="protocol\category_summary.h" />
     <ClInclude Include="protocol\clipboard.h" />
-    <ClInclude Include="protocol\column.h" />
     <ClInclude Include="protocol\filesystem.h" />
     <ClInclude Include="protocol\file_depacketizer.h" />
     <ClInclude Include="protocol\file_packetizer.h" />

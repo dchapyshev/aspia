@@ -31,17 +31,26 @@ Output::Document::~Document()
     output_->EndDocument();
 }
 
-Output::Table::Table(std::shared_ptr<OutputProxy> output,
-      const std::string& name,
-      const ColumnList& column_list)
+Output::Table::Table(std::shared_ptr<OutputProxy> output, const std::string& name)
     : output_(std::move(output))
 {
-    output_->StartTable(name, column_list);
+    output_->StartTable(name);
 }
 
 Output::Table::~Table()
 {
     output_->EndTable();
+}
+
+Output::TableHeader::TableHeader(std::shared_ptr<OutputProxy> output)
+    : output_(std::move(output))
+{
+    output_->StartTableHeader();
+}
+
+Output::TableHeader::~TableHeader()
+{
+    output_->EndTableHeader();
 }
 
 Output::Group::Group(std::shared_ptr<OutputProxy> output,

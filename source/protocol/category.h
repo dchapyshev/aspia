@@ -10,8 +10,8 @@
 
 #include "base/macros.h"
 #include "base/logging.h"
-#include "protocol/column.h"
 
+#include <list>
 #include <memory>
 
 namespace aspia {
@@ -30,8 +30,6 @@ public:
     Type type() const { return type_; }
     IconId Icon() const { return icon_id_; }
     const std::string& Name() const { return name_; }
-    const ColumnList& column_list() const { return column_list_; }
-    ColumnList* mutable_column_list() { return &column_list_; }
 
     const CategoryList& child_list() const
     {
@@ -57,9 +55,8 @@ protected:
 private:
     const Type type_;
     const std::string name_;
-    const int icon_id_;
+    const IconId icon_id_;
 
-    ColumnList column_list_;
     CategoryList child_list_;
 
     DISALLOW_COPY_AND_ASSIGN(Category);

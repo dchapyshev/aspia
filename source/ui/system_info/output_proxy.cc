@@ -43,14 +43,14 @@ bool OutputProxy::EndDocument()
     return true;
 }
 
-bool OutputProxy::StartTable(const std::string& name, const ColumnList& column_list)
+bool OutputProxy::StartTable(const std::string& name)
 {
     std::lock_guard<std::mutex> lock(output_lock_);
 
     if (!output_)
         return false;
 
-    output_->StartTable(name, column_list);
+    output_->StartTable(name);
     return true;
 }
 
@@ -62,6 +62,39 @@ bool OutputProxy::EndTable()
         return false;
 
     output_->EndTable();
+    return true;
+}
+
+bool OutputProxy::StartTableHeader()
+{
+    std::lock_guard<std::mutex> lock(output_lock_);
+
+    if (!output_)
+        return false;
+
+    output_->StartTableHeader();
+    return true;
+}
+
+bool OutputProxy::EndTableHeader()
+{
+    std::lock_guard<std::mutex> lock(output_lock_);
+
+    if (!output_)
+        return false;
+
+    output_->EndTableHeader();
+    return true;
+}
+
+bool OutputProxy::AddHeaderItem(const std::string& name, int width)
+{
+    std::lock_guard<std::mutex> lock(output_lock_);
+
+    if (!output_)
+        return false;
+
+    output_->AddHeaderItem(name, width);
     return true;
 }
 

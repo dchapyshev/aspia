@@ -22,8 +22,12 @@ public:
     bool StartDocument(const std::string& name);
     bool EndDocument();
 
-    bool StartTable(const std::string& name, const ColumnList& column_list);
+    bool StartTable(const std::string& name);
     bool EndTable();
+
+    bool StartTableHeader();
+    bool EndTableHeader();
+    bool AddHeaderItem(const std::string& name, int width);
 
     bool StartGroup(const std::string& name, Category::IconId icon_id);
     bool EndGroup();

@@ -21,9 +21,7 @@ public:
     CategoryPrograms()
         : CategoryInfo(system_info::software::kPrograms, "Programs", IDI_APPLICATIONS)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -47,9 +45,7 @@ public:
     CategoryUpdates()
         : CategoryInfo(system_info::software::kUpdates, "Updates", IDI_APPLICATIONS)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -72,14 +68,7 @@ class CategoryServices : public CategoryInfo
 public:
     CategoryServices() : CategoryInfo(system_info::software::kServices, "Services", IDI_GEAR)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Display Name", 200);
-        column_list->emplace_back("Name", 200);
-        column_list->emplace_back("Description", 200);
-        column_list->emplace_back("Status", 200);
-        column_list->emplace_back("Startup Type", 200);
-        column_list->emplace_back("Account", 200);
-        column_list->emplace_back("Executable File", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -89,7 +78,18 @@ public:
         if (!message.ParseFromString(data))
             return;
 
-        Output::Table table(output, Name(), column_list());
+        Output::Table table(output, Name());
+
+        {
+            Output::TableHeader header(output);
+            output->AddHeaderItem("Display Name", 200);
+            output->AddHeaderItem("Name", 200);
+            output->AddHeaderItem("Description", 200);
+            output->AddHeaderItem("Status", 200);
+            output->AddHeaderItem("Startup Type", 200);
+            output->AddHeaderItem("Account", 200);
+            output->AddHeaderItem("Executable File", 200);
+        }
 
         for (int index = 0; index < message.item_size(); ++index)
         {
@@ -253,13 +253,7 @@ class CategoryDrivers : public CategoryInfo
 public:
     CategoryDrivers() : CategoryInfo(system_info::software::kDrivers, "Drivers", IDI_PCI)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Display Name", 200);
-        column_list->emplace_back("Name", 200);
-        column_list->emplace_back("Description", 200);
-        column_list->emplace_back("Status", 200);
-        column_list->emplace_back("Startup Type", 200);
-        column_list->emplace_back("Executable File", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -269,7 +263,17 @@ public:
         if (!message.ParseFromString(data))
             return;
 
-        Output::Table table(output, Name(), column_list());
+        Output::Table table(output, Name());
+
+        {
+            Output::TableHeader header(output);
+            output->AddHeaderItem("Display Name", 200);
+            output->AddHeaderItem("Name", 200);
+            output->AddHeaderItem("Description", 200);
+            output->AddHeaderItem("Status", 200);
+            output->AddHeaderItem("Startup Type", 200);
+            output->AddHeaderItem("Executable File", 200);
+        }
 
         for (int index = 0; index < message.item_size(); ++index)
         {
@@ -379,9 +383,7 @@ public:
     CategoryProcesses()
         : CategoryInfo(system_info::software::kProcesses, "Processes", IDI_SYSTEM_MONITOR)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -405,9 +407,7 @@ public:
     CategoryLicenses()
         : CategoryInfo(system_info::software::kLicenses, "Licenses", IDI_LICENSE_KEY)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final

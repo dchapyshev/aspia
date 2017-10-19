@@ -9,7 +9,6 @@
 #define _ASPIA_UI__SYSTEM_INFO__INFO_LIST_CTRL_H
 
 #include "base/macros.h"
-#include "ui/system_info/category.h"
 #include "ui/system_info/output.h"
 
 #include <atlbase.h>
@@ -33,8 +32,11 @@ public:
 protected:
     void StartDocument(const std::string& name) final;
     void EndDocument() final;
-    void StartTable(const std::string& name, const ColumnList& column_list) final;
+    void StartTable(const std::string& name) final;
     void EndTable() final;
+    void StartTableHeader() final;
+    void EndTableHeader() final;
+    void AddHeaderItem(const std::string& name, int width) final;
     void StartGroup(const std::string& name, Category::IconId icon_id) final;
     void EndGroup() final;
     void AddParam(Category::IconId icon_id,

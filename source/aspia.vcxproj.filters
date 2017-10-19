@@ -1301,9 +1301,6 @@
     <ClInclude Include="protocol\category_summary.h">
       <Filter>protocol</Filter>
     </ClInclude>
-    <ClInclude Include="protocol\column.h">
-      <Filter>protocol</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">

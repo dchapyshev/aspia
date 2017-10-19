@@ -66,30 +66,35 @@ void InfoListCtrl::EndDocument()
     // Nothing
 }
 
-void InfoListCtrl::StartTable(const std::string& name, const ColumnList& column_list)
+void InfoListCtrl::StartTable(const std::string& name)
 {
     UNREF(name);
-
     imagelist_.RemoveAll();
-
-    current_column_ = 0;
     indent_ = 0;
-
-    int column_index = 0;
-
-    for (const auto& column : column_list)
-    {
-        AddColumn(UNICODEfromUTF8(column.Name()).c_str(), column_index);
-        SetColumnWidth(column_index, column.Width());
-        ++column_index;
-    }
-
-    column_count_ = column_list.size();
 }
 
 void InfoListCtrl::EndTable()
 {
     // Nothing
+}
+
+void InfoListCtrl::StartTableHeader()
+{
+    current_column_ = 0;
+    column_count_ = 0;
+}
+
+void InfoListCtrl::EndTableHeader()
+{
+    column_count_ = current_column_ + 1;
+    current_column_ = 0;
+}
+
+void InfoListCtrl::AddHeaderItem(const std::string& name, int width)
+{
+    const int column_index = AddColumn(UNICODEfromUTF8(name).c_str(), current_column_);
+    SetColumnWidth(column_index, width);
+    ++current_column_;
 }
 
 void InfoListCtrl::StartGroup(const std::string& name, Category::IconId icon_id)

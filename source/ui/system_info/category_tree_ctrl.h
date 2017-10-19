@@ -8,8 +8,8 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__CATEGORY_TREE_CTRL_H
 #define _ASPIA_UI__SYSTEM_INFO__CATEGORY_TREE_CTRL_H
 
-#include "ui/system_info/category_group.h"
-#include "ui/system_info/category_info.h"
+#include "protocol/category_group.h"
+#include "protocol/category_info.h"
 
 #include <atlbase.h>
 #include <atlapp.h>

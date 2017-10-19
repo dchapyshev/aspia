@@ -13,9 +13,7 @@ namespace aspia {
 
 CategorySummary::CategorySummary() : CategoryInfo(system_info::kSummary, "Summary", IDI_COMPUTER)
 {
-    ColumnList* column_list = mutable_column_list();
-    column_list->emplace_back("Parameter", 200);
-    column_list->emplace_back("Value", 200);
+    // Nothing
 }
 
 void CategorySummary::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)

@@ -8,11 +8,11 @@
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
 #include "ui/system_info/category_tree_ctrl.h"
-#include "ui/system_info/category_group_hardware.h"
-#include "ui/system_info/category_group_software.h"
-#include "ui/system_info/category_group_network.h"
-#include "ui/system_info/category_group_os.h"
-#include "ui/system_info/category_summary.h"
+#include "protocol/category_group_hardware.h"
+#include "protocol/category_group_software.h"
+#include "protocol/category_group_network.h"
+#include "protocol/category_group_os.h"
+#include "protocol/category_summary.h"
 #include "ui/resource.h"
 
 #include <uxtheme.h>

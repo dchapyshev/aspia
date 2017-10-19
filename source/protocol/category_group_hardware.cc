@@ -15,22 +15,10 @@
 
 namespace aspia {
 
-class CategoryDmi : public CategoryInfo
+class CategoryDmiBios : public CategoryInfo
 {
 public:
-    CategoryDmi(const char* guid, const std::string& name, IconId icon_id)
-        : CategoryInfo(guid, name, icon_id)
-    {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
-    }
-};
-
-class CategoryDmiBios : public CategoryDmi
-{
-public:
-    CategoryDmiBios() : CategoryDmi(system_info::hardware::dmi::kBIOS, "BIOS", IDI_BIOS)
+    CategoryDmiBios() : CategoryInfo(system_info::hardware::dmi::kBIOS, "BIOS", IDI_BIOS)
     {
         // Nothing
     }
@@ -50,10 +38,10 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiBios);
 };
 
-class CategoryDmiSystem : public CategoryDmi
+class CategoryDmiSystem : public CategoryInfo
 {
 public:
-    CategoryDmiSystem() : CategoryDmi(system_info::hardware::dmi::kSystem, "System", IDI_COMPUTER)
+    CategoryDmiSystem() : CategoryInfo(system_info::hardware::dmi::kSystem, "System", IDI_COMPUTER)
     {
         // Nothing
     }
@@ -73,11 +61,11 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiSystem);
 };
 
-class CategoryDmiMotherboard : public CategoryDmi
+class CategoryDmiMotherboard : public CategoryInfo
 {
 public:
     CategoryDmiMotherboard()
-        : CategoryDmi(system_info::hardware::dmi::kMotherboard, "Motherboard", IDI_MOTHERBOARD)
+        : CategoryInfo(system_info::hardware::dmi::kMotherboard, "Motherboard", IDI_MOTHERBOARD)
     {
         // Nothing
     }
@@ -97,10 +85,11 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiMotherboard);
 };
 
-class CategoryDmiChassis : public CategoryDmi
+class CategoryDmiChassis : public CategoryInfo
 {
 public:
-    CategoryDmiChassis() : CategoryDmi(system_info::hardware::dmi::kChassis, "Chassis", IDI_SERVER)
+    CategoryDmiChassis()
+        : CategoryInfo(system_info::hardware::dmi::kChassis, "Chassis", IDI_SERVER)
     {
         // Nothing
     }
@@ -120,10 +109,10 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiChassis);
 };
 
-class CategoryDmiCaches : public CategoryDmi
+class CategoryDmiCaches : public CategoryInfo
 {
 public:
-    CategoryDmiCaches() : CategoryDmi(system_info::hardware::dmi::kCaches, "Caches", IDI_CHIP)
+    CategoryDmiCaches() : CategoryInfo(system_info::hardware::dmi::kCaches, "Caches", IDI_CHIP)
     {
         // Nothing
     }
@@ -143,11 +132,11 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiCaches);
 };
 
-class CategoryDmiProcessors : public CategoryDmi
+class CategoryDmiProcessors : public CategoryInfo
 {
 public:
     CategoryDmiProcessors()
-        : CategoryDmi(system_info::hardware::dmi::kProcessors, "Processors", IDI_PROCESSOR)
+        : CategoryInfo(system_info::hardware::dmi::kProcessors, "Processors", IDI_PROCESSOR)
     {
         // Nothing
     }
@@ -167,11 +156,11 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiProcessors);
 };
 
-class CategoryDmiMemoryDevices : public CategoryDmi
+class CategoryDmiMemoryDevices : public CategoryInfo
 {
 public:
     CategoryDmiMemoryDevices()
-        : CategoryDmi(system_info::hardware::dmi::kMemoryDevices, "Memory Devices", IDI_MEMORY)
+        : CategoryInfo(system_info::hardware::dmi::kMemoryDevices, "Memory Devices", IDI_MEMORY)
     {
         // Nothing
     }
@@ -191,11 +180,11 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiMemoryDevices);
 };
 
-class CategoryDmiSystemSlots : public CategoryDmi
+class CategoryDmiSystemSlots : public CategoryInfo
 {
 public:
     CategoryDmiSystemSlots()
-        : CategoryDmi(system_info::hardware::dmi::kSystemSlots, "System Slots", IDI_PORT)
+        : CategoryInfo(system_info::hardware::dmi::kSystemSlots, "System Slots", IDI_PORT)
     {
         // Nothing
     }
@@ -215,11 +204,11 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiSystemSlots);
 };
 
-class CategoryDmiPortConnectors : public CategoryDmi
+class CategoryDmiPortConnectors : public CategoryInfo
 {
 public:
     CategoryDmiPortConnectors()
-        : CategoryDmi(system_info::hardware::dmi::kPortConnectors, "Port Connectors", IDI_PORT)
+        : CategoryInfo(system_info::hardware::dmi::kPortConnectors, "Port Connectors", IDI_PORT)
     {
         // Nothing
     }
@@ -239,13 +228,13 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiPortConnectors);
 };
 
-class CategoryDmiOnboardDevices : public CategoryDmi
+class CategoryDmiOnboardDevices : public CategoryInfo
 {
 public:
     CategoryDmiOnboardDevices()
-        : CategoryDmi(system_info::hardware::dmi::kOnboardDevices,
-                      "Onboard Devices",
-                      IDI_MOTHERBOARD)
+        : CategoryInfo(system_info::hardware::dmi::kOnboardDevices,
+                       "Onboard Devices",
+                       IDI_MOTHERBOARD)
     {
         // Nothing
     }
@@ -265,13 +254,13 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiOnboardDevices);
 };
 
-class CategoryDmiBuildinPointing : public CategoryDmi
+class CategoryDmiBuildinPointing : public CategoryInfo
 {
 public:
     CategoryDmiBuildinPointing()
-        : CategoryDmi(system_info::hardware::dmi::kBuildinPointing,
-                      "Build-in Pointing",
-                      IDI_MOUSE)
+        : CategoryInfo(system_info::hardware::dmi::kBuildinPointing,
+                       "Build-in Pointing",
+                       IDI_MOUSE)
     {
         // Nothing
     }
@@ -291,13 +280,13 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiBuildinPointing);
 };
 
-class CategoryDmiPortableBattery : public CategoryDmi
+class CategoryDmiPortableBattery : public CategoryInfo
 {
 public:
     CategoryDmiPortableBattery()
-        : CategoryDmi(system_info::hardware::dmi::kPortableBattery,
-                      "Portable Battery",
-                      IDI_BATTERY)
+        : CategoryInfo(system_info::hardware::dmi::kPortableBattery,
+                       "Portable Battery",
+                       IDI_BATTERY)
     {
         // Nothing
     }
@@ -348,9 +337,7 @@ public:
     CategoryCPU()
         : CategoryInfo(system_info::hardware::kCPU, "Central Processor", IDI_PROCESSOR)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -376,9 +363,7 @@ public:
                        "Optical Drives",
                        IDI_DRIVE_DISK)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -401,9 +386,7 @@ class CategoryATA : public CategoryInfo
 public:
     CategoryATA() : CategoryInfo(system_info::hardware::storage::kATA, "ATA", IDI_DRIVE)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -427,9 +410,7 @@ public:
     CategorySMART()
         : CategoryInfo(system_info::hardware::storage::kSMART, "S.M.A.R.T.", IDI_DRIVE)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -471,9 +452,7 @@ public:
                        "Windows Video",
                        IDI_MONITOR)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -497,9 +476,7 @@ public:
     CategoryMonitor()
         : CategoryInfo(system_info::hardware::display::kMonitor, "Monitor", IDI_MONITOR)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -523,9 +500,7 @@ public:
     CategoryOpenGL()
         : CategoryInfo(system_info::hardware::display::kOpenGL, "OpenGL", IDI_CLAPPERBOARD)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -563,9 +538,7 @@ class CategoryPrinters : public CategoryInfo
 public:
     CategoryPrinters() : CategoryInfo(system_info::hardware::kPrinters, "Printers", IDI_PRINTER)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 250);
-        column_list->emplace_back("Value", 250);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -575,7 +548,13 @@ public:
         if (!message.ParseFromString(data))
             return;
 
-        Output::Table table(output, Name(), column_list());
+        Output::Table table(output, Name());
+
+        {
+            Output::TableHeader header(output);
+            output->AddHeaderItem("Parameter", 200);
+            output->AddHeaderItem("Value", 200);
+        }
 
         for (int index = 0; index < message.item_size(); ++index)
         {
@@ -691,9 +670,7 @@ public:
     CategoryPowerOptions()
         : CategoryInfo(system_info::hardware::kPowerOptions, "Power Options", IDI_POWER_SUPPLY)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -717,9 +694,7 @@ public:
     CategoryAllDevices()
         : CategoryInfo(system_info::hardware::windows_devices::kAll, "All Devices", IDI_PCI)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -745,9 +720,7 @@ public:
                        "Unknown Devices",
                        IDI_PCI)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final

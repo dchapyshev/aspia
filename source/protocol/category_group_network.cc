@@ -26,9 +26,7 @@ public:
                        "Network Cards",
                        IDI_NETWORK_ADAPTER)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 250);
-        column_list->emplace_back("Value", 250);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -38,7 +36,13 @@ public:
         if (!message.ParseFromString(data))
             return;
 
-        Output::Table table(output, Name(), column_list());
+        Output::Table table(output, Name());
+
+        {
+            Output::TableHeader header(output);
+            output->AddHeaderItem("Parameter", 250);
+            output->AddHeaderItem("Value", 250);
+        }
 
         for (int index = 0; index < message.item_size(); ++index)
         {
@@ -199,9 +203,7 @@ public:
                        "RAS Connections",
                        IDI_TELEPHONE_FAX)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -227,9 +229,7 @@ public:
                        "Open Connections",
                        IDI_SERVERS_NETWORK)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -284,13 +284,7 @@ public:
                        "Shared Resources",
                        IDI_FOLDER_NETWORK)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Name", 120);
-        column_list->emplace_back("Type", 70);
-        column_list->emplace_back("Description", 100);
-        column_list->emplace_back("Local Path", 150);
-        column_list->emplace_back("Current Uses", 100);
-        column_list->emplace_back("Maximum Uses", 100);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -300,7 +294,17 @@ public:
         if (!message.ParseFromString(data))
             return;
 
-        Output::Table table(output, Name(), column_list());
+        Output::Table table(output, Name());
+
+        {
+            Output::TableHeader header(output);
+            output->AddHeaderItem("Name", 120);
+            output->AddHeaderItem("Type", 70);
+            output->AddHeaderItem("Description", 100);
+            output->AddHeaderItem("Local Path", 150);
+            output->AddHeaderItem("Current Uses", 100);
+            output->AddHeaderItem("Maximum Uses", 100);
+        }
 
         for (int index = 0; index < message.item_size(); ++index)
         {
@@ -405,9 +409,7 @@ public:
                        "Open Files",
                        IDI_FOLDER_NETWORK)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -430,11 +432,7 @@ class CategoryRoutes : public CategoryInfo
 public:
     CategoryRoutes() : CategoryInfo(system_info::network::kRoutes, "Routes", IDI_ROUTE)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Destonation", 150);
-        column_list->emplace_back("Mask", 150);
-        column_list->emplace_back("Gateway", 150);
-        column_list->emplace_back("Metric", 100);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -444,7 +442,15 @@ public:
         if (!message.ParseFromString(data))
             return;
 
-        Output::Table table(output, Name(), column_list());
+        Output::Table table(output, Name());
+
+        {
+            Output::TableHeader header(output);
+            output->AddHeaderItem("Destonation", 150);
+            output->AddHeaderItem("Mask", 150);
+            output->AddHeaderItem("Gateway", 150);
+            output->AddHeaderItem("Metric", 100);
+        }
 
         for (int index = 0; index < message.item_size(); ++index)
         {

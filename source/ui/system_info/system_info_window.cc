@@ -7,6 +7,8 @@
 
 #include "base/strings/unicode.h"
 #include "base/logging.h"
+#include "protocol/category_info.h"
+#include "protocol/category_group.h"
 #include "ui/system_info/system_info_window.h"
 #include "ui/about_dialog.h"
 

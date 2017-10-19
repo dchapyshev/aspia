@@ -26,9 +26,7 @@ public:
                        "Registration Information",
                        IDI_COMPUTER)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -54,9 +52,7 @@ public:
                        "Task Scheduler",
                        IDI_CLOCK)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -82,9 +78,7 @@ public:
                        "Environment Variables",
                        IDI_APPLICATIONS)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -110,9 +104,7 @@ public:
                        "Applications",
                        IDI_ERROR_LOG)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -138,9 +130,7 @@ public:
                        "Security",
                        IDI_ERROR_LOG)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -166,9 +156,7 @@ public:
                        "System",
                        IDI_ERROR_LOG)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -209,9 +197,7 @@ public:
                       "Users",
                        IDI_USER)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Parameter", 200);
-        column_list->emplace_back("Value", 200);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -221,7 +207,13 @@ public:
         if (!message.ParseFromString(data))
             return;
 
-        Output::Table table(output, Name(), column_list());
+        Output::Table table(output, Name());
+
+        {
+            Output::TableHeader header(output);
+            output->AddHeaderItem("Parameter", 200);
+            output->AddHeaderItem("Value", 200);
+        }
 
         for (int index = 0; index < message.item_size(); ++index)
         {
@@ -304,9 +296,7 @@ public:
                        "User Groups",
                        IDI_USERS)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Group Name", 250);
-        column_list->emplace_back("Description", 250);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -316,7 +306,13 @@ public:
         if (!message.ParseFromString(data))
             return;
 
-        Output::Table table(output, Name(), column_list());
+        Output::Table table(output, Name());
+
+        {
+            Output::TableHeader header(output);
+            output->AddHeaderItem("Group Name", 250);
+            output->AddHeaderItem("Description", 250);
+        }
 
         for (int index = 0; index < message.item_size(); ++index)
         {
@@ -356,13 +352,7 @@ public:
                        "Active Sessions",
                        IDI_USERS)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("User Name", 150);
-        column_list->emplace_back("Domain", 100);
-        column_list->emplace_back("ID", 50);
-        column_list->emplace_back("State", 80);
-        column_list->emplace_back("Client Name", 100);
-        column_list->emplace_back("Logon Type", 100);
+        // Nothing
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final
@@ -372,7 +362,17 @@ public:
         if (!message.ParseFromString(data))
             return;
 
-        Output::Table table(output, Name(), column_list());
+        Output::Table table(output, Name());
+
+        {
+            Output::TableHeader header(output);
+            output->AddHeaderItem("User Name", 150);
+            output->AddHeaderItem("Domain", 100);
+            output->AddHeaderItem("ID", 50);
+            output->AddHeaderItem("State", 80);
+            output->AddHeaderItem("Client Name", 100);
+            output->AddHeaderItem("Logon Type", 100);
+        }
 
         for (int index = 0; index < message.item_size(); ++index)
         {

@@ -19,8 +19,7 @@ public:
     CategoryGroup(const std::string& name, IconId icon_id)
         : Category(Type::GROUP, name, icon_id)
     {
-        ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("Category Name", 250);
+        // Nothing
     }
 
 private:
