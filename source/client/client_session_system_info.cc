@@ -35,7 +35,7 @@ void ClientSessionSystemInfo::OnCategoryRequest(const char* guid,
 
     last_guid_ = guid;
     parse_callback_ = parse_callback;
-    output_ = output;
+    output_ = std::move(output);
 
     DCHECK(last_guid_.length() == system_info::kGuidLength);
 

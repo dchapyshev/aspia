@@ -65,7 +65,7 @@ bool OutputProxy::EndTable()
     return true;
 }
 
-bool OutputProxy::StartGroup(const std::string& name, Output::IconId icon_id)
+bool OutputProxy::StartGroup(const std::string& name, Category::IconId icon_id)
 {
     std::lock_guard<std::mutex> lock(output_lock_);
 
@@ -87,7 +87,7 @@ bool OutputProxy::EndGroup()
     return true;
 }
 
-bool OutputProxy::AddParam(Output::IconId icon_id,
+bool OutputProxy::AddParam(Category::IconId icon_id,
                            const std::string& param,
                            const std::string& value,
                            const char* unit)
@@ -101,7 +101,7 @@ bool OutputProxy::AddParam(Output::IconId icon_id,
     return true;
 }
 
-bool OutputProxy::StartRow(Output::IconId icon_id)
+bool OutputProxy::StartRow(Category::IconId icon_id)
 {
     std::lock_guard<std::mutex> lock(output_lock_);
 

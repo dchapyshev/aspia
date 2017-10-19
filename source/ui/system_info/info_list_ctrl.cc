@@ -92,7 +92,7 @@ void InfoListCtrl::EndTable()
     // Nothing
 }
 
-void InfoListCtrl::StartGroup(const std::string& name, Output::IconId icon_id)
+void InfoListCtrl::StartGroup(const std::string& name, Category::IconId icon_id)
 {
     LVITEMW item = { 0 };
 
@@ -121,7 +121,7 @@ void InfoListCtrl::EndGroup()
     --indent_;
 }
 
-void InfoListCtrl::AddParam(Output::IconId icon_id,
+void InfoListCtrl::AddParam(Category::IconId icon_id,
                             const std::string& param,
                             const std::string& value,
                             const char* unit)
@@ -156,7 +156,7 @@ void InfoListCtrl::AddParam(Output::IconId icon_id,
     AddItem(item_index, 1, text.c_str());
 }
 
-void InfoListCtrl::StartRow(Output::IconId icon_id)
+void InfoListCtrl::StartRow(Category::IconId icon_id)
 {
     current_column_ = 0;
 

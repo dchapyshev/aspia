@@ -25,14 +25,14 @@ public:
     bool StartTable(const std::string& name, const ColumnList& column_list);
     bool EndTable();
 
-    bool StartGroup(const std::string& name, Output::IconId icon_id);
+    bool StartGroup(const std::string& name, Category::IconId icon_id);
     bool EndGroup();
-    bool AddParam(Output::IconId icon_id,
+    bool AddParam(Category::IconId icon_id,
                   const std::string& param,
                   const std::string& value,
                   const char* unit = nullptr);
 
-    bool StartRow(Output::IconId icon_id);
+    bool StartRow(Category::IconId icon_id);
     bool EndRow();
     bool AddValue(const std::string& value, const char* unit = nullptr);
 

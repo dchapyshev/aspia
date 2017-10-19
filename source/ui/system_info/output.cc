@@ -44,7 +44,9 @@ Output::Table::~Table()
     output_->EndTable();
 }
 
-Output::Group::Group(std::shared_ptr<OutputProxy> output, const std::string& name, IconId icon_id)
+Output::Group::Group(std::shared_ptr<OutputProxy> output,
+                     const std::string& name,
+                     Category::IconId icon_id)
     : output_(std::move(output))
 {
     output_->StartGroup(name, icon_id);
@@ -55,7 +57,7 @@ Output::Group::~Group()
     output_->EndGroup();
 }
 
-Output::Row::Row(std::shared_ptr<OutputProxy> output, IconId icon_id)
+Output::Row::Row(std::shared_ptr<OutputProxy> output, Category::IconId icon_id)
     : output_(std::move(output))
 {
     output_->StartRow(icon_id);

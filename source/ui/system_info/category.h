@@ -23,11 +23,12 @@ class Category
 {
 public:
     enum class Type { GROUP, INFO };
+    using IconId = int;
 
     virtual ~Category() = default;
 
     Type type() const { return type_; }
-    int Icon() const { return icon_id_; }
+    IconId Icon() const { return icon_id_; }
     const std::string& Name() const { return name_; }
     const ColumnList& column_list() const { return column_list_; }
     ColumnList* mutable_column_list() { return &column_list_; }

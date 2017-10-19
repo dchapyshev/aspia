@@ -279,12 +279,12 @@ public:
                        IDI_USERS)
     {
         ColumnList* column_list = mutable_column_list();
-        column_list->emplace_back("User Name", 200);
-        column_list->emplace_back("Domain", 200);
-        column_list->emplace_back("ID", 200);
-        column_list->emplace_back("State", 200);
-        column_list->emplace_back("Client Name", 200);
-        column_list->emplace_back("Logon Type", 200);
+        column_list->emplace_back("User Name", 150);
+        column_list->emplace_back("Domain", 100);
+        column_list->emplace_back("ID", 50);
+        column_list->emplace_back("State", 80);
+        column_list->emplace_back("Client Name", 100);
+        column_list->emplace_back("Logon Type", 100);
     }
 
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final

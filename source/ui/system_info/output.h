@@ -8,6 +8,7 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__OUTPUT_H
 #define _ASPIA_UI__SYSTEM_INFO__OUTPUT_H
 
+#include "ui/system_info/category.h"
 #include "ui/system_info/column.h"
 
 #include <memory>
@@ -24,8 +25,6 @@ public:
     virtual ~Output();
 
     std::shared_ptr<OutputProxy> output_proxy() const { return proxy_; }
-
-    using IconId = int;
 
     class Document
     {
@@ -54,7 +53,9 @@ public:
     class Group
     {
     public:
-        Group(std::shared_ptr<OutputProxy> output, const std::string& name, IconId icon_id);
+        Group(std::shared_ptr<OutputProxy> output,
+              const std::string& name,
+              Category::IconId icon_id);
         ~Group();
 
     private:
@@ -65,7 +66,7 @@ public:
     class Row
     {
     public:
-        Row(std::shared_ptr<OutputProxy> output, IconId icon_id);
+        Row(std::shared_ptr<OutputProxy> output, Category::IconId icon_id);
         ~Row();
 
     private:
@@ -80,14 +81,14 @@ protected:
     virtual void StartTable(const std::string& name, const ColumnList& column_list) = 0;
     virtual void EndTable() = 0;
 
-    virtual void StartGroup(const std::string& name, IconId icon_id) = 0;
+    virtual void StartGroup(const std::string& name, Category::IconId icon_id) = 0;
     virtual void EndGroup() = 0;
-    virtual void AddParam(IconId icon_id,
+    virtual void AddParam(Category::IconId icon_id,
                           const std::string& param,
                           const std::string& value,
                           const char* unit) = 0;
 
-    virtual void StartRow(IconId icon_id) = 0;
+    virtual void StartRow(Category::IconId icon_id) = 0;
     virtual void EndRow() = 0;
     virtual void AddValue(const std::string& value, const char* unit) = 0;
 
