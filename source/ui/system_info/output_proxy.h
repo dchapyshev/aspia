@@ -8,7 +8,6 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__OUTPUT_PROXY_H
 #define _ASPIA_UI__SYSTEM_INFO__OUTPUT_PROXY_H
 
-#include "base/strings/string_util.h"
 #include "base/macros.h"
 #include "ui/system_info/output.h"
 
