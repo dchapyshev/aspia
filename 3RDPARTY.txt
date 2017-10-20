@@ -13,6 +13,7 @@ zlib-ng       zlib License               https://github.com/Dead2/zlib-ng
 libsodium     ISC License                https://github.com/jedisct1/libsodium/releases
 wtl           Common Public License 1.0  https://sourceforge.net/projects/wtl
 asio          Boost Software License 1.0 https://github.com/chriskohlhoff/asio
+rapidjson     BSD License                https://github.com/Tencent/rapidjson
 
 Synchronization status
 ======================
@@ -29,3 +30,4 @@ zlib-ng       17.10.2017    trunk
 libsodium     23.09.2017    1.0.15
 wtl           12.07.2017    r636
 asio          17.07.2017    1.10.8
+rapidjson     20.10.2017    1.1.0
