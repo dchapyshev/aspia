@@ -47,7 +47,7 @@ void ClientLocalSystemInfo::OnRequest(GuidList list, std::shared_ptr<OutputProxy
     guid_list_ = std::move(list);
     output_ = std::move(output);
 
-    output_->StartDocument("System Information");
+    output_->StartDocument();
 
     SendRequest();
 }

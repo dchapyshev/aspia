@@ -21,14 +21,14 @@ void OutputProxy::WillDestroyCurrentOutput()
     output_ = nullptr;
 }
 
-bool OutputProxy::StartDocument(const std::string& name)
+bool OutputProxy::StartDocument()
 {
     std::lock_guard<std::mutex> lock(output_lock_);
 
     if (!output_)
         return false;
 
-    output_->StartDocument(name);
+    output_->StartDocument();
     return true;
 }
 

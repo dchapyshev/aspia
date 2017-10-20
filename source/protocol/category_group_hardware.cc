@@ -655,8 +655,8 @@ void CategoryPrinters::Parse(std::shared_ptr<OutputProxy> output, const std::str
 
     {
         Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 200);
-        output->AddHeaderItem("Value", 200);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
     }
 
     for (int index = 0; index < message.item_size(); ++index)

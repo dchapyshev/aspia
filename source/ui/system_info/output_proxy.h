@@ -18,7 +18,7 @@ namespace aspia {
 class OutputProxy
 {
 public:
-    bool StartDocument(const std::string& name);
+    bool StartDocument();
     bool EndDocument();
 
     bool StartTable(const std::string& name);

@@ -30,7 +30,7 @@ public:
     int GetColumnCount() const;
 
 protected:
-    void StartDocument(const std::string& name) final;
+    void StartDocument() final;
     void EndDocument() final;
     void StartTable(const std::string& name) final;
     void EndTable() final;

@@ -57,7 +57,7 @@ int InfoListCtrl::GetColumnCount() const
     return header.GetItemCount();
 }
 
-void InfoListCtrl::StartDocument(const std::string& name)
+void InfoListCtrl::StartDocument()
 {
     // Nothing
 }
