@@ -48,7 +48,7 @@ void CategoryTreeCtrl::ExpandChildGroups(HTREEITEM parent_tree_item)
 
     while (child)
     {
-        Category* category = GetItemCategory(child);
+        Category* category = GetItem(child);
 
         if (category && category->type() == Category::Type::GROUP)
         {
@@ -70,7 +70,7 @@ LRESULT CategoryTreeCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
         SetExtendedStyle(kDoubleBuffer, kDoubleBuffer);
     }
 
-    category_tree_ = std::move(CreateCategoryTree());
+    category_tree_ = CreateCategoryTree();
 
     if (imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
                           GetSystemMetrics(SM_CYSMICON),
@@ -101,24 +101,9 @@ CategoryTreeCtrl::ItemType CategoryTreeCtrl::GetItemType(HTREEITEM tree_item) co
     return ItemType::CATEGORY;
 }
 
-CategoryInfo* CategoryTreeCtrl::GetItemCategory(HTREEITEM tree_item) const
+Category* CategoryTreeCtrl::GetItem(HTREEITEM tree_item) const
 {
-    Category* item = reinterpret_cast<Category*>(GetItemData(tree_item));
-
-    if (!item || item->type() == Category::Type::GROUP)
-        return nullptr;
-
-    return reinterpret_cast<CategoryInfo*>(item);
-}
-
-CategoryGroup* CategoryTreeCtrl::GetItemGroup(HTREEITEM tree_item) const
-{
-    Category* item = reinterpret_cast<Category*>(GetItemData(tree_item));
-
-    if (!item || item->type() == Category::Type::INFO)
-        return nullptr;
-
-    return reinterpret_cast<CategoryGroup*>(item);
+    return reinterpret_cast<Category*>(GetItemData(tree_item));
 }
 
 } // namespace aspia

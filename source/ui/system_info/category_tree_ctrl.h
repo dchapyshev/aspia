@@ -27,8 +27,7 @@ public:
     enum class ItemType { UNKNOWN, GROUP, CATEGORY };
 
     ItemType GetItemType(HTREEITEM tree_item) const;
-    CategoryInfo* GetItemCategory(HTREEITEM tree_item) const;
-    CategoryGroup* GetItemGroup(HTREEITEM tree_item) const;
+    Category* GetItem(HTREEITEM tree_item) const;
     void ExpandChildGroups(HTREEITEM parent_tree_item);
 
 private:

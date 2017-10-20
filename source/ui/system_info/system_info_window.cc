@@ -209,7 +209,7 @@ LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& 
 
     if (type == CategoryTreeCtrl::ItemType::CATEGORY)
     {
-        CategoryInfo* category = tree_.GetItemCategory(nmtv->itemNew.hItem);
+        CategoryInfo* category = tree_.GetItem(nmtv->itemNew.hItem)->category_info();
         if (!category)
             return 0;
 
@@ -227,7 +227,7 @@ LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& 
     }
     else if (type == CategoryTreeCtrl::ItemType::GROUP)
     {
-        CategoryGroup* group = tree_.GetItemGroup(nmtv->itemNew.hItem);
+        CategoryGroup* group = tree_.GetItem(nmtv->itemNew.hItem)->category_group();
         if (!group)
             return 0;
     }
