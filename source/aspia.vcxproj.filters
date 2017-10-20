@@ -625,6 +625,12 @@
     <ClCompile Include="protocol\category.cc">
       <Filter>protocol</Filter>
     </ClCompile>
+    <ClCompile Include="client\client_local_system_info.cc">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="client\client_local_system_info_pool.cc">
+      <Filter>client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1291,6 +1297,12 @@
     </ClInclude>
     <ClInclude Include="protocol\category_summary.h">
       <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="client\client_local_system_info.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="client\client_local_system_info_pool.h">
+      <Filter>client</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

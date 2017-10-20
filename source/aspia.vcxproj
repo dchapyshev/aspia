@@ -79,6 +79,8 @@
     <ClCompile Include="base\version_helpers.cc" />
     <ClCompile Include="client\client.cc" />
     <ClCompile Include="client\client_config.cc" />
+    <ClCompile Include="client\client_local_system_info.cc" />
+    <ClCompile Include="client\client_local_system_info_pool.cc" />
     <ClCompile Include="client\client_pool.cc" />
     <ClCompile Include="client\client_session_desktop_manage.cc" />
     <ClCompile Include="client\client_session_desktop_view.cc" />
@@ -285,6 +287,8 @@
     <ClInclude Include="build_config.h" />
     <ClInclude Include="client\client.h" />
     <ClInclude Include="client\client_config.h" />
+    <ClInclude Include="client\client_local_system_info.h" />
+    <ClInclude Include="client\client_local_system_info_pool.h" />
     <ClInclude Include="client\client_pool.h" />
     <ClInclude Include="client\client_session.h" />
     <ClInclude Include="client\client_session_desktop_manage.h" />

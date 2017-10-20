@@ -456,7 +456,12 @@ LRESULT MainDialog::OnIpListRightClick(int control_id, LPNMHDR hdr, BOOL& handle
 LRESULT MainDialog::OnSystemInfoButton(WORD notify_code, WORD control_id, HWND control,
                                        BOOL& handled)
 {
-    // TODO
+    if (!system_info_)
+    {
+        system_info_ = std::make_unique<ClientLocalSystemInfoPool>(MessageLoopProxy::Current());
+    }
+
+    system_info_->Open();
     return 0;
 }
 

@@ -29,13 +29,9 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        using ParseCallback = std::function<void(std::shared_ptr<OutputProxy> output,
-                                                 const std::string& data)>;
+        using GuidList = std::list<std::string>;
 
-        virtual void OnCategoryRequest(const char* guid,
-                                       ParseCallback parse_callback,
-                                       std::shared_ptr<OutputProxy> output) = 0;
-
+        virtual void OnRequest(GuidList list, std::shared_ptr<OutputProxy> output) = 0;
         virtual void OnWindowClose() = 0;
     };
 

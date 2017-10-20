@@ -24,17 +24,16 @@ public:
 
 private:
     // SystemInfoWindow::Delegate implementation.
-    void OnCategoryRequest(const char* guid,
-                           ParseCallback parse_callback,
-                           std::shared_ptr<OutputProxy> output) override;
+    void OnRequest(GuidList list, std::shared_ptr<OutputProxy> output) override;
     void OnWindowClose() override;
 
-    void OnMessageSended();
-    void OnMessageReceived(const IOBuffer& buffer);
+    void SendRequest();
+    void OnRequestSended();
+    void OnReplyReceived(const IOBuffer& buffer);
 
     std::unique_ptr<SystemInfoWindow> window_;
-    std::string last_guid_;
-    ParseCallback parse_callback_;
+    CategoryMap map_;
+    GuidList guid_list_;
     std::shared_ptr<OutputProxy> output_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionSystemInfo);

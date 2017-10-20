@@ -18,6 +18,7 @@ ClientSessionSystemInfo::ClientSessionSystemInfo(
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
     : ClientSession(config, channel_proxy)
 {
+    map_ = CreateCategoryMap();
     window_.reset(new SystemInfoWindow(this));
 }
 
@@ -26,25 +27,17 @@ ClientSessionSystemInfo::~ClientSessionSystemInfo()
     window_.reset();
 }
 
-void ClientSessionSystemInfo::OnCategoryRequest(const char* guid,
-                                                ParseCallback parse_callback,
-                                                std::shared_ptr<OutputProxy> output)
+void ClientSessionSystemInfo::OnRequest(GuidList list, std::shared_ptr<OutputProxy> output)
 {
-    DCHECK(parse_callback);
     DCHECK(output);
-    DCHECK(guid);
+    DCHECK(!list.empty());
 
-    last_guid_ = guid;
-    parse_callback_ = parse_callback;
+    guid_list_ = std::move(list);
     output_ = std::move(output);
 
-    DCHECK(last_guid_.length() == kGuidLength);
+    output_->StartDocument("System Information");
 
-    proto::system_info::ClientToHost message;
-    message.set_guid(guid);
-
-    channel_proxy_->Send(SerializeMessage<IOBuffer>(message),
-                         std::bind(&ClientSessionSystemInfo::OnMessageSended, this));
+    SendRequest();
 }
 
 void ClientSessionSystemInfo::OnWindowClose()
@@ -52,28 +45,52 @@ void ClientSessionSystemInfo::OnWindowClose()
     channel_proxy_->Disconnect();
 }
 
-void ClientSessionSystemInfo::OnMessageSended()
+void ClientSessionSystemInfo::SendRequest()
 {
-    channel_proxy_->Receive(std::bind(
-        &ClientSessionSystemInfo::OnMessageReceived, this, std::placeholders::_1));
+    DCHECK(!guid_list_.empty());
+    DCHECK(guid_list_.front().length() == kGuidLength);
+
+    proto::system_info::ClientToHost message;
+    message.set_guid(guid_list_.front());
+
+    channel_proxy_->Send(SerializeMessage<IOBuffer>(message),
+                         std::bind(&ClientSessionSystemInfo::OnRequestSended, this));
 }
 
-void ClientSessionSystemInfo::OnMessageReceived(const IOBuffer& buffer)
+void ClientSessionSystemInfo::OnRequestSended()
 {
-    DCHECK(last_guid_.length() == kGuidLength);
+    channel_proxy_->Receive(std::bind(
+        &ClientSessionSystemInfo::OnReplyReceived, this, std::placeholders::_1));
+}
 
+void ClientSessionSystemInfo::OnReplyReceived(const IOBuffer& buffer)
+{
     proto::system_info::HostToClient message;
 
     if (ParseMessage(buffer, message))
     {
         const std::string& guid = message.guid();
 
-        if (guid.length() == kGuidLength && guid == last_guid_)
+        if (guid.length() == kGuidLength && guid == guid_list_.front())
         {
-            parse_callback_(output_, message.data());
-            parse_callback_ = nullptr;
-            output_ = nullptr;
-            return;
+            // Looking for a category by GUID.
+            const auto category = map_.find(guid);
+            if (category != map_.end())
+            {
+                category->second->Parse(output_, message.data());
+                guid_list_.pop_front();
+
+                if (guid_list_.empty())
+                {
+                    output_->EndDocument();
+                }
+                else
+                {
+                    SendRequest();
+                }
+
+                return;
+            }
         }
     }
 

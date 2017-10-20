@@ -219,10 +219,11 @@ LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& 
                                                GetSystemMetrics(SM_CXSMICON),
                                                GetSystemMetrics(SM_CYSMICON)));
 
-        delegate_->OnCategoryRequest(
-            category->Guid(),
-            std::bind(&CategoryInfo::Parse, category, std::placeholders::_1, std::placeholders::_2),
-            list_.output_proxy());
+        // Prepare the list of requested categories.
+        Delegate::GuidList guid_list;
+        guid_list.emplace_back(category->Guid());
+
+        delegate_->OnRequest(std::move(guid_list), list_.output_proxy());
     }
     else if (type == CategoryTreeCtrl::ItemType::GROUP)
     {
