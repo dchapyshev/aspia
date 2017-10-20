@@ -323,6 +323,8 @@ BEGIN
                       • libsodium © 2013-2017 Frank Denis, ISC License\r\n\
                       • WTL © 2015 Microsoft Corporation, WTL Team, Common Public License 1.0\r\n\
                       • asio © 2003-2016 Christopher M. Kohlhoff, Boost Software License 1.0\r\n\
+                      • RapidJSON © 2015 THL A29 Limited, a Tencent company, and Milo Yip, BSD License\r\n\
+                      • RapidXML © 2003 Marcin Kalicinski, Boost Software License 1.0\r\n\
                       • FatCow Icons © 2009-2014 FatCow Web Hosting, Creative Commons Attribution 3.0 License\r\n\
                       • Fugue Icons © 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 License"
 
