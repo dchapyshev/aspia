@@ -311,6 +311,9 @@ BEGIN
                       https://www.mozilla.org/en-US/MPL/2.0\r\n\r\n\
                       Ontwikkelaars:\r\n\
                       • Dmitry Chapyshev (dmitry@aspia.ru)\r\n\r\n\
+                      Translators:\r\n\
+                      • Dmitry Chapyshev (Russian)\r\n\
+                      • Mark Jansen (Dutch)\r\n\r\n\
                       Bij het ontwikkelen zijn de volgende projecten gebruikt:\r\n\
                       • Chromium © 2015, The Chromium Authors, BSD 3-Clause Licentie\r\n\
                       • WebRTC © 2011, The WebRTC project authors, BSD 3-Clause Licentie\r\n\
