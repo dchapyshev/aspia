@@ -35,10 +35,11 @@ Also uses:
    - [libglog](https://github.com/google/glog "libglog") (logging)
    - [gflags](https://github.com/gflags/gflags "gflags") (command line arguments parsing)
    - [libyuv](https://chromium.googlesource.com/libyuv/libyuv "libyuv") (image formats convertation)
-   - [gtest](https://github.com/google/googletest "gtest") (unit testing)
    - [libsodium](https://github.com/jedisct1/libsodium/releases "libsodium") (encryption)
    - [WTL](https://sourceforge.net/projects/wtl "WTL") (for UI in Windows)
    - [asio](https://github.com/chriskohlhoff/asio "asio") (for networking)
+   - [RapidJSON](https://github.com/Tencent/rapidjson "rapidjson") (JSON format reading/writing)
+   - [RapidXML](http://rapidxml.sourceforge.net "rapidxml") (XML format reading/writing)
    - [FatCow Icons](http://www.fatcow.com/free-icons "FatCow Icons")
    - [Fugue Icons](https://github.com/yusukekamiyamane/fugue-icons "Fugue Icons")
 
