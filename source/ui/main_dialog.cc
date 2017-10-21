@@ -113,10 +113,12 @@ proto::SessionType MainDialog::GetSelectedSessionType() const
 
 LRESULT MainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    CSize small_icon_size(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
+
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
                                    LR_CREATEDIBSECTION,
-                                   GetSystemMetrics(SM_CXSMICON),
-                                   GetSystemMetrics(SM_CYSMICON));
+                                   small_icon_size.cx,
+                                   small_icon_size.cy);
     SetIcon(small_icon_, FALSE);
 
     big_icon_ = AtlLoadIconImage(IDI_MAIN,
@@ -127,8 +129,8 @@ LRESULT MainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOO
 
     refresh_icon_ = AtlLoadIconImage(IDI_REFRESH,
                                      LR_CREATEDIBSECTION,
-                                     GetSystemMetrics(SM_CXSMICON),
-                                     GetSystemMetrics(SM_CYSMICON));
+                                     small_icon_size.cx,
+                                     small_icon_size.cy);
     CButton(GetDlgItem(IDC_UPDATE_IP_LIST_BUTTON)).SetIcon(refresh_icon_);
 
     main_menu_ = AtlLoadMenu(IDR_MAIN);
