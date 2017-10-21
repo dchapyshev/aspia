@@ -69,7 +69,7 @@ void InfoListCtrl::EndDocument()
 
 void InfoListCtrl::StartTable(const std::string& name)
 {
-    UNREF(name);
+    UNUSED_PARAMETER(name);
     imagelist_.RemoveAll();
     indent_ = 0;
 }

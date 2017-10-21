@@ -35,8 +35,8 @@ DWORD WINAPI Service::ServiceControlHandler(DWORD control_code,
                                             LPVOID event_data,
                                             LPVOID context)
 {
-    UNREF(event_type);
-    UNREF(event_data);
+    UNUSED_PARAMETER(event_type);
+    UNUSED_PARAMETER(event_data);
 
     switch (control_code)
     {
@@ -62,8 +62,8 @@ DWORD WINAPI Service::ServiceControlHandler(DWORD control_code,
 // static
 void Service::ServiceMain(DWORD argc, LPWSTR* argv)
 {
-    UNREF(argc);
-    UNREF(argv);
+    UNUSED_PARAMETER(argc);
+    UNUSED_PARAMETER(argv);
 
     DCHECK(_self);
 

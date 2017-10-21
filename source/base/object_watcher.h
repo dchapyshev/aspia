@@ -62,7 +62,7 @@ public:
 
         virtual void OnObjectTimeout(HANDLE object)
         {
-            UNREF(object);
+            UNUSED_PARAMETER(object);
         }
     };
 

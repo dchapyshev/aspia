@@ -37,7 +37,7 @@ void WaitableEventWatcher::StopWatching()
 
 void WaitableEventWatcher::OnObjectSignaled(HANDLE object)
 {
-    UNREF(object);
+    UNUSED_PARAMETER(object);
 
     WaitableEvent* event = event_;
 

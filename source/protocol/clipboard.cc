@@ -157,9 +157,6 @@ void Clipboard::OnClipboardUpdate()
 
 bool Clipboard::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result)
 {
-    UNREF(wParam);
-    UNREF(lParam);
-
     switch (message)
     {
         case WM_CLIPBOARDUPDATE:

@@ -51,7 +51,7 @@ void OutputJsonFile::AddHeaderItem(const std::string& name, int width)
 
 void OutputJsonFile::StartGroup(const std::string& name, Category::IconId icon_id)
 {
-    UNREF(icon_id);
+    UNUSED_PARAMETER(icon_id);
     // TODO
 }
 
@@ -65,13 +65,13 @@ void OutputJsonFile::AddParam(Category::IconId icon_id,
                               const std::string& value,
                               const char* unit)
 {
-    UNREF(icon_id);
+    UNUSED_PARAMETER(icon_id);
     // TODO
 }
 
 void OutputJsonFile::StartRow(Category::IconId icon_id)
 {
-    UNREF(icon_id);
+    UNUSED_PARAMETER(icon_id);
     // TODO
 }
 

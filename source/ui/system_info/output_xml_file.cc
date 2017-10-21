@@ -67,7 +67,7 @@ void OutputXmlFile::EndTableHeader()
 
 void OutputXmlFile::AddHeaderItem(const std::string& name, int width)
 {
-    UNREF(width);
+    UNUSED_PARAMETER(width);
     DCHECK(category_);
 
     column_list_.emplace_back(name);
@@ -75,7 +75,7 @@ void OutputXmlFile::AddHeaderItem(const std::string& name, int width)
 
 void OutputXmlFile::StartGroup(const std::string& name, Category::IconId icon_id)
 {
-    UNREF(icon_id);
+    UNUSED_PARAMETER(icon_id);
     DCHECK(category_);
 
     rapidxml::xml_node<>* group = doc_.allocate_node(rapidxml::node_element, "group");
@@ -106,7 +106,7 @@ void OutputXmlFile::AddParam(Category::IconId icon_id,
                              const std::string& value,
                              const char* unit)
 {
-    UNREF(icon_id);
+    UNUSED_PARAMETER(icon_id);
     DCHECK(category_);
 
     rapidxml::xml_node<>* param_node = doc_.allocate_node(rapidxml::node_element, "param");
@@ -134,7 +134,7 @@ void OutputXmlFile::AddParam(Category::IconId icon_id,
 
 void OutputXmlFile::StartRow(Category::IconId icon_id)
 {
-    UNREF(icon_id);
+    UNUSED_PARAMETER(icon_id);
     DCHECK(category_);
     DCHECK(!row_);
 

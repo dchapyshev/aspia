@@ -83,9 +83,9 @@ void MessagePumpForUI::ScheduleDelayedWork(const TimePoint& delayed_work_time)
 bool MessagePumpForUI::OnMessage(UINT message, WPARAM wparam,
                                  LPARAM lparam, LRESULT& result)
 {
-    UNREF(wparam);
-    UNREF(lparam);
-    UNREF(result);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(result);
 
     switch (message)
     {
