@@ -5,58 +5,161 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/logging.h"
 #include "ui/system_info/output_html_file.h"
+
+#include <rapidxml_print.hpp>
 
 namespace aspia {
 
+static const char kCssStyle[] =
+    "body {"
+    "color: #353535;"
+    "font-family: Tahoma,Arial,Verdana;"
+    "}"
+    "h1 {"
+    "font-size: 14px;"
+    "}"
+    "table {"
+    "background-color: #F9F9FC;"
+    "border: 1px solid #E2E2E0;"
+    "font-size: 12px;"
+    "}"
+    "tr {"
+    "border-bottom: 1px solid #E2E2E0;"
+    "}"
+    "tbody tr: hover {"
+    "background-color:#F2F2F8;"
+    "}"
+    "th,td {"
+    "padding: 5px;"
+    "}"
+    "th { "
+    "background-color: #DCDCED;"
+    "font-weight:bold;"
+    "}";
+
 OutputHtmlFile::OutputHtmlFile(const std::wstring& file_path)
 {
-    // TODO
+    file_.open(file_path);
 }
 
 void OutputHtmlFile::StartDocument()
 {
-    // TODO
+    html_ = doc_.allocate_node(rapidxml::node_element, "html");
+
+    rapidxml::xml_node<>* head = doc_.allocate_node(rapidxml::node_element, "head");
+
+    rapidxml::xml_node<>* meta = doc_.allocate_node(rapidxml::node_element, "meta");
+
+    meta->append_attribute(doc_.allocate_attribute("http-equiv", "content-type"));
+    meta->append_attribute(doc_.allocate_attribute("content", "text/html"));
+    meta->append_attribute(doc_.allocate_attribute("charset", "UTF-8"));
+
+    head->append_node(meta);
+
+    meta = doc_.allocate_node(rapidxml::node_element, "meta");
+    meta->append_attribute(doc_.allocate_attribute("generator", "Aspia Remote Desktop"));
+
+    head->append_node(meta);
+
+    rapidxml::xml_node<>* title = doc_.allocate_node(rapidxml::node_element, "title");
+    title->value("Report");
+
+    head->append_node(title);
+
+    rapidxml::xml_node<>* style = doc_.allocate_node(rapidxml::node_element, "style");
+    style->append_attribute(doc_.allocate_attribute("type", "text/css"));
+    style->value(kCssStyle);
+
+    head->append_node(style);
+    html_->append_node(head);
+
+    body_ = doc_.allocate_node(rapidxml::node_element, "body");
 }
 
 void OutputHtmlFile::EndDocument()
 {
-    // TODO
+    DCHECK(html_);
+    DCHECK(body_);
+
+    html_->append_node(body_);
+    doc_.append_node(html_);
+
+    file_ << doc_;
+    file_.close();
+    doc_.clear();
 }
 
 void OutputHtmlFile::StartTable(const std::string& name)
 {
-    // TODO
+    DCHECK(body_);
+    DCHECK(!table_);
+
+    rapidxml::xml_node<>* h1 = doc_.allocate_node(rapidxml::node_element, "h1");
+    h1->value(doc_.allocate_string(name.c_str()));
+    body_->append_node(h1);
+
+    table_ = doc_.allocate_node(rapidxml::node_element, "table");
 }
 
 void OutputHtmlFile::EndTable()
 {
-    // TODO
+    DCHECK(body_);
+    DCHECK(table_);
+
+    body_->append_node(table_);
+    table_ = nullptr;
 }
 
 void OutputHtmlFile::StartTableHeader()
 {
-    // TODO
+    DCHECK(table_);
+    tr_ = doc_.allocate_node(rapidxml::node_element, "tr");
 }
 
 void OutputHtmlFile::EndTableHeader()
 {
-    // TODO
+    DCHECK(table_);
+    DCHECK(tr_);
+
+    table_->append_node(tr_);
+    tr_ = nullptr;
 }
 
 void OutputHtmlFile::AddHeaderItem(const std::string& name, int width)
 {
-    // TODO
+    UNREF(width);
+    DCHECK(table_);
+    DCHECK(tr_);
+
+    rapidxml::xml_node<>* th = doc_.allocate_node(rapidxml::node_element, "th");
+    th->value(doc_.allocate_string(name.c_str()));
+    tr_->append_node(th);
 }
 
 void OutputHtmlFile::StartGroup(const std::string& name, Category::IconId icon_id)
 {
-    // TODO
+    UNREF(icon_id);
+    DCHECK(table_);
+
+    rapidxml::xml_node<>* td1 = doc_.allocate_node(rapidxml::node_element, "td");
+    td1->append_attribute(doc_.allocate_attribute("style", "font-weight: bold;"));
+    td1->value(doc_.allocate_string(name.c_str(), name.length()));
+
+    rapidxml::xml_node<>* td2 = doc_.allocate_node(rapidxml::node_element, "td");
+    td1->value(doc_.allocate_string("&nbsp;"));
+
+    rapidxml::xml_node<>* tr = doc_.allocate_node(rapidxml::node_element, "tr");
+    tr->append_node(td1);
+    tr->append_node(td2);
+
+    table_->append_node(tr);
 }
 
 void OutputHtmlFile::EndGroup()
 {
-    // TODO
+    // Nothing
 }
 
 void OutputHtmlFile::AddParam(Category::IconId icon_id,
@@ -64,22 +167,66 @@ void OutputHtmlFile::AddParam(Category::IconId icon_id,
                               const std::string& value,
                               const char* unit)
 {
-    // TODO
+    UNREF(icon_id);
+    DCHECK(table_);
+
+    rapidxml::xml_node<>* td1 = doc_.allocate_node(rapidxml::node_element, "td");
+    td1->append_attribute(doc_.allocate_attribute("style", "font-weight: bold;"));
+    td1->value(doc_.allocate_string(param.c_str(), param.length()));
+
+    std::string value_with_unit = value;
+
+    if (unit)
+    {
+        value_with_unit.append(" ");
+        value_with_unit.append(value);
+    }
+
+    rapidxml::xml_node<>* td2 = doc_.allocate_node(rapidxml::node_element, "td");
+    td1->value(doc_.allocate_string(value_with_unit.c_str(), value_with_unit.length()));
+
+    rapidxml::xml_node<>* tr = doc_.allocate_node(rapidxml::node_element, "tr");
+    tr->append_node(td1);
+    tr->append_node(td2);
+
+    table_->append_node(tr);
 }
 
 void OutputHtmlFile::StartRow(Category::IconId icon_id)
 {
-    // TODO
+    UNREF(icon_id);
+    DCHECK(table_);
+    DCHECK(!tr_);
+
+    tr_ = doc_.allocate_node(rapidxml::node_element, "tr");
 }
 
 void OutputHtmlFile::EndRow()
 {
-    // TODO
+    DCHECK(table_);
+    DCHECK(tr_);
+
+    table_->append_node(tr_);
+    tr_ = nullptr;
 }
 
 void OutputHtmlFile::AddValue(const std::string& value, const char* unit)
 {
-    // TODO
+    DCHECK(table_);
+    DCHECK(tr_);
+
+    std::string value_with_unit = value;
+
+    if (unit)
+    {
+        value_with_unit.append(" ");
+        value_with_unit.append(value);
+    }
+
+    rapidxml::xml_node<>* td = doc_.allocate_node(rapidxml::node_element, "td");
+    td->value(doc_.allocate_string(value_with_unit.c_str(), value_with_unit.length()));
+
+    tr_->append_node(td);
 }
 
 } // namespace aspia

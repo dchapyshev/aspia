@@ -11,6 +11,9 @@
 #include "base/macros.h"
 #include "ui/system_info/output.h"
 
+#include <rapidxml.hpp>
+#include <fstream>
+
 namespace aspia {
 
 class OutputHtmlFile : protected Output
@@ -39,6 +42,13 @@ protected:
     void AddValue(const std::string& value, const char* unit) final;
 
 private:
+    std::ofstream file_;
+    rapidxml::xml_document<> doc_;
+    rapidxml::xml_node<>* html_ = nullptr;
+    rapidxml::xml_node<>* body_ = nullptr;
+    rapidxml::xml_node<>* table_ = nullptr;
+    rapidxml::xml_node<>* tr_ = nullptr;
+
     DISALLOW_COPY_AND_ASSIGN(OutputHtmlFile);
 };
 
