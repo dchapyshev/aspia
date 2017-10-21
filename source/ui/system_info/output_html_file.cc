@@ -14,7 +14,17 @@ OutputHtmlFile::OutputHtmlFile(const std::wstring& file_path)
     // TODO
 }
 
-void OutputHtmlFile::BeginTable(const ColumnList& column_list)
+void OutputHtmlFile::StartDocument()
+{
+    // TODO
+}
+
+void OutputHtmlFile::EndDocument()
+{
+    // TODO
+}
+
+void OutputHtmlFile::StartTable(const std::string& name)
 {
     // TODO
 }
@@ -24,22 +34,50 @@ void OutputHtmlFile::EndTable()
     // TODO
 }
 
-void OutputHtmlFile::BeginItemGroup(const std::string& name)
+void OutputHtmlFile::StartTableHeader()
 {
     // TODO
 }
 
-void OutputHtmlFile::EndItemGroup()
+void OutputHtmlFile::EndTableHeader()
 {
     // TODO
 }
 
-void OutputHtmlFile::AddItem(const std::string& parameter, const std::string& value)
+void OutputHtmlFile::AddHeaderItem(const std::string& name, int width)
 {
     // TODO
 }
 
-void OutputHtmlFile::AddItem(const std::string& value)
+void OutputHtmlFile::StartGroup(const std::string& name, Category::IconId icon_id)
+{
+    // TODO
+}
+
+void OutputHtmlFile::EndGroup()
+{
+    // TODO
+}
+
+void OutputHtmlFile::AddParam(Category::IconId icon_id,
+                              const std::string& param,
+                              const std::string& value,
+                              const char* unit)
+{
+    // TODO
+}
+
+void OutputHtmlFile::StartRow(Category::IconId icon_id)
+{
+    // TODO
+}
+
+void OutputHtmlFile::EndRow()
+{
+    // TODO
+}
+
+void OutputHtmlFile::AddValue(const std::string& value, const char* unit)
 {
     // TODO
 }

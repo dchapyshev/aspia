@@ -21,12 +21,22 @@ public:
 
 protected:
     // Output implementation.
-    void BeginTable(const ColumnList& column_list) final;
+    void StartDocument() final;
+    void EndDocument() final;
+    void StartTable(const std::string& name) final;
     void EndTable() final;
-    void BeginItemGroup(const std::string& name) final;
-    void EndItemGroup() final;
-    void AddItem(const std::string& parameter, const std::string& value) final;
-    void AddItem(const std::string& value) final;
+    void StartTableHeader() final;
+    void EndTableHeader() final;
+    void AddHeaderItem(const std::string& name, int width) final;
+    void StartGroup(const std::string& name, Category::IconId icon_id) final;
+    void EndGroup() final;
+    void AddParam(Category::IconId icon_id,
+                  const std::string& param,
+                  const std::string& value,
+                  const char* unit) final;
+    void StartRow(Category::IconId icon_id) final;
+    void EndRow() final;
+    void AddValue(const std::string& value, const char* unit) final;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(OutputJsonFile);

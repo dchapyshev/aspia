@@ -14,7 +14,17 @@ OutputJsonFile::OutputJsonFile(const std::wstring& file_path)
     // TODO
 }
 
-void OutputJsonFile::BeginTable(const ColumnList& column_list)
+void OutputJsonFile::StartDocument()
+{
+    // TODO
+}
+
+void OutputJsonFile::EndDocument()
+{
+    // TODO
+}
+
+void OutputJsonFile::StartTable(const std::string& name)
 {
     // TODO
 }
@@ -24,22 +34,50 @@ void OutputJsonFile::EndTable()
     // TODO
 }
 
-void OutputJsonFile::BeginItemGroup(const std::string& name)
+void OutputJsonFile::StartTableHeader()
 {
     // TODO
 }
 
-void OutputJsonFile::EndItemGroup()
+void OutputJsonFile::EndTableHeader()
 {
     // TODO
 }
 
-void OutputJsonFile::AddItem(const std::string& parameter, const std::string& value)
+void OutputJsonFile::AddHeaderItem(const std::string& name, int width)
 {
     // TODO
 }
 
-void OutputJsonFile::AddItem(const std::string& value)
+void OutputJsonFile::StartGroup(const std::string& name, Category::IconId icon_id)
+{
+    // TODO
+}
+
+void OutputJsonFile::EndGroup()
+{
+    // TODO
+}
+
+void OutputJsonFile::AddParam(Category::IconId icon_id,
+                              const std::string& param,
+                              const std::string& value,
+                              const char* unit)
+{
+    // TODO
+}
+
+void OutputJsonFile::StartRow(Category::IconId icon_id)
+{
+    // TODO
+}
+
+void OutputJsonFile::EndRow()
+{
+    // TODO
+}
+
+void OutputJsonFile::AddValue(const std::string& value, const char* unit)
 {
     // TODO
 }

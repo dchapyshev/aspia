@@ -24,6 +24,7 @@ ClientLocalSystemInfoPool::~ClientLocalSystemInfoPool()
 
 void ClientLocalSystemInfoPool::Open()
 {
+    DCHECK(runner_->BelongsToCurrentThread());
     list_.emplace_back(new ClientLocalSystemInfo(this));
 }
 
