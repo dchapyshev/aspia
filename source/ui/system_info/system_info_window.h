@@ -60,6 +60,7 @@ private:
         NOTIFY_HANDLER(kTreeControl, TVN_SELCHANGED, OnCategorySelected)
         NOTIFY_CODE_HANDLER(TBN_DROPDOWN, OnToolBarDropDown)
 
+        COMMAND_ID_HANDLER(ID_SAVE_SELECTED, OnSaveSelectedButton)
         COMMAND_ID_HANDLER(ID_ABOUT, OnAboutButton)
         COMMAND_ID_HANDLER(ID_EXIT, OnExitButton)
     END_MSG_MAP()
@@ -73,6 +74,7 @@ private:
     LRESULT OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& handled);
 
+    LRESULT OnSaveSelectedButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnAboutButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnExitButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 

@@ -68,17 +68,19 @@
 #define IDI_RECIEVE                                149
 #define IDI_REFRESH                                150
 #define IDI_ROUTE                                  151
-#define IDI_SEND                                   152
-#define IDI_SERVER                                 153
-#define IDI_SERVERS_NETWORK                        154
-#define IDI_SETTINGS                               155
-#define IDI_SOFTWARE                               156
-#define IDI_SYSTEM_MONITOR                         157
-#define IDI_TELEPHONE_FAX                          158
-#define IDI_UNCHECKED                              159
-#define IDI_USER                                   160
-#define IDI_USER_DISABLED                          161
-#define IDI_USERS                                  162
+#define IDI_SELECT_ALL                             152
+#define IDI_SEND                                   153
+#define IDI_SERVER                                 154
+#define IDI_SERVERS_NETWORK                        155
+#define IDI_SETTINGS                               156
+#define IDI_SOFTWARE                               157
+#define IDI_SYSTEM_MONITOR                         158
+#define IDI_TELEPHONE_FAX                          159
+#define IDI_UNCHECKED                              160
+#define IDI_UNSELECT_ALL                           161
+#define IDI_USER                                   162
+#define IDI_USER_DISABLED                          163
+#define IDI_USERS                                  164
 
 //
 // Dialogs
@@ -95,6 +97,7 @@
 #define IDD_FILE_ACTION                            109
 #define IDD_FILE_STATUS                            110
 #define IDD_POWER_HOST                             111
+#define IDD_SAVE_REPORT                            112
 
 //
 // Controls
@@ -145,6 +148,9 @@
 #define IDC_POWER_TIME                             143
 #define IDC_FILE_MANAGER_ACCELERATORS              144
 #define IDC_UPDATE_IP_LIST_BUTTON                  145
+#define IDC_CATEGORY_TREE                          146
+#define IDC_SELECT_ALL                             147
+#define IDC_UNSELECT_ALL                           148
 
 //
 // Commands

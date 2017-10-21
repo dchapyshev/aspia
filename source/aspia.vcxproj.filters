@@ -640,6 +640,9 @@
     <ClCompile Include="ui\system_info\output_html_file.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
+    <ClCompile Include="ui\system_info\save_report_dialog.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1320,6 +1323,9 @@
       <Filter>ui\system_info</Filter>
     </ClInclude>
     <ClInclude Include="ui\system_info\output_html_file.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\save_report_dialog.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
   </ItemGroup>

@@ -8,6 +8,7 @@
 #include "base/strings/unicode.h"
 #include "base/logging.h"
 #include "ui/system_info/system_info_window.h"
+#include "ui/system_info/save_report_dialog.h"
 #include "ui/about_dialog.h"
 
 namespace aspia {
@@ -236,6 +237,13 @@ LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& 
         DLOG(FATAL) << "Unexpected item type: " << static_cast<int>(type);
     }
 
+    return 0;
+}
+
+LRESULT SystemInfoWindow::OnSaveSelectedButton(WORD notify_code, WORD control_id, HWND control,
+                                               BOOL& handled)
+{
+    SaveReportDialog().DoModal(*this);
     return 0;
 }
 
