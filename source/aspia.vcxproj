@@ -79,8 +79,6 @@
     <ClCompile Include="base\version_helpers.cc" />
     <ClCompile Include="client\client.cc" />
     <ClCompile Include="client\client_config.cc" />
-    <ClCompile Include="client\client_local_system_info.cc" />
-    <ClCompile Include="client\client_local_system_info_pool.cc" />
     <ClCompile Include="client\client_pool.cc" />
     <ClCompile Include="client\client_session_desktop_manage.cc" />
     <ClCompile Include="client\client_session_desktop_view.cc" />
@@ -127,6 +125,7 @@
     <ClCompile Include="host\clipboard_thread.cc" />
     <ClCompile Include="host\console_session_watcher.cc" />
     <ClCompile Include="host\host.cc" />
+    <ClCompile Include="host\host_local_system_info.cc" />
     <ClCompile Include="host\host_main.cc" />
     <ClCompile Include="host\host_pool.cc" />
     <ClCompile Include="host\host_process_connector.cc" />
@@ -291,8 +290,6 @@
     <ClInclude Include="build_config.h" />
     <ClInclude Include="client\client.h" />
     <ClInclude Include="client\client_config.h" />
-    <ClInclude Include="client\client_local_system_info.h" />
-    <ClInclude Include="client\client_local_system_info_pool.h" />
     <ClInclude Include="client\client_pool.h" />
     <ClInclude Include="client\client_session.h" />
     <ClInclude Include="client\client_session_desktop_manage.h" />
@@ -353,6 +350,7 @@
     <ClInclude Include="host\clipboard_thread.h" />
     <ClInclude Include="host\console_session_watcher.h" />
     <ClInclude Include="host\host.h" />
+    <ClInclude Include="host\host_local_system_info.h" />
     <ClInclude Include="host\host_main.h" />
     <ClInclude Include="host\host_pool.h" />
     <ClInclude Include="host\host_process_connector.h" />

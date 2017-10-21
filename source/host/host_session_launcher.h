@@ -19,6 +19,7 @@ static const WCHAR kDesktopSessionSwitch[] = L"desktop-session";
 static const WCHAR kFileTransferSessionSwitch[] = L"file-transfer-session";
 static const WCHAR kPowerManageSessionSwitch[] = L"power-manage-session";
 static const WCHAR kSystemInfoSessionSwitch[] = L"system-info-session";
+static const WCHAR kSystemInfoSwitch[] = L"system-info";
 
 bool LaunchSessionProcessFromService(const std::wstring& run_mode,
                                      uint32_t session_id,
@@ -27,6 +28,8 @@ bool LaunchSessionProcessFromService(const std::wstring& run_mode,
 bool LaunchSessionProcess(proto::SessionType session_type,
                           uint32_t session_id,
                           const std::wstring& channel_id);
+
+bool LaunchSystemInfoProcess();
 
 } // namespace aspia
 

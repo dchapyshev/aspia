@@ -1,34 +1,26 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            client/client_local_system_info.h
+// FILE:            host/host_local_system_info.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_CLIENT__CLIENT_LOCAL_SYSTEM_INFO_H
-#define _ASPIA_CLIENT__CLIENT_LOCAL_SYSTEM_INFO_H
+#ifndef _ASPIA_HOST__HOST_LOCAL_SYSTEM_INFO_H
+#define _ASPIA_HOST__HOST_LOCAL_SYSTEM_INFO_H
 
 #include "base/message_loop/message_loop_thread.h"
 #include "ui/system_info/system_info_window.h"
 
 namespace aspia {
 
-class ClientLocalSystemInfo
+class HostLocalSystemInfo
     : private MessageLoopThread::Delegate,
       private SystemInfoWindow::Delegate
 {
 public:
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-        virtual void OnClose() = 0;
-    };
+    HostLocalSystemInfo() = default;
 
-    ClientLocalSystemInfo(Delegate* delegate);
-    ~ClientLocalSystemInfo();
-
-    bool IsTerminated() const;
+    void Run();
 
 private:
     // MessageLoopThread::Delegate implementation.
@@ -41,8 +33,6 @@ private:
 
     void SendRequest();
 
-    Delegate* delegate_;
-
     MessageLoopThread thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
@@ -52,11 +42,9 @@ private:
     GuidList guid_list_;
     std::shared_ptr<OutputProxy> output_;
 
-    bool terminated_ = false;
-
-    DISALLOW_COPY_AND_ASSIGN(ClientLocalSystemInfo);
+    DISALLOW_COPY_AND_ASSIGN(HostLocalSystemInfo);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__CLIENT_LOCAL_SYSTEM_INFO_H
+#endif // _ASPIA_HOST__HOST_LOCAL_SYSTEM_INFO_H

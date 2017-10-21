@@ -14,6 +14,7 @@
 #include "host/host_session_file_transfer.h"
 #include "host/host_session_power.h"
 #include "host/host_session_system_info.h"
+#include "host/host_local_system_info.h"
 #include "base/strings/unicode.h"
 #include "base/process/process.h"
 
@@ -63,6 +64,10 @@ void RunHostMain(const std::wstring& run_mode)
 
         HostSessionLauncherService launcher(service_id);
         launcher.RunLauncher(launcher_mode, FLAGS_session_id, channel_id);
+    }
+    else if (run_mode == kSystemInfoSwitch)
+    {
+        HostLocalSystemInfo().Run();
     }
     else
     {

@@ -15,6 +15,7 @@
 #include "base/strings/unicode.h"
 #include "base/scoped_clipboard.h"
 #include "client/client_config.h"
+#include "host/host_session_launcher.h"
 #include "host/host_service.h"
 #include "network/network_adapter_enumerator.h"
 #include "ui/desktop/viewer_window.h"
@@ -456,12 +457,7 @@ LRESULT MainDialog::OnIpListRightClick(int control_id, LPNMHDR hdr, BOOL& handle
 LRESULT MainDialog::OnSystemInfoButton(WORD notify_code, WORD control_id, HWND control,
                                        BOOL& handled)
 {
-    if (!system_info_)
-    {
-        system_info_ = std::make_unique<ClientLocalSystemInfoPool>(MessageLoopProxy::Current());
-    }
-
-    system_info_->Open();
+    LaunchSystemInfoProcess();
     return 0;
 }
 

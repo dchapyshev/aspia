@@ -320,4 +320,24 @@ bool LaunchSessionProcess(proto::SessionType session_type,
     }
 }
 
+bool LaunchSystemInfoProcess()
+{
+    FilePath path;
+
+    if (!GetBasePath(BasePathKey::FILE_EXE, path))
+        return false;
+
+    std::wstring command_line(path);
+
+    command_line.append(L" --run_mode=");
+    command_line.append(kSystemInfoSwitch);
+
+    ScopedHandle token;
+
+    if (!CopyProcessToken(TOKEN_ALL_ACCESS, token))
+        return false;
+
+    return CreateProcessWithToken(token, command_line);
+}
+
 } // namespace aspia

@@ -10,7 +10,6 @@
 
 #include "host/host_pool.h"
 #include "client/client_pool.h"
-#include "client/client_local_system_info_pool.h"
 #include "ui/base/tray_icon.h"
 #include "ui/resource.h"
 
@@ -97,7 +96,6 @@ private:
 
     CMenu main_menu_;
 
-    std::unique_ptr<ClientLocalSystemInfoPool> system_info_;
     std::unique_ptr<HostPool> host_pool_;
     std::unique_ptr<ClientPool> client_pool_;
     ClientConfig config_;
