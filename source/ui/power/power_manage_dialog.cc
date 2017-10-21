@@ -14,6 +14,11 @@ namespace aspia {
 
 LRESULT PowerManageDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     CenterWindow();
 
     icon_ = AtlLoadIconImage(IDI_POWER_SURGE,
@@ -30,6 +35,11 @@ LRESULT PowerManageDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpar
 
 LRESULT PowerManageDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     EndDialog(proto::PowerEvent::UNKNOWN);
     return 0;
 }
@@ -37,6 +47,11 @@ LRESULT PowerManageDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, B
 LRESULT PowerManageDialog::OnOkButton(WORD notify_code, WORD control_id, HWND control,
                                       BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     proto::PowerEvent::Action action = proto::PowerEvent::UNKNOWN;
 
     if (IsDlgButtonChecked(ID_POWER_SHUTDOWN) == BST_CHECKED)
@@ -55,6 +70,11 @@ LRESULT PowerManageDialog::OnOkButton(WORD notify_code, WORD control_id, HWND co
 LRESULT PowerManageDialog::OnCancelButton(WORD notify_code, WORD control_id, HWND control,
                                           BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     EndDialog(proto::PowerEvent::UNKNOWN);
     return 0;
 }

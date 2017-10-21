@@ -61,6 +61,8 @@ void CategoryTreeCtrl::ExpandChildGroups(HTREEITEM parent_tree_item)
 
 LRESULT CategoryTreeCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(handled);
+
     LRESULT ret = DefWindowProcW(message, wparam, lparam);
 
     if (IsWindowsVistaOrGreater())

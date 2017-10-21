@@ -15,6 +15,11 @@ namespace aspia {
 
 LRESULT AboutDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     DlgResize_Init();
 
     icon_ = AtlLoadIconImage(IDI_MAIN, LR_CREATEDIBSECTION, 48, 48);
@@ -32,12 +37,21 @@ LRESULT AboutDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BO
 
 LRESULT AboutDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     EndDialog(0);
     return 0;
 }
 
 LRESULT AboutDialog::OnDrawItem(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(handled);
+
     LPDRAWITEMSTRUCT dis = reinterpret_cast<LPDRAWITEMSTRUCT>(lparam);
 
     int saved_dc = SaveDC(dis->hDC);
@@ -59,12 +73,22 @@ LRESULT AboutDialog::OnDrawItem(UINT message, WPARAM wparam, LPARAM lparam, BOOL
 
 LRESULT AboutDialog::OnCloseButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     EndDialog(0);
     return 0;
 }
 
 LRESULT AboutDialog::OnDonateButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     CString url;
     url.LoadStringW(IDS_DONATE_LINK);
     ShellExecuteW(nullptr, L"open", url, nullptr, nullptr, SW_SHOWNORMAL);
@@ -73,6 +97,11 @@ LRESULT AboutDialog::OnDonateButton(WORD notify_code, WORD control_id, HWND cont
 
 LRESULT AboutDialog::OnSiteButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     CString url;
     url.LoadStringW(IDS_SITE_LINK);
     ShellExecuteW(nullptr, L"open", url, nullptr, nullptr, SW_SHOWNORMAL);

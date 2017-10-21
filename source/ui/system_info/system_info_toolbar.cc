@@ -12,6 +12,11 @@ namespace aspia {
 
 LRESULT SystemInfoToolbar::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     SetExtendedStyle(TBSTYLE_EX_DRAWDDARROWS | TBSTYLE_EX_MIXEDBUTTONS | TBSTYLE_EX_DOUBLEBUFFER);
 
     TBBUTTON kButtons[] =
@@ -50,6 +55,9 @@ LRESULT SystemInfoToolbar::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, 
 
 LRESULT SystemInfoToolbar::OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(handled);
+
     LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(hdr);
     UINT string_id;
 

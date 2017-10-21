@@ -27,6 +27,8 @@ const char* CategorySummary::Guid() const
 
 void CategorySummary::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 

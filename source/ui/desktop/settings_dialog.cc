@@ -8,7 +8,6 @@
 #include "ui/desktop/settings_dialog.h"
 #include "desktop_capture/pixel_format.h"
 #include "codec/video_helpers.h"
-#include "base/strings/string_util.h"
 #include "base/logging.h"
 
 #include <atlmisc.h>
@@ -144,6 +143,11 @@ void SettingsDialog::UpdateCompressionRatio(int compression_ratio)
 
 LRESULT SettingsDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     InitCodecList();
     InitColorDepthList();
     UpdateCompressionRatio(config_.compress_ratio());
@@ -180,12 +184,21 @@ LRESULT SettingsDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam,
 
 LRESULT SettingsDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     EndDialog(IDCANCEL);
     return 0;
 }
 
 LRESULT SettingsDialog::OnHScroll(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(handled);
+
     CWindow control(reinterpret_cast<HWND>(lparam));
 
     if (control.GetWindowLongPtrW(GWLP_ID) == IDC_COMPRESS_RATIO_TRACKBAR)
@@ -216,12 +229,22 @@ void SettingsDialog::OnCodecChanged()
 LRESULT SettingsDialog::OnCodecListChanged(WORD notify_code, WORD control_id, HWND control,
                                            BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     OnCodecChanged();
     return 0;
 }
 
 LRESULT SettingsDialog::OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     CComboBox codec_combo(GetDlgItem(IDC_CODEC_COMBO));
 
     proto::VideoEncoding encoding =
@@ -310,6 +333,11 @@ LRESULT SettingsDialog::OnOkButton(WORD notify_code, WORD control_id, HWND contr
 LRESULT SettingsDialog::OnCancelButton(WORD notify_code, WORD control_id, HWND control,
                                        BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     EndDialog(IDCANCEL);
     return 0;
 }

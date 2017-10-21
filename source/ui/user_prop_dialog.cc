@@ -87,6 +87,11 @@ LRESULT CALLBACK UserPropDialog::PasswordEditWindowProc(HWND hwnd,
 
 LRESULT UserPropDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     DlgResize_Init();
 
     CListViewCtrl list(GetDlgItem(IDC_SESSION_TYPES_LIST));
@@ -163,12 +168,19 @@ LRESULT UserPropDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam,
 
 LRESULT UserPropDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     EndDialog(IDCANCEL);
     return 0;
 }
 
 LRESULT UserPropDialog::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(handled);
+
     LRESULT ret = 0;
 
     if (CDialogResize<UserPropDialog>::ProcessWindowMessage(
@@ -193,6 +205,11 @@ void UserPropDialog::ShowErrorMessage(UINT string_id)
 
 LRESULT UserPropDialog::OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     // TODO: Clear memory.
 
     WCHAR buffer[128];
@@ -276,6 +293,11 @@ LRESULT UserPropDialog::OnOkButton(WORD notify_code, WORD control_id, HWND contr
 LRESULT UserPropDialog::OnCancelButton(WORD notify_code, WORD control_id, HWND control,
                                        BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     EndDialog(IDCANCEL);
     return 0;
 }

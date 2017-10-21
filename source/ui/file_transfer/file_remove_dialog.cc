@@ -27,6 +27,11 @@ FileRemoveDialog::FileRemoveDialog(std::shared_ptr<FileRequestSenderProxy> sende
 
 LRESULT FileRemoveDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     CenterWindow();
 
     current_item_edit_ = GetDlgItem(IDC_CURRENT_ITEM_EDIT);
@@ -50,6 +55,11 @@ LRESULT FileRemoveDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpara
 
 LRESULT FileRemoveDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     file_remover_.reset();
     EndDialog(0);
     return 0;
@@ -58,6 +68,11 @@ LRESULT FileRemoveDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BO
 LRESULT FileRemoveDialog::OnCancelButton(WORD notify_code, WORD control_id, HWND control,
                                          BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     PostMessageW(WM_CLOSE);
     return 0;
 }

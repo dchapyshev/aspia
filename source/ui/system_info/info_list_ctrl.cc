@@ -16,6 +16,8 @@ namespace aspia {
 
 LRESULT InfoListCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(handled);
+
     LRESULT ret = DefWindowProcW(message, wparam, lparam);
 
     DWORD ex_style = LVS_EX_FULLROWSELECT;

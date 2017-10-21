@@ -82,6 +82,9 @@ void FileRequestSenderLocal::SendCreateDirectoryRequest(
 void FileRequestSenderLocal::DirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                                   const FilePath& path)
 {
+    UNUSED_PARAMETER(receiver);
+    UNUSED_PARAMETER(path);
+
     DCHECK(worker_->BelongsToCurrentThread());
     // TODO
 }
@@ -129,6 +132,10 @@ void FileRequestSenderLocal::SendFileUploadRequest(std::shared_ptr<FileReplyRece
                                                    const FilePath& file_path,
                                                    Overwrite overwrite)
 {
+    UNUSED_PARAMETER(receiver);
+    UNUSED_PARAMETER(file_path);
+    UNUSED_PARAMETER(overwrite);
+
     DLOG(FATAL) << "The request type is not allowed for local processing";
 }
 
@@ -136,18 +143,26 @@ void FileRequestSenderLocal::SendFileDownloadRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
     const FilePath& file_path)
 {
+    UNUSED_PARAMETER(receiver);
+    UNUSED_PARAMETER(file_path);
+
     DLOG(FATAL) << "The request type is not allowed for local processing";
 }
 
 void FileRequestSenderLocal::SendFilePacket(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                             std::unique_ptr<proto::FilePacket> file_packet)
 {
+    UNUSED_PARAMETER(receiver);
+    UNUSED_PARAMETER(file_packet);
+
     DLOG(FATAL) << "The request type is not allowed for local processing";
 }
 
 void FileRequestSenderLocal::SendFilePacketRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver)
 {
+    UNUSED_PARAMETER(receiver);
+
     DLOG(FATAL) << "The request type is not allowed for local processing";
 }
 

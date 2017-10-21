@@ -36,6 +36,11 @@ FileTransferDialog::FileTransferDialog(Mode mode,
 
 LRESULT FileTransferDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     CenterWindow();
 
     current_item_edit_ = GetDlgItem(IDC_CURRENT_ITEM_EDIT);
@@ -68,6 +73,11 @@ LRESULT FileTransferDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpa
 
 LRESULT FileTransferDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     file_transfer_.reset();
     EndDialog(0);
     return 0;
@@ -75,6 +85,11 @@ LRESULT FileTransferDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, 
 
 LRESULT FileTransferDialog::OnCancelButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
+    UNUSED_PARAMETER(code);
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(ctrl);
+    UNUSED_PARAMETER(handled);
+
     PostMessageW(WM_CLOSE);
     return 0;
 }

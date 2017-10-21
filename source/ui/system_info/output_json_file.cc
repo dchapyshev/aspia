@@ -11,6 +11,7 @@ namespace aspia {
 
 OutputJsonFile::OutputJsonFile(const std::wstring& file_path)
 {
+    UNUSED_PARAMETER(file_path);
     // TODO
 }
 
@@ -26,6 +27,7 @@ void OutputJsonFile::EndDocument()
 
 void OutputJsonFile::StartTable(const std::string& name)
 {
+    UNUSED_PARAMETER(name);
     // TODO
 }
 
@@ -46,11 +48,14 @@ void OutputJsonFile::EndTableHeader()
 
 void OutputJsonFile::AddHeaderItem(const std::string& name, int width)
 {
+    UNUSED_PARAMETER(name);
+    UNUSED_PARAMETER(width);
     // TODO
 }
 
 void OutputJsonFile::StartGroup(const std::string& name, Category::IconId icon_id)
 {
+    UNUSED_PARAMETER(name);
     UNUSED_PARAMETER(icon_id);
     // TODO
 }
@@ -66,6 +71,9 @@ void OutputJsonFile::AddParam(Category::IconId icon_id,
                               const char* unit)
 {
     UNUSED_PARAMETER(icon_id);
+    UNUSED_PARAMETER(param);
+    UNUSED_PARAMETER(value);
+    UNUSED_PARAMETER(unit);
     // TODO
 }
 
@@ -82,6 +90,8 @@ void OutputJsonFile::EndRow()
 
 void OutputJsonFile::AddValue(const std::string& value, const char* unit)
 {
+    UNUSED_PARAMETER(value);
+    UNUSED_PARAMETER(unit);
     // TODO
 }
 

@@ -58,6 +58,7 @@ bool DeviceBattery::SetBatteryInformation(BATTERY_SET_INFORMATION_LEVEL level, U
     BATTERY_SET_INFORMATION battery_info;
 
     memset(&battery_info, 0, sizeof(battery_info));
+    battery_info.InformationLevel = level;
     battery_info.Buffer[0] = value;
 
     if (!GetBatteryTag(battery_info.BatteryTag))

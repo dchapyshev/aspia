@@ -69,6 +69,9 @@ void ViewerWindow::DrawFrame()
 
 LRESULT ViewerWindow::OnVideoFrameResize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(handled);
+
     const DesktopSize* size = reinterpret_cast<const DesktopSize*>(wparam);
     const PixelFormat* format = reinterpret_cast<const PixelFormat*>(lparam);
 
@@ -133,6 +136,11 @@ void ViewerWindow::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> c
 
 LRESULT ViewerWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
                                    LR_CREATEDIBSECTION,
                                    GetSystemMetrics(SM_CXSMICON),
@@ -168,12 +176,22 @@ LRESULT ViewerWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL&
 
 LRESULT ViewerWindow::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     delegate_->OnWindowClose();
     return 0;
 }
 
 LRESULT ViewerWindow::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     toolbar_.DestroyWindow();
     video_window_.DestroyWindow();
     return 0;
@@ -181,6 +199,10 @@ LRESULT ViewerWindow::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL
 
 LRESULT ViewerWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     if (wparam == SIZE_MINIMIZED)
         return 0;
 
@@ -202,6 +224,10 @@ LRESULT ViewerWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& h
 
 LRESULT ViewerWindow::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(handled);
+
     LPMINMAXINFO mmi = reinterpret_cast<LPMINMAXINFO>(lparam);
 
     mmi->ptMinTrackSize.x = kVideoWindowSize.Width();
@@ -267,6 +293,10 @@ static LRESULT CALLBACK KeyboardHookProc(INT code, WPARAM wparam, LPARAM lparam)
 
 LRESULT ViewerWindow::OnActivate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     const UINT state = LOWORD(wparam);
 
     if (state == WA_ACTIVE || state == WA_CLICKACTIVE)
@@ -291,6 +321,9 @@ LRESULT ViewerWindow::OnActivate(UINT message, WPARAM wparam, LPARAM lparam, BOO
 
 LRESULT ViewerWindow::OnKeyboard(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(handled);
+
     const uint8_t key_code = static_cast<uint8_t>(static_cast<uint32_t>(wparam) & 255);
 
     // We do not pass CapsLock and NoLock directly. Instead, when sending each
@@ -314,18 +347,32 @@ LRESULT ViewerWindow::OnKeyboard(UINT message, WPARAM wparam, LPARAM lparam, BOO
 
 LRESULT ViewerWindow::OnSkipMessage(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
     // Nothing
     return 0;
 }
 
 LRESULT ViewerWindow::OnSetFocus(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     video_window_.SetHasFocus(true);
     return 0;
 }
 
 LRESULT ViewerWindow::OnKillFocus(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     video_window_.SetHasFocus(false);
     return 0;
 }
@@ -352,6 +399,11 @@ void ViewerWindow::ApplyConfig(const proto::DesktopSessionConfig& config)
 LRESULT ViewerWindow::OnSettingsButton(WORD notify_code, WORD control_id, HWND control,
                                        BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     SettingsDialog dialog(config_->session_type(), config_->desktop_session_config());
 
     if (dialog.DoModal(*this) == IDOK)
@@ -367,12 +419,22 @@ LRESULT ViewerWindow::OnSettingsButton(WORD notify_code, WORD control_id, HWND c
 
 LRESULT ViewerWindow::OnAboutButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     AboutDialog().DoModal(*this);
     return 0;
 }
 
 LRESULT ViewerWindow::OnExitButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     PostMessageW(WM_CLOSE);
     return 0;
 }
@@ -462,6 +524,11 @@ int ViewerWindow::DoAutoSize(const DesktopSize &video_frame_size)
 LRESULT ViewerWindow::OnAutoSizeButton(WORD notify_code, WORD control_id, HWND control,
                                        BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     DesktopSize video_frame_size = video_window_.FrameSize();
 
     if (!video_frame_size.IsEmpty())
@@ -521,6 +588,11 @@ void ViewerWindow::DoFullScreen(bool fullscreen)
 LRESULT ViewerWindow::OnFullScreenButton(WORD notify_code, WORD control_id, HWND control,
                                          BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     DoFullScreen(toolbar_.IsButtonChecked(ID_FULLSCREEN));
     return 0;
 }
@@ -528,6 +600,10 @@ LRESULT ViewerWindow::OnFullScreenButton(WORD notify_code, WORD control_id, HWND
 LRESULT ViewerWindow::OnDropDownButton(WORD notify_code, WORD control_id, HWND control,
                                        BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     CRect rect;
     toolbar_.GetRect(control_id, &rect);
     ShowDropDownMenu(control_id, &rect);
@@ -536,6 +612,11 @@ LRESULT ViewerWindow::OnDropDownButton(WORD notify_code, WORD control_id, HWND c
 
 LRESULT ViewerWindow::OnCADButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     delegate_->OnKeyEvent(VK_CONTROL, proto::KeyEvent::PRESSED);
     delegate_->OnKeyEvent(VK_MENU, proto::KeyEvent::PRESSED);
     delegate_->OnKeyEvent(VK_DELETE, proto::KeyEvent::EXTENDED | proto::KeyEvent::PRESSED);
@@ -549,6 +630,10 @@ LRESULT ViewerWindow::OnCADButton(WORD notify_code, WORD control_id, HWND contro
 
 LRESULT ViewerWindow::OnKeyButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     switch (control_id)
     {
         case ID_KEY_CTRL_ESC:
@@ -638,6 +723,9 @@ LRESULT ViewerWindow::OnKeyButton(WORD notify_code, WORD control_id, HWND contro
 
 LRESULT ViewerWindow::OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(handled);
+
     LPNMTOOLBARW header = reinterpret_cast<LPNMTOOLBARW>(hdr);
     ShowDropDownMenu(header->iItem, &header->rcButton);
     return 0;

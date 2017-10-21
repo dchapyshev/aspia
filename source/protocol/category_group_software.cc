@@ -33,6 +33,8 @@ const char* CategoryPrograms::Guid() const
 
 void CategoryPrograms::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -63,6 +65,8 @@ const char* CategoryUpdates::Guid() const
 
 void CategoryUpdates::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -424,6 +428,8 @@ const char* CategoryProcesses::Guid() const
 
 void CategoryProcesses::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -454,6 +460,8 @@ const char* CategoryLicenses::Guid() const
 
 void CategoryLicenses::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 

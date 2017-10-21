@@ -68,6 +68,11 @@ bool SystemInfoWindow::Dispatch(const NativeEvent& event)
 
 LRESULT SystemInfoWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
                                    LR_CREATEDIBSECTION,
                                    GetSystemMetrics(SM_CXSMICON),
@@ -124,6 +129,11 @@ LRESULT SystemInfoWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
 
 LRESULT SystemInfoWindow::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     toolbar_.DestroyWindow();
     tree_.DestroyWindow();
     list_.DestroyWindow();
@@ -134,6 +144,10 @@ LRESULT SystemInfoWindow::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, 
 
 LRESULT SystemInfoWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(handled);
+
     const CSize size(lparam);
 
     toolbar_.AutoSize();
@@ -154,6 +168,10 @@ LRESULT SystemInfoWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOO
 LRESULT SystemInfoWindow::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam,
                                           BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(handled);
+
     LPMINMAXINFO mmi = reinterpret_cast<LPMINMAXINFO>(lparam);
 
     mmi->ptMinTrackSize.x = 500;
@@ -164,6 +182,11 @@ LRESULT SystemInfoWindow::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lp
 
 LRESULT SystemInfoWindow::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     delegate_->OnWindowClose();
     return 0;
 }
@@ -194,6 +217,9 @@ void SystemInfoWindow::ShowDropDownMenu(int button_id, RECT* button_rect)
 
 LRESULT SystemInfoWindow::OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(handled);
+
     LPNMTOOLBARW header = reinterpret_cast<LPNMTOOLBARW>(hdr);
     ShowDropDownMenu(header->iItem, &header->rcButton);
     return 0;
@@ -201,6 +227,9 @@ LRESULT SystemInfoWindow::OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& h
 
 LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(handled);
+
     LPNMTREEVIEWW nmtv = reinterpret_cast<LPNMTREEVIEWW>(hdr);
 
     list_.DeleteAllItems();
@@ -243,6 +272,11 @@ LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& 
 LRESULT SystemInfoWindow::OnSaveSelectedButton(WORD notify_code, WORD control_id, HWND control,
                                                BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     SaveReportDialog().DoModal(*this);
     return 0;
 }
@@ -250,6 +284,11 @@ LRESULT SystemInfoWindow::OnSaveSelectedButton(WORD notify_code, WORD control_id
 LRESULT SystemInfoWindow::OnAboutButton(WORD notify_code, WORD control_id, HWND control,
                                         BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     AboutDialog().DoModal(*this);
     return 0;
 }
@@ -257,6 +296,11 @@ LRESULT SystemInfoWindow::OnAboutButton(WORD notify_code, WORD control_id, HWND 
 LRESULT SystemInfoWindow::OnExitButton(WORD notify_code, WORD control_id, HWND control,
                                        BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     PostMessageW(WM_CLOSE);
     return 0;
 }

@@ -46,6 +46,11 @@ void UsersDialog::UpdateUserList()
 
 LRESULT UsersDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     DlgResize_Init();
 
     CSize small_icon_size(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
@@ -120,12 +125,19 @@ LRESULT UsersDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BO
 
 LRESULT UsersDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     EndDialog(IDCANCEL);
     return 0;
 }
 
 LRESULT UsersDialog::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(handled);
+
     LRESULT ret = 0;
 
     if (CDialogResize<UsersDialog>::ProcessWindowMessage(
@@ -143,6 +155,11 @@ LRESULT UsersDialog::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& ha
 
 LRESULT UsersDialog::OnAddButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
+    UNUSED_PARAMETER(code);
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(ctrl);
+    UNUSED_PARAMETER(handled);
+
     std::unique_ptr<proto::HostUser> user(std::make_unique<proto::HostUser>());
 
     UserPropDialog dialog(UserPropDialog::Mode::ADD, user.get(), user_list_);
@@ -181,6 +198,11 @@ void UsersDialog::EditSelectedUser()
 
 LRESULT UsersDialog::OnEditButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
+    UNUSED_PARAMETER(code);
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(ctrl);
+    UNUSED_PARAMETER(handled);
+
     EditSelectedUser();
     return 0;
 }
@@ -211,12 +233,22 @@ void UsersDialog::DeleteSelectedUser()
 
 LRESULT UsersDialog::OnDeleteButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
+    UNUSED_PARAMETER(code);
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(ctrl);
+    UNUSED_PARAMETER(handled);
+
     DeleteSelectedUser();
     return 0;
 }
 
 LRESULT UsersDialog::OnOkButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
+    UNUSED_PARAMETER(code);
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(ctrl);
+    UNUSED_PARAMETER(handled);
+
     user_list_.SaveToStorage();
     EndDialog(IDOK);
     return 0;
@@ -224,6 +256,11 @@ LRESULT UsersDialog::OnOkButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handle
 
 LRESULT UsersDialog::OnCancelButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
+    UNUSED_PARAMETER(code);
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(ctrl);
+    UNUSED_PARAMETER(handled);
+
     EndDialog(IDCANCEL);
     return 0;
 }
@@ -264,12 +301,20 @@ void UsersDialog::SetUserListModified()
 
 LRESULT UsersDialog::OnUserListDoubleClick(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(hdr);
+    UNUSED_PARAMETER(handled);
+
     EditSelectedUser();
     return 0;
 }
 
 LRESULT UsersDialog::OnUserListRightClick(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(hdr);
+    UNUSED_PARAMETER(handled);
+
     ShowUserPopupMenu();
     UpdateButtonsState();
     return 0;
@@ -293,12 +338,19 @@ void UsersDialog::UpdateButtonsState()
 
 LRESULT UsersDialog::OnUserListClick(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(hdr);
+    UNUSED_PARAMETER(handled);
+
     UpdateButtonsState();
     return 0;
 }
 
 LRESULT UsersDialog::OnUserListKeyDown(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(handled);
+
     LPNMLVKEYDOWN keydown_header = reinterpret_cast<LPNMLVKEYDOWN>(hdr);
 
     switch (keydown_header->wVKey)
@@ -321,6 +373,10 @@ LRESULT UsersDialog::OnUserListKeyDown(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 
 LRESULT UsersDialog::OnUserListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(hdr);
+    UNUSED_PARAMETER(handled);
+
     UpdateButtonsState();
     return 0;
 }

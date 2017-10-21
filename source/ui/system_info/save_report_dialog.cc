@@ -12,6 +12,11 @@ namespace aspia {
 
 LRESULT SaveReportDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     DlgResize_Init();
     CenterWindow();
 
@@ -46,17 +51,31 @@ LRESULT SaveReportDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpara
 
 LRESULT SaveReportDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     EndDialog(0);
     return 0;
 }
 
 LRESULT SaveReportDialog::OnSaveButton(WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(ctrl);
+    UNUSED_PARAMETER(handled);
     return 0;
 }
 
 LRESULT SaveReportDialog::OnCancelButton(WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(ctrl);
+    UNUSED_PARAMETER(handled);
+
     EndDialog(0);
     return 0;
 }

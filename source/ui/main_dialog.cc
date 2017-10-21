@@ -113,6 +113,11 @@ proto::SessionType MainDialog::GetSelectedSessionType() const
 
 LRESULT MainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     CSize small_icon_size(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
 
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
@@ -191,6 +196,11 @@ LRESULT MainDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOO
 LRESULT MainDialog::OnDefaultPortClicked(WORD notify_code, WORD control_id, HWND control,
                                          BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     CEdit port(GetDlgItem(IDC_SERVER_PORT_EDIT));
 
     if (IsDlgButtonChecked(IDC_SERVER_DEFAULT_PORT_CHECK) == BST_CHECKED)
@@ -208,6 +218,11 @@ LRESULT MainDialog::OnDefaultPortClicked(WORD notify_code, WORD control_id, HWND
 
 LRESULT MainDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     host_pool_.reset();
     client_pool_.reset();
     DestroyWindow();
@@ -230,6 +245,11 @@ void MainDialog::StopHostMode()
 LRESULT MainDialog::OnStartServerButton(WORD notify_code, WORD control_id, HWND control,
                                         BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     if (host_pool_)
     {
         StopHostMode();
@@ -248,6 +268,11 @@ LRESULT MainDialog::OnStartServerButton(WORD notify_code, WORD control_id, HWND 
 LRESULT MainDialog::OnUpdateIpListButton(WORD notify_code, WORD control_id, HWND control,
                                          BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     UpdateIpList();
     return 0;
 }
@@ -273,6 +298,11 @@ void MainDialog::UpdateSessionType()
 LRESULT MainDialog::OnSessionTypeChanged(WORD notify_code, WORD control_id, HWND control,
                                          BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     UpdateSessionType();
     return 0;
 }
@@ -280,6 +310,11 @@ LRESULT MainDialog::OnSessionTypeChanged(WORD notify_code, WORD control_id, HWND
 LRESULT MainDialog::OnSettingsButton(WORD notify_code, WORD control_id, HWND control,
                                      BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     const proto::SessionType session_type = GetSelectedSessionType();
 
     switch (session_type)
@@ -305,6 +340,11 @@ LRESULT MainDialog::OnSettingsButton(WORD notify_code, WORD control_id, HWND con
 
 LRESULT MainDialog::OnConnectButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     const proto::SessionType session_type = GetSelectedSessionType();
 
     if (session_type != proto::SessionType::SESSION_TYPE_UNKNOWN)
@@ -327,6 +367,11 @@ LRESULT MainDialog::OnConnectButton(WORD notify_code, WORD control_id, HWND cont
 
 LRESULT MainDialog::OnHelpButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     CString url;
     url.LoadStringW(IDS_HELP_LINK);
     ShellExecuteW(nullptr, L"open", url, nullptr, nullptr, SW_SHOWNORMAL);
@@ -336,6 +381,11 @@ LRESULT MainDialog::OnHelpButton(WORD notify_code, WORD control_id, HWND control
 LRESULT MainDialog::OnShowHideButton(WORD notify_code, WORD control_id, HWND control,
                                      BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     if (IsWindowVisible())
         ShowWindow(SW_HIDE);
     else
@@ -347,6 +397,11 @@ LRESULT MainDialog::OnShowHideButton(WORD notify_code, WORD control_id, HWND con
 LRESULT MainDialog::OnInstallServiceButton(WORD notify_code, WORD control_id, HWND control,
                                            BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     if (host_pool_)
     {
         StopHostMode();
@@ -365,6 +420,11 @@ LRESULT MainDialog::OnInstallServiceButton(WORD notify_code, WORD control_id, HW
 LRESULT MainDialog::OnRemoveServiceButton(WORD notify_code, WORD control_id, HWND control,
                                           BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     if (HostService::Remove())
     {
         main_menu_.EnableMenuItem(ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_ENABLED);
@@ -418,18 +478,31 @@ void MainDialog::CopySelectedIp()
 
 LRESULT MainDialog::OnCopyButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     CopySelectedIp();
     return 0;
 }
 
 LRESULT MainDialog::OnIpListDoubleClick(int control_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(hdr);
+    UNUSED_PARAMETER(handled);
+
     CopySelectedIp();
     return 0;
 }
 
 LRESULT MainDialog::OnIpListRightClick(int control_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(hdr);
+    UNUSED_PARAMETER(handled);
+
     CListViewCtrl list(GetDlgItem(IDC_IP_LIST));
 
     if (!list.GetSelectedCount())
@@ -459,24 +532,44 @@ LRESULT MainDialog::OnIpListRightClick(int control_id, LPNMHDR hdr, BOOL& handle
 LRESULT MainDialog::OnSystemInfoButton(WORD notify_code, WORD control_id, HWND control,
                                        BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     LaunchSystemInfoProcess();
     return 0;
 }
 
 LRESULT MainDialog::OnExitButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     EndDialog(0);
     return 0;
 }
 
 LRESULT MainDialog::OnAboutButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     AboutDialog().DoModal(*this);
     return 0;
 }
 
 LRESULT MainDialog::OnUsersButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     UsersDialog().DoModal(*this);
     return 0;
 }

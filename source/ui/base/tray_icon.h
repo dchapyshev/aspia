@@ -123,6 +123,9 @@ private:
 
     LRESULT OnTrayIcon(UINT msg, WPARAM wparam, LPARAM lparam, BOOL &handled)
     {
+        UNUSED_PARAMETER(msg);
+        UNUSED_PARAMETER(handled);
+
         // Is this the ID we want?
         if (wparam != nid_.uID)
             return 0;

@@ -52,6 +52,8 @@ void FileRemover::OnTaskQueueBuilded(FileTaskQueue& task_queue,
                                      int64_t task_object_size,
                                      int64_t task_object_count)
 {
+    UNUSED_PARAMETER(task_object_size);
+
     task_queue_.swap(task_queue);
 
     delegate_->OnRemovingStarted(task_object_count);

@@ -36,6 +36,11 @@ void StatusDialog::SetStatus(proto::Status status)
 
 LRESULT StatusDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     DlgResize_Init();
 
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
@@ -69,12 +74,22 @@ LRESULT StatusDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, B
 
 LRESULT StatusDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     EndDialog(0);
     return 0;
 }
 
 LRESULT StatusDialog::OnCloseButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled)
 {
+    UNUSED_PARAMETER(notify_code);
+    UNUSED_PARAMETER(control_id);
+    UNUSED_PARAMETER(control);
+    UNUSED_PARAMETER(handled);
+
     EndDialog(0);
     return 0;
 }

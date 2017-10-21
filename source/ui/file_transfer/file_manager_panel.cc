@@ -43,6 +43,11 @@ void FileManagerPanel::Refresh()
 
 LPARAM FileManagerPanel::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     HFONT default_font = AtlGetStockFont(DEFAULT_GUI_FONT);
 
     CString panel_name;
@@ -71,6 +76,11 @@ LPARAM FileManagerPanel::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BO
 
 LRESULT FileManagerPanel::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(lparam);
+    UNUSED_PARAMETER(handled);
+
     drive_list_.DestroyWindow();
     file_list_.DestroyWindow();
     toolbar_.DestroyWindow();
@@ -81,6 +91,10 @@ LRESULT FileManagerPanel::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, 
 
 LRESULT FileManagerPanel::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(handled);
+
     HDWP dwp = BeginDeferWindowPos(5);
 
     if (!dwp)
@@ -137,6 +151,10 @@ LRESULT FileManagerPanel::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOO
 
 LRESULT FileManagerPanel::OnDrawItem(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(handled);
+
     LPDRAWITEMSTRUCT dis = reinterpret_cast<LPDRAWITEMSTRUCT>(lparam);
 
     if (dis->hwndItem != title_ && dis->hwndItem != status_)
@@ -168,6 +186,11 @@ LRESULT FileManagerPanel::OnDrawItem(UINT message, WPARAM wparam, LPARAM lparam,
 
 LRESULT FileManagerPanel::OnDriveChange(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
+    UNUSED_PARAMETER(code);
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(ctrl);
+    UNUSED_PARAMETER(handled);
+
     int object_index = drive_list_.SelectedObject();
 
     if (object_index == DriveListCtrl::kInvalidObjectIndex)
@@ -179,6 +202,10 @@ LRESULT FileManagerPanel::OnDriveChange(WORD code, WORD ctrl_id, HWND ctrl, BOOL
 
 LRESULT FileManagerPanel::OnListDoubleClock(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(hdr);
+    UNUSED_PARAMETER(handled);
+
     int object_index = file_list_.GetObjectUnderMousePointer();
 
     if (object_index == FileListCtrl::kInvalidObjectIndex)
@@ -219,18 +246,33 @@ void FileManagerPanel::FolderUp()
 
 LRESULT FileManagerPanel::OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
+    UNUSED_PARAMETER(code);
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(ctrl);
+    UNUSED_PARAMETER(handled);
+
     FolderUp();
     return 0;
 }
 
 LRESULT FileManagerPanel::OnFolderAdd(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
+    UNUSED_PARAMETER(code);
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(ctrl);
+    UNUSED_PARAMETER(handled);
+
     file_list_.AddDirectory();
     return 0;
 }
 
 LRESULT FileManagerPanel::OnRefresh(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
+    UNUSED_PARAMETER(code);
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(ctrl);
+    UNUSED_PARAMETER(handled);
+
     Refresh();
     return 0;
 }
@@ -275,6 +317,11 @@ void FileManagerPanel::RemoveSelectedFiles()
 
 LRESULT FileManagerPanel::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
+    UNUSED_PARAMETER(code);
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(ctrl);
+    UNUSED_PARAMETER(handled);
+
     RemoveSelectedFiles();
     return 0;
 }
@@ -300,6 +347,9 @@ void FileManagerPanel::MoveToDrive(int object_index)
 
 LRESULT FileManagerPanel::OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(handled);
+
     LPNMLVDISPINFOW disp_info = reinterpret_cast<LPNMLVDISPINFOW>(hdr);
 
     if (!file_list_.HasFileList())
@@ -342,6 +392,10 @@ LRESULT FileManagerPanel::OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& han
 
 LRESULT FileManagerPanel::OnListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(hdr);
+    UNUSED_PARAMETER(handled);
+
     UINT count = file_list_.GetSelectedCount();
 
     if (file_list_.HasFileList())
@@ -361,6 +415,9 @@ LRESULT FileManagerPanel::OnListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& hand
 
 LRESULT FileManagerPanel::OnListBeginDrag(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(handled);
+
     if (!file_list_.HasFileList())
         return 0;
 
@@ -394,6 +451,10 @@ LRESULT FileManagerPanel::OnListBeginDrag(int ctrl_id, LPNMHDR hdr, BOOL& handle
 
 LRESULT FileManagerPanel::OnMouseMove(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(handled);
+
     if (!dragging_)
         return 0;
 
@@ -406,6 +467,10 @@ LRESULT FileManagerPanel::OnMouseMove(UINT message, WPARAM wparam, LPARAM lparam
 
 LRESULT FileManagerPanel::OnLButtonUp(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
+    UNUSED_PARAMETER(message);
+    UNUSED_PARAMETER(wparam);
+    UNUSED_PARAMETER(handled);
+
     if (!dragging_)
         return 0;
 
@@ -458,6 +523,11 @@ void FileManagerPanel::SendSelectedFiles()
 
 LRESULT FileManagerPanel::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
+    UNUSED_PARAMETER(code);
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(ctrl);
+    UNUSED_PARAMETER(handled);
+
     SendSelectedFiles();
     return 0;
 }
@@ -491,6 +561,9 @@ int CALLBACK FileManagerPanel::CompareFunc(LPARAM lparam1, LPARAM lparam2, LPARA
 
 LRESULT FileManagerPanel::OnListColumnClick(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(handled);
+
     LPNMLISTVIEW pnmv = reinterpret_cast<LPNMLISTVIEW>(hdr);
 
     SortContext context;
@@ -505,6 +578,9 @@ LRESULT FileManagerPanel::OnListColumnClick(int ctrl_id, LPNMHDR hdr, BOOL& hand
 
 LRESULT FileManagerPanel::OnDriveEndEdit(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(handled);
+
     PNMCBEENDEDITW end_edit = reinterpret_cast<PNMCBEENDEDITW>(hdr);
 
     if (end_edit->fChanged && end_edit->iWhy == CBENF_RETURN && end_edit->szText[0])
@@ -522,6 +598,11 @@ void FileManagerPanel::Home()
 
 LRESULT FileManagerPanel::OnHome(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
+    UNUSED_PARAMETER(code);
+    UNUSED_PARAMETER(ctrl_id);
+    UNUSED_PARAMETER(ctrl);
+    UNUSED_PARAMETER(handled);
+
     Home();
     return 0;
 }

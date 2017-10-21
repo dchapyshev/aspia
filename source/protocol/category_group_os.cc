@@ -37,6 +37,8 @@ const char* CategoryRegistrationInformation::Guid() const
 
 void CategoryRegistrationInformation::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -67,6 +69,8 @@ const char* CategoryTaskScheduler::Guid() const
 
 void CategoryTaskScheduler::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -97,6 +101,8 @@ const char* CategoryEnvironmentVariables::Guid() const
 
 void CategoryEnvironmentVariables::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -127,6 +133,8 @@ const char* CategoryEventLogsApplications::Guid() const
 
 void CategoryEventLogsApplications::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -157,6 +165,8 @@ const char* CategoryEventLogsSecurity::Guid() const
 
 void CategoryEventLogsSecurity::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -187,6 +197,8 @@ const char* CategoryEventLogsSystem::Guid() const
 
 void CategoryEventLogsSystem::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 

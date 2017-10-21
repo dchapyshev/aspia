@@ -34,6 +34,8 @@ const char* CategoryDmiBios::Guid() const
 
 void CategoryDmiBios::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -64,6 +66,8 @@ const char* CategoryDmiSystem::Guid() const
 
 void CategoryDmiSystem::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -94,6 +98,8 @@ const char* CategoryDmiMotherboard::Guid() const
 
 void CategoryDmiMotherboard::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -124,6 +130,8 @@ const char* CategoryDmiChassis::Guid() const
 
 void CategoryDmiChassis::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -154,6 +162,8 @@ const char* CategoryDmiCaches::Guid() const
 
 void CategoryDmiCaches::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -184,6 +194,8 @@ const char* CategoryDmiProcessors::Guid() const
 
 void CategoryDmiProcessors::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -214,6 +226,8 @@ const char* CategoryDmiMemoryDevices::Guid() const
 
 void CategoryDmiMemoryDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -244,6 +258,8 @@ const char* CategoryDmiSystemSlots::Guid() const
 
 void CategoryDmiSystemSlots::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -274,6 +290,8 @@ const char* CategoryDmiPortConnectors::Guid() const
 
 void CategoryDmiPortConnectors::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -304,6 +322,8 @@ const char* CategoryDmiOnboardDevices::Guid() const
 
 void CategoryDmiOnboardDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -334,6 +354,8 @@ const char* CategoryDmiBuildinPointing::Guid() const
 
 void CategoryDmiBuildinPointing::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -364,6 +386,8 @@ const char* CategoryDmiPortableBattery::Guid() const
 
 void CategoryDmiPortableBattery::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -408,6 +432,8 @@ const char* CategoryCPU::Guid() const
 
 void CategoryCPU::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -438,6 +464,8 @@ const char* CategoryOpticalDrives::Guid() const
 
 void CategoryOpticalDrives::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -468,6 +496,8 @@ const char* CategoryATA::Guid() const
 
 void CategoryATA::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -498,6 +528,8 @@ const char* CategorySMART::Guid() const
 
 void CategorySMART::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -542,6 +574,8 @@ const char* CategoryWindowsVideo::Guid() const
 
 void CategoryWindowsVideo::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -572,6 +606,8 @@ const char* CategoryMonitor::Guid() const
 
 void CategoryMonitor::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -602,6 +638,8 @@ const char* CategoryOpenGL::Guid() const
 
 void CategoryOpenGL::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -780,6 +818,8 @@ const char* CategoryPowerOptions::Guid() const
 
 void CategoryPowerOptions::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -810,6 +850,8 @@ const char* CategoryAllDevices::Guid() const
 
 void CategoryAllDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -840,6 +882,8 @@ const char* CategoryUnknownDevices::Guid() const
 
 void CategoryUnknownDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 

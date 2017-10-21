@@ -218,6 +218,8 @@ const char* CategoryRasConnections::Guid() const
 
 void CategoryRasConnections::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -248,6 +250,8 @@ const char* CategoryOpenConnections::Guid() const
 
 void CategoryOpenConnections::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -437,6 +441,8 @@ const char* CategoryOpenFiles::Guid() const
 
 void CategoryOpenFiles::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
+    UNUSED_PARAMETER(output);
+    UNUSED_PARAMETER(data);
     // TODO
 }
 
