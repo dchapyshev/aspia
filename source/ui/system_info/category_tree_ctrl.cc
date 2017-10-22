@@ -15,15 +15,17 @@
 
 namespace aspia {
 
-void CategoryTreeCtrl::AddChildItems(const CategoryList& tree, HTREEITEM parent_tree_item)
+void CategoryTreeCtrl::AddChildItems(const CSize& icon_size,
+                                     const CategoryList& tree,
+                                     HTREEITEM parent_tree_item)
 {
     for (const auto& child : tree)
     {
         const int icon_index =
             imagelist_.AddIcon(AtlLoadIconImage(child->Icon(),
                                                 LR_CREATEDIBSECTION,
-                                                GetSystemMetrics(SM_CXSMICON),
-                                                GetSystemMetrics(SM_CYSMICON)));
+                                                icon_size.cx,
+                                                icon_size.cy));
 
         HTREEITEM tree_item = InsertItem(
             UNICODEfromUTF8(child->Name()).c_str(),
@@ -37,7 +39,7 @@ void CategoryTreeCtrl::AddChildItems(const CategoryList& tree, HTREEITEM parent_
 
         if (child->type() == Category::Type::GROUP)
         {
-            AddChildItems(child->category_group()->child_list(), tree_item);
+            AddChildItems(icon_size, child->category_group()->child_list(), tree_item);
         }
     }
 }
@@ -72,17 +74,19 @@ LRESULT CategoryTreeCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
         SetExtendedStyle(kDoubleBuffer, kDoubleBuffer);
     }
 
+    const CSize small_icon_size(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
+
     category_tree_ = CreateCategoryTree();
 
-    if (imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
-                          GetSystemMetrics(SM_CYSMICON),
+    if (imagelist_.Create(small_icon_size.cx,
+                          small_icon_size.cy,
                           ILC_MASK | ILC_COLOR32,
                           1, 1))
     {
         SetImageList(imagelist_);
     }
 
-    AddChildItems(category_tree_, TVI_ROOT);
+    AddChildItems(small_icon_size, category_tree_, TVI_ROOT);
     ExpandChildGroups(TVI_ROOT);
 
     return ret;

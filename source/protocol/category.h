@@ -20,6 +20,7 @@ class CategoryGroup;
 class CategoryInfo;
 
 using CategoryList = std::list<std::unique_ptr<Category>>;
+using CategoryGuidList = std::list<std::string>;
 using CategoryMap = std::map<std::string, std::unique_ptr<CategoryInfo>>;
 
 class Category

@@ -15,6 +15,7 @@
 #include <atlapp.h>
 #include <atlwin.h>
 #include <atlctrls.h>
+#include <atlmisc.h>
 
 namespace aspia {
 
@@ -37,7 +38,9 @@ private:
 
     LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
 
-    void AddChildItems(const CategoryList& tree, HTREEITEM parent_tree_item);
+    void AddChildItems(const CSize& icon_size,
+                       const CategoryList& tree,
+                       HTREEITEM parent_tree_item);
 
     CategoryList category_tree_;
     CImageListManaged imagelist_;
