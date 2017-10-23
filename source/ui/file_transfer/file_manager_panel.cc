@@ -48,7 +48,7 @@ LPARAM FileManagerPanel::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BO
     UNUSED_PARAMETER(lparam);
     UNUSED_PARAMETER(handled);
 
-    HFONT default_font = AtlGetStockFont(DEFAULT_GUI_FONT);
+    HFONT default_font = AtlGetDefaultGuiFont();
 
     CString panel_name;
 

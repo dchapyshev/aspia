@@ -25,7 +25,7 @@ bool DriveListCtrl::CreateDriveList(HWND parent, int control_id)
         return false;
     }
 
-    SetFont(AtlGetStockFont(DEFAULT_GUI_FONT));
+    SetFont(AtlGetDefaultGuiFont());
 
     if (imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
                           GetSystemMetrics(SM_CYSMICON),
