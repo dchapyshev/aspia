@@ -75,18 +75,12 @@ public:
 	}
 
 // Event map and handlers
-#ifdef _VC80X
-  #pragma warning(disable:4867)
-#endif
 	BEGIN_SINK_MAP(CBrowserView)
 		SINK_ENTRY_INFO(_nDispatchID, DIID_DWebBrowserEvents2, DISPID_DOCUMENTCOMPLETE, OnEventDocumentComplete, &DocumentComplete2_Info)
 		SINK_ENTRY_INFO(_nDispatchID, DIID_DWebBrowserEvents2, DISPID_TITLECHANGE, OnEventTitleChange, &TitleChange_Info)
 		SINK_ENTRY_INFO(_nDispatchID, DIID_DWebBrowserEvents2, DISPID_STATUSTEXTCHANGE, OnEventStatusTextChange, &StatusTextChange_Info)
 		SINK_ENTRY_INFO(_nDispatchID, DIID_DWebBrowserEvents2, DISPID_COMMANDSTATECHANGE, OnEventCommandStateChange, &CommandStateChange_Info)
 	END_SINK_MAP()
-#ifdef _VC80X
-  #pragma warning(default:4867)
-#endif
 
 	void __stdcall OnEventDocumentComplete(IDispatch* /*pDisp*/, VARIANT* URL)
 	{

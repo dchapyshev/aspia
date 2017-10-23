@@ -34,15 +34,11 @@ public:
 			// get full path and file name
 			TCHAR szPathName[MAX_PATH];
 			LPTSTR lpstrFileName = NULL;
-#ifndef _WIN32_WCE
 			::GetFullPathName(lpstrCmd, MAX_PATH, szPathName, &lpstrFileName);
-#endif // _WIN32_WCE
 			// open file
 			if(m_wndFrame.DoFileOpen(szPathName, lpstrFileName))
 			{
-#ifndef _WIN32_WCE
 				m_wndFrame.m_mru.AddToList(szPathName);
-#endif // _WIN32_WCE
 			}
 		}
 

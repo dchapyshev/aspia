@@ -1,4 +1,4 @@
-// Windows Template Library - WTL version 9.10
+// Windows Template Library - WTL version 10.0
 // Copyright (C) Microsoft Corporation, WTL Team. All rights reserved.
 //
 // This file is a part of the Windows Template Library.
@@ -106,7 +106,7 @@ public: \
 	if (uMsg == WM_MOVE) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func(_WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func(::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -117,7 +117,7 @@ public: \
 	if (uMsg == WM_SIZE) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CSize(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CSize(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -562,7 +562,7 @@ public: \
 	if (uMsg == WM_NCHITTEST) \
 	{ \
 		SetMsgHandled(TRUE); \
-		lResult = (LRESULT)func(_WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		lResult = (LRESULT)func(::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		if(IsMsgHandled()) \
 			return TRUE; \
 	}
@@ -603,7 +603,7 @@ public: \
 	if (uMsg == WM_NCMOUSEMOVE) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -614,7 +614,7 @@ public: \
 	if (uMsg == WM_NCLBUTTONDOWN) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -625,7 +625,7 @@ public: \
 	if (uMsg == WM_NCLBUTTONUP) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -636,7 +636,7 @@ public: \
 	if (uMsg == WM_NCLBUTTONDBLCLK) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -647,7 +647,7 @@ public: \
 	if (uMsg == WM_NCRBUTTONDOWN) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -658,7 +658,7 @@ public: \
 	if (uMsg == WM_NCRBUTTONUP) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -669,7 +669,7 @@ public: \
 	if (uMsg == WM_NCRBUTTONDBLCLK) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -680,7 +680,7 @@ public: \
 	if (uMsg == WM_NCMBUTTONDOWN) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -691,7 +691,7 @@ public: \
 	if (uMsg == WM_NCMBUTTONUP) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -702,7 +702,7 @@ public: \
 	if (uMsg == WM_NCMBUTTONDBLCLK) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -713,7 +713,7 @@ public: \
 	if (uMsg == WM_KEYDOWN) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((TCHAR)wParam, (UINT)lParam & 0xFFFF, (UINT)((lParam & 0xFFFF0000) >> 16)); \
+		func((UINT)wParam, (UINT)lParam & 0xFFFF, (UINT)((lParam & 0xFFFF0000) >> 16)); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -724,13 +724,13 @@ public: \
 	if (uMsg == WM_KEYUP) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((TCHAR)wParam, (UINT)lParam & 0xFFFF, (UINT)((lParam & 0xFFFF0000) >> 16)); \
+		func((UINT)wParam, (UINT)lParam & 0xFFFF, (UINT)((lParam & 0xFFFF0000) >> 16)); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
 	}
 
-// void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
+// void OnChar(TCHAR chChar, UINT nRepCnt, UINT nFlags)
 #define MSG_WM_CHAR(func) \
 	if (uMsg == WM_CHAR) \
 	{ \
@@ -741,7 +741,7 @@ public: \
 			return TRUE; \
 	}
 
-// void OnDeadChar(UINT nChar, UINT nRepCnt, UINT nFlags)
+// void OnDeadChar(TCHAR chChar, UINT nRepCnt, UINT nFlags)
 #define MSG_WM_DEADCHAR(func) \
 	if (uMsg == WM_DEADCHAR) \
 	{ \
@@ -757,7 +757,7 @@ public: \
 	if (uMsg == WM_SYSKEYDOWN) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((TCHAR)wParam, (UINT)lParam & 0xFFFF, (UINT)((lParam & 0xFFFF0000) >> 16)); \
+		func((UINT)wParam, (UINT)lParam & 0xFFFF, (UINT)((lParam & 0xFFFF0000) >> 16)); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -768,13 +768,13 @@ public: \
 	if (uMsg == WM_SYSKEYUP) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((TCHAR)wParam, (UINT)lParam & 0xFFFF, (UINT)((lParam & 0xFFFF0000) >> 16)); \
+		func((UINT)wParam, (UINT)lParam & 0xFFFF, (UINT)((lParam & 0xFFFF0000) >> 16)); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
 	}
 
-// void OnSysChar(UINT nChar, UINT nRepCnt, UINT nFlags)
+// void OnSysChar(TCHAR chChar, UINT nRepCnt, UINT nFlags)
 #define MSG_WM_SYSCHAR(func) \
 	if (uMsg == WM_SYSCHAR) \
 	{ \
@@ -785,7 +785,7 @@ public: \
 			return TRUE; \
 	}
 
-// void OnSysDeadChar(UINT nChar, UINT nRepCnt, UINT nFlags)
+// void OnSysDeadChar(TCHAR chChar, UINT nRepCnt, UINT nFlags)
 #define MSG_WM_SYSDEADCHAR(func) \
 	if (uMsg == WM_SYSDEADCHAR) \
 	{ \
@@ -801,7 +801,7 @@ public: \
 	if (uMsg == WM_SYSCOMMAND) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -920,7 +920,7 @@ public: \
 	if (uMsg == WM_MOUSEMOVE) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -931,7 +931,7 @@ public: \
 	if (uMsg == WM_MOUSEWHEEL) \
 	{ \
 		SetMsgHandled(TRUE); \
-		lResult = (LRESULT)func((UINT)LOWORD(wParam), (short)HIWORD(wParam), _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		lResult = (LRESULT)func((UINT)LOWORD(wParam), (short)HIWORD(wParam), ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		if(IsMsgHandled()) \
 			return TRUE; \
 	}
@@ -941,7 +941,7 @@ public: \
 	if (uMsg == WM_LBUTTONDOWN) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -952,7 +952,7 @@ public: \
 	if (uMsg == WM_LBUTTONUP) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -963,7 +963,7 @@ public: \
 	if (uMsg == WM_LBUTTONDBLCLK) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -974,7 +974,7 @@ public: \
 	if (uMsg == WM_RBUTTONDOWN) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -985,7 +985,7 @@ public: \
 	if (uMsg == WM_RBUTTONUP) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -996,7 +996,7 @@ public: \
 	if (uMsg == WM_RBUTTONDBLCLK) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -1007,7 +1007,7 @@ public: \
 	if (uMsg == WM_MBUTTONDOWN) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -1018,7 +1018,7 @@ public: \
 	if (uMsg == WM_MBUTTONUP) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -1029,7 +1029,7 @@ public: \
 	if (uMsg == WM_MBUTTONDBLCLK) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -1129,7 +1129,7 @@ public: \
 	if (uMsg == WM_CONTEXTMENU) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((HWND)wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((HWND)wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -1348,7 +1348,7 @@ public: \
 	if (uMsg == WM_DISPLAYCHANGE) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func((UINT)wParam, _WTYPES_NS::CSize(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func((UINT)wParam, ::CSize(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -1609,16 +1609,14 @@ public: \
 	}
 
 ///////////////////////////////////////////////////////////////////////////////
-// New NT4 & NT5 messages
-
-#if (_WIN32_WINNT >= 0x0400)
+// Newer Windows messages
 
 // void OnMouseHover(WPARAM wParam, CPoint ptPos)
 #define MSG_WM_MOUSEHOVER(func) \
 	if (uMsg == WM_MOUSEHOVER) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func(wParam, _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		func(wParam, ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		lResult = 0; \
 		if(IsMsgHandled()) \
 			return TRUE; \
@@ -1634,10 +1632,6 @@ public: \
 		if(IsMsgHandled()) \
 			return TRUE; \
 	}
-
-#endif // _WIN32_WINNT >= 0x0400
-
-#if (WINVER >= 0x0500)
 
 // void OnMenuRButtonUp(WPARAM wParam, CMenuHandle menu)
 #define MSG_WM_MENURBUTTONUP(func) \
@@ -1692,10 +1686,6 @@ public: \
 			return TRUE; \
 	}
 
-#endif // WINVER >= 0x0500
-
-#if (_WIN32_WINNT >= 0x0500)
-
 // BOOL OnAppCommand(CWindow wndFocus, short cmd, WORD uDevice, int dwKeys)
 #define MSG_WM_APPCOMMAND(func) \
 	if (uMsg == WM_APPCOMMAND) \
@@ -1711,8 +1701,8 @@ public: \
 	if (uMsg == WM_NCXBUTTONDOWN) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func(GET_XBUTTON_WPARAM(wParam), GET_NCHITTEST_WPARAM(wParam), _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
-		lResult = 0; \
+		func(GET_XBUTTON_WPARAM(wParam), GET_NCHITTEST_WPARAM(wParam), ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		lResult = (LRESULT)TRUE; \
 		if(IsMsgHandled()) \
 			return TRUE; \
 	}
@@ -1722,8 +1712,8 @@ public: \
 	if (uMsg == WM_NCXBUTTONUP) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func(GET_XBUTTON_WPARAM(wParam), GET_NCHITTEST_WPARAM(wParam), _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
-		lResult = 0; \
+		func(GET_XBUTTON_WPARAM(wParam), GET_NCHITTEST_WPARAM(wParam), ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		lResult = (LRESULT)TRUE; \
 		if(IsMsgHandled()) \
 			return TRUE; \
 	}
@@ -1733,8 +1723,8 @@ public: \
 	if (uMsg == WM_NCXBUTTONDBLCLK) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func(GET_XBUTTON_WPARAM(wParam), GET_NCHITTEST_WPARAM(wParam), _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
-		lResult = 0; \
+		func(GET_XBUTTON_WPARAM(wParam), GET_NCHITTEST_WPARAM(wParam), ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		lResult = (LRESULT)TRUE; \
 		if(IsMsgHandled()) \
 			return TRUE; \
 	}
@@ -1744,8 +1734,8 @@ public: \
 	if (uMsg == WM_XBUTTONDOWN) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func(GET_XBUTTON_WPARAM(wParam), GET_KEYSTATE_WPARAM(wParam), _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
-		lResult = 0; \
+		func(GET_XBUTTON_WPARAM(wParam), GET_KEYSTATE_WPARAM(wParam), ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		lResult = (LRESULT)TRUE; \
 		if(IsMsgHandled()) \
 			return TRUE; \
 	}
@@ -1755,8 +1745,8 @@ public: \
 	if (uMsg == WM_XBUTTONUP) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func(GET_XBUTTON_WPARAM(wParam), GET_KEYSTATE_WPARAM(wParam), _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
-		lResult = 0; \
+		func(GET_XBUTTON_WPARAM(wParam), GET_KEYSTATE_WPARAM(wParam), ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		lResult = (LRESULT)TRUE; \
 		if(IsMsgHandled()) \
 			return TRUE; \
 	}
@@ -1766,8 +1756,8 @@ public: \
 	if (uMsg == WM_XBUTTONDBLCLK) \
 	{ \
 		SetMsgHandled(TRUE); \
-		func(GET_XBUTTON_WPARAM(wParam), GET_KEYSTATE_WPARAM(wParam), _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
-		lResult = 0; \
+		func(GET_XBUTTON_WPARAM(wParam), GET_KEYSTATE_WPARAM(wParam), ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		lResult = (LRESULT)TRUE; \
 		if(IsMsgHandled()) \
 			return TRUE; \
 	}
@@ -1803,10 +1793,6 @@ public: \
 		if(IsMsgHandled()) \
 			return TRUE; \
 	}
-
-#endif // (_WIN32_WINNT >= 0x0500)
-
-#if(_WIN32_WINNT >= 0x0501)
 
 // void OnInput(WPARAM RawInputCode, HRAWINPUT hRawInput)
 #define MSG_WM_INPUT(func) \
@@ -1854,8 +1840,6 @@ public: \
 			return TRUE; \
 	}
 
-#endif // _WIN32_WINNT >= 0x0501
-
 #if (_WIN32_WINNT >= 0x0600)
 
 // BOOL OnMouseHWheel(UINT nFlags, short zDelta, CPoint pt)
@@ -1863,12 +1847,45 @@ public: \
 	if (uMsg == WM_MOUSEHWHEEL) \
 	{ \
 		SetMsgHandled(TRUE); \
-		lResult = (LRESULT)func((UINT)LOWORD(wParam), (short)HIWORD(wParam), _WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		lResult = (LRESULT)func((UINT)LOWORD(wParam), (short)HIWORD(wParam), ::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
 		if(IsMsgHandled()) \
 			return TRUE; \
 	}
 
 #endif // (_WIN32_WINNT >= 0x0600)
+
+#if (WINVER >= 0x0601)
+
+// void OnGesture(ULONGLONG ullArguments, HGESTUREINFO hGestureInfo)
+#define MSG_WM_GESTURE(func) \
+	if (uMsg == WM_GESTURE) \
+	{ \
+		SetMsgHandled(TRUE); \
+		func((ULONGLONG)wParam, (HGESTUREINFO)lParam); \
+		lResult = 0; \
+		if(IsMsgHandled()) \
+			return TRUE; \
+	}
+
+// void OnGestureNotify(PGESTURENOTIFYSTRUCT pGestureNotifyStruct)
+#define MSG_WM_GESTURENOTIFY(func) \
+	if (uMsg == WM_GESTURENOTIFY) \
+	{ \
+		func((PGESTURENOTIFYSTRUCT)lParam); \
+	}
+
+// void OnDpiChanged(UINT nDpiX, UINT nDpiY, PRECT pRect)
+#define MSG_WM_DPICHANGED(func) \
+	if (uMsg == WM_DPICHANGED) \
+	{ \
+		SetMsgHandled(TRUE); \
+		func((UINT)LOWORD(wParam), (UINT)HIWORD(wParam), (PRECT)lParam); \
+		lResult = 0; \
+		if(IsMsgHandled()) \
+			return TRUE; \
+	}
+
+#endif // (WINVER >= 0x0601)
 
 ///////////////////////////////////////////////////////////////////////////////
 // ATL defined messages
@@ -2171,7 +2188,7 @@ public: \
 
 // LRESULT OnMessageRangeHandlerEX(UINT uMsg, WPARAM wParam, LPARAM lParam)
 #define MESSAGE_RANGE_HANDLER_EX(msgFirst, msgLast, func) \
-	if(uMsg >= msgFirst && uMsg <= msgLast) \
+	if((uMsg >= msgFirst) && (uMsg <= msgLast)) \
 	{ \
 		SetMsgHandled(TRUE); \
 		lResult = func(uMsg, wParam, lParam); \
@@ -2184,7 +2201,7 @@ public: \
 
 // void OnCommandHandlerEX(UINT uNotifyCode, int nID, CWindow wndCtl)
 #define COMMAND_HANDLER_EX(id, code, func) \
-	if (uMsg == WM_COMMAND && code == HIWORD(wParam) && id == LOWORD(wParam)) \
+	if ((uMsg == WM_COMMAND) && (code == HIWORD(wParam)) && (id == LOWORD(wParam))) \
 	{ \
 		SetMsgHandled(TRUE); \
 		func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam); \
@@ -2195,7 +2212,7 @@ public: \
 
 // void OnCommandIDHandlerEX(UINT uNotifyCode, int nID, CWindow wndCtl)
 #define COMMAND_ID_HANDLER_EX(id, func) \
-	if (uMsg == WM_COMMAND && id == LOWORD(wParam)) \
+	if ((uMsg == WM_COMMAND) && (id == LOWORD(wParam))) \
 	{ \
 		SetMsgHandled(TRUE); \
 		func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam); \
@@ -2206,7 +2223,7 @@ public: \
 
 // void OnCommandCodeHandlerEX(UINT uNotifyCode, int nID, CWindow wndCtl)
 #define COMMAND_CODE_HANDLER_EX(code, func) \
-	if (uMsg == WM_COMMAND && code == HIWORD(wParam)) \
+	if ((uMsg == WM_COMMAND) && (code == HIWORD(wParam))) \
 	{ \
 		SetMsgHandled(TRUE); \
 		func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam); \
@@ -2217,7 +2234,7 @@ public: \
 
 // LRESULT OnNotifyHandlerEX(LPNMHDR pnmh)
 #define NOTIFY_HANDLER_EX(id, cd, func) \
-	if (uMsg == WM_NOTIFY && cd == ((LPNMHDR)lParam)->code && id == ((LPNMHDR)lParam)->idFrom) \
+	if ((uMsg == WM_NOTIFY) && (cd == ((LPNMHDR)lParam)->code) && (id == ((LPNMHDR)lParam)->idFrom)) \
 	{ \
 		SetMsgHandled(TRUE); \
 		lResult = func((LPNMHDR)lParam); \
@@ -2227,7 +2244,7 @@ public: \
 
 // LRESULT OnNotifyIDHandlerEX(LPNMHDR pnmh)
 #define NOTIFY_ID_HANDLER_EX(id, func) \
-	if (uMsg == WM_NOTIFY && id == ((LPNMHDR)lParam)->idFrom) \
+	if ((uMsg == WM_NOTIFY) && (id == ((LPNMHDR)lParam)->idFrom)) \
 	{ \
 		SetMsgHandled(TRUE); \
 		lResult = func((LPNMHDR)lParam); \
@@ -2237,7 +2254,7 @@ public: \
 
 // LRESULT OnNotifyCodeHandlerEX(LPNMHDR pnmh)
 #define NOTIFY_CODE_HANDLER_EX(cd, func) \
-	if (uMsg == WM_NOTIFY && cd == ((LPNMHDR)lParam)->code) \
+	if ((uMsg == WM_NOTIFY) && (cd == ((LPNMHDR)lParam)->code)) \
 	{ \
 		SetMsgHandled(TRUE); \
 		lResult = func((LPNMHDR)lParam); \
@@ -2247,7 +2264,7 @@ public: \
 
 // void OnCommandRangeHandlerEX(UINT uNotifyCode, int nID, CWindow wndCtl)
 #define COMMAND_RANGE_HANDLER_EX(idFirst, idLast, func) \
-	if(uMsg == WM_COMMAND && LOWORD(wParam) >= idFirst && LOWORD(wParam) <= idLast) \
+	if((uMsg == WM_COMMAND) && (LOWORD(wParam) >= idFirst) && (LOWORD(wParam) <= idLast)) \
 	{ \
 		SetMsgHandled(TRUE); \
 		func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam); \
@@ -2258,7 +2275,7 @@ public: \
 
 // void OnCommandRangeCodeHandlerEX(UINT uNotifyCode, int nID, CWindow wndCtl)
 #define COMMAND_RANGE_CODE_HANDLER_EX(idFirst, idLast, code, func) \
-	if(uMsg == WM_COMMAND && code == HIWORD(wParam) && LOWORD(wParam) >= idFirst && LOWORD(wParam) <= idLast) \
+	if((uMsg == WM_COMMAND) && (code == HIWORD(wParam)) && (LOWORD(wParam) >= idFirst) && (LOWORD(wParam) <= idLast)) \
 	{ \
 		SetMsgHandled(TRUE); \
 		func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam); \
@@ -2269,7 +2286,7 @@ public: \
 
 // LRESULT OnNotifyRangeHandlerEX(LPNMHDR pnmh)
 #define NOTIFY_RANGE_HANDLER_EX(idFirst, idLast, func) \
-	if(uMsg == WM_NOTIFY && ((LPNMHDR)lParam)->idFrom >= idFirst && ((LPNMHDR)lParam)->idFrom <= idLast) \
+	if((uMsg == WM_NOTIFY) && (((LPNMHDR)lParam)->idFrom >= idFirst) && (((LPNMHDR)lParam)->idFrom <= idLast)) \
 	{ \
 		SetMsgHandled(TRUE); \
 		lResult = func((LPNMHDR)lParam); \
@@ -2279,7 +2296,7 @@ public: \
 
 // LRESULT OnNotifyRangeCodeHandlerEX(LPNMHDR pnmh)
 #define NOTIFY_RANGE_CODE_HANDLER_EX(idFirst, idLast, cd, func) \
-	if(uMsg == WM_NOTIFY && cd == ((LPNMHDR)lParam)->code && ((LPNMHDR)lParam)->idFrom >= idFirst && ((LPNMHDR)lParam)->idFrom <= idLast) \
+	if((uMsg == WM_NOTIFY) && (cd == ((LPNMHDR)lParam)->code) && (((LPNMHDR)lParam)->idFrom >= idFirst) && (((LPNMHDR)lParam)->idFrom <= idLast)) \
 	{ \
 		SetMsgHandled(TRUE); \
 		lResult = func((LPNMHDR)lParam); \
@@ -2289,7 +2306,7 @@ public: \
 
 // LRESULT OnReflectedCommandHandlerEX(UINT uNotifyCode, int nID, CWindow wndCtl)
 #define REFLECTED_COMMAND_HANDLER_EX(id, code, func) \
-	if (uMsg == OCM_COMMAND && code == HIWORD(wParam) && id == LOWORD(wParam)) \
+	if ((uMsg == OCM_COMMAND) && (code == HIWORD(wParam)) && (id == LOWORD(wParam))) \
 	{ \
 		SetMsgHandled(TRUE); \
 		func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam); \
@@ -2300,7 +2317,7 @@ public: \
 
 // LRESULT OnReflectedCommandIDHandlerEX(UINT uNotifyCode, int nID, CWindow wndCtl)
 #define REFLECTED_COMMAND_ID_HANDLER_EX(id, func) \
-	if (uMsg == OCM_COMMAND && id == LOWORD(wParam)) \
+	if ((uMsg == OCM_COMMAND) && (id == LOWORD(wParam))) \
 	{ \
 		SetMsgHandled(TRUE); \
 		func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam); \
@@ -2311,7 +2328,7 @@ public: \
 
 // LRESULT OnReflectedCommandCodeHandlerEX(UINT uNotifyCode, int nID, CWindow wndCtl)
 #define REFLECTED_COMMAND_CODE_HANDLER_EX(code, func) \
-	if (uMsg == OCM_COMMAND && code == HIWORD(wParam)) \
+	if ((uMsg == OCM_COMMAND) && (code == HIWORD(wParam))) \
 	{ \
 		SetMsgHandled(TRUE); \
 		func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam); \
@@ -2322,7 +2339,7 @@ public: \
 
 // LRESULT OnReflectedNotifyHandlerEX(LPNMHDR pnmh)
 #define REFLECTED_NOTIFY_HANDLER_EX(id, cd, func) \
-	if (uMsg == OCM_NOTIFY && cd == ((LPNMHDR)lParam)->code && id == ((LPNMHDR)lParam)->idFrom) \
+	if ((uMsg == OCM_NOTIFY) && (cd == ((LPNMHDR)lParam)->code) && (id == ((LPNMHDR)lParam)->idFrom)) \
 	{ \
 		SetMsgHandled(TRUE); \
 		lResult = func((LPNMHDR)lParam); \
@@ -2332,7 +2349,7 @@ public: \
 
 // LRESULT OnReflectedNotifyIDHandlerEX(LPNMHDR pnmh)
 #define REFLECTED_NOTIFY_ID_HANDLER_EX(id, func) \
-	if (uMsg == OCM_NOTIFY && id == ((LPNMHDR)lParam)->idFrom) \
+	if ((uMsg == OCM_NOTIFY) && (id == ((LPNMHDR)lParam)->idFrom)) \
 	{ \
 		SetMsgHandled(TRUE); \
 		lResult = func((LPNMHDR)lParam); \
@@ -2342,7 +2359,7 @@ public: \
 
 // LRESULT OnReflectedNotifyCodeHandlerEX(LPNMHDR pnmh)
 #define REFLECTED_NOTIFY_CODE_HANDLER_EX(cd, func) \
-	if (uMsg == OCM_NOTIFY && cd == ((LPNMHDR)lParam)->code) \
+	if ((uMsg == OCM_NOTIFY) && (cd == ((LPNMHDR)lParam)->code)) \
 	{ \
 		SetMsgHandled(TRUE); \
 		lResult = func((LPNMHDR)lParam); \
@@ -2352,7 +2369,7 @@ public: \
 
 // void OnReflectedCommandRangeHandlerEX(UINT uNotifyCode, int nID, CWindow wndCtl)
 #define REFLECTED_COMMAND_RANGE_HANDLER_EX(idFirst, idLast, func) \
-	if(uMsg == OCM_COMMAND && LOWORD(wParam) >= idFirst && LOWORD(wParam) <= idLast) \
+	if((uMsg == OCM_COMMAND) && (LOWORD(wParam) >= idFirst) && (LOWORD(wParam) <= idLast)) \
 	{ \
 		SetMsgHandled(TRUE); \
 		func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam); \
@@ -2363,7 +2380,7 @@ public: \
 
 // void OnReflectedCommandRangeCodeHandlerEX(UINT uNotifyCode, int nID, CWindow wndCtl)
 #define REFLECTED_COMMAND_RANGE_CODE_HANDLER_EX(idFirst, idLast, code, func) \
-	if(uMsg == OCM_COMMAND && code == HIWORD(wParam) && LOWORD(wParam) >= idFirst && LOWORD(wParam) <= idLast) \
+	if((uMsg == OCM_COMMAND) && (code == HIWORD(wParam)) && (LOWORD(wParam) >= idFirst) && (LOWORD(wParam) <= idLast)) \
 	{ \
 		SetMsgHandled(TRUE); \
 		func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam); \
@@ -2374,7 +2391,7 @@ public: \
 
 // LRESULT OnReflectedNotifyRangeHandlerEX(LPNMHDR pnmh)
 #define REFLECTED_NOTIFY_RANGE_HANDLER_EX(idFirst, idLast, func) \
-	if(uMsg == OCM_NOTIFY && ((LPNMHDR)lParam)->idFrom >= idFirst && ((LPNMHDR)lParam)->idFrom <= idLast) \
+	if((uMsg == OCM_NOTIFY) && (((LPNMHDR)lParam)->idFrom >= idFirst) && (((LPNMHDR)lParam)->idFrom <= idLast)) \
 	{ \
 		SetMsgHandled(TRUE); \
 		lResult = func((LPNMHDR)lParam); \
@@ -2384,10 +2401,21 @@ public: \
 
 // LRESULT OnReflectedNotifyRangeCodeHandlerEX(LPNMHDR pnmh)
 #define REFLECTED_NOTIFY_RANGE_CODE_HANDLER_EX(idFirst, idLast, cd, func) \
-	if(uMsg == OCM_NOTIFY && cd == ((LPNMHDR)lParam)->code && ((LPNMHDR)lParam)->idFrom >= idFirst && ((LPNMHDR)lParam)->idFrom <= idLast) \
+	if((uMsg == OCM_NOTIFY) && (cd == ((LPNMHDR)lParam)->code) && (((LPNMHDR)lParam)->idFrom >= idFirst) && (((LPNMHDR)lParam)->idFrom <= idLast)) \
 	{ \
 		SetMsgHandled(TRUE); \
 		lResult = func((LPNMHDR)lParam); \
+		if(IsMsgHandled()) \
+			return TRUE; \
+	}
+
+// void OnAppCommandHandler(UINT uDevice, DWORD dwKeys, CWindow wndFocus)
+#define APPCOMMAND_HANDLER_EX(cmd, func) \
+	if((uMsg == WM_APPCOMMAND) && (cmd == GET_APPCOMMAND_LPARAM(lParam))) \
+	{ \
+		SetMsgHandled(TRUE); \
+		func(GET_DEVICE_LPARAM(lParam), GET_KEYSTATE_LPARAM(lParam), (HWND)wParam); \
+		lResult = TRUE; \
 		if(IsMsgHandled()) \
 			return TRUE; \
 	}

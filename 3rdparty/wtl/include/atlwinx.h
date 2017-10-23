@@ -1,4 +1,4 @@
-// Windows Template Library - WTL version 9.10
+// Windows Template Library - WTL version 10.0
 // Copyright (C) Microsoft Corporation, WTL Team. All rights reserved.
 //
 // This file is a part of the Windows Template Library.
@@ -15,17 +15,13 @@
 	#error atlwinx.h requires atlapp.h to be included first
 #endif
 
-#if (_ATL_VER >= 0x0700)
-  #include <atlwin.h>
-#endif // (_ATL_VER >= 0x0700)
+#include <atlwin.h>
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // Classes in this file:
 //
-// _U_RECT
-// _U_MENUorID
-// _U_STRINGorID
+// CWindowEx
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -85,7 +81,6 @@ inline LRESULT WtlReflectNotificationsFiltered(HWND hWndParent, UINT uMsg, WPARA
 		hWndChild = ((LPNMHDR)lParam)->hwndFrom;
 		idFrom = ((LPNMHDR)lParam)->idFrom;
 		break;
-#ifndef _WIN32_WCE
 	case WM_PARENTNOTIFY:
 		switch(LOWORD(wParam))
 		{
@@ -100,7 +95,6 @@ inline LRESULT WtlReflectNotificationsFiltered(HWND hWndParent, UINT uMsg, WPARA
 			break;
 		}
 		break;
-#endif // !_WIN32_WCE
 	case WM_DRAWITEM:
 		if(wParam)	// not from a menu
 		{
@@ -233,7 +227,7 @@ inline LRESULT WtlReflectNotificationsFiltered(HWND hWndParent, UINT uMsg, WPARA
 	}
 
 #define REFLECT_COMMAND(id, code) \
-	if(uMsg == WM_COMMAND && id == LOWORD(wParam) && code == HIWORD(wParam)) \
+	if((uMsg == WM_COMMAND) && (id == LOWORD(wParam)) && (code == HIWORD(wParam))) \
 	{ \
 		bHandled = TRUE; \
 		lResult = ReflectNotifications(uMsg, wParam, lParam, bHandled); \
@@ -242,7 +236,7 @@ inline LRESULT WtlReflectNotificationsFiltered(HWND hWndParent, UINT uMsg, WPARA
 	}
 
 #define REFLECT_COMMAND_ID(id) \
-	if(uMsg == WM_COMMAND && id == LOWORD(wParam)) \
+	if((uMsg == WM_COMMAND) && (id == LOWORD(wParam))) \
 	{ \
 		bHandled = TRUE; \
 		lResult = ReflectNotifications(uMsg, wParam, lParam, bHandled); \
@@ -251,7 +245,7 @@ inline LRESULT WtlReflectNotificationsFiltered(HWND hWndParent, UINT uMsg, WPARA
 	}
 
 #define REFLECT_COMMAND_CODE(code) \
-	if(uMsg == WM_COMMAND && code == HIWORD(wParam)) \
+	if((uMsg == WM_COMMAND) && (code == HIWORD(wParam))) \
 	{ \
 		bHandled = TRUE; \
 		lResult = ReflectNotifications(uMsg, wParam, lParam, bHandled); \
@@ -260,7 +254,7 @@ inline LRESULT WtlReflectNotificationsFiltered(HWND hWndParent, UINT uMsg, WPARA
 	}
 
 #define REFLECT_COMMAND_RANGE(idFirst, idLast) \
-	if(uMsg == WM_COMMAND && LOWORD(wParam) >= idFirst  && LOWORD(wParam) <= idLast) \
+	if((uMsg == WM_COMMAND) && (LOWORD(wParam) >= idFirst) && (LOWORD(wParam) <= idLast)) \
 	{ \
 		bHandled = TRUE; \
 		lResult = ReflectNotifications(uMsg, wParam, lParam, bHandled); \
@@ -269,7 +263,7 @@ inline LRESULT WtlReflectNotificationsFiltered(HWND hWndParent, UINT uMsg, WPARA
 	}
 
 #define REFLECT_COMMAND_RANGE_CODE(idFirst, idLast, code) \
-	if(uMsg == WM_COMMAND && code == HIWORD(wParam) && LOWORD(wParam) >= idFirst  && LOWORD(wParam) <= idLast) \
+	if((uMsg == WM_COMMAND) && (code == HIWORD(wParam)) && (LOWORD(wParam) >= idFirst) && (LOWORD(wParam) <= idLast)) \
 	{ \
 		bHandled = TRUE; \
 		lResult = ReflectNotifications(uMsg, wParam, lParam, bHandled); \
@@ -278,7 +272,7 @@ inline LRESULT WtlReflectNotificationsFiltered(HWND hWndParent, UINT uMsg, WPARA
 	}
 
 #define REFLECT_NOTIFY(id, cd) \
-	if(uMsg == WM_NOTIFY && id == ((LPNMHDR)lParam)->idFrom && cd == ((LPNMHDR)lParam)->code) \
+	if((uMsg == WM_NOTIFY) && (id == ((LPNMHDR)lParam)->idFrom) && (cd == ((LPNMHDR)lParam)->code)) \
 	{ \
 		bHandled = TRUE; \
 		lResult = ReflectNotifications(uMsg, wParam, lParam, bHandled); \
@@ -287,7 +281,7 @@ inline LRESULT WtlReflectNotificationsFiltered(HWND hWndParent, UINT uMsg, WPARA
 	}
 
 #define REFLECT_NOTIFY_ID(id) \
-	if(uMsg == WM_NOTIFY && id == ((LPNMHDR)lParam)->idFrom) \
+	if((uMsg == WM_NOTIFY) && (id == ((LPNMHDR)lParam)->idFrom)) \
 	{ \
 		bHandled = TRUE; \
 		lResult = ReflectNotifications(uMsg, wParam, lParam, bHandled); \
@@ -296,7 +290,7 @@ inline LRESULT WtlReflectNotificationsFiltered(HWND hWndParent, UINT uMsg, WPARA
 	}
 
 #define REFLECT_NOTIFY_CODE(cd) \
-	if(uMsg == WM_NOTIFY && cd == ((LPNMHDR)lParam)->code) \
+	if((uMsg == WM_NOTIFY) && (cd == ((LPNMHDR)lParam)->code)) \
 	{ \
 		bHandled = TRUE; \
 		lResult = ReflectNotifications(uMsg, wParam, lParam, bHandled); \
@@ -305,7 +299,7 @@ inline LRESULT WtlReflectNotificationsFiltered(HWND hWndParent, UINT uMsg, WPARA
 	}
 
 #define REFLECT_NOTIFY_RANGE(idFirst, idLast) \
-	if(uMsg == WM_NOTIFY && ((LPNMHDR)lParam)->idFrom >= idFirst && ((LPNMHDR)lParam)->idFrom <= idLast) \
+	if((uMsg == WM_NOTIFY) && (((LPNMHDR)lParam)->idFrom >= idFirst) && (((LPNMHDR)lParam)->idFrom <= idLast)) \
 	{ \
 		bHandled = TRUE; \
 		lResult = ReflectNotifications(uMsg, wParam, lParam, bHandled); \
@@ -314,7 +308,7 @@ inline LRESULT WtlReflectNotificationsFiltered(HWND hWndParent, UINT uMsg, WPARA
 	}
 
 #define REFLECT_NOTIFY_RANGE_CODE(idFirst, idLast, cd) \
-	if(uMsg == WM_NOTIFY && cd == ((LPNMHDR)lParam)->code && ((LPNMHDR)lParam)->idFrom >= idFirst && ((LPNMHDR)lParam)->idFrom <= idLast) \
+	if((uMsg == WM_NOTIFY) && (cd == ((LPNMHDR)lParam)->code) && (((LPNMHDR)lParam)->idFrom >= idFirst) && (((LPNMHDR)lParam)->idFrom <= idLast)) \
 	{ \
 		bHandled = TRUE; \
 		lResult = ReflectNotifications(uMsg, wParam, lParam, bHandled); \
@@ -324,198 +318,249 @@ inline LRESULT WtlReflectNotificationsFiltered(HWND hWndParent, UINT uMsg, WPARA
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Reflected message handler macros for message maps (for ATL 3.0)
+// GetClassLong/SetClassLong redefinition to avoid problems with class members
 
-#if (_ATL_VER < 0x0700)
+#ifdef SetClassLongPtrA
+  #undef SetClassLongPtrA
+  inline LONG_PTR SetClassLongPtrA(HWND hWnd, int nIndex, LONG_PTR dwNewLong)
+  {
+	return ::SetClassLongA(hWnd, nIndex, LONG(dwNewLong));
+  }
+#endif
 
-#define REFLECTED_COMMAND_HANDLER(id, code, func) \
-	if(uMsg == OCM_COMMAND && id == LOWORD(wParam) && code == HIWORD(wParam)) \
-	{ \
-		bHandled = TRUE; \
-		lResult = func(HIWORD(wParam), LOWORD(wParam), (HWND)lParam, bHandled); \
-		if(bHandled) \
-			return TRUE; \
-	}
+#ifdef SetClassLongPtrW
+  #undef SetClassLongPtrW
+  inline LONG_PTR SetClassLongPtrW(HWND hWnd, int nIndex, LONG_PTR dwNewLong)
+  {
+	return ::SetClassLongW(hWnd, nIndex, LONG(dwNewLong));
+  }
+#endif
 
-#define REFLECTED_COMMAND_ID_HANDLER(id, func) \
-	if(uMsg == OCM_COMMAND && id == LOWORD(wParam)) \
-	{ \
-		bHandled = TRUE; \
-		lResult = func(HIWORD(wParam), LOWORD(wParam), (HWND)lParam, bHandled); \
-		if(bHandled) \
-			return TRUE; \
-	}
+#ifdef GetClassLongPtrA
+  #undef GetClassLongPtrA
+  inline LONG_PTR GetClassLongPtrA(HWND hWnd, int nIndex)
+  {
+	return ::GetClassLongA(hWnd, nIndex);
+  }
+#endif
 
-#define REFLECTED_COMMAND_CODE_HANDLER(code, func) \
-	if(uMsg == OCM_COMMAND && code == HIWORD(wParam)) \
-	{ \
-		bHandled = TRUE; \
-		lResult = func(HIWORD(wParam), LOWORD(wParam), (HWND)lParam, bHandled); \
-		if(bHandled) \
-			return TRUE; \
-	}
-
-#define REFLECTED_COMMAND_RANGE_HANDLER(idFirst, idLast, func) \
-	if(uMsg == OCM_COMMAND && LOWORD(wParam) >= idFirst  && LOWORD(wParam) <= idLast) \
-	{ \
-		bHandled = TRUE; \
-		lResult = func(HIWORD(wParam), LOWORD(wParam), (HWND)lParam, bHandled); \
-		if(bHandled) \
-			return TRUE; \
-	}
-
-#define REFLECTED_COMMAND_RANGE_CODE_HANDLER(idFirst, idLast, code, func) \
-	if(uMsg == OCM_COMMAND && code == HIWORD(wParam) && LOWORD(wParam) >= idFirst  && LOWORD(wParam) <= idLast) \
-	{ \
-		bHandled = TRUE; \
-		lResult = func(HIWORD(wParam), LOWORD(wParam), (HWND)lParam, bHandled); \
-		if(bHandled) \
-			return TRUE; \
-	}
-
-#define REFLECTED_NOTIFY_HANDLER(id, cd, func) \
-	if(uMsg == OCM_NOTIFY && id == ((LPNMHDR)lParam)->idFrom && cd == ((LPNMHDR)lParam)->code) \
-	{ \
-		bHandled = TRUE; \
-		lResult = func((int)wParam, (LPNMHDR)lParam, bHandled); \
-		if(bHandled) \
-			return TRUE; \
-	}
-
-#define REFLECTED_NOTIFY_ID_HANDLER(id, func) \
-	if(uMsg == OCM_NOTIFY && id == ((LPNMHDR)lParam)->idFrom) \
-	{ \
-		bHandled = TRUE; \
-		lResult = func((int)wParam, (LPNMHDR)lParam, bHandled); \
-		if(bHandled) \
-			return TRUE; \
-	}
-
-#define REFLECTED_NOTIFY_CODE_HANDLER(cd, func) \
-	if(uMsg == OCM_NOTIFY && cd == ((LPNMHDR)lParam)->code) \
-	{ \
-		bHandled = TRUE; \
-		lResult = func((int)wParam, (LPNMHDR)lParam, bHandled); \
-		if(bHandled) \
-			return TRUE; \
-	}
-
-#define REFLECTED_NOTIFY_RANGE_HANDLER(idFirst, idLast, func) \
-	if(uMsg == OCM_NOTIFY && ((LPNMHDR)lParam)->idFrom >= idFirst && ((LPNMHDR)lParam)->idFrom <= idLast) \
-	{ \
-		bHandled = TRUE; \
-		lResult = func((int)wParam, (LPNMHDR)lParam, bHandled); \
-		if(bHandled) \
-			return TRUE; \
-	}
-
-#define REFLECTED_NOTIFY_RANGE_CODE_HANDLER(idFirst, idLast, cd, func) \
-	if(uMsg == OCM_NOTIFY && cd == ((LPNMHDR)lParam)->code && ((LPNMHDR)lParam)->idFrom >= idFirst && ((LPNMHDR)lParam)->idFrom <= idLast) \
-	{ \
-		bHandled = TRUE; \
-		lResult = func((int)wParam, (LPNMHDR)lParam, bHandled); \
-		if(bHandled) \
-			return TRUE; \
-	}
-
-#endif // (_ATL_VER < 0x0700)
+#ifdef GetClassLongPtrW
+  #undef GetClassLongPtrW
+  inline LONG_PTR GetClassLongPtrW(HWND hWnd, int nIndex)
+  {
+	return ::GetClassLongW(hWnd, nIndex);
+  }
+#endif
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Dual argument helper classes (for ATL 3.0)
-
-#if (_ATL_VER < 0x0700)
-
-namespace ATL
-{
-
-class _U_RECT
-{
-public:
-	_U_RECT(LPRECT lpRect) : m_lpRect(lpRect)
-	{ }
-	_U_RECT(RECT& rc) : m_lpRect(&rc)
-	{ }
-	LPRECT m_lpRect;
-};
-
-class _U_MENUorID
-{
-public:
-	_U_MENUorID(HMENU hMenu) : m_hMenu(hMenu)
-	{ }
-	_U_MENUorID(UINT nID) : m_hMenu((HMENU)LongToHandle(nID))
-	{ }
-	HMENU m_hMenu;
-};
-
-class _U_STRINGorID
-{
-public:
-	_U_STRINGorID(LPCTSTR lpString) : m_lpstr(lpString)
-	{ }
-	_U_STRINGorID(UINT nID) : m_lpstr(MAKEINTRESOURCE(nID))
-	{ }
-	LPCTSTR m_lpstr;
-};
-
-}; // namespace ATL
-
-#endif // (_ATL_VER < 0x0700)
-
+// CWindowEx - extension of ATL::CWindow
 
 namespace WTL
 {
 
-///////////////////////////////////////////////////////////////////////////////
-// Forward notifications support for message maps (for ATL 3.0)
-
-#if (_ATL_VER < 0x0700)
-
-// forward notifications support
-#define FORWARD_NOTIFICATIONS() \
-	{ \
-		bHandled = TRUE; \
-		lResult = WTL::Atl3ForwardNotifications(m_hWnd, uMsg, wParam, lParam, bHandled); \
-		if(bHandled) \
-			return TRUE; \
-	}
-
-static LRESULT Atl3ForwardNotifications(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+class CWindowEx : public ATL::CWindow
 {
-	LRESULT lResult = 0;
-	switch(uMsg)
-	{
-	case WM_COMMAND:
-	case WM_NOTIFY:
-#ifndef _WIN32_WCE
-	case WM_PARENTNOTIFY:
-#endif // !_WIN32_WCE
-	case WM_DRAWITEM:
-	case WM_MEASUREITEM:
-	case WM_COMPAREITEM:
-	case WM_DELETEITEM:
-	case WM_VKEYTOITEM:
-	case WM_CHARTOITEM:
-	case WM_HSCROLL:
-	case WM_VSCROLL:
-	case WM_CTLCOLORBTN:
-	case WM_CTLCOLORDLG:
-	case WM_CTLCOLOREDIT:
-	case WM_CTLCOLORLISTBOX:
-	case WM_CTLCOLORMSGBOX:
-	case WM_CTLCOLORSCROLLBAR:
-	case WM_CTLCOLORSTATIC:
-		lResult = ::SendMessage(::GetParent(hWnd), uMsg, wParam, lParam);
-		break;
-	default:
-		bHandled = FALSE;
-		break;
-	}
-	return lResult;
-}
+public:
+	CWindowEx(HWND hWnd = NULL) : ATL::CWindow(hWnd)
+	{ }
 
-#endif // (_ATL_VER < 0x0700)
+	CWindowEx& operator =(HWND hWnd)
+	{
+		m_hWnd = hWnd;
+		return *this;
+	}
+
+	operator HWND() const
+	{
+		return m_hWnd;
+	}
+
+// Methods
+	BOOL PrintWindow(HDC hDC, UINT uFlags = 0)
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+		return ::PrintWindow(m_hWnd, hDC, uFlags);
+	}
+
+	BOOL DragDetect(POINT pt)
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+		return ::DragDetect(m_hWnd, pt);
+	}
+
+	BOOL DragDetect()
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+
+		POINT pt = { 0, 0 };
+		::GetCursorPos(&pt);
+		return ::DragDetect(m_hWnd, pt);
+	}
+
+	CWindowEx GetAncestor(UINT uFlags) const
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+		return CWindowEx(::GetAncestor(m_hWnd, uFlags));
+	}
+
+	// Note: Does not work properly on Vista Aero and above
+	BOOL AnimateWindow(DWORD dwFlags, DWORD dwTime = 200)
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+		return ::AnimateWindow(m_hWnd, dwTime, dwFlags);
+	}
+
+	BOOL FlashWindowEx(DWORD dwFlags, UINT uCount, DWORD dwTimeout = 0)
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+
+		FLASHWINFO fi = { sizeof(FLASHWINFO) };
+		fi.hwnd = m_hWnd;
+		fi.dwFlags = dwFlags;
+		fi.uCount = uCount;
+		fi.dwTimeout = dwTimeout;
+		return ::FlashWindowEx(&fi);
+	}
+
+	BOOL StopFlashWindowEx()
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+
+		FLASHWINFO fi = { sizeof(FLASHWINFO) };
+		fi.hwnd = m_hWnd;
+		fi.dwFlags = FLASHW_STOP;
+		return ::FlashWindowEx(&fi);
+	}
+
+// Class long properties
+	DWORD GetClassLong(int nIndex) const
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+		return ::GetClassLong(m_hWnd, nIndex);
+	}
+
+	DWORD SetClassLong(int nIndex, LONG dwNewLong)
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+		return ::SetClassLong(m_hWnd, nIndex, dwNewLong);
+	}
+
+	ULONG_PTR GetClassLongPtr(int nIndex) const
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+		return ::GetClassLongPtr(m_hWnd, nIndex);
+	}
+
+	ULONG_PTR SetClassLongPtr(int nIndex, LONG_PTR dwNewLong)
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+		return ::SetClassLongPtr(m_hWnd, nIndex, dwNewLong);
+	}
+
+// Layered windows
+	BOOL SetLayeredWindowAttributes(COLORREF crlKey, BYTE byteAlpha, DWORD dwFlags)
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT((GetExStyle() & WS_EX_LAYERED) != 0);
+
+		return ::SetLayeredWindowAttributes(m_hWnd, crlKey, byteAlpha, dwFlags);
+	}
+
+	BOOL UpdateLayeredWindow(HDC hdcDst, LPPOINT pptDst, LPSIZE psize, HDC hdcSrc, LPPOINT pptSrc, COLORREF crlKey, BLENDFUNCTION* pblend, DWORD dwFlags)
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT((GetExStyle() & WS_EX_LAYERED) != 0);
+
+		return ::UpdateLayeredWindow(m_hWnd, hdcDst, pptDst, psize, hdcSrc, pptSrc, crlKey, pblend, dwFlags);
+	}
+
+	BOOL UpdateLayeredWindow(LPPOINT pptDst = NULL)
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT((GetExStyle() & WS_EX_LAYERED) != 0);
+
+		return ::UpdateLayeredWindow(m_hWnd, NULL, pptDst, NULL, NULL, NULL, CLR_NONE, NULL, 0);
+	}
+
+	BOOL GetLayeredWindowAttributes(COLORREF* pcrlKey, BYTE* pbyteAlpha, DWORD* pdwFlags) const
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT((GetExStyle() & WS_EX_LAYERED) != 0);
+
+		return ::GetLayeredWindowAttributes(m_hWnd, pcrlKey, pbyteAlpha, pdwFlags);
+	}
+
+// Mouse tracking
+	BOOL StartTrackMouseLeave()
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+
+		TRACKMOUSEEVENT tme = { 0 };
+		tme.cbSize = sizeof(TRACKMOUSEEVENT);
+		tme.dwFlags = TME_LEAVE;
+		tme.hwndTrack = m_hWnd;
+		return ::TrackMouseEvent(&tme);
+	}
+
+	BOOL StartTrackMouse(DWORD dwFlags, DWORD dwHoverTime = HOVER_DEFAULT)
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+
+		TRACKMOUSEEVENT tme = { 0 };
+		tme.cbSize = sizeof(TRACKMOUSEEVENT);
+		tme.dwFlags = dwFlags;
+		tme.hwndTrack = m_hWnd;
+		tme.dwHoverTime = dwHoverTime;
+		return ::TrackMouseEvent(&tme);
+	}
+
+	BOOL CancelTrackMouse(DWORD dwType)
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+
+		TRACKMOUSEEVENT tme = { 0 };
+		tme.cbSize = sizeof(TRACKMOUSEEVENT);
+		tme.dwFlags = TME_CANCEL | dwType;
+		tme.hwndTrack = m_hWnd;
+		return ::TrackMouseEvent(&tme);
+	}
+
+// CString support
+#ifdef __ATLSTR_H__
+	int GetWindowText(ATL::CString& strText) const
+	{
+		int nLength = GetWindowTextLength();
+		LPTSTR pszText = strText.GetBuffer(nLength + 1);
+		nLength = ::GetWindowText(m_hWnd, pszText, nLength + 1);
+		strText.ReleaseBuffer(nLength);
+
+		return nLength;
+	}
+
+	UINT GetDlgItemText(int nID, ATL::CString& strText) const
+	{
+		ATLASSERT(::IsWindow(m_hWnd));
+
+		HWND hItem = GetDlgItem(nID);
+		if(hItem != NULL)
+		{
+			int nLength = ::GetWindowTextLength(hItem);
+			LPTSTR pszText = strText.GetBuffer(nLength + 1);
+			nLength = ::GetWindowText(hItem, pszText, nLength + 1);
+			strText.ReleaseBuffer(nLength);
+
+			return nLength;
+		}
+		else
+		{
+			strText.Empty();
+
+			return 0;
+		}
+	}
+#endif // __ATLSTR_H__
+};
 
 }; // namespace WTL
 

@@ -7,10 +7,10 @@
 #define AFX_STDAFX_H__D895E823_4E73_4C58_95DF_B988F909018A__INCLUDED_
 
 // Change these values to use different versions
-#define WINVER		0x0500
+#define WINVER		0x0501
 #define _WIN32_WINNT	0x0501
-#define _WIN32_IE	0x0501
-#define _RICHEDIT_VER	0x0100
+#define _WIN32_IE	0x0600
+#define _RICHEDIT_VER	0x0200
 
 
 #include <atlbase.h>
@@ -18,6 +18,7 @@
 
 extern CAppModule _Module;
 
+#include <atlstr.h>
 #include <atlwin.h>
 
 //{{AFX_INSERT_LOCATION}}

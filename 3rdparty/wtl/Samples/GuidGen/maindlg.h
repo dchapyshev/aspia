@@ -5,9 +5,7 @@
 #if !defined(AFX_MAINDLG_H__6920296A_4C3F_11D1_AA9A_000000000000__INCLUDED_)
 #define AFX_MAINDLG_H__6920296A_4C3F_11D1_AA9A_000000000000__INCLUDED_
 
-#if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
 
 LPCTSTR _lpstrRegKey = _T("Software\\Microsoft\\WTL Samples\\GUIDGEN");
 

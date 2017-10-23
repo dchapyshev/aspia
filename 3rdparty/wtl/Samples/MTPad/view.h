@@ -1,28 +1,15 @@
 class CEditView : 
-#ifndef _WIN32_WCE
 	public CWindowImpl<CEditView, CRichEditCtrl>,
 	public CRichEditCommands<CEditView>,
 	public CRichEditFindReplaceImpl<CEditView, CFindReplaceDialogWithMessageFilter>
-#else // _WIN32_WCE
-	public CWindowImpl<CEditView, CEdit>,
-	public CEditCommands<CEditView>
-#endif // _WIN32_WCE
 {
 protected:
 	typedef CEditView thisClass;
-#ifndef _WIN32_WCE
 	typedef CRichEditCommands<CEditView> editCommandsClass;
 	typedef CRichEditFindReplaceImpl<CEditView, CFindReplaceDialogWithMessageFilter> findReplaceClass;
-#else
-	typedef CEditCommands<CEditView> editCommandsClass;
-#endif
 
 public:
-#ifndef _WIN32_WCE
 	DECLARE_WND_SUPERCLASS(NULL, CRichEditCtrl::GetWndClassName())
-#else // _WIN32_WCE
-	DECLARE_WND_SUPERCLASS(NULL, CEdit::GetWndClassName())
-#endif // _WIN32_WCE
 
 	enum
 	{
@@ -52,7 +39,6 @@ public:
 
 	BOOL PreTranslateMessage(MSG* pMsg)
 	{
-#ifndef _WIN32_WCE
 		// In non Multi-thread SDI cases, CFindReplaceDialogWithMessageFilter will add itself to the
 		// global message filters list.  In our case, we'll call it directly.
 		if(m_pFindReplaceDialog != NULL)
@@ -60,7 +46,6 @@ public:
 			if(m_pFindReplaceDialog->PreTranslateMessage(pMsg))
 				return TRUE;
 		}
-#endif
 		return FALSE;
 	}
 
@@ -73,11 +58,9 @@ public:
 		COMMAND_ID_HANDLER(ID_EDIT_PASTE, OnEditPaste)
 		CHAIN_MSG_MAP_ALT(editCommandsClass, 1)
 
-#ifndef _WIN32_WCE
 		CHAIN_MSG_MAP_ALT(findReplaceClass, 1)
 		COMMAND_ID_HANDLER(ID_EDIT_WORD_WRAP, OnEditWordWrap)
 		COMMAND_ID_HANDLER(ID_FORMAT_FONT, OnViewFormatFont)
-#endif // _WIN32_WCE
 	END_MSG_MAP()
 
 	LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
@@ -93,7 +76,6 @@ public:
 		dc.GetTextMetrics(&tm);
 		int nLogPix = dc.GetDeviceCaps(LOGPIXELSX);
 		dc.SelectFont(hOldFont);
-#ifndef _WIN32_WCE
 		int cxTab = ::MulDiv(tm.tmAveCharWidth * cchTAB, 1440, nLogPix);	// 1440 twips = 1 inch
 		if(cxTab != -1)
 		{
@@ -105,7 +87,6 @@ public:
 				pf.rgxTabs[i] = (i + 1) * cxTab;
 			SetParaFormat(pf);
 		}
-#endif // _WIN32_WCE
 		dc.SelectFont(hOldFont);
 
 		SetModify(FALSE);
@@ -118,11 +99,7 @@ public:
 		LRESULT lRet = DefWindowProc(uMsg, wParam, lParam);
 
 		// calc caret position
-#ifndef _WIN32_WCE
 		long nStartPos, nEndPos;
-#else // _WIN32_WCE
-		int nStartPos, nEndPos;
-#endif // _WIN32_WCE
 		GetSel(nStartPos, nEndPos);
 		m_nRow = LineFromChar(nEndPos);
 		m_nCol = 0;
@@ -147,15 +124,10 @@ public:
 
 	LRESULT OnEditPaste(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 	{
-#ifndef _WIN32_WCE
 		PasteSpecial(CF_TEXT);
-#else // _WIN32_WCE
-		Paste();
-#endif // _WIN32_WCE
 		return 0;
 	}
 
-#ifndef _WIN32_WCE
 	LRESULT OnEditWordWrap(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 	{
 		m_bWordWrap = !m_bWordWrap;
@@ -178,10 +150,8 @@ public:
 		}
 		return 0;
 	}
-#endif // _WIN32_WCE
 
 // Overrides from CEditFindReplaceImpl
-#ifndef _WIN32_WCE
 	CFindReplaceDialogWithMessageFilter* CreateFindReplaceDialog(BOOL bFindOnly, // TRUE for Find, FALSE for FindReplace
 			LPCTSTR lpszFindWhat,
 			LPCTSTR lpszReplaceWith = NULL,
@@ -229,7 +199,6 @@ public:
 
 		return dwFlags;
 	}
-#endif // _WIN32_WCE
 
 	BOOL LoadFile(LPCTSTR lpstrFilePath)
 	{
@@ -239,7 +208,6 @@ public:
 		if(hFile == INVALID_HANDLE_VALUE)
 			return FALSE;
 
-#ifndef _WIN32_WCE
 		EDITSTREAM es;
 		es.dwCookie = (DWORD)hFile;
 		es.dwError = 0;
@@ -249,12 +217,6 @@ public:
 		::CloseHandle(hFile);
 
 		return !(BOOL)es.dwError;
-#else // _WIN32_WCE
-		//TODO - figure out what to do here instead...
-		::CloseHandle(hFile);
-
-		return FALSE;
-#endif // _WIN32_WCE
 	}
 
 	static DWORD CALLBACK StreamReadCallback(DWORD dwCookie, LPBYTE pbBuff, LONG cb, LONG FAR *pcb)
@@ -273,7 +235,6 @@ public:
 		if(hFile == INVALID_HANDLE_VALUE)
 			return FALSE;
 
-#ifndef _WIN32_WCE
 		EDITSTREAM es;
 		es.dwCookie = (DWORD)hFile;
 		es.dwError = 0;
@@ -283,12 +244,6 @@ public:
 		::CloseHandle(hFile);
 
 		return !(BOOL)es.dwError;
-#else // _WIN32_WCE
-		//TODO - figure out what to do here instead...
-		::CloseHandle(hFile);
-
-		return FALSE;
-#endif // _WIN32_WCE
 	}
 
 	static DWORD CALLBACK StreamWriteCallback(DWORD dwCookie, LPBYTE pbBuff, LONG cb, LONG FAR *pcb)

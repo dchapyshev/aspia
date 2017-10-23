@@ -5,19 +5,13 @@
 #ifndef __VIEW_H__
 #define __VIEW_H__
 
-#if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
 
 
 class CBitmapView : public CScrollWindowImpl<CBitmapView>
 {
 public:
-#ifndef _WIN32_WCE
 	DECLARE_WND_CLASS_EX(NULL, 0, -1)
-#else // _WIN32_WCE
-	DECLARE_WND_CLASS(NULL)
-#endif // _WIN32_WCE
 
 	CBitmap m_bmp;
 	SIZE m_size;
@@ -80,14 +74,12 @@ public:
 			rectBottom.top = y;
 			dc.FillRect(&rectBottom, COLOR_WINDOW);
 		}
-#if !defined(_WIN32_WCE) || (_WIN32_WCE >= 400)
 		if(!m_bmp.IsNull())
 		{
 			dc.MoveTo(m_size.cx, 0);
 			dc.LineTo(m_size.cx, m_size.cy);
 			dc.LineTo(0, m_size.cy);
 		}
-#endif //!defined(_WIN32_WCE) || (_WIN32_WCE >= 400)
 		return 0;
 	}
 

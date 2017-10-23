@@ -1,4 +1,4 @@
-// Windows Template Library - WTL version 9.10
+// Windows Template Library - WTL version 10.0
 // Copyright (C) Microsoft Corporation, WTL Team. All rights reserved.
 //
 // This file is a part of the Windows Template Library.
@@ -11,10 +11,6 @@
 
 #pragma once
 
-#ifdef _WIN32_WCE
-	#error atlfind.h is not supported on Windows CE
-#endif
-
 #ifndef __ATLCTRLS_H__
 	#error atlfind.h requires atlctrls.h to be included first
 #endif
@@ -23,8 +19,8 @@
 	#error atlfind.h requires atldlgs.h to be included first
 #endif
 
-#if !((defined(__ATLMISC_H__) && defined(_WTL_USE_CSTRING)) || defined(__ATLSTR_H__))
-	#error atlfind.h requires CString (either from ATL's atlstr.h or WTL's atlmisc.h with _WTL_USE_CSTRING)
+#ifndef __ATLSTR_H__
+	#error atlfind.h requires CString
 #endif
 
 
@@ -52,7 +48,7 @@ protected:
 
 // Data members
 	TFindReplaceDialog* m_pFindReplaceDialog;
-	_CSTRING_NS::CString m_sFindNext, m_sReplaceWith;
+	ATL::CString m_sFindNext, m_sReplaceWith;
 	BOOL m_bFindOnly, m_bFirstSearch, m_bMatchCase, m_bWholeWord, m_bFindDown;
 	LONG m_nInitialSearchPos;
 	HCURSOR m_hOldCursor;
@@ -239,26 +235,26 @@ public:
 		::SendMessage(pT->m_hWnd, EM_GETSEL, (WPARAM)&nStartChar, (LPARAM)&nEndChar);
 		POINT point = pT->PosFromChar(nStartChar);
 		::ClientToScreen(pT->GetParent(), &point);
-		CRect rect;
+		RECT rect = { 0 };
 		::GetWindowRect(hWndDialog, &rect);
-		if(rect.PtInRect(point))
+		if(::PtInRect(&rect, point) != FALSE)
 		{
-			if(point.y > rect.Height())
+			if(point.y > (rect.bottom - rect.top))
 			{
-				rect.OffsetRect(0, point.y - rect.bottom - 20);
+				::OffsetRect(&rect, 0, point.y - rect.bottom - 20);
 			}
 			else
 			{
 				int nVertExt = GetSystemMetrics(SM_CYSCREEN);
-				if(point.y + rect.Height() < nVertExt)
-					rect.OffsetRect(0, 40 + point.y - rect.top);
+				if((point.y + (rect.bottom - rect.top)) < nVertExt)
+					::OffsetRect(&rect, 0, 40 + point.y - rect.top);
 			}
 
-			::MoveWindow(hWndDialog, rect.left, rect.top, rect.Width(), rect.Height(), TRUE);
+			::MoveWindow(hWndDialog, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, TRUE);
 		}
 	}
 
-	DWORD GetFindReplaceDialogFlags(void) const
+	DWORD GetFindReplaceDialogFlags() const
 	{
 		DWORD dwFlags = 0;
 		if(m_bFindDown)
@@ -292,12 +288,12 @@ public:
 
 		ATLASSERT(m_pFindReplaceDialog == NULL);
 
-		_CSTRING_NS::CString findNext;
+		ATL::CString findNext;
 		pT->GetSelText(findNext);
 		// if selection is empty or spans multiple lines use old find text
 		if(findNext.IsEmpty() || (findNext.FindOneOf(_T("\n\r")) != -1))
 			findNext = m_sFindNext;
-		_CSTRING_NS::CString replaceWith = m_sReplaceWith;
+		ATL::CString replaceWith = m_sReplaceWith;
 		DWORD dwFlags = pT->GetFindReplaceDialogFlags();
 
 		m_pFindReplaceDialog = pT->CreateFindReplaceDialog(bFindOnly,
@@ -321,11 +317,11 @@ public:
 			return FALSE;
 
 		// length is the same, check contents
-		_CSTRING_NS::CString selectedText;
+		ATL::CString selectedText;
 		pT->GetSelText(selectedText);
 
-		return (bMatchCase && selectedText.Compare(lpszCompare) == 0) ||
-			(!bMatchCase && selectedText.CompareNoCase(lpszCompare) == 0);
+		return (bMatchCase && (selectedText.Compare(lpszCompare) == 0)) ||
+			(!bMatchCase && (selectedText.CompareNoCase(lpszCompare) == 0));
 	}
 
 	void TextNotFound(LPCTSTR lpszFind)
@@ -335,9 +331,9 @@ public:
 		pT->OnTextNotFound(lpszFind);
 	}
 
-	_CSTRING_NS::CString GetTranslationText(enum TranslationTextItem eItem) const
+	ATL::CString GetTranslationText(enum TranslationTextItem eItem) const
 	{
-		_CSTRING_NS::CString text;
+		ATL::CString text;
 		switch(eItem)
 		{
 		case eText_OnReplaceAllMessage:
@@ -441,11 +437,11 @@ public:
 
 		::SetCursor(m_hOldCursor);
 
-		_CSTRING_NS::CString message = pT->GetTranslationText(eText_OnReplaceAllMessage);
+		ATL::CString message = pT->GetTranslationText(eText_OnReplaceAllMessage);
 		if(message.GetLength() > 0)
 		{
-			_CSTRING_NS::CString formattedMessage;
-			formattedMessage.Format(message, replaceCount, m_sFindNext, m_sReplaceWith);
+			ATL::CString formattedMessage;
+			formattedMessage.Format(message, replaceCount, (LPCTSTR)m_sFindNext, (LPCTSTR)m_sReplaceWith);
 			if(m_pFindReplaceDialog != NULL)
 			{
 				m_pFindReplaceDialog->MessageBox(formattedMessage,
@@ -464,10 +460,10 @@ public:
 	void OnTextNotFound(LPCTSTR lpszFind)
 	{
 		T* pT = static_cast<T*>(this);
-		_CSTRING_NS::CString message = pT->GetTranslationText(eText_OnTextNotFoundMessage);
+		ATL::CString message = pT->GetTranslationText(eText_OnTextNotFoundMessage);
 		if(message.GetLength() > 0)
 		{
-			_CSTRING_NS::CString formattedMessage;
+			ATL::CString formattedMessage;
 			formattedMessage.Format(message, lpszFind);
 			if(m_pFindReplaceDialog != NULL)
 			{
@@ -518,29 +514,7 @@ protected:
 	typedef CEditFindReplaceImpl<T, TFindReplaceDialog> thisClass;
 	typedef CEditFindReplaceImplBase<T, TFindReplaceDialog> baseClass;
 
-// Data members
-	LPTSTR m_pShadowBuffer;     // Special shadow buffer only used in some cases.
-	UINT m_nShadowSize;
-	int m_bShadowBufferNeeded;  // TRUE, FALSE, < 0 => Need to check
-
 public:
-// Constructors
-	CEditFindReplaceImpl() :
-		m_pShadowBuffer(NULL),
-		m_nShadowSize(0),
-		m_bShadowBufferNeeded(-1)
-	{
-	}
-
-	virtual ~CEditFindReplaceImpl()
-	{
-		if(m_pShadowBuffer != NULL)
-		{
-			delete [] m_pShadowBuffer;
-			m_pShadowBuffer = NULL;
-		}
-	}
-
 // Message Handlers
 	BEGIN_MSG_MAP(thisClass)
 	ALT_MSG_MAP(1)
@@ -650,9 +624,9 @@ public:
 			while(lpsz <= lpszStop)
 			{
 #ifndef _UNICODE
-				if(!bMatchCase || (*lpsz == *lpszFind && (!::IsDBCSLeadByte(*lpsz) || lpsz[1] == lpszFind[1])))
+				if(!bMatchCase || ((*lpsz == *lpszFind) && (!::IsDBCSLeadByte(*lpsz) || (lpsz[1] == lpszFind[1]))))
 #else
-				if(!bMatchCase || (*lpsz == *lpszFind && lpsz[1] == lpszFind[1]))
+				if(!bMatchCase || ((*lpsz == *lpszFind) && (lpsz[1] == lpszFind[1])))
 #endif
 				{
 					LPTSTR lpch = (LPTSTR)(lpsz + nLenFind);
@@ -723,32 +697,18 @@ public:
 		const T* pT = static_cast<const T*>(this);
 		ATLASSERT(pT->m_hWnd != NULL);
 
-		BOOL useShadowBuffer = pT->UseShadowBuffer();
-		if(useShadowBuffer)
+#ifndef _UNICODE
+		// If common controls version 6 is in use (such as via theming), then EM_GETHANDLE 
+		// will always return a UNICODE string. You're really not supposed to superclass 
+		// or subclass common controls with an ANSI windows procedure.
+		DWORD dwMajor = 0, dwMinor = 0;
+		HRESULT hRet = ATL::AtlGetCommCtrlVersion(&dwMajor, &dwMinor);
+		if(SUCCEEDED(hRet) && (dwMajor >= 6))
 		{
-			if((m_pShadowBuffer == NULL) || pT->GetModify())
-			{
-				ATLASSERT((m_pShadowBuffer != NULL) || (m_nShadowSize == 0));
-				UINT nSize = pT->GetWindowTextLength() + 1;
-				if(nSize > m_nShadowSize)
-				{
-					// need more room for shadow buffer
-					T* pThisNoConst = const_cast<T*>(pT);
-					delete[] m_pShadowBuffer;
-					pThisNoConst->m_pShadowBuffer = NULL;
-					pThisNoConst->m_nShadowSize = 0;
-					pThisNoConst->m_pShadowBuffer = new TCHAR[nSize];
-					pThisNoConst->m_nShadowSize = nSize;
-				}
-
-				// update the shadow buffer with GetWindowText
-				ATLASSERT(m_nShadowSize >= nSize);
-				ATLASSERT(m_pShadowBuffer != NULL);
-				pT->GetWindowText(m_pShadowBuffer, nSize);
-			}
-
-			return m_pShadowBuffer;
+			ATLTRACE2(atlTraceUI, 0, _T("AtlFind Warning: You have compiled for MBCS/ANSI but are using common controls version 6 or later which are always Unicode.\r\n"));
+			ATLASSERT(FALSE);
 		}
+#endif // !_UNICODE
 
 		HLOCAL hLocal = pT->GetHandle();
 		ATLASSERT(hLocal != NULL);
@@ -763,13 +723,9 @@ public:
 		const T* pT = static_cast<const T*>(this);
 		ATLASSERT(pT->m_hWnd != NULL);
 
-		BOOL useShadowBuffer = pT->UseShadowBuffer();
-		if(!useShadowBuffer)
-		{
-			HLOCAL hLocal = pT->GetHandle();
-			ATLASSERT(hLocal != NULL);
-			::LocalUnlock(hLocal);
-		}
+		HLOCAL hLocal = pT->GetHandle();
+		ATLASSERT(hLocal != NULL);
+		::LocalUnlock(hLocal);
 	}
 
 	UINT GetBufferLength() const
@@ -790,12 +746,12 @@ public:
 	{
 		LPCTSTR lpsz = lpszText + nIndex;
 		LPCTSTR lpszStop = lpszText + nLen;
-		while(lpsz < lpszStop && *lpsz != _T('\r'))
+		while((lpsz < lpszStop) && (*lpsz != _T('\r')))
 			++lpsz;
 		return LONG(lpsz - lpszText);
 	}
 
-	LONG GetSelText(_CSTRING_NS::CString& strText) const
+	LONG GetSelText(ATL::CString& strText) const
 	{
 		const T* pT = static_cast<const T*>(this);
 
@@ -804,77 +760,11 @@ public:
 		ATLASSERT((UINT)nEndChar <= pT->GetBufferLength());
 		LPCTSTR lpszText = pT->LockBuffer();
 		LONG nLen = pT->EndOfLine(lpszText, nEndChar, nStartChar) - nStartChar;
-		SecureHelper::memcpy_x(strText.GetBuffer(nLen), nLen * sizeof(TCHAR), lpszText + nStartChar, nLen * sizeof(TCHAR));
+		ATL::Checked::memcpy_s(strText.GetBuffer(nLen), nLen * sizeof(TCHAR), lpszText + nStartChar, nLen * sizeof(TCHAR));
 		strText.ReleaseBuffer(nLen);
 		pT->UnlockBuffer();
 
 		return nLen;
-	}
-
-	BOOL UseShadowBuffer(void) const
-	{
-		const T* pT = static_cast<const T*>(this);
-
-		if(pT->m_bShadowBufferNeeded < 0)
-		{
-			T* pThisNoConst = const_cast<T*>(pT);
-
-#ifdef _versionhelpers_H_INCLUDED_
-			OSVERSIONINFOEX ovi = { sizeof(OSVERSIONINFOEX) };
-			ovi.dwPlatformId = VER_PLATFORM_WIN32_WINDOWS;
-			DWORDLONG const dwlConditionMask = ::VerSetConditionMask(0, VER_PLATFORMID, VER_EQUAL);
-			bool bWin9x = (::VerifyVersionInfo(&ovi, VER_PLATFORMID, dwlConditionMask) != FALSE);
-#else // !_versionhelpers_H_INCLUDED_
-			OSVERSIONINFO ovi = { sizeof(OSVERSIONINFO) };
-			::GetVersionEx(&ovi);
-
-			bool bWin9x = (ovi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS);
-#endif // _versionhelpers_H_INCLUDED_
-			if(bWin9x)
-			{
-				// Windows 95, 98, ME
-				// Under Win9x, it is necessary to maintain a shadow buffer.
-				// It is only updated when the control contents have been changed.
-				pThisNoConst->m_bShadowBufferNeeded = TRUE;
-			}
-			else
-			{
-				// Windows NT, 2000, XP, etc.
-				pThisNoConst->m_bShadowBufferNeeded = FALSE;
-
-#ifndef _UNICODE
-				// On Windows XP (or later), if common controls version 6 is in use
-				// (such as via theming), then EM_GETHANDLE will always return a UNICODE string.
-				// If theming is enabled and Common Controls version 6 is in use,
-				// you're really not suppose to superclass or subclass common controls
-				// with an ANSI windows procedure (so its best to only theme if you use UNICODE).
-				// Using a shadow buffer uses GetWindowText instead, so it solves
-				// this problem for us (although it makes it a little less efficient).
-
-#ifdef _versionhelpers_H_INCLUDED_
-				if(::IsWindowsXPOrGreater())
-#else // !_versionhelpers_H_INCLUDED_
-				if ((ovi.dwMajorVersion == 5 && ovi.dwMinorVersion >= 1) || (ovi.dwMajorVersion > 5))
-#endif // _versionhelpers_H_INCLUDED_
-				{
-					DWORD dwMajor = 0, dwMinor = 0;
-					HRESULT hRet = ATL::AtlGetCommCtrlVersion(&dwMajor, &dwMinor);
-					if(SUCCEEDED(hRet))
-					{
-						if(dwMajor >= 6)
-						{
-							pThisNoConst->m_bShadowBufferNeeded = TRUE;
-
-							ATLTRACE2(atlTraceUI, 0, _T("Warning: You have compiled for MBCS/ANSI but are using common controls version 6 or later (likely through a manifest file).\r\n"));
-							ATLTRACE2(atlTraceUI, 0, _T("If you use common controls version 6 or later, you should only do so for UNICODE builds.\r\n"));
-						}
-					}
-				}
-#endif // !_UNICODE
-			}
-		}
-
-		return (pT->m_bShadowBufferNeeded != FALSE);
 	}
 };
 
@@ -918,21 +808,16 @@ public:
 		FINDTEXTEX ft = { 0 };
 
 		pT->GetSel(ft.chrg);
-		if(m_bFirstSearch)
+		if(this->m_bFirstSearch)
 		{
 			if(bFindDown)
-				m_nInitialSearchPos = ft.chrg.cpMin;
+				this->m_nInitialSearchPos = ft.chrg.cpMin;
 			else
-				m_nInitialSearchPos = ft.chrg.cpMax;
-			m_bFirstSearch = FALSE;
+				this->m_nInitialSearchPos = ft.chrg.cpMax;
+			this->m_bFirstSearch = FALSE;
 		}
 
-#if (_RICHEDIT_VER >= 0x0200)
 		ft.lpstrText = (LPTSTR)lpszFind;
-#else // !(_RICHEDIT_VER >= 0x0200)
-		USES_CONVERSION;
-		ft.lpstrText = T2A((LPTSTR)lpszFind);
-#endif // !(_RICHEDIT_VER >= 0x0200)
 
 		if(ft.chrg.cpMin != ft.chrg.cpMax) // i.e. there is a selection
 		{
@@ -950,11 +835,11 @@ public:
 		DWORD dwFlags = bMatchCase ? FR_MATCHCASE : 0;
 		dwFlags |= bWholeWord ? FR_WHOLEWORD : 0;
 
-		ft.chrg.cpMax = pT->GetTextLength() + m_nInitialSearchPos;
+		ft.chrg.cpMax = pT->GetTextLength() + this->m_nInitialSearchPos;
 
 		if(bFindDown)
 		{
-			if(m_nInitialSearchPos >= 0)
+			if(this->m_nInitialSearchPos >= 0)
 				ft.chrg.cpMax = pT->GetTextLength();
 
 			dwFlags |= FR_DOWN;
@@ -962,7 +847,7 @@ public:
 		}
 		else
 		{
-			if(m_nInitialSearchPos >= 0)
+			if(this->m_nInitialSearchPos >= 0)
 				ft.chrg.cpMax = 0;
 
 			dwFlags &= ~FR_DOWN;
@@ -974,21 +859,21 @@ public:
 		{
 			bRet = TRUE;   // we found the text
 		}
-		else if(m_nInitialSearchPos > 0)
+		else if(this->m_nInitialSearchPos > 0)
 		{
 			// if the original starting point was not the beginning
 			// of the buffer and we haven't already been here
 			if(bFindDown)
 			{
 				ft.chrg.cpMin = 0;
-				ft.chrg.cpMax = m_nInitialSearchPos;
+				ft.chrg.cpMax = this->m_nInitialSearchPos;
 			}
 			else
 			{
 				ft.chrg.cpMin = pT->GetTextLength();
-				ft.chrg.cpMax = m_nInitialSearchPos;
+				ft.chrg.cpMax = this->m_nInitialSearchPos;
 			}
-			m_nInitialSearchPos = m_nInitialSearchPos - pT->GetTextLength();
+			this->m_nInitialSearchPos = this->m_nInitialSearchPos - pT->GetTextLength();
 
 			bRet = (pT->FindAndSelect(dwFlags, ft) != -1) ? TRUE : FALSE;
 		}

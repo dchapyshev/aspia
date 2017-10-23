@@ -5,9 +5,7 @@
 #ifndef __MAINFRM_H__
 #define __MAINFRM_H__
 
-#if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
 
 #define FILE_MENU_POSITION	0
 #define RECENT_MENU_POSITION	6
@@ -18,44 +16,32 @@ LPCTSTR g_lpcstrApp = _T("BmpView");
 
 
 class CMainFrame : public CFrameWindowImpl<CMainFrame>, public CUpdateUI<CMainFrame>,
-		public CMessageFilter, public CIdleHandler
-#ifndef _WIN32_WCE
-		, public CPrintJobInfo
-#endif // _WIN32_WCE
+		public CMessageFilter, public CIdleHandler, public CPrintJobInfo
 {
 public:
 	DECLARE_FRAME_WND_CLASS(NULL, IDR_MAINFRAME)
 
-#ifndef _WIN32_WCE
 	CCommandBarCtrl m_CmdBar;
 	CRecentDocumentList m_mru;
 	CMruList m_list;
-#endif // _WIN32_WCE
 	CBitmapView m_view;
 
 	TCHAR m_szFilePath[MAX_PATH];
 
 	// printing support
-#ifndef _WIN32_WCE
 	CPrinter m_printer;
 	CDevMode m_devmode;
 	CPrintPreviewWindow m_wndPreview;
 	CEnhMetaFile m_enhmetafile;
 	RECT m_rcMargin;
 	bool m_bPrintPreview;
-#endif // _WIN32_WCE
 
 
-	CMainFrame() 
-#ifndef _WIN32_WCE
-		: m_bPrintPreview(false)
-#endif // _WIN32_WCE
+	CMainFrame() : m_bPrintPreview(false)
 	{
-#ifndef _WIN32_WCE
 		::SetRect(&m_rcMargin, 1000, 1000, 1000, 1000);
 		m_printer.OpenDefaultPrinter();
 		m_devmode.CopyFromPrinter(m_printer);
-#endif // _WIN32_WCE
 		m_szFilePath[0] = 0;
 	}
 
@@ -70,26 +56,19 @@ public:
 	virtual BOOL OnIdle()
 	{
 		BOOL bEnable = !m_view.m_bmp.IsNull();
-#ifndef _WIN32_WCE
 		UIEnable(ID_FILE_PRINT, bEnable);
 		UIEnable(ID_FILE_PRINT_PREVIEW, bEnable);
 		UISetCheck(ID_FILE_PRINT_PREVIEW, m_bPrintPreview);
-#endif // _WIN32_WCE
 		UIEnable(ID_EDIT_COPY, bEnable);
 		UIEnable(ID_EDIT_PASTE, ::IsClipboardFormatAvailable(CF_BITMAP));
 		UIEnable(ID_EDIT_CLEAR, bEnable);
 		UIEnable(ID_VIEW_PROPERTIES, bEnable);
-#ifndef _WIN32_WCE
 		UISetCheck(ID_RECENT_BTN, m_list.IsWindowVisible());
-#endif // _WIN32_WCE
-#ifndef WIN32_PLATFORM_PSPC
 		UIUpdateToolBar();
-#endif // WIN32_PLATFORM_PSPC
 
 		return FALSE;
 	}
 
-#ifndef _WIN32_WCE
 	void TogglePrintPreview()
 	{
 		if(m_bPrintPreview)	// close it
@@ -115,9 +94,7 @@ public:
 		m_bPrintPreview = !m_bPrintPreview;
 		UpdateLayout();
 	}
-#endif // _WIN32_WCE
 
-#ifndef WIN32_PLATFORM_PSPC
 	void UpdateTitleBar(LPCTSTR lpstrTitle)
 	{
 		CString strDefault;
@@ -131,9 +108,7 @@ public:
 		}
 		SetWindowText(strTitle);
 	}
-#endif // WIN32_PLATFORM_PSPC
 
-#ifndef _WIN32_WCE
 	//print job info callbacks
 	virtual bool IsValidPage(UINT nPage)
 	{
@@ -187,34 +162,23 @@ public:
 
 		return true;
 	}
-#endif // _WIN32_WCE
 
 	BEGIN_MSG_MAP_EX(CMainFrame)
 		MSG_WM_CREATE(OnCreate)
-#ifndef _WIN32_WCE
 		MSG_WM_CONTEXTMENU(OnContextMenu)
-#endif // _WIN32_WCE
 
 		COMMAND_ID_HANDLER_EX(ID_FILE_OPEN, OnFileOpen)
-#ifndef _WIN32_WCE
 		COMMAND_RANGE_HANDLER_EX(ID_FILE_MRU_FIRST, ID_FILE_MRU_LAST, OnFileRecent)
 		COMMAND_ID_HANDLER_EX(ID_RECENT_BTN, OnRecentButton)
-#endif // _WIN32_WCE
-#ifndef _WIN32_WCE
 		COMMAND_ID_HANDLER_EX(ID_FILE_PRINT, OnFilePrint);
 		COMMAND_ID_HANDLER_EX(ID_FILE_PAGE_SETUP, OnFilePageSetup)
 		COMMAND_ID_HANDLER_EX(ID_FILE_PRINT_PREVIEW, OnFilePrintPreview);
-#endif // _WIN32_WCE
 		COMMAND_ID_HANDLER_EX(ID_APP_EXIT, OnFileExit)
 		COMMAND_ID_HANDLER_EX(ID_EDIT_COPY, OnEditCopy)
 		COMMAND_ID_HANDLER_EX(ID_EDIT_PASTE, OnEditPaste)
 		COMMAND_ID_HANDLER_EX(ID_EDIT_CLEAR, OnEditClear)
-#ifndef _WIN32_WCE
 		COMMAND_ID_HANDLER_EX(ID_VIEW_TOOLBAR, OnViewToolBar)
-#endif // _WIN32_WCE
-#ifndef WIN32_PLATFORM_PSPC
 		COMMAND_ID_HANDLER_EX(ID_VIEW_STATUS_BAR, OnViewStatusBar)
-#endif // WIN32_PLATFORM_PSPC
 		COMMAND_ID_HANDLER_EX(ID_VIEW_PROPERTIES, OnViewProperties)
 		COMMAND_ID_HANDLER_EX(ID_APP_ABOUT, OnAppAbout)
 
@@ -223,26 +187,19 @@ public:
 	END_MSG_MAP()
 
 	BEGIN_UPDATE_UI_MAP(CMainFrame)
-#ifndef _WIN32_WCE
 		UPDATE_ELEMENT(ID_FILE_PRINT, UPDUI_MENUPOPUP | UPDUI_TOOLBAR)
 		UPDATE_ELEMENT(ID_FILE_PRINT_PREVIEW, UPDUI_MENUPOPUP | UPDUI_TOOLBAR)
-#endif // _WIN32_WCE
 		UPDATE_ELEMENT(ID_EDIT_COPY, UPDUI_MENUPOPUP | UPDUI_TOOLBAR)
 		UPDATE_ELEMENT(ID_EDIT_PASTE, UPDUI_MENUPOPUP | UPDUI_TOOLBAR)
 		UPDATE_ELEMENT(ID_EDIT_CLEAR, UPDUI_MENUPOPUP | UPDUI_TOOLBAR)
-#ifndef _WIN32_WCE
 		UPDATE_ELEMENT(ID_VIEW_TOOLBAR, UPDUI_MENUPOPUP)
-#endif // _WIN32_WCE
-#ifndef WIN32_PLATFORM_PSPC
 		UPDATE_ELEMENT(ID_VIEW_STATUS_BAR, UPDUI_MENUPOPUP)
-#endif // WIN32_PLATFORM_PSPC
 		UPDATE_ELEMENT(ID_VIEW_PROPERTIES, UPDUI_MENUPOPUP | UPDUI_TOOLBAR)
 		UPDATE_ELEMENT(ID_RECENT_BTN, UPDUI_TOOLBAR)
 	END_UPDATE_UI_MAP()
 
 	int OnCreate(LPCREATESTRUCT /*lpCreateStruct*/)
 	{
-#ifndef _WIN32_WCE
 		// create command bar window
 		HWND hWndCmdBar = m_CmdBar.Create(m_hWnd, rcDefault, NULL, ATL_SIMPLE_CMDBAR_PANE_STYLE);
 		// atach menu
@@ -258,25 +215,14 @@ public:
 		CreateSimpleReBar(ATL_SIMPLE_REBAR_NOBORDER_STYLE);
 		AddSimpleReBarBand(hWndCmdBar);
 		AddSimpleReBarBand(hWndToolBar, NULL, TRUE);
-#else // _WIN32_WCE
-#ifndef WIN32_PLATFORM_PSPC
-		CreateSimpleCECommandBar(MAKEINTRESOURCE(IDR_MAINFRAME));
-		CreateSimpleToolBar();
-#else // WIN32_PLATFORM_PSPC
-		CreateSimpleCEMenuBar(IDR_MAINFRAME, SHCMBF_HMENU);
-#endif // WIN32_PLATFORM_PSPC
-#endif // _WIN32_WCE
 
-#ifndef WIN32_PLATFORM_PSPC
 		// create status bar
 		CreateSimpleStatusBar();
-#endif // WIN32_PLATFORM_PSPC
 
 		// create view window
 		m_hWndClient = m_view.Create(m_hWnd, rcDefault, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, WS_EX_CLIENTEDGE);
 		m_view.SetBitmap(NULL);
 
-#ifndef _WIN32_WCE
 		// set up MRU stuff
 		CMenuHandle menu = m_CmdBar.GetMenu();
 		CMenuHandle menuFile = menu.GetSubMenu(FILE_MENU_POSITION);
@@ -288,18 +234,11 @@ public:
 
 		// create MRU list
 		m_list.Create(m_hWnd);
-#endif // _WIN32_WCE
 
-#ifndef WIN32_PLATFORM_PSPC
 		// set up update UI
-#ifndef _WIN32_WCE
 		UIAddToolBar(hWndToolBar);
-#else // _WIN32_WCE
-		UIAddToolBar(m_hWndToolBar);
-#endif // _WIN32_WCE
 		UISetCheck(ID_VIEW_TOOLBAR, 1);
 		UISetCheck(ID_VIEW_STATUS_BAR, 1);
-#endif // WIN32_PLATFORM_PSPC
 
 		CMessageLoop* pLoop = _Module.GetMessageLoop();
 		ATLASSERT(pLoop != NULL);
@@ -309,7 +248,6 @@ public:
 		return 0;
 	}
 
-#ifndef _WIN32_WCE
 	void OnContextMenu(CWindow wnd, CPoint point)
 	{
 		if(wnd.m_hWnd == m_view.m_hWnd)
@@ -324,7 +262,6 @@ public:
 			SetMsgHandled(FALSE);
 		}
 	}
-#endif // _WIN32_WCE
 
 	void OnFileExit(UINT /*uNotifyCode*/, int /*nID*/, CWindow /*wnd*/)
 	{
@@ -336,29 +273,16 @@ public:
 		CFileDialog dlg(TRUE, _T("bmp"), NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, _T("Bitmap Files (*.bmp)\0*.bmp\0All Files (*.*)\0*.*\0"), m_hWnd);
 		if(dlg.DoModal() == IDOK)
 		{
-#ifndef _WIN32_WCE
 			if(m_bPrintPreview)
 				TogglePrintPreview();
 
 			HBITMAP hBmp = (HBITMAP)::LoadImage(NULL, dlg.m_szFileName, IMAGE_BITMAP, 0, 0, LR_DEFAULTCOLOR | LR_LOADFROMFILE);
-#else
-			// Using alternate image load routines here since LR_LOADFROMFILE isn't supported.
-#ifdef WIN32_PLATFORM_PSPC
-			HBITMAP hBmp = (HBITMAP)::SHLoadImageFile(dlg.m_szFileName);
-#else	// SHLoadDIBitmap (below) is for CE, but only loads .bmp; SHLoadImageFile (above) loads .bmp, .gif, .jpg, .png
-			HBITMAP hBmp = (HBITMAP)::SHLoadDIBitmap(dlg.m_szFileName);
-#endif	// WIN32_PLATFORM_PSPC
-#endif // _WIN32_WCE
 			if(hBmp != NULL)
 			{
 				m_view.SetBitmap(hBmp);
-#ifndef _WIN32_WCE
 				m_mru.AddToList(dlg.m_ofn.lpstrFile);
 				m_mru.WriteToRegistry(g_lpcstrMRURegKey);
-#endif // _WIN32_WCE
-#ifndef WIN32_PLATFORM_PSPC
 				UpdateTitleBar(dlg.m_szFileTitle);
-#endif // WIN32_PLATFORM_PSPC
 				lstrcpy(m_szFilePath, dlg.m_szFileName);
 			}
 			else
@@ -370,7 +294,6 @@ public:
 		}
 	}
 
-#ifndef _WIN32_WCE
 	void OnFileRecent(UINT /*uNotifyCode*/, int nID, CWindow /*wnd*/)
 	{
 		if(m_bPrintPreview)
@@ -431,9 +354,7 @@ public:
 		m_list.BuildList(m_mru);
 		m_list.ShowList(rect.left, rect.bottom);
 	}
-#endif // _WIN32_WCE
 
-#ifndef _WIN32_WCE
 	void OnFilePrint(UINT /*uNotifyCode*/, int /*nID*/, CWindow /*wnd*/)
 	{
 		CPrintDialog dlg(FALSE);
@@ -482,18 +403,12 @@ public:
 	{
 		TogglePrintPreview();
 	}
-#endif // _WIN32_WCE
 
 	void OnEditCopy(UINT /*uNotifyCode*/, int /*nID*/, CWindow /*wnd*/)
 	{
 		if(::OpenClipboard(NULL))
 		{
-#ifndef _WIN32_WCE
 			HBITMAP hBitmapCopy = (HBITMAP)::CopyImage(m_view.m_bmp.m_hBitmap, IMAGE_BITMAP, 0, 0, 0);
-#else // _WIN32_WCE
-			// TODO - JoshHe 7/03/2003 - provide alternate BitMap copy routine.
-			HBITMAP hBitmapCopy = NULL;
-#endif // _WIN32_WCE
 			if(hBitmapCopy != NULL)
 				::SetClipboardData(CF_BITMAP, hBitmapCopy);
 			else
@@ -509,10 +424,8 @@ public:
 
 	void OnEditPaste(UINT /*uNotifyCode*/, int /*nID*/, CWindow /*wnd*/)
 	{
-#ifndef _WIN32_WCE
 		if(m_bPrintPreview)
 			TogglePrintPreview();
-#endif // _WIN32_WCE
 
 		if(::OpenClipboard(NULL))
 		{
@@ -520,18 +433,11 @@ public:
 			::CloseClipboard();
 			if(hBitmap != NULL)
 			{
-#ifndef _WIN32_WCE
 				HBITMAP hBitmapCopy = (HBITMAP)::CopyImage(hBitmap, IMAGE_BITMAP, 0, 0, 0);
-#else // _WIN32_WCE
-				// TODO - JoshHe 7/03/2003 - provide alternate BitMap copy routine.
-				HBITMAP hBitmapCopy = NULL;
-#endif // _WIN32_WCE
 				if(hBitmapCopy != NULL)
 				{
 					m_view.SetBitmap(hBitmapCopy);
-#ifndef WIN32_PLATFORM_PSPC
 					UpdateTitleBar(_T("(Clipboard)"));
-#endif // WIN32_PLATFORM_PSPC
 					m_szFilePath[0] = 0;
 				}
 				else
@@ -552,19 +458,14 @@ public:
 
 	void OnEditClear(UINT /*uNotifyCode*/, int /*nID*/, CWindow /*wnd*/)
 	{
-#ifndef _WIN32_WCE
 		if(m_bPrintPreview)
 			TogglePrintPreview();
-#endif // _WIN32_WCE
 
 		m_view.SetBitmap(NULL);
-#ifndef WIN32_PLATFORM_PSPC
 		UpdateTitleBar(NULL);
-#endif // WIN32_PLATFORM_PSPC
 		m_szFilePath[0] = 0;
 	}
 
-#ifndef _WIN32_WCE
 	void OnViewToolBar(UINT /*uNotifyCode*/, int /*nID*/, CWindow /*wnd*/)
 	{
 		static BOOL bNew = TRUE;	// initially visible
@@ -576,9 +477,7 @@ public:
 		UISetCheck(ID_VIEW_TOOLBAR, bNew);
 		UpdateLayout();
 	}
-#endif // _WIN32_WCE
 
-#ifndef WIN32_PLATFORM_PSPC
 	void OnViewStatusBar(UINT /*uNotifyCode*/, int /*nID*/, CWindow /*wnd*/)
 	{
 		BOOL bNew = !::IsWindowVisible(m_hWndStatusBar);
@@ -586,7 +485,6 @@ public:
 		UISetCheck(ID_VIEW_STATUS_BAR, bNew);
 		UpdateLayout();
 	}
-#endif // WIN32_PLATFORM_PSPC
 
 	void OnViewProperties(UINT /*uNotifyCode*/, int /*nID*/, CWindow /*wnd*/)
 	{

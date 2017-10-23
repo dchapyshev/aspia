@@ -1,9 +1,7 @@
 #define FILE_MENU_POSITION	0
 #define RECENT_MENU_POSITION	11
 
-class CMainFrame : 
-	public CRibbonFrameWindowImpl<CMainFrame>
-	, public CPrintJobInfo
+class CMainFrame : public CRibbonFrameWindowImpl<CMainFrame>, public CPrintJobInfo
 {
 public:
 	DECLARE_FRAME_WND_CLASS(NULL, IDR_MAINFRAME);

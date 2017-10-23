@@ -13,47 +13,25 @@
 #define STRICT
 #endif
 
-#define WINVER        0x0500
-#define _WIN32_WINNT  0x0500  // Require Windows 2000 or later
-#define _WIN32_IE     0x0501  // Require IE 5.01 or later (comes with Windows 2000 or later)
+#define WINVER        0x0501
+#define _WIN32_WINNT  0x0501  // Require Windows 2000 or later
+#define _WIN32_IE     0x0600  // Require IE 5.01 or later (comes with Windows 2000 or later)
 #define _RICHEDIT_VER 0x0300  // Require RichEdit 3.0 or later (comes with Windows 2000 or later)
-
-// ATL related preprocessor definitions
-#if (_ATL_VER >= 0x0700)
-	#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// some CString constructors will be explicit
-	#define _ATL_USE_CSTRING_FLOAT
-	#define _ATL_USE_DDX_FLOAT
-	#define _ATL_NO_OLD_NAMES
-	#define _ATL_DISABLE_DEPRECATED
-	#define _ATL_ALL_WARNINGS
-	#define _ATL_NO_OLD_HEADERS_WIN64
-#endif
 
 // Includes
 #include "resource.h"
 
 #include <atlbase.h>
-#if (_ATL_VER >= 0x0700)
-	#include <atlstr.h>
-	#include <atltypes.h>
-#endif
-
-// WTL related preprocessor definitions
-#if (_ATL_VER >= 0x0700)
-	#define _WTL_NO_WTYPES
-	#define _WTL_NO_UNION_CLASSES
-	#define _WTL_NO_CSTRING
-#endif
-#define _WTL_NEW_PAGE_NOTIFY_HANDLERS
+#include <atlstr.h>
+#include <atltypes.h>
 
 #include <atlapp.h>
+
 extern CAppModule _Module;
 
 #include <atlwin.h>
-#include <atlcom.h>
 
 #include <atlmisc.h>
-#include <atlctl.h>
 #include <atlframe.h>
 #include <atlddx.h>
 #include <atldlgs.h>

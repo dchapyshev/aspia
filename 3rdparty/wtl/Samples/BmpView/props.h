@@ -5,9 +5,7 @@
 #ifndef __PROPS_H__
 #define __PROPS_H__
 
-#if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
 
 // not defined in original the VC6 headers
 #ifndef BI_JPEG
@@ -24,10 +22,8 @@ public:
 
 	LPCTSTR m_lpstrFilePath;
 
-#ifndef _WIN32_WCE
 	enum { m_nToolTipID = 1313 };
 	CToolTipCtrl m_tooltip;
-#endif // _WIN32_WCE
 
 
 	CFileName() : m_lpstrFilePath(NULL)
@@ -38,7 +34,6 @@ public:
 		ATLASSERT(::IsWindow(hWnd));
 		SubclassWindow(hWnd);
 
-#ifndef _WIN32_WCE
 		// Set tooltip
 		m_tooltip.Create(m_hWnd);
 		ATLASSERT(m_tooltip.IsWindow());
@@ -63,20 +58,16 @@ public:
 		m_tooltip.Activate(bTooLong);
 
 		dc.SelectFont(hFontOld);
-#endif // _WIN32_WCE
 
 		Invalidate();
 		UpdateWindow();
 	}
 
 	BEGIN_MSG_MAP(CFileName)
-#ifndef _WIN32_WCE
 		MESSAGE_RANGE_HANDLER(WM_MOUSEFIRST, WM_MOUSELAST, OnMouseMessage)
-#endif // _WIN32_WCE
 		MESSAGE_HANDLER(WM_PAINT, OnPaint)
 	END_MSG_MAP()
 
-#ifndef _WIN32_WCE
 	LRESULT OnMouseMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		if(m_tooltip.IsWindow())
@@ -87,7 +78,6 @@ public:
 		bHandled = FALSE;
 		return 1;
 	}
-#endif // _WIN32_WCE
 
 	LRESULT OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 	{
@@ -101,11 +91,7 @@ public:
 			dc.SetBkMode(TRANSPARENT);
 			HFONT hFontOld = dc.SelectFont(GetFont());
 
-#ifndef _WIN32_WCE
 			dc.DrawText(m_lpstrFilePath, -1, &rect, DT_SINGLELINE | DT_LEFT | DT_VCENTER | DT_NOPREFIX | DT_PATH_ELLIPSIS);
-#else // _WIN32_WCE
-			dc.DrawText(m_lpstrFilePath, -1, &rect, DT_SINGLELINE | DT_LEFT | DT_VCENTER | DT_NOPREFIX);
-#endif // _WIN32_WCE
 
 			dc.SelectFont(hFontOld);
 		}
@@ -204,7 +190,6 @@ public:
 	{
 		// Special - remove unused buttons, move Close button, center wizard
 		CPropertySheetWindow sheet = GetPropertySheet();
-#if !defined(_AYGSHELL_H_) && !defined(__AYGSHELL_H__) // PPC specific
 		sheet.CancelToClose();
 		RECT rect;
 		CButton btnCancel = sheet.GetDlgItem(IDCANCEL);
@@ -216,7 +201,6 @@ public:
 		sheet.CenterWindow(GetPropertySheet().GetParent());
 
 		sheet.ModifyStyleEx(WS_EX_CONTEXTHELP, 0);
-#endif // (_AYGSHELL_H_) || defined(__AYGSHELL_H__) // PPC specific
 
 		// get and display bitmap prperties
 		SetDlgItemText(IDC_TYPE, _T("Windows 3.x Bitmap (BMP)"));
@@ -224,11 +208,7 @@ public:
 
 		if(m_lpstrFilePath != NULL)
 		{
-#ifndef _WIN32_WCE 
 			HANDLE hFile = ::CreateFile(m_lpstrFilePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
-#else
-			HANDLE hFile = ::CreateFile(m_lpstrFilePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-#endif // _WIN32_WCE
 			ATLASSERT(hFile != INVALID_HANDLE_VALUE);
 			if(hFile != INVALID_HANDLE_VALUE)
 			{
@@ -247,12 +227,10 @@ public:
 
 				switch(bih.biCompression)
 				{
-#ifndef _WIN32_WCE
 				case BI_RLE4:
 				case BI_RLE8:
 					lpstrCompression = _T("RLE");
 					break;
-#endif // _WIN32_WCE
 				case BI_BITFIELDS:
 					lpstrCompression = _T("Uncompressed with bitfields");
 					break;

@@ -1,4 +1,4 @@
-// Windows Template Library - WTL version 9.10
+// Windows Template Library - WTL version 10.0
 // Copyright (C) Microsoft Corporation, WTL Team. All rights reserved.
 //
 // This file is a part of the Windows Template Library.
@@ -476,7 +476,7 @@ public:
 		{
 			dc.FillRect(&rect, COLOR_3DFACE);
 
-#if (!defined(_WIN32_WCE) && !defined(_ATL_NO_MSIMG)) || (_WIN32_WCE >= 420)
+#ifndef _ATL_NO_MSIMG
 			if((m_dwExtendedStyle & SPLIT_GRADIENTBAR) != 0)
 			{
 				RECT rect2 = rect;
@@ -487,8 +487,7 @@ public:
 
 				dc.GradientFillRect(rect2, ::GetSysColor(COLOR_3DFACE), ::GetSysColor(COLOR_3DSHADOW), m_bVertical);
 			}
-#endif // (!defined(_WIN32_WCE) && !defined(_ATL_NO_MSIMG)) || (_WIN32_WCE >= 420)
-
+#endif
 			// draw 3D edge if needed
 			T* pT = static_cast<T*>(this);
 			if((pT->GetExStyle() & WS_EX_CLIENTEDGE) != 0)
@@ -513,9 +512,7 @@ public:
 	BEGIN_MSG_MAP(CSplitterImpl)
 		MESSAGE_HANDLER(WM_CREATE, OnCreate)
 		MESSAGE_HANDLER(WM_PAINT, OnPaint)
-#ifndef _WIN32_WCE
 		MESSAGE_HANDLER(WM_PRINTCLIENT, OnPaint)
-#endif // !_WIN32_WCE
 		if(IsInteractive())
 		{
 			MESSAGE_HANDLER(WM_SETCURSOR, OnSetCursor)
@@ -527,9 +524,7 @@ public:
 			MESSAGE_HANDLER(WM_KEYDOWN, OnKeyDown)
 		}
 		MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocus)
-#ifndef _WIN32_WCE
 		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
-#endif // !_WIN32_WCE
 		MESSAGE_HANDLER(WM_SETTINGCHANGE, OnSettingChange)
 	END_MSG_MAP()
 
@@ -765,7 +760,6 @@ public:
 		return 1;
 	}
 
-#ifndef _WIN32_WCE
 	LRESULT OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
 	{
 		T* pT = static_cast<T*>(this);
@@ -788,7 +782,6 @@ public:
 
 		return lRet;
 	}
-#endif // !_WIN32_WCE
 
 	LRESULT OnSettingChange(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 	{
@@ -923,8 +916,8 @@ public:
 	bool IsOverSplitterRect(int x, int y) const
 	{
 		// -1 == don't check
-		return ((x == -1 || (x >= m_rcSplitter.left && x <= m_rcSplitter.right)) &&
-			(y == -1 || (y >= m_rcSplitter.top && y <= m_rcSplitter.bottom)));
+		return (((x == -1) || ((x >= m_rcSplitter.left) && (x <= m_rcSplitter.right))) &&
+			((y == -1) || ((y >= m_rcSplitter.top) && (y <= m_rcSplitter.bottom))));
 	}
 
 	bool IsOverSplitterBar(int x, int y) const
@@ -936,7 +929,7 @@ public:
 		int xy = m_bVertical ? x : y;
 		int xyOff = m_bVertical ? m_rcSplitter.left : m_rcSplitter.top;
 
-		return ((xy >= (xyOff + m_xySplitterPos)) && (xy < xyOff + m_xySplitterPos + m_cxySplitBar + m_cxyBarEdge));
+		return ((xy >= (xyOff + m_xySplitterPos)) && (xy < (xyOff + m_xySplitterPos + m_cxySplitBar + m_cxyBarEdge)));
 	}
 
 	void DrawGhostBar()
@@ -953,7 +946,7 @@ public:
 
 			// invert the brush pattern (looks just like frame window sizing)
 			CWindowDC dc(pT->m_hWnd);
-			CBrush brush = CDCHandle::GetHalftoneBrush();
+			CBrush brush(CDCHandle::GetHalftoneBrush());
 			if(brush.m_hBrush != NULL)
 			{
 				CBrushHandle brushOld = dc.SelectBrush(brush);
@@ -967,11 +960,7 @@ public:
 	{
 		if((m_dwExtendedStyle & SPLIT_FIXEDBARSIZE) == 0)
 		{
-#ifndef _WIN32_WCE
 			m_cxySplitBar = ::GetSystemMetrics(m_bVertical ? SM_CXSIZEFRAME : SM_CYSIZEFRAME);
-#else // CE specific
-			m_cxySplitBar = 2 * ::GetSystemMetrics(m_bVertical ? SM_CXEDGE : SM_CYEDGE);
-#endif // _WIN32_WCE
 		}
 
 		T* pT = static_cast<T*>(this);
@@ -986,9 +975,7 @@ public:
 			m_cxyMin = 2 * ::GetSystemMetrics(m_bVertical ? SM_CXEDGE : SM_CYEDGE);
 		}
 
-#ifndef _WIN32_WCE
 		::SystemParametersInfo(SPI_GETDRAGFULLWINDOWS, 0, &m_bFullDrag, 0);
-#endif // !_WIN32_WCE
 
 		if(bUpdate)
 			UpdateSplitterLayout();
@@ -1068,12 +1055,7 @@ public:
 
 	BOOL SubclassWindow(HWND hWnd)
 	{
-#if (_MSC_VER >= 1300)
 		BOOL bRet = ATL::CWindowImpl< T, TBase, TWinTraits >::SubclassWindow(hWnd);
-#else // !(_MSC_VER >= 1300)
-		typedef ATL::CWindowImpl< T, TBase, TWinTraits >   _baseClass;
-		BOOL bRet = _baseClass::SubclassWindow(hWnd);
-#endif // !(_MSC_VER >= 1300)
 		if(bRet != FALSE)
 		{
 			T* pT = static_cast<T*>(this);
@@ -1101,7 +1083,7 @@ public:
 	LRESULT OnSize(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
 	{
 		if(wParam != SIZE_MINIMIZED)
-			SetSplitterRect();
+			this->SetSplitterRect();
 
 		bHandled = FALSE;
 		return 1;

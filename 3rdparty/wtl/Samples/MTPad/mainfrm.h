@@ -3,28 +3,22 @@
 
 class CMainFrame : 
 	public CFrameWindowImpl<CMainFrame>, 
-	public CUpdateUI<CMainFrame>
-#ifndef _WIN32_WCE
-	, public CPrintJobInfo
-#endif // _WIN32_WCE
+	public CUpdateUI<CMainFrame>, 
+	public CPrintJobInfo
 {
 public:
 	DECLARE_FRAME_WND_CLASS(NULL, IDR_MAINFRAME);
 
-#ifndef _WIN32_WCE
 	CCommandBarCtrl m_CmdBar;
 	CRecentDocumentList m_mru;
-#endif // _WIN32_WCE
 	CMultiPaneStatusBarCtrl m_sbar;
 	CEditView m_view;
 	BOOL m_bModified;
 
-#ifndef _WIN32_WCE
 	CPrinterT<true> printer;
 	CDevModeT<true> devmode;
 	CPrintPreviewWindow prev;
 	CEnhMetaFileT<true> enhmetafile;
-#endif // _WIN32_WCE
 	CRect m_rcMargin;
 	HWND m_hWndOldClient;
 	HWND m_hWndToolBarPP;
@@ -32,10 +26,8 @@ public:
 
 	CMainFrame() : m_bModified(FALSE), m_rcMargin(1000, 1000, 1000, 1000)
 	{
-#ifndef _WIN32_WCE
 		printer.OpenDefaultPrinter();
 		devmode.CopyFromPrinter(printer);
-#endif // _WIN32_WCE
 	}
 
 	BOOL PreTranslateMessage(MSG* pMsg)
@@ -50,21 +42,17 @@ public:
 		MESSAGE_HANDLER(WM_CREATE, OnCreate)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_UPDATEROWCOL, OnUpdateRowCol)
-#ifndef _WIN32_WCE
 		COMMAND_ID_HANDLER(ID_FILE_PRINT, OnFilePrint)
 		COMMAND_ID_HANDLER(ID_FILE_PRINT_PREVIEW, OnFilePrintPreview)
 		COMMAND_ID_HANDLER(ID_FILE_PAGE_SETUP, OnFilePageSetup)
 		COMMAND_ID_HANDLER(ID_PP_CLOSE, OnPrintPreviewClose)
 		COMMAND_ID_HANDLER(ID_PP_BACK, OnPrintPreviewBack)
 		COMMAND_ID_HANDLER(ID_PP_FORWARD, OnPrintPreviewForward)
-#endif // _WIN32_WCE
 		COMMAND_ID_HANDLER(ID_FILE_NEW, OnFileNew)
 		COMMAND_ID_HANDLER(ID_FILE_OPEN, OnFileOpen)
 		COMMAND_ID_HANDLER(ID_FILE_SAVE, OnFileSave)
 		COMMAND_ID_HANDLER(ID_FILE_SAVE_AS, OnFileSaveAs)
-#ifndef _WIN32_WCE
 		COMMAND_RANGE_HANDLER(ID_FILE_MRU_FIRST, ID_FILE_MRU_LAST, OnFileRecent)
-#endif // _WIN32_WCE
 		COMMAND_ID_HANDLER(ID_FILE_NEW_WINDOW, OnFileNewWindow)
 		COMMAND_ID_HANDLER(ID_APP_EXIT, OnFileExit)
 		COMMAND_ID_HANDLER(ID_VIEW_TOOLBAR, OnViewToolBar)
@@ -95,7 +83,6 @@ public:
 
 	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 	{
-#ifndef _WIN32_WCE
 		// create command bar window
 		HWND hWndCmdBar = m_CmdBar.Create(m_hWnd, rcDefault, NULL, ATL_SIMPLE_CMDBAR_PANE_STYLE);
 		// atach menu
@@ -110,10 +97,6 @@ public:
 		CreateSimpleReBar(ATL_SIMPLE_REBAR_NOBORDER_STYLE);
 		AddSimpleReBarBand(hWndCmdBar);
 		AddSimpleReBarBand(hWndToolBar, NULL, TRUE);
-#else
-		CreateSimpleCECommandBar(MAKEINTRESOURCE(IDR_MAINFRAME));
-		CreateSimpleToolBar();
-#endif // _WIN32_WCE
 
 		CreateSimpleStatusBar();
 		m_sbar.SubclassWindow(m_hWndStatusBar);
@@ -128,30 +111,21 @@ public:
 		m_hWndClient = m_view.Create(m_hWnd, rcDefault, NULL, 
 			WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_HSCROLL | 
 			ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL 
-#ifndef _WIN32_WCE
 			| ES_SAVESEL | ES_SELECTIONBAR,
 			WS_EX_CLIENTEDGE);
-#else // _WIN32_WCE
-			);
-#endif // _WIN32_WCE
 
-#ifndef _WIN32_WCE
 		UIAddToolBar(hWndToolBar);
 		UISetCheck(ID_VIEW_TOOLBAR, 1);
-#endif // _WIN32_WCE
 		UISetCheck(ID_VIEW_STATUS_BAR, 1);
 
 		SendMessage(WM_UPDATEROWCOL);	// update row and col indicators
 
-#ifndef _WIN32_WCE
 		m_hWndToolBarPP = CreateSimpleToolBarCtrl(m_hWnd, IDR_PRINTPREVIEWBAR, FALSE, ATL_SIMPLE_TOOLBAR_PANE_STYLE, ATL_IDW_TOOLBAR + 1);
 		AddSimpleReBarBand(m_hWndToolBarPP, NULL, TRUE);
 		::SendMessage(m_hWndToolBar, RB_SHOWBAND, 2, FALSE);	// print preview toolbar is band #2
 
 		UIAddToolBar(m_hWndToolBarPP);
-#endif // _WIN32_WCE
 
-#ifndef _WIN32_WCE
 		HMENU hMenu = m_CmdBar.GetMenu();
 		HMENU hFileMenu = ::GetSubMenu(hMenu, FILE_MENU_POSITION);
 #ifdef _DEBUG
@@ -164,7 +138,6 @@ public:
 		m_mru.SetMenuHandle(hMruMenu);
 
 		m_mru.ReadFromRegistry(lpcstrMTPadRegKey);
-#endif // _WIN32_WCE
 
 		return 0;
 	}
@@ -240,10 +213,8 @@ public:
 
 			if(DoFileOpen(dlg.m_ofn.lpstrFile, dlg.m_ofn.lpstrFileTitle))
 			{
-#ifndef _WIN32_WCE
 				m_mru.AddToList(dlg.m_ofn.lpstrFile);
 				m_mru.WriteToRegistry(lpcstrMTPadRegKey);
-#endif // _WIN32_WCE
 			}
 		}
 
@@ -271,10 +242,8 @@ public:
 			if(m_view.SaveFile(m_view.m_strFilePath))
 			{
 				m_view.SetModify(FALSE);
-#ifndef _WIN32_WCE
 				m_mru.AddToList(m_view.m_strFilePath);
 				m_mru.WriteToRegistry(lpcstrMTPadRegKey);
-#endif // _WIN32_WCE
 			}
 			else
 			{
@@ -286,10 +255,8 @@ public:
 			if(m_view.DoFileSaveAs())
 			{
 				UpdateTitle();
-#ifndef _WIN32_WCE
 				m_mru.AddToList(m_view.m_strFilePath);
 				m_mru.WriteToRegistry(lpcstrMTPadRegKey);
-#endif // _WIN32_WCE
 			}
 		}
 
@@ -301,10 +268,8 @@ public:
 		if(m_view.DoFileSaveAs())
 		{
 			UpdateTitle();
-#ifndef _WIN32_WCE
 			m_mru.AddToList(m_view.m_strFilePath);
 			m_mru.WriteToRegistry(lpcstrMTPadRegKey);
-#endif // _WIN32_WCE
 		}
 		return 0;
 	}
@@ -331,7 +296,6 @@ public:
 		return bRet;
 	}
 
-#ifndef _WIN32_WCE
 	LRESULT OnFileRecent(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 	{
 		// check if we have to save the current one
@@ -368,7 +332,6 @@ public:
 
 		return 0;
 	}
-#endif // _WIN32_WCE
 
 	LRESULT OnFileNewWindow(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 	{
@@ -415,11 +378,7 @@ public:
 			CMenu menuContext;
 			menuContext.LoadMenu(IDR_CONTEXTMENU);
 			CMenuHandle menuPopup(menuContext.GetSubMenu(0));
-#ifndef _WIN32_WCE
 			m_CmdBar.TrackPopupMenu(menuPopup, TPM_LEFTALIGN | TPM_RIGHTBUTTON, LOWORD(lParam), HIWORD(lParam));
-#else
-			TrackPopupMenuEx(menuPopup, TPM_LEFTALIGN, LOWORD(lParam), HIWORD(lParam), m_hWndCECommandBar, NULL);
-#endif // _WIN32_WCE
 		}
 		else
 		{
@@ -439,7 +398,6 @@ public:
 		}
 
 		UIEnable(ID_EDIT_UNDO, m_view.CanUndo());
-#ifndef _WIN32_WCE
 		UIEnable(ID_EDIT_PASTE, m_view.CanPaste(CF_TEXT));
 
 		BOOL bSel = (m_view.GetSelectionType() != SEL_EMPTY);
@@ -447,7 +405,6 @@ public:
 		UIEnable(ID_EDIT_CUT, bSel);
 		UIEnable(ID_EDIT_COPY, bSel);
 		UIEnable(ID_EDIT_CLEAR, bSel);
-#endif // _WIN32_WCE
 
 		BOOL bNotEmpty = (m_view.GetWindowTextLength() > 0);
 		UIEnable(ID_EDIT_SELECT_ALL, bNotEmpty);
@@ -457,18 +414,15 @@ public:
 
 		UISetCheck(ID_EDIT_WORD_WRAP, m_view.m_bWordWrap);
 
-#ifndef _WIN32_WCE
 		if(prev.IsWindow() && (prev.GetStyle() & WS_VISIBLE) != 0)
 		{
 			UIEnable(ID_PP_BACK, (prev.m_nCurPage > prev.m_nMinPage));
 			UIEnable(ID_PP_FORWARD, prev.m_nCurPage < prev.m_nMaxPage);
 		}
-#endif // _WIN32_WCE
 
 		UIUpdateToolBar();
 	}
 
-#ifndef _WIN32_WCE
 //print job info callback
 	virtual bool IsValidPage(UINT /*nPage*/)
 	{
@@ -683,5 +637,4 @@ public:
 		prev.PrevPage();
 		return 0;
 	}
-#endif // _WIN32_WCE
 };

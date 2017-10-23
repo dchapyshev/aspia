@@ -7,10 +7,6 @@
 
 #pragma once
 
-#if !defined _WTL_VER || _WTL_VER < 0x800
-	#error Aero.h requires the Windows Template Library 8.0
-#endif
-
 #if _WIN32_WINNT < 0x0600
 	#error Aero.h requires _WIN32_WINNT >= 0x0600
 #elif !defined(NTDDI_VERSION) || (NTDDI_VERSION < NTDDI_LONGHORN)
@@ -23,11 +19,6 @@
 
 #include <dwmapi.h>
 #pragma comment (lib, "dwmapi.lib")
-
-#if (_MSC_VER < 1300) && !defined(_WTL_NO_THEME_DELAYLOAD)
-  #pragma comment(lib, "delayimp.lib")
-  #pragma comment(linker, "/delayload:dwmapi.dll")
-#endif // (_MSC_VER < 1300) && !defined(_WTL_NO_THEME_DELAYLOAD)
 
 
 ///////////////////////////////////////////////////////////////////////////////

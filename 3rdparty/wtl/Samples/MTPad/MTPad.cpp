@@ -5,12 +5,10 @@
 #include <atlctrlx.h>
 #include <atldlgs.h>
 #include <atlmisc.h>
-#ifndef _WIN32_WCE
 #include <atlctrlw.h>
 #include <atlprint.h>
 #include <atlfind.h>
 #include "finddlg.h"
-#endif // _WIN32_WCE
 
 #include "resource.h"
 
@@ -41,16 +39,12 @@ CAppModule _Module;
 int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int nCmdShow)
 {
 	_Module.Init(NULL, hInstance);
-#ifndef _WIN32_WCE
 	HINSTANCE hInstRich = ::LoadLibrary(CRichEditCtrl::GetLibraryName());
-#endif // _WIN32_WCE
 
 	CThreadManager mgr;
 	int nRet = mgr.Run(lpCmdLine, nCmdShow);
 
-#ifndef _WIN32_WCE
 	::FreeLibrary(hInstRich);
-#endif // _WIN32_WCE
 	_Module.Term();
 
 	return nRet;

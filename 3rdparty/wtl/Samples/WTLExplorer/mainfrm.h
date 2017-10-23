@@ -50,11 +50,7 @@ public:
 			rect.right -= m_cxyTextOffset;
 			if(m_tb.m_hWnd != NULL)
 				rect.right -= m_cxToolBar;;
-#ifndef _WIN32_WCE
 			dc.DrawText(m_szTitle, -1, &rect, DT_LEFT | DT_SINGLELINE | DT_VCENTER | DT_END_ELLIPSIS);
-#else // CE specific
-			dc.DrawText(m_szTitle, -1, &rect, DT_LEFT | DT_SINGLELINE | DT_VCENTER);
-#endif //_WIN32_WCE
 			dc.SelectFont(hFontOld);
 		}
 	}

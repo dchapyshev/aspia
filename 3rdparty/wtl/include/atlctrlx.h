@@ -1,4 +1,4 @@
-// Windows Template Library - WTL version 9.10
+// Windows Template Library - WTL version 10.0
 // Copyright (C) Microsoft Corporation, WTL Team. All rights reserved.
 //
 // This file is a part of the Windows Template Library.
@@ -18,10 +18,6 @@
 #ifndef __ATLCTRLS_H__
 	#error atlctrlx.h requires atlctrls.h to be included first
 #endif
-
-#ifndef WM_UPDATEUISTATE
-  #define WM_UPDATEUISTATE                0x0128
-#endif // !WM_UPDATEUISTATE
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -50,8 +46,6 @@ namespace WTL
 
 ///////////////////////////////////////////////////////////////////////////////
 // CBitmapButton - bitmap button implementation
-
-#ifndef _WIN32_WCE
 
 // bitmap button extended styles
 #define BMPBTN_HOVER            0x00000001
@@ -131,12 +125,7 @@ public:
 	// overridden to provide proper initialization
 	BOOL SubclassWindow(HWND hWnd)
 	{
-#if (_MSC_VER >= 1300)
 		BOOL bRet = ATL::CWindowImpl< T, TBase, TWinTraits >::SubclassWindow(hWnd);
-#else // !(_MSC_VER >= 1300)
-		typedef ATL::CWindowImpl< T, TBase, TWinTraits >   _baseClass;
-		BOOL bRet = _baseClass::SubclassWindow(hWnd);
-#endif // !(_MSC_VER >= 1300)
 		if(bRet != FALSE)
 		{
 			T* pT = static_cast<T*>(this);
@@ -177,7 +166,7 @@ public:
 	{
 		HIMAGELIST hImageListPrev = m_ImageList;
 		m_ImageList = hImageList;
-		if((m_dwExtendedStyle & BMPBTN_AUTOSIZE) != 0 && ::IsWindow(m_hWnd))
+		if(((m_dwExtendedStyle & BMPBTN_AUTOSIZE) != 0) && ::IsWindow(this->m_hWnd))
 			SizeToImage();
 
 		return hImageListPrev;
@@ -194,9 +183,9 @@ public:
 		if(m_lpstrToolTipText == NULL)
 			return false;
 
-		errno_t nRet = SecureHelper::strncpy_x(lpstrText, nLength, m_lpstrToolTipText, _TRUNCATE);
+		errno_t nRet = ATL::Checked::tcsncpy_s(lpstrText, nLength, m_lpstrToolTipText, _TRUNCATE);
 
-		return (nRet == 0 || nRet == STRUNCATE);
+		return ((nRet == 0) || (nRet == STRUNCATE));
 	}
 
 	bool SetToolTipText(LPCTSTR lpstrText)
@@ -219,11 +208,11 @@ public:
 		if(m_lpstrToolTipText == NULL)
 			return false;
 
-		SecureHelper::strcpy_x(m_lpstrToolTipText, cchLen, lpstrText);
+		ATL::Checked::tcscpy_s(m_lpstrToolTipText, cchLen, lpstrText);
 		if(m_tip.IsWindow())
 		{
 			m_tip.Activate(TRUE);
-			m_tip.AddTool(m_hWnd, m_lpstrToolTipText);
+			m_tip.AddTool(this->m_hWnd, m_lpstrToolTipText);
 		}
 
 		return true;
@@ -240,8 +229,8 @@ public:
 
 		if(bUpdate)
 		{
-			Invalidate();
-			UpdateWindow();
+			this->Invalidate();
+			this->UpdateWindow();
 		}
 	}
 
@@ -260,12 +249,12 @@ public:
 
 	BOOL SizeToImage()
 	{
-		ATLASSERT(::IsWindow(m_hWnd) && m_ImageList.m_hImageList != NULL);
+		ATLASSERT(::IsWindow(this->m_hWnd) && (m_ImageList.m_hImageList != NULL));
 		int cx = 0;
 		int cy = 0;
 		if(!m_ImageList.GetIconSize(cx, cy))
 			return FALSE;
-		return ResizeClient(cx, cy);
+		return this->ResizeClient(cx, cy);
 	}
 
 // Overrideables
@@ -278,7 +267,7 @@ public:
 		bool bHover = IsHoverMode();
 		bool bPressed = (m_fPressed == 1) || (IsCheckMode() && (m_fChecked == 1));
 		int nImage = -1;
-		if(!IsWindowEnabled())
+		if(!this->IsWindowEnabled())
 			nImage = m_nImage[_nImageDisabled];
 		else if(bPressed)
 			nImage = m_nImage[_nImagePushed];
@@ -298,7 +287,7 @@ public:
 		if(bAuto3D)
 		{
 			RECT rect = { 0 };
-			GetClientRect(&rect);
+			this->GetClientRect(&rect);
 
 			if(bPressed)
 				dc.DrawEdge(&rect, ((m_dwExtendedStyle & BMPBTN_AUTO3D_SINGLE) != 0) ? BDR_SUNKENOUTER : EDGE_SUNKEN, BF_RECT);
@@ -358,7 +347,7 @@ public:
 
 	LRESULT OnMouseMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		MSG msg = { m_hWnd, uMsg, wParam, lParam };
+		MSG msg = { this->m_hWnd, uMsg, wParam, lParam };
 		if(m_tip.IsWindow())
 			m_tip.RelayEvent(&msg);
 		bHandled = FALSE;
@@ -379,7 +368,7 @@ public:
 		}
 		else
 		{
-			CPaintDC dc(m_hWnd);
+			CPaintDC dc(this->m_hWnd);
 			pT->DoPaint(dc.m_hDC);
 		}
 		return 0;
@@ -388,8 +377,8 @@ public:
 	LRESULT OnFocus(UINT uMsg, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
 	{
 		m_fFocus = (uMsg == WM_SETFOCUS) ? 1 : 0;
-		Invalidate();
-		UpdateWindow();
+		this->Invalidate();
+		this->UpdateWindow();
 		bHandled = FALSE;
 		return 1;
 	}
@@ -398,14 +387,14 @@ public:
 	{
 		LRESULT lRet = 0;
 		if(IsHoverMode())
-			SetCapture();
+			this->SetCapture();
 		else
-			lRet = DefWindowProc(uMsg, wParam, lParam);
-		if(::GetCapture() == m_hWnd)
+			lRet = this->DefWindowProc(uMsg, wParam, lParam);
+		if(::GetCapture() == this->m_hWnd)
 		{
 			m_fPressed = 1;
-			Invalidate();
-			UpdateWindow();
+			this->Invalidate();
+			this->UpdateWindow();
 		}
 		if(((m_dwExtendedStyle & BMPBTN_AUTOFIRE) != 0) && !IsCheckMode())
 		{
@@ -413,7 +402,7 @@ public:
 			int nDelay = 0;
 			if(::SystemParametersInfo(SPI_GETKEYBOARDDELAY, 0, &nDelay, 0))
 				nElapse += nDelay * 250;   // all milli-seconds
-			SetTimer(ID_TIMER_FIRST, nElapse);
+			this->SetTimer(ID_TIMER_FIRST, nElapse);
 		}
 		return lRet;
 	}
@@ -422,14 +411,14 @@ public:
 	{
 		LRESULT lRet = 0;
 		if(!IsHoverMode() && !IsCheckMode())
-			lRet = DefWindowProc(uMsg, wParam, lParam);
-		if(::GetCapture() != m_hWnd)
-			SetCapture();
+			lRet = this->DefWindowProc(uMsg, wParam, lParam);
+		if(::GetCapture() != this->m_hWnd)
+			this->SetCapture();
 		if(m_fPressed == 0)
 		{
 			m_fPressed = 1;
-			Invalidate();
-			UpdateWindow();
+			this->Invalidate();
+			this->UpdateWindow();
 		}
 		return lRet;
 	}
@@ -441,11 +430,11 @@ public:
 
 		LRESULT lRet = 0;
 		if(!IsHoverMode() && !IsCheckMode())
-			lRet = DefWindowProc(uMsg, wParam, lParam);
-		if(::GetCapture() == m_hWnd)
+			lRet = this->DefWindowProc(uMsg, wParam, lParam);
+		if(::GetCapture() == this->m_hWnd)
 		{
 			if((IsHoverMode() || IsCheckMode()) && (m_fPressed == 1))
-				::SendMessage(GetParent(), WM_COMMAND, MAKEWPARAM(GetDlgCtrlID(), BN_CLICKED), (LPARAM)m_hWnd);
+				this->GetParent().SendMessage(WM_COMMAND, MAKEWPARAM(this->GetDlgCtrlID(), BN_CLICKED), (LPARAM)this->m_hWnd);
 			::ReleaseCapture();
 		}
 		return lRet;
@@ -456,8 +445,8 @@ public:
 		if(m_fPressed == 1)
 		{
 			m_fPressed = 0;
-			Invalidate();
-			UpdateWindow();
+			this->Invalidate();
+			this->UpdateWindow();
 		}
 		bHandled = FALSE;
 		return 1;
@@ -465,33 +454,33 @@ public:
 
 	LRESULT OnEnable(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
 	{
-		Invalidate();
-		UpdateWindow();
+		this->Invalidate();
+		this->UpdateWindow();
 		bHandled = FALSE;
 		return 1;
 	}
 
 	LRESULT OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
 	{
-		if(::GetCapture() == m_hWnd)
+		if(::GetCapture() == this->m_hWnd)
 		{
 			POINT ptCursor = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
-			ClientToScreen(&ptCursor);
+			this->ClientToScreen(&ptCursor);
 			RECT rect = { 0 };
-			GetWindowRect(&rect);
+			this->GetWindowRect(&rect);
 			unsigned int uPressed = ::PtInRect(&rect, ptCursor) ? 1 : 0;
 			if(m_fPressed != uPressed)
 			{
 				m_fPressed = uPressed;
-				Invalidate();
-				UpdateWindow();
+				this->Invalidate();
+				this->UpdateWindow();
 			}
 		}
 		else if(IsHoverMode() && m_fMouseOver == 0)
 		{
 			m_fMouseOver = 1;
-			Invalidate();
-			UpdateWindow();
+			this->Invalidate();
+			this->UpdateWindow();
 			StartTrackMouseLeave();
 		}
 		bHandled = FALSE;
@@ -503,21 +492,21 @@ public:
 		if(m_fMouseOver == 1)
 		{
 			m_fMouseOver = 0;
-			Invalidate();
-			UpdateWindow();
+			this->Invalidate();
+			this->UpdateWindow();
 		}
 		return 0;
 	}
 
 	LRESULT OnKeyDown(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
 	{
-		if(wParam == VK_SPACE && IsHoverMode())
+		if((wParam == VK_SPACE) && IsHoverMode())
 			return 0;   // ignore if in hover mode
-		if(wParam == VK_SPACE && m_fPressed == 0)
+		if((wParam == VK_SPACE) && (m_fPressed == 0))
 		{
 			m_fPressed = 1;
-			Invalidate();
-			UpdateWindow();
+			this->Invalidate();
+			this->UpdateWindow();
 		}
 		bHandled = FALSE;
 		return 1;
@@ -525,15 +514,15 @@ public:
 
 	LRESULT OnKeyUp(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
 	{
-		if(wParam == VK_SPACE && IsHoverMode())
+		if((wParam == VK_SPACE) && IsHoverMode())
 			return 0;   // ignore if in hover mode
-		if(wParam == VK_SPACE && m_fPressed == 1)
+		if((wParam == VK_SPACE) && (m_fPressed == 1))
 		{
 			m_fPressed = 0;
 			if((m_dwExtendedStyle & BMPBTN_AUTOCHECK) != 0)
 				SetCheck(!GetCheck(), false);
-			Invalidate();
-			UpdateWindow();
+			this->Invalidate();
+			this->UpdateWindow();
 		}
 		bHandled = FALSE;
 		return 1;
@@ -545,22 +534,22 @@ public:
 		switch(wParam)   // timer ID
 		{
 		case ID_TIMER_FIRST:
-			KillTimer(ID_TIMER_FIRST);
+			this->KillTimer(ID_TIMER_FIRST);
 			if(m_fPressed == 1)
 			{
-				::SendMessage(GetParent(), WM_COMMAND, MAKEWPARAM(GetDlgCtrlID(), BN_CLICKED), (LPARAM)m_hWnd);
+				this->GetParent().SendMessage(WM_COMMAND, MAKEWPARAM(this->GetDlgCtrlID(), BN_CLICKED), (LPARAM)this->m_hWnd);
 				int nElapse = 250;
 				int nRepeat = 40;
 				if(::SystemParametersInfo(SPI_GETKEYBOARDSPEED, 0, &nRepeat, 0))
 					nElapse = 10000 / (10 * nRepeat + 25);   // milli-seconds, approximated
-				SetTimer(ID_TIMER_REPEAT, nElapse);
+				this->SetTimer(ID_TIMER_REPEAT, nElapse);
 			}
 			break;
 		case ID_TIMER_REPEAT:
 			if(m_fPressed == 1)
-				::SendMessage(GetParent(), WM_COMMAND, MAKEWPARAM(GetDlgCtrlID(), BN_CLICKED), (LPARAM)m_hWnd);
-			else if(::GetCapture() != m_hWnd)
-				KillTimer(ID_TIMER_REPEAT);
+				this->GetParent().SendMessage(WM_COMMAND, MAKEWPARAM(this->GetDlgCtrlID(), BN_CLICKED), (LPARAM)this->m_hWnd);
+			else if(::GetCapture() != this->m_hWnd)
+				this->KillTimer(ID_TIMER_REPEAT);
 			break;
 		default:	// not our timer
 			break;
@@ -579,18 +568,18 @@ public:
 	void Init()
 	{
 		// We need this style to prevent Windows from painting the button
-		ModifyStyle(0, BS_OWNERDRAW);
+		this->ModifyStyle(0, BS_OWNERDRAW);
 
 		// create a tool tip
-		m_tip.Create(m_hWnd);
+		m_tip.Create(this->m_hWnd);
 		ATLASSERT(m_tip.IsWindow());
-		if(m_tip.IsWindow() && m_lpstrToolTipText != NULL)
+		if(m_tip.IsWindow() && (m_lpstrToolTipText != NULL))
 		{
 			m_tip.Activate(TRUE);
-			m_tip.AddTool(m_hWnd, m_lpstrToolTipText);
+			m_tip.AddTool(this->m_hWnd, m_lpstrToolTipText);
 		}
 
-		if(m_ImageList.m_hImageList != NULL && (m_dwExtendedStyle & BMPBTN_AUTOSIZE) != 0)
+		if((m_ImageList.m_hImageList != NULL) && ((m_dwExtendedStyle & BMPBTN_AUTOSIZE) != 0))
 			SizeToImage();
 	}
 
@@ -599,8 +588,8 @@ public:
 		TRACKMOUSEEVENT tme = { 0 };
 		tme.cbSize = sizeof(tme);
 		tme.dwFlags = TME_LEAVE;
-		tme.hwndTrack = m_hWnd;
-		return _TrackMouseEvent(&tme);
+		tme.hwndTrack = this->m_hWnd;
+		return ::TrackMouseEvent(&tme);
 	}
 
 	bool IsHoverMode() const
@@ -623,8 +612,6 @@ public:
 		CBitmapButtonImpl<CBitmapButton>(dwExtendedStyle, hImageList)
 	{ }
 };
-
-#endif // !_WIN32_WCE
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -667,12 +654,7 @@ public:
 // Operations
 	BOOL SubclassWindow(HWND hWnd)
 	{
-#if (_MSC_VER >= 1300)
 		BOOL bRet = ATL::CWindowImpl< T, TBase, TWinTraits >::SubclassWindow(hWnd);
-#else // !(_MSC_VER >= 1300)
-		typedef ATL::CWindowImpl< T, TBase, TWinTraits >   _baseClass;
-		BOOL bRet = _baseClass::SubclassWindow(hWnd);
-#endif // !(_MSC_VER >= 1300)
 		if(bRet != FALSE)
 		{
 			T* pT = static_cast<T*>(this);
@@ -690,18 +672,18 @@ public:
 		lvi.iSubItem = 0;
 		lvi.mask = LVIF_STATE;
 		lvi.stateMask = LVIS_SELECTED;
-		GetItem(&lvi);
+		this->GetItem(&lvi);
 		// if item is not selected, don't do anything
 		if(!(lvi.state & LVIS_SELECTED))
 			return;
 		// new check state will be reverse of the current state,
-		BOOL bCheck = !GetCheckState(nCurrItem);
+		BOOL bCheck = !this->GetCheckState(nCurrItem);
 		int nItem = -1;
 		int nOldItem = -1;
-		while((nItem = GetNextItem(nOldItem, LVNI_SELECTED)) != -1)
+		while((nItem = this->GetNextItem(nOldItem, LVNI_SELECTED)) != -1)
 		{
 			if(nItem != nCurrItem)
-				SetCheckState(nItem, bCheck);
+				this->SetCheckState(nItem, bCheck);
 			nOldItem = nItem;
 		}
 	}
@@ -712,7 +694,7 @@ public:
 		T* pT = static_cast<T*>(this);
 		pT;   // avoid level 4 warning
 		ATLASSERT((pT->GetExtendedLVStyle() & LVS_EX_CHECKBOXES) != 0);
-		SetExtendedListViewStyle(pT->GetExtendedLVStyle());
+		this->SetExtendedListViewStyle(pT->GetExtendedLVStyle());
 	}
 
 // Message map and handlers
@@ -726,7 +708,7 @@ public:
 	LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
 	{
 		// first let list view control initialize everything
-		LRESULT lRet = DefWindowProc(uMsg, wParam, lParam);
+		LRESULT lRet = this->DefWindowProc(uMsg, wParam, lParam);
 		if(lRet == 0)
 		{
 			T* pT = static_cast<T*>(this);
@@ -741,7 +723,7 @@ public:
 		POINT ptMsg = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 		LVHITTESTINFO lvh = { 0 };
 		lvh.pt = ptMsg;
-		if(HitTest(&lvh) != -1 && lvh.flags == LVHT_ONITEMSTATEICON && ::GetKeyState(VK_CONTROL) >= 0)
+		if((this->HitTest(&lvh) != -1) && (lvh.flags == LVHT_ONITEMSTATEICON) && (::GetKeyState(VK_CONTROL) >= 0))
 		{
 			T* pT = static_cast<T*>(this);
 			pT->CheckSelectedItems(lvh.iItem);
@@ -754,8 +736,8 @@ public:
 	{
 		if(wParam == VK_SPACE)
 		{
-			int nCurrItem = GetNextItem(-1, LVNI_FOCUSED);
-			if(nCurrItem != -1  && ::GetKeyState(VK_CONTROL) >= 0)
+			int nCurrItem = this->GetNextItem(-1, LVNI_FOCUSED);
+			if((nCurrItem != -1)  && (::GetKeyState(VK_CONTROL) >= 0))
 			{
 				T* pT = static_cast<T*>(this);
 				pT->CheckSelectedItems(nCurrItem);
@@ -775,40 +757,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 // CHyperLink - hyper link control implementation
-
-#if (WINVER < 0x0500) && !defined(_WIN32_WCE)
-__declspec(selectany) struct
-{
-	enum { cxWidth = 32, cyHeight = 32 };
-	int xHotSpot;
-	int yHotSpot;
-	unsigned char arrANDPlane[cxWidth * cyHeight / 8];
-	unsigned char arrXORPlane[cxWidth * cyHeight / 8];
-} _AtlHyperLink_CursorData = 
-{
-	5, 0, 
-	{
-		0xF9, 0xFF, 0xFF, 0xFF, 0xF0, 0xFF, 0xFF, 0xFF, 0xF0, 0xFF, 0xFF, 0xFF, 0xF0, 0xFF, 0xFF, 0xFF, 
-		0xF0, 0xFF, 0xFF, 0xFF, 0xF0, 0x3F, 0xFF, 0xFF, 0xF0, 0x07, 0xFF, 0xFF, 0xF0, 0x01, 0xFF, 0xFF, 
-		0xF0, 0x00, 0xFF, 0xFF, 0x10, 0x00, 0x7F, 0xFF, 0x00, 0x00, 0x7F, 0xFF, 0x00, 0x00, 0x7F, 0xFF, 
-		0x80, 0x00, 0x7F, 0xFF, 0xC0, 0x00, 0x7F, 0xFF, 0xC0, 0x00, 0x7F, 0xFF, 0xE0, 0x00, 0x7F, 0xFF, 
-		0xE0, 0x00, 0xFF, 0xFF, 0xF0, 0x00, 0xFF, 0xFF, 0xF0, 0x00, 0xFF, 0xFF, 0xF8, 0x01, 0xFF, 0xFF, 
-		0xF8, 0x01, 0xFF, 0xFF, 0xF8, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-		0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-		0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
-	},
-	{
-		0x00, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 
-		0x06, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x06, 0xC0, 0x00, 0x00, 0x06, 0xD8, 0x00, 0x00, 
-		0x06, 0xDA, 0x00, 0x00, 0x06, 0xDB, 0x00, 0x00, 0x67, 0xFB, 0x00, 0x00, 0x77, 0xFF, 0x00, 0x00, 
-		0x37, 0xFF, 0x00, 0x00, 0x17, 0xFF, 0x00, 0x00, 0x1F, 0xFF, 0x00, 0x00, 0x0F, 0xFF, 0x00, 0x00, 
-		0x0F, 0xFE, 0x00, 0x00, 0x07, 0xFE, 0x00, 0x00, 0x07, 0xFE, 0x00, 0x00, 0x03, 0xFC, 0x00, 0x00, 
-		0x03, 0xFC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	}
-};
-#endif // (WINVER < 0x0500) && !defined(_WIN32_WCE)
 
 #define HLINK_UNDERLINED           0x00000000
 #define HLINK_NOTUNDERLINED        0x00000001
@@ -837,9 +785,7 @@ public:
 	HFONT m_hFontNormal;
 
 	RECT m_rcLink;
-#ifndef _WIN32_WCE
 	CToolTipCtrl m_tip;
-#endif // !_WIN32_WCE
 
 	COLORREF m_clrLink;
 	COLORREF m_clrVisited;
@@ -869,11 +815,6 @@ public:
 	{
 		delete [] m_lpstrLabel;
 		delete [] m_lpstrHyperLink;
-#if (WINVER < 0x0500) && !defined(_WIN32_WCE)
-		// It was created, not loaded, so we have to destroy it
-		if(m_hCursor != NULL)
-			::DestroyCursor(m_hCursor);
-#endif // (WINVER < 0x0500) && !defined(_WIN32_WCE)
 	}
 
 // Attributes
@@ -900,7 +841,7 @@ public:
 		if(nLength <= lstrlen(m_lpstrLabel))
 			return false;
 
-		SecureHelper::strcpy_x(lpstrBuffer, nLength, m_lpstrLabel);
+		ATL::Checked::tcscpy_s(lpstrBuffer, nLength, m_lpstrLabel);
 
 		return true;
 	}
@@ -914,12 +855,12 @@ public:
 		if(m_lpstrLabel == NULL)
 			return false;
 
-		SecureHelper::strcpy_x(m_lpstrLabel, cchLen, lpstrLabel);
+		ATL::Checked::tcscpy_s(m_lpstrLabel, cchLen, lpstrLabel);
 		T* pT = static_cast<T*>(this);
 		pT->CalcLabelRect();
 
-		if(m_hWnd != NULL)
-			SetWindowText(lpstrLabel);   // Set this for accessibility
+		if(this->m_hWnd != NULL)
+			this->SetWindowText(lpstrLabel);   // Set this for accessibility
 
 		return true;
 	}
@@ -932,7 +873,7 @@ public:
 		if(nLength <= lstrlen(m_lpstrHyperLink))
 			return false;
 
-		SecureHelper::strcpy_x(lpstrBuffer, nLength, m_lpstrHyperLink);
+		ATL::Checked::tcscpy_s(lpstrBuffer, nLength, m_lpstrHyperLink);
 
 		return true;
 	}
@@ -946,19 +887,19 @@ public:
 		if(m_lpstrHyperLink == NULL)
 			return false;
 
-		SecureHelper::strcpy_x(m_lpstrHyperLink, cchLen, lpstrLink);
+		ATL::Checked::tcscpy_s(m_lpstrHyperLink, cchLen, lpstrLink);
 		if(m_lpstrLabel == NULL)
 		{
 			T* pT = static_cast<T*>(this);
 			pT->CalcLabelRect();
 		}
-#ifndef _WIN32_WCE
+
 		if(m_tip.IsWindow())
 		{
 			m_tip.Activate(TRUE);
-			m_tip.AddTool(m_hWnd, m_lpstrHyperLink, &m_rcLink, 1);
+			m_tip.AddTool(this->m_hWnd, m_lpstrHyperLink, &m_rcLink, 1);
 		}
-#endif // !_WIN32_WCE
+
 		return true;
 	}
 
@@ -983,15 +924,15 @@ public:
 
 	int GetIdealHeight() const
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
-		if(m_lpstrLabel == NULL && m_lpstrHyperLink == NULL)
+		ATLASSERT(::IsWindow(this->m_hWnd));
+		if((m_lpstrLabel == NULL) && (m_lpstrHyperLink == NULL))
 			return -1;
 		if(!m_bPaintLabel)
 			return -1;
 
 		UINT uFormat = IsSingleLine() ? DT_SINGLELINE : DT_WORDBREAK;
 
-		CClientDC dc(m_hWnd);
+		CClientDC dc(this->m_hWnd);
 		RECT rect = { 0 };
 		GetClientRect(&rect);
 		HFONT hFontOld = dc.SelectFont(m_hFontNormal);
@@ -1018,13 +959,13 @@ public:
 
 	bool GetIdealSize(int& cx, int& cy) const
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
-		if(m_lpstrLabel == NULL && m_lpstrHyperLink == NULL)
+		ATLASSERT(::IsWindow(this->m_hWnd));
+		if((m_lpstrLabel == NULL) && (m_lpstrHyperLink == NULL))
 			return false;
 		if(!m_bPaintLabel)
 			return false;
 
-		CClientDC dc(m_hWnd);
+		CClientDC dc(this->m_hWnd);
 		RECT rcClient = { 0 };
 		GetClientRect(&rcClient);
 		RECT rcAll = rcClient;
@@ -1112,17 +1053,12 @@ public:
 // Operations
 	BOOL SubclassWindow(HWND hWnd)
 	{
-		ATLASSERT(m_hWnd == NULL);
+		ATLASSERT(this->m_hWnd == NULL);
 		ATLASSERT(::IsWindow(hWnd));
 		if(m_hFontNormal == NULL)
 			m_hFontNormal = (HFONT)::SendMessage(hWnd, WM_GETFONT, 0, 0L);
 
-#if (_MSC_VER >= 1300)
 		BOOL bRet = ATL::CWindowImpl< T, TBase, TWinTraits >::SubclassWindow(hWnd);
-#else // !(_MSC_VER >= 1300)
-		typedef ATL::CWindowImpl< T, TBase, TWinTraits >   _baseClass;
-		BOOL bRet = _baseClass::SubclassWindow(hWnd);
-#endif // !(_MSC_VER >= 1300)
 		if(bRet != FALSE)
 		{
 			T* pT = static_cast<T*>(this);
@@ -1134,34 +1070,27 @@ public:
 
 	bool Navigate()
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		bool bRet = true;
 		if(IsNotifyButton())
 		{
-			NMHDR nmhdr = { m_hWnd, (UINT_PTR)GetDlgCtrlID(), NM_CLICK };
-			::SendMessage(GetParent(), WM_NOTIFY, GetDlgCtrlID(), (LPARAM)&nmhdr);
+			NMHDR nmhdr = { this->m_hWnd, (UINT_PTR)this->GetDlgCtrlID(), NM_CLICK };
+			this->GetParent().SendMessage(WM_NOTIFY, this->GetDlgCtrlID(), (LPARAM)&nmhdr);
 		}
 		else if(IsCommandButton())
 		{
-			::SendMessage(GetParent(), WM_COMMAND, MAKEWPARAM(GetDlgCtrlID(), BN_CLICKED), (LPARAM)m_hWnd);
+			this->GetParent().SendMessage(WM_COMMAND, MAKEWPARAM(this->GetDlgCtrlID(), BN_CLICKED), (LPARAM)this->m_hWnd);
 		}
 		else
 		{
 			ATLASSERT(m_lpstrHyperLink != NULL);
-#ifndef _WIN32_WCE
 			DWORD_PTR dwRet = (DWORD_PTR)::ShellExecute(0, _T("open"), m_lpstrHyperLink, 0, 0, SW_SHOWNORMAL);
 			bRet = (dwRet > 32);
-#else // CE specific
-			SHELLEXECUTEINFO shExeInfo = { sizeof(SHELLEXECUTEINFO), 0, 0, L"open", m_lpstrHyperLink, 0, 0, SW_SHOWNORMAL, 0, 0, 0, 0, 0, 0, 0 };
-			::ShellExecuteEx(&shExeInfo);
-			DWORD_PTR dwRet = (DWORD_PTR)shExeInfo.hInstApp;
-			bRet = (dwRet == 0) || (dwRet > 32);
-#endif // _WIN32_WCE
 			ATLASSERT(bRet);
 			if(bRet)
 			{
 				m_bVisited = true;
-				Invalidate();
+				this->Invalidate();
 			}
 		}
 		return bRet;
@@ -1192,21 +1121,15 @@ public:
 // Message map and handlers
 	BEGIN_MSG_MAP(CHyperLinkImpl)
 		MESSAGE_HANDLER(WM_CREATE, OnCreate)
-#ifndef _WIN32_WCE
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_RANGE_HANDLER(WM_MOUSEFIRST, WM_MOUSELAST, OnMouseMessage)
-#endif // !_WIN32_WCE
 		MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBackground)
 		MESSAGE_HANDLER(WM_PAINT, OnPaint)
-#ifndef _WIN32_WCE
 		MESSAGE_HANDLER(WM_PRINTCLIENT, OnPaint)
-#endif // !_WIN32_WCE
 		MESSAGE_HANDLER(WM_SETFOCUS, OnFocus)
 		MESSAGE_HANDLER(WM_KILLFOCUS, OnFocus)
 		MESSAGE_HANDLER(WM_MOUSEMOVE, OnMouseMove)
-#ifndef _WIN32_WCE
 		MESSAGE_HANDLER(WM_MOUSELEAVE, OnMouseLeave)
-#endif // !_WIN32_WCE
 		MESSAGE_HANDLER(WM_LBUTTONDOWN, OnLButtonDown)
 		MESSAGE_HANDLER(WM_LBUTTONUP, OnLButtonUp)
 		MESSAGE_HANDLER(WM_CHAR, OnChar)
@@ -1226,7 +1149,6 @@ public:
 		return 0;
 	}
 
-#ifndef _WIN32_WCE
 	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
 	{
 		if(m_tip.IsWindow())
@@ -1255,13 +1177,12 @@ public:
 
 	LRESULT OnMouseMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		MSG msg = { m_hWnd, uMsg, wParam, lParam };
+		MSG msg = { this->m_hWnd, uMsg, wParam, lParam };
 		if(m_tip.IsWindow() && IsUsingToolTip())
 			m_tip.RelayEvent(&msg);
 		bHandled = FALSE;
 		return 1;
 	}
-#endif // !_WIN32_WCE
 
 	LRESULT OnEraseBackground(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 	{
@@ -1284,7 +1205,7 @@ public:
 		}
 		else
 		{
-			CPaintDC dc(m_hWnd);
+			CPaintDC dc(this->m_hWnd);
 			pT->DoEraseBackground(dc.m_hDC);
 			pT->DoPaint(dc.m_hDC);
 		}
@@ -1295,7 +1216,7 @@ public:
 	LRESULT OnFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
 	{
 		if(m_bPaintLabel)
-			Invalidate();
+			this->Invalidate();
 		else
 			bHandled = FALSE;
 		return 0;
@@ -1304,7 +1225,7 @@ public:
 	LRESULT OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
 	{
 		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
-		if((m_lpstrHyperLink != NULL  || IsCommandButton()) && ::PtInRect(&m_rcLink, pt))
+		if(((m_lpstrHyperLink != NULL) || IsCommandButton()) && ::PtInRect(&m_rcLink, pt))
 		{
 			::SetCursor(m_hCursor);
 			if(IsUnderlineHover())
@@ -1312,11 +1233,9 @@ public:
 				if(!m_bHover)
 				{
 					m_bHover = true;
-					InvalidateRect(&m_rcLink);
-					UpdateWindow();
-#ifndef _WIN32_WCE
+					this->InvalidateRect(&m_rcLink);
+					this->UpdateWindow();
 					StartTrackMouseLeave();
-#endif // !_WIN32_WCE
 				}
 			}
 		}
@@ -1327,8 +1246,8 @@ public:
 				if(m_bHover)
 				{
 					m_bHover = false;
-					InvalidateRect(&m_rcLink);
-					UpdateWindow();
+					this->InvalidateRect(&m_rcLink);
+					this->UpdateWindow();
 				}
 			}
 			bHandled = FALSE;
@@ -1336,33 +1255,31 @@ public:
 		return 0;
 	}
 
-#ifndef _WIN32_WCE
 	LRESULT OnMouseLeave(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 	{
 		if(IsUnderlineHover() && m_bHover)
 		{
 			m_bHover = false;
-			InvalidateRect(&m_rcLink);
-			UpdateWindow();
+			this->InvalidateRect(&m_rcLink);
+			this->UpdateWindow();
 		}
 		return 0;
 	}
-#endif // !_WIN32_WCE
 
 	LRESULT OnLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& /*bHandled*/)
 	{
 		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 		if(::PtInRect(&m_rcLink, pt))
 		{
-			SetFocus();
-			SetCapture();
+			this->SetFocus();
+			this->SetCapture();
 		}
 		return 0;
 	}
 
 	LRESULT OnLButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& /*bHandled*/)
 	{
-		if(GetCapture() == m_hWnd)
+		if(GetCapture() == this->m_hWnd)
 		{
 			ReleaseCapture();
 			POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
@@ -1377,7 +1294,7 @@ public:
 
 	LRESULT OnChar(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 	{
-		if(wParam == VK_RETURN || wParam == VK_SPACE)
+		if((wParam == VK_RETURN) || (wParam == VK_SPACE))
 		{
 			T* pT = static_cast<T*>(this);
 			pT->Navigate();
@@ -1394,8 +1311,8 @@ public:
 	{
 		POINT pt = { 0, 0 };
 		GetCursorPos(&pt);
-		ScreenToClient(&pt);
-		if((m_lpstrHyperLink != NULL  || IsCommandButton()) && ::PtInRect(&m_rcLink, pt))
+		this->ScreenToClient(&pt);
+		if(((m_lpstrHyperLink != NULL)  || IsCommandButton()) && ::PtInRect(&m_rcLink, pt))
 		{
 			return TRUE;
 		}
@@ -1405,8 +1322,8 @@ public:
 
 	LRESULT OnEnable(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 	{
-		Invalidate();
-		UpdateWindow();
+		this->Invalidate();
+		this->UpdateWindow();
 		return 0;
 	}
 
@@ -1435,8 +1352,8 @@ public:
 
 		if((BOOL)lParam)
 		{
-			Invalidate();
-			UpdateWindow();
+			this->Invalidate();
+			this->UpdateWindow();
 		}
 
 		return 0;
@@ -1460,35 +1377,27 @@ public:
 // Implementation
 	void Init()
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 
 		// Check if we should paint a label
 		const int cchBuff = 8;
 		TCHAR szBuffer[cchBuff] = { 0 };
-		if(::GetClassName(m_hWnd, szBuffer, cchBuff))
+		if(::GetClassName(this->m_hWnd, szBuffer, cchBuff))
 		{
 			if(lstrcmpi(szBuffer, _T("static")) == 0)
 			{
-				ModifyStyle(0, SS_NOTIFY);   // we need this
-				DWORD dwStyle = GetStyle() & 0x000000FF;
-#ifndef _WIN32_WCE
-				if(dwStyle == SS_ICON || dwStyle == SS_BLACKRECT || dwStyle == SS_GRAYRECT || 
-						dwStyle == SS_WHITERECT || dwStyle == SS_BLACKFRAME || dwStyle == SS_GRAYFRAME || 
-						dwStyle == SS_WHITEFRAME || dwStyle == SS_OWNERDRAW || 
-						dwStyle == SS_BITMAP || dwStyle == SS_ENHMETAFILE)
-#else // CE specific
-				if(dwStyle == SS_ICON || dwStyle == SS_BITMAP)
-#endif // _WIN32_WCE
+				this->ModifyStyle(0, SS_NOTIFY);   // we need this
+				DWORD dwStyle = this->GetStyle() & 0x000000FF;
+				if((dwStyle == SS_ICON) || (dwStyle == SS_BLACKRECT) || (dwStyle == SS_GRAYRECT) || 
+						(dwStyle == SS_WHITERECT) || (dwStyle == SS_BLACKFRAME) || (dwStyle == SS_GRAYFRAME) || 
+						(dwStyle == SS_WHITEFRAME) || (dwStyle == SS_OWNERDRAW) || 
+						(dwStyle == SS_BITMAP) || (dwStyle == SS_ENHMETAFILE))
 					m_bPaintLabel = false;
 			}
 		}
 
 		// create or load a cursor
-#if (WINVER >= 0x0500) || defined(_WIN32_WCE)
 		m_hCursor = ::LoadCursor(NULL, IDC_HAND);
-#else
-		m_hCursor = ::CreateCursor(ModuleHelper::GetModuleInstance(), _AtlHyperLink_CursorData.xHotSpot, _AtlHyperLink_CursorData.yHotSpot, _AtlHyperLink_CursorData.cxWidth, _AtlHyperLink_CursorData.cyHeight, _AtlHyperLink_CursorData.arrANDPlane, _AtlHyperLink_CursorData.arrXORPlane);
-#endif
 		ATLASSERT(m_hCursor != NULL);
 
 		// set fonts
@@ -1504,21 +1413,19 @@ public:
 				CreateLinkFontFromNormal();
 		}
 
-#ifndef _WIN32_WCE
 		// create a tool tip
-		m_tip.Create(m_hWnd);
+		m_tip.Create(this->m_hWnd);
 		ATLASSERT(m_tip.IsWindow());
-#endif // !_WIN32_WCE
 
 		// set label (defaults to window text)
 		if(m_lpstrLabel == NULL)
 		{
-			int nLen = GetWindowTextLength();
+			int nLen = this->GetWindowTextLength();
 			if(nLen > 0)
 			{
 				ATLTRY(m_lpstrLabel = new TCHAR[nLen + 1]);
 				if(m_lpstrLabel != NULL)
-					ATLVERIFY(GetWindowText(m_lpstrLabel, nLen + 1) > 0);
+					ATLVERIFY(this->GetWindowText(m_lpstrLabel, nLen + 1) > 0);
 			}
 		}
 
@@ -1526,23 +1433,21 @@ public:
 		pT->CalcLabelRect();
 
 		// set hyperlink (defaults to label), or just activate tool tip if already set
-		if(m_lpstrHyperLink == NULL && !IsCommandButton())
+		if((m_lpstrHyperLink == NULL) && !IsCommandButton())
 		{
 			if(m_lpstrLabel != NULL)
 				SetHyperLink(m_lpstrLabel);
 		}
-#ifndef _WIN32_WCE
 		else
 		{
 			m_tip.Activate(TRUE);
-			m_tip.AddTool(m_hWnd, m_lpstrHyperLink, &m_rcLink, 1);
+			m_tip.AddTool(this->m_hWnd, m_lpstrHyperLink, &m_rcLink, 1);
 		}
-#endif // !_WIN32_WCE
 
 		// set link colors
 		if(m_bPaintLabel)
 		{
-			CRegKeyEx rk;
+			ATL::CRegKey rk;
 			LONG lRet = rk.Open(HKEY_CURRENT_USER, _T("Software\\Microsoft\\Internet Explorer\\Settings"));
 			if(lRet == ERROR_SUCCESS)
 			{
@@ -1582,7 +1487,7 @@ public:
 				if(*p == _T(','))
 				{
 					*p = _T('\0');
-					c[i] = MinCrtHelper::_atoi(lpstr);
+					c[i] = _ttoi(lpstr);
 					lpstr = &p[1];
 					break;
 				}
@@ -1592,21 +1497,21 @@ public:
 		}
 		if(*lpstr == _T('\0'))
 			return CLR_INVALID;
-		c[2] = MinCrtHelper::_atoi(lpstr);
+		c[2] = _ttoi(lpstr);
 
 		return RGB(c[0], c[1], c[2]);
 	}
 
 	bool CalcLabelRect()
 	{
-		if(!::IsWindow(m_hWnd))
+		if(!::IsWindow(this->m_hWnd))
 			return false;
-		if(m_lpstrLabel == NULL && m_lpstrHyperLink == NULL)
+		if((m_lpstrLabel == NULL) && (m_lpstrHyperLink == NULL))
 			return false;
 
-		CClientDC dc(m_hWnd);
+		CClientDC dc(this->m_hWnd);
 		RECT rcClient = { 0 };
-		GetClientRect(&rcClient);
+		this->GetClientRect(&rcClient);
 		m_rcLink = rcClient;
 		if(!m_bPaintLabel)
 			return true;
@@ -1651,7 +1556,7 @@ public:
 			if(m_hFontLink != NULL)
 				hOldFont = dc.SelectFont(m_hFontLink);
 			LPTSTR lpstrText = (m_lpstrLabel != NULL) ? m_lpstrLabel : m_lpstrHyperLink;
-			DWORD dwStyle = GetStyle();
+			DWORD dwStyle = this->GetStyle();
 			UINT uFormat = DT_LEFT;
 			if (dwStyle & SS_CENTER)
 				uFormat = DT_CENTER;
@@ -1725,11 +1630,11 @@ public:
 
 	void DoEraseBackground(CDCHandle dc)
 	{
-		HBRUSH hBrush = (HBRUSH)::SendMessage(GetParent(), WM_CTLCOLORSTATIC, (WPARAM)dc.m_hDC, (LPARAM)m_hWnd);
+		HBRUSH hBrush = (HBRUSH)this->GetParent().SendMessage(WM_CTLCOLORSTATIC, (WPARAM)dc.m_hDC, (LPARAM)this->m_hWnd);
 		if(hBrush != NULL)
 		{
 			RECT rect = { 0 };
-			GetClientRect(&rect);
+			this->GetClientRect(&rect);
 			dc.FillRect(&rect, hBrush);
 		}
 	}
@@ -1751,7 +1656,7 @@ public:
 
 			// get label part rects
 			RECT rcClient = { 0 };
-			GetClientRect(&rcClient);
+			this->GetClientRect(&rcClient);
 
 			dc.SetBkMode(TRANSPARENT);
 			HFONT hFontOld = dc.SelectFont(m_hFontNormal);
@@ -1761,8 +1666,8 @@ public:
 			if(lpstrLeft != NULL)
 				dc.DrawText(lpstrLeft, cchLeft, &rcClient, DT_LEFT | uFormat);
 
-			COLORREF clrOld = dc.SetTextColor(IsWindowEnabled() ? (m_bVisited ? m_clrVisited : m_clrLink) : (::GetSysColor(COLOR_GRAYTEXT)));
-			if(m_hFontLink != NULL && (!IsUnderlineHover() || (IsUnderlineHover() && m_bHover)))
+			COLORREF clrOld = dc.SetTextColor(this->IsWindowEnabled() ? (m_bVisited ? m_clrVisited : m_clrLink) : (::GetSysColor(COLOR_GRAYTEXT)));
+			if((m_hFontLink != NULL) && (!IsUnderlineHover() || (IsUnderlineHover() && m_bHover)))
 				dc.SelectFont(m_hFontLink);
 			else
 				dc.SelectFont(m_hFontNormal);
@@ -1777,7 +1682,7 @@ public:
 				dc.DrawText(lpstrRight, cchRight, &rcRight, DT_LEFT | uFormat);
 			}
 
-			if(GetFocus() == m_hWnd)
+			if(GetFocus() == this->m_hWnd)
 				dc.DrawFocusRect(&m_rcLink);
 
 			dc.SelectFont(hFontOld);
@@ -1785,17 +1690,17 @@ public:
 		else
 		{
 			dc.SetBkMode(TRANSPARENT);
-			COLORREF clrOld = dc.SetTextColor(IsWindowEnabled() ? (m_bVisited ? m_clrVisited : m_clrLink) : (::GetSysColor(COLOR_GRAYTEXT)));
+			COLORREF clrOld = dc.SetTextColor(this->IsWindowEnabled() ? (m_bVisited ? m_clrVisited : m_clrLink) : (::GetSysColor(COLOR_GRAYTEXT)));
 
 			HFONT hFontOld = NULL;
-			if(m_hFontLink != NULL && (!IsUnderlineHover() || (IsUnderlineHover() && m_bHover)))
+			if((m_hFontLink != NULL) && (!IsUnderlineHover() || (IsUnderlineHover() && m_bHover)))
 				hFontOld = dc.SelectFont(m_hFontLink);
 			else
 				hFontOld = dc.SelectFont(m_hFontNormal);
 
 			LPTSTR lpstrText = (m_lpstrLabel != NULL) ? m_lpstrLabel : m_lpstrHyperLink;
 
-			DWORD dwStyle = GetStyle();
+			DWORD dwStyle = this->GetStyle();
 			UINT uFormat = DT_LEFT;
 			if (dwStyle & SS_CENTER)
 				uFormat = DT_CENTER;
@@ -1805,7 +1710,7 @@ public:
 
 			dc.DrawText(lpstrText, -1, &m_rcLink, uFormat);
 
-			if(GetFocus() == m_hWnd)
+			if(GetFocus() == this->m_hWnd)
 				dc.DrawFocusRect(&m_rcLink);
 
 			dc.SetTextColor(clrOld);
@@ -1813,16 +1718,14 @@ public:
 		}
 	}
 
-#ifndef _WIN32_WCE
 	BOOL StartTrackMouseLeave()
 	{
 		TRACKMOUSEEVENT tme = { 0 };
 		tme.cbSize = sizeof(tme);
 		tme.dwFlags = TME_LEAVE;
-		tme.hwndTrack = m_hWnd;
-		return _TrackMouseEvent(&tme);
+		tme.hwndTrack = this->m_hWnd;
+		return ::TrackMouseEvent(&tme);
 	}
-#endif // !_WIN32_WCE
 
 // Implementation helpers
 	bool IsUnderlined() const
@@ -1952,9 +1855,7 @@ public:
 	~CCustomWaitCursor()
 	{
 		Restore();
-#if !defined(_WIN32_WCE) || ((_WIN32_WCE >= 0x400) && !(defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP)))
 		::DestroyCursor(m_hWaitCursor);
-#endif // !defined(_WIN32_WCE) || ((_WIN32_WCE >= 0x400) && !(defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP)))
 	}
 };
 
@@ -1986,12 +1887,7 @@ public:
 // Methods
 	HWND Create(HWND hWndParent, LPCTSTR lpstrText, DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | SBARS_SIZEGRIP, UINT nID = ATL_IDW_STATUS_BAR)
 	{
-#if (_MSC_VER >= 1300)
 		return ATL::CWindowImpl< T, TBase >::Create(hWndParent, rcDefault, lpstrText, dwStyle, 0, nID);
-#else // !(_MSC_VER >= 1300)
-		typedef ATL::CWindowImpl< T, TBase >   _baseClass;
-		return _baseClass::Create(hWndParent, rcDefault, lpstrText, dwStyle, 0, nID);
-#endif // !(_MSC_VER >= 1300)
 	}
 
 	HWND Create(HWND hWndParent, UINT nTextID = ATL_IDS_IDLEMESSAGE, DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | SBARS_SIZEGRIP, UINT nID = ATL_IDW_STATUS_BAR)
@@ -2004,7 +1900,7 @@ public:
 
 	BOOL SetPanes(int* pPanes, int nPanes, bool bSetText = true)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		ATLASSERT(nPanes > 0);
 
 		m_nPanes = nPanes;
@@ -2016,21 +1912,21 @@ public:
 		if(m_pPane == NULL)
 			return FALSE;
 
-		CTempBuffer<int, _WTL_STACK_ALLOC_THRESHOLD> buff;
+		ATL::CTempBuffer<int, _WTL_STACK_ALLOC_THRESHOLD> buff;
 		int* pPanesPos = buff.Allocate(nPanes);
 		ATLASSERT(pPanesPos != NULL);
 		if(pPanesPos == NULL)
 			return FALSE;
 
-		SecureHelper::memcpy_x(m_pPane, nPanes * sizeof(int), pPanes, nPanes * sizeof(int));
+		ATL::Checked::memcpy_s(m_pPane, nPanes * sizeof(int), pPanes, nPanes * sizeof(int));
 
 		// get status bar DC and set font
-		CClientDC dc(m_hWnd);
+		CClientDC dc(this->m_hWnd);
 		HFONT hOldFont = dc.SelectFont(GetFont());
 
 		// get status bar borders
 		int arrBorders[3] = { 0 };
-		GetBorders(arrBorders);
+		this->GetBorders(arrBorders);
 
 		const int cchBuff = 128;
 		TCHAR szBuff[cchBuff] = { 0 };
@@ -2056,7 +1952,7 @@ public:
 			cxLeft = pPanesPos[i];
 		}
 
-		BOOL bRet = SetParts(nPanes, pPanesPos);
+		BOOL bRet = this->SetParts(nPanes, pPanesPos);
 
 		if(bRet && bSetText)
 		{
@@ -2076,12 +1972,12 @@ public:
 
 	bool GetPaneTextLength(int nPaneID, int* pcchLength = NULL, int* pnType = NULL) const
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		int nIndex  = GetPaneIndexFromID(nPaneID);
 		if(nIndex == -1)
 			return false;
 
-		int nLength = GetTextLength(nIndex, pnType);
+		int nLength = this->GetTextLength(nIndex, pnType);
 		if(pcchLength != NULL)
 			*pcchLength = nLength;
 
@@ -2090,12 +1986,12 @@ public:
 
 	BOOL GetPaneText(int nPaneID, LPTSTR lpstrText, int* pcchLength = NULL, int* pnType = NULL) const
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		int nIndex  = GetPaneIndexFromID(nPaneID);
 		if(nIndex == -1)
 			return FALSE;
 
-		int nLength = GetText(nIndex, lpstrText, pnType);
+		int nLength = this->GetText(nIndex, lpstrText, pnType);
 		if(pcchLength != NULL)
 			*pcchLength = nLength;
 
@@ -2104,38 +2000,38 @@ public:
 
 	BOOL SetPaneText(int nPaneID, LPCTSTR lpstrText, int nType = 0)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		int nIndex  = GetPaneIndexFromID(nPaneID);
 		if(nIndex == -1)
 			return FALSE;
 
-		return SetText(nIndex, lpstrText, nType);
+		return this->SetText(nIndex, lpstrText, nType);
 	}
 
 	BOOL GetPaneRect(int nPaneID, LPRECT lpRect) const
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		int nIndex  = GetPaneIndexFromID(nPaneID);
 		if(nIndex == -1)
 			return FALSE;
 
-		return GetRect(nIndex, lpRect);
+		return this->GetRect(nIndex, lpRect);
 	}
 
 	BOOL SetPaneWidth(int nPaneID, int cxWidth)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		ATLASSERT(nPaneID != ID_DEFAULT_PANE);   // Can't resize this one
 		int nIndex  = GetPaneIndexFromID(nPaneID);
 		if(nIndex == -1)
 			return FALSE;
 
 		// get pane positions
-		CTempBuffer<int, _WTL_STACK_ALLOC_THRESHOLD> buff;
+		ATL::CTempBuffer<int, _WTL_STACK_ALLOC_THRESHOLD> buff;
 		int* pPanesPos = buff.Allocate(m_nPanes);
 		if(pPanesPos == NULL)
 			return FALSE;
-		GetParts(m_nPanes, pPanesPos);
+		this->GetParts(m_nPanes, pPanesPos);
 		// calculate offset
 		int cxPaneWidth = pPanesPos[nIndex] - ((nIndex == 0) ? 0 : pPanesPos[nIndex - 1]);
 		int cxOff = cxWidth - cxPaneWidth;
@@ -2162,55 +2058,51 @@ public:
 				pPanesPos[i] -= cxOff;
 		}
 		// set pane postions
-		return SetParts(m_nPanes, pPanesPos);
+		return this->SetParts(m_nPanes, pPanesPos);
 	}
 
-#if (_WIN32_IE >= 0x0400) && !defined(_WIN32_WCE)
 	BOOL GetPaneTipText(int nPaneID, LPTSTR lpstrText, int nSize) const
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		int nIndex  = GetPaneIndexFromID(nPaneID);
 		if(nIndex == -1)
 			return FALSE;
 
-		GetTipText(nIndex, lpstrText, nSize);
+		this->GetTipText(nIndex, lpstrText, nSize);
 		return TRUE;
 	}
 
 	BOOL SetPaneTipText(int nPaneID, LPCTSTR lpstrText)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		int nIndex  = GetPaneIndexFromID(nPaneID);
 		if(nIndex == -1)
 			return FALSE;
 
-		SetTipText(nIndex, lpstrText);
+		this->SetTipText(nIndex, lpstrText);
 		return TRUE;
 	}
-#endif // (_WIN32_IE >= 0x0400) && !defined(_WIN32_WCE)
 
-#if ((_WIN32_IE >= 0x0400) && !defined(_WIN32_WCE)) || (defined(_WIN32_WCE) && (_WIN32_WCE >= 0x0500))
 	BOOL GetPaneIcon(int nPaneID, HICON& hIcon) const
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		int nIndex  = GetPaneIndexFromID(nPaneID);
 		if(nIndex == -1)
 			return FALSE;
 
-		hIcon = GetIcon(nIndex);
+		hIcon = this->GetIcon(nIndex);
 		return TRUE;
 	}
 
 	BOOL SetPaneIcon(int nPaneID, HICON hIcon)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		int nIndex  = GetPaneIndexFromID(nPaneID);
 		if(nIndex == -1)
 			return FALSE;
 
-		return SetIcon(nIndex, hIcon);
+		return this->SetIcon(nIndex, hIcon);
 	}
-#endif // ((_WIN32_IE >= 0x0400) && !defined(_WIN32_WCE)) || (defined(_WIN32_WCE) && (_WIN32_WCE >= 0x0500))
 
 // Message map and handlers
 	BEGIN_MSG_MAP(CMultiPaneStatusBarCtrlImpl< T >)
@@ -2219,8 +2111,8 @@ public:
 
 	LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
 	{
-		LRESULT lRet = DefWindowProc(uMsg, wParam, lParam);
-		if(wParam != SIZE_MINIMIZED && m_nPanes > 0)
+		LRESULT lRet = this->DefWindowProc(uMsg, wParam, lParam);
+		if((wParam != SIZE_MINIMIZED) && (m_nPanes > 0))
 		{
 			T* pT = static_cast<T*>(this);
 			pT->UpdatePanesLayout();
@@ -2232,24 +2124,22 @@ public:
 	BOOL UpdatePanesLayout()
 	{
 		// get pane positions
-		CTempBuffer<int, _WTL_STACK_ALLOC_THRESHOLD> buff;
+		ATL::CTempBuffer<int, _WTL_STACK_ALLOC_THRESHOLD> buff;
 		int* pPanesPos = buff.Allocate(m_nPanes);
 		ATLASSERT(pPanesPos != NULL);
 		if(pPanesPos == NULL)
 			return FALSE;
-		int nRet = GetParts(m_nPanes, pPanesPos);
+		int nRet = this->GetParts(m_nPanes, pPanesPos);
 		ATLASSERT(nRet == m_nPanes);
 		if(nRet != m_nPanes)
 			return FALSE;
 		// calculate offset
 		RECT rcClient = { 0 };
-		GetClientRect(&rcClient);
+		this->GetClientRect(&rcClient);
 		int cxOff = rcClient.right - pPanesPos[m_nPanes - 1];
-#ifndef _WIN32_WCE
 		// Move panes left if size grip box is present
-		if((GetStyle() & SBARS_SIZEGRIP) != 0)
+		if((this->GetStyle() & SBARS_SIZEGRIP) != 0)
 			cxOff -= ::GetSystemMetrics(SM_CXVSCROLL) + ::GetSystemMetrics(SM_CXEDGE);
-#endif // !_WIN32_WCE
 		// find variable width pane
 		int i;
 		for(i = 0; i < m_nPanes; i++)
@@ -2264,7 +2154,7 @@ public:
 				pPanesPos[i] += cxOff;
 		}
 		// set pane postions
-		return SetParts(m_nPanes, pPanesPos);
+		return this->SetParts(m_nPanes, pPanesPos);
 	}
 
 	int GetPaneIndexFromID(int nPaneID) const
@@ -2357,7 +2247,7 @@ public:
 			m_dwExtendedStyle = dwExtendedStyle;
 		else
 			m_dwExtendedStyle = (m_dwExtendedStyle & ~dwMask) | (dwExtendedStyle & dwMask);
-		if(m_hWnd != NULL)
+		if(this->m_hWnd != NULL)
 		{
 			T* pT = static_cast<T*>(this);
 			bool bUpdate = false;
@@ -2385,13 +2275,12 @@ public:
 				bUpdate = true;
 			}
 
-#if (!defined(_WIN32_WCE) && !defined(_ATL_NO_MSIMG)) || (_WIN32_WCE >= 420)
+#ifndef _ATL_NO_MSIMG
 			if((dwPrevStyle & PANECNT_GRADIENT) != (m_dwExtendedStyle & PANECNT_GRADIENT))   // change background
 			{
 				bUpdate = true;
 			}
-#endif // (!defined(_WIN32_WCE) && !defined(_ATL_NO_MSIMG)) || (_WIN32_WCE >= 420)
-
+#endif
 			if(bUpdate)
 				pT->UpdateLayout();
 		}
@@ -2407,7 +2296,7 @@ public:
 	{
 		HWND hWndOldClient = m_wndClient;
 		m_wndClient = hWndClient;
-		if(m_hWnd != NULL)
+		if(this->m_hWnd != NULL)
 		{
 			T* pT = static_cast<T*>(this);
 			pT->UpdateLayout();
@@ -2419,18 +2308,18 @@ public:
 	{
 		ATLASSERT(lpstrTitle != NULL);
 
-		errno_t nRet = SecureHelper::strncpy_x(lpstrTitle, cchLength, m_szTitle, _TRUNCATE);
+		errno_t nRet = ATL::Checked::tcsncpy_s(lpstrTitle, cchLength, m_szTitle, _TRUNCATE);
 
-		return (nRet == 0 || nRet == STRUNCATE);
+		return ((nRet == 0) || (nRet == STRUNCATE));
 	}
 
 	BOOL SetTitle(LPCTSTR lpstrTitle)
 	{
 		ATLASSERT(lpstrTitle != NULL);
 
-		errno_t nRet = SecureHelper::strncpy_x(m_szTitle, m_cchTitle, lpstrTitle, _TRUNCATE);
-		bool bRet = (nRet == 0 || nRet == STRUNCATE);
-		if(bRet && m_hWnd != NULL)
+		errno_t nRet = ATL::Checked::tcsncpy_s(m_szTitle, m_cchTitle, lpstrTitle, _TRUNCATE);
+		bool bRet = ((nRet == 0) || (nRet == STRUNCATE));
+		if(bRet && (this->m_hWnd != NULL))
 		{
 			T* pT = static_cast<T*>(this);
 			pT->UpdateLayout();
@@ -2449,13 +2338,8 @@ public:
 			DWORD dwExStyle = 0, UINT nID = 0, LPVOID lpCreateParam = NULL)
 	{
 		if(lpstrTitle != NULL)
-			SecureHelper::strncpy_x(m_szTitle, m_cchTitle, lpstrTitle, _TRUNCATE);
-#if (_MSC_VER >= 1300)
+			ATL::Checked::tcsncpy_s(m_szTitle, m_cchTitle, lpstrTitle, _TRUNCATE);
 		return ATL::CWindowImpl< T, TBase, TWinTraits >::Create(hWndParent, rcDefault, NULL, dwStyle, dwExStyle, nID, lpCreateParam);
-#else // !(_MSC_VER >= 1300)
-		typedef ATL::CWindowImpl< T, TBase, TWinTraits >   _baseClass;
-		return _baseClass::Create(hWndParent, rcDefault, NULL, dwStyle, dwExStyle, nID, lpCreateParam);
-#endif // !(_MSC_VER >= 1300)
 	}
 
 	HWND Create(HWND hWndParent, UINT uTitleID, DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
@@ -2463,22 +2347,12 @@ public:
 	{
 		if(uTitleID != 0U)
 			::LoadString(ModuleHelper::GetResourceInstance(), uTitleID, m_szTitle, m_cchTitle);
-#if (_MSC_VER >= 1300)
 		return ATL::CWindowImpl< T, TBase, TWinTraits >::Create(hWndParent, rcDefault, NULL, dwStyle, dwExStyle, nID, lpCreateParam);
-#else // !(_MSC_VER >= 1300)
-		typedef ATL::CWindowImpl< T, TBase, TWinTraits >   _baseClass;
-		return _baseClass::Create(hWndParent, rcDefault, NULL, dwStyle, dwExStyle, nID, lpCreateParam);
-#endif // !(_MSC_VER >= 1300)
 	}
 
 	BOOL SubclassWindow(HWND hWnd)
 	{
-#if (_MSC_VER >= 1300)
 		BOOL bRet = ATL::CWindowImpl< T, TBase, TWinTraits >::SubclassWindow(hWnd);
-#else // !(_MSC_VER >= 1300)
-		typedef ATL::CWindowImpl< T, TBase, TWinTraits >   _baseClass;
-		BOOL bRet = _baseClass::SubclassWindow(hWnd);
-#endif // !(_MSC_VER >= 1300)
 		if(bRet != FALSE)
 		{
 			T* pT = static_cast<T*>(this);
@@ -2494,7 +2368,7 @@ public:
 
 	BOOL EnableCloseButton(BOOL bEnable)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		T* pT = static_cast<T*>(this);
 		pT;   // avoid level 4 warning
 		return (m_tb.m_hWnd != NULL) ? m_tb.EnableButton(pT->m_nCloseBtnID, bEnable) : FALSE;
@@ -2503,7 +2377,7 @@ public:
 	void UpdateLayout()
 	{
 		RECT rcClient = { 0 };
-		GetClientRect(&rcClient);
+		this->GetClientRect(&rcClient);
 		T* pT = static_cast<T*>(this);
 		pT->UpdateLayout(rcClient.right, rcClient.bottom);
 	}
@@ -2518,9 +2392,7 @@ public:
 		MESSAGE_HANDLER(WM_SETFONT, OnSetFont)
 		MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBackground)
 		MESSAGE_HANDLER(WM_PAINT, OnPaint)
-#ifndef _WIN32_WCE
 		MESSAGE_HANDLER(WM_PRINTCLIENT, OnPaint)
-#endif // !_WIN32_WCE
 		MESSAGE_HANDLER(WM_NOTIFY, OnNotify)
 		MESSAGE_HANDLER(WM_COMMAND, OnCommand)
 		FORWARD_NOTIFICATIONS()
@@ -2604,7 +2476,7 @@ public:
 		}
 		else
 		{
-			CPaintDC dc(m_hWnd);
+			CPaintDC dc(this->m_hWnd);
 			pT->DrawPaneTitle(dc.m_hDC);
 
 			if(m_wndClient.m_hWnd == NULL)   // no client window
@@ -2628,16 +2500,14 @@ public:
 		LRESULT lRet = 0;
 
 		// pass toolbar custom draw notifications to the base class
-		if(lpnmh->code == NM_CUSTOMDRAW && lpnmh->hwndFrom == m_tb.m_hWnd)
+		if((lpnmh->code == NM_CUSTOMDRAW) && (lpnmh->hwndFrom == m_tb.m_hWnd))
 			lRet = CCustomDraw< T >::OnCustomDraw(0, lpnmh, bHandled);
-#ifndef _WIN32_WCE
 		// tooltip notifications come with the tooltip window handle and button ID,
 		// pass them to the parent if we don't handle them
-		else if(lpnmh->code == TTN_GETDISPINFO && lpnmh->idFrom == pT->m_nCloseBtnID)
+		else if((lpnmh->code == TTN_GETDISPINFO) && (lpnmh->idFrom == pT->m_nCloseBtnID))
 			bHandled = pT->GetToolTipText(lpnmh);
-#endif // !_WIN32_WCE
 		// only let notifications not from the toolbar go to the parent
-		else if(lpnmh->hwndFrom != m_tb.m_hWnd && lpnmh->idFrom != pT->m_nCloseBtnID)
+		else if((lpnmh->hwndFrom != m_tb.m_hWnd) && (lpnmh->idFrom != pT->m_nCloseBtnID))
 			bHandled = FALSE;
 
 		return lRet;
@@ -2646,8 +2516,8 @@ public:
 	LRESULT OnCommand(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		// if command comes from the close button, substitute HWND of the pane container instead
-		if(m_tb.m_hWnd != NULL && (HWND)lParam == m_tb.m_hWnd)
-			return ::SendMessage(GetParent(), WM_COMMAND, wParam, (LPARAM)m_hWnd);
+		if((m_tb.m_hWnd != NULL) && ((HWND)lParam == m_tb.m_hWnd))
+			return this->GetParent().SendMessage(WM_COMMAND, wParam, (LPARAM)this->m_hWnd);
 
 		bHandled = FALSE;
 		return 1;
@@ -2667,12 +2537,7 @@ public:
 	DWORD OnItemPostPaint(int /*idCtrl*/, LPNMCUSTOMDRAW lpNMCustomDraw)
 	{
 		CDCHandle dc = lpNMCustomDraw->hdc;
-#if (_WIN32_IE >= 0x0400)
 		RECT& rc = lpNMCustomDraw->rc;
-#else // !(_WIN32_IE >= 0x0400)
-		RECT rc = { 0 };
-		m_tb.GetItemRect(0, &rc);
-#endif // !(_WIN32_IE >= 0x0400)
 
 		RECT rcImage = { m_xBtnImageLeft, m_yBtnImageTop, m_xBtnImageRight + 1, m_yBtnImageBottom + 1 };
 		::OffsetRect(&rcImage, rc.left, rc.top);
@@ -2707,21 +2572,11 @@ public:
 		if(m_hFont == NULL)
 		{
 			// The same as AtlCreateControlFont() for horizontal pane
-#ifndef _WIN32_WCE
 			LOGFONT lf = { 0 };
 			ATLVERIFY(::SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(LOGFONT), &lf, 0) != FALSE);
 			if(IsVertical())
 				lf.lfEscapement = 900;   // 90 degrees
 			m_hFont = ::CreateFontIndirect(&lf);
-#else // CE specific
-			m_hFont = (HFONT)::GetStockObject(SYSTEM_FONT);
-			if(IsVertical())
-			{
-				CLogFont lf(m_hFont);
-				lf.lfEscapement = 900;   // 90 degrees
-				m_hFont = ::CreateFontIndirect(&lf);
-			}
-#endif // _WIN32_WCE
 			m_bInternalFont = true;
 		}
 
@@ -2734,7 +2589,7 @@ public:
 
 	void UpdateLayout(int cxWidth, int cyHeight)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		RECT rect = { 0 };
 
 		if(IsVertical())
@@ -2760,14 +2615,14 @@ public:
 				rect.bottom = cyHeight;
 		}
 
-		InvalidateRect(&rect);
+		this->InvalidateRect(&rect);
 	}
 
 	void CreateCloseButton()
 	{
 		ATLASSERT(m_tb.m_hWnd == NULL);
 		// create toolbar for the "x" button
-		m_tb.Create(m_hWnd, rcDefault, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | CCS_NODIVIDER | CCS_NORESIZE | CCS_NOPARENTALIGN | CCS_NOMOVEY | TBSTYLE_TOOLTIPS | TBSTYLE_FLAT, 0);
+		m_tb.Create(this->m_hWnd, this->rcDefault, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | CCS_NODIVIDER | CCS_NORESIZE | CCS_NOPARENTALIGN | CCS_NOMOVEY | TBSTYLE_TOOLTIPS | TBSTYLE_FLAT, 0);
 		ATLASSERT(m_tb.IsWindow());
 
 		if(m_tb.m_hWnd != NULL)
@@ -2824,17 +2679,15 @@ public:
 		return m_hFont;
 	}
 
-#ifndef _WIN32_WCE
 	BOOL GetToolTipText(LPNMHDR /*lpnmh*/)
 	{
 		return FALSE;
 	}
-#endif // !_WIN32_WCE
 
 	void DrawPaneTitle(CDCHandle dc)
 	{
 		RECT rect = { 0 };
-		GetClientRect(&rect);
+		this->GetClientRect(&rect);
 
 		UINT uBorder = BF_LEFT | BF_TOP | BF_ADJUST;
 		if(IsVertical())
@@ -2866,9 +2719,6 @@ public:
 		dc.SetBkMode(TRANSPARENT);
 		T* pT = static_cast<T*>(this);
 		HFONT hFontOld = dc.SelectFont(pT->GetTitleFont());
-#if defined(_WIN32_WCE) && !defined(DT_END_ELLIPSIS)
-		const UINT DT_END_ELLIPSIS = 0;
-#endif // defined(_WIN32_WCE) && !defined(DT_END_ELLIPSIS)
 
 		if(IsVertical())
 		{
@@ -2902,17 +2752,17 @@ public:
 	void DrawPaneTitleBackground(CDCHandle dc)
 	{
 		RECT rect = { 0 };
-		GetClientRect(&rect);
+		this->GetClientRect(&rect);
 		if(IsVertical())
 			rect.right = m_cxyHeader;
 		else
 			rect.bottom = m_cxyHeader;
 
-#if (!defined(_WIN32_WCE) && !defined(_ATL_NO_MSIMG)) || (_WIN32_WCE >= 420)
+#ifndef _ATL_NO_MSIMG
 		if((m_dwExtendedStyle & PANECNT_GRADIENT) != 0)
 			dc.GradientFillRect(rect, ::GetSysColor(COLOR_WINDOW), ::GetSysColor(COLOR_3DFACE), IsVertical());
 		else
-#endif // (!defined(_WIN32_WCE) && !defined(_ATL_NO_MSIMG)) || (_WIN32_WCE >= 420)
+#endif
 			dc.FillRect(&rect, COLOR_3DFACE);
 	}
 
@@ -2920,12 +2770,12 @@ public:
 	void DrawPane(CDCHandle dc)
 	{
 		RECT rect = { 0 };
-		GetClientRect(&rect);
+		this->GetClientRect(&rect);
 		if(IsVertical())
 			rect.left += m_cxyHeader;
 		else
 			rect.top += m_cxyHeader;
-		if((GetExStyle() & WS_EX_CLIENTEDGE) == 0)
+		if((this->GetExStyle() & WS_EX_CLIENTEDGE) == 0)
 			dc.DrawEdge(&rect, EDGE_SUNKEN, BF_RECT | BF_ADJUST);
 		dc.FillRect(&rect, COLOR_APPWORKSPACE);
 	}
@@ -2933,7 +2783,6 @@ public:
 	// drawing helper - draws "x" button image
 	void DrawButtonImage(CDCHandle dc, RECT& rcImage, HPEN hPen)
 	{
-#if !defined(_WIN32_WCE) || (_WIN32_WCE >= 400)
 		HPEN hPenOld = dc.SelectPen(hPen);
 
 		dc.MoveTo(rcImage.left, rcImage.top);
@@ -2947,11 +2796,6 @@ public:
 		dc.LineTo(rcImage.right + 1, rcImage.top - 1);
 
 		dc.SelectPen(hPenOld);
-#else // (_WIN32_WCE < 400)
-		rcImage;
-		hPen;
-		// no support for the "x" button image
-#endif // (_WIN32_WCE < 400)
 	}
 
 	bool IsVertical() const
@@ -3058,12 +2902,10 @@ public:
 			m_dwSortLVExtendedStyle(SORTLV_USESHELLBITMAPS),
 			m_bUseWaitCursor(true)
 	{
-#ifndef _WIN32_WCE
 		DWORD dwMajor = 0;
 		DWORD dwMinor = 0;
 		HRESULT hRet = ATL::AtlGetCommCtrlVersion(&dwMajor, &dwMinor);
-		m_bCommCtrl6 = SUCCEEDED(hRet) && dwMajor >= 6;
-#endif // !_WIN32_WCE
+		m_bCommCtrl6 = SUCCEEDED(hRet) && (dwMajor >= 6);
 	}
 	
 // Attributes
@@ -3073,26 +2915,20 @@ public:
 		ATLASSERT(::IsWindow(pT->m_hWnd));
 		CHeaderCtrl header = pT->GetHeader();
 		ATLASSERT(header.m_hWnd != NULL);
-		ATLASSERT(iCol >= -1 && iCol < m_arrColSortType.GetSize());
+		ATLASSERT((iCol >= -1) && (iCol < m_arrColSortType.GetSize()));
 
 		int iOldSortCol = m_iSortColumn;
 		m_iSortColumn = iCol;
 		if(m_bCommCtrl6)
 		{
-#ifndef HDF_SORTUP
-			const int HDF_SORTUP = 0x0400;	
-#endif // HDF_SORTUP
-#ifndef HDF_SORTDOWN
-			const int HDF_SORTDOWN = 0x0200;	
-#endif // HDF_SORTDOWN
 			const int nMask = HDF_SORTUP | HDF_SORTDOWN;
 			HDITEM hditem = { HDI_FORMAT };
-			if(iOldSortCol != iCol && iOldSortCol >= 0 && header.GetItem(iOldSortCol, &hditem))
+			if((iOldSortCol != iCol) && (iOldSortCol >= 0) && header.GetItem(iOldSortCol, &hditem))
 			{
 				hditem.fmt &= ~nMask;
 				header.SetItem(iOldSortCol, &hditem);
 			}
-			if(iCol >= 0 && header.GetItem(iCol, &hditem))
+			if((iCol >= 0) && header.GetItem(iCol, &hditem))
 			{
 				hditem.fmt &= ~nMask;
 				hditem.fmt |= m_bSortDescending ? HDF_SORTDOWN : HDF_SORTUP;
@@ -3106,7 +2942,7 @@ public:
 
 		// restore previous sort column's bitmap, if any, and format
 		HDITEM hditem = { HDI_BITMAP | HDI_FORMAT };
-		if(iOldSortCol != iCol && iOldSortCol >= 0)
+		if((iOldSortCol != iCol) && (iOldSortCol >= 0))
 		{
 			hditem.hbm = m_hbmOldSortCol;
 			hditem.fmt = m_fmtOldSortCol;
@@ -3114,7 +2950,7 @@ public:
 		}
 
 		// save new sort column's bitmap and format, and add our sort bitmap
-		if(iCol >= 0 && header.GetItem(iCol, &hditem))
+		if((iCol >= 0) && header.GetItem(iCol, &hditem))
 		{
 			if(iOldSortCol != iCol)
 			{
@@ -3136,14 +2972,14 @@ public:
 
 	void SetColumnSortType(int iCol, WORD wType)
 	{
-		ATLASSERT(iCol >= 0 && iCol < m_arrColSortType.GetSize());
-		ATLASSERT(wType >= LVCOLSORT_NONE && wType <= LVCOLSORT_LAST);
+		ATLASSERT((iCol >= 0) && (iCol < m_arrColSortType.GetSize()));
+		ATLASSERT((wType >= LVCOLSORT_NONE) && (wType <= LVCOLSORT_LAST));
 		m_arrColSortType[iCol] = wType;
 	}
 
 	WORD GetColumnSortType(int iCol) const
 	{
-		ATLASSERT((iCol >= 0) && iCol < m_arrColSortType.GetSize());
+		ATLASSERT((iCol >= 0) && (iCol < m_arrColSortType.GetSize()));
 		return m_arrColSortType[iCol];
 	}
 
@@ -3180,7 +3016,7 @@ public:
 	{
 		T* pT = static_cast<T*>(this);
 		ATLASSERT(::IsWindow(pT->m_hWnd));
-		ATLASSERT(iCol >= 0 && iCol < m_arrColSortType.GetSize());
+		ATLASSERT((iCol >= 0) && (iCol < m_arrColSortType.GetSize()));
 
 		WORD wType = m_arrColSortType[iCol];
 		if(wType == LVCOLSORT_NONE)
@@ -3339,11 +3175,7 @@ public:
 					if(!m_bmSort[i].IsNull())
 						m_bmSort[i].DeleteObject();
 					m_bmSort[i] = (HBITMAP)::LoadImage(hShell, MAKEINTRESOURCE(m_nShellSortUpID + i), 
-#ifndef _WIN32_WCE
 						IMAGE_BITMAP, 0, 0, LR_LOADMAP3DCOLORS);
-#else // CE specific
-						IMAGE_BITMAP, 0, 0, 0);
-#endif // _WIN32_WCE
 					if(m_bmSort[i].IsNull())
 					{
 						bSuccess = false;
@@ -3426,7 +3258,7 @@ public:
 	double DateStrToDouble(LPCTSTR lpstr, DWORD dwFlags)
 	{
 		ATLASSERT(lpstr != NULL);
-		if(lpstr == NULL || lpstr[0] == _T('\0'))
+		if((lpstr == NULL) || (lpstr[0] == _T('\0')))
 			return 0;
 
 		USES_CONVERSION;
@@ -3443,7 +3275,7 @@ public:
 	long StrToLong(LPCTSTR lpstr)
 	{
 		ATLASSERT(lpstr != NULL);
-		if(lpstr == NULL || lpstr[0] == _T('\0'))
+		if((lpstr == NULL) || (lpstr[0] == _T('\0')))
 			return 0;
 		
 		USES_CONVERSION;
@@ -3460,7 +3292,7 @@ public:
 	double StrToDouble(LPCTSTR lpstr)
 	{
 		ATLASSERT(lpstr != NULL);
-		if(lpstr == NULL || lpstr[0] == _T('\0'))
+		if((lpstr == NULL) || (lpstr[0] == _T('\0')))
 			return 0;
 
 		USES_CONVERSION;
@@ -3478,7 +3310,7 @@ public:
 	{
 		ATLASSERT(lpstr != NULL);
 		ATLASSERT(pDecimal != NULL);
-		if(lpstr == NULL || pDecimal == NULL)
+		if((lpstr == NULL) || (pDecimal == NULL))
 			return false;
 
 		USES_CONVERSION;
@@ -3497,7 +3329,7 @@ public:
 // Overrideable PFNLVCOMPARE functions
 	static int CALLBACK LVCompareText(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 	{
-		ATLASSERT(lParam1 != NULL && lParam2 != NULL && lParamSort != NULL);
+		ATLASSERT((lParam1 != NULL) && (lParam2 != NULL) && (lParamSort != NULL));
 
 		LVCompareParam* pParam1 = (LVCompareParam*)lParam1;
 		LVCompareParam* pParam2 = (LVCompareParam*)lParam2;
@@ -3509,7 +3341,7 @@ public:
 
 	static int CALLBACK LVCompareTextNoCase(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 	{
-		ATLASSERT(lParam1 != NULL && lParam2 != NULL && lParamSort != NULL);
+		ATLASSERT((lParam1 != NULL) && (lParam2 != NULL) && (lParamSort != NULL));
 
 		LVCompareParam* pParam1 = (LVCompareParam*)lParam1;
 		LVCompareParam* pParam2 = (LVCompareParam*)lParam2;
@@ -3521,7 +3353,7 @@ public:
 
 	static int CALLBACK LVCompareLong(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 	{
-		ATLASSERT(lParam1 != NULL && lParam2 != NULL && lParamSort != NULL);
+		ATLASSERT((lParam1 != NULL) && (lParam2 != NULL) && (lParamSort != NULL));
 
 		LVCompareParam* pParam1 = (LVCompareParam*)lParam1;
 		LVCompareParam* pParam2 = (LVCompareParam*)lParam2;
@@ -3537,7 +3369,7 @@ public:
 
 	static int CALLBACK LVCompareDouble(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 	{
-		ATLASSERT(lParam1 != NULL && lParam2 != NULL && lParamSort != NULL);
+		ATLASSERT((lParam1 != NULL) && (lParam2 != NULL) && (lParamSort != NULL));
 
 		LVCompareParam* pParam1 = (LVCompareParam*)lParam1;
 		LVCompareParam* pParam2 = (LVCompareParam*)lParam2;
@@ -3553,7 +3385,7 @@ public:
 
 	static int CALLBACK LVCompareCustom(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 	{
-		ATLASSERT(lParam1 != NULL && lParam2 != NULL && lParamSort != NULL);
+		ATLASSERT((lParam1 != NULL) && (lParam2 != NULL) && (lParamSort != NULL));
 
 		LVCompareParam* pParam1 = (LVCompareParam*)lParam1;
 		LVCompareParam* pParam2 = (LVCompareParam*)lParam2;
@@ -3563,10 +3395,9 @@ public:
 		return pInfo->bDescending ? -nRet : nRet;
 	}
 
-#ifndef _WIN32_WCE
 	static int CALLBACK LVCompareDecimal(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 	{
-		ATLASSERT(lParam1 != NULL && lParam2 != NULL && lParamSort != NULL);
+		ATLASSERT((lParam1 != NULL) && (lParam2 != NULL) && (lParamSort != NULL));
 
 		LVCompareParam* pParam1 = (LVCompareParam*)lParam1;
 		LVCompareParam* pParam2 = (LVCompareParam*)lParam2;
@@ -3576,147 +3407,6 @@ public:
 		nRet--;
 		return pInfo->bDescending ? -nRet : nRet;
 	}
-#else
-	// Compare mantissas, ignore sign and scale
-	static int CompareMantissas(const DECIMAL& decLeft, const DECIMAL& decRight)
-	{
-		if (decLeft.Hi32 < decRight.Hi32)
-		{
-			return -1;
-		}
-		if (decLeft.Hi32 > decRight.Hi32)
-		{
-			return 1;
-		}
-		// Here, decLeft.Hi32 == decRight.Hi32
-		if (decLeft.Lo64 < decRight.Lo64)
-		{
-			return -1;
-		}
-		if (decLeft.Lo64 > decRight.Lo64)
-		{
-			return 1;
-		}
-		return 0;
-	}
-
-	// return values: VARCMP_LT, VARCMP_EQ, VARCMP_GT, VARCMP_NULL
-	static HRESULT VarDecCmp(const DECIMAL* pdecLeft, const DECIMAL* pdecRight)
-	{
-		static const ULONG powersOfTen[] =
-		{
-			10ul,
-			100ul,
-			1000ul,
-			10000ul,
-			100000ul,
-			1000000ul,
-			10000000ul,
-			100000000ul,
-			1000000000ul
-		};
-		static const int largestPower = sizeof(powersOfTen) / sizeof(powersOfTen[0]);
-		if (!pdecLeft || !pdecRight)
-		{
-			return VARCMP_NULL;
-		}
-		
-		// Degenerate case - at least one comparand is of the form
-		// [+-]0*10^N (denormalized zero)
-		bool bLeftZero = (!pdecLeft->Lo64 && !pdecLeft->Hi32);
-		bool bRightZero = (!pdecRight->Lo64 && !pdecRight->Hi32);
-		if (bLeftZero && bRightZero)
-		{
-			return VARCMP_EQ;
-		}
-		bool bLeftNeg = ((pdecLeft->sign & DECIMAL_NEG) != 0);
-		bool bRightNeg = ((pdecRight->sign & DECIMAL_NEG) != 0);
-		if (bLeftZero)
-		{
-			return (bRightNeg ? VARCMP_GT : VARCMP_LT);
-		}
-		// This also covers the case where the comparands have different signs
-		if (bRightZero || bLeftNeg != bRightNeg)
-		{
-			return (bLeftNeg ? VARCMP_LT : VARCMP_GT);
-		}
-
-		// Here both comparands have the same sign and need to be compared
-		// on mantissa and scale. The result is obvious when
-		// 1. Scales are equal (then compare mantissas)
-		// 2. A number with smaller scale is also the one with larger mantissa
-		//    (then this number is obviously larger)
-		// In the remaining case, we would multiply the number with smaller
-		// scale by 10 and simultaneously increment its scale (which amounts to
-		// adding trailing zeros after decimal point), until the numbers fall under
-		// one of the two cases above
-		DECIMAL temp;
-		bool bInvert = bLeftNeg; // the final result needs to be inverted
-		if (pdecLeft->scale < pdecRight->scale)
-		{
-			temp = *pdecLeft;
-		}
-		else
-		{
-			temp = *pdecRight;
-			pdecRight = pdecLeft;
-			bInvert = !bInvert;
-		}
-
-		// Now temp is the number with smaller (or equal) scale, and
-		// we can modify it freely without touching original parameters
-		int comp;
-		while ((comp = CompareMantissas(temp, *pdecRight)) < 0 &&
-			temp.scale < pdecRight->scale)
-		{
-			// Multiply by an appropriate power of 10
-			int scaleDiff = pdecRight->scale - temp.scale;
-			if (scaleDiff > largestPower)
-			{
-				// Keep the multiplier representable in 32bit
-				scaleDiff = largestPower;
-			}
-			DWORDLONG power = powersOfTen[scaleDiff - 1];
-			// Multiply temp's mantissa by power
-			DWORDLONG product = temp.Lo32 * power;
-			ULONG carry = static_cast<ULONG>(product >> 32);
-			temp.Lo32  = static_cast<ULONG>(product);
-			product = temp.Mid32 * power + carry;
-			carry = static_cast<ULONG>(product >> 32);
-			temp.Mid32 = static_cast<ULONG>(product);
-			product = temp.Hi32 * power + carry;
-			if (static_cast<ULONG>(product >> 32))
-			{
-				// Multiplication overflowed - pdecLeft is clearly larger
-				break;
-			}
-			temp.Hi32 = static_cast<ULONG>(product);
-			temp.scale = (BYTE)(temp.scale + scaleDiff);
-		}
-		if (temp.scale < pdecRight->scale)
-		{
-			comp = 1;
-		}
-		if (bInvert)
-		{
-			comp = -comp;
-		}
-		return (comp > 0 ? VARCMP_GT : comp < 0 ? VARCMP_LT : VARCMP_EQ);
-	}
-
-	static int CALLBACK LVCompareDecimal(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
-	{
-		ATLASSERT(lParam1 != NULL && lParam2 != NULL && lParamSort != NULL);
-
-		LVCompareParam* pParam1 = (LVCompareParam*)lParam1;
-		LVCompareParam* pParam2 = (LVCompareParam*)lParam2;
-		LVSortInfo* pInfo = (LVSortInfo*)lParamSort;
-		
-		int nRet = (int)VarDecCmp(&pParam1->decValue, &pParam2->decValue);
-		nRet--;
-		return pInfo->bDescending ? -nRet : nRet;
-	}
-#endif // !_WIN32_WCE
 
 	BEGIN_MSG_MAP(CSortListViewImpl)
 		MESSAGE_HANDLER(LVM_INSERTCOLUMN, OnInsertColumn)
@@ -3781,13 +3471,8 @@ public:
 
 	LRESULT OnSettingChange(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
 	{
-#ifndef _WIN32_WCE
 		if(wParam == SPI_SETNONCLIENTMETRICS)
 			GetSystemSettings();
-#else  // CE specific
-		wParam; // avoid level 4 warning
-		GetSystemSettings();
-#endif // _WIN32_WCE
 		bHandled = FALSE;
 		return 0;
 	}
@@ -3948,7 +3633,7 @@ public:
 // Message filter function - to be called from PreTranslateMessage of the main window
 	BOOL PreTranslateMessage(MSG* pMsg)
 	{
-		if(IsWindow() == FALSE)
+		if(this->IsWindow() == FALSE)
 			return FALSE;
 
 		BOOL bRet = FALSE;
@@ -3981,7 +3666,7 @@ public:
 		// If we are doing drag-drop, check for Escape key that cancels it
 		if(bRet == FALSE)
 		{
-			if(m_bTabCapture && pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_ESCAPE)
+			if(m_bTabCapture && (pMsg->message == WM_KEYDOWN) && (pMsg->wParam == VK_ESCAPE))
 			{
 				::ReleaseCapture();
 				bRet = TRUE;
@@ -4001,7 +3686,7 @@ public:
 // Attributes
 	int GetPageCount() const
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		return m_tab.GetItemCount();
 	}
 
@@ -4012,23 +3697,23 @@ public:
 
 	void SetActivePage(int nPage)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		ATLASSERT(IsValidPageIndex(nPage));
 
 		T* pT = static_cast<T*>(this);
 
-		SetRedraw(FALSE);
+		this->SetRedraw(FALSE);
 
 		if(m_nActivePage != -1)
-			::ShowWindow(GetPageHWND(m_nActivePage), FALSE);
+			::ShowWindow(GetPageHWND(m_nActivePage), SW_HIDE);
 		m_nActivePage = nPage;
 		m_tab.SetCurSel(m_nActivePage);
-		::ShowWindow(GetPageHWND(m_nActivePage), TRUE);
+		::ShowWindow(GetPageHWND(m_nActivePage), SW_SHOW);
 
 		pT->UpdateLayout();
 
-		SetRedraw(TRUE);
-		RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE | RDW_UPDATENOW | RDW_ALLCHILDREN);
+		this->SetRedraw(TRUE);
+		this->RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE | RDW_UPDATENOW | RDW_ALLCHILDREN);
 
 		if(::GetFocus() != m_tab.m_hWnd)
 			::SetFocus(GetPageHWND(m_nActivePage));
@@ -4039,19 +3724,19 @@ public:
 
 	HIMAGELIST GetImageList() const
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		return m_tab.GetImageList();
 	}
 
 	HIMAGELIST SetImageList(HIMAGELIST hImageList)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		return m_tab.SetImageList(hImageList);
 	}
 
 	void SetWindowMenu(HMENU hMenu)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 
 		m_menu = hMenu;
 
@@ -4061,7 +3746,7 @@ public:
 
 	void SetTitleBarWindow(HWND hWnd)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 
 		delete [] m_lpstrTitleBarBase;
 		m_lpstrTitleBarBase = NULL;
@@ -4083,7 +3768,7 @@ public:
 // Page attributes
 	HWND GetPageHWND(int nPage) const
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		ATLASSERT(IsValidPageIndex(nPage));
 
 		TCITEMEXTRA tcix = { 0 };
@@ -4095,7 +3780,7 @@ public:
 
 	LPCTSTR GetPageTitle(int nPage) const
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		ATLASSERT(IsValidPageIndex(nPage));
 
 		TCITEMEXTRA tcix = { 0 };
@@ -4108,7 +3793,7 @@ public:
 
 	bool SetPageTitle(int nPage, LPCTSTR lpstrTitle)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		ATLASSERT(IsValidPageIndex(nPage));
 
 		T* pT = static_cast<T*>(this);
@@ -4119,13 +3804,13 @@ public:
 		if(lpstrBuff == NULL)
 			return false;
 
-		SecureHelper::strcpy_x(lpstrBuff, cchBuff, lpstrTitle);
+		ATL::Checked::tcscpy_s(lpstrBuff, cchBuff, lpstrTitle);
 		TCITEMEXTRA tcix = { 0 };
 		tcix.tciheader.mask = TCIF_PARAM;
 		if(m_tab.GetItem(nPage, tcix) == FALSE)
 			return false;
 
-		CTempBuffer<TCHAR, _WTL_STACK_ALLOC_THRESHOLD> buff;
+		ATL::CTempBuffer<TCHAR, _WTL_STACK_ALLOC_THRESHOLD> buff;
 		LPTSTR lpstrTabText = buff.Allocate(m_cchTabTextLength + 1);
 		if(lpstrTabText == NULL)
 			return false;
@@ -4148,7 +3833,7 @@ public:
 
 	LPVOID GetPageData(int nPage) const
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		ATLASSERT(IsValidPageIndex(nPage));
 
 		TCITEMEXTRA tcix = { 0 };
@@ -4160,7 +3845,7 @@ public:
 
 	LPVOID SetPageData(int nPage, LPVOID pData)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		ATLASSERT(IsValidPageIndex(nPage));
 
 		TCITEMEXTRA tcix = { 0 };
@@ -4176,7 +3861,7 @@ public:
 
 	int GetPageImage(int nPage) const
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		ATLASSERT(IsValidPageIndex(nPage));
 
 		TCITEMEXTRA tcix = { 0 };
@@ -4188,7 +3873,7 @@ public:
 
 	int SetPageImage(int nPage, int nImage)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		ATLASSERT(IsValidPageIndex(nPage));
 
 		TCITEMEXTRA tcix = { 0 };
@@ -4210,8 +3895,8 @@ public:
 
 	bool InsertPage(int nPage, HWND hWndView, LPCTSTR lpstrTitle, int nImage = -1, LPVOID pData = NULL)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
-		ATLASSERT(nPage == GetPageCount() || IsValidPageIndex(nPage));
+		ATLASSERT(::IsWindow(this->m_hWnd));
+		ATLASSERT((nPage == GetPageCount()) || IsValidPageIndex(nPage));
 
 		T* pT = static_cast<T*>(this);
 
@@ -4221,16 +3906,16 @@ public:
 		if(lpstrBuff == NULL)
 			return false;
 
-		SecureHelper::strcpy_x(lpstrBuff, cchBuff, lpstrTitle);
+		ATL::Checked::tcscpy_s(lpstrBuff, cchBuff, lpstrTitle);
 
-		CTempBuffer<TCHAR, _WTL_STACK_ALLOC_THRESHOLD> buff;
+		ATL::CTempBuffer<TCHAR, _WTL_STACK_ALLOC_THRESHOLD> buff;
 		LPTSTR lpstrTabText = buff.Allocate(m_cchTabTextLength + 1);
 		if(lpstrTabText == NULL)
 			return false;
 
 		pT->ShortenTitle(lpstrTitle, lpstrTabText, m_cchTabTextLength + 1);
 
-		SetRedraw(FALSE);
+		this->SetRedraw(FALSE);
 
 		TCITEMEXTRA tcix = { 0 };
 		tcix.tciheader.mask = TCIF_TEXT | TCIF_IMAGE | TCIF_PARAM;
@@ -4243,7 +3928,7 @@ public:
 		if(nItem == -1)
 		{
 			delete [] lpstrBuff;
-			SetRedraw(TRUE);
+			this->SetRedraw(TRUE);
 			return false;
 		}
 
@@ -4259,20 +3944,20 @@ public:
 
 		pT->UpdateLayout();
 
-		SetRedraw(TRUE);
-		RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE | RDW_UPDATENOW | RDW_ALLCHILDREN);
+		this->SetRedraw(TRUE);
+		this->RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE | RDW_UPDATENOW | RDW_ALLCHILDREN);
 
 		return true;
 	}
 
 	void RemovePage(int nPage)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 		ATLASSERT(IsValidPageIndex(nPage));
 
 		T* pT = static_cast<T*>(this);
 
-		SetRedraw(FALSE);
+		this->SetRedraw(FALSE);
 
 		if(GetPageCount() == 1)
 			pT->ShowTabControl(false);
@@ -4280,7 +3965,7 @@ public:
 		if(m_bDestroyPageOnRemove)
 			::DestroyWindow(GetPageHWND(nPage));
 		else
-			::ShowWindow(GetPageHWND(nPage), FALSE);
+			::ShowWindow(GetPageHWND(nPage), SW_HIDE);
 		LPTSTR lpstrTitle = (LPTSTR)GetPageTitle(nPage);
 		delete [] lpstrTitle;
 
@@ -4300,9 +3985,9 @@ public:
 			}
 			else
 			{
-				SetRedraw(TRUE);
-				Invalidate();
-				UpdateWindow();
+				this->SetRedraw(TRUE);
+				this->Invalidate();
+				this->UpdateWindow();
 				pT->UpdateTitleBar();
 				pT->UpdateMenu();
 			}
@@ -4319,14 +4004,14 @@ public:
 
 	void RemoveAllPages()
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 
 		if(GetPageCount() == 0)
 			return;
 
 		T* pT = static_cast<T*>(this);
 
-		SetRedraw(FALSE);
+		this->SetRedraw(FALSE);
 
 		pT->ShowTabControl(false);
 
@@ -4335,7 +4020,7 @@ public:
 			if(m_bDestroyPageOnRemove)
 				::DestroyWindow(GetPageHWND(i));
 			else
-				::ShowWindow(GetPageHWND(i), FALSE);
+				::ShowWindow(GetPageHWND(i), SW_HIDE);
 			LPTSTR lpstrTitle = (LPTSTR)GetPageTitle(i);
 			delete [] lpstrTitle;
 		}
@@ -4344,9 +4029,9 @@ public:
 		m_nActivePage = -1;
 		pT->OnPageActivated(m_nActivePage);
 
-		SetRedraw(TRUE);
-		Invalidate();
-		UpdateWindow();
+		this->SetRedraw(TRUE);
+		this->Invalidate();
+		this->UpdateWindow();
 
 		pT->UpdateTitleBar();
 		pT->UpdateMenu();
@@ -4370,7 +4055,7 @@ public:
 
 	void BuildWindowMenu(HMENU hMenu, int nMenuItemsCount = 10, bool bEmptyMenuItem = true, bool bWindowsMenuItem = true, bool bActivePageMenuItem = true, bool bActiveAsDefaultMenuItem = false)
 	{
-		ATLASSERT(::IsWindow(m_hWnd));
+		ATLASSERT(::IsWindow(this->m_hWnd));
 
 		CMenuHandle menu = hMenu;
 		T* pT = static_cast<T*>(this);
@@ -4378,25 +4063,12 @@ public:
 		int nFirstPos = 0;
 
 		// Find first menu item in our range
-#ifndef _WIN32_WCE
 		for(nFirstPos = 0; nFirstPos < menu.GetMenuItemCount(); nFirstPos++)
 		{
 			UINT nID = menu.GetMenuItemID(nFirstPos);
-			if((nID >= ID_WINDOW_TABFIRST && nID <= ID_WINDOW_TABLAST) || nID == ID_WINDOW_SHOWTABLIST)
+			if(((nID >= ID_WINDOW_TABFIRST) && (nID <= ID_WINDOW_TABLAST)) || (nID == ID_WINDOW_SHOWTABLIST))
 				break;
 		}
-#else // CE specific
-		for(nFirstPos = 0; ; nFirstPos++)
-		{
-			CMenuItemInfo mii;
-			mii.fMask = MIIM_ID;
-			BOOL bRet = menu.GetMenuItemInfo(nFirstPos, TRUE, &mii);
-			if(bRet == FALSE)
-				break;
-			if((mii.wID >= ID_WINDOW_TABFIRST && mii.wID <= ID_WINDOW_TABLAST) || mii.wID == ID_WINDOW_SHOWTABLIST)
-				break;
-		}
-#endif // _WIN32_WCE
 
 		// Remove all menu items for tab pages
 		BOOL bRet = TRUE;
@@ -4431,13 +4103,13 @@ public:
 			{
 				LPCTSTR lpstrTitle = GetPageTitle(i);
 				int nLen = lstrlen(lpstrTitle);
-				CTempBuffer<TCHAR, _WTL_STACK_ALLOC_THRESHOLD> buff;
+				ATL::CTempBuffer<TCHAR, _WTL_STACK_ALLOC_THRESHOLD> buff;
 				LPTSTR lpstrText = buff.Allocate(cchPrefix + nLen + 1);
 				ATLASSERT(lpstrText != NULL);
 				if(lpstrText != NULL)
 				{
 					LPCTSTR lpstrFormat = (i < 9) ? _T("&%i %s") : _T("%i %s");
-					SecureHelper::wsprintf_x(lpstrText, cchPrefix + nLen + 1, lpstrFormat, i + 1, lpstrTitle);
+					_stprintf_s(lpstrText, cchPrefix + nLen + 1, lpstrFormat, i + 1, lpstrTitle);
 					menu.AppendMenu(MF_STRING, ID_WINDOW_TABFIRST + i, lpstrText);
 				}
 			}
@@ -4445,16 +4117,12 @@ public:
 			// Mark active page
 			if(bActivePageMenuItem && (m_nActivePage != -1))
 			{
-#ifndef _WIN32_WCE
 				if(bActiveAsDefaultMenuItem)
 				{
 					menu.SetMenuDefaultItem((UINT)-1,  TRUE);
 					menu.SetMenuDefaultItem(nFirstPos + m_nActivePage,  TRUE);
 				}
 				else
-#else // CE specific
-				bActiveAsDefaultMenuItem;   // avoid level 4 warning
-#endif // _WIN32_WCE
 				{
 					menu.CheckMenuRadioItem(nFirstPos, nFirstPos + nMenuItemsCount, nFirstPos + m_nActivePage, MF_BYPOSITION);
 				}
@@ -4486,12 +4154,7 @@ public:
 
 	BOOL SubclassWindow(HWND hWnd)
 	{
-#if (_MSC_VER >= 1300)
 		BOOL bRet = ATL::CWindowImpl< T, TBase, TWinTraits >::SubclassWindow(hWnd);
-#else // !(_MSC_VER >= 1300)
-		typedef ATL::CWindowImpl< T, TBase, TWinTraits >   _baseClass;
-		BOOL bRet = _baseClass::SubclassWindow(hWnd);
-#endif // !(_MSC_VER >= 1300)
 		if(bRet != FALSE)
 		{
 			T* pT = static_cast<T*>(this);
@@ -4512,9 +4175,7 @@ public:
 		MESSAGE_HANDLER(WM_SETFONT, OnSetFont)
 		NOTIFY_HANDLER(m_nTabID, TCN_SELCHANGE, OnTabChanged)
 		NOTIFY_ID_HANDLER(m_nTabID, OnTabNotification)
-#ifndef _WIN32_WCE
 		NOTIFY_CODE_HANDLER(TTN_GETDISPINFO, OnTabGetDispInfo)
-#endif // !_WIN32_WCE
 		FORWARD_NOTIFICATIONS()
 	ALT_MSG_MAP(1)   // tab control
 		MESSAGE_HANDLER(WM_LBUTTONDOWN, OnTabLButtonDown)
@@ -4611,7 +4272,6 @@ public:
 		return 0;
 	}
 
-#ifndef _WIN32_WCE
 	LRESULT OnTabGetDispInfo(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled)
 	{
 		LPNMTTDISPINFO pTTDI = (LPNMTTDISPINFO)pnmh;
@@ -4627,7 +4287,6 @@ public:
 
 		return 0;
 	}
-#endif // !_WIN32_WCE
 
 // Tab control message handlers
 	LRESULT OnTabLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
@@ -4678,9 +4337,7 @@ public:
 				T* pT = static_cast<T*>(this);
 				pT->DrawMoveMark(-1);
 
-#ifndef _WIN32_WCE
 				m_ilDrag.DragLeave(GetDesktopWindow());
-#endif // !_WIN32_WCE
 				m_ilDrag.EndDrag();
 
 				m_ilDrag.Destroy();
@@ -4702,13 +4359,8 @@ public:
 
 			if(!m_bTabDrag)
 			{
-#ifndef _WIN32_WCE
-				if(abs(m_ptStartDrag.x - GET_X_LPARAM(lParam)) >= ::GetSystemMetrics(SM_CXDRAG) ||
-				   abs(m_ptStartDrag.y - GET_Y_LPARAM(lParam)) >= ::GetSystemMetrics(SM_CYDRAG))
-#else // CE specific
-				if(abs(m_ptStartDrag.x - GET_X_LPARAM(lParam)) >= 4 ||
-				   abs(m_ptStartDrag.y - GET_Y_LPARAM(lParam)) >= 4)
-#endif // _WIN32_WCE
+				if((abs(m_ptStartDrag.x - GET_X_LPARAM(lParam)) >= ::GetSystemMetrics(SM_CXDRAG)) ||
+				   (abs(m_ptStartDrag.y - GET_Y_LPARAM(lParam)) >= ::GetSystemMetrics(SM_CYDRAG)))
 				{
 					T* pT = static_cast<T*>(this);
 					pT->GenerateDragImage(m_nActivePage);
@@ -4716,11 +4368,9 @@ public:
 					int cxCursor = ::GetSystemMetrics(SM_CXCURSOR);
 					int cyCursor = ::GetSystemMetrics(SM_CYCURSOR);
 					m_ilDrag.BeginDrag(0, -(cxCursor / 2), -(cyCursor / 2));
-#ifndef _WIN32_WCE
 					POINT ptEnter = m_ptStartDrag;
 					m_tab.ClientToScreen(&ptEnter);
 					m_ilDrag.DragEnter(GetDesktopWindow(), ptEnter);
-#endif // !_WIN32_WCE
 
 					m_bTabDrag = true;
 				}
@@ -4767,7 +4417,7 @@ public:
 	LRESULT OnTabSysKeyDown(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
 	{
 		bool bShift = (::GetKeyState(VK_SHIFT) < 0);
-		if(wParam == VK_F10 && bShift)
+		if((wParam == VK_F10) && bShift)
 		{
 			if(m_nActivePage != -1)
 			{
@@ -4789,7 +4439,7 @@ public:
 // Implementation helpers
 	bool IsValidPageIndex(int nPage) const
 	{
-		return (nPage >= 0 && nPage < GetPageCount());
+		return ((nPage >= 0) && (nPage < GetPageCount()));
 	}
 
 	bool MovePage(int nMovePage, int nInsertBeforePage)
@@ -4803,7 +4453,7 @@ public:
 		if(nMovePage == nInsertBeforePage)
 			return true;   // nothing to do
 
-		CTempBuffer<TCHAR, _WTL_STACK_ALLOC_THRESHOLD> buff;
+		ATL::CTempBuffer<TCHAR, _WTL_STACK_ALLOC_THRESHOLD> buff;
 		LPTSTR lpstrTabText = buff.Allocate(m_cchTabTextLength + 1);
 		if(lpstrTabText == NULL)
 			return false;
@@ -4840,11 +4490,7 @@ public:
 // Implementation overrideables
 	bool CreateTabControl()
 	{
-#ifndef _WIN32_WCE
-		m_tab.Create(m_hWnd, rcDefault, NULL, WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | TCS_TOOLTIPS, 0, m_nTabID);
-#else // CE specific
-		m_tab.Create(m_hWnd, rcDefault, NULL, WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, m_nTabID);
-#endif // _WIN32_WCE
+		m_tab.Create(this->m_hWnd, this->rcDefault, NULL, WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | TCS_TOOLTIPS, 0, m_nTabID);
 		ATLASSERT(m_tab.m_hWnd != NULL);
 		if(m_tab.m_hWnd == NULL)
 			return false;
@@ -4892,7 +4538,7 @@ public:
 	void UpdateLayout()
 	{
 		RECT rect = { 0 };
-		GetClientRect(&rect);
+		this->GetClientRect(&rect);
 
 		int cyOffset = 0;
 		if(m_tab.IsWindow() && ((m_tab.GetStyle() & WS_VISIBLE) != 0))
@@ -4913,7 +4559,7 @@ public:
 
 	void UpdateTitleBar()
 	{
-		if(!m_wndTitleBar.IsWindow() || m_lpstrTitleBarBase == NULL)
+		if(!m_wndTitleBar.IsWindow() || (m_lpstrTitleBarBase == NULL))
 			return;   // nothing to do
 
 		if(m_nActivePage != -1)
@@ -4922,14 +4568,14 @@ public:
 			LPCTSTR lpstrTitle = pT->GetPageTitle(m_nActivePage);
 			LPCTSTR lpstrDivider = pT->GetTitleDividerText();
 			int cchBuffer = m_cchTitleBarLength + lstrlen(lpstrDivider) + lstrlen(m_lpstrTitleBarBase) + 1;
-			CTempBuffer<TCHAR, _WTL_STACK_ALLOC_THRESHOLD> buff;
+			ATL::CTempBuffer<TCHAR, _WTL_STACK_ALLOC_THRESHOLD> buff;
 			LPTSTR lpstrPageTitle = buff.Allocate(cchBuffer);
 			ATLASSERT(lpstrPageTitle != NULL);
 			if(lpstrPageTitle != NULL)
 			{
 				pT->ShortenTitle(lpstrTitle, lpstrPageTitle, m_cchTitleBarLength + 1);
-				SecureHelper::strcat_x(lpstrPageTitle, cchBuffer, lpstrDivider);
-				SecureHelper::strcat_x(lpstrPageTitle, cchBuffer, m_lpstrTitleBarBase);
+				ATL::Checked::tcscat_s(lpstrPageTitle, cchBuffer, lpstrDivider);
+				ATL::Checked::tcscat_s(lpstrPageTitle, cchBuffer, m_lpstrTitleBarBase);
 			}
 			else
 			{
@@ -5014,19 +4660,14 @@ public:
 	{
 		ATLASSERT(IsValidPageIndex(nItem));
 
-#ifndef _WIN32_WCE
 		RECT rcItem = { 0 };
 		m_tab.GetItemRect(nItem, &rcItem);
 		::InflateRect(&rcItem, 2, 2);   // make bigger to cover selected item
-#else // CE specific
-		nItem;   // avoid level 4 warning
-		RECT rcItem = { 0, 0, 40, 20 };
-#endif // _WIN32_WCE
 
 		ATLASSERT(m_ilDrag.m_hImageList == NULL);
 		m_ilDrag.Create(rcItem.right - rcItem.left, rcItem.bottom - rcItem.top, ILC_COLORDDB | ILC_MASK, 1, 1);
 
-		CClientDC dc(m_hWnd);
+		CClientDC dc(this->m_hWnd);
 		CDC dcMem;
 		dcMem.CreateCompatibleDC(dc);
 		ATLASSERT(dcMem.m_hDC != NULL);
@@ -5037,11 +4678,7 @@ public:
 		ATLASSERT(bmp.m_hBitmap != NULL);
 
 		HBITMAP hBmpOld = dcMem.SelectBitmap(bmp);
-#ifndef _WIN32_WCE
 		m_tab.SendMessage(WM_PRINTCLIENT, (WPARAM)dcMem.m_hDC);
-#else // CE specific
-		dcMem.Rectangle(&rcItem);
-#endif // _WIN32_WCE
 		dcMem.SelectBitmap(hBmpOld);
 
 		ATLVERIFY(m_ilDrag.Add(bmp.m_hBitmap, RGB(255, 0, 255)) != -1);
@@ -5053,22 +4690,20 @@ public:
 		{
 			LPCTSTR lpstrEllipsis = _T("...");
 			int cchEllipsis = lstrlen(lpstrEllipsis);
-			SecureHelper::strncpy_x(lpstrShortTitle, cchShortTitle, lpstrTitle, cchShortTitle - cchEllipsis - 1);
-			SecureHelper::strcat_x(lpstrShortTitle, cchShortTitle, lpstrEllipsis);
+			ATL::Checked::tcsncpy_s(lpstrShortTitle, cchShortTitle, lpstrTitle, cchShortTitle - cchEllipsis - 1);
+			ATL::Checked::tcscat_s(lpstrShortTitle, cchShortTitle, lpstrEllipsis);
 		}
 		else
 		{
-			SecureHelper::strcpy_x(lpstrShortTitle, cchShortTitle, lpstrTitle);
+			ATL::Checked::tcscpy_s(lpstrShortTitle, cchShortTitle, lpstrTitle);
 		}
 	}
 
-#ifndef _WIN32_WCE
 	void UpdateTooltipText(LPNMTTDISPINFO pTTDI)
 	{
 		ATLASSERT(pTTDI != NULL);
 		pTTDI->lpszText = (LPTSTR)GetPageTitle((int)pTTDI->hdr.idFrom);
 	}
-#endif // !_WIN32_WCE
 
 // Text for menu items and title bar - override to provide different strings
 	static LPCTSTR GetEmptyListText()
@@ -5090,10 +4725,10 @@ public:
 	void OnPageActivated(int nPage)
 	{
 		NMHDR nmhdr = { 0 };
-		nmhdr.hwndFrom = m_hWnd;
+		nmhdr.hwndFrom = this->m_hWnd;
 		nmhdr.idFrom = nPage;
 		nmhdr.code = TBVN_PAGEACTIVATED;
-		::SendMessage(GetParent(), WM_NOTIFY, GetDlgCtrlID(), (LPARAM)&nmhdr);
+		this->GetParent().SendMessage(WM_NOTIFY, this->GetDlgCtrlID(), (LPARAM)&nmhdr);
 	}
 
 	void OnContextMenu(int nPage, POINT pt)
@@ -5101,11 +4736,11 @@ public:
 		m_tab.ClientToScreen(&pt);
 
 		TBVCONTEXTMENUINFO cmi = { 0 };
-		cmi.hdr.hwndFrom = m_hWnd;
+		cmi.hdr.hwndFrom = this->m_hWnd;
 		cmi.hdr.idFrom = nPage;
 		cmi.hdr.code = TBVN_CONTEXTMENU;
 		cmi.pt = pt;
-		::SendMessage(GetParent(), WM_NOTIFY, GetDlgCtrlID(), (LPARAM)&cmi);
+		this->GetParent().SendMessage(WM_NOTIFY, this->GetDlgCtrlID(), (LPARAM)&cmi);
 	}
 };
 

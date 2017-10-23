@@ -1,4 +1,4 @@
-// Windows Template Library - WTL version 9.10
+// Windows Template Library - WTL version 10.0
 // Copyright (C) Microsoft Corporation, WTL Team. All rights reserved.
 //
 // This file is a part of the Windows Template Library.
@@ -10,10 +10,6 @@
 #define __ATLPRINT_H__
 
 #pragma once
-
-#ifdef _WIN32_WCE
-	#error atlprint.h is not supported on Windows CE
-#endif
 
 #ifndef __ATLAPP_H__
 	#error atlprint.h requires atlapp.h to be included first
@@ -60,11 +56,8 @@ template <> class _printer_info<4> { public: typedef PRINTER_INFO_4 infotype; };
 template <> class _printer_info<5> { public: typedef PRINTER_INFO_5 infotype; };
 template <> class _printer_info<6> { public: typedef PRINTER_INFO_6 infotype; };
 template <> class _printer_info<7> { public: typedef PRINTER_INFO_7 infotype; };
-// these are not in the old (vc6.0) headers
-#ifdef _ATL_USE_NEW_PRINTER_INFO
 template <> class _printer_info<8> { public: typedef PRINTER_INFO_8 infotype; };
 template <> class _printer_info<9> { public: typedef PRINTER_INFO_9 infotype; };
-#endif // _ATL_USE_NEW_PRINTER_INFO
 
 
 template <unsigned int t_nInfo>
@@ -253,7 +246,7 @@ public:
 				memset(pv, 0, nLen);
 				pdev->wDeviceOffset = sizeof(DEVNAMES) / sizeof(TCHAR);
 				pv = pv + sizeof(DEVNAMES); // now points to end
-				SecureHelper::strcpy_x((LPTSTR)pv, lstrlen(lpszPrinterName) + 1, lpszPrinterName);
+				ATL::Checked::tcscpy_s((LPTSTR)pv, lstrlen(lpszPrinterName) + 1, lpszPrinterName);
 				::GlobalUnlock(h);
 			}
 		}
@@ -377,7 +370,7 @@ public:
 		if (h != NULL)
 		{
 			void* p = ::GlobalLock(h);
-			SecureHelper::memcpy_x(p, nSize, pdm, nSize);
+			ATL::Checked::memcpy_s(p, nSize, pdm, nSize);
 			::GlobalUnlock(h);
 		}
 		Attach(h);
@@ -405,7 +398,7 @@ public:
 		if (h != NULL)
 		{
 			void* p = ::GlobalLock(h);
-			SecureHelper::memcpy_x(p, nSize, m_pDevMode, nSize);
+			ATL::Checked::memcpy_s(p, nSize, m_pDevMode, nSize);
 			::GlobalUnlock(h);
 		}
 		return h;
@@ -417,7 +410,7 @@ public:
 	{
 		bool bRet = false;
 		LONG nLen = ::DocumentProperties(NULL, hPrinter, NULL, NULL, NULL, 0);
-		CTempBuffer<DEVMODE, _WTL_STACK_ALLOC_THRESHOLD> buff;
+		ATL::CTempBuffer<DEVMODE, _WTL_STACK_ALLOC_THRESHOLD> buff;
 		DEVMODE* pdm = buff.AllocateBytes(nLen);
 		if(pdm != NULL)
 		{
@@ -439,7 +432,7 @@ public:
 
 		bool bRet = false;
 		LONG nLen = ::DocumentProperties(hWnd, hPrinter, pi.m_pi->pName, NULL, NULL, 0);
-		CTempBuffer<DEVMODE, _WTL_STACK_ALLOC_THRESHOLD> buff;
+		ATL::CTempBuffer<DEVMODE, _WTL_STACK_ALLOC_THRESHOLD> buff;
 		DEVMODE* pdm = buff.AllocateBytes(nLen);
 		if(pdm != NULL)
 		{
@@ -625,7 +618,7 @@ public:
 
 		// Create a thread and return
 		DWORD dwThreadID = 0;
-#if !defined(_ATL_MIN_CRT) && defined(_MT)
+#ifdef _MT
 		HANDLE hThread = (HANDLE)_beginthreadex(NULL, 0, (UINT (WINAPI*)(void*))StartProc, this, 0, (UINT*)&dwThreadID);
 #else
 		HANDLE hThread = ::CreateThread(NULL, 0, StartProc, (void*)this, 0, &dwThreadID);
@@ -882,7 +875,7 @@ public:
 		}
 		else
 		{
-			CPaintDC dc(m_hWnd);
+			CPaintDC dc(this->m_hWnd);
 			pT->DoPrePaint(dc.m_hDC, rc);
 			pT->DoPaint(dc.m_hDC, rc);
 		}
@@ -894,7 +887,7 @@ public:
 	void DoPrePaint(CDCHandle dc, RECT& rc)
 	{
 		RECT rcClient = { 0 };
-		GetClientRect(&rcClient);
+		this->GetClientRect(&rcClient);
 		RECT rcArea = rcClient;
 		T* pT = static_cast<T*>(this);
 		pT;   // avoid level 4 warning
@@ -940,7 +933,7 @@ public:
 
 	CZoomPrintPreviewWindowImpl()  
 	{
-		SetScrollExtendedStyle(SCRL_DISABLENOSCROLL);
+		this->SetScrollExtendedStyle(SCRL_DISABLENOSCROLL);
 		InitZoom();
 	}
 
@@ -948,9 +941,9 @@ public:
 	void InitZoom()
 	{
 		m_bSized = false;	
-		m_nZoomMode = ZOOMMODE_OFF;
-		m_fZoomScaleMin = 1.0;
-		m_fZoomScale = 1.0;
+		this->m_nZoomMode = ZOOMMODE_OFF;
+		this->m_fZoomScaleMin = 1.0;
+		this->m_fZoomScale = 1.0;
 	}
 
 	BEGIN_MSG_MAP(CZoomPrintPreviewWindowImpl)
@@ -958,9 +951,6 @@ public:
 		MESSAGE_HANDLER(WM_VSCROLL, CScrollImpl< T >::OnVScroll)
 		MESSAGE_HANDLER(WM_HSCROLL, CScrollImpl< T >::OnHScroll)
 		MESSAGE_HANDLER(WM_MOUSEWHEEL, CScrollImpl< T >::OnMouseWheel)
-#if !((_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400))
-		MESSAGE_HANDLER(m_uMsgMouseWheel, CScrollImpl< T >::OnMouseWheel)
-#endif // !((_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400))
 		MESSAGE_HANDLER(WM_MOUSEHWHEEL, CScrollImpl< T >::OnMouseHWheel)
 		MESSAGE_HANDLER(WM_SETTINGCHANGE, CScrollImpl< T >::OnSettingChange)
 		MESSAGE_HANDLER(WM_LBUTTONDOWN, CZoomScrollImpl< T >::OnLButtonDown)
@@ -989,14 +979,14 @@ public:
 	LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		SIZE sizeClient = {GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
-		POINT ptOffset = m_ptOffset;
-		SIZE sizeAll = m_sizeAll;
-		SetScrollSize(sizeClient);
+		POINT ptOffset = this->m_ptOffset;
+		SIZE sizeAll = this->m_sizeAll;
+		this->SetScrollSize(sizeClient);
 		if(sizeAll.cx > 0)
-			ptOffset.x = ::MulDiv(ptOffset.x, m_sizeAll.cx, sizeAll.cx);
+			ptOffset.x = ::MulDiv(ptOffset.x, this->m_sizeAll.cx, sizeAll.cx);
 		if(sizeAll.cy > 0)
-			ptOffset.y = ::MulDiv(ptOffset.y, m_sizeAll.cy, sizeAll.cy);
-		SetScrollOffset(ptOffset);
+			ptOffset.y = ::MulDiv(ptOffset.y, this->m_sizeAll.cy, sizeAll.cy);
+		this->SetScrollOffset(ptOffset);
 		CScrollImpl< T >::OnSize(uMsg, wParam, lParam, bHandled);
 		if(!m_bSized)
 		{
@@ -1024,11 +1014,11 @@ public:
 			int nMapModeSav = dc.GetMapMode();
 			dc.SetMapMode(MM_ANISOTROPIC);
 			SIZE szWindowExt = { 0, 0 };
-			dc.SetWindowExt(m_sizeLogAll, &szWindowExt);
+			dc.SetWindowExt(this->m_sizeLogAll, &szWindowExt);
 			SIZE szViewportExt = { 0, 0 };
-			dc.SetViewportExt(m_sizeAll, &szViewportExt);
+			dc.SetViewportExt(this->m_sizeAll, &szViewportExt);
 			POINT ptViewportOrg = { 0, 0 };
-			dc.SetViewportOrg(-m_ptOffset.x, -m_ptOffset.y, &ptViewportOrg);
+			dc.SetViewportOrg(-this->m_ptOffset.x, -this->m_ptOffset.y, &ptViewportOrg);
 
 			pT->DoPrePaint(dc, rc);
 			pT->DoPaint(dc, rc);
@@ -1058,7 +1048,7 @@ public:
 	void DoPrePaint(CDCHandle dc, RECT& rc)
 	{
 		RECT rcClient = { 0 };
-		GetClientRect(&rcClient);
+		this->GetClientRect(&rcClient);
 		RECT rcArea = rcClient;
 		T* pT = static_cast<T*>(this);
 		pT;   // avoid level 4 warning
@@ -1067,7 +1057,7 @@ public:
 			rcArea.right = rcArea.left;
 		if (rcArea.top > rcArea.bottom)
 			rcArea.bottom = rcArea.top;
-		GetPageRect(rcArea, &rc);
+		this->GetPageRect(rcArea, &rc);
 		HBRUSH hbrOld = dc.SelectBrush(::GetSysColorBrush(COLOR_BTNSHADOW));
 		dc.PatBlt(rcClient.left, rcClient.top, rc.left - rcClient.left, rcClient.bottom - rcClient.top, PATCOPY);
 		dc.PatBlt(rc.left, rcClient.top, rc.right - rc.left, rc.top - rcClient.top, PATCOPY);
@@ -1083,13 +1073,13 @@ public:
 
 	void DoPaint(CDCHandle dc, RECT& rc)
 	{
-		CEnhMetaFileInfo emfinfo(m_meta);
+		CEnhMetaFileInfo emfinfo(this->m_meta);
 		ENHMETAHEADER* pmh = emfinfo.GetEnhMetaFileHeader();
-		int nOffsetX = MulDiv(m_sizeCurPhysOffset.cx, rc.right-rc.left, pmh->szlDevice.cx);
-		int nOffsetY = MulDiv(m_sizeCurPhysOffset.cy, rc.bottom-rc.top, pmh->szlDevice.cy);
+		int nOffsetX = MulDiv(this->m_sizeCurPhysOffset.cx, rc.right-rc.left, pmh->szlDevice.cx);
+		int nOffsetY = MulDiv(this->m_sizeCurPhysOffset.cy, rc.bottom-rc.top, pmh->szlDevice.cy);
 
 		dc.OffsetWindowOrg(-nOffsetX, -nOffsetY);
-		dc.PlayMetaFile(m_meta, &rc);
+		dc.PlayMetaFile(this->m_meta, &rc);
 	}
 };
 

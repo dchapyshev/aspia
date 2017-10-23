@@ -1,4 +1,4 @@
-// Windows Template Library - WTL version 9.10
+// Windows Template Library - WTL version 10.0
 // Copyright (C) Microsoft Corporation, WTL Team. All rights reserved.
 //
 // This file is a part of the Windows Template Library.
@@ -23,17 +23,8 @@
 	#error atlribbon.h requires the Windows 7 SDK or higher
 #endif
 
-#ifdef _WIN32_WCE
-	#error atlribbon.h is not supported on Windows CE
-#endif
-
 #ifndef __ATLAPP_H__
 	#error atlribbon.h requires atlapp.h to be included first
-#endif
-
-#if (_ATL_VER < 0x0700)
-  #include <shlwapi.h>
-  #pragma comment(lib, "shlwapi.lib")
 #endif
 
 #include <atlmisc.h>    // for RecentDocumentList classes
@@ -41,7 +32,7 @@
 #include <atlctrls.h>   // required for atlctrlw.h
 #include <atlctrlw.h>   // for CCommandBarCtrl
 
-#if !defined(_WTL_USE_CSTRING) && !defined(__ATLSTR_H__)
+#ifndef __ATLSTR_H__
   #pragma warning(push)
   #pragma warning(disable: 4530)   // unwind semantics not enabled
   #include <string>
@@ -51,8 +42,8 @@
 #include <dwmapi.h>
 #pragma comment(lib, "dwmapi.lib")
 
-#include <UIRibbon.h>
-#include <UIRibbonPropertyHelpers.h>
+#include "UIRibbon.h"
+#include "UIRibbonPropertyHelpers.h"
 #pragma comment(lib, "propsys.lib")
 
 #include <Richedit.h>   // for CHARFORMAT2
@@ -134,17 +125,17 @@ public:
 		UPDUI_PERSIST = 0x0020
 	};
 
-	bool IsRibbonElement(const _AtlUpdateUIMap& UIMap)
+	bool IsRibbonElement(const CUpdateUIBase::_AtlUpdateUIMap& UIMap)
 	{
 		return (UIMap.m_wType & UPDUI_RIBBON) != 0;
 	}
 
 	bool IsRibbonID(UINT nID)
 	{
-		for(int i = 0; i < m_arrUIMap.GetSize(); i++)
+		for(int i = 0; i < this->m_arrUIMap.GetSize(); i++)
 		{
-			if(m_arrUIMap[i].m_nID == nID)
-				return IsRibbonElement(m_arrUIMap[i]);
+			if(this->m_arrUIMap[i].m_nID == nID)
+				return IsRibbonElement(this->m_arrUIMap[i]);
 		}
 
 		return false;
@@ -153,12 +144,12 @@ public:
 // Element
 	bool UIAddRibbonElement(UINT nID)
 	{
-		return UIAddElement<UPDUI_RIBBON>(nID);
+		return this->UIAddElement<UPDUI_RIBBON>(nID);
 	}
 
 	bool UIRemoveRibbonElement(UINT nID)
 	{
-		return UIRemoveElement<UPDUI_RIBBON>(nID);
+		return this->UIRemoveElement<UPDUI_RIBBON>(nID);
 	}
 
 	bool UIPersistElement(UINT nID, bool bPersist = true)
@@ -180,8 +171,8 @@ public:
 
 	BOOL UISetText(int nID, UINT uIdResource, BOOL bForceUpdate = FALSE)
 	{
-		CTempBuffer<WCHAR> sText(RIBBONUI_MAX_TEXT);
-		int nRet = AtlLoadString(uIdResource, sText, RIBBONUI_MAX_TEXT);
+		ATL::CTempBuffer<WCHAR> sText(RIBBONUI_MAX_TEXT);
+		int nRet = ATL::AtlLoadString(uIdResource, sText, RIBBONUI_MAX_TEXT);
 		if(nRet > 0)
 			UISetText(nID, sText, bForceUpdate);
 		return (nRet > 0) ? TRUE : FALSE;
@@ -190,7 +181,7 @@ public:
 	LPCTSTR UIGetText(int nID)
 	{
 		T* pT = static_cast<T*>(this);
-		LPCTSTR sUI = CAutoUpdateUI::UIGetText(nID);
+		LPCTSTR sUI = CAutoUpdateUI<T>::UIGetText(nID);
 		
 		// replace 'tab' by 'space' for RibbonUI elements
 		if (sUI && pT->IsRibbonUI() && IsRibbonID(nID) && wcschr(sUI, L'\t'))
@@ -244,8 +235,8 @@ namespace RibbonUI
 {
 
 // Minimal string allocation support for various PROPERTYKEY values
-#if defined(_WTL_USE_CSTRING) || defined(__ATLSTR_H__)
-  typedef _CSTRING_NS::CString Text;
+#ifdef __ATLSTR_H__
+  typedef ATL::CString Text;
 #else
   class Text : public std::wstring
   {
@@ -269,7 +260,7 @@ namespace RibbonUI
 		return static_cast<Text&>(std::wstring::operator =(s));
 	}
   };
-#endif
+#endif // __ATLSTR_H__
 
 // PROPERTYKEY enum and helpers
 enum k_KEY
@@ -410,15 +401,15 @@ struct CharFormat : CHARFORMAT2
 		{
 			&CharFormat::Getk_Family, 
 			&CharFormat::Getk_FontProperties_Size, 
-			&CharFormat::Getk_MaskEffect<CFM_BOLD, CFE_BOLD, UI_PKEY_FontProperties_Bold>,
-			&CharFormat::Getk_MaskEffect<CFM_ITALIC, CFE_ITALIC, UI_PKEY_FontProperties_Italic>,
-			&CharFormat::Getk_MaskEffect<CFM_UNDERLINE, CFE_UNDERLINE, UI_PKEY_FontProperties_Underline>,
-			&CharFormat::Getk_MaskEffect<CFM_STRIKEOUT, CFE_STRIKEOUT, UI_PKEY_FontProperties_Strikethrough>,
-			&CharFormat::Getk_VerticalPositioning, 
-			&CharFormat::Getk_Color<CFM_COLOR, UI_PKEY_FontProperties_ForegroundColor>, 
-			&CharFormat::Getk_Color<CFM_BACKCOLOR, UI_PKEY_FontProperties_BackgroundColor>, 
-			&CharFormat::Getk_ColorType<CFM_COLOR, CFE_AUTOCOLOR, UI_SWATCHCOLORTYPE_AUTOMATIC, UI_PKEY_FontProperties_ForegroundColorType>,
-			&CharFormat::Getk_ColorType<CFM_BACKCOLOR, CFE_AUTOBACKCOLOR, UI_SWATCHCOLORTYPE_NOCOLOR, UI_PKEY_FontProperties_BackgroundColorType>,
+			&CharFormat::Getk_MaskEffectBold,
+			&CharFormat::Getk_MaskEffectItalic,
+			&CharFormat::Getk_MaskEffectUnderline,
+			&CharFormat::Getk_MaskEffectStrikeout,
+			&CharFormat::Getk_VerticalPositioning,
+			&CharFormat::Getk_Color, 
+			&CharFormat::Getk_ColorBack, 
+			&CharFormat::Getk_ColorType,
+			&CharFormat::Getk_ColorTypeBack,
 		};
 
 		DWORD nProps = 0;
@@ -486,18 +477,37 @@ private:
 		}
 	}
 
-	template <DWORD t_dwMask, DWORD t_dwEffects, REFPROPERTYKEY key>
-	void Getk_MaskEffect(IPropertyStore* pStore)
+	void Getk_MaskEffectBold(IPropertyStore* pStore)
+	{
+		Getk_MaskEffectAll(pStore, CFM_BOLD, CFE_BOLD, UI_PKEY_FontProperties_Bold);
+	}
+
+	void Getk_MaskEffectItalic(IPropertyStore* pStore)
+	{
+		Getk_MaskEffectAll(pStore, CFM_ITALIC, CFE_ITALIC, UI_PKEY_FontProperties_Italic);
+	}
+
+	void Getk_MaskEffectUnderline(IPropertyStore* pStore)
+	{
+		Getk_MaskEffectAll(pStore, CFM_UNDERLINE, CFE_UNDERLINE, UI_PKEY_FontProperties_Underline);
+	}
+
+	void Getk_MaskEffectStrikeout(IPropertyStore* pStore)
+	{
+		Getk_MaskEffectAll(pStore, CFM_STRIKEOUT, CFE_STRIKEOUT, UI_PKEY_FontProperties_Strikethrough);
+	}
+
+	void Getk_MaskEffectAll(IPropertyStore* pStore, DWORD _dwMask, DWORD _dwEffects, REFPROPERTYKEY key)
 	{
 		if (SUCCEEDED(pStore->GetValue(key, &propvar)))
 		{
 			UIPropertyToUInt32(key, propvar, &uValue);
 			if ((UI_FONTPROPERTIES)uValue != UI_FONTPROPERTIES_NOTAVAILABLE)
 			{
-				dwMask |= t_dwMask;
-				dwEffects |= ((UI_FONTPROPERTIES) uValue == UI_FONTPROPERTIES_SET) ? t_dwEffects : 0;
+				dwMask |= _dwMask;
+				dwEffects |= ((UI_FONTPROPERTIES)uValue == UI_FONTPROPERTIES_SET) ? _dwEffects : 0;
 			}
-		}	
+		}
 	}
 
 	void Getk_VerticalPositioning(IPropertyStore* pStore)
@@ -517,32 +527,51 @@ private:
 		}
 	}
 
-	template <DWORD t_dwMask, REFPROPERTYKEY key>
 	void Getk_Color(IPropertyStore* pStore)
+	{
+		Getk_ColorAll(pStore, CFM_COLOR, UI_PKEY_FontProperties_ForegroundColor);
+	}
+
+	void Getk_ColorBack(IPropertyStore* pStore)
+	{
+		Getk_ColorAll(pStore, CFM_BACKCOLOR, UI_PKEY_FontProperties_BackgroundColor);
+	}
+		
+	void Getk_ColorAll(IPropertyStore* pStore, DWORD _dwMask, REFPROPERTYKEY key)
 	{
 		UINT32 color = 0;
 		if (SUCCEEDED(pStore->GetValue(key, &propvar)))
 		{
 			UIPropertyToUInt32(key, propvar, &color);
-			dwMask |= t_dwMask;
+			dwMask |= _dwMask;
 
-			if (t_dwMask == CFM_COLOR)
+			if (_dwMask == CFM_COLOR)
 				crTextColor = color;
 			else
 				crBackColor = color;
 		}
 	}
 
-	template <DWORD t_dwMask, DWORD t_dwEffects, UI_SWATCHCOLORTYPE t_type, REFPROPERTYKEY key>
 	void Getk_ColorType(IPropertyStore* pStore)
+	{
+		Getk_ColorTypeAll(pStore, CFM_COLOR, CFE_AUTOCOLOR, UI_SWATCHCOLORTYPE_AUTOMATIC, UI_PKEY_FontProperties_ForegroundColor);
+
+	}
+
+	void Getk_ColorTypeBack(IPropertyStore* pStore)
+	{
+		Getk_ColorTypeAll(pStore, CFM_BACKCOLOR, CFE_AUTOBACKCOLOR, UI_SWATCHCOLORTYPE_NOCOLOR, UI_PKEY_FontProperties_BackgroundColor);
+	}
+
+	void Getk_ColorTypeAll(IPropertyStore* pStore, DWORD _dwMask, DWORD _dwEffects, UI_SWATCHCOLORTYPE _type, REFPROPERTYKEY key)
 	{
 		if (SUCCEEDED(pStore->GetValue(key, &propvar)))
 		{
 			UIPropertyToUInt32(key, propvar, &uValue);
-			if (t_type == (UI_SWATCHCOLORTYPE)uValue)
+			if (_type == (UI_SWATCHCOLORTYPE)uValue)
 			{
-				dwMask |= t_dwMask;
-				dwEffects |= t_dwEffects;
+				dwMask |= _dwMask;
+				dwEffects |= _dwEffects;
 			}
 		}
 	}
@@ -789,7 +818,7 @@ public:
 		const INT iImage = k_(key) - k_LargeImage;
 
 		if (m_hbm[iImage].IsNull())
-			m_hbm[iImage] = GetWndRibbon().OnRibbonQueryImage(GetID(), key);
+			m_hbm[iImage] = this->GetWndRibbon().OnRibbonQueryImage(this->GetID(), key);
 
 		return m_hbm[iImage].IsNull() ?
 			E_NOTIMPL :
@@ -799,11 +828,11 @@ public:
 	virtual HRESULT DoUpdateProperty(UINT nCmdID, REFPROPERTYKEY key, 
 	                                 const PROPVARIANT* ppropvarCurrentValue, PROPVARIANT* ppropvarNewValue)
 	{
-		ATLASSERT (nCmdID == GetID());
+		ATLASSERT (nCmdID == this->GetID());
 
 		return (k_(key) <= k_SmallHighContrastImage) && (k_(key) >= k_LargeImage) ?
 			OnGetImage(key, ppropvarNewValue) :
-			CtrlImpl::DoUpdateProperty(nCmdID, key, ppropvarCurrentValue, ppropvarNewValue);
+			CtrlImpl<T, t_ID>::DoUpdateProperty(nCmdID, key, ppropvarCurrentValue, ppropvarNewValue);
 	}
 };
 
@@ -1011,7 +1040,7 @@ public:
 				hr = pIUICollection->Clear();
 				for (UINT i = 0; i < m_size; i++)
 				{
-					if FAILED(hr = pIUICollection->Add(m_apItems[i]))
+					if FAILED(hr = pIUICollection->Add(this->m_apItems[i]))
 						break;
 				}
 				ATLASSERT(SUCCEEDED(hr));
@@ -1025,7 +1054,7 @@ public:
 				hr = pIUICategory->Clear();
 				for (UINT i = t_items; i < (t_items + t_categories); i++)
 				{
-					if FAILED(hr = pIUICategory->Add(m_apItems[i]))
+					if FAILED(hr = pIUICategory->Add(this->m_apItems[i]))
 						break;
 				}
 				ATLASSERT(SUCCEEDED(hr));
@@ -1095,7 +1124,7 @@ public:
 		}
 		else
 		{
-			return Collection::DoGetItem(uItem, key, value);
+			return CollectionImpl<TCtrl, t_items, t_categories>::Collection::DoGetItem(uItem, key, value);
 		}
 	}
 
@@ -1116,7 +1145,7 @@ public:
 		}
 		else
 		{
-			return Collection::DoUpdateProperty(nCmdID, key, ppropvarCurrentValue, ppropvarNewValue);
+			return CollectionImpl<TCtrl, t_items, t_categories>::Collection::DoUpdateProperty(nCmdID, key, ppropvarCurrentValue, ppropvarNewValue);
 		}
 	}
 };
@@ -1165,7 +1194,7 @@ public:
 		}
 		else
 		{
-			return TextCollection::DoGetItem(uItem, key, value);
+			return TextCollectionImpl<TCtrl, t_items, t_categories>::TextCollection::DoGetItem(uItem, key, value);
 		}
 	}
 };
@@ -1235,7 +1264,7 @@ public:
 		if (uCommandID != 0)
 			ribbon.UIAddRibbonElement(uCommandID);
 
-		return bUpdate ? InvalidateItems() : S_OK;
+		return bUpdate ? this->InvalidateItems() : S_OK;
 	}
 
 	HRESULT SetItemCommandType(UINT uItem, UI_COMMANDTYPE type, bool bUpdate = false)
@@ -1244,7 +1273,7 @@ public:
 
 		m_aCmdType[uItem] = (BYTE)type;
 
-		return bUpdate ? InvalidateItems() : S_OK;
+		return bUpdate ? this->InvalidateItems() : S_OK;
 	}
 
 // Implementation
@@ -1268,7 +1297,7 @@ public:
 			break;
 		case k_CategoryId:
 		default:
-			hr = Collection::DoGetItem(uItem, key, value);
+			hr = CollectionImpl<TCtrl, t_items, t_categories>::Collection::DoGetItem(uItem, key, value);
 			break;
 		}
 
@@ -1345,7 +1374,7 @@ public:
 	virtual HRESULT DoUpdateProperty(UINT nCmdID, REFPROPERTYKEY key, 
 	                                 const PROPVARIANT* ppropvarCurrentValue, PROPVARIANT* ppropvarNewValue)
 	{
-		ATLASSERT(nCmdID == GetID());
+		ATLASSERT(nCmdID == this->GetID());
 		ATLASSERT(ppropvarNewValue);
 
 		HRESULT hr = Collection::DoUpdateProperty(nCmdID, key, ppropvarCurrentValue, ppropvarNewValue);
@@ -1359,12 +1388,12 @@ public:
 	                          const PROPERTYKEY* key, const PROPVARIANT* ppropvarValue,
 	                          IUISimplePropertySet* /*pCommandExecutionProperties*/)
 	{
-		ATLASSERT (nCmdID == GetID());
+		ATLASSERT (nCmdID == this->GetID());
 		nCmdID; // avoid level4 warning
 
 		if (key == NULL) // gallery button pressed
 		{
-			GetWndRibbon().OnRibbonItemSelected(GetID(), UI_EXECUTIONVERB_EXECUTE, UI_COLLECTION_INVALIDINDEX);
+			this->GetWndRibbon().OnRibbonItemSelected(this->GetID(), UI_EXECUTIONVERB_EXECUTE, UI_COLLECTION_INVALIDINDEX);
 			return S_OK;
 		}
 
@@ -1377,7 +1406,7 @@ public:
 
 		if (SUCCEEDED(hr))
 		{
-			if (GetWndRibbon().OnRibbonItemSelected(GetID(), verb, uSel))
+			if (this->GetWndRibbon().OnRibbonItemSelected(this->GetID(), verb, uSel))
 				TCollection::Select(uSel);
 		}
 
@@ -1405,28 +1434,28 @@ public:
 		{
 			if (pItems[i] != 0)
 			{
-				m_aCmdType[j] = UI_COMMANDTYPE_ACTION;
-				m_auCmd[j++] = pItems[i];
+				this->m_aCmdType[j] = UI_COMMANDTYPE_ACTION;
+				this->m_auCmd[j++] = pItems[i];
 			}
 		}
 
 		if (j < t_size)
-			Resize(j);
+			this->Resize(j);
 	}
 
  	HRESULT DoGetItem(UINT uItem, REFPROPERTYKEY key, PROPVARIANT *value)
 	{
-		ATLASSERT(uItem < m_size);
-		ATLASSERT(m_auCmd[uItem]);
+		ATLASSERT(uItem < this->m_size);
+		ATLASSERT(this->m_auCmd[uItem]);
 
 		HRESULT hr = E_FAIL;
 		switch (k_(key))
 		{
 		case k_CommandId:
-			hr = SetPropertyVal(key, m_auCmd[uItem], value);
+			hr = SetPropertyVal(key, this->m_auCmd[uItem], value);
 			break;
 		case k_CommandType:
-			hr = SetPropertyVal(key, UINT32(m_aCmdType[uItem]), value);
+			hr = SetPropertyVal(key, UINT32(this->m_aCmdType[uItem]), value);
 			break;
 		case k_CategoryId:
 			hr = SetPropertyVal(key, UI_COLLECTION_INVALIDINDEX, value);
@@ -1472,7 +1501,7 @@ public:
 	virtual HRESULT DoUpdateProperty(UINT nCmdID, REFPROPERTYKEY key, 
 	                                 const PROPVARIANT* ppropvarCurrentValue, PROPVARIANT* ppropvarNewValue)
 	{
-		ATLASSERT(nCmdID == GetID());
+		ATLASSERT(nCmdID == this->GetID());
 		ATLASSERT(ppropvarNewValue != NULL);
 
 		HRESULT hr = S_OK;
@@ -1485,7 +1514,7 @@ public:
 				hr = pIUICollection->Clear();
 				for (UINT i = 0; i < t_size; i++)
 				{
-					if FAILED(hr = pIUICollection->Add(m_apItems[i]))
+					if FAILED(hr = pIUICollection->Add(this->m_apItems[i]))
 						break;
 				}
 				ATLASSERT(SUCCEEDED(hr));
@@ -1495,7 +1524,7 @@ public:
 			hr = SetPropertyVal(UI_PKEY_SelectedItem, m_uSelected, ppropvarNewValue);
 			break;
 		default:
-			hr = CommandCtrlImpl::DoUpdateProperty(nCmdID, key, ppropvarCurrentValue, ppropvarNewValue);
+			hr = CommandCtrlImpl<T, t_ID>::DoUpdateProperty(nCmdID, key, ppropvarCurrentValue, ppropvarNewValue);
 			break;
 		}
 
@@ -1506,20 +1535,20 @@ public:
 	                          const PROPERTYKEY* key, const PROPVARIANT* ppropvarValue,
 	                          IUISimplePropertySet* /*pCommandExecutionProperties*/)
 	{
-		ATLASSERT (nCmdID == GetID());
+		ATLASSERT (nCmdID == this->GetID());
 		nCmdID;   // avoid level 4 warning
 		
 		HRESULT hr = S_OK;
 		if (key == NULL) // gallery button pressed
 		{
-			GetWndRibbon().OnRibbonItemSelected(GetID(), UI_EXECUTIONVERB_EXECUTE, UI_COLLECTION_INVALIDINDEX);
+			this->GetWndRibbon().OnRibbonItemSelected(this->GetID(), UI_EXECUTIONVERB_EXECUTE, UI_COLLECTION_INVALIDINDEX);
 			return hr;
 		}
 		ATLASSERT(k_(*key) == k_SelectedItem);
 		ATLASSERT(ppropvarValue);
 
 		if SUCCEEDED(hr = UIPropertyToUInt32(*key, *ppropvarValue, &m_uSelected))
-			GetWndRibbon().OnRibbonItemSelected(GetID(), verb, m_uSelected);
+			this->GetWndRibbon().OnRibbonItemSelected(this->GetID(), verb, m_uSelected);
 
 		return hr;
 	}
@@ -1540,14 +1569,14 @@ public:
 	// Implementation
 	HRESULT OnGetItem(UINT uItem, REFPROPERTYKEY key, PROPVARIANT *value)
 	{
-		ATLASSERT((INT)uItem < GetMaxEntries());
+		ATLASSERT((INT)uItem < this->GetMaxEntries());
 
-		LPCWSTR sPath = m_arrDocs[uItem].szDocName;
+		LPCWSTR sPath = this->m_arrDocs[uItem].szDocName;
 		HRESULT hr = E_NOTIMPL;
 		switch (k_(key))
 		{
 		case k_Label:
-			hr = SetPropertyVal(key, GetWndRibbon().OnRibbonQueryRecentItemName(sPath), value);
+			hr = SetPropertyVal(key, this->GetWndRibbon().OnRibbonQueryRecentItemName(sPath), value);
 			break;
 		case k_LabelDescription:
 			hr = SetPropertyVal(key, sPath, value);
@@ -1563,25 +1592,25 @@ public:
 	virtual HRESULT DoUpdateProperty(UINT nCmdID, REFPROPERTYKEY key, 
 	                                 const PROPVARIANT* ppropvarCurrentValue, PROPVARIANT* ppropvarNewValue)
 	{
-		ATLASSERT(nCmdID == GetID());
+		ATLASSERT(nCmdID == this->GetID());
 		ATLASSERT(ppropvarNewValue);
 
 		HRESULT hr = S_OK;
 		switch (k_(key))
 		{
 		case k_RecentItems:
-			if (SAFEARRAY* psa = SafeArrayCreateVector(VT_UNKNOWN, 0, m_arrDocs.GetSize()))
+			if (SAFEARRAY* psa = SafeArrayCreateVector(VT_UNKNOWN, 0, this->m_arrDocs.GetSize()))
 			{
-				const int iLastIndex = m_arrDocs.GetSize() - 1;
+				const int iLastIndex = this->m_arrDocs.GetSize() - 1;
 				for (LONG i = 0; i <= iLastIndex; i++)
-					SafeArrayPutElement(psa, &i, m_apItems[iLastIndex - i]); // reverse order
+					SafeArrayPutElement(psa, &i, this->m_apItems[iLastIndex - i]); // reverse order
 
 				hr = SetPropertyVal(key, psa, ppropvarNewValue);
 				SafeArrayDestroy(psa);
 			}
 			break;
 		default:
-			hr = CtrlImpl::DoUpdateProperty(nCmdID, key, ppropvarCurrentValue, ppropvarNewValue);
+			hr = CtrlImpl<T, t_ID>::DoUpdateProperty(nCmdID, key, ppropvarCurrentValue, ppropvarNewValue);
 			break;
 		}
 
@@ -1592,7 +1621,7 @@ public:
 	                          const PROPERTYKEY* key, const PROPVARIANT* ppropvarValue,
 	                          IUISimplePropertySet* /*pCommandExecutionProperties*/)
 	{
-		ATLASSERT(nCmdID == GetID());
+		ATLASSERT(nCmdID == this->GetID());
 		nCmdID;   // avoid level 4 warning
 		ATLASSERT(verb == UI_EXECUTIONVERB_EXECUTE);
 		verb;   // avoid level 4 warning
@@ -1603,8 +1632,8 @@ public:
 		HRESULT hr = UIPropertyToUInt32(*key, *ppropvarValue, &uSel);
 		if SUCCEEDED(hr)
 		{
-			ATLASSERT(uSel < (UINT)GetMaxEntries());
-			GetWndRibbon().DefCommandExecute(ID_FILE_MRU_FIRST + uSel);
+			ATLASSERT(uSel < (UINT)this->GetMaxEntries());
+			this->GetWndRibbon().DefCommandExecute(ID_FILE_MRU_FIRST + uSel);
 		}
 
 		return hr;
@@ -1629,7 +1658,7 @@ public:
 	                          const PROPERTYKEY* key, const PROPVARIANT* ppropvarValue,
 	                          IUISimplePropertySet* pCommandExecutionProperties)
 	{
-		ATLASSERT (nCmdID == GetID());
+		ATLASSERT (nCmdID == this->GetID());
 		nCmdID;   // avoid level 4 warning
 		ATLASSERT ((key) && (k_(*key) == k_FontProperties));
 		key;   // avoid level 4 warning
@@ -1656,7 +1685,7 @@ public:
 		}
 
 		if (SUCCEEDED(hr))
-			GetWndRibbon().OnRibbonFontCtrlExecute(GetID(), verb, &m_cf);
+			this->GetWndRibbon().OnRibbonFontCtrlExecute(this->GetID(), verb, &m_cf);
 		else
 			ATLASSERT(FALSE);
 
@@ -1666,7 +1695,7 @@ public:
 	virtual HRESULT DoUpdateProperty(UINT nCmdID, REFPROPERTYKEY key, 
 	                                 const PROPVARIANT* ppropvarCurrentValue, PROPVARIANT* ppropvarNewValue)
 	{
-		if ((k_(key) == k_FontProperties) && (GetWndRibbon().OnRibbonQueryFont(t_ID, m_cf)))
+		if ((k_(key) == k_FontProperties) && (this->GetWndRibbon().OnRibbonQueryFont(t_ID, m_cf)))
 		{
 			ATL::CComQIPtr<IPropertyStore> pStore(ppropvarCurrentValue->punkVal);
 			m_cf >> pStore;
@@ -1674,7 +1703,7 @@ public:
 		}
 		else
 		{
-			return CtrlImpl::DoUpdateProperty(nCmdID, key, ppropvarCurrentValue, ppropvarNewValue);
+			return CtrlImpl<T, t_ID>::DoUpdateProperty(nCmdID, key, ppropvarCurrentValue, ppropvarNewValue);
 		}
 	}
 };
@@ -1729,7 +1758,7 @@ public:
 		{
 			PROPVARIANT var;
 			if SUCCEEDED(InitPropVariantFromUInt32Vector(m_aColors[ic].GetData(), m_aColors[ic].GetSize(), &var))
-				return SetProperty(key, var);
+				return this->SetProperty(key, var);
 			else
 				return E_INVALIDARG;
 		}
@@ -1752,7 +1781,7 @@ public:
 		{
 			PROPVARIANT var;
 			if SUCCEEDED(InitPropVariantFromStringVector(m_aTooltips[ic].GetData(), m_aTooltips[ic].GetSize(), &var))
-				return SetProperty(key, var);
+				return this->SetProperty(key, var);
 			else
 				return E_INVALIDARG;
 		}
@@ -1767,7 +1796,7 @@ public:
 	                          const PROPERTYKEY* key, const PROPVARIANT* ppropvarValue,
 	                          IUISimplePropertySet* pCommandExecutionProperties)
 	{
-		ATLASSERT (nCmdID == GetID());
+		ATLASSERT (nCmdID == this->GetID());
 		nCmdID;   // avoid level 4 warning
 		ATLASSERT (key && (k_(*key) == k_ColorType));
 		key;   // avoid level 4 warning
@@ -1785,7 +1814,7 @@ public:
 		}
 
 		if SUCCEEDED(hr)
-			GetWndRibbon().OnRibbonColorCtrlExecute(GetID(), verb, (UI_SWATCHCOLORTYPE)m_colorType/*uType*/, m_color);
+			this->GetWndRibbon().OnRibbonColorCtrlExecute(this->GetID(), verb, (UI_SWATCHCOLORTYPE)m_colorType/*uType*/, m_color);
 		else
 			ATLASSERT(FALSE); // something was wrong
 
@@ -1795,7 +1824,7 @@ public:
 	virtual HRESULT DoUpdateProperty(UINT nCmdID, REFPROPERTYKEY key, 
 	                                 const PROPVARIANT* ppropvarCurrentValue, PROPVARIANT* ppropvarNewValue)
 	{
-		ATLASSERT (nCmdID == GetID());
+		ATLASSERT (nCmdID == this->GetID());
 
 		HRESULT hr = E_NOTIMPL;
 
@@ -1806,7 +1835,7 @@ public:
 			break;
 		case k_Color:
 			if (m_color == 0x800080) /*MAGENTA*/
-				m_color = GetWndRibbon().OnRibbonQueryColor(GetID());
+				m_color = this->GetWndRibbon().OnRibbonQueryColor(this->GetID());
 			hr = SetPropertyVal(key, m_color, ppropvarNewValue);
 			break;
 		case k_ColorMode:
@@ -1820,7 +1849,7 @@ public:
 			{
 				const UINT iLabel = k_(key) - k_ThemeColorsCategoryLabel;
 				if (m_sLabels[iLabel].IsEmpty())
-					if (LPCWSTR psLabel = GetWndRibbon().OnRibbonQueryColorLabel(GetID(), key))
+					if (LPCWSTR psLabel = this->GetWndRibbon().OnRibbonQueryColorLabel(this->GetID(), key))
 						m_sLabels[iLabel] = psLabel;
 				if (!m_sLabels[iLabel].IsEmpty())
 					hr = SetPropertyVal(key, (LPCWSTR)m_sLabels[iLabel], ppropvarNewValue);
@@ -1831,7 +1860,7 @@ public:
 			{
 				const INT ic = k_(key) - k_ThemeColors;
 				if (!m_aColors[ic].GetSize())
-					if (COLORREF* pColor = GetWndRibbon().OnRibbonQueryColorArray(GetID(), key))
+					if (COLORREF* pColor = this->GetWndRibbon().OnRibbonQueryColorArray(this->GetID(), key))
 						SetColorArray(key, pColor);
 				if (INT iMax = m_aColors[ic].GetSize())
 					hr = InitPropVariantFromUInt32Vector(m_aColors[ic].GetData(), iMax, ppropvarNewValue);
@@ -1842,14 +1871,14 @@ public:
 			{
 				const INT ic = k_(key) - k_ThemeColorsTooltips;
 				if (m_aTooltips[ic].GetSize() == 0)
-					if (LPCWSTR* ppsTT = GetWndRibbon().OnRibbonQueryColorTooltips(GetID(), key))
+					if (LPCWSTR* ppsTT = this->GetWndRibbon().OnRibbonQueryColorTooltips(this->GetID(), key))
 						SetColorTooltips(key, ppsTT);
 				if (INT iMax = m_aTooltips[ic].GetSize())
 					hr = InitPropVariantFromStringVector(m_aTooltips[ic].GetData(), iMax, ppropvarNewValue);
 			}
 			break;
 		default:
-			hr = CommandCtrlImpl::DoUpdateProperty(nCmdID, key, ppropvarCurrentValue, ppropvarNewValue);
+			hr = CommandCtrlImpl<T, t_ID>::DoUpdateProperty(nCmdID, key, ppropvarCurrentValue, ppropvarNewValue);
 			break;
 		}
 
@@ -1960,12 +1989,12 @@ public:
 
 	HRESULT QueryValue(REFPROPERTYKEY key, LONG* plVal)
 	{
-		return GetWndRibbon().OnRibbonQuerySpinnerValue(GetID(), key, plVal) ? S_OK : S_FALSE;
+		return this->GetWndRibbon().OnRibbonQuerySpinnerValue(this->GetID(), key, plVal) ? S_OK : S_FALSE;
 	}
 
 	HRESULT QueryValue(REFPROPERTYKEY key, DOUBLE* pdVal)
 	{
-		return GetWndRibbon().OnRibbonQueryFloatSpinnerValue(GetID(), key, pdVal) ? S_OK : S_FALSE;
+		return this->GetWndRibbon().OnRibbonQueryFloatSpinnerValue(this->GetID(), key, pdVal) ? S_OK : S_FALSE;
 	}
 
 	HRESULT OnGetValue(REFPROPERTYKEY key, PROPVARIANT* ppv)
@@ -1990,7 +2019,7 @@ public:
 
 	HRESULT OnGetText(REFPROPERTYKEY key, Text& sVal, PROPVARIANT* ppv)
 	{
-		if (LPCWSTR sNew = GetWndRibbon().OnRibbonQueryText(GetID(), key))
+		if (LPCWSTR sNew = this->GetWndRibbon().OnRibbonQueryText(this->GetID(), key))
 			sVal = sNew;
 		return SetPropertyVal(key, (LPCWSTR)sVal, ppv);
 	}
@@ -1999,7 +2028,7 @@ public:
 	                          const PROPERTYKEY* key, const PROPVARIANT* ppropvarValue,
 	                          IUISimplePropertySet* /*pCommandExecutionProperties*/)
 	{
-		ATLASSERT (nCmdID == GetID());
+		ATLASSERT (nCmdID == this->GetID());
 		nCmdID;   // avoid level 4 warning
 		ATLASSERT (key && (k_(*key) == k_DecimalValue));
 		key;   // avoid level 4 warning
@@ -2011,7 +2040,7 @@ public:
 		HRESULT hr = UIPropertyToDecimal(UI_PKEY_DecimalValue, *ppropvarValue, &decVal);
 		hr = InitVal(m_Values[0], &decVal);
 
-		GetWndRibbon().OnRibbonSpinnerCtrlExecute(GetID(), &m_Values[0]);
+		this->GetWndRibbon().OnRibbonSpinnerCtrlExecute(this->GetID(), &m_Values[0]);
 
 		return hr;
 	}
@@ -2019,7 +2048,7 @@ public:
 	virtual HRESULT DoUpdateProperty(UINT nCmdID, REFPROPERTYKEY key, 
 	                                 const PROPVARIANT* ppropvarCurrentValue, PROPVARIANT* ppropvarNewValue)
 	{
-		ATLASSERT (nCmdID == GetID());
+		ATLASSERT (nCmdID == this->GetID());
 
 		HRESULT hr = E_NOTIMPL;
 		switch (k_(key))
@@ -2040,7 +2069,7 @@ public:
 				return OnGetText(key, m_RepresentativeString, ppropvarNewValue);
 			break;
 		default:
-			hr = CtrlImpl::DoUpdateProperty(nCmdID, key, ppropvarCurrentValue, ppropvarNewValue);
+			hr = CtrlImpl<T, t_ID>::DoUpdateProperty(nCmdID, key, ppropvarCurrentValue, ppropvarNewValue);
 			break;
 		}
 
@@ -2482,10 +2511,10 @@ public:
 
 	UI_CONTEXTAVAILABILITY OnRibbonQueryTabAvail(UINT nCmdID)
 	{
-		DWORD dwState = UIGetState(nCmdID);
-		return ((dwState & UPDUI_DISABLED) == UPDUI_DISABLED) ? 
+		DWORD dwState = this->UIGetState(nCmdID);
+		return ((dwState & CUpdateUIBase::UPDUI_DISABLED) == CUpdateUIBase::UPDUI_DISABLED) ?
 			UI_CONTEXTAVAILABILITY_NOTAVAILABLE :
-			(((dwState & UPDUI_CHECKED) == UPDUI_CHECKED) ? 
+			(((dwState & CUpdateUIBase::UPDUI_CHECKED) == CUpdateUIBase::UPDUI_CHECKED) ?
 				UI_CONTEXTAVAILABILITY_ACTIVE : 
 				UI_CONTEXTAVAILABILITY_AVAILABLE);
 	}
@@ -2609,15 +2638,15 @@ public:
 
 	bool DefRibbonQueryState(UINT nCmdID, REFPROPERTYKEY key)
 	{
-		DWORD dwState = UIGetState(nCmdID);
+		DWORD dwState = this->UIGetState(nCmdID);
 		bool bRet = false;
 		switch (k_(key))
 		{
 		case k_BooleanValue:
-			bRet = (dwState & UPDUI_CHECKED) == UPDUI_CHECKED;
+			bRet = (dwState & CUpdateUIBase::UPDUI_CHECKED) == CUpdateUIBase::UPDUI_CHECKED;
 			break;
 		case k_Enabled:
-			bRet = (dwState & UPDUI_DISABLED) != UPDUI_DISABLED;
+			bRet = (dwState & CUpdateUIBase::UPDUI_DISABLED) != CUpdateUIBase::UPDUI_DISABLED;
 			break;
 		default:
 			ATLASSERT(FALSE);
@@ -2632,9 +2661,9 @@ public:
 		static WCHAR sText[RIBBONUI_MAX_TEXT] = { 0 };
 
 		if (k_(key) == k_Label)
-			 return UIGetText(nCmdID);
+			 return this->UIGetText(nCmdID);
 
-		if (AtlLoadString(nCmdID, sText, RIBBONUI_MAX_TEXT))
+		if (ATL::AtlLoadString(nCmdID, sText, RIBBONUI_MAX_TEXT))
 		{
 			PWCHAR pTitle = wcschr(sText, L'\n');
 			switch (k_(key))
@@ -2763,7 +2792,7 @@ public:
 
 	STDMETHODIMP OnCreateUICommand(UINT32 nCmdID, UI_COMMANDTYPE typeID, IUICommandHandler** ppCommandHandler)
 	{
-		UIAddRibbonElement(nCmdID);
+		this->UIAddRibbonElement(nCmdID);
 		if (typeID == UI_COMMANDTYPE_CONTEXT)
 			CUpdateUIBase::UIEnable(nCmdID, false);
 		*ppCommandHandler = this;
@@ -2772,7 +2801,7 @@ public:
 
 	STDMETHODIMP OnDestroyUICommand(UINT32 nCmdID, UI_COMMANDTYPE, IUICommandHandler*)
 	{
-		UIRemoveRibbonElement(nCmdID);
+		this->UIRemoveRibbonElement(nCmdID);
 		return S_OK;
 	}
 
@@ -3001,7 +3030,7 @@ public:
 	public:
 		CRibbonFloatSpinnerCtrl()
 		{
-			m_Values[4] = 1; // 1 decimal
+			this->m_Values[4] = 1; // 1 decimal
 		}
 	};
 
@@ -3058,7 +3087,7 @@ typedef struct
 
 // Control message map macros
 #define RIBBON_GALLERY_CONTROL_HANDLER(id, func) \
-	if(uMsg == WM_COMMAND && id == LOWORD(wParam)) \
+	if((uMsg == WM_COMMAND) && (id == LOWORD(wParam))) \
 	{ \
 		bHandled = TRUE; \
 		lResult = func((UI_EXECUTIONVERB)HIWORD(wParam), LOWORD(wParam), (UINT)lParam, bHandled); \
@@ -3070,7 +3099,7 @@ typedef struct
 	RIBBON_GALLERY_CONTROL_HANDLER(id, func)	
 
 #define RIBBON_FONT_CONTROL_HANDLER(id, func) \
-	if(uMsg == WM_COMMAND && id == LOWORD(wParam)) \
+	if((uMsg == WM_COMMAND) && (id == LOWORD(wParam))) \
 	{ \
 		bHandled = TRUE; \
 		lResult = func((UI_EXECUTIONVERB)HIWORD(wParam), LOWORD(wParam), (CHARFORMAT2*)lParam, bHandled); \
@@ -3079,7 +3108,7 @@ typedef struct
 	}
 
 #define RIBBON_COLOR_CONTROL_HANDLER(id, func) \
-	if(uMsg == WM_COMMAND && id == LOWORD(wParam)) \
+	if((uMsg == WM_COMMAND) && (id == LOWORD(wParam))) \
 	{ \
 		bHandled = TRUE; \
 		lResult = func((UI_EXECUTIONVERB)HIWORD(wParam), LOWORD(wParam), (COLORREF)lParam, bHandled); \
@@ -3088,7 +3117,7 @@ typedef struct
 	}
 
 #define RIBBON_SPINNER_CONTROL_HANDLER(id, func) \
-	if(uMsg == WM_COMMAND && id == wParam) \
+	if((uMsg == WM_COMMAND) && (id == wParam)) \
 	{ \
 		bHandled = TRUE; \
 		lResult = func((WORD)wParam, (LONG)lParam, bHandled); \
@@ -3097,7 +3126,7 @@ typedef struct
 	}
 
 #define RIBBON_FLOATSPINNER_CONTROL_HANDLER(id, func) \
-	if(uMsg == WM_COMMAND && id == wParam) \
+	if((uMsg == WM_COMMAND) && (id == wParam)) \
 	{ \
 		bHandled = TRUE; \
 		lResult = func((WORD)wParam, (DOUBLE*)lParam, bHandled); \
@@ -3143,14 +3172,14 @@ public:
 	void ResetFrame()
 	{
 		const MARGINS margins = { 0 };
-		::DwmExtendFrameIntoClientArea(m_hWnd, &margins);
+		::DwmExtendFrameIntoClientArea(this->m_hWnd, &margins);
 	}
 
 	INT CalcWin7Fix()
 	{
 		ResetFrame();
 		RECT rc = { 0 };
-		::AdjustWindowRectEx(&rc, T::GetWndStyle(0), GetMenu() != NULL, T::GetWndExStyle(0));
+		::AdjustWindowRectEx(&rc, T::GetWndStyle(0), this->GetMenu() != NULL, T::GetWndExStyle(0));
 		return -rc.top;
 	}
 
@@ -3232,11 +3261,11 @@ public:
 				return (HBITMAP)::CopyImage(hbm, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
 		}
 
-		return DefRibbonQueryImage(nCmdID);
+		return this->DefRibbonQueryImage(nCmdID);
 	}
 
 	BEGIN_MSG_MAP(CRibbonFrameWindowImplBase)
-		if (!IsRibbonUI() && NeedWin7Fix())
+		if (!this->IsRibbonUI() && NeedWin7Fix())
 		{
 			MESSAGE_HANDLER(WM_SIZING, OnSizing)
 			MESSAGE_HANDLER(WM_SIZE, OnSize)
@@ -3255,10 +3284,10 @@ public:
 		case WMSZ_TOP:
 		case WMSZ_TOPLEFT:
 		case WMSZ_TOPRIGHT:
-			SetWindowPos(NULL, (LPRECT)lParam, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+			this->SetWindowPos(NULL, (LPRECT)lParam, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
 			break;
 		default:
-			DefWindowProc();
+			this->DefWindowProc();
 			break;
 		}
 
@@ -3268,7 +3297,7 @@ public:
 	LRESULT OnSize(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
 	{
 		if (wParam != SIZE_MINIMIZED)
-			SetWindowPos(NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+			this->SetWindowPos(NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 
 		bHandled = FALSE;
 		return 1;
@@ -3277,7 +3306,7 @@ public:
 	LRESULT OnActivate(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
 	{
 		if(wParam != WA_INACTIVE)
-			SetWindowPos(NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+			this->SetWindowPos(NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 
 		bHandled = FALSE;
 		return 1;
@@ -3285,9 +3314,9 @@ public:
 
 	LRESULT OnNCCalcSize(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
 	{
-		ATLASSERT(!IsRibbonUI() && NeedWin7Fix());
+		ATLASSERT(!this->IsRibbonUI() && NeedWin7Fix());
 
-		LRESULT lRet = DefWindowProc();
+		LRESULT lRet = this->DefWindowProc();
 
 		if(wParam)
 		{
@@ -3302,23 +3331,23 @@ public:
 	void UpdateLayout(BOOL bResizeBars = TRUE)
 	{
 		RECT rect = { 0 };
-		GetClientRect(&rect);
+		this->GetClientRect(&rect);
 
-		if (IsRibbonUI() && !IsRibbonHidden())
+		if (this->IsRibbonUI() && !this->IsRibbonHidden())
 		{
-			rect.top += GetRibbonHeight(); 
+			rect.top += this->GetRibbonHeight();
 		}
-		else if (!IsRibbonUI() && NeedWin7Fix())
+		else if (!this->IsRibbonUI() && NeedWin7Fix())
 		{
 			ResetFrame();
 		}
 
 		// position bars and offset their dimensions
-		UpdateBarsPosition(rect, bResizeBars);
+		this->UpdateBarsPosition(rect, bResizeBars);
 
 		// resize client window
-		if(m_hWndClient != NULL)
-			::SetWindowPos(m_hWndClient, NULL, rect.left, rect.top,
+		if(this->m_hWndClient != NULL)
+			::SetWindowPos(this->m_hWndClient, NULL, rect.left, rect.top,
 				rect.right - rect.left, rect.bottom - rect.top,
 				SWP_NOZORDER | SWP_NOACTIVATE);
 	}
@@ -3367,11 +3396,11 @@ public:
 		ATLASSERT(m_Key.m_hKey);
 	}
 
-	CRegKeyEx m_Key;
+	ATL::CRegKey m_Key;
 
 	LONG Save(bool bRibbonUI, HGLOBAL hgSettings = NULL)
 	{
-		CRegKeyEx key;
+		ATL::CRegKey key;
 		const DWORD dwUI = bRibbonUI;
 
 		LONG lRet = key.Create(m_Key, L"Ribbon");
@@ -3403,7 +3432,7 @@ public:
 	{
 		ATLASSERT(hgSettings == NULL);
 
-		CRegKeyEx key;
+		ATL::CRegKey key;
 
 		LONG lRet = key.Open(m_Key, L"Ribbon");
 		if(lRet != ERROR_SUCCESS)

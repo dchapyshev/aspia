@@ -395,11 +395,7 @@ public:
 
 	LRESULT OnCreate(UINT, WPARAM, LPARAM, BOOL& bHandled)
 	{
-#if (_ATL_VER >= 0x0300)
 		if(!SetTimer(1, 100))	// start slow
-#else
-		if(!SetTimer(1, 100, NULL))	// start slow
-#endif //(_ATL_VER == 0x0300)
 		{
 			MessageBox(_T("Not enough timers available for this window."),
 					_T("MDI:Bounce"), MB_ICONEXCLAMATION | MB_OK);
@@ -551,11 +547,7 @@ public:
 		m_bFastSpeed = (wID == ID_SPEED_FAST) ? TRUE : FALSE;
 		UpdateSpeedButtons();
 		KillTimer(1);
-#if (_ATL_VER >= 0x0300)
 		if(!SetTimer(1, m_bFastSpeed ? 0 : 100))
-#else
-		if(!SetTimer(1, m_bFastSpeed ? 0 : 100, NULL))
-#endif //(_ATL_VER == 0x0300)
 		{
 			MessageBox(_T("Not enough timers available for this window."),
 					_T("MDI:Bounce"), MB_ICONEXCLAMATION | MB_OK);
@@ -634,7 +626,7 @@ public:
 
 
 class CMDIFrame : public CMDIFrameWindowImpl<CMDIFrame>, CUpdateUI<CMDIFrame>,
-		public CMessageFilter, public CUpdateUIObject
+		public CMessageFilter, public CIdleHandler
 {
 public:
 	DECLARE_FRAME_WND_CLASS(NULL, IDR_MAINFRAME)
@@ -646,7 +638,7 @@ public:
 		return CMDIFrameWindowImpl<CMDIFrame>::PreTranslateMessage(pMsg);
 	}
 
-	virtual BOOL DoUpdate()
+	virtual BOOL OnIdle()
 	{
 		UIUpdateToolBar();
 		return FALSE;
@@ -718,7 +710,7 @@ public:
 
 		CMessageLoop* pLoop = _Module.GetMessageLoop();
 		pLoop->AddMessageFilter(this);
-		pLoop->AddUpdateUI(this);
+		pLoop->AddIdleHandler(this);
 
 		return 0;
 	}

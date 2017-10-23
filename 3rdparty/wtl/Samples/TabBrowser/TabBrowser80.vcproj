@@ -107,7 +107,7 @@
 			IntermediateDirectory="Release80"
 			ConfigurationType="1"
 			UseOfATL="2"
-			ATLMinimizesCRunTimeLibraryUsage="true"
+			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
 			>
 			<Tool
