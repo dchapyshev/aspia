@@ -19,7 +19,7 @@ class DeviceEnumerator
 {
 public:
     DeviceEnumerator();
-    ~DeviceEnumerator();
+    virtual ~DeviceEnumerator();
 
     bool IsAtEnd() const;
     void Advance();
@@ -30,6 +30,9 @@ public:
     std::string GetDriverDate() const;
     std::string GetDriverVendor() const;
     std::string GetDeviceID() const;
+
+protected:
+    DeviceEnumerator(const GUID* class_guid, DWORD flags);
 
 private:
     std::wstring GetDriverRegistryValue(const WCHAR* key_name) const;

@@ -19,12 +19,17 @@ static const WCHAR kDriverDateKey[] = L"DriverDate";
 static const WCHAR kProviderNameKey[] = L"ProviderName";
 
 DeviceEnumerator::DeviceEnumerator()
+    : DeviceEnumerator(nullptr, DIGCF_ALLCLASSES | DIGCF_PRESENT)
 {
-    device_info_ = SetupDiGetClassDevsW(nullptr, nullptr, nullptr,
-                                        DIGCF_ALLCLASSES | DIGCF_PRESENT);
+    // Nothing
+}
+
+DeviceEnumerator::DeviceEnumerator(const GUID* class_guid, DWORD flags)
+{
+    device_info_ = SetupDiGetClassDevsW(class_guid, nullptr, nullptr, flags);
     if (!device_info_ || device_info_ == INVALID_HANDLE_VALUE)
     {
-        DLOG(WARNING) << "SetupDiGetClassDevsW() failed: " << GetLastSystemErrorString();
+        LOG(WARNING) << "SetupDiGetClassDevsW() failed: " << GetLastSystemErrorString();
     }
 
     memset(&device_info_data_, 0, sizeof(device_info_data_));
@@ -41,7 +46,20 @@ DeviceEnumerator::~DeviceEnumerator()
 
 bool DeviceEnumerator::IsAtEnd() const
 {
-    return !!SetupDiEnumDeviceInfo(device_info_, device_index_, &device_info_data_);
+    if (!SetupDiEnumDeviceInfo(device_info_, device_index_, &device_info_data_))
+    {
+        SystemErrorCode error_code = GetLastError();
+
+        if (error_code != ERROR_NO_MORE_ITEMS)
+        {
+            LOG(WARNING) << "SetupDiEnumDeviceInfo() failed: "
+                         << SystemErrorCodeToString(error_code);
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 void DeviceEnumerator::Advance()
@@ -61,8 +79,8 @@ std::string DeviceEnumerator::GetFriendlyName() const
                                            ARRAYSIZE(friendly_name),
                                            nullptr))
     {
-        DLOG(WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed: "
-                      << GetLastSystemErrorString();
+        LOG(WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed: "
+                     << GetLastSystemErrorString();
         return std::string();
     }
 
@@ -81,8 +99,8 @@ std::string DeviceEnumerator::GetDescription() const
                                            ARRAYSIZE(description),
                                            nullptr))
     {
-        DLOG(WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed: "
-                      << GetLastSystemErrorString();
+        LOG(WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed: "
+                     << GetLastSystemErrorString();
         return std::string();
     }
 
@@ -101,8 +119,8 @@ std::wstring DeviceEnumerator::GetDriverRegistryValue(const WCHAR* key_name) con
                                            ARRAYSIZE(driver),
                                            nullptr))
     {
-        DLOG(WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed: "
-                      << GetLastSystemErrorString();
+        LOG(WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed: "
+                     << GetLastSystemErrorString();
         return std::wstring();
     }
 
@@ -150,7 +168,7 @@ std::string DeviceEnumerator::GetDeviceID() const
                                      ARRAYSIZE(device_id),
                                      nullptr))
     {
-        DLOG(WARNING) << "SetupDiGetDeviceInstanceIdW() failed: " << GetLastSystemErrorString();
+        LOG(WARNING) << "SetupDiGetDeviceInstanceIdW() failed: " << GetLastSystemErrorString();
         return std::string();
     }
 

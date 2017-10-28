@@ -1,0 +1,507 @@
+﻿//
+// PROJECT:         Aspia Remote Desktop
+// FILE:            base/devices/edid_parser.cc
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+#include "base/devices/edid_parser.h"
+#include "base/strings/string_util.h"
+#include "base/byte_order.h"
+#include "base/logging.h"
+
+namespace aspia {
+
+namespace {
+
+const size_t kMinEdidSize = 0x80; // 128 bytes
+const uint64_t kEdidHeader = 0x00FFFFFFFFFFFF00;
+const uint8_t kMinWeekOfManufacture = 1;
+const uint8_t kMaxWeekOfManufacture = 53;
+const int kUnknownDescriptor = -1;
+const int kDetailedTimingDescriptor = -2;
+
+struct Manufacturers
+{
+    const char* signature;
+    const char* name;
+} kManufacturers[] =
+{
+    { "ABO", "Acer" },
+    { "ACI", "Asus" },
+    { "ACR", "Acer" },
+    { "AIC", "AG" },
+    { "AOC", "AOC" },
+    { "API", "Acer" },
+    { "AUO", "AU Optronics Corp." },
+    { "BNQ", "BenQ" },
+    { "CHD", "ChangHong Electric Co.,Ltd." },
+    { "CPQ", "Compaq" },
+    { "CTC", "CTC" },
+    { "CTX", "CTX" },
+    { "DEL", "Dell" },
+    { "DON", "Denon" },
+    { "DNY", "Disney" },
+    { "EIZ", "EIZO" },
+    { "ENC", "ENC" },
+    { "EPI", "EPI" },
+    { "GSM", "LG" },
+    { "GWY", "Gateway" },
+    { "HCG", "Harman Kardon" },
+    { "HEC", "Hisense Electric Co., Ltd." },
+    { "HSL", "Hansol" },
+    { "HTC", "Hitachi" },
+    { "HWP", "HP" },
+    { "IBM", "IBM" },
+    { "IFS", "In Focus Systems Inc" },
+    { "IVM", "Iiyama" },
+    { "IQT", "ImageQuest" },
+    { "JEN", "Acer" },
+    { "JVC", "JVC" },
+    { "YMH", "Yamaha" },
+    { "MAX", "Belinea" },
+    { "MEA", "Diamond" },
+    { "MED", "Medion" },
+    { "MEI", "Panasonic" },
+    { "MEL", "Mitsubishi" },
+    { "MJI", "Marantz" },
+    { "NEC", "NEC" },
+    { "NOK", "Nokia" },
+    { "PHL", "Philips" },
+    { "PIO", "Pioneer" },
+    { "PRI", "Prima" },
+    { "PYX", "PYX" },
+    { "PTS", "MAG" },
+    { "LEN", "Lenovo" },
+    { "LGE", "LG" },
+    { "LGD", "Samsung" },
+    { "LTN", "Acer" },
+    { "ONK", "Onkyo" },
+    { "SAM", "Samsung" },
+    { "SHP", "Sharp" },
+    { "SNY", "Sony" },
+    { "STN", "Samtron" },
+    { "TAT", "Tatung" },
+    { "TPV", "TPV" },
+    { "TSB", "Toshiba" },
+    { "VIZ", "Vizio" },
+    { "VSC", "ViewSonic" }
+};
+
+} // namespace
+
+static EdidParser::Edid* EdidFromData(uint8_t* data)
+{
+    EdidParser::Edid* edid = reinterpret_cast<EdidParser::Edid*>(data);
+    DCHECK(edid);
+    return edid;
+}
+
+static int GetDataType(uint8_t* descriptor)
+{
+    const uint8_t kEdidV1DescriptorFlag[] = { 0x00, 0x00 };
+
+    if (memcmp(descriptor, kEdidV1DescriptorFlag, 2) == 0)
+    {
+        if (descriptor[2] != 0)
+            return kUnknownDescriptor;
+
+        return descriptor[3];
+    }
+
+    return kDetailedTimingDescriptor;
+}
+
+// static
+std::unique_ptr<EdidParser> EdidParser::Create(std::unique_ptr<uint8_t[]> data, size_t data_size)
+{
+    static_assert(sizeof(Edid) == kMinEdidSize);
+
+    if (data && data_size >= sizeof(Edid))
+    {
+        Edid* edid = EdidFromData(data.get());
+
+        if (edid->header == kEdidHeader)
+        {
+            uint8_t checksum = 0;
+
+            for (size_t index = 0; index < kMinEdidSize; ++index)
+                checksum += data[index];
+
+            // The 1-byte sum of all 128 bytes in this EDID block shall equal zero.
+            if (!checksum)
+            {
+                return std::unique_ptr<EdidParser>(new EdidParser(std::move(data), data_size));
+            }
+
+            LOG(WARNING) << "Invalid EDID checksum: " << checksum;
+        }
+        else
+        {
+            LOG(WARNING) << "Invalid EDID header: " << edid->header;
+        }
+    }
+    else
+    {
+        LOG(WARNING) << "Invalid EDID data";
+    }
+
+    return nullptr;
+}
+
+EdidParser::EdidParser(std::unique_ptr<uint8_t[]> data, size_t data_size)
+    : data_(std::move(data)),
+      data_size_(data_size)
+{
+    // Nothing
+}
+
+int EdidParser::GetWeekOfManufacture() const
+{
+    uint8_t week = EdidFromData(data_.get())->week_of_manufacture;
+
+    if (week < kMinWeekOfManufacture && week > kMaxWeekOfManufacture)
+    {
+        DLOG(WARNING) << "Wrong week field value: " << week;
+        return 0;
+    }
+
+    return week;
+}
+
+int EdidParser::GetYearOfManufacture() const
+{
+    // The Year of Manufacture field is used to represent the year of the monitor’s manufacture.
+    // The value that is stored is an offset from the year 1990 as derived from the following
+    // equation:
+    // Value stored = (Year of manufacture - 1990)
+
+    return 1990 + EdidFromData(data_.get())->year_of_manufacture;
+}
+
+int EdidParser::GetEdidVersion() const
+{
+    return EdidFromData(data_.get())->structure_version;
+}
+
+int EdidParser::GetEdidRevision() const
+{
+    return EdidFromData(data_.get())->structure_revision;
+}
+
+int EdidParser::GetMaxHorizontalImageSize() const
+{
+    return EdidFromData(data_.get())->max_horizontal_image_size;
+}
+
+int EdidParser::GetMaxVerticalImageSize() const
+{
+    return EdidFromData(data_.get())->max_vertical_image_size;
+}
+
+int EdidParser::GetHorizontalResolution() const
+{
+    DetailedTimingDescriptor* descriptor =
+        reinterpret_cast<DetailedTimingDescriptor*>(GetDescriptor(kDetailedTimingDescriptor));
+
+    if (!descriptor)
+        return 0;
+
+    uint32_t lo = static_cast<uint32_t>(descriptor->horizontal_active);
+    uint32_t hi = ((0xF0 & static_cast<uint32_t>(descriptor->horizontal_active_blanking)) >> 4);
+
+    return (hi << 8) | lo;
+}
+
+int EdidParser::GetVerticalResolution() const
+{
+    DetailedTimingDescriptor* descriptor =
+        reinterpret_cast<DetailedTimingDescriptor*>(GetDescriptor(kDetailedTimingDescriptor));
+
+    if (!descriptor)
+        return 0;
+
+    uint32_t lo = static_cast<uint32_t>(descriptor->vertical_active);
+    uint32_t hi = ((0xF0 & static_cast<uint32_t>(descriptor->vertical_active_blanking)) >> 4);
+
+    return (hi << 8) | lo;
+}
+
+double EdidParser::GetGamma() const
+{
+    const uint8_t gamma = EdidFromData(data_.get())->gamma;
+
+    if (gamma == 0xFF)
+        return 0.0;
+
+    return (static_cast<double>(gamma) / 100.0) + 1.0;
+}
+
+uint8_t EdidParser::GetFeatureSupport() const
+{
+    return EdidFromData(data_.get())->feature_support;
+}
+
+std::string EdidParser::GetManufacturerSignature() const
+{
+    const uint16_t id = ByteSwap(EdidFromData(data_.get())->id_manufacturer_name);
+
+    // Bits 14:10 : first letter (01h = 'A', 02h = 'B', etc.).
+    // Bits 9:5 : second letter.
+    // Bits 4:0 : third letter.
+    char signature[4];
+    signature[0] = ((id >> 10) & 0x1F) + 'A' - 1;
+    signature[1] = ((id >> 5) & 0x1F) + 'A' - 1;
+    signature[2] = ((id >> 0) & 0x1F) + 'A' - 1;
+    signature[3] = 0;
+
+    return signature;
+}
+
+std::string EdidParser::GetMonitorId() const
+{
+    return StringPrintf("%s%04X",
+                        GetManufacturerSignature().c_str(),
+                        EdidFromData(data_.get())->id_product_code);
+}
+
+std::string EdidParser::GetSerialNumber() const
+{
+    MonitorDescriptor* descriptor =
+        reinterpret_cast<MonitorDescriptor*>(
+            GetDescriptor(DATA_TYPE_TAG_MONITOR_SERIAL_NUMBER_ASCII));
+
+    if (descriptor)
+    {
+        const size_t kMaxMonitorSNLength = 13;
+
+        char sn[kMaxMonitorSNLength];
+
+        for (size_t i = 0; i < kMaxMonitorSNLength; ++i)
+        {
+            if (descriptor->descriptor_data[i] == 0x0A)
+            {
+                sn[i] = 0;
+                return sn;
+            }
+
+            sn[i] = descriptor->descriptor_data[i];
+        }
+    }
+
+    return std::string();
+}
+
+uint8_t* EdidParser::GetDescriptor(int type) const
+{
+    for (size_t index = 0; index < _countof(Edid::detailed_timing_description); ++index)
+    {
+        uint8_t* descriptor = &EdidFromData(data_.get())->detailed_timing_description[index][0];
+
+        if (GetDataType(descriptor) == type)
+            return descriptor;
+    }
+
+    return nullptr;
+}
+
+std::string EdidParser::GetManufacturerName() const
+{
+    std::string signature = GetManufacturerSignature();
+
+    for (size_t i = 0; i < _countof(kManufacturers); ++i)
+    {
+        if (signature == kManufacturers[i].signature)
+            return kManufacturers[i].name;
+    }
+
+    return std::string();
+}
+
+std::string EdidParser::GetMonitorName() const
+{
+    MonitorDescriptor* descriptor =
+        reinterpret_cast<MonitorDescriptor*>(GetDescriptor(DATA_TYPE_TAG_MONITOR_NAME_ASCII));
+
+    if (descriptor)
+    {
+        const size_t kMaxMonitorNameLength = 13;
+
+        char name[kMaxMonitorNameLength];
+
+        for (size_t i = 0; i < kMaxMonitorNameLength; ++i)
+        {
+            if (descriptor->descriptor_data[i] == 0x0A)
+            {
+                name[i] = 0;
+                return name;
+            }
+
+            name[i] = descriptor->descriptor_data[i];
+        }
+    }
+
+    return std::string();
+}
+
+int EdidParser::GetMinVerticalRate() const
+{
+    MonitorDescriptor* descriptor =
+        reinterpret_cast<MonitorDescriptor*>(GetDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
+
+    if (!descriptor)
+        return 0;
+
+    return descriptor->descriptor_data[0];
+}
+
+int EdidParser::GetMaxVerticalRate() const
+{
+    MonitorDescriptor* descriptor =
+        reinterpret_cast<MonitorDescriptor*>(GetDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
+
+    if (!descriptor)
+        return 0;
+
+    return descriptor->descriptor_data[1];
+}
+
+int EdidParser::GetMinHorizontalRate() const
+{
+    MonitorDescriptor* descriptor =
+        reinterpret_cast<MonitorDescriptor*>(GetDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
+
+    if (!descriptor)
+        return 0;
+
+    return descriptor->descriptor_data[2];
+}
+
+int EdidParser::GetMaxHorizontalRate() const
+{
+    MonitorDescriptor* descriptor =
+        reinterpret_cast<MonitorDescriptor*>(GetDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
+
+    if (!descriptor)
+        return 0;
+
+    return descriptor->descriptor_data[3];
+}
+
+int EdidParser::GetMaxSupportedPixelClock() const
+{
+    MonitorDescriptor* descriptor =
+        reinterpret_cast<MonitorDescriptor*>(GetDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
+
+    if (!descriptor)
+        return 0;
+
+    return descriptor->descriptor_data[4] * 10;
+}
+
+double EdidParser::GetPixelClock() const
+{
+    DetailedTimingDescriptor* descriptor =
+        reinterpret_cast<DetailedTimingDescriptor*>(GetDescriptor(kDetailedTimingDescriptor));
+
+    if (!descriptor)
+        return 0;
+
+    return double(descriptor->pixel_clock) / 100.0;
+}
+
+EdidParser::InputSignalType EdidParser::GetInputSignalType() const
+{
+    if (EdidFromData(data_.get())->video_input_definition & 0x80)
+        return INPUT_SIGNAL_TYPE_DIGITAL;
+
+    return INPUT_SIGNAL_TYPE_ANALOG;
+}
+
+uint8_t EdidParser::GetEstabilishedTimings1() const
+{
+    return EdidFromData(data_.get())->established_timings[0];
+}
+
+uint8_t EdidParser::GetEstabilishedTimings2() const
+{
+    return EdidFromData(data_.get())->established_timings[1];
+}
+
+uint8_t EdidParser::GetManufacturersTimings() const
+{
+    return EdidFromData(data_.get())->manufacturers_reserved_timings;
+}
+
+int EdidParser::GetStandardTimingsCount() const
+{
+    return _countof(Edid::standard_timing_identification);
+}
+
+bool EdidParser::GetStandardTimings(int index, int& width, int& height, int& frequency)
+{
+    Edid* edid = EdidFromData(data_.get());
+
+    uint8_t byte1 = edid->standard_timing_identification[index][0];
+    uint8_t byte2 = edid->standard_timing_identification[index][1];
+
+    if (byte1 == 0x01 && byte2 == 0x01)
+        return false;
+
+    if (byte1 == 0x00)
+        return false;
+
+    int ratio_w;
+    int ratio_h;
+
+    width = (byte1 + 31) * 8;
+
+    switch ((byte2 >> 6) & 0x03)
+    {
+        case 0x00:
+        {
+            if (edid->structure_revision == 3)
+            {
+                ratio_w = 16;
+                ratio_h = 10;
+            }
+            else
+            {
+                ratio_w = 1;
+                ratio_h = 1;
+            }
+        }
+        break;
+
+        case 0x01:
+        {
+            ratio_w = 4;
+            ratio_h = 3;
+        }
+        break;
+
+        case 0x02:
+        {
+            ratio_w = 5;
+            ratio_h = 4;
+        }
+        break;
+
+        case 0x03:
+        {
+            ratio_w = 16;
+            ratio_h = 9;
+        }
+        break;
+
+        default:
+            return false;
+    }
+
+    height = width * ratio_h / ratio_w;
+    frequency = 60 + (byte2 & 0x3F);
+
+    return true;
+}
+
+} // namespace aspia

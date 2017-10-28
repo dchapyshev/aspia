@@ -68,6 +68,18 @@ std::wstring ToUpperCopy(const std::wstring& string);
 void ToLower(std::wstring& string);
 std::wstring ToLowerCopy(const std::wstring& string);
 
+std::string ToHexString(const uint8_t* data, size_t data_size);
+std::string ToHexString(uint64_t data);
+std::string ToHexString(uint32_t data);
+std::string ToHexString(uint16_t data);
+std::string ToHexString(uint8_t data);
+
+std::string ToBinaryString(const uint8_t* data, size_t data_size);
+std::string ToBinaryString(uint64_t data);
+std::string ToBinaryString(uint32_t data);
+std::string ToBinaryString(uint16_t data);
+std::string ToBinaryString(uint8_t data);
+
 } // namespace aspia
 
 #endif // _ASPIA_BASE__STRINGS__STRING_UTIL_H

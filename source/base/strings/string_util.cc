@@ -10,7 +10,10 @@
 #include "base/logging.h"
 
 #include <algorithm>
+#include <bitset>
 #include <cwctype>
+#include <iomanip>
+#include <sstream>
 #include <strsafe.h>
 
 namespace aspia {
@@ -309,6 +312,76 @@ std::wstring ToLowerCopy(const std::wstring& in)
     std::wstring out(in);
     ToLower(out);
     return out;
+}
+
+std::string ToHexString(const uint8_t* data, size_t data_size)
+{
+    DCHECK(data);
+
+    std::stringstream ss;
+
+    for (size_t i = 0; i < data_size; ++i)
+    {
+        ss << std::setw(2) << std::setfill('0') << std::hex
+           << std::uppercase << static_cast<int>(data[i]);
+    }
+
+    return ss.str();
+}
+
+std::string ToHexString(uint64_t data)
+{
+    return ToHexString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
+}
+
+std::string ToHexString(uint32_t data)
+{
+    return ToHexString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
+}
+
+std::string ToHexString(uint16_t data)
+{
+    return ToHexString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
+}
+
+std::string ToHexString(uint8_t data)
+{
+    return ToHexString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
+}
+
+std::string ToBinaryString(const uint8_t* data, size_t data_size)
+{
+    DCHECK(data);
+
+    std::string string;
+
+    for (size_t i = 0; i < data_size; ++i)
+    {
+        std::bitset<8> c(data[i]);
+        string += c.to_string();
+    }
+
+    return string;
+}
+
+std::string ToBinaryString(uint64_t data)
+{
+    return ToBinaryString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
+}
+
+std::string ToBinaryString(uint32_t data)
+{
+    return ToBinaryString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
+}
+
+std::string ToBinaryString(uint16_t data)
+{
+    return ToBinaryString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
+}
+
+std::string ToBinaryString(uint8_t data)
+{
+    return ToBinaryString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
 }
 
 } // namespace aspia
