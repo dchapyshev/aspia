@@ -41,6 +41,18 @@ SMBiosParser::SMBiosParser(std::unique_ptr<uint8_t[]> data, size_t data_size, in
     DCHECK(table_count_ != 0);
 }
 
+uint8_t SMBiosParser::GetMajorVersion() const
+{
+    SMBiosData* smbios = reinterpret_cast<SMBiosData*>(data_.get());
+    return smbios->smbios_major_version;
+}
+
+uint8_t SMBiosParser::GetMinorVersion() const
+{
+    SMBiosData* smbios = reinterpret_cast<SMBiosData*>(data_.get());
+    return smbios->smbios_minor_version;
+}
+
 // static
 int SMBiosParser::GetTableCount(uint8_t* table_data, uint32_t length)
 {
@@ -74,28 +86,7 @@ int SMBiosParser::GetTableCount(uint8_t* table_data, uint32_t length)
     return count;
 }
 
-// static
-std::string SMBiosParser::GetString(const Table* table, uint8_t offset)
-{
-    if (!offset)
-        return std::string();
-
-    char* string = reinterpret_cast<char*>(const_cast<Table*>(table)) + table->length;
-
-    while (offset > 1 && *string)
-    {
-        string += strlen(string);
-        ++string;
-        --offset;
-    }
-
-    if (!*string)
-        return std::string();
-
-    return string;
-}
-
-SMBiosParser::Table* SMBiosParser::GetTable(TableType type)
+SMBiosParser::Table* SMBiosParser::GetTable(TableType type) const
 {
     SMBiosData* smbios = reinterpret_cast<SMBiosData*>(data_.get());
 
@@ -166,10 +157,15 @@ SMBiosParser::Table* SMBiosParser::GetTable(TableType type)
 // TableParser
 //
 
-SMBiosParser::TableParser::TableParser(const Table* table)
-    : data_(reinterpret_cast<const uint8_t*>(table))
+SMBiosParser::TableParser::TableParser(const SMBiosParser& parser, TableType type)
+    : data_(reinterpret_cast<uint8_t*>(parser.GetTable(type)))
 {
     // Nothing
+}
+
+bool SMBiosParser::TableParser::IsValidTable() const
+{
+    return data_ != nullptr;
 }
 
 uint8_t SMBiosParser::TableParser::GetByte(uint8_t offset) const
@@ -179,23 +175,21 @@ uint8_t SMBiosParser::TableParser::GetByte(uint8_t offset) const
 
 uint16_t SMBiosParser::TableParser::GetWord(uint8_t offset) const
 {
-    return *reinterpret_cast<const uint16_t*>(&data_[offset]);
+    return *reinterpret_cast<const uint16_t*>(GetPointer(offset));
 }
 
 uint32_t SMBiosParser::TableParser::GetDword(uint8_t offset) const
 {
-    return *reinterpret_cast<const uint32_t*>(&data_[offset]);
+    return *reinterpret_cast<const uint32_t*>(GetPointer(offset));
 }
 
 uint64_t SMBiosParser::TableParser::GetQword(uint8_t offset) const
 {
-    return *reinterpret_cast<const uint64_t*>(&data_[offset]);
+    return *reinterpret_cast<const uint64_t*>(GetPointer(offset));
 }
 
 std::string SMBiosParser::TableParser::GetString(uint8_t offset) const
 {
-    DCHECK(offset < 0x04);
-
     uint8_t handle = GetByte(offset);
     if (!handle)
         return std::string();
@@ -215,14 +209,19 @@ std::string SMBiosParser::TableParser::GetString(uint8_t offset) const
     return string;
 }
 
+const uint8_t* SMBiosParser::TableParser::GetPointer(uint8_t offset) const
+{
+    return &data_[offset];
+}
+
 //
 // BiosTableParser
 //
 
-SMBiosParser::BiosTableParser::BiosTableParser(Table* table)
-    : TableParser(table)
+SMBiosParser::BiosTableParser::BiosTableParser(const SMBiosParser& parser)
+    : TableParser(parser, TABLE_TYPE_BIOS)
 {
-    DCHECK(table->type == TABLE_TYPE_BIOS);
+    // Nothing
 }
 
 std::string SMBiosParser::BiosTableParser::GetManufacturer() const
@@ -339,7 +338,7 @@ std::vector<SMBiosParser::BiosTableParser::Characteristic>
         }
     }
 
-    uint8_t table_length = GetByte(0x02);
+    uint8_t table_length = GetByte(0x01);
 
     if (table_length >= 0x13)
     {
@@ -383,6 +382,125 @@ std::vector<SMBiosParser::BiosTableParser::Characteristic>
     }
 
     return table;
+}
+
+//
+// SystemTableParser
+//
+
+SMBiosParser::SystemTableParser::SystemTableParser(const SMBiosParser& parser)
+    : TableParser(parser, TABLE_TYPE_SYSTEM),
+      major_version_(parser.GetMajorVersion()),
+      minor_version_(parser.GetMinorVersion())
+{
+    // Nothing
+}
+
+std::string SMBiosParser::SystemTableParser::GetManufacturer() const
+{
+    return GetString(0x04);
+}
+
+std::string SMBiosParser::SystemTableParser::GetProduct() const
+{
+    return GetString(0x05);
+}
+
+std::string SMBiosParser::SystemTableParser::GetVersion() const
+{
+    return GetString(0x06);
+}
+
+std::string SMBiosParser::SystemTableParser::GetSerialNumber() const
+{
+    return GetString(0x07);
+}
+
+std::string SMBiosParser::SystemTableParser::GetUUID() const
+{
+    uint8_t table_length = GetByte(0x01);
+    if (table_length < 0x19)
+        return std::string();
+
+    const uint8_t* ptr = GetPointer(0x08);
+
+    bool only_0xFF = true;
+    bool only_0x00 = true;
+
+    for (int i = 0; i < 16 && (only_0x00 || only_0xFF); ++i)
+    {
+        if (ptr[i] != 0x00) only_0x00 = false;
+        if (ptr[i] != 0xFF) only_0xFF = false;
+    }
+
+    if (only_0xFF || only_0x00)
+        return std::string();
+
+    if ((major_version_ << 8) + minor_version_ >= 0x0206)
+    {
+        return StringPrintf("%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X",
+                     ptr[3], ptr[2], ptr[1], ptr[0], ptr[5], ptr[4], ptr[7], ptr[6],
+                     ptr[8], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13], ptr[14], ptr[15]);
+    }
+
+    return StringPrintf("%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X",
+                        ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5], ptr[6], ptr[7],
+                        ptr[8], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13], ptr[14], ptr[15]);
+}
+
+std::string SMBiosParser::SystemTableParser::GetWakeupType() const
+{
+    uint8_t table_length = GetByte(0x01);
+    if (table_length < 0x19)
+        return std::string();
+
+    switch (GetByte(0x18))
+    {
+        case 0x01:
+            return "Other";
+
+        case 0x02:
+            return "Unknown";
+
+        case 0x03:
+            return "APM Timer";
+
+        case 0x04:
+            return "Modem Ring";
+
+        case 0x05:
+            return "LAN Remote";
+
+        case 0x06:
+            return "Power Switch";
+
+        case 0x07:
+            return "PCI PME#";
+
+        case 0x08:
+            return "AC Power Restored";
+
+        default:
+            return std::string();
+    }
+}
+
+std::string SMBiosParser::SystemTableParser::GetSKUNumber() const
+{
+    uint8_t table_length = GetByte(0x01);
+    if (table_length < 0x1B)
+        return std::string();
+
+    return GetString(0x19);
+}
+
+std::string SMBiosParser::SystemTableParser::GetFamily() const
+{
+    uint8_t table_length = GetByte(0x01);
+    if (table_length < 0x1B)
+        return std::string();
+
+    return GetString(0x1A);
 }
 
 } // namespace aspia

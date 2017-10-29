@@ -90,30 +90,31 @@ public:
         // data
     };
 
-    Table* GetTable(TableType type);
-
     class TableParser
     {
     public:
         virtual ~TableParser() = default;
 
+        bool IsValidTable() const;
+
     protected:
-        TableParser(const Table* table);
+        TableParser(const SMBiosParser& parser, TableType type);
 
         uint8_t GetByte(uint8_t offset) const;
         uint16_t GetWord(uint8_t offset) const;
         uint32_t GetDword(uint8_t offset) const;
         uint64_t GetQword(uint8_t offset) const;
         std::string GetString(uint8_t offset) const;
+        const uint8_t* GetPointer(uint8_t offset) const;
 
     private:
         const uint8_t* data_;
     };
 
-    class BiosTableParser : private TableParser
+    class BiosTableParser : public TableParser
     {
     public:
-        BiosTableParser(Table* table);
+        BiosTableParser(const SMBiosParser& parser);
 
         std::string GetManufacturer() const;
         std::string GetVersion() const;
@@ -131,11 +132,35 @@ public:
         DISALLOW_COPY_AND_ASSIGN(BiosTableParser);
     };
 
+    class SystemTableParser : public TableParser
+    {
+    public:
+        SystemTableParser(const SMBiosParser& parser);
+
+        std::string GetManufacturer() const;
+        std::string GetProduct() const;
+        std::string GetVersion() const;
+        std::string GetSerialNumber() const;
+        std::string GetUUID() const;
+        std::string GetWakeupType() const;
+        std::string GetSKUNumber() const;
+        std::string GetFamily() const;
+
+    private:
+        const uint8_t major_version_;
+        const uint8_t minor_version_;
+        DISALLOW_COPY_AND_ASSIGN(SystemTableParser);
+    };
+
 private:
+    friend class TableParser;
+
     SMBiosParser(std::unique_ptr<uint8_t[]> data, size_t data_size, int table_count);
 
+    uint8_t GetMajorVersion() const;
+    uint8_t GetMinorVersion() const;
     static int GetTableCount(uint8_t* table_data, uint32_t length);
-    static std::string GetString(const Table* table, uint8_t offset);
+    Table* GetTable(TableType type) const;
 
     std::unique_ptr<uint8_t[]> data_;
     const size_t data_size_;

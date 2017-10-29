@@ -30,6 +30,18 @@ message DmiBios
     repeated Characteristic characteristic = 9;
 }
 
+message DmiSystem
+{
+    string manufacturer  = 1;
+    string product       = 2;
+    string version       = 3;
+    string serial_number = 4;
+    string uuid          = 5;
+    string wakeup_type   = 6;
+    string sku_number    = 7;
+    string family        = 8;
+}
+
 message Monitors
 {
     message Item

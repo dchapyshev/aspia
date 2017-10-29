@@ -96,24 +96,23 @@ std::string CategoryDmiBios::Serialize()
     if (!parser)
         return std::string();
 
-    SMBiosParser::Table* table = parser->GetTable(SMBiosParser::TABLE_TYPE_BIOS);
-    if (!table)
+    SMBiosParser::BiosTableParser table(*parser);
+    if (!table.IsValidTable())
         return std::string();
 
-    SMBiosParser::BiosTableParser table_parser(table);
     system_info::DmiBios message;
 
-    message.set_manufacturer(table_parser.GetManufacturer());
-    message.set_version(table_parser.GetVersion());
-    message.set_date(table_parser.GetDate());
-    message.set_size(table_parser.GetSize());
-    message.set_bios_revision(table_parser.GetBiosRevision());
-    message.set_firmware_revision(table_parser.GetFirmwareRevision());
-    message.set_address(table_parser.GetAddress());
-    message.set_runtime_size(table_parser.GetRuntimeSize());
+    message.set_manufacturer(table.GetManufacturer());
+    message.set_version(table.GetVersion());
+    message.set_date(table.GetDate());
+    message.set_size(table.GetSize());
+    message.set_bios_revision(table.GetBiosRevision());
+    message.set_firmware_revision(table.GetFirmwareRevision());
+    message.set_address(table.GetAddress());
+    message.set_runtime_size(table.GetRuntimeSize());
 
     std::vector<SMBiosParser::BiosTableParser::Characteristic> characteristics =
-        table_parser.GetCharacteristics();
+        table.GetCharacteristics();
 
     for (const auto& characteristic : characteristics)
     {
@@ -146,15 +145,66 @@ const char* CategoryDmiSystem::Guid() const
 
 void CategoryDmiSystem::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::DmiSystem message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    if (!message.manufacturer().empty())
+        output->AddParam(IDI_COMPUTER, "Manufacturer", message.manufacturer());
+
+    if (!message.product().empty())
+        output->AddParam(IDI_COMPUTER, "Product", message.product());
+
+    if (!message.version().empty())
+        output->AddParam(IDI_COMPUTER, "Version", message.version());
+
+    if (!message.serial_number().empty())
+        output->AddParam(IDI_COMPUTER, "Serial Number", message.serial_number());
+
+    if (!message.uuid().empty())
+        output->AddParam(IDI_COMPUTER, "UUID", message.uuid());
+
+    if (!message.wakeup_type().empty())
+        output->AddParam(IDI_COMPUTER, "Wakeup Type", message.wakeup_type());
+
+    if (!message.sku_number().empty())
+        output->AddParam(IDI_COMPUTER, "SKU Number", message.sku_number());
+
+    if (!message.family().empty())
+        output->AddParam(IDI_COMPUTER, "Family", message.family());
 }
 
 std::string CategoryDmiSystem::Serialize()
 {
-    // TODO
-    return std::string();
+    std::unique_ptr<SMBiosParser> parser = ReadSMBios();
+    if (!parser)
+        return std::string();
+
+    SMBiosParser::SystemTableParser table(*parser);
+    if (!table.IsValidTable())
+        return std::string();
+
+    system_info::DmiSystem message;
+
+    message.set_manufacturer(table.GetManufacturer());
+    message.set_product(table.GetProduct());
+    message.set_version(table.GetVersion());
+    message.set_serial_number(table.GetSerialNumber());
+    message.set_uuid(table.GetUUID());
+    message.set_wakeup_type(table.GetWakeupType());
+    message.set_sku_number(table.GetSKUNumber());
+    message.set_family(table.GetFamily());
+
+    return message.SerializeAsString();
 }
 
 //
