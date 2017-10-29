@@ -627,83 +627,133 @@ void CategoryMonitor::Parse(std::shared_ptr<OutputProxy> output, const std::stri
 
         Output::Group group(output, item.system_name(), Icon());
 
-        output->AddParam(IDI_MONITOR, "Monitor Name", item.monitor_name());
-        output->AddParam(IDI_MONITOR, "Manufacturer Name", item.manufacturer_name());
-        output->AddParam(IDI_MONITOR, "Monitor ID", item.monitor_id());
-        output->AddParam(IDI_MONITOR, "Serial Number", item.serial_number());
-        output->AddParam(IDI_MONITOR, "EDID Version", std::to_string(item.edid_version()));
-        output->AddParam(IDI_MONITOR, "EDID Revision", std::to_string(item.edid_revision()));
+        if (!item.monitor_name().empty())
+            output->AddParam(IDI_MONITOR, "Monitor Name", item.monitor_name());
 
-        output->AddParam(IDI_MONITOR,
-                         "Week Of Manufacture",
-                         std::to_string(item.week_of_manufacture()));
+        if (!item.manufacturer_name().empty())
+            output->AddParam(IDI_MONITOR, "Manufacturer Name", item.manufacturer_name());
 
-        output->AddParam(IDI_MONITOR,
-                         "Year Of Manufacture",
-                         std::to_string(item.year_of_manufacture()));
+        if (!item.monitor_id().empty())
+            output->AddParam(IDI_MONITOR, "Monitor ID", item.monitor_id());
 
-        output->AddParam(IDI_MONITOR, "Gamma", StringPrintf("%.2f", item.gamma()));
+        if (!item.serial_number().empty())
+            output->AddParam(IDI_MONITOR, "Serial Number", item.serial_number());
 
-        output->AddParam(IDI_MONITOR,
-                         "Horizontal Image Size",
-                         std::to_string(item.max_horizontal_image_size()),
-                         "cm");
+        if (item.edid_version() != 0)
+            output->AddParam(IDI_MONITOR, "EDID Version", std::to_string(item.edid_version()));
 
-        output->AddParam(IDI_MONITOR,
-                         "Vertical Image Size",
-                         std::to_string(item.max_vertical_image_size()),
-                         "cm");
+        if (item.edid_revision() != 0)
+            output->AddParam(IDI_MONITOR, "EDID Revision", std::to_string(item.edid_revision()));
 
-        // Calculate the monitor diagonal by the Pythagorean theorem and translate from
-        // centimeters to inches.
-        double diagonal_size =
-            sqrt((item.max_horizontal_image_size() * item.max_horizontal_image_size()) +
-                 (item.max_vertical_image_size() * item.max_vertical_image_size())) / 2.54;
+        if (item.week_of_manufacture() != 0)
+        {
+            output->AddParam(IDI_MONITOR,
+                             "Week Of Manufacture",
+                             std::to_string(item.week_of_manufacture()));
+        }
 
-        output->AddParam(IDI_MONITOR,
-                         "Diagonal Size",
-                         StringPrintf("%.0f", diagonal_size),
-                         "\"");
+        if (item.year_of_manufacture() != 0)
+        {
+            output->AddParam(IDI_MONITOR,
+                             "Year Of Manufacture",
+                             std::to_string(item.year_of_manufacture()));
+        }
 
-        output->AddParam(IDI_MONITOR,
-                         "Hirizontal Resolution",
-                         std::to_string(item.horizontal_resolution()),
-                         "px");
+        if (item.gamma() != 0.0)
+            output->AddParam(IDI_MONITOR, "Gamma", StringPrintf("%.2f", item.gamma()));
 
-        output->AddParam(IDI_MONITOR,
-                         "Vertical Resolution",
-                         std::to_string(item.vertical_resoulution()),
-                         "px");
+        if (item.max_horizontal_image_size() != 0)
+        {
+            output->AddParam(IDI_MONITOR,
+                             "Horizontal Image Size",
+                             std::to_string(item.max_horizontal_image_size()),
+                             "cm");
+        }
 
-        output->AddParam(IDI_MONITOR,
-                         "Minimum Horizontal Frequency",
-                         std::to_string(item.min_horizontal_rate()),
-                         "kHz");
+        if (item.max_vertical_image_size() != 0)
+        {
+            output->AddParam(IDI_MONITOR,
+                             "Vertical Image Size",
+                             std::to_string(item.max_vertical_image_size()),
+                             "cm");
+        }
+        if (item.max_horizontal_image_size() != 0 && item.max_vertical_image_size() != 0)
+        {
+            // Calculate the monitor diagonal by the Pythagorean theorem and translate from
+            // centimeters to inches.
+            double diagonal_size =
+                sqrt((item.max_horizontal_image_size() * item.max_horizontal_image_size()) +
+                (item.max_vertical_image_size() * item.max_vertical_image_size())) / 2.54;
 
-        output->AddParam(IDI_MONITOR,
-                         "Maximum Horizontal Frequency",
-                         std::to_string(item.max_horizontal_rate()),
-                         "kHz");
+            output->AddParam(IDI_MONITOR,
+                             "Diagonal Size",
+                             StringPrintf("%.0f", diagonal_size),
+                             "\"");
+        }
 
-        output->AddParam(IDI_MONITOR,
-                         "Minimum Vertical Frequency",
-                         std::to_string(item.min_vertical_rate()),
-                         "Hz");
+        if (item.horizontal_resolution() != 0)
+        {
+            output->AddParam(IDI_MONITOR,
+                             "Hirizontal Resolution",
+                             std::to_string(item.horizontal_resolution()),
+                             "px");
+        }
 
-        output->AddParam(IDI_MONITOR,
-                         "Maximum Vertical Frequency",
-                         std::to_string(item.max_vertical_rate()),
-                         "Hz");
+        if (item.vertical_resoulution() != 0)
+        {
+            output->AddParam(IDI_MONITOR,
+                             "Vertical Resolution",
+                             std::to_string(item.vertical_resoulution()),
+                             "px");
+        }
 
-        output->AddParam(IDI_MONITOR,
-                         "Pixel Clock",
-                         StringPrintf("%.2f", item.pixel_clock()),
-                         "MHz");
+        if (item.min_horizontal_rate() != 0)
+        {
+            output->AddParam(IDI_MONITOR,
+                             "Minimum Horizontal Frequency",
+                             std::to_string(item.min_horizontal_rate()),
+                             "kHz");
+        }
 
-        output->AddParam(IDI_MONITOR,
-                         "Maximum Pixel Clock",
-                         std::to_string(item.max_pixel_clock()),
-                         "MHz");
+        if (item.max_horizontal_rate() != 0)
+        {
+            output->AddParam(IDI_MONITOR,
+                             "Maximum Horizontal Frequency",
+                             std::to_string(item.max_horizontal_rate()),
+                             "kHz");
+        }
+
+        if (item.min_vertical_rate() != 0)
+        {
+            output->AddParam(IDI_MONITOR,
+                             "Minimum Vertical Frequency",
+                             std::to_string(item.min_vertical_rate()),
+                             "Hz");
+        }
+
+        if (item.max_vertical_rate() != 0)
+        {
+            output->AddParam(IDI_MONITOR,
+                             "Maximum Vertical Frequency",
+                             std::to_string(item.max_vertical_rate()),
+                             "Hz");
+        }
+
+        if (item.pixel_clock() != 0.0)
+        {
+            output->AddParam(IDI_MONITOR,
+                             "Pixel Clock",
+                             StringPrintf("%.2f", item.pixel_clock()),
+                             "MHz");
+        }
+
+        if (item.max_pixel_clock() != 0)
+        {
+            output->AddParam(IDI_MONITOR,
+                             "Maximum Pixel Clock",
+                             std::to_string(item.max_pixel_clock()),
+                             "MHz");
+        }
 
         switch (item.input_signal_type())
         {

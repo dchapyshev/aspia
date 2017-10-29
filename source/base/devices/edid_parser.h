@@ -231,6 +231,7 @@ private:
     uint8_t* GetDescriptor(int type) const;
     std::unique_ptr<uint8_t[]> data_;
     const size_t data_size_;
+    Edid* edid_;
 
     DISALLOW_COPY_AND_ASSIGN(EdidParser);
 };

@@ -90,13 +90,6 @@ struct Manufacturers
 
 } // namespace
 
-static EdidParser::Edid* EdidFromData(uint8_t* data)
-{
-    EdidParser::Edid* edid = reinterpret_cast<EdidParser::Edid*>(data);
-    DCHECK(edid);
-    return edid;
-}
-
 static int GetDataType(uint8_t* descriptor)
 {
     const uint8_t kEdidV1DescriptorFlag[] = { 0x00, 0x00 };
@@ -119,7 +112,7 @@ std::unique_ptr<EdidParser> EdidParser::Create(std::unique_ptr<uint8_t[]> data, 
 
     if (data && data_size >= sizeof(Edid))
     {
-        Edid* edid = EdidFromData(data.get());
+        Edid* edid = reinterpret_cast<Edid*>(data.get());
 
         if (edid->header == kEdidHeader)
         {
@@ -153,14 +146,14 @@ EdidParser::EdidParser(std::unique_ptr<uint8_t[]> data, size_t data_size)
     : data_(std::move(data)),
       data_size_(data_size)
 {
-    // Nothing
+    edid_ = reinterpret_cast<Edid*>(data_.get());
 }
 
 int EdidParser::GetWeekOfManufacture() const
 {
-    uint8_t week = EdidFromData(data_.get())->week_of_manufacture;
+    uint8_t week = edid_->week_of_manufacture;
 
-    if (week < kMinWeekOfManufacture && week > kMaxWeekOfManufacture)
+    if (week < kMinWeekOfManufacture || week > kMaxWeekOfManufacture)
     {
         DLOG(WARNING) << "Wrong week field value: " << week;
         return 0;
@@ -176,27 +169,27 @@ int EdidParser::GetYearOfManufacture() const
     // equation:
     // Value stored = (Year of manufacture - 1990)
 
-    return 1990 + EdidFromData(data_.get())->year_of_manufacture;
+    return 1990 + edid_->year_of_manufacture;
 }
 
 int EdidParser::GetEdidVersion() const
 {
-    return EdidFromData(data_.get())->structure_version;
+    return edid_->structure_version;
 }
 
 int EdidParser::GetEdidRevision() const
 {
-    return EdidFromData(data_.get())->structure_revision;
+    return edid_->structure_revision;
 }
 
 int EdidParser::GetMaxHorizontalImageSize() const
 {
-    return EdidFromData(data_.get())->max_horizontal_image_size;
+    return edid_->max_horizontal_image_size;
 }
 
 int EdidParser::GetMaxVerticalImageSize() const
 {
-    return EdidFromData(data_.get())->max_vertical_image_size;
+    return edid_->max_vertical_image_size;
 }
 
 int EdidParser::GetHorizontalResolution() const
@@ -229,7 +222,7 @@ int EdidParser::GetVerticalResolution() const
 
 double EdidParser::GetGamma() const
 {
-    const uint8_t gamma = EdidFromData(data_.get())->gamma;
+    const uint8_t gamma = edid_->gamma;
 
     if (gamma == 0xFF)
         return 0.0;
@@ -239,12 +232,12 @@ double EdidParser::GetGamma() const
 
 uint8_t EdidParser::GetFeatureSupport() const
 {
-    return EdidFromData(data_.get())->feature_support;
+    return edid_->feature_support;
 }
 
 std::string EdidParser::GetManufacturerSignature() const
 {
-    const uint16_t id = ByteSwap(EdidFromData(data_.get())->id_manufacturer_name);
+    const uint16_t id = ByteSwap(edid_->id_manufacturer_name);
 
     // Bits 14:10 : first letter (01h = 'A', 02h = 'B', etc.).
     // Bits 9:5 : second letter.
@@ -262,7 +255,7 @@ std::string EdidParser::GetMonitorId() const
 {
     return StringPrintf("%s%04X",
                         GetManufacturerSignature().c_str(),
-                        EdidFromData(data_.get())->id_product_code);
+                        edid_->id_product_code);
 }
 
 std::string EdidParser::GetSerialNumber() const
@@ -296,7 +289,7 @@ uint8_t* EdidParser::GetDescriptor(int type) const
 {
     for (size_t index = 0; index < _countof(Edid::detailed_timing_description); ++index)
     {
-        uint8_t* descriptor = &EdidFromData(data_.get())->detailed_timing_description[index][0];
+        uint8_t* descriptor = &edid_->detailed_timing_description[index][0];
 
         if (GetDataType(descriptor) == type)
             return descriptor;
@@ -412,7 +405,7 @@ double EdidParser::GetPixelClock() const
 
 EdidParser::InputSignalType EdidParser::GetInputSignalType() const
 {
-    if (EdidFromData(data_.get())->video_input_definition & 0x80)
+    if (edid_->video_input_definition & 0x80)
         return INPUT_SIGNAL_TYPE_DIGITAL;
 
     return INPUT_SIGNAL_TYPE_ANALOG;
@@ -420,17 +413,17 @@ EdidParser::InputSignalType EdidParser::GetInputSignalType() const
 
 uint8_t EdidParser::GetEstabilishedTimings1() const
 {
-    return EdidFromData(data_.get())->established_timings[0];
+    return edid_->established_timings[0];
 }
 
 uint8_t EdidParser::GetEstabilishedTimings2() const
 {
-    return EdidFromData(data_.get())->established_timings[1];
+    return edid_->established_timings[1];
 }
 
 uint8_t EdidParser::GetManufacturersTimings() const
 {
-    return EdidFromData(data_.get())->manufacturers_reserved_timings;
+    return edid_->manufacturers_reserved_timings;
 }
 
 int EdidParser::GetStandardTimingsCount() const
@@ -440,10 +433,8 @@ int EdidParser::GetStandardTimingsCount() const
 
 bool EdidParser::GetStandardTimings(int index, int& width, int& height, int& frequency)
 {
-    Edid* edid = EdidFromData(data_.get());
-
-    uint8_t byte1 = edid->standard_timing_identification[index][0];
-    uint8_t byte2 = edid->standard_timing_identification[index][1];
+    uint8_t byte1 = edid_->standard_timing_identification[index][0];
+    uint8_t byte2 = edid_->standard_timing_identification[index][1];
 
     if (byte1 == 0x01 && byte2 == 0x01)
         return false;
@@ -460,7 +451,7 @@ bool EdidParser::GetStandardTimings(int index, int& width, int& height, int& fre
     {
         case 0x00:
         {
-            if (edid->structure_revision == 3)
+            if (edid_->structure_revision == 3)
             {
                 ratio_w = 16;
                 ratio_h = 10;
