@@ -11,6 +11,25 @@ option optimize_for = LITE_RUNTIME;
 
 package aspia.system_info;
 
+message DmiBios
+{
+    message Characteristic
+    {
+        string name    = 1;
+        bool supported = 2;
+    }
+
+    string manufacturer                    = 1;
+    string version                         = 2;
+    string date                            = 3;
+    int32 size                             = 4;
+    string bios_revision                   = 5;
+    string firmware_revision               = 6;
+    string address                         = 7;
+    int32 runtime_size                     = 8;
+    repeated Characteristic characteristic = 9;
+}
+
 message Monitors
 {
     message Item

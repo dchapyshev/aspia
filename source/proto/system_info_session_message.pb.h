@@ -32,6 +32,12 @@
 // @@protoc_insertion_point(includes)
 namespace aspia {
 namespace system_info {
+class DmiBios;
+class DmiBiosDefaultTypeInternal;
+extern DmiBiosDefaultTypeInternal _DmiBios_default_instance_;
+class DmiBios_Characteristic;
+class DmiBios_CharacteristicDefaultTypeInternal;
+extern DmiBios_CharacteristicDefaultTypeInternal _DmiBios_Characteristic_default_instance_;
 class Monitors;
 class MonitorsDefaultTypeInternal;
 extern MonitorsDefaultTypeInternal _Monitors_default_instance_;
@@ -193,6 +199,323 @@ const int SharedResources_Item_Type_Type_ARRAYSIZE = SharedResources_Item_Type_T
 
 // ===================================================================
 
+class DmiBios_Characteristic : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.DmiBios.Characteristic) */ {
+ public:
+  DmiBios_Characteristic();
+  virtual ~DmiBios_Characteristic();
+
+  DmiBios_Characteristic(const DmiBios_Characteristic& from);
+
+  inline DmiBios_Characteristic& operator=(const DmiBios_Characteristic& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  DmiBios_Characteristic(DmiBios_Characteristic&& from) noexcept
+    : DmiBios_Characteristic() {
+    *this = ::std::move(from);
+  }
+
+  inline DmiBios_Characteristic& operator=(DmiBios_Characteristic&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const DmiBios_Characteristic& default_instance();
+
+  static inline const DmiBios_Characteristic* internal_default_instance() {
+    return reinterpret_cast<const DmiBios_Characteristic*>(
+               &_DmiBios_Characteristic_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    0;
+
+  void Swap(DmiBios_Characteristic* other);
+  friend void swap(DmiBios_Characteristic& a, DmiBios_Characteristic& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DmiBios_Characteristic* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  DmiBios_Characteristic* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const DmiBios_Characteristic& from);
+  void MergeFrom(const DmiBios_Characteristic& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(DmiBios_Characteristic* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string name = 1;
+  void clear_name();
+  static const int kNameFieldNumber = 1;
+  const ::std::string& name() const;
+  void set_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_name(::std::string&& value);
+  #endif
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  ::std::string* mutable_name();
+  ::std::string* release_name();
+  void set_allocated_name(::std::string* name);
+
+  // bool supported = 2;
+  void clear_supported();
+  static const int kSupportedFieldNumber = 2;
+  bool supported() const;
+  void set_supported(bool value);
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.DmiBios.Characteristic)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr name_;
+  bool supported_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class DmiBios : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.DmiBios) */ {
+ public:
+  DmiBios();
+  virtual ~DmiBios();
+
+  DmiBios(const DmiBios& from);
+
+  inline DmiBios& operator=(const DmiBios& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  DmiBios(DmiBios&& from) noexcept
+    : DmiBios() {
+    *this = ::std::move(from);
+  }
+
+  inline DmiBios& operator=(DmiBios&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const DmiBios& default_instance();
+
+  static inline const DmiBios* internal_default_instance() {
+    return reinterpret_cast<const DmiBios*>(
+               &_DmiBios_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    1;
+
+  void Swap(DmiBios* other);
+  friend void swap(DmiBios& a, DmiBios& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DmiBios* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  DmiBios* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const DmiBios& from);
+  void MergeFrom(const DmiBios& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(DmiBios* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef DmiBios_Characteristic Characteristic;
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.system_info.DmiBios.Characteristic characteristic = 9;
+  int characteristic_size() const;
+  void clear_characteristic();
+  static const int kCharacteristicFieldNumber = 9;
+  const ::aspia::system_info::DmiBios_Characteristic& characteristic(int index) const;
+  ::aspia::system_info::DmiBios_Characteristic* mutable_characteristic(int index);
+  ::aspia::system_info::DmiBios_Characteristic* add_characteristic();
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBios_Characteristic >*
+      mutable_characteristic();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBios_Characteristic >&
+      characteristic() const;
+
+  // string manufacturer = 1;
+  void clear_manufacturer();
+  static const int kManufacturerFieldNumber = 1;
+  const ::std::string& manufacturer() const;
+  void set_manufacturer(const ::std::string& value);
+  #if LANG_CXX11
+  void set_manufacturer(::std::string&& value);
+  #endif
+  void set_manufacturer(const char* value);
+  void set_manufacturer(const char* value, size_t size);
+  ::std::string* mutable_manufacturer();
+  ::std::string* release_manufacturer();
+  void set_allocated_manufacturer(::std::string* manufacturer);
+
+  // string version = 2;
+  void clear_version();
+  static const int kVersionFieldNumber = 2;
+  const ::std::string& version() const;
+  void set_version(const ::std::string& value);
+  #if LANG_CXX11
+  void set_version(::std::string&& value);
+  #endif
+  void set_version(const char* value);
+  void set_version(const char* value, size_t size);
+  ::std::string* mutable_version();
+  ::std::string* release_version();
+  void set_allocated_version(::std::string* version);
+
+  // string date = 3;
+  void clear_date();
+  static const int kDateFieldNumber = 3;
+  const ::std::string& date() const;
+  void set_date(const ::std::string& value);
+  #if LANG_CXX11
+  void set_date(::std::string&& value);
+  #endif
+  void set_date(const char* value);
+  void set_date(const char* value, size_t size);
+  ::std::string* mutable_date();
+  ::std::string* release_date();
+  void set_allocated_date(::std::string* date);
+
+  // string bios_revision = 5;
+  void clear_bios_revision();
+  static const int kBiosRevisionFieldNumber = 5;
+  const ::std::string& bios_revision() const;
+  void set_bios_revision(const ::std::string& value);
+  #if LANG_CXX11
+  void set_bios_revision(::std::string&& value);
+  #endif
+  void set_bios_revision(const char* value);
+  void set_bios_revision(const char* value, size_t size);
+  ::std::string* mutable_bios_revision();
+  ::std::string* release_bios_revision();
+  void set_allocated_bios_revision(::std::string* bios_revision);
+
+  // string firmware_revision = 6;
+  void clear_firmware_revision();
+  static const int kFirmwareRevisionFieldNumber = 6;
+  const ::std::string& firmware_revision() const;
+  void set_firmware_revision(const ::std::string& value);
+  #if LANG_CXX11
+  void set_firmware_revision(::std::string&& value);
+  #endif
+  void set_firmware_revision(const char* value);
+  void set_firmware_revision(const char* value, size_t size);
+  ::std::string* mutable_firmware_revision();
+  ::std::string* release_firmware_revision();
+  void set_allocated_firmware_revision(::std::string* firmware_revision);
+
+  // string address = 7;
+  void clear_address();
+  static const int kAddressFieldNumber = 7;
+  const ::std::string& address() const;
+  void set_address(const ::std::string& value);
+  #if LANG_CXX11
+  void set_address(::std::string&& value);
+  #endif
+  void set_address(const char* value);
+  void set_address(const char* value, size_t size);
+  ::std::string* mutable_address();
+  ::std::string* release_address();
+  void set_allocated_address(::std::string* address);
+
+  // int32 size = 4;
+  void clear_size();
+  static const int kSizeFieldNumber = 4;
+  ::google::protobuf::int32 size() const;
+  void set_size(::google::protobuf::int32 value);
+
+  // int32 runtime_size = 8;
+  void clear_runtime_size();
+  static const int kRuntimeSizeFieldNumber = 8;
+  ::google::protobuf::int32 runtime_size() const;
+  void set_runtime_size(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.DmiBios)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBios_Characteristic > characteristic_;
+  ::google::protobuf::internal::ArenaStringPtr manufacturer_;
+  ::google::protobuf::internal::ArenaStringPtr version_;
+  ::google::protobuf::internal::ArenaStringPtr date_;
+  ::google::protobuf::internal::ArenaStringPtr bios_revision_;
+  ::google::protobuf::internal::ArenaStringPtr firmware_revision_;
+  ::google::protobuf::internal::ArenaStringPtr address_;
+  ::google::protobuf::int32 size_;
+  ::google::protobuf::int32 runtime_size_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class Monitors_Item_Timing : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.Monitors.Item.Timing) */ {
  public:
   Monitors_Item_Timing();
@@ -226,7 +549,7 @@ class Monitors_Item_Timing : public ::google::protobuf::MessageLite /* @@protoc_
                &_Monitors_Item_Timing_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    0;
+    2;
 
   void Swap(Monitors_Item_Timing* other);
   friend void swap(Monitors_Item_Timing& a, Monitors_Item_Timing& b) {
@@ -335,7 +658,7 @@ class Monitors_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Monitors_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    1;
+    3;
 
   void Swap(Monitors_Item* other);
   friend void swap(Monitors_Item& a, Monitors_Item& b) {
@@ -684,7 +1007,7 @@ class Monitors : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Monitors_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    2;
+    4;
 
   void Swap(Monitors* other);
   friend void swap(Monitors& a, Monitors& b) {
@@ -787,7 +1110,7 @@ class Printers_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Printers_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    3;
+    5;
 
   void Swap(Printers_Item* other);
   friend void swap(Printers_Item& a, Printers_Item& b) {
@@ -1091,7 +1414,7 @@ class Printers : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Printers_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    4;
+    6;
 
   void Swap(Printers* other);
   friend void swap(Printers& a, Printers& b) {
@@ -1194,7 +1517,7 @@ class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Services_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
+    7;
 
   void Swap(Services_Item* other);
   friend void swap(Services_Item& a, Services_Item& b) {
@@ -1421,7 +1744,7 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Services_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    6;
+    8;
 
   void Swap(Services* other);
   friend void swap(Services& a, Services& b) {
@@ -1524,7 +1847,7 @@ class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@
                &_NetworkCards_Item_IpAddress_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    9;
 
   void Swap(NetworkCards_Item_IpAddress* other);
   friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
@@ -1642,7 +1965,7 @@ class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_NetworkCards_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    10;
 
   void Swap(NetworkCards_Item* other);
   friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
@@ -1932,7 +2255,7 @@ class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_NetworkCards_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    11;
 
   void Swap(NetworkCards* other);
   friend void swap(NetworkCards& a, NetworkCards& b) {
@@ -2035,7 +2358,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    12;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -2197,7 +2520,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    13;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -2300,7 +2623,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    14;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -2479,7 +2802,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    13;
+    15;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -2582,7 +2905,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    14;
+    16;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -2722,7 +3045,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    15;
+    17;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -2825,7 +3148,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    16;
+    18;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -3014,7 +3337,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    17;
+    19;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -3117,7 +3440,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    18;
+    20;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -3235,7 +3558,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    19;
+    21;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -3338,7 +3661,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    20;
+    22;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -3508,7 +3831,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    21;
+    23;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -3586,6 +3909,457 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// DmiBios_Characteristic
+
+// string name = 1;
+inline void DmiBios_Characteristic::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& DmiBios_Characteristic::name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.Characteristic.name)
+  return name_.GetNoArena();
+}
+inline void DmiBios_Characteristic::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBios.Characteristic.name)
+}
+#if LANG_CXX11
+inline void DmiBios_Characteristic::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBios.Characteristic.name)
+}
+#endif
+inline void DmiBios_Characteristic::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBios.Characteristic.name)
+}
+inline void DmiBios_Characteristic::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBios.Characteristic.name)
+}
+inline ::std::string* DmiBios_Characteristic::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBios.Characteristic.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* DmiBios_Characteristic::release_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBios.Characteristic.name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void DmiBios_Characteristic::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBios.Characteristic.name)
+}
+
+// bool supported = 2;
+inline void DmiBios_Characteristic::clear_supported() {
+  supported_ = false;
+}
+inline bool DmiBios_Characteristic::supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.Characteristic.supported)
+  return supported_;
+}
+inline void DmiBios_Characteristic::set_supported(bool value) {
+  
+  supported_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBios.Characteristic.supported)
+}
+
+// -------------------------------------------------------------------
+
+// DmiBios
+
+// string manufacturer = 1;
+inline void DmiBios::clear_manufacturer() {
+  manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& DmiBios::manufacturer() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.manufacturer)
+  return manufacturer_.GetNoArena();
+}
+inline void DmiBios::set_manufacturer(const ::std::string& value) {
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBios.manufacturer)
+}
+#if LANG_CXX11
+inline void DmiBios::set_manufacturer(::std::string&& value) {
+  
+  manufacturer_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBios.manufacturer)
+}
+#endif
+inline void DmiBios::set_manufacturer(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBios.manufacturer)
+}
+inline void DmiBios::set_manufacturer(const char* value, size_t size) {
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBios.manufacturer)
+}
+inline ::std::string* DmiBios::mutable_manufacturer() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBios.manufacturer)
+  return manufacturer_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* DmiBios::release_manufacturer() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBios.manufacturer)
+  
+  return manufacturer_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void DmiBios::set_allocated_manufacturer(::std::string* manufacturer) {
+  if (manufacturer != NULL) {
+    
+  } else {
+    
+  }
+  manufacturer_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), manufacturer);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBios.manufacturer)
+}
+
+// string version = 2;
+inline void DmiBios::clear_version() {
+  version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& DmiBios::version() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.version)
+  return version_.GetNoArena();
+}
+inline void DmiBios::set_version(const ::std::string& value) {
+  
+  version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBios.version)
+}
+#if LANG_CXX11
+inline void DmiBios::set_version(::std::string&& value) {
+  
+  version_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBios.version)
+}
+#endif
+inline void DmiBios::set_version(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBios.version)
+}
+inline void DmiBios::set_version(const char* value, size_t size) {
+  
+  version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBios.version)
+}
+inline ::std::string* DmiBios::mutable_version() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBios.version)
+  return version_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* DmiBios::release_version() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBios.version)
+  
+  return version_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void DmiBios::set_allocated_version(::std::string* version) {
+  if (version != NULL) {
+    
+  } else {
+    
+  }
+  version_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), version);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBios.version)
+}
+
+// string date = 3;
+inline void DmiBios::clear_date() {
+  date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& DmiBios::date() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.date)
+  return date_.GetNoArena();
+}
+inline void DmiBios::set_date(const ::std::string& value) {
+  
+  date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBios.date)
+}
+#if LANG_CXX11
+inline void DmiBios::set_date(::std::string&& value) {
+  
+  date_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBios.date)
+}
+#endif
+inline void DmiBios::set_date(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBios.date)
+}
+inline void DmiBios::set_date(const char* value, size_t size) {
+  
+  date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBios.date)
+}
+inline ::std::string* DmiBios::mutable_date() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBios.date)
+  return date_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* DmiBios::release_date() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBios.date)
+  
+  return date_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void DmiBios::set_allocated_date(::std::string* date) {
+  if (date != NULL) {
+    
+  } else {
+    
+  }
+  date_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), date);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBios.date)
+}
+
+// int32 size = 4;
+inline void DmiBios::clear_size() {
+  size_ = 0;
+}
+inline ::google::protobuf::int32 DmiBios::size() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.size)
+  return size_;
+}
+inline void DmiBios::set_size(::google::protobuf::int32 value) {
+  
+  size_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBios.size)
+}
+
+// string bios_revision = 5;
+inline void DmiBios::clear_bios_revision() {
+  bios_revision_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& DmiBios::bios_revision() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.bios_revision)
+  return bios_revision_.GetNoArena();
+}
+inline void DmiBios::set_bios_revision(const ::std::string& value) {
+  
+  bios_revision_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBios.bios_revision)
+}
+#if LANG_CXX11
+inline void DmiBios::set_bios_revision(::std::string&& value) {
+  
+  bios_revision_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBios.bios_revision)
+}
+#endif
+inline void DmiBios::set_bios_revision(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  bios_revision_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBios.bios_revision)
+}
+inline void DmiBios::set_bios_revision(const char* value, size_t size) {
+  
+  bios_revision_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBios.bios_revision)
+}
+inline ::std::string* DmiBios::mutable_bios_revision() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBios.bios_revision)
+  return bios_revision_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* DmiBios::release_bios_revision() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBios.bios_revision)
+  
+  return bios_revision_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void DmiBios::set_allocated_bios_revision(::std::string* bios_revision) {
+  if (bios_revision != NULL) {
+    
+  } else {
+    
+  }
+  bios_revision_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), bios_revision);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBios.bios_revision)
+}
+
+// string firmware_revision = 6;
+inline void DmiBios::clear_firmware_revision() {
+  firmware_revision_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& DmiBios::firmware_revision() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.firmware_revision)
+  return firmware_revision_.GetNoArena();
+}
+inline void DmiBios::set_firmware_revision(const ::std::string& value) {
+  
+  firmware_revision_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBios.firmware_revision)
+}
+#if LANG_CXX11
+inline void DmiBios::set_firmware_revision(::std::string&& value) {
+  
+  firmware_revision_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBios.firmware_revision)
+}
+#endif
+inline void DmiBios::set_firmware_revision(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  firmware_revision_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBios.firmware_revision)
+}
+inline void DmiBios::set_firmware_revision(const char* value, size_t size) {
+  
+  firmware_revision_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBios.firmware_revision)
+}
+inline ::std::string* DmiBios::mutable_firmware_revision() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBios.firmware_revision)
+  return firmware_revision_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* DmiBios::release_firmware_revision() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBios.firmware_revision)
+  
+  return firmware_revision_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void DmiBios::set_allocated_firmware_revision(::std::string* firmware_revision) {
+  if (firmware_revision != NULL) {
+    
+  } else {
+    
+  }
+  firmware_revision_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), firmware_revision);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBios.firmware_revision)
+}
+
+// string address = 7;
+inline void DmiBios::clear_address() {
+  address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& DmiBios::address() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.address)
+  return address_.GetNoArena();
+}
+inline void DmiBios::set_address(const ::std::string& value) {
+  
+  address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBios.address)
+}
+#if LANG_CXX11
+inline void DmiBios::set_address(::std::string&& value) {
+  
+  address_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBios.address)
+}
+#endif
+inline void DmiBios::set_address(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBios.address)
+}
+inline void DmiBios::set_address(const char* value, size_t size) {
+  
+  address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBios.address)
+}
+inline ::std::string* DmiBios::mutable_address() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBios.address)
+  return address_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* DmiBios::release_address() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBios.address)
+  
+  return address_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void DmiBios::set_allocated_address(::std::string* address) {
+  if (address != NULL) {
+    
+  } else {
+    
+  }
+  address_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), address);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBios.address)
+}
+
+// int32 runtime_size = 8;
+inline void DmiBios::clear_runtime_size() {
+  runtime_size_ = 0;
+}
+inline ::google::protobuf::int32 DmiBios::runtime_size() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.runtime_size)
+  return runtime_size_;
+}
+inline void DmiBios::set_runtime_size(::google::protobuf::int32 value) {
+  
+  runtime_size_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBios.runtime_size)
+}
+
+// repeated .aspia.system_info.DmiBios.Characteristic characteristic = 9;
+inline int DmiBios::characteristic_size() const {
+  return characteristic_.size();
+}
+inline void DmiBios::clear_characteristic() {
+  characteristic_.Clear();
+}
+inline const ::aspia::system_info::DmiBios_Characteristic& DmiBios::characteristic(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.characteristic)
+  return characteristic_.Get(index);
+}
+inline ::aspia::system_info::DmiBios_Characteristic* DmiBios::mutable_characteristic(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBios.characteristic)
+  return characteristic_.Mutable(index);
+}
+inline ::aspia::system_info::DmiBios_Characteristic* DmiBios::add_characteristic() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.DmiBios.characteristic)
+  return characteristic_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBios_Characteristic >*
+DmiBios::mutable_characteristic() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.DmiBios.characteristic)
+  return &characteristic_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBios_Characteristic >&
+DmiBios::characteristic() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.DmiBios.characteristic)
+  return characteristic_;
+}
+
+// -------------------------------------------------------------------
+
 // Monitors_Item_Timing
 
 // int32 width = 1;
@@ -7529,6 +8303,10 @@ Sessions::item() const {
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -7,6 +7,7 @@
 
 #include "base/printer_enumerator.h"
 #include "base/devices/monitor_enumerator.h"
+#include "base/devices/smbios_reader.h"
 #include "base/strings/string_util.h"
 #include "protocol/category_group_hardware.h"
 #include "proto/system_info_session_message.pb.h"
@@ -36,15 +37,92 @@ const char* CategoryDmiBios::Guid() const
 
 void CategoryDmiBios::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::DmiBios message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    if (!message.manufacturer().empty())
+        output->AddParam(IDI_BIOS, "Manufacturer", message.manufacturer());
+
+    if (!message.version().empty())
+        output->AddParam(IDI_BIOS, "Version", message.version());
+
+    if (!message.date().empty())
+        output->AddParam(IDI_BIOS, "Date", message.date());
+
+    if (message.size() != 0)
+        output->AddParam(IDI_BIOS, "Size", std::to_string(message.size()), "kB");
+
+    if (!message.bios_revision().empty())
+        output->AddParam(IDI_BIOS, "BIOS Revision", message.bios_revision());
+
+    if (!message.firmware_revision().empty())
+        output->AddParam(IDI_BIOS, "Firmware Revision", message.firmware_revision());
+
+    if (!message.address().empty())
+        output->AddParam(IDI_BIOS, "Address", message.address());
+
+    if (message.runtime_size() != 0)
+        output->AddParam(IDI_BIOS, "Runtime Size", std::to_string(message.runtime_size()), "Bytes");
+
+    if (message.characteristic_size() > 0)
+    {
+        Output::Group group(output, "Supported Features", IDI_BIOS);
+
+        for (int index = 0; index < message.characteristic_size(); ++index)
+        {
+            const system_info::DmiBios::Characteristic& characteristic =
+                message.characteristic(index);
+
+            output->AddParam(characteristic.supported() ? IDI_CHECKED : IDI_UNCHECKED,
+                             characteristic.name(),
+                             characteristic.supported() ? "Yes" : "No");
+        }
+    }
 }
 
 std::string CategoryDmiBios::Serialize()
 {
-    // TODO
-    return std::string();
+    std::unique_ptr<SMBiosParser> parser = ReadSMBios();
+    if (!parser)
+        return std::string();
+
+    SMBiosParser::Table* table = parser->GetTable(SMBiosParser::TABLE_TYPE_BIOS);
+    if (!table)
+        return std::string();
+
+    SMBiosParser::BiosTableParser table_parser(table);
+    system_info::DmiBios message;
+
+    message.set_manufacturer(table_parser.GetManufacturer());
+    message.set_version(table_parser.GetVersion());
+    message.set_date(table_parser.GetDate());
+    message.set_size(table_parser.GetSize());
+    message.set_bios_revision(table_parser.GetBiosRevision());
+    message.set_firmware_revision(table_parser.GetFirmwareRevision());
+    message.set_address(table_parser.GetAddress());
+    message.set_runtime_size(table_parser.GetRuntimeSize());
+
+    std::vector<SMBiosParser::BiosTableParser::Characteristic> characteristics =
+        table_parser.GetCharacteristics();
+
+    for (const auto& characteristic : characteristics)
+    {
+        system_info::DmiBios::Characteristic* ch = message.add_characteristic();
+        ch->set_name(characteristic.first);
+        ch->set_supported(characteristic.second);
+    }
+
+    return message.SerializeAsString();
 }
 
 //
@@ -763,6 +841,9 @@ void CategoryMonitor::Parse(std::shared_ptr<OutputProxy> output, const std::stri
 
             case system_info::Monitors::Item::INPUT_SIGNAL_TYPE_DIGITAL:
                 output->AddParam(IDI_MONITOR, "Input Signal Type", "Digital");
+                break;
+
+            default:
                 break;
         }
 
