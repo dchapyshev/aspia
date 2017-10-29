@@ -694,7 +694,7 @@ void CategoryMonitor::Parse(std::shared_ptr<OutputProxy> output, const std::stri
         if (item.horizontal_resolution() != 0)
         {
             output->AddParam(IDI_MONITOR,
-                             "Hirizontal Resolution",
+                             "Horizontal Resolution",
                              std::to_string(item.horizontal_resolution()),
                              "px");
         }
