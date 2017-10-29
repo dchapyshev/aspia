@@ -601,6 +601,7 @@
       <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -632,6 +633,7 @@
       <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>false</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -730,6 +732,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <TreatWarningAsError>false</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

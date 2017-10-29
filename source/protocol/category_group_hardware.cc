@@ -654,6 +654,17 @@ void CategoryMonitor::Parse(std::shared_ptr<OutputProxy> output, const std::stri
                          std::to_string(item.max_vertical_image_size()),
                          "cm");
 
+        // Calculate the monitor diagonal by the Pythagorean theorem and translate from
+        // centimeters to inches.
+        double diagonal_size =
+            sqrt((item.max_horizontal_image_size() * item.max_horizontal_image_size()) +
+                 (item.max_vertical_image_size() * item.max_vertical_image_size())) / 2.54;
+
+        output->AddParam(IDI_MONITOR,
+                         "Diagonal Size",
+                         StringPrintf("%.0f", diagonal_size),
+                         "\"");
+
         output->AddParam(IDI_MONITOR,
                          "Hirizontal Resolution",
                          std::to_string(item.horizontal_resolution()),
