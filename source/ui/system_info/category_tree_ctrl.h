@@ -25,10 +25,10 @@ public:
     CategoryTreeCtrl() = default;
     ~CategoryTreeCtrl() = default;
 
-    enum class ItemType { UNKNOWN, GROUP, CATEGORY };
-
-    ItemType GetItemType(HTREEITEM tree_item) const;
-    Category* GetItem(HTREEITEM tree_item) const;
+    void AddChildItems(const CSize& icon_size,
+                       const CategoryList& tree,
+                       HTREEITEM parent_tree_item);
+    Category* GetItemCategory(HTREEITEM tree_item) const;
     void ExpandChildGroups(HTREEITEM parent_tree_item);
 
 private:
@@ -38,11 +38,6 @@ private:
 
     LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
 
-    void AddChildItems(const CSize& icon_size,
-                       const CategoryList& tree,
-                       HTREEITEM parent_tree_item);
-
-    CategoryList category_tree_;
     CImageListManaged imagelist_;
 
     DISALLOW_COPY_AND_ASSIGN(CategoryTreeCtrl);

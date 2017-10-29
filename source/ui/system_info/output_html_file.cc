@@ -91,6 +91,16 @@ void OutputHtmlFile::EndDocument()
     doc_.clear();
 }
 
+void OutputHtmlFile::StartTableGroup(const std::string& name)
+{
+    // TODO
+}
+
+void OutputHtmlFile::EndTableGroup()
+{
+    // TODO
+}
+
 void OutputHtmlFile::StartTable(const std::string& name)
 {
     DCHECK(body_);

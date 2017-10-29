@@ -20,7 +20,6 @@ class CategoryGroup;
 class CategoryInfo;
 
 using CategoryList = std::list<std::unique_ptr<Category>>;
-using CategoryGuidList = std::list<std::string>;
 using CategoryMap = std::map<std::string, std::unique_ptr<CategoryInfo>>;
 
 class Category
@@ -69,8 +68,14 @@ public:
     virtual void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) = 0;
     virtual std::string Serialize() = 0;
 
+    bool IsChecked() const { return checked_; }
+    void SetChecked(bool value) { checked_ = value; }
+
 protected:
     CategoryInfo();
+
+private:
+    bool checked_ = false;
 };
 
 CategoryList CreateCategoryTree();

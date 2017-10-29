@@ -32,6 +32,8 @@ public:
 protected:
     void StartDocument() final;
     void EndDocument() final;
+    void StartTableGroup(const std::string& name) final;
+    void EndTableGroup() final;
     void StartTable(const std::string& name) final;
     void EndTable() final;
     void StartTableHeader() final;

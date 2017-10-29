@@ -16,10 +16,16 @@ namespace aspia {
 static const int kDefaultWindowWidth = 980;
 static const int kDefaultWindowHeight = 700;
 
-SystemInfoWindow::SystemInfoWindow(Delegate* delegate)
-    : delegate_(delegate)
+SystemInfoWindow::SystemInfoWindow(SystemInfoWindow::Delegate* window_delegate,
+                                   DocumentCreater::Delegate* document_creater_delegate)
+    : delegate_(window_delegate)
 {
-    DCHECK(delegate);
+    DCHECK(delegate_);
+    DCHECK(document_creater_delegate);
+
+    document_creater_ = std::make_unique<DocumentCreater>(
+        document_creater_delegate, list_.output_proxy());
+
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
@@ -73,10 +79,12 @@ LRESULT SystemInfoWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
     UNUSED_PARAMETER(lparam);
     UNUSED_PARAMETER(handled);
 
+    const CSize small_icon_size(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
+
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
                                    LR_CREATEDIBSECTION,
-                                   GetSystemMetrics(SM_CXSMICON),
-                                   GetSystemMetrics(SM_CYSMICON));
+                                   small_icon_size.cx,
+                                   small_icon_size.cy);
     SetIcon(small_icon_, FALSE);
 
     big_icon_ = AtlLoadIconImage(IDI_MAIN,
@@ -122,6 +130,8 @@ LRESULT SystemInfoWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
                  SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
     CenterWindow();
 
+    tree_.AddChildItems(small_icon_size, document_creater_->tree(), TVI_ROOT);
+    tree_.ExpandChildGroups(TVI_ROOT);
     tree_.SelectItem(tree_.GetChildItem(TVI_ROOT));
     tree_.SetFocus();
     return 0;
@@ -235,35 +245,32 @@ LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& 
     list_.DeleteAllItems();
     list_.DeleteAllColumns();
 
-    const CategoryTreeCtrl::ItemType type = tree_.GetItemType(nmtv->itemNew.hItem);
+    Category* category = tree_.GetItemCategory(nmtv->itemNew.hItem);
+    if (!category)
+        return 0;
 
-    if (type == CategoryTreeCtrl::ItemType::CATEGORY)
+    if (category->type() == Category::Type::INFO)
     {
-        CategoryInfo* category = tree_.GetItem(nmtv->itemNew.hItem)->category_info();
-        if (!category)
-            return 0;
+        CategoryInfo* category_info = category->category_info();
 
-        statusbar_.SetText(0, UNICODEfromUTF8(category->Name()).c_str());
-        statusbar_.SetIcon(0, AtlLoadIconImage(category->Icon(),
-                                               LR_CREATEDIBSECTION,
-                                               GetSystemMetrics(SM_CXSMICON),
-                                               GetSystemMetrics(SM_CYSMICON)));
+        statusbar_icon_ = AtlLoadIconImage(category_info->Icon(),
+                                           LR_CREATEDIBSECTION,
+                                           GetSystemMetrics(SM_CXSMICON),
+                                           GetSystemMetrics(SM_CYSMICON));
 
-        // Prepare the list of requested categories.
-        Delegate::GuidList guid_list;
-        guid_list.emplace_back(category->Guid());
+        statusbar_.SetText(0, UNICODEfromUTF8(category_info->Name()).c_str());
+        statusbar_.SetIcon(0, statusbar_icon_);
 
-        delegate_->OnRequest(std::move(guid_list), list_.output_proxy());
-    }
-    else if (type == CategoryTreeCtrl::ItemType::GROUP)
-    {
-        CategoryGroup* group = tree_.GetItem(nmtv->itemNew.hItem)->category_group();
-        if (!group)
-            return 0;
+        category_info->SetChecked(true);
+
+        document_creater_->CreateDocument();
     }
     else
     {
-        DLOG(FATAL) << "Unexpected item type: " << static_cast<int>(type);
+        DCHECK(category->type() == Category::Type::GROUP);
+
+        CategoryGroup* group = category->category_group();
+        // TODO
     }
 
     return 0;

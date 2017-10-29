@@ -6,6 +6,8 @@
 //
 
 #include "base/printer_enumerator.h"
+#include "base/devices/monitor_enumerator.h"
+#include "base/strings/string_util.h"
 #include "protocol/category_group_hardware.h"
 #include "proto/system_info_session_message.pb.h"
 #include "ui/system_info/output_proxy.h"
@@ -606,15 +608,293 @@ const char* CategoryMonitor::Guid() const
 
 void CategoryMonitor::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::Monitors message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::Monitors::Item& item = message.item(index);
+
+        Output::Group group(output, item.system_name(), Icon());
+
+        output->AddParam(IDI_MONITOR, "Monitor Name", item.monitor_name());
+        output->AddParam(IDI_MONITOR, "Manufacturer Name", item.manufacturer_name());
+        output->AddParam(IDI_MONITOR, "Monitor ID", item.monitor_id());
+        output->AddParam(IDI_MONITOR, "Serial Number", item.serial_number());
+        output->AddParam(IDI_MONITOR, "EDID Version", std::to_string(item.edid_version()));
+        output->AddParam(IDI_MONITOR, "EDID Revision", std::to_string(item.edid_revision()));
+
+        output->AddParam(IDI_MONITOR,
+                         "Week Of Manufacture",
+                         std::to_string(item.week_of_manufacture()));
+
+        output->AddParam(IDI_MONITOR,
+                         "Year Of Manufacture",
+                         std::to_string(item.year_of_manufacture()));
+
+        output->AddParam(IDI_MONITOR, "Gamma", StringPrintf("%.2f", item.gamma()));
+
+        output->AddParam(IDI_MONITOR,
+                         "Horizontal Image Size",
+                         std::to_string(item.max_horizontal_image_size()),
+                         "cm");
+
+        output->AddParam(IDI_MONITOR,
+                         "Vertical Image Size",
+                         std::to_string(item.max_vertical_image_size()),
+                         "cm");
+
+        output->AddParam(IDI_MONITOR,
+                         "Hirizontal Resolution",
+                         std::to_string(item.horizontal_resolution()),
+                         "px");
+
+        output->AddParam(IDI_MONITOR,
+                         "Vertical Resolution",
+                         std::to_string(item.vertical_resoulution()),
+                         "px");
+
+        output->AddParam(IDI_MONITOR,
+                         "Minimum Horizontal Frequency",
+                         std::to_string(item.min_horizontal_rate()),
+                         "kHz");
+
+        output->AddParam(IDI_MONITOR,
+                         "Maximum Horizontal Frequency",
+                         std::to_string(item.max_horizontal_rate()),
+                         "kHz");
+
+        output->AddParam(IDI_MONITOR,
+                         "Minimum Vertical Frequency",
+                         std::to_string(item.min_vertical_rate()),
+                         "Hz");
+
+        output->AddParam(IDI_MONITOR,
+                         "Maximum Vertical Frequency",
+                         std::to_string(item.max_vertical_rate()),
+                         "Hz");
+
+        output->AddParam(IDI_MONITOR,
+                         "Pixel Clock",
+                         StringPrintf("%.2f", item.pixel_clock()),
+                         "MHz");
+
+        output->AddParam(IDI_MONITOR,
+                         "Maximum Pixel Clock",
+                         std::to_string(item.max_pixel_clock()),
+                         "MHz");
+
+        switch (item.input_signal_type())
+        {
+            case system_info::Monitors::Item::INPUT_SIGNAL_TYPE_ANALOG:
+                output->AddParam(IDI_MONITOR, "Input Signal Type", "Analog");
+                break;
+
+            case system_info::Monitors::Item::INPUT_SIGNAL_TYPE_DIGITAL:
+                output->AddParam(IDI_MONITOR, "Input Signal Type", "Digital");
+                break;
+        }
+
+        {
+            Output::Group features_group(output, "Supported Features", Icon());
+
+            output->AddParam(item.default_gtf_supported() ? IDI_CHECKED : IDI_UNCHECKED,
+                             "Default GTF",
+                             item.default_gtf_supported() ? "Yes" : "No");
+
+            output->AddParam(item.suspend_supported() ? IDI_CHECKED : IDI_UNCHECKED,
+                             "Suspend",
+                             item.suspend_supported() ? "Yes" : "No");
+
+            output->AddParam(item.standby_supported() ? IDI_CHECKED : IDI_UNCHECKED,
+                             "Standby",
+                             item.standby_supported() ? "Yes" : "No");
+
+            output->AddParam(item.active_off_supported() ? IDI_CHECKED : IDI_UNCHECKED,
+                             "Active Off",
+                             item.active_off_supported() ? "Yes" : "No");
+
+            output->AddParam(item.preferred_timing_mode_supported() ? IDI_CHECKED : IDI_UNCHECKED,
+                             "Preferred Timing Mode",
+                             item.preferred_timing_mode_supported() ? "Yes" : "No");
+
+            output->AddParam(item.srgb_supported() ? IDI_CHECKED : IDI_UNCHECKED,
+                             "sRGB",
+                             item.srgb_supported() ? "Yes" : "No");
+        }
+
+        if (item.timings_size() > 0)
+        {
+            Output::Group features_group(output, "Supported Video Modes", Icon());
+
+            for (int mode = 0; mode < item.timings_size(); ++mode)
+            {
+                const system_info::Monitors::Item::Timing& timing = item.timings(mode);
+
+                output->AddParam(IDI_CHECKED,
+                                 StringPrintf("%dx%d", timing.width(), timing.height()),
+                                 std::to_string(timing.frequency()),
+                                 "Hz");
+            }
+        }
+    }
 }
 
 std::string CategoryMonitor::Serialize()
 {
-    // TODO
-    return std::string();
+    system_info::Monitors message;
+
+    for (MonitorEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+    {
+        std::unique_ptr<EdidParser> edid = enumerator.GetEDID();
+        if (!edid)
+            continue;
+
+        system_info::Monitors::Item* item = message.add_item();
+
+        std::string system_name = enumerator.GetFriendlyName();
+
+        if (system_name.empty())
+            system_name = enumerator.GetDescription();
+
+        item->set_system_name(system_name);
+        item->set_monitor_name(edid->GetMonitorName());
+        item->set_manufacturer_name(edid->GetManufacturerName());
+        item->set_monitor_id(edid->GetMonitorId());
+        item->set_serial_number(edid->GetSerialNumber());
+        item->set_edid_version(edid->GetEdidVersion());
+        item->set_edid_revision(edid->GetEdidRevision());
+        item->set_week_of_manufacture(edid->GetWeekOfManufacture());
+        item->set_year_of_manufacture(edid->GetYearOfManufacture());
+        item->set_max_horizontal_image_size(edid->GetMaxHorizontalImageSize());
+        item->set_max_vertical_image_size(edid->GetMaxVerticalImageSize());
+        item->set_horizontal_resolution(edid->GetHorizontalResolution());
+        item->set_vertical_resoulution(edid->GetVerticalResolution());
+        item->set_gamma(edid->GetGamma());
+        item->set_max_horizontal_rate(edid->GetMaxHorizontalRate());
+        item->set_min_horizontal_rate(edid->GetMinHorizontalRate());
+        item->set_max_vertical_rate(edid->GetMaxVerticalRate());
+        item->set_min_vertical_rate(edid->GetMinVerticalRate());
+        item->set_pixel_clock(edid->GetPixelClock());
+        item->set_max_pixel_clock(edid->GetMaxSupportedPixelClock());
+
+        switch (edid->GetInputSignalType())
+        {
+            case EdidParser::INPUT_SIGNAL_TYPE_DIGITAL:
+                item->set_input_signal_type(system_info::Monitors::Item::INPUT_SIGNAL_TYPE_DIGITAL);
+                break;
+
+            default:
+                item->set_input_signal_type(system_info::Monitors::Item::INPUT_SIGNAL_TYPE_ANALOG);
+                break;
+        }
+
+        uint8_t supported_features = edid->GetFeatureSupport();
+
+        if (supported_features & EdidParser::FEATURE_SUPPORT_DEFAULT_GTF_SUPPORTED)
+            item->set_default_gtf_supported(true);
+
+        if (supported_features & EdidParser::FEATURE_SUPPORT_SUSPEND)
+            item->set_suspend_supported(true);
+
+        if (supported_features & EdidParser::FEATURE_SUPPORT_STANDBY)
+            item->set_standby_supported(true);
+
+        if (supported_features & EdidParser::FEATURE_SUPPORT_ACTIVE_OFF)
+            item->set_active_off_supported(true);
+
+        if (supported_features & EdidParser::FEATURE_SUPPORT_PREFERRED_TIMING_MODE)
+            item->set_preferred_timing_mode_supported(true);
+
+        if (supported_features & EdidParser::FEATURE_SUPPORT_SRGB)
+            item->set_srgb_supported(true);
+
+        auto add_timing = [&](int width, int height, int freq)
+        {
+            system_info::Monitors::Item::Timing* timing = item->add_timings();
+
+            timing->set_width(width);
+            timing->set_height(height);
+            timing->set_frequency(freq);
+        };
+
+        uint8_t estabilished_timings1 = edid->GetEstabilishedTimings1();
+
+        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_800X600_60HZ)
+            add_timing(800, 600, 60);
+
+        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_800X600_56HZ)
+            add_timing(800, 600, 56);
+
+        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_640X480_75HZ)
+            add_timing(640, 480, 75);
+
+        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_640X480_72HZ)
+            add_timing(640, 480, 72);
+
+        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_640X480_67HZ)
+            add_timing(640, 480, 67);
+
+        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_640X480_60HZ)
+            add_timing(640, 480, 60);
+
+        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_720X400_88HZ)
+            add_timing(720, 400, 88);
+
+        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_720X400_70HZ)
+            add_timing(720, 400, 70);
+
+        uint8_t estabilished_timings2 = edid->GetEstabilishedTimings2();
+
+        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_1280X1024_75HZ)
+            add_timing(1280, 1024, 75);
+
+        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_1024X768_75HZ)
+            add_timing(1024, 768, 75);
+
+        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_1024X768_70HZ)
+            add_timing(1024, 768, 70);
+
+        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_1024X768_60HZ)
+            add_timing(1024, 768, 60);
+
+        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_1024X768_87HZ)
+            add_timing(1024, 768, 87);
+
+        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_832X624_75HZ)
+            add_timing(832, 624, 75);
+
+        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_800X600_75HZ)
+            add_timing(800, 600, 75);
+
+        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_800X600_72HZ)
+            add_timing(800, 600, 72);
+
+        uint8_t manufacturer_timings = edid->GetManufacturersTimings();
+
+        if (manufacturer_timings & EdidParser::MANUFACTURERS_TIMINGS_1152X870_75HZ)
+            add_timing(1152, 870, 75);
+
+        for (int index = 0; index < edid->GetStandardTimingsCount(); ++index)
+        {
+            int width, height, freq;
+
+            if (edid->GetStandardTimings(index, width, height, freq))
+                add_timing(width, height, freq);
+        }
+    }
+
+    return message.SerializeAsString();
 }
 
 //

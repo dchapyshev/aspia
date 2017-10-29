@@ -25,6 +25,16 @@ void OutputJsonFile::EndDocument()
     // TODO
 }
 
+void OutputJsonFile::StartTableGroup(const std::string& name)
+{
+    // TODO
+}
+
+void OutputJsonFile::EndTableGroup()
+{
+    // TODO
+}
+
 void OutputJsonFile::StartTable(const std::string& name)
 {
     UNUSED_PARAMETER(name);

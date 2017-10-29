@@ -40,6 +40,16 @@ void OutputXmlFile::EndDocument()
     doc_.clear();
 }
 
+void OutputXmlFile::StartTableGroup(const std::string& name)
+{
+    // TODO
+}
+
+void OutputXmlFile::EndTableGroup()
+{
+    // TODO
+}
+
 void OutputXmlFile::StartTable(const std::string& name)
 {
     category_ = doc_.allocate_node(rapidxml::node_element, "category");

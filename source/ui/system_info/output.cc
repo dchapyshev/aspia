@@ -20,17 +20,6 @@ Output::~Output()
     proxy_ = nullptr;
 }
 
-Output::Document::Document(std::shared_ptr<OutputProxy> output)
-    : output_(std::move(output))
-{
-    output_->StartDocument();
-}
-
-Output::Document::~Document()
-{
-    output_->EndDocument();
-}
-
 Output::Table::Table(std::shared_ptr<OutputProxy> output, const std::string& name)
     : output_(std::move(output))
 {

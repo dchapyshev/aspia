@@ -640,6 +640,18 @@
     <ClCompile Include="host\host_local_system_info.cc">
       <Filter>host</Filter>
     </ClCompile>
+    <ClCompile Include="ui\system_info\document_creater.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\document_creater_proxy.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="base\devices\monitor_enumerator.cc">
+      <Filter>base\devices</Filter>
+    </ClCompile>
+    <ClCompile Include="base\devices\edid_parser.cc">
+      <Filter>base\devices</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1321,6 +1333,18 @@
     </ClInclude>
     <ClInclude Include="host\host_local_system_info.h">
       <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\document_creater.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\document_creater_proxy.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="base\devices\monitor_enumerator.h">
+      <Filter>base\devices</Filter>
+    </ClInclude>
+    <ClInclude Include="base\devices\edid_parser.h">
+      <Filter>base\devices</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

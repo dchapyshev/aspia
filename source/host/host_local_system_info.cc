@@ -7,6 +7,8 @@
 
 #include "base/logging.h"
 #include "host/host_local_system_info.h"
+#include "protocol/category.h"
+#include "ui/system_info/document_creater_proxy.h"
 
 namespace aspia {
 
@@ -22,7 +24,8 @@ void HostLocalSystemInfo::OnBeforeThreadRunning()
     DCHECK(runner_);
 
     map_ = CreateCategoryMap();
-    window_.reset(new SystemInfoWindow(this));
+
+    window_.reset(new SystemInfoWindow(this, this));
 }
 
 void HostLocalSystemInfo::OnAfterThreadRunning()
@@ -30,39 +33,23 @@ void HostLocalSystemInfo::OnAfterThreadRunning()
     window_.reset();
 }
 
-void HostLocalSystemInfo::OnRequest(GuidList list, std::shared_ptr<OutputProxy> output)
+void HostLocalSystemInfo::OnRequest(const std::string& guid,
+                                    std::shared_ptr<DocumentCreaterProxy> creater)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&HostLocalSystemInfo::OnRequest, this, list, output));
+        runner_->PostTask(std::bind(&HostLocalSystemInfo::OnRequest, this, guid, creater));
         return;
     }
 
-    guid_list_ = std::move(list);
-    output_ = std::move(output);
-
-    output_->StartDocument();
-
-    SendRequest();
-}
-
-void HostLocalSystemInfo::SendRequest()
-{
     // Looking for a category by GUID.
-    const auto category = map_.find(guid_list_.front());
+    const auto category = map_.find(guid);
     if (category != map_.end())
     {
-        category->second->Parse(output_, category->second->Serialize());
-        guid_list_.pop_front();
+        std::shared_ptr<std::string> data =
+            std::make_shared<std::string>(category->second->Serialize());
 
-        if (guid_list_.empty())
-        {
-            output_->EndDocument();
-        }
-        else
-        {
-            runner_->PostTask(std::bind(&HostLocalSystemInfo::SendRequest, this));
-        }
+        creater->Parse(std::move(data));
     }
 }
 

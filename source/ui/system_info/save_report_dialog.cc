@@ -16,33 +16,9 @@ namespace aspia {
 
 #define STATEIMAGEMASKTOINDEX(state) (((state) & TVIS_STATEIMAGEMASK) >> 12)
 
-CategoryGuidList& SaveReportDialog::GetSelectedGuidList()
+const CategoryList& SaveReportDialog::GetCategoryTree()
 {
-    return selected_list_;
-}
-
-void SaveReportDialog::BuildGuidList(CTreeViewCtrl& treeview, HTREEITEM parent_item)
-{
-    for (HTREEITEM item = treeview.GetChildItem(parent_item);
-         item != nullptr;
-         item = treeview.GetNextSiblingItem(item))
-    {
-        Category* category = reinterpret_cast<Category*>(treeview.GetItemData(item));
-
-        if (category)
-        {
-            if (category->type() == Category::Type::INFO)
-            {
-                CategoryInfo* category_info = category->category_info();
-                selected_list_.emplace_back(category_info->Guid());
-            }
-            else
-            {
-                DCHECK(category->type() == Category::Type::GROUP);
-                BuildGuidList(treeview, item);
-            }
-        }
-    }
+    return category_tree_;
 }
 
 void SaveReportDialog::AddChildItems(CTreeViewCtrl& treeview,
@@ -183,9 +159,6 @@ LRESULT SaveReportDialog::OnSaveButton(WORD notify_code, WORD ctrl_id, HWND ctrl
     UNUSED_PARAMETER(ctrl);
     UNUSED_PARAMETER(handled);
 
-    CTreeViewCtrl treeview(GetDlgItem(IDC_CATEGORY_TREE));
-    BuildGuidList(treeview, TVI_ROOT);
-
     EndDialog(IDOK);
     return 0;
 }
@@ -202,6 +175,24 @@ LRESULT SaveReportDialog::OnCancelButton(WORD notify_code, WORD ctrl_id, HWND ct
 }
 
 // static
+void SaveReportDialog::SetCheckStateForItem(CTreeViewCtrl& treeview,
+                                            HTREEITEM item,
+                                            BOOL state)
+{
+    Category* category = reinterpret_cast<Category*>(treeview.GetItemData(item));
+
+    if (category)
+    {
+        treeview.SetCheckState(item, state);
+
+        if (category->type() == Category::Type::INFO)
+        {
+            category->category_info()->SetChecked(!!state);
+        }
+    }
+}
+
+// static
 void SaveReportDialog::SetCheckStateForChildItems(CTreeViewCtrl& treeview,
                                                   HTREEITEM parent_item,
                                                   BOOL state)
@@ -210,7 +201,7 @@ void SaveReportDialog::SetCheckStateForChildItems(CTreeViewCtrl& treeview,
          item != nullptr;
          item = treeview.GetNextSiblingItem(item))
     {
-        treeview.SetCheckState(item, state);
+        SetCheckStateForItem(treeview, item, state);
         SetCheckStateForChildItems(treeview, item, state);
     }
 }
@@ -237,6 +228,7 @@ LRESULT SaveReportDialog::OnTreeItemChanged(int control_id, LPNMHDR hdr, BOOL& h
         {
             CTreeViewCtrl treeview(item_change->hdr.hwndFrom);
 
+            SetCheckStateForItem(treeview, item_change->hItem, new_state);
             SetCheckStateForChildItems(treeview, item_change->hItem, new_state);
 
             HTREEITEM parent_item = treeview.GetParentItem(item_change->hItem);

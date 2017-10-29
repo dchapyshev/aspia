@@ -43,6 +43,28 @@ bool OutputProxy::EndDocument()
     return true;
 }
 
+bool OutputProxy::StartTableGroup(const std::string& name)
+{
+    std::lock_guard<std::mutex> lock(output_lock_);
+
+    if (!output_)
+        return false;
+
+    output_->StartTableGroup(name);
+    return true;
+}
+
+bool OutputProxy::EndTableGroup()
+{
+    std::lock_guard<std::mutex> lock(output_lock_);
+
+    if (!output_)
+        return false;
+
+    output_->EndTableGroup();
+    return true;
+}
+
 bool OutputProxy::StartTable(const std::string& name)
 {
     std::lock_guard<std::mutex> lock(output_lock_);

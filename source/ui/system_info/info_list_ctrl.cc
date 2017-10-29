@@ -69,6 +69,16 @@ void InfoListCtrl::EndDocument()
     // Nothing
 }
 
+void InfoListCtrl::StartTableGroup(const std::string& name)
+{
+    // Nothing
+}
+
+void InfoListCtrl::EndTableGroup()
+{
+    // Nothing
+}
+
 void InfoListCtrl::StartTable(const std::string& name)
 {
     UNUSED_PARAMETER(name);

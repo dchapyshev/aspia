@@ -8,6 +8,7 @@
 #include "client/client_session_system_info.h"
 #include "proto/system_info_session.pb.h"
 #include "protocol/message_serialization.h"
+#include "ui/system_info/document_creater_proxy.h"
 
 namespace aspia {
 
@@ -18,8 +19,7 @@ ClientSessionSystemInfo::ClientSessionSystemInfo(
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
     : ClientSession(config, channel_proxy)
 {
-    map_ = CreateCategoryMap();
-    window_.reset(new SystemInfoWindow(this));
+    window_.reset(new SystemInfoWindow(this, this));
 }
 
 ClientSessionSystemInfo::~ClientSessionSystemInfo()
@@ -27,34 +27,21 @@ ClientSessionSystemInfo::~ClientSessionSystemInfo()
     window_.reset();
 }
 
-void ClientSessionSystemInfo::OnRequest(GuidList list, std::shared_ptr<OutputProxy> output)
+void ClientSessionSystemInfo::OnRequest(const std::string& guid,
+                                        std::shared_ptr<DocumentCreaterProxy> creater)
 {
-    DCHECK(output);
-    DCHECK(!list.empty());
+    document_creater_ = std::move(creater);
 
-    guid_list_ = std::move(list);
-    output_ = std::move(output);
+    proto::system_info::ClientToHost message;
+    message.set_guid(guid);
 
-    output_->StartDocument();
-
-    SendRequest();
+    channel_proxy_->Send(SerializeMessage<IOBuffer>(message),
+                         std::bind(&ClientSessionSystemInfo::OnRequestSended, this));
 }
 
 void ClientSessionSystemInfo::OnWindowClose()
 {
     channel_proxy_->Disconnect();
-}
-
-void ClientSessionSystemInfo::SendRequest()
-{
-    DCHECK(!guid_list_.empty());
-    DCHECK(guid_list_.front().length() == kGuidLength);
-
-    proto::system_info::ClientToHost message;
-    message.set_guid(guid_list_.front());
-
-    channel_proxy_->Send(SerializeMessage<IOBuffer>(message),
-                         std::bind(&ClientSessionSystemInfo::OnRequestSended, this));
 }
 
 void ClientSessionSystemInfo::OnRequestSended()
@@ -71,26 +58,12 @@ void ClientSessionSystemInfo::OnReplyReceived(const IOBuffer& buffer)
     {
         const std::string& guid = message.guid();
 
-        if (guid.length() == kGuidLength && guid == guid_list_.front())
+        if (guid.length() == kGuidLength)
         {
-            // Looking for a category by GUID.
-            const auto category = map_.find(guid);
-            if (category != map_.end())
-            {
-                category->second->Parse(output_, message.data());
-                guid_list_.pop_front();
+            std::shared_ptr<std::string> data =
+                std::shared_ptr<std::string>(message.release_data());
 
-                if (guid_list_.empty())
-                {
-                    output_->EndDocument();
-                }
-                else
-                {
-                    SendRequest();
-                }
-
-                return;
-            }
+            document_creater_->Parse(std::move(data));
         }
     }
 

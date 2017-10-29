@@ -21,6 +21,9 @@ public:
     bool StartDocument();
     bool EndDocument();
 
+    bool StartTableGroup(const std::string& name);
+    bool EndTableGroup();
+
     bool StartTable(const std::string& name);
     bool EndTable();
 

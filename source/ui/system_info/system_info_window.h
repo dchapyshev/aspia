@@ -9,6 +9,7 @@
 #define _ASPIA_UI__SYSTEM_INFO__SYSTEM_INFO_WINDOW_H
 
 #include "base/message_loop/message_loop_thread.h"
+#include "ui/system_info/document_creater.h"
 #include "ui/system_info/system_info_toolbar.h"
 #include "ui/system_info/category_tree_ctrl.h"
 #include "ui/system_info/info_list_ctrl.h"
@@ -29,13 +30,11 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        using GuidList = std::list<std::string>;
-
-        virtual void OnRequest(GuidList list, std::shared_ptr<OutputProxy> output) = 0;
         virtual void OnWindowClose() = 0;
     };
 
-    SystemInfoWindow(Delegate* delegate);
+    SystemInfoWindow(SystemInfoWindow::Delegate* window_delegate,
+                     DocumentCreater::Delegate* document_creater_delegate);
     ~SystemInfoWindow();
 
 private:
@@ -85,6 +84,8 @@ private:
 
     Delegate* delegate_;
 
+    std::unique_ptr<DocumentCreater> document_creater_;
+
     SystemInfoToolbar toolbar_;
     CategoryTreeCtrl tree_;
     InfoListCtrl list_;
@@ -93,6 +94,7 @@ private:
 
     CIcon small_icon_;
     CIcon big_icon_;
+    CIcon statusbar_icon_;
 
     DISALLOW_COPY_AND_ASSIGN(SystemInfoWindow);
 };

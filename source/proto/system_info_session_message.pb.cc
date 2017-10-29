@@ -16,6 +16,21 @@
 
 namespace aspia {
 namespace system_info {
+class Monitors_Item_TimingDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<Monitors_Item_Timing>
+     _instance;
+} _Monitors_Item_Timing_default_instance_;
+class Monitors_ItemDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<Monitors_Item>
+     _instance;
+} _Monitors_Item_default_instance_;
+class MonitorsDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<Monitors>
+     _instance;
+} _Monitors_default_instance_;
 class Printers_ItemDefaultTypeInternal {
 public:
  ::google::protobuf::internal::ExplicitlyConstructed<Printers_Item>
@@ -144,13 +159,22 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
 };
 
 void TableStruct::InitDefaultsImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::internal::InitProtobufDefaults();
-  _Printers_Item_default_instance_._instance.DefaultConstruct();
+  _Monitors_Item_Timing_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_Monitors_Item_Timing_default_instance_);_Monitors_Item_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_Monitors_Item_default_instance_);_Monitors_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_Monitors_default_instance_);_Printers_Item_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_Printers_Item_default_instance_);_Printers_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
@@ -207,6 +231,25 @@ void AddDescriptors() {
 
 }  // namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto
 
+bool Monitors_Item_InputSignalType_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const Monitors_Item_InputSignalType Monitors_Item::INPUT_SIGNAL_TYPE_UNKNOWN;
+const Monitors_Item_InputSignalType Monitors_Item::INPUT_SIGNAL_TYPE_ANALOG;
+const Monitors_Item_InputSignalType Monitors_Item::INPUT_SIGNAL_TYPE_DIGITAL;
+const Monitors_Item_InputSignalType Monitors_Item::InputSignalType_MIN;
+const Monitors_Item_InputSignalType Monitors_Item::InputSignalType_MAX;
+const int Monitors_Item::InputSignalType_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool Printers_Item_Orientation_IsValid(int value) {
   switch (value) {
     case 0:
@@ -307,6 +350,2251 @@ const SharedResources_Item_Type SharedResources_Item::Type_MIN;
 const SharedResources_Item_Type SharedResources_Item::Type_MAX;
 const int SharedResources_Item::Type_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int Monitors_Item_Timing::kWidthFieldNumber;
+const int Monitors_Item_Timing::kHeightFieldNumber;
+const int Monitors_Item_Timing::kFrequencyFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+Monitors_Item_Timing::Monitors_Item_Timing()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.Monitors.Item.Timing)
+}
+Monitors_Item_Timing::Monitors_Item_Timing(const Monitors_Item_Timing& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&width_, &from.width_,
+    static_cast<size_t>(reinterpret_cast<char*>(&frequency_) -
+    reinterpret_cast<char*>(&width_)) + sizeof(frequency_));
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Monitors.Item.Timing)
+}
+
+void Monitors_Item_Timing::SharedCtor() {
+  ::memset(&width_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&frequency_) -
+      reinterpret_cast<char*>(&width_)) + sizeof(frequency_));
+  _cached_size_ = 0;
+}
+
+Monitors_Item_Timing::~Monitors_Item_Timing() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.Monitors.Item.Timing)
+  SharedDtor();
+}
+
+void Monitors_Item_Timing::SharedDtor() {
+}
+
+void Monitors_Item_Timing::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const Monitors_Item_Timing& Monitors_Item_Timing::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+Monitors_Item_Timing* Monitors_Item_Timing::New(::google::protobuf::Arena* arena) const {
+  Monitors_Item_Timing* n = new Monitors_Item_Timing;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void Monitors_Item_Timing::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.Monitors.Item.Timing)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&width_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&frequency_) -
+      reinterpret_cast<char*>(&width_)) + sizeof(frequency_));
+  _internal_metadata_.Clear();
+}
+
+bool Monitors_Item_Timing::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.Monitors.Item.Timing)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int32 width = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &width_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 height = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &height_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 frequency = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &frequency_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.Monitors.Item.Timing)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.Monitors.Item.Timing)
+  return false;
+#undef DO_
+}
+
+void Monitors_Item_Timing::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.Monitors.Item.Timing)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 width = 1;
+  if (this->width() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->width(), output);
+  }
+
+  // int32 height = 2;
+  if (this->height() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->height(), output);
+  }
+
+  // int32 frequency = 3;
+  if (this->frequency() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->frequency(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.Monitors.Item.Timing)
+}
+
+size_t Monitors_Item_Timing::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Monitors.Item.Timing)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // int32 width = 1;
+  if (this->width() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->width());
+  }
+
+  // int32 height = 2;
+  if (this->height() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->height());
+  }
+
+  // int32 frequency = 3;
+  if (this->frequency() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->frequency());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Monitors_Item_Timing::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const Monitors_Item_Timing*>(&from));
+}
+
+void Monitors_Item_Timing::MergeFrom(const Monitors_Item_Timing& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Monitors.Item.Timing)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.width() != 0) {
+    set_width(from.width());
+  }
+  if (from.height() != 0) {
+    set_height(from.height());
+  }
+  if (from.frequency() != 0) {
+    set_frequency(from.frequency());
+  }
+}
+
+void Monitors_Item_Timing::CopyFrom(const Monitors_Item_Timing& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Monitors.Item.Timing)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Monitors_Item_Timing::IsInitialized() const {
+  return true;
+}
+
+void Monitors_Item_Timing::Swap(Monitors_Item_Timing* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void Monitors_Item_Timing::InternalSwap(Monitors_Item_Timing* other) {
+  using std::swap;
+  swap(width_, other->width_);
+  swap(height_, other->height_);
+  swap(frequency_, other->frequency_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string Monitors_Item_Timing::GetTypeName() const {
+  return "aspia.system_info.Monitors.Item.Timing";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// Monitors_Item_Timing
+
+// int32 width = 1;
+void Monitors_Item_Timing::clear_width() {
+  width_ = 0;
+}
+::google::protobuf::int32 Monitors_Item_Timing::width() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.Timing.width)
+  return width_;
+}
+void Monitors_Item_Timing::set_width(::google::protobuf::int32 value) {
+  
+  width_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.Timing.width)
+}
+
+// int32 height = 2;
+void Monitors_Item_Timing::clear_height() {
+  height_ = 0;
+}
+::google::protobuf::int32 Monitors_Item_Timing::height() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.Timing.height)
+  return height_;
+}
+void Monitors_Item_Timing::set_height(::google::protobuf::int32 value) {
+  
+  height_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.Timing.height)
+}
+
+// int32 frequency = 3;
+void Monitors_Item_Timing::clear_frequency() {
+  frequency_ = 0;
+}
+::google::protobuf::int32 Monitors_Item_Timing::frequency() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.Timing.frequency)
+  return frequency_;
+}
+void Monitors_Item_Timing::set_frequency(::google::protobuf::int32 value) {
+  
+  frequency_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.Timing.frequency)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int Monitors_Item::kSystemNameFieldNumber;
+const int Monitors_Item::kMonitorNameFieldNumber;
+const int Monitors_Item::kManufacturerNameFieldNumber;
+const int Monitors_Item::kMonitorIdFieldNumber;
+const int Monitors_Item::kSerialNumberFieldNumber;
+const int Monitors_Item::kEdidVersionFieldNumber;
+const int Monitors_Item::kEdidRevisionFieldNumber;
+const int Monitors_Item::kWeekOfManufactureFieldNumber;
+const int Monitors_Item::kYearOfManufactureFieldNumber;
+const int Monitors_Item::kMaxHorizontalImageSizeFieldNumber;
+const int Monitors_Item::kMaxVerticalImageSizeFieldNumber;
+const int Monitors_Item::kHorizontalResolutionFieldNumber;
+const int Monitors_Item::kVerticalResoulutionFieldNumber;
+const int Monitors_Item::kGammaFieldNumber;
+const int Monitors_Item::kMinHorizontalRateFieldNumber;
+const int Monitors_Item::kMaxHorizontalRateFieldNumber;
+const int Monitors_Item::kMinVerticalRateFieldNumber;
+const int Monitors_Item::kMaxVerticalRateFieldNumber;
+const int Monitors_Item::kPixelClockFieldNumber;
+const int Monitors_Item::kMaxPixelClockFieldNumber;
+const int Monitors_Item::kInputSignalTypeFieldNumber;
+const int Monitors_Item::kDefaultGtfSupportedFieldNumber;
+const int Monitors_Item::kSuspendSupportedFieldNumber;
+const int Monitors_Item::kStandbySupportedFieldNumber;
+const int Monitors_Item::kActiveOffSupportedFieldNumber;
+const int Monitors_Item::kPreferredTimingModeSupportedFieldNumber;
+const int Monitors_Item::kSrgbSupportedFieldNumber;
+const int Monitors_Item::kTimingsFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+Monitors_Item::Monitors_Item()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.Monitors.Item)
+}
+Monitors_Item::Monitors_Item(const Monitors_Item& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      timings_(from.timings_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  system_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.system_name().size() > 0) {
+    system_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.system_name_);
+  }
+  monitor_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.monitor_name().size() > 0) {
+    monitor_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.monitor_name_);
+  }
+  manufacturer_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.manufacturer_name().size() > 0) {
+    manufacturer_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacturer_name_);
+  }
+  monitor_id_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.monitor_id().size() > 0) {
+    monitor_id_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.monitor_id_);
+  }
+  serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.serial_number().size() > 0) {
+    serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.serial_number_);
+  }
+  ::memcpy(&edid_version_, &from.edid_version_,
+    static_cast<size_t>(reinterpret_cast<char*>(&srgb_supported_) -
+    reinterpret_cast<char*>(&edid_version_)) + sizeof(srgb_supported_));
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Monitors.Item)
+}
+
+void Monitors_Item::SharedCtor() {
+  system_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  monitor_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  manufacturer_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  monitor_id_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&edid_version_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&srgb_supported_) -
+      reinterpret_cast<char*>(&edid_version_)) + sizeof(srgb_supported_));
+  _cached_size_ = 0;
+}
+
+Monitors_Item::~Monitors_Item() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.Monitors.Item)
+  SharedDtor();
+}
+
+void Monitors_Item::SharedDtor() {
+  system_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  monitor_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  manufacturer_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  monitor_id_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void Monitors_Item::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const Monitors_Item& Monitors_Item::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+Monitors_Item* Monitors_Item::New(::google::protobuf::Arena* arena) const {
+  Monitors_Item* n = new Monitors_Item;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void Monitors_Item::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.Monitors.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  timings_.Clear();
+  system_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  monitor_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  manufacturer_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  monitor_id_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&edid_version_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&srgb_supported_) -
+      reinterpret_cast<char*>(&edid_version_)) + sizeof(srgb_supported_));
+  _internal_metadata_.Clear();
+}
+
+bool Monitors_Item::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.Monitors.Item)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(16383u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string system_name = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_system_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->system_name().data(), static_cast<int>(this->system_name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.Monitors.Item.system_name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string monitor_name = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_monitor_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->monitor_name().data(), static_cast<int>(this->monitor_name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.Monitors.Item.monitor_name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string manufacturer_name = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_manufacturer_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->manufacturer_name().data(), static_cast<int>(this->manufacturer_name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.Monitors.Item.manufacturer_name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string monitor_id = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_monitor_id()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->monitor_id().data(), static_cast<int>(this->monitor_id().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.Monitors.Item.monitor_id"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string serial_number = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_serial_number()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->serial_number().data(), static_cast<int>(this->serial_number().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.Monitors.Item.serial_number"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 edid_version = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(48u /* 48 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &edid_version_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 edid_revision = 7;
+      case 7: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(56u /* 56 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &edid_revision_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 week_of_manufacture = 8;
+      case 8: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(64u /* 64 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &week_of_manufacture_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 year_of_manufacture = 9;
+      case 9: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(72u /* 72 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &year_of_manufacture_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 max_horizontal_image_size = 10;
+      case 10: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(80u /* 80 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &max_horizontal_image_size_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 max_vertical_image_size = 11;
+      case 11: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(88u /* 88 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &max_vertical_image_size_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 horizontal_resolution = 12;
+      case 12: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(96u /* 96 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &horizontal_resolution_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 vertical_resoulution = 13;
+      case 13: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(104u /* 104 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &vertical_resoulution_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // double gamma = 14;
+      case 14: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(113u /* 113 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
+                 input, &gamma_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 min_horizontal_rate = 15;
+      case 15: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(120u /* 120 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &min_horizontal_rate_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 max_horizontal_rate = 16;
+      case 16: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(128u /* 128 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &max_horizontal_rate_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 min_vertical_rate = 17;
+      case 17: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(136u /* 136 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &min_vertical_rate_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 max_vertical_rate = 18;
+      case 18: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(144u /* 144 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &max_vertical_rate_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // double pixel_clock = 19;
+      case 19: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(153u /* 153 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
+                 input, &pixel_clock_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 max_pixel_clock = 20;
+      case 20: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(160u /* 160 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &max_pixel_clock_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.system_info.Monitors.Item.InputSignalType input_signal_type = 21;
+      case 21: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(168u /* 168 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_input_signal_type(static_cast< ::aspia::system_info::Monitors_Item_InputSignalType >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool default_gtf_supported = 22;
+      case 22: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(176u /* 176 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &default_gtf_supported_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool suspend_supported = 23;
+      case 23: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(184u /* 184 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &suspend_supported_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool standby_supported = 24;
+      case 24: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(192u /* 192 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &standby_supported_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool active_off_supported = 25;
+      case 25: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(200u /* 200 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &active_off_supported_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool preferred_timing_mode_supported = 26;
+      case 26: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(208u /* 208 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &preferred_timing_mode_supported_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool srgb_supported = 27;
+      case 27: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(216u /* 216 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &srgb_supported_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .aspia.system_info.Monitors.Item.Timing timings = 28;
+      case 28: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(226u /* 226 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_timings()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.Monitors.Item)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.Monitors.Item)
+  return false;
+#undef DO_
+}
+
+void Monitors_Item::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.Monitors.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string system_name = 1;
+  if (this->system_name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->system_name().data(), static_cast<int>(this->system_name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.Monitors.Item.system_name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->system_name(), output);
+  }
+
+  // string monitor_name = 2;
+  if (this->monitor_name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->monitor_name().data(), static_cast<int>(this->monitor_name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.Monitors.Item.monitor_name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->monitor_name(), output);
+  }
+
+  // string manufacturer_name = 3;
+  if (this->manufacturer_name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->manufacturer_name().data(), static_cast<int>(this->manufacturer_name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.Monitors.Item.manufacturer_name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->manufacturer_name(), output);
+  }
+
+  // string monitor_id = 4;
+  if (this->monitor_id().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->monitor_id().data(), static_cast<int>(this->monitor_id().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.Monitors.Item.monitor_id");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      4, this->monitor_id(), output);
+  }
+
+  // string serial_number = 5;
+  if (this->serial_number().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->serial_number().data(), static_cast<int>(this->serial_number().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.Monitors.Item.serial_number");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      5, this->serial_number(), output);
+  }
+
+  // int32 edid_version = 6;
+  if (this->edid_version() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(6, this->edid_version(), output);
+  }
+
+  // int32 edid_revision = 7;
+  if (this->edid_revision() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->edid_revision(), output);
+  }
+
+  // int32 week_of_manufacture = 8;
+  if (this->week_of_manufacture() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(8, this->week_of_manufacture(), output);
+  }
+
+  // int32 year_of_manufacture = 9;
+  if (this->year_of_manufacture() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(9, this->year_of_manufacture(), output);
+  }
+
+  // int32 max_horizontal_image_size = 10;
+  if (this->max_horizontal_image_size() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(10, this->max_horizontal_image_size(), output);
+  }
+
+  // int32 max_vertical_image_size = 11;
+  if (this->max_vertical_image_size() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(11, this->max_vertical_image_size(), output);
+  }
+
+  // int32 horizontal_resolution = 12;
+  if (this->horizontal_resolution() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(12, this->horizontal_resolution(), output);
+  }
+
+  // int32 vertical_resoulution = 13;
+  if (this->vertical_resoulution() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(13, this->vertical_resoulution(), output);
+  }
+
+  // double gamma = 14;
+  if (this->gamma() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(14, this->gamma(), output);
+  }
+
+  // int32 min_horizontal_rate = 15;
+  if (this->min_horizontal_rate() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(15, this->min_horizontal_rate(), output);
+  }
+
+  // int32 max_horizontal_rate = 16;
+  if (this->max_horizontal_rate() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(16, this->max_horizontal_rate(), output);
+  }
+
+  // int32 min_vertical_rate = 17;
+  if (this->min_vertical_rate() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(17, this->min_vertical_rate(), output);
+  }
+
+  // int32 max_vertical_rate = 18;
+  if (this->max_vertical_rate() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(18, this->max_vertical_rate(), output);
+  }
+
+  // double pixel_clock = 19;
+  if (this->pixel_clock() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(19, this->pixel_clock(), output);
+  }
+
+  // int32 max_pixel_clock = 20;
+  if (this->max_pixel_clock() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(20, this->max_pixel_clock(), output);
+  }
+
+  // .aspia.system_info.Monitors.Item.InputSignalType input_signal_type = 21;
+  if (this->input_signal_type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      21, this->input_signal_type(), output);
+  }
+
+  // bool default_gtf_supported = 22;
+  if (this->default_gtf_supported() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(22, this->default_gtf_supported(), output);
+  }
+
+  // bool suspend_supported = 23;
+  if (this->suspend_supported() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(23, this->suspend_supported(), output);
+  }
+
+  // bool standby_supported = 24;
+  if (this->standby_supported() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(24, this->standby_supported(), output);
+  }
+
+  // bool active_off_supported = 25;
+  if (this->active_off_supported() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(25, this->active_off_supported(), output);
+  }
+
+  // bool preferred_timing_mode_supported = 26;
+  if (this->preferred_timing_mode_supported() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(26, this->preferred_timing_mode_supported(), output);
+  }
+
+  // bool srgb_supported = 27;
+  if (this->srgb_supported() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(27, this->srgb_supported(), output);
+  }
+
+  // repeated .aspia.system_info.Monitors.Item.Timing timings = 28;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->timings_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      28, this->timings(static_cast<int>(i)), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.Monitors.Item)
+}
+
+size_t Monitors_Item::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Monitors.Item)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.system_info.Monitors.Item.Timing timings = 28;
+  {
+    unsigned int count = static_cast<unsigned int>(this->timings_size());
+    total_size += 2UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->timings(static_cast<int>(i)));
+    }
+  }
+
+  // string system_name = 1;
+  if (this->system_name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->system_name());
+  }
+
+  // string monitor_name = 2;
+  if (this->monitor_name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->monitor_name());
+  }
+
+  // string manufacturer_name = 3;
+  if (this->manufacturer_name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->manufacturer_name());
+  }
+
+  // string monitor_id = 4;
+  if (this->monitor_id().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->monitor_id());
+  }
+
+  // string serial_number = 5;
+  if (this->serial_number().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->serial_number());
+  }
+
+  // int32 edid_version = 6;
+  if (this->edid_version() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->edid_version());
+  }
+
+  // int32 edid_revision = 7;
+  if (this->edid_revision() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->edid_revision());
+  }
+
+  // int32 week_of_manufacture = 8;
+  if (this->week_of_manufacture() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->week_of_manufacture());
+  }
+
+  // int32 year_of_manufacture = 9;
+  if (this->year_of_manufacture() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->year_of_manufacture());
+  }
+
+  // int32 max_horizontal_image_size = 10;
+  if (this->max_horizontal_image_size() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->max_horizontal_image_size());
+  }
+
+  // int32 max_vertical_image_size = 11;
+  if (this->max_vertical_image_size() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->max_vertical_image_size());
+  }
+
+  // int32 horizontal_resolution = 12;
+  if (this->horizontal_resolution() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->horizontal_resolution());
+  }
+
+  // int32 vertical_resoulution = 13;
+  if (this->vertical_resoulution() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->vertical_resoulution());
+  }
+
+  // double gamma = 14;
+  if (this->gamma() != 0) {
+    total_size += 1 + 8;
+  }
+
+  // int32 min_horizontal_rate = 15;
+  if (this->min_horizontal_rate() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->min_horizontal_rate());
+  }
+
+  // int32 max_horizontal_rate = 16;
+  if (this->max_horizontal_rate() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->max_horizontal_rate());
+  }
+
+  // int32 min_vertical_rate = 17;
+  if (this->min_vertical_rate() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->min_vertical_rate());
+  }
+
+  // int32 max_vertical_rate = 18;
+  if (this->max_vertical_rate() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->max_vertical_rate());
+  }
+
+  // double pixel_clock = 19;
+  if (this->pixel_clock() != 0) {
+    total_size += 2 + 8;
+  }
+
+  // int32 max_pixel_clock = 20;
+  if (this->max_pixel_clock() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->max_pixel_clock());
+  }
+
+  // .aspia.system_info.Monitors.Item.InputSignalType input_signal_type = 21;
+  if (this->input_signal_type() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->input_signal_type());
+  }
+
+  // bool default_gtf_supported = 22;
+  if (this->default_gtf_supported() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool suspend_supported = 23;
+  if (this->suspend_supported() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool standby_supported = 24;
+  if (this->standby_supported() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool active_off_supported = 25;
+  if (this->active_off_supported() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool preferred_timing_mode_supported = 26;
+  if (this->preferred_timing_mode_supported() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool srgb_supported = 27;
+  if (this->srgb_supported() != 0) {
+    total_size += 2 + 1;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Monitors_Item::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const Monitors_Item*>(&from));
+}
+
+void Monitors_Item::MergeFrom(const Monitors_Item& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Monitors.Item)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  timings_.MergeFrom(from.timings_);
+  if (from.system_name().size() > 0) {
+
+    system_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.system_name_);
+  }
+  if (from.monitor_name().size() > 0) {
+
+    monitor_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.monitor_name_);
+  }
+  if (from.manufacturer_name().size() > 0) {
+
+    manufacturer_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacturer_name_);
+  }
+  if (from.monitor_id().size() > 0) {
+
+    monitor_id_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.monitor_id_);
+  }
+  if (from.serial_number().size() > 0) {
+
+    serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.serial_number_);
+  }
+  if (from.edid_version() != 0) {
+    set_edid_version(from.edid_version());
+  }
+  if (from.edid_revision() != 0) {
+    set_edid_revision(from.edid_revision());
+  }
+  if (from.week_of_manufacture() != 0) {
+    set_week_of_manufacture(from.week_of_manufacture());
+  }
+  if (from.year_of_manufacture() != 0) {
+    set_year_of_manufacture(from.year_of_manufacture());
+  }
+  if (from.max_horizontal_image_size() != 0) {
+    set_max_horizontal_image_size(from.max_horizontal_image_size());
+  }
+  if (from.max_vertical_image_size() != 0) {
+    set_max_vertical_image_size(from.max_vertical_image_size());
+  }
+  if (from.horizontal_resolution() != 0) {
+    set_horizontal_resolution(from.horizontal_resolution());
+  }
+  if (from.vertical_resoulution() != 0) {
+    set_vertical_resoulution(from.vertical_resoulution());
+  }
+  if (from.gamma() != 0) {
+    set_gamma(from.gamma());
+  }
+  if (from.min_horizontal_rate() != 0) {
+    set_min_horizontal_rate(from.min_horizontal_rate());
+  }
+  if (from.max_horizontal_rate() != 0) {
+    set_max_horizontal_rate(from.max_horizontal_rate());
+  }
+  if (from.min_vertical_rate() != 0) {
+    set_min_vertical_rate(from.min_vertical_rate());
+  }
+  if (from.max_vertical_rate() != 0) {
+    set_max_vertical_rate(from.max_vertical_rate());
+  }
+  if (from.pixel_clock() != 0) {
+    set_pixel_clock(from.pixel_clock());
+  }
+  if (from.max_pixel_clock() != 0) {
+    set_max_pixel_clock(from.max_pixel_clock());
+  }
+  if (from.input_signal_type() != 0) {
+    set_input_signal_type(from.input_signal_type());
+  }
+  if (from.default_gtf_supported() != 0) {
+    set_default_gtf_supported(from.default_gtf_supported());
+  }
+  if (from.suspend_supported() != 0) {
+    set_suspend_supported(from.suspend_supported());
+  }
+  if (from.standby_supported() != 0) {
+    set_standby_supported(from.standby_supported());
+  }
+  if (from.active_off_supported() != 0) {
+    set_active_off_supported(from.active_off_supported());
+  }
+  if (from.preferred_timing_mode_supported() != 0) {
+    set_preferred_timing_mode_supported(from.preferred_timing_mode_supported());
+  }
+  if (from.srgb_supported() != 0) {
+    set_srgb_supported(from.srgb_supported());
+  }
+}
+
+void Monitors_Item::CopyFrom(const Monitors_Item& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Monitors.Item)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Monitors_Item::IsInitialized() const {
+  return true;
+}
+
+void Monitors_Item::Swap(Monitors_Item* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void Monitors_Item::InternalSwap(Monitors_Item* other) {
+  using std::swap;
+  timings_.InternalSwap(&other->timings_);
+  system_name_.Swap(&other->system_name_);
+  monitor_name_.Swap(&other->monitor_name_);
+  manufacturer_name_.Swap(&other->manufacturer_name_);
+  monitor_id_.Swap(&other->monitor_id_);
+  serial_number_.Swap(&other->serial_number_);
+  swap(edid_version_, other->edid_version_);
+  swap(edid_revision_, other->edid_revision_);
+  swap(week_of_manufacture_, other->week_of_manufacture_);
+  swap(year_of_manufacture_, other->year_of_manufacture_);
+  swap(max_horizontal_image_size_, other->max_horizontal_image_size_);
+  swap(max_vertical_image_size_, other->max_vertical_image_size_);
+  swap(horizontal_resolution_, other->horizontal_resolution_);
+  swap(vertical_resoulution_, other->vertical_resoulution_);
+  swap(gamma_, other->gamma_);
+  swap(min_horizontal_rate_, other->min_horizontal_rate_);
+  swap(max_horizontal_rate_, other->max_horizontal_rate_);
+  swap(min_vertical_rate_, other->min_vertical_rate_);
+  swap(max_vertical_rate_, other->max_vertical_rate_);
+  swap(pixel_clock_, other->pixel_clock_);
+  swap(max_pixel_clock_, other->max_pixel_clock_);
+  swap(input_signal_type_, other->input_signal_type_);
+  swap(default_gtf_supported_, other->default_gtf_supported_);
+  swap(suspend_supported_, other->suspend_supported_);
+  swap(standby_supported_, other->standby_supported_);
+  swap(active_off_supported_, other->active_off_supported_);
+  swap(preferred_timing_mode_supported_, other->preferred_timing_mode_supported_);
+  swap(srgb_supported_, other->srgb_supported_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string Monitors_Item::GetTypeName() const {
+  return "aspia.system_info.Monitors.Item";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// Monitors_Item
+
+// string system_name = 1;
+void Monitors_Item::clear_system_name() {
+  system_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& Monitors_Item::system_name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.system_name)
+  return system_name_.GetNoArena();
+}
+void Monitors_Item::set_system_name(const ::std::string& value) {
+  
+  system_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.system_name)
+}
+#if LANG_CXX11
+void Monitors_Item::set_system_name(::std::string&& value) {
+  
+  system_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Monitors.Item.system_name)
+}
+#endif
+void Monitors_Item::set_system_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  system_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Monitors.Item.system_name)
+}
+void Monitors_Item::set_system_name(const char* value, size_t size) {
+  
+  system_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Monitors.Item.system_name)
+}
+::std::string* Monitors_Item::mutable_system_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Monitors.Item.system_name)
+  return system_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* Monitors_Item::release_system_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Monitors.Item.system_name)
+  
+  return system_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void Monitors_Item::set_allocated_system_name(::std::string* system_name) {
+  if (system_name != NULL) {
+    
+  } else {
+    
+  }
+  system_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), system_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Monitors.Item.system_name)
+}
+
+// string monitor_name = 2;
+void Monitors_Item::clear_monitor_name() {
+  monitor_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& Monitors_Item::monitor_name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.monitor_name)
+  return monitor_name_.GetNoArena();
+}
+void Monitors_Item::set_monitor_name(const ::std::string& value) {
+  
+  monitor_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.monitor_name)
+}
+#if LANG_CXX11
+void Monitors_Item::set_monitor_name(::std::string&& value) {
+  
+  monitor_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Monitors.Item.monitor_name)
+}
+#endif
+void Monitors_Item::set_monitor_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  monitor_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Monitors.Item.monitor_name)
+}
+void Monitors_Item::set_monitor_name(const char* value, size_t size) {
+  
+  monitor_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Monitors.Item.monitor_name)
+}
+::std::string* Monitors_Item::mutable_monitor_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Monitors.Item.monitor_name)
+  return monitor_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* Monitors_Item::release_monitor_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Monitors.Item.monitor_name)
+  
+  return monitor_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void Monitors_Item::set_allocated_monitor_name(::std::string* monitor_name) {
+  if (monitor_name != NULL) {
+    
+  } else {
+    
+  }
+  monitor_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), monitor_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Monitors.Item.monitor_name)
+}
+
+// string manufacturer_name = 3;
+void Monitors_Item::clear_manufacturer_name() {
+  manufacturer_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& Monitors_Item::manufacturer_name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.manufacturer_name)
+  return manufacturer_name_.GetNoArena();
+}
+void Monitors_Item::set_manufacturer_name(const ::std::string& value) {
+  
+  manufacturer_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.manufacturer_name)
+}
+#if LANG_CXX11
+void Monitors_Item::set_manufacturer_name(::std::string&& value) {
+  
+  manufacturer_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Monitors.Item.manufacturer_name)
+}
+#endif
+void Monitors_Item::set_manufacturer_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  manufacturer_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Monitors.Item.manufacturer_name)
+}
+void Monitors_Item::set_manufacturer_name(const char* value, size_t size) {
+  
+  manufacturer_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Monitors.Item.manufacturer_name)
+}
+::std::string* Monitors_Item::mutable_manufacturer_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Monitors.Item.manufacturer_name)
+  return manufacturer_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* Monitors_Item::release_manufacturer_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Monitors.Item.manufacturer_name)
+  
+  return manufacturer_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void Monitors_Item::set_allocated_manufacturer_name(::std::string* manufacturer_name) {
+  if (manufacturer_name != NULL) {
+    
+  } else {
+    
+  }
+  manufacturer_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), manufacturer_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Monitors.Item.manufacturer_name)
+}
+
+// string monitor_id = 4;
+void Monitors_Item::clear_monitor_id() {
+  monitor_id_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& Monitors_Item::monitor_id() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.monitor_id)
+  return monitor_id_.GetNoArena();
+}
+void Monitors_Item::set_monitor_id(const ::std::string& value) {
+  
+  monitor_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.monitor_id)
+}
+#if LANG_CXX11
+void Monitors_Item::set_monitor_id(::std::string&& value) {
+  
+  monitor_id_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Monitors.Item.monitor_id)
+}
+#endif
+void Monitors_Item::set_monitor_id(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  monitor_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Monitors.Item.monitor_id)
+}
+void Monitors_Item::set_monitor_id(const char* value, size_t size) {
+  
+  monitor_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Monitors.Item.monitor_id)
+}
+::std::string* Monitors_Item::mutable_monitor_id() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Monitors.Item.monitor_id)
+  return monitor_id_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* Monitors_Item::release_monitor_id() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Monitors.Item.monitor_id)
+  
+  return monitor_id_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void Monitors_Item::set_allocated_monitor_id(::std::string* monitor_id) {
+  if (monitor_id != NULL) {
+    
+  } else {
+    
+  }
+  monitor_id_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), monitor_id);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Monitors.Item.monitor_id)
+}
+
+// string serial_number = 5;
+void Monitors_Item::clear_serial_number() {
+  serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& Monitors_Item::serial_number() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.serial_number)
+  return serial_number_.GetNoArena();
+}
+void Monitors_Item::set_serial_number(const ::std::string& value) {
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.serial_number)
+}
+#if LANG_CXX11
+void Monitors_Item::set_serial_number(::std::string&& value) {
+  
+  serial_number_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Monitors.Item.serial_number)
+}
+#endif
+void Monitors_Item::set_serial_number(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Monitors.Item.serial_number)
+}
+void Monitors_Item::set_serial_number(const char* value, size_t size) {
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Monitors.Item.serial_number)
+}
+::std::string* Monitors_Item::mutable_serial_number() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Monitors.Item.serial_number)
+  return serial_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* Monitors_Item::release_serial_number() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Monitors.Item.serial_number)
+  
+  return serial_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void Monitors_Item::set_allocated_serial_number(::std::string* serial_number) {
+  if (serial_number != NULL) {
+    
+  } else {
+    
+  }
+  serial_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), serial_number);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Monitors.Item.serial_number)
+}
+
+// int32 edid_version = 6;
+void Monitors_Item::clear_edid_version() {
+  edid_version_ = 0;
+}
+::google::protobuf::int32 Monitors_Item::edid_version() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.edid_version)
+  return edid_version_;
+}
+void Monitors_Item::set_edid_version(::google::protobuf::int32 value) {
+  
+  edid_version_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.edid_version)
+}
+
+// int32 edid_revision = 7;
+void Monitors_Item::clear_edid_revision() {
+  edid_revision_ = 0;
+}
+::google::protobuf::int32 Monitors_Item::edid_revision() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.edid_revision)
+  return edid_revision_;
+}
+void Monitors_Item::set_edid_revision(::google::protobuf::int32 value) {
+  
+  edid_revision_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.edid_revision)
+}
+
+// int32 week_of_manufacture = 8;
+void Monitors_Item::clear_week_of_manufacture() {
+  week_of_manufacture_ = 0;
+}
+::google::protobuf::int32 Monitors_Item::week_of_manufacture() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.week_of_manufacture)
+  return week_of_manufacture_;
+}
+void Monitors_Item::set_week_of_manufacture(::google::protobuf::int32 value) {
+  
+  week_of_manufacture_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.week_of_manufacture)
+}
+
+// int32 year_of_manufacture = 9;
+void Monitors_Item::clear_year_of_manufacture() {
+  year_of_manufacture_ = 0;
+}
+::google::protobuf::int32 Monitors_Item::year_of_manufacture() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.year_of_manufacture)
+  return year_of_manufacture_;
+}
+void Monitors_Item::set_year_of_manufacture(::google::protobuf::int32 value) {
+  
+  year_of_manufacture_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.year_of_manufacture)
+}
+
+// int32 max_horizontal_image_size = 10;
+void Monitors_Item::clear_max_horizontal_image_size() {
+  max_horizontal_image_size_ = 0;
+}
+::google::protobuf::int32 Monitors_Item::max_horizontal_image_size() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.max_horizontal_image_size)
+  return max_horizontal_image_size_;
+}
+void Monitors_Item::set_max_horizontal_image_size(::google::protobuf::int32 value) {
+  
+  max_horizontal_image_size_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.max_horizontal_image_size)
+}
+
+// int32 max_vertical_image_size = 11;
+void Monitors_Item::clear_max_vertical_image_size() {
+  max_vertical_image_size_ = 0;
+}
+::google::protobuf::int32 Monitors_Item::max_vertical_image_size() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.max_vertical_image_size)
+  return max_vertical_image_size_;
+}
+void Monitors_Item::set_max_vertical_image_size(::google::protobuf::int32 value) {
+  
+  max_vertical_image_size_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.max_vertical_image_size)
+}
+
+// int32 horizontal_resolution = 12;
+void Monitors_Item::clear_horizontal_resolution() {
+  horizontal_resolution_ = 0;
+}
+::google::protobuf::int32 Monitors_Item::horizontal_resolution() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.horizontal_resolution)
+  return horizontal_resolution_;
+}
+void Monitors_Item::set_horizontal_resolution(::google::protobuf::int32 value) {
+  
+  horizontal_resolution_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.horizontal_resolution)
+}
+
+// int32 vertical_resoulution = 13;
+void Monitors_Item::clear_vertical_resoulution() {
+  vertical_resoulution_ = 0;
+}
+::google::protobuf::int32 Monitors_Item::vertical_resoulution() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.vertical_resoulution)
+  return vertical_resoulution_;
+}
+void Monitors_Item::set_vertical_resoulution(::google::protobuf::int32 value) {
+  
+  vertical_resoulution_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.vertical_resoulution)
+}
+
+// double gamma = 14;
+void Monitors_Item::clear_gamma() {
+  gamma_ = 0;
+}
+double Monitors_Item::gamma() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.gamma)
+  return gamma_;
+}
+void Monitors_Item::set_gamma(double value) {
+  
+  gamma_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.gamma)
+}
+
+// int32 min_horizontal_rate = 15;
+void Monitors_Item::clear_min_horizontal_rate() {
+  min_horizontal_rate_ = 0;
+}
+::google::protobuf::int32 Monitors_Item::min_horizontal_rate() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.min_horizontal_rate)
+  return min_horizontal_rate_;
+}
+void Monitors_Item::set_min_horizontal_rate(::google::protobuf::int32 value) {
+  
+  min_horizontal_rate_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.min_horizontal_rate)
+}
+
+// int32 max_horizontal_rate = 16;
+void Monitors_Item::clear_max_horizontal_rate() {
+  max_horizontal_rate_ = 0;
+}
+::google::protobuf::int32 Monitors_Item::max_horizontal_rate() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.max_horizontal_rate)
+  return max_horizontal_rate_;
+}
+void Monitors_Item::set_max_horizontal_rate(::google::protobuf::int32 value) {
+  
+  max_horizontal_rate_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.max_horizontal_rate)
+}
+
+// int32 min_vertical_rate = 17;
+void Monitors_Item::clear_min_vertical_rate() {
+  min_vertical_rate_ = 0;
+}
+::google::protobuf::int32 Monitors_Item::min_vertical_rate() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.min_vertical_rate)
+  return min_vertical_rate_;
+}
+void Monitors_Item::set_min_vertical_rate(::google::protobuf::int32 value) {
+  
+  min_vertical_rate_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.min_vertical_rate)
+}
+
+// int32 max_vertical_rate = 18;
+void Monitors_Item::clear_max_vertical_rate() {
+  max_vertical_rate_ = 0;
+}
+::google::protobuf::int32 Monitors_Item::max_vertical_rate() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.max_vertical_rate)
+  return max_vertical_rate_;
+}
+void Monitors_Item::set_max_vertical_rate(::google::protobuf::int32 value) {
+  
+  max_vertical_rate_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.max_vertical_rate)
+}
+
+// double pixel_clock = 19;
+void Monitors_Item::clear_pixel_clock() {
+  pixel_clock_ = 0;
+}
+double Monitors_Item::pixel_clock() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.pixel_clock)
+  return pixel_clock_;
+}
+void Monitors_Item::set_pixel_clock(double value) {
+  
+  pixel_clock_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.pixel_clock)
+}
+
+// int32 max_pixel_clock = 20;
+void Monitors_Item::clear_max_pixel_clock() {
+  max_pixel_clock_ = 0;
+}
+::google::protobuf::int32 Monitors_Item::max_pixel_clock() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.max_pixel_clock)
+  return max_pixel_clock_;
+}
+void Monitors_Item::set_max_pixel_clock(::google::protobuf::int32 value) {
+  
+  max_pixel_clock_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.max_pixel_clock)
+}
+
+// .aspia.system_info.Monitors.Item.InputSignalType input_signal_type = 21;
+void Monitors_Item::clear_input_signal_type() {
+  input_signal_type_ = 0;
+}
+::aspia::system_info::Monitors_Item_InputSignalType Monitors_Item::input_signal_type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.input_signal_type)
+  return static_cast< ::aspia::system_info::Monitors_Item_InputSignalType >(input_signal_type_);
+}
+void Monitors_Item::set_input_signal_type(::aspia::system_info::Monitors_Item_InputSignalType value) {
+  
+  input_signal_type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.input_signal_type)
+}
+
+// bool default_gtf_supported = 22;
+void Monitors_Item::clear_default_gtf_supported() {
+  default_gtf_supported_ = false;
+}
+bool Monitors_Item::default_gtf_supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.default_gtf_supported)
+  return default_gtf_supported_;
+}
+void Monitors_Item::set_default_gtf_supported(bool value) {
+  
+  default_gtf_supported_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.default_gtf_supported)
+}
+
+// bool suspend_supported = 23;
+void Monitors_Item::clear_suspend_supported() {
+  suspend_supported_ = false;
+}
+bool Monitors_Item::suspend_supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.suspend_supported)
+  return suspend_supported_;
+}
+void Monitors_Item::set_suspend_supported(bool value) {
+  
+  suspend_supported_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.suspend_supported)
+}
+
+// bool standby_supported = 24;
+void Monitors_Item::clear_standby_supported() {
+  standby_supported_ = false;
+}
+bool Monitors_Item::standby_supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.standby_supported)
+  return standby_supported_;
+}
+void Monitors_Item::set_standby_supported(bool value) {
+  
+  standby_supported_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.standby_supported)
+}
+
+// bool active_off_supported = 25;
+void Monitors_Item::clear_active_off_supported() {
+  active_off_supported_ = false;
+}
+bool Monitors_Item::active_off_supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.active_off_supported)
+  return active_off_supported_;
+}
+void Monitors_Item::set_active_off_supported(bool value) {
+  
+  active_off_supported_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.active_off_supported)
+}
+
+// bool preferred_timing_mode_supported = 26;
+void Monitors_Item::clear_preferred_timing_mode_supported() {
+  preferred_timing_mode_supported_ = false;
+}
+bool Monitors_Item::preferred_timing_mode_supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.preferred_timing_mode_supported)
+  return preferred_timing_mode_supported_;
+}
+void Monitors_Item::set_preferred_timing_mode_supported(bool value) {
+  
+  preferred_timing_mode_supported_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.preferred_timing_mode_supported)
+}
+
+// bool srgb_supported = 27;
+void Monitors_Item::clear_srgb_supported() {
+  srgb_supported_ = false;
+}
+bool Monitors_Item::srgb_supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.srgb_supported)
+  return srgb_supported_;
+}
+void Monitors_Item::set_srgb_supported(bool value) {
+  
+  srgb_supported_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.srgb_supported)
+}
+
+// repeated .aspia.system_info.Monitors.Item.Timing timings = 28;
+int Monitors_Item::timings_size() const {
+  return timings_.size();
+}
+void Monitors_Item::clear_timings() {
+  timings_.Clear();
+}
+const ::aspia::system_info::Monitors_Item_Timing& Monitors_Item::timings(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.timings)
+  return timings_.Get(index);
+}
+::aspia::system_info::Monitors_Item_Timing* Monitors_Item::mutable_timings(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Monitors.Item.timings)
+  return timings_.Mutable(index);
+}
+::aspia::system_info::Monitors_Item_Timing* Monitors_Item::add_timings() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.Monitors.Item.timings)
+  return timings_.Add();
+}
+::google::protobuf::RepeatedPtrField< ::aspia::system_info::Monitors_Item_Timing >*
+Monitors_Item::mutable_timings() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.Monitors.Item.timings)
+  return &timings_;
+}
+const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Monitors_Item_Timing >&
+Monitors_Item::timings() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.Monitors.Item.timings)
+  return timings_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int Monitors::kItemFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+Monitors::Monitors()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.Monitors)
+}
+Monitors::Monitors(const Monitors& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      item_(from.item_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Monitors)
+}
+
+void Monitors::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+Monitors::~Monitors() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.Monitors)
+  SharedDtor();
+}
+
+void Monitors::SharedDtor() {
+}
+
+void Monitors::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const Monitors& Monitors::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+Monitors* Monitors::New(::google::protobuf::Arena* arena) const {
+  Monitors* n = new Monitors;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void Monitors::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.Monitors)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  item_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool Monitors::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.Monitors)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .aspia.system_info.Monitors.Item item = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_item()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.Monitors)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.Monitors)
+  return false;
+#undef DO_
+}
+
+void Monitors::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.Monitors)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .aspia.system_info.Monitors.Item item = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1, this->item(static_cast<int>(i)), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.Monitors)
+}
+
+size_t Monitors::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Monitors)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.system_info.Monitors.Item item = 1;
+  {
+    unsigned int count = static_cast<unsigned int>(this->item_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->item(static_cast<int>(i)));
+    }
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Monitors::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const Monitors*>(&from));
+}
+
+void Monitors::MergeFrom(const Monitors& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Monitors)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  item_.MergeFrom(from.item_);
+}
+
+void Monitors::CopyFrom(const Monitors& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Monitors)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Monitors::IsInitialized() const {
+  return true;
+}
+
+void Monitors::Swap(Monitors* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void Monitors::InternalSwap(Monitors* other) {
+  using std::swap;
+  item_.InternalSwap(&other->item_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string Monitors::GetTypeName() const {
+  return "aspia.system_info.Monitors";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// Monitors
+
+// repeated .aspia.system_info.Monitors.Item item = 1;
+int Monitors::item_size() const {
+  return item_.size();
+}
+void Monitors::clear_item() {
+  item_.Clear();
+}
+const ::aspia::system_info::Monitors_Item& Monitors::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.item)
+  return item_.Get(index);
+}
+::aspia::system_info::Monitors_Item* Monitors::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Monitors.item)
+  return item_.Mutable(index);
+}
+::aspia::system_info::Monitors_Item* Monitors::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.Monitors.item)
+  return item_.Add();
+}
+::google::protobuf::RepeatedPtrField< ::aspia::system_info::Monitors_Item >*
+Monitors::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.Monitors.item)
+  return &item_;
+}
+const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Monitors_Item >&
+Monitors::item() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.Monitors.item)
+  return item_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 

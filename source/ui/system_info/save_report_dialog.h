@@ -31,7 +31,7 @@ public:
     SaveReportDialog() = default;
     ~SaveReportDialog() = default;
 
-    CategoryGuidList& GetSelectedGuidList();
+    const CategoryList& GetCategoryTree();
 
 private:
     BEGIN_MSG_MAP(SaveReportDialog)
@@ -65,12 +65,13 @@ private:
 
     LRESULT OnTreeItemChanged(int control_id, LPNMHDR hdr, BOOL& handled);
 
-    void BuildGuidList(CTreeViewCtrl& treeview, HTREEITEM parent_item);
-
     void AddChildItems(CTreeViewCtrl& treeview,
                        const CSize& icon_size,
                        const CategoryList& tree,
                        HTREEITEM parent_tree_item);
+    static void SetCheckStateForItem(CTreeViewCtrl& treeview,
+                                     HTREEITEM item,
+                                     BOOL state);
     static void SetCheckStateForChildItems(CTreeViewCtrl& treeview,
                                            HTREEITEM parent_item,
                                            BOOL state);
@@ -82,7 +83,6 @@ private:
 
     CImageListManaged imagelist_;
 
-    CategoryGuidList selected_list_;
     CategoryList category_tree_;
     bool checkbox_rebuild_ = false;
 

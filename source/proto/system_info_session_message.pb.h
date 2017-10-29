@@ -32,6 +32,15 @@
 // @@protoc_insertion_point(includes)
 namespace aspia {
 namespace system_info {
+class Monitors;
+class MonitorsDefaultTypeInternal;
+extern MonitorsDefaultTypeInternal _Monitors_default_instance_;
+class Monitors_Item;
+class Monitors_ItemDefaultTypeInternal;
+extern Monitors_ItemDefaultTypeInternal _Monitors_Item_default_instance_;
+class Monitors_Item_Timing;
+class Monitors_Item_TimingDefaultTypeInternal;
+extern Monitors_Item_TimingDefaultTypeInternal _Monitors_Item_Timing_default_instance_;
 class NetworkCards;
 class NetworkCardsDefaultTypeInternal;
 extern NetworkCardsDefaultTypeInternal _NetworkCards_default_instance_;
@@ -110,6 +119,18 @@ void AddDescriptors();
 void InitDefaults();
 }  // namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto
 
+enum Monitors_Item_InputSignalType {
+  Monitors_Item_InputSignalType_INPUT_SIGNAL_TYPE_UNKNOWN = 0,
+  Monitors_Item_InputSignalType_INPUT_SIGNAL_TYPE_ANALOG = 1,
+  Monitors_Item_InputSignalType_INPUT_SIGNAL_TYPE_DIGITAL = 2,
+  Monitors_Item_InputSignalType_Monitors_Item_InputSignalType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  Monitors_Item_InputSignalType_Monitors_Item_InputSignalType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool Monitors_Item_InputSignalType_IsValid(int value);
+const Monitors_Item_InputSignalType Monitors_Item_InputSignalType_InputSignalType_MIN = Monitors_Item_InputSignalType_INPUT_SIGNAL_TYPE_UNKNOWN;
+const Monitors_Item_InputSignalType Monitors_Item_InputSignalType_InputSignalType_MAX = Monitors_Item_InputSignalType_INPUT_SIGNAL_TYPE_DIGITAL;
+const int Monitors_Item_InputSignalType_InputSignalType_ARRAYSIZE = Monitors_Item_InputSignalType_InputSignalType_MAX + 1;
+
 enum Printers_Item_Orientation {
   Printers_Item_Orientation_ORIENTATION_UNKNOWN = 0,
   Printers_Item_Orientation_ORIENTATION_PORTRAIT = 1,
@@ -172,6 +193,567 @@ const int SharedResources_Item_Type_Type_ARRAYSIZE = SharedResources_Item_Type_T
 
 // ===================================================================
 
+class Monitors_Item_Timing : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.Monitors.Item.Timing) */ {
+ public:
+  Monitors_Item_Timing();
+  virtual ~Monitors_Item_Timing();
+
+  Monitors_Item_Timing(const Monitors_Item_Timing& from);
+
+  inline Monitors_Item_Timing& operator=(const Monitors_Item_Timing& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  Monitors_Item_Timing(Monitors_Item_Timing&& from) noexcept
+    : Monitors_Item_Timing() {
+    *this = ::std::move(from);
+  }
+
+  inline Monitors_Item_Timing& operator=(Monitors_Item_Timing&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const Monitors_Item_Timing& default_instance();
+
+  static inline const Monitors_Item_Timing* internal_default_instance() {
+    return reinterpret_cast<const Monitors_Item_Timing*>(
+               &_Monitors_Item_Timing_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    0;
+
+  void Swap(Monitors_Item_Timing* other);
+  friend void swap(Monitors_Item_Timing& a, Monitors_Item_Timing& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Monitors_Item_Timing* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  Monitors_Item_Timing* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const Monitors_Item_Timing& from);
+  void MergeFrom(const Monitors_Item_Timing& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(Monitors_Item_Timing* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int32 width = 1;
+  void clear_width();
+  static const int kWidthFieldNumber = 1;
+  ::google::protobuf::int32 width() const;
+  void set_width(::google::protobuf::int32 value);
+
+  // int32 height = 2;
+  void clear_height();
+  static const int kHeightFieldNumber = 2;
+  ::google::protobuf::int32 height() const;
+  void set_height(::google::protobuf::int32 value);
+
+  // int32 frequency = 3;
+  void clear_frequency();
+  static const int kFrequencyFieldNumber = 3;
+  ::google::protobuf::int32 frequency() const;
+  void set_frequency(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.Monitors.Item.Timing)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::int32 width_;
+  ::google::protobuf::int32 height_;
+  ::google::protobuf::int32 frequency_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class Monitors_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.Monitors.Item) */ {
+ public:
+  Monitors_Item();
+  virtual ~Monitors_Item();
+
+  Monitors_Item(const Monitors_Item& from);
+
+  inline Monitors_Item& operator=(const Monitors_Item& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  Monitors_Item(Monitors_Item&& from) noexcept
+    : Monitors_Item() {
+    *this = ::std::move(from);
+  }
+
+  inline Monitors_Item& operator=(Monitors_Item&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const Monitors_Item& default_instance();
+
+  static inline const Monitors_Item* internal_default_instance() {
+    return reinterpret_cast<const Monitors_Item*>(
+               &_Monitors_Item_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    1;
+
+  void Swap(Monitors_Item* other);
+  friend void swap(Monitors_Item& a, Monitors_Item& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Monitors_Item* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  Monitors_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const Monitors_Item& from);
+  void MergeFrom(const Monitors_Item& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(Monitors_Item* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef Monitors_Item_Timing Timing;
+
+  typedef Monitors_Item_InputSignalType InputSignalType;
+  static const InputSignalType INPUT_SIGNAL_TYPE_UNKNOWN =
+    Monitors_Item_InputSignalType_INPUT_SIGNAL_TYPE_UNKNOWN;
+  static const InputSignalType INPUT_SIGNAL_TYPE_ANALOG =
+    Monitors_Item_InputSignalType_INPUT_SIGNAL_TYPE_ANALOG;
+  static const InputSignalType INPUT_SIGNAL_TYPE_DIGITAL =
+    Monitors_Item_InputSignalType_INPUT_SIGNAL_TYPE_DIGITAL;
+  static inline bool InputSignalType_IsValid(int value) {
+    return Monitors_Item_InputSignalType_IsValid(value);
+  }
+  static const InputSignalType InputSignalType_MIN =
+    Monitors_Item_InputSignalType_InputSignalType_MIN;
+  static const InputSignalType InputSignalType_MAX =
+    Monitors_Item_InputSignalType_InputSignalType_MAX;
+  static const int InputSignalType_ARRAYSIZE =
+    Monitors_Item_InputSignalType_InputSignalType_ARRAYSIZE;
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.system_info.Monitors.Item.Timing timings = 28;
+  int timings_size() const;
+  void clear_timings();
+  static const int kTimingsFieldNumber = 28;
+  const ::aspia::system_info::Monitors_Item_Timing& timings(int index) const;
+  ::aspia::system_info::Monitors_Item_Timing* mutable_timings(int index);
+  ::aspia::system_info::Monitors_Item_Timing* add_timings();
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Monitors_Item_Timing >*
+      mutable_timings();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Monitors_Item_Timing >&
+      timings() const;
+
+  // string system_name = 1;
+  void clear_system_name();
+  static const int kSystemNameFieldNumber = 1;
+  const ::std::string& system_name() const;
+  void set_system_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_system_name(::std::string&& value);
+  #endif
+  void set_system_name(const char* value);
+  void set_system_name(const char* value, size_t size);
+  ::std::string* mutable_system_name();
+  ::std::string* release_system_name();
+  void set_allocated_system_name(::std::string* system_name);
+
+  // string monitor_name = 2;
+  void clear_monitor_name();
+  static const int kMonitorNameFieldNumber = 2;
+  const ::std::string& monitor_name() const;
+  void set_monitor_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_monitor_name(::std::string&& value);
+  #endif
+  void set_monitor_name(const char* value);
+  void set_monitor_name(const char* value, size_t size);
+  ::std::string* mutable_monitor_name();
+  ::std::string* release_monitor_name();
+  void set_allocated_monitor_name(::std::string* monitor_name);
+
+  // string manufacturer_name = 3;
+  void clear_manufacturer_name();
+  static const int kManufacturerNameFieldNumber = 3;
+  const ::std::string& manufacturer_name() const;
+  void set_manufacturer_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_manufacturer_name(::std::string&& value);
+  #endif
+  void set_manufacturer_name(const char* value);
+  void set_manufacturer_name(const char* value, size_t size);
+  ::std::string* mutable_manufacturer_name();
+  ::std::string* release_manufacturer_name();
+  void set_allocated_manufacturer_name(::std::string* manufacturer_name);
+
+  // string monitor_id = 4;
+  void clear_monitor_id();
+  static const int kMonitorIdFieldNumber = 4;
+  const ::std::string& monitor_id() const;
+  void set_monitor_id(const ::std::string& value);
+  #if LANG_CXX11
+  void set_monitor_id(::std::string&& value);
+  #endif
+  void set_monitor_id(const char* value);
+  void set_monitor_id(const char* value, size_t size);
+  ::std::string* mutable_monitor_id();
+  ::std::string* release_monitor_id();
+  void set_allocated_monitor_id(::std::string* monitor_id);
+
+  // string serial_number = 5;
+  void clear_serial_number();
+  static const int kSerialNumberFieldNumber = 5;
+  const ::std::string& serial_number() const;
+  void set_serial_number(const ::std::string& value);
+  #if LANG_CXX11
+  void set_serial_number(::std::string&& value);
+  #endif
+  void set_serial_number(const char* value);
+  void set_serial_number(const char* value, size_t size);
+  ::std::string* mutable_serial_number();
+  ::std::string* release_serial_number();
+  void set_allocated_serial_number(::std::string* serial_number);
+
+  // int32 edid_version = 6;
+  void clear_edid_version();
+  static const int kEdidVersionFieldNumber = 6;
+  ::google::protobuf::int32 edid_version() const;
+  void set_edid_version(::google::protobuf::int32 value);
+
+  // int32 edid_revision = 7;
+  void clear_edid_revision();
+  static const int kEdidRevisionFieldNumber = 7;
+  ::google::protobuf::int32 edid_revision() const;
+  void set_edid_revision(::google::protobuf::int32 value);
+
+  // int32 week_of_manufacture = 8;
+  void clear_week_of_manufacture();
+  static const int kWeekOfManufactureFieldNumber = 8;
+  ::google::protobuf::int32 week_of_manufacture() const;
+  void set_week_of_manufacture(::google::protobuf::int32 value);
+
+  // int32 year_of_manufacture = 9;
+  void clear_year_of_manufacture();
+  static const int kYearOfManufactureFieldNumber = 9;
+  ::google::protobuf::int32 year_of_manufacture() const;
+  void set_year_of_manufacture(::google::protobuf::int32 value);
+
+  // int32 max_horizontal_image_size = 10;
+  void clear_max_horizontal_image_size();
+  static const int kMaxHorizontalImageSizeFieldNumber = 10;
+  ::google::protobuf::int32 max_horizontal_image_size() const;
+  void set_max_horizontal_image_size(::google::protobuf::int32 value);
+
+  // int32 max_vertical_image_size = 11;
+  void clear_max_vertical_image_size();
+  static const int kMaxVerticalImageSizeFieldNumber = 11;
+  ::google::protobuf::int32 max_vertical_image_size() const;
+  void set_max_vertical_image_size(::google::protobuf::int32 value);
+
+  // int32 horizontal_resolution = 12;
+  void clear_horizontal_resolution();
+  static const int kHorizontalResolutionFieldNumber = 12;
+  ::google::protobuf::int32 horizontal_resolution() const;
+  void set_horizontal_resolution(::google::protobuf::int32 value);
+
+  // int32 vertical_resoulution = 13;
+  void clear_vertical_resoulution();
+  static const int kVerticalResoulutionFieldNumber = 13;
+  ::google::protobuf::int32 vertical_resoulution() const;
+  void set_vertical_resoulution(::google::protobuf::int32 value);
+
+  // double gamma = 14;
+  void clear_gamma();
+  static const int kGammaFieldNumber = 14;
+  double gamma() const;
+  void set_gamma(double value);
+
+  // int32 min_horizontal_rate = 15;
+  void clear_min_horizontal_rate();
+  static const int kMinHorizontalRateFieldNumber = 15;
+  ::google::protobuf::int32 min_horizontal_rate() const;
+  void set_min_horizontal_rate(::google::protobuf::int32 value);
+
+  // int32 max_horizontal_rate = 16;
+  void clear_max_horizontal_rate();
+  static const int kMaxHorizontalRateFieldNumber = 16;
+  ::google::protobuf::int32 max_horizontal_rate() const;
+  void set_max_horizontal_rate(::google::protobuf::int32 value);
+
+  // int32 min_vertical_rate = 17;
+  void clear_min_vertical_rate();
+  static const int kMinVerticalRateFieldNumber = 17;
+  ::google::protobuf::int32 min_vertical_rate() const;
+  void set_min_vertical_rate(::google::protobuf::int32 value);
+
+  // int32 max_vertical_rate = 18;
+  void clear_max_vertical_rate();
+  static const int kMaxVerticalRateFieldNumber = 18;
+  ::google::protobuf::int32 max_vertical_rate() const;
+  void set_max_vertical_rate(::google::protobuf::int32 value);
+
+  // double pixel_clock = 19;
+  void clear_pixel_clock();
+  static const int kPixelClockFieldNumber = 19;
+  double pixel_clock() const;
+  void set_pixel_clock(double value);
+
+  // int32 max_pixel_clock = 20;
+  void clear_max_pixel_clock();
+  static const int kMaxPixelClockFieldNumber = 20;
+  ::google::protobuf::int32 max_pixel_clock() const;
+  void set_max_pixel_clock(::google::protobuf::int32 value);
+
+  // .aspia.system_info.Monitors.Item.InputSignalType input_signal_type = 21;
+  void clear_input_signal_type();
+  static const int kInputSignalTypeFieldNumber = 21;
+  ::aspia::system_info::Monitors_Item_InputSignalType input_signal_type() const;
+  void set_input_signal_type(::aspia::system_info::Monitors_Item_InputSignalType value);
+
+  // bool default_gtf_supported = 22;
+  void clear_default_gtf_supported();
+  static const int kDefaultGtfSupportedFieldNumber = 22;
+  bool default_gtf_supported() const;
+  void set_default_gtf_supported(bool value);
+
+  // bool suspend_supported = 23;
+  void clear_suspend_supported();
+  static const int kSuspendSupportedFieldNumber = 23;
+  bool suspend_supported() const;
+  void set_suspend_supported(bool value);
+
+  // bool standby_supported = 24;
+  void clear_standby_supported();
+  static const int kStandbySupportedFieldNumber = 24;
+  bool standby_supported() const;
+  void set_standby_supported(bool value);
+
+  // bool active_off_supported = 25;
+  void clear_active_off_supported();
+  static const int kActiveOffSupportedFieldNumber = 25;
+  bool active_off_supported() const;
+  void set_active_off_supported(bool value);
+
+  // bool preferred_timing_mode_supported = 26;
+  void clear_preferred_timing_mode_supported();
+  static const int kPreferredTimingModeSupportedFieldNumber = 26;
+  bool preferred_timing_mode_supported() const;
+  void set_preferred_timing_mode_supported(bool value);
+
+  // bool srgb_supported = 27;
+  void clear_srgb_supported();
+  static const int kSrgbSupportedFieldNumber = 27;
+  bool srgb_supported() const;
+  void set_srgb_supported(bool value);
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.Monitors.Item)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Monitors_Item_Timing > timings_;
+  ::google::protobuf::internal::ArenaStringPtr system_name_;
+  ::google::protobuf::internal::ArenaStringPtr monitor_name_;
+  ::google::protobuf::internal::ArenaStringPtr manufacturer_name_;
+  ::google::protobuf::internal::ArenaStringPtr monitor_id_;
+  ::google::protobuf::internal::ArenaStringPtr serial_number_;
+  ::google::protobuf::int32 edid_version_;
+  ::google::protobuf::int32 edid_revision_;
+  ::google::protobuf::int32 week_of_manufacture_;
+  ::google::protobuf::int32 year_of_manufacture_;
+  ::google::protobuf::int32 max_horizontal_image_size_;
+  ::google::protobuf::int32 max_vertical_image_size_;
+  ::google::protobuf::int32 horizontal_resolution_;
+  ::google::protobuf::int32 vertical_resoulution_;
+  double gamma_;
+  ::google::protobuf::int32 min_horizontal_rate_;
+  ::google::protobuf::int32 max_horizontal_rate_;
+  ::google::protobuf::int32 min_vertical_rate_;
+  ::google::protobuf::int32 max_vertical_rate_;
+  double pixel_clock_;
+  ::google::protobuf::int32 max_pixel_clock_;
+  int input_signal_type_;
+  bool default_gtf_supported_;
+  bool suspend_supported_;
+  bool standby_supported_;
+  bool active_off_supported_;
+  bool preferred_timing_mode_supported_;
+  bool srgb_supported_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class Monitors : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.Monitors) */ {
+ public:
+  Monitors();
+  virtual ~Monitors();
+
+  Monitors(const Monitors& from);
+
+  inline Monitors& operator=(const Monitors& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  Monitors(Monitors&& from) noexcept
+    : Monitors() {
+    *this = ::std::move(from);
+  }
+
+  inline Monitors& operator=(Monitors&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const Monitors& default_instance();
+
+  static inline const Monitors* internal_default_instance() {
+    return reinterpret_cast<const Monitors*>(
+               &_Monitors_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    2;
+
+  void Swap(Monitors* other);
+  friend void swap(Monitors& a, Monitors& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Monitors* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  Monitors* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const Monitors& from);
+  void MergeFrom(const Monitors& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(Monitors* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef Monitors_Item Item;
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.system_info.Monitors.Item item = 1;
+  int item_size() const;
+  void clear_item();
+  static const int kItemFieldNumber = 1;
+  const ::aspia::system_info::Monitors_Item& item(int index) const;
+  ::aspia::system_info::Monitors_Item* mutable_item(int index);
+  ::aspia::system_info::Monitors_Item* add_item();
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Monitors_Item >*
+      mutable_item();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Monitors_Item >&
+      item() const;
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.Monitors)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Monitors_Item > item_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class Printers_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.Printers.Item) */ {
  public:
   Printers_Item();
@@ -205,7 +787,7 @@ class Printers_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Printers_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    0;
+    3;
 
   void Swap(Printers_Item* other);
   friend void swap(Printers_Item& a, Printers_Item& b) {
@@ -509,7 +1091,7 @@ class Printers : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Printers_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    1;
+    4;
 
   void Swap(Printers* other);
   friend void swap(Printers& a, Printers& b) {
@@ -612,7 +1194,7 @@ class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Services_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    2;
+    5;
 
   void Swap(Services_Item* other);
   friend void swap(Services_Item& a, Services_Item& b) {
@@ -839,7 +1421,7 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Services_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    3;
+    6;
 
   void Swap(Services* other);
   friend void swap(Services& a, Services& b) {
@@ -942,7 +1524,7 @@ class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@
                &_NetworkCards_Item_IpAddress_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    4;
+    7;
 
   void Swap(NetworkCards_Item_IpAddress* other);
   friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
@@ -1060,7 +1642,7 @@ class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_NetworkCards_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
+    8;
 
   void Swap(NetworkCards_Item* other);
   friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
@@ -1350,7 +1932,7 @@ class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_NetworkCards_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    6;
+    9;
 
   void Swap(NetworkCards* other);
   friend void swap(NetworkCards& a, NetworkCards& b) {
@@ -1453,7 +2035,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    10;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -1615,7 +2197,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    11;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -1718,7 +2300,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    12;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -1897,7 +2479,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    13;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -2000,7 +2582,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    14;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -2140,7 +2722,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    15;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -2243,7 +2825,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    13;
+    16;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -2432,7 +3014,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    14;
+    17;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -2535,7 +3117,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    15;
+    18;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -2653,7 +3235,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    16;
+    19;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -2756,7 +3338,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    17;
+    20;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -2926,7 +3508,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    18;
+    21;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -3004,6 +3586,693 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// Monitors_Item_Timing
+
+// int32 width = 1;
+inline void Monitors_Item_Timing::clear_width() {
+  width_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item_Timing::width() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.Timing.width)
+  return width_;
+}
+inline void Monitors_Item_Timing::set_width(::google::protobuf::int32 value) {
+  
+  width_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.Timing.width)
+}
+
+// int32 height = 2;
+inline void Monitors_Item_Timing::clear_height() {
+  height_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item_Timing::height() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.Timing.height)
+  return height_;
+}
+inline void Monitors_Item_Timing::set_height(::google::protobuf::int32 value) {
+  
+  height_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.Timing.height)
+}
+
+// int32 frequency = 3;
+inline void Monitors_Item_Timing::clear_frequency() {
+  frequency_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item_Timing::frequency() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.Timing.frequency)
+  return frequency_;
+}
+inline void Monitors_Item_Timing::set_frequency(::google::protobuf::int32 value) {
+  
+  frequency_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.Timing.frequency)
+}
+
+// -------------------------------------------------------------------
+
+// Monitors_Item
+
+// string system_name = 1;
+inline void Monitors_Item::clear_system_name() {
+  system_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Monitors_Item::system_name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.system_name)
+  return system_name_.GetNoArena();
+}
+inline void Monitors_Item::set_system_name(const ::std::string& value) {
+  
+  system_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.system_name)
+}
+#if LANG_CXX11
+inline void Monitors_Item::set_system_name(::std::string&& value) {
+  
+  system_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Monitors.Item.system_name)
+}
+#endif
+inline void Monitors_Item::set_system_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  system_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Monitors.Item.system_name)
+}
+inline void Monitors_Item::set_system_name(const char* value, size_t size) {
+  
+  system_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Monitors.Item.system_name)
+}
+inline ::std::string* Monitors_Item::mutable_system_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Monitors.Item.system_name)
+  return system_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Monitors_Item::release_system_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Monitors.Item.system_name)
+  
+  return system_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Monitors_Item::set_allocated_system_name(::std::string* system_name) {
+  if (system_name != NULL) {
+    
+  } else {
+    
+  }
+  system_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), system_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Monitors.Item.system_name)
+}
+
+// string monitor_name = 2;
+inline void Monitors_Item::clear_monitor_name() {
+  monitor_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Monitors_Item::monitor_name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.monitor_name)
+  return monitor_name_.GetNoArena();
+}
+inline void Monitors_Item::set_monitor_name(const ::std::string& value) {
+  
+  monitor_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.monitor_name)
+}
+#if LANG_CXX11
+inline void Monitors_Item::set_monitor_name(::std::string&& value) {
+  
+  monitor_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Monitors.Item.monitor_name)
+}
+#endif
+inline void Monitors_Item::set_monitor_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  monitor_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Monitors.Item.monitor_name)
+}
+inline void Monitors_Item::set_monitor_name(const char* value, size_t size) {
+  
+  monitor_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Monitors.Item.monitor_name)
+}
+inline ::std::string* Monitors_Item::mutable_monitor_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Monitors.Item.monitor_name)
+  return monitor_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Monitors_Item::release_monitor_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Monitors.Item.monitor_name)
+  
+  return monitor_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Monitors_Item::set_allocated_monitor_name(::std::string* monitor_name) {
+  if (monitor_name != NULL) {
+    
+  } else {
+    
+  }
+  monitor_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), monitor_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Monitors.Item.monitor_name)
+}
+
+// string manufacturer_name = 3;
+inline void Monitors_Item::clear_manufacturer_name() {
+  manufacturer_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Monitors_Item::manufacturer_name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.manufacturer_name)
+  return manufacturer_name_.GetNoArena();
+}
+inline void Monitors_Item::set_manufacturer_name(const ::std::string& value) {
+  
+  manufacturer_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.manufacturer_name)
+}
+#if LANG_CXX11
+inline void Monitors_Item::set_manufacturer_name(::std::string&& value) {
+  
+  manufacturer_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Monitors.Item.manufacturer_name)
+}
+#endif
+inline void Monitors_Item::set_manufacturer_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  manufacturer_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Monitors.Item.manufacturer_name)
+}
+inline void Monitors_Item::set_manufacturer_name(const char* value, size_t size) {
+  
+  manufacturer_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Monitors.Item.manufacturer_name)
+}
+inline ::std::string* Monitors_Item::mutable_manufacturer_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Monitors.Item.manufacturer_name)
+  return manufacturer_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Monitors_Item::release_manufacturer_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Monitors.Item.manufacturer_name)
+  
+  return manufacturer_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Monitors_Item::set_allocated_manufacturer_name(::std::string* manufacturer_name) {
+  if (manufacturer_name != NULL) {
+    
+  } else {
+    
+  }
+  manufacturer_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), manufacturer_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Monitors.Item.manufacturer_name)
+}
+
+// string monitor_id = 4;
+inline void Monitors_Item::clear_monitor_id() {
+  monitor_id_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Monitors_Item::monitor_id() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.monitor_id)
+  return monitor_id_.GetNoArena();
+}
+inline void Monitors_Item::set_monitor_id(const ::std::string& value) {
+  
+  monitor_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.monitor_id)
+}
+#if LANG_CXX11
+inline void Monitors_Item::set_monitor_id(::std::string&& value) {
+  
+  monitor_id_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Monitors.Item.monitor_id)
+}
+#endif
+inline void Monitors_Item::set_monitor_id(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  monitor_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Monitors.Item.monitor_id)
+}
+inline void Monitors_Item::set_monitor_id(const char* value, size_t size) {
+  
+  monitor_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Monitors.Item.monitor_id)
+}
+inline ::std::string* Monitors_Item::mutable_monitor_id() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Monitors.Item.monitor_id)
+  return monitor_id_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Monitors_Item::release_monitor_id() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Monitors.Item.monitor_id)
+  
+  return monitor_id_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Monitors_Item::set_allocated_monitor_id(::std::string* monitor_id) {
+  if (monitor_id != NULL) {
+    
+  } else {
+    
+  }
+  monitor_id_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), monitor_id);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Monitors.Item.monitor_id)
+}
+
+// string serial_number = 5;
+inline void Monitors_Item::clear_serial_number() {
+  serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Monitors_Item::serial_number() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.serial_number)
+  return serial_number_.GetNoArena();
+}
+inline void Monitors_Item::set_serial_number(const ::std::string& value) {
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.serial_number)
+}
+#if LANG_CXX11
+inline void Monitors_Item::set_serial_number(::std::string&& value) {
+  
+  serial_number_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Monitors.Item.serial_number)
+}
+#endif
+inline void Monitors_Item::set_serial_number(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Monitors.Item.serial_number)
+}
+inline void Monitors_Item::set_serial_number(const char* value, size_t size) {
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Monitors.Item.serial_number)
+}
+inline ::std::string* Monitors_Item::mutable_serial_number() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Monitors.Item.serial_number)
+  return serial_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Monitors_Item::release_serial_number() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Monitors.Item.serial_number)
+  
+  return serial_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Monitors_Item::set_allocated_serial_number(::std::string* serial_number) {
+  if (serial_number != NULL) {
+    
+  } else {
+    
+  }
+  serial_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), serial_number);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Monitors.Item.serial_number)
+}
+
+// int32 edid_version = 6;
+inline void Monitors_Item::clear_edid_version() {
+  edid_version_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item::edid_version() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.edid_version)
+  return edid_version_;
+}
+inline void Monitors_Item::set_edid_version(::google::protobuf::int32 value) {
+  
+  edid_version_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.edid_version)
+}
+
+// int32 edid_revision = 7;
+inline void Monitors_Item::clear_edid_revision() {
+  edid_revision_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item::edid_revision() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.edid_revision)
+  return edid_revision_;
+}
+inline void Monitors_Item::set_edid_revision(::google::protobuf::int32 value) {
+  
+  edid_revision_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.edid_revision)
+}
+
+// int32 week_of_manufacture = 8;
+inline void Monitors_Item::clear_week_of_manufacture() {
+  week_of_manufacture_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item::week_of_manufacture() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.week_of_manufacture)
+  return week_of_manufacture_;
+}
+inline void Monitors_Item::set_week_of_manufacture(::google::protobuf::int32 value) {
+  
+  week_of_manufacture_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.week_of_manufacture)
+}
+
+// int32 year_of_manufacture = 9;
+inline void Monitors_Item::clear_year_of_manufacture() {
+  year_of_manufacture_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item::year_of_manufacture() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.year_of_manufacture)
+  return year_of_manufacture_;
+}
+inline void Monitors_Item::set_year_of_manufacture(::google::protobuf::int32 value) {
+  
+  year_of_manufacture_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.year_of_manufacture)
+}
+
+// int32 max_horizontal_image_size = 10;
+inline void Monitors_Item::clear_max_horizontal_image_size() {
+  max_horizontal_image_size_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item::max_horizontal_image_size() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.max_horizontal_image_size)
+  return max_horizontal_image_size_;
+}
+inline void Monitors_Item::set_max_horizontal_image_size(::google::protobuf::int32 value) {
+  
+  max_horizontal_image_size_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.max_horizontal_image_size)
+}
+
+// int32 max_vertical_image_size = 11;
+inline void Monitors_Item::clear_max_vertical_image_size() {
+  max_vertical_image_size_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item::max_vertical_image_size() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.max_vertical_image_size)
+  return max_vertical_image_size_;
+}
+inline void Monitors_Item::set_max_vertical_image_size(::google::protobuf::int32 value) {
+  
+  max_vertical_image_size_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.max_vertical_image_size)
+}
+
+// int32 horizontal_resolution = 12;
+inline void Monitors_Item::clear_horizontal_resolution() {
+  horizontal_resolution_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item::horizontal_resolution() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.horizontal_resolution)
+  return horizontal_resolution_;
+}
+inline void Monitors_Item::set_horizontal_resolution(::google::protobuf::int32 value) {
+  
+  horizontal_resolution_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.horizontal_resolution)
+}
+
+// int32 vertical_resoulution = 13;
+inline void Monitors_Item::clear_vertical_resoulution() {
+  vertical_resoulution_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item::vertical_resoulution() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.vertical_resoulution)
+  return vertical_resoulution_;
+}
+inline void Monitors_Item::set_vertical_resoulution(::google::protobuf::int32 value) {
+  
+  vertical_resoulution_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.vertical_resoulution)
+}
+
+// double gamma = 14;
+inline void Monitors_Item::clear_gamma() {
+  gamma_ = 0;
+}
+inline double Monitors_Item::gamma() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.gamma)
+  return gamma_;
+}
+inline void Monitors_Item::set_gamma(double value) {
+  
+  gamma_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.gamma)
+}
+
+// int32 min_horizontal_rate = 15;
+inline void Monitors_Item::clear_min_horizontal_rate() {
+  min_horizontal_rate_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item::min_horizontal_rate() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.min_horizontal_rate)
+  return min_horizontal_rate_;
+}
+inline void Monitors_Item::set_min_horizontal_rate(::google::protobuf::int32 value) {
+  
+  min_horizontal_rate_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.min_horizontal_rate)
+}
+
+// int32 max_horizontal_rate = 16;
+inline void Monitors_Item::clear_max_horizontal_rate() {
+  max_horizontal_rate_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item::max_horizontal_rate() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.max_horizontal_rate)
+  return max_horizontal_rate_;
+}
+inline void Monitors_Item::set_max_horizontal_rate(::google::protobuf::int32 value) {
+  
+  max_horizontal_rate_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.max_horizontal_rate)
+}
+
+// int32 min_vertical_rate = 17;
+inline void Monitors_Item::clear_min_vertical_rate() {
+  min_vertical_rate_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item::min_vertical_rate() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.min_vertical_rate)
+  return min_vertical_rate_;
+}
+inline void Monitors_Item::set_min_vertical_rate(::google::protobuf::int32 value) {
+  
+  min_vertical_rate_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.min_vertical_rate)
+}
+
+// int32 max_vertical_rate = 18;
+inline void Monitors_Item::clear_max_vertical_rate() {
+  max_vertical_rate_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item::max_vertical_rate() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.max_vertical_rate)
+  return max_vertical_rate_;
+}
+inline void Monitors_Item::set_max_vertical_rate(::google::protobuf::int32 value) {
+  
+  max_vertical_rate_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.max_vertical_rate)
+}
+
+// double pixel_clock = 19;
+inline void Monitors_Item::clear_pixel_clock() {
+  pixel_clock_ = 0;
+}
+inline double Monitors_Item::pixel_clock() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.pixel_clock)
+  return pixel_clock_;
+}
+inline void Monitors_Item::set_pixel_clock(double value) {
+  
+  pixel_clock_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.pixel_clock)
+}
+
+// int32 max_pixel_clock = 20;
+inline void Monitors_Item::clear_max_pixel_clock() {
+  max_pixel_clock_ = 0;
+}
+inline ::google::protobuf::int32 Monitors_Item::max_pixel_clock() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.max_pixel_clock)
+  return max_pixel_clock_;
+}
+inline void Monitors_Item::set_max_pixel_clock(::google::protobuf::int32 value) {
+  
+  max_pixel_clock_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.max_pixel_clock)
+}
+
+// .aspia.system_info.Monitors.Item.InputSignalType input_signal_type = 21;
+inline void Monitors_Item::clear_input_signal_type() {
+  input_signal_type_ = 0;
+}
+inline ::aspia::system_info::Monitors_Item_InputSignalType Monitors_Item::input_signal_type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.input_signal_type)
+  return static_cast< ::aspia::system_info::Monitors_Item_InputSignalType >(input_signal_type_);
+}
+inline void Monitors_Item::set_input_signal_type(::aspia::system_info::Monitors_Item_InputSignalType value) {
+  
+  input_signal_type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.input_signal_type)
+}
+
+// bool default_gtf_supported = 22;
+inline void Monitors_Item::clear_default_gtf_supported() {
+  default_gtf_supported_ = false;
+}
+inline bool Monitors_Item::default_gtf_supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.default_gtf_supported)
+  return default_gtf_supported_;
+}
+inline void Monitors_Item::set_default_gtf_supported(bool value) {
+  
+  default_gtf_supported_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.default_gtf_supported)
+}
+
+// bool suspend_supported = 23;
+inline void Monitors_Item::clear_suspend_supported() {
+  suspend_supported_ = false;
+}
+inline bool Monitors_Item::suspend_supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.suspend_supported)
+  return suspend_supported_;
+}
+inline void Monitors_Item::set_suspend_supported(bool value) {
+  
+  suspend_supported_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.suspend_supported)
+}
+
+// bool standby_supported = 24;
+inline void Monitors_Item::clear_standby_supported() {
+  standby_supported_ = false;
+}
+inline bool Monitors_Item::standby_supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.standby_supported)
+  return standby_supported_;
+}
+inline void Monitors_Item::set_standby_supported(bool value) {
+  
+  standby_supported_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.standby_supported)
+}
+
+// bool active_off_supported = 25;
+inline void Monitors_Item::clear_active_off_supported() {
+  active_off_supported_ = false;
+}
+inline bool Monitors_Item::active_off_supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.active_off_supported)
+  return active_off_supported_;
+}
+inline void Monitors_Item::set_active_off_supported(bool value) {
+  
+  active_off_supported_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.active_off_supported)
+}
+
+// bool preferred_timing_mode_supported = 26;
+inline void Monitors_Item::clear_preferred_timing_mode_supported() {
+  preferred_timing_mode_supported_ = false;
+}
+inline bool Monitors_Item::preferred_timing_mode_supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.preferred_timing_mode_supported)
+  return preferred_timing_mode_supported_;
+}
+inline void Monitors_Item::set_preferred_timing_mode_supported(bool value) {
+  
+  preferred_timing_mode_supported_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.preferred_timing_mode_supported)
+}
+
+// bool srgb_supported = 27;
+inline void Monitors_Item::clear_srgb_supported() {
+  srgb_supported_ = false;
+}
+inline bool Monitors_Item::srgb_supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.srgb_supported)
+  return srgb_supported_;
+}
+inline void Monitors_Item::set_srgb_supported(bool value) {
+  
+  srgb_supported_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.Monitors.Item.srgb_supported)
+}
+
+// repeated .aspia.system_info.Monitors.Item.Timing timings = 28;
+inline int Monitors_Item::timings_size() const {
+  return timings_.size();
+}
+inline void Monitors_Item::clear_timings() {
+  timings_.Clear();
+}
+inline const ::aspia::system_info::Monitors_Item_Timing& Monitors_Item::timings(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.Item.timings)
+  return timings_.Get(index);
+}
+inline ::aspia::system_info::Monitors_Item_Timing* Monitors_Item::mutable_timings(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Monitors.Item.timings)
+  return timings_.Mutable(index);
+}
+inline ::aspia::system_info::Monitors_Item_Timing* Monitors_Item::add_timings() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.Monitors.Item.timings)
+  return timings_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Monitors_Item_Timing >*
+Monitors_Item::mutable_timings() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.Monitors.Item.timings)
+  return &timings_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Monitors_Item_Timing >&
+Monitors_Item::timings() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.Monitors.Item.timings)
+  return timings_;
+}
+
+// -------------------------------------------------------------------
+
+// Monitors
+
+// repeated .aspia.system_info.Monitors.Item item = 1;
+inline int Monitors::item_size() const {
+  return item_.size();
+}
+inline void Monitors::clear_item() {
+  item_.Clear();
+}
+inline const ::aspia::system_info::Monitors_Item& Monitors::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Monitors.item)
+  return item_.Get(index);
+}
+inline ::aspia::system_info::Monitors_Item* Monitors::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Monitors.item)
+  return item_.Mutable(index);
+}
+inline ::aspia::system_info::Monitors_Item* Monitors::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.Monitors.item)
+  return item_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Monitors_Item >*
+Monitors::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.Monitors.item)
+  return &item_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Monitors_Item >&
+Monitors::item() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.Monitors.item)
+  return item_;
+}
+
+// -------------------------------------------------------------------
+
 // Printers_Item
 
 // string name = 1;
@@ -6296,6 +7565,12 @@ Sessions::item() const {
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -6306,6 +7581,7 @@ Sessions::item() const {
 namespace google {
 namespace protobuf {
 
+template <> struct is_proto_enum< ::aspia::system_info::Monitors_Item_InputSignalType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::Printers_Item_Orientation> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::Services_Item_Status> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::Services_Item_StartupType> : ::google::protobuf::internal::true_type {};

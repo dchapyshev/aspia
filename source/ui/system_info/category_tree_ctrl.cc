@@ -50,7 +50,7 @@ void CategoryTreeCtrl::ExpandChildGroups(HTREEITEM parent_tree_item)
 
     while (child)
     {
-        Category* category = GetItem(child);
+        Category* category = GetItemCategory(child);
 
         if (category && category->type() == Category::Type::GROUP)
         {
@@ -76,8 +76,6 @@ LRESULT CategoryTreeCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
 
     const CSize small_icon_size(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
 
-    category_tree_ = CreateCategoryTree();
-
     if (imagelist_.Create(small_icon_size.cx,
                           small_icon_size.cy,
                           ILC_MASK | ILC_COLOR32,
@@ -86,28 +84,10 @@ LRESULT CategoryTreeCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
         SetImageList(imagelist_);
     }
 
-    AddChildItems(small_icon_size, category_tree_, TVI_ROOT);
-    ExpandChildGroups(TVI_ROOT);
-
     return ret;
 }
 
-CategoryTreeCtrl::ItemType CategoryTreeCtrl::GetItemType(HTREEITEM tree_item) const
-{
-    Category* item = reinterpret_cast<Category*>(GetItemData(tree_item));
-
-    if (!item)
-        return ItemType::UNKNOWN;
-
-    if (item->type() == Category::Type::GROUP)
-        return ItemType::GROUP;
-
-    DCHECK(item->type() == Category::Type::INFO);
-
-    return ItemType::CATEGORY;
-}
-
-Category* CategoryTreeCtrl::GetItem(HTREEITEM tree_item) const
+Category* CategoryTreeCtrl::GetItemCategory(HTREEITEM tree_item) const
 {
     return reinterpret_cast<Category*>(GetItemData(tree_item));
 }
