@@ -12,7 +12,7 @@
 
 #include <memory>
 #include <string>
-#include <vector>
+#include <list>
 
 namespace aspia {
 
@@ -90,15 +90,18 @@ public:
         // data
     };
 
-    class TableParser
+    class SMBiosTable
     {
     public:
-        virtual ~TableParser() = default;
+        virtual ~SMBiosTable() = default;
+
+        using Feature = std::pair<std::string, bool>;
+        using FeatureList = std::list<Feature>;
 
         bool IsValidTable() const;
 
     protected:
-        TableParser(const SMBiosParser& parser, TableType type);
+        SMBiosTable(const SMBiosParser& parser, TableType type);
 
         uint8_t GetByte(uint8_t offset) const;
         uint16_t GetWord(uint8_t offset) const;
@@ -111,10 +114,10 @@ public:
         const uint8_t* data_;
     };
 
-    class BiosTableParser : public TableParser
+    class BiosTable : public SMBiosTable
     {
     public:
-        BiosTableParser(const SMBiosParser& parser);
+        BiosTable(const SMBiosParser& parser);
 
         std::string GetManufacturer() const;
         std::string GetVersion() const;
@@ -124,21 +127,19 @@ public:
         std::string GetFirmwareRevision() const;
         std::string GetAddress() const;
         int GetRuntimeSize() const; // In bytes.
-
-        using Characteristic = std::pair<std::string, bool>;
-        std::vector<Characteristic> GetCharacteristics() const;
+        FeatureList GetCharacteristics() const;
 
     private:
-        DISALLOW_COPY_AND_ASSIGN(BiosTableParser);
+        DISALLOW_COPY_AND_ASSIGN(BiosTable);
     };
 
-    class SystemTableParser : public TableParser
+    class SystemTable : public SMBiosTable
     {
     public:
-        SystemTableParser(const SMBiosParser& parser);
+        SystemTable(const SMBiosParser& parser);
 
         std::string GetManufacturer() const;
-        std::string GetProduct() const;
+        std::string GetProductName() const;
         std::string GetVersion() const;
         std::string GetSerialNumber() const;
         std::string GetUUID() const;
@@ -149,11 +150,29 @@ public:
     private:
         const uint8_t major_version_;
         const uint8_t minor_version_;
-        DISALLOW_COPY_AND_ASSIGN(SystemTableParser);
+        DISALLOW_COPY_AND_ASSIGN(SystemTable);
+    };
+
+    class BaseboardTable : public SMBiosTable
+    {
+    public:
+        BaseboardTable(const SMBiosParser& parser);
+
+        std::string GetManufacturer() const;
+        std::string GetProductName() const;
+        std::string GetVersion() const;
+        std::string GetSerialNumber() const;
+        std::string GetAssetTag() const;
+        FeatureList GetFeatures() const;
+        std::string GetLocationInChassis() const;
+        std::string GetBoardType() const;
+
+    private:
+        DISALLOW_COPY_AND_ASSIGN(BaseboardTable);
     };
 
 private:
-    friend class TableParser;
+    friend class SMBiosTable;
 
     SMBiosParser(std::unique_ptr<uint8_t[]> data, size_t data_size, int table_count);
 

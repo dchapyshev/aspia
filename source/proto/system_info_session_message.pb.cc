@@ -16,11 +16,11 @@
 
 namespace aspia {
 namespace system_info {
-class DmiBios_CharacteristicDefaultTypeInternal {
+class DmiBios_FeatureDefaultTypeInternal {
 public:
- ::google::protobuf::internal::ExplicitlyConstructed<DmiBios_Characteristic>
+ ::google::protobuf::internal::ExplicitlyConstructed<DmiBios_Feature>
      _instance;
-} _DmiBios_Characteristic_default_instance_;
+} _DmiBios_Feature_default_instance_;
 class DmiBiosDefaultTypeInternal {
 public:
  ::google::protobuf::internal::ExplicitlyConstructed<DmiBios>
@@ -31,6 +31,16 @@ public:
  ::google::protobuf::internal::ExplicitlyConstructed<DmiSystem>
      _instance;
 } _DmiSystem_default_instance_;
+class DmiMotherboard_FeatureDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<DmiMotherboard_Feature>
+     _instance;
+} _DmiMotherboard_Feature_default_instance_;
+class DmiMotherboardDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<DmiMotherboard>
+     _instance;
+} _DmiMotherboard_default_instance_;
 class Monitors_Item_TimingDefaultTypeInternal {
 public:
  ::google::protobuf::internal::ExplicitlyConstructed<Monitors_Item_Timing>
@@ -180,19 +190,25 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
 };
 
 void TableStruct::InitDefaultsImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::internal::InitProtobufDefaults();
-  _DmiBios_Characteristic_default_instance_._instance.DefaultConstruct();
+  _DmiBios_Feature_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
-      &_DmiBios_Characteristic_default_instance_);_DmiBios_default_instance_._instance.DefaultConstruct();
+      &_DmiBios_Feature_default_instance_);_DmiBios_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_DmiBios_default_instance_);_DmiSystem_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
-      &_DmiSystem_default_instance_);_Monitors_Item_Timing_default_instance_._instance.DefaultConstruct();
+      &_DmiSystem_default_instance_);_DmiMotherboard_Feature_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_DmiMotherboard_Feature_default_instance_);_DmiMotherboard_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_DmiMotherboard_default_instance_);_Monitors_Item_Timing_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_Monitors_Item_Timing_default_instance_);_Monitors_Item_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
@@ -378,19 +394,19 @@ const int SharedResources_Item::Type_ARRAYSIZE;
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int DmiBios_Characteristic::kNameFieldNumber;
-const int DmiBios_Characteristic::kSupportedFieldNumber;
+const int DmiBios_Feature::kNameFieldNumber;
+const int DmiBios_Feature::kSupportedFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-DmiBios_Characteristic::DmiBios_Characteristic()
+DmiBios_Feature::DmiBios_Feature()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
     protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiBios.Characteristic)
+  // @@protoc_insertion_point(constructor:aspia.system_info.DmiBios.Feature)
 }
-DmiBios_Characteristic::DmiBios_Characteristic(const DmiBios_Characteristic& from)
+DmiBios_Feature::DmiBios_Feature(const DmiBios_Feature& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
@@ -400,44 +416,44 @@ DmiBios_Characteristic::DmiBios_Characteristic(const DmiBios_Characteristic& fro
     name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
   }
   supported_ = from.supported_;
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiBios.Characteristic)
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiBios.Feature)
 }
 
-void DmiBios_Characteristic::SharedCtor() {
+void DmiBios_Feature::SharedCtor() {
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   supported_ = false;
   _cached_size_ = 0;
 }
 
-DmiBios_Characteristic::~DmiBios_Characteristic() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiBios.Characteristic)
+DmiBios_Feature::~DmiBios_Feature() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.DmiBios.Feature)
   SharedDtor();
 }
 
-void DmiBios_Characteristic::SharedDtor() {
+void DmiBios_Feature::SharedDtor() {
   name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
-void DmiBios_Characteristic::SetCachedSize(int size) const {
+void DmiBios_Feature::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const DmiBios_Characteristic& DmiBios_Characteristic::default_instance() {
+const DmiBios_Feature& DmiBios_Feature::default_instance() {
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
   return *internal_default_instance();
 }
 
-DmiBios_Characteristic* DmiBios_Characteristic::New(::google::protobuf::Arena* arena) const {
-  DmiBios_Characteristic* n = new DmiBios_Characteristic;
+DmiBios_Feature* DmiBios_Feature::New(::google::protobuf::Arena* arena) const {
+  DmiBios_Feature* n = new DmiBios_Feature;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void DmiBios_Characteristic::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiBios.Characteristic)
+void DmiBios_Feature::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiBios.Feature)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -447,7 +463,7 @@ void DmiBios_Characteristic::Clear() {
   _internal_metadata_.Clear();
 }
 
-bool DmiBios_Characteristic::MergePartialFromCodedStream(
+bool DmiBios_Feature::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -457,7 +473,7 @@ bool DmiBios_Characteristic::MergePartialFromCodedStream(
               mutable_unknown_fields));
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_string, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiBios.Characteristic)
+  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiBios.Feature)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -472,7 +488,7 @@ bool DmiBios_Characteristic::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->name().data(), static_cast<int>(this->name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBios.Characteristic.name"));
+            "aspia.system_info.DmiBios.Feature.name"));
         } else {
           goto handle_unusual;
         }
@@ -505,17 +521,17 @@ bool DmiBios_Characteristic::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiBios.Characteristic)
+  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiBios.Feature)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiBios.Characteristic)
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiBios.Feature)
   return false;
 #undef DO_
 }
 
-void DmiBios_Characteristic::SerializeWithCachedSizes(
+void DmiBios_Feature::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiBios.Characteristic)
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiBios.Feature)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -524,7 +540,7 @@ void DmiBios_Characteristic::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), static_cast<int>(this->name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBios.Characteristic.name");
+      "aspia.system_info.DmiBios.Feature.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->name(), output);
   }
@@ -536,11 +552,11 @@ void DmiBios_Characteristic::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiBios.Characteristic)
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiBios.Feature)
 }
 
-size_t DmiBios_Characteristic::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiBios.Characteristic)
+size_t DmiBios_Feature::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiBios.Feature)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -564,13 +580,13 @@ size_t DmiBios_Characteristic::ByteSizeLong() const {
   return total_size;
 }
 
-void DmiBios_Characteristic::CheckTypeAndMergeFrom(
+void DmiBios_Feature::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const DmiBios_Characteristic*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const DmiBios_Feature*>(&from));
 }
 
-void DmiBios_Characteristic::MergeFrom(const DmiBios_Characteristic& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiBios.Characteristic)
+void DmiBios_Feature::MergeFrom(const DmiBios_Feature& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiBios.Feature)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -585,22 +601,22 @@ void DmiBios_Characteristic::MergeFrom(const DmiBios_Characteristic& from) {
   }
 }
 
-void DmiBios_Characteristic::CopyFrom(const DmiBios_Characteristic& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiBios.Characteristic)
+void DmiBios_Feature::CopyFrom(const DmiBios_Feature& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiBios.Feature)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool DmiBios_Characteristic::IsInitialized() const {
+bool DmiBios_Feature::IsInitialized() const {
   return true;
 }
 
-void DmiBios_Characteristic::Swap(DmiBios_Characteristic* other) {
+void DmiBios_Feature::Swap(DmiBios_Feature* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void DmiBios_Characteristic::InternalSwap(DmiBios_Characteristic* other) {
+void DmiBios_Feature::InternalSwap(DmiBios_Feature* other) {
   using std::swap;
   name_.Swap(&other->name_);
   swap(supported_, other->supported_);
@@ -608,78 +624,78 @@ void DmiBios_Characteristic::InternalSwap(DmiBios_Characteristic* other) {
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string DmiBios_Characteristic::GetTypeName() const {
-  return "aspia.system_info.DmiBios.Characteristic";
+::std::string DmiBios_Feature::GetTypeName() const {
+  return "aspia.system_info.DmiBios.Feature";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// DmiBios_Characteristic
+// DmiBios_Feature
 
 // string name = 1;
-void DmiBios_Characteristic::clear_name() {
+void DmiBios_Feature::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-const ::std::string& DmiBios_Characteristic::name() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.Characteristic.name)
+const ::std::string& DmiBios_Feature::name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.Feature.name)
   return name_.GetNoArena();
 }
-void DmiBios_Characteristic::set_name(const ::std::string& value) {
+void DmiBios_Feature::set_name(const ::std::string& value) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBios.Characteristic.name)
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBios.Feature.name)
 }
 #if LANG_CXX11
-void DmiBios_Characteristic::set_name(::std::string&& value) {
+void DmiBios_Feature::set_name(::std::string&& value) {
   
   name_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBios.Characteristic.name)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBios.Feature.name)
 }
 #endif
-void DmiBios_Characteristic::set_name(const char* value) {
+void DmiBios_Feature::set_name(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBios.Characteristic.name)
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBios.Feature.name)
 }
-void DmiBios_Characteristic::set_name(const char* value, size_t size) {
+void DmiBios_Feature::set_name(const char* value, size_t size) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBios.Characteristic.name)
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBios.Feature.name)
 }
-::std::string* DmiBios_Characteristic::mutable_name() {
+::std::string* DmiBios_Feature::mutable_name() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBios.Characteristic.name)
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBios.Feature.name)
   return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* DmiBios_Characteristic::release_name() {
-  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBios.Characteristic.name)
+::std::string* DmiBios_Feature::release_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBios.Feature.name)
   
   return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void DmiBios_Characteristic::set_allocated_name(::std::string* name) {
+void DmiBios_Feature::set_allocated_name(::std::string* name) {
   if (name != NULL) {
     
   } else {
     
   }
   name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBios.Characteristic.name)
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBios.Feature.name)
 }
 
 // bool supported = 2;
-void DmiBios_Characteristic::clear_supported() {
+void DmiBios_Feature::clear_supported() {
   supported_ = false;
 }
-bool DmiBios_Characteristic::supported() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.Characteristic.supported)
+bool DmiBios_Feature::supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.Feature.supported)
   return supported_;
 }
-void DmiBios_Characteristic::set_supported(bool value) {
+void DmiBios_Feature::set_supported(bool value) {
   
   supported_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBios.Characteristic.supported)
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBios.Feature.supported)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -695,7 +711,7 @@ const int DmiBios::kBiosRevisionFieldNumber;
 const int DmiBios::kFirmwareRevisionFieldNumber;
 const int DmiBios::kAddressFieldNumber;
 const int DmiBios::kRuntimeSizeFieldNumber;
-const int DmiBios::kCharacteristicFieldNumber;
+const int DmiBios::kFeatureFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 DmiBios::DmiBios()
@@ -709,7 +725,7 @@ DmiBios::DmiBios()
 DmiBios::DmiBios(const DmiBios& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
-      characteristic_(from.characteristic_),
+      feature_(from.feature_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   manufacturer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -793,7 +809,7 @@ void DmiBios::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  characteristic_.Clear();
+  feature_.Clear();
   manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -946,12 +962,12 @@ bool DmiBios::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .aspia.system_info.DmiBios.Characteristic characteristic = 9;
+      // repeated .aspia.system_info.DmiBios.Feature feature = 9;
       case 9: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(74u /* 74 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_characteristic()));
+                input, add_feature()));
         } else {
           goto handle_unusual;
         }
@@ -1054,11 +1070,11 @@ void DmiBios::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(8, this->runtime_size(), output);
   }
 
-  // repeated .aspia.system_info.DmiBios.Characteristic characteristic = 9;
+  // repeated .aspia.system_info.DmiBios.Feature feature = 9;
   for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->characteristic_size()); i < n; i++) {
+      n = static_cast<unsigned int>(this->feature_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      9, this->characteristic(static_cast<int>(i)), output);
+      9, this->feature(static_cast<int>(i)), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -1072,14 +1088,14 @@ size_t DmiBios::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.DmiBios.Characteristic characteristic = 9;
+  // repeated .aspia.system_info.DmiBios.Feature feature = 9;
   {
-    unsigned int count = static_cast<unsigned int>(this->characteristic_size());
+    unsigned int count = static_cast<unsigned int>(this->feature_size());
     total_size += 1UL * count;
     for (unsigned int i = 0; i < count; i++) {
       total_size +=
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->characteristic(static_cast<int>(i)));
+          this->feature(static_cast<int>(i)));
     }
   }
 
@@ -1158,7 +1174,7 @@ void DmiBios::MergeFrom(const DmiBios& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  characteristic_.MergeFrom(from.characteristic_);
+  feature_.MergeFrom(from.feature_);
   if (from.manufacturer().size() > 0) {
 
     manufacturer_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacturer_);
@@ -1208,7 +1224,7 @@ void DmiBios::Swap(DmiBios* other) {
 }
 void DmiBios::InternalSwap(DmiBios* other) {
   using std::swap;
-  characteristic_.InternalSwap(&other->characteristic_);
+  feature_.InternalSwap(&other->feature_);
   manufacturer_.Swap(&other->manufacturer_);
   version_.Swap(&other->version_);
   date_.Swap(&other->date_);
@@ -1574,34 +1590,34 @@ void DmiBios::set_runtime_size(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.system_info.DmiBios.runtime_size)
 }
 
-// repeated .aspia.system_info.DmiBios.Characteristic characteristic = 9;
-int DmiBios::characteristic_size() const {
-  return characteristic_.size();
+// repeated .aspia.system_info.DmiBios.Feature feature = 9;
+int DmiBios::feature_size() const {
+  return feature_.size();
 }
-void DmiBios::clear_characteristic() {
-  characteristic_.Clear();
+void DmiBios::clear_feature() {
+  feature_.Clear();
 }
-const ::aspia::system_info::DmiBios_Characteristic& DmiBios::characteristic(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.characteristic)
-  return characteristic_.Get(index);
+const ::aspia::system_info::DmiBios_Feature& DmiBios::feature(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBios.feature)
+  return feature_.Get(index);
 }
-::aspia::system_info::DmiBios_Characteristic* DmiBios::mutable_characteristic(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBios.characteristic)
-  return characteristic_.Mutable(index);
+::aspia::system_info::DmiBios_Feature* DmiBios::mutable_feature(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBios.feature)
+  return feature_.Mutable(index);
 }
-::aspia::system_info::DmiBios_Characteristic* DmiBios::add_characteristic() {
-  // @@protoc_insertion_point(field_add:aspia.system_info.DmiBios.characteristic)
-  return characteristic_.Add();
+::aspia::system_info::DmiBios_Feature* DmiBios::add_feature() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.DmiBios.feature)
+  return feature_.Add();
 }
-::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBios_Characteristic >*
-DmiBios::mutable_characteristic() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.DmiBios.characteristic)
-  return &characteristic_;
+::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBios_Feature >*
+DmiBios::mutable_feature() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.DmiBios.feature)
+  return &feature_;
 }
-const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBios_Characteristic >&
-DmiBios::characteristic() const {
-  // @@protoc_insertion_point(field_list:aspia.system_info.DmiBios.characteristic)
-  return characteristic_;
+const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBios_Feature >&
+DmiBios::feature() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.DmiBios.feature)
+  return feature_;
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -1610,7 +1626,7 @@ DmiBios::characteristic() const {
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int DmiSystem::kManufacturerFieldNumber;
-const int DmiSystem::kProductFieldNumber;
+const int DmiSystem::kProductNameFieldNumber;
 const int DmiSystem::kVersionFieldNumber;
 const int DmiSystem::kSerialNumberFieldNumber;
 const int DmiSystem::kUuidFieldNumber;
@@ -1636,9 +1652,9 @@ DmiSystem::DmiSystem(const DmiSystem& from)
   if (from.manufacturer().size() > 0) {
     manufacturer_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacturer_);
   }
-  product_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.product().size() > 0) {
-    product_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.product_);
+  product_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.product_name().size() > 0) {
+    product_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.product_name_);
   }
   version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.version().size() > 0) {
@@ -1669,7 +1685,7 @@ DmiSystem::DmiSystem(const DmiSystem& from)
 
 void DmiSystem::SharedCtor() {
   manufacturer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  product_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  product_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   uuid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -1686,7 +1702,7 @@ DmiSystem::~DmiSystem() {
 
 void DmiSystem::SharedDtor() {
   manufacturer_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  product_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  product_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   version_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   uuid_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -1720,7 +1736,7 @@ void DmiSystem::Clear() {
   (void) cached_has_bits;
 
   manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  product_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  product_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   uuid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -1762,16 +1778,16 @@ bool DmiSystem::MergePartialFromCodedStream(
         break;
       }
 
-      // string product = 2;
+      // string product_name = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_product()));
+                input, this->mutable_product_name()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->product().data(), static_cast<int>(this->product().length()),
+            this->product_name().data(), static_cast<int>(this->product_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiSystem.product"));
+            "aspia.system_info.DmiSystem.product_name"));
         } else {
           goto handle_unusual;
         }
@@ -1910,14 +1926,14 @@ void DmiSystem::SerializeWithCachedSizes(
       1, this->manufacturer(), output);
   }
 
-  // string product = 2;
-  if (this->product().size() > 0) {
+  // string product_name = 2;
+  if (this->product_name().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->product().data(), static_cast<int>(this->product().length()),
+      this->product_name().data(), static_cast<int>(this->product_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiSystem.product");
+      "aspia.system_info.DmiSystem.product_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      2, this->product(), output);
+      2, this->product_name(), output);
   }
 
   // string version = 3;
@@ -1998,11 +2014,11 @@ size_t DmiSystem::ByteSizeLong() const {
         this->manufacturer());
   }
 
-  // string product = 2;
-  if (this->product().size() > 0) {
+  // string product_name = 2;
+  if (this->product_name().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->product());
+        this->product_name());
   }
 
   // string version = 3;
@@ -2070,9 +2086,9 @@ void DmiSystem::MergeFrom(const DmiSystem& from) {
 
     manufacturer_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacturer_);
   }
-  if (from.product().size() > 0) {
+  if (from.product_name().size() > 0) {
 
-    product_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.product_);
+    product_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.product_name_);
   }
   if (from.version().size() > 0) {
 
@@ -2118,7 +2134,7 @@ void DmiSystem::Swap(DmiSystem* other) {
 void DmiSystem::InternalSwap(DmiSystem* other) {
   using std::swap;
   manufacturer_.Swap(&other->manufacturer_);
-  product_.Swap(&other->product_);
+  product_name_.Swap(&other->product_name_);
   version_.Swap(&other->version_);
   serial_number_.Swap(&other->serial_number_);
   uuid_.Swap(&other->uuid_);
@@ -2189,57 +2205,57 @@ void DmiSystem::set_allocated_manufacturer(::std::string* manufacturer) {
   // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiSystem.manufacturer)
 }
 
-// string product = 2;
-void DmiSystem::clear_product() {
-  product_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// string product_name = 2;
+void DmiSystem::clear_product_name() {
+  product_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-const ::std::string& DmiSystem::product() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.DmiSystem.product)
-  return product_.GetNoArena();
+const ::std::string& DmiSystem::product_name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiSystem.product_name)
+  return product_name_.GetNoArena();
 }
-void DmiSystem::set_product(const ::std::string& value) {
+void DmiSystem::set_product_name(const ::std::string& value) {
   
-  product_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.system_info.DmiSystem.product)
+  product_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiSystem.product_name)
 }
 #if LANG_CXX11
-void DmiSystem::set_product(::std::string&& value) {
+void DmiSystem::set_product_name(::std::string&& value) {
   
-  product_.SetNoArena(
+  product_name_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiSystem.product)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiSystem.product_name)
 }
 #endif
-void DmiSystem::set_product(const char* value) {
+void DmiSystem::set_product_name(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
-  product_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiSystem.product)
+  product_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiSystem.product_name)
 }
-void DmiSystem::set_product(const char* value, size_t size) {
+void DmiSystem::set_product_name(const char* value, size_t size) {
   
-  product_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  product_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiSystem.product)
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiSystem.product_name)
 }
-::std::string* DmiSystem::mutable_product() {
+::std::string* DmiSystem::mutable_product_name() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiSystem.product)
-  return product_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiSystem.product_name)
+  return product_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* DmiSystem::release_product() {
-  // @@protoc_insertion_point(field_release:aspia.system_info.DmiSystem.product)
+::std::string* DmiSystem::release_product_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiSystem.product_name)
   
-  return product_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return product_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void DmiSystem::set_allocated_product(::std::string* product) {
-  if (product != NULL) {
+void DmiSystem::set_allocated_product_name(::std::string* product_name) {
+  if (product_name != NULL) {
     
   } else {
     
   }
-  product_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), product);
-  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiSystem.product)
+  product_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), product_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiSystem.product_name)
 }
 
 // string version = 3;
@@ -2558,6 +2574,1237 @@ void DmiSystem::set_allocated_family(::std::string* family) {
   }
   family_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), family);
   // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiSystem.family)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DmiMotherboard_Feature::kNameFieldNumber;
+const int DmiMotherboard_Feature::kSupportedFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DmiMotherboard_Feature::DmiMotherboard_Feature()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.DmiMotherboard.Feature)
+}
+DmiMotherboard_Feature::DmiMotherboard_Feature(const DmiMotherboard_Feature& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.name().size() > 0) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  supported_ = from.supported_;
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiMotherboard.Feature)
+}
+
+void DmiMotherboard_Feature::SharedCtor() {
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  supported_ = false;
+  _cached_size_ = 0;
+}
+
+DmiMotherboard_Feature::~DmiMotherboard_Feature() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.DmiMotherboard.Feature)
+  SharedDtor();
+}
+
+void DmiMotherboard_Feature::SharedDtor() {
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void DmiMotherboard_Feature::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DmiMotherboard_Feature& DmiMotherboard_Feature::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+DmiMotherboard_Feature* DmiMotherboard_Feature::New(::google::protobuf::Arena* arena) const {
+  DmiMotherboard_Feature* n = new DmiMotherboard_Feature;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DmiMotherboard_Feature::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiMotherboard.Feature)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  supported_ = false;
+  _internal_metadata_.Clear();
+}
+
+bool DmiMotherboard_Feature::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiMotherboard.Feature)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string name = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->name().data(), static_cast<int>(this->name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiMotherboard.Feature.name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool supported = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &supported_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiMotherboard.Feature)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiMotherboard.Feature)
+  return false;
+#undef DO_
+}
+
+void DmiMotherboard_Feature::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiMotherboard.Feature)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string name = 1;
+  if (this->name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->name().data(), static_cast<int>(this->name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiMotherboard.Feature.name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->name(), output);
+  }
+
+  // bool supported = 2;
+  if (this->supported() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->supported(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiMotherboard.Feature)
+}
+
+size_t DmiMotherboard_Feature::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiMotherboard.Feature)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string name = 1;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->name());
+  }
+
+  // bool supported = 2;
+  if (this->supported() != 0) {
+    total_size += 1 + 1;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DmiMotherboard_Feature::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const DmiMotherboard_Feature*>(&from));
+}
+
+void DmiMotherboard_Feature::MergeFrom(const DmiMotherboard_Feature& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiMotherboard.Feature)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.name().size() > 0) {
+
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  if (from.supported() != 0) {
+    set_supported(from.supported());
+  }
+}
+
+void DmiMotherboard_Feature::CopyFrom(const DmiMotherboard_Feature& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiMotherboard.Feature)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DmiMotherboard_Feature::IsInitialized() const {
+  return true;
+}
+
+void DmiMotherboard_Feature::Swap(DmiMotherboard_Feature* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void DmiMotherboard_Feature::InternalSwap(DmiMotherboard_Feature* other) {
+  using std::swap;
+  name_.Swap(&other->name_);
+  swap(supported_, other->supported_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string DmiMotherboard_Feature::GetTypeName() const {
+  return "aspia.system_info.DmiMotherboard.Feature";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// DmiMotherboard_Feature
+
+// string name = 1;
+void DmiMotherboard_Feature::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiMotherboard_Feature::name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.Feature.name)
+  return name_.GetNoArena();
+}
+void DmiMotherboard_Feature::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.Feature.name)
+}
+#if LANG_CXX11
+void DmiMotherboard_Feature::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.Feature.name)
+}
+#endif
+void DmiMotherboard_Feature::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.Feature.name)
+}
+void DmiMotherboard_Feature::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.Feature.name)
+}
+::std::string* DmiMotherboard_Feature::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.Feature.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiMotherboard_Feature::release_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.Feature.name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiMotherboard_Feature::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.Feature.name)
+}
+
+// bool supported = 2;
+void DmiMotherboard_Feature::clear_supported() {
+  supported_ = false;
+}
+bool DmiMotherboard_Feature::supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.Feature.supported)
+  return supported_;
+}
+void DmiMotherboard_Feature::set_supported(bool value) {
+  
+  supported_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.Feature.supported)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DmiMotherboard::kManufacturerFieldNumber;
+const int DmiMotherboard::kProductNameFieldNumber;
+const int DmiMotherboard::kVersionFieldNumber;
+const int DmiMotherboard::kSerialNumberFieldNumber;
+const int DmiMotherboard::kAssetTagFieldNumber;
+const int DmiMotherboard::kFeatureFieldNumber;
+const int DmiMotherboard::kLocationInChassisFieldNumber;
+const int DmiMotherboard::kTypeFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DmiMotherboard::DmiMotherboard()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.DmiMotherboard)
+}
+DmiMotherboard::DmiMotherboard(const DmiMotherboard& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      feature_(from.feature_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  manufacturer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.manufacturer().size() > 0) {
+    manufacturer_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacturer_);
+  }
+  product_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.product_name().size() > 0) {
+    product_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.product_name_);
+  }
+  version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.version().size() > 0) {
+    version_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.version_);
+  }
+  serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.serial_number().size() > 0) {
+    serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.serial_number_);
+  }
+  asset_tag_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.asset_tag().size() > 0) {
+    asset_tag_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.asset_tag_);
+  }
+  location_in_chassis_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.location_in_chassis().size() > 0) {
+    location_in_chassis_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.location_in_chassis_);
+  }
+  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.type().size() > 0) {
+    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiMotherboard)
+}
+
+void DmiMotherboard::SharedCtor() {
+  manufacturer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  product_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  asset_tag_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  location_in_chassis_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _cached_size_ = 0;
+}
+
+DmiMotherboard::~DmiMotherboard() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.DmiMotherboard)
+  SharedDtor();
+}
+
+void DmiMotherboard::SharedDtor() {
+  manufacturer_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  product_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  version_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  asset_tag_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  location_in_chassis_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void DmiMotherboard::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DmiMotherboard& DmiMotherboard::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+DmiMotherboard* DmiMotherboard::New(::google::protobuf::Arena* arena) const {
+  DmiMotherboard* n = new DmiMotherboard;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DmiMotherboard::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiMotherboard)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  feature_.Clear();
+  manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  product_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  asset_tag_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  location_in_chassis_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _internal_metadata_.Clear();
+}
+
+bool DmiMotherboard::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiMotherboard)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string manufacturer = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_manufacturer()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiMotherboard.manufacturer"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string product_name = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_product_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->product_name().data(), static_cast<int>(this->product_name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiMotherboard.product_name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string version = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_version()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->version().data(), static_cast<int>(this->version().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiMotherboard.version"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string serial_number = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_serial_number()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->serial_number().data(), static_cast<int>(this->serial_number().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiMotherboard.serial_number"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string asset_tag = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_asset_tag()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->asset_tag().data(), static_cast<int>(this->asset_tag().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiMotherboard.asset_tag"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .aspia.system_info.DmiMotherboard.Feature feature = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_feature()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string location_in_chassis = 7;
+      case 7: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(58u /* 58 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_location_in_chassis()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->location_in_chassis().data(), static_cast<int>(this->location_in_chassis().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiMotherboard.location_in_chassis"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string type = 8;
+      case 8: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->type().data(), static_cast<int>(this->type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiMotherboard.type"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiMotherboard)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiMotherboard)
+  return false;
+#undef DO_
+}
+
+void DmiMotherboard::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiMotherboard)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string manufacturer = 1;
+  if (this->manufacturer().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiMotherboard.manufacturer");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->manufacturer(), output);
+  }
+
+  // string product_name = 2;
+  if (this->product_name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->product_name().data(), static_cast<int>(this->product_name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiMotherboard.product_name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->product_name(), output);
+  }
+
+  // string version = 3;
+  if (this->version().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->version().data(), static_cast<int>(this->version().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiMotherboard.version");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->version(), output);
+  }
+
+  // string serial_number = 4;
+  if (this->serial_number().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->serial_number().data(), static_cast<int>(this->serial_number().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiMotherboard.serial_number");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      4, this->serial_number(), output);
+  }
+
+  // string asset_tag = 5;
+  if (this->asset_tag().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->asset_tag().data(), static_cast<int>(this->asset_tag().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiMotherboard.asset_tag");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      5, this->asset_tag(), output);
+  }
+
+  // repeated .aspia.system_info.DmiMotherboard.Feature feature = 6;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->feature_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      6, this->feature(static_cast<int>(i)), output);
+  }
+
+  // string location_in_chassis = 7;
+  if (this->location_in_chassis().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->location_in_chassis().data(), static_cast<int>(this->location_in_chassis().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiMotherboard.location_in_chassis");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      7, this->location_in_chassis(), output);
+  }
+
+  // string type = 8;
+  if (this->type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->type().data(), static_cast<int>(this->type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiMotherboard.type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      8, this->type(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiMotherboard)
+}
+
+size_t DmiMotherboard::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiMotherboard)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.system_info.DmiMotherboard.Feature feature = 6;
+  {
+    unsigned int count = static_cast<unsigned int>(this->feature_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->feature(static_cast<int>(i)));
+    }
+  }
+
+  // string manufacturer = 1;
+  if (this->manufacturer().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->manufacturer());
+  }
+
+  // string product_name = 2;
+  if (this->product_name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->product_name());
+  }
+
+  // string version = 3;
+  if (this->version().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->version());
+  }
+
+  // string serial_number = 4;
+  if (this->serial_number().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->serial_number());
+  }
+
+  // string asset_tag = 5;
+  if (this->asset_tag().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->asset_tag());
+  }
+
+  // string location_in_chassis = 7;
+  if (this->location_in_chassis().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->location_in_chassis());
+  }
+
+  // string type = 8;
+  if (this->type().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->type());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DmiMotherboard::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const DmiMotherboard*>(&from));
+}
+
+void DmiMotherboard::MergeFrom(const DmiMotherboard& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiMotherboard)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  feature_.MergeFrom(from.feature_);
+  if (from.manufacturer().size() > 0) {
+
+    manufacturer_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacturer_);
+  }
+  if (from.product_name().size() > 0) {
+
+    product_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.product_name_);
+  }
+  if (from.version().size() > 0) {
+
+    version_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.version_);
+  }
+  if (from.serial_number().size() > 0) {
+
+    serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.serial_number_);
+  }
+  if (from.asset_tag().size() > 0) {
+
+    asset_tag_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.asset_tag_);
+  }
+  if (from.location_in_chassis().size() > 0) {
+
+    location_in_chassis_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.location_in_chassis_);
+  }
+  if (from.type().size() > 0) {
+
+    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
+  }
+}
+
+void DmiMotherboard::CopyFrom(const DmiMotherboard& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiMotherboard)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DmiMotherboard::IsInitialized() const {
+  return true;
+}
+
+void DmiMotherboard::Swap(DmiMotherboard* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void DmiMotherboard::InternalSwap(DmiMotherboard* other) {
+  using std::swap;
+  feature_.InternalSwap(&other->feature_);
+  manufacturer_.Swap(&other->manufacturer_);
+  product_name_.Swap(&other->product_name_);
+  version_.Swap(&other->version_);
+  serial_number_.Swap(&other->serial_number_);
+  asset_tag_.Swap(&other->asset_tag_);
+  location_in_chassis_.Swap(&other->location_in_chassis_);
+  type_.Swap(&other->type_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string DmiMotherboard::GetTypeName() const {
+  return "aspia.system_info.DmiMotherboard";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// DmiMotherboard
+
+// string manufacturer = 1;
+void DmiMotherboard::clear_manufacturer() {
+  manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiMotherboard::manufacturer() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.manufacturer)
+  return manufacturer_.GetNoArena();
+}
+void DmiMotherboard::set_manufacturer(const ::std::string& value) {
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.manufacturer)
+}
+#if LANG_CXX11
+void DmiMotherboard::set_manufacturer(::std::string&& value) {
+  
+  manufacturer_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.manufacturer)
+}
+#endif
+void DmiMotherboard::set_manufacturer(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.manufacturer)
+}
+void DmiMotherboard::set_manufacturer(const char* value, size_t size) {
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.manufacturer)
+}
+::std::string* DmiMotherboard::mutable_manufacturer() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.manufacturer)
+  return manufacturer_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiMotherboard::release_manufacturer() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.manufacturer)
+  
+  return manufacturer_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiMotherboard::set_allocated_manufacturer(::std::string* manufacturer) {
+  if (manufacturer != NULL) {
+    
+  } else {
+    
+  }
+  manufacturer_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), manufacturer);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.manufacturer)
+}
+
+// string product_name = 2;
+void DmiMotherboard::clear_product_name() {
+  product_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiMotherboard::product_name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.product_name)
+  return product_name_.GetNoArena();
+}
+void DmiMotherboard::set_product_name(const ::std::string& value) {
+  
+  product_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.product_name)
+}
+#if LANG_CXX11
+void DmiMotherboard::set_product_name(::std::string&& value) {
+  
+  product_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.product_name)
+}
+#endif
+void DmiMotherboard::set_product_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  product_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.product_name)
+}
+void DmiMotherboard::set_product_name(const char* value, size_t size) {
+  
+  product_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.product_name)
+}
+::std::string* DmiMotherboard::mutable_product_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.product_name)
+  return product_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiMotherboard::release_product_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.product_name)
+  
+  return product_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiMotherboard::set_allocated_product_name(::std::string* product_name) {
+  if (product_name != NULL) {
+    
+  } else {
+    
+  }
+  product_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), product_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.product_name)
+}
+
+// string version = 3;
+void DmiMotherboard::clear_version() {
+  version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiMotherboard::version() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.version)
+  return version_.GetNoArena();
+}
+void DmiMotherboard::set_version(const ::std::string& value) {
+  
+  version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.version)
+}
+#if LANG_CXX11
+void DmiMotherboard::set_version(::std::string&& value) {
+  
+  version_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.version)
+}
+#endif
+void DmiMotherboard::set_version(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.version)
+}
+void DmiMotherboard::set_version(const char* value, size_t size) {
+  
+  version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.version)
+}
+::std::string* DmiMotherboard::mutable_version() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.version)
+  return version_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiMotherboard::release_version() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.version)
+  
+  return version_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiMotherboard::set_allocated_version(::std::string* version) {
+  if (version != NULL) {
+    
+  } else {
+    
+  }
+  version_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), version);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.version)
+}
+
+// string serial_number = 4;
+void DmiMotherboard::clear_serial_number() {
+  serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiMotherboard::serial_number() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.serial_number)
+  return serial_number_.GetNoArena();
+}
+void DmiMotherboard::set_serial_number(const ::std::string& value) {
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.serial_number)
+}
+#if LANG_CXX11
+void DmiMotherboard::set_serial_number(::std::string&& value) {
+  
+  serial_number_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.serial_number)
+}
+#endif
+void DmiMotherboard::set_serial_number(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.serial_number)
+}
+void DmiMotherboard::set_serial_number(const char* value, size_t size) {
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.serial_number)
+}
+::std::string* DmiMotherboard::mutable_serial_number() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.serial_number)
+  return serial_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiMotherboard::release_serial_number() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.serial_number)
+  
+  return serial_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiMotherboard::set_allocated_serial_number(::std::string* serial_number) {
+  if (serial_number != NULL) {
+    
+  } else {
+    
+  }
+  serial_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), serial_number);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.serial_number)
+}
+
+// string asset_tag = 5;
+void DmiMotherboard::clear_asset_tag() {
+  asset_tag_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiMotherboard::asset_tag() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.asset_tag)
+  return asset_tag_.GetNoArena();
+}
+void DmiMotherboard::set_asset_tag(const ::std::string& value) {
+  
+  asset_tag_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.asset_tag)
+}
+#if LANG_CXX11
+void DmiMotherboard::set_asset_tag(::std::string&& value) {
+  
+  asset_tag_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.asset_tag)
+}
+#endif
+void DmiMotherboard::set_asset_tag(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  asset_tag_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.asset_tag)
+}
+void DmiMotherboard::set_asset_tag(const char* value, size_t size) {
+  
+  asset_tag_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.asset_tag)
+}
+::std::string* DmiMotherboard::mutable_asset_tag() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.asset_tag)
+  return asset_tag_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiMotherboard::release_asset_tag() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.asset_tag)
+  
+  return asset_tag_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiMotherboard::set_allocated_asset_tag(::std::string* asset_tag) {
+  if (asset_tag != NULL) {
+    
+  } else {
+    
+  }
+  asset_tag_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), asset_tag);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.asset_tag)
+}
+
+// repeated .aspia.system_info.DmiMotherboard.Feature feature = 6;
+int DmiMotherboard::feature_size() const {
+  return feature_.size();
+}
+void DmiMotherboard::clear_feature() {
+  feature_.Clear();
+}
+const ::aspia::system_info::DmiMotherboard_Feature& DmiMotherboard::feature(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.feature)
+  return feature_.Get(index);
+}
+::aspia::system_info::DmiMotherboard_Feature* DmiMotherboard::mutable_feature(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.feature)
+  return feature_.Mutable(index);
+}
+::aspia::system_info::DmiMotherboard_Feature* DmiMotherboard::add_feature() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.DmiMotherboard.feature)
+  return feature_.Add();
+}
+::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiMotherboard_Feature >*
+DmiMotherboard::mutable_feature() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.DmiMotherboard.feature)
+  return &feature_;
+}
+const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiMotherboard_Feature >&
+DmiMotherboard::feature() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.DmiMotherboard.feature)
+  return feature_;
+}
+
+// string location_in_chassis = 7;
+void DmiMotherboard::clear_location_in_chassis() {
+  location_in_chassis_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiMotherboard::location_in_chassis() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.location_in_chassis)
+  return location_in_chassis_.GetNoArena();
+}
+void DmiMotherboard::set_location_in_chassis(const ::std::string& value) {
+  
+  location_in_chassis_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.location_in_chassis)
+}
+#if LANG_CXX11
+void DmiMotherboard::set_location_in_chassis(::std::string&& value) {
+  
+  location_in_chassis_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.location_in_chassis)
+}
+#endif
+void DmiMotherboard::set_location_in_chassis(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  location_in_chassis_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.location_in_chassis)
+}
+void DmiMotherboard::set_location_in_chassis(const char* value, size_t size) {
+  
+  location_in_chassis_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.location_in_chassis)
+}
+::std::string* DmiMotherboard::mutable_location_in_chassis() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.location_in_chassis)
+  return location_in_chassis_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiMotherboard::release_location_in_chassis() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.location_in_chassis)
+  
+  return location_in_chassis_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiMotherboard::set_allocated_location_in_chassis(::std::string* location_in_chassis) {
+  if (location_in_chassis != NULL) {
+    
+  } else {
+    
+  }
+  location_in_chassis_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), location_in_chassis);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.location_in_chassis)
+}
+
+// string type = 8;
+void DmiMotherboard::clear_type() {
+  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiMotherboard::type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.type)
+  return type_.GetNoArena();
+}
+void DmiMotherboard::set_type(const ::std::string& value) {
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.type)
+}
+#if LANG_CXX11
+void DmiMotherboard::set_type(::std::string&& value) {
+  
+  type_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.type)
+}
+#endif
+void DmiMotherboard::set_type(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.type)
+}
+void DmiMotherboard::set_type(const char* value, size_t size) {
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.type)
+}
+::std::string* DmiMotherboard::mutable_type() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.type)
+  return type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiMotherboard::release_type() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.type)
+  
+  return type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiMotherboard::set_allocated_type(::std::string* type) {
+  if (type != NULL) {
+    
+  } else {
+    
+  }
+  type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), type);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.type)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

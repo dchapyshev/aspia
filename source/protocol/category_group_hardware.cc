@@ -74,18 +74,17 @@ void CategoryDmiBios::Parse(std::shared_ptr<OutputProxy> output, const std::stri
     if (message.runtime_size() != 0)
         output->AddParam(IDI_BIOS, "Runtime Size", std::to_string(message.runtime_size()), "Bytes");
 
-    if (message.characteristic_size() > 0)
+    if (message.feature_size() > 0)
     {
         Output::Group group(output, "Supported Features", IDI_BIOS);
 
-        for (int index = 0; index < message.characteristic_size(); ++index)
+        for (int index = 0; index < message.feature_size(); ++index)
         {
-            const system_info::DmiBios::Characteristic& characteristic =
-                message.characteristic(index);
+            const system_info::DmiBios::Feature& feature = message.feature(index);
 
-            output->AddParam(characteristic.supported() ? IDI_CHECKED : IDI_UNCHECKED,
-                             characteristic.name(),
-                             characteristic.supported() ? "Yes" : "No");
+            output->AddParam(feature.supported() ? IDI_CHECKED : IDI_UNCHECKED,
+                             feature.name(),
+                             feature.supported() ? "Yes" : "No");
         }
     }
 }
@@ -96,7 +95,7 @@ std::string CategoryDmiBios::Serialize()
     if (!parser)
         return std::string();
 
-    SMBiosParser::BiosTableParser table(*parser);
+    SMBiosParser::BiosTable table(*parser);
     if (!table.IsValidTable())
         return std::string();
 
@@ -111,14 +110,13 @@ std::string CategoryDmiBios::Serialize()
     message.set_address(table.GetAddress());
     message.set_runtime_size(table.GetRuntimeSize());
 
-    std::vector<SMBiosParser::BiosTableParser::Characteristic> characteristics =
-        table.GetCharacteristics();
+    SMBiosParser::BiosTable::FeatureList feature_list = table.GetCharacteristics();
 
-    for (const auto& characteristic : characteristics)
+    for (const auto& feature : feature_list)
     {
-        system_info::DmiBios::Characteristic* ch = message.add_characteristic();
-        ch->set_name(characteristic.first);
-        ch->set_supported(characteristic.second);
+        system_info::DmiBios::Feature* item = message.add_feature();
+        item->set_name(feature.first);
+        item->set_supported(feature.second);
     }
 
     return message.SerializeAsString();
@@ -161,8 +159,8 @@ void CategoryDmiSystem::Parse(std::shared_ptr<OutputProxy> output, const std::st
     if (!message.manufacturer().empty())
         output->AddParam(IDI_COMPUTER, "Manufacturer", message.manufacturer());
 
-    if (!message.product().empty())
-        output->AddParam(IDI_COMPUTER, "Product", message.product());
+    if (!message.product_name().empty())
+        output->AddParam(IDI_COMPUTER, "Product Name", message.product_name());
 
     if (!message.version().empty())
         output->AddParam(IDI_COMPUTER, "Version", message.version());
@@ -189,14 +187,14 @@ std::string CategoryDmiSystem::Serialize()
     if (!parser)
         return std::string();
 
-    SMBiosParser::SystemTableParser table(*parser);
+    SMBiosParser::SystemTable table(*parser);
     if (!table.IsValidTable())
         return std::string();
 
     system_info::DmiSystem message;
 
     message.set_manufacturer(table.GetManufacturer());
-    message.set_product(table.GetProduct());
+    message.set_product_name(table.GetProductName());
     message.set_version(table.GetVersion());
     message.set_serial_number(table.GetSerialNumber());
     message.set_uuid(table.GetUUID());
@@ -228,15 +226,85 @@ const char* CategoryDmiMotherboard::Guid() const
 
 void CategoryDmiMotherboard::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::DmiMotherboard message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    if (!message.manufacturer().empty())
+        output->AddParam(IDI_MOTHERBOARD, "Manufacturer", message.manufacturer());
+
+    if (!message.product_name().empty())
+        output->AddParam(IDI_MOTHERBOARD, "Product Name", message.product_name());
+
+    if (!message.version().empty())
+        output->AddParam(IDI_MOTHERBOARD, "Version", message.version());
+
+    if (!message.serial_number().empty())
+        output->AddParam(IDI_MOTHERBOARD, "Serial Number", message.serial_number());
+
+    if (!message.asset_tag().empty())
+        output->AddParam(IDI_MOTHERBOARD, "Asset Tag", message.asset_tag());
+
+    if (message.feature_size() > 0)
+    {
+        Output::Group group(output, "Supported Features", IDI_MOTHERBOARD);
+
+        for (int index = 0; index < message.feature_size(); ++index)
+        {
+            const system_info::DmiMotherboard::Feature& feature = message.feature(index);
+
+            output->AddParam(feature.supported() ? IDI_CHECKED : IDI_UNCHECKED,
+                             feature.name(),
+                             feature.supported() ? "Yes" : "No");
+        }
+    }
+
+    if (!message.location_in_chassis().empty())
+        output->AddParam(IDI_MOTHERBOARD, "Location in chassis", message.location_in_chassis());
+
+    if (!message.type().empty())
+        output->AddParam(IDI_MOTHERBOARD, "Type", message.type());
 }
 
 std::string CategoryDmiMotherboard::Serialize()
 {
-    // TODO
-    return std::string();
+    std::unique_ptr<SMBiosParser> parser = ReadSMBios();
+    if (!parser)
+        return std::string();
+
+    SMBiosParser::BaseboardTable table(*parser);
+    if (!table.IsValidTable())
+        return std::string();
+
+    system_info::DmiMotherboard message;
+
+    message.set_manufacturer(table.GetManufacturer());
+    message.set_product_name(table.GetProductName());
+    message.set_version(table.GetVersion());
+    message.set_serial_number(table.GetSerialNumber());
+    message.set_asset_tag(table.GetAssetTag());
+    message.set_location_in_chassis(table.GetLocationInChassis());
+    message.set_type(table.GetBoardType());
+
+    SMBiosParser::BaseboardTable::FeatureList feature_list = table.GetFeatures();
+
+    for (const auto& feature : feature_list)
+    {
+        system_info::DmiMotherboard::Feature* item = message.add_feature();
+        item->set_name(feature.first);
+        item->set_supported(feature.second);
+    }
+
+    return message.SerializeAsString();
 }
 
 //

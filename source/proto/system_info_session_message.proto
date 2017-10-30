@@ -13,33 +13,51 @@ package aspia.system_info;
 
 message DmiBios
 {
-    message Characteristic
+    message Feature
     {
         string name    = 1;
         bool supported = 2;
     }
 
-    string manufacturer                    = 1;
-    string version                         = 2;
-    string date                            = 3;
-    int32 size                             = 4;
-    string bios_revision                   = 5;
-    string firmware_revision               = 6;
-    string address                         = 7;
-    int32 runtime_size                     = 8;
-    repeated Characteristic characteristic = 9;
+    string manufacturer      = 1;
+    string version           = 2;
+    string date              = 3;
+    int32 size               = 4;
+    string bios_revision     = 5;
+    string firmware_revision = 6;
+    string address           = 7;
+    int32 runtime_size       = 8;
+    repeated Feature feature = 9;
 }
 
 message DmiSystem
 {
     string manufacturer  = 1;
-    string product       = 2;
+    string product_name  = 2;
     string version       = 3;
     string serial_number = 4;
     string uuid          = 5;
     string wakeup_type   = 6;
     string sku_number    = 7;
     string family        = 8;
+}
+
+message DmiMotherboard
+{
+    message Feature
+    {
+        string name    = 1;
+        bool supported = 2;
+    }
+
+    string manufacturer        = 1;
+    string product_name        = 2;
+    string version             = 3;
+    string serial_number       = 4;
+    string asset_tag           = 5;
+    repeated Feature feature   = 6;
+    string location_in_chassis = 7;
+    string type                = 8;
 }
 
 message Monitors

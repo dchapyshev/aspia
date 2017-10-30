@@ -154,41 +154,41 @@ SMBiosParser::Table* SMBiosParser::GetTable(TableType type) const
 }
 
 //
-// TableParser
+// SMBiosTable
 //
 
-SMBiosParser::TableParser::TableParser(const SMBiosParser& parser, TableType type)
+SMBiosParser::SMBiosTable::SMBiosTable(const SMBiosParser& parser, TableType type)
     : data_(reinterpret_cast<uint8_t*>(parser.GetTable(type)))
 {
     // Nothing
 }
 
-bool SMBiosParser::TableParser::IsValidTable() const
+bool SMBiosParser::SMBiosTable::IsValidTable() const
 {
     return data_ != nullptr;
 }
 
-uint8_t SMBiosParser::TableParser::GetByte(uint8_t offset) const
+uint8_t SMBiosParser::SMBiosTable::GetByte(uint8_t offset) const
 {
     return data_[offset];
 }
 
-uint16_t SMBiosParser::TableParser::GetWord(uint8_t offset) const
+uint16_t SMBiosParser::SMBiosTable::GetWord(uint8_t offset) const
 {
     return *reinterpret_cast<const uint16_t*>(GetPointer(offset));
 }
 
-uint32_t SMBiosParser::TableParser::GetDword(uint8_t offset) const
+uint32_t SMBiosParser::SMBiosTable::GetDword(uint8_t offset) const
 {
     return *reinterpret_cast<const uint32_t*>(GetPointer(offset));
 }
 
-uint64_t SMBiosParser::TableParser::GetQword(uint8_t offset) const
+uint64_t SMBiosParser::SMBiosTable::GetQword(uint8_t offset) const
 {
     return *reinterpret_cast<const uint64_t*>(GetPointer(offset));
 }
 
-std::string SMBiosParser::TableParser::GetString(uint8_t offset) const
+std::string SMBiosParser::SMBiosTable::GetString(uint8_t offset) const
 {
     uint8_t handle = GetByte(offset);
     if (!handle)
@@ -209,42 +209,42 @@ std::string SMBiosParser::TableParser::GetString(uint8_t offset) const
     return string;
 }
 
-const uint8_t* SMBiosParser::TableParser::GetPointer(uint8_t offset) const
+const uint8_t* SMBiosParser::SMBiosTable::GetPointer(uint8_t offset) const
 {
     return &data_[offset];
 }
 
 //
-// BiosTableParser
+// BiosTable
 //
 
-SMBiosParser::BiosTableParser::BiosTableParser(const SMBiosParser& parser)
-    : TableParser(parser, TABLE_TYPE_BIOS)
+SMBiosParser::BiosTable::BiosTable(const SMBiosParser& parser)
+    : SMBiosTable(parser, TABLE_TYPE_BIOS)
 {
     // Nothing
 }
 
-std::string SMBiosParser::BiosTableParser::GetManufacturer() const
+std::string SMBiosParser::BiosTable::GetManufacturer() const
 {
     return GetString(0x04);
 }
 
-std::string SMBiosParser::BiosTableParser::GetVersion() const
+std::string SMBiosParser::BiosTable::GetVersion() const
 {
     return GetString(0x05);
 }
 
-std::string SMBiosParser::BiosTableParser::GetDate() const
+std::string SMBiosParser::BiosTable::GetDate() const
 {
     return GetString(0x08);
 }
 
-int SMBiosParser::BiosTableParser::GetSize() const
+int SMBiosParser::BiosTable::GetSize() const
 {
     return (GetByte(0x09) + 1) << 6;
 }
 
-std::string SMBiosParser::BiosTableParser::GetBiosRevision() const
+std::string SMBiosParser::BiosTable::GetBiosRevision() const
 {
     uint8_t major = GetByte(0x14);
     uint8_t minor = GetByte(0x15);
@@ -255,7 +255,7 @@ std::string SMBiosParser::BiosTableParser::GetBiosRevision() const
     return std::string();
 }
 
-std::string SMBiosParser::BiosTableParser::GetFirmwareRevision() const
+std::string SMBiosParser::BiosTable::GetFirmwareRevision() const
 {
     uint8_t major = GetByte(0x16);
     uint8_t minor = GetByte(0x17);
@@ -266,7 +266,7 @@ std::string SMBiosParser::BiosTableParser::GetFirmwareRevision() const
     return std::string();
 }
 
-std::string SMBiosParser::BiosTableParser::GetAddress() const
+std::string SMBiosParser::BiosTable::GetAddress() const
 {
     uint16_t address = GetWord(0x06);
 
@@ -276,7 +276,7 @@ std::string SMBiosParser::BiosTableParser::GetAddress() const
     return std::string();
 }
 
-int SMBiosParser::BiosTableParser::GetRuntimeSize() const
+int SMBiosParser::BiosTable::GetRuntimeSize() const
 {
     uint16_t address = GetWord(0x06);
     if (address == 0)
@@ -290,10 +290,9 @@ int SMBiosParser::BiosTableParser::GetRuntimeSize() const
     return (code >> 10) * 1024;
 }
 
-std::vector<SMBiosParser::BiosTableParser::Characteristic>
-    SMBiosParser::BiosTableParser::GetCharacteristics() const
+SMBiosParser::BiosTable::FeatureList SMBiosParser::BiosTable::GetCharacteristics() const
 {
-    std::vector<Characteristic> table;
+    FeatureList feature_list;
 
     static const char* characteristics_names[] =
     {
@@ -334,7 +333,7 @@ std::vector<SMBiosParser::BiosTableParser::Characteristic>
         for (int i = 4; i <= 31; ++i)
         {
             bool is_supported = (characteristics & (1ULL << i)) ? true : false;
-            table.emplace_back(characteristics_names[i - 3], is_supported);
+            feature_list.emplace_back(characteristics_names[i - 3], is_supported);
         }
     }
 
@@ -359,7 +358,7 @@ std::vector<SMBiosParser::BiosTableParser::Characteristic>
         for (int i = 0; i <= 7; ++i)
         {
             bool is_supported = (characteristics1 & (1 << i)) ? true : false;
-            table.emplace_back(characteristics1_names[i], is_supported);
+            feature_list.emplace_back(characteristics1_names[i], is_supported);
         }
     }
 
@@ -377,46 +376,46 @@ std::vector<SMBiosParser::BiosTableParser::Characteristic>
         for (int i = 0; i <= 2; ++i)
         {
             bool is_supported = (characteristics2 & (1 << i)) ? true : false;
-            table.emplace_back(characteristics2_names[i], is_supported);
+            feature_list.emplace_back(characteristics2_names[i], is_supported);
         }
     }
 
-    return table;
+    return feature_list;
 }
 
 //
-// SystemTableParser
+// SystemTable
 //
 
-SMBiosParser::SystemTableParser::SystemTableParser(const SMBiosParser& parser)
-    : TableParser(parser, TABLE_TYPE_SYSTEM),
+SMBiosParser::SystemTable::SystemTable(const SMBiosParser& parser)
+    : SMBiosTable(parser, TABLE_TYPE_SYSTEM),
       major_version_(parser.GetMajorVersion()),
       minor_version_(parser.GetMinorVersion())
 {
     // Nothing
 }
 
-std::string SMBiosParser::SystemTableParser::GetManufacturer() const
+std::string SMBiosParser::SystemTable::GetManufacturer() const
 {
     return GetString(0x04);
 }
 
-std::string SMBiosParser::SystemTableParser::GetProduct() const
+std::string SMBiosParser::SystemTable::GetProductName() const
 {
     return GetString(0x05);
 }
 
-std::string SMBiosParser::SystemTableParser::GetVersion() const
+std::string SMBiosParser::SystemTable::GetVersion() const
 {
     return GetString(0x06);
 }
 
-std::string SMBiosParser::SystemTableParser::GetSerialNumber() const
+std::string SMBiosParser::SystemTable::GetSerialNumber() const
 {
     return GetString(0x07);
 }
 
-std::string SMBiosParser::SystemTableParser::GetUUID() const
+std::string SMBiosParser::SystemTable::GetUUID() const
 {
     uint8_t table_length = GetByte(0x01);
     if (table_length < 0x19)
@@ -448,7 +447,7 @@ std::string SMBiosParser::SystemTableParser::GetUUID() const
                         ptr[8], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13], ptr[14], ptr[15]);
 }
 
-std::string SMBiosParser::SystemTableParser::GetWakeupType() const
+std::string SMBiosParser::SystemTable::GetWakeupType() const
 {
     uint8_t table_length = GetByte(0x01);
     if (table_length < 0x19)
@@ -485,7 +484,7 @@ std::string SMBiosParser::SystemTableParser::GetWakeupType() const
     }
 }
 
-std::string SMBiosParser::SystemTableParser::GetSKUNumber() const
+std::string SMBiosParser::SystemTable::GetSKUNumber() const
 {
     uint8_t table_length = GetByte(0x01);
     if (table_length < 0x1B)
@@ -494,13 +493,121 @@ std::string SMBiosParser::SystemTableParser::GetSKUNumber() const
     return GetString(0x19);
 }
 
-std::string SMBiosParser::SystemTableParser::GetFamily() const
+std::string SMBiosParser::SystemTable::GetFamily() const
 {
     uint8_t table_length = GetByte(0x01);
     if (table_length < 0x1B)
         return std::string();
 
     return GetString(0x1A);
+}
+
+//
+// BaseboardTable
+//
+
+SMBiosParser::BaseboardTable::BaseboardTable(const SMBiosParser& parser)
+    : SMBiosTable(parser, TABLE_TYPE_BASEBOARD)
+{
+    // Nothing
+}
+
+std::string SMBiosParser::BaseboardTable::GetManufacturer() const
+{
+    return GetString(0x04);
+}
+
+std::string SMBiosParser::BaseboardTable::GetProductName() const
+{
+    return GetString(0x05);
+}
+
+std::string SMBiosParser::BaseboardTable::GetVersion() const
+{
+    return GetString(0x06);
+}
+
+std::string SMBiosParser::BaseboardTable::GetSerialNumber() const
+{
+    return GetString(0x07);
+}
+
+std::string SMBiosParser::BaseboardTable::GetAssetTag() const
+{
+    uint8_t table_length = GetByte(0x01);
+    if (table_length < 0x09)
+        return std::string();
+
+    return GetString(0x08);
+}
+
+SMBiosParser::BaseboardTable::FeatureList SMBiosParser::BaseboardTable::GetFeatures() const
+{
+    uint8_t table_length = GetByte(0x01);
+    if (table_length < 0x0A)
+        return FeatureList();
+
+    uint8_t features = GetByte(0x09);
+    if ((features & 0x1F) == 0)
+        return FeatureList();
+
+    static const char* feature_names[] =
+    {
+        "Board is a hosting board", // 0
+        "Board requires at least one daughter board",
+        "Board is removable",
+        "Board is replaceable",
+        "Board is hot swappable" // 4
+    };
+
+    FeatureList list;
+
+    for (int i = 0; i <= 4; ++i)
+    {
+        bool is_supported = (features & (1 << i)) ? true : false;
+        list.emplace_back(feature_names[i], is_supported);
+    }
+
+    return list;
+}
+
+std::string SMBiosParser::BaseboardTable::GetLocationInChassis() const
+{
+    uint8_t table_length = GetByte(0x01);
+    if (table_length < 0x0E)
+        return std::string();
+
+    return GetString(0x0A);
+}
+
+std::string SMBiosParser::BaseboardTable::GetBoardType() const
+{
+    uint8_t table_length = GetByte(0x01);
+    if (table_length < 0x0E)
+        return std::string();
+
+    static const char* type_names[] =
+    {
+        "Unknown", // 0x01
+        "Other",
+        "Server Blade",
+        "Connectivity Switch",
+        "System Management Module",
+        "Processor Module",
+        "I/O Module",
+        "Memory Module",
+        "Daughter Board",
+        "Motherboard",
+        "Processor+Memory Module",
+        "Processor+I/O Module",
+        "Interconnect Board" // 0x0D
+    };
+
+    uint8_t type = GetByte(0x0D);
+    if (!type || type > 0x0D)
+        return std::string();
+
+    return type_names[type - 1];
 }
 
 } // namespace aspia
