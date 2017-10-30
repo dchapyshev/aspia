@@ -1,19 +1,18 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/devices/smbios_parser.cc
+// FILE:            base/devices/smbios.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/devices/smbios_parser.h"
+#include "base/devices/smbios.h"
 #include "base/strings/string_util.h"
 #include "base/logging.h"
 
 namespace aspia {
 
 // static
-std::unique_ptr<SMBiosParser> SMBiosParser::Create(std::unique_ptr<uint8_t[]> data,
-                                                   size_t data_size)
+std::unique_ptr<SMBios> SMBios::Create(std::unique_ptr<uint8_t[]> data, size_t data_size)
 {
     if (!data || !data_size)
         return nullptr;
@@ -27,11 +26,10 @@ std::unique_ptr<SMBiosParser> SMBiosParser::Create(std::unique_ptr<uint8_t[]> da
         return nullptr;
     }
 
-    return std::unique_ptr<SMBiosParser>(
-        new SMBiosParser(std::move(data), data_size, table_count));
+    return std::unique_ptr<SMBios>(new SMBios(std::move(data), data_size, table_count));
 }
 
-SMBiosParser::SMBiosParser(std::unique_ptr<uint8_t[]> data, size_t data_size, int table_count)
+SMBios::SMBios(std::unique_ptr<uint8_t[]> data, size_t data_size, int table_count)
     : data_(std::move(data)),
       data_size_(data_size),
       table_count_(table_count)
@@ -41,98 +39,87 @@ SMBiosParser::SMBiosParser(std::unique_ptr<uint8_t[]> data, size_t data_size, in
     DCHECK(table_count_ != 0);
 }
 
-uint8_t SMBiosParser::GetMajorVersion() const
+uint8_t SMBios::GetMajorVersion() const
 {
     SMBiosData* smbios = reinterpret_cast<SMBiosData*>(data_.get());
     return smbios->smbios_major_version;
 }
 
-uint8_t SMBiosParser::GetMinorVersion() const
+uint8_t SMBios::GetMinorVersion() const
 {
     SMBiosData* smbios = reinterpret_cast<SMBiosData*>(data_.get());
     return smbios->smbios_minor_version;
 }
 
 // static
-int SMBiosParser::GetTableCount(uint8_t* table_data, uint32_t length)
+int SMBios::GetTableCount(const uint8_t* table_data, uint32_t length)
 {
     int count = 0;
 
-    uint8_t* offset = table_data;
-    uint8_t* end = table_data + length;
+    const uint8_t* pos = table_data;
+    const uint8_t* end = table_data + length;
 
-    while (offset < end)
+    while (pos < end)
     {
-        // Get the table header to read te length.
-        Table* table = reinterpret_cast<Table*>(offset);
-
-        // Increase the offset.
-        offset += table->length;
+        // Increase the position by the length of the structure.
+        pos += pos[1];
 
         // Increses the offset to point to the next header that's after the strings at the end
         // of the structure.
-        while (*reinterpret_cast<uint16_t*>(offset) != 0 && offset < end)
-        {
-            ++offset;
-        }
+        while (*reinterpret_cast<const uint16_t*>(pos) != 0 && pos < end)
+            ++pos;
 
         // Points to the next stucture thas after two null bytes at the end of the strings.
-        offset += 2;
+        pos += 2;
 
-        // Increase tables count.
         ++count;
     }
 
     return count;
 }
 
-SMBiosParser::Table* SMBiosParser::GetTable(TableType type) const
+const uint8_t* SMBios::GetTable(TableType type) const
 {
     SMBiosData* smbios = reinterpret_cast<SMBiosData*>(data_.get());
 
-    uint8_t* start = &smbios->smbios_table_data[0];
-    uint8_t* end = start + smbios->length;
-    uint8_t* pos = start;
+    const uint8_t* start = &smbios->smbios_table_data[0];
+    const uint8_t* end = start + smbios->length;
+    const uint8_t* pos = start;
 
     int table_index = 0;
 
     while (table_index < table_count_ && pos + 4 <= end)
     {
-        Table* table = reinterpret_cast<Table*>(pos);
+        const uint8_t table_type = pos[0];
+        const uint8_t table_length = pos[1];
 
-        if (table->length < 4)
+        if (table_length < 4)
         {
             // If a short entry is found(less than 4 bytes), not only it is invalid, but we
             // cannot reliably locate the next entry. Better stop at this point, and let the
             // user know his / her table is broken.
-            LOG(WARNING) << "Invalid SMBIOS table length: " << table->length;
+            LOG(WARNING) << "Invalid SMBIOS table length: " << table_length;
             break;
         }
 
-        // Stop decoding at end of table marker.
-        if (table->type == TABLE_TYPE_END_OF_TABLE)
+        // The table of the specified type is found.
+        if (table_type == type)
+            return pos;
+
+        if (table_type == TABLE_TYPE_END_OF_TABLE)
             break;
 
         // Look for the next handle.
-        uint8_t* next = pos + table->length;
-        while (static_cast<size_t>(next - start + 1) < smbios->length &&
+        const uint8_t* next = pos + table_length;
+        while (static_cast<uintptr_t>(next - start + 1) < smbios->length &&
                (next[0] != 0 || next[1] != 0))
         {
             ++next;
         }
 
-        // Points to the next stucture thas after two null bytes at the end of the strings.
-        next += 2;
+        // Points to the next table thas after two null bytes at the end of the strings.
+        pos = next + 2;
 
-        if (static_cast<size_t>(next - start) <= smbios->length && table->type == type)
-        {
-            // The table of the specified type is found.
-            return table;
-        }
-
-        pos = next;
-
-        // Increase table index.
         ++table_index;
     }
 
@@ -143,10 +130,10 @@ SMBiosParser::Table* SMBiosParser::GetTable(TableType type) const
                      << (table_index + 1) << "/" << table_count_;
     }
 
-    if (pos - start != smbios->length)
+    if (static_cast<uintptr_t>(pos - start) != smbios->length)
     {
         LOG(WARNING) << "The announced size does not match the processed: "
-                     << static_cast<size_t>(pos - start) << "/" << smbios->length;
+                     << static_cast<uintptr_t>(pos - start) << "/" << smbios->length;
     }
 
     // Table not found.
@@ -157,38 +144,38 @@ SMBiosParser::Table* SMBiosParser::GetTable(TableType type) const
 // SMBiosTable
 //
 
-SMBiosParser::SMBiosTable::SMBiosTable(const SMBiosParser& parser, TableType type)
-    : data_(reinterpret_cast<uint8_t*>(parser.GetTable(type)))
+SMBios::Table::Table(const SMBios& smbios, TableType type)
+    : data_(smbios.GetTable(type))
 {
     // Nothing
 }
 
-bool SMBiosParser::SMBiosTable::IsValidTable() const
+bool SMBios::Table::IsValid() const
 {
     return data_ != nullptr;
 }
 
-uint8_t SMBiosParser::SMBiosTable::GetByte(uint8_t offset) const
+uint8_t SMBios::Table::GetByte(uint8_t offset) const
 {
     return data_[offset];
 }
 
-uint16_t SMBiosParser::SMBiosTable::GetWord(uint8_t offset) const
+uint16_t SMBios::Table::GetWord(uint8_t offset) const
 {
     return *reinterpret_cast<const uint16_t*>(GetPointer(offset));
 }
 
-uint32_t SMBiosParser::SMBiosTable::GetDword(uint8_t offset) const
+uint32_t SMBios::Table::GetDword(uint8_t offset) const
 {
     return *reinterpret_cast<const uint32_t*>(GetPointer(offset));
 }
 
-uint64_t SMBiosParser::SMBiosTable::GetQword(uint8_t offset) const
+uint64_t SMBios::Table::GetQword(uint8_t offset) const
 {
     return *reinterpret_cast<const uint64_t*>(GetPointer(offset));
 }
 
-std::string SMBiosParser::SMBiosTable::GetString(uint8_t offset) const
+std::string SMBios::Table::GetString(uint8_t offset) const
 {
     uint8_t handle = GetByte(offset);
     if (!handle)
@@ -209,7 +196,7 @@ std::string SMBiosParser::SMBiosTable::GetString(uint8_t offset) const
     return string;
 }
 
-const uint8_t* SMBiosParser::SMBiosTable::GetPointer(uint8_t offset) const
+const uint8_t* SMBios::Table::GetPointer(uint8_t offset) const
 {
     return &data_[offset];
 }
@@ -218,33 +205,33 @@ const uint8_t* SMBiosParser::SMBiosTable::GetPointer(uint8_t offset) const
 // BiosTable
 //
 
-SMBiosParser::BiosTable::BiosTable(const SMBiosParser& parser)
-    : SMBiosTable(parser, TABLE_TYPE_BIOS)
+SMBios::BiosTable::BiosTable(const SMBios& smbios)
+    : Table(smbios, TABLE_TYPE_BIOS)
 {
     // Nothing
 }
 
-std::string SMBiosParser::BiosTable::GetManufacturer() const
+std::string SMBios::BiosTable::GetManufacturer() const
 {
     return GetString(0x04);
 }
 
-std::string SMBiosParser::BiosTable::GetVersion() const
+std::string SMBios::BiosTable::GetVersion() const
 {
     return GetString(0x05);
 }
 
-std::string SMBiosParser::BiosTable::GetDate() const
+std::string SMBios::BiosTable::GetDate() const
 {
     return GetString(0x08);
 }
 
-int SMBiosParser::BiosTable::GetSize() const
+int SMBios::BiosTable::GetSize() const
 {
     return (GetByte(0x09) + 1) << 6;
 }
 
-std::string SMBiosParser::BiosTable::GetBiosRevision() const
+std::string SMBios::BiosTable::GetBiosRevision() const
 {
     uint8_t major = GetByte(0x14);
     uint8_t minor = GetByte(0x15);
@@ -255,7 +242,7 @@ std::string SMBiosParser::BiosTable::GetBiosRevision() const
     return std::string();
 }
 
-std::string SMBiosParser::BiosTable::GetFirmwareRevision() const
+std::string SMBios::BiosTable::GetFirmwareRevision() const
 {
     uint8_t major = GetByte(0x16);
     uint8_t minor = GetByte(0x17);
@@ -266,7 +253,7 @@ std::string SMBiosParser::BiosTable::GetFirmwareRevision() const
     return std::string();
 }
 
-std::string SMBiosParser::BiosTable::GetAddress() const
+std::string SMBios::BiosTable::GetAddress() const
 {
     uint16_t address = GetWord(0x06);
 
@@ -276,7 +263,7 @@ std::string SMBiosParser::BiosTable::GetAddress() const
     return std::string();
 }
 
-int SMBiosParser::BiosTable::GetRuntimeSize() const
+int SMBios::BiosTable::GetRuntimeSize() const
 {
     uint16_t address = GetWord(0x06);
     if (address == 0)
@@ -290,7 +277,7 @@ int SMBiosParser::BiosTable::GetRuntimeSize() const
     return (code >> 10) * 1024;
 }
 
-SMBiosParser::BiosTable::FeatureList SMBiosParser::BiosTable::GetCharacteristics() const
+SMBios::BiosTable::FeatureList SMBios::BiosTable::GetCharacteristics() const
 {
     FeatureList feature_list;
 
@@ -387,35 +374,35 @@ SMBiosParser::BiosTable::FeatureList SMBiosParser::BiosTable::GetCharacteristics
 // SystemTable
 //
 
-SMBiosParser::SystemTable::SystemTable(const SMBiosParser& parser)
-    : SMBiosTable(parser, TABLE_TYPE_SYSTEM),
-      major_version_(parser.GetMajorVersion()),
-      minor_version_(parser.GetMinorVersion())
+SMBios::SystemTable::SystemTable(const SMBios& smbios)
+    : Table(smbios, TABLE_TYPE_SYSTEM),
+      major_version_(smbios.GetMajorVersion()),
+      minor_version_(smbios.GetMinorVersion())
 {
     // Nothing
 }
 
-std::string SMBiosParser::SystemTable::GetManufacturer() const
+std::string SMBios::SystemTable::GetManufacturer() const
 {
     return GetString(0x04);
 }
 
-std::string SMBiosParser::SystemTable::GetProductName() const
+std::string SMBios::SystemTable::GetProductName() const
 {
     return GetString(0x05);
 }
 
-std::string SMBiosParser::SystemTable::GetVersion() const
+std::string SMBios::SystemTable::GetVersion() const
 {
     return GetString(0x06);
 }
 
-std::string SMBiosParser::SystemTable::GetSerialNumber() const
+std::string SMBios::SystemTable::GetSerialNumber() const
 {
     return GetString(0x07);
 }
 
-std::string SMBiosParser::SystemTable::GetUUID() const
+std::string SMBios::SystemTable::GetUUID() const
 {
     uint8_t table_length = GetByte(0x01);
     if (table_length < 0x19)
@@ -447,7 +434,7 @@ std::string SMBiosParser::SystemTable::GetUUID() const
                         ptr[8], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13], ptr[14], ptr[15]);
 }
 
-std::string SMBiosParser::SystemTable::GetWakeupType() const
+std::string SMBios::SystemTable::GetWakeupType() const
 {
     uint8_t table_length = GetByte(0x01);
     if (table_length < 0x19)
@@ -484,7 +471,7 @@ std::string SMBiosParser::SystemTable::GetWakeupType() const
     }
 }
 
-std::string SMBiosParser::SystemTable::GetSKUNumber() const
+std::string SMBios::SystemTable::GetSKUNumber() const
 {
     uint8_t table_length = GetByte(0x01);
     if (table_length < 0x1B)
@@ -493,7 +480,7 @@ std::string SMBiosParser::SystemTable::GetSKUNumber() const
     return GetString(0x19);
 }
 
-std::string SMBiosParser::SystemTable::GetFamily() const
+std::string SMBios::SystemTable::GetFamily() const
 {
     uint8_t table_length = GetByte(0x01);
     if (table_length < 0x1B)
@@ -506,33 +493,33 @@ std::string SMBiosParser::SystemTable::GetFamily() const
 // BaseboardTable
 //
 
-SMBiosParser::BaseboardTable::BaseboardTable(const SMBiosParser& parser)
-    : SMBiosTable(parser, TABLE_TYPE_BASEBOARD)
+SMBios::BaseboardTable::BaseboardTable(const SMBios& smbios)
+    : Table(smbios, TABLE_TYPE_BASEBOARD)
 {
     // Nothing
 }
 
-std::string SMBiosParser::BaseboardTable::GetManufacturer() const
+std::string SMBios::BaseboardTable::GetManufacturer() const
 {
     return GetString(0x04);
 }
 
-std::string SMBiosParser::BaseboardTable::GetProductName() const
+std::string SMBios::BaseboardTable::GetProductName() const
 {
     return GetString(0x05);
 }
 
-std::string SMBiosParser::BaseboardTable::GetVersion() const
+std::string SMBios::BaseboardTable::GetVersion() const
 {
     return GetString(0x06);
 }
 
-std::string SMBiosParser::BaseboardTable::GetSerialNumber() const
+std::string SMBios::BaseboardTable::GetSerialNumber() const
 {
     return GetString(0x07);
 }
 
-std::string SMBiosParser::BaseboardTable::GetAssetTag() const
+std::string SMBios::BaseboardTable::GetAssetTag() const
 {
     uint8_t table_length = GetByte(0x01);
     if (table_length < 0x09)
@@ -541,7 +528,7 @@ std::string SMBiosParser::BaseboardTable::GetAssetTag() const
     return GetString(0x08);
 }
 
-SMBiosParser::BaseboardTable::FeatureList SMBiosParser::BaseboardTable::GetFeatures() const
+SMBios::BaseboardTable::FeatureList SMBios::BaseboardTable::GetFeatures() const
 {
     uint8_t table_length = GetByte(0x01);
     if (table_length < 0x0A)
@@ -571,7 +558,7 @@ SMBiosParser::BaseboardTable::FeatureList SMBiosParser::BaseboardTable::GetFeatu
     return list;
 }
 
-std::string SMBiosParser::BaseboardTable::GetLocationInChassis() const
+std::string SMBios::BaseboardTable::GetLocationInChassis() const
 {
     uint8_t table_length = GetByte(0x01);
     if (table_length < 0x0E)
@@ -580,7 +567,7 @@ std::string SMBiosParser::BaseboardTable::GetLocationInChassis() const
     return GetString(0x0A);
 }
 
-std::string SMBiosParser::BaseboardTable::GetBoardType() const
+std::string SMBios::BaseboardTable::GetBoardType() const
 {
     uint8_t table_length = GetByte(0x01);
     if (table_length < 0x0E)

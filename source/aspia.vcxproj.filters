@@ -652,10 +652,10 @@
     <ClCompile Include="base\devices\edid_parser.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
-    <ClCompile Include="base\devices\smbios_parser.cc">
+    <ClCompile Include="base\devices\smbios_reader.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
-    <ClCompile Include="base\devices\smbios_reader.cc">
+    <ClCompile Include="base\devices\smbios.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1352,10 +1352,10 @@
     <ClInclude Include="base\devices\edid_parser.h">
       <Filter>base\devices</Filter>
     </ClInclude>
-    <ClInclude Include="base\devices\smbios_parser.h">
+    <ClInclude Include="base\devices\smbios_reader.h">
       <Filter>base\devices</Filter>
     </ClInclude>
-    <ClInclude Include="base\devices\smbios_reader.h">
+    <ClInclude Include="base\devices\smbios.h">
       <Filter>base\devices</Filter>
     </ClInclude>
   </ItemGroup>

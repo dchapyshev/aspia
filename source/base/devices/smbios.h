@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/devices/smbios_parser.h
+// FILE:            base/devices/smbios.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__DEVICES__SMBIOS_PARSER_H
-#define _ASPIA_BASE__DEVICES__SMBIOS_PARSER_H
+#ifndef _ASPIA_BASE__DEVICES__SMBIOS_H
+#define _ASPIA_BASE__DEVICES__SMBIOS_H
 
 #include "base/macros.h"
 
@@ -16,10 +16,13 @@
 
 namespace aspia {
 
-class SMBiosParser
+class SMBios
 {
 public:
-    static std::unique_ptr<SMBiosParser> Create(std::unique_ptr<uint8_t[]> data, size_t data_size);
+    static std::unique_ptr<SMBios> Create(std::unique_ptr<uint8_t[]> data, size_t data_size);
+
+    uint8_t GetMajorVersion() const;
+    uint8_t GetMinorVersion() const;
 
     static const size_t kMaxDataSize = 0xFA00; // 64K
 
@@ -82,26 +85,18 @@ public:
         TABLE_TYPE_END_OF_TABLE                         = 127
     };
 
-    struct Table
-    {
-        uint8_t type;
-        uint8_t length;
-        uint16_t handle;
-        // data
-    };
-
-    class SMBiosTable
+    class Table
     {
     public:
-        virtual ~SMBiosTable() = default;
+        virtual ~Table() = default;
 
         using Feature = std::pair<std::string, bool>;
         using FeatureList = std::list<Feature>;
 
-        bool IsValidTable() const;
+        bool IsValid() const;
 
     protected:
-        SMBiosTable(const SMBiosParser& parser, TableType type);
+        Table(const SMBios& smbios, TableType type);
 
         uint8_t GetByte(uint8_t offset) const;
         uint16_t GetWord(uint8_t offset) const;
@@ -114,10 +109,10 @@ public:
         const uint8_t* data_;
     };
 
-    class BiosTable : public SMBiosTable
+    class BiosTable : public Table
     {
     public:
-        BiosTable(const SMBiosParser& parser);
+        BiosTable(const SMBios& smbios);
 
         std::string GetManufacturer() const;
         std::string GetVersion() const;
@@ -133,10 +128,10 @@ public:
         DISALLOW_COPY_AND_ASSIGN(BiosTable);
     };
 
-    class SystemTable : public SMBiosTable
+    class SystemTable : public Table
     {
     public:
-        SystemTable(const SMBiosParser& parser);
+        SystemTable(const SMBios& smbios);
 
         std::string GetManufacturer() const;
         std::string GetProductName() const;
@@ -153,10 +148,10 @@ public:
         DISALLOW_COPY_AND_ASSIGN(SystemTable);
     };
 
-    class BaseboardTable : public SMBiosTable
+    class BaseboardTable : public Table
     {
     public:
-        BaseboardTable(const SMBiosParser& parser);
+        BaseboardTable(const SMBios& smbios);
 
         std::string GetManufacturer() const;
         std::string GetProductName() const;
@@ -174,20 +169,18 @@ public:
 private:
     friend class SMBiosTable;
 
-    SMBiosParser(std::unique_ptr<uint8_t[]> data, size_t data_size, int table_count);
+    SMBios(std::unique_ptr<uint8_t[]> data, size_t data_size, int table_count);
 
-    uint8_t GetMajorVersion() const;
-    uint8_t GetMinorVersion() const;
-    static int GetTableCount(uint8_t* table_data, uint32_t length);
-    Table* GetTable(TableType type) const;
+    static int GetTableCount(const uint8_t* table_data, uint32_t length);
+    const uint8_t* GetTable(TableType type) const;
 
     std::unique_ptr<uint8_t[]> data_;
     const size_t data_size_;
     const int table_count_;
 
-    DISALLOW_COPY_AND_ASSIGN(SMBiosParser);
+    DISALLOW_COPY_AND_ASSIGN(SMBios);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__DEVICES__SMBIOS_PARSER_H
+#endif // _ASPIA_BASE__DEVICES__SMBIOS_H

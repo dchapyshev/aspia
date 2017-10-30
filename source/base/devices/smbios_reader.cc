@@ -12,7 +12,7 @@
 
 namespace aspia {
 
-std::unique_ptr<SMBiosParser> ReadSMBiosFromFirmwareTable()
+std::unique_ptr<SMBios> ReadSMBiosFromFirmwareTable()
 {
     typedef UINT(WINAPI *GetSystemFirmwareTableFunc)(DWORD, DWORD, PVOID, DWORD);
 
@@ -43,10 +43,10 @@ std::unique_ptr<SMBiosParser> ReadSMBiosFromFirmwareTable()
         return nullptr;
     }
 
-    return SMBiosParser::Create(std::move(data), data_size);
+    return SMBios::Create(std::move(data), data_size);
 }
 
-std::unique_ptr<SMBiosParser> ReadSMBiosFromWindowsRegistry()
+std::unique_ptr<SMBios> ReadSMBiosFromWindowsRegistry()
 {
     const WCHAR kSMBiosPath[] = L"SYSTEM\\CurrentControlSet\\services\\mssmbios\\Data";
     RegistryKey key;
@@ -85,14 +85,14 @@ std::unique_ptr<SMBiosParser> ReadSMBiosFromWindowsRegistry()
         return nullptr;
     }
 
-    return SMBiosParser::Create(std::move(data), data_size);
+    return SMBios::Create(std::move(data), data_size);
 }
 
-std::unique_ptr<SMBiosParser> ReadSMBios()
+std::unique_ptr<SMBios> ReadSMBios()
 {
-    std::unique_ptr<SMBiosParser> parser = ReadSMBiosFromFirmwareTable();
-    if (parser)
-        return parser;
+    std::unique_ptr<SMBios> smbios = ReadSMBiosFromFirmwareTable();
+    if (smbios)
+        return smbios;
 
     return ReadSMBiosFromWindowsRegistry();
 }

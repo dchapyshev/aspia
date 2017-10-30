@@ -8,11 +8,11 @@
 #ifndef _ASPIA_BASE__DEVICES__SMBIOS_READER_H
 #define _ASPIA_BASE__DEVICES__SMBIOS_READER_H
 
-#include "base/devices/smbios_parser.h"
+#include "base/devices/smbios.h"
 
 namespace aspia {
 
-std::unique_ptr<SMBiosParser> ReadSMBios();
+std::unique_ptr<SMBios> ReadSMBios();
 
 } // namespace aspia
 

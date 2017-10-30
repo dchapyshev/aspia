@@ -91,12 +91,12 @@ void CategoryDmiBios::Parse(std::shared_ptr<OutputProxy> output, const std::stri
 
 std::string CategoryDmiBios::Serialize()
 {
-    std::unique_ptr<SMBiosParser> parser = ReadSMBios();
-    if (!parser)
+    std::unique_ptr<SMBios> smbios = ReadSMBios();
+    if (!smbios)
         return std::string();
 
-    SMBiosParser::BiosTable table(*parser);
-    if (!table.IsValidTable())
+    SMBios::BiosTable table(*smbios);
+    if (!table.IsValid())
         return std::string();
 
     system_info::DmiBios message;
@@ -110,7 +110,7 @@ std::string CategoryDmiBios::Serialize()
     message.set_address(table.GetAddress());
     message.set_runtime_size(table.GetRuntimeSize());
 
-    SMBiosParser::BiosTable::FeatureList feature_list = table.GetCharacteristics();
+    SMBios::BiosTable::FeatureList feature_list = table.GetCharacteristics();
 
     for (const auto& feature : feature_list)
     {
@@ -183,12 +183,12 @@ void CategoryDmiSystem::Parse(std::shared_ptr<OutputProxy> output, const std::st
 
 std::string CategoryDmiSystem::Serialize()
 {
-    std::unique_ptr<SMBiosParser> parser = ReadSMBios();
-    if (!parser)
+    std::unique_ptr<SMBios> smbios = ReadSMBios();
+    if (!smbios)
         return std::string();
 
-    SMBiosParser::SystemTable table(*parser);
-    if (!table.IsValidTable())
+    SMBios::SystemTable table(*smbios);
+    if (!table.IsValid())
         return std::string();
 
     system_info::DmiSystem message;
@@ -277,12 +277,12 @@ void CategoryDmiMotherboard::Parse(std::shared_ptr<OutputProxy> output, const st
 
 std::string CategoryDmiMotherboard::Serialize()
 {
-    std::unique_ptr<SMBiosParser> parser = ReadSMBios();
-    if (!parser)
+    std::unique_ptr<SMBios> smbios = ReadSMBios();
+    if (!smbios)
         return std::string();
 
-    SMBiosParser::BaseboardTable table(*parser);
-    if (!table.IsValidTable())
+    SMBios::BaseboardTable table(*smbios);
+    if (!table.IsValid())
         return std::string();
 
     system_info::DmiMotherboard message;
@@ -295,7 +295,7 @@ std::string CategoryDmiMotherboard::Serialize()
     message.set_location_in_chassis(table.GetLocationInChassis());
     message.set_type(table.GetBoardType());
 
-    SMBiosParser::BaseboardTable::FeatureList feature_list = table.GetFeatures();
+    SMBios::BaseboardTable::FeatureList feature_list = table.GetFeatures();
 
     for (const auto& feature : feature_list)
     {
