@@ -2753,6 +2753,48 @@ void MergeUVRow_SSE2(const uint8* src_u,
 }
 #endif  // HAS_MERGEUVROW_SSE2
 
+#ifdef HAS_MERGEUV10ROW_AVX2
+void MergeUV10Row_AVX2(const uint16* src_u,
+                       const uint16* src_v,
+                       uint16* dst_uv,
+                       int width) {
+  asm volatile (
+    "sub       %0,%1                           \n"
+
+    LABELALIGN
+    "1:                                        \n"
+    "vmovdqu   (%0),%%ymm0                     \n"
+    "vmovdqu   (%0,%1,1),%%ymm1                \n"
+    "add        $0x20,%0                       \n"
+    "vpsllw    $0x6,%%ymm0,%%ymm0              \n"
+    "vpsllw    $0x6,%%ymm1,%%ymm1              \n"
+//    "vpermq     $0xd8,%%ymm0,%%ymm0            \n"
+//    "vpermq     $0xd8,%%ymm1,%%ymm1            \n"
+    "vpunpcklwd %%ymm1,%%ymm0,%%ymm2           \n"
+    "vpunpckhwd %%ymm1,%%ymm0,%%ymm0           \n"
+
+//    "vmovdqu   %%ymm2, (%2)                    \n"
+//    "vmovdqu   %%ymm0, 0x20(%2)                \n"
+
+    "vextractf128 $0x0,%%ymm2,(%2)             \n"
+    "vextractf128 $0x0,%%ymm0,0x10(%2)         \n"
+    "vextractf128 $0x1,%%ymm2,0x20(%2)         \n"
+    "vextractf128 $0x1,%%ymm0,0x30(%2)         \n"
+    "add       $0x40,%2                        \n"
+    "sub       $0x10,%3                        \n"
+    "jg        1b                              \n"
+    "vzeroupper                                \n"
+  : "+r"(src_u),     // %0
+    "+r"(src_v),     // %1
+    "+r"(dst_uv),    // %2
+    "+r"(width)      // %3
+  :
+  : "memory", "cc", "xmm0", "xmm1", "xmm2"
+  );
+}
+#endif  // HAS_MERGEUVROW_AVX2
+
+
 #ifdef HAS_SPLITRGBROW_SSSE3
 
 // Shuffle table for converting RGB to Planar.

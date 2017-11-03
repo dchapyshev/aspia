@@ -271,7 +271,7 @@ extern "C" {
 #define HAS_I422TOARGBROW_SSSE3
 #endif
 
-// The following are available forr gcc/clang x86 platforms:
+// The following are available for gcc/clang x86 platforms:
 // TODO(fbarchard): Port to Visual C
 #if !defined(LIBYUV_DISABLE_X86) && \
     (defined(__x86_64__) || (defined(__i386__) && !defined(_MSC_VER)))
@@ -279,6 +279,14 @@ extern "C" {
 #define HAS_SPLITRGBROW_SSSE3
 #endif
 
+// The following are available for AVX2 gcc/clang x86 platforms:
+// TODO(fbarchard): Port to Visual C
+#if !defined(LIBYUV_DISABLE_X86) && \
+    (defined(__x86_64__) || (defined(__i386__) && !defined(_MSC_VER))) && \
+    (defined(CLANG_HAS_AVX2) || defined(GCC_HAS_AVX2))
+#define HAS_MERGEUV10ROW_AVX2
+#endif
+    
 // The following are available on Neon platforms:
 #if !defined(LIBYUV_DISABLE_NEON) && \
     (defined(__aarch64__) || defined(__ARM_NEON__) || defined(LIBYUV_NEON))
@@ -1522,6 +1530,15 @@ void MergeRGBRow_Any_NEON(const uint8* src_r,
                           const uint8* src_b,
                           uint8* dst_rgb,
                           int width);
+
+void MergeUV10Row_C(const uint16* src_u,
+                    const uint16* src_v,
+                    uint16* dst_uv,
+                    int width);
+void MergeUV10Row_AVX2(const uint16* src_u,
+                       const uint16* src_v,
+                       uint16* dst_uv,
+                       int width);
 
 void CopyRow_SSE2(const uint8* src, uint8* dst, int count);
 void CopyRow_AVX(const uint8* src, uint8* dst, int count);

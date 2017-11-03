@@ -22,6 +22,9 @@ int main(int argc, const char* argv[]) {
   int has_arm = TestCpuFlag(kCpuHasARM);
   int has_mips = TestCpuFlag(kCpuHasMIPS);
   int has_x86 = TestCpuFlag(kCpuHasX86);
+  (void)argc;
+  (void)argv;
+
 #if defined(__i386__) || defined(__x86_64__) || \
     defined(_M_IX86) || defined(_M_X64)
   if (has_x86) {
