@@ -321,7 +321,7 @@ void NetworkChannelTcp::DoNextWriteTask()
         return;
     }
 
-    write_size_ = write_buffer_.size();
+    write_size_ = static_cast<MessageSizeType>(write_buffer_.size());
 
     if (write_size_ > kMaxMessageSize)
     {

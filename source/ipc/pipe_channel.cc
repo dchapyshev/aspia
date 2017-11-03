@@ -187,7 +187,7 @@ void PipeChannel::DoNextWriteTask()
         return;
     }
 
-    write_size_ = write_buffer_.size();
+    write_size_ = static_cast<uint32_t>(write_buffer_.size());
 
     asio::async_write(stream_,
                       asio::buffer(&write_size_, sizeof(uint32_t)),

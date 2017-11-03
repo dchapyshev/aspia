@@ -183,7 +183,7 @@ proto::FileList::Item* FileListCtrl::FirstSelectedObject() const
     if (selected_item == -1)
         return nullptr;
 
-    const int object_index = GetItemData(selected_item);
+    const int object_index = static_cast<int>(GetItemData(selected_item));
 
     if (!IsValidObjectIndex(object_index))
         return nullptr;
@@ -271,7 +271,7 @@ const proto::FileList::Item& FileListCtrl::Iterator::Object() const
     if (item_index_ == -1)
         return empty_item;
 
-    const int object_index = list_.GetItemData(item_index_);
+    const int object_index = static_cast<int>(list_.GetItemData(item_index_));
 
     if (!list_.IsValidObjectIndex(object_index))
         return empty_item;
@@ -295,7 +295,7 @@ int FileListCtrl::GetObjectUnderMousePointer() const
     if (item_index == -1)
         return kInvalidObjectIndex;
 
-    return GetItemData(item_index);
+    return static_cast<int>(GetItemData(item_index));
 }
 
 } // namespace aspia

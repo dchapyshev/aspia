@@ -80,7 +80,7 @@ LRESULT FileStatusDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpara
     CenterWindow();
 
     // Disable close button for dialog.
-    DWORD style = GetClassLongPtrW(*this, GCL_STYLE);
+    LONG_PTR style = GetClassLongPtrW(*this, GCL_STYLE);
     SetClassLongPtrW(*this, GCL_STYLE, style | CS_NOCLOSE);
 
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
@@ -169,7 +169,7 @@ void FileStatusDialog::OnSessionTerminated()
     }
 
     // Enable close button for dialog.
-    DWORD style = GetClassLongPtrW(*this, GCL_STYLE);
+    LONG_PTR style = GetClassLongPtrW(*this, GCL_STYLE);
     SetClassLongPtrW(*this, GCL_STYLE, style & ~CS_NOCLOSE);
 
     CString button_title;

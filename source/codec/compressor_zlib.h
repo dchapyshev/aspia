@@ -22,12 +22,12 @@ public:
     ~CompressorZLIB();
 
     bool Process(const uint8_t* input_data,
-                 int input_size,
+                 size_t input_size,
                  uint8_t* output_data,
-                 int output_size,
+                 size_t output_size,
                  CompressorFlush flush,
-                 int* consumed,
-                 int* written) override;
+                 size_t* consumed,
+                 size_t* written) override;
 
     void Reset() override;
 

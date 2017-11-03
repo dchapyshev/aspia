@@ -158,7 +158,7 @@ LRESULT SystemInfoWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOO
     UNUSED_PARAMETER(wparam);
     UNUSED_PARAMETER(handled);
 
-    const CSize size(lparam);
+    const CSize size(static_cast<DWORD>(lparam));
 
     toolbar_.AutoSize();
     statusbar_.SendMessageW(WM_SIZE);

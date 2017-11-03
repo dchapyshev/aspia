@@ -43,16 +43,16 @@ void CursorEncoder::CompressCursor(proto::CursorShape* cursor_shape,
     int width = mouse_cursor->Size().Width();
     int height = mouse_cursor->Size().Height();
 
-    const int row_size = width * sizeof(uint32_t);
+    const size_t row_size = width * sizeof(uint32_t);
 
-    int packet_size = row_size * height;
+    size_t packet_size = row_size * height;
     packet_size += packet_size / 100 + 16;
 
     uint8_t* compressed_pos = GetOutputBuffer(cursor_shape, packet_size);
     const uint8_t* source_pos = mouse_cursor->Data();
 
-    int filled = 0;
-    int row_pos = 0; // Position in the current row in bytes.
+    size_t filled = 0;
+    size_t row_pos = 0; // Position in the current row in bytes.
     int row_y = 0; // Current row.
     bool compress_again = true;
 
@@ -64,8 +64,8 @@ void CursorEncoder::CompressCursor(proto::CursorShape* cursor_shape,
         if (row_y == height - 1)
             flush = Compressor::CompressorFinish;
 
-        int consumed = 0;
-        int written = 0;
+        size_t consumed = 0;
+        size_t written = 0;
 
         compress_again = compressor_.Process(
             source_pos + row_pos, row_size - row_pos,

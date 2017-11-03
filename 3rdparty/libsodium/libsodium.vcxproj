@@ -168,6 +168,9 @@
     <PostBuildEvent>
       <Command>call "$(SolutionDir)3rdparty/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
     </PostBuildEvent>
+    <Lib>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

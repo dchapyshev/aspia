@@ -104,7 +104,7 @@ int DriveListCtrl::SelectedObject() const
     if (selected_item == CB_ERR)
         return kInvalidObjectIndex;
 
-    return GetItemData(selected_item);
+    return static_cast<int>(GetItemData(selected_item));
 }
 
 const proto::DriveList::Item& DriveListCtrl::Object(int object_index) const

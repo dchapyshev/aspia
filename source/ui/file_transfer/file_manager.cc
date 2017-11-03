@@ -209,7 +209,7 @@ LRESULT FileManagerWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BO
     UNUSED_PARAMETER(lparam);
     UNUSED_PARAMETER(handled);
 
-    CSize size(lparam);
+    CSize size(static_cast<DWORD>(lparam));
     splitter_.MoveWindow(kBorderSize, 0, size.cx - (kBorderSize * 2), size.cy, FALSE);
     return 0;
 }

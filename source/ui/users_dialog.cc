@@ -176,7 +176,7 @@ LRESULT UsersDialog::OnAddButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handl
 int UsersDialog::GetSelectedUserIndex()
 {
     CListViewCtrl list(GetDlgItem(IDC_USER_LIST));
-    return list.GetItemData(list.GetNextItem(-1, LVNI_SELECTED));
+    return static_cast<int>(list.GetItemData(list.GetNextItem(-1, LVNI_SELECTED)));
 }
 
 void UsersDialog::EditSelectedUser()

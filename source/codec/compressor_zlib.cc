@@ -37,19 +37,19 @@ void CompressorZLIB::Reset()
 }
 
 bool CompressorZLIB::Process(const uint8_t* input_data,
-                             int input_size,
+                             size_t input_size,
                              uint8_t* output_data,
-                             int output_size,
+                             size_t output_size,
                              CompressorFlush flush,
-                             int* consumed,
-                             int* written)
+                             size_t* consumed,
+                             size_t* written)
 {
-    DCHECK_GT(output_size, 0);
+    DCHECK(output_size != 0);
 
     // Setup I/O parameters.
-    stream_.avail_in  = input_size;
+    stream_.avail_in  = static_cast<uint32_t>(input_size);
     stream_.next_in   = input_data;
-    stream_.avail_out = output_size;
+    stream_.avail_out = static_cast<uint32_t>(output_size);
     stream_.next_out  = output_data;
 
     int z_flush = 0;

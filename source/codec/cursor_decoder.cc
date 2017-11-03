@@ -13,15 +13,15 @@ namespace aspia {
 bool CursorDecoder::DecompressCursor(const proto::CursorShape& cursor_shape, uint8_t* image)
 {
     const uint8_t* src = reinterpret_cast<const uint8_t*>(cursor_shape.data().data());
-    const int src_size = cursor_shape.data().size();
-    const int row_size = cursor_shape.width() * sizeof(uint32_t);
+    const size_t src_size = cursor_shape.data().size();
+    const size_t row_size = cursor_shape.width() * sizeof(uint32_t);
 
     // Consume all the data in the message.
     bool decompress_again = true;
-    int used = 0;
+    size_t used = 0;
 
     int row_y = 0;
-    int row_pos = 0;
+    size_t row_pos = 0;
 
     while (decompress_again && used < src_size)
     {
@@ -31,8 +31,8 @@ bool CursorDecoder::DecompressCursor(const proto::CursorShape& cursor_shape, uin
             return false;
         }
 
-        int written = 0;
-        int consumed = 0;
+        size_t written = 0;
+        size_t consumed = 0;
 
         decompress_again = decompressor_.Process(src + used,
                                                  src_size - used,

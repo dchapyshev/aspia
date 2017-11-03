@@ -58,21 +58,21 @@ void VideoEncoderZLIB::CompressPacket(proto::VideoPacket* packet, size_t source_
 {
     compressor_.Reset();
 
-    const int packet_size = source_data_size + (source_data_size / 100 + 16);
+    const size_t packet_size = source_data_size + (source_data_size / 100 + 16);
 
     uint8_t* compress_pos = GetOutputBuffer(packet, packet_size);
 
-    int filled = 0;   // Number of bytes in the destination buffer.
-    int pos = 0;  // Position in the current row in bytes.
+    size_t filled = 0;  // Number of bytes in the destination buffer.
+    size_t pos = 0;  // Position in the current row in bytes.
     bool compress_again = true;
 
     while (compress_again)
     {
         // Number of bytes that was taken from the source buffer.
-        int consumed = 0;
+        size_t consumed = 0;
 
         // Number of bytes that were written to the destination buffer.
-        int written = 0;
+        size_t written = 0;
 
         compress_again = compressor_.Process(
             translate_buffer_.get() + pos, source_data_size - pos,

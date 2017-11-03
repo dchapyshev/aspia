@@ -20,8 +20,8 @@ std::unique_ptr<VideoDecoderZLIB> VideoDecoderZLIB::Create()
 bool VideoDecoderZLIB::Decode(const proto::VideoPacket& packet, DesktopFrame* frame)
 {
     const uint8_t* src = reinterpret_cast<const uint8_t*>(packet.data().data());
-    const int src_size = packet.data().size();
-    int used = 0;
+    const size_t src_size = packet.data().size();
+    size_t used = 0;
 
     DesktopRect frame_rect(DesktopRect::MakeSize(frame->Size()));
 
@@ -36,13 +36,13 @@ bool VideoDecoderZLIB::Decode(const proto::VideoPacket& packet, DesktopFrame* fr
         }
 
         uint8_t* dst = frame->GetFrameDataAtPos(rect.x(), rect.y());
-        const int row_size = rect.Width() * frame->Format().BytesPerPixel();
+        const size_t row_size = rect.Width() * frame->Format().BytesPerPixel();
 
         // Consume all the data in the message.
         bool decompress_again = true;
 
         int row_y = 0;
-        int row_pos = 0;
+        size_t row_pos = 0;
 
         while (decompress_again && used < src_size)
         {
@@ -51,8 +51,8 @@ bool VideoDecoderZLIB::Decode(const proto::VideoPacket& packet, DesktopFrame* fr
             if (row_y > rect.Height() - 1)
                 break;
 
-            int written = 0;
-            int consumed = 0;
+            size_t written = 0;
+            size_t consumed = 0;
 
             decompress_again = decompressor_.Process(src + used,
                                                      src_size - used,

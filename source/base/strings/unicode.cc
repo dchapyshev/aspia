@@ -56,13 +56,13 @@ bool ANSItoUNICODE(const char* in, std::wstring& out)
     if (!in_len)
         return false;
 
-    const int out_len = MultiByteToWideChar(CP_ACP, 0, in, in_len, nullptr, 0);
+    const int out_len = MultiByteToWideChar(CP_ACP, 0, in, static_cast<int>(in_len), nullptr, 0);
     if (out_len <= 0)
         return false;
 
     out.resize(out_len);
 
-    if (MultiByteToWideChar(CP_ACP, 0, in, in_len, &out[0], out_len) != out_len)
+    if (MultiByteToWideChar(CP_ACP, 0, in, static_cast<int>(in_len), &out[0], out_len) != out_len)
         return false;
 
     return true;
@@ -77,13 +77,15 @@ bool UNICODEtoANSI(const wchar_t* in, std::string& out)
     if (!in_len)
         return false;
 
-    const int out_len = WideCharToMultiByte(CP_ACP, 0, in, in_len, nullptr, 0, nullptr, nullptr);
+    const int out_len = WideCharToMultiByte(CP_ACP, 0, in, static_cast<int>(in_len),
+                                            nullptr, 0, nullptr, nullptr);
     if (out_len <= 0)
         return false;
 
     out.resize(out_len);
 
-    if (WideCharToMultiByte(CP_ACP, 0, in, in_len, &out[0], out_len, nullptr, nullptr) != out_len)
+    if (WideCharToMultiByte(CP_ACP, 0, in, static_cast<int>(in_len),
+                            &out[0], out_len, nullptr, nullptr) != out_len)
         return false;
 
     return true;
@@ -91,18 +93,18 @@ bool UNICODEtoANSI(const wchar_t* in, std::string& out)
 
 bool UNICODEtoUTF8(const std::wstring& in, std::string& out)
 {
-    const int in_len = static_cast<int>(in.length());
-    if (in_len <= 0)
+    const size_t in_len = in.length();
+    if (!in_len)
         return false;
 
-    const int out_len = WideCharToMultiByte(CP_UTF8, 0, in.data(), in_len,
+    const int out_len = WideCharToMultiByte(CP_UTF8, 0, in.data(), static_cast<int>(in_len),
                                             nullptr, 0, nullptr, nullptr);
     if (out_len <= 0)
         return false;
 
     out.resize(out_len);
 
-    if (WideCharToMultiByte(CP_UTF8, 0, in.data(), in_len,
+    if (WideCharToMultiByte(CP_UTF8, 0, in.data(), static_cast<int>(in_len),
                             &out[0], out_len, nullptr, nullptr) != out_len)
         return false;
 
@@ -111,17 +113,19 @@ bool UNICODEtoUTF8(const std::wstring& in, std::string& out)
 
 bool UTF8toUNICODE(const std::string& in, std::wstring& out)
 {
-    const int in_len = static_cast<int>(in.length());
-    if (in_len <= 0)
+    const size_t in_len = in.length();
+    if (!in_len)
         return false;
 
-    const int out_len = MultiByteToWideChar(CP_UTF8, 0, in.data(), in_len, nullptr, 0);
+    const int out_len = MultiByteToWideChar(CP_UTF8, 0, in.data(), static_cast<int>(in_len),
+                                            nullptr, 0);
     if (out_len <= 0)
         return false;
 
     out.resize(out_len);
 
-    if (MultiByteToWideChar(CP_UTF8, 0, in.data(), in_len, &out[0], out_len) != out_len)
+    if (MultiByteToWideChar(CP_UTF8, 0, in.data(), static_cast<int>(in_len),
+                            &out[0], out_len) != out_len)
         return false;
 
     return true;
@@ -136,13 +140,15 @@ bool UNICODEtoUTF8(const wchar_t* in, std::string& out)
     if (!in_len)
         return false;
 
-    const int out_len = WideCharToMultiByte(CP_UTF8, 0, in, in_len, nullptr, 0, nullptr, nullptr);
+    const int out_len = WideCharToMultiByte(CP_UTF8, 0, in, static_cast<int>(in_len),
+                                            nullptr, 0, nullptr, nullptr);
     if (out_len <= 0)
         return false;
 
     out.resize(out_len);
 
-    if (WideCharToMultiByte(CP_UTF8, 0, in, in_len, &out[0], out_len, nullptr, nullptr) != out_len)
+    if (WideCharToMultiByte(CP_UTF8, 0, in, static_cast<int>(in_len),
+                            &out[0], out_len, nullptr, nullptr) != out_len)
         return false;
 
     return true;
@@ -157,13 +163,13 @@ bool UTF8toUNICODE(const char* in, std::wstring& out)
     if (!in_len)
         return false;
 
-    const int out_len = MultiByteToWideChar(CP_UTF8, 0, in, in_len, nullptr, 0);
+    const int out_len = MultiByteToWideChar(CP_UTF8, 0, in, static_cast<int>(in_len), nullptr, 0);
     if (out_len <= 0)
         return false;
 
     out.resize(out_len);
 
-    if (MultiByteToWideChar(CP_UTF8, 0, in, in_len, &out[0], out_len) != out_len)
+    if (MultiByteToWideChar(CP_UTF8, 0, in, static_cast<int>(in_len), &out[0], out_len) != out_len)
         return false;
 
     return true;

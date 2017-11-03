@@ -32,18 +32,18 @@ void DecompressorZLIB::Reset()
 }
 
 bool DecompressorZLIB::Process(const uint8_t* input_data,
-                               int input_size,
+                               size_t input_size,
                                uint8_t* output_data,
-                               int output_size,
-                               int* consumed,
-                               int* written)
+                               size_t output_size,
+                               size_t* consumed,
+                               size_t* written)
 {
-    DCHECK_GT(output_size, 0);
+    DCHECK(output_size != 0);
 
     // Setup I/O parameters.
-    stream_.avail_in  = input_size;
+    stream_.avail_in  = static_cast<uint32_t>(input_size);
     stream_.next_in   = input_data;
-    stream_.avail_out = output_size;
+    stream_.avail_out = static_cast<uint32_t>(output_size);
     stream_.next_out  = output_data;
 
     int ret = inflate(&stream_, Z_NO_FLUSH);

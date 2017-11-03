@@ -100,7 +100,7 @@ LRESULT FileManagerPanel::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOO
     if (!dwp)
         return 0;
 
-    CSize size(lparam);
+    CSize size(static_cast<DWORD>(lparam));
 
     toolbar_.AutoSize();
 
@@ -355,7 +355,7 @@ LRESULT FileManagerPanel::OnListEndLabelEdit(int ctrl_id, LPNMHDR hdr, BOOL& han
     if (!file_list_.HasFileList())
         return 0;
 
-    int object_index = disp_info->item.lParam;
+    int object_index = static_cast<int>(disp_info->item.lParam);
 
     // New folder.
     if (object_index == FileListCtrl::kNewFolderObjectIndex)
