@@ -353,7 +353,7 @@ LRESULT MainDialog::OnConnectButton(WORD notify_code, WORD control_id, HWND cont
         GetDlgItemTextW(IDC_SERVER_ADDRESS_EDIT, buffer, _countof(buffer));
 
         config_.set_address(buffer);
-        config_.set_port(GetDlgItemInt(IDC_SERVER_PORT_EDIT, nullptr, FALSE));
+        config_.set_port(static_cast<uint16_t>(GetDlgItemInt(IDC_SERVER_PORT_EDIT, nullptr, FALSE)));
         config_.set_session_type(session_type);
 
         if (!client_pool_)

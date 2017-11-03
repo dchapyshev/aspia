@@ -11,13 +11,6 @@
 #include "crypto/secure_buffer.h"
 #include "protocol/io_buffer.h"
 
-extern "C" {
-#define SODIUM_STATIC
-#include <sodium.h>
-} // extern "C"
-
-#include <memory>
-
 namespace aspia {
 
 // Implements encryption of messages with using xsalsa20 + poly1305 algorithms.

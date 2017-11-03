@@ -5,8 +5,8 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/logging.h"
 #include "desktop_capture/differ.h"
-
 #include "desktop_capture/diff_block_sse2.h"
 
 namespace aspia {
@@ -105,7 +105,7 @@ void Differ::MarkDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
         {
             // For x86 and x86_64, we do not support processors that do not
             // have SSE2 instructions support.
-            if (kBlockSize == 16)
+            if constexpr(kBlockSize == 16)
             {
                 // Mark this block as being modified so that it gets
                 // incorporated into a dirty rect.
@@ -113,8 +113,10 @@ void Differ::MarkDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
                                                          curr_block,
                                                          bytes_per_row_);
             }
-            else if (kBlockSize == 32)
+            else
             {
+                DCHECK(kBlockSize == 32);
+
                 // Mark this block as being modified so that it gets
                 // incorporated into a dirty rect.
                 *is_different = DiffFullBlock_32x32_SSE2(prev_block,

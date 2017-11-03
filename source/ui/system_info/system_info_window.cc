@@ -269,7 +269,7 @@ LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& 
     {
         DCHECK(category->type() == Category::Type::GROUP);
 
-        CategoryGroup* group = category->category_group();
+        //CategoryGroup* group = category->category_group();
         // TODO
     }
 

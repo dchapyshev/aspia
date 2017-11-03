@@ -66,13 +66,13 @@ DesktopFrameDIB::Create(const DesktopSize& size,
 
         for (uint32_t i = 0; i < 256; ++i)
         {
-            uint32_t red   = (i >> format.RedShift())   & format.RedMax();
-            uint32_t green = (i >> format.GreenShift()) & format.GreenMax();
-            uint32_t blue  = (i >> format.BlueShift())  & format.BlueMax();
+            const uint32_t red   = (i >> format.RedShift())   & format.RedMax();
+            const uint32_t green = (i >> format.GreenShift()) & format.GreenMax();
+            const uint32_t blue  = (i >> format.BlueShift())  & format.BlueMax();
 
-            bmi.u.color[i].rgbRed   = red   * 0xFF / format.RedMax();
-            bmi.u.color[i].rgbGreen = green * 0xFF / format.GreenMax();
-            bmi.u.color[i].rgbBlue  = blue  * 0xFF / format.BlueMax();
+            bmi.u.color[i].rgbRed   = static_cast<uint8_t>(red   * 0xFF / format.RedMax());
+            bmi.u.color[i].rgbGreen = static_cast<uint8_t>(green * 0xFF / format.GreenMax());
+            bmi.u.color[i].rgbBlue  = static_cast<uint8_t>(blue  * 0xFF / format.BlueMax());
         }
     }
 

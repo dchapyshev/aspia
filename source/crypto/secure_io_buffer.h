@@ -12,7 +12,10 @@
 
 extern "C" {
 #define SODIUM_STATIC
+
+#pragma warning(push, 3)
 #include <sodium.h>
+#pragma warning(pop)
 } // extern "C"
 
 namespace aspia {

@@ -42,21 +42,21 @@ void PixelTranslator::Translate(const uint8_t* src,
             switch (dst_bytes_per_pixel_)
             {
                 case 1:
-                    *(uint8_t*) dst = (uint8_t) (red | green | blue);
+                    *(uint8_t*) dst = static_cast<uint8_t>(red | green | blue);
                     break;
 
                 case 2:
-                    *(uint16_t*) dst = (uint16_t) (red | green | blue);
+                    *(uint16_t*) dst = static_cast<uint16_t>(red | green | blue);
                     break;
 
                 case 3:
-                    dst[0] = blue;
-                    dst[1] = green >> 8;
-                    dst[2] = red >> 16;
+                    dst[0] = static_cast<uint8_t>(blue);
+                    dst[1] = static_cast<uint8_t>(green >> 8);
+                    dst[2] = static_cast<uint8_t>(red >> 16);
                     break;
 
                 case 4:
-                    *(uint32_t*) dst = (uint32_t) (red | green | blue);
+                    *(uint32_t*) dst = static_cast<uint32_t>(red | green | blue);
                     break;
             }
 

@@ -8,7 +8,9 @@
 #include "base/logging.h"
 #include "ui/system_info/output_xml_file.h"
 
+#pragma warning(push, 3)
 #include <rapidxml_print.hpp>
+#pragma warning(pop)
 
 namespace aspia {
 
@@ -42,6 +44,7 @@ void OutputXmlFile::EndDocument()
 
 void OutputXmlFile::StartTableGroup(const std::string& name)
 {
+    UNUSED_PARAMETER(name);
     // TODO
 }
 

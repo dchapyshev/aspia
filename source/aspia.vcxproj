@@ -205,6 +205,7 @@
     <ClCompile Include="ui\main_dialog.cc" />
     <ClCompile Include="ui\power\power_manage_dialog.cc" />
     <ClCompile Include="ui\power\power_session_dialog.cc" />
+    <ClCompile Include="ui\status_code.cc" />
     <ClCompile Include="ui\status_dialog.cc" />
     <ClCompile Include="ui\system_info\category_tree_ctrl.cc" />
     <ClCompile Include="ui\system_info\document_creater.cc" />
@@ -657,7 +658,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>

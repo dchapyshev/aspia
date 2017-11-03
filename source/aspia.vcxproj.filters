@@ -658,6 +658,9 @@
     <ClCompile Include="base\devices\smbios.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
+    <ClCompile Include="ui\status_code.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">

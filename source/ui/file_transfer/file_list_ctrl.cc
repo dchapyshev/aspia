@@ -205,7 +205,7 @@ void FileListCtrl::AddDirectory()
     SetFocus();
 
     const int item_index = AddItem(GetItemCount(), 0, folder_name, icon_index);
-    SetItemData(item_index, kNewFolderObjectIndex);
+    SetItemData(item_index, static_cast<DWORD_PTR>(kNewFolderObjectIndex));
     EditLabel(item_index);
 }
 

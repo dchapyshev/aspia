@@ -132,6 +132,8 @@ void FileTransferDownloader::RunNextTask()
 void FileTransferDownloader::OnCreateDirectoryReply(const FilePath& path,
                                                     proto::RequestStatus status)
 {
+    UNUSED_PARAMETER(path);
+
     if (status != proto::REQUEST_STATUS_SUCCESS)
     {
         if (create_directory_failure_action_ == FileAction::ASK)

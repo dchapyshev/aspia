@@ -10,7 +10,10 @@
 
 #define GLOG_NO_ABBREVIATED_SEVERITIES
 #define GOOGLE_GLOG_DLL_DECL
+
+#pragma warning(push, 3)
 #include <glog/logging.h>
+#pragma warning(pop)
 
 namespace aspia {
 

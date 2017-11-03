@@ -663,7 +663,7 @@ void FileManagerPanel::OnCreateDirectoryReply(const FilePath& path, proto::Reque
         CString status_string = RequestStatusCodeToString(status);
 
         CString message;
-        message.Format(IDS_FT_OP_CREATE_FOLDER_ERROR, path.c_str(), status_string);
+        message.Format(IDS_FT_OP_CREATE_FOLDER_ERROR, path.c_str(), status_string.GetBuffer(0));
         MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
     }
     else
@@ -681,7 +681,10 @@ void FileManagerPanel::OnRenameReply(const FilePath& old_name,
         CString status_string = RequestStatusCodeToString(status);
 
         CString message;
-        message.Format(IDS_FT_OP_RENAME_ERROR, old_name.c_str(), new_name.c_str(), status_string);
+        message.Format(IDS_FT_OP_RENAME_ERROR,
+                       old_name.c_str(),
+                       new_name.c_str(),
+                       status_string.GetBuffer(0));
         MessageBoxW(message, nullptr, MB_ICONWARNING | MB_OK);
     }
     else

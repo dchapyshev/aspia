@@ -141,7 +141,7 @@ void OpenConnectionEnumerator::Advance()
 
 std::string OpenConnectionEnumerator::GetProcessName() const
 {
-    DWORD pid = -1;
+    DWORD pid = static_cast<DWORD>(-1);
 
     if (tcp_table_)
     {
