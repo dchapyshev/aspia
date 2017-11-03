@@ -75,7 +75,7 @@ CategoryList CreateCategoryTree()
 
     dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiBios>());
     dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiSystem>());
-    dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiMotherboard>());
+    dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiBaseboard>());
     dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiChassis>());
     dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiCaches>());
     dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiProcessors>());
@@ -177,7 +177,7 @@ CategoryMap CreateCategoryMap()
 
     emplace_back(std::make_unique<CategoryDmiBios>());
     emplace_back(std::make_unique<CategoryDmiSystem>());
-    emplace_back(std::make_unique<CategoryDmiMotherboard>());
+    emplace_back(std::make_unique<CategoryDmiBaseboard>());
     emplace_back(std::make_unique<CategoryDmiChassis>());
     emplace_back(std::make_unique<CategoryDmiCaches>());
     emplace_back(std::make_unique<CategoryDmiProcessors>());

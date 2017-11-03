@@ -17,37 +17,34 @@ std::unique_ptr<SMBios> SMBios::Create(std::unique_ptr<uint8_t[]> data, size_t d
     if (!data || !data_size)
         return nullptr;
 
-    SMBiosData* smbios = reinterpret_cast<SMBiosData*>(data.get());
+    Data* smbios = reinterpret_cast<Data*>(data.get());
 
-    int table_count = GetTableCount(smbios->smbios_table_data, smbios->length);
-    if (!table_count)
+    if (!GetTableCount(smbios->smbios_table_data, smbios->length))
     {
         LOG(WARNING) << "SMBios tables not found";
         return nullptr;
     }
 
-    return std::unique_ptr<SMBios>(new SMBios(std::move(data), data_size, table_count));
+    return std::unique_ptr<SMBios>(new SMBios(std::move(data), data_size));
 }
 
-SMBios::SMBios(std::unique_ptr<uint8_t[]> data, size_t data_size, int table_count)
+SMBios::SMBios(std::unique_ptr<uint8_t[]> data, size_t data_size)
     : data_(std::move(data)),
-      data_size_(data_size),
-      table_count_(table_count)
+      data_size_(data_size)
 {
     DCHECK(data_ != nullptr);
     DCHECK(data_size_ != 0);
-    DCHECK(table_count_ != 0);
 }
 
 uint8_t SMBios::GetMajorVersion() const
 {
-    SMBiosData* smbios = reinterpret_cast<SMBiosData*>(data_.get());
+    Data* smbios = reinterpret_cast<Data*>(data_.get());
     return smbios->smbios_major_version;
 }
 
 uint8_t SMBios::GetMinorVersion() const
 {
-    SMBiosData* smbios = reinterpret_cast<SMBiosData*>(data_.get());
+    Data* smbios = reinterpret_cast<Data*>(data_.get());
     return smbios->smbios_minor_version;
 }
 
@@ -78,20 +75,35 @@ int SMBios::GetTableCount(const uint8_t* table_data, uint32_t length)
     return count;
 }
 
-const uint8_t* SMBios::GetTable(TableType type) const
+//
+// TableEnumeratorImpl
+//
+
+SMBios::TableEnumeratorImpl::TableEnumeratorImpl(const Data* data, uint8_t type)
+    : data_(data)
 {
-    SMBiosData* smbios = reinterpret_cast<SMBiosData*>(data_.get());
+    start_ = &data_->smbios_table_data[0];
+    end_ = start_ + data_->length;
+    current_ = start_;
+    next_ = start_;
 
-    const uint8_t* start = &smbios->smbios_table_data[0];
-    const uint8_t* end = start + smbios->length;
-    const uint8_t* pos = start;
+    Advance(type);
+}
 
-    int table_index = 0;
+bool SMBios::TableEnumeratorImpl::IsAtEnd() const
+{
+    return current_ == nullptr;
+}
 
-    while (table_index < table_count_ && pos + 4 <= end)
+void SMBios::TableEnumeratorImpl::Advance(uint8_t type)
+{
+    current_ = next_;
+    DCHECK(current_);
+
+    while (current_ + 4 <= end_)
     {
-        const uint8_t table_type = pos[0];
-        const uint8_t table_length = pos[1];
+        const uint8_t table_type = current_[0];
+        const uint8_t table_length = current_[1];
 
         if (table_length < 4)
         {
@@ -102,86 +114,82 @@ const uint8_t* SMBios::GetTable(TableType type) const
             break;
         }
 
-        // The table of the specified type is found.
-        if (table_type == type)
-            return pos;
-
-        if (table_type == TABLE_TYPE_END_OF_TABLE)
+        // Stop decoding at end of table marker.
+        if (table_type == 127)
             break;
 
         // Look for the next handle.
-        const uint8_t* next = pos + table_length;
-        while (static_cast<uintptr_t>(next - start + 1) < smbios->length &&
-               (next[0] != 0 || next[1] != 0))
+        next_ = current_ + table_length;
+        while (static_cast<uintptr_t>(next_ - start_ + 1) < data_->length &&
+            (next_[0] != 0 || next_[1] != 0))
         {
-            ++next;
+            ++next_;
         }
 
         // Points to the next table thas after two null bytes at the end of the strings.
-        pos = next + 2;
+        next_ += 2;
 
-        ++table_index;
+        // The table of the specified type is found.
+        if (table_type == type)
+            return;
+
+        current_ = next_;
     }
 
-    if (table_index + 1 != table_count_)
-    {
-        LOG(WARNING) << "The number of processed tables does not correspond "
-                        "to the total number of tables: "
-                     << (table_index + 1) << "/" << table_count_;
-    }
+    current_ = nullptr;
+    next_ = nullptr;
+}
 
-    if (static_cast<uintptr_t>(pos - start) != smbios->length)
-    {
-        LOG(WARNING) << "The announced size does not match the processed: "
-                     << static_cast<uintptr_t>(pos - start) << "/" << smbios->length;
-    }
+const SMBios::Data* SMBios::TableEnumeratorImpl::GetSMBiosData() const
+{
+    return data_;
+}
 
-    // Table not found.
-    return nullptr;
+const uint8_t* SMBios::TableEnumeratorImpl::GetTableData() const
+{
+    return current_;
 }
 
 //
 // SMBiosTable
 //
 
-SMBios::Table::Table(const SMBios& smbios, TableType type)
-    : data_(smbios.GetTable(type))
+SMBios::TableReader::TableReader(const Data* smbios, const uint8_t* table)
+    : smbios_(smbios),
+      table_(table)
 {
-    // Nothing
+    DCHECK(smbios_);
+    DCHECK(table_);
 }
 
-bool SMBios::Table::IsValid() const
+uint8_t SMBios::TableReader::GetByte(uint8_t offset) const
 {
-    return data_ != nullptr;
+    return table_[offset];
 }
 
-uint8_t SMBios::Table::GetByte(uint8_t offset) const
-{
-    return data_[offset];
-}
-
-uint16_t SMBios::Table::GetWord(uint8_t offset) const
+uint16_t SMBios::TableReader::GetWord(uint8_t offset) const
 {
     return *reinterpret_cast<const uint16_t*>(GetPointer(offset));
 }
 
-uint32_t SMBios::Table::GetDword(uint8_t offset) const
+uint32_t SMBios::TableReader::GetDword(uint8_t offset) const
 {
     return *reinterpret_cast<const uint32_t*>(GetPointer(offset));
 }
 
-uint64_t SMBios::Table::GetQword(uint8_t offset) const
+uint64_t SMBios::TableReader::GetQword(uint8_t offset) const
 {
     return *reinterpret_cast<const uint64_t*>(GetPointer(offset));
 }
 
-std::string SMBios::Table::GetString(uint8_t offset) const
+std::string SMBios::TableReader::GetString(uint8_t offset) const
 {
     uint8_t handle = GetByte(offset);
     if (!handle)
         return std::string();
 
-    char* string = reinterpret_cast<char*>(const_cast<uint8_t*>(data_)) + data_[1];
+    char* string = reinterpret_cast<char*>(
+        const_cast<uint8_t*>(table_)) + table_[1];
 
     while (handle > 1 && *string)
     {
@@ -196,45 +204,45 @@ std::string SMBios::Table::GetString(uint8_t offset) const
     return string;
 }
 
-const uint8_t* SMBios::Table::GetPointer(uint8_t offset) const
+const uint8_t* SMBios::TableReader::GetPointer(uint8_t offset) const
 {
-    return &data_[offset];
+    return &table_[offset];
 }
 
 //
 // BiosTable
 //
 
-SMBios::BiosTable::BiosTable(const SMBios& smbios)
-    : Table(smbios, TABLE_TYPE_BIOS)
+SMBios::BiosTable::BiosTable(const Data* smbios, const uint8_t* table)
+    : reader_(smbios, table)
 {
     // Nothing
 }
 
 std::string SMBios::BiosTable::GetManufacturer() const
 {
-    return GetString(0x04);
+    return reader_.GetString(0x04);
 }
 
 std::string SMBios::BiosTable::GetVersion() const
 {
-    return GetString(0x05);
+    return reader_.GetString(0x05);
 }
 
 std::string SMBios::BiosTable::GetDate() const
 {
-    return GetString(0x08);
+    return reader_.GetString(0x08);
 }
 
 int SMBios::BiosTable::GetSize() const
 {
-    return (GetByte(0x09) + 1) << 6;
+    return (reader_.GetByte(0x09) + 1) << 6;
 }
 
 std::string SMBios::BiosTable::GetBiosRevision() const
 {
-    uint8_t major = GetByte(0x14);
-    uint8_t minor = GetByte(0x15);
+    uint8_t major = reader_.GetByte(0x14);
+    uint8_t minor = reader_.GetByte(0x15);
 
     if (major != 0xFF && minor != 0xFF)
         return StringPrintf("%u.%u", major, minor);
@@ -244,8 +252,8 @@ std::string SMBios::BiosTable::GetBiosRevision() const
 
 std::string SMBios::BiosTable::GetFirmwareRevision() const
 {
-    uint8_t major = GetByte(0x16);
-    uint8_t minor = GetByte(0x17);
+    uint8_t major = reader_.GetByte(0x16);
+    uint8_t minor = reader_.GetByte(0x17);
 
     if (major != 0xFF && minor != 0xFF)
         return StringPrintf("%u.%u", major, minor);
@@ -255,7 +263,7 @@ std::string SMBios::BiosTable::GetFirmwareRevision() const
 
 std::string SMBios::BiosTable::GetAddress() const
 {
-    uint16_t address = GetWord(0x06);
+    uint16_t address = reader_.GetWord(0x06);
 
     if (address != 0)
         return StringPrintf("%04X0h", address);
@@ -265,7 +273,7 @@ std::string SMBios::BiosTable::GetAddress() const
 
 int SMBios::BiosTable::GetRuntimeSize() const
 {
-    uint16_t address = GetWord(0x06);
+    uint16_t address = reader_.GetWord(0x06);
     if (address == 0)
         return 0;
 
@@ -314,7 +322,7 @@ SMBios::BiosTable::FeatureList SMBios::BiosTable::GetCharacteristics() const
         "NEC PC-98" // 31
     };
 
-    uint64_t characteristics = GetQword(0x0A);
+    uint64_t characteristics = reader_.GetQword(0x0A);
     if (!(characteristics & (1 << 3)))
     {
         for (int i = 4; i <= 31; ++i)
@@ -324,11 +332,11 @@ SMBios::BiosTable::FeatureList SMBios::BiosTable::GetCharacteristics() const
         }
     }
 
-    uint8_t table_length = GetByte(0x01);
+    uint8_t table_length = reader_.GetByte(0x01);
 
     if (table_length >= 0x13)
     {
-        uint8_t characteristics1 = GetByte(0x12);
+        uint8_t characteristics1 = reader_.GetByte(0x12);
 
         static const char* characteristics1_names[] =
         {
@@ -351,7 +359,7 @@ SMBios::BiosTable::FeatureList SMBios::BiosTable::GetCharacteristics() const
 
     if (table_length >= 0x14)
     {
-        uint8_t characteristics2 = GetByte(0x13);
+        uint8_t characteristics2 = reader_.GetByte(0x13);
 
         static const char* characteristics2_names[] =
         {
@@ -374,41 +382,39 @@ SMBios::BiosTable::FeatureList SMBios::BiosTable::GetCharacteristics() const
 // SystemTable
 //
 
-SMBios::SystemTable::SystemTable(const SMBios& smbios)
-    : Table(smbios, TABLE_TYPE_SYSTEM),
-      major_version_(smbios.GetMajorVersion()),
-      minor_version_(smbios.GetMinorVersion())
+SMBios::SystemTable::SystemTable(const Data* smbios, const uint8_t* table)
+    : reader_(smbios, table)
 {
     // Nothing
 }
 
 std::string SMBios::SystemTable::GetManufacturer() const
 {
-    return GetString(0x04);
+    return reader_.GetString(0x04);
 }
 
 std::string SMBios::SystemTable::GetProductName() const
 {
-    return GetString(0x05);
+    return reader_.GetString(0x05);
 }
 
 std::string SMBios::SystemTable::GetVersion() const
 {
-    return GetString(0x06);
+    return reader_.GetString(0x06);
 }
 
 std::string SMBios::SystemTable::GetSerialNumber() const
 {
-    return GetString(0x07);
+    return reader_.GetString(0x07);
 }
 
 std::string SMBios::SystemTable::GetUUID() const
 {
-    uint8_t table_length = GetByte(0x01);
+    uint8_t table_length = reader_.GetByte(0x01);
     if (table_length < 0x19)
         return std::string();
 
-    const uint8_t* ptr = GetPointer(0x08);
+    const uint8_t* ptr = reader_.GetPointer(0x08);
 
     bool only_0xFF = true;
     bool only_0x00 = true;
@@ -422,7 +428,7 @@ std::string SMBios::SystemTable::GetUUID() const
     if (only_0xFF || only_0x00)
         return std::string();
 
-    if ((major_version_ << 8) + minor_version_ >= 0x0206)
+    if ((reader_.GetMajorVersion() << 8) + reader_.GetMinorVersion() >= 0x0206)
     {
         return StringPrintf("%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X",
                      ptr[3], ptr[2], ptr[1], ptr[0], ptr[5], ptr[4], ptr[7], ptr[6],
@@ -436,11 +442,11 @@ std::string SMBios::SystemTable::GetUUID() const
 
 std::string SMBios::SystemTable::GetWakeupType() const
 {
-    uint8_t table_length = GetByte(0x01);
+    uint8_t table_length = reader_.GetByte(0x01);
     if (table_length < 0x19)
         return std::string();
 
-    switch (GetByte(0x18))
+    switch (reader_.GetByte(0x18))
     {
         case 0x01:
             return "Other";
@@ -473,68 +479,68 @@ std::string SMBios::SystemTable::GetWakeupType() const
 
 std::string SMBios::SystemTable::GetSKUNumber() const
 {
-    uint8_t table_length = GetByte(0x01);
+    uint8_t table_length = reader_.GetByte(0x01);
     if (table_length < 0x1B)
         return std::string();
 
-    return GetString(0x19);
+    return reader_.GetString(0x19);
 }
 
 std::string SMBios::SystemTable::GetFamily() const
 {
-    uint8_t table_length = GetByte(0x01);
+    uint8_t table_length = reader_.GetByte(0x01);
     if (table_length < 0x1B)
         return std::string();
 
-    return GetString(0x1A);
+    return reader_.GetString(0x1A);
 }
 
 //
 // BaseboardTable
 //
 
-SMBios::BaseboardTable::BaseboardTable(const SMBios& smbios)
-    : Table(smbios, TABLE_TYPE_BASEBOARD)
+SMBios::BaseboardTable::BaseboardTable(const Data* smbios, const uint8_t* table)
+    : reader_(smbios, table)
 {
     // Nothing
 }
 
 std::string SMBios::BaseboardTable::GetManufacturer() const
 {
-    return GetString(0x04);
+    return reader_.GetString(0x04);
 }
 
 std::string SMBios::BaseboardTable::GetProductName() const
 {
-    return GetString(0x05);
+    return reader_.GetString(0x05);
 }
 
 std::string SMBios::BaseboardTable::GetVersion() const
 {
-    return GetString(0x06);
+    return reader_.GetString(0x06);
 }
 
 std::string SMBios::BaseboardTable::GetSerialNumber() const
 {
-    return GetString(0x07);
+    return reader_.GetString(0x07);
 }
 
 std::string SMBios::BaseboardTable::GetAssetTag() const
 {
-    uint8_t table_length = GetByte(0x01);
+    uint8_t table_length = reader_.GetByte(0x01);
     if (table_length < 0x09)
         return std::string();
 
-    return GetString(0x08);
+    return reader_.GetString(0x08);
 }
 
 SMBios::BaseboardTable::FeatureList SMBios::BaseboardTable::GetFeatures() const
 {
-    uint8_t table_length = GetByte(0x01);
+    uint8_t table_length = reader_.GetByte(0x01);
     if (table_length < 0x0A)
         return FeatureList();
 
-    uint8_t features = GetByte(0x09);
+    uint8_t features = reader_.GetByte(0x09);
     if ((features & 0x1F) == 0)
         return FeatureList();
 
@@ -560,16 +566,16 @@ SMBios::BaseboardTable::FeatureList SMBios::BaseboardTable::GetFeatures() const
 
 std::string SMBios::BaseboardTable::GetLocationInChassis() const
 {
-    uint8_t table_length = GetByte(0x01);
+    uint8_t table_length = reader_.GetByte(0x01);
     if (table_length < 0x0E)
         return std::string();
 
-    return GetString(0x0A);
+    return reader_.GetString(0x0A);
 }
 
 std::string SMBios::BaseboardTable::GetBoardType() const
 {
-    uint8_t table_length = GetByte(0x01);
+    uint8_t table_length = reader_.GetByte(0x01);
     if (table_length < 0x0E)
         return std::string();
 
@@ -590,7 +596,7 @@ std::string SMBios::BaseboardTable::GetBoardType() const
         "Interconnect Board" // 0x0D
     };
 
-    uint8_t type = GetByte(0x0D);
+    uint8_t type = reader_.GetByte(0x0D);
     if (!type || type > 0x0D)
         return std::string();
 

@@ -32,18 +32,21 @@
 // @@protoc_insertion_point(includes)
 namespace aspia {
 namespace system_info {
+class DmiBaseboard;
+class DmiBaseboardDefaultTypeInternal;
+extern DmiBaseboardDefaultTypeInternal _DmiBaseboard_default_instance_;
+class DmiBaseboard_Item;
+class DmiBaseboard_ItemDefaultTypeInternal;
+extern DmiBaseboard_ItemDefaultTypeInternal _DmiBaseboard_Item_default_instance_;
+class DmiBaseboard_Item_Feature;
+class DmiBaseboard_Item_FeatureDefaultTypeInternal;
+extern DmiBaseboard_Item_FeatureDefaultTypeInternal _DmiBaseboard_Item_Feature_default_instance_;
 class DmiBios;
 class DmiBiosDefaultTypeInternal;
 extern DmiBiosDefaultTypeInternal _DmiBios_default_instance_;
 class DmiBios_Feature;
 class DmiBios_FeatureDefaultTypeInternal;
 extern DmiBios_FeatureDefaultTypeInternal _DmiBios_Feature_default_instance_;
-class DmiMotherboard;
-class DmiMotherboardDefaultTypeInternal;
-extern DmiMotherboardDefaultTypeInternal _DmiMotherboard_default_instance_;
-class DmiMotherboard_Feature;
-class DmiMotherboard_FeatureDefaultTypeInternal;
-extern DmiMotherboard_FeatureDefaultTypeInternal _DmiMotherboard_Feature_default_instance_;
 class DmiSystem;
 class DmiSystemDefaultTypeInternal;
 extern DmiSystemDefaultTypeInternal _DmiSystem_default_instance_;
@@ -733,24 +736,24 @@ class DmiSystem : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
-class DmiMotherboard_Feature : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.DmiMotherboard.Feature) */ {
+class DmiBaseboard_Item_Feature : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.DmiBaseboard.Item.Feature) */ {
  public:
-  DmiMotherboard_Feature();
-  virtual ~DmiMotherboard_Feature();
+  DmiBaseboard_Item_Feature();
+  virtual ~DmiBaseboard_Item_Feature();
 
-  DmiMotherboard_Feature(const DmiMotherboard_Feature& from);
+  DmiBaseboard_Item_Feature(const DmiBaseboard_Item_Feature& from);
 
-  inline DmiMotherboard_Feature& operator=(const DmiMotherboard_Feature& from) {
+  inline DmiBaseboard_Item_Feature& operator=(const DmiBaseboard_Item_Feature& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  DmiMotherboard_Feature(DmiMotherboard_Feature&& from) noexcept
-    : DmiMotherboard_Feature() {
+  DmiBaseboard_Item_Feature(DmiBaseboard_Item_Feature&& from) noexcept
+    : DmiBaseboard_Item_Feature() {
     *this = ::std::move(from);
   }
 
-  inline DmiMotherboard_Feature& operator=(DmiMotherboard_Feature&& from) noexcept {
+  inline DmiBaseboard_Item_Feature& operator=(DmiBaseboard_Item_Feature&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -759,29 +762,29 @@ class DmiMotherboard_Feature : public ::google::protobuf::MessageLite /* @@proto
     return *this;
   }
   #endif
-  static const DmiMotherboard_Feature& default_instance();
+  static const DmiBaseboard_Item_Feature& default_instance();
 
-  static inline const DmiMotherboard_Feature* internal_default_instance() {
-    return reinterpret_cast<const DmiMotherboard_Feature*>(
-               &_DmiMotherboard_Feature_default_instance_);
+  static inline const DmiBaseboard_Item_Feature* internal_default_instance() {
+    return reinterpret_cast<const DmiBaseboard_Item_Feature*>(
+               &_DmiBaseboard_Item_Feature_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     3;
 
-  void Swap(DmiMotherboard_Feature* other);
-  friend void swap(DmiMotherboard_Feature& a, DmiMotherboard_Feature& b) {
+  void Swap(DmiBaseboard_Item_Feature* other);
+  friend void swap(DmiBaseboard_Item_Feature& a, DmiBaseboard_Item_Feature& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline DmiMotherboard_Feature* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline DmiBaseboard_Item_Feature* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  DmiMotherboard_Feature* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  DmiBaseboard_Item_Feature* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const DmiMotherboard_Feature& from);
-  void MergeFrom(const DmiMotherboard_Feature& from);
+  void CopyFrom(const DmiBaseboard_Item_Feature& from);
+  void MergeFrom(const DmiBaseboard_Item_Feature& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -796,7 +799,7 @@ class DmiMotherboard_Feature : public ::google::protobuf::MessageLite /* @@proto
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(DmiMotherboard_Feature* other);
+  void InternalSwap(DmiBaseboard_Item_Feature* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -832,7 +835,7 @@ class DmiMotherboard_Feature : public ::google::protobuf::MessageLite /* @@proto
   bool supported() const;
   void set_supported(bool value);
 
-  // @@protoc_insertion_point(class_scope:aspia.system_info.DmiMotherboard.Feature)
+  // @@protoc_insertion_point(class_scope:aspia.system_info.DmiBaseboard.Item.Feature)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -843,24 +846,24 @@ class DmiMotherboard_Feature : public ::google::protobuf::MessageLite /* @@proto
 };
 // -------------------------------------------------------------------
 
-class DmiMotherboard : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.DmiMotherboard) */ {
+class DmiBaseboard_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.DmiBaseboard.Item) */ {
  public:
-  DmiMotherboard();
-  virtual ~DmiMotherboard();
+  DmiBaseboard_Item();
+  virtual ~DmiBaseboard_Item();
 
-  DmiMotherboard(const DmiMotherboard& from);
+  DmiBaseboard_Item(const DmiBaseboard_Item& from);
 
-  inline DmiMotherboard& operator=(const DmiMotherboard& from) {
+  inline DmiBaseboard_Item& operator=(const DmiBaseboard_Item& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  DmiMotherboard(DmiMotherboard&& from) noexcept
-    : DmiMotherboard() {
+  DmiBaseboard_Item(DmiBaseboard_Item&& from) noexcept
+    : DmiBaseboard_Item() {
     *this = ::std::move(from);
   }
 
-  inline DmiMotherboard& operator=(DmiMotherboard&& from) noexcept {
+  inline DmiBaseboard_Item& operator=(DmiBaseboard_Item&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -869,29 +872,29 @@ class DmiMotherboard : public ::google::protobuf::MessageLite /* @@protoc_insert
     return *this;
   }
   #endif
-  static const DmiMotherboard& default_instance();
+  static const DmiBaseboard_Item& default_instance();
 
-  static inline const DmiMotherboard* internal_default_instance() {
-    return reinterpret_cast<const DmiMotherboard*>(
-               &_DmiMotherboard_default_instance_);
+  static inline const DmiBaseboard_Item* internal_default_instance() {
+    return reinterpret_cast<const DmiBaseboard_Item*>(
+               &_DmiBaseboard_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     4;
 
-  void Swap(DmiMotherboard* other);
-  friend void swap(DmiMotherboard& a, DmiMotherboard& b) {
+  void Swap(DmiBaseboard_Item* other);
+  friend void swap(DmiBaseboard_Item& a, DmiBaseboard_Item& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline DmiMotherboard* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline DmiBaseboard_Item* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  DmiMotherboard* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  DmiBaseboard_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const DmiMotherboard& from);
-  void MergeFrom(const DmiMotherboard& from);
+  void CopyFrom(const DmiBaseboard_Item& from);
+  void MergeFrom(const DmiBaseboard_Item& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -906,7 +909,7 @@ class DmiMotherboard : public ::google::protobuf::MessageLite /* @@protoc_insert
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(DmiMotherboard* other);
+  void InternalSwap(DmiBaseboard_Item* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -920,20 +923,20 @@ class DmiMotherboard : public ::google::protobuf::MessageLite /* @@protoc_insert
 
   // nested types ----------------------------------------------------
 
-  typedef DmiMotherboard_Feature Feature;
+  typedef DmiBaseboard_Item_Feature Feature;
 
   // accessors -------------------------------------------------------
 
-  // repeated .aspia.system_info.DmiMotherboard.Feature feature = 6;
+  // repeated .aspia.system_info.DmiBaseboard.Item.Feature feature = 6;
   int feature_size() const;
   void clear_feature();
   static const int kFeatureFieldNumber = 6;
-  const ::aspia::system_info::DmiMotherboard_Feature& feature(int index) const;
-  ::aspia::system_info::DmiMotherboard_Feature* mutable_feature(int index);
-  ::aspia::system_info::DmiMotherboard_Feature* add_feature();
-  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiMotherboard_Feature >*
+  const ::aspia::system_info::DmiBaseboard_Item_Feature& feature(int index) const;
+  ::aspia::system_info::DmiBaseboard_Item_Feature* mutable_feature(int index);
+  ::aspia::system_info::DmiBaseboard_Item_Feature* add_feature();
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBaseboard_Item_Feature >*
       mutable_feature();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiMotherboard_Feature >&
+  const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBaseboard_Item_Feature >&
       feature() const;
 
   // string manufacturer = 1;
@@ -1034,11 +1037,11 @@ class DmiMotherboard : public ::google::protobuf::MessageLite /* @@protoc_insert
   ::std::string* release_type();
   void set_allocated_type(::std::string* type);
 
-  // @@protoc_insertion_point(class_scope:aspia.system_info.DmiMotherboard)
+  // @@protoc_insertion_point(class_scope:aspia.system_info.DmiBaseboard.Item)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiMotherboard_Feature > feature_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBaseboard_Item_Feature > feature_;
   ::google::protobuf::internal::ArenaStringPtr manufacturer_;
   ::google::protobuf::internal::ArenaStringPtr product_name_;
   ::google::protobuf::internal::ArenaStringPtr version_;
@@ -1046,6 +1049,109 @@ class DmiMotherboard : public ::google::protobuf::MessageLite /* @@protoc_insert
   ::google::protobuf::internal::ArenaStringPtr asset_tag_;
   ::google::protobuf::internal::ArenaStringPtr location_in_chassis_;
   ::google::protobuf::internal::ArenaStringPtr type_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class DmiBaseboard : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.DmiBaseboard) */ {
+ public:
+  DmiBaseboard();
+  virtual ~DmiBaseboard();
+
+  DmiBaseboard(const DmiBaseboard& from);
+
+  inline DmiBaseboard& operator=(const DmiBaseboard& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  DmiBaseboard(DmiBaseboard&& from) noexcept
+    : DmiBaseboard() {
+    *this = ::std::move(from);
+  }
+
+  inline DmiBaseboard& operator=(DmiBaseboard&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const DmiBaseboard& default_instance();
+
+  static inline const DmiBaseboard* internal_default_instance() {
+    return reinterpret_cast<const DmiBaseboard*>(
+               &_DmiBaseboard_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    5;
+
+  void Swap(DmiBaseboard* other);
+  friend void swap(DmiBaseboard& a, DmiBaseboard& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DmiBaseboard* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  DmiBaseboard* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const DmiBaseboard& from);
+  void MergeFrom(const DmiBaseboard& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(DmiBaseboard* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef DmiBaseboard_Item Item;
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.system_info.DmiBaseboard.Item item = 1;
+  int item_size() const;
+  void clear_item();
+  static const int kItemFieldNumber = 1;
+  const ::aspia::system_info::DmiBaseboard_Item& item(int index) const;
+  ::aspia::system_info::DmiBaseboard_Item* mutable_item(int index);
+  ::aspia::system_info::DmiBaseboard_Item* add_item();
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBaseboard_Item >*
+      mutable_item();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBaseboard_Item >&
+      item() const;
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.DmiBaseboard)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBaseboard_Item > item_;
   mutable int _cached_size_;
   friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
 };
@@ -1084,7 +1190,7 @@ class Monitors_Item_Timing : public ::google::protobuf::MessageLite /* @@protoc_
                &_Monitors_Item_Timing_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
+    6;
 
   void Swap(Monitors_Item_Timing* other);
   friend void swap(Monitors_Item_Timing& a, Monitors_Item_Timing& b) {
@@ -1193,7 +1299,7 @@ class Monitors_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Monitors_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    6;
+    7;
 
   void Swap(Monitors_Item* other);
   friend void swap(Monitors_Item& a, Monitors_Item& b) {
@@ -1542,7 +1648,7 @@ class Monitors : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Monitors_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    8;
 
   void Swap(Monitors* other);
   friend void swap(Monitors& a, Monitors& b) {
@@ -1645,7 +1751,7 @@ class Printers_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Printers_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    9;
 
   void Swap(Printers_Item* other);
   friend void swap(Printers_Item& a, Printers_Item& b) {
@@ -1949,7 +2055,7 @@ class Printers : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Printers_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    10;
 
   void Swap(Printers* other);
   friend void swap(Printers& a, Printers& b) {
@@ -2052,7 +2158,7 @@ class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Services_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    11;
 
   void Swap(Services_Item* other);
   friend void swap(Services_Item& a, Services_Item& b) {
@@ -2279,7 +2385,7 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Services_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    12;
 
   void Swap(Services* other);
   friend void swap(Services& a, Services& b) {
@@ -2382,7 +2488,7 @@ class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@
                &_NetworkCards_Item_IpAddress_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    13;
 
   void Swap(NetworkCards_Item_IpAddress* other);
   friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
@@ -2500,7 +2606,7 @@ class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_NetworkCards_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    13;
+    14;
 
   void Swap(NetworkCards_Item* other);
   friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
@@ -2790,7 +2896,7 @@ class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_NetworkCards_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    14;
+    15;
 
   void Swap(NetworkCards* other);
   friend void swap(NetworkCards& a, NetworkCards& b) {
@@ -2893,7 +2999,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    15;
+    16;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -3055,7 +3161,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    16;
+    17;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -3158,7 +3264,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    17;
+    18;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -3337,7 +3443,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    18;
+    19;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -3440,7 +3546,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    19;
+    20;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -3580,7 +3686,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    20;
+    21;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -3683,7 +3789,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    21;
+    22;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -3872,7 +3978,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    22;
+    23;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -3975,7 +4081,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    23;
+    24;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -4093,7 +4199,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    24;
+    25;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -4196,7 +4302,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    25;
+    26;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -4366,7 +4472,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    26;
+    27;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -5323,478 +5429,512 @@ inline void DmiSystem::set_allocated_family(::std::string* family) {
 
 // -------------------------------------------------------------------
 
-// DmiMotherboard_Feature
+// DmiBaseboard_Item_Feature
 
 // string name = 1;
-inline void DmiMotherboard_Feature::clear_name() {
+inline void DmiBaseboard_Item_Feature::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& DmiMotherboard_Feature::name() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.Feature.name)
+inline const ::std::string& DmiBaseboard_Item_Feature::name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBaseboard.Item.Feature.name)
   return name_.GetNoArena();
 }
-inline void DmiMotherboard_Feature::set_name(const ::std::string& value) {
+inline void DmiBaseboard_Item_Feature::set_name(const ::std::string& value) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.Feature.name)
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBaseboard.Item.Feature.name)
 }
 #if LANG_CXX11
-inline void DmiMotherboard_Feature::set_name(::std::string&& value) {
+inline void DmiBaseboard_Item_Feature::set_name(::std::string&& value) {
   
   name_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.Feature.name)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBaseboard.Item.Feature.name)
 }
 #endif
-inline void DmiMotherboard_Feature::set_name(const char* value) {
+inline void DmiBaseboard_Item_Feature::set_name(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.Feature.name)
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBaseboard.Item.Feature.name)
 }
-inline void DmiMotherboard_Feature::set_name(const char* value, size_t size) {
+inline void DmiBaseboard_Item_Feature::set_name(const char* value, size_t size) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.Feature.name)
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBaseboard.Item.Feature.name)
 }
-inline ::std::string* DmiMotherboard_Feature::mutable_name() {
+inline ::std::string* DmiBaseboard_Item_Feature::mutable_name() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.Feature.name)
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBaseboard.Item.Feature.name)
   return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* DmiMotherboard_Feature::release_name() {
-  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.Feature.name)
+inline ::std::string* DmiBaseboard_Item_Feature::release_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBaseboard.Item.Feature.name)
   
   return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void DmiMotherboard_Feature::set_allocated_name(::std::string* name) {
+inline void DmiBaseboard_Item_Feature::set_allocated_name(::std::string* name) {
   if (name != NULL) {
     
   } else {
     
   }
   name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.Feature.name)
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBaseboard.Item.Feature.name)
 }
 
 // bool supported = 2;
-inline void DmiMotherboard_Feature::clear_supported() {
+inline void DmiBaseboard_Item_Feature::clear_supported() {
   supported_ = false;
 }
-inline bool DmiMotherboard_Feature::supported() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.Feature.supported)
+inline bool DmiBaseboard_Item_Feature::supported() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBaseboard.Item.Feature.supported)
   return supported_;
 }
-inline void DmiMotherboard_Feature::set_supported(bool value) {
+inline void DmiBaseboard_Item_Feature::set_supported(bool value) {
   
   supported_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.Feature.supported)
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBaseboard.Item.Feature.supported)
 }
 
 // -------------------------------------------------------------------
 
-// DmiMotherboard
+// DmiBaseboard_Item
 
 // string manufacturer = 1;
-inline void DmiMotherboard::clear_manufacturer() {
+inline void DmiBaseboard_Item::clear_manufacturer() {
   manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& DmiMotherboard::manufacturer() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.manufacturer)
+inline const ::std::string& DmiBaseboard_Item::manufacturer() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBaseboard.Item.manufacturer)
   return manufacturer_.GetNoArena();
 }
-inline void DmiMotherboard::set_manufacturer(const ::std::string& value) {
+inline void DmiBaseboard_Item::set_manufacturer(const ::std::string& value) {
   
   manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.manufacturer)
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBaseboard.Item.manufacturer)
 }
 #if LANG_CXX11
-inline void DmiMotherboard::set_manufacturer(::std::string&& value) {
+inline void DmiBaseboard_Item::set_manufacturer(::std::string&& value) {
   
   manufacturer_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.manufacturer)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBaseboard.Item.manufacturer)
 }
 #endif
-inline void DmiMotherboard::set_manufacturer(const char* value) {
+inline void DmiBaseboard_Item::set_manufacturer(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.manufacturer)
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBaseboard.Item.manufacturer)
 }
-inline void DmiMotherboard::set_manufacturer(const char* value, size_t size) {
+inline void DmiBaseboard_Item::set_manufacturer(const char* value, size_t size) {
   
   manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.manufacturer)
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBaseboard.Item.manufacturer)
 }
-inline ::std::string* DmiMotherboard::mutable_manufacturer() {
+inline ::std::string* DmiBaseboard_Item::mutable_manufacturer() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.manufacturer)
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBaseboard.Item.manufacturer)
   return manufacturer_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* DmiMotherboard::release_manufacturer() {
-  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.manufacturer)
+inline ::std::string* DmiBaseboard_Item::release_manufacturer() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBaseboard.Item.manufacturer)
   
   return manufacturer_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void DmiMotherboard::set_allocated_manufacturer(::std::string* manufacturer) {
+inline void DmiBaseboard_Item::set_allocated_manufacturer(::std::string* manufacturer) {
   if (manufacturer != NULL) {
     
   } else {
     
   }
   manufacturer_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), manufacturer);
-  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.manufacturer)
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBaseboard.Item.manufacturer)
 }
 
 // string product_name = 2;
-inline void DmiMotherboard::clear_product_name() {
+inline void DmiBaseboard_Item::clear_product_name() {
   product_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& DmiMotherboard::product_name() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.product_name)
+inline const ::std::string& DmiBaseboard_Item::product_name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBaseboard.Item.product_name)
   return product_name_.GetNoArena();
 }
-inline void DmiMotherboard::set_product_name(const ::std::string& value) {
+inline void DmiBaseboard_Item::set_product_name(const ::std::string& value) {
   
   product_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.product_name)
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBaseboard.Item.product_name)
 }
 #if LANG_CXX11
-inline void DmiMotherboard::set_product_name(::std::string&& value) {
+inline void DmiBaseboard_Item::set_product_name(::std::string&& value) {
   
   product_name_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.product_name)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBaseboard.Item.product_name)
 }
 #endif
-inline void DmiMotherboard::set_product_name(const char* value) {
+inline void DmiBaseboard_Item::set_product_name(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   product_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.product_name)
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBaseboard.Item.product_name)
 }
-inline void DmiMotherboard::set_product_name(const char* value, size_t size) {
+inline void DmiBaseboard_Item::set_product_name(const char* value, size_t size) {
   
   product_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.product_name)
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBaseboard.Item.product_name)
 }
-inline ::std::string* DmiMotherboard::mutable_product_name() {
+inline ::std::string* DmiBaseboard_Item::mutable_product_name() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.product_name)
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBaseboard.Item.product_name)
   return product_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* DmiMotherboard::release_product_name() {
-  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.product_name)
+inline ::std::string* DmiBaseboard_Item::release_product_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBaseboard.Item.product_name)
   
   return product_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void DmiMotherboard::set_allocated_product_name(::std::string* product_name) {
+inline void DmiBaseboard_Item::set_allocated_product_name(::std::string* product_name) {
   if (product_name != NULL) {
     
   } else {
     
   }
   product_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), product_name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.product_name)
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBaseboard.Item.product_name)
 }
 
 // string version = 3;
-inline void DmiMotherboard::clear_version() {
+inline void DmiBaseboard_Item::clear_version() {
   version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& DmiMotherboard::version() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.version)
+inline const ::std::string& DmiBaseboard_Item::version() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBaseboard.Item.version)
   return version_.GetNoArena();
 }
-inline void DmiMotherboard::set_version(const ::std::string& value) {
+inline void DmiBaseboard_Item::set_version(const ::std::string& value) {
   
   version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.version)
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBaseboard.Item.version)
 }
 #if LANG_CXX11
-inline void DmiMotherboard::set_version(::std::string&& value) {
+inline void DmiBaseboard_Item::set_version(::std::string&& value) {
   
   version_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.version)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBaseboard.Item.version)
 }
 #endif
-inline void DmiMotherboard::set_version(const char* value) {
+inline void DmiBaseboard_Item::set_version(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.version)
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBaseboard.Item.version)
 }
-inline void DmiMotherboard::set_version(const char* value, size_t size) {
+inline void DmiBaseboard_Item::set_version(const char* value, size_t size) {
   
   version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.version)
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBaseboard.Item.version)
 }
-inline ::std::string* DmiMotherboard::mutable_version() {
+inline ::std::string* DmiBaseboard_Item::mutable_version() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.version)
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBaseboard.Item.version)
   return version_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* DmiMotherboard::release_version() {
-  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.version)
+inline ::std::string* DmiBaseboard_Item::release_version() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBaseboard.Item.version)
   
   return version_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void DmiMotherboard::set_allocated_version(::std::string* version) {
+inline void DmiBaseboard_Item::set_allocated_version(::std::string* version) {
   if (version != NULL) {
     
   } else {
     
   }
   version_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), version);
-  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.version)
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBaseboard.Item.version)
 }
 
 // string serial_number = 4;
-inline void DmiMotherboard::clear_serial_number() {
+inline void DmiBaseboard_Item::clear_serial_number() {
   serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& DmiMotherboard::serial_number() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.serial_number)
+inline const ::std::string& DmiBaseboard_Item::serial_number() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBaseboard.Item.serial_number)
   return serial_number_.GetNoArena();
 }
-inline void DmiMotherboard::set_serial_number(const ::std::string& value) {
+inline void DmiBaseboard_Item::set_serial_number(const ::std::string& value) {
   
   serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.serial_number)
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBaseboard.Item.serial_number)
 }
 #if LANG_CXX11
-inline void DmiMotherboard::set_serial_number(::std::string&& value) {
+inline void DmiBaseboard_Item::set_serial_number(::std::string&& value) {
   
   serial_number_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.serial_number)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBaseboard.Item.serial_number)
 }
 #endif
-inline void DmiMotherboard::set_serial_number(const char* value) {
+inline void DmiBaseboard_Item::set_serial_number(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.serial_number)
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBaseboard.Item.serial_number)
 }
-inline void DmiMotherboard::set_serial_number(const char* value, size_t size) {
+inline void DmiBaseboard_Item::set_serial_number(const char* value, size_t size) {
   
   serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.serial_number)
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBaseboard.Item.serial_number)
 }
-inline ::std::string* DmiMotherboard::mutable_serial_number() {
+inline ::std::string* DmiBaseboard_Item::mutable_serial_number() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.serial_number)
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBaseboard.Item.serial_number)
   return serial_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* DmiMotherboard::release_serial_number() {
-  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.serial_number)
+inline ::std::string* DmiBaseboard_Item::release_serial_number() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBaseboard.Item.serial_number)
   
   return serial_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void DmiMotherboard::set_allocated_serial_number(::std::string* serial_number) {
+inline void DmiBaseboard_Item::set_allocated_serial_number(::std::string* serial_number) {
   if (serial_number != NULL) {
     
   } else {
     
   }
   serial_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), serial_number);
-  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.serial_number)
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBaseboard.Item.serial_number)
 }
 
 // string asset_tag = 5;
-inline void DmiMotherboard::clear_asset_tag() {
+inline void DmiBaseboard_Item::clear_asset_tag() {
   asset_tag_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& DmiMotherboard::asset_tag() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.asset_tag)
+inline const ::std::string& DmiBaseboard_Item::asset_tag() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBaseboard.Item.asset_tag)
   return asset_tag_.GetNoArena();
 }
-inline void DmiMotherboard::set_asset_tag(const ::std::string& value) {
+inline void DmiBaseboard_Item::set_asset_tag(const ::std::string& value) {
   
   asset_tag_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.asset_tag)
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBaseboard.Item.asset_tag)
 }
 #if LANG_CXX11
-inline void DmiMotherboard::set_asset_tag(::std::string&& value) {
+inline void DmiBaseboard_Item::set_asset_tag(::std::string&& value) {
   
   asset_tag_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.asset_tag)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBaseboard.Item.asset_tag)
 }
 #endif
-inline void DmiMotherboard::set_asset_tag(const char* value) {
+inline void DmiBaseboard_Item::set_asset_tag(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   asset_tag_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.asset_tag)
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBaseboard.Item.asset_tag)
 }
-inline void DmiMotherboard::set_asset_tag(const char* value, size_t size) {
+inline void DmiBaseboard_Item::set_asset_tag(const char* value, size_t size) {
   
   asset_tag_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.asset_tag)
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBaseboard.Item.asset_tag)
 }
-inline ::std::string* DmiMotherboard::mutable_asset_tag() {
+inline ::std::string* DmiBaseboard_Item::mutable_asset_tag() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.asset_tag)
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBaseboard.Item.asset_tag)
   return asset_tag_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* DmiMotherboard::release_asset_tag() {
-  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.asset_tag)
+inline ::std::string* DmiBaseboard_Item::release_asset_tag() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBaseboard.Item.asset_tag)
   
   return asset_tag_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void DmiMotherboard::set_allocated_asset_tag(::std::string* asset_tag) {
+inline void DmiBaseboard_Item::set_allocated_asset_tag(::std::string* asset_tag) {
   if (asset_tag != NULL) {
     
   } else {
     
   }
   asset_tag_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), asset_tag);
-  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.asset_tag)
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBaseboard.Item.asset_tag)
 }
 
-// repeated .aspia.system_info.DmiMotherboard.Feature feature = 6;
-inline int DmiMotherboard::feature_size() const {
+// repeated .aspia.system_info.DmiBaseboard.Item.Feature feature = 6;
+inline int DmiBaseboard_Item::feature_size() const {
   return feature_.size();
 }
-inline void DmiMotherboard::clear_feature() {
+inline void DmiBaseboard_Item::clear_feature() {
   feature_.Clear();
 }
-inline const ::aspia::system_info::DmiMotherboard_Feature& DmiMotherboard::feature(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.feature)
+inline const ::aspia::system_info::DmiBaseboard_Item_Feature& DmiBaseboard_Item::feature(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBaseboard.Item.feature)
   return feature_.Get(index);
 }
-inline ::aspia::system_info::DmiMotherboard_Feature* DmiMotherboard::mutable_feature(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.feature)
+inline ::aspia::system_info::DmiBaseboard_Item_Feature* DmiBaseboard_Item::mutable_feature(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBaseboard.Item.feature)
   return feature_.Mutable(index);
 }
-inline ::aspia::system_info::DmiMotherboard_Feature* DmiMotherboard::add_feature() {
-  // @@protoc_insertion_point(field_add:aspia.system_info.DmiMotherboard.feature)
+inline ::aspia::system_info::DmiBaseboard_Item_Feature* DmiBaseboard_Item::add_feature() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.DmiBaseboard.Item.feature)
   return feature_.Add();
 }
-inline ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiMotherboard_Feature >*
-DmiMotherboard::mutable_feature() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.DmiMotherboard.feature)
+inline ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBaseboard_Item_Feature >*
+DmiBaseboard_Item::mutable_feature() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.DmiBaseboard.Item.feature)
   return &feature_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiMotherboard_Feature >&
-DmiMotherboard::feature() const {
-  // @@protoc_insertion_point(field_list:aspia.system_info.DmiMotherboard.feature)
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBaseboard_Item_Feature >&
+DmiBaseboard_Item::feature() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.DmiBaseboard.Item.feature)
   return feature_;
 }
 
 // string location_in_chassis = 7;
-inline void DmiMotherboard::clear_location_in_chassis() {
+inline void DmiBaseboard_Item::clear_location_in_chassis() {
   location_in_chassis_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& DmiMotherboard::location_in_chassis() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.location_in_chassis)
+inline const ::std::string& DmiBaseboard_Item::location_in_chassis() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBaseboard.Item.location_in_chassis)
   return location_in_chassis_.GetNoArena();
 }
-inline void DmiMotherboard::set_location_in_chassis(const ::std::string& value) {
+inline void DmiBaseboard_Item::set_location_in_chassis(const ::std::string& value) {
   
   location_in_chassis_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.location_in_chassis)
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBaseboard.Item.location_in_chassis)
 }
 #if LANG_CXX11
-inline void DmiMotherboard::set_location_in_chassis(::std::string&& value) {
+inline void DmiBaseboard_Item::set_location_in_chassis(::std::string&& value) {
   
   location_in_chassis_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.location_in_chassis)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBaseboard.Item.location_in_chassis)
 }
 #endif
-inline void DmiMotherboard::set_location_in_chassis(const char* value) {
+inline void DmiBaseboard_Item::set_location_in_chassis(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   location_in_chassis_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.location_in_chassis)
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBaseboard.Item.location_in_chassis)
 }
-inline void DmiMotherboard::set_location_in_chassis(const char* value, size_t size) {
+inline void DmiBaseboard_Item::set_location_in_chassis(const char* value, size_t size) {
   
   location_in_chassis_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.location_in_chassis)
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBaseboard.Item.location_in_chassis)
 }
-inline ::std::string* DmiMotherboard::mutable_location_in_chassis() {
+inline ::std::string* DmiBaseboard_Item::mutable_location_in_chassis() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.location_in_chassis)
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBaseboard.Item.location_in_chassis)
   return location_in_chassis_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* DmiMotherboard::release_location_in_chassis() {
-  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.location_in_chassis)
+inline ::std::string* DmiBaseboard_Item::release_location_in_chassis() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBaseboard.Item.location_in_chassis)
   
   return location_in_chassis_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void DmiMotherboard::set_allocated_location_in_chassis(::std::string* location_in_chassis) {
+inline void DmiBaseboard_Item::set_allocated_location_in_chassis(::std::string* location_in_chassis) {
   if (location_in_chassis != NULL) {
     
   } else {
     
   }
   location_in_chassis_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), location_in_chassis);
-  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.location_in_chassis)
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBaseboard.Item.location_in_chassis)
 }
 
 // string type = 8;
-inline void DmiMotherboard::clear_type() {
+inline void DmiBaseboard_Item::clear_type() {
   type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& DmiMotherboard::type() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMotherboard.type)
+inline const ::std::string& DmiBaseboard_Item::type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBaseboard.Item.type)
   return type_.GetNoArena();
 }
-inline void DmiMotherboard::set_type(const ::std::string& value) {
+inline void DmiBaseboard_Item::set_type(const ::std::string& value) {
   
   type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMotherboard.type)
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBaseboard.Item.type)
 }
 #if LANG_CXX11
-inline void DmiMotherboard::set_type(::std::string&& value) {
+inline void DmiBaseboard_Item::set_type(::std::string&& value) {
   
   type_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMotherboard.type)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBaseboard.Item.type)
 }
 #endif
-inline void DmiMotherboard::set_type(const char* value) {
+inline void DmiBaseboard_Item::set_type(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMotherboard.type)
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBaseboard.Item.type)
 }
-inline void DmiMotherboard::set_type(const char* value, size_t size) {
+inline void DmiBaseboard_Item::set_type(const char* value, size_t size) {
   
   type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMotherboard.type)
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBaseboard.Item.type)
 }
-inline ::std::string* DmiMotherboard::mutable_type() {
+inline ::std::string* DmiBaseboard_Item::mutable_type() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMotherboard.type)
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBaseboard.Item.type)
   return type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* DmiMotherboard::release_type() {
-  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMotherboard.type)
+inline ::std::string* DmiBaseboard_Item::release_type() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBaseboard.Item.type)
   
   return type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void DmiMotherboard::set_allocated_type(::std::string* type) {
+inline void DmiBaseboard_Item::set_allocated_type(::std::string* type) {
   if (type != NULL) {
     
   } else {
     
   }
   type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), type);
-  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMotherboard.type)
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBaseboard.Item.type)
+}
+
+// -------------------------------------------------------------------
+
+// DmiBaseboard
+
+// repeated .aspia.system_info.DmiBaseboard.Item item = 1;
+inline int DmiBaseboard::item_size() const {
+  return item_.size();
+}
+inline void DmiBaseboard::clear_item() {
+  item_.Clear();
+}
+inline const ::aspia::system_info::DmiBaseboard_Item& DmiBaseboard::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBaseboard.item)
+  return item_.Get(index);
+}
+inline ::aspia::system_info::DmiBaseboard_Item* DmiBaseboard::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBaseboard.item)
+  return item_.Mutable(index);
+}
+inline ::aspia::system_info::DmiBaseboard_Item* DmiBaseboard::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.DmiBaseboard.item)
+  return item_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBaseboard_Item >*
+DmiBaseboard::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.DmiBaseboard.item)
+  return &item_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBaseboard_Item >&
+DmiBaseboard::item() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.DmiBaseboard.item)
+  return item_;
 }
 
 // -------------------------------------------------------------------
@@ -9742,6 +9882,8 @@ Sessions::item() const {
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

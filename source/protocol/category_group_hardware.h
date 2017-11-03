@@ -45,10 +45,10 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiSystem);
 };
 
-class CategoryDmiMotherboard : public CategoryInfo
+class CategoryDmiBaseboard : public CategoryInfo
 {
 public:
-    CategoryDmiMotherboard() = default;
+    CategoryDmiBaseboard() = default;
 
     const char* Name() const final;
     IconId Icon() const final;
@@ -58,7 +58,7 @@ public:
     std::string Serialize() final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiMotherboard);
+    DISALLOW_COPY_AND_ASSIGN(CategoryDmiBaseboard);
 };
 
 class CategoryDmiChassis : public CategoryInfo

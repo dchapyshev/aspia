@@ -95,10 +95,11 @@ std::string CategoryDmiBios::Serialize()
     if (!smbios)
         return std::string();
 
-    SMBios::BiosTable table(*smbios);
-    if (!table.IsValid())
+    SMBios::TableEnumerator<SMBios::BiosTable> table_enumerator(*smbios);
+    if (table_enumerator.IsAtEnd())
         return std::string();
 
+    SMBios::BiosTable table = table_enumerator.GetTable();
     system_info::DmiBios message;
 
     message.set_manufacturer(table.GetManufacturer());
@@ -187,10 +188,11 @@ std::string CategoryDmiSystem::Serialize()
     if (!smbios)
         return std::string();
 
-    SMBios::SystemTable table(*smbios);
-    if (!table.IsValid())
+    SMBios::TableEnumerator<SMBios::SystemTable> table_enumerator(*smbios);
+    if (table_enumerator.IsAtEnd())
         return std::string();
 
+    SMBios::SystemTable table = table_enumerator.GetTable();
     system_info::DmiSystem message;
 
     message.set_manufacturer(table.GetManufacturer());
@@ -209,24 +211,24 @@ std::string CategoryDmiSystem::Serialize()
 // CategoryDmiMotherboard
 //
 
-const char* CategoryDmiMotherboard::Name() const
+const char* CategoryDmiBaseboard::Name() const
 {
-    return "Motherboard";
+    return "Baseboard";
 }
 
-Category::IconId CategoryDmiMotherboard::Icon() const
+Category::IconId CategoryDmiBaseboard::Icon() const
 {
     return IDI_MOTHERBOARD;
 }
 
-const char* CategoryDmiMotherboard::Guid() const
+const char* CategoryDmiBaseboard::Guid() const
 {
     return "8143642D-3248-40F5-8FCF-629C581FFF01";
 }
 
-void CategoryDmiMotherboard::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryDmiBaseboard::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::DmiMotherboard message;
+    system_info::DmiBaseboard message;
 
     if (!message.ParseFromString(data))
         return;
@@ -239,69 +241,80 @@ void CategoryDmiMotherboard::Parse(std::shared_ptr<OutputProxy> output, const st
         output->AddHeaderItem("Value", 250);
     }
 
-    if (!message.manufacturer().empty())
-        output->AddParam(IDI_MOTHERBOARD, "Manufacturer", message.manufacturer());
-
-    if (!message.product_name().empty())
-        output->AddParam(IDI_MOTHERBOARD, "Product Name", message.product_name());
-
-    if (!message.version().empty())
-        output->AddParam(IDI_MOTHERBOARD, "Version", message.version());
-
-    if (!message.serial_number().empty())
-        output->AddParam(IDI_MOTHERBOARD, "Serial Number", message.serial_number());
-
-    if (!message.asset_tag().empty())
-        output->AddParam(IDI_MOTHERBOARD, "Asset Tag", message.asset_tag());
-
-    if (message.feature_size() > 0)
+    for (int index = 0; index < message.item_size(); ++index)
     {
-        Output::Group group(output, "Supported Features", IDI_MOTHERBOARD);
+        const system_info::DmiBaseboard::Item& item = message.item(index);
 
-        for (int index = 0; index < message.feature_size(); ++index)
+        Output::Group group(output, StringPrintf("Baseboard #%d", index + 1), Icon());
+
+        if (!item.type().empty())
+            output->AddParam(IDI_MOTHERBOARD, "Type", item.type());
+
+        if (!item.manufacturer().empty())
+            output->AddParam(IDI_MOTHERBOARD, "Manufacturer", item.manufacturer());
+
+        if (!item.product_name().empty())
+            output->AddParam(IDI_MOTHERBOARD, "Product Name", item.product_name());
+
+        if (!item.version().empty())
+            output->AddParam(IDI_MOTHERBOARD, "Version", item.version());
+
+        if (!item.serial_number().empty())
+            output->AddParam(IDI_MOTHERBOARD, "Serial Number", item.serial_number());
+
+        if (!item.asset_tag().empty())
+            output->AddParam(IDI_MOTHERBOARD, "Asset Tag", item.asset_tag());
+
+        if (item.feature_size() > 0)
         {
-            const system_info::DmiMotherboard::Feature& feature = message.feature(index);
+            Output::Group features_group(output, "Supported Features", IDI_MOTHERBOARD);
 
-            output->AddParam(feature.supported() ? IDI_CHECKED : IDI_UNCHECKED,
-                             feature.name(),
-                             feature.supported() ? "Yes" : "No");
+            for (int i = 0; i < item.feature_size(); ++i)
+            {
+                const system_info::DmiBaseboard::Item::Feature& feature = item.feature(i);
+
+                output->AddParam(feature.supported() ? IDI_CHECKED : IDI_UNCHECKED,
+                                 feature.name(),
+                                 feature.supported() ? "Yes" : "No");
+            }
         }
+
+        if (!item.location_in_chassis().empty())
+            output->AddParam(IDI_MOTHERBOARD, "Location in chassis", item.location_in_chassis());
     }
-
-    if (!message.location_in_chassis().empty())
-        output->AddParam(IDI_MOTHERBOARD, "Location in chassis", message.location_in_chassis());
-
-    if (!message.type().empty())
-        output->AddParam(IDI_MOTHERBOARD, "Type", message.type());
 }
 
-std::string CategoryDmiMotherboard::Serialize()
+std::string CategoryDmiBaseboard::Serialize()
 {
     std::unique_ptr<SMBios> smbios = ReadSMBios();
     if (!smbios)
         return std::string();
 
-    SMBios::BaseboardTable table(*smbios);
-    if (!table.IsValid())
-        return std::string();
+    system_info::DmiBaseboard message;
 
-    system_info::DmiMotherboard message;
-
-    message.set_manufacturer(table.GetManufacturer());
-    message.set_product_name(table.GetProductName());
-    message.set_version(table.GetVersion());
-    message.set_serial_number(table.GetSerialNumber());
-    message.set_asset_tag(table.GetAssetTag());
-    message.set_location_in_chassis(table.GetLocationInChassis());
-    message.set_type(table.GetBoardType());
-
-    SMBios::BaseboardTable::FeatureList feature_list = table.GetFeatures();
-
-    for (const auto& feature : feature_list)
+    for (SMBios::TableEnumerator<SMBios::BaseboardTable> table_enumerator(*smbios);
+         !table_enumerator.IsAtEnd();
+         table_enumerator.Advance())
     {
-        system_info::DmiMotherboard::Feature* item = message.add_feature();
-        item->set_name(feature.first);
-        item->set_supported(feature.second);
+        SMBios::BaseboardTable table = table_enumerator.GetTable();
+        system_info::DmiBaseboard::Item* item = message.add_item();
+
+        item->set_manufacturer(table.GetManufacturer());
+        item->set_product_name(table.GetProductName());
+        item->set_version(table.GetVersion());
+        item->set_serial_number(table.GetSerialNumber());
+        item->set_asset_tag(table.GetAssetTag());
+        item->set_location_in_chassis(table.GetLocationInChassis());
+        item->set_type(table.GetBoardType());
+
+        SMBios::BaseboardTable::FeatureList feature_list = table.GetFeatures();
+
+        for (const auto& feature : feature_list)
+        {
+            system_info::DmiBaseboard::Item::Feature* feature_item = item->add_feature();
+            feature_item->set_name(feature.first);
+            feature_item->set_supported(feature.second);
+        }
     }
 
     return message.SerializeAsString();

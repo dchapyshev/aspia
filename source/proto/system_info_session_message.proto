@@ -42,22 +42,27 @@ message DmiSystem
     string family        = 8;
 }
 
-message DmiMotherboard
+message DmiBaseboard
 {
-    message Feature
+    message Item
     {
-        string name    = 1;
-        bool supported = 2;
+        message Feature
+        {
+            string name    = 1;
+            bool supported = 2;
+        }
+
+        string manufacturer        = 1;
+        string product_name        = 2;
+        string version             = 3;
+        string serial_number       = 4;
+        string asset_tag           = 5;
+        repeated Feature feature   = 6;
+        string location_in_chassis = 7;
+        string type                = 8;
     }
 
-    string manufacturer        = 1;
-    string product_name        = 2;
-    string version             = 3;
-    string serial_number       = 4;
-    string asset_tag           = 5;
-    repeated Feature feature   = 6;
-    string location_in_chassis = 7;
-    string type                = 8;
+    repeated Item item = 1;
 }
 
 message Monitors

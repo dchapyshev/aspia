@@ -18,86 +18,41 @@ namespace aspia {
 
 class SMBios
 {
+    class TableEnumeratorImpl;
+    struct Data;
+
 public:
     static std::unique_ptr<SMBios> Create(std::unique_ptr<uint8_t[]> data, size_t data_size);
 
     uint8_t GetMajorVersion() const;
     uint8_t GetMinorVersion() const;
 
-    static const size_t kMaxDataSize = 0xFA00; // 64K
-
-    struct SMBiosData
-    {
-        uint8_t used_20_calling_method;
-        uint8_t smbios_major_version;
-        uint8_t smbios_minor_version;
-        uint8_t dmi_revision;
-        uint32_t length;
-        uint8_t smbios_table_data[kMaxDataSize];
-    };
-
-    enum TableType : uint8_t
-    {
-        TABLE_TYPE_BIOS                                 = 0,
-        TABLE_TYPE_SYSTEM                               = 1,
-        TABLE_TYPE_BASEBOARD                            = 2,
-        TABLE_TYPE_CHASSIS                              = 3,
-        TABLE_TYPE_PROCESSOR                            = 4,
-        TABLE_TYPE_MEMORY_CONTROLLER                    = 5,
-        TABLE_TYPE_MEMORY_MODULE                        = 6,
-        TABLE_TYPE_CACHE                                = 7,
-        TABLE_TYPE_PORT_CONNECTOR                       = 8,
-        TABLE_TYPE_SYSTEM_SLOTS                         = 9,
-        TABLE_TYPE_ONBOARD_DEVICES                      = 10,
-        TABLE_TYPE_OEM_STRINGS                          = 11,
-        TABLE_TYPE_SYSTEM_CONFIGURATION_OPTIONS         = 12,
-        TABLE_TYPE_BIOS_LANGUAGE                        = 13,
-        TABLE_TYPE_GROUP_ASSOCIATIONS                   = 14,
-        TABLE_TYPE_SYSTEM_EVENT_LOG                     = 15,
-        TABLE_TYPE_PHYSICAL_MEMORY_ARRAY                = 16,
-        TABLE_TYPE_MEMORY_DEVICE                        = 17,
-        TABLE_TYPE_32BIT_MEMORY_ERROR                   = 18,
-        TABLE_TYPE_MEMORY_ARRAY_MAPPED_ADDRESS          = 19,
-        TABLE_TYPE_MEMORY_DEVICE_MAPPED_ADDRESS         = 20,
-        TABLE_TYPE_BUILDIN_POINTING_DEVICE              = 21,
-        TABLE_TYPE_PORTABLE_BATTERY                     = 22,
-        TABLE_TYPE_SYSTEM_RESET                         = 23,
-        TABLE_TYPE_HARDWARE_SECURITY                    = 24,
-        TABLE_TYPE_SYSTEM_POWER_CONTROLS                = 25,
-        TABLE_TYPE_VOLTAGE_PROBE                        = 26,
-        TABLE_TYPE_COOLING_DEVICE                       = 27,
-        TABLE_TYPE_TEMPERATURE_PROBE                    = 28,
-        TABLE_TYPE_ELECTRICAL_CURRENT_PROBE             = 29,
-        TABLE_TYPE_OUT_OF_BAND_REMOTE_ACCESS            = 30,
-        TABLE_TYPE_BIS_ENTRY_POINT                      = 31,
-        TABLE_TYPE_SYSTEM_BOOT                          = 32,
-        TABLE_TYPE_64BIT_MEMORY_ERROR                   = 33,
-        TABLE_TYPE_MANAGEMENT_DEVICE                    = 34,
-        TABLE_TYPE_MANAGEMENT_DEVICE_COMPONENT          = 35,
-        TABLE_TYPE_MANAGEMENT_DEVICE_THRESHOLD_DATA     = 36,
-        TABLE_TYPE_MEMORY_CHANNEL                       = 37,
-        TABLE_TYPE_IPMI_DEVICE                          = 38,
-        TABLE_TYPE_SYSTEM_POWER_SUPPLY                  = 39,
-        TABLE_TYPE_ADDITIONAL                           = 40,
-        TABLE_TYPE_ONBOARD_DEVICE_EXTENDED              = 41,
-        TABLE_TYPE_MANAGEMENT_CONTROLLER_HOST_INTERFACE = 42,
-        TABLE_TYPE_INACTIVE                             = 126,
-        TABLE_TYPE_END_OF_TABLE                         = 127
-    };
-
-    class Table
+    template <class T>
+    class TableEnumerator
     {
     public:
-        virtual ~Table() = default;
+        TableEnumerator(const SMBios& smbios)
+            : impl_(reinterpret_cast<const Data*>(smbios.data_.get()), T::TABLE_TYPE)
+        {
+            // Nothing
+        }
 
-        using Feature = std::pair<std::string, bool>;
-        using FeatureList = std::list<Feature>;
+        bool IsAtEnd() const { return impl_.IsAtEnd(); }
+        void Advance() { impl_.Advance(T::TABLE_TYPE); }
+        T GetTable() const { return T(impl_.GetSMBiosData(), impl_.GetTableData()); }
 
-        bool IsValid() const;
+    private:
+        TableEnumeratorImpl impl_;
+        DISALLOW_COPY_AND_ASSIGN(TableEnumerator);
+    };
 
-    protected:
-        Table(const SMBios& smbios, TableType type);
+    class TableReader
+    {
+    public:
+        TableReader(const Data* smbios, const uint8_t* table);
 
+        uint8_t GetMajorVersion() const { return smbios_->smbios_major_version; }
+        uint8_t GetMinorVersion() const { return smbios_->smbios_minor_version; }
         uint8_t GetByte(uint8_t offset) const;
         uint16_t GetWord(uint8_t offset) const;
         uint32_t GetDword(uint8_t offset) const;
@@ -106,13 +61,17 @@ public:
         const uint8_t* GetPointer(uint8_t offset) const;
 
     private:
-        const uint8_t* data_;
+        const Data* smbios_;
+        const uint8_t* table_;
     };
 
-    class BiosTable : public Table
+    class BiosTable
     {
     public:
-        BiosTable(const SMBios& smbios);
+        enum : uint8_t { TABLE_TYPE = 0x00 };
+
+        using Feature = std::pair<std::string, bool>;
+        using FeatureList = std::list<Feature>;
 
         std::string GetManufacturer() const;
         std::string GetVersion() const;
@@ -125,13 +84,16 @@ public:
         FeatureList GetCharacteristics() const;
 
     private:
-        DISALLOW_COPY_AND_ASSIGN(BiosTable);
+        friend class TableEnumerator<BiosTable>;
+        BiosTable(const Data* smbios, const uint8_t* table);
+
+        TableReader reader_;
     };
 
-    class SystemTable : public Table
+    class SystemTable
     {
     public:
-        SystemTable(const SMBios& smbios);
+        enum : uint8_t { TABLE_TYPE = 0x01 };
 
         std::string GetManufacturer() const;
         std::string GetProductName() const;
@@ -143,15 +105,19 @@ public:
         std::string GetFamily() const;
 
     private:
-        const uint8_t major_version_;
-        const uint8_t minor_version_;
-        DISALLOW_COPY_AND_ASSIGN(SystemTable);
+        friend class TableEnumerator<SystemTable>;
+        SystemTable(const Data* smbios, const uint8_t* table);
+
+        TableReader reader_;
     };
 
-    class BaseboardTable : public Table
+    class BaseboardTable
     {
     public:
-        BaseboardTable(const SMBios& smbios);
+        enum : uint8_t { TABLE_TYPE = 0x02 };
+
+        using Feature = std::pair<std::string, bool>;
+        using FeatureList = std::list<Feature>;
 
         std::string GetManufacturer() const;
         std::string GetProductName() const;
@@ -163,20 +129,49 @@ public:
         std::string GetBoardType() const;
 
     private:
-        DISALLOW_COPY_AND_ASSIGN(BaseboardTable);
+        friend class TableEnumerator<BaseboardTable>;
+        BaseboardTable(const Data* smbios, const uint8_t* table);
+
+        TableReader reader_;
     };
 
 private:
-    friend class SMBiosTable;
-
-    SMBios(std::unique_ptr<uint8_t[]> data, size_t data_size, int table_count);
-
+    SMBios(std::unique_ptr<uint8_t[]> data, size_t data_size);
     static int GetTableCount(const uint8_t* table_data, uint32_t length);
-    const uint8_t* GetTable(TableType type) const;
+
+    static const size_t kMaxDataSize = 0xFA00; // 64K
+
+    struct Data
+    {
+        uint8_t used_20_calling_method;
+        uint8_t smbios_major_version;
+        uint8_t smbios_minor_version;
+        uint8_t dmi_revision;
+        uint32_t length;
+        uint8_t smbios_table_data[kMaxDataSize];
+    };
+
+    class TableEnumeratorImpl
+    {
+    public:
+        TableEnumeratorImpl(const Data* data, uint8_t type);
+
+        bool IsAtEnd() const;
+        void Advance(uint8_t type);
+        const Data* GetSMBiosData() const;
+        const uint8_t* GetTableData() const;
+
+    private:
+        const Data* data_;
+        const uint8_t* start_;
+        const uint8_t* next_;
+        const uint8_t* end_;
+        const uint8_t* current_;
+        DISALLOW_COPY_AND_ASSIGN(TableEnumeratorImpl);
+    };
 
     std::unique_ptr<uint8_t[]> data_;
     const size_t data_size_;
-    const int table_count_;
 
     DISALLOW_COPY_AND_ASSIGN(SMBios);
 };
