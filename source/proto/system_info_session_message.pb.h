@@ -47,6 +47,12 @@ extern DmiBiosDefaultTypeInternal _DmiBios_default_instance_;
 class DmiBios_Feature;
 class DmiBios_FeatureDefaultTypeInternal;
 extern DmiBios_FeatureDefaultTypeInternal _DmiBios_Feature_default_instance_;
+class DmiCaches;
+class DmiCachesDefaultTypeInternal;
+extern DmiCachesDefaultTypeInternal _DmiCaches_default_instance_;
+class DmiCaches_Item;
+class DmiCaches_ItemDefaultTypeInternal;
+extern DmiCaches_ItemDefaultTypeInternal _DmiCaches_Item_default_instance_;
 class DmiChassis;
 class DmiChassisDefaultTypeInternal;
 extern DmiChassisDefaultTypeInternal _DmiChassis_default_instance_;
@@ -231,6 +237,126 @@ bool DmiChassis_Item_SecurityStatus_IsValid(int value);
 const DmiChassis_Item_SecurityStatus DmiChassis_Item_SecurityStatus_SecurityStatus_MIN = DmiChassis_Item_SecurityStatus_SECURITY_STATUS_UNKNOWN;
 const DmiChassis_Item_SecurityStatus DmiChassis_Item_SecurityStatus_SecurityStatus_MAX = DmiChassis_Item_SecurityStatus_SECURITY_STATUS_EXTERNAL_INTERFACE_ENABLED;
 const int DmiChassis_Item_SecurityStatus_SecurityStatus_ARRAYSIZE = DmiChassis_Item_SecurityStatus_SecurityStatus_MAX + 1;
+
+enum DmiCaches_Item_Location {
+  DmiCaches_Item_Location_LOCATION_UNKNOWN = 0,
+  DmiCaches_Item_Location_LOCATION_INTERNAL = 1,
+  DmiCaches_Item_Location_LOCATION_EXTERNAL = 2,
+  DmiCaches_Item_Location_LOCATION_RESERVED = 3,
+  DmiCaches_Item_Location_DmiCaches_Item_Location_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiCaches_Item_Location_DmiCaches_Item_Location_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiCaches_Item_Location_IsValid(int value);
+const DmiCaches_Item_Location DmiCaches_Item_Location_Location_MIN = DmiCaches_Item_Location_LOCATION_UNKNOWN;
+const DmiCaches_Item_Location DmiCaches_Item_Location_Location_MAX = DmiCaches_Item_Location_LOCATION_RESERVED;
+const int DmiCaches_Item_Location_Location_ARRAYSIZE = DmiCaches_Item_Location_Location_MAX + 1;
+
+enum DmiCaches_Item_Status {
+  DmiCaches_Item_Status_STATUS_UNKNOWN = 0,
+  DmiCaches_Item_Status_STATUS_ENABLED = 1,
+  DmiCaches_Item_Status_STATUS_DISABLED = 2,
+  DmiCaches_Item_Status_DmiCaches_Item_Status_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiCaches_Item_Status_DmiCaches_Item_Status_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiCaches_Item_Status_IsValid(int value);
+const DmiCaches_Item_Status DmiCaches_Item_Status_Status_MIN = DmiCaches_Item_Status_STATUS_UNKNOWN;
+const DmiCaches_Item_Status DmiCaches_Item_Status_Status_MAX = DmiCaches_Item_Status_STATUS_DISABLED;
+const int DmiCaches_Item_Status_Status_ARRAYSIZE = DmiCaches_Item_Status_Status_MAX + 1;
+
+enum DmiCaches_Item_Mode {
+  DmiCaches_Item_Mode_MODE_UNKNOWN = 0,
+  DmiCaches_Item_Mode_MODE_WRITE_THRU = 1,
+  DmiCaches_Item_Mode_MODE_WRITE_BACK = 2,
+  DmiCaches_Item_Mode_MODE_WRITE_WITH_MEMORY_ADDRESS = 3,
+  DmiCaches_Item_Mode_DmiCaches_Item_Mode_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiCaches_Item_Mode_DmiCaches_Item_Mode_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiCaches_Item_Mode_IsValid(int value);
+const DmiCaches_Item_Mode DmiCaches_Item_Mode_Mode_MIN = DmiCaches_Item_Mode_MODE_UNKNOWN;
+const DmiCaches_Item_Mode DmiCaches_Item_Mode_Mode_MAX = DmiCaches_Item_Mode_MODE_WRITE_WITH_MEMORY_ADDRESS;
+const int DmiCaches_Item_Mode_Mode_ARRAYSIZE = DmiCaches_Item_Mode_Mode_MAX + 1;
+
+enum DmiCaches_Item_Level {
+  DmiCaches_Item_Level_LEVEL_UNKNOWN = 0,
+  DmiCaches_Item_Level_LEVEL_L1 = 1,
+  DmiCaches_Item_Level_LEVEL_L2 = 2,
+  DmiCaches_Item_Level_LEVEL_L3 = 3,
+  DmiCaches_Item_Level_DmiCaches_Item_Level_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiCaches_Item_Level_DmiCaches_Item_Level_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiCaches_Item_Level_IsValid(int value);
+const DmiCaches_Item_Level DmiCaches_Item_Level_Level_MIN = DmiCaches_Item_Level_LEVEL_UNKNOWN;
+const DmiCaches_Item_Level DmiCaches_Item_Level_Level_MAX = DmiCaches_Item_Level_LEVEL_L3;
+const int DmiCaches_Item_Level_Level_ARRAYSIZE = DmiCaches_Item_Level_Level_MAX + 1;
+
+enum DmiCaches_Item_SRAMType {
+  DmiCaches_Item_SRAMType_SRAM_TYPE_BAD = 0,
+  DmiCaches_Item_SRAMType_SRAM_TYPE_OTHER = 1,
+  DmiCaches_Item_SRAMType_SRAM_TYPE_UNKNOWN = 2,
+  DmiCaches_Item_SRAMType_SRAM_TYPE_NON_BURST = 4,
+  DmiCaches_Item_SRAMType_SRAM_TYPE_BURST = 8,
+  DmiCaches_Item_SRAMType_SRAM_TYPE_PIPELINE_BURST = 16,
+  DmiCaches_Item_SRAMType_SRAM_TYPE_SYNCHRONOUS = 32,
+  DmiCaches_Item_SRAMType_SRAM_TYPE_ASYNCHRONOUS = 64,
+  DmiCaches_Item_SRAMType_DmiCaches_Item_SRAMType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiCaches_Item_SRAMType_DmiCaches_Item_SRAMType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiCaches_Item_SRAMType_IsValid(int value);
+const DmiCaches_Item_SRAMType DmiCaches_Item_SRAMType_SRAMType_MIN = DmiCaches_Item_SRAMType_SRAM_TYPE_BAD;
+const DmiCaches_Item_SRAMType DmiCaches_Item_SRAMType_SRAMType_MAX = DmiCaches_Item_SRAMType_SRAM_TYPE_ASYNCHRONOUS;
+const int DmiCaches_Item_SRAMType_SRAMType_ARRAYSIZE = DmiCaches_Item_SRAMType_SRAMType_MAX + 1;
+
+enum DmiCaches_Item_ErrorCorrectionType {
+  DmiCaches_Item_ErrorCorrectionType_ERROR_CORRECTION_TYPE_UNKNOWN = 0,
+  DmiCaches_Item_ErrorCorrectionType_ERROR_CORRECTION_TYPE_OTHER = 1,
+  DmiCaches_Item_ErrorCorrectionType_ERROR_CORRECTION_TYPE_NONE = 2,
+  DmiCaches_Item_ErrorCorrectionType_ERROR_CORRECTION_TYPE_PARITY = 3,
+  DmiCaches_Item_ErrorCorrectionType_ERROR_CORRECTION_TYPE_SINGLE_BIT_ECC = 4,
+  DmiCaches_Item_ErrorCorrectionType_ERROR_CORRECTION_TYPE_MULTI_BIT_ECC = 5,
+  DmiCaches_Item_ErrorCorrectionType_DmiCaches_Item_ErrorCorrectionType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiCaches_Item_ErrorCorrectionType_DmiCaches_Item_ErrorCorrectionType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiCaches_Item_ErrorCorrectionType_IsValid(int value);
+const DmiCaches_Item_ErrorCorrectionType DmiCaches_Item_ErrorCorrectionType_ErrorCorrectionType_MIN = DmiCaches_Item_ErrorCorrectionType_ERROR_CORRECTION_TYPE_UNKNOWN;
+const DmiCaches_Item_ErrorCorrectionType DmiCaches_Item_ErrorCorrectionType_ErrorCorrectionType_MAX = DmiCaches_Item_ErrorCorrectionType_ERROR_CORRECTION_TYPE_MULTI_BIT_ECC;
+const int DmiCaches_Item_ErrorCorrectionType_ErrorCorrectionType_ARRAYSIZE = DmiCaches_Item_ErrorCorrectionType_ErrorCorrectionType_MAX + 1;
+
+enum DmiCaches_Item_Type {
+  DmiCaches_Item_Type_TYPE_UNKNOWN = 0,
+  DmiCaches_Item_Type_TYPE_OTHER = 1,
+  DmiCaches_Item_Type_TYPE_INSTRUCTION = 2,
+  DmiCaches_Item_Type_TYPE_DATA = 3,
+  DmiCaches_Item_Type_TYPE_UNIFIED = 4,
+  DmiCaches_Item_Type_DmiCaches_Item_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiCaches_Item_Type_DmiCaches_Item_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiCaches_Item_Type_IsValid(int value);
+const DmiCaches_Item_Type DmiCaches_Item_Type_Type_MIN = DmiCaches_Item_Type_TYPE_UNKNOWN;
+const DmiCaches_Item_Type DmiCaches_Item_Type_Type_MAX = DmiCaches_Item_Type_TYPE_UNIFIED;
+const int DmiCaches_Item_Type_Type_ARRAYSIZE = DmiCaches_Item_Type_Type_MAX + 1;
+
+enum DmiCaches_Item_Associativity {
+  DmiCaches_Item_Associativity_ASSOCIATIVITY_UNKNOWN = 0,
+  DmiCaches_Item_Associativity_ASSOCIATIVITY_OTHER = 1,
+  DmiCaches_Item_Associativity_ASSOCIATIVITY_DIRECT_MAPPED = 2,
+  DmiCaches_Item_Associativity_ASSOCIATIVITY_2_WAY = 3,
+  DmiCaches_Item_Associativity_ASSOCIATIVITY_4_WAY = 4,
+  DmiCaches_Item_Associativity_ASSOCIATIVITY_FULLY = 5,
+  DmiCaches_Item_Associativity_ASSOCIATIVITY_8_WAY = 6,
+  DmiCaches_Item_Associativity_ASSOCIATIVITY_16_WAY = 7,
+  DmiCaches_Item_Associativity_ASSOCIATIVITY_12_WAY = 8,
+  DmiCaches_Item_Associativity_ASSOCIATIVITY_24_WAY = 9,
+  DmiCaches_Item_Associativity_ASSOCIATIVITY_32_WAY = 10,
+  DmiCaches_Item_Associativity_ASSOCIATIVITY_48_WAY = 11,
+  DmiCaches_Item_Associativity_ASSOCIATIVITY_64_WAY = 12,
+  DmiCaches_Item_Associativity_ASSOCIATIVITY_20_WAY = 13,
+  DmiCaches_Item_Associativity_DmiCaches_Item_Associativity_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiCaches_Item_Associativity_DmiCaches_Item_Associativity_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiCaches_Item_Associativity_IsValid(int value);
+const DmiCaches_Item_Associativity DmiCaches_Item_Associativity_Associativity_MIN = DmiCaches_Item_Associativity_ASSOCIATIVITY_UNKNOWN;
+const DmiCaches_Item_Associativity DmiCaches_Item_Associativity_Associativity_MAX = DmiCaches_Item_Associativity_ASSOCIATIVITY_20_WAY;
+const int DmiCaches_Item_Associativity_Associativity_ARRAYSIZE = DmiCaches_Item_Associativity_Associativity_MAX + 1;
 
 enum Monitors_Item_InputSignalType {
   Monitors_Item_InputSignalType_INPUT_SIGNAL_TYPE_UNKNOWN = 0,
@@ -1694,6 +1820,480 @@ class DmiChassis : public ::google::protobuf::MessageLite /* @@protoc_insertion_
 };
 // -------------------------------------------------------------------
 
+class DmiCaches_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.DmiCaches.Item) */ {
+ public:
+  DmiCaches_Item();
+  virtual ~DmiCaches_Item();
+
+  DmiCaches_Item(const DmiCaches_Item& from);
+
+  inline DmiCaches_Item& operator=(const DmiCaches_Item& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  DmiCaches_Item(DmiCaches_Item&& from) noexcept
+    : DmiCaches_Item() {
+    *this = ::std::move(from);
+  }
+
+  inline DmiCaches_Item& operator=(DmiCaches_Item&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const DmiCaches_Item& default_instance();
+
+  static inline const DmiCaches_Item* internal_default_instance() {
+    return reinterpret_cast<const DmiCaches_Item*>(
+               &_DmiCaches_Item_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    8;
+
+  void Swap(DmiCaches_Item* other);
+  friend void swap(DmiCaches_Item& a, DmiCaches_Item& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DmiCaches_Item* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  DmiCaches_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const DmiCaches_Item& from);
+  void MergeFrom(const DmiCaches_Item& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(DmiCaches_Item* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef DmiCaches_Item_Location Location;
+  static const Location LOCATION_UNKNOWN =
+    DmiCaches_Item_Location_LOCATION_UNKNOWN;
+  static const Location LOCATION_INTERNAL =
+    DmiCaches_Item_Location_LOCATION_INTERNAL;
+  static const Location LOCATION_EXTERNAL =
+    DmiCaches_Item_Location_LOCATION_EXTERNAL;
+  static const Location LOCATION_RESERVED =
+    DmiCaches_Item_Location_LOCATION_RESERVED;
+  static inline bool Location_IsValid(int value) {
+    return DmiCaches_Item_Location_IsValid(value);
+  }
+  static const Location Location_MIN =
+    DmiCaches_Item_Location_Location_MIN;
+  static const Location Location_MAX =
+    DmiCaches_Item_Location_Location_MAX;
+  static const int Location_ARRAYSIZE =
+    DmiCaches_Item_Location_Location_ARRAYSIZE;
+
+  typedef DmiCaches_Item_Status Status;
+  static const Status STATUS_UNKNOWN =
+    DmiCaches_Item_Status_STATUS_UNKNOWN;
+  static const Status STATUS_ENABLED =
+    DmiCaches_Item_Status_STATUS_ENABLED;
+  static const Status STATUS_DISABLED =
+    DmiCaches_Item_Status_STATUS_DISABLED;
+  static inline bool Status_IsValid(int value) {
+    return DmiCaches_Item_Status_IsValid(value);
+  }
+  static const Status Status_MIN =
+    DmiCaches_Item_Status_Status_MIN;
+  static const Status Status_MAX =
+    DmiCaches_Item_Status_Status_MAX;
+  static const int Status_ARRAYSIZE =
+    DmiCaches_Item_Status_Status_ARRAYSIZE;
+
+  typedef DmiCaches_Item_Mode Mode;
+  static const Mode MODE_UNKNOWN =
+    DmiCaches_Item_Mode_MODE_UNKNOWN;
+  static const Mode MODE_WRITE_THRU =
+    DmiCaches_Item_Mode_MODE_WRITE_THRU;
+  static const Mode MODE_WRITE_BACK =
+    DmiCaches_Item_Mode_MODE_WRITE_BACK;
+  static const Mode MODE_WRITE_WITH_MEMORY_ADDRESS =
+    DmiCaches_Item_Mode_MODE_WRITE_WITH_MEMORY_ADDRESS;
+  static inline bool Mode_IsValid(int value) {
+    return DmiCaches_Item_Mode_IsValid(value);
+  }
+  static const Mode Mode_MIN =
+    DmiCaches_Item_Mode_Mode_MIN;
+  static const Mode Mode_MAX =
+    DmiCaches_Item_Mode_Mode_MAX;
+  static const int Mode_ARRAYSIZE =
+    DmiCaches_Item_Mode_Mode_ARRAYSIZE;
+
+  typedef DmiCaches_Item_Level Level;
+  static const Level LEVEL_UNKNOWN =
+    DmiCaches_Item_Level_LEVEL_UNKNOWN;
+  static const Level LEVEL_L1 =
+    DmiCaches_Item_Level_LEVEL_L1;
+  static const Level LEVEL_L2 =
+    DmiCaches_Item_Level_LEVEL_L2;
+  static const Level LEVEL_L3 =
+    DmiCaches_Item_Level_LEVEL_L3;
+  static inline bool Level_IsValid(int value) {
+    return DmiCaches_Item_Level_IsValid(value);
+  }
+  static const Level Level_MIN =
+    DmiCaches_Item_Level_Level_MIN;
+  static const Level Level_MAX =
+    DmiCaches_Item_Level_Level_MAX;
+  static const int Level_ARRAYSIZE =
+    DmiCaches_Item_Level_Level_ARRAYSIZE;
+
+  typedef DmiCaches_Item_SRAMType SRAMType;
+  static const SRAMType SRAM_TYPE_BAD =
+    DmiCaches_Item_SRAMType_SRAM_TYPE_BAD;
+  static const SRAMType SRAM_TYPE_OTHER =
+    DmiCaches_Item_SRAMType_SRAM_TYPE_OTHER;
+  static const SRAMType SRAM_TYPE_UNKNOWN =
+    DmiCaches_Item_SRAMType_SRAM_TYPE_UNKNOWN;
+  static const SRAMType SRAM_TYPE_NON_BURST =
+    DmiCaches_Item_SRAMType_SRAM_TYPE_NON_BURST;
+  static const SRAMType SRAM_TYPE_BURST =
+    DmiCaches_Item_SRAMType_SRAM_TYPE_BURST;
+  static const SRAMType SRAM_TYPE_PIPELINE_BURST =
+    DmiCaches_Item_SRAMType_SRAM_TYPE_PIPELINE_BURST;
+  static const SRAMType SRAM_TYPE_SYNCHRONOUS =
+    DmiCaches_Item_SRAMType_SRAM_TYPE_SYNCHRONOUS;
+  static const SRAMType SRAM_TYPE_ASYNCHRONOUS =
+    DmiCaches_Item_SRAMType_SRAM_TYPE_ASYNCHRONOUS;
+  static inline bool SRAMType_IsValid(int value) {
+    return DmiCaches_Item_SRAMType_IsValid(value);
+  }
+  static const SRAMType SRAMType_MIN =
+    DmiCaches_Item_SRAMType_SRAMType_MIN;
+  static const SRAMType SRAMType_MAX =
+    DmiCaches_Item_SRAMType_SRAMType_MAX;
+  static const int SRAMType_ARRAYSIZE =
+    DmiCaches_Item_SRAMType_SRAMType_ARRAYSIZE;
+
+  typedef DmiCaches_Item_ErrorCorrectionType ErrorCorrectionType;
+  static const ErrorCorrectionType ERROR_CORRECTION_TYPE_UNKNOWN =
+    DmiCaches_Item_ErrorCorrectionType_ERROR_CORRECTION_TYPE_UNKNOWN;
+  static const ErrorCorrectionType ERROR_CORRECTION_TYPE_OTHER =
+    DmiCaches_Item_ErrorCorrectionType_ERROR_CORRECTION_TYPE_OTHER;
+  static const ErrorCorrectionType ERROR_CORRECTION_TYPE_NONE =
+    DmiCaches_Item_ErrorCorrectionType_ERROR_CORRECTION_TYPE_NONE;
+  static const ErrorCorrectionType ERROR_CORRECTION_TYPE_PARITY =
+    DmiCaches_Item_ErrorCorrectionType_ERROR_CORRECTION_TYPE_PARITY;
+  static const ErrorCorrectionType ERROR_CORRECTION_TYPE_SINGLE_BIT_ECC =
+    DmiCaches_Item_ErrorCorrectionType_ERROR_CORRECTION_TYPE_SINGLE_BIT_ECC;
+  static const ErrorCorrectionType ERROR_CORRECTION_TYPE_MULTI_BIT_ECC =
+    DmiCaches_Item_ErrorCorrectionType_ERROR_CORRECTION_TYPE_MULTI_BIT_ECC;
+  static inline bool ErrorCorrectionType_IsValid(int value) {
+    return DmiCaches_Item_ErrorCorrectionType_IsValid(value);
+  }
+  static const ErrorCorrectionType ErrorCorrectionType_MIN =
+    DmiCaches_Item_ErrorCorrectionType_ErrorCorrectionType_MIN;
+  static const ErrorCorrectionType ErrorCorrectionType_MAX =
+    DmiCaches_Item_ErrorCorrectionType_ErrorCorrectionType_MAX;
+  static const int ErrorCorrectionType_ARRAYSIZE =
+    DmiCaches_Item_ErrorCorrectionType_ErrorCorrectionType_ARRAYSIZE;
+
+  typedef DmiCaches_Item_Type Type;
+  static const Type TYPE_UNKNOWN =
+    DmiCaches_Item_Type_TYPE_UNKNOWN;
+  static const Type TYPE_OTHER =
+    DmiCaches_Item_Type_TYPE_OTHER;
+  static const Type TYPE_INSTRUCTION =
+    DmiCaches_Item_Type_TYPE_INSTRUCTION;
+  static const Type TYPE_DATA =
+    DmiCaches_Item_Type_TYPE_DATA;
+  static const Type TYPE_UNIFIED =
+    DmiCaches_Item_Type_TYPE_UNIFIED;
+  static inline bool Type_IsValid(int value) {
+    return DmiCaches_Item_Type_IsValid(value);
+  }
+  static const Type Type_MIN =
+    DmiCaches_Item_Type_Type_MIN;
+  static const Type Type_MAX =
+    DmiCaches_Item_Type_Type_MAX;
+  static const int Type_ARRAYSIZE =
+    DmiCaches_Item_Type_Type_ARRAYSIZE;
+
+  typedef DmiCaches_Item_Associativity Associativity;
+  static const Associativity ASSOCIATIVITY_UNKNOWN =
+    DmiCaches_Item_Associativity_ASSOCIATIVITY_UNKNOWN;
+  static const Associativity ASSOCIATIVITY_OTHER =
+    DmiCaches_Item_Associativity_ASSOCIATIVITY_OTHER;
+  static const Associativity ASSOCIATIVITY_DIRECT_MAPPED =
+    DmiCaches_Item_Associativity_ASSOCIATIVITY_DIRECT_MAPPED;
+  static const Associativity ASSOCIATIVITY_2_WAY =
+    DmiCaches_Item_Associativity_ASSOCIATIVITY_2_WAY;
+  static const Associativity ASSOCIATIVITY_4_WAY =
+    DmiCaches_Item_Associativity_ASSOCIATIVITY_4_WAY;
+  static const Associativity ASSOCIATIVITY_FULLY =
+    DmiCaches_Item_Associativity_ASSOCIATIVITY_FULLY;
+  static const Associativity ASSOCIATIVITY_8_WAY =
+    DmiCaches_Item_Associativity_ASSOCIATIVITY_8_WAY;
+  static const Associativity ASSOCIATIVITY_16_WAY =
+    DmiCaches_Item_Associativity_ASSOCIATIVITY_16_WAY;
+  static const Associativity ASSOCIATIVITY_12_WAY =
+    DmiCaches_Item_Associativity_ASSOCIATIVITY_12_WAY;
+  static const Associativity ASSOCIATIVITY_24_WAY =
+    DmiCaches_Item_Associativity_ASSOCIATIVITY_24_WAY;
+  static const Associativity ASSOCIATIVITY_32_WAY =
+    DmiCaches_Item_Associativity_ASSOCIATIVITY_32_WAY;
+  static const Associativity ASSOCIATIVITY_48_WAY =
+    DmiCaches_Item_Associativity_ASSOCIATIVITY_48_WAY;
+  static const Associativity ASSOCIATIVITY_64_WAY =
+    DmiCaches_Item_Associativity_ASSOCIATIVITY_64_WAY;
+  static const Associativity ASSOCIATIVITY_20_WAY =
+    DmiCaches_Item_Associativity_ASSOCIATIVITY_20_WAY;
+  static inline bool Associativity_IsValid(int value) {
+    return DmiCaches_Item_Associativity_IsValid(value);
+  }
+  static const Associativity Associativity_MIN =
+    DmiCaches_Item_Associativity_Associativity_MIN;
+  static const Associativity Associativity_MAX =
+    DmiCaches_Item_Associativity_Associativity_MAX;
+  static const int Associativity_ARRAYSIZE =
+    DmiCaches_Item_Associativity_Associativity_ARRAYSIZE;
+
+  // accessors -------------------------------------------------------
+
+  // string name = 1;
+  void clear_name();
+  static const int kNameFieldNumber = 1;
+  const ::std::string& name() const;
+  void set_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_name(::std::string&& value);
+  #endif
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  ::std::string* mutable_name();
+  ::std::string* release_name();
+  void set_allocated_name(::std::string* name);
+
+  // .aspia.system_info.DmiCaches.Item.Location location = 2;
+  void clear_location();
+  static const int kLocationFieldNumber = 2;
+  ::aspia::system_info::DmiCaches_Item_Location location() const;
+  void set_location(::aspia::system_info::DmiCaches_Item_Location value);
+
+  // .aspia.system_info.DmiCaches.Item.Status status = 3;
+  void clear_status();
+  static const int kStatusFieldNumber = 3;
+  ::aspia::system_info::DmiCaches_Item_Status status() const;
+  void set_status(::aspia::system_info::DmiCaches_Item_Status value);
+
+  // .aspia.system_info.DmiCaches.Item.Mode mode = 4;
+  void clear_mode();
+  static const int kModeFieldNumber = 4;
+  ::aspia::system_info::DmiCaches_Item_Mode mode() const;
+  void set_mode(::aspia::system_info::DmiCaches_Item_Mode value);
+
+  // .aspia.system_info.DmiCaches.Item.Level level = 5;
+  void clear_level();
+  static const int kLevelFieldNumber = 5;
+  ::aspia::system_info::DmiCaches_Item_Level level() const;
+  void set_level(::aspia::system_info::DmiCaches_Item_Level value);
+
+  // int32 maximum_size = 6;
+  void clear_maximum_size();
+  static const int kMaximumSizeFieldNumber = 6;
+  ::google::protobuf::int32 maximum_size() const;
+  void set_maximum_size(::google::protobuf::int32 value);
+
+  // int32 current_size = 7;
+  void clear_current_size();
+  static const int kCurrentSizeFieldNumber = 7;
+  ::google::protobuf::int32 current_size() const;
+  void set_current_size(::google::protobuf::int32 value);
+
+  // uint32 supported_sram_types = 8;
+  void clear_supported_sram_types();
+  static const int kSupportedSramTypesFieldNumber = 8;
+  ::google::protobuf::uint32 supported_sram_types() const;
+  void set_supported_sram_types(::google::protobuf::uint32 value);
+
+  // .aspia.system_info.DmiCaches.Item.SRAMType current_sram_type = 9;
+  void clear_current_sram_type();
+  static const int kCurrentSramTypeFieldNumber = 9;
+  ::aspia::system_info::DmiCaches_Item_SRAMType current_sram_type() const;
+  void set_current_sram_type(::aspia::system_info::DmiCaches_Item_SRAMType value);
+
+  // int32 speed = 10;
+  void clear_speed();
+  static const int kSpeedFieldNumber = 10;
+  ::google::protobuf::int32 speed() const;
+  void set_speed(::google::protobuf::int32 value);
+
+  // .aspia.system_info.DmiCaches.Item.ErrorCorrectionType error_correction_type = 11;
+  void clear_error_correction_type();
+  static const int kErrorCorrectionTypeFieldNumber = 11;
+  ::aspia::system_info::DmiCaches_Item_ErrorCorrectionType error_correction_type() const;
+  void set_error_correction_type(::aspia::system_info::DmiCaches_Item_ErrorCorrectionType value);
+
+  // .aspia.system_info.DmiCaches.Item.Type type = 12;
+  void clear_type();
+  static const int kTypeFieldNumber = 12;
+  ::aspia::system_info::DmiCaches_Item_Type type() const;
+  void set_type(::aspia::system_info::DmiCaches_Item_Type value);
+
+  // .aspia.system_info.DmiCaches.Item.Associativity associativity = 13;
+  void clear_associativity();
+  static const int kAssociativityFieldNumber = 13;
+  ::aspia::system_info::DmiCaches_Item_Associativity associativity() const;
+  void set_associativity(::aspia::system_info::DmiCaches_Item_Associativity value);
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.DmiCaches.Item)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr name_;
+  int location_;
+  int status_;
+  int mode_;
+  int level_;
+  ::google::protobuf::int32 maximum_size_;
+  ::google::protobuf::int32 current_size_;
+  ::google::protobuf::uint32 supported_sram_types_;
+  int current_sram_type_;
+  ::google::protobuf::int32 speed_;
+  int error_correction_type_;
+  int type_;
+  int associativity_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class DmiCaches : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.DmiCaches) */ {
+ public:
+  DmiCaches();
+  virtual ~DmiCaches();
+
+  DmiCaches(const DmiCaches& from);
+
+  inline DmiCaches& operator=(const DmiCaches& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  DmiCaches(DmiCaches&& from) noexcept
+    : DmiCaches() {
+    *this = ::std::move(from);
+  }
+
+  inline DmiCaches& operator=(DmiCaches&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const DmiCaches& default_instance();
+
+  static inline const DmiCaches* internal_default_instance() {
+    return reinterpret_cast<const DmiCaches*>(
+               &_DmiCaches_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    9;
+
+  void Swap(DmiCaches* other);
+  friend void swap(DmiCaches& a, DmiCaches& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DmiCaches* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  DmiCaches* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const DmiCaches& from);
+  void MergeFrom(const DmiCaches& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(DmiCaches* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef DmiCaches_Item Item;
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.system_info.DmiCaches.Item item = 1;
+  int item_size() const;
+  void clear_item();
+  static const int kItemFieldNumber = 1;
+  const ::aspia::system_info::DmiCaches_Item& item(int index) const;
+  ::aspia::system_info::DmiCaches_Item* mutable_item(int index);
+  ::aspia::system_info::DmiCaches_Item* add_item();
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiCaches_Item >*
+      mutable_item();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiCaches_Item >&
+      item() const;
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.DmiCaches)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiCaches_Item > item_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class Monitors_Item_Timing : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.Monitors.Item.Timing) */ {
  public:
   Monitors_Item_Timing();
@@ -1727,7 +2327,7 @@ class Monitors_Item_Timing : public ::google::protobuf::MessageLite /* @@protoc_
                &_Monitors_Item_Timing_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    10;
 
   void Swap(Monitors_Item_Timing* other);
   friend void swap(Monitors_Item_Timing& a, Monitors_Item_Timing& b) {
@@ -1836,7 +2436,7 @@ class Monitors_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Monitors_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    11;
 
   void Swap(Monitors_Item* other);
   friend void swap(Monitors_Item& a, Monitors_Item& b) {
@@ -2185,7 +2785,7 @@ class Monitors : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Monitors_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    12;
 
   void Swap(Monitors* other);
   friend void swap(Monitors& a, Monitors& b) {
@@ -2288,7 +2888,7 @@ class Printers_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Printers_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    13;
 
   void Swap(Printers_Item* other);
   friend void swap(Printers_Item& a, Printers_Item& b) {
@@ -2592,7 +3192,7 @@ class Printers : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Printers_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    14;
 
   void Swap(Printers* other);
   friend void swap(Printers& a, Printers& b) {
@@ -2695,7 +3295,7 @@ class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Services_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    13;
+    15;
 
   void Swap(Services_Item* other);
   friend void swap(Services_Item& a, Services_Item& b) {
@@ -2922,7 +3522,7 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Services_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    14;
+    16;
 
   void Swap(Services* other);
   friend void swap(Services& a, Services& b) {
@@ -3025,7 +3625,7 @@ class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@
                &_NetworkCards_Item_IpAddress_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    15;
+    17;
 
   void Swap(NetworkCards_Item_IpAddress* other);
   friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
@@ -3143,7 +3743,7 @@ class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_NetworkCards_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    16;
+    18;
 
   void Swap(NetworkCards_Item* other);
   friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
@@ -3433,7 +4033,7 @@ class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_NetworkCards_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    17;
+    19;
 
   void Swap(NetworkCards* other);
   friend void swap(NetworkCards& a, NetworkCards& b) {
@@ -3536,7 +4136,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    18;
+    20;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -3698,7 +4298,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    19;
+    21;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -3801,7 +4401,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    20;
+    22;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -3980,7 +4580,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    21;
+    23;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -4083,7 +4683,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    22;
+    24;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -4223,7 +4823,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    23;
+    25;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -4326,7 +4926,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    24;
+    26;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -4515,7 +5115,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    25;
+    27;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -4618,7 +5218,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    26;
+    28;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -4736,7 +5336,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    27;
+    29;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -4839,7 +5439,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    28;
+    30;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -5009,7 +5609,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    29;
+    31;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -6780,6 +7380,265 @@ DmiChassis::mutable_item() {
 inline const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiChassis_Item >&
 DmiChassis::item() const {
   // @@protoc_insertion_point(field_list:aspia.system_info.DmiChassis.item)
+  return item_;
+}
+
+// -------------------------------------------------------------------
+
+// DmiCaches_Item
+
+// string name = 1;
+inline void DmiCaches_Item::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& DmiCaches_Item::name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiCaches.Item.name)
+  return name_.GetNoArena();
+}
+inline void DmiCaches_Item::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiCaches.Item.name)
+}
+#if LANG_CXX11
+inline void DmiCaches_Item::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiCaches.Item.name)
+}
+#endif
+inline void DmiCaches_Item::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiCaches.Item.name)
+}
+inline void DmiCaches_Item::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiCaches.Item.name)
+}
+inline ::std::string* DmiCaches_Item::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiCaches.Item.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* DmiCaches_Item::release_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiCaches.Item.name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void DmiCaches_Item::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiCaches.Item.name)
+}
+
+// .aspia.system_info.DmiCaches.Item.Location location = 2;
+inline void DmiCaches_Item::clear_location() {
+  location_ = 0;
+}
+inline ::aspia::system_info::DmiCaches_Item_Location DmiCaches_Item::location() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiCaches.Item.location)
+  return static_cast< ::aspia::system_info::DmiCaches_Item_Location >(location_);
+}
+inline void DmiCaches_Item::set_location(::aspia::system_info::DmiCaches_Item_Location value) {
+  
+  location_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiCaches.Item.location)
+}
+
+// .aspia.system_info.DmiCaches.Item.Status status = 3;
+inline void DmiCaches_Item::clear_status() {
+  status_ = 0;
+}
+inline ::aspia::system_info::DmiCaches_Item_Status DmiCaches_Item::status() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiCaches.Item.status)
+  return static_cast< ::aspia::system_info::DmiCaches_Item_Status >(status_);
+}
+inline void DmiCaches_Item::set_status(::aspia::system_info::DmiCaches_Item_Status value) {
+  
+  status_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiCaches.Item.status)
+}
+
+// .aspia.system_info.DmiCaches.Item.Mode mode = 4;
+inline void DmiCaches_Item::clear_mode() {
+  mode_ = 0;
+}
+inline ::aspia::system_info::DmiCaches_Item_Mode DmiCaches_Item::mode() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiCaches.Item.mode)
+  return static_cast< ::aspia::system_info::DmiCaches_Item_Mode >(mode_);
+}
+inline void DmiCaches_Item::set_mode(::aspia::system_info::DmiCaches_Item_Mode value) {
+  
+  mode_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiCaches.Item.mode)
+}
+
+// .aspia.system_info.DmiCaches.Item.Level level = 5;
+inline void DmiCaches_Item::clear_level() {
+  level_ = 0;
+}
+inline ::aspia::system_info::DmiCaches_Item_Level DmiCaches_Item::level() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiCaches.Item.level)
+  return static_cast< ::aspia::system_info::DmiCaches_Item_Level >(level_);
+}
+inline void DmiCaches_Item::set_level(::aspia::system_info::DmiCaches_Item_Level value) {
+  
+  level_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiCaches.Item.level)
+}
+
+// int32 maximum_size = 6;
+inline void DmiCaches_Item::clear_maximum_size() {
+  maximum_size_ = 0;
+}
+inline ::google::protobuf::int32 DmiCaches_Item::maximum_size() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiCaches.Item.maximum_size)
+  return maximum_size_;
+}
+inline void DmiCaches_Item::set_maximum_size(::google::protobuf::int32 value) {
+  
+  maximum_size_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiCaches.Item.maximum_size)
+}
+
+// int32 current_size = 7;
+inline void DmiCaches_Item::clear_current_size() {
+  current_size_ = 0;
+}
+inline ::google::protobuf::int32 DmiCaches_Item::current_size() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiCaches.Item.current_size)
+  return current_size_;
+}
+inline void DmiCaches_Item::set_current_size(::google::protobuf::int32 value) {
+  
+  current_size_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiCaches.Item.current_size)
+}
+
+// uint32 supported_sram_types = 8;
+inline void DmiCaches_Item::clear_supported_sram_types() {
+  supported_sram_types_ = 0u;
+}
+inline ::google::protobuf::uint32 DmiCaches_Item::supported_sram_types() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiCaches.Item.supported_sram_types)
+  return supported_sram_types_;
+}
+inline void DmiCaches_Item::set_supported_sram_types(::google::protobuf::uint32 value) {
+  
+  supported_sram_types_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiCaches.Item.supported_sram_types)
+}
+
+// .aspia.system_info.DmiCaches.Item.SRAMType current_sram_type = 9;
+inline void DmiCaches_Item::clear_current_sram_type() {
+  current_sram_type_ = 0;
+}
+inline ::aspia::system_info::DmiCaches_Item_SRAMType DmiCaches_Item::current_sram_type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiCaches.Item.current_sram_type)
+  return static_cast< ::aspia::system_info::DmiCaches_Item_SRAMType >(current_sram_type_);
+}
+inline void DmiCaches_Item::set_current_sram_type(::aspia::system_info::DmiCaches_Item_SRAMType value) {
+  
+  current_sram_type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiCaches.Item.current_sram_type)
+}
+
+// int32 speed = 10;
+inline void DmiCaches_Item::clear_speed() {
+  speed_ = 0;
+}
+inline ::google::protobuf::int32 DmiCaches_Item::speed() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiCaches.Item.speed)
+  return speed_;
+}
+inline void DmiCaches_Item::set_speed(::google::protobuf::int32 value) {
+  
+  speed_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiCaches.Item.speed)
+}
+
+// .aspia.system_info.DmiCaches.Item.ErrorCorrectionType error_correction_type = 11;
+inline void DmiCaches_Item::clear_error_correction_type() {
+  error_correction_type_ = 0;
+}
+inline ::aspia::system_info::DmiCaches_Item_ErrorCorrectionType DmiCaches_Item::error_correction_type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiCaches.Item.error_correction_type)
+  return static_cast< ::aspia::system_info::DmiCaches_Item_ErrorCorrectionType >(error_correction_type_);
+}
+inline void DmiCaches_Item::set_error_correction_type(::aspia::system_info::DmiCaches_Item_ErrorCorrectionType value) {
+  
+  error_correction_type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiCaches.Item.error_correction_type)
+}
+
+// .aspia.system_info.DmiCaches.Item.Type type = 12;
+inline void DmiCaches_Item::clear_type() {
+  type_ = 0;
+}
+inline ::aspia::system_info::DmiCaches_Item_Type DmiCaches_Item::type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiCaches.Item.type)
+  return static_cast< ::aspia::system_info::DmiCaches_Item_Type >(type_);
+}
+inline void DmiCaches_Item::set_type(::aspia::system_info::DmiCaches_Item_Type value) {
+  
+  type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiCaches.Item.type)
+}
+
+// .aspia.system_info.DmiCaches.Item.Associativity associativity = 13;
+inline void DmiCaches_Item::clear_associativity() {
+  associativity_ = 0;
+}
+inline ::aspia::system_info::DmiCaches_Item_Associativity DmiCaches_Item::associativity() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiCaches.Item.associativity)
+  return static_cast< ::aspia::system_info::DmiCaches_Item_Associativity >(associativity_);
+}
+inline void DmiCaches_Item::set_associativity(::aspia::system_info::DmiCaches_Item_Associativity value) {
+  
+  associativity_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiCaches.Item.associativity)
+}
+
+// -------------------------------------------------------------------
+
+// DmiCaches
+
+// repeated .aspia.system_info.DmiCaches.Item item = 1;
+inline int DmiCaches::item_size() const {
+  return item_.size();
+}
+inline void DmiCaches::clear_item() {
+  item_.Clear();
+}
+inline const ::aspia::system_info::DmiCaches_Item& DmiCaches::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiCaches.item)
+  return item_.Get(index);
+}
+inline ::aspia::system_info::DmiCaches_Item* DmiCaches::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiCaches.item)
+  return item_.Mutable(index);
+}
+inline ::aspia::system_info::DmiCaches_Item* DmiCaches::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.DmiCaches.item)
+  return item_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiCaches_Item >*
+DmiCaches::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.DmiCaches.item)
+  return &item_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiCaches_Item >&
+DmiCaches::item() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.DmiCaches.item)
   return item_;
 }
 
@@ -10786,6 +11645,10 @@ Sessions::item() const {
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -10800,6 +11663,14 @@ template <> struct is_proto_enum< ::aspia::system_info::DmiBaseboard_Item_BoardT
 template <> struct is_proto_enum< ::aspia::system_info::DmiChassis_Item_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::DmiChassis_Item_Status> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::DmiChassis_Item_SecurityStatus> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::system_info::DmiCaches_Item_Location> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::system_info::DmiCaches_Item_Status> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::system_info::DmiCaches_Item_Mode> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::system_info::DmiCaches_Item_Level> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::system_info::DmiCaches_Item_SRAMType> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::system_info::DmiCaches_Item_ErrorCorrectionType> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::system_info::DmiCaches_Item_Type> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::system_info::DmiCaches_Item_Associativity> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::Monitors_Item_InputSignalType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::Printers_Item_Orientation> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::Services_Item_Status> : ::google::protobuf::internal::true_type {};

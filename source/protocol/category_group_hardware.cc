@@ -889,15 +889,583 @@ const char* CategoryDmiCaches::Guid() const
 
 void CategoryDmiCaches::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::DmiCaches message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::DmiCaches::Item& item = message.item(index);
+
+        Output::Group group(output, StringPrintf("Cache #%d", index + 1), Icon());
+
+        if (!item.name().empty())
+            output->AddParam(IDI_CHIP, "Name", item.name());
+
+        const char* location;
+        switch (item.location())
+        {
+            case system_info::DmiCaches::Item::LOCATION_INTERNAL:
+                location = "Internal";
+                break;
+
+            case system_info::DmiCaches::Item::LOCATION_EXTERNAL:
+                location = "External";
+                break;
+
+            case system_info::DmiCaches::Item::LOCATION_RESERVED:
+                location = "Reserved";
+                break;
+
+            default:
+                location = nullptr;
+                break;
+        }
+
+        if (location != nullptr)
+            output->AddParam(IDI_CHIP, "Location", location);
+
+        const char* status;
+        switch (item.status())
+        {
+            case system_info::DmiCaches::Item::STATUS_ENABLED:
+                status = "Enabled";
+                break;
+
+            case system_info::DmiCaches::Item::STATUS_DISABLED:
+                status = "Disabled";
+                break;
+
+            default:
+                status = nullptr;
+                break;
+        }
+
+        if (status != nullptr)
+            output->AddParam(IDI_CHIP, "Status", status);
+
+        const char* mode;
+        switch (item.mode())
+        {
+            case system_info::DmiCaches::Item::MODE_WRITE_THRU:
+                mode = "Write Thru";
+                break;
+
+            case system_info::DmiCaches::Item::MODE_WRITE_BACK:
+                mode = "Write Back";
+                break;
+
+            case system_info::DmiCaches::Item::MODE_WRITE_WITH_MEMORY_ADDRESS:
+                mode = "Write with memory address";
+                break;
+
+            default:
+                mode = nullptr;
+                break;
+        }
+
+        if (mode != nullptr)
+            output->AddParam(IDI_CHIP, "Mode", mode);
+
+        const char* level;
+        switch (item.level())
+        {
+            case system_info::DmiCaches::Item::LEVEL_L1:
+                level = "L1";
+                break;
+
+            case system_info::DmiCaches::Item::LEVEL_L2:
+                level = "L2";
+                break;
+
+            case system_info::DmiCaches::Item::LEVEL_L3:
+                level = "L3";
+                break;
+
+            default:
+                level = nullptr;
+                break;
+        }
+
+        if (level != nullptr)
+            output->AddParam(IDI_CHIP, "Level", level);
+
+        if (item.maximum_size() != 0)
+            output->AddParam(IDI_CHIP, "Maximum Size", std::to_string(item.maximum_size()), "kB");
+
+        if (item.current_size() != 0)
+            output->AddParam(IDI_CHIP, "Current Size", std::to_string(item.current_size()), "kB");
+
+        if (item.supported_sram_types() != 0)
+        {
+            Output::Group types_group(output, "Supported SRAM Types", Icon());
+
+            auto add_type = [&](system_info::DmiCaches::Item::SRAMType type, const char* name)
+            {
+                output->AddParam(item.supported_sram_types() & type ? IDI_CHECKED : IDI_UNCHECKED,
+                                 name,
+                                 item.supported_sram_types() & type ? "Yes" : "No");
+            };
+
+            add_type(system_info::DmiCaches::Item::SRAM_TYPE_OTHER, "Other");
+            add_type(system_info::DmiCaches::Item::SRAM_TYPE_UNKNOWN, "Unknown");
+            add_type(system_info::DmiCaches::Item::SRAM_TYPE_NON_BURST, "Non-burst");
+            add_type(system_info::DmiCaches::Item::SRAM_TYPE_BURST, "Burst");
+            add_type(system_info::DmiCaches::Item::SRAM_TYPE_PIPELINE_BURST, "Pipeline Burst");
+            add_type(system_info::DmiCaches::Item::SRAM_TYPE_SYNCHRONOUS, "Synchronous");
+            add_type(system_info::DmiCaches::Item::SRAM_TYPE_ASYNCHRONOUS, "Asynchronous");
+        }
+
+        const char* current_sram_type;
+        switch (item.current_sram_type())
+        {
+            case system_info::DmiCaches::Item::SRAM_TYPE_OTHER:
+                current_sram_type = "Other";
+                break;
+
+            case system_info::DmiCaches::Item::SRAM_TYPE_UNKNOWN:
+                current_sram_type = "Unknown";
+                break;
+
+            case system_info::DmiCaches::Item::SRAM_TYPE_NON_BURST:
+                current_sram_type = "Non-burst";
+                break;
+
+            case system_info::DmiCaches::Item::SRAM_TYPE_BURST:
+                current_sram_type = "Burst";
+                break;
+
+            case system_info::DmiCaches::Item::SRAM_TYPE_PIPELINE_BURST:
+                current_sram_type = "Pipeline Burst";
+                break;
+
+            case system_info::DmiCaches::Item::SRAM_TYPE_SYNCHRONOUS:
+                current_sram_type = "Synchronous";
+                break;
+
+            case system_info::DmiCaches::Item::SRAM_TYPE_ASYNCHRONOUS:
+                current_sram_type = "Asynchronous";
+                break;
+
+            default:
+                current_sram_type = nullptr;
+                break;
+        }
+
+        if (current_sram_type != nullptr)
+            output->AddParam(IDI_CHIP, "Current SRAM Type", current_sram_type);
+
+        if (item.speed() != 0)
+            output->AddParam(IDI_CHIP, "Speed", std::to_string(item.speed()), "ns");
+
+        const char* ec_type;
+        switch (item.error_correction_type())
+        {
+            case system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_OTHER:
+                ec_type = "Other";
+                break;
+
+            case system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_NONE:
+                ec_type = "None";
+                break;
+
+            case system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_PARITY:
+                ec_type = "Parity";
+                break;
+
+            case system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_SINGLE_BIT_ECC:
+                ec_type = "Single bit ECC";
+                break;
+
+            case system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_MULTI_BIT_ECC:
+                ec_type = "Multi bit ECC";
+                break;
+
+            default:
+                ec_type = nullptr;
+                break;
+        }
+
+        if (ec_type != nullptr)
+            output->AddParam(IDI_CHIP, "Error Correction Type", ec_type);
+
+        const char* type;
+        switch (item.type())
+        {
+            case system_info::DmiCaches::Item::TYPE_OTHER:
+                type = "Other";
+                break;
+
+            case system_info::DmiCaches::Item::TYPE_INSTRUCTION:
+                type = "Instruction";
+                break;
+
+            case system_info::DmiCaches::Item::TYPE_DATA:
+                type = "Data";
+                break;
+
+            case system_info::DmiCaches::Item::TYPE_UNIFIED:
+                type = "Unified";
+                break;
+
+            default:
+                type = nullptr;
+                break;
+        }
+
+        if (type != nullptr)
+            output->AddParam(IDI_CHIP, "Type", type);
+
+        const char* assoc;
+        switch (item.associativity())
+        {
+            case system_info::DmiCaches::Item::ASSOCIATIVITY_OTHER:
+                assoc = "Other";
+                break;
+
+            case system_info::DmiCaches::Item::ASSOCIATIVITY_DIRECT_MAPPED:
+                assoc = "Direct Mapped";
+                break;
+
+            case system_info::DmiCaches::Item::ASSOCIATIVITY_2_WAY:
+                assoc = "2-way Set-Associative";
+                break;
+
+            case system_info::DmiCaches::Item::ASSOCIATIVITY_4_WAY:
+                assoc = "4-way Set-Associative";
+                break;
+
+            case system_info::DmiCaches::Item::ASSOCIATIVITY_FULLY:
+                assoc = "Fully Associative";
+                break;
+
+            case system_info::DmiCaches::Item::ASSOCIATIVITY_8_WAY:
+                assoc = "8-way Set-Associative";
+                break;
+
+            case system_info::DmiCaches::Item::ASSOCIATIVITY_16_WAY:
+                assoc = "16-way Set-Associative";
+                break;
+
+            case system_info::DmiCaches::Item::ASSOCIATIVITY_12_WAY:
+                assoc = "12-way Set-Associative";
+                break;
+
+            case system_info::DmiCaches::Item::ASSOCIATIVITY_24_WAY:
+                assoc = "24-way Set-Associative";
+                break;
+
+            case system_info::DmiCaches::Item::ASSOCIATIVITY_32_WAY:
+                assoc = "32-way Set-Associative";
+                break;
+
+            case system_info::DmiCaches::Item::ASSOCIATIVITY_48_WAY:
+                assoc = "48-way Set-Associative";
+                break;
+
+            case system_info::DmiCaches::Item::ASSOCIATIVITY_64_WAY:
+                assoc = "64-way Set-Associative";
+                break;
+
+            case system_info::DmiCaches::Item::ASSOCIATIVITY_20_WAY:
+                assoc = "20-way Set-Associative";
+                break;
+
+            default:
+                assoc = nullptr;
+                break;
+        }
+
+        if (assoc != nullptr)
+            output->AddParam(IDI_CHIP, "Associativity", assoc);
+    }
 }
 
 std::string CategoryDmiCaches::Serialize()
 {
-    // TODO
-    return std::string();
+    std::unique_ptr<SMBios> smbios = ReadSMBios();
+    if (!smbios)
+        return std::string();
+
+    system_info::DmiCaches message;
+
+    for (SMBios::TableEnumerator<SMBios::CacheTable> table_enumerator(*smbios);
+         !table_enumerator.IsAtEnd();
+         table_enumerator.Advance())
+    {
+        SMBios::CacheTable table = table_enumerator.GetTable();
+        system_info::DmiCaches::Item* item = message.add_item();
+
+        item->set_name(table.GetName());
+
+        switch (table.GetLocation())
+        {
+            case SMBios::CacheTable::Location::INTERNAL:
+                item->set_location(system_info::DmiCaches::Item::LOCATION_INTERNAL);
+                break;
+
+            case SMBios::CacheTable::Location::EXTERNAL:
+                item->set_location(system_info::DmiCaches::Item::LOCATION_EXTERNAL);
+                break;
+
+            case SMBios::CacheTable::Location::RESERVED:
+                item->set_location(system_info::DmiCaches::Item::LOCATION_RESERVED);
+                break;
+
+            default:
+                break;
+        }
+
+        switch (table.GetStatus())
+        {
+            case SMBios::CacheTable::Status::ENABLED:
+                item->set_status(system_info::DmiCaches::Item::STATUS_ENABLED);
+                break;
+
+            case SMBios::CacheTable::Status::DISABLED:
+                item->set_status(system_info::DmiCaches::Item::STATUS_DISABLED);
+                break;
+
+            default:
+                break;
+        }
+
+        switch (table.GetMode())
+        {
+            case SMBios::CacheTable::Mode::WRITE_THRU:
+                item->set_mode(system_info::DmiCaches::Item::MODE_WRITE_THRU);
+                break;
+
+            case SMBios::CacheTable::Mode::WRITE_BACK:
+                item->set_mode(system_info::DmiCaches::Item::MODE_WRITE_BACK);
+                break;
+
+            case SMBios::CacheTable::Mode::WRITE_WITH_MEMORY_ADDRESS:
+                item->set_mode(system_info::DmiCaches::Item::MODE_WRITE_WITH_MEMORY_ADDRESS);
+                break;
+
+            default:
+                break;
+        }
+
+        switch (table.GetLevel())
+        {
+            case SMBios::CacheTable::Level::L1:
+                item->set_level(system_info::DmiCaches::Item::LEVEL_L1);
+                break;
+
+            case SMBios::CacheTable::Level::L2:
+                item->set_level(system_info::DmiCaches::Item::LEVEL_L2);
+                break;
+
+            case SMBios::CacheTable::Level::L3:
+                item->set_level(system_info::DmiCaches::Item::LEVEL_L3);
+                break;
+
+            default:
+                break;
+        }
+
+        item->set_maximum_size(table.GetMaximumSize());
+        item->set_current_size(table.GetCurrentSize());
+
+        uint16_t supported_sram_types = table.GetSupportedSRAMTypes();
+
+        if (supported_sram_types & SMBios::CacheTable::SRAM_TYPE_OTHER)
+        {
+            item->set_supported_sram_types(
+                item->supported_sram_types() | system_info::DmiCaches::Item::SRAM_TYPE_OTHER);
+        }
+
+        if (supported_sram_types & SMBios::CacheTable::SRAM_TYPE_UNKNOWN)
+        {
+            item->set_supported_sram_types(
+                item->supported_sram_types() | system_info::DmiCaches::Item::SRAM_TYPE_UNKNOWN);
+        }
+
+        if (supported_sram_types & SMBios::CacheTable::SRAM_TYPE_NON_BURST)
+        {
+            item->set_supported_sram_types(
+                item->supported_sram_types() | system_info::DmiCaches::Item::SRAM_TYPE_NON_BURST);
+        }
+
+        if (supported_sram_types & SMBios::CacheTable::SRAM_TYPE_BURST)
+        {
+            item->set_supported_sram_types(
+                item->supported_sram_types() | system_info::DmiCaches::Item::SRAM_TYPE_BURST);
+        }
+
+        if (supported_sram_types & SMBios::CacheTable::SRAM_TYPE_PIPELINE_BURST)
+        {
+            item->set_supported_sram_types(
+                item->supported_sram_types() | system_info::DmiCaches::Item::SRAM_TYPE_PIPELINE_BURST);
+        }
+
+        if (supported_sram_types & SMBios::CacheTable::SRAM_TYPE_SYNCHRONOUS)
+        {
+            item->set_supported_sram_types(
+                item->supported_sram_types() | system_info::DmiCaches::Item::SRAM_TYPE_SYNCHRONOUS);
+        }
+
+        if (supported_sram_types & SMBios::CacheTable::SRAM_TYPE_ASYNCHRONOUS)
+        {
+            item->set_supported_sram_types(
+                item->supported_sram_types() | system_info::DmiCaches::Item::SRAM_TYPE_ASYNCHRONOUS);
+        }
+
+        switch (table.GetCurrentSRAMType())
+        {
+            case SMBios::CacheTable::SRAM_TYPE_OTHER:
+                item->set_current_sram_type(system_info::DmiCaches::Item::SRAM_TYPE_OTHER);
+                break;
+
+            case SMBios::CacheTable::SRAM_TYPE_UNKNOWN:
+                item->set_current_sram_type(system_info::DmiCaches::Item::SRAM_TYPE_UNKNOWN);
+                break;
+
+            case SMBios::CacheTable::SRAM_TYPE_NON_BURST:
+                item->set_current_sram_type(system_info::DmiCaches::Item::SRAM_TYPE_NON_BURST);
+                break;
+
+            case SMBios::CacheTable::SRAM_TYPE_BURST:
+                item->set_current_sram_type(system_info::DmiCaches::Item::SRAM_TYPE_BURST);
+                break;
+
+            case SMBios::CacheTable::SRAM_TYPE_PIPELINE_BURST:
+                item->set_current_sram_type(system_info::DmiCaches::Item::SRAM_TYPE_PIPELINE_BURST);
+                break;
+
+            case SMBios::CacheTable::SRAM_TYPE_SYNCHRONOUS:
+                item->set_current_sram_type(system_info::DmiCaches::Item::SRAM_TYPE_SYNCHRONOUS);
+                break;
+
+            case SMBios::CacheTable::SRAM_TYPE_ASYNCHRONOUS:
+                item->set_current_sram_type(system_info::DmiCaches::Item::SRAM_TYPE_ASYNCHRONOUS);
+                break;
+
+            default:
+                break;
+        }
+
+        item->set_speed(table.GetSpeed());
+
+        switch (table.GetErrorCorrectionType())
+        {
+            case SMBios::CacheTable::ErrorCorrectionType::OTHER:
+                item->set_error_correction_type(system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_OTHER);
+                break;
+
+            case SMBios::CacheTable::ErrorCorrectionType::NONE:
+                item->set_error_correction_type(system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_NONE);
+                break;
+
+            case SMBios::CacheTable::ErrorCorrectionType::PARITY:
+                item->set_error_correction_type(system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_PARITY);
+                break;
+
+            case SMBios::CacheTable::ErrorCorrectionType::SINGLE_BIT_ECC:
+                item->set_error_correction_type(system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_SINGLE_BIT_ECC);
+                break;
+
+            case SMBios::CacheTable::ErrorCorrectionType::MULTI_BIT_ECC:
+                item->set_error_correction_type(system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_MULTI_BIT_ECC);
+                break;
+
+            default:
+                break;
+        }
+
+        switch (table.GetType())
+        {
+            case SMBios::CacheTable::Type::OTHER:
+                item->set_type(system_info::DmiCaches::Item::TYPE_OTHER);
+                break;
+
+            case SMBios::CacheTable::Type::INSTRUCTION:
+                item->set_type(system_info::DmiCaches::Item::TYPE_INSTRUCTION);
+                break;
+
+            case SMBios::CacheTable::Type::DATA:
+                item->set_type(system_info::DmiCaches::Item::TYPE_DATA);
+                break;
+
+            case SMBios::CacheTable::Type::UNIFIED:
+                item->set_type(system_info::DmiCaches::Item::TYPE_UNIFIED);
+                break;
+
+            default:
+                break;
+        }
+
+        switch (table.GetAssociativity())
+        {
+            case SMBios::CacheTable::Associativity::OTHER:
+                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_OTHER);
+                break;
+
+            case SMBios::CacheTable::Associativity::DIRECT_MAPPED:
+                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_DIRECT_MAPPED);
+                break;
+
+            case SMBios::CacheTable::Associativity::WAY_2_SET_ASSOCIATIVE:
+                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_2_WAY);
+                break;
+
+            case SMBios::CacheTable::Associativity::WAY_4_SET_ASSOCIATIVE:
+                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_4_WAY);
+                break;
+
+            case SMBios::CacheTable::Associativity::FULLY_ASSOCIATIVE:
+                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_FULLY);
+                break;
+
+            case SMBios::CacheTable::Associativity::WAY_8_SET_ASSOCIATIVE:
+                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_8_WAY);
+                break;
+
+            case SMBios::CacheTable::Associativity::WAY_16_SET_ASSOCIATIVE:
+                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_16_WAY);
+                break;
+
+            case SMBios::CacheTable::Associativity::WAY_12_SET_ASSOCIATIVE:
+                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_12_WAY);
+                break;
+
+            case SMBios::CacheTable::Associativity::WAY_24_SET_ASSOCIATIVE:
+                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_24_WAY);
+                break;
+
+            case SMBios::CacheTable::Associativity::WAY_32_SET_ASSOCIATIVE:
+                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_32_WAY);
+                break;
+
+            case SMBios::CacheTable::Associativity::WAY_48_SET_ASSOCIATIVE:
+                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_48_WAY);
+                break;
+
+            case SMBios::CacheTable::Associativity::WAY_64_SET_ASSOCIATIVE:
+                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_64_WAY);
+                break;
+
+            case SMBios::CacheTable::Associativity::WAY_20_SET_ASSOCIATIVE:
+                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_20_WAY);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    return message.SerializeAsString();
 }
 
 //

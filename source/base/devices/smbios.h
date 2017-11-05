@@ -230,6 +230,111 @@ public:
         TableReader reader_;
     };
 
+    class CacheTable
+    {
+    public:
+        enum : uint8_t { TABLE_TYPE = 0x07 };
+
+        enum class Location
+        {
+            UNKNOWN  = 0,
+            INTERNAL = 1,
+            EXTERNAL = 2,
+            RESERVED = 3
+        };
+
+        enum class Status
+        {
+            UNKNOWN  = 0,
+            ENABLED  = 1,
+            DISABLED = 2
+        };
+
+        enum class Mode
+        {
+            UNKNOWN                   = 0,
+            WRITE_THRU                = 1,
+            WRITE_BACK                = 2,
+            WRITE_WITH_MEMORY_ADDRESS = 3
+        };
+
+        enum class Level
+        {
+            UNKNOWN = 0,
+            L1      = 1,
+            L2      = 2,
+            L3      = 3
+        };
+
+        enum SRAMType
+        {
+            SRAM_TYPE_OTHER          = 1,
+            SRAM_TYPE_UNKNOWN        = 2,
+            SRAM_TYPE_NON_BURST      = 4,
+            SRAM_TYPE_BURST          = 8,
+            SRAM_TYPE_PIPELINE_BURST = 16,
+            SRAM_TYPE_SYNCHRONOUS    = 32,
+            SRAM_TYPE_ASYNCHRONOUS   = 64
+        };
+
+        enum class ErrorCorrectionType
+        {
+            UNKNOWN        = 0,
+            OTHER          = 1,
+            NONE           = 2,
+            PARITY         = 3,
+            SINGLE_BIT_ECC = 4,
+            MULTI_BIT_ECC  = 5
+        };
+
+        enum class Type
+        {
+            UNKNOWN     = 0,
+            OTHER       = 1,
+            INSTRUCTION = 2,
+            DATA        = 3,
+            UNIFIED     = 4
+        };
+
+        enum class Associativity
+        {
+            UNKNOWN                = 0,
+            OTHER                  = 1,
+            DIRECT_MAPPED          = 2,
+            WAY_2_SET_ASSOCIATIVE  = 3,
+            WAY_4_SET_ASSOCIATIVE  = 4,
+            FULLY_ASSOCIATIVE      = 5,
+            WAY_8_SET_ASSOCIATIVE  = 6,
+            WAY_16_SET_ASSOCIATIVE = 7,
+            WAY_12_SET_ASSOCIATIVE = 8,
+            WAY_24_SET_ASSOCIATIVE = 9,
+            WAY_32_SET_ASSOCIATIVE = 10,
+            WAY_48_SET_ASSOCIATIVE = 11,
+            WAY_64_SET_ASSOCIATIVE = 12,
+            WAY_20_SET_ASSOCIATIVE = 13
+        };
+
+        std::string GetName() const;
+        Location GetLocation() const;
+        Status GetStatus() const;
+        Mode GetMode() const;
+        Level GetLevel() const;
+        int GetMaximumSize() const;
+        int GetCurrentSize() const;
+        uint16_t GetSupportedSRAMTypes() const;
+        SRAMType GetCurrentSRAMType() const;
+        int GetSpeed() const;
+        ErrorCorrectionType GetErrorCorrectionType() const;
+        Type GetType() const;
+        Associativity GetAssociativity() const;
+
+    private:
+        friend class TableEnumerator<CacheTable>;
+        CacheTable(const TableReader& reader);
+
+        TableReader reader_;
+    };
+
 private:
     SMBios(std::unique_ptr<uint8_t[]> data, size_t data_size);
     static int GetTableCount(const uint8_t* table_data, uint32_t length);

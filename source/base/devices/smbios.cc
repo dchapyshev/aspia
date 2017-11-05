@@ -601,6 +601,10 @@ SMBios::BaseboardTable::BoardType SMBios::BaseboardTable::GetBoardType() const
     }
 }
 
+//
+// ChassisTable
+//
+
 SMBios::ChassisTable::ChassisTable(const TableReader& reader)
     : reader_(reader)
 {
@@ -754,6 +758,160 @@ int SMBios::ChassisTable::GetNumberOfPowerCords() const
         return 0;
 
     return reader_.GetByte(0x12);
+}
+
+//
+// CacheTable
+//
+
+SMBios::CacheTable::CacheTable(const TableReader& reader)
+    : reader_(reader)
+{
+    // Nothing
+}
+
+std::string SMBios::CacheTable::GetName() const
+{
+    return reader_.GetString(0x04);
+}
+
+SMBios::CacheTable::Location SMBios::CacheTable::GetLocation() const
+{
+    const uint16_t type = (reader_.GetWord(0x05) & 0x60) >> 5;
+
+    switch (type)
+    {
+        case 0x00: return Location::INTERNAL;
+        case 0x01: return Location::EXTERNAL;
+        case 0x02: return Location::RESERVED;
+        default: return Location::UNKNOWN;
+    }
+}
+
+SMBios::CacheTable::Status SMBios::CacheTable::GetStatus() const
+{
+    const uint16_t status = (reader_.GetWord(0x05) & 0x80) >> 7;
+
+    switch (status)
+    {
+        case 0x00: return Status::DISABLED;
+        case 0x01: return Status::ENABLED;
+        default: return Status::UNKNOWN;
+    }
+}
+
+SMBios::CacheTable::Mode SMBios::CacheTable::GetMode() const
+{
+    const uint16_t mode = (reader_.GetWord(0x05) & 0x300) >> 8;
+
+    switch (mode)
+    {
+        case 0x00: return Mode::WRITE_THRU;
+        case 0x01: return Mode::WRITE_BACK;
+        case 0x02: return Mode::WRITE_WITH_MEMORY_ADDRESS;
+        default: return Mode::UNKNOWN;
+    }
+}
+
+SMBios::CacheTable::Level SMBios::CacheTable::GetLevel() const
+{
+    const uint16_t level = reader_.GetWord(0x05) & 0x07;
+
+    switch (level)
+    {
+        case 0x00: return Level::L1;
+        case 0x01: return Level::L2;
+        case 0x02: return Level::L3;
+        default: return Level::UNKNOWN;
+    }
+}
+
+int SMBios::CacheTable::GetMaximumSize() const
+{
+    return reader_.GetWord(0x07) & 0x7FFF;
+}
+
+int SMBios::CacheTable::GetCurrentSize() const
+{
+    return reader_.GetWord(0x09) & 0x7FFF;
+}
+
+uint16_t SMBios::CacheTable::GetSupportedSRAMTypes() const
+{
+    const uint16_t bitfield = reader_.GetWord(0x0B);
+
+    if (!(bitfield & 0x007F))
+        return 0;
+
+    return bitfield;
+}
+
+SMBios::CacheTable::SRAMType SMBios::CacheTable::GetCurrentSRAMType() const
+{
+    return static_cast<SRAMType>(reader_.GetWord(0x0D));
+}
+
+int SMBios::CacheTable::GetSpeed() const
+{
+    if (reader_.GetTableLength() < 0x13)
+        return 0;
+
+    return reader_.GetByte(0x0F);
+}
+
+SMBios::CacheTable::ErrorCorrectionType SMBios::CacheTable::GetErrorCorrectionType() const
+{
+    if (reader_.GetTableLength() < 0x13)
+        return ErrorCorrectionType::UNKNOWN;
+
+    switch (reader_.GetByte(0x10))
+    {
+        case 0x01: return ErrorCorrectionType::OTHER;
+        case 0x03: return ErrorCorrectionType::NONE;
+        case 0x04: return ErrorCorrectionType::PARITY;
+        case 0x05: return ErrorCorrectionType::SINGLE_BIT_ECC;
+        case 0x06: return ErrorCorrectionType::MULTI_BIT_ECC;
+        default: return ErrorCorrectionType::UNKNOWN;
+    }
+}
+
+SMBios::CacheTable::Type SMBios::CacheTable::GetType() const
+{
+    if (reader_.GetTableLength() < 0x13)
+        return Type::UNKNOWN;
+
+    switch (reader_.GetByte(0x11))
+    {
+        case 0x01: return Type::OTHER;
+        case 0x03: return Type::INSTRUCTION;
+        case 0x04: return Type::DATA;
+        case 0x05: return Type::UNIFIED;
+        default: return Type::UNKNOWN;
+    }
+}
+
+SMBios::CacheTable::Associativity SMBios::CacheTable::GetAssociativity() const
+{
+    if (reader_.GetTableLength() < 0x13)
+        return Associativity::UNKNOWN;
+
+    switch (reader_.GetByte(0x12))
+    {
+        case 0x01: return Associativity::OTHER;
+        case 0x03: return Associativity::DIRECT_MAPPED;
+        case 0x04: return Associativity::WAY_2_SET_ASSOCIATIVE;
+        case 0x05: return Associativity::WAY_4_SET_ASSOCIATIVE;
+        case 0x06: return Associativity::FULLY_ASSOCIATIVE;
+        case 0x07: return Associativity::WAY_8_SET_ASSOCIATIVE;
+        case 0x08: return Associativity::WAY_16_SET_ASSOCIATIVE;
+        case 0x09: return Associativity::WAY_12_SET_ASSOCIATIVE;
+        case 0x0A: return Associativity::WAY_24_SET_ASSOCIATIVE;
+        case 0x0B: return Associativity::WAY_32_SET_ASSOCIATIVE;
+        case 0x0C: return Associativity::WAY_48_SET_ASSOCIATIVE;
+        case 0x0D: return Associativity::WAY_64_SET_ASSOCIATIVE;
+        case 0x0E: return Associativity::WAY_20_SET_ASSOCIATIVE;
+        default: return Associativity::UNKNOWN;
+    }
 }
 
 } // namespace aspia
