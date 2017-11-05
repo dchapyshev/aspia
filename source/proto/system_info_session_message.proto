@@ -52,6 +52,23 @@ message DmiBaseboard
             bool supported = 2;
         }
 
+        enum BoardType
+        {
+            BOARD_TYPE_UNKNOWN                      = 0;
+            BOARD_TYPE_OTHER                        = 1;
+            BOARD_TYPE_SERVER_BLADE                 = 2;
+            BOARD_TYPE_CONNECTIVITY_SWITCH          = 3;
+            BOARD_TYPE_SYSTEM_MANAGEMENT_MODULE     = 4;
+            BOARD_TYPE_PROCESSOR_MODULE             = 5;
+            BOARD_TYPE_IO_MODULE                    = 6;
+            BOARD_TYPE_MEMORY_MODULE                = 7;
+            BOARD_TYPE_DAUGHTER_BOARD               = 8;
+            BOARD_TYPE_MOTHERBOARD                  = 9;
+            BOARD_TYPE_PROCESSOR_PLUS_MEMORY_MODULE = 10;
+            BOARD_TYPE_PROCESSOR_PLUS_IO_MODULE     = 11;
+            BOARD_TYPE_INTERCONNECT_BOARD           = 12;
+        }
+
         string manufacturer        = 1;
         string product_name        = 2;
         string version             = 3;
@@ -59,7 +76,79 @@ message DmiBaseboard
         string asset_tag           = 5;
         repeated Feature feature   = 6;
         string location_in_chassis = 7;
-        string type                = 8;
+        BoardType type             = 8;
+    }
+
+    repeated Item item = 1;
+}
+
+message DmiChassis
+{
+    message Item
+    {
+        enum Type
+        {
+            TYPE_UNKNOWN               = 0;
+            TYPE_OTHER                 = 1;
+            TYPE_DESKTOP               = 2;
+            TYPE_LOW_PROFILE_DESKTOP   = 3;
+            TYPE_PIZZA_BOX             = 4;
+            TYPE_MINI_TOWER            = 5;
+            TYPE_TOWER                 = 6;
+            TYPE_PORTABLE              = 7;
+            TYPE_LAPTOP                = 8;
+            TYPE_NOTEBOOK              = 9;
+            TYPE_HAND_HELD             = 10;
+            TYPE_DOCKING_STATION       = 11;
+            TYPE_ALL_IN_ONE            = 12;
+            TYPE_SUB_NOTEBOOK          = 13;
+            TYPE_SPACE_SAVING          = 14;
+            TYPE_LUNCH_BOX             = 15;
+            TYPE_MAIN_SERVER_CHASSIS   = 16;
+            TYPE_EXPANSION_CHASSIS     = 17;
+            TYPE_SUB_CHASSIS           = 18;
+            TYPE_BUS_EXPANSION_CHASSIS = 19;
+            TYPE_PERIPHERIAL_CHASSIS   = 20;
+            TYPE_RAID_CHASSIS          = 21;
+            TYPE_RACK_MOUNT_CHASSIS    = 22;
+            TYPE_SEALED_CASE_PC        = 23;
+            TYPE_MULTI_SYSTEM_CHASSIS  = 24;
+            TYPE_COMPACT_PCI           = 25;
+            TYPE_ADVANCED_TCA          = 26;
+            TYPE_BLADE                 = 27;
+            TYPE_BLADE_ENCLOSURE       = 28;
+        }
+
+        enum Status
+        {
+            STATUS_UNKNOWN         = 0;
+            STATUS_OTHER           = 1;
+            STATUS_SAFE            = 2;
+            STATUS_WARNING         = 3;
+            STATUS_CRITICAL        = 4;
+            STATUS_NON_RECOVERABLE = 5;
+        }
+
+        enum SecurityStatus
+        {
+            SECURITY_STATUS_UNKNOWN                       = 0;
+            SECURITY_STATUS_OTHER                         = 1;
+            SECURITY_STATUS_NONE                          = 2;
+            SECURITY_STATUS_EXTERNAL_INTERFACE_LOCKED_OUT = 3;
+            SECURITY_STATUS_EXTERNAL_INTERFACE_ENABLED    = 4;
+        }
+
+        string manufacturer            = 1;
+        string version                 = 2;
+        string serial_number           = 3;
+        string asset_tag               = 4;
+        Type type                      = 5;
+        Status os_load_status          = 6;
+        Status power_source_status     = 7;
+        Status temparature_status      = 8;
+        SecurityStatus security_status = 9;
+        int32 height                   = 10;
+        int32 number_of_power_cords    = 11;
     }
 
     repeated Item item = 1;

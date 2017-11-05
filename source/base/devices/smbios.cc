@@ -154,6 +154,13 @@ const uint8_t* SMBios::TableEnumeratorImpl::GetTableData() const
 // SMBiosTable
 //
 
+SMBios::TableReader::TableReader(const TableReader& other)
+    : smbios_(other.smbios_),
+      table_(other.table_)
+{
+    // Nothing
+}
+
 SMBios::TableReader::TableReader(const Data* smbios, const uint8_t* table)
     : smbios_(smbios),
       table_(table)
@@ -209,12 +216,17 @@ const uint8_t* SMBios::TableReader::GetPointer(uint8_t offset) const
     return &table_[offset];
 }
 
+uint8_t SMBios::TableReader::GetTableLength() const
+{
+    return GetByte(0x01);
+}
+
 //
 // BiosTable
 //
 
-SMBios::BiosTable::BiosTable(const Data* smbios, const uint8_t* table)
-    : reader_(smbios, table)
+SMBios::BiosTable::BiosTable(const TableReader& reader)
+    : reader_(reader)
 {
     // Nothing
 }
@@ -332,7 +344,7 @@ SMBios::BiosTable::FeatureList SMBios::BiosTable::GetCharacteristics() const
         }
     }
 
-    uint8_t table_length = reader_.GetByte(0x01);
+    uint8_t table_length = reader_.GetTableLength();
 
     if (table_length >= 0x13)
     {
@@ -382,8 +394,8 @@ SMBios::BiosTable::FeatureList SMBios::BiosTable::GetCharacteristics() const
 // SystemTable
 //
 
-SMBios::SystemTable::SystemTable(const Data* smbios, const uint8_t* table)
-    : reader_(smbios, table)
+SMBios::SystemTable::SystemTable(const TableReader& reader)
+    : reader_(reader)
 {
     // Nothing
 }
@@ -410,8 +422,7 @@ std::string SMBios::SystemTable::GetSerialNumber() const
 
 std::string SMBios::SystemTable::GetUUID() const
 {
-    uint8_t table_length = reader_.GetByte(0x01);
-    if (table_length < 0x19)
+    if (reader_.GetTableLength() < 0x19)
         return std::string();
 
     const uint8_t* ptr = reader_.GetPointer(0x08);
@@ -442,8 +453,7 @@ std::string SMBios::SystemTable::GetUUID() const
 
 std::string SMBios::SystemTable::GetWakeupType() const
 {
-    uint8_t table_length = reader_.GetByte(0x01);
-    if (table_length < 0x19)
+    if (reader_.GetTableLength() < 0x19)
         return std::string();
 
     switch (reader_.GetByte(0x18))
@@ -479,8 +489,7 @@ std::string SMBios::SystemTable::GetWakeupType() const
 
 std::string SMBios::SystemTable::GetSKUNumber() const
 {
-    uint8_t table_length = reader_.GetByte(0x01);
-    if (table_length < 0x1B)
+    if (reader_.GetTableLength() < 0x1B)
         return std::string();
 
     return reader_.GetString(0x19);
@@ -488,8 +497,7 @@ std::string SMBios::SystemTable::GetSKUNumber() const
 
 std::string SMBios::SystemTable::GetFamily() const
 {
-    uint8_t table_length = reader_.GetByte(0x01);
-    if (table_length < 0x1B)
+    if (reader_.GetTableLength() < 0x1B)
         return std::string();
 
     return reader_.GetString(0x1A);
@@ -499,8 +507,8 @@ std::string SMBios::SystemTable::GetFamily() const
 // BaseboardTable
 //
 
-SMBios::BaseboardTable::BaseboardTable(const Data* smbios, const uint8_t* table)
-    : reader_(smbios, table)
+SMBios::BaseboardTable::BaseboardTable(const TableReader& reader)
+    : reader_(reader)
 {
     // Nothing
 }
@@ -527,8 +535,7 @@ std::string SMBios::BaseboardTable::GetSerialNumber() const
 
 std::string SMBios::BaseboardTable::GetAssetTag() const
 {
-    uint8_t table_length = reader_.GetByte(0x01);
-    if (table_length < 0x09)
+    if (reader_.GetTableLength() < 0x09)
         return std::string();
 
     return reader_.GetString(0x08);
@@ -536,8 +543,7 @@ std::string SMBios::BaseboardTable::GetAssetTag() const
 
 SMBios::BaseboardTable::FeatureList SMBios::BaseboardTable::GetFeatures() const
 {
-    uint8_t table_length = reader_.GetByte(0x01);
-    if (table_length < 0x0A)
+    if (reader_.GetTableLength() < 0x0A)
         return FeatureList();
 
     uint8_t features = reader_.GetByte(0x09);
@@ -566,41 +572,188 @@ SMBios::BaseboardTable::FeatureList SMBios::BaseboardTable::GetFeatures() const
 
 std::string SMBios::BaseboardTable::GetLocationInChassis() const
 {
-    uint8_t table_length = reader_.GetByte(0x01);
-    if (table_length < 0x0E)
+    if (reader_.GetTableLength() < 0x0E)
         return std::string();
 
     return reader_.GetString(0x0A);
 }
 
-std::string SMBios::BaseboardTable::GetBoardType() const
+SMBios::BaseboardTable::BoardType SMBios::BaseboardTable::GetBoardType() const
 {
-    uint8_t table_length = reader_.GetByte(0x01);
-    if (table_length < 0x0E)
-        return std::string();
+    if (reader_.GetTableLength() < 0x0E)
+        return BoardType::UNKNOWN;
 
-    static const char* type_names[] =
+    switch (reader_.GetByte(0x0D))
     {
-        "Unknown", // 0x01
-        "Other",
-        "Server Blade",
-        "Connectivity Switch",
-        "System Management Module",
-        "Processor Module",
-        "I/O Module",
-        "Memory Module",
-        "Daughter Board",
-        "Motherboard",
-        "Processor+Memory Module",
-        "Processor+I/O Module",
-        "Interconnect Board" // 0x0D
-    };
+        case 0x02: return BoardType::OTHER;
+        case 0x03: return BoardType::SERVER_BLADE;
+        case 0x04: return BoardType::CONNECTIVITY_SWITCH;
+        case 0x05: return BoardType::SYSTEM_MANAGEMENT_MODULE;
+        case 0x06: return BoardType::PROCESSOR_MODULE;
+        case 0x07: return BoardType::IO_MODULE;
+        case 0x08: return BoardType::MEMORY_MODULE;
+        case 0x09: return BoardType::DAUGHTER_BOARD;
+        case 0x0A: return BoardType::MOTHERBOARD;
+        case 0x0B: return BoardType::PROCESSOR_PLUS_MEMORY_MODULE;
+        case 0x0C: return BoardType::PROCESSOR_PLUS_IO_MODULE;
+        case 0x0D: return BoardType::INTERCONNECT_BOARD;
+        default: return BoardType::UNKNOWN;
+    }
+}
 
-    uint8_t type = reader_.GetByte(0x0D);
-    if (!type || type > 0x0D)
+SMBios::ChassisTable::ChassisTable(const TableReader& reader)
+    : reader_(reader)
+{
+    // Nothing
+}
+
+std::string SMBios::ChassisTable::GetManufacturer() const
+{
+    if (reader_.GetTableLength() < 0x09)
         return std::string();
 
-    return type_names[type - 1];
+    return reader_.GetString(0x04);
+}
+
+std::string SMBios::ChassisTable::GetVersion() const
+{
+    if (reader_.GetTableLength() < 0x09)
+        return std::string();
+
+    return reader_.GetString(0x06);
+}
+
+std::string SMBios::ChassisTable::GetSerialNumber() const
+{
+    if (reader_.GetTableLength() < 0x09)
+        return std::string();
+
+    return reader_.GetString(0x07);
+}
+
+std::string SMBios::ChassisTable::GetAssetTag() const
+{
+    if (reader_.GetTableLength() < 0x09)
+        return std::string();
+
+    return reader_.GetString(0x08);
+}
+
+SMBios::ChassisTable::Type SMBios::ChassisTable::GetType() const
+{
+    if (reader_.GetTableLength() < 0x09)
+        return Type::UNKNOWN;
+
+    switch (reader_.GetByte(0x05) & 0x7F)
+    {
+        case 0x03: return Type::DESKTOP;
+        case 0x04: return Type::LOW_PROFILE_DESKTOP;
+        case 0x05: return Type::PIZZA_BOX;
+        case 0x06: return Type::MINI_TOWER;
+        case 0x07: return Type::TOWER;
+        case 0x08: return Type::PORTABLE;
+        case 0x09: return Type::LAPTOP;
+        case 0x0A: return Type::NOTEBOOK;
+        case 0x0B: return Type::HAND_HELD;
+        case 0x0C: return Type::DOCKING_STATION;
+        case 0x0D: return Type::ALL_IN_ONE;
+        case 0x0E: return Type::SUB_NOTEBOOK;
+        case 0x0F: return Type::SPACE_SAVING;
+        case 0x10: return Type::LUNCH_BOX;
+        case 0x11: return Type::MAIN_SERVER_CHASSIS;
+        case 0x12: return Type::EXPANSION_CHASSIS;
+        case 0x13: return Type::SUB_CHASSIS;
+        case 0x14: return Type::BUS_EXPANSION_CHASSIS;
+        case 0x15: return Type::PERIPHERIAL_CHASSIS;
+        case 0x16: return Type::RAID_CHASSIS;
+        case 0x17: return Type::RACK_MOUNT_CHASSIS;
+        case 0x18: return Type::SEALED_CASE_PC;
+        case 0x19: return Type::MULTI_SYSTEM_CHASSIS;
+        case 0x1A: return Type::COMPACT_PCI;
+        case 0x1B: return Type::ADVANCED_TCA;
+        case 0x1C: return Type::BLADE;
+        case 0x1D: return Type::BLADE_ENCLOSURE;
+        default: return Type::UNKNOWN;
+    }
+}
+
+SMBios::ChassisTable::Status SMBios::ChassisTable::GetOSLoadStatus() const
+{
+    if (reader_.GetTableLength() < 0x0D)
+        return Status::UNKNOWN;
+
+    switch (reader_.GetByte(0x09))
+    {
+        case 0x01: return Status::OTHER;
+        case 0x03: return Status::SAFE;
+        case 0x04: return Status::WARNING;
+        case 0x05: return Status::CRITICAL;
+        case 0x06: return Status::NON_RECOVERABLE;
+        default: return Status::UNKNOWN;
+    }
+}
+
+SMBios::ChassisTable::Status SMBios::ChassisTable::GetPowerSourceStatus() const
+{
+    if (reader_.GetTableLength() < 0x0D)
+        return Status::UNKNOWN;
+
+    switch (reader_.GetByte(0x0A))
+    {
+        case 0x01: return Status::OTHER;
+        case 0x03: return Status::SAFE;
+        case 0x04: return Status::WARNING;
+        case 0x05: return Status::CRITICAL;
+        case 0x06: return Status::NON_RECOVERABLE;
+        default: return Status::UNKNOWN;
+    }
+}
+
+SMBios::ChassisTable::Status SMBios::ChassisTable::GetTemperatureStatus() const
+{
+    if (reader_.GetTableLength() < 0x0D)
+        return Status::UNKNOWN;
+
+    switch (reader_.GetByte(0x0B))
+    {
+        case 0x01: return Status::OTHER;
+        case 0x03: return Status::SAFE;
+        case 0x04: return Status::WARNING;
+        case 0x05: return Status::CRITICAL;
+        case 0x06: return Status::NON_RECOVERABLE;
+        default: return Status::UNKNOWN;
+    }
+}
+
+SMBios::ChassisTable::SecurityStatus SMBios::ChassisTable::GetSecurityStatus() const
+{
+    if (reader_.GetTableLength() < 0x0D)
+        return SecurityStatus::UNKNOWN;
+
+    switch (reader_.GetByte(0x0C))
+    {
+        case 0x01: return SecurityStatus::OTHER;
+        case 0x03: return SecurityStatus::NONE;
+        case 0x04: return SecurityStatus::EXTERNAL_INTERFACE_LOCKED_OUT;
+        case 0x05: return SecurityStatus::EXTERNAL_INTERFACE_ENABLED;
+        default: return SecurityStatus::UNKNOWN;
+    }
+}
+
+int SMBios::ChassisTable::GetHeight() const
+{
+    if (reader_.GetTableLength() < 0x13)
+        return 0;
+
+    return reader_.GetByte(0x11);
+}
+
+int SMBios::ChassisTable::GetNumberOfPowerCords() const
+{
+    if (reader_.GetTableLength() < 0x13)
+        return 0;
+
+    return reader_.GetByte(0x12);
 }
 
 } // namespace aspia

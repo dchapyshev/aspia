@@ -247,8 +247,64 @@ void CategoryDmiBaseboard::Parse(std::shared_ptr<OutputProxy> output, const std:
 
         Output::Group group(output, StringPrintf("Baseboard #%d", index + 1), Icon());
 
-        if (!item.type().empty())
-            output->AddParam(IDI_MOTHERBOARD, "Type", item.type());
+        const char* type;
+        switch (item.type())
+        {
+            case system_info::DmiBaseboard::Item::BOARD_TYPE_OTHER:
+                type = "Other";
+                break;
+
+            case system_info::DmiBaseboard::Item::BOARD_TYPE_SERVER_BLADE:
+                type =  "Server Blade";
+                break;
+
+            case system_info::DmiBaseboard::Item::BOARD_TYPE_CONNECTIVITY_SWITCH:
+                type = "Connectivity Switch";
+                break;
+
+            case system_info::DmiBaseboard::Item::BOARD_TYPE_SYSTEM_MANAGEMENT_MODULE:
+                type = "System Management Module";
+                break;
+
+            case system_info::DmiBaseboard::Item::BOARD_TYPE_PROCESSOR_MODULE:
+                type = "Processor Module";
+                break;
+
+            case system_info::DmiBaseboard::Item::BOARD_TYPE_IO_MODULE:
+                type = "I/O Module";
+                break;
+
+            case system_info::DmiBaseboard::Item::BOARD_TYPE_MEMORY_MODULE:
+                type = "Memory Module";
+                break;
+
+            case system_info::DmiBaseboard::Item::BOARD_TYPE_DAUGHTER_BOARD:
+                type = "Daughter Board";
+                break;
+
+            case system_info::DmiBaseboard::Item::BOARD_TYPE_MOTHERBOARD:
+                type = "Motherboard";
+                break;
+
+            case system_info::DmiBaseboard::Item::BOARD_TYPE_PROCESSOR_PLUS_MEMORY_MODULE:
+                type = "Processor + Memory Module";
+                break;
+
+            case system_info::DmiBaseboard::Item::BOARD_TYPE_PROCESSOR_PLUS_IO_MODULE:
+                type = "Processor + I/O Module";
+                break;
+
+            case system_info::DmiBaseboard::Item::BOARD_TYPE_INTERCONNECT_BOARD:
+                type = "Interconnect Board";
+                break;
+
+            default:
+                type = nullptr;
+                break;
+        }
+
+        if (type != nullptr)
+            output->AddParam(IDI_MOTHERBOARD, "Type", type);
 
         if (!item.manufacturer().empty())
             output->AddParam(IDI_MOTHERBOARD, "Manufacturer", item.manufacturer());
@@ -305,7 +361,61 @@ std::string CategoryDmiBaseboard::Serialize()
         item->set_serial_number(table.GetSerialNumber());
         item->set_asset_tag(table.GetAssetTag());
         item->set_location_in_chassis(table.GetLocationInChassis());
-        item->set_type(table.GetBoardType());
+
+        switch (table.GetBoardType())
+        {
+            case SMBios::BaseboardTable::BoardType::OTHER:
+                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_OTHER);
+                break;
+
+            case SMBios::BaseboardTable::BoardType::SERVER_BLADE:
+                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_SERVER_BLADE);
+                break;
+
+            case SMBios::BaseboardTable::BoardType::CONNECTIVITY_SWITCH:
+                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_CONNECTIVITY_SWITCH);
+                break;
+
+            case SMBios::BaseboardTable::BoardType::SYSTEM_MANAGEMENT_MODULE:
+                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_SYSTEM_MANAGEMENT_MODULE);
+                break;
+
+            case SMBios::BaseboardTable::BoardType::PROCESSOR_MODULE:
+                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_PROCESSOR_MODULE);
+                break;
+
+            case SMBios::BaseboardTable::BoardType::IO_MODULE:
+                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_IO_MODULE);
+                break;
+
+            case SMBios::BaseboardTable::BoardType::MEMORY_MODULE:
+                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_MEMORY_MODULE);
+                break;
+
+            case SMBios::BaseboardTable::BoardType::DAUGHTER_BOARD:
+                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_DAUGHTER_BOARD);
+                break;
+
+            case SMBios::BaseboardTable::BoardType::MOTHERBOARD:
+                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_MOTHERBOARD);
+                break;
+
+            case SMBios::BaseboardTable::BoardType::PROCESSOR_PLUS_MEMORY_MODULE:
+                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_PROCESSOR_PLUS_MEMORY_MODULE);
+                break;
+
+            case SMBios::BaseboardTable::BoardType::PROCESSOR_PLUS_IO_MODULE:
+                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_PROCESSOR_PLUS_IO_MODULE);
+                break;
+
+            case SMBios::BaseboardTable::BoardType::INTERCONNECT_BOARD:
+                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_INTERCONNECT_BOARD);
+                break;
+
+            default:
+                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_UNKNOWN);
+                break;
+        }
 
         SMBios::BaseboardTable::FeatureList feature_list = table.GetFeatures();
 
@@ -341,15 +451,421 @@ const char* CategoryDmiChassis::Guid() const
 
 void CategoryDmiChassis::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::DmiChassis message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::DmiChassis::Item& item = message.item(index);
+
+        Output::Group group(output, StringPrintf("Chassis #%d", index + 1), Icon());
+
+        if (!item.manufacturer().empty())
+            output->AddParam(IDI_SERVER, "Manufacturer", item.manufacturer());
+
+        if (!item.version().empty())
+            output->AddParam(IDI_SERVER, "Version", item.version());
+
+        if (!item.serial_number().empty())
+            output->AddParam(IDI_SERVER, "Serial Number", item.serial_number());
+
+        if (!item.asset_tag().empty())
+            output->AddParam(IDI_SERVER, "Asset Tag", item.asset_tag());
+
+        const char* type;
+        switch (item.type())
+        {
+            case system_info::DmiChassis::Item::TYPE_OTHER:
+                type = "Other";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_DESKTOP:
+                type = "Desktop";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_LOW_PROFILE_DESKTOP:
+                type = "Low Profile Desktop";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_PIZZA_BOX:
+                type = "Pizza Box";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_MINI_TOWER:
+                type = "Mini Tower";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_TOWER:
+                type = "Tower";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_PORTABLE:
+                type = "Portable";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_LAPTOP:
+                type = "Laptop";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_NOTEBOOK:
+                type = "Notebook";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_HAND_HELD:
+                type = "Hand Held";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_DOCKING_STATION:
+                type = "Docking Station";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_ALL_IN_ONE:
+                type = "All In One";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_SUB_NOTEBOOK:
+                type = "Sub Notebook";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_SPACE_SAVING:
+                type = "Space Saving";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_LUNCH_BOX:
+                type = "Lunch Box";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_MAIN_SERVER_CHASSIS:
+                type = "Main Server Chassis";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_EXPANSION_CHASSIS:
+                type = "Expansion Chassis";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_SUB_CHASSIS:
+                type = "Sub Chassis";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_BUS_EXPANSION_CHASSIS:
+                type = "Bus Expansion Chassis";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_PERIPHERIAL_CHASSIS:
+                type = "Peripherial Chassis";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_RAID_CHASSIS:
+                type = "RAID Chassis";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_RACK_MOUNT_CHASSIS:
+                type = "Rack Mount Chassis";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_SEALED_CASE_PC:
+                type = "Sealed Case PC";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_MULTI_SYSTEM_CHASSIS:
+                type = "Multi System Chassis";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_COMPACT_PCI:
+                type = "Compact PCI";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_ADVANCED_TCA:
+                type = "Advanced TCA";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_BLADE:
+                type = "Blade";
+                break;
+
+            case system_info::DmiChassis::Item::TYPE_BLADE_ENCLOSURE:
+                type = "Blade Enclosure";
+                break;
+
+            default:
+                type = nullptr;
+                break;
+        }
+
+        if (type != nullptr)
+            output->AddParam(IDI_SERVER, "Type", type);
+
+        auto status_to_string = [](system_info::DmiChassis::Item::Status status)
+        {
+            switch (status)
+            {
+                case system_info::DmiChassis::Item::STATUS_OTHER:
+                    return "Other";
+
+                case system_info::DmiChassis::Item::STATUS_SAFE:
+                    return "Safe";
+
+                case system_info::DmiChassis::Item::STATUS_WARNING:
+                    return "Warning";
+
+                case system_info::DmiChassis::Item::STATUS_CRITICAL:
+                    return "Critical";
+
+                case system_info::DmiChassis::Item::STATUS_NON_RECOVERABLE:
+                    return "Non Recoverable";
+
+                default:
+                    return "Unknown";
+            }
+        };
+
+        output->AddParam(IDI_SERVER, "OS Load Status", status_to_string(item.os_load_status()));
+        output->AddParam(IDI_SERVER, "Power Source Status", status_to_string(item.power_source_status()));
+        output->AddParam(IDI_SERVER, "Temperature Status", status_to_string(item.temparature_status()));
+
+        const char* status;
+        switch (item.security_status())
+        {
+            case system_info::DmiChassis::Item::SECURITY_STATUS_OTHER:
+                status = "Other";
+                break;
+
+            case system_info::DmiChassis::Item::SECURITY_STATUS_NONE:
+                status = "None";
+                break;
+
+            case system_info::DmiChassis::Item::SECURITY_STATUS_EXTERNAL_INTERFACE_LOCKED_OUT:
+                status = "External Interface Locked Out";
+                break;
+
+            case system_info::DmiChassis::Item::SECURITY_STATUS_EXTERNAL_INTERFACE_ENABLED:
+                status = "External Interface Enabled";
+                break;
+
+            default:
+                status = nullptr;
+                break;
+        }
+
+        if (status != nullptr)
+            output->AddParam(IDI_SERVER, "Security Status", status);
+
+        if (item.height() != 0)
+            output->AddParam(IDI_SERVER, "Height", std::to_string(item.height()), "U");
+
+        if (item.number_of_power_cords() != 0)
+        {
+            output->AddParam(IDI_SERVER,
+                             "Number Of Power Cords",
+                             std::to_string(item.number_of_power_cords()));
+        }
+    }
 }
 
 std::string CategoryDmiChassis::Serialize()
 {
-    // TODO
-    return std::string();
+    std::unique_ptr<SMBios> smbios = ReadSMBios();
+    if (!smbios)
+        return std::string();
+
+    system_info::DmiChassis message;
+
+    for (SMBios::TableEnumerator<SMBios::ChassisTable> table_enumerator(*smbios);
+         !table_enumerator.IsAtEnd();
+         table_enumerator.Advance())
+    {
+        SMBios::ChassisTable table = table_enumerator.GetTable();
+        system_info::DmiChassis::Item* item = message.add_item();
+
+        item->set_manufacturer(table.GetManufacturer());
+        item->set_version(table.GetVersion());
+        item->set_serial_number(table.GetSerialNumber());
+        item->set_asset_tag(table.GetAssetTag());
+
+        switch (table.GetType())
+        {
+            case SMBios::ChassisTable::Type::OTHER:
+                item->set_type(system_info::DmiChassis::Item::TYPE_OTHER);
+                break;
+
+            case SMBios::ChassisTable::Type::DESKTOP:
+                item->set_type(system_info::DmiChassis::Item::TYPE_DESKTOP);
+                break;
+
+            case SMBios::ChassisTable::Type::LOW_PROFILE_DESKTOP:
+                item->set_type(system_info::DmiChassis::Item::TYPE_LOW_PROFILE_DESKTOP);
+                break;
+
+            case SMBios::ChassisTable::Type::PIZZA_BOX:
+                item->set_type(system_info::DmiChassis::Item::TYPE_PIZZA_BOX);
+                break;
+
+            case SMBios::ChassisTable::Type::MINI_TOWER:
+                item->set_type(system_info::DmiChassis::Item::TYPE_MINI_TOWER);
+                break;
+
+            case SMBios::ChassisTable::Type::TOWER:
+                item->set_type(system_info::DmiChassis::Item::TYPE_TOWER);
+                break;
+
+            case SMBios::ChassisTable::Type::PORTABLE:
+                item->set_type(system_info::DmiChassis::Item::TYPE_PORTABLE);
+                break;
+
+            case SMBios::ChassisTable::Type::LAPTOP:
+                item->set_type(system_info::DmiChassis::Item::TYPE_LAPTOP);
+                break;
+
+            case SMBios::ChassisTable::Type::NOTEBOOK:
+                item->set_type(system_info::DmiChassis::Item::TYPE_NOTEBOOK);
+                break;
+
+            case SMBios::ChassisTable::Type::HAND_HELD:
+                item->set_type(system_info::DmiChassis::Item::TYPE_HAND_HELD);
+                break;
+
+            case SMBios::ChassisTable::Type::DOCKING_STATION:
+                item->set_type(system_info::DmiChassis::Item::TYPE_DOCKING_STATION);
+                break;
+
+            case SMBios::ChassisTable::Type::ALL_IN_ONE:
+                item->set_type(system_info::DmiChassis::Item::TYPE_ALL_IN_ONE);
+                break;
+
+            case SMBios::ChassisTable::Type::SUB_NOTEBOOK:
+                item->set_type(system_info::DmiChassis::Item::TYPE_SUB_NOTEBOOK);
+                break;
+
+            case SMBios::ChassisTable::Type::SPACE_SAVING:
+                item->set_type(system_info::DmiChassis::Item::TYPE_SPACE_SAVING);
+                break;
+
+            case SMBios::ChassisTable::Type::LUNCH_BOX:
+                item->set_type(system_info::DmiChassis::Item::TYPE_LUNCH_BOX);
+                break;
+
+            case SMBios::ChassisTable::Type::MAIN_SERVER_CHASSIS:
+                item->set_type(system_info::DmiChassis::Item::TYPE_MAIN_SERVER_CHASSIS);
+                break;
+
+            case SMBios::ChassisTable::Type::EXPANSION_CHASSIS:
+                item->set_type(system_info::DmiChassis::Item::TYPE_EXPANSION_CHASSIS);
+                break;
+
+            case SMBios::ChassisTable::Type::SUB_CHASSIS:
+                item->set_type(system_info::DmiChassis::Item::TYPE_SUB_CHASSIS);
+                break;
+
+            case SMBios::ChassisTable::Type::BUS_EXPANSION_CHASSIS:
+                item->set_type(system_info::DmiChassis::Item::TYPE_BUS_EXPANSION_CHASSIS);
+                break;
+
+            case SMBios::ChassisTable::Type::PERIPHERIAL_CHASSIS:
+                item->set_type(system_info::DmiChassis::Item::TYPE_PERIPHERIAL_CHASSIS);
+                break;
+
+            case SMBios::ChassisTable::Type::RAID_CHASSIS:
+                item->set_type(system_info::DmiChassis::Item::TYPE_RAID_CHASSIS);
+                break;
+
+            case SMBios::ChassisTable::Type::RACK_MOUNT_CHASSIS:
+                item->set_type(system_info::DmiChassis::Item::TYPE_RACK_MOUNT_CHASSIS);
+                break;
+
+            case SMBios::ChassisTable::Type::SEALED_CASE_PC:
+                item->set_type(system_info::DmiChassis::Item::TYPE_SEALED_CASE_PC);
+                break;
+
+            case SMBios::ChassisTable::Type::MULTI_SYSTEM_CHASSIS:
+                item->set_type(system_info::DmiChassis::Item::TYPE_MULTI_SYSTEM_CHASSIS);
+                break;
+
+            case SMBios::ChassisTable::Type::COMPACT_PCI:
+                item->set_type(system_info::DmiChassis::Item::TYPE_COMPACT_PCI);
+                break;
+
+            case SMBios::ChassisTable::Type::ADVANCED_TCA:
+                item->set_type(system_info::DmiChassis::Item::TYPE_ADVANCED_TCA);
+                break;
+
+            case SMBios::ChassisTable::Type::BLADE:
+                item->set_type(system_info::DmiChassis::Item::TYPE_BLADE);
+                break;
+
+            case SMBios::ChassisTable::Type::BLADE_ENCLOSURE:
+                item->set_type(system_info::DmiChassis::Item::TYPE_BLADE_ENCLOSURE);
+                break;
+
+            default:
+                item->set_type(system_info::DmiChassis::Item::TYPE_UNKNOWN);
+                break;
+        }
+
+        auto status_to_proto_status = [](SMBios::ChassisTable::Status status)
+        {
+            switch (status)
+            {
+                case SMBios::ChassisTable::Status::OTHER:
+                    return system_info::DmiChassis::Item::STATUS_OTHER;
+
+                case SMBios::ChassisTable::Status::SAFE:
+                    return system_info::DmiChassis::Item::STATUS_SAFE;
+
+                case SMBios::ChassisTable::Status::WARNING:
+                    return system_info::DmiChassis::Item::STATUS_WARNING;
+
+                case SMBios::ChassisTable::Status::CRITICAL:
+                    return system_info::DmiChassis::Item::STATUS_CRITICAL;
+
+                case SMBios::ChassisTable::Status::NON_RECOVERABLE:
+                    return system_info::DmiChassis::Item::STATUS_NON_RECOVERABLE;
+
+                default:
+                    return system_info::DmiChassis::Item::STATUS_UNKNOWN;
+            }
+        };
+
+        item->set_os_load_status(status_to_proto_status(table.GetOSLoadStatus()));
+        item->set_power_source_status(status_to_proto_status(table.GetPowerSourceStatus()));
+        item->set_temparature_status(status_to_proto_status(table.GetTemperatureStatus()));
+
+        switch (table.GetSecurityStatus())
+        {
+            case SMBios::ChassisTable::SecurityStatus::OTHER:
+                item->set_security_status(system_info::DmiChassis::Item::SECURITY_STATUS_OTHER);
+                break;
+
+            case SMBios::ChassisTable::SecurityStatus::NONE:
+                item->set_security_status(system_info::DmiChassis::Item::SECURITY_STATUS_NONE);
+                break;
+
+            case SMBios::ChassisTable::SecurityStatus::EXTERNAL_INTERFACE_LOCKED_OUT:
+                item->set_security_status(
+                    system_info::DmiChassis::Item::SECURITY_STATUS_EXTERNAL_INTERFACE_LOCKED_OUT);
+                break;
+
+            case SMBios::ChassisTable::SecurityStatus::EXTERNAL_INTERFACE_ENABLED:
+                item->set_security_status(
+                    system_info::DmiChassis::Item::SECURITY_STATUS_EXTERNAL_INTERFACE_ENABLED);
+                break;
+
+            default:
+                item->set_security_status(system_info::DmiChassis::Item::SECURITY_STATUS_UNKNOWN);
+                break;
+        }
+    }
+
+    return message.SerializeAsString();
 }
 
 //

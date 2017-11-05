@@ -39,7 +39,7 @@ public:
 
         bool IsAtEnd() const { return impl_.IsAtEnd(); }
         void Advance() { impl_.Advance(T::TABLE_TYPE); }
-        T GetTable() const { return T(impl_.GetSMBiosData(), impl_.GetTableData()); }
+        T GetTable() const { return T(TableReader(impl_.GetSMBiosData(), impl_.GetTableData())); }
 
     private:
         TableEnumeratorImpl impl_;
@@ -49,6 +49,7 @@ public:
     class TableReader
     {
     public:
+        TableReader(const TableReader& other);
         TableReader(const Data* smbios, const uint8_t* table);
 
         uint8_t GetMajorVersion() const { return smbios_->smbios_major_version; }
@@ -59,6 +60,7 @@ public:
         uint64_t GetQword(uint8_t offset) const;
         std::string GetString(uint8_t offset) const;
         const uint8_t* GetPointer(uint8_t offset) const;
+        uint8_t GetTableLength() const;
 
     private:
         const Data* smbios_;
@@ -85,7 +87,7 @@ public:
 
     private:
         friend class TableEnumerator<BiosTable>;
-        BiosTable(const Data* smbios, const uint8_t* table);
+        BiosTable(const TableReader& reader);
 
         TableReader reader_;
     };
@@ -106,7 +108,7 @@ public:
 
     private:
         friend class TableEnumerator<SystemTable>;
-        SystemTable(const Data* smbios, const uint8_t* table);
+        SystemTable(const TableReader& reader);
 
         TableReader reader_;
     };
@@ -119,6 +121,23 @@ public:
         using Feature = std::pair<std::string, bool>;
         using FeatureList = std::list<Feature>;
 
+        enum class BoardType
+        {
+            UNKNOWN                      = 0,
+            OTHER                        = 1,
+            SERVER_BLADE                 = 2,
+            CONNECTIVITY_SWITCH          = 3,
+            SYSTEM_MANAGEMENT_MODULE     = 4,
+            PROCESSOR_MODULE             = 5,
+            IO_MODULE                    = 6,
+            MEMORY_MODULE                = 7,
+            DAUGHTER_BOARD               = 8,
+            MOTHERBOARD                  = 9,
+            PROCESSOR_PLUS_MEMORY_MODULE = 10,
+            PROCESSOR_PLUS_IO_MODULE     = 11,
+            INTERCONNECT_BOARD           = 12
+        };
+
         std::string GetManufacturer() const;
         std::string GetProductName() const;
         std::string GetVersion() const;
@@ -126,11 +145,87 @@ public:
         std::string GetAssetTag() const;
         FeatureList GetFeatures() const;
         std::string GetLocationInChassis() const;
-        std::string GetBoardType() const;
+        BoardType GetBoardType() const;
 
     private:
         friend class TableEnumerator<BaseboardTable>;
-        BaseboardTable(const Data* smbios, const uint8_t* table);
+        BaseboardTable(const TableReader& reader);
+
+        TableReader reader_;
+    };
+
+    class ChassisTable
+    {
+    public:
+        enum : uint8_t { TABLE_TYPE = 0x03 };
+
+        enum class Status
+        {
+            UNKNOWN         = 0,
+            OTHER           = 1,
+            SAFE            = 2,
+            WARNING         = 3,
+            CRITICAL        = 4,
+            NON_RECOVERABLE = 5
+        };
+
+        enum class SecurityStatus
+        {
+            UNKNOWN                       = 0,
+            OTHER                         = 1,
+            NONE                          = 2,
+            EXTERNAL_INTERFACE_LOCKED_OUT = 3,
+            EXTERNAL_INTERFACE_ENABLED    = 4
+        };
+
+        enum class Type
+        {
+            UNKNOWN               = 0,
+            OTHER                 = 1,
+            DESKTOP               = 2,
+            LOW_PROFILE_DESKTOP   = 3,
+            PIZZA_BOX             = 4,
+            MINI_TOWER            = 5,
+            TOWER                 = 6,
+            PORTABLE              = 7,
+            LAPTOP                = 8,
+            NOTEBOOK              = 9,
+            HAND_HELD             = 10,
+            DOCKING_STATION       = 11,
+            ALL_IN_ONE            = 12,
+            SUB_NOTEBOOK          = 13,
+            SPACE_SAVING          = 14,
+            LUNCH_BOX             = 15,
+            MAIN_SERVER_CHASSIS   = 16,
+            EXPANSION_CHASSIS     = 17,
+            SUB_CHASSIS           = 18,
+            BUS_EXPANSION_CHASSIS = 19,
+            PERIPHERIAL_CHASSIS   = 20,
+            RAID_CHASSIS          = 21,
+            RACK_MOUNT_CHASSIS    = 22,
+            SEALED_CASE_PC        = 23,
+            MULTI_SYSTEM_CHASSIS  = 24,
+            COMPACT_PCI           = 25,
+            ADVANCED_TCA          = 26,
+            BLADE                 = 27,
+            BLADE_ENCLOSURE       = 28
+        };
+
+        std::string GetManufacturer() const;
+        std::string GetVersion() const;
+        std::string GetSerialNumber() const;
+        std::string GetAssetTag() const;
+        Type GetType() const;
+        Status GetOSLoadStatus() const;
+        Status GetPowerSourceStatus() const;
+        Status GetTemperatureStatus() const;
+        SecurityStatus GetSecurityStatus() const;
+        int GetHeight() const; // In Units.
+        int GetNumberOfPowerCords() const;
+
+    private:
+        friend class TableEnumerator<ChassisTable>;
+        ChassisTable(const TableReader& reader);
 
         TableReader reader_;
     };
