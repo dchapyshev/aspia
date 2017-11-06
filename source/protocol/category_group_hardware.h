@@ -385,10 +385,10 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryPowerOptions);
 };
 
-class CategoryAllDevices : public CategoryInfo
+class CategoryWindowsDevices : public CategoryInfo
 {
 public:
-    CategoryAllDevices() = default;
+    CategoryWindowsDevices() = default;
 
     const char* Name() const final;
     IconId Icon() const final;
@@ -398,35 +398,7 @@ public:
     std::string Serialize() final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryAllDevices);
-};
-
-class CategoryUnknownDevices : public CategoryInfo
-{
-public:
-    CategoryUnknownDevices() = default;
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryUnknownDevices);
-};
-
-class CategoryGroupWindowDevices : public CategoryGroup
-{
-public:
-    CategoryGroupWindowDevices() = default;
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryGroupWindowDevices);
+    DISALLOW_COPY_AND_ASSIGN(CategoryWindowsDevices);
 };
 
 class CategoryGroupHardware : public CategoryGroup

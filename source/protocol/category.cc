@@ -98,11 +98,6 @@ CategoryList CreateCategoryTree()
     display->mutable_child_list()->emplace_back(std::make_unique<CategoryMonitor>());
     display->mutable_child_list()->emplace_back(std::make_unique<CategoryOpenGL>());
 
-    std::unique_ptr<CategoryGroup> windows_devices = std::make_unique<CategoryGroupWindowDevices>();
-
-    windows_devices->mutable_child_list()->emplace_back(std::make_unique<CategoryAllDevices>());
-    windows_devices->mutable_child_list()->emplace_back(std::make_unique<CategoryUnknownDevices>());
-
     std::unique_ptr<CategoryGroup> hardware = std::make_unique<CategoryGroupHardware>();
 
     hardware->mutable_child_list()->emplace_back(std::move(dmi));
@@ -111,7 +106,7 @@ CategoryList CreateCategoryTree()
     hardware->mutable_child_list()->emplace_back(std::move(display));
     hardware->mutable_child_list()->emplace_back(std::make_unique<CategoryPowerOptions>());
     hardware->mutable_child_list()->emplace_back(std::make_unique<CategoryPrinters>());
-    hardware->mutable_child_list()->emplace_back(std::move(windows_devices));
+    hardware->mutable_child_list()->emplace_back(std::make_unique<CategoryWindowsDevices>());
 
     std::unique_ptr<CategoryGroup> software = std::make_unique<CategoryGroupSoftware>();
 
@@ -196,9 +191,7 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryMonitor>());
     emplace_back(std::make_unique<CategoryOpenGL>());
 
-    emplace_back(std::make_unique<CategoryAllDevices>());
-    emplace_back(std::make_unique<CategoryUnknownDevices>());
-
+    emplace_back(std::make_unique<CategoryWindowsDevices>());
     emplace_back(std::make_unique<CategoryCPU>());
     emplace_back(std::make_unique<CategoryPowerOptions>());
     emplace_back(std::make_unique<CategoryPrinters>());

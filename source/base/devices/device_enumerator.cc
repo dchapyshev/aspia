@@ -19,7 +19,7 @@ static const WCHAR kDriverDateKey[] = L"DriverDate";
 static const WCHAR kProviderNameKey[] = L"ProviderName";
 
 DeviceEnumerator::DeviceEnumerator()
-    : DeviceEnumerator(nullptr, DIGCF_ALLCLASSES | DIGCF_PRESENT)
+    : DeviceEnumerator(nullptr, DIGCF_ALLCLASSES | DIGCF_PRESENT | DIGCF_PROFILE)
 {
     // Nothing
 }
@@ -79,8 +79,8 @@ std::string DeviceEnumerator::GetFriendlyName() const
                                            ARRAYSIZE(friendly_name),
                                            nullptr))
     {
-        LOG(WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed: "
-                     << GetLastSystemErrorString();
+        DLOG(WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed: "
+                      << GetLastSystemErrorString();
         return std::string();
     }
 
@@ -128,19 +128,23 @@ std::wstring DeviceEnumerator::GetDriverRegistryValue(const WCHAR* key_name) con
     driver_key_path.append(driver);
 
     RegistryKey driver_key(HKEY_LOCAL_MACHINE, driver_key_path.c_str(), KEY_READ);
-
-    if (driver_key.IsValid())
+    if (!driver_key.IsValid())
     {
-        WCHAR value[MAX_PATH] = { 0 };
-        DWORD value_size = ARRAYSIZE(value);
-
-        if (driver_key.ReadValue(key_name, value, &value_size, nullptr))
-        {
-            return value;
-        }
+        LOG(WARNING) << "Unable to open registry key: " << GetLastSystemErrorString();
+        return std::wstring();
     }
 
-    return std::wstring();
+    WCHAR value[MAX_PATH] = { 0 };
+    DWORD value_size = ARRAYSIZE(value);
+
+    LONG status = driver_key.ReadValue(key_name, value, &value_size, nullptr);
+    if (status != ERROR_SUCCESS)
+    {
+        LOG(WARNING) << "Unable to read key value: " << SystemErrorCodeToString(status);
+        return std::wstring();
+    }
+
+    return value;
 }
 
 std::string DeviceEnumerator::GetDriverVersion() const

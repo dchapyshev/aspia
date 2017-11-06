@@ -161,6 +161,16 @@ public:
  ::google::protobuf::internal::ExplicitlyConstructed<Printers>
      _instance;
 } _Printers_default_instance_;
+class WindowsDevices_ItemDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<WindowsDevices_Item>
+     _instance;
+} _WindowsDevices_Item_default_instance_;
+class WindowsDevicesDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<WindowsDevices>
+     _instance;
+} _WindowsDevices_default_instance_;
 class Services_ItemDefaultTypeInternal {
 public:
  ::google::protobuf::internal::ExplicitlyConstructed<Services_Item>
@@ -306,6 +316,8 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
 };
 
 void TableStruct::InitDefaultsImpl() {
@@ -370,7 +382,11 @@ void TableStruct::InitDefaultsImpl() {
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_Printers_Item_default_instance_);_Printers_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
-      &_Printers_default_instance_);_Services_Item_default_instance_._instance.DefaultConstruct();
+      &_Printers_default_instance_);_WindowsDevices_Item_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_WindowsDevices_Item_default_instance_);_WindowsDevices_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_WindowsDevices_default_instance_);_Services_Item_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_Services_Item_default_instance_);_Services_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
@@ -18148,6 +18164,993 @@ Printers::mutable_item() {
 const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Printers_Item >&
 Printers::item() const {
   // @@protoc_insertion_point(field_list:aspia.system_info.Printers.item)
+  return item_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int WindowsDevices_Item::kFriendlyNameFieldNumber;
+const int WindowsDevices_Item::kDescriptionFieldNumber;
+const int WindowsDevices_Item::kDriverVersionFieldNumber;
+const int WindowsDevices_Item::kDriverDateFieldNumber;
+const int WindowsDevices_Item::kDriverVendorFieldNumber;
+const int WindowsDevices_Item::kDeviceIdFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+WindowsDevices_Item::WindowsDevices_Item()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.WindowsDevices.Item)
+}
+WindowsDevices_Item::WindowsDevices_Item(const WindowsDevices_Item& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  friendly_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.friendly_name().size() > 0) {
+    friendly_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.friendly_name_);
+  }
+  description_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.description().size() > 0) {
+    description_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.description_);
+  }
+  driver_version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.driver_version().size() > 0) {
+    driver_version_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.driver_version_);
+  }
+  driver_date_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.driver_date().size() > 0) {
+    driver_date_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.driver_date_);
+  }
+  driver_vendor_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.driver_vendor().size() > 0) {
+    driver_vendor_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.driver_vendor_);
+  }
+  device_id_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.device_id().size() > 0) {
+    device_id_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_id_);
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.WindowsDevices.Item)
+}
+
+void WindowsDevices_Item::SharedCtor() {
+  friendly_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  description_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_date_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_vendor_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  device_id_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _cached_size_ = 0;
+}
+
+WindowsDevices_Item::~WindowsDevices_Item() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.WindowsDevices.Item)
+  SharedDtor();
+}
+
+void WindowsDevices_Item::SharedDtor() {
+  friendly_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  description_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_version_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_date_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_vendor_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  device_id_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void WindowsDevices_Item::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const WindowsDevices_Item& WindowsDevices_Item::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+WindowsDevices_Item* WindowsDevices_Item::New(::google::protobuf::Arena* arena) const {
+  WindowsDevices_Item* n = new WindowsDevices_Item;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void WindowsDevices_Item::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.WindowsDevices.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  friendly_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  description_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_vendor_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  device_id_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _internal_metadata_.Clear();
+}
+
+bool WindowsDevices_Item::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.WindowsDevices.Item)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string friendly_name = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_friendly_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->friendly_name().data(), static_cast<int>(this->friendly_name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.WindowsDevices.Item.friendly_name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string description = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_description()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->description().data(), static_cast<int>(this->description().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.WindowsDevices.Item.description"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string driver_version = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_driver_version()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->driver_version().data(), static_cast<int>(this->driver_version().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.WindowsDevices.Item.driver_version"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string driver_date = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_driver_date()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->driver_date().data(), static_cast<int>(this->driver_date().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.WindowsDevices.Item.driver_date"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string driver_vendor = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_driver_vendor()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->driver_vendor().data(), static_cast<int>(this->driver_vendor().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.WindowsDevices.Item.driver_vendor"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string device_id = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_device_id()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->device_id().data(), static_cast<int>(this->device_id().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.WindowsDevices.Item.device_id"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.WindowsDevices.Item)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.WindowsDevices.Item)
+  return false;
+#undef DO_
+}
+
+void WindowsDevices_Item::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.WindowsDevices.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string friendly_name = 1;
+  if (this->friendly_name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->friendly_name().data(), static_cast<int>(this->friendly_name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.WindowsDevices.Item.friendly_name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->friendly_name(), output);
+  }
+
+  // string description = 2;
+  if (this->description().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->description().data(), static_cast<int>(this->description().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.WindowsDevices.Item.description");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->description(), output);
+  }
+
+  // string driver_version = 3;
+  if (this->driver_version().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->driver_version().data(), static_cast<int>(this->driver_version().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.WindowsDevices.Item.driver_version");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->driver_version(), output);
+  }
+
+  // string driver_date = 4;
+  if (this->driver_date().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->driver_date().data(), static_cast<int>(this->driver_date().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.WindowsDevices.Item.driver_date");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      4, this->driver_date(), output);
+  }
+
+  // string driver_vendor = 5;
+  if (this->driver_vendor().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->driver_vendor().data(), static_cast<int>(this->driver_vendor().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.WindowsDevices.Item.driver_vendor");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      5, this->driver_vendor(), output);
+  }
+
+  // string device_id = 6;
+  if (this->device_id().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->device_id().data(), static_cast<int>(this->device_id().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.WindowsDevices.Item.device_id");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      6, this->device_id(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.WindowsDevices.Item)
+}
+
+size_t WindowsDevices_Item::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.WindowsDevices.Item)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string friendly_name = 1;
+  if (this->friendly_name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->friendly_name());
+  }
+
+  // string description = 2;
+  if (this->description().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->description());
+  }
+
+  // string driver_version = 3;
+  if (this->driver_version().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->driver_version());
+  }
+
+  // string driver_date = 4;
+  if (this->driver_date().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->driver_date());
+  }
+
+  // string driver_vendor = 5;
+  if (this->driver_vendor().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->driver_vendor());
+  }
+
+  // string device_id = 6;
+  if (this->device_id().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->device_id());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void WindowsDevices_Item::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const WindowsDevices_Item*>(&from));
+}
+
+void WindowsDevices_Item::MergeFrom(const WindowsDevices_Item& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.WindowsDevices.Item)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.friendly_name().size() > 0) {
+
+    friendly_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.friendly_name_);
+  }
+  if (from.description().size() > 0) {
+
+    description_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.description_);
+  }
+  if (from.driver_version().size() > 0) {
+
+    driver_version_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.driver_version_);
+  }
+  if (from.driver_date().size() > 0) {
+
+    driver_date_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.driver_date_);
+  }
+  if (from.driver_vendor().size() > 0) {
+
+    driver_vendor_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.driver_vendor_);
+  }
+  if (from.device_id().size() > 0) {
+
+    device_id_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_id_);
+  }
+}
+
+void WindowsDevices_Item::CopyFrom(const WindowsDevices_Item& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.WindowsDevices.Item)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool WindowsDevices_Item::IsInitialized() const {
+  return true;
+}
+
+void WindowsDevices_Item::Swap(WindowsDevices_Item* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void WindowsDevices_Item::InternalSwap(WindowsDevices_Item* other) {
+  using std::swap;
+  friendly_name_.Swap(&other->friendly_name_);
+  description_.Swap(&other->description_);
+  driver_version_.Swap(&other->driver_version_);
+  driver_date_.Swap(&other->driver_date_);
+  driver_vendor_.Swap(&other->driver_vendor_);
+  device_id_.Swap(&other->device_id_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string WindowsDevices_Item::GetTypeName() const {
+  return "aspia.system_info.WindowsDevices.Item";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// WindowsDevices_Item
+
+// string friendly_name = 1;
+void WindowsDevices_Item::clear_friendly_name() {
+  friendly_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& WindowsDevices_Item::friendly_name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.WindowsDevices.Item.friendly_name)
+  return friendly_name_.GetNoArena();
+}
+void WindowsDevices_Item::set_friendly_name(const ::std::string& value) {
+  
+  friendly_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.WindowsDevices.Item.friendly_name)
+}
+#if LANG_CXX11
+void WindowsDevices_Item::set_friendly_name(::std::string&& value) {
+  
+  friendly_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.WindowsDevices.Item.friendly_name)
+}
+#endif
+void WindowsDevices_Item::set_friendly_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  friendly_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.WindowsDevices.Item.friendly_name)
+}
+void WindowsDevices_Item::set_friendly_name(const char* value, size_t size) {
+  
+  friendly_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.WindowsDevices.Item.friendly_name)
+}
+::std::string* WindowsDevices_Item::mutable_friendly_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.WindowsDevices.Item.friendly_name)
+  return friendly_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* WindowsDevices_Item::release_friendly_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.WindowsDevices.Item.friendly_name)
+  
+  return friendly_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void WindowsDevices_Item::set_allocated_friendly_name(::std::string* friendly_name) {
+  if (friendly_name != NULL) {
+    
+  } else {
+    
+  }
+  friendly_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), friendly_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.WindowsDevices.Item.friendly_name)
+}
+
+// string description = 2;
+void WindowsDevices_Item::clear_description() {
+  description_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& WindowsDevices_Item::description() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.WindowsDevices.Item.description)
+  return description_.GetNoArena();
+}
+void WindowsDevices_Item::set_description(const ::std::string& value) {
+  
+  description_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.WindowsDevices.Item.description)
+}
+#if LANG_CXX11
+void WindowsDevices_Item::set_description(::std::string&& value) {
+  
+  description_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.WindowsDevices.Item.description)
+}
+#endif
+void WindowsDevices_Item::set_description(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  description_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.WindowsDevices.Item.description)
+}
+void WindowsDevices_Item::set_description(const char* value, size_t size) {
+  
+  description_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.WindowsDevices.Item.description)
+}
+::std::string* WindowsDevices_Item::mutable_description() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.WindowsDevices.Item.description)
+  return description_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* WindowsDevices_Item::release_description() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.WindowsDevices.Item.description)
+  
+  return description_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void WindowsDevices_Item::set_allocated_description(::std::string* description) {
+  if (description != NULL) {
+    
+  } else {
+    
+  }
+  description_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), description);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.WindowsDevices.Item.description)
+}
+
+// string driver_version = 3;
+void WindowsDevices_Item::clear_driver_version() {
+  driver_version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& WindowsDevices_Item::driver_version() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.WindowsDevices.Item.driver_version)
+  return driver_version_.GetNoArena();
+}
+void WindowsDevices_Item::set_driver_version(const ::std::string& value) {
+  
+  driver_version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.WindowsDevices.Item.driver_version)
+}
+#if LANG_CXX11
+void WindowsDevices_Item::set_driver_version(::std::string&& value) {
+  
+  driver_version_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.WindowsDevices.Item.driver_version)
+}
+#endif
+void WindowsDevices_Item::set_driver_version(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  driver_version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.WindowsDevices.Item.driver_version)
+}
+void WindowsDevices_Item::set_driver_version(const char* value, size_t size) {
+  
+  driver_version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.WindowsDevices.Item.driver_version)
+}
+::std::string* WindowsDevices_Item::mutable_driver_version() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.WindowsDevices.Item.driver_version)
+  return driver_version_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* WindowsDevices_Item::release_driver_version() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.WindowsDevices.Item.driver_version)
+  
+  return driver_version_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void WindowsDevices_Item::set_allocated_driver_version(::std::string* driver_version) {
+  if (driver_version != NULL) {
+    
+  } else {
+    
+  }
+  driver_version_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), driver_version);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.WindowsDevices.Item.driver_version)
+}
+
+// string driver_date = 4;
+void WindowsDevices_Item::clear_driver_date() {
+  driver_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& WindowsDevices_Item::driver_date() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.WindowsDevices.Item.driver_date)
+  return driver_date_.GetNoArena();
+}
+void WindowsDevices_Item::set_driver_date(const ::std::string& value) {
+  
+  driver_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.WindowsDevices.Item.driver_date)
+}
+#if LANG_CXX11
+void WindowsDevices_Item::set_driver_date(::std::string&& value) {
+  
+  driver_date_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.WindowsDevices.Item.driver_date)
+}
+#endif
+void WindowsDevices_Item::set_driver_date(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  driver_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.WindowsDevices.Item.driver_date)
+}
+void WindowsDevices_Item::set_driver_date(const char* value, size_t size) {
+  
+  driver_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.WindowsDevices.Item.driver_date)
+}
+::std::string* WindowsDevices_Item::mutable_driver_date() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.WindowsDevices.Item.driver_date)
+  return driver_date_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* WindowsDevices_Item::release_driver_date() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.WindowsDevices.Item.driver_date)
+  
+  return driver_date_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void WindowsDevices_Item::set_allocated_driver_date(::std::string* driver_date) {
+  if (driver_date != NULL) {
+    
+  } else {
+    
+  }
+  driver_date_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), driver_date);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.WindowsDevices.Item.driver_date)
+}
+
+// string driver_vendor = 5;
+void WindowsDevices_Item::clear_driver_vendor() {
+  driver_vendor_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& WindowsDevices_Item::driver_vendor() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.WindowsDevices.Item.driver_vendor)
+  return driver_vendor_.GetNoArena();
+}
+void WindowsDevices_Item::set_driver_vendor(const ::std::string& value) {
+  
+  driver_vendor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.WindowsDevices.Item.driver_vendor)
+}
+#if LANG_CXX11
+void WindowsDevices_Item::set_driver_vendor(::std::string&& value) {
+  
+  driver_vendor_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.WindowsDevices.Item.driver_vendor)
+}
+#endif
+void WindowsDevices_Item::set_driver_vendor(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  driver_vendor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.WindowsDevices.Item.driver_vendor)
+}
+void WindowsDevices_Item::set_driver_vendor(const char* value, size_t size) {
+  
+  driver_vendor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.WindowsDevices.Item.driver_vendor)
+}
+::std::string* WindowsDevices_Item::mutable_driver_vendor() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.WindowsDevices.Item.driver_vendor)
+  return driver_vendor_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* WindowsDevices_Item::release_driver_vendor() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.WindowsDevices.Item.driver_vendor)
+  
+  return driver_vendor_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void WindowsDevices_Item::set_allocated_driver_vendor(::std::string* driver_vendor) {
+  if (driver_vendor != NULL) {
+    
+  } else {
+    
+  }
+  driver_vendor_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), driver_vendor);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.WindowsDevices.Item.driver_vendor)
+}
+
+// string device_id = 6;
+void WindowsDevices_Item::clear_device_id() {
+  device_id_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& WindowsDevices_Item::device_id() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.WindowsDevices.Item.device_id)
+  return device_id_.GetNoArena();
+}
+void WindowsDevices_Item::set_device_id(const ::std::string& value) {
+  
+  device_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.WindowsDevices.Item.device_id)
+}
+#if LANG_CXX11
+void WindowsDevices_Item::set_device_id(::std::string&& value) {
+  
+  device_id_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.WindowsDevices.Item.device_id)
+}
+#endif
+void WindowsDevices_Item::set_device_id(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  device_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.WindowsDevices.Item.device_id)
+}
+void WindowsDevices_Item::set_device_id(const char* value, size_t size) {
+  
+  device_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.WindowsDevices.Item.device_id)
+}
+::std::string* WindowsDevices_Item::mutable_device_id() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.WindowsDevices.Item.device_id)
+  return device_id_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* WindowsDevices_Item::release_device_id() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.WindowsDevices.Item.device_id)
+  
+  return device_id_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void WindowsDevices_Item::set_allocated_device_id(::std::string* device_id) {
+  if (device_id != NULL) {
+    
+  } else {
+    
+  }
+  device_id_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), device_id);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.WindowsDevices.Item.device_id)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int WindowsDevices::kItemFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+WindowsDevices::WindowsDevices()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.WindowsDevices)
+}
+WindowsDevices::WindowsDevices(const WindowsDevices& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      item_(from.item_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.WindowsDevices)
+}
+
+void WindowsDevices::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+WindowsDevices::~WindowsDevices() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.WindowsDevices)
+  SharedDtor();
+}
+
+void WindowsDevices::SharedDtor() {
+}
+
+void WindowsDevices::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const WindowsDevices& WindowsDevices::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+WindowsDevices* WindowsDevices::New(::google::protobuf::Arena* arena) const {
+  WindowsDevices* n = new WindowsDevices;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void WindowsDevices::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.WindowsDevices)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  item_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool WindowsDevices::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.WindowsDevices)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .aspia.system_info.WindowsDevices.Item item = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_item()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.WindowsDevices)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.WindowsDevices)
+  return false;
+#undef DO_
+}
+
+void WindowsDevices::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.WindowsDevices)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .aspia.system_info.WindowsDevices.Item item = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1, this->item(static_cast<int>(i)), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.WindowsDevices)
+}
+
+size_t WindowsDevices::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.WindowsDevices)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.system_info.WindowsDevices.Item item = 1;
+  {
+    unsigned int count = static_cast<unsigned int>(this->item_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->item(static_cast<int>(i)));
+    }
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void WindowsDevices::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const WindowsDevices*>(&from));
+}
+
+void WindowsDevices::MergeFrom(const WindowsDevices& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.WindowsDevices)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  item_.MergeFrom(from.item_);
+}
+
+void WindowsDevices::CopyFrom(const WindowsDevices& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.WindowsDevices)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool WindowsDevices::IsInitialized() const {
+  return true;
+}
+
+void WindowsDevices::Swap(WindowsDevices* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void WindowsDevices::InternalSwap(WindowsDevices* other) {
+  using std::swap;
+  item_.InternalSwap(&other->item_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string WindowsDevices::GetTypeName() const {
+  return "aspia.system_info.WindowsDevices";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// WindowsDevices
+
+// repeated .aspia.system_info.WindowsDevices.Item item = 1;
+int WindowsDevices::item_size() const {
+  return item_.size();
+}
+void WindowsDevices::clear_item() {
+  item_.Clear();
+}
+const ::aspia::system_info::WindowsDevices_Item& WindowsDevices::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.WindowsDevices.item)
+  return item_.Get(index);
+}
+::aspia::system_info::WindowsDevices_Item* WindowsDevices::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.WindowsDevices.item)
+  return item_.Mutable(index);
+}
+::aspia::system_info::WindowsDevices_Item* WindowsDevices::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.WindowsDevices.item)
+  return item_.Add();
+}
+::google::protobuf::RepeatedPtrField< ::aspia::system_info::WindowsDevices_Item >*
+WindowsDevices::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.WindowsDevices.item)
+  return &item_;
+}
+const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::WindowsDevices_Item >&
+WindowsDevices::item() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.WindowsDevices.item)
   return item_;
 }
 

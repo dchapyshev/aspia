@@ -3153,81 +3153,79 @@ std::string CategoryPowerOptions::Serialize()
 }
 
 //
-// CategoryAllDevices
+// CategoryWindowsDevices
 //
 
-const char* CategoryAllDevices::Name() const
-{
-    return "All Devices";
-}
-
-Category::IconId CategoryAllDevices::Icon() const
-{
-    return IDI_PCI;
-}
-
-const char* CategoryAllDevices::Guid() const
-{
-    return "22C4F1A6-67F2-4445-B807-9D39E1A80636";
-}
-
-void CategoryAllDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
-{
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
-}
-
-std::string CategoryAllDevices::Serialize()
-{
-    // TODO
-    return std::string();
-}
-
-//
-// CategoryUnknownDevices
-//
-
-const char* CategoryUnknownDevices::Name() const
-{
-    return "Unknown Devices";
-}
-
-Category::IconId CategoryUnknownDevices::Icon() const
-{
-    return IDI_PCI;
-}
-
-const char* CategoryUnknownDevices::Guid() const
-{
-    return "5BE9FAA9-5F94-4420-8650-B649F35A1DA0";
-}
-
-void CategoryUnknownDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
-{
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
-}
-
-std::string CategoryUnknownDevices::Serialize()
-{
-    // TODO
-    return std::string();
-}
-
-//
-// CategoryGroupWindowDevices
-//
-
-const char* CategoryGroupWindowDevices::Name() const
+const char* CategoryWindowsDevices::Name() const
 {
     return "Windows Devices";
 }
 
-Category::IconId CategoryGroupWindowDevices::Icon() const
+Category::IconId CategoryWindowsDevices::Icon() const
 {
     return IDI_PCI;
+}
+
+const char* CategoryWindowsDevices::Guid() const
+{
+    return "22C4F1A6-67F2-4445-B807-9D39E1A80636";
+}
+
+void CategoryWindowsDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+{
+    system_info::WindowsDevices message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Device Name", 200);
+        output->AddHeaderItem("Driver Version", 90);
+        output->AddHeaderItem("Driver Date", 80);
+        output->AddHeaderItem("Driver Vendor", 90);
+        output->AddHeaderItem("Device ID", 200);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::WindowsDevices::Item& item = message.item(index);
+
+        Output::Row row(output, Icon());
+
+        if (!item.friendly_name().empty())
+            output->AddValue(item.friendly_name());
+        else if (!item.description().empty())
+            output->AddValue(item.description());
+        else
+            output->AddValue("Unknown Device");
+
+        output->AddValue(item.driver_version());
+        output->AddValue(item.driver_date());
+        output->AddValue(item.driver_vendor());
+        output->AddValue(item.device_id());
+    }
+}
+
+std::string CategoryWindowsDevices::Serialize()
+{
+    system_info::WindowsDevices message;
+
+    for (DeviceEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+    {
+        system_info::WindowsDevices::Item* item = message.add_item();
+
+        item->set_friendly_name(enumerator.GetFriendlyName());
+        item->set_description(enumerator.GetDescription());
+        item->set_driver_version(enumerator.GetDriverVersion());
+        item->set_driver_date(enumerator.GetDriverDate());
+        item->set_driver_vendor(enumerator.GetDriverVendor());
+        item->set_device_id(enumerator.GetDeviceID());
+    }
+
+    return message.SerializeAsString();
 }
 
 //
