@@ -116,6 +116,16 @@ public:
  ::google::protobuf::internal::ExplicitlyConstructed<DmiOnBoardDevices>
      _instance;
 } _DmiOnBoardDevices_default_instance_;
+class DmiBuildinPointing_ItemDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<DmiBuildinPointing_Item>
+     _instance;
+} _DmiBuildinPointing_Item_default_instance_;
+class DmiBuildinPointingDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<DmiBuildinPointing>
+     _instance;
+} _DmiBuildinPointing_default_instance_;
 class Monitors_Item_TimingDefaultTypeInternal {
 public:
  ::google::protobuf::internal::ExplicitlyConstructed<Monitors_Item_Timing>
@@ -282,6 +292,8 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
 };
 
 void TableStruct::InitDefaultsImpl() {
@@ -328,7 +340,11 @@ void TableStruct::InitDefaultsImpl() {
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_DmiOnBoardDevices_Item_default_instance_);_DmiOnBoardDevices_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
-      &_DmiOnBoardDevices_default_instance_);_Monitors_Item_Timing_default_instance_._instance.DefaultConstruct();
+      &_DmiOnBoardDevices_default_instance_);_DmiBuildinPointing_Item_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_DmiBuildinPointing_Item_default_instance_);_DmiBuildinPointing_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_DmiBuildinPointing_default_instance_);_Monitors_Item_Timing_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_Monitors_Item_Timing_default_instance_);_Monitors_Item_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
@@ -11982,6 +11998,645 @@ DmiOnBoardDevices::mutable_item() {
 const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiOnBoardDevices_Item >&
 DmiOnBoardDevices::item() const {
   // @@protoc_insertion_point(field_list:aspia.system_info.DmiOnBoardDevices.item)
+  return item_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DmiBuildinPointing_Item::kDeviceTypeFieldNumber;
+const int DmiBuildinPointing_Item::kDeviceInterfaceFieldNumber;
+const int DmiBuildinPointing_Item::kButtonCountFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DmiBuildinPointing_Item::DmiBuildinPointing_Item()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.DmiBuildinPointing.Item)
+}
+DmiBuildinPointing_Item::DmiBuildinPointing_Item(const DmiBuildinPointing_Item& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  device_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.device_type().size() > 0) {
+    device_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_type_);
+  }
+  device_interface_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.device_interface().size() > 0) {
+    device_interface_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_interface_);
+  }
+  button_count_ = from.button_count_;
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiBuildinPointing.Item)
+}
+
+void DmiBuildinPointing_Item::SharedCtor() {
+  device_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  device_interface_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  button_count_ = 0;
+  _cached_size_ = 0;
+}
+
+DmiBuildinPointing_Item::~DmiBuildinPointing_Item() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.DmiBuildinPointing.Item)
+  SharedDtor();
+}
+
+void DmiBuildinPointing_Item::SharedDtor() {
+  device_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  device_interface_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void DmiBuildinPointing_Item::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DmiBuildinPointing_Item& DmiBuildinPointing_Item::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+DmiBuildinPointing_Item* DmiBuildinPointing_Item::New(::google::protobuf::Arena* arena) const {
+  DmiBuildinPointing_Item* n = new DmiBuildinPointing_Item;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DmiBuildinPointing_Item::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiBuildinPointing.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  device_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  device_interface_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  button_count_ = 0;
+  _internal_metadata_.Clear();
+}
+
+bool DmiBuildinPointing_Item::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiBuildinPointing.Item)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string device_type = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_device_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->device_type().data(), static_cast<int>(this->device_type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiBuildinPointing.Item.device_type"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string device_interface = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_device_interface()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->device_interface().data(), static_cast<int>(this->device_interface().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiBuildinPointing.Item.device_interface"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 button_count = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &button_count_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiBuildinPointing.Item)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiBuildinPointing.Item)
+  return false;
+#undef DO_
+}
+
+void DmiBuildinPointing_Item::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiBuildinPointing.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string device_type = 1;
+  if (this->device_type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->device_type().data(), static_cast<int>(this->device_type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiBuildinPointing.Item.device_type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->device_type(), output);
+  }
+
+  // string device_interface = 2;
+  if (this->device_interface().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->device_interface().data(), static_cast<int>(this->device_interface().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiBuildinPointing.Item.device_interface");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->device_interface(), output);
+  }
+
+  // int32 button_count = 3;
+  if (this->button_count() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->button_count(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiBuildinPointing.Item)
+}
+
+size_t DmiBuildinPointing_Item::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiBuildinPointing.Item)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string device_type = 1;
+  if (this->device_type().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->device_type());
+  }
+
+  // string device_interface = 2;
+  if (this->device_interface().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->device_interface());
+  }
+
+  // int32 button_count = 3;
+  if (this->button_count() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->button_count());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DmiBuildinPointing_Item::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const DmiBuildinPointing_Item*>(&from));
+}
+
+void DmiBuildinPointing_Item::MergeFrom(const DmiBuildinPointing_Item& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiBuildinPointing.Item)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.device_type().size() > 0) {
+
+    device_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_type_);
+  }
+  if (from.device_interface().size() > 0) {
+
+    device_interface_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_interface_);
+  }
+  if (from.button_count() != 0) {
+    set_button_count(from.button_count());
+  }
+}
+
+void DmiBuildinPointing_Item::CopyFrom(const DmiBuildinPointing_Item& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiBuildinPointing.Item)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DmiBuildinPointing_Item::IsInitialized() const {
+  return true;
+}
+
+void DmiBuildinPointing_Item::Swap(DmiBuildinPointing_Item* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void DmiBuildinPointing_Item::InternalSwap(DmiBuildinPointing_Item* other) {
+  using std::swap;
+  device_type_.Swap(&other->device_type_);
+  device_interface_.Swap(&other->device_interface_);
+  swap(button_count_, other->button_count_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string DmiBuildinPointing_Item::GetTypeName() const {
+  return "aspia.system_info.DmiBuildinPointing.Item";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// DmiBuildinPointing_Item
+
+// string device_type = 1;
+void DmiBuildinPointing_Item::clear_device_type() {
+  device_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiBuildinPointing_Item::device_type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBuildinPointing.Item.device_type)
+  return device_type_.GetNoArena();
+}
+void DmiBuildinPointing_Item::set_device_type(const ::std::string& value) {
+  
+  device_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBuildinPointing.Item.device_type)
+}
+#if LANG_CXX11
+void DmiBuildinPointing_Item::set_device_type(::std::string&& value) {
+  
+  device_type_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBuildinPointing.Item.device_type)
+}
+#endif
+void DmiBuildinPointing_Item::set_device_type(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  device_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBuildinPointing.Item.device_type)
+}
+void DmiBuildinPointing_Item::set_device_type(const char* value, size_t size) {
+  
+  device_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBuildinPointing.Item.device_type)
+}
+::std::string* DmiBuildinPointing_Item::mutable_device_type() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBuildinPointing.Item.device_type)
+  return device_type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiBuildinPointing_Item::release_device_type() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBuildinPointing.Item.device_type)
+  
+  return device_type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiBuildinPointing_Item::set_allocated_device_type(::std::string* device_type) {
+  if (device_type != NULL) {
+    
+  } else {
+    
+  }
+  device_type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), device_type);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBuildinPointing.Item.device_type)
+}
+
+// string device_interface = 2;
+void DmiBuildinPointing_Item::clear_device_interface() {
+  device_interface_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiBuildinPointing_Item::device_interface() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+  return device_interface_.GetNoArena();
+}
+void DmiBuildinPointing_Item::set_device_interface(const ::std::string& value) {
+  
+  device_interface_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+}
+#if LANG_CXX11
+void DmiBuildinPointing_Item::set_device_interface(::std::string&& value) {
+  
+  device_interface_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+}
+#endif
+void DmiBuildinPointing_Item::set_device_interface(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  device_interface_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+}
+void DmiBuildinPointing_Item::set_device_interface(const char* value, size_t size) {
+  
+  device_interface_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+}
+::std::string* DmiBuildinPointing_Item::mutable_device_interface() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+  return device_interface_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiBuildinPointing_Item::release_device_interface() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+  
+  return device_interface_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiBuildinPointing_Item::set_allocated_device_interface(::std::string* device_interface) {
+  if (device_interface != NULL) {
+    
+  } else {
+    
+  }
+  device_interface_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), device_interface);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+}
+
+// int32 button_count = 3;
+void DmiBuildinPointing_Item::clear_button_count() {
+  button_count_ = 0;
+}
+::google::protobuf::int32 DmiBuildinPointing_Item::button_count() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBuildinPointing.Item.button_count)
+  return button_count_;
+}
+void DmiBuildinPointing_Item::set_button_count(::google::protobuf::int32 value) {
+  
+  button_count_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBuildinPointing.Item.button_count)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DmiBuildinPointing::kItemFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DmiBuildinPointing::DmiBuildinPointing()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.DmiBuildinPointing)
+}
+DmiBuildinPointing::DmiBuildinPointing(const DmiBuildinPointing& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      item_(from.item_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiBuildinPointing)
+}
+
+void DmiBuildinPointing::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+DmiBuildinPointing::~DmiBuildinPointing() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.DmiBuildinPointing)
+  SharedDtor();
+}
+
+void DmiBuildinPointing::SharedDtor() {
+}
+
+void DmiBuildinPointing::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DmiBuildinPointing& DmiBuildinPointing::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+DmiBuildinPointing* DmiBuildinPointing::New(::google::protobuf::Arena* arena) const {
+  DmiBuildinPointing* n = new DmiBuildinPointing;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DmiBuildinPointing::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiBuildinPointing)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  item_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool DmiBuildinPointing::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiBuildinPointing)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .aspia.system_info.DmiBuildinPointing.Item item = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_item()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiBuildinPointing)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiBuildinPointing)
+  return false;
+#undef DO_
+}
+
+void DmiBuildinPointing::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiBuildinPointing)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .aspia.system_info.DmiBuildinPointing.Item item = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1, this->item(static_cast<int>(i)), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiBuildinPointing)
+}
+
+size_t DmiBuildinPointing::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiBuildinPointing)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.system_info.DmiBuildinPointing.Item item = 1;
+  {
+    unsigned int count = static_cast<unsigned int>(this->item_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->item(static_cast<int>(i)));
+    }
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DmiBuildinPointing::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const DmiBuildinPointing*>(&from));
+}
+
+void DmiBuildinPointing::MergeFrom(const DmiBuildinPointing& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiBuildinPointing)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  item_.MergeFrom(from.item_);
+}
+
+void DmiBuildinPointing::CopyFrom(const DmiBuildinPointing& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiBuildinPointing)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DmiBuildinPointing::IsInitialized() const {
+  return true;
+}
+
+void DmiBuildinPointing::Swap(DmiBuildinPointing* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void DmiBuildinPointing::InternalSwap(DmiBuildinPointing* other) {
+  using std::swap;
+  item_.InternalSwap(&other->item_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string DmiBuildinPointing::GetTypeName() const {
+  return "aspia.system_info.DmiBuildinPointing";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// DmiBuildinPointing
+
+// repeated .aspia.system_info.DmiBuildinPointing.Item item = 1;
+int DmiBuildinPointing::item_size() const {
+  return item_.size();
+}
+void DmiBuildinPointing::clear_item() {
+  item_.Clear();
+}
+const ::aspia::system_info::DmiBuildinPointing_Item& DmiBuildinPointing::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBuildinPointing.item)
+  return item_.Get(index);
+}
+::aspia::system_info::DmiBuildinPointing_Item* DmiBuildinPointing::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBuildinPointing.item)
+  return item_.Mutable(index);
+}
+::aspia::system_info::DmiBuildinPointing_Item* DmiBuildinPointing::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.DmiBuildinPointing.item)
+  return item_.Add();
+}
+::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBuildinPointing_Item >*
+DmiBuildinPointing::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.DmiBuildinPointing.item)
+  return &item_;
+}
+const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBuildinPointing_Item >&
+DmiBuildinPointing::item() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.DmiBuildinPointing.item)
   return item_;
 }
 

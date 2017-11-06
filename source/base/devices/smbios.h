@@ -496,6 +496,22 @@ public:
         TableReader reader_;
     };
 
+    class BuildinPointingTable
+    {
+    public:
+        enum : uint8_t { TABLE_TYPE = 0x15 };
+
+        std::string GetDeviceType() const;
+        std::string GetInterface() const;
+        int GetButtonCount() const;
+
+    private:
+        friend class TableEnumerator<BuildinPointingTable>;
+        BuildinPointingTable(const TableReader& reader);
+
+        TableReader reader_;
+    };
+
 private:
     SMBios(std::unique_ptr<uint8_t[]> data, size_t data_size);
     static int GetTableCount(const uint8_t* table_data, uint32_t length);

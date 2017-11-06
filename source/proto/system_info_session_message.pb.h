@@ -47,6 +47,12 @@ extern DmiBiosDefaultTypeInternal _DmiBios_default_instance_;
 class DmiBios_Feature;
 class DmiBios_FeatureDefaultTypeInternal;
 extern DmiBios_FeatureDefaultTypeInternal _DmiBios_Feature_default_instance_;
+class DmiBuildinPointing;
+class DmiBuildinPointingDefaultTypeInternal;
+extern DmiBuildinPointingDefaultTypeInternal _DmiBuildinPointing_default_instance_;
+class DmiBuildinPointing_Item;
+class DmiBuildinPointing_ItemDefaultTypeInternal;
+extern DmiBuildinPointing_ItemDefaultTypeInternal _DmiBuildinPointing_Item_default_instance_;
 class DmiCaches;
 class DmiCachesDefaultTypeInternal;
 extern DmiCachesDefaultTypeInternal _DmiCaches_default_instance_;
@@ -3954,6 +3960,234 @@ class DmiOnBoardDevices : public ::google::protobuf::MessageLite /* @@protoc_ins
 };
 // -------------------------------------------------------------------
 
+class DmiBuildinPointing_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.DmiBuildinPointing.Item) */ {
+ public:
+  DmiBuildinPointing_Item();
+  virtual ~DmiBuildinPointing_Item();
+
+  DmiBuildinPointing_Item(const DmiBuildinPointing_Item& from);
+
+  inline DmiBuildinPointing_Item& operator=(const DmiBuildinPointing_Item& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  DmiBuildinPointing_Item(DmiBuildinPointing_Item&& from) noexcept
+    : DmiBuildinPointing_Item() {
+    *this = ::std::move(from);
+  }
+
+  inline DmiBuildinPointing_Item& operator=(DmiBuildinPointing_Item&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const DmiBuildinPointing_Item& default_instance();
+
+  static inline const DmiBuildinPointing_Item* internal_default_instance() {
+    return reinterpret_cast<const DmiBuildinPointing_Item*>(
+               &_DmiBuildinPointing_Item_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    20;
+
+  void Swap(DmiBuildinPointing_Item* other);
+  friend void swap(DmiBuildinPointing_Item& a, DmiBuildinPointing_Item& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DmiBuildinPointing_Item* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  DmiBuildinPointing_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const DmiBuildinPointing_Item& from);
+  void MergeFrom(const DmiBuildinPointing_Item& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(DmiBuildinPointing_Item* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string device_type = 1;
+  void clear_device_type();
+  static const int kDeviceTypeFieldNumber = 1;
+  const ::std::string& device_type() const;
+  void set_device_type(const ::std::string& value);
+  #if LANG_CXX11
+  void set_device_type(::std::string&& value);
+  #endif
+  void set_device_type(const char* value);
+  void set_device_type(const char* value, size_t size);
+  ::std::string* mutable_device_type();
+  ::std::string* release_device_type();
+  void set_allocated_device_type(::std::string* device_type);
+
+  // string device_interface = 2;
+  void clear_device_interface();
+  static const int kDeviceInterfaceFieldNumber = 2;
+  const ::std::string& device_interface() const;
+  void set_device_interface(const ::std::string& value);
+  #if LANG_CXX11
+  void set_device_interface(::std::string&& value);
+  #endif
+  void set_device_interface(const char* value);
+  void set_device_interface(const char* value, size_t size);
+  ::std::string* mutable_device_interface();
+  ::std::string* release_device_interface();
+  void set_allocated_device_interface(::std::string* device_interface);
+
+  // int32 button_count = 3;
+  void clear_button_count();
+  static const int kButtonCountFieldNumber = 3;
+  ::google::protobuf::int32 button_count() const;
+  void set_button_count(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.DmiBuildinPointing.Item)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr device_type_;
+  ::google::protobuf::internal::ArenaStringPtr device_interface_;
+  ::google::protobuf::int32 button_count_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class DmiBuildinPointing : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.DmiBuildinPointing) */ {
+ public:
+  DmiBuildinPointing();
+  virtual ~DmiBuildinPointing();
+
+  DmiBuildinPointing(const DmiBuildinPointing& from);
+
+  inline DmiBuildinPointing& operator=(const DmiBuildinPointing& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  DmiBuildinPointing(DmiBuildinPointing&& from) noexcept
+    : DmiBuildinPointing() {
+    *this = ::std::move(from);
+  }
+
+  inline DmiBuildinPointing& operator=(DmiBuildinPointing&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const DmiBuildinPointing& default_instance();
+
+  static inline const DmiBuildinPointing* internal_default_instance() {
+    return reinterpret_cast<const DmiBuildinPointing*>(
+               &_DmiBuildinPointing_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    21;
+
+  void Swap(DmiBuildinPointing* other);
+  friend void swap(DmiBuildinPointing& a, DmiBuildinPointing& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DmiBuildinPointing* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  DmiBuildinPointing* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const DmiBuildinPointing& from);
+  void MergeFrom(const DmiBuildinPointing& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(DmiBuildinPointing* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef DmiBuildinPointing_Item Item;
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.system_info.DmiBuildinPointing.Item item = 1;
+  int item_size() const;
+  void clear_item();
+  static const int kItemFieldNumber = 1;
+  const ::aspia::system_info::DmiBuildinPointing_Item& item(int index) const;
+  ::aspia::system_info::DmiBuildinPointing_Item* mutable_item(int index);
+  ::aspia::system_info::DmiBuildinPointing_Item* add_item();
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBuildinPointing_Item >*
+      mutable_item();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBuildinPointing_Item >&
+      item() const;
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.DmiBuildinPointing)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBuildinPointing_Item > item_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class Monitors_Item_Timing : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.Monitors.Item.Timing) */ {
  public:
   Monitors_Item_Timing();
@@ -3987,7 +4221,7 @@ class Monitors_Item_Timing : public ::google::protobuf::MessageLite /* @@protoc_
                &_Monitors_Item_Timing_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    20;
+    22;
 
   void Swap(Monitors_Item_Timing* other);
   friend void swap(Monitors_Item_Timing& a, Monitors_Item_Timing& b) {
@@ -4096,7 +4330,7 @@ class Monitors_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Monitors_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    21;
+    23;
 
   void Swap(Monitors_Item* other);
   friend void swap(Monitors_Item& a, Monitors_Item& b) {
@@ -4445,7 +4679,7 @@ class Monitors : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Monitors_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    22;
+    24;
 
   void Swap(Monitors* other);
   friend void swap(Monitors& a, Monitors& b) {
@@ -4548,7 +4782,7 @@ class Printers_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Printers_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    23;
+    25;
 
   void Swap(Printers_Item* other);
   friend void swap(Printers_Item& a, Printers_Item& b) {
@@ -4852,7 +5086,7 @@ class Printers : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Printers_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    24;
+    26;
 
   void Swap(Printers* other);
   friend void swap(Printers& a, Printers& b) {
@@ -4955,7 +5189,7 @@ class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Services_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    25;
+    27;
 
   void Swap(Services_Item* other);
   friend void swap(Services_Item& a, Services_Item& b) {
@@ -5182,7 +5416,7 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Services_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    26;
+    28;
 
   void Swap(Services* other);
   friend void swap(Services& a, Services& b) {
@@ -5285,7 +5519,7 @@ class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@
                &_NetworkCards_Item_IpAddress_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    27;
+    29;
 
   void Swap(NetworkCards_Item_IpAddress* other);
   friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
@@ -5403,7 +5637,7 @@ class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_NetworkCards_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    28;
+    30;
 
   void Swap(NetworkCards_Item* other);
   friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
@@ -5693,7 +5927,7 @@ class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_NetworkCards_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    29;
+    31;
 
   void Swap(NetworkCards* other);
   friend void swap(NetworkCards& a, NetworkCards& b) {
@@ -5796,7 +6030,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    30;
+    32;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -5958,7 +6192,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    31;
+    33;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -6061,7 +6295,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    32;
+    34;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -6240,7 +6474,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    33;
+    35;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -6343,7 +6577,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    34;
+    36;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -6483,7 +6717,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    35;
+    37;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -6586,7 +6820,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    36;
+    38;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -6775,7 +7009,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    37;
+    39;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -6878,7 +7112,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    38;
+    40;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -6996,7 +7230,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    39;
+    41;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -7099,7 +7333,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    40;
+    42;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -7269,7 +7503,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    41;
+    43;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -11052,6 +11286,164 @@ DmiOnBoardDevices::mutable_item() {
 inline const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiOnBoardDevices_Item >&
 DmiOnBoardDevices::item() const {
   // @@protoc_insertion_point(field_list:aspia.system_info.DmiOnBoardDevices.item)
+  return item_;
+}
+
+// -------------------------------------------------------------------
+
+// DmiBuildinPointing_Item
+
+// string device_type = 1;
+inline void DmiBuildinPointing_Item::clear_device_type() {
+  device_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& DmiBuildinPointing_Item::device_type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBuildinPointing.Item.device_type)
+  return device_type_.GetNoArena();
+}
+inline void DmiBuildinPointing_Item::set_device_type(const ::std::string& value) {
+  
+  device_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBuildinPointing.Item.device_type)
+}
+#if LANG_CXX11
+inline void DmiBuildinPointing_Item::set_device_type(::std::string&& value) {
+  
+  device_type_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBuildinPointing.Item.device_type)
+}
+#endif
+inline void DmiBuildinPointing_Item::set_device_type(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  device_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBuildinPointing.Item.device_type)
+}
+inline void DmiBuildinPointing_Item::set_device_type(const char* value, size_t size) {
+  
+  device_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBuildinPointing.Item.device_type)
+}
+inline ::std::string* DmiBuildinPointing_Item::mutable_device_type() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBuildinPointing.Item.device_type)
+  return device_type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* DmiBuildinPointing_Item::release_device_type() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBuildinPointing.Item.device_type)
+  
+  return device_type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void DmiBuildinPointing_Item::set_allocated_device_type(::std::string* device_type) {
+  if (device_type != NULL) {
+    
+  } else {
+    
+  }
+  device_type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), device_type);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBuildinPointing.Item.device_type)
+}
+
+// string device_interface = 2;
+inline void DmiBuildinPointing_Item::clear_device_interface() {
+  device_interface_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& DmiBuildinPointing_Item::device_interface() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+  return device_interface_.GetNoArena();
+}
+inline void DmiBuildinPointing_Item::set_device_interface(const ::std::string& value) {
+  
+  device_interface_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+}
+#if LANG_CXX11
+inline void DmiBuildinPointing_Item::set_device_interface(::std::string&& value) {
+  
+  device_interface_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+}
+#endif
+inline void DmiBuildinPointing_Item::set_device_interface(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  device_interface_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+}
+inline void DmiBuildinPointing_Item::set_device_interface(const char* value, size_t size) {
+  
+  device_interface_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+}
+inline ::std::string* DmiBuildinPointing_Item::mutable_device_interface() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+  return device_interface_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* DmiBuildinPointing_Item::release_device_interface() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+  
+  return device_interface_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void DmiBuildinPointing_Item::set_allocated_device_interface(::std::string* device_interface) {
+  if (device_interface != NULL) {
+    
+  } else {
+    
+  }
+  device_interface_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), device_interface);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiBuildinPointing.Item.device_interface)
+}
+
+// int32 button_count = 3;
+inline void DmiBuildinPointing_Item::clear_button_count() {
+  button_count_ = 0;
+}
+inline ::google::protobuf::int32 DmiBuildinPointing_Item::button_count() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBuildinPointing.Item.button_count)
+  return button_count_;
+}
+inline void DmiBuildinPointing_Item::set_button_count(::google::protobuf::int32 value) {
+  
+  button_count_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiBuildinPointing.Item.button_count)
+}
+
+// -------------------------------------------------------------------
+
+// DmiBuildinPointing
+
+// repeated .aspia.system_info.DmiBuildinPointing.Item item = 1;
+inline int DmiBuildinPointing::item_size() const {
+  return item_.size();
+}
+inline void DmiBuildinPointing::clear_item() {
+  item_.Clear();
+}
+inline const ::aspia::system_info::DmiBuildinPointing_Item& DmiBuildinPointing::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiBuildinPointing.item)
+  return item_.Get(index);
+}
+inline ::aspia::system_info::DmiBuildinPointing_Item* DmiBuildinPointing::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiBuildinPointing.item)
+  return item_.Mutable(index);
+}
+inline ::aspia::system_info::DmiBuildinPointing_Item* DmiBuildinPointing::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.DmiBuildinPointing.item)
+  return item_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBuildinPointing_Item >*
+DmiBuildinPointing::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.DmiBuildinPointing.item)
+  return &item_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBuildinPointing_Item >&
+DmiBuildinPointing::item() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.DmiBuildinPointing.item)
   return item_;
 }
 
@@ -15000,6 +15392,10 @@ Sessions::item() const {
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

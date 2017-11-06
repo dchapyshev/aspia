@@ -1884,4 +1884,83 @@ int SMBios::MemoryDeviceTable::GetDataWidth() const
     return reader_.GetWord(0x0A);
 }
 
+//
+// BuildinPointingTable
+//
+
+SMBios::BuildinPointingTable::BuildinPointingTable(const TableReader& reader)
+    : reader_(reader)
+{
+    // Nothing
+}
+
+std::string SMBios::BuildinPointingTable::GetDeviceType() const
+{
+    if (reader_.GetTableLength() < 0x07)
+        return std::string();
+
+    static const char* names[] =
+    {
+        "Other", // 0x01
+        nullptr,
+        "Mouse",
+        "Track Ball",
+        "Track Point",
+        "Glide Point",
+        "Touch Pad",
+        "Touch Screen",
+        "Optical Sensor" // 0x09
+    };
+
+    const uint8_t type = reader_.GetByte(0x04);
+
+    if (type >= 0x01 && type <= 0x09 && names[type - 0x01])
+        return names[type - 0x01];
+
+    return std::string();
+}
+
+std::string SMBios::BuildinPointingTable::GetInterface() const
+{
+    if (reader_.GetTableLength() < 0x07)
+        return std::string();
+
+    const uint8_t type = reader_.GetByte(0x05);
+
+    static const char* names[] =
+    {
+        "Other", // 0x01
+        nullptr,
+        "Serial",
+        "PS/2",
+        "Infrared",
+        "HIP-HIL",
+        "Bus Mouse",
+        "ADB (Apple Desktop Bus)" // 0x08
+    };
+
+    if (type >= 0x01 && type <= 0x08 && names[type - 0x01])
+        return names[type - 0x01];
+
+    static const char* names_0xA0[] =
+    {
+        "Bus Mouse DB-9", // 0xA0
+        "Bus Mouse Micro DIN",
+        "USB" // 0xA2
+    };
+
+    if (type >= 0xA0 && type <= 0xA2)
+        return names_0xA0[type - 0xA0];
+
+    return std::string();
+}
+
+int SMBios::BuildinPointingTable::GetButtonCount() const
+{
+    if (reader_.GetTableLength() < 0x07)
+        return 0;
+
+    return reader_.GetByte(0x06);
+}
+
 } // namespace aspia

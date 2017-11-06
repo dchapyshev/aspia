@@ -2196,15 +2196,57 @@ const char* CategoryDmiBuildinPointing::Guid() const
 
 void CategoryDmiBuildinPointing::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::DmiBuildinPointing message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::DmiBuildinPointing::Item& item = message.item(index);
+
+        Output::Group group(output, StringPrintf("Build-in Pointing Device #%d", index + 1), Icon());
+
+        if (!item.device_type().empty())
+            output->AddParam(IDI_MOUSE, "Device Type", item.device_type());
+
+        if (!item.device_interface().empty())
+            output->AddParam(IDI_MOUSE, "Device Interface", item.device_interface());
+
+        if (item.button_count() != 0)
+            output->AddParam(IDI_MOUSE, "Buttons Count", std::to_string(item.button_count()));
+    }
 }
 
 std::string CategoryDmiBuildinPointing::Serialize()
 {
-    // TODO
-    return std::string();
+    std::unique_ptr<SMBios> smbios = ReadSMBios();
+    if (!smbios)
+        return std::string();
+
+    system_info::DmiBuildinPointing message;
+
+    for (SMBios::TableEnumerator<SMBios::BuildinPointingTable> table_enumerator(*smbios);
+         !table_enumerator.IsAtEnd();
+         table_enumerator.Advance())
+    {
+        SMBios::BuildinPointingTable table = table_enumerator.GetTable();
+        system_info::DmiBuildinPointing::Item* item = message.add_item();
+
+        item->set_device_type(table.GetDeviceType());
+        item->set_device_interface(table.GetInterface());
+        item->set_button_count(table.GetButtonCount());
+    }
+
+    return message.SerializeAsString();
 }
 
 //

@@ -390,6 +390,18 @@ message DmiOnBoardDevices
     repeated Item item = 1;
 }
 
+message DmiBuildinPointing
+{
+    message Item
+    {
+        string device_type      = 1;
+        string device_interface = 2;
+        int32 button_count      = 3;
+    }
+
+    repeated Item item = 1;
+}
+
 message Monitors
 {
     message Item
