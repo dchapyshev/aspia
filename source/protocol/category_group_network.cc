@@ -250,9 +250,51 @@ const char* CategoryOpenConnections::Guid() const
 
 void CategoryOpenConnections::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::OpenConnections message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Process Name", 150);
+        output->AddHeaderItem("Protocol", 60);
+        output->AddHeaderItem("Local Address", 90);
+        output->AddHeaderItem("Local Port", 80);
+        output->AddHeaderItem("Remote Address", 90);
+        output->AddHeaderItem("Remote Port", 80);
+        output->AddHeaderItem("State", 100);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::OpenConnections::Item& item = message.item(index);
+
+        Output::Row row(output, Icon());
+
+        output->AddValue(item.process_name());
+
+        if (item.protocol() == system_info::OpenConnections::Item::PROTOCOL_TCP)
+        {
+            output->AddValue("TCP");
+        }
+        else if (item.protocol() == system_info::OpenConnections::Item::PROTOCOL_UDP)
+        {
+            output->AddValue("UDP");
+        }
+        else
+        {
+            output->AddValue("Unknown");
+        }
+
+        output->AddValue(item.local_address());
+        output->AddValue(std::to_string(item.local_port()));
+        output->AddValue(item.remote_address());
+        output->AddValue(std::to_string(item.remote_port()));
+        output->AddValue(item.state());
+    }
 }
 
 std::string CategoryOpenConnections::Serialize()
@@ -266,6 +308,7 @@ std::string CategoryOpenConnections::Serialize()
         system_info::OpenConnections::Item* item = message.add_item();
 
         item->set_process_name(enumerator.GetProcessName());
+        item->set_protocol(system_info::OpenConnections::Item::PROTOCOL_TCP);
         item->set_local_address(enumerator.GetLocalAddress());
         item->set_remote_address(enumerator.GetRemoteAddress());
         item->set_local_port(enumerator.GetLocalPort());
@@ -280,6 +323,7 @@ std::string CategoryOpenConnections::Serialize()
         system_info::OpenConnections::Item* item = message.add_item();
 
         item->set_process_name(enumerator.GetProcessName());
+        item->set_protocol(system_info::OpenConnections::Item::PROTOCOL_UDP);
         item->set_local_address(enumerator.GetLocalAddress());
         item->set_remote_address(enumerator.GetRemoteAddress());
         item->set_local_port(enumerator.GetLocalPort());

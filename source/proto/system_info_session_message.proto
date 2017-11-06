@@ -583,12 +583,20 @@ message OpenConnections
 {
     message Item
     {
+        enum Protocol
+        {
+            PROTOCOL_UNKNOWN = 0;
+            PROTOCOL_TCP     = 1;
+            PROTOCOL_UDP     = 2;
+        }
+
         string process_name   = 1;
-        string local_address  = 2;
-        string remote_address = 3;
-        uint32 local_port     = 4;
-        uint32 remote_port    = 5;
-        string state          = 6;
+        Protocol protocol     = 2;
+        string local_address  = 3;
+        string remote_address = 4;
+        uint32 local_port     = 5;
+        uint32 remote_port    = 6;
+        string state          = 7;
     }
 
     repeated Item item = 1;

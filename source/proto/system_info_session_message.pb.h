@@ -528,6 +528,18 @@ const Services_Item_StartupType Services_Item_StartupType_StartupType_MIN = Serv
 const Services_Item_StartupType Services_Item_StartupType_StartupType_MAX = Services_Item_StartupType_STARTUP_TYPE_SYSTEM_START;
 const int Services_Item_StartupType_StartupType_ARRAYSIZE = Services_Item_StartupType_StartupType_MAX + 1;
 
+enum OpenConnections_Item_Protocol {
+  OpenConnections_Item_Protocol_PROTOCOL_UNKNOWN = 0,
+  OpenConnections_Item_Protocol_PROTOCOL_TCP = 1,
+  OpenConnections_Item_Protocol_PROTOCOL_UDP = 2,
+  OpenConnections_Item_Protocol_OpenConnections_Item_Protocol_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  OpenConnections_Item_Protocol_OpenConnections_Item_Protocol_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool OpenConnections_Item_Protocol_IsValid(int value);
+const OpenConnections_Item_Protocol OpenConnections_Item_Protocol_Protocol_MIN = OpenConnections_Item_Protocol_PROTOCOL_UNKNOWN;
+const OpenConnections_Item_Protocol OpenConnections_Item_Protocol_Protocol_MAX = OpenConnections_Item_Protocol_PROTOCOL_UDP;
+const int OpenConnections_Item_Protocol_Protocol_ARRAYSIZE = OpenConnections_Item_Protocol_Protocol_MAX + 1;
+
 enum SharedResources_Item_Type {
   SharedResources_Item_Type_TYPE_UNKNOWN = 0,
   SharedResources_Item_Type_TYPE_DISK = 1,
@@ -6442,6 +6454,23 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
 
   // nested types ----------------------------------------------------
 
+  typedef OpenConnections_Item_Protocol Protocol;
+  static const Protocol PROTOCOL_UNKNOWN =
+    OpenConnections_Item_Protocol_PROTOCOL_UNKNOWN;
+  static const Protocol PROTOCOL_TCP =
+    OpenConnections_Item_Protocol_PROTOCOL_TCP;
+  static const Protocol PROTOCOL_UDP =
+    OpenConnections_Item_Protocol_PROTOCOL_UDP;
+  static inline bool Protocol_IsValid(int value) {
+    return OpenConnections_Item_Protocol_IsValid(value);
+  }
+  static const Protocol Protocol_MIN =
+    OpenConnections_Item_Protocol_Protocol_MIN;
+  static const Protocol Protocol_MAX =
+    OpenConnections_Item_Protocol_Protocol_MAX;
+  static const int Protocol_ARRAYSIZE =
+    OpenConnections_Item_Protocol_Protocol_ARRAYSIZE;
+
   // accessors -------------------------------------------------------
 
   // string process_name = 1;
@@ -6458,9 +6487,9 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
   ::std::string* release_process_name();
   void set_allocated_process_name(::std::string* process_name);
 
-  // string local_address = 2;
+  // string local_address = 3;
   void clear_local_address();
-  static const int kLocalAddressFieldNumber = 2;
+  static const int kLocalAddressFieldNumber = 3;
   const ::std::string& local_address() const;
   void set_local_address(const ::std::string& value);
   #if LANG_CXX11
@@ -6472,9 +6501,9 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
   ::std::string* release_local_address();
   void set_allocated_local_address(::std::string* local_address);
 
-  // string remote_address = 3;
+  // string remote_address = 4;
   void clear_remote_address();
-  static const int kRemoteAddressFieldNumber = 3;
+  static const int kRemoteAddressFieldNumber = 4;
   const ::std::string& remote_address() const;
   void set_remote_address(const ::std::string& value);
   #if LANG_CXX11
@@ -6486,9 +6515,9 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
   ::std::string* release_remote_address();
   void set_allocated_remote_address(::std::string* remote_address);
 
-  // string state = 6;
+  // string state = 7;
   void clear_state();
-  static const int kStateFieldNumber = 6;
+  static const int kStateFieldNumber = 7;
   const ::std::string& state() const;
   void set_state(const ::std::string& value);
   #if LANG_CXX11
@@ -6500,15 +6529,21 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
   ::std::string* release_state();
   void set_allocated_state(::std::string* state);
 
-  // uint32 local_port = 4;
+  // .aspia.system_info.OpenConnections.Item.Protocol protocol = 2;
+  void clear_protocol();
+  static const int kProtocolFieldNumber = 2;
+  ::aspia::system_info::OpenConnections_Item_Protocol protocol() const;
+  void set_protocol(::aspia::system_info::OpenConnections_Item_Protocol value);
+
+  // uint32 local_port = 5;
   void clear_local_port();
-  static const int kLocalPortFieldNumber = 4;
+  static const int kLocalPortFieldNumber = 5;
   ::google::protobuf::uint32 local_port() const;
   void set_local_port(::google::protobuf::uint32 value);
 
-  // uint32 remote_port = 5;
+  // uint32 remote_port = 6;
   void clear_remote_port();
-  static const int kRemotePortFieldNumber = 5;
+  static const int kRemotePortFieldNumber = 6;
   ::google::protobuf::uint32 remote_port() const;
   void set_remote_port(::google::protobuf::uint32 value);
 
@@ -6520,6 +6555,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
   ::google::protobuf::internal::ArenaStringPtr local_address_;
   ::google::protobuf::internal::ArenaStringPtr remote_address_;
   ::google::protobuf::internal::ArenaStringPtr state_;
+  int protocol_;
   ::google::protobuf::uint32 local_port_;
   ::google::protobuf::uint32 remote_port_;
   mutable int _cached_size_;
@@ -14925,7 +14961,21 @@ inline void OpenConnections_Item::set_allocated_process_name(::std::string* proc
   // @@protoc_insertion_point(field_set_allocated:aspia.system_info.OpenConnections.Item.process_name)
 }
 
-// string local_address = 2;
+// .aspia.system_info.OpenConnections.Item.Protocol protocol = 2;
+inline void OpenConnections_Item::clear_protocol() {
+  protocol_ = 0;
+}
+inline ::aspia::system_info::OpenConnections_Item_Protocol OpenConnections_Item::protocol() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.OpenConnections.Item.protocol)
+  return static_cast< ::aspia::system_info::OpenConnections_Item_Protocol >(protocol_);
+}
+inline void OpenConnections_Item::set_protocol(::aspia::system_info::OpenConnections_Item_Protocol value) {
+  
+  protocol_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.OpenConnections.Item.protocol)
+}
+
+// string local_address = 3;
 inline void OpenConnections_Item::clear_local_address() {
   local_address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -14978,7 +15028,7 @@ inline void OpenConnections_Item::set_allocated_local_address(::std::string* loc
   // @@protoc_insertion_point(field_set_allocated:aspia.system_info.OpenConnections.Item.local_address)
 }
 
-// string remote_address = 3;
+// string remote_address = 4;
 inline void OpenConnections_Item::clear_remote_address() {
   remote_address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -15031,7 +15081,7 @@ inline void OpenConnections_Item::set_allocated_remote_address(::std::string* re
   // @@protoc_insertion_point(field_set_allocated:aspia.system_info.OpenConnections.Item.remote_address)
 }
 
-// uint32 local_port = 4;
+// uint32 local_port = 5;
 inline void OpenConnections_Item::clear_local_port() {
   local_port_ = 0u;
 }
@@ -15045,7 +15095,7 @@ inline void OpenConnections_Item::set_local_port(::google::protobuf::uint32 valu
   // @@protoc_insertion_point(field_set:aspia.system_info.OpenConnections.Item.local_port)
 }
 
-// uint32 remote_port = 5;
+// uint32 remote_port = 6;
 inline void OpenConnections_Item::clear_remote_port() {
   remote_port_ = 0u;
 }
@@ -15059,7 +15109,7 @@ inline void OpenConnections_Item::set_remote_port(::google::protobuf::uint32 val
   // @@protoc_insertion_point(field_set:aspia.system_info.OpenConnections.Item.remote_port)
 }
 
-// string state = 6;
+// string state = 7;
 inline void OpenConnections_Item::clear_state() {
   state_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -16491,6 +16541,7 @@ template <> struct is_proto_enum< ::aspia::system_info::Monitors_Item_InputSigna
 template <> struct is_proto_enum< ::aspia::system_info::Printers_Item_Orientation> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::Services_Item_Status> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::Services_Item_StartupType> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::system_info::OpenConnections_Item_Protocol> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::SharedResources_Item_Type> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf

@@ -992,6 +992,25 @@ const Services_Item_StartupType Services_Item::StartupType_MIN;
 const Services_Item_StartupType Services_Item::StartupType_MAX;
 const int Services_Item::StartupType_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool OpenConnections_Item_Protocol_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const OpenConnections_Item_Protocol OpenConnections_Item::PROTOCOL_UNKNOWN;
+const OpenConnections_Item_Protocol OpenConnections_Item::PROTOCOL_TCP;
+const OpenConnections_Item_Protocol OpenConnections_Item::PROTOCOL_UDP;
+const OpenConnections_Item_Protocol OpenConnections_Item::Protocol_MIN;
+const OpenConnections_Item_Protocol OpenConnections_Item::Protocol_MAX;
+const int OpenConnections_Item::Protocol_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool SharedResources_Item_Type_IsValid(int value) {
   switch (value) {
     case 0:
@@ -21053,6 +21072,7 @@ NetworkCards::item() const {
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int OpenConnections_Item::kProcessNameFieldNumber;
+const int OpenConnections_Item::kProtocolFieldNumber;
 const int OpenConnections_Item::kLocalAddressFieldNumber;
 const int OpenConnections_Item::kRemoteAddressFieldNumber;
 const int OpenConnections_Item::kLocalPortFieldNumber;
@@ -21089,9 +21109,9 @@ OpenConnections_Item::OpenConnections_Item(const OpenConnections_Item& from)
   if (from.state().size() > 0) {
     state_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.state_);
   }
-  ::memcpy(&local_port_, &from.local_port_,
+  ::memcpy(&protocol_, &from.protocol_,
     static_cast<size_t>(reinterpret_cast<char*>(&remote_port_) -
-    reinterpret_cast<char*>(&local_port_)) + sizeof(remote_port_));
+    reinterpret_cast<char*>(&protocol_)) + sizeof(remote_port_));
   // @@protoc_insertion_point(copy_constructor:aspia.system_info.OpenConnections.Item)
 }
 
@@ -21100,9 +21120,9 @@ void OpenConnections_Item::SharedCtor() {
   local_address_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   remote_address_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   state_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&local_port_, 0, static_cast<size_t>(
+  ::memset(&protocol_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&remote_port_) -
-      reinterpret_cast<char*>(&local_port_)) + sizeof(remote_port_));
+      reinterpret_cast<char*>(&protocol_)) + sizeof(remote_port_));
   _cached_size_ = 0;
 }
 
@@ -21146,9 +21166,9 @@ void OpenConnections_Item::Clear() {
   local_address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   remote_address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   state_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&local_port_, 0, static_cast<size_t>(
+  ::memset(&protocol_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&remote_port_) -
-      reinterpret_cast<char*>(&local_port_)) + sizeof(remote_port_));
+      reinterpret_cast<char*>(&protocol_)) + sizeof(remote_port_));
   _internal_metadata_.Clear();
 }
 
@@ -21184,10 +21204,25 @@ bool OpenConnections_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // string local_address = 2;
+      // .aspia.system_info.OpenConnections.Item.Protocol protocol = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_protocol(static_cast< ::aspia::system_info::OpenConnections_Item_Protocol >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string local_address = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_local_address()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -21200,10 +21235,10 @@ bool OpenConnections_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // string remote_address = 3;
-      case 3: {
+      // string remote_address = 4;
+      case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_remote_address()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -21216,10 +21251,10 @@ bool OpenConnections_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // uint32 local_port = 4;
-      case 4: {
+      // uint32 local_port = 5;
+      case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -21230,10 +21265,10 @@ bool OpenConnections_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // uint32 remote_port = 5;
-      case 5: {
+      // uint32 remote_port = 6;
+      case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(48u /* 48 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -21244,10 +21279,10 @@ bool OpenConnections_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // string state = 6;
-      case 6: {
+      // string state = 7;
+      case 7: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(58u /* 58 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_state()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -21296,44 +21331,50 @@ void OpenConnections_Item::SerializeWithCachedSizes(
       1, this->process_name(), output);
   }
 
-  // string local_address = 2;
+  // .aspia.system_info.OpenConnections.Item.Protocol protocol = 2;
+  if (this->protocol() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      2, this->protocol(), output);
+  }
+
+  // string local_address = 3;
   if (this->local_address().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->local_address().data(), static_cast<int>(this->local_address().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.system_info.OpenConnections.Item.local_address");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      2, this->local_address(), output);
+      3, this->local_address(), output);
   }
 
-  // string remote_address = 3;
+  // string remote_address = 4;
   if (this->remote_address().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->remote_address().data(), static_cast<int>(this->remote_address().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.system_info.OpenConnections.Item.remote_address");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      3, this->remote_address(), output);
+      4, this->remote_address(), output);
   }
 
-  // uint32 local_port = 4;
+  // uint32 local_port = 5;
   if (this->local_port() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->local_port(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->local_port(), output);
   }
 
-  // uint32 remote_port = 5;
+  // uint32 remote_port = 6;
   if (this->remote_port() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->remote_port(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(6, this->remote_port(), output);
   }
 
-  // string state = 6;
+  // string state = 7;
   if (this->state().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->state().data(), static_cast<int>(this->state().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.system_info.OpenConnections.Item.state");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      6, this->state(), output);
+      7, this->state(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -21354,35 +21395,41 @@ size_t OpenConnections_Item::ByteSizeLong() const {
         this->process_name());
   }
 
-  // string local_address = 2;
+  // string local_address = 3;
   if (this->local_address().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->local_address());
   }
 
-  // string remote_address = 3;
+  // string remote_address = 4;
   if (this->remote_address().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->remote_address());
   }
 
-  // string state = 6;
+  // string state = 7;
   if (this->state().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->state());
   }
 
-  // uint32 local_port = 4;
+  // .aspia.system_info.OpenConnections.Item.Protocol protocol = 2;
+  if (this->protocol() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->protocol());
+  }
+
+  // uint32 local_port = 5;
   if (this->local_port() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->local_port());
   }
 
-  // uint32 remote_port = 5;
+  // uint32 remote_port = 6;
   if (this->remote_port() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
@@ -21424,6 +21471,9 @@ void OpenConnections_Item::MergeFrom(const OpenConnections_Item& from) {
 
     state_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.state_);
   }
+  if (from.protocol() != 0) {
+    set_protocol(from.protocol());
+  }
   if (from.local_port() != 0) {
     set_local_port(from.local_port());
   }
@@ -21453,6 +21503,7 @@ void OpenConnections_Item::InternalSwap(OpenConnections_Item* other) {
   local_address_.Swap(&other->local_address_);
   remote_address_.Swap(&other->remote_address_);
   state_.Swap(&other->state_);
+  swap(protocol_, other->protocol_);
   swap(local_port_, other->local_port_);
   swap(remote_port_, other->remote_port_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
@@ -21519,7 +21570,21 @@ void OpenConnections_Item::set_allocated_process_name(::std::string* process_nam
   // @@protoc_insertion_point(field_set_allocated:aspia.system_info.OpenConnections.Item.process_name)
 }
 
-// string local_address = 2;
+// .aspia.system_info.OpenConnections.Item.Protocol protocol = 2;
+void OpenConnections_Item::clear_protocol() {
+  protocol_ = 0;
+}
+::aspia::system_info::OpenConnections_Item_Protocol OpenConnections_Item::protocol() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.OpenConnections.Item.protocol)
+  return static_cast< ::aspia::system_info::OpenConnections_Item_Protocol >(protocol_);
+}
+void OpenConnections_Item::set_protocol(::aspia::system_info::OpenConnections_Item_Protocol value) {
+  
+  protocol_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.OpenConnections.Item.protocol)
+}
+
+// string local_address = 3;
 void OpenConnections_Item::clear_local_address() {
   local_address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -21572,7 +21637,7 @@ void OpenConnections_Item::set_allocated_local_address(::std::string* local_addr
   // @@protoc_insertion_point(field_set_allocated:aspia.system_info.OpenConnections.Item.local_address)
 }
 
-// string remote_address = 3;
+// string remote_address = 4;
 void OpenConnections_Item::clear_remote_address() {
   remote_address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -21625,7 +21690,7 @@ void OpenConnections_Item::set_allocated_remote_address(::std::string* remote_ad
   // @@protoc_insertion_point(field_set_allocated:aspia.system_info.OpenConnections.Item.remote_address)
 }
 
-// uint32 local_port = 4;
+// uint32 local_port = 5;
 void OpenConnections_Item::clear_local_port() {
   local_port_ = 0u;
 }
@@ -21639,7 +21704,7 @@ void OpenConnections_Item::set_local_port(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:aspia.system_info.OpenConnections.Item.local_port)
 }
 
-// uint32 remote_port = 5;
+// uint32 remote_port = 6;
 void OpenConnections_Item::clear_remote_port() {
   remote_port_ = 0u;
 }
@@ -21653,7 +21718,7 @@ void OpenConnections_Item::set_remote_port(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:aspia.system_info.OpenConnections.Item.remote_port)
 }
 
-// string state = 6;
+// string state = 7;
 void OpenConnections_Item::clear_state() {
   state_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
