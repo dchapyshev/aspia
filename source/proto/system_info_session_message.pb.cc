@@ -126,6 +126,16 @@ public:
  ::google::protobuf::internal::ExplicitlyConstructed<DmiBuildinPointing>
      _instance;
 } _DmiBuildinPointing_default_instance_;
+class DmiPortableBattery_ItemDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<DmiPortableBattery_Item>
+     _instance;
+} _DmiPortableBattery_Item_default_instance_;
+class DmiPortableBatteryDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<DmiPortableBattery>
+     _instance;
+} _DmiPortableBattery_default_instance_;
 class Monitors_Item_TimingDefaultTypeInternal {
 public:
  ::google::protobuf::internal::ExplicitlyConstructed<Monitors_Item_Timing>
@@ -294,6 +304,8 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
 };
 
 void TableStruct::InitDefaultsImpl() {
@@ -344,7 +356,11 @@ void TableStruct::InitDefaultsImpl() {
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_DmiBuildinPointing_Item_default_instance_);_DmiBuildinPointing_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
-      &_DmiBuildinPointing_default_instance_);_Monitors_Item_Timing_default_instance_._instance.DefaultConstruct();
+      &_DmiBuildinPointing_default_instance_);_DmiPortableBattery_Item_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_DmiPortableBattery_Item_default_instance_);_DmiPortableBattery_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_DmiPortableBattery_default_instance_);_Monitors_Item_Timing_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_Monitors_Item_Timing_default_instance_);_Monitors_Item_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
@@ -12637,6 +12653,1533 @@ DmiBuildinPointing::mutable_item() {
 const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiBuildinPointing_Item >&
 DmiBuildinPointing::item() const {
   // @@protoc_insertion_point(field_list:aspia.system_info.DmiBuildinPointing.item)
+  return item_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DmiPortableBattery_Item::kLocationFieldNumber;
+const int DmiPortableBattery_Item::kManufacturerFieldNumber;
+const int DmiPortableBattery_Item::kManufactureDateFieldNumber;
+const int DmiPortableBattery_Item::kSerialNumberFieldNumber;
+const int DmiPortableBattery_Item::kDeviceNameFieldNumber;
+const int DmiPortableBattery_Item::kChemistryFieldNumber;
+const int DmiPortableBattery_Item::kDesignCapacityFieldNumber;
+const int DmiPortableBattery_Item::kDesignVoltageFieldNumber;
+const int DmiPortableBattery_Item::kSbdsVersionNumberFieldNumber;
+const int DmiPortableBattery_Item::kMaxErrorInBatteryDataFieldNumber;
+const int DmiPortableBattery_Item::kSbdsSerialNumberFieldNumber;
+const int DmiPortableBattery_Item::kSbdsManufactureDateFieldNumber;
+const int DmiPortableBattery_Item::kSbdsDeviceChemistryFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DmiPortableBattery_Item::DmiPortableBattery_Item()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.DmiPortableBattery.Item)
+}
+DmiPortableBattery_Item::DmiPortableBattery_Item(const DmiPortableBattery_Item& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  location_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.location().size() > 0) {
+    location_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.location_);
+  }
+  manufacturer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.manufacturer().size() > 0) {
+    manufacturer_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacturer_);
+  }
+  manufacture_date_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.manufacture_date().size() > 0) {
+    manufacture_date_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacture_date_);
+  }
+  serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.serial_number().size() > 0) {
+    serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.serial_number_);
+  }
+  device_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.device_name().size() > 0) {
+    device_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_name_);
+  }
+  chemistry_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.chemistry().size() > 0) {
+    chemistry_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.chemistry_);
+  }
+  sbds_version_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.sbds_version_number().size() > 0) {
+    sbds_version_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sbds_version_number_);
+  }
+  sbds_serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.sbds_serial_number().size() > 0) {
+    sbds_serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sbds_serial_number_);
+  }
+  sbds_manufacture_date_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.sbds_manufacture_date().size() > 0) {
+    sbds_manufacture_date_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sbds_manufacture_date_);
+  }
+  sbds_device_chemistry_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.sbds_device_chemistry().size() > 0) {
+    sbds_device_chemistry_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sbds_device_chemistry_);
+  }
+  ::memcpy(&design_capacity_, &from.design_capacity_,
+    static_cast<size_t>(reinterpret_cast<char*>(&max_error_in_battery_data_) -
+    reinterpret_cast<char*>(&design_capacity_)) + sizeof(max_error_in_battery_data_));
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiPortableBattery.Item)
+}
+
+void DmiPortableBattery_Item::SharedCtor() {
+  location_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  manufacturer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  manufacture_date_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  device_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  chemistry_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sbds_version_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sbds_serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sbds_manufacture_date_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sbds_device_chemistry_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&design_capacity_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&max_error_in_battery_data_) -
+      reinterpret_cast<char*>(&design_capacity_)) + sizeof(max_error_in_battery_data_));
+  _cached_size_ = 0;
+}
+
+DmiPortableBattery_Item::~DmiPortableBattery_Item() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.DmiPortableBattery.Item)
+  SharedDtor();
+}
+
+void DmiPortableBattery_Item::SharedDtor() {
+  location_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  manufacturer_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  manufacture_date_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  device_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  chemistry_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sbds_version_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sbds_serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sbds_manufacture_date_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sbds_device_chemistry_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void DmiPortableBattery_Item::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DmiPortableBattery_Item& DmiPortableBattery_Item::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+DmiPortableBattery_Item* DmiPortableBattery_Item::New(::google::protobuf::Arena* arena) const {
+  DmiPortableBattery_Item* n = new DmiPortableBattery_Item;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DmiPortableBattery_Item::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiPortableBattery.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  location_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  manufacture_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  device_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  chemistry_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sbds_version_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sbds_serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sbds_manufacture_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  sbds_device_chemistry_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&design_capacity_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&max_error_in_battery_data_) -
+      reinterpret_cast<char*>(&design_capacity_)) + sizeof(max_error_in_battery_data_));
+  _internal_metadata_.Clear();
+}
+
+bool DmiPortableBattery_Item::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiPortableBattery.Item)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string location = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_location()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->location().data(), static_cast<int>(this->location().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiPortableBattery.Item.location"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string manufacturer = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_manufacturer()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiPortableBattery.Item.manufacturer"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string manufacture_date = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_manufacture_date()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->manufacture_date().data(), static_cast<int>(this->manufacture_date().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiPortableBattery.Item.manufacture_date"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string serial_number = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_serial_number()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->serial_number().data(), static_cast<int>(this->serial_number().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiPortableBattery.Item.serial_number"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string device_name = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_device_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->device_name().data(), static_cast<int>(this->device_name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiPortableBattery.Item.device_name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string chemistry = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_chemistry()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->chemistry().data(), static_cast<int>(this->chemistry().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiPortableBattery.Item.chemistry"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 design_capacity = 7;
+      case 7: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(56u /* 56 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &design_capacity_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 design_voltage = 8;
+      case 8: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(64u /* 64 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &design_voltage_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string sbds_version_number = 9;
+      case 9: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(74u /* 74 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_sbds_version_number()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->sbds_version_number().data(), static_cast<int>(this->sbds_version_number().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiPortableBattery.Item.sbds_version_number"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 max_error_in_battery_data = 10;
+      case 10: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(80u /* 80 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &max_error_in_battery_data_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string sbds_serial_number = 11;
+      case 11: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(90u /* 90 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_sbds_serial_number()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->sbds_serial_number().data(), static_cast<int>(this->sbds_serial_number().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiPortableBattery.Item.sbds_serial_number"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string sbds_manufacture_date = 12;
+      case 12: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(98u /* 98 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_sbds_manufacture_date()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->sbds_manufacture_date().data(), static_cast<int>(this->sbds_manufacture_date().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiPortableBattery.Item.sbds_manufacture_date"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string sbds_device_chemistry = 13;
+      case 13: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(106u /* 106 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_sbds_device_chemistry()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->sbds_device_chemistry().data(), static_cast<int>(this->sbds_device_chemistry().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiPortableBattery.Item.sbds_device_chemistry"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiPortableBattery.Item)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiPortableBattery.Item)
+  return false;
+#undef DO_
+}
+
+void DmiPortableBattery_Item::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiPortableBattery.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string location = 1;
+  if (this->location().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->location().data(), static_cast<int>(this->location().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiPortableBattery.Item.location");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->location(), output);
+  }
+
+  // string manufacturer = 2;
+  if (this->manufacturer().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiPortableBattery.Item.manufacturer");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->manufacturer(), output);
+  }
+
+  // string manufacture_date = 3;
+  if (this->manufacture_date().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->manufacture_date().data(), static_cast<int>(this->manufacture_date().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiPortableBattery.Item.manufacture_date");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->manufacture_date(), output);
+  }
+
+  // string serial_number = 4;
+  if (this->serial_number().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->serial_number().data(), static_cast<int>(this->serial_number().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiPortableBattery.Item.serial_number");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      4, this->serial_number(), output);
+  }
+
+  // string device_name = 5;
+  if (this->device_name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->device_name().data(), static_cast<int>(this->device_name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiPortableBattery.Item.device_name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      5, this->device_name(), output);
+  }
+
+  // string chemistry = 6;
+  if (this->chemistry().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->chemistry().data(), static_cast<int>(this->chemistry().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiPortableBattery.Item.chemistry");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      6, this->chemistry(), output);
+  }
+
+  // int32 design_capacity = 7;
+  if (this->design_capacity() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->design_capacity(), output);
+  }
+
+  // int32 design_voltage = 8;
+  if (this->design_voltage() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(8, this->design_voltage(), output);
+  }
+
+  // string sbds_version_number = 9;
+  if (this->sbds_version_number().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->sbds_version_number().data(), static_cast<int>(this->sbds_version_number().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiPortableBattery.Item.sbds_version_number");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      9, this->sbds_version_number(), output);
+  }
+
+  // int32 max_error_in_battery_data = 10;
+  if (this->max_error_in_battery_data() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(10, this->max_error_in_battery_data(), output);
+  }
+
+  // string sbds_serial_number = 11;
+  if (this->sbds_serial_number().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->sbds_serial_number().data(), static_cast<int>(this->sbds_serial_number().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiPortableBattery.Item.sbds_serial_number");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      11, this->sbds_serial_number(), output);
+  }
+
+  // string sbds_manufacture_date = 12;
+  if (this->sbds_manufacture_date().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->sbds_manufacture_date().data(), static_cast<int>(this->sbds_manufacture_date().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiPortableBattery.Item.sbds_manufacture_date");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      12, this->sbds_manufacture_date(), output);
+  }
+
+  // string sbds_device_chemistry = 13;
+  if (this->sbds_device_chemistry().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->sbds_device_chemistry().data(), static_cast<int>(this->sbds_device_chemistry().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiPortableBattery.Item.sbds_device_chemistry");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      13, this->sbds_device_chemistry(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiPortableBattery.Item)
+}
+
+size_t DmiPortableBattery_Item::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiPortableBattery.Item)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string location = 1;
+  if (this->location().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->location());
+  }
+
+  // string manufacturer = 2;
+  if (this->manufacturer().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->manufacturer());
+  }
+
+  // string manufacture_date = 3;
+  if (this->manufacture_date().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->manufacture_date());
+  }
+
+  // string serial_number = 4;
+  if (this->serial_number().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->serial_number());
+  }
+
+  // string device_name = 5;
+  if (this->device_name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->device_name());
+  }
+
+  // string chemistry = 6;
+  if (this->chemistry().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->chemistry());
+  }
+
+  // string sbds_version_number = 9;
+  if (this->sbds_version_number().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->sbds_version_number());
+  }
+
+  // string sbds_serial_number = 11;
+  if (this->sbds_serial_number().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->sbds_serial_number());
+  }
+
+  // string sbds_manufacture_date = 12;
+  if (this->sbds_manufacture_date().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->sbds_manufacture_date());
+  }
+
+  // string sbds_device_chemistry = 13;
+  if (this->sbds_device_chemistry().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->sbds_device_chemistry());
+  }
+
+  // int32 design_capacity = 7;
+  if (this->design_capacity() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->design_capacity());
+  }
+
+  // int32 design_voltage = 8;
+  if (this->design_voltage() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->design_voltage());
+  }
+
+  // int32 max_error_in_battery_data = 10;
+  if (this->max_error_in_battery_data() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->max_error_in_battery_data());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DmiPortableBattery_Item::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const DmiPortableBattery_Item*>(&from));
+}
+
+void DmiPortableBattery_Item::MergeFrom(const DmiPortableBattery_Item& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiPortableBattery.Item)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.location().size() > 0) {
+
+    location_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.location_);
+  }
+  if (from.manufacturer().size() > 0) {
+
+    manufacturer_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacturer_);
+  }
+  if (from.manufacture_date().size() > 0) {
+
+    manufacture_date_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacture_date_);
+  }
+  if (from.serial_number().size() > 0) {
+
+    serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.serial_number_);
+  }
+  if (from.device_name().size() > 0) {
+
+    device_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_name_);
+  }
+  if (from.chemistry().size() > 0) {
+
+    chemistry_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.chemistry_);
+  }
+  if (from.sbds_version_number().size() > 0) {
+
+    sbds_version_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sbds_version_number_);
+  }
+  if (from.sbds_serial_number().size() > 0) {
+
+    sbds_serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sbds_serial_number_);
+  }
+  if (from.sbds_manufacture_date().size() > 0) {
+
+    sbds_manufacture_date_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sbds_manufacture_date_);
+  }
+  if (from.sbds_device_chemistry().size() > 0) {
+
+    sbds_device_chemistry_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sbds_device_chemistry_);
+  }
+  if (from.design_capacity() != 0) {
+    set_design_capacity(from.design_capacity());
+  }
+  if (from.design_voltage() != 0) {
+    set_design_voltage(from.design_voltage());
+  }
+  if (from.max_error_in_battery_data() != 0) {
+    set_max_error_in_battery_data(from.max_error_in_battery_data());
+  }
+}
+
+void DmiPortableBattery_Item::CopyFrom(const DmiPortableBattery_Item& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiPortableBattery.Item)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DmiPortableBattery_Item::IsInitialized() const {
+  return true;
+}
+
+void DmiPortableBattery_Item::Swap(DmiPortableBattery_Item* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void DmiPortableBattery_Item::InternalSwap(DmiPortableBattery_Item* other) {
+  using std::swap;
+  location_.Swap(&other->location_);
+  manufacturer_.Swap(&other->manufacturer_);
+  manufacture_date_.Swap(&other->manufacture_date_);
+  serial_number_.Swap(&other->serial_number_);
+  device_name_.Swap(&other->device_name_);
+  chemistry_.Swap(&other->chemistry_);
+  sbds_version_number_.Swap(&other->sbds_version_number_);
+  sbds_serial_number_.Swap(&other->sbds_serial_number_);
+  sbds_manufacture_date_.Swap(&other->sbds_manufacture_date_);
+  sbds_device_chemistry_.Swap(&other->sbds_device_chemistry_);
+  swap(design_capacity_, other->design_capacity_);
+  swap(design_voltage_, other->design_voltage_);
+  swap(max_error_in_battery_data_, other->max_error_in_battery_data_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string DmiPortableBattery_Item::GetTypeName() const {
+  return "aspia.system_info.DmiPortableBattery.Item";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// DmiPortableBattery_Item
+
+// string location = 1;
+void DmiPortableBattery_Item::clear_location() {
+  location_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiPortableBattery_Item::location() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortableBattery.Item.location)
+  return location_.GetNoArena();
+}
+void DmiPortableBattery_Item::set_location(const ::std::string& value) {
+  
+  location_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortableBattery.Item.location)
+}
+#if LANG_CXX11
+void DmiPortableBattery_Item::set_location(::std::string&& value) {
+  
+  location_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiPortableBattery.Item.location)
+}
+#endif
+void DmiPortableBattery_Item::set_location(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  location_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiPortableBattery.Item.location)
+}
+void DmiPortableBattery_Item::set_location(const char* value, size_t size) {
+  
+  location_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiPortableBattery.Item.location)
+}
+::std::string* DmiPortableBattery_Item::mutable_location() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortableBattery.Item.location)
+  return location_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiPortableBattery_Item::release_location() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiPortableBattery.Item.location)
+  
+  return location_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiPortableBattery_Item::set_allocated_location(::std::string* location) {
+  if (location != NULL) {
+    
+  } else {
+    
+  }
+  location_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), location);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiPortableBattery.Item.location)
+}
+
+// string manufacturer = 2;
+void DmiPortableBattery_Item::clear_manufacturer() {
+  manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiPortableBattery_Item::manufacturer() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortableBattery.Item.manufacturer)
+  return manufacturer_.GetNoArena();
+}
+void DmiPortableBattery_Item::set_manufacturer(const ::std::string& value) {
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortableBattery.Item.manufacturer)
+}
+#if LANG_CXX11
+void DmiPortableBattery_Item::set_manufacturer(::std::string&& value) {
+  
+  manufacturer_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiPortableBattery.Item.manufacturer)
+}
+#endif
+void DmiPortableBattery_Item::set_manufacturer(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiPortableBattery.Item.manufacturer)
+}
+void DmiPortableBattery_Item::set_manufacturer(const char* value, size_t size) {
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiPortableBattery.Item.manufacturer)
+}
+::std::string* DmiPortableBattery_Item::mutable_manufacturer() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortableBattery.Item.manufacturer)
+  return manufacturer_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiPortableBattery_Item::release_manufacturer() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiPortableBattery.Item.manufacturer)
+  
+  return manufacturer_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiPortableBattery_Item::set_allocated_manufacturer(::std::string* manufacturer) {
+  if (manufacturer != NULL) {
+    
+  } else {
+    
+  }
+  manufacturer_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), manufacturer);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiPortableBattery.Item.manufacturer)
+}
+
+// string manufacture_date = 3;
+void DmiPortableBattery_Item::clear_manufacture_date() {
+  manufacture_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiPortableBattery_Item::manufacture_date() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortableBattery.Item.manufacture_date)
+  return manufacture_date_.GetNoArena();
+}
+void DmiPortableBattery_Item::set_manufacture_date(const ::std::string& value) {
+  
+  manufacture_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortableBattery.Item.manufacture_date)
+}
+#if LANG_CXX11
+void DmiPortableBattery_Item::set_manufacture_date(::std::string&& value) {
+  
+  manufacture_date_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiPortableBattery.Item.manufacture_date)
+}
+#endif
+void DmiPortableBattery_Item::set_manufacture_date(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  manufacture_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiPortableBattery.Item.manufacture_date)
+}
+void DmiPortableBattery_Item::set_manufacture_date(const char* value, size_t size) {
+  
+  manufacture_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiPortableBattery.Item.manufacture_date)
+}
+::std::string* DmiPortableBattery_Item::mutable_manufacture_date() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortableBattery.Item.manufacture_date)
+  return manufacture_date_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiPortableBattery_Item::release_manufacture_date() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiPortableBattery.Item.manufacture_date)
+  
+  return manufacture_date_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiPortableBattery_Item::set_allocated_manufacture_date(::std::string* manufacture_date) {
+  if (manufacture_date != NULL) {
+    
+  } else {
+    
+  }
+  manufacture_date_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), manufacture_date);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiPortableBattery.Item.manufacture_date)
+}
+
+// string serial_number = 4;
+void DmiPortableBattery_Item::clear_serial_number() {
+  serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiPortableBattery_Item::serial_number() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortableBattery.Item.serial_number)
+  return serial_number_.GetNoArena();
+}
+void DmiPortableBattery_Item::set_serial_number(const ::std::string& value) {
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortableBattery.Item.serial_number)
+}
+#if LANG_CXX11
+void DmiPortableBattery_Item::set_serial_number(::std::string&& value) {
+  
+  serial_number_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiPortableBattery.Item.serial_number)
+}
+#endif
+void DmiPortableBattery_Item::set_serial_number(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiPortableBattery.Item.serial_number)
+}
+void DmiPortableBattery_Item::set_serial_number(const char* value, size_t size) {
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiPortableBattery.Item.serial_number)
+}
+::std::string* DmiPortableBattery_Item::mutable_serial_number() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortableBattery.Item.serial_number)
+  return serial_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiPortableBattery_Item::release_serial_number() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiPortableBattery.Item.serial_number)
+  
+  return serial_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiPortableBattery_Item::set_allocated_serial_number(::std::string* serial_number) {
+  if (serial_number != NULL) {
+    
+  } else {
+    
+  }
+  serial_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), serial_number);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiPortableBattery.Item.serial_number)
+}
+
+// string device_name = 5;
+void DmiPortableBattery_Item::clear_device_name() {
+  device_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiPortableBattery_Item::device_name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortableBattery.Item.device_name)
+  return device_name_.GetNoArena();
+}
+void DmiPortableBattery_Item::set_device_name(const ::std::string& value) {
+  
+  device_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortableBattery.Item.device_name)
+}
+#if LANG_CXX11
+void DmiPortableBattery_Item::set_device_name(::std::string&& value) {
+  
+  device_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiPortableBattery.Item.device_name)
+}
+#endif
+void DmiPortableBattery_Item::set_device_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  device_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiPortableBattery.Item.device_name)
+}
+void DmiPortableBattery_Item::set_device_name(const char* value, size_t size) {
+  
+  device_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiPortableBattery.Item.device_name)
+}
+::std::string* DmiPortableBattery_Item::mutable_device_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortableBattery.Item.device_name)
+  return device_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiPortableBattery_Item::release_device_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiPortableBattery.Item.device_name)
+  
+  return device_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiPortableBattery_Item::set_allocated_device_name(::std::string* device_name) {
+  if (device_name != NULL) {
+    
+  } else {
+    
+  }
+  device_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), device_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiPortableBattery.Item.device_name)
+}
+
+// string chemistry = 6;
+void DmiPortableBattery_Item::clear_chemistry() {
+  chemistry_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiPortableBattery_Item::chemistry() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortableBattery.Item.chemistry)
+  return chemistry_.GetNoArena();
+}
+void DmiPortableBattery_Item::set_chemistry(const ::std::string& value) {
+  
+  chemistry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortableBattery.Item.chemistry)
+}
+#if LANG_CXX11
+void DmiPortableBattery_Item::set_chemistry(::std::string&& value) {
+  
+  chemistry_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiPortableBattery.Item.chemistry)
+}
+#endif
+void DmiPortableBattery_Item::set_chemistry(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  chemistry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiPortableBattery.Item.chemistry)
+}
+void DmiPortableBattery_Item::set_chemistry(const char* value, size_t size) {
+  
+  chemistry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiPortableBattery.Item.chemistry)
+}
+::std::string* DmiPortableBattery_Item::mutable_chemistry() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortableBattery.Item.chemistry)
+  return chemistry_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiPortableBattery_Item::release_chemistry() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiPortableBattery.Item.chemistry)
+  
+  return chemistry_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiPortableBattery_Item::set_allocated_chemistry(::std::string* chemistry) {
+  if (chemistry != NULL) {
+    
+  } else {
+    
+  }
+  chemistry_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), chemistry);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiPortableBattery.Item.chemistry)
+}
+
+// int32 design_capacity = 7;
+void DmiPortableBattery_Item::clear_design_capacity() {
+  design_capacity_ = 0;
+}
+::google::protobuf::int32 DmiPortableBattery_Item::design_capacity() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortableBattery.Item.design_capacity)
+  return design_capacity_;
+}
+void DmiPortableBattery_Item::set_design_capacity(::google::protobuf::int32 value) {
+  
+  design_capacity_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortableBattery.Item.design_capacity)
+}
+
+// int32 design_voltage = 8;
+void DmiPortableBattery_Item::clear_design_voltage() {
+  design_voltage_ = 0;
+}
+::google::protobuf::int32 DmiPortableBattery_Item::design_voltage() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortableBattery.Item.design_voltage)
+  return design_voltage_;
+}
+void DmiPortableBattery_Item::set_design_voltage(::google::protobuf::int32 value) {
+  
+  design_voltage_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortableBattery.Item.design_voltage)
+}
+
+// string sbds_version_number = 9;
+void DmiPortableBattery_Item::clear_sbds_version_number() {
+  sbds_version_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiPortableBattery_Item::sbds_version_number() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortableBattery.Item.sbds_version_number)
+  return sbds_version_number_.GetNoArena();
+}
+void DmiPortableBattery_Item::set_sbds_version_number(const ::std::string& value) {
+  
+  sbds_version_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortableBattery.Item.sbds_version_number)
+}
+#if LANG_CXX11
+void DmiPortableBattery_Item::set_sbds_version_number(::std::string&& value) {
+  
+  sbds_version_number_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiPortableBattery.Item.sbds_version_number)
+}
+#endif
+void DmiPortableBattery_Item::set_sbds_version_number(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  sbds_version_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiPortableBattery.Item.sbds_version_number)
+}
+void DmiPortableBattery_Item::set_sbds_version_number(const char* value, size_t size) {
+  
+  sbds_version_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiPortableBattery.Item.sbds_version_number)
+}
+::std::string* DmiPortableBattery_Item::mutable_sbds_version_number() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortableBattery.Item.sbds_version_number)
+  return sbds_version_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiPortableBattery_Item::release_sbds_version_number() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiPortableBattery.Item.sbds_version_number)
+  
+  return sbds_version_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiPortableBattery_Item::set_allocated_sbds_version_number(::std::string* sbds_version_number) {
+  if (sbds_version_number != NULL) {
+    
+  } else {
+    
+  }
+  sbds_version_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), sbds_version_number);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiPortableBattery.Item.sbds_version_number)
+}
+
+// int32 max_error_in_battery_data = 10;
+void DmiPortableBattery_Item::clear_max_error_in_battery_data() {
+  max_error_in_battery_data_ = 0;
+}
+::google::protobuf::int32 DmiPortableBattery_Item::max_error_in_battery_data() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortableBattery.Item.max_error_in_battery_data)
+  return max_error_in_battery_data_;
+}
+void DmiPortableBattery_Item::set_max_error_in_battery_data(::google::protobuf::int32 value) {
+  
+  max_error_in_battery_data_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortableBattery.Item.max_error_in_battery_data)
+}
+
+// string sbds_serial_number = 11;
+void DmiPortableBattery_Item::clear_sbds_serial_number() {
+  sbds_serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiPortableBattery_Item::sbds_serial_number() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortableBattery.Item.sbds_serial_number)
+  return sbds_serial_number_.GetNoArena();
+}
+void DmiPortableBattery_Item::set_sbds_serial_number(const ::std::string& value) {
+  
+  sbds_serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortableBattery.Item.sbds_serial_number)
+}
+#if LANG_CXX11
+void DmiPortableBattery_Item::set_sbds_serial_number(::std::string&& value) {
+  
+  sbds_serial_number_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiPortableBattery.Item.sbds_serial_number)
+}
+#endif
+void DmiPortableBattery_Item::set_sbds_serial_number(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  sbds_serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiPortableBattery.Item.sbds_serial_number)
+}
+void DmiPortableBattery_Item::set_sbds_serial_number(const char* value, size_t size) {
+  
+  sbds_serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiPortableBattery.Item.sbds_serial_number)
+}
+::std::string* DmiPortableBattery_Item::mutable_sbds_serial_number() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortableBattery.Item.sbds_serial_number)
+  return sbds_serial_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiPortableBattery_Item::release_sbds_serial_number() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiPortableBattery.Item.sbds_serial_number)
+  
+  return sbds_serial_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiPortableBattery_Item::set_allocated_sbds_serial_number(::std::string* sbds_serial_number) {
+  if (sbds_serial_number != NULL) {
+    
+  } else {
+    
+  }
+  sbds_serial_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), sbds_serial_number);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiPortableBattery.Item.sbds_serial_number)
+}
+
+// string sbds_manufacture_date = 12;
+void DmiPortableBattery_Item::clear_sbds_manufacture_date() {
+  sbds_manufacture_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiPortableBattery_Item::sbds_manufacture_date() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortableBattery.Item.sbds_manufacture_date)
+  return sbds_manufacture_date_.GetNoArena();
+}
+void DmiPortableBattery_Item::set_sbds_manufacture_date(const ::std::string& value) {
+  
+  sbds_manufacture_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortableBattery.Item.sbds_manufacture_date)
+}
+#if LANG_CXX11
+void DmiPortableBattery_Item::set_sbds_manufacture_date(::std::string&& value) {
+  
+  sbds_manufacture_date_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiPortableBattery.Item.sbds_manufacture_date)
+}
+#endif
+void DmiPortableBattery_Item::set_sbds_manufacture_date(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  sbds_manufacture_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiPortableBattery.Item.sbds_manufacture_date)
+}
+void DmiPortableBattery_Item::set_sbds_manufacture_date(const char* value, size_t size) {
+  
+  sbds_manufacture_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiPortableBattery.Item.sbds_manufacture_date)
+}
+::std::string* DmiPortableBattery_Item::mutable_sbds_manufacture_date() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortableBattery.Item.sbds_manufacture_date)
+  return sbds_manufacture_date_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiPortableBattery_Item::release_sbds_manufacture_date() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiPortableBattery.Item.sbds_manufacture_date)
+  
+  return sbds_manufacture_date_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiPortableBattery_Item::set_allocated_sbds_manufacture_date(::std::string* sbds_manufacture_date) {
+  if (sbds_manufacture_date != NULL) {
+    
+  } else {
+    
+  }
+  sbds_manufacture_date_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), sbds_manufacture_date);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiPortableBattery.Item.sbds_manufacture_date)
+}
+
+// string sbds_device_chemistry = 13;
+void DmiPortableBattery_Item::clear_sbds_device_chemistry() {
+  sbds_device_chemistry_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiPortableBattery_Item::sbds_device_chemistry() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortableBattery.Item.sbds_device_chemistry)
+  return sbds_device_chemistry_.GetNoArena();
+}
+void DmiPortableBattery_Item::set_sbds_device_chemistry(const ::std::string& value) {
+  
+  sbds_device_chemistry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortableBattery.Item.sbds_device_chemistry)
+}
+#if LANG_CXX11
+void DmiPortableBattery_Item::set_sbds_device_chemistry(::std::string&& value) {
+  
+  sbds_device_chemistry_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiPortableBattery.Item.sbds_device_chemistry)
+}
+#endif
+void DmiPortableBattery_Item::set_sbds_device_chemistry(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  sbds_device_chemistry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiPortableBattery.Item.sbds_device_chemistry)
+}
+void DmiPortableBattery_Item::set_sbds_device_chemistry(const char* value, size_t size) {
+  
+  sbds_device_chemistry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiPortableBattery.Item.sbds_device_chemistry)
+}
+::std::string* DmiPortableBattery_Item::mutable_sbds_device_chemistry() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortableBattery.Item.sbds_device_chemistry)
+  return sbds_device_chemistry_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiPortableBattery_Item::release_sbds_device_chemistry() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiPortableBattery.Item.sbds_device_chemistry)
+  
+  return sbds_device_chemistry_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiPortableBattery_Item::set_allocated_sbds_device_chemistry(::std::string* sbds_device_chemistry) {
+  if (sbds_device_chemistry != NULL) {
+    
+  } else {
+    
+  }
+  sbds_device_chemistry_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), sbds_device_chemistry);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiPortableBattery.Item.sbds_device_chemistry)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DmiPortableBattery::kItemFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DmiPortableBattery::DmiPortableBattery()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.DmiPortableBattery)
+}
+DmiPortableBattery::DmiPortableBattery(const DmiPortableBattery& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      item_(from.item_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiPortableBattery)
+}
+
+void DmiPortableBattery::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+DmiPortableBattery::~DmiPortableBattery() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.DmiPortableBattery)
+  SharedDtor();
+}
+
+void DmiPortableBattery::SharedDtor() {
+}
+
+void DmiPortableBattery::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DmiPortableBattery& DmiPortableBattery::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+DmiPortableBattery* DmiPortableBattery::New(::google::protobuf::Arena* arena) const {
+  DmiPortableBattery* n = new DmiPortableBattery;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DmiPortableBattery::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiPortableBattery)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  item_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool DmiPortableBattery::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiPortableBattery)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .aspia.system_info.DmiPortableBattery.Item item = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_item()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiPortableBattery)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiPortableBattery)
+  return false;
+#undef DO_
+}
+
+void DmiPortableBattery::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiPortableBattery)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .aspia.system_info.DmiPortableBattery.Item item = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1, this->item(static_cast<int>(i)), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiPortableBattery)
+}
+
+size_t DmiPortableBattery::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiPortableBattery)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.system_info.DmiPortableBattery.Item item = 1;
+  {
+    unsigned int count = static_cast<unsigned int>(this->item_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->item(static_cast<int>(i)));
+    }
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DmiPortableBattery::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const DmiPortableBattery*>(&from));
+}
+
+void DmiPortableBattery::MergeFrom(const DmiPortableBattery& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiPortableBattery)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  item_.MergeFrom(from.item_);
+}
+
+void DmiPortableBattery::CopyFrom(const DmiPortableBattery& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiPortableBattery)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DmiPortableBattery::IsInitialized() const {
+  return true;
+}
+
+void DmiPortableBattery::Swap(DmiPortableBattery* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void DmiPortableBattery::InternalSwap(DmiPortableBattery* other) {
+  using std::swap;
+  item_.InternalSwap(&other->item_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string DmiPortableBattery::GetTypeName() const {
+  return "aspia.system_info.DmiPortableBattery";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// DmiPortableBattery
+
+// repeated .aspia.system_info.DmiPortableBattery.Item item = 1;
+int DmiPortableBattery::item_size() const {
+  return item_.size();
+}
+void DmiPortableBattery::clear_item() {
+  item_.Clear();
+}
+const ::aspia::system_info::DmiPortableBattery_Item& DmiPortableBattery::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortableBattery.item)
+  return item_.Get(index);
+}
+::aspia::system_info::DmiPortableBattery_Item* DmiPortableBattery::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortableBattery.item)
+  return item_.Mutable(index);
+}
+::aspia::system_info::DmiPortableBattery_Item* DmiPortableBattery::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.DmiPortableBattery.item)
+  return item_.Add();
+}
+::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiPortableBattery_Item >*
+DmiPortableBattery::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.DmiPortableBattery.item)
+  return &item_;
+}
+const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiPortableBattery_Item >&
+DmiPortableBattery::item() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.DmiPortableBattery.item)
   return item_;
 }
 

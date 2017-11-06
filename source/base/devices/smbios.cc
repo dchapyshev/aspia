@@ -1963,4 +1963,142 @@ int SMBios::BuildinPointingTable::GetButtonCount() const
     return reader_.GetByte(0x06);
 }
 
+//
+// PortableBatteryTable
+//
+
+SMBios::PortableBatteryTable::PortableBatteryTable(const TableReader& reader)
+    : reader_(reader)
+{
+    // Nothing
+}
+
+std::string SMBios::PortableBatteryTable::GetLocation() const
+{
+    if (reader_.GetTableLength() < 0x10)
+        return std::string();
+
+    return reader_.GetString(0x04);
+}
+
+std::string SMBios::PortableBatteryTable::GetManufacturer() const
+{
+    if (reader_.GetTableLength() < 0x10)
+        return std::string();
+
+    return reader_.GetString(0x05);
+}
+
+std::string SMBios::PortableBatteryTable::GetManufactureDate() const
+{
+    if (reader_.GetTableLength() < 0x10)
+        return std::string();
+
+    return reader_.GetString(0x06);
+}
+
+std::string SMBios::PortableBatteryTable::GetSerialNumber() const
+{
+    if (reader_.GetTableLength() < 0x10)
+        return std::string();
+
+    return reader_.GetString(0x07);
+}
+
+std::string SMBios::PortableBatteryTable::GetDeviceName() const
+{
+    if (reader_.GetTableLength() < 0x10)
+        return std::string();
+
+    return reader_.GetString(0x08);
+}
+
+std::string SMBios::PortableBatteryTable::GetChemistry() const
+{
+    if (reader_.GetTableLength() < 0x10)
+        return std::string();
+
+    static const char* names[] =
+    {
+        "Other", // 0x01
+        nullptr,
+        "Mouse",
+        "Track Ball",
+        "Track Point",
+        "Glide Point",
+        "Touch Pad",
+        "Touch Screen",
+        "Optical Sensor" // 0x09
+    };
+
+    const uint8_t value = reader_.GetByte(0x09);
+
+    if (value >= 0x01 && value <= 0x09 && names[value - 0x01])
+        return names[value - 0x01];
+
+    return std::string();
+}
+
+int SMBios::PortableBatteryTable::GetDesignCapacity() const
+{
+    const uint8_t length = reader_.GetTableLength();
+    if (length < 0x10)
+        return 0;
+
+    if (length < 0x16)
+        return reader_.GetWord(0x0A);
+
+    return reader_.GetWord(0x0A) + reader_.GetByte(0x15);
+}
+
+int SMBios::PortableBatteryTable::GetDesignVoltage() const
+{
+    if (reader_.GetTableLength() < 0x10)
+        return 0;
+
+    return reader_.GetWord(0x0C);
+}
+
+std::string SMBios::PortableBatteryTable::GetSBDSVersionNumber() const
+{
+    if (reader_.GetTableLength() < 0x10)
+        return std::string();
+
+    return reader_.GetString(0x0E);
+}
+
+int SMBios::PortableBatteryTable::GetMaxErrorInBatteryData() const
+{
+    if (reader_.GetTableLength() < 0x10)
+        return 0;
+
+    return reader_.GetByte(0x0F);
+}
+
+std::string SMBios::PortableBatteryTable::GetSBDSSerialNumber() const
+{
+    if (reader_.GetTableLength() < 0x1A)
+        return std::string();
+
+    return StringPrintf("%04X", reader_.GetWord(0x10));
+}
+
+std::string SMBios::PortableBatteryTable::GetSBDSManufactureDate() const
+{
+    if (reader_.GetTableLength() < 0x1A)
+        return std::string();
+
+    const uint16_t date = reader_.GetWord(0x12);
+
+    return StringPrintf("%02u/%02u/%u", (date & 0x1F), ((date >> 5) & 0x0F), (1980U + (date >> 9)));
+}
+
+std::string SMBios::PortableBatteryTable::GetSBDSDeviceChemistry() const
+{
+    if (reader_.GetTableLength() < 0x1A)
+        return std::string();
+
+    return reader_.GetString(0x14);
+}
+
 } // namespace aspia

@@ -512,6 +512,32 @@ public:
         TableReader reader_;
     };
 
+    class PortableBatteryTable
+    {
+    public:
+        enum : uint8_t { TABLE_TYPE = 0x16 };
+
+        std::string GetLocation() const;
+        std::string GetManufacturer() const;
+        std::string GetManufactureDate() const;
+        std::string GetSerialNumber() const;
+        std::string GetDeviceName() const;
+        std::string GetChemistry() const;
+        int GetDesignCapacity() const;
+        int GetDesignVoltage() const;
+        std::string GetSBDSVersionNumber() const;
+        int GetMaxErrorInBatteryData() const;
+        std::string GetSBDSSerialNumber() const;
+        std::string GetSBDSManufactureDate() const;
+        std::string GetSBDSDeviceChemistry() const;
+
+    private:
+        friend class TableEnumerator<PortableBatteryTable>;
+        PortableBatteryTable(const TableReader& reader);
+
+        TableReader reader_;
+    };
+
 private:
     SMBios(std::unique_ptr<uint8_t[]> data, size_t data_size);
     static int GetTableCount(const uint8_t* table_data, uint32_t length);

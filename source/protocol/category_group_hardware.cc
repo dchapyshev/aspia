@@ -2270,15 +2270,112 @@ const char* CategoryDmiPortableBattery::Guid() const
 
 void CategoryDmiPortableBattery::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::DmiPortableBattery message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::DmiPortableBattery::Item& item = message.item(index);
+
+        Output::Group group(output, StringPrintf("Portable Battery #%d", index + 1), Icon());
+
+        if (!item.location().empty())
+            output->AddParam(IDI_BATTERY, "Location", item.location());
+
+        if (!item.manufacturer().empty())
+            output->AddParam(IDI_BATTERY, "Manufacturer", item.manufacturer());
+
+        if (!item.manufacture_date().empty())
+            output->AddParam(IDI_BATTERY, "Manufacture Date", item.manufacture_date());
+
+        if (!item.sbds_serial_number().empty())
+            output->AddParam(IDI_BATTERY, "Serial Number", item.sbds_serial_number());
+
+        if (!item.device_name().empty())
+            output->AddParam(IDI_BATTERY, "Device Name", item.device_name());
+
+        if (!item.chemistry().empty())
+            output->AddParam(IDI_BATTERY, "Chemistry", item.chemistry());
+
+        if (item.design_capacity() != 0)
+        {
+            output->AddParam(IDI_BATTERY,
+                             "Design Capacity",
+                             std::to_string(item.design_capacity()),
+                             "mWh");
+        }
+
+        if (item.design_voltage() != 0)
+        {
+            output->AddParam(IDI_BATTERY,
+                             "Design Voltage",
+                             std::to_string(item.design_voltage()),
+                             "mV");
+        }
+
+        if (item.max_error_in_battery_data() != 0)
+        {
+            output->AddParam(IDI_BATTERY,
+                             "Max. Error in Battery Data",
+                             std::to_string(item.max_error_in_battery_data()),
+                             "%%");
+        }
+
+        if (!item.sbds_version_number().empty())
+            output->AddParam(IDI_BATTERY, "SBDS Version Number", item.sbds_version_number());
+
+        if (!item.sbds_serial_number().empty())
+            output->AddParam(IDI_BATTERY, "SBDS Serial Number", item.sbds_serial_number());
+
+        if (!item.sbds_manufacture_date().empty())
+            output->AddParam(IDI_BATTERY, "SBDS Manufacture Date", item.sbds_manufacture_date());
+
+        if (!item.sbds_device_chemistry().empty())
+            output->AddParam(IDI_BATTERY, "SBDS Device Chemistry", item.sbds_device_chemistry());
+    }
 }
 
 std::string CategoryDmiPortableBattery::Serialize()
 {
-    // TODO
-    return std::string();
+    std::unique_ptr<SMBios> smbios = ReadSMBios();
+    if (!smbios)
+        return std::string();
+
+    system_info::DmiPortableBattery message;
+
+    for (SMBios::TableEnumerator<SMBios::PortableBatteryTable> table_enumerator(*smbios);
+         !table_enumerator.IsAtEnd();
+         table_enumerator.Advance())
+    {
+        SMBios::PortableBatteryTable table = table_enumerator.GetTable();
+        system_info::DmiPortableBattery::Item* item = message.add_item();
+
+        item->set_location(table.GetLocation());
+        item->set_manufacturer(table.GetManufacturer());
+        item->set_manufacture_date(table.GetManufactureDate());
+        item->set_serial_number(table.GetSerialNumber());
+        item->set_device_name(table.GetDeviceName());
+        item->set_chemistry(table.GetChemistry());
+        item->set_design_capacity(table.GetDesignCapacity());
+        item->set_design_voltage(table.GetDesignVoltage());
+        item->set_sbds_version_number(table.GetSBDSVersionNumber());
+        item->set_max_error_in_battery_data(table.GetMaxErrorInBatteryData());
+        item->set_sbds_serial_number(table.GetSBDSSerialNumber());
+        item->set_sbds_manufacture_date(table.GetSBDSManufactureDate());
+        item->set_sbds_device_chemistry(table.GetSBDSDeviceChemistry());
+    }
+
+    return message.SerializeAsString();
 }
 
 //

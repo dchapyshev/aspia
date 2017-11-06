@@ -402,6 +402,28 @@ message DmiBuildinPointing
     repeated Item item = 1;
 }
 
+message DmiPortableBattery
+{
+    message Item
+    {
+        string location                 = 1;
+        string manufacturer             = 2;
+        string manufacture_date         = 3;
+        string serial_number            = 4;
+        string device_name              = 5;
+        string chemistry                = 6;
+        int32 design_capacity           = 7;
+        int32 design_voltage            = 8;
+        string sbds_version_number      = 9;
+        int32 max_error_in_battery_data = 10;
+        string sbds_serial_number       = 11;
+        string sbds_manufacture_date    = 12;
+        string sbds_device_chemistry    = 13;
+    }
+
+    repeated Item item = 1;
+}
+
 message Monitors
 {
     message Item
