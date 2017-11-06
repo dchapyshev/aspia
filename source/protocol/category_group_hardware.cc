@@ -1489,15 +1489,268 @@ const char* CategoryDmiProcessors::Guid() const
 
 void CategoryDmiProcessors::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::DmiProcessors message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::DmiProcessors::Item& item = message.item(index);
+
+        Output::Group group(output, StringPrintf("Processor #%d", index + 1), Icon());
+
+        if (!item.manufacturer().empty())
+            output->AddParam(IDI_PROCESSOR, "Manufacturer", item.manufacturer());
+
+        if (!item.version().empty())
+            output->AddParam(IDI_PROCESSOR, "Version", item.version());
+
+        if (!item.family().empty())
+            output->AddParam(IDI_PROCESSOR, "Family", item.family());
+
+        const char* type;
+        switch (item.type())
+        {
+            case system_info::DmiProcessors::Item::TYPE_CENTRAL_PROCESSOR:
+                type = "Central Processor";
+                break;
+
+            case system_info::DmiProcessors::Item::TYPE_MATH_PROCESSOR:
+                type = "Math Processor";
+                break;
+
+            case system_info::DmiProcessors::Item::TYPE_DSP_PROCESSOR:
+                type = "DSP Processor";
+                break;
+
+            case system_info::DmiProcessors::Item::TYPE_VIDEO_PROCESSOR:
+                type = "Video Processor";
+                break;
+
+            case system_info::DmiProcessors::Item::TYPE_OTHER:
+                type = "Other Processor";
+                break;
+
+            default:
+                type = nullptr;
+                break;
+        }
+
+        if (type != nullptr)
+            output->AddParam(IDI_PROCESSOR, "Type", type);
+
+        const char* status;
+        switch (item.status())
+        {
+            case system_info::DmiProcessors::Item::STATUS_ENABLED:
+                status = "Enabled";
+                break;
+
+            case system_info::DmiProcessors::Item::STATUS_DISABLED_BY_USER:
+                status = "Disabled by User";
+                break;
+
+            case system_info::DmiProcessors::Item::STATUS_DISABLED_BY_BIOS:
+                status = "Disabled by BIOS";
+                break;
+
+            case system_info::DmiProcessors::Item::STATUS_IDLE:
+                status = "Idle";
+                break;
+
+            case system_info::DmiProcessors::Item::STATUS_OTHER:
+                status = "Other";
+                break;
+
+            default:
+                status = nullptr;
+                break;
+        }
+
+        if (status != nullptr)
+            output->AddParam(IDI_PROCESSOR, "Status", status);
+
+        if (!item.socket().empty())
+            output->AddParam(IDI_PROCESSOR, "Socket", item.socket());
+
+        if (!item.upgrade().empty())
+            output->AddParam(IDI_PROCESSOR, "Upgrade", item.upgrade());
+
+        if (item.external_clock() != 0)
+            output->AddParam(IDI_PROCESSOR, "External Clock", std::to_string(item.external_clock()), "MHz");
+
+        if (item.current_speed() != 0)
+            output->AddParam(IDI_PROCESSOR, "Current Speed", std::to_string(item.current_speed()), "MHz");
+
+        if (item.maximum_speed() != 0)
+            output->AddParam(IDI_PROCESSOR, "Maximum Speed", std::to_string(item.maximum_speed()), "MHz");
+
+        if (item.voltage() != 0.0)
+            output->AddParam(IDI_PROCESSOR, "Voltage", std::to_string(item.voltage()), "V");
+
+        if (!item.serial_number().empty())
+            output->AddParam(IDI_PROCESSOR, "Serial Number", item.serial_number());
+
+        if (!item.asset_tag().empty())
+        output->AddParam(IDI_PROCESSOR, "Asset Tag", item.asset_tag());
+
+        if (!item.part_number().empty())
+            output->AddParam(IDI_PROCESSOR, "Part Number", item.part_number());
+
+        if (item.core_count() != 0)
+            output->AddParam(IDI_PROCESSOR, "Core Count", std::to_string(item.core_count()));
+
+        if (item.core_enabled() != 0)
+            output->AddParam(IDI_PROCESSOR, "Core Enabled", std::to_string(item.core_enabled()));
+
+        if (item.thread_count() != 0)
+            output->AddParam(IDI_PROCESSOR, "Thread Count", std::to_string(item.thread_count()));
+
+        auto add_characteristic = [&](uint32_t flag, const char* name)
+        {
+            output->AddParam((item.characteristics() & flag) ? IDI_CHECKED : IDI_UNCHECKED,
+                             name,
+                             (item.characteristics() & flag) ? "Yes" : "No");
+        };
+
+        if (item.characteristics() != 0)
+        {
+            Output::Group characteristic_group(output, "Characteristics", IDI_PROCESSOR);
+
+            add_characteristic(system_info::DmiProcessors::Item::CHARACTERISTIC_64BIT_CAPABLE,
+                               "64-bit Capable");
+            add_characteristic(system_info::DmiProcessors::Item::CHARACTERISTIC_MULTI_CORE,
+                               "Multi-Core");
+            add_characteristic(system_info::DmiProcessors::Item::CHARACTERISTIC_HARDWARE_THREAD,
+                               "Hardware Thread");
+            add_characteristic(system_info::DmiProcessors::Item::CHARACTERISTIC_EXECUTE_PROTECTION,
+                               "Execute Protection");
+            add_characteristic(system_info::DmiProcessors::Item::CHARACTERISTIC_ENHANCED_VIRTUALIZATION,
+                               "Enhanced Virtualization");
+            add_characteristic(system_info::DmiProcessors::Item::CHARACTERISTIC_POWER_CONTROL,
+                               "Power/Perfomance Control");
+        }
+    }
 }
 
 std::string CategoryDmiProcessors::Serialize()
 {
-    // TODO
-    return std::string();
+    std::unique_ptr<SMBios> smbios = ReadSMBios();
+    if (!smbios)
+        return std::string();
+
+    system_info::DmiProcessors message;
+
+    for (SMBios::TableEnumerator<SMBios::ProcessorTable> table_enumerator(*smbios);
+         !table_enumerator.IsAtEnd();
+         table_enumerator.Advance())
+    {
+        SMBios::ProcessorTable table = table_enumerator.GetTable();
+        system_info::DmiProcessors::Item* item = message.add_item();
+
+        item->set_manufacturer(table.GetManufacturer());
+        item->set_version(table.GetVersion());
+        item->set_family(table.GetFamily());
+
+        switch (table.GetType())
+        {
+            case SMBios::ProcessorTable::Type::CENTRAL_PROCESSOR:
+                item->set_type(system_info::DmiProcessors::Item::TYPE_CENTRAL_PROCESSOR);
+                break;
+
+            case SMBios::ProcessorTable::Type::MATH_PROCESSOR:
+                item->set_type(system_info::DmiProcessors::Item::TYPE_MATH_PROCESSOR);
+                break;
+
+            case SMBios::ProcessorTable::Type::DSP_PROCESSOR:
+                item->set_type(system_info::DmiProcessors::Item::TYPE_DSP_PROCESSOR);
+                break;
+
+            case SMBios::ProcessorTable::Type::VIDEO_PROCESSOR:
+                item->set_type(system_info::DmiProcessors::Item::TYPE_VIDEO_PROCESSOR);
+                break;
+
+            case SMBios::ProcessorTable::Type::OTHER:
+                item->set_type(system_info::DmiProcessors::Item::TYPE_OTHER);
+                break;
+
+            default:
+                break;
+        }
+
+        switch (table.GetStatus())
+        {
+            case SMBios::ProcessorTable::Status::ENABLED:
+                item->set_status(system_info::DmiProcessors::Item::STATUS_ENABLED);
+                break;
+
+            case SMBios::ProcessorTable::Status::DISABLED_BY_USER:
+                item->set_status(system_info::DmiProcessors::Item::STATUS_DISABLED_BY_USER);
+                break;
+
+            case SMBios::ProcessorTable::Status::DISABLED_BY_BIOS:
+                item->set_status(system_info::DmiProcessors::Item::STATUS_DISABLED_BY_BIOS);
+                break;
+
+            case SMBios::ProcessorTable::Status::IDLE:
+                item->set_status(system_info::DmiProcessors::Item::STATUS_IDLE);
+                break;
+
+            case SMBios::ProcessorTable::Status::OTHER:
+                item->set_status(system_info::DmiProcessors::Item::STATUS_OTHER);
+                break;
+
+            default:
+                break;
+        }
+
+        item->set_socket(table.GetSocket());
+        item->set_upgrade(table.GetUpgrade());
+        item->set_external_clock(table.GetExternalClock());
+        item->set_current_speed(table.GetCurrentSpeed());
+        item->set_maximum_speed(table.GetMaximumSpeed());
+        item->set_voltage(table.GetVoltage());
+        item->set_serial_number(table.GetSerialNumber());
+        item->set_asset_tag(table.GetAssetTag());
+        item->set_part_number(table.GetPartNumber());
+        item->set_core_count(table.GetCoreCount());
+        item->set_core_enabled(table.GetCoreEnabled());
+        item->set_thread_count(table.GetThreadCount());
+
+        auto add_characteristic = [&](uint16_t src, uint32_t dst)
+        {
+            uint16_t bitfield = table.GetCharacteristics();
+
+            if (bitfield & src)
+            {
+                item->set_characteristics(item->characteristics() | dst);
+            }
+        };
+
+        add_characteristic(SMBios::ProcessorTable::CHARACTERISTIC_64BIT_CAPABLE,
+                           system_info::DmiProcessors::Item::CHARACTERISTIC_64BIT_CAPABLE);
+        add_characteristic(SMBios::ProcessorTable::CHARACTERISTIC_MULTI_CORE,
+                           system_info::DmiProcessors::Item::CHARACTERISTIC_MULTI_CORE);
+        add_characteristic(SMBios::ProcessorTable::CHARACTERISTIC_HARDWARE_THREAD,
+                           system_info::DmiProcessors::Item::CHARACTERISTIC_HARDWARE_THREAD);
+        add_characteristic(SMBios::ProcessorTable::CHARACTERISTIC_EXECUTE_PROTECTION,
+                           system_info::DmiProcessors::Item::CHARACTERISTIC_EXECUTE_PROTECTION);
+        add_characteristic(SMBios::ProcessorTable::CHARACTERISTIC_ENHANCED_VIRTUALIZATION,
+                           system_info::DmiProcessors::Item::CHARACTERISTIC_ENHANCED_VIRTUALIZATION);
+        add_characteristic(SMBios::ProcessorTable::CHARACTERISTIC_POWER_CONTROL,
+                           system_info::DmiProcessors::Item::CHARACTERISTIC_POWER_CONTROL);
+    }
+
+    return message.SerializeAsString();
 }
 
 //

@@ -256,6 +256,64 @@ message DmiCaches
     repeated Item item = 1;
 }
 
+message DmiProcessors
+{
+    message Item
+    {
+        enum Type
+        {
+            TYPE_UNKNOWN           = 0;
+            TYPE_OTHER             = 1;
+            TYPE_CENTRAL_PROCESSOR = 2;
+            TYPE_MATH_PROCESSOR    = 3;
+            TYPE_DSP_PROCESSOR     = 4;
+            TYPE_VIDEO_PROCESSOR   = 5;
+        }
+
+        enum Status
+        {
+            STATUS_UNKNOWN          = 0;
+            STATUS_ENABLED          = 1;
+            STATUS_DISABLED_BY_USER = 2;
+            STATUS_DISABLED_BY_BIOS = 3;
+            STATUS_IDLE             = 4;
+            STATUS_OTHER            = 5;
+        }
+
+        enum Characteristics
+        {
+            CHARACTERISTIC_NONE                    = 0;
+            CHARACTERISTIC_64BIT_CAPABLE           = 1;
+            CHARACTERISTIC_MULTI_CORE              = 2;
+            CHARACTERISTIC_HARDWARE_THREAD         = 4;
+            CHARACTERISTIC_EXECUTE_PROTECTION      = 8;
+            CHARACTERISTIC_ENHANCED_VIRTUALIZATION = 16;
+            CHARACTERISTIC_POWER_CONTROL           = 32;
+        }
+
+        string manufacturer    = 1;
+        string version         = 2;
+        string family          = 3;
+        Type type              = 4;
+        Status status          = 5;
+        string socket          = 6;
+        string upgrade         = 7;
+        int32 external_clock   = 8;
+        int32 current_speed    = 9;
+        int32 maximum_speed    = 10;
+        double voltage         = 11;
+        string serial_number   = 12;
+        string asset_tag       = 13;
+        string part_number     = 14;
+        int32 core_count       = 15;
+        int32 core_enabled     = 16;
+        int32 thread_count     = 17;
+        uint32 characteristics = 18;
+    }
+
+    repeated Item item = 1;
+}
+
 message Monitors
 {
     message Item

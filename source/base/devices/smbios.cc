@@ -761,6 +761,442 @@ int SMBios::ChassisTable::GetNumberOfPowerCords() const
 }
 
 //
+// ProcessorTable
+//
+
+SMBios::ProcessorTable::ProcessorTable(const TableReader& reader)
+    : reader_(reader)
+{
+    // Nothing
+}
+
+std::string SMBios::ProcessorTable::GetManufacturer() const
+{
+    if (reader_.GetTableLength() < 0x1A)
+        return std::string();
+
+    return reader_.GetString(0x07);
+}
+
+std::string SMBios::ProcessorTable::GetVersion() const
+{
+    if (reader_.GetTableLength() < 0x1A)
+        return std::string();
+
+    return reader_.GetString(0x10);
+}
+
+std::string SMBios::ProcessorTable::GetFamily() const
+{
+    if (reader_.GetTableLength() < 0x1A)
+        return std::string();
+
+    struct FamilyList
+    {
+        uint16_t family;
+        const char* name;
+    } const list[] =
+    {
+        { 0x01, "Other" },
+        { 0x02, "Unknown" },
+        { 0x03, "Intel 8086" },
+        { 0x04, "Intel 80286" },
+        { 0x05, "Intel386" },
+        { 0x06, "Intel486" },
+        { 0x07, "Intel 8087" },
+        { 0x08, "Intel 80287" },
+        { 0x09, "Intel 80387" },
+        { 0x0A, "Intel 80487" },
+        { 0x0B, "Intel Pentium" },
+        { 0x0C, "Intel Pentium Pro" },
+        { 0x0D, "Intel Pentium 2" },
+        { 0x0E, "Pentium with MMX technology" },
+        { 0x0F, "Intel Celeron" },
+        { 0x10, "Intel Pentium 2 Xeon" },
+        { 0x11, "Intel Pentium 3" },
+        { 0x12, "M1 Family" },
+        { 0x13, "M2 Family" },
+        { 0x14, "Intel Celeron M" },
+        { 0x15, "Intel Pentium 4 HT" },
+        // 0x16 - 0x17 Available for assignment.
+        { 0x18, "AMD Duron" },
+        { 0x19, "AMD K5 Family" },
+        { 0x1A, "AMD K6 Family" },
+        { 0x1B, "AMD K6-2" },
+        { 0x1C, "AMD K6-3" },
+        { 0x1D, "AMD Athlon" },
+        { 0x1E, "AMD 29000" },
+        { 0x1F, "AMD K6-2+" },
+        { 0x20, "Power PC" },
+        { 0x21, "Power PC 601" },
+        { 0x22, "Power PC 603" },
+        { 0x23, "Power PC 603+" },
+        { 0x24, "Power PC 604" },
+        { 0x25, "Power PC 620" },
+        { 0x26, "Power PC x704" },
+        { 0x27, "Power PC 750" },
+        { 0x28, "Intel Core Duo" },
+        { 0x29, "Intel Core Duo Mobile" },
+        { 0x2A, "Intel Core Solo Mobile" },
+        { 0x2B, "Intel Atom" },
+        // 0x2C - 0x2F Available for assignment.
+        { 0x30, "Alpha" },
+        { 0x31, "Alpha 21064" },
+        { 0x32, "Alpha 21066" },
+        { 0x33, "Alpha 21164" },
+        { 0x34, "Alpha 21164PC" },
+        { 0x35, "Alpha 21164a" },
+        { 0x36, "Alpha 21264" },
+        { 0x37, "Alpha 21364" },
+        { 0x38, "AMD Turion 2 Ultra Dual-Core Mobile M" },
+        { 0x39, "AMD Turion 2 Dual-Core Mobile M" },
+        { 0x3A, "AMD Athlon 2 Dual-Core M" },
+        { 0x3B, "AMD Opteron 6100 Series" },
+        { 0x3C, "AMD Opteron 4100 Series" },
+        { 0x3D, "AMD Opteron 6200 Series" },
+        { 0x3E, "AMD Opteron 4200 Series" },
+        // 0x3F Available for assignment.
+        { 0x40, "MIPS" },
+        { 0x41, "MIPS R4000" },
+        { 0x42, "MIPS R4200" },
+        { 0x43, "MIPS R4400" },
+        { 0x44, "MIPS R4600" },
+        { 0x45, "MIPS R10000" },
+        { 0x46, "AMD C-Series" },
+        { 0x47, "AMD E-Series" },
+        { 0x48, "AMD S-Series" },
+        { 0x49, "AMD G-Series" },
+        // 0x4A - 0x4F Available for assignment.
+        { 0x50, "SPARC" },
+        { 0x51, "SuperSPARC" },
+        { 0x52, "microSPARC 2" },
+        { 0x53, "microSPARC 2ep" },
+        { 0x54, "UltraSPARC" },
+        { 0x55, "UltraSPARC 2" },
+        { 0x56, "UltraSPARC 2i" },
+        { 0x57, "UltraSPARC 3" },
+        { 0x58, "UltraSPARC 3i" },
+        // 0x59 - 0x5F Available for assignment.
+        { 0x60, "68040" },
+        { 0x61, "68xxx" },
+        { 0x62, "68000" },
+        { 0x63, "68010" },
+        { 0x64, "68020" },
+        { 0x65, "68030" },
+        // 0x66 - 0x6F Available for assignment.
+        { 0x70, "Hobbit" },
+        // 0x71 - 0x77 Available for assignment.
+        { 0x78, "Crusoe TM5000" },
+        { 0x79, "Crusoe TM3000" },
+        { 0x7A, "Efficeon TM8000" },
+        // 0x7B - 0x7F Available for assignment.
+        { 0x80, "Weitek" },
+        // 0x81 Available for assignment.
+        { 0x82, "Itanium" },
+        { 0x83, "AMD Athlon 64" },
+        { 0x84, "AMD Opteron" },
+        { 0x85, "AMD Sempron" },
+        { 0x86, "AMD Turion 64 Mobile" },
+        { 0x87, "AMD Opteron Dual-Core" },
+        { 0x88, "AMD Athlon 64 X2 Dual-Core" },
+        { 0x89, "AMD Turion 64 X2 Mobile" },
+        { 0x8A, "AMD Opteron Quad-Core" },
+        { 0x8B, "Third-Generation AMD Opteron" },
+        { 0x8C, "AMD Phenom FX Quad-Core" },
+        { 0x8D, "AMD Phenom X4 Quad-Core" },
+        { 0x8E, "AMD Phenom X2 Dual-Core" },
+        { 0x8F, "AMD Athlon X2 Dual-Core" },
+        { 0x90, "PA-RISC" },
+        { 0x91, "PA-RISC 8500" },
+        { 0x92, "PA-RISC 8000" },
+        { 0x93, "PA-RISC 7300LC" },
+        { 0x94, "PA-RISC 7200" },
+        { 0x95, "PA-RISC 7100LC" },
+        { 0x96, "PA-RISC 7100" },
+        // 0x97 - 0x9F Available for assignment.
+        { 0xA0, "V30" },
+        { 0xA1, "Intel Xeon Quad-Core 3200" },
+        { 0xA2, "Intel Xeon Dual-Core 3000" },
+        { 0xA3, "Intel Xeon Quad-Core 5300" },
+        { 0xA4, "Intel Xeon Dual-Core 5100" },
+        { 0xA5, "Intel Xeon Dual-Core 5000" },
+        { 0xA6, "Intel Xeon Dual-Core LV" },
+        { 0xA7, "Intel Xeon Dual-Core ULV" },
+        { 0xA8, "Intel Xeon Dual-Core 7100" },
+        { 0xA9, "Intel Xeon Quad-Core 5400" },
+        { 0xAA, "Intel Xeon Quad-Core" },
+        { 0xAB, "Intel Xeon Dual-Core 5200" },
+        { 0xAC, "Intel Xeon Dual-Core 7200" },
+        { 0xAD, "Intel Xeon Quad-Core 7300" },
+        { 0xAE, "Intel Xeon Quad-Core 7400" },
+        { 0xAF, "Intel Xeon Multi-Core 7400" },
+        { 0xB0, "Intel Pentium 3 Xeon" },
+        { 0xB1, "Intel Pentium 3 with SpeedStep Technology" },
+        { 0xB2, "Intel Pentium 4" },
+        { 0xB3, "Intel Xeon" },
+        { 0xB4, "AS400" },
+        { 0xB5, "Intel Xeon MP" },
+        { 0xB6, "AMD Athlon XP" },
+        { 0xB7, "AMD Athlon MP" },
+        { 0xB8, "Intel Itanium 2" },
+        { 0xB9, "Intel Pentium M" },
+        { 0xBA, "Intel Celeron D" },
+        { 0xBB, "Intel Pentium D" },
+        { 0xBC, "Intel Pentium Extreme Edition" },
+        { 0xBD, "Intel Core Solo" },
+        // 0xBE - Reserved.
+        { 0xBF, "Intel Core 2 Duo" },
+        { 0xC0, "Intel Core 2 Solo" },
+        { 0xC1, "Intel Core 2 Extreme" },
+        { 0xC2, "Intel Core 2 Quad" },
+        { 0xC3, "Intel Core 2 Extreme Mobile" },
+        { 0xC4, "Intel Core 2 Duo Mobile" },
+        { 0xC5, "Intel Core 2 Solo Mobile" },
+        { 0xC6, "Intel Core i7" },
+        { 0xC7, "Intel Celeron Dual-Core" },
+        { 0xC8, "IBM390" },
+        { 0xC9, "G4" },
+        { 0xCA, "G5" },
+        { 0xCB, "ESA/390 G6" },
+        { 0xCC, "z/Architectur base" },
+        { 0xCD, "Intel Core i5" },
+        { 0xCE, "Intel Core i3" },
+        // 0xCF - 0xD1 Available for assignment.
+        { 0xD2, "VIA C7-M" },
+        { 0xD3, "VIA C7-D" },
+        { 0xD4, "VIA C7" },
+        { 0xD5, "VIA Eden" },
+        { 0xD6, "Intel Xeon Multi-Core" },
+        { 0xD7, "Intel Xeon Dual-Core 3xxx" },
+        { 0xD8, "Intel Xeon Quad-Core 3xxx" },
+        { 0xD9, "VIA Nano" },
+        { 0xDA, "Intel Xeon Dual-Core 5xxx" },
+        { 0xDB, "Intel Xeon Quad-Core 5xxx" },
+        // 0xDC Available for assignment.
+        { 0xDD, "Intel Xeon Dual-Core 7xxx" },
+        { 0xDE, "Intel Xeon Quad-Core 7xxx" },
+        { 0xDF, "Intel Xeon Multi-Core 7xxx" },
+        { 0xE0, "Intel Xeon Multi-Core 3400" },
+        // 0xE1 - 0xE5 Available for assignment.
+        { 0xE6, "AMD Opteron Quad-Core Embedded" },
+        { 0xE7, "AMD Phenom Triple-Core" },
+        { 0xE8, "AMD Turion Ultra Dual-Core Mobile" },
+        { 0xE9, "AMD Turion Dual-Core Mobile" },
+        { 0xEA, "AMD Athlon Dual-Core" },
+        { 0xEB, "AMD Sempron SI" },
+        { 0xEC, "AMD Phenom 2" },
+        { 0xED, "AMD Athlon 2" },
+        { 0xEE, "AMD Opteron Six-Core" },
+        { 0xEF, "AMD Sempron M" },
+        // 0xF0 - 0xF9 Available for assignment.
+        { 0xFA, "i860" },
+        { 0xFB, "i960" },
+        // 0xFC - 0xFD Available for assignment.
+        // 0xFE - Indicator to obtain the processor family from the Processor Family 2 field.
+        // 0xFF Reserved */
+        // 0x100 - 0x1FF These values are available for assignment, except for the following:
+        { 0x104, "SH-3" },
+        { 0x105, "SH-4" },
+        { 0x118, "ARM" },
+        { 0x119, "StrongARM" },
+        { 0x12C, "6x86" },
+        { 0x12D, "MediaGX" },
+        { 0x12E, "MII" },
+        { 0x140, "WinChip" },
+        { 0x15E, "DSP" },
+        { 0x1F4, "Video Processor" }
+        // 0x200 - 0xFFFD Available for assignment.
+        // 0xFFFE - 0xFFFF - Reserved.
+    };
+
+    const uint8_t family = reader_.GetByte(0x06);
+
+    for (size_t i = 0; i < _countof(list); ++i)
+    {
+        if (list[i].family == family)
+            return list[i].name;
+    }
+
+    return std::string();
+}
+
+SMBios::ProcessorTable::Type SMBios::ProcessorTable::GetType() const
+{
+    if (reader_.GetTableLength() < 0x1A)
+        return Type::UNKNOWN;
+
+    return static_cast<Type>(reader_.GetByte(0x05));
+}
+
+SMBios::ProcessorTable::Status SMBios::ProcessorTable::GetStatus() const
+{
+    if (reader_.GetTableLength() < 0x1A)
+        return Status::UNKNOWN;
+
+    return static_cast<Status>(reader_.GetByte(0x18) & 0x07);
+}
+
+std::string SMBios::ProcessorTable::GetSocket() const
+{
+    if (reader_.GetTableLength() < 0x1A)
+        return std::string();
+
+    return reader_.GetString(0x04);
+}
+
+std::string SMBios::ProcessorTable::GetUpgrade() const
+{
+    if (reader_.GetTableLength() < 0x1A)
+        return std::string();
+
+    static const char* names[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Daughter Board",
+        "ZIF Socket",
+        "Replaceable Piggy Back",
+        "None",
+        "LIF Socket",
+        "Slot 1",
+        "Slot 2",
+        "370-pin Socket",
+        "Slot A",
+        "Slot M",
+        "Socket 423",
+        "Socket A (Socket 462)",
+        "Socket 478",
+        "Socket 754",
+        "Socket 940",
+        "Socket 939",
+        "Socket mPGA604",
+        "Socket LGA771",
+        "Socket LGA775",
+        "Socket S1",
+        "Socket AM2",
+        "Socket F (1207)",
+        "Socket LGA1366",
+        "Socket G34",
+        "Socket AM3",
+        "Socket C32",
+        "Socket LGA1156",
+        "Socket LGA1567",
+        "Socket PGA988A",
+        "Socket BGA1288" // 0x20
+    };
+
+    const uint8_t upgrade = reader_.GetByte(0x19);
+    if (upgrade >= 0x01 && upgrade <= 0x20)
+        return names[upgrade - 0x01];
+
+    return std::string();
+}
+
+int SMBios::ProcessorTable::GetExternalClock() const
+{
+    if (reader_.GetTableLength() < 0x1A)
+        return 0;
+
+    return reader_.GetWord(0x12);
+}
+
+int SMBios::ProcessorTable::GetCurrentSpeed() const
+{
+    if (reader_.GetTableLength() < 0x1A)
+        return 0;
+
+    return reader_.GetWord(0x16);
+}
+
+int SMBios::ProcessorTable::GetMaximumSpeed() const
+{
+    if (reader_.GetTableLength() < 0x1A)
+        return 0;
+
+    return reader_.GetWord(0x14);
+}
+
+double SMBios::ProcessorTable::GetVoltage() const
+{
+    if (reader_.GetTableLength() < 0x1A)
+        return 0.0;
+
+    const uint8_t voltage = reader_.GetByte(0x11);
+    if (!voltage)
+        return 0.0;
+
+    if (voltage & 0x80)
+        return double(voltage & 0x7F) / 10.0;
+
+    if (voltage & 0x01)
+        return 5.0;
+
+    if (voltage & 0x02)
+        return 3.3;
+
+    if (voltage & 0x04)
+        return 2.9;
+
+    return 0.0;
+}
+
+std::string SMBios::ProcessorTable::GetSerialNumber() const
+{
+    if (reader_.GetTableLength() < 0x23)
+        return std::string();
+
+    return reader_.GetString(0x20);
+}
+
+std::string SMBios::ProcessorTable::GetAssetTag() const
+{
+    if (reader_.GetTableLength() < 0x23)
+        return std::string();
+
+    return reader_.GetString(0x21);
+}
+
+std::string SMBios::ProcessorTable::GetPartNumber() const
+{
+    if (reader_.GetTableLength() < 0x23)
+        return std::string();
+
+    return reader_.GetString(0x22);
+}
+
+int SMBios::ProcessorTable::GetCoreCount() const
+{
+    if (reader_.GetTableLength() < 0x28)
+        return 0;
+
+    return reader_.GetByte(0x23);
+}
+
+int SMBios::ProcessorTable::GetCoreEnabled() const
+{
+    if (reader_.GetTableLength() < 0x28)
+        return 0;
+
+    return reader_.GetByte(0x24);
+}
+
+int SMBios::ProcessorTable::GetThreadCount() const
+{
+    if (reader_.GetTableLength() < 0x28)
+        return 0;
+
+    return reader_.GetByte(0x25);
+}
+
+uint16_t SMBios::ProcessorTable::GetCharacteristics() const
+{
+    if (reader_.GetTableLength() < 0x28)
+        return 0;
+
+    return reader_.GetWord(0x26);
+}
+
+//
 // CacheTable
 //
 

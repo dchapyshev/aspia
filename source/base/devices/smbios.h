@@ -230,6 +230,70 @@ public:
         TableReader reader_;
     };
 
+    class ProcessorTable
+    {
+    public:
+        enum : uint8_t { TABLE_TYPE = 0x04 };
+
+        enum class Type
+        {
+            OTHER             = 0x01,
+            UNKNOWN           = 0x02,
+            CENTRAL_PROCESSOR = 0x03,
+            MATH_PROCESSOR    = 0x04,
+            DSP_PROCESSOR     = 0x05,
+            VIDEO_PROCESSOR   = 0x06
+        };
+
+        enum class Status
+        {
+            UNKNOWN          = 0x0,
+            ENABLED          = 0x1,
+            DISABLED_BY_USER = 0x2,
+            DISABLED_BY_BIOS = 0x3,
+            IDLE             = 0x4,
+            OTHER            = 0x7
+        };
+
+        enum Characteristics
+        {
+            // Bit 0 Reserved.
+            // Bit 1 Unknown.
+            CHARACTERISTIC_64BIT_CAPABLE           = 0x0004,
+            CHARACTERISTIC_MULTI_CORE              = 0x0008,
+            CHARACTERISTIC_HARDWARE_THREAD         = 0x0010,
+            CHARACTERISTIC_EXECUTE_PROTECTION      = 0x0020,
+            CHARACTERISTIC_ENHANCED_VIRTUALIZATION = 0x0040,
+            CHARACTERISTIC_POWER_CONTROL           = 0x0080
+            // Bits 8:15 Reserved.
+        };
+
+        std::string GetManufacturer() const;
+        std::string GetVersion() const;
+        std::string GetFamily() const;
+        Type GetType() const;
+        Status GetStatus() const;
+        std::string GetSocket() const;
+        std::string GetUpgrade() const;
+        int GetExternalClock() const;
+        int GetCurrentSpeed() const;
+        int GetMaximumSpeed() const;
+        double GetVoltage() const;
+        std::string GetSerialNumber() const;
+        std::string GetAssetTag() const;
+        std::string GetPartNumber() const;
+        int GetCoreCount() const;
+        int GetCoreEnabled() const;
+        int GetThreadCount() const;
+        uint16_t GetCharacteristics() const;
+
+    private:
+        friend class TableEnumerator<ProcessorTable>;
+        ProcessorTable(const TableReader& reader);
+
+        TableReader reader_;
+    };
+
     class CacheTable
     {
     public:

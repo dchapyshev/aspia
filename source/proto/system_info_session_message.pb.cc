@@ -66,6 +66,16 @@ public:
  ::google::protobuf::internal::ExplicitlyConstructed<DmiCaches>
      _instance;
 } _DmiCaches_default_instance_;
+class DmiProcessors_ItemDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<DmiProcessors_Item>
+     _instance;
+} _DmiProcessors_Item_default_instance_;
+class DmiProcessorsDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<DmiProcessors>
+     _instance;
+} _DmiProcessors_default_instance_;
 class Monitors_Item_TimingDefaultTypeInternal {
 public:
  ::google::protobuf::internal::ExplicitlyConstructed<Monitors_Item_Timing>
@@ -222,6 +232,8 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
 };
 
 void TableStruct::InitDefaultsImpl() {
@@ -248,7 +260,11 @@ void TableStruct::InitDefaultsImpl() {
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_DmiCaches_Item_default_instance_);_DmiCaches_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
-      &_DmiCaches_default_instance_);_Monitors_Item_Timing_default_instance_._instance.DefaultConstruct();
+      &_DmiCaches_default_instance_);_DmiProcessors_Item_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_DmiProcessors_Item_default_instance_);_DmiProcessors_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_DmiProcessors_default_instance_);_Monitors_Item_Timing_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_Monitors_Item_Timing_default_instance_);_Monitors_Item_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
@@ -668,6 +684,83 @@ const DmiCaches_Item_Associativity DmiCaches_Item::ASSOCIATIVITY_20_WAY;
 const DmiCaches_Item_Associativity DmiCaches_Item::Associativity_MIN;
 const DmiCaches_Item_Associativity DmiCaches_Item::Associativity_MAX;
 const int DmiCaches_Item::Associativity_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool DmiProcessors_Item_Type_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const DmiProcessors_Item_Type DmiProcessors_Item::TYPE_UNKNOWN;
+const DmiProcessors_Item_Type DmiProcessors_Item::TYPE_OTHER;
+const DmiProcessors_Item_Type DmiProcessors_Item::TYPE_CENTRAL_PROCESSOR;
+const DmiProcessors_Item_Type DmiProcessors_Item::TYPE_MATH_PROCESSOR;
+const DmiProcessors_Item_Type DmiProcessors_Item::TYPE_DSP_PROCESSOR;
+const DmiProcessors_Item_Type DmiProcessors_Item::TYPE_VIDEO_PROCESSOR;
+const DmiProcessors_Item_Type DmiProcessors_Item::Type_MIN;
+const DmiProcessors_Item_Type DmiProcessors_Item::Type_MAX;
+const int DmiProcessors_Item::Type_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool DmiProcessors_Item_Status_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const DmiProcessors_Item_Status DmiProcessors_Item::STATUS_UNKNOWN;
+const DmiProcessors_Item_Status DmiProcessors_Item::STATUS_ENABLED;
+const DmiProcessors_Item_Status DmiProcessors_Item::STATUS_DISABLED_BY_USER;
+const DmiProcessors_Item_Status DmiProcessors_Item::STATUS_DISABLED_BY_BIOS;
+const DmiProcessors_Item_Status DmiProcessors_Item::STATUS_IDLE;
+const DmiProcessors_Item_Status DmiProcessors_Item::STATUS_OTHER;
+const DmiProcessors_Item_Status DmiProcessors_Item::Status_MIN;
+const DmiProcessors_Item_Status DmiProcessors_Item::Status_MAX;
+const int DmiProcessors_Item::Status_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool DmiProcessors_Item_Characteristics_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 4:
+    case 8:
+    case 16:
+    case 32:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const DmiProcessors_Item_Characteristics DmiProcessors_Item::CHARACTERISTIC_NONE;
+const DmiProcessors_Item_Characteristics DmiProcessors_Item::CHARACTERISTIC_64BIT_CAPABLE;
+const DmiProcessors_Item_Characteristics DmiProcessors_Item::CHARACTERISTIC_MULTI_CORE;
+const DmiProcessors_Item_Characteristics DmiProcessors_Item::CHARACTERISTIC_HARDWARE_THREAD;
+const DmiProcessors_Item_Characteristics DmiProcessors_Item::CHARACTERISTIC_EXECUTE_PROTECTION;
+const DmiProcessors_Item_Characteristics DmiProcessors_Item::CHARACTERISTIC_ENHANCED_VIRTUALIZATION;
+const DmiProcessors_Item_Characteristics DmiProcessors_Item::CHARACTERISTIC_POWER_CONTROL;
+const DmiProcessors_Item_Characteristics DmiProcessors_Item::Characteristics_MIN;
+const DmiProcessors_Item_Characteristics DmiProcessors_Item::Characteristics_MAX;
+const int DmiProcessors_Item::Characteristics_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool Monitors_Item_InputSignalType_IsValid(int value) {
   switch (value) {
@@ -6548,6 +6641,1650 @@ DmiCaches::mutable_item() {
 const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiCaches_Item >&
 DmiCaches::item() const {
   // @@protoc_insertion_point(field_list:aspia.system_info.DmiCaches.item)
+  return item_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DmiProcessors_Item::kManufacturerFieldNumber;
+const int DmiProcessors_Item::kVersionFieldNumber;
+const int DmiProcessors_Item::kFamilyFieldNumber;
+const int DmiProcessors_Item::kTypeFieldNumber;
+const int DmiProcessors_Item::kStatusFieldNumber;
+const int DmiProcessors_Item::kSocketFieldNumber;
+const int DmiProcessors_Item::kUpgradeFieldNumber;
+const int DmiProcessors_Item::kExternalClockFieldNumber;
+const int DmiProcessors_Item::kCurrentSpeedFieldNumber;
+const int DmiProcessors_Item::kMaximumSpeedFieldNumber;
+const int DmiProcessors_Item::kVoltageFieldNumber;
+const int DmiProcessors_Item::kSerialNumberFieldNumber;
+const int DmiProcessors_Item::kAssetTagFieldNumber;
+const int DmiProcessors_Item::kPartNumberFieldNumber;
+const int DmiProcessors_Item::kCoreCountFieldNumber;
+const int DmiProcessors_Item::kCoreEnabledFieldNumber;
+const int DmiProcessors_Item::kThreadCountFieldNumber;
+const int DmiProcessors_Item::kCharacteristicsFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DmiProcessors_Item::DmiProcessors_Item()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.DmiProcessors.Item)
+}
+DmiProcessors_Item::DmiProcessors_Item(const DmiProcessors_Item& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  manufacturer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.manufacturer().size() > 0) {
+    manufacturer_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacturer_);
+  }
+  version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.version().size() > 0) {
+    version_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.version_);
+  }
+  family_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.family().size() > 0) {
+    family_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.family_);
+  }
+  socket_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.socket().size() > 0) {
+    socket_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.socket_);
+  }
+  upgrade_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.upgrade().size() > 0) {
+    upgrade_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.upgrade_);
+  }
+  serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.serial_number().size() > 0) {
+    serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.serial_number_);
+  }
+  asset_tag_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.asset_tag().size() > 0) {
+    asset_tag_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.asset_tag_);
+  }
+  part_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.part_number().size() > 0) {
+    part_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.part_number_);
+  }
+  ::memcpy(&type_, &from.type_,
+    static_cast<size_t>(reinterpret_cast<char*>(&characteristics_) -
+    reinterpret_cast<char*>(&type_)) + sizeof(characteristics_));
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiProcessors.Item)
+}
+
+void DmiProcessors_Item::SharedCtor() {
+  manufacturer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  family_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  socket_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  upgrade_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  asset_tag_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  part_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&characteristics_) -
+      reinterpret_cast<char*>(&type_)) + sizeof(characteristics_));
+  _cached_size_ = 0;
+}
+
+DmiProcessors_Item::~DmiProcessors_Item() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.DmiProcessors.Item)
+  SharedDtor();
+}
+
+void DmiProcessors_Item::SharedDtor() {
+  manufacturer_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  version_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  family_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  socket_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  upgrade_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  asset_tag_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  part_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void DmiProcessors_Item::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DmiProcessors_Item& DmiProcessors_Item::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+DmiProcessors_Item* DmiProcessors_Item::New(::google::protobuf::Arena* arena) const {
+  DmiProcessors_Item* n = new DmiProcessors_Item;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DmiProcessors_Item::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiProcessors.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  family_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  socket_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  upgrade_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  asset_tag_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  part_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&characteristics_) -
+      reinterpret_cast<char*>(&type_)) + sizeof(characteristics_));
+  _internal_metadata_.Clear();
+}
+
+bool DmiProcessors_Item::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiProcessors.Item)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(16383u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string manufacturer = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_manufacturer()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiProcessors.Item.manufacturer"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string version = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_version()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->version().data(), static_cast<int>(this->version().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiProcessors.Item.version"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string family = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_family()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->family().data(), static_cast<int>(this->family().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiProcessors.Item.family"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.system_info.DmiProcessors.Item.Type type = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_type(static_cast< ::aspia::system_info::DmiProcessors_Item_Type >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.system_info.DmiProcessors.Item.Status status = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_status(static_cast< ::aspia::system_info::DmiProcessors_Item_Status >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string socket = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_socket()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->socket().data(), static_cast<int>(this->socket().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiProcessors.Item.socket"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string upgrade = 7;
+      case 7: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(58u /* 58 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_upgrade()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->upgrade().data(), static_cast<int>(this->upgrade().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiProcessors.Item.upgrade"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 external_clock = 8;
+      case 8: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(64u /* 64 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &external_clock_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 current_speed = 9;
+      case 9: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(72u /* 72 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &current_speed_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 maximum_speed = 10;
+      case 10: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(80u /* 80 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &maximum_speed_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // double voltage = 11;
+      case 11: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(89u /* 89 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
+                 input, &voltage_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string serial_number = 12;
+      case 12: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(98u /* 98 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_serial_number()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->serial_number().data(), static_cast<int>(this->serial_number().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiProcessors.Item.serial_number"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string asset_tag = 13;
+      case 13: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(106u /* 106 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_asset_tag()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->asset_tag().data(), static_cast<int>(this->asset_tag().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiProcessors.Item.asset_tag"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string part_number = 14;
+      case 14: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(114u /* 114 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_part_number()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->part_number().data(), static_cast<int>(this->part_number().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiProcessors.Item.part_number"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 core_count = 15;
+      case 15: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(120u /* 120 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &core_count_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 core_enabled = 16;
+      case 16: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(128u /* 128 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &core_enabled_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 thread_count = 17;
+      case 17: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(136u /* 136 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &thread_count_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 characteristics = 18;
+      case 18: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(144u /* 144 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &characteristics_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiProcessors.Item)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiProcessors.Item)
+  return false;
+#undef DO_
+}
+
+void DmiProcessors_Item::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiProcessors.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string manufacturer = 1;
+  if (this->manufacturer().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiProcessors.Item.manufacturer");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->manufacturer(), output);
+  }
+
+  // string version = 2;
+  if (this->version().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->version().data(), static_cast<int>(this->version().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiProcessors.Item.version");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->version(), output);
+  }
+
+  // string family = 3;
+  if (this->family().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->family().data(), static_cast<int>(this->family().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiProcessors.Item.family");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->family(), output);
+  }
+
+  // .aspia.system_info.DmiProcessors.Item.Type type = 4;
+  if (this->type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      4, this->type(), output);
+  }
+
+  // .aspia.system_info.DmiProcessors.Item.Status status = 5;
+  if (this->status() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      5, this->status(), output);
+  }
+
+  // string socket = 6;
+  if (this->socket().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->socket().data(), static_cast<int>(this->socket().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiProcessors.Item.socket");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      6, this->socket(), output);
+  }
+
+  // string upgrade = 7;
+  if (this->upgrade().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->upgrade().data(), static_cast<int>(this->upgrade().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiProcessors.Item.upgrade");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      7, this->upgrade(), output);
+  }
+
+  // int32 external_clock = 8;
+  if (this->external_clock() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(8, this->external_clock(), output);
+  }
+
+  // int32 current_speed = 9;
+  if (this->current_speed() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(9, this->current_speed(), output);
+  }
+
+  // int32 maximum_speed = 10;
+  if (this->maximum_speed() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(10, this->maximum_speed(), output);
+  }
+
+  // double voltage = 11;
+  if (this->voltage() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(11, this->voltage(), output);
+  }
+
+  // string serial_number = 12;
+  if (this->serial_number().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->serial_number().data(), static_cast<int>(this->serial_number().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiProcessors.Item.serial_number");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      12, this->serial_number(), output);
+  }
+
+  // string asset_tag = 13;
+  if (this->asset_tag().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->asset_tag().data(), static_cast<int>(this->asset_tag().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiProcessors.Item.asset_tag");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      13, this->asset_tag(), output);
+  }
+
+  // string part_number = 14;
+  if (this->part_number().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->part_number().data(), static_cast<int>(this->part_number().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiProcessors.Item.part_number");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      14, this->part_number(), output);
+  }
+
+  // int32 core_count = 15;
+  if (this->core_count() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(15, this->core_count(), output);
+  }
+
+  // int32 core_enabled = 16;
+  if (this->core_enabled() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(16, this->core_enabled(), output);
+  }
+
+  // int32 thread_count = 17;
+  if (this->thread_count() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(17, this->thread_count(), output);
+  }
+
+  // uint32 characteristics = 18;
+  if (this->characteristics() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(18, this->characteristics(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiProcessors.Item)
+}
+
+size_t DmiProcessors_Item::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiProcessors.Item)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string manufacturer = 1;
+  if (this->manufacturer().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->manufacturer());
+  }
+
+  // string version = 2;
+  if (this->version().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->version());
+  }
+
+  // string family = 3;
+  if (this->family().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->family());
+  }
+
+  // string socket = 6;
+  if (this->socket().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->socket());
+  }
+
+  // string upgrade = 7;
+  if (this->upgrade().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->upgrade());
+  }
+
+  // string serial_number = 12;
+  if (this->serial_number().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->serial_number());
+  }
+
+  // string asset_tag = 13;
+  if (this->asset_tag().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->asset_tag());
+  }
+
+  // string part_number = 14;
+  if (this->part_number().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->part_number());
+  }
+
+  // .aspia.system_info.DmiProcessors.Item.Type type = 4;
+  if (this->type() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
+  }
+
+  // .aspia.system_info.DmiProcessors.Item.Status status = 5;
+  if (this->status() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
+  }
+
+  // int32 external_clock = 8;
+  if (this->external_clock() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->external_clock());
+  }
+
+  // int32 current_speed = 9;
+  if (this->current_speed() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->current_speed());
+  }
+
+  // double voltage = 11;
+  if (this->voltage() != 0) {
+    total_size += 1 + 8;
+  }
+
+  // int32 maximum_speed = 10;
+  if (this->maximum_speed() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->maximum_speed());
+  }
+
+  // int32 core_count = 15;
+  if (this->core_count() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->core_count());
+  }
+
+  // int32 core_enabled = 16;
+  if (this->core_enabled() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->core_enabled());
+  }
+
+  // int32 thread_count = 17;
+  if (this->thread_count() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->thread_count());
+  }
+
+  // uint32 characteristics = 18;
+  if (this->characteristics() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->characteristics());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DmiProcessors_Item::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const DmiProcessors_Item*>(&from));
+}
+
+void DmiProcessors_Item::MergeFrom(const DmiProcessors_Item& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiProcessors.Item)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.manufacturer().size() > 0) {
+
+    manufacturer_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacturer_);
+  }
+  if (from.version().size() > 0) {
+
+    version_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.version_);
+  }
+  if (from.family().size() > 0) {
+
+    family_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.family_);
+  }
+  if (from.socket().size() > 0) {
+
+    socket_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.socket_);
+  }
+  if (from.upgrade().size() > 0) {
+
+    upgrade_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.upgrade_);
+  }
+  if (from.serial_number().size() > 0) {
+
+    serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.serial_number_);
+  }
+  if (from.asset_tag().size() > 0) {
+
+    asset_tag_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.asset_tag_);
+  }
+  if (from.part_number().size() > 0) {
+
+    part_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.part_number_);
+  }
+  if (from.type() != 0) {
+    set_type(from.type());
+  }
+  if (from.status() != 0) {
+    set_status(from.status());
+  }
+  if (from.external_clock() != 0) {
+    set_external_clock(from.external_clock());
+  }
+  if (from.current_speed() != 0) {
+    set_current_speed(from.current_speed());
+  }
+  if (from.voltage() != 0) {
+    set_voltage(from.voltage());
+  }
+  if (from.maximum_speed() != 0) {
+    set_maximum_speed(from.maximum_speed());
+  }
+  if (from.core_count() != 0) {
+    set_core_count(from.core_count());
+  }
+  if (from.core_enabled() != 0) {
+    set_core_enabled(from.core_enabled());
+  }
+  if (from.thread_count() != 0) {
+    set_thread_count(from.thread_count());
+  }
+  if (from.characteristics() != 0) {
+    set_characteristics(from.characteristics());
+  }
+}
+
+void DmiProcessors_Item::CopyFrom(const DmiProcessors_Item& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiProcessors.Item)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DmiProcessors_Item::IsInitialized() const {
+  return true;
+}
+
+void DmiProcessors_Item::Swap(DmiProcessors_Item* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void DmiProcessors_Item::InternalSwap(DmiProcessors_Item* other) {
+  using std::swap;
+  manufacturer_.Swap(&other->manufacturer_);
+  version_.Swap(&other->version_);
+  family_.Swap(&other->family_);
+  socket_.Swap(&other->socket_);
+  upgrade_.Swap(&other->upgrade_);
+  serial_number_.Swap(&other->serial_number_);
+  asset_tag_.Swap(&other->asset_tag_);
+  part_number_.Swap(&other->part_number_);
+  swap(type_, other->type_);
+  swap(status_, other->status_);
+  swap(external_clock_, other->external_clock_);
+  swap(current_speed_, other->current_speed_);
+  swap(voltage_, other->voltage_);
+  swap(maximum_speed_, other->maximum_speed_);
+  swap(core_count_, other->core_count_);
+  swap(core_enabled_, other->core_enabled_);
+  swap(thread_count_, other->thread_count_);
+  swap(characteristics_, other->characteristics_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string DmiProcessors_Item::GetTypeName() const {
+  return "aspia.system_info.DmiProcessors.Item";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// DmiProcessors_Item
+
+// string manufacturer = 1;
+void DmiProcessors_Item::clear_manufacturer() {
+  manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiProcessors_Item::manufacturer() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.manufacturer)
+  return manufacturer_.GetNoArena();
+}
+void DmiProcessors_Item::set_manufacturer(const ::std::string& value) {
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.manufacturer)
+}
+#if LANG_CXX11
+void DmiProcessors_Item::set_manufacturer(::std::string&& value) {
+  
+  manufacturer_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiProcessors.Item.manufacturer)
+}
+#endif
+void DmiProcessors_Item::set_manufacturer(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiProcessors.Item.manufacturer)
+}
+void DmiProcessors_Item::set_manufacturer(const char* value, size_t size) {
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiProcessors.Item.manufacturer)
+}
+::std::string* DmiProcessors_Item::mutable_manufacturer() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiProcessors.Item.manufacturer)
+  return manufacturer_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiProcessors_Item::release_manufacturer() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiProcessors.Item.manufacturer)
+  
+  return manufacturer_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiProcessors_Item::set_allocated_manufacturer(::std::string* manufacturer) {
+  if (manufacturer != NULL) {
+    
+  } else {
+    
+  }
+  manufacturer_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), manufacturer);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiProcessors.Item.manufacturer)
+}
+
+// string version = 2;
+void DmiProcessors_Item::clear_version() {
+  version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiProcessors_Item::version() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.version)
+  return version_.GetNoArena();
+}
+void DmiProcessors_Item::set_version(const ::std::string& value) {
+  
+  version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.version)
+}
+#if LANG_CXX11
+void DmiProcessors_Item::set_version(::std::string&& value) {
+  
+  version_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiProcessors.Item.version)
+}
+#endif
+void DmiProcessors_Item::set_version(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiProcessors.Item.version)
+}
+void DmiProcessors_Item::set_version(const char* value, size_t size) {
+  
+  version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiProcessors.Item.version)
+}
+::std::string* DmiProcessors_Item::mutable_version() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiProcessors.Item.version)
+  return version_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiProcessors_Item::release_version() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiProcessors.Item.version)
+  
+  return version_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiProcessors_Item::set_allocated_version(::std::string* version) {
+  if (version != NULL) {
+    
+  } else {
+    
+  }
+  version_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), version);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiProcessors.Item.version)
+}
+
+// string family = 3;
+void DmiProcessors_Item::clear_family() {
+  family_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiProcessors_Item::family() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.family)
+  return family_.GetNoArena();
+}
+void DmiProcessors_Item::set_family(const ::std::string& value) {
+  
+  family_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.family)
+}
+#if LANG_CXX11
+void DmiProcessors_Item::set_family(::std::string&& value) {
+  
+  family_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiProcessors.Item.family)
+}
+#endif
+void DmiProcessors_Item::set_family(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  family_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiProcessors.Item.family)
+}
+void DmiProcessors_Item::set_family(const char* value, size_t size) {
+  
+  family_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiProcessors.Item.family)
+}
+::std::string* DmiProcessors_Item::mutable_family() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiProcessors.Item.family)
+  return family_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiProcessors_Item::release_family() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiProcessors.Item.family)
+  
+  return family_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiProcessors_Item::set_allocated_family(::std::string* family) {
+  if (family != NULL) {
+    
+  } else {
+    
+  }
+  family_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), family);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiProcessors.Item.family)
+}
+
+// .aspia.system_info.DmiProcessors.Item.Type type = 4;
+void DmiProcessors_Item::clear_type() {
+  type_ = 0;
+}
+::aspia::system_info::DmiProcessors_Item_Type DmiProcessors_Item::type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.type)
+  return static_cast< ::aspia::system_info::DmiProcessors_Item_Type >(type_);
+}
+void DmiProcessors_Item::set_type(::aspia::system_info::DmiProcessors_Item_Type value) {
+  
+  type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.type)
+}
+
+// .aspia.system_info.DmiProcessors.Item.Status status = 5;
+void DmiProcessors_Item::clear_status() {
+  status_ = 0;
+}
+::aspia::system_info::DmiProcessors_Item_Status DmiProcessors_Item::status() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.status)
+  return static_cast< ::aspia::system_info::DmiProcessors_Item_Status >(status_);
+}
+void DmiProcessors_Item::set_status(::aspia::system_info::DmiProcessors_Item_Status value) {
+  
+  status_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.status)
+}
+
+// string socket = 6;
+void DmiProcessors_Item::clear_socket() {
+  socket_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiProcessors_Item::socket() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.socket)
+  return socket_.GetNoArena();
+}
+void DmiProcessors_Item::set_socket(const ::std::string& value) {
+  
+  socket_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.socket)
+}
+#if LANG_CXX11
+void DmiProcessors_Item::set_socket(::std::string&& value) {
+  
+  socket_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiProcessors.Item.socket)
+}
+#endif
+void DmiProcessors_Item::set_socket(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  socket_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiProcessors.Item.socket)
+}
+void DmiProcessors_Item::set_socket(const char* value, size_t size) {
+  
+  socket_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiProcessors.Item.socket)
+}
+::std::string* DmiProcessors_Item::mutable_socket() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiProcessors.Item.socket)
+  return socket_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiProcessors_Item::release_socket() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiProcessors.Item.socket)
+  
+  return socket_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiProcessors_Item::set_allocated_socket(::std::string* socket) {
+  if (socket != NULL) {
+    
+  } else {
+    
+  }
+  socket_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), socket);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiProcessors.Item.socket)
+}
+
+// string upgrade = 7;
+void DmiProcessors_Item::clear_upgrade() {
+  upgrade_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiProcessors_Item::upgrade() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.upgrade)
+  return upgrade_.GetNoArena();
+}
+void DmiProcessors_Item::set_upgrade(const ::std::string& value) {
+  
+  upgrade_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.upgrade)
+}
+#if LANG_CXX11
+void DmiProcessors_Item::set_upgrade(::std::string&& value) {
+  
+  upgrade_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiProcessors.Item.upgrade)
+}
+#endif
+void DmiProcessors_Item::set_upgrade(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  upgrade_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiProcessors.Item.upgrade)
+}
+void DmiProcessors_Item::set_upgrade(const char* value, size_t size) {
+  
+  upgrade_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiProcessors.Item.upgrade)
+}
+::std::string* DmiProcessors_Item::mutable_upgrade() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiProcessors.Item.upgrade)
+  return upgrade_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiProcessors_Item::release_upgrade() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiProcessors.Item.upgrade)
+  
+  return upgrade_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiProcessors_Item::set_allocated_upgrade(::std::string* upgrade) {
+  if (upgrade != NULL) {
+    
+  } else {
+    
+  }
+  upgrade_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), upgrade);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiProcessors.Item.upgrade)
+}
+
+// int32 external_clock = 8;
+void DmiProcessors_Item::clear_external_clock() {
+  external_clock_ = 0;
+}
+::google::protobuf::int32 DmiProcessors_Item::external_clock() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.external_clock)
+  return external_clock_;
+}
+void DmiProcessors_Item::set_external_clock(::google::protobuf::int32 value) {
+  
+  external_clock_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.external_clock)
+}
+
+// int32 current_speed = 9;
+void DmiProcessors_Item::clear_current_speed() {
+  current_speed_ = 0;
+}
+::google::protobuf::int32 DmiProcessors_Item::current_speed() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.current_speed)
+  return current_speed_;
+}
+void DmiProcessors_Item::set_current_speed(::google::protobuf::int32 value) {
+  
+  current_speed_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.current_speed)
+}
+
+// int32 maximum_speed = 10;
+void DmiProcessors_Item::clear_maximum_speed() {
+  maximum_speed_ = 0;
+}
+::google::protobuf::int32 DmiProcessors_Item::maximum_speed() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.maximum_speed)
+  return maximum_speed_;
+}
+void DmiProcessors_Item::set_maximum_speed(::google::protobuf::int32 value) {
+  
+  maximum_speed_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.maximum_speed)
+}
+
+// double voltage = 11;
+void DmiProcessors_Item::clear_voltage() {
+  voltage_ = 0;
+}
+double DmiProcessors_Item::voltage() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.voltage)
+  return voltage_;
+}
+void DmiProcessors_Item::set_voltage(double value) {
+  
+  voltage_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.voltage)
+}
+
+// string serial_number = 12;
+void DmiProcessors_Item::clear_serial_number() {
+  serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiProcessors_Item::serial_number() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.serial_number)
+  return serial_number_.GetNoArena();
+}
+void DmiProcessors_Item::set_serial_number(const ::std::string& value) {
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.serial_number)
+}
+#if LANG_CXX11
+void DmiProcessors_Item::set_serial_number(::std::string&& value) {
+  
+  serial_number_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiProcessors.Item.serial_number)
+}
+#endif
+void DmiProcessors_Item::set_serial_number(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiProcessors.Item.serial_number)
+}
+void DmiProcessors_Item::set_serial_number(const char* value, size_t size) {
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiProcessors.Item.serial_number)
+}
+::std::string* DmiProcessors_Item::mutable_serial_number() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiProcessors.Item.serial_number)
+  return serial_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiProcessors_Item::release_serial_number() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiProcessors.Item.serial_number)
+  
+  return serial_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiProcessors_Item::set_allocated_serial_number(::std::string* serial_number) {
+  if (serial_number != NULL) {
+    
+  } else {
+    
+  }
+  serial_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), serial_number);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiProcessors.Item.serial_number)
+}
+
+// string asset_tag = 13;
+void DmiProcessors_Item::clear_asset_tag() {
+  asset_tag_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiProcessors_Item::asset_tag() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.asset_tag)
+  return asset_tag_.GetNoArena();
+}
+void DmiProcessors_Item::set_asset_tag(const ::std::string& value) {
+  
+  asset_tag_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.asset_tag)
+}
+#if LANG_CXX11
+void DmiProcessors_Item::set_asset_tag(::std::string&& value) {
+  
+  asset_tag_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiProcessors.Item.asset_tag)
+}
+#endif
+void DmiProcessors_Item::set_asset_tag(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  asset_tag_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiProcessors.Item.asset_tag)
+}
+void DmiProcessors_Item::set_asset_tag(const char* value, size_t size) {
+  
+  asset_tag_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiProcessors.Item.asset_tag)
+}
+::std::string* DmiProcessors_Item::mutable_asset_tag() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiProcessors.Item.asset_tag)
+  return asset_tag_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiProcessors_Item::release_asset_tag() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiProcessors.Item.asset_tag)
+  
+  return asset_tag_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiProcessors_Item::set_allocated_asset_tag(::std::string* asset_tag) {
+  if (asset_tag != NULL) {
+    
+  } else {
+    
+  }
+  asset_tag_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), asset_tag);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiProcessors.Item.asset_tag)
+}
+
+// string part_number = 14;
+void DmiProcessors_Item::clear_part_number() {
+  part_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiProcessors_Item::part_number() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.part_number)
+  return part_number_.GetNoArena();
+}
+void DmiProcessors_Item::set_part_number(const ::std::string& value) {
+  
+  part_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.part_number)
+}
+#if LANG_CXX11
+void DmiProcessors_Item::set_part_number(::std::string&& value) {
+  
+  part_number_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiProcessors.Item.part_number)
+}
+#endif
+void DmiProcessors_Item::set_part_number(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  part_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiProcessors.Item.part_number)
+}
+void DmiProcessors_Item::set_part_number(const char* value, size_t size) {
+  
+  part_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiProcessors.Item.part_number)
+}
+::std::string* DmiProcessors_Item::mutable_part_number() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiProcessors.Item.part_number)
+  return part_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiProcessors_Item::release_part_number() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiProcessors.Item.part_number)
+  
+  return part_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiProcessors_Item::set_allocated_part_number(::std::string* part_number) {
+  if (part_number != NULL) {
+    
+  } else {
+    
+  }
+  part_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), part_number);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiProcessors.Item.part_number)
+}
+
+// int32 core_count = 15;
+void DmiProcessors_Item::clear_core_count() {
+  core_count_ = 0;
+}
+::google::protobuf::int32 DmiProcessors_Item::core_count() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.core_count)
+  return core_count_;
+}
+void DmiProcessors_Item::set_core_count(::google::protobuf::int32 value) {
+  
+  core_count_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.core_count)
+}
+
+// int32 core_enabled = 16;
+void DmiProcessors_Item::clear_core_enabled() {
+  core_enabled_ = 0;
+}
+::google::protobuf::int32 DmiProcessors_Item::core_enabled() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.core_enabled)
+  return core_enabled_;
+}
+void DmiProcessors_Item::set_core_enabled(::google::protobuf::int32 value) {
+  
+  core_enabled_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.core_enabled)
+}
+
+// int32 thread_count = 17;
+void DmiProcessors_Item::clear_thread_count() {
+  thread_count_ = 0;
+}
+::google::protobuf::int32 DmiProcessors_Item::thread_count() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.thread_count)
+  return thread_count_;
+}
+void DmiProcessors_Item::set_thread_count(::google::protobuf::int32 value) {
+  
+  thread_count_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.thread_count)
+}
+
+// uint32 characteristics = 18;
+void DmiProcessors_Item::clear_characteristics() {
+  characteristics_ = 0u;
+}
+::google::protobuf::uint32 DmiProcessors_Item::characteristics() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.Item.characteristics)
+  return characteristics_;
+}
+void DmiProcessors_Item::set_characteristics(::google::protobuf::uint32 value) {
+  
+  characteristics_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiProcessors.Item.characteristics)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DmiProcessors::kItemFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DmiProcessors::DmiProcessors()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.DmiProcessors)
+}
+DmiProcessors::DmiProcessors(const DmiProcessors& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      item_(from.item_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiProcessors)
+}
+
+void DmiProcessors::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+DmiProcessors::~DmiProcessors() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.DmiProcessors)
+  SharedDtor();
+}
+
+void DmiProcessors::SharedDtor() {
+}
+
+void DmiProcessors::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DmiProcessors& DmiProcessors::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+DmiProcessors* DmiProcessors::New(::google::protobuf::Arena* arena) const {
+  DmiProcessors* n = new DmiProcessors;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DmiProcessors::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiProcessors)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  item_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool DmiProcessors::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiProcessors)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .aspia.system_info.DmiProcessors.Item item = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_item()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiProcessors)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiProcessors)
+  return false;
+#undef DO_
+}
+
+void DmiProcessors::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiProcessors)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .aspia.system_info.DmiProcessors.Item item = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1, this->item(static_cast<int>(i)), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiProcessors)
+}
+
+size_t DmiProcessors::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiProcessors)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.system_info.DmiProcessors.Item item = 1;
+  {
+    unsigned int count = static_cast<unsigned int>(this->item_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->item(static_cast<int>(i)));
+    }
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DmiProcessors::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const DmiProcessors*>(&from));
+}
+
+void DmiProcessors::MergeFrom(const DmiProcessors& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiProcessors)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  item_.MergeFrom(from.item_);
+}
+
+void DmiProcessors::CopyFrom(const DmiProcessors& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiProcessors)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DmiProcessors::IsInitialized() const {
+  return true;
+}
+
+void DmiProcessors::Swap(DmiProcessors* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void DmiProcessors::InternalSwap(DmiProcessors* other) {
+  using std::swap;
+  item_.InternalSwap(&other->item_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string DmiProcessors::GetTypeName() const {
+  return "aspia.system_info.DmiProcessors";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// DmiProcessors
+
+// repeated .aspia.system_info.DmiProcessors.Item item = 1;
+int DmiProcessors::item_size() const {
+  return item_.size();
+}
+void DmiProcessors::clear_item() {
+  item_.Clear();
+}
+const ::aspia::system_info::DmiProcessors_Item& DmiProcessors::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiProcessors.item)
+  return item_.Get(index);
+}
+::aspia::system_info::DmiProcessors_Item* DmiProcessors::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiProcessors.item)
+  return item_.Mutable(index);
+}
+::aspia::system_info::DmiProcessors_Item* DmiProcessors::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.DmiProcessors.item)
+  return item_.Add();
+}
+::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiProcessors_Item >*
+DmiProcessors::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.DmiProcessors.item)
+  return &item_;
+}
+const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiProcessors_Item >&
+DmiProcessors::item() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.DmiProcessors.item)
   return item_;
 }
 
