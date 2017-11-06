@@ -453,6 +453,25 @@ public:
         TableReader reader_;
     };
 
+    class OnBoardDeviceTable
+    {
+    public:
+        enum : uint8_t { TABLE_TYPE = 0x0A };
+
+        int GetDeviceCount() const;
+        std::string GetDescription(int index) const;
+        std::string GetType(int index) const;
+        bool IsEnabled(int index) const;
+
+    private:
+        friend class TableEnumerator<OnBoardDeviceTable>;
+        OnBoardDeviceTable(const TableReader& reader);
+
+        const int count_;
+        const uint8_t* ptr_;
+        TableReader reader_;
+    };
+
     class MemoryDeviceTable
     {
     public:

@@ -378,6 +378,18 @@ message DmiPortConnectors
     repeated Item item = 1;
 }
 
+message DmiOnBoardDevices
+{
+    message Item
+    {
+        string description = 1;
+        string type        = 2;
+        bool enabled       = 3;
+    }
+
+    repeated Item item = 1;
+}
+
 message Monitors
 {
     message Item

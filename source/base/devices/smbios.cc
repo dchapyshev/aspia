@@ -196,7 +196,7 @@ std::string SMBios::TableReader::GetString(uint8_t offset) const
         return std::string();
 
     char* string = reinterpret_cast<char*>(
-        const_cast<uint8_t*>(table_)) + table_[1];
+        const_cast<uint8_t*>(GetPointer(0))) + GetTableLength();
 
     while (handle > 1 && *string)
     {
@@ -1635,6 +1635,78 @@ SMBios::SystemSlotTable::Length SMBios::SystemSlotTable::GetLength() const
         return Length::UNKNOWN;
 
     return static_cast<Length>(reader_.GetByte(0x08));
+}
+
+//
+// OnBoardDeviceTable
+//
+
+SMBios::OnBoardDeviceTable::OnBoardDeviceTable(const TableReader& reader)
+    : count_((reader.GetTableLength() - 4) / 2),
+      ptr_(reader.GetPointer(0) + 4),
+      reader_(reader)
+{
+    // Nothing
+}
+
+int SMBios::OnBoardDeviceTable::GetDeviceCount() const
+{
+    return count_;
+}
+
+std::string SMBios::OnBoardDeviceTable::GetDescription(int index) const
+{
+    DCHECK(index < count_);
+
+    uint8_t handle = ptr_[2 * index + 1];
+    if (!handle)
+        return std::string();
+
+    char* string = reinterpret_cast<char*>(const_cast<uint8_t*>(
+        reader_.GetPointer(0))) + reader_.GetTableLength();
+
+    while (handle > 1 && *string)
+    {
+        string += strlen(string);
+        ++string;
+        --handle;
+    }
+
+    if (!*string || !string[0])
+        return std::string();
+
+    return string;
+}
+
+std::string SMBios::OnBoardDeviceTable::GetType(int index) const
+{
+    DCHECK(index < count_);
+    const uint8_t type = ptr_[2 * index] & 0x7F;
+
+    static const char* names[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Video",
+        "SCSI Controller",
+        "Ethernet",
+        "Token Ring",
+        "Sound",
+        "PATA Controller",
+        "SATA Controller",
+        "SAS Controller" // 0x0A
+    };
+
+    if (type >= 0x01 && type <= 0x0A)
+        return names[type - 0x01];
+
+    return std::string();
+}
+
+bool SMBios::OnBoardDeviceTable::IsEnabled(int index) const
+{
+    DCHECK(index < count_);
+    return !!(ptr_[2 * index] & 0x80);
 }
 
 //

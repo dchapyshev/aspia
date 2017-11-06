@@ -2119,15 +2119,60 @@ const char* CategoryDmiOnboardDevices::Guid() const
 
 void CategoryDmiOnboardDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::DmiOnBoardDevices message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::DmiOnBoardDevices::Item& item = message.item(index);
+
+        Output::Group group(output, StringPrintf("OnBoard Device #%d", index + 1), Icon());
+
+        if (!item.description().empty())
+            output->AddParam(IDI_MOTHERBOARD, "Description", item.description());
+
+        if (!item.type().empty())
+            output->AddParam(IDI_MOTHERBOARD, "Type", item.type());
+
+        output->AddParam(IDI_MOTHERBOARD, "Status", item.enabled() ? "Enabled" : "Disabled");
+    }
 }
 
 std::string CategoryDmiOnboardDevices::Serialize()
 {
-    // TODO
-    return std::string();
+    std::unique_ptr<SMBios> smbios = ReadSMBios();
+    if (!smbios)
+        return std::string();
+
+    system_info::DmiOnBoardDevices message;
+
+    for (SMBios::TableEnumerator<SMBios::OnBoardDeviceTable> table_enumerator(*smbios);
+         !table_enumerator.IsAtEnd();
+         table_enumerator.Advance())
+    {
+        SMBios::OnBoardDeviceTable table = table_enumerator.GetTable();
+
+        for (int index = 0; index < table.GetDeviceCount(); ++index)
+        {
+            system_info::DmiOnBoardDevices::Item* item = message.add_item();
+
+            item->set_description(table.GetDescription(index));
+            item->set_type(table.GetType(index));
+            item->set_enabled(table.IsEnabled(index));
+        }
+    }
+
+    return message.SerializeAsString();
 }
 
 //
