@@ -1351,6 +1351,168 @@ SMBios::CacheTable::Associativity SMBios::CacheTable::GetAssociativity() const
 }
 
 //
+// PortConnectorTable
+//
+
+SMBios::PortConnectorTable::PortConnectorTable(const TableReader& reader)
+    : reader_(reader)
+{
+    // Nothing
+}
+
+std::string SMBios::PortConnectorTable::GetInternalDesignation() const
+{
+    if (reader_.GetTableLength() < 0x09)
+        return std::string();
+
+    return reader_.GetString(0x04);
+}
+
+std::string SMBios::PortConnectorTable::GetExternalDesignation() const
+{
+    if (reader_.GetTableLength() < 0x09)
+        return std::string();
+
+    return reader_.GetString(0x06);
+}
+
+std::string SMBios::PortConnectorTable::GetType() const
+{
+    if (reader_.GetTableLength() < 0x09)
+        return std::string();
+
+    struct PortType
+    {
+        uint16_t type;
+        const char* name;
+    } const list[] =
+    {
+        { 0x01, "Parallel Port XT/AT Compatible" },
+        { 0x02, "Parallel Port PS/2" },
+        { 0x03, "Parallel Port ECP" },
+        { 0x04, "Parallel Port EPP" },
+        { 0x05, "Parallel Port ECP/EPP" },
+        { 0x06, "Serial Port XT/AT Compatible" },
+        { 0x07, "Serial Port 16450 Compatible" },
+        { 0x08, "Serial Port 16550 Compatible" },
+        { 0x09, "Serial Port 16550A Compatible" },
+        { 0x0A, "SCSI Port" },
+        { 0x0B, "MIDI Port" },
+        { 0x0C, "Joy Stick Port" },
+        { 0x0D, "Keyboard Port" },
+        { 0x0E, "Mouse Port" },
+        { 0x0F, "SSA SCSI" },
+        { 0x10, "USB" },
+        { 0x11, "FireWire (IEEE P1394)" },
+        { 0x12, "PCMCIA Type I" },
+        { 0x13, "PCMCIA Type II" },
+        { 0x14, "PCMCIA Type III" },
+        { 0x15, "Cardbus" },
+        { 0x16, "Access Bus Port" },
+        { 0x17, "SCSI II" },
+        { 0x18, "SCSI Wide" },
+        { 0x19, "PC-98" },
+        { 0x1A, "PC-98-Hireso" },
+        { 0x1B, "PC-H98" },
+        { 0x1C, "Video Port" },
+        { 0x1D, "Audio Port" },
+        { 0x1E, "Modem Port" },
+        { 0x1F, "Network Port" },
+        { 0x20, "SATA" },
+        { 0x21, "SAS" },
+        { 0xA0, "8251 Compatible" },
+        { 0xA1, "8251 FIFO Compatible" },
+        { 0x0FF, "Other" }
+    };
+
+    const uint8_t type = reader_.GetByte(0x08);
+
+    for (size_t i = 0; i < _countof(list); ++i)
+    {
+        if (list[i].type == type)
+            return list[i].name;
+    }
+
+    return std::string();
+}
+
+// static
+std::string SMBios::PortConnectorTable::ConnectorTypeToString(uint8_t type)
+{
+    struct PortConnectors
+    {
+        uint8_t type;
+        const char* name;
+    } const list[] =
+    {
+        { 0x01, "Centronics" },
+        { 0x02, "Mini Centronics" },
+        { 0x03, "Proprietary" },
+        { 0x04, "DB-25 pin male" },
+        { 0x05, "DB-25 pin female" },
+        { 0x06, "DB-15 pin male" },
+        { 0x07, "DB-15 pin female" },
+        { 0x08, "DB-9 pin male" },
+        { 0x09, "DB-9 pin female" },
+        { 0x0A, "RJ-11" },
+        { 0x0B, "RJ-45" },
+        { 0x0C, "50-pin MiniSCSI" },
+        { 0x0D, "Mini-DIN" },
+        { 0x0E, "Micro-DIN" },
+        { 0x0F, "PS/2" },
+        { 0x10, "Infrared" },
+        { 0x11, "HP-HIL" },
+        { 0x12, "Access Bus (USB)" },
+        { 0x13, "SSA SCSI" },
+        { 0x14, "Circular DIN-8 male" },
+        { 0x15, "Circular DIN-8 female" },
+        { 0x16, "On Board IDE" },
+        { 0x17, "On Board Floppy" },
+        { 0x18, "9-pin Dual Inline (pin 10 cut)" },
+        { 0x19, "25-pin Dual Inline (pin 26 cut)" },
+        { 0x1A, "50-pin Dual Inline" },
+        { 0x1B, "68-pin Dual Inline" },
+        { 0x1C, "On Board Sound Input from CD-ROM" },
+        { 0x1D, "Mini-Centronics Type-14" },
+        { 0x1E, "Mini-Centronics Type-26" },
+        { 0x1F, "Mini-jack (headphones)" },
+        { 0x20, "BNC" },
+        { 0x21, "1394" },
+        { 0x22, "SAS/SATA Plug Receptacle" },
+        { 0xA0, "PC-98" },
+        { 0xA1, "PC-98Hireso" },
+        { 0xA2, "PC-H98" },
+        { 0xA3, "PC-98Note" },
+        { 0xA4, "PC-98Full" },
+        { 0xFF, "Other" }
+    };
+
+    for (size_t i = 0; i < _countof(list); ++i)
+    {
+        if (list[i].type == type)
+            return list[i].name;
+    }
+
+    return std::string();
+}
+
+std::string SMBios::PortConnectorTable::GetInternalConnectorType() const
+{
+    if (reader_.GetTableLength() < 0x09)
+        return std::string();
+
+    return ConnectorTypeToString(reader_.GetByte(0x05));
+}
+
+std::string SMBios::PortConnectorTable::GetExternalConnectorType() const
+{
+    if (reader_.GetTableLength() < 0x09)
+        return std::string();
+
+    return ConnectorTypeToString(reader_.GetByte(0x07));
+}
+
+//
 // SystemSlotTable
 //
 

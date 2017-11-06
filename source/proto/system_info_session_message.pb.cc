@@ -96,6 +96,16 @@ public:
  ::google::protobuf::internal::ExplicitlyConstructed<DmiSystemSlots>
      _instance;
 } _DmiSystemSlots_default_instance_;
+class DmiPortConnectors_ItemDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<DmiPortConnectors_Item>
+     _instance;
+} _DmiPortConnectors_Item_default_instance_;
+class DmiPortConnectorsDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<DmiPortConnectors>
+     _instance;
+} _DmiPortConnectors_default_instance_;
 class Monitors_Item_TimingDefaultTypeInternal {
 public:
  ::google::protobuf::internal::ExplicitlyConstructed<Monitors_Item_Timing>
@@ -258,6 +268,8 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
 };
 
 void TableStruct::InitDefaultsImpl() {
@@ -296,7 +308,11 @@ void TableStruct::InitDefaultsImpl() {
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_DmiSystemSlots_Item_default_instance_);_DmiSystemSlots_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
-      &_DmiSystemSlots_default_instance_);_Monitors_Item_Timing_default_instance_._instance.DefaultConstruct();
+      &_DmiSystemSlots_default_instance_);_DmiPortConnectors_Item_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_DmiPortConnectors_Item_default_instance_);_DmiPortConnectors_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_DmiPortConnectors_default_instance_);_Monitors_Item_Timing_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_Monitors_Item_Timing_default_instance_);_Monitors_Item_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
@@ -10425,6 +10441,894 @@ DmiSystemSlots::mutable_item() {
 const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiSystemSlots_Item >&
 DmiSystemSlots::item() const {
   // @@protoc_insertion_point(field_list:aspia.system_info.DmiSystemSlots.item)
+  return item_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DmiPortConnectors_Item::kInternalDesignationFieldNumber;
+const int DmiPortConnectors_Item::kExternalDesignationFieldNumber;
+const int DmiPortConnectors_Item::kTypeFieldNumber;
+const int DmiPortConnectors_Item::kInternalConnectorTypeFieldNumber;
+const int DmiPortConnectors_Item::kExternalConnectorTypeFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DmiPortConnectors_Item::DmiPortConnectors_Item()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.DmiPortConnectors.Item)
+}
+DmiPortConnectors_Item::DmiPortConnectors_Item(const DmiPortConnectors_Item& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  internal_designation_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.internal_designation().size() > 0) {
+    internal_designation_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.internal_designation_);
+  }
+  external_designation_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.external_designation().size() > 0) {
+    external_designation_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.external_designation_);
+  }
+  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.type().size() > 0) {
+    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
+  }
+  internal_connector_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.internal_connector_type().size() > 0) {
+    internal_connector_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.internal_connector_type_);
+  }
+  external_connector_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.external_connector_type().size() > 0) {
+    external_connector_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.external_connector_type_);
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiPortConnectors.Item)
+}
+
+void DmiPortConnectors_Item::SharedCtor() {
+  internal_designation_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  external_designation_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  internal_connector_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  external_connector_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _cached_size_ = 0;
+}
+
+DmiPortConnectors_Item::~DmiPortConnectors_Item() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.DmiPortConnectors.Item)
+  SharedDtor();
+}
+
+void DmiPortConnectors_Item::SharedDtor() {
+  internal_designation_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  external_designation_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  internal_connector_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  external_connector_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void DmiPortConnectors_Item::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DmiPortConnectors_Item& DmiPortConnectors_Item::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+DmiPortConnectors_Item* DmiPortConnectors_Item::New(::google::protobuf::Arena* arena) const {
+  DmiPortConnectors_Item* n = new DmiPortConnectors_Item;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DmiPortConnectors_Item::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiPortConnectors.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  internal_designation_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  external_designation_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  internal_connector_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  external_connector_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _internal_metadata_.Clear();
+}
+
+bool DmiPortConnectors_Item::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiPortConnectors.Item)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string internal_designation = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_internal_designation()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->internal_designation().data(), static_cast<int>(this->internal_designation().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiPortConnectors.Item.internal_designation"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string external_designation = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_external_designation()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->external_designation().data(), static_cast<int>(this->external_designation().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiPortConnectors.Item.external_designation"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string type = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->type().data(), static_cast<int>(this->type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiPortConnectors.Item.type"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string internal_connector_type = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_internal_connector_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->internal_connector_type().data(), static_cast<int>(this->internal_connector_type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiPortConnectors.Item.internal_connector_type"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string external_connector_type = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_external_connector_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->external_connector_type().data(), static_cast<int>(this->external_connector_type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiPortConnectors.Item.external_connector_type"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiPortConnectors.Item)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiPortConnectors.Item)
+  return false;
+#undef DO_
+}
+
+void DmiPortConnectors_Item::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiPortConnectors.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string internal_designation = 1;
+  if (this->internal_designation().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->internal_designation().data(), static_cast<int>(this->internal_designation().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiPortConnectors.Item.internal_designation");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->internal_designation(), output);
+  }
+
+  // string external_designation = 2;
+  if (this->external_designation().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->external_designation().data(), static_cast<int>(this->external_designation().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiPortConnectors.Item.external_designation");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->external_designation(), output);
+  }
+
+  // string type = 3;
+  if (this->type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->type().data(), static_cast<int>(this->type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiPortConnectors.Item.type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->type(), output);
+  }
+
+  // string internal_connector_type = 4;
+  if (this->internal_connector_type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->internal_connector_type().data(), static_cast<int>(this->internal_connector_type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiPortConnectors.Item.internal_connector_type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      4, this->internal_connector_type(), output);
+  }
+
+  // string external_connector_type = 5;
+  if (this->external_connector_type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->external_connector_type().data(), static_cast<int>(this->external_connector_type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiPortConnectors.Item.external_connector_type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      5, this->external_connector_type(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiPortConnectors.Item)
+}
+
+size_t DmiPortConnectors_Item::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiPortConnectors.Item)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string internal_designation = 1;
+  if (this->internal_designation().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->internal_designation());
+  }
+
+  // string external_designation = 2;
+  if (this->external_designation().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->external_designation());
+  }
+
+  // string type = 3;
+  if (this->type().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->type());
+  }
+
+  // string internal_connector_type = 4;
+  if (this->internal_connector_type().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->internal_connector_type());
+  }
+
+  // string external_connector_type = 5;
+  if (this->external_connector_type().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->external_connector_type());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DmiPortConnectors_Item::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const DmiPortConnectors_Item*>(&from));
+}
+
+void DmiPortConnectors_Item::MergeFrom(const DmiPortConnectors_Item& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiPortConnectors.Item)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.internal_designation().size() > 0) {
+
+    internal_designation_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.internal_designation_);
+  }
+  if (from.external_designation().size() > 0) {
+
+    external_designation_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.external_designation_);
+  }
+  if (from.type().size() > 0) {
+
+    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
+  }
+  if (from.internal_connector_type().size() > 0) {
+
+    internal_connector_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.internal_connector_type_);
+  }
+  if (from.external_connector_type().size() > 0) {
+
+    external_connector_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.external_connector_type_);
+  }
+}
+
+void DmiPortConnectors_Item::CopyFrom(const DmiPortConnectors_Item& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiPortConnectors.Item)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DmiPortConnectors_Item::IsInitialized() const {
+  return true;
+}
+
+void DmiPortConnectors_Item::Swap(DmiPortConnectors_Item* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void DmiPortConnectors_Item::InternalSwap(DmiPortConnectors_Item* other) {
+  using std::swap;
+  internal_designation_.Swap(&other->internal_designation_);
+  external_designation_.Swap(&other->external_designation_);
+  type_.Swap(&other->type_);
+  internal_connector_type_.Swap(&other->internal_connector_type_);
+  external_connector_type_.Swap(&other->external_connector_type_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string DmiPortConnectors_Item::GetTypeName() const {
+  return "aspia.system_info.DmiPortConnectors.Item";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// DmiPortConnectors_Item
+
+// string internal_designation = 1;
+void DmiPortConnectors_Item::clear_internal_designation() {
+  internal_designation_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiPortConnectors_Item::internal_designation() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortConnectors.Item.internal_designation)
+  return internal_designation_.GetNoArena();
+}
+void DmiPortConnectors_Item::set_internal_designation(const ::std::string& value) {
+  
+  internal_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortConnectors.Item.internal_designation)
+}
+#if LANG_CXX11
+void DmiPortConnectors_Item::set_internal_designation(::std::string&& value) {
+  
+  internal_designation_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiPortConnectors.Item.internal_designation)
+}
+#endif
+void DmiPortConnectors_Item::set_internal_designation(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  internal_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiPortConnectors.Item.internal_designation)
+}
+void DmiPortConnectors_Item::set_internal_designation(const char* value, size_t size) {
+  
+  internal_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiPortConnectors.Item.internal_designation)
+}
+::std::string* DmiPortConnectors_Item::mutable_internal_designation() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortConnectors.Item.internal_designation)
+  return internal_designation_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiPortConnectors_Item::release_internal_designation() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiPortConnectors.Item.internal_designation)
+  
+  return internal_designation_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiPortConnectors_Item::set_allocated_internal_designation(::std::string* internal_designation) {
+  if (internal_designation != NULL) {
+    
+  } else {
+    
+  }
+  internal_designation_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), internal_designation);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiPortConnectors.Item.internal_designation)
+}
+
+// string external_designation = 2;
+void DmiPortConnectors_Item::clear_external_designation() {
+  external_designation_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiPortConnectors_Item::external_designation() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortConnectors.Item.external_designation)
+  return external_designation_.GetNoArena();
+}
+void DmiPortConnectors_Item::set_external_designation(const ::std::string& value) {
+  
+  external_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortConnectors.Item.external_designation)
+}
+#if LANG_CXX11
+void DmiPortConnectors_Item::set_external_designation(::std::string&& value) {
+  
+  external_designation_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiPortConnectors.Item.external_designation)
+}
+#endif
+void DmiPortConnectors_Item::set_external_designation(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  external_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiPortConnectors.Item.external_designation)
+}
+void DmiPortConnectors_Item::set_external_designation(const char* value, size_t size) {
+  
+  external_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiPortConnectors.Item.external_designation)
+}
+::std::string* DmiPortConnectors_Item::mutable_external_designation() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortConnectors.Item.external_designation)
+  return external_designation_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiPortConnectors_Item::release_external_designation() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiPortConnectors.Item.external_designation)
+  
+  return external_designation_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiPortConnectors_Item::set_allocated_external_designation(::std::string* external_designation) {
+  if (external_designation != NULL) {
+    
+  } else {
+    
+  }
+  external_designation_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), external_designation);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiPortConnectors.Item.external_designation)
+}
+
+// string type = 3;
+void DmiPortConnectors_Item::clear_type() {
+  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiPortConnectors_Item::type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortConnectors.Item.type)
+  return type_.GetNoArena();
+}
+void DmiPortConnectors_Item::set_type(const ::std::string& value) {
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortConnectors.Item.type)
+}
+#if LANG_CXX11
+void DmiPortConnectors_Item::set_type(::std::string&& value) {
+  
+  type_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiPortConnectors.Item.type)
+}
+#endif
+void DmiPortConnectors_Item::set_type(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiPortConnectors.Item.type)
+}
+void DmiPortConnectors_Item::set_type(const char* value, size_t size) {
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiPortConnectors.Item.type)
+}
+::std::string* DmiPortConnectors_Item::mutable_type() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortConnectors.Item.type)
+  return type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiPortConnectors_Item::release_type() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiPortConnectors.Item.type)
+  
+  return type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiPortConnectors_Item::set_allocated_type(::std::string* type) {
+  if (type != NULL) {
+    
+  } else {
+    
+  }
+  type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), type);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiPortConnectors.Item.type)
+}
+
+// string internal_connector_type = 4;
+void DmiPortConnectors_Item::clear_internal_connector_type() {
+  internal_connector_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiPortConnectors_Item::internal_connector_type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortConnectors.Item.internal_connector_type)
+  return internal_connector_type_.GetNoArena();
+}
+void DmiPortConnectors_Item::set_internal_connector_type(const ::std::string& value) {
+  
+  internal_connector_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortConnectors.Item.internal_connector_type)
+}
+#if LANG_CXX11
+void DmiPortConnectors_Item::set_internal_connector_type(::std::string&& value) {
+  
+  internal_connector_type_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiPortConnectors.Item.internal_connector_type)
+}
+#endif
+void DmiPortConnectors_Item::set_internal_connector_type(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  internal_connector_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiPortConnectors.Item.internal_connector_type)
+}
+void DmiPortConnectors_Item::set_internal_connector_type(const char* value, size_t size) {
+  
+  internal_connector_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiPortConnectors.Item.internal_connector_type)
+}
+::std::string* DmiPortConnectors_Item::mutable_internal_connector_type() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortConnectors.Item.internal_connector_type)
+  return internal_connector_type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiPortConnectors_Item::release_internal_connector_type() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiPortConnectors.Item.internal_connector_type)
+  
+  return internal_connector_type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiPortConnectors_Item::set_allocated_internal_connector_type(::std::string* internal_connector_type) {
+  if (internal_connector_type != NULL) {
+    
+  } else {
+    
+  }
+  internal_connector_type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), internal_connector_type);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiPortConnectors.Item.internal_connector_type)
+}
+
+// string external_connector_type = 5;
+void DmiPortConnectors_Item::clear_external_connector_type() {
+  external_connector_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiPortConnectors_Item::external_connector_type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortConnectors.Item.external_connector_type)
+  return external_connector_type_.GetNoArena();
+}
+void DmiPortConnectors_Item::set_external_connector_type(const ::std::string& value) {
+  
+  external_connector_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiPortConnectors.Item.external_connector_type)
+}
+#if LANG_CXX11
+void DmiPortConnectors_Item::set_external_connector_type(::std::string&& value) {
+  
+  external_connector_type_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiPortConnectors.Item.external_connector_type)
+}
+#endif
+void DmiPortConnectors_Item::set_external_connector_type(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  external_connector_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiPortConnectors.Item.external_connector_type)
+}
+void DmiPortConnectors_Item::set_external_connector_type(const char* value, size_t size) {
+  
+  external_connector_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiPortConnectors.Item.external_connector_type)
+}
+::std::string* DmiPortConnectors_Item::mutable_external_connector_type() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortConnectors.Item.external_connector_type)
+  return external_connector_type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiPortConnectors_Item::release_external_connector_type() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiPortConnectors.Item.external_connector_type)
+  
+  return external_connector_type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiPortConnectors_Item::set_allocated_external_connector_type(::std::string* external_connector_type) {
+  if (external_connector_type != NULL) {
+    
+  } else {
+    
+  }
+  external_connector_type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), external_connector_type);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiPortConnectors.Item.external_connector_type)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DmiPortConnectors::kItemFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DmiPortConnectors::DmiPortConnectors()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.DmiPortConnectors)
+}
+DmiPortConnectors::DmiPortConnectors(const DmiPortConnectors& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      item_(from.item_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiPortConnectors)
+}
+
+void DmiPortConnectors::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+DmiPortConnectors::~DmiPortConnectors() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.DmiPortConnectors)
+  SharedDtor();
+}
+
+void DmiPortConnectors::SharedDtor() {
+}
+
+void DmiPortConnectors::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DmiPortConnectors& DmiPortConnectors::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+DmiPortConnectors* DmiPortConnectors::New(::google::protobuf::Arena* arena) const {
+  DmiPortConnectors* n = new DmiPortConnectors;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DmiPortConnectors::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiPortConnectors)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  item_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool DmiPortConnectors::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiPortConnectors)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .aspia.system_info.DmiPortConnectors.Item item = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_item()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiPortConnectors)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiPortConnectors)
+  return false;
+#undef DO_
+}
+
+void DmiPortConnectors::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiPortConnectors)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .aspia.system_info.DmiPortConnectors.Item item = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1, this->item(static_cast<int>(i)), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiPortConnectors)
+}
+
+size_t DmiPortConnectors::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiPortConnectors)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.system_info.DmiPortConnectors.Item item = 1;
+  {
+    unsigned int count = static_cast<unsigned int>(this->item_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->item(static_cast<int>(i)));
+    }
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DmiPortConnectors::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const DmiPortConnectors*>(&from));
+}
+
+void DmiPortConnectors::MergeFrom(const DmiPortConnectors& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiPortConnectors)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  item_.MergeFrom(from.item_);
+}
+
+void DmiPortConnectors::CopyFrom(const DmiPortConnectors& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiPortConnectors)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DmiPortConnectors::IsInitialized() const {
+  return true;
+}
+
+void DmiPortConnectors::Swap(DmiPortConnectors* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void DmiPortConnectors::InternalSwap(DmiPortConnectors* other) {
+  using std::swap;
+  item_.InternalSwap(&other->item_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string DmiPortConnectors::GetTypeName() const {
+  return "aspia.system_info.DmiPortConnectors";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// DmiPortConnectors
+
+// repeated .aspia.system_info.DmiPortConnectors.Item item = 1;
+int DmiPortConnectors::item_size() const {
+  return item_.size();
+}
+void DmiPortConnectors::clear_item() {
+  item_.Clear();
+}
+const ::aspia::system_info::DmiPortConnectors_Item& DmiPortConnectors::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiPortConnectors.item)
+  return item_.Get(index);
+}
+::aspia::system_info::DmiPortConnectors_Item* DmiPortConnectors::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiPortConnectors.item)
+  return item_.Mutable(index);
+}
+::aspia::system_info::DmiPortConnectors_Item* DmiPortConnectors::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.DmiPortConnectors.item)
+  return item_.Add();
+}
+::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiPortConnectors_Item >*
+DmiPortConnectors::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.DmiPortConnectors.item)
+  return &item_;
+}
+const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiPortConnectors_Item >&
+DmiPortConnectors::item() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.DmiPortConnectors.item)
   return item_;
 }
 

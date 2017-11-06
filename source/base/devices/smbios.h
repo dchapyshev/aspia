@@ -399,6 +399,26 @@ public:
         TableReader reader_;
     };
 
+    class PortConnectorTable
+    {
+    public:
+        enum : uint8_t { TABLE_TYPE = 0x08 };
+
+        std::string GetInternalDesignation() const;
+        std::string GetExternalDesignation() const;
+        std::string GetType() const;
+        std::string GetInternalConnectorType() const;
+        std::string GetExternalConnectorType() const;
+
+    private:
+        friend class TableEnumerator<PortConnectorTable>;
+        PortConnectorTable(const TableReader& reader);
+
+        static std::string ConnectorTypeToString(uint8_t type);
+
+        TableReader reader_;
+    };
+
     class SystemSlotTable
     {
     public:

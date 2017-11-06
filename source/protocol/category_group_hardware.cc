@@ -2037,15 +2037,65 @@ const char* CategoryDmiPortConnectors::Guid() const
 
 void CategoryDmiPortConnectors::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::DmiPortConnectors message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::DmiPortConnectors::Item& item = message.item(index);
+
+        Output::Group group(output, StringPrintf("Port Connector #%d", index + 1), Icon());
+
+        if (!item.internal_designation().empty())
+            output->AddParam(IDI_PORT, "Internal Designation", item.internal_designation());
+
+        if (!item.external_designation().empty())
+            output->AddParam(IDI_PORT, "External Designation", item.external_designation());
+
+        if (!item.type().empty())
+            output->AddParam(IDI_PORT, "Type", item.type());
+
+        if (!item.internal_connector_type().empty())
+            output->AddParam(IDI_PORT, "Internal Connector Type", item.internal_connector_type());
+
+        if (!item.external_connector_type().empty())
+            output->AddParam(IDI_PORT, "External Connector Type", item.external_connector_type());
+    }
 }
 
 std::string CategoryDmiPortConnectors::Serialize()
 {
-    // TODO
-    return std::string();
+    std::unique_ptr<SMBios> smbios = ReadSMBios();
+    if (!smbios)
+        return std::string();
+
+    system_info::DmiPortConnectors message;
+
+    for (SMBios::TableEnumerator<SMBios::PortConnectorTable> table_enumerator(*smbios);
+         !table_enumerator.IsAtEnd();
+         table_enumerator.Advance())
+    {
+        SMBios::PortConnectorTable table = table_enumerator.GetTable();
+        system_info::DmiPortConnectors::Item* item = message.add_item();
+
+        item->set_internal_designation(table.GetInternalDesignation());
+        item->set_external_designation(table.GetExternalDesignation());
+        item->set_type(table.GetType());
+        item->set_internal_connector_type(table.GetInternalConnectorType());
+        item->set_external_connector_type(table.GetExternalConnectorType());
+    }
+
+    return message.SerializeAsString();
 }
 
 //

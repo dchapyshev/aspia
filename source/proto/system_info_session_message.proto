@@ -364,6 +364,20 @@ message DmiSystemSlots
     repeated Item item = 1;
 }
 
+message DmiPortConnectors
+{
+    message Item
+    {
+        string internal_designation    = 1;
+        string external_designation    = 2;
+        string type                    = 3;
+        string internal_connector_type = 4;
+        string external_connector_type = 5;
+    }
+
+    repeated Item item = 1;
+}
+
 message Monitors
 {
     message Item
