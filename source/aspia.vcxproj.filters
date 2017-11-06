@@ -643,9 +643,6 @@
     <ClCompile Include="base\devices\monitor_enumerator.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
-    <ClCompile Include="base\devices\edid_parser.cc">
-      <Filter>base\devices</Filter>
-    </ClCompile>
     <ClCompile Include="base\devices\smbios_reader.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
@@ -656,6 +653,9 @@
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="base\devices\battery_enumerator.cc">
+      <Filter>base\devices</Filter>
+    </ClCompile>
+    <ClCompile Include="base\devices\edid.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1343,9 +1343,6 @@
     <ClInclude Include="base\devices\monitor_enumerator.h">
       <Filter>base\devices</Filter>
     </ClInclude>
-    <ClInclude Include="base\devices\edid_parser.h">
-      <Filter>base\devices</Filter>
-    </ClInclude>
     <ClInclude Include="base\devices\smbios_reader.h">
       <Filter>base\devices</Filter>
     </ClInclude>
@@ -1353,6 +1350,9 @@
       <Filter>base\devices</Filter>
     </ClInclude>
     <ClInclude Include="base\devices\battery_enumerator.h">
+      <Filter>base\devices</Filter>
+    </ClInclude>
+    <ClInclude Include="base\devices\edid.h">
       <Filter>base\devices</Filter>
     </ClInclude>
   </ItemGroup>

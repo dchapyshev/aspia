@@ -2800,7 +2800,7 @@ std::string CategoryMonitor::Serialize()
 
     for (MonitorEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
-        std::unique_ptr<EdidParser> edid = enumerator.GetEDID();
+        std::unique_ptr<Edid> edid = enumerator.GetEDID();
         if (!edid)
             continue;
 
@@ -2834,7 +2834,7 @@ std::string CategoryMonitor::Serialize()
 
         switch (edid->GetInputSignalType())
         {
-            case EdidParser::INPUT_SIGNAL_TYPE_DIGITAL:
+            case Edid::INPUT_SIGNAL_TYPE_DIGITAL:
                 item->set_input_signal_type(system_info::Monitors::Item::INPUT_SIGNAL_TYPE_DIGITAL);
                 break;
 
@@ -2845,22 +2845,22 @@ std::string CategoryMonitor::Serialize()
 
         uint8_t supported_features = edid->GetFeatureSupport();
 
-        if (supported_features & EdidParser::FEATURE_SUPPORT_DEFAULT_GTF_SUPPORTED)
+        if (supported_features & Edid::FEATURE_SUPPORT_DEFAULT_GTF_SUPPORTED)
             item->set_default_gtf_supported(true);
 
-        if (supported_features & EdidParser::FEATURE_SUPPORT_SUSPEND)
+        if (supported_features & Edid::FEATURE_SUPPORT_SUSPEND)
             item->set_suspend_supported(true);
 
-        if (supported_features & EdidParser::FEATURE_SUPPORT_STANDBY)
+        if (supported_features & Edid::FEATURE_SUPPORT_STANDBY)
             item->set_standby_supported(true);
 
-        if (supported_features & EdidParser::FEATURE_SUPPORT_ACTIVE_OFF)
+        if (supported_features & Edid::FEATURE_SUPPORT_ACTIVE_OFF)
             item->set_active_off_supported(true);
 
-        if (supported_features & EdidParser::FEATURE_SUPPORT_PREFERRED_TIMING_MODE)
+        if (supported_features & Edid::FEATURE_SUPPORT_PREFERRED_TIMING_MODE)
             item->set_preferred_timing_mode_supported(true);
 
-        if (supported_features & EdidParser::FEATURE_SUPPORT_SRGB)
+        if (supported_features & Edid::FEATURE_SUPPORT_SRGB)
             item->set_srgb_supported(true);
 
         auto add_timing = [&](int width, int height, int freq)
@@ -2874,59 +2874,59 @@ std::string CategoryMonitor::Serialize()
 
         uint8_t estabilished_timings1 = edid->GetEstabilishedTimings1();
 
-        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_800X600_60HZ)
+        if (estabilished_timings1 & Edid::ESTABLISHED_TIMINGS_1_800X600_60HZ)
             add_timing(800, 600, 60);
 
-        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_800X600_56HZ)
+        if (estabilished_timings1 & Edid::ESTABLISHED_TIMINGS_1_800X600_56HZ)
             add_timing(800, 600, 56);
 
-        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_640X480_75HZ)
+        if (estabilished_timings1 & Edid::ESTABLISHED_TIMINGS_1_640X480_75HZ)
             add_timing(640, 480, 75);
 
-        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_640X480_72HZ)
+        if (estabilished_timings1 & Edid::ESTABLISHED_TIMINGS_1_640X480_72HZ)
             add_timing(640, 480, 72);
 
-        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_640X480_67HZ)
+        if (estabilished_timings1 & Edid::ESTABLISHED_TIMINGS_1_640X480_67HZ)
             add_timing(640, 480, 67);
 
-        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_640X480_60HZ)
+        if (estabilished_timings1 & Edid::ESTABLISHED_TIMINGS_1_640X480_60HZ)
             add_timing(640, 480, 60);
 
-        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_720X400_88HZ)
+        if (estabilished_timings1 & Edid::ESTABLISHED_TIMINGS_1_720X400_88HZ)
             add_timing(720, 400, 88);
 
-        if (estabilished_timings1 & EdidParser::ESTABLISHED_TIMINGS_1_720X400_70HZ)
+        if (estabilished_timings1 & Edid::ESTABLISHED_TIMINGS_1_720X400_70HZ)
             add_timing(720, 400, 70);
 
         uint8_t estabilished_timings2 = edid->GetEstabilishedTimings2();
 
-        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_1280X1024_75HZ)
+        if (estabilished_timings2 & Edid::ESTABLISHED_TIMINGS_2_1280X1024_75HZ)
             add_timing(1280, 1024, 75);
 
-        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_1024X768_75HZ)
+        if (estabilished_timings2 & Edid::ESTABLISHED_TIMINGS_2_1024X768_75HZ)
             add_timing(1024, 768, 75);
 
-        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_1024X768_70HZ)
+        if (estabilished_timings2 & Edid::ESTABLISHED_TIMINGS_2_1024X768_70HZ)
             add_timing(1024, 768, 70);
 
-        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_1024X768_60HZ)
+        if (estabilished_timings2 & Edid::ESTABLISHED_TIMINGS_2_1024X768_60HZ)
             add_timing(1024, 768, 60);
 
-        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_1024X768_87HZ)
+        if (estabilished_timings2 & Edid::ESTABLISHED_TIMINGS_2_1024X768_87HZ)
             add_timing(1024, 768, 87);
 
-        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_832X624_75HZ)
+        if (estabilished_timings2 & Edid::ESTABLISHED_TIMINGS_2_832X624_75HZ)
             add_timing(832, 624, 75);
 
-        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_800X600_75HZ)
+        if (estabilished_timings2 & Edid::ESTABLISHED_TIMINGS_2_800X600_75HZ)
             add_timing(800, 600, 75);
 
-        if (estabilished_timings2 & EdidParser::ESTABLISHED_TIMINGS_2_800X600_72HZ)
+        if (estabilished_timings2 & Edid::ESTABLISHED_TIMINGS_2_800X600_72HZ)
             add_timing(800, 600, 72);
 
         uint8_t manufacturer_timings = edid->GetManufacturersTimings();
 
-        if (manufacturer_timings & EdidParser::MANUFACTURERS_TIMINGS_1152X870_75HZ)
+        if (manufacturer_timings & Edid::MANUFACTURERS_TIMINGS_1152X870_75HZ)
             add_timing(1152, 870, 75);
 
         for (int index = 0; index < edid->GetStandardTimingsCount(); ++index)

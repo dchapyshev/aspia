@@ -1,12 +1,12 @@
 ﻿//
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/devices/edid_parser.h
+// FILE:            base/devices/edid.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__DEVICES__EDID_PARSER_H
-#define _ASPIA_BASE__DEVICES__EDID_PARSER_H
+#ifndef _ASPIA_BASE__DEVICES__EDID_H
+#define _ASPIA_BASE__DEVICES__EDID_H
 
 #include "base/macros.h"
 
@@ -16,12 +16,12 @@
 
 namespace aspia {
 
-class EdidParser
+class Edid
 {
 public:
-    static std::unique_ptr<EdidParser> Create(std::unique_ptr<uint8_t[]> data, size_t data_size);
+    static std::unique_ptr<Edid> Create(std::unique_ptr<uint8_t[]> data, size_t data_size);
 
-    ~EdidParser() = default;
+    ~Edid() = default;
 
     enum DataTypeTag : uint8_t
     {
@@ -97,7 +97,7 @@ public:
         uint8_t flags;
     };
 
-    struct Edid
+    struct Data
     {
         // Header (8 bytes)
         uint64_t header;                            // 00h-07h
@@ -225,17 +225,17 @@ public:
     bool GetStandardTimings(int index, int& width, int& height, int& frequency);
 
 private:
-    EdidParser(std::unique_ptr<uint8_t[]> data, size_t data_size);
+    Edid(std::unique_ptr<uint8_t[]> data, size_t data_size);
 
     std::string GetManufacturerSignature() const;
     uint8_t* GetDescriptor(int type) const;
     std::unique_ptr<uint8_t[]> data_;
     const size_t data_size_;
-    Edid* edid_;
+    Data* edid_;
 
-    DISALLOW_COPY_AND_ASSIGN(EdidParser);
+    DISALLOW_COPY_AND_ASSIGN(Edid);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__DEVICES__EDID_PARSER_H
+#endif // _ASPIA_BASE__DEVICES__EDID_H

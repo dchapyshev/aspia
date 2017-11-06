@@ -21,7 +21,7 @@ MonitorEnumerator::MonitorEnumerator()
     // Nothing
 }
 
-std::unique_ptr<EdidParser> MonitorEnumerator::GetEDID() const
+std::unique_ptr<Edid> MonitorEnumerator::GetEDID() const
 {
     std::wstring key_path =
         StringPrintfW(L"SYSTEM\\CurrentControlSet\\Enum\\%s\\Device Parameters",
@@ -63,7 +63,7 @@ std::unique_ptr<EdidParser> MonitorEnumerator::GetEDID() const
         return nullptr;
     }
 
-    return EdidParser::Create(std::move(data), size);
+    return Edid::Create(std::move(data), size);
 }
 
 } // namespace aspia

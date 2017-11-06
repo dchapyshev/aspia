@@ -1,11 +1,11 @@
 ﻿//
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/devices/edid_parser.cc
+// FILE:            base/devices/edid.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/devices/edid_parser.h"
+#include "base/devices/edid.h"
 #include "base/strings/string_util.h"
 #include "base/byte_order.h"
 #include "base/logging.h"
@@ -106,13 +106,13 @@ static int GetDataType(uint8_t* descriptor)
 }
 
 // static
-std::unique_ptr<EdidParser> EdidParser::Create(std::unique_ptr<uint8_t[]> data, size_t data_size)
+std::unique_ptr<Edid> Edid::Create(std::unique_ptr<uint8_t[]> data, size_t data_size)
 {
-    static_assert(sizeof(Edid) == kMinEdidSize);
+    static_assert(sizeof(Data) == kMinEdidSize);
 
-    if (data && data_size >= sizeof(Edid))
+    if (data && data_size >= sizeof(Data))
     {
-        Edid* edid = reinterpret_cast<Edid*>(data.get());
+        Data* edid = reinterpret_cast<Data*>(data.get());
 
         if (edid->header == kEdidHeader)
         {
@@ -124,7 +124,7 @@ std::unique_ptr<EdidParser> EdidParser::Create(std::unique_ptr<uint8_t[]> data, 
             // The 1-byte sum of all 128 bytes in this EDID block shall equal zero.
             if (!checksum)
             {
-                return std::unique_ptr<EdidParser>(new EdidParser(std::move(data), data_size));
+                return std::unique_ptr<Edid>(new Edid(std::move(data), data_size));
             }
 
             LOG(WARNING) << "Invalid EDID checksum: " << checksum;
@@ -142,14 +142,14 @@ std::unique_ptr<EdidParser> EdidParser::Create(std::unique_ptr<uint8_t[]> data, 
     return nullptr;
 }
 
-EdidParser::EdidParser(std::unique_ptr<uint8_t[]> data, size_t data_size)
+Edid::Edid(std::unique_ptr<uint8_t[]> data, size_t data_size)
     : data_(std::move(data)),
       data_size_(data_size)
 {
-    edid_ = reinterpret_cast<Edid*>(data_.get());
+    edid_ = reinterpret_cast<Data*>(data_.get());
 }
 
-int EdidParser::GetWeekOfManufacture() const
+int Edid::GetWeekOfManufacture() const
 {
     uint8_t week = edid_->week_of_manufacture;
 
@@ -162,7 +162,7 @@ int EdidParser::GetWeekOfManufacture() const
     return week;
 }
 
-int EdidParser::GetYearOfManufacture() const
+int Edid::GetYearOfManufacture() const
 {
     // The Year of Manufacture field is used to represent the year of the monitor’s manufacture.
     // The value that is stored is an offset from the year 1990 as derived from the following
@@ -172,27 +172,27 @@ int EdidParser::GetYearOfManufacture() const
     return 1990 + edid_->year_of_manufacture;
 }
 
-int EdidParser::GetEdidVersion() const
+int Edid::GetEdidVersion() const
 {
     return edid_->structure_version;
 }
 
-int EdidParser::GetEdidRevision() const
+int Edid::GetEdidRevision() const
 {
     return edid_->structure_revision;
 }
 
-int EdidParser::GetMaxHorizontalImageSize() const
+int Edid::GetMaxHorizontalImageSize() const
 {
     return edid_->max_horizontal_image_size;
 }
 
-int EdidParser::GetMaxVerticalImageSize() const
+int Edid::GetMaxVerticalImageSize() const
 {
     return edid_->max_vertical_image_size;
 }
 
-int EdidParser::GetHorizontalResolution() const
+int Edid::GetHorizontalResolution() const
 {
     DetailedTimingDescriptor* descriptor =
         reinterpret_cast<DetailedTimingDescriptor*>(GetDescriptor(kDetailedTimingDescriptor));
@@ -206,7 +206,7 @@ int EdidParser::GetHorizontalResolution() const
     return (hi << 8) | lo;
 }
 
-int EdidParser::GetVerticalResolution() const
+int Edid::GetVerticalResolution() const
 {
     DetailedTimingDescriptor* descriptor =
         reinterpret_cast<DetailedTimingDescriptor*>(GetDescriptor(kDetailedTimingDescriptor));
@@ -220,7 +220,7 @@ int EdidParser::GetVerticalResolution() const
     return (hi << 8) | lo;
 }
 
-double EdidParser::GetGamma() const
+double Edid::GetGamma() const
 {
     const uint8_t gamma = edid_->gamma;
 
@@ -230,12 +230,12 @@ double EdidParser::GetGamma() const
     return (static_cast<double>(gamma) / 100.0) + 1.0;
 }
 
-uint8_t EdidParser::GetFeatureSupport() const
+uint8_t Edid::GetFeatureSupport() const
 {
     return edid_->feature_support;
 }
 
-std::string EdidParser::GetManufacturerSignature() const
+std::string Edid::GetManufacturerSignature() const
 {
     const uint16_t id = ByteSwap(edid_->id_manufacturer_name);
 
@@ -251,14 +251,14 @@ std::string EdidParser::GetManufacturerSignature() const
     return signature;
 }
 
-std::string EdidParser::GetMonitorId() const
+std::string Edid::GetMonitorId() const
 {
     return StringPrintf("%s%04X",
                         GetManufacturerSignature().c_str(),
                         edid_->id_product_code);
 }
 
-std::string EdidParser::GetSerialNumber() const
+std::string Edid::GetSerialNumber() const
 {
     MonitorDescriptor* descriptor =
         reinterpret_cast<MonitorDescriptor*>(
@@ -285,9 +285,9 @@ std::string EdidParser::GetSerialNumber() const
     return std::string();
 }
 
-uint8_t* EdidParser::GetDescriptor(int type) const
+uint8_t* Edid::GetDescriptor(int type) const
 {
-    for (size_t index = 0; index < _countof(Edid::detailed_timing_description); ++index)
+    for (size_t index = 0; index < _countof(Data::detailed_timing_description); ++index)
     {
         uint8_t* descriptor = &edid_->detailed_timing_description[index][0];
 
@@ -298,7 +298,7 @@ uint8_t* EdidParser::GetDescriptor(int type) const
     return nullptr;
 }
 
-std::string EdidParser::GetManufacturerName() const
+std::string Edid::GetManufacturerName() const
 {
     std::string signature = GetManufacturerSignature();
 
@@ -311,7 +311,7 @@ std::string EdidParser::GetManufacturerName() const
     return std::string();
 }
 
-std::string EdidParser::GetMonitorName() const
+std::string Edid::GetMonitorName() const
 {
     MonitorDescriptor* descriptor =
         reinterpret_cast<MonitorDescriptor*>(GetDescriptor(DATA_TYPE_TAG_MONITOR_NAME_ASCII));
@@ -337,7 +337,7 @@ std::string EdidParser::GetMonitorName() const
     return std::string();
 }
 
-int EdidParser::GetMinVerticalRate() const
+int Edid::GetMinVerticalRate() const
 {
     MonitorDescriptor* descriptor =
         reinterpret_cast<MonitorDescriptor*>(GetDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
@@ -348,7 +348,7 @@ int EdidParser::GetMinVerticalRate() const
     return descriptor->descriptor_data[0];
 }
 
-int EdidParser::GetMaxVerticalRate() const
+int Edid::GetMaxVerticalRate() const
 {
     MonitorDescriptor* descriptor =
         reinterpret_cast<MonitorDescriptor*>(GetDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
@@ -359,7 +359,7 @@ int EdidParser::GetMaxVerticalRate() const
     return descriptor->descriptor_data[1];
 }
 
-int EdidParser::GetMinHorizontalRate() const
+int Edid::GetMinHorizontalRate() const
 {
     MonitorDescriptor* descriptor =
         reinterpret_cast<MonitorDescriptor*>(GetDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
@@ -370,7 +370,7 @@ int EdidParser::GetMinHorizontalRate() const
     return descriptor->descriptor_data[2];
 }
 
-int EdidParser::GetMaxHorizontalRate() const
+int Edid::GetMaxHorizontalRate() const
 {
     MonitorDescriptor* descriptor =
         reinterpret_cast<MonitorDescriptor*>(GetDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
@@ -381,7 +381,7 @@ int EdidParser::GetMaxHorizontalRate() const
     return descriptor->descriptor_data[3];
 }
 
-int EdidParser::GetMaxSupportedPixelClock() const
+int Edid::GetMaxSupportedPixelClock() const
 {
     MonitorDescriptor* descriptor =
         reinterpret_cast<MonitorDescriptor*>(GetDescriptor(DATA_TYPE_TAG_MINITOR_RANGE_LIMITS));
@@ -392,7 +392,7 @@ int EdidParser::GetMaxSupportedPixelClock() const
     return descriptor->descriptor_data[4] * 10;
 }
 
-double EdidParser::GetPixelClock() const
+double Edid::GetPixelClock() const
 {
     DetailedTimingDescriptor* descriptor =
         reinterpret_cast<DetailedTimingDescriptor*>(GetDescriptor(kDetailedTimingDescriptor));
@@ -403,7 +403,7 @@ double EdidParser::GetPixelClock() const
     return double(descriptor->pixel_clock) / 100.0;
 }
 
-EdidParser::InputSignalType EdidParser::GetInputSignalType() const
+Edid::InputSignalType Edid::GetInputSignalType() const
 {
     if (edid_->video_input_definition & 0x80)
         return INPUT_SIGNAL_TYPE_DIGITAL;
@@ -411,27 +411,27 @@ EdidParser::InputSignalType EdidParser::GetInputSignalType() const
     return INPUT_SIGNAL_TYPE_ANALOG;
 }
 
-uint8_t EdidParser::GetEstabilishedTimings1() const
+uint8_t Edid::GetEstabilishedTimings1() const
 {
     return edid_->established_timings[0];
 }
 
-uint8_t EdidParser::GetEstabilishedTimings2() const
+uint8_t Edid::GetEstabilishedTimings2() const
 {
     return edid_->established_timings[1];
 }
 
-uint8_t EdidParser::GetManufacturersTimings() const
+uint8_t Edid::GetManufacturersTimings() const
 {
     return edid_->manufacturers_reserved_timings;
 }
 
-int EdidParser::GetStandardTimingsCount() const
+int Edid::GetStandardTimingsCount() const
 {
-    return _countof(Edid::standard_timing_identification);
+    return _countof(Data::standard_timing_identification);
 }
 
-bool EdidParser::GetStandardTimings(int index, int& width, int& height, int& frequency)
+bool Edid::GetStandardTimings(int index, int& width, int& height, int& frequency)
 {
     uint8_t byte1 = edid_->standard_timing_identification[index][0];
     uint8_t byte2 = edid_->standard_timing_identification[index][1];

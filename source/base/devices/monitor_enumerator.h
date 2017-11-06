@@ -9,7 +9,7 @@
 #define _ASPIA_BASE__DEVICES__MONITOR_ENUMERATOR_H
 
 #include "base/devices/device_enumerator.h"
-#include "base/devices/edid_parser.h"
+#include "base/devices/edid.h"
 
 #include <memory>
 
@@ -21,7 +21,7 @@ public:
     MonitorEnumerator();
     ~MonitorEnumerator() = default;
 
-    std::unique_ptr<EdidParser> GetEDID() const;
+    std::unique_ptr<Edid> GetEDID() const;
 };
 
 } // namespace aspia

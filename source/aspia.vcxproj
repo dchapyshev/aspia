@@ -33,7 +33,7 @@
     <ClCompile Include="base\devices\battery_enumerator.cc" />
     <ClCompile Include="base\devices\device.cc" />
     <ClCompile Include="base\devices\device_enumerator.cc" />
-    <ClCompile Include="base\devices\edid_parser.cc" />
+    <ClCompile Include="base\devices\edid.cc" />
     <ClCompile Include="base\devices\monitor_enumerator.cc" />
     <ClCompile Include="base\devices\smbios.cc" />
     <ClCompile Include="base\devices\smbios_reader.cc" />
@@ -229,7 +229,7 @@
     <ClInclude Include="base\devices\battery_enumerator.h" />
     <ClInclude Include="base\devices\device.h" />
     <ClInclude Include="base\devices\device_enumerator.h" />
-    <ClInclude Include="base\devices\edid_parser.h" />
+    <ClInclude Include="base\devices\edid.h" />
     <ClInclude Include="base\devices\monitor_enumerator.h" />
     <ClInclude Include="base\devices\smbios.h" />
     <ClInclude Include="base\devices\smbios_reader.h" />
