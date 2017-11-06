@@ -553,9 +553,6 @@
     <ClCompile Include="base\devices\device.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
-    <ClCompile Include="base\devices\device_battery.cc">
-      <Filter>base\devices</Filter>
-    </ClCompile>
     <ClCompile Include="base\service_enumerator.cc">
       <Filter>base</Filter>
     </ClCompile>
@@ -660,6 +657,9 @@
     </ClCompile>
     <ClCompile Include="ui\status_code.cc">
       <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="base\devices\battery_enumerator.cc">
+      <Filter>base\devices</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1256,9 +1256,6 @@
     <ClInclude Include="base\devices\device.h">
       <Filter>base\devices</Filter>
     </ClInclude>
-    <ClInclude Include="base\devices\device_battery.h">
-      <Filter>base\devices</Filter>
-    </ClInclude>
     <ClInclude Include="base\service_enumerator.h">
       <Filter>base</Filter>
     </ClInclude>
@@ -1359,6 +1356,9 @@
       <Filter>base\devices</Filter>
     </ClInclude>
     <ClInclude Include="base\devices\smbios.h">
+      <Filter>base\devices</Filter>
+    </ClInclude>
+    <ClInclude Include="base\devices\battery_enumerator.h">
       <Filter>base\devices</Filter>
     </ClInclude>
   </ItemGroup>

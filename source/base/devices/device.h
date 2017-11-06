@@ -16,6 +16,7 @@ namespace aspia {
 class Device
 {
 public:
+    Device() = default;
     virtual ~Device();
 
     bool Open(const FilePath& device_path);

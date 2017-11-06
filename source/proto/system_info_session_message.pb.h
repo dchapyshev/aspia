@@ -128,6 +128,12 @@ extern OpenConnectionsDefaultTypeInternal _OpenConnections_default_instance_;
 class OpenConnections_Item;
 class OpenConnections_ItemDefaultTypeInternal;
 extern OpenConnections_ItemDefaultTypeInternal _OpenConnections_Item_default_instance_;
+class PowerOptions;
+class PowerOptionsDefaultTypeInternal;
+extern PowerOptionsDefaultTypeInternal _PowerOptions_default_instance_;
+class PowerOptions_Battery;
+class PowerOptions_BatteryDefaultTypeInternal;
+extern PowerOptions_BatteryDefaultTypeInternal _PowerOptions_Battery_default_instance_;
 class Printers;
 class PrintersDefaultTypeInternal;
 extern PrintersDefaultTypeInternal _Printers_default_instance_;
@@ -489,6 +495,47 @@ bool Monitors_Item_InputSignalType_IsValid(int value);
 const Monitors_Item_InputSignalType Monitors_Item_InputSignalType_InputSignalType_MIN = Monitors_Item_InputSignalType_INPUT_SIGNAL_TYPE_UNKNOWN;
 const Monitors_Item_InputSignalType Monitors_Item_InputSignalType_InputSignalType_MAX = Monitors_Item_InputSignalType_INPUT_SIGNAL_TYPE_DIGITAL;
 const int Monitors_Item_InputSignalType_InputSignalType_ARRAYSIZE = Monitors_Item_InputSignalType_InputSignalType_MAX + 1;
+
+enum PowerOptions_Battery_State {
+  PowerOptions_Battery_State_STATE_UNKNOWN = 0,
+  PowerOptions_Battery_State_STATE_CHARGING = 1,
+  PowerOptions_Battery_State_STATE_CRITICAL = 2,
+  PowerOptions_Battery_State_STATE_DISCHARGING = 4,
+  PowerOptions_Battery_State_STATE_POWER_ONLINE = 8,
+  PowerOptions_Battery_State_PowerOptions_Battery_State_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  PowerOptions_Battery_State_PowerOptions_Battery_State_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool PowerOptions_Battery_State_IsValid(int value);
+const PowerOptions_Battery_State PowerOptions_Battery_State_State_MIN = PowerOptions_Battery_State_STATE_UNKNOWN;
+const PowerOptions_Battery_State PowerOptions_Battery_State_State_MAX = PowerOptions_Battery_State_STATE_POWER_ONLINE;
+const int PowerOptions_Battery_State_State_ARRAYSIZE = PowerOptions_Battery_State_State_MAX + 1;
+
+enum PowerOptions_PowerSource {
+  PowerOptions_PowerSource_POWER_SOURCE_UNKNOWN = 0,
+  PowerOptions_PowerSource_POWER_SOURCE_DC_BATTERY = 1,
+  PowerOptions_PowerSource_POWER_SOURCE_AC_LINE = 2,
+  PowerOptions_PowerSource_PowerOptions_PowerSource_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  PowerOptions_PowerSource_PowerOptions_PowerSource_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool PowerOptions_PowerSource_IsValid(int value);
+const PowerOptions_PowerSource PowerOptions_PowerSource_PowerSource_MIN = PowerOptions_PowerSource_POWER_SOURCE_UNKNOWN;
+const PowerOptions_PowerSource PowerOptions_PowerSource_PowerSource_MAX = PowerOptions_PowerSource_POWER_SOURCE_AC_LINE;
+const int PowerOptions_PowerSource_PowerSource_ARRAYSIZE = PowerOptions_PowerSource_PowerSource_MAX + 1;
+
+enum PowerOptions_BatteryStatus {
+  PowerOptions_BatteryStatus_BATTERY_STATUS_UNKNOWN = 0,
+  PowerOptions_BatteryStatus_BATTERY_STATUS_HIGH = 1,
+  PowerOptions_BatteryStatus_BATTERY_STATUS_LOW = 2,
+  PowerOptions_BatteryStatus_BATTERY_STATUS_CRITICAL = 3,
+  PowerOptions_BatteryStatus_BATTERY_STATUS_CHARGING = 4,
+  PowerOptions_BatteryStatus_BATTERY_STATUS_NO_BATTERY = 5,
+  PowerOptions_BatteryStatus_PowerOptions_BatteryStatus_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  PowerOptions_BatteryStatus_PowerOptions_BatteryStatus_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool PowerOptions_BatteryStatus_IsValid(int value);
+const PowerOptions_BatteryStatus PowerOptions_BatteryStatus_BatteryStatus_MIN = PowerOptions_BatteryStatus_BATTERY_STATUS_UNKNOWN;
+const PowerOptions_BatteryStatus PowerOptions_BatteryStatus_BatteryStatus_MAX = PowerOptions_BatteryStatus_BATTERY_STATUS_NO_BATTERY;
+const int PowerOptions_BatteryStatus_BatteryStatus_ARRAYSIZE = PowerOptions_BatteryStatus_BatteryStatus_MAX + 1;
 
 enum Printers_Item_Orientation {
   Printers_Item_Orientation_ORIENTATION_UNKNOWN = 0,
@@ -5135,6 +5182,440 @@ class Monitors : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
 };
 // -------------------------------------------------------------------
 
+class PowerOptions_Battery : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.PowerOptions.Battery) */ {
+ public:
+  PowerOptions_Battery();
+  virtual ~PowerOptions_Battery();
+
+  PowerOptions_Battery(const PowerOptions_Battery& from);
+
+  inline PowerOptions_Battery& operator=(const PowerOptions_Battery& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  PowerOptions_Battery(PowerOptions_Battery&& from) noexcept
+    : PowerOptions_Battery() {
+    *this = ::std::move(from);
+  }
+
+  inline PowerOptions_Battery& operator=(PowerOptions_Battery&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const PowerOptions_Battery& default_instance();
+
+  static inline const PowerOptions_Battery* internal_default_instance() {
+    return reinterpret_cast<const PowerOptions_Battery*>(
+               &_PowerOptions_Battery_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    27;
+
+  void Swap(PowerOptions_Battery* other);
+  friend void swap(PowerOptions_Battery& a, PowerOptions_Battery& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline PowerOptions_Battery* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  PowerOptions_Battery* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const PowerOptions_Battery& from);
+  void MergeFrom(const PowerOptions_Battery& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(PowerOptions_Battery* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef PowerOptions_Battery_State State;
+  static const State STATE_UNKNOWN =
+    PowerOptions_Battery_State_STATE_UNKNOWN;
+  static const State STATE_CHARGING =
+    PowerOptions_Battery_State_STATE_CHARGING;
+  static const State STATE_CRITICAL =
+    PowerOptions_Battery_State_STATE_CRITICAL;
+  static const State STATE_DISCHARGING =
+    PowerOptions_Battery_State_STATE_DISCHARGING;
+  static const State STATE_POWER_ONLINE =
+    PowerOptions_Battery_State_STATE_POWER_ONLINE;
+  static inline bool State_IsValid(int value) {
+    return PowerOptions_Battery_State_IsValid(value);
+  }
+  static const State State_MIN =
+    PowerOptions_Battery_State_State_MIN;
+  static const State State_MAX =
+    PowerOptions_Battery_State_State_MAX;
+  static const int State_ARRAYSIZE =
+    PowerOptions_Battery_State_State_ARRAYSIZE;
+
+  // accessors -------------------------------------------------------
+
+  // string device_name = 1;
+  void clear_device_name();
+  static const int kDeviceNameFieldNumber = 1;
+  const ::std::string& device_name() const;
+  void set_device_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_device_name(::std::string&& value);
+  #endif
+  void set_device_name(const char* value);
+  void set_device_name(const char* value, size_t size);
+  ::std::string* mutable_device_name();
+  ::std::string* release_device_name();
+  void set_allocated_device_name(::std::string* device_name);
+
+  // string manufacturer = 2;
+  void clear_manufacturer();
+  static const int kManufacturerFieldNumber = 2;
+  const ::std::string& manufacturer() const;
+  void set_manufacturer(const ::std::string& value);
+  #if LANG_CXX11
+  void set_manufacturer(::std::string&& value);
+  #endif
+  void set_manufacturer(const char* value);
+  void set_manufacturer(const char* value, size_t size);
+  ::std::string* mutable_manufacturer();
+  ::std::string* release_manufacturer();
+  void set_allocated_manufacturer(::std::string* manufacturer);
+
+  // string manufacture_date = 3;
+  void clear_manufacture_date();
+  static const int kManufactureDateFieldNumber = 3;
+  const ::std::string& manufacture_date() const;
+  void set_manufacture_date(const ::std::string& value);
+  #if LANG_CXX11
+  void set_manufacture_date(::std::string&& value);
+  #endif
+  void set_manufacture_date(const char* value);
+  void set_manufacture_date(const char* value, size_t size);
+  ::std::string* mutable_manufacture_date();
+  ::std::string* release_manufacture_date();
+  void set_allocated_manufacture_date(::std::string* manufacture_date);
+
+  // string unique_id = 4;
+  void clear_unique_id();
+  static const int kUniqueIdFieldNumber = 4;
+  const ::std::string& unique_id() const;
+  void set_unique_id(const ::std::string& value);
+  #if LANG_CXX11
+  void set_unique_id(::std::string&& value);
+  #endif
+  void set_unique_id(const char* value);
+  void set_unique_id(const char* value, size_t size);
+  ::std::string* mutable_unique_id();
+  ::std::string* release_unique_id();
+  void set_allocated_unique_id(::std::string* unique_id);
+
+  // string serial_number = 5;
+  void clear_serial_number();
+  static const int kSerialNumberFieldNumber = 5;
+  const ::std::string& serial_number() const;
+  void set_serial_number(const ::std::string& value);
+  #if LANG_CXX11
+  void set_serial_number(::std::string&& value);
+  #endif
+  void set_serial_number(const char* value);
+  void set_serial_number(const char* value, size_t size);
+  ::std::string* mutable_serial_number();
+  ::std::string* release_serial_number();
+  void set_allocated_serial_number(::std::string* serial_number);
+
+  // string temperature = 6;
+  void clear_temperature();
+  static const int kTemperatureFieldNumber = 6;
+  const ::std::string& temperature() const;
+  void set_temperature(const ::std::string& value);
+  #if LANG_CXX11
+  void set_temperature(::std::string&& value);
+  #endif
+  void set_temperature(const char* value);
+  void set_temperature(const char* value, size_t size);
+  ::std::string* mutable_temperature();
+  ::std::string* release_temperature();
+  void set_allocated_temperature(::std::string* temperature);
+
+  // string type = 8;
+  void clear_type();
+  static const int kTypeFieldNumber = 8;
+  const ::std::string& type() const;
+  void set_type(const ::std::string& value);
+  #if LANG_CXX11
+  void set_type(::std::string&& value);
+  #endif
+  void set_type(const char* value);
+  void set_type(const char* value, size_t size);
+  ::std::string* mutable_type();
+  ::std::string* release_type();
+  void set_allocated_type(::std::string* type);
+
+  // int32 design_capacity = 7;
+  void clear_design_capacity();
+  static const int kDesignCapacityFieldNumber = 7;
+  ::google::protobuf::int32 design_capacity() const;
+  void set_design_capacity(::google::protobuf::int32 value);
+
+  // int32 full_charged_capacity = 9;
+  void clear_full_charged_capacity();
+  static const int kFullChargedCapacityFieldNumber = 9;
+  ::google::protobuf::int32 full_charged_capacity() const;
+  void set_full_charged_capacity(::google::protobuf::int32 value);
+
+  // int32 depreciation = 10;
+  void clear_depreciation();
+  static const int kDepreciationFieldNumber = 10;
+  ::google::protobuf::int32 depreciation() const;
+  void set_depreciation(::google::protobuf::int32 value);
+
+  // int32 current_capacity = 11;
+  void clear_current_capacity();
+  static const int kCurrentCapacityFieldNumber = 11;
+  ::google::protobuf::int32 current_capacity() const;
+  void set_current_capacity(::google::protobuf::int32 value);
+
+  // int32 voltage = 12;
+  void clear_voltage();
+  static const int kVoltageFieldNumber = 12;
+  ::google::protobuf::int32 voltage() const;
+  void set_voltage(::google::protobuf::int32 value);
+
+  // uint32 state = 13;
+  void clear_state();
+  static const int kStateFieldNumber = 13;
+  ::google::protobuf::uint32 state() const;
+  void set_state(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.PowerOptions.Battery)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr device_name_;
+  ::google::protobuf::internal::ArenaStringPtr manufacturer_;
+  ::google::protobuf::internal::ArenaStringPtr manufacture_date_;
+  ::google::protobuf::internal::ArenaStringPtr unique_id_;
+  ::google::protobuf::internal::ArenaStringPtr serial_number_;
+  ::google::protobuf::internal::ArenaStringPtr temperature_;
+  ::google::protobuf::internal::ArenaStringPtr type_;
+  ::google::protobuf::int32 design_capacity_;
+  ::google::protobuf::int32 full_charged_capacity_;
+  ::google::protobuf::int32 depreciation_;
+  ::google::protobuf::int32 current_capacity_;
+  ::google::protobuf::int32 voltage_;
+  ::google::protobuf::uint32 state_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class PowerOptions : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.PowerOptions) */ {
+ public:
+  PowerOptions();
+  virtual ~PowerOptions();
+
+  PowerOptions(const PowerOptions& from);
+
+  inline PowerOptions& operator=(const PowerOptions& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  PowerOptions(PowerOptions&& from) noexcept
+    : PowerOptions() {
+    *this = ::std::move(from);
+  }
+
+  inline PowerOptions& operator=(PowerOptions&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const PowerOptions& default_instance();
+
+  static inline const PowerOptions* internal_default_instance() {
+    return reinterpret_cast<const PowerOptions*>(
+               &_PowerOptions_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    28;
+
+  void Swap(PowerOptions* other);
+  friend void swap(PowerOptions& a, PowerOptions& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline PowerOptions* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  PowerOptions* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const PowerOptions& from);
+  void MergeFrom(const PowerOptions& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(PowerOptions* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef PowerOptions_Battery Battery;
+
+  typedef PowerOptions_PowerSource PowerSource;
+  static const PowerSource POWER_SOURCE_UNKNOWN =
+    PowerOptions_PowerSource_POWER_SOURCE_UNKNOWN;
+  static const PowerSource POWER_SOURCE_DC_BATTERY =
+    PowerOptions_PowerSource_POWER_SOURCE_DC_BATTERY;
+  static const PowerSource POWER_SOURCE_AC_LINE =
+    PowerOptions_PowerSource_POWER_SOURCE_AC_LINE;
+  static inline bool PowerSource_IsValid(int value) {
+    return PowerOptions_PowerSource_IsValid(value);
+  }
+  static const PowerSource PowerSource_MIN =
+    PowerOptions_PowerSource_PowerSource_MIN;
+  static const PowerSource PowerSource_MAX =
+    PowerOptions_PowerSource_PowerSource_MAX;
+  static const int PowerSource_ARRAYSIZE =
+    PowerOptions_PowerSource_PowerSource_ARRAYSIZE;
+
+  typedef PowerOptions_BatteryStatus BatteryStatus;
+  static const BatteryStatus BATTERY_STATUS_UNKNOWN =
+    PowerOptions_BatteryStatus_BATTERY_STATUS_UNKNOWN;
+  static const BatteryStatus BATTERY_STATUS_HIGH =
+    PowerOptions_BatteryStatus_BATTERY_STATUS_HIGH;
+  static const BatteryStatus BATTERY_STATUS_LOW =
+    PowerOptions_BatteryStatus_BATTERY_STATUS_LOW;
+  static const BatteryStatus BATTERY_STATUS_CRITICAL =
+    PowerOptions_BatteryStatus_BATTERY_STATUS_CRITICAL;
+  static const BatteryStatus BATTERY_STATUS_CHARGING =
+    PowerOptions_BatteryStatus_BATTERY_STATUS_CHARGING;
+  static const BatteryStatus BATTERY_STATUS_NO_BATTERY =
+    PowerOptions_BatteryStatus_BATTERY_STATUS_NO_BATTERY;
+  static inline bool BatteryStatus_IsValid(int value) {
+    return PowerOptions_BatteryStatus_IsValid(value);
+  }
+  static const BatteryStatus BatteryStatus_MIN =
+    PowerOptions_BatteryStatus_BatteryStatus_MIN;
+  static const BatteryStatus BatteryStatus_MAX =
+    PowerOptions_BatteryStatus_BatteryStatus_MAX;
+  static const int BatteryStatus_ARRAYSIZE =
+    PowerOptions_BatteryStatus_BatteryStatus_ARRAYSIZE;
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.system_info.PowerOptions.Battery battery = 6;
+  int battery_size() const;
+  void clear_battery();
+  static const int kBatteryFieldNumber = 6;
+  const ::aspia::system_info::PowerOptions_Battery& battery(int index) const;
+  ::aspia::system_info::PowerOptions_Battery* mutable_battery(int index);
+  ::aspia::system_info::PowerOptions_Battery* add_battery();
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::PowerOptions_Battery >*
+      mutable_battery();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::PowerOptions_Battery >&
+      battery() const;
+
+  // .aspia.system_info.PowerOptions.PowerSource power_source = 1;
+  void clear_power_source();
+  static const int kPowerSourceFieldNumber = 1;
+  ::aspia::system_info::PowerOptions_PowerSource power_source() const;
+  void set_power_source(::aspia::system_info::PowerOptions_PowerSource value);
+
+  // .aspia.system_info.PowerOptions.BatteryStatus battery_status = 2;
+  void clear_battery_status();
+  static const int kBatteryStatusFieldNumber = 2;
+  ::aspia::system_info::PowerOptions_BatteryStatus battery_status() const;
+  void set_battery_status(::aspia::system_info::PowerOptions_BatteryStatus value);
+
+  // int64 full_battery_life_time = 3;
+  void clear_full_battery_life_time();
+  static const int kFullBatteryLifeTimeFieldNumber = 3;
+  ::google::protobuf::int64 full_battery_life_time() const;
+  void set_full_battery_life_time(::google::protobuf::int64 value);
+
+  // int64 remaining_battery_life_time = 4;
+  void clear_remaining_battery_life_time();
+  static const int kRemainingBatteryLifeTimeFieldNumber = 4;
+  ::google::protobuf::int64 remaining_battery_life_time() const;
+  void set_remaining_battery_life_time(::google::protobuf::int64 value);
+
+  // int32 battery_life_percent = 5;
+  void clear_battery_life_percent();
+  static const int kBatteryLifePercentFieldNumber = 5;
+  ::google::protobuf::int32 battery_life_percent() const;
+  void set_battery_life_percent(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.PowerOptions)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::PowerOptions_Battery > battery_;
+  int power_source_;
+  int battery_status_;
+  ::google::protobuf::int64 full_battery_life_time_;
+  ::google::protobuf::int64 remaining_battery_life_time_;
+  ::google::protobuf::int32 battery_life_percent_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class Printers_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.Printers.Item) */ {
  public:
   Printers_Item();
@@ -5168,7 +5649,7 @@ class Printers_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Printers_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    27;
+    29;
 
   void Swap(Printers_Item* other);
   friend void swap(Printers_Item& a, Printers_Item& b) {
@@ -5472,7 +5953,7 @@ class Printers : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Printers_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    28;
+    30;
 
   void Swap(Printers* other);
   friend void swap(Printers& a, Printers& b) {
@@ -5575,7 +6056,7 @@ class WindowsDevices_Item : public ::google::protobuf::MessageLite /* @@protoc_i
                &_WindowsDevices_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    29;
+    31;
 
   void Swap(WindowsDevices_Item* other);
   friend void swap(WindowsDevices_Item& a, WindowsDevices_Item& b) {
@@ -5753,7 +6234,7 @@ class WindowsDevices : public ::google::protobuf::MessageLite /* @@protoc_insert
                &_WindowsDevices_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    30;
+    32;
 
   void Swap(WindowsDevices* other);
   friend void swap(WindowsDevices& a, WindowsDevices& b) {
@@ -5856,7 +6337,7 @@ class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Services_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    31;
+    33;
 
   void Swap(Services_Item* other);
   friend void swap(Services_Item& a, Services_Item& b) {
@@ -6083,7 +6564,7 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Services_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    32;
+    34;
 
   void Swap(Services* other);
   friend void swap(Services& a, Services& b) {
@@ -6186,7 +6667,7 @@ class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@
                &_NetworkCards_Item_IpAddress_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    33;
+    35;
 
   void Swap(NetworkCards_Item_IpAddress* other);
   friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
@@ -6304,7 +6785,7 @@ class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_NetworkCards_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    34;
+    36;
 
   void Swap(NetworkCards_Item* other);
   friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
@@ -6594,7 +7075,7 @@ class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_NetworkCards_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    35;
+    37;
 
   void Swap(NetworkCards* other);
   friend void swap(NetworkCards& a, NetworkCards& b) {
@@ -6697,7 +7178,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    36;
+    38;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -6883,7 +7364,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    37;
+    39;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -6986,7 +7467,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    38;
+    40;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -7165,7 +7646,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    39;
+    41;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -7268,7 +7749,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    40;
+    42;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -7408,7 +7889,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    41;
+    43;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -7511,7 +7992,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    42;
+    44;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -7700,7 +8181,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    43;
+    45;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -7803,7 +8284,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    44;
+    46;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -7921,7 +8402,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    45;
+    47;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -8024,7 +8505,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    46;
+    48;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -8194,7 +8675,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    47;
+    49;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -13437,6 +13918,569 @@ Monitors::item() const {
 
 // -------------------------------------------------------------------
 
+// PowerOptions_Battery
+
+// string device_name = 1;
+inline void PowerOptions_Battery::clear_device_name() {
+  device_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& PowerOptions_Battery::device_name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.Battery.device_name)
+  return device_name_.GetNoArena();
+}
+inline void PowerOptions_Battery::set_device_name(const ::std::string& value) {
+  
+  device_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.Battery.device_name)
+}
+#if LANG_CXX11
+inline void PowerOptions_Battery::set_device_name(::std::string&& value) {
+  
+  device_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.PowerOptions.Battery.device_name)
+}
+#endif
+inline void PowerOptions_Battery::set_device_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  device_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.PowerOptions.Battery.device_name)
+}
+inline void PowerOptions_Battery::set_device_name(const char* value, size_t size) {
+  
+  device_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.PowerOptions.Battery.device_name)
+}
+inline ::std::string* PowerOptions_Battery::mutable_device_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.PowerOptions.Battery.device_name)
+  return device_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* PowerOptions_Battery::release_device_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.PowerOptions.Battery.device_name)
+  
+  return device_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void PowerOptions_Battery::set_allocated_device_name(::std::string* device_name) {
+  if (device_name != NULL) {
+    
+  } else {
+    
+  }
+  device_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), device_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.PowerOptions.Battery.device_name)
+}
+
+// string manufacturer = 2;
+inline void PowerOptions_Battery::clear_manufacturer() {
+  manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& PowerOptions_Battery::manufacturer() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.Battery.manufacturer)
+  return manufacturer_.GetNoArena();
+}
+inline void PowerOptions_Battery::set_manufacturer(const ::std::string& value) {
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.Battery.manufacturer)
+}
+#if LANG_CXX11
+inline void PowerOptions_Battery::set_manufacturer(::std::string&& value) {
+  
+  manufacturer_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.PowerOptions.Battery.manufacturer)
+}
+#endif
+inline void PowerOptions_Battery::set_manufacturer(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.PowerOptions.Battery.manufacturer)
+}
+inline void PowerOptions_Battery::set_manufacturer(const char* value, size_t size) {
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.PowerOptions.Battery.manufacturer)
+}
+inline ::std::string* PowerOptions_Battery::mutable_manufacturer() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.PowerOptions.Battery.manufacturer)
+  return manufacturer_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* PowerOptions_Battery::release_manufacturer() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.PowerOptions.Battery.manufacturer)
+  
+  return manufacturer_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void PowerOptions_Battery::set_allocated_manufacturer(::std::string* manufacturer) {
+  if (manufacturer != NULL) {
+    
+  } else {
+    
+  }
+  manufacturer_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), manufacturer);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.PowerOptions.Battery.manufacturer)
+}
+
+// string manufacture_date = 3;
+inline void PowerOptions_Battery::clear_manufacture_date() {
+  manufacture_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& PowerOptions_Battery::manufacture_date() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.Battery.manufacture_date)
+  return manufacture_date_.GetNoArena();
+}
+inline void PowerOptions_Battery::set_manufacture_date(const ::std::string& value) {
+  
+  manufacture_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.Battery.manufacture_date)
+}
+#if LANG_CXX11
+inline void PowerOptions_Battery::set_manufacture_date(::std::string&& value) {
+  
+  manufacture_date_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.PowerOptions.Battery.manufacture_date)
+}
+#endif
+inline void PowerOptions_Battery::set_manufacture_date(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  manufacture_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.PowerOptions.Battery.manufacture_date)
+}
+inline void PowerOptions_Battery::set_manufacture_date(const char* value, size_t size) {
+  
+  manufacture_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.PowerOptions.Battery.manufacture_date)
+}
+inline ::std::string* PowerOptions_Battery::mutable_manufacture_date() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.PowerOptions.Battery.manufacture_date)
+  return manufacture_date_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* PowerOptions_Battery::release_manufacture_date() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.PowerOptions.Battery.manufacture_date)
+  
+  return manufacture_date_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void PowerOptions_Battery::set_allocated_manufacture_date(::std::string* manufacture_date) {
+  if (manufacture_date != NULL) {
+    
+  } else {
+    
+  }
+  manufacture_date_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), manufacture_date);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.PowerOptions.Battery.manufacture_date)
+}
+
+// string unique_id = 4;
+inline void PowerOptions_Battery::clear_unique_id() {
+  unique_id_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& PowerOptions_Battery::unique_id() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.Battery.unique_id)
+  return unique_id_.GetNoArena();
+}
+inline void PowerOptions_Battery::set_unique_id(const ::std::string& value) {
+  
+  unique_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.Battery.unique_id)
+}
+#if LANG_CXX11
+inline void PowerOptions_Battery::set_unique_id(::std::string&& value) {
+  
+  unique_id_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.PowerOptions.Battery.unique_id)
+}
+#endif
+inline void PowerOptions_Battery::set_unique_id(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  unique_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.PowerOptions.Battery.unique_id)
+}
+inline void PowerOptions_Battery::set_unique_id(const char* value, size_t size) {
+  
+  unique_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.PowerOptions.Battery.unique_id)
+}
+inline ::std::string* PowerOptions_Battery::mutable_unique_id() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.PowerOptions.Battery.unique_id)
+  return unique_id_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* PowerOptions_Battery::release_unique_id() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.PowerOptions.Battery.unique_id)
+  
+  return unique_id_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void PowerOptions_Battery::set_allocated_unique_id(::std::string* unique_id) {
+  if (unique_id != NULL) {
+    
+  } else {
+    
+  }
+  unique_id_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), unique_id);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.PowerOptions.Battery.unique_id)
+}
+
+// string serial_number = 5;
+inline void PowerOptions_Battery::clear_serial_number() {
+  serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& PowerOptions_Battery::serial_number() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.Battery.serial_number)
+  return serial_number_.GetNoArena();
+}
+inline void PowerOptions_Battery::set_serial_number(const ::std::string& value) {
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.Battery.serial_number)
+}
+#if LANG_CXX11
+inline void PowerOptions_Battery::set_serial_number(::std::string&& value) {
+  
+  serial_number_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.PowerOptions.Battery.serial_number)
+}
+#endif
+inline void PowerOptions_Battery::set_serial_number(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.PowerOptions.Battery.serial_number)
+}
+inline void PowerOptions_Battery::set_serial_number(const char* value, size_t size) {
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.PowerOptions.Battery.serial_number)
+}
+inline ::std::string* PowerOptions_Battery::mutable_serial_number() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.PowerOptions.Battery.serial_number)
+  return serial_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* PowerOptions_Battery::release_serial_number() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.PowerOptions.Battery.serial_number)
+  
+  return serial_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void PowerOptions_Battery::set_allocated_serial_number(::std::string* serial_number) {
+  if (serial_number != NULL) {
+    
+  } else {
+    
+  }
+  serial_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), serial_number);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.PowerOptions.Battery.serial_number)
+}
+
+// string temperature = 6;
+inline void PowerOptions_Battery::clear_temperature() {
+  temperature_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& PowerOptions_Battery::temperature() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.Battery.temperature)
+  return temperature_.GetNoArena();
+}
+inline void PowerOptions_Battery::set_temperature(const ::std::string& value) {
+  
+  temperature_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.Battery.temperature)
+}
+#if LANG_CXX11
+inline void PowerOptions_Battery::set_temperature(::std::string&& value) {
+  
+  temperature_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.PowerOptions.Battery.temperature)
+}
+#endif
+inline void PowerOptions_Battery::set_temperature(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  temperature_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.PowerOptions.Battery.temperature)
+}
+inline void PowerOptions_Battery::set_temperature(const char* value, size_t size) {
+  
+  temperature_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.PowerOptions.Battery.temperature)
+}
+inline ::std::string* PowerOptions_Battery::mutable_temperature() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.PowerOptions.Battery.temperature)
+  return temperature_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* PowerOptions_Battery::release_temperature() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.PowerOptions.Battery.temperature)
+  
+  return temperature_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void PowerOptions_Battery::set_allocated_temperature(::std::string* temperature) {
+  if (temperature != NULL) {
+    
+  } else {
+    
+  }
+  temperature_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), temperature);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.PowerOptions.Battery.temperature)
+}
+
+// int32 design_capacity = 7;
+inline void PowerOptions_Battery::clear_design_capacity() {
+  design_capacity_ = 0;
+}
+inline ::google::protobuf::int32 PowerOptions_Battery::design_capacity() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.Battery.design_capacity)
+  return design_capacity_;
+}
+inline void PowerOptions_Battery::set_design_capacity(::google::protobuf::int32 value) {
+  
+  design_capacity_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.Battery.design_capacity)
+}
+
+// string type = 8;
+inline void PowerOptions_Battery::clear_type() {
+  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& PowerOptions_Battery::type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.Battery.type)
+  return type_.GetNoArena();
+}
+inline void PowerOptions_Battery::set_type(const ::std::string& value) {
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.Battery.type)
+}
+#if LANG_CXX11
+inline void PowerOptions_Battery::set_type(::std::string&& value) {
+  
+  type_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.PowerOptions.Battery.type)
+}
+#endif
+inline void PowerOptions_Battery::set_type(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.PowerOptions.Battery.type)
+}
+inline void PowerOptions_Battery::set_type(const char* value, size_t size) {
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.PowerOptions.Battery.type)
+}
+inline ::std::string* PowerOptions_Battery::mutable_type() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.PowerOptions.Battery.type)
+  return type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* PowerOptions_Battery::release_type() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.PowerOptions.Battery.type)
+  
+  return type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void PowerOptions_Battery::set_allocated_type(::std::string* type) {
+  if (type != NULL) {
+    
+  } else {
+    
+  }
+  type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), type);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.PowerOptions.Battery.type)
+}
+
+// int32 full_charged_capacity = 9;
+inline void PowerOptions_Battery::clear_full_charged_capacity() {
+  full_charged_capacity_ = 0;
+}
+inline ::google::protobuf::int32 PowerOptions_Battery::full_charged_capacity() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.Battery.full_charged_capacity)
+  return full_charged_capacity_;
+}
+inline void PowerOptions_Battery::set_full_charged_capacity(::google::protobuf::int32 value) {
+  
+  full_charged_capacity_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.Battery.full_charged_capacity)
+}
+
+// int32 depreciation = 10;
+inline void PowerOptions_Battery::clear_depreciation() {
+  depreciation_ = 0;
+}
+inline ::google::protobuf::int32 PowerOptions_Battery::depreciation() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.Battery.depreciation)
+  return depreciation_;
+}
+inline void PowerOptions_Battery::set_depreciation(::google::protobuf::int32 value) {
+  
+  depreciation_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.Battery.depreciation)
+}
+
+// int32 current_capacity = 11;
+inline void PowerOptions_Battery::clear_current_capacity() {
+  current_capacity_ = 0;
+}
+inline ::google::protobuf::int32 PowerOptions_Battery::current_capacity() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.Battery.current_capacity)
+  return current_capacity_;
+}
+inline void PowerOptions_Battery::set_current_capacity(::google::protobuf::int32 value) {
+  
+  current_capacity_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.Battery.current_capacity)
+}
+
+// int32 voltage = 12;
+inline void PowerOptions_Battery::clear_voltage() {
+  voltage_ = 0;
+}
+inline ::google::protobuf::int32 PowerOptions_Battery::voltage() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.Battery.voltage)
+  return voltage_;
+}
+inline void PowerOptions_Battery::set_voltage(::google::protobuf::int32 value) {
+  
+  voltage_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.Battery.voltage)
+}
+
+// uint32 state = 13;
+inline void PowerOptions_Battery::clear_state() {
+  state_ = 0u;
+}
+inline ::google::protobuf::uint32 PowerOptions_Battery::state() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.Battery.state)
+  return state_;
+}
+inline void PowerOptions_Battery::set_state(::google::protobuf::uint32 value) {
+  
+  state_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.Battery.state)
+}
+
+// -------------------------------------------------------------------
+
+// PowerOptions
+
+// .aspia.system_info.PowerOptions.PowerSource power_source = 1;
+inline void PowerOptions::clear_power_source() {
+  power_source_ = 0;
+}
+inline ::aspia::system_info::PowerOptions_PowerSource PowerOptions::power_source() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.power_source)
+  return static_cast< ::aspia::system_info::PowerOptions_PowerSource >(power_source_);
+}
+inline void PowerOptions::set_power_source(::aspia::system_info::PowerOptions_PowerSource value) {
+  
+  power_source_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.power_source)
+}
+
+// .aspia.system_info.PowerOptions.BatteryStatus battery_status = 2;
+inline void PowerOptions::clear_battery_status() {
+  battery_status_ = 0;
+}
+inline ::aspia::system_info::PowerOptions_BatteryStatus PowerOptions::battery_status() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.battery_status)
+  return static_cast< ::aspia::system_info::PowerOptions_BatteryStatus >(battery_status_);
+}
+inline void PowerOptions::set_battery_status(::aspia::system_info::PowerOptions_BatteryStatus value) {
+  
+  battery_status_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.battery_status)
+}
+
+// int64 full_battery_life_time = 3;
+inline void PowerOptions::clear_full_battery_life_time() {
+  full_battery_life_time_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 PowerOptions::full_battery_life_time() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.full_battery_life_time)
+  return full_battery_life_time_;
+}
+inline void PowerOptions::set_full_battery_life_time(::google::protobuf::int64 value) {
+  
+  full_battery_life_time_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.full_battery_life_time)
+}
+
+// int64 remaining_battery_life_time = 4;
+inline void PowerOptions::clear_remaining_battery_life_time() {
+  remaining_battery_life_time_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 PowerOptions::remaining_battery_life_time() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.remaining_battery_life_time)
+  return remaining_battery_life_time_;
+}
+inline void PowerOptions::set_remaining_battery_life_time(::google::protobuf::int64 value) {
+  
+  remaining_battery_life_time_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.remaining_battery_life_time)
+}
+
+// int32 battery_life_percent = 5;
+inline void PowerOptions::clear_battery_life_percent() {
+  battery_life_percent_ = 0;
+}
+inline ::google::protobuf::int32 PowerOptions::battery_life_percent() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.battery_life_percent)
+  return battery_life_percent_;
+}
+inline void PowerOptions::set_battery_life_percent(::google::protobuf::int32 value) {
+  
+  battery_life_percent_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.PowerOptions.battery_life_percent)
+}
+
+// repeated .aspia.system_info.PowerOptions.Battery battery = 6;
+inline int PowerOptions::battery_size() const {
+  return battery_.size();
+}
+inline void PowerOptions::clear_battery() {
+  battery_.Clear();
+}
+inline const ::aspia::system_info::PowerOptions_Battery& PowerOptions::battery(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.PowerOptions.battery)
+  return battery_.Get(index);
+}
+inline ::aspia::system_info::PowerOptions_Battery* PowerOptions::mutable_battery(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.PowerOptions.battery)
+  return battery_.Mutable(index);
+}
+inline ::aspia::system_info::PowerOptions_Battery* PowerOptions::add_battery() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.PowerOptions.battery)
+  return battery_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::system_info::PowerOptions_Battery >*
+PowerOptions::mutable_battery() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.PowerOptions.battery)
+  return &battery_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::PowerOptions_Battery >&
+PowerOptions::battery() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.PowerOptions.battery)
+  return battery_;
+}
+
+// -------------------------------------------------------------------
+
 // Printers_Item
 
 // string name = 1;
@@ -17157,6 +18201,10 @@ Sessions::item() const {
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -17185,6 +18233,9 @@ template <> struct is_proto_enum< ::aspia::system_info::DmiProcessors_Item_Chara
 template <> struct is_proto_enum< ::aspia::system_info::DmiSystemSlots_Item_Usage> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::DmiSystemSlots_Item_Length> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::Monitors_Item_InputSignalType> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::system_info::PowerOptions_Battery_State> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::system_info::PowerOptions_PowerSource> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::system_info::PowerOptions_BatteryStatus> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::Printers_Item_Orientation> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::Services_Item_Status> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::Services_Item_StartupType> : ::google::protobuf::internal::true_type {};

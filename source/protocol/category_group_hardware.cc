@@ -6,6 +6,7 @@
 //
 
 #include "base/printer_enumerator.h"
+#include "base/devices/battery_enumerator.h"
 #include "base/devices/monitor_enumerator.h"
 #include "base/devices/smbios_reader.h"
 #include "base/strings/string_util.h"
@@ -3141,15 +3142,273 @@ const char* CategoryPowerOptions::Guid() const
 
 void CategoryPowerOptions::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::PowerOptions message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    const char* power_source;
+    switch (message.power_source())
+    {
+        case system_info::PowerOptions::POWER_SOURCE_DC_BATTERY:
+            power_source = "DC Battery";
+            break;
+
+        case system_info::PowerOptions::POWER_SOURCE_AC_LINE:
+            power_source = "AC Line";
+            break;
+
+        default:
+            power_source = "Unknown";
+            break;
+    }
+
+    output->AddParam(IDI_POWER_SUPPLY, "Power Source", power_source);
+
+    const char* battery_status;
+    switch (message.battery_status())
+    {
+        case system_info::PowerOptions::BATTERY_STATUS_HIGH:
+            battery_status = "High";
+            break;
+
+        case system_info::PowerOptions::BATTERY_STATUS_LOW:
+            battery_status = "Low";
+            break;
+
+        case system_info::PowerOptions::BATTERY_STATUS_CRITICAL:
+            battery_status = "Critical";
+            break;
+
+        case system_info::PowerOptions::BATTERY_STATUS_CHARGING:
+            battery_status = "Charging";
+            break;
+
+        case system_info::PowerOptions::BATTERY_STATUS_NO_BATTERY:
+            battery_status = "No Battery";
+            break;
+
+        default:
+            battery_status = "Unknown";
+            break;
+    }
+
+    output->AddParam(IDI_BATTERY, "Battery Status", battery_status);
+
+    if (message.battery_status() != system_info::PowerOptions::BATTERY_STATUS_NO_BATTERY &&
+        message.battery_status() != system_info::PowerOptions::BATTERY_STATUS_UNKNOWN)
+    {
+        output->AddParam(IDI_BATTERY,
+                         "Battery Life Percent",
+                         std::to_string(message.battery_life_percent()),
+                         "%%");
+
+        output->AddParam(IDI_BATTERY,
+                         "Full Battery Life Time",
+                         std::to_string(message.full_battery_life_time()),
+                         "s");
+
+        output->AddParam(IDI_BATTERY,
+                         "Remaining Battery Life Time",
+                         std::to_string(message.remaining_battery_life_time()),
+                         "s");
+    }
+
+    for (int index = 0; index < message.battery_size(); ++index)
+    {
+        const system_info::PowerOptions::Battery& battery = message.battery(index);
+
+        Output::Group group(output, StringPrintf("Battery #%d", index + 1), IDI_BATTERY);
+
+        if (!battery.device_name().empty())
+            output->AddParam(IDI_BATTERY, "Device Name", battery.device_name());
+
+        if (!battery.manufacturer().empty())
+            output->AddParam(IDI_BATTERY, "Manufacturer", battery.manufacturer());
+
+        if (!battery.manufacture_date().empty())
+            output->AddParam(IDI_BATTERY, "Manufacture Date", battery.manufacture_date());
+
+        if (!battery.unique_id().empty())
+            output->AddParam(IDI_BATTERY, "Unique Id", battery.unique_id());
+
+        if (!battery.serial_number().empty())
+            output->AddParam(IDI_BATTERY, "Serial Number", battery.serial_number());
+
+        if (!battery.temperature().empty())
+            output->AddParam(IDI_BATTERY, "Tempareture", battery.temperature());
+
+        if (battery.design_capacity() != 0)
+        {
+            output->AddParam(IDI_BATTERY,
+                             "Design Capacity",
+                             std::to_string(battery.design_capacity()),
+                             "mWh");
+        }
+
+        if (!battery.type().empty())
+            output->AddParam(IDI_BATTERY, "Type", battery.type());
+
+        if (battery.full_charged_capacity() != 0)
+        {
+            output->AddParam(IDI_BATTERY,
+                             "Full Charged Capacity",
+                             std::to_string(battery.full_charged_capacity()),
+                             "mWh");
+        }
+
+        if (battery.depreciation() != 0)
+        {
+            output->AddParam(IDI_BATTERY,
+                             "Depreciation",
+                             std::to_string(battery.depreciation()),
+                             "%%");
+        }
+
+        if (battery.current_capacity() != 0)
+        {
+            output->AddParam(IDI_BATTERY,
+                             "Current Capacity",
+                             std::to_string(battery.current_capacity()),
+                             "mWh");
+        }
+
+        if (battery.voltage() != 0)
+            output->AddParam(IDI_BATTERY, "Voltage", std::to_string(battery.voltage()), "mV");
+
+        if (battery.state() != 0)
+        {
+            Output::Group state_group(output, "State", IDI_BATTERY);
+
+            if (battery.state() & system_info::PowerOptions::Battery::STATE_CHARGING)
+                output->AddParam(IDI_CHECKED, "Charging", "Yes");
+
+            if (battery.state() & system_info::PowerOptions::Battery::STATE_CRITICAL)
+                output->AddParam(IDI_CHECKED, "Critical", "Yes");
+
+            if (battery.state() & system_info::PowerOptions::Battery::STATE_DISCHARGING)
+                output->AddParam(IDI_CHECKED, "Discharging", "Yes");
+
+            if (battery.state() & system_info::PowerOptions::Battery::STATE_POWER_ONLINE)
+                output->AddParam(IDI_CHECKED, "Power OnLine", "Yes");
+        }
+    }
 }
 
 std::string CategoryPowerOptions::Serialize()
 {
-    // TODO
-    return std::string();
+    system_info::PowerOptions message;
+
+    SYSTEM_POWER_STATUS power_status;
+    memset(&power_status, 0, sizeof(power_status));
+
+    if (GetSystemPowerStatus(&power_status))
+    {
+        switch (power_status.ACLineStatus)
+        {
+            case 0:
+                message.set_power_source(system_info::PowerOptions::POWER_SOURCE_DC_BATTERY);
+                break;
+
+            case 1:
+                message.set_power_source(system_info::PowerOptions::POWER_SOURCE_AC_LINE);
+                break;
+
+            default:
+                break;
+        }
+
+        switch (power_status.BatteryFlag)
+        {
+            case 1:
+                message.set_battery_status(system_info::PowerOptions::BATTERY_STATUS_HIGH);
+                break;
+
+            case 2:
+                message.set_battery_status(system_info::PowerOptions::BATTERY_STATUS_LOW);
+                break;
+
+            case 4:
+                message.set_battery_status(system_info::PowerOptions::BATTERY_STATUS_CRITICAL);
+                break;
+
+            case 8:
+                message.set_battery_status(system_info::PowerOptions::BATTERY_STATUS_CHARGING);
+                break;
+
+            case 128:
+                message.set_battery_status(system_info::PowerOptions::BATTERY_STATUS_NO_BATTERY);
+                break;
+
+            default:
+                break;
+        }
+
+        if (power_status.BatteryFlag != 128)
+        {
+            message.set_battery_life_percent(power_status.BatteryLifePercent);
+
+            if (power_status.BatteryFullLifeTime != -1)
+                message.set_full_battery_life_time(power_status.BatteryFullLifeTime);
+
+            if (power_status.BatteryLifeTime != -1)
+                message.set_remaining_battery_life_time(power_status.BatteryLifeTime);
+        }
+    }
+
+    for (BatteryEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+    {
+        system_info::PowerOptions::Battery* battery = message.add_battery();
+
+        battery->set_device_name(enumerator.GetDeviceName());
+        battery->set_manufacturer(enumerator.GetManufacturer());
+        battery->set_manufacture_date(enumerator.GetManufactureDate());
+        battery->set_unique_id(enumerator.GetUniqueId());
+        battery->set_serial_number(enumerator.GetSerialNumber());
+        battery->set_temperature(enumerator.GetTemperature());
+        battery->set_design_capacity(enumerator.GetDesignCapacity());
+        battery->set_type(enumerator.GetType());
+        battery->set_full_charged_capacity(enumerator.GetFullChargedCapacity());
+        battery->set_depreciation(enumerator.GetDepreciation());
+        battery->set_current_capacity(enumerator.GetCurrentCapacity());
+        battery->set_voltage(enumerator.GetVoltage());
+
+        const uint32_t state = enumerator.GetState();
+
+        if (state & BatteryEnumerator::STATE_CHARGING)
+        {
+            battery->set_state(
+                battery->state() | system_info::PowerOptions::Battery::STATE_CHARGING);
+        }
+
+        if (state & BatteryEnumerator::STATE_CRITICAL)
+        {
+            battery->set_state(
+                battery->state() | system_info::PowerOptions::Battery::STATE_CRITICAL);
+        }
+
+        if (state & BatteryEnumerator::STATE_DISCHARGING)
+        {
+            battery->set_state(
+                battery->state() | system_info::PowerOptions::Battery::STATE_DISCHARGING);
+        }
+
+        if (state & BatteryEnumerator::STATE_POWER_ONLINE)
+        {
+            battery->set_state(
+                battery->state() | system_info::PowerOptions::Battery::STATE_POWER_ONLINE);
+        }
+    }
+
+    return message.SerializeAsString();
 }
 
 //

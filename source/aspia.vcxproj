@@ -30,8 +30,8 @@
     <ClCompile Include="base\byte_order.cc" />
     <ClCompile Include="base\datetime.cc" />
     <ClCompile Include="base\desktop.cc" />
+    <ClCompile Include="base\devices\battery_enumerator.cc" />
     <ClCompile Include="base\devices\device.cc" />
-    <ClCompile Include="base\devices\device_battery.cc" />
     <ClCompile Include="base\devices\device_enumerator.cc" />
     <ClCompile Include="base\devices\edid_parser.cc" />
     <ClCompile Include="base\devices\monitor_enumerator.cc" />
@@ -227,8 +227,8 @@
     <ClInclude Include="base\byte_order.h" />
     <ClInclude Include="base\datetime.h" />
     <ClInclude Include="base\desktop.h" />
+    <ClInclude Include="base\devices\battery_enumerator.h" />
     <ClInclude Include="base\devices\device.h" />
-    <ClInclude Include="base\devices\device_battery.h" />
     <ClInclude Include="base\devices\device_enumerator.h" />
     <ClInclude Include="base\devices\edid_parser.h" />
     <ClInclude Include="base\devices\monitor_enumerator.h" />
