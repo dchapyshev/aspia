@@ -1351,6 +1351,131 @@ SMBios::CacheTable::Associativity SMBios::CacheTable::GetAssociativity() const
 }
 
 //
+// SystemSlotTable
+//
+
+SMBios::SystemSlotTable::SystemSlotTable(const TableReader& reader)
+    : reader_(reader)
+{
+    // Nothing
+}
+
+std::string SMBios::SystemSlotTable::GetSlotDesignation() const
+{
+    if (reader_.GetTableLength() < 0x0C)
+        return std::string();
+
+    return reader_.GetString(0x04);
+}
+
+std::string SMBios::SystemSlotTable::GetType() const
+{
+    if (reader_.GetTableLength() < 0x0C)
+        return std::string();
+
+    const uint8_t type = reader_.GetByte(0x05);
+
+    static const char* names[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "ISA",
+        "MCA",
+        "EISA",
+        "PCI",
+        "PC Card (PCMCIA)",
+        "VLB",
+        "Proprietary",
+        "Processor Card",
+        "Proprietary Memory Card",
+        "I/O Riser Card",
+        "NuBus",
+        "PCI-66",
+        "AGP",
+        "AGP 2x",
+        "AGP 4x",
+        "PCI-X",
+        "AGP 8x" // 0x13
+    };
+
+    if (type >= 0x01 && type <= 0x13)
+        return names[type - 0x01];
+
+    static const char* names_0xA0[] =
+    {
+        "PC-98/C20", // 0xA0
+        "PC-98/C24",
+        "PC-98/E",
+        "PC-98/Local Bus",
+        "PC-98/Card",
+        "PCI Express",
+        "PCI Express x1",
+        "PCI Express x2",
+        "PCI Express x4",
+        "PCI Express x8",
+        "PCI Express x16",
+        "PCI Express 2",
+        "PCI Express 2 x1",
+        "PCI Express 2 x2",
+        "PCI Express 2 x4",
+        "PCI Express 2 x8",
+        "PCI Express 2 x16" // 0xB0
+    };
+
+    if (type >= 0xA0 && type <= 0xB0)
+        return names_0xA0[type - 0xA0];
+
+    return std::string();
+}
+
+SMBios::SystemSlotTable::Usage SMBios::SystemSlotTable::GetUsage() const
+{
+    if (reader_.GetTableLength() < 0x0C)
+        return Usage::UNKNOWN;
+
+    return static_cast<Usage>(reader_.GetByte(0x07));
+}
+
+std::string SMBios::SystemSlotTable::GetBusWidth() const
+{
+    if (reader_.GetTableLength() < 0x0C)
+        return std::string();
+
+    static const char* names[] =
+    {
+        "Other", // 0x01, Other
+        nullptr, // Unknown
+        "8-bit",
+        "16-bit",
+        "32-bit",
+        "64-bit",
+        "128-bit",
+        "x1",
+        "x2",
+        "x4",
+        "x8",
+        "x12",
+        "x16",
+        "x32" // 0x0E
+    };
+
+    const uint8_t width = reader_.GetByte(0x06);
+
+    if (width >= 0x01 && width <= 0x0E && names[width - 0x01])
+        return names[width - 0x01];
+
+    return std::string();
+}
+
+SMBios::SystemSlotTable::Length SMBios::SystemSlotTable::GetLength() const
+{
+    if (reader_.GetTableLength() < 0x0C)
+        return Length::UNKNOWN;
+
+    return static_cast<Length>(reader_.GetByte(0x08));
+}
+
+//
 // MemoryDeviceTable
 //
 

@@ -74,6 +74,12 @@ extern DmiProcessors_ItemDefaultTypeInternal _DmiProcessors_Item_default_instanc
 class DmiSystem;
 class DmiSystemDefaultTypeInternal;
 extern DmiSystemDefaultTypeInternal _DmiSystem_default_instance_;
+class DmiSystemSlots;
+class DmiSystemSlotsDefaultTypeInternal;
+extern DmiSystemSlotsDefaultTypeInternal _DmiSystemSlots_default_instance_;
+class DmiSystemSlots_Item;
+class DmiSystemSlots_ItemDefaultTypeInternal;
+extern DmiSystemSlots_ItemDefaultTypeInternal _DmiSystemSlots_Item_default_instance_;
 class Monitors;
 class MonitorsDefaultTypeInternal;
 extern MonitorsDefaultTypeInternal _Monitors_default_instance_;
@@ -415,6 +421,32 @@ bool DmiProcessors_Item_Characteristics_IsValid(int value);
 const DmiProcessors_Item_Characteristics DmiProcessors_Item_Characteristics_Characteristics_MIN = DmiProcessors_Item_Characteristics_CHARACTERISTIC_NONE;
 const DmiProcessors_Item_Characteristics DmiProcessors_Item_Characteristics_Characteristics_MAX = DmiProcessors_Item_Characteristics_CHARACTERISTIC_POWER_CONTROL;
 const int DmiProcessors_Item_Characteristics_Characteristics_ARRAYSIZE = DmiProcessors_Item_Characteristics_Characteristics_MAX + 1;
+
+enum DmiSystemSlots_Item_Usage {
+  DmiSystemSlots_Item_Usage_USAGE_UNKNOWN = 0,
+  DmiSystemSlots_Item_Usage_USAGE_OTHER = 1,
+  DmiSystemSlots_Item_Usage_USAGE_AVAILABLE = 2,
+  DmiSystemSlots_Item_Usage_USAGE_IN_USE = 3,
+  DmiSystemSlots_Item_Usage_DmiSystemSlots_Item_Usage_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiSystemSlots_Item_Usage_DmiSystemSlots_Item_Usage_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiSystemSlots_Item_Usage_IsValid(int value);
+const DmiSystemSlots_Item_Usage DmiSystemSlots_Item_Usage_Usage_MIN = DmiSystemSlots_Item_Usage_USAGE_UNKNOWN;
+const DmiSystemSlots_Item_Usage DmiSystemSlots_Item_Usage_Usage_MAX = DmiSystemSlots_Item_Usage_USAGE_IN_USE;
+const int DmiSystemSlots_Item_Usage_Usage_ARRAYSIZE = DmiSystemSlots_Item_Usage_Usage_MAX + 1;
+
+enum DmiSystemSlots_Item_Length {
+  DmiSystemSlots_Item_Length_LENGTH_UNKNOWN = 0,
+  DmiSystemSlots_Item_Length_LENGTH_OTHER = 1,
+  DmiSystemSlots_Item_Length_LENGTH_SHORT = 2,
+  DmiSystemSlots_Item_Length_LENGTH_LONG = 3,
+  DmiSystemSlots_Item_Length_DmiSystemSlots_Item_Length_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiSystemSlots_Item_Length_DmiSystemSlots_Item_Length_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiSystemSlots_Item_Length_IsValid(int value);
+const DmiSystemSlots_Item_Length DmiSystemSlots_Item_Length_Length_MIN = DmiSystemSlots_Item_Length_LENGTH_UNKNOWN;
+const DmiSystemSlots_Item_Length DmiSystemSlots_Item_Length_Length_MAX = DmiSystemSlots_Item_Length_LENGTH_LONG;
+const int DmiSystemSlots_Item_Length_Length_ARRAYSIZE = DmiSystemSlots_Item_Length_Length_MAX + 1;
 
 enum Monitors_Item_InputSignalType {
   Monitors_Item_InputSignalType_INPUT_SIGNAL_TYPE_UNKNOWN = 0,
@@ -3128,6 +3160,294 @@ class DmiMemoryDevices : public ::google::protobuf::MessageLite /* @@protoc_inse
 };
 // -------------------------------------------------------------------
 
+class DmiSystemSlots_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.DmiSystemSlots.Item) */ {
+ public:
+  DmiSystemSlots_Item();
+  virtual ~DmiSystemSlots_Item();
+
+  DmiSystemSlots_Item(const DmiSystemSlots_Item& from);
+
+  inline DmiSystemSlots_Item& operator=(const DmiSystemSlots_Item& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  DmiSystemSlots_Item(DmiSystemSlots_Item&& from) noexcept
+    : DmiSystemSlots_Item() {
+    *this = ::std::move(from);
+  }
+
+  inline DmiSystemSlots_Item& operator=(DmiSystemSlots_Item&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const DmiSystemSlots_Item& default_instance();
+
+  static inline const DmiSystemSlots_Item* internal_default_instance() {
+    return reinterpret_cast<const DmiSystemSlots_Item*>(
+               &_DmiSystemSlots_Item_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    14;
+
+  void Swap(DmiSystemSlots_Item* other);
+  friend void swap(DmiSystemSlots_Item& a, DmiSystemSlots_Item& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DmiSystemSlots_Item* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  DmiSystemSlots_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const DmiSystemSlots_Item& from);
+  void MergeFrom(const DmiSystemSlots_Item& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(DmiSystemSlots_Item* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef DmiSystemSlots_Item_Usage Usage;
+  static const Usage USAGE_UNKNOWN =
+    DmiSystemSlots_Item_Usage_USAGE_UNKNOWN;
+  static const Usage USAGE_OTHER =
+    DmiSystemSlots_Item_Usage_USAGE_OTHER;
+  static const Usage USAGE_AVAILABLE =
+    DmiSystemSlots_Item_Usage_USAGE_AVAILABLE;
+  static const Usage USAGE_IN_USE =
+    DmiSystemSlots_Item_Usage_USAGE_IN_USE;
+  static inline bool Usage_IsValid(int value) {
+    return DmiSystemSlots_Item_Usage_IsValid(value);
+  }
+  static const Usage Usage_MIN =
+    DmiSystemSlots_Item_Usage_Usage_MIN;
+  static const Usage Usage_MAX =
+    DmiSystemSlots_Item_Usage_Usage_MAX;
+  static const int Usage_ARRAYSIZE =
+    DmiSystemSlots_Item_Usage_Usage_ARRAYSIZE;
+
+  typedef DmiSystemSlots_Item_Length Length;
+  static const Length LENGTH_UNKNOWN =
+    DmiSystemSlots_Item_Length_LENGTH_UNKNOWN;
+  static const Length LENGTH_OTHER =
+    DmiSystemSlots_Item_Length_LENGTH_OTHER;
+  static const Length LENGTH_SHORT =
+    DmiSystemSlots_Item_Length_LENGTH_SHORT;
+  static const Length LENGTH_LONG =
+    DmiSystemSlots_Item_Length_LENGTH_LONG;
+  static inline bool Length_IsValid(int value) {
+    return DmiSystemSlots_Item_Length_IsValid(value);
+  }
+  static const Length Length_MIN =
+    DmiSystemSlots_Item_Length_Length_MIN;
+  static const Length Length_MAX =
+    DmiSystemSlots_Item_Length_Length_MAX;
+  static const int Length_ARRAYSIZE =
+    DmiSystemSlots_Item_Length_Length_ARRAYSIZE;
+
+  // accessors -------------------------------------------------------
+
+  // string slot_designation = 1;
+  void clear_slot_designation();
+  static const int kSlotDesignationFieldNumber = 1;
+  const ::std::string& slot_designation() const;
+  void set_slot_designation(const ::std::string& value);
+  #if LANG_CXX11
+  void set_slot_designation(::std::string&& value);
+  #endif
+  void set_slot_designation(const char* value);
+  void set_slot_designation(const char* value, size_t size);
+  ::std::string* mutable_slot_designation();
+  ::std::string* release_slot_designation();
+  void set_allocated_slot_designation(::std::string* slot_designation);
+
+  // string type = 2;
+  void clear_type();
+  static const int kTypeFieldNumber = 2;
+  const ::std::string& type() const;
+  void set_type(const ::std::string& value);
+  #if LANG_CXX11
+  void set_type(::std::string&& value);
+  #endif
+  void set_type(const char* value);
+  void set_type(const char* value, size_t size);
+  ::std::string* mutable_type();
+  ::std::string* release_type();
+  void set_allocated_type(::std::string* type);
+
+  // string bus_width = 4;
+  void clear_bus_width();
+  static const int kBusWidthFieldNumber = 4;
+  const ::std::string& bus_width() const;
+  void set_bus_width(const ::std::string& value);
+  #if LANG_CXX11
+  void set_bus_width(::std::string&& value);
+  #endif
+  void set_bus_width(const char* value);
+  void set_bus_width(const char* value, size_t size);
+  ::std::string* mutable_bus_width();
+  ::std::string* release_bus_width();
+  void set_allocated_bus_width(::std::string* bus_width);
+
+  // .aspia.system_info.DmiSystemSlots.Item.Usage usage = 3;
+  void clear_usage();
+  static const int kUsageFieldNumber = 3;
+  ::aspia::system_info::DmiSystemSlots_Item_Usage usage() const;
+  void set_usage(::aspia::system_info::DmiSystemSlots_Item_Usage value);
+
+  // .aspia.system_info.DmiSystemSlots.Item.Length length = 5;
+  void clear_length();
+  static const int kLengthFieldNumber = 5;
+  ::aspia::system_info::DmiSystemSlots_Item_Length length() const;
+  void set_length(::aspia::system_info::DmiSystemSlots_Item_Length value);
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.DmiSystemSlots.Item)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr slot_designation_;
+  ::google::protobuf::internal::ArenaStringPtr type_;
+  ::google::protobuf::internal::ArenaStringPtr bus_width_;
+  int usage_;
+  int length_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class DmiSystemSlots : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.DmiSystemSlots) */ {
+ public:
+  DmiSystemSlots();
+  virtual ~DmiSystemSlots();
+
+  DmiSystemSlots(const DmiSystemSlots& from);
+
+  inline DmiSystemSlots& operator=(const DmiSystemSlots& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  DmiSystemSlots(DmiSystemSlots&& from) noexcept
+    : DmiSystemSlots() {
+    *this = ::std::move(from);
+  }
+
+  inline DmiSystemSlots& operator=(DmiSystemSlots&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const DmiSystemSlots& default_instance();
+
+  static inline const DmiSystemSlots* internal_default_instance() {
+    return reinterpret_cast<const DmiSystemSlots*>(
+               &_DmiSystemSlots_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    15;
+
+  void Swap(DmiSystemSlots* other);
+  friend void swap(DmiSystemSlots& a, DmiSystemSlots& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DmiSystemSlots* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  DmiSystemSlots* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const DmiSystemSlots& from);
+  void MergeFrom(const DmiSystemSlots& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(DmiSystemSlots* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef DmiSystemSlots_Item Item;
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.system_info.DmiSystemSlots.Item item = 1;
+  int item_size() const;
+  void clear_item();
+  static const int kItemFieldNumber = 1;
+  const ::aspia::system_info::DmiSystemSlots_Item& item(int index) const;
+  ::aspia::system_info::DmiSystemSlots_Item* mutable_item(int index);
+  ::aspia::system_info::DmiSystemSlots_Item* add_item();
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiSystemSlots_Item >*
+      mutable_item();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiSystemSlots_Item >&
+      item() const;
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.DmiSystemSlots)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiSystemSlots_Item > item_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class Monitors_Item_Timing : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.Monitors.Item.Timing) */ {
  public:
   Monitors_Item_Timing();
@@ -3161,7 +3481,7 @@ class Monitors_Item_Timing : public ::google::protobuf::MessageLite /* @@protoc_
                &_Monitors_Item_Timing_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    14;
+    16;
 
   void Swap(Monitors_Item_Timing* other);
   friend void swap(Monitors_Item_Timing& a, Monitors_Item_Timing& b) {
@@ -3270,7 +3590,7 @@ class Monitors_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Monitors_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    15;
+    17;
 
   void Swap(Monitors_Item* other);
   friend void swap(Monitors_Item& a, Monitors_Item& b) {
@@ -3619,7 +3939,7 @@ class Monitors : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Monitors_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    16;
+    18;
 
   void Swap(Monitors* other);
   friend void swap(Monitors& a, Monitors& b) {
@@ -3722,7 +4042,7 @@ class Printers_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Printers_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    17;
+    19;
 
   void Swap(Printers_Item* other);
   friend void swap(Printers_Item& a, Printers_Item& b) {
@@ -4026,7 +4346,7 @@ class Printers : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Printers_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    18;
+    20;
 
   void Swap(Printers* other);
   friend void swap(Printers& a, Printers& b) {
@@ -4129,7 +4449,7 @@ class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Services_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    19;
+    21;
 
   void Swap(Services_Item* other);
   friend void swap(Services_Item& a, Services_Item& b) {
@@ -4356,7 +4676,7 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Services_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    20;
+    22;
 
   void Swap(Services* other);
   friend void swap(Services& a, Services& b) {
@@ -4459,7 +4779,7 @@ class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@
                &_NetworkCards_Item_IpAddress_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    21;
+    23;
 
   void Swap(NetworkCards_Item_IpAddress* other);
   friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
@@ -4577,7 +4897,7 @@ class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_NetworkCards_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    22;
+    24;
 
   void Swap(NetworkCards_Item* other);
   friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
@@ -4867,7 +5187,7 @@ class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_NetworkCards_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    23;
+    25;
 
   void Swap(NetworkCards* other);
   friend void swap(NetworkCards& a, NetworkCards& b) {
@@ -4970,7 +5290,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    24;
+    26;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -5132,7 +5452,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    25;
+    27;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -5235,7 +5555,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    26;
+    28;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -5414,7 +5734,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    27;
+    29;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -5517,7 +5837,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    28;
+    30;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -5657,7 +5977,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    29;
+    31;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -5760,7 +6080,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    30;
+    32;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -5949,7 +6269,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    31;
+    33;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -6052,7 +6372,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    32;
+    34;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -6170,7 +6490,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    33;
+    35;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -6273,7 +6593,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    34;
+    36;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -6443,7 +6763,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    35;
+    37;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -9540,6 +9860,231 @@ DmiMemoryDevices::mutable_item() {
 inline const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiMemoryDevices_Item >&
 DmiMemoryDevices::item() const {
   // @@protoc_insertion_point(field_list:aspia.system_info.DmiMemoryDevices.item)
+  return item_;
+}
+
+// -------------------------------------------------------------------
+
+// DmiSystemSlots_Item
+
+// string slot_designation = 1;
+inline void DmiSystemSlots_Item::clear_slot_designation() {
+  slot_designation_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& DmiSystemSlots_Item::slot_designation() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiSystemSlots.Item.slot_designation)
+  return slot_designation_.GetNoArena();
+}
+inline void DmiSystemSlots_Item::set_slot_designation(const ::std::string& value) {
+  
+  slot_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiSystemSlots.Item.slot_designation)
+}
+#if LANG_CXX11
+inline void DmiSystemSlots_Item::set_slot_designation(::std::string&& value) {
+  
+  slot_designation_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiSystemSlots.Item.slot_designation)
+}
+#endif
+inline void DmiSystemSlots_Item::set_slot_designation(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  slot_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiSystemSlots.Item.slot_designation)
+}
+inline void DmiSystemSlots_Item::set_slot_designation(const char* value, size_t size) {
+  
+  slot_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiSystemSlots.Item.slot_designation)
+}
+inline ::std::string* DmiSystemSlots_Item::mutable_slot_designation() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiSystemSlots.Item.slot_designation)
+  return slot_designation_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* DmiSystemSlots_Item::release_slot_designation() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiSystemSlots.Item.slot_designation)
+  
+  return slot_designation_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void DmiSystemSlots_Item::set_allocated_slot_designation(::std::string* slot_designation) {
+  if (slot_designation != NULL) {
+    
+  } else {
+    
+  }
+  slot_designation_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), slot_designation);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiSystemSlots.Item.slot_designation)
+}
+
+// string type = 2;
+inline void DmiSystemSlots_Item::clear_type() {
+  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& DmiSystemSlots_Item::type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiSystemSlots.Item.type)
+  return type_.GetNoArena();
+}
+inline void DmiSystemSlots_Item::set_type(const ::std::string& value) {
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiSystemSlots.Item.type)
+}
+#if LANG_CXX11
+inline void DmiSystemSlots_Item::set_type(::std::string&& value) {
+  
+  type_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiSystemSlots.Item.type)
+}
+#endif
+inline void DmiSystemSlots_Item::set_type(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiSystemSlots.Item.type)
+}
+inline void DmiSystemSlots_Item::set_type(const char* value, size_t size) {
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiSystemSlots.Item.type)
+}
+inline ::std::string* DmiSystemSlots_Item::mutable_type() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiSystemSlots.Item.type)
+  return type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* DmiSystemSlots_Item::release_type() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiSystemSlots.Item.type)
+  
+  return type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void DmiSystemSlots_Item::set_allocated_type(::std::string* type) {
+  if (type != NULL) {
+    
+  } else {
+    
+  }
+  type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), type);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiSystemSlots.Item.type)
+}
+
+// .aspia.system_info.DmiSystemSlots.Item.Usage usage = 3;
+inline void DmiSystemSlots_Item::clear_usage() {
+  usage_ = 0;
+}
+inline ::aspia::system_info::DmiSystemSlots_Item_Usage DmiSystemSlots_Item::usage() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiSystemSlots.Item.usage)
+  return static_cast< ::aspia::system_info::DmiSystemSlots_Item_Usage >(usage_);
+}
+inline void DmiSystemSlots_Item::set_usage(::aspia::system_info::DmiSystemSlots_Item_Usage value) {
+  
+  usage_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiSystemSlots.Item.usage)
+}
+
+// string bus_width = 4;
+inline void DmiSystemSlots_Item::clear_bus_width() {
+  bus_width_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& DmiSystemSlots_Item::bus_width() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiSystemSlots.Item.bus_width)
+  return bus_width_.GetNoArena();
+}
+inline void DmiSystemSlots_Item::set_bus_width(const ::std::string& value) {
+  
+  bus_width_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiSystemSlots.Item.bus_width)
+}
+#if LANG_CXX11
+inline void DmiSystemSlots_Item::set_bus_width(::std::string&& value) {
+  
+  bus_width_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiSystemSlots.Item.bus_width)
+}
+#endif
+inline void DmiSystemSlots_Item::set_bus_width(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  bus_width_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiSystemSlots.Item.bus_width)
+}
+inline void DmiSystemSlots_Item::set_bus_width(const char* value, size_t size) {
+  
+  bus_width_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiSystemSlots.Item.bus_width)
+}
+inline ::std::string* DmiSystemSlots_Item::mutable_bus_width() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiSystemSlots.Item.bus_width)
+  return bus_width_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* DmiSystemSlots_Item::release_bus_width() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiSystemSlots.Item.bus_width)
+  
+  return bus_width_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void DmiSystemSlots_Item::set_allocated_bus_width(::std::string* bus_width) {
+  if (bus_width != NULL) {
+    
+  } else {
+    
+  }
+  bus_width_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), bus_width);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiSystemSlots.Item.bus_width)
+}
+
+// .aspia.system_info.DmiSystemSlots.Item.Length length = 5;
+inline void DmiSystemSlots_Item::clear_length() {
+  length_ = 0;
+}
+inline ::aspia::system_info::DmiSystemSlots_Item_Length DmiSystemSlots_Item::length() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiSystemSlots.Item.length)
+  return static_cast< ::aspia::system_info::DmiSystemSlots_Item_Length >(length_);
+}
+inline void DmiSystemSlots_Item::set_length(::aspia::system_info::DmiSystemSlots_Item_Length value) {
+  
+  length_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiSystemSlots.Item.length)
+}
+
+// -------------------------------------------------------------------
+
+// DmiSystemSlots
+
+// repeated .aspia.system_info.DmiSystemSlots.Item item = 1;
+inline int DmiSystemSlots::item_size() const {
+  return item_.size();
+}
+inline void DmiSystemSlots::clear_item() {
+  item_.Clear();
+}
+inline const ::aspia::system_info::DmiSystemSlots_Item& DmiSystemSlots::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiSystemSlots.item)
+  return item_.Get(index);
+}
+inline ::aspia::system_info::DmiSystemSlots_Item* DmiSystemSlots::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiSystemSlots.item)
+  return item_.Mutable(index);
+}
+inline ::aspia::system_info::DmiSystemSlots_Item* DmiSystemSlots::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.DmiSystemSlots.item)
+  return item_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiSystemSlots_Item >*
+DmiSystemSlots::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.DmiSystemSlots.item)
+  return &item_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiSystemSlots_Item >&
+DmiSystemSlots::item() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.DmiSystemSlots.item)
   return item_;
 }
 
@@ -13558,6 +14103,10 @@ Sessions::item() const {
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -13583,6 +14132,8 @@ template <> struct is_proto_enum< ::aspia::system_info::DmiCaches_Item_Associati
 template <> struct is_proto_enum< ::aspia::system_info::DmiProcessors_Item_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::DmiProcessors_Item_Status> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::DmiProcessors_Item_Characteristics> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::system_info::DmiSystemSlots_Item_Usage> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::system_info::DmiSystemSlots_Item_Length> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::Monitors_Item_InputSignalType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::Printers_Item_Orientation> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::system_info::Services_Item_Status> : ::google::protobuf::internal::true_type {};

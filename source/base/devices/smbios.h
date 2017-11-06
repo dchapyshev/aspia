@@ -399,6 +399,40 @@ public:
         TableReader reader_;
     };
 
+    class SystemSlotTable
+    {
+    public:
+        enum : uint8_t { TABLE_TYPE = 0x09 };
+
+        enum class Usage
+        {
+            OTHER     = 0x01,
+            UNKNOWN   = 0x02,
+            AVAILABLE = 0x03,
+            IN_USE    = 0x04
+        };
+
+        enum class Length
+        {
+            OTHER   = 0x01,
+            UNKNOWN = 0x02,
+            SHORT   = 0x03,
+            LONG    = 0x04
+        };
+
+        std::string GetSlotDesignation() const;
+        std::string GetType() const;
+        Usage GetUsage() const;
+        std::string GetBusWidth() const;
+        Length GetLength() const;
+
+    private:
+        friend class TableEnumerator<SystemSlotTable>;
+        SystemSlotTable(const TableReader& reader);
+
+        TableReader reader_;
+    };
+
     class MemoryDeviceTable
     {
     public:

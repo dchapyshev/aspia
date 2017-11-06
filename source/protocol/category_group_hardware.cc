@@ -1880,15 +1880,140 @@ const char* CategoryDmiSystemSlots::Guid() const
 
 void CategoryDmiSystemSlots::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::DmiSystemSlots message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::DmiSystemSlots::Item& item = message.item(index);
+
+        Output::Group group(output, StringPrintf("System Slot #%d", index + 1), Icon());
+
+        if (!item.slot_designation().empty())
+            output->AddParam(IDI_PORT, "Slot Designation", item.slot_designation());
+
+        if (!item.type().empty())
+            output->AddParam(IDI_PORT, "Type", item.type());
+
+        const char* usage;
+        switch (item.usage())
+        {
+            case system_info::DmiSystemSlots::Item::USAGE_OTHER:
+                usage = "Other";
+                break;
+
+            case system_info::DmiSystemSlots::Item::USAGE_AVAILABLE:
+                usage = "Available";
+                break;
+
+            case system_info::DmiSystemSlots::Item::USAGE_IN_USE:
+                usage = "In Use";
+                break;
+
+            default:
+                usage = nullptr;
+                break;
+        }
+
+        if (usage != nullptr)
+            output->AddParam(IDI_PORT, "Usage", usage);
+
+        if (!item.bus_width().empty())
+            output->AddParam(IDI_PORT, "Bus Width", item.bus_width());
+
+        const char* length;
+        switch (item.length())
+        {
+            case system_info::DmiSystemSlots::Item::LENGTH_OTHER:
+                length = "Other";
+                break;
+
+            case system_info::DmiSystemSlots::Item::LENGTH_SHORT:
+                length = "Short";
+                break;
+
+            case system_info::DmiSystemSlots::Item::LENGTH_LONG:
+                length = "Long";
+                break;
+
+            default:
+                length = nullptr;
+                break;
+        }
+
+        if (length != nullptr)
+            output->AddParam(IDI_PORT, "Length", length);
+    }
 }
 
 std::string CategoryDmiSystemSlots::Serialize()
 {
-    // TODO
-    return std::string();
+    std::unique_ptr<SMBios> smbios = ReadSMBios();
+    if (!smbios)
+        return std::string();
+
+    system_info::DmiSystemSlots message;
+
+    for (SMBios::TableEnumerator<SMBios::SystemSlotTable> table_enumerator(*smbios);
+         !table_enumerator.IsAtEnd();
+         table_enumerator.Advance())
+    {
+        SMBios::SystemSlotTable table = table_enumerator.GetTable();
+        system_info::DmiSystemSlots::Item* item = message.add_item();
+
+        item->set_slot_designation(table.GetSlotDesignation());
+        item->set_type(table.GetType());
+
+        switch (table.GetUsage())
+        {
+            case SMBios::SystemSlotTable::Usage::OTHER:
+                item->set_usage(system_info::DmiSystemSlots::Item::USAGE_OTHER);
+                break;
+
+            case SMBios::SystemSlotTable::Usage::AVAILABLE:
+                item->set_usage(system_info::DmiSystemSlots::Item::USAGE_AVAILABLE);
+                break;
+
+            case SMBios::SystemSlotTable::Usage::IN_USE:
+                item->set_usage(system_info::DmiSystemSlots::Item::USAGE_IN_USE);
+                break;
+
+            default:
+                break;
+        }
+
+        item->set_bus_width(table.GetBusWidth());
+
+        switch (table.GetLength())
+        {
+            case SMBios::SystemSlotTable::Length::OTHER:
+                item->set_length(system_info::DmiSystemSlots::Item::LENGTH_OTHER);
+                break;
+
+            case SMBios::SystemSlotTable::Length::SHORT:
+                item->set_length(system_info::DmiSystemSlots::Item::LENGTH_SHORT);
+                break;
+
+            case SMBios::SystemSlotTable::Length::LONG:
+                item->set_length(system_info::DmiSystemSlots::Item::LENGTH_LONG);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    return message.SerializeAsString();
 }
 
 //

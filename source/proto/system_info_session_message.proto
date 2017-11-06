@@ -334,6 +334,36 @@ message DmiMemoryDevices
     repeated Item item = 1;
 }
 
+message DmiSystemSlots
+{
+    message Item
+    {
+        enum Usage
+        {
+            USAGE_UNKNOWN   = 0;
+            USAGE_OTHER     = 1;
+            USAGE_AVAILABLE = 2;
+            USAGE_IN_USE    = 3;
+        }
+
+        enum Length
+        {
+            LENGTH_UNKNOWN = 0;
+            LENGTH_OTHER   = 1;
+            LENGTH_SHORT   = 2;
+            LENGTH_LONG    = 3;
+        }
+
+        string slot_designation = 1;
+        string type             = 2;
+        Usage usage             = 3;
+        string bus_width        = 4;
+        Length length           = 5;
+    }
+
+    repeated Item item = 1;
+}
+
 message Monitors
 {
     message Item
