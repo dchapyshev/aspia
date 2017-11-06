@@ -244,6 +244,7 @@ LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& 
 
     list_.DeleteAllItems();
     list_.DeleteAllColumns();
+    list_.EnableWindow(FALSE);
 
     Category* category = tree_.GetItemCategory(nmtv->itemNew.hItem);
     if (!category)

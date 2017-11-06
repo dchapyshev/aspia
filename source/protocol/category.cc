@@ -10,7 +10,6 @@
 #include "protocol/category_group_software.h"
 #include "protocol/category_group_network.h"
 #include "protocol/category_group_os.h"
-#include "protocol/category_summary.h"
 
 namespace aspia {
 
@@ -148,7 +147,6 @@ CategoryList CreateCategoryTree()
 
     CategoryList tree;
 
-    tree.emplace_back(std::make_unique<CategorySummary>());
     tree.emplace_back(std::move(hardware));
     tree.emplace_back(std::move(software));
     tree.emplace_back(std::move(network));
@@ -167,8 +165,6 @@ CategoryMap CreateCategoryMap()
         std::string guid(category->Guid());
         map.emplace(std::move(guid), std::move(category));
     };
-
-    emplace_back(std::make_unique<CategorySummary>());
 
     emplace_back(std::make_unique<CategoryDmiBios>());
     emplace_back(std::make_unique<CategoryDmiSystem>());

@@ -166,7 +166,6 @@
     <ClCompile Include="protocol\category_group_network.cc" />
     <ClCompile Include="protocol\category_group_os.cc" />
     <ClCompile Include="protocol\category_group_software.cc" />
-    <ClCompile Include="protocol\category_summary.cc" />
     <ClCompile Include="protocol\clipboard.cc" />
     <ClCompile Include="protocol\filesystem.cc" />
     <ClCompile Include="protocol\file_depacketizer.cc" />
@@ -397,7 +396,6 @@
     <ClInclude Include="protocol\category_group_network.h" />
     <ClInclude Include="protocol\category_group_os.h" />
     <ClInclude Include="protocol\category_group_software.h" />
-    <ClInclude Include="protocol\category_summary.h" />
     <ClInclude Include="protocol\clipboard.h" />
     <ClInclude Include="protocol\filesystem.h" />
     <ClInclude Include="protocol\file_depacketizer.h" />

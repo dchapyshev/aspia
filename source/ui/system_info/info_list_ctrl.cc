@@ -66,7 +66,8 @@ void InfoListCtrl::StartDocument()
 
 void InfoListCtrl::EndDocument()
 {
-    // Nothing
+    if (GetItemCount() > 0)
+        EnableWindow();
 }
 
 void InfoListCtrl::StartTableGroup(const std::string& name)
