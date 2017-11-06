@@ -399,6 +399,30 @@ public:
         TableReader reader_;
     };
 
+    class MemoryDeviceTable
+    {
+    public:
+        enum : uint8_t { TABLE_TYPE = 0x11 };
+
+        std::string GetDeviceLocator() const;
+        int GetSize() const;
+        std::string GetType() const;
+        int GetSpeed() const;
+        std::string GetFormFactor() const;
+        std::string GetSerialNumber() const;
+        std::string GetPartNumber() const;
+        std::string GetManufacturer() const;
+        std::string GetBank() const;
+        int GetTotalWidth() const;
+        int GetDataWidth() const;
+
+    private:
+        friend class TableEnumerator<MemoryDeviceTable>;
+        MemoryDeviceTable(const TableReader& reader);
+
+        TableReader reader_;
+    };
+
 private:
     SMBios(std::unique_ptr<uint8_t[]> data, size_t data_size);
     static int GetTableCount(const uint8_t* table_data, uint32_t length);

@@ -1774,15 +1774,89 @@ const char* CategoryDmiMemoryDevices::Guid() const
 
 void CategoryDmiMemoryDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::DmiMemoryDevices message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::DmiMemoryDevices::Item& item = message.item(index);
+
+        Output::Group group(output, StringPrintf("Memory Device #%d", index + 1), Icon());
+
+        if (!item.device_locator().empty())
+            output->AddParam(IDI_MEMORY, "Device Locator", item.device_locator());
+
+        if (item.size() != 0)
+            output->AddParam(IDI_MEMORY, "Size", std::to_string(item.size()), "MB");
+
+        if (!item.type().empty())
+            output->AddParam(IDI_MEMORY, "Type", item.type());
+
+        if (item.speed() != 0)
+            output->AddParam(IDI_MEMORY, "Speed", std::to_string(item.speed()), "MHz");
+
+        if (!item.form_factor().empty())
+            output->AddParam(IDI_MEMORY, "Form Factor", item.form_factor());
+
+        if (!item.serial_number().empty())
+            output->AddParam(IDI_MEMORY, "Serial Number", item.serial_number());
+
+        if (!item.part_number().empty())
+            output->AddParam(IDI_MEMORY, "Part Number", item.part_number());
+
+        if (!item.manufactorer().empty())
+            output->AddParam(IDI_MEMORY, "Manufacturer", item.manufactorer());
+
+        if (!item.bank().empty())
+            output->AddParam(IDI_MEMORY, "Bank", item.bank());
+
+        if (item.total_width() != 0)
+            output->AddParam(IDI_MEMORY, "Total Width", std::to_string(item.total_width()), "Bit");
+
+        if (item.data_width() != 0)
+            output->AddParam(IDI_MEMORY, "Data Width", std::to_string(item.data_width()), "Bit");
+    }
 }
 
 std::string CategoryDmiMemoryDevices::Serialize()
 {
-    // TODO
-    return std::string();
+    std::unique_ptr<SMBios> smbios = ReadSMBios();
+    if (!smbios)
+        return std::string();
+
+    system_info::DmiMemoryDevices message;
+
+    for (SMBios::TableEnumerator<SMBios::MemoryDeviceTable> table_enumerator(*smbios);
+         !table_enumerator.IsAtEnd();
+         table_enumerator.Advance())
+    {
+        SMBios::MemoryDeviceTable table = table_enumerator.GetTable();
+        system_info::DmiMemoryDevices::Item* item = message.add_item();
+
+        item->set_device_locator(table.GetDeviceLocator());
+        item->set_size(table.GetSize());
+        item->set_type(table.GetType());
+        item->set_speed(table.GetSpeed());
+        item->set_form_factor(table.GetFormFactor());
+        item->set_serial_number(table.GetSerialNumber());
+        item->set_part_number(table.GetPartNumber());
+        item->set_manufactorer(table.GetManufacturer());
+        item->set_bank(table.GetBank());
+        item->set_total_width(table.GetTotalWidth());
+        item->set_data_width(table.GetDataWidth());
+    }
+
+    return message.SerializeAsString();
 }
 
 //

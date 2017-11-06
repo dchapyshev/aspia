@@ -314,6 +314,26 @@ message DmiProcessors
     repeated Item item = 1;
 }
 
+message DmiMemoryDevices
+{
+    message Item
+    {
+        string device_locator = 1;
+        int32 size            = 2;
+        string type           = 3;
+        int32 speed           = 4;
+        string form_factor    = 5;
+        string serial_number  = 6;
+        string part_number    = 7;
+        string manufactorer   = 8;
+        string bank           = 9;
+        int32 total_width     = 10;
+        int32 data_width      = 11;
+    }
+
+    repeated Item item = 1;
+}
+
 message Monitors
 {
     message Item

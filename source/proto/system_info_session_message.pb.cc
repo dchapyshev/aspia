@@ -76,6 +76,16 @@ public:
  ::google::protobuf::internal::ExplicitlyConstructed<DmiProcessors>
      _instance;
 } _DmiProcessors_default_instance_;
+class DmiMemoryDevices_ItemDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<DmiMemoryDevices_Item>
+     _instance;
+} _DmiMemoryDevices_Item_default_instance_;
+class DmiMemoryDevicesDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<DmiMemoryDevices>
+     _instance;
+} _DmiMemoryDevices_default_instance_;
 class Monitors_Item_TimingDefaultTypeInternal {
 public:
  ::google::protobuf::internal::ExplicitlyConstructed<Monitors_Item_Timing>
@@ -234,6 +244,8 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
 };
 
 void TableStruct::InitDefaultsImpl() {
@@ -264,7 +276,11 @@ void TableStruct::InitDefaultsImpl() {
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_DmiProcessors_Item_default_instance_);_DmiProcessors_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
-      &_DmiProcessors_default_instance_);_Monitors_Item_Timing_default_instance_._instance.DefaultConstruct();
+      &_DmiProcessors_default_instance_);_DmiMemoryDevices_Item_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_DmiMemoryDevices_Item_default_instance_);_DmiMemoryDevices_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_DmiMemoryDevices_default_instance_);_Monitors_Item_Timing_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_Monitors_Item_Timing_default_instance_);_Monitors_Item_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
@@ -8285,6 +8301,1281 @@ DmiProcessors::mutable_item() {
 const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiProcessors_Item >&
 DmiProcessors::item() const {
   // @@protoc_insertion_point(field_list:aspia.system_info.DmiProcessors.item)
+  return item_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DmiMemoryDevices_Item::kDeviceLocatorFieldNumber;
+const int DmiMemoryDevices_Item::kSizeFieldNumber;
+const int DmiMemoryDevices_Item::kTypeFieldNumber;
+const int DmiMemoryDevices_Item::kSpeedFieldNumber;
+const int DmiMemoryDevices_Item::kFormFactorFieldNumber;
+const int DmiMemoryDevices_Item::kSerialNumberFieldNumber;
+const int DmiMemoryDevices_Item::kPartNumberFieldNumber;
+const int DmiMemoryDevices_Item::kManufactorerFieldNumber;
+const int DmiMemoryDevices_Item::kBankFieldNumber;
+const int DmiMemoryDevices_Item::kTotalWidthFieldNumber;
+const int DmiMemoryDevices_Item::kDataWidthFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DmiMemoryDevices_Item::DmiMemoryDevices_Item()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.DmiMemoryDevices.Item)
+}
+DmiMemoryDevices_Item::DmiMemoryDevices_Item(const DmiMemoryDevices_Item& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  device_locator_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.device_locator().size() > 0) {
+    device_locator_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_locator_);
+  }
+  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.type().size() > 0) {
+    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
+  }
+  form_factor_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.form_factor().size() > 0) {
+    form_factor_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.form_factor_);
+  }
+  serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.serial_number().size() > 0) {
+    serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.serial_number_);
+  }
+  part_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.part_number().size() > 0) {
+    part_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.part_number_);
+  }
+  manufactorer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.manufactorer().size() > 0) {
+    manufactorer_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufactorer_);
+  }
+  bank_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.bank().size() > 0) {
+    bank_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.bank_);
+  }
+  ::memcpy(&size_, &from.size_,
+    static_cast<size_t>(reinterpret_cast<char*>(&data_width_) -
+    reinterpret_cast<char*>(&size_)) + sizeof(data_width_));
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiMemoryDevices.Item)
+}
+
+void DmiMemoryDevices_Item::SharedCtor() {
+  device_locator_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  form_factor_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  part_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  manufactorer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  bank_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&size_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&data_width_) -
+      reinterpret_cast<char*>(&size_)) + sizeof(data_width_));
+  _cached_size_ = 0;
+}
+
+DmiMemoryDevices_Item::~DmiMemoryDevices_Item() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.DmiMemoryDevices.Item)
+  SharedDtor();
+}
+
+void DmiMemoryDevices_Item::SharedDtor() {
+  device_locator_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  form_factor_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  part_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  manufactorer_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  bank_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void DmiMemoryDevices_Item::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DmiMemoryDevices_Item& DmiMemoryDevices_Item::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+DmiMemoryDevices_Item* DmiMemoryDevices_Item::New(::google::protobuf::Arena* arena) const {
+  DmiMemoryDevices_Item* n = new DmiMemoryDevices_Item;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DmiMemoryDevices_Item::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiMemoryDevices.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  device_locator_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  form_factor_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  part_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  manufactorer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  bank_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&size_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&data_width_) -
+      reinterpret_cast<char*>(&size_)) + sizeof(data_width_));
+  _internal_metadata_.Clear();
+}
+
+bool DmiMemoryDevices_Item::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiMemoryDevices.Item)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string device_locator = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_device_locator()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->device_locator().data(), static_cast<int>(this->device_locator().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiMemoryDevices.Item.device_locator"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 size = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &size_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string type = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->type().data(), static_cast<int>(this->type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiMemoryDevices.Item.type"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 speed = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &speed_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string form_factor = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_form_factor()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->form_factor().data(), static_cast<int>(this->form_factor().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiMemoryDevices.Item.form_factor"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string serial_number = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_serial_number()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->serial_number().data(), static_cast<int>(this->serial_number().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiMemoryDevices.Item.serial_number"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string part_number = 7;
+      case 7: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(58u /* 58 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_part_number()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->part_number().data(), static_cast<int>(this->part_number().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiMemoryDevices.Item.part_number"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string manufactorer = 8;
+      case 8: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_manufactorer()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->manufactorer().data(), static_cast<int>(this->manufactorer().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiMemoryDevices.Item.manufactorer"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string bank = 9;
+      case 9: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(74u /* 74 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_bank()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->bank().data(), static_cast<int>(this->bank().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.DmiMemoryDevices.Item.bank"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 total_width = 10;
+      case 10: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(80u /* 80 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &total_width_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 data_width = 11;
+      case 11: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(88u /* 88 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &data_width_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiMemoryDevices.Item)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiMemoryDevices.Item)
+  return false;
+#undef DO_
+}
+
+void DmiMemoryDevices_Item::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiMemoryDevices.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string device_locator = 1;
+  if (this->device_locator().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->device_locator().data(), static_cast<int>(this->device_locator().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiMemoryDevices.Item.device_locator");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->device_locator(), output);
+  }
+
+  // int32 size = 2;
+  if (this->size() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->size(), output);
+  }
+
+  // string type = 3;
+  if (this->type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->type().data(), static_cast<int>(this->type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiMemoryDevices.Item.type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->type(), output);
+  }
+
+  // int32 speed = 4;
+  if (this->speed() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->speed(), output);
+  }
+
+  // string form_factor = 5;
+  if (this->form_factor().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->form_factor().data(), static_cast<int>(this->form_factor().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiMemoryDevices.Item.form_factor");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      5, this->form_factor(), output);
+  }
+
+  // string serial_number = 6;
+  if (this->serial_number().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->serial_number().data(), static_cast<int>(this->serial_number().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiMemoryDevices.Item.serial_number");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      6, this->serial_number(), output);
+  }
+
+  // string part_number = 7;
+  if (this->part_number().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->part_number().data(), static_cast<int>(this->part_number().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiMemoryDevices.Item.part_number");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      7, this->part_number(), output);
+  }
+
+  // string manufactorer = 8;
+  if (this->manufactorer().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->manufactorer().data(), static_cast<int>(this->manufactorer().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiMemoryDevices.Item.manufactorer");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      8, this->manufactorer(), output);
+  }
+
+  // string bank = 9;
+  if (this->bank().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->bank().data(), static_cast<int>(this->bank().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.DmiMemoryDevices.Item.bank");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      9, this->bank(), output);
+  }
+
+  // int32 total_width = 10;
+  if (this->total_width() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(10, this->total_width(), output);
+  }
+
+  // int32 data_width = 11;
+  if (this->data_width() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(11, this->data_width(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiMemoryDevices.Item)
+}
+
+size_t DmiMemoryDevices_Item::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiMemoryDevices.Item)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string device_locator = 1;
+  if (this->device_locator().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->device_locator());
+  }
+
+  // string type = 3;
+  if (this->type().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->type());
+  }
+
+  // string form_factor = 5;
+  if (this->form_factor().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->form_factor());
+  }
+
+  // string serial_number = 6;
+  if (this->serial_number().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->serial_number());
+  }
+
+  // string part_number = 7;
+  if (this->part_number().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->part_number());
+  }
+
+  // string manufactorer = 8;
+  if (this->manufactorer().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->manufactorer());
+  }
+
+  // string bank = 9;
+  if (this->bank().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->bank());
+  }
+
+  // int32 size = 2;
+  if (this->size() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->size());
+  }
+
+  // int32 speed = 4;
+  if (this->speed() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->speed());
+  }
+
+  // int32 total_width = 10;
+  if (this->total_width() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->total_width());
+  }
+
+  // int32 data_width = 11;
+  if (this->data_width() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->data_width());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DmiMemoryDevices_Item::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const DmiMemoryDevices_Item*>(&from));
+}
+
+void DmiMemoryDevices_Item::MergeFrom(const DmiMemoryDevices_Item& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiMemoryDevices.Item)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.device_locator().size() > 0) {
+
+    device_locator_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_locator_);
+  }
+  if (from.type().size() > 0) {
+
+    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
+  }
+  if (from.form_factor().size() > 0) {
+
+    form_factor_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.form_factor_);
+  }
+  if (from.serial_number().size() > 0) {
+
+    serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.serial_number_);
+  }
+  if (from.part_number().size() > 0) {
+
+    part_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.part_number_);
+  }
+  if (from.manufactorer().size() > 0) {
+
+    manufactorer_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufactorer_);
+  }
+  if (from.bank().size() > 0) {
+
+    bank_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.bank_);
+  }
+  if (from.size() != 0) {
+    set_size(from.size());
+  }
+  if (from.speed() != 0) {
+    set_speed(from.speed());
+  }
+  if (from.total_width() != 0) {
+    set_total_width(from.total_width());
+  }
+  if (from.data_width() != 0) {
+    set_data_width(from.data_width());
+  }
+}
+
+void DmiMemoryDevices_Item::CopyFrom(const DmiMemoryDevices_Item& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiMemoryDevices.Item)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DmiMemoryDevices_Item::IsInitialized() const {
+  return true;
+}
+
+void DmiMemoryDevices_Item::Swap(DmiMemoryDevices_Item* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void DmiMemoryDevices_Item::InternalSwap(DmiMemoryDevices_Item* other) {
+  using std::swap;
+  device_locator_.Swap(&other->device_locator_);
+  type_.Swap(&other->type_);
+  form_factor_.Swap(&other->form_factor_);
+  serial_number_.Swap(&other->serial_number_);
+  part_number_.Swap(&other->part_number_);
+  manufactorer_.Swap(&other->manufactorer_);
+  bank_.Swap(&other->bank_);
+  swap(size_, other->size_);
+  swap(speed_, other->speed_);
+  swap(total_width_, other->total_width_);
+  swap(data_width_, other->data_width_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string DmiMemoryDevices_Item::GetTypeName() const {
+  return "aspia.system_info.DmiMemoryDevices.Item";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// DmiMemoryDevices_Item
+
+// string device_locator = 1;
+void DmiMemoryDevices_Item::clear_device_locator() {
+  device_locator_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiMemoryDevices_Item::device_locator() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMemoryDevices.Item.device_locator)
+  return device_locator_.GetNoArena();
+}
+void DmiMemoryDevices_Item::set_device_locator(const ::std::string& value) {
+  
+  device_locator_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMemoryDevices.Item.device_locator)
+}
+#if LANG_CXX11
+void DmiMemoryDevices_Item::set_device_locator(::std::string&& value) {
+  
+  device_locator_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMemoryDevices.Item.device_locator)
+}
+#endif
+void DmiMemoryDevices_Item::set_device_locator(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  device_locator_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMemoryDevices.Item.device_locator)
+}
+void DmiMemoryDevices_Item::set_device_locator(const char* value, size_t size) {
+  
+  device_locator_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMemoryDevices.Item.device_locator)
+}
+::std::string* DmiMemoryDevices_Item::mutable_device_locator() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMemoryDevices.Item.device_locator)
+  return device_locator_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiMemoryDevices_Item::release_device_locator() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMemoryDevices.Item.device_locator)
+  
+  return device_locator_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiMemoryDevices_Item::set_allocated_device_locator(::std::string* device_locator) {
+  if (device_locator != NULL) {
+    
+  } else {
+    
+  }
+  device_locator_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), device_locator);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMemoryDevices.Item.device_locator)
+}
+
+// int32 size = 2;
+void DmiMemoryDevices_Item::clear_size() {
+  size_ = 0;
+}
+::google::protobuf::int32 DmiMemoryDevices_Item::size() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMemoryDevices.Item.size)
+  return size_;
+}
+void DmiMemoryDevices_Item::set_size(::google::protobuf::int32 value) {
+  
+  size_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMemoryDevices.Item.size)
+}
+
+// string type = 3;
+void DmiMemoryDevices_Item::clear_type() {
+  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiMemoryDevices_Item::type() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMemoryDevices.Item.type)
+  return type_.GetNoArena();
+}
+void DmiMemoryDevices_Item::set_type(const ::std::string& value) {
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMemoryDevices.Item.type)
+}
+#if LANG_CXX11
+void DmiMemoryDevices_Item::set_type(::std::string&& value) {
+  
+  type_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMemoryDevices.Item.type)
+}
+#endif
+void DmiMemoryDevices_Item::set_type(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMemoryDevices.Item.type)
+}
+void DmiMemoryDevices_Item::set_type(const char* value, size_t size) {
+  
+  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMemoryDevices.Item.type)
+}
+::std::string* DmiMemoryDevices_Item::mutable_type() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMemoryDevices.Item.type)
+  return type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiMemoryDevices_Item::release_type() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMemoryDevices.Item.type)
+  
+  return type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiMemoryDevices_Item::set_allocated_type(::std::string* type) {
+  if (type != NULL) {
+    
+  } else {
+    
+  }
+  type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), type);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMemoryDevices.Item.type)
+}
+
+// int32 speed = 4;
+void DmiMemoryDevices_Item::clear_speed() {
+  speed_ = 0;
+}
+::google::protobuf::int32 DmiMemoryDevices_Item::speed() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMemoryDevices.Item.speed)
+  return speed_;
+}
+void DmiMemoryDevices_Item::set_speed(::google::protobuf::int32 value) {
+  
+  speed_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMemoryDevices.Item.speed)
+}
+
+// string form_factor = 5;
+void DmiMemoryDevices_Item::clear_form_factor() {
+  form_factor_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiMemoryDevices_Item::form_factor() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMemoryDevices.Item.form_factor)
+  return form_factor_.GetNoArena();
+}
+void DmiMemoryDevices_Item::set_form_factor(const ::std::string& value) {
+  
+  form_factor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMemoryDevices.Item.form_factor)
+}
+#if LANG_CXX11
+void DmiMemoryDevices_Item::set_form_factor(::std::string&& value) {
+  
+  form_factor_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMemoryDevices.Item.form_factor)
+}
+#endif
+void DmiMemoryDevices_Item::set_form_factor(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  form_factor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMemoryDevices.Item.form_factor)
+}
+void DmiMemoryDevices_Item::set_form_factor(const char* value, size_t size) {
+  
+  form_factor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMemoryDevices.Item.form_factor)
+}
+::std::string* DmiMemoryDevices_Item::mutable_form_factor() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMemoryDevices.Item.form_factor)
+  return form_factor_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiMemoryDevices_Item::release_form_factor() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMemoryDevices.Item.form_factor)
+  
+  return form_factor_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiMemoryDevices_Item::set_allocated_form_factor(::std::string* form_factor) {
+  if (form_factor != NULL) {
+    
+  } else {
+    
+  }
+  form_factor_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), form_factor);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMemoryDevices.Item.form_factor)
+}
+
+// string serial_number = 6;
+void DmiMemoryDevices_Item::clear_serial_number() {
+  serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiMemoryDevices_Item::serial_number() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMemoryDevices.Item.serial_number)
+  return serial_number_.GetNoArena();
+}
+void DmiMemoryDevices_Item::set_serial_number(const ::std::string& value) {
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMemoryDevices.Item.serial_number)
+}
+#if LANG_CXX11
+void DmiMemoryDevices_Item::set_serial_number(::std::string&& value) {
+  
+  serial_number_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMemoryDevices.Item.serial_number)
+}
+#endif
+void DmiMemoryDevices_Item::set_serial_number(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMemoryDevices.Item.serial_number)
+}
+void DmiMemoryDevices_Item::set_serial_number(const char* value, size_t size) {
+  
+  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMemoryDevices.Item.serial_number)
+}
+::std::string* DmiMemoryDevices_Item::mutable_serial_number() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMemoryDevices.Item.serial_number)
+  return serial_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiMemoryDevices_Item::release_serial_number() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMemoryDevices.Item.serial_number)
+  
+  return serial_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiMemoryDevices_Item::set_allocated_serial_number(::std::string* serial_number) {
+  if (serial_number != NULL) {
+    
+  } else {
+    
+  }
+  serial_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), serial_number);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMemoryDevices.Item.serial_number)
+}
+
+// string part_number = 7;
+void DmiMemoryDevices_Item::clear_part_number() {
+  part_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiMemoryDevices_Item::part_number() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMemoryDevices.Item.part_number)
+  return part_number_.GetNoArena();
+}
+void DmiMemoryDevices_Item::set_part_number(const ::std::string& value) {
+  
+  part_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMemoryDevices.Item.part_number)
+}
+#if LANG_CXX11
+void DmiMemoryDevices_Item::set_part_number(::std::string&& value) {
+  
+  part_number_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMemoryDevices.Item.part_number)
+}
+#endif
+void DmiMemoryDevices_Item::set_part_number(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  part_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMemoryDevices.Item.part_number)
+}
+void DmiMemoryDevices_Item::set_part_number(const char* value, size_t size) {
+  
+  part_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMemoryDevices.Item.part_number)
+}
+::std::string* DmiMemoryDevices_Item::mutable_part_number() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMemoryDevices.Item.part_number)
+  return part_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiMemoryDevices_Item::release_part_number() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMemoryDevices.Item.part_number)
+  
+  return part_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiMemoryDevices_Item::set_allocated_part_number(::std::string* part_number) {
+  if (part_number != NULL) {
+    
+  } else {
+    
+  }
+  part_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), part_number);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMemoryDevices.Item.part_number)
+}
+
+// string manufactorer = 8;
+void DmiMemoryDevices_Item::clear_manufactorer() {
+  manufactorer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiMemoryDevices_Item::manufactorer() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMemoryDevices.Item.manufactorer)
+  return manufactorer_.GetNoArena();
+}
+void DmiMemoryDevices_Item::set_manufactorer(const ::std::string& value) {
+  
+  manufactorer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMemoryDevices.Item.manufactorer)
+}
+#if LANG_CXX11
+void DmiMemoryDevices_Item::set_manufactorer(::std::string&& value) {
+  
+  manufactorer_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMemoryDevices.Item.manufactorer)
+}
+#endif
+void DmiMemoryDevices_Item::set_manufactorer(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  manufactorer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMemoryDevices.Item.manufactorer)
+}
+void DmiMemoryDevices_Item::set_manufactorer(const char* value, size_t size) {
+  
+  manufactorer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMemoryDevices.Item.manufactorer)
+}
+::std::string* DmiMemoryDevices_Item::mutable_manufactorer() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMemoryDevices.Item.manufactorer)
+  return manufactorer_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiMemoryDevices_Item::release_manufactorer() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMemoryDevices.Item.manufactorer)
+  
+  return manufactorer_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiMemoryDevices_Item::set_allocated_manufactorer(::std::string* manufactorer) {
+  if (manufactorer != NULL) {
+    
+  } else {
+    
+  }
+  manufactorer_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), manufactorer);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMemoryDevices.Item.manufactorer)
+}
+
+// string bank = 9;
+void DmiMemoryDevices_Item::clear_bank() {
+  bank_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& DmiMemoryDevices_Item::bank() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMemoryDevices.Item.bank)
+  return bank_.GetNoArena();
+}
+void DmiMemoryDevices_Item::set_bank(const ::std::string& value) {
+  
+  bank_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMemoryDevices.Item.bank)
+}
+#if LANG_CXX11
+void DmiMemoryDevices_Item::set_bank(::std::string&& value) {
+  
+  bank_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.DmiMemoryDevices.Item.bank)
+}
+#endif
+void DmiMemoryDevices_Item::set_bank(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  bank_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.DmiMemoryDevices.Item.bank)
+}
+void DmiMemoryDevices_Item::set_bank(const char* value, size_t size) {
+  
+  bank_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.DmiMemoryDevices.Item.bank)
+}
+::std::string* DmiMemoryDevices_Item::mutable_bank() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMemoryDevices.Item.bank)
+  return bank_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* DmiMemoryDevices_Item::release_bank() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.DmiMemoryDevices.Item.bank)
+  
+  return bank_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void DmiMemoryDevices_Item::set_allocated_bank(::std::string* bank) {
+  if (bank != NULL) {
+    
+  } else {
+    
+  }
+  bank_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), bank);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.DmiMemoryDevices.Item.bank)
+}
+
+// int32 total_width = 10;
+void DmiMemoryDevices_Item::clear_total_width() {
+  total_width_ = 0;
+}
+::google::protobuf::int32 DmiMemoryDevices_Item::total_width() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMemoryDevices.Item.total_width)
+  return total_width_;
+}
+void DmiMemoryDevices_Item::set_total_width(::google::protobuf::int32 value) {
+  
+  total_width_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMemoryDevices.Item.total_width)
+}
+
+// int32 data_width = 11;
+void DmiMemoryDevices_Item::clear_data_width() {
+  data_width_ = 0;
+}
+::google::protobuf::int32 DmiMemoryDevices_Item::data_width() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMemoryDevices.Item.data_width)
+  return data_width_;
+}
+void DmiMemoryDevices_Item::set_data_width(::google::protobuf::int32 value) {
+  
+  data_width_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.DmiMemoryDevices.Item.data_width)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DmiMemoryDevices::kItemFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DmiMemoryDevices::DmiMemoryDevices()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.DmiMemoryDevices)
+}
+DmiMemoryDevices::DmiMemoryDevices(const DmiMemoryDevices& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      item_(from.item_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiMemoryDevices)
+}
+
+void DmiMemoryDevices::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+DmiMemoryDevices::~DmiMemoryDevices() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.DmiMemoryDevices)
+  SharedDtor();
+}
+
+void DmiMemoryDevices::SharedDtor() {
+}
+
+void DmiMemoryDevices::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DmiMemoryDevices& DmiMemoryDevices::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+DmiMemoryDevices* DmiMemoryDevices::New(::google::protobuf::Arena* arena) const {
+  DmiMemoryDevices* n = new DmiMemoryDevices;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DmiMemoryDevices::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiMemoryDevices)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  item_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool DmiMemoryDevices::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiMemoryDevices)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .aspia.system_info.DmiMemoryDevices.Item item = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_item()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiMemoryDevices)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiMemoryDevices)
+  return false;
+#undef DO_
+}
+
+void DmiMemoryDevices::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiMemoryDevices)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .aspia.system_info.DmiMemoryDevices.Item item = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1, this->item(static_cast<int>(i)), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiMemoryDevices)
+}
+
+size_t DmiMemoryDevices::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiMemoryDevices)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.system_info.DmiMemoryDevices.Item item = 1;
+  {
+    unsigned int count = static_cast<unsigned int>(this->item_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->item(static_cast<int>(i)));
+    }
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DmiMemoryDevices::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const DmiMemoryDevices*>(&from));
+}
+
+void DmiMemoryDevices::MergeFrom(const DmiMemoryDevices& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiMemoryDevices)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  item_.MergeFrom(from.item_);
+}
+
+void DmiMemoryDevices::CopyFrom(const DmiMemoryDevices& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiMemoryDevices)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DmiMemoryDevices::IsInitialized() const {
+  return true;
+}
+
+void DmiMemoryDevices::Swap(DmiMemoryDevices* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void DmiMemoryDevices::InternalSwap(DmiMemoryDevices* other) {
+  using std::swap;
+  item_.InternalSwap(&other->item_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string DmiMemoryDevices::GetTypeName() const {
+  return "aspia.system_info.DmiMemoryDevices";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// DmiMemoryDevices
+
+// repeated .aspia.system_info.DmiMemoryDevices.Item item = 1;
+int DmiMemoryDevices::item_size() const {
+  return item_.size();
+}
+void DmiMemoryDevices::clear_item() {
+  item_.Clear();
+}
+const ::aspia::system_info::DmiMemoryDevices_Item& DmiMemoryDevices::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.DmiMemoryDevices.item)
+  return item_.Get(index);
+}
+::aspia::system_info::DmiMemoryDevices_Item* DmiMemoryDevices::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.DmiMemoryDevices.item)
+  return item_.Mutable(index);
+}
+::aspia::system_info::DmiMemoryDevices_Item* DmiMemoryDevices::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.DmiMemoryDevices.item)
+  return item_.Add();
+}
+::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiMemoryDevices_Item >*
+DmiMemoryDevices::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.DmiMemoryDevices.item)
+  return &item_;
+}
+const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::DmiMemoryDevices_Item >&
+DmiMemoryDevices::item() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.DmiMemoryDevices.item)
   return item_;
 }
 

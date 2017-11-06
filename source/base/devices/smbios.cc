@@ -1350,4 +1350,179 @@ SMBios::CacheTable::Associativity SMBios::CacheTable::GetAssociativity() const
     }
 }
 
+//
+// MemoryDeviceTable
+//
+
+SMBios::MemoryDeviceTable::MemoryDeviceTable(const TableReader& reader)
+    : reader_(reader)
+{
+    // Nothing
+}
+
+std::string SMBios::MemoryDeviceTable::GetDeviceLocator() const
+{
+    if (reader_.GetTableLength() < 0x15)
+        return std::string();
+
+    return reader_.GetString(0x10);
+}
+
+int SMBios::MemoryDeviceTable::GetSize() const
+{
+    if (reader_.GetTableLength() < 0x15)
+        return 0;
+
+    return reader_.GetWord(0x0C) & 0x07FFF;
+}
+
+std::string SMBios::MemoryDeviceTable::GetType() const
+{
+    if (reader_.GetTableLength() < 0x15)
+        return std::string();
+
+    const uint8_t type = reader_.GetByte(0x12);
+    if (type == 0x02)
+        return std::string();
+
+    struct TypeList
+    {
+        uint8_t type;
+        const char* name;
+    } const list[] =
+    {
+        { 0x01, "Other" },
+        { 0x02, "Unknown" },
+        { 0x03, "DRAM" },
+        { 0x04, "EDRAM" },
+        { 0x05, "VRAM" },
+        { 0x06, "SRAM" },
+        { 0x07, "RAM" },
+        { 0x08, "ROM" },
+        { 0x09, "Flash" },
+        { 0x0A, "EEPROM" },
+        { 0x0B, "FEPROM" },
+        { 0x0C, "EPROM" },
+        { 0x0D, "CDRAM" },
+        { 0x0E, "3DRAM" },
+        { 0x0F, "SDRAM" },
+        { 0x10, "SGRAM" },
+        { 0x11, "RDRAM" },
+        { 0x12, "DDR" },
+        { 0x13, "DDR2" },
+        { 0x14, "DDR2 FB-DIMM" },
+        // 0x15 - 0x17 Reserved.
+        { 0x18, "DDR3" },
+        { 0x19, "FBD2" },
+        { 0x1A, "DDR4" },
+        { 0x1B, "LPDDR" },
+        { 0x1C, "LPDDR2" },
+        { 0x1D, "LPDDR3" },
+        { 0x1E, "LPDDR4" }
+    };
+
+    for (size_t i = 0; i < _countof(list); ++i)
+    {
+        if (list[i].type == type)
+            return list[i].name;
+    }
+
+    return std::string();
+}
+
+int SMBios::MemoryDeviceTable::GetSpeed() const
+{
+    if (reader_.GetTableLength() < 0x15)
+        return 0;
+
+    return reader_.GetWord(0x15);
+}
+
+std::string SMBios::MemoryDeviceTable::GetFormFactor() const
+{
+    if (reader_.GetTableLength() < 0x15)
+        return std::string();
+
+    const uint8_t form_factor = reader_.GetByte(0x0E);
+
+    struct FormFactor
+    {
+        uint8_t form_factor;
+        const char* name;
+    } const list[] =
+    {
+        { 0x01, "Other" },
+        { 0x02, "Unknown" },
+        { 0x03, "SIMM" },
+        { 0x04, "SIP" },
+        { 0x05, "Chip" },
+        { 0x06, "DIP" },
+        { 0x07, "ZIP" },
+        { 0x08, "Proprietary Card" },
+        { 0x09, "DIMM" },
+        { 0x0A, "TSOP" },
+        { 0x0B, "Row of chips" },
+        { 0x0C, "RIMM" },
+        { 0x0D, "SODIMM" },
+        { 0x0E, "SRIMM" },
+        { 0x0F, "FB-DIMM" }
+    };
+
+    for (size_t i = 0; i < _countof(list); ++i)
+    {
+        if (list[i].form_factor == form_factor)
+            return list[i].name;
+    }
+
+    return std::string();
+}
+
+std::string SMBios::MemoryDeviceTable::GetSerialNumber() const
+{
+    if (reader_.GetTableLength() < 0x15)
+        return std::string();
+
+    return reader_.GetString(0x18);
+}
+
+std::string SMBios::MemoryDeviceTable::GetPartNumber() const
+{
+    if (reader_.GetTableLength() < 0x15)
+        return std::string();
+
+    return reader_.GetString(0x1A);
+}
+
+std::string SMBios::MemoryDeviceTable::GetManufacturer() const
+{
+    if (reader_.GetTableLength() < 0x15)
+        return std::string();
+
+    return reader_.GetString(0x17);
+}
+
+std::string SMBios::MemoryDeviceTable::GetBank() const
+{
+    if (reader_.GetTableLength() < 0x15)
+        return std::string();
+
+    return reader_.GetString(0x11);
+}
+
+int SMBios::MemoryDeviceTable::GetTotalWidth() const
+{
+    if (reader_.GetTableLength() < 0x15)
+        return 0;
+
+    return reader_.GetWord(0x08);
+}
+
+int SMBios::MemoryDeviceTable::GetDataWidth() const
+{
+    if (reader_.GetTableLength() < 0x15)
+        return 0;
+
+    return reader_.GetWord(0x0A);
+}
+
 } // namespace aspia
