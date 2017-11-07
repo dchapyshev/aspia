@@ -181,6 +181,16 @@ public:
  ::google::protobuf::internal::ExplicitlyConstructed<WindowsDevices>
      _instance;
 } _WindowsDevices_default_instance_;
+class Programs_ItemDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<Programs_Item>
+     _instance;
+} _Programs_Item_default_instance_;
+class ProgramsDefaultTypeInternal {
+public:
+ ::google::protobuf::internal::ExplicitlyConstructed<Programs>
+     _instance;
+} _Programs_default_instance_;
 class Services_ItemDefaultTypeInternal {
 public:
  ::google::protobuf::internal::ExplicitlyConstructed<Services_Item>
@@ -342,6 +352,8 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
   { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
+  { NULL, NULL, 0, -1, -1, -1, -1, NULL, false },
 };
 
 void TableStruct::InitDefaultsImpl() {
@@ -414,7 +426,11 @@ void TableStruct::InitDefaultsImpl() {
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_WindowsDevices_Item_default_instance_);_WindowsDevices_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
-      &_WindowsDevices_default_instance_);_Services_Item_default_instance_._instance.DefaultConstruct();
+      &_WindowsDevices_default_instance_);_Programs_Item_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_Programs_Item_default_instance_);_Programs_default_instance_._instance.DefaultConstruct();
+  ::google::protobuf::internal::OnShutdownDestroyMessage(
+      &_Programs_default_instance_);_Services_Item_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
       &_Services_Item_default_instance_);_Services_default_instance_._instance.DefaultConstruct();
   ::google::protobuf::internal::OnShutdownDestroyMessage(
@@ -20851,6 +20867,894 @@ WindowsDevices::mutable_item() {
 const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::WindowsDevices_Item >&
 WindowsDevices::item() const {
   // @@protoc_insertion_point(field_list:aspia.system_info.WindowsDevices.item)
+  return item_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int Programs_Item::kNameFieldNumber;
+const int Programs_Item::kVersionFieldNumber;
+const int Programs_Item::kPublisherFieldNumber;
+const int Programs_Item::kInstallDateFieldNumber;
+const int Programs_Item::kInstallLocationFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+Programs_Item::Programs_Item()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.Programs.Item)
+}
+Programs_Item::Programs_Item(const Programs_Item& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.name().size() > 0) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.version().size() > 0) {
+    version_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.version_);
+  }
+  publisher_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.publisher().size() > 0) {
+    publisher_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.publisher_);
+  }
+  install_date_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.install_date().size() > 0) {
+    install_date_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.install_date_);
+  }
+  install_location_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.install_location().size() > 0) {
+    install_location_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.install_location_);
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Programs.Item)
+}
+
+void Programs_Item::SharedCtor() {
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  publisher_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  install_date_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  install_location_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _cached_size_ = 0;
+}
+
+Programs_Item::~Programs_Item() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.Programs.Item)
+  SharedDtor();
+}
+
+void Programs_Item::SharedDtor() {
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  version_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  publisher_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  install_date_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  install_location_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void Programs_Item::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const Programs_Item& Programs_Item::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+Programs_Item* Programs_Item::New(::google::protobuf::Arena* arena) const {
+  Programs_Item* n = new Programs_Item;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void Programs_Item::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.Programs.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  publisher_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  install_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  install_location_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _internal_metadata_.Clear();
+}
+
+bool Programs_Item::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.Programs.Item)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string name = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->name().data(), static_cast<int>(this->name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.Programs.Item.name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string version = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_version()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->version().data(), static_cast<int>(this->version().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.Programs.Item.version"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string publisher = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_publisher()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->publisher().data(), static_cast<int>(this->publisher().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.Programs.Item.publisher"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string install_date = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_install_date()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->install_date().data(), static_cast<int>(this->install_date().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.Programs.Item.install_date"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string install_location = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_install_location()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->install_location().data(), static_cast<int>(this->install_location().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.system_info.Programs.Item.install_location"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.Programs.Item)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.Programs.Item)
+  return false;
+#undef DO_
+}
+
+void Programs_Item::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.Programs.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string name = 1;
+  if (this->name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->name().data(), static_cast<int>(this->name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.Programs.Item.name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->name(), output);
+  }
+
+  // string version = 2;
+  if (this->version().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->version().data(), static_cast<int>(this->version().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.Programs.Item.version");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->version(), output);
+  }
+
+  // string publisher = 3;
+  if (this->publisher().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->publisher().data(), static_cast<int>(this->publisher().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.Programs.Item.publisher");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->publisher(), output);
+  }
+
+  // string install_date = 4;
+  if (this->install_date().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->install_date().data(), static_cast<int>(this->install_date().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.Programs.Item.install_date");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      4, this->install_date(), output);
+  }
+
+  // string install_location = 5;
+  if (this->install_location().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->install_location().data(), static_cast<int>(this->install_location().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.system_info.Programs.Item.install_location");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      5, this->install_location(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.Programs.Item)
+}
+
+size_t Programs_Item::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Programs.Item)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string name = 1;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->name());
+  }
+
+  // string version = 2;
+  if (this->version().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->version());
+  }
+
+  // string publisher = 3;
+  if (this->publisher().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->publisher());
+  }
+
+  // string install_date = 4;
+  if (this->install_date().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->install_date());
+  }
+
+  // string install_location = 5;
+  if (this->install_location().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->install_location());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Programs_Item::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const Programs_Item*>(&from));
+}
+
+void Programs_Item::MergeFrom(const Programs_Item& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Programs.Item)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.name().size() > 0) {
+
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  if (from.version().size() > 0) {
+
+    version_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.version_);
+  }
+  if (from.publisher().size() > 0) {
+
+    publisher_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.publisher_);
+  }
+  if (from.install_date().size() > 0) {
+
+    install_date_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.install_date_);
+  }
+  if (from.install_location().size() > 0) {
+
+    install_location_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.install_location_);
+  }
+}
+
+void Programs_Item::CopyFrom(const Programs_Item& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Programs.Item)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Programs_Item::IsInitialized() const {
+  return true;
+}
+
+void Programs_Item::Swap(Programs_Item* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void Programs_Item::InternalSwap(Programs_Item* other) {
+  using std::swap;
+  name_.Swap(&other->name_);
+  version_.Swap(&other->version_);
+  publisher_.Swap(&other->publisher_);
+  install_date_.Swap(&other->install_date_);
+  install_location_.Swap(&other->install_location_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string Programs_Item::GetTypeName() const {
+  return "aspia.system_info.Programs.Item";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// Programs_Item
+
+// string name = 1;
+void Programs_Item::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& Programs_Item::name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Programs.Item.name)
+  return name_.GetNoArena();
+}
+void Programs_Item::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Programs.Item.name)
+}
+#if LANG_CXX11
+void Programs_Item::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Programs.Item.name)
+}
+#endif
+void Programs_Item::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Programs.Item.name)
+}
+void Programs_Item::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Programs.Item.name)
+}
+::std::string* Programs_Item::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Programs.Item.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* Programs_Item::release_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Programs.Item.name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void Programs_Item::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Programs.Item.name)
+}
+
+// string version = 2;
+void Programs_Item::clear_version() {
+  version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& Programs_Item::version() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Programs.Item.version)
+  return version_.GetNoArena();
+}
+void Programs_Item::set_version(const ::std::string& value) {
+  
+  version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Programs.Item.version)
+}
+#if LANG_CXX11
+void Programs_Item::set_version(::std::string&& value) {
+  
+  version_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Programs.Item.version)
+}
+#endif
+void Programs_Item::set_version(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Programs.Item.version)
+}
+void Programs_Item::set_version(const char* value, size_t size) {
+  
+  version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Programs.Item.version)
+}
+::std::string* Programs_Item::mutable_version() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Programs.Item.version)
+  return version_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* Programs_Item::release_version() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Programs.Item.version)
+  
+  return version_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void Programs_Item::set_allocated_version(::std::string* version) {
+  if (version != NULL) {
+    
+  } else {
+    
+  }
+  version_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), version);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Programs.Item.version)
+}
+
+// string publisher = 3;
+void Programs_Item::clear_publisher() {
+  publisher_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& Programs_Item::publisher() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Programs.Item.publisher)
+  return publisher_.GetNoArena();
+}
+void Programs_Item::set_publisher(const ::std::string& value) {
+  
+  publisher_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Programs.Item.publisher)
+}
+#if LANG_CXX11
+void Programs_Item::set_publisher(::std::string&& value) {
+  
+  publisher_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Programs.Item.publisher)
+}
+#endif
+void Programs_Item::set_publisher(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  publisher_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Programs.Item.publisher)
+}
+void Programs_Item::set_publisher(const char* value, size_t size) {
+  
+  publisher_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Programs.Item.publisher)
+}
+::std::string* Programs_Item::mutable_publisher() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Programs.Item.publisher)
+  return publisher_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* Programs_Item::release_publisher() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Programs.Item.publisher)
+  
+  return publisher_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void Programs_Item::set_allocated_publisher(::std::string* publisher) {
+  if (publisher != NULL) {
+    
+  } else {
+    
+  }
+  publisher_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), publisher);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Programs.Item.publisher)
+}
+
+// string install_date = 4;
+void Programs_Item::clear_install_date() {
+  install_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& Programs_Item::install_date() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Programs.Item.install_date)
+  return install_date_.GetNoArena();
+}
+void Programs_Item::set_install_date(const ::std::string& value) {
+  
+  install_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Programs.Item.install_date)
+}
+#if LANG_CXX11
+void Programs_Item::set_install_date(::std::string&& value) {
+  
+  install_date_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Programs.Item.install_date)
+}
+#endif
+void Programs_Item::set_install_date(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  install_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Programs.Item.install_date)
+}
+void Programs_Item::set_install_date(const char* value, size_t size) {
+  
+  install_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Programs.Item.install_date)
+}
+::std::string* Programs_Item::mutable_install_date() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Programs.Item.install_date)
+  return install_date_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* Programs_Item::release_install_date() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Programs.Item.install_date)
+  
+  return install_date_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void Programs_Item::set_allocated_install_date(::std::string* install_date) {
+  if (install_date != NULL) {
+    
+  } else {
+    
+  }
+  install_date_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), install_date);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Programs.Item.install_date)
+}
+
+// string install_location = 5;
+void Programs_Item::clear_install_location() {
+  install_location_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& Programs_Item::install_location() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Programs.Item.install_location)
+  return install_location_.GetNoArena();
+}
+void Programs_Item::set_install_location(const ::std::string& value) {
+  
+  install_location_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Programs.Item.install_location)
+}
+#if LANG_CXX11
+void Programs_Item::set_install_location(::std::string&& value) {
+  
+  install_location_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Programs.Item.install_location)
+}
+#endif
+void Programs_Item::set_install_location(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  install_location_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Programs.Item.install_location)
+}
+void Programs_Item::set_install_location(const char* value, size_t size) {
+  
+  install_location_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Programs.Item.install_location)
+}
+::std::string* Programs_Item::mutable_install_location() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Programs.Item.install_location)
+  return install_location_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* Programs_Item::release_install_location() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Programs.Item.install_location)
+  
+  return install_location_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void Programs_Item::set_allocated_install_location(::std::string* install_location) {
+  if (install_location != NULL) {
+    
+  } else {
+    
+  }
+  install_location_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), install_location);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Programs.Item.install_location)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int Programs::kItemFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+Programs::Programs()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.system_info.Programs)
+}
+Programs::Programs(const Programs& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      item_(from.item_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Programs)
+}
+
+void Programs::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+Programs::~Programs() {
+  // @@protoc_insertion_point(destructor:aspia.system_info.Programs)
+  SharedDtor();
+}
+
+void Programs::SharedDtor() {
+}
+
+void Programs::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const Programs& Programs::default_instance() {
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+Programs* Programs::New(::google::protobuf::Arena* arena) const {
+  Programs* n = new Programs;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void Programs::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.system_info.Programs)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  item_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool Programs::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::io::LazyStringOutputStream unknown_fields_string(
+      ::google::protobuf::NewPermanentCallback(&_internal_metadata_,
+          &::google::protobuf::internal::InternalMetadataWithArenaLite::
+              mutable_unknown_fields));
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_string, false);
+  // @@protoc_insertion_point(parse_start:aspia.system_info.Programs)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .aspia.system_info.Programs.Item item = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_item()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.system_info.Programs)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.system_info.Programs)
+  return false;
+#undef DO_
+}
+
+void Programs::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.system_info.Programs)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .aspia.system_info.Programs.Item item = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1, this->item(static_cast<int>(i)), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.system_info.Programs)
+}
+
+size_t Programs::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Programs)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.system_info.Programs.Item item = 1;
+  {
+    unsigned int count = static_cast<unsigned int>(this->item_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->item(static_cast<int>(i)));
+    }
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Programs::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const Programs*>(&from));
+}
+
+void Programs::MergeFrom(const Programs& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Programs)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  item_.MergeFrom(from.item_);
+}
+
+void Programs::CopyFrom(const Programs& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Programs)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Programs::IsInitialized() const {
+  return true;
+}
+
+void Programs::Swap(Programs* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void Programs::InternalSwap(Programs* other) {
+  using std::swap;
+  item_.InternalSwap(&other->item_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string Programs::GetTypeName() const {
+  return "aspia.system_info.Programs";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// Programs
+
+// repeated .aspia.system_info.Programs.Item item = 1;
+int Programs::item_size() const {
+  return item_.size();
+}
+void Programs::clear_item() {
+  item_.Clear();
+}
+const ::aspia::system_info::Programs_Item& Programs::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Programs.item)
+  return item_.Get(index);
+}
+::aspia::system_info::Programs_Item* Programs::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Programs.item)
+  return item_.Mutable(index);
+}
+::aspia::system_info::Programs_Item* Programs::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.Programs.item)
+  return item_.Add();
+}
+::google::protobuf::RepeatedPtrField< ::aspia::system_info::Programs_Item >*
+Programs::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.Programs.item)
+  return &item_;
+}
+const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Programs_Item >&
+Programs::item() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.Programs.item)
   return item_;
 }
 

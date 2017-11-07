@@ -661,6 +661,9 @@
     <ClCompile Include="base\process\process_enumerator.cc">
       <Filter>base\process</Filter>
     </ClCompile>
+    <ClCompile Include="base\program_enumerator.cc">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1360,6 +1363,9 @@
     </ClInclude>
     <ClInclude Include="base\process\process_enumerator.h">
       <Filter>base\process</Filter>
+    </ClInclude>
+    <ClInclude Include="base\program_enumerator.h">
+      <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,7 @@
 //
 
 #include "base/process/process_enumerator.h"
+#include "base/program_enumerator.h"
 #include "base/service_enumerator.h"
 #include "protocol/category_group_software.h"
 #include "ui/system_info/output_proxy.h"
@@ -34,15 +35,52 @@ const char* CategoryPrograms::Guid() const
 
 void CategoryPrograms::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::Programs message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Name", 200);
+        output->AddHeaderItem("Version", 100);
+        output->AddHeaderItem("Publisher", 100);
+        output->AddHeaderItem("Install Date", 80);
+        output->AddHeaderItem("Install Location", 150);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::Programs::Item& item = message.item(index);
+
+        Output::Row row(output, Icon());
+
+        output->AddValue(item.name());
+        output->AddValue(item.version());
+        output->AddValue(item.publisher());
+        output->AddValue(item.install_date());
+        output->AddValue(item.install_location());
+    }
 }
 
 std::string CategoryPrograms::Serialize()
 {
-    // TODO
-    return std::string();
+    system_info::Programs message;
+
+    for (ProgramEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+    {
+        system_info::Programs::Item* item = message.add_item();
+
+        item->set_name(enumerator.GetName());
+        item->set_version(enumerator.GetVersion());
+        item->set_publisher(enumerator.GetPublisher());
+        item->set_install_date(enumerator.GetInstallDate());
+        item->set_install_location(enumerator.GetInstallLocation());
+    }
+
+    return message.SerializeAsString();
 }
 
 //

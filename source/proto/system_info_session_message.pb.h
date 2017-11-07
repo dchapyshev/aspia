@@ -146,6 +146,12 @@ extern ProcessesDefaultTypeInternal _Processes_default_instance_;
 class Processes_Item;
 class Processes_ItemDefaultTypeInternal;
 extern Processes_ItemDefaultTypeInternal _Processes_Item_default_instance_;
+class Programs;
+class ProgramsDefaultTypeInternal;
+extern ProgramsDefaultTypeInternal _Programs_default_instance_;
+class Programs_Item;
+class Programs_ItemDefaultTypeInternal;
+extern Programs_ItemDefaultTypeInternal _Programs_Item_default_instance_;
 class Routes;
 class RoutesDefaultTypeInternal;
 extern RoutesDefaultTypeInternal _Routes_default_instance_;
@@ -6310,6 +6316,272 @@ class WindowsDevices : public ::google::protobuf::MessageLite /* @@protoc_insert
 };
 // -------------------------------------------------------------------
 
+class Programs_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.Programs.Item) */ {
+ public:
+  Programs_Item();
+  virtual ~Programs_Item();
+
+  Programs_Item(const Programs_Item& from);
+
+  inline Programs_Item& operator=(const Programs_Item& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  Programs_Item(Programs_Item&& from) noexcept
+    : Programs_Item() {
+    *this = ::std::move(from);
+  }
+
+  inline Programs_Item& operator=(Programs_Item&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const Programs_Item& default_instance();
+
+  static inline const Programs_Item* internal_default_instance() {
+    return reinterpret_cast<const Programs_Item*>(
+               &_Programs_Item_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    33;
+
+  void Swap(Programs_Item* other);
+  friend void swap(Programs_Item& a, Programs_Item& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Programs_Item* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  Programs_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const Programs_Item& from);
+  void MergeFrom(const Programs_Item& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(Programs_Item* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string name = 1;
+  void clear_name();
+  static const int kNameFieldNumber = 1;
+  const ::std::string& name() const;
+  void set_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_name(::std::string&& value);
+  #endif
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  ::std::string* mutable_name();
+  ::std::string* release_name();
+  void set_allocated_name(::std::string* name);
+
+  // string version = 2;
+  void clear_version();
+  static const int kVersionFieldNumber = 2;
+  const ::std::string& version() const;
+  void set_version(const ::std::string& value);
+  #if LANG_CXX11
+  void set_version(::std::string&& value);
+  #endif
+  void set_version(const char* value);
+  void set_version(const char* value, size_t size);
+  ::std::string* mutable_version();
+  ::std::string* release_version();
+  void set_allocated_version(::std::string* version);
+
+  // string publisher = 3;
+  void clear_publisher();
+  static const int kPublisherFieldNumber = 3;
+  const ::std::string& publisher() const;
+  void set_publisher(const ::std::string& value);
+  #if LANG_CXX11
+  void set_publisher(::std::string&& value);
+  #endif
+  void set_publisher(const char* value);
+  void set_publisher(const char* value, size_t size);
+  ::std::string* mutable_publisher();
+  ::std::string* release_publisher();
+  void set_allocated_publisher(::std::string* publisher);
+
+  // string install_date = 4;
+  void clear_install_date();
+  static const int kInstallDateFieldNumber = 4;
+  const ::std::string& install_date() const;
+  void set_install_date(const ::std::string& value);
+  #if LANG_CXX11
+  void set_install_date(::std::string&& value);
+  #endif
+  void set_install_date(const char* value);
+  void set_install_date(const char* value, size_t size);
+  ::std::string* mutable_install_date();
+  ::std::string* release_install_date();
+  void set_allocated_install_date(::std::string* install_date);
+
+  // string install_location = 5;
+  void clear_install_location();
+  static const int kInstallLocationFieldNumber = 5;
+  const ::std::string& install_location() const;
+  void set_install_location(const ::std::string& value);
+  #if LANG_CXX11
+  void set_install_location(::std::string&& value);
+  #endif
+  void set_install_location(const char* value);
+  void set_install_location(const char* value, size_t size);
+  ::std::string* mutable_install_location();
+  ::std::string* release_install_location();
+  void set_allocated_install_location(::std::string* install_location);
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.Programs.Item)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr name_;
+  ::google::protobuf::internal::ArenaStringPtr version_;
+  ::google::protobuf::internal::ArenaStringPtr publisher_;
+  ::google::protobuf::internal::ArenaStringPtr install_date_;
+  ::google::protobuf::internal::ArenaStringPtr install_location_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class Programs : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.Programs) */ {
+ public:
+  Programs();
+  virtual ~Programs();
+
+  Programs(const Programs& from);
+
+  inline Programs& operator=(const Programs& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  Programs(Programs&& from) noexcept
+    : Programs() {
+    *this = ::std::move(from);
+  }
+
+  inline Programs& operator=(Programs&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const Programs& default_instance();
+
+  static inline const Programs* internal_default_instance() {
+    return reinterpret_cast<const Programs*>(
+               &_Programs_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    34;
+
+  void Swap(Programs* other);
+  friend void swap(Programs& a, Programs& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Programs* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  Programs* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const Programs& from);
+  void MergeFrom(const Programs& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(Programs* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef Programs_Item Item;
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.system_info.Programs.Item item = 1;
+  int item_size() const;
+  void clear_item();
+  static const int kItemFieldNumber = 1;
+  const ::aspia::system_info::Programs_Item& item(int index) const;
+  ::aspia::system_info::Programs_Item* mutable_item(int index);
+  ::aspia::system_info::Programs_Item* add_item();
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Programs_Item >*
+      mutable_item();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Programs_Item >&
+      item() const;
+
+  // @@protoc_insertion_point(class_scope:aspia.system_info.Programs)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Programs_Item > item_;
+  mutable int _cached_size_;
+  friend struct protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.system_info.Services.Item) */ {
  public:
   Services_Item();
@@ -6343,7 +6615,7 @@ class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Services_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    33;
+    35;
 
   void Swap(Services_Item* other);
   friend void swap(Services_Item& a, Services_Item& b) {
@@ -6570,7 +6842,7 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Services_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    34;
+    36;
 
   void Swap(Services* other);
   friend void swap(Services& a, Services& b) {
@@ -6673,7 +6945,7 @@ class Processes_Item : public ::google::protobuf::MessageLite /* @@protoc_insert
                &_Processes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    35;
+    37;
 
   void Swap(Processes_Item* other);
   friend void swap(Processes_Item& a, Processes_Item& b) {
@@ -6820,7 +7092,7 @@ class Processes : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
                &_Processes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    36;
+    38;
 
   void Swap(Processes* other);
   friend void swap(Processes& a, Processes& b) {
@@ -6923,7 +7195,7 @@ class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@
                &_NetworkCards_Item_IpAddress_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    37;
+    39;
 
   void Swap(NetworkCards_Item_IpAddress* other);
   friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
@@ -7041,7 +7313,7 @@ class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_NetworkCards_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    38;
+    40;
 
   void Swap(NetworkCards_Item* other);
   friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
@@ -7331,7 +7603,7 @@ class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_NetworkCards_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    39;
+    41;
 
   void Swap(NetworkCards* other);
   friend void swap(NetworkCards& a, NetworkCards& b) {
@@ -7434,7 +7706,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    40;
+    42;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -7620,7 +7892,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    41;
+    43;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -7723,7 +7995,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    42;
+    44;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -7902,7 +8174,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    43;
+    45;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -8005,7 +8277,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    44;
+    46;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -8145,7 +8417,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    45;
+    47;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -8248,7 +8520,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    46;
+    48;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -8437,7 +8709,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    47;
+    49;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -8540,7 +8812,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    48;
+    50;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -8658,7 +8930,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    49;
+    51;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -8761,7 +9033,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    50;
+    52;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -8931,7 +9203,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    51;
+    53;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -15759,6 +16031,309 @@ WindowsDevices::item() const {
 
 // -------------------------------------------------------------------
 
+// Programs_Item
+
+// string name = 1;
+inline void Programs_Item::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Programs_Item::name() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Programs.Item.name)
+  return name_.GetNoArena();
+}
+inline void Programs_Item::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Programs.Item.name)
+}
+#if LANG_CXX11
+inline void Programs_Item::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Programs.Item.name)
+}
+#endif
+inline void Programs_Item::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Programs.Item.name)
+}
+inline void Programs_Item::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Programs.Item.name)
+}
+inline ::std::string* Programs_Item::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Programs.Item.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Programs_Item::release_name() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Programs.Item.name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Programs_Item::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Programs.Item.name)
+}
+
+// string version = 2;
+inline void Programs_Item::clear_version() {
+  version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Programs_Item::version() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Programs.Item.version)
+  return version_.GetNoArena();
+}
+inline void Programs_Item::set_version(const ::std::string& value) {
+  
+  version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Programs.Item.version)
+}
+#if LANG_CXX11
+inline void Programs_Item::set_version(::std::string&& value) {
+  
+  version_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Programs.Item.version)
+}
+#endif
+inline void Programs_Item::set_version(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Programs.Item.version)
+}
+inline void Programs_Item::set_version(const char* value, size_t size) {
+  
+  version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Programs.Item.version)
+}
+inline ::std::string* Programs_Item::mutable_version() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Programs.Item.version)
+  return version_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Programs_Item::release_version() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Programs.Item.version)
+  
+  return version_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Programs_Item::set_allocated_version(::std::string* version) {
+  if (version != NULL) {
+    
+  } else {
+    
+  }
+  version_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), version);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Programs.Item.version)
+}
+
+// string publisher = 3;
+inline void Programs_Item::clear_publisher() {
+  publisher_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Programs_Item::publisher() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Programs.Item.publisher)
+  return publisher_.GetNoArena();
+}
+inline void Programs_Item::set_publisher(const ::std::string& value) {
+  
+  publisher_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Programs.Item.publisher)
+}
+#if LANG_CXX11
+inline void Programs_Item::set_publisher(::std::string&& value) {
+  
+  publisher_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Programs.Item.publisher)
+}
+#endif
+inline void Programs_Item::set_publisher(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  publisher_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Programs.Item.publisher)
+}
+inline void Programs_Item::set_publisher(const char* value, size_t size) {
+  
+  publisher_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Programs.Item.publisher)
+}
+inline ::std::string* Programs_Item::mutable_publisher() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Programs.Item.publisher)
+  return publisher_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Programs_Item::release_publisher() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Programs.Item.publisher)
+  
+  return publisher_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Programs_Item::set_allocated_publisher(::std::string* publisher) {
+  if (publisher != NULL) {
+    
+  } else {
+    
+  }
+  publisher_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), publisher);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Programs.Item.publisher)
+}
+
+// string install_date = 4;
+inline void Programs_Item::clear_install_date() {
+  install_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Programs_Item::install_date() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Programs.Item.install_date)
+  return install_date_.GetNoArena();
+}
+inline void Programs_Item::set_install_date(const ::std::string& value) {
+  
+  install_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Programs.Item.install_date)
+}
+#if LANG_CXX11
+inline void Programs_Item::set_install_date(::std::string&& value) {
+  
+  install_date_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Programs.Item.install_date)
+}
+#endif
+inline void Programs_Item::set_install_date(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  install_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Programs.Item.install_date)
+}
+inline void Programs_Item::set_install_date(const char* value, size_t size) {
+  
+  install_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Programs.Item.install_date)
+}
+inline ::std::string* Programs_Item::mutable_install_date() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Programs.Item.install_date)
+  return install_date_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Programs_Item::release_install_date() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Programs.Item.install_date)
+  
+  return install_date_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Programs_Item::set_allocated_install_date(::std::string* install_date) {
+  if (install_date != NULL) {
+    
+  } else {
+    
+  }
+  install_date_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), install_date);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Programs.Item.install_date)
+}
+
+// string install_location = 5;
+inline void Programs_Item::clear_install_location() {
+  install_location_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Programs_Item::install_location() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Programs.Item.install_location)
+  return install_location_.GetNoArena();
+}
+inline void Programs_Item::set_install_location(const ::std::string& value) {
+  
+  install_location_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.system_info.Programs.Item.install_location)
+}
+#if LANG_CXX11
+inline void Programs_Item::set_install_location(::std::string&& value) {
+  
+  install_location_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.system_info.Programs.Item.install_location)
+}
+#endif
+inline void Programs_Item::set_install_location(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  install_location_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.system_info.Programs.Item.install_location)
+}
+inline void Programs_Item::set_install_location(const char* value, size_t size) {
+  
+  install_location_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.system_info.Programs.Item.install_location)
+}
+inline ::std::string* Programs_Item::mutable_install_location() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Programs.Item.install_location)
+  return install_location_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Programs_Item::release_install_location() {
+  // @@protoc_insertion_point(field_release:aspia.system_info.Programs.Item.install_location)
+  
+  return install_location_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Programs_Item::set_allocated_install_location(::std::string* install_location) {
+  if (install_location != NULL) {
+    
+  } else {
+    
+  }
+  install_location_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), install_location);
+  // @@protoc_insertion_point(field_set_allocated:aspia.system_info.Programs.Item.install_location)
+}
+
+// -------------------------------------------------------------------
+
+// Programs
+
+// repeated .aspia.system_info.Programs.Item item = 1;
+inline int Programs::item_size() const {
+  return item_.size();
+}
+inline void Programs::clear_item() {
+  item_.Clear();
+}
+inline const ::aspia::system_info::Programs_Item& Programs::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.Programs.item)
+  return item_.Get(index);
+}
+inline ::aspia::system_info::Programs_Item* Programs::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.system_info.Programs.item)
+  return item_.Mutable(index);
+}
+inline ::aspia::system_info::Programs_Item* Programs::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.system_info.Programs.item)
+  return item_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Programs_Item >*
+Programs::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.system_info.Programs.item)
+  return &item_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::system_info::Programs_Item >&
+Programs::item() const {
+  // @@protoc_insertion_point(field_list:aspia.system_info.Programs.item)
+  return item_;
+}
+
+// -------------------------------------------------------------------
+
 // Services_Item
 
 // string name = 1;
@@ -18588,6 +19163,10 @@ Sessions::item() const {
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
