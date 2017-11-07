@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/process/process_enumerator.h"
 #include "base/service_enumerator.h"
 #include "protocol/category_group_software.h"
 #include "ui/system_info/output_proxy.h"
@@ -428,15 +429,69 @@ const char* CategoryProcesses::Guid() const
 
 void CategoryProcesses::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::Processes message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Process Name", 150);
+        output->AddHeaderItem("File Path", 200);
+        output->AddHeaderItem("Used Memory", 80);
+        output->AddHeaderItem("Used Swap", 80);
+        output->AddHeaderItem("Description", 150);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::Processes::Item& item = message.item(index);
+
+        Output::Row row(output, Icon());
+
+        output->AddValue(item.process_name());
+        output->AddValue(item.file_path());
+
+        if (item.used_memory() != 0)
+        {
+            output->AddValue(std::to_string(item.used_memory() / 1024), "kB");
+        }
+        else
+        {
+            output->AddValue(std::string());
+        }
+
+        if (item.used_swap() != 0)
+        {
+            output->AddValue(std::to_string(item.used_swap() / 1024), "kB");
+        }
+        else
+        {
+            output->AddValue(std::string());
+        }
+
+        output->AddValue(item.description());
+    }
 }
 
 std::string CategoryProcesses::Serialize()
 {
-    // TODO
-    return std::string();
+    system_info::Processes message;
+
+    for (ProcessEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+    {
+        system_info::Processes::Item* item = message.add_item();
+
+        item->set_process_name(enumerator.GetProcessName());
+        item->set_file_path(enumerator.GetFilePath());
+        item->set_used_memory(enumerator.GetUsedMemory());
+        item->set_used_swap(enumerator.GetUsedSwap());
+        item->set_description(enumerator.GetFileDescription());
+    }
+
+    return message.SerializeAsString();
 }
 
 //

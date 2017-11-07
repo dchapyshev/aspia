@@ -8,6 +8,7 @@
 #include "base/process/process_enumerator.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
+#include "base/scoped_privilege.h"
 #include "base/logging.h"
 
 #include <tlhelp32.h>
@@ -27,14 +28,22 @@ ProcessEnumerator::ProcessEnumerator()
 
     memset(&process_entry_, 0, sizeof(process_entry_));
     process_entry_.dwSize = sizeof(process_entry_);
+
     if (!Process32FirstW(snapshot_, &process_entry_))
     {
         LOG(WARNING) << "Process32FirstW() failed: " << GetLastSystemErrorString();
         snapshot_.Reset();
     }
-
-    for (;;)
+    else
     {
+        if (process_entry_.szExeFile[0] == '[')
+        {
+            Advance();
+            return;
+        }
+
+        ScopedProcessPrivilege privilege(SE_DEBUG_NAME);
+
         current_process_.Reset(OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
                                            FALSE,
                                            process_entry_.th32ProcessID));
@@ -42,22 +51,6 @@ ProcessEnumerator::ProcessEnumerator()
         if (!current_process_.IsValid())
         {
             LOG(WARNING) << "OpenProcess() failed: " << GetLastSystemErrorString();
-
-            if (!Process32NextW(snapshot_, &process_entry_))
-            {
-                DWORD error_code = GetLastError();
-                if (error_code != ERROR_NO_MORE_FILES)
-                {
-                    LOG(WARNING) << "Process32NextW() failed: " << GetLastSystemErrorString();
-                }
-
-                snapshot_.Reset();
-                return;
-            }
-        }
-        else
-        {
-            break;
         }
     }
 }
@@ -69,19 +62,19 @@ bool ProcessEnumerator::IsAtEnd() const
 
 void ProcessEnumerator::Advance()
 {
-    for (;;)
+    if (!Process32NextW(snapshot_, &process_entry_))
     {
-        if (!Process32NextW(snapshot_, &process_entry_))
+        const DWORD error_code = GetLastError();
+        if (error_code != ERROR_NO_MORE_FILES)
         {
-            DWORD error_code = GetLastError();
-            if (error_code != ERROR_NO_MORE_FILES)
-            {
-                LOG(WARNING) << "Process32NextW() failed: " << GetLastSystemErrorString();
-            }
-
-            snapshot_.Reset();
-            return;
+            LOG(WARNING) << "Process32NextW() failed: " << GetLastSystemErrorString();
         }
+
+        snapshot_.Reset();
+    }
+    else
+    {
+        ScopedProcessPrivilege privilege(SE_DEBUG_NAME);
 
         current_process_.Reset(OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
                                            FALSE,
@@ -89,10 +82,7 @@ void ProcessEnumerator::Advance()
         if (!current_process_.IsValid())
         {
             LOG(WARNING) << "OpenProcess() failed: " << GetLastSystemErrorString();
-            continue;
         }
-
-        break;
     }
 }
 
@@ -103,6 +93,9 @@ std::string ProcessEnumerator::GetProcessName() const
 
 std::string ProcessEnumerator::GetFilePath() const
 {
+    if (!current_process_.IsValid())
+        return std::string();
+
     WCHAR file_path[MAX_PATH];
 
     if (!GetModuleFileNameExW(current_process_.Get(), nullptr, file_path, _countof(file_path)))
@@ -116,6 +109,9 @@ std::string ProcessEnumerator::GetFilePath() const
 
 std::string ProcessEnumerator::GetFileDescription() const
 {
+    if (!current_process_.IsValid())
+        return std::string();
+
     WCHAR file_path[MAX_PATH];
 
     if (!GetModuleFileNameExW(current_process_.Get(), nullptr, file_path, _countof(file_path)))
@@ -125,7 +121,7 @@ std::string ProcessEnumerator::GetFileDescription() const
     }
 
     DWORD handle = 0;
-    DWORD size = GetFileVersionInfoSizeW(file_path, &handle);;
+    const DWORD size = GetFileVersionInfoSizeW(file_path, &handle);;
     if (!size)
     {
         LOG(WARNING) << "GetFileVersionInfoSizeW() failed: " << GetLastSystemErrorString();
@@ -177,6 +173,9 @@ std::string ProcessEnumerator::GetFileDescription() const
 
 uint64_t ProcessEnumerator::GetUsedMemory() const
 {
+    if (!current_process_.IsValid())
+        return 0;
+
     PROCESS_MEMORY_COUNTERS memory_counters;
     memset(&memory_counters, 0, sizeof(memory_counters));
 
@@ -191,6 +190,9 @@ uint64_t ProcessEnumerator::GetUsedMemory() const
 
 uint64_t ProcessEnumerator::GetUsedSwap() const
 {
+    if (!current_process_.IsValid())
+        return 0;
+
     PROCESS_MEMORY_COUNTERS memory_counters;
     memset(&memory_counters, 0, sizeof(memory_counters));
 
