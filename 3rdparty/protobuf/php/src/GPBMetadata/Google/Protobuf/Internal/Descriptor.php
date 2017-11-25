@@ -110,6 +110,13 @@ class Descriptor
             ->optional('name', \Google\Protobuf\Internal\GPBType::STRING, 1)
             ->repeated('value', \Google\Protobuf\Internal\GPBType::MESSAGE, 2, 'google.protobuf.internal.EnumValueDescriptorProto')
             ->optional('options', \Google\Protobuf\Internal\GPBType::MESSAGE, 3, 'google.protobuf.internal.EnumOptions')
+            ->repeated('reserved_range', \Google\Protobuf\Internal\GPBType::MESSAGE, 4, 'google.protobuf.internal.EnumDescriptorProto.EnumReservedRange')
+            ->repeated('reserved_name', \Google\Protobuf\Internal\GPBType::STRING, 5)
+            ->finalizeToPool();
+
+        $pool->addMessage('google.protobuf.internal.EnumDescriptorProto.EnumReservedRange', \Google\Protobuf\Internal\EnumDescriptorProto_EnumReservedRange::class)
+            ->optional('start', \Google\Protobuf\Internal\GPBType::INT32, 1)
+            ->optional('end', \Google\Protobuf\Internal\GPBType::INT32, 2)
             ->finalizeToPool();
 
         $pool->addMessage('google.protobuf.internal.EnumValueDescriptorProto', \Google\Protobuf\Internal\EnumValueDescriptorProto::class)

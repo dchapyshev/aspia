@@ -178,6 +178,7 @@
     <ClCompile Include="src\google\protobuf\compiler\cpp\cpp_map_field.cc" />
     <ClCompile Include="src\google\protobuf\compiler\cpp\cpp_message.cc" />
     <ClCompile Include="src\google\protobuf\compiler\cpp\cpp_message_field.cc" />
+    <ClCompile Include="src\google\protobuf\compiler\cpp\cpp_padding_optimizer.cc" />
     <ClCompile Include="src\google\protobuf\compiler\cpp\cpp_primitive_field.cc" />
     <ClCompile Include="src\google\protobuf\compiler\cpp\cpp_service.cc" />
     <ClCompile Include="src\google\protobuf\compiler\cpp\cpp_string_field.cc" />
@@ -261,6 +262,7 @@
     <ClCompile Include="src\google\protobuf\compiler\zip_writer.cc" />
     <ClInclude Include="src\google\protobuf\compiler\code_generator.h" />
     <ClInclude Include="src\google\protobuf\compiler\command_line_interface.h" />
+    <ClInclude Include="src\google\protobuf\compiler\cpp\cpp_padding_optimizer.h" />
     <ClInclude Include="src\google\protobuf\compiler\importer.h" />
     <ClInclude Include="src\google\protobuf\compiler\mock_code_generator.h" />
     <ClInclude Include="src\google\protobuf\compiler\package_info.h" />

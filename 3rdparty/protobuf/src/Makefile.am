@@ -71,7 +71,6 @@ nobase_include_HEADERS =                                         \
   google/protobuf/stubs/atomicops_internals_arm64_gcc.h          \
   google/protobuf/stubs/atomicops_internals_arm_gcc.h            \
   google/protobuf/stubs/atomicops_internals_arm_qnx.h            \
-  google/protobuf/stubs/atomicops_internals_atomicword_compat.h  \
   google/protobuf/stubs/atomicops_internals_generic_c11_atomic.h \
   google/protobuf/stubs/atomicops_internals_generic_gcc.h        \
   google/protobuf/stubs/atomicops_internals_mips_gcc.h           \
@@ -183,7 +182,7 @@ nobase_include_HEADERS =                                         \
 lib_LTLIBRARIES = libprotobuf-lite.la libprotobuf.la libprotoc.la
 
 libprotobuf_lite_la_LIBADD = $(PTHREAD_LIBS)
-libprotobuf_lite_la_LDFLAGS = -version-info 14:0:0 -export-dynamic -no-undefined
+libprotobuf_lite_la_LDFLAGS = -version-info 15:0:0 -export-dynamic -no-undefined
 if HAVE_LD_VERSION_SCRIPT
 libprotobuf_lite_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libprotobuf-lite.map
 EXTRA_libprotobuf_lite_la_DEPENDENCIES = libprotobuf-lite.map
@@ -232,7 +231,7 @@ libprotobuf_lite_la_SOURCES =                                  \
   google/protobuf/io/zero_copy_stream_impl_lite.cc
 
 libprotobuf_la_LIBADD = $(PTHREAD_LIBS)
-libprotobuf_la_LDFLAGS = -version-info 14:0:0 -export-dynamic -no-undefined
+libprotobuf_la_LDFLAGS = -version-info 15:0:0 -export-dynamic -no-undefined
 if HAVE_LD_VERSION_SCRIPT
 libprotobuf_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libprotobuf.map
 EXTRA_libprotobuf_la_DEPENDENCIES = libprotobuf.map
@@ -323,7 +322,7 @@ libprotobuf_la_SOURCES =                                       \
 nodist_libprotobuf_la_SOURCES = $(nodist_libprotobuf_lite_la_SOURCES)
 
 libprotoc_la_LIBADD = $(PTHREAD_LIBS) libprotobuf.la
-libprotoc_la_LDFLAGS = -version-info 14:0:0 -export-dynamic -no-undefined
+libprotoc_la_LDFLAGS = -version-info 15:0:0 -export-dynamic -no-undefined
 if HAVE_LD_VERSION_SCRIPT
 libprotoc_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libprotoc.map
 EXTRA_libprotoc_la_DEPENDENCIES = libprotoc.map
@@ -356,7 +355,10 @@ libprotoc_la_SOURCES =                                         \
   google/protobuf/compiler/cpp/cpp_message.h                   \
   google/protobuf/compiler/cpp/cpp_message_field.cc            \
   google/protobuf/compiler/cpp/cpp_message_field.h             \
+  google/protobuf/compiler/cpp/cpp_message_layout_helper.h     \
   google/protobuf/compiler/cpp/cpp_options.h                   \
+  google/protobuf/compiler/cpp/cpp_padding_optimizer.cc        \
+  google/protobuf/compiler/cpp/cpp_padding_optimizer.h         \
   google/protobuf/compiler/cpp/cpp_primitive_field.cc          \
   google/protobuf/compiler/cpp/cpp_primitive_field.h           \
   google/protobuf/compiler/cpp/cpp_service.cc                  \
@@ -810,6 +812,8 @@ protobuf_test_SOURCES =                                        \
   google/protobuf/io/printer_unittest.cc                       \
   google/protobuf/io/tokenizer_unittest.cc                     \
   google/protobuf/io/zero_copy_stream_unittest.cc              \
+  google/protobuf/compiler/annotation_test_util.h              \
+  google/protobuf/compiler/annotation_test_util.cc             \
   google/protobuf/compiler/command_line_interface_unittest.cc  \
   google/protobuf/compiler/importer_unittest.cc                \
   google/protobuf/compiler/mock_code_generator.cc              \

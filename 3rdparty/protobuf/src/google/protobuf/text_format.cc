@@ -1216,7 +1216,7 @@ class TextFormat::Printer::TextGenerator
       Write(text + pos, size - pos);
     } else {
       Write(text, size);
-      if (text[size - 1] == '\n') {
+      if (size > 0 && text[size - 1] == '\n') {
         at_start_of_line_ = true;
       }
     }
@@ -1244,10 +1244,12 @@ class TextFormat::Printer::TextGenerator
     while (size > buffer_size_) {
       // Data exceeds space in the buffer.  Copy what we can and request a
       // new buffer.
-      memcpy(buffer_, data, buffer_size_);
-      data += buffer_size_;
-      size -= buffer_size_;
-      void* void_buffer;
+      if (buffer_size_ > 0) {
+        memcpy(buffer_, data, buffer_size_);
+        data += buffer_size_;
+        size -= buffer_size_;
+      }
+      void* void_buffer = NULL;
       failed_ = !output_->Next(&void_buffer, &buffer_size_);
       if (failed_) return;
       buffer_ = reinterpret_cast<char*>(void_buffer);

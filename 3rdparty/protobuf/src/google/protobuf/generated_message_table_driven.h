@@ -33,6 +33,7 @@
 
 #include <google/protobuf/map.h>
 #include <google/protobuf/map_entry_lite.h>
+#include <google/protobuf/map_field_lite.h>
 #include <google/protobuf/message_lite.h>
 #include <google/protobuf/wire_format_lite.h>
 #include <google/protobuf/wire_format_lite_inl.h>
@@ -43,7 +44,8 @@
 // We require C++11 and Clang to use constexpr for variables, as GCC 4.8
 // requires constexpr to be consistent between declarations of variables
 // unnecessarily (see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58541).
-#ifdef __clang__
+// VS 2017 Update 3 also supports this usage of constexpr.
+#if defined(__clang__) || (defined(_MSC_VER) && _MSC_VER >= 1911)
 #define PROTOBUF_CONSTEXPR_VAR constexpr
 #else  // !__clang__
 #define PROTOBUF_CONSTEXPR_VAR
@@ -196,20 +198,6 @@ bool MergePartialFromCodedStream(MessageLite* msg, const ParseTable& table,
                                  io::CodedInputStream* input);
 bool MergePartialFromCodedStreamLite(MessageLite* msg, const ParseTable& table,
                                  io::CodedInputStream* input);
-
-template <typename MEntry>
-struct MapEntryToMapField;
-
-template <typename Key, typename Value, WireFormatLite::FieldType kKeyFieldType,
-          WireFormatLite::FieldType kValueFieldType, int default_enum_value>
-struct MapEntryToMapField<MapEntryLite<Key, Value, kKeyFieldType,
-                                       kValueFieldType, default_enum_value> > {
-  typedef MapFieldLite<MapEntryLite<Key, Value, kKeyFieldType, kValueFieldType,
-                                    default_enum_value>,
-                       Key, Value, kKeyFieldType, kValueFieldType,
-                       default_enum_value>
-      MapFieldType;
-};
 
 template <typename Entry>
 bool ParseMap(io::CodedInputStream* input, void* map_field) {

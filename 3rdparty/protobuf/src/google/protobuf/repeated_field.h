@@ -60,6 +60,7 @@
 #include <google/protobuf/stubs/type_traits.h>
 #include <google/protobuf/arena.h>
 #include <google/protobuf/message_lite.h>
+#include <google/protobuf/stubs/port.h>
 
 
 // Forward-declare these so that we can make them friends.
@@ -117,6 +118,11 @@ class RepeatedField PROTOBUF_FINAL {
   ~RepeatedField();
 
   RepeatedField& operator=(const RepeatedField& other);
+
+#if LANG_CXX11
+  RepeatedField(RepeatedField&& other) noexcept;
+  RepeatedField& operator=(RepeatedField&& other) noexcept;
+#endif
 
   bool empty() const;
   int size() const;
@@ -280,6 +286,10 @@ class RepeatedField PROTOBUF_FINAL {
   friend class Arena;
   typedef void InternalArenaConstructable_;
 
+
+  // Move the contents of |from| into |to|, possibly clobbering |from| in the
+  // process.  For primitive types this is just a memcpy(), but it could be
+  // specialized for non-primitive types to, say, swap each element instead.
   void MoveArray(Element* to, Element* from, int size);
 
   // Copy the elements of |from| into |to|.
@@ -366,7 +376,7 @@ struct TypeImplementsMergeBehaviorProbeForMergeFrom {
       CheckType<U, bool, &U::MergeFrom>*);
   template<typename U> static HasNoMerge Check(...);
 
-  // Resovles to either google::protobuf::internal::true_type or google::protobuf::internal::false_type.
+  // Resolves to either google::protobuf::internal::true_type or google::protobuf::internal::false_type.
   typedef google::protobuf::internal::integral_constant<bool,
                (sizeof(Check<T>(0)) == sizeof(HasMerge))> type;
 };
@@ -473,8 +483,8 @@ class LIBPROTOBUF_EXPORT RepeatedPtrFieldBase {
   template <typename TypeHandler>
   const typename TypeHandler::Type* const* data() const;
 
-  template <typename TypeHandler>
-  GOOGLE_ATTRIBUTE_ALWAYS_INLINE void Swap(RepeatedPtrFieldBase* other);
+  template <typename TypeHandler> GOOGLE_PROTOBUF_ATTRIBUTE_ALWAYS_INLINE
+  void Swap(RepeatedPtrFieldBase* other);
 
   void SwapElements(int index1, int index2);
 
@@ -518,17 +528,15 @@ class LIBPROTOBUF_EXPORT RepeatedPtrFieldBase {
   inline void InternalSwap(RepeatedPtrFieldBase* other);
 
   template <typename TypeHandler>
-  void AddAllocatedInternal(typename TypeHandler::Type* value,
-                            google::protobuf::internal::true_type);
+  void AddAllocatedInternal(typename TypeHandler::Type* value, google::protobuf::internal::true_type);
   template <typename TypeHandler>
-  void AddAllocatedInternal(typename TypeHandler::Type* value,
-                            google::protobuf::internal::false_type);
+  void AddAllocatedInternal(typename TypeHandler::Type* value, google::protobuf::internal::false_type);
 
-  template <typename TypeHandler> GOOGLE_ATTRIBUTE_NOINLINE
+  template <typename TypeHandler> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE
   void AddAllocatedSlowWithCopy(typename TypeHandler::Type* value,
                                 Arena* value_arena,
                                 Arena* my_arena);
-  template <typename TypeHandler> GOOGLE_ATTRIBUTE_NOINLINE
+  template <typename TypeHandler> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE
   void AddAllocatedSlowWithoutCopy(typename TypeHandler::Type* value);
 
   template <typename TypeHandler>
@@ -536,7 +544,7 @@ class LIBPROTOBUF_EXPORT RepeatedPtrFieldBase {
   template <typename TypeHandler>
   typename TypeHandler::Type* ReleaseLastInternal(google::protobuf::internal::false_type);
 
-  template<typename TypeHandler> GOOGLE_ATTRIBUTE_NOINLINE
+  template<typename TypeHandler> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE
   void SwapFallback(RepeatedPtrFieldBase* other);
 
   inline Arena* GetArenaNoVirtual() const {
@@ -623,8 +631,8 @@ class GenericTypeHandler {
   }
 
   static inline void Clear(GenericType* value) { value->Clear(); }
-  GOOGLE_ATTRIBUTE_NOINLINE static void Merge(const GenericType& from,
-                                       GenericType* to);
+  GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE
+  static void Merge(const GenericType& from, GenericType* to);
   static inline size_t SpaceUsedLong(const GenericType& value) {
     return value.SpaceUsedLong();
   }
@@ -769,6 +777,11 @@ class RepeatedPtrField PROTOBUF_FINAL : public internal::RepeatedPtrFieldBase {
   ~RepeatedPtrField();
 
   RepeatedPtrField& operator=(const RepeatedPtrField& other);
+
+#if LANG_CXX11
+  RepeatedPtrField(RepeatedPtrField&& other) noexcept;
+  RepeatedPtrField& operator=(RepeatedPtrField&& other) noexcept;
+#endif
 
   bool empty() const;
   int size() const;
@@ -1085,6 +1098,37 @@ RepeatedField<Element>::operator=(const RepeatedField& other) {
     CopyFrom(other);
   return *this;
 }
+
+#if LANG_CXX11
+
+template <typename Element>
+inline RepeatedField<Element>::RepeatedField(RepeatedField&& other) noexcept
+    : RepeatedField() {
+  // We don't just call Swap(&other) here because it would perform 3 copies if
+  // the two fields are on different arenas.
+  if (other.GetArenaNoVirtual()) {
+    CopyFrom(other);
+  } else {
+    InternalSwap(&other);
+  }
+}
+
+template <typename Element>
+inline RepeatedField<Element>& RepeatedField<Element>::operator=(
+    RepeatedField&& other) noexcept {
+  // We don't just call Swap(&other) here because it would perform 3 copies if
+  // the two fields are on different arenas.
+  if (this != &other) {
+    if (this->GetArenaNoVirtual() != other.GetArenaNoVirtual()) {
+      CopyFrom(other);
+    } else {
+      InternalSwap(&other);
+    }
+  }
+  return *this;
+}
+
+#endif  // LANG_CXX11
 
 template <typename Element>
 inline bool RepeatedField<Element>::empty() const {
@@ -1689,7 +1733,6 @@ void RepeatedPtrFieldBase::AddAllocatedInternal(
     elems[current_size_] = value;
     current_size_ = current_size_ + 1;
     rep_->allocated_size = rep_->allocated_size + 1;
-    return;
   } else {
     AddAllocatedSlowWithCopy<TypeHandler>(
         value, TypeHandler::GetArena(value), arena);
@@ -1736,7 +1779,6 @@ void RepeatedPtrFieldBase::AddAllocatedInternal(
     elems[current_size_] = value;
     current_size_ = current_size_ + 1;
     ++rep_->allocated_size;
-    return;
   } else {
     UnsafeArenaAddAllocated<TypeHandler>(value);
   }
@@ -1899,6 +1941,38 @@ inline RepeatedPtrField<Element>& RepeatedPtrField<Element>::operator=(
     CopyFrom(other);
   return *this;
 }
+
+#if LANG_CXX11
+
+template <typename Element>
+inline RepeatedPtrField<Element>::RepeatedPtrField(
+    RepeatedPtrField&& other) noexcept
+    : RepeatedPtrField() {
+  // We don't just call Swap(&other) here because it would perform 3 copies if
+  // the two fields are on different arenas.
+  if (other.GetArenaNoVirtual()) {
+    CopyFrom(other);
+  } else {
+    InternalSwap(&other);
+  }
+}
+
+template <typename Element>
+inline RepeatedPtrField<Element>& RepeatedPtrField<Element>::operator=(
+    RepeatedPtrField&& other) noexcept {
+  // We don't just call Swap(&other) here because it would perform 3 copies if
+  // the two fields are on different arenas.
+  if (this != &other) {
+    if (this->GetArenaNoVirtual() != other.GetArenaNoVirtual()) {
+      CopyFrom(other);
+    } else {
+      InternalSwap(&other);
+    }
+  }
+  return *this;
+}
+
+#endif  // LANG_CXX11
 
 template <typename Element>
 inline bool RepeatedPtrField<Element>::empty() const {
@@ -2184,7 +2258,7 @@ class RepeatedPtrIterator
       : it_(other.it_) {
     // Force a compiler error if the other type is not convertible to ours.
     if (false) {
-      implicit_cast<Element*, OtherElement*>(0);
+      implicit_cast<Element*>(static_cast<OtherElement*>(NULL));
     }
   }
 

@@ -418,7 +418,7 @@ def _VarintBytes(value):
 def TagBytes(field_number, wire_type):
   """Encode the given tag and return the bytes.  Only called at startup."""
 
-  return _VarintBytes(wire_format.PackTag(field_number, wire_type))
+  return six.binary_type( _VarintBytes(wire_format.PackTag(field_number, wire_type)) )
 
 # --------------------------------------------------------------------
 # As with sizers (see above), we have a number of common encoder
@@ -819,7 +819,7 @@ def MapEncoder(field_descriptor):
   encode_message = MessageEncoder(field_descriptor.number, False, False)
 
   def EncodeField(write, value, deterministic):
-    value_keys = sorted(value.keys()) if deterministic else value.keys()
+    value_keys = sorted(value.keys()) if deterministic else value
     for key in value_keys:
       entry_msg = message_type._concrete_class(key=key, value=value[key])
       encode_message(write, entry_msg, deterministic)
