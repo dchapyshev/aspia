@@ -52,6 +52,8 @@ public:
         TableReader(const TableReader& other);
         TableReader(const Data* smbios, const uint8_t* table);
 
+        TableReader& operator=(const TableReader& other);
+
         uint8_t GetMajorVersion() const { return smbios_->smbios_major_version; }
         uint8_t GetMinorVersion() const { return smbios_->smbios_minor_version; }
         uint8_t GetByte(uint8_t offset) const;
@@ -87,7 +89,7 @@ public:
 
     private:
         friend class TableEnumerator<BiosTable>;
-        BiosTable(const TableReader& reader);
+        explicit BiosTable(const TableReader& reader);
 
         TableReader reader_;
     };
@@ -108,7 +110,7 @@ public:
 
     private:
         friend class TableEnumerator<SystemTable>;
-        SystemTable(const TableReader& reader);
+        explicit SystemTable(const TableReader& reader);
 
         TableReader reader_;
     };
@@ -149,7 +151,7 @@ public:
 
     private:
         friend class TableEnumerator<BaseboardTable>;
-        BaseboardTable(const TableReader& reader);
+        explicit BaseboardTable(const TableReader& reader);
 
         TableReader reader_;
     };
@@ -225,7 +227,7 @@ public:
 
     private:
         friend class TableEnumerator<ChassisTable>;
-        ChassisTable(const TableReader& reader);
+        explicit ChassisTable(const TableReader& reader);
 
         TableReader reader_;
     };
@@ -289,7 +291,7 @@ public:
 
     private:
         friend class TableEnumerator<ProcessorTable>;
-        ProcessorTable(const TableReader& reader);
+        explicit ProcessorTable(const TableReader& reader);
 
         TableReader reader_;
     };
@@ -394,7 +396,7 @@ public:
 
     private:
         friend class TableEnumerator<CacheTable>;
-        CacheTable(const TableReader& reader);
+        explicit CacheTable(const TableReader& reader);
 
         TableReader reader_;
     };
@@ -412,7 +414,7 @@ public:
 
     private:
         friend class TableEnumerator<PortConnectorTable>;
-        PortConnectorTable(const TableReader& reader);
+        explicit PortConnectorTable(const TableReader& reader);
 
         static std::string ConnectorTypeToString(uint8_t type);
 
@@ -448,7 +450,7 @@ public:
 
     private:
         friend class TableEnumerator<SystemSlotTable>;
-        SystemSlotTable(const TableReader& reader);
+        explicit SystemSlotTable(const TableReader& reader);
 
         TableReader reader_;
     };
@@ -465,7 +467,7 @@ public:
 
     private:
         friend class TableEnumerator<OnBoardDeviceTable>;
-        OnBoardDeviceTable(const TableReader& reader);
+        explicit OnBoardDeviceTable(const TableReader& reader);
 
         const int count_;
         const uint8_t* ptr_;
@@ -491,7 +493,7 @@ public:
 
     private:
         friend class TableEnumerator<MemoryDeviceTable>;
-        MemoryDeviceTable(const TableReader& reader);
+        explicit MemoryDeviceTable(const TableReader& reader);
 
         TableReader reader_;
     };
@@ -507,7 +509,7 @@ public:
 
     private:
         friend class TableEnumerator<BuildinPointingTable>;
-        BuildinPointingTable(const TableReader& reader);
+        explicit BuildinPointingTable(const TableReader& reader);
 
         TableReader reader_;
     };
@@ -533,7 +535,7 @@ public:
 
     private:
         friend class TableEnumerator<PortableBatteryTable>;
-        PortableBatteryTable(const TableReader& reader);
+        explicit PortableBatteryTable(const TableReader& reader);
 
         TableReader reader_;
     };

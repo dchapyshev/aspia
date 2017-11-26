@@ -169,6 +169,13 @@ SMBios::TableReader::TableReader(const Data* smbios, const uint8_t* table)
     DCHECK(table_);
 }
 
+SMBios::TableReader& SMBios::TableReader::operator=(const TableReader& other)
+{
+    smbios_ = other.smbios_;
+    table_ = other.table_;
+    return *this;
+}
+
 uint8_t SMBios::TableReader::GetByte(uint8_t offset) const
 {
     return table_[offset];
@@ -253,8 +260,8 @@ int SMBios::BiosTable::GetSize() const
 
 std::string SMBios::BiosTable::GetBiosRevision() const
 {
-    uint8_t major = reader_.GetByte(0x14);
-    uint8_t minor = reader_.GetByte(0x15);
+    const uint8_t major = reader_.GetByte(0x14);
+    const uint8_t minor = reader_.GetByte(0x15);
 
     if (major != 0xFF && minor != 0xFF)
         return StringPrintf("%u.%u", major, minor);
@@ -264,8 +271,8 @@ std::string SMBios::BiosTable::GetBiosRevision() const
 
 std::string SMBios::BiosTable::GetFirmwareRevision() const
 {
-    uint8_t major = reader_.GetByte(0x16);
-    uint8_t minor = reader_.GetByte(0x17);
+    const uint8_t major = reader_.GetByte(0x16);
+    const uint8_t minor = reader_.GetByte(0x17);
 
     if (major != 0xFF && minor != 0xFF)
         return StringPrintf("%u.%u", major, minor);
@@ -275,7 +282,7 @@ std::string SMBios::BiosTable::GetFirmwareRevision() const
 
 std::string SMBios::BiosTable::GetAddress() const
 {
-    uint16_t address = reader_.GetWord(0x06);
+    const uint16_t address = reader_.GetWord(0x06);
 
     if (address != 0)
         return StringPrintf("%04X0h", address);
@@ -285,11 +292,11 @@ std::string SMBios::BiosTable::GetAddress() const
 
 int SMBios::BiosTable::GetRuntimeSize() const
 {
-    uint16_t address = reader_.GetWord(0x06);
+    const uint16_t address = reader_.GetWord(0x06);
     if (address == 0)
         return 0;
 
-    uint32_t code = (0x10000 - address) << 4;
+    const uint32_t code = (0x10000 - address) << 4;
 
     if (code & 0x000003FF)
         return code;
@@ -334,7 +341,7 @@ SMBios::BiosTable::FeatureList SMBios::BiosTable::GetCharacteristics() const
         "NEC PC-98" // 31
     };
 
-    uint64_t characteristics = reader_.GetQword(0x0A);
+    const uint64_t characteristics = reader_.GetQword(0x0A);
     if (!(characteristics & (1 << 3)))
     {
         for (int i = 4; i <= 31; ++i)
@@ -344,11 +351,11 @@ SMBios::BiosTable::FeatureList SMBios::BiosTable::GetCharacteristics() const
         }
     }
 
-    uint8_t table_length = reader_.GetTableLength();
+    const uint8_t table_length = reader_.GetTableLength();
 
     if (table_length >= 0x13)
     {
-        uint8_t characteristics1 = reader_.GetByte(0x12);
+        const uint8_t characteristics1 = reader_.GetByte(0x12);
 
         static const char* characteristics1_names[] =
         {
@@ -371,7 +378,7 @@ SMBios::BiosTable::FeatureList SMBios::BiosTable::GetCharacteristics() const
 
     if (table_length >= 0x14)
     {
-        uint8_t characteristics2 = reader_.GetByte(0x13);
+        const uint8_t characteristics2 = reader_.GetByte(0x13);
 
         static const char* characteristics2_names[] =
         {
@@ -546,7 +553,7 @@ SMBios::BaseboardTable::FeatureList SMBios::BaseboardTable::GetFeatures() const
     if (reader_.GetTableLength() < 0x0A)
         return FeatureList();
 
-    uint8_t features = reader_.GetByte(0x09);
+    const uint8_t features = reader_.GetByte(0x09);
     if ((features & 0x1F) == 0)
         return FeatureList();
 
