@@ -29,6 +29,8 @@ DesktopRegion::Row::Row(int32_t top, int32_t bottom) :
 
 DesktopRegion::Row::~Row() {}
 
+DesktopRegion::Row& DesktopRegion::Row::operator=(const Row& other) = default;
+
 DesktopRegion::DesktopRegion() {}
 
 DesktopRegion::DesktopRegion(const DesktopRect& rect)
@@ -53,6 +55,9 @@ DesktopRegion::~DesktopRegion()
 
 DesktopRegion& DesktopRegion::operator=(const DesktopRegion& other)
 {
+    if (this == &other)
+        return *this;
+
     Clear();
     rows_ = other.rows_;
 

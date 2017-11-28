@@ -51,6 +51,8 @@ private:
         Row(int32_t top, int32_t bottom);
         ~Row();
 
+        Row& operator=(const Row& other);
+
         int32_t top;
         int32_t bottom;
 
