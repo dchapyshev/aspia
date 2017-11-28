@@ -42,9 +42,8 @@ void ScreenUpdater::PostUpdateRequest()
         return;
     }
 
-    std::chrono::milliseconds delay = scheduler_.NextCaptureDelay(update_interval_);
-
-    runner_->PostDelayedTask(std::bind(&ScreenUpdater::UpdateScreen, this), delay);
+    runner_->PostDelayedTask(std::bind(&ScreenUpdater::UpdateScreen, this),
+                             scheduler_.NextCaptureDelay(update_interval_));
 }
 
 void ScreenUpdater::UpdateScreen()
@@ -54,25 +53,24 @@ void ScreenUpdater::UpdateScreen()
     scheduler_.BeginCapture();
 
     const DesktopFrame* screen_frame = capturer_->CaptureImage();
-    if (!screen_frame)
-        return;
-
-    if (screen_frame->UpdatedRegion().IsEmpty())
-        screen_frame = nullptr;
-
-    std::unique_ptr<MouseCursor> mouse_cursor;
-
-    if (mode_ == Mode::SCREEN_AND_CURSOR)
-        mouse_cursor = capturer_->CaptureCursor();
-
-    if (screen_frame || mouse_cursor)
+    if (screen_frame)
     {
-        screen_update_callback_(screen_frame, std::move(mouse_cursor));
+        if (screen_frame->UpdatedRegion().IsEmpty())
+            screen_frame = nullptr;
+
+        std::unique_ptr<MouseCursor> mouse_cursor;
+
+        if (mode_ == Mode::SCREEN_WITH_CURSOR)
+            mouse_cursor = capturer_->CaptureCursor();
+
+        if (screen_frame || mouse_cursor)
+        {
+            screen_update_callback_(screen_frame, std::move(mouse_cursor));
+            return;
+        }
     }
-    else
-    {
-        runner_->PostDelayedTask(std::bind(&ScreenUpdater::UpdateScreen, this), update_interval_);
-    }
+
+    runner_->PostDelayedTask(std::bind(&ScreenUpdater::UpdateScreen, this), update_interval_);
 }
 
 void ScreenUpdater::OnBeforeThreadRunning()

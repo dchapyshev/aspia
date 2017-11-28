@@ -17,7 +17,7 @@ namespace aspia {
 class ScreenUpdater : private MessageLoopThread::Delegate
 {
 public:
-    enum class Mode { SCREEN_AND_CURSOR, SCREEN };
+    enum class Mode { SCREEN_WITH_CURSOR, SCREEN };
 
     using ScreenUpdateCallback =
         std::function<void(const DesktopFrame* screen_frame,

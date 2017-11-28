@@ -287,7 +287,7 @@ bool HostSessionDesktop::ReadConfig(const proto::DesktopSessionConfig& config)
                   this, std::placeholders::_1, std::placeholders::_2);
 
     ScreenUpdater::Mode update_mode = enable_cursor_shape ?
-        ScreenUpdater::Mode::SCREEN_AND_CURSOR : ScreenUpdater::Mode::SCREEN;
+        ScreenUpdater::Mode::SCREEN_WITH_CURSOR : ScreenUpdater::Mode::SCREEN;
 
     screen_updater_ = std::make_unique<ScreenUpdater>(
         update_mode,
