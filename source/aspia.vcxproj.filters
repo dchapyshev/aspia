@@ -177,9 +177,6 @@
     <ClCompile Include="desktop_capture\desktop_region.cc">
       <Filter>desktop_capture</Filter>
     </ClCompile>
-    <ClCompile Include="desktop_capture\desktop_size.cc">
-      <Filter>desktop_capture</Filter>
-    </ClCompile>
     <ClCompile Include="desktop_capture\differ.cc">
       <Filter>desktop_capture</Filter>
     </ClCompile>

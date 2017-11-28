@@ -123,7 +123,6 @@
     <ClCompile Include="desktop_capture\desktop_point.cc" />
     <ClCompile Include="desktop_capture\desktop_rect.cc" />
     <ClCompile Include="desktop_capture\desktop_region.cc" />
-    <ClCompile Include="desktop_capture\desktop_size.cc" />
     <ClCompile Include="desktop_capture\differ.cc" />
     <ClCompile Include="desktop_capture\mouse_cursor.cc" />
     <ClCompile Include="desktop_capture\mouse_cursor_cache.cc" />
