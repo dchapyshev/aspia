@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            base/files/drive_enumerator.h
+// FILE:            base/files/logical_drive_enumerator.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__FILES__DRIVE_ENUMERATOR_H
-#define _ASPIA_BASE__FILES__DRIVE_ENUMERATOR_H
+#ifndef _ASPIA_BASE__FILES__LOGICAL_DRIVE_ENUMERATOR_H
+#define _ASPIA_BASE__FILES__LOGICAL_DRIVE_ENUMERATOR_H
 
 #include "base/files/file_path.h"
 #include "base/macros.h"
@@ -15,11 +15,11 @@
 
 namespace aspia {
 
-class DriveEnumerator
+class LogicalDriveEnumerator
 {
 public:
-    DriveEnumerator();
-    ~DriveEnumerator() = default;
+    LogicalDriveEnumerator();
+    ~LogicalDriveEnumerator() = default;
 
     class DriveInfo
     {
@@ -44,7 +44,7 @@ public:
         std::wstring VolumeName() const;
 
     private:
-        friend class DriveEnumerator;
+        friend class LogicalDriveEnumerator;
 
         DriveInfo(const FilePath& path);
 
@@ -60,9 +60,9 @@ private:
     wchar_t* next_ = nullptr;
     std::wstring current_;
 
-    DISALLOW_COPY_AND_ASSIGN(DriveEnumerator);
+    DISALLOW_COPY_AND_ASSIGN(LogicalDriveEnumerator);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__FILES__DRIVE_ENUMERATOR_H
+#endif // _ASPIA_BASE__FILES__LOGICAL_DRIVE_ENUMERATOR_H

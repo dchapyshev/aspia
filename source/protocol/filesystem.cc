@@ -6,7 +6,7 @@
 //
 
 #include "protocol/filesystem.h"
-#include "base/files/drive_enumerator.h"
+#include "base/files/logical_drive_enumerator.h"
 #include "base/files/file_enumerator.h"
 #include "base/files/file_helpers.h"
 #include "base/files/base_paths.h"
@@ -20,7 +20,7 @@ proto::RequestStatus ExecuteDriveListRequest(proto::DriveList* drive_list)
 {
     DCHECK(drive_list);
 
-    DriveEnumerator enumerator;
+    LogicalDriveEnumerator enumerator;
 
     for (;;)
     {
@@ -33,7 +33,7 @@ proto::RequestStatus ExecuteDriveListRequest(proto::DriveList* drive_list)
 
         item->set_path(UTF8fromUNICODE(path));
 
-        DriveEnumerator::DriveInfo drive_info = enumerator.GetInfo();
+        LogicalDriveEnumerator::DriveInfo drive_info = enumerator.GetInfo();
 
         item->set_name(UTF8fromUNICODE(drive_info.VolumeName()));
         item->set_total_space(drive_info.TotalSpace());
@@ -41,23 +41,23 @@ proto::RequestStatus ExecuteDriveListRequest(proto::DriveList* drive_list)
 
         switch (drive_info.Type())
         {
-            case DriveEnumerator::DriveInfo::DriveType::CDROM:
+            case LogicalDriveEnumerator::DriveInfo::DriveType::CDROM:
                 item->set_type(proto::DriveList::Item::CDROM);
                 break;
 
-            case DriveEnumerator::DriveInfo::DriveType::REMOVABLE:
+            case LogicalDriveEnumerator::DriveInfo::DriveType::REMOVABLE:
                 item->set_type(proto::DriveList::Item::REMOVABLE);
                 break;
 
-            case DriveEnumerator::DriveInfo::DriveType::FIXED:
+            case LogicalDriveEnumerator::DriveInfo::DriveType::FIXED:
                 item->set_type(proto::DriveList::Item::FIXED);
                 break;
 
-            case DriveEnumerator::DriveInfo::DriveType::RAM:
+            case LogicalDriveEnumerator::DriveInfo::DriveType::RAM:
                 item->set_type(proto::DriveList::Item::RAM);
                 break;
 
-            case DriveEnumerator::DriveInfo::DriveType::REMOTE:
+            case LogicalDriveEnumerator::DriveInfo::DriveType::REMOTE:
                 item->set_type(proto::DriveList::Item::REMOTE);
                 break;
 
@@ -97,8 +97,6 @@ proto::RequestStatus ExecuteFileListRequest(const FilePath& path, proto::FileLis
 
     if (!IsValidPathName(path))
         return proto::REQUEST_STATUS_INVALID_PATH_NAME;
-
-    std::error_code code;
 
     if (!DirectoryExists(path))
         return proto::REQUEST_STATUS_PATH_NOT_FOUND;

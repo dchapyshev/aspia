@@ -352,9 +352,6 @@
     <ClCompile Include="protocol\filesystem.cc">
       <Filter>protocol</Filter>
     </ClCompile>
-    <ClCompile Include="base\files\drive_enumerator.cc">
-      <Filter>base\files</Filter>
-    </ClCompile>
     <ClCompile Include="base\memory\aligned_memory.cc">
       <Filter>base\memory</Filter>
     </ClCompile>
@@ -657,6 +654,9 @@
     </ClCompile>
     <ClCompile Include="desktop_capture\desktop_geometry.cc">
       <Filter>desktop_capture</Filter>
+    </ClCompile>
+    <ClCompile Include="base\files\logical_drive_enumerator.cc">
+      <Filter>base\files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1031,9 +1031,6 @@
     <ClInclude Include="ui\status_code.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="base\files\drive_enumerator.h">
-      <Filter>base\files</Filter>
-    </ClInclude>
     <ClInclude Include="base\memory\aligned_memory.h">
       <Filter>base\memory</Filter>
     </ClInclude>
@@ -1354,6 +1351,9 @@
     </ClInclude>
     <ClInclude Include="desktop_capture\desktop_geometry.h">
       <Filter>desktop_capture</Filter>
+    </ClInclude>
+    <ClInclude Include="base\files\logical_drive_enumerator.h">
+      <Filter>base\files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
