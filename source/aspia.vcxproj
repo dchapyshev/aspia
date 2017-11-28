@@ -120,7 +120,6 @@
     <ClCompile Include="desktop_capture\desktop_frame.cc" />
     <ClCompile Include="desktop_capture\desktop_frame_basic.cc" />
     <ClCompile Include="desktop_capture\desktop_frame_dib.cc" />
-    <ClCompile Include="desktop_capture\desktop_point.cc" />
     <ClCompile Include="desktop_capture\desktop_rect.cc" />
     <ClCompile Include="desktop_capture\desktop_region.cc" />
     <ClCompile Include="desktop_capture\differ.cc" />

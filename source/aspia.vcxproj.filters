@@ -168,9 +168,6 @@
     <ClCompile Include="desktop_capture\desktop_frame_dib.cc">
       <Filter>desktop_capture</Filter>
     </ClCompile>
-    <ClCompile Include="desktop_capture\desktop_point.cc">
-      <Filter>desktop_capture</Filter>
-    </ClCompile>
     <ClCompile Include="desktop_capture\desktop_rect.cc">
       <Filter>desktop_capture</Filter>
     </ClCompile>
