@@ -120,7 +120,7 @@
     <ClCompile Include="desktop_capture\desktop_frame.cc" />
     <ClCompile Include="desktop_capture\desktop_frame_basic.cc" />
     <ClCompile Include="desktop_capture\desktop_frame_dib.cc" />
-    <ClCompile Include="desktop_capture\desktop_rect.cc" />
+    <ClCompile Include="desktop_capture\desktop_geometry.cc" />
     <ClCompile Include="desktop_capture\desktop_region.cc" />
     <ClCompile Include="desktop_capture\differ.cc" />
     <ClCompile Include="desktop_capture\mouse_cursor.cc" />
@@ -349,10 +349,8 @@
     <ClInclude Include="desktop_capture\desktop_frame.h" />
     <ClInclude Include="desktop_capture\desktop_frame_basic.h" />
     <ClInclude Include="desktop_capture\desktop_frame_dib.h" />
-    <ClInclude Include="desktop_capture\desktop_point.h" />
-    <ClInclude Include="desktop_capture\desktop_rect.h" />
+    <ClInclude Include="desktop_capture\desktop_geometry.h" />
     <ClInclude Include="desktop_capture\desktop_region.h" />
-    <ClInclude Include="desktop_capture\desktop_size.h" />
     <ClInclude Include="desktop_capture\differ.h" />
     <ClInclude Include="desktop_capture\diff_block_sse2.h" />
     <ClInclude Include="desktop_capture\mouse_cursor.h" />

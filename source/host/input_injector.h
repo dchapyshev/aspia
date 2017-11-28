@@ -10,7 +10,7 @@
 
 #include "base/scoped_thread_desktop.h"
 #include "proto/desktop_session_message.pb.h"
-#include "desktop_capture/desktop_point.h"
+#include "desktop_capture/desktop_geometry.h"
 
 namespace aspia {
 

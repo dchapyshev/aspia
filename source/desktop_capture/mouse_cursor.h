@@ -10,8 +10,7 @@
 
 #include <memory>
 
-#include "desktop_capture/desktop_size.h"
-#include "desktop_capture/desktop_point.h"
+#include "desktop_capture/desktop_geometry.h"
 
 namespace aspia {
 

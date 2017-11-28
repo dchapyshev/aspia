@@ -8,8 +8,6 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_H
 #define _ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_H
 
-#include "desktop_capture/desktop_size.h"
-#include "desktop_capture/desktop_point.h"
 #include "desktop_capture/desktop_region.h"
 #include "desktop_capture/pixel_format.h"
 #include "base/macros.h"

@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            desktop_capture/desktop_rect.cc
+// FILE:            desktop_capture/desktop_geometry.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "desktop_capture/desktop_rect.h"
+#include "desktop_capture/desktop_geometry.h"
 
 #include <algorithm>
 

@@ -8,8 +8,7 @@
 #ifndef _ASPIA_CODEC__VIDEO_HELPERS_H
 #define _ASPIA_CODEC__VIDEO_HELPERS_H
 
-#include "desktop_capture/desktop_rect.h"
-#include "desktop_capture/desktop_size.h"
+#include "desktop_capture/desktop_geometry.h"
 #include "desktop_capture/pixel_format.h"
 #include "proto/desktop_session_message.pb.h"
 

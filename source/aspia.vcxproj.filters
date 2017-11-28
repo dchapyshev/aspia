@@ -168,9 +168,6 @@
     <ClCompile Include="desktop_capture\desktop_frame_dib.cc">
       <Filter>desktop_capture</Filter>
     </ClCompile>
-    <ClCompile Include="desktop_capture\desktop_rect.cc">
-      <Filter>desktop_capture</Filter>
-    </ClCompile>
     <ClCompile Include="desktop_capture\desktop_region.cc">
       <Filter>desktop_capture</Filter>
     </ClCompile>
@@ -658,6 +655,9 @@
     <ClCompile Include="base\program_enumerator.cc">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="desktop_capture\desktop_geometry.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -714,12 +714,6 @@
     <ClInclude Include="desktop_capture\capturer_gdi.h">
       <Filter>desktop_capture</Filter>
     </ClInclude>
-    <ClInclude Include="desktop_capture\desktop_rect.h">
-      <Filter>desktop_capture</Filter>
-    </ClInclude>
-    <ClInclude Include="desktop_capture\desktop_size.h">
-      <Filter>desktop_capture</Filter>
-    </ClInclude>
     <ClInclude Include="desktop_capture\diff_block_sse2.h">
       <Filter>desktop_capture</Filter>
     </ClInclude>
@@ -731,9 +725,6 @@
     </ClInclude>
     <ClInclude Include="base\scoped_select_object.h">
       <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="desktop_capture\desktop_point.h">
-      <Filter>desktop_capture</Filter>
     </ClInclude>
     <ClInclude Include="base\service.h">
       <Filter>base</Filter>
@@ -1360,6 +1351,9 @@
     </ClInclude>
     <ClInclude Include="base\program_enumerator.h">
       <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="desktop_capture\desktop_geometry.h">
+      <Filter>desktop_capture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

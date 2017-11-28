@@ -10,7 +10,6 @@
 
 #include <memory>
 
-#include "desktop_capture/desktop_size.h"
 #include "desktop_capture/desktop_region.h"
 #include "base/macros.h"
 

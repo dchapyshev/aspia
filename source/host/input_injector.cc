@@ -7,7 +7,6 @@
 
 #include "host/input_injector.h"
 #include "base/logging.h"
-#include "desktop_capture/desktop_rect.h"
 #include "host/sas_injector.h"
 
 namespace aspia {
