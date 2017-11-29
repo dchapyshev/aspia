@@ -15,16 +15,16 @@ Device::~Device()
     Close();
 }
 
-bool Device::Open(const FilePath& device_path)
+bool Device::Open(const FilePath& device_path, DWORD desired_access, DWORD share_mode)
 {
     device_.Reset(CreateFileW(device_path.c_str(),
-                              GENERIC_READ | GENERIC_WRITE,
-                              FILE_SHARE_READ | FILE_SHARE_WRITE,
+                              desired_access,
+                              share_mode,
                               nullptr,
                               OPEN_EXISTING,
                               0,
                               nullptr));
-    if (device_.IsValid())
+    if (!device_.IsValid())
     {
         LOG(WARNING) << "Unable to open device: " << device_path
                      << ". Error code: " << GetLastSystemErrorString();
@@ -34,17 +34,22 @@ bool Device::Open(const FilePath& device_path)
     return true;
 }
 
+bool Device::Open(const FilePath& device_path)
+{
+    return Open(device_path, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE);
+}
+
 void Device::Close()
 {
     device_.Reset();
 }
 
-bool Device::SendIoControl(DWORD io_control_code,
-                           LPVOID input_buffer,
-                           DWORD input_buffer_size,
-                           LPVOID output_buffer,
-                           DWORD output_buffer_size,
-                           LPDWORD bytes_returned)
+bool Device::IoControl(DWORD io_control_code,
+                       LPVOID input_buffer,
+                       DWORD input_buffer_size,
+                       LPVOID output_buffer,
+                       DWORD output_buffer_size,
+                       LPDWORD bytes_returned)
 {
     if (!DeviceIoControl(device_, io_control_code,
                          input_buffer, input_buffer_size,

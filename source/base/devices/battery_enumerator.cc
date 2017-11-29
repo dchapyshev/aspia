@@ -114,12 +114,10 @@ bool BatteryEnumerator::GetBatteryTag(ULONG& tag) const
     ULONG input_buffer = 0;
     ULONG output_buffer = 0;
 
-    if (!device_.SendIoControl(IOCTL_BATTERY_QUERY_TAG,
-                               &input_buffer,
-                               sizeof(input_buffer),
-                               &output_buffer,
-                               sizeof(output_buffer),
-                               &bytes_returned))
+    if (!device_.IoControl(IOCTL_BATTERY_QUERY_TAG,
+                           &input_buffer, sizeof(input_buffer),
+                           &output_buffer, sizeof(output_buffer),
+                           &bytes_returned))
     {
         return false;
     }
@@ -142,12 +140,10 @@ bool BatteryEnumerator::GetBatteryInformation(BATTERY_QUERY_INFORMATION_LEVEL le
 
     ULONG bytes_returned;
 
-    return device_.SendIoControl(IOCTL_BATTERY_QUERY_INFORMATION,
-                                 &battery_info,
-                                 sizeof(battery_info),
-                                 buffer,
-                                 buffer_size,
-                                 &bytes_returned);
+    return device_.IoControl(IOCTL_BATTERY_QUERY_INFORMATION,
+                             &battery_info, sizeof(battery_info),
+                             buffer, buffer_size,
+                             &bytes_returned);
 }
 
 bool BatteryEnumerator::GetStatus(BATTERY_STATUS& status) const
@@ -163,10 +159,10 @@ bool BatteryEnumerator::GetStatus(BATTERY_STATUS& status) const
 
     DWORD bytes_returned = 0;
 
-    if (!device_.SendIoControl(IOCTL_BATTERY_QUERY_STATUS,
-                               &status_request, sizeof(status_request),
-                               &status_reply, sizeof(status_reply),
-                               &bytes_returned))
+    if (!device_.IoControl(IOCTL_BATTERY_QUERY_STATUS,
+                           &status_request, sizeof(status_request),
+                           &status_reply, sizeof(status_reply),
+                           &bytes_returned))
     {
         return false;
     }

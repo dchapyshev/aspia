@@ -13,10 +13,11 @@
 namespace aspia {
 
 uint16_t ByteSwap(uint16_t value);
-
 uint32_t ByteSwap(uint32_t value);
-
 uint64_t ByteSwap(uint64_t value);
+
+void ChangeByteOrder(uint8_t* data, size_t data_size);
+void ChangeByteOrder(char* data, size_t data_size);
 
 template <typename T>
 T NetworkByteOrderToHost(T value)

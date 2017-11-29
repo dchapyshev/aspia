@@ -19,14 +19,15 @@ public:
     Device() = default;
     virtual ~Device();
 
+    bool Open(const FilePath& device_path, DWORD desired_access, DWORD share_mode);
     bool Open(const FilePath& device_path);
     void Close();
-    bool SendIoControl(DWORD io_control_code,
-                       LPVOID input_buffer,
-                       DWORD input_buffer_size,
-                       LPVOID output_buffer,
-                       DWORD output_buffer_size,
-                       LPDWORD bytes_returned);
+    bool IoControl(DWORD io_control_code,
+                   LPVOID input_buffer,
+                   DWORD input_buffer_size,
+                   LPVOID output_buffer,
+                   DWORD output_buffer_size,
+                   LPDWORD bytes_returned);
 
 private:
     ScopedPlatformFile device_;

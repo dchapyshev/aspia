@@ -8,6 +8,7 @@
 #include "base/printer_enumerator.h"
 #include "base/devices/battery_enumerator.h"
 #include "base/devices/monitor_enumerator.h"
+#include "base/devices/physical_drive_enumerator.h"
 #include "base/devices/smbios_reader.h"
 #include "base/strings/string_util.h"
 #include "protocol/category_group_hardware.h"
@@ -2478,15 +2479,487 @@ const char* CategoryATA::Guid() const
 
 void CategoryATA::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    system_info::AtaDrives message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const system_info::AtaDrives::Item& item = message.item(index);
+
+        Output::Group group(output, item.model_number(), Icon());
+
+        if (!item.serial_number().empty())
+            output->AddParam(IDI_DRIVE, "Serial Number", item.serial_number());
+
+        if (!item.firmware_revision().empty())
+            output->AddParam(IDI_DRIVE, "Firmware Revision", item.firmware_revision());
+
+        const char* bus_type = nullptr;
+        switch (item.bus_type())
+        {
+            case system_info::AtaDrives::Item::BUS_TYPE_SCSI:
+                bus_type = "SCSI";
+                break;
+
+            case system_info::AtaDrives::Item::BUS_TYPE_ATAPI:
+                bus_type = "ATAPI";
+                break;
+
+            case system_info::AtaDrives::Item::BUS_TYPE_ATA:
+                bus_type = "ATA";
+                break;
+
+            case system_info::AtaDrives::Item::BUS_TYPE_IEEE1394:
+                bus_type = "IEEE 1394";
+                break;
+
+            case system_info::AtaDrives::Item::BUS_TYPE_SSA:
+                bus_type = "SSA";
+                break;
+
+            case system_info::AtaDrives::Item::BUS_TYPE_FIBRE:
+                bus_type = "Fibre";
+                break;
+
+            case system_info::AtaDrives::Item::BUS_TYPE_USB:
+                bus_type = "USB";
+                break;
+
+            case system_info::AtaDrives::Item::BUS_TYPE_RAID:
+                bus_type = "RAID";
+                break;
+
+            case system_info::AtaDrives::Item::BUS_TYPE_ISCSI:
+                bus_type = "iSCSI";
+                break;
+
+            case system_info::AtaDrives::Item::BUS_TYPE_SAS:
+                bus_type = "SAS";
+                break;
+
+            case system_info::AtaDrives::Item::BUS_TYPE_SATA:
+                bus_type = "SATA";
+                break;
+
+            case system_info::AtaDrives::Item::BUS_TYPE_SD:
+                bus_type = "SD";
+                break;
+
+            case system_info::AtaDrives::Item::BUS_TYPE_MMC:
+                bus_type = "MMC";
+                break;
+
+            case system_info::AtaDrives::Item::BUS_TYPE_VIRTUAL:
+                bus_type = "Virtual";
+                break;
+
+            case system_info::AtaDrives::Item::BUS_TYPE_FILE_BACKED_VIRTUAL:
+                bus_type = "File Backed Virtual";
+                break;
+
+            default:
+                break;
+        }
+
+        if (bus_type != nullptr)
+            output->AddParam(IDI_DRIVE, "Bus Type", bus_type);
+
+        const char* transfer_mode = nullptr;
+        switch (item.transfer_mode())
+        {
+            case system_info::AtaDrives::Item::TRANSFER_MODE_PIO:
+                transfer_mode = "PIO";
+                break;
+
+            case system_info::AtaDrives::Item::TRANSFER_MODE_PIO_DMA:
+                transfer_mode = "PIO / DMA";
+                break;
+
+            case system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_133:
+                transfer_mode = "Ultra DMA/133 (133 MB/s)";
+                break;
+
+            case system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_100:
+                transfer_mode = "Ultra DMA/100 (100 MB/s)";
+                break;
+
+            case system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_66:
+                transfer_mode = "Ultra DMA/66 (66 MB/s)";
+                break;
+
+            case system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_44:
+                transfer_mode = "Ultra DMA/44 (44 MB/s)";
+                break;
+
+            case system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_33:
+                transfer_mode = "Ultra DMA/33 (33 MB/s)";
+                break;
+
+            case system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_25:
+                transfer_mode = "Ultra DMA/25 (25 MB/s)";
+                break;
+
+            case system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_16:
+                transfer_mode = "Ultra DMA/16 (16 MB/s)";
+                break;
+
+            case system_info::AtaDrives::Item::TRANSFER_MODE_SATA_600:
+                transfer_mode = "SATA/600 (600 MB/s)";
+                break;
+
+            case system_info::AtaDrives::Item::TRANSFER_MODE_SATA_300:
+                transfer_mode = "SATA/300 (300 MB/s)";
+                break;
+
+            case system_info::AtaDrives::Item::TRANSFER_MODE_SATA_150:
+                transfer_mode = "SATA/150 (150 MB/s)";
+                break;
+
+            default:
+                break;
+        }
+
+        if (transfer_mode != nullptr)
+            output->AddParam(IDI_DRIVE, "Transfer Mode", transfer_mode);
+
+        if (item.rotation_rate())
+            output->AddParam(IDI_DRIVE, "Rotation Rate", std::to_string(item.rotation_rate()), "RPM");
+
+        if (item.drive_size())
+            output->AddParam(IDI_DRIVE, "Drive Size", std::to_string(item.drive_size()), "Bytes");
+
+        if (item.buffer_size())
+            output->AddParam(IDI_DRIVE, "Buffer Size", std::to_string(item.buffer_size()), "Bytes");
+
+        if (item.multisectors())
+            output->AddParam(IDI_DRIVE, "Multisectors", std::to_string(item.multisectors()));
+
+        if (item.ecc_size())
+            output->AddParam(IDI_DRIVE, "ECC Size", std::to_string(item.ecc_size()));
+
+        output->AddParam(IDI_DRIVE, "Removable", item.is_removable() ? "Yes" : "No");
+
+        if (item.heads_number())
+            output->AddParam(IDI_DRIVE, "Heads Count", std::to_string(item.heads_number()));
+
+        if (item.cylinders_number())
+            output->AddParam(IDI_DRIVE, "Cylinders Count", std::to_string(item.cylinders_number()));
+
+        if (item.tracks_per_cylinder())
+            output->AddParam(IDI_DRIVE, "Tracks per Cylinder", std::to_string(item.tracks_per_cylinder()));
+
+        if (item.sectors_per_track())
+            output->AddParam(IDI_DRIVE, "Sectors per Track", std::to_string(item.sectors_per_track()));
+
+        if (item.bytes_per_sector())
+            output->AddParam(IDI_DRIVE, "Bytes per Sector", std::to_string(item.bytes_per_sector()));
+
+        if (item.supported_features() != 0)
+        {
+            Output::Group features_group(output, "Features", Icon());
+
+            auto add_feature = [&](const char* name, uint64_t feature)
+            {
+                if (item.supported_features() & feature)
+                {
+                    output->AddParam((item.enabled_features() & feature) ? IDI_CHECKED : IDI_UNCHECKED,
+                                     name,
+                                     (item.enabled_features() & feature) ? "Yes" : "No");
+                }
+            };
+
+            add_feature("48-bit LBA",
+                        system_info::AtaDrives::Item::FEATURE_48BIT_LBA);
+            add_feature("Advanced Power Management",
+                        system_info::AtaDrives::Item::FEATURE_ADVANCED_POWER_MANAGEMENT);
+            add_feature("Automatic Acoustic Management",
+                        system_info::AtaDrives::Item::FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT);
+            add_feature("SMART",
+                        system_info::AtaDrives::Item::FEATURE_SMART);
+            add_feature("SMART Error Logging",
+                        system_info::AtaDrives::Item::FEATURE_SMART_ERROR_LOGGING);
+            add_feature("SMART Self Test",
+                        system_info::AtaDrives::Item::FEATURE_SMART_SELF_TEST);
+            add_feature("Streaming",
+                        system_info::AtaDrives::Item::FEATURE_STREAMING);
+            add_feature("General Purpose Logging",
+                        system_info::AtaDrives::Item::FEATURE_GENERAL_PURPOSE_LOGGING);
+            add_feature("Security Mode",
+                        system_info::AtaDrives::Item::FEATURE_SECURITY_MODE);
+            add_feature("Power Management",
+                        system_info::AtaDrives::Item::FEATURE_POWER_MANAGEMENT);
+            add_feature("Write Cache",
+                        system_info::AtaDrives::Item::FEATURE_WRITE_CACHE);
+            add_feature("Read Lock Ahead",
+                        system_info::AtaDrives::Item::FEATURE_READ_LOCK_AHEAD);
+            add_feature("Host Protected Area",
+                        system_info::AtaDrives::Item::FEATURE_HOST_PROTECTED_AREA);
+            add_feature("Release Interrupt",
+                        system_info::AtaDrives::Item::FEATURE_RELEASE_INTERRUPT);
+            add_feature("Power Up In Standby",
+                        system_info::AtaDrives::Item::FEATURE_POWER_UP_IN_STANDBY);
+            add_feature("Device Configuration Overlay",
+                        system_info::AtaDrives::Item::FEATURE_DEVICE_CONFIGURATION_OVERLAY);
+            add_feature("Service Interrupt",
+                        system_info::AtaDrives::Item::FEATURE_SERVICE_INTERRUPT);
+            add_feature("Native Command Queuing",
+                        system_info::AtaDrives::Item::FEATURE_NATIVE_COMMAND_QUEUING);
+            add_feature("TRIM",
+                        system_info::AtaDrives::Item::FEATURE_TRIM);
+        }
+    }
 }
 
 std::string CategoryATA::Serialize()
 {
-    // TODO
-    return std::string();
+    system_info::AtaDrives message;
+
+    for (PhysicalDriveEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+    {
+        system_info::AtaDrives::Item* item = message.add_item();
+
+        item->set_model_number(enumerator.GetModelNumber());
+        item->set_serial_number(enumerator.GetSerialNumber());
+        item->set_firmware_revision(enumerator.GetFirmwareRevision());
+
+        switch (enumerator.GetBusType())
+        {
+            case PhysicalDriveEnumerator::BusType::SCSI:
+                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_SCSI);
+                break;
+
+            case PhysicalDriveEnumerator::BusType::ATAPI:
+                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_ATAPI);
+                break;
+
+            case PhysicalDriveEnumerator::BusType::ATA:
+                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_ATA);
+                break;
+
+            case PhysicalDriveEnumerator::BusType::IEEE1394:
+                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_IEEE1394);
+                break;
+
+            case PhysicalDriveEnumerator::BusType::SSA:
+                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_SSA);
+                break;
+
+            case PhysicalDriveEnumerator::BusType::FIBRE:
+                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_FIBRE);
+                break;
+
+            case PhysicalDriveEnumerator::BusType::USB:
+                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_USB);
+                break;
+
+            case PhysicalDriveEnumerator::BusType::RAID:
+                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_RAID);
+                break;
+
+            case PhysicalDriveEnumerator::BusType::ISCSI:
+                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_ISCSI);
+                break;
+
+            case PhysicalDriveEnumerator::BusType::SAS:
+                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_SAS);
+                break;
+
+            case PhysicalDriveEnumerator::BusType::SATA:
+                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_SATA);
+                break;
+
+            case PhysicalDriveEnumerator::BusType::SD:
+                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_SD);
+                break;
+
+            case PhysicalDriveEnumerator::BusType::MMC:
+                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_MMC);
+                break;
+
+            case PhysicalDriveEnumerator::BusType::VIRTUAL:
+                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_VIRTUAL);
+                break;
+
+            case PhysicalDriveEnumerator::BusType::FILE_BACKED_VIRTUAL:
+                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_FILE_BACKED_VIRTUAL);
+                break;
+
+            default:
+                break;
+        }
+
+        switch (enumerator.GetCurrentTransferMode())
+        {
+            case PhysicalDriveEnumerator::TransferMode::PIO:
+                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_PIO);
+                break;
+
+            case PhysicalDriveEnumerator::TransferMode::PIO_DMA:
+                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_PIO_DMA);
+                break;
+
+            case PhysicalDriveEnumerator::TransferMode::ULTRA_DMA_133:
+                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_133);
+                break;
+
+            case PhysicalDriveEnumerator::TransferMode::ULTRA_DMA_100:
+                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_100);
+                break;
+
+            case PhysicalDriveEnumerator::TransferMode::ULTRA_DMA_66:
+                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_66);
+                break;
+
+            case PhysicalDriveEnumerator::TransferMode::ULTRA_DMA_44:
+                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_44);
+                break;
+
+            case PhysicalDriveEnumerator::TransferMode::ULTRA_DMA_33:
+                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_33);
+                break;
+
+            case PhysicalDriveEnumerator::TransferMode::ULTRA_DMA_25:
+                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_25);
+                break;
+
+            case PhysicalDriveEnumerator::TransferMode::ULTRA_DMA_16:
+                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_16);
+                break;
+
+            case PhysicalDriveEnumerator::TransferMode::SATA_600:
+                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_SATA_600);
+                break;
+
+            case PhysicalDriveEnumerator::TransferMode::SATA_300:
+                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_SATA_300);
+                break;
+
+            case PhysicalDriveEnumerator::TransferMode::SATA_150:
+                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_SATA_150);
+                break;
+
+            default:
+                break;
+        }
+
+        item->set_rotation_rate(enumerator.GetRotationRate());
+        item->set_drive_size(enumerator.GetDriveSize());
+        item->set_buffer_size(enumerator.GetBufferSize());
+        item->set_multisectors(enumerator.GetMultisectors());
+        item->set_ecc_size(enumerator.GetECCSize());
+        item->set_is_removable(enumerator.IsRemovable());
+        item->set_cylinders_number(enumerator.GetCylindersNumber());
+        item->set_tracks_per_cylinder(enumerator.GetTracksPerCylinder());
+        item->set_sectors_per_track(enumerator.GetSectorsPerTrack());
+        item->set_bytes_per_sector(enumerator.GetBytesPerSector());
+        item->set_heads_number(enumerator.GetHeadsNumber());
+
+        uint64_t supported = enumerator.GetSupportedFeatures();
+
+        auto add_supported_feature = [&](uint64_t feacture, uint64_t proto)
+        {
+            if (supported & feacture)
+                item->set_supported_features(item->supported_features() | proto);
+        };
+
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_48BIT_LBA,
+                              system_info::AtaDrives::Item::FEATURE_48BIT_LBA);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_ADVANCED_POWER_MANAGEMENT,
+                              system_info::AtaDrives::Item::FEATURE_ADVANCED_POWER_MANAGEMENT);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT,
+                              system_info::AtaDrives::Item::FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_SMART,
+                              system_info::AtaDrives::Item::FEATURE_SMART);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_SMART_ERROR_LOGGING,
+                              system_info::AtaDrives::Item::FEATURE_SMART_ERROR_LOGGING);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_SMART_SELF_TEST,
+                              system_info::AtaDrives::Item::FEATURE_SMART_SELF_TEST);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_STREAMING,
+                              system_info::AtaDrives::Item::FEATURE_STREAMING);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_GENERAL_PURPOSE_LOGGING,
+                              system_info::AtaDrives::Item::FEATURE_GENERAL_PURPOSE_LOGGING);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_SECURITY_MODE,
+                              system_info::AtaDrives::Item::FEATURE_SECURITY_MODE);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_POWER_MANAGEMENT,
+                              system_info::AtaDrives::Item::FEATURE_POWER_MANAGEMENT);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_WRITE_CACHE,
+                              system_info::AtaDrives::Item::FEATURE_WRITE_CACHE);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_READ_LOCK_AHEAD,
+                              system_info::AtaDrives::Item::FEATURE_READ_LOCK_AHEAD);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_HOST_PROTECTED_AREA,
+                              system_info::AtaDrives::Item::FEATURE_HOST_PROTECTED_AREA);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_RELEASE_INTERRUPT,
+                              system_info::AtaDrives::Item::FEATURE_RELEASE_INTERRUPT);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_POWER_UP_IN_STANDBY,
+                              system_info::AtaDrives::Item::FEATURE_POWER_UP_IN_STANDBY);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_DEVICE_CONFIGURATION_OVERLAY,
+                              system_info::AtaDrives::Item::FEATURE_DEVICE_CONFIGURATION_OVERLAY);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_SERVICE_INTERRUPT,
+                              system_info::AtaDrives::Item::FEATURE_SERVICE_INTERRUPT);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_NATIVE_COMMAND_QUEUING,
+                              system_info::AtaDrives::Item::FEATURE_NATIVE_COMMAND_QUEUING);
+        add_supported_feature(PhysicalDriveEnumerator::FEATURE_TRIM,
+                              system_info::AtaDrives::Item::FEATURE_TRIM);
+
+        uint64_t enabled = enumerator.GetEnabledFeatures();
+
+        auto add_enabled_feature = [&](uint64_t feacture, uint64_t proto)
+        {
+            if (enabled & feacture)
+                item->set_enabled_features(item->enabled_features() | proto);
+        };
+
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_48BIT_LBA,
+                            system_info::AtaDrives::Item::FEATURE_48BIT_LBA);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_ADVANCED_POWER_MANAGEMENT,
+                            system_info::AtaDrives::Item::FEATURE_ADVANCED_POWER_MANAGEMENT);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT,
+                            system_info::AtaDrives::Item::FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_SMART,
+                            system_info::AtaDrives::Item::FEATURE_SMART);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_SMART_ERROR_LOGGING,
+                            system_info::AtaDrives::Item::FEATURE_SMART_ERROR_LOGGING);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_SMART_SELF_TEST,
+                            system_info::AtaDrives::Item::FEATURE_SMART_SELF_TEST);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_STREAMING,
+                            system_info::AtaDrives::Item::FEATURE_STREAMING);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_GENERAL_PURPOSE_LOGGING,
+                            system_info::AtaDrives::Item::FEATURE_GENERAL_PURPOSE_LOGGING);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_SECURITY_MODE,
+                            system_info::AtaDrives::Item::FEATURE_SECURITY_MODE);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_POWER_MANAGEMENT,
+                            system_info::AtaDrives::Item::FEATURE_POWER_MANAGEMENT);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_WRITE_CACHE,
+                            system_info::AtaDrives::Item::FEATURE_WRITE_CACHE);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_READ_LOCK_AHEAD,
+                            system_info::AtaDrives::Item::FEATURE_READ_LOCK_AHEAD);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_HOST_PROTECTED_AREA,
+                            system_info::AtaDrives::Item::FEATURE_HOST_PROTECTED_AREA);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_RELEASE_INTERRUPT,
+                            system_info::AtaDrives::Item::FEATURE_RELEASE_INTERRUPT);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_POWER_UP_IN_STANDBY,
+                            system_info::AtaDrives::Item::FEATURE_POWER_UP_IN_STANDBY);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_DEVICE_CONFIGURATION_OVERLAY,
+                            system_info::AtaDrives::Item::FEATURE_DEVICE_CONFIGURATION_OVERLAY);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_SERVICE_INTERRUPT,
+                            system_info::AtaDrives::Item::FEATURE_SERVICE_INTERRUPT);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_NATIVE_COMMAND_QUEUING,
+                            system_info::AtaDrives::Item::FEATURE_NATIVE_COMMAND_QUEUING);
+        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_TRIM,
+                            system_info::AtaDrives::Item::FEATURE_TRIM);
+    }
+
+    return message.SerializeAsString();
 }
 
 //
