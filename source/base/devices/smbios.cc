@@ -215,7 +215,9 @@ std::string SMBios::TableReader::GetString(uint8_t offset) const
     if (!*string || !string[0])
         return std::string();
 
-    return string;
+    std::string output;
+    TrimWhitespaceASCII(string, TRIM_ALL, output);
+    return output;
 }
 
 const uint8_t* SMBios::TableReader::GetPointer(uint8_t offset) const
@@ -1682,7 +1684,9 @@ std::string SMBios::OnBoardDeviceTable::GetDescription(int index) const
     if (!*string || !string[0])
         return std::string();
 
-    return string;
+    std::string output;
+    TrimWhitespaceASCII(string, TRIM_ALL, output);
+    return output;
 }
 
 std::string SMBios::OnBoardDeviceTable::GetType(int index) const

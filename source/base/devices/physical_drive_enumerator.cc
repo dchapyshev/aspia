@@ -169,19 +169,25 @@ void PhysicalDriveEnumerator::Advance()
 std::string PhysicalDriveEnumerator::GetModelNumber() const
 {
     ChangeByteOrder(id_data_.model_number, sizeof(id_data_.model_number));
-    return id_data_.model_number;
+    std::string output;
+    TrimWhitespaceASCII(id_data_.model_number, TRIM_ALL, output);
+    return output;
 }
 
 std::string PhysicalDriveEnumerator::GetSerialNumber() const
 {
     ChangeByteOrder(id_data_.serial_number, sizeof(id_data_.serial_number));
-    return id_data_.serial_number;
+    std::string output;
+    TrimWhitespaceASCII(id_data_.serial_number, TRIM_ALL, output);
+    return output;
 }
 
 std::string PhysicalDriveEnumerator::GetFirmwareRevision() const
 {
     ChangeByteOrder(id_data_.firmware_revision, sizeof(id_data_.firmware_revision));
-    return id_data_.firmware_revision;
+    std::string output;
+    TrimWhitespaceASCII(id_data_.firmware_revision, TRIM_ALL, output);
+    return output;
 }
 
 PhysicalDriveEnumerator::BusType PhysicalDriveEnumerator::GetBusType() const
