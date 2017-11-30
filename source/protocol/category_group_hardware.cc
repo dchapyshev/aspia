@@ -39,7 +39,7 @@ const char* CategoryDmiBios::Guid() const
 
 void CategoryDmiBios::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::DmiBios message;
+    proto::DmiBios message;
 
     if (!message.ParseFromString(data))
         return;
@@ -82,7 +82,7 @@ void CategoryDmiBios::Parse(std::shared_ptr<OutputProxy> output, const std::stri
 
         for (int index = 0; index < message.feature_size(); ++index)
         {
-            const system_info::DmiBios::Feature& feature = message.feature(index);
+            const proto::DmiBios::Feature& feature = message.feature(index);
 
             output->AddParam(feature.supported() ? IDI_CHECKED : IDI_UNCHECKED,
                              feature.name(),
@@ -102,7 +102,7 @@ std::string CategoryDmiBios::Serialize()
         return std::string();
 
     SMBios::BiosTable table = table_enumerator.GetTable();
-    system_info::DmiBios message;
+    proto::DmiBios message;
 
     message.set_manufacturer(table.GetManufacturer());
     message.set_version(table.GetVersion());
@@ -117,7 +117,7 @@ std::string CategoryDmiBios::Serialize()
 
     for (const auto& feature : feature_list)
     {
-        system_info::DmiBios::Feature* item = message.add_feature();
+        proto::DmiBios::Feature* item = message.add_feature();
         item->set_name(feature.first);
         item->set_supported(feature.second);
     }
@@ -146,7 +146,7 @@ const char* CategoryDmiSystem::Guid() const
 
 void CategoryDmiSystem::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::DmiSystem message;
+    proto::DmiSystem message;
 
     if (!message.ParseFromString(data))
         return;
@@ -195,7 +195,7 @@ std::string CategoryDmiSystem::Serialize()
         return std::string();
 
     SMBios::SystemTable table = table_enumerator.GetTable();
-    system_info::DmiSystem message;
+    proto::DmiSystem message;
 
     message.set_manufacturer(table.GetManufacturer());
     message.set_product_name(table.GetProductName());
@@ -230,7 +230,7 @@ const char* CategoryDmiBaseboard::Guid() const
 
 void CategoryDmiBaseboard::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::DmiBaseboard message;
+    proto::DmiBaseboard message;
 
     if (!message.ParseFromString(data))
         return;
@@ -245,68 +245,12 @@ void CategoryDmiBaseboard::Parse(std::shared_ptr<OutputProxy> output, const std:
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::DmiBaseboard::Item& item = message.item(index);
+        const proto::DmiBaseboard::Item& item = message.item(index);
 
         Output::Group group(output, StringPrintf("Baseboard #%d", index + 1), Icon());
 
-        const char* type;
-        switch (item.type())
-        {
-            case system_info::DmiBaseboard::Item::BOARD_TYPE_OTHER:
-                type = "Other";
-                break;
-
-            case system_info::DmiBaseboard::Item::BOARD_TYPE_SERVER_BLADE:
-                type =  "Server Blade";
-                break;
-
-            case system_info::DmiBaseboard::Item::BOARD_TYPE_CONNECTIVITY_SWITCH:
-                type = "Connectivity Switch";
-                break;
-
-            case system_info::DmiBaseboard::Item::BOARD_TYPE_SYSTEM_MANAGEMENT_MODULE:
-                type = "System Management Module";
-                break;
-
-            case system_info::DmiBaseboard::Item::BOARD_TYPE_PROCESSOR_MODULE:
-                type = "Processor Module";
-                break;
-
-            case system_info::DmiBaseboard::Item::BOARD_TYPE_IO_MODULE:
-                type = "I/O Module";
-                break;
-
-            case system_info::DmiBaseboard::Item::BOARD_TYPE_MEMORY_MODULE:
-                type = "Memory Module";
-                break;
-
-            case system_info::DmiBaseboard::Item::BOARD_TYPE_DAUGHTER_BOARD:
-                type = "Daughter Board";
-                break;
-
-            case system_info::DmiBaseboard::Item::BOARD_TYPE_MOTHERBOARD:
-                type = "Motherboard";
-                break;
-
-            case system_info::DmiBaseboard::Item::BOARD_TYPE_PROCESSOR_PLUS_MEMORY_MODULE:
-                type = "Processor + Memory Module";
-                break;
-
-            case system_info::DmiBaseboard::Item::BOARD_TYPE_PROCESSOR_PLUS_IO_MODULE:
-                type = "Processor + I/O Module";
-                break;
-
-            case system_info::DmiBaseboard::Item::BOARD_TYPE_INTERCONNECT_BOARD:
-                type = "Interconnect Board";
-                break;
-
-            default:
-                type = nullptr;
-                break;
-        }
-
-        if (type != nullptr)
-            output->AddParam(IDI_MOTHERBOARD, "Type", type);
+        if (!item.type().empty())
+            output->AddParam(IDI_MOTHERBOARD, "Type", item.type());
 
         if (!item.manufacturer().empty())
             output->AddParam(IDI_MOTHERBOARD, "Manufacturer", item.manufacturer());
@@ -329,7 +273,7 @@ void CategoryDmiBaseboard::Parse(std::shared_ptr<OutputProxy> output, const std:
 
             for (int i = 0; i < item.feature_size(); ++i)
             {
-                const system_info::DmiBaseboard::Item::Feature& feature = item.feature(i);
+                const proto::DmiBaseboard::Item::Feature& feature = item.feature(i);
 
                 output->AddParam(feature.supported() ? IDI_CHECKED : IDI_UNCHECKED,
                                  feature.name(),
@@ -348,14 +292,14 @@ std::string CategoryDmiBaseboard::Serialize()
     if (!smbios)
         return std::string();
 
-    system_info::DmiBaseboard message;
+    proto::DmiBaseboard message;
 
     for (SMBios::TableEnumerator<SMBios::BaseboardTable> table_enumerator(*smbios);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
         SMBios::BaseboardTable table = table_enumerator.GetTable();
-        system_info::DmiBaseboard::Item* item = message.add_item();
+        proto::DmiBaseboard::Item* item = message.add_item();
 
         item->set_manufacturer(table.GetManufacturer());
         item->set_product_name(table.GetProductName());
@@ -363,67 +307,13 @@ std::string CategoryDmiBaseboard::Serialize()
         item->set_serial_number(table.GetSerialNumber());
         item->set_asset_tag(table.GetAssetTag());
         item->set_location_in_chassis(table.GetLocationInChassis());
-
-        switch (table.GetBoardType())
-        {
-            case SMBios::BaseboardTable::BoardType::OTHER:
-                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_OTHER);
-                break;
-
-            case SMBios::BaseboardTable::BoardType::SERVER_BLADE:
-                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_SERVER_BLADE);
-                break;
-
-            case SMBios::BaseboardTable::BoardType::CONNECTIVITY_SWITCH:
-                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_CONNECTIVITY_SWITCH);
-                break;
-
-            case SMBios::BaseboardTable::BoardType::SYSTEM_MANAGEMENT_MODULE:
-                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_SYSTEM_MANAGEMENT_MODULE);
-                break;
-
-            case SMBios::BaseboardTable::BoardType::PROCESSOR_MODULE:
-                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_PROCESSOR_MODULE);
-                break;
-
-            case SMBios::BaseboardTable::BoardType::IO_MODULE:
-                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_IO_MODULE);
-                break;
-
-            case SMBios::BaseboardTable::BoardType::MEMORY_MODULE:
-                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_MEMORY_MODULE);
-                break;
-
-            case SMBios::BaseboardTable::BoardType::DAUGHTER_BOARD:
-                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_DAUGHTER_BOARD);
-                break;
-
-            case SMBios::BaseboardTable::BoardType::MOTHERBOARD:
-                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_MOTHERBOARD);
-                break;
-
-            case SMBios::BaseboardTable::BoardType::PROCESSOR_PLUS_MEMORY_MODULE:
-                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_PROCESSOR_PLUS_MEMORY_MODULE);
-                break;
-
-            case SMBios::BaseboardTable::BoardType::PROCESSOR_PLUS_IO_MODULE:
-                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_PROCESSOR_PLUS_IO_MODULE);
-                break;
-
-            case SMBios::BaseboardTable::BoardType::INTERCONNECT_BOARD:
-                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_INTERCONNECT_BOARD);
-                break;
-
-            default:
-                item->set_type(system_info::DmiBaseboard::Item::BOARD_TYPE_UNKNOWN);
-                break;
-        }
+        item->set_type(table.GetBoardType());
 
         SMBios::BaseboardTable::FeatureList feature_list = table.GetFeatures();
 
         for (const auto& feature : feature_list)
         {
-            system_info::DmiBaseboard::Item::Feature* feature_item = item->add_feature();
+            auto feature_item = item->add_feature();
             feature_item->set_name(feature.first);
             feature_item->set_supported(feature.second);
         }
@@ -453,7 +343,7 @@ const char* CategoryDmiChassis::Guid() const
 
 void CategoryDmiChassis::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::DmiChassis message;
+    proto::DmiChassis message;
 
     if (!message.ParseFromString(data))
         return;
@@ -468,7 +358,7 @@ void CategoryDmiChassis::Parse(std::shared_ptr<OutputProxy> output, const std::s
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::DmiChassis::Item& item = message.item(index);
+        const proto::DmiChassis::Item& item = message.item(index);
 
         Output::Group group(output, StringPrintf("Chassis #%d", index + 1), Icon());
 
@@ -484,183 +374,20 @@ void CategoryDmiChassis::Parse(std::shared_ptr<OutputProxy> output, const std::s
         if (!item.asset_tag().empty())
             output->AddParam(IDI_SERVER, "Asset Tag", item.asset_tag());
 
-        const char* type;
-        switch (item.type())
-        {
-            case system_info::DmiChassis::Item::TYPE_OTHER:
-                type = "Other";
-                break;
+        if (!item.type().empty())
+            output->AddParam(IDI_SERVER, "Type", item.type());
 
-            case system_info::DmiChassis::Item::TYPE_DESKTOP:
-                type = "Desktop";
-                break;
+        if (!item.os_load_status().empty())
+            output->AddParam(IDI_SERVER, "OS Load Status", item.os_load_status());
 
-            case system_info::DmiChassis::Item::TYPE_LOW_PROFILE_DESKTOP:
-                type = "Low Profile Desktop";
-                break;
+        if (!item.power_source_status().empty())
+            output->AddParam(IDI_SERVER, "Power Source Status", item.power_source_status());
 
-            case system_info::DmiChassis::Item::TYPE_PIZZA_BOX:
-                type = "Pizza Box";
-                break;
+        if (!item.temparature_status().empty())
+            output->AddParam(IDI_SERVER, "Temperature Status", item.temparature_status());
 
-            case system_info::DmiChassis::Item::TYPE_MINI_TOWER:
-                type = "Mini Tower";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_TOWER:
-                type = "Tower";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_PORTABLE:
-                type = "Portable";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_LAPTOP:
-                type = "Laptop";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_NOTEBOOK:
-                type = "Notebook";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_HAND_HELD:
-                type = "Hand Held";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_DOCKING_STATION:
-                type = "Docking Station";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_ALL_IN_ONE:
-                type = "All In One";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_SUB_NOTEBOOK:
-                type = "Sub Notebook";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_SPACE_SAVING:
-                type = "Space Saving";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_LUNCH_BOX:
-                type = "Lunch Box";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_MAIN_SERVER_CHASSIS:
-                type = "Main Server Chassis";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_EXPANSION_CHASSIS:
-                type = "Expansion Chassis";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_SUB_CHASSIS:
-                type = "Sub Chassis";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_BUS_EXPANSION_CHASSIS:
-                type = "Bus Expansion Chassis";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_PERIPHERIAL_CHASSIS:
-                type = "Peripherial Chassis";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_RAID_CHASSIS:
-                type = "RAID Chassis";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_RACK_MOUNT_CHASSIS:
-                type = "Rack Mount Chassis";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_SEALED_CASE_PC:
-                type = "Sealed Case PC";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_MULTI_SYSTEM_CHASSIS:
-                type = "Multi System Chassis";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_COMPACT_PCI:
-                type = "Compact PCI";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_ADVANCED_TCA:
-                type = "Advanced TCA";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_BLADE:
-                type = "Blade";
-                break;
-
-            case system_info::DmiChassis::Item::TYPE_BLADE_ENCLOSURE:
-                type = "Blade Enclosure";
-                break;
-
-            default:
-                type = nullptr;
-                break;
-        }
-
-        if (type != nullptr)
-            output->AddParam(IDI_SERVER, "Type", type);
-
-        auto status_to_string = [](system_info::DmiChassis::Item::Status status)
-        {
-            switch (status)
-            {
-                case system_info::DmiChassis::Item::STATUS_OTHER:
-                    return "Other";
-
-                case system_info::DmiChassis::Item::STATUS_SAFE:
-                    return "Safe";
-
-                case system_info::DmiChassis::Item::STATUS_WARNING:
-                    return "Warning";
-
-                case system_info::DmiChassis::Item::STATUS_CRITICAL:
-                    return "Critical";
-
-                case system_info::DmiChassis::Item::STATUS_NON_RECOVERABLE:
-                    return "Non Recoverable";
-
-                default:
-                    return "Unknown";
-            }
-        };
-
-        output->AddParam(IDI_SERVER, "OS Load Status", status_to_string(item.os_load_status()));
-        output->AddParam(IDI_SERVER, "Power Source Status", status_to_string(item.power_source_status()));
-        output->AddParam(IDI_SERVER, "Temperature Status", status_to_string(item.temparature_status()));
-
-        const char* status;
-        switch (item.security_status())
-        {
-            case system_info::DmiChassis::Item::SECURITY_STATUS_OTHER:
-                status = "Other";
-                break;
-
-            case system_info::DmiChassis::Item::SECURITY_STATUS_NONE:
-                status = "None";
-                break;
-
-            case system_info::DmiChassis::Item::SECURITY_STATUS_EXTERNAL_INTERFACE_LOCKED_OUT:
-                status = "External Interface Locked Out";
-                break;
-
-            case system_info::DmiChassis::Item::SECURITY_STATUS_EXTERNAL_INTERFACE_ENABLED:
-                status = "External Interface Enabled";
-                break;
-
-            default:
-                status = nullptr;
-                break;
-        }
-
-        if (status != nullptr)
-            output->AddParam(IDI_SERVER, "Security Status", status);
+        if (!item.security_status().empty())
+            output->AddParam(IDI_SERVER, "Security Status", item.security_status());
 
         if (item.height() != 0)
             output->AddParam(IDI_SERVER, "Height", std::to_string(item.height()), "U");
@@ -680,191 +407,24 @@ std::string CategoryDmiChassis::Serialize()
     if (!smbios)
         return std::string();
 
-    system_info::DmiChassis message;
+    proto::DmiChassis message;
 
     for (SMBios::TableEnumerator<SMBios::ChassisTable> table_enumerator(*smbios);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
         SMBios::ChassisTable table = table_enumerator.GetTable();
-        system_info::DmiChassis::Item* item = message.add_item();
+        proto::DmiChassis::Item* item = message.add_item();
 
         item->set_manufacturer(table.GetManufacturer());
         item->set_version(table.GetVersion());
         item->set_serial_number(table.GetSerialNumber());
         item->set_asset_tag(table.GetAssetTag());
-
-        switch (table.GetType())
-        {
-            case SMBios::ChassisTable::Type::OTHER:
-                item->set_type(system_info::DmiChassis::Item::TYPE_OTHER);
-                break;
-
-            case SMBios::ChassisTable::Type::DESKTOP:
-                item->set_type(system_info::DmiChassis::Item::TYPE_DESKTOP);
-                break;
-
-            case SMBios::ChassisTable::Type::LOW_PROFILE_DESKTOP:
-                item->set_type(system_info::DmiChassis::Item::TYPE_LOW_PROFILE_DESKTOP);
-                break;
-
-            case SMBios::ChassisTable::Type::PIZZA_BOX:
-                item->set_type(system_info::DmiChassis::Item::TYPE_PIZZA_BOX);
-                break;
-
-            case SMBios::ChassisTable::Type::MINI_TOWER:
-                item->set_type(system_info::DmiChassis::Item::TYPE_MINI_TOWER);
-                break;
-
-            case SMBios::ChassisTable::Type::TOWER:
-                item->set_type(system_info::DmiChassis::Item::TYPE_TOWER);
-                break;
-
-            case SMBios::ChassisTable::Type::PORTABLE:
-                item->set_type(system_info::DmiChassis::Item::TYPE_PORTABLE);
-                break;
-
-            case SMBios::ChassisTable::Type::LAPTOP:
-                item->set_type(system_info::DmiChassis::Item::TYPE_LAPTOP);
-                break;
-
-            case SMBios::ChassisTable::Type::NOTEBOOK:
-                item->set_type(system_info::DmiChassis::Item::TYPE_NOTEBOOK);
-                break;
-
-            case SMBios::ChassisTable::Type::HAND_HELD:
-                item->set_type(system_info::DmiChassis::Item::TYPE_HAND_HELD);
-                break;
-
-            case SMBios::ChassisTable::Type::DOCKING_STATION:
-                item->set_type(system_info::DmiChassis::Item::TYPE_DOCKING_STATION);
-                break;
-
-            case SMBios::ChassisTable::Type::ALL_IN_ONE:
-                item->set_type(system_info::DmiChassis::Item::TYPE_ALL_IN_ONE);
-                break;
-
-            case SMBios::ChassisTable::Type::SUB_NOTEBOOK:
-                item->set_type(system_info::DmiChassis::Item::TYPE_SUB_NOTEBOOK);
-                break;
-
-            case SMBios::ChassisTable::Type::SPACE_SAVING:
-                item->set_type(system_info::DmiChassis::Item::TYPE_SPACE_SAVING);
-                break;
-
-            case SMBios::ChassisTable::Type::LUNCH_BOX:
-                item->set_type(system_info::DmiChassis::Item::TYPE_LUNCH_BOX);
-                break;
-
-            case SMBios::ChassisTable::Type::MAIN_SERVER_CHASSIS:
-                item->set_type(system_info::DmiChassis::Item::TYPE_MAIN_SERVER_CHASSIS);
-                break;
-
-            case SMBios::ChassisTable::Type::EXPANSION_CHASSIS:
-                item->set_type(system_info::DmiChassis::Item::TYPE_EXPANSION_CHASSIS);
-                break;
-
-            case SMBios::ChassisTable::Type::SUB_CHASSIS:
-                item->set_type(system_info::DmiChassis::Item::TYPE_SUB_CHASSIS);
-                break;
-
-            case SMBios::ChassisTable::Type::BUS_EXPANSION_CHASSIS:
-                item->set_type(system_info::DmiChassis::Item::TYPE_BUS_EXPANSION_CHASSIS);
-                break;
-
-            case SMBios::ChassisTable::Type::PERIPHERIAL_CHASSIS:
-                item->set_type(system_info::DmiChassis::Item::TYPE_PERIPHERIAL_CHASSIS);
-                break;
-
-            case SMBios::ChassisTable::Type::RAID_CHASSIS:
-                item->set_type(system_info::DmiChassis::Item::TYPE_RAID_CHASSIS);
-                break;
-
-            case SMBios::ChassisTable::Type::RACK_MOUNT_CHASSIS:
-                item->set_type(system_info::DmiChassis::Item::TYPE_RACK_MOUNT_CHASSIS);
-                break;
-
-            case SMBios::ChassisTable::Type::SEALED_CASE_PC:
-                item->set_type(system_info::DmiChassis::Item::TYPE_SEALED_CASE_PC);
-                break;
-
-            case SMBios::ChassisTable::Type::MULTI_SYSTEM_CHASSIS:
-                item->set_type(system_info::DmiChassis::Item::TYPE_MULTI_SYSTEM_CHASSIS);
-                break;
-
-            case SMBios::ChassisTable::Type::COMPACT_PCI:
-                item->set_type(system_info::DmiChassis::Item::TYPE_COMPACT_PCI);
-                break;
-
-            case SMBios::ChassisTable::Type::ADVANCED_TCA:
-                item->set_type(system_info::DmiChassis::Item::TYPE_ADVANCED_TCA);
-                break;
-
-            case SMBios::ChassisTable::Type::BLADE:
-                item->set_type(system_info::DmiChassis::Item::TYPE_BLADE);
-                break;
-
-            case SMBios::ChassisTable::Type::BLADE_ENCLOSURE:
-                item->set_type(system_info::DmiChassis::Item::TYPE_BLADE_ENCLOSURE);
-                break;
-
-            default:
-                item->set_type(system_info::DmiChassis::Item::TYPE_UNKNOWN);
-                break;
-        }
-
-        auto status_to_proto_status = [](SMBios::ChassisTable::Status status)
-        {
-            switch (status)
-            {
-                case SMBios::ChassisTable::Status::OTHER:
-                    return system_info::DmiChassis::Item::STATUS_OTHER;
-
-                case SMBios::ChassisTable::Status::SAFE:
-                    return system_info::DmiChassis::Item::STATUS_SAFE;
-
-                case SMBios::ChassisTable::Status::WARNING:
-                    return system_info::DmiChassis::Item::STATUS_WARNING;
-
-                case SMBios::ChassisTable::Status::CRITICAL:
-                    return system_info::DmiChassis::Item::STATUS_CRITICAL;
-
-                case SMBios::ChassisTable::Status::NON_RECOVERABLE:
-                    return system_info::DmiChassis::Item::STATUS_NON_RECOVERABLE;
-
-                default:
-                    return system_info::DmiChassis::Item::STATUS_UNKNOWN;
-            }
-        };
-
-        item->set_os_load_status(status_to_proto_status(table.GetOSLoadStatus()));
-        item->set_power_source_status(status_to_proto_status(table.GetPowerSourceStatus()));
-        item->set_temparature_status(status_to_proto_status(table.GetTemperatureStatus()));
-
-        switch (table.GetSecurityStatus())
-        {
-            case SMBios::ChassisTable::SecurityStatus::OTHER:
-                item->set_security_status(system_info::DmiChassis::Item::SECURITY_STATUS_OTHER);
-                break;
-
-            case SMBios::ChassisTable::SecurityStatus::NONE:
-                item->set_security_status(system_info::DmiChassis::Item::SECURITY_STATUS_NONE);
-                break;
-
-            case SMBios::ChassisTable::SecurityStatus::EXTERNAL_INTERFACE_LOCKED_OUT:
-                item->set_security_status(
-                    system_info::DmiChassis::Item::SECURITY_STATUS_EXTERNAL_INTERFACE_LOCKED_OUT);
-                break;
-
-            case SMBios::ChassisTable::SecurityStatus::EXTERNAL_INTERFACE_ENABLED:
-                item->set_security_status(
-                    system_info::DmiChassis::Item::SECURITY_STATUS_EXTERNAL_INTERFACE_ENABLED);
-                break;
-
-            default:
-                item->set_security_status(system_info::DmiChassis::Item::SECURITY_STATUS_UNKNOWN);
-                break;
-        }
+        item->set_type(table.GetType());
+        item->set_os_load_status(table.GetOSLoadStatus());
+        item->set_power_source_status(table.GetPowerSourceStatus());
+        item->set_temparature_status(table.GetTemperatureStatus());
+        item->set_security_status(table.GetSecurityStatus());
     }
 
     return message.SerializeAsString();
@@ -891,7 +451,7 @@ const char* CategoryDmiCaches::Guid() const
 
 void CategoryDmiCaches::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::DmiCaches message;
+    proto::DmiCaches message;
 
     if (!message.ParseFromString(data))
         return;
@@ -906,100 +466,23 @@ void CategoryDmiCaches::Parse(std::shared_ptr<OutputProxy> output, const std::st
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::DmiCaches::Item& item = message.item(index);
+        const proto::DmiCaches::Item& item = message.item(index);
 
         Output::Group group(output, StringPrintf("Cache #%d", index + 1), Icon());
 
         if (!item.name().empty())
             output->AddParam(IDI_CHIP, "Name", item.name());
 
-        const char* location;
-        switch (item.location())
-        {
-            case system_info::DmiCaches::Item::LOCATION_INTERNAL:
-                location = "Internal";
-                break;
+        if (!item.location().empty())
+            output->AddParam(IDI_CHIP, "Location", item.location());
 
-            case system_info::DmiCaches::Item::LOCATION_EXTERNAL:
-                location = "External";
-                break;
+        output->AddParam(IDI_CHIP, "Status", item.enabled() ? "Enabled" : "Disabled");
 
-            case system_info::DmiCaches::Item::LOCATION_RESERVED:
-                location = "Reserved";
-                break;
+        if (!item.mode().empty())
+            output->AddParam(IDI_CHIP, "Mode", item.mode());
 
-            default:
-                location = nullptr;
-                break;
-        }
-
-        if (location != nullptr)
-            output->AddParam(IDI_CHIP, "Location", location);
-
-        const char* status;
-        switch (item.status())
-        {
-            case system_info::DmiCaches::Item::STATUS_ENABLED:
-                status = "Enabled";
-                break;
-
-            case system_info::DmiCaches::Item::STATUS_DISABLED:
-                status = "Disabled";
-                break;
-
-            default:
-                status = nullptr;
-                break;
-        }
-
-        if (status != nullptr)
-            output->AddParam(IDI_CHIP, "Status", status);
-
-        const char* mode;
-        switch (item.mode())
-        {
-            case system_info::DmiCaches::Item::MODE_WRITE_THRU:
-                mode = "Write Thru";
-                break;
-
-            case system_info::DmiCaches::Item::MODE_WRITE_BACK:
-                mode = "Write Back";
-                break;
-
-            case system_info::DmiCaches::Item::MODE_WRITE_WITH_MEMORY_ADDRESS:
-                mode = "Write with memory address";
-                break;
-
-            default:
-                mode = nullptr;
-                break;
-        }
-
-        if (mode != nullptr)
-            output->AddParam(IDI_CHIP, "Mode", mode);
-
-        const char* level;
-        switch (item.level())
-        {
-            case system_info::DmiCaches::Item::LEVEL_L1:
-                level = "L1";
-                break;
-
-            case system_info::DmiCaches::Item::LEVEL_L2:
-                level = "L2";
-                break;
-
-            case system_info::DmiCaches::Item::LEVEL_L3:
-                level = "L3";
-                break;
-
-            default:
-                level = nullptr;
-                break;
-        }
-
-        if (level != nullptr)
-            output->AddParam(IDI_CHIP, "Level", level);
+        if (item.level() != 0)
+            output->AddParam(IDI_CHIP, "Level", StringPrintf("L%d", item.level()));
 
         if (item.maximum_size() != 0)
             output->AddParam(IDI_CHIP, "Maximum Size", std::to_string(item.maximum_size()), "kB");
@@ -1007,188 +490,32 @@ void CategoryDmiCaches::Parse(std::shared_ptr<OutputProxy> output, const std::st
         if (item.current_size() != 0)
             output->AddParam(IDI_CHIP, "Current Size", std::to_string(item.current_size()), "kB");
 
-        if (item.supported_sram_types() != 0)
+        if (item.supported_sram_type_size())
         {
             Output::Group types_group(output, "Supported SRAM Types", Icon());
 
-            auto add_type = [&](system_info::DmiCaches::Item::SRAMType type, const char* name)
+            for (int i = 0; i < item.supported_sram_type_size(); ++i)
             {
-                output->AddParam(item.supported_sram_types() & type ? IDI_CHECKED : IDI_UNCHECKED,
-                                 name,
-                                 item.supported_sram_types() & type ? "Yes" : "No");
-            };
-
-            add_type(system_info::DmiCaches::Item::SRAM_TYPE_OTHER, "Other");
-            add_type(system_info::DmiCaches::Item::SRAM_TYPE_UNKNOWN, "Unknown");
-            add_type(system_info::DmiCaches::Item::SRAM_TYPE_NON_BURST, "Non-burst");
-            add_type(system_info::DmiCaches::Item::SRAM_TYPE_BURST, "Burst");
-            add_type(system_info::DmiCaches::Item::SRAM_TYPE_PIPELINE_BURST, "Pipeline Burst");
-            add_type(system_info::DmiCaches::Item::SRAM_TYPE_SYNCHRONOUS, "Synchronous");
-            add_type(system_info::DmiCaches::Item::SRAM_TYPE_ASYNCHRONOUS, "Asynchronous");
+                output->AddParam(item.supported_sram_type(i).supported() ? IDI_CHECKED : IDI_UNCHECKED,
+                                 item.supported_sram_type(i).name(),
+                                 item.supported_sram_type(i).supported() ? "Yes" : "No");
+            }
         }
 
-        const char* current_sram_type;
-        switch (item.current_sram_type())
-        {
-            case system_info::DmiCaches::Item::SRAM_TYPE_OTHER:
-                current_sram_type = "Other";
-                break;
-
-            case system_info::DmiCaches::Item::SRAM_TYPE_UNKNOWN:
-                current_sram_type = "Unknown";
-                break;
-
-            case system_info::DmiCaches::Item::SRAM_TYPE_NON_BURST:
-                current_sram_type = "Non-burst";
-                break;
-
-            case system_info::DmiCaches::Item::SRAM_TYPE_BURST:
-                current_sram_type = "Burst";
-                break;
-
-            case system_info::DmiCaches::Item::SRAM_TYPE_PIPELINE_BURST:
-                current_sram_type = "Pipeline Burst";
-                break;
-
-            case system_info::DmiCaches::Item::SRAM_TYPE_SYNCHRONOUS:
-                current_sram_type = "Synchronous";
-                break;
-
-            case system_info::DmiCaches::Item::SRAM_TYPE_ASYNCHRONOUS:
-                current_sram_type = "Asynchronous";
-                break;
-
-            default:
-                current_sram_type = nullptr;
-                break;
-        }
-
-        if (current_sram_type != nullptr)
-            output->AddParam(IDI_CHIP, "Current SRAM Type", current_sram_type);
+        if (!item.current_sram_type().empty())
+            output->AddParam(IDI_CHIP, "Current SRAM Type", item.current_sram_type());
 
         if (item.speed() != 0)
             output->AddParam(IDI_CHIP, "Speed", std::to_string(item.speed()), "ns");
 
-        const char* ec_type;
-        switch (item.error_correction_type())
-        {
-            case system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_OTHER:
-                ec_type = "Other";
-                break;
+        if (!item.error_correction_type().empty())
+            output->AddParam(IDI_CHIP, "Error Correction Type", item.error_correction_type());
 
-            case system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_NONE:
-                ec_type = "None";
-                break;
+        if (!item.type().empty())
+            output->AddParam(IDI_CHIP, "Type", item.type());
 
-            case system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_PARITY:
-                ec_type = "Parity";
-                break;
-
-            case system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_SINGLE_BIT_ECC:
-                ec_type = "Single bit ECC";
-                break;
-
-            case system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_MULTI_BIT_ECC:
-                ec_type = "Multi bit ECC";
-                break;
-
-            default:
-                ec_type = nullptr;
-                break;
-        }
-
-        if (ec_type != nullptr)
-            output->AddParam(IDI_CHIP, "Error Correction Type", ec_type);
-
-        const char* type;
-        switch (item.type())
-        {
-            case system_info::DmiCaches::Item::TYPE_OTHER:
-                type = "Other";
-                break;
-
-            case system_info::DmiCaches::Item::TYPE_INSTRUCTION:
-                type = "Instruction";
-                break;
-
-            case system_info::DmiCaches::Item::TYPE_DATA:
-                type = "Data";
-                break;
-
-            case system_info::DmiCaches::Item::TYPE_UNIFIED:
-                type = "Unified";
-                break;
-
-            default:
-                type = nullptr;
-                break;
-        }
-
-        if (type != nullptr)
-            output->AddParam(IDI_CHIP, "Type", type);
-
-        const char* assoc;
-        switch (item.associativity())
-        {
-            case system_info::DmiCaches::Item::ASSOCIATIVITY_OTHER:
-                assoc = "Other";
-                break;
-
-            case system_info::DmiCaches::Item::ASSOCIATIVITY_DIRECT_MAPPED:
-                assoc = "Direct Mapped";
-                break;
-
-            case system_info::DmiCaches::Item::ASSOCIATIVITY_2_WAY:
-                assoc = "2-way Set-Associative";
-                break;
-
-            case system_info::DmiCaches::Item::ASSOCIATIVITY_4_WAY:
-                assoc = "4-way Set-Associative";
-                break;
-
-            case system_info::DmiCaches::Item::ASSOCIATIVITY_FULLY:
-                assoc = "Fully Associative";
-                break;
-
-            case system_info::DmiCaches::Item::ASSOCIATIVITY_8_WAY:
-                assoc = "8-way Set-Associative";
-                break;
-
-            case system_info::DmiCaches::Item::ASSOCIATIVITY_16_WAY:
-                assoc = "16-way Set-Associative";
-                break;
-
-            case system_info::DmiCaches::Item::ASSOCIATIVITY_12_WAY:
-                assoc = "12-way Set-Associative";
-                break;
-
-            case system_info::DmiCaches::Item::ASSOCIATIVITY_24_WAY:
-                assoc = "24-way Set-Associative";
-                break;
-
-            case system_info::DmiCaches::Item::ASSOCIATIVITY_32_WAY:
-                assoc = "32-way Set-Associative";
-                break;
-
-            case system_info::DmiCaches::Item::ASSOCIATIVITY_48_WAY:
-                assoc = "48-way Set-Associative";
-                break;
-
-            case system_info::DmiCaches::Item::ASSOCIATIVITY_64_WAY:
-                assoc = "64-way Set-Associative";
-                break;
-
-            case system_info::DmiCaches::Item::ASSOCIATIVITY_20_WAY:
-                assoc = "20-way Set-Associative";
-                break;
-
-            default:
-                assoc = nullptr;
-                break;
-        }
-
-        if (assoc != nullptr)
-            output->AddParam(IDI_CHIP, "Associativity", assoc);
+        if (!item.associativity().empty())
+            output->AddParam(IDI_CHIP, "Associativity", item.associativity());
     }
 }
 
@@ -1198,273 +525,35 @@ std::string CategoryDmiCaches::Serialize()
     if (!smbios)
         return std::string();
 
-    system_info::DmiCaches message;
+    proto::DmiCaches message;
 
     for (SMBios::TableEnumerator<SMBios::CacheTable> table_enumerator(*smbios);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
         SMBios::CacheTable table = table_enumerator.GetTable();
-        system_info::DmiCaches::Item* item = message.add_item();
+        proto::DmiCaches::Item* item = message.add_item();
 
         item->set_name(table.GetName());
-
-        switch (table.GetLocation())
-        {
-            case SMBios::CacheTable::Location::INTERNAL:
-                item->set_location(system_info::DmiCaches::Item::LOCATION_INTERNAL);
-                break;
-
-            case SMBios::CacheTable::Location::EXTERNAL:
-                item->set_location(system_info::DmiCaches::Item::LOCATION_EXTERNAL);
-                break;
-
-            case SMBios::CacheTable::Location::RESERVED:
-                item->set_location(system_info::DmiCaches::Item::LOCATION_RESERVED);
-                break;
-
-            default:
-                break;
-        }
-
-        switch (table.GetStatus())
-        {
-            case SMBios::CacheTable::Status::ENABLED:
-                item->set_status(system_info::DmiCaches::Item::STATUS_ENABLED);
-                break;
-
-            case SMBios::CacheTable::Status::DISABLED:
-                item->set_status(system_info::DmiCaches::Item::STATUS_DISABLED);
-                break;
-
-            default:
-                break;
-        }
-
-        switch (table.GetMode())
-        {
-            case SMBios::CacheTable::Mode::WRITE_THRU:
-                item->set_mode(system_info::DmiCaches::Item::MODE_WRITE_THRU);
-                break;
-
-            case SMBios::CacheTable::Mode::WRITE_BACK:
-                item->set_mode(system_info::DmiCaches::Item::MODE_WRITE_BACK);
-                break;
-
-            case SMBios::CacheTable::Mode::WRITE_WITH_MEMORY_ADDRESS:
-                item->set_mode(system_info::DmiCaches::Item::MODE_WRITE_WITH_MEMORY_ADDRESS);
-                break;
-
-            default:
-                break;
-        }
-
-        switch (table.GetLevel())
-        {
-            case SMBios::CacheTable::Level::L1:
-                item->set_level(system_info::DmiCaches::Item::LEVEL_L1);
-                break;
-
-            case SMBios::CacheTable::Level::L2:
-                item->set_level(system_info::DmiCaches::Item::LEVEL_L2);
-                break;
-
-            case SMBios::CacheTable::Level::L3:
-                item->set_level(system_info::DmiCaches::Item::LEVEL_L3);
-                break;
-
-            default:
-                break;
-        }
-
+        item->set_location(table.GetLocation());
+        item->set_enabled(table.IsEnabled());
+        item->set_mode(table.GetMode());
+        item->set_level(table.GetLevel());
         item->set_maximum_size(table.GetMaximumSize());
         item->set_current_size(table.GetCurrentSize());
 
-        uint16_t supported_sram_types = table.GetSupportedSRAMTypes();
-
-        if (supported_sram_types & SMBios::CacheTable::SRAM_TYPE_OTHER)
+        for (const auto& sram_type : table.GetSupportedSRAMTypes())
         {
-            item->set_supported_sram_types(
-                item->supported_sram_types() | system_info::DmiCaches::Item::SRAM_TYPE_OTHER);
+            auto sram_type_item = item->add_supported_sram_type();
+            sram_type_item->set_name(sram_type.first);
+            sram_type_item->set_supported(sram_type.second);
         }
 
-        if (supported_sram_types & SMBios::CacheTable::SRAM_TYPE_UNKNOWN)
-        {
-            item->set_supported_sram_types(
-                item->supported_sram_types() | system_info::DmiCaches::Item::SRAM_TYPE_UNKNOWN);
-        }
-
-        if (supported_sram_types & SMBios::CacheTable::SRAM_TYPE_NON_BURST)
-        {
-            item->set_supported_sram_types(
-                item->supported_sram_types() | system_info::DmiCaches::Item::SRAM_TYPE_NON_BURST);
-        }
-
-        if (supported_sram_types & SMBios::CacheTable::SRAM_TYPE_BURST)
-        {
-            item->set_supported_sram_types(
-                item->supported_sram_types() | system_info::DmiCaches::Item::SRAM_TYPE_BURST);
-        }
-
-        if (supported_sram_types & SMBios::CacheTable::SRAM_TYPE_PIPELINE_BURST)
-        {
-            item->set_supported_sram_types(
-                item->supported_sram_types() | system_info::DmiCaches::Item::SRAM_TYPE_PIPELINE_BURST);
-        }
-
-        if (supported_sram_types & SMBios::CacheTable::SRAM_TYPE_SYNCHRONOUS)
-        {
-            item->set_supported_sram_types(
-                item->supported_sram_types() | system_info::DmiCaches::Item::SRAM_TYPE_SYNCHRONOUS);
-        }
-
-        if (supported_sram_types & SMBios::CacheTable::SRAM_TYPE_ASYNCHRONOUS)
-        {
-            item->set_supported_sram_types(
-                item->supported_sram_types() | system_info::DmiCaches::Item::SRAM_TYPE_ASYNCHRONOUS);
-        }
-
-        switch (table.GetCurrentSRAMType())
-        {
-            case SMBios::CacheTable::SRAM_TYPE_OTHER:
-                item->set_current_sram_type(system_info::DmiCaches::Item::SRAM_TYPE_OTHER);
-                break;
-
-            case SMBios::CacheTable::SRAM_TYPE_UNKNOWN:
-                item->set_current_sram_type(system_info::DmiCaches::Item::SRAM_TYPE_UNKNOWN);
-                break;
-
-            case SMBios::CacheTable::SRAM_TYPE_NON_BURST:
-                item->set_current_sram_type(system_info::DmiCaches::Item::SRAM_TYPE_NON_BURST);
-                break;
-
-            case SMBios::CacheTable::SRAM_TYPE_BURST:
-                item->set_current_sram_type(system_info::DmiCaches::Item::SRAM_TYPE_BURST);
-                break;
-
-            case SMBios::CacheTable::SRAM_TYPE_PIPELINE_BURST:
-                item->set_current_sram_type(system_info::DmiCaches::Item::SRAM_TYPE_PIPELINE_BURST);
-                break;
-
-            case SMBios::CacheTable::SRAM_TYPE_SYNCHRONOUS:
-                item->set_current_sram_type(system_info::DmiCaches::Item::SRAM_TYPE_SYNCHRONOUS);
-                break;
-
-            case SMBios::CacheTable::SRAM_TYPE_ASYNCHRONOUS:
-                item->set_current_sram_type(system_info::DmiCaches::Item::SRAM_TYPE_ASYNCHRONOUS);
-                break;
-
-            default:
-                break;
-        }
-
+        item->set_current_sram_type(table.GetCurrentSRAMType());
         item->set_speed(table.GetSpeed());
-
-        switch (table.GetErrorCorrectionType())
-        {
-            case SMBios::CacheTable::ErrorCorrectionType::OTHER:
-                item->set_error_correction_type(system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_OTHER);
-                break;
-
-            case SMBios::CacheTable::ErrorCorrectionType::NONE:
-                item->set_error_correction_type(system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_NONE);
-                break;
-
-            case SMBios::CacheTable::ErrorCorrectionType::PARITY:
-                item->set_error_correction_type(system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_PARITY);
-                break;
-
-            case SMBios::CacheTable::ErrorCorrectionType::SINGLE_BIT_ECC:
-                item->set_error_correction_type(system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_SINGLE_BIT_ECC);
-                break;
-
-            case SMBios::CacheTable::ErrorCorrectionType::MULTI_BIT_ECC:
-                item->set_error_correction_type(system_info::DmiCaches::Item::ERROR_CORRECTION_TYPE_MULTI_BIT_ECC);
-                break;
-
-            default:
-                break;
-        }
-
-        switch (table.GetType())
-        {
-            case SMBios::CacheTable::Type::OTHER:
-                item->set_type(system_info::DmiCaches::Item::TYPE_OTHER);
-                break;
-
-            case SMBios::CacheTable::Type::INSTRUCTION:
-                item->set_type(system_info::DmiCaches::Item::TYPE_INSTRUCTION);
-                break;
-
-            case SMBios::CacheTable::Type::DATA:
-                item->set_type(system_info::DmiCaches::Item::TYPE_DATA);
-                break;
-
-            case SMBios::CacheTable::Type::UNIFIED:
-                item->set_type(system_info::DmiCaches::Item::TYPE_UNIFIED);
-                break;
-
-            default:
-                break;
-        }
-
-        switch (table.GetAssociativity())
-        {
-            case SMBios::CacheTable::Associativity::OTHER:
-                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_OTHER);
-                break;
-
-            case SMBios::CacheTable::Associativity::DIRECT_MAPPED:
-                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_DIRECT_MAPPED);
-                break;
-
-            case SMBios::CacheTable::Associativity::WAY_2_SET_ASSOCIATIVE:
-                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_2_WAY);
-                break;
-
-            case SMBios::CacheTable::Associativity::WAY_4_SET_ASSOCIATIVE:
-                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_4_WAY);
-                break;
-
-            case SMBios::CacheTable::Associativity::FULLY_ASSOCIATIVE:
-                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_FULLY);
-                break;
-
-            case SMBios::CacheTable::Associativity::WAY_8_SET_ASSOCIATIVE:
-                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_8_WAY);
-                break;
-
-            case SMBios::CacheTable::Associativity::WAY_16_SET_ASSOCIATIVE:
-                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_16_WAY);
-                break;
-
-            case SMBios::CacheTable::Associativity::WAY_12_SET_ASSOCIATIVE:
-                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_12_WAY);
-                break;
-
-            case SMBios::CacheTable::Associativity::WAY_24_SET_ASSOCIATIVE:
-                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_24_WAY);
-                break;
-
-            case SMBios::CacheTable::Associativity::WAY_32_SET_ASSOCIATIVE:
-                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_32_WAY);
-                break;
-
-            case SMBios::CacheTable::Associativity::WAY_48_SET_ASSOCIATIVE:
-                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_48_WAY);
-                break;
-
-            case SMBios::CacheTable::Associativity::WAY_64_SET_ASSOCIATIVE:
-                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_64_WAY);
-                break;
-
-            case SMBios::CacheTable::Associativity::WAY_20_SET_ASSOCIATIVE:
-                item->set_associativity(system_info::DmiCaches::Item::ASSOCIATIVITY_20_WAY);
-                break;
-
-            default:
-                break;
-        }
+        item->set_error_correction_type(table.GetErrorCorrectionType());
+        item->set_type(table.GetType());
+        item->set_associativity(table.GetAssociativity());
     }
 
     return message.SerializeAsString();
@@ -1491,7 +580,7 @@ const char* CategoryDmiProcessors::Guid() const
 
 void CategoryDmiProcessors::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::DmiProcessors message;
+    proto::DmiProcessors message;
 
     if (!message.ParseFromString(data))
         return;
@@ -1506,7 +595,7 @@ void CategoryDmiProcessors::Parse(std::shared_ptr<OutputProxy> output, const std
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::DmiProcessors::Item& item = message.item(index);
+        const proto::DmiProcessors::Item& item = message.item(index);
 
         Output::Group group(output, StringPrintf("Processor #%d", index + 1), Icon());
 
@@ -1519,67 +608,11 @@ void CategoryDmiProcessors::Parse(std::shared_ptr<OutputProxy> output, const std
         if (!item.family().empty())
             output->AddParam(IDI_PROCESSOR, "Family", item.family());
 
-        const char* type;
-        switch (item.type())
-        {
-            case system_info::DmiProcessors::Item::TYPE_CENTRAL_PROCESSOR:
-                type = "Central Processor";
-                break;
+        if (!item.type().empty())
+            output->AddParam(IDI_PROCESSOR, "Type", item.type());
 
-            case system_info::DmiProcessors::Item::TYPE_MATH_PROCESSOR:
-                type = "Math Processor";
-                break;
-
-            case system_info::DmiProcessors::Item::TYPE_DSP_PROCESSOR:
-                type = "DSP Processor";
-                break;
-
-            case system_info::DmiProcessors::Item::TYPE_VIDEO_PROCESSOR:
-                type = "Video Processor";
-                break;
-
-            case system_info::DmiProcessors::Item::TYPE_OTHER:
-                type = "Other Processor";
-                break;
-
-            default:
-                type = nullptr;
-                break;
-        }
-
-        if (type != nullptr)
-            output->AddParam(IDI_PROCESSOR, "Type", type);
-
-        const char* status;
-        switch (item.status())
-        {
-            case system_info::DmiProcessors::Item::STATUS_ENABLED:
-                status = "Enabled";
-                break;
-
-            case system_info::DmiProcessors::Item::STATUS_DISABLED_BY_USER:
-                status = "Disabled by User";
-                break;
-
-            case system_info::DmiProcessors::Item::STATUS_DISABLED_BY_BIOS:
-                status = "Disabled by BIOS";
-                break;
-
-            case system_info::DmiProcessors::Item::STATUS_IDLE:
-                status = "Idle";
-                break;
-
-            case system_info::DmiProcessors::Item::STATUS_OTHER:
-                status = "Other";
-                break;
-
-            default:
-                status = nullptr;
-                break;
-        }
-
-        if (status != nullptr)
-            output->AddParam(IDI_PROCESSOR, "Status", status);
+        if (!item.status().empty())
+            output->AddParam(IDI_PROCESSOR, "Status", item.status());
 
         if (!item.socket().empty())
             output->AddParam(IDI_PROCESSOR, "Socket", item.socket());
@@ -1603,7 +636,7 @@ void CategoryDmiProcessors::Parse(std::shared_ptr<OutputProxy> output, const std
             output->AddParam(IDI_PROCESSOR, "Serial Number", item.serial_number());
 
         if (!item.asset_tag().empty())
-        output->AddParam(IDI_PROCESSOR, "Asset Tag", item.asset_tag());
+            output->AddParam(IDI_PROCESSOR, "Asset Tag", item.asset_tag());
 
         if (!item.part_number().empty())
             output->AddParam(IDI_PROCESSOR, "Part Number", item.part_number());
@@ -1617,29 +650,16 @@ void CategoryDmiProcessors::Parse(std::shared_ptr<OutputProxy> output, const std
         if (item.thread_count() != 0)
             output->AddParam(IDI_PROCESSOR, "Thread Count", std::to_string(item.thread_count()));
 
-        auto add_characteristic = [&](uint32_t flag, const char* name)
+        if (item.feature_size())
         {
-            output->AddParam((item.characteristics() & flag) ? IDI_CHECKED : IDI_UNCHECKED,
-                             name,
-                             (item.characteristics() & flag) ? "Yes" : "No");
-        };
+            Output::Group features_group(output, "Features", IDI_PROCESSOR);
 
-        if (item.characteristics() != 0)
-        {
-            Output::Group characteristic_group(output, "Characteristics", IDI_PROCESSOR);
-
-            add_characteristic(system_info::DmiProcessors::Item::CHARACTERISTIC_64BIT_CAPABLE,
-                               "64-bit Capable");
-            add_characteristic(system_info::DmiProcessors::Item::CHARACTERISTIC_MULTI_CORE,
-                               "Multi-Core");
-            add_characteristic(system_info::DmiProcessors::Item::CHARACTERISTIC_HARDWARE_THREAD,
-                               "Hardware Thread");
-            add_characteristic(system_info::DmiProcessors::Item::CHARACTERISTIC_EXECUTE_PROTECTION,
-                               "Execute Protection");
-            add_characteristic(system_info::DmiProcessors::Item::CHARACTERISTIC_ENHANCED_VIRTUALIZATION,
-                               "Enhanced Virtualization");
-            add_characteristic(system_info::DmiProcessors::Item::CHARACTERISTIC_POWER_CONTROL,
-                               "Power/Perfomance Control");
+            for (int i = 0; i < item.feature_size(); ++i)
+            {
+                output->AddParam(item.feature(i).supported() ? IDI_CHECKED : IDI_UNCHECKED,
+                                 item.feature(i).name(),
+                                 item.feature(i).supported() ? "Yes" : "No");
+            }
         }
     }
 }
@@ -1650,71 +670,20 @@ std::string CategoryDmiProcessors::Serialize()
     if (!smbios)
         return std::string();
 
-    system_info::DmiProcessors message;
+    proto::DmiProcessors message;
 
     for (SMBios::TableEnumerator<SMBios::ProcessorTable> table_enumerator(*smbios);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
         SMBios::ProcessorTable table = table_enumerator.GetTable();
-        system_info::DmiProcessors::Item* item = message.add_item();
+        proto::DmiProcessors::Item* item = message.add_item();
 
         item->set_manufacturer(table.GetManufacturer());
         item->set_version(table.GetVersion());
         item->set_family(table.GetFamily());
-
-        switch (table.GetType())
-        {
-            case SMBios::ProcessorTable::Type::CENTRAL_PROCESSOR:
-                item->set_type(system_info::DmiProcessors::Item::TYPE_CENTRAL_PROCESSOR);
-                break;
-
-            case SMBios::ProcessorTable::Type::MATH_PROCESSOR:
-                item->set_type(system_info::DmiProcessors::Item::TYPE_MATH_PROCESSOR);
-                break;
-
-            case SMBios::ProcessorTable::Type::DSP_PROCESSOR:
-                item->set_type(system_info::DmiProcessors::Item::TYPE_DSP_PROCESSOR);
-                break;
-
-            case SMBios::ProcessorTable::Type::VIDEO_PROCESSOR:
-                item->set_type(system_info::DmiProcessors::Item::TYPE_VIDEO_PROCESSOR);
-                break;
-
-            case SMBios::ProcessorTable::Type::OTHER:
-                item->set_type(system_info::DmiProcessors::Item::TYPE_OTHER);
-                break;
-
-            default:
-                break;
-        }
-
-        switch (table.GetStatus())
-        {
-            case SMBios::ProcessorTable::Status::ENABLED:
-                item->set_status(system_info::DmiProcessors::Item::STATUS_ENABLED);
-                break;
-
-            case SMBios::ProcessorTable::Status::DISABLED_BY_USER:
-                item->set_status(system_info::DmiProcessors::Item::STATUS_DISABLED_BY_USER);
-                break;
-
-            case SMBios::ProcessorTable::Status::DISABLED_BY_BIOS:
-                item->set_status(system_info::DmiProcessors::Item::STATUS_DISABLED_BY_BIOS);
-                break;
-
-            case SMBios::ProcessorTable::Status::IDLE:
-                item->set_status(system_info::DmiProcessors::Item::STATUS_IDLE);
-                break;
-
-            case SMBios::ProcessorTable::Status::OTHER:
-                item->set_status(system_info::DmiProcessors::Item::STATUS_OTHER);
-                break;
-
-            default:
-                break;
-        }
-
+        item->set_type(table.GetType());
+        item->set_status(table.GetStatus());
         item->set_socket(table.GetSocket());
         item->set_upgrade(table.GetUpgrade());
         item->set_external_clock(table.GetExternalClock());
@@ -1728,28 +697,12 @@ std::string CategoryDmiProcessors::Serialize()
         item->set_core_enabled(table.GetCoreEnabled());
         item->set_thread_count(table.GetThreadCount());
 
-        auto add_characteristic = [&](uint16_t src, uint32_t dst)
+        for (const auto& feature : table.GetFeatures())
         {
-            uint16_t bitfield = table.GetCharacteristics();
-
-            if (bitfield & src)
-            {
-                item->set_characteristics(item->characteristics() | dst);
-            }
-        };
-
-        add_characteristic(SMBios::ProcessorTable::CHARACTERISTIC_64BIT_CAPABLE,
-                           system_info::DmiProcessors::Item::CHARACTERISTIC_64BIT_CAPABLE);
-        add_characteristic(SMBios::ProcessorTable::CHARACTERISTIC_MULTI_CORE,
-                           system_info::DmiProcessors::Item::CHARACTERISTIC_MULTI_CORE);
-        add_characteristic(SMBios::ProcessorTable::CHARACTERISTIC_HARDWARE_THREAD,
-                           system_info::DmiProcessors::Item::CHARACTERISTIC_HARDWARE_THREAD);
-        add_characteristic(SMBios::ProcessorTable::CHARACTERISTIC_EXECUTE_PROTECTION,
-                           system_info::DmiProcessors::Item::CHARACTERISTIC_EXECUTE_PROTECTION);
-        add_characteristic(SMBios::ProcessorTable::CHARACTERISTIC_ENHANCED_VIRTUALIZATION,
-                           system_info::DmiProcessors::Item::CHARACTERISTIC_ENHANCED_VIRTUALIZATION);
-        add_characteristic(SMBios::ProcessorTable::CHARACTERISTIC_POWER_CONTROL,
-                           system_info::DmiProcessors::Item::CHARACTERISTIC_POWER_CONTROL);
+            auto feature_item = item->add_feature();
+            feature_item->set_name(feature.first);
+            feature_item->set_supported(feature.second);
+        }
     }
 
     return message.SerializeAsString();
@@ -1776,7 +729,7 @@ const char* CategoryDmiMemoryDevices::Guid() const
 
 void CategoryDmiMemoryDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::DmiMemoryDevices message;
+    proto::DmiMemoryDevices message;
 
     if (!message.ParseFromString(data))
         return;
@@ -1791,7 +744,7 @@ void CategoryDmiMemoryDevices::Parse(std::shared_ptr<OutputProxy> output, const 
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::DmiMemoryDevices::Item& item = message.item(index);
+        const proto::DmiMemoryDevices::Item& item = message.item(index);
 
         Output::Group group(output, StringPrintf("Memory Device #%d", index + 1), Icon());
 
@@ -1836,14 +789,14 @@ std::string CategoryDmiMemoryDevices::Serialize()
     if (!smbios)
         return std::string();
 
-    system_info::DmiMemoryDevices message;
+    proto::DmiMemoryDevices message;
 
     for (SMBios::TableEnumerator<SMBios::MemoryDeviceTable> table_enumerator(*smbios);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
         SMBios::MemoryDeviceTable table = table_enumerator.GetTable();
-        system_info::DmiMemoryDevices::Item* item = message.add_item();
+        proto::DmiMemoryDevices::Item* item = message.add_item();
 
         item->set_device_locator(table.GetDeviceLocator());
         item->set_size(table.GetSize());
@@ -1882,7 +835,7 @@ const char* CategoryDmiSystemSlots::Guid() const
 
 void CategoryDmiSystemSlots::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::DmiSystemSlots message;
+    proto::DmiSystemSlots message;
 
     if (!message.ParseFromString(data))
         return;
@@ -1897,7 +850,7 @@ void CategoryDmiSystemSlots::Parse(std::shared_ptr<OutputProxy> output, const st
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::DmiSystemSlots::Item& item = message.item(index);
+        const proto::DmiSystemSlots::Item& item = message.item(index);
 
         Output::Group group(output, StringPrintf("System Slot #%d", index + 1), Icon());
 
@@ -1907,54 +860,14 @@ void CategoryDmiSystemSlots::Parse(std::shared_ptr<OutputProxy> output, const st
         if (!item.type().empty())
             output->AddParam(IDI_PORT, "Type", item.type());
 
-        const char* usage;
-        switch (item.usage())
-        {
-            case system_info::DmiSystemSlots::Item::USAGE_OTHER:
-                usage = "Other";
-                break;
-
-            case system_info::DmiSystemSlots::Item::USAGE_AVAILABLE:
-                usage = "Available";
-                break;
-
-            case system_info::DmiSystemSlots::Item::USAGE_IN_USE:
-                usage = "In Use";
-                break;
-
-            default:
-                usage = nullptr;
-                break;
-        }
-
-        if (usage != nullptr)
-            output->AddParam(IDI_PORT, "Usage", usage);
+        if (!item.usage().empty())
+            output->AddParam(IDI_PORT, "Usage", item.usage());
 
         if (!item.bus_width().empty())
             output->AddParam(IDI_PORT, "Bus Width", item.bus_width());
 
-        const char* length;
-        switch (item.length())
-        {
-            case system_info::DmiSystemSlots::Item::LENGTH_OTHER:
-                length = "Other";
-                break;
-
-            case system_info::DmiSystemSlots::Item::LENGTH_SHORT:
-                length = "Short";
-                break;
-
-            case system_info::DmiSystemSlots::Item::LENGTH_LONG:
-                length = "Long";
-                break;
-
-            default:
-                length = nullptr;
-                break;
-        }
-
-        if (length != nullptr)
-            output->AddParam(IDI_PORT, "Length", length);
+        if (!item.length().empty())
+            output->AddParam(IDI_PORT, "Length", item.length());
     }
 }
 
@@ -1964,55 +877,20 @@ std::string CategoryDmiSystemSlots::Serialize()
     if (!smbios)
         return std::string();
 
-    system_info::DmiSystemSlots message;
+    proto::DmiSystemSlots message;
 
     for (SMBios::TableEnumerator<SMBios::SystemSlotTable> table_enumerator(*smbios);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
         SMBios::SystemSlotTable table = table_enumerator.GetTable();
-        system_info::DmiSystemSlots::Item* item = message.add_item();
+        proto::DmiSystemSlots::Item* item = message.add_item();
 
         item->set_slot_designation(table.GetSlotDesignation());
         item->set_type(table.GetType());
-
-        switch (table.GetUsage())
-        {
-            case SMBios::SystemSlotTable::Usage::OTHER:
-                item->set_usage(system_info::DmiSystemSlots::Item::USAGE_OTHER);
-                break;
-
-            case SMBios::SystemSlotTable::Usage::AVAILABLE:
-                item->set_usage(system_info::DmiSystemSlots::Item::USAGE_AVAILABLE);
-                break;
-
-            case SMBios::SystemSlotTable::Usage::IN_USE:
-                item->set_usage(system_info::DmiSystemSlots::Item::USAGE_IN_USE);
-                break;
-
-            default:
-                break;
-        }
-
+        item->set_usage(table.GetUsage());
         item->set_bus_width(table.GetBusWidth());
-
-        switch (table.GetLength())
-        {
-            case SMBios::SystemSlotTable::Length::OTHER:
-                item->set_length(system_info::DmiSystemSlots::Item::LENGTH_OTHER);
-                break;
-
-            case SMBios::SystemSlotTable::Length::SHORT:
-                item->set_length(system_info::DmiSystemSlots::Item::LENGTH_SHORT);
-                break;
-
-            case SMBios::SystemSlotTable::Length::LONG:
-                item->set_length(system_info::DmiSystemSlots::Item::LENGTH_LONG);
-                break;
-
-            default:
-                break;
-        }
+        item->set_length(table.GetLength());
     }
 
     return message.SerializeAsString();
@@ -2039,7 +917,7 @@ const char* CategoryDmiPortConnectors::Guid() const
 
 void CategoryDmiPortConnectors::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::DmiPortConnectors message;
+    proto::DmiPortConnectors message;
 
     if (!message.ParseFromString(data))
         return;
@@ -2054,7 +932,7 @@ void CategoryDmiPortConnectors::Parse(std::shared_ptr<OutputProxy> output, const
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::DmiPortConnectors::Item& item = message.item(index);
+        const proto::DmiPortConnectors::Item& item = message.item(index);
 
         Output::Group group(output, StringPrintf("Port Connector #%d", index + 1), Icon());
 
@@ -2081,14 +959,14 @@ std::string CategoryDmiPortConnectors::Serialize()
     if (!smbios)
         return std::string();
 
-    system_info::DmiPortConnectors message;
+    proto::DmiPortConnectors message;
 
     for (SMBios::TableEnumerator<SMBios::PortConnectorTable> table_enumerator(*smbios);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
         SMBios::PortConnectorTable table = table_enumerator.GetTable();
-        system_info::DmiPortConnectors::Item* item = message.add_item();
+        proto::DmiPortConnectors::Item* item = message.add_item();
 
         item->set_internal_designation(table.GetInternalDesignation());
         item->set_external_designation(table.GetExternalDesignation());
@@ -2121,7 +999,7 @@ const char* CategoryDmiOnboardDevices::Guid() const
 
 void CategoryDmiOnboardDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::DmiOnBoardDevices message;
+    proto::DmiOnBoardDevices message;
 
     if (!message.ParseFromString(data))
         return;
@@ -2136,7 +1014,7 @@ void CategoryDmiOnboardDevices::Parse(std::shared_ptr<OutputProxy> output, const
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::DmiOnBoardDevices::Item& item = message.item(index);
+        const proto::DmiOnBoardDevices::Item& item = message.item(index);
 
         Output::Group group(output, StringPrintf("OnBoard Device #%d", index + 1), Icon());
 
@@ -2156,7 +1034,7 @@ std::string CategoryDmiOnboardDevices::Serialize()
     if (!smbios)
         return std::string();
 
-    system_info::DmiOnBoardDevices message;
+    proto::DmiOnBoardDevices message;
 
     for (SMBios::TableEnumerator<SMBios::OnBoardDeviceTable> table_enumerator(*smbios);
          !table_enumerator.IsAtEnd();
@@ -2166,7 +1044,7 @@ std::string CategoryDmiOnboardDevices::Serialize()
 
         for (int index = 0; index < table.GetDeviceCount(); ++index)
         {
-            system_info::DmiOnBoardDevices::Item* item = message.add_item();
+            proto::DmiOnBoardDevices::Item* item = message.add_item();
 
             item->set_description(table.GetDescription(index));
             item->set_type(table.GetType(index));
@@ -2198,7 +1076,7 @@ const char* CategoryDmiBuildinPointing::Guid() const
 
 void CategoryDmiBuildinPointing::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::DmiBuildinPointing message;
+    proto::DmiBuildinPointing message;
 
     if (!message.ParseFromString(data))
         return;
@@ -2213,7 +1091,7 @@ void CategoryDmiBuildinPointing::Parse(std::shared_ptr<OutputProxy> output, cons
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::DmiBuildinPointing::Item& item = message.item(index);
+        const proto::DmiBuildinPointing::Item& item = message.item(index);
 
         Output::Group group(output, StringPrintf("Build-in Pointing Device #%d", index + 1), Icon());
 
@@ -2234,14 +1112,14 @@ std::string CategoryDmiBuildinPointing::Serialize()
     if (!smbios)
         return std::string();
 
-    system_info::DmiBuildinPointing message;
+    proto::DmiBuildinPointing message;
 
     for (SMBios::TableEnumerator<SMBios::BuildinPointingTable> table_enumerator(*smbios);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
         SMBios::BuildinPointingTable table = table_enumerator.GetTable();
-        system_info::DmiBuildinPointing::Item* item = message.add_item();
+        proto::DmiBuildinPointing::Item* item = message.add_item();
 
         item->set_device_type(table.GetDeviceType());
         item->set_device_interface(table.GetInterface());
@@ -2272,7 +1150,7 @@ const char* CategoryDmiPortableBattery::Guid() const
 
 void CategoryDmiPortableBattery::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::DmiPortableBattery message;
+    proto::DmiPortableBattery message;
 
     if (!message.ParseFromString(data))
         return;
@@ -2287,7 +1165,7 @@ void CategoryDmiPortableBattery::Parse(std::shared_ptr<OutputProxy> output, cons
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::DmiPortableBattery::Item& item = message.item(index);
+        const proto::DmiPortableBattery::Item& item = message.item(index);
 
         Output::Group group(output, StringPrintf("Portable Battery #%d", index + 1), Icon());
 
@@ -2353,14 +1231,14 @@ std::string CategoryDmiPortableBattery::Serialize()
     if (!smbios)
         return std::string();
 
-    system_info::DmiPortableBattery message;
+    proto::DmiPortableBattery message;
 
     for (SMBios::TableEnumerator<SMBios::PortableBatteryTable> table_enumerator(*smbios);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
         SMBios::PortableBatteryTable table = table_enumerator.GetTable();
-        system_info::DmiPortableBattery::Item* item = message.add_item();
+        proto::DmiPortableBattery::Item* item = message.add_item();
 
         item->set_location(table.GetLocation());
         item->set_manufacturer(table.GetManufacturer());
@@ -2479,7 +1357,7 @@ const char* CategoryATA::Guid() const
 
 void CategoryATA::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::AtaDrives message;
+    proto::AtaDrives message;
 
     if (!message.ParseFromString(data))
         return;
@@ -2494,7 +1372,7 @@ void CategoryATA::Parse(std::shared_ptr<OutputProxy> output, const std::string& 
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::AtaDrives::Item& item = message.item(index);
+        const proto::AtaDrives::Item& item = message.item(index);
 
         Output::Group group(output, item.model_number(), Icon());
 
@@ -2504,133 +1382,11 @@ void CategoryATA::Parse(std::shared_ptr<OutputProxy> output, const std::string& 
         if (!item.firmware_revision().empty())
             output->AddParam(IDI_DRIVE, "Firmware Revision", item.firmware_revision());
 
-        const char* bus_type = nullptr;
-        switch (item.bus_type())
-        {
-            case system_info::AtaDrives::Item::BUS_TYPE_SCSI:
-                bus_type = "SCSI";
-                break;
+        if (!item.bus_type().empty())
+            output->AddParam(IDI_DRIVE, "Bus Type", item.bus_type());
 
-            case system_info::AtaDrives::Item::BUS_TYPE_ATAPI:
-                bus_type = "ATAPI";
-                break;
-
-            case system_info::AtaDrives::Item::BUS_TYPE_ATA:
-                bus_type = "ATA";
-                break;
-
-            case system_info::AtaDrives::Item::BUS_TYPE_IEEE1394:
-                bus_type = "IEEE 1394";
-                break;
-
-            case system_info::AtaDrives::Item::BUS_TYPE_SSA:
-                bus_type = "SSA";
-                break;
-
-            case system_info::AtaDrives::Item::BUS_TYPE_FIBRE:
-                bus_type = "Fibre";
-                break;
-
-            case system_info::AtaDrives::Item::BUS_TYPE_USB:
-                bus_type = "USB";
-                break;
-
-            case system_info::AtaDrives::Item::BUS_TYPE_RAID:
-                bus_type = "RAID";
-                break;
-
-            case system_info::AtaDrives::Item::BUS_TYPE_ISCSI:
-                bus_type = "iSCSI";
-                break;
-
-            case system_info::AtaDrives::Item::BUS_TYPE_SAS:
-                bus_type = "SAS";
-                break;
-
-            case system_info::AtaDrives::Item::BUS_TYPE_SATA:
-                bus_type = "SATA";
-                break;
-
-            case system_info::AtaDrives::Item::BUS_TYPE_SD:
-                bus_type = "SD";
-                break;
-
-            case system_info::AtaDrives::Item::BUS_TYPE_MMC:
-                bus_type = "MMC";
-                break;
-
-            case system_info::AtaDrives::Item::BUS_TYPE_VIRTUAL:
-                bus_type = "Virtual";
-                break;
-
-            case system_info::AtaDrives::Item::BUS_TYPE_FILE_BACKED_VIRTUAL:
-                bus_type = "File Backed Virtual";
-                break;
-
-            default:
-                break;
-        }
-
-        if (bus_type != nullptr)
-            output->AddParam(IDI_DRIVE, "Bus Type", bus_type);
-
-        const char* transfer_mode = nullptr;
-        switch (item.transfer_mode())
-        {
-            case system_info::AtaDrives::Item::TRANSFER_MODE_PIO:
-                transfer_mode = "PIO";
-                break;
-
-            case system_info::AtaDrives::Item::TRANSFER_MODE_PIO_DMA:
-                transfer_mode = "PIO / DMA";
-                break;
-
-            case system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_133:
-                transfer_mode = "Ultra DMA/133 (133 MB/s)";
-                break;
-
-            case system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_100:
-                transfer_mode = "Ultra DMA/100 (100 MB/s)";
-                break;
-
-            case system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_66:
-                transfer_mode = "Ultra DMA/66 (66 MB/s)";
-                break;
-
-            case system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_44:
-                transfer_mode = "Ultra DMA/44 (44 MB/s)";
-                break;
-
-            case system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_33:
-                transfer_mode = "Ultra DMA/33 (33 MB/s)";
-                break;
-
-            case system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_25:
-                transfer_mode = "Ultra DMA/25 (25 MB/s)";
-                break;
-
-            case system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_16:
-                transfer_mode = "Ultra DMA/16 (16 MB/s)";
-                break;
-
-            case system_info::AtaDrives::Item::TRANSFER_MODE_SATA_600:
-                transfer_mode = "SATA/600 (600 MB/s)";
-                break;
-
-            case system_info::AtaDrives::Item::TRANSFER_MODE_SATA_300:
-                transfer_mode = "SATA/300 (300 MB/s)";
-                break;
-
-            case system_info::AtaDrives::Item::TRANSFER_MODE_SATA_150:
-                transfer_mode = "SATA/150 (150 MB/s)";
-                break;
-
-            default:
-                break;
-        }
-
-        if (transfer_mode != nullptr)
-            output->AddParam(IDI_DRIVE, "Transfer Mode", transfer_mode);
+        if (!item.transfer_mode().empty())
+            output->AddParam(IDI_DRIVE, "Transfer Mode", item.transfer_mode());
 
         if (item.rotation_rate())
             output->AddParam(IDI_DRIVE, "Rotation Rate", std::to_string(item.rotation_rate()), "RPM");
@@ -2664,194 +1420,33 @@ void CategoryATA::Parse(std::shared_ptr<OutputProxy> output, const std::string& 
         if (item.bytes_per_sector())
             output->AddParam(IDI_DRIVE, "Bytes per Sector", std::to_string(item.bytes_per_sector()));
 
-        if (item.supported_features() != 0)
+        if (item.feature_size())
         {
             Output::Group features_group(output, "Features", Icon());
 
-            auto add_feature = [&](const char* name, uint64_t feature)
+            for (int i = 0; i < item.feature_size(); ++i)
             {
-                if (item.supported_features() & feature)
-                {
-                    output->AddParam((item.enabled_features() & feature) ? IDI_CHECKED : IDI_UNCHECKED,
-                                     name,
-                                     (item.enabled_features() & feature) ? "Yes" : "No");
-                }
-            };
-
-            add_feature("48-bit LBA",
-                        system_info::AtaDrives::Item::FEATURE_48BIT_LBA);
-            add_feature("Advanced Power Management",
-                        system_info::AtaDrives::Item::FEATURE_ADVANCED_POWER_MANAGEMENT);
-            add_feature("Automatic Acoustic Management",
-                        system_info::AtaDrives::Item::FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT);
-            add_feature("SMART",
-                        system_info::AtaDrives::Item::FEATURE_SMART);
-            add_feature("SMART Error Logging",
-                        system_info::AtaDrives::Item::FEATURE_SMART_ERROR_LOGGING);
-            add_feature("SMART Self Test",
-                        system_info::AtaDrives::Item::FEATURE_SMART_SELF_TEST);
-            add_feature("Streaming",
-                        system_info::AtaDrives::Item::FEATURE_STREAMING);
-            add_feature("General Purpose Logging",
-                        system_info::AtaDrives::Item::FEATURE_GENERAL_PURPOSE_LOGGING);
-            add_feature("Security Mode",
-                        system_info::AtaDrives::Item::FEATURE_SECURITY_MODE);
-            add_feature("Power Management",
-                        system_info::AtaDrives::Item::FEATURE_POWER_MANAGEMENT);
-            add_feature("Write Cache",
-                        system_info::AtaDrives::Item::FEATURE_WRITE_CACHE);
-            add_feature("Read Lock Ahead",
-                        system_info::AtaDrives::Item::FEATURE_READ_LOCK_AHEAD);
-            add_feature("Host Protected Area",
-                        system_info::AtaDrives::Item::FEATURE_HOST_PROTECTED_AREA);
-            add_feature("Release Interrupt",
-                        system_info::AtaDrives::Item::FEATURE_RELEASE_INTERRUPT);
-            add_feature("Power Up In Standby",
-                        system_info::AtaDrives::Item::FEATURE_POWER_UP_IN_STANDBY);
-            add_feature("Device Configuration Overlay",
-                        system_info::AtaDrives::Item::FEATURE_DEVICE_CONFIGURATION_OVERLAY);
-            add_feature("Service Interrupt",
-                        system_info::AtaDrives::Item::FEATURE_SERVICE_INTERRUPT);
-            add_feature("Native Command Queuing",
-                        system_info::AtaDrives::Item::FEATURE_NATIVE_COMMAND_QUEUING);
-            add_feature("TRIM",
-                        system_info::AtaDrives::Item::FEATURE_TRIM);
+                output->AddParam(item.feature(i).enabled() ? IDI_CHECKED : IDI_UNCHECKED,
+                                 item.feature(i).name(),
+                                 item.feature(i).enabled() ? "Yes" : "No");
+            }
         }
     }
 }
 
 std::string CategoryATA::Serialize()
 {
-    system_info::AtaDrives message;
+    proto::AtaDrives message;
 
     for (PhysicalDriveEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
-        system_info::AtaDrives::Item* item = message.add_item();
+        proto::AtaDrives::Item* item = message.add_item();
 
         item->set_model_number(enumerator.GetModelNumber());
         item->set_serial_number(enumerator.GetSerialNumber());
         item->set_firmware_revision(enumerator.GetFirmwareRevision());
-
-        switch (enumerator.GetBusType())
-        {
-            case PhysicalDriveEnumerator::BusType::SCSI:
-                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_SCSI);
-                break;
-
-            case PhysicalDriveEnumerator::BusType::ATAPI:
-                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_ATAPI);
-                break;
-
-            case PhysicalDriveEnumerator::BusType::ATA:
-                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_ATA);
-                break;
-
-            case PhysicalDriveEnumerator::BusType::IEEE1394:
-                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_IEEE1394);
-                break;
-
-            case PhysicalDriveEnumerator::BusType::SSA:
-                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_SSA);
-                break;
-
-            case PhysicalDriveEnumerator::BusType::FIBRE:
-                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_FIBRE);
-                break;
-
-            case PhysicalDriveEnumerator::BusType::USB:
-                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_USB);
-                break;
-
-            case PhysicalDriveEnumerator::BusType::RAID:
-                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_RAID);
-                break;
-
-            case PhysicalDriveEnumerator::BusType::ISCSI:
-                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_ISCSI);
-                break;
-
-            case PhysicalDriveEnumerator::BusType::SAS:
-                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_SAS);
-                break;
-
-            case PhysicalDriveEnumerator::BusType::SATA:
-                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_SATA);
-                break;
-
-            case PhysicalDriveEnumerator::BusType::SD:
-                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_SD);
-                break;
-
-            case PhysicalDriveEnumerator::BusType::MMC:
-                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_MMC);
-                break;
-
-            case PhysicalDriveEnumerator::BusType::VIRTUAL:
-                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_VIRTUAL);
-                break;
-
-            case PhysicalDriveEnumerator::BusType::FILE_BACKED_VIRTUAL:
-                item->set_bus_type(system_info::AtaDrives::Item::BUS_TYPE_FILE_BACKED_VIRTUAL);
-                break;
-
-            default:
-                break;
-        }
-
-        switch (enumerator.GetCurrentTransferMode())
-        {
-            case PhysicalDriveEnumerator::TransferMode::PIO:
-                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_PIO);
-                break;
-
-            case PhysicalDriveEnumerator::TransferMode::PIO_DMA:
-                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_PIO_DMA);
-                break;
-
-            case PhysicalDriveEnumerator::TransferMode::ULTRA_DMA_133:
-                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_133);
-                break;
-
-            case PhysicalDriveEnumerator::TransferMode::ULTRA_DMA_100:
-                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_100);
-                break;
-
-            case PhysicalDriveEnumerator::TransferMode::ULTRA_DMA_66:
-                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_66);
-                break;
-
-            case PhysicalDriveEnumerator::TransferMode::ULTRA_DMA_44:
-                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_44);
-                break;
-
-            case PhysicalDriveEnumerator::TransferMode::ULTRA_DMA_33:
-                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_33);
-                break;
-
-            case PhysicalDriveEnumerator::TransferMode::ULTRA_DMA_25:
-                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_25);
-                break;
-
-            case PhysicalDriveEnumerator::TransferMode::ULTRA_DMA_16:
-                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_ULTRA_DMA_16);
-                break;
-
-            case PhysicalDriveEnumerator::TransferMode::SATA_600:
-                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_SATA_600);
-                break;
-
-            case PhysicalDriveEnumerator::TransferMode::SATA_300:
-                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_SATA_300);
-                break;
-
-            case PhysicalDriveEnumerator::TransferMode::SATA_150:
-                item->set_transfer_mode(system_info::AtaDrives::Item::TRANSFER_MODE_SATA_150);
-                break;
-
-            default:
-                break;
-        }
-
+        item->set_bus_type(enumerator.GetBusType());
+        item->set_transfer_mode(enumerator.GetCurrentTransferMode());
         item->set_rotation_rate(enumerator.GetRotationRate());
         item->set_drive_size(enumerator.GetDriveSize());
         item->set_buffer_size(enumerator.GetBufferSize());
@@ -2864,99 +1459,12 @@ std::string CategoryATA::Serialize()
         item->set_bytes_per_sector(enumerator.GetBytesPerSector());
         item->set_heads_number(enumerator.GetHeadsNumber());
 
-        uint64_t supported = enumerator.GetSupportedFeatures();
-
-        auto add_supported_feature = [&](uint64_t feacture, uint64_t proto)
+        for (const auto& feature : enumerator.GetFeatures())
         {
-            if (supported & feacture)
-                item->set_supported_features(item->supported_features() | proto);
-        };
-
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_48BIT_LBA,
-                              system_info::AtaDrives::Item::FEATURE_48BIT_LBA);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_ADVANCED_POWER_MANAGEMENT,
-                              system_info::AtaDrives::Item::FEATURE_ADVANCED_POWER_MANAGEMENT);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT,
-                              system_info::AtaDrives::Item::FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_SMART,
-                              system_info::AtaDrives::Item::FEATURE_SMART);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_SMART_ERROR_LOGGING,
-                              system_info::AtaDrives::Item::FEATURE_SMART_ERROR_LOGGING);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_SMART_SELF_TEST,
-                              system_info::AtaDrives::Item::FEATURE_SMART_SELF_TEST);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_STREAMING,
-                              system_info::AtaDrives::Item::FEATURE_STREAMING);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_GENERAL_PURPOSE_LOGGING,
-                              system_info::AtaDrives::Item::FEATURE_GENERAL_PURPOSE_LOGGING);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_SECURITY_MODE,
-                              system_info::AtaDrives::Item::FEATURE_SECURITY_MODE);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_POWER_MANAGEMENT,
-                              system_info::AtaDrives::Item::FEATURE_POWER_MANAGEMENT);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_WRITE_CACHE,
-                              system_info::AtaDrives::Item::FEATURE_WRITE_CACHE);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_READ_LOCK_AHEAD,
-                              system_info::AtaDrives::Item::FEATURE_READ_LOCK_AHEAD);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_HOST_PROTECTED_AREA,
-                              system_info::AtaDrives::Item::FEATURE_HOST_PROTECTED_AREA);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_RELEASE_INTERRUPT,
-                              system_info::AtaDrives::Item::FEATURE_RELEASE_INTERRUPT);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_POWER_UP_IN_STANDBY,
-                              system_info::AtaDrives::Item::FEATURE_POWER_UP_IN_STANDBY);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_DEVICE_CONFIGURATION_OVERLAY,
-                              system_info::AtaDrives::Item::FEATURE_DEVICE_CONFIGURATION_OVERLAY);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_SERVICE_INTERRUPT,
-                              system_info::AtaDrives::Item::FEATURE_SERVICE_INTERRUPT);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_NATIVE_COMMAND_QUEUING,
-                              system_info::AtaDrives::Item::FEATURE_NATIVE_COMMAND_QUEUING);
-        add_supported_feature(PhysicalDriveEnumerator::FEATURE_TRIM,
-                              system_info::AtaDrives::Item::FEATURE_TRIM);
-
-        uint64_t enabled = enumerator.GetEnabledFeatures();
-
-        auto add_enabled_feature = [&](uint64_t feacture, uint64_t proto)
-        {
-            if (enabled & feacture)
-                item->set_enabled_features(item->enabled_features() | proto);
-        };
-
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_48BIT_LBA,
-                            system_info::AtaDrives::Item::FEATURE_48BIT_LBA);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_ADVANCED_POWER_MANAGEMENT,
-                            system_info::AtaDrives::Item::FEATURE_ADVANCED_POWER_MANAGEMENT);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT,
-                            system_info::AtaDrives::Item::FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_SMART,
-                            system_info::AtaDrives::Item::FEATURE_SMART);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_SMART_ERROR_LOGGING,
-                            system_info::AtaDrives::Item::FEATURE_SMART_ERROR_LOGGING);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_SMART_SELF_TEST,
-                            system_info::AtaDrives::Item::FEATURE_SMART_SELF_TEST);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_STREAMING,
-                            system_info::AtaDrives::Item::FEATURE_STREAMING);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_GENERAL_PURPOSE_LOGGING,
-                            system_info::AtaDrives::Item::FEATURE_GENERAL_PURPOSE_LOGGING);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_SECURITY_MODE,
-                            system_info::AtaDrives::Item::FEATURE_SECURITY_MODE);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_POWER_MANAGEMENT,
-                            system_info::AtaDrives::Item::FEATURE_POWER_MANAGEMENT);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_WRITE_CACHE,
-                            system_info::AtaDrives::Item::FEATURE_WRITE_CACHE);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_READ_LOCK_AHEAD,
-                            system_info::AtaDrives::Item::FEATURE_READ_LOCK_AHEAD);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_HOST_PROTECTED_AREA,
-                            system_info::AtaDrives::Item::FEATURE_HOST_PROTECTED_AREA);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_RELEASE_INTERRUPT,
-                            system_info::AtaDrives::Item::FEATURE_RELEASE_INTERRUPT);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_POWER_UP_IN_STANDBY,
-                            system_info::AtaDrives::Item::FEATURE_POWER_UP_IN_STANDBY);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_DEVICE_CONFIGURATION_OVERLAY,
-                            system_info::AtaDrives::Item::FEATURE_DEVICE_CONFIGURATION_OVERLAY);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_SERVICE_INTERRUPT,
-                            system_info::AtaDrives::Item::FEATURE_SERVICE_INTERRUPT);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_NATIVE_COMMAND_QUEUING,
-                            system_info::AtaDrives::Item::FEATURE_NATIVE_COMMAND_QUEUING);
-        add_enabled_feature(PhysicalDriveEnumerator::FEATURE_TRIM,
-                            system_info::AtaDrives::Item::FEATURE_TRIM);
+            auto feature_item = item->add_feature();
+            feature_item->set_name(feature.first);
+            feature_item->set_enabled(feature.second);
+        }
     }
 
     return message.SerializeAsString();
@@ -3061,7 +1569,7 @@ const char* CategoryMonitor::Guid() const
 
 void CategoryMonitor::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::Monitors message;
+    proto::Monitors message;
 
     if (!message.ParseFromString(data))
         return;
@@ -3076,7 +1584,7 @@ void CategoryMonitor::Parse(std::shared_ptr<OutputProxy> output, const std::stri
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::Monitors::Item& item = message.item(index);
+        const proto::Monitors::Item& item = message.item(index);
 
         Output::Group group(output, item.system_name(), Icon());
 
@@ -3208,19 +1716,8 @@ void CategoryMonitor::Parse(std::shared_ptr<OutputProxy> output, const std::stri
                              "MHz");
         }
 
-        switch (item.input_signal_type())
-        {
-            case system_info::Monitors::Item::INPUT_SIGNAL_TYPE_ANALOG:
-                output->AddParam(IDI_MONITOR, "Input Signal Type", "Analog");
-                break;
-
-            case system_info::Monitors::Item::INPUT_SIGNAL_TYPE_DIGITAL:
-                output->AddParam(IDI_MONITOR, "Input Signal Type", "Digital");
-                break;
-
-            default:
-                break;
-        }
+        if (!item.input_signal_type().empty())
+            output->AddParam(IDI_MONITOR, "Input Signal Type", item.input_signal_type());
 
         {
             Output::Group features_group(output, "Supported Features", Icon());
@@ -3256,7 +1753,7 @@ void CategoryMonitor::Parse(std::shared_ptr<OutputProxy> output, const std::stri
 
             for (int mode = 0; mode < item.timings_size(); ++mode)
             {
-                const system_info::Monitors::Item::Timing& timing = item.timings(mode);
+                const proto::Monitors::Item::Timing& timing = item.timings(mode);
 
                 output->AddParam(IDI_CHECKED,
                                  StringPrintf("%dx%d", timing.width(), timing.height()),
@@ -3269,7 +1766,7 @@ void CategoryMonitor::Parse(std::shared_ptr<OutputProxy> output, const std::stri
 
 std::string CategoryMonitor::Serialize()
 {
-    system_info::Monitors message;
+    proto::Monitors message;
 
     for (MonitorEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
@@ -3277,7 +1774,7 @@ std::string CategoryMonitor::Serialize()
         if (!edid)
             continue;
 
-        system_info::Monitors::Item* item = message.add_item();
+        proto::Monitors::Item* item = message.add_item();
 
         std::string system_name = enumerator.GetFriendlyName();
 
@@ -3304,17 +1801,7 @@ std::string CategoryMonitor::Serialize()
         item->set_min_vertical_rate(edid->GetMinVerticalRate());
         item->set_pixel_clock(edid->GetPixelClock());
         item->set_max_pixel_clock(edid->GetMaxSupportedPixelClock());
-
-        switch (edid->GetInputSignalType())
-        {
-            case Edid::INPUT_SIGNAL_TYPE_DIGITAL:
-                item->set_input_signal_type(system_info::Monitors::Item::INPUT_SIGNAL_TYPE_DIGITAL);
-                break;
-
-            default:
-                item->set_input_signal_type(system_info::Monitors::Item::INPUT_SIGNAL_TYPE_ANALOG);
-                break;
-        }
+        item->set_input_signal_type(edid->GetInputSignalType());
 
         uint8_t supported_features = edid->GetFeatureSupport();
 
@@ -3338,7 +1825,7 @@ std::string CategoryMonitor::Serialize()
 
         auto add_timing = [&](int width, int height, int freq)
         {
-            system_info::Monitors::Item::Timing* timing = item->add_timings();
+            proto::Monitors::Item::Timing* timing = item->add_timings();
 
             timing->set_width(width);
             timing->set_height(height);
@@ -3481,7 +1968,7 @@ const char* CategoryPrinters::Guid() const
 
 void CategoryPrinters::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::Printers message;
+    proto::Printers message;
 
     if (!message.ParseFromString(data))
         return;
@@ -3496,7 +1983,7 @@ void CategoryPrinters::Parse(std::shared_ptr<OutputProxy> output, const std::str
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::Printers::Item& item = message.item(index);
+        const proto::Printers::Item& item = message.item(index);
 
         Output::Group group(output, item.name(), Icon());
 
@@ -3535,11 +2022,11 @@ void CategoryPrinters::Parse(std::shared_ptr<OutputProxy> output, const std::str
 
         switch (item.orientation())
         {
-            case system_info::Printers::Item::ORIENTATION_LANDSCAPE:
+            case proto::Printers::Item::ORIENTATION_LANDSCAPE:
                 output->AddParam(IDI_DOCUMENT_TEXT, "Orientation", "Landscape");
                 break;
 
-            case system_info::Printers::Item::ORIENTATION_PORTRAIT:
+            case proto::Printers::Item::ORIENTATION_PORTRAIT:
                 output->AddParam(IDI_DOCUMENT_TEXT, "Orientation", "Portrait");
                 break;
 
@@ -3552,11 +2039,11 @@ void CategoryPrinters::Parse(std::shared_ptr<OutputProxy> output, const std::str
 
 std::string CategoryPrinters::Serialize()
 {
-    system_info::Printers message;
+    proto::Printers message;
 
     for (PrinterEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
-        system_info::Printers::Item* item = message.add_item();
+        proto::Printers::Item* item = message.add_item();
 
         item->set_name(enumerator.GetName());
         item->set_is_default(enumerator.IsDefault());
@@ -3578,15 +2065,15 @@ std::string CategoryPrinters::Serialize()
         switch (enumerator.GetOrientation())
         {
             case PrinterEnumerator::Orientation::PORTRAIT:
-                item->set_orientation(system_info::Printers::Item::ORIENTATION_PORTRAIT);
+                item->set_orientation(proto::Printers::Item::ORIENTATION_PORTRAIT);
                 break;
 
             case PrinterEnumerator::Orientation::LANDSCAPE:
-                item->set_orientation(system_info::Printers::Item::ORIENTATION_LANDSCAPE);
+                item->set_orientation(proto::Printers::Item::ORIENTATION_LANDSCAPE);
                 break;
 
             default:
-                item->set_orientation(system_info::Printers::Item::ORIENTATION_UNKNOWN);
+                item->set_orientation(proto::Printers::Item::ORIENTATION_UNKNOWN);
                 break;
         }
     }
@@ -3615,7 +2102,7 @@ const char* CategoryPowerOptions::Guid() const
 
 void CategoryPowerOptions::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::PowerOptions message;
+    proto::PowerOptions message;
 
     if (!message.ParseFromString(data))
         return;
@@ -3631,11 +2118,11 @@ void CategoryPowerOptions::Parse(std::shared_ptr<OutputProxy> output, const std:
     const char* power_source;
     switch (message.power_source())
     {
-        case system_info::PowerOptions::POWER_SOURCE_DC_BATTERY:
+        case proto::PowerOptions::POWER_SOURCE_DC_BATTERY:
             power_source = "DC Battery";
             break;
 
-        case system_info::PowerOptions::POWER_SOURCE_AC_LINE:
+        case proto::PowerOptions::POWER_SOURCE_AC_LINE:
             power_source = "AC Line";
             break;
 
@@ -3649,23 +2136,23 @@ void CategoryPowerOptions::Parse(std::shared_ptr<OutputProxy> output, const std:
     const char* battery_status;
     switch (message.battery_status())
     {
-        case system_info::PowerOptions::BATTERY_STATUS_HIGH:
+        case proto::PowerOptions::BATTERY_STATUS_HIGH:
             battery_status = "High";
             break;
 
-        case system_info::PowerOptions::BATTERY_STATUS_LOW:
+        case proto::PowerOptions::BATTERY_STATUS_LOW:
             battery_status = "Low";
             break;
 
-        case system_info::PowerOptions::BATTERY_STATUS_CRITICAL:
+        case proto::PowerOptions::BATTERY_STATUS_CRITICAL:
             battery_status = "Critical";
             break;
 
-        case system_info::PowerOptions::BATTERY_STATUS_CHARGING:
+        case proto::PowerOptions::BATTERY_STATUS_CHARGING:
             battery_status = "Charging";
             break;
 
-        case system_info::PowerOptions::BATTERY_STATUS_NO_BATTERY:
+        case proto::PowerOptions::BATTERY_STATUS_NO_BATTERY:
             battery_status = "No Battery";
             break;
 
@@ -3676,8 +2163,8 @@ void CategoryPowerOptions::Parse(std::shared_ptr<OutputProxy> output, const std:
 
     output->AddParam(IDI_BATTERY, "Battery Status", battery_status);
 
-    if (message.battery_status() != system_info::PowerOptions::BATTERY_STATUS_NO_BATTERY &&
-        message.battery_status() != system_info::PowerOptions::BATTERY_STATUS_UNKNOWN)
+    if (message.battery_status() != proto::PowerOptions::BATTERY_STATUS_NO_BATTERY &&
+        message.battery_status() != proto::PowerOptions::BATTERY_STATUS_UNKNOWN)
     {
         output->AddParam(IDI_BATTERY,
                          "Battery Life Percent",
@@ -3697,7 +2184,7 @@ void CategoryPowerOptions::Parse(std::shared_ptr<OutputProxy> output, const std:
 
     for (int index = 0; index < message.battery_size(); ++index)
     {
-        const system_info::PowerOptions::Battery& battery = message.battery(index);
+        const proto::PowerOptions::Battery& battery = message.battery(index);
 
         Output::Group group(output, StringPrintf("Battery #%d", index + 1), IDI_BATTERY);
 
@@ -3761,16 +2248,16 @@ void CategoryPowerOptions::Parse(std::shared_ptr<OutputProxy> output, const std:
         {
             Output::Group state_group(output, "State", IDI_BATTERY);
 
-            if (battery.state() & system_info::PowerOptions::Battery::STATE_CHARGING)
+            if (battery.state() & proto::PowerOptions::Battery::STATE_CHARGING)
                 output->AddParam(IDI_CHECKED, "Charging", "Yes");
 
-            if (battery.state() & system_info::PowerOptions::Battery::STATE_CRITICAL)
+            if (battery.state() & proto::PowerOptions::Battery::STATE_CRITICAL)
                 output->AddParam(IDI_CHECKED, "Critical", "Yes");
 
-            if (battery.state() & system_info::PowerOptions::Battery::STATE_DISCHARGING)
+            if (battery.state() & proto::PowerOptions::Battery::STATE_DISCHARGING)
                 output->AddParam(IDI_CHECKED, "Discharging", "Yes");
 
-            if (battery.state() & system_info::PowerOptions::Battery::STATE_POWER_ONLINE)
+            if (battery.state() & proto::PowerOptions::Battery::STATE_POWER_ONLINE)
                 output->AddParam(IDI_CHECKED, "Power OnLine", "Yes");
         }
     }
@@ -3778,7 +2265,7 @@ void CategoryPowerOptions::Parse(std::shared_ptr<OutputProxy> output, const std:
 
 std::string CategoryPowerOptions::Serialize()
 {
-    system_info::PowerOptions message;
+    proto::PowerOptions message;
 
     SYSTEM_POWER_STATUS power_status;
     memset(&power_status, 0, sizeof(power_status));
@@ -3788,11 +2275,11 @@ std::string CategoryPowerOptions::Serialize()
         switch (power_status.ACLineStatus)
         {
             case 0:
-                message.set_power_source(system_info::PowerOptions::POWER_SOURCE_DC_BATTERY);
+                message.set_power_source(proto::PowerOptions::POWER_SOURCE_DC_BATTERY);
                 break;
 
             case 1:
-                message.set_power_source(system_info::PowerOptions::POWER_SOURCE_AC_LINE);
+                message.set_power_source(proto::PowerOptions::POWER_SOURCE_AC_LINE);
                 break;
 
             default:
@@ -3802,23 +2289,23 @@ std::string CategoryPowerOptions::Serialize()
         switch (power_status.BatteryFlag)
         {
             case 1:
-                message.set_battery_status(system_info::PowerOptions::BATTERY_STATUS_HIGH);
+                message.set_battery_status(proto::PowerOptions::BATTERY_STATUS_HIGH);
                 break;
 
             case 2:
-                message.set_battery_status(system_info::PowerOptions::BATTERY_STATUS_LOW);
+                message.set_battery_status(proto::PowerOptions::BATTERY_STATUS_LOW);
                 break;
 
             case 4:
-                message.set_battery_status(system_info::PowerOptions::BATTERY_STATUS_CRITICAL);
+                message.set_battery_status(proto::PowerOptions::BATTERY_STATUS_CRITICAL);
                 break;
 
             case 8:
-                message.set_battery_status(system_info::PowerOptions::BATTERY_STATUS_CHARGING);
+                message.set_battery_status(proto::PowerOptions::BATTERY_STATUS_CHARGING);
                 break;
 
             case 128:
-                message.set_battery_status(system_info::PowerOptions::BATTERY_STATUS_NO_BATTERY);
+                message.set_battery_status(proto::PowerOptions::BATTERY_STATUS_NO_BATTERY);
                 break;
 
             default:
@@ -3839,7 +2326,7 @@ std::string CategoryPowerOptions::Serialize()
 
     for (BatteryEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
-        system_info::PowerOptions::Battery* battery = message.add_battery();
+        proto::PowerOptions::Battery* battery = message.add_battery();
 
         battery->set_device_name(enumerator.GetDeviceName());
         battery->set_manufacturer(enumerator.GetManufacturer());
@@ -3859,25 +2346,25 @@ std::string CategoryPowerOptions::Serialize()
         if (state & BatteryEnumerator::STATE_CHARGING)
         {
             battery->set_state(
-                battery->state() | system_info::PowerOptions::Battery::STATE_CHARGING);
+                battery->state() | proto::PowerOptions::Battery::STATE_CHARGING);
         }
 
         if (state & BatteryEnumerator::STATE_CRITICAL)
         {
             battery->set_state(
-                battery->state() | system_info::PowerOptions::Battery::STATE_CRITICAL);
+                battery->state() | proto::PowerOptions::Battery::STATE_CRITICAL);
         }
 
         if (state & BatteryEnumerator::STATE_DISCHARGING)
         {
             battery->set_state(
-                battery->state() | system_info::PowerOptions::Battery::STATE_DISCHARGING);
+                battery->state() | proto::PowerOptions::Battery::STATE_DISCHARGING);
         }
 
         if (state & BatteryEnumerator::STATE_POWER_ONLINE)
         {
             battery->set_state(
-                battery->state() | system_info::PowerOptions::Battery::STATE_POWER_ONLINE);
+                battery->state() | proto::PowerOptions::Battery::STATE_POWER_ONLINE);
         }
     }
 
@@ -3905,7 +2392,7 @@ const char* CategoryWindowsDevices::Guid() const
 
 void CategoryWindowsDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::WindowsDevices message;
+    proto::WindowsDevices message;
 
     if (!message.ParseFromString(data))
         return;
@@ -3923,7 +2410,7 @@ void CategoryWindowsDevices::Parse(std::shared_ptr<OutputProxy> output, const st
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::WindowsDevices::Item& item = message.item(index);
+        const proto::WindowsDevices::Item& item = message.item(index);
 
         Output::Row row(output, Icon());
 
@@ -3943,11 +2430,11 @@ void CategoryWindowsDevices::Parse(std::shared_ptr<OutputProxy> output, const st
 
 std::string CategoryWindowsDevices::Serialize()
 {
-    system_info::WindowsDevices message;
+    proto::WindowsDevices message;
 
     for (DeviceEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
-        system_info::WindowsDevices::Item* item = message.add_item();
+        proto::WindowsDevices::Item* item = message.add_item();
 
         item->set_friendly_name(enumerator.GetFriendlyName());
         item->set_description(enumerator.GetDescription());

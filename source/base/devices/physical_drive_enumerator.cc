@@ -190,7 +190,7 @@ std::string PhysicalDriveEnumerator::GetFirmwareRevision() const
     return output;
 }
 
-PhysicalDriveEnumerator::BusType PhysicalDriveEnumerator::GetBusType() const
+std::string PhysicalDriveEnumerator::GetBusType() const
 {
     STORAGE_DEVICE_DESCRIPTOR device_descriptor;
     memset(&device_descriptor, 0, sizeof(device_descriptor));
@@ -205,94 +205,66 @@ PhysicalDriveEnumerator::BusType PhysicalDriveEnumerator::GetBusType() const
                            &device_descriptor, sizeof(device_descriptor),
                            &bytes_returned))
     {
-        return BusType::UNKNOWN;
+        return std::string();
     }
 
     switch (device_descriptor.BusType)
     {
-        case BusTypeScsi:
-            return BusType::SCSI;
-
-        case BusTypeAtapi:
-            return BusType::ATAPI;
-
-        case BusTypeAta:
-            return BusType::ATA;
-
-        case BusType1394:
-            return BusType::IEEE1394;
-
-        case BusTypeSsa:
-            return BusType::SSA;
-
-        case BusTypeFibre:
-            return BusType::FIBRE;
-
-        case BusTypeUsb:
-            return BusType::USB;
-
-        case BusTypeRAID:
-            return BusType::RAID;
-
-        case BusTypeiScsi:
-            return BusType::ISCSI;
-
-        case BusTypeSas:
-            return BusType::SAS;
-
-        case BusTypeSata:
-            return BusType::SATA;
-
-        case BusTypeSd:
-            return BusType::SD;
-
-        case BusTypeMmc:
-            return BusType::MMC;
-
-        case BusTypeVirtual:
-            return BusType::VIRTUAL;
-
-        case BusTypeFileBackedVirtual:
-            return BusType::FILE_BACKED_VIRTUAL;
-
-        default:
-            return BusType::UNKNOWN;
+        case BusTypeScsi: return "SCSI";
+        case BusTypeAtapi: return "ATAPI";
+        case BusTypeAta: return "ATA";
+        case BusType1394: return "IEEE 1394";
+        case BusTypeSsa: return "SSA";
+        case BusTypeFibre: return "Fibre";
+        case BusTypeUsb: return "USB";
+        case BusTypeRAID: return "RAID";
+        case BusTypeiScsi: return "iSCSI";
+        case BusTypeSas: return "SAS";
+        case BusTypeSata: return "SATA";
+        case BusTypeSd: return "SD";
+        case BusTypeMmc: return "MMC";
+        case BusTypeVirtual: return "Virtual";
+        case BusTypeFileBackedVirtual: return "File Backed Virtual";
+        default: return std::string();
     }
 }
 
-PhysicalDriveEnumerator::TransferMode PhysicalDriveEnumerator::GetCurrentTransferMode() const
+std::string PhysicalDriveEnumerator::GetCurrentTransferMode() const
 {
-    TransferMode mode = TransferMode::PIO;
+    const char* mode = "PIO";
 
     if (id_data_.multi_word_dma & 0x700)
-        mode = TransferMode::PIO_DMA;
+        mode = "PIO / DMA";
 
     if (id_data_.ultra_dma_mode & 0x4000)
-        mode = TransferMode::ULTRA_DMA_133;
+        mode = "UltraDMA/133 (133 MB/s)";
     else if (id_data_.ultra_dma_mode & 0x2000)
-        mode = TransferMode::ULTRA_DMA_100;
+        mode = "UltraDMA/100 (100 MB/s)";
     else if (id_data_.ultra_dma_mode & 0x1000)
-        mode = TransferMode::ULTRA_DMA_66;
+        mode = "UltraDMA/66 (66 MB/s)";
     else if (id_data_.ultra_dma_mode & 0x800)
-        mode = TransferMode::ULTRA_DMA_44;
+        mode = "UltraDMA/44 (44 MB/s)";
     else if (id_data_.ultra_dma_mode & 0x400)
-        mode = TransferMode::ULTRA_DMA_33;
+        mode = "UltraDMA/33 (33 MB/s)";
     else if (id_data_.ultra_dma_mode & 0x200)
-        mode = TransferMode::ULTRA_DMA_25;
+        mode = "UltraDMA/25 (25 MB/s)";
     else if (id_data_.ultra_dma_mode & 0x100)
-        mode = TransferMode::ULTRA_DMA_16;
+        mode = "UltraDMA/16 (16 MB/s)";
 
     if (id_data_.sata_capabilities != 0x0000 && id_data_.sata_capabilities != 0xFFFF)
     {
         if (id_data_.sata_capabilities & 0x10)
-            mode = TransferMode::UNKNOWN;
+            mode = nullptr;
         else if (id_data_.sata_capabilities & 0x8)
-            mode = TransferMode::SATA_600;
+            mode = "SATA/600 (600 MB/s)";
         else if (id_data_.sata_capabilities & 0x4)
-            mode = TransferMode::SATA_300;
+            mode = "SATA/300 (300 MB/s)";
         else if (id_data_.sata_capabilities & 0x2)
-            mode = TransferMode::SATA_150;
+            mode = "SATA/150 (150 MB/s)";
     }
+
+    if (!mode)
+        return std::string();
 
     return mode;
 }
@@ -358,160 +330,88 @@ uint16_t PhysicalDriveEnumerator::GetHeadsNumber() const
     return id_data_.number_of_heads;
 }
 
-uint64_t PhysicalDriveEnumerator::GetSupportedFeatures() const
+PhysicalDriveEnumerator::FeatureList PhysicalDriveEnumerator::GetFeatures() const
 {
     const uint16_t major_version = GetMajorVersion();
 
-    uint64_t features = 0;
+    FeatureList list;
 
     if (major_version >= 3)
     {
         if (id_data_.command_set_support2 & (1 << 3))
-            features |= FEATURE_ADVANCED_POWER_MANAGEMENT;
+        {
+            list.emplace_back("Advanced Power Management",
+                              id_data_.command_set_enabled2 & (1 << 3));
+        }
 
         if (id_data_.command_set_support1 & (1 << 0))
-            features |= FEATURE_SMART;
+            list.emplace_back("SMART", id_data_.command_set_enabled1 & (1 << 0));
 
         if (major_version >= 5)
         {
             if (id_data_.command_set_support2 & (1 << 10))
-                features |= FEATURE_48BIT_LBA;
+                list.emplace_back("48-Bit LBA", id_data_.command_set_enabled2 & (1 << 10));
 
             if (id_data_.command_set_support2 & (1 << 9))
-                features |= FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT;
+            {
+                list.emplace_back("Automatic Acoustic Management",
+                                  id_data_.command_set_enabled2 & (1 << 9));
+            }
 
             if (major_version >= 6)
             {
                 if (id_data_.sata_capabilities & (1 << 8))
-                    features |= FEATURE_NATIVE_COMMAND_QUEUING;
+                    list.emplace_back("Native Command Queuing", true);
 
                 if (major_version >= 7)
                 {
                     if (id_data_.data_set_management & (1 << 0))
-                        features |= FEATURE_TRIM;
+                        list.emplace_back("TRIM", true);
                 }
             }
         }
     }
 
     if (id_data_.command_set_support3 & (1 << 0))
-        features |= FEATURE_SMART_ERROR_LOGGING;
+        list.emplace_back("SMART Error Logging", true);
 
     if (id_data_.command_set_support3 & (1 << 1))
-        features |= FEATURE_SMART_SELF_TEST;
+        list.emplace_back("SMART Self Test", true);
 
     if (id_data_.command_set_support3 & (1 << 4))
-        features |= FEATURE_STREAMING;
+        list.emplace_back("Streaming", true);
 
     if (id_data_.command_set_support3 & (1 << 5))
-        features |= FEATURE_GENERAL_PURPOSE_LOGGING;
+        list.emplace_back("General Purpose Logging", true);
 
     if (id_data_.command_set_support1 & (1 << 1))
-        features |= FEATURE_SECURITY_MODE;
+        list.emplace_back("Security Mode", id_data_.command_set_enabled1 & (1 << 1));
 
     if (id_data_.command_set_support1 & (1 << 3))
-        features |= FEATURE_POWER_MANAGEMENT;
+        list.emplace_back("Power Management", id_data_.command_set_enabled1 & (1 << 3));
 
     if (id_data_.command_set_support1 & (1 << 5))
-        features |= FEATURE_WRITE_CACHE;
+        list.emplace_back("Write Cache", id_data_.command_set_enabled1 & (1 << 5));
 
     if (id_data_.command_set_support1 & (1 << 6))
-        features |= FEATURE_READ_LOCK_AHEAD;
+        list.emplace_back("Read Lock Ahead", id_data_.command_set_enabled1 & (1 << 6));
 
     if (id_data_.command_set_support1 & (1 << 7))
-        features |= FEATURE_RELEASE_INTERRUPT;
+        list.emplace_back("Release Interrupt", id_data_.command_set_enabled1 & (1 << 7));
 
     if (id_data_.command_set_support1 & (1 << 8))
-        features |= FEATURE_SERVICE_INTERRUPT;
+        list.emplace_back("Service Interrupt", id_data_.command_set_enabled1 & (1 << 8));
 
     if (id_data_.command_set_support1 & (1 << 10))
-        features |= FEATURE_HOST_PROTECTED_AREA;
+        list.emplace_back("Host Protected Area", id_data_.command_set_enabled1 & (1 << 10));
 
     if (id_data_.command_set_support2 & (1 << 5))
-        features |= FEATURE_POWER_UP_IN_STANDBY;
+        list.emplace_back("Power Up in Standby", id_data_.command_set_enabled2 & (1 << 5));
 
     if (id_data_.command_set_support2 & (1 << 11))
-        features |= FEATURE_DEVICE_CONFIGURATION_OVERLAY;
+        list.emplace_back("Device Configuration Overlay", id_data_.command_set_enabled2 & (1 << 11));
 
-    return features;
-}
-
-uint64_t PhysicalDriveEnumerator::GetEnabledFeatures() const
-{
-    const uint16_t major_version = GetMajorVersion();
-
-    uint64_t features = 0;
-
-    if (major_version >= 3)
-    {
-        if (id_data_.command_set_support2 & (1 << 3) && id_data_.command_set_enabled2 & (1 << 3))
-            features |= FEATURE_ADVANCED_POWER_MANAGEMENT;
-
-        if (id_data_.command_set_support1 & (1 << 0) && id_data_.command_set_enabled1 & (1 << 0))
-            features |= FEATURE_SMART;
-
-        if (major_version >= 5)
-        {
-            if (id_data_.command_set_support2 & (1 << 10) && id_data_.command_set_enabled2 & (1 << 10))
-                features |= FEATURE_48BIT_LBA;
-
-            if (id_data_.command_set_support2 & (1 << 9) && id_data_.command_set_enabled2 & (1 << 9))
-                features |= FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT;
-
-            if (major_version >= 6)
-            {
-                if (id_data_.sata_capabilities & (1 << 8))
-                    features |= FEATURE_NATIVE_COMMAND_QUEUING;
-
-                if (major_version >= 7)
-                {
-                    if (id_data_.data_set_management & (1 << 0))
-                        features |= FEATURE_TRIM;
-                }
-            }
-        }
-    }
-
-    if (id_data_.command_set_support3 & (1 << 0))
-        features |= FEATURE_SMART_ERROR_LOGGING;
-
-    if (id_data_.command_set_support3 & (1 << 1))
-        features |= FEATURE_SMART_SELF_TEST;
-
-    if (id_data_.command_set_support3 & (1 << 4))
-        features |= FEATURE_STREAMING;
-
-    if (id_data_.command_set_support3 & (1 << 5))
-        features |= FEATURE_GENERAL_PURPOSE_LOGGING;
-
-    if (id_data_.command_set_support1 & (1 << 1) && id_data_.command_set_enabled1 & (1 << 1))
-        features |= FEATURE_SECURITY_MODE;
-
-    if (id_data_.command_set_support1 & (1 << 3) && id_data_.command_set_enabled1 & (1 << 3))
-        features |= FEATURE_POWER_MANAGEMENT;
-
-    if (id_data_.command_set_support1 & (1 << 5) && id_data_.command_set_enabled1 & (1 << 5))
-        features |= FEATURE_WRITE_CACHE;
-
-    if (id_data_.command_set_support1 & (1 << 6) && id_data_.command_set_enabled1 & (1 << 6))
-        features |= FEATURE_READ_LOCK_AHEAD;
-
-    if (id_data_.command_set_support1 & (1 << 7) && id_data_.command_set_enabled1 & (1 << 7))
-        features |= FEATURE_RELEASE_INTERRUPT;
-
-    if (id_data_.command_set_support1 & (1 << 8) && id_data_.command_set_enabled1 & (1 << 8))
-        features |= FEATURE_SERVICE_INTERRUPT;
-
-    if (id_data_.command_set_support1 & (1 << 10) && id_data_.command_set_enabled1 & (1 << 10))
-        features |= FEATURE_HOST_PROTECTED_AREA;
-
-    if (id_data_.command_set_support2 & (1 << 5) && id_data_.command_set_enabled2 & (1 << 5))
-        features |= FEATURE_POWER_UP_IN_STANDBY;
-
-    if (id_data_.command_set_support2 & (1 << 11) && id_data_.command_set_enabled2 & (1 << 11))
-        features |= FEATURE_DEVICE_CONFIGURATION_OVERLAY;
-
-    return features;
+    return list;
 }
 
 bool PhysicalDriveEnumerator::GetDriveInfo(DWORD device_number) const

@@ -243,7 +243,7 @@ const char* CategoryUsers::Guid() const
 
 void CategoryUsers::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::Users message;
+    proto::Users message;
 
     if (!message.ParseFromString(data))
         return;
@@ -258,7 +258,7 @@ void CategoryUsers::Parse(std::shared_ptr<OutputProxy> output, const std::string
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::Users::Item& item = message.item(index);
+        const proto::Users::Item& item = message.item(index);
 
         Output::Group group(output, item.name(), Icon());
 
@@ -303,11 +303,11 @@ void CategoryUsers::Parse(std::shared_ptr<OutputProxy> output, const std::string
 
 std::string CategoryUsers::Serialize()
 {
-    system_info::Users message;
+    proto::Users message;
 
     for (UserEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
-        system_info::Users::Item* item = message.add_item();
+        proto::Users::Item* item = message.add_item();
 
         item->set_name(enumerator.GetName());
         item->set_full_name(enumerator.GetFullName());
@@ -346,7 +346,7 @@ const char* CategoryUserGroups::Guid() const
 
 void CategoryUserGroups::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::UserGroups message;
+    proto::UserGroups message;
 
     if (!message.ParseFromString(data))
         return;
@@ -361,7 +361,7 @@ void CategoryUserGroups::Parse(std::shared_ptr<OutputProxy> output, const std::s
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::UserGroups::Item& item = message.item(index);
+        const proto::UserGroups::Item& item = message.item(index);
 
         Output::Row row(output, Icon());
 
@@ -372,11 +372,11 @@ void CategoryUserGroups::Parse(std::shared_ptr<OutputProxy> output, const std::s
 
 std::string CategoryUserGroups::Serialize()
 {
-    system_info::UserGroups message;
+    proto::UserGroups message;
 
     for (UserGroupEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
-        system_info::UserGroups::Item* item = message.add_item();
+        proto::UserGroups::Item* item = message.add_item();
 
         item->set_name(enumerator.GetName());
         item->set_comment(enumerator.GetComment());
@@ -406,7 +406,7 @@ const char* CategoryActiveSessions::Guid() const
 
 void CategoryActiveSessions::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::Sessions message;
+    proto::Sessions message;
 
     if (!message.ParseFromString(data))
         return;
@@ -425,7 +425,7 @@ void CategoryActiveSessions::Parse(std::shared_ptr<OutputProxy> output, const st
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::Sessions::Item& item = message.item(index);
+        const proto::Sessions::Item& item = message.item(index);
 
         Output::Row row(output, Icon());
 
@@ -440,11 +440,11 @@ void CategoryActiveSessions::Parse(std::shared_ptr<OutputProxy> output, const st
 
 std::string CategoryActiveSessions::Serialize()
 {
-    system_info::Sessions message;
+    proto::Sessions message;
 
     for (SessionEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
-        system_info::Sessions::Item* item = message.add_item();
+        proto::Sessions::Item* item = message.add_item();
 
         item->set_user_name(enumerator.GetUserName());
         item->set_domain_name(enumerator.GetDomainName());

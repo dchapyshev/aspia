@@ -211,13 +211,7 @@ public:
     double GetPixelClock() const; // MHz
     int GetMaxSupportedPixelClock() const; // MHz
 
-    enum InputSignalType
-    {
-        INPUT_SIGNAL_TYPE_ANALOG = 0,
-        INPUT_SIGNAL_TYPE_DIGITAL = 1
-    };
-
-    InputSignalType GetInputSignalType() const;
+    std::string GetInputSignalType() const;
     uint8_t GetEstabilishedTimings1() const;
     uint8_t GetEstabilishedTimings2() const;
     uint8_t GetManufacturersTimings() const;

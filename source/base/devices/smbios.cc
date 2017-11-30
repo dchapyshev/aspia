@@ -587,27 +587,34 @@ std::string SMBios::BaseboardTable::GetLocationInChassis() const
     return reader_.GetString(0x0A);
 }
 
-SMBios::BaseboardTable::BoardType SMBios::BaseboardTable::GetBoardType() const
+std::string SMBios::BaseboardTable::GetBoardType() const
 {
     if (reader_.GetTableLength() < 0x0E)
-        return BoardType::UNKNOWN;
+        return std::string();
 
-    switch (reader_.GetByte(0x0D))
+    static const char* text[] =
     {
-        case 0x02: return BoardType::OTHER;
-        case 0x03: return BoardType::SERVER_BLADE;
-        case 0x04: return BoardType::CONNECTIVITY_SWITCH;
-        case 0x05: return BoardType::SYSTEM_MANAGEMENT_MODULE;
-        case 0x06: return BoardType::PROCESSOR_MODULE;
-        case 0x07: return BoardType::IO_MODULE;
-        case 0x08: return BoardType::MEMORY_MODULE;
-        case 0x09: return BoardType::DAUGHTER_BOARD;
-        case 0x0A: return BoardType::MOTHERBOARD;
-        case 0x0B: return BoardType::PROCESSOR_PLUS_MEMORY_MODULE;
-        case 0x0C: return BoardType::PROCESSOR_PLUS_IO_MODULE;
-        case 0x0D: return BoardType::INTERCONNECT_BOARD;
-        default: return BoardType::UNKNOWN;
-    }
+        "Unknown", // 0x01
+        "Other",
+        "Server Blade",
+        "Connectivity Switch",
+        "System Management Module",
+        "Processor Module",
+        "I/O Module",
+        "Memory Module",
+        "Daughter Board",
+        "Motherboard",
+        "Processor+Memory Module",
+        "Processor+I/O Module",
+        "Interconnect Board" // 0x0D
+    };
+
+    const uint8_t type = reader_.GetByte(0x0D);
+
+    if (type >= 0x01 && type <= 0x0D)
+        return text[type - 1];
+
+    return std::string();
 }
 
 //
@@ -652,105 +659,122 @@ std::string SMBios::ChassisTable::GetAssetTag() const
     return reader_.GetString(0x08);
 }
 
-SMBios::ChassisTable::Type SMBios::ChassisTable::GetType() const
+std::string SMBios::ChassisTable::GetType() const
 {
     if (reader_.GetTableLength() < 0x09)
-        return Type::UNKNOWN;
+        return std::string();
 
-    switch (reader_.GetByte(0x05) & 0x7F)
+    static const char* text[] =
     {
-        case 0x03: return Type::DESKTOP;
-        case 0x04: return Type::LOW_PROFILE_DESKTOP;
-        case 0x05: return Type::PIZZA_BOX;
-        case 0x06: return Type::MINI_TOWER;
-        case 0x07: return Type::TOWER;
-        case 0x08: return Type::PORTABLE;
-        case 0x09: return Type::LAPTOP;
-        case 0x0A: return Type::NOTEBOOK;
-        case 0x0B: return Type::HAND_HELD;
-        case 0x0C: return Type::DOCKING_STATION;
-        case 0x0D: return Type::ALL_IN_ONE;
-        case 0x0E: return Type::SUB_NOTEBOOK;
-        case 0x0F: return Type::SPACE_SAVING;
-        case 0x10: return Type::LUNCH_BOX;
-        case 0x11: return Type::MAIN_SERVER_CHASSIS;
-        case 0x12: return Type::EXPANSION_CHASSIS;
-        case 0x13: return Type::SUB_CHASSIS;
-        case 0x14: return Type::BUS_EXPANSION_CHASSIS;
-        case 0x15: return Type::PERIPHERIAL_CHASSIS;
-        case 0x16: return Type::RAID_CHASSIS;
-        case 0x17: return Type::RACK_MOUNT_CHASSIS;
-        case 0x18: return Type::SEALED_CASE_PC;
-        case 0x19: return Type::MULTI_SYSTEM_CHASSIS;
-        case 0x1A: return Type::COMPACT_PCI;
-        case 0x1B: return Type::ADVANCED_TCA;
-        case 0x1C: return Type::BLADE;
-        case 0x1D: return Type::BLADE_ENCLOSURE;
-        default: return Type::UNKNOWN;
-    }
+        "Other", // 0x01
+        "Unknown",
+        "Desktop",
+        "Low Profile Desktop",
+        "Pizza Box",
+        "Mini Tower",
+        "Tower",
+        "Portable",
+        "Laptop",
+        "Notebook",
+        "Hand Held",
+        "Docking Station",
+        "All In One",
+        "Sub Notebook",
+        "Space-saving",
+        "Lunch Box",
+        "Main Server Chassis",
+        "Expansion Chassis",
+        "Sub Chassis",
+        "Bus Expansion Chassis",
+        "Peripheral Chassis",
+        "RAID Chassis",
+        "Rack Mount Chassis",
+        "Sealed-case PC",
+        "Multi-system",
+        "CompactPCI",
+        "AdvancedTCA",
+        "Blade",
+        "Blade Enclosing",
+        "Tablet",
+        "Convertible",
+        "Detachable",
+        "IoT Gateway",
+        "Embedded PC",
+        "Mini PC",
+        "Stick PC" // 0x24
+    };
+
+    const uint8_t type = reader_.GetByte(0x05) & 0x7F;
+
+    if (type >= 0x01 && type <= 0x24)
+        return text[type - 1];
+
+    return std::string();
 }
 
-SMBios::ChassisTable::Status SMBios::ChassisTable::GetOSLoadStatus() const
+// static
+std::string SMBios::ChassisTable::StatusToString(uint8_t status)
 {
-    if (reader_.GetTableLength() < 0x0D)
-        return Status::UNKNOWN;
-
-    switch (reader_.GetByte(0x09))
+    static const char* text[] =
     {
-        case 0x01: return Status::OTHER;
-        case 0x03: return Status::SAFE;
-        case 0x04: return Status::WARNING;
-        case 0x05: return Status::CRITICAL;
-        case 0x06: return Status::NON_RECOVERABLE;
-        default: return Status::UNKNOWN;
-    }
+        "Other", // 0x01
+        "Unknown",
+        "Safe",
+        "Warning",
+        "Critical",
+        "Non-recoverable" // 0x06
+    };
+
+    if (status >= 0x01 && status <= 0x06)
+        return text[status - 1];
+
+    return std::string();
 }
 
-SMBios::ChassisTable::Status SMBios::ChassisTable::GetPowerSourceStatus() const
+std::string SMBios::ChassisTable::GetOSLoadStatus() const
 {
     if (reader_.GetTableLength() < 0x0D)
-        return Status::UNKNOWN;
+        return std::string();
 
-    switch (reader_.GetByte(0x0A))
-    {
-        case 0x01: return Status::OTHER;
-        case 0x03: return Status::SAFE;
-        case 0x04: return Status::WARNING;
-        case 0x05: return Status::CRITICAL;
-        case 0x06: return Status::NON_RECOVERABLE;
-        default: return Status::UNKNOWN;
-    }
+    return StatusToString(reader_.GetByte(0x09));
 }
 
-SMBios::ChassisTable::Status SMBios::ChassisTable::GetTemperatureStatus() const
+std::string SMBios::ChassisTable::GetPowerSourceStatus() const
 {
     if (reader_.GetTableLength() < 0x0D)
-        return Status::UNKNOWN;
+        return std::string();
 
-    switch (reader_.GetByte(0x0B))
-    {
-        case 0x01: return Status::OTHER;
-        case 0x03: return Status::SAFE;
-        case 0x04: return Status::WARNING;
-        case 0x05: return Status::CRITICAL;
-        case 0x06: return Status::NON_RECOVERABLE;
-        default: return Status::UNKNOWN;
-    }
+    return StatusToString(reader_.GetByte(0x0A));
 }
 
-SMBios::ChassisTable::SecurityStatus SMBios::ChassisTable::GetSecurityStatus() const
+std::string SMBios::ChassisTable::GetTemperatureStatus() const
 {
     if (reader_.GetTableLength() < 0x0D)
-        return SecurityStatus::UNKNOWN;
+        return std::string();
 
-    switch (reader_.GetByte(0x0C))
+    return StatusToString(reader_.GetByte(0x0B));
+}
+
+std::string SMBios::ChassisTable::GetSecurityStatus() const
+{
+    if (reader_.GetTableLength() < 0x0D)
+        return std::string();
+
+    static const char* text[] =
     {
-        case 0x01: return SecurityStatus::OTHER;
-        case 0x03: return SecurityStatus::NONE;
-        case 0x04: return SecurityStatus::EXTERNAL_INTERFACE_LOCKED_OUT;
-        case 0x05: return SecurityStatus::EXTERNAL_INTERFACE_ENABLED;
-        default: return SecurityStatus::UNKNOWN;
-    }
+        "Other", // 0x01
+        "Unknown",
+        "None",
+        "External Interface Locked Out",
+        "External Interface Enabled" // 0x05
+    };
+
+    const uint8_t status = reader_.GetByte(0x0C);
+
+    if (status >= 0x01 && status <= 0x05)
+        return text[status - 1];
+
+    return std::string();
 }
 
 int SMBios::ChassisTable::GetHeight() const
@@ -1029,20 +1053,52 @@ std::string SMBios::ProcessorTable::GetFamily() const
     return std::string();
 }
 
-SMBios::ProcessorTable::Type SMBios::ProcessorTable::GetType() const
+std::string SMBios::ProcessorTable::GetType() const
 {
     if (reader_.GetTableLength() < 0x1A)
-        return Type::UNKNOWN;
+        return std::string();
 
-    return static_cast<Type>(reader_.GetByte(0x05));
+    static const char* names[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Central Processor",
+        "Math Processor",
+        "DSP Processor",
+        "Video Processor" // 0x06
+    };
+
+    const uint8_t type = reader_.GetByte(0x05);
+
+    if (type >= 0x01 && type <= 0x06)
+        return names[type - 1];
+
+    return std::string();
 }
 
-SMBios::ProcessorTable::Status SMBios::ProcessorTable::GetStatus() const
+std::string SMBios::ProcessorTable::GetStatus() const
 {
     if (reader_.GetTableLength() < 0x1A)
-        return Status::UNKNOWN;
+        return std::string();
 
-    return static_cast<Status>(reader_.GetByte(0x18) & 0x07);
+    static const char* text[] =
+    {
+        "Unknown", // 0x00
+        "Enabled",
+        "Disabled By User",
+        "Disabled By BIOS",
+        "Idle", // 0x04
+        nullptr,
+        nullptr,
+        "Other" // 0x07
+    };
+
+    const uint8_t status = reader_.GetByte(0x18) & 0x07;
+
+    if (!text[status])
+        return std::string();
+
+    return text[status];
 }
 
 std::string SMBios::ProcessorTable::GetSocket() const
@@ -1197,12 +1253,22 @@ int SMBios::ProcessorTable::GetThreadCount() const
     return reader_.GetByte(0x25);
 }
 
-uint16_t SMBios::ProcessorTable::GetCharacteristics() const
+SMBios::ProcessorTable::FeatureList SMBios::ProcessorTable::GetFeatures() const
 {
     if (reader_.GetTableLength() < 0x28)
-        return 0;
+        return FeatureList();
 
-    return reader_.GetWord(0x26);
+    const uint16_t bitfield = reader_.GetWord(0x26);
+    FeatureList list;
+
+    list.emplace_back("64-bit Capable", (bitfield & 0x0004) ? true : false);
+    list.emplace_back("Multi-Core", (bitfield & 0x0008) ? true : false);
+    list.emplace_back("Hardware Thread", (bitfield & 0x0010) ? true : false);
+    list.emplace_back("Execute Protection", (bitfield & 0x0020) ? true : false);
+    list.emplace_back("Enhanced Virtualization", (bitfield & 0x0040) ? true : false);
+    list.emplace_back("Power/Perfomance Control", (bitfield & 0x0080) ? true : false);
+
+    return list;
 }
 
 //
@@ -1220,55 +1286,47 @@ std::string SMBios::CacheTable::GetName() const
     return reader_.GetString(0x04);
 }
 
-SMBios::CacheTable::Location SMBios::CacheTable::GetLocation() const
+std::string SMBios::CacheTable::GetLocation() const
 {
-    const uint16_t type = (reader_.GetWord(0x05) & 0x60) >> 5;
-
-    switch (type)
+    static const char* text[4] =
     {
-        case 0x00: return Location::INTERNAL;
-        case 0x01: return Location::EXTERNAL;
-        case 0x02: return Location::RESERVED;
-        default: return Location::UNKNOWN;
-    }
+        "Internal", // 0x00
+        "External",
+        nullptr, // 0x02
+        "Unknown" // 0x03
+    };
+
+    const uint16_t type = (reader_.GetWord(0x05) >> 5) & 0x0003;
+
+    if (!text[type])
+        return std::string();
+
+    return text[type];
 }
 
-SMBios::CacheTable::Status SMBios::CacheTable::GetStatus() const
+bool SMBios::CacheTable::IsEnabled() const
 {
-    const uint16_t status = (reader_.GetWord(0x05) & 0x80) >> 7;
-
-    switch (status)
-    {
-        case 0x00: return Status::DISABLED;
-        case 0x01: return Status::ENABLED;
-        default: return Status::UNKNOWN;
-    }
+    return (reader_.GetWord(0x05) & 0x0080) ? true : false;
 }
 
-SMBios::CacheTable::Mode SMBios::CacheTable::GetMode() const
+std::string SMBios::CacheTable::GetMode() const
 {
-    const uint16_t mode = (reader_.GetWord(0x05) & 0x300) >> 8;
-
-    switch (mode)
+    static const char* text[] =
     {
-        case 0x00: return Mode::WRITE_THRU;
-        case 0x01: return Mode::WRITE_BACK;
-        case 0x02: return Mode::WRITE_WITH_MEMORY_ADDRESS;
-        default: return Mode::UNKNOWN;
-    }
+        "Write Through", // 0x00
+        "Write Back",
+        "Varies With Memory Address",
+        "Unknown" // 0x03
+    };
+
+    const uint16_t mode = (reader_.GetWord(0x05) >> 8) & 0x0003;
+
+    return text[mode];
 }
 
-SMBios::CacheTable::Level SMBios::CacheTable::GetLevel() const
+int SMBios::CacheTable::GetLevel() const
 {
-    const uint16_t level = reader_.GetWord(0x05) & 0x07;
-
-    switch (level)
-    {
-        case 0x00: return Level::L1;
-        case 0x01: return Level::L2;
-        case 0x02: return Level::L3;
-        default: return Level::UNKNOWN;
-    }
+    return (reader_.GetWord(0x05) & 0x0007) + 1;
 }
 
 int SMBios::CacheTable::GetMaximumSize() const
@@ -1281,19 +1339,56 @@ int SMBios::CacheTable::GetCurrentSize() const
     return reader_.GetWord(0x09) & 0x7FFF;
 }
 
-uint16_t SMBios::CacheTable::GetSupportedSRAMTypes() const
+SMBios::CacheTable::SRAMTypeList SMBios::CacheTable::GetSupportedSRAMTypes() const
 {
+    static const char* text[] =
+    {
+        "Other", // 0
+        "Unknown",
+        "Non-burst",
+        "Burst",
+        "Pipeline Burst",
+        "Synchronous",
+        "Asynchronous" // 6
+    };
+
     const uint16_t bitfield = reader_.GetWord(0x0B);
 
     if (!(bitfield & 0x007F))
-        return 0;
+        return SRAMTypeList();
 
-    return bitfield;
+    SRAMTypeList list;
+
+    for (int i = 0; i <= 6; ++i)
+    {
+        list.emplace_back(text[i], (bitfield & (1 << i)) ? true : false);
+    }
+
+    return list;
 }
 
-SMBios::CacheTable::SRAMType SMBios::CacheTable::GetCurrentSRAMType() const
+std::string SMBios::CacheTable::GetCurrentSRAMType() const
 {
-    return static_cast<SRAMType>(reader_.GetWord(0x0D));
+    static const char* text[] =
+    {
+        "Other", // 0
+        "Unknown",
+        "Non-burst",
+        "Burst",
+        "Pipeline Burst",
+        "Synchronous",
+        "Asynchronous" // 6
+    };
+
+    const uint16_t type = reader_.GetWord(0x0D);
+
+    for (int i = 0; i <= 6; ++i)
+    {
+        if (type & (1 << i))
+            return text[i];
+    }
+
+    return std::string();
 }
 
 int SMBios::CacheTable::GetSpeed() const
@@ -1304,59 +1399,80 @@ int SMBios::CacheTable::GetSpeed() const
     return reader_.GetByte(0x0F);
 }
 
-SMBios::CacheTable::ErrorCorrectionType SMBios::CacheTable::GetErrorCorrectionType() const
+std::string SMBios::CacheTable::GetErrorCorrectionType() const
 {
     if (reader_.GetTableLength() < 0x13)
-        return ErrorCorrectionType::UNKNOWN;
+        return std::string();
 
-    switch (reader_.GetByte(0x10))
+    const uint8_t type = reader_.GetByte(0x10);
+
+    static const char* text[] =
     {
-        case 0x01: return ErrorCorrectionType::OTHER;
-        case 0x03: return ErrorCorrectionType::NONE;
-        case 0x04: return ErrorCorrectionType::PARITY;
-        case 0x05: return ErrorCorrectionType::SINGLE_BIT_ECC;
-        case 0x06: return ErrorCorrectionType::MULTI_BIT_ECC;
-        default: return ErrorCorrectionType::UNKNOWN;
-    }
+        "Other", // 0x01
+        "Unknown",
+        "None",
+        "Parity",
+        "Single-bit ECC",
+        "Multi-bit ECC" // 0x06
+    };
+
+    if (type >= 0x01 && type <= 0x06)
+        return text[type - 1];
+
+    return std::string();
 }
 
-SMBios::CacheTable::Type SMBios::CacheTable::GetType() const
+std::string SMBios::CacheTable::GetType() const
 {
     if (reader_.GetTableLength() < 0x13)
-        return Type::UNKNOWN;
+        return std::string();
 
-    switch (reader_.GetByte(0x11))
+    static const char* text[] =
     {
-        case 0x01: return Type::OTHER;
-        case 0x03: return Type::INSTRUCTION;
-        case 0x04: return Type::DATA;
-        case 0x05: return Type::UNIFIED;
-        default: return Type::UNKNOWN;
-    }
+        "Other", // 0x01
+        "Unknown",
+        "Instruction",
+        "Data",
+        "Unified" // 0x05
+    };
+
+    const uint8_t type = reader_.GetByte(0x11);
+
+    if (type >= 0x01 && type <= 0x05)
+        return text[type - 1];
+
+    return std::string();
 }
 
-SMBios::CacheTable::Associativity SMBios::CacheTable::GetAssociativity() const
+std::string SMBios::CacheTable::GetAssociativity() const
 {
     if (reader_.GetTableLength() < 0x13)
-        return Associativity::UNKNOWN;
+        return std::string();
 
-    switch (reader_.GetByte(0x12))
+    static const char* text[] =
     {
-        case 0x01: return Associativity::OTHER;
-        case 0x03: return Associativity::DIRECT_MAPPED;
-        case 0x04: return Associativity::WAY_2_SET_ASSOCIATIVE;
-        case 0x05: return Associativity::WAY_4_SET_ASSOCIATIVE;
-        case 0x06: return Associativity::FULLY_ASSOCIATIVE;
-        case 0x07: return Associativity::WAY_8_SET_ASSOCIATIVE;
-        case 0x08: return Associativity::WAY_16_SET_ASSOCIATIVE;
-        case 0x09: return Associativity::WAY_12_SET_ASSOCIATIVE;
-        case 0x0A: return Associativity::WAY_24_SET_ASSOCIATIVE;
-        case 0x0B: return Associativity::WAY_32_SET_ASSOCIATIVE;
-        case 0x0C: return Associativity::WAY_48_SET_ASSOCIATIVE;
-        case 0x0D: return Associativity::WAY_64_SET_ASSOCIATIVE;
-        case 0x0E: return Associativity::WAY_20_SET_ASSOCIATIVE;
-        default: return Associativity::UNKNOWN;
-    }
+        "Other", // 0x01
+        "Unknown",
+        "Direct Mapped",
+        "2-way Set-associative",
+        "4-way Set-associative",
+        "Fully Associative",
+        "8-way Set-associative",
+        "16-way Set-associative",
+        "12-way Set-associative",
+        "24-way Set-associative",
+        "32-way Set-associative",
+        "48-way Set-associative",
+        "64-way Set-associative",
+        "20-way Set-associative" // 0x0E
+    };
+
+    const uint8_t value = reader_.GetByte(0x12);
+
+    if (value >= 0x01 && value <= 0x0E)
+        return text[value - 1];
+
+    return std::string();
 }
 
 //
@@ -1599,12 +1715,25 @@ std::string SMBios::SystemSlotTable::GetType() const
     return std::string();
 }
 
-SMBios::SystemSlotTable::Usage SMBios::SystemSlotTable::GetUsage() const
+std::string SMBios::SystemSlotTable::GetUsage() const
 {
     if (reader_.GetTableLength() < 0x0C)
-        return Usage::UNKNOWN;
+        return std::string();
 
-    return static_cast<Usage>(reader_.GetByte(0x07));
+    static const char* text[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Available",
+        "In Use" // 0x04
+    };
+
+    const uint8_t value = reader_.GetByte(0x07);
+
+    if (value >= 0x01 && value <= 0x04)
+        return text[value - 1];
+
+    return std::string();
 }
 
 std::string SMBios::SystemSlotTable::GetBusWidth() const
@@ -1638,12 +1767,25 @@ std::string SMBios::SystemSlotTable::GetBusWidth() const
     return std::string();
 }
 
-SMBios::SystemSlotTable::Length SMBios::SystemSlotTable::GetLength() const
+std::string SMBios::SystemSlotTable::GetLength() const
 {
     if (reader_.GetTableLength() < 0x0C)
-        return Length::UNKNOWN;
+        return std::string();
 
-    return static_cast<Length>(reader_.GetByte(0x08));
+    static const char* text[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Short",
+        "Long" // 0x04
+    };
+
+    const uint8_t value = reader_.GetByte(0x08);
+
+    if (value >= 0x01 && value <= 0x04)
+        return text[value - 1];
+
+    return std::string();
 }
 
 //

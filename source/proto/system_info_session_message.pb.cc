@@ -17,7 +17,7 @@
 #endif
 // @@protoc_insertion_point(includes)
 namespace aspia {
-namespace system_info {
+namespace proto {
 class DmiBios_FeatureDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<DmiBios_Feature>
@@ -58,6 +58,11 @@ class DmiChassisDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<DmiChassis>
       _instance;
 } _DmiChassis_default_instance_;
+class DmiCaches_Item_SRAMTypeDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<DmiCaches_Item_SRAMType>
+      _instance;
+} _DmiCaches_Item_SRAMType_default_instance_;
 class DmiCaches_ItemDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<DmiCaches_Item>
@@ -68,6 +73,11 @@ class DmiCachesDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<DmiCaches>
       _instance;
 } _DmiCaches_default_instance_;
+class DmiProcessors_Item_FeatureDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<DmiProcessors_Item_Feature>
+      _instance;
+} _DmiProcessors_Item_Feature_default_instance_;
 class DmiProcessors_ItemDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<DmiProcessors_Item>
@@ -138,6 +148,11 @@ class DmiPortableBatteryDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<DmiPortableBattery>
       _instance;
 } _DmiPortableBattery_default_instance_;
+class AtaDrives_Item_FeatureDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<AtaDrives_Item_Feature>
+      _instance;
+} _AtaDrives_Item_Feature_default_instance_;
 class AtaDrives_ItemDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<AtaDrives_Item>
@@ -298,7 +313,7 @@ class SessionsDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<Sessions>
       _instance;
 } _Sessions_default_instance_;
-}  // namespace system_info
+}  // namespace proto
 }  // namespace aspia
 namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto {
 void InitDefaultsDmiBios_FeatureImpl() {
@@ -310,11 +325,11 @@ void InitDefaultsDmiBios_FeatureImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_DmiBios_Feature_default_instance_;
-    new (ptr) ::aspia::system_info::DmiBios_Feature();
+    void* ptr = &::aspia::proto::_DmiBios_Feature_default_instance_;
+    new (ptr) ::aspia::proto::DmiBios_Feature();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiBios_Feature::InitAsDefaultInstance();
+  ::aspia::proto::DmiBios_Feature::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiBios_Feature() {
@@ -332,11 +347,11 @@ void InitDefaultsDmiBiosImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBios_Feature();
   {
-    void* ptr = &::aspia::system_info::_DmiBios_default_instance_;
-    new (ptr) ::aspia::system_info::DmiBios();
+    void* ptr = &::aspia::proto::_DmiBios_default_instance_;
+    new (ptr) ::aspia::proto::DmiBios();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiBios::InitAsDefaultInstance();
+  ::aspia::proto::DmiBios::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiBios() {
@@ -353,11 +368,11 @@ void InitDefaultsDmiSystemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_DmiSystem_default_instance_;
-    new (ptr) ::aspia::system_info::DmiSystem();
+    void* ptr = &::aspia::proto::_DmiSystem_default_instance_;
+    new (ptr) ::aspia::proto::DmiSystem();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiSystem::InitAsDefaultInstance();
+  ::aspia::proto::DmiSystem::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiSystem() {
@@ -374,11 +389,11 @@ void InitDefaultsDmiBaseboard_Item_FeatureImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_DmiBaseboard_Item_Feature_default_instance_;
-    new (ptr) ::aspia::system_info::DmiBaseboard_Item_Feature();
+    void* ptr = &::aspia::proto::_DmiBaseboard_Item_Feature_default_instance_;
+    new (ptr) ::aspia::proto::DmiBaseboard_Item_Feature();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiBaseboard_Item_Feature::InitAsDefaultInstance();
+  ::aspia::proto::DmiBaseboard_Item_Feature::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiBaseboard_Item_Feature() {
@@ -396,11 +411,11 @@ void InitDefaultsDmiBaseboard_ItemImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBaseboard_Item_Feature();
   {
-    void* ptr = &::aspia::system_info::_DmiBaseboard_Item_default_instance_;
-    new (ptr) ::aspia::system_info::DmiBaseboard_Item();
+    void* ptr = &::aspia::proto::_DmiBaseboard_Item_default_instance_;
+    new (ptr) ::aspia::proto::DmiBaseboard_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiBaseboard_Item::InitAsDefaultInstance();
+  ::aspia::proto::DmiBaseboard_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiBaseboard_Item() {
@@ -418,11 +433,11 @@ void InitDefaultsDmiBaseboardImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBaseboard_Item();
   {
-    void* ptr = &::aspia::system_info::_DmiBaseboard_default_instance_;
-    new (ptr) ::aspia::system_info::DmiBaseboard();
+    void* ptr = &::aspia::proto::_DmiBaseboard_default_instance_;
+    new (ptr) ::aspia::proto::DmiBaseboard();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiBaseboard::InitAsDefaultInstance();
+  ::aspia::proto::DmiBaseboard::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiBaseboard() {
@@ -439,11 +454,11 @@ void InitDefaultsDmiChassis_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_DmiChassis_Item_default_instance_;
-    new (ptr) ::aspia::system_info::DmiChassis_Item();
+    void* ptr = &::aspia::proto::_DmiChassis_Item_default_instance_;
+    new (ptr) ::aspia::proto::DmiChassis_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiChassis_Item::InitAsDefaultInstance();
+  ::aspia::proto::DmiChassis_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiChassis_Item() {
@@ -461,16 +476,37 @@ void InitDefaultsDmiChassisImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiChassis_Item();
   {
-    void* ptr = &::aspia::system_info::_DmiChassis_default_instance_;
-    new (ptr) ::aspia::system_info::DmiChassis();
+    void* ptr = &::aspia::proto::_DmiChassis_default_instance_;
+    new (ptr) ::aspia::proto::DmiChassis();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiChassis::InitAsDefaultInstance();
+  ::aspia::proto::DmiChassis::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiChassis() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiChassisImpl);
+}
+
+void InitDefaultsDmiCaches_Item_SRAMTypeImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_DmiCaches_Item_SRAMType_default_instance_;
+    new (ptr) ::aspia::proto::DmiCaches_Item_SRAMType();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::DmiCaches_Item_SRAMType::InitAsDefaultInstance();
+}
+
+void InitDefaultsDmiCaches_Item_SRAMType() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiCaches_Item_SRAMTypeImpl);
 }
 
 void InitDefaultsDmiCaches_ItemImpl() {
@@ -481,12 +517,13 @@ void InitDefaultsDmiCaches_ItemImpl() {
 #else
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiCaches_Item_SRAMType();
   {
-    void* ptr = &::aspia::system_info::_DmiCaches_Item_default_instance_;
-    new (ptr) ::aspia::system_info::DmiCaches_Item();
+    void* ptr = &::aspia::proto::_DmiCaches_Item_default_instance_;
+    new (ptr) ::aspia::proto::DmiCaches_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiCaches_Item::InitAsDefaultInstance();
+  ::aspia::proto::DmiCaches_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiCaches_Item() {
@@ -504,16 +541,37 @@ void InitDefaultsDmiCachesImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiCaches_Item();
   {
-    void* ptr = &::aspia::system_info::_DmiCaches_default_instance_;
-    new (ptr) ::aspia::system_info::DmiCaches();
+    void* ptr = &::aspia::proto::_DmiCaches_default_instance_;
+    new (ptr) ::aspia::proto::DmiCaches();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiCaches::InitAsDefaultInstance();
+  ::aspia::proto::DmiCaches::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiCaches() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiCachesImpl);
+}
+
+void InitDefaultsDmiProcessors_Item_FeatureImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_DmiProcessors_Item_Feature_default_instance_;
+    new (ptr) ::aspia::proto::DmiProcessors_Item_Feature();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::DmiProcessors_Item_Feature::InitAsDefaultInstance();
+}
+
+void InitDefaultsDmiProcessors_Item_Feature() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiProcessors_Item_FeatureImpl);
 }
 
 void InitDefaultsDmiProcessors_ItemImpl() {
@@ -524,12 +582,13 @@ void InitDefaultsDmiProcessors_ItemImpl() {
 #else
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiProcessors_Item_Feature();
   {
-    void* ptr = &::aspia::system_info::_DmiProcessors_Item_default_instance_;
-    new (ptr) ::aspia::system_info::DmiProcessors_Item();
+    void* ptr = &::aspia::proto::_DmiProcessors_Item_default_instance_;
+    new (ptr) ::aspia::proto::DmiProcessors_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiProcessors_Item::InitAsDefaultInstance();
+  ::aspia::proto::DmiProcessors_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiProcessors_Item() {
@@ -547,11 +606,11 @@ void InitDefaultsDmiProcessorsImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiProcessors_Item();
   {
-    void* ptr = &::aspia::system_info::_DmiProcessors_default_instance_;
-    new (ptr) ::aspia::system_info::DmiProcessors();
+    void* ptr = &::aspia::proto::_DmiProcessors_default_instance_;
+    new (ptr) ::aspia::proto::DmiProcessors();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiProcessors::InitAsDefaultInstance();
+  ::aspia::proto::DmiProcessors::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiProcessors() {
@@ -568,11 +627,11 @@ void InitDefaultsDmiMemoryDevices_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_DmiMemoryDevices_Item_default_instance_;
-    new (ptr) ::aspia::system_info::DmiMemoryDevices_Item();
+    void* ptr = &::aspia::proto::_DmiMemoryDevices_Item_default_instance_;
+    new (ptr) ::aspia::proto::DmiMemoryDevices_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiMemoryDevices_Item::InitAsDefaultInstance();
+  ::aspia::proto::DmiMemoryDevices_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiMemoryDevices_Item() {
@@ -590,11 +649,11 @@ void InitDefaultsDmiMemoryDevicesImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiMemoryDevices_Item();
   {
-    void* ptr = &::aspia::system_info::_DmiMemoryDevices_default_instance_;
-    new (ptr) ::aspia::system_info::DmiMemoryDevices();
+    void* ptr = &::aspia::proto::_DmiMemoryDevices_default_instance_;
+    new (ptr) ::aspia::proto::DmiMemoryDevices();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiMemoryDevices::InitAsDefaultInstance();
+  ::aspia::proto::DmiMemoryDevices::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiMemoryDevices() {
@@ -611,11 +670,11 @@ void InitDefaultsDmiSystemSlots_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_DmiSystemSlots_Item_default_instance_;
-    new (ptr) ::aspia::system_info::DmiSystemSlots_Item();
+    void* ptr = &::aspia::proto::_DmiSystemSlots_Item_default_instance_;
+    new (ptr) ::aspia::proto::DmiSystemSlots_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiSystemSlots_Item::InitAsDefaultInstance();
+  ::aspia::proto::DmiSystemSlots_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiSystemSlots_Item() {
@@ -633,11 +692,11 @@ void InitDefaultsDmiSystemSlotsImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiSystemSlots_Item();
   {
-    void* ptr = &::aspia::system_info::_DmiSystemSlots_default_instance_;
-    new (ptr) ::aspia::system_info::DmiSystemSlots();
+    void* ptr = &::aspia::proto::_DmiSystemSlots_default_instance_;
+    new (ptr) ::aspia::proto::DmiSystemSlots();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiSystemSlots::InitAsDefaultInstance();
+  ::aspia::proto::DmiSystemSlots::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiSystemSlots() {
@@ -654,11 +713,11 @@ void InitDefaultsDmiPortConnectors_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_DmiPortConnectors_Item_default_instance_;
-    new (ptr) ::aspia::system_info::DmiPortConnectors_Item();
+    void* ptr = &::aspia::proto::_DmiPortConnectors_Item_default_instance_;
+    new (ptr) ::aspia::proto::DmiPortConnectors_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiPortConnectors_Item::InitAsDefaultInstance();
+  ::aspia::proto::DmiPortConnectors_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiPortConnectors_Item() {
@@ -676,11 +735,11 @@ void InitDefaultsDmiPortConnectorsImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPortConnectors_Item();
   {
-    void* ptr = &::aspia::system_info::_DmiPortConnectors_default_instance_;
-    new (ptr) ::aspia::system_info::DmiPortConnectors();
+    void* ptr = &::aspia::proto::_DmiPortConnectors_default_instance_;
+    new (ptr) ::aspia::proto::DmiPortConnectors();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiPortConnectors::InitAsDefaultInstance();
+  ::aspia::proto::DmiPortConnectors::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiPortConnectors() {
@@ -697,11 +756,11 @@ void InitDefaultsDmiOnBoardDevices_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_DmiOnBoardDevices_Item_default_instance_;
-    new (ptr) ::aspia::system_info::DmiOnBoardDevices_Item();
+    void* ptr = &::aspia::proto::_DmiOnBoardDevices_Item_default_instance_;
+    new (ptr) ::aspia::proto::DmiOnBoardDevices_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiOnBoardDevices_Item::InitAsDefaultInstance();
+  ::aspia::proto::DmiOnBoardDevices_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiOnBoardDevices_Item() {
@@ -719,11 +778,11 @@ void InitDefaultsDmiOnBoardDevicesImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiOnBoardDevices_Item();
   {
-    void* ptr = &::aspia::system_info::_DmiOnBoardDevices_default_instance_;
-    new (ptr) ::aspia::system_info::DmiOnBoardDevices();
+    void* ptr = &::aspia::proto::_DmiOnBoardDevices_default_instance_;
+    new (ptr) ::aspia::proto::DmiOnBoardDevices();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiOnBoardDevices::InitAsDefaultInstance();
+  ::aspia::proto::DmiOnBoardDevices::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiOnBoardDevices() {
@@ -740,11 +799,11 @@ void InitDefaultsDmiBuildinPointing_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_DmiBuildinPointing_Item_default_instance_;
-    new (ptr) ::aspia::system_info::DmiBuildinPointing_Item();
+    void* ptr = &::aspia::proto::_DmiBuildinPointing_Item_default_instance_;
+    new (ptr) ::aspia::proto::DmiBuildinPointing_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiBuildinPointing_Item::InitAsDefaultInstance();
+  ::aspia::proto::DmiBuildinPointing_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiBuildinPointing_Item() {
@@ -762,11 +821,11 @@ void InitDefaultsDmiBuildinPointingImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBuildinPointing_Item();
   {
-    void* ptr = &::aspia::system_info::_DmiBuildinPointing_default_instance_;
-    new (ptr) ::aspia::system_info::DmiBuildinPointing();
+    void* ptr = &::aspia::proto::_DmiBuildinPointing_default_instance_;
+    new (ptr) ::aspia::proto::DmiBuildinPointing();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiBuildinPointing::InitAsDefaultInstance();
+  ::aspia::proto::DmiBuildinPointing::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiBuildinPointing() {
@@ -783,11 +842,11 @@ void InitDefaultsDmiPortableBattery_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_DmiPortableBattery_Item_default_instance_;
-    new (ptr) ::aspia::system_info::DmiPortableBattery_Item();
+    void* ptr = &::aspia::proto::_DmiPortableBattery_Item_default_instance_;
+    new (ptr) ::aspia::proto::DmiPortableBattery_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiPortableBattery_Item::InitAsDefaultInstance();
+  ::aspia::proto::DmiPortableBattery_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiPortableBattery_Item() {
@@ -805,16 +864,37 @@ void InitDefaultsDmiPortableBatteryImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPortableBattery_Item();
   {
-    void* ptr = &::aspia::system_info::_DmiPortableBattery_default_instance_;
-    new (ptr) ::aspia::system_info::DmiPortableBattery();
+    void* ptr = &::aspia::proto::_DmiPortableBattery_default_instance_;
+    new (ptr) ::aspia::proto::DmiPortableBattery();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::DmiPortableBattery::InitAsDefaultInstance();
+  ::aspia::proto::DmiPortableBattery::InitAsDefaultInstance();
 }
 
 void InitDefaultsDmiPortableBattery() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiPortableBatteryImpl);
+}
+
+void InitDefaultsAtaDrives_Item_FeatureImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_AtaDrives_Item_Feature_default_instance_;
+    new (ptr) ::aspia::proto::AtaDrives_Item_Feature();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::AtaDrives_Item_Feature::InitAsDefaultInstance();
+}
+
+void InitDefaultsAtaDrives_Item_Feature() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsAtaDrives_Item_FeatureImpl);
 }
 
 void InitDefaultsAtaDrives_ItemImpl() {
@@ -825,12 +905,13 @@ void InitDefaultsAtaDrives_ItemImpl() {
 #else
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsAtaDrives_Item_Feature();
   {
-    void* ptr = &::aspia::system_info::_AtaDrives_Item_default_instance_;
-    new (ptr) ::aspia::system_info::AtaDrives_Item();
+    void* ptr = &::aspia::proto::_AtaDrives_Item_default_instance_;
+    new (ptr) ::aspia::proto::AtaDrives_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::AtaDrives_Item::InitAsDefaultInstance();
+  ::aspia::proto::AtaDrives_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsAtaDrives_Item() {
@@ -848,11 +929,11 @@ void InitDefaultsAtaDrivesImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsAtaDrives_Item();
   {
-    void* ptr = &::aspia::system_info::_AtaDrives_default_instance_;
-    new (ptr) ::aspia::system_info::AtaDrives();
+    void* ptr = &::aspia::proto::_AtaDrives_default_instance_;
+    new (ptr) ::aspia::proto::AtaDrives();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::AtaDrives::InitAsDefaultInstance();
+  ::aspia::proto::AtaDrives::InitAsDefaultInstance();
 }
 
 void InitDefaultsAtaDrives() {
@@ -869,11 +950,11 @@ void InitDefaultsMonitors_Item_TimingImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_Monitors_Item_Timing_default_instance_;
-    new (ptr) ::aspia::system_info::Monitors_Item_Timing();
+    void* ptr = &::aspia::proto::_Monitors_Item_Timing_default_instance_;
+    new (ptr) ::aspia::proto::Monitors_Item_Timing();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Monitors_Item_Timing::InitAsDefaultInstance();
+  ::aspia::proto::Monitors_Item_Timing::InitAsDefaultInstance();
 }
 
 void InitDefaultsMonitors_Item_Timing() {
@@ -891,11 +972,11 @@ void InitDefaultsMonitors_ItemImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsMonitors_Item_Timing();
   {
-    void* ptr = &::aspia::system_info::_Monitors_Item_default_instance_;
-    new (ptr) ::aspia::system_info::Monitors_Item();
+    void* ptr = &::aspia::proto::_Monitors_Item_default_instance_;
+    new (ptr) ::aspia::proto::Monitors_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Monitors_Item::InitAsDefaultInstance();
+  ::aspia::proto::Monitors_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsMonitors_Item() {
@@ -913,11 +994,11 @@ void InitDefaultsMonitorsImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsMonitors_Item();
   {
-    void* ptr = &::aspia::system_info::_Monitors_default_instance_;
-    new (ptr) ::aspia::system_info::Monitors();
+    void* ptr = &::aspia::proto::_Monitors_default_instance_;
+    new (ptr) ::aspia::proto::Monitors();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Monitors::InitAsDefaultInstance();
+  ::aspia::proto::Monitors::InitAsDefaultInstance();
 }
 
 void InitDefaultsMonitors() {
@@ -934,11 +1015,11 @@ void InitDefaultsPowerOptions_BatteryImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_PowerOptions_Battery_default_instance_;
-    new (ptr) ::aspia::system_info::PowerOptions_Battery();
+    void* ptr = &::aspia::proto::_PowerOptions_Battery_default_instance_;
+    new (ptr) ::aspia::proto::PowerOptions_Battery();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::PowerOptions_Battery::InitAsDefaultInstance();
+  ::aspia::proto::PowerOptions_Battery::InitAsDefaultInstance();
 }
 
 void InitDefaultsPowerOptions_Battery() {
@@ -956,11 +1037,11 @@ void InitDefaultsPowerOptionsImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsPowerOptions_Battery();
   {
-    void* ptr = &::aspia::system_info::_PowerOptions_default_instance_;
-    new (ptr) ::aspia::system_info::PowerOptions();
+    void* ptr = &::aspia::proto::_PowerOptions_default_instance_;
+    new (ptr) ::aspia::proto::PowerOptions();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::PowerOptions::InitAsDefaultInstance();
+  ::aspia::proto::PowerOptions::InitAsDefaultInstance();
 }
 
 void InitDefaultsPowerOptions() {
@@ -977,11 +1058,11 @@ void InitDefaultsPrinters_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_Printers_Item_default_instance_;
-    new (ptr) ::aspia::system_info::Printers_Item();
+    void* ptr = &::aspia::proto::_Printers_Item_default_instance_;
+    new (ptr) ::aspia::proto::Printers_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Printers_Item::InitAsDefaultInstance();
+  ::aspia::proto::Printers_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsPrinters_Item() {
@@ -999,11 +1080,11 @@ void InitDefaultsPrintersImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsPrinters_Item();
   {
-    void* ptr = &::aspia::system_info::_Printers_default_instance_;
-    new (ptr) ::aspia::system_info::Printers();
+    void* ptr = &::aspia::proto::_Printers_default_instance_;
+    new (ptr) ::aspia::proto::Printers();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Printers::InitAsDefaultInstance();
+  ::aspia::proto::Printers::InitAsDefaultInstance();
 }
 
 void InitDefaultsPrinters() {
@@ -1020,11 +1101,11 @@ void InitDefaultsWindowsDevices_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_WindowsDevices_Item_default_instance_;
-    new (ptr) ::aspia::system_info::WindowsDevices_Item();
+    void* ptr = &::aspia::proto::_WindowsDevices_Item_default_instance_;
+    new (ptr) ::aspia::proto::WindowsDevices_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::WindowsDevices_Item::InitAsDefaultInstance();
+  ::aspia::proto::WindowsDevices_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsWindowsDevices_Item() {
@@ -1042,11 +1123,11 @@ void InitDefaultsWindowsDevicesImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsWindowsDevices_Item();
   {
-    void* ptr = &::aspia::system_info::_WindowsDevices_default_instance_;
-    new (ptr) ::aspia::system_info::WindowsDevices();
+    void* ptr = &::aspia::proto::_WindowsDevices_default_instance_;
+    new (ptr) ::aspia::proto::WindowsDevices();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::WindowsDevices::InitAsDefaultInstance();
+  ::aspia::proto::WindowsDevices::InitAsDefaultInstance();
 }
 
 void InitDefaultsWindowsDevices() {
@@ -1063,11 +1144,11 @@ void InitDefaultsPrograms_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_Programs_Item_default_instance_;
-    new (ptr) ::aspia::system_info::Programs_Item();
+    void* ptr = &::aspia::proto::_Programs_Item_default_instance_;
+    new (ptr) ::aspia::proto::Programs_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Programs_Item::InitAsDefaultInstance();
+  ::aspia::proto::Programs_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsPrograms_Item() {
@@ -1085,11 +1166,11 @@ void InitDefaultsProgramsImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsPrograms_Item();
   {
-    void* ptr = &::aspia::system_info::_Programs_default_instance_;
-    new (ptr) ::aspia::system_info::Programs();
+    void* ptr = &::aspia::proto::_Programs_default_instance_;
+    new (ptr) ::aspia::proto::Programs();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Programs::InitAsDefaultInstance();
+  ::aspia::proto::Programs::InitAsDefaultInstance();
 }
 
 void InitDefaultsPrograms() {
@@ -1106,11 +1187,11 @@ void InitDefaultsServices_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_Services_Item_default_instance_;
-    new (ptr) ::aspia::system_info::Services_Item();
+    void* ptr = &::aspia::proto::_Services_Item_default_instance_;
+    new (ptr) ::aspia::proto::Services_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Services_Item::InitAsDefaultInstance();
+  ::aspia::proto::Services_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsServices_Item() {
@@ -1128,11 +1209,11 @@ void InitDefaultsServicesImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsServices_Item();
   {
-    void* ptr = &::aspia::system_info::_Services_default_instance_;
-    new (ptr) ::aspia::system_info::Services();
+    void* ptr = &::aspia::proto::_Services_default_instance_;
+    new (ptr) ::aspia::proto::Services();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Services::InitAsDefaultInstance();
+  ::aspia::proto::Services::InitAsDefaultInstance();
 }
 
 void InitDefaultsServices() {
@@ -1149,11 +1230,11 @@ void InitDefaultsProcesses_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_Processes_Item_default_instance_;
-    new (ptr) ::aspia::system_info::Processes_Item();
+    void* ptr = &::aspia::proto::_Processes_Item_default_instance_;
+    new (ptr) ::aspia::proto::Processes_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Processes_Item::InitAsDefaultInstance();
+  ::aspia::proto::Processes_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsProcesses_Item() {
@@ -1171,11 +1252,11 @@ void InitDefaultsProcessesImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsProcesses_Item();
   {
-    void* ptr = &::aspia::system_info::_Processes_default_instance_;
-    new (ptr) ::aspia::system_info::Processes();
+    void* ptr = &::aspia::proto::_Processes_default_instance_;
+    new (ptr) ::aspia::proto::Processes();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Processes::InitAsDefaultInstance();
+  ::aspia::proto::Processes::InitAsDefaultInstance();
 }
 
 void InitDefaultsProcesses() {
@@ -1192,11 +1273,11 @@ void InitDefaultsNetworkCards_Item_IpAddressImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_NetworkCards_Item_IpAddress_default_instance_;
-    new (ptr) ::aspia::system_info::NetworkCards_Item_IpAddress();
+    void* ptr = &::aspia::proto::_NetworkCards_Item_IpAddress_default_instance_;
+    new (ptr) ::aspia::proto::NetworkCards_Item_IpAddress();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::NetworkCards_Item_IpAddress::InitAsDefaultInstance();
+  ::aspia::proto::NetworkCards_Item_IpAddress::InitAsDefaultInstance();
 }
 
 void InitDefaultsNetworkCards_Item_IpAddress() {
@@ -1214,11 +1295,11 @@ void InitDefaultsNetworkCards_ItemImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsNetworkCards_Item_IpAddress();
   {
-    void* ptr = &::aspia::system_info::_NetworkCards_Item_default_instance_;
-    new (ptr) ::aspia::system_info::NetworkCards_Item();
+    void* ptr = &::aspia::proto::_NetworkCards_Item_default_instance_;
+    new (ptr) ::aspia::proto::NetworkCards_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::NetworkCards_Item::InitAsDefaultInstance();
+  ::aspia::proto::NetworkCards_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsNetworkCards_Item() {
@@ -1236,11 +1317,11 @@ void InitDefaultsNetworkCardsImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsNetworkCards_Item();
   {
-    void* ptr = &::aspia::system_info::_NetworkCards_default_instance_;
-    new (ptr) ::aspia::system_info::NetworkCards();
+    void* ptr = &::aspia::proto::_NetworkCards_default_instance_;
+    new (ptr) ::aspia::proto::NetworkCards();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::NetworkCards::InitAsDefaultInstance();
+  ::aspia::proto::NetworkCards::InitAsDefaultInstance();
 }
 
 void InitDefaultsNetworkCards() {
@@ -1257,11 +1338,11 @@ void InitDefaultsOpenConnections_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_OpenConnections_Item_default_instance_;
-    new (ptr) ::aspia::system_info::OpenConnections_Item();
+    void* ptr = &::aspia::proto::_OpenConnections_Item_default_instance_;
+    new (ptr) ::aspia::proto::OpenConnections_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::OpenConnections_Item::InitAsDefaultInstance();
+  ::aspia::proto::OpenConnections_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsOpenConnections_Item() {
@@ -1279,11 +1360,11 @@ void InitDefaultsOpenConnectionsImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsOpenConnections_Item();
   {
-    void* ptr = &::aspia::system_info::_OpenConnections_default_instance_;
-    new (ptr) ::aspia::system_info::OpenConnections();
+    void* ptr = &::aspia::proto::_OpenConnections_default_instance_;
+    new (ptr) ::aspia::proto::OpenConnections();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::OpenConnections::InitAsDefaultInstance();
+  ::aspia::proto::OpenConnections::InitAsDefaultInstance();
 }
 
 void InitDefaultsOpenConnections() {
@@ -1300,11 +1381,11 @@ void InitDefaultsSharedResources_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_SharedResources_Item_default_instance_;
-    new (ptr) ::aspia::system_info::SharedResources_Item();
+    void* ptr = &::aspia::proto::_SharedResources_Item_default_instance_;
+    new (ptr) ::aspia::proto::SharedResources_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::SharedResources_Item::InitAsDefaultInstance();
+  ::aspia::proto::SharedResources_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsSharedResources_Item() {
@@ -1322,11 +1403,11 @@ void InitDefaultsSharedResourcesImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsSharedResources_Item();
   {
-    void* ptr = &::aspia::system_info::_SharedResources_default_instance_;
-    new (ptr) ::aspia::system_info::SharedResources();
+    void* ptr = &::aspia::proto::_SharedResources_default_instance_;
+    new (ptr) ::aspia::proto::SharedResources();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::SharedResources::InitAsDefaultInstance();
+  ::aspia::proto::SharedResources::InitAsDefaultInstance();
 }
 
 void InitDefaultsSharedResources() {
@@ -1343,11 +1424,11 @@ void InitDefaultsRoutes_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_Routes_Item_default_instance_;
-    new (ptr) ::aspia::system_info::Routes_Item();
+    void* ptr = &::aspia::proto::_Routes_Item_default_instance_;
+    new (ptr) ::aspia::proto::Routes_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Routes_Item::InitAsDefaultInstance();
+  ::aspia::proto::Routes_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsRoutes_Item() {
@@ -1365,11 +1446,11 @@ void InitDefaultsRoutesImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsRoutes_Item();
   {
-    void* ptr = &::aspia::system_info::_Routes_default_instance_;
-    new (ptr) ::aspia::system_info::Routes();
+    void* ptr = &::aspia::proto::_Routes_default_instance_;
+    new (ptr) ::aspia::proto::Routes();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Routes::InitAsDefaultInstance();
+  ::aspia::proto::Routes::InitAsDefaultInstance();
 }
 
 void InitDefaultsRoutes() {
@@ -1386,11 +1467,11 @@ void InitDefaultsUsers_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_Users_Item_default_instance_;
-    new (ptr) ::aspia::system_info::Users_Item();
+    void* ptr = &::aspia::proto::_Users_Item_default_instance_;
+    new (ptr) ::aspia::proto::Users_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Users_Item::InitAsDefaultInstance();
+  ::aspia::proto::Users_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsUsers_Item() {
@@ -1408,11 +1489,11 @@ void InitDefaultsUsersImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsUsers_Item();
   {
-    void* ptr = &::aspia::system_info::_Users_default_instance_;
-    new (ptr) ::aspia::system_info::Users();
+    void* ptr = &::aspia::proto::_Users_default_instance_;
+    new (ptr) ::aspia::proto::Users();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Users::InitAsDefaultInstance();
+  ::aspia::proto::Users::InitAsDefaultInstance();
 }
 
 void InitDefaultsUsers() {
@@ -1429,11 +1510,11 @@ void InitDefaultsUserGroups_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_UserGroups_Item_default_instance_;
-    new (ptr) ::aspia::system_info::UserGroups_Item();
+    void* ptr = &::aspia::proto::_UserGroups_Item_default_instance_;
+    new (ptr) ::aspia::proto::UserGroups_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::UserGroups_Item::InitAsDefaultInstance();
+  ::aspia::proto::UserGroups_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsUserGroups_Item() {
@@ -1451,11 +1532,11 @@ void InitDefaultsUserGroupsImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsUserGroups_Item();
   {
-    void* ptr = &::aspia::system_info::_UserGroups_default_instance_;
-    new (ptr) ::aspia::system_info::UserGroups();
+    void* ptr = &::aspia::proto::_UserGroups_default_instance_;
+    new (ptr) ::aspia::proto::UserGroups();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::UserGroups::InitAsDefaultInstance();
+  ::aspia::proto::UserGroups::InitAsDefaultInstance();
 }
 
 void InitDefaultsUserGroups() {
@@ -1472,11 +1553,11 @@ void InitDefaultsSessions_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::system_info::_Sessions_Item_default_instance_;
-    new (ptr) ::aspia::system_info::Sessions_Item();
+    void* ptr = &::aspia::proto::_Sessions_Item_default_instance_;
+    new (ptr) ::aspia::proto::Sessions_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Sessions_Item::InitAsDefaultInstance();
+  ::aspia::proto::Sessions_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsSessions_Item() {
@@ -1494,11 +1575,11 @@ void InitDefaultsSessionsImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsSessions_Item();
   {
-    void* ptr = &::aspia::system_info::_Sessions_default_instance_;
-    new (ptr) ::aspia::system_info::Sessions();
+    void* ptr = &::aspia::proto::_Sessions_default_instance_;
+    new (ptr) ::aspia::proto::Sessions();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::system_info::Sessions::InitAsDefaultInstance();
+  ::aspia::proto::Sessions::InitAsDefaultInstance();
 }
 
 void InitDefaultsSessions() {
@@ -1508,640 +1589,7 @@ void InitDefaultsSessions() {
 
 }  // namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto
 namespace aspia {
-namespace system_info {
-bool DmiBaseboard_Item_BoardType_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-    case 11:
-    case 12:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiBaseboard_Item_BoardType DmiBaseboard_Item::BOARD_TYPE_UNKNOWN;
-const DmiBaseboard_Item_BoardType DmiBaseboard_Item::BOARD_TYPE_OTHER;
-const DmiBaseboard_Item_BoardType DmiBaseboard_Item::BOARD_TYPE_SERVER_BLADE;
-const DmiBaseboard_Item_BoardType DmiBaseboard_Item::BOARD_TYPE_CONNECTIVITY_SWITCH;
-const DmiBaseboard_Item_BoardType DmiBaseboard_Item::BOARD_TYPE_SYSTEM_MANAGEMENT_MODULE;
-const DmiBaseboard_Item_BoardType DmiBaseboard_Item::BOARD_TYPE_PROCESSOR_MODULE;
-const DmiBaseboard_Item_BoardType DmiBaseboard_Item::BOARD_TYPE_IO_MODULE;
-const DmiBaseboard_Item_BoardType DmiBaseboard_Item::BOARD_TYPE_MEMORY_MODULE;
-const DmiBaseboard_Item_BoardType DmiBaseboard_Item::BOARD_TYPE_DAUGHTER_BOARD;
-const DmiBaseboard_Item_BoardType DmiBaseboard_Item::BOARD_TYPE_MOTHERBOARD;
-const DmiBaseboard_Item_BoardType DmiBaseboard_Item::BOARD_TYPE_PROCESSOR_PLUS_MEMORY_MODULE;
-const DmiBaseboard_Item_BoardType DmiBaseboard_Item::BOARD_TYPE_PROCESSOR_PLUS_IO_MODULE;
-const DmiBaseboard_Item_BoardType DmiBaseboard_Item::BOARD_TYPE_INTERCONNECT_BOARD;
-const DmiBaseboard_Item_BoardType DmiBaseboard_Item::BoardType_MIN;
-const DmiBaseboard_Item_BoardType DmiBaseboard_Item::BoardType_MAX;
-const int DmiBaseboard_Item::BoardType_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiChassis_Item_Type_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-    case 15:
-    case 16:
-    case 17:
-    case 18:
-    case 19:
-    case 20:
-    case 21:
-    case 22:
-    case 23:
-    case 24:
-    case 25:
-    case 26:
-    case 27:
-    case 28:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_UNKNOWN;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_OTHER;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_DESKTOP;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_LOW_PROFILE_DESKTOP;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_PIZZA_BOX;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_MINI_TOWER;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_TOWER;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_PORTABLE;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_LAPTOP;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_NOTEBOOK;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_HAND_HELD;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_DOCKING_STATION;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_ALL_IN_ONE;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_SUB_NOTEBOOK;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_SPACE_SAVING;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_LUNCH_BOX;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_MAIN_SERVER_CHASSIS;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_EXPANSION_CHASSIS;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_SUB_CHASSIS;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_BUS_EXPANSION_CHASSIS;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_PERIPHERIAL_CHASSIS;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_RAID_CHASSIS;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_RACK_MOUNT_CHASSIS;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_SEALED_CASE_PC;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_MULTI_SYSTEM_CHASSIS;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_COMPACT_PCI;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_ADVANCED_TCA;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_BLADE;
-const DmiChassis_Item_Type DmiChassis_Item::TYPE_BLADE_ENCLOSURE;
-const DmiChassis_Item_Type DmiChassis_Item::Type_MIN;
-const DmiChassis_Item_Type DmiChassis_Item::Type_MAX;
-const int DmiChassis_Item::Type_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiChassis_Item_Status_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiChassis_Item_Status DmiChassis_Item::STATUS_UNKNOWN;
-const DmiChassis_Item_Status DmiChassis_Item::STATUS_OTHER;
-const DmiChassis_Item_Status DmiChassis_Item::STATUS_SAFE;
-const DmiChassis_Item_Status DmiChassis_Item::STATUS_WARNING;
-const DmiChassis_Item_Status DmiChassis_Item::STATUS_CRITICAL;
-const DmiChassis_Item_Status DmiChassis_Item::STATUS_NON_RECOVERABLE;
-const DmiChassis_Item_Status DmiChassis_Item::Status_MIN;
-const DmiChassis_Item_Status DmiChassis_Item::Status_MAX;
-const int DmiChassis_Item::Status_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiChassis_Item_SecurityStatus_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiChassis_Item_SecurityStatus DmiChassis_Item::SECURITY_STATUS_UNKNOWN;
-const DmiChassis_Item_SecurityStatus DmiChassis_Item::SECURITY_STATUS_OTHER;
-const DmiChassis_Item_SecurityStatus DmiChassis_Item::SECURITY_STATUS_NONE;
-const DmiChassis_Item_SecurityStatus DmiChassis_Item::SECURITY_STATUS_EXTERNAL_INTERFACE_LOCKED_OUT;
-const DmiChassis_Item_SecurityStatus DmiChassis_Item::SECURITY_STATUS_EXTERNAL_INTERFACE_ENABLED;
-const DmiChassis_Item_SecurityStatus DmiChassis_Item::SecurityStatus_MIN;
-const DmiChassis_Item_SecurityStatus DmiChassis_Item::SecurityStatus_MAX;
-const int DmiChassis_Item::SecurityStatus_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiCaches_Item_Location_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiCaches_Item_Location DmiCaches_Item::LOCATION_UNKNOWN;
-const DmiCaches_Item_Location DmiCaches_Item::LOCATION_INTERNAL;
-const DmiCaches_Item_Location DmiCaches_Item::LOCATION_EXTERNAL;
-const DmiCaches_Item_Location DmiCaches_Item::LOCATION_RESERVED;
-const DmiCaches_Item_Location DmiCaches_Item::Location_MIN;
-const DmiCaches_Item_Location DmiCaches_Item::Location_MAX;
-const int DmiCaches_Item::Location_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiCaches_Item_Status_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiCaches_Item_Status DmiCaches_Item::STATUS_UNKNOWN;
-const DmiCaches_Item_Status DmiCaches_Item::STATUS_ENABLED;
-const DmiCaches_Item_Status DmiCaches_Item::STATUS_DISABLED;
-const DmiCaches_Item_Status DmiCaches_Item::Status_MIN;
-const DmiCaches_Item_Status DmiCaches_Item::Status_MAX;
-const int DmiCaches_Item::Status_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiCaches_Item_Mode_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiCaches_Item_Mode DmiCaches_Item::MODE_UNKNOWN;
-const DmiCaches_Item_Mode DmiCaches_Item::MODE_WRITE_THRU;
-const DmiCaches_Item_Mode DmiCaches_Item::MODE_WRITE_BACK;
-const DmiCaches_Item_Mode DmiCaches_Item::MODE_WRITE_WITH_MEMORY_ADDRESS;
-const DmiCaches_Item_Mode DmiCaches_Item::Mode_MIN;
-const DmiCaches_Item_Mode DmiCaches_Item::Mode_MAX;
-const int DmiCaches_Item::Mode_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiCaches_Item_Level_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiCaches_Item_Level DmiCaches_Item::LEVEL_UNKNOWN;
-const DmiCaches_Item_Level DmiCaches_Item::LEVEL_L1;
-const DmiCaches_Item_Level DmiCaches_Item::LEVEL_L2;
-const DmiCaches_Item_Level DmiCaches_Item::LEVEL_L3;
-const DmiCaches_Item_Level DmiCaches_Item::Level_MIN;
-const DmiCaches_Item_Level DmiCaches_Item::Level_MAX;
-const int DmiCaches_Item::Level_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiCaches_Item_SRAMType_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 4:
-    case 8:
-    case 16:
-    case 32:
-    case 64:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiCaches_Item_SRAMType DmiCaches_Item::SRAM_TYPE_BAD;
-const DmiCaches_Item_SRAMType DmiCaches_Item::SRAM_TYPE_OTHER;
-const DmiCaches_Item_SRAMType DmiCaches_Item::SRAM_TYPE_UNKNOWN;
-const DmiCaches_Item_SRAMType DmiCaches_Item::SRAM_TYPE_NON_BURST;
-const DmiCaches_Item_SRAMType DmiCaches_Item::SRAM_TYPE_BURST;
-const DmiCaches_Item_SRAMType DmiCaches_Item::SRAM_TYPE_PIPELINE_BURST;
-const DmiCaches_Item_SRAMType DmiCaches_Item::SRAM_TYPE_SYNCHRONOUS;
-const DmiCaches_Item_SRAMType DmiCaches_Item::SRAM_TYPE_ASYNCHRONOUS;
-const DmiCaches_Item_SRAMType DmiCaches_Item::SRAMType_MIN;
-const DmiCaches_Item_SRAMType DmiCaches_Item::SRAMType_MAX;
-const int DmiCaches_Item::SRAMType_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiCaches_Item_ErrorCorrectionType_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiCaches_Item_ErrorCorrectionType DmiCaches_Item::ERROR_CORRECTION_TYPE_UNKNOWN;
-const DmiCaches_Item_ErrorCorrectionType DmiCaches_Item::ERROR_CORRECTION_TYPE_OTHER;
-const DmiCaches_Item_ErrorCorrectionType DmiCaches_Item::ERROR_CORRECTION_TYPE_NONE;
-const DmiCaches_Item_ErrorCorrectionType DmiCaches_Item::ERROR_CORRECTION_TYPE_PARITY;
-const DmiCaches_Item_ErrorCorrectionType DmiCaches_Item::ERROR_CORRECTION_TYPE_SINGLE_BIT_ECC;
-const DmiCaches_Item_ErrorCorrectionType DmiCaches_Item::ERROR_CORRECTION_TYPE_MULTI_BIT_ECC;
-const DmiCaches_Item_ErrorCorrectionType DmiCaches_Item::ErrorCorrectionType_MIN;
-const DmiCaches_Item_ErrorCorrectionType DmiCaches_Item::ErrorCorrectionType_MAX;
-const int DmiCaches_Item::ErrorCorrectionType_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiCaches_Item_Type_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiCaches_Item_Type DmiCaches_Item::TYPE_UNKNOWN;
-const DmiCaches_Item_Type DmiCaches_Item::TYPE_OTHER;
-const DmiCaches_Item_Type DmiCaches_Item::TYPE_INSTRUCTION;
-const DmiCaches_Item_Type DmiCaches_Item::TYPE_DATA;
-const DmiCaches_Item_Type DmiCaches_Item::TYPE_UNIFIED;
-const DmiCaches_Item_Type DmiCaches_Item::Type_MIN;
-const DmiCaches_Item_Type DmiCaches_Item::Type_MAX;
-const int DmiCaches_Item::Type_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiCaches_Item_Associativity_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-    case 11:
-    case 12:
-    case 13:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiCaches_Item_Associativity DmiCaches_Item::ASSOCIATIVITY_UNKNOWN;
-const DmiCaches_Item_Associativity DmiCaches_Item::ASSOCIATIVITY_OTHER;
-const DmiCaches_Item_Associativity DmiCaches_Item::ASSOCIATIVITY_DIRECT_MAPPED;
-const DmiCaches_Item_Associativity DmiCaches_Item::ASSOCIATIVITY_2_WAY;
-const DmiCaches_Item_Associativity DmiCaches_Item::ASSOCIATIVITY_4_WAY;
-const DmiCaches_Item_Associativity DmiCaches_Item::ASSOCIATIVITY_FULLY;
-const DmiCaches_Item_Associativity DmiCaches_Item::ASSOCIATIVITY_8_WAY;
-const DmiCaches_Item_Associativity DmiCaches_Item::ASSOCIATIVITY_16_WAY;
-const DmiCaches_Item_Associativity DmiCaches_Item::ASSOCIATIVITY_12_WAY;
-const DmiCaches_Item_Associativity DmiCaches_Item::ASSOCIATIVITY_24_WAY;
-const DmiCaches_Item_Associativity DmiCaches_Item::ASSOCIATIVITY_32_WAY;
-const DmiCaches_Item_Associativity DmiCaches_Item::ASSOCIATIVITY_48_WAY;
-const DmiCaches_Item_Associativity DmiCaches_Item::ASSOCIATIVITY_64_WAY;
-const DmiCaches_Item_Associativity DmiCaches_Item::ASSOCIATIVITY_20_WAY;
-const DmiCaches_Item_Associativity DmiCaches_Item::Associativity_MIN;
-const DmiCaches_Item_Associativity DmiCaches_Item::Associativity_MAX;
-const int DmiCaches_Item::Associativity_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiProcessors_Item_Type_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiProcessors_Item_Type DmiProcessors_Item::TYPE_UNKNOWN;
-const DmiProcessors_Item_Type DmiProcessors_Item::TYPE_OTHER;
-const DmiProcessors_Item_Type DmiProcessors_Item::TYPE_CENTRAL_PROCESSOR;
-const DmiProcessors_Item_Type DmiProcessors_Item::TYPE_MATH_PROCESSOR;
-const DmiProcessors_Item_Type DmiProcessors_Item::TYPE_DSP_PROCESSOR;
-const DmiProcessors_Item_Type DmiProcessors_Item::TYPE_VIDEO_PROCESSOR;
-const DmiProcessors_Item_Type DmiProcessors_Item::Type_MIN;
-const DmiProcessors_Item_Type DmiProcessors_Item::Type_MAX;
-const int DmiProcessors_Item::Type_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiProcessors_Item_Status_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiProcessors_Item_Status DmiProcessors_Item::STATUS_UNKNOWN;
-const DmiProcessors_Item_Status DmiProcessors_Item::STATUS_ENABLED;
-const DmiProcessors_Item_Status DmiProcessors_Item::STATUS_DISABLED_BY_USER;
-const DmiProcessors_Item_Status DmiProcessors_Item::STATUS_DISABLED_BY_BIOS;
-const DmiProcessors_Item_Status DmiProcessors_Item::STATUS_IDLE;
-const DmiProcessors_Item_Status DmiProcessors_Item::STATUS_OTHER;
-const DmiProcessors_Item_Status DmiProcessors_Item::Status_MIN;
-const DmiProcessors_Item_Status DmiProcessors_Item::Status_MAX;
-const int DmiProcessors_Item::Status_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiProcessors_Item_Characteristics_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 4:
-    case 8:
-    case 16:
-    case 32:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiProcessors_Item_Characteristics DmiProcessors_Item::CHARACTERISTIC_NONE;
-const DmiProcessors_Item_Characteristics DmiProcessors_Item::CHARACTERISTIC_64BIT_CAPABLE;
-const DmiProcessors_Item_Characteristics DmiProcessors_Item::CHARACTERISTIC_MULTI_CORE;
-const DmiProcessors_Item_Characteristics DmiProcessors_Item::CHARACTERISTIC_HARDWARE_THREAD;
-const DmiProcessors_Item_Characteristics DmiProcessors_Item::CHARACTERISTIC_EXECUTE_PROTECTION;
-const DmiProcessors_Item_Characteristics DmiProcessors_Item::CHARACTERISTIC_ENHANCED_VIRTUALIZATION;
-const DmiProcessors_Item_Characteristics DmiProcessors_Item::CHARACTERISTIC_POWER_CONTROL;
-const DmiProcessors_Item_Characteristics DmiProcessors_Item::Characteristics_MIN;
-const DmiProcessors_Item_Characteristics DmiProcessors_Item::Characteristics_MAX;
-const int DmiProcessors_Item::Characteristics_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiSystemSlots_Item_Usage_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiSystemSlots_Item_Usage DmiSystemSlots_Item::USAGE_UNKNOWN;
-const DmiSystemSlots_Item_Usage DmiSystemSlots_Item::USAGE_OTHER;
-const DmiSystemSlots_Item_Usage DmiSystemSlots_Item::USAGE_AVAILABLE;
-const DmiSystemSlots_Item_Usage DmiSystemSlots_Item::USAGE_IN_USE;
-const DmiSystemSlots_Item_Usage DmiSystemSlots_Item::Usage_MIN;
-const DmiSystemSlots_Item_Usage DmiSystemSlots_Item::Usage_MAX;
-const int DmiSystemSlots_Item::Usage_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiSystemSlots_Item_Length_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiSystemSlots_Item_Length DmiSystemSlots_Item::LENGTH_UNKNOWN;
-const DmiSystemSlots_Item_Length DmiSystemSlots_Item::LENGTH_OTHER;
-const DmiSystemSlots_Item_Length DmiSystemSlots_Item::LENGTH_SHORT;
-const DmiSystemSlots_Item_Length DmiSystemSlots_Item::LENGTH_LONG;
-const DmiSystemSlots_Item_Length DmiSystemSlots_Item::Length_MIN;
-const DmiSystemSlots_Item_Length DmiSystemSlots_Item::Length_MAX;
-const int DmiSystemSlots_Item::Length_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool AtaDrives_Item_BusType_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-    case 15:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_UNKNOWN;
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_SCSI;
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_ATAPI;
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_ATA;
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_IEEE1394;
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_SSA;
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_FIBRE;
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_USB;
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_RAID;
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_ISCSI;
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_SAS;
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_SATA;
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_SD;
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_MMC;
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_VIRTUAL;
-const AtaDrives_Item_BusType AtaDrives_Item::BUS_TYPE_FILE_BACKED_VIRTUAL;
-const AtaDrives_Item_BusType AtaDrives_Item::BusType_MIN;
-const AtaDrives_Item_BusType AtaDrives_Item::BusType_MAX;
-const int AtaDrives_Item::BusType_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool AtaDrives_Item_TransferMode_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-    case 11:
-    case 12:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const AtaDrives_Item_TransferMode AtaDrives_Item::TRANSFER_MODE_UNKNOWN;
-const AtaDrives_Item_TransferMode AtaDrives_Item::TRANSFER_MODE_PIO;
-const AtaDrives_Item_TransferMode AtaDrives_Item::TRANSFER_MODE_PIO_DMA;
-const AtaDrives_Item_TransferMode AtaDrives_Item::TRANSFER_MODE_ULTRA_DMA_133;
-const AtaDrives_Item_TransferMode AtaDrives_Item::TRANSFER_MODE_ULTRA_DMA_100;
-const AtaDrives_Item_TransferMode AtaDrives_Item::TRANSFER_MODE_ULTRA_DMA_66;
-const AtaDrives_Item_TransferMode AtaDrives_Item::TRANSFER_MODE_ULTRA_DMA_44;
-const AtaDrives_Item_TransferMode AtaDrives_Item::TRANSFER_MODE_ULTRA_DMA_33;
-const AtaDrives_Item_TransferMode AtaDrives_Item::TRANSFER_MODE_ULTRA_DMA_25;
-const AtaDrives_Item_TransferMode AtaDrives_Item::TRANSFER_MODE_ULTRA_DMA_16;
-const AtaDrives_Item_TransferMode AtaDrives_Item::TRANSFER_MODE_SATA_600;
-const AtaDrives_Item_TransferMode AtaDrives_Item::TRANSFER_MODE_SATA_300;
-const AtaDrives_Item_TransferMode AtaDrives_Item::TRANSFER_MODE_SATA_150;
-const AtaDrives_Item_TransferMode AtaDrives_Item::TransferMode_MIN;
-const AtaDrives_Item_TransferMode AtaDrives_Item::TransferMode_MAX;
-const int AtaDrives_Item::TransferMode_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool AtaDrives_Item_Features_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 4:
-    case 8:
-    case 16:
-    case 32:
-    case 64:
-    case 128:
-    case 256:
-    case 512:
-    case 1024:
-    case 2048:
-    case 4096:
-    case 8192:
-    case 16384:
-    case 32768:
-    case 65536:
-    case 131072:
-    case 262144:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_UNKNOWN;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_48BIT_LBA;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_ADVANCED_POWER_MANAGEMENT;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_SMART;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_SMART_ERROR_LOGGING;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_SMART_SELF_TEST;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_STREAMING;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_GENERAL_PURPOSE_LOGGING;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_SECURITY_MODE;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_POWER_MANAGEMENT;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_WRITE_CACHE;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_READ_LOCK_AHEAD;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_HOST_PROTECTED_AREA;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_RELEASE_INTERRUPT;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_POWER_UP_IN_STANDBY;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_DEVICE_CONFIGURATION_OVERLAY;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_SERVICE_INTERRUPT;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_NATIVE_COMMAND_QUEUING;
-const AtaDrives_Item_Features AtaDrives_Item::FEATURE_TRIM;
-const AtaDrives_Item_Features AtaDrives_Item::Features_MIN;
-const AtaDrives_Item_Features AtaDrives_Item::Features_MAX;
-const int AtaDrives_Item::Features_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool Monitors_Item_InputSignalType_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const Monitors_Item_InputSignalType Monitors_Item::INPUT_SIGNAL_TYPE_UNKNOWN;
-const Monitors_Item_InputSignalType Monitors_Item::INPUT_SIGNAL_TYPE_ANALOG;
-const Monitors_Item_InputSignalType Monitors_Item::INPUT_SIGNAL_TYPE_DIGITAL;
-const Monitors_Item_InputSignalType Monitors_Item::InputSignalType_MIN;
-const Monitors_Item_InputSignalType Monitors_Item::InputSignalType_MAX;
-const int Monitors_Item::InputSignalType_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+namespace proto {
 bool PowerOptions_Battery_State_IsValid(int value) {
   switch (value) {
     case 0:
@@ -2344,7 +1792,7 @@ DmiBios_Feature::DmiBios_Feature()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBios_Feature();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiBios.Feature)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiBios.Feature)
 }
 DmiBios_Feature::DmiBios_Feature(const DmiBios_Feature& from)
   : ::google::protobuf::MessageLite(),
@@ -2356,7 +1804,7 @@ DmiBios_Feature::DmiBios_Feature(const DmiBios_Feature& from)
     name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
   }
   supported_ = from.supported_;
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiBios.Feature)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiBios.Feature)
 }
 
 void DmiBios_Feature::SharedCtor() {
@@ -2366,7 +1814,7 @@ void DmiBios_Feature::SharedCtor() {
 }
 
 DmiBios_Feature::~DmiBios_Feature() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiBios.Feature)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiBios.Feature)
   SharedDtor();
 }
 
@@ -2393,7 +1841,7 @@ DmiBios_Feature* DmiBios_Feature::New(::google::protobuf::Arena* arena) const {
 }
 
 void DmiBios_Feature::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiBios.Feature)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiBios.Feature)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -2413,7 +1861,7 @@ bool DmiBios_Feature::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiBios.Feature)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiBios.Feature)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -2428,7 +1876,7 @@ bool DmiBios_Feature::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->name().data(), static_cast<int>(this->name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBios.Feature.name"));
+            "aspia.proto.DmiBios.Feature.name"));
         } else {
           goto handle_unusual;
         }
@@ -2461,17 +1909,17 @@ bool DmiBios_Feature::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiBios.Feature)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiBios.Feature)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiBios.Feature)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiBios.Feature)
   return false;
 #undef DO_
 }
 
 void DmiBios_Feature::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiBios.Feature)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiBios.Feature)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -2480,7 +1928,7 @@ void DmiBios_Feature::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), static_cast<int>(this->name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBios.Feature.name");
+      "aspia.proto.DmiBios.Feature.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->name(), output);
   }
@@ -2492,11 +1940,11 @@ void DmiBios_Feature::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiBios.Feature)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiBios.Feature)
 }
 
 size_t DmiBios_Feature::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiBios.Feature)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiBios.Feature)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -2526,7 +1974,7 @@ void DmiBios_Feature::CheckTypeAndMergeFrom(
 }
 
 void DmiBios_Feature::MergeFrom(const DmiBios_Feature& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiBios.Feature)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiBios.Feature)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -2542,7 +1990,7 @@ void DmiBios_Feature::MergeFrom(const DmiBios_Feature& from) {
 }
 
 void DmiBios_Feature::CopyFrom(const DmiBios_Feature& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiBios.Feature)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiBios.Feature)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -2565,7 +2013,7 @@ void DmiBios_Feature::InternalSwap(DmiBios_Feature* other) {
 }
 
 ::std::string DmiBios_Feature::GetTypeName() const {
-  return "aspia.system_info.DmiBios.Feature";
+  return "aspia.proto.DmiBios.Feature";
 }
 
 
@@ -2591,7 +2039,7 @@ DmiBios::DmiBios()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBios();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiBios)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiBios)
 }
 DmiBios::DmiBios(const DmiBios& from)
   : ::google::protobuf::MessageLite(),
@@ -2626,7 +2074,7 @@ DmiBios::DmiBios(const DmiBios& from)
   ::memcpy(&size_, &from.size_,
     static_cast<size_t>(reinterpret_cast<char*>(&runtime_size_) -
     reinterpret_cast<char*>(&size_)) + sizeof(runtime_size_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiBios)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiBios)
 }
 
 void DmiBios::SharedCtor() {
@@ -2643,7 +2091,7 @@ void DmiBios::SharedCtor() {
 }
 
 DmiBios::~DmiBios() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiBios)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiBios)
   SharedDtor();
 }
 
@@ -2675,7 +2123,7 @@ DmiBios* DmiBios::New(::google::protobuf::Arena* arena) const {
 }
 
 void DmiBios::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiBios)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiBios)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -2703,7 +2151,7 @@ bool DmiBios::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiBios)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiBios)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -2718,7 +2166,7 @@ bool DmiBios::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBios.manufacturer"));
+            "aspia.proto.DmiBios.manufacturer"));
         } else {
           goto handle_unusual;
         }
@@ -2734,7 +2182,7 @@ bool DmiBios::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->version().data(), static_cast<int>(this->version().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBios.version"));
+            "aspia.proto.DmiBios.version"));
         } else {
           goto handle_unusual;
         }
@@ -2750,7 +2198,7 @@ bool DmiBios::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->date().data(), static_cast<int>(this->date().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBios.date"));
+            "aspia.proto.DmiBios.date"));
         } else {
           goto handle_unusual;
         }
@@ -2780,7 +2228,7 @@ bool DmiBios::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->bios_revision().data(), static_cast<int>(this->bios_revision().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBios.bios_revision"));
+            "aspia.proto.DmiBios.bios_revision"));
         } else {
           goto handle_unusual;
         }
@@ -2796,7 +2244,7 @@ bool DmiBios::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->firmware_revision().data(), static_cast<int>(this->firmware_revision().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBios.firmware_revision"));
+            "aspia.proto.DmiBios.firmware_revision"));
         } else {
           goto handle_unusual;
         }
@@ -2812,7 +2260,7 @@ bool DmiBios::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->address().data(), static_cast<int>(this->address().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBios.address"));
+            "aspia.proto.DmiBios.address"));
         } else {
           goto handle_unusual;
         }
@@ -2833,7 +2281,7 @@ bool DmiBios::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .aspia.system_info.DmiBios.Feature feature = 9;
+      // repeated .aspia.proto.DmiBios.Feature feature = 9;
       case 9: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(74u /* 74 & 0xFF */)) {
@@ -2856,17 +2304,17 @@ bool DmiBios::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiBios)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiBios)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiBios)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiBios)
   return false;
 #undef DO_
 }
 
 void DmiBios::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiBios)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiBios)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -2875,7 +2323,7 @@ void DmiBios::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBios.manufacturer");
+      "aspia.proto.DmiBios.manufacturer");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->manufacturer(), output);
   }
@@ -2885,7 +2333,7 @@ void DmiBios::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->version().data(), static_cast<int>(this->version().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBios.version");
+      "aspia.proto.DmiBios.version");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->version(), output);
   }
@@ -2895,7 +2343,7 @@ void DmiBios::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->date().data(), static_cast<int>(this->date().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBios.date");
+      "aspia.proto.DmiBios.date");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->date(), output);
   }
@@ -2910,7 +2358,7 @@ void DmiBios::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->bios_revision().data(), static_cast<int>(this->bios_revision().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBios.bios_revision");
+      "aspia.proto.DmiBios.bios_revision");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->bios_revision(), output);
   }
@@ -2920,7 +2368,7 @@ void DmiBios::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->firmware_revision().data(), static_cast<int>(this->firmware_revision().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBios.firmware_revision");
+      "aspia.proto.DmiBios.firmware_revision");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->firmware_revision(), output);
   }
@@ -2930,7 +2378,7 @@ void DmiBios::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->address().data(), static_cast<int>(this->address().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBios.address");
+      "aspia.proto.DmiBios.address");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       7, this->address(), output);
   }
@@ -2940,7 +2388,7 @@ void DmiBios::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(8, this->runtime_size(), output);
   }
 
-  // repeated .aspia.system_info.DmiBios.Feature feature = 9;
+  // repeated .aspia.proto.DmiBios.Feature feature = 9;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->feature_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -2949,16 +2397,16 @@ void DmiBios::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiBios)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiBios)
 }
 
 size_t DmiBios::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiBios)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiBios)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.DmiBios.Feature feature = 9;
+  // repeated .aspia.proto.DmiBios.Feature feature = 9;
   {
     unsigned int count = static_cast<unsigned int>(this->feature_size());
     total_size += 1UL * count;
@@ -3038,7 +2486,7 @@ void DmiBios::CheckTypeAndMergeFrom(
 }
 
 void DmiBios::MergeFrom(const DmiBios& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiBios)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiBios)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -3078,7 +2526,7 @@ void DmiBios::MergeFrom(const DmiBios& from) {
 }
 
 void DmiBios::CopyFrom(const DmiBios& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiBios)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiBios)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -3108,7 +2556,7 @@ void DmiBios::InternalSwap(DmiBios* other) {
 }
 
 ::std::string DmiBios::GetTypeName() const {
-  return "aspia.system_info.DmiBios";
+  return "aspia.proto.DmiBios";
 }
 
 
@@ -3133,7 +2581,7 @@ DmiSystem::DmiSystem()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiSystem();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiSystem)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiSystem)
 }
 DmiSystem::DmiSystem(const DmiSystem& from)
   : ::google::protobuf::MessageLite(),
@@ -3172,7 +2620,7 @@ DmiSystem::DmiSystem(const DmiSystem& from)
   if (from.family().size() > 0) {
     family_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.family_);
   }
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiSystem)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiSystem)
 }
 
 void DmiSystem::SharedCtor() {
@@ -3188,7 +2636,7 @@ void DmiSystem::SharedCtor() {
 }
 
 DmiSystem::~DmiSystem() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiSystem)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiSystem)
   SharedDtor();
 }
 
@@ -3222,7 +2670,7 @@ DmiSystem* DmiSystem::New(::google::protobuf::Arena* arena) const {
 }
 
 void DmiSystem::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiSystem)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiSystem)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -3248,7 +2696,7 @@ bool DmiSystem::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiSystem)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiSystem)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -3263,7 +2711,7 @@ bool DmiSystem::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiSystem.manufacturer"));
+            "aspia.proto.DmiSystem.manufacturer"));
         } else {
           goto handle_unusual;
         }
@@ -3279,7 +2727,7 @@ bool DmiSystem::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->product_name().data(), static_cast<int>(this->product_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiSystem.product_name"));
+            "aspia.proto.DmiSystem.product_name"));
         } else {
           goto handle_unusual;
         }
@@ -3295,7 +2743,7 @@ bool DmiSystem::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->version().data(), static_cast<int>(this->version().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiSystem.version"));
+            "aspia.proto.DmiSystem.version"));
         } else {
           goto handle_unusual;
         }
@@ -3311,7 +2759,7 @@ bool DmiSystem::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->serial_number().data(), static_cast<int>(this->serial_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiSystem.serial_number"));
+            "aspia.proto.DmiSystem.serial_number"));
         } else {
           goto handle_unusual;
         }
@@ -3327,7 +2775,7 @@ bool DmiSystem::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->uuid().data(), static_cast<int>(this->uuid().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiSystem.uuid"));
+            "aspia.proto.DmiSystem.uuid"));
         } else {
           goto handle_unusual;
         }
@@ -3343,7 +2791,7 @@ bool DmiSystem::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->wakeup_type().data(), static_cast<int>(this->wakeup_type().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiSystem.wakeup_type"));
+            "aspia.proto.DmiSystem.wakeup_type"));
         } else {
           goto handle_unusual;
         }
@@ -3359,7 +2807,7 @@ bool DmiSystem::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->sku_number().data(), static_cast<int>(this->sku_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiSystem.sku_number"));
+            "aspia.proto.DmiSystem.sku_number"));
         } else {
           goto handle_unusual;
         }
@@ -3375,7 +2823,7 @@ bool DmiSystem::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->family().data(), static_cast<int>(this->family().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiSystem.family"));
+            "aspia.proto.DmiSystem.family"));
         } else {
           goto handle_unusual;
         }
@@ -3394,17 +2842,17 @@ bool DmiSystem::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiSystem)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiSystem)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiSystem)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiSystem)
   return false;
 #undef DO_
 }
 
 void DmiSystem::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiSystem)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiSystem)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -3413,7 +2861,7 @@ void DmiSystem::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiSystem.manufacturer");
+      "aspia.proto.DmiSystem.manufacturer");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->manufacturer(), output);
   }
@@ -3423,7 +2871,7 @@ void DmiSystem::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->product_name().data(), static_cast<int>(this->product_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiSystem.product_name");
+      "aspia.proto.DmiSystem.product_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->product_name(), output);
   }
@@ -3433,7 +2881,7 @@ void DmiSystem::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->version().data(), static_cast<int>(this->version().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiSystem.version");
+      "aspia.proto.DmiSystem.version");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->version(), output);
   }
@@ -3443,7 +2891,7 @@ void DmiSystem::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->serial_number().data(), static_cast<int>(this->serial_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiSystem.serial_number");
+      "aspia.proto.DmiSystem.serial_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->serial_number(), output);
   }
@@ -3453,7 +2901,7 @@ void DmiSystem::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->uuid().data(), static_cast<int>(this->uuid().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiSystem.uuid");
+      "aspia.proto.DmiSystem.uuid");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->uuid(), output);
   }
@@ -3463,7 +2911,7 @@ void DmiSystem::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->wakeup_type().data(), static_cast<int>(this->wakeup_type().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiSystem.wakeup_type");
+      "aspia.proto.DmiSystem.wakeup_type");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->wakeup_type(), output);
   }
@@ -3473,7 +2921,7 @@ void DmiSystem::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->sku_number().data(), static_cast<int>(this->sku_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiSystem.sku_number");
+      "aspia.proto.DmiSystem.sku_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       7, this->sku_number(), output);
   }
@@ -3483,18 +2931,18 @@ void DmiSystem::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->family().data(), static_cast<int>(this->family().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiSystem.family");
+      "aspia.proto.DmiSystem.family");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       8, this->family(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiSystem)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiSystem)
 }
 
 size_t DmiSystem::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiSystem)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiSystem)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -3568,7 +3016,7 @@ void DmiSystem::CheckTypeAndMergeFrom(
 }
 
 void DmiSystem::MergeFrom(const DmiSystem& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiSystem)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiSystem)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -3609,7 +3057,7 @@ void DmiSystem::MergeFrom(const DmiSystem& from) {
 }
 
 void DmiSystem::CopyFrom(const DmiSystem& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiSystem)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiSystem)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -3638,7 +3086,7 @@ void DmiSystem::InternalSwap(DmiSystem* other) {
 }
 
 ::std::string DmiSystem::GetTypeName() const {
-  return "aspia.system_info.DmiSystem";
+  return "aspia.proto.DmiSystem";
 }
 
 
@@ -3657,7 +3105,7 @@ DmiBaseboard_Item_Feature::DmiBaseboard_Item_Feature()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBaseboard_Item_Feature();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiBaseboard.Item.Feature)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiBaseboard.Item.Feature)
 }
 DmiBaseboard_Item_Feature::DmiBaseboard_Item_Feature(const DmiBaseboard_Item_Feature& from)
   : ::google::protobuf::MessageLite(),
@@ -3669,7 +3117,7 @@ DmiBaseboard_Item_Feature::DmiBaseboard_Item_Feature(const DmiBaseboard_Item_Fea
     name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
   }
   supported_ = from.supported_;
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiBaseboard.Item.Feature)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiBaseboard.Item.Feature)
 }
 
 void DmiBaseboard_Item_Feature::SharedCtor() {
@@ -3679,7 +3127,7 @@ void DmiBaseboard_Item_Feature::SharedCtor() {
 }
 
 DmiBaseboard_Item_Feature::~DmiBaseboard_Item_Feature() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiBaseboard.Item.Feature)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiBaseboard.Item.Feature)
   SharedDtor();
 }
 
@@ -3706,7 +3154,7 @@ DmiBaseboard_Item_Feature* DmiBaseboard_Item_Feature::New(::google::protobuf::Ar
 }
 
 void DmiBaseboard_Item_Feature::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiBaseboard.Item.Feature)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiBaseboard.Item.Feature)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -3726,7 +3174,7 @@ bool DmiBaseboard_Item_Feature::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiBaseboard.Item.Feature)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiBaseboard.Item.Feature)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -3741,7 +3189,7 @@ bool DmiBaseboard_Item_Feature::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->name().data(), static_cast<int>(this->name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBaseboard.Item.Feature.name"));
+            "aspia.proto.DmiBaseboard.Item.Feature.name"));
         } else {
           goto handle_unusual;
         }
@@ -3774,17 +3222,17 @@ bool DmiBaseboard_Item_Feature::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiBaseboard.Item.Feature)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiBaseboard.Item.Feature)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiBaseboard.Item.Feature)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiBaseboard.Item.Feature)
   return false;
 #undef DO_
 }
 
 void DmiBaseboard_Item_Feature::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiBaseboard.Item.Feature)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiBaseboard.Item.Feature)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -3793,7 +3241,7 @@ void DmiBaseboard_Item_Feature::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), static_cast<int>(this->name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBaseboard.Item.Feature.name");
+      "aspia.proto.DmiBaseboard.Item.Feature.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->name(), output);
   }
@@ -3805,11 +3253,11 @@ void DmiBaseboard_Item_Feature::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiBaseboard.Item.Feature)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiBaseboard.Item.Feature)
 }
 
 size_t DmiBaseboard_Item_Feature::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiBaseboard.Item.Feature)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiBaseboard.Item.Feature)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -3839,7 +3287,7 @@ void DmiBaseboard_Item_Feature::CheckTypeAndMergeFrom(
 }
 
 void DmiBaseboard_Item_Feature::MergeFrom(const DmiBaseboard_Item_Feature& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiBaseboard.Item.Feature)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiBaseboard.Item.Feature)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -3855,7 +3303,7 @@ void DmiBaseboard_Item_Feature::MergeFrom(const DmiBaseboard_Item_Feature& from)
 }
 
 void DmiBaseboard_Item_Feature::CopyFrom(const DmiBaseboard_Item_Feature& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiBaseboard.Item.Feature)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiBaseboard.Item.Feature)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -3878,7 +3326,7 @@ void DmiBaseboard_Item_Feature::InternalSwap(DmiBaseboard_Item_Feature* other) {
 }
 
 ::std::string DmiBaseboard_Item_Feature::GetTypeName() const {
-  return "aspia.system_info.DmiBaseboard.Item.Feature";
+  return "aspia.proto.DmiBaseboard.Item.Feature";
 }
 
 
@@ -3903,7 +3351,7 @@ DmiBaseboard_Item::DmiBaseboard_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBaseboard_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiBaseboard.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiBaseboard.Item)
 }
 DmiBaseboard_Item::DmiBaseboard_Item(const DmiBaseboard_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -3935,8 +3383,11 @@ DmiBaseboard_Item::DmiBaseboard_Item(const DmiBaseboard_Item& from)
   if (from.location_in_chassis().size() > 0) {
     location_in_chassis_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.location_in_chassis_);
   }
-  type_ = from.type_;
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiBaseboard.Item)
+  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.type().size() > 0) {
+    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiBaseboard.Item)
 }
 
 void DmiBaseboard_Item::SharedCtor() {
@@ -3946,12 +3397,12 @@ void DmiBaseboard_Item::SharedCtor() {
   serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   asset_tag_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   location_in_chassis_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_ = 0;
+  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   _cached_size_ = 0;
 }
 
 DmiBaseboard_Item::~DmiBaseboard_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiBaseboard.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiBaseboard.Item)
   SharedDtor();
 }
 
@@ -3962,6 +3413,7 @@ void DmiBaseboard_Item::SharedDtor() {
   serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   asset_tag_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   location_in_chassis_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void DmiBaseboard_Item::SetCachedSize(int size) const {
@@ -3983,7 +3435,7 @@ DmiBaseboard_Item* DmiBaseboard_Item::New(::google::protobuf::Arena* arena) cons
 }
 
 void DmiBaseboard_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiBaseboard.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiBaseboard.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -3995,7 +3447,7 @@ void DmiBaseboard_Item::Clear() {
   serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   asset_tag_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   location_in_chassis_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_ = 0;
+  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   _internal_metadata_.Clear();
 }
 
@@ -4009,7 +3461,7 @@ bool DmiBaseboard_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiBaseboard.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiBaseboard.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -4024,7 +3476,7 @@ bool DmiBaseboard_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBaseboard.Item.manufacturer"));
+            "aspia.proto.DmiBaseboard.Item.manufacturer"));
         } else {
           goto handle_unusual;
         }
@@ -4040,7 +3492,7 @@ bool DmiBaseboard_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->product_name().data(), static_cast<int>(this->product_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBaseboard.Item.product_name"));
+            "aspia.proto.DmiBaseboard.Item.product_name"));
         } else {
           goto handle_unusual;
         }
@@ -4056,7 +3508,7 @@ bool DmiBaseboard_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->version().data(), static_cast<int>(this->version().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBaseboard.Item.version"));
+            "aspia.proto.DmiBaseboard.Item.version"));
         } else {
           goto handle_unusual;
         }
@@ -4072,7 +3524,7 @@ bool DmiBaseboard_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->serial_number().data(), static_cast<int>(this->serial_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBaseboard.Item.serial_number"));
+            "aspia.proto.DmiBaseboard.Item.serial_number"));
         } else {
           goto handle_unusual;
         }
@@ -4088,14 +3540,14 @@ bool DmiBaseboard_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->asset_tag().data(), static_cast<int>(this->asset_tag().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBaseboard.Item.asset_tag"));
+            "aspia.proto.DmiBaseboard.Item.asset_tag"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // repeated .aspia.system_info.DmiBaseboard.Item.Feature feature = 6;
+      // repeated .aspia.proto.DmiBaseboard.Item.Feature feature = 6;
       case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
@@ -4115,22 +3567,23 @@ bool DmiBaseboard_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->location_in_chassis().data(), static_cast<int>(this->location_in_chassis().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBaseboard.Item.location_in_chassis"));
+            "aspia.proto.DmiBaseboard.Item.location_in_chassis"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiBaseboard.Item.BoardType type = 8;
+      // string type = 8;
       case 8: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(64u /* 64 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_type(static_cast< ::aspia::system_info::DmiBaseboard_Item_BoardType >(value));
+            static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->type().data(), static_cast<int>(this->type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiBaseboard.Item.type"));
         } else {
           goto handle_unusual;
         }
@@ -4149,17 +3602,17 @@ bool DmiBaseboard_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiBaseboard.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiBaseboard.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiBaseboard.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiBaseboard.Item)
   return false;
 #undef DO_
 }
 
 void DmiBaseboard_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiBaseboard.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiBaseboard.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -4168,7 +3621,7 @@ void DmiBaseboard_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBaseboard.Item.manufacturer");
+      "aspia.proto.DmiBaseboard.Item.manufacturer");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->manufacturer(), output);
   }
@@ -4178,7 +3631,7 @@ void DmiBaseboard_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->product_name().data(), static_cast<int>(this->product_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBaseboard.Item.product_name");
+      "aspia.proto.DmiBaseboard.Item.product_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->product_name(), output);
   }
@@ -4188,7 +3641,7 @@ void DmiBaseboard_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->version().data(), static_cast<int>(this->version().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBaseboard.Item.version");
+      "aspia.proto.DmiBaseboard.Item.version");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->version(), output);
   }
@@ -4198,7 +3651,7 @@ void DmiBaseboard_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->serial_number().data(), static_cast<int>(this->serial_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBaseboard.Item.serial_number");
+      "aspia.proto.DmiBaseboard.Item.serial_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->serial_number(), output);
   }
@@ -4208,12 +3661,12 @@ void DmiBaseboard_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->asset_tag().data(), static_cast<int>(this->asset_tag().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBaseboard.Item.asset_tag");
+      "aspia.proto.DmiBaseboard.Item.asset_tag");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->asset_tag(), output);
   }
 
-  // repeated .aspia.system_info.DmiBaseboard.Item.Feature feature = 6;
+  // repeated .aspia.proto.DmiBaseboard.Item.Feature feature = 6;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->feature_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -4225,29 +3678,33 @@ void DmiBaseboard_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->location_in_chassis().data(), static_cast<int>(this->location_in_chassis().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBaseboard.Item.location_in_chassis");
+      "aspia.proto.DmiBaseboard.Item.location_in_chassis");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       7, this->location_in_chassis(), output);
   }
 
-  // .aspia.system_info.DmiBaseboard.Item.BoardType type = 8;
-  if (this->type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string type = 8;
+  if (this->type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->type().data(), static_cast<int>(this->type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiBaseboard.Item.type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       8, this->type(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiBaseboard.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiBaseboard.Item)
 }
 
 size_t DmiBaseboard_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiBaseboard.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiBaseboard.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.DmiBaseboard.Item.Feature feature = 6;
+  // repeated .aspia.proto.DmiBaseboard.Item.Feature feature = 6;
   {
     unsigned int count = static_cast<unsigned int>(this->feature_size());
     total_size += 1UL * count;
@@ -4300,10 +3757,11 @@ size_t DmiBaseboard_Item::ByteSizeLong() const {
         this->location_in_chassis());
   }
 
-  // .aspia.system_info.DmiBaseboard.Item.BoardType type = 8;
-  if (this->type() != 0) {
+  // string type = 8;
+  if (this->type().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->type());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -4319,7 +3777,7 @@ void DmiBaseboard_Item::CheckTypeAndMergeFrom(
 }
 
 void DmiBaseboard_Item::MergeFrom(const DmiBaseboard_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiBaseboard.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiBaseboard.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -4350,13 +3808,14 @@ void DmiBaseboard_Item::MergeFrom(const DmiBaseboard_Item& from) {
 
     location_in_chassis_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.location_in_chassis_);
   }
-  if (from.type() != 0) {
-    set_type(from.type());
+  if (from.type().size() > 0) {
+
+    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
   }
 }
 
 void DmiBaseboard_Item::CopyFrom(const DmiBaseboard_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiBaseboard.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiBaseboard.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -4379,13 +3838,13 @@ void DmiBaseboard_Item::InternalSwap(DmiBaseboard_Item* other) {
   serial_number_.Swap(&other->serial_number_);
   asset_tag_.Swap(&other->asset_tag_);
   location_in_chassis_.Swap(&other->location_in_chassis_);
-  swap(type_, other->type_);
+  type_.Swap(&other->type_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string DmiBaseboard_Item::GetTypeName() const {
-  return "aspia.system_info.DmiBaseboard.Item";
+  return "aspia.proto.DmiBaseboard.Item";
 }
 
 
@@ -4403,7 +3862,7 @@ DmiBaseboard::DmiBaseboard()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBaseboard();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiBaseboard)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiBaseboard)
 }
 DmiBaseboard::DmiBaseboard(const DmiBaseboard& from)
   : ::google::protobuf::MessageLite(),
@@ -4411,7 +3870,7 @@ DmiBaseboard::DmiBaseboard(const DmiBaseboard& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiBaseboard)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiBaseboard)
 }
 
 void DmiBaseboard::SharedCtor() {
@@ -4419,7 +3878,7 @@ void DmiBaseboard::SharedCtor() {
 }
 
 DmiBaseboard::~DmiBaseboard() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiBaseboard)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiBaseboard)
   SharedDtor();
 }
 
@@ -4445,7 +3904,7 @@ DmiBaseboard* DmiBaseboard::New(::google::protobuf::Arena* arena) const {
 }
 
 void DmiBaseboard::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiBaseboard)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiBaseboard)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -4464,13 +3923,13 @@ bool DmiBaseboard::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiBaseboard)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiBaseboard)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.DmiBaseboard.Item item = 1;
+      // repeated .aspia.proto.DmiBaseboard.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -4493,21 +3952,21 @@ bool DmiBaseboard::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiBaseboard)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiBaseboard)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiBaseboard)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiBaseboard)
   return false;
 #undef DO_
 }
 
 void DmiBaseboard::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiBaseboard)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiBaseboard)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.DmiBaseboard.Item item = 1;
+  // repeated .aspia.proto.DmiBaseboard.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -4516,16 +3975,16 @@ void DmiBaseboard::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiBaseboard)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiBaseboard)
 }
 
 size_t DmiBaseboard::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiBaseboard)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiBaseboard)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.DmiBaseboard.Item item = 1;
+  // repeated .aspia.proto.DmiBaseboard.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -4549,7 +4008,7 @@ void DmiBaseboard::CheckTypeAndMergeFrom(
 }
 
 void DmiBaseboard::MergeFrom(const DmiBaseboard& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiBaseboard)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiBaseboard)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -4559,7 +4018,7 @@ void DmiBaseboard::MergeFrom(const DmiBaseboard& from) {
 }
 
 void DmiBaseboard::CopyFrom(const DmiBaseboard& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiBaseboard)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiBaseboard)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -4581,7 +4040,7 @@ void DmiBaseboard::InternalSwap(DmiBaseboard* other) {
 }
 
 ::std::string DmiBaseboard::GetTypeName() const {
-  return "aspia.system_info.DmiBaseboard";
+  return "aspia.proto.DmiBaseboard";
 }
 
 
@@ -4609,7 +4068,7 @@ DmiChassis_Item::DmiChassis_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiChassis_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiChassis.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiChassis.Item)
 }
 DmiChassis_Item::DmiChassis_Item(const DmiChassis_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -4632,10 +4091,30 @@ DmiChassis_Item::DmiChassis_Item(const DmiChassis_Item& from)
   if (from.asset_tag().size() > 0) {
     asset_tag_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.asset_tag_);
   }
-  ::memcpy(&type_, &from.type_,
+  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.type().size() > 0) {
+    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
+  }
+  os_load_status_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.os_load_status().size() > 0) {
+    os_load_status_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.os_load_status_);
+  }
+  power_source_status_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.power_source_status().size() > 0) {
+    power_source_status_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.power_source_status_);
+  }
+  temparature_status_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.temparature_status().size() > 0) {
+    temparature_status_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.temparature_status_);
+  }
+  security_status_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.security_status().size() > 0) {
+    security_status_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.security_status_);
+  }
+  ::memcpy(&height_, &from.height_,
     static_cast<size_t>(reinterpret_cast<char*>(&number_of_power_cords_) -
-    reinterpret_cast<char*>(&type_)) + sizeof(number_of_power_cords_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiChassis.Item)
+    reinterpret_cast<char*>(&height_)) + sizeof(number_of_power_cords_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiChassis.Item)
 }
 
 void DmiChassis_Item::SharedCtor() {
@@ -4643,14 +4122,19 @@ void DmiChassis_Item::SharedCtor() {
   version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   asset_tag_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&type_, 0, static_cast<size_t>(
+  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  os_load_status_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  power_source_status_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  temparature_status_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  security_status_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&height_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&number_of_power_cords_) -
-      reinterpret_cast<char*>(&type_)) + sizeof(number_of_power_cords_));
+      reinterpret_cast<char*>(&height_)) + sizeof(number_of_power_cords_));
   _cached_size_ = 0;
 }
 
 DmiChassis_Item::~DmiChassis_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiChassis.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiChassis.Item)
   SharedDtor();
 }
 
@@ -4659,6 +4143,11 @@ void DmiChassis_Item::SharedDtor() {
   version_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   asset_tag_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  os_load_status_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  power_source_status_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  temparature_status_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  security_status_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void DmiChassis_Item::SetCachedSize(int size) const {
@@ -4680,7 +4169,7 @@ DmiChassis_Item* DmiChassis_Item::New(::google::protobuf::Arena* arena) const {
 }
 
 void DmiChassis_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiChassis.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiChassis.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -4689,9 +4178,14 @@ void DmiChassis_Item::Clear() {
   version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   asset_tag_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&type_, 0, static_cast<size_t>(
+  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  os_load_status_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  power_source_status_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  temparature_status_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  security_status_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&height_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&number_of_power_cords_) -
-      reinterpret_cast<char*>(&type_)) + sizeof(number_of_power_cords_));
+      reinterpret_cast<char*>(&height_)) + sizeof(number_of_power_cords_));
   _internal_metadata_.Clear();
 }
 
@@ -4705,7 +4199,7 @@ bool DmiChassis_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiChassis.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiChassis.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -4720,7 +4214,7 @@ bool DmiChassis_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiChassis.Item.manufacturer"));
+            "aspia.proto.DmiChassis.Item.manufacturer"));
         } else {
           goto handle_unusual;
         }
@@ -4736,7 +4230,7 @@ bool DmiChassis_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->version().data(), static_cast<int>(this->version().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiChassis.Item.version"));
+            "aspia.proto.DmiChassis.Item.version"));
         } else {
           goto handle_unusual;
         }
@@ -4752,7 +4246,7 @@ bool DmiChassis_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->serial_number().data(), static_cast<int>(this->serial_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiChassis.Item.serial_number"));
+            "aspia.proto.DmiChassis.Item.serial_number"));
         } else {
           goto handle_unusual;
         }
@@ -4768,82 +4262,87 @@ bool DmiChassis_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->asset_tag().data(), static_cast<int>(this->asset_tag().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiChassis.Item.asset_tag"));
+            "aspia.proto.DmiChassis.Item.asset_tag"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiChassis.Item.Type type = 5;
+      // string type = 5;
       case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_type(static_cast< ::aspia::system_info::DmiChassis_Item_Type >(value));
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->type().data(), static_cast<int>(this->type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiChassis.Item.type"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiChassis.Item.Status os_load_status = 6;
+      // string os_load_status = 6;
       case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(48u /* 48 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_os_load_status(static_cast< ::aspia::system_info::DmiChassis_Item_Status >(value));
+            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_os_load_status()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->os_load_status().data(), static_cast<int>(this->os_load_status().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiChassis.Item.os_load_status"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiChassis.Item.Status power_source_status = 7;
+      // string power_source_status = 7;
       case 7: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(56u /* 56 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_power_source_status(static_cast< ::aspia::system_info::DmiChassis_Item_Status >(value));
+            static_cast< ::google::protobuf::uint8>(58u /* 58 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_power_source_status()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->power_source_status().data(), static_cast<int>(this->power_source_status().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiChassis.Item.power_source_status"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiChassis.Item.Status temparature_status = 8;
+      // string temparature_status = 8;
       case 8: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(64u /* 64 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_temparature_status(static_cast< ::aspia::system_info::DmiChassis_Item_Status >(value));
+            static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_temparature_status()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->temparature_status().data(), static_cast<int>(this->temparature_status().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiChassis.Item.temparature_status"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiChassis.Item.SecurityStatus security_status = 9;
+      // string security_status = 9;
       case 9: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(72u /* 72 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_security_status(static_cast< ::aspia::system_info::DmiChassis_Item_SecurityStatus >(value));
+            static_cast< ::google::protobuf::uint8>(74u /* 74 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_security_status()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->security_status().data(), static_cast<int>(this->security_status().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiChassis.Item.security_status"));
         } else {
           goto handle_unusual;
         }
@@ -4890,17 +4389,17 @@ bool DmiChassis_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiChassis.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiChassis.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiChassis.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiChassis.Item)
   return false;
 #undef DO_
 }
 
 void DmiChassis_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiChassis.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiChassis.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -4909,7 +4408,7 @@ void DmiChassis_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiChassis.Item.manufacturer");
+      "aspia.proto.DmiChassis.Item.manufacturer");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->manufacturer(), output);
   }
@@ -4919,7 +4418,7 @@ void DmiChassis_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->version().data(), static_cast<int>(this->version().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiChassis.Item.version");
+      "aspia.proto.DmiChassis.Item.version");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->version(), output);
   }
@@ -4929,7 +4428,7 @@ void DmiChassis_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->serial_number().data(), static_cast<int>(this->serial_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiChassis.Item.serial_number");
+      "aspia.proto.DmiChassis.Item.serial_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->serial_number(), output);
   }
@@ -4939,38 +4438,58 @@ void DmiChassis_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->asset_tag().data(), static_cast<int>(this->asset_tag().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiChassis.Item.asset_tag");
+      "aspia.proto.DmiChassis.Item.asset_tag");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->asset_tag(), output);
   }
 
-  // .aspia.system_info.DmiChassis.Item.Type type = 5;
-  if (this->type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string type = 5;
+  if (this->type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->type().data(), static_cast<int>(this->type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiChassis.Item.type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->type(), output);
   }
 
-  // .aspia.system_info.DmiChassis.Item.Status os_load_status = 6;
-  if (this->os_load_status() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string os_load_status = 6;
+  if (this->os_load_status().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->os_load_status().data(), static_cast<int>(this->os_load_status().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiChassis.Item.os_load_status");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->os_load_status(), output);
   }
 
-  // .aspia.system_info.DmiChassis.Item.Status power_source_status = 7;
-  if (this->power_source_status() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string power_source_status = 7;
+  if (this->power_source_status().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->power_source_status().data(), static_cast<int>(this->power_source_status().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiChassis.Item.power_source_status");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       7, this->power_source_status(), output);
   }
 
-  // .aspia.system_info.DmiChassis.Item.Status temparature_status = 8;
-  if (this->temparature_status() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string temparature_status = 8;
+  if (this->temparature_status().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->temparature_status().data(), static_cast<int>(this->temparature_status().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiChassis.Item.temparature_status");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       8, this->temparature_status(), output);
   }
 
-  // .aspia.system_info.DmiChassis.Item.SecurityStatus security_status = 9;
-  if (this->security_status() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string security_status = 9;
+  if (this->security_status().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->security_status().data(), static_cast<int>(this->security_status().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiChassis.Item.security_status");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       9, this->security_status(), output);
   }
 
@@ -4986,11 +4505,11 @@ void DmiChassis_Item::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiChassis.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiChassis.Item)
 }
 
 size_t DmiChassis_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiChassis.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiChassis.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -5023,34 +4542,39 @@ size_t DmiChassis_Item::ByteSizeLong() const {
         this->asset_tag());
   }
 
-  // .aspia.system_info.DmiChassis.Item.Type type = 5;
-  if (this->type() != 0) {
+  // string type = 5;
+  if (this->type().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->type());
   }
 
-  // .aspia.system_info.DmiChassis.Item.Status os_load_status = 6;
-  if (this->os_load_status() != 0) {
+  // string os_load_status = 6;
+  if (this->os_load_status().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->os_load_status());
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->os_load_status());
   }
 
-  // .aspia.system_info.DmiChassis.Item.Status power_source_status = 7;
-  if (this->power_source_status() != 0) {
+  // string power_source_status = 7;
+  if (this->power_source_status().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->power_source_status());
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->power_source_status());
   }
 
-  // .aspia.system_info.DmiChassis.Item.Status temparature_status = 8;
-  if (this->temparature_status() != 0) {
+  // string temparature_status = 8;
+  if (this->temparature_status().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->temparature_status());
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->temparature_status());
   }
 
-  // .aspia.system_info.DmiChassis.Item.SecurityStatus security_status = 9;
-  if (this->security_status() != 0) {
+  // string security_status = 9;
+  if (this->security_status().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->security_status());
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->security_status());
   }
 
   // int32 height = 10;
@@ -5080,7 +4604,7 @@ void DmiChassis_Item::CheckTypeAndMergeFrom(
 }
 
 void DmiChassis_Item::MergeFrom(const DmiChassis_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiChassis.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiChassis.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -5102,20 +4626,25 @@ void DmiChassis_Item::MergeFrom(const DmiChassis_Item& from) {
 
     asset_tag_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.asset_tag_);
   }
-  if (from.type() != 0) {
-    set_type(from.type());
+  if (from.type().size() > 0) {
+
+    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
   }
-  if (from.os_load_status() != 0) {
-    set_os_load_status(from.os_load_status());
+  if (from.os_load_status().size() > 0) {
+
+    os_load_status_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.os_load_status_);
   }
-  if (from.power_source_status() != 0) {
-    set_power_source_status(from.power_source_status());
+  if (from.power_source_status().size() > 0) {
+
+    power_source_status_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.power_source_status_);
   }
-  if (from.temparature_status() != 0) {
-    set_temparature_status(from.temparature_status());
+  if (from.temparature_status().size() > 0) {
+
+    temparature_status_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.temparature_status_);
   }
-  if (from.security_status() != 0) {
-    set_security_status(from.security_status());
+  if (from.security_status().size() > 0) {
+
+    security_status_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.security_status_);
   }
   if (from.height() != 0) {
     set_height(from.height());
@@ -5126,7 +4655,7 @@ void DmiChassis_Item::MergeFrom(const DmiChassis_Item& from) {
 }
 
 void DmiChassis_Item::CopyFrom(const DmiChassis_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiChassis.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiChassis.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -5146,11 +4675,11 @@ void DmiChassis_Item::InternalSwap(DmiChassis_Item* other) {
   version_.Swap(&other->version_);
   serial_number_.Swap(&other->serial_number_);
   asset_tag_.Swap(&other->asset_tag_);
-  swap(type_, other->type_);
-  swap(os_load_status_, other->os_load_status_);
-  swap(power_source_status_, other->power_source_status_);
-  swap(temparature_status_, other->temparature_status_);
-  swap(security_status_, other->security_status_);
+  type_.Swap(&other->type_);
+  os_load_status_.Swap(&other->os_load_status_);
+  power_source_status_.Swap(&other->power_source_status_);
+  temparature_status_.Swap(&other->temparature_status_);
+  security_status_.Swap(&other->security_status_);
   swap(height_, other->height_);
   swap(number_of_power_cords_, other->number_of_power_cords_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
@@ -5158,7 +4687,7 @@ void DmiChassis_Item::InternalSwap(DmiChassis_Item* other) {
 }
 
 ::std::string DmiChassis_Item::GetTypeName() const {
-  return "aspia.system_info.DmiChassis.Item";
+  return "aspia.proto.DmiChassis.Item";
 }
 
 
@@ -5176,7 +4705,7 @@ DmiChassis::DmiChassis()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiChassis();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiChassis)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiChassis)
 }
 DmiChassis::DmiChassis(const DmiChassis& from)
   : ::google::protobuf::MessageLite(),
@@ -5184,7 +4713,7 @@ DmiChassis::DmiChassis(const DmiChassis& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiChassis)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiChassis)
 }
 
 void DmiChassis::SharedCtor() {
@@ -5192,7 +4721,7 @@ void DmiChassis::SharedCtor() {
 }
 
 DmiChassis::~DmiChassis() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiChassis)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiChassis)
   SharedDtor();
 }
 
@@ -5218,7 +4747,7 @@ DmiChassis* DmiChassis::New(::google::protobuf::Arena* arena) const {
 }
 
 void DmiChassis::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiChassis)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiChassis)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -5237,13 +4766,13 @@ bool DmiChassis::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiChassis)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiChassis)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.DmiChassis.Item item = 1;
+      // repeated .aspia.proto.DmiChassis.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -5266,21 +4795,21 @@ bool DmiChassis::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiChassis)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiChassis)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiChassis)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiChassis)
   return false;
 #undef DO_
 }
 
 void DmiChassis::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiChassis)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiChassis)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.DmiChassis.Item item = 1;
+  // repeated .aspia.proto.DmiChassis.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -5289,16 +4818,16 @@ void DmiChassis::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiChassis)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiChassis)
 }
 
 size_t DmiChassis::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiChassis)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiChassis)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.DmiChassis.Item item = 1;
+  // repeated .aspia.proto.DmiChassis.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -5322,7 +4851,7 @@ void DmiChassis::CheckTypeAndMergeFrom(
 }
 
 void DmiChassis::MergeFrom(const DmiChassis& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiChassis)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiChassis)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -5332,7 +4861,7 @@ void DmiChassis::MergeFrom(const DmiChassis& from) {
 }
 
 void DmiChassis::CopyFrom(const DmiChassis& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiChassis)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiChassis)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -5354,7 +4883,247 @@ void DmiChassis::InternalSwap(DmiChassis* other) {
 }
 
 ::std::string DmiChassis::GetTypeName() const {
-  return "aspia.system_info.DmiChassis";
+  return "aspia.proto.DmiChassis";
+}
+
+
+// ===================================================================
+
+void DmiCaches_Item_SRAMType::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DmiCaches_Item_SRAMType::kNameFieldNumber;
+const int DmiCaches_Item_SRAMType::kSupportedFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DmiCaches_Item_SRAMType::DmiCaches_Item_SRAMType()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiCaches_Item_SRAMType();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiCaches.Item.SRAMType)
+}
+DmiCaches_Item_SRAMType::DmiCaches_Item_SRAMType(const DmiCaches_Item_SRAMType& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.name().size() > 0) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  supported_ = from.supported_;
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiCaches.Item.SRAMType)
+}
+
+void DmiCaches_Item_SRAMType::SharedCtor() {
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  supported_ = false;
+  _cached_size_ = 0;
+}
+
+DmiCaches_Item_SRAMType::~DmiCaches_Item_SRAMType() {
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiCaches.Item.SRAMType)
+  SharedDtor();
+}
+
+void DmiCaches_Item_SRAMType::SharedDtor() {
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void DmiCaches_Item_SRAMType::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DmiCaches_Item_SRAMType& DmiCaches_Item_SRAMType::default_instance() {
+  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiCaches_Item_SRAMType();
+  return *internal_default_instance();
+}
+
+DmiCaches_Item_SRAMType* DmiCaches_Item_SRAMType::New(::google::protobuf::Arena* arena) const {
+  DmiCaches_Item_SRAMType* n = new DmiCaches_Item_SRAMType;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DmiCaches_Item_SRAMType::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiCaches.Item.SRAMType)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  supported_ = false;
+  _internal_metadata_.Clear();
+}
+
+bool DmiCaches_Item_SRAMType::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiCaches.Item.SRAMType)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string name = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->name().data(), static_cast<int>(this->name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiCaches.Item.SRAMType.name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool supported = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &supported_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiCaches.Item.SRAMType)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiCaches.Item.SRAMType)
+  return false;
+#undef DO_
+}
+
+void DmiCaches_Item_SRAMType::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiCaches.Item.SRAMType)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string name = 1;
+  if (this->name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->name().data(), static_cast<int>(this->name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiCaches.Item.SRAMType.name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->name(), output);
+  }
+
+  // bool supported = 2;
+  if (this->supported() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->supported(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiCaches.Item.SRAMType)
+}
+
+size_t DmiCaches_Item_SRAMType::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiCaches.Item.SRAMType)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string name = 1;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->name());
+  }
+
+  // bool supported = 2;
+  if (this->supported() != 0) {
+    total_size += 1 + 1;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DmiCaches_Item_SRAMType::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const DmiCaches_Item_SRAMType*>(&from));
+}
+
+void DmiCaches_Item_SRAMType::MergeFrom(const DmiCaches_Item_SRAMType& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiCaches.Item.SRAMType)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.name().size() > 0) {
+
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  if (from.supported() != 0) {
+    set_supported(from.supported());
+  }
+}
+
+void DmiCaches_Item_SRAMType::CopyFrom(const DmiCaches_Item_SRAMType& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiCaches.Item.SRAMType)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DmiCaches_Item_SRAMType::IsInitialized() const {
+  return true;
+}
+
+void DmiCaches_Item_SRAMType::Swap(DmiCaches_Item_SRAMType* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void DmiCaches_Item_SRAMType::InternalSwap(DmiCaches_Item_SRAMType* other) {
+  using std::swap;
+  name_.Swap(&other->name_);
+  swap(supported_, other->supported_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string DmiCaches_Item_SRAMType::GetTypeName() const {
+  return "aspia.proto.DmiCaches.Item.SRAMType";
 }
 
 
@@ -5365,12 +5134,12 @@ void DmiCaches_Item::InitAsDefaultInstance() {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int DmiCaches_Item::kNameFieldNumber;
 const int DmiCaches_Item::kLocationFieldNumber;
-const int DmiCaches_Item::kStatusFieldNumber;
+const int DmiCaches_Item::kEnabledFieldNumber;
 const int DmiCaches_Item::kModeFieldNumber;
 const int DmiCaches_Item::kLevelFieldNumber;
 const int DmiCaches_Item::kMaximumSizeFieldNumber;
 const int DmiCaches_Item::kCurrentSizeFieldNumber;
-const int DmiCaches_Item::kSupportedSramTypesFieldNumber;
+const int DmiCaches_Item::kSupportedSramTypeFieldNumber;
 const int DmiCaches_Item::kCurrentSramTypeFieldNumber;
 const int DmiCaches_Item::kSpeedFieldNumber;
 const int DmiCaches_Item::kErrorCorrectionTypeFieldNumber;
@@ -5384,38 +5153,75 @@ DmiCaches_Item::DmiCaches_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiCaches_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiCaches.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiCaches.Item)
 }
 DmiCaches_Item::DmiCaches_Item(const DmiCaches_Item& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
+      supported_sram_type_(from.supported_sram_type_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.name().size() > 0) {
     name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
   }
-  ::memcpy(&location_, &from.location_,
-    static_cast<size_t>(reinterpret_cast<char*>(&associativity_) -
-    reinterpret_cast<char*>(&location_)) + sizeof(associativity_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiCaches.Item)
+  location_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.location().size() > 0) {
+    location_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.location_);
+  }
+  mode_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.mode().size() > 0) {
+    mode_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.mode_);
+  }
+  current_sram_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.current_sram_type().size() > 0) {
+    current_sram_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.current_sram_type_);
+  }
+  error_correction_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.error_correction_type().size() > 0) {
+    error_correction_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.error_correction_type_);
+  }
+  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.type().size() > 0) {
+    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
+  }
+  associativity_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.associativity().size() > 0) {
+    associativity_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.associativity_);
+  }
+  ::memcpy(&enabled_, &from.enabled_,
+    static_cast<size_t>(reinterpret_cast<char*>(&speed_) -
+    reinterpret_cast<char*>(&enabled_)) + sizeof(speed_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiCaches.Item)
 }
 
 void DmiCaches_Item::SharedCtor() {
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&location_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&associativity_) -
-      reinterpret_cast<char*>(&location_)) + sizeof(associativity_));
+  location_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  mode_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  current_sram_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  error_correction_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  associativity_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&enabled_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&speed_) -
+      reinterpret_cast<char*>(&enabled_)) + sizeof(speed_));
   _cached_size_ = 0;
 }
 
 DmiCaches_Item::~DmiCaches_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiCaches.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiCaches.Item)
   SharedDtor();
 }
 
 void DmiCaches_Item::SharedDtor() {
   name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  location_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  mode_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  current_sram_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  error_correction_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  associativity_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void DmiCaches_Item::SetCachedSize(int size) const {
@@ -5437,15 +5243,22 @@ DmiCaches_Item* DmiCaches_Item::New(::google::protobuf::Arena* arena) const {
 }
 
 void DmiCaches_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiCaches.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiCaches.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  supported_sram_type_.Clear();
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&location_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&associativity_) -
-      reinterpret_cast<char*>(&location_)) + sizeof(associativity_));
+  location_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  mode_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  current_sram_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  error_correction_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  associativity_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&enabled_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&speed_) -
+      reinterpret_cast<char*>(&enabled_)) + sizeof(speed_));
   _internal_metadata_.Clear();
 }
 
@@ -5459,7 +5272,7 @@ bool DmiCaches_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiCaches.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiCaches.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -5474,67 +5287,67 @@ bool DmiCaches_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->name().data(), static_cast<int>(this->name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiCaches.Item.name"));
+            "aspia.proto.DmiCaches.Item.name"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiCaches.Item.Location location = 2;
+      // string location = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_location(static_cast< ::aspia::system_info::DmiCaches_Item_Location >(value));
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_location()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->location().data(), static_cast<int>(this->location().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiCaches.Item.location"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiCaches.Item.Status status = 3;
+      // bool enabled = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
-          int value;
+
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_status(static_cast< ::aspia::system_info::DmiCaches_Item_Status >(value));
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &enabled_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiCaches.Item.Mode mode = 4;
+      // string mode = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_mode(static_cast< ::aspia::system_info::DmiCaches_Item_Mode >(value));
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_mode()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->mode().data(), static_cast<int>(this->mode().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiCaches.Item.mode"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiCaches.Item.Level level = 5;
+      // int32 level = 5;
       case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
-          int value;
+
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_level(static_cast< ::aspia::system_info::DmiCaches_Item_Level >(value));
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &level_)));
         } else {
           goto handle_unusual;
         }
@@ -5569,29 +5382,27 @@ bool DmiCaches_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // uint32 supported_sram_types = 8;
+      // repeated .aspia.proto.DmiCaches.Item.SRAMType supported_sram_type = 8;
       case 8: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(64u /* 64 & 0xFF */)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &supported_sram_types_)));
+            static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_supported_sram_type()));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiCaches.Item.SRAMType current_sram_type = 9;
+      // string current_sram_type = 9;
       case 9: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(72u /* 72 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_current_sram_type(static_cast< ::aspia::system_info::DmiCaches_Item_SRAMType >(value));
+            static_cast< ::google::protobuf::uint8>(74u /* 74 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_current_sram_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->current_sram_type().data(), static_cast<int>(this->current_sram_type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiCaches.Item.current_sram_type"));
         } else {
           goto handle_unusual;
         }
@@ -5612,45 +5423,48 @@ bool DmiCaches_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.system_info.DmiCaches.Item.ErrorCorrectionType error_correction_type = 11;
+      // string error_correction_type = 11;
       case 11: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(88u /* 88 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_error_correction_type(static_cast< ::aspia::system_info::DmiCaches_Item_ErrorCorrectionType >(value));
+            static_cast< ::google::protobuf::uint8>(90u /* 90 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_error_correction_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->error_correction_type().data(), static_cast<int>(this->error_correction_type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiCaches.Item.error_correction_type"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiCaches.Item.Type type = 12;
+      // string type = 12;
       case 12: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(96u /* 96 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_type(static_cast< ::aspia::system_info::DmiCaches_Item_Type >(value));
+            static_cast< ::google::protobuf::uint8>(98u /* 98 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->type().data(), static_cast<int>(this->type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiCaches.Item.type"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiCaches.Item.Associativity associativity = 13;
+      // string associativity = 13;
       case 13: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(104u /* 104 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_associativity(static_cast< ::aspia::system_info::DmiCaches_Item_Associativity >(value));
+            static_cast< ::google::protobuf::uint8>(106u /* 106 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_associativity()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->associativity().data(), static_cast<int>(this->associativity().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiCaches.Item.associativity"));
         } else {
           goto handle_unusual;
         }
@@ -5669,17 +5483,17 @@ bool DmiCaches_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiCaches.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiCaches.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiCaches.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiCaches.Item)
   return false;
 #undef DO_
 }
 
 void DmiCaches_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiCaches.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiCaches.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -5688,33 +5502,39 @@ void DmiCaches_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), static_cast<int>(this->name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiCaches.Item.name");
+      "aspia.proto.DmiCaches.Item.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->name(), output);
   }
 
-  // .aspia.system_info.DmiCaches.Item.Location location = 2;
-  if (this->location() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string location = 2;
+  if (this->location().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->location().data(), static_cast<int>(this->location().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiCaches.Item.location");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->location(), output);
   }
 
-  // .aspia.system_info.DmiCaches.Item.Status status = 3;
-  if (this->status() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      3, this->status(), output);
+  // bool enabled = 3;
+  if (this->enabled() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->enabled(), output);
   }
 
-  // .aspia.system_info.DmiCaches.Item.Mode mode = 4;
-  if (this->mode() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string mode = 4;
+  if (this->mode().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->mode().data(), static_cast<int>(this->mode().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiCaches.Item.mode");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->mode(), output);
   }
 
-  // .aspia.system_info.DmiCaches.Item.Level level = 5;
+  // int32 level = 5;
   if (this->level() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      5, this->level(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->level(), output);
   }
 
   // int32 maximum_size = 6;
@@ -5727,14 +5547,20 @@ void DmiCaches_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->current_size(), output);
   }
 
-  // uint32 supported_sram_types = 8;
-  if (this->supported_sram_types() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(8, this->supported_sram_types(), output);
+  // repeated .aspia.proto.DmiCaches.Item.SRAMType supported_sram_type = 8;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->supported_sram_type_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      8, this->supported_sram_type(static_cast<int>(i)), output);
   }
 
-  // .aspia.system_info.DmiCaches.Item.SRAMType current_sram_type = 9;
-  if (this->current_sram_type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string current_sram_type = 9;
+  if (this->current_sram_type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->current_sram_type().data(), static_cast<int>(this->current_sram_type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiCaches.Item.current_sram_type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       9, this->current_sram_type(), output);
   }
 
@@ -5743,34 +5569,57 @@ void DmiCaches_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(10, this->speed(), output);
   }
 
-  // .aspia.system_info.DmiCaches.Item.ErrorCorrectionType error_correction_type = 11;
-  if (this->error_correction_type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string error_correction_type = 11;
+  if (this->error_correction_type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->error_correction_type().data(), static_cast<int>(this->error_correction_type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiCaches.Item.error_correction_type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       11, this->error_correction_type(), output);
   }
 
-  // .aspia.system_info.DmiCaches.Item.Type type = 12;
-  if (this->type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string type = 12;
+  if (this->type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->type().data(), static_cast<int>(this->type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiCaches.Item.type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       12, this->type(), output);
   }
 
-  // .aspia.system_info.DmiCaches.Item.Associativity associativity = 13;
-  if (this->associativity() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string associativity = 13;
+  if (this->associativity().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->associativity().data(), static_cast<int>(this->associativity().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiCaches.Item.associativity");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       13, this->associativity(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiCaches.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiCaches.Item)
 }
 
 size_t DmiCaches_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiCaches.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiCaches.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.proto.DmiCaches.Item.SRAMType supported_sram_type = 8;
+  {
+    unsigned int count = static_cast<unsigned int>(this->supported_sram_type_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->supported_sram_type(static_cast<int>(i)));
+    }
+  }
 
   // string name = 1;
   if (this->name().size() > 0) {
@@ -5779,28 +5628,58 @@ size_t DmiCaches_Item::ByteSizeLong() const {
         this->name());
   }
 
-  // .aspia.system_info.DmiCaches.Item.Location location = 2;
-  if (this->location() != 0) {
+  // string location = 2;
+  if (this->location().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->location());
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->location());
   }
 
-  // .aspia.system_info.DmiCaches.Item.Status status = 3;
-  if (this->status() != 0) {
+  // string mode = 4;
+  if (this->mode().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->mode());
   }
 
-  // .aspia.system_info.DmiCaches.Item.Mode mode = 4;
-  if (this->mode() != 0) {
+  // string current_sram_type = 9;
+  if (this->current_sram_type().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->mode());
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->current_sram_type());
   }
 
-  // .aspia.system_info.DmiCaches.Item.Level level = 5;
+  // string error_correction_type = 11;
+  if (this->error_correction_type().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->error_correction_type());
+  }
+
+  // string type = 12;
+  if (this->type().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->type());
+  }
+
+  // string associativity = 13;
+  if (this->associativity().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->associativity());
+  }
+
+  // bool enabled = 3;
+  if (this->enabled() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // int32 level = 5;
   if (this->level() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->level());
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->level());
   }
 
   // int32 maximum_size = 6;
@@ -5817,42 +5696,11 @@ size_t DmiCaches_Item::ByteSizeLong() const {
         this->current_size());
   }
 
-  // uint32 supported_sram_types = 8;
-  if (this->supported_sram_types() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->supported_sram_types());
-  }
-
-  // .aspia.system_info.DmiCaches.Item.SRAMType current_sram_type = 9;
-  if (this->current_sram_type() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->current_sram_type());
-  }
-
   // int32 speed = 10;
   if (this->speed() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->speed());
-  }
-
-  // .aspia.system_info.DmiCaches.Item.ErrorCorrectionType error_correction_type = 11;
-  if (this->error_correction_type() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->error_correction_type());
-  }
-
-  // .aspia.system_info.DmiCaches.Item.Type type = 12;
-  if (this->type() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
-  }
-
-  // .aspia.system_info.DmiCaches.Item.Associativity associativity = 13;
-  if (this->associativity() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->associativity());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -5868,24 +5716,43 @@ void DmiCaches_Item::CheckTypeAndMergeFrom(
 }
 
 void DmiCaches_Item::MergeFrom(const DmiCaches_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiCaches.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiCaches.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  supported_sram_type_.MergeFrom(from.supported_sram_type_);
   if (from.name().size() > 0) {
 
     name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
   }
-  if (from.location() != 0) {
-    set_location(from.location());
+  if (from.location().size() > 0) {
+
+    location_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.location_);
   }
-  if (from.status() != 0) {
-    set_status(from.status());
+  if (from.mode().size() > 0) {
+
+    mode_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.mode_);
   }
-  if (from.mode() != 0) {
-    set_mode(from.mode());
+  if (from.current_sram_type().size() > 0) {
+
+    current_sram_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.current_sram_type_);
+  }
+  if (from.error_correction_type().size() > 0) {
+
+    error_correction_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.error_correction_type_);
+  }
+  if (from.type().size() > 0) {
+
+    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
+  }
+  if (from.associativity().size() > 0) {
+
+    associativity_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.associativity_);
+  }
+  if (from.enabled() != 0) {
+    set_enabled(from.enabled());
   }
   if (from.level() != 0) {
     set_level(from.level());
@@ -5896,28 +5763,13 @@ void DmiCaches_Item::MergeFrom(const DmiCaches_Item& from) {
   if (from.current_size() != 0) {
     set_current_size(from.current_size());
   }
-  if (from.supported_sram_types() != 0) {
-    set_supported_sram_types(from.supported_sram_types());
-  }
-  if (from.current_sram_type() != 0) {
-    set_current_sram_type(from.current_sram_type());
-  }
   if (from.speed() != 0) {
     set_speed(from.speed());
-  }
-  if (from.error_correction_type() != 0) {
-    set_error_correction_type(from.error_correction_type());
-  }
-  if (from.type() != 0) {
-    set_type(from.type());
-  }
-  if (from.associativity() != 0) {
-    set_associativity(from.associativity());
   }
 }
 
 void DmiCaches_Item::CopyFrom(const DmiCaches_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiCaches.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiCaches.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -5933,25 +5785,25 @@ void DmiCaches_Item::Swap(DmiCaches_Item* other) {
 }
 void DmiCaches_Item::InternalSwap(DmiCaches_Item* other) {
   using std::swap;
+  supported_sram_type_.InternalSwap(&other->supported_sram_type_);
   name_.Swap(&other->name_);
-  swap(location_, other->location_);
-  swap(status_, other->status_);
-  swap(mode_, other->mode_);
+  location_.Swap(&other->location_);
+  mode_.Swap(&other->mode_);
+  current_sram_type_.Swap(&other->current_sram_type_);
+  error_correction_type_.Swap(&other->error_correction_type_);
+  type_.Swap(&other->type_);
+  associativity_.Swap(&other->associativity_);
+  swap(enabled_, other->enabled_);
   swap(level_, other->level_);
   swap(maximum_size_, other->maximum_size_);
   swap(current_size_, other->current_size_);
-  swap(supported_sram_types_, other->supported_sram_types_);
-  swap(current_sram_type_, other->current_sram_type_);
   swap(speed_, other->speed_);
-  swap(error_correction_type_, other->error_correction_type_);
-  swap(type_, other->type_);
-  swap(associativity_, other->associativity_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string DmiCaches_Item::GetTypeName() const {
-  return "aspia.system_info.DmiCaches.Item";
+  return "aspia.proto.DmiCaches.Item";
 }
 
 
@@ -5969,7 +5821,7 @@ DmiCaches::DmiCaches()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiCaches();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiCaches)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiCaches)
 }
 DmiCaches::DmiCaches(const DmiCaches& from)
   : ::google::protobuf::MessageLite(),
@@ -5977,7 +5829,7 @@ DmiCaches::DmiCaches(const DmiCaches& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiCaches)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiCaches)
 }
 
 void DmiCaches::SharedCtor() {
@@ -5985,7 +5837,7 @@ void DmiCaches::SharedCtor() {
 }
 
 DmiCaches::~DmiCaches() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiCaches)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiCaches)
   SharedDtor();
 }
 
@@ -6011,7 +5863,7 @@ DmiCaches* DmiCaches::New(::google::protobuf::Arena* arena) const {
 }
 
 void DmiCaches::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiCaches)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiCaches)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -6030,13 +5882,13 @@ bool DmiCaches::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiCaches)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiCaches)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.DmiCaches.Item item = 1;
+      // repeated .aspia.proto.DmiCaches.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -6059,21 +5911,21 @@ bool DmiCaches::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiCaches)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiCaches)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiCaches)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiCaches)
   return false;
 #undef DO_
 }
 
 void DmiCaches::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiCaches)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiCaches)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.DmiCaches.Item item = 1;
+  // repeated .aspia.proto.DmiCaches.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -6082,16 +5934,16 @@ void DmiCaches::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiCaches)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiCaches)
 }
 
 size_t DmiCaches::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiCaches)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiCaches)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.DmiCaches.Item item = 1;
+  // repeated .aspia.proto.DmiCaches.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -6115,7 +5967,7 @@ void DmiCaches::CheckTypeAndMergeFrom(
 }
 
 void DmiCaches::MergeFrom(const DmiCaches& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiCaches)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiCaches)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -6125,7 +5977,7 @@ void DmiCaches::MergeFrom(const DmiCaches& from) {
 }
 
 void DmiCaches::CopyFrom(const DmiCaches& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiCaches)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiCaches)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -6147,7 +5999,247 @@ void DmiCaches::InternalSwap(DmiCaches* other) {
 }
 
 ::std::string DmiCaches::GetTypeName() const {
-  return "aspia.system_info.DmiCaches";
+  return "aspia.proto.DmiCaches";
+}
+
+
+// ===================================================================
+
+void DmiProcessors_Item_Feature::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int DmiProcessors_Item_Feature::kNameFieldNumber;
+const int DmiProcessors_Item_Feature::kSupportedFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+DmiProcessors_Item_Feature::DmiProcessors_Item_Feature()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiProcessors_Item_Feature();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiProcessors.Item.Feature)
+}
+DmiProcessors_Item_Feature::DmiProcessors_Item_Feature(const DmiProcessors_Item_Feature& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.name().size() > 0) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  supported_ = from.supported_;
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiProcessors.Item.Feature)
+}
+
+void DmiProcessors_Item_Feature::SharedCtor() {
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  supported_ = false;
+  _cached_size_ = 0;
+}
+
+DmiProcessors_Item_Feature::~DmiProcessors_Item_Feature() {
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiProcessors.Item.Feature)
+  SharedDtor();
+}
+
+void DmiProcessors_Item_Feature::SharedDtor() {
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void DmiProcessors_Item_Feature::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const DmiProcessors_Item_Feature& DmiProcessors_Item_Feature::default_instance() {
+  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiProcessors_Item_Feature();
+  return *internal_default_instance();
+}
+
+DmiProcessors_Item_Feature* DmiProcessors_Item_Feature::New(::google::protobuf::Arena* arena) const {
+  DmiProcessors_Item_Feature* n = new DmiProcessors_Item_Feature;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void DmiProcessors_Item_Feature::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiProcessors.Item.Feature)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  supported_ = false;
+  _internal_metadata_.Clear();
+}
+
+bool DmiProcessors_Item_Feature::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiProcessors.Item.Feature)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string name = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->name().data(), static_cast<int>(this->name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiProcessors.Item.Feature.name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool supported = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &supported_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiProcessors.Item.Feature)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiProcessors.Item.Feature)
+  return false;
+#undef DO_
+}
+
+void DmiProcessors_Item_Feature::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiProcessors.Item.Feature)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string name = 1;
+  if (this->name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->name().data(), static_cast<int>(this->name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiProcessors.Item.Feature.name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->name(), output);
+  }
+
+  // bool supported = 2;
+  if (this->supported() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->supported(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiProcessors.Item.Feature)
+}
+
+size_t DmiProcessors_Item_Feature::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiProcessors.Item.Feature)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string name = 1;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->name());
+  }
+
+  // bool supported = 2;
+  if (this->supported() != 0) {
+    total_size += 1 + 1;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DmiProcessors_Item_Feature::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const DmiProcessors_Item_Feature*>(&from));
+}
+
+void DmiProcessors_Item_Feature::MergeFrom(const DmiProcessors_Item_Feature& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiProcessors.Item.Feature)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.name().size() > 0) {
+
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  if (from.supported() != 0) {
+    set_supported(from.supported());
+  }
+}
+
+void DmiProcessors_Item_Feature::CopyFrom(const DmiProcessors_Item_Feature& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiProcessors.Item.Feature)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DmiProcessors_Item_Feature::IsInitialized() const {
+  return true;
+}
+
+void DmiProcessors_Item_Feature::Swap(DmiProcessors_Item_Feature* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void DmiProcessors_Item_Feature::InternalSwap(DmiProcessors_Item_Feature* other) {
+  using std::swap;
+  name_.Swap(&other->name_);
+  swap(supported_, other->supported_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string DmiProcessors_Item_Feature::GetTypeName() const {
+  return "aspia.proto.DmiProcessors.Item.Feature";
 }
 
 
@@ -6173,7 +6265,7 @@ const int DmiProcessors_Item::kPartNumberFieldNumber;
 const int DmiProcessors_Item::kCoreCountFieldNumber;
 const int DmiProcessors_Item::kCoreEnabledFieldNumber;
 const int DmiProcessors_Item::kThreadCountFieldNumber;
-const int DmiProcessors_Item::kCharacteristicsFieldNumber;
+const int DmiProcessors_Item::kFeatureFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 DmiProcessors_Item::DmiProcessors_Item()
@@ -6182,11 +6274,12 @@ DmiProcessors_Item::DmiProcessors_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiProcessors_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiProcessors.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiProcessors.Item)
 }
 DmiProcessors_Item::DmiProcessors_Item(const DmiProcessors_Item& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
+      feature_(from.feature_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   manufacturer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -6200,6 +6293,14 @@ DmiProcessors_Item::DmiProcessors_Item(const DmiProcessors_Item& from)
   family_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.family().size() > 0) {
     family_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.family_);
+  }
+  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.type().size() > 0) {
+    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
+  }
+  status_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.status().size() > 0) {
+    status_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.status_);
   }
   socket_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.socket().size() > 0) {
@@ -6221,29 +6322,31 @@ DmiProcessors_Item::DmiProcessors_Item(const DmiProcessors_Item& from)
   if (from.part_number().size() > 0) {
     part_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.part_number_);
   }
-  ::memcpy(&type_, &from.type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&characteristics_) -
-    reinterpret_cast<char*>(&type_)) + sizeof(characteristics_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiProcessors.Item)
+  ::memcpy(&external_clock_, &from.external_clock_,
+    static_cast<size_t>(reinterpret_cast<char*>(&thread_count_) -
+    reinterpret_cast<char*>(&external_clock_)) + sizeof(thread_count_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiProcessors.Item)
 }
 
 void DmiProcessors_Item::SharedCtor() {
   manufacturer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   family_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  status_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   socket_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   upgrade_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   asset_tag_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   part_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&characteristics_) -
-      reinterpret_cast<char*>(&type_)) + sizeof(characteristics_));
+  ::memset(&external_clock_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&thread_count_) -
+      reinterpret_cast<char*>(&external_clock_)) + sizeof(thread_count_));
   _cached_size_ = 0;
 }
 
 DmiProcessors_Item::~DmiProcessors_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiProcessors.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiProcessors.Item)
   SharedDtor();
 }
 
@@ -6251,6 +6354,8 @@ void DmiProcessors_Item::SharedDtor() {
   manufacturer_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   version_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   family_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  status_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   socket_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   upgrade_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -6277,22 +6382,25 @@ DmiProcessors_Item* DmiProcessors_Item::New(::google::protobuf::Arena* arena) co
 }
 
 void DmiProcessors_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiProcessors.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiProcessors.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  feature_.Clear();
   manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   family_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  status_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   socket_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   upgrade_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   asset_tag_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   part_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&characteristics_) -
-      reinterpret_cast<char*>(&type_)) + sizeof(characteristics_));
+  ::memset(&external_clock_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&thread_count_) -
+      reinterpret_cast<char*>(&external_clock_)) + sizeof(thread_count_));
   _internal_metadata_.Clear();
 }
 
@@ -6306,7 +6414,7 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiProcessors.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiProcessors.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(16383u);
     tag = p.first;
@@ -6321,7 +6429,7 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiProcessors.Item.manufacturer"));
+            "aspia.proto.DmiProcessors.Item.manufacturer"));
         } else {
           goto handle_unusual;
         }
@@ -6337,7 +6445,7 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->version().data(), static_cast<int>(this->version().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiProcessors.Item.version"));
+            "aspia.proto.DmiProcessors.Item.version"));
         } else {
           goto handle_unusual;
         }
@@ -6353,37 +6461,39 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->family().data(), static_cast<int>(this->family().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiProcessors.Item.family"));
+            "aspia.proto.DmiProcessors.Item.family"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiProcessors.Item.Type type = 4;
+      // string type = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_type(static_cast< ::aspia::system_info::DmiProcessors_Item_Type >(value));
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->type().data(), static_cast<int>(this->type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiProcessors.Item.type"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiProcessors.Item.Status status = 5;
+      // string status = 5;
       case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_status(static_cast< ::aspia::system_info::DmiProcessors_Item_Status >(value));
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_status()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->status().data(), static_cast<int>(this->status().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiProcessors.Item.status"));
         } else {
           goto handle_unusual;
         }
@@ -6399,7 +6509,7 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->socket().data(), static_cast<int>(this->socket().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiProcessors.Item.socket"));
+            "aspia.proto.DmiProcessors.Item.socket"));
         } else {
           goto handle_unusual;
         }
@@ -6415,7 +6525,7 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->upgrade().data(), static_cast<int>(this->upgrade().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiProcessors.Item.upgrade"));
+            "aspia.proto.DmiProcessors.Item.upgrade"));
         } else {
           goto handle_unusual;
         }
@@ -6487,7 +6597,7 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->serial_number().data(), static_cast<int>(this->serial_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiProcessors.Item.serial_number"));
+            "aspia.proto.DmiProcessors.Item.serial_number"));
         } else {
           goto handle_unusual;
         }
@@ -6503,7 +6613,7 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->asset_tag().data(), static_cast<int>(this->asset_tag().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiProcessors.Item.asset_tag"));
+            "aspia.proto.DmiProcessors.Item.asset_tag"));
         } else {
           goto handle_unusual;
         }
@@ -6519,7 +6629,7 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->part_number().data(), static_cast<int>(this->part_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiProcessors.Item.part_number"));
+            "aspia.proto.DmiProcessors.Item.part_number"));
         } else {
           goto handle_unusual;
         }
@@ -6568,14 +6678,11 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // uint32 characteristics = 18;
+      // repeated .aspia.proto.DmiProcessors.Item.Feature feature = 18;
       case 18: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(144u /* 144 & 0xFF */)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &characteristics_)));
+            static_cast< ::google::protobuf::uint8>(146u /* 146 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_feature()));
         } else {
           goto handle_unusual;
         }
@@ -6594,17 +6701,17 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiProcessors.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiProcessors.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiProcessors.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiProcessors.Item)
   return false;
 #undef DO_
 }
 
 void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiProcessors.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiProcessors.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -6613,7 +6720,7 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiProcessors.Item.manufacturer");
+      "aspia.proto.DmiProcessors.Item.manufacturer");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->manufacturer(), output);
   }
@@ -6623,7 +6730,7 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->version().data(), static_cast<int>(this->version().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiProcessors.Item.version");
+      "aspia.proto.DmiProcessors.Item.version");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->version(), output);
   }
@@ -6633,20 +6740,28 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->family().data(), static_cast<int>(this->family().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiProcessors.Item.family");
+      "aspia.proto.DmiProcessors.Item.family");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->family(), output);
   }
 
-  // .aspia.system_info.DmiProcessors.Item.Type type = 4;
-  if (this->type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string type = 4;
+  if (this->type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->type().data(), static_cast<int>(this->type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiProcessors.Item.type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->type(), output);
   }
 
-  // .aspia.system_info.DmiProcessors.Item.Status status = 5;
-  if (this->status() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string status = 5;
+  if (this->status().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->status().data(), static_cast<int>(this->status().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiProcessors.Item.status");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->status(), output);
   }
 
@@ -6655,7 +6770,7 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->socket().data(), static_cast<int>(this->socket().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiProcessors.Item.socket");
+      "aspia.proto.DmiProcessors.Item.socket");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->socket(), output);
   }
@@ -6665,7 +6780,7 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->upgrade().data(), static_cast<int>(this->upgrade().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiProcessors.Item.upgrade");
+      "aspia.proto.DmiProcessors.Item.upgrade");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       7, this->upgrade(), output);
   }
@@ -6695,7 +6810,7 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->serial_number().data(), static_cast<int>(this->serial_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiProcessors.Item.serial_number");
+      "aspia.proto.DmiProcessors.Item.serial_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       12, this->serial_number(), output);
   }
@@ -6705,7 +6820,7 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->asset_tag().data(), static_cast<int>(this->asset_tag().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiProcessors.Item.asset_tag");
+      "aspia.proto.DmiProcessors.Item.asset_tag");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       13, this->asset_tag(), output);
   }
@@ -6715,7 +6830,7 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->part_number().data(), static_cast<int>(this->part_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiProcessors.Item.part_number");
+      "aspia.proto.DmiProcessors.Item.part_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       14, this->part_number(), output);
   }
@@ -6735,21 +6850,34 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(17, this->thread_count(), output);
   }
 
-  // uint32 characteristics = 18;
-  if (this->characteristics() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(18, this->characteristics(), output);
+  // repeated .aspia.proto.DmiProcessors.Item.Feature feature = 18;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->feature_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      18, this->feature(static_cast<int>(i)), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiProcessors.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiProcessors.Item)
 }
 
 size_t DmiProcessors_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiProcessors.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiProcessors.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.proto.DmiProcessors.Item.Feature feature = 18;
+  {
+    unsigned int count = static_cast<unsigned int>(this->feature_size());
+    total_size += 2UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->feature(static_cast<int>(i)));
+    }
+  }
 
   // string manufacturer = 1;
   if (this->manufacturer().size() > 0) {
@@ -6770,6 +6898,20 @@ size_t DmiProcessors_Item::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->family());
+  }
+
+  // string type = 4;
+  if (this->type().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->type());
+  }
+
+  // string status = 5;
+  if (this->status().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->status());
   }
 
   // string socket = 6;
@@ -6805,18 +6947,6 @@ size_t DmiProcessors_Item::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->part_number());
-  }
-
-  // .aspia.system_info.DmiProcessors.Item.Type type = 4;
-  if (this->type() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
-  }
-
-  // .aspia.system_info.DmiProcessors.Item.Status status = 5;
-  if (this->status() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
   }
 
   // int32 external_clock = 8;
@@ -6866,13 +6996,6 @@ size_t DmiProcessors_Item::ByteSizeLong() const {
         this->thread_count());
   }
 
-  // uint32 characteristics = 18;
-  if (this->characteristics() != 0) {
-    total_size += 2 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->characteristics());
-  }
-
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = cached_size;
@@ -6886,12 +7009,13 @@ void DmiProcessors_Item::CheckTypeAndMergeFrom(
 }
 
 void DmiProcessors_Item::MergeFrom(const DmiProcessors_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiProcessors.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiProcessors.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  feature_.MergeFrom(from.feature_);
   if (from.manufacturer().size() > 0) {
 
     manufacturer_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacturer_);
@@ -6903,6 +7027,14 @@ void DmiProcessors_Item::MergeFrom(const DmiProcessors_Item& from) {
   if (from.family().size() > 0) {
 
     family_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.family_);
+  }
+  if (from.type().size() > 0) {
+
+    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
+  }
+  if (from.status().size() > 0) {
+
+    status_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.status_);
   }
   if (from.socket().size() > 0) {
 
@@ -6923,12 +7055,6 @@ void DmiProcessors_Item::MergeFrom(const DmiProcessors_Item& from) {
   if (from.part_number().size() > 0) {
 
     part_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.part_number_);
-  }
-  if (from.type() != 0) {
-    set_type(from.type());
-  }
-  if (from.status() != 0) {
-    set_status(from.status());
   }
   if (from.external_clock() != 0) {
     set_external_clock(from.external_clock());
@@ -6951,13 +7077,10 @@ void DmiProcessors_Item::MergeFrom(const DmiProcessors_Item& from) {
   if (from.thread_count() != 0) {
     set_thread_count(from.thread_count());
   }
-  if (from.characteristics() != 0) {
-    set_characteristics(from.characteristics());
-  }
 }
 
 void DmiProcessors_Item::CopyFrom(const DmiProcessors_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiProcessors.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiProcessors.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -6973,16 +7096,17 @@ void DmiProcessors_Item::Swap(DmiProcessors_Item* other) {
 }
 void DmiProcessors_Item::InternalSwap(DmiProcessors_Item* other) {
   using std::swap;
+  feature_.InternalSwap(&other->feature_);
   manufacturer_.Swap(&other->manufacturer_);
   version_.Swap(&other->version_);
   family_.Swap(&other->family_);
+  type_.Swap(&other->type_);
+  status_.Swap(&other->status_);
   socket_.Swap(&other->socket_);
   upgrade_.Swap(&other->upgrade_);
   serial_number_.Swap(&other->serial_number_);
   asset_tag_.Swap(&other->asset_tag_);
   part_number_.Swap(&other->part_number_);
-  swap(type_, other->type_);
-  swap(status_, other->status_);
   swap(external_clock_, other->external_clock_);
   swap(current_speed_, other->current_speed_);
   swap(voltage_, other->voltage_);
@@ -6990,13 +7114,12 @@ void DmiProcessors_Item::InternalSwap(DmiProcessors_Item* other) {
   swap(core_count_, other->core_count_);
   swap(core_enabled_, other->core_enabled_);
   swap(thread_count_, other->thread_count_);
-  swap(characteristics_, other->characteristics_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string DmiProcessors_Item::GetTypeName() const {
-  return "aspia.system_info.DmiProcessors.Item";
+  return "aspia.proto.DmiProcessors.Item";
 }
 
 
@@ -7014,7 +7137,7 @@ DmiProcessors::DmiProcessors()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiProcessors();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiProcessors)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiProcessors)
 }
 DmiProcessors::DmiProcessors(const DmiProcessors& from)
   : ::google::protobuf::MessageLite(),
@@ -7022,7 +7145,7 @@ DmiProcessors::DmiProcessors(const DmiProcessors& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiProcessors)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiProcessors)
 }
 
 void DmiProcessors::SharedCtor() {
@@ -7030,7 +7153,7 @@ void DmiProcessors::SharedCtor() {
 }
 
 DmiProcessors::~DmiProcessors() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiProcessors)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiProcessors)
   SharedDtor();
 }
 
@@ -7056,7 +7179,7 @@ DmiProcessors* DmiProcessors::New(::google::protobuf::Arena* arena) const {
 }
 
 void DmiProcessors::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiProcessors)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiProcessors)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -7075,13 +7198,13 @@ bool DmiProcessors::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiProcessors)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiProcessors)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.DmiProcessors.Item item = 1;
+      // repeated .aspia.proto.DmiProcessors.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -7104,21 +7227,21 @@ bool DmiProcessors::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiProcessors)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiProcessors)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiProcessors)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiProcessors)
   return false;
 #undef DO_
 }
 
 void DmiProcessors::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiProcessors)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiProcessors)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.DmiProcessors.Item item = 1;
+  // repeated .aspia.proto.DmiProcessors.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -7127,16 +7250,16 @@ void DmiProcessors::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiProcessors)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiProcessors)
 }
 
 size_t DmiProcessors::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiProcessors)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiProcessors)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.DmiProcessors.Item item = 1;
+  // repeated .aspia.proto.DmiProcessors.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -7160,7 +7283,7 @@ void DmiProcessors::CheckTypeAndMergeFrom(
 }
 
 void DmiProcessors::MergeFrom(const DmiProcessors& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiProcessors)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiProcessors)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -7170,7 +7293,7 @@ void DmiProcessors::MergeFrom(const DmiProcessors& from) {
 }
 
 void DmiProcessors::CopyFrom(const DmiProcessors& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiProcessors)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiProcessors)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -7192,7 +7315,7 @@ void DmiProcessors::InternalSwap(DmiProcessors* other) {
 }
 
 ::std::string DmiProcessors::GetTypeName() const {
-  return "aspia.system_info.DmiProcessors";
+  return "aspia.proto.DmiProcessors";
 }
 
 
@@ -7220,7 +7343,7 @@ DmiMemoryDevices_Item::DmiMemoryDevices_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiMemoryDevices_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiMemoryDevices.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiMemoryDevices.Item)
 }
 DmiMemoryDevices_Item::DmiMemoryDevices_Item(const DmiMemoryDevices_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -7258,7 +7381,7 @@ DmiMemoryDevices_Item::DmiMemoryDevices_Item(const DmiMemoryDevices_Item& from)
   ::memcpy(&size_, &from.size_,
     static_cast<size_t>(reinterpret_cast<char*>(&data_width_) -
     reinterpret_cast<char*>(&size_)) + sizeof(data_width_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiMemoryDevices.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiMemoryDevices.Item)
 }
 
 void DmiMemoryDevices_Item::SharedCtor() {
@@ -7276,7 +7399,7 @@ void DmiMemoryDevices_Item::SharedCtor() {
 }
 
 DmiMemoryDevices_Item::~DmiMemoryDevices_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiMemoryDevices.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiMemoryDevices.Item)
   SharedDtor();
 }
 
@@ -7309,7 +7432,7 @@ DmiMemoryDevices_Item* DmiMemoryDevices_Item::New(::google::protobuf::Arena* are
 }
 
 void DmiMemoryDevices_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiMemoryDevices.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiMemoryDevices.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -7337,7 +7460,7 @@ bool DmiMemoryDevices_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiMemoryDevices.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiMemoryDevices.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -7352,7 +7475,7 @@ bool DmiMemoryDevices_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->device_locator().data(), static_cast<int>(this->device_locator().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiMemoryDevices.Item.device_locator"));
+            "aspia.proto.DmiMemoryDevices.Item.device_locator"));
         } else {
           goto handle_unusual;
         }
@@ -7382,7 +7505,7 @@ bool DmiMemoryDevices_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->type().data(), static_cast<int>(this->type().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiMemoryDevices.Item.type"));
+            "aspia.proto.DmiMemoryDevices.Item.type"));
         } else {
           goto handle_unusual;
         }
@@ -7412,7 +7535,7 @@ bool DmiMemoryDevices_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->form_factor().data(), static_cast<int>(this->form_factor().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiMemoryDevices.Item.form_factor"));
+            "aspia.proto.DmiMemoryDevices.Item.form_factor"));
         } else {
           goto handle_unusual;
         }
@@ -7428,7 +7551,7 @@ bool DmiMemoryDevices_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->serial_number().data(), static_cast<int>(this->serial_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiMemoryDevices.Item.serial_number"));
+            "aspia.proto.DmiMemoryDevices.Item.serial_number"));
         } else {
           goto handle_unusual;
         }
@@ -7444,7 +7567,7 @@ bool DmiMemoryDevices_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->part_number().data(), static_cast<int>(this->part_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiMemoryDevices.Item.part_number"));
+            "aspia.proto.DmiMemoryDevices.Item.part_number"));
         } else {
           goto handle_unusual;
         }
@@ -7460,7 +7583,7 @@ bool DmiMemoryDevices_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->manufactorer().data(), static_cast<int>(this->manufactorer().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiMemoryDevices.Item.manufactorer"));
+            "aspia.proto.DmiMemoryDevices.Item.manufactorer"));
         } else {
           goto handle_unusual;
         }
@@ -7476,7 +7599,7 @@ bool DmiMemoryDevices_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->bank().data(), static_cast<int>(this->bank().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiMemoryDevices.Item.bank"));
+            "aspia.proto.DmiMemoryDevices.Item.bank"));
         } else {
           goto handle_unusual;
         }
@@ -7523,17 +7646,17 @@ bool DmiMemoryDevices_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiMemoryDevices.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiMemoryDevices.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiMemoryDevices.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiMemoryDevices.Item)
   return false;
 #undef DO_
 }
 
 void DmiMemoryDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiMemoryDevices.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiMemoryDevices.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -7542,7 +7665,7 @@ void DmiMemoryDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->device_locator().data(), static_cast<int>(this->device_locator().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiMemoryDevices.Item.device_locator");
+      "aspia.proto.DmiMemoryDevices.Item.device_locator");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->device_locator(), output);
   }
@@ -7557,7 +7680,7 @@ void DmiMemoryDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->type().data(), static_cast<int>(this->type().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiMemoryDevices.Item.type");
+      "aspia.proto.DmiMemoryDevices.Item.type");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->type(), output);
   }
@@ -7572,7 +7695,7 @@ void DmiMemoryDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->form_factor().data(), static_cast<int>(this->form_factor().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiMemoryDevices.Item.form_factor");
+      "aspia.proto.DmiMemoryDevices.Item.form_factor");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->form_factor(), output);
   }
@@ -7582,7 +7705,7 @@ void DmiMemoryDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->serial_number().data(), static_cast<int>(this->serial_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiMemoryDevices.Item.serial_number");
+      "aspia.proto.DmiMemoryDevices.Item.serial_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->serial_number(), output);
   }
@@ -7592,7 +7715,7 @@ void DmiMemoryDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->part_number().data(), static_cast<int>(this->part_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiMemoryDevices.Item.part_number");
+      "aspia.proto.DmiMemoryDevices.Item.part_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       7, this->part_number(), output);
   }
@@ -7602,7 +7725,7 @@ void DmiMemoryDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->manufactorer().data(), static_cast<int>(this->manufactorer().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiMemoryDevices.Item.manufactorer");
+      "aspia.proto.DmiMemoryDevices.Item.manufactorer");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       8, this->manufactorer(), output);
   }
@@ -7612,7 +7735,7 @@ void DmiMemoryDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->bank().data(), static_cast<int>(this->bank().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiMemoryDevices.Item.bank");
+      "aspia.proto.DmiMemoryDevices.Item.bank");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       9, this->bank(), output);
   }
@@ -7629,11 +7752,11 @@ void DmiMemoryDevices_Item::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiMemoryDevices.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiMemoryDevices.Item)
 }
 
 size_t DmiMemoryDevices_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiMemoryDevices.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiMemoryDevices.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -7728,7 +7851,7 @@ void DmiMemoryDevices_Item::CheckTypeAndMergeFrom(
 }
 
 void DmiMemoryDevices_Item::MergeFrom(const DmiMemoryDevices_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiMemoryDevices.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiMemoryDevices.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -7777,7 +7900,7 @@ void DmiMemoryDevices_Item::MergeFrom(const DmiMemoryDevices_Item& from) {
 }
 
 void DmiMemoryDevices_Item::CopyFrom(const DmiMemoryDevices_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiMemoryDevices.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiMemoryDevices.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -7809,7 +7932,7 @@ void DmiMemoryDevices_Item::InternalSwap(DmiMemoryDevices_Item* other) {
 }
 
 ::std::string DmiMemoryDevices_Item::GetTypeName() const {
-  return "aspia.system_info.DmiMemoryDevices.Item";
+  return "aspia.proto.DmiMemoryDevices.Item";
 }
 
 
@@ -7827,7 +7950,7 @@ DmiMemoryDevices::DmiMemoryDevices()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiMemoryDevices();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiMemoryDevices)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiMemoryDevices)
 }
 DmiMemoryDevices::DmiMemoryDevices(const DmiMemoryDevices& from)
   : ::google::protobuf::MessageLite(),
@@ -7835,7 +7958,7 @@ DmiMemoryDevices::DmiMemoryDevices(const DmiMemoryDevices& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiMemoryDevices)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiMemoryDevices)
 }
 
 void DmiMemoryDevices::SharedCtor() {
@@ -7843,7 +7966,7 @@ void DmiMemoryDevices::SharedCtor() {
 }
 
 DmiMemoryDevices::~DmiMemoryDevices() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiMemoryDevices)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiMemoryDevices)
   SharedDtor();
 }
 
@@ -7869,7 +7992,7 @@ DmiMemoryDevices* DmiMemoryDevices::New(::google::protobuf::Arena* arena) const 
 }
 
 void DmiMemoryDevices::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiMemoryDevices)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiMemoryDevices)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -7888,13 +8011,13 @@ bool DmiMemoryDevices::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiMemoryDevices)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiMemoryDevices)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.DmiMemoryDevices.Item item = 1;
+      // repeated .aspia.proto.DmiMemoryDevices.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -7917,21 +8040,21 @@ bool DmiMemoryDevices::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiMemoryDevices)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiMemoryDevices)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiMemoryDevices)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiMemoryDevices)
   return false;
 #undef DO_
 }
 
 void DmiMemoryDevices::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiMemoryDevices)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiMemoryDevices)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.DmiMemoryDevices.Item item = 1;
+  // repeated .aspia.proto.DmiMemoryDevices.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -7940,16 +8063,16 @@ void DmiMemoryDevices::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiMemoryDevices)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiMemoryDevices)
 }
 
 size_t DmiMemoryDevices::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiMemoryDevices)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiMemoryDevices)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.DmiMemoryDevices.Item item = 1;
+  // repeated .aspia.proto.DmiMemoryDevices.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -7973,7 +8096,7 @@ void DmiMemoryDevices::CheckTypeAndMergeFrom(
 }
 
 void DmiMemoryDevices::MergeFrom(const DmiMemoryDevices& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiMemoryDevices)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiMemoryDevices)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -7983,7 +8106,7 @@ void DmiMemoryDevices::MergeFrom(const DmiMemoryDevices& from) {
 }
 
 void DmiMemoryDevices::CopyFrom(const DmiMemoryDevices& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiMemoryDevices)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiMemoryDevices)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -8005,7 +8128,7 @@ void DmiMemoryDevices::InternalSwap(DmiMemoryDevices* other) {
 }
 
 ::std::string DmiMemoryDevices::GetTypeName() const {
-  return "aspia.system_info.DmiMemoryDevices";
+  return "aspia.proto.DmiMemoryDevices";
 }
 
 
@@ -8027,7 +8150,7 @@ DmiSystemSlots_Item::DmiSystemSlots_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiSystemSlots_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiSystemSlots.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiSystemSlots.Item)
 }
 DmiSystemSlots_Item::DmiSystemSlots_Item(const DmiSystemSlots_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -8042,35 +8165,41 @@ DmiSystemSlots_Item::DmiSystemSlots_Item(const DmiSystemSlots_Item& from)
   if (from.type().size() > 0) {
     type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
   }
+  usage_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.usage().size() > 0) {
+    usage_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.usage_);
+  }
   bus_width_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.bus_width().size() > 0) {
     bus_width_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.bus_width_);
   }
-  ::memcpy(&usage_, &from.usage_,
-    static_cast<size_t>(reinterpret_cast<char*>(&length_) -
-    reinterpret_cast<char*>(&usage_)) + sizeof(length_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiSystemSlots.Item)
+  length_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.length().size() > 0) {
+    length_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.length_);
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiSystemSlots.Item)
 }
 
 void DmiSystemSlots_Item::SharedCtor() {
   slot_designation_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  usage_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   bus_width_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&usage_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&length_) -
-      reinterpret_cast<char*>(&usage_)) + sizeof(length_));
+  length_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   _cached_size_ = 0;
 }
 
 DmiSystemSlots_Item::~DmiSystemSlots_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiSystemSlots.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiSystemSlots.Item)
   SharedDtor();
 }
 
 void DmiSystemSlots_Item::SharedDtor() {
   slot_designation_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  usage_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   bus_width_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  length_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void DmiSystemSlots_Item::SetCachedSize(int size) const {
@@ -8092,17 +8221,16 @@ DmiSystemSlots_Item* DmiSystemSlots_Item::New(::google::protobuf::Arena* arena) 
 }
 
 void DmiSystemSlots_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiSystemSlots.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiSystemSlots.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   slot_designation_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  usage_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   bus_width_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&usage_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&length_) -
-      reinterpret_cast<char*>(&usage_)) + sizeof(length_));
+  length_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   _internal_metadata_.Clear();
 }
 
@@ -8116,7 +8244,7 @@ bool DmiSystemSlots_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiSystemSlots.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiSystemSlots.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -8131,7 +8259,7 @@ bool DmiSystemSlots_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->slot_designation().data(), static_cast<int>(this->slot_designation().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiSystemSlots.Item.slot_designation"));
+            "aspia.proto.DmiSystemSlots.Item.slot_designation"));
         } else {
           goto handle_unusual;
         }
@@ -8147,22 +8275,23 @@ bool DmiSystemSlots_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->type().data(), static_cast<int>(this->type().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiSystemSlots.Item.type"));
+            "aspia.proto.DmiSystemSlots.Item.type"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiSystemSlots.Item.Usage usage = 3;
+      // string usage = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_usage(static_cast< ::aspia::system_info::DmiSystemSlots_Item_Usage >(value));
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_usage()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->usage().data(), static_cast<int>(this->usage().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiSystemSlots.Item.usage"));
         } else {
           goto handle_unusual;
         }
@@ -8178,22 +8307,23 @@ bool DmiSystemSlots_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->bus_width().data(), static_cast<int>(this->bus_width().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiSystemSlots.Item.bus_width"));
+            "aspia.proto.DmiSystemSlots.Item.bus_width"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.DmiSystemSlots.Item.Length length = 5;
+      // string length = 5;
       case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_length(static_cast< ::aspia::system_info::DmiSystemSlots_Item_Length >(value));
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_length()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->length().data(), static_cast<int>(this->length().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.DmiSystemSlots.Item.length"));
         } else {
           goto handle_unusual;
         }
@@ -8212,17 +8342,17 @@ bool DmiSystemSlots_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiSystemSlots.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiSystemSlots.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiSystemSlots.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiSystemSlots.Item)
   return false;
 #undef DO_
 }
 
 void DmiSystemSlots_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiSystemSlots.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiSystemSlots.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -8231,7 +8361,7 @@ void DmiSystemSlots_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->slot_designation().data(), static_cast<int>(this->slot_designation().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiSystemSlots.Item.slot_designation");
+      "aspia.proto.DmiSystemSlots.Item.slot_designation");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->slot_designation(), output);
   }
@@ -8241,14 +8371,18 @@ void DmiSystemSlots_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->type().data(), static_cast<int>(this->type().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiSystemSlots.Item.type");
+      "aspia.proto.DmiSystemSlots.Item.type");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->type(), output);
   }
 
-  // .aspia.system_info.DmiSystemSlots.Item.Usage usage = 3;
-  if (this->usage() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string usage = 3;
+  if (this->usage().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->usage().data(), static_cast<int>(this->usage().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiSystemSlots.Item.usage");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->usage(), output);
   }
 
@@ -8257,24 +8391,28 @@ void DmiSystemSlots_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->bus_width().data(), static_cast<int>(this->bus_width().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiSystemSlots.Item.bus_width");
+      "aspia.proto.DmiSystemSlots.Item.bus_width");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->bus_width(), output);
   }
 
-  // .aspia.system_info.DmiSystemSlots.Item.Length length = 5;
-  if (this->length() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string length = 5;
+  if (this->length().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->length().data(), static_cast<int>(this->length().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.DmiSystemSlots.Item.length");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->length(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiSystemSlots.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiSystemSlots.Item)
 }
 
 size_t DmiSystemSlots_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiSystemSlots.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiSystemSlots.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -8293,6 +8431,13 @@ size_t DmiSystemSlots_Item::ByteSizeLong() const {
         this->type());
   }
 
+  // string usage = 3;
+  if (this->usage().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->usage());
+  }
+
   // string bus_width = 4;
   if (this->bus_width().size() > 0) {
     total_size += 1 +
@@ -8300,16 +8445,11 @@ size_t DmiSystemSlots_Item::ByteSizeLong() const {
         this->bus_width());
   }
 
-  // .aspia.system_info.DmiSystemSlots.Item.Usage usage = 3;
-  if (this->usage() != 0) {
+  // string length = 5;
+  if (this->length().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->usage());
-  }
-
-  // .aspia.system_info.DmiSystemSlots.Item.Length length = 5;
-  if (this->length() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->length());
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->length());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -8325,7 +8465,7 @@ void DmiSystemSlots_Item::CheckTypeAndMergeFrom(
 }
 
 void DmiSystemSlots_Item::MergeFrom(const DmiSystemSlots_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiSystemSlots.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiSystemSlots.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -8339,20 +8479,22 @@ void DmiSystemSlots_Item::MergeFrom(const DmiSystemSlots_Item& from) {
 
     type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
   }
+  if (from.usage().size() > 0) {
+
+    usage_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.usage_);
+  }
   if (from.bus_width().size() > 0) {
 
     bus_width_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.bus_width_);
   }
-  if (from.usage() != 0) {
-    set_usage(from.usage());
-  }
-  if (from.length() != 0) {
-    set_length(from.length());
+  if (from.length().size() > 0) {
+
+    length_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.length_);
   }
 }
 
 void DmiSystemSlots_Item::CopyFrom(const DmiSystemSlots_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiSystemSlots.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiSystemSlots.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -8370,15 +8512,15 @@ void DmiSystemSlots_Item::InternalSwap(DmiSystemSlots_Item* other) {
   using std::swap;
   slot_designation_.Swap(&other->slot_designation_);
   type_.Swap(&other->type_);
+  usage_.Swap(&other->usage_);
   bus_width_.Swap(&other->bus_width_);
-  swap(usage_, other->usage_);
-  swap(length_, other->length_);
+  length_.Swap(&other->length_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string DmiSystemSlots_Item::GetTypeName() const {
-  return "aspia.system_info.DmiSystemSlots.Item";
+  return "aspia.proto.DmiSystemSlots.Item";
 }
 
 
@@ -8396,7 +8538,7 @@ DmiSystemSlots::DmiSystemSlots()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiSystemSlots();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiSystemSlots)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiSystemSlots)
 }
 DmiSystemSlots::DmiSystemSlots(const DmiSystemSlots& from)
   : ::google::protobuf::MessageLite(),
@@ -8404,7 +8546,7 @@ DmiSystemSlots::DmiSystemSlots(const DmiSystemSlots& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiSystemSlots)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiSystemSlots)
 }
 
 void DmiSystemSlots::SharedCtor() {
@@ -8412,7 +8554,7 @@ void DmiSystemSlots::SharedCtor() {
 }
 
 DmiSystemSlots::~DmiSystemSlots() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiSystemSlots)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiSystemSlots)
   SharedDtor();
 }
 
@@ -8438,7 +8580,7 @@ DmiSystemSlots* DmiSystemSlots::New(::google::protobuf::Arena* arena) const {
 }
 
 void DmiSystemSlots::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiSystemSlots)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiSystemSlots)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -8457,13 +8599,13 @@ bool DmiSystemSlots::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiSystemSlots)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiSystemSlots)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.DmiSystemSlots.Item item = 1;
+      // repeated .aspia.proto.DmiSystemSlots.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -8486,21 +8628,21 @@ bool DmiSystemSlots::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiSystemSlots)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiSystemSlots)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiSystemSlots)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiSystemSlots)
   return false;
 #undef DO_
 }
 
 void DmiSystemSlots::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiSystemSlots)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiSystemSlots)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.DmiSystemSlots.Item item = 1;
+  // repeated .aspia.proto.DmiSystemSlots.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -8509,16 +8651,16 @@ void DmiSystemSlots::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiSystemSlots)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiSystemSlots)
 }
 
 size_t DmiSystemSlots::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiSystemSlots)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiSystemSlots)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.DmiSystemSlots.Item item = 1;
+  // repeated .aspia.proto.DmiSystemSlots.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -8542,7 +8684,7 @@ void DmiSystemSlots::CheckTypeAndMergeFrom(
 }
 
 void DmiSystemSlots::MergeFrom(const DmiSystemSlots& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiSystemSlots)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiSystemSlots)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -8552,7 +8694,7 @@ void DmiSystemSlots::MergeFrom(const DmiSystemSlots& from) {
 }
 
 void DmiSystemSlots::CopyFrom(const DmiSystemSlots& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiSystemSlots)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiSystemSlots)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -8574,7 +8716,7 @@ void DmiSystemSlots::InternalSwap(DmiSystemSlots* other) {
 }
 
 ::std::string DmiSystemSlots::GetTypeName() const {
-  return "aspia.system_info.DmiSystemSlots";
+  return "aspia.proto.DmiSystemSlots";
 }
 
 
@@ -8596,7 +8738,7 @@ DmiPortConnectors_Item::DmiPortConnectors_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPortConnectors_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiPortConnectors.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiPortConnectors.Item)
 }
 DmiPortConnectors_Item::DmiPortConnectors_Item(const DmiPortConnectors_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -8623,7 +8765,7 @@ DmiPortConnectors_Item::DmiPortConnectors_Item(const DmiPortConnectors_Item& fro
   if (from.external_connector_type().size() > 0) {
     external_connector_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.external_connector_type_);
   }
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiPortConnectors.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiPortConnectors.Item)
 }
 
 void DmiPortConnectors_Item::SharedCtor() {
@@ -8636,7 +8778,7 @@ void DmiPortConnectors_Item::SharedCtor() {
 }
 
 DmiPortConnectors_Item::~DmiPortConnectors_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiPortConnectors.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiPortConnectors.Item)
   SharedDtor();
 }
 
@@ -8667,7 +8809,7 @@ DmiPortConnectors_Item* DmiPortConnectors_Item::New(::google::protobuf::Arena* a
 }
 
 void DmiPortConnectors_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiPortConnectors.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiPortConnectors.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -8690,7 +8832,7 @@ bool DmiPortConnectors_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiPortConnectors.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiPortConnectors.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -8705,7 +8847,7 @@ bool DmiPortConnectors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->internal_designation().data(), static_cast<int>(this->internal_designation().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiPortConnectors.Item.internal_designation"));
+            "aspia.proto.DmiPortConnectors.Item.internal_designation"));
         } else {
           goto handle_unusual;
         }
@@ -8721,7 +8863,7 @@ bool DmiPortConnectors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->external_designation().data(), static_cast<int>(this->external_designation().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiPortConnectors.Item.external_designation"));
+            "aspia.proto.DmiPortConnectors.Item.external_designation"));
         } else {
           goto handle_unusual;
         }
@@ -8737,7 +8879,7 @@ bool DmiPortConnectors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->type().data(), static_cast<int>(this->type().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiPortConnectors.Item.type"));
+            "aspia.proto.DmiPortConnectors.Item.type"));
         } else {
           goto handle_unusual;
         }
@@ -8753,7 +8895,7 @@ bool DmiPortConnectors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->internal_connector_type().data(), static_cast<int>(this->internal_connector_type().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiPortConnectors.Item.internal_connector_type"));
+            "aspia.proto.DmiPortConnectors.Item.internal_connector_type"));
         } else {
           goto handle_unusual;
         }
@@ -8769,7 +8911,7 @@ bool DmiPortConnectors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->external_connector_type().data(), static_cast<int>(this->external_connector_type().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiPortConnectors.Item.external_connector_type"));
+            "aspia.proto.DmiPortConnectors.Item.external_connector_type"));
         } else {
           goto handle_unusual;
         }
@@ -8788,17 +8930,17 @@ bool DmiPortConnectors_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiPortConnectors.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiPortConnectors.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiPortConnectors.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiPortConnectors.Item)
   return false;
 #undef DO_
 }
 
 void DmiPortConnectors_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiPortConnectors.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiPortConnectors.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -8807,7 +8949,7 @@ void DmiPortConnectors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->internal_designation().data(), static_cast<int>(this->internal_designation().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiPortConnectors.Item.internal_designation");
+      "aspia.proto.DmiPortConnectors.Item.internal_designation");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->internal_designation(), output);
   }
@@ -8817,7 +8959,7 @@ void DmiPortConnectors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->external_designation().data(), static_cast<int>(this->external_designation().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiPortConnectors.Item.external_designation");
+      "aspia.proto.DmiPortConnectors.Item.external_designation");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->external_designation(), output);
   }
@@ -8827,7 +8969,7 @@ void DmiPortConnectors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->type().data(), static_cast<int>(this->type().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiPortConnectors.Item.type");
+      "aspia.proto.DmiPortConnectors.Item.type");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->type(), output);
   }
@@ -8837,7 +8979,7 @@ void DmiPortConnectors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->internal_connector_type().data(), static_cast<int>(this->internal_connector_type().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiPortConnectors.Item.internal_connector_type");
+      "aspia.proto.DmiPortConnectors.Item.internal_connector_type");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->internal_connector_type(), output);
   }
@@ -8847,18 +8989,18 @@ void DmiPortConnectors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->external_connector_type().data(), static_cast<int>(this->external_connector_type().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiPortConnectors.Item.external_connector_type");
+      "aspia.proto.DmiPortConnectors.Item.external_connector_type");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->external_connector_type(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiPortConnectors.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiPortConnectors.Item)
 }
 
 size_t DmiPortConnectors_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiPortConnectors.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiPortConnectors.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -8911,7 +9053,7 @@ void DmiPortConnectors_Item::CheckTypeAndMergeFrom(
 }
 
 void DmiPortConnectors_Item::MergeFrom(const DmiPortConnectors_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiPortConnectors.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiPortConnectors.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -8940,7 +9082,7 @@ void DmiPortConnectors_Item::MergeFrom(const DmiPortConnectors_Item& from) {
 }
 
 void DmiPortConnectors_Item::CopyFrom(const DmiPortConnectors_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiPortConnectors.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiPortConnectors.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -8966,7 +9108,7 @@ void DmiPortConnectors_Item::InternalSwap(DmiPortConnectors_Item* other) {
 }
 
 ::std::string DmiPortConnectors_Item::GetTypeName() const {
-  return "aspia.system_info.DmiPortConnectors.Item";
+  return "aspia.proto.DmiPortConnectors.Item";
 }
 
 
@@ -8984,7 +9126,7 @@ DmiPortConnectors::DmiPortConnectors()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPortConnectors();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiPortConnectors)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiPortConnectors)
 }
 DmiPortConnectors::DmiPortConnectors(const DmiPortConnectors& from)
   : ::google::protobuf::MessageLite(),
@@ -8992,7 +9134,7 @@ DmiPortConnectors::DmiPortConnectors(const DmiPortConnectors& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiPortConnectors)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiPortConnectors)
 }
 
 void DmiPortConnectors::SharedCtor() {
@@ -9000,7 +9142,7 @@ void DmiPortConnectors::SharedCtor() {
 }
 
 DmiPortConnectors::~DmiPortConnectors() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiPortConnectors)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiPortConnectors)
   SharedDtor();
 }
 
@@ -9026,7 +9168,7 @@ DmiPortConnectors* DmiPortConnectors::New(::google::protobuf::Arena* arena) cons
 }
 
 void DmiPortConnectors::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiPortConnectors)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiPortConnectors)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -9045,13 +9187,13 @@ bool DmiPortConnectors::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiPortConnectors)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiPortConnectors)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.DmiPortConnectors.Item item = 1;
+      // repeated .aspia.proto.DmiPortConnectors.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -9074,21 +9216,21 @@ bool DmiPortConnectors::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiPortConnectors)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiPortConnectors)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiPortConnectors)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiPortConnectors)
   return false;
 #undef DO_
 }
 
 void DmiPortConnectors::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiPortConnectors)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiPortConnectors)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.DmiPortConnectors.Item item = 1;
+  // repeated .aspia.proto.DmiPortConnectors.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -9097,16 +9239,16 @@ void DmiPortConnectors::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiPortConnectors)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiPortConnectors)
 }
 
 size_t DmiPortConnectors::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiPortConnectors)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiPortConnectors)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.DmiPortConnectors.Item item = 1;
+  // repeated .aspia.proto.DmiPortConnectors.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -9130,7 +9272,7 @@ void DmiPortConnectors::CheckTypeAndMergeFrom(
 }
 
 void DmiPortConnectors::MergeFrom(const DmiPortConnectors& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiPortConnectors)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiPortConnectors)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -9140,7 +9282,7 @@ void DmiPortConnectors::MergeFrom(const DmiPortConnectors& from) {
 }
 
 void DmiPortConnectors::CopyFrom(const DmiPortConnectors& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiPortConnectors)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiPortConnectors)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -9162,7 +9304,7 @@ void DmiPortConnectors::InternalSwap(DmiPortConnectors* other) {
 }
 
 ::std::string DmiPortConnectors::GetTypeName() const {
-  return "aspia.system_info.DmiPortConnectors";
+  return "aspia.proto.DmiPortConnectors";
 }
 
 
@@ -9182,7 +9324,7 @@ DmiOnBoardDevices_Item::DmiOnBoardDevices_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiOnBoardDevices_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiOnBoardDevices.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiOnBoardDevices.Item)
 }
 DmiOnBoardDevices_Item::DmiOnBoardDevices_Item(const DmiOnBoardDevices_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -9198,7 +9340,7 @@ DmiOnBoardDevices_Item::DmiOnBoardDevices_Item(const DmiOnBoardDevices_Item& fro
     type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
   }
   enabled_ = from.enabled_;
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiOnBoardDevices.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiOnBoardDevices.Item)
 }
 
 void DmiOnBoardDevices_Item::SharedCtor() {
@@ -9209,7 +9351,7 @@ void DmiOnBoardDevices_Item::SharedCtor() {
 }
 
 DmiOnBoardDevices_Item::~DmiOnBoardDevices_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiOnBoardDevices.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiOnBoardDevices.Item)
   SharedDtor();
 }
 
@@ -9237,7 +9379,7 @@ DmiOnBoardDevices_Item* DmiOnBoardDevices_Item::New(::google::protobuf::Arena* a
 }
 
 void DmiOnBoardDevices_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiOnBoardDevices.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiOnBoardDevices.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -9258,7 +9400,7 @@ bool DmiOnBoardDevices_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiOnBoardDevices.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiOnBoardDevices.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -9273,7 +9415,7 @@ bool DmiOnBoardDevices_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->description().data(), static_cast<int>(this->description().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiOnBoardDevices.Item.description"));
+            "aspia.proto.DmiOnBoardDevices.Item.description"));
         } else {
           goto handle_unusual;
         }
@@ -9289,7 +9431,7 @@ bool DmiOnBoardDevices_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->type().data(), static_cast<int>(this->type().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiOnBoardDevices.Item.type"));
+            "aspia.proto.DmiOnBoardDevices.Item.type"));
         } else {
           goto handle_unusual;
         }
@@ -9322,17 +9464,17 @@ bool DmiOnBoardDevices_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiOnBoardDevices.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiOnBoardDevices.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiOnBoardDevices.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiOnBoardDevices.Item)
   return false;
 #undef DO_
 }
 
 void DmiOnBoardDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiOnBoardDevices.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiOnBoardDevices.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -9341,7 +9483,7 @@ void DmiOnBoardDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->description().data(), static_cast<int>(this->description().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiOnBoardDevices.Item.description");
+      "aspia.proto.DmiOnBoardDevices.Item.description");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->description(), output);
   }
@@ -9351,7 +9493,7 @@ void DmiOnBoardDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->type().data(), static_cast<int>(this->type().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiOnBoardDevices.Item.type");
+      "aspia.proto.DmiOnBoardDevices.Item.type");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->type(), output);
   }
@@ -9363,11 +9505,11 @@ void DmiOnBoardDevices_Item::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiOnBoardDevices.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiOnBoardDevices.Item)
 }
 
 size_t DmiOnBoardDevices_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiOnBoardDevices.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiOnBoardDevices.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -9404,7 +9546,7 @@ void DmiOnBoardDevices_Item::CheckTypeAndMergeFrom(
 }
 
 void DmiOnBoardDevices_Item::MergeFrom(const DmiOnBoardDevices_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiOnBoardDevices.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiOnBoardDevices.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -9424,7 +9566,7 @@ void DmiOnBoardDevices_Item::MergeFrom(const DmiOnBoardDevices_Item& from) {
 }
 
 void DmiOnBoardDevices_Item::CopyFrom(const DmiOnBoardDevices_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiOnBoardDevices.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiOnBoardDevices.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -9448,7 +9590,7 @@ void DmiOnBoardDevices_Item::InternalSwap(DmiOnBoardDevices_Item* other) {
 }
 
 ::std::string DmiOnBoardDevices_Item::GetTypeName() const {
-  return "aspia.system_info.DmiOnBoardDevices.Item";
+  return "aspia.proto.DmiOnBoardDevices.Item";
 }
 
 
@@ -9466,7 +9608,7 @@ DmiOnBoardDevices::DmiOnBoardDevices()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiOnBoardDevices();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiOnBoardDevices)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiOnBoardDevices)
 }
 DmiOnBoardDevices::DmiOnBoardDevices(const DmiOnBoardDevices& from)
   : ::google::protobuf::MessageLite(),
@@ -9474,7 +9616,7 @@ DmiOnBoardDevices::DmiOnBoardDevices(const DmiOnBoardDevices& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiOnBoardDevices)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiOnBoardDevices)
 }
 
 void DmiOnBoardDevices::SharedCtor() {
@@ -9482,7 +9624,7 @@ void DmiOnBoardDevices::SharedCtor() {
 }
 
 DmiOnBoardDevices::~DmiOnBoardDevices() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiOnBoardDevices)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiOnBoardDevices)
   SharedDtor();
 }
 
@@ -9508,7 +9650,7 @@ DmiOnBoardDevices* DmiOnBoardDevices::New(::google::protobuf::Arena* arena) cons
 }
 
 void DmiOnBoardDevices::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiOnBoardDevices)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiOnBoardDevices)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -9527,13 +9669,13 @@ bool DmiOnBoardDevices::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiOnBoardDevices)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiOnBoardDevices)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.DmiOnBoardDevices.Item item = 1;
+      // repeated .aspia.proto.DmiOnBoardDevices.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -9556,21 +9698,21 @@ bool DmiOnBoardDevices::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiOnBoardDevices)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiOnBoardDevices)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiOnBoardDevices)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiOnBoardDevices)
   return false;
 #undef DO_
 }
 
 void DmiOnBoardDevices::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiOnBoardDevices)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiOnBoardDevices)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.DmiOnBoardDevices.Item item = 1;
+  // repeated .aspia.proto.DmiOnBoardDevices.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -9579,16 +9721,16 @@ void DmiOnBoardDevices::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiOnBoardDevices)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiOnBoardDevices)
 }
 
 size_t DmiOnBoardDevices::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiOnBoardDevices)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiOnBoardDevices)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.DmiOnBoardDevices.Item item = 1;
+  // repeated .aspia.proto.DmiOnBoardDevices.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -9612,7 +9754,7 @@ void DmiOnBoardDevices::CheckTypeAndMergeFrom(
 }
 
 void DmiOnBoardDevices::MergeFrom(const DmiOnBoardDevices& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiOnBoardDevices)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiOnBoardDevices)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -9622,7 +9764,7 @@ void DmiOnBoardDevices::MergeFrom(const DmiOnBoardDevices& from) {
 }
 
 void DmiOnBoardDevices::CopyFrom(const DmiOnBoardDevices& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiOnBoardDevices)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiOnBoardDevices)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -9644,7 +9786,7 @@ void DmiOnBoardDevices::InternalSwap(DmiOnBoardDevices* other) {
 }
 
 ::std::string DmiOnBoardDevices::GetTypeName() const {
-  return "aspia.system_info.DmiOnBoardDevices";
+  return "aspia.proto.DmiOnBoardDevices";
 }
 
 
@@ -9664,7 +9806,7 @@ DmiBuildinPointing_Item::DmiBuildinPointing_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBuildinPointing_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiBuildinPointing.Item)
 }
 DmiBuildinPointing_Item::DmiBuildinPointing_Item(const DmiBuildinPointing_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -9680,7 +9822,7 @@ DmiBuildinPointing_Item::DmiBuildinPointing_Item(const DmiBuildinPointing_Item& 
     device_interface_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_interface_);
   }
   button_count_ = from.button_count_;
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiBuildinPointing.Item)
 }
 
 void DmiBuildinPointing_Item::SharedCtor() {
@@ -9691,7 +9833,7 @@ void DmiBuildinPointing_Item::SharedCtor() {
 }
 
 DmiBuildinPointing_Item::~DmiBuildinPointing_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiBuildinPointing.Item)
   SharedDtor();
 }
 
@@ -9719,7 +9861,7 @@ DmiBuildinPointing_Item* DmiBuildinPointing_Item::New(::google::protobuf::Arena*
 }
 
 void DmiBuildinPointing_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiBuildinPointing.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiBuildinPointing.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -9740,7 +9882,7 @@ bool DmiBuildinPointing_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiBuildinPointing.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -9755,7 +9897,7 @@ bool DmiBuildinPointing_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->device_type().data(), static_cast<int>(this->device_type().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBuildinPointing.Item.device_type"));
+            "aspia.proto.DmiBuildinPointing.Item.device_type"));
         } else {
           goto handle_unusual;
         }
@@ -9771,7 +9913,7 @@ bool DmiBuildinPointing_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->device_interface().data(), static_cast<int>(this->device_interface().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiBuildinPointing.Item.device_interface"));
+            "aspia.proto.DmiBuildinPointing.Item.device_interface"));
         } else {
           goto handle_unusual;
         }
@@ -9804,17 +9946,17 @@ bool DmiBuildinPointing_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiBuildinPointing.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiBuildinPointing.Item)
   return false;
 #undef DO_
 }
 
 void DmiBuildinPointing_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiBuildinPointing.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -9823,7 +9965,7 @@ void DmiBuildinPointing_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->device_type().data(), static_cast<int>(this->device_type().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBuildinPointing.Item.device_type");
+      "aspia.proto.DmiBuildinPointing.Item.device_type");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->device_type(), output);
   }
@@ -9833,7 +9975,7 @@ void DmiBuildinPointing_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->device_interface().data(), static_cast<int>(this->device_interface().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiBuildinPointing.Item.device_interface");
+      "aspia.proto.DmiBuildinPointing.Item.device_interface");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->device_interface(), output);
   }
@@ -9845,11 +9987,11 @@ void DmiBuildinPointing_Item::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiBuildinPointing.Item)
 }
 
 size_t DmiBuildinPointing_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiBuildinPointing.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiBuildinPointing.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -9888,7 +10030,7 @@ void DmiBuildinPointing_Item::CheckTypeAndMergeFrom(
 }
 
 void DmiBuildinPointing_Item::MergeFrom(const DmiBuildinPointing_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiBuildinPointing.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiBuildinPointing.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -9908,7 +10050,7 @@ void DmiBuildinPointing_Item::MergeFrom(const DmiBuildinPointing_Item& from) {
 }
 
 void DmiBuildinPointing_Item::CopyFrom(const DmiBuildinPointing_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiBuildinPointing.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiBuildinPointing.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -9932,7 +10074,7 @@ void DmiBuildinPointing_Item::InternalSwap(DmiBuildinPointing_Item* other) {
 }
 
 ::std::string DmiBuildinPointing_Item::GetTypeName() const {
-  return "aspia.system_info.DmiBuildinPointing.Item";
+  return "aspia.proto.DmiBuildinPointing.Item";
 }
 
 
@@ -9950,7 +10092,7 @@ DmiBuildinPointing::DmiBuildinPointing()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBuildinPointing();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiBuildinPointing)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiBuildinPointing)
 }
 DmiBuildinPointing::DmiBuildinPointing(const DmiBuildinPointing& from)
   : ::google::protobuf::MessageLite(),
@@ -9958,7 +10100,7 @@ DmiBuildinPointing::DmiBuildinPointing(const DmiBuildinPointing& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiBuildinPointing)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiBuildinPointing)
 }
 
 void DmiBuildinPointing::SharedCtor() {
@@ -9966,7 +10108,7 @@ void DmiBuildinPointing::SharedCtor() {
 }
 
 DmiBuildinPointing::~DmiBuildinPointing() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiBuildinPointing)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiBuildinPointing)
   SharedDtor();
 }
 
@@ -9992,7 +10134,7 @@ DmiBuildinPointing* DmiBuildinPointing::New(::google::protobuf::Arena* arena) co
 }
 
 void DmiBuildinPointing::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiBuildinPointing)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiBuildinPointing)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -10011,13 +10153,13 @@ bool DmiBuildinPointing::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiBuildinPointing)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiBuildinPointing)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.DmiBuildinPointing.Item item = 1;
+      // repeated .aspia.proto.DmiBuildinPointing.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -10040,21 +10182,21 @@ bool DmiBuildinPointing::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiBuildinPointing)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiBuildinPointing)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiBuildinPointing)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiBuildinPointing)
   return false;
 #undef DO_
 }
 
 void DmiBuildinPointing::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiBuildinPointing)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiBuildinPointing)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.DmiBuildinPointing.Item item = 1;
+  // repeated .aspia.proto.DmiBuildinPointing.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -10063,16 +10205,16 @@ void DmiBuildinPointing::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiBuildinPointing)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiBuildinPointing)
 }
 
 size_t DmiBuildinPointing::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiBuildinPointing)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiBuildinPointing)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.DmiBuildinPointing.Item item = 1;
+  // repeated .aspia.proto.DmiBuildinPointing.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -10096,7 +10238,7 @@ void DmiBuildinPointing::CheckTypeAndMergeFrom(
 }
 
 void DmiBuildinPointing::MergeFrom(const DmiBuildinPointing& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiBuildinPointing)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiBuildinPointing)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -10106,7 +10248,7 @@ void DmiBuildinPointing::MergeFrom(const DmiBuildinPointing& from) {
 }
 
 void DmiBuildinPointing::CopyFrom(const DmiBuildinPointing& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiBuildinPointing)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiBuildinPointing)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -10128,7 +10270,7 @@ void DmiBuildinPointing::InternalSwap(DmiBuildinPointing* other) {
 }
 
 ::std::string DmiBuildinPointing::GetTypeName() const {
-  return "aspia.system_info.DmiBuildinPointing";
+  return "aspia.proto.DmiBuildinPointing";
 }
 
 
@@ -10158,7 +10300,7 @@ DmiPortableBattery_Item::DmiPortableBattery_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPortableBattery_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiPortableBattery.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiPortableBattery.Item)
 }
 DmiPortableBattery_Item::DmiPortableBattery_Item(const DmiPortableBattery_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -10208,7 +10350,7 @@ DmiPortableBattery_Item::DmiPortableBattery_Item(const DmiPortableBattery_Item& 
   ::memcpy(&design_capacity_, &from.design_capacity_,
     static_cast<size_t>(reinterpret_cast<char*>(&max_error_in_battery_data_) -
     reinterpret_cast<char*>(&design_capacity_)) + sizeof(max_error_in_battery_data_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiPortableBattery.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiPortableBattery.Item)
 }
 
 void DmiPortableBattery_Item::SharedCtor() {
@@ -10229,7 +10371,7 @@ void DmiPortableBattery_Item::SharedCtor() {
 }
 
 DmiPortableBattery_Item::~DmiPortableBattery_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiPortableBattery.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiPortableBattery.Item)
   SharedDtor();
 }
 
@@ -10265,7 +10407,7 @@ DmiPortableBattery_Item* DmiPortableBattery_Item::New(::google::protobuf::Arena*
 }
 
 void DmiPortableBattery_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiPortableBattery.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiPortableBattery.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -10296,7 +10438,7 @@ bool DmiPortableBattery_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiPortableBattery.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiPortableBattery.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -10311,7 +10453,7 @@ bool DmiPortableBattery_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->location().data(), static_cast<int>(this->location().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiPortableBattery.Item.location"));
+            "aspia.proto.DmiPortableBattery.Item.location"));
         } else {
           goto handle_unusual;
         }
@@ -10327,7 +10469,7 @@ bool DmiPortableBattery_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiPortableBattery.Item.manufacturer"));
+            "aspia.proto.DmiPortableBattery.Item.manufacturer"));
         } else {
           goto handle_unusual;
         }
@@ -10343,7 +10485,7 @@ bool DmiPortableBattery_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->manufacture_date().data(), static_cast<int>(this->manufacture_date().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiPortableBattery.Item.manufacture_date"));
+            "aspia.proto.DmiPortableBattery.Item.manufacture_date"));
         } else {
           goto handle_unusual;
         }
@@ -10359,7 +10501,7 @@ bool DmiPortableBattery_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->serial_number().data(), static_cast<int>(this->serial_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiPortableBattery.Item.serial_number"));
+            "aspia.proto.DmiPortableBattery.Item.serial_number"));
         } else {
           goto handle_unusual;
         }
@@ -10375,7 +10517,7 @@ bool DmiPortableBattery_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->device_name().data(), static_cast<int>(this->device_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiPortableBattery.Item.device_name"));
+            "aspia.proto.DmiPortableBattery.Item.device_name"));
         } else {
           goto handle_unusual;
         }
@@ -10391,7 +10533,7 @@ bool DmiPortableBattery_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->chemistry().data(), static_cast<int>(this->chemistry().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiPortableBattery.Item.chemistry"));
+            "aspia.proto.DmiPortableBattery.Item.chemistry"));
         } else {
           goto handle_unusual;
         }
@@ -10435,7 +10577,7 @@ bool DmiPortableBattery_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->sbds_version_number().data(), static_cast<int>(this->sbds_version_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiPortableBattery.Item.sbds_version_number"));
+            "aspia.proto.DmiPortableBattery.Item.sbds_version_number"));
         } else {
           goto handle_unusual;
         }
@@ -10465,7 +10607,7 @@ bool DmiPortableBattery_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->sbds_serial_number().data(), static_cast<int>(this->sbds_serial_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiPortableBattery.Item.sbds_serial_number"));
+            "aspia.proto.DmiPortableBattery.Item.sbds_serial_number"));
         } else {
           goto handle_unusual;
         }
@@ -10481,7 +10623,7 @@ bool DmiPortableBattery_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->sbds_manufacture_date().data(), static_cast<int>(this->sbds_manufacture_date().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiPortableBattery.Item.sbds_manufacture_date"));
+            "aspia.proto.DmiPortableBattery.Item.sbds_manufacture_date"));
         } else {
           goto handle_unusual;
         }
@@ -10497,7 +10639,7 @@ bool DmiPortableBattery_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->sbds_device_chemistry().data(), static_cast<int>(this->sbds_device_chemistry().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.DmiPortableBattery.Item.sbds_device_chemistry"));
+            "aspia.proto.DmiPortableBattery.Item.sbds_device_chemistry"));
         } else {
           goto handle_unusual;
         }
@@ -10516,17 +10658,17 @@ bool DmiPortableBattery_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiPortableBattery.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiPortableBattery.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiPortableBattery.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiPortableBattery.Item)
   return false;
 #undef DO_
 }
 
 void DmiPortableBattery_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiPortableBattery.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiPortableBattery.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -10535,7 +10677,7 @@ void DmiPortableBattery_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->location().data(), static_cast<int>(this->location().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiPortableBattery.Item.location");
+      "aspia.proto.DmiPortableBattery.Item.location");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->location(), output);
   }
@@ -10545,7 +10687,7 @@ void DmiPortableBattery_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiPortableBattery.Item.manufacturer");
+      "aspia.proto.DmiPortableBattery.Item.manufacturer");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->manufacturer(), output);
   }
@@ -10555,7 +10697,7 @@ void DmiPortableBattery_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->manufacture_date().data(), static_cast<int>(this->manufacture_date().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiPortableBattery.Item.manufacture_date");
+      "aspia.proto.DmiPortableBattery.Item.manufacture_date");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->manufacture_date(), output);
   }
@@ -10565,7 +10707,7 @@ void DmiPortableBattery_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->serial_number().data(), static_cast<int>(this->serial_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiPortableBattery.Item.serial_number");
+      "aspia.proto.DmiPortableBattery.Item.serial_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->serial_number(), output);
   }
@@ -10575,7 +10717,7 @@ void DmiPortableBattery_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->device_name().data(), static_cast<int>(this->device_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiPortableBattery.Item.device_name");
+      "aspia.proto.DmiPortableBattery.Item.device_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->device_name(), output);
   }
@@ -10585,7 +10727,7 @@ void DmiPortableBattery_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->chemistry().data(), static_cast<int>(this->chemistry().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiPortableBattery.Item.chemistry");
+      "aspia.proto.DmiPortableBattery.Item.chemistry");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->chemistry(), output);
   }
@@ -10605,7 +10747,7 @@ void DmiPortableBattery_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->sbds_version_number().data(), static_cast<int>(this->sbds_version_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiPortableBattery.Item.sbds_version_number");
+      "aspia.proto.DmiPortableBattery.Item.sbds_version_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       9, this->sbds_version_number(), output);
   }
@@ -10620,7 +10762,7 @@ void DmiPortableBattery_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->sbds_serial_number().data(), static_cast<int>(this->sbds_serial_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiPortableBattery.Item.sbds_serial_number");
+      "aspia.proto.DmiPortableBattery.Item.sbds_serial_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       11, this->sbds_serial_number(), output);
   }
@@ -10630,7 +10772,7 @@ void DmiPortableBattery_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->sbds_manufacture_date().data(), static_cast<int>(this->sbds_manufacture_date().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiPortableBattery.Item.sbds_manufacture_date");
+      "aspia.proto.DmiPortableBattery.Item.sbds_manufacture_date");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       12, this->sbds_manufacture_date(), output);
   }
@@ -10640,18 +10782,18 @@ void DmiPortableBattery_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->sbds_device_chemistry().data(), static_cast<int>(this->sbds_device_chemistry().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.DmiPortableBattery.Item.sbds_device_chemistry");
+      "aspia.proto.DmiPortableBattery.Item.sbds_device_chemistry");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       13, this->sbds_device_chemistry(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiPortableBattery.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiPortableBattery.Item)
 }
 
 size_t DmiPortableBattery_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiPortableBattery.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiPortableBattery.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -10760,7 +10902,7 @@ void DmiPortableBattery_Item::CheckTypeAndMergeFrom(
 }
 
 void DmiPortableBattery_Item::MergeFrom(const DmiPortableBattery_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiPortableBattery.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiPortableBattery.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -10818,7 +10960,7 @@ void DmiPortableBattery_Item::MergeFrom(const DmiPortableBattery_Item& from) {
 }
 
 void DmiPortableBattery_Item::CopyFrom(const DmiPortableBattery_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiPortableBattery.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiPortableBattery.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -10852,7 +10994,7 @@ void DmiPortableBattery_Item::InternalSwap(DmiPortableBattery_Item* other) {
 }
 
 ::std::string DmiPortableBattery_Item::GetTypeName() const {
-  return "aspia.system_info.DmiPortableBattery.Item";
+  return "aspia.proto.DmiPortableBattery.Item";
 }
 
 
@@ -10870,7 +11012,7 @@ DmiPortableBattery::DmiPortableBattery()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPortableBattery();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.DmiPortableBattery)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiPortableBattery)
 }
 DmiPortableBattery::DmiPortableBattery(const DmiPortableBattery& from)
   : ::google::protobuf::MessageLite(),
@@ -10878,7 +11020,7 @@ DmiPortableBattery::DmiPortableBattery(const DmiPortableBattery& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.DmiPortableBattery)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiPortableBattery)
 }
 
 void DmiPortableBattery::SharedCtor() {
@@ -10886,7 +11028,7 @@ void DmiPortableBattery::SharedCtor() {
 }
 
 DmiPortableBattery::~DmiPortableBattery() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.DmiPortableBattery)
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiPortableBattery)
   SharedDtor();
 }
 
@@ -10912,7 +11054,7 @@ DmiPortableBattery* DmiPortableBattery::New(::google::protobuf::Arena* arena) co
 }
 
 void DmiPortableBattery::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.DmiPortableBattery)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiPortableBattery)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -10931,13 +11073,13 @@ bool DmiPortableBattery::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.DmiPortableBattery)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiPortableBattery)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.DmiPortableBattery.Item item = 1;
+      // repeated .aspia.proto.DmiPortableBattery.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -10960,21 +11102,21 @@ bool DmiPortableBattery::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.DmiPortableBattery)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiPortableBattery)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.DmiPortableBattery)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiPortableBattery)
   return false;
 #undef DO_
 }
 
 void DmiPortableBattery::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.DmiPortableBattery)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiPortableBattery)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.DmiPortableBattery.Item item = 1;
+  // repeated .aspia.proto.DmiPortableBattery.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -10983,16 +11125,16 @@ void DmiPortableBattery::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.DmiPortableBattery)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiPortableBattery)
 }
 
 size_t DmiPortableBattery::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.DmiPortableBattery)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiPortableBattery)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.DmiPortableBattery.Item item = 1;
+  // repeated .aspia.proto.DmiPortableBattery.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -11016,7 +11158,7 @@ void DmiPortableBattery::CheckTypeAndMergeFrom(
 }
 
 void DmiPortableBattery::MergeFrom(const DmiPortableBattery& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.DmiPortableBattery)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiPortableBattery)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -11026,7 +11168,7 @@ void DmiPortableBattery::MergeFrom(const DmiPortableBattery& from) {
 }
 
 void DmiPortableBattery::CopyFrom(const DmiPortableBattery& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.DmiPortableBattery)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiPortableBattery)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -11048,7 +11190,247 @@ void DmiPortableBattery::InternalSwap(DmiPortableBattery* other) {
 }
 
 ::std::string DmiPortableBattery::GetTypeName() const {
-  return "aspia.system_info.DmiPortableBattery";
+  return "aspia.proto.DmiPortableBattery";
+}
+
+
+// ===================================================================
+
+void AtaDrives_Item_Feature::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int AtaDrives_Item_Feature::kNameFieldNumber;
+const int AtaDrives_Item_Feature::kEnabledFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+AtaDrives_Item_Feature::AtaDrives_Item_Feature()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsAtaDrives_Item_Feature();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.AtaDrives.Item.Feature)
+}
+AtaDrives_Item_Feature::AtaDrives_Item_Feature(const AtaDrives_Item_Feature& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.name().size() > 0) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  enabled_ = from.enabled_;
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.AtaDrives.Item.Feature)
+}
+
+void AtaDrives_Item_Feature::SharedCtor() {
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  enabled_ = false;
+  _cached_size_ = 0;
+}
+
+AtaDrives_Item_Feature::~AtaDrives_Item_Feature() {
+  // @@protoc_insertion_point(destructor:aspia.proto.AtaDrives.Item.Feature)
+  SharedDtor();
+}
+
+void AtaDrives_Item_Feature::SharedDtor() {
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void AtaDrives_Item_Feature::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const AtaDrives_Item_Feature& AtaDrives_Item_Feature::default_instance() {
+  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsAtaDrives_Item_Feature();
+  return *internal_default_instance();
+}
+
+AtaDrives_Item_Feature* AtaDrives_Item_Feature::New(::google::protobuf::Arena* arena) const {
+  AtaDrives_Item_Feature* n = new AtaDrives_Item_Feature;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void AtaDrives_Item_Feature::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.AtaDrives.Item.Feature)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  enabled_ = false;
+  _internal_metadata_.Clear();
+}
+
+bool AtaDrives_Item_Feature::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.AtaDrives.Item.Feature)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string name = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->name().data(), static_cast<int>(this->name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.AtaDrives.Item.Feature.name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool enabled = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &enabled_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.AtaDrives.Item.Feature)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.AtaDrives.Item.Feature)
+  return false;
+#undef DO_
+}
+
+void AtaDrives_Item_Feature::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.AtaDrives.Item.Feature)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string name = 1;
+  if (this->name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->name().data(), static_cast<int>(this->name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.AtaDrives.Item.Feature.name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->name(), output);
+  }
+
+  // bool enabled = 2;
+  if (this->enabled() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->enabled(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.AtaDrives.Item.Feature)
+}
+
+size_t AtaDrives_Item_Feature::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.AtaDrives.Item.Feature)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string name = 1;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->name());
+  }
+
+  // bool enabled = 2;
+  if (this->enabled() != 0) {
+    total_size += 1 + 1;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void AtaDrives_Item_Feature::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const AtaDrives_Item_Feature*>(&from));
+}
+
+void AtaDrives_Item_Feature::MergeFrom(const AtaDrives_Item_Feature& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.AtaDrives.Item.Feature)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.name().size() > 0) {
+
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  if (from.enabled() != 0) {
+    set_enabled(from.enabled());
+  }
+}
+
+void AtaDrives_Item_Feature::CopyFrom(const AtaDrives_Item_Feature& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.AtaDrives.Item.Feature)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AtaDrives_Item_Feature::IsInitialized() const {
+  return true;
+}
+
+void AtaDrives_Item_Feature::Swap(AtaDrives_Item_Feature* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void AtaDrives_Item_Feature::InternalSwap(AtaDrives_Item_Feature* other) {
+  using std::swap;
+  name_.Swap(&other->name_);
+  swap(enabled_, other->enabled_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string AtaDrives_Item_Feature::GetTypeName() const {
+  return "aspia.proto.AtaDrives.Item.Feature";
 }
 
 
@@ -11073,8 +11455,7 @@ const int AtaDrives_Item::kTracksPerCylinderFieldNumber;
 const int AtaDrives_Item::kSectorsPerTrackFieldNumber;
 const int AtaDrives_Item::kBytesPerSectorFieldNumber;
 const int AtaDrives_Item::kHeadsNumberFieldNumber;
-const int AtaDrives_Item::kSupportedFeaturesFieldNumber;
-const int AtaDrives_Item::kEnabledFeaturesFieldNumber;
+const int AtaDrives_Item::kFeatureFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 AtaDrives_Item::AtaDrives_Item()
@@ -11083,11 +11464,12 @@ AtaDrives_Item::AtaDrives_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsAtaDrives_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.AtaDrives.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.AtaDrives.Item)
 }
 AtaDrives_Item::AtaDrives_Item(const AtaDrives_Item& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
+      feature_(from.feature_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   model_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -11102,24 +11484,34 @@ AtaDrives_Item::AtaDrives_Item(const AtaDrives_Item& from)
   if (from.firmware_revision().size() > 0) {
     firmware_revision_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.firmware_revision_);
   }
-  ::memcpy(&bus_type_, &from.bus_type_,
+  bus_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.bus_type().size() > 0) {
+    bus_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.bus_type_);
+  }
+  transfer_mode_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.transfer_mode().size() > 0) {
+    transfer_mode_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.transfer_mode_);
+  }
+  ::memcpy(&drive_size_, &from.drive_size_,
     static_cast<size_t>(reinterpret_cast<char*>(&heads_number_) -
-    reinterpret_cast<char*>(&bus_type_)) + sizeof(heads_number_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.AtaDrives.Item)
+    reinterpret_cast<char*>(&drive_size_)) + sizeof(heads_number_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.AtaDrives.Item)
 }
 
 void AtaDrives_Item::SharedCtor() {
   model_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   firmware_revision_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&bus_type_, 0, static_cast<size_t>(
+  bus_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  transfer_mode_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&drive_size_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&heads_number_) -
-      reinterpret_cast<char*>(&bus_type_)) + sizeof(heads_number_));
+      reinterpret_cast<char*>(&drive_size_)) + sizeof(heads_number_));
   _cached_size_ = 0;
 }
 
 AtaDrives_Item::~AtaDrives_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.AtaDrives.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.AtaDrives.Item)
   SharedDtor();
 }
 
@@ -11127,6 +11519,8 @@ void AtaDrives_Item::SharedDtor() {
   model_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   firmware_revision_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  bus_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  transfer_mode_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void AtaDrives_Item::SetCachedSize(int size) const {
@@ -11148,17 +11542,20 @@ AtaDrives_Item* AtaDrives_Item::New(::google::protobuf::Arena* arena) const {
 }
 
 void AtaDrives_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.AtaDrives.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.AtaDrives.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  feature_.Clear();
   model_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   firmware_revision_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&bus_type_, 0, static_cast<size_t>(
+  bus_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  transfer_mode_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&drive_size_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&heads_number_) -
-      reinterpret_cast<char*>(&bus_type_)) + sizeof(heads_number_));
+      reinterpret_cast<char*>(&drive_size_)) + sizeof(heads_number_));
   _internal_metadata_.Clear();
 }
 
@@ -11172,7 +11569,7 @@ bool AtaDrives_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.AtaDrives.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.AtaDrives.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(16383u);
     tag = p.first;
@@ -11187,7 +11584,7 @@ bool AtaDrives_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->model_number().data(), static_cast<int>(this->model_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.AtaDrives.Item.model_number"));
+            "aspia.proto.AtaDrives.Item.model_number"));
         } else {
           goto handle_unusual;
         }
@@ -11203,7 +11600,7 @@ bool AtaDrives_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->serial_number().data(), static_cast<int>(this->serial_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.AtaDrives.Item.serial_number"));
+            "aspia.proto.AtaDrives.Item.serial_number"));
         } else {
           goto handle_unusual;
         }
@@ -11219,37 +11616,39 @@ bool AtaDrives_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->firmware_revision().data(), static_cast<int>(this->firmware_revision().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.AtaDrives.Item.firmware_revision"));
+            "aspia.proto.AtaDrives.Item.firmware_revision"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.AtaDrives.Item.BusType bus_type = 4;
+      // string bus_type = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_bus_type(static_cast< ::aspia::system_info::AtaDrives_Item_BusType >(value));
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_bus_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->bus_type().data(), static_cast<int>(this->bus_type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.AtaDrives.Item.bus_type"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.AtaDrives.Item.TransferMode transfer_mode = 5;
+      // string transfer_mode = 5;
       case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_transfer_mode(static_cast< ::aspia::system_info::AtaDrives_Item_TransferMode >(value));
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_transfer_mode()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->transfer_mode().data(), static_cast<int>(this->transfer_mode().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.AtaDrives.Item.transfer_mode"));
         } else {
           goto handle_unusual;
         }
@@ -11410,28 +11809,11 @@ bool AtaDrives_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // uint64 supported_features = 17;
+      // repeated .aspia.proto.AtaDrives.Item.Feature feature = 17;
       case 17: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(136u /* 136 & 0xFF */)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
-                 input, &supported_features_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // uint64 enabled_features = 18;
-      case 18: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(144u /* 144 & 0xFF */)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
-                 input, &enabled_features_)));
+            static_cast< ::google::protobuf::uint8>(138u /* 138 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_feature()));
         } else {
           goto handle_unusual;
         }
@@ -11450,17 +11832,17 @@ bool AtaDrives_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.AtaDrives.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.AtaDrives.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.AtaDrives.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.AtaDrives.Item)
   return false;
 #undef DO_
 }
 
 void AtaDrives_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.AtaDrives.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.AtaDrives.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -11469,7 +11851,7 @@ void AtaDrives_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->model_number().data(), static_cast<int>(this->model_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.AtaDrives.Item.model_number");
+      "aspia.proto.AtaDrives.Item.model_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->model_number(), output);
   }
@@ -11479,7 +11861,7 @@ void AtaDrives_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->serial_number().data(), static_cast<int>(this->serial_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.AtaDrives.Item.serial_number");
+      "aspia.proto.AtaDrives.Item.serial_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->serial_number(), output);
   }
@@ -11489,20 +11871,28 @@ void AtaDrives_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->firmware_revision().data(), static_cast<int>(this->firmware_revision().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.AtaDrives.Item.firmware_revision");
+      "aspia.proto.AtaDrives.Item.firmware_revision");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->firmware_revision(), output);
   }
 
-  // .aspia.system_info.AtaDrives.Item.BusType bus_type = 4;
-  if (this->bus_type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string bus_type = 4;
+  if (this->bus_type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->bus_type().data(), static_cast<int>(this->bus_type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.AtaDrives.Item.bus_type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->bus_type(), output);
   }
 
-  // .aspia.system_info.AtaDrives.Item.TransferMode transfer_mode = 5;
-  if (this->transfer_mode() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string transfer_mode = 5;
+  if (this->transfer_mode().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->transfer_mode().data(), static_cast<int>(this->transfer_mode().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.AtaDrives.Item.transfer_mode");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->transfer_mode(), output);
   }
 
@@ -11561,26 +11951,34 @@ void AtaDrives_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(16, this->heads_number(), output);
   }
 
-  // uint64 supported_features = 17;
-  if (this->supported_features() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt64(17, this->supported_features(), output);
-  }
-
-  // uint64 enabled_features = 18;
-  if (this->enabled_features() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt64(18, this->enabled_features(), output);
+  // repeated .aspia.proto.AtaDrives.Item.Feature feature = 17;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->feature_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      17, this->feature(static_cast<int>(i)), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.AtaDrives.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.AtaDrives.Item)
 }
 
 size_t AtaDrives_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.AtaDrives.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.AtaDrives.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.proto.AtaDrives.Item.Feature feature = 17;
+  {
+    unsigned int count = static_cast<unsigned int>(this->feature_size());
+    total_size += 2UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->feature(static_cast<int>(i)));
+    }
+  }
 
   // string model_number = 1;
   if (this->model_number().size() > 0) {
@@ -11603,16 +12001,18 @@ size_t AtaDrives_Item::ByteSizeLong() const {
         this->firmware_revision());
   }
 
-  // .aspia.system_info.AtaDrives.Item.BusType bus_type = 4;
-  if (this->bus_type() != 0) {
+  // string bus_type = 4;
+  if (this->bus_type().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->bus_type());
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->bus_type());
   }
 
-  // .aspia.system_info.AtaDrives.Item.TransferMode transfer_mode = 5;
-  if (this->transfer_mode() != 0) {
+  // string transfer_mode = 5;
+  if (this->transfer_mode().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->transfer_mode());
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->transfer_mode());
   }
 
   // uint64 drive_size = 7;
@@ -11683,20 +12083,6 @@ size_t AtaDrives_Item::ByteSizeLong() const {
         this->bytes_per_sector());
   }
 
-  // uint64 supported_features = 17;
-  if (this->supported_features() != 0) {
-    total_size += 2 +
-      ::google::protobuf::internal::WireFormatLite::UInt64Size(
-        this->supported_features());
-  }
-
-  // uint64 enabled_features = 18;
-  if (this->enabled_features() != 0) {
-    total_size += 2 +
-      ::google::protobuf::internal::WireFormatLite::UInt64Size(
-        this->enabled_features());
-  }
-
   // uint32 heads_number = 16;
   if (this->heads_number() != 0) {
     total_size += 2 +
@@ -11717,12 +12103,13 @@ void AtaDrives_Item::CheckTypeAndMergeFrom(
 }
 
 void AtaDrives_Item::MergeFrom(const AtaDrives_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.AtaDrives.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.AtaDrives.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  feature_.MergeFrom(from.feature_);
   if (from.model_number().size() > 0) {
 
     model_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.model_number_);
@@ -11735,11 +12122,13 @@ void AtaDrives_Item::MergeFrom(const AtaDrives_Item& from) {
 
     firmware_revision_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.firmware_revision_);
   }
-  if (from.bus_type() != 0) {
-    set_bus_type(from.bus_type());
+  if (from.bus_type().size() > 0) {
+
+    bus_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.bus_type_);
   }
-  if (from.transfer_mode() != 0) {
-    set_transfer_mode(from.transfer_mode());
+  if (from.transfer_mode().size() > 0) {
+
+    transfer_mode_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.transfer_mode_);
   }
   if (from.drive_size() != 0) {
     set_drive_size(from.drive_size());
@@ -11771,19 +12160,13 @@ void AtaDrives_Item::MergeFrom(const AtaDrives_Item& from) {
   if (from.bytes_per_sector() != 0) {
     set_bytes_per_sector(from.bytes_per_sector());
   }
-  if (from.supported_features() != 0) {
-    set_supported_features(from.supported_features());
-  }
-  if (from.enabled_features() != 0) {
-    set_enabled_features(from.enabled_features());
-  }
   if (from.heads_number() != 0) {
     set_heads_number(from.heads_number());
   }
 }
 
 void AtaDrives_Item::CopyFrom(const AtaDrives_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.AtaDrives.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.AtaDrives.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -11799,11 +12182,12 @@ void AtaDrives_Item::Swap(AtaDrives_Item* other) {
 }
 void AtaDrives_Item::InternalSwap(AtaDrives_Item* other) {
   using std::swap;
+  feature_.InternalSwap(&other->feature_);
   model_number_.Swap(&other->model_number_);
   serial_number_.Swap(&other->serial_number_);
   firmware_revision_.Swap(&other->firmware_revision_);
-  swap(bus_type_, other->bus_type_);
-  swap(transfer_mode_, other->transfer_mode_);
+  bus_type_.Swap(&other->bus_type_);
+  transfer_mode_.Swap(&other->transfer_mode_);
   swap(drive_size_, other->drive_size_);
   swap(rotation_rate_, other->rotation_rate_);
   swap(buffer_size_, other->buffer_size_);
@@ -11814,15 +12198,13 @@ void AtaDrives_Item::InternalSwap(AtaDrives_Item* other) {
   swap(tracks_per_cylinder_, other->tracks_per_cylinder_);
   swap(sectors_per_track_, other->sectors_per_track_);
   swap(bytes_per_sector_, other->bytes_per_sector_);
-  swap(supported_features_, other->supported_features_);
-  swap(enabled_features_, other->enabled_features_);
   swap(heads_number_, other->heads_number_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string AtaDrives_Item::GetTypeName() const {
-  return "aspia.system_info.AtaDrives.Item";
+  return "aspia.proto.AtaDrives.Item";
 }
 
 
@@ -11840,7 +12222,7 @@ AtaDrives::AtaDrives()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsAtaDrives();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.AtaDrives)
+  // @@protoc_insertion_point(constructor:aspia.proto.AtaDrives)
 }
 AtaDrives::AtaDrives(const AtaDrives& from)
   : ::google::protobuf::MessageLite(),
@@ -11848,7 +12230,7 @@ AtaDrives::AtaDrives(const AtaDrives& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.AtaDrives)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.AtaDrives)
 }
 
 void AtaDrives::SharedCtor() {
@@ -11856,7 +12238,7 @@ void AtaDrives::SharedCtor() {
 }
 
 AtaDrives::~AtaDrives() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.AtaDrives)
+  // @@protoc_insertion_point(destructor:aspia.proto.AtaDrives)
   SharedDtor();
 }
 
@@ -11882,7 +12264,7 @@ AtaDrives* AtaDrives::New(::google::protobuf::Arena* arena) const {
 }
 
 void AtaDrives::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.AtaDrives)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.AtaDrives)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -11901,13 +12283,13 @@ bool AtaDrives::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.AtaDrives)
+  // @@protoc_insertion_point(parse_start:aspia.proto.AtaDrives)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.AtaDrives.Item item = 1;
+      // repeated .aspia.proto.AtaDrives.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -11930,21 +12312,21 @@ bool AtaDrives::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.AtaDrives)
+  // @@protoc_insertion_point(parse_success:aspia.proto.AtaDrives)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.AtaDrives)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.AtaDrives)
   return false;
 #undef DO_
 }
 
 void AtaDrives::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.AtaDrives)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.AtaDrives)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.AtaDrives.Item item = 1;
+  // repeated .aspia.proto.AtaDrives.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -11953,16 +12335,16 @@ void AtaDrives::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.AtaDrives)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.AtaDrives)
 }
 
 size_t AtaDrives::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.AtaDrives)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.AtaDrives)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.AtaDrives.Item item = 1;
+  // repeated .aspia.proto.AtaDrives.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -11986,7 +12368,7 @@ void AtaDrives::CheckTypeAndMergeFrom(
 }
 
 void AtaDrives::MergeFrom(const AtaDrives& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.AtaDrives)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.AtaDrives)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -11996,7 +12378,7 @@ void AtaDrives::MergeFrom(const AtaDrives& from) {
 }
 
 void AtaDrives::CopyFrom(const AtaDrives& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.AtaDrives)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.AtaDrives)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -12018,7 +12400,7 @@ void AtaDrives::InternalSwap(AtaDrives* other) {
 }
 
 ::std::string AtaDrives::GetTypeName() const {
-  return "aspia.system_info.AtaDrives";
+  return "aspia.proto.AtaDrives";
 }
 
 
@@ -12038,7 +12420,7 @@ Monitors_Item_Timing::Monitors_Item_Timing()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsMonitors_Item_Timing();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Monitors.Item.Timing)
+  // @@protoc_insertion_point(constructor:aspia.proto.Monitors.Item.Timing)
 }
 Monitors_Item_Timing::Monitors_Item_Timing(const Monitors_Item_Timing& from)
   : ::google::protobuf::MessageLite(),
@@ -12048,7 +12430,7 @@ Monitors_Item_Timing::Monitors_Item_Timing(const Monitors_Item_Timing& from)
   ::memcpy(&width_, &from.width_,
     static_cast<size_t>(reinterpret_cast<char*>(&frequency_) -
     reinterpret_cast<char*>(&width_)) + sizeof(frequency_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Monitors.Item.Timing)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Monitors.Item.Timing)
 }
 
 void Monitors_Item_Timing::SharedCtor() {
@@ -12059,7 +12441,7 @@ void Monitors_Item_Timing::SharedCtor() {
 }
 
 Monitors_Item_Timing::~Monitors_Item_Timing() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Monitors.Item.Timing)
+  // @@protoc_insertion_point(destructor:aspia.proto.Monitors.Item.Timing)
   SharedDtor();
 }
 
@@ -12085,7 +12467,7 @@ Monitors_Item_Timing* Monitors_Item_Timing::New(::google::protobuf::Arena* arena
 }
 
 void Monitors_Item_Timing::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Monitors.Item.Timing)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Monitors.Item.Timing)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -12106,7 +12488,7 @@ bool Monitors_Item_Timing::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Monitors.Item.Timing)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Monitors.Item.Timing)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -12166,17 +12548,17 @@ bool Monitors_Item_Timing::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Monitors.Item.Timing)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Monitors.Item.Timing)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Monitors.Item.Timing)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Monitors.Item.Timing)
   return false;
 #undef DO_
 }
 
 void Monitors_Item_Timing::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Monitors.Item.Timing)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Monitors.Item.Timing)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -12197,11 +12579,11 @@ void Monitors_Item_Timing::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Monitors.Item.Timing)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Monitors.Item.Timing)
 }
 
 size_t Monitors_Item_Timing::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Monitors.Item.Timing)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Monitors.Item.Timing)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -12240,7 +12622,7 @@ void Monitors_Item_Timing::CheckTypeAndMergeFrom(
 }
 
 void Monitors_Item_Timing::MergeFrom(const Monitors_Item_Timing& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Monitors.Item.Timing)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Monitors.Item.Timing)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -12258,7 +12640,7 @@ void Monitors_Item_Timing::MergeFrom(const Monitors_Item_Timing& from) {
 }
 
 void Monitors_Item_Timing::CopyFrom(const Monitors_Item_Timing& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Monitors.Item.Timing)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Monitors.Item.Timing)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -12282,7 +12664,7 @@ void Monitors_Item_Timing::InternalSwap(Monitors_Item_Timing* other) {
 }
 
 ::std::string Monitors_Item_Timing::GetTypeName() const {
-  return "aspia.system_info.Monitors.Item.Timing";
+  return "aspia.proto.Monitors.Item.Timing";
 }
 
 
@@ -12327,7 +12709,7 @@ Monitors_Item::Monitors_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsMonitors_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Monitors.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.Monitors.Item)
 }
 Monitors_Item::Monitors_Item(const Monitors_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -12355,10 +12737,14 @@ Monitors_Item::Monitors_Item(const Monitors_Item& from)
   if (from.serial_number().size() > 0) {
     serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.serial_number_);
   }
+  input_signal_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.input_signal_type().size() > 0) {
+    input_signal_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.input_signal_type_);
+  }
   ::memcpy(&edid_version_, &from.edid_version_,
     static_cast<size_t>(reinterpret_cast<char*>(&srgb_supported_) -
     reinterpret_cast<char*>(&edid_version_)) + sizeof(srgb_supported_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Monitors.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Monitors.Item)
 }
 
 void Monitors_Item::SharedCtor() {
@@ -12367,6 +12753,7 @@ void Monitors_Item::SharedCtor() {
   manufacturer_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   monitor_id_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  input_signal_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&edid_version_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&srgb_supported_) -
       reinterpret_cast<char*>(&edid_version_)) + sizeof(srgb_supported_));
@@ -12374,7 +12761,7 @@ void Monitors_Item::SharedCtor() {
 }
 
 Monitors_Item::~Monitors_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Monitors.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.Monitors.Item)
   SharedDtor();
 }
 
@@ -12384,6 +12771,7 @@ void Monitors_Item::SharedDtor() {
   manufacturer_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   monitor_id_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  input_signal_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void Monitors_Item::SetCachedSize(int size) const {
@@ -12405,7 +12793,7 @@ Monitors_Item* Monitors_Item::New(::google::protobuf::Arena* arena) const {
 }
 
 void Monitors_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Monitors.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Monitors.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -12416,6 +12804,7 @@ void Monitors_Item::Clear() {
   manufacturer_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   monitor_id_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  input_signal_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&edid_version_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&srgb_supported_) -
       reinterpret_cast<char*>(&edid_version_)) + sizeof(srgb_supported_));
@@ -12432,7 +12821,7 @@ bool Monitors_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Monitors.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Monitors.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(16383u);
     tag = p.first;
@@ -12447,7 +12836,7 @@ bool Monitors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->system_name().data(), static_cast<int>(this->system_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Monitors.Item.system_name"));
+            "aspia.proto.Monitors.Item.system_name"));
         } else {
           goto handle_unusual;
         }
@@ -12463,7 +12852,7 @@ bool Monitors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->monitor_name().data(), static_cast<int>(this->monitor_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Monitors.Item.monitor_name"));
+            "aspia.proto.Monitors.Item.monitor_name"));
         } else {
           goto handle_unusual;
         }
@@ -12479,7 +12868,7 @@ bool Monitors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->manufacturer_name().data(), static_cast<int>(this->manufacturer_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Monitors.Item.manufacturer_name"));
+            "aspia.proto.Monitors.Item.manufacturer_name"));
         } else {
           goto handle_unusual;
         }
@@ -12495,7 +12884,7 @@ bool Monitors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->monitor_id().data(), static_cast<int>(this->monitor_id().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Monitors.Item.monitor_id"));
+            "aspia.proto.Monitors.Item.monitor_id"));
         } else {
           goto handle_unusual;
         }
@@ -12511,7 +12900,7 @@ bool Monitors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->serial_number().data(), static_cast<int>(this->serial_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Monitors.Item.serial_number"));
+            "aspia.proto.Monitors.Item.serial_number"));
         } else {
           goto handle_unusual;
         }
@@ -12728,15 +13117,16 @@ bool Monitors_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.system_info.Monitors.Item.InputSignalType input_signal_type = 21;
+      // string input_signal_type = 21;
       case 21: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(168u /* 168 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_input_signal_type(static_cast< ::aspia::system_info::Monitors_Item_InputSignalType >(value));
+            static_cast< ::google::protobuf::uint8>(170u /* 170 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_input_signal_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->input_signal_type().data(), static_cast<int>(this->input_signal_type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.Monitors.Item.input_signal_type"));
         } else {
           goto handle_unusual;
         }
@@ -12827,7 +13217,7 @@ bool Monitors_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .aspia.system_info.Monitors.Item.Timing timings = 28;
+      // repeated .aspia.proto.Monitors.Item.Timing timings = 28;
       case 28: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(226u /* 226 & 0xFF */)) {
@@ -12850,17 +13240,17 @@ bool Monitors_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Monitors.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Monitors.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Monitors.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Monitors.Item)
   return false;
 #undef DO_
 }
 
 void Monitors_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Monitors.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Monitors.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -12869,7 +13259,7 @@ void Monitors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->system_name().data(), static_cast<int>(this->system_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Monitors.Item.system_name");
+      "aspia.proto.Monitors.Item.system_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->system_name(), output);
   }
@@ -12879,7 +13269,7 @@ void Monitors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->monitor_name().data(), static_cast<int>(this->monitor_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Monitors.Item.monitor_name");
+      "aspia.proto.Monitors.Item.monitor_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->monitor_name(), output);
   }
@@ -12889,7 +13279,7 @@ void Monitors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->manufacturer_name().data(), static_cast<int>(this->manufacturer_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Monitors.Item.manufacturer_name");
+      "aspia.proto.Monitors.Item.manufacturer_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->manufacturer_name(), output);
   }
@@ -12899,7 +13289,7 @@ void Monitors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->monitor_id().data(), static_cast<int>(this->monitor_id().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Monitors.Item.monitor_id");
+      "aspia.proto.Monitors.Item.monitor_id");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->monitor_id(), output);
   }
@@ -12909,7 +13299,7 @@ void Monitors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->serial_number().data(), static_cast<int>(this->serial_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Monitors.Item.serial_number");
+      "aspia.proto.Monitors.Item.serial_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->serial_number(), output);
   }
@@ -12989,9 +13379,13 @@ void Monitors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(20, this->max_pixel_clock(), output);
   }
 
-  // .aspia.system_info.Monitors.Item.InputSignalType input_signal_type = 21;
-  if (this->input_signal_type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+  // string input_signal_type = 21;
+  if (this->input_signal_type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->input_signal_type().data(), static_cast<int>(this->input_signal_type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.Monitors.Item.input_signal_type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       21, this->input_signal_type(), output);
   }
 
@@ -13025,7 +13419,7 @@ void Monitors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(27, this->srgb_supported(), output);
   }
 
-  // repeated .aspia.system_info.Monitors.Item.Timing timings = 28;
+  // repeated .aspia.proto.Monitors.Item.Timing timings = 28;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->timings_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -13034,16 +13428,16 @@ void Monitors_Item::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Monitors.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Monitors.Item)
 }
 
 size_t Monitors_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Monitors.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Monitors.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.Monitors.Item.Timing timings = 28;
+  // repeated .aspia.proto.Monitors.Item.Timing timings = 28;
   {
     unsigned int count = static_cast<unsigned int>(this->timings_size());
     total_size += 2UL * count;
@@ -13087,6 +13481,13 @@ size_t Monitors_Item::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->serial_number());
+  }
+
+  // string input_signal_type = 21;
+  if (this->input_signal_type().size() > 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->input_signal_type());
   }
 
   // int32 edid_version = 6;
@@ -13190,12 +13591,6 @@ size_t Monitors_Item::ByteSizeLong() const {
         this->max_pixel_clock());
   }
 
-  // .aspia.system_info.Monitors.Item.InputSignalType input_signal_type = 21;
-  if (this->input_signal_type() != 0) {
-    total_size += 2 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->input_signal_type());
-  }
-
   // bool default_gtf_supported = 22;
   if (this->default_gtf_supported() != 0) {
     total_size += 2 + 1;
@@ -13239,7 +13634,7 @@ void Monitors_Item::CheckTypeAndMergeFrom(
 }
 
 void Monitors_Item::MergeFrom(const Monitors_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Monitors.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Monitors.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -13265,6 +13660,10 @@ void Monitors_Item::MergeFrom(const Monitors_Item& from) {
   if (from.serial_number().size() > 0) {
 
     serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.serial_number_);
+  }
+  if (from.input_signal_type().size() > 0) {
+
+    input_signal_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.input_signal_type_);
   }
   if (from.edid_version() != 0) {
     set_edid_version(from.edid_version());
@@ -13311,9 +13710,6 @@ void Monitors_Item::MergeFrom(const Monitors_Item& from) {
   if (from.max_pixel_clock() != 0) {
     set_max_pixel_clock(from.max_pixel_clock());
   }
-  if (from.input_signal_type() != 0) {
-    set_input_signal_type(from.input_signal_type());
-  }
   if (from.default_gtf_supported() != 0) {
     set_default_gtf_supported(from.default_gtf_supported());
   }
@@ -13335,7 +13731,7 @@ void Monitors_Item::MergeFrom(const Monitors_Item& from) {
 }
 
 void Monitors_Item::CopyFrom(const Monitors_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Monitors.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Monitors.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -13357,6 +13753,7 @@ void Monitors_Item::InternalSwap(Monitors_Item* other) {
   manufacturer_name_.Swap(&other->manufacturer_name_);
   monitor_id_.Swap(&other->monitor_id_);
   serial_number_.Swap(&other->serial_number_);
+  input_signal_type_.Swap(&other->input_signal_type_);
   swap(edid_version_, other->edid_version_);
   swap(edid_revision_, other->edid_revision_);
   swap(week_of_manufacture_, other->week_of_manufacture_);
@@ -13372,7 +13769,6 @@ void Monitors_Item::InternalSwap(Monitors_Item* other) {
   swap(max_vertical_rate_, other->max_vertical_rate_);
   swap(pixel_clock_, other->pixel_clock_);
   swap(max_pixel_clock_, other->max_pixel_clock_);
-  swap(input_signal_type_, other->input_signal_type_);
   swap(default_gtf_supported_, other->default_gtf_supported_);
   swap(suspend_supported_, other->suspend_supported_);
   swap(standby_supported_, other->standby_supported_);
@@ -13384,7 +13780,7 @@ void Monitors_Item::InternalSwap(Monitors_Item* other) {
 }
 
 ::std::string Monitors_Item::GetTypeName() const {
-  return "aspia.system_info.Monitors.Item";
+  return "aspia.proto.Monitors.Item";
 }
 
 
@@ -13402,7 +13798,7 @@ Monitors::Monitors()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsMonitors();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Monitors)
+  // @@protoc_insertion_point(constructor:aspia.proto.Monitors)
 }
 Monitors::Monitors(const Monitors& from)
   : ::google::protobuf::MessageLite(),
@@ -13410,7 +13806,7 @@ Monitors::Monitors(const Monitors& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Monitors)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Monitors)
 }
 
 void Monitors::SharedCtor() {
@@ -13418,7 +13814,7 @@ void Monitors::SharedCtor() {
 }
 
 Monitors::~Monitors() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Monitors)
+  // @@protoc_insertion_point(destructor:aspia.proto.Monitors)
   SharedDtor();
 }
 
@@ -13444,7 +13840,7 @@ Monitors* Monitors::New(::google::protobuf::Arena* arena) const {
 }
 
 void Monitors::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Monitors)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Monitors)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -13463,13 +13859,13 @@ bool Monitors::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Monitors)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Monitors)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.Monitors.Item item = 1;
+      // repeated .aspia.proto.Monitors.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -13492,21 +13888,21 @@ bool Monitors::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Monitors)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Monitors)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Monitors)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Monitors)
   return false;
 #undef DO_
 }
 
 void Monitors::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Monitors)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Monitors)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.Monitors.Item item = 1;
+  // repeated .aspia.proto.Monitors.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -13515,16 +13911,16 @@ void Monitors::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Monitors)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Monitors)
 }
 
 size_t Monitors::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Monitors)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Monitors)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.Monitors.Item item = 1;
+  // repeated .aspia.proto.Monitors.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -13548,7 +13944,7 @@ void Monitors::CheckTypeAndMergeFrom(
 }
 
 void Monitors::MergeFrom(const Monitors& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Monitors)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Monitors)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -13558,7 +13954,7 @@ void Monitors::MergeFrom(const Monitors& from) {
 }
 
 void Monitors::CopyFrom(const Monitors& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Monitors)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Monitors)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -13580,7 +13976,7 @@ void Monitors::InternalSwap(Monitors* other) {
 }
 
 ::std::string Monitors::GetTypeName() const {
-  return "aspia.system_info.Monitors";
+  return "aspia.proto.Monitors";
 }
 
 
@@ -13610,7 +14006,7 @@ PowerOptions_Battery::PowerOptions_Battery()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsPowerOptions_Battery();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.PowerOptions.Battery)
+  // @@protoc_insertion_point(constructor:aspia.proto.PowerOptions.Battery)
 }
 PowerOptions_Battery::PowerOptions_Battery(const PowerOptions_Battery& from)
   : ::google::protobuf::MessageLite(),
@@ -13648,7 +14044,7 @@ PowerOptions_Battery::PowerOptions_Battery(const PowerOptions_Battery& from)
   ::memcpy(&design_capacity_, &from.design_capacity_,
     static_cast<size_t>(reinterpret_cast<char*>(&state_) -
     reinterpret_cast<char*>(&design_capacity_)) + sizeof(state_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.PowerOptions.Battery)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.PowerOptions.Battery)
 }
 
 void PowerOptions_Battery::SharedCtor() {
@@ -13666,7 +14062,7 @@ void PowerOptions_Battery::SharedCtor() {
 }
 
 PowerOptions_Battery::~PowerOptions_Battery() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.PowerOptions.Battery)
+  // @@protoc_insertion_point(destructor:aspia.proto.PowerOptions.Battery)
   SharedDtor();
 }
 
@@ -13699,7 +14095,7 @@ PowerOptions_Battery* PowerOptions_Battery::New(::google::protobuf::Arena* arena
 }
 
 void PowerOptions_Battery::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.PowerOptions.Battery)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.PowerOptions.Battery)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -13727,7 +14123,7 @@ bool PowerOptions_Battery::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.PowerOptions.Battery)
+  // @@protoc_insertion_point(parse_start:aspia.proto.PowerOptions.Battery)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -13742,7 +14138,7 @@ bool PowerOptions_Battery::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->device_name().data(), static_cast<int>(this->device_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.PowerOptions.Battery.device_name"));
+            "aspia.proto.PowerOptions.Battery.device_name"));
         } else {
           goto handle_unusual;
         }
@@ -13758,7 +14154,7 @@ bool PowerOptions_Battery::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.PowerOptions.Battery.manufacturer"));
+            "aspia.proto.PowerOptions.Battery.manufacturer"));
         } else {
           goto handle_unusual;
         }
@@ -13774,7 +14170,7 @@ bool PowerOptions_Battery::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->manufacture_date().data(), static_cast<int>(this->manufacture_date().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.PowerOptions.Battery.manufacture_date"));
+            "aspia.proto.PowerOptions.Battery.manufacture_date"));
         } else {
           goto handle_unusual;
         }
@@ -13790,7 +14186,7 @@ bool PowerOptions_Battery::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->unique_id().data(), static_cast<int>(this->unique_id().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.PowerOptions.Battery.unique_id"));
+            "aspia.proto.PowerOptions.Battery.unique_id"));
         } else {
           goto handle_unusual;
         }
@@ -13806,7 +14202,7 @@ bool PowerOptions_Battery::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->serial_number().data(), static_cast<int>(this->serial_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.PowerOptions.Battery.serial_number"));
+            "aspia.proto.PowerOptions.Battery.serial_number"));
         } else {
           goto handle_unusual;
         }
@@ -13822,7 +14218,7 @@ bool PowerOptions_Battery::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->temperature().data(), static_cast<int>(this->temperature().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.PowerOptions.Battery.temperature"));
+            "aspia.proto.PowerOptions.Battery.temperature"));
         } else {
           goto handle_unusual;
         }
@@ -13852,7 +14248,7 @@ bool PowerOptions_Battery::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->type().data(), static_cast<int>(this->type().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.PowerOptions.Battery.type"));
+            "aspia.proto.PowerOptions.Battery.type"));
         } else {
           goto handle_unusual;
         }
@@ -13941,17 +14337,17 @@ bool PowerOptions_Battery::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.PowerOptions.Battery)
+  // @@protoc_insertion_point(parse_success:aspia.proto.PowerOptions.Battery)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.PowerOptions.Battery)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.PowerOptions.Battery)
   return false;
 #undef DO_
 }
 
 void PowerOptions_Battery::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.PowerOptions.Battery)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.PowerOptions.Battery)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -13960,7 +14356,7 @@ void PowerOptions_Battery::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->device_name().data(), static_cast<int>(this->device_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.PowerOptions.Battery.device_name");
+      "aspia.proto.PowerOptions.Battery.device_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->device_name(), output);
   }
@@ -13970,7 +14366,7 @@ void PowerOptions_Battery::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.PowerOptions.Battery.manufacturer");
+      "aspia.proto.PowerOptions.Battery.manufacturer");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->manufacturer(), output);
   }
@@ -13980,7 +14376,7 @@ void PowerOptions_Battery::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->manufacture_date().data(), static_cast<int>(this->manufacture_date().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.PowerOptions.Battery.manufacture_date");
+      "aspia.proto.PowerOptions.Battery.manufacture_date");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->manufacture_date(), output);
   }
@@ -13990,7 +14386,7 @@ void PowerOptions_Battery::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->unique_id().data(), static_cast<int>(this->unique_id().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.PowerOptions.Battery.unique_id");
+      "aspia.proto.PowerOptions.Battery.unique_id");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->unique_id(), output);
   }
@@ -14000,7 +14396,7 @@ void PowerOptions_Battery::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->serial_number().data(), static_cast<int>(this->serial_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.PowerOptions.Battery.serial_number");
+      "aspia.proto.PowerOptions.Battery.serial_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->serial_number(), output);
   }
@@ -14010,7 +14406,7 @@ void PowerOptions_Battery::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->temperature().data(), static_cast<int>(this->temperature().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.PowerOptions.Battery.temperature");
+      "aspia.proto.PowerOptions.Battery.temperature");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->temperature(), output);
   }
@@ -14025,7 +14421,7 @@ void PowerOptions_Battery::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->type().data(), static_cast<int>(this->type().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.PowerOptions.Battery.type");
+      "aspia.proto.PowerOptions.Battery.type");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       8, this->type(), output);
   }
@@ -14057,11 +14453,11 @@ void PowerOptions_Battery::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.PowerOptions.Battery)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.PowerOptions.Battery)
 }
 
 size_t PowerOptions_Battery::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.PowerOptions.Battery)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.PowerOptions.Battery)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -14170,7 +14566,7 @@ void PowerOptions_Battery::CheckTypeAndMergeFrom(
 }
 
 void PowerOptions_Battery::MergeFrom(const PowerOptions_Battery& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.PowerOptions.Battery)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.PowerOptions.Battery)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -14225,7 +14621,7 @@ void PowerOptions_Battery::MergeFrom(const PowerOptions_Battery& from) {
 }
 
 void PowerOptions_Battery::CopyFrom(const PowerOptions_Battery& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.PowerOptions.Battery)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.PowerOptions.Battery)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -14259,7 +14655,7 @@ void PowerOptions_Battery::InternalSwap(PowerOptions_Battery* other) {
 }
 
 ::std::string PowerOptions_Battery::GetTypeName() const {
-  return "aspia.system_info.PowerOptions.Battery";
+  return "aspia.proto.PowerOptions.Battery";
 }
 
 
@@ -14282,7 +14678,7 @@ PowerOptions::PowerOptions()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsPowerOptions();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.PowerOptions)
+  // @@protoc_insertion_point(constructor:aspia.proto.PowerOptions)
 }
 PowerOptions::PowerOptions(const PowerOptions& from)
   : ::google::protobuf::MessageLite(),
@@ -14293,7 +14689,7 @@ PowerOptions::PowerOptions(const PowerOptions& from)
   ::memcpy(&power_source_, &from.power_source_,
     static_cast<size_t>(reinterpret_cast<char*>(&battery_life_percent_) -
     reinterpret_cast<char*>(&power_source_)) + sizeof(battery_life_percent_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.PowerOptions)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.PowerOptions)
 }
 
 void PowerOptions::SharedCtor() {
@@ -14304,7 +14700,7 @@ void PowerOptions::SharedCtor() {
 }
 
 PowerOptions::~PowerOptions() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.PowerOptions)
+  // @@protoc_insertion_point(destructor:aspia.proto.PowerOptions)
   SharedDtor();
 }
 
@@ -14330,7 +14726,7 @@ PowerOptions* PowerOptions::New(::google::protobuf::Arena* arena) const {
 }
 
 void PowerOptions::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.PowerOptions)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.PowerOptions)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -14352,13 +14748,13 @@ bool PowerOptions::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.PowerOptions)
+  // @@protoc_insertion_point(parse_start:aspia.proto.PowerOptions)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.system_info.PowerOptions.PowerSource power_source = 1;
+      // .aspia.proto.PowerOptions.PowerSource power_source = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
@@ -14366,14 +14762,14 @@ bool PowerOptions::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_power_source(static_cast< ::aspia::system_info::PowerOptions_PowerSource >(value));
+          set_power_source(static_cast< ::aspia::proto::PowerOptions_PowerSource >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.PowerOptions.BatteryStatus battery_status = 2;
+      // .aspia.proto.PowerOptions.BatteryStatus battery_status = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
@@ -14381,7 +14777,7 @@ bool PowerOptions::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_battery_status(static_cast< ::aspia::system_info::PowerOptions_BatteryStatus >(value));
+          set_battery_status(static_cast< ::aspia::proto::PowerOptions_BatteryStatus >(value));
         } else {
           goto handle_unusual;
         }
@@ -14430,7 +14826,7 @@ bool PowerOptions::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .aspia.system_info.PowerOptions.Battery battery = 6;
+      // repeated .aspia.proto.PowerOptions.Battery battery = 6;
       case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
@@ -14453,27 +14849,27 @@ bool PowerOptions::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.PowerOptions)
+  // @@protoc_insertion_point(parse_success:aspia.proto.PowerOptions)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.PowerOptions)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.PowerOptions)
   return false;
 #undef DO_
 }
 
 void PowerOptions::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.PowerOptions)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.PowerOptions)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.system_info.PowerOptions.PowerSource power_source = 1;
+  // .aspia.proto.PowerOptions.PowerSource power_source = 1;
   if (this->power_source() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->power_source(), output);
   }
 
-  // .aspia.system_info.PowerOptions.BatteryStatus battery_status = 2;
+  // .aspia.proto.PowerOptions.BatteryStatus battery_status = 2;
   if (this->battery_status() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       2, this->battery_status(), output);
@@ -14494,7 +14890,7 @@ void PowerOptions::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->battery_life_percent(), output);
   }
 
-  // repeated .aspia.system_info.PowerOptions.Battery battery = 6;
+  // repeated .aspia.proto.PowerOptions.Battery battery = 6;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->battery_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -14503,16 +14899,16 @@ void PowerOptions::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.PowerOptions)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.PowerOptions)
 }
 
 size_t PowerOptions::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.PowerOptions)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.PowerOptions)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.PowerOptions.Battery battery = 6;
+  // repeated .aspia.proto.PowerOptions.Battery battery = 6;
   {
     unsigned int count = static_cast<unsigned int>(this->battery_size());
     total_size += 1UL * count;
@@ -14523,13 +14919,13 @@ size_t PowerOptions::ByteSizeLong() const {
     }
   }
 
-  // .aspia.system_info.PowerOptions.PowerSource power_source = 1;
+  // .aspia.proto.PowerOptions.PowerSource power_source = 1;
   if (this->power_source() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->power_source());
   }
 
-  // .aspia.system_info.PowerOptions.BatteryStatus battery_status = 2;
+  // .aspia.proto.PowerOptions.BatteryStatus battery_status = 2;
   if (this->battery_status() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->battery_status());
@@ -14569,7 +14965,7 @@ void PowerOptions::CheckTypeAndMergeFrom(
 }
 
 void PowerOptions::MergeFrom(const PowerOptions& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.PowerOptions)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.PowerOptions)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -14594,7 +14990,7 @@ void PowerOptions::MergeFrom(const PowerOptions& from) {
 }
 
 void PowerOptions::CopyFrom(const PowerOptions& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.PowerOptions)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.PowerOptions)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -14621,7 +15017,7 @@ void PowerOptions::InternalSwap(PowerOptions* other) {
 }
 
 ::std::string PowerOptions::GetTypeName() const {
-  return "aspia.system_info.PowerOptions";
+  return "aspia.proto.PowerOptions";
 }
 
 
@@ -14655,7 +15051,7 @@ Printers_Item::Printers_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsPrinters_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Printers.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.Printers.Item)
 }
 Printers_Item::Printers_Item(const Printers_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -14705,7 +15101,7 @@ Printers_Item::Printers_Item(const Printers_Item& from)
   ::memcpy(&is_default_, &from.is_default_,
     static_cast<size_t>(reinterpret_cast<char*>(&orientation_) -
     reinterpret_cast<char*>(&is_default_)) + sizeof(orientation_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Printers.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Printers.Item)
 }
 
 void Printers_Item::SharedCtor() {
@@ -14726,7 +15122,7 @@ void Printers_Item::SharedCtor() {
 }
 
 Printers_Item::~Printers_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Printers.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.Printers.Item)
   SharedDtor();
 }
 
@@ -14762,7 +15158,7 @@ Printers_Item* Printers_Item::New(::google::protobuf::Arena* arena) const {
 }
 
 void Printers_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Printers.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Printers.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -14793,7 +15189,7 @@ bool Printers_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Printers.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Printers.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(16383u);
     tag = p.first;
@@ -14808,7 +15204,7 @@ bool Printers_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->name().data(), static_cast<int>(this->name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Printers.Item.name"));
+            "aspia.proto.Printers.Item.name"));
         } else {
           goto handle_unusual;
         }
@@ -14852,7 +15248,7 @@ bool Printers_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->share_name().data(), static_cast<int>(this->share_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Printers.Item.share_name"));
+            "aspia.proto.Printers.Item.share_name"));
         } else {
           goto handle_unusual;
         }
@@ -14868,7 +15264,7 @@ bool Printers_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->port_name().data(), static_cast<int>(this->port_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Printers.Item.port_name"));
+            "aspia.proto.Printers.Item.port_name"));
         } else {
           goto handle_unusual;
         }
@@ -14884,7 +15280,7 @@ bool Printers_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->driver_name().data(), static_cast<int>(this->driver_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Printers.Item.driver_name"));
+            "aspia.proto.Printers.Item.driver_name"));
         } else {
           goto handle_unusual;
         }
@@ -14900,7 +15296,7 @@ bool Printers_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->device_name().data(), static_cast<int>(this->device_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Printers.Item.device_name"));
+            "aspia.proto.Printers.Item.device_name"));
         } else {
           goto handle_unusual;
         }
@@ -14916,7 +15312,7 @@ bool Printers_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->print_processor().data(), static_cast<int>(this->print_processor().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Printers.Item.print_processor"));
+            "aspia.proto.Printers.Item.print_processor"));
         } else {
           goto handle_unusual;
         }
@@ -14932,7 +15328,7 @@ bool Printers_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->data_type().data(), static_cast<int>(this->data_type().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Printers.Item.data_type"));
+            "aspia.proto.Printers.Item.data_type"));
         } else {
           goto handle_unusual;
         }
@@ -14948,7 +15344,7 @@ bool Printers_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->server_name().data(), static_cast<int>(this->server_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Printers.Item.server_name"));
+            "aspia.proto.Printers.Item.server_name"));
         } else {
           goto handle_unusual;
         }
@@ -14964,7 +15360,7 @@ bool Printers_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->location().data(), static_cast<int>(this->location().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Printers.Item.location"));
+            "aspia.proto.Printers.Item.location"));
         } else {
           goto handle_unusual;
         }
@@ -14980,7 +15376,7 @@ bool Printers_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->comment().data(), static_cast<int>(this->comment().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Printers.Item.comment"));
+            "aspia.proto.Printers.Item.comment"));
         } else {
           goto handle_unusual;
         }
@@ -15043,7 +15439,7 @@ bool Printers_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.system_info.Printers.Item.Orientation orientation = 17;
+      // .aspia.proto.Printers.Item.Orientation orientation = 17;
       case 17: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(136u /* 136 & 0xFF */)) {
@@ -15051,7 +15447,7 @@ bool Printers_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_orientation(static_cast< ::aspia::system_info::Printers_Item_Orientation >(value));
+          set_orientation(static_cast< ::aspia::proto::Printers_Item_Orientation >(value));
         } else {
           goto handle_unusual;
         }
@@ -15070,17 +15466,17 @@ bool Printers_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Printers.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Printers.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Printers.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Printers.Item)
   return false;
 #undef DO_
 }
 
 void Printers_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Printers.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Printers.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -15089,7 +15485,7 @@ void Printers_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), static_cast<int>(this->name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Printers.Item.name");
+      "aspia.proto.Printers.Item.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->name(), output);
   }
@@ -15109,7 +15505,7 @@ void Printers_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->share_name().data(), static_cast<int>(this->share_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Printers.Item.share_name");
+      "aspia.proto.Printers.Item.share_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->share_name(), output);
   }
@@ -15119,7 +15515,7 @@ void Printers_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->port_name().data(), static_cast<int>(this->port_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Printers.Item.port_name");
+      "aspia.proto.Printers.Item.port_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->port_name(), output);
   }
@@ -15129,7 +15525,7 @@ void Printers_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->driver_name().data(), static_cast<int>(this->driver_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Printers.Item.driver_name");
+      "aspia.proto.Printers.Item.driver_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->driver_name(), output);
   }
@@ -15139,7 +15535,7 @@ void Printers_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->device_name().data(), static_cast<int>(this->device_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Printers.Item.device_name");
+      "aspia.proto.Printers.Item.device_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       7, this->device_name(), output);
   }
@@ -15149,7 +15545,7 @@ void Printers_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->print_processor().data(), static_cast<int>(this->print_processor().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Printers.Item.print_processor");
+      "aspia.proto.Printers.Item.print_processor");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       8, this->print_processor(), output);
   }
@@ -15159,7 +15555,7 @@ void Printers_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->data_type().data(), static_cast<int>(this->data_type().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Printers.Item.data_type");
+      "aspia.proto.Printers.Item.data_type");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       9, this->data_type(), output);
   }
@@ -15169,7 +15565,7 @@ void Printers_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->server_name().data(), static_cast<int>(this->server_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Printers.Item.server_name");
+      "aspia.proto.Printers.Item.server_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       10, this->server_name(), output);
   }
@@ -15179,7 +15575,7 @@ void Printers_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->location().data(), static_cast<int>(this->location().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Printers.Item.location");
+      "aspia.proto.Printers.Item.location");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       11, this->location(), output);
   }
@@ -15189,7 +15585,7 @@ void Printers_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->comment().data(), static_cast<int>(this->comment().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Printers.Item.comment");
+      "aspia.proto.Printers.Item.comment");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       12, this->comment(), output);
   }
@@ -15214,7 +15610,7 @@ void Printers_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(16, this->print_quality(), output);
   }
 
-  // .aspia.system_info.Printers.Item.Orientation orientation = 17;
+  // .aspia.proto.Printers.Item.Orientation orientation = 17;
   if (this->orientation() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       17, this->orientation(), output);
@@ -15222,11 +15618,11 @@ void Printers_Item::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Printers.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Printers.Item)
 }
 
 size_t Printers_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Printers.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Printers.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -15339,7 +15735,7 @@ size_t Printers_Item::ByteSizeLong() const {
         this->print_quality());
   }
 
-  // .aspia.system_info.Printers.Item.Orientation orientation = 17;
+  // .aspia.proto.Printers.Item.Orientation orientation = 17;
   if (this->orientation() != 0) {
     total_size += 2 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->orientation());
@@ -15358,7 +15754,7 @@ void Printers_Item::CheckTypeAndMergeFrom(
 }
 
 void Printers_Item::MergeFrom(const Printers_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Printers.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Printers.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -15428,7 +15824,7 @@ void Printers_Item::MergeFrom(const Printers_Item& from) {
 }
 
 void Printers_Item::CopyFrom(const Printers_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Printers.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Printers.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -15466,7 +15862,7 @@ void Printers_Item::InternalSwap(Printers_Item* other) {
 }
 
 ::std::string Printers_Item::GetTypeName() const {
-  return "aspia.system_info.Printers.Item";
+  return "aspia.proto.Printers.Item";
 }
 
 
@@ -15484,7 +15880,7 @@ Printers::Printers()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsPrinters();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Printers)
+  // @@protoc_insertion_point(constructor:aspia.proto.Printers)
 }
 Printers::Printers(const Printers& from)
   : ::google::protobuf::MessageLite(),
@@ -15492,7 +15888,7 @@ Printers::Printers(const Printers& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Printers)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Printers)
 }
 
 void Printers::SharedCtor() {
@@ -15500,7 +15896,7 @@ void Printers::SharedCtor() {
 }
 
 Printers::~Printers() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Printers)
+  // @@protoc_insertion_point(destructor:aspia.proto.Printers)
   SharedDtor();
 }
 
@@ -15526,7 +15922,7 @@ Printers* Printers::New(::google::protobuf::Arena* arena) const {
 }
 
 void Printers::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Printers)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Printers)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -15545,13 +15941,13 @@ bool Printers::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Printers)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Printers)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.Printers.Item item = 1;
+      // repeated .aspia.proto.Printers.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -15574,21 +15970,21 @@ bool Printers::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Printers)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Printers)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Printers)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Printers)
   return false;
 #undef DO_
 }
 
 void Printers::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Printers)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Printers)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.Printers.Item item = 1;
+  // repeated .aspia.proto.Printers.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -15597,16 +15993,16 @@ void Printers::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Printers)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Printers)
 }
 
 size_t Printers::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Printers)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Printers)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.Printers.Item item = 1;
+  // repeated .aspia.proto.Printers.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -15630,7 +16026,7 @@ void Printers::CheckTypeAndMergeFrom(
 }
 
 void Printers::MergeFrom(const Printers& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Printers)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Printers)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -15640,7 +16036,7 @@ void Printers::MergeFrom(const Printers& from) {
 }
 
 void Printers::CopyFrom(const Printers& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Printers)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Printers)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -15662,7 +16058,7 @@ void Printers::InternalSwap(Printers* other) {
 }
 
 ::std::string Printers::GetTypeName() const {
-  return "aspia.system_info.Printers";
+  return "aspia.proto.Printers";
 }
 
 
@@ -15685,7 +16081,7 @@ WindowsDevices_Item::WindowsDevices_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsWindowsDevices_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.WindowsDevices.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.WindowsDevices.Item)
 }
 WindowsDevices_Item::WindowsDevices_Item(const WindowsDevices_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -15716,7 +16112,7 @@ WindowsDevices_Item::WindowsDevices_Item(const WindowsDevices_Item& from)
   if (from.device_id().size() > 0) {
     device_id_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_id_);
   }
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.WindowsDevices.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.WindowsDevices.Item)
 }
 
 void WindowsDevices_Item::SharedCtor() {
@@ -15730,7 +16126,7 @@ void WindowsDevices_Item::SharedCtor() {
 }
 
 WindowsDevices_Item::~WindowsDevices_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.WindowsDevices.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.WindowsDevices.Item)
   SharedDtor();
 }
 
@@ -15762,7 +16158,7 @@ WindowsDevices_Item* WindowsDevices_Item::New(::google::protobuf::Arena* arena) 
 }
 
 void WindowsDevices_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.WindowsDevices.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.WindowsDevices.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -15786,7 +16182,7 @@ bool WindowsDevices_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.WindowsDevices.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.WindowsDevices.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -15801,7 +16197,7 @@ bool WindowsDevices_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->friendly_name().data(), static_cast<int>(this->friendly_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.WindowsDevices.Item.friendly_name"));
+            "aspia.proto.WindowsDevices.Item.friendly_name"));
         } else {
           goto handle_unusual;
         }
@@ -15817,7 +16213,7 @@ bool WindowsDevices_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->description().data(), static_cast<int>(this->description().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.WindowsDevices.Item.description"));
+            "aspia.proto.WindowsDevices.Item.description"));
         } else {
           goto handle_unusual;
         }
@@ -15833,7 +16229,7 @@ bool WindowsDevices_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->driver_version().data(), static_cast<int>(this->driver_version().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.WindowsDevices.Item.driver_version"));
+            "aspia.proto.WindowsDevices.Item.driver_version"));
         } else {
           goto handle_unusual;
         }
@@ -15849,7 +16245,7 @@ bool WindowsDevices_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->driver_date().data(), static_cast<int>(this->driver_date().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.WindowsDevices.Item.driver_date"));
+            "aspia.proto.WindowsDevices.Item.driver_date"));
         } else {
           goto handle_unusual;
         }
@@ -15865,7 +16261,7 @@ bool WindowsDevices_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->driver_vendor().data(), static_cast<int>(this->driver_vendor().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.WindowsDevices.Item.driver_vendor"));
+            "aspia.proto.WindowsDevices.Item.driver_vendor"));
         } else {
           goto handle_unusual;
         }
@@ -15881,7 +16277,7 @@ bool WindowsDevices_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->device_id().data(), static_cast<int>(this->device_id().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.WindowsDevices.Item.device_id"));
+            "aspia.proto.WindowsDevices.Item.device_id"));
         } else {
           goto handle_unusual;
         }
@@ -15900,17 +16296,17 @@ bool WindowsDevices_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.WindowsDevices.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.WindowsDevices.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.WindowsDevices.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.WindowsDevices.Item)
   return false;
 #undef DO_
 }
 
 void WindowsDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.WindowsDevices.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.WindowsDevices.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -15919,7 +16315,7 @@ void WindowsDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->friendly_name().data(), static_cast<int>(this->friendly_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.WindowsDevices.Item.friendly_name");
+      "aspia.proto.WindowsDevices.Item.friendly_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->friendly_name(), output);
   }
@@ -15929,7 +16325,7 @@ void WindowsDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->description().data(), static_cast<int>(this->description().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.WindowsDevices.Item.description");
+      "aspia.proto.WindowsDevices.Item.description");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->description(), output);
   }
@@ -15939,7 +16335,7 @@ void WindowsDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->driver_version().data(), static_cast<int>(this->driver_version().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.WindowsDevices.Item.driver_version");
+      "aspia.proto.WindowsDevices.Item.driver_version");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->driver_version(), output);
   }
@@ -15949,7 +16345,7 @@ void WindowsDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->driver_date().data(), static_cast<int>(this->driver_date().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.WindowsDevices.Item.driver_date");
+      "aspia.proto.WindowsDevices.Item.driver_date");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->driver_date(), output);
   }
@@ -15959,7 +16355,7 @@ void WindowsDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->driver_vendor().data(), static_cast<int>(this->driver_vendor().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.WindowsDevices.Item.driver_vendor");
+      "aspia.proto.WindowsDevices.Item.driver_vendor");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->driver_vendor(), output);
   }
@@ -15969,18 +16365,18 @@ void WindowsDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->device_id().data(), static_cast<int>(this->device_id().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.WindowsDevices.Item.device_id");
+      "aspia.proto.WindowsDevices.Item.device_id");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->device_id(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.WindowsDevices.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.WindowsDevices.Item)
 }
 
 size_t WindowsDevices_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.WindowsDevices.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.WindowsDevices.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -16040,7 +16436,7 @@ void WindowsDevices_Item::CheckTypeAndMergeFrom(
 }
 
 void WindowsDevices_Item::MergeFrom(const WindowsDevices_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.WindowsDevices.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.WindowsDevices.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -16073,7 +16469,7 @@ void WindowsDevices_Item::MergeFrom(const WindowsDevices_Item& from) {
 }
 
 void WindowsDevices_Item::CopyFrom(const WindowsDevices_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.WindowsDevices.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.WindowsDevices.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -16100,7 +16496,7 @@ void WindowsDevices_Item::InternalSwap(WindowsDevices_Item* other) {
 }
 
 ::std::string WindowsDevices_Item::GetTypeName() const {
-  return "aspia.system_info.WindowsDevices.Item";
+  return "aspia.proto.WindowsDevices.Item";
 }
 
 
@@ -16118,7 +16514,7 @@ WindowsDevices::WindowsDevices()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsWindowsDevices();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.WindowsDevices)
+  // @@protoc_insertion_point(constructor:aspia.proto.WindowsDevices)
 }
 WindowsDevices::WindowsDevices(const WindowsDevices& from)
   : ::google::protobuf::MessageLite(),
@@ -16126,7 +16522,7 @@ WindowsDevices::WindowsDevices(const WindowsDevices& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.WindowsDevices)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.WindowsDevices)
 }
 
 void WindowsDevices::SharedCtor() {
@@ -16134,7 +16530,7 @@ void WindowsDevices::SharedCtor() {
 }
 
 WindowsDevices::~WindowsDevices() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.WindowsDevices)
+  // @@protoc_insertion_point(destructor:aspia.proto.WindowsDevices)
   SharedDtor();
 }
 
@@ -16160,7 +16556,7 @@ WindowsDevices* WindowsDevices::New(::google::protobuf::Arena* arena) const {
 }
 
 void WindowsDevices::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.WindowsDevices)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.WindowsDevices)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -16179,13 +16575,13 @@ bool WindowsDevices::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.WindowsDevices)
+  // @@protoc_insertion_point(parse_start:aspia.proto.WindowsDevices)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.WindowsDevices.Item item = 1;
+      // repeated .aspia.proto.WindowsDevices.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -16208,21 +16604,21 @@ bool WindowsDevices::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.WindowsDevices)
+  // @@protoc_insertion_point(parse_success:aspia.proto.WindowsDevices)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.WindowsDevices)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.WindowsDevices)
   return false;
 #undef DO_
 }
 
 void WindowsDevices::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.WindowsDevices)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.WindowsDevices)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.WindowsDevices.Item item = 1;
+  // repeated .aspia.proto.WindowsDevices.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -16231,16 +16627,16 @@ void WindowsDevices::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.WindowsDevices)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.WindowsDevices)
 }
 
 size_t WindowsDevices::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.WindowsDevices)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.WindowsDevices)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.WindowsDevices.Item item = 1;
+  // repeated .aspia.proto.WindowsDevices.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -16264,7 +16660,7 @@ void WindowsDevices::CheckTypeAndMergeFrom(
 }
 
 void WindowsDevices::MergeFrom(const WindowsDevices& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.WindowsDevices)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.WindowsDevices)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -16274,7 +16670,7 @@ void WindowsDevices::MergeFrom(const WindowsDevices& from) {
 }
 
 void WindowsDevices::CopyFrom(const WindowsDevices& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.WindowsDevices)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.WindowsDevices)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -16296,7 +16692,7 @@ void WindowsDevices::InternalSwap(WindowsDevices* other) {
 }
 
 ::std::string WindowsDevices::GetTypeName() const {
-  return "aspia.system_info.WindowsDevices";
+  return "aspia.proto.WindowsDevices";
 }
 
 
@@ -16318,7 +16714,7 @@ Programs_Item::Programs_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsPrograms_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Programs.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.Programs.Item)
 }
 Programs_Item::Programs_Item(const Programs_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -16345,7 +16741,7 @@ Programs_Item::Programs_Item(const Programs_Item& from)
   if (from.install_location().size() > 0) {
     install_location_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.install_location_);
   }
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Programs.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Programs.Item)
 }
 
 void Programs_Item::SharedCtor() {
@@ -16358,7 +16754,7 @@ void Programs_Item::SharedCtor() {
 }
 
 Programs_Item::~Programs_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Programs.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.Programs.Item)
   SharedDtor();
 }
 
@@ -16389,7 +16785,7 @@ Programs_Item* Programs_Item::New(::google::protobuf::Arena* arena) const {
 }
 
 void Programs_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Programs.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Programs.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -16412,7 +16808,7 @@ bool Programs_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Programs.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Programs.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -16427,7 +16823,7 @@ bool Programs_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->name().data(), static_cast<int>(this->name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Programs.Item.name"));
+            "aspia.proto.Programs.Item.name"));
         } else {
           goto handle_unusual;
         }
@@ -16443,7 +16839,7 @@ bool Programs_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->version().data(), static_cast<int>(this->version().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Programs.Item.version"));
+            "aspia.proto.Programs.Item.version"));
         } else {
           goto handle_unusual;
         }
@@ -16459,7 +16855,7 @@ bool Programs_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->publisher().data(), static_cast<int>(this->publisher().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Programs.Item.publisher"));
+            "aspia.proto.Programs.Item.publisher"));
         } else {
           goto handle_unusual;
         }
@@ -16475,7 +16871,7 @@ bool Programs_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->install_date().data(), static_cast<int>(this->install_date().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Programs.Item.install_date"));
+            "aspia.proto.Programs.Item.install_date"));
         } else {
           goto handle_unusual;
         }
@@ -16491,7 +16887,7 @@ bool Programs_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->install_location().data(), static_cast<int>(this->install_location().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Programs.Item.install_location"));
+            "aspia.proto.Programs.Item.install_location"));
         } else {
           goto handle_unusual;
         }
@@ -16510,17 +16906,17 @@ bool Programs_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Programs.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Programs.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Programs.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Programs.Item)
   return false;
 #undef DO_
 }
 
 void Programs_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Programs.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Programs.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -16529,7 +16925,7 @@ void Programs_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), static_cast<int>(this->name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Programs.Item.name");
+      "aspia.proto.Programs.Item.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->name(), output);
   }
@@ -16539,7 +16935,7 @@ void Programs_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->version().data(), static_cast<int>(this->version().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Programs.Item.version");
+      "aspia.proto.Programs.Item.version");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->version(), output);
   }
@@ -16549,7 +16945,7 @@ void Programs_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->publisher().data(), static_cast<int>(this->publisher().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Programs.Item.publisher");
+      "aspia.proto.Programs.Item.publisher");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->publisher(), output);
   }
@@ -16559,7 +16955,7 @@ void Programs_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->install_date().data(), static_cast<int>(this->install_date().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Programs.Item.install_date");
+      "aspia.proto.Programs.Item.install_date");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->install_date(), output);
   }
@@ -16569,18 +16965,18 @@ void Programs_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->install_location().data(), static_cast<int>(this->install_location().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Programs.Item.install_location");
+      "aspia.proto.Programs.Item.install_location");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->install_location(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Programs.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Programs.Item)
 }
 
 size_t Programs_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Programs.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Programs.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -16633,7 +17029,7 @@ void Programs_Item::CheckTypeAndMergeFrom(
 }
 
 void Programs_Item::MergeFrom(const Programs_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Programs.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Programs.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -16662,7 +17058,7 @@ void Programs_Item::MergeFrom(const Programs_Item& from) {
 }
 
 void Programs_Item::CopyFrom(const Programs_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Programs.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Programs.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -16688,7 +17084,7 @@ void Programs_Item::InternalSwap(Programs_Item* other) {
 }
 
 ::std::string Programs_Item::GetTypeName() const {
-  return "aspia.system_info.Programs.Item";
+  return "aspia.proto.Programs.Item";
 }
 
 
@@ -16706,7 +17102,7 @@ Programs::Programs()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsPrograms();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Programs)
+  // @@protoc_insertion_point(constructor:aspia.proto.Programs)
 }
 Programs::Programs(const Programs& from)
   : ::google::protobuf::MessageLite(),
@@ -16714,7 +17110,7 @@ Programs::Programs(const Programs& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Programs)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Programs)
 }
 
 void Programs::SharedCtor() {
@@ -16722,7 +17118,7 @@ void Programs::SharedCtor() {
 }
 
 Programs::~Programs() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Programs)
+  // @@protoc_insertion_point(destructor:aspia.proto.Programs)
   SharedDtor();
 }
 
@@ -16748,7 +17144,7 @@ Programs* Programs::New(::google::protobuf::Arena* arena) const {
 }
 
 void Programs::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Programs)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Programs)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -16767,13 +17163,13 @@ bool Programs::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Programs)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Programs)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.Programs.Item item = 1;
+      // repeated .aspia.proto.Programs.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -16796,21 +17192,21 @@ bool Programs::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Programs)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Programs)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Programs)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Programs)
   return false;
 #undef DO_
 }
 
 void Programs::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Programs)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Programs)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.Programs.Item item = 1;
+  // repeated .aspia.proto.Programs.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -16819,16 +17215,16 @@ void Programs::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Programs)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Programs)
 }
 
 size_t Programs::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Programs)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Programs)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.Programs.Item item = 1;
+  // repeated .aspia.proto.Programs.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -16852,7 +17248,7 @@ void Programs::CheckTypeAndMergeFrom(
 }
 
 void Programs::MergeFrom(const Programs& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Programs)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Programs)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -16862,7 +17258,7 @@ void Programs::MergeFrom(const Programs& from) {
 }
 
 void Programs::CopyFrom(const Programs& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Programs)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Programs)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -16884,7 +17280,7 @@ void Programs::InternalSwap(Programs* other) {
 }
 
 ::std::string Programs::GetTypeName() const {
-  return "aspia.system_info.Programs";
+  return "aspia.proto.Programs";
 }
 
 
@@ -16908,7 +17304,7 @@ Services_Item::Services_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsServices_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Services.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.Services.Item)
 }
 Services_Item::Services_Item(const Services_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -16938,7 +17334,7 @@ Services_Item::Services_Item(const Services_Item& from)
   ::memcpy(&status_, &from.status_,
     static_cast<size_t>(reinterpret_cast<char*>(&startup_type_) -
     reinterpret_cast<char*>(&status_)) + sizeof(startup_type_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Services.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Services.Item)
 }
 
 void Services_Item::SharedCtor() {
@@ -16954,7 +17350,7 @@ void Services_Item::SharedCtor() {
 }
 
 Services_Item::~Services_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Services.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.Services.Item)
   SharedDtor();
 }
 
@@ -16985,7 +17381,7 @@ Services_Item* Services_Item::New(::google::protobuf::Arena* arena) const {
 }
 
 void Services_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Services.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Services.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -17011,7 +17407,7 @@ bool Services_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Services.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Services.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -17026,7 +17422,7 @@ bool Services_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->name().data(), static_cast<int>(this->name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Services.Item.name"));
+            "aspia.proto.Services.Item.name"));
         } else {
           goto handle_unusual;
         }
@@ -17042,7 +17438,7 @@ bool Services_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->display_name().data(), static_cast<int>(this->display_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Services.Item.display_name"));
+            "aspia.proto.Services.Item.display_name"));
         } else {
           goto handle_unusual;
         }
@@ -17058,14 +17454,14 @@ bool Services_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->description().data(), static_cast<int>(this->description().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Services.Item.description"));
+            "aspia.proto.Services.Item.description"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.Services.Item.Status status = 4;
+      // .aspia.proto.Services.Item.Status status = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
@@ -17073,14 +17469,14 @@ bool Services_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_status(static_cast< ::aspia::system_info::Services_Item_Status >(value));
+          set_status(static_cast< ::aspia::proto::Services_Item_Status >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.Services.Item.StartupType startup_type = 5;
+      // .aspia.proto.Services.Item.StartupType startup_type = 5;
       case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
@@ -17088,7 +17484,7 @@ bool Services_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_startup_type(static_cast< ::aspia::system_info::Services_Item_StartupType >(value));
+          set_startup_type(static_cast< ::aspia::proto::Services_Item_StartupType >(value));
         } else {
           goto handle_unusual;
         }
@@ -17104,7 +17500,7 @@ bool Services_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->binary_path().data(), static_cast<int>(this->binary_path().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Services.Item.binary_path"));
+            "aspia.proto.Services.Item.binary_path"));
         } else {
           goto handle_unusual;
         }
@@ -17120,7 +17516,7 @@ bool Services_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->start_name().data(), static_cast<int>(this->start_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Services.Item.start_name"));
+            "aspia.proto.Services.Item.start_name"));
         } else {
           goto handle_unusual;
         }
@@ -17139,17 +17535,17 @@ bool Services_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Services.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Services.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Services.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Services.Item)
   return false;
 #undef DO_
 }
 
 void Services_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Services.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Services.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -17158,7 +17554,7 @@ void Services_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), static_cast<int>(this->name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Services.Item.name");
+      "aspia.proto.Services.Item.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->name(), output);
   }
@@ -17168,7 +17564,7 @@ void Services_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->display_name().data(), static_cast<int>(this->display_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Services.Item.display_name");
+      "aspia.proto.Services.Item.display_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->display_name(), output);
   }
@@ -17178,18 +17574,18 @@ void Services_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->description().data(), static_cast<int>(this->description().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Services.Item.description");
+      "aspia.proto.Services.Item.description");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->description(), output);
   }
 
-  // .aspia.system_info.Services.Item.Status status = 4;
+  // .aspia.proto.Services.Item.Status status = 4;
   if (this->status() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       4, this->status(), output);
   }
 
-  // .aspia.system_info.Services.Item.StartupType startup_type = 5;
+  // .aspia.proto.Services.Item.StartupType startup_type = 5;
   if (this->startup_type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       5, this->startup_type(), output);
@@ -17200,7 +17596,7 @@ void Services_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->binary_path().data(), static_cast<int>(this->binary_path().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Services.Item.binary_path");
+      "aspia.proto.Services.Item.binary_path");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->binary_path(), output);
   }
@@ -17210,18 +17606,18 @@ void Services_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->start_name().data(), static_cast<int>(this->start_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Services.Item.start_name");
+      "aspia.proto.Services.Item.start_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       7, this->start_name(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Services.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Services.Item)
 }
 
 size_t Services_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Services.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Services.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -17261,13 +17657,13 @@ size_t Services_Item::ByteSizeLong() const {
         this->start_name());
   }
 
-  // .aspia.system_info.Services.Item.Status status = 4;
+  // .aspia.proto.Services.Item.Status status = 4;
   if (this->status() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
   }
 
-  // .aspia.system_info.Services.Item.StartupType startup_type = 5;
+  // .aspia.proto.Services.Item.StartupType startup_type = 5;
   if (this->startup_type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->startup_type());
@@ -17286,7 +17682,7 @@ void Services_Item::CheckTypeAndMergeFrom(
 }
 
 void Services_Item::MergeFrom(const Services_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Services.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Services.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -17321,7 +17717,7 @@ void Services_Item::MergeFrom(const Services_Item& from) {
 }
 
 void Services_Item::CopyFrom(const Services_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Services.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Services.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -17349,7 +17745,7 @@ void Services_Item::InternalSwap(Services_Item* other) {
 }
 
 ::std::string Services_Item::GetTypeName() const {
-  return "aspia.system_info.Services.Item";
+  return "aspia.proto.Services.Item";
 }
 
 
@@ -17367,7 +17763,7 @@ Services::Services()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsServices();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Services)
+  // @@protoc_insertion_point(constructor:aspia.proto.Services)
 }
 Services::Services(const Services& from)
   : ::google::protobuf::MessageLite(),
@@ -17375,7 +17771,7 @@ Services::Services(const Services& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Services)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Services)
 }
 
 void Services::SharedCtor() {
@@ -17383,7 +17779,7 @@ void Services::SharedCtor() {
 }
 
 Services::~Services() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Services)
+  // @@protoc_insertion_point(destructor:aspia.proto.Services)
   SharedDtor();
 }
 
@@ -17409,7 +17805,7 @@ Services* Services::New(::google::protobuf::Arena* arena) const {
 }
 
 void Services::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Services)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Services)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -17428,13 +17824,13 @@ bool Services::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Services)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Services)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.Services.Item item = 1;
+      // repeated .aspia.proto.Services.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -17457,21 +17853,21 @@ bool Services::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Services)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Services)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Services)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Services)
   return false;
 #undef DO_
 }
 
 void Services::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Services)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Services)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.Services.Item item = 1;
+  // repeated .aspia.proto.Services.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -17480,16 +17876,16 @@ void Services::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Services)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Services)
 }
 
 size_t Services::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Services)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Services)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.Services.Item item = 1;
+  // repeated .aspia.proto.Services.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -17513,7 +17909,7 @@ void Services::CheckTypeAndMergeFrom(
 }
 
 void Services::MergeFrom(const Services& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Services)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Services)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -17523,7 +17919,7 @@ void Services::MergeFrom(const Services& from) {
 }
 
 void Services::CopyFrom(const Services& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Services)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Services)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -17545,7 +17941,7 @@ void Services::InternalSwap(Services* other) {
 }
 
 ::std::string Services::GetTypeName() const {
-  return "aspia.system_info.Services";
+  return "aspia.proto.Services";
 }
 
 
@@ -17567,7 +17963,7 @@ Processes_Item::Processes_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsProcesses_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Processes.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.Processes.Item)
 }
 Processes_Item::Processes_Item(const Processes_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -17589,7 +17985,7 @@ Processes_Item::Processes_Item(const Processes_Item& from)
   ::memcpy(&used_memory_, &from.used_memory_,
     static_cast<size_t>(reinterpret_cast<char*>(&used_swap_) -
     reinterpret_cast<char*>(&used_memory_)) + sizeof(used_swap_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Processes.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Processes.Item)
 }
 
 void Processes_Item::SharedCtor() {
@@ -17603,7 +17999,7 @@ void Processes_Item::SharedCtor() {
 }
 
 Processes_Item::~Processes_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Processes.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.Processes.Item)
   SharedDtor();
 }
 
@@ -17632,7 +18028,7 @@ Processes_Item* Processes_Item::New(::google::protobuf::Arena* arena) const {
 }
 
 void Processes_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Processes.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Processes.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -17656,7 +18052,7 @@ bool Processes_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Processes.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Processes.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -17671,7 +18067,7 @@ bool Processes_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->process_name().data(), static_cast<int>(this->process_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Processes.Item.process_name"));
+            "aspia.proto.Processes.Item.process_name"));
         } else {
           goto handle_unusual;
         }
@@ -17687,7 +18083,7 @@ bool Processes_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->file_path().data(), static_cast<int>(this->file_path().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Processes.Item.file_path"));
+            "aspia.proto.Processes.Item.file_path"));
         } else {
           goto handle_unusual;
         }
@@ -17731,7 +18127,7 @@ bool Processes_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->description().data(), static_cast<int>(this->description().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Processes.Item.description"));
+            "aspia.proto.Processes.Item.description"));
         } else {
           goto handle_unusual;
         }
@@ -17750,17 +18146,17 @@ bool Processes_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Processes.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Processes.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Processes.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Processes.Item)
   return false;
 #undef DO_
 }
 
 void Processes_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Processes.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Processes.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -17769,7 +18165,7 @@ void Processes_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->process_name().data(), static_cast<int>(this->process_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Processes.Item.process_name");
+      "aspia.proto.Processes.Item.process_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->process_name(), output);
   }
@@ -17779,7 +18175,7 @@ void Processes_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->file_path().data(), static_cast<int>(this->file_path().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Processes.Item.file_path");
+      "aspia.proto.Processes.Item.file_path");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->file_path(), output);
   }
@@ -17799,18 +18195,18 @@ void Processes_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->description().data(), static_cast<int>(this->description().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Processes.Item.description");
+      "aspia.proto.Processes.Item.description");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->description(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Processes.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Processes.Item)
 }
 
 size_t Processes_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Processes.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Processes.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -17863,7 +18259,7 @@ void Processes_Item::CheckTypeAndMergeFrom(
 }
 
 void Processes_Item::MergeFrom(const Processes_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Processes.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Processes.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -17890,7 +18286,7 @@ void Processes_Item::MergeFrom(const Processes_Item& from) {
 }
 
 void Processes_Item::CopyFrom(const Processes_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Processes.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Processes.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -17916,7 +18312,7 @@ void Processes_Item::InternalSwap(Processes_Item* other) {
 }
 
 ::std::string Processes_Item::GetTypeName() const {
-  return "aspia.system_info.Processes.Item";
+  return "aspia.proto.Processes.Item";
 }
 
 
@@ -17934,7 +18330,7 @@ Processes::Processes()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsProcesses();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Processes)
+  // @@protoc_insertion_point(constructor:aspia.proto.Processes)
 }
 Processes::Processes(const Processes& from)
   : ::google::protobuf::MessageLite(),
@@ -17942,7 +18338,7 @@ Processes::Processes(const Processes& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Processes)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Processes)
 }
 
 void Processes::SharedCtor() {
@@ -17950,7 +18346,7 @@ void Processes::SharedCtor() {
 }
 
 Processes::~Processes() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Processes)
+  // @@protoc_insertion_point(destructor:aspia.proto.Processes)
   SharedDtor();
 }
 
@@ -17976,7 +18372,7 @@ Processes* Processes::New(::google::protobuf::Arena* arena) const {
 }
 
 void Processes::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Processes)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Processes)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -17995,13 +18391,13 @@ bool Processes::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Processes)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Processes)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.Processes.Item item = 1;
+      // repeated .aspia.proto.Processes.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -18024,21 +18420,21 @@ bool Processes::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Processes)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Processes)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Processes)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Processes)
   return false;
 #undef DO_
 }
 
 void Processes::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Processes)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Processes)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.Processes.Item item = 1;
+  // repeated .aspia.proto.Processes.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -18047,16 +18443,16 @@ void Processes::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Processes)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Processes)
 }
 
 size_t Processes::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Processes)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Processes)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.Processes.Item item = 1;
+  // repeated .aspia.proto.Processes.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -18080,7 +18476,7 @@ void Processes::CheckTypeAndMergeFrom(
 }
 
 void Processes::MergeFrom(const Processes& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Processes)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Processes)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -18090,7 +18486,7 @@ void Processes::MergeFrom(const Processes& from) {
 }
 
 void Processes::CopyFrom(const Processes& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Processes)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Processes)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -18112,7 +18508,7 @@ void Processes::InternalSwap(Processes* other) {
 }
 
 ::std::string Processes::GetTypeName() const {
-  return "aspia.system_info.Processes";
+  return "aspia.proto.Processes";
 }
 
 
@@ -18131,7 +18527,7 @@ NetworkCards_Item_IpAddress::NetworkCards_Item_IpAddress()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsNetworkCards_Item_IpAddress();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.NetworkCards.Item.IpAddress)
+  // @@protoc_insertion_point(constructor:aspia.proto.NetworkCards.Item.IpAddress)
 }
 NetworkCards_Item_IpAddress::NetworkCards_Item_IpAddress(const NetworkCards_Item_IpAddress& from)
   : ::google::protobuf::MessageLite(),
@@ -18146,7 +18542,7 @@ NetworkCards_Item_IpAddress::NetworkCards_Item_IpAddress(const NetworkCards_Item
   if (from.mask().size() > 0) {
     mask_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.mask_);
   }
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.NetworkCards.Item.IpAddress)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.NetworkCards.Item.IpAddress)
 }
 
 void NetworkCards_Item_IpAddress::SharedCtor() {
@@ -18156,7 +18552,7 @@ void NetworkCards_Item_IpAddress::SharedCtor() {
 }
 
 NetworkCards_Item_IpAddress::~NetworkCards_Item_IpAddress() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.NetworkCards.Item.IpAddress)
+  // @@protoc_insertion_point(destructor:aspia.proto.NetworkCards.Item.IpAddress)
   SharedDtor();
 }
 
@@ -18184,7 +18580,7 @@ NetworkCards_Item_IpAddress* NetworkCards_Item_IpAddress::New(::google::protobuf
 }
 
 void NetworkCards_Item_IpAddress::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.NetworkCards.Item.IpAddress)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.NetworkCards.Item.IpAddress)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -18204,7 +18600,7 @@ bool NetworkCards_Item_IpAddress::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.NetworkCards.Item.IpAddress)
+  // @@protoc_insertion_point(parse_start:aspia.proto.NetworkCards.Item.IpAddress)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -18219,7 +18615,7 @@ bool NetworkCards_Item_IpAddress::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->address().data(), static_cast<int>(this->address().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.NetworkCards.Item.IpAddress.address"));
+            "aspia.proto.NetworkCards.Item.IpAddress.address"));
         } else {
           goto handle_unusual;
         }
@@ -18235,7 +18631,7 @@ bool NetworkCards_Item_IpAddress::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->mask().data(), static_cast<int>(this->mask().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.NetworkCards.Item.IpAddress.mask"));
+            "aspia.proto.NetworkCards.Item.IpAddress.mask"));
         } else {
           goto handle_unusual;
         }
@@ -18254,17 +18650,17 @@ bool NetworkCards_Item_IpAddress::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.NetworkCards.Item.IpAddress)
+  // @@protoc_insertion_point(parse_success:aspia.proto.NetworkCards.Item.IpAddress)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.NetworkCards.Item.IpAddress)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.NetworkCards.Item.IpAddress)
   return false;
 #undef DO_
 }
 
 void NetworkCards_Item_IpAddress::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.NetworkCards.Item.IpAddress)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.NetworkCards.Item.IpAddress)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -18273,7 +18669,7 @@ void NetworkCards_Item_IpAddress::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->address().data(), static_cast<int>(this->address().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.NetworkCards.Item.IpAddress.address");
+      "aspia.proto.NetworkCards.Item.IpAddress.address");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->address(), output);
   }
@@ -18283,18 +18679,18 @@ void NetworkCards_Item_IpAddress::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->mask().data(), static_cast<int>(this->mask().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.NetworkCards.Item.IpAddress.mask");
+      "aspia.proto.NetworkCards.Item.IpAddress.mask");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->mask(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.NetworkCards.Item.IpAddress)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.NetworkCards.Item.IpAddress)
 }
 
 size_t NetworkCards_Item_IpAddress::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.NetworkCards.Item.IpAddress)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.NetworkCards.Item.IpAddress)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -18326,7 +18722,7 @@ void NetworkCards_Item_IpAddress::CheckTypeAndMergeFrom(
 }
 
 void NetworkCards_Item_IpAddress::MergeFrom(const NetworkCards_Item_IpAddress& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.NetworkCards.Item.IpAddress)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.NetworkCards.Item.IpAddress)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -18343,7 +18739,7 @@ void NetworkCards_Item_IpAddress::MergeFrom(const NetworkCards_Item_IpAddress& f
 }
 
 void NetworkCards_Item_IpAddress::CopyFrom(const NetworkCards_Item_IpAddress& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.NetworkCards.Item.IpAddress)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.NetworkCards.Item.IpAddress)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -18366,7 +18762,7 @@ void NetworkCards_Item_IpAddress::InternalSwap(NetworkCards_Item_IpAddress* othe
 }
 
 ::std::string NetworkCards_Item_IpAddress::GetTypeName() const {
-  return "aspia.system_info.NetworkCards.Item.IpAddress";
+  return "aspia.proto.NetworkCards.Item.IpAddress";
 }
 
 
@@ -18397,7 +18793,7 @@ NetworkCards_Item::NetworkCards_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsNetworkCards_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.NetworkCards.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.NetworkCards.Item)
 }
 NetworkCards_Item::NetworkCards_Item(const NetworkCards_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -18435,7 +18831,7 @@ NetworkCards_Item::NetworkCards_Item(const NetworkCards_Item& from)
   ::memcpy(&mtu_, &from.mtu_,
     static_cast<size_t>(reinterpret_cast<char*>(&is_dhcp_enabled_) -
     reinterpret_cast<char*>(&mtu_)) + sizeof(is_dhcp_enabled_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.NetworkCards.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.NetworkCards.Item)
 }
 
 void NetworkCards_Item::SharedCtor() {
@@ -18452,7 +18848,7 @@ void NetworkCards_Item::SharedCtor() {
 }
 
 NetworkCards_Item::~NetworkCards_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.NetworkCards.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.NetworkCards.Item)
   SharedDtor();
 }
 
@@ -18484,7 +18880,7 @@ NetworkCards_Item* NetworkCards_Item::New(::google::protobuf::Arena* arena) cons
 }
 
 void NetworkCards_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.NetworkCards.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.NetworkCards.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -18515,7 +18911,7 @@ bool NetworkCards_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.NetworkCards.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.NetworkCards.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -18530,7 +18926,7 @@ bool NetworkCards_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->adapter_name().data(), static_cast<int>(this->adapter_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.NetworkCards.Item.adapter_name"));
+            "aspia.proto.NetworkCards.Item.adapter_name"));
         } else {
           goto handle_unusual;
         }
@@ -18546,7 +18942,7 @@ bool NetworkCards_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->connection_name().data(), static_cast<int>(this->connection_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.NetworkCards.Item.connection_name"));
+            "aspia.proto.NetworkCards.Item.connection_name"));
         } else {
           goto handle_unusual;
         }
@@ -18562,7 +18958,7 @@ bool NetworkCards_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->interface_type().data(), static_cast<int>(this->interface_type().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.NetworkCards.Item.interface_type"));
+            "aspia.proto.NetworkCards.Item.interface_type"));
         } else {
           goto handle_unusual;
         }
@@ -18606,7 +19002,7 @@ bool NetworkCards_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->mac_address().data(), static_cast<int>(this->mac_address().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.NetworkCards.Item.mac_address"));
+            "aspia.proto.NetworkCards.Item.mac_address"));
         } else {
           goto handle_unusual;
         }
@@ -18636,7 +19032,7 @@ bool NetworkCards_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->primary_wins_server().data(), static_cast<int>(this->primary_wins_server().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.NetworkCards.Item.primary_wins_server"));
+            "aspia.proto.NetworkCards.Item.primary_wins_server"));
         } else {
           goto handle_unusual;
         }
@@ -18652,7 +19048,7 @@ bool NetworkCards_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->secondary_wins_server().data(), static_cast<int>(this->secondary_wins_server().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.NetworkCards.Item.secondary_wins_server"));
+            "aspia.proto.NetworkCards.Item.secondary_wins_server"));
         } else {
           goto handle_unusual;
         }
@@ -18673,7 +19069,7 @@ bool NetworkCards_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .aspia.system_info.NetworkCards.Item.IpAddress ip_address = 11;
+      // repeated .aspia.proto.NetworkCards.Item.IpAddress ip_address = 11;
       case 11: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(90u /* 90 & 0xFF */)) {
@@ -18694,7 +19090,7 @@ bool NetworkCards_Item::MergePartialFromCodedStream(
             this->gateway_address(this->gateway_address_size() - 1).data(),
             static_cast<int>(this->gateway_address(this->gateway_address_size() - 1).length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.NetworkCards.Item.gateway_address"));
+            "aspia.proto.NetworkCards.Item.gateway_address"));
         } else {
           goto handle_unusual;
         }
@@ -18711,7 +19107,7 @@ bool NetworkCards_Item::MergePartialFromCodedStream(
             this->dhcp_server_address(this->dhcp_server_address_size() - 1).data(),
             static_cast<int>(this->dhcp_server_address(this->dhcp_server_address_size() - 1).length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.NetworkCards.Item.dhcp_server_address"));
+            "aspia.proto.NetworkCards.Item.dhcp_server_address"));
         } else {
           goto handle_unusual;
         }
@@ -18728,7 +19124,7 @@ bool NetworkCards_Item::MergePartialFromCodedStream(
             this->dns_server_address(this->dns_server_address_size() - 1).data(),
             static_cast<int>(this->dns_server_address(this->dns_server_address_size() - 1).length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.NetworkCards.Item.dns_server_address"));
+            "aspia.proto.NetworkCards.Item.dns_server_address"));
         } else {
           goto handle_unusual;
         }
@@ -18747,17 +19143,17 @@ bool NetworkCards_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.NetworkCards.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.NetworkCards.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.NetworkCards.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.NetworkCards.Item)
   return false;
 #undef DO_
 }
 
 void NetworkCards_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.NetworkCards.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.NetworkCards.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -18766,7 +19162,7 @@ void NetworkCards_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->adapter_name().data(), static_cast<int>(this->adapter_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.NetworkCards.Item.adapter_name");
+      "aspia.proto.NetworkCards.Item.adapter_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->adapter_name(), output);
   }
@@ -18776,7 +19172,7 @@ void NetworkCards_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->connection_name().data(), static_cast<int>(this->connection_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.NetworkCards.Item.connection_name");
+      "aspia.proto.NetworkCards.Item.connection_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->connection_name(), output);
   }
@@ -18786,7 +19182,7 @@ void NetworkCards_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->interface_type().data(), static_cast<int>(this->interface_type().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.NetworkCards.Item.interface_type");
+      "aspia.proto.NetworkCards.Item.interface_type");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->interface_type(), output);
   }
@@ -18806,7 +19202,7 @@ void NetworkCards_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->mac_address().data(), static_cast<int>(this->mac_address().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.NetworkCards.Item.mac_address");
+      "aspia.proto.NetworkCards.Item.mac_address");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->mac_address(), output);
   }
@@ -18821,7 +19217,7 @@ void NetworkCards_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->primary_wins_server().data(), static_cast<int>(this->primary_wins_server().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.NetworkCards.Item.primary_wins_server");
+      "aspia.proto.NetworkCards.Item.primary_wins_server");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       8, this->primary_wins_server(), output);
   }
@@ -18831,7 +19227,7 @@ void NetworkCards_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->secondary_wins_server().data(), static_cast<int>(this->secondary_wins_server().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.NetworkCards.Item.secondary_wins_server");
+      "aspia.proto.NetworkCards.Item.secondary_wins_server");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       9, this->secondary_wins_server(), output);
   }
@@ -18841,7 +19237,7 @@ void NetworkCards_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(10, this->is_dhcp_enabled(), output);
   }
 
-  // repeated .aspia.system_info.NetworkCards.Item.IpAddress ip_address = 11;
+  // repeated .aspia.proto.NetworkCards.Item.IpAddress ip_address = 11;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->ip_address_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -18853,7 +19249,7 @@ void NetworkCards_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->gateway_address(i).data(), static_cast<int>(this->gateway_address(i).length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.NetworkCards.Item.gateway_address");
+      "aspia.proto.NetworkCards.Item.gateway_address");
     ::google::protobuf::internal::WireFormatLite::WriteString(
       12, this->gateway_address(i), output);
   }
@@ -18863,7 +19259,7 @@ void NetworkCards_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->dhcp_server_address(i).data(), static_cast<int>(this->dhcp_server_address(i).length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.NetworkCards.Item.dhcp_server_address");
+      "aspia.proto.NetworkCards.Item.dhcp_server_address");
     ::google::protobuf::internal::WireFormatLite::WriteString(
       13, this->dhcp_server_address(i), output);
   }
@@ -18873,23 +19269,23 @@ void NetworkCards_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->dns_server_address(i).data(), static_cast<int>(this->dns_server_address(i).length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.NetworkCards.Item.dns_server_address");
+      "aspia.proto.NetworkCards.Item.dns_server_address");
     ::google::protobuf::internal::WireFormatLite::WriteString(
       14, this->dns_server_address(i), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.NetworkCards.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.NetworkCards.Item)
 }
 
 size_t NetworkCards_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.NetworkCards.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.NetworkCards.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.NetworkCards.Item.IpAddress ip_address = 11;
+  // repeated .aspia.proto.NetworkCards.Item.IpAddress ip_address = 11;
   {
     unsigned int count = static_cast<unsigned int>(this->ip_address_size());
     total_size += 1UL * count;
@@ -19003,7 +19399,7 @@ void NetworkCards_Item::CheckTypeAndMergeFrom(
 }
 
 void NetworkCards_Item::MergeFrom(const NetworkCards_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.NetworkCards.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.NetworkCards.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -19052,7 +19448,7 @@ void NetworkCards_Item::MergeFrom(const NetworkCards_Item& from) {
 }
 
 void NetworkCards_Item::CopyFrom(const NetworkCards_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.NetworkCards.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.NetworkCards.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -19087,7 +19483,7 @@ void NetworkCards_Item::InternalSwap(NetworkCards_Item* other) {
 }
 
 ::std::string NetworkCards_Item::GetTypeName() const {
-  return "aspia.system_info.NetworkCards.Item";
+  return "aspia.proto.NetworkCards.Item";
 }
 
 
@@ -19105,7 +19501,7 @@ NetworkCards::NetworkCards()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsNetworkCards();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.NetworkCards)
+  // @@protoc_insertion_point(constructor:aspia.proto.NetworkCards)
 }
 NetworkCards::NetworkCards(const NetworkCards& from)
   : ::google::protobuf::MessageLite(),
@@ -19113,7 +19509,7 @@ NetworkCards::NetworkCards(const NetworkCards& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.NetworkCards)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.NetworkCards)
 }
 
 void NetworkCards::SharedCtor() {
@@ -19121,7 +19517,7 @@ void NetworkCards::SharedCtor() {
 }
 
 NetworkCards::~NetworkCards() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.NetworkCards)
+  // @@protoc_insertion_point(destructor:aspia.proto.NetworkCards)
   SharedDtor();
 }
 
@@ -19147,7 +19543,7 @@ NetworkCards* NetworkCards::New(::google::protobuf::Arena* arena) const {
 }
 
 void NetworkCards::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.NetworkCards)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.NetworkCards)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -19166,13 +19562,13 @@ bool NetworkCards::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.NetworkCards)
+  // @@protoc_insertion_point(parse_start:aspia.proto.NetworkCards)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.NetworkCards.Item item = 1;
+      // repeated .aspia.proto.NetworkCards.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -19195,21 +19591,21 @@ bool NetworkCards::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.NetworkCards)
+  // @@protoc_insertion_point(parse_success:aspia.proto.NetworkCards)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.NetworkCards)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.NetworkCards)
   return false;
 #undef DO_
 }
 
 void NetworkCards::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.NetworkCards)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.NetworkCards)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.NetworkCards.Item item = 1;
+  // repeated .aspia.proto.NetworkCards.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -19218,16 +19614,16 @@ void NetworkCards::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.NetworkCards)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.NetworkCards)
 }
 
 size_t NetworkCards::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.NetworkCards)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.NetworkCards)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.NetworkCards.Item item = 1;
+  // repeated .aspia.proto.NetworkCards.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -19251,7 +19647,7 @@ void NetworkCards::CheckTypeAndMergeFrom(
 }
 
 void NetworkCards::MergeFrom(const NetworkCards& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.NetworkCards)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.NetworkCards)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -19261,7 +19657,7 @@ void NetworkCards::MergeFrom(const NetworkCards& from) {
 }
 
 void NetworkCards::CopyFrom(const NetworkCards& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.NetworkCards)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.NetworkCards)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -19283,7 +19679,7 @@ void NetworkCards::InternalSwap(NetworkCards* other) {
 }
 
 ::std::string NetworkCards::GetTypeName() const {
-  return "aspia.system_info.NetworkCards";
+  return "aspia.proto.NetworkCards";
 }
 
 
@@ -19307,7 +19703,7 @@ OpenConnections_Item::OpenConnections_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsOpenConnections_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.OpenConnections.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.OpenConnections.Item)
 }
 OpenConnections_Item::OpenConnections_Item(const OpenConnections_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -19333,7 +19729,7 @@ OpenConnections_Item::OpenConnections_Item(const OpenConnections_Item& from)
   ::memcpy(&protocol_, &from.protocol_,
     static_cast<size_t>(reinterpret_cast<char*>(&remote_port_) -
     reinterpret_cast<char*>(&protocol_)) + sizeof(remote_port_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.OpenConnections.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.OpenConnections.Item)
 }
 
 void OpenConnections_Item::SharedCtor() {
@@ -19348,7 +19744,7 @@ void OpenConnections_Item::SharedCtor() {
 }
 
 OpenConnections_Item::~OpenConnections_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.OpenConnections.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.OpenConnections.Item)
   SharedDtor();
 }
 
@@ -19378,7 +19774,7 @@ OpenConnections_Item* OpenConnections_Item::New(::google::protobuf::Arena* arena
 }
 
 void OpenConnections_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.OpenConnections.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.OpenConnections.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -19403,7 +19799,7 @@ bool OpenConnections_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.OpenConnections.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.OpenConnections.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -19418,14 +19814,14 @@ bool OpenConnections_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->process_name().data(), static_cast<int>(this->process_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.OpenConnections.Item.process_name"));
+            "aspia.proto.OpenConnections.Item.process_name"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.OpenConnections.Item.Protocol protocol = 2;
+      // .aspia.proto.OpenConnections.Item.Protocol protocol = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
@@ -19433,7 +19829,7 @@ bool OpenConnections_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_protocol(static_cast< ::aspia::system_info::OpenConnections_Item_Protocol >(value));
+          set_protocol(static_cast< ::aspia::proto::OpenConnections_Item_Protocol >(value));
         } else {
           goto handle_unusual;
         }
@@ -19449,7 +19845,7 @@ bool OpenConnections_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->local_address().data(), static_cast<int>(this->local_address().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.OpenConnections.Item.local_address"));
+            "aspia.proto.OpenConnections.Item.local_address"));
         } else {
           goto handle_unusual;
         }
@@ -19465,7 +19861,7 @@ bool OpenConnections_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->remote_address().data(), static_cast<int>(this->remote_address().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.OpenConnections.Item.remote_address"));
+            "aspia.proto.OpenConnections.Item.remote_address"));
         } else {
           goto handle_unusual;
         }
@@ -19509,7 +19905,7 @@ bool OpenConnections_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->state().data(), static_cast<int>(this->state().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.OpenConnections.Item.state"));
+            "aspia.proto.OpenConnections.Item.state"));
         } else {
           goto handle_unusual;
         }
@@ -19528,17 +19924,17 @@ bool OpenConnections_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.OpenConnections.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.OpenConnections.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.OpenConnections.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.OpenConnections.Item)
   return false;
 #undef DO_
 }
 
 void OpenConnections_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.OpenConnections.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.OpenConnections.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -19547,12 +19943,12 @@ void OpenConnections_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->process_name().data(), static_cast<int>(this->process_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.OpenConnections.Item.process_name");
+      "aspia.proto.OpenConnections.Item.process_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->process_name(), output);
   }
 
-  // .aspia.system_info.OpenConnections.Item.Protocol protocol = 2;
+  // .aspia.proto.OpenConnections.Item.Protocol protocol = 2;
   if (this->protocol() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       2, this->protocol(), output);
@@ -19563,7 +19959,7 @@ void OpenConnections_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->local_address().data(), static_cast<int>(this->local_address().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.OpenConnections.Item.local_address");
+      "aspia.proto.OpenConnections.Item.local_address");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->local_address(), output);
   }
@@ -19573,7 +19969,7 @@ void OpenConnections_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->remote_address().data(), static_cast<int>(this->remote_address().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.OpenConnections.Item.remote_address");
+      "aspia.proto.OpenConnections.Item.remote_address");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->remote_address(), output);
   }
@@ -19593,18 +19989,18 @@ void OpenConnections_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->state().data(), static_cast<int>(this->state().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.OpenConnections.Item.state");
+      "aspia.proto.OpenConnections.Item.state");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       7, this->state(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.OpenConnections.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.OpenConnections.Item)
 }
 
 size_t OpenConnections_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.OpenConnections.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.OpenConnections.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -19637,7 +20033,7 @@ size_t OpenConnections_Item::ByteSizeLong() const {
         this->state());
   }
 
-  // .aspia.system_info.OpenConnections.Item.Protocol protocol = 2;
+  // .aspia.proto.OpenConnections.Item.Protocol protocol = 2;
   if (this->protocol() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->protocol());
@@ -19670,7 +20066,7 @@ void OpenConnections_Item::CheckTypeAndMergeFrom(
 }
 
 void OpenConnections_Item::MergeFrom(const OpenConnections_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.OpenConnections.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.OpenConnections.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -19704,7 +20100,7 @@ void OpenConnections_Item::MergeFrom(const OpenConnections_Item& from) {
 }
 
 void OpenConnections_Item::CopyFrom(const OpenConnections_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.OpenConnections.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.OpenConnections.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -19732,7 +20128,7 @@ void OpenConnections_Item::InternalSwap(OpenConnections_Item* other) {
 }
 
 ::std::string OpenConnections_Item::GetTypeName() const {
-  return "aspia.system_info.OpenConnections.Item";
+  return "aspia.proto.OpenConnections.Item";
 }
 
 
@@ -19750,7 +20146,7 @@ OpenConnections::OpenConnections()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsOpenConnections();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.OpenConnections)
+  // @@protoc_insertion_point(constructor:aspia.proto.OpenConnections)
 }
 OpenConnections::OpenConnections(const OpenConnections& from)
   : ::google::protobuf::MessageLite(),
@@ -19758,7 +20154,7 @@ OpenConnections::OpenConnections(const OpenConnections& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.OpenConnections)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.OpenConnections)
 }
 
 void OpenConnections::SharedCtor() {
@@ -19766,7 +20162,7 @@ void OpenConnections::SharedCtor() {
 }
 
 OpenConnections::~OpenConnections() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.OpenConnections)
+  // @@protoc_insertion_point(destructor:aspia.proto.OpenConnections)
   SharedDtor();
 }
 
@@ -19792,7 +20188,7 @@ OpenConnections* OpenConnections::New(::google::protobuf::Arena* arena) const {
 }
 
 void OpenConnections::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.OpenConnections)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.OpenConnections)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -19811,13 +20207,13 @@ bool OpenConnections::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.OpenConnections)
+  // @@protoc_insertion_point(parse_start:aspia.proto.OpenConnections)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.OpenConnections.Item item = 1;
+      // repeated .aspia.proto.OpenConnections.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -19840,21 +20236,21 @@ bool OpenConnections::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.OpenConnections)
+  // @@protoc_insertion_point(parse_success:aspia.proto.OpenConnections)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.OpenConnections)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.OpenConnections)
   return false;
 #undef DO_
 }
 
 void OpenConnections::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.OpenConnections)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.OpenConnections)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.OpenConnections.Item item = 1;
+  // repeated .aspia.proto.OpenConnections.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -19863,16 +20259,16 @@ void OpenConnections::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.OpenConnections)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.OpenConnections)
 }
 
 size_t OpenConnections::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.OpenConnections)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.OpenConnections)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.OpenConnections.Item item = 1;
+  // repeated .aspia.proto.OpenConnections.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -19896,7 +20292,7 @@ void OpenConnections::CheckTypeAndMergeFrom(
 }
 
 void OpenConnections::MergeFrom(const OpenConnections& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.OpenConnections)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.OpenConnections)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -19906,7 +20302,7 @@ void OpenConnections::MergeFrom(const OpenConnections& from) {
 }
 
 void OpenConnections::CopyFrom(const OpenConnections& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.OpenConnections)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.OpenConnections)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -19928,7 +20324,7 @@ void OpenConnections::InternalSwap(OpenConnections* other) {
 }
 
 ::std::string OpenConnections::GetTypeName() const {
-  return "aspia.system_info.OpenConnections";
+  return "aspia.proto.OpenConnections";
 }
 
 
@@ -19951,7 +20347,7 @@ SharedResources_Item::SharedResources_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsSharedResources_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.SharedResources.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.SharedResources.Item)
 }
 SharedResources_Item::SharedResources_Item(const SharedResources_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -19973,7 +20369,7 @@ SharedResources_Item::SharedResources_Item(const SharedResources_Item& from)
   ::memcpy(&type_, &from.type_,
     static_cast<size_t>(reinterpret_cast<char*>(&maximum_uses_) -
     reinterpret_cast<char*>(&type_)) + sizeof(maximum_uses_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.SharedResources.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.SharedResources.Item)
 }
 
 void SharedResources_Item::SharedCtor() {
@@ -19987,7 +20383,7 @@ void SharedResources_Item::SharedCtor() {
 }
 
 SharedResources_Item::~SharedResources_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.SharedResources.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.SharedResources.Item)
   SharedDtor();
 }
 
@@ -20016,7 +20412,7 @@ SharedResources_Item* SharedResources_Item::New(::google::protobuf::Arena* arena
 }
 
 void SharedResources_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.SharedResources.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.SharedResources.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -20040,7 +20436,7 @@ bool SharedResources_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.SharedResources.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.SharedResources.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -20055,14 +20451,14 @@ bool SharedResources_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->name().data(), static_cast<int>(this->name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.SharedResources.Item.name"));
+            "aspia.proto.SharedResources.Item.name"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.system_info.SharedResources.Item.Type type = 2;
+      // .aspia.proto.SharedResources.Item.Type type = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
@@ -20070,7 +20466,7 @@ bool SharedResources_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_type(static_cast< ::aspia::system_info::SharedResources_Item_Type >(value));
+          set_type(static_cast< ::aspia::proto::SharedResources_Item_Type >(value));
         } else {
           goto handle_unusual;
         }
@@ -20086,7 +20482,7 @@ bool SharedResources_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->description().data(), static_cast<int>(this->description().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.SharedResources.Item.description"));
+            "aspia.proto.SharedResources.Item.description"));
         } else {
           goto handle_unusual;
         }
@@ -20102,7 +20498,7 @@ bool SharedResources_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->local_path().data(), static_cast<int>(this->local_path().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.SharedResources.Item.local_path"));
+            "aspia.proto.SharedResources.Item.local_path"));
         } else {
           goto handle_unusual;
         }
@@ -20149,17 +20545,17 @@ bool SharedResources_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.SharedResources.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.SharedResources.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.SharedResources.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.SharedResources.Item)
   return false;
 #undef DO_
 }
 
 void SharedResources_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.SharedResources.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.SharedResources.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -20168,12 +20564,12 @@ void SharedResources_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), static_cast<int>(this->name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.SharedResources.Item.name");
+      "aspia.proto.SharedResources.Item.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->name(), output);
   }
 
-  // .aspia.system_info.SharedResources.Item.Type type = 2;
+  // .aspia.proto.SharedResources.Item.Type type = 2;
   if (this->type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       2, this->type(), output);
@@ -20184,7 +20580,7 @@ void SharedResources_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->description().data(), static_cast<int>(this->description().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.SharedResources.Item.description");
+      "aspia.proto.SharedResources.Item.description");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->description(), output);
   }
@@ -20194,7 +20590,7 @@ void SharedResources_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->local_path().data(), static_cast<int>(this->local_path().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.SharedResources.Item.local_path");
+      "aspia.proto.SharedResources.Item.local_path");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->local_path(), output);
   }
@@ -20211,11 +20607,11 @@ void SharedResources_Item::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.SharedResources.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.SharedResources.Item)
 }
 
 size_t SharedResources_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.SharedResources.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.SharedResources.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -20241,7 +20637,7 @@ size_t SharedResources_Item::ByteSizeLong() const {
         this->local_path());
   }
 
-  // .aspia.system_info.SharedResources.Item.Type type = 2;
+  // .aspia.proto.SharedResources.Item.Type type = 2;
   if (this->type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
@@ -20274,7 +20670,7 @@ void SharedResources_Item::CheckTypeAndMergeFrom(
 }
 
 void SharedResources_Item::MergeFrom(const SharedResources_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.SharedResources.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.SharedResources.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -20304,7 +20700,7 @@ void SharedResources_Item::MergeFrom(const SharedResources_Item& from) {
 }
 
 void SharedResources_Item::CopyFrom(const SharedResources_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.SharedResources.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.SharedResources.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -20331,7 +20727,7 @@ void SharedResources_Item::InternalSwap(SharedResources_Item* other) {
 }
 
 ::std::string SharedResources_Item::GetTypeName() const {
-  return "aspia.system_info.SharedResources.Item";
+  return "aspia.proto.SharedResources.Item";
 }
 
 
@@ -20349,7 +20745,7 @@ SharedResources::SharedResources()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsSharedResources();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.SharedResources)
+  // @@protoc_insertion_point(constructor:aspia.proto.SharedResources)
 }
 SharedResources::SharedResources(const SharedResources& from)
   : ::google::protobuf::MessageLite(),
@@ -20357,7 +20753,7 @@ SharedResources::SharedResources(const SharedResources& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.SharedResources)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.SharedResources)
 }
 
 void SharedResources::SharedCtor() {
@@ -20365,7 +20761,7 @@ void SharedResources::SharedCtor() {
 }
 
 SharedResources::~SharedResources() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.SharedResources)
+  // @@protoc_insertion_point(destructor:aspia.proto.SharedResources)
   SharedDtor();
 }
 
@@ -20391,7 +20787,7 @@ SharedResources* SharedResources::New(::google::protobuf::Arena* arena) const {
 }
 
 void SharedResources::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.SharedResources)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.SharedResources)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -20410,13 +20806,13 @@ bool SharedResources::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.SharedResources)
+  // @@protoc_insertion_point(parse_start:aspia.proto.SharedResources)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.SharedResources.Item item = 1;
+      // repeated .aspia.proto.SharedResources.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -20439,21 +20835,21 @@ bool SharedResources::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.SharedResources)
+  // @@protoc_insertion_point(parse_success:aspia.proto.SharedResources)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.SharedResources)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.SharedResources)
   return false;
 #undef DO_
 }
 
 void SharedResources::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.SharedResources)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.SharedResources)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.SharedResources.Item item = 1;
+  // repeated .aspia.proto.SharedResources.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -20462,16 +20858,16 @@ void SharedResources::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.SharedResources)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.SharedResources)
 }
 
 size_t SharedResources::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.SharedResources)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.SharedResources)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.SharedResources.Item item = 1;
+  // repeated .aspia.proto.SharedResources.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -20495,7 +20891,7 @@ void SharedResources::CheckTypeAndMergeFrom(
 }
 
 void SharedResources::MergeFrom(const SharedResources& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.SharedResources)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.SharedResources)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -20505,7 +20901,7 @@ void SharedResources::MergeFrom(const SharedResources& from) {
 }
 
 void SharedResources::CopyFrom(const SharedResources& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.SharedResources)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.SharedResources)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -20527,7 +20923,7 @@ void SharedResources::InternalSwap(SharedResources* other) {
 }
 
 ::std::string SharedResources::GetTypeName() const {
-  return "aspia.system_info.SharedResources";
+  return "aspia.proto.SharedResources";
 }
 
 
@@ -20548,7 +20944,7 @@ Routes_Item::Routes_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsRoutes_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Routes.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.Routes.Item)
 }
 Routes_Item::Routes_Item(const Routes_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -20568,7 +20964,7 @@ Routes_Item::Routes_Item(const Routes_Item& from)
     gateway_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.gateway_);
   }
   metric_ = from.metric_;
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Routes.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Routes.Item)
 }
 
 void Routes_Item::SharedCtor() {
@@ -20580,7 +20976,7 @@ void Routes_Item::SharedCtor() {
 }
 
 Routes_Item::~Routes_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Routes.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.Routes.Item)
   SharedDtor();
 }
 
@@ -20609,7 +21005,7 @@ Routes_Item* Routes_Item::New(::google::protobuf::Arena* arena) const {
 }
 
 void Routes_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Routes.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Routes.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -20631,7 +21027,7 @@ bool Routes_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Routes.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Routes.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -20646,7 +21042,7 @@ bool Routes_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->destonation().data(), static_cast<int>(this->destonation().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Routes.Item.destonation"));
+            "aspia.proto.Routes.Item.destonation"));
         } else {
           goto handle_unusual;
         }
@@ -20662,7 +21058,7 @@ bool Routes_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->mask().data(), static_cast<int>(this->mask().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Routes.Item.mask"));
+            "aspia.proto.Routes.Item.mask"));
         } else {
           goto handle_unusual;
         }
@@ -20678,7 +21074,7 @@ bool Routes_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->gateway().data(), static_cast<int>(this->gateway().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Routes.Item.gateway"));
+            "aspia.proto.Routes.Item.gateway"));
         } else {
           goto handle_unusual;
         }
@@ -20711,17 +21107,17 @@ bool Routes_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Routes.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Routes.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Routes.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Routes.Item)
   return false;
 #undef DO_
 }
 
 void Routes_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Routes.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Routes.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -20730,7 +21126,7 @@ void Routes_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->destonation().data(), static_cast<int>(this->destonation().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Routes.Item.destonation");
+      "aspia.proto.Routes.Item.destonation");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->destonation(), output);
   }
@@ -20740,7 +21136,7 @@ void Routes_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->mask().data(), static_cast<int>(this->mask().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Routes.Item.mask");
+      "aspia.proto.Routes.Item.mask");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->mask(), output);
   }
@@ -20750,7 +21146,7 @@ void Routes_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->gateway().data(), static_cast<int>(this->gateway().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Routes.Item.gateway");
+      "aspia.proto.Routes.Item.gateway");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->gateway(), output);
   }
@@ -20762,11 +21158,11 @@ void Routes_Item::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Routes.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Routes.Item)
 }
 
 size_t Routes_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Routes.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Routes.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -20812,7 +21208,7 @@ void Routes_Item::CheckTypeAndMergeFrom(
 }
 
 void Routes_Item::MergeFrom(const Routes_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Routes.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Routes.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -20836,7 +21232,7 @@ void Routes_Item::MergeFrom(const Routes_Item& from) {
 }
 
 void Routes_Item::CopyFrom(const Routes_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Routes.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Routes.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -20861,7 +21257,7 @@ void Routes_Item::InternalSwap(Routes_Item* other) {
 }
 
 ::std::string Routes_Item::GetTypeName() const {
-  return "aspia.system_info.Routes.Item";
+  return "aspia.proto.Routes.Item";
 }
 
 
@@ -20879,7 +21275,7 @@ Routes::Routes()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsRoutes();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Routes)
+  // @@protoc_insertion_point(constructor:aspia.proto.Routes)
 }
 Routes::Routes(const Routes& from)
   : ::google::protobuf::MessageLite(),
@@ -20887,7 +21283,7 @@ Routes::Routes(const Routes& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Routes)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Routes)
 }
 
 void Routes::SharedCtor() {
@@ -20895,7 +21291,7 @@ void Routes::SharedCtor() {
 }
 
 Routes::~Routes() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Routes)
+  // @@protoc_insertion_point(destructor:aspia.proto.Routes)
   SharedDtor();
 }
 
@@ -20921,7 +21317,7 @@ Routes* Routes::New(::google::protobuf::Arena* arena) const {
 }
 
 void Routes::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Routes)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Routes)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -20940,13 +21336,13 @@ bool Routes::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Routes)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Routes)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.Routes.Item item = 1;
+      // repeated .aspia.proto.Routes.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -20969,21 +21365,21 @@ bool Routes::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Routes)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Routes)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Routes)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Routes)
   return false;
 #undef DO_
 }
 
 void Routes::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Routes)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Routes)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.Routes.Item item = 1;
+  // repeated .aspia.proto.Routes.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -20992,16 +21388,16 @@ void Routes::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Routes)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Routes)
 }
 
 size_t Routes::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Routes)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Routes)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.Routes.Item item = 1;
+  // repeated .aspia.proto.Routes.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -21025,7 +21421,7 @@ void Routes::CheckTypeAndMergeFrom(
 }
 
 void Routes::MergeFrom(const Routes& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Routes)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Routes)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -21035,7 +21431,7 @@ void Routes::MergeFrom(const Routes& from) {
 }
 
 void Routes::CopyFrom(const Routes& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Routes)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Routes)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -21057,7 +21453,7 @@ void Routes::InternalSwap(Routes* other) {
 }
 
 ::std::string Routes::GetTypeName() const {
-  return "aspia.system_info.Routes";
+  return "aspia.proto.Routes";
 }
 
 
@@ -21085,7 +21481,7 @@ Users_Item::Users_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsUsers_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Users.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.Users.Item)
 }
 Users_Item::Users_Item(const Users_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -21107,7 +21503,7 @@ Users_Item::Users_Item(const Users_Item& from)
   ::memcpy(&is_disabled_, &from.is_disabled_,
     static_cast<size_t>(reinterpret_cast<char*>(&last_logon_time_) -
     reinterpret_cast<char*>(&is_disabled_)) + sizeof(last_logon_time_));
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Users.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Users.Item)
 }
 
 void Users_Item::SharedCtor() {
@@ -21121,7 +21517,7 @@ void Users_Item::SharedCtor() {
 }
 
 Users_Item::~Users_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Users.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.Users.Item)
   SharedDtor();
 }
 
@@ -21150,7 +21546,7 @@ Users_Item* Users_Item::New(::google::protobuf::Arena* arena) const {
 }
 
 void Users_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Users.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Users.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -21174,7 +21570,7 @@ bool Users_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Users.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Users.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -21189,7 +21585,7 @@ bool Users_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->name().data(), static_cast<int>(this->name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Users.Item.name"));
+            "aspia.proto.Users.Item.name"));
         } else {
           goto handle_unusual;
         }
@@ -21205,7 +21601,7 @@ bool Users_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->full_name().data(), static_cast<int>(this->full_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Users.Item.full_name"));
+            "aspia.proto.Users.Item.full_name"));
         } else {
           goto handle_unusual;
         }
@@ -21221,7 +21617,7 @@ bool Users_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->comment().data(), static_cast<int>(this->comment().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Users.Item.comment"));
+            "aspia.proto.Users.Item.comment"));
         } else {
           goto handle_unusual;
         }
@@ -21352,17 +21748,17 @@ bool Users_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Users.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Users.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Users.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Users.Item)
   return false;
 #undef DO_
 }
 
 void Users_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Users.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Users.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -21371,7 +21767,7 @@ void Users_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), static_cast<int>(this->name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Users.Item.name");
+      "aspia.proto.Users.Item.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->name(), output);
   }
@@ -21381,7 +21777,7 @@ void Users_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->full_name().data(), static_cast<int>(this->full_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Users.Item.full_name");
+      "aspia.proto.Users.Item.full_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->full_name(), output);
   }
@@ -21391,7 +21787,7 @@ void Users_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->comment().data(), static_cast<int>(this->comment().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Users.Item.comment");
+      "aspia.proto.Users.Item.comment");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->comment(), output);
   }
@@ -21438,11 +21834,11 @@ void Users_Item::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Users.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Users.Item)
 }
 
 size_t Users_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Users.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Users.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -21527,7 +21923,7 @@ void Users_Item::CheckTypeAndMergeFrom(
 }
 
 void Users_Item::MergeFrom(const Users_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Users.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Users.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -21572,7 +21968,7 @@ void Users_Item::MergeFrom(const Users_Item& from) {
 }
 
 void Users_Item::CopyFrom(const Users_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Users.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Users.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -21604,7 +22000,7 @@ void Users_Item::InternalSwap(Users_Item* other) {
 }
 
 ::std::string Users_Item::GetTypeName() const {
-  return "aspia.system_info.Users.Item";
+  return "aspia.proto.Users.Item";
 }
 
 
@@ -21622,7 +22018,7 @@ Users::Users()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsUsers();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Users)
+  // @@protoc_insertion_point(constructor:aspia.proto.Users)
 }
 Users::Users(const Users& from)
   : ::google::protobuf::MessageLite(),
@@ -21630,7 +22026,7 @@ Users::Users(const Users& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Users)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Users)
 }
 
 void Users::SharedCtor() {
@@ -21638,7 +22034,7 @@ void Users::SharedCtor() {
 }
 
 Users::~Users() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Users)
+  // @@protoc_insertion_point(destructor:aspia.proto.Users)
   SharedDtor();
 }
 
@@ -21664,7 +22060,7 @@ Users* Users::New(::google::protobuf::Arena* arena) const {
 }
 
 void Users::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Users)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Users)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -21683,13 +22079,13 @@ bool Users::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Users)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Users)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.Users.Item item = 1;
+      // repeated .aspia.proto.Users.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -21712,21 +22108,21 @@ bool Users::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Users)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Users)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Users)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Users)
   return false;
 #undef DO_
 }
 
 void Users::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Users)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Users)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.Users.Item item = 1;
+  // repeated .aspia.proto.Users.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -21735,16 +22131,16 @@ void Users::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Users)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Users)
 }
 
 size_t Users::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Users)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Users)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.Users.Item item = 1;
+  // repeated .aspia.proto.Users.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -21768,7 +22164,7 @@ void Users::CheckTypeAndMergeFrom(
 }
 
 void Users::MergeFrom(const Users& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Users)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Users)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -21778,7 +22174,7 @@ void Users::MergeFrom(const Users& from) {
 }
 
 void Users::CopyFrom(const Users& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Users)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Users)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -21800,7 +22196,7 @@ void Users::InternalSwap(Users* other) {
 }
 
 ::std::string Users::GetTypeName() const {
-  return "aspia.system_info.Users";
+  return "aspia.proto.Users";
 }
 
 
@@ -21819,7 +22215,7 @@ UserGroups_Item::UserGroups_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsUserGroups_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.UserGroups.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.UserGroups.Item)
 }
 UserGroups_Item::UserGroups_Item(const UserGroups_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -21834,7 +22230,7 @@ UserGroups_Item::UserGroups_Item(const UserGroups_Item& from)
   if (from.comment().size() > 0) {
     comment_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.comment_);
   }
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.UserGroups.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.UserGroups.Item)
 }
 
 void UserGroups_Item::SharedCtor() {
@@ -21844,7 +22240,7 @@ void UserGroups_Item::SharedCtor() {
 }
 
 UserGroups_Item::~UserGroups_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.UserGroups.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.UserGroups.Item)
   SharedDtor();
 }
 
@@ -21872,7 +22268,7 @@ UserGroups_Item* UserGroups_Item::New(::google::protobuf::Arena* arena) const {
 }
 
 void UserGroups_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.UserGroups.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.UserGroups.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -21892,7 +22288,7 @@ bool UserGroups_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.UserGroups.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.UserGroups.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -21907,7 +22303,7 @@ bool UserGroups_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->name().data(), static_cast<int>(this->name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.UserGroups.Item.name"));
+            "aspia.proto.UserGroups.Item.name"));
         } else {
           goto handle_unusual;
         }
@@ -21923,7 +22319,7 @@ bool UserGroups_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->comment().data(), static_cast<int>(this->comment().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.UserGroups.Item.comment"));
+            "aspia.proto.UserGroups.Item.comment"));
         } else {
           goto handle_unusual;
         }
@@ -21942,17 +22338,17 @@ bool UserGroups_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.UserGroups.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.UserGroups.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.UserGroups.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.UserGroups.Item)
   return false;
 #undef DO_
 }
 
 void UserGroups_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.UserGroups.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.UserGroups.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -21961,7 +22357,7 @@ void UserGroups_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), static_cast<int>(this->name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.UserGroups.Item.name");
+      "aspia.proto.UserGroups.Item.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->name(), output);
   }
@@ -21971,18 +22367,18 @@ void UserGroups_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->comment().data(), static_cast<int>(this->comment().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.UserGroups.Item.comment");
+      "aspia.proto.UserGroups.Item.comment");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->comment(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.UserGroups.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.UserGroups.Item)
 }
 
 size_t UserGroups_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.UserGroups.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.UserGroups.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -22014,7 +22410,7 @@ void UserGroups_Item::CheckTypeAndMergeFrom(
 }
 
 void UserGroups_Item::MergeFrom(const UserGroups_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.UserGroups.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.UserGroups.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -22031,7 +22427,7 @@ void UserGroups_Item::MergeFrom(const UserGroups_Item& from) {
 }
 
 void UserGroups_Item::CopyFrom(const UserGroups_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.UserGroups.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.UserGroups.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -22054,7 +22450,7 @@ void UserGroups_Item::InternalSwap(UserGroups_Item* other) {
 }
 
 ::std::string UserGroups_Item::GetTypeName() const {
-  return "aspia.system_info.UserGroups.Item";
+  return "aspia.proto.UserGroups.Item";
 }
 
 
@@ -22072,7 +22468,7 @@ UserGroups::UserGroups()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsUserGroups();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.UserGroups)
+  // @@protoc_insertion_point(constructor:aspia.proto.UserGroups)
 }
 UserGroups::UserGroups(const UserGroups& from)
   : ::google::protobuf::MessageLite(),
@@ -22080,7 +22476,7 @@ UserGroups::UserGroups(const UserGroups& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.UserGroups)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.UserGroups)
 }
 
 void UserGroups::SharedCtor() {
@@ -22088,7 +22484,7 @@ void UserGroups::SharedCtor() {
 }
 
 UserGroups::~UserGroups() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.UserGroups)
+  // @@protoc_insertion_point(destructor:aspia.proto.UserGroups)
   SharedDtor();
 }
 
@@ -22114,7 +22510,7 @@ UserGroups* UserGroups::New(::google::protobuf::Arena* arena) const {
 }
 
 void UserGroups::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.UserGroups)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.UserGroups)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -22133,13 +22529,13 @@ bool UserGroups::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.UserGroups)
+  // @@protoc_insertion_point(parse_start:aspia.proto.UserGroups)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.UserGroups.Item item = 1;
+      // repeated .aspia.proto.UserGroups.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -22162,21 +22558,21 @@ bool UserGroups::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.UserGroups)
+  // @@protoc_insertion_point(parse_success:aspia.proto.UserGroups)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.UserGroups)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.UserGroups)
   return false;
 #undef DO_
 }
 
 void UserGroups::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.UserGroups)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.UserGroups)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.UserGroups.Item item = 1;
+  // repeated .aspia.proto.UserGroups.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -22185,16 +22581,16 @@ void UserGroups::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.UserGroups)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.UserGroups)
 }
 
 size_t UserGroups::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.UserGroups)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.UserGroups)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.UserGroups.Item item = 1;
+  // repeated .aspia.proto.UserGroups.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -22218,7 +22614,7 @@ void UserGroups::CheckTypeAndMergeFrom(
 }
 
 void UserGroups::MergeFrom(const UserGroups& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.UserGroups)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.UserGroups)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -22228,7 +22624,7 @@ void UserGroups::MergeFrom(const UserGroups& from) {
 }
 
 void UserGroups::CopyFrom(const UserGroups& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.UserGroups)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.UserGroups)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -22250,7 +22646,7 @@ void UserGroups::InternalSwap(UserGroups* other) {
 }
 
 ::std::string UserGroups::GetTypeName() const {
-  return "aspia.system_info.UserGroups";
+  return "aspia.proto.UserGroups";
 }
 
 
@@ -22273,7 +22669,7 @@ Sessions_Item::Sessions_Item()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsSessions_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Sessions.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.Sessions.Item)
 }
 Sessions_Item::Sessions_Item(const Sessions_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -22301,7 +22697,7 @@ Sessions_Item::Sessions_Item(const Sessions_Item& from)
     winstation_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.winstation_name_);
   }
   session_id_ = from.session_id_;
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Sessions.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Sessions.Item)
 }
 
 void Sessions_Item::SharedCtor() {
@@ -22315,7 +22711,7 @@ void Sessions_Item::SharedCtor() {
 }
 
 Sessions_Item::~Sessions_Item() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Sessions.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.Sessions.Item)
   SharedDtor();
 }
 
@@ -22346,7 +22742,7 @@ Sessions_Item* Sessions_Item::New(::google::protobuf::Arena* arena) const {
 }
 
 void Sessions_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Sessions.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Sessions.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -22370,7 +22766,7 @@ bool Sessions_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Sessions.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Sessions.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -22385,7 +22781,7 @@ bool Sessions_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->user_name().data(), static_cast<int>(this->user_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Sessions.Item.user_name"));
+            "aspia.proto.Sessions.Item.user_name"));
         } else {
           goto handle_unusual;
         }
@@ -22401,7 +22797,7 @@ bool Sessions_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->domain_name().data(), static_cast<int>(this->domain_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Sessions.Item.domain_name"));
+            "aspia.proto.Sessions.Item.domain_name"));
         } else {
           goto handle_unusual;
         }
@@ -22431,7 +22827,7 @@ bool Sessions_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->connect_state().data(), static_cast<int>(this->connect_state().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Sessions.Item.connect_state"));
+            "aspia.proto.Sessions.Item.connect_state"));
         } else {
           goto handle_unusual;
         }
@@ -22447,7 +22843,7 @@ bool Sessions_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->client_name().data(), static_cast<int>(this->client_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Sessions.Item.client_name"));
+            "aspia.proto.Sessions.Item.client_name"));
         } else {
           goto handle_unusual;
         }
@@ -22463,7 +22859,7 @@ bool Sessions_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->winstation_name().data(), static_cast<int>(this->winstation_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.system_info.Sessions.Item.winstation_name"));
+            "aspia.proto.Sessions.Item.winstation_name"));
         } else {
           goto handle_unusual;
         }
@@ -22482,17 +22878,17 @@ bool Sessions_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Sessions.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Sessions.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Sessions.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Sessions.Item)
   return false;
 #undef DO_
 }
 
 void Sessions_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Sessions.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Sessions.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -22501,7 +22897,7 @@ void Sessions_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->user_name().data(), static_cast<int>(this->user_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Sessions.Item.user_name");
+      "aspia.proto.Sessions.Item.user_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->user_name(), output);
   }
@@ -22511,7 +22907,7 @@ void Sessions_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->domain_name().data(), static_cast<int>(this->domain_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Sessions.Item.domain_name");
+      "aspia.proto.Sessions.Item.domain_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->domain_name(), output);
   }
@@ -22526,7 +22922,7 @@ void Sessions_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->connect_state().data(), static_cast<int>(this->connect_state().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Sessions.Item.connect_state");
+      "aspia.proto.Sessions.Item.connect_state");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->connect_state(), output);
   }
@@ -22536,7 +22932,7 @@ void Sessions_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->client_name().data(), static_cast<int>(this->client_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Sessions.Item.client_name");
+      "aspia.proto.Sessions.Item.client_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->client_name(), output);
   }
@@ -22546,18 +22942,18 @@ void Sessions_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->winstation_name().data(), static_cast<int>(this->winstation_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.system_info.Sessions.Item.winstation_name");
+      "aspia.proto.Sessions.Item.winstation_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->winstation_name(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Sessions.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Sessions.Item)
 }
 
 size_t Sessions_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Sessions.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Sessions.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -22617,7 +23013,7 @@ void Sessions_Item::CheckTypeAndMergeFrom(
 }
 
 void Sessions_Item::MergeFrom(const Sessions_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Sessions.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Sessions.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -22649,7 +23045,7 @@ void Sessions_Item::MergeFrom(const Sessions_Item& from) {
 }
 
 void Sessions_Item::CopyFrom(const Sessions_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Sessions.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Sessions.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -22676,7 +23072,7 @@ void Sessions_Item::InternalSwap(Sessions_Item* other) {
 }
 
 ::std::string Sessions_Item::GetTypeName() const {
-  return "aspia.system_info.Sessions.Item";
+  return "aspia.proto.Sessions.Item";
 }
 
 
@@ -22694,7 +23090,7 @@ Sessions::Sessions()
     ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsSessions();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.system_info.Sessions)
+  // @@protoc_insertion_point(constructor:aspia.proto.Sessions)
 }
 Sessions::Sessions(const Sessions& from)
   : ::google::protobuf::MessageLite(),
@@ -22702,7 +23098,7 @@ Sessions::Sessions(const Sessions& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.system_info.Sessions)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Sessions)
 }
 
 void Sessions::SharedCtor() {
@@ -22710,7 +23106,7 @@ void Sessions::SharedCtor() {
 }
 
 Sessions::~Sessions() {
-  // @@protoc_insertion_point(destructor:aspia.system_info.Sessions)
+  // @@protoc_insertion_point(destructor:aspia.proto.Sessions)
   SharedDtor();
 }
 
@@ -22736,7 +23132,7 @@ Sessions* Sessions::New(::google::protobuf::Arena* arena) const {
 }
 
 void Sessions::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.system_info.Sessions)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Sessions)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -22755,13 +23151,13 @@ bool Sessions::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.system_info.Sessions)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Sessions)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.system_info.Sessions.Item item = 1;
+      // repeated .aspia.proto.Sessions.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -22784,21 +23180,21 @@ bool Sessions::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.system_info.Sessions)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Sessions)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.system_info.Sessions)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Sessions)
   return false;
 #undef DO_
 }
 
 void Sessions::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.system_info.Sessions)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Sessions)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.system_info.Sessions.Item item = 1;
+  // repeated .aspia.proto.Sessions.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -22807,16 +23203,16 @@ void Sessions::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.system_info.Sessions)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Sessions)
 }
 
 size_t Sessions::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.system_info.Sessions)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Sessions)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.system_info.Sessions.Item item = 1;
+  // repeated .aspia.proto.Sessions.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -22840,7 +23236,7 @@ void Sessions::CheckTypeAndMergeFrom(
 }
 
 void Sessions::MergeFrom(const Sessions& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.system_info.Sessions)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Sessions)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -22850,7 +23246,7 @@ void Sessions::MergeFrom(const Sessions& from) {
 }
 
 void Sessions::CopyFrom(const Sessions& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.system_info.Sessions)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Sessions)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -22872,12 +23268,12 @@ void Sessions::InternalSwap(Sessions* other) {
 }
 
 ::std::string Sessions::GetTypeName() const {
-  return "aspia.system_info.Sessions";
+  return "aspia.proto.Sessions";
 }
 
 
 // @@protoc_insertion_point(namespace_scope)
-}  // namespace system_info
+}  // namespace proto
 }  // namespace aspia
 
 // @@protoc_insertion_point(global_scope)

@@ -403,12 +403,12 @@ double Edid::GetPixelClock() const
     return double(descriptor->pixel_clock) / 100.0;
 }
 
-Edid::InputSignalType Edid::GetInputSignalType() const
+std::string Edid::GetInputSignalType() const
 {
     if (edid_->video_input_definition & 0x80)
-        return INPUT_SIGNAL_TYPE_DIGITAL;
+        return "Digital";
 
-    return INPUT_SIGNAL_TYPE_ANALOG;
+    return "Analog";
 }
 
 uint8_t Edid::GetEstabilishedTimings1() const

@@ -24,71 +24,14 @@ public:
     bool IsAtEnd() const;
     void Advance();
 
-    enum class BusType
-    {
-        UNKNOWN             = 0,
-        SCSI                = 1,
-        ATAPI               = 2,
-        ATA                 = 3,
-        IEEE1394            = 4,
-        SSA                 = 5,
-        FIBRE               = 6,
-        USB                 = 7,
-        RAID                = 8,
-        ISCSI               = 9,
-        SAS                 = 10,
-        SATA                = 11,
-        SD                  = 12,
-        MMC                 = 13,
-        VIRTUAL             = 14,
-        FILE_BACKED_VIRTUAL = 15
-    };
-
-    enum class TransferMode
-    {
-        UNKNOWN       = 0,
-        PIO           = 1,
-        PIO_DMA       = 2,
-        ULTRA_DMA_133 = 3,
-        ULTRA_DMA_100 = 4,
-        ULTRA_DMA_66  = 5,
-        ULTRA_DMA_44  = 6,
-        ULTRA_DMA_33  = 7,
-        ULTRA_DMA_25  = 8,
-        ULTRA_DMA_16  = 9,
-        SATA_600      = 10,
-        SATA_300      = 11,
-        SATA_150      = 12
-    };
-
-    enum Features
-    {
-        FEATURE_48BIT_LBA                     = 1,
-        FEATURE_ADVANCED_POWER_MANAGEMENT     = 2,
-        FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT = 4,
-        FEATURE_SMART                         = 8,
-        FEATURE_SMART_ERROR_LOGGING           = 16,
-        FEATURE_SMART_SELF_TEST               = 32,
-        FEATURE_STREAMING                     = 64,
-        FEATURE_GENERAL_PURPOSE_LOGGING       = 128,
-        FEATURE_SECURITY_MODE                 = 256,
-        FEATURE_POWER_MANAGEMENT              = 512,
-        FEATURE_WRITE_CACHE                   = 1024,
-        FEATURE_READ_LOCK_AHEAD               = 2048,
-        FEATURE_HOST_PROTECTED_AREA           = 4096,
-        FEATURE_RELEASE_INTERRUPT             = 8192,
-        FEATURE_POWER_UP_IN_STANDBY           = 16384,
-        FEATURE_DEVICE_CONFIGURATION_OVERLAY  = 32768,
-        FEATURE_SERVICE_INTERRUPT             = 65536,
-        FEATURE_NATIVE_COMMAND_QUEUING        = 131072,
-        FEATURE_TRIM                          = 262144
-    };
+    using Feature = std::pair<std::string, bool>;
+    using FeatureList = std::list<Feature>;
 
     std::string GetModelNumber() const;
     std::string GetSerialNumber() const;
     std::string GetFirmwareRevision() const;
-    BusType GetBusType() const;
-    TransferMode GetCurrentTransferMode() const;
+    std::string GetBusType() const;
+    std::string GetCurrentTransferMode() const;
     int GetRotationRate() const; // in RPM.
     uint64_t GetDriveSize() const;
     uint32_t GetBufferSize() const; // in bytes.
@@ -100,8 +43,7 @@ public:
     uint32_t GetSectorsPerTrack() const;
     uint32_t GetBytesPerSector() const;
     uint16_t GetHeadsNumber() const;
-    uint64_t GetSupportedFeatures() const;
-    uint64_t GetEnabledFeatures() const;
+    FeatureList GetFeatures() const;
 
 private:
 #pragma pack (push, id_data, 1)

@@ -58,8 +58,8 @@ public:
     void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
     std::string Serialize() final;
 
-    static const char* StatusToString(system_info::Services::Item::Status status);
-    static const char* StartupTypeToString(system_info::Services::Item::StartupType startup_type);
+    static const char* StatusToString(proto::Services::Item::Status status);
+    static const char* StartupTypeToString(proto::Services::Item::StartupType startup_type);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryServices);

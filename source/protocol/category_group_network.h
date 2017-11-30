@@ -75,7 +75,7 @@ public:
     std::string Serialize() final;
 
 private:
-    static const char* TypeToString(system_info::SharedResources::Item::Type type);
+    static const char* TypeToString(proto::SharedResources::Item::Type type);
 
     DISALLOW_COPY_AND_ASSIGN(CategorySharedResources);
 };

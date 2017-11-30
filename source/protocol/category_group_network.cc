@@ -37,7 +37,7 @@ const char* CategoryNetworkCards::Guid() const
 
 void CategoryNetworkCards::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::NetworkCards message;
+    proto::NetworkCards message;
 
     if (!message.ParseFromString(data))
         return;
@@ -52,7 +52,7 @@ void CategoryNetworkCards::Parse(std::shared_ptr<OutputProxy> output, const std:
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::NetworkCards::Item& item = message.item(index);
+        const proto::NetworkCards::Item& item = message.item(index);
 
         Output::Group group(output, item.adapter_name(), Icon());
 
@@ -73,7 +73,7 @@ void CategoryNetworkCards::Parse(std::shared_ptr<OutputProxy> output, const std:
 
             for (int addr_index = 0; addr_index < item.ip_address_size(); ++addr_index)
             {
-                const system_info::NetworkCards::Item::IpAddress& address =
+                const proto::NetworkCards::Item::IpAddress& address =
                     item.ip_address(addr_index);
 
                 output->AddParam(IDI_NETWORK_IP,
@@ -145,11 +145,11 @@ void CategoryNetworkCards::Parse(std::shared_ptr<OutputProxy> output, const std:
 
 std::string CategoryNetworkCards::Serialize()
 {
-    system_info::NetworkCards message;
+    proto::NetworkCards message;
 
     for (NetworkAdapterEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
-        system_info::NetworkCards::Item* item = message.add_item();
+        proto::NetworkCards::Item* item = message.add_item();
 
         item->set_adapter_name(enumerator.GetAdapterName());
         item->set_connection_name(enumerator.GetConnectionName());
@@ -166,7 +166,7 @@ std::string CategoryNetworkCards::Serialize()
              !ip_address_enumerator.IsAtEnd();
              ip_address_enumerator.Advance())
         {
-            system_info::NetworkCards::Item::IpAddress* address = item->add_ip_address();
+            proto::NetworkCards::Item::IpAddress* address = item->add_ip_address();
 
             address->set_address(ip_address_enumerator.GetIpAddress());
             address->set_mask(ip_address_enumerator.GetIpMask());
@@ -250,7 +250,7 @@ const char* CategoryOpenConnections::Guid() const
 
 void CategoryOpenConnections::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::OpenConnections message;
+    proto::OpenConnections message;
 
     if (!message.ParseFromString(data))
         return;
@@ -270,17 +270,17 @@ void CategoryOpenConnections::Parse(std::shared_ptr<OutputProxy> output, const s
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::OpenConnections::Item& item = message.item(index);
+        const proto::OpenConnections::Item& item = message.item(index);
 
         Output::Row row(output, Icon());
 
         output->AddValue(item.process_name());
 
-        if (item.protocol() == system_info::OpenConnections::Item::PROTOCOL_TCP)
+        if (item.protocol() == proto::OpenConnections::Item::PROTOCOL_TCP)
         {
             output->AddValue("TCP");
         }
-        else if (item.protocol() == system_info::OpenConnections::Item::PROTOCOL_UDP)
+        else if (item.protocol() == proto::OpenConnections::Item::PROTOCOL_UDP)
         {
             output->AddValue("UDP");
         }
@@ -299,16 +299,16 @@ void CategoryOpenConnections::Parse(std::shared_ptr<OutputProxy> output, const s
 
 std::string CategoryOpenConnections::Serialize()
 {
-    system_info::OpenConnections message;
+    proto::OpenConnections message;
 
     for (OpenConnectionEnumerator enumerator(OpenConnectionEnumerator::Type::TCP);
          !enumerator.IsAtEnd();
          enumerator.Advance())
     {
-        system_info::OpenConnections::Item* item = message.add_item();
+        proto::OpenConnections::Item* item = message.add_item();
 
         item->set_process_name(enumerator.GetProcessName());
-        item->set_protocol(system_info::OpenConnections::Item::PROTOCOL_TCP);
+        item->set_protocol(proto::OpenConnections::Item::PROTOCOL_TCP);
         item->set_local_address(enumerator.GetLocalAddress());
         item->set_remote_address(enumerator.GetRemoteAddress());
         item->set_local_port(enumerator.GetLocalPort());
@@ -320,10 +320,10 @@ std::string CategoryOpenConnections::Serialize()
          !enumerator.IsAtEnd();
          enumerator.Advance())
     {
-        system_info::OpenConnections::Item* item = message.add_item();
+        proto::OpenConnections::Item* item = message.add_item();
 
         item->set_process_name(enumerator.GetProcessName());
-        item->set_protocol(system_info::OpenConnections::Item::PROTOCOL_UDP);
+        item->set_protocol(proto::OpenConnections::Item::PROTOCOL_UDP);
         item->set_local_address(enumerator.GetLocalAddress());
         item->set_remote_address(enumerator.GetRemoteAddress());
         item->set_local_port(enumerator.GetLocalPort());
@@ -355,7 +355,7 @@ const char* CategorySharedResources::Guid() const
 
 void CategorySharedResources::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::SharedResources message;
+    proto::SharedResources message;
 
     if (!message.ParseFromString(data))
         return;
@@ -374,7 +374,7 @@ void CategorySharedResources::Parse(std::shared_ptr<OutputProxy> output, const s
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::SharedResources::Item& item = message.item(index);
+        const proto::SharedResources::Item& item = message.item(index);
 
         Output::Row row(output, Icon());
 
@@ -389,42 +389,42 @@ void CategorySharedResources::Parse(std::shared_ptr<OutputProxy> output, const s
 
 std::string CategorySharedResources::Serialize()
 {
-    system_info::SharedResources message;
+    proto::SharedResources message;
 
     for (ShareEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
-        system_info::SharedResources::Item* item = message.add_item();
+        proto::SharedResources::Item* item = message.add_item();
 
         item->set_name(enumerator.GetName());
 
         switch (enumerator.GetType())
         {
             case ShareEnumerator::Type::DISK:
-                item->set_type(system_info::SharedResources::Item::TYPE_DISK);
+                item->set_type(proto::SharedResources::Item::TYPE_DISK);
                 break;
 
             case ShareEnumerator::Type::PRINTER:
-                item->set_type(system_info::SharedResources::Item::TYPE_PRINTER);
+                item->set_type(proto::SharedResources::Item::TYPE_PRINTER);
                 break;
 
             case ShareEnumerator::Type::DEVICE:
-                item->set_type(system_info::SharedResources::Item::TYPE_DEVICE);
+                item->set_type(proto::SharedResources::Item::TYPE_DEVICE);
                 break;
 
             case ShareEnumerator::Type::IPC:
-                item->set_type(system_info::SharedResources::Item::TYPE_IPC);
+                item->set_type(proto::SharedResources::Item::TYPE_IPC);
                 break;
 
             case ShareEnumerator::Type::SPECIAL:
-                item->set_type(system_info::SharedResources::Item::TYPE_SPECIAL);
+                item->set_type(proto::SharedResources::Item::TYPE_SPECIAL);
                 break;
 
             case ShareEnumerator::Type::TEMPORARY:
-                item->set_type(system_info::SharedResources::Item::TYPE_TEMPORARY);
+                item->set_type(proto::SharedResources::Item::TYPE_TEMPORARY);
                 break;
 
             default:
-                item->set_type(system_info::SharedResources::Item::TYPE_UNKNOWN);
+                item->set_type(proto::SharedResources::Item::TYPE_UNKNOWN);
                 break;
         }
 
@@ -437,26 +437,26 @@ std::string CategorySharedResources::Serialize()
 }
 
     // static
-const char* CategorySharedResources::TypeToString(system_info::SharedResources::Item::Type type)
+const char* CategorySharedResources::TypeToString(proto::SharedResources::Item::Type type)
 {
     switch (type)
     {
-        case system_info::SharedResources::Item::TYPE_DISK:
+        case proto::SharedResources::Item::TYPE_DISK:
             return "Disk";
 
-        case system_info::SharedResources::Item::TYPE_PRINTER:
+        case proto::SharedResources::Item::TYPE_PRINTER:
             return "Printer";
 
-        case system_info::SharedResources::Item::TYPE_DEVICE:
+        case proto::SharedResources::Item::TYPE_DEVICE:
             return "Device";
 
-        case system_info::SharedResources::Item::TYPE_IPC:
+        case proto::SharedResources::Item::TYPE_IPC:
             return "IPC";
 
-        case system_info::SharedResources::Item::TYPE_SPECIAL:
+        case proto::SharedResources::Item::TYPE_SPECIAL:
             return "Special";
 
-        case system_info::SharedResources::Item::TYPE_TEMPORARY:
+        case proto::SharedResources::Item::TYPE_TEMPORARY:
             return "Temporary";
 
         default:
@@ -517,7 +517,7 @@ const char* CategoryRoutes::Guid() const
 
 void CategoryRoutes::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::Routes message;
+    proto::Routes message;
 
     if (!message.ParseFromString(data))
         return;
@@ -534,7 +534,7 @@ void CategoryRoutes::Parse(std::shared_ptr<OutputProxy> output, const std::strin
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::Routes::Item& item = message.item(index);
+        const proto::Routes::Item& item = message.item(index);
 
         Output::Row row(output, Icon());
 
@@ -547,11 +547,11 @@ void CategoryRoutes::Parse(std::shared_ptr<OutputProxy> output, const std::strin
 
 std::string CategoryRoutes::Serialize()
 {
-    system_info::Routes message;
+    proto::Routes message;
 
     for (RouteEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
-        system_info::Routes::Item* item = message.add_item();
+        proto::Routes::Item* item = message.add_item();
 
         item->set_destonation(enumerator.GetDestonation());
         item->set_mask(enumerator.GetMask());

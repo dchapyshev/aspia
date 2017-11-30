@@ -35,7 +35,7 @@ const char* CategoryPrograms::Guid() const
 
 void CategoryPrograms::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::Programs message;
+    proto::Programs message;
 
     if (!message.ParseFromString(data))
         return;
@@ -53,7 +53,7 @@ void CategoryPrograms::Parse(std::shared_ptr<OutputProxy> output, const std::str
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::Programs::Item& item = message.item(index);
+        const proto::Programs::Item& item = message.item(index);
 
         Output::Row row(output, Icon());
 
@@ -67,11 +67,11 @@ void CategoryPrograms::Parse(std::shared_ptr<OutputProxy> output, const std::str
 
 std::string CategoryPrograms::Serialize()
 {
-    system_info::Programs message;
+    proto::Programs message;
 
     for (ProgramEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
-        system_info::Programs::Item* item = message.add_item();
+        proto::Programs::Item* item = message.add_item();
 
         item->set_name(enumerator.GetName());
         item->set_version(enumerator.GetVersion());
@@ -136,7 +136,7 @@ const char* CategoryServices::Guid() const
 
 void CategoryServices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::Services message;
+    proto::Services message;
 
     if (!message.ParseFromString(data))
         return;
@@ -156,7 +156,7 @@ void CategoryServices::Parse(std::shared_ptr<OutputProxy> output, const std::str
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::Services::Item& item = message.item(index);
+        const proto::Services::Item& item = message.item(index);
 
         Output::Row row(output, Icon());
 
@@ -172,13 +172,13 @@ void CategoryServices::Parse(std::shared_ptr<OutputProxy> output, const std::str
 
 std::string CategoryServices::Serialize()
 {
-    system_info::Services message;
+    proto::Services message;
 
     for (ServiceEnumerator enumerator(ServiceEnumerator::Type::SERVICES);
          !enumerator.IsAtEnd();
          enumerator.Advance())
     {
-        system_info::Services::Item* item = message.add_item();
+        proto::Services::Item* item = message.add_item();
 
         item->set_name(enumerator.GetName());
         item->set_display_name(enumerator.GetDisplayName());
@@ -187,62 +187,62 @@ std::string CategoryServices::Serialize()
         switch (enumerator.GetStatus())
         {
             case ServiceEnumerator::Status::CONTINUE_PENDING:
-                item->set_status(system_info::Services::Item::STATUS_CONTINUE_PENDING);
+                item->set_status(proto::Services::Item::STATUS_CONTINUE_PENDING);
                 break;
 
             case ServiceEnumerator::Status::PAUSE_PENDING:
-                item->set_status(system_info::Services::Item::STATUS_PAUSE_PENDING);
+                item->set_status(proto::Services::Item::STATUS_PAUSE_PENDING);
                 break;
 
             case ServiceEnumerator::Status::PAUSED:
-                item->set_status(system_info::Services::Item::STATUS_PAUSED);
+                item->set_status(proto::Services::Item::STATUS_PAUSED);
                 break;
 
             case ServiceEnumerator::Status::RUNNING:
-                item->set_status(system_info::Services::Item::STATUS_RUNNING);
+                item->set_status(proto::Services::Item::STATUS_RUNNING);
                 break;
 
             case ServiceEnumerator::Status::START_PENDING:
-                item->set_status(system_info::Services::Item::STATUS_START_PENDING);
+                item->set_status(proto::Services::Item::STATUS_START_PENDING);
                 break;
 
             case ServiceEnumerator::Status::STOP_PENDING:
-                item->set_status(system_info::Services::Item::STATUS_STOP_PENDING);
+                item->set_status(proto::Services::Item::STATUS_STOP_PENDING);
                 break;
 
             case ServiceEnumerator::Status::STOPPED:
-                item->set_status(system_info::Services::Item::STATUS_STOPPED);
+                item->set_status(proto::Services::Item::STATUS_STOPPED);
                 break;
 
             default:
-                item->set_status(system_info::Services::Item::STATUS_UNKNOWN);
+                item->set_status(proto::Services::Item::STATUS_UNKNOWN);
                 break;
         }
 
         switch (enumerator.GetStartupType())
         {
             case ServiceEnumerator::StartupType::AUTO_START:
-                item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_AUTO_START);
+                item->set_startup_type(proto::Services::Item::STARTUP_TYPE_AUTO_START);
                 break;
 
             case ServiceEnumerator::StartupType::DEMAND_START:
-                item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_DEMAND_START);
+                item->set_startup_type(proto::Services::Item::STARTUP_TYPE_DEMAND_START);
                 break;
 
             case ServiceEnumerator::StartupType::DISABLED:
-                item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_DISABLED);
+                item->set_startup_type(proto::Services::Item::STARTUP_TYPE_DISABLED);
                 break;
 
             case ServiceEnumerator::StartupType::BOOT_START:
-                item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_BOOT_START);
+                item->set_startup_type(proto::Services::Item::STARTUP_TYPE_BOOT_START);
                 break;
 
             case ServiceEnumerator::StartupType::SYSTEM_START:
-                item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_SYSTEM_START);
+                item->set_startup_type(proto::Services::Item::STARTUP_TYPE_SYSTEM_START);
                 break;
 
             default:
-                item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_UNKNOWN);
+                item->set_startup_type(proto::Services::Item::STARTUP_TYPE_UNKNOWN);
                 break;
         }
 
@@ -254,29 +254,29 @@ std::string CategoryServices::Serialize()
 }
 
     // static
-const char* CategoryServices::StatusToString(system_info::Services::Item::Status status)
+const char* CategoryServices::StatusToString(proto::Services::Item::Status status)
 {
     switch (status)
     {
-        case system_info::Services::Item::STATUS_CONTINUE_PENDING:
+        case proto::Services::Item::STATUS_CONTINUE_PENDING:
             return "Continue Pending";
 
-        case system_info::Services::Item::STATUS_PAUSE_PENDING:
+        case proto::Services::Item::STATUS_PAUSE_PENDING:
             return "Pause Pending";
 
-        case system_info::Services::Item::STATUS_PAUSED:
+        case proto::Services::Item::STATUS_PAUSED:
             return "Paused";
 
-        case system_info::Services::Item::STATUS_RUNNING:
+        case proto::Services::Item::STATUS_RUNNING:
             return "Running";
 
-        case system_info::Services::Item::STATUS_START_PENDING:
+        case proto::Services::Item::STATUS_START_PENDING:
             return "Start Pending";
 
-        case system_info::Services::Item::STATUS_STOP_PENDING:
+        case proto::Services::Item::STATUS_STOP_PENDING:
             return "Stop Pending";
 
-        case system_info::Services::Item::STATUS_STOPPED:
+        case proto::Services::Item::STATUS_STOPPED:
             return "Stopped";
 
         default:
@@ -286,23 +286,23 @@ const char* CategoryServices::StatusToString(system_info::Services::Item::Status
 
     // static
 const char* CategoryServices::StartupTypeToString(
-    system_info::Services::Item::StartupType startup_type)
+    proto::Services::Item::StartupType startup_type)
 {
     switch (startup_type)
     {
-        case system_info::Services::Item::STARTUP_TYPE_AUTO_START:
+        case proto::Services::Item::STARTUP_TYPE_AUTO_START:
             return "Auto Start";
 
-        case system_info::Services::Item::STARTUP_TYPE_DEMAND_START:
+        case proto::Services::Item::STARTUP_TYPE_DEMAND_START:
             return "Demand Start";
 
-        case system_info::Services::Item::STARTUP_TYPE_DISABLED:
+        case proto::Services::Item::STARTUP_TYPE_DISABLED:
             return "Disabled";
 
-        case system_info::Services::Item::STARTUP_TYPE_BOOT_START:
+        case proto::Services::Item::STARTUP_TYPE_BOOT_START:
             return "Boot Start";
 
-        case system_info::Services::Item::STARTUP_TYPE_SYSTEM_START:
+        case proto::Services::Item::STARTUP_TYPE_SYSTEM_START:
             return "System Start";
 
         default:
@@ -331,7 +331,7 @@ const char* CategoryDrivers::Guid() const
 
 void CategoryDrivers::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::Services message;
+    proto::Services message;
 
     if (!message.ParseFromString(data))
         return;
@@ -350,7 +350,7 @@ void CategoryDrivers::Parse(std::shared_ptr<OutputProxy> output, const std::stri
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::Services::Item& item = message.item(index);
+        const proto::Services::Item& item = message.item(index);
 
         Output::Row row(output, Icon());
 
@@ -365,13 +365,13 @@ void CategoryDrivers::Parse(std::shared_ptr<OutputProxy> output, const std::stri
 
 std::string CategoryDrivers::Serialize()
 {
-    system_info::Services message;
+    proto::Services message;
 
     for (ServiceEnumerator enumerator(ServiceEnumerator::Type::DRIVERS);
          !enumerator.IsAtEnd();
          enumerator.Advance())
     {
-        system_info::Services::Item* item = message.add_item();
+        proto::Services::Item* item = message.add_item();
 
         item->set_name(enumerator.GetName());
         item->set_display_name(enumerator.GetDisplayName());
@@ -380,62 +380,62 @@ std::string CategoryDrivers::Serialize()
         switch (enumerator.GetStatus())
         {
             case ServiceEnumerator::Status::CONTINUE_PENDING:
-                item->set_status(system_info::Services::Item::STATUS_CONTINUE_PENDING);
+                item->set_status(proto::Services::Item::STATUS_CONTINUE_PENDING);
                 break;
 
             case ServiceEnumerator::Status::PAUSE_PENDING:
-                item->set_status(system_info::Services::Item::STATUS_PAUSE_PENDING);
+                item->set_status(proto::Services::Item::STATUS_PAUSE_PENDING);
                 break;
 
             case ServiceEnumerator::Status::PAUSED:
-                item->set_status(system_info::Services::Item::STATUS_PAUSED);
+                item->set_status(proto::Services::Item::STATUS_PAUSED);
                 break;
 
             case ServiceEnumerator::Status::RUNNING:
-                item->set_status(system_info::Services::Item::STATUS_RUNNING);
+                item->set_status(proto::Services::Item::STATUS_RUNNING);
                 break;
 
             case ServiceEnumerator::Status::START_PENDING:
-                item->set_status(system_info::Services::Item::STATUS_START_PENDING);
+                item->set_status(proto::Services::Item::STATUS_START_PENDING);
                 break;
 
             case ServiceEnumerator::Status::STOP_PENDING:
-                item->set_status(system_info::Services::Item::STATUS_STOP_PENDING);
+                item->set_status(proto::Services::Item::STATUS_STOP_PENDING);
                 break;
 
             case ServiceEnumerator::Status::STOPPED:
-                item->set_status(system_info::Services::Item::STATUS_STOPPED);
+                item->set_status(proto::Services::Item::STATUS_STOPPED);
                 break;
 
             default:
-                item->set_status(system_info::Services::Item::STATUS_UNKNOWN);
+                item->set_status(proto::Services::Item::STATUS_UNKNOWN);
                 break;
         }
 
         switch (enumerator.GetStartupType())
         {
             case ServiceEnumerator::StartupType::AUTO_START:
-                item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_AUTO_START);
+                item->set_startup_type(proto::Services::Item::STARTUP_TYPE_AUTO_START);
                 break;
 
             case ServiceEnumerator::StartupType::DEMAND_START:
-                item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_DEMAND_START);
+                item->set_startup_type(proto::Services::Item::STARTUP_TYPE_DEMAND_START);
                 break;
 
             case ServiceEnumerator::StartupType::DISABLED:
-                item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_DISABLED);
+                item->set_startup_type(proto::Services::Item::STARTUP_TYPE_DISABLED);
                 break;
 
             case ServiceEnumerator::StartupType::BOOT_START:
-                item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_BOOT_START);
+                item->set_startup_type(proto::Services::Item::STARTUP_TYPE_BOOT_START);
                 break;
 
             case ServiceEnumerator::StartupType::SYSTEM_START:
-                item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_SYSTEM_START);
+                item->set_startup_type(proto::Services::Item::STARTUP_TYPE_SYSTEM_START);
                 break;
 
             default:
-                item->set_startup_type(system_info::Services::Item::STARTUP_TYPE_UNKNOWN);
+                item->set_startup_type(proto::Services::Item::STARTUP_TYPE_UNKNOWN);
                 break;
         }
 
@@ -467,7 +467,7 @@ const char* CategoryProcesses::Guid() const
 
 void CategoryProcesses::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    system_info::Processes message;
+    proto::Processes message;
 
     if (!message.ParseFromString(data))
         return;
@@ -485,7 +485,7 @@ void CategoryProcesses::Parse(std::shared_ptr<OutputProxy> output, const std::st
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const system_info::Processes::Item& item = message.item(index);
+        const proto::Processes::Item& item = message.item(index);
 
         Output::Row row(output, Icon());
 
@@ -516,11 +516,11 @@ void CategoryProcesses::Parse(std::shared_ptr<OutputProxy> output, const std::st
 
 std::string CategoryProcesses::Serialize()
 {
-    system_info::Processes message;
+    proto::Processes message;
 
     for (ProcessEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
-        system_info::Processes::Item* item = message.add_item();
+        proto::Processes::Item* item = message.add_item();
 
         item->set_process_name(enumerator.GetProcessName());
         item->set_file_path(enumerator.GetFilePath());
