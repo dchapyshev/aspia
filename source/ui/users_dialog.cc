@@ -336,16 +336,6 @@ void UsersDialog::UpdateButtonsState()
     }
 }
 
-LRESULT UsersDialog::OnUserListClick(int ctrl_id, LPNMHDR hdr, BOOL& handled)
-{
-    UNUSED_PARAMETER(ctrl_id);
-    UNUSED_PARAMETER(hdr);
-    UNUSED_PARAMETER(handled);
-
-    UpdateButtonsState();
-    return 0;
-}
-
 LRESULT UsersDialog::OnUserListKeyDown(int ctrl_id, LPNMHDR hdr, BOOL& handled)
 {
     UNUSED_PARAMETER(ctrl_id);

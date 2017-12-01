@@ -42,7 +42,7 @@ private:
 
         NOTIFY_HANDLER(IDC_USER_LIST, NM_DBLCLK, OnUserListDoubleClick)
         NOTIFY_HANDLER(IDC_USER_LIST, NM_RCLICK, OnUserListRightClick)
-        NOTIFY_HANDLER(IDC_USER_LIST, NM_CLICK, OnUserListClick)
+        NOTIFY_HANDLER(IDC_USER_LIST, NM_CLICK, OnUserListItemChanged)
         NOTIFY_HANDLER(IDC_USER_LIST, LVN_KEYDOWN, OnUserListKeyDown)
         NOTIFY_HANDLER(IDC_USER_LIST, LVN_ITEMCHANGED, OnUserListItemChanged)
 
@@ -67,7 +67,6 @@ private:
 
     LRESULT OnUserListDoubleClick(int ctrl_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnUserListRightClick(int ctrl_id, LPNMHDR hdr, BOOL& handled);
-    LRESULT OnUserListClick(int ctrl_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnUserListKeyDown(int ctrl_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnUserListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& handled);
 
