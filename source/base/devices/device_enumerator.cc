@@ -107,7 +107,7 @@ std::string DeviceEnumerator::GetDescription() const
     return UTF8fromUNICODE(description);
 }
 
-std::wstring DeviceEnumerator::GetDriverRegistryValue(const WCHAR* key_name) const
+std::wstring DeviceEnumerator::GetDriverKeyPath() const
 {
     WCHAR driver[MAX_PATH] = { 0 };
 
@@ -126,6 +126,13 @@ std::wstring DeviceEnumerator::GetDriverRegistryValue(const WCHAR* key_name) con
 
     std::wstring driver_key_path(kClassRootPath);
     driver_key_path.append(driver);
+
+    return driver_key_path;
+}
+
+std::wstring DeviceEnumerator::GetDriverRegistryString(const WCHAR* key_name) const
+{
+    std::wstring driver_key_path = GetDriverKeyPath();
 
     RegistryKey driver_key(HKEY_LOCAL_MACHINE, driver_key_path.c_str(), KEY_READ);
     if (!driver_key.IsValid())
@@ -147,19 +154,42 @@ std::wstring DeviceEnumerator::GetDriverRegistryValue(const WCHAR* key_name) con
     return value;
 }
 
+DWORD DeviceEnumerator::GetDriverRegistryDW(const WCHAR* key_name) const
+{
+    std::wstring driver_key_path = GetDriverKeyPath();
+
+    RegistryKey driver_key(HKEY_LOCAL_MACHINE, driver_key_path.c_str(), KEY_READ);
+    if (!driver_key.IsValid())
+    {
+        LOG(WARNING) << "Unable to open registry key: " << GetLastSystemErrorString();
+        return 0;
+    }
+
+    DWORD value = 0;
+
+    LONG status = driver_key.ReadValueDW(key_name, &value);
+    if (status != ERROR_SUCCESS)
+    {
+        LOG(WARNING) << "Unable to read key value: " << SystemErrorCodeToString(status);
+        return 0;
+    }
+
+    return value;
+}
+
 std::string DeviceEnumerator::GetDriverVersion() const
 {
-    return UTF8fromUNICODE(GetDriverRegistryValue(kDriverVersionKey));
+    return UTF8fromUNICODE(GetDriverRegistryString(kDriverVersionKey));
 }
 
 std::string DeviceEnumerator::GetDriverDate() const
 {
-    return UTF8fromUNICODE(GetDriverRegistryValue(kDriverDateKey));
+    return UTF8fromUNICODE(GetDriverRegistryString(kDriverDateKey));
 }
 
 std::string DeviceEnumerator::GetDriverVendor() const
 {
-    return UTF8fromUNICODE(GetDriverRegistryValue(kProviderNameKey));
+    return UTF8fromUNICODE(GetDriverRegistryString(kProviderNameKey));
 }
 
 std::string DeviceEnumerator::GetDeviceID() const

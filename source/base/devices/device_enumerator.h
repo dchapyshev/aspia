@@ -34,8 +34,11 @@ public:
 protected:
     DeviceEnumerator(const GUID* class_guid, DWORD flags);
 
+    std::wstring GetDriverRegistryString(const WCHAR* key_name) const;
+    DWORD GetDriverRegistryDW(const WCHAR* key_name) const;
+
 private:
-    std::wstring GetDriverRegistryValue(const WCHAR* key_name) const;
+    std::wstring GetDriverKeyPath() const;
 
     HDEVINFO device_info_;
     mutable SP_DEVINFO_DATA device_info_data_;

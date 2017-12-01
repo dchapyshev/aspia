@@ -8,6 +8,7 @@
 #include "base/printer_enumerator.h"
 #include "base/devices/battery_enumerator.h"
 #include "base/devices/monitor_enumerator.h"
+#include "base/devices/video_adapter_enumarator.h"
 #include "base/devices/physical_drive_enumerator.h"
 #include "base/devices/smbios_reader.h"
 #include "base/strings/string_util.h"
@@ -1517,35 +1518,77 @@ Category::IconId CategoryGroupStorage::Icon() const
 }
 
 //
-// CategoryWindowsVideo
+// CategoryVideoAdapters
 //
 
-const char* CategoryWindowsVideo::Name() const
+const char* CategoryVideoAdapters::Name() const
 {
-    return "Windows Video";
+    return "Video Adapters";
 }
 
-Category::IconId CategoryWindowsVideo::Icon() const
+Category::IconId CategoryVideoAdapters::Icon() const
 {
     return IDI_MONITOR;
 }
 
-const char* CategoryWindowsVideo::Guid() const
+const char* CategoryVideoAdapters::Guid() const
 {
     return "09E9069D-C394-4CD7-8252-E5CF83B7674C";
 }
 
-void CategoryWindowsVideo::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryVideoAdapters::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
+    proto::VideoAdapters message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name());
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    for (int index = 0; index < message.item_size(); ++index)
+    {
+        const proto::VideoAdapters::Item& item = message.item(index);
+
+        Output::Group group(output, item.description(), Icon());
+
+        output->AddParam(IDI_MONITOR, "Description", item.description());
+        output->AddParam(IDI_MONITOR, "Adapter String", item.adapter_string());
+        output->AddParam(IDI_MONITOR, "BIOS String", item.bios_string());
+        output->AddParam(IDI_MONITOR, "Chip Type", item.chip_type());
+        output->AddParam(IDI_MONITOR, "DAC Type", item.dac_type());
+        output->AddParam(IDI_MONITOR, "Memory Size", std::to_string(item.memory_size()), "Bytes");
+        output->AddParam(IDI_MONITOR, "Driver Date", item.driver_date());
+        output->AddParam(IDI_MONITOR, "Driver Version", item.driver_version());
+        output->AddParam(IDI_MONITOR, "Driver Provider", item.driver_provider());
+    }
 }
 
-std::string CategoryWindowsVideo::Serialize()
+std::string CategoryVideoAdapters::Serialize()
 {
-    // TODO
-    return std::string();
+    proto::VideoAdapters message;
+
+    for (VideoAdapterEnumarator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+    {
+        proto::VideoAdapters::Item* item = message.add_item();
+
+        item->set_description(enumerator.GetDescription());
+        item->set_adapter_string(enumerator.GetAdapterString());
+        item->set_bios_string(enumerator.GetBIOSString());
+        item->set_chip_type(enumerator.GetChipString());
+        item->set_dac_type(enumerator.GetDACType());
+        item->set_driver_date(enumerator.GetDriverDate());
+        item->set_driver_version(enumerator.GetDriverVersion());
+        item->set_driver_provider(enumerator.GetDriverVendor());
+        item->set_memory_size(enumerator.GetMemorySize());
+    }
+
+    return message.SerializeAsString();
 }
 
 //
@@ -1899,38 +1942,6 @@ std::string CategoryMonitor::Serialize()
     }
 
     return message.SerializeAsString();
-}
-
-//
-// CategoryOpenGL
-//
-
-const char* CategoryOpenGL::Name() const
-{
-    return "OpenGL";
-}
-
-Category::IconId CategoryOpenGL::Icon() const
-{
-    return IDI_CLAPPERBOARD;
-}
-
-const char* CategoryOpenGL::Guid() const
-{
-    return "05E4437C-A0CD-41CB-8B50-9A627E13CB97";
-}
-
-void CategoryOpenGL::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
-{
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
-    // TODO
-}
-
-std::string CategoryOpenGL::Serialize()
-{
-    // TODO
-    return std::string();
 }
 
 //

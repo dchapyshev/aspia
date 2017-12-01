@@ -661,6 +661,9 @@
     <ClCompile Include="base\devices\physical_drive_enumerator.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
+    <ClCompile Include="base\devices\video_adapter_enumerator.cc">
+      <Filter>base\devices</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1359,6 +1362,9 @@
       <Filter>base\files</Filter>
     </ClInclude>
     <ClInclude Include="base\devices\physical_drive_enumerator.h">
+      <Filter>base\devices</Filter>
+    </ClInclude>
+    <ClInclude Include="base\devices\video_adapter_enumarator.h">
       <Filter>base\devices</Filter>
     </ClInclude>
   </ItemGroup>

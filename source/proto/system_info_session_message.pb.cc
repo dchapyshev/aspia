@@ -163,6 +163,16 @@ class AtaDrivesDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<AtaDrives>
       _instance;
 } _AtaDrives_default_instance_;
+class VideoAdapters_ItemDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<VideoAdapters_Item>
+      _instance;
+} _VideoAdapters_Item_default_instance_;
+class VideoAdaptersDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<VideoAdapters>
+      _instance;
+} _VideoAdapters_default_instance_;
 class Monitors_Item_TimingDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<Monitors_Item_Timing>
@@ -939,6 +949,49 @@ void InitDefaultsAtaDrivesImpl() {
 void InitDefaultsAtaDrives() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsAtaDrivesImpl);
+}
+
+void InitDefaultsVideoAdapters_ItemImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_VideoAdapters_Item_default_instance_;
+    new (ptr) ::aspia::proto::VideoAdapters_Item();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::VideoAdapters_Item::InitAsDefaultInstance();
+}
+
+void InitDefaultsVideoAdapters_Item() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsVideoAdapters_ItemImpl);
+}
+
+void InitDefaultsVideoAdaptersImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsVideoAdapters_Item();
+  {
+    void* ptr = &::aspia::proto::_VideoAdapters_default_instance_;
+    new (ptr) ::aspia::proto::VideoAdapters();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::VideoAdapters::InitAsDefaultInstance();
+}
+
+void InitDefaultsVideoAdapters() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsVideoAdaptersImpl);
 }
 
 void InitDefaultsMonitors_Item_TimingImpl() {
@@ -12401,6 +12454,766 @@ void AtaDrives::InternalSwap(AtaDrives* other) {
 
 ::std::string AtaDrives::GetTypeName() const {
   return "aspia.proto.AtaDrives";
+}
+
+
+// ===================================================================
+
+void VideoAdapters_Item::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int VideoAdapters_Item::kDescriptionFieldNumber;
+const int VideoAdapters_Item::kAdapterStringFieldNumber;
+const int VideoAdapters_Item::kBiosStringFieldNumber;
+const int VideoAdapters_Item::kChipTypeFieldNumber;
+const int VideoAdapters_Item::kDacTypeFieldNumber;
+const int VideoAdapters_Item::kDriverDateFieldNumber;
+const int VideoAdapters_Item::kDriverVersionFieldNumber;
+const int VideoAdapters_Item::kDriverProviderFieldNumber;
+const int VideoAdapters_Item::kMemorySizeFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+VideoAdapters_Item::VideoAdapters_Item()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsVideoAdapters_Item();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.VideoAdapters.Item)
+}
+VideoAdapters_Item::VideoAdapters_Item(const VideoAdapters_Item& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  description_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.description().size() > 0) {
+    description_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.description_);
+  }
+  adapter_string_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.adapter_string().size() > 0) {
+    adapter_string_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.adapter_string_);
+  }
+  bios_string_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.bios_string().size() > 0) {
+    bios_string_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.bios_string_);
+  }
+  chip_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.chip_type().size() > 0) {
+    chip_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.chip_type_);
+  }
+  dac_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.dac_type().size() > 0) {
+    dac_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.dac_type_);
+  }
+  driver_date_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.driver_date().size() > 0) {
+    driver_date_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.driver_date_);
+  }
+  driver_version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.driver_version().size() > 0) {
+    driver_version_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.driver_version_);
+  }
+  driver_provider_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.driver_provider().size() > 0) {
+    driver_provider_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.driver_provider_);
+  }
+  memory_size_ = from.memory_size_;
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.VideoAdapters.Item)
+}
+
+void VideoAdapters_Item::SharedCtor() {
+  description_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  adapter_string_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  bios_string_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  chip_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  dac_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_date_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_provider_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  memory_size_ = GOOGLE_ULONGLONG(0);
+  _cached_size_ = 0;
+}
+
+VideoAdapters_Item::~VideoAdapters_Item() {
+  // @@protoc_insertion_point(destructor:aspia.proto.VideoAdapters.Item)
+  SharedDtor();
+}
+
+void VideoAdapters_Item::SharedDtor() {
+  description_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  adapter_string_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  bios_string_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  chip_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  dac_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_date_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_version_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_provider_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void VideoAdapters_Item::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const VideoAdapters_Item& VideoAdapters_Item::default_instance() {
+  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsVideoAdapters_Item();
+  return *internal_default_instance();
+}
+
+VideoAdapters_Item* VideoAdapters_Item::New(::google::protobuf::Arena* arena) const {
+  VideoAdapters_Item* n = new VideoAdapters_Item;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void VideoAdapters_Item::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.VideoAdapters.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  description_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  adapter_string_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  bios_string_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  chip_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  dac_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  driver_provider_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  memory_size_ = GOOGLE_ULONGLONG(0);
+  _internal_metadata_.Clear();
+}
+
+bool VideoAdapters_Item::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.VideoAdapters.Item)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string description = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_description()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->description().data(), static_cast<int>(this->description().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.VideoAdapters.Item.description"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string adapter_string = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_adapter_string()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->adapter_string().data(), static_cast<int>(this->adapter_string().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.VideoAdapters.Item.adapter_string"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string bios_string = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_bios_string()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->bios_string().data(), static_cast<int>(this->bios_string().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.VideoAdapters.Item.bios_string"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string chip_type = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_chip_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->chip_type().data(), static_cast<int>(this->chip_type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.VideoAdapters.Item.chip_type"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string dac_type = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_dac_type()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->dac_type().data(), static_cast<int>(this->dac_type().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.VideoAdapters.Item.dac_type"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string driver_date = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_driver_date()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->driver_date().data(), static_cast<int>(this->driver_date().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.VideoAdapters.Item.driver_date"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string driver_version = 7;
+      case 7: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(58u /* 58 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_driver_version()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->driver_version().data(), static_cast<int>(this->driver_version().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.VideoAdapters.Item.driver_version"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string driver_provider = 8;
+      case 8: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_driver_provider()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->driver_provider().data(), static_cast<int>(this->driver_provider().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.VideoAdapters.Item.driver_provider"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint64 memory_size = 9;
+      case 9: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(72u /* 72 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &memory_size_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.VideoAdapters.Item)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.VideoAdapters.Item)
+  return false;
+#undef DO_
+}
+
+void VideoAdapters_Item::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.VideoAdapters.Item)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string description = 1;
+  if (this->description().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->description().data(), static_cast<int>(this->description().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.VideoAdapters.Item.description");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->description(), output);
+  }
+
+  // string adapter_string = 2;
+  if (this->adapter_string().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->adapter_string().data(), static_cast<int>(this->adapter_string().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.VideoAdapters.Item.adapter_string");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->adapter_string(), output);
+  }
+
+  // string bios_string = 3;
+  if (this->bios_string().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->bios_string().data(), static_cast<int>(this->bios_string().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.VideoAdapters.Item.bios_string");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->bios_string(), output);
+  }
+
+  // string chip_type = 4;
+  if (this->chip_type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->chip_type().data(), static_cast<int>(this->chip_type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.VideoAdapters.Item.chip_type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      4, this->chip_type(), output);
+  }
+
+  // string dac_type = 5;
+  if (this->dac_type().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->dac_type().data(), static_cast<int>(this->dac_type().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.VideoAdapters.Item.dac_type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      5, this->dac_type(), output);
+  }
+
+  // string driver_date = 6;
+  if (this->driver_date().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->driver_date().data(), static_cast<int>(this->driver_date().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.VideoAdapters.Item.driver_date");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      6, this->driver_date(), output);
+  }
+
+  // string driver_version = 7;
+  if (this->driver_version().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->driver_version().data(), static_cast<int>(this->driver_version().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.VideoAdapters.Item.driver_version");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      7, this->driver_version(), output);
+  }
+
+  // string driver_provider = 8;
+  if (this->driver_provider().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->driver_provider().data(), static_cast<int>(this->driver_provider().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.VideoAdapters.Item.driver_provider");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      8, this->driver_provider(), output);
+  }
+
+  // uint64 memory_size = 9;
+  if (this->memory_size() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(9, this->memory_size(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.VideoAdapters.Item)
+}
+
+size_t VideoAdapters_Item::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.VideoAdapters.Item)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string description = 1;
+  if (this->description().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->description());
+  }
+
+  // string adapter_string = 2;
+  if (this->adapter_string().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->adapter_string());
+  }
+
+  // string bios_string = 3;
+  if (this->bios_string().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->bios_string());
+  }
+
+  // string chip_type = 4;
+  if (this->chip_type().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->chip_type());
+  }
+
+  // string dac_type = 5;
+  if (this->dac_type().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->dac_type());
+  }
+
+  // string driver_date = 6;
+  if (this->driver_date().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->driver_date());
+  }
+
+  // string driver_version = 7;
+  if (this->driver_version().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->driver_version());
+  }
+
+  // string driver_provider = 8;
+  if (this->driver_provider().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->driver_provider());
+  }
+
+  // uint64 memory_size = 9;
+  if (this->memory_size() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->memory_size());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void VideoAdapters_Item::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const VideoAdapters_Item*>(&from));
+}
+
+void VideoAdapters_Item::MergeFrom(const VideoAdapters_Item& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.VideoAdapters.Item)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.description().size() > 0) {
+
+    description_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.description_);
+  }
+  if (from.adapter_string().size() > 0) {
+
+    adapter_string_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.adapter_string_);
+  }
+  if (from.bios_string().size() > 0) {
+
+    bios_string_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.bios_string_);
+  }
+  if (from.chip_type().size() > 0) {
+
+    chip_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.chip_type_);
+  }
+  if (from.dac_type().size() > 0) {
+
+    dac_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.dac_type_);
+  }
+  if (from.driver_date().size() > 0) {
+
+    driver_date_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.driver_date_);
+  }
+  if (from.driver_version().size() > 0) {
+
+    driver_version_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.driver_version_);
+  }
+  if (from.driver_provider().size() > 0) {
+
+    driver_provider_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.driver_provider_);
+  }
+  if (from.memory_size() != 0) {
+    set_memory_size(from.memory_size());
+  }
+}
+
+void VideoAdapters_Item::CopyFrom(const VideoAdapters_Item& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.VideoAdapters.Item)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool VideoAdapters_Item::IsInitialized() const {
+  return true;
+}
+
+void VideoAdapters_Item::Swap(VideoAdapters_Item* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void VideoAdapters_Item::InternalSwap(VideoAdapters_Item* other) {
+  using std::swap;
+  description_.Swap(&other->description_);
+  adapter_string_.Swap(&other->adapter_string_);
+  bios_string_.Swap(&other->bios_string_);
+  chip_type_.Swap(&other->chip_type_);
+  dac_type_.Swap(&other->dac_type_);
+  driver_date_.Swap(&other->driver_date_);
+  driver_version_.Swap(&other->driver_version_);
+  driver_provider_.Swap(&other->driver_provider_);
+  swap(memory_size_, other->memory_size_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string VideoAdapters_Item::GetTypeName() const {
+  return "aspia.proto.VideoAdapters.Item";
+}
+
+
+// ===================================================================
+
+void VideoAdapters::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int VideoAdapters::kItemFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+VideoAdapters::VideoAdapters()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsVideoAdapters();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.VideoAdapters)
+}
+VideoAdapters::VideoAdapters(const VideoAdapters& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      item_(from.item_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.VideoAdapters)
+}
+
+void VideoAdapters::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+VideoAdapters::~VideoAdapters() {
+  // @@protoc_insertion_point(destructor:aspia.proto.VideoAdapters)
+  SharedDtor();
+}
+
+void VideoAdapters::SharedDtor() {
+}
+
+void VideoAdapters::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const VideoAdapters& VideoAdapters::default_instance() {
+  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsVideoAdapters();
+  return *internal_default_instance();
+}
+
+VideoAdapters* VideoAdapters::New(::google::protobuf::Arena* arena) const {
+  VideoAdapters* n = new VideoAdapters;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void VideoAdapters::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.VideoAdapters)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  item_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool VideoAdapters::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.VideoAdapters)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .aspia.proto.VideoAdapters.Item item = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_item()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.VideoAdapters)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.VideoAdapters)
+  return false;
+#undef DO_
+}
+
+void VideoAdapters::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.VideoAdapters)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .aspia.proto.VideoAdapters.Item item = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1, this->item(static_cast<int>(i)), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.VideoAdapters)
+}
+
+size_t VideoAdapters::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.VideoAdapters)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.proto.VideoAdapters.Item item = 1;
+  {
+    unsigned int count = static_cast<unsigned int>(this->item_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->item(static_cast<int>(i)));
+    }
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void VideoAdapters::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const VideoAdapters*>(&from));
+}
+
+void VideoAdapters::MergeFrom(const VideoAdapters& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.VideoAdapters)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  item_.MergeFrom(from.item_);
+}
+
+void VideoAdapters::CopyFrom(const VideoAdapters& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.VideoAdapters)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool VideoAdapters::IsInitialized() const {
+  return true;
+}
+
+void VideoAdapters::Swap(VideoAdapters* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void VideoAdapters::InternalSwap(VideoAdapters* other) {
+  using std::swap;
+  item_.InternalSwap(&other->item_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string VideoAdapters::GetTypeName() const {
+  return "aspia.proto.VideoAdapters";
 }
 
 

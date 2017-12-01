@@ -293,10 +293,10 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryGroupStorage);
 };
 
-class CategoryWindowsVideo : public CategoryInfo
+class CategoryVideoAdapters : public CategoryInfo
 {
 public:
-    CategoryWindowsVideo() = default;
+    CategoryVideoAdapters() = default;
 
     const char* Name() const final;
     IconId Icon() const final;
@@ -306,7 +306,7 @@ public:
     std::string Serialize() final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryWindowsVideo);
+    DISALLOW_COPY_AND_ASSIGN(CategoryVideoAdapters);
 };
 
 class CategoryMonitor : public CategoryInfo
@@ -323,22 +323,6 @@ public:
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryMonitor);
-};
-
-class CategoryOpenGL : public CategoryInfo
-{
-public:
-    CategoryOpenGL() = default;
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryOpenGL);
 };
 
 class CategoryGroupDisplay : public CategoryGroup

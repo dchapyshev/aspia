@@ -22,6 +22,9 @@ public:
     ~MonitorEnumerator() = default;
 
     std::unique_ptr<Edid> GetEDID() const;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(MonitorEnumerator);
 };
 
 } // namespace aspia
