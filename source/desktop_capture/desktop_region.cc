@@ -79,11 +79,15 @@ bool DesktopRegion::Equals(const DesktopRegion& region) const
 
     while (it1 != rows_.end())
     {
-        if (it2 == region.rows_.end() ||
-            it1->first != it2->first ||
-            it1->second->top != it2->second->top ||
-            it1->second->bottom != it2->second->bottom ||
-            it1->second->spans != it2->second->spans)
+        if (it2 == region.rows_.end() || it1->first != it2->first)
+            return false;
+
+        const Row* row1 = it1->second;
+        const Row* row2 = it2->second;
+
+        if (row1->top != row2->top ||
+            row1->bottom != row2->bottom ||
+            row1->spans != row2->spans)
         {
             return false;
         }
@@ -182,23 +186,26 @@ void DesktopRegion::AddRects(const DesktopRect* rects, int count)
     }
 }
 
-void DesktopRegion::MergeWithPrecedingRow(Rows::iterator row)
+void DesktopRegion::MergeWithPrecedingRow(Rows::iterator row_it)
 {
-    assert(row != rows_.end());
+    assert(row_it != rows_.end());
 
-    if (row != rows_.begin())
+    if (row_it != rows_.begin())
     {
-        Rows::iterator previous_row = row;
-        --previous_row;
+        Rows::iterator previous_row_it = row_it;
+        --previous_row_it;
+
+        Row* previous_row = previous_row_it->second;
+        Row* row = row_it->second;
 
         // If |row| and |previous_row| are next to each other and contain the same
         // set of spans then they can be merged.
-        if (previous_row->second->bottom == row->second->top &&
-            previous_row->second->spans == row->second->spans)
+        if (previous_row->bottom == row->top &&
+            previous_row->spans == row->spans)
         {
-            row->second->top = previous_row->second->top;
-            delete previous_row->second;
-            rows_.erase(previous_row);
+            row->top = previous_row->top;
+            delete previous_row;
+            rows_.erase(previous_row_it);
         }
     }
 }

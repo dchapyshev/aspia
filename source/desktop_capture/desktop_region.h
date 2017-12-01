@@ -156,7 +156,7 @@ private:
     // do anything if called with |row| set to rows_.begin() (i.e. first row of
     // the region). If the rows were merged |row| remains a valid iterator to the
     // merged row.
-    void MergeWithPrecedingRow(Rows::iterator row);
+    void MergeWithPrecedingRow(Rows::iterator row_it);
 
     Rows rows_;
 };
