@@ -26,22 +26,22 @@ protected:
     // Output implementation.
     void StartDocument() final;
     void EndDocument() final;
-    void StartTableGroup(const std::string& name) final;
+    void StartTableGroup(std::string_view name) final;
     void EndTableGroup() final;
-    void StartTable(const std::string& name) final;
+    void StartTable(std::string_view name) final;
     void EndTable() final;
     void StartTableHeader() final;
     void EndTableHeader() final;
-    void AddHeaderItem(const std::string& name, int width) final;
-    void StartGroup(const std::string& name, Category::IconId icon_id) final;
+    void AddHeaderItem(std::string_view name, int width) final;
+    void StartGroup(std::string_view name, Category::IconId icon_id) final;
     void EndGroup() final;
     void AddParam(Category::IconId icon_id,
-                  const std::string& param,
-                  const std::string& value,
-                  const char* unit) final;
+                  std::string_view param,
+                  std::string_view value,
+                  std::string_view unit) final;
     void StartRow(Category::IconId icon_id) final;
     void EndRow() final;
-    void AddValue(const std::string& value, const char* unit) final;
+    void AddValue(std::string_view value, std::string_view unit) final;
 
 private:
     std::ofstream file_;

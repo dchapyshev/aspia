@@ -25,7 +25,7 @@ void OutputJsonFile::EndDocument()
     // TODO
 }
 
-void OutputJsonFile::StartTableGroup(const std::string& name)
+void OutputJsonFile::StartTableGroup(std::string_view name)
 {
     UNUSED_PARAMETER(name);
     // TODO
@@ -36,7 +36,7 @@ void OutputJsonFile::EndTableGroup()
     // TODO
 }
 
-void OutputJsonFile::StartTable(const std::string& name)
+void OutputJsonFile::StartTable(std::string_view name)
 {
     UNUSED_PARAMETER(name);
     // TODO
@@ -57,14 +57,14 @@ void OutputJsonFile::EndTableHeader()
     // TODO
 }
 
-void OutputJsonFile::AddHeaderItem(const std::string& name, int width)
+void OutputJsonFile::AddHeaderItem(std::string_view name, int width)
 {
     UNUSED_PARAMETER(name);
     UNUSED_PARAMETER(width);
     // TODO
 }
 
-void OutputJsonFile::StartGroup(const std::string& name, Category::IconId icon_id)
+void OutputJsonFile::StartGroup(std::string_view name, Category::IconId icon_id)
 {
     UNUSED_PARAMETER(name);
     UNUSED_PARAMETER(icon_id);
@@ -77,9 +77,9 @@ void OutputJsonFile::EndGroup()
 }
 
 void OutputJsonFile::AddParam(Category::IconId icon_id,
-                              const std::string& param,
-                              const std::string& value,
-                              const char* unit)
+                              std::string_view param,
+                              std::string_view value,
+                              std::string_view unit)
 {
     UNUSED_PARAMETER(icon_id);
     UNUSED_PARAMETER(param);
@@ -99,7 +99,7 @@ void OutputJsonFile::EndRow()
     // TODO
 }
 
-void OutputJsonFile::AddValue(const std::string& value, const char* unit)
+void OutputJsonFile::AddValue(std::string_view value, std::string_view unit)
 {
     UNUSED_PARAMETER(value);
     UNUSED_PARAMETER(unit);

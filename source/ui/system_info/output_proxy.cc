@@ -43,7 +43,7 @@ bool OutputProxy::EndDocument()
     return true;
 }
 
-bool OutputProxy::StartTableGroup(const std::string& name)
+bool OutputProxy::StartTableGroup(std::string_view name)
 {
     std::lock_guard<std::mutex> lock(output_lock_);
 
@@ -65,7 +65,7 @@ bool OutputProxy::EndTableGroup()
     return true;
 }
 
-bool OutputProxy::StartTable(const std::string& name)
+bool OutputProxy::StartTable(std::string_view name)
 {
     std::lock_guard<std::mutex> lock(output_lock_);
 
@@ -109,7 +109,7 @@ bool OutputProxy::EndTableHeader()
     return true;
 }
 
-bool OutputProxy::AddHeaderItem(const std::string& name, int width)
+bool OutputProxy::AddHeaderItem(std::string_view name, int width)
 {
     std::lock_guard<std::mutex> lock(output_lock_);
 
@@ -120,7 +120,7 @@ bool OutputProxy::AddHeaderItem(const std::string& name, int width)
     return true;
 }
 
-bool OutputProxy::StartGroup(const std::string& name, Category::IconId icon_id)
+bool OutputProxy::StartGroup(std::string_view name, Category::IconId icon_id)
 {
     std::lock_guard<std::mutex> lock(output_lock_);
 
@@ -143,9 +143,9 @@ bool OutputProxy::EndGroup()
 }
 
 bool OutputProxy::AddParam(Category::IconId icon_id,
-                           const std::string& param,
-                           const std::string& value,
-                           const char* unit)
+                           std::string_view param,
+                           std::string_view value,
+                           std::string_view unit)
 {
     std::lock_guard<std::mutex> lock(output_lock_);
 
@@ -154,6 +154,13 @@ bool OutputProxy::AddParam(Category::IconId icon_id,
 
     output_->AddParam(icon_id, param, value, unit);
     return true;
+}
+
+bool OutputProxy::AddParam(Category::IconId icon_id,
+                           std::string_view param,
+                           std::string_view value)
+{
+    return AddParam(icon_id, param, value, std::string());
 }
 
 bool OutputProxy::StartRow(Category::IconId icon_id)
@@ -178,7 +185,7 @@ bool OutputProxy::EndRow()
     return true;
 }
 
-bool OutputProxy::AddValue(const std::string& value, const char* unit)
+bool OutputProxy::AddValue(std::string_view value, std::string_view unit)
 {
     std::lock_guard<std::mutex> lock(output_lock_);
 
@@ -187,6 +194,11 @@ bool OutputProxy::AddValue(const std::string& value, const char* unit)
 
     output_->AddValue(value, unit);
     return true;
+}
+
+bool OutputProxy::AddValue(std::string_view value)
+{
+    return AddValue(value, std::string());
 }
 
 } // namespace aspia

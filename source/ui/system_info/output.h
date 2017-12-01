@@ -67,7 +67,7 @@ public:
     class Table
     {
     public:
-        Table(std::shared_ptr<OutputProxy> output, const std::string& name);
+        Table(std::shared_ptr<OutputProxy> output, std::string_view name);
         ~Table();
 
     private:
@@ -90,7 +90,7 @@ public:
     {
     public:
         Group(std::shared_ptr<OutputProxy> output,
-              const std::string& name,
+              std::string_view name,
               Category::IconId icon_id);
         ~Group();
 
@@ -114,26 +114,26 @@ protected:
     virtual void StartDocument() = 0;
     virtual void EndDocument() = 0;
 
-    virtual void StartTableGroup(const std::string& name) = 0;
+    virtual void StartTableGroup(std::string_view name) = 0;
     virtual void EndTableGroup() = 0;
 
-    virtual void StartTable(const std::string& name) = 0;
+    virtual void StartTable(std::string_view name) = 0;
     virtual void EndTable() = 0;
 
     virtual void StartTableHeader() = 0;
     virtual void EndTableHeader() = 0;
-    virtual void AddHeaderItem(const std::string& name, int width) = 0;
+    virtual void AddHeaderItem(std::string_view name, int width) = 0;
 
-    virtual void StartGroup(const std::string& name, Category::IconId icon_id) = 0;
+    virtual void StartGroup(std::string_view name, Category::IconId icon_id) = 0;
     virtual void EndGroup() = 0;
     virtual void AddParam(Category::IconId icon_id,
-                          const std::string& param,
-                          const std::string& value,
-                          const char* unit) = 0;
+                          std::string_view param,
+                          std::string_view value,
+                          std::string_view unit) = 0;
 
     virtual void StartRow(Category::IconId icon_id) = 0;
     virtual void EndRow() = 0;
-    virtual void AddValue(const std::string& value, const char* unit) = 0;
+    virtual void AddValue(std::string_view value, std::string_view unit) = 0;
 
 private:
     friend class OutputProxy;

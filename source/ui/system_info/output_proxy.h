@@ -21,26 +21,30 @@ public:
     bool StartDocument();
     bool EndDocument();
 
-    bool StartTableGroup(const std::string& name);
+    bool StartTableGroup(std::string_view name);
     bool EndTableGroup();
 
-    bool StartTable(const std::string& name);
+    bool StartTable(std::string_view name);
     bool EndTable();
 
     bool StartTableHeader();
     bool EndTableHeader();
-    bool AddHeaderItem(const std::string& name, int width);
+    bool AddHeaderItem(std::string_view name, int width);
 
-    bool StartGroup(const std::string& name, Category::IconId icon_id);
+    bool StartGroup(std::string_view name, Category::IconId icon_id);
     bool EndGroup();
     bool AddParam(Category::IconId icon_id,
-                  const std::string& param,
-                  const std::string& value,
-                  const char* unit = nullptr);
+                  std::string_view param,
+                  std::string_view value,
+                  std::string_view unit);
+    bool AddParam(Category::IconId icon_id,
+                  std::string_view param,
+                  std::string_view value);
 
     bool StartRow(Category::IconId icon_id);
     bool EndRow();
-    bool AddValue(const std::string& value, const char* unit = nullptr);
+    bool AddValue(std::string_view value, std::string_view unit);
+    bool AddValue(std::string_view value);
 
 private:
     friend class Output;

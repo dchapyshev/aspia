@@ -93,7 +93,7 @@ void OutputHtmlFile::EndDocument()
     doc_.clear();
 }
 
-void OutputHtmlFile::StartTableGroup(const std::string& name)
+void OutputHtmlFile::StartTableGroup(std::string_view name)
 {
     UNUSED_PARAMETER(name);
     // TODO
@@ -104,13 +104,13 @@ void OutputHtmlFile::EndTableGroup()
     // TODO
 }
 
-void OutputHtmlFile::StartTable(const std::string& name)
+void OutputHtmlFile::StartTable(std::string_view name)
 {
     DCHECK(body_);
     DCHECK(!table_);
 
     rapidxml::xml_node<>* h1 = doc_.allocate_node(rapidxml::node_element, "h1");
-    h1->value(doc_.allocate_string(name.c_str()));
+    h1->value(doc_.allocate_string(std::data(name)));
     body_->append_node(h1);
 
     table_ = doc_.allocate_node(rapidxml::node_element, "table");
@@ -140,25 +140,25 @@ void OutputHtmlFile::EndTableHeader()
     tr_ = nullptr;
 }
 
-void OutputHtmlFile::AddHeaderItem(const std::string& name, int width)
+void OutputHtmlFile::AddHeaderItem(std::string_view name, int width)
 {
     UNUSED_PARAMETER(width);
     DCHECK(table_);
     DCHECK(tr_);
 
     rapidxml::xml_node<>* th = doc_.allocate_node(rapidxml::node_element, "th");
-    th->value(doc_.allocate_string(name.c_str()));
+    th->value(doc_.allocate_string(std::data(name)));
     tr_->append_node(th);
 }
 
-void OutputHtmlFile::StartGroup(const std::string& name, Category::IconId icon_id)
+void OutputHtmlFile::StartGroup(std::string_view name, Category::IconId icon_id)
 {
     UNUSED_PARAMETER(icon_id);
     DCHECK(table_);
 
     rapidxml::xml_node<>* td1 = doc_.allocate_node(rapidxml::node_element, "td");
     td1->append_attribute(doc_.allocate_attribute("style", "font-weight: bold;"));
-    td1->value(doc_.allocate_string(name.c_str(), name.length()));
+    td1->value(doc_.allocate_string(std::data(name), name.length()));
 
     rapidxml::xml_node<>* td2 = doc_.allocate_node(rapidxml::node_element, "td");
     td1->value(doc_.allocate_string("&nbsp;"));
@@ -176,20 +176,20 @@ void OutputHtmlFile::EndGroup()
 }
 
 void OutputHtmlFile::AddParam(Category::IconId icon_id,
-                              const std::string& param,
-                              const std::string& value,
-                              const char* unit)
+                              std::string_view param,
+                              std::string_view value,
+                              std::string_view unit)
 {
     UNUSED_PARAMETER(icon_id);
     DCHECK(table_);
 
     rapidxml::xml_node<>* td1 = doc_.allocate_node(rapidxml::node_element, "td");
     td1->append_attribute(doc_.allocate_attribute("style", "font-weight: bold;"));
-    td1->value(doc_.allocate_string(param.c_str(), param.length()));
+    td1->value(doc_.allocate_string(std::data(param), param.length()));
 
-    std::string value_with_unit = value;
+    std::string value_with_unit(value);
 
-    if (unit)
+    if (!unit.empty())
     {
         value_with_unit.append(" ");
         value_with_unit.append(value);
@@ -223,14 +223,14 @@ void OutputHtmlFile::EndRow()
     tr_ = nullptr;
 }
 
-void OutputHtmlFile::AddValue(const std::string& value, const char* unit)
+void OutputHtmlFile::AddValue(std::string_view value, std::string_view unit)
 {
     DCHECK(table_);
     DCHECK(tr_);
 
-    std::string value_with_unit = value;
+    std::string value_with_unit(value);
 
-    if (unit)
+    if (!unit.empty())
     {
         value_with_unit.append(" ");
         value_with_unit.append(value);

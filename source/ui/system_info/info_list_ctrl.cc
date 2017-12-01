@@ -70,7 +70,7 @@ void InfoListCtrl::EndDocument()
         EnableWindow();
 }
 
-void InfoListCtrl::StartTableGroup(const std::string& name)
+void InfoListCtrl::StartTableGroup(std::string_view name)
 {
     UNUSED_PARAMETER(name);
     // Nothing
@@ -81,7 +81,7 @@ void InfoListCtrl::EndTableGroup()
     // Nothing
 }
 
-void InfoListCtrl::StartTable(const std::string& name)
+void InfoListCtrl::StartTable(std::string_view name)
 {
     UNUSED_PARAMETER(name);
     imagelist_.RemoveAll();
@@ -105,14 +105,14 @@ void InfoListCtrl::EndTableHeader()
     current_column_ = 0;
 }
 
-void InfoListCtrl::AddHeaderItem(const std::string& name, int width)
+void InfoListCtrl::AddHeaderItem(std::string_view name, int width)
 {
-    const int column_index = AddColumn(UNICODEfromUTF8(name).c_str(), current_column_);
+    const int column_index = AddColumn(UNICODEfromUTF8(std::data(name)).c_str(), current_column_);
     SetColumnWidth(column_index, width);
     ++current_column_;
 }
 
-void InfoListCtrl::StartGroup(const std::string& name, Category::IconId icon_id)
+void InfoListCtrl::StartGroup(std::string_view name, Category::IconId icon_id)
 {
     LVITEMW item = { 0 };
 
@@ -122,7 +122,7 @@ void InfoListCtrl::StartGroup(const std::string& name, Category::IconId icon_id)
                          GetSystemMetrics(SM_CXSMICON),
                          GetSystemMetrics(SM_CYSMICON)));
 
-    std::wstring text(UNICODEfromUTF8(name));
+    std::wstring text(UNICODEfromUTF8(std::data(name)));
 
     item.mask    = LVIF_IMAGE | LVIF_INDENT | LVIF_TEXT | LVIF_STATE | LVIF_PARAM;
     item.iImage  = icon_index;
@@ -142,9 +142,9 @@ void InfoListCtrl::EndGroup()
 }
 
 void InfoListCtrl::AddParam(Category::IconId icon_id,
-                            const std::string& param,
-                            const std::string& value,
-                            const char* unit)
+                            std::string_view param,
+                            std::string_view value,
+                            std::string_view unit)
 {
     LVITEMW item = { 0 };
 
@@ -154,7 +154,7 @@ void InfoListCtrl::AddParam(Category::IconId icon_id,
                          GetSystemMetrics(SM_CXSMICON),
                          GetSystemMetrics(SM_CYSMICON)));
 
-    std::wstring param_name(UNICODEfromUTF8(param));
+    std::wstring param_name(UNICODEfromUTF8(std::data(param)));
 
     item.mask     = LVIF_IMAGE | LVIF_INDENT | LVIF_TEXT;
     item.iImage   = icon_index;
@@ -165,12 +165,12 @@ void InfoListCtrl::AddParam(Category::IconId icon_id,
 
     const int item_index = InsertItem(&item);
 
-    std::wstring text(UNICODEfromUTF8(value));
+    std::wstring text(UNICODEfromUTF8(std::data(value)));
 
-    if (unit)
+    if (!unit.empty())
     {
         text.append(L" ");
-        text.append(UNICODEfromUTF8(unit));
+        text.append(UNICODEfromUTF8(std::data(unit)));
     }
 
     AddItem(item_index, 1, text.c_str());
@@ -191,14 +191,14 @@ void InfoListCtrl::EndRow()
     DCHECK(current_column_ == column_count_ - 1);
 }
 
-void InfoListCtrl::AddValue(const std::string& value, const char* unit)
+void InfoListCtrl::AddValue(std::string_view value, std::string_view unit)
 {
-    std::wstring text(UNICODEfromUTF8(value));
+    std::wstring text(UNICODEfromUTF8(std::data(value)));
 
-    if (unit)
+    if (!unit.empty())
     {
         text.append(L" ");
-        text.append(UNICODEfromUTF8(unit));
+        text.append(UNICODEfromUTF8(std::data(unit)));
     }
 
     if (current_column_ == 0)

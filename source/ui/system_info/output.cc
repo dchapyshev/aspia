@@ -20,7 +20,7 @@ Output::~Output()
     proxy_ = nullptr;
 }
 
-Output::Table::Table(std::shared_ptr<OutputProxy> output, const std::string& name)
+Output::Table::Table(std::shared_ptr<OutputProxy> output, std::string_view name)
     : output_(std::move(output))
 {
     output_->StartTable(name);
@@ -43,7 +43,7 @@ Output::TableHeader::~TableHeader()
 }
 
 Output::Group::Group(std::shared_ptr<OutputProxy> output,
-                     const std::string& name,
+                     std::string_view name,
                      Category::IconId icon_id)
     : output_(std::move(output))
 {
