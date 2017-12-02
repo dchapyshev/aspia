@@ -14,7 +14,7 @@
 #include "base/strings/string_util.h"
 #include "protocol/category_group_hardware.h"
 #include "proto/system_info_session_message.pb.h"
-#include "ui/system_info/output_proxy.h"
+#include "ui/system_info/output.h"
 #include "ui/resource.h"
 
 namespace aspia {
@@ -38,7 +38,7 @@ const char* CategoryDmiBios::Guid() const
     return "B0B73D57-2CDC-4814-9AE0-C7AF7DDDD60E";
 }
 
-void CategoryDmiBios::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryDmiBios::Parse(Output* output, const std::string& data)
 {
     proto::DmiBios message;
 
@@ -145,7 +145,7 @@ const char* CategoryDmiSystem::Guid() const
     return "F599BBA4-AEBB-4583-A15E-9848F4C98601";
 }
 
-void CategoryDmiSystem::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryDmiSystem::Parse(Output* output, const std::string& data)
 {
     proto::DmiSystem message;
 
@@ -229,7 +229,7 @@ const char* CategoryDmiBaseboard::Guid() const
     return "8143642D-3248-40F5-8FCF-629C581FFF01";
 }
 
-void CategoryDmiBaseboard::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryDmiBaseboard::Parse(Output* output, const std::string& data)
 {
     proto::DmiBaseboard message;
 
@@ -342,7 +342,7 @@ const char* CategoryDmiChassis::Guid() const
     return "81D9E51F-4A86-49FC-A37F-232D6A62EC45";
 }
 
-void CategoryDmiChassis::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryDmiChassis::Parse(Output* output, const std::string& data)
 {
     proto::DmiChassis message;
 
@@ -450,7 +450,7 @@ const char* CategoryDmiCaches::Guid() const
     return "BA9258E7-0046-4A77-A97B-0407453706A3";
 }
 
-void CategoryDmiCaches::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryDmiCaches::Parse(Output* output, const std::string& data)
 {
     proto::DmiCaches message;
 
@@ -579,7 +579,7 @@ const char* CategoryDmiProcessors::Guid() const
     return "84D8B0C3-37A4-4825-A523-40B62E0CADC3";
 }
 
-void CategoryDmiProcessors::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryDmiProcessors::Parse(Output* output, const std::string& data)
 {
     proto::DmiProcessors message;
 
@@ -728,7 +728,7 @@ const char* CategoryDmiMemoryDevices::Guid() const
     return "9C591459-A83F-4F48-883D-927765C072B0";
 }
 
-void CategoryDmiMemoryDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryDmiMemoryDevices::Parse(Output* output, const std::string& data)
 {
     proto::DmiMemoryDevices message;
 
@@ -834,7 +834,7 @@ const char* CategoryDmiSystemSlots::Guid() const
     return "7A4F71C6-557F-48A5-AC94-E430F69154F1";
 }
 
-void CategoryDmiSystemSlots::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryDmiSystemSlots::Parse(Output* output, const std::string& data)
 {
     proto::DmiSystemSlots message;
 
@@ -916,7 +916,7 @@ const char* CategoryDmiPortConnectors::Guid() const
     return "FF4CE0FE-261F-46EF-852F-42420E68CFD2";
 }
 
-void CategoryDmiPortConnectors::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryDmiPortConnectors::Parse(Output* output, const std::string& data)
 {
     proto::DmiPortConnectors message;
 
@@ -998,7 +998,7 @@ const char* CategoryDmiOnboardDevices::Guid() const
     return "6C62195C-5E5F-41BA-B6AD-99041594DAC6";
 }
 
-void CategoryDmiOnboardDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryDmiOnboardDevices::Parse(Output* output, const std::string& data)
 {
     proto::DmiOnBoardDevices message;
 
@@ -1075,7 +1075,7 @@ const char* CategoryDmiBuildinPointing::Guid() const
     return "6883684B-3CEC-451B-A2E3-34C16348BA1B";
 }
 
-void CategoryDmiBuildinPointing::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryDmiBuildinPointing::Parse(Output* output, const std::string& data)
 {
     proto::DmiBuildinPointing message;
 
@@ -1149,7 +1149,7 @@ const char* CategoryDmiPortableBattery::Guid() const
     return "0CA213B5-12EE-4828-A399-BA65244E65FD";
 }
 
-void CategoryDmiPortableBattery::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryDmiPortableBattery::Parse(Output* output, const std::string& data)
 {
     proto::DmiPortableBattery message;
 
@@ -1292,7 +1292,7 @@ const char* CategoryCPU::Guid() const
     return "31D1312E-85A9-419A-91B4-BA81129B3CCC";
 }
 
-void CategoryCPU::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryCPU::Parse(Output* output, const std::string& data)
 {
     UNUSED_PARAMETER(output);
     UNUSED_PARAMETER(data);
@@ -1324,7 +1324,7 @@ const char* CategoryOpticalDrives::Guid() const
     return "68E028FE-3DA6-4BAF-9E18-CDB828372860";
 }
 
-void CategoryOpticalDrives::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryOpticalDrives::Parse(Output* output, const std::string& data)
 {
     UNUSED_PARAMETER(output);
     UNUSED_PARAMETER(data);
@@ -1356,7 +1356,7 @@ const char* CategoryATA::Guid() const
     return "79D80586-D264-46E6-8718-09E267730B78";
 }
 
-void CategoryATA::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryATA::Parse(Output* output, const std::string& data)
 {
     proto::AtaDrives message;
 
@@ -1490,7 +1490,7 @@ const char* CategorySMART::Guid() const
     return "7B1F2ED7-7A2E-4F5C-A70B-A56AB5B8CE00";
 }
 
-void CategorySMART::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategorySMART::Parse(Output* output, const std::string& data)
 {
     UNUSED_PARAMETER(output);
     UNUSED_PARAMETER(data);
@@ -1536,7 +1536,7 @@ const char* CategoryVideoAdapters::Guid() const
     return "09E9069D-C394-4CD7-8252-E5CF83B7674C";
 }
 
-void CategoryVideoAdapters::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryVideoAdapters::Parse(Output* output, const std::string& data)
 {
     proto::VideoAdapters message;
 
@@ -1610,7 +1610,7 @@ const char* CategoryMonitor::Guid() const
     return "281100E4-88ED-4AE2-BC4A-3A37282BBAB5";
 }
 
-void CategoryMonitor::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryMonitor::Parse(Output* output, const std::string& data)
 {
     proto::Monitors message;
 
@@ -1977,7 +1977,7 @@ const char* CategoryPrinters::Guid() const
     return "ACBDCE39-CE38-4A79-9626-8C8BA2E3A26A";
 }
 
-void CategoryPrinters::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryPrinters::Parse(Output* output, const std::string& data)
 {
     proto::Printers message;
 
@@ -2111,7 +2111,7 @@ const char* CategoryPowerOptions::Guid() const
     return "42E04A9E-36F7-42A1-BCDA-F3ED70112DFF";
 }
 
-void CategoryPowerOptions::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryPowerOptions::Parse(Output* output, const std::string& data)
 {
     proto::PowerOptions message;
 
@@ -2401,7 +2401,7 @@ const char* CategoryWindowsDevices::Guid() const
     return "22C4F1A6-67F2-4445-B807-9D39E1A80636";
 }
 
-void CategoryWindowsDevices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryWindowsDevices::Parse(Output* output, const std::string& data)
 {
     proto::WindowsDevices message;
 

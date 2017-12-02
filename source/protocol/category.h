@@ -14,7 +14,7 @@
 
 namespace aspia {
 
-class OutputProxy;
+class Output;
 class Category;
 class CategoryGroup;
 class CategoryInfo;
@@ -65,7 +65,7 @@ public:
     virtual ~CategoryInfo() = default;
 
     virtual const char* Guid() const = 0;
-    virtual void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) = 0;
+    virtual void Parse(Output* output, const std::string& data) = 0;
     virtual std::string Serialize() = 0;
 
     bool IsChecked() const { return checked_; }

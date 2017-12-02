@@ -9,6 +9,7 @@
 #include "base/logging.h"
 #include "ui/system_info/system_info_window.h"
 #include "ui/system_info/category_select_dialog.h"
+#include "ui/system_info/report_progress_dialog.h"
 #include "ui/about_dialog.h"
 
 namespace aspia {
@@ -18,13 +19,12 @@ static const int kDefaultWindowHeight = 700;
 
 SystemInfoWindow::SystemInfoWindow(SystemInfoWindow::Delegate* window_delegate,
                                    DocumentCreater::Delegate* document_creater_delegate)
-    : delegate_(window_delegate)
+    : delegate_(window_delegate),
+      document_creater_delegate_(document_creater_delegate),
+      category_list_(CreateCategoryTree())
 {
     DCHECK(delegate_);
-    DCHECK(document_creater_delegate);
-
-    document_creater_ = std::make_unique<DocumentCreater>(
-        document_creater_delegate, list_.output_proxy());
+    DCHECK(document_creater_delegate_);
 
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
@@ -72,13 +72,9 @@ bool SystemInfoWindow::Dispatch(const NativeEvent& event)
     return true;
 }
 
-LRESULT SystemInfoWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT SystemInfoWindow::OnCreate(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     const CSize small_icon_size(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
 
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
@@ -130,20 +126,16 @@ LRESULT SystemInfoWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
                  SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
     CenterWindow();
 
-    tree_.AddChildItems(small_icon_size, document_creater_->tree(), TVI_ROOT);
+    tree_.AddChildItems(small_icon_size, category_list_, TVI_ROOT);
     tree_.ExpandChildGroups(TVI_ROOT);
     tree_.SelectItem(tree_.GetChildItem(TVI_ROOT));
     tree_.SetFocus();
     return 0;
 }
 
-LRESULT SystemInfoWindow::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT SystemInfoWindow::OnDestroy(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     toolbar_.DestroyWindow();
     tree_.DestroyWindow();
     list_.DestroyWindow();
@@ -152,12 +144,9 @@ LRESULT SystemInfoWindow::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, 
     return 0;
 }
 
-LRESULT SystemInfoWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT SystemInfoWindow::OnSize(
+    UINT /* message */, WPARAM /* wparam */, LPARAM lparam, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(handled);
-
     const CSize size(static_cast<DWORD>(lparam));
 
     toolbar_.AutoSize();
@@ -175,13 +164,9 @@ LRESULT SystemInfoWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOO
     return 0;
 }
 
-LRESULT SystemInfoWindow::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam,
-                                          BOOL& handled)
+LRESULT SystemInfoWindow::OnGetMinMaxInfo(
+    UINT /* message */, WPARAM /* wparam */, LPARAM lparam, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(handled);
-
     LPMINMAXINFO mmi = reinterpret_cast<LPMINMAXINFO>(lparam);
 
     mmi->ptMinTrackSize.x = 500;
@@ -190,13 +175,9 @@ LRESULT SystemInfoWindow::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lp
     return 0;
 }
 
-LRESULT SystemInfoWindow::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT SystemInfoWindow::OnClose(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     delegate_->OnWindowClose();
     return 0;
 }
@@ -225,26 +206,21 @@ void SystemInfoWindow::ShowDropDownMenu(int button_id, RECT* button_rect)
     }
 }
 
-LRESULT SystemInfoWindow::OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& handled)
+LRESULT SystemInfoWindow::OnToolBarDropDown(
+    int /* control_id */, LPNMHDR hdr, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(handled);
-
     LPNMTOOLBARW header = reinterpret_cast<LPNMTOOLBARW>(hdr);
     ShowDropDownMenu(header->iItem, &header->rcButton);
     return 0;
 }
 
-LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& handled)
+LRESULT SystemInfoWindow::OnCategorySelected(
+    int /* control_id */, LPNMHDR hdr, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(handled);
-
     LPNMTREEVIEWW nmtv = reinterpret_cast<LPNMTREEVIEWW>(hdr);
 
     list_.DeleteAllItems();
     list_.DeleteAllColumns();
-    list_.EnableWindow(FALSE);
 
     Category* category = tree_.GetItemCategory(nmtv->itemNew.hItem);
     if (!category)
@@ -264,7 +240,9 @@ LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& 
 
         category_info->SetChecked(true);
 
-        document_creater_->CreateDocument();
+        DocumentCreater document_creater(&category_list_, &list_, document_creater_delegate_);
+
+        ReportProgressDialog(&document_creater).DoModal();
     }
     else
     {
@@ -277,38 +255,23 @@ LRESULT SystemInfoWindow::OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& 
     return 0;
 }
 
-LRESULT SystemInfoWindow::OnSaveSelectedButton(WORD notify_code, WORD control_id, HWND control,
-                                               BOOL& handled)
+LRESULT SystemInfoWindow::OnSaveSelectedButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(control);
-    UNUSED_PARAMETER(handled);
-
     CategorySelectDialog().DoModal();
     return 0;
 }
 
-LRESULT SystemInfoWindow::OnAboutButton(WORD notify_code, WORD control_id, HWND control,
-                                        BOOL& handled)
+LRESULT SystemInfoWindow::OnAboutButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(control);
-    UNUSED_PARAMETER(handled);
-
     AboutDialog().DoModal(*this);
     return 0;
 }
 
-LRESULT SystemInfoWindow::OnExitButton(WORD notify_code, WORD control_id, HWND control,
-                                       BOOL& handled)
+LRESULT SystemInfoWindow::OnExitButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(control);
-    UNUSED_PARAMETER(handled);
-
     PostMessageW(WM_CLOSE);
     return 0;
 }

@@ -15,6 +15,7 @@
 #include <atlapp.h>
 #include <atlwin.h>
 #include <atlctrls.h>
+#include <atlmisc.h>
 
 namespace aspia {
 
@@ -56,8 +57,10 @@ private:
 
     LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
 
+    CSize small_icon_size_;
     CImageListManaged imagelist_;
 
+    int item_count_ = 0;
     int column_count_ = 0;
     int current_column_ = 0;
     int indent_ = 0;

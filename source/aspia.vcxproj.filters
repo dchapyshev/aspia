@@ -583,9 +583,6 @@
     <ClCompile Include="proto\system_info_session_message.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
-    <ClCompile Include="ui\system_info\output_proxy.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
     <ClCompile Include="ui\system_info\output.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
@@ -1293,9 +1290,6 @@
       <Filter>proto</Filter>
     </ClInclude>
     <ClInclude Include="ui\system_info\output.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\output_proxy.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
     <ClInclude Include="base\datetime.h">

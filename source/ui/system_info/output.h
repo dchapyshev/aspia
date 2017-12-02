@@ -47,70 +47,62 @@
 // EndDocument()
 //
 
+#include "base/macros.h"
 #include "protocol/category.h"
 
-#include <memory>
-#include <string>
-
 namespace aspia {
-
-class OutputProxy;
 
 class Output
 {
 public:
-    Output();
-    virtual ~Output();
-
-    std::shared_ptr<OutputProxy> output_proxy() const { return proxy_; }
+    virtual ~Output() = default;
 
     class Table
     {
     public:
-        Table(std::shared_ptr<OutputProxy> output, std::string_view name);
+        Table(Output* output, std::string_view name);
         ~Table();
 
     private:
-        std::shared_ptr<OutputProxy> output_;
+        Output* output_;
         DISALLOW_COPY_AND_ASSIGN(Table);
     };
 
     class TableHeader
     {
     public:
-        TableHeader(std::shared_ptr<OutputProxy> output);
+        TableHeader(Output* output);
         ~TableHeader();
 
     private:
-        std::shared_ptr<OutputProxy> output_;
+        Output* output_;
         DISALLOW_COPY_AND_ASSIGN(TableHeader);
     };
 
     class Group
     {
     public:
-        Group(std::shared_ptr<OutputProxy> output,
+        Group(Output* output,
               std::string_view name,
               Category::IconId icon_id);
         ~Group();
 
     private:
-        std::shared_ptr<OutputProxy> output_;
+        Output* output_;
         DISALLOW_COPY_AND_ASSIGN(Group);
     };
 
     class Row
     {
     public:
-        Row(std::shared_ptr<OutputProxy> output, Category::IconId icon_id);
+        Row(Output* output, Category::IconId icon_id);
         ~Row();
 
     private:
-        std::shared_ptr<OutputProxy> output_;
+        Output* output_;
         DISALLOW_COPY_AND_ASSIGN(Row);
     };
 
-protected:
     virtual void StartDocument() = 0;
     virtual void EndDocument() = 0;
 
@@ -130,15 +122,20 @@ protected:
                           std::string_view param,
                           std::string_view value,
                           std::string_view unit) = 0;
+    void AddParam(Category::IconId icon_id,
+                  std::string_view param,
+                  std::string_view value)
+    {
+        AddParam(icon_id, param, value, std::string());
+    }
 
     virtual void StartRow(Category::IconId icon_id) = 0;
     virtual void EndRow() = 0;
     virtual void AddValue(std::string_view value, std::string_view unit) = 0;
-
-private:
-    friend class OutputProxy;
-
-    std::shared_ptr<OutputProxy> proxy_;
+    void AddValue(std::string_view value)
+    {
+        AddValue(value, std::string());
+    }
 };
 
 } // namespace aspia

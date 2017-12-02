@@ -8,9 +8,9 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__DOCUMENT_CREATER_H
 #define _ASPIA_UI__SYSTEM_INFO__DOCUMENT_CREATER_H
 
-#include "base/message_loop/message_loop_thread.h"
-#include "ui/system_info/output_proxy.h"
+#include "ui/system_info/output.h"
 
+#include <functional>
 #include <stack>
 
 namespace aspia {
@@ -18,7 +18,6 @@ namespace aspia {
 class DocumentCreaterProxy;
 
 class DocumentCreater
-    : private MessageLoopThread::Delegate
 {
 public:
     class Delegate
@@ -30,36 +29,34 @@ public:
                                std::shared_ptr<DocumentCreaterProxy> creater) = 0;
     };
 
-    DocumentCreater(Delegate* delegate, std::shared_ptr<OutputProxy> output);
+    DocumentCreater(CategoryList* list, Output* output, Delegate* delegate);
     ~DocumentCreater();
 
-    std::shared_ptr<DocumentCreaterProxy> document_creater_proxy() const { return proxy_; }
+    enum class State { REQUEST, OUTPUT };
+    using StateChangeCallback =
+        std::function<void(std::string_view category_name, State state)>;
+    using TerminateCallback = std::function<void()>;
 
-    void CreateDocument();
-
-    const CategoryList& tree() const { return tree_; }
-    CategoryList* mutable_tree() { return &tree_; }
+    void Start(StateChangeCallback state_change_callback,
+               TerminateCallback terminate_callback);
 
 private:
     friend class DocumentCreaterProxy;
 
     void Parse(std::shared_ptr<std::string> data);
 
-    // MessageLoopThread::Delegate implementation.
-    void OnBeforeThreadRunning() override;
-    void OnAfterThreadRunning() override;
-
     void ProcessNextItem();
     static bool HasCheckedItems(CategoryGroup* parent_group);
 
     std::shared_ptr<DocumentCreaterProxy> proxy_;
 
-    MessageLoopThread thread_;
-    std::shared_ptr<MessageLoopProxy> runner_;
-
     Delegate* delegate_;
-    std::shared_ptr<OutputProxy> output_;
-    CategoryList tree_;
+
+    StateChangeCallback state_change_callback_;
+    TerminateCallback terminate_callback_;
+    CategoryList* list_;
+    Output* output_;
+
     std::stack<std::pair<CategoryList*, CategoryList::iterator>> iterator_stack_;
 
     DISALLOW_COPY_AND_ASSIGN(DocumentCreater);

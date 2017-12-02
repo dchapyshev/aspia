@@ -473,6 +473,8 @@ BEGIN
     IDS_SI_TOOLTIP_REFRESH                  "Обновить текущую страницу"
     IDS_SI_TOOLTIP_ABOUT                    "О программе"
     IDS_SI_TOOLTIP_EXIT                     "Закрыть окно и завершить сессию"
+    IDS_SI_STATE_REQUEST                    "Отправка запроса"
+    IDS_SI_STATE_OUTPUT                     "Вывод информации"
 END
 
 // Request Status

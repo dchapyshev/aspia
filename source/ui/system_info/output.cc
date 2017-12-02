@@ -5,23 +5,12 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/system_info/output_proxy.h"
+#include "ui/system_info/output.h"
 
 namespace aspia {
 
-Output::Output()
-{
-    proxy_.reset(new OutputProxy(this));
-}
-
-Output::~Output()
-{
-    proxy_->WillDestroyCurrentOutput();
-    proxy_ = nullptr;
-}
-
-Output::Table::Table(std::shared_ptr<OutputProxy> output, std::string_view name)
-    : output_(std::move(output))
+Output::Table::Table(Output* output, std::string_view name)
+    : output_(output)
 {
     output_->StartTable(name);
 }
@@ -31,8 +20,8 @@ Output::Table::~Table()
     output_->EndTable();
 }
 
-Output::TableHeader::TableHeader(std::shared_ptr<OutputProxy> output)
-    : output_(std::move(output))
+Output::TableHeader::TableHeader(Output* output)
+    : output_(output)
 {
     output_->StartTableHeader();
 }
@@ -42,9 +31,7 @@ Output::TableHeader::~TableHeader()
     output_->EndTableHeader();
 }
 
-Output::Group::Group(std::shared_ptr<OutputProxy> output,
-                     std::string_view name,
-                     Category::IconId icon_id)
+Output::Group::Group(Output* output, std::string_view name, Category::IconId icon_id)
     : output_(std::move(output))
 {
     output_->StartGroup(name, icon_id);
@@ -55,8 +42,8 @@ Output::Group::~Group()
     output_->EndGroup();
 }
 
-Output::Row::Row(std::shared_ptr<OutputProxy> output, Category::IconId icon_id)
-    : output_(std::move(output))
+Output::Row::Row(Output* output, Category::IconId icon_id)
+    : output_(output)
 {
     output_->StartRow(icon_id);
 }

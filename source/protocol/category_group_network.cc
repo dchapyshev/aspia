@@ -11,7 +11,7 @@
 #include "network/share_enumerator.h"
 #include "network/route_enumerator.h"
 #include "protocol/category_group_network.h"
-#include "ui/system_info/output_proxy.h"
+#include "ui/system_info/output.h"
 #include "ui/resource.h"
 
 namespace aspia {
@@ -35,7 +35,7 @@ const char* CategoryNetworkCards::Guid() const
     return "98D665E9-0F78-4054-BDF3-A51E950A8618";
 }
 
-void CategoryNetworkCards::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryNetworkCards::Parse(Output* output, const std::string& data)
 {
     proto::NetworkCards message;
 
@@ -216,7 +216,7 @@ const char* CategoryRasConnections::Guid() const
     return "E0A43CFD-3A97-4577-B3FB-3B542C0729F7";
 }
 
-void CategoryRasConnections::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryRasConnections::Parse(Output* output, const std::string& data)
 {
     UNUSED_PARAMETER(output);
     UNUSED_PARAMETER(data);
@@ -248,7 +248,7 @@ const char* CategoryOpenConnections::Guid() const
     return "1A9CBCBD-5623-4CEC-B58C-BD7BD8FAE622";
 }
 
-void CategoryOpenConnections::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryOpenConnections::Parse(Output* output, const std::string& data)
 {
     proto::OpenConnections message;
 
@@ -353,7 +353,7 @@ const char* CategorySharedResources::Guid() const
     return "9219D538-E1B8-453C-9298-61D5B80C4130";
 }
 
-void CategorySharedResources::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategorySharedResources::Parse(Output* output, const std::string& data)
 {
     proto::SharedResources message;
 
@@ -483,7 +483,7 @@ const char* CategoryOpenFiles::Guid() const
     return "EAE638B9-CCF6-442C-84A1-B0901A64DA3D";
 }
 
-void CategoryOpenFiles::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryOpenFiles::Parse(Output* output, const std::string& data)
 {
     UNUSED_PARAMETER(output);
     UNUSED_PARAMETER(data);
@@ -515,7 +515,7 @@ const char* CategoryRoutes::Guid() const
     return "84184CEB-E232-4CA7-BCAC-E156F1E6DDCB";
 }
 
-void CategoryRoutes::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryRoutes::Parse(Output* output, const std::string& data)
 {
     proto::Routes message;
 

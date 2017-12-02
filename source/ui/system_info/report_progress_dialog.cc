@@ -5,23 +5,74 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/strings/unicode.h"
+#include "base/logging.h"
 #include "ui/system_info/report_progress_dialog.h"
 
 namespace aspia {
+
+ReportProgressDialog::ReportProgressDialog(DocumentCreater* document_creater)
+    : document_creater_(document_creater)
+{
+    // Nothing
+}
 
 LRESULT ReportProgressDialog::OnInitDialog(
     UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
     CenterWindow();
+
+    document_creater_->Start(
+        std::bind(&ReportProgressDialog::OnStateChanged, this,
+                  std::placeholders::_1, std::placeholders::_2),
+        std::bind(&ReportProgressDialog::OnTerminate, this));
+
     return FALSE;
 }
 
-LRESULT ReportProgressDialog::OnCancelButton(
-    WORD /* notify_code */, WORD /* ctrl_id */, HWND /* ctrl */, BOOL& /* handled */)
+LRESULT ReportProgressDialog::OnClose(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
     EndDialog(0);
     return 0;
 }
 
-} // namespace aspia
+LRESULT ReportProgressDialog::OnCancelButton(
+    WORD /* notify_code */, WORD /* ctrl_id */, HWND /* ctrl */, BOOL& /* handled */)
+{
+    SendMessageW(WM_CLOSE);
+    return 0;
+}
 
+void ReportProgressDialog::OnStateChanged(std::string_view category_name,
+                                          DocumentCreater::State state)
+{
+    GetDlgItem(IDC_CURRENT_CATEGORY).SetWindowTextW(
+        UNICODEfromUTF8(std::data(category_name)).c_str());
+
+    CString state_string;
+
+    switch (state)
+    {
+        case DocumentCreater::State::REQUEST:
+            state_string.LoadStringW(IDS_SI_STATE_REQUEST);
+            break;
+
+        case DocumentCreater::State::OUTPUT:
+            state_string.LoadStringW(IDS_SI_STATE_OUTPUT);
+            break;
+
+        default:
+            DLOG(ERROR) << "Unhandled state: " << static_cast<int>(state);
+            return;
+    }
+
+    GetDlgItem(IDC_CURRENT_ACTION).SetWindowTextW(state_string);
+}
+
+void ReportProgressDialog::OnTerminate()
+{
+    SendMessageW(WM_CLOSE);
+}
+
+} // namespace aspia

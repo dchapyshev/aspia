@@ -328,6 +328,8 @@
 #define IDS_SI_TOOLTIP_REFRESH                      3004
 #define IDS_SI_TOOLTIP_ABOUT                        3005
 #define IDS_SI_TOOLTIP_EXIT                         3006
+#define IDS_SI_STATE_REQUEST                        3007
+#define IDS_SI_STATE_OUTPUT                         3008
 
 // Request Status
 #define IDS_REQUEST_STATUS_FIRST                    11000

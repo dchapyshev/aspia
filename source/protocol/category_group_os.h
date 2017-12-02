@@ -22,7 +22,7 @@ public:
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    void Parse(Output* output, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -38,7 +38,7 @@ public:
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    void Parse(Output* output, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -54,7 +54,7 @@ public:
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    void Parse(Output* output, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -70,7 +70,7 @@ public:
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    void Parse(Output* output, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -86,7 +86,7 @@ public:
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    void Parse(Output* output, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -102,7 +102,7 @@ public:
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    void Parse(Output* output, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -130,7 +130,7 @@ public:
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    void Parse(Output* output, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -146,7 +146,7 @@ public:
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    void Parse(Output* output, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -162,7 +162,7 @@ public:
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(std::shared_ptr<OutputProxy> output, const std::string& data) final;
+    void Parse(Output* output, const std::string& data) final;
     std::string Serialize() final;
 
 private:

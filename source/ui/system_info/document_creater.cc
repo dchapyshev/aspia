@@ -11,44 +11,31 @@
 
 namespace aspia {
 
-DocumentCreater::DocumentCreater(Delegate* delegate, std::shared_ptr<OutputProxy> output)
+DocumentCreater::DocumentCreater(CategoryList* list,
+                                 Output* output,
+                                 Delegate* delegate)
     : delegate_(delegate),
-      output_(std::move(output)),
-      tree_(CreateCategoryTree())
+      list_(list),
+      output_(output)
 {
     DCHECK(delegate_);
+    DCHECK(list_);
     DCHECK(output_);
-
-    thread_.Start(MessageLoop::TYPE_DEFAULT, this);
-}
-
-DocumentCreater::~DocumentCreater()
-{
-    thread_.Stop();
-}
-
-void DocumentCreater::OnBeforeThreadRunning()
-{
-    runner_ = thread_.message_loop_proxy();
-    DCHECK(runner_);
 
     proxy_.reset(new DocumentCreaterProxy(this));
 }
 
-void DocumentCreater::OnAfterThreadRunning()
+DocumentCreater::~DocumentCreater()
 {
     proxy_->WillDestroyCurrentDocumentCreater();
     proxy_ = nullptr;
 }
 
-void DocumentCreater::CreateDocument()
+void DocumentCreater::Start(StateChangeCallback state_change_callback,
+                            TerminateCallback terminate_callback)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&DocumentCreater::CreateDocument, this));
-        return;
-    }
-
+    state_change_callback_ = std::move(state_change_callback);
+    terminate_callback_ = std::move(terminate_callback);
     ProcessNextItem();
 }
 
@@ -57,7 +44,7 @@ void DocumentCreater::ProcessNextItem()
     if (iterator_stack_.empty())
     {
         output_->StartDocument();
-        iterator_stack_.emplace(&tree_, tree_.begin());
+        iterator_stack_.emplace(list_, list_->begin());
     }
 
     CategoryList* list = iterator_stack_.top().first;
@@ -70,6 +57,7 @@ void DocumentCreater::ProcessNextItem()
         if (iterator_stack_.empty())
         {
             output_->EndDocument();
+            terminate_callback_();
             return;
         }
 
@@ -86,7 +74,8 @@ void DocumentCreater::ProcessNextItem()
 
             if (category_info->IsChecked())
             {
-                delegate_->OnRequest(category_info->Guid(), document_creater_proxy());
+                state_change_callback_(category_info->Name(), State::REQUEST);
+                delegate_->OnRequest(category_info->Guid(), proxy_);
                 return;
             }
         }
@@ -141,17 +130,13 @@ bool DocumentCreater::HasCheckedItems(CategoryGroup* parent_group)
 
 void DocumentCreater::Parse(std::shared_ptr<std::string> data)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&DocumentCreater::Parse, this, data));
-        return;
-    }
-
     CategoryList::iterator& iterator = iterator_stack_.top().second;
 
     Category* category = iterator->get();
     DCHECK(category);
     DCHECK(category->type() == Category::Type::INFO);
+
+    state_change_callback_(category->category_info()->Name(), State::OUTPUT);
 
     category->category_info()->Parse(output_, *data);
     category->category_info()->SetChecked(false);

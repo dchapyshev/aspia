@@ -9,7 +9,7 @@
 #include "base/program_enumerator.h"
 #include "base/service_enumerator.h"
 #include "protocol/category_group_software.h"
-#include "ui/system_info/output_proxy.h"
+#include "ui/system_info/output.h"
 #include "ui/resource.h"
 
 namespace aspia {
@@ -33,7 +33,7 @@ const char* CategoryPrograms::Guid() const
     return "606C70BE-0C6C-4CB6-90E6-D374760FC5EE";
 }
 
-void CategoryPrograms::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryPrograms::Parse(Output* output, const std::string& data)
 {
     proto::Programs message;
 
@@ -102,7 +102,7 @@ const char* CategoryUpdates::Guid() const
     return "3E160E27-BE2E-45DB-8292-C3786C9533AB";
 }
 
-void CategoryUpdates::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryUpdates::Parse(Output* output, const std::string& data)
 {
     UNUSED_PARAMETER(output);
     UNUSED_PARAMETER(data);
@@ -134,7 +134,7 @@ const char* CategoryServices::Guid() const
     return "BE3143AB-67C3-4EFE-97F5-FA0C84F338C3";
 }
 
-void CategoryServices::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryServices::Parse(Output* output, const std::string& data)
 {
     proto::Services message;
 
@@ -329,7 +329,7 @@ const char* CategoryDrivers::Guid() const
     return "8278DA10-227F-4484-9D5D-9A66C294CA82";
 }
 
-void CategoryDrivers::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryDrivers::Parse(Output* output, const std::string& data)
 {
     proto::Services message;
 
@@ -465,7 +465,7 @@ const char* CategoryProcesses::Guid() const
     return "14BB101B-EE61-49E6-B5B9-874C4DBEA03C";
 }
 
-void CategoryProcesses::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryProcesses::Parse(Output* output, const std::string& data)
 {
     proto::Processes message;
 
@@ -551,7 +551,7 @@ const char* CategoryLicenses::Guid() const
     return "6BD88575-9D23-44BC-8A49-64D94CC3EE48";
 }
 
-void CategoryLicenses::Parse(std::shared_ptr<OutputProxy> output, const std::string& data)
+void CategoryLicenses::Parse(Output* output, const std::string& data)
 {
     UNUSED_PARAMETER(output);
     UNUSED_PARAMETER(data);

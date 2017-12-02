@@ -14,10 +14,8 @@
 
 namespace aspia {
 
-LRESULT InfoListCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT InfoListCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(handled);
-
     LRESULT ret = DefWindowProcW(message, wparam, lparam);
 
     DWORD ex_style = LVS_EX_FULLROWSELECT;
@@ -30,8 +28,11 @@ LRESULT InfoListCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL&
 
     SetExtendedListViewStyle(ex_style);
 
-    if (imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
-                          GetSystemMetrics(SM_CYSMICON),
+    small_icon_size_.SetSize(GetSystemMetrics(SM_CXSMICON),
+                             GetSystemMetrics(SM_CYSMICON));
+
+    if (imagelist_.Create(small_icon_size_.cx,
+                          small_icon_size_.cy,
                           ILC_MASK | ILC_COLOR32,
                           1, 1))
     {
@@ -66,8 +67,7 @@ void InfoListCtrl::StartDocument()
 
 void InfoListCtrl::EndDocument()
 {
-    if (GetItemCount() > 0)
-        EnableWindow();
+    EnableWindow(item_count_ > 0 ? TRUE : FALSE);
 }
 
 void InfoListCtrl::StartTableGroup(std::string_view name)
@@ -85,6 +85,7 @@ void InfoListCtrl::StartTable(std::string_view name)
 {
     UNUSED_PARAMETER(name);
     imagelist_.RemoveAll();
+    item_count_ = 0;
     indent_ = 0;
 }
 
@@ -114,26 +115,27 @@ void InfoListCtrl::AddHeaderItem(std::string_view name, int width)
 
 void InfoListCtrl::StartGroup(std::string_view name, Category::IconId icon_id)
 {
-    LVITEMW item = { 0 };
+    CIcon icon = AtlLoadIconImage(icon_id,
+                                  LR_CREATEDIBSECTION,
+                                  small_icon_size_.cx,
+                                  small_icon_size_.cy);
 
-    const int icon_index = imagelist_.AddIcon(
-        AtlLoadIconImage(icon_id,
-                         LR_CREATEDIBSECTION,
-                         GetSystemMetrics(SM_CXSMICON),
-                         GetSystemMetrics(SM_CYSMICON)));
+    const int icon_index = imagelist_.AddIcon(icon);
 
     std::wstring text(UNICODEfromUTF8(std::data(name)));
 
+    LVITEMW item = { 0 };
     item.mask    = LVIF_IMAGE | LVIF_INDENT | LVIF_TEXT | LVIF_STATE | LVIF_PARAM;
     item.iImage  = icon_index;
     item.iIndent = indent_;
     item.pszText = const_cast<LPWSTR>(text.c_str());
-    item.iItem   = GetItemCount();
+    item.iItem   = item_count_;
     item.lParam  = 0;
 
     InsertItem(&item);
 
     ++indent_;
+    ++item_count_;
 }
 
 void InfoListCtrl::EndGroup()
@@ -146,21 +148,21 @@ void InfoListCtrl::AddParam(Category::IconId icon_id,
                             std::string_view value,
                             std::string_view unit)
 {
-    LVITEMW item = { 0 };
+    CIcon icon = AtlLoadIconImage(icon_id,
+                                  LR_CREATEDIBSECTION,
+                                  small_icon_size_.cx,
+                                  small_icon_size_.cy);
 
-    const int icon_index = imagelist_.AddIcon(
-        AtlLoadIconImage(icon_id,
-                         LR_CREATEDIBSECTION,
-                         GetSystemMetrics(SM_CXSMICON),
-                         GetSystemMetrics(SM_CYSMICON)));
+    const int icon_index = imagelist_.AddIcon(icon);
 
     std::wstring param_name(UNICODEfromUTF8(std::data(param)));
 
+    LVITEMW item = { 0 };
     item.mask     = LVIF_IMAGE | LVIF_INDENT | LVIF_TEXT;
     item.iImage   = icon_index;
     item.iIndent  = indent_;
     item.pszText  = const_cast<LPWSTR>(param_name.c_str());
-    item.iItem    = GetItemCount();
+    item.iItem    = item_count_;
     item.iSubItem = 0;
 
     const int item_index = InsertItem(&item);
@@ -174,16 +176,19 @@ void InfoListCtrl::AddParam(Category::IconId icon_id,
     }
 
     AddItem(item_index, 1, text.c_str());
+    ++item_count_;
 }
 
 void InfoListCtrl::StartRow(Category::IconId icon_id)
 {
     current_column_ = 0;
 
-    imagelist_.AddIcon(AtlLoadIconImage(icon_id,
-                                        LR_CREATEDIBSECTION,
-                                        GetSystemMetrics(SM_CXSMICON),
-                                        GetSystemMetrics(SM_CYSMICON)));
+    CIcon icon = AtlLoadIconImage(icon_id,
+                                  LR_CREATEDIBSECTION,
+                                  small_icon_size_.cx,
+                                  small_icon_size_.cy);
+
+    imagelist_.AddIcon(icon);
 }
 
 void InfoListCtrl::EndRow()
@@ -208,14 +213,15 @@ void InfoListCtrl::AddValue(std::string_view value, std::string_view unit)
         item.mask     = LVIF_TEXT | LVIF_STATE | LVIF_IMAGE;
         item.iImage   = imagelist_.GetImageCount() - 1;
         item.pszText  = const_cast<LPWSTR>(text.c_str());
-        item.iItem    = GetItemCount();
+        item.iItem    = item_count_;
         item.iSubItem = current_column_;
 
         InsertItem(&item);
+        ++item_count_;
     }
     else
     {
-        SetItemText(GetItemCount() - 1, current_column_, text.c_str());
+        SetItemText(item_count_ - 1, current_column_, text.c_str());
     }
 
     ++current_column_;

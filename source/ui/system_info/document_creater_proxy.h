@@ -10,6 +10,8 @@
 
 #include "ui/system_info/document_creater.h"
 
+#include <mutex>
+
 namespace aspia {
 
 class DocumentCreaterProxy

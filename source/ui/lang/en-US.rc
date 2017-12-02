@@ -473,6 +473,8 @@ BEGIN
     IDS_SI_TOOLTIP_REFRESH                  "Reload current page"
     IDS_SI_TOOLTIP_ABOUT                    "About the program"
     IDS_SI_TOOLTIP_EXIT                     "Close the window and end the session"
+    IDS_SI_STATE_REQUEST                    "Sending a request"
+    IDS_SI_STATE_OUTPUT                     "Information output"
 END
 
 // Request Status

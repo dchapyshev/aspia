@@ -13,7 +13,7 @@
 #include "ui/system_info/system_info_toolbar.h"
 #include "ui/system_info/category_tree_ctrl.h"
 #include "ui/system_info/info_list_ctrl.h"
-#include "ui/system_info/output_proxy.h"
+#include "ui/system_info/output.h"
 #include "ui/base/splitter.h"
 #include "ui/resource.h"
 
@@ -84,7 +84,8 @@ private:
 
     Delegate* delegate_;
 
-    std::unique_ptr<DocumentCreater> document_creater_;
+    DocumentCreater::Delegate* document_creater_delegate_;
+    CategoryList category_list_;
 
     SystemInfoToolbar toolbar_;
     CategoryTreeCtrl tree_;
