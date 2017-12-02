@@ -74,7 +74,7 @@ void ReportProgressDialog::OnStateChanged(std::string_view category_name,
 
 void ReportProgressDialog::OnTerminate()
 {
-    SendMessageW(WM_CLOSE);
+    PostMessageW(WM_CLOSE);
 }
 
 } // namespace aspia
