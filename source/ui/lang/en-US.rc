@@ -322,6 +322,18 @@ BEGIN
     END
 END
 
+IDR_LIST_COPY MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "&Copy", ID_COPY
+        MENUITEM "Copy &All", ID_COPY_ALL
+        MENUITEM "Copy &Value", ID_COPY_VALUE
+        MENUITEM SEPARATOR
+        MENUITEM "&Refresh", ID_REFRESH
+    END
+END
+
 // General
 STRINGTABLE DISCARDABLE
 BEGIN

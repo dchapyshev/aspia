@@ -322,6 +322,18 @@ BEGIN
     END
 END
 
+IDR_LIST_COPY MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "&Копировать", ID_COPY
+        MENUITEM "Копировать &все", ID_COPY_ALL
+        MENUITEM "Копировать &значение", ID_COPY_VALUE
+        MENUITEM SEPARATOR
+        MENUITEM "&Обновить", ID_REFRESH
+    END
+END
+
 // General
 STRINGTABLE DISCARDABLE
 BEGIN

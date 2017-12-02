@@ -50,7 +50,7 @@ void ReportProgressDialog::OnStateChanged(std::string_view category_name,
                                           ReportCreator::State state)
 {
     GetDlgItem(IDC_CURRENT_CATEGORY).SetWindowTextW(
-        UNICODEfromUTF8(std::data(category_name)).c_str());
+        UNICODEfromUTF8(category_name.data()).c_str());
 
     CString state_string;
 

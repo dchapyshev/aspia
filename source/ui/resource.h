@@ -183,6 +183,8 @@
 #define ID_SAVE_ALL                                521
 #define ID_SAVE_SELECTED                           522
 #define ID_SAVE_CURRENT                            523
+#define ID_COPY_ALL                                524
+#define ID_COPY_VALUE                              525
 
 #define ID_KEY_FIRST                               600
 #define ID_KEY_CTRL_ESC                            600
@@ -211,6 +213,7 @@
 #define IDR_USER                                   103
 #define IDR_IP_LIST                                104
 #define IDR_SAVE_REPORT                            105
+#define IDR_LIST_COPY                              106
 
 //
 // Strings

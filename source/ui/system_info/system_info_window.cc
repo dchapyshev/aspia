@@ -6,6 +6,7 @@
 //
 
 #include "base/strings/unicode.h"
+#include "base/scoped_clipboard.h"
 #include "base/logging.h"
 #include "ui/system_info/system_info_window.h"
 #include "ui/system_info/category_select_dialog.h"
@@ -252,10 +253,128 @@ LRESULT SystemInfoWindow::OnCategorySelected(
     return 0;
 }
 
+LRESULT SystemInfoWindow::OnListRightClick(
+    int /* control_id */, LPNMHDR /* hdr */, BOOL& /* handled */)
+{
+    if (!list_.GetSelectedCount())
+        return 0;
+
+    CMenu menu(AtlLoadMenu(IDR_LIST_COPY));
+
+    if (menu)
+    {
+        POINT cursor_pos;
+
+        if (GetCursorPos(&cursor_pos))
+        {
+            SetForegroundWindow(*this);
+
+            CMenuHandle popup_menu(menu.GetSubMenu(0));
+            if (popup_menu)
+            {
+                if (list_.GetColumnCount() > 2)
+                {
+                    popup_menu.EnableMenuItem(ID_COPY_VALUE, MF_BYCOMMAND | MF_DISABLED);
+                }
+
+                popup_menu.TrackPopupMenu(0, cursor_pos.x, cursor_pos.y, *this, nullptr);
+            }
+        }
+    }
+
+    return 0;
+}
+
 LRESULT SystemInfoWindow::OnSaveSelectedButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
     CategorySelectDialog().DoModal();
+    return 0;
+}
+
+LRESULT SystemInfoWindow::OnCopyButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    LVITEMW item;
+    memset(&item, 0, sizeof(item));
+
+    if (!list_.GetSelectedItem(&item))
+        return 0;
+
+    std::wstring text = GetListHeaderText();
+    text.append(L"\r\n");
+
+    const int column_count = list_.GetColumnCount();
+
+    for (int column_index = 0; column_index < column_count; ++column_index)
+    {
+        WCHAR buffer[256] = { 0 };
+
+        if (list_.GetItemText(item.iItem, column_index, buffer, ARRAYSIZE(buffer)))
+        {
+            text.append(buffer);
+
+            if (column_index < column_count - 1)
+                text.append(L"\t");
+        }
+    }
+
+    CopyTextToClipboard(text);
+
+    return 0;
+}
+
+LRESULT SystemInfoWindow::OnCopyAllButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    std::wstring text = GetListHeaderText();
+
+    const int item_count = list_.GetItemCount();
+    const int column_count = list_.GetColumnCount();
+
+    if (item_count > 0)
+        text.append(L"\r\n");
+
+    for (int item_index = 0; item_index < item_count; ++item_index)
+    {
+        for (int column_index = 0; column_index < column_count; ++column_index)
+        {
+            WCHAR buffer[256] = { 0 };
+
+            if (list_.GetItemText(item_index, column_index, buffer, ARRAYSIZE(buffer)))
+            {
+                text.append(buffer);
+
+                if (column_index < column_count - 1)
+                    text.append(L"\t");
+            }
+        }
+
+        if (item_index < item_count - 1)
+            text.append(L"\r\n");
+    }
+
+    CopyTextToClipboard(text);
+
+    return 0;
+}
+
+LRESULT SystemInfoWindow::OnCopyValueButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    LVITEMW item;
+    memset(&item, 0, sizeof(item));
+
+    if (!list_.GetSelectedItem(&item))
+        return 0;
+
+    WCHAR buffer[256] = { 0 };
+
+    if (list_.GetItemText(item.iItem, 1, buffer, ARRAYSIZE(buffer)))
+    {
+        CopyTextToClipboard(buffer);
+    }
+
     return 0;
 }
 
@@ -271,6 +390,62 @@ LRESULT SystemInfoWindow::OnExitButton(
 {
     PostMessageW(WM_CLOSE);
     return 0;
+}
+
+std::wstring SystemInfoWindow::GetListHeaderText()
+{
+    std::wstring text;
+
+    CHeaderCtrl header = list_.GetHeader();
+    const int column_count = header.GetItemCount();
+
+    for (int column_index = 0; column_index < column_count; ++column_index)
+    {
+        WCHAR buffer[256] = { 0 };
+        HDITEMW header_item;
+
+        memset(&header_item, 0, sizeof(header_item));
+        header_item.mask       = HDI_TEXT;
+        header_item.pszText    = buffer;
+        header_item.cchTextMax = ARRAYSIZE(buffer);
+
+        if (header.GetItem(column_index, &header_item))
+        {
+            text.append(header_item.pszText);
+
+            if (column_index < column_count - 1)
+                text.append(L"\t");
+        }
+    }
+
+    return text;
+}
+
+void SystemInfoWindow::CopyTextToClipboard(const std::wstring& text)
+{
+    ScopedClipboard clipboard;
+    if (!clipboard.Init(*this))
+        return;
+
+    clipboard.Empty();
+
+    HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.length() + 1) * sizeof(WCHAR));
+    if (!text_global)
+        return;
+
+    LPWSTR text_global_locked = reinterpret_cast<LPWSTR>(GlobalLock(text_global));
+    if (!text_global_locked)
+    {
+        GlobalFree(text_global);
+        return;
+    }
+
+    memcpy(text_global_locked, text.data(), text.length() * sizeof(WCHAR));
+    text_global_locked[text.length()] = 0;
+
+    GlobalUnlock(text_global);
+
+    clipboard.SetData(CF_UNICODETEXT, text_global);
 }
 
 void SystemInfoWindow::OnRequest(
