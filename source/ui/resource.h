@@ -97,7 +97,7 @@
 #define IDD_FILE_ACTION                            109
 #define IDD_FILE_STATUS                            110
 #define IDD_POWER_HOST                             111
-#define IDD_SAVE_REPORT                            112
+#define IDD_CATEGORY_SELECT                        112
 
 //
 // Controls

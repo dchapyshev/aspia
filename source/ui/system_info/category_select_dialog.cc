@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/system_info/save_report_dialog.cc
+// FILE:            ui/system_info/category_select_dialog.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
@@ -8,7 +8,7 @@
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
 #include "base/logging.h"
-#include "ui/system_info/save_report_dialog.h"
+#include "ui/system_info/category_select_dialog.h"
 
 #include <uxtheme.h>
 
@@ -16,15 +16,15 @@ namespace aspia {
 
 #define STATEIMAGEMASKTOINDEX(state) (((state) & TVIS_STATEIMAGEMASK) >> 12)
 
-const CategoryList& SaveReportDialog::GetCategoryTree()
+const CategoryList& CategorySelectDialog::GetCategoryTree()
 {
     return category_tree_;
 }
 
-void SaveReportDialog::AddChildItems(CTreeViewCtrl& treeview,
-                                     const CSize& icon_size,
-                                     const CategoryList& tree,
-                                     HTREEITEM parent_tree_item)
+void CategorySelectDialog::AddChildItems(CTreeViewCtrl& treeview,
+                                         const CSize& icon_size,
+                                         const CategoryList& tree,
+                                         HTREEITEM parent_tree_item)
 {
     for (const auto& child : tree)
     {
@@ -51,7 +51,8 @@ void SaveReportDialog::AddChildItems(CTreeViewCtrl& treeview,
     }
 }
 
-LRESULT SaveReportDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT CategorySelectDialog::OnInitDialog(
+    UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     UNUSED_PARAMETER(message);
     UNUSED_PARAMETER(wparam);
@@ -113,7 +114,8 @@ LRESULT SaveReportDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpara
     return FALSE;
 }
 
-LRESULT SaveReportDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT CategorySelectDialog::OnClose(
+    UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
     UNUSED_PARAMETER(message);
     UNUSED_PARAMETER(wparam);
@@ -124,8 +126,8 @@ LRESULT SaveReportDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BO
     return 0;
 }
 
-LRESULT SaveReportDialog::OnSelectAllButton(WORD notify_code, WORD ctrl_id, HWND ctrl,
-                                            BOOL& handled)
+LRESULT CategorySelectDialog::OnSelectAllButton(
+    WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     UNUSED_PARAMETER(notify_code);
     UNUSED_PARAMETER(ctrl_id);
@@ -138,8 +140,8 @@ LRESULT SaveReportDialog::OnSelectAllButton(WORD notify_code, WORD ctrl_id, HWND
     return 0;
 }
 
-LRESULT SaveReportDialog::OnUnselectAllButton(WORD notify_code, WORD ctrl_id, HWND ctrl,
-                                              BOOL& handled)
+LRESULT CategorySelectDialog::OnUnselectAllButton(
+    WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     UNUSED_PARAMETER(notify_code);
     UNUSED_PARAMETER(ctrl_id);
@@ -152,7 +154,8 @@ LRESULT SaveReportDialog::OnUnselectAllButton(WORD notify_code, WORD ctrl_id, HW
     return 0;
 }
 
-LRESULT SaveReportDialog::OnSaveButton(WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT CategorySelectDialog::OnSaveButton(
+    WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     UNUSED_PARAMETER(notify_code);
     UNUSED_PARAMETER(ctrl_id);
@@ -163,7 +166,8 @@ LRESULT SaveReportDialog::OnSaveButton(WORD notify_code, WORD ctrl_id, HWND ctrl
     return 0;
 }
 
-LRESULT SaveReportDialog::OnCancelButton(WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT CategorySelectDialog::OnCancelButton(
+    WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled)
 {
     UNUSED_PARAMETER(notify_code);
     UNUSED_PARAMETER(ctrl_id);
@@ -175,9 +179,8 @@ LRESULT SaveReportDialog::OnCancelButton(WORD notify_code, WORD ctrl_id, HWND ct
 }
 
 // static
-void SaveReportDialog::SetCheckStateForItem(CTreeViewCtrl& treeview,
-                                            HTREEITEM item,
-                                            BOOL state)
+void CategorySelectDialog::SetCheckStateForItem(
+    CTreeViewCtrl& treeview, HTREEITEM item, BOOL state)
 {
     Category* category = reinterpret_cast<Category*>(treeview.GetItemData(item));
 
@@ -193,9 +196,8 @@ void SaveReportDialog::SetCheckStateForItem(CTreeViewCtrl& treeview,
 }
 
 // static
-void SaveReportDialog::SetCheckStateForChildItems(CTreeViewCtrl& treeview,
-                                                  HTREEITEM parent_item,
-                                                  BOOL state)
+void CategorySelectDialog::SetCheckStateForChildItems(
+    CTreeViewCtrl& treeview, HTREEITEM parent_item, BOOL state)
 {
     for (HTREEITEM item = treeview.GetChildItem(parent_item);
          item != nullptr;
@@ -206,7 +208,7 @@ void SaveReportDialog::SetCheckStateForChildItems(CTreeViewCtrl& treeview,
     }
 }
 
-LRESULT SaveReportDialog::OnTreeItemChanged(int control_id, LPNMHDR hdr, BOOL& handled)
+LRESULT CategorySelectDialog::OnTreeItemChanged(int control_id, LPNMHDR hdr, BOOL& handled)
 {
     UNUSED_PARAMETER(control_id);
     UNUSED_PARAMETER(handled);

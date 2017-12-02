@@ -8,7 +8,7 @@
 #include "base/strings/unicode.h"
 #include "base/logging.h"
 #include "ui/system_info/system_info_window.h"
-#include "ui/system_info/save_report_dialog.h"
+#include "ui/system_info/category_select_dialog.h"
 #include "ui/about_dialog.h"
 
 namespace aspia {
@@ -285,7 +285,7 @@ LRESULT SystemInfoWindow::OnSaveSelectedButton(WORD notify_code, WORD control_id
     UNUSED_PARAMETER(control);
     UNUSED_PARAMETER(handled);
 
-    SaveReportDialog().DoModal(*this);
+    CategorySelectDialog().DoModal(*this);
     return 0;
 }
 

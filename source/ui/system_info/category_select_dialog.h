@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/system_info/save_report_dialog.h
+// FILE:            ui/system_info/category_select_dialog.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SYSTEM_INFO__SAVE_REPORT_DIALOG_H
-#define _ASPIA_UI__SYSTEM_INFO__SAVE_REPORT_DIALOG_H
+#ifndef _ASPIA_UI__SYSTEM_INFO__CATEGORY_SELECT_DIALOG_H
+#define _ASPIA_UI__SYSTEM_INFO__CATEGORY_SELECT_DIALOG_H
 
 #include "base/macros.h"
 #include "protocol/category.h"
@@ -21,20 +21,20 @@
 
 namespace aspia {
 
-class SaveReportDialog :
-    public CDialogImpl<SaveReportDialog>,
-    public CDialogResize<SaveReportDialog>
+class CategorySelectDialog :
+    public CDialogImpl<CategorySelectDialog>,
+    public CDialogResize<CategorySelectDialog>
 {
 public:
-    enum { IDD = IDD_SAVE_REPORT };
+    enum { IDD = IDD_CATEGORY_SELECT };
 
-    SaveReportDialog() = default;
-    ~SaveReportDialog() = default;
+    CategorySelectDialog() = default;
+    ~CategorySelectDialog() = default;
 
     const CategoryList& GetCategoryTree();
 
 private:
-    BEGIN_MSG_MAP(SaveReportDialog)
+    BEGIN_MSG_MAP(CategorySelectDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
@@ -45,10 +45,10 @@ private:
 
         NOTIFY_CODE_HANDLER(TVN_ITEMCHANGED, OnTreeItemChanged)
 
-        CHAIN_MSG_MAP(CDialogResize<SaveReportDialog>)
+        CHAIN_MSG_MAP(CDialogResize<CategorySelectDialog>)
     END_MSG_MAP()
 
-    BEGIN_DLGRESIZE_MAP(SaveReportDialog)
+    BEGIN_DLGRESIZE_MAP(CategorySelectDialog)
         DLGRESIZE_CONTROL(IDC_CATEGORY_TREE, DLSZ_SIZE_X | DLSZ_SIZE_Y)
         DLGRESIZE_CONTROL(IDC_SELECT_ALL, DLSZ_MOVE_Y)
         DLGRESIZE_CONTROL(IDC_UNSELECT_ALL, DLSZ_MOVE_Y)
@@ -86,9 +86,9 @@ private:
     CategoryList category_tree_;
     bool checkbox_rebuild_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(SaveReportDialog);
+    DISALLOW_COPY_AND_ASSIGN(CategorySelectDialog);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SYSTEM_INFO__SAVE_REPORT_DIALOG_H
+#endif // _ASPIA_UI__SYSTEM_INFO__CATEGORY_SELECT_DIALOG_H

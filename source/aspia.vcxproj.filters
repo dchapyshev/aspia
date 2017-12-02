@@ -616,9 +616,6 @@
     <ClCompile Include="ui\system_info\output_html_file.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
-    <ClCompile Include="ui\system_info\save_report_dialog.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
     <ClCompile Include="host\host_local_system_info.cc">
       <Filter>host</Filter>
     </ClCompile>
@@ -663,6 +660,9 @@
     </ClCompile>
     <ClCompile Include="base\devices\video_adapter_enumerator.cc">
       <Filter>base\devices</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\category_select_dialog.cc">
+      <Filter>ui\system_info</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1322,9 +1322,6 @@
     <ClInclude Include="ui\system_info\output_html_file.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
-    <ClInclude Include="ui\system_info\save_report_dialog.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
     <ClInclude Include="host\host_local_system_info.h">
       <Filter>host</Filter>
     </ClInclude>
@@ -1366,6 +1363,9 @@
     </ClInclude>
     <ClInclude Include="base\devices\video_adapter_enumarator.h">
       <Filter>base\devices</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\category_select_dialog.h">
+      <Filter>ui\system_info</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
