@@ -21,14 +21,14 @@ void ReportCreatorProxy::WillDestroyCurrentReportCreator()
     creator_ = nullptr;
 }
 
-bool ReportCreatorProxy::Parse(std::shared_ptr<std::string> data)
+bool ReportCreatorProxy::Parse(const std::string& data)
 {
     std::lock_guard<std::mutex> lock(creator_lock_);
 
     if (!creator_)
         return false;
 
-    creator_->Parse(std::move(data));
+    creator_->Parse(data);
     return true;
 }
 

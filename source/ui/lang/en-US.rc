@@ -487,6 +487,9 @@ BEGIN
     IDS_SI_TOOLTIP_EXIT                     "Close the window and end the session"
     IDS_SI_STATE_REQUEST                    "Sending a request"
     IDS_SI_STATE_OUTPUT                     "Information output"
+    IDS_SI_FILTER_HTML                      "HTML File (*.html, *.htm)"
+    IDS_SI_FILTER_JSON                      "JSON File (*.json)"
+    IDS_SI_FILTER_XML                       "XML File (*.xml)"
 END
 
 // Request Status

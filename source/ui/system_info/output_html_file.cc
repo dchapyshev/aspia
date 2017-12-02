@@ -41,9 +41,25 @@ static const char kCssStyle[] =
     "font-weight:bold;"
     "}";
 
-OutputHtmlFile::OutputHtmlFile(const std::wstring& file_path)
+OutputHtmlFile::OutputHtmlFile(std::ofstream file)
+    : file_(std::move(file))
 {
-    file_.open(file_path);
+    // Nothing
+}
+
+// static
+std::unique_ptr<OutputHtmlFile> OutputHtmlFile::Create(const FilePath& file_path)
+{
+    std::ofstream file;
+
+    file.open(file_path, std::ofstream::out | std::ofstream::trunc);
+    if (!file.is_open())
+    {
+        LOG(WARNING) << "Unable to create report file: " << file_path;
+        return nullptr;
+    }
+
+    return std::unique_ptr<OutputHtmlFile>(new OutputHtmlFile(std::move(file)));
 }
 
 void OutputHtmlFile::StartDocument()

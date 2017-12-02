@@ -334,6 +334,9 @@
 #define IDS_SI_TOOLTIP_EXIT                         3006
 #define IDS_SI_STATE_REQUEST                        3007
 #define IDS_SI_STATE_OUTPUT                         3008
+#define IDS_SI_FILTER_HTML                          3009
+#define IDS_SI_FILTER_JSON                          3010
+#define IDS_SI_FILTER_XML                           3011
 
 // Request Status
 #define IDS_REQUEST_STATUS_FIRST                    11000

@@ -5,13 +5,20 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/files/file_path.h"
 #include "base/strings/unicode.h"
 #include "base/scoped_clipboard.h"
 #include "base/logging.h"
 #include "ui/system_info/system_info_window.h"
 #include "ui/system_info/category_select_dialog.h"
 #include "ui/system_info/report_progress_dialog.h"
+#include "ui/system_info/output_html_file.h"
+#include "ui/system_info/output_json_file.h"
+#include "ui/system_info/output_xml_file.h"
 #include "ui/about_dialog.h"
+
+#include <atldlgs.h>
+#include <strsafe.h>
 
 namespace aspia {
 
@@ -260,7 +267,67 @@ LRESULT SystemInfoWindow::OnListRightClick(
 LRESULT SystemInfoWindow::OnSaveSelectedButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    CategorySelectDialog().DoModal();
+    if (CategorySelectDialog(&category_list_).DoModal() == IDCANCEL)
+        return 0;
+
+    static const WCHAR html_files[] = L"*.html;*.htm";
+    static const WCHAR json_files[] = L"*.json";
+    static const WCHAR xml_files[] = L"*.xml";
+
+    WCHAR filter[256] = { 0 };
+    int length = 0;
+
+    length += AtlLoadString(IDS_SI_FILTER_HTML, filter, ARRAYSIZE(filter)) + 1;
+    StringCbCatW(filter + length, ARRAYSIZE(filter) - length, html_files);
+    length += ARRAYSIZE(html_files);
+
+    length += AtlLoadString(IDS_SI_FILTER_JSON, filter + length, ARRAYSIZE(filter) - length) + 1;
+    StringCbCatW(filter + length, ARRAYSIZE(filter) - length, json_files);
+    length += ARRAYSIZE(json_files);
+
+    length += AtlLoadString(IDS_SI_FILTER_XML, filter + length, ARRAYSIZE(filter) - length) + 1;
+    StringCbCatW(filter + length, ARRAYSIZE(filter) - length, xml_files);
+
+    WCHAR computer_name[256] = { 0 };
+    DWORD computer_name_length = ARRAYSIZE(computer_name);
+    GetComputerNameW(computer_name, &computer_name_length);
+
+    CFileDialog save_dialog(FALSE, L"html", computer_name,
+                            OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, filter);
+    if (save_dialog.DoModal() == IDCANCEL)
+        return 0;
+
+    FilePath file_path(save_dialog.m_szFileName);
+    FilePath extension(file_path.extension());
+
+    std::unique_ptr<Output> output;
+
+    if (extension == L".html" || extension == L".htm")
+    {
+        output = OutputHtmlFile::Create(file_path);
+    }
+    else if (extension == L".json")
+    {
+        output = OutputJsonFile::Create(file_path);
+    }
+    else if (extension == L".xml")
+    {
+        output = OutputXmlFile::Create(file_path);
+    }
+    else
+    {
+        LOG(WARNING) << "Invalid file extension: " << extension;
+        return 0;
+    }
+
+    if (!output)
+        return 0;
+
+    ReportProgressDialog progress_dialog(&category_list_, output.get(),
+                                         std::bind(&SystemInfoWindow::OnRequest, this,
+                                                   std::placeholders::_1, std::placeholders::_2));
+    progress_dialog.DoModal();
+
     return 0;
 }
 

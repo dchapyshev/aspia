@@ -17,7 +17,7 @@ namespace aspia {
 class ReportCreatorProxy
 {
 public:
-    bool Parse(std::shared_ptr<std::string> data);
+    bool Parse(const std::string& data);
 
 private:
     friend class ReportCreator;

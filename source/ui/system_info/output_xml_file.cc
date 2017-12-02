@@ -14,9 +14,25 @@
 
 namespace aspia {
 
-OutputXmlFile::OutputXmlFile(const std::wstring& file_path)
+OutputXmlFile::OutputXmlFile(std::ofstream file)
+    : file_(std::move(file))
 {
-    file_.open(file_path);
+    // Nothing
+}
+
+// static
+std::unique_ptr<OutputXmlFile> OutputXmlFile::Create(const FilePath& file_path)
+{
+    std::ofstream file;
+
+    file.open(file_path, std::ofstream::out | std::ofstream::trunc);
+    if (!file.is_open())
+    {
+        LOG(WARNING) << "Unable to create report file: " << file_path;
+        return nullptr;
+    }
+
+    return std::unique_ptr<OutputXmlFile>(new OutputXmlFile(std::move(file)));
 }
 
 void OutputXmlFile::StartDocument()
@@ -57,7 +73,7 @@ void OutputXmlFile::StartTable(std::string_view name)
 {
     category_ = doc_.allocate_node(rapidxml::node_element, "category");
     category_->append_attribute(
-        doc_.allocate_attribute("name", doc_.allocate_string(std::data(name))));
+        doc_.allocate_attribute("name", doc_.allocate_string(name.data())));
 }
 
 void OutputXmlFile::EndTable()
@@ -78,22 +94,20 @@ void OutputXmlFile::EndTableHeader()
     // Nothing
 }
 
-void OutputXmlFile::AddHeaderItem(std::string_view name, int width)
+void OutputXmlFile::AddHeaderItem(std::string_view name, int /* width */)
 {
-    UNUSED_PARAMETER(width);
     DCHECK(category_);
 
     column_list_.emplace_back(name);
 }
 
-void OutputXmlFile::StartGroup(std::string_view name, Category::IconId icon_id)
+void OutputXmlFile::StartGroup(std::string_view name, Category::IconId /* icon_id */)
 {
-    UNUSED_PARAMETER(icon_id);
     DCHECK(category_);
 
     rapidxml::xml_node<>* group = doc_.allocate_node(rapidxml::node_element, "group");
     group->append_attribute(
-        doc_.allocate_attribute("name", doc_.allocate_string(std::data(name))));
+        doc_.allocate_attribute("name", doc_.allocate_string(name.data())));
 
     group_stack_.push(group);
 }
@@ -115,27 +129,26 @@ void OutputXmlFile::EndGroup()
     }
 }
 
-void OutputXmlFile::AddParam(Category::IconId icon_id,
+void OutputXmlFile::AddParam(Category::IconId /* icon_id */,
                              std::string_view param,
                              std::string_view value,
                              std::string_view unit)
 {
-    UNUSED_PARAMETER(icon_id);
     DCHECK(category_);
 
     rapidxml::xml_node<>* param_node = doc_.allocate_node(rapidxml::node_element, "param");
 
     param_node->append_attribute(
-        doc_.allocate_attribute("name", doc_.allocate_string(std::data(param))));
+        doc_.allocate_attribute("name", doc_.allocate_string(param.data())));
 
     if (!unit.empty())
     {
         // The unit of measure is an optional parameter.
         param_node->append_attribute(
-            doc_.allocate_attribute("unit", doc_.allocate_string(std::data(unit))));
+            doc_.allocate_attribute("unit", doc_.allocate_string(unit.data())));
     }
 
-    param_node->value(doc_.allocate_string(std::data(value)));
+    param_node->value(doc_.allocate_string(value.data()));
 
     if (group_stack_.empty())
     {
@@ -147,9 +160,8 @@ void OutputXmlFile::AddParam(Category::IconId icon_id,
     }
 }
 
-void OutputXmlFile::StartRow(Category::IconId icon_id)
+void OutputXmlFile::StartRow(Category::IconId /* icon_id */)
 {
-    UNUSED_PARAMETER(icon_id);
     DCHECK(category_);
     DCHECK(!row_);
 
@@ -184,10 +196,10 @@ void OutputXmlFile::AddValue(std::string_view value, std::string_view unit)
     {
         // The unit of measure is an optional parameter.
         column->append_attribute(
-            doc_.allocate_attribute("unit", doc_.allocate_string(std::data(unit))));
+            doc_.allocate_attribute("unit", doc_.allocate_string(unit.data())));
     }
 
-    column->value(doc_.allocate_string(std::data(value)));
+    column->value(doc_.allocate_string(value.data()));
 
     row_->append_node(column);
 

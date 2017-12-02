@@ -29,7 +29,7 @@ ReportCreator::~ReportCreator()
 }
 
 void ReportCreator::Start(StateChangeCallback state_change_callback,
-                            TerminateCallback terminate_callback)
+                          TerminateCallback terminate_callback)
 {
     state_change_callback_ = std::move(state_change_callback);
     terminate_callback_ = std::move(terminate_callback);
@@ -125,7 +125,7 @@ bool ReportCreator::HasCheckedItems(CategoryGroup* parent_group)
     return false;
 }
 
-void ReportCreator::Parse(std::shared_ptr<std::string> data)
+void ReportCreator::Parse(const std::string& data)
 {
     CategoryList::iterator& iterator = iterator_stack_.top().second;
 
@@ -135,7 +135,7 @@ void ReportCreator::Parse(std::shared_ptr<std::string> data)
 
     state_change_callback_(category->category_info()->Name(), State::OUTPUT);
 
-    category->category_info()->Parse(output_, *data);
+    category->category_info()->Parse(output_, data);
     category->category_info()->SetChecked(false);
 
     ++iterator;

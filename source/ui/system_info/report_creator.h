@@ -38,7 +38,7 @@ public:
 private:
     friend class ReportCreatorProxy;
 
-    void Parse(std::shared_ptr<std::string> data);
+    void Parse(const std::string& data);
 
     void ProcessNextItem();
     static bool HasCheckedItems(CategoryGroup* parent_group);

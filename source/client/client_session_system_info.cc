@@ -59,12 +59,7 @@ void ClientSessionSystemInfo::OnReplyReceived(const IOBuffer& buffer)
         const std::string& guid = message.guid();
 
         if (guid.length() == kGuidLength)
-        {
-            std::shared_ptr<std::string> data =
-                std::shared_ptr<std::string>(message.release_data());
-
-            report_creator_->Parse(std::move(data));
-        }
+            report_creator_->Parse(message.data());
     }
 
     channel_proxy_->Disconnect();

@@ -30,7 +30,11 @@ private:
 
     // SystemInfoWindow::Delegate implementation.
     void OnWindowClose() override;
-    void OnRequest(std::string_view guid, std::shared_ptr<ReportCreatorProxy> creator) override;
+    void OnRequest(std::string_view guid,
+                   std::shared_ptr<ReportCreatorProxy> report_creator) override;
+
+    void ExecuteRequest(std::string_view guid,
+                        std::shared_ptr<ReportCreatorProxy> report_creator);
 
     MessageLoopThread thread_;
     std::shared_ptr<MessageLoopProxy> runner_;

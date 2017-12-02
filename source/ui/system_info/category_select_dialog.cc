@@ -16,9 +16,10 @@ namespace aspia {
 
 #define STATEIMAGEMASKTOINDEX(state) (((state) & TVIS_STATEIMAGEMASK) >> 12)
 
-const CategoryList& CategorySelectDialog::GetCategoryTree()
+CategorySelectDialog::CategorySelectDialog(CategoryList* category_list)
+    : category_list_(category_list)
 {
-    return category_tree_;
+    DCHECK(category_list_);
 }
 
 void CategorySelectDialog::AddChildItems(CTreeViewCtrl& treeview,
@@ -28,11 +29,11 @@ void CategorySelectDialog::AddChildItems(CTreeViewCtrl& treeview,
 {
     for (const auto& child : tree)
     {
-        const int icon_index =
-            imagelist_.AddIcon(AtlLoadIconImage(child->Icon(),
-                                                LR_CREATEDIBSECTION,
-                                                icon_size.cx,
-                                                icon_size.cy));
+        CIcon icon = AtlLoadIconImage(child->Icon(),
+                                      LR_CREATEDIBSECTION,
+                                      icon_size.cx,
+                                      icon_size.cy);
+        const int icon_index = imagelist_.AddIcon(icon);
 
         HTREEITEM tree_item = treeview.InsertItem(
             UNICODEfromUTF8(child->Name()).c_str(),
@@ -107,9 +108,7 @@ LRESULT CategorySelectDialog::OnInitDialog(
 
     treeview.ModifyStyle(0, TVS_CHECKBOXES);
 
-    category_tree_ = CreateCategoryTree();
-
-    AddChildItems(treeview, small_icon_size, category_tree_, TVI_ROOT);
+    AddChildItems(treeview, small_icon_size, *category_list_, TVI_ROOT);
 
     return FALSE;
 }

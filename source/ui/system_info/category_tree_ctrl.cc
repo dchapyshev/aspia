@@ -21,11 +21,11 @@ void CategoryTreeCtrl::AddChildItems(const CSize& icon_size,
 {
     for (const auto& child : tree)
     {
-        const int icon_index =
-            imagelist_.AddIcon(AtlLoadIconImage(child->Icon(),
-                                                LR_CREATEDIBSECTION,
-                                                icon_size.cx,
-                                                icon_size.cy));
+        CIcon icon = AtlLoadIconImage(child->Icon(),
+                                      LR_CREATEDIBSECTION,
+                                      icon_size.cx,
+                                      icon_size.cy);
+        const int icon_index = imagelist_.AddIcon(icon);
 
         HTREEITEM tree_item = InsertItem(
             UNICODEfromUTF8(child->Name()).c_str(),

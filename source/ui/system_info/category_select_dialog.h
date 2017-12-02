@@ -28,7 +28,7 @@ class CategorySelectDialog :
 public:
     enum { IDD = IDD_CATEGORY_SELECT };
 
-    CategorySelectDialog() = default;
+    CategorySelectDialog(CategoryList* category_list);
     ~CategorySelectDialog() = default;
 
     const CategoryList& GetCategoryTree();
@@ -76,6 +76,8 @@ private:
                                            HTREEITEM parent_item,
                                            BOOL state);
 
+    CategoryList* category_list_;
+
     CIcon small_icon_;
     CIcon big_icon_;
     CIcon select_all_icon_;
@@ -83,7 +85,6 @@ private:
 
     CImageListManaged imagelist_;
 
-    CategoryList category_tree_;
     bool checkbox_rebuild_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(CategorySelectDialog);

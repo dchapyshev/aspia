@@ -34,28 +34,29 @@ void HostLocalSystemInfo::OnAfterThreadRunning()
 }
 
 void HostLocalSystemInfo::OnRequest(std::string_view guid,
-                                    std::shared_ptr<ReportCreatorProxy> creator)
+                                    std::shared_ptr<ReportCreatorProxy> report_creator)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&HostLocalSystemInfo::OnRequest, this, guid, creator));
-        return;
-    }
-
-    // Looking for a category by GUID.
-    const auto& category = map_.find(guid.data());
-    if (category != map_.end())
-    {
-        std::shared_ptr<std::string> data =
-            std::make_shared<std::string>(category->second->Serialize());
-
-        creator->Parse(std::move(data));
-    }
+    runner_->PostTask(std::bind(&HostLocalSystemInfo::ExecuteRequest, this, guid, report_creator));
 }
 
 void HostLocalSystemInfo::OnWindowClose()
 {
     runner_->PostQuit();
+}
+
+void HostLocalSystemInfo::ExecuteRequest(std::string_view guid,
+                                         std::shared_ptr<ReportCreatorProxy> report_creator)
+{
+    DCHECK(runner_->BelongsToCurrentThread());
+
+    std::string data;
+
+    // Looking for a category by GUID.
+    const auto& category = map_.find(guid.data());
+    if (category != map_.end())
+        data = category->second->Serialize();
+
+    report_creator->Parse(data);
 }
 
 } // namespace aspia
