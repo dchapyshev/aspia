@@ -664,6 +664,9 @@
     <ClCompile Include="ui\system_info\category_select_dialog.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
+    <ClCompile Include="ui\system_info\report_progress_dialog.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1365,6 +1368,9 @@
       <Filter>base\devices</Filter>
     </ClInclude>
     <ClInclude Include="ui\system_info\category_select_dialog.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\report_progress_dialog.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
   </ItemGroup>

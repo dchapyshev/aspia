@@ -285,7 +285,7 @@ LRESULT SystemInfoWindow::OnSaveSelectedButton(WORD notify_code, WORD control_id
     UNUSED_PARAMETER(control);
     UNUSED_PARAMETER(handled);
 
-    CategorySelectDialog().DoModal(*this);
+    CategorySelectDialog().DoModal();
     return 0;
 }
 

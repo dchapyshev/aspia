@@ -98,6 +98,7 @@
 #define IDD_FILE_STATUS                            110
 #define IDD_POWER_HOST                             111
 #define IDD_CATEGORY_SELECT                        112
+#define IDD_REPORT_PROGRESS                        113
 
 //
 // Controls
@@ -151,6 +152,9 @@
 #define IDC_CATEGORY_TREE                          146
 #define IDC_SELECT_ALL                             147
 #define IDC_UNSELECT_ALL                           148
+#define IDC_CURRENT_CATEGORY                       149
+#define IDC_CURRENT_ACTION                         150
+#define IDC_REPORT_PROGRESS                        151
 
 //
 // Commands
