@@ -11,8 +11,8 @@
 
 namespace aspia {
 
-ReportProgressDialog::ReportProgressDialog(DocumentCreater* document_creater)
-    : document_creater_(document_creater)
+ReportProgressDialog::ReportProgressDialog(ReportCreator* report_creator)
+    : report_creator_(report_creator)
 {
     // Nothing
 }
@@ -22,7 +22,7 @@ LRESULT ReportProgressDialog::OnInitDialog(
 {
     CenterWindow();
 
-    document_creater_->Start(
+    report_creator_->Start(
         std::bind(&ReportProgressDialog::OnStateChanged, this,
                   std::placeholders::_1, std::placeholders::_2),
         std::bind(&ReportProgressDialog::OnTerminate, this));
@@ -45,7 +45,7 @@ LRESULT ReportProgressDialog::OnCancelButton(
 }
 
 void ReportProgressDialog::OnStateChanged(std::string_view category_name,
-                                          DocumentCreater::State state)
+                                          ReportCreator::State state)
 {
     GetDlgItem(IDC_CURRENT_CATEGORY).SetWindowTextW(
         UNICODEfromUTF8(std::data(category_name)).c_str());
@@ -54,11 +54,11 @@ void ReportProgressDialog::OnStateChanged(std::string_view category_name,
 
     switch (state)
     {
-        case DocumentCreater::State::REQUEST:
+        case ReportCreator::State::REQUEST:
             state_string.LoadStringW(IDS_SI_STATE_REQUEST);
             break;
 
-        case DocumentCreater::State::OUTPUT:
+        case ReportCreator::State::OUTPUT:
             state_string.LoadStringW(IDS_SI_STATE_OUTPUT);
             break;
 

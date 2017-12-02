@@ -10,14 +10,14 @@
 
 #include "client/client_session.h"
 #include "ui/system_info/system_info_window.h"
-#include "ui/system_info/document_creater.h"
+#include "ui/system_info/report_creator.h"
 
 namespace aspia {
 
 class ClientSessionSystemInfo
     : public ClientSession,
       private SystemInfoWindow::Delegate,
-      private DocumentCreater::Delegate
+      private ReportCreator::Delegate
 {
 public:
     ClientSessionSystemInfo(const ClientConfig& config,
@@ -28,15 +28,15 @@ private:
     // SystemInfoWindow::Delegate implementation.
     void OnWindowClose() override;
 
-    // DocumentCreater::Delegate implementation.
+    // ReportCreator::Delegate implementation.
     void OnRequest(const std::string& guid,
-                   std::shared_ptr<DocumentCreaterProxy> creater) override;
+                   std::shared_ptr<ReportCreatorProxy> report_creator) override;
 
     void OnRequestSended();
     void OnReplyReceived(const IOBuffer& buffer);
 
     std::unique_ptr<SystemInfoWindow> window_;
-    std::shared_ptr<DocumentCreaterProxy> document_creater_;
+    std::shared_ptr<ReportCreatorProxy> report_creator_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionSystemInfo);
 };

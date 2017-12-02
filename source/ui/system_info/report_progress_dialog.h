@@ -9,7 +9,7 @@
 #define _ASPIA_UI__SYSTEM_INFO__REPORT_PROGRESS_DIALOG_H
 
 #include "base/macros.h"
-#include "ui/system_info/document_creater.h"
+#include "ui/system_info/report_creator.h"
 #include "ui/resource.h"
 
 #include <atlbase.h>
@@ -25,7 +25,7 @@ class ReportProgressDialog
 public:
     enum { IDD = IDD_REPORT_PROGRESS };
 
-    ReportProgressDialog(DocumentCreater* document_creater);
+    ReportProgressDialog(ReportCreator* report_creator);
     ~ReportProgressDialog() = default;
 
 private:
@@ -40,10 +40,10 @@ private:
     LRESULT OnCancelButton(WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled);
 
     void OnStateChanged(std::string_view category_name,
-                        DocumentCreater::State state);
+                        ReportCreator::State state);
     void OnTerminate();
 
-    DocumentCreater* document_creater_;
+    ReportCreator* report_creator_;
 
     DISALLOW_COPY_AND_ASSIGN(ReportProgressDialog);
 };

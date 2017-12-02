@@ -18,13 +18,13 @@ static const int kDefaultWindowWidth = 980;
 static const int kDefaultWindowHeight = 700;
 
 SystemInfoWindow::SystemInfoWindow(SystemInfoWindow::Delegate* window_delegate,
-                                   DocumentCreater::Delegate* document_creater_delegate)
+                                   ReportCreator::Delegate* report_creator_delegate)
     : delegate_(window_delegate),
-      document_creater_delegate_(document_creater_delegate),
+      report_creator_delegate_(report_creator_delegate),
       category_list_(CreateCategoryTree())
 {
     DCHECK(delegate_);
-    DCHECK(document_creater_delegate_);
+    DCHECK(report_creator_delegate_);
 
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
@@ -240,9 +240,9 @@ LRESULT SystemInfoWindow::OnCategorySelected(
 
         category_info->SetChecked(true);
 
-        DocumentCreater document_creater(&category_list_, &list_, document_creater_delegate_);
+        ReportCreator report_creator(&category_list_, &list_, report_creator_delegate_);
 
-        ReportProgressDialog(&document_creater).DoModal();
+        ReportProgressDialog(&report_creator).DoModal();
     }
     else
     {

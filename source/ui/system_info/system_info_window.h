@@ -9,11 +9,10 @@
 #define _ASPIA_UI__SYSTEM_INFO__SYSTEM_INFO_WINDOW_H
 
 #include "base/message_loop/message_loop_thread.h"
-#include "ui/system_info/document_creater.h"
+#include "ui/system_info/report_creator.h"
 #include "ui/system_info/system_info_toolbar.h"
 #include "ui/system_info/category_tree_ctrl.h"
 #include "ui/system_info/info_list_ctrl.h"
-#include "ui/system_info/output.h"
 #include "ui/base/splitter.h"
 #include "ui/resource.h"
 
@@ -34,7 +33,7 @@ public:
     };
 
     SystemInfoWindow(SystemInfoWindow::Delegate* window_delegate,
-                     DocumentCreater::Delegate* document_creater_delegate);
+                     ReportCreator::Delegate* report_creator_delegate);
     ~SystemInfoWindow();
 
 private:
@@ -84,7 +83,7 @@ private:
 
     Delegate* delegate_;
 
-    DocumentCreater::Delegate* document_creater_delegate_;
+    ReportCreator::Delegate* report_creator_delegate_;
     CategoryList category_list_;
 
     SystemInfoToolbar toolbar_;

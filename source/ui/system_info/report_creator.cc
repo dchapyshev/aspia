@@ -1,17 +1,16 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/system_info/document_creater.cc
+// FILE:            ui/system_info/report_creator.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #include "base/logging.h"
-#include "ui/system_info/document_creater.h"
-#include "ui/system_info/document_creater_proxy.h"
+#include "ui/system_info/report_creator_proxy.h"
 
 namespace aspia {
 
-DocumentCreater::DocumentCreater(CategoryList* list,
+ReportCreator::ReportCreator(CategoryList* list,
                                  Output* output,
                                  Delegate* delegate)
     : delegate_(delegate),
@@ -22,16 +21,16 @@ DocumentCreater::DocumentCreater(CategoryList* list,
     DCHECK(list_);
     DCHECK(output_);
 
-    proxy_.reset(new DocumentCreaterProxy(this));
+    proxy_.reset(new ReportCreatorProxy(this));
 }
 
-DocumentCreater::~DocumentCreater()
+ReportCreator::~ReportCreator()
 {
-    proxy_->WillDestroyCurrentDocumentCreater();
+    proxy_->WillDestroyCurrentReportCreator();
     proxy_ = nullptr;
 }
 
-void DocumentCreater::Start(StateChangeCallback state_change_callback,
+void ReportCreator::Start(StateChangeCallback state_change_callback,
                             TerminateCallback terminate_callback)
 {
     state_change_callback_ = std::move(state_change_callback);
@@ -39,7 +38,7 @@ void DocumentCreater::Start(StateChangeCallback state_change_callback,
     ProcessNextItem();
 }
 
-void DocumentCreater::ProcessNextItem()
+void ReportCreator::ProcessNextItem()
 {
     if (iterator_stack_.empty())
     {
@@ -101,7 +100,7 @@ void DocumentCreater::ProcessNextItem()
 }
 
 // static
-bool DocumentCreater::HasCheckedItems(CategoryGroup* parent_group)
+bool ReportCreator::HasCheckedItems(CategoryGroup* parent_group)
 {
     const CategoryList& child_list = parent_group->child_list();
 
@@ -128,7 +127,7 @@ bool DocumentCreater::HasCheckedItems(CategoryGroup* parent_group)
     return false;
 }
 
-void DocumentCreater::Parse(std::shared_ptr<std::string> data)
+void ReportCreator::Parse(std::shared_ptr<std::string> data)
 {
     CategoryList::iterator& iterator = iterator_stack_.top().second;
 

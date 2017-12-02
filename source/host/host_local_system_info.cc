@@ -8,7 +8,7 @@
 #include "base/logging.h"
 #include "host/host_local_system_info.h"
 #include "protocol/category.h"
-#include "ui/system_info/document_creater_proxy.h"
+#include "ui/system_info/report_creator_proxy.h"
 
 namespace aspia {
 
@@ -34,11 +34,11 @@ void HostLocalSystemInfo::OnAfterThreadRunning()
 }
 
 void HostLocalSystemInfo::OnRequest(const std::string& guid,
-                                    std::shared_ptr<DocumentCreaterProxy> creater)
+                                    std::shared_ptr<ReportCreatorProxy> creator)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&HostLocalSystemInfo::OnRequest, this, guid, creater));
+        runner_->PostTask(std::bind(&HostLocalSystemInfo::OnRequest, this, guid, creator));
         return;
     }
 
@@ -49,7 +49,7 @@ void HostLocalSystemInfo::OnRequest(const std::string& guid,
         std::shared_ptr<std::string> data =
             std::make_shared<std::string>(category->second->Serialize());
 
-        creater->Parse(std::move(data));
+        creator->Parse(std::move(data));
     }
 }
 

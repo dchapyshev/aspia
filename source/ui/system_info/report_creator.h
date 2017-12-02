@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia Remote Desktop
-// FILE:            ui/system_info/document_creater.h
+// FILE:            ui/system_info/report_creator.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SYSTEM_INFO__DOCUMENT_CREATER_H
-#define _ASPIA_UI__SYSTEM_INFO__DOCUMENT_CREATER_H
+#ifndef _ASPIA_UI__SYSTEM_INFO__REPORT_CREATOR_H
+#define _ASPIA_UI__SYSTEM_INFO__REPORT_CREATOR_H
 
 #include "ui/system_info/output.h"
 
@@ -15,9 +15,9 @@
 
 namespace aspia {
 
-class DocumentCreaterProxy;
+class ReportCreatorProxy;
 
-class DocumentCreater
+class ReportCreator
 {
 public:
     class Delegate
@@ -26,11 +26,11 @@ public:
         virtual ~Delegate() = default;
 
         virtual void OnRequest(const std::string& guid,
-                               std::shared_ptr<DocumentCreaterProxy> creater) = 0;
+                               std::shared_ptr<ReportCreatorProxy> creater) = 0;
     };
 
-    DocumentCreater(CategoryList* list, Output* output, Delegate* delegate);
-    ~DocumentCreater();
+    ReportCreator(CategoryList* list, Output* output, Delegate* delegate);
+    ~ReportCreator();
 
     enum class State { REQUEST, OUTPUT };
     using StateChangeCallback =
@@ -41,14 +41,14 @@ public:
                TerminateCallback terminate_callback);
 
 private:
-    friend class DocumentCreaterProxy;
+    friend class ReportCreatorProxy;
 
     void Parse(std::shared_ptr<std::string> data);
 
     void ProcessNextItem();
     static bool HasCheckedItems(CategoryGroup* parent_group);
 
-    std::shared_ptr<DocumentCreaterProxy> proxy_;
+    std::shared_ptr<ReportCreatorProxy> proxy_;
 
     Delegate* delegate_;
 
@@ -59,9 +59,9 @@ private:
 
     std::stack<std::pair<CategoryList*, CategoryList::iterator>> iterator_stack_;
 
-    DISALLOW_COPY_AND_ASSIGN(DocumentCreater);
+    DISALLOW_COPY_AND_ASSIGN(ReportCreator);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SYSTEM_INFO__DOCUMENT_CREATER_H
+#endif // _ASPIA_UI__SYSTEM_INFO__REPORT_CREATOR_H

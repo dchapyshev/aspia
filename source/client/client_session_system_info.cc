@@ -8,7 +8,7 @@
 #include "client/client_session_system_info.h"
 #include "proto/system_info_session.pb.h"
 #include "protocol/message_serialization.h"
-#include "ui/system_info/document_creater_proxy.h"
+#include "ui/system_info/report_creator_proxy.h"
 
 namespace aspia {
 
@@ -27,10 +27,10 @@ ClientSessionSystemInfo::~ClientSessionSystemInfo()
     window_.reset();
 }
 
-void ClientSessionSystemInfo::OnRequest(const std::string& guid,
-                                        std::shared_ptr<DocumentCreaterProxy> creater)
+void ClientSessionSystemInfo::OnRequest(
+    const std::string& guid, std::shared_ptr<ReportCreatorProxy> report_creator)
 {
-    document_creater_ = std::move(creater);
+    report_creator_ = std::move(report_creator);
 
     proto::system_info::ClientToHost message;
     message.set_guid(guid);
@@ -63,7 +63,7 @@ void ClientSessionSystemInfo::OnReplyReceived(const IOBuffer& buffer)
             std::shared_ptr<std::string> data =
                 std::shared_ptr<std::string>(message.release_data());
 
-            document_creater_->Parse(std::move(data));
+            report_creator_->Parse(std::move(data));
         }
     }
 

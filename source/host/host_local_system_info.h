@@ -10,14 +10,14 @@
 
 #include "base/message_loop/message_loop_thread.h"
 #include "ui/system_info/system_info_window.h"
-#include "ui/system_info/document_creater.h"
+#include "ui/system_info/report_creator.h"
 
 namespace aspia {
 
 class HostLocalSystemInfo
     : private MessageLoopThread::Delegate,
       private SystemInfoWindow::Delegate,
-      private DocumentCreater::Delegate
+      private ReportCreator::Delegate
 {
 public:
     HostLocalSystemInfo() = default;
@@ -32,14 +32,13 @@ private:
     // SystemInfoWindow::Delegate implementation.
     void OnWindowClose() override;
 
-    // DocumentCreater::Delegate implementation.
-    void OnRequest(const std::string& guid,
-                   std::shared_ptr<DocumentCreaterProxy> creater) override;
+    // ReportCreator::Delegate implementation.
+    void OnRequest(const std::string& guid, std::shared_ptr<ReportCreatorProxy> creator) override;
 
     MessageLoopThread thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
     std::unique_ptr<SystemInfoWindow> window_;
-    std::shared_ptr<DocumentCreaterProxy> creater_;
+    std::shared_ptr<ReportCreatorProxy> creater_;
     CategoryMap map_;
 
     DISALLOW_COPY_AND_ASSIGN(HostLocalSystemInfo);
