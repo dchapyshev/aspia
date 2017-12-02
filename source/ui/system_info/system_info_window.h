@@ -106,6 +106,8 @@ private:
     VerticalSplitter splitter_;
     CStatusBarCtrl statusbar_;
 
+    CAccelerator accelerator_;
+
     CIcon small_icon_;
     CIcon big_icon_;
     CIcon statusbar_icon_;

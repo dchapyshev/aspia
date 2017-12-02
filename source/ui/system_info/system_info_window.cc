@@ -36,6 +36,8 @@ void SystemInfoWindow::OnBeforeThreadRunning()
     runner_ = ui_thread_.message_loop_proxy();
     DCHECK(runner_);
 
+    accelerator_.LoadAcceleratorsW(IDC_SYSTEM_INFO_ACCELERATORS);
+
     CString title;
     title.LoadStringW(IDS_SI_SYSTEM_INFORMATION);
 
@@ -64,8 +66,12 @@ void SystemInfoWindow::OnAfterThreadRunning()
 
 bool SystemInfoWindow::Dispatch(const NativeEvent& event)
 {
-    TranslateMessage(&event);
-    DispatchMessageW(&event);
+    if (!accelerator_.TranslateAcceleratorW(*this, const_cast<NativeEvent*>(&event)))
+    {
+        TranslateMessage(&event);
+        DispatchMessageW(&event);
+    }
+
     return true;
 }
 
@@ -373,17 +379,17 @@ void SystemInfoWindow::Refresh(Category* category)
     list_.DeleteAllItems();
     list_.DeleteAllColumns();
 
+    statusbar_icon_ = AtlLoadIconImage(category->Icon(),
+                                       LR_CREATEDIBSECTION,
+                                       GetSystemMetrics(SM_CXSMICON),
+                                       GetSystemMetrics(SM_CYSMICON));
+
+    statusbar_.SetText(0, UNICODEfromUTF8(category->Name()).c_str());
+    statusbar_.SetIcon(0, statusbar_icon_);
+
     if (category->type() == Category::Type::INFO)
     {
         CategoryInfo* category_info = category->category_info();
-
-        statusbar_icon_ = AtlLoadIconImage(category_info->Icon(),
-                                           LR_CREATEDIBSECTION,
-                                           GetSystemMetrics(SM_CXSMICON),
-                                           GetSystemMetrics(SM_CYSMICON));
-
-        statusbar_.SetText(0, UNICODEfromUTF8(category_info->Name()).c_str());
-        statusbar_.SetIcon(0, statusbar_icon_);
 
         category_info->SetChecked(true);
 

@@ -155,6 +155,7 @@
 #define IDC_CURRENT_CATEGORY                       149
 #define IDC_CURRENT_ACTION                         150
 #define IDC_REPORT_PROGRESS                        151
+#define IDC_SYSTEM_INFO_ACCELERATORS               152
 
 //
 // Commands
