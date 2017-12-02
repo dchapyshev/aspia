@@ -215,41 +215,7 @@ LRESULT SystemInfoWindow::OnCategorySelected(
     int /* control_id */, LPNMHDR hdr, BOOL& /* handled */)
 {
     LPNMTREEVIEWW nmtv = reinterpret_cast<LPNMTREEVIEWW>(hdr);
-
-    list_.DeleteAllItems();
-    list_.DeleteAllColumns();
-
-    Category* category = tree_.GetItemCategory(nmtv->itemNew.hItem);
-    if (!category)
-        return 0;
-
-    if (category->type() == Category::Type::INFO)
-    {
-        CategoryInfo* category_info = category->category_info();
-
-        statusbar_icon_ = AtlLoadIconImage(category_info->Icon(),
-                                           LR_CREATEDIBSECTION,
-                                           GetSystemMetrics(SM_CXSMICON),
-                                           GetSystemMetrics(SM_CYSMICON));
-
-        statusbar_.SetText(0, UNICODEfromUTF8(category_info->Name()).c_str());
-        statusbar_.SetIcon(0, statusbar_icon_);
-
-        category_info->SetChecked(true);
-
-        ReportProgressDialog dialog(&category_list_, &list_,
-                                    std::bind(&SystemInfoWindow::OnRequest, this,
-                                              std::placeholders::_1, std::placeholders::_2));
-        dialog.DoModal();
-    }
-    else
-    {
-        DCHECK(category->type() == Category::Type::GROUP);
-
-        //CategoryGroup* group = category->category_group();
-        // TODO
-    }
-
+    Refresh(tree_.GetItemCategory(nmtv->itemNew.hItem));
     return 0;
 }
 
@@ -289,6 +255,13 @@ LRESULT SystemInfoWindow::OnSaveSelectedButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
     CategorySelectDialog().DoModal();
+    return 0;
+}
+
+LRESULT SystemInfoWindow::OnRefreshButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    Refresh(tree_.GetItemCategory(tree_.GetSelectedItem()));
     return 0;
 }
 
@@ -390,6 +363,42 @@ LRESULT SystemInfoWindow::OnExitButton(
 {
     PostMessageW(WM_CLOSE);
     return 0;
+}
+
+void SystemInfoWindow::Refresh(Category* category)
+{
+    if (!category)
+        return;
+
+    list_.DeleteAllItems();
+    list_.DeleteAllColumns();
+
+    if (category->type() == Category::Type::INFO)
+    {
+        CategoryInfo* category_info = category->category_info();
+
+        statusbar_icon_ = AtlLoadIconImage(category_info->Icon(),
+                                           LR_CREATEDIBSECTION,
+                                           GetSystemMetrics(SM_CXSMICON),
+                                           GetSystemMetrics(SM_CYSMICON));
+
+        statusbar_.SetText(0, UNICODEfromUTF8(category_info->Name()).c_str());
+        statusbar_.SetIcon(0, statusbar_icon_);
+
+        category_info->SetChecked(true);
+
+        ReportProgressDialog dialog(&category_list_, &list_,
+                                    std::bind(&SystemInfoWindow::OnRequest, this,
+                                              std::placeholders::_1, std::placeholders::_2));
+        dialog.DoModal();
+    }
+    else
+    {
+        DCHECK(category->type() == Category::Type::GROUP);
+
+        //CategoryGroup* group = category->category_group();
+        // TODO
+    }
 }
 
 std::wstring SystemInfoWindow::GetListHeaderText()
