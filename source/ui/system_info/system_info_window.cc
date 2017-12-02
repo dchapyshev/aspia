@@ -395,9 +395,7 @@ void SystemInfoWindow::Refresh(Category* category)
     else
     {
         DCHECK(category->type() == Category::Type::GROUP);
-
-        //CategoryGroup* group = category->category_group();
-        // TODO
+        list_.EnableWindow(FALSE);
     }
 }
 

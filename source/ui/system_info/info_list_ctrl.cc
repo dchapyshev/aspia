@@ -70,9 +70,8 @@ void InfoListCtrl::EndDocument()
     EnableWindow(item_count_ > 0 ? TRUE : FALSE);
 }
 
-void InfoListCtrl::StartTableGroup(std::string_view name)
+void InfoListCtrl::StartTableGroup(std::string_view /* name */)
 {
-    UNUSED_PARAMETER(name);
     // Nothing
 }
 
@@ -81,9 +80,8 @@ void InfoListCtrl::EndTableGroup()
     // Nothing
 }
 
-void InfoListCtrl::StartTable(std::string_view name)
+void InfoListCtrl::StartTable(std::string_view /* name */)
 {
-    UNUSED_PARAMETER(name);
     imagelist_.RemoveAll();
     item_count_ = 0;
     indent_ = 0;
@@ -108,7 +106,7 @@ void InfoListCtrl::EndTableHeader()
 
 void InfoListCtrl::AddHeaderItem(std::string_view name, int width)
 {
-    const int column_index = AddColumn(UNICODEfromUTF8(std::data(name)).c_str(), current_column_);
+    const int column_index = AddColumn(UNICODEfromUTF8(name.data()).c_str(), current_column_);
     SetColumnWidth(column_index, width);
     ++current_column_;
 }
@@ -122,7 +120,7 @@ void InfoListCtrl::StartGroup(std::string_view name, Category::IconId icon_id)
 
     const int icon_index = imagelist_.AddIcon(icon);
 
-    std::wstring text(UNICODEfromUTF8(std::data(name)));
+    std::wstring text(UNICODEfromUTF8(name.data()));
 
     LVITEMW item = { 0 };
     item.mask    = LVIF_IMAGE | LVIF_INDENT | LVIF_TEXT | LVIF_STATE | LVIF_PARAM;
@@ -155,7 +153,7 @@ void InfoListCtrl::AddParam(Category::IconId icon_id,
 
     const int icon_index = imagelist_.AddIcon(icon);
 
-    std::wstring param_name(UNICODEfromUTF8(std::data(param)));
+    std::wstring param_name(UNICODEfromUTF8(param.data()));
 
     LVITEMW item = { 0 };
     item.mask     = LVIF_IMAGE | LVIF_INDENT | LVIF_TEXT;
@@ -167,12 +165,12 @@ void InfoListCtrl::AddParam(Category::IconId icon_id,
 
     const int item_index = InsertItem(&item);
 
-    std::wstring text(UNICODEfromUTF8(std::data(value)));
+    std::wstring text(UNICODEfromUTF8(value.data()));
 
     if (!unit.empty())
     {
         text.append(L" ");
-        text.append(UNICODEfromUTF8(std::data(unit)));
+        text.append(UNICODEfromUTF8(unit.data()));
     }
 
     AddItem(item_index, 1, text.c_str());
@@ -198,12 +196,12 @@ void InfoListCtrl::EndRow()
 
 void InfoListCtrl::AddValue(std::string_view value, std::string_view unit)
 {
-    std::wstring text(UNICODEfromUTF8(std::data(value)));
+    std::wstring text(UNICODEfromUTF8(value.data()));
 
     if (!unit.empty())
     {
         text.append(L" ");
-        text.append(UNICODEfromUTF8(std::data(unit)));
+        text.append(UNICODEfromUTF8(unit.data()));
     }
 
     if (current_column_ == 0)
