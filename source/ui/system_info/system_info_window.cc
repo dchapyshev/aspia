@@ -17,15 +17,11 @@ namespace aspia {
 static const int kDefaultWindowWidth = 980;
 static const int kDefaultWindowHeight = 700;
 
-SystemInfoWindow::SystemInfoWindow(SystemInfoWindow::Delegate* window_delegate,
-                                   ReportCreator::Delegate* report_creator_delegate)
-    : delegate_(window_delegate),
-      report_creator_delegate_(report_creator_delegate),
+SystemInfoWindow::SystemInfoWindow(Delegate* delegate)
+    : delegate_(delegate),
       category_list_(CreateCategoryTree())
 {
     DCHECK(delegate_);
-    DCHECK(report_creator_delegate_);
-
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
@@ -240,9 +236,10 @@ LRESULT SystemInfoWindow::OnCategorySelected(
 
         category_info->SetChecked(true);
 
-        ReportCreator report_creator(&category_list_, &list_, report_creator_delegate_);
-
-        ReportProgressDialog(&report_creator).DoModal();
+        ReportProgressDialog dialog(&category_list_, &list_,
+                                    std::bind(&SystemInfoWindow::OnRequest, this,
+                                              std::placeholders::_1, std::placeholders::_2));
+        dialog.DoModal();
     }
     else
     {
@@ -274,6 +271,12 @@ LRESULT SystemInfoWindow::OnExitButton(
 {
     PostMessageW(WM_CLOSE);
     return 0;
+}
+
+void SystemInfoWindow::OnRequest(
+    std::string_view guid, std::shared_ptr<ReportCreatorProxy> report_creator)
+{
+    delegate_->OnRequest(guid, report_creator);
 }
 
 } // namespace aspia

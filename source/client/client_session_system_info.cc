@@ -19,7 +19,7 @@ ClientSessionSystemInfo::ClientSessionSystemInfo(
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
     : ClientSession(config, channel_proxy)
 {
-    window_.reset(new SystemInfoWindow(this, this));
+    window_.reset(new SystemInfoWindow(this));
 }
 
 ClientSessionSystemInfo::~ClientSessionSystemInfo()
@@ -28,12 +28,12 @@ ClientSessionSystemInfo::~ClientSessionSystemInfo()
 }
 
 void ClientSessionSystemInfo::OnRequest(
-    const std::string& guid, std::shared_ptr<ReportCreatorProxy> report_creator)
+    std::string_view guid, std::shared_ptr<ReportCreatorProxy> report_creator)
 {
     report_creator_ = std::move(report_creator);
 
     proto::system_info::ClientToHost message;
-    message.set_guid(guid);
+    message.set_guid(guid.data());
 
     channel_proxy_->Send(SerializeMessage<IOBuffer>(message),
                          std::bind(&ClientSessionSystemInfo::OnRequestSended, this));

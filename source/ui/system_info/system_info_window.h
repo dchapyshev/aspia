@@ -30,10 +30,11 @@ public:
         virtual ~Delegate() = default;
 
         virtual void OnWindowClose() = 0;
+        virtual void OnRequest(std::string_view guid,
+                               std::shared_ptr<ReportCreatorProxy> report_creater) = 0;
     };
 
-    SystemInfoWindow(SystemInfoWindow::Delegate* window_delegate,
-                     ReportCreator::Delegate* report_creator_delegate);
+    SystemInfoWindow(Delegate* delegate);
     ~SystemInfoWindow();
 
 private:
@@ -78,12 +79,13 @@ private:
 
     void ShowDropDownMenu(int button_id, RECT* button_rect);
 
+    void OnRequest(std::string_view guid, std::shared_ptr<ReportCreatorProxy> report_creator);
+
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
     Delegate* delegate_;
 
-    ReportCreator::Delegate* report_creator_delegate_;
     CategoryList category_list_;
 
     SystemInfoToolbar toolbar_;

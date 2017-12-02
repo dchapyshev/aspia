@@ -25,7 +25,7 @@ void HostLocalSystemInfo::OnBeforeThreadRunning()
 
     map_ = CreateCategoryMap();
 
-    window_.reset(new SystemInfoWindow(this, this));
+    window_.reset(new SystemInfoWindow(this));
 }
 
 void HostLocalSystemInfo::OnAfterThreadRunning()
@@ -33,7 +33,7 @@ void HostLocalSystemInfo::OnAfterThreadRunning()
     window_.reset();
 }
 
-void HostLocalSystemInfo::OnRequest(const std::string& guid,
+void HostLocalSystemInfo::OnRequest(std::string_view guid,
                                     std::shared_ptr<ReportCreatorProxy> creator)
 {
     if (!runner_->BelongsToCurrentThread())
@@ -43,7 +43,7 @@ void HostLocalSystemInfo::OnRequest(const std::string& guid,
     }
 
     // Looking for a category by GUID.
-    const auto category = map_.find(guid);
+    const auto& category = map_.find(guid.data());
     if (category != map_.end())
     {
         std::shared_ptr<std::string> data =

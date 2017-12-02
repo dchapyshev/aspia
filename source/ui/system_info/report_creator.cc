@@ -10,14 +10,12 @@
 
 namespace aspia {
 
-ReportCreator::ReportCreator(CategoryList* list,
-                                 Output* output,
-                                 Delegate* delegate)
-    : delegate_(delegate),
+ReportCreator::ReportCreator(CategoryList* list, Output* output, RequestCallback request_callback)
+    : request_callback_(std::move(request_callback)),
       list_(list),
       output_(output)
 {
-    DCHECK(delegate_);
+    DCHECK(request_callback_);
     DCHECK(list_);
     DCHECK(output_);
 
@@ -74,7 +72,7 @@ void ReportCreator::ProcessNextItem()
             if (category_info->IsChecked())
             {
                 state_change_callback_(category_info->Name(), State::REQUEST);
-                delegate_->OnRequest(category_info->Guid(), proxy_);
+                request_callback_(category_info->Guid(), proxy_);
                 return;
             }
         }

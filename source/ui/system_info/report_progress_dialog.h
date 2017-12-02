@@ -25,7 +25,9 @@ class ReportProgressDialog
 public:
     enum { IDD = IDD_REPORT_PROGRESS };
 
-    ReportProgressDialog(ReportCreator* report_creator);
+    ReportProgressDialog(CategoryList* list,
+                         Output* output,
+                         ReportCreator::RequestCallback request_callback);
     ~ReportProgressDialog() = default;
 
 private:
@@ -43,7 +45,7 @@ private:
                         ReportCreator::State state);
     void OnTerminate();
 
-    ReportCreator* report_creator_;
+    std::unique_ptr<ReportCreator> report_creator_;
 
     DISALLOW_COPY_AND_ASSIGN(ReportProgressDialog);
 };

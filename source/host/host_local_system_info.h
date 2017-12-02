@@ -16,8 +16,7 @@ namespace aspia {
 
 class HostLocalSystemInfo
     : private MessageLoopThread::Delegate,
-      private SystemInfoWindow::Delegate,
-      private ReportCreator::Delegate
+      private SystemInfoWindow::Delegate
 {
 public:
     HostLocalSystemInfo() = default;
@@ -31,9 +30,7 @@ private:
 
     // SystemInfoWindow::Delegate implementation.
     void OnWindowClose() override;
-
-    // ReportCreator::Delegate implementation.
-    void OnRequest(const std::string& guid, std::shared_ptr<ReportCreatorProxy> creator) override;
+    void OnRequest(std::string_view guid, std::shared_ptr<ReportCreatorProxy> creator) override;
 
     MessageLoopThread thread_;
     std::shared_ptr<MessageLoopProxy> runner_;

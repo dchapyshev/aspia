@@ -16,8 +16,7 @@ namespace aspia {
 
 class ClientSessionSystemInfo
     : public ClientSession,
-      private SystemInfoWindow::Delegate,
-      private ReportCreator::Delegate
+      private SystemInfoWindow::Delegate
 {
 public:
     ClientSessionSystemInfo(const ClientConfig& config,
@@ -27,9 +26,7 @@ public:
 private:
     // SystemInfoWindow::Delegate implementation.
     void OnWindowClose() override;
-
-    // ReportCreator::Delegate implementation.
-    void OnRequest(const std::string& guid,
+    void OnRequest(std::string_view guid,
                    std::shared_ptr<ReportCreatorProxy> report_creator) override;
 
     void OnRequestSended();

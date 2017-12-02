@@ -11,8 +11,9 @@
 
 namespace aspia {
 
-ReportProgressDialog::ReportProgressDialog(ReportCreator* report_creator)
-    : report_creator_(report_creator)
+ReportProgressDialog::ReportProgressDialog(
+    CategoryList* list, Output* output, ReportCreator::RequestCallback request_callback)
+    : report_creator_(std::make_unique<ReportCreator>(list, output, request_callback))
 {
     // Nothing
 }
@@ -33,6 +34,7 @@ LRESULT ReportProgressDialog::OnInitDialog(
 LRESULT ReportProgressDialog::OnClose(
     UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
+    report_creator_.reset();
     EndDialog(0);
     return 0;
 }

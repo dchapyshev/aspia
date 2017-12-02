@@ -20,16 +20,11 @@ class ReportCreatorProxy;
 class ReportCreator
 {
 public:
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
+    using RequestCallback =
+        std::function<void(std::string_view guid,
+                           std::shared_ptr <ReportCreatorProxy> report_creator)>;
 
-        virtual void OnRequest(const std::string& guid,
-                               std::shared_ptr<ReportCreatorProxy> creater) = 0;
-    };
-
-    ReportCreator(CategoryList* list, Output* output, Delegate* delegate);
+    ReportCreator(CategoryList* list, Output* output, RequestCallback request_callback);
     ~ReportCreator();
 
     enum class State { REQUEST, OUTPUT };
@@ -50,10 +45,10 @@ private:
 
     std::shared_ptr<ReportCreatorProxy> proxy_;
 
-    Delegate* delegate_;
-
+    RequestCallback request_callback_;
     StateChangeCallback state_change_callback_;
     TerminateCallback terminate_callback_;
+
     CategoryList* list_;
     Output* output_;
 
