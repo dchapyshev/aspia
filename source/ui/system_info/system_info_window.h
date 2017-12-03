@@ -61,6 +61,7 @@ private:
         NOTIFY_CODE_HANDLER(TBN_DROPDOWN, OnToolBarDropDown)
 
         COMMAND_ID_HANDLER(ID_SAVE_SELECTED, OnSaveSelectedButton)
+        COMMAND_ID_HANDLER(ID_SAVE, OnSaveSelectedButton)
         COMMAND_ID_HANDLER(ID_SAVE_ALL, OnSaveAllButton)
         COMMAND_ID_HANDLER(ID_SAVE_CURRENT, OnSaveCurrentButton)
         COMMAND_ID_HANDLER(ID_REFRESH, OnRefreshButton)
