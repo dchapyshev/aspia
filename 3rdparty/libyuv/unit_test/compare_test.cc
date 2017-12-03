@@ -338,7 +338,7 @@ static const int kMaxOptCount = (1 << (32 - 3)) - 64;  // 536870848
 
 TEST_F(LibYUVCompareTest, TestHammingDistance_Opt) {
   uint32 h1 = 0;
-  const int kMaxWidth = benchmark_width_ * benchmark_height_;
+  const int kMaxWidth = (benchmark_width_ * benchmark_height_ + 31) & ~31;
   align_buffer_page_end(src_a, kMaxWidth);
   align_buffer_page_end(src_b, kMaxWidth);
   memset(src_a, 255u, kMaxWidth);

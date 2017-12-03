@@ -111,9 +111,9 @@ uint32 HammingDistance_SSE42(const uint8* src_a,
 }
 #endif
 
-static vec8 kNibbleMask = {15, 15, 15, 15, 15, 15, 15, 15,
-                           15, 15, 15, 15, 15, 15, 15, 15};
-static vec8 kBitCount = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4};
+static const vec8 kNibbleMask = {15, 15, 15, 15, 15, 15, 15, 15,
+                                 15, 15, 15, 15, 15, 15, 15, 15};
+static const vec8 kBitCount = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4};
 
 uint32 HammingDistance_SSSE3(const uint8* src_a,
                              const uint8* src_b,
@@ -160,7 +160,7 @@ uint32 HammingDistance_SSSE3(const uint8* src_a,
 
       "pshufd     $0xaa,%%xmm0,%%xmm1            \n"
       "paddd      %%xmm1,%%xmm0                  \n"
-      "vmovd      %%xmm0, %3                     \n"
+      "movd       %%xmm0, %3                     \n"
       : "+r"(src_a),       // %0
         "+r"(src_b),       // %1
         "+r"(count),       // %2
@@ -267,26 +267,26 @@ uint32 SumSquareError_SSE2(const uint8* src_a, const uint8* src_b, int count) {
   return sse;
 }
 
-static uvec32 kHash16x33 = {0x92d9e201, 0, 0, 0};  // 33 ^ 16
-static uvec32 kHashMul0 = {
+static const uvec32 kHash16x33 = {0x92d9e201, 0, 0, 0};  // 33 ^ 16
+static const uvec32 kHashMul0 = {
     0x0c3525e1,  // 33 ^ 15
     0xa3476dc1,  // 33 ^ 14
     0x3b4039a1,  // 33 ^ 13
     0x4f5f0981,  // 33 ^ 12
 };
-static uvec32 kHashMul1 = {
+static const uvec32 kHashMul1 = {
     0x30f35d61,  // 33 ^ 11
     0x855cb541,  // 33 ^ 10
     0x040a9121,  // 33 ^ 9
     0x747c7101,  // 33 ^ 8
 };
-static uvec32 kHashMul2 = {
+static const uvec32 kHashMul2 = {
     0xec41d4e1,  // 33 ^ 7
     0x4cfa3cc1,  // 33 ^ 6
     0x025528a1,  // 33 ^ 5
     0x00121881,  // 33 ^ 4
 };
-static uvec32 kHashMul3 = {
+static const uvec32 kHashMul3 = {
     0x00008c61,  // 33 ^ 3
     0x00000441,  // 33 ^ 2
     0x00000021,  // 33 ^ 1

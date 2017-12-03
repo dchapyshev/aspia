@@ -22,80 +22,80 @@ extern "C" {
 #if defined(HAS_ARGBTOYROW_SSSE3) || defined(HAS_ARGBGRAYROW_SSSE3)
 
 // Constants for ARGB
-static vec8 kARGBToY = {13, 65, 33, 0, 13, 65, 33, 0,
-                        13, 65, 33, 0, 13, 65, 33, 0};
+static const vec8 kARGBToY = {13, 65, 33, 0, 13, 65, 33, 0,
+                              13, 65, 33, 0, 13, 65, 33, 0};
 
 // JPeg full range.
-static vec8 kARGBToYJ = {15, 75, 38, 0, 15, 75, 38, 0,
-                         15, 75, 38, 0, 15, 75, 38, 0};
+static const vec8 kARGBToYJ = {15, 75, 38, 0, 15, 75, 38, 0,
+                               15, 75, 38, 0, 15, 75, 38, 0};
 #endif  // defined(HAS_ARGBTOYROW_SSSE3) || defined(HAS_ARGBGRAYROW_SSSE3)
 
 #if defined(HAS_ARGBTOYROW_SSSE3) || defined(HAS_I422TOARGBROW_SSSE3)
 
-static vec8 kARGBToU = {112, -74, -38, 0, 112, -74, -38, 0,
-                        112, -74, -38, 0, 112, -74, -38, 0};
+static const vec8 kARGBToU = {112, -74, -38, 0, 112, -74, -38, 0,
+                              112, -74, -38, 0, 112, -74, -38, 0};
 
-static vec8 kARGBToUJ = {127, -84, -43, 0, 127, -84, -43, 0,
-                         127, -84, -43, 0, 127, -84, -43, 0};
+static const vec8 kARGBToUJ = {127, -84, -43, 0, 127, -84, -43, 0,
+                               127, -84, -43, 0, 127, -84, -43, 0};
 
-static vec8 kARGBToV = {-18, -94, 112, 0, -18, -94, 112, 0,
-                        -18, -94, 112, 0, -18, -94, 112, 0};
+static const vec8 kARGBToV = {-18, -94, 112, 0, -18, -94, 112, 0,
+                              -18, -94, 112, 0, -18, -94, 112, 0};
 
-static vec8 kARGBToVJ = {-20, -107, 127, 0, -20, -107, 127, 0,
-                         -20, -107, 127, 0, -20, -107, 127, 0};
+static const vec8 kARGBToVJ = {-20, -107, 127, 0, -20, -107, 127, 0,
+                               -20, -107, 127, 0, -20, -107, 127, 0};
 
 // Constants for BGRA
-static vec8 kBGRAToY = {0, 33, 65, 13, 0, 33, 65, 13,
-                        0, 33, 65, 13, 0, 33, 65, 13};
+static const vec8 kBGRAToY = {0, 33, 65, 13, 0, 33, 65, 13,
+                              0, 33, 65, 13, 0, 33, 65, 13};
 
-static vec8 kBGRAToU = {0, -38, -74, 112, 0, -38, -74, 112,
-                        0, -38, -74, 112, 0, -38, -74, 112};
+static const vec8 kBGRAToU = {0, -38, -74, 112, 0, -38, -74, 112,
+                              0, -38, -74, 112, 0, -38, -74, 112};
 
-static vec8 kBGRAToV = {0, 112, -94, -18, 0, 112, -94, -18,
-                        0, 112, -94, -18, 0, 112, -94, -18};
+static const vec8 kBGRAToV = {0, 112, -94, -18, 0, 112, -94, -18,
+                              0, 112, -94, -18, 0, 112, -94, -18};
 
 // Constants for ABGR
-static vec8 kABGRToY = {33, 65, 13, 0, 33, 65, 13, 0,
-                        33, 65, 13, 0, 33, 65, 13, 0};
+static const vec8 kABGRToY = {33, 65, 13, 0, 33, 65, 13, 0,
+                              33, 65, 13, 0, 33, 65, 13, 0};
 
-static vec8 kABGRToU = {-38, -74, 112, 0, -38, -74, 112, 0,
-                        -38, -74, 112, 0, -38, -74, 112, 0};
+static const vec8 kABGRToU = {-38, -74, 112, 0, -38, -74, 112, 0,
+                              -38, -74, 112, 0, -38, -74, 112, 0};
 
-static vec8 kABGRToV = {112, -94, -18, 0, 112, -94, -18, 0,
-                        112, -94, -18, 0, 112, -94, -18, 0};
+static const vec8 kABGRToV = {112, -94, -18, 0, 112, -94, -18, 0,
+                              112, -94, -18, 0, 112, -94, -18, 0};
 
 // Constants for RGBA.
-static vec8 kRGBAToY = {0, 13, 65, 33, 0, 13, 65, 33,
-                        0, 13, 65, 33, 0, 13, 65, 33};
+static const vec8 kRGBAToY = {0, 13, 65, 33, 0, 13, 65, 33,
+                              0, 13, 65, 33, 0, 13, 65, 33};
 
-static vec8 kRGBAToU = {0, 112, -74, -38, 0, 112, -74, -38,
-                        0, 112, -74, -38, 0, 112, -74, -38};
+static const vec8 kRGBAToU = {0, 112, -74, -38, 0, 112, -74, -38,
+                              0, 112, -74, -38, 0, 112, -74, -38};
 
-static vec8 kRGBAToV = {0, -18, -94, 112, 0, -18, -94, 112,
-                        0, -18, -94, 112, 0, -18, -94, 112};
+static const vec8 kRGBAToV = {0, -18, -94, 112, 0, -18, -94, 112,
+                              0, -18, -94, 112, 0, -18, -94, 112};
 
-static uvec8 kAddY16 = {16u, 16u, 16u, 16u, 16u, 16u, 16u, 16u,
-                        16u, 16u, 16u, 16u, 16u, 16u, 16u, 16u};
+static const uvec8 kAddY16 = {16u, 16u, 16u, 16u, 16u, 16u, 16u, 16u,
+                              16u, 16u, 16u, 16u, 16u, 16u, 16u, 16u};
 
 // 7 bit fixed point 0.5.
-static vec16 kAddYJ64 = {64, 64, 64, 64, 64, 64, 64, 64};
+static const vec16 kAddYJ64 = {64, 64, 64, 64, 64, 64, 64, 64};
 
-static uvec8 kAddUV128 = {128u, 128u, 128u, 128u, 128u, 128u, 128u, 128u,
-                          128u, 128u, 128u, 128u, 128u, 128u, 128u, 128u};
+static const uvec8 kAddUV128 = {128u, 128u, 128u, 128u, 128u, 128u, 128u, 128u,
+                                128u, 128u, 128u, 128u, 128u, 128u, 128u, 128u};
 
-static uvec16 kAddUVJ128 = {0x8080u, 0x8080u, 0x8080u, 0x8080u,
-                            0x8080u, 0x8080u, 0x8080u, 0x8080u};
+static const uvec16 kAddUVJ128 = {0x8080u, 0x8080u, 0x8080u, 0x8080u,
+                                  0x8080u, 0x8080u, 0x8080u, 0x8080u};
 #endif  // defined(HAS_ARGBTOYROW_SSSE3) || defined(HAS_I422TOARGBROW_SSSE3)
 
 #ifdef HAS_RGB24TOARGBROW_SSSE3
 
 // Shuffle table for converting RGB24 to ARGB.
-static uvec8 kShuffleMaskRGB24ToARGB = {0u, 1u, 2u, 12u, 3u, 4u,  5u,  13u,
-                                        6u, 7u, 8u, 14u, 9u, 10u, 11u, 15u};
+static const uvec8 kShuffleMaskRGB24ToARGB = {
+    0u, 1u, 2u, 12u, 3u, 4u, 5u, 13u, 6u, 7u, 8u, 14u, 9u, 10u, 11u, 15u};
 
 // Shuffle table for converting RAW to ARGB.
-static uvec8 kShuffleMaskRAWToARGB = {2u, 1u, 0u, 12u, 5u,  4u,  3u, 13u,
-                                      8u, 7u, 6u, 14u, 11u, 10u, 9u, 15u};
+static const uvec8 kShuffleMaskRAWToARGB = {2u, 1u, 0u, 12u, 5u,  4u,  3u, 13u,
+                                            8u, 7u, 6u, 14u, 11u, 10u, 9u, 15u};
 
 // Shuffle table for converting RAW to RGB24.  First 8.
 static const uvec8 kShuffleMaskRAWToRGB24_0 = {
@@ -113,15 +113,15 @@ static const uvec8 kShuffleMaskRAWToRGB24_2 = {
     128u, 128u, 128u, 128u, 128u, 128u, 128u, 128u};
 
 // Shuffle table for converting ARGB to RGB24.
-static uvec8 kShuffleMaskARGBToRGB24 = {
+static const uvec8 kShuffleMaskARGBToRGB24 = {
     0u, 1u, 2u, 4u, 5u, 6u, 8u, 9u, 10u, 12u, 13u, 14u, 128u, 128u, 128u, 128u};
 
 // Shuffle table for converting ARGB to RAW.
-static uvec8 kShuffleMaskARGBToRAW = {
+static const uvec8 kShuffleMaskARGBToRAW = {
     2u, 1u, 0u, 6u, 5u, 4u, 10u, 9u, 8u, 14u, 13u, 12u, 128u, 128u, 128u, 128u};
 
 // Shuffle table for converting ARGBToRGB24 for I422ToRGB24.  First 8 + next 4
-static uvec8 kShuffleMaskARGBToRGB24_0 = {
+static const uvec8 kShuffleMaskARGBToRGB24_0 = {
     0u, 1u, 2u, 4u, 5u, 6u, 8u, 9u, 128u, 128u, 128u, 128u, 10u, 12u, 13u, 14u};
 
 // YUY2 shuf 16 Y to 32 Y.
@@ -699,6 +699,56 @@ void ARGBToARGB4444Row_SSE2(const uint8* src, uint8* dst, int width) {
   );
 }
 #endif  // HAS_RGB24TOARGBROW_SSSE3
+
+#ifdef HAS_ARGBTOAR30ROW_AVX2
+void ARGBToAR30Row_AVX2(const uint8* src, uint8* dst, int width) {
+  asm volatile(
+      "vpcmpeqb   %%ymm4,%%ymm4,%%ymm4           \n"  // 0x000000ff mask
+      "vpsrld     $0x18,%%ymm4,%%ymm4            \n"
+      "vpcmpeqb   %%ymm5,%%ymm5,%%ymm5           \n"  // 0xc0000000 mask
+      "vpslld     $30,%%ymm5,%%ymm5              \n"
+
+      LABELALIGN
+      "1:                                        \n"
+      "vmovdqu    (%0),%%ymm0                    \n"
+      // alpha
+      "vpand      %%ymm5,%%ymm0,%%ymm3           \n"
+      // red
+      "vpsrld     $0x10,%%ymm0,%%ymm1            \n"
+      "vpand      %%ymm4,%%ymm1,%%ymm1           \n"
+      "vpsrld     $0x6,%%ymm1,%%ymm2             \n"
+      "vpslld     $22,%%ymm1,%%ymm1              \n"
+      "vpslld     $20,%%ymm2,%%ymm2              \n"
+      "vpor       %%ymm1,%%ymm3,%%ymm3           \n"
+      "vpor       %%ymm2,%%ymm3,%%ymm3           \n"
+      // green
+      "vpsrld     $0x08,%%ymm0,%%ymm1            \n"
+      "vpand      %%ymm4,%%ymm1,%%ymm1           \n"
+      "vpsrld     $0x6,%%ymm1,%%ymm2             \n"
+      "vpslld     $12,%%ymm1,%%ymm1              \n"
+      "vpslld     $10,%%ymm2,%%ymm2              \n"
+      "vpor       %%ymm1,%%ymm3,%%ymm3           \n"
+      "vpor       %%ymm2,%%ymm3,%%ymm3           \n"
+      // blue
+      "vpand      %%ymm4,%%ymm0,%%ymm1           \n"
+      "vpsrld     $0x6,%%ymm1,%%ymm2             \n"
+      "vpslld     $2,%%ymm1,%%ymm1               \n"
+      "vpor       %%ymm1,%%ymm3,%%ymm3           \n"
+      "vpor       %%ymm2,%%ymm3,%%ymm3           \n"
+
+      "vmovdqu    %%ymm3,(%1)                    \n"
+      "add        $0x20,%0                       \n"
+      "add        $0x20,%1                       \n"
+      "sub        $0x8,%2                        \n"
+      "jg         1b                             \n"
+      "vzeroupper                                \n"
+      : "+r"(src),   // %0
+        "+r"(dst),   // %1
+        "+r"(width)  // %2
+        ::"memory",
+        "cc", "xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5");
+}
+#endif
 
 #ifdef HAS_ARGBTOYROW_SSSE3
 // Convert 16 ARGB pixels (64 bytes) to 16 Y values.
@@ -2469,8 +2519,8 @@ void I400ToARGBRow_AVX2(const uint8* y_buf, uint8* dst_argb, int width) {
 
 #ifdef HAS_MIRRORROW_SSSE3
 // Shuffle table for reversing the bytes.
-static uvec8 kShuffleMirror = {15u, 14u, 13u, 12u, 11u, 10u, 9u, 8u,
-                               7u,  6u,  5u,  4u,  3u,  2u,  1u, 0u};
+static const uvec8 kShuffleMirror = {15u, 14u, 13u, 12u, 11u, 10u, 9u, 8u,
+                                     7u,  6u,  5u,  4u,  3u,  2u,  1u, 0u};
 
 void MirrorRow_SSSE3(const uint8* src, uint8* dst, int width) {
   intptr_t temp_width = (intptr_t)(width);
@@ -2523,8 +2573,8 @@ void MirrorRow_AVX2(const uint8* src, uint8* dst, int width) {
 
 #ifdef HAS_MIRRORUVROW_SSSE3
 // Shuffle table for reversing the bytes of UV channels.
-static uvec8 kShuffleMirrorUV = {14u, 12u, 10u, 8u, 6u, 4u, 2u, 0u,
-                                 15u, 13u, 11u, 9u, 7u, 5u, 3u, 1u};
+static const uvec8 kShuffleMirrorUV = {14u, 12u, 10u, 8u, 6u, 4u, 2u, 0u,
+                                       15u, 13u, 11u, 9u, 7u, 5u, 3u, 1u};
 void MirrorUVRow_SSSE3(const uint8* src,
                        uint8* dst_u,
                        uint8* dst_v,
@@ -2753,29 +2803,35 @@ void MergeUVRow_SSE2(const uint8* src_u,
 }
 #endif  // HAS_MERGEUVROW_SSE2
 
-#ifdef HAS_MERGEUV10ROW_AVX2
-void MergeUV10Row_AVX2(const uint16* src_u,
-                       const uint16* src_v,
-                       uint16* dst_uv,
-                       int width) {
+// Use scale to convert lsb formats to msb, depending how many bits there are:
+// 128 = 9 bits
+// 64 = 10 bits
+// 16 = 12 bits
+// 1 = 16 bits
+#ifdef HAS_MERGEUVROW_16_AVX2
+void MergeUVRow_16_AVX2(const uint16* src_u,
+                        const uint16* src_v,
+                        uint16* dst_uv,
+                        int scale,
+                        int width) {
+  // clang-format off
   asm volatile (
+    "vmovd      %4,%%xmm3                      \n"
+    "vpunpcklwd %%xmm3,%%xmm3,%%xmm3           \n"
+    "vbroadcastss %%xmm3,%%ymm3                \n"
     "sub       %0,%1                           \n"
 
+    // 16 pixels per loop.
     LABELALIGN
     "1:                                        \n"
     "vmovdqu   (%0),%%ymm0                     \n"
     "vmovdqu   (%0,%1,1),%%ymm1                \n"
     "add        $0x20,%0                       \n"
-    "vpsllw    $0x6,%%ymm0,%%ymm0              \n"
-    "vpsllw    $0x6,%%ymm1,%%ymm1              \n"
-//    "vpermq     $0xd8,%%ymm0,%%ymm0            \n"
-//    "vpermq     $0xd8,%%ymm1,%%ymm1            \n"
-    "vpunpcklwd %%ymm1,%%ymm0,%%ymm2           \n"
+
+    "vpmullw   %%ymm3,%%ymm0,%%ymm0            \n"
+    "vpmullw   %%ymm3,%%ymm1,%%ymm1            \n"
+    "vpunpcklwd %%ymm1,%%ymm0,%%ymm2           \n"  // mutates
     "vpunpckhwd %%ymm1,%%ymm0,%%ymm0           \n"
-
-//    "vmovdqu   %%ymm2, (%2)                    \n"
-//    "vmovdqu   %%ymm0, 0x20(%2)                \n"
-
     "vextractf128 $0x0,%%ymm2,(%2)             \n"
     "vextractf128 $0x0,%%ymm0,0x10(%2)         \n"
     "vextractf128 $0x1,%%ymm2,0x20(%2)         \n"
@@ -2784,49 +2840,159 @@ void MergeUV10Row_AVX2(const uint16* src_u,
     "sub       $0x10,%3                        \n"
     "jg        1b                              \n"
     "vzeroupper                                \n"
-  : "+r"(src_u),     // %0
-    "+r"(src_v),     // %1
-    "+r"(dst_uv),    // %2
-    "+r"(width)      // %3
-  :
-  : "memory", "cc", "xmm0", "xmm1", "xmm2"
-  );
+  : "+r"(src_u),   // %0
+    "+r"(src_v),   // %1
+    "+r"(dst_uv),  // %2
+    "+r"(width)    // %3
+  : "r"(scale)     // %4
+  : "memory", "cc", "xmm0", "xmm1", "xmm2", "xmm3");
+  // clang-format on
 }
 #endif  // HAS_MERGEUVROW_AVX2
 
+// Use scale to convert lsb formats to msb, depending how many bits there are:
+// 128 = 9 bits
+// 64 = 10 bits
+// 16 = 12 bits
+// 1 = 16 bits
+#ifdef HAS_MULTIPLYROW_16_AVX2
+void MultiplyRow_16_AVX2(const uint16* src_y,
+                         uint16* dst_y,
+                         int scale,
+                         int width) {
+  // clang-format off
+  asm volatile (
+    "vmovd      %3,%%xmm3                      \n"
+    "vpunpcklwd %%xmm3,%%xmm3,%%xmm3           \n"
+    "vbroadcastss %%xmm3,%%ymm3                \n"
+    "sub       %0,%1                           \n"
+
+    // 16 pixels per loop.
+    LABELALIGN
+    "1:                                        \n"
+    "vmovdqu   (%0),%%ymm0                     \n"
+    "vmovdqu   0x20(%0),%%ymm1                 \n"
+    "vpmullw   %%ymm3,%%ymm0,%%ymm0            \n"
+    "vpmullw   %%ymm3,%%ymm1,%%ymm1            \n"
+    "vmovdqu   %%ymm0,(%0,%1)                  \n"
+    "vmovdqu   %%ymm1,0x20(%0,%1)              \n"
+    "add        $0x40,%0                       \n"
+    "sub       $0x20,%2                        \n"
+    "jg        1b                              \n"
+    "vzeroupper                                \n"
+  : "+r"(src_y),   // %0
+    "+r"(dst_y),   // %1
+    "+r"(width)    // %2
+  : "r"(scale)     // %3
+  : "memory", "cc", "xmm0", "xmm1", "xmm3");
+  // clang-format on
+}
+#endif  // HAS_MULTIPLYROW_16_AVX2
+
+// Use scale to convert lsb formats to msb, depending how many bits there are:
+// 32768 = 9 bits
+// 16384 = 10 bits
+// 4096 = 12 bits
+// 256 = 16 bits
+void Convert16To8Row_SSSE3(const uint16* src_y,
+                           uint8* dst_y,
+                           int scale,
+                           int width) {
+  // clang-format off
+  asm volatile (
+    "movd      %3,%%xmm3                      \n"
+    "punpcklwd %%xmm3,%%xmm3                  \n"
+    "pshufd    $0x0,%%xmm3,%%xmm3             \n"
+
+    // 32 pixels per loop.
+    LABELALIGN
+    "1:                                       \n"
+    "movdqu    (%0),%%xmm0                    \n"
+    "movdqu    0x10(%0),%%xmm1                \n"
+    "pmulhuw   %%xmm3,%%xmm0                  \n"
+    "pmulhuw   %%xmm3,%%xmm1                  \n"
+    "packuswb  %%xmm1,%%xmm0                  \n"
+    "movdqu    %%xmm0,(%1)                    \n"
+    "add       $0x20,%0                       \n"
+    "add       $0x10,%1                       \n"
+    "sub       $0x10,%2                       \n"
+    "jg        1b                             \n"
+  : "+r"(src_y),   // %0
+    "+r"(dst_y),   // %1
+    "+r"(width)    // %2
+  : "r"(scale)     // %3
+  : "memory", "cc", "xmm0", "xmm1", "xmm3");
+  // clang-format on
+}
+
+#ifdef HAS_MULTIPLYROW_16_AVX2
+void Convert16To8Row_AVX2(const uint16* src_y,
+                          uint8* dst_y,
+                          int scale,
+                          int width) {
+  // clang-format off
+  asm volatile (
+    "vmovd      %3,%%xmm3                      \n"
+    "vpunpcklwd %%xmm3,%%xmm3,%%xmm3           \n"
+    "vbroadcastss %%xmm3,%%ymm3                \n"
+
+    // 32 pixels per loop.
+    LABELALIGN
+    "1:                                        \n"
+    "vmovdqu   (%0),%%ymm0                     \n"
+    "vmovdqu   0x20(%0),%%ymm1                 \n"
+    "vpmulhuw   %%ymm3,%%ymm0,%%ymm0           \n"
+    "vpmulhuw   %%ymm3,%%ymm1,%%ymm1           \n"
+
+    "vpackuswb %%ymm1,%%ymm0,%%ymm0            \n"  // mutates
+    "vpermq    $0xd8,%%ymm0,%%ymm0             \n"
+    "vmovdqu   %%ymm0,(%1)                     \n"
+    "add       $0x40,%0                        \n"
+    "add       $0x20,%1                        \n"
+    "sub       $0x20,%2                        \n"
+    "jg        1b                              \n"
+    "vzeroupper                                \n"
+  : "+r"(src_y),   // %0
+    "+r"(dst_y),   // %1
+    "+r"(width)    // %2
+  : "r"(scale)     // %3
+  : "memory", "cc", "xmm0", "xmm1", "xmm3");
+  // clang-format on
+}
+#endif  // HAS_MULTIPLYROW_16_AVX2
 
 #ifdef HAS_SPLITRGBROW_SSSE3
 
 // Shuffle table for converting RGB to Planar.
-static uvec8 kShuffleMaskRGBToR0 = {0u,   3u,   6u,   9u,   12u,  15u,
-                                    128u, 128u, 128u, 128u, 128u, 128u,
-                                    128u, 128u, 128u, 128u};
-static uvec8 kShuffleMaskRGBToR1 = {128u, 128u, 128u, 128u, 128u, 128u,
-                                    2u,   5u,   8u,   11u,  14u,  128u,
-                                    128u, 128u, 128u, 128u};
-static uvec8 kShuffleMaskRGBToR2 = {128u, 128u, 128u, 128u, 128u, 128u,
-                                    128u, 128u, 128u, 128u, 128u, 1u,
-                                    4u,   7u,   10u,  13u};
+static const uvec8 kShuffleMaskRGBToR0 = {0u,   3u,   6u,   9u,   12u,  15u,
+                                          128u, 128u, 128u, 128u, 128u, 128u,
+                                          128u, 128u, 128u, 128u};
+static const uvec8 kShuffleMaskRGBToR1 = {128u, 128u, 128u, 128u, 128u, 128u,
+                                          2u,   5u,   8u,   11u,  14u,  128u,
+                                          128u, 128u, 128u, 128u};
+static const uvec8 kShuffleMaskRGBToR2 = {128u, 128u, 128u, 128u, 128u, 128u,
+                                          128u, 128u, 128u, 128u, 128u, 1u,
+                                          4u,   7u,   10u,  13u};
 
-static uvec8 kShuffleMaskRGBToG0 = {1u,   4u,   7u,   10u,  13u,  128u,
-                                    128u, 128u, 128u, 128u, 128u, 128u,
-                                    128u, 128u, 128u, 128u};
-static uvec8 kShuffleMaskRGBToG1 = {128u, 128u, 128u, 128u, 128u, 0u,
-                                    3u,   6u,   9u,   12u,  15u,  128u,
-                                    128u, 128u, 128u, 128u};
-static uvec8 kShuffleMaskRGBToG2 = {128u, 128u, 128u, 128u, 128u, 128u,
-                                    128u, 128u, 128u, 128u, 128u, 2u,
-                                    5u,   8u,   11u,  14u};
+static const uvec8 kShuffleMaskRGBToG0 = {1u,   4u,   7u,   10u,  13u,  128u,
+                                          128u, 128u, 128u, 128u, 128u, 128u,
+                                          128u, 128u, 128u, 128u};
+static const uvec8 kShuffleMaskRGBToG1 = {128u, 128u, 128u, 128u, 128u, 0u,
+                                          3u,   6u,   9u,   12u,  15u,  128u,
+                                          128u, 128u, 128u, 128u};
+static const uvec8 kShuffleMaskRGBToG2 = {128u, 128u, 128u, 128u, 128u, 128u,
+                                          128u, 128u, 128u, 128u, 128u, 2u,
+                                          5u,   8u,   11u,  14u};
 
-static uvec8 kShuffleMaskRGBToB0 = {2u,   5u,   8u,   11u,  14u,  128u,
-                                    128u, 128u, 128u, 128u, 128u, 128u,
-                                    128u, 128u, 128u, 128u};
-static uvec8 kShuffleMaskRGBToB1 = {128u, 128u, 128u, 128u, 128u, 1u,
-                                    4u,   7u,   10u,  13u,  128u, 128u,
-                                    128u, 128u, 128u, 128u};
-static uvec8 kShuffleMaskRGBToB2 = {128u, 128u, 128u, 128u, 128u, 128u,
-                                    128u, 128u, 128u, 128u, 0u,   3u,
-                                    6u,   9u,   12u,  15u};
+static const uvec8 kShuffleMaskRGBToB0 = {2u,   5u,   8u,   11u,  14u,  128u,
+                                          128u, 128u, 128u, 128u, 128u, 128u,
+                                          128u, 128u, 128u, 128u};
+static const uvec8 kShuffleMaskRGBToB1 = {128u, 128u, 128u, 128u, 128u, 1u,
+                                          4u,   7u,   10u,  13u,  128u, 128u,
+                                          128u, 128u, 128u, 128u};
+static const uvec8 kShuffleMaskRGBToB2 = {128u, 128u, 128u, 128u, 128u, 128u,
+                                          128u, 128u, 128u, 128u, 0u,   3u,
+                                          6u,   9u,   12u,  15u};
 
 void SplitRGBRow_SSSE3(const uint8* src_rgb,
                        uint8* dst_r,
@@ -2894,35 +3060,35 @@ void SplitRGBRow_SSSE3(const uint8* src_rgb,
 #ifdef HAS_MERGERGBROW_SSSE3
 
 // Shuffle table for converting RGB to Planar.
-static uvec8 kShuffleMaskRToRGB0 = {0u, 128u, 128u, 1u, 128u, 128u,
-                                    2u, 128u, 128u, 3u, 128u, 128u,
-                                    4u, 128u, 128u, 5u};
-static uvec8 kShuffleMaskGToRGB0 = {128u, 0u, 128u, 128u, 1u, 128u,
-                                    128u, 2u, 128u, 128u, 3u, 128u,
-                                    128u, 4u, 128u, 128u};
-static uvec8 kShuffleMaskBToRGB0 = {128u, 128u, 0u, 128u, 128u, 1u,
-                                    128u, 128u, 2u, 128u, 128u, 3u,
-                                    128u, 128u, 4u, 128u};
+static const uvec8 kShuffleMaskRToRGB0 = {0u, 128u, 128u, 1u, 128u, 128u,
+                                          2u, 128u, 128u, 3u, 128u, 128u,
+                                          4u, 128u, 128u, 5u};
+static const uvec8 kShuffleMaskGToRGB0 = {128u, 0u, 128u, 128u, 1u, 128u,
+                                          128u, 2u, 128u, 128u, 3u, 128u,
+                                          128u, 4u, 128u, 128u};
+static const uvec8 kShuffleMaskBToRGB0 = {128u, 128u, 0u, 128u, 128u, 1u,
+                                          128u, 128u, 2u, 128u, 128u, 3u,
+                                          128u, 128u, 4u, 128u};
 
-static uvec8 kShuffleMaskGToRGB1 = {5u, 128u, 128u, 6u, 128u, 128u,
-                                    7u, 128u, 128u, 8u, 128u, 128u,
-                                    9u, 128u, 128u, 10u};
-static uvec8 kShuffleMaskBToRGB1 = {128u, 5u, 128u, 128u, 6u, 128u,
-                                    128u, 7u, 128u, 128u, 8u, 128u,
-                                    128u, 9u, 128u, 128u};
-static uvec8 kShuffleMaskRToRGB1 = {128u, 128u, 6u,  128u, 128u, 7u,
-                                    128u, 128u, 8u,  128u, 128u, 9u,
-                                    128u, 128u, 10u, 128u};
+static const uvec8 kShuffleMaskGToRGB1 = {5u, 128u, 128u, 6u, 128u, 128u,
+                                          7u, 128u, 128u, 8u, 128u, 128u,
+                                          9u, 128u, 128u, 10u};
+static const uvec8 kShuffleMaskBToRGB1 = {128u, 5u, 128u, 128u, 6u, 128u,
+                                          128u, 7u, 128u, 128u, 8u, 128u,
+                                          128u, 9u, 128u, 128u};
+static const uvec8 kShuffleMaskRToRGB1 = {128u, 128u, 6u,  128u, 128u, 7u,
+                                          128u, 128u, 8u,  128u, 128u, 9u,
+                                          128u, 128u, 10u, 128u};
 
-static uvec8 kShuffleMaskBToRGB2 = {10u, 128u, 128u, 11u, 128u, 128u,
-                                    12u, 128u, 128u, 13u, 128u, 128u,
-                                    14u, 128u, 128u, 15u};
-static uvec8 kShuffleMaskRToRGB2 = {128u, 11u, 128u, 128u, 12u, 128u,
-                                    128u, 13u, 128u, 128u, 14u, 128u,
-                                    128u, 15u, 128u, 128u};
-static uvec8 kShuffleMaskGToRGB2 = {128u, 128u, 11u, 128u, 128u, 12u,
-                                    128u, 128u, 13u, 128u, 128u, 14u,
-                                    128u, 128u, 15u, 128u};
+static const uvec8 kShuffleMaskBToRGB2 = {10u, 128u, 128u, 11u, 128u, 128u,
+                                          12u, 128u, 128u, 13u, 128u, 128u,
+                                          14u, 128u, 128u, 15u};
+static const uvec8 kShuffleMaskRToRGB2 = {128u, 11u, 128u, 128u, 12u, 128u,
+                                          128u, 13u, 128u, 128u, 14u, 128u,
+                                          128u, 15u, 128u, 128u};
+static const uvec8 kShuffleMaskGToRGB2 = {128u, 128u, 11u, 128u, 128u, 12u,
+                                          128u, 128u, 13u, 128u, 128u, 14u,
+                                          128u, 128u, 15u, 128u};
 
 void MergeRGBRow_SSSE3(const uint8* src_r,
                        const uint8* src_g,
@@ -3732,8 +3898,8 @@ void UYVYToUV422Row_AVX2(const uint8* src_uyvy,
 
 #ifdef HAS_ARGBBLENDROW_SSSE3
 // Shuffle table for isolating alpha.
-static uvec8 kShuffleAlpha = {3u,  0x80, 3u,  0x80, 7u,  0x80, 7u,  0x80,
-                              11u, 0x80, 11u, 0x80, 15u, 0x80, 15u, 0x80};
+static const uvec8 kShuffleAlpha = {3u,  0x80, 3u,  0x80, 7u,  0x80, 7u,  0x80,
+                                    11u, 0x80, 11u, 0x80, 15u, 0x80, 15u, 0x80};
 
 // Blend 8 pixels at a time
 void ARGBBlendRow_SSSE3(const uint8* src_argb0,
@@ -3933,10 +4099,10 @@ void BlendPlaneRow_AVX2(const uint8* src0,
 
 #ifdef HAS_ARGBATTENUATEROW_SSSE3
 // Shuffle table duplicating alpha
-static uvec8 kShuffleAlpha0 = {3u, 3u, 3u, 3u, 3u, 3u, 128u, 128u,
-                               7u, 7u, 7u, 7u, 7u, 7u, 128u, 128u};
-static uvec8 kShuffleAlpha1 = {11u, 11u, 11u, 11u, 11u, 11u, 128u, 128u,
-                               15u, 15u, 15u, 15u, 15u, 15u, 128u, 128u};
+static const uvec8 kShuffleAlpha0 = {3u, 3u, 3u, 3u, 3u, 3u, 128u, 128u,
+                                     7u, 7u, 7u, 7u, 7u, 7u, 128u, 128u};
+static const uvec8 kShuffleAlpha1 = {11u, 11u, 11u, 11u, 11u, 11u, 128u, 128u,
+                                     15u, 15u, 15u, 15u, 15u, 15u, 128u, 128u};
 // Attenuate 4 pixels at a time.
 void ARGBAttenuateRow_SSSE3(const uint8* src_argb, uint8* dst_argb, int width) {
   asm volatile (
@@ -4191,14 +4357,14 @@ void ARGBGrayRow_SSSE3(const uint8* src_argb, uint8* dst_argb, int width) {
 //    g = (r * 45 + g * 88 + b * 22) >> 7
 //    r = (r * 50 + g * 98 + b * 24) >> 7
 // Constant for ARGB color to sepia tone
-static vec8 kARGBToSepiaB = {17, 68, 35, 0, 17, 68, 35, 0,
-                             17, 68, 35, 0, 17, 68, 35, 0};
+static const vec8 kARGBToSepiaB = {17, 68, 35, 0, 17, 68, 35, 0,
+                                   17, 68, 35, 0, 17, 68, 35, 0};
 
-static vec8 kARGBToSepiaG = {22, 88, 45, 0, 22, 88, 45, 0,
-                             22, 88, 45, 0, 22, 88, 45, 0};
+static const vec8 kARGBToSepiaG = {22, 88, 45, 0, 22, 88, 45, 0,
+                                   22, 88, 45, 0, 22, 88, 45, 0};
 
-static vec8 kARGBToSepiaR = {24, 98, 50, 0, 24, 98, 50, 0,
-                             24, 98, 50, 0, 24, 98, 50, 0};
+static const vec8 kARGBToSepiaR = {24, 98, 50, 0, 24, 98, 50, 0,
+                                   24, 98, 50, 0, 24, 98, 50, 0};
 
 // Convert 8 ARGB pixels (32 bytes) to 8 Sepia ARGB pixels.
 void ARGBSepiaRow_SSSE3(uint8* dst_argb, int width) {
@@ -5687,6 +5853,7 @@ void ARGBPolynomialRow_AVX2(const uint8* src_argb,
 #ifdef HAS_HALFFLOATROW_SSE2
 static float kScaleBias = 1.9259299444e-34f;
 void HalfFloatRow_SSE2(const uint16* src, uint16* dst, float scale, int width) {
+  scale *= kScaleBias;
   asm volatile (
     "pshufd      $0x0,%3,%%xmm4                \n"
     "pxor        %%xmm5,%%xmm5                 \n"
@@ -5713,7 +5880,11 @@ void HalfFloatRow_SSE2(const uint16* src, uint16* dst, float scale, int width) {
   : "+r"(src),    // %0
     "+r"(dst),    // %1
     "+r"(width)   // %2
-  : "x"(scale * kScaleBias)   // %3
+#if defined(__x86_64__)
+  : "x"(scale)   // %3
+#else
+  : "m"(scale)   // %3
+#endif
   : "memory", "cc",
     "xmm2", "xmm3", "xmm4", "xmm5"
   );
@@ -5722,6 +5893,7 @@ void HalfFloatRow_SSE2(const uint16* src, uint16* dst, float scale, int width) {
 
 #ifdef HAS_HALFFLOATROW_AVX2
 void HalfFloatRow_AVX2(const uint16* src, uint16* dst, float scale, int width) {
+  scale *= kScaleBias;
   asm volatile (
     "vbroadcastss  %3, %%ymm4                  \n"
     "vpxor      %%ymm5,%%ymm5,%%ymm5           \n"
@@ -5749,7 +5921,11 @@ void HalfFloatRow_AVX2(const uint16* src, uint16* dst, float scale, int width) {
   : "+r"(src),    // %0
     "+r"(dst),    // %1
     "+r"(width)   // %2
-  : "x"(scale * kScaleBias)   // %3
+#if defined(__x86_64__)
+  : "x"(scale)   // %3
+#else
+  : "m"(scale)   // %3
+#endif
   : "memory", "cc",
     "xmm2", "xmm3", "xmm4", "xmm5"
   );
@@ -5782,7 +5958,11 @@ void HalfFloatRow_F16C(const uint16* src, uint16* dst, float scale, int width) {
   : "+r"(src),   // %0
     "+r"(dst),   // %1
     "+r"(width)  // %2
+#if defined(__x86_64__)
   : "x"(scale)   // %3
+#else
+  : "m"(scale)   // %3
+#endif
   : "memory", "cc",
     "xmm2", "xmm3", "xmm4"
   );

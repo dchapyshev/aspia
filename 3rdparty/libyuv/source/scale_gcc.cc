@@ -21,72 +21,73 @@ extern "C" {
     (defined(__x86_64__) || (defined(__i386__) && !defined(_MSC_VER)))
 
 // Offsets for source bytes 0 to 9
-static uvec8 kShuf0 = {0,   1,   3,   4,   5,   7,   8,   9,
-                       128, 128, 128, 128, 128, 128, 128, 128};
+static const uvec8 kShuf0 = {0,   1,   3,   4,   5,   7,   8,   9,
+                             128, 128, 128, 128, 128, 128, 128, 128};
 
 // Offsets for source bytes 11 to 20 with 8 subtracted = 3 to 12.
-static uvec8 kShuf1 = {3,   4,   5,   7,   8,   9,   11,  12,
-                       128, 128, 128, 128, 128, 128, 128, 128};
+static const uvec8 kShuf1 = {3,   4,   5,   7,   8,   9,   11,  12,
+                             128, 128, 128, 128, 128, 128, 128, 128};
 
 // Offsets for source bytes 21 to 31 with 16 subtracted = 5 to 31.
-static uvec8 kShuf2 = {5,   7,   8,   9,   11,  12,  13,  15,
-                       128, 128, 128, 128, 128, 128, 128, 128};
+static const uvec8 kShuf2 = {5,   7,   8,   9,   11,  12,  13,  15,
+                             128, 128, 128, 128, 128, 128, 128, 128};
 
 // Offsets for source bytes 0 to 10
-static uvec8 kShuf01 = {0, 1, 1, 2, 2, 3, 4, 5, 5, 6, 6, 7, 8, 9, 9, 10};
+static const uvec8 kShuf01 = {0, 1, 1, 2, 2, 3, 4, 5, 5, 6, 6, 7, 8, 9, 9, 10};
 
 // Offsets for source bytes 10 to 21 with 8 subtracted = 3 to 13.
-static uvec8 kShuf11 = {2, 3, 4, 5, 5, 6, 6, 7, 8, 9, 9, 10, 10, 11, 12, 13};
+static const uvec8 kShuf11 = {2, 3, 4, 5,  5,  6,  6,  7,
+                              8, 9, 9, 10, 10, 11, 12, 13};
 
 // Offsets for source bytes 21 to 31 with 16 subtracted = 5 to 31.
-static uvec8 kShuf21 = {5,  6,  6,  7,  8,  9,  9,  10,
-                        10, 11, 12, 13, 13, 14, 14, 15};
+static const uvec8 kShuf21 = {5,  6,  6,  7,  8,  9,  9,  10,
+                              10, 11, 12, 13, 13, 14, 14, 15};
 
 // Coefficients for source bytes 0 to 10
-static uvec8 kMadd01 = {3, 1, 2, 2, 1, 3, 3, 1, 2, 2, 1, 3, 3, 1, 2, 2};
+static const uvec8 kMadd01 = {3, 1, 2, 2, 1, 3, 3, 1, 2, 2, 1, 3, 3, 1, 2, 2};
 
 // Coefficients for source bytes 10 to 21
-static uvec8 kMadd11 = {1, 3, 3, 1, 2, 2, 1, 3, 3, 1, 2, 2, 1, 3, 3, 1};
+static const uvec8 kMadd11 = {1, 3, 3, 1, 2, 2, 1, 3, 3, 1, 2, 2, 1, 3, 3, 1};
 
 // Coefficients for source bytes 21 to 31
-static uvec8 kMadd21 = {2, 2, 1, 3, 3, 1, 2, 2, 1, 3, 3, 1, 2, 2, 1, 3};
+static const uvec8 kMadd21 = {2, 2, 1, 3, 3, 1, 2, 2, 1, 3, 3, 1, 2, 2, 1, 3};
 
 // Coefficients for source bytes 21 to 31
-static vec16 kRound34 = {2, 2, 2, 2, 2, 2, 2, 2};
+static const vec16 kRound34 = {2, 2, 2, 2, 2, 2, 2, 2};
 
-static uvec8 kShuf38a = {0,   3,   6,   8,   11,  14,  128, 128,
-                         128, 128, 128, 128, 128, 128, 128, 128};
+static const uvec8 kShuf38a = {0,   3,   6,   8,   11,  14,  128, 128,
+                               128, 128, 128, 128, 128, 128, 128, 128};
 
-static uvec8 kShuf38b = {128, 128, 128, 128, 128, 128, 0,   3,
-                         6,   8,   11,  14,  128, 128, 128, 128};
+static const uvec8 kShuf38b = {128, 128, 128, 128, 128, 128, 0,   3,
+                               6,   8,   11,  14,  128, 128, 128, 128};
 
 // Arrange words 0,3,6 into 0,1,2
-static uvec8 kShufAc = {0,   1,   6,   7,   12,  13,  128, 128,
-                        128, 128, 128, 128, 128, 128, 128, 128};
+static const uvec8 kShufAc = {0,   1,   6,   7,   12,  13,  128, 128,
+                              128, 128, 128, 128, 128, 128, 128, 128};
 
 // Arrange words 0,3,6 into 3,4,5
-static uvec8 kShufAc3 = {128, 128, 128, 128, 128, 128, 0,   1,
-                         6,   7,   12,  13,  128, 128, 128, 128};
+static const uvec8 kShufAc3 = {128, 128, 128, 128, 128, 128, 0,   1,
+                               6,   7,   12,  13,  128, 128, 128, 128};
 
 // Scaling values for boxes of 3x3 and 2x3
-static uvec16 kScaleAc33 = {65536 / 9, 65536 / 9, 65536 / 6, 65536 / 9,
-                            65536 / 9, 65536 / 6, 0,         0};
+static const uvec16 kScaleAc33 = {65536 / 9, 65536 / 9, 65536 / 6, 65536 / 9,
+                                  65536 / 9, 65536 / 6, 0,         0};
 
 // Arrange first value for pixels 0,1,2,3,4,5
-static uvec8 kShufAb0 = {0,  128, 3,  128, 6,   128, 8,   128,
-                         11, 128, 14, 128, 128, 128, 128, 128};
+static const uvec8 kShufAb0 = {0,  128, 3,  128, 6,   128, 8,   128,
+                               11, 128, 14, 128, 128, 128, 128, 128};
 
 // Arrange second value for pixels 0,1,2,3,4,5
-static uvec8 kShufAb1 = {1,  128, 4,  128, 7,   128, 9,   128,
-                         12, 128, 15, 128, 128, 128, 128, 128};
+static const uvec8 kShufAb1 = {1,  128, 4,  128, 7,   128, 9,   128,
+                               12, 128, 15, 128, 128, 128, 128, 128};
 
 // Arrange third value for pixels 0,1,2,3,4,5
-static uvec8 kShufAb2 = {2,  128, 5,   128, 128, 128, 10,  128,
-                         13, 128, 128, 128, 128, 128, 128, 128};
+static const uvec8 kShufAb2 = {2,  128, 5,   128, 128, 128, 10,  128,
+                               13, 128, 128, 128, 128, 128, 128, 128};
 
 // Scaling values for boxes of 3x2 and 2x2
-static uvec16 kScaleAb2 = {65536 / 3, 65536 / 3, 65536 / 2, 65536 / 3,
-                           65536 / 3, 65536 / 2, 0,         0};
+static const uvec16 kScaleAb2 = {65536 / 3, 65536 / 3, 65536 / 2, 65536 / 3,
+                                 65536 / 3, 65536 / 2, 0,         0};
 
 // GCC versions of row functions are verbatim conversions from Visual C.
 // Generated using gcc disassembly on Visual C object file:
@@ -851,12 +852,12 @@ void ScaleAddRow_AVX2(const uint8* src_ptr, uint16* dst_ptr, int src_width) {
 
 // Constant for making pixels signed to avoid pmaddubsw
 // saturation.
-static uvec8 kFsub80 = {0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80,
-                        0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80};
+static const uvec8 kFsub80 = {0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80,
+                              0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80};
 
 // Constant for making pixels unsigned and adding .5 for rounding.
-static uvec16 kFadd40 = {0x4040, 0x4040, 0x4040, 0x4040,
-                         0x4040, 0x4040, 0x4040, 0x4040};
+static const uvec16 kFadd40 = {0x4040, 0x4040, 0x4040, 0x4040,
+                               0x4040, 0x4040, 0x4040, 0x4040};
 
 // Bilinear column filtering. SSSE3 version.
 void ScaleFilterCols_SSSE3(uint8* dst_ptr,
@@ -1250,13 +1251,13 @@ void ScaleARGBColsUp2_SSE2(uint8* dst_argb,
 }
 
 // Shuffle table for arranging 2 pixels into pairs for pmaddubsw
-static uvec8 kShuffleColARGB = {
+static const uvec8 kShuffleColARGB = {
     0u, 4u,  1u, 5u,  2u,  6u,  3u,  7u,  // bbggrraa 1st pixel
     8u, 12u, 9u, 13u, 10u, 14u, 11u, 15u  // bbggrraa 2nd pixel
 };
 
 // Shuffle table for duplicating 2 fractions into 8 bytes each
-static uvec8 kShuffleFractions = {
+static const uvec8 kShuffleFractions = {
     0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 4u, 4u, 4u, 4u, 4u, 4u, 4u, 4u,
 };
 

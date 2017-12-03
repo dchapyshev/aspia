@@ -396,6 +396,9 @@ ANY11(ARGBToRGB565Row_Any_AVX2, ARGBToRGB565Row_AVX2, 0, 4, 2, 7)
 ANY11(ARGBToARGB1555Row_Any_AVX2, ARGBToARGB1555Row_AVX2, 0, 4, 2, 7)
 ANY11(ARGBToARGB4444Row_Any_AVX2, ARGBToARGB4444Row_AVX2, 0, 4, 2, 7)
 #endif
+#if defined(HAS_ARGBTOAR30ROW_AVX2)
+ANY11(ARGBToAR30Row_Any_AVX2, ARGBToAR30Row_AVX2, 0, 4, 4, 7)
+#endif
 #if defined(HAS_J400TOARGBROW_SSE2)
 ANY11(J400ToARGBRow_Any_SSE2, J400ToARGBRow_SSE2, 0, 1, 4, 7)
 #endif
@@ -729,10 +732,34 @@ ANY11P(ARGBShuffleRow_Any_MSA, ARGBShuffleRow_MSA, const uint8*, 4, 4, 7)
 #undef ANY11P
 
 // Any 1 to 1 with parameter and shorts.  BPP measures in shorts.
+#define ANY11C(NAMEANY, ANY_SIMD, SBPP, BPP, MASK)                            \
+  void NAMEANY(const uint16* src_ptr, uint8* dst_ptr, int scale, int width) { \
+    SIMD_ALIGNED(uint16 temp[32]);                                            \
+    SIMD_ALIGNED(uint8 out[32]);                                              \
+    memset(temp, 0, 64); /* for msan */                                       \
+    int r = width & MASK;                                                     \
+    int n = width & ~MASK;                                                    \
+    if (n > 0) {                                                              \
+      ANY_SIMD(src_ptr, dst_ptr, scale, n);                                   \
+    }                                                                         \
+    memcpy(temp, src_ptr + n, r * SBPP);                                      \
+    ANY_SIMD(temp, out, scale, MASK + 1);                                     \
+    memcpy(dst_ptr + n, out, r * BPP);                                        \
+  }
+
+#ifdef HAS_CONVERT16TO8ROW_SSSE3
+ANY11C(Convert16To8Row_Any_SSSE3, Convert16To8Row_SSSE3, 2, 1, 15)
+#endif
+#ifdef HAS_CONVERT16TO8ROW_AVX2
+ANY11C(Convert16To8Row_Any_AVX2, Convert16To8Row_AVX2, 2, 1, 31)
+#endif
+#undef ANY11C
+
+// Any 1 to 1 with parameter and shorts to byte.  BPP measures in shorts.
 #define ANY11P16(NAMEANY, ANY_SIMD, T, SBPP, BPP, MASK)                      \
   void NAMEANY(const uint16* src_ptr, uint16* dst_ptr, T param, int width) { \
-    SIMD_ALIGNED(uint16 temp[16 * 2]);                                       \
-    memset(temp, 0, 32); /* for msan */                                      \
+    SIMD_ALIGNED(uint16 temp[32 * 2]);                                       \
+    memset(temp, 0, 64); /* for msan */                                      \
     int r = width & MASK;                                                    \
     int n = width & ~MASK;                                                   \
     if (n > 0) {                                                             \

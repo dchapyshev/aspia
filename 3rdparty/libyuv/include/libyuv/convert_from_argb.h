@@ -55,6 +55,15 @@ int ARGBToRGBA(const uint8* src_argb,
                int width,
                int height);
 
+// Convert ARGB To AR30.
+LIBYUV_API
+int ARGBToAR30(const uint8* src_argb,
+               int src_stride_argb,
+               uint8* dst_ar30,
+               int dst_stride_ar30,
+               int width,
+               int height);
+
 // Convert ARGB To RGB24.
 LIBYUV_API
 int ARGBToRGB24(const uint8* src_argb,

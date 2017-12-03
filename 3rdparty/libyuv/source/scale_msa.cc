@@ -127,7 +127,6 @@ void ScaleARGBRowDownEven_MSA(const uint8_t* src_argb,
   }
 }
 
-#ifndef DISABLE_CLANG_MSA
 void ScaleARGBRowDownEvenBox_MSA(const uint8* src_argb,
                                  ptrdiff_t src_stride,
                                  int src_stepx,
@@ -182,7 +181,6 @@ void ScaleARGBRowDownEvenBox_MSA(const uint8* src_argb,
     dst_argb += 16;
   }
 }
-#endif
 
 void ScaleRowDown2_MSA(const uint8_t* src_ptr,
                        ptrdiff_t src_stride,
@@ -385,7 +383,6 @@ void ScaleRowDown38_MSA(const uint8_t* src_ptr,
   }
 }
 
-#ifndef DISABLE_CLANG_MSA
 void ScaleRowDown38_2_Box_MSA(const uint8_t* src_ptr,
                               ptrdiff_t src_stride,
                               uint8_t* dst_ptr,
@@ -535,7 +532,6 @@ void ScaleRowDown38_3_Box_MSA(const uint8_t* src_ptr,
     dst_ptr += 12;
   }
 }
-#endif
 
 void ScaleAddRow_MSA(const uint8_t* src_ptr, uint16_t* dst_ptr, int src_width) {
   int x;
@@ -557,7 +553,6 @@ void ScaleAddRow_MSA(const uint8_t* src_ptr, uint16_t* dst_ptr, int src_width) {
   }
 }
 
-#ifndef DISABLE_CLANG_MSA
 void ScaleFilterCols_MSA(uint8* dst_ptr,
                          const uint8* src_ptr,
                          int dst_width,
@@ -634,7 +629,6 @@ void ScaleFilterCols_MSA(uint8* dst_ptr,
     dst_ptr += 16;
   }
 }
-#endif
 
 void ScaleARGBCols_MSA(uint8* dst_argb,
                        const uint8* src_argb,
@@ -663,7 +657,6 @@ void ScaleARGBCols_MSA(uint8* dst_argb,
   }
 }
 
-#ifndef DISABLE_CLANG_MSA
 void ScaleARGBFilterCols_MSA(uint8* dst_argb,
                              const uint8* src_argb,
                              int dst_width,
@@ -728,7 +721,6 @@ void ScaleARGBFilterCols_MSA(uint8* dst_argb,
     dst_argb += 32;
   }
 }
-#endif
 
 void ScaleRowDown34_MSA(const uint8* src_ptr,
                         ptrdiff_t src_stride,

@@ -68,6 +68,7 @@ enum FourCC {
   FOURCC_ARGB = FOURCC('A', 'R', 'G', 'B'),
   FOURCC_BGRA = FOURCC('B', 'G', 'R', 'A'),
   FOURCC_ABGR = FOURCC('A', 'B', 'G', 'R'),
+  FOURCC_AR30 = FOURCC('A', 'R', '3', '0'),
   FOURCC_24BG = FOURCC('2', '4', 'B', 'G'),
   FOURCC_RAW = FOURCC('r', 'a', 'w', ' '),
   FOURCC_RGBA = FOURCC('R', 'G', 'B', 'A'),
@@ -92,6 +93,7 @@ enum FourCC {
   FOURCC_J420 = FOURCC('J', '4', '2', '0'),
   FOURCC_J400 = FOURCC('J', '4', '0', '0'),  // unofficial fourcc
   FOURCC_H420 = FOURCC('H', '4', '2', '0'),  // unofficial fourcc
+  FOURCC_H010 = FOURCC('H', '0', '1', '0'),  // unofficial fourcc. 10 bit lsb
 
   // 14 Auxiliary aliases.  CanonicalFourCC() maps these to canonical fourcc.
   FOURCC_IYUV = FOURCC('I', 'Y', 'U', 'V'),  // Alias for I420.
@@ -136,6 +138,7 @@ enum FourCCBpp {
   FOURCC_BPP_BGRA = 32,
   FOURCC_BPP_ABGR = 32,
   FOURCC_BPP_RGBA = 32,
+  FOURCC_BPP_AR30 = 32,
   FOURCC_BPP_24BG = 24,
   FOURCC_BPP_RAW = 24,
   FOURCC_BPP_RGBP = 16,
@@ -152,6 +155,7 @@ enum FourCCBpp {
   FOURCC_BPP_J420 = 12,
   FOURCC_BPP_J400 = 8,
   FOURCC_BPP_H420 = 12,
+  FOURCC_BPP_H010 = 24,
   FOURCC_BPP_MJPG = 0,  // 0 means unknown.
   FOURCC_BPP_H264 = 0,
   FOURCC_BPP_IYUV = 12,

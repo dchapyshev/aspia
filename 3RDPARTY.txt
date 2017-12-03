@@ -20,7 +20,7 @@ Synchronization status
 Component   | Sync date   | Version
 protobuf      25.11.2017    3.5.0
 glog          19.08.2017    trunk
-libyuv        04.11.2017    trunk
+libyuv        03.12.2017    trunk
 libvpx        12.07.2017    1.6.1
 gflags        19.08.2017    trunk
 zlib-ng       17.10.2017    trunk

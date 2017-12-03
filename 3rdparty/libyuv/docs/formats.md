@@ -54,6 +54,7 @@ The following is extracted from video_common.h as a complete list of formats sup
       FOURCC_ARGB = FOURCC('A', 'R', 'G', 'B'),
       FOURCC_BGRA = FOURCC('B', 'G', 'R', 'A'),
       FOURCC_ABGR = FOURCC('A', 'B', 'G', 'R'),
+      FOURCC_AR30 = FOURCC('A', 'R', '3', '0'),
       FOURCC_24BG = FOURCC('2', '4', 'B', 'G'),
       FOURCC_RAW  = FOURCC('r', 'a', 'w', ' '),
       FOURCC_RGBA = FOURCC('R', 'G', 'B', 'A'),
@@ -138,3 +139,20 @@ Some are channel order agnostic (e.g. ARGBScale).
 Some functions are symmetric (e.g. ARGBToBGRA is the same as BGRAToARGB, so its a macro).
 
 ARGBBlend expects preattenuated ARGB. The R,G,B are premultiplied by alpha.  Other functions don't care.
+
+# RGB24 and RAW
+
+There are 2 RGB layouts - RGB24 (aka 24BG) and RAW
+
+RGB24 is B,G,R in memory
+RAW is R,G,B in memory
+
+# AR30
+
+AR30 is 2 10 10 10 ARGB stored in little endian order.
+The 2 bit alpha has 4 values.  Here are the comparable 8 bit alpha values.
+0 - 0.    00000000b = 0x00 = 0
+1 - 33%.  01010101b = 0x55 = 85
+2 - 66%.  10101010b = 0xaa = 170
+3 - 100%. 11111111b = 0xff = 255
+The 10 bit RGB values range from 0 to 1023.

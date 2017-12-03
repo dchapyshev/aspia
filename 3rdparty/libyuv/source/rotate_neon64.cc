@@ -21,8 +21,8 @@ extern "C" {
 // This module is for GCC Neon armv8 64 bit.
 #if !defined(LIBYUV_DISABLE_NEON) && defined(__aarch64__)
 
-static uvec8 kVTbl4x4Transpose = {0, 4, 8,  12, 1, 5, 9,  13,
-                                  2, 6, 10, 14, 3, 7, 11, 15};
+static const uvec8 kVTbl4x4Transpose = {0, 4, 8,  12, 1, 5, 9,  13,
+                                        2, 6, 10, 14, 3, 7, 11, 15};
 
 void TransposeWx8_NEON(const uint8* src,
                        int src_stride,
@@ -196,7 +196,7 @@ void TransposeWx8_NEON(const uint8* src,
         "v17", "v18", "v19", "v20", "v21", "v22", "v23");
 }
 
-static uint8 kVTbl4x4TransposeDi[32] = {
+static const uint8 kVTbl4x4TransposeDi[32] = {
     0, 16, 32, 48, 2, 18, 34, 50, 4, 20, 36, 52, 6, 22, 38, 54,
     1, 17, 33, 49, 3, 19, 35, 51, 5, 21, 37, 53, 7, 23, 39, 55};
 

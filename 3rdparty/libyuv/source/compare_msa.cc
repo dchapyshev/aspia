@@ -47,7 +47,6 @@ uint32 HammingDistance_MSA(const uint8* src_a, const uint8* src_b, int count) {
   return diff;
 }
 
-#ifndef DISABLE_CLANG_MSA
 uint32 SumSquareError_MSA(const uint8* src_a, const uint8* src_b, int count) {
   uint32 sse = 0u;
   int i;
@@ -85,7 +84,6 @@ uint32 SumSquareError_MSA(const uint8* src_a, const uint8* src_b, int count) {
   sse += (uint32)__msa_copy_u_w((v4i32)tmp0, 2);
   return sse;
 }
-#endif
 
 #ifdef __cplusplus
 }  // extern "C"
