@@ -1292,10 +1292,8 @@ const char* CategoryCPU::Guid() const
     return "31D1312E-85A9-419A-91B4-BA81129B3CCC";
 }
 
-void CategoryCPU::Parse(Output* output, const std::string& data)
+void CategoryCPU::Parse(Output* /* output */, const std::string& /* data */)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -1324,10 +1322,8 @@ const char* CategoryOpticalDrives::Guid() const
     return "68E028FE-3DA6-4BAF-9E18-CDB828372860";
 }
 
-void CategoryOpticalDrives::Parse(Output* output, const std::string& data)
+void CategoryOpticalDrives::Parse(Output* /* output */, const std::string& /* data */)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -1490,10 +1486,8 @@ const char* CategorySMART::Guid() const
     return "7B1F2ED7-7A2E-4F5C-A70B-A56AB5B8CE00";
 }
 
-void CategorySMART::Parse(Output* output, const std::string& data)
+void CategorySMART::Parse(Output* /* output */, const std::string& /* data */)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
     // TODO
 }
 

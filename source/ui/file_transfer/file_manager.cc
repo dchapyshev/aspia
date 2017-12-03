@@ -144,13 +144,9 @@ bool FileManagerWindow::GetPanelTypeInPoint(const CPoint& pt, FileManagerPanel::
     return false;
 }
 
-LRESULT FileManagerWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileManagerWindow::OnCreate(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
                                    LR_CREATEDIBSECTION,
                                    GetSystemMetrics(SM_CXSMICON),
@@ -189,37 +185,26 @@ LRESULT FileManagerWindow::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, 
     return 0;
 }
 
-LRESULT FileManagerWindow::OnDestroy(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileManagerWindow::OnDestroy(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     local_panel_.DestroyWindow();
     remote_panel_.DestroyWindow();
     splitter_.DestroyWindow();
     return 0;
 }
 
-LRESULT FileManagerWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileManagerWindow::OnSize(
+    UINT /* message */, WPARAM /* wparam */, LPARAM lparam, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     CSize size(static_cast<DWORD>(lparam));
     splitter_.MoveWindow(kBorderSize, 0, size.cx - (kBorderSize * 2), size.cy, FALSE);
     return 0;
 }
 
-LRESULT FileManagerWindow::OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileManagerWindow::OnGetMinMaxInfo(
+    UINT /* message */, WPARAM /* wparam */, LPARAM lparam, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(handled);
-
     LPMINMAXINFO mmi = reinterpret_cast<LPMINMAXINFO>(lparam);
 
     mmi->ptMinTrackSize.x = 500;
@@ -238,24 +223,16 @@ bool FileManagerWindow::GetFocusedPanelType(FileManagerPanel::Type& type)
     return GetPanelTypeInPoint(focused_window_rect.CenterPoint(), type);
 }
 
-LRESULT FileManagerWindow::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileManagerWindow::OnClose(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     delegate_->OnWindowClose();
     return 0;
 }
 
-LRESULT FileManagerWindow::OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT FileManagerWindow::OnFolderUp(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(code);
-    UNUSED_PARAMETER(ctrl_id);
-    UNUSED_PARAMETER(ctrl);
-    UNUSED_PARAMETER(handled);
-
     FileManagerPanel::Type type;
 
     if (GetFocusedPanelType(type))
@@ -274,13 +251,9 @@ LRESULT FileManagerWindow::OnFolderUp(WORD code, WORD ctrl_id, HWND ctrl, BOOL& 
     return 0;
 }
 
-LRESULT FileManagerWindow::OnRefresh(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT FileManagerWindow::OnRefresh(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(code);
-    UNUSED_PARAMETER(ctrl_id);
-    UNUSED_PARAMETER(ctrl);
-    UNUSED_PARAMETER(handled);
-
     FileManagerPanel::Type type;
 
     if (GetFocusedPanelType(type))
@@ -299,13 +272,9 @@ LRESULT FileManagerWindow::OnRefresh(WORD code, WORD ctrl_id, HWND ctrl, BOOL& h
     return 0;
 }
 
-LRESULT FileManagerWindow::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT FileManagerWindow::OnRemove(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(code);
-    UNUSED_PARAMETER(ctrl_id);
-    UNUSED_PARAMETER(ctrl);
-    UNUSED_PARAMETER(handled);
-
     FileManagerPanel::Type type;
 
     if (GetFocusedPanelType(type))
@@ -324,13 +293,9 @@ LRESULT FileManagerWindow::OnRemove(WORD code, WORD ctrl_id, HWND ctrl, BOOL& ha
     return 0;
 }
 
-LRESULT FileManagerWindow::OnHome(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT FileManagerWindow::OnHome(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(code);
-    UNUSED_PARAMETER(ctrl_id);
-    UNUSED_PARAMETER(ctrl);
-    UNUSED_PARAMETER(handled);
-
     FileManagerPanel::Type type;
 
     if (GetFocusedPanelType(type))
@@ -349,13 +314,9 @@ LRESULT FileManagerWindow::OnHome(WORD code, WORD ctrl_id, HWND ctrl, BOOL& hand
     return 0;
 }
 
-LRESULT FileManagerWindow::OnSend(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT FileManagerWindow::OnSend(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(code);
-    UNUSED_PARAMETER(ctrl_id);
-    UNUSED_PARAMETER(ctrl);
-    UNUSED_PARAMETER(handled);
-
     FileManagerPanel::Type type;
 
     if (GetFocusedPanelType(type))

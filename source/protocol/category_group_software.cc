@@ -102,10 +102,8 @@ const char* CategoryUpdates::Guid() const
     return "3E160E27-BE2E-45DB-8292-C3786C9533AB";
 }
 
-void CategoryUpdates::Parse(Output* output, const std::string& data)
+void CategoryUpdates::Parse(Output* /* output */, const std::string& /* data */)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -551,10 +549,8 @@ const char* CategoryLicenses::Guid() const
     return "6BD88575-9D23-44BC-8A49-64D94CC3EE48";
 }
 
-void CategoryLicenses::Parse(Output* output, const std::string& data)
+void CategoryLicenses::Parse(Output* /* output */, const std::string& /* data */)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
     // TODO
 }
 

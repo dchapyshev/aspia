@@ -38,9 +38,8 @@ public:
     }
 
     // Constructor for MTA initialization.
-    explicit ScopedCOMInitializer(SelectMTA mta)
+    explicit ScopedCOMInitializer(SelectMTA /* mta */)
     {
-        UNUSED_PARAMETER(mta);
         Initialize(COINIT_MULTITHREADED);
     }
 

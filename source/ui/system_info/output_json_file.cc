@@ -42,9 +42,8 @@ void OutputJsonFile::EndDocument()
     file_.close();
 }
 
-void OutputJsonFile::StartTableGroup(std::string_view name)
+void OutputJsonFile::StartTableGroup(std::string_view /* name */)
 {
-    UNUSED_PARAMETER(name);
     // TODO
 }
 
@@ -53,9 +52,8 @@ void OutputJsonFile::EndTableGroup()
     // TODO
 }
 
-void OutputJsonFile::StartTable(std::string_view name)
+void OutputJsonFile::StartTable(std::string_view /* name */)
 {
-    UNUSED_PARAMETER(name);
     // TODO
 }
 
@@ -74,17 +72,13 @@ void OutputJsonFile::EndTableHeader()
     // TODO
 }
 
-void OutputJsonFile::AddHeaderItem(std::string_view name, int width)
+void OutputJsonFile::AddHeaderItem(std::string_view /* name */, int /* width */)
 {
-    UNUSED_PARAMETER(name);
-    UNUSED_PARAMETER(width);
     // TODO
 }
 
-void OutputJsonFile::StartGroup(std::string_view name, Category::IconId icon_id)
+void OutputJsonFile::StartGroup(std::string_view /* name */, Category::IconId /* icon_id */)
 {
-    UNUSED_PARAMETER(name);
-    UNUSED_PARAMETER(icon_id);
     // TODO
 }
 
@@ -93,21 +87,16 @@ void OutputJsonFile::EndGroup()
     // TODO
 }
 
-void OutputJsonFile::AddParam(Category::IconId icon_id,
-                              std::string_view param,
-                              std::string_view value,
-                              std::string_view unit)
+void OutputJsonFile::AddParam(Category::IconId /* icon_id */,
+                              std::string_view /* param */,
+                              std::string_view /* value */,
+                              std::string_view /* unit */)
 {
-    UNUSED_PARAMETER(icon_id);
-    UNUSED_PARAMETER(param);
-    UNUSED_PARAMETER(value);
-    UNUSED_PARAMETER(unit);
     // TODO
 }
 
-void OutputJsonFile::StartRow(Category::IconId icon_id)
+void OutputJsonFile::StartRow(Category::IconId /* icon_id */)
 {
-    UNUSED_PARAMETER(icon_id);
     // TODO
 }
 
@@ -116,10 +105,8 @@ void OutputJsonFile::EndRow()
     // TODO
 }
 
-void OutputJsonFile::AddValue(std::string_view value, std::string_view unit)
+void OutputJsonFile::AddValue(std::string_view /* value */, std::string_view /* unit */)
 {
-    UNUSED_PARAMETER(value);
-    UNUSED_PARAMETER(unit);
     // TODO
 }
 

@@ -17,13 +17,9 @@ FileActionDialog::FileActionDialog(const FilePath& path, proto::RequestStatus st
     // Nothing
 }
 
-LRESULT FileActionDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileActionDialog::OnInitDialog(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     CenterWindow();
 
     if (status_ != proto::REQUEST_STATUS_PATH_ALREADY_EXISTS)
@@ -43,77 +39,48 @@ LRESULT FileActionDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpara
     return FALSE;
 }
 
-LRESULT FileActionDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileActionDialog::OnClose(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     EndDialog(0);
     return 0;
 }
 
-LRESULT FileActionDialog::OnReplaceButton(WORD notify_code, WORD control_id, HWND control,
-                                          BOOL& handled)
+LRESULT FileActionDialog::OnReplaceButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(control);
-    UNUSED_PARAMETER(handled);
-
     action_ = FileAction::REPLACE;
     EndDialog(0);
     return 0;
 }
 
-LRESULT FileActionDialog::OnReplaceAllButton(WORD notify_code, WORD control_id, HWND control,
-                                             BOOL& handled)
+LRESULT FileActionDialog::OnReplaceAllButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(control);
-    UNUSED_PARAMETER(handled);
-
     action_ = FileAction::REPLACE_ALL;
     EndDialog(0);
     return 0;
 }
 
-LRESULT FileActionDialog::OnSkipButton(WORD notify_code, WORD control_id, HWND control,
-                                       BOOL& handled)
+LRESULT FileActionDialog::OnSkipButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(control);
-    UNUSED_PARAMETER(handled);
-
     action_ = FileAction::SKIP;
     EndDialog(0);
     return 0;
 }
 
-LRESULT FileActionDialog::OnSkipAllButton(WORD notify_code, WORD control_id, HWND control,
-                                          BOOL& handled)
+LRESULT FileActionDialog::OnSkipAllButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(control);
-    UNUSED_PARAMETER(handled);
-
     action_ = FileAction::SKIP_ALL;
     EndDialog(0);
     return 0;
 }
 
-LRESULT FileActionDialog::OnCancelButton(WORD notify_code, WORD control_id, HWND control,
-                                         BOOL& handled)
+LRESULT FileActionDialog::OnCancelButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(control);
-    UNUSED_PARAMETER(handled);
-
     EndDialog(0);
     return 0;
 }

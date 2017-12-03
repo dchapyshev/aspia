@@ -80,13 +80,9 @@ void MessagePumpForUI::ScheduleDelayedWork(const TimePoint& delayed_work_time)
     SetTimer(message_window_.hwnd(), reinterpret_cast<UINT_PTR>(this), delay_msec, nullptr);
 }
 
-bool MessagePumpForUI::OnMessage(UINT message, WPARAM wparam,
-                                 LPARAM lparam, LRESULT& result)
+bool MessagePumpForUI::OnMessage(
+    UINT message, WPARAM /* wparam */, LPARAM /* lparam */, LRESULT& /* result */)
 {
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(result);
-
     switch (message)
     {
         case kMsgHaveWork:

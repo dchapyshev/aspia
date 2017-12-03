@@ -30,15 +30,10 @@ VideoWindow::VideoWindow(Delegate* delegate)
     // Nothing
 }
 
-LRESULT VideoWindow::OnSkipMessage(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT VideoWindow::OnSkipMessage(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     // Nothing
-
     return 0;
 }
 
@@ -77,13 +72,9 @@ void VideoWindow::DrawBackground(HDC paint_dc, const CRect& paint_rect)
         FillRect(paint_dc, bottom_rect, background_brush_);
 }
 
-LRESULT VideoWindow::OnPaint(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT VideoWindow::OnPaint(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     CPaintDC paint(*this);
 
     if (frame_)
@@ -113,13 +104,9 @@ LRESULT VideoWindow::OnPaint(UINT message, WPARAM wparam, LPARAM lparam, BOOL& h
     return 0;
 }
 
-LRESULT VideoWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT VideoWindow::OnSize(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     if (!frame_)
         return 0;
 
@@ -150,10 +137,8 @@ LRESULT VideoWindow::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& ha
     return 0;
 }
 
-LRESULT VideoWindow::OnMouse(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT VideoWindow::OnMouse(UINT message, WPARAM wparam, LPARAM lparam, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(handled);
-
     if (!frame_ || !has_focus_)
         return 0;
 
@@ -258,23 +243,16 @@ LRESULT VideoWindow::OnMouse(UINT message, WPARAM wparam, LPARAM lparam, BOOL& h
     return 0;
 }
 
-LRESULT VideoWindow::OnMouseLeave(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT VideoWindow::OnMouseLeave(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     has_mouse_ = false;
     return 0;
 }
 
-LRESULT VideoWindow::OnTimer(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT VideoWindow::OnTimer(
+    UINT /* message */, WPARAM wparam, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     const UINT_PTR event_id = static_cast<UINT_PTR>(wparam);
 
     switch (event_id)
@@ -295,12 +273,8 @@ LRESULT VideoWindow::OnTimer(UINT message, WPARAM wparam, LPARAM lparam, BOOL& h
     return 0;
 }
 
-LRESULT VideoWindow::OnHScroll(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT VideoWindow::OnHScroll(UINT /* message */, WPARAM wparam, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     const UINT code = LOWORD(wparam);
     const UINT pos = HIWORD(wparam);
 
@@ -334,12 +308,9 @@ LRESULT VideoWindow::OnHScroll(UINT message, WPARAM wparam, LPARAM lparam, BOOL&
     return 0;
 }
 
-LRESULT VideoWindow::OnVScroll(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT VideoWindow::OnVScroll(
+    UINT /* message */, WPARAM wparam, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     const UINT code = LOWORD(wparam);
     const UINT pos = HIWORD(wparam);
 

@@ -30,14 +30,9 @@ Service::~Service()
 }
 
 // static
-DWORD WINAPI Service::ServiceControlHandler(DWORD control_code,
-                                            DWORD event_type,
-                                            LPVOID event_data,
-                                            LPVOID context)
+DWORD WINAPI Service::ServiceControlHandler(
+    DWORD control_code, DWORD /* event_type */, LPVOID /* event_data */, LPVOID context)
 {
-    UNUSED_PARAMETER(event_type);
-    UNUSED_PARAMETER(event_data);
-
     switch (control_code)
     {
         case SERVICE_CONTROL_INTERROGATE:
@@ -60,11 +55,8 @@ DWORD WINAPI Service::ServiceControlHandler(DWORD control_code,
 }
 
 // static
-void Service::ServiceMain(DWORD argc, LPWSTR* argv)
+void Service::ServiceMain(DWORD /* argc */, LPWSTR* /* argv */)
 {
-    UNUSED_PARAMETER(argc);
-    UNUSED_PARAMETER(argv);
-
     DCHECK(_self);
 
     _self->terminating_ = false;

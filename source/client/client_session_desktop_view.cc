@@ -103,10 +103,8 @@ bool ClientSessionDesktopView::ReadVideoPacket(const proto::VideoPacket& video_p
 }
 
 void ClientSessionDesktopView::ReadConfigRequest(
-    const proto::DesktopSessionConfigRequest& config_request)
+    const proto::DesktopSessionConfigRequest& /* config_request */)
 {
-    UNUSED_PARAMETER(config_request);
-
     OnConfigChange(config_.desktop_session_config());
 }
 
@@ -164,21 +162,19 @@ void ClientSessionDesktopView::OnConfigChange(const proto::DesktopSessionConfig&
     WriteMessage(message);
 }
 
-void ClientSessionDesktopView::OnKeyEvent(uint32_t keycode, uint32_t flags)
+void ClientSessionDesktopView::OnKeyEvent(uint32_t /* keycode */, uint32_t /* flags */)
 {
-    UNUSED_PARAMETER(keycode);
-    UNUSED_PARAMETER(flags);
+    // Nothing
 }
 
-void ClientSessionDesktopView::OnPointerEvent(const DesktopPoint& pos, uint32_t mask)
+void ClientSessionDesktopView::OnPointerEvent(const DesktopPoint& /* pos */, uint32_t /* mask */)
 {
-    UNUSED_PARAMETER(pos);
-    UNUSED_PARAMETER(mask);
+    // Nothing
 }
 
-void ClientSessionDesktopView::OnClipboardEvent(proto::ClipboardEvent& clipboard_event)
+void ClientSessionDesktopView::OnClipboardEvent(proto::ClipboardEvent& /* clipboard_event */)
 {
-    UNUSED_PARAMETER(clipboard_event);
+    // Nothing
 }
 
 } // namespace aspia

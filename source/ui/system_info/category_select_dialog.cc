@@ -53,13 +53,8 @@ void CategorySelectDialog::AddChildItems(CTreeViewCtrl& treeview,
 }
 
 LRESULT CategorySelectDialog::OnInitDialog(
-    UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     DlgResize_Init();
     CenterWindow();
 
@@ -114,39 +109,23 @@ LRESULT CategorySelectDialog::OnInitDialog(
 }
 
 LRESULT CategorySelectDialog::OnClose(
-    UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     EndDialog(IDCANCEL);
     return 0;
 }
 
 LRESULT CategorySelectDialog::OnSelectAllButton(
-    WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(ctrl_id);
-    UNUSED_PARAMETER(ctrl);
-    UNUSED_PARAMETER(handled);
-
     CTreeViewCtrl treeview(GetDlgItem(IDC_CATEGORY_TREE));
     SetCheckStateForChildItems(treeview, TVI_ROOT, TRUE);
-
     return 0;
 }
 
 LRESULT CategorySelectDialog::OnUnselectAllButton(
-    WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(ctrl_id);
-    UNUSED_PARAMETER(ctrl);
-    UNUSED_PARAMETER(handled);
-
     CTreeViewCtrl treeview(GetDlgItem(IDC_CATEGORY_TREE));
     SetCheckStateForChildItems(treeview, TVI_ROOT, FALSE);
 
@@ -154,25 +133,15 @@ LRESULT CategorySelectDialog::OnUnselectAllButton(
 }
 
 LRESULT CategorySelectDialog::OnSaveButton(
-    WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(ctrl_id);
-    UNUSED_PARAMETER(ctrl);
-    UNUSED_PARAMETER(handled);
-
     EndDialog(IDOK);
     return 0;
 }
 
 LRESULT CategorySelectDialog::OnCancelButton(
-    WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(ctrl_id);
-    UNUSED_PARAMETER(ctrl);
-    UNUSED_PARAMETER(handled);
-
     EndDialog(IDCANCEL);
     return 0;
 }
@@ -207,11 +176,9 @@ void CategorySelectDialog::SetCheckStateForChildItems(
     }
 }
 
-LRESULT CategorySelectDialog::OnTreeItemChanged(int control_id, LPNMHDR hdr, BOOL& handled)
+LRESULT CategorySelectDialog::OnTreeItemChanged(
+    int /* control_id */, LPNMHDR hdr, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(handled);
-
     if (checkbox_rebuild_)
         return FALSE;
 

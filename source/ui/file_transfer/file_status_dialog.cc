@@ -69,13 +69,9 @@ void FileStatusDialog::OnAfterThreadRunning()
     DestroyWindow();
 }
 
-LRESULT FileStatusDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileStatusDialog::OnInitDialog(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     DlgResize_Init();
     CenterWindow();
 
@@ -101,37 +97,23 @@ LRESULT FileStatusDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpara
     return FALSE;
 }
 
-LRESULT FileStatusDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileStatusDialog::OnClose(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     PostQuitMessage(0);
     return 0;
 }
 
-LRESULT FileStatusDialog::OnMinimizeButton(WORD notify_code, WORD control_id, HWND control,
-                                           BOOL& handled)
+LRESULT FileStatusDialog::OnMinimizeButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(control);
-    UNUSED_PARAMETER(handled);
-
     ShowWindow(SW_MINIMIZE);
     return 0;
 }
 
-LRESULT FileStatusDialog::OnStopButton(WORD notify_code, WORD control_id, HWND control,
-                                       BOOL& handled)
+LRESULT FileStatusDialog::OnStopButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(control);
-    UNUSED_PARAMETER(handled);
-
     PostMessageW(WM_CLOSE);
     return 0;
 }

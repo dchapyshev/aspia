@@ -27,8 +27,4 @@
   TypeName() = delete;                           \
   DISALLOW_COPY_AND_ASSIGN(TypeName)
 
-#ifndef UNUSED_PARAMETER
-#define UNUSED_PARAMETER(P)    (P)
-#endif // UNUSED_PARAMETER
-
 #endif // _ASPIA_BASE__MACROS_H

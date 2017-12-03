@@ -34,13 +34,9 @@ FileTransferDialog::FileTransferDialog(Mode mode,
     DCHECK(runner_->BelongsToCurrentThread());
 }
 
-LRESULT FileTransferDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileTransferDialog::OnInitDialog(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     CenterWindow();
 
     current_item_edit_ = GetDlgItem(IDC_CURRENT_ITEM_EDIT);
@@ -71,25 +67,17 @@ LRESULT FileTransferDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpa
     return TRUE;
 }
 
-LRESULT FileTransferDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileTransferDialog::OnClose(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     file_transfer_.reset();
     EndDialog(0);
     return 0;
 }
 
-LRESULT FileTransferDialog::OnCancelButton(WORD code, WORD ctrl_id, HWND ctrl, BOOL& handled)
+LRESULT FileTransferDialog::OnCancelButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(code);
-    UNUSED_PARAMETER(ctrl_id);
-    UNUSED_PARAMETER(ctrl);
-    UNUSED_PARAMETER(handled);
-
     PostMessageW(WM_CLOSE);
     return 0;
 }

@@ -109,9 +109,8 @@ void OutputHtmlFile::EndDocument()
     doc_.clear();
 }
 
-void OutputHtmlFile::StartTableGroup(std::string_view name)
+void OutputHtmlFile::StartTableGroup(std::string_view /* name */)
 {
-    UNUSED_PARAMETER(name);
     // TODO
 }
 
@@ -156,9 +155,8 @@ void OutputHtmlFile::EndTableHeader()
     tr_ = nullptr;
 }
 
-void OutputHtmlFile::AddHeaderItem(std::string_view name, int width)
+void OutputHtmlFile::AddHeaderItem(std::string_view name, int /* width */)
 {
-    UNUSED_PARAMETER(width);
     DCHECK(table_);
     DCHECK(tr_);
 
@@ -167,9 +165,8 @@ void OutputHtmlFile::AddHeaderItem(std::string_view name, int width)
     tr_->append_node(th);
 }
 
-void OutputHtmlFile::StartGroup(std::string_view name, Category::IconId icon_id)
+void OutputHtmlFile::StartGroup(std::string_view name, Category::IconId /* icon_id */)
 {
-    UNUSED_PARAMETER(icon_id);
     DCHECK(table_);
 
     rapidxml::xml_node<>* td1 = doc_.allocate_node(rapidxml::node_element, "td");
@@ -191,12 +188,11 @@ void OutputHtmlFile::EndGroup()
     // Nothing
 }
 
-void OutputHtmlFile::AddParam(Category::IconId icon_id,
+void OutputHtmlFile::AddParam(Category::IconId /* icon_id */,
                               std::string_view param,
                               std::string_view value,
                               std::string_view unit)
 {
-    UNUSED_PARAMETER(icon_id);
     DCHECK(table_);
 
     rapidxml::xml_node<>* td1 = doc_.allocate_node(rapidxml::node_element, "td");
@@ -221,9 +217,8 @@ void OutputHtmlFile::AddParam(Category::IconId icon_id,
     table_->append_node(tr);
 }
 
-void OutputHtmlFile::StartRow(Category::IconId icon_id)
+void OutputHtmlFile::StartRow(Category::IconId /* icon_id */)
 {
-    UNUSED_PARAMETER(icon_id);
     DCHECK(table_);
     DCHECK(!tr_);
 

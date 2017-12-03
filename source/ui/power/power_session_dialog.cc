@@ -24,13 +24,9 @@ PowerSessionDialog::PowerSessionDialog(proto::PowerEvent::Action action)
     // Nothing
 }
 
-LRESULT PowerSessionDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT PowerSessionDialog::OnInitDialog(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     CenterWindow();
 
     small_icon_ = AtlLoadIconImage(IDI_MAIN,
@@ -93,23 +89,16 @@ LRESULT PowerSessionDialog::OnInitDialog(UINT message, WPARAM wparam, LPARAM lpa
     return TRUE;
 }
 
-LRESULT PowerSessionDialog::OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT PowerSessionDialog::OnClose(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     Exit(Result::CANCEL);
     return 0;
 }
 
-LRESULT PowerSessionDialog::OnTimer(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT PowerSessionDialog::OnTimer(
+    UINT /* message */, WPARAM wparam, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     UINT_PTR event_id = static_cast<UINT_PTR>(wparam);
 
     if (event_id != kTimerId)
@@ -129,26 +118,16 @@ LRESULT PowerSessionDialog::OnTimer(UINT message, WPARAM wparam, LPARAM lparam, 
     return 0;
 }
 
-LRESULT PowerSessionDialog::OnOkButton(WORD notify_code, WORD control_id, HWND control,
-                                       BOOL& handled)
+LRESULT PowerSessionDialog::OnOkButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(control);
-    UNUSED_PARAMETER(handled);
-
     Exit(Result::EXECUTE);
     return 0;
 }
 
-LRESULT PowerSessionDialog::OnCancelButton(WORD notify_code, WORD control_id, HWND control,
-                                           BOOL& handled)
+LRESULT PowerSessionDialog::OnCancelButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(notify_code);
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(control);
-    UNUSED_PARAMETER(handled);
-
     Exit(Result::CANCEL);
     return 0;
 }

@@ -16,11 +16,8 @@ WaitableTimer::~WaitableTimer()
 }
 
 // static
-void NTAPI WaitableTimer::TimerProc(LPVOID context,
-                                    BOOLEAN timer_or_wait_fired)
+void NTAPI WaitableTimer::TimerProc(LPVOID context, BOOLEAN /* timer_or_wait_fired */)
 {
-    UNUSED_PARAMETER(timer_or_wait_fired);
-
     WaitableTimer* self = reinterpret_cast<WaitableTimer*>(context);
     DCHECK(self);
 

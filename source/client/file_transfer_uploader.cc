@@ -55,10 +55,8 @@ void FileTransferUploader::Start(const FilePath& source_path,
 
 void FileTransferUploader::OnTaskQueueBuilded(FileTaskQueue& task_queue,
                                               int64_t task_object_size,
-                                              int64_t task_object_count)
+                                              int64_t /* task_object_count */)
 {
-    UNUSED_PARAMETER(task_object_count);
-
     task_queue_.swap(task_queue);
 
     delegate_->OnTransferStarted(task_object_size);

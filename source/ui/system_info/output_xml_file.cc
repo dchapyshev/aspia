@@ -58,9 +58,8 @@ void OutputXmlFile::EndDocument()
     doc_.clear();
 }
 
-void OutputXmlFile::StartTableGroup(std::string_view name)
+void OutputXmlFile::StartTableGroup(std::string_view /* name */)
 {
-    UNUSED_PARAMETER(name);
     // TODO
 }
 

@@ -60,9 +60,9 @@ public:
         // again.
         virtual void OnObjectSignaled(HANDLE object) = 0;
 
-        virtual void OnObjectTimeout(HANDLE object)
+        virtual void OnObjectTimeout(HANDLE /* object */)
         {
-            UNUSED_PARAMETER(object);
+            // Nothing
         }
     };
 

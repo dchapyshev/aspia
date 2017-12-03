@@ -35,10 +35,8 @@ const char* CategoryRegistrationInformation::Guid() const
     return "2DDA7127-6ECF-49E1-9C6A-549AEF4B9E87";
 }
 
-void CategoryRegistrationInformation::Parse(Output* output, const std::string& data)
+void CategoryRegistrationInformation::Parse(Output* /* output */, const std::string& /* data */)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -67,10 +65,8 @@ const char* CategoryTaskScheduler::Guid() const
     return "1B27C27F-847E-47CC-92DF-6B8F5CB4827A";
 }
 
-void CategoryTaskScheduler::Parse(Output* output, const std::string& data)
+void CategoryTaskScheduler::Parse(Output* /* output */, const std::string& /* data */)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -99,10 +95,8 @@ const char* CategoryEnvironmentVariables::Guid() const
     return "AAB8670A-3C90-4F75-A907-512ACBAD1BE6";
 }
 
-void CategoryEnvironmentVariables::Parse(Output* output, const std::string& data)
+void CategoryEnvironmentVariables::Parse(Output* /* output */, const std::string& /* data */)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -131,10 +125,8 @@ const char* CategoryEventLogsApplications::Guid() const
     return "0DD03A20-D1AF-4D1F-938F-956EE9003EE9";
 }
 
-void CategoryEventLogsApplications::Parse(Output* output, const std::string& data)
+void CategoryEventLogsApplications::Parse(Output* /* output */, const std::string& /* data */)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -163,10 +155,8 @@ const char* CategoryEventLogsSecurity::Guid() const
     return "7E0220A8-AC51-4C9E-8834-F0F805D40977";
 }
 
-void CategoryEventLogsSecurity::Parse(Output* output, const std::string& data)
+void CategoryEventLogsSecurity::Parse(Output* /* output */, const std::string& /* data */)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -195,10 +185,8 @@ const char* CategoryEventLogsSystem::Guid() const
     return "8421A38A-4757-4298-A5CB-9493C7726515";
 }
 
-void CategoryEventLogsSystem::Parse(Output* output, const std::string& data)
+void CategoryEventLogsSystem::Parse(Output* /* output */, const std::string& /* data */)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
     // TODO
 }
 

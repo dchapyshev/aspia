@@ -35,10 +35,8 @@ void WaitableEventWatcher::StopWatching()
     watcher_.StopWatching();
 }
 
-void WaitableEventWatcher::OnObjectSignaled(HANDLE object)
+void WaitableEventWatcher::OnObjectSignaled(HANDLE /* object */)
 {
-    UNUSED_PARAMETER(object);
-
     WaitableEvent* event = event_;
 
     event_ = nullptr;

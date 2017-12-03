@@ -216,10 +216,8 @@ const char* CategoryRasConnections::Guid() const
     return "E0A43CFD-3A97-4577-B3FB-3B542C0729F7";
 }
 
-void CategoryRasConnections::Parse(Output* output, const std::string& data)
+void CategoryRasConnections::Parse(Output* /* output */, const std::string& /* data */)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
     // TODO
 }
 
@@ -483,10 +481,8 @@ const char* CategoryOpenFiles::Guid() const
     return "EAE638B9-CCF6-442C-84A1-B0901A64DA3D";
 }
 
-void CategoryOpenFiles::Parse(Output* output, const std::string& data)
+void CategoryOpenFiles::Parse(Output* /* output */, const std::string& /* data */)
 {
-    UNUSED_PARAMETER(output);
-    UNUSED_PARAMETER(data);
     // TODO
 }
 

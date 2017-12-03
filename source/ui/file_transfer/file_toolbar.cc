@@ -32,10 +32,8 @@ bool FileToolBar::CreateFileToolBar(HWND parent)
     return true;
 }
 
-LRESULT FileToolBar::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT FileToolBar::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(handled);
-
     LRESULT ret = DefWindowProcW(message, wparam, lparam);
 
     SetExtendedStyle(TBSTYLE_EX_MIXEDBUTTONS | TBSTYLE_EX_DOUBLEBUFFER);
@@ -86,11 +84,8 @@ LRESULT FileToolBar::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& 
     return ret;
 }
 
-LRESULT FileToolBar::OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled)
+LRESULT FileToolBar::OnGetDispInfo(int /* control_id */, LPNMHDR hdr, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(handled);
-
     LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(hdr);
     UINT string_id;
 

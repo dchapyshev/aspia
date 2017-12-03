@@ -38,12 +38,10 @@ void FileTaskQueueBuilder::Start(std::shared_ptr<FileRequestSenderProxy> sender,
     Start(sender, path, FilePath(), file_list, callback);
 }
 
-void FileTaskQueueBuilder::OnFileListReply(const FilePath& path,
+void FileTaskQueueBuilder::OnFileListReply(const FilePath& /* path */,
                                            std::shared_ptr<proto::FileList> file_list,
                                            proto::RequestStatus status)
 {
-    UNUSED_PARAMETER(path);
-
     if (status != proto::REQUEST_STATUS_SUCCESS)
     {
         return;
