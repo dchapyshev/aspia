@@ -269,10 +269,8 @@ LRESULT SystemInfoWindow::OnListRightClick(
 LRESULT SystemInfoWindow::OnSaveSelectedButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    if (CategorySelectDialog(&category_list_).DoModal() == IDCANCEL)
-        return 0;
-
-    Save(&category_list_);
+    if (CategorySelectDialog(&category_list_).DoModal() == IDOK)
+        Save(&category_list_);
 
     std::function<void(CategoryList&, bool)> set_check_state =
         [&](CategoryList& category_list, bool checked)
@@ -291,7 +289,6 @@ LRESULT SystemInfoWindow::OnSaveSelectedButton(
     };
 
     set_check_state(category_list_, false);
-
     return 0;
 }
 
