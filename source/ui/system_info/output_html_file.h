@@ -30,7 +30,7 @@ protected:
     void EndDocument() final;
     void StartTableGroup(std::string_view name) final;
     void EndTableGroup() final;
-    void StartTable(std::string_view name) final;
+    void StartTable(std::string_view name, TableType table_type) final;
     void EndTable() final;
     void StartTableHeader() final;
     void EndTableHeader() final;

@@ -125,7 +125,7 @@ void OutputHtmlFile::EndTableGroup()
         --h_level_;
 }
 
-void OutputHtmlFile::StartTable(std::string_view name)
+void OutputHtmlFile::StartTable(std::string_view name, TableType /* table_type */)
 {
     DCHECK(body_);
     DCHECK(!table_);

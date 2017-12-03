@@ -236,7 +236,7 @@ void CategoryUsers::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -339,7 +339,7 @@ void CategoryUserGroups::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::LIST);
 
     {
         Output::TableHeader header(output);
@@ -399,7 +399,7 @@ void CategoryActiveSessions::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::LIST);
 
     {
         Output::TableHeader header(output);

@@ -57,10 +57,12 @@ class Output
 public:
     virtual ~Output() = default;
 
+    enum class TableType { LIST, PARAM_VALUE };
+
     class Table
     {
     public:
-        Table(Output* output, std::string_view name);
+        Table(Output* output, std::string_view name, TableType table_type);
         ~Table();
 
     private:
@@ -109,7 +111,7 @@ public:
     virtual void StartTableGroup(std::string_view name) = 0;
     virtual void EndTableGroup() = 0;
 
-    virtual void StartTable(std::string_view name) = 0;
+    virtual void StartTable(std::string_view name, TableType table_type) = 0;
     virtual void EndTable() = 0;
 
     virtual void StartTableHeader() = 0;

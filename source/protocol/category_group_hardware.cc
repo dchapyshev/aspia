@@ -45,7 +45,7 @@ void CategoryDmiBios::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -152,7 +152,7 @@ void CategoryDmiSystem::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -236,7 +236,7 @@ void CategoryDmiBaseboard::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -349,7 +349,7 @@ void CategoryDmiChassis::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -457,7 +457,7 @@ void CategoryDmiCaches::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -586,7 +586,7 @@ void CategoryDmiProcessors::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -735,7 +735,7 @@ void CategoryDmiMemoryDevices::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -841,7 +841,7 @@ void CategoryDmiSystemSlots::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -923,7 +923,7 @@ void CategoryDmiPortConnectors::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -1005,7 +1005,7 @@ void CategoryDmiOnboardDevices::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -1082,7 +1082,7 @@ void CategoryDmiBuildinPointing::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -1156,7 +1156,7 @@ void CategoryDmiPortableBattery::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -1359,7 +1359,7 @@ void CategoryATA::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -1537,7 +1537,7 @@ void CategoryVideoAdapters::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -1611,7 +1611,7 @@ void CategoryMonitor::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -1978,7 +1978,7 @@ void CategoryPrinters::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -2112,7 +2112,7 @@ void CategoryPowerOptions::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
     {
         Output::TableHeader header(output);
@@ -2402,7 +2402,7 @@ void CategoryWindowsDevices::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::LIST);
 
     {
         Output::TableHeader header(output);

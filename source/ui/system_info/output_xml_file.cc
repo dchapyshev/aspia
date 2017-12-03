@@ -83,7 +83,7 @@ void OutputXmlFile::EndTableGroup()
     }
 }
 
-void OutputXmlFile::StartTable(std::string_view name)
+void OutputXmlFile::StartTable(std::string_view name, TableType /* table_type */)
 {
     category_ = doc_.allocate_node(rapidxml::node_element, "category");
     category_->append_attribute(

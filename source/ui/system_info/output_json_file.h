@@ -33,7 +33,7 @@ protected:
     void EndDocument() final;
     void StartTableGroup(std::string_view name) final;
     void EndTableGroup() final;
-    void StartTable(std::string_view name) final;
+    void StartTable(std::string_view name, TableType table_type) final;
     void EndTable() final;
     void StartTableHeader() final;
     void EndTableHeader() final;
@@ -56,7 +56,8 @@ private:
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer_;
 
     std::vector<std::string> column_list_;
-    size_t column_index_ = 0;
+    int column_index_ = 0;
+    TableType table_type_;
 
     DISALLOW_COPY_AND_ASSIGN(OutputJsonFile);
 };

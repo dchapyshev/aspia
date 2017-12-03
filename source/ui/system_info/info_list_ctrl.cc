@@ -80,7 +80,7 @@ void InfoListCtrl::EndTableGroup()
     // Nothing
 }
 
-void InfoListCtrl::StartTable(std::string_view /* name */)
+void InfoListCtrl::StartTable(std::string_view /* name */, TableType /* table_type */)
 {
     imagelist_.RemoveAll();
     item_count_ = 0;

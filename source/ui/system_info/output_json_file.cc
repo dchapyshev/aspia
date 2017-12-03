@@ -46,7 +46,7 @@ void OutputJsonFile::EndDocument()
 
 void OutputJsonFile::StartTableGroup(std::string_view name)
 {
-    writer_.String(name.data(), static_cast<rapidjson::SizeType>(name.size()));
+    writer_.String(name.data());
     writer_.StartObject();
 }
 
@@ -55,14 +55,22 @@ void OutputJsonFile::EndTableGroup()
     writer_.EndObject();
 }
 
-void OutputJsonFile::StartTable(std::string_view name)
+void OutputJsonFile::StartTable(std::string_view name, TableType table_type)
 {
-    writer_.String(name.data(), static_cast<rapidjson::SizeType>(name.size()));
+    table_type_ = table_type;
+
+    writer_.String(name.data());
     writer_.StartObject();
+
+    if (table_type_ == TableType::LIST)
+        writer_.StartArray();
 }
 
 void OutputJsonFile::EndTable()
 {
+    if (table_type_ == TableType::LIST)
+        writer_.EndArray();
+
     writer_.EndObject();
     column_list_.clear();
 }
@@ -84,7 +92,7 @@ void OutputJsonFile::AddHeaderItem(std::string_view name, int /* width */)
 
 void OutputJsonFile::StartGroup(std::string_view name, Category::IconId /* icon_id */)
 {
-    writer_.String(name.data(), static_cast<rapidjson::SizeType>(name.size()));
+    writer_.String(name.data());
     writer_.StartObject();
 }
 
@@ -96,28 +104,59 @@ void OutputJsonFile::EndGroup()
 void OutputJsonFile::AddParam(Category::IconId /* icon_id */,
                               std::string_view param,
                               std::string_view value,
-                              std::string_view /* unit */)
+                              std::string_view unit)
 {
-    writer_.Key(param.data(), static_cast<rapidjson::SizeType>(param.size()));
-    writer_.String(value.data(), static_cast<rapidjson::SizeType>(value.size()));
+    if (unit.empty())
+    {
+        writer_.Key(param.data());
+        writer_.String(value.data());
+    }
+    else
+    {
+        writer_.String(param.data());
+        writer_.StartObject();
+
+        writer_.Key("value");
+        writer_.String(value.data());
+
+        writer_.Key("unit");
+        writer_.String(unit.data());
+
+        writer_.EndObject();
+    }
 }
 
 void OutputJsonFile::StartRow(Category::IconId /* icon_id */)
 {
+    writer_.StartObject();
     column_index_ = 0;
 }
 
 void OutputJsonFile::EndRow()
 {
-    // Nothing
+    writer_.EndObject();
 }
 
-void OutputJsonFile::AddValue(std::string_view value, std::string_view /* unit */)
+void OutputJsonFile::AddValue(std::string_view value, std::string_view unit)
 {
-    writer_.Key(column_list_[column_index_].data(),
-                static_cast<rapidjson::SizeType>(column_list_[column_index_].size()));
+    if (unit.empty())
+    {
+        writer_.Key(column_list_[column_index_].data());
+        writer_.String(value.data());
+    }
+    else
+    {
+        writer_.String(column_list_[column_index_].data());
+        writer_.StartObject();
 
-    writer_.String(value.data(), static_cast<rapidjson::SizeType>(value.size()));
+        writer_.Key("value");
+        writer_.String(value.data());
+
+        writer_.Key("unit");
+        writer_.String(unit.data());
+
+        writer_.EndObject();
+    }
 
     ++column_index_;
 }

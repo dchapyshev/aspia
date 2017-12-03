@@ -272,63 +272,65 @@ LRESULT SystemInfoWindow::OnSaveSelectedButton(
     if (CategorySelectDialog(&category_list_).DoModal() == IDCANCEL)
         return 0;
 
-    static const WCHAR html_files[] = L"*.html;*.htm";
-    static const WCHAR json_files[] = L"*.json";
-    static const WCHAR xml_files[] = L"*.xml";
+    Save(&category_list_);
 
-    WCHAR filter[256] = { 0 };
-    int length = 0;
-
-    length += AtlLoadString(IDS_SI_FILTER_HTML, filter, ARRAYSIZE(filter)) + 1;
-    StringCbCatW(filter + length, ARRAYSIZE(filter) - length, html_files);
-    length += ARRAYSIZE(html_files);
-
-    length += AtlLoadString(IDS_SI_FILTER_JSON, filter + length, ARRAYSIZE(filter) - length) + 1;
-    StringCbCatW(filter + length, ARRAYSIZE(filter) - length, json_files);
-    length += ARRAYSIZE(json_files);
-
-    length += AtlLoadString(IDS_SI_FILTER_XML, filter + length, ARRAYSIZE(filter) - length) + 1;
-    StringCbCatW(filter + length, ARRAYSIZE(filter) - length, xml_files);
-
-    WCHAR computer_name[256] = { 0 };
-    DWORD computer_name_length = ARRAYSIZE(computer_name);
-    GetComputerNameW(computer_name, &computer_name_length);
-
-    CFileDialog save_dialog(FALSE, L"html", computer_name,
-                            OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, filter);
-    if (save_dialog.DoModal() == IDCANCEL)
-        return 0;
-
-    FilePath file_path(save_dialog.m_szFileName);
-    FilePath extension(file_path.extension());
-
-    std::unique_ptr<Output> output;
-
-    if (extension == L".html" || extension == L".htm")
+    std::function<void(CategoryList&, bool)> set_check_state =
+        [&](CategoryList& category_list, bool checked)
     {
-        output = OutputHtmlFile::Create(file_path);
-    }
-    else if (extension == L".json")
-    {
-        output = OutputJsonFile::Create(file_path);
-    }
-    else if (extension == L".xml")
-    {
-        output = OutputXmlFile::Create(file_path);
-    }
-    else
-    {
-        LOG(WARNING) << "Invalid file extension: " << extension;
-        return 0;
-    }
+        for (auto& category : category_list)
+        {
+            if (category->type() == Category::Type::INFO)
+            {
+                category->category_info()->SetChecked(checked);
+            }
+            else
+            {
+                set_check_state(*category->category_group()->mutable_child_list(), checked);
+            }
+        }
+    };
 
-    if (!output)
-        return 0;
+    set_check_state(category_list_, false);
 
-    ReportProgressDialog progress_dialog(&category_list_, output.get(),
-                                         std::bind(&SystemInfoWindow::OnRequest, this,
-                                                   std::placeholders::_1, std::placeholders::_2));
-    progress_dialog.DoModal();
+    return 0;
+}
+
+LRESULT SystemInfoWindow::OnSaveAllButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    std::function<void(CategoryList&, bool)> set_check_state =
+        [&](CategoryList& category_list, bool checked)
+    {
+        for (auto& category : category_list)
+        {
+            if (category->type() == Category::Type::INFO)
+            {
+                category->category_info()->SetChecked(checked);
+            }
+            else
+            {
+                set_check_state(*category->category_group()->mutable_child_list(), checked);
+            }
+        }
+    };
+
+    set_check_state(category_list_, true);
+    Save(&category_list_);
+    set_check_state(category_list_, false);
+
+    return 0;
+}
+
+LRESULT SystemInfoWindow::OnSaveCurrentButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    Category* category = tree_.GetItemCategory(tree_.GetSelectedItem());
+    if (category && category->type() == Category::Type::INFO)
+    {
+        category->category_info()->SetChecked(true);
+        Save(&category_list_);
+        category->category_info()->SetChecked(false);
+    }
 
     return 0;
 }
@@ -438,6 +440,67 @@ LRESULT SystemInfoWindow::OnExitButton(
 {
     PostMessageW(WM_CLOSE);
     return 0;
+}
+
+void SystemInfoWindow::Save(CategoryList* category_list)
+{
+    static const WCHAR html_files[] = L"*.html;*.htm";
+    static const WCHAR json_files[] = L"*.json";
+    static const WCHAR xml_files[] = L"*.xml";
+
+    WCHAR filter[256] = { 0 };
+    int length = 0;
+
+    length += AtlLoadString(IDS_SI_FILTER_HTML, filter, ARRAYSIZE(filter)) + 1;
+    StringCbCatW(filter + length, ARRAYSIZE(filter) - length, html_files);
+    length += ARRAYSIZE(html_files);
+
+    length += AtlLoadString(IDS_SI_FILTER_JSON, filter + length, ARRAYSIZE(filter) - length) + 1;
+    StringCbCatW(filter + length, ARRAYSIZE(filter) - length, json_files);
+    length += ARRAYSIZE(json_files);
+
+    length += AtlLoadString(IDS_SI_FILTER_XML, filter + length, ARRAYSIZE(filter) - length) + 1;
+    StringCbCatW(filter + length, ARRAYSIZE(filter) - length, xml_files);
+
+    WCHAR computer_name[256] = { 0 };
+    DWORD computer_name_length = ARRAYSIZE(computer_name);
+    GetComputerNameW(computer_name, &computer_name_length);
+
+    CFileDialog save_dialog(FALSE, L"html", computer_name,
+                            OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, filter);
+    if (save_dialog.DoModal() == IDCANCEL)
+        return;
+
+    FilePath file_path = save_dialog.m_szFileName;
+    FilePath extension = file_path.extension();
+
+    std::unique_ptr<Output> output;
+
+    if (extension == L".html" || extension == L".htm")
+    {
+        output = OutputHtmlFile::Create(file_path);
+    }
+    else if (extension == L".json")
+    {
+        output = OutputJsonFile::Create(file_path);
+    }
+    else if (extension == L".xml")
+    {
+        output = OutputXmlFile::Create(file_path);
+    }
+    else
+    {
+        LOG(WARNING) << "Invalid file extension: " << extension;
+        return;
+    }
+
+    if (!output)
+        return;
+
+    ReportProgressDialog progress_dialog(category_list, output.get(),
+                                         std::bind(&SystemInfoWindow::OnRequest, this,
+                                                   std::placeholders::_1, std::placeholders::_2));
+    progress_dialog.DoModal();
 }
 
 void SystemInfoWindow::Refresh(Category* category)

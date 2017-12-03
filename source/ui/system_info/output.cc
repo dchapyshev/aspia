@@ -9,10 +9,10 @@
 
 namespace aspia {
 
-Output::Table::Table(Output* output, std::string_view name)
+Output::Table::Table(Output* output, std::string_view name, TableType table_type)
     : output_(output)
 {
-    output_->StartTable(name);
+    output_->StartTable(name, table_type);
 }
 
 Output::Table::~Table()

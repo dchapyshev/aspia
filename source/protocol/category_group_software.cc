@@ -40,7 +40,7 @@ void CategoryPrograms::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::LIST);
 
     {
         Output::TableHeader header(output);
@@ -139,7 +139,7 @@ void CategoryServices::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::LIST);
 
     {
         Output::TableHeader header(output);
@@ -334,7 +334,7 @@ void CategoryDrivers::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::LIST);
 
     {
         Output::TableHeader header(output);
@@ -470,7 +470,7 @@ void CategoryProcesses::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name());
+    Output::Table table(output, Name(), Output::TableType::LIST);
 
     {
         Output::TableHeader header(output);
