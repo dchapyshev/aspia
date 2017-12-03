@@ -84,6 +84,18 @@ LRESULT CategorySelectDialog::OnInitDialog(
                                           small_icon_size.cy);
     CButton(GetDlgItem(IDC_UNSELECT_ALL)).SetIcon(unselect_all_icon_);
 
+    expand_all_icon_ = AtlLoadIconImage(IDI_TREE,
+                                        LR_CREATEDIBSECTION,
+                                        small_icon_size.cx,
+                                        small_icon_size.cy);
+    CButton(GetDlgItem(IDC_EXPAND_ALL)).SetIcon(expand_all_icon_);
+
+    collapse_all_icon_ = AtlLoadIconImage(IDI_LIST,
+                                          LR_CREATEDIBSECTION,
+                                          small_icon_size.cx,
+                                          small_icon_size.cy);
+    CButton(GetDlgItem(IDC_COLLAPSE_ALL)).SetIcon(collapse_all_icon_);
+
     CTreeViewCtrl treeview(GetDlgItem(IDC_CATEGORY_TREE));
 
     if (IsWindowsVistaOrGreater())
@@ -128,7 +140,22 @@ LRESULT CategorySelectDialog::OnUnselectAllButton(
 {
     CTreeViewCtrl treeview(GetDlgItem(IDC_CATEGORY_TREE));
     SetCheckStateForChildItems(treeview, TVI_ROOT, FALSE);
+    return 0;
+}
 
+LRESULT CategorySelectDialog::OnExpandAllButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    CTreeViewCtrl treeview(GetDlgItem(IDC_CATEGORY_TREE));
+    ExpandChildItems(treeview, TVI_ROOT, TVE_EXPAND);
+    return 0;
+}
+
+LRESULT CategorySelectDialog::OnCollapseAllButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    CTreeViewCtrl treeview(GetDlgItem(IDC_CATEGORY_TREE));
+    ExpandChildItems(treeview, TVI_ROOT, TVE_COLLAPSE);
     return 0;
 }
 
@@ -173,6 +200,24 @@ void CategorySelectDialog::SetCheckStateForChildItems(
     {
         SetCheckStateForItem(treeview, item, state);
         SetCheckStateForChildItems(treeview, item, state);
+    }
+}
+
+// static
+void CategorySelectDialog::ExpandChildItems(
+    CTreeViewCtrl& treeview, HTREEITEM parent_item, UINT flag)
+{
+    for (HTREEITEM item = treeview.GetChildItem(parent_item);
+         item != nullptr;
+         item = treeview.GetNextSiblingItem(item))
+    {
+        Category* category = reinterpret_cast<Category*>(treeview.GetItemData(item));
+
+        if (category && category->type() == Category::Type::GROUP)
+        {
+            treeview.Expand(item, flag);
+            ExpandChildItems(treeview, item, flag);
+        }
     }
 }
 

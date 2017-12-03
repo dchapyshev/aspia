@@ -40,6 +40,8 @@ private:
 
         COMMAND_ID_HANDLER(IDC_SELECT_ALL, OnSelectAllButton)
         COMMAND_ID_HANDLER(IDC_UNSELECT_ALL, OnUnselectAllButton)
+        COMMAND_ID_HANDLER(IDC_EXPAND_ALL, OnExpandAllButton)
+        COMMAND_ID_HANDLER(IDC_COLLAPSE_ALL, OnCollapseAllButton)
         COMMAND_ID_HANDLER(IDOK, OnSaveButton)
         COMMAND_ID_HANDLER(IDCANCEL, OnCancelButton)
 
@@ -50,8 +52,6 @@ private:
 
     BEGIN_DLGRESIZE_MAP(CategorySelectDialog)
         DLGRESIZE_CONTROL(IDC_CATEGORY_TREE, DLSZ_SIZE_X | DLSZ_SIZE_Y)
-        DLGRESIZE_CONTROL(IDC_SELECT_ALL, DLSZ_MOVE_Y)
-        DLGRESIZE_CONTROL(IDC_UNSELECT_ALL, DLSZ_MOVE_Y)
         DLGRESIZE_CONTROL(IDOK, DLSZ_MOVE_X | DLSZ_MOVE_Y)
         DLGRESIZE_CONTROL(IDCANCEL, DLSZ_MOVE_X | DLSZ_MOVE_Y)
     END_DLGRESIZE_MAP()
@@ -60,6 +60,8 @@ private:
     LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnSelectAllButton(WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled);
     LRESULT OnUnselectAllButton(WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnExpandAllButton(WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled);
+    LRESULT OnCollapseAllButton(WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled);
     LRESULT OnSaveButton(WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled);
     LRESULT OnCancelButton(WORD notify_code, WORD ctrl_id, HWND ctrl, BOOL& handled);
 
@@ -75,6 +77,7 @@ private:
     static void SetCheckStateForChildItems(CTreeViewCtrl& treeview,
                                            HTREEITEM parent_item,
                                            BOOL state);
+    static void ExpandChildItems(CTreeViewCtrl& treeview, HTREEITEM parent_item, UINT flag);
 
     CategoryList* category_list_;
 
@@ -82,6 +85,8 @@ private:
     CIcon big_icon_;
     CIcon select_all_icon_;
     CIcon unselect_all_icon_;
+    CIcon expand_all_icon_;
+    CIcon collapse_all_icon_;
 
     CImageListManaged imagelist_;
 

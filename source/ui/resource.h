@@ -47,40 +47,42 @@
 #define IDI_HOME                                   128
 #define IDI_KEYS                                   129
 #define IDI_LICENSE_KEY                            130
-#define IDI_MEMORY                                 131
-#define IDI_MINUS                                  132
-#define IDI_MONITOR                                133
-#define IDI_MOTHERBOARD                            134
-#define IDI_MOUSE                                  135
-#define IDI_NETWORK                                136
-#define IDI_NETWORK_ADAPTER                        137
-#define IDI_NETWORK_IP                             138
-#define IDI_OS                                     139
-#define IDI_PCI                                    140
-#define IDI_PENCIL                                 141
-#define IDI_PLUS                                   142
-#define IDI_PORT                                   143
-#define IDI_POWER_SURGE                            144
-#define IDI_POWER_SUPPLY                           145
-#define IDI_PRINTER                                146
-#define IDI_PRINTER_SHARE                          147
-#define IDI_PROCESSOR                              148
-#define IDI_RECIEVE                                149
-#define IDI_REFRESH                                150
-#define IDI_ROUTE                                  151
-#define IDI_SELECT_ALL                             152
-#define IDI_SEND                                   153
-#define IDI_SERVER                                 154
-#define IDI_SERVERS_NETWORK                        155
-#define IDI_SETTINGS                               156
-#define IDI_SOFTWARE                               157
-#define IDI_SYSTEM_MONITOR                         158
-#define IDI_TELEPHONE_FAX                          159
-#define IDI_UNCHECKED                              160
-#define IDI_UNSELECT_ALL                           161
-#define IDI_USER                                   162
-#define IDI_USER_DISABLED                          163
-#define IDI_USERS                                  164
+#define IDI_LIST                                   131
+#define IDI_MEMORY                                 132
+#define IDI_MINUS                                  133
+#define IDI_MONITOR                                134
+#define IDI_MOTHERBOARD                            135
+#define IDI_MOUSE                                  136
+#define IDI_NETWORK                                137
+#define IDI_NETWORK_ADAPTER                        138
+#define IDI_NETWORK_IP                             139
+#define IDI_OS                                     140
+#define IDI_PCI                                    141
+#define IDI_PENCIL                                 142
+#define IDI_PLUS                                   143
+#define IDI_PORT                                   144
+#define IDI_POWER_SURGE                            145
+#define IDI_POWER_SUPPLY                           146
+#define IDI_PRINTER                                147
+#define IDI_PRINTER_SHARE                          148
+#define IDI_PROCESSOR                              149
+#define IDI_RECIEVE                                150
+#define IDI_REFRESH                                151
+#define IDI_ROUTE                                  152
+#define IDI_SELECT_ALL                             153
+#define IDI_SEND                                   154
+#define IDI_SERVER                                 155
+#define IDI_SERVERS_NETWORK                        156
+#define IDI_SETTINGS                               157
+#define IDI_SOFTWARE                               158
+#define IDI_SYSTEM_MONITOR                         159
+#define IDI_TELEPHONE_FAX                          160
+#define IDI_TREE                                   161
+#define IDI_UNCHECKED                              162
+#define IDI_UNSELECT_ALL                           163
+#define IDI_USER                                   164
+#define IDI_USER_DISABLED                          165
+#define IDI_USERS                                  166
 
 //
 // Dialogs
@@ -156,6 +158,8 @@
 #define IDC_CURRENT_ACTION                         150
 #define IDC_REPORT_PROGRESS                        151
 #define IDC_SYSTEM_INFO_ACCELERATORS               152
+#define IDC_EXPAND_ALL                             153
+#define IDC_COLLAPSE_ALL                           154
 
 //
 // Commands
