@@ -111,10 +111,12 @@ LRESULT SystemInfoWindow::OnCreate(
                      WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
 
     splitter_.SetActivePane(SPLIT_PANE_LEFT);
-    splitter_.SetSplitterPos(350);
+    splitter_.SetSplitterPos(230);
     splitter_.m_cxySplitBar = 5;
     splitter_.m_cxyMin = 0;
     splitter_.m_bFullDrag = false;
+
+    splitter_.SetSplitterExtendedStyle(splitter_.GetSplitterExtendedStyle() &~SPLIT_PROPORTIONAL);
 
     const DWORD tree_style = WS_CHILD | WS_VISIBLE | WS_TABSTOP | TVS_HASLINES |
         TVS_SHOWSELALWAYS | TVS_HASBUTTONS | TVS_LINESATROOT;
