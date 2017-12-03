@@ -281,9 +281,9 @@ void CategoryUsers::Parse(Output* output, const std::string& data)
                          item.is_lockout() ? "Yes" : "No");
 
         output->AddParam(IDI_CLOCK, "Last Logon", TimeToString(item.last_logon_time()));
-        output->AddParam(IDI_COUNTER, "Number Logons", std::to_string(item.number_logons()));
+        output->AddParam(IDI_USER, "Number Logons", std::to_string(item.number_logons()));
 
-        output->AddParam(IDI_COUNTER,
+        output->AddParam(IDI_USER,
                          "Bad Password Count",
                          std::to_string(item.bad_password_count()));
     }
