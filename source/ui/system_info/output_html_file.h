@@ -54,6 +54,8 @@ private:
     rapidxml::xml_node<>* body_ = nullptr;
     rapidxml::xml_node<>* table_ = nullptr;
     rapidxml::xml_node<>* tr_ = nullptr;
+    int h_level_ = 1;
+    int padding_ = 5;
 
     DISALLOW_COPY_AND_ASSIGN(OutputHtmlFile);
 };

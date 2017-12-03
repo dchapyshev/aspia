@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/strings/string_util.h"
 #include "base/logging.h"
 #include "ui/system_info/output_html_file.h"
 
@@ -16,29 +17,29 @@ namespace aspia {
 
 static const char kCssStyle[] =
     "body {"
-    "color: #353535;"
-    "font-family: Tahoma,Arial,Verdana;"
+        "color: #353535;"
+        "font-family: Tahoma,Arial,Verdana;"
     "}"
-    "h1 {"
-    "font-size: 14px;"
-    "}"
+    "h1 { font-size: 18px; }"
+    "h2 { font-size: 16px; }"
+    "h3 { font-size: 14px; }"
+    "h4 { font-size: 12px; }"
+    "h5 { font-size: 10px; }"
+    "h6 { font-size: 8px; }"
     "table {"
-    "background-color: #F9F9FC;"
-    "border: 1px solid #E2E2E0;"
-    "font-size: 12px;"
+        "background-color: #F9F9FC;"
+        "border: 1px solid #E2E2E0;"
+        "font-size: 12px;"
     "}"
     "tr {"
-    "border-bottom: 1px solid #E2E2E0;"
-    "}"
-    "tbody tr: hover {"
-    "background-color:#F2F2F8;"
+        "border-bottom: 1px solid #E2E2E0;"
     "}"
     "th,td {"
-    "padding: 5px;"
+        "padding: 5px;"
     "}"
     "th { "
-    "background-color: #DCDCED;"
-    "font-weight:bold;"
+        "background-color: #DCDCED;"
+        "font-weight: bold;"
     "}";
 
 OutputHtmlFile::OutputHtmlFile(std::ofstream file)
@@ -109,14 +110,23 @@ void OutputHtmlFile::EndDocument()
     doc_.clear();
 }
 
-void OutputHtmlFile::StartTableGroup(std::string_view /* name */)
+void OutputHtmlFile::StartTableGroup(std::string_view name)
 {
-    // TODO
+    rapidxml::xml_node<>* h =
+        doc_.allocate_node(rapidxml::node_element,
+                           doc_.allocate_string(StringPrintf("h%d", h_level_).data()));
+
+    h->value(doc_.allocate_string(name.data()));
+    body_->append_node(h);
+
+    if (h_level_ <= 6)
+        ++h_level_;
 }
 
 void OutputHtmlFile::EndTableGroup()
 {
-    // TODO
+    if (h_level_ > 1)
+        --h_level_;
 }
 
 void OutputHtmlFile::StartTable(std::string_view name)
@@ -124,7 +134,10 @@ void OutputHtmlFile::StartTable(std::string_view name)
     DCHECK(body_);
     DCHECK(!table_);
 
-    rapidxml::xml_node<>* h1 = doc_.allocate_node(rapidxml::node_element, "h1");
+    rapidxml::xml_node<>* h1 =
+        doc_.allocate_node(rapidxml::node_element,
+                           doc_.allocate_string(StringPrintf("h%d", h_level_).data()));
+
     h1->value(doc_.allocate_string(name.data()));
     body_->append_node(h1);
 
@@ -169,8 +182,11 @@ void OutputHtmlFile::StartGroup(std::string_view name, Category::IconId /* icon_
 {
     DCHECK(table_);
 
+    std::string style = "font-weight: bold; padding-left: " +
+        StringPrintf("%dpx;", padding_);
+
     rapidxml::xml_node<>* td1 = doc_.allocate_node(rapidxml::node_element, "td");
-    td1->append_attribute(doc_.allocate_attribute("style", "font-weight: bold;"));
+    td1->append_attribute(doc_.allocate_attribute("style", doc_.allocate_string(style.data())));
     td1->value(doc_.allocate_string(name.data()));
 
     rapidxml::xml_node<>* td2 = doc_.allocate_node(rapidxml::node_element, "td");
@@ -181,11 +197,13 @@ void OutputHtmlFile::StartGroup(std::string_view name, Category::IconId /* icon_
     tr->append_node(td2);
 
     table_->append_node(tr);
+
+    padding_ += 12;
 }
 
 void OutputHtmlFile::EndGroup()
 {
-    // Nothing
+    padding_ -= 12;
 }
 
 void OutputHtmlFile::AddParam(Category::IconId /* icon_id */,
@@ -195,8 +213,11 @@ void OutputHtmlFile::AddParam(Category::IconId /* icon_id */,
 {
     DCHECK(table_);
 
+    std::string style = "font-weight: bold; padding-left: " +
+        StringPrintf("%dpx;", padding_);
+
     rapidxml::xml_node<>* td1 = doc_.allocate_node(rapidxml::node_element, "td");
-    td1->append_attribute(doc_.allocate_attribute("style", "font-weight: bold;"));
+    td1->append_attribute(doc_.allocate_attribute("style", doc_.allocate_string(style.data())));
     td1->value(doc_.allocate_string(param.data()));
 
     std::string value_with_unit(value);
@@ -208,7 +229,7 @@ void OutputHtmlFile::AddParam(Category::IconId /* icon_id */,
     }
 
     rapidxml::xml_node<>* td2 = doc_.allocate_node(rapidxml::node_element, "td");
-    td2->value(doc_.allocate_string(value_with_unit.c_str(), value_with_unit.length()));
+    td2->value(doc_.allocate_string(value_with_unit.data()));
 
     rapidxml::xml_node<>* tr = doc_.allocate_node(rapidxml::node_element, "tr");
     tr->append_node(td1);
@@ -248,7 +269,7 @@ void OutputHtmlFile::AddValue(std::string_view value, std::string_view unit)
     }
 
     rapidxml::xml_node<>* td = doc_.allocate_node(rapidxml::node_element, "td");
-    td->value(doc_.allocate_string(value_with_unit.c_str(), value_with_unit.length()));
+    td->value(doc_.allocate_string(value_with_unit.data()));
 
     tr_->append_node(td);
 }
