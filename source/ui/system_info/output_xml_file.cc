@@ -58,14 +58,29 @@ void OutputXmlFile::EndDocument()
     doc_.clear();
 }
 
-void OutputXmlFile::StartTableGroup(std::string_view /* name */)
+void OutputXmlFile::StartTableGroup(std::string_view name)
 {
-    // TODO
+    rapidxml::xml_node<>* category_group =
+        doc_.allocate_node(rapidxml::node_element, "category_group");
+    category_group->append_attribute(
+        doc_.allocate_attribute("name", doc_.allocate_string(name.data())));
+
+    category_group_stack_.push(category_group);
 }
 
 void OutputXmlFile::EndTableGroup()
 {
-    // TODO
+    rapidxml::xml_node<>* category_group = category_group_stack_.top();
+    category_group_stack_.pop();
+
+    if (category_group_stack_.empty())
+    {
+        root_->append_node(category_group);
+    }
+    else
+    {
+        category_group_stack_.top()->append_node(category_group);
+    }
 }
 
 void OutputXmlFile::StartTable(std::string_view name)
@@ -78,7 +93,16 @@ void OutputXmlFile::StartTable(std::string_view name)
 void OutputXmlFile::EndTable()
 {
     DCHECK(category_);
-    root_->append_node(category_);
+
+    if (category_group_stack_.empty())
+    {
+        root_->append_node(category_);
+    }
+    else
+    {
+        category_group_stack_.top()->append_node(category_);
+    }
+
     category_ = nullptr;
     column_list_.clear();
 }

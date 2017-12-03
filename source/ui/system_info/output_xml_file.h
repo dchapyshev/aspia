@@ -55,6 +55,7 @@ private:
     rapidxml::xml_node<>* category_ = nullptr;
     std::stack<rapidxml::xml_node<>*> group_stack_;
     rapidxml::xml_node<>* row_ = nullptr;
+    std::stack<rapidxml::xml_node<>*> category_group_stack_;
 
     std::vector<std::string> column_list_;
     size_t current_column_ = 0;
