@@ -46,7 +46,7 @@ void OutputJsonFile::EndDocument()
 
 void OutputJsonFile::StartTableGroup(std::string_view name)
 {
-    writer_.String(name.data(), name.size());
+    writer_.String(name.data(), static_cast<rapidjson::SizeType>(name.size()));
     writer_.StartObject();
 }
 
@@ -57,7 +57,7 @@ void OutputJsonFile::EndTableGroup()
 
 void OutputJsonFile::StartTable(std::string_view name)
 {
-    writer_.String(name.data(), name.size());
+    writer_.String(name.data(), static_cast<rapidjson::SizeType>(name.size()));
     writer_.StartObject();
 }
 
@@ -84,7 +84,7 @@ void OutputJsonFile::AddHeaderItem(std::string_view name, int /* width */)
 
 void OutputJsonFile::StartGroup(std::string_view name, Category::IconId /* icon_id */)
 {
-    writer_.String(name.data(), name.size());
+    writer_.String(name.data(), static_cast<rapidjson::SizeType>(name.size()));
     writer_.StartObject();
 }
 
@@ -98,8 +98,8 @@ void OutputJsonFile::AddParam(Category::IconId /* icon_id */,
                               std::string_view value,
                               std::string_view /* unit */)
 {
-    writer_.Key(param.data(), param.size());
-    writer_.String(value.data(), value.size());
+    writer_.Key(param.data(), static_cast<rapidjson::SizeType>(param.size()));
+    writer_.String(value.data(), static_cast<rapidjson::SizeType>(value.size()));
 }
 
 void OutputJsonFile::StartRow(Category::IconId /* icon_id */)
@@ -114,8 +114,10 @@ void OutputJsonFile::EndRow()
 
 void OutputJsonFile::AddValue(std::string_view value, std::string_view /* unit */)
 {
-    writer_.Key(column_list_[column_index_].data(), column_list_[column_index_].size());
-    writer_.String(value.data(), value.size());
+    writer_.Key(column_list_[column_index_].data(),
+                static_cast<rapidjson::SizeType>(column_list_[column_index_].size()));
+
+    writer_.String(value.data(), static_cast<rapidjson::SizeType>(value.size()));
 
     ++column_index_;
 }
