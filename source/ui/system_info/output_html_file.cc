@@ -125,7 +125,7 @@ void OutputHtmlFile::StartTable(std::string_view name)
     DCHECK(!table_);
 
     rapidxml::xml_node<>* h1 = doc_.allocate_node(rapidxml::node_element, "h1");
-    h1->value(doc_.allocate_string(std::data(name)));
+    h1->value(doc_.allocate_string(name.data()));
     body_->append_node(h1);
 
     table_ = doc_.allocate_node(rapidxml::node_element, "table");
@@ -161,7 +161,7 @@ void OutputHtmlFile::AddHeaderItem(std::string_view name, int /* width */)
     DCHECK(tr_);
 
     rapidxml::xml_node<>* th = doc_.allocate_node(rapidxml::node_element, "th");
-    th->value(doc_.allocate_string(std::data(name)));
+    th->value(doc_.allocate_string(name.data()));
     tr_->append_node(th);
 }
 
@@ -171,10 +171,10 @@ void OutputHtmlFile::StartGroup(std::string_view name, Category::IconId /* icon_
 
     rapidxml::xml_node<>* td1 = doc_.allocate_node(rapidxml::node_element, "td");
     td1->append_attribute(doc_.allocate_attribute("style", "font-weight: bold;"));
-    td1->value(doc_.allocate_string(std::data(name), name.length()));
+    td1->value(doc_.allocate_string(name.data()));
 
     rapidxml::xml_node<>* td2 = doc_.allocate_node(rapidxml::node_element, "td");
-    td1->value(doc_.allocate_string("&nbsp;"));
+    td2->value(doc_.allocate_string(" "));
 
     rapidxml::xml_node<>* tr = doc_.allocate_node(rapidxml::node_element, "tr");
     tr->append_node(td1);
@@ -197,18 +197,18 @@ void OutputHtmlFile::AddParam(Category::IconId /* icon_id */,
 
     rapidxml::xml_node<>* td1 = doc_.allocate_node(rapidxml::node_element, "td");
     td1->append_attribute(doc_.allocate_attribute("style", "font-weight: bold;"));
-    td1->value(doc_.allocate_string(std::data(param), param.length()));
+    td1->value(doc_.allocate_string(param.data()));
 
     std::string value_with_unit(value);
 
     if (!unit.empty())
     {
         value_with_unit.append(" ");
-        value_with_unit.append(value);
+        value_with_unit.append(unit);
     }
 
     rapidxml::xml_node<>* td2 = doc_.allocate_node(rapidxml::node_element, "td");
-    td1->value(doc_.allocate_string(value_with_unit.c_str(), value_with_unit.length()));
+    td2->value(doc_.allocate_string(value_with_unit.c_str(), value_with_unit.length()));
 
     rapidxml::xml_node<>* tr = doc_.allocate_node(rapidxml::node_element, "tr");
     tr->append_node(td1);
@@ -244,7 +244,7 @@ void OutputHtmlFile::AddValue(std::string_view value, std::string_view unit)
     if (!unit.empty())
     {
         value_with_unit.append(" ");
-        value_with_unit.append(value);
+        value_with_unit.append(unit);
     }
 
     rapidxml::xml_node<>* td = doc_.allocate_node(rapidxml::node_element, "td");
