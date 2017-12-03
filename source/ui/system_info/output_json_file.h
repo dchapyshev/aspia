@@ -12,6 +12,10 @@
 #include "base/macros.h"
 #include "ui/system_info/output.h"
 
+#define RAPIDJSON_HAS_STDSTRING 1
+#define RAPIDJSON_SSE2
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/prettywriter.h>
 #include <fstream>
 
 namespace aspia {
@@ -48,6 +52,11 @@ private:
     OutputJsonFile(std::ofstream file);
 
     std::ofstream file_;
+    rapidjson::StringBuffer buffer_;
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer_;
+
+    std::vector<std::string> column_list_;
+    size_t column_index_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(OutputJsonFile);
 };

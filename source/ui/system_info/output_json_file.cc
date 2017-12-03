@@ -11,9 +11,10 @@
 namespace aspia {
 
 OutputJsonFile::OutputJsonFile(std::ofstream file)
-    : file_(std::move(file))
+    : writer_(buffer_),
+      file_(std::move(file))
 {
-    // Nothing
+    writer_.SetIndent('\t', 1);
 }
 
 // static
@@ -33,81 +34,90 @@ std::unique_ptr<OutputJsonFile> OutputJsonFile::Create(const FilePath& file_path
 
 void OutputJsonFile::StartDocument()
 {
-    // TODO
+    writer_.StartObject();
 }
 
 void OutputJsonFile::EndDocument()
 {
-    // TODO
+    writer_.EndObject();
+    file_.write(buffer_.GetString(), buffer_.GetSize());
     file_.close();
 }
 
-void OutputJsonFile::StartTableGroup(std::string_view /* name */)
+void OutputJsonFile::StartTableGroup(std::string_view name)
 {
-    // TODO
+    writer_.String(name.data(), name.size());
+    writer_.StartObject();
 }
 
 void OutputJsonFile::EndTableGroup()
 {
-    // TODO
+    writer_.EndObject();
 }
 
-void OutputJsonFile::StartTable(std::string_view /* name */)
+void OutputJsonFile::StartTable(std::string_view name)
 {
-    // TODO
+    writer_.String(name.data(), name.size());
+    writer_.StartObject();
 }
 
 void OutputJsonFile::EndTable()
 {
-    // TODO
+    writer_.EndObject();
+    column_list_.clear();
 }
 
 void OutputJsonFile::StartTableHeader()
 {
-    // TODO
+    // Nothing
 }
 
 void OutputJsonFile::EndTableHeader()
 {
-    // TODO
+    // Nothing
 }
 
-void OutputJsonFile::AddHeaderItem(std::string_view /* name */, int /* width */)
+void OutputJsonFile::AddHeaderItem(std::string_view name, int /* width */)
 {
-    // TODO
+    column_list_.emplace_back(name);
 }
 
-void OutputJsonFile::StartGroup(std::string_view /* name */, Category::IconId /* icon_id */)
+void OutputJsonFile::StartGroup(std::string_view name, Category::IconId /* icon_id */)
 {
-    // TODO
+    writer_.String(name.data(), name.size());
+    writer_.StartObject();
 }
 
 void OutputJsonFile::EndGroup()
 {
-    // TODO
+    writer_.EndObject();
 }
 
 void OutputJsonFile::AddParam(Category::IconId /* icon_id */,
-                              std::string_view /* param */,
-                              std::string_view /* value */,
+                              std::string_view param,
+                              std::string_view value,
                               std::string_view /* unit */)
 {
-    // TODO
+    writer_.Key(param.data(), param.size());
+    writer_.String(value.data(), value.size());
 }
 
 void OutputJsonFile::StartRow(Category::IconId /* icon_id */)
 {
-    // TODO
+    column_index_ = 0;
 }
 
 void OutputJsonFile::EndRow()
 {
-    // TODO
+    // Nothing
 }
 
-void OutputJsonFile::AddValue(std::string_view /* value */, std::string_view /* unit */)
+void OutputJsonFile::AddValue(std::string_view value, std::string_view /* unit */)
 {
-    // TODO
+    writer_.Key(column_list_[column_index_].data(), column_list_[column_index_].size());
+    writer_.String(value.data(), value.size());
+
+    ++column_index_;
 }
 
 } // namespace aspia
