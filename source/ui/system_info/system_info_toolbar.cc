@@ -10,29 +10,25 @@
 
 namespace aspia {
 
-LRESULT SystemInfoToolbar::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT SystemInfoToolbar::OnCreate(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(message);
-    UNUSED_PARAMETER(wparam);
-    UNUSED_PARAMETER(lparam);
-    UNUSED_PARAMETER(handled);
-
     SetExtendedStyle(TBSTYLE_EX_DRAWDDARROWS | TBSTYLE_EX_MIXEDBUTTONS | TBSTYLE_EX_DOUBLEBUFFER);
 
     TBBUTTON kButtons[] =
     {
         // iBitmap, idCommand, fsState, fsStyle, bReserved[2], dwData, iString
         { 0, ID_SAVE,    TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_DROPDOWN | BTNS_SHOWTEXT,{ 0 }, 0, -1 },
-        { 1, ID_HOME,    TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,{ 0 }, 0, -1 },
-        { 2, ID_REFRESH, TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,{ 0 }, 0, -1 },
-        { 3, ID_ABOUT,   TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,{ 0 }, 0, -1 },
-        { 4, ID_EXIT,    TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,{ 0 }, 0, -1 },
+        { 1, ID_REFRESH, TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,{ 0 }, 0, -1 },
+        { 2, ID_ABOUT,   TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,{ 0 }, 0, -1 },
+        { 3, ID_EXIT,    TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,{ 0 }, 0, -1 },
     };
 
     SetButtonStructSize(sizeof(kButtons[0]));
     AddButtons(_countof(kButtons), kButtons);
 
-    CSize small_icon_size(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
+    const CSize small_icon_size(GetSystemMetrics(SM_CXSMICON),
+                                GetSystemMetrics(SM_CYSMICON));
 
     if (imagelist_.Create(small_icon_size.cx,
                           small_icon_size.cy,
@@ -42,7 +38,6 @@ LRESULT SystemInfoToolbar::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, 
         SetImageList(imagelist_);
 
         AddIcon(IDI_DISK, small_icon_size);
-        AddIcon(IDI_HOME, small_icon_size);
         AddIcon(IDI_REFRESH, small_icon_size);
         AddIcon(IDI_ABOUT, small_icon_size);
         AddIcon(IDI_EXIT, small_icon_size);
@@ -53,11 +48,8 @@ LRESULT SystemInfoToolbar::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, 
     return 0;
 }
 
-LRESULT SystemInfoToolbar::OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled)
+LRESULT SystemInfoToolbar::OnGetDispInfo(int /* control_id */, LPNMHDR hdr, BOOL& /* handled */)
 {
-    UNUSED_PARAMETER(control_id);
-    UNUSED_PARAMETER(handled);
-
     LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(hdr);
     UINT string_id;
 
