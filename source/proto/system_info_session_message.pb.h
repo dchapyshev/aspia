@@ -36,7 +36,7 @@ namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[61];
+  static const ::google::protobuf::internal::ParseTable schema[63];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -93,6 +93,10 @@ void InitDefaultsDmiPortableBattery_ItemImpl();
 void InitDefaultsDmiPortableBattery_Item();
 void InitDefaultsDmiPortableBatteryImpl();
 void InitDefaultsDmiPortableBattery();
+void InitDefaultsCentralProcessor_FeatureImpl();
+void InitDefaultsCentralProcessor_Feature();
+void InitDefaultsCentralProcessorImpl();
+void InitDefaultsCentralProcessor();
 void InitDefaultsAtaDrives_Item_FeatureImpl();
 void InitDefaultsAtaDrives_Item_Feature();
 void InitDefaultsAtaDrives_ItemImpl();
@@ -190,6 +194,8 @@ inline void InitDefaults() {
   InitDefaultsDmiBuildinPointing();
   InitDefaultsDmiPortableBattery_Item();
   InitDefaultsDmiPortableBattery();
+  InitDefaultsCentralProcessor_Feature();
+  InitDefaultsCentralProcessor();
   InitDefaultsAtaDrives_Item_Feature();
   InitDefaultsAtaDrives_Item();
   InitDefaultsAtaDrives();
@@ -238,6 +244,12 @@ extern AtaDrives_ItemDefaultTypeInternal _AtaDrives_Item_default_instance_;
 class AtaDrives_Item_Feature;
 class AtaDrives_Item_FeatureDefaultTypeInternal;
 extern AtaDrives_Item_FeatureDefaultTypeInternal _AtaDrives_Item_Feature_default_instance_;
+class CentralProcessor;
+class CentralProcessorDefaultTypeInternal;
+extern CentralProcessorDefaultTypeInternal _CentralProcessor_default_instance_;
+class CentralProcessor_Feature;
+class CentralProcessor_FeatureDefaultTypeInternal;
+extern CentralProcessor_FeatureDefaultTypeInternal _CentralProcessor_Feature_default_instance_;
 class DmiBaseboard;
 class DmiBaseboardDefaultTypeInternal;
 extern DmiBaseboardDefaultTypeInternal _DmiBaseboard_default_instance_;
@@ -4515,6 +4527,323 @@ class DmiPortableBattery : public ::google::protobuf::MessageLite /* @@protoc_in
 };
 // -------------------------------------------------------------------
 
+class CentralProcessor_Feature : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.CentralProcessor.Feature) */ {
+ public:
+  CentralProcessor_Feature();
+  virtual ~CentralProcessor_Feature();
+
+  CentralProcessor_Feature(const CentralProcessor_Feature& from);
+
+  inline CentralProcessor_Feature& operator=(const CentralProcessor_Feature& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  CentralProcessor_Feature(CentralProcessor_Feature&& from) noexcept
+    : CentralProcessor_Feature() {
+    *this = ::std::move(from);
+  }
+
+  inline CentralProcessor_Feature& operator=(CentralProcessor_Feature&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const CentralProcessor_Feature& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const CentralProcessor_Feature* internal_default_instance() {
+    return reinterpret_cast<const CentralProcessor_Feature*>(
+               &_CentralProcessor_Feature_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    26;
+
+  void Swap(CentralProcessor_Feature* other);
+  friend void swap(CentralProcessor_Feature& a, CentralProcessor_Feature& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline CentralProcessor_Feature* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  CentralProcessor_Feature* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const CentralProcessor_Feature& from);
+  void MergeFrom(const CentralProcessor_Feature& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(CentralProcessor_Feature* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string name = 1;
+  void clear_name();
+  static const int kNameFieldNumber = 1;
+  const ::std::string& name() const;
+  void set_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_name(::std::string&& value);
+  #endif
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  ::std::string* mutable_name();
+  ::std::string* release_name();
+  void set_allocated_name(::std::string* name);
+
+  // bool supported = 2;
+  void clear_supported();
+  static const int kSupportedFieldNumber = 2;
+  bool supported() const;
+  void set_supported(bool value);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.CentralProcessor.Feature)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr name_;
+  bool supported_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessor_FeatureImpl();
+};
+// -------------------------------------------------------------------
+
+class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.CentralProcessor) */ {
+ public:
+  CentralProcessor();
+  virtual ~CentralProcessor();
+
+  CentralProcessor(const CentralProcessor& from);
+
+  inline CentralProcessor& operator=(const CentralProcessor& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  CentralProcessor(CentralProcessor&& from) noexcept
+    : CentralProcessor() {
+    *this = ::std::move(from);
+  }
+
+  inline CentralProcessor& operator=(CentralProcessor&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const CentralProcessor& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const CentralProcessor* internal_default_instance() {
+    return reinterpret_cast<const CentralProcessor*>(
+               &_CentralProcessor_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    27;
+
+  void Swap(CentralProcessor* other);
+  friend void swap(CentralProcessor& a, CentralProcessor& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline CentralProcessor* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  CentralProcessor* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const CentralProcessor& from);
+  void MergeFrom(const CentralProcessor& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(CentralProcessor* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef CentralProcessor_Feature Feature;
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.proto.CentralProcessor.Feature feature = 13;
+  int feature_size() const;
+  void clear_feature();
+  static const int kFeatureFieldNumber = 13;
+  const ::aspia::proto::CentralProcessor_Feature& feature(int index) const;
+  ::aspia::proto::CentralProcessor_Feature* mutable_feature(int index);
+  ::aspia::proto::CentralProcessor_Feature* add_feature();
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::CentralProcessor_Feature >*
+      mutable_feature();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::CentralProcessor_Feature >&
+      feature() const;
+
+  // string name = 1;
+  void clear_name();
+  static const int kNameFieldNumber = 1;
+  const ::std::string& name() const;
+  void set_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_name(::std::string&& value);
+  #endif
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  ::std::string* mutable_name();
+  ::std::string* release_name();
+  void set_allocated_name(::std::string* name);
+
+  // string manufacturer = 2;
+  void clear_manufacturer();
+  static const int kManufacturerFieldNumber = 2;
+  const ::std::string& manufacturer() const;
+  void set_manufacturer(const ::std::string& value);
+  #if LANG_CXX11
+  void set_manufacturer(::std::string&& value);
+  #endif
+  void set_manufacturer(const char* value);
+  void set_manufacturer(const char* value, size_t size);
+  ::std::string* mutable_manufacturer();
+  ::std::string* release_manufacturer();
+  void set_allocated_manufacturer(::std::string* manufacturer);
+
+  // uint32 stepping = 3;
+  void clear_stepping();
+  static const int kSteppingFieldNumber = 3;
+  ::google::protobuf::uint32 stepping() const;
+  void set_stepping(::google::protobuf::uint32 value);
+
+  // uint32 model = 4;
+  void clear_model();
+  static const int kModelFieldNumber = 4;
+  ::google::protobuf::uint32 model() const;
+  void set_model(::google::protobuf::uint32 value);
+
+  // uint32 family = 5;
+  void clear_family();
+  static const int kFamilyFieldNumber = 5;
+  ::google::protobuf::uint32 family() const;
+  void set_family(::google::protobuf::uint32 value);
+
+  // uint32 extended_model = 6;
+  void clear_extended_model();
+  static const int kExtendedModelFieldNumber = 6;
+  ::google::protobuf::uint32 extended_model() const;
+  void set_extended_model(::google::protobuf::uint32 value);
+
+  // uint32 extended_family = 7;
+  void clear_extended_family();
+  static const int kExtendedFamilyFieldNumber = 7;
+  ::google::protobuf::uint32 extended_family() const;
+  void set_extended_family(::google::protobuf::uint32 value);
+
+  // uint32 brand_id = 8;
+  void clear_brand_id();
+  static const int kBrandIdFieldNumber = 8;
+  ::google::protobuf::uint32 brand_id() const;
+  void set_brand_id(::google::protobuf::uint32 value);
+
+  // uint32 packages = 9;
+  void clear_packages();
+  static const int kPackagesFieldNumber = 9;
+  ::google::protobuf::uint32 packages() const;
+  void set_packages(::google::protobuf::uint32 value);
+
+  // uint32 physical_cores = 10;
+  void clear_physical_cores();
+  static const int kPhysicalCoresFieldNumber = 10;
+  ::google::protobuf::uint32 physical_cores() const;
+  void set_physical_cores(::google::protobuf::uint32 value);
+
+  // double speed = 12;
+  void clear_speed();
+  static const int kSpeedFieldNumber = 12;
+  double speed() const;
+  void set_speed(double value);
+
+  // uint32 logical_cores = 11;
+  void clear_logical_cores();
+  static const int kLogicalCoresFieldNumber = 11;
+  ::google::protobuf::uint32 logical_cores() const;
+  void set_logical_cores(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.CentralProcessor)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::CentralProcessor_Feature > feature_;
+  ::google::protobuf::internal::ArenaStringPtr name_;
+  ::google::protobuf::internal::ArenaStringPtr manufacturer_;
+  ::google::protobuf::uint32 stepping_;
+  ::google::protobuf::uint32 model_;
+  ::google::protobuf::uint32 family_;
+  ::google::protobuf::uint32 extended_model_;
+  ::google::protobuf::uint32 extended_family_;
+  ::google::protobuf::uint32 brand_id_;
+  ::google::protobuf::uint32 packages_;
+  ::google::protobuf::uint32 physical_cores_;
+  double speed_;
+  ::google::protobuf::uint32 logical_cores_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessorImpl();
+};
+// -------------------------------------------------------------------
+
 class AtaDrives_Item_Feature : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.AtaDrives.Item.Feature) */ {
  public:
   AtaDrives_Item_Feature();
@@ -4549,7 +4878,7 @@ class AtaDrives_Item_Feature : public ::google::protobuf::MessageLite /* @@proto
                &_AtaDrives_Item_Feature_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    26;
+    28;
 
   void Swap(AtaDrives_Item_Feature* other);
   friend void swap(AtaDrives_Item_Feature& a, AtaDrives_Item_Feature& b) {
@@ -4661,7 +4990,7 @@ class AtaDrives_Item : public ::google::protobuf::MessageLite /* @@protoc_insert
                &_AtaDrives_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    27;
+    29;
 
   void Swap(AtaDrives_Item* other);
   friend void swap(AtaDrives_Item& a, AtaDrives_Item& b) {
@@ -4918,7 +5247,7 @@ class AtaDrives : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
                &_AtaDrives_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    28;
+    30;
 
   void Swap(AtaDrives* other);
   friend void swap(AtaDrives& a, AtaDrives& b) {
@@ -5023,7 +5352,7 @@ class VideoAdapters_Item : public ::google::protobuf::MessageLite /* @@protoc_in
                &_VideoAdapters_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    29;
+    31;
 
   void Swap(VideoAdapters_Item* other);
   friend void swap(VideoAdapters_Item& a, VideoAdapters_Item& b) {
@@ -5240,7 +5569,7 @@ class VideoAdapters : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_VideoAdapters_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    30;
+    32;
 
   void Swap(VideoAdapters* other);
   friend void swap(VideoAdapters& a, VideoAdapters& b) {
@@ -5345,7 +5674,7 @@ class Monitors_Item_Timing : public ::google::protobuf::MessageLite /* @@protoc_
                &_Monitors_Item_Timing_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    31;
+    33;
 
   void Swap(Monitors_Item_Timing* other);
   friend void swap(Monitors_Item_Timing& a, Monitors_Item_Timing& b) {
@@ -5456,7 +5785,7 @@ class Monitors_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Monitors_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    32;
+    34;
 
   void Swap(Monitors_Item* other);
   friend void swap(Monitors_Item& a, Monitors_Item& b) {
@@ -5798,7 +6127,7 @@ class Monitors : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Monitors_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    33;
+    35;
 
   void Swap(Monitors* other);
   friend void swap(Monitors& a, Monitors& b) {
@@ -5903,7 +6232,7 @@ class PowerOptions_Battery : public ::google::protobuf::MessageLite /* @@protoc_
                &_PowerOptions_Battery_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    34;
+    36;
 
   void Swap(PowerOptions_Battery* other);
   friend void swap(PowerOptions_Battery& a, PowerOptions_Battery& b) {
@@ -6161,7 +6490,7 @@ class PowerOptions : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_PowerOptions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    35;
+    37;
 
   void Swap(PowerOptions* other);
   friend void swap(PowerOptions& a, PowerOptions& b) {
@@ -6341,7 +6670,7 @@ class Printers_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Printers_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    36;
+    38;
 
   void Swap(Printers_Item* other);
   friend void swap(Printers_Item& a, Printers_Item& b) {
@@ -6647,7 +6976,7 @@ class Printers : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Printers_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    37;
+    39;
 
   void Swap(Printers* other);
   friend void swap(Printers& a, Printers& b) {
@@ -6752,7 +7081,7 @@ class WindowsDevices_Item : public ::google::protobuf::MessageLite /* @@protoc_i
                &_WindowsDevices_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    38;
+    40;
 
   void Swap(WindowsDevices_Item* other);
   friend void swap(WindowsDevices_Item& a, WindowsDevices_Item& b) {
@@ -6932,7 +7261,7 @@ class WindowsDevices : public ::google::protobuf::MessageLite /* @@protoc_insert
                &_WindowsDevices_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    39;
+    41;
 
   void Swap(WindowsDevices* other);
   friend void swap(WindowsDevices& a, WindowsDevices& b) {
@@ -7037,7 +7366,7 @@ class Programs_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Programs_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    40;
+    42;
 
   void Swap(Programs_Item* other);
   friend void swap(Programs_Item& a, Programs_Item& b) {
@@ -7202,7 +7531,7 @@ class Programs : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Programs_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    41;
+    43;
 
   void Swap(Programs* other);
   friend void swap(Programs& a, Programs& b) {
@@ -7307,7 +7636,7 @@ class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Services_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    42;
+    44;
 
   void Swap(Services_Item* other);
   friend void swap(Services_Item& a, Services_Item& b) {
@@ -7536,7 +7865,7 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Services_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    43;
+    45;
 
   void Swap(Services* other);
   friend void swap(Services& a, Services& b) {
@@ -7641,7 +7970,7 @@ class Processes_Item : public ::google::protobuf::MessageLite /* @@protoc_insert
                &_Processes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    44;
+    46;
 
   void Swap(Processes_Item* other);
   friend void swap(Processes_Item& a, Processes_Item& b) {
@@ -7790,7 +8119,7 @@ class Processes : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
                &_Processes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    45;
+    47;
 
   void Swap(Processes* other);
   friend void swap(Processes& a, Processes& b) {
@@ -7895,7 +8224,7 @@ class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@
                &_NetworkCards_Item_IpAddress_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    46;
+    48;
 
   void Swap(NetworkCards_Item_IpAddress* other);
   friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
@@ -8015,7 +8344,7 @@ class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_NetworkCards_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    47;
+    49;
 
   void Swap(NetworkCards_Item* other);
   friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
@@ -8307,7 +8636,7 @@ class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_NetworkCards_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    48;
+    50;
 
   void Swap(NetworkCards* other);
   friend void swap(NetworkCards& a, NetworkCards& b) {
@@ -8412,7 +8741,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    49;
+    51;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -8600,7 +8929,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    50;
+    52;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -8705,7 +9034,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    51;
+    53;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -8886,7 +9215,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    52;
+    54;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -8991,7 +9320,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    53;
+    55;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -9133,7 +9462,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    54;
+    56;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -9238,7 +9567,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    55;
+    57;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -9429,7 +9758,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    56;
+    58;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -9534,7 +9863,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    57;
+    59;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -9654,7 +9983,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    58;
+    60;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -9759,7 +10088,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    59;
+    61;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -9931,7 +10260,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    60;
+    62;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -15281,6 +15610,357 @@ inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPortableBa
 DmiPortableBattery::item() const {
   // @@protoc_insertion_point(field_list:aspia.proto.DmiPortableBattery.item)
   return item_;
+}
+
+// -------------------------------------------------------------------
+
+// CentralProcessor_Feature
+
+// string name = 1;
+inline void CentralProcessor_Feature::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& CentralProcessor_Feature::name() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Feature.name)
+  return name_.GetNoArena();
+}
+inline void CentralProcessor_Feature::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Feature.name)
+}
+#if LANG_CXX11
+inline void CentralProcessor_Feature::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.CentralProcessor.Feature.name)
+}
+#endif
+inline void CentralProcessor_Feature::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.CentralProcessor.Feature.name)
+}
+inline void CentralProcessor_Feature::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CentralProcessor.Feature.name)
+}
+inline ::std::string* CentralProcessor_Feature::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.CentralProcessor.Feature.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* CentralProcessor_Feature::release_name() {
+  // @@protoc_insertion_point(field_release:aspia.proto.CentralProcessor.Feature.name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void CentralProcessor_Feature::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CentralProcessor.Feature.name)
+}
+
+// bool supported = 2;
+inline void CentralProcessor_Feature::clear_supported() {
+  supported_ = false;
+}
+inline bool CentralProcessor_Feature::supported() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Feature.supported)
+  return supported_;
+}
+inline void CentralProcessor_Feature::set_supported(bool value) {
+  
+  supported_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Feature.supported)
+}
+
+// -------------------------------------------------------------------
+
+// CentralProcessor
+
+// string name = 1;
+inline void CentralProcessor::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& CentralProcessor::name() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.name)
+  return name_.GetNoArena();
+}
+inline void CentralProcessor::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.name)
+}
+#if LANG_CXX11
+inline void CentralProcessor::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.CentralProcessor.name)
+}
+#endif
+inline void CentralProcessor::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.CentralProcessor.name)
+}
+inline void CentralProcessor::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CentralProcessor.name)
+}
+inline ::std::string* CentralProcessor::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.CentralProcessor.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* CentralProcessor::release_name() {
+  // @@protoc_insertion_point(field_release:aspia.proto.CentralProcessor.name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void CentralProcessor::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CentralProcessor.name)
+}
+
+// string manufacturer = 2;
+inline void CentralProcessor::clear_manufacturer() {
+  manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& CentralProcessor::manufacturer() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.manufacturer)
+  return manufacturer_.GetNoArena();
+}
+inline void CentralProcessor::set_manufacturer(const ::std::string& value) {
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.manufacturer)
+}
+#if LANG_CXX11
+inline void CentralProcessor::set_manufacturer(::std::string&& value) {
+  
+  manufacturer_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.CentralProcessor.manufacturer)
+}
+#endif
+inline void CentralProcessor::set_manufacturer(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.CentralProcessor.manufacturer)
+}
+inline void CentralProcessor::set_manufacturer(const char* value, size_t size) {
+  
+  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CentralProcessor.manufacturer)
+}
+inline ::std::string* CentralProcessor::mutable_manufacturer() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.CentralProcessor.manufacturer)
+  return manufacturer_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* CentralProcessor::release_manufacturer() {
+  // @@protoc_insertion_point(field_release:aspia.proto.CentralProcessor.manufacturer)
+  
+  return manufacturer_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void CentralProcessor::set_allocated_manufacturer(::std::string* manufacturer) {
+  if (manufacturer != NULL) {
+    
+  } else {
+    
+  }
+  manufacturer_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), manufacturer);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CentralProcessor.manufacturer)
+}
+
+// uint32 stepping = 3;
+inline void CentralProcessor::clear_stepping() {
+  stepping_ = 0u;
+}
+inline ::google::protobuf::uint32 CentralProcessor::stepping() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.stepping)
+  return stepping_;
+}
+inline void CentralProcessor::set_stepping(::google::protobuf::uint32 value) {
+  
+  stepping_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.stepping)
+}
+
+// uint32 model = 4;
+inline void CentralProcessor::clear_model() {
+  model_ = 0u;
+}
+inline ::google::protobuf::uint32 CentralProcessor::model() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.model)
+  return model_;
+}
+inline void CentralProcessor::set_model(::google::protobuf::uint32 value) {
+  
+  model_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.model)
+}
+
+// uint32 family = 5;
+inline void CentralProcessor::clear_family() {
+  family_ = 0u;
+}
+inline ::google::protobuf::uint32 CentralProcessor::family() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.family)
+  return family_;
+}
+inline void CentralProcessor::set_family(::google::protobuf::uint32 value) {
+  
+  family_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.family)
+}
+
+// uint32 extended_model = 6;
+inline void CentralProcessor::clear_extended_model() {
+  extended_model_ = 0u;
+}
+inline ::google::protobuf::uint32 CentralProcessor::extended_model() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.extended_model)
+  return extended_model_;
+}
+inline void CentralProcessor::set_extended_model(::google::protobuf::uint32 value) {
+  
+  extended_model_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.extended_model)
+}
+
+// uint32 extended_family = 7;
+inline void CentralProcessor::clear_extended_family() {
+  extended_family_ = 0u;
+}
+inline ::google::protobuf::uint32 CentralProcessor::extended_family() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.extended_family)
+  return extended_family_;
+}
+inline void CentralProcessor::set_extended_family(::google::protobuf::uint32 value) {
+  
+  extended_family_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.extended_family)
+}
+
+// uint32 brand_id = 8;
+inline void CentralProcessor::clear_brand_id() {
+  brand_id_ = 0u;
+}
+inline ::google::protobuf::uint32 CentralProcessor::brand_id() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.brand_id)
+  return brand_id_;
+}
+inline void CentralProcessor::set_brand_id(::google::protobuf::uint32 value) {
+  
+  brand_id_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.brand_id)
+}
+
+// uint32 packages = 9;
+inline void CentralProcessor::clear_packages() {
+  packages_ = 0u;
+}
+inline ::google::protobuf::uint32 CentralProcessor::packages() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.packages)
+  return packages_;
+}
+inline void CentralProcessor::set_packages(::google::protobuf::uint32 value) {
+  
+  packages_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.packages)
+}
+
+// uint32 physical_cores = 10;
+inline void CentralProcessor::clear_physical_cores() {
+  physical_cores_ = 0u;
+}
+inline ::google::protobuf::uint32 CentralProcessor::physical_cores() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.physical_cores)
+  return physical_cores_;
+}
+inline void CentralProcessor::set_physical_cores(::google::protobuf::uint32 value) {
+  
+  physical_cores_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.physical_cores)
+}
+
+// uint32 logical_cores = 11;
+inline void CentralProcessor::clear_logical_cores() {
+  logical_cores_ = 0u;
+}
+inline ::google::protobuf::uint32 CentralProcessor::logical_cores() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.logical_cores)
+  return logical_cores_;
+}
+inline void CentralProcessor::set_logical_cores(::google::protobuf::uint32 value) {
+  
+  logical_cores_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.logical_cores)
+}
+
+// double speed = 12;
+inline void CentralProcessor::clear_speed() {
+  speed_ = 0;
+}
+inline double CentralProcessor::speed() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.speed)
+  return speed_;
+}
+inline void CentralProcessor::set_speed(double value) {
+  
+  speed_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.speed)
+}
+
+// repeated .aspia.proto.CentralProcessor.Feature feature = 13;
+inline int CentralProcessor::feature_size() const {
+  return feature_.size();
+}
+inline void CentralProcessor::clear_feature() {
+  feature_.Clear();
+}
+inline const ::aspia::proto::CentralProcessor_Feature& CentralProcessor::feature(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.feature)
+  return feature_.Get(index);
+}
+inline ::aspia::proto::CentralProcessor_Feature* CentralProcessor::mutable_feature(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.proto.CentralProcessor.feature)
+  return feature_.Mutable(index);
+}
+inline ::aspia::proto::CentralProcessor_Feature* CentralProcessor::add_feature() {
+  // @@protoc_insertion_point(field_add:aspia.proto.CentralProcessor.feature)
+  return feature_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::CentralProcessor_Feature >*
+CentralProcessor::mutable_feature() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.proto.CentralProcessor.feature)
+  return &feature_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::CentralProcessor_Feature >&
+CentralProcessor::feature() const {
+  // @@protoc_insertion_point(field_list:aspia.proto.CentralProcessor.feature)
+  return feature_;
 }
 
 // -------------------------------------------------------------------
@@ -21761,6 +22441,10 @@ Sessions::item() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -664,6 +664,9 @@
     <ClCompile Include="ui\system_info\report_creator_proxy.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
+    <ClCompile Include="base\cpu_info.cc">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1368,6 +1371,12 @@
       <Filter>ui\system_info</Filter>
     </ClInclude>
     <ClInclude Include="base\bitset.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\cpuid.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\cpu_info.h">
       <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>

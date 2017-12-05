@@ -113,6 +113,8 @@ public:
     // Returns numberic value of bitset.
     NumericType Value() const { return value_; }
 
+    // Copies a value.
+    void CopyFrom(NumericType value) { value_ = value; }
     void CopyFrom(const BitSet& other) { value_ = other.value_; }
 
     // Returns the number of bits that the bitset can hold.

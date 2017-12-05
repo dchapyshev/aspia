@@ -240,6 +240,29 @@ message DmiPortableBattery
     repeated Item item = 1;
 }
 
+message CentralProcessor
+{
+    message Feature
+    {
+        string name    = 1;
+        bool supported = 2;
+    }
+
+    string name              = 1;
+    string manufacturer      = 2;
+    uint32 stepping          = 3;
+    uint32 model             = 4;
+    uint32 family            = 5;
+    uint32 extended_model    = 6;
+    uint32 extended_family   = 7;
+    uint32 brand_id          = 8;
+    uint32 packages          = 9;
+    uint32 physical_cores    = 10;
+    uint32 logical_cores     = 11;
+    double speed             = 12;
+    repeated Feature feature = 13;
+}
+
 message AtaDrives
 {
     message Item

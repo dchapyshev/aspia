@@ -12,6 +12,7 @@
 #include "base/devices/physical_drive_enumerator.h"
 #include "base/devices/smbios_reader.h"
 #include "base/strings/string_util.h"
+#include "base/cpu_info.h"
 #include "protocol/category_group_hardware.h"
 #include "proto/system_info_session_message.pb.h"
 #include "ui/system_info/output.h"
@@ -1292,15 +1293,162 @@ const char* CategoryCPU::Guid() const
     return "31D1312E-85A9-419A-91B4-BA81129B3CCC";
 }
 
-void CategoryCPU::Parse(Output* /* output */, const std::string& /* data */)
+void CategoryCPU::Parse(Output* output, const std::string& data)
 {
-    // TODO
+    proto::CentralProcessor message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+
+    {
+        Output::TableHeader header(output);
+        output->AddHeaderItem("Parameter", 250);
+        output->AddHeaderItem("Value", 250);
+    }
+
+    output->AddParam(IDI_PROCESSOR, "Name", message.name());
+    output->AddParam(IDI_PROCESSOR, "Manufacturer", message.manufacturer());
+    output->AddParam(IDI_PROCESSOR, "Stepping", StringPrintf("%02Xh", message.stepping()));
+    output->AddParam(IDI_PROCESSOR, "Model", StringPrintf("%02Xh", message.model()));
+    output->AddParam(IDI_PROCESSOR, "Family", StringPrintf("%02Xh", message.family()));
+
+    if (message.extended_model())
+    {
+        output->AddParam(IDI_PROCESSOR,
+                         "Extended Model",
+                         StringPrintf("%02Xh", message.extended_model()));
+    }
+
+    if (message.extended_family())
+    {
+        output->AddParam(IDI_PROCESSOR,
+                         "Extended Family",
+                         StringPrintf("%02Xh", message.extended_family()));
+    }
+
+    output->AddParam(IDI_PROCESSOR, "Brand ID", StringPrintf("%02Xh", message.brand_id()));
+    output->AddParam(IDI_PROCESSOR, "Packages", std::to_string(message.packages()));
+    output->AddParam(IDI_PROCESSOR, "Physical Cores", std::to_string(message.physical_cores()));
+    output->AddParam(IDI_PROCESSOR, "Logical Cores", std::to_string(message.logical_cores()));
+    output->AddParam(IDI_PROCESSOR, "Speed", StringPrintf("%.2f", message.speed()), "MHz");
+
+    if (message.feature_size())
+    {
+        Output::Group group(output, "Features", Icon());
+
+        for (int i = 0; i < message.feature_size(); ++i)
+        {
+            const proto::CentralProcessor::Feature& feature = message.feature(i);
+
+            output->AddParam(feature.supported() ? IDI_CHECKED : IDI_UNCHECKED,
+                             feature.name(),
+                             feature.supported() ? "Yes" : "No");
+        }
+    }
 }
 
 std::string CategoryCPU::Serialize()
 {
-    // TODO
-    return std::string();
+    proto::CentralProcessor message;
+
+    CPUInfo cpu_info;
+    GetCPUInformation(cpu_info);
+
+    message.set_name(cpu_info.brand_string);
+    message.set_manufacturer(cpu_info.manufacturer);
+    message.set_stepping(cpu_info.stepping);
+    message.set_model(cpu_info.model);
+    message.set_family(cpu_info.family);
+    message.set_extended_model(cpu_info.extended_model);
+    message.set_extended_family(cpu_info.extended_family);
+    message.set_brand_id(cpu_info.brand_id);
+    message.set_packages(cpu_info.package_count);
+    message.set_physical_cores(cpu_info.physical_core_count);
+    message.set_logical_cores(cpu_info.logical_core_count);
+    message.set_speed(GetCPUSpeed());
+
+    auto add = [&](uint8_t flag, const char* name)
+    {
+        proto::CentralProcessor::Feature* feature = message.add_feature();
+        feature->set_name(name);
+        feature->set_supported(flag);
+    };
+
+    // Function 1 EDX
+    add(cpu_info.func1_edx.has_fpu, "Floating-point Unit On-Chip");
+    add(cpu_info.func1_edx.has_vme, "Virtual Mode Extension");
+    add(cpu_info.func1_edx.has_de, "Debug Extension");
+    add(cpu_info.func1_edx.has_pse, "Page Size Extension");
+    add(cpu_info.func1_edx.has_tsc, "Time Stamp Extension");
+    add(cpu_info.func1_edx.has_msr, "Model Specific Registers");
+    add(cpu_info.func1_edx.has_pae, "Physical Address Extension");
+    add(cpu_info.func1_edx.has_mce, "Machine-Check Exception");
+    add(cpu_info.func1_edx.has_cx8, "CMPXCHG8 Instruction");
+    add(cpu_info.func1_edx.has_apic, "On-cpip APIC Hardware");
+    add(cpu_info.func1_edx.has_sep, "Fast System Call");
+    add(cpu_info.func1_edx.has_mtrr, "Memory Type Range Registers");
+    add(cpu_info.func1_edx.has_pge, "Page Global Enable");
+    add(cpu_info.func1_edx.has_mca, "Machine-Check Architecture");
+    add(cpu_info.func1_edx.has_cmov, "Conditional Move Instruction");
+    add(cpu_info.func1_edx.has_pat, "Page Attribute Table");
+    add(cpu_info.func1_edx.has_pse36, "36-bit Page Size Extension");
+    add(cpu_info.func1_edx.has_psn, "Processor serial number is present and enabled");
+    add(cpu_info.func1_edx.has_clfsh, "CLFLUSH Instruction");
+    add(cpu_info.func1_edx.has_ds, "Debug Store");
+    add(cpu_info.func1_edx.has_acpu, "Thermal Monitor and Software Controlled Clock Facilities");
+    add(cpu_info.func1_edx.has_mmx, "MMX Technology");
+    add(cpu_info.func1_edx.has_fxsr, "FXSAVE and FXSTOR Instructions");
+    add(cpu_info.func1_edx.has_sse, "Streaming SIMD Extension");
+    add(cpu_info.func1_edx.has_sse2, "Streaming SIMD Extension 2");
+    add(cpu_info.func1_edx.has_ss, "Self-Snoop");
+    add(cpu_info.func1_edx.has_htt, "Multi-Threading");
+    add(cpu_info.func1_edx.has_tm, "Thermal Monitor");
+    add(cpu_info.func1_edx.has_pbe, "Pending Break Enable");
+
+    // Function 1 ECX
+    add(cpu_info.func1_ecx.has_sse3, "Streaming SIMD Extension 3");
+    add(cpu_info.func1_ecx.has_pclmuldq, "PCLMULDQ Instruction");
+    add(cpu_info.func1_ecx.has_dtes64, "64-Bit Debug Store");
+    add(cpu_info.func1_ecx.has_monitor, "MONITOR/MWAIT Instructions");
+    add(cpu_info.func1_ecx.has_ds_cpl, "CPL Qualified Debug Store");
+    add(cpu_info.func1_ecx.has_vmx, "Virtual Machine Extensions");
+    add(cpu_info.func1_ecx.has_smx, "Safe Mode Extensions");
+    add(cpu_info.func1_ecx.has_est, "Enhanced Intel SpeedStep Technology");
+    add(cpu_info.func1_ecx.has_tm2, "Thermal Monitor 2");
+    add(cpu_info.func1_ecx.has_ssse3, "Supplemental Streaming SIMD Extension 3");
+    add(cpu_info.func1_ecx.has_cnxt_id, "L1 Context ID");
+    add(cpu_info.func1_ecx.has_fma, "Fused Multiply Add");
+    add(cpu_info.func1_ecx.has_cx16, "CMPXCHG16B Instruction");
+    add(cpu_info.func1_ecx.has_xtpr, "xTPR Update Control");
+    add(cpu_info.func1_ecx.has_pdcm, "Perfmon and Debug Capability");
+    add(cpu_info.func1_ecx.has_pcid, "Process Context Identifiers");
+    add(cpu_info.func1_ecx.has_dca, "Direct Cache Access");
+    add(cpu_info.func1_ecx.has_sse41, "Streaming SIMD Extension 4.1");
+    add(cpu_info.func1_ecx.has_sse42, "Streaming SIMD Extension 4.2");
+    add(cpu_info.func1_ecx.has_x2apic, "Extended xAPIC Support");
+    add(cpu_info.func1_ecx.has_movbe, "MOVBE Instruction");
+    add(cpu_info.func1_ecx.has_popcnt, "POPCNT Instruction");
+    add(cpu_info.func1_ecx.has_tsc_deadline, "Time Stamp Counter Deadline");
+    add(cpu_info.func1_ecx.has_aes, "AES Instruction");
+    add(cpu_info.func1_ecx.has_xsave, "XSAVE/XSTOR States");
+    add(cpu_info.func1_ecx.has_osxsave, "OS-Enabled Extended State Management");
+    add(cpu_info.func1_ecx.has_avx, "Advanced Vector Extension");
+    add(cpu_info.func1_ecx.has_f16c, "16-bit floating-point convertsion instructions");
+    add(cpu_info.func1_ecx.has_rdrand, "RDRAND Instruction");
+
+    // Function 0x80000001 EDX
+    add(cpu_info.func81_edx.has_syscall, "SYSCALL/SYSRET Instructions");
+    add(cpu_info.func81_edx.has_xd_bit, "Execution Disable Bit");
+    add(cpu_info.func81_edx.has_1gb_pages, "1 GB Pages");
+    add(cpu_info.func81_edx.has_rdtscp, "RDTSCP and IA32_TSC_AUX Supported");
+    add(cpu_info.func81_edx.has_intel64, "Intel 64 Instruction Set Architecture");
+
+    // Function 0x80000001 ECX
+    add(cpu_info.func81_ecx.has_lahf, "LAHF/SAHF Instructions");
+
+    return message.SerializeAsString();
 }
 
 //

@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="base\byte_order.cc" />
+    <ClCompile Include="base\cpu_info.cc" />
     <ClCompile Include="base\datetime.cc" />
     <ClCompile Include="base\desktop.cc" />
     <ClCompile Include="base\devices\battery_enumerator.cc" />
@@ -227,6 +228,8 @@
   <ItemGroup>
     <ClInclude Include="base\bitset.h" />
     <ClInclude Include="base\byte_order.h" />
+    <ClInclude Include="base\cpuid.h" />
+    <ClInclude Include="base\cpu_info.h" />
     <ClInclude Include="base\datetime.h" />
     <ClInclude Include="base\desktop.h" />
     <ClInclude Include="base\devices\battery_enumerator.h" />
