@@ -80,7 +80,7 @@ public:
         std::string GetManufacturer() const;
         std::string GetVersion() const;
         std::string GetDate() const;
-        int GetSize() const; // In kB.
+        uint64_t GetSize() const; // In kB.
         std::string GetBiosRevision() const;
         std::string GetFirmwareRevision() const;
         std::string GetAddress() const;

@@ -822,11 +822,11 @@ class DmiBios : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
   ::std::string* release_address();
   void set_allocated_address(::std::string* address);
 
-  // int32 size = 4;
+  // uint64 size = 4;
   void clear_size();
   static const int kSizeFieldNumber = 4;
-  ::google::protobuf::int32 size() const;
-  void set_size(::google::protobuf::int32 value);
+  ::google::protobuf::uint64 size() const;
+  void set_size(::google::protobuf::uint64 value);
 
   // int32 runtime_size = 8;
   void clear_runtime_size();
@@ -845,7 +845,7 @@ class DmiBios : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
   ::google::protobuf::internal::ArenaStringPtr bios_revision_;
   ::google::protobuf::internal::ArenaStringPtr firmware_revision_;
   ::google::protobuf::internal::ArenaStringPtr address_;
-  ::google::protobuf::int32 size_;
+  ::google::protobuf::uint64 size_;
   ::google::protobuf::int32 runtime_size_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
@@ -10241,15 +10241,15 @@ inline void DmiBios::set_allocated_date(::std::string* date) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiBios.date)
 }
 
-// int32 size = 4;
+// uint64 size = 4;
 inline void DmiBios::clear_size() {
-  size_ = 0;
+  size_ = GOOGLE_ULONGLONG(0);
 }
-inline ::google::protobuf::int32 DmiBios::size() const {
+inline ::google::protobuf::uint64 DmiBios::size() const {
   // @@protoc_insertion_point(field_get:aspia.proto.DmiBios.size)
   return size_;
 }
-inline void DmiBios::set_size(::google::protobuf::int32 value) {
+inline void DmiBios::set_size(::google::protobuf::uint64 value) {
   
   size_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.DmiBios.size)

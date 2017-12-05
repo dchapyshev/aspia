@@ -225,6 +225,7 @@
     <ClCompile Include="ui\user_prop_dialog.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="base\bitset.h" />
     <ClInclude Include="base\byte_order.h" />
     <ClInclude Include="base\datetime.h" />
     <ClInclude Include="base\desktop.h" />

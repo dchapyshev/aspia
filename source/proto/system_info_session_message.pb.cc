@@ -2258,13 +2258,13 @@ bool DmiBios::MergePartialFromCodedStream(
         break;
       }
 
-      // int32 size = 4;
+      // uint64 size = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
                  input, &size_)));
         } else {
           goto handle_unusual;
@@ -2401,9 +2401,9 @@ void DmiBios::SerializeWithCachedSizes(
       3, this->date(), output);
   }
 
-  // int32 size = 4;
+  // uint64 size = 4;
   if (this->size() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->size(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(4, this->size(), output);
   }
 
   // string bios_revision = 5;
@@ -2512,10 +2512,10 @@ size_t DmiBios::ByteSizeLong() const {
         this->address());
   }
 
-  // int32 size = 4;
+  // uint64 size = 4;
   if (this->size() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
         this->size());
   }
 

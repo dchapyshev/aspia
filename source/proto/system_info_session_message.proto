@@ -22,7 +22,7 @@ message DmiBios
     string manufacturer      = 1;
     string version           = 2;
     string date              = 3;
-    int32 size               = 4;
+    uint64 size              = 4;
     string bios_revision     = 5;
     string firmware_revision = 6;
     string address           = 7;

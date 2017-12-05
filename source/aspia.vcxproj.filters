@@ -1367,6 +1367,9 @@
     <ClInclude Include="ui\system_info\report_creator_proxy.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
+    <ClInclude Include="base\bitset.h">
+      <Filter>base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">

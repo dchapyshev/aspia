@@ -7,6 +7,7 @@
 
 #include "base/devices/smbios.h"
 #include "base/strings/string_util.h"
+#include "base/bitset.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -255,9 +256,30 @@ std::string SMBios::BiosTable::GetDate() const
     return reader_.GetString(0x08);
 }
 
-int SMBios::BiosTable::GetSize() const
+uint64_t SMBios::BiosTable::GetSize() const
 {
-    return (reader_.GetByte(0x09) + 1) << 6;
+    const uint8_t old_size = reader_.GetByte(0x09);
+    if (old_size != 0xFF)
+        return (old_size + 1) << 6;
+
+    BitSet<uint16_t> bitfield(reader_.GetWord(0x18));
+
+    uint16_t size = 16; // By default 16 MBytes.
+
+    if (reader_.GetTableLength() >= 0x1A)
+        size = bitfield.Range(0, 13);
+
+    switch (bitfield.Range(14, 15))
+    {
+        case 0x0000: // MB
+            return static_cast<uint64_t>(size) * 1024ULL;
+
+        case 0x0001: // GB
+            return static_cast<uint64_t>(size) * 1024ULL * 1024ULL;
+
+        default:
+            return 0;
+    }
 }
 
 std::string SMBios::BiosTable::GetBiosRevision() const
@@ -1093,7 +1115,8 @@ std::string SMBios::ProcessorTable::GetStatus() const
         "Other" // 0x07
     };
 
-    const uint8_t status = reader_.GetByte(0x18) & 0x07;
+    const uint8_t status =
+        BitSet<uint8_t>(reader_.GetByte(0x18)).Range(0, 2);
 
     if (!text[status])
         return std::string();
@@ -1152,7 +1175,7 @@ std::string SMBios::ProcessorTable::GetUpgrade() const
 
     const uint8_t upgrade = reader_.GetByte(0x19);
     if (upgrade >= 0x01 && upgrade <= 0x20)
-        return names[upgrade - 0x01];
+        return names[upgrade - 1];
 
     return std::string();
 }
@@ -1258,15 +1281,15 @@ SMBios::ProcessorTable::FeatureList SMBios::ProcessorTable::GetFeatures() const
     if (reader_.GetTableLength() < 0x28)
         return FeatureList();
 
-    const uint16_t bitfield = reader_.GetWord(0x26);
+    BitSet<uint16_t> bitfield(reader_.GetWord(0x26));
     FeatureList list;
 
-    list.emplace_back("64-bit Capable", (bitfield & 0x0004) ? true : false);
-    list.emplace_back("Multi-Core", (bitfield & 0x0008) ? true : false);
-    list.emplace_back("Hardware Thread", (bitfield & 0x0010) ? true : false);
-    list.emplace_back("Execute Protection", (bitfield & 0x0020) ? true : false);
-    list.emplace_back("Enhanced Virtualization", (bitfield & 0x0040) ? true : false);
-    list.emplace_back("Power/Perfomance Control", (bitfield & 0x0080) ? true : false);
+    list.emplace_back("64-bit Capable", bitfield.Test(2));
+    list.emplace_back("Multi-Core", bitfield.Test(3));
+    list.emplace_back("Hardware Thread", bitfield.Test(4));
+    list.emplace_back("Execute Protection", bitfield.Test(5));
+    list.emplace_back("Enhanced Virtualization", bitfield.Test(6));
+    list.emplace_back("Power/Perfomance Control", bitfield.Test(7));
 
     return list;
 }
@@ -1296,17 +1319,18 @@ std::string SMBios::CacheTable::GetLocation() const
         "Unknown" // 0x03
     };
 
-    const uint16_t type = (reader_.GetWord(0x05) >> 5) & 0x0003;
+    const uint16_t value =
+        BitSet<uint16_t>(reader_.GetWord(0x05)).Range(5, 6);
 
-    if (!text[type])
+    if (!text[value])
         return std::string();
 
-    return text[type];
+    return text[value];
 }
 
 bool SMBios::CacheTable::IsEnabled() const
 {
-    return (reader_.GetWord(0x05) & 0x0080) ? true : false;
+    return BitSet<uint16_t>(reader_.GetWord(0x05) & 0x0080).Test(7);
 }
 
 std::string SMBios::CacheTable::GetMode() const
@@ -1315,28 +1339,29 @@ std::string SMBios::CacheTable::GetMode() const
     {
         "Write Through", // 0x00
         "Write Back",
-        "Varies With Memory Address",
+        "Varies with Memory Address",
         "Unknown" // 0x03
     };
 
-    const uint16_t mode = (reader_.GetWord(0x05) >> 8) & 0x0003;
+    const uint16_t mode =
+        BitSet<uint16_t>(reader_.GetWord(0x05)).Range(8, 9);
 
     return text[mode];
 }
 
 int SMBios::CacheTable::GetLevel() const
 {
-    return (reader_.GetWord(0x05) & 0x0007) + 1;
+    return BitSet<uint16_t>(reader_.GetWord(0x05)).Range(0, 2) + 1;
 }
 
 int SMBios::CacheTable::GetMaximumSize() const
 {
-    return reader_.GetWord(0x07) & 0x7FFF;
+    return BitSet<uint16_t>(reader_.GetWord(0x07)).Range(0, 14);
 }
 
 int SMBios::CacheTable::GetCurrentSize() const
 {
-    return reader_.GetWord(0x09) & 0x7FFF;
+    return BitSet<uint16_t>(reader_.GetWord(0x09)).Range(0, 14);
 }
 
 SMBios::CacheTable::SRAMTypeList SMBios::CacheTable::GetSupportedSRAMTypes() const
@@ -1352,16 +1377,16 @@ SMBios::CacheTable::SRAMTypeList SMBios::CacheTable::GetSupportedSRAMTypes() con
         "Asynchronous" // 6
     };
 
-    const uint16_t bitfield = reader_.GetWord(0x0B);
+    const BitSet<uint16_t> bitfield(reader_.GetWord(0x0B));
 
-    if (!(bitfield & 0x007F))
+    if (bitfield.None())
         return SRAMTypeList();
 
     SRAMTypeList list;
 
     for (int i = 0; i <= 6; ++i)
     {
-        list.emplace_back(text[i], (bitfield & (1 << i)) ? true : false);
+        list.emplace_back(text[i], bitfield.Test(i));
     }
 
     return list;
@@ -1380,11 +1405,11 @@ std::string SMBios::CacheTable::GetCurrentSRAMType() const
         "Asynchronous" // 6
     };
 
-    const uint16_t type = reader_.GetWord(0x0D);
+    BitSet<uint16_t> type(reader_.GetWord(0x0D));
 
     for (int i = 0; i <= 6; ++i)
     {
-        if (type & (1 << i))
+        if (type.Test(i))
             return text[i];
     }
 
@@ -2241,9 +2266,12 @@ std::string SMBios::PortableBatteryTable::GetSBDSManufactureDate() const
     if (reader_.GetTableLength() < 0x1A)
         return std::string();
 
-    const uint16_t date = reader_.GetWord(0x12);
+    const BitSet<uint16_t> date(reader_.GetWord(0x12));
 
-    return StringPrintf("%02u/%02u/%u", (date & 0x1F), ((date >> 5) & 0x0F), (1980U + (date >> 9)));
+    return StringPrintf("%02u/%02u/%u",
+                        date.Range(0, 4), // Day.
+                        date.Range(5, 8), // Month.
+                        1980U + date.Range(9, 15)); // Year.
 }
 
 std::string SMBios::PortableBatteryTable::GetSBDSDeviceChemistry() const
