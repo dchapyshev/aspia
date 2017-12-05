@@ -64,6 +64,7 @@ private:
         COMMAND_ID_HANDLER(ID_SAVE, OnSaveSelectedButton)
         COMMAND_ID_HANDLER(ID_SAVE_ALL, OnSaveAllButton)
         COMMAND_ID_HANDLER(ID_SAVE_CURRENT, OnSaveCurrentButton)
+        COMMAND_ID_HANDLER(ID_SCREENSHOT, OnScreenshotButton)
         COMMAND_ID_HANDLER(ID_REFRESH, OnRefreshButton)
         COMMAND_ID_HANDLER(ID_COPY, OnCopyButton)
         COMMAND_ID_HANDLER(ID_COPY_ALL, OnCopyAllButton)
@@ -85,6 +86,7 @@ private:
     LRESULT OnSaveSelectedButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSaveAllButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSaveCurrentButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnScreenshotButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnRefreshButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnCopyButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnCopyAllButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);

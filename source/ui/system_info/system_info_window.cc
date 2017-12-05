@@ -8,6 +8,8 @@
 #include "base/files/file_path.h"
 #include "base/strings/unicode.h"
 #include "base/scoped_clipboard.h"
+#include "base/scoped_select_object.h"
+#include "base/scoped_hdc.h"
 #include "base/logging.h"
 #include "ui/system_info/system_info_window.h"
 #include "ui/system_info/category_select_dialog.h"
@@ -327,6 +329,44 @@ LRESULT SystemInfoWindow::OnSaveCurrentButton(
         category->category_info()->SetChecked(true);
         Save(&category_list_);
         category->category_info()->SetChecked(false);
+    }
+
+    return 0;
+}
+
+LRESULT SystemInfoWindow::OnScreenshotButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    ScopedGetDC window_dc(*this);
+    if (!window_dc)
+        return 0;
+
+    CDC memory_dc;
+    memory_dc.CreateCompatibleDC(window_dc);
+    if (memory_dc.IsNull())
+        return 0;
+
+    CRect window_rect;
+    if (!GetClientRect(window_rect))
+        return 0;
+
+    CBitmap bitmap = CreateCompatibleBitmap(window_dc,
+                                            window_rect.Width(),
+                                            window_rect.Height());
+    if (bitmap.IsNull())
+        return 0;
+
+    ScopedSelectObject select_object(memory_dc, bitmap);
+
+    if (memory_dc.BitBlt(0, 0, window_rect.Width(), window_rect.Height(),
+                         window_dc, 0, 0, SRCCOPY))
+    {
+        if (OpenClipboard())
+        {
+            EmptyClipboard();
+            SetClipboardData(CF_BITMAP, bitmap);
+            CloseClipboard();
+        }
     }
 
     return 0;

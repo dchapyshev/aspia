@@ -18,10 +18,11 @@ LRESULT SystemInfoToolbar::OnCreate(
     TBBUTTON kButtons[] =
     {
         // iBitmap, idCommand, fsState, fsStyle, bReserved[2], dwData, iString
-        { 0, ID_SAVE,    TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_DROPDOWN | BTNS_SHOWTEXT,{ 0 }, 0, -1 },
-        { 1, ID_REFRESH, TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,{ 0 }, 0, -1 },
-        { 2, ID_ABOUT,   TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,{ 0 }, 0, -1 },
-        { 3, ID_EXIT,    TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE,{ 0 }, 0, -1 },
+        { 0, ID_SAVE,       TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_DROPDOWN | BTNS_SHOWTEXT, { 0 }, 0, -1 },
+        { 1, ID_SCREENSHOT, TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE, { 0 }, 0, -1 },
+        { 2, ID_REFRESH,    TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE, { 0 }, 0, -1 },
+        { 3, ID_ABOUT,      TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE, { 0 }, 0, -1 },
+        { 4, ID_EXIT,       TBSTATE_ENABLED, BTNS_BUTTON | BTNS_AUTOSIZE, { 0 }, 0, -1 },
     };
 
     SetButtonStructSize(sizeof(kButtons[0]));
@@ -38,6 +39,7 @@ LRESULT SystemInfoToolbar::OnCreate(
         SetImageList(imagelist_);
 
         AddIcon(IDI_DISK, small_icon_size);
+        AddIcon(IDI_CLIPBOARD_PASTE_IMAGE, small_icon_size);
         AddIcon(IDI_REFRESH, small_icon_size);
         AddIcon(IDI_ABOUT, small_icon_size);
         AddIcon(IDI_EXIT, small_icon_size);
@@ -57,6 +59,10 @@ LRESULT SystemInfoToolbar::OnGetDispInfo(int /* control_id */, LPNMHDR hdr, BOOL
     {
         case ID_SAVE:
             string_id = IDS_SI_TOOLTIP_SAVE;
+            break;
+
+        case ID_SCREENSHOT:
+            string_id = IDS_SI_TOOLTIP_SCREENSHOT;
             break;
 
         case ID_HOME:
