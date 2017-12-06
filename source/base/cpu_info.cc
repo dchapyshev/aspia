@@ -80,13 +80,59 @@ void GetCPUInformation(CPUInfo& cpu_info)
     uint32_t ecx = cpuid.ecx();
     uint32_t edx = cpuid.edx();
 
-    memcpy(&cpu_info.manufacturer[0], &ebx, sizeof(ebx));
-    memcpy(&cpu_info.manufacturer[4], &edx, sizeof(edx));
-    memcpy(&cpu_info.manufacturer[8], &ecx, sizeof(ecx));
+    memcpy(&cpu_info.vendor[0], &ebx, sizeof(ebx));
+    memcpy(&cpu_info.vendor[4], &edx, sizeof(edx));
+    memcpy(&cpu_info.vendor[8], &ecx, sizeof(ecx));
 
-    uint32_t max = CPUID(0x80000000).eax();
+    uint32_t max_leaf = cpuid.eax();
 
-    for (uint32_t leaf = 0x80000000, offset = 0; leaf <= max; ++leaf)
+    for (uint32_t leaf = 0; leaf <= max_leaf; ++leaf)
+    {
+        cpuid.get(leaf);
+
+        eax = cpuid.eax();
+        ebx = cpuid.ebx();
+        ecx = cpuid.ecx();
+        edx = cpuid.edx();
+
+        switch (leaf)
+        {
+            case 1:
+            {
+                cpu_info.stepping = BitSet<uint32_t>(eax).Range(0, 3);
+                cpu_info.model = BitSet<uint32_t>(eax).Range(4, 7);
+                cpu_info.family = BitSet<uint32_t>(eax).Range(8, 11);
+                cpu_info.brand_id = BitSet<uint32_t>(ebx).Range(0, 7);
+
+                memcpy(&cpu_info.func_1_ecx, &ecx, sizeof(ecx));
+                memcpy(&cpu_info.func_1_edx, &edx, sizeof(edx));
+
+                if (cpu_info.family == 0x06 || cpu_info.family == 0x0F)
+                {
+                    const uint32_t extended_model = BitSet<uint32_t>(eax).Range(16, 19);
+                    const uint32_t extended_family = BitSet<uint32_t>(eax).Range(20, 27);
+                    cpu_info.extended_model = (extended_model << 4) + cpu_info.model;
+                    cpu_info.extended_family = extended_family + cpu_info.family;
+                }
+            }
+            break;
+
+            case 7:
+            {
+                memcpy(&cpu_info.func_7_0_ebx, &ebx, sizeof(ebx));
+                memcpy(&cpu_info.func_7_0_ecx, &ecx, sizeof(ecx));
+                memcpy(&cpu_info.func_7_0_edx, &edx, sizeof(edx));
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
+
+    max_leaf = CPUID(0x80000000).eax();
+
+    for (uint32_t leaf = 0x80000000, offset = 0; leaf <= max_leaf; ++leaf)
     {
         cpuid.get(leaf);
 
@@ -99,8 +145,8 @@ void GetCPUInformation(CPUInfo& cpu_info)
         {
             case 0x80000001:
             {
-                memcpy(&cpu_info.func81_ecx, &ecx, sizeof(ecx));
-                memcpy(&cpu_info.func81_edx, &edx, sizeof(edx));
+                memcpy(&cpu_info.func_81_ecx, &ecx, sizeof(ecx));
+                memcpy(&cpu_info.func_81_edx, &edx, sizeof(edx));
             }
             break;
 
@@ -122,29 +168,6 @@ void GetCPUInformation(CPUInfo& cpu_info)
             default:
                 break;
         }
-    }
-
-    cpuid.get(0x00000001);
-
-    eax = cpuid.eax();
-    ebx = cpuid.ebx();
-    ecx = cpuid.ecx();
-    edx = cpuid.edx();
-
-    cpu_info.stepping = BitSet<uint32_t>(eax).Range(0, 3);
-    cpu_info.model = BitSet<uint32_t>(eax).Range(4, 7);
-    cpu_info.family = BitSet<uint32_t>(eax).Range(8, 11);
-    cpu_info.brand_id = BitSet<uint32_t>(ebx).Range(0, 7);
-
-    memcpy(&cpu_info.func1_ecx, &ecx, sizeof(ecx));
-    memcpy(&cpu_info.func1_edx, &edx, sizeof(edx));
-
-    if (cpu_info.family == 0x06 || cpu_info.family == 0x0F)
-    {
-        const uint32_t extended_model = BitSet<uint32_t>(eax).Range(16, 19);
-        const uint32_t extended_family = BitSet<uint32_t>(eax).Range(20, 27);
-        cpu_info.extended_model = (extended_model << 4) + cpu_info.model;
-        cpu_info.extended_family = extended_family + cpu_info.family;
     }
 
     GetCPUCount(cpu_info.package_count,

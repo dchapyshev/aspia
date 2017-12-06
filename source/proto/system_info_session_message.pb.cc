@@ -11545,8 +11545,8 @@ void CentralProcessor_Feature::InternalSwap(CentralProcessor_Feature* other) {
 void CentralProcessor::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int CentralProcessor::kNameFieldNumber;
-const int CentralProcessor::kManufacturerFieldNumber;
+const int CentralProcessor::kBrandStringFieldNumber;
+const int CentralProcessor::kVendorFieldNumber;
 const int CentralProcessor::kSteppingFieldNumber;
 const int CentralProcessor::kModelFieldNumber;
 const int CentralProcessor::kFamilyFieldNumber;
@@ -11556,7 +11556,6 @@ const int CentralProcessor::kBrandIdFieldNumber;
 const int CentralProcessor::kPackagesFieldNumber;
 const int CentralProcessor::kPhysicalCoresFieldNumber;
 const int CentralProcessor::kLogicalCoresFieldNumber;
-const int CentralProcessor::kSpeedFieldNumber;
 const int CentralProcessor::kFeatureFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -11574,13 +11573,13 @@ CentralProcessor::CentralProcessor(const CentralProcessor& from)
       feature_(from.feature_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.name().size() > 0) {
-    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  brand_string_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.brand_string().size() > 0) {
+    brand_string_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.brand_string_);
   }
-  manufacturer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.manufacturer().size() > 0) {
-    manufacturer_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacturer_);
+  vendor_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.vendor().size() > 0) {
+    vendor_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.vendor_);
   }
   ::memcpy(&stepping_, &from.stepping_,
     static_cast<size_t>(reinterpret_cast<char*>(&logical_cores_) -
@@ -11589,8 +11588,8 @@ CentralProcessor::CentralProcessor(const CentralProcessor& from)
 }
 
 void CentralProcessor::SharedCtor() {
-  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  manufacturer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  brand_string_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  vendor_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&stepping_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&logical_cores_) -
       reinterpret_cast<char*>(&stepping_)) + sizeof(logical_cores_));
@@ -11603,8 +11602,8 @@ CentralProcessor::~CentralProcessor() {
 }
 
 void CentralProcessor::SharedDtor() {
-  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  manufacturer_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  brand_string_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  vendor_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void CentralProcessor::SetCachedSize(int size) const {
@@ -11632,8 +11631,8 @@ void CentralProcessor::Clear() {
   (void) cached_has_bits;
 
   feature_.Clear();
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  brand_string_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  vendor_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&stepping_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&logical_cores_) -
       reinterpret_cast<char*>(&stepping_)) + sizeof(logical_cores_));
@@ -11656,32 +11655,32 @@ bool CentralProcessor::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // string name = 1;
+      // string brand_string = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_name()));
+                input, this->mutable_brand_string()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->name().data(), static_cast<int>(this->name().length()),
+            this->brand_string().data(), static_cast<int>(this->brand_string().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.CentralProcessor.name"));
+            "aspia.proto.CentralProcessor.brand_string"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // string manufacturer = 2;
+      // string vendor = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_manufacturer()));
+                input, this->mutable_vendor()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
+            this->vendor().data(), static_cast<int>(this->vendor().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.CentralProcessor.manufacturer"));
+            "aspia.proto.CentralProcessor.vendor"));
         } else {
           goto handle_unusual;
         }
@@ -11814,24 +11813,10 @@ bool CentralProcessor::MergePartialFromCodedStream(
         break;
       }
 
-      // double speed = 12;
+      // repeated .aspia.proto.CentralProcessor.Feature feature = 12;
       case 12: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(97u /* 97 & 0xFF */)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
-                 input, &speed_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // repeated .aspia.proto.CentralProcessor.Feature feature = 13;
-      case 13: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(106u /* 106 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(98u /* 98 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_feature()));
         } else {
           goto handle_unusual;
@@ -11865,24 +11850,24 @@ void CentralProcessor::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string name = 1;
-  if (this->name().size() > 0) {
+  // string brand_string = 1;
+  if (this->brand_string().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->name().data(), static_cast<int>(this->name().length()),
+      this->brand_string().data(), static_cast<int>(this->brand_string().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.CentralProcessor.name");
+      "aspia.proto.CentralProcessor.brand_string");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->name(), output);
+      1, this->brand_string(), output);
   }
 
-  // string manufacturer = 2;
-  if (this->manufacturer().size() > 0) {
+  // string vendor = 2;
+  if (this->vendor().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
+      this->vendor().data(), static_cast<int>(this->vendor().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.CentralProcessor.manufacturer");
+      "aspia.proto.CentralProcessor.vendor");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      2, this->manufacturer(), output);
+      2, this->vendor(), output);
   }
 
   // uint32 stepping = 3;
@@ -11930,16 +11915,11 @@ void CentralProcessor::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(11, this->logical_cores(), output);
   }
 
-  // double speed = 12;
-  if (this->speed() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteDouble(12, this->speed(), output);
-  }
-
-  // repeated .aspia.proto.CentralProcessor.Feature feature = 13;
+  // repeated .aspia.proto.CentralProcessor.Feature feature = 12;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->feature_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      13, this->feature(static_cast<int>(i)), output);
+      12, this->feature(static_cast<int>(i)), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -11953,7 +11933,7 @@ size_t CentralProcessor::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.proto.CentralProcessor.Feature feature = 13;
+  // repeated .aspia.proto.CentralProcessor.Feature feature = 12;
   {
     unsigned int count = static_cast<unsigned int>(this->feature_size());
     total_size += 1UL * count;
@@ -11964,18 +11944,18 @@ size_t CentralProcessor::ByteSizeLong() const {
     }
   }
 
-  // string name = 1;
-  if (this->name().size() > 0) {
+  // string brand_string = 1;
+  if (this->brand_string().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->name());
+        this->brand_string());
   }
 
-  // string manufacturer = 2;
-  if (this->manufacturer().size() > 0) {
+  // string vendor = 2;
+  if (this->vendor().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->manufacturer());
+        this->vendor());
   }
 
   // uint32 stepping = 3;
@@ -12034,11 +12014,6 @@ size_t CentralProcessor::ByteSizeLong() const {
         this->physical_cores());
   }
 
-  // double speed = 12;
-  if (this->speed() != 0) {
-    total_size += 1 + 8;
-  }
-
   // uint32 logical_cores = 11;
   if (this->logical_cores() != 0) {
     total_size += 1 +
@@ -12066,13 +12041,13 @@ void CentralProcessor::MergeFrom(const CentralProcessor& from) {
   (void) cached_has_bits;
 
   feature_.MergeFrom(from.feature_);
-  if (from.name().size() > 0) {
+  if (from.brand_string().size() > 0) {
 
-    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+    brand_string_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.brand_string_);
   }
-  if (from.manufacturer().size() > 0) {
+  if (from.vendor().size() > 0) {
 
-    manufacturer_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacturer_);
+    vendor_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.vendor_);
   }
   if (from.stepping() != 0) {
     set_stepping(from.stepping());
@@ -12098,9 +12073,6 @@ void CentralProcessor::MergeFrom(const CentralProcessor& from) {
   if (from.physical_cores() != 0) {
     set_physical_cores(from.physical_cores());
   }
-  if (from.speed() != 0) {
-    set_speed(from.speed());
-  }
   if (from.logical_cores() != 0) {
     set_logical_cores(from.logical_cores());
   }
@@ -12124,8 +12096,8 @@ void CentralProcessor::Swap(CentralProcessor* other) {
 void CentralProcessor::InternalSwap(CentralProcessor* other) {
   using std::swap;
   feature_.InternalSwap(&other->feature_);
-  name_.Swap(&other->name_);
-  manufacturer_.Swap(&other->manufacturer_);
+  brand_string_.Swap(&other->brand_string_);
+  vendor_.Swap(&other->vendor_);
   swap(stepping_, other->stepping_);
   swap(model_, other->model_);
   swap(family_, other->family_);
@@ -12134,7 +12106,6 @@ void CentralProcessor::InternalSwap(CentralProcessor* other) {
   swap(brand_id_, other->brand_id_);
   swap(packages_, other->packages_);
   swap(physical_cores_, other->physical_cores_);
-  swap(speed_, other->speed_);
   swap(logical_cores_, other->logical_cores_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);

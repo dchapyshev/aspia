@@ -4721,10 +4721,10 @@ class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_inse
 
   // accessors -------------------------------------------------------
 
-  // repeated .aspia.proto.CentralProcessor.Feature feature = 13;
+  // repeated .aspia.proto.CentralProcessor.Feature feature = 12;
   int feature_size() const;
   void clear_feature();
-  static const int kFeatureFieldNumber = 13;
+  static const int kFeatureFieldNumber = 12;
   const ::aspia::proto::CentralProcessor_Feature& feature(int index) const;
   ::aspia::proto::CentralProcessor_Feature* mutable_feature(int index);
   ::aspia::proto::CentralProcessor_Feature* add_feature();
@@ -4733,33 +4733,33 @@ class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_inse
   const ::google::protobuf::RepeatedPtrField< ::aspia::proto::CentralProcessor_Feature >&
       feature() const;
 
-  // string name = 1;
-  void clear_name();
-  static const int kNameFieldNumber = 1;
-  const ::std::string& name() const;
-  void set_name(const ::std::string& value);
+  // string brand_string = 1;
+  void clear_brand_string();
+  static const int kBrandStringFieldNumber = 1;
+  const ::std::string& brand_string() const;
+  void set_brand_string(const ::std::string& value);
   #if LANG_CXX11
-  void set_name(::std::string&& value);
+  void set_brand_string(::std::string&& value);
   #endif
-  void set_name(const char* value);
-  void set_name(const char* value, size_t size);
-  ::std::string* mutable_name();
-  ::std::string* release_name();
-  void set_allocated_name(::std::string* name);
+  void set_brand_string(const char* value);
+  void set_brand_string(const char* value, size_t size);
+  ::std::string* mutable_brand_string();
+  ::std::string* release_brand_string();
+  void set_allocated_brand_string(::std::string* brand_string);
 
-  // string manufacturer = 2;
-  void clear_manufacturer();
-  static const int kManufacturerFieldNumber = 2;
-  const ::std::string& manufacturer() const;
-  void set_manufacturer(const ::std::string& value);
+  // string vendor = 2;
+  void clear_vendor();
+  static const int kVendorFieldNumber = 2;
+  const ::std::string& vendor() const;
+  void set_vendor(const ::std::string& value);
   #if LANG_CXX11
-  void set_manufacturer(::std::string&& value);
+  void set_vendor(::std::string&& value);
   #endif
-  void set_manufacturer(const char* value);
-  void set_manufacturer(const char* value, size_t size);
-  ::std::string* mutable_manufacturer();
-  ::std::string* release_manufacturer();
-  void set_allocated_manufacturer(::std::string* manufacturer);
+  void set_vendor(const char* value);
+  void set_vendor(const char* value, size_t size);
+  ::std::string* mutable_vendor();
+  ::std::string* release_vendor();
+  void set_allocated_vendor(::std::string* vendor);
 
   // uint32 stepping = 3;
   void clear_stepping();
@@ -4809,12 +4809,6 @@ class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_inse
   ::google::protobuf::uint32 physical_cores() const;
   void set_physical_cores(::google::protobuf::uint32 value);
 
-  // double speed = 12;
-  void clear_speed();
-  static const int kSpeedFieldNumber = 12;
-  double speed() const;
-  void set_speed(double value);
-
   // uint32 logical_cores = 11;
   void clear_logical_cores();
   static const int kLogicalCoresFieldNumber = 11;
@@ -4826,8 +4820,8 @@ class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_inse
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::aspia::proto::CentralProcessor_Feature > feature_;
-  ::google::protobuf::internal::ArenaStringPtr name_;
-  ::google::protobuf::internal::ArenaStringPtr manufacturer_;
+  ::google::protobuf::internal::ArenaStringPtr brand_string_;
+  ::google::protobuf::internal::ArenaStringPtr vendor_;
   ::google::protobuf::uint32 stepping_;
   ::google::protobuf::uint32 model_;
   ::google::protobuf::uint32 family_;
@@ -4836,7 +4830,6 @@ class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_inse
   ::google::protobuf::uint32 brand_id_;
   ::google::protobuf::uint32 packages_;
   ::google::protobuf::uint32 physical_cores_;
-  double speed_;
   ::google::protobuf::uint32 logical_cores_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
@@ -15687,110 +15680,110 @@ inline void CentralProcessor_Feature::set_supported(bool value) {
 
 // CentralProcessor
 
-// string name = 1;
-inline void CentralProcessor::clear_name() {
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// string brand_string = 1;
+inline void CentralProcessor::clear_brand_string() {
+  brand_string_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& CentralProcessor::name() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.name)
-  return name_.GetNoArena();
+inline const ::std::string& CentralProcessor::brand_string() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.brand_string)
+  return brand_string_.GetNoArena();
 }
-inline void CentralProcessor::set_name(const ::std::string& value) {
+inline void CentralProcessor::set_brand_string(const ::std::string& value) {
   
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.name)
+  brand_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.brand_string)
 }
 #if LANG_CXX11
-inline void CentralProcessor::set_name(::std::string&& value) {
+inline void CentralProcessor::set_brand_string(::std::string&& value) {
   
-  name_.SetNoArena(
+  brand_string_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.CentralProcessor.name)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.CentralProcessor.brand_string)
 }
 #endif
-inline void CentralProcessor::set_name(const char* value) {
+inline void CentralProcessor::set_brand_string(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.CentralProcessor.name)
+  brand_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.CentralProcessor.brand_string)
 }
-inline void CentralProcessor::set_name(const char* value, size_t size) {
+inline void CentralProcessor::set_brand_string(const char* value, size_t size) {
   
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  brand_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CentralProcessor.name)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CentralProcessor.brand_string)
 }
-inline ::std::string* CentralProcessor::mutable_name() {
+inline ::std::string* CentralProcessor::mutable_brand_string() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.CentralProcessor.name)
-  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:aspia.proto.CentralProcessor.brand_string)
+  return brand_string_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* CentralProcessor::release_name() {
-  // @@protoc_insertion_point(field_release:aspia.proto.CentralProcessor.name)
+inline ::std::string* CentralProcessor::release_brand_string() {
+  // @@protoc_insertion_point(field_release:aspia.proto.CentralProcessor.brand_string)
   
-  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return brand_string_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void CentralProcessor::set_allocated_name(::std::string* name) {
-  if (name != NULL) {
+inline void CentralProcessor::set_allocated_brand_string(::std::string* brand_string) {
+  if (brand_string != NULL) {
     
   } else {
     
   }
-  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CentralProcessor.name)
+  brand_string_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), brand_string);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CentralProcessor.brand_string)
 }
 
-// string manufacturer = 2;
-inline void CentralProcessor::clear_manufacturer() {
-  manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// string vendor = 2;
+inline void CentralProcessor::clear_vendor() {
+  vendor_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& CentralProcessor::manufacturer() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.manufacturer)
-  return manufacturer_.GetNoArena();
+inline const ::std::string& CentralProcessor::vendor() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.vendor)
+  return vendor_.GetNoArena();
 }
-inline void CentralProcessor::set_manufacturer(const ::std::string& value) {
+inline void CentralProcessor::set_vendor(const ::std::string& value) {
   
-  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.manufacturer)
+  vendor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.vendor)
 }
 #if LANG_CXX11
-inline void CentralProcessor::set_manufacturer(::std::string&& value) {
+inline void CentralProcessor::set_vendor(::std::string&& value) {
   
-  manufacturer_.SetNoArena(
+  vendor_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.CentralProcessor.manufacturer)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.CentralProcessor.vendor)
 }
 #endif
-inline void CentralProcessor::set_manufacturer(const char* value) {
+inline void CentralProcessor::set_vendor(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
-  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.CentralProcessor.manufacturer)
+  vendor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.CentralProcessor.vendor)
 }
-inline void CentralProcessor::set_manufacturer(const char* value, size_t size) {
+inline void CentralProcessor::set_vendor(const char* value, size_t size) {
   
-  manufacturer_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  vendor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CentralProcessor.manufacturer)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CentralProcessor.vendor)
 }
-inline ::std::string* CentralProcessor::mutable_manufacturer() {
+inline ::std::string* CentralProcessor::mutable_vendor() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.CentralProcessor.manufacturer)
-  return manufacturer_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:aspia.proto.CentralProcessor.vendor)
+  return vendor_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* CentralProcessor::release_manufacturer() {
-  // @@protoc_insertion_point(field_release:aspia.proto.CentralProcessor.manufacturer)
+inline ::std::string* CentralProcessor::release_vendor() {
+  // @@protoc_insertion_point(field_release:aspia.proto.CentralProcessor.vendor)
   
-  return manufacturer_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return vendor_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void CentralProcessor::set_allocated_manufacturer(::std::string* manufacturer) {
-  if (manufacturer != NULL) {
+inline void CentralProcessor::set_allocated_vendor(::std::string* vendor) {
+  if (vendor != NULL) {
     
   } else {
     
   }
-  manufacturer_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), manufacturer);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CentralProcessor.manufacturer)
+  vendor_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), vendor);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CentralProcessor.vendor)
 }
 
 // uint32 stepping = 3;
@@ -15919,21 +15912,7 @@ inline void CentralProcessor::set_logical_cores(::google::protobuf::uint32 value
   // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.logical_cores)
 }
 
-// double speed = 12;
-inline void CentralProcessor::clear_speed() {
-  speed_ = 0;
-}
-inline double CentralProcessor::speed() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.speed)
-  return speed_;
-}
-inline void CentralProcessor::set_speed(double value) {
-  
-  speed_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.speed)
-}
-
-// repeated .aspia.proto.CentralProcessor.Feature feature = 13;
+// repeated .aspia.proto.CentralProcessor.Feature feature = 12;
 inline int CentralProcessor::feature_size() const {
   return feature_.size();
 }

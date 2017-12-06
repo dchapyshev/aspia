@@ -19,7 +19,7 @@ class BitSet
 {
 public:
     BitSet() = default;
-    explicit BitSet(NumericType value) : value_(value) { /* Nothing */ }
+    BitSet(NumericType value) : value_(value) { /* Nothing */ }
     BitSet(const BitSet& other) { CopyFrom(other); }
     virtual ~BitSet() = default;
 
