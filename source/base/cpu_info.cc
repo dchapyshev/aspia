@@ -69,6 +69,15 @@ void GetCPUCount(uint32_t& package_count,
 
 void GetCPUInformation(CPUInfo& cpu_info)
 {
+    DCHECK_EQ(sizeof(FN_1_ECX), sizeof(uint32_t));
+    DCHECK_EQ(sizeof(FN_1_EDX), sizeof(uint32_t));
+    DCHECK_EQ(sizeof(FN_80000001_ECX), sizeof(uint32_t));
+    DCHECK_EQ(sizeof(FN_80000001_EDX), sizeof(uint32_t));
+    DCHECK_EQ(sizeof(FN_7_0_EBX), sizeof(uint32_t));
+    DCHECK_EQ(sizeof(FN_7_0_ECX), sizeof(uint32_t));
+    DCHECK_EQ(sizeof(FN_7_0_EDX), sizeof(uint32_t));
+    DCHECK_EQ(sizeof(FN_C0000001_EDX), sizeof(uint32_t));
+
     memset(&cpu_info, 0, sizeof(CPUInfo));
 
     CPUID cpuid;
@@ -104,8 +113,8 @@ void GetCPUInformation(CPUInfo& cpu_info)
                 cpu_info.family = BitSet<uint32_t>(eax).Range(8, 11);
                 cpu_info.brand_id = BitSet<uint32_t>(ebx).Range(0, 7);
 
-                memcpy(&cpu_info.func_1_ecx, &ecx, sizeof(ecx));
-                memcpy(&cpu_info.func_1_edx, &edx, sizeof(edx));
+                memcpy(&cpu_info.fn_1_ecx, &ecx, sizeof(ecx));
+                memcpy(&cpu_info.fn_1_edx, &edx, sizeof(edx));
 
                 if (cpu_info.family == 0x06 || cpu_info.family == 0x0F)
                 {
@@ -119,9 +128,9 @@ void GetCPUInformation(CPUInfo& cpu_info)
 
             case 7:
             {
-                memcpy(&cpu_info.func_7_0_ebx, &ebx, sizeof(ebx));
-                memcpy(&cpu_info.func_7_0_ecx, &ecx, sizeof(ecx));
-                memcpy(&cpu_info.func_7_0_edx, &edx, sizeof(edx));
+                memcpy(&cpu_info.fn_7_0_ebx, &ebx, sizeof(ebx));
+                memcpy(&cpu_info.fn_7_0_ecx, &ecx, sizeof(ecx));
+                memcpy(&cpu_info.fn_7_0_edx, &edx, sizeof(edx));
             }
             break;
 
@@ -145,8 +154,8 @@ void GetCPUInformation(CPUInfo& cpu_info)
         {
             case 0x80000001:
             {
-                memcpy(&cpu_info.func_81_ecx, &ecx, sizeof(ecx));
-                memcpy(&cpu_info.func_81_edx, &edx, sizeof(edx));
+                memcpy(&cpu_info.fn_81_ecx, &ecx, sizeof(ecx));
+                memcpy(&cpu_info.fn_81_edx, &edx, sizeof(edx));
             }
             break;
 
@@ -170,30 +179,33 @@ void GetCPUInformation(CPUInfo& cpu_info)
         }
     }
 
+    max_leaf = CPUID(0xC0000000).eax();
+
+    for (uint32_t leaf = 0xC0000000; leaf <= max_leaf; ++leaf)
+    {
+        cpuid.get(leaf);
+
+        eax = cpuid.eax();
+        ebx = cpuid.ebx();
+        ecx = cpuid.ecx();
+        edx = cpuid.edx();
+
+        switch (leaf)
+        {
+            case 0xC0000001:
+            {
+                memcpy(&cpu_info.fn_c1_edx, &edx, sizeof(edx));
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
+
     GetCPUCount(cpu_info.package_count,
                 cpu_info.physical_core_count,
                 cpu_info.logical_core_count);
-}
-
-double GetCPUSpeed()
-{
-    LARGE_INTEGER frequency;
-    QueryPerformanceFrequency(&frequency);
-
-    LARGE_INTEGER start;
-    QueryPerformanceCounter(&start);
-
-    UINT64 time_stamp_count = __rdtsc();
-
-    Sleep(100);
-
-    time_stamp_count = __rdtsc() - time_stamp_count;
-
-    LARGE_INTEGER end;
-    QueryPerformanceCounter(&end);
-
-    return static_cast<double>((time_stamp_count * frequency.QuadPart /
-        (end.QuadPart - start.QuadPart)) / 1000000.0);
 }
 
 } // namespace aspia
