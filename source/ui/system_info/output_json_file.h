@@ -52,7 +52,7 @@ private:
 
     std::vector<std::string> column_list_;
     int column_index_ = 0;
-    Category::Type type_;
+    Category* category_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(OutputJsonFile);
 };

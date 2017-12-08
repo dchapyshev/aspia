@@ -34,6 +34,7 @@ Row& Row::operator=(Row&& other)
 {
     output_ = other.output_;
     other.output_ = nullptr;
+    return *this;
 }
 
 void Row::AddValue(const Value& value)

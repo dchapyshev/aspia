@@ -133,15 +133,15 @@ void ReportCreator::Parse(const std::string& data)
 
     Category* category = iterator->get();
     DCHECK(category);
-    DCHECK(category->type() == Category::Type::INFO_LIST ||
-           category->type() == Category::Type::INFO_PARAM_VALUE);
 
-    state_change_callback_(category->category_info()->Name(), State::OUTPUT);
+    CategoryInfo* category_info = category->category_info();
+
+    state_change_callback_(category_info->Name(), State::OUTPUT);
 
     {
         Table table = Table::Create(output_, category);
-        category->category_info()->Parse(table, data);
-        category->category_info()->SetChecked(false);
+        category_info->Parse(table, data);
+        category_info->SetChecked(false);
     }
 
     ++iterator;

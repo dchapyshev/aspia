@@ -57,22 +57,28 @@ void OutputJsonFile::EndTableGroup()
 
 void OutputJsonFile::StartTable(Category* category)
 {
-    type_ = category->type();
+    DCHECK(!category_);
+    category_ = category;
+    DCHECK(category_);
 
     writer_.String(category->Name());
     writer_.StartObject();
 
-    if (type_ == Category::Type::INFO_LIST)
+    if (category_->type() == Category::Type::INFO_LIST)
         writer_.StartArray();
 }
 
 void OutputJsonFile::EndTable()
 {
-    if (type_ == Category::Type::INFO_LIST)
+    DCHECK(category_);
+
+    if (category_->type() == Category::Type::INFO_LIST)
         writer_.EndArray();
 
     writer_.EndObject();
     column_list_.clear();
+
+    category_ = nullptr;
 }
 
 void OutputJsonFile::AddColumns(const ColumnList& column_list)
