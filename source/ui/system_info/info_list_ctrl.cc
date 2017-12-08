@@ -143,8 +143,7 @@ void InfoListCtrl::EndGroup()
 
 void InfoListCtrl::AddParam(Category::IconId icon_id,
                             std::string_view param,
-                            std::string_view value,
-                            std::string_view unit)
+                            const Value& value)
 {
     CIcon icon = AtlLoadIconImage(icon_id,
                                   LR_CREATEDIBSECTION,
@@ -165,12 +164,12 @@ void InfoListCtrl::AddParam(Category::IconId icon_id,
 
     const int item_index = InsertItem(&item);
 
-    std::wstring text(UNICODEfromUTF8(value.data()));
+    std::wstring text(UNICODEfromUTF8(value.ToString()));
 
-    if (!unit.empty())
+    if (value.HasUnit())
     {
         text.append(L" ");
-        text.append(UNICODEfromUTF8(unit.data()));
+        text.append(UNICODEfromUTF8(value.Unit()));
     }
 
     AddItem(item_index, 1, text.c_str());
@@ -194,14 +193,14 @@ void InfoListCtrl::EndRow()
     DCHECK(current_column_ == column_count_ - 1);
 }
 
-void InfoListCtrl::AddValue(std::string_view value, std::string_view unit)
+void InfoListCtrl::AddValue(const Value& value)
 {
-    std::wstring text(UNICODEfromUTF8(value.data()));
+    std::wstring text(UNICODEfromUTF8(value.ToString()));
 
-    if (!unit.empty())
+    if (value.HasUnit())
     {
         text.append(L" ");
-        text.append(UNICODEfromUTF8(unit.data()));
+        text.append(UNICODEfromUTF8(value.Unit()));
     }
 
     if (current_column_ == 0)

@@ -154,8 +154,7 @@ void OutputXmlFile::EndGroup()
 
 void OutputXmlFile::AddParam(Category::IconId /* icon_id */,
                              std::string_view param,
-                             std::string_view value,
-                             std::string_view unit)
+                             const Value& value)
 {
     DCHECK(category_);
 
@@ -164,14 +163,14 @@ void OutputXmlFile::AddParam(Category::IconId /* icon_id */,
     param_node->append_attribute(
         doc_.allocate_attribute("name", doc_.allocate_string(param.data())));
 
-    if (!unit.empty())
+    if (value.HasUnit())
     {
         // The unit of measure is an optional parameter.
         param_node->append_attribute(
-            doc_.allocate_attribute("unit", doc_.allocate_string(unit.data())));
+            doc_.allocate_attribute("unit", doc_.allocate_string(value.Unit().data())));
     }
 
-    param_node->value(doc_.allocate_string(value.data()));
+    param_node->value(doc_.allocate_string(value.ToString().data()));
 
     if (group_stack_.empty())
     {
@@ -201,7 +200,7 @@ void OutputXmlFile::EndRow()
     row_ = nullptr;
 }
 
-void OutputXmlFile::AddValue(std::string_view value, std::string_view unit)
+void OutputXmlFile::AddValue(const Value& value)
 {
     DCHECK(category_);
     DCHECK(row_);
@@ -215,14 +214,14 @@ void OutputXmlFile::AddValue(std::string_view value, std::string_view unit)
     column->append_attribute(
         doc_.allocate_attribute("name", doc_.allocate_string(column_name.c_str())));
 
-    if (!unit.empty())
+    if (!value.HasUnit())
     {
         // The unit of measure is an optional parameter.
         column->append_attribute(
-            doc_.allocate_attribute("unit", doc_.allocate_string(unit.data())));
+            doc_.allocate_attribute("unit", doc_.allocate_string(value.Unit().data())));
     }
 
-    column->value(doc_.allocate_string(value.data()));
+    column->value(doc_.allocate_string(value.ToString().data()));
 
     row_->append_node(column);
 

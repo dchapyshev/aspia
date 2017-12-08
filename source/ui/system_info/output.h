@@ -49,6 +49,7 @@
 
 #include "base/macros.h"
 #include "protocol/category.h"
+#include "ui/system_info/value.h"
 
 namespace aspia {
 
@@ -122,22 +123,11 @@ public:
     virtual void EndGroup() = 0;
     virtual void AddParam(Category::IconId icon_id,
                           std::string_view param,
-                          std::string_view value,
-                          std::string_view unit) = 0;
-    void AddParam(Category::IconId icon_id,
-                  std::string_view param,
-                  std::string_view value)
-    {
-        AddParam(icon_id, param, value, std::string());
-    }
+                          const Value& value) = 0;
 
     virtual void StartRow(Category::IconId icon_id) = 0;
     virtual void EndRow() = 0;
-    virtual void AddValue(std::string_view value, std::string_view unit) = 0;
-    void AddValue(std::string_view value)
-    {
-        AddValue(value, std::string());
-    }
+    virtual void AddValue(const Value& value) = 0;
 };
 
 } // namespace aspia

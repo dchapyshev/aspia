@@ -42,13 +42,10 @@ protected:
     void AddHeaderItem(std::string_view name, int width) final;
     void StartGroup(std::string_view name, Category::IconId icon_id) final;
     void EndGroup() final;
-    void AddParam(Category::IconId icon_id,
-                  std::string_view param,
-                  std::string_view value,
-                  std::string_view unit) final;
+    void AddParam(Category::IconId icon_id, std::string_view param, const Value& value) final;
     void StartRow(Category::IconId icon_id) final;
     void EndRow() final;
-    void AddValue(std::string_view value, std::string_view unit) final;
+    void AddValue(const Value& value) final;
 
 private:
     BEGIN_MSG_MAP(InfoListCtrl)

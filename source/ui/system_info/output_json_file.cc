@@ -103,13 +103,12 @@ void OutputJsonFile::EndGroup()
 
 void OutputJsonFile::AddParam(Category::IconId /* icon_id */,
                               std::string_view param,
-                              std::string_view value,
-                              std::string_view unit)
+                              const Value& value)
 {
-    if (unit.empty())
+    if (!value.HasUnit())
     {
         writer_.Key(param.data());
-        writer_.String(value.data());
+        writer_.String(value.ToString());
     }
     else
     {
@@ -117,10 +116,10 @@ void OutputJsonFile::AddParam(Category::IconId /* icon_id */,
         writer_.StartObject();
 
         writer_.Key("value");
-        writer_.String(value.data());
+        writer_.String(value.ToString());
 
         writer_.Key("unit");
-        writer_.String(unit.data());
+        writer_.String(value.Unit());
 
         writer_.EndObject();
     }
@@ -137,12 +136,12 @@ void OutputJsonFile::EndRow()
     writer_.EndObject();
 }
 
-void OutputJsonFile::AddValue(std::string_view value, std::string_view unit)
+void OutputJsonFile::AddValue(const Value& value)
 {
-    if (unit.empty())
+    if (!value.HasUnit())
     {
         writer_.Key(column_list_[column_index_].data());
-        writer_.String(value.data());
+        writer_.String(value.ToString());
     }
     else
     {
@@ -150,10 +149,10 @@ void OutputJsonFile::AddValue(std::string_view value, std::string_view unit)
         writer_.StartObject();
 
         writer_.Key("value");
-        writer_.String(value.data());
+        writer_.String(value.ToString());
 
         writer_.Key("unit");
-        writer_.String(unit.data());
+        writer_.String(value.Unit());
 
         writer_.EndObject();
     }

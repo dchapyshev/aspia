@@ -204,8 +204,7 @@ void OutputHtmlFile::EndGroup()
 
 void OutputHtmlFile::AddParam(Category::IconId /* icon_id */,
                               std::string_view param,
-                              std::string_view value,
-                              std::string_view unit)
+                              const Value& value)
 {
     DCHECK(table_);
 
@@ -216,12 +215,12 @@ void OutputHtmlFile::AddParam(Category::IconId /* icon_id */,
     td1->append_attribute(doc_.allocate_attribute("style", doc_.allocate_string(style.data())));
     td1->value(doc_.allocate_string(param.data()));
 
-    std::string value_with_unit(value);
+    std::string value_with_unit(value.ToString());
 
-    if (!unit.empty())
+    if (value.HasUnit())
     {
         value_with_unit.append(" ");
-        value_with_unit.append(unit);
+        value_with_unit.append(value.Unit());
     }
 
     rapidxml::xml_node<>* td2 = doc_.allocate_node(rapidxml::node_element, "td");
@@ -251,17 +250,17 @@ void OutputHtmlFile::EndRow()
     tr_ = nullptr;
 }
 
-void OutputHtmlFile::AddValue(std::string_view value, std::string_view unit)
+void OutputHtmlFile::AddValue(const Value& value)
 {
     DCHECK(table_);
     DCHECK(tr_);
 
-    std::string value_with_unit(value);
+    std::string value_with_unit(value.ToString());
 
-    if (!unit.empty())
+    if (value.HasUnit())
     {
         value_with_unit.append(" ");
-        value_with_unit.append(unit);
+        value_with_unit.append(value.Unit());
     }
 
     rapidxml::xml_node<>* td = doc_.allocate_node(rapidxml::node_element, "td");

@@ -221,6 +221,7 @@
     <ClCompile Include="ui\system_info\report_progress_dialog.cc" />
     <ClCompile Include="ui\system_info\system_info_toolbar.cc" />
     <ClCompile Include="ui\system_info\system_info_window.cc" />
+    <ClCompile Include="ui\system_info\value.cc" />
     <ClCompile Include="ui\ui_main.cc" />
     <ClCompile Include="ui\users_dialog.cc" />
     <ClCompile Include="ui\user_prop_dialog.cc" />
@@ -461,6 +462,7 @@
     <ClInclude Include="ui\system_info\report_progress_dialog.h" />
     <ClInclude Include="ui\system_info\system_info_toolbar.h" />
     <ClInclude Include="ui\system_info\system_info_window.h" />
+    <ClInclude Include="ui\system_info\value.h" />
     <ClInclude Include="ui\ui_main.h" />
     <ClInclude Include="ui\users_dialog.h" />
     <ClInclude Include="ui\user_prop_dialog.h" />

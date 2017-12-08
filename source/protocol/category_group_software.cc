@@ -57,11 +57,11 @@ void CategoryPrograms::Parse(Output* output, const std::string& data)
 
         Output::Row row(output, Icon());
 
-        output->AddValue(item.name());
-        output->AddValue(item.version());
-        output->AddValue(item.publisher());
-        output->AddValue(item.install_date());
-        output->AddValue(item.install_location());
+        output->AddValue(Value::String(item.name()));
+        output->AddValue(Value::String(item.version()));
+        output->AddValue(Value::String(item.publisher()));
+        output->AddValue(Value::String(item.install_date()));
+        output->AddValue(Value::String(item.install_location()));
     }
 }
 
@@ -158,13 +158,13 @@ void CategoryServices::Parse(Output* output, const std::string& data)
 
         Output::Row row(output, Icon());
 
-        output->AddValue(item.display_name());
-        output->AddValue(item.name());
-        output->AddValue(item.description());
-        output->AddValue(StatusToString(item.status()));
-        output->AddValue(StartupTypeToString(item.startup_type()));
-        output->AddValue(item.start_name());
-        output->AddValue(item.binary_path());
+        output->AddValue(Value::String(item.display_name()));
+        output->AddValue(Value::String(item.name()));
+        output->AddValue(Value::String(item.description()));
+        output->AddValue(Value::String(StatusToString(item.status())));
+        output->AddValue(Value::String(StartupTypeToString(item.startup_type())));
+        output->AddValue(Value::String(item.start_name()));
+        output->AddValue(Value::String(item.binary_path()));
     }
 }
 
@@ -352,12 +352,12 @@ void CategoryDrivers::Parse(Output* output, const std::string& data)
 
         Output::Row row(output, Icon());
 
-        output->AddValue(item.display_name());
-        output->AddValue(item.name());
-        output->AddValue(item.description());
-        output->AddValue(CategoryServices::StatusToString(item.status()));
-        output->AddValue(CategoryServices::StartupTypeToString(item.startup_type()));
-        output->AddValue(item.binary_path());
+        output->AddValue(Value::String(item.display_name()));
+        output->AddValue(Value::String(item.name()));
+        output->AddValue(Value::String(item.description()));
+        output->AddValue(Value::String(CategoryServices::StatusToString(item.status())));
+        output->AddValue(Value::String(CategoryServices::StartupTypeToString(item.startup_type())));
+        output->AddValue(Value::String(item.binary_path()));
     }
 }
 
@@ -487,28 +487,28 @@ void CategoryProcesses::Parse(Output* output, const std::string& data)
 
         Output::Row row(output, Icon());
 
-        output->AddValue(item.process_name());
-        output->AddValue(item.file_path());
+        output->AddValue(Value::String(item.process_name()));
+        output->AddValue(Value::String(item.file_path()));
 
         if (item.used_memory() != 0)
         {
-            output->AddValue(std::to_string(item.used_memory() / 1024), "kB");
+            output->AddValue(Value::Number(item.used_memory() / 1024, "kB"));
         }
         else
         {
-            output->AddValue(std::string());
+            output->AddValue(Value::Empty());
         }
 
         if (item.used_swap() != 0)
         {
-            output->AddValue(std::to_string(item.used_swap() / 1024), "kB");
+            output->AddValue(Value::Number(item.used_swap() / 1024, "kB"));
         }
         else
         {
-            output->AddValue(std::string());
+            output->AddValue(Value::Empty());
         }
 
-        output->AddValue(item.description());
+        output->AddValue(Value::String(item.description()));
     }
 }
 

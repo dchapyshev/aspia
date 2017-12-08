@@ -56,16 +56,15 @@ void CategoryNetworkCards::Parse(Output* output, const std::string& data)
 
         Output::Group group(output, item.adapter_name(), Icon());
 
-        output->AddParam(IDI_NETWORK_ADAPTER, "Connection Name", item.connection_name());
-        output->AddParam(IDI_NETWORK_ADAPTER, "Interface Type", item.interface_type());
-        output->AddParam(IDI_NETWORK_ADAPTER, "MTU", std::to_string(item.mtu()), "byte");
+        output->AddParam(IDI_NETWORK_ADAPTER, "Connection Name", Value::String(item.connection_name()));
+        output->AddParam(IDI_NETWORK_ADAPTER, "Interface Type", Value::String(item.interface_type()));
+        output->AddParam(IDI_NETWORK_ADAPTER, "MTU", Value::Number(item.mtu(), "byte"));
 
         output->AddParam(IDI_NETWORK_ADAPTER,
                          "Connection Speed",
-                         std::to_string(item.speed() / (1000 * 1000)),
-                         "Mbps");
+                         Value::Number(item.speed() / (1000 * 1000), "Mbps"));
 
-        output->AddParam(IDI_NETWORK_ADAPTER, "MAC Address", item.mac_address());
+        output->AddParam(IDI_NETWORK_ADAPTER, "MAC Address", Value::String(item.mac_address()));
 
         if (item.ip_address_size())
         {
@@ -78,11 +77,11 @@ void CategoryNetworkCards::Parse(Output* output, const std::string& data)
 
                 output->AddParam(IDI_NETWORK_IP,
                                  StringPrintf("Address #%d", addr_index + 1),
-                                 address.address());
+                                 Value::String(address.address()));
 
                 output->AddParam(IDI_NETWORK_IP,
                                  StringPrintf("Mask #%d", addr_index + 1),
-                                 address.mask());
+                                 Value::String(address.mask()));
             }
         }
 
@@ -94,13 +93,13 @@ void CategoryNetworkCards::Parse(Output* output, const std::string& data)
             {
                 output->AddParam(IDI_NETWORK_IP,
                                  StringPrintf("Address #%d", addr_index + 1),
-                                 item.gateway_address(addr_index));
+                                 Value::String(item.gateway_address(addr_index)));
             }
         }
 
         output->AddParam(IDI_NETWORK_ADAPTER,
                          "DHCP Enabled",
-                         item.is_dhcp_enabled() ? "Yes" : "No");
+                         Value::Bool(item.is_dhcp_enabled()));
 
         if (item.is_dhcp_enabled() && item.dhcp_server_address_size())
         {
@@ -110,7 +109,7 @@ void CategoryNetworkCards::Parse(Output* output, const std::string& data)
             {
                 output->AddParam(IDI_NETWORK_IP,
                                  StringPrintf("Address #%d", addr_index + 1),
-                                 item.dhcp_server_address(addr_index));
+                                 Value::String(item.dhcp_server_address(addr_index)));
             }
         }
 
@@ -122,23 +121,23 @@ void CategoryNetworkCards::Parse(Output* output, const std::string& data)
             {
                 output->AddParam(IDI_NETWORK_IP,
                                  StringPrintf("Address #%d", addr_index + 1),
-                                 item.dns_server_address(addr_index));
+                                 Value::String(item.dns_server_address(addr_index)));
             }
         }
 
         output->AddParam(IDI_NETWORK_ADAPTER,
                          "WINS Enabled",
-                         item.is_wins_enabled() ? "Yes" : "No");
+                         Value::Bool(item.is_wins_enabled()));
 
         if (item.is_wins_enabled())
         {
             output->AddParam(IDI_NETWORK_IP,
                              "Primary WINS Server",
-                             item.primary_wins_server());
+                             Value::String(item.primary_wins_server()));
 
             output->AddParam(IDI_NETWORK_IP,
                              "Secondary WINS Server",
-                             item.secondary_wins_server());
+                             Value::String(item.secondary_wins_server()));
         }
     }
 }
@@ -272,26 +271,26 @@ void CategoryOpenConnections::Parse(Output* output, const std::string& data)
 
         Output::Row row(output, Icon());
 
-        output->AddValue(item.process_name());
+        output->AddValue(Value::String(item.process_name()));
 
         if (item.protocol() == proto::OpenConnections::Item::PROTOCOL_TCP)
         {
-            output->AddValue("TCP");
+            output->AddValue(Value::String("TCP"));
         }
         else if (item.protocol() == proto::OpenConnections::Item::PROTOCOL_UDP)
         {
-            output->AddValue("UDP");
+            output->AddValue(Value::String("UDP"));
         }
         else
         {
-            output->AddValue("Unknown");
+            output->AddValue(Value::String("Unknown"));
         }
 
-        output->AddValue(item.local_address());
-        output->AddValue(std::to_string(item.local_port()));
-        output->AddValue(item.remote_address());
-        output->AddValue(std::to_string(item.remote_port()));
-        output->AddValue(item.state());
+        output->AddValue(Value::String(item.local_address()));
+        output->AddValue(Value::Number(item.local_port()));
+        output->AddValue(Value::String(item.remote_address()));
+        output->AddValue(Value::Number(item.remote_port()));
+        output->AddValue(Value::String(item.state()));
     }
 }
 
@@ -376,12 +375,12 @@ void CategorySharedResources::Parse(Output* output, const std::string& data)
 
         Output::Row row(output, Icon());
 
-        output->AddValue(item.name());
-        output->AddValue(TypeToString(item.type()));
-        output->AddValue(item.description());
-        output->AddValue(item.local_path());
-        output->AddValue(std::to_string(item.current_uses()));
-        output->AddValue(std::to_string(item.maximum_uses()));
+        output->AddValue(Value::String(item.name()));
+        output->AddValue(Value::String(TypeToString(item.type())));
+        output->AddValue(Value::String(item.description()));
+        output->AddValue(Value::String(item.local_path()));
+        output->AddValue(Value::Number(item.current_uses()));
+        output->AddValue(Value::Number(item.maximum_uses()));
     }
 }
 
@@ -534,10 +533,10 @@ void CategoryRoutes::Parse(Output* output, const std::string& data)
 
         Output::Row row(output, Icon());
 
-        output->AddValue(item.destonation());
-        output->AddValue(item.mask());
-        output->AddValue(item.gateway());
-        output->AddValue(std::to_string(item.metric()));
+        output->AddValue(Value::String(item.destonation()));
+        output->AddValue(Value::String(item.mask()));
+        output->AddValue(Value::String(item.gateway()));
+        output->AddValue(Value::Number(item.metric()));
     }
 }
 

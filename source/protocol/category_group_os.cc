@@ -252,40 +252,40 @@ void CategoryUsers::Parse(Output* output, const std::string& data)
 
         if (!item.full_name().empty())
         {
-            output->AddParam(IDI_USER, "Full Name", item.full_name());
+            output->AddParam(IDI_USER, "Full Name", Value::String(item.full_name()));
         }
 
         if (!item.comment().empty())
         {
-            output->AddParam(IDI_DOCUMENT_TEXT, "Description", item.comment());
+            output->AddParam(IDI_DOCUMENT_TEXT, "Description", Value::String(item.comment()));
         }
 
         output->AddParam(item.is_disabled() ? IDI_CHECKED : IDI_UNCHECKED,
                          "Disabled",
-                         item.is_disabled() ? "Yes" : "No");
+                         Value::Bool(item.is_disabled()));
 
         output->AddParam(item.is_password_cant_change() ? IDI_CHECKED : IDI_UNCHECKED,
                          "Password Can't Change",
-                         item.is_password_cant_change() ? "Yes" : "No");
+                         Value::Bool(item.is_password_cant_change()));
 
         output->AddParam(item.is_password_expired() ? IDI_CHECKED : IDI_UNCHECKED,
                          "Password Expired",
-                         item.is_password_expired() ? "Yes" : "No");
+                         Value::Bool(item.is_password_expired()));
 
         output->AddParam(item.is_dont_expire_password() ? IDI_CHECKED : IDI_UNCHECKED,
                          "Don't Expire Password",
-                         item.is_dont_expire_password() ? "Yes" : "No");
+                         Value::Bool(item.is_dont_expire_password()));
 
         output->AddParam(item.is_lockout() ? IDI_CHECKED : IDI_UNCHECKED,
                          "Lockout",
-                         item.is_lockout() ? "Yes" : "No");
+                         Value::Bool(item.is_lockout()));
 
-        output->AddParam(IDI_CLOCK, "Last Logon", TimeToString(item.last_logon_time()));
-        output->AddParam(IDI_USER, "Number Logons", std::to_string(item.number_logons()));
+        output->AddParam(IDI_CLOCK, "Last Logon", Value::String(TimeToString(item.last_logon_time())));
+        output->AddParam(IDI_USER, "Number Logons", Value::Number(item.number_logons()));
 
         output->AddParam(IDI_USER,
                          "Bad Password Count",
-                         std::to_string(item.bad_password_count()));
+                         Value::Number(item.bad_password_count()));
     }
 }
 
@@ -353,8 +353,8 @@ void CategoryUserGroups::Parse(Output* output, const std::string& data)
 
         Output::Row row(output, Icon());
 
-        output->AddValue(item.name());
-        output->AddValue(item.comment());
+        output->AddValue(Value::String(item.name()));
+        output->AddValue(Value::String(item.comment()));
     }
 }
 
@@ -417,12 +417,12 @@ void CategoryActiveSessions::Parse(Output* output, const std::string& data)
 
         Output::Row row(output, Icon());
 
-        output->AddValue(item.user_name());
-        output->AddValue(item.domain_name());
-        output->AddValue(std::to_string(item.session_id()));
-        output->AddValue(item.connect_state());
-        output->AddValue(item.client_name());
-        output->AddValue(item.winstation_name());
+        output->AddValue(Value::String(item.user_name()));
+        output->AddValue(Value::String(item.domain_name()));
+        output->AddValue(Value::Number(item.session_id()));
+        output->AddValue(Value::String(item.connect_state()));
+        output->AddValue(Value::String(item.client_name()));
+        output->AddValue(Value::String(item.winstation_name()));
     }
 }
 

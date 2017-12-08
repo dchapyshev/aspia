@@ -667,6 +667,9 @@
     <ClCompile Include="base\cpu_info.cc">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="ui\system_info\value.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1378,6 +1381,9 @@
     </ClInclude>
     <ClInclude Include="base\cpu_info.h">
       <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\value.h">
+      <Filter>ui\system_info</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
