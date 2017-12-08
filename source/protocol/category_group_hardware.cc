@@ -1210,7 +1210,7 @@ void CategoryDmiPortableBattery::Parse(Output* output, const std::string& data)
             output->AddParam(IDI_BATTERY,
                              "Max. Error in Battery Data",
                              std::to_string(item.max_error_in_battery_data()),
-                             "%%");
+                             "%");
         }
 
         if (!item.sbds_version_number().empty())
@@ -2409,7 +2409,7 @@ void CategoryPowerOptions::Parse(Output* output, const std::string& data)
         output->AddParam(IDI_BATTERY,
                          "Battery Life Percent",
                          std::to_string(message.battery_life_percent()),
-                         "%%");
+                         "%");
 
         output->AddParam(IDI_BATTERY,
                          "Full Battery Life Time",
@@ -2470,7 +2470,7 @@ void CategoryPowerOptions::Parse(Output* output, const std::string& data)
             output->AddParam(IDI_BATTERY,
                              "Depreciation",
                              std::to_string(battery.depreciation()),
-                             "%%");
+                             "%");
         }
 
         if (battery.current_capacity() != 0)
