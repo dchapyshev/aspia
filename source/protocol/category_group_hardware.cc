@@ -1702,15 +1702,32 @@ void CategoryVideoAdapters::Parse(Table& table, const std::string& data)
 
         Group group = table.AddGroup(item.description());
 
-        group.AddParam("Description", Value::String(item.description()));
-        group.AddParam("Adapter String", Value::String(item.adapter_string()));
-        group.AddParam("BIOS String", Value::String(item.bios_string()));
-        group.AddParam("Chip Type", Value::String(item.chip_type()));
-        group.AddParam("DAC Type", Value::String(item.dac_type()));
-        group.AddParam("Memory Size", Value::Number(item.memory_size(), "Bytes"));
-        group.AddParam("Driver Date", Value::String(item.driver_date()));
-        group.AddParam("Driver Version", Value::String(item.driver_version()));
-        group.AddParam("Driver Provider", Value::String(item.driver_provider()));
+        if (!item.description().empty())
+            group.AddParam("Description", Value::String(item.description()));
+
+        if (!item.adapter_string().empty())
+            group.AddParam("Adapter String", Value::String(item.adapter_string()));
+
+        if (!item.bios_string().empty())
+            group.AddParam("BIOS String", Value::String(item.bios_string()));
+
+        if (!item.chip_type().empty())
+            group.AddParam("Chip Type", Value::String(item.chip_type()));
+
+        if (!item.dac_type().empty())
+            group.AddParam("DAC Type", Value::String(item.dac_type()));
+
+        if (item.memory_size())
+            group.AddParam("Memory Size", Value::Number(item.memory_size(), "Bytes"));
+
+        if (!item.driver_date().empty())
+            group.AddParam("Driver Date", Value::String(item.driver_date()));
+
+        if (!item.driver_version().empty())
+            group.AddParam("Driver Version", Value::String(item.driver_version()));
+
+        if (!item.driver_provider().empty())
+            group.AddParam("Driver Provider", Value::String(item.driver_provider()));
     }
 }
 
